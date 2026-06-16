@@ -27,7 +27,7 @@ The study uses repository-clustered standard errors. Functional correctness is n
 
 **Force pushes are the strongest negative predictor.** Rewriting history mid-review disrupts shared understanding. Each force push invalidates prior review context, forcing reviewers to re-orient — signaling instability and breaking incremental convergence.
 
-**Larger change sizes reduce merge probability.** Larger diffs lower merge likelihood independently. This compounds with cognitive load: large changesets reduce the probability of initial reviewer engagement.
+**Larger change sizes reduce merge probability.** Larger diffs lower merge likelihood independently. This compounds with cognitive load: large changesets reduce the probability of [initial reviewer engagement](agent-pr-volume-vs-value.md).
 
 **Iteration intensity has limited standalone value.** More commits, revisions, or tests do not independently increase merge likelihood once collaboration signals are in the model. Optimizing for iteration volume without targeting reviewer expectations yields less than optimizing for review alignment.
 
@@ -67,7 +67,7 @@ Optimizing for reviewer engagement assumes reviewers are available and their exp
 
 - **Chronic reviewer scarcity**: Engagement correlates with merge success because those PRs captured a scarce resource, not because engagement can be manufactured. High-volume agents compete for the same reviewer bandwidth.
 - **Design disagreement without recourse**: The dominant failure mode (10 of 30 failed PRs) is architectural divergence. If an agent cannot propose an alternative design, no review loop resolves the disagreement.
-- **Reviewer abandonment after queueing**: High time-to-first-review helps only when reviewers eventually engage. If they abandon a queued PR, wait time becomes noise; large diffs compound this risk.
+- **Reviewer abandonment after queueing**: High time-to-first-review helps only when reviewers eventually engage. If they abandon a queued PR, wait time becomes noise; large diffs compound this risk, which [agent-driven PR slicing](agent-driven-pr-slicing.md) is meant to reduce.
 - **CRA-only review**: The pattern assumes human reviewers with discretionary merge authority. Repositories reviewed only by automated agents show much lower merge rates (45% vs 68%).
 - **High comment volume as a correction signal**: Each extra reviewer comment *decreases* agentic-PR merge odds by 2.8% (vs +2.7% for human PRs), interpreted as required corrections rather than productive alignment ([arXiv:2601.18749](https://arxiv.org/abs/2601.18749)); related work reports 1-10% ghosting after feedback ([arXiv:2601.00753](https://arxiv.org/abs/2601.00753)).
 

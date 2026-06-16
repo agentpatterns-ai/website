@@ -89,7 +89,7 @@ Tools vanish when the session ends. Promoting useful ones to a [skill library](.
 
 Token overhead is modest: on SWE-bench Verified, Live-SWE-agent averaged $0.68 per issue versus $0.56 for the baseline agent — roughly $0.12 incremental cost — which the authors describe as "minimal" relative to the accuracy gain ([Xia et al., 2025](https://arxiv.org/abs/2511.13646)).
 
-The hidden cost is context pressure. Each synthesized tool definition consumes tokens. In long sessions, accumulated definitions may crowd out problem-relevant context. Active tool pruning strategies are not addressed by current implementations.
+The hidden cost is context pressure. Each [synthesized tool definition consumes tokens](../tool-engineering/tool-minimalism.md). In long sessions, accumulated definitions may crowd out problem-relevant context. Active tool pruning strategies are not addressed by current implementations.
 
 ## When to Use
 
@@ -141,7 +141,7 @@ The tool was created in response to friction (noisy grep results), used for the 
 - [Introspective Skill Generation](../workflows/introspective-skill-generation.md) — offline pattern mining across sessions
 - [Agentic Flywheel](agentic-flywheel.md) — closed-loop harness self-improvement
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md) — lifecycle governance for persisted skills
-- [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md) — three-layer framework the runtime evolution operates within, across control, tool interface, and resource dimensions
+- [Scaffold Architecture Taxonomy](harness-design-dimensions.md) — three-layer framework the runtime evolution operates within, across control, tool interface, and resource dimensions
 - [Harness Engineering](harness-engineering.md) — designing agent environments
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md) — human-driven observation-to-update loop
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — runtime tools as removable scaffolding

@@ -22,7 +22,7 @@ maturity: adopted
 
 Chain-of-Thought (CoT) forces reasoning into a single linear sequence: each step depends only on the prior step. Tree of Thoughts (ToT) adds branching, letting the model explore multiple paths in parallel — but paths never reconverge. Once two branches diverge, each proceeds in isolation to its own conclusion.
 
-Problems requiring synthesis across independent reasoning lines — multi-hop inference, strategic planning with interdependent sub-goals, reconciling multiple converging analyses — cannot be expressed in either topology.
+Problems requiring synthesis across independent reasoning lines — multi-hop inference, strategic planning with interdependent sub-goals, reconciling multiple converging analyses — cannot be expressed in either topology, which is what motivates the richer graph-based scaffolds covered in [Petri Net of Thoughts](petri-net-of-thoughts.md).
 
 [Besta et al. (2023)](https://arxiv.org/abs/2308.09687) introduced Graph of Thoughts (GoT) to close this gap. GoT models reasoning as a directed graph where thoughts are vertices and dependencies are edges. Any vertex can have multiple predecessors, enabling diverged paths to reconverge before a conclusion is drawn.
 

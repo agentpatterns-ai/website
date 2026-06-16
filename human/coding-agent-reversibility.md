@@ -27,7 +27,7 @@ Treat a platform decision as reversible only when all hold:
 |-----------|----------------|
 | **High-coverage behavioural tests** | Agents converge against tests; missing coverage means semantic drift goes invisible. FreshBrew gates migrations on test pass *and* coverage within 5 pp ([arxiv 2510.04852](https://arxiv.org/abs/2510.04852)). |
 | **Stable external contracts** | Public APIs, data formats, and wire protocols anchor the translation. Internal refactors lack this anchor. |
-| **Shallow platform-API surface** | The fewer HealthKit, ARKit, CoreML, or kernel-level calls, the more of the codebase is portable logic vs. platform glue. |
+| **Shallow platform-API surface** | The fewer `HealthKit`, `ARKit`, `CoreML`, or kernel-level calls, the more of the codebase is portable logic vs. platform glue. |
 | **Functional requirements dominate** | Agents preserve logic, not latency distributions, memory profiles, or security postures. |
 
 If any is missing, the cost saving is the small half of the bill.
@@ -54,7 +54,7 @@ The opposing posture — committing irreversibly — is documented in [Burn the 
 
 The prerequisites the agent can't manufacture are what a healthy codebase already wants:
 
-- **Behavioural tests over unit tests** — property-based and end-to-end coverage against the contract surface.
+- [**Behavioural tests** over unit tests](../verification/behavioral-testing-agents.md) — property-based and end-to-end coverage against the contract surface.
 - **Contract isolation** — push platform-API calls behind a thin adapter so the retranslation surface stays small.
 - **Performance baselines as artefacts** — latency and memory profiles captured as benchmarks the post-migration build must match.
 

@@ -11,7 +11,7 @@ tags:
   - tool-agnostic
   - tool-engineering
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Poka-Yoke for Agent Tools
@@ -97,7 +97,7 @@ Over-constraining tool interfaces introduces its own failure modes:
 - **Enum exhaustion** — a fixed enum valid at design time excludes production edge cases; update or the agent cannot proceed.
 - **Prerequisite deadlock** — read-before-write gates block optimistic-write and content-from-scratch pipelines.
 - **Designer blind spots** — constraints encode the designer's model of valid usage; legitimate emergent strategies get rejected.
-- **Over-normalized toolsets** — too-narrow toolsets push agents toward multi-step workarounds with higher cumulative error probability.
+- **Over-normalized toolsets** — too-narrow toolsets push agents toward multi-step workarounds with higher cumulative error probability, the failure mode [Tool Minimalism](tool-minimalism.md) warns against in the opposite direction.
 
 Apply poka-yoke where failure modes are well-understood and the constraint space is stable. Prefer validation when use cases are still evolving.
 
@@ -105,14 +105,14 @@ Apply poka-yoke where failure modes are well-understood and the constraint space
 
 1. **Can any parameter accept values that are never valid?** Constrain to an enum or validated range.
 2. **Does the tool depend on prior state?** Add a prerequisite gate (read-before-write, auth-before-access).
-3. **Can the output overwhelm the context window?** Add truncation with recovery hints.
+3. **Can the output overwhelm the context window?** Add truncation with recovery hints, as in [Graceful Tool-Output Truncation](graceful-tool-output-truncation.md).
 4. **Does the format require precise mechanical reasoning?** Switch to a format with strong training priors.
 5. **Can the tool silently apply the wrong change?** Add a uniqueness or [idempotency](../agent-design/idempotent-agent-operations.md) constraint.
 6. **Test like a junior developer API** — pass many inputs and observe where the model fails. Fix the interface, not the prompt.
 
 ## Key Takeaways
 
-- Poka-yoke makes the wrong tool call structurally impossible, not merely documented as wrong.
+- Poka-yoke makes the wrong tool call structurally impossible, not merely documented as wrong — one of the four [Agent-Computer Interface (ACI)](agent-computer-interface.md) design principles.
 - Three manufacturing mechanisms map to tool design: parameter types (contact), bounds and defaults (fixed-value), and prerequisite gates (motion-step).
 - Apply where failure modes are stable and well-understood; prefer runtime validation when the constraint space is still evolving.
 - Fix the interface, not the prompt — the prompt-fix loop has no terminating condition.

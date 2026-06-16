@@ -3,9 +3,8 @@ title: "Decentralized Memory for Self-Evolving Multi-Agent Systems"
 term: "Decentralized Memory"
 description: "Give each agent its own private memory instead of a shared store — qualified pattern that pays off only at large agent counts, heterogeneous workloads, long deployments, and trusted writers."
 tags:
-  - agent-design
-  - memory
   - multi-agent
+  - memory
   - tool-agnostic
   - arxiv
 aliases:
@@ -31,7 +30,7 @@ The architecture is **qualified** — verify all four preconditions before adopt
 3. **Long-enough deployments** — the regret bound is asymptotic in T ([Hao, Long, Zhao 2026, §3](https://arxiv.org/abs/2605.22721)); short deployments never amortise the bandit machinery.
 4. **Trusted writers** — N independent stores multiply the memory-poisoning surface ([Memory Poisoning in MAS, arxiv 2603.20357](https://arxiv.org/abs/2603.20357)).
 
-If any precondition fails, prefer a shared store or a single-agent design — see [agent memory patterns](agent-memory-patterns.md) or [tiered memory architecture](tiered-memory-architecture.md).
+If any precondition fails, prefer a shared store or a single-agent design — see [agent memory patterns](../agent-design/agent-memory-patterns.md) or [tiered memory architecture](../agent-design/tiered-memory-architecture.md).
 
 ## Architecture
 
@@ -59,7 +58,7 @@ Other agents in the system run the same loop against their own pools. Writes nev
 
 ## Why It Works
 
-Decentralized memory works because it **separates write contention from retrieval competition** and lets each agent's exploitation pool anchor on its own task distribution rather than diluting against unrelated peers' episodes — the dilution argument that motivates [tiered memory architectures](tiered-memory-architecture.md) at the single-agent level. The exploration pool adds a stochastic-bandit term bounded at O(log T) cumulative regret, giving each agent a controlled rate of trying novel candidates against accumulated solutions ([Hao, Long, Zhao 2026, §3](https://arxiv.org/abs/2605.22721)). Independent results from [G-Memory](https://arxiv.org/abs/2506.07398) and [Trainable Graph Memory](https://arxiv.org/html/2511.07800v1) reach comparable improvements via explicit relational structure rather than per-agent isolation — evidence that the operative variable is separating retrieval competition from write contention, not isolation per se. Tiering and graph-structuring are alternative levers on the same trade.
+Decentralized memory works because it **separates write contention from retrieval competition** and lets each agent's exploitation pool anchor on its own task distribution rather than diluting against unrelated peers' episodes — the dilution argument that motivates [tiered memory architectures](../agent-design/tiered-memory-architecture.md) at the single-agent level. The exploration pool adds a stochastic-bandit term bounded at O(log T) cumulative regret, giving each agent a controlled rate of trying novel candidates against accumulated solutions ([Hao, Long, Zhao 2026, §3](https://arxiv.org/abs/2605.22721)). Independent results from [G-Memory](https://arxiv.org/abs/2506.07398) and [Trainable Graph Memory](https://arxiv.org/html/2511.07800v1) reach comparable improvements via explicit relational structure rather than per-agent isolation — evidence that the operative variable is separating retrieval competition from write contention, not isolation per se. Tiering and graph-structuring are alternative levers on the same trade.
 
 ## Reported Numbers
 
@@ -73,7 +72,7 @@ The system is more accurately described as **locally-decentralized, globally-coo
 
 Beyond the precondition failures above, two additional failure modes are worth naming:
 
-- **Tasks requiring global coherence** — when agents must produce mutually consistent artifacts (shared schemas, joined outputs), per-agent divergent memory produces locally-correct but globally-inconsistent decisions, the canonical decentralised-topology failure mode ([Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md)).
+- **Tasks requiring global coherence** — when agents must produce mutually consistent artifacts (shared schemas, joined outputs), per-agent divergent memory produces locally-correct but globally-inconsistent decisions, the canonical decentralised-topology failure mode ([Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)).
 - **Faithfulness gaps** — agents with private memory frequently regress, acknowledge mistakes then repeat them, and apply learned strategies inconsistently ([arxiv 2601.22436](https://arxiv.org/pdf/2601.22436)). Private memory alone does not produce reliable self-improvement.
 
 A poisoned LLM-as-judge is a particular concern even with the "trusted writers" precondition held — the judge is shared across the supposedly-independent agents and propagates incorrect reweighting to every agent simultaneously.
@@ -87,10 +86,10 @@ A poisoned LLM-as-judge is a particular concern even with the "trusted writers" 
 
 ## Related
 
-- [Tiered Memory Architecture: Episodic-to-Semantic Consolidation](tiered-memory-architecture.md) — single-agent design that achieves a similar dilution-reduction effect via promotion rather than per-agent isolation
-- [Experience Graphs as Structured Memory for Self-Evolving Agents](experience-graphs-self-evolving-agents.md) — graph-structured alternative that reports comparable gains via relational structure
-- [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — scope-based memory architecture covering shared-store designs
-- [Continual Learning for AI Agents: Three Layers of Knowledge Accumulation](continual-learning-layers.md) — the context-layer view of memory updates that decentralized stores instantiate
-- [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md) — self-improvement loop that decentralized memory feeds at the per-agent level
-- [Multi-Agent Topology Taxonomy: Centralised, Decentralised, and Hybrid](../multi-agent/multi-agent-topology-taxonomy.md) — coordination-topology context for choosing per-agent vs shared state
-- [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md) — utility-score updates for retrieval that the LLM-as-judge reweighting parallels at the pool level
+- [Tiered Memory Architecture: Episodic-to-Semantic Consolidation](../agent-design/tiered-memory-architecture.md) — single-agent design that achieves a similar dilution-reduction effect via promotion rather than per-agent isolation
+- [Experience Graphs as Structured Memory for Self-Evolving Agents](../agent-design/experience-graphs-self-evolving-agents.md) — graph-structured alternative that reports comparable gains via relational structure
+- [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — scope-based memory architecture covering shared-store designs
+- [Continual Learning for AI Agents: Three Layers of Knowledge Accumulation](../agent-design/continual-learning-layers.md) — the context-layer view of memory updates that decentralized stores instantiate
+- [Agentic Flywheel: Self-Improving Agent Systems](../agent-design/agentic-flywheel.md) — self-improvement loop that decentralized memory feeds at the per-agent level
+- [Multi-Agent Topology Taxonomy: Centralised, Decentralised, and Hybrid](multi-agent-topology-taxonomy.md) — coordination-topology context for choosing per-agent vs shared state
+- [Memory Retrieval as a Control Decision](../agent-design/memory-retrieval-as-control.md) — utility-score updates for retrieval that the LLM-as-judge reweighting parallels at the pool level

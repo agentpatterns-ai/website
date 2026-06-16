@@ -8,7 +8,7 @@ tags:
   - observability
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Using the Agent to Analyze Its Own Evaluation Transcripts
@@ -111,7 +111,7 @@ response = client.messages.create(
 print(response.content[0].text)
 ```
 
-The key instruction is to reason through the root cause before proposing a rewrite. This separates diagnosis from prescription and makes it easier to evaluate whether the proposed change actually addresses the underlying issue. After applying any changes, re-run the eval suite against a held-out test set before treating the tool as improved.
+The key instruction is to reason through the root cause before proposing a rewrite. This separates diagnosis from prescription and makes it easier to evaluate whether the proposed change actually addresses the underlying issue. After applying any changes, re-run the eval suite against a [held-out test set](eval-blind-spots.md) before treating the tool as improved.
 
 ## Key Takeaways
 
@@ -125,7 +125,7 @@ The key instruction is to reason through the root cause before proposing a rewri
 
 Agents miss by omission as much as by commission — the Anthropic engineering team notes that "what agents omit in their feedback and responses can often be more important than what they include." An agent that confidently lists five issue classes may silently skip a sixth that is harder to articulate.
 
-Agent-proposed fixes can overfit to the surface of a failure rather than its root cause. A description rewrite may resolve the visible symptom while introducing a subtler ambiguity that only surfaces on task types not covered by your eval set — which is why re-running a [held-out test set after changes](held-out-test-gap.md) is not optional.
+Agent-proposed fixes can overfit to the surface of a failure rather than its root cause. A description rewrite may resolve the visible symptom while introducing a subtler ambiguity that only surfaces on task types not covered by your eval set — which is why re-running a [held-out test set after changes](eval-blind-spots.md) is not optional.
 
 When the same model both generates and reviews, self-preference bias compounds the problem: judges mark their own outputs as satisfying rubrics up to 50% more often than a neutral evaluator would, even on objectively verifiable criteria. [Source: [Self-Preference Bias in Rubric-Based Evaluation](https://arxiv.org/abs/2604.06996)] Cross-check proposed fixes with a different model family.
 
@@ -133,11 +133,10 @@ Do not rely on agent analysis as the sole quality gate. Use it to narrow the sea
 
 ## Related
 
-- [Evaluation-Driven Development for Agent Tools](../workflows/eval-driven-tool-development.md)
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md)
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
 - [Introspective Skill Generation](../workflows/introspective-skill-generation.md)
 - [Incident-to-Eval Synthesis: Production Failures as Evals](incident-to-eval-synthesis.md)
-- [Trajectory-Opaque Evaluation Gap: Why Final-Output Grading Misses Safety Violations](trajectory-opaque-evaluation-gap.md)
+- [Trajectory-Opaque Evaluation Gap: Why Final-Output Grading Misses Safety Violations](eval-blind-spots.md)
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md)

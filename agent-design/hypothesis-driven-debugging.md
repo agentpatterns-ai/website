@@ -65,9 +65,9 @@ Skip it when:
 ## Trade-offs
 
 - **Log pollution.** Even with tags, heavy instrumentation inside a hot loop or widely-called helper floods the log with noise that masks the discriminating line. Keep hypotheses narrow enough that each tag appears in tens of lines, not thousands.
-- **Sensitive-data exposure.** Instrumenting an auth, PII, or payment handler writes variable state to the log; if cleanup misses a branch the instrumentation becomes a data-leak vector. Mask secrets at the log call site, not after the fact.
+- **Sensitive-data exposure.** Instrumenting an auth, PII, or payment handler writes variable state to the log; if cleanup misses a branch the instrumentation becomes a data-leak vector. Apply [secrets-management discipline](../security/secrets-management-for-agents.md): mask secrets at the log call site, not after the fact.
 - **Observer effect.** Log statements change timing. Inserted inside a race or latency-sensitive section, they can mask or shift the bug — the agent then converges on evidence from instrumented code, not the code that failed.
-- **Reproduction dependency.** The loop requires running the failing case with instrumentation in place. Production-only failures, load-triggered races, and flaky tests break the reproduction step, and the agent converges on incomplete evidence.
+- **Reproduction dependency.** The loop requires running the failing case with instrumentation in place. Production-only failures, load-triggered races, and flaky tests break the [reproduction step](../code-review/reproduce-before-report-verification-gate.md), and the agent converges on incomplete evidence.
 - **Overhead on obvious fixes.** For bugs the model can resolve from source alone, the loop costs agent turns on instrumentation and reproduction that were unnecessary.
 
 ## Tool-Specific Notes
@@ -109,7 +109,7 @@ Without the hypothesis-and-tag structure, the agent would likely have patched H1
 - The three steps are non-negotiable: enumerate hypotheses, instrument with tagged logs, converge from evidence. Skipping hypothesis enumeration is what produces speculative patches.
 - Hypothesis tags (`[DEBUG H1]`, `[DEBUG H2]`) are load-bearing — they map runtime output back to the theories under test so the agent reads discriminating evidence on the second pass.
 - The loop works because it ranks fixes by falsifiable evidence, not by model prior.
-- Enter for bugs where mechanism is unclear; skip for one-token-obvious fixes and for codepaths you cannot safely instrument.
+- Enter for bugs where mechanism is unclear; skip for one-token-obvious fixes, for codepaths you cannot safely instrument, and for cases a lighter [think-tool](think-tool.md) checkpoint already resolves.
 - Known failure modes: log pollution, sensitive-data exposure, observer effect on races, dependence on reliable reproduction.
 - Cleanup is part of the loop, not an afterthought — the instrumentation must come out before the fix ships.
 

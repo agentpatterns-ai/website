@@ -22,7 +22,7 @@ maturity: emerging
 A staged pipeline runs two models against every step:
 
 1. **Action policy** — proposes the next move (a UI action, a tool call, an edit).
-2. **Critic** — scores confidence using operator feedback collected during normal work; abstains below a threshold.
+2. **Critic** — scores confidence using operator feedback collected during normal work; abstains below a threshold. It is the same role as [critic agent plan review](critic-agent-plan-review.md), applied at action time rather than plan time.
 
 Confident steps execute autonomously and the agent resumes from the updated state. Uncertain steps surface to an operator who either accepts the suggestion or supplies a correction. Both responses become new training labels for the critic.
 
@@ -45,7 +45,7 @@ graph LR
 The pattern is a direct application of **selective classification with a reject option**, formalised by [Geifman and El-Yaniv (2017)](https://arxiv.org/abs/1705.08500): a model that may abstain trades coverage for guaranteed risk on the cases it does accept. Two consequences for agents:
 
 - **Cheaper supervision.** A policy required to be correct everywhere needs exhaustive labelled traces. A policy that may abstain only needs enough confidence on a high-coverage subset; the critic absorbs residual uncertainty.
-- **Already-paid labels.** Operator accept/correct decisions are produced by routine work, not a separate annotation pipeline. The critic trains on supervision the system was already generating.
+- **Already-paid labels.** Operator accept/correct decisions are produced by routine work, not a separate annotation pipeline — the same outcome signal that [grading agent outcomes](../verification/grade-agent-outcomes.md) captures. The critic trains on supervision the system was already generating.
 
 This is structurally a more granular form of [on-the-loop placement](../workflows/human-in-the-loop.md): the agent is supervised continuously, but the gate fires only on uncertainty rather than on every action.
 
@@ -76,7 +76,7 @@ The deployed system in [Borovkov et al. (2026)](https://arxiv.org/abs/2604.23855
 
 **Without selective autonomy** — every proposed action is either fully automated (and the rare wrong action reaches the customer) or fully manual (the operator handles every step of every session).
 
-**With selective autonomy** — the critic, trained on operators' prior accept and correct decisions over UI traces, scores each proposed action. Confident steps run in the background; the agent resumes from the updated UI state. Uncertain steps surface to an operator, whose accept-or-correct response feeds back as a fresh training label. The reported result: 45% of sessions automated end-to-end and average handling time reduced 39%, with one operator supervising multiple concurrent sessions and interrupted only on uncertain steps.
+**With selective autonomy** — the critic, trained on operators' prior accept and correct decisions over UI traces, scores each proposed action. Confident steps run in the background; the agent resumes from the updated UI state, falling back to undo rather than abstention only where [rollback-first design](rollback-first-design.md) makes a step cheap to reverse. Uncertain steps surface to an operator, whose accept-or-correct response feeds back as a fresh training label. The reported result: 45% of sessions automated end-to-end and average handling time reduced 39%, with one operator supervising multiple concurrent sessions and interrupted only on uncertain steps.
 
 ## Key Takeaways
 

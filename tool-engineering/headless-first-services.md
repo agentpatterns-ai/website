@@ -66,7 +66,7 @@ For MCP, follow the [MCP server design](mcp-server-design.md) checklist. For CLI
 Four conditions push against headless ([Brandur Leach, 2026](https://brandur.org/second-wave-api-first)):
 
 - **Ad-supported platforms** — Instagram, TikTok, and similar capture revenue on the surface agents would bypass.
-- **Regulated monopolies with no competitive pressure** — Brandur's example is Xfinity: no agent-friendly path when the incumbent need not compete on this axis.
+- **Regulated monopolies with no competitive pressure** — according to Brandur, Xfinity has no agent-friendly path when the incumbent need not compete on this axis.
 - **Products where the UI is the value** — design and creative tools where the interface is what users pay for.
 - **Partial-coverage teams** — fragmentation may hurt users more than GUI-only.
 

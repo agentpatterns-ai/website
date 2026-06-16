@@ -51,7 +51,7 @@ The mapping is structural, not exact. Three divergences matter:
 
 **Context windows as a resource constraint.** Distributed systems manage memory, CPU, and network. Agent systems manage a fourth resource with no direct equivalent: the context window. It degrades non-linearly — performance doesn't scale down smoothly as the [context window fills](../context-engineering/context-window-dumb-zone.md), it falls off a cliff. Traditional capacity planning doesn't model this failure mode.
 
-**Non-deterministic routing.** A load balancer routes requests based on rules. An orchestrator agent routes subtasks based on reasoning, which is probabilistic. The same input can produce different decompositions across runs. Retry logic and idempotency patterns from distributed systems assume deterministic routing — they need adaptation for [agent operations](../agent-design/idempotent-agent-operations.md).
+**Non-deterministic routing.** A load balancer routes requests based on rules. An [orchestrator agent](../multi-agent/orchestrator-worker.md) routes subtasks based on reasoning, which is probabilistic. The same input can produce different decompositions across runs. Retry logic and idempotency patterns from distributed systems assume deterministic routing — they need adaptation for [agent operations](../agent-design/idempotent-agent-operations.md).
 
 ```mermaid
 graph TD
@@ -76,7 +76,7 @@ A multi-file refactoring agent uses three distributed patterns in a single run:
 
 1. **Saga** — the orchestrator commits a checkpoint before each file edit, so a failed transformation triggers `git checkout -- <file>` on every previously modified file rather than leaving the codebase half-refactored.
 2. **Circuit Breaker** — after the third consecutive lint failure on generated code, the agent stops retrying and surfaces the error instead of burning its remaining context on identical attempts.
-3. **Fan-out / Fan-in** — the orchestrator spawns one sub-agent per module, each operating in its own worktree. Results merge only after all sub-agents report success.
+3. **Fan-out / Fan-in** — the orchestrator spawns one [sub-agent per module](../multi-agent/fan-out-synthesis.md), each operating in its own worktree. Results merge only after all sub-agents report success.
 
 Without recognizing these as known patterns, teams reinvent each mechanism ad hoc — and miss the failure modes that distributed systems engineers documented decades ago.
 

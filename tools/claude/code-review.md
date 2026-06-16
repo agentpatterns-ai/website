@@ -79,7 +79,7 @@ Findings are non-binding: they never approve or block a PR and don't count towar
 
 ## Why It Works
 
-Parallel specialization reduces cognitive load per agent. A single reviewer scanning a diff for security issues, logic correctness, edge cases, and regressions simultaneously must context-switch between incompatible mental models. Code Review assigns each issue class to a dedicated agent that builds context only for that domain. A verification step then cross-checks flagged candidates against actual code behavior before posting, filtering false positives without sacrificing recall.
+Parallel specialization reduces cognitive load per agent. A single reviewer scanning a diff for security issues, logic correctness, edge cases, and regressions simultaneously must context-switch between incompatible mental models. Code Review automates the per-domain split that [DIY subagent review](../../code-review/agent-assisted-code-review.md) builds by hand, assigning each issue class to a dedicated agent that builds context only for that domain. A verification step then cross-checks flagged candidates against actual code behavior before posting, filtering false positives without sacrificing recall.
 
 ## When This Backfires
 

@@ -11,7 +11,7 @@ aliases:
   - lightweight todo agent
   - todo offload pattern
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Background Todo Agent
@@ -24,7 +24,7 @@ It is a specialisation of [cognitive reasoning vs execution separation](cognitiv
 
 ## Why Bookkeeping Is Small-Model-Shaped
 
-Plan maintenance and plan *use* are structurally different. Maintenance is transcription-and-classification: given the main model's recent output, decide which list items moved, which are blocked, which were added. The output space is bounded, the ground truth is the prior list, and the input is the last few turns. That shape — bounded extraction with structured output — is what small models are sized for.
+Plan maintenance and plan *use* are structurally different. Maintenance is transcription-and-classification: given the main model's recent output, decide which list items moved, which are blocked, which were added. The output space is bounded, the ground truth is the prior list, and the input is the last few turns. That shape — bounded extraction with structured output — is what small models are sized for, the same case made for a [specialised SLM as an agent tool](specialized-slm-as-agent-tool.md).
 
 Plan *use* is open-ended reasoning, and belongs on the frontier model. Carrying the full todo list in the main model's prompt every turn is a constant attention tax for a task the main model is not doing. [Anthropic's context engineering guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) treats keeping context lean as a first-order discipline; a background todo agent applies that discipline to plan maintenance specifically.
 
@@ -95,7 +95,7 @@ That invocation reverts to the standard behaviour for the request — the main m
 
 ## Key Takeaways
 
-- Plan maintenance is bounded extraction; plan use is open-ended reasoning. Routing them to different model classes matches each subtask to the model class sized for it.
+- Plan maintenance is bounded extraction; plan use is open-ended reasoning. Routing them to different model classes matches each subtask to the model class sized for it — the [cost-aware routing](cost-aware-agent-design.md) rule applied to bookkeeping.
 - The pattern earns its complexity at long session lengths, large or volatile todo lists, and routine bookkeeping work. Short sessions and high-correctness work keep plan ownership on the main model.
 - VS Code 1.119 ships the first surfaced production implementation. The opt-in default and explicit `#todo` override signal that the maintainer treats plan correctness as the user's call.
 - Plan drift from small-model misclassification is the dominant failure mode — once a "done" status is wrong, downstream decisions compound the error.

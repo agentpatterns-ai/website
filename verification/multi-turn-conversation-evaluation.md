@@ -39,7 +39,7 @@ The high-per-turn + low-trace cell is the cheapest diagnostic — per-turn metri
 
 Conversations carry state across turns. Three failure classes only emerge in that setting:
 
-- **Context loss** — the agent forgets a fact the user gave earlier (order number, account email). The per-turn response is locally coherent; the next turn re-asks for the dropped fact.
+- **Context loss** — the agent forgets a fact the user gave earlier (order number, account email), the kind of dropped detail [transcript analysis](agent-transcript-analysis.md) surfaces. The per-turn response is locally coherent; the next turn re-asks for the dropped fact.
 - **Intent drift** — the conversation gradually leaves the original goal. Stateful drift detection (RNN over per-turn embeddings, DeepContext) reaches F1 0.84 versus 0.67 for stateless filters like Llama-Prompt-Guard-2 and Granite-Guardian — the gap is the multi-turn signal stateless eval cannot see. ([DeepContext, 2026](https://arxiv.org/abs/2602.16935))
 - **Circular exchange** — every turn is locally fine but the conversation makes no progress. The trace-level resolution check is the first metric to fail on a polite loop.
 
@@ -50,7 +50,7 @@ Drift-Bench extends the taxonomy to input faults that only surface across clarif
 Three pieces have to be in place before trace-level scoring works:
 
 1. **Span grouping** — every turn logs as a child span under a shared trace ID. Without it, each turn is an unrelated root span and trace-level scoring has nothing to score. ([Braintrust, 2026](https://www.braintrust.dev/blog/multi-turn-scoring))
-2. **A per-turn scorer** — graded turn-by-turn (helpfulness, tone, policy, format). LLM-as-a-judge against three or four binary sub-criteria is the standard pattern.
+2. **A per-turn scorer** — graded turn-by-turn (helpfulness, tone, policy, format). [LLM-as-a-judge](../workflows/llm-as-judge-evaluation.md) against three or four binary sub-criteria is the standard pattern.
 3. **A trace-level scorer** — graded against goal completion for the whole conversation: did the agent satisfy the user's stated goal by the end of the trace.
 
 Online scoring rules then run both scorers asynchronously against new production traces — per-turn rules span-scoped, trace-level rules trace-scoped. Sampling rate is the cost lever: 100% at low volume, lower as traffic scales.
@@ -68,7 +68,7 @@ Trace-level scoring is not free. Narrow scope when:
 - **Logs are not grouped.** If production logs every LLM call as its own root span, retrofitting trace-level scoring needs re-instrumentation or timestamp reconstruction. The failure is silent — scoring runs against fragments and produces real-looking numbers.
 - **Volume × per-trace cost exceeds the violation cost.** Every trace-level judge call is its own inference; at tens of thousands of conversations a day the bill can exceed the value of the violations caught. Sampling cuts cost but moves the metric from continuous to spot-check.
 
-The [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) covers the conjugate safety case: outcome-only grading misses safety violations even in single-turn conversations. Pair the two — per-turn + trace-level for quality and resolution, outcome + trajectory auditing for safety.
+The [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) covers the conjugate safety case: outcome-only grading misses safety violations even in single-turn conversations. Pair the two — per-turn + trace-level for quality and resolution, outcome + trajectory auditing for safety.
 
 ## Example
 
@@ -98,14 +98,14 @@ The divergence is diagnostic. Per-turn at 62.5% would trigger a tone review; tra
 ## Key Takeaways
 
 - Per-turn scoring evaluates each response in its local context; trace-level scoring evaluates the conversation against a goal-completion criterion. Both are required because they catch orthogonal failures.
-- The high-per-turn + low-trace cell ("sounds good, fixes nothing") is the cheapest diagnostic — it points at the resolution gap that per-turn metrics alone would call a success.
+- The high-per-turn + low-trace cell ("sounds good, fixes nothing") is the cheapest diagnostic — it points at the resolution gap that [outcome grading](grade-agent-outcomes.md) targets and that per-turn metrics alone would call a success.
 - Three failure classes only emerge across turns: context loss, intent drift, and circular exchange. Single-turn scoring is structurally blind to all three.
-- Span grouping is the prerequisite. Without a shared trace ID across turns, the framework cannot tell which turns belong to one conversation.
+- Span grouping is the prerequisite. Without a shared `trace ID` across turns, the framework cannot tell which turns belong to one conversation.
 - Trace-level LLM judges have a measured precision ceiling near 70%; deterministic resolution checks (was a refund issued) are more reliable when they are expressible.
 
 ## Related
 
-- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md)
+- [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md)
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md)
 - [pass@k and pass^k: Capability and Consistency Metrics](pass-at-k-metrics.md)
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md)

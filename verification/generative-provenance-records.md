@@ -7,7 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-03
-maturity: established
+maturity: adopted
 ---
 
 # Generative Provenance Records for Tool-Using Agents
@@ -134,5 +134,5 @@ The verifier confirms `OCR_2` and `Calculator_1` are in the trajectory, the span
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md)
 - [Layered Accuracy Defense](layered-accuracy-defense.md)
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md)
-- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md)
+- [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md)
 - [RAG/Agent Reliability Problem Map](rag-agent-reliability-problem-map.md)

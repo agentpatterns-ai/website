@@ -27,7 +27,7 @@ The term covers a spectrum of network isolation, not a single standard:
 | Level | Description | Example use case |
 |-------|-------------|------------------|
 | **Fully offline** | No network interfaces connected to any external network. Data moves only via physical media. | Classified, SCIFs, industrial control systems |
-| **Internal network** | Connected to an internal LAN but no internet egress. Outbound traffic is blocked at the perimeter. | Regulated enterprise, air-gapped R&D labs |
+| **Internal network** | Connected to an internal LAN but no internet egress. Outbound traffic to AWS, Azure, and other cloud endpoints is blocked at the perimeter. | Regulated enterprise, air-gapped R&D labs |
 | **DMZ deployment** | Segmented between internal and external networks by two firewall layers. Controlled inbound only. | Government contractors, healthcare portals |
 
 Most enterprise air-gapped RAG deployments are the "internal network" variant — internet-blocked but internally reachable. Fully offline deployments require sneakernet updates and are rare outside classified environments. Per [Wikipedia's definition](https://en.wikipedia.org/wiki/Air_gap_(networking)), a true air gap requires physical isolation from any externally connected network; practitioners often use the term loosely for any on-premises deployment.
@@ -76,7 +76,7 @@ Air-gapped RAG addresses a specific threat model. Understanding its scope preven
 **What it defends against**
 
 - Data exfiltration via the inference API: queries and retrieved content never leave your network boundary.
-- Third-party model provider data retention: cloud providers typically retain request logs, and exact retention windows depend on the provider's DPA and contract tier — queries are part of that telemetry surface unless a zero-retention agreement is in place.
+- Third-party model provider data retention: cloud providers such as OpenAI and Anthropic typically retain request logs, and exact retention windows depend on the provider's DPA and contract tier — queries are part of that telemetry surface unless a zero-retention agreement is in place.
 - Supply chain risk from cloud model updates: a provider can silently modify model behavior; a pinned local model version does not change without your action.
 - Internet-facing attack surface: an internally-only reachable RAG system cannot be queried from the public internet.
 

@@ -9,7 +9,7 @@ aliases:
   - Model-invocable slash commands
   - Agent-invokable commands
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Agent-Discoverable Slash Commands
@@ -40,7 +40,7 @@ Side-effectful commands (`/deploy`, `/commit`, `/send-slack-message`) should set
 
 The `description` sits in the system prompt at all times ([Skills reference](https://code.claude.com/docs/en/skills#skill-content-lifecycle)) and drives agent invocation. Four rules from tool-description craft ([Anthropic best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices#writing-effective-descriptions)):
 
-1. **Third person** — "Processes Excel files", not "I can help you…"; point-of-view shift causes discovery misses.
+1. **Third person** — Anthropic's example is "Processes Excel files", not "I can help you…"; point-of-view shift causes discovery misses.
 2. **What and when** — "Extract text from PDFs. Use when the user mentions PDFs, forms, or document extraction." Trigger phrases anchor selection.
 3. **Specific over vague** — "Fills PDF forms and merges documents" selects on those verbs; "Helps with documents" selects nothing.
 4. **Front-load the use case** — combined `description` and `when_to_use` is capped at 1,536 characters per skill ([Skills reference](https://code.claude.com/docs/en/skills)).

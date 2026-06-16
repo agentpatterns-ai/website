@@ -24,7 +24,7 @@ A framework compresses your work when its primitives match your task signature a
 
 - **Task horizon** — single turn, single session, or workflows that pause for days and resume from checkpoint.
 - **Action space** — tools and code only, browser DOM, full desktop, or all of the above.
-- **Memory model** — none, ephemeral within session, server-stateful agent identity, or a memory layer composed over any runtime.
+- **Memory model** — none, ephemeral within session, server-stateful agent identity, or a memory layer composed over any runtime (the scope-and-temporal choices in [Agent Memory Patterns](../agent-design/agent-memory-patterns.md)).
 - **Deployment shape** — Python/Node library, control-plane runtime with an HTTP surface, or a packaged desktop app.
 - **Language and ecosystem fit** — Python-first, polyglot SDKs, or TypeScript/Electron.
 
@@ -99,7 +99,7 @@ A team building a code-review agent for internal PRs starts by asking the five a
 
 - **Task horizon**: one PR per invocation, single session — no checkpointing needed.
 - **Action space**: read repo, call tests, post comments — tools only, no browser.
-- **Memory model**: review conventions per repo persist; cross-PR review state does not.
+- **Memory model**: review conventions per repo persist; cross-PR review state does not — a scope decision covered in [Agent Memory Patterns](../agent-design/agent-memory-patterns.md).
 - **Deployment shape**: library inside an existing CI service, not a control plane.
 - **Language**: existing CI is Go.
 
@@ -110,7 +110,7 @@ Compare with a customer-support agent handling cross-session conversation histor
 ## Key Takeaways
 
 - The six frameworks sit at different layers — runtime (ADK, Agno), action space (Browser Use), memory (mem0), stateful agent runtime (Letta), desktop product (Eigent) — so selection is a task-shape match, not a feature comparison.
-- Decide on five axes: task horizon, action space, memory model, deployment shape, language/ecosystem fit. The axes carry the decision; benchmarks rarely do.
+- Decide on five axes: task horizon, action space, memory model, deployment shape, language/ecosystem fit — the same integration-shape framing as [The Agent Stack Bet](../agent-design/agent-stack-bets.md). The axes carry the decision; benchmarks rarely do.
 - No framework is often the right answer for single-session, short-horizon agents — production teams ship directly on model SDKs plus tracing.
 - Picking on benchmark headlines locks you into vendor methodology disputes that turn over quarterly; pick on integration shape instead.
 

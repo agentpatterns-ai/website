@@ -37,14 +37,14 @@ The [Claude Code best practices guide](https://code.claude.com/docs/en/best-prac
 
 ### Bullets Over Sentences
 
-One idea per line. No transitional language. Sentences like "It is important that you ensure the code is well-tested before submission" collapse to "Write tests before submitting."
+One idea per line. No transitional language. Sentences like "It is important that you ensure the code is well-tested before submission" collapse to `Write tests before submitting`.
 
 ### Rules Over Explanations
 
 State the rule. Do not explain why unless the reason is non-obvious and compliance depends on it.
 
 - **Verbose**: "Try to avoid using unnecessary filler phrases that don't add value to the response."
-- **Compressed**: "No filler phrases."
+- **Compressed**: `No filler phrases.`
 
 The instruction delivers the same constraint at one-third the length.
 
@@ -105,8 +105,8 @@ Same constraints. 60% fewer tokens.
 
 Compression removes words, not meaning — but the two are not always separable.
 
-- **Edge-case context removed**: A rule like "Write tests before submitting" compresses cleanly, but "Write integration tests when the function touches the database, unit tests otherwise" cannot be compressed further without losing the conditional. Cutting context that disambiguates applies the rule uniformly where it should apply selectively.
-- **Implicit reasoning stripped**: Rules without *why* rely on the agent inferring intent correctly. When the agent encounters a case the rule author didn't anticipate, absence of rationale means no basis for generalization. Add rationale only when compliance on unforeseen inputs depends on it.
+- **Edge-case context removed**: A rule like "Write tests before submitting" compresses cleanly, but `Write integration tests when the function touches the database, unit tests otherwise` cannot be compressed further without losing the conditional. Cutting context that disambiguates applies the rule uniformly where it should apply selectively.
+- **Implicit reasoning stripped**: Rules stripped of [their rationale](semantic-density-optimization.md) rely on the agent inferring intent correctly. When the agent encounters a case the rule author didn't anticipate, absence of rationale means no basis for generalization. Add rationale only when compliance on unforeseen inputs depends on it.
 - **Compression as premature optimization**: Trimming a CLAUDE.md that is already under 20 rules produces marginal gains. The [Claude Code documentation](https://code.claude.com/docs/en/best-practices) identifies long, bloated files as the failure mode — not files that are merely imperfect. Compress to remove noise; stop before removing signal.
 - **The compliance U-curve**: "Shorter" is not monotonically "better." A benchmark study of instruction-following under compression — [Separating Constraint Compliance from Semantic Accuracy (arXiv:2512.17920)](https://arxiv.org/abs/2512.17920) — found constraint violations peak at *medium* compression, with compliance recovering at both the verbose and the extreme-compression ends. Half-compressing a rule (paraphrasing it tighter without committing to a terse, unambiguous form) can hurt compliance more than leaving it verbose. Compress decisively to a crisp rule; a partially-trimmed instruction is the worst of both worlds.
 
@@ -115,7 +115,7 @@ Compression removes words, not meaning — but the two are not always separable.
 - Verbose instructions do not improve accuracy — they increase the chance that important rules are skipped.
 - Tables, bullets, and direct rules compress more information per token than prose.
 - Apply a compression test: remove any word or sentence that does not change agent behavior.
-- Front-load the highest-priority rules; attention degrades across long instruction sets.
+- Front-load the highest-priority rules; [attention degrades across long instruction sets](lost-in-the-middle.md).
 - Move workflow-specific instructions from always-loaded files (CLAUDE.md) to on-demand skills.
 
 ## Related

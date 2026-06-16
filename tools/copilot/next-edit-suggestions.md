@@ -69,7 +69,7 @@ NES surfaces a general principle: match the AI's initiative level to the task.
 
 - **Autocomplete** works for forward-moving composition where the developer knows the direction.
 - **NES** works for cascading edits where one change implies others the developer would make manually.
-- **Agent mode** works for well-scoped tasks where the developer can specify the goal and verify the result.
+- **[Agent mode](agent-mode.md)** works for well-scoped tasks where the developer can specify the goal and verify the result.
 
 Selecting the wrong paradigm creates friction: agent mode for a simple rename is overhead; autocomplete for a cross-file refactor requires visiting each location manually. NES fills the gap — proactive enough to find related edit locations, constrained enough to suggest only the edit rather than take autonomous action.
 

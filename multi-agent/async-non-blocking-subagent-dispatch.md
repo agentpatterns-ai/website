@@ -10,7 +10,7 @@ aliases:
   - async subagent dispatch
   - fire-and-continue delegation
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Async Non-Blocking Subagent Dispatch
@@ -21,7 +21,7 @@ maturity: established
 
 Standard [fan-out patterns](sub-agents-fan-out.md) and [bounded batch dispatch](bounded-batch-dispatch.md) treat the orchestrator as a passive waiter: launch N agents, block until all return, synthesize. When the orchestrator itself has productive work — planning next waves, processing partial results, managing cross-agent state — blocking wastes its execution budget.
 
-Async dispatch decouples orchestration from subagent lifecycle. The orchestrator dispatches and continues its own loop, handling results as they arrive.
+Async dispatch decouples orchestration from subagent lifecycle. The [orchestrator](orchestrator-worker.md) dispatches and continues its own loop, handling results as they arrive.
 
 **The condition matters.** When the orchestrator is a pure dispatch-and-synthesize node with no intermediate work, async adds coordination complexity — task tracking, timeout detection, partial-result reconciliation — without throughput gain. The orchestrator busy-waits or idle-polls instead of blocking cleanly. Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) chose synchronous execution because "asynchronicity adds challenges in result coordination, state consistency, and error propagation across the subagents."
 

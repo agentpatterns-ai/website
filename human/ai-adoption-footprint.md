@@ -21,7 +21,7 @@ maturity: established
 
 Steve Yegge's April 2026 post described a Google contact's view as "20% agentic power users, 20% outright refusers, 60% still using Cursor or equivalent chat tool," and claimed "most of the industry has the same internal adoption curve" ([Simon Willison](https://simonwillison.net/2026/Apr/13/steve-yegge/)). Addy Osmani cited "over 40K SWEs use agentic coding weekly" at Google; Demis Hassabis called the post "pure clickbait" ([VentureBeat](https://venturebeat.com/orchestration/google-leaders-including-demis-hassabis-push-back-on-claim-of-uneven-ai-adoption-internally)).
 
-The dispute is about threshold placement, not shape. Weekly agentic headcount and multi-agent orchestration depth are different measurements. Under either, adoption is segmented, not flat.
+The dispute is about threshold placement, not shape. Weekly agentic headcount and [multi-agent orchestration depth](../workflows/ai-development-maturity-model.md) are different measurements. Under either, adoption is segmented, not flat.
 
 ```mermaid
 graph LR

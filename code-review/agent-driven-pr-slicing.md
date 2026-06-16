@@ -37,11 +37,11 @@ The agent cuts along axes the diff alone does not encode — the `commit-work` s
 
 - **Feature vs. refactor** — endpoint and supporting interface change land separately
 - **Backend vs. frontend** — server contract first, client consumer second
-- **Formatting vs. logic** — mechanical reformatting splits from behavior
+- **Formatting vs. logic** — mechanical reformatting splits from behavior, the style-change-vs-logic-change distinction [structure-aware diff labeling](structure-aware-diff-labeling.md) encodes per hunk
 - **Tests vs. production code** — the test PR can land alongside or after
 - **Dependency bumps vs. behavior changes** — version updates separate from usage
 
-Intent-driven slicing adds a sixth axis: which task in the chat session each edit belonged to. This turns a shallow file-based split into a semantically coherent set.
+Intent-driven slicing adds a sixth axis: which task in the chat session each edit belonged to — the signal Cursor's "Split PRs" quick action reads from chat context. This turns a shallow file-based split into a semantically coherent set.
 
 ## Stacking and Dependency Order
 

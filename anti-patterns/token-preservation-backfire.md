@@ -44,7 +44,7 @@ flowchart LR
 
 System-level instructions override user-level task requests. When token preservation is a system directive, the efficiency constraint takes precedence over the user's objective — the agent is not being lazy, it is faithfully following a conflicting instruction.
 
-Any instruction framing work as a *cost to be minimised* risks reducing agent ambition. The effect is most documented for long-horizon coding agents; evidence for other task types is limited to a small number of practitioner reports.
+Any instruction framing work as a *cost to be minimised* risks reducing agent ambition — a form of [objective drift](objective-drift.md) where the resource budget displaces the task goal. The effect is most documented for long-horizon coding agents; evidence for other task types is limited to a small number of practitioner reports.
 
 ## When This Applies
 
@@ -85,7 +85,7 @@ Reframe constraints as **quality targets** rather than **resource limits**.
 
 - Open-ended efficiency instructions ("preserve tokens", "don't be wasteful") create a second objective that long-horizon agents resolve by doing less work — skipping exploration, refusing ambitious tasks, stopping early.
 - The mechanism is instruction precedence: a system-level resource constraint outranks the user's task, so the agent is faithfully following a conflicting directive, not being lazy.
-- The failure mode is specific to multi-step, tool-using tasks where the agent chooses whether to continue; single-turn and summarisation work has no "less work" to fall back to.
+- The failure mode is specific to multi-step, tool-using tasks where the agent chooses whether to continue ([harness-engineering](../agent-design/harness-engineering.md) territory); single-turn and summarisation work has no "less work" to fall back to.
 - A bounded, quantified token budget (e.g. TALE) can cut tokens with minimal accuracy loss — the backfire is a property of vague minimisation framing, not of efficiency goals.
 - Reframe constraints as quality targets ("be thorough", "bias to action") or make them mechanical, rather than as resource limits.
 

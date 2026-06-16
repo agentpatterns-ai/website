@@ -18,7 +18,7 @@ maturity: established
 
 ## The Boundary Is an Economic Line
 
-Each developer carries an implicit delegation frontier: tasks on one side are "reasonable to hand to an agent", tasks on the other are "not yet". When a model release moves the frontier, the gain is consumed in one of two ways:
+Each developer carries an implicit delegation frontier: tasks on one side are "reasonable to hand to an agent", tasks on the other are "not yet". When [a model release](progressive-autonomy-model-evolution.md) moves the frontier, the gain is consumed in one of two ways:
 
 - **Hold ambition constant** — same tasks, faster. Gain is bounded speedup.
 - **Move the target** — rescope previously-uneconomic tasks. Gain is a step change in what gets attempted.

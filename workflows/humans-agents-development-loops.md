@@ -20,7 +20,7 @@ Software delivery runs as two nested feedback loops, as described by Kief Morris
 
 **The why loop** iterates over ideas and working software. A human has an idea, the software gets built, the human evaluates it, and the cycle continues. Humans always own this loop — they set the goals and evaluate whether outcomes match them.
 
-**The how loop** iterates over intermediate artefacts: specs, code, tests, infrastructure. It is a means to an end. The how loop itself nests further:
+**The how loop** iterates over intermediate artefacts: [specs](spec-driven-development.md), code, tests, infrastructure. It is a means to an end. The how loop itself nests further:
 
 - Outer how loop: feature-level delivery (spec → implementation → validation)
 - Middle how loop: story-level breakdown (decompose → implement → integrate)
@@ -45,13 +45,13 @@ Humans run the why loop only. Agents run the entire how loop without human direc
 
 The appeal is real: the how loop is where software development accumulates the most friction (over-engineering, technical debt, approval queues). Delegating it entirely removes that friction.
 
-The risk: agents working in messy or poorly-structured codebases spiral more, take longer, and cost more. Internal code quality still matters, not for its own sake, but because a clean codebase improves agent velocity and reduces inference cost. External quality — correctness, performance, compliance — remains the measure, but it is harder to achieve without internal structure.
+The risk: agents working in messy or poorly-structured codebases spiral more, take longer, and cost more. Internal code quality still matters, not for its own sake, but because a clean codebase improves agent velocity and reduces inference cost — [code cleanliness is an agent cost lever](code-cleanliness-agent-cost-lever.md). External quality — correctness, performance, compliance — remains the measure, but it is harder to achieve without internal structure.
 
 ### Humans in the Loop
 
 Humans gate specific steps of the how loop, typically the innermost coding loop. The common form: a developer inspects every diff the agent produces before accepting it.
 
-This mode preserves high control over internal quality and catches spiraling agents quickly. Experienced developers can resolve in seconds what an agent might spiral on for minutes.
+This mode preserves high control over internal quality and catches spiraling agents quickly, the way [loop detection](../observability/loop-detection.md) does automatically. Experienced developers can resolve in seconds what an agent might spiral on for minutes.
 
 The cost: it creates a throughput bottleneck. Agents generate code faster than humans can review it. The [human-in-the-loop placement pattern](human-in-the-loop.md) formalizes when gating is worth the cost (irreversible or high-impact actions) and when it is waste (reversible execution steps that automated checks already cover).
 
@@ -84,7 +84,7 @@ Teams shifting from in-loop to on-loop typically pass through a recognition: the
 2. **Capture patterns as harness rules** — when a human would have caught a recurring class of error, convert that judgment into an automated check that catches it upstream
 3. **Review harness performance, not artefact quality** — shift the human review cadence from per-PR diff review to periodic harness evaluation: are the checks catching what they should? Are new failure modes emerging?
 
-This is not a one-time migration. The harness is continuously maintained. New workload types, model changes, and scope expansions each require harness updates.
+This is not a one-time migration. The [harness](../agent-design/harness-engineering.md) is continuously maintained. New workload types, model changes, and scope expansions each require harness updates.
 
 ## The Agentic Flywheel
 
@@ -96,7 +96,7 @@ The graduation path for flywheel recommendations mirrors the in/on/out spectrum:
 - **Backlog**: agent adds suggestions to the queue for later triage
 - **Autonomous**: high-confidence, narrow-scope changes auto-apply with monitoring
 
-Moving to autonomous requires a track record. Start interactive. Promote specific categories to autonomous only after they prove safe.
+Moving to autonomous requires a track record. Start interactive. Promote specific categories to autonomous only after they prove safe, the same graduated-trust path the [human-in-the-loop placement pattern](human-in-the-loop.md) lays out.
 
 At scale, this starts to resemble humans-outside-the-loop again — but the difference is that the harness was engineered deliberately, not abandoned. The system is not just "good enough"; it is capable of catching and correcting its own failure modes.
 

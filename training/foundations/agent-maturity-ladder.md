@@ -13,7 +13,7 @@ last_reviewed: 2026-05-27
 
 > Build agents in this order — single tool call before retries, retries before retrieval, retrieval before planning. Each rung exposes the failure modes the next pretends to solve.
 
-The earned-complexity ladder is a diagnostic map of nine layers from a single LLM tool call to multi-agent delegation. Read the blockquote above as a default heuristic, not a forced sequence: the rungs are prerequisite layers, and the default for greenfield work is to build them in order. Skip a rung when you can articulate which failure mode at the lower rung you have already solved. Skip without that articulation and you are cargo-culting: copying the architecture of a production system without inheriting the failures that shaped it.
+The earned-complexity ladder is a diagnostic map of nine layers from a single LLM tool call to multi-agent delegation. Read the blockquote above as a default heuristic, not a forced sequence: the rungs are prerequisite layers, and the default for greenfield work is to build them in order — the start-simple posture of the [Anthropic effective-agents framework](../../agent-design/anthropic-effective-agents-framework.md). Skip a rung when you can articulate which failure mode at the lower rung you have already solved. Skip without that articulation and you are cargo-culting: copying the architecture of a production system without inheriting the failures that shaped it.
 
 The cargo-cult symptom is consistent. A team reads about Anthropic's multi-agent research system or watches a Devin demo, then builds a planner agent, a critic agent, a memory layer, and a delegation graph — before they have shipped a reliable single-step tool loop. The result is a system that fails in ways the team cannot diagnose, because they never built the layer below the failure. Anthropic's own guidance is to start simple: "we recommend finding the simplest solution possible, and only increasing complexity when needed" and "optimizing single LLM calls with retrieval and in-context examples is usually enough" ([Anthropic Engineering: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
 
@@ -47,7 +47,7 @@ A bounded retry loop that re-invokes the model when validation fails — schema 
 
 **Cargo-cult symptom**: assuming retrieval (rung 4) will fix "the model keeps getting it wrong" when the actual issue is that the same prompt is being retried with no validation signal — the model has no new information to use.
 
-**Anchor**: [Deterministic Guardrails](../../verification/deterministic-guardrails.md) and [Agent Self-Review Loop](../../agent-design/agent-self-review-loop.md).
+**Anchor**: [Deterministic Guardrails](../../verification/deterministic-guardrails.md) and [Agent Self-Review Loop](../../code-review/agent-self-review-loop.md).
 
 ## Rung 4 — Retrieval
 

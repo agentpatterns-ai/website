@@ -40,7 +40,7 @@ Agent (sandbox) → unauthenticated request → Proxy (external)
                                          Upstream service
 ```
 
-The agent never holds credentials. A compromised agent can only make requests the proxy permits. [[Source]](https://www.anthropic.com/engineering/claude-code-sandboxing)
+The agent never holds credentials. A compromised agent can only make requests the proxy permits — [blast-radius containment](blast-radius-containment.md) by construction. [[Source]](https://www.anthropic.com/engineering/claude-code-sandboxing)
 
 ## Scoping Tokens to Operations
 
@@ -128,7 +128,7 @@ The security guarantee comes from OS-level process isolation. Agent and proxy ru
 - **Proxy is itself compromised**: A supply chain attack on the proxy process (e.g., Caddy, a misconfigured admin API) exposes all credentials. The proxy becomes a high-value target — harden it accordingly.
 - **Allowlist is too permissive**: A wildcard like `/repos/*` allows any org repo. Misconfigured allowlists provide false confidence with unchanged blast radius.
 - **Single point of failure**: If the proxy is unreachable, the agent cannot authenticate. Production deployments need health checks and restart policies.
-- **Latency overhead**: Every authenticated call adds a local network hop. Measurable for high-frequency tool use — benchmark before adopting this pattern in latency-sensitive workflows.
+- **Latency overhead**: Every authenticated call adds a local network hop through the proxy, which doubles as an [egress-policy](agent-network-egress-policy.md) enforcement point. Measurable for high-frequency tool use — benchmark before adopting this pattern in latency-sensitive workflows.
 - **Operational complexity**: An additional process to deploy and secure. For low-blast-radius dev tasks, environment variable injection is simpler and sufficient.
 
 ## Key Takeaways

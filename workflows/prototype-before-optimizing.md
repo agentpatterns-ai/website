@@ -12,7 +12,7 @@ aliases:
   - no-token-limit magic
   - baseline-first optimization
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
@@ -53,13 +53,13 @@ Two separate stages with a hard gate between them:
 
 During prototyping, the objective is *learning*, not efficiency. Constraints that make the workflow look fast before failure modes surface create false confidence.
 
-**Remove hard token ceilings per call.** Let reasoning run until the model is done, not until a budget is exhausted. If the model hits a limit and produces a truncated result, you learn nothing about the actual failure boundary.
+**Remove hard token ceilings per call.** Let [reasoning run until the model is done](../agent-design/reasoning-budget-allocation.md), not until a budget is exhausted. If the model hits a limit and produces a truncated result, you learn nothing about the actual failure boundary.
 
 **Enable multiple reasoning passes.** Self-consistency and self-reflection loops enhance reasoning quality but require generous budgets. [Compressing these before understanding them removes the signal that reveals where the workflow actually breaks](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/no-token-limit-magic.md).
 
 **Set temporary spending ceilings per experiment, not per call.** Bound the total cost of a discovery run, not individual responses within it. This caps expenditure without distorting individual outputs.
 
-**Track quality and token consumption together from the start.** Without parallel measurement, you have no basis for the optimization phase.
+**Track quality and token consumption together from the start.** Without parallel measurement, you have no basis for the [optimization phase](eval-driven-development.md#applying-the-loop-to-tool-building).
 
 ### What "Generous" Does Not Mean
 
@@ -78,7 +78,7 @@ The optimization phase runs as A/B comparison:
 3. **Apply one optimization at a time** — token budget reduction, prompt compression, or context pruning
 4. **Compare against baseline** — if quality metrics fall below threshold, the optimization is unsafe
 
-[Evaluation-Driven Development for Agent Tools](eval-driven-tool-development.md) covers the prototype-evaluate-analyze-iterate loop that makes this systematic.
+[Eval-Driven Development for tool building](eval-driven-development.md#applying-the-loop-to-tool-building) covers the prototype-evaluate-analyze-iterate loop that makes this systematic.
 
 ## Trade-offs
 
@@ -103,8 +103,7 @@ The trade-off is real: higher upfront inference cost for faster baseline discove
 
 - [Context Budget Allocation: Every Token Has a Cost](../context-engineering/context-budget-allocation.md) — structural allocation: what to load and how much
 - [Reasoning Budget Allocation: The Reasoning Sandwich](../agent-design/reasoning-budget-allocation.md) — phase-level allocation: max compute for planning/verification, reduced for execution
-- [Evaluation-Driven Development for Agent Tools](eval-driven-tool-development.md) — prototype-evaluate-analyze-iterate loop
-- [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md) — defining success criteria before building
+- [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md) — defining success criteria before building, plus the prototype-evaluate-analyze-iterate loop for tool building
 - [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — the failure mode when efficiency instructions override task completion
 - [The Velocity-Quality Asymmetry](velocity-quality-asymmetry.md) — why compounding quality debt reverses velocity gains
 - [Prompt Compression: Maximizing Signal Per Token](../context-engineering/prompt-compression.md) — how to compress safely once a baseline exists

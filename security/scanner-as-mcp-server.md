@@ -12,7 +12,7 @@ tags:
   - tool-agnostic
   - mcp
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Scanner-as-MCP-Server: Secret and Dependency Scans as Typed Agent Tools
@@ -56,7 +56,7 @@ The MCP server "honor[s] your existing push protection customization" ([GA chang
 
 Six conditions invert the pattern's value:
 
-1. **Agent skips the scan.** Tools the agent decides to call do not enforce. Without a system-prompt directive or user prompt naming the scan, no scan runs. CI gates remove that agency by design.
+1. **Agent skips the scan.** Tools the agent decides to call do not enforce. Without a system-prompt directive or user prompt naming the scan, no scan runs. [CI gates](always-on-pr-security-review.md) remove that agency by design.
 2. **Repo lacks the upstream signal.** Secret scanning requires Secret Protection enabled; dependency scanning requires Dependabot alerts. Without them the toolset returns empty and the agent reports a clean result.
 3. **Scanner principal closes the lethal trifecta.** A scanner MCP server with repo read, a write-egress tool, and exposure to untrusted content (PR bodies, log snippets) holds all three legs on the scanner principal. Audit for trifecta closure before merge.
 4. **Schema mutability.** MCP tool schemas can change between sessions and most clients do not warn. An agent that parsed `severity` yesterday can receive `note` today, then fail silently or invent a value ([DZone](https://dzone.com/articles/why-security-scanning-isnt-enough-for-mcp-servers)).

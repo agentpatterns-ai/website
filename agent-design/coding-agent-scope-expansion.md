@@ -11,7 +11,7 @@ aliases:
   - general-purpose coding agent
   - coding agent generalization
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Coding Agent Scope Expansion: When to Extend Beyond the Codebase
@@ -47,14 +47,14 @@ graph TD
 Expansion pays off when all four hold:
 
 - **Per-domain evals exist before rollout.** Anthropic warns that "optimizing for one kind of input can hurt performance on other inputs" ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)). Coding pass rates do not measure browser automation quality, PR-comment review tone, or incident-triage correctness. Each new domain needs its own eval loop before production traffic.
-- **Verification signal exists in the new domain.** Compile and test are the coding agent's ground truth. Outside code, substitute signals must exist — a schema the browser output conforms to, a runbook step that succeeds, a ticket that transitions state. Without a signal, there is no self-correction loop.
+- **Verification signal exists in the new domain.** Compile and test are the coding agent's [incremental-verification](../verification/incremental-verification.md) ground truth. Outside code, substitute signals must exist — a schema the browser output conforms to, a runbook step that succeeds, a ticket that transitions state. Without a signal, there is no self-correction loop.
 - **Credentials are isolated per task-type.** The [lethal trifecta](../security/lethal-trifecta-threat-model.md) — private data, untrusted input, external communication — appears on nearly every task once the agent reads Gmail, writes Jira tickets, and browses untrusted pages. Each task-type needs its own credential scope and egress policy; one agent with union-of-all credentials is a governance regression.
 - **Long-horizon work has progress checkpoints.** Self-scheduled work across days ([OpenAI](https://openai.com/index/codex-for-almost-everything/)) amplifies both [reward hacking](../verification/anti-reward-hacking.md) and objective drift without compile/test anchors. Force periodic progress artifacts (summaries, diffs, decision logs) a human or critic agent can verify.
 
 ## When Expansion Backfires
 
 - **Generalization without evals.** The coding-specific eval suite stays green while non-coding tasks silently regress. You discover the regression from user reports, not dashboards.
-- **Credential sprawl.** Each new plugin adds secrets. Revocation and audit become intractable; the trifecta is now the default.
+- **Credential sprawl.** Each new plugin adds secrets. Revocation and audit become intractable; the [lethal trifecta](../security/lethal-trifecta-threat-model.md) is now the default.
 - **Long automations without checkpoints.** Multi-day tasks drift from the original objective because no verification signal runs between wake-ups.
 - **Enterprise rollout outrunning governance.** GSI-driven deployments ([OpenAI](https://openai.com/index/scaling-codex-to-enterprises-worldwide/)) land before permission design and audit trails exist.
 
@@ -93,7 +93,7 @@ Two narrow agents with shared scaffold patterns beat one general agent with a un
 
 - Scope expansion works when the coding scaffold — loop, verification, eval, credential boundary — transfers into each new domain.
 - No per-domain eval means silent regression; coding pass rates do not measure non-coding quality.
-- Credential isolation per task-type is the only defense against the lethal trifecta becoming the default.
+- Credential isolation per task-type is the only defense against the [lethal trifecta](../security/lethal-trifecta-threat-model.md) becoming the default.
 - Long-horizon automations need progress checkpoints to substitute for compile/test signals.
 - When the conditions do not hold, prefer separate narrow agents sharing a harness over one generalist.
 
@@ -102,6 +102,6 @@ Two narrow agents with shared scaffold patterns beat one general agent with a un
 - [Delegation Decision](delegation-decision.md)
 - [Task-Specific vs Role-Based Agents](task-specific-vs-role-based-agents.md)
 - [Specialized Agent Roles](specialized-agent-roles.md)
-- [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md)
+- [Scaffold Architecture Taxonomy](harness-design-dimensions.md)
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md)
 - [Harness Engineering](harness-engineering.md)

@@ -12,7 +12,7 @@ tags:
   - tool-agnostic
   - context-engineering
 last_reviewed: 2026-05-27
-maturity: established
+maturity: emerging
 ---
 
 # Context-Injected Error Recovery

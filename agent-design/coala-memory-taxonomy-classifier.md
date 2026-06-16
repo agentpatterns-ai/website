@@ -78,7 +78,7 @@ graph TD
     style H fill:#2d5a2d,stroke:#4a4a4a,color:#e0e0e0
 ```
 
-A harness with only working and procedural memory cannot learn from past sessions — the absence of episodic memory predicts the failure mode without testing. A harness with episodic but no semantic memory will repeatedly re-derive facts that should live in a lookup. The classifier names these absences directly.
+A harness with only working and procedural memory cannot learn from past sessions — the absence of episodic memory predicts the failure mode without testing. A harness with episodic but no semantic memory will repeatedly re-derive facts that should live in a lookup, the consolidation gap [tiered memory architecture](tiered-memory-architecture.md) closes. The classifier names these absences directly.
 
 ## Why It Works
 
@@ -93,7 +93,7 @@ The classifier describes content type, not operational mechanics. Treating the l
 - **Trivial agents pay ceremony without yield.** A one-file CLAUDE.md and a context window need no taxonomy. The classifier's value is proportional to how much memory surface there is to classify; on small surfaces the description is the inventory.
 - **Mislabelling implies false architectural depth.** A team claiming "all four CoALA memory types" can ship a harness whose semantic memory is one embedded JSON file and whose episodic memory is the session window — labels present, capabilities absent. Type coverage is necessary but not sufficient; operational quality is a separate audit.
 
-Lead with the artifacts, then use CoALA to *name* them and surface gaps. Do not let the labels imply mechanics the underlying artifacts don't have.
+Lead with the artifacts, then use [CoALA's full three-axis framework](../frameworks/coala-cognitive-architecture-language-agents.md) to *name* them and surface gaps. Do not let the labels imply mechanics the underlying artifacts don't have.
 
 ## Example
 
@@ -118,10 +118,11 @@ The inventory says: missing semantic memory. The capability prediction follows d
 
 ## Related
 
+- [CoALA Decision-Making Loop as an Orchestration Lens](coala-decision-making-loop.md) — The other CoALA axis: this page classifies the *memory* surfaces, that page traces the *decision-making* loop (propose -> evaluate -> select -> act) — two distinct facets of the same framework
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — scope-based memory architecture for cross-session learning
+- [Continual-Learning Layers](continual-learning-layers.md) — companion taxonomy organised by update-target / persistence-scope, distinct from this classify-what axis
 - [Tiered Memory Architecture](tiered-memory-architecture.md) — operationalising episodic-to-semantic consolidation
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md) — episode-keyed recall implementation
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — converting traces into persistent knowledge
 - [Session Recap: Goal-Shaped Handoff at Context Boundaries](session-recap.md) — episodic-memory artifact for compaction boundaries
-- [Externalization in LLM Agents: Memory, Skills, Protocols, and Harness](externalization-in-llm-agents.md) — the broader externalisation lens that CoALA's procedural axis sits inside
 - [Cognitive Architectures for Language Agents (CoALA): A Classifier for Agent Harnesses](../frameworks/coala-cognitive-architecture-language-agents.md) — the full three-axis framework this memory taxonomy is one axis of

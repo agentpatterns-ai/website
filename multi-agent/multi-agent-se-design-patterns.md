@@ -42,7 +42,7 @@ The study identifies 16 design patterns across five categories:
 **Execution** — how action is sequenced:
 
 - **Sequential** — fixed order, one after another.
-- **Parallel** — independent agents run simultaneously.
+- **Parallel** — independent agents run simultaneously (see [Fan-Out Synthesis](fan-out-synthesis.md)).
 - **Conditional** — downstream agents activate based on upstream results.
 
 **Verification** — how outputs are validated:
@@ -53,7 +53,7 @@ The study identifies 16 design patterns across five categories:
 
 **Communication** — how information flows:
 
-- **Structured Message Passing** — typed, schema-validated payloads.
+- **Structured Message Passing** — [typed, schema-validated payloads](typed-schemas-at-agent-boundaries.md).
 - **Shared Workspace** — communication through shared artifacts (files, tickets, code).
 - **Broadcast** — one publishes, all observe.
 - **Request-Response** — point-to-point query/reply.

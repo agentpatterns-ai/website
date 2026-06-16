@@ -54,7 +54,7 @@ Adding verification gates to every agent definition can fail in four ways:
 
 **False-positive pre-task checks.** A loose duplicate check blocks legitimate work — an agent told to skip if "a page on this topic exists" stops on tangential matches. Scope checks precisely.
 
-**Validator blindness.** In-task validation catches structural errors, not semantic ones. An agent cannot reliably catch its own reasoning errors — separate reviewer agents close this gap but add latency and cost.
+**Validator blindness.** In-task validation catches structural errors, not semantic ones — semantic errors need a [separate reviewer](../agent-design/separation-of-knowledge-and-execution.md). An agent cannot reliably catch its own reasoning errors — separate reviewer agents close this gap but add latency and cost.
 
 **Prompt-level ceiling.** Verification instructions reduce sycophantic compliance but do not eliminate it. The bias is rooted in RLHF training, not prompt scaffolding; mitigation requires combined fine-tuning, decoding strategies, and post-deployment controls alongside instructions ([Sycophancy in Large Language Models: Causes and Mitigations](https://arxiv.org/html/2411.15287v1)). Treat prompts as a floor-raiser, not a fix.
 
@@ -97,7 +97,7 @@ The corrected prompt adds three gate points: a pre-task duplicate check, in-task
 
 - Agents without verification instructions comply with every request, including bad ones.
 - Add pre-task checks, in-task validation, and explicit stop conditions to every agent definition.
-- Use separate reviewer agents — an agent cannot reliably review its own work.
+- Use [separate reviewer agents](../agent-design/separation-of-knowledge-and-execution.md) — an agent cannot reliably review its own work.
 - Mandatory structured output fields force the agent to perform the evaluation you need.
 
 ## Related

@@ -75,7 +75,7 @@ Runtime confirmation gates ([Human-in-the-Loop Confirmation Gates](../security/h
 SEFZ is heavy machinery — trace-recording runtime, LLM mutation engine, per-skill bandit — that earns its keep only when destructive or networked actions reach broad user populations. Skip it when:
 
 - **No destructive or egress-capable operations exist.** Read-only skills have no forbidden sink; static review covers them.
-- **Trace-annotation infrastructure is absent.** Without predicates wired into the runtime, the reachability oracle has no graph to query — author operationally-testable guardrails (§"Where the Fix Lives") instead.
+- **Trace-annotation infrastructure is absent.** Without predicates wired into the runtime, the reachability oracle has no graph to query — author operationally-testable guardrails (§"Where the Fix Lives", and see [skill authoring patterns](../tool-engineering/skill-authoring-patterns.md)) instead.
 - **The skill library is small, internal, and curated.** Manual review per skill costs less than per-skill fuzzing campaigns.
 - **The mutation budget is constrained.** SEFZ's LLM-driven mutation contributes ~53% of discovery; without it the tool underperforms basic differential testing.
 

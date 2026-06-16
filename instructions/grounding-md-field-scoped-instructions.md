@@ -9,7 +9,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # GROUNDING.md: Field-Scoped Hard Constraints and Convention Parameters
@@ -48,9 +48,9 @@ Each rule carries an explicit ID (`HC-FDR-01`, `CP-QUANT-02`) and a justificatio
 
 A flat instruction file gives every rule equal weight. The agent has no principled basis to break ties when a request conflicts with a rule. The HC/CP split solves three problems at once:
 
-- **Refusal contract** — HCs grant explicit licence to refuse; CPs do not. The agent stops guessing whether to comply or push back.
+- **Refusal contract** — HCs grant explicit licence to refuse; CPs do not, extending the [standards-as-instructions](standards-as-agent-instructions.md) principle with a severity tag. The agent stops guessing whether to comply or push back.
 - **Evolution path** — fields evolve practice via CP updates without touching HCs. New methods enter as CP options before promotion to HC.
-- **Reviewability** — HC violations are bugs; CP deviations are tradeoffs. Reviewers and CI gates treat them differently.
+- **Reviewability** — HC violations are bugs; CP deviations are tradeoffs, and where a check is deterministic, [enforcing it via a hook](enforcing-agent-behavior-with-hooks.md) outranks any review. Reviewers and CI gates treat them differently.
 
 This is the [standards-as-instructions](standards-as-agent-instructions.md) principle with severity tagged into the document itself.
 

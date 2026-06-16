@@ -73,7 +73,7 @@ Periodically code without AI assistance — the same principle behind pilots fly
 
 ### Explain-Then-Code
 
-When using an agent, ask for an explanation of the approach *before* requesting implementation. This forces engagement with the reasoning, not just the output.
+When using an agent, ask for an explanation of the approach *before* requesting implementation — one of the [deliberate AI-assisted learning](deliberate-ai-learning.md) interaction styles that build skill instead of eroding it. This forces engagement with the reasoning, not just the output.
 
 ```text
 Instead of:

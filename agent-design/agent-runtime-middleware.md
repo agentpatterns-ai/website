@@ -79,12 +79,12 @@ Genkit ships in TypeScript, Go, and Dart with Python in flight; LangChain's API 
 
 ## When This Backfires
 
-- **Small agents with three or fewer cross-cutting concerns.** Three middlewares around a function are harder to read than three inline lines. The indirection pays off only once the cross-cutting set is large or stable enough across agents to motivate the abstraction.
+- **Small agents with 3 or fewer cross-cutting concerns.** 3 middlewares around a function are harder to read than 3 inline lines. The indirection pays off only once the cross-cutting set is large or stable enough across agents to motivate the abstraction.
 - **Order-dependent middleware without ordering tests.** Redaction-then-logging vs logging-then-redaction is a security bug, not a style preference. Registration-order drift without a test asserting effective order is a footgun.
 - **Silent-swallow middleware.** A handler that catches and discards exceptions makes failures vanish into the stack — a documented agent failure mode ([AI agent failure pattern recognition](https://www.mindstudio.ai/blog/ai-agent-failure-pattern-recognition)). Contain it with an error-handler middleware that re-raises by default.
 - **Performance death-by-thousand-handlers.** Fifteen handlers run twice per turn at 2 ms each add 60 ms per iteration; at thirty iterations that is 1.8 s of pure middleware overhead.
 - **Compliance theatre.** An "approval" middleware that auto-approves teaches the audit log that controls exist when none do — the Lies-in-the-Loop failure mode.
-- **Off-protocol egress invisible to middleware.** Middleware only sees calls through the runtime. An agent that shells out to curl, opens a raw socket, or uses a DB driver directly bypasses the chain. Pair with host-side egress controls.
+- **Off-protocol egress invisible to middleware.** Middleware only sees calls through the runtime. An agent that shells out to `curl`, opens a raw socket, or uses a DB driver directly bypasses the chain. Pair with host-side egress controls.
 
 ## Example
 

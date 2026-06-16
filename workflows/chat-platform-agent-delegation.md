@@ -90,10 +90,10 @@ Cursor's Cloud Agents require temporary code storage while running, so legacy Pr
 ## Failure Modes
 
 - **Shared and Connect channels**: external participants can post into the channel, so any mention becomes untrusted content from outside the security boundary. The trifecta closes instantly on the agent principal.
-- **Heuristic repo binding silently mis-routes**: an ambiguous message routes work to the wrong repo. Compute and reviewer attention are spent before the mismatch surfaces at PR review.
+- **Heuristic repo binding silently mis-routes**: an ambiguous message routes work to the wrong repo. Compute and reviewer attention are spent before the mismatch surfaces at GitHub PR review.
 - **Channel without engineering quorum**: delegation from a marketing or product channel where no engineer monitors produces orphan PRs. The visibility benefit only pays out if the audience can act on the result.
 - **High-frequency channels**: agent-status messages compete with human messages; the team mutes the bot; visibility regresses to worse than IDE-private invocation because nobody reads the status updates.
-- **Auth-model mismatch**: chat-platform identity binds to forge identity. Joint blast radius is whatever the forge account can do — if the chat identity is broader than the forge identity (contractors with Teams access but limited repo access), the link inverts the expected permission boundary.
+- **Auth-model mismatch**: chat-platform identity (Slack or Microsoft Teams) binds to forge identity. Joint blast radius is whatever the forge account can do — if the chat identity is broader than the forge identity (contractors with Teams access but limited repo access), the link inverts the expected permission boundary.
 
 ## When to Adopt
 

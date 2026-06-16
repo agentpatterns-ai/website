@@ -26,9 +26,9 @@ Cross-lingual prompt preprocessing inserts a small local model (e.g. Llama 3.2 3
 The pattern only pays back its preprocessing latency and complexity under all of the following:
 
 - **Native-language prompting is non-negotiable** — the developer cannot or will not author prompts in English. A bilingual developer who writes English captures the same savings with zero infrastructure.
-- **Input is the dominant cost** — input tokens (long context, repeated source files, multi-turn history) substantially exceed output tokens.
+- **Input is the dominant cost** — input tokens (long context, repeated source files, multi-turn history) substantially exceed output tokens, the regime where [structural prompt compression](prompt-compression.md) pays.
 - **Latency budget tolerates the local pass** — batch pipelines, background agents, or prompts large enough that local inference amortises. Short interactive turns close the operating window.
-- **Source language tokenizes inefficiently** — Turkish, Arabic, Chinese, and similar languages where BPE inflates token count materially. Romance and Germanic languages share more of English's subword vocabulary; the arbitrage shrinks there.
+- **Source language tokenizes inefficiently** — Turkish, Arabic, Chinese, and similar languages where BPE inflates token count materially. Romance and Germanic languages share more of English's subword vocabulary; the [tokenizer arbitrage](tokenizer-swap-tax.md) shrinks there.
 - **Production-side evals exist** — benchmark parity does not transfer to your codebase, identifier set, or domain vocabulary. The middleware needs its own quality gate.
 
 ## Reported Savings and the Conditions Behind Them

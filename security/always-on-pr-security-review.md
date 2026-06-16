@@ -22,7 +22,7 @@ maturity: established
 
 Security review fails along two temporal axes:
 
-- **New risk** — vulnerabilities in today's changes. Diff-scoped, cheap to review at PR open, lost if not caught before merge.
+- **New risk** — vulnerabilities in today's changes. Diff-scoped, cheap to review when the `pull_request` opens, lost if not caught before merge.
 - **Resident risk** — vulnerabilities already in the codebase, plus dependency, config, and policy drift. No PR may touch the affected files for months.
 
 PR-only review never finds resident risk; scheduled-only scanning delays new-code coverage.

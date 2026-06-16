@@ -9,7 +9,7 @@ tags:
 aliases:
   - "Compensatory Scaffolding"
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Temporary Compensatory Mechanisms
@@ -42,7 +42,7 @@ The classification question: *If the model were perfect at this capability, woul
 
 ### Forced Verification Passes
 
-[Pre-completion checklists](../verification/pre-completion-checklists.md) force agents through verification before declaring completion. Without an explicit gate, agents frequently declare success before running tests or checking linter output — treating apparent completion as actual completion.
+[Pre-completion checklists](../verification/pre-completion-checklists.md) force agents through verification before declaring completion. Without an explicit gate, agents frequently declare success before running tests or checking linter output — the [premature completion](../anti-patterns/premature-completion.md) failure of treating apparent completion as actual completion.
 
 **Design for removal**: separate the gate from the criteria. The criteria (tests pass, linter clean) are permanently valuable. The gate forcing the agent to check them is compensatory.
 
@@ -123,9 +123,9 @@ Classifying scaffolding up front is not free. The steelman for building the mech
 
 - **Short-lived projects** — for internal tooling with a 6-month horizon, feature flags and middleware boundaries cost more than the eventual removal would have.
 - **Stable model dependencies** — teams pinned to a specific model version do not get capability upgrades, so removability machinery is pure overhead.
-- **No middleware layer** — "implement as removable middleware" presumes a middleware layer exists. Retrofitting one to support a single mechanism inverts the cost-benefit.
+- **No middleware layer** — "implement as removable middleware" presumes a middleware layer exists, the kind the [scaffold architecture taxonomy](harness-design-dimensions.md) catalogs. Retrofitting one to support a single mechanism inverts the cost-benefit.
 - **Slow-improving capabilities** — self-verification, instruction adherence, and loop-avoidance remain unreliable years later. Many "temporary" compensations outlive the projects that built them.
-- **Mechanism interaction** — compensatory and structural mechanisms often share state (e.g., loop detection feeds iteration caps). Decoupling for independent removability can produce a thinner but more complex architecture.
+- **Mechanism interaction** — compensatory and structural mechanisms often share state (e.g., [loop detection](../observability/loop-detection.md) feeds iteration caps). Decoupling for independent removability can produce a thinner but more complex architecture.
 
 Treat classification as a tagging exercise on existing scaffolding, not a mandate to build every mechanism behind its own feature flag.
 
@@ -144,5 +144,5 @@ Treat classification as a tagging exercise on existing scaffolding, not a mandat
 - [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md)
 - [Agent Harness](agent-harness.md)
 - [Harness Engineering](harness-engineering.md)
-- [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md)
+- [Scaffold Architecture Taxonomy](harness-design-dimensions.md)
 - [Runtime Scaffold Evolution](runtime-scaffold-evolution.md)

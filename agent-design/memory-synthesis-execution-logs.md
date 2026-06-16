@@ -17,7 +17,7 @@ maturity: established
 
 ## Recording vs. Learning
 
-Most agents save *what happened* without extracting *why* outcomes occurred. The gap: **configuration** ("this build command works") vs. **knowledge** ("approach X fails for file type Y because Z").
+Most agents [save *what happened*](../observability/trajectory-logging-progress-files.md) without extracting *why* outcomes occurred. The gap: **configuration** ("this build command works") vs. **knowledge** ("approach X fails for file type Y because Z").
 
 | Level | Example | Improves future runs? |
 |-------|---------|----------------------|
@@ -159,7 +159,7 @@ The raw observation records *what happened*; the synthesized lesson records *wha
 
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md)
 - [Continual Learning for AI Agents: Three Layers of Knowledge Accumulation](continual-learning-layers.md)
-- [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md)
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md)
 - [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md)
 - [Skill as Knowledge](../tool-engineering/skill-as-knowledge.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)

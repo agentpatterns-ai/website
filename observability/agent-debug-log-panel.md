@@ -88,7 +88,7 @@ The fix is a workspace configuration change, not a prompt or model change. Witho
 
 - A debug log panel is a separate surface from the transcript — same events, different presentation, no truncation.
 - Persistence to disk lets operators debug sessions that already ended; without it, each failed session has to be re-run to investigate.
-- Event granularity matters: tool calls, LLM requests, prompt-file discovery, and errors — enough to reconstruct the agent's path, not just its output.
+- Event granularity matters: tool calls, LLM requests, prompt-file discovery, and errors — enough to reconstruct the agent's path during [agent debugging](agent-debugging.md), not just its output.
 - Default-off for a reason: raw events contain verbatim prompts, tool inputs, and tool outputs that may include secrets or PII.
 - OpenTelemetry raw-body export is the cross-tool equivalent — same data, different consumer (external observability backend rather than an in-IDE panel).
 

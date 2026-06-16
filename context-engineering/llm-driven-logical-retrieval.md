@@ -26,7 +26,7 @@ The pattern only holds under all four conditions:
 
 - **Frontier-capable agent LLM**, able to plan multi-hop questions and author well-formed Boolean expressions. Weaker generators collapse — Search-R1 paired with BM25 reaches **3.86% on BrowseComp-Plus** against the same retriever a frontier agent uses to reach 83.1% ([Chen et al., 2025](https://arxiv.org/abs/2508.06600); [Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
 - **Lexical-overlap-rich corpus** — multi-hop QA over Wikipedia-style text, code, docs, log lines, where queries and target documents share surface forms. It weakens when one concept has many surface forms with no shared tokens.
-- **Construction cost matters** — the index is rebuilt often, or indexing budget is constrained. A static, one-time index amortises hybrid's build cost to zero.
+- **Construction cost matters** — the index is rebuilt often, or indexing budget is constrained. A static, one-time index amortises hybrid's build cost to zero, erasing the 41× indexing-cost advantage reported below.
 - **Hallucination on unanswerable queries is tracked** — the Boolean "no match" gives a sharper unanswerable signal than a low cosine score.
 
 Outside these conditions, an agentic hybrid baseline retains a small accuracy edge and is the more conservative default.

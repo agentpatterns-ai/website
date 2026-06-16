@@ -10,7 +10,7 @@ tags:
   - cost-performance
   - tool-agnostic
 last_reviewed: 2026-06-03
-maturity: established
+maturity: adopted
 ---
 
 # Future-Based Asynchronous Function Calling

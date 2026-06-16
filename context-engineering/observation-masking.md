@@ -10,7 +10,7 @@ tags:
   - cost-performance
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Observation Masking: Filter Tool Outputs from Context
@@ -25,7 +25,7 @@ The useful artifact of a tool call is typically what the agent produced from it 
 
 ## How Observation Masking Works
 
-Observation masking removes processed tool outputs from conversation history before the next inference call. The agent synthesises a result from the tool output; once synthesis is complete, the raw output is replaced with a compact summary or dropped entirely.
+Observation masking removes processed tool outputs from conversation history before the next inference call. The agent synthesises a result from the tool output; once synthesis is complete, the raw output is replaced with a [compact summary](context-compression-strategies.md) or dropped entirely.
 
 The retention decision is based on whether the agent will need to reference the tool output again:
 
@@ -69,7 +69,7 @@ For those cases, combine masking with context compression (tiered summarisation 
 
 Masking is a heuristic, not a guarantee. It degrades quality when:
 
-- **Reference outputs are masked too early.** Schema definitions, API contracts, or documentation the agent consults repeatedly are not "single-use" — masking them forces the agent to re-read or hallucinate their contents on subsequent turns.
+- **Reference outputs are masked too early.** Schema definitions, API contracts, or documentation the agent consults repeatedly are not "single-use" — masking them forces the agent to re-read or hallucinate their contents on subsequent turns. Keep such content available through [on-demand retrieval](retrieval-augmented-agent-workflows.md) instead.
 - **Synthesis is not yet complete.** Masking a test failure output before the agent has produced and verified a fix removes the ground truth mid-task. The retention decision must be confirmed, not assumed.
 - **Models use extended reasoning.** Benchmarks show that masking reduces solve rate by ~10% for models with extended thinking enabled, where the model benefits from inspecting its full observation history during long chains of thought ([arXiv 2508.21433](https://arxiv.org/abs/2508.21433)). Prefer LLM-based summarisation over hard masking in those configurations.
 - **Domain differs from software engineering.** The efficiency advantage of masking assumes observation tokens dominate context (≈84% in SE benchmarks). In domains where observations are brief and reasoning turns are long, the gain is smaller and the risk of over-masking is higher.
@@ -122,7 +122,7 @@ The token saving from masking `read_file` and `edit_file` in this example is rou
 
 ## Key Takeaways
 
-- Most tool outputs are referenced once and then abandoned — masking them prevents unnecessary context accumulation.
+- Most tool outputs are referenced once and then abandoned — they account for roughly 84% of trajectory content in SE benchmarks — so masking them prevents unnecessary context accumulation.
 - Retain tool outputs when the agent will query them repeatedly; mask them after single-use synthesis.
 - Apply masking at the conversation history management layer, before each inference call.
 - Replace masked outputs with a brief summary line to preserve traceability without the full token cost.

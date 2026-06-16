@@ -10,7 +10,7 @@ aliases:
   - "define-and-compose"
   - "declarative agent orchestration"
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Declarative Multi-Agent Composition
@@ -19,7 +19,7 @@ maturity: established
 
 ## Why Declarative
 
-Imperative multi-agent code tangles agent capabilities, coordination logic, and runtime behavior. When a workflow fails, the developer must trace through code to distinguish a misconfigured agent from a wrong handoff or a runtime error. Declarative specs separate these layers.
+Imperative multi-agent code tangles agent capabilities, coordination logic, and runtime behavior. When a workflow fails, the developer must trace through code to distinguish a misconfigured agent from a wrong [handoff](agent-handoff-protocols.md) or a runtime error. Declarative specs separate these layers.
 
 A declarative definition captures the **what** (model, tools, memory) without encoding the **how** (framework internals, API call sequences, retry logic). This makes agent configurations:
 

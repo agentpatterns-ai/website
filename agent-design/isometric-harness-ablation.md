@@ -97,7 +97,7 @@ A team using GPT-4o on a TypeScript + React frontend codebase (~20,000 LOC) ran 
 | 3 — add feedback | Verification commands listed | 80% |
 | 4 — add state | `PROGRESS.md` between sessions | 80–100% |
 
-Reading the same data as an ablation table: removing instructions costs 40 pp, feedback 20 pp, state at most 20 pp. Instructions is the load-bearing subsystem here — invest there first. State is the smallest contributor and the candidate to drop if maintenance gets costly.
+Reading the same data as an ablation table: removing instructions costs 40 pp, feedback 20 pp, state at most 20 pp. Instructions is the load-bearing subsystem here — invest there first. State is the smallest contributor and the candidate to drop if maintenance gets costly, the retire-cleanly case [harness impermanence](harness-impermanence.md) handles.
 
 Order-of-addition is a real artifact: a different order yields different per-stage deltas. The ranking is more stable than the exact magnitudes.
 

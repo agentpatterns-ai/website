@@ -20,7 +20,7 @@ maturity: established
 
 ## Why Phases Matter
 
-Adoption of AI coding tools isn't linear, and the mistakes at each phase are different. If you are over-trusting, you make different errors than if you are under-trusting. If you are stuck in prompt tinkering, you have different problems than if you are building multi-agent pipelines. The phases provide a map: where you are now, where the traps are, and what the next phase looks like.
+Adoption of AI coding tools isn't linear, and the mistakes at each phase are different. If you are over-trusting, you make different errors than if you are under-trusting. If you are stuck in [prompt tinkering](../anti-patterns/prompt-tinkerer.md), you have different problems than if you are building multi-agent pipelines. The phases provide a map: where you are now, where the traps are, and what the next phase looks like.
 
 Practitioners who have systematically observed developer AI adoption describe a recognizable phase progression. The model below synthesizes that framing with observed patterns in team adoption and trust calibration.
 
@@ -28,37 +28,37 @@ Practitioners who have systematically observed developer AI adoption describe a 
 
 ### Phase 1: Skepticism
 
-You don't believe AI tools produce useful output. You may have tried an early or poorly configured tool and dismissed it. Usage is minimal or zero. The risk here is missing productivity gains that compound over time.
+You don't believe AI tools produce useful output. You may have tried an early or poorly configured tool and dismissed it. Usage is minimal or zero. The risk here is missing productivity gains that [compound over time](compound-engineering.md).
 
 The exit condition: a task where the agent saves you meaningful time or produces output you couldn't produce as quickly alone.
 
 ### Phase 2: First Experiments
 
-You use the tool occasionally, on low-stakes tasks. Output quality seems inconsistent. There's no systematic approach — just occasional invocation and occasional surprise.
+You use the tool occasionally, on low-stakes tasks. Output quality seems inconsistent. There's no [systematic approach to its context](../context-engineering/seeding-agent-context.md) — just occasional invocation and occasional surprise.
 
 The trap: concluding that inconsistency reflects the tool's ceiling rather than the quality of your input (prompt, context, task specification). Most inconsistency at this phase is driven by underspecified prompts and missing context.
 
 ### Phase 3: Over-Enthusiasm
 
-The tool seems to work. You delegate broadly, review output superficially, and may ship agent-generated code with minimal verification. Errors begin to appear in production or reviews.
+The tool seems to work. You delegate broadly, [review output superficially, and may ship agent-generated code with minimal verification](../anti-patterns/trust-without-verify.md). Errors begin to appear in production or reviews.
 
 The trap: [trust without verify](../anti-patterns/trust-without-verify.md). Agent output can be plausible and wrong. This phase produces the war stories that create skeptics.
 
 ### Phase 4: Calibrated Disappointment
 
-You have seen enough failures to be cautious but haven't yet developed systematic verification habits. Usage contracts. You revert to manual work for "important" tasks.
+You have seen enough failures to be cautious but haven't yet developed [systematic verification habits](../verification/tdd-agent-development.md). Usage contracts. You revert to manual work for "important" tasks.
 
-The trap: over-generalizing from failures to conclude the tool isn't useful, rather than identifying which task types and contexts produce reliable output.
+The trap: [over-generalizing from failures](failure-driven-iteration.md) to conclude the tool isn't useful, rather than identifying which task types and contexts produce reliable output.
 
 ### Phase 5: Calibrated Use
 
-You understand which task types produce reliable output and apply the tool there systematically. Verification habits are established. You use the tool as an accelerator for well-defined work, not as a replacement for judgment.
+You understand which task types produce reliable output and apply the tool there systematically. Verification habits are established. You use the tool as an accelerator for well-defined work, [not as a replacement for judgment](human-in-the-loop.md).
 
 This is the productive baseline. Many experienced practitioners operate here indefinitely.
 
 ### Phase 6: Context Engineering
 
-You move beyond prompt writing to thinking about what context the agent has access to at runtime. You structure project files, instructions, and task specifications to improve agent output systematically rather than prompt-by-prompt.
+You move beyond prompt writing to thinking about [what context the agent has access to at runtime](cli-ide-github-context-ladder.md). You structure project files, instructions, and task specifications to improve agent output systematically rather than prompt-by-prompt.
 
 Skills shift from "how do I phrase this prompt" to "how do I structure this project so agents produce better output by default." See [Seeding Agent Context](../context-engineering/seeding-agent-context.md) and [Context Priming](../context-engineering/context-priming.md).
 

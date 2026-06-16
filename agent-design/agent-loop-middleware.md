@@ -21,7 +21,7 @@ maturity: established
 
 Agents are probabilistic. A critical step — committing changes, opening a PR, logging state — may be skipped depending on context, token pressure, or model attention. Prompt instructions reduce the failure rate; they do not eliminate it.
 
-Middleware removes the dependence on agent compliance. The agent either does the critical step or the middleware does — the outcome is the same. This is distinct from per-tool-call enforcement ([hooks-vs-prompts](../instructions/hooks-vs-prompts.md)) and CI guardrails ([deterministic-guardrails](../verification/deterministic-guardrails.md)), which operate within the loop or after it. Middleware acts at loop boundaries.
+Middleware wraps the [agent turn model](agent-turn-model.md) so that it removes the dependence on agent compliance. The agent either does the critical step or the middleware does — the outcome is the same. This is distinct from per-tool-call enforcement ([hooks-vs-prompts](../instructions/hooks-vs-prompts.md)) and CI guardrails ([deterministic-guardrails](../verification/deterministic-guardrails.md)), which operate within the loop or after it. Middleware acts at loop boundaries.
 
 ## Two Middleware Patterns
 
@@ -180,14 +180,14 @@ The `inject` node drains external messages before every model call. The `commit`
 Post-loop safety nets rely on idempotency — if a net fires when the agent already completed the step, the result must be identical, not doubled. Three conditions produce failures:
 
 - **Non-idempotent critical steps.** `open_pr_if_needed` is safe only if the `state.pr_opened` flag is reliably set. If the agent opens a PR but fails to persist the flag, the net opens a second PR. Design safety nets around verifiable state, not assumed state.
-- **Safety net masks systematic compliance failures.** If the agent never opens PRs and the net fires every run, the pattern hides a prompt or tool-call problem that should be fixed at the source. Monitor net fire-rate; a rate that climbs over time signals an upstream issue worth addressing rather than masking.
+- **Safety net masks systematic compliance failures.** If the agent never opens PRs and the net fires every run, the pattern hides a prompt or tool-call problem that should be fixed at the source. Monitor net fire-rate the way you would track [loop detection](../observability/loop-detection.md) signals; a rate that climbs over time signals an upstream issue worth addressing rather than masking.
 - **Message queue injection in high-latency channels.** Pre-call injection polls an external queue synchronously before each model call. If the queue endpoint has variable latency, injection adds per-iteration overhead. Rate-limit the poll or use a local buffer when the queue source is unreliable.
 
 ## Key Takeaways
 
 - Treat the agent loop as a unit to wrap from the outside — middleware nodes guarantee critical steps regardless of model compliance.
 - Post-loop safety nets perform skipped critical steps deterministically; pre-call injection nodes drain external message queues before each model invocation.
-- Safety nets require idempotent operations and verifiable state — if a flag can be wrong, the net can fire twice.
+- Safety nets require [idempotent operations](idempotent-agent-operations.md) and verifiable state — if a flag can be wrong, the net can fire twice.
 - Monitor net fire-rate; a rate that stays high or climbs hides an upstream prompt or tooling problem that should be fixed at the source.
 - Claude Code's `Stop` and `UserPromptSubmit` hooks provide host-side equivalents of the same two patterns.
 

@@ -108,8 +108,8 @@ Apply constraints at generation time. See [PR Scope Creep](../anti-patterns/pr-s
 The three strategies impose their own costs:
 
 - **Tiered review adds process overhead.** A CI-based AI review step adds latency to every PR. On small teams with tight feedback loops, this slows junior developers more than it helps senior ones.
-- **Scope discipline constrains genuine progress.** Hard LOC caps can fragment logically unified changes, making each atomic PR pass review while the assembled feature remains unreviewed as a whole. Architectural changes that span many files resist artificial splitting.
-- **Structural enforcement creates false confidence.** Expanding linter and CI coverage to catch AI-specific bug classes works until the AI learns the lint rules — newer models generate code that passes the gates while still introducing semantic errors the gates were never designed to catch.
+- **[Scope discipline](../anti-patterns/pr-scope-creep-review-bottleneck.md) constrains genuine progress.** Hard LOC caps can fragment logically unified changes, making each atomic PR pass review while the assembled feature remains unreviewed as a whole. Architectural changes that span many files resist artificial splitting.
+- **[Structural enforcement](../agent-design/agent-harness.md) creates false confidence.** Expanding linter and CI coverage to catch AI-specific bug classes works until the AI learns the lint rules — newer models generate code that passes the gates while still introducing semantic errors the gates were never designed to catch.
 
 Apply these strategies when PR volume visibly strains human review capacity. In low-volume teams or early-stage products where speed of iteration matters more than defect rate, the overhead may exceed the benefit.
 

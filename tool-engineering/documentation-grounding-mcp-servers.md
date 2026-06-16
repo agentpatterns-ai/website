@@ -32,7 +32,7 @@ When any of the four fails, a curated `llms.txt` pointer plus `WebFetch` of the 
 
 Training-cutoff lag produces code targeting **deprecated APIs or hallucinated APIs that never existed**. Microsoft's writeup traces the failure concretely: without grounding, an agent chose deprecated `az ml`, hit dependency crashes, and took 15+ debugging steps on a retired API surface; with Learn MCP it found current docs and used `az cognitiveservices` on the first attempt ([Microsoft Developer blog](https://developer.microsoft.com/blog/improve-your-agentic-developer-tools-by-grounding-in-microsoft-learn)).
 
-This is distinct from the [internal-repo stale-RAG failure mode](../context-engineering/stale-repository-retrieval-induces-incorrect-code.md) — same shape (retrieval surfaces obsolete signatures), different source layer (vendor docs versus the user's repo).
+This is distinct from the [internal-repo stale-RAG failure mode](../context-engineering/repository-level-retrieval-code-generation.md) — same shape (retrieval surfaces obsolete signatures), different source layer (vendor docs versus the user's repo).
 
 ## Why It Works
 
@@ -66,8 +66,7 @@ The shape is consistent: **remote HTTP MCP, no install, no auth for the read-onl
 | Pattern | Source | Failure mode addressed |
 |---------|--------|-----------------------|
 | **Doc-grounding MCP** (this page) | Vendor's live docs corpus | Deprecated/hallucinated API calls from training-cutoff lag |
-| [Stale Repository Retrieval](../context-engineering/stale-repository-retrieval-induces-incorrect-code.md) | The user's own codebase index | Internal helpers refactored faster than index rebuild |
-| [Repository-Level Retrieval](../context-engineering/repository-level-retrieval-code-generation.md) | The user's own codebase | Generating code without project conventions |
+| [Repository-Level Retrieval](../context-engineering/repository-level-retrieval-code-generation.md) | The user's own codebase index | Generating code without project conventions, or internal helpers refactored faster than the index rebuild (stale-retrieval case study) |
 | [Context Hub](../context-engineering/context-hub.md) | Versioned internal API docs | Calling internal APIs at the wrong major version |
 
 ## Example
@@ -104,6 +103,6 @@ Microsoft Learn sits in the prefix every turn so Azure-related prompts can retri
 
 - [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](mcp-eager-vs-jit-loading.md) — the per-server load decision once you have a doc-grounding MCP wired
 - [Production MCP Agent Stack](production-mcp-agent-stack.md) — sequencing six MCP decisions into a coherent deployment
-- [Stale Repository Retrieval Induces Incorrect Code](../context-engineering/stale-repository-retrieval-induces-incorrect-code.md) — the internal-repo analogue of the failure mode this pattern addresses
+- [Repository-Level Retrieval for Code Generation](../context-engineering/repository-level-retrieval-code-generation.md) — its stale-retrieval case study is the internal-repo analogue of the failure mode this pattern addresses
 - [Context Hub](../context-engineering/context-hub.md) — versioned API documentation retrieval; the internal-docs analogue of doc-grounding MCP
 - [MCP Server Design](mcp-server-design.md) — the server author's checklist if you are building rather than consuming a doc-grounding MCP

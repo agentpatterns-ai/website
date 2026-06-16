@@ -24,7 +24,7 @@ maturity: established
 
 `git worktree` creates additional working directories linked to the same repository. Each worktree has its own checked-out branch, its own working tree state, and shares git objects with the main checkout — so creation is fast and disk overhead is minimal.
 
-For agent workflows, this means: each agent gets a private sandbox. It reads and writes files without affecting any other agent's environment. If its output is wrong, the worktree is deleted. If its output is correct, its branch is submitted for merge.
+For agent workflows, this means: each agent gets a private sandbox (Claude Code automates this per sub-agent via `isolation: worktree`). It reads and writes files without affecting any other agent's environment. If its output is wrong, the worktree is deleted. If its output is correct, its branch is submitted for merge.
 
 [Claude Code's worktrees workflow documentation](https://code.claude.com/docs/en/common-workflows) covers the mechanics. The underlying primitive is standard [git worktree](https://git-scm.com/docs/git-worktree) — nothing Claude-specific about the isolation guarantee.
 
@@ -76,7 +76,7 @@ Worktrees are not always the right tool:
 
 - **Environment re-initialization overhead**: Each worktree is a fresh checkout. Long setup sequences — `npm install`, Docker builds, secrets provisioning — run once per worktree. For short-lived agents doing lightweight tasks, this cost can exceed the parallelism benefit.
 - **Disk pressure at scale**: Each worktree duplicates the working tree (not git objects, but all tracked files). Fifty agents on a large monorepo can saturate disk before the first task completes.
-- **Orchestrator complexity**: The orchestrator must track which branch lives in which worktree, handle cleanup on failure, and reconcile branches after runs. For simple sequential tasks this is pure overhead.
+- **Orchestrator complexity**: The orchestrator must track which branch lives in which worktree, handle cleanup on failure, and reconcile branches after runs — overhead that [lazy worktree isolation](lazy-worktree-isolation.md) defers until first write. For simple sequential tasks this is pure overhead.
 - **Stateless agents don't need isolation**: If an agent only reads files and calls external APIs — never writes to disk — shared checkout is safe and worktrees add friction without benefit.
 - **Runtime state isn't isolated**: Worktrees separate files and branches but not ports, databases, caches, secrets, or background processes. Two agents running a dev server on port 3000, a shared Postgres instance, or the same Docker daemon will collide even though their checkouts are independent. For runtime isolation, pair worktrees with per-agent containers, ephemeral databases, and dynamic port allocation — see [this discussion of the runtime isolation gap](https://www.penligent.ai/hackinglabs/git-worktrees-need-runtime-isolation-for-parallel-ai-agent-development/).
 
@@ -117,7 +117,7 @@ Each agent operates in its own directory. If `add-audit-log` fails, its worktree
 - Each agent in its own git worktree cannot interfere with other agents or the main branch.
 - Worktrees share git objects — creation is fast, disk overhead is minimal.
 - Failed agent outputs cost nothing to discard; successful outputs become branches ready for review.
-- The batch pattern (N agents, N worktrees, N PRs) enables natural parallelism across independent tasks.
+- The [batch pattern](../tools/claude/batch-worktrees.md) (N agents, N worktrees, N PRs) enables natural parallelism across independent tasks.
 
 ## Related
 

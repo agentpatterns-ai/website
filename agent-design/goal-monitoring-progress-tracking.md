@@ -108,12 +108,12 @@ Agents need continuous ground truth — test results, linter output, build statu
 
 ## Why It Works
 
-Progress files and feature lists externalize state that would otherwise live only in the model's context window. Context compression partially replaces in-context memory with a summary — which can omit detail. A progress file written to disk is immune to that loss. A JSON feature list makes completion criteria explicit and binary: the model cannot interpret "passing" as "partially passing." The separation between volatile in-context reasoning and durable external state closes the gap between what the agent *thinks* it has done and what it has actually done.
+Progress files and feature lists externalize state that would otherwise live only in the model's context window. [Context compression](../context-engineering/context-compression-strategies.md) partially replaces in-context memory with a summary — which can omit detail. A progress file written to disk is immune to that loss. A JSON feature list makes completion criteria explicit and binary: the model cannot interpret "passing" as "partially passing." The separation between volatile in-context reasoning and durable external state closes the gap between what the agent *thinks* it has done and what it has actually done.
 
 ## When This Backfires
 
 1. **Short-lived tasks**: For tasks completing in a single session, progress files and an initializer agent add overhead that exceeds their benefit. ROI requires context window boundaries to become real.
-2. **Emergent requirements**: Feature lists require upfront enumeration. When success criteria are discovered through exploration, a rigid contract creates friction — the agent spends time updating the list rather than building.
+2. **Emergent requirements**: [Feature lists](../instructions/feature-list-files.md) require upfront enumeration. When success criteria are discovered through exploration, a rigid contract creates friction — the agent spends time updating the list rather than building.
 3. **Broken scaffolding**: A misspecified `feature_list.json` from the initializer is worse than none — downstream sessions inherit a false map and gain false confidence about completion.
 
 ## Production Monitoring

@@ -83,7 +83,7 @@ Add it when:
 Skip it when:
 
 - The deterministic envelope already matches the task tightly (one-shot agents, single-purpose subagents). The added inference cost buys nothing.
-- Conversations legitimately span unrelated tasks; extraction either over-restricts or fragments.
+- Conversations legitimately span unrelated tasks; [task extraction](hybrid-deterministic-semantic-tool-authorization.md) either over-restricts or fragments.
 - Tool catalogs change faster than the semantic model's knowledge of "what each tool legitimately does" — staleness causes rolling false positives.
 - Latency budgets are tight: a [pDFA firewall](behavioral-firewall-tool-call-trajectories.md) runs at ~2.2 ms per call ([2604.26274](https://arxiv.org/abs/2604.26274)); a two-stage semantic evaluation does not.
 
@@ -105,14 +105,14 @@ The deterministic axis stops the attack. The semantic axis makes it visible when
 - **Implementation cost.** TBAC requires an authorization server that mints task-scoped credentials and a PEP between the agent and every tool — typically an [MCP runtime control plane](mcp-runtime-control-plane.md) plus a [scoped-credentials proxy](scoped-credentials-proxy.md).
 - **Token lifecycle.** JIT VCs need an authority that can mint on demand and revoke globally; lingering tokens defeat the model.
 - **Semantic-axis tuning.** Threshold drift produces alert fatigue or silent under-flagging. Treat the threshold as an evaluable artefact.
-- **Deterministic axis still needed.** A semantic inspector without it is detection, not authorization. Build the deterministic side first.
+- **Deterministic axis still needed.** A semantic inspector without the signed-credential and [trajectory-firewall](behavioral-firewall-tool-call-trajectories.md) layer is detection, not authorization. Build the deterministic side first.
 
 ## Key Takeaways
 
 - OAuth's static scopes do not bind authorization to the user's current task; runtime-adaptive agents escalate inside legitimate scopes without visibility.
 - TBAC binds each decision to the current task via short-lived signed credentials and an allowlisted tool registry.
 - Hybrid inspection adds a semantic axis that extracts task from the conversation and scores call-to-task fit — useful for detection, not as a primary control.
-- The deterministic axis carries the guarantee. The semantic axis cannot, because it shares the input channel with the attacker.
+- The deterministic axis — signed task-bound credentials minted by a [scoped-credentials proxy](scoped-credentials-proxy.md) — carries the guarantee. The semantic axis cannot, because it shares the input channel with the attacker.
 - Add the semantic axis when the envelope is necessarily broad and an audit pipeline can absorb its flags. Skip it when scope is tight or latency is critical.
 
 ## Related

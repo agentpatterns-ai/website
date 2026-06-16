@@ -6,7 +6,7 @@ tags:
   - testing-verification
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Dependency Gap Validation for AI-Generated Code
@@ -77,7 +77,7 @@ Code quality failures outnumber dependency gaps 5:1. Both matter, but fixing onl
 
 ### 1. Generate Lock Files in a Clean Environment
 
-Never trust the agent's declared dependencies as the final list. Generate the lock file in a clean environment to capture the full transitive closure:
+Never trust the agent's declared dependencies as the final list. Generate the lock file in a [clean environment](../workflows/agent-environment-bootstrapping.md) to capture the full transitive closure:
 
 ```bash
 # Python

@@ -36,7 +36,7 @@ Under these conditions, HASP reports up to 25% gain on web-search and 30.4% on m
 
 A PF wraps a skill's guidance in three parts:
 
-1. **Trigger predicate** — a deterministic check against agent state. The model is not consulted.
+1. **Trigger predicate** — a deterministic check against agent state, such as `result_count == 0`. The model is not consulted.
 2. **Intervention type** — *action modification* (rewrite the agent's next tool call) or *context injection* (append a corrective user-role message).
 3. **Termination condition** — when the PF stops firing, so the fix-loop terminates.
 
@@ -130,6 +130,7 @@ The PF should still pass a per-function pilot eval — a sample of 50 trajectori
 - [Agent Loop Middleware](agent-loop-middleware.md) — deterministic loop-boundary nodes; PFs extend this to mid-loop intervention with compiled triggers
 - [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md) — the static-template predecessor pattern; PFs replace the hand-authored templates with skill-derived ones
 - [Skill as Knowledge](../tool-engineering/skill-as-knowledge.md) — the source-of-truth layer that PFs compile from, not against
+- [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — the canonical home for the skill guidance PFs compile into runtime predicates
 - [Steering Running Agents](steering-running-agents.md) — human-in-the-loop intervention; PFs are the automated counterpart on detected failure states
 - [Guardrails Beat Guidance for Coding Agents](../instructions/guardrails-beat-guidance-coding-agents.md) — counter-evidence that much of skill-text value is context priming rather than instruction content
 - [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md) — an async observer that classifies misbehaviours and injects course-corrections, complementary to the synchronous PF model

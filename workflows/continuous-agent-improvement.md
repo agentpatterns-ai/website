@@ -8,7 +8,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # Continuous Agent Improvement: Iterating on Agent Quality
@@ -17,7 +17,7 @@ maturity: established
 
 ## Agent Configs Are Not Set-and-Forget
 
-Your initial AGENTS.md and first set of skills will have gaps. The project evolves. Tools update. Conventions shift. An agent that worked well at project start produces progressively worse output if its instructions don't keep pace.
+Your initial AGENTS.md and first set of skills will have gaps. The project evolves. Tools update. Conventions shift. An agent that worked well at project start produces progressively worse output if its AGENTS.md and skills don't keep pace.
 
 The improvement cycle is:
 
@@ -34,7 +34,7 @@ graph TD
 
 ### Observe
 
-Review agent output regularly, not just when something breaks. Issues worth tracking:
+Review agent output regularly, not just when something breaks — [agent debugging](../observability/agent-debugging.md) tooling makes this review systematic rather than ad hoc. Issues worth tracking:
 
 - Recurring mistakes across multiple sessions (not one-off errors)
 - Output that requires consistent manual correction before use
@@ -67,17 +67,17 @@ Apply changes in isolation where possible:
 - Add one skill before reorganizing the skill hierarchy
 - Add one hook before enabling a validation pipeline
 
-Document why each change was made. Agent configuration files benefit from changelogs — the same reasoning that applies to dependency updates applies here. A rule with no documented rationale gets removed incorrectly when someone can't determine whether it's still needed.
+Document why each change was made. Agent configuration files like AGENTS.md and skill files benefit from changelogs — the same reasoning that applies to dependency updates applies here. A rule with no documented rationale gets removed incorrectly when someone can't determine whether it's still needed.
 
 ### Verify
 
-After updating, re-run the same task that exhibited the failure. Confirm the output improved. If the failure recurs, the root cause categorization was wrong — return to the observe step rather than stacking additional changes.
+After updating, re-run the same task that exhibited the failure. Confirm the output improved. If the failure recurs, the root cause categorization was wrong — return to the observe step rather than stacking additional changes, the same convergence check [skill library refinement loops](skill-library-refinement-loops.md) use before keeping a change.
 
 Keep the verification input fixed. Testing against a different task after a change doesn't confirm the fix — it may just shift the failure to a new instance.
 
 ### Progressive Trust
 
-As agents demonstrate reliable output over time, reduce review overhead proportionally — but never eliminate it. No industry-standard thresholds exist for this progression; apply judgment based on task risk. A useful heuristic: start with human review of every output, move to sampling (review every nth output) once error rate drops, and move to hook-only validation only when sampling finds no issues over a sustained period.
+As agents demonstrate reliable output over time, reduce review overhead proportionally — but never eliminate it, the calibration [human-in-the-loop](human-in-the-loop.md) placement governs. No industry-standard thresholds exist for this progression; apply judgment based on task risk. A useful heuristic: start with human review of every output, move to sampling (review every nth output) once error rate drops, and move to hook-only validation only when sampling finds no issues over a sustained period.
 
 Reducing review prematurely reintroduces risk without detection.
 
@@ -106,7 +106,7 @@ You don't need formal tooling for this. A shared notes file or GitHub issue trac
 
 ## Anti-Patterns
 
-**Reactive single-error updates.** Changing the instruction file after every individual error adds noise and makes it hard to identify which changes actually helped. Batch observations across multiple sessions before acting.
+**Reactive single-error updates.** Changing the instruction file after every individual error is the [prompt tinkerer](../anti-patterns/prompt-tinkerer.md) failure applied to config — it adds noise and makes it hard to identify which changes actually helped. Batch observations across multiple sessions before acting.
 
 **Never updating after initial setup.** Agent configurations that aren't maintained diverge from the project's current state. The gap between "what the agent thinks the project is" and "what the project actually is" grows over time until output quality drops noticeably.
 
@@ -116,7 +116,7 @@ The improvement loop degrades under three conditions:
 
 **[Instruction bloat](../anti-patterns/prompt-tinkerer.md).** Each targeted fix adds words. Over dozens of iterations, instruction files become verbose enough to exceed context windows or dilute the signal of any single rule. An [ETH Zurich evaluation of repository-level context files](https://arxiv.org/abs/2602.11988) reported that LLM-generated `AGENTS.md` files reduced task success rates by roughly 3 percent on average and increased inference cost by over 20 percent — a concrete argument for pruning over append-only iteration. The fix is periodic pruning: review the full file and consolidate overlapping rules rather than appending indefinitely.
 
-**Over-fitting to recent sessions.** If observations are drawn from a narrow slice of work — a single sprint, one team member's tasks — the updates optimize for that slice and regress on other task types. Diversify the observation sample before acting.
+**Over-fitting to recent sessions.** If observations are drawn from a narrow slice of work — a single sprint, one team member's tasks — the updates optimize for that slice and regress on other task types. Diversify the observation sample before acting, the same discipline [failure-driven iteration](failure-driven-iteration.md) applies to the failures it generalizes from.
 
 **Conflicting rule accumulation.** Two separately-correct updates can contradict each other when applied together. Adding "always use concise commit messages" and later "always include the ticket number in commit messages" produces two rules that conflict on short-ticket-number-heavy workflows. Audit for conflicts when adding to an existing instruction set.
 
@@ -174,3 +174,4 @@ The changelog comment ("added 2026-02-14 — sessions #42, #47, #51") documents 
 - [Failure-Driven Iteration](failure-driven-iteration.md)
 - [Skill Library Refinement Loops](skill-library-refinement-loops.md)
 - [Scheduled Instruction File Fact-Checker](instruction-file-fact-checker.md)
+- [Continuous AI: A Navigation Map of Always-On Agent Workflows](continuous-ai.md) — the parent map of the continuous-* and triage families this loop belongs to

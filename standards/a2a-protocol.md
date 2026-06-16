@@ -6,7 +6,7 @@ tags:
   - tool-agnostic
   - standards
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # Agent-to-Agent (A2A) Protocol

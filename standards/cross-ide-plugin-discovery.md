@@ -6,7 +6,7 @@ tags:
   - tool-engineering
   - copilot
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Cross-IDE Plugin Discovery
@@ -15,7 +15,7 @@ maturity: established
 
 ## The File-System Contract
 
-Cross-IDE plugin discovery is a one-way file-system contract. The install surface (a CLI, a package manager, an MDM channel) writes plugin manifests to a well-known per-user path. Every consumer (IDE, headless agent, second IDE) reads that path on startup and on filesystem-change events. No coordination protocol runs between them — the path is the protocol.
+Cross-IDE plugin discovery is a one-way file-system contract. The install surface (a CLI, a package manager, an MDM channel) writes [plugin manifests](plugin-packaging.md) to a well-known per-user path. Every consumer (IDE, headless agent, second IDE) reads that path on startup and on filesystem-change events. No coordination protocol runs between them — the path is the protocol.
 
 ```mermaid
 graph LR
@@ -54,7 +54,7 @@ Cross-IDE discovery is a per-user, per-machine convention. It depends on every c
 
 - **JetBrains, Eclipse, and Xcode Copilot plugins** added custom-agent and skill support in November 2025, but they install through the JetBrains Marketplace and equivalents — they do not read `~/.copilot/installed-plugins/` ([GitHub Changelog](https://github.blog/changelog/2025-11-18-custom-agents-available-in-github-copilot-for-jetbrains-eclipse-and-xcode-now-in-public-preview/)). A team with mixed IDEs still needs a parallel install path for the non-participating surfaces.
 - **Direct-from-Git installs hit known discovery bugs**: `copilot plugin install owner/repo` sets `cache_path` to the repo root and skips `.github/plugin/plugin.json` ([copilot-cli issue #2390](https://github.com/github/copilot-cli/issues/2390)). The shared install surface inherits CLI bugs into every consuming IDE on the same machine.
-- **Trust scope mismatch**: the path is per-user. On a multi-tenant or shared-workstation machine (lab, classroom, kiosk), one user account may represent multiple trust contexts. Cross-surface discovery couples them in a way that is wrong when each IDE session represents a different role.
+- **Trust scope mismatch**: the path is per-user. On a multi-tenant or shared-workstation machine (lab, classroom, kiosk), one user account may represent multiple trust contexts. Cross-surface discovery couples them in a way that is wrong when each IDE session represents a [different role](../security/blast-radius-containment.md).
 
 ## Supply-Chain Implication
 

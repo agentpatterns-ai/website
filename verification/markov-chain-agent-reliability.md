@@ -80,9 +80,9 @@ The claim is not that Markov chains correctly model agents in general — only t
 The Markov assumption is real. The paper is explicit about when it breaks:
 
 - **Memory carries information across steps.** Mapping trajectories to a DTMC aggregates over memory, tool state, and context — no mapping is canonical. Agents leaning heavily on scratchpad violate memorylessness and the certificate rejects.
-- **Sparse trace corpora.** Small suites leave rows of Q̂ poorly estimated; CI widths grow until point estimates are uninformative.
+- **Sparse trace corpora.** Small suites leave rows of Q̂ poorly estimated; CI widths grow until point estimates are uninformative — the same sampling floor that makes [single-run outputs unreliable distribution estimates](nonstandard-errors-ai-agents.md).
 - **Non-i.i.d. sampling.** Temperature-0 or shared-prefix sampling breaks the i.i.d. assumption the bootstrap inherits.
-- **Featurization is not canonical.** Two analysts can produce different chains from the same traces; report (φ, m, p_KS, ΔAIC) so the choice is auditable.
+- **Featurization is not canonical.** Two analysts can produce different chains from the same traces, just as [trajectory decomposition](trajectory-decomposition-diagnosis.md) can segment one run several ways; report (φ, m, p_KS, ΔAIC) so the choice is auditable.
 - **SWE-bench / τ-bench are not yet validated** — raw trajectories require step-level feature data and remain future targets.
 
 When the certificate rejects, segment, re-featurize, or use a richer process. Do not report pass@k from a rejected chain.

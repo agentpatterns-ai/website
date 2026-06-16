@@ -17,9 +17,9 @@ maturity: established
 
 ## The Core Problem: Engineers with No Memory
 
-AI agents have no persistent memory across sessions. They don't remember decisions made last week, patterns established last sprint, or the reasoning behind architectural choices. Each session starts cold.
+AI agents have no persistent memory across sessions. Absent an explicit [agent-memory layer](../agent-design/agent-memory-patterns.md), they don't remember decisions made last week, patterns established last sprint, or the reasoning behind architectural choices. Each session starts cold.
 
-The implication: process must be embedded in the tooling, not assumed from context. A general instruction file helps, but it doesn't force an agent through a specific sequence of decisions at the right moment. Purpose-built skills do.
+The implication: process must be embedded in the tooling, not assumed from context. A general instruction file such as `CLAUDE.md` helps, but it doesn't force an agent through a specific sequence of decisions at the right moment. Purpose-built skills do.
 
 Matt Pocock's [five daily-use skills](https://www.aihero.dev/5-agent-skills-i-use-every-day) demonstrate this: a library covering ideation through architecture refinement, invoked at specific decision points throughout the engineering day. Each skill enforces a process gate rather than leaving the agent to infer how to proceed.
 
@@ -59,7 +59,7 @@ The skill's value is enforcement: without it, agents tend to implement first and
 
 ### /improve-codebase-architecture — Weekly Structural Refinement
 
-Explores the codebase for architectural improvement opportunities, focusing on deepening shallow modules and designing thin interfaces. Run weekly rather than per-feature. The explicit goal is making the codebase easier for agents to navigate in future sessions — architectural clarity reduces the amount of context an agent must load to orient itself.
+Explores the codebase for architectural improvement opportunities, focusing on deepening shallow modules and designing thin interfaces — the [discovery-only refactor pass](discovery-only-refactor-pass.md) treats this same skill as a standalone read-only stage. Run weekly rather than per-feature. The explicit goal is making the codebase easier for agents to navigate in future sessions — architectural clarity reduces the amount of context an agent must load to orient itself.
 
 This skill closes the feedback loop: better architecture reduces the context burden that forces agents into shallow, surface-level implementations.
 
@@ -67,7 +67,7 @@ This skill closes the feedback loop: better architecture reduces the context bur
 
 The grill-me skill is three sentences. It works because it fires at the right moment (before implementation begins) and enforces the right constraint (resolve every decision branch). Longer is not better.
 
-Skill design questions:
+Skill design questions (the [grill-me skill](../agent-design/grill-me-technique.md) passes all three):
 
 - What decision point does this skill address?
 - What would the agent do without it that it shouldn't?
@@ -94,7 +94,7 @@ The pattern assumes skills fire at the right moment and that their cost is cover
 - **Trigger reliability is probabilistic.** At startup, agents see only the `name` and `description` from each installed skill's YAML frontmatter — the body, including any "When to Use" section, is not indexed. A vague description, keyword collisions with neighbouring skills, or a user phrasing that doesn't match the description will leave the skill sitting there unused while the agent proceeds without it. ([Skill authoring best practices — Claude docs](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices))
 - **Description budgets shrink as the library grows.** Descriptions are capped at 1024 characters individually and share an aggregate budget that scales with context window size. Past a few dozen skills, practitioners report descriptions getting truncated or deprioritised, which strips the keywords needed for matching. ([Skill authoring best practices — Claude docs](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices))
 - **Process gates can rigidify exploration.** A strict `/grill-me → /write-a-prd → /prd-to-issues → /tdd` sequence is appropriate for well-understood feature work. For exploratory spikes, migrations, or incident response, the ceremony cost can exceed the information it surfaces — a plain CLAUDE.md plus direct prompting is often faster.
-- **Maintenance cost is real.** Every skill needs evaluations, description tuning, and periodic re-testing against new model releases. Solo developers and small teams frequently find that a single well-edited instruction file outperforms a library of five skills they don't exercise often enough to keep calibrated.
+- **Maintenance cost is real.** Every skill needs evaluations, description tuning, and periodic re-testing against new model releases. Solo developers and small teams frequently find that a single well-edited instruction file outperforms a library of 5 skills they don't exercise often enough to keep calibrated.
 
 Audit whether each skill is firing when expected before adding the next one. A three-skill library that triggers reliably beats a ten-skill library half of which sit idle.
 

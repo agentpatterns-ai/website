@@ -93,7 +93,7 @@ When a session completes and a PR is opened:
 1. **Check session logs first** — identify reasoning errors before reviewing code
 2. **Scan files changed** — flag unexpected modifications and changes to shared or critical code paths
 3. **Verify CI** — all checks should pass; investigate failures before merging
-4. **Request self-review** — ask Copilot to review edge cases and boundary conditions (see [Agent Self-Review Loop](../../agent-design/agent-self-review-loop.md))
+4. **Request self-review** — ask Copilot to review edge cases and boundary conditions (see [Agent Self-Review Loop](../../code-review/agent-self-review-loop.md))
 5. **Batch similar reviews** — group PRs from related tasks to maintain context between reviews
 
 ## Example

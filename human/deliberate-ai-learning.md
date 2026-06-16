@@ -18,7 +18,7 @@ maturity: established
 
 ## The Mechanism: Adaptive Scaffolding
 
-Vygotsky's Zone of Proximal Development (ZPD) defines the gap between what a learner can do unaided and what they can accomplish with appropriate support. AI assistants can act as adaptive scaffolding: providing targeted help at the edge of current ability, then fading support as competence builds.
+Vygotsky's Zone of Proximal Development (ZPD) defines the gap between what a learner can do unaided and what they can accomplish with appropriate support. AI assistants can act as adaptive scaffolding: providing targeted help at the edge of current ability, then [fading support as competence builds](agentic-education-persona-progression.md).
 
 The critical word is *adaptive*. Scaffolding only accelerates learning when it operates at the difficulty edge — too easy, and there is no growth; too complete, and the learner offloads the cognition that builds skill. This is the same mechanism that explains [skill atrophy](skill-atrophy.md): full delegation removes the learner from the ZPD entirely.
 
@@ -53,11 +53,11 @@ burst tolerance, and why?"
 # Then implement the solution yourself
 ```
 
-This keeps the cognitive work — the part that builds skill — with you.
+This keeps the cognitive work — [the part that builds skill](skill-atrophy.md) — with you.
 
 ### Generation-Then-Comprehension
 
-When you do request implementation, interrogate it before using it. Ask the AI to explain what a specific block does, what edge cases it handles, and what would break under different inputs. This turns passive acceptance into active learning.
+When you do request implementation, interrogate it before using it. Ask the AI to explain what a specific block does, [what edge cases it handles](../anti-patterns/comprehension-debt.md), and what would break under different inputs. This turns passive acceptance into active learning.
 
 ```
 # After receiving generated code:
@@ -108,9 +108,9 @@ The Anthropic study found debugging scores showed the steepest divergence betwee
 
 The pattern degrades under specific conditions:
 
-- **Hard deadline pressure.** Socratic dialog and fading support lengthen time-to-working-code. When the goal is shipping, not skill-building, full delegation is faster — deferring learning to a calmer window is the honest trade-off.
+- **Hard deadline pressure.** Socratic dialog and fading support lengthen time-to-working-code. When the goal is shipping, not skill-building, [full delegation is faster](../agent-design/delegation-decision.md) — deferring learning to a calmer window is the honest trade-off.
 - **Missing foundational vocabulary.** Socratic prompting assumes the learner can parse the AI's response. In a genuinely unfamiliar domain, "why" questions yield answers the learner cannot evaluate, producing confident misunderstanding rather than growth.
-- **Unverifiable domains.** When output cannot be independently checked (obscure libraries, niche regulatory logic, specialised hardware), interrogating the AI creates a feedback loop with no ground truth. Pairing with a human expert beats deliberate AI dialog here.
+- **Unverifiable domains.** When output cannot be independently checked (obscure libraries, niche regulatory logic, specialised hardware), interrogating the AI creates a [feedback loop with no ground truth](process-amplification.md). Pairing with a human expert beats deliberate AI dialog here.
 - **Rote or mechanical tasks.** Generation-then-comprehension on boilerplate or well-understood refactors wastes cognition without retention benefit. The ZPD only exists at the edge of capability; below that edge, delegation is correct.
 
 ## Key Takeaways

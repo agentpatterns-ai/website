@@ -35,7 +35,7 @@ For each layer, [Tallam](https://arxiv.org/abs/2604.14717) argues governance dif
 
 1. **Speed** — how fast mutations land.
 2. **Downstream coupling** — how strongly this layer's state drives future tool calls and planning.
-3. **Reversibility** — whether rolling the layer back restores prior behavior.
+3. **Reversibility** — whether rolling the layer back restores prior behavior, the property [rollback-first design](rollback-first-design.md) makes a precondition.
 4. **Observability** — whether an operator can inspect the current state before it fires.
 
 The paper's core observation: the layers that most affect behavior (memory, self-narrative) are often the least inspectable, while the layers humans can inspect most easily (pretraining artifacts, published alignment cards) change slowly enough that inspection rarely matters. This mismatch is the governance gap.
@@ -80,7 +80,7 @@ graph TD
 The five-layer framework is overhead for systems where most layers are inert:
 
 - **Stateless or short-session agents** — no cross-session accumulation, so memory and self-narrative collapse. Standard prompt engineering is sufficient.
-- **Well-governed memory stores** — teams already running SSGM-style consolidation gates, temporal decay, and versioning see residual drift dominated by retrieval quality rather than layer coupling.
+- **Well-governed memory stores** — teams already running SSGM-style consolidation gates, temporal decay, and versioning (see [agent memory patterns](agent-memory-patterns.md)) see residual drift dominated by retrieval quality rather than layer coupling.
 - **Weak self-narrative coupling** — when the agent's self-description does not feed back into tool selection or planning, reverting memory reliably restores behavior and the hysteresis effect does not appear.
 - **Single-tenant, single-user agents** — without distinct users and contexts feeding the ratchet, accretion is slow enough to govern with periodic review.
 
@@ -95,7 +95,7 @@ A persistent coding agent with a `SOUL.md`-style self-narrative and a vector mem
 + I follow the conventions present in the codebase.
 ```
 
-Tool-call behavior does not revert. The agent still retrieves the accumulated memory entries about inline error handling and plans around them. The visible layer changed; the coupled layer (memory) did not. A rollback contract at the same granularity as the writes — versioning each memory write and providing a per-write revert — is required to restore baseline, not a self-narrative edit.
+Tool-call behavior does not revert. The agent still retrieves the accumulated memory entries about inline error handling and plans around them. The visible layer changed; the coupled layer ([memory synthesised from prior sessions](memory-synthesis-execution-logs.md)) did not. A rollback contract at the same granularity as the writes — versioning each memory write and providing a per-write revert — is required to restore baseline, not a self-narrative edit.
 
 ## Key Takeaways
 

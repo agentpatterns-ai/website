@@ -107,7 +107,7 @@ The steelman against templates: skip the library, write every judge from scratch
 
 - **Calibration debt outweighs saved draft cost**. Template prompts are only "free" until you grade 20–50 examples per template and re-grade on every judge-model upgrade. For a small suite (≤3 judges), calibration overhead can exceed bespoke authoring time.
 - **Workspace-level lock-in**. Centralising definitions in one vendor's tab re-creates the migration tax LangSmith identifies for duplicated copies — the unit of duplication moves from per-project to per-vendor.
-- **Shortcut bias inherited silently**. Recent work documents systematic shortcut bias in LLM judges — recency, provenance hierarchy, verbosity inflation — that templates inherit unacknowledged. A safety template scoring "expert-tagged" outputs higher independent of content is portable only on the surface. [Source: [The Silent Judge: Unacknowledged Shortcut Bias in LLM-as-a-Judge (arXiv 2509.26072)](https://arxiv.org/abs/2509.26072)]
+- **Shortcut bias inherited silently**. Recent work documents systematic [shortcut bias in LLM judges](anti-reward-hacking.md) — recency, provenance hierarchy, verbosity inflation — that templates inherit unacknowledged. A safety template scoring "expert-tagged" outputs higher independent of content is portable only on the surface. [Source: [The Silent Judge: Unacknowledged Shortcut Bias in LLM-as-a-Judge (arXiv 2509.26072)](https://arxiv.org/abs/2509.26072)]
 - **False ceiling on coverage**. Six template categories can read as "evals done" while domain-specific failures remain unmeasured.
 
 ## Example

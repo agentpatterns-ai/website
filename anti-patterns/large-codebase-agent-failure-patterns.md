@@ -42,7 +42,7 @@ All five share one cause: the working set exceeds what context plus search can c
 ## When This Backfires
 
 - **Semantic retrieval for Partial Completion is contested.** Claude Code, Cursor, and Devin dropped vector-DB RAG for agentic search, which beat it on real code ([SmartScope, 2026](https://smartscope.blog/en/ai-development/practices/rag-debate-agentic-search-code-exploration/); [MindStudio, 2026](https://www.mindstudio.ai/blog/is-rag-dead-what-ai-agents-use-instead)). Hybrid retrieval is one answer among several.
-- **Vendor-study framing.** Sourcegraph sells the remediation; a strong agentic-search harness may close the gap without indexing.
+- **Vendor-study framing.** Sourcegraph sells the remediation; a strong agentic-search harness, of the kind Cursor and Devin adopted, may close the gap without indexing.
 - **Polyglot or build-broken repos.** Structural navigation needs a working build — references degrade silently when compilation fails or no unified cross-language index exists.
 - **Task restructuring beats infrastructure.** Per-repo PRs or scoping to one component often cost less than indexing a monorepo.
 

@@ -27,7 +27,7 @@ Anthropic's [C compiler project](https://www.anthropic.com/engineering/building-
 
 Default stdout to summary-level output. Write verbose output — stack traces, per-test results, timing data — to log files. The agent reads the summary; if it needs detail, it greps the log.
 
-The agent cannot choose to ignore parts of stdout — everything printed enters context. Log files give selective access without forcing consumption.
+The agent cannot choose to ignore parts of stdout — everything printed enters [the context window](../context-engineering/context-window-dumb-zone.md). Log files give selective access without forcing consumption.
 
 ### Place ERROR and Its Reason on the Same Line
 
@@ -93,7 +93,7 @@ A human-optimized harness typically includes per-test progress lines (`✓ test_
 An LLM-first harness is the wrong default when:
 
 - **Humans are the primary consumers.** In shared CI, engineers triage failures from the full log; stripping stdout forces them to open a secondary file per failure.
-- **The agent will load the full log anyway.** Intermittent failures need surrounding output; one extra tool call per failure beats verbose stdout only at scale.
+- **The agent will load the full log anyway.** Intermittent failures need surrounding output for [agent debugging](../observability/agent-debugging.md); one extra tool call per failure beats verbose stdout only at scale.
 - **Tests carry diagnostic data in the body.** Property-based suites and snapshot diffs print the offending input; a one-line reason drops the payload needed to diagnose.
 - **The suite is small.** Under a few dozen tests, per-test progress is cheap to scan and a custom reporter is not worth the effort.
 

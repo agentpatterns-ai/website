@@ -10,7 +10,7 @@ aliases:
   - deferred work ledger
   - next-trigger debt log
 last_reviewed: 2026-06-02
-maturity: established
+maturity: adopted
 ---
 
 # Acknowledged-Debt Ledger with Next-Trigger Conditions

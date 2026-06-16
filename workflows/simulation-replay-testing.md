@@ -8,7 +8,7 @@ tags:
   - workflows
   - agent-design
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Simulation and Replay Testing for Agent Verification
@@ -17,13 +17,13 @@ maturity: established
 
 ## The Problem
 
-When you change an agent's instructions, how do you know the change improves output? Intuition and manual testing on new tasks are unreliable — new tasks have different context, different difficulty, and different success criteria. You cannot compare them cleanly to the previous agent's performance.
+When you change an agent's instructions, how do you know the change improves output? Intuition and manual testing on new tasks are unreliable — new tasks have different context, different difficulty, and different [success criteria](eval-driven-development.md). You cannot compare them cleanly to the previous agent's performance.
 
 Simulation and replay testing solves this by using the past as the test fixture.
 
 ## Why It Works
 
-Replay testing eliminates confounding variables. A new task varies in complexity, context, and success criteria, making before/after comparisons unreliable. A past task fixes all of these: the inputs are known, the expected output is known (what was merged), and the only variable is the updated instructions. Because git preserves the repository state at every commit, you can reconstruct the exact conditions of any prior run and replay them deterministically from the prompt's perspective — the task context is frozen even if the model output varies.
+Replay testing eliminates confounding variables. A new task varies in complexity, context, and success criteria, making before/after comparisons unreliable. A past task fixes all of these: the inputs are known, the [expected output is known (what was merged)](../verification/red-green-refactor-agents.md), and the only variable is the updated instructions. Because git preserves the repository state at every commit, you can reconstruct the exact conditions of any prior run and replay them deterministically from the prompt's perspective — the task context is frozen even if the model output varies.
 
 ## The Technique
 
@@ -142,6 +142,5 @@ You update a researcher agent's instructions to add a "related pages" step. Befo
 - [Layered Accuracy Defense](../verification/layered-accuracy-defense.md)
 - [Red-Green-Refactor with Agents: Tests as the Spec](../verification/red-green-refactor-agents.md)
 - [Eval-Driven Development](eval-driven-development.md)
-- [Evaluation-Driven Development for Agent Tools](eval-driven-tool-development.md)
 - [LLM-as-Judge Evaluation with Human Spot-Checking](llm-as-judge-evaluation.md)
 - [One-Shot Record and Deterministic Replay for Periodic Agent Tasks](../tool-engineering/one-shot-record-deterministic-replay.md) — the production counterpart; same recording substrate used for cost elimination rather than verification.

@@ -103,7 +103,7 @@ robots.txt is **advisory, not enforceable**. Key nuances:
 - **Perplexity stealth crawling documented**: [Cloudflare reported in August 2025](https://blog.cloudflare.com/perplexity-is-using-stealth-undeclared-crawlers-to-evade-website-no-crawl-directives/) that Perplexity rotates user-agents and ASNs to evade blocks and has been observed ignoring robots.txt. Treat `PerplexityBot` and `Perplexity-User` allow-listing as directional only; use WAF rules for any hard block.
 - **Bytespider ignores it**: ByteDance's Bytespider is documented to not respect robots.txt — block at CDN/WAF level. See [Cloudflare WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) for setup.
 - **No legal enforcement**: robots.txt does not prevent crawling. It signals intent. Legal protection requires ToS, CFAA claims, or contractual agreements.
-- **EU AI Act alignment**: The EU regulatory framework encourages GPAI providers to document and respect publisher opt-out signals — robots.txt disallow for training crawlers is the de facto mechanism. Verify specific commitments against the published Code of Practice text as obligations evolve.
+- **EU AI Act alignment**: The EU regulatory framework encourages GPAI providers to document and respect publisher opt-out signals — `robots.txt` disallow for training crawlers is the de facto mechanism. Verify specific commitments against the published Code of Practice text as obligations evolve.
 
 ## Provider User-Agent Reference
 

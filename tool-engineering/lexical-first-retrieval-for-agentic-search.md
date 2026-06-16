@@ -13,7 +13,7 @@ aliases:
   - lexical retrieval for deep research
   - sparse retrieval for search agents
 last_reviewed: 2026-06-03
-maturity: established
+maturity: emerging
 ---
 
 # Lexical-First Retrieval for Agentic Search

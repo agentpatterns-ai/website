@@ -19,13 +19,13 @@ maturity: established
 Two common defaults in agent-driven pipelines:
 
 - **Review everything** — every agent change gets manual review. Safe, but slow. Review quality is empirically tied to coverage and reviewer participation ([McIntosh et al. 2016](https://link.springer.com/article/10.1007/s10664-015-9381-9)); as changeset volume grows, both decline.
-- **Trust everything** — agent changes ship without review. Fast, but one bad change reaches production unchecked.
+- **Trust everything** — agent changes ship without review ([trust without verify](../anti-patterns/trust-without-verify.md)). Fast, but one bad change reaches production unchecked.
 
 Neither scales. Review-everything teams abandon the workflow when volume exceeds capacity; trust-everything teams learn the hard way when an agent ships a breaking change.
 
 ## The Risk Matrix
 
-Risk-based shipping assigns each change type a tier. The tier determines whether the change auto-ships or requires manual review.
+Risk-based shipping assigns each change type a tier, the same tiering logic [risk-based task sizing](risk-based-task-sizing.md) applies to verification depth. The tier determines whether the change auto-ships or requires manual review.
 
 | Change Type | Risk Tier | Action |
 |------------|-----------|--------|
@@ -46,7 +46,7 @@ The harness classifies each change before shipping it. Three approaches:
 
 **File-path heuristics** — map paths to tiers. `auth/`, `migrations/`, `infrastructure/` are high risk; `content/`, `docs/`, `styles/` are low. Simple, deterministic, auditable.
 
-**Diff analysis** — parse the diff. Schema alterations, permission changes, or new environment variables signal higher risk. More accurate than paths but requires parsing logic.
+**Diff analysis** — parse the diff. Schema alterations, permission changes, or new environment variables signal higher risk. More accurate than paths but requires parsing logic, the same diff inspection [diff-based review](../code-review/diff-based-review.md) relies on.
 
 **Agent self-classification** — ask the agent to tier its own change. Cheap and context-aware, but the agent may underestimate risk. Use as a signal combined with heuristics, not as the sole classifier.
 
@@ -56,7 +56,7 @@ The matrix is only as safe as its classifier. Conditions that flip the pattern n
 
 - **Misclassified diffs slip through** — a change that touches `auth/` via an indirect import, or a schema-adjacent change in `api/`, gets tagged medium. Path heuristics are blind to dependency graphs.
 - **Cross-cutting interactions** — two low-risk edits combine into a broken state, or a string change breaks a downstream parser. Per-diff tiering misses defects in the interaction.
-- **Monitoring decays** — if the medium-tier alert channel is noisy or on-call ignores it, "auto-ship with monitoring" collapses into "auto-ship".
+- **Monitoring decays** — if the medium-tier alert channel is noisy or on-call ignores it, "auto-ship with monitoring" collapses into "auto-ship" (pair it with [circuit breakers](../observability/circuit-breakers.md) so error spikes halt shipping automatically).
 - **Tier-boundary gaming** — an agent that learns schema changes block auto-merge may split one logical change into two diffs that each stay under the threshold.
 - **Small teams, high-consequence domains** — on a two-engineer team in a regulated codebase (medical, financial, safety-critical), blanket-review overhead is tolerable; one bad auto-shipped change dwarfs the throughput gain.
 

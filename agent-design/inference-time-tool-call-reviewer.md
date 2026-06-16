@@ -22,7 +22,7 @@ maturity: emerging
 
 ## Where the Review Happens
 
-Existing review stations sit elsewhere in the loop. The [critic agent](critic-agent-plan-review.md) reviews the *plan*; [evaluator-optimizer](evaluator-optimizer.md) reviews *output* in a refinement loop; [trajectory-aware audit](../verification/trajectory-opaque-evaluation-gap.md) reviews the *transcript* post-hoc.
+Existing review stations sit elsewhere in the loop. The [critic agent](critic-agent-plan-review.md) reviews the *plan*; [evaluator-optimizer](evaluator-optimizer.md) reviews *output* in a refinement loop; [trajectory-aware audit](../verification/eval-blind-spots.md) reviews the *transcript* post-hoc.
 
 The inference-time tool-call reviewer occupies a different slot: between the base agent's decision to call a tool and the harness dispatching it. Each provisional call is intercepted, sent to a separate reviewer, and approved, rejected, or revised before it executes ([Ta et al., 2026](https://arxiv.org/abs/2604.27233)).
 
@@ -67,7 +67,7 @@ Two findings constrain deployment:
 
 The pattern earns its place when:
 
-- **Tool calls have asymmetric blast radius** — destructive writes, external API calls, and stateful mutations expensive to roll back.
+- **Tool calls have asymmetric blast radius** — destructive writes, external API calls, and stateful mutations expensive to roll back, beyond what [blast-radius containment](../security/blast-radius-containment.md) alone absorbs.
 - **The base agent has a documented tool-call failure mode** — irrelevance, parameter drift, or scope violations that show up empirically.
 - **A reasoning-tier or different-vendor reviewer is available** — same-base-model reviewers fail the blind-spot test.
 - **You can measure helpfulness and harmfulness** on a held-out trajectory set — without the metric, the reviewer is unfalsifiable.
@@ -88,7 +88,7 @@ Synchronous per-call review is not the right surface for every workflow:
 | [Critic agent](critic-agent-plan-review.md) | The plan | One review per task | Multi-step plans with compounding errors |
 | **Inference-time tool-call reviewer** | Each provisional call | One review per tool call | Per-call risk and irrelevance detection |
 | [Evaluator-optimizer](evaluator-optimizer.md) | Output, in a loop | N rounds × 2 models | Iterative refinement against explicit criteria |
-| [Trajectory-opaque audit](../verification/trajectory-opaque-evaluation-gap.md) | Full transcript | Post-hoc, batched | Safety and compliance after the fact |
+| [Trajectory-opaque audit](../verification/eval-blind-spots.md) | Full transcript | Post-hoc, batched | Safety and compliance after the fact |
 
 These compose — a critic at plan time and a reviewer at call time inspect different error surfaces. They do not replace each other.
 
@@ -124,9 +124,9 @@ The same reviewer wired into a read-heavy lookup workflow would inflate harmfuln
 
 - [Critic Agent Pattern](critic-agent-plan-review.md)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
-- [Trajectory-Opaque Evaluation Gap](../verification/trajectory-opaque-evaluation-gap.md)
+- [Trajectory-Opaque Evaluation Gap](../verification/eval-blind-spots.md)
 - [Tool Confirmation Carousel](tool-confirmation-carousel.md)
 - [GEPA: Reflective Prompt Evolution](gepa-reflective-prompt-evolution.md)
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
 - [Rollback-First Design](rollback-first-design.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)

@@ -27,13 +27,13 @@ graph LR
 
 ### Research
 
-Gather context before proposing anything. Read relevant code, check documentation, understand constraints and existing patterns. The goal is to build a mental model of the problem space — not to produce output.
+Gather context before proposing anything. Read relevant code, check documentation, understand constraints and existing patterns. The goal is to [build a mental model of the problem space](pre-execution-codebase-exploration.md) — not to produce output.
 
 What research answers:
 
 - What exists already? (files, functions, patterns, tests)
 - What are the constraints? (performance, compatibility, conventions)
-- What has been tried before? (git history, related PRs)
+- What has been tried before? (`git log` history, related PRs)
 
 ### Plan
 
@@ -41,7 +41,7 @@ With research in hand, outline the approach. Identify which files change, what n
 
 ### Implement
 
-Execute the plan with focused scope. Implementation becomes mechanical when the research and plan are solid. Deviations from the plan signal missing research, not creative latitude.
+Execute the plan with focused scope. [Implementation becomes mechanical](../agent-design/reasoning-budget-allocation.md) when the research and plan are solid. Deviations from the plan signal missing research, not creative latitude.
 
 The back-edge in the diagram — implementation surfacing new information that invalidates the plan — is a deliberate replan gate, not a bug. The nibzard [Agentic AI Handbook](https://www.nibzard.com/agentic-handbook) describes production agent work as "plan, controlled execution, and replan gates," where gates trigger reassessment rather than silent drift when assumptions break.
 
@@ -109,7 +109,7 @@ graph TD
 
 ## Anti-Pattern: Implement First, Fix Later
 
-The inverse pattern — start coding, discover problems, backtrack — burns context on rework. Each failed attempt consumes tokens that could have been spent on implementation. In long-running tasks, this leads to half-finished features spread across context windows with no clear thread connecting them.
+The inverse pattern — start coding, discover problems, backtrack — burns context on rework. Each failed attempt consumes tokens that could have been spent on implementation. In long-running tasks, this leads to half-finished features spread across [context windows](../context-engineering/context-engineering.md) with no clear thread connecting them.
 
 Signs you're in implement-first mode:
 
@@ -121,12 +121,12 @@ Signs you're in implement-first mode:
 
 The pattern assumes research compounds — more reading yields a better plan. That assumption breaks in several conditions:
 
-- **Well-mapped domains** — when the task is a routine change in familiar code, a research phase produces a summary the implementer already knew. The token cost of the summary outweighs any correction it provides.
+- **Well-mapped domains** — when the task is a routine change in familiar code, a research phase produces a summary the implementer already knew. The [token cost of the summary](../context-engineering/context-budget-allocation.md) outweighs any correction it provides.
 - **Stale or wrong research summaries** — a condensed summary the implementer cannot audit cheaply can confidently omit a relevant constraint, seeding the plan with a silent false assumption that is harder to recover from than implementing first and hitting the constraint directly.
-- **Fast feedback loops** — when tests run in seconds and failures are compile or runtime errors, try-and-fix can converge faster than plan-and-verify. The pattern shines when errors are expensive to surface, not when the environment surfaces them for free.
+- [**Fast feedback loops**](../verification/red-green-refactor-agents.md) — when tests run in seconds and failures are compile or runtime errors, try-and-fix can converge faster than plan-and-verify. The pattern shines when errors are expensive to surface, not when the environment surfaces them for free.
 - **Open-ended exploration** — early prototyping benefits from discovering the problem shape through code. A plan written before the shape is known ossifies premature structure.
 
-The pattern pays off when wrong assumptions are expensive: unfamiliar code, irreversible actions, long implementation phases where backtracking burns a large context window. Trivial, well-understood, or cheaply-reversible work is better served by implement-first.
+The pattern pays off when wrong assumptions are expensive: unfamiliar code, irreversible actions, [long implementation phases](../agent-design/long-running-agents.md) where backtracking burns a large context window. Trivial, well-understood, or cheaply-reversible work is better served by implement-first.
 
 Dexter Horthy — who originally popularised Research-Plan-Implement — publicly reversed that recommendation in early 2026 and rebuilt the workflow as [QRSPI](https://alexlavaee.me/blog/from-rpi-to-qrspi/) (Questioning, Research, Structure, Plan, Implement) after three failure modes surfaced at scale: a broad research prompt skipped the alignment moments where the agent should surface design decisions as explicit options, the Structure phase between Plan and Implement was the most-skipped step in practice, and plans drifted silently once research summaries lost fidelity ([talk: *Everything We Got Wrong About Research-Plan-Implement*](https://www.youtube.com/watch?v=YwZR6tc7qYg)). Treat the three phases here as the minimum decomposition; for high-stakes work, add an explicit Questioning step before Research and a Structure step before Implement.
 

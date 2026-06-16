@@ -23,7 +23,7 @@ maturity: established
 Two phases:
 
 1. **Coordinator** — a single orchestrator enumerates all affected files and produces a complete task list. No workers run yet.
-2. **Workers** — the orchestrator dispatches workers in parallel; each receives a bounded file slice and an unambiguous migration spec, then reports results.
+2. **Workers** — the [orchestrator dispatches workers](orchestrator-worker.md) in parallel; each receives a bounded file slice and an unambiguous migration spec, then reports results.
 
 Workers have no cross-worker communication. The only coordination point is the orchestrator collecting results.
 
@@ -108,7 +108,7 @@ Sequential migration takes `N × t`; a swarm of `W` workers collapses that to `�
 ## When This Backfires
 
 - **Rate limit exhaustion** — 10–20 simultaneous calls frequently hit provider rate limits, serializing execution. Stagger launches or queue to stay under per-minute token budgets.
-- **Context window overflow** — files exceeding the model's usable context produce silent partial migrations. Pre-filter large files and handle them with a narrower-scope prompt.
+- **Context window overflow** — files exceeding the model's [usable context](../context-engineering/context-budget-allocation.md) produce silent partial migrations. Pre-filter large files and handle them with a narrower-scope prompt.
 - **LLM non-determinism** — parallel workers on similar code patterns make inconsistent stylistic choices. For strict uniformity requirements, run a normalization pass after the swarm.
 - **Partial-migration state** — failure rates above ~30% leave the codebase in a mixed state harder to reason about than a fully-unmigrated one. Isolate with a feature flag or dedicated branch.
 - **Token cost vs ROI** — at ~10x sequential token cost, the break-even is roughly 50–100 files. Below that threshold, manual staged migration is cheaper.

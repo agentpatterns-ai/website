@@ -46,7 +46,7 @@ Apply the same discipline at the PR surface. Cluster on `(rule × severity × fi
 
 **Rubber-stamp risk.** [Empirical data on 278,790 AI-reviewed PRs](https://arxiv.org/abs/2603.15911) shows AI suggestions adopted at 16.6% versus 56.5% for humans, with "over half of unadopted suggestions from AI agents are either incorrect or addressed through alternative fixes." A meaningful fraction should not be applied at all. Batch-apply makes it cheaper to act on the mechanical majority — and cheaper to apply the wrong ones if boundaries are loose.
 
-**Audit-trail collapse.** One commit applying thirty fixes loses the per-finding decision trail compliance reviewers need. Remediate by structuring the commit message as a per-finding manifest with alert IDs.
+**Audit-trail collapse.** One commit applying 30 fixes loses the per-finding decision trail compliance reviewers need. Remediate by structuring the commit message as a per-finding manifest with alert IDs.
 
 **Cross-cutting fixes that look mechanical.** Suggestions that change a shared sanitiser, schema field, or interface look trivial line-by-line but mutate global behaviour when summed. [Diff-only review](diff-based-review.md) already has this blind spot; batching amplifies it. Exclude shared utilities and interface boundaries from auto-batch eligibility.
 
@@ -62,7 +62,7 @@ Apply the same discipline at the PR surface. Cluster on `(rule × severity × fi
 
 ## When This Backfires
 
-- **High-stakes monorepos** where one bad fix costs more than fifty good ones save.
+- **High-stakes monorepos** where one bad fix costs more than 50 good ones save.
 - **Audit-sensitive paths** requiring per-finding sign-off.
 - **Heterogeneous suggestion sources** where one reviewer pass cannot calibrate to a shared rule.
 - **Architecturally cross-cutting fixes** where the sum of mechanical changes is not mechanical.

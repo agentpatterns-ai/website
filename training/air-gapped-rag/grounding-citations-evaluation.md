@@ -79,7 +79,7 @@ This forces the model to trace each claim to a chunk at generation time rather t
 
 When retrieved chunks do not contain relevant information, the model should refuse rather than speculate. Two mechanisms complement each other:
 
-**Retrieval-side**: Filter out any chunk whose similarity score falls below a threshold before populating the context window. If no chunks pass the threshold, skip generation entirely and return the structured refusal directly.
+**Retrieval-side**: Filter out any chunk whose similarity score falls below a threshold before populating the context window. The score comes from the retriever covered in [Retrieval and Re-Ranking](retrieval-and-reranking.md); if no chunks pass the threshold, skip generation entirely and return the structured refusal directly.
 
 **Prompt-side**: Even above-threshold chunks may not answer the specific question. The system prompt rule above instructs the model to refuse explicitly rather than construct a plausible-sounding answer from tangential chunks.
 

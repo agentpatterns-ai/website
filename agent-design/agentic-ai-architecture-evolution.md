@@ -47,13 +47,13 @@ graph TD
     F -->|typed result| D
 ```
 
-**Cognitive layer** — the LLM. Handles goal interpretation, planning, tool selection, and result synthesis. Never modifies external state directly; only emits typed tool calls.
+**Cognitive layer** — the LLM. Handles goal interpretation, planning, tool selection, and result synthesis. Never modifies external state directly; only emits typed tool calls (the [cognitive/execution split](cognitive-reasoning-execution-separation.md)).
 
-**Typed tool interfaces** — the boundary. Calls and results are schema-validated, so the cognitive layer cannot issue a malformed command. This is the primary mechanism for predictable behavior.
+**Typed tool interfaces** — the boundary. Calls and results are schema-validated, so the cognitive layer cannot issue a malformed command. This is the primary mechanism for predictable behavior — [typed schemas at the boundary](../multi-agent/typed-schemas-at-agent-boundaries.md).
 
 **Execution layer** — deterministic infrastructure. Receives typed calls, executes them, returns typed results. Contains no reasoning — only execution logic, error handling, and result formatting.
 
-This separation enables independent testing of each layer and explicit auditability at the boundary.
+This separation enables independent testing of each layer and explicit auditability at the boundary — the [separation of knowledge and execution](separation-of-knowledge-and-execution.md) applied to runtime.
 
 ## Multi-Agent Topology Taxonomy
 
@@ -104,9 +104,9 @@ The paper observes ecosystem convergence on shared infrastructure parallel to we
 
 The cognitive/execution separation adds structural overhead. Three conditions where it costs more than it returns:
 
-1. **Simple single-turn tasks.** If the agent calls one tool and terminates, typed interfaces and a separate execution layer add engineering overhead with no reliability benefit. A direct function call is cheaper and easier to test.
+1. **Simple single-turn tasks.** If the agent calls one tool and terminates ([a single turn](agent-turn-model.md), not a loop), typed interfaces and a separate execution layer add engineering overhead with no reliability benefit. A direct function call is cheaper and easier to test.
 2. **Rapid prototyping.** Strict schema contracts slow iteration. Early-stage agents benefit from fluid coupling; formal separation is a refactoring target once the interface stabilizes.
-3. **Low-throughput, human-supervised workflows.** Auditability at the tool boundary matters when agents run autonomously at volume. A reviewer inspecting every action replaces much of what formal audit logging provides — adding the full harness before volume justifies it is maintenance cost with no proportionate gain.
+3. **Low-throughput, human-supervised workflows.** Auditability at the tool boundary ([trajectory logging](../observability/trajectory-logging-progress-files.md)) matters when agents run autonomously at volume. A reviewer inspecting every action replaces much of what formal audit logging provides — adding the full harness before volume justifies it is maintenance cost with no proportionate gain.
 
 ## Example
 
@@ -128,7 +128,7 @@ This maps each component directly onto the reference architecture above: the LLM
 
 - Goal-directed agents require structural separation of cognitive reasoning from execution — not a prompt-engineering refinement of the request-response model.
 - Typed tool interfaces at the cognitive/execution boundary are the primary mechanism that makes agent behavior predictable and auditable.
-- Three multi-agent topologies — centralised, decentralised peer-to-peer, and hybrid — each carry distinct failure modes that must be matched to task shape.
+- [Three multi-agent topologies](../multi-agent/multi-agent-topology-taxonomy.md) — centralised, decentralised peer-to-peer, and hybrid — each carry distinct failure modes that must be matched to task shape.
 - Enterprise deployment adds three orthogonal concerns to functional correctness: governance, observability, and reproducibility.
 - The full harness is overhead until volume justifies it; simple single-turn tasks, prototypes, and human-supervised workflows are cheaper without it.
 

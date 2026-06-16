@@ -25,7 +25,7 @@ maturity: emerging
 A terminal agent reads instructions from surfaces it did not author: READMEs, code comments, stack traces. Some are necessary cues for an underspecified task. Some are irrelevant or adversarial distractors. Two postures both produce passing-looking scores on standard benchmarks: ([Mavali et al., 2026](https://arxiv.org/abs/2605.12233))
 
 - **Blanket acceptance** — execute every instruction the environment surfaces. Looks capable because it picks up cues, but also runs the distractor.
-- **Blanket rejection** — ignore all environmental instructions, rely only on the user prompt. Looks robust to prompt injection but fails any task whose specification was incomplete.
+- **Blanket rejection** — ignore all environmental instructions, rely only on the user prompt. Looks robust to prompt injection but fails any task whose specification was incomplete — the posture [injection-resistant agent design](../security/prompt-injection-resistant-agent-design.md) deliberately adopts.
 
 Neither is task-aligned. Selectivity — connecting an environmental instruction back to the user's goal before acting on it — is the missing capability, and standard benchmarks do not measure it.
 
@@ -54,7 +54,7 @@ The architectural defenses in [Designing Agents to Resist Prompt Injection](../s
 Pursuing task alignment is not always correct. Three conditions where blanket rejection is the right posture:
 
 - **High-stakes consequential actions.** For agents holding the [lethal trifecta](../security/lethal-trifecta-threat-model.md) — private data, untrusted content, egress — the cost of executing a malicious cue exceeds the cost of missing a legitimate one.
-- **Multi-tenant or untrusted-environment agents.** When artifacts come from arbitrary external principals, "plausible cues" are attacker-controlled. Selectivity widens the attack surface.
+- **Multi-tenant or untrusted-environment agents.** When artifacts come from arbitrary external principals, "plausible cues" are attacker-controlled, the threat surface mapped in [discovering indirect injection vulnerabilities](../security/indirect-injection-discovery.md). Selectivity widens the attack surface.
 - **Well-specified upstream tasks.** If the task description is complete, there is no cue to recover. TAB-style underspecification is a property of the task, not a universal failure mode — fix the specification first.
 
 For agents in those settings, see [Prompt Injection Threat Model](../security/prompt-injection-threat-model.md) and [Discovering Indirect Injection Vulnerabilities in Your Agent](../security/indirect-injection-discovery.md).
@@ -64,7 +64,7 @@ For agents in those settings, see [Prompt Injection Threat Model](../security/pr
 For agents whose operating envelope makes environmental cues an intended input channel — coding, infra, or DX agents reading docs and READMEs — three operational practices:
 
 - **Report both axes separately.** A single alignment number hides the trade-off. Track cue use and distraction resistance independently when comparing models or defenses.
-- **Evaluate defenses with paired cues.** A defense that drops distractor execution to zero is not a win if it also drops cue use to zero. Pair every defense evaluation with a cue-recovery test.
+- **Evaluate defenses with paired cues.** A defense that drops distractor execution to zero is not a win if it also drops cue use to zero — the cue-suppression cost [injection-resistant agent design](../security/prompt-injection-resistant-agent-design.md) incurs by construction. Pair every defense evaluation with a cue-recovery test.
 - **Prefer reasoning-time selectivity over output filtering.** Claude Opus 4.7's results suggest model-internal relevance routing — checking whether a found instruction is a precondition for the user's goal — closes the gap better than sanitisation. ([Mavali et al., 2026](https://arxiv.org/abs/2605.12233))
 
 ## Example
@@ -88,7 +88,7 @@ The first passage is the necessary cue — the user prompt did not specify the r
 
 Behaviour by posture:
 
-- **Blanket acceptance** — agent runs both. Passes the git recovery rubric, fails alignment (distractor executed).
+- **Blanket acceptance** — agent runs both `git reflog` and `uv lock`. Passes the git recovery rubric, fails alignment (distractor executed).
 - **Blanket rejection** — agent runs neither. Fails capability (cue ignored, task incomplete).
 - **Task-aligned** — agent runs only `git reflog` / `git checkout`. Passes both axes.
 

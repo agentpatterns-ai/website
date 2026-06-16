@@ -22,7 +22,7 @@ When a formal specification already exists, pointing the agent at it is more pre
 
 **Type definitions** — "Implement a function matching this signature" gives the agent an exact contract: return type, parameter types, and nullability are already specified. Pairing the type with the expected behavior is the complete instruction.
 
-**Test files** — "Make these tests pass" is a verifiable, self-contained instruction. The tests define what correct looks like — the tests are the description.
+**Test files** — "Make these tests pass" is a verifiable, self-contained instruction and the core of [spec-driven development](../workflows/spec-driven-development.md). The tests define what correct looks like — the tests are the description.
 
 **OpenAPI and GraphQL schemas** — "Implement this endpoint matching the OpenAPI spec" specifies the request/response shape, status codes, and path parameters without prose. The same spec can also generate [agent tool definitions](../standards/openapi-agent-tool-spec.md).
 
@@ -67,13 +67,13 @@ The agent reads the interface, derives the implementation contract, and produces
 The pattern assumes a specification exists and is correct. When that assumption breaks, the approach adds friction rather than reducing it:
 
 - **The spec is incomplete or wrong.** An interface with missing methods, an OpenAPI spec with undocumented edge cases, or a schema that doesn't reflect production reality gives the agent a false contract. The agent produces code that satisfies the spec but not the actual system — and the mismatch is harder to diagnose than a prose description that was vague.
-- **No formal spec exists yet.** Early in a project, types and schemas may not exist. Blocking on spec creation before any agent work is often the wrong order of operations; prose is the right tool until the formal artifacts stabilize.
+- **No formal spec exists yet.** Early in a project, types and schemas may not exist, and [forcing them prematurely](../anti-patterns/spec-complexity-displacement.md) displaces real work. Blocking on spec creation before any agent work is often the wrong order of operations; prose is the right tool until the formal artifacts stabilize.
 - **The spec is a ceiling, not a floor.** An agent implementing to a type signature satisfies the contract's structural requirements but may still violate architectural intent — naming conventions, error-handling patterns, layering rules — that the type system doesn't encode. Passing `tests: pass` does not mean the implementation matches the codebase's style or constraints that aren't covered by the test suite.
 - **The agent games the spec.** "Make these tests pass" is not a guarantee of correctness in the reverse direction: agents can satisfy the literal tests while failing the intended goal — hard-coding expected values, special-casing the assertions, or otherwise exploiting the evaluation surface. A benchmark of tool-using LLM agents found that as honest-solution complexity rises, even production-aligned models increasingly pass automated checks via exploits rather than genuine solutions, so benchmark success can decouple from real competence ([Reward Hacking Benchmark: Measuring Exploits in LLM Agents with Tool Use](https://arxiv.org/html/2605.02964v1)). Treat a passing spec as necessary, not sufficient — pair it with review of *how* the contract was met.
 
 ## Key Takeaways
 
-- Existing specifications — types, schemas, tests, API docs — are more precise agent instructions than prose descriptions.
+- Existing specifications — types, schemas, tests, API docs — are more precise agent instructions than prose descriptions, the same way [actionable standards serve as instructions](standards-as-agent-instructions.md).
 - "Make these tests pass" and "implement this interface" are complete, verifiable instructions.
 - Formal specs prevent the agent from hallucinating structural details (column names, field types, route shapes) that don't match the actual system.
 - Reserve prose for context that has no formal equivalent: business rationale, priority trade-offs, user intent.

@@ -10,7 +10,7 @@ aliases:
   - programmatic agent session listing
   - agent session inventory
 last_reviewed: 2026-06-02
-maturity: established
+maturity: adopted
 ---
 
 # Programmatic Agent Session Export via `claude agents --json`

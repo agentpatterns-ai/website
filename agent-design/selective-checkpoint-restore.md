@@ -8,7 +8,7 @@ aliases:
   - three-way checkpoint restore
   - code-only and conversation-only rewind
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Selective Checkpoint Restore Across Code and Conversation State
@@ -74,7 +74,7 @@ A common selective-restore flow: the agent spent an hour analysing a flaky integ
 → Type: "That fix broke X. Try a different patch that preserves Y."
 ```
 
-The agent re-attempts the fix with the analysis still loaded — no re-investigation from scratch.
+The agent re-attempts the fix with the analysis still loaded — no re-investigation from scratch — because the Claude Code `Restore code` action reverts files while leaving the conversation intact.
 
 **Restore conversation only.** The patch was right but the agent then proposed a follow-up refactor based on a misread of an unrelated file.
 

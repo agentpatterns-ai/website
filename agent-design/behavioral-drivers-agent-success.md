@@ -48,7 +48,7 @@ Agents that read related files, trace call chains, and inspect tests before touc
 
 ### 2. Post-Patch Verification Loops
 
-Agents that run tests after patching and iterate on failures resolve more tasks than those that patch without verification:
+Agents that run tests after patching and iterate on failures — the [agent self-review loop](../code-review/agent-self-review-loop.md) — resolve more tasks than those that patch without verification:
 
 ```
 patch → test → diagnose failure → repatch → test → ...
@@ -77,7 +77,7 @@ The LLM is the primary driver of both outcome and behavior. Agents sharing an LL
 
 The framework still sets hard limits: without a test-execution step, no model produces a verification loop. Framework prompts influence tactics, though the effect diminishes with stronger LLMs.
 
-**Framework audit questions** (constraints even capable LLMs cannot bypass):
+**Framework audit questions** ([harness](harness-engineering.md)-level constraints even capable LLMs cannot bypass):
 - Does the agent execute tests after patching?
 - Does test failure output route back for a repatch attempt?
 - Does the iteration cap allow at least two repatch cycles?
@@ -114,7 +114,7 @@ Behavioral-pattern auditing and ensembling have diminishing returns in several c
 ## Related
 
 - [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md) — two-phase constrained approaches outperforming autonomous agents on SWE-bench
-- [Agent Self-Review Loop](agent-self-review-loop.md) — implementing the post-patch verification loop pattern
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — implementing the post-patch verification loop pattern
 - [Harness Engineering](harness-engineering.md) — environment design as the primary lever on agent behavioral patterns
 - [Agent Harness: Initializer and Coding Agent Pattern](agent-harness.md) — structuring long-running agent work with initializer and execution phases
 - [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md) — trajectory-level misbehavior classification (30% misbehavior rate in production)

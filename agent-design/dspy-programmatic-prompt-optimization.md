@@ -10,7 +10,7 @@ aliases:
   - programmatic prompt optimization
   - DSPy prompt compiler
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # DSPy: Programmatic Prompt Optimization
@@ -27,7 +27,7 @@ Three conditions must hold before DSPy optimization pays off:
 
 ## Core Abstractions
 
-**Signatures** replace raw prompt strings. A signature declares typed input/output fields:
+**Signatures** — declared as a `dspy.Signature` subclass — replace raw prompt strings. A signature declares typed input/output fields:
 
 ```python
 class SummarizeCode(dspy.Signature):
@@ -67,7 +67,7 @@ The foundational paper ([Khattab et al., 2023, arxiv 2310.03714](https://arxiv.o
 
 - **Optimization cost**: MIPROv2 makes many LLM calls during the optimization run. Cost amortizes only if the compiled pipeline runs frequently enough in production.
 - **Metric quality dependency**: a poorly specified metric causes the optimizer to overfit to a proxy — gains on the training distribution may not transfer.
-- **Model non-transferability**: prompts optimized for one model do not reliably transfer to another. Teams that rotate underlying models must re-optimize.
+- **Model non-transferability**: prompts optimized for one model do not reliably transfer to another, the same coupling that makes [per-model harness tuning](per-model-harness-tuning.md) necessary. Teams that rotate underlying models must re-optimize.
 - **Opacity**: DSPy manages prompt text automatically; inspecting what is sent to the LLM requires explicit extraction from the compiled program.
 
 ## Example

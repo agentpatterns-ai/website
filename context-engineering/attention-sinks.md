@@ -9,7 +9,7 @@ aliases:
   - Critical Instruction Repetition
   - Attention Bias and Instruction Placement
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # Attention Sinks: Why First Tokens Always Win
@@ -82,11 +82,11 @@ Content that must be reliably followed belongs at either end. Content the agent 
 - Initial tokens receive disproportionate attention — open instruction files with your most critical constraint, not context-setting prose.
 - Boilerplate at the top of a system prompt wastes the highest-attention positions on low-value content.
 - The role and constraints placed first shape agent behaviour most strongly across the session.
-- Attention sinks and recency effects are the two mechanisms behind the U-shaped attention distribution.
+- Attention sinks and recency effects are the two mechanisms behind the [U-shaped attention distribution](lost-in-the-middle.md).
 
 ## When This Backfires
 
-- **Context compression discards early tokens.** Techniques that compress or truncate context — including some KV-cache eviction strategies — may discard early tokens, neutralizing the primacy advantage. Placing critical constraints first is only reliable when the full prompt prefix is retained.
+- **Context compression discards early tokens.** Techniques that compress or truncate context — including some KV-cache eviction strategies — may discard early tokens, neutralizing the primacy advantage. Placing critical constraints first is only reliable when the full prompt prefix is retained ([Context Compression Strategies](context-compression-strategies.md)).
 - **Fine-tuned models with instruction following training.** RLHF and instruction-tuning can shift how models weight positional bias versus semantic relevance. A model fine-tuned to follow instructions placed anywhere in the prompt may not exhibit the same sink strength as a base model.
 - **RAG pipelines with late-injected context.** In retrieval-augmented workflows, retrieved chunks are typically injected mid-prompt. If the critical constraint is buried in a static preamble before substantial retrieved content, positional advantage may be outweighed by semantic relevance of the retrieved material.
 - **Very short prompts.** Attention sink effects are most pronounced in long sequences. In short prompts (under a few hundred tokens), positional placement has less observable impact on model behavior.

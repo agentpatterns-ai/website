@@ -8,7 +8,7 @@ tags:
   - context-engineering
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Compound Engineering: Learning Loops That Make Each Feature Easier
@@ -17,7 +17,7 @@ maturity: established
 
 ## The Core Idea
 
-Most agent workflows treat each task as independent. You prompt, the agent builds, you review, you ship. The next task starts from scratch with no memory of what went wrong or what worked.
+Most agent workflows treat each task as independent. You prompt, the agent builds, you review, you ship. The next task starts from scratch with no [memory](../agent-design/agent-memory-patterns.md) of what went wrong or what worked.
 
 Compound engineering breaks this by adding a deliberate **Compound** step after every feature cycle. Bugs, performance issues, novel approaches, and architectural decisions are captured as prompts that automatically prime future agent sessions. Over time, the system accumulates institutional knowledge -- the equivalent of a senior engineer's experience encoded in the repository itself.
 
@@ -114,7 +114,7 @@ graph TD
     F2C -.->|accumulated learnings| FN
 ```
 
-The mechanism: every bug caught in Assess that gets encoded in Compound is a bug that cannot recur. Every architectural decision recorded means the next agent session does not need to rediscover it. New team members -- and new agent sessions -- inherit the equivalent of senior engineer knowledge from their first interaction.
+The mechanism: every bug caught in Assess that gets encoded in Compound makes [tacit knowledge explicit](../anti-patterns/implicit-knowledge-problem.md) so it cannot recur. Every architectural decision recorded means the next agent session does not need to rediscover it. New team members -- and new agent sessions -- inherit the equivalent of senior engineer knowledge from their first interaction.
 
 This is the same principle described in [agent memory patterns](../agent-design/agent-memory-patterns.md) (persistence across sessions), the [implicit knowledge problem](../anti-patterns/implicit-knowledge-problem.md) (making tacit knowledge explicit), and [encoding tacit knowledge into agent improvement loops](encoding-tacit-knowledge.md) (active elicitation and encoding), but applied as a **systematic workflow** rather than an ad-hoc practice.
 
@@ -155,7 +155,7 @@ Compound engineering is a **workflow that orchestrates** patterns already docume
 |-------|---------------------|
 | Plan | [Plan-first loop](plan-first-loop.md), [rigor relocation](../human/rigor-relocation.md) |
 | Work | [Agent harness](../agent-design/agent-harness.md), MCP-driven tool use |
-| Assess | [Committee review](../code-review/committee-review-pattern.md), [agent self-review loop](../agent-design/agent-self-review-loop.md) |
+| Assess | [Committee review](../code-review/committee-review-pattern.md), [agent self-review loop](../code-review/agent-self-review-loop.md) |
 | Compound | [Agent memory patterns](../agent-design/agent-memory-patterns.md), [implicit knowledge capture](../anti-patterns/implicit-knowledge-problem.md) |
 
 The value is not in any individual pattern but in the **closed loop** that connects them. Without the Compound step, learnings from Assess evaporate between sessions. Without structured Plan, agents build against incomplete context. The closed loop is what converts isolated patterns into cumulative improvement.
@@ -173,7 +173,7 @@ The value is not in any individual pattern but in the **closed loop** that conne
 Compound engineering requires sustained discipline across all four phases. Several conditions reduce its effectiveness or make it counterproductive:
 
 - **Deadline pressure collapses the Compound step.** The 10% effort allocation for Compound is the first budget cut when teams are under pressure. Without consistent compounding, the workflow degrades to a standard plan-build-review cycle with no cumulative benefit.
-- **Stale or contradictory prompt files.** Encoded learnings accumulate over time. If the codebase evolves but the prompt files are not pruned, agents receive conflicting instructions — older rules that no longer apply alongside current ones. The maintenance cost of a learnings library grows with the project's age.
+- **Stale or contradictory prompt files.** Encoded learnings accumulate over time, the same staleness [continuous agent improvement](continuous-agent-improvement.md) prunes for. If the codebase evolves but the prompt files are not pruned, agents receive conflicting instructions — older rules that no longer apply alongside current ones. The maintenance cost of a learnings library grows with the project's age.
 - **Front-loading planning is only valuable when the problem is well-defined.** The ~40% planning allocation assumes research can yield a precise spec. For genuinely exploratory work (novel integrations, prototyping in unknown domains), a fixed upfront plan may constrain agents toward premature decisions and prevent useful divergence.
 
 ## Related
@@ -182,7 +182,7 @@ Compound engineering requires sustained discipline across all four phases. Sever
 - [Committee Review Pattern](../code-review/committee-review-pattern.md)
 - [Agent Memory Patterns](../agent-design/agent-memory-patterns.md)
 - [Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md)
-- [Agent Self-Review Loop](../agent-design/agent-self-review-loop.md)
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
 - [Agentic Flywheel](../agent-design/agentic-flywheel.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Encoding Tacit Knowledge](encoding-tacit-knowledge.md)

@@ -11,7 +11,7 @@ tags:
   - tool-agnostic
   - agent-design
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Steering Running Agents: Mid-Run Redirection and Follow-Ups
@@ -25,7 +25,7 @@ maturity: established
 
 **Steering message**: A mid-run user message that interrupts tool execution and redirects behavior. The agent stops its current approach and responds to the new direction.
 
-**Follow-up message**: A correction queued during execution, delivered after the current step completes. The agent finishes what it's doing, then processes the queued message.
+**Follow-up message**: A correction queued during execution, delivered after the current step completes. The agent finishes what it's doing, then processes the queued message — in Claude Code, at the next turn boundary.
 
 Both preserve accumulated context. Restarting discards it.
 
@@ -42,7 +42,7 @@ graph TD
     F -- No --> H[Let it finish]
 ```
 
-**Steer** when the agent is heading toward wasted context or unusable output — wrong file, wrong approach, misunderstood requirement.
+**Steer** when the agent is heading toward wasted context or unusable output — wrong file, wrong approach, misunderstood requirement, the kinds of drift [goal monitoring](goal-monitoring-progress-tracking.md) surfaces.
 
 **Follow up** when the current step is fine but you want to adjust the next one — "also update the tests" or "use the existing utility function."
 
@@ -52,7 +52,7 @@ graph TD
 
 ## Observing Agent Direction
 
-Effective steering depends on reading tool calls as they happen. Most agent interfaces show tool use in real time. Watch which files are read and which commands run to detect wrong direction early.
+Effective steering depends on reading tool calls as they happen — the same observation point [agent loop middleware](agent-loop-middleware.md) hooks into. Most agent interfaces show tool use in real time. Watch which files are read and which commands run to detect wrong direction early.
 
 Indicators that a steer may be needed:
 
@@ -63,11 +63,11 @@ Indicators that a steer may be needed:
 
 ## Anti-Patterns
 
-**Waiting too long**: Letting the agent finish a bad approach before correcting. Context is consumed on useless work, and you still need to undo it.
+**Waiting too long**: Letting the agent finish a bad approach before correcting. Context is consumed on useless work, and you still need to undo it — cheap only under [rollback-first design](rollback-first-design.md).
 
 **Over-steering**: Interrupting every few steps. The initial prompt was underspecified — restart with a clearer specification.
 
-**Steering instead of restarting**: Trying to salvage a fundamentally wrong run through multiple steers. Restart is cheaper.
+**Steering instead of restarting**: Trying to salvage a fundamentally wrong run through multiple steers. Restart is cheaper — the [Ralph Wiggum loop](ralph-wiggum-loop.md) makes a clean restart the default.
 
 **Ignoring tool calls**: Steering requires detecting wrong direction early through active observation, not waiting for output.
 
@@ -107,7 +107,7 @@ After you finish the session refactor, also update
 auth/tokens.py to use the same expiry constant you define in session.py.
 ```
 
-The agent queues this and processes it once the session refactor step completes. No context is lost and the agent already has the session.py changes in context when it moves to tokens.py.
+The agent queues this and processes it once the session refactor step completes. No context is lost and the agent already has the `session.py` changes in context when it moves to `tokens.py`.
 
 Both messages preserve the file reads and reasoning the agent has already accumulated. A restart at this point would discard that context and require the agent to re-read the auth files from scratch.
 

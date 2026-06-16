@@ -20,9 +20,9 @@ maturity: established
 
 ## The Agent-First Inversion
 
-Traditional software design optimizes for human comprehension: dashboards, forms, visual hierarchies. Agent-first design inverts this. The primary consumer is a program that reads structured data, calls APIs, and acts on machine-readable state. Human interfaces become a layer on top, not the foundation.
+Traditional software design optimizes for human comprehension: dashboards, forms, visual hierarchies. Agent-first design inverts this. The primary consumer is a program that reads structured data, calls APIs, and acts on machine-readable state exposed through interfaces like MCP. Human interfaces become a layer on top, not the foundation.
 
-This does not remove humans from the loop. It designs the data and control plane for machines first, then renders human-friendly views from the same substrate. Anthropic frames this as the [agent-computer interface (ACI)](../tool-engineering/agent-computer-interface.md) — investing the same design effort into machine-facing interfaces as into human-computer interfaces (HCI).
+This does not remove humans from the loop. It designs the data and control plane for machines first, then renders human-friendly views from the same substrate — the [agent-computer interface](../tool-engineering/agent-computer-interface.md) approach. Anthropic frames this as the [agent-computer interface (ACI)](../tool-engineering/agent-computer-interface.md) — investing the same design effort into machine-facing interfaces as into human-computer interfaces (HCI).
 
 ## Design Principles
 
@@ -43,7 +43,7 @@ Agent-consumable APIs require richer metadata than human-facing ones. Anthropic 
 
 ### Poka-Yoke Tool Design
 
-Anthropic's SWE-bench work demonstrated that [tool interfaces should make mistakes structurally impossible](https://www.anthropic.com/research/building-effective-agents). When their agent used relative filepaths, it made errors after changing directories. Switching to mandatory absolute filepaths eliminated the error class entirely. Design inputs so wrong usage fails at the interface level, not at runtime.
+Anthropic's SWE-bench work demonstrated that [tool interfaces should make mistakes structurally impossible](https://www.anthropic.com/research/building-effective-agents). When their agent used relative filepaths, it made errors after changing directories. Switching to mandatory absolute filepaths eliminated the error class entirely. Design inputs so wrong usage fails at the interface level, not at runtime — the [poka-yoke](../tool-engineering/poka-yoke-agent-tools.md) principle.
 
 ### Deterministic Over Probabilistic
 
@@ -78,7 +78,7 @@ The structured data layer is the single source of truth. Both agent and human in
 
 **Reduced human observability.** When the primary interface is machine-readable, visibility into system state requires explicitly maintaining a human UI layer.
 
-**Higher upfront metadata cost.** Self-describing APIs require descriptions, examples, and constraints for every field — more work than a minimal API with separate docs. The payoff: agents consume the API without custom integration code.
+**Higher upfront metadata cost.** Self-describing APIs require a `description`, examples, and constraints for every field — more work than a minimal API with separate docs. The payoff: agents consume the API without custom integration code.
 
 **Premature optimization risk.** Most valuable for platforms consumed by multiple agents, not internal tools with a single human user.
 

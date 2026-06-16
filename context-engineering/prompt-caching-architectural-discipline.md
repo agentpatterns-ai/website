@@ -10,13 +10,14 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - long-form
 last_reviewed: 2026-05-27
 maturity: established
 ---
 
 # Prompt Caching: Architectural Discipline for Agents
 
-> Treat prompt caching as a structural constraint that shapes how you compose, extend, and compact agent context — not as an optimization you toggle on after the fact.
+> Treat prompt caching as a structural constraint that shapes how you compose, extend, and compact agent context — not an optimization toggled on afterward.
 
 !!! info "Also known as"
     Keep Agent Loop Prompts Stateless, Stateless Agent Loop Design
@@ -97,6 +98,77 @@ Three conditions where prefix-first discipline loses to the alternative:
 
 Audit the hit-rate trace first; if reads do not dominate writes after a few turns, the cost is not paid back.
 
+## Cache Economics Across Providers
+
+The architectural discipline above decides whether caching activates at all; the economics decide whether it pays. Prompt caching skips recomputation for repeated token prefixes — you pay more on the first request (cache write) to pay less on subsequent ones (cache read). Net savings depend on session length, request frequency, and provider pricing.
+
+| | Anthropic | OpenAI | Google Gemini |
+|---|---|---|---|
+| **Discount on cached tokens** | 90% (reads cost 0.1x base) | 50% | ~90% (implicit); ~90% (explicit) |
+| **Cache write cost** | 1.25x (5-min TTL) or 2x (1-hour TTL) | No write premium | No write premium (implicit); hourly storage fee (explicit) |
+| **Activation** | Explicit breakpoints (up to 4) or automatic mode | Automatic for prompts >1,024 tokens | Implicit (automatic, no guarantee) or explicit (manual) |
+| **Minimum tokens** | 1,024--4,096 (varies by model) | 1,024 | Not documented for implicit |
+| **TTL** | 5 min or 1 hour (configurable) | Undocumented; evicted when unused | 1 hour default (explicit, configurable); undocumented (implicit) |
+| **Cache sharing** | Workspace-isolated (since Feb 2026) | Organization-level | Not documented |
+| **Storage fees** | None | None | $1.00--$4.50/MTok/hour for explicit caching |
+
+Sources: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), [OpenAI cookbook](https://developers.openai.com/cookbook/examples/prompt_caching101), [Gemini caching](https://ai.google.dev/gemini-api/docs/caching), [Gemini pricing](https://ai.google.dev/pricing)
+
+Anthropic's per-model minimum tokens before a breakpoint activates: 1,024 (Sonnet 4/4.5, Opus 4/4.1), 2,048 (Sonnet 4.6, Haiku 3.5), 4,096 (Opus 4.5/4.6, Haiku 3, Haiku 4.5). [Source: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)]
+
+**Break-even turns matter more than headline discount.** For a coding agent with a 4,000-token stable prefix, 200 new tokens per turn, over 50 turns:
+
+=== "Anthropic (Claude Sonnet, $3/MTok uncached)"
+
+    | | No caching | With caching |
+    |---|---|---|
+    | Prefix cost | $0.60 | $0.06 (cache reads at $0.30/MTok) |
+    | Cache write (turn 1) | -- | $0.015 (4K tokens at $3.75/MTok) |
+    | Dynamic tail cost | $0.77 | $0.77 |
+    | **Total input cost** | **$1.37** | **$0.84** |
+    | **Savings** | -- | **38%** |
+
+=== "OpenAI (GPT-4.1, $2/MTok uncached)"
+
+    | | No caching | With caching |
+    |---|---|---|
+    | Prefix cost | $0.40 | $0.20 (cache reads at $1/MTok) |
+    | Cache write | -- | automatic, no premium |
+    | Dynamic tail cost | $0.51 | $0.51 |
+    | **Total input cost** | **$0.91** | **$0.71** |
+    | **Savings** | -- | **22%** |
+
+Per-session cache savings = `prefix_tokens` × `turns` × `base_price` × `discount_rate` − `cache_write_cost`. Caching can lose money in three economic conditions even when the prefix is stable: short sessions (1--2 turns), where Anthropic's 1.25x or 2x write premium needs 2--3 reads to recoup; high parallelism, where simultaneous requests each miss the cache and pay the write because the entry only becomes available after the first response begins (sequence the first request before fanning out); and Google explicit caching, where storage fees ($1.00--$4.50/MTok/hour) exceed read savings unless the cache is hit several times per hour. [Source: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)]
+
+Monitor per provider: Anthropic `cache_read_input_tokens` vs `cache_creation_input_tokens` (high reads, near-zero creation after turn 1); OpenAI `usage.prompt_tokens_details.cached_tokens` (non-zero on turns 2+); Google explicit caching hit metadata. A creation-token spike mid-session signals prefix mutation, not a pricing question.
+
+## Extended Cache TTL for Long Sessions
+
+Anthropic's prompt cache defaults to a 5-minute TTL: a cached prefix is evicted 5 minutes after its last read, and the next request pays the full cache-write cost. The 1-hour TTL is an opt-in alternative — writes cost 2x base input (vs 1.25x for 5-minute) but the entry stays warm for an hour. In Claude Code, opt in via `ENABLE_PROMPT_CACHING_1H=1` (added in v2.1.108, April 14, 2026); at the raw API level, set `cache_control: {"type": "ephemeral", "ttl": "1h"}` on the breakpoint. [Source: [Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), [Claude Code changelog](https://code.claude.com/docs/en/changelog)]
+
+The decision reduces to session shape:
+
+| Session shape | Idle gap pattern | TTL |
+|---|---|---|
+| Autonomous loop, no human in the middle | Continuous turns, < 5 min apart | 5-minute |
+| Interactive code review | Mixed: most < 5 min, some 5–30 min | 1-hour |
+| Agent waiting on side-agents or human review | Mostly 5–60 min idle | 1-hour |
+| Walk-away workflows (return next day) | > 60 min idle | Neither — cache will expire |
+
+**Why the break-even is the multiplier ratio, not the prefix size.** A 1-hour cache write costs 2x base input; two consecutive 5-minute writes cost 2 × 1.25x = 2.5x. When a session idles longer than 5 minutes but resumes within the hour, the 1-hour write is strictly cheaper than rewriting the 5-minute cache on resume. Skidmore (2026) derives the closed form for the related *refresh vs let-expire* decision: `T = 5 × (W / R) = 5 × (1.25 / 0.10) = 62.5 min`, with token count and per-token price cancelling out — the crossover is identical for a 5K Sonnet prefix and a 500K Opus prefix. [Source: [Skidmore: 62.5-minute rule](https://skids.dev/blog/anthropic-cache-tokenomics/)]
+
+| Model | Base input | 5-min write | 1-hour write | Cache read |
+|---|---|---|---|---|
+| Opus 4.7 | $5/MTok | $6.25/MTok | $10/MTok | $0.50/MTok |
+| Sonnet 4.6 | $3/MTok | $3.75/MTok | $6/MTok | $0.30/MTok |
+| Haiku 4.5 | $1/MTok | $1.25/MTok | $2/MTok | $0.10/MTok |
+
+Source: [Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching).
+
+Verify the flag is doing work via the `usage` block, which separates 5-minute and 1-hour writes — the system prompt and tool definitions should appear in `ephemeral_1h_input_tokens` on turn 1 and in `cache_read_input_tokens` thereafter. If they keep landing in `ephemeral_5m_input_tokens` or `cache_creation_input_tokens` mid-session, the flag is not honoured or a prefix mutation is busting the cache before the longer TTL can help.
+
+The longer TTL backfires in the same prefix-mutation cases as the default cache, plus three of its own: walk-away workflows past one hour (the cache evicts anyway, so you paid 2x for nothing — at T = 90 min, holding a 500K Opus prefix costs $1.375 more than letting it expire); a session-wide flag with mixed block sizes (`ENABLE_PROMPT_CACHING_1H` paints every breakpoint with the 1-hour premium, so set `ttl: "1h"` per breakpoint for finer control, 1-hour blocks before 5-minute blocks in the same request); and 20-block lookback exhaustion (each breakpoint scans at most 20 content blocks backwards, and a long tool-heavy session can exceed that depth and silently miss the cache regardless of TTL). [Source: [Skidmore](https://skids.dev/blog/anthropic-cache-tokenomics/)]
+
 ## Key Takeaways
 
 - Stable prefix first, dynamic content last — this determines whether you pay 10% or 100% per turn.
@@ -154,9 +226,10 @@ After the first turn, `cache_read_input_tokens` should cover the system prompt a
 
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
 - [Static Content First: Maximizing Prompt Cache Hits](static-content-first-caching.md)
-- [Prompt Cache Economics: Comparing Costs by Provider](prompt-cache-economics.md)
-- [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md)
+- [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md) — disabling attribution headers to preserve the local KV cache
+- [Peek-Orientation Cache](peek-orientation-cache.md) — caching orientation reads so re-priming does not bust the prefix
 - [Observation Masking: Filter Tool Outputs from Context](observation-masking.md)
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
+  - long-form

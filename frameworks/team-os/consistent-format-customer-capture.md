@@ -8,7 +8,7 @@ tags:
   - tool-agnostic
   - frameworks
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Consistent-Format Customer Capture
@@ -60,7 +60,7 @@ The pattern underdelivers — or actively hurts — under three conditions:
 
 - **Heterogeneous call types.** Support escalations, renewal negotiations, and technical deep-dives do not map cleanly onto six discovery-shaped sections. Forcing them in produces empty `## Feature Requests` blocks that pollute aggregation; fork the schema by call kind instead.
 - **Small corpora.** When the team has twenty calls total, the agent can read every transcript end-to-end and the grep economics collapse. Schema overhead exceeds payoff until the corpus outgrows the context window.
-- **Schemas frozen past their strategy.** A schema cut against last year's hypothesis silently distorts this quarter's discovery — the section the team needs now is the one nobody is recording. Quarterly review is a hard prerequisite, not a nice-to-have.
+- **Schemas frozen past their strategy.** A schema cut against last year's hypothesis silently distorts this quarter's discovery — the section the team needs now is the one nobody is recording. Quarterly review — treating the schema as a [frozen spec file](../../instructions/frozen-spec-file.md) changed only by versioned PR — is a hard prerequisite, not a nice-to-have.
 
 ## Example
 

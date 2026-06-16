@@ -10,7 +10,7 @@ aliases:
   - hallucinated package supply chain attack
   - LLM package name hallucination
   - AI-induced package squatting
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-14
 maturity: established
 ---
 
@@ -36,6 +36,8 @@ Spracklen et al. ran 576,000 code generations across 16 LLMs in Python and JavaS
 | Python hallucinations that match a valid JavaScript package | **8.7%** |
 
 The 43% persistence number is load-bearing — it is what makes the attack economic. Random per-call hallucinations would be unexploitable; a stable hallucination prior turns "predict what the model recommends next" into a tractable enumeration problem.
+
+A 2026 re-evaluation of the same benchmark against the current frontier-model cohort reports that package-hallucination rates have fallen but not closed, confirming the original figures still describe an open surface ([arXiv:2605.17062](https://arxiv.org/abs/2605.17062)).
 
 ## Why It Works
 
@@ -155,6 +157,7 @@ Same shape as the LLM-pinned-CVE finding: a measurement-grounded threat that ord
 
 - [arXiv:2406.10279](https://arxiv.org/abs/2406.10279) — Spracklen et al., USENIX Security 2025: "We Have a Package for You! A Comprehensive Analysis of Package Hallucinations by Code Generating LLMs"
 - [arXiv:2501.19012](https://arxiv.org/abs/2501.19012) — Krishna et al., "Importing Phantoms: Measuring LLM Package Hallucination Vulnerabilities" — HumanEval inversely correlates with hallucination rate
+- [arXiv:2605.17062](https://arxiv.org/abs/2605.17062) — 2026 frontier-model cohort re-evaluation of package-hallucination rates, refreshing the USENIX Security 2025 figures
 - [Wikipedia — Slopsquatting](https://en.wikipedia.org/wiki/Slopsquatting) — term origin (Seth Larson, Python Software Foundation), current exploitation status
 - [The Register — AI bots hallucinate software packages and devs download them (March 2024)](https://www.theregister.com/2024/03/28/ai_bots_hallucinate_software_packages/) — Bar Lanyado `huggingface-cli` PoC
 - [OWASP GenAI LLM Top 10 — LLM09:2025 Misinformation](https://genai.owasp.org/llm-top-10/) — the taxonomic anchor; package hallucination is the canonical example

@@ -24,7 +24,7 @@ Long-running autonomous loops — agents working over hours or days across repea
 
 - **Drift**: Each restart discards prior decisions. The agent restarts without awareness of what was already resolved.
 - **Repetition**: Agents re-debate questions settled in earlier cycles, wasting tokens and compute on resolved trade-offs.
-- **Stalls**: Without a convergence signal, loops spin indefinitely without producing output.
+- **Stalls**: Without a [convergence signal](convergence-detection.md), loops spin indefinitely without producing output.
 
 A progress file records what happened. The relay addresses why it happened and what must happen next — a reasoning contract, not a log.
 

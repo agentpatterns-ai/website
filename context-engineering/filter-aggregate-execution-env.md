@@ -8,7 +8,7 @@ tags:
   - cost-performance
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Filter and Aggregate Data in the Execution Environment
@@ -75,14 +75,14 @@ It is not applicable when the agent needs to reason about the full dataset — f
 ## When This Backfires
 
 - **Agent writes non-deterministic code**: If the agent generates code with side effects — writing to shared state, making external calls, consuming random seeds — determinism guarantees break. The same filter run twice may return different results or corrupt shared resources.
-- **Sandbox provisioning latency exceeds context savings**: Cold-starting a new sandbox container can add hundreds of milliseconds per invocation. For small datasets or infrequent queries, the sandbox overhead outweighs the token savings from filtering.
-- **Sandbox isolation is under-scoped**: An inadequately isolated sandbox — shared filesystem, unrestricted network, or insufficient memory limits — turns agent-generated code into a privilege-escalation vector. The pattern assumes a well-hardened execution environment; without it, the pattern introduces more risk than raw context overhead.
+- **Sandbox provisioning latency exceeds context savings**: Cold-starting a new sandbox container can add hundreds of milliseconds per invocation. For small datasets or infrequent queries, the sandbox overhead outweighs the [token savings](context-budget-allocation.md) from filtering.
+- **Sandbox isolation is under-scoped**: An inadequately isolated sandbox — shared filesystem, unrestricted network, or insufficient memory limits — turns agent-generated code into a privilege-escalation vector. The pattern assumes a well-hardened execution environment; without it, the pattern introduces more risk than [raw context overhead](context-compression-strategies.md).
 - **Filtering silently drops relevant data**: If the agent's filter logic has an off-by-one error or incorrect predicate, the model receives a clean but wrong subset and reasons confidently over incomplete data. Errors in tool chains are often visible; errors in sandbox code may be silent.
 
 ## Key Takeaways
 
 - Pass filtered results to the model, not raw datasets — the sandbox is the compute boundary.
-- Replace multi-step tool chains with single sandbox executions to reduce latency and token cost.
+- Replace multi-step tool chains with single sandbox executions to reduce latency and [token cost](../tool-engineering/token-efficient-tool-design.md).
 - Apply to any large intermediate representation: tables, logs, API payloads, binary data.
 - The sandbox must have resource limits, isolation, and monitoring — code execution without these is a security risk.
 

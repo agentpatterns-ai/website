@@ -127,7 +127,7 @@ Runtime composition can defeat the caching goal it was meant to enable. Lumer et
 
 2. **Prompt injection via dynamic sections.** Session-state and user-provided content require sanitization before inclusion; static sections have no injection surface.
 
-3. **Cache invalidation from over-modulation.** A conditionally included section appearing early in priority order invalidates the cache for every token that follows. Reserve dynamic sections for the end of the priority stack.
+3. **Cache invalidation from over-modulation.** A conditionally included section appearing early in priority order invalidates the cache for every token that follows. [Reserve dynamic sections for the end of the priority stack](./static-content-first-caching.md).
 
 4. **Churn across deploys.** Re-ordering or re-wording mode- or provider-specific blocks between releases invalidates cached prefixes across all sessions — composition amplifies the blast radius of wording changes.
 
@@ -149,5 +149,4 @@ When the task set is narrow and well-defined, a single authored system prompt is
 - [Prompt Caching as Architectural Discipline](./prompt-caching-architectural-discipline.md)
 - [Structure Prompts with Static Content First to Maximize Cache Hits](./static-content-first-caching.md)
 - [Phase-Specific Context Assembly for AI Agent Development](./phase-specific-context-assembly.md)
-- [Prompt Cache Economics: Comparing Costs by Provider](./prompt-cache-economics.md)
 - [Layered Context Architecture](./layered-context-architecture.md)

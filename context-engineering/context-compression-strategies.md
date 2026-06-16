@@ -45,7 +45,7 @@ Replace large tool payloads (full files, API responses, search results) with a f
 
 ### Tier 2: Summarise Conversation History
 
-When context fills further, summarise prior turns. Preserve current objective, key artifacts, decisions and rationale, and next steps. Discard exploratory turns, superseded instructions, resolved errors, and intermediate reasoning that did not affect outcomes. The agent restarts with the summary as prior context — [Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) calls this "compaction" and identifies it as a core strategy for long-horizon tasks.
+When context fills further, [summarise prior turns](manual-compaction-dumb-zone-mitigation.md). Preserve current objective, key artifacts, decisions and rationale, and next steps. Discard exploratory turns, superseded instructions, resolved errors, and intermediate reasoning that did not affect outcomes. The agent restarts with the summary as prior context — [Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) calls this "compaction" and identifies it as a core strategy for long-horizon tasks.
 
 ### Cache Preservation During Compaction
 
@@ -80,7 +80,7 @@ Summaries that only capture "what happened" without "what matters next" cause [o
 
 ## Why It Works
 
-Transformer attention is computed over all tokens in the window. As context grows, relevant signal competes with accumulated noise — redundant tool outputs, superseded reasoning, resolved errors — and retrieval precision degrades. Compression reduces this noise floor: offloading removes content that is addressable on demand but rarely needed; summarisation distils decision rationale and state into a compact form the model can condition on. The mechanism is selective discarding, not lossy encoding — artifacts remain on disk, so compaction is non-destructive for recoverable content.
+Transformer attention is computed over all tokens in the window. As context grows, relevant signal competes with accumulated noise — redundant tool outputs, superseded reasoning, resolved errors — and [retrieval precision degrades](context-window-dumb-zone.md). Compression reduces this noise floor: offloading removes content that is addressable on demand but rarely needed; summarisation distils decision rationale and state into a compact form the model can condition on. The mechanism is selective discarding, not lossy encoding — artifacts remain on disk, so compaction is non-destructive for recoverable content.
 
 The effect is measurable: one empirical study reports that pruning context to the last five tool call/response pairs plus summarisation reached 91.6% task completion versus 71% for full-context agents, at a fraction of the tokens and runtime — quantitative support for combining the offload and summarise tiers rather than carrying full history ([Pruning and summarising context for tool-using agents](https://arxiv.org/abs/2606.10209)).
 
@@ -103,7 +103,7 @@ Compression degrades task continuity when applied incorrectly:
 
 - Tiered compression applies in sequence: offload large tool responses first, then summarise history.
 - Five-stage compaction provides graduated degradation instead of a single compression cliff.
-- Summaries must preserve task objective, current state, and next steps — not just action history.
+- Summaries must preserve task objective, current state, and next steps — [not just action history](../anti-patterns/objective-drift.md).
 - Offloading preserves recoverability; summarisation is lossy — retain decision rationale, not just outcomes.
 - Compaction reuses the cached system-prompt prefix, so a `cache_control` breakpoint keeps post-compaction turns cheap.
 

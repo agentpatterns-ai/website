@@ -68,7 +68,7 @@ Adjacent results in the same literature cluster point in the same direction: ReS
 Elastic orchestration is search-agent territory, not a default for short coding sessions.
 
 - **Short-horizon tasks (≲ 20 turns).** The five-op vocabulary adds policy complexity and SFT cost without payoff; raw ReAct or [tiered compression](context-compression-strategies.md) is cheaper.
-- **Code agents with persistent file state.** Evidence lives in files, not trajectory. Aggressive Skip or Delete on tool observations breaks debug loops where the agent needs to re-read prior outputs.
+- **Code agents with persistent file state.** Evidence lives in files, not trajectory. Aggressive Skip or Delete on tool observations breaks debug loops where the agent needs to [re-read prior outputs](observation-masking.md).
 - **Off-the-shelf models with no SFT on the vocabulary.** Skip, Snippet, and Rollback are not natural ReAct actions. Models invoke them inconsistently and can regress below the ReAct baseline. LongSeeker reports 10,000-trajectory SFT specifically to teach the operation policy ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)).
 - **Side-effecting tools.** Rollback removes context but cannot undo bookings, payments, or writes. See [Rollback-First Design](../agent-design/rollback-first-design.md) for the orthogonal mechanism that handles world state.
 
@@ -103,7 +103,7 @@ The agent ends with a working context of a few hundred tokens covering 22 search
 
 ## Key Takeaways
 
-- Elastic context orchestration treats context management as a per-turn action drawn from a fixed vocabulary, not a periodic background process.
+- Elastic context orchestration treats context management as a per-turn action drawn from a fixed vocabulary, not a [periodic background process](context-compression-strategies.md).
 - The Skip / Compress / Snippet / Rollback / Delete vocabulary lets the policy tier retention by current relevance — Compress is expressively complete; the others exist for efficiency and fidelity.
 - Reported gains come from search-agent benchmarks (BrowseComp, BrowseComp-ZH) on SFT-trained models; numbers are first-party and unreplicated.
 - Short coding sessions, file-state-heavy agents, and off-the-shelf models without operation-vocabulary SFT will not benefit and can regress.

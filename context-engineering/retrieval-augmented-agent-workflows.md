@@ -51,13 +51,13 @@ Anthropic notes that teams increasingly augment retrieval systems with ["just in
 
 **Web fetch** lets an agent pull a documentation page when researching a specific question rather than pre-embedding pages in the system prompt.
 
-**File search** lets an agent locate relevant code at the point of implementation rather than loading every module upfront.
+**File search** lets an agent [locate relevant code](repository-level-retrieval-code-generation.md) at the point of implementation rather than loading every module upfront.
 
 **Sub-agents** provide isolated context windows for retrieval-heavy tasks. A coordinator delegates a retrieval step to a sub-agent, which fetches, processes, and returns a condensed summary. [LangChain's Deep Agents framework](https://blog.langchain.com/context-management-for-deepagents/) uses a filesystem abstraction that lets agents offload large results and re-read them selectively, rather than keeping everything in active context.
 
 ## Trade-offs
 
-On-demand retrieval adds latency. Multi-step retrieval chains (search → read → search again) can slow throughput. Preloading eliminates that latency at the cost of context budget.
+On-demand retrieval adds latency. Multi-step retrieval chains (search → read → search again) can slow throughput. Preloading eliminates that latency at the cost of [context budget](context-budget-allocation.md).
 
 Latency is not the only downside. Retrieval quality is a second failure mode: when the retriever surfaces irrelevant chunks, accuracy drops rather than improves — one study saw accuracy fall [from 75% to below 40% as a corpus grew from 54 to 1,128 documents](https://arxiv.org/abs/2606.11350) because dense similarity search returned semantically similar but contextually wrong results. On-demand retrieval only preserves budget for reasoning when what it returns is correct; a noisy retriever spends budget on distractors and degrades the very reasoning it was meant to protect.
 
@@ -65,7 +65,7 @@ The right balance depends on task structure:
 
 - **Repetitive access** to the same document: preload it.
 - **Exploratory tasks** where the relevant subset is unknown upfront: retrieve on-demand.
-- **Long-horizon tasks**: combine both — keep instructions preloaded, retrieve reference material as needed, and use compaction or sub-agents when context fills.
+- **Long-horizon tasks**: combine both — keep instructions preloaded, retrieve reference material as needed, and use compaction or [sub-agents](../multi-agent/sub-agents-fan-out.md) when context fills.
 
 Anthropic notes that treating context as ["a precious, finite resource"](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) and assembling "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome" produces better results than broad preloading.
 

@@ -85,8 +85,8 @@ Skip when:
 
 ## Failure Modes
 
-- **BashArena-specific transfer** — the drop is measured against bash tool-use monitors. Replicate in the target environment before quoting externally.
-- **Refinement budget** — each run consumes reconnaissance, execution, and refinement calls. Scope which attack tiers get the full pipeline.
+- **BashArena-specific transfer** — the 60.3% drop is measured against bash tool-use monitors. Replicate in the target environment before quoting externally.
+- **Refinement budget** — each run consumes reconnaissance, execution, and refinement calls. Scope which attack tiers (T1-T5) get the full pipeline.
 - **Monitor-feedback grounding leaks** — strategy generation using the monitor being scored leaks signal. Use a held-out monitor for final scoring.
 - **Persuasion is the long tail** — frontier monitors mis-calibrate when the trajectory contains plausible justification ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684)). Lexical-cue refinement misses this category; run explicit persuasion-evasion variants.
 
@@ -119,4 +119,4 @@ The baseline number alone would let the team ship the monitor with confidence. T
 - [Close the Attack-to-Fix Loop](../security/close-attack-to-fix-loop.md) — Feed discovered attacks straight into adversarial fine-tuning of the defender
 - [Learned Prefix Monitors for Agent Traces](learned-prefix-monitors-agent-traces.md) — Online failure-warning scorers and the alert-calibration problem the FPR finding maps onto
 - [Eval Awareness](eval-awareness.md) — Why monitors and judges shift behaviour on eval-shaped prompts
-- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) — Outcome-only grading misses safety violations that trajectory auditing catches
+- [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — Outcome-only grading misses safety violations that trajectory auditing catches

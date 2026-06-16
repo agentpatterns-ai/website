@@ -60,9 +60,9 @@ Durability defeats compaction. The context window forgets; git does not. The cor
 The four properties are not equally valuable in every workflow:
 
 - **Single-session greenfield tasks.** No cross-session continuity, no shared workspace — durability and isolation are overhead; atomicity and consistency carry the workflow.
-- **Throwaway environments.** Per-task containers reset on each invocation. Durability via git is duplicative — the environment is already ephemeral.
+- **Throwaway environments.** Per-task containers reset on each invocation. Durability via `git` is duplicative — the environment is already ephemeral.
 - **High-frequency inner loops.** One commit per logical operation inflates history at sub-minute cadences. Squash-on-merge or commit-per-task scales better than strict per-operation atomicity.
-- **Multi-agent with shared file ownership.** Branch isolation handles write-disjoint tasks but does not coordinate writes to the same file. Git has no transaction manager — the conflict surfaces at rebase, not at write.
+- **Multi-agent with shared file ownership.** Branch isolation handles write-disjoint tasks but does not coordinate writes to the same file. Git has no transaction manager — the conflict surfaces at rebase, not at write (see [Worktree Isolation](../workflows/worktree-isolation.md)).
 
 Consistency and durability carry the most weight in typical single-agent workflows. Atomicity and isolation gain importance at scale and across sessions.
 

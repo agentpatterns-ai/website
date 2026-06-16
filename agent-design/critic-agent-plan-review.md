@@ -10,7 +10,7 @@ aliases:
   - dual-model plan review
   - pre-execution plan review
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Critic Agent Pattern
@@ -39,7 +39,7 @@ The critic is a distinct agent role, not self-review. Using a different model cr
 
 The pattern's value is timing. The [evaluator-optimizer pattern](evaluator-optimizer.md) applies a reviewer inside a generation loop — useful for iterative refinement. The critic agent applies review at the plan stage, before any tool calls or code changes execute.
 
-Plan-stage errors are cheap. A structurally flawed plan caught before execution costs one extra model call. The same error caught mid-execution requires rollback, re-planning, and re-execution — each of which re-incurs the token cost of the already-consumed steps.
+Plan-stage errors are cheap. A structurally flawed plan caught before execution costs one extra model call. The same error caught mid-execution requires [rollback](rollback-first-design.md), re-planning, and re-execution — each of which re-incurs the token cost of the already-consumed steps.
 
 Multi-step agentic plans amplify single errors. If step 3 of a 10-step plan assumes the wrong environment state, every subsequent step inherits that assumption. A critic that reviews the full plan detects cross-step inconsistencies that per-step review misses.
 
@@ -84,7 +84,7 @@ A developer runs: `copilot -p "Migrate the users table to add a new required col
 
 **Without a critic:** The planner generates a migration script and executes it. If the script omits a backfill step for existing rows, production fails at runtime.
 
-**With a critic:** The critic reviews the plan and flags: "Required column with no default will fail on existing rows — backfill step missing between ALTER TABLE and constraint enforcement." Execution is blocked. The planner revises the plan to include the backfill step before the constraint is applied.
+**With a critic:** The critic reviews the plan and flags: "Required column with no default will fail on existing rows — backfill step missing between `ALTER TABLE` and constraint enforcement." Execution is blocked. The planner revises the plan to include the backfill step before the constraint is applied.
 
 The error is caught before a single query runs.
 
@@ -99,7 +99,7 @@ The error is caught before a single query runs.
 ## Related
 
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
 - [Specialized Agent Roles](specialized-agent-roles.md)
 - [Rollback-First Design](rollback-first-design.md)
 - [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md)

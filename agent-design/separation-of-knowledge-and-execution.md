@@ -9,7 +9,7 @@ aliases:
   - three-layer agent architecture
   - skills-agents-commands pattern
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Separation of Knowledge and Execution
@@ -32,7 +32,7 @@ The [Agent Skills Standard](../standards/agent-skills-standard.md) defines skill
 
 **Skills carry knowledge, not behavior.** A skill describing how to navigate GitHub documentation remains stable when the agent using it changes. Embedding that knowledge directly in agents duplicates it — and when the knowledge drifts, you have multiple places to update.
 
-**Agents carry execution, not knowledge.** An agent that knows "how to research a topic" should not also encode "what URLs are authoritative for this domain." Separating these allows the same agent logic to work across different domains by swapping skills.
+**Agents carry execution, not knowledge.** An agent that knows "how to research a topic" should not also encode "what URLs are authoritative for this domain." Separating these allows the same agent logic to work across different domains by swapping the portable knowledge units the [Agent Skills Standard](../standards/agent-skills-standard.md) defines.
 
 **Commands carry orchestration, not logic.** A command that runs the content pipeline triggers agents in sequence but doesn't implement the steps itself. You can change the workflow — add a review step, reorder stages — without touching the agents.
 
@@ -56,7 +56,7 @@ Shared skills mean a single update propagates everywhere. Shared agents mean orc
 Each layer can be validated without the others:
 
 - **Skills**: Are the referenced URLs still live? Does the knowledge match the current tool behavior?
-- **Agents**: Given a skill, does the agent produce correct output for a known input?
+- **Agents**: Given a skill, does the agent produce correct output for a known input — the validation step the [agent development lifecycle](agent-development-lifecycle.md) formalises?
 - **Commands**: Given working agents, does the command sequence produce the expected pipeline behavior?
 
 This mirrors the layered architecture pattern in software — data layer, business logic, API layer — each testable and replaceable independently.
@@ -70,7 +70,7 @@ The failure mode is embedding domain knowledge directly in agent definitions. Kn
 Three-layer separation adds indirection overhead that is not always worth it:
 
 - **Single-purpose throwaway agents**: If an agent will never be reused and has no sibling agents sharing knowledge, extracting a skill file adds file management cost with no payoff. The pattern is optimized for shared reuse.
-- **Rapidly evolving domains**: When the domain knowledge changes faster than the agents using it, a centralized skill becomes a choke point — every agent breaks when the skill is updated, requiring coordinated testing across all consumers.
+- **Rapidly evolving domains**: When the domain knowledge changes faster than the agents using it, a centralized skill becomes a choke point — every agent breaks when the skill is updated, requiring coordinated testing across all consumers; [progressive disclosure](progressive-disclosure-agents.md) softens this by loading skill knowledge on demand rather than baking it in.
 - **Small teams with one agent author**: Separation works best when different people or processes own different layers. When one person writes every skill, agent, and command, the abstraction adds navigation overhead without the coordination benefit it is designed to provide.
 
 The knowledge layer also does not scale indefinitely. A survey of agent-skill architectures ([Xu & Yan, "Agent Skills for Large Language Models", arXiv:2602.12430](https://arxiv.org/abs/2602.12430)) reports a phase transition: beyond a critical skill-library size, skill-selection accuracy degrades sharply rather than gradually, and the routing problem of deciding which skill to activate becomes combinatorially hard as libraries grow into the hundreds. Past that threshold, more skills make the system *worse*, not more reusable — so the separation pattern buys composability up to a point, then trades it back for a selection-and-context cost that a smaller, consolidated agent would not pay.
@@ -126,7 +126,7 @@ With this structure, updating the source list in `source-list.md` propagates imm
 
 ## Key Takeaways
 
-- Skills hold domain knowledge; agents hold execution logic; commands hold orchestration.
+- Skills hold domain knowledge; agents hold execution logic; commands hold orchestration — see [agents vs commands](agents-vs-commands.md) for the agent/command half of that split.
 - Updating a skill propagates to all agents that use it without changing agent definitions.
 - Each layer can be tested and replaced independently of the others.
 - Embedding knowledge in agents causes duplication, drift, and coupling.

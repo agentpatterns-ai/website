@@ -33,7 +33,7 @@ Static benchmarks degrade as models train on their data (see [Benchmark Contamin
 
 Teams that rely solely on published benchmarks for model comparison or upgrade decisions risk selecting models that memorized the benchmark rather than models that generalize. Two defenses:
 
-1. **Maintain a private eval suite** sourced from your own codebase and real incidents. Tasks drawn from internal repositories are unlikely to appear in training data.
+1. **Maintain a private eval suite** sourced from your own codebase and real incidents, built with the task-authoring approach in [Writing Your First Eval Suite](writing-first-eval-suite.md). Tasks drawn from internal repositories are unlikely to appear in training data.
 2. **Refresh continuously.** SWE-rebench's pipeline sources tasks from recent merged PRs linked to resolved issues — tasks that postdate the model's training cutoff. The same principle applies at team scale: periodically add eval tasks from recent work to keep the suite ahead of potential contamination.
 
 ---
@@ -46,7 +46,7 @@ Agents can reach correct final states through unsafe intermediate steps — dele
 
 For production safety evals, augment outcome grading with trajectory evidence from at least two of: execution traces, audit logs, and environment snapshots. The research also found that [Pass^k (consistency across trials) drops up to 24% under error injection while Pass@k (peak capability) remains stable](../../verification/pass-at-k-metrics.md) — confirming that reliability and capability require separate measurement.
 
-See [Trajectory-Opaque Evaluation Gap](../../verification/trajectory-opaque-evaluation-gap.md) for the three-channel evidence model and when to add trajectory auditing.
+See [Trajectory-Opaque Evaluation Gap](../../verification/eval-blind-spots.md) for the three-channel evidence model and when to add trajectory auditing.
 
 ---
 
@@ -166,5 +166,5 @@ After hardening, the suite catches three regressions in the next quarter that wo
 - [Golden Query Pairs as Regression Tests](../../verification/golden-query-pairs-regression.md)
 - [Incident-to-Eval Synthesis](../../verification/incident-to-eval-synthesis.md)
 - [Layered Accuracy Defense](../../verification/layered-accuracy-defense.md)
-- [Trajectory-Opaque Evaluation Gap](../../verification/trajectory-opaque-evaluation-gap.md)
+- [Trajectory-Opaque Evaluation Gap](../../verification/eval-blind-spots.md)
 - [Eval Engineering](../foundations/eval-engineering.md) — complementary module in Foundational Disciplines

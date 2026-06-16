@@ -99,7 +99,7 @@ In the same release, prompt caching reuses "more than 93% of each request" once 
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — selects one vendor per task; no nesting
 - [Role Orchestration on a Single Model](role-orchestration-single-model.md) — same weights, different conditioning per role
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — heterogeneous models per role with fallback chains
-- [Code-Health-Gated Tier Routing](code-health-gated-tier-routing.md) — pre-call tier selection on file health
+- [Code-Health-Gated Tier Routing](auto-model-selection.md) — pre-call tier selection on file health
 - [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md) — two-layer split, typically across different models
 - [Advanced Tool Use](../tool-engineering/advanced-tool-use.md) — Anthropic Tool Search Tool, programmatic calling, tool use examples
 - [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md) — design-level strategies for shrinking tool output

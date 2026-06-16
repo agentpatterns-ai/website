@@ -50,7 +50,7 @@ The compulsive engagement risk is not uniform. Structured contexts constrain the
 
 - **Hard deadlines**: External stop dates override session momentum regardless of engagement level.
 - **Beginner onboarding**: Limited mental models prevent the skill-challenge balance flow requires; confusion interrupts the loop early.
-- **Review-gated workflows**: Mandatory code review or CI checks inject interruptions the agent cannot collapse.
+- **Review-gated workflows**: Mandatory code review or CI checks inject interruptions the agent cannot collapse — the supervision friction described in [The Bottleneck Migration](bottleneck-migration.md).
 - **Unfamiliar task ceilings**: The METR study found AI assistance *slowed* developers on tasks requiring genuine understanding. Where prompt-and-evaluate fails, the variable ratio schedule produces frustration, not flow.
 
 The grey literature review found 11% of practitioners abandoned projects when AI output grew too complex to fix — a natural failure mode that breaks the loop rather than sustaining it.

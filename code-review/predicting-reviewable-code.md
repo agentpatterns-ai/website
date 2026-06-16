@@ -10,7 +10,7 @@ aliases:
   - "Pre-Flagging Functions for Review"
   - "Code Deletion Prediction"
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # Predicting Reviewable Code: Pre-Flagging Functions Reviewers Will Delete
@@ -25,9 +25,9 @@ Agentic coding tools shift work from writing to reviewing. When an agent generat
 
 [arXiv:2602.17091](https://arxiv.org/abs/2602.17091) identifies structural features that distinguish deleted from surviving functions — method name length, lines of code, Halstead volume, and call count — but does not name deletion-reason categories. The taxonomy below is author-derived, organising those structural signals into three practitioner-facing buckets to make the predictors actionable. Treat the category names as framing, not findings.
 
-**Dead code**: Functions generated but never called from the PR's entry points. Maps to the paper's call-count signal — functions with fewer inbound references.
+**Dead code**: Functions generated but never called from the PR's entry points. Maps to the paper's call-count signal — functions with fewer inbound references ([arXiv:2602.17091](https://arxiv.org/abs/2602.17091)).
 
-**Over-engineering**: Functions that introduce abstraction the spec did not require — utility helpers, base classes, factory patterns for single-instantiation objects. Maps to the paper's three strongest predictors (longer method names, higher line counts, greater Halstead volume), which together signal more generated code than the task required.
+**Over-engineering**: Functions that introduce abstraction the spec did not require — utility helpers, base classes, factory patterns for single-instantiation objects. Maps to the paper's three strongest predictors (longer method names, higher line counts, greater Halstead volume) ([arXiv:2602.17091](https://arxiv.org/abs/2602.17091)), which together signal more generated code than the task required.
 
 **Spec mismatch**: Functions that implement different behaviour than the spec required — wrong signature, wrong return type, wrong preconditions. Not directly identified in the paper; included because type-contract divergence is a separate failure mode that structural metrics alone will not catch.
 
@@ -122,10 +122,10 @@ These two functions would be candidates for deletion. Returning this report to t
 Pre-flagging adds value when the cost of reviewer time exceeds the cost of running structural analysis, but several conditions undermine that trade-off:
 
 - **Infrastructure and setup functions**: Functions not yet called within the PR — setup hooks, migration helpers, exported API surface — will appear as dead code to a call-graph analyzer. Treat entry-point configuration as a first-class parameter, not an afterthought.
-- **Cross-file call graphs are expensive**: Dead code detection that only inspects the generated module (as in the example above) misses legitimate calls from existing files. Building a full project call graph adds pipeline latency and may require language-specific tooling.
+- **Cross-file call graphs are expensive**: Dead code detection that only inspects the generated module (as in the `flag_dead_code` example above) misses legitimate calls from existing files. Building a full project call graph adds pipeline latency and may require language-specific tooling.
 - **Single-study generalization risk**: The AUC 87.1% result comes from one codebase and one AI model. Feature importance will differ across languages, project types, and model generations — validate false-positive rates locally before routing suppressions to the agent.
 - **False negatives pass bad code unexamined**: A 12.9% error rate leaves roughly 1-in-8 deletable functions unflagged. Reviewers who lean on the report may skip unflagged code too quickly, raising the cost of each missed deletion.
-- **False positives block valid abstractions**: A utility called only once looks like over-engineering by metrics but may be essential for testability or extension. Flags routed back to the agent can regenerate away intentional design decisions.
+- **False positives block valid abstractions**: A utility called only once looks like over-engineering by metrics but may be essential for testability or extension. Flags routed back to the agent can regenerate away intentional design decisions — the inverse risk to the [abstraction bloat](../anti-patterns/abstraction-bloat.md) the pattern targets.
 - **Feedback loop without calibration**: Returning flags for regeneration without calibrating "spec scope" can cause under-generation in later tasks. A regeneration limit and human fallback prevent loops.
 
 ## Key Takeaways

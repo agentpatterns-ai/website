@@ -24,7 +24,7 @@ maturity: emerging
 Long agent runs surface failure too late — the intervention window closes before the grader sees the result. The two common alternatives both have costs:
 
 - **Hand-authored event schemas** — explicit rules over typed events. Transparent and cheap, but brittle when the harness, model, or tool catalog changes.
-- **Deployment-time LLM judges** — call a separate model at every step. Robust to surface change, expensive at scale.
+- **Deployment-time LLM judges** — call a separate [model-as-judge](../workflows/llm-as-judge-evaluation.md) at every step. Robust to surface change, expensive at scale.
 
 [PrefixGuard](https://arxiv.org/abs/2605.06455) frames a third option: an offline-trained *prefix monitor* scoring partial traces in flight. Two stages — induce a typed-event abstraction from raw traces, then train a supervised scorer against terminal outcomes.
 
@@ -46,7 +46,7 @@ graph LR
 
 **Supervised monitor.** With the abstraction fixed, train a scorer mapping a typed-step prefix to terminal-failure probability from labelled complete traces.
 
-The split matters. Hand-authored schemas commit to one vocabulary; StepView re-derives it from data. LLM judges reason at inference; the supervised scorer pushes that cost offline. Adjacent work uses the same offline-learn / online-score split: *ProbGuard* fits a discrete-time Markov chain over abstracted agent states and triggers when the probability of reaching an unsafe state crosses a threshold [Source: [Zhou et al., *ProbGuard*](https://arxiv.org/abs/2508.00500)].
+The split matters. Hand-authored schemas commit to one vocabulary; StepView re-derives it from data. An [LLM-as-judge](../workflows/llm-as-judge-evaluation.md) reasons at inference; the supervised scorer pushes that cost offline. Adjacent work uses the same offline-learn / online-score split: *ProbGuard* fits a discrete-time Markov chain over abstracted agent states and triggers when the probability of reaching an unsafe state crosses a threshold [Source: [Zhou et al., *ProbGuard*](https://arxiv.org/abs/2508.00500)].
 
 ## What the Numbers Actually Say
 
@@ -67,13 +67,13 @@ The headline AUPRC is not load-bearing. The authors flag it: *"strong ranking do
 
 Deterministic signals — [circuit breakers](../observability/circuit-breakers.md), [loop detection](../observability/loop-detection.md), token-budget caps — catch failure modes a human can name in advance. They miss patterns that show up only across many steps: plausible tool calls that, in aggregate, mean the agent has lost the plot.
 
-A learned prefix monitor sees the aggregate. It pays off on long-horizon traces where the failure signature is distributional, the trace distribution is stable enough to train on, and a labelled terminal-outcome dataset exists. When those fail, deterministic alternatives win on cost and interpretability.
+A learned prefix monitor sees the aggregate. It pays off on long-horizon traces where the failure signature is distributional, the trace distribution is stable enough to train on, and a labelled terminal-outcome dataset exists. When those fail, [deterministic guardrails](deterministic-guardrails.md) win on cost and interpretability.
 
 ## When the Pattern Backfires
 
 - **Distribution shift.** Change the harness, model, or tool catalog and the trace distribution shifts. Calibration degrades silently — no in-band signal flags the monitor as wrong. Retraining cadence becomes operational cost.
-- **Low-base-rate failures.** When terminal failures are rare, supervised training has few positives. AUPRC can look strong while precision-at-recall stays unusable — the WebArena pattern.
-- **Short tasks.** When tasks finish in a handful of steps, a final-outcome check lands in time; the prefix-monitor premise no longer applies.
+- **Low-base-rate failures.** When terminal failures are rare, supervised training has few positives — the same scarcity that makes an [incident-to-eval corpus](incident-to-eval-synthesis.md) slow to accumulate. AUPRC can look strong while precision-at-recall stays unusable — the WebArena pattern.
+- **Short tasks.** When tasks finish in a handful of steps, a [final-outcome check](grade-agent-outcomes.md) lands in time; the prefix-monitor premise no longer applies.
 - **Single-team shops.** With one or two agent shapes, a hand-written deterministic invariant suite delivers most of the warning value at lower cost.
 
 ## Interpretability via DFA Extraction
@@ -84,7 +84,7 @@ Post-hoc DFA extraction converts the trained monitor into a finite-state represe
 
 1. Start with [deterministic guardrails](deterministic-guardrails.md) and [circuit breakers](../observability/circuit-breakers.md). They are cheap, transparent, and catch named failure modes.
 2. Collect labelled terminal outcomes. The same corpus supports [incident-to-eval](incident-to-eval-synthesis.md) regression cases.
-3. Decide the alert-budget envelope before training. Pick a target false-alarm rate the team can absorb; report precision and recall at that operating point, not just AUPRC.
+3. Decide the alert-budget envelope before training. Pick a target false-alarm rate the team can absorb; report precision and recall at that operating point — the same [primary-metric choice](pass-at-k-metrics.md) discipline applies — not just AUPRC.
 4. Pin the trace distribution. If the harness or model changes, retrain — calibration drifts silently otherwise.
 
 ## Key Takeaways
@@ -102,6 +102,6 @@ Post-hoc DFA extraction converts the trained monitor into a finite-state represe
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — the broader case for hard, transparent checks before adding learned components.
 - [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md) — the labelled-outcome corpus the monitor trains against can also seed regression evals.
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — stage-level diagnostic that pairs with distribution-level monitoring.
-- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) — why outcome-only grading misses safety failures the prefix view catches.
+- [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — why outcome-only grading misses safety failures the prefix view catches.
 - [Corpus-Level Trace Diagnostics](corpus-level-trace-diagnostics.md) — offline cross-trace analysis that complements online prefix scoring.
 - [Decomposed Red-Teaming Agent Monitors](decomposed-red-teaming-agent-monitors.md) — adversarial monitor evaluation that exposes the same false-positive-rate calibration problem.

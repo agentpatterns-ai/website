@@ -21,7 +21,7 @@ maturity: emerging
 
 ## The Pattern
 
-A learned diff-risk model scores each diff by likelihood of revert or production incident. A single percentile threshold separates auto-approved diffs from those routed to human review. Moving it up automates more diffs at strictly higher marginal risk; moving it down trades yield for safety. The point on the curve is an operator choice, not a property of the model.
+A learned diff-risk model scores each diff by likelihood of revert or production incident. A single percentile threshold separates auto-approved diffs from those routed to human review ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208)). Moving it up automates more diffs at strictly higher marginal risk; moving it down trades yield for safety. The point on the curve is an operator choice, not a property of the model.
 
 It differs from two adjacent patterns. [Tiered code review](tiered-code-review.md) routes by *static path criticality* — auth and payment paths escalate regardless of score. [Tunable per-PR effort](tunable-review-effort.md) picks review depth per PR. Threshold calibration is the *organization-wide* dial on a learned score deciding whether human review happens at all.
 
@@ -74,7 +74,7 @@ Calibration requires infrastructure the pattern's industrial provenance can hide
 
 - **Revert/incident telemetry per score bucket** — without per-percentile observation, the curve is unmeasured.
 - **Deterministic validation backstop** — linters, type checks, and sandboxed test execution catch score under-estimates before they land.
-- **Stable feature signals** — authorship, churn, and blast-radius features must be stably observable. Microservice sprawl with rotating owners degrades feature quality.
+- **Stable feature signals** — authorship, churn, and blast-radius features must be stably observable ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208)). Microservice sprawl with rotating owners degrades feature quality.
 - **Periodic recalibration cadence** — the diff distribution shifts as the codebase, tooling, and AI-author mix change. A threshold set in Q1 will not be right in Q4.
 
 Adopting the pattern without these inherits an opaque knob with no way to know which direction to turn it.

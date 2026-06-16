@@ -174,7 +174,7 @@ The PATH smell (`/users/{id}/transfer` with `doTransfer`) collapsed into a resou
 
 - An OpenAPI spec that validates structurally can still fail agents — every one of 600 audited endpoints had at least one smell.
 - The nine-category taxonomy (four documentation, five REST) gives a concrete checklist that maps to specific agent failure modes.
-- Audit only the endpoints your defined agent scenarios need. Blanket audits produce reports nobody acts on; selective audits cut remediation effort by an order of magnitude.
+- Audit only the endpoints your defined agent scenarios need. Blanket audits produce reports nobody acts on; selective audits cut remediation effort by an order of magnitude (385 to 42 engineering hours in the Hermes study).
 - Use static linters for structural smells and LLM-based detection for prose-shaped smells. Open-weight models reach expert-level Jaccard on this task — frontier pricing is not required.
 
 ## Related

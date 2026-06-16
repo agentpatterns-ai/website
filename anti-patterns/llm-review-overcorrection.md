@@ -22,7 +22,7 @@ maturity: established
 
 [arXiv:2603.00539](https://arxiv.org/abs/2603.00539) documents a systematic failure mode in LLM-based code review: overcorrection. LLMs consistently misclassify correct implementations as non-compliant. The misclassification is not random noise — it is a directional bias toward finding problems.
 
-Counterintuitively, prompts that require the model to explain its reasoning and propose corrections produce *higher* misjudgement rates than simpler prompts. The added detail amplifies the problem rather than improving reliability.
+Counterintuitively, prompts that require the model to explain its reasoning and propose corrections produce *higher* misjudgement rates than simpler prompts, an effect [Turpin et al. (2023)](https://arxiv.org/abs/2305.04388) trace to chain-of-thought rationalising a predisposed answer. The added detail amplifies the problem rather than improving reliability.
 
 ## The Risk in Review Pipelines
 

@@ -14,7 +14,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-11
+last_reviewed: 2026-06-14
 maturity: emerging
 ---
 
@@ -88,7 +88,7 @@ Independent work formalizes the broader class as *cross-session stored prompt in
 2. **Semantic activation.** Retrieval surfaces it exactly when high-value data is in context.
 3. **Persistence.** Memory persists by design, hiding the causal link from single-session monitoring.
 
-[A-MemGuard (2025)](https://arxiv.org/abs/2510.02373) and [Memory Poisoning and Secure Multi-Agent Systems (2026)](https://arxiv.org/abs/2603.20357) propose provenance-aware retrieval and cryptographic provenance; neither is broadly deployed.
+[A-MemGuard (2025)](https://arxiv.org/abs/2510.02373) and [Memory Poisoning and Secure Multi-Agent Systems (2026)](https://arxiv.org/abs/2603.20357) propose provenance-aware retrieval and cryptographic provenance; neither is broadly deployed. Later work reports a *certified* defence against runtime memory poisoning in persistent-memory agents — a provable guarantee rather than a heuristic filter ([Certified defence against runtime memory poisoning, 2026](https://arxiv.org/abs/2606.12703)).
 
 ## When This Doesn't Apply
 

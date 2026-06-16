@@ -108,7 +108,7 @@ Env var injection has specific failure modes:
 
 - **Shared container environments**: In multi-tenant or sidecar-based deployments, sibling processes may be able to read `/proc/<pid>/environ` on Linux unless the container is hardened with user namespaces or seccomp restrictions.
 - **Sub-process env stripping**: Some agent frameworks spawn sandboxed sub-processes with a cleaned environment. If the agent runs tools in an isolated subprocess, env vars set in the parent shell may not be inherited — verify the tool execution model before relying on this pattern.
-- **Env var logging by the agent itself**: Some agents log their startup environment for debugging. Confirm the agent's own log output is not captured in session context or written to files the agent can read.
+- **Env var logging by the agent itself**: Some agents log their startup environment for debugging. Confirm the agent's own log output is not captured in session context or written to files the agent can read (see [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)).
 - **Secrets manager retrieval inside the session**: Fetching a secret with a CLI tool *during* an agent task (rather than before session start) risks the retrieval command and its output appearing in the context window. Retrieve all required secrets before the agent session begins.
 - **Env sprawl**: Injecting all available credentials rather than just the ones needed for the current task expands blast radius unnecessarily — see [Blast Radius Containment](blast-radius-containment.md).
 

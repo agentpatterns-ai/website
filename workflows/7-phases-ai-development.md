@@ -39,7 +39,7 @@ Phases alternate between human-led (judgment, decisions, commitments) and agent-
 
 ### 1. Research
 
-**Human-led.** Explore the problem space with AI before committing to an approach. The goal is to surface constraints, understand existing code, and identify what is not known. No code is written and no requirements are fixed.
+**Human-led.** Explore the problem space with AI before committing to an approach. The goal is to surface constraints, [understand existing code](pre-execution-codebase-exploration.md), and identify what is not known. No code is written and no requirements are fixed.
 
 Exit criterion: you can describe the problem clearly, identify the relevant codebase areas, and name the open questions that the prototype will resolve.
 
@@ -49,13 +49,13 @@ Tools and patterns: Claude's [Plan Mode](../tools/claude/plan-mode.md) (read-onl
 
 **Agent-led.** Build a throwaway spike to validate assumptions before formalizing requirements. The prototype is not production code — it is an experiment. Its purpose is to answer the open questions from the Research phase.
 
-Exit criterion: the key unknowns are resolved (feasibility, API behavior, performance characteristics) and the prototype can be discarded.
+Exit criterion: the key unknowns are resolved (feasibility, API behavior, performance characteristics) and the [throwaway prototype](prototype-before-optimizing.md) can be discarded.
 
 Common failure: treating the prototype as the starting point for production. Prototypes routinely take design shortcuts that are expensive to undo in production code.
 
 ### 3. PRD (Product Requirements Document)
 
-**Human-led.** Formalize the feature requirements based on what the Research and Prototype phases revealed. The PRD is a structured Markdown document capturing who uses the feature, what behavior it produces, and what the success criteria are.
+**Human-led.** Formalize the feature requirements based on what the Research and Prototype phases revealed. The PRD is a structured Markdown document — the same externalised-spec role [spec-driven development](spec-driven-development.md) formalises — capturing who uses the feature, what behavior it produces, and what the success criteria are.
 
 Exit criterion: the PRD is specific enough that a developer who has not seen the prototype could implement the feature from it.
 
@@ -65,7 +65,7 @@ The PRD is the most expensive phase to skip: issues decomposed from vague requir
 
 **Human-led.** Decompose the PRD into trackable GitHub issues. Each issue is a unit of work the agent can pick up, execute, and close without additional clarification. The decomposition is itself the planning work — the act of writing issues forces scope decisions that the PRD left open.
 
-Exit criterion: every issue has concrete acceptance criteria (a test to pass, a behavior to verify, a file to change) and no issue depends on another issue to define its scope.
+Exit criterion: every issue has concrete [acceptance criteria](agentic-agile-rituals.md) (a test to pass, a behavior to verify, a file to change) and no issue depends on another issue to define its scope.
 
 This decomposition step is the highest-value handoff point in the model. Issue description quality is the primary lever for delegation success — specific context, acceptance criteria, and file references directly affect output quality ([Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md)).
 
@@ -75,11 +75,11 @@ This decomposition step is the highest-value handoff point in the model. Issue d
 
 Exit criterion: all issues are closed, CI passes, and the implementation matches the acceptance criteria in each issue.
 
-Context management is the primary concern here. Long-running implementation phases require a harness that persists phase state across context windows. Without this, agents lose track of prior work mid-phase and repeat or contradict earlier decisions. See [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).
+[Context management](../context-engineering/context-engineering.md) is the primary concern here. Long-running implementation phases require a harness that persists phase state across context windows. Without this, agents lose track of prior work mid-phase and repeat or contradict earlier decisions. See [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).
 
 ### 6. QA
 
-**Human-led.** Structured review and testing pass. QA reviews the implementation against the PRD requirements — not just against the individual issues — and identifies gaps, edge cases, and regressions.
+**Human-led.** Structured review and testing pass. QA reviews the implementation against the PRD requirements — not just against the individual issues — and [identifies gaps, edge cases, and regressions](verification-centric-development.md).
 
 Exit criterion: implementation matches PRD requirements, automated tests pass, and any gaps discovered are converted back into Issues for another Implement cycle.
 
@@ -137,17 +137,17 @@ The 7-phase model was designed for feature-scale work by one or more developers 
 
 **Feature:** Add OAuth 2.0 login to a TypeScript API that currently supports only API key auth.
 
-**Research** — agent reads the auth module, git log for prior OAuth attempts, and existing session management. Human identifies the open question: does the current session store support the OAuth callback flow?
+**Research** — agent [reads the auth module](pre-execution-codebase-exploration.md), git log for prior OAuth attempts, and existing session management. Human identifies the open question: does the current session store support the OAuth callback flow?
 
 **Prototype** — agent implements a minimal OAuth callback handler wired to a mock user store. Confirms the session store works without modification; surfaces that the token refresh flow requires a new DB table.
 
 **PRD** — human writes requirements: supported providers (GitHub, Google), token storage schema, error states, redirect behavior, and the specific DB migration needed. Exit criterion: a reviewer unfamiliar with the codebase can implement from the PRD.
 
-**Issues** — human decomposes into five issues: DB migration, token storage service, OAuth callback handler, provider-specific configuration, and integration tests. Each issue has explicit acceptance criteria.
+**Issues** — human decomposes into 5 issues: DB migration, token storage service, OAuth callback handler, provider-specific configuration, and integration tests. Each issue has explicit acceptance criteria.
 
-**Implement** — agent works through issues in parallel (migration and tests independently; handler after migration merges). CI gates each PR.
+**Implement** — agent works through issues in [parallel](parallel-agent-sessions.md) (migration and tests independently; handler after migration merges). CI gates each PR.
 
-**QA** — human tests the complete flow against the PRD requirements. Discovers token expiry behavior missing from the acceptance criteria; creates a new issue for a sixth Implement cycle.
+**QA** — human tests the complete flow against the PRD requirements. Discovers token expiry behavior missing from the acceptance criteria; creates a new issue for a 6th Implement cycle.
 
 **Ship** — feature deployed, OAuth login monitored for provider errors and token refresh failures.
 

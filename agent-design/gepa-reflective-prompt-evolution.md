@@ -11,7 +11,7 @@ aliases:
   - reflective prompt evolution
   - genetic pareto prompt optimizer
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # Reflective Prompt Evolution with Pareto Selection (GEPA)
@@ -23,7 +23,7 @@ maturity: established
 GEPA pays off when three preconditions hold:
 
 1. **Rich textual feedback exists** — stage-level pass/fail, parse errors, constraint violations, unit-test output, profiler notes. The DSPy maintainers state outright that "a well-designed metric is central to GEPA's sample efficiency and learning signal richness" ([dspy.GEPA overview](https://dspy.ai/api/optimizers/GEPA/overview/)). A scalar-only correctness metric starves the reflection step.
-2. **Evaluation instances are heterogeneous** — different examples expose different failure modes. Pareto selection only adds value when the best candidate on instance A is not the best on instance B. Homogeneous evals collapse Pareto selection into plain scalar-greedy and leave only bookkeeping overhead.
+2. **Evaluation instances are heterogeneous** — different examples expose different failure modes. Pareto selection only adds value when the best candidate on instance A is not the best on instance B. Homogeneous evals collapse Pareto selection into plain scalar-greedy — the same regime where the [MIPROv2 Bayesian search](dspy-programmatic-prompt-optimization.md) is the better-fit optimizer — and leave only bookkeeping overhead.
 3. **Rollout budget is the binding constraint** — the paper reports up to **35× fewer rollouts** than GRPO, and the reference implementation cites **100–500 evaluations** vs 5,000–25,000+ for RL ([Agrawal et al., 2025](https://arxiv.org/abs/2507.19457); [gepa-ai/gepa](https://github.com/gepa-ai/gepa)).
 
 Without all three, reach for a different optimizer: [MIPROv2](https://arxiv.org/abs/2406.11695) for joint Bayesian search on stable pipelines, [GRPO](https://arxiv.org/abs/2402.03300) when dense scalar rewards dominate.

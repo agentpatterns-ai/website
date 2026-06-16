@@ -47,13 +47,13 @@ Once a single pass produces tractable output, scaling fans it out. Mozilla "para
 
 ### Stacking — filter in inference, not maintainer hours
 
-Stacking is the lifecycle wrapper around discovery: "deduplicating against known issues, tracking bugs, triaging them, and getting fixes shipped" ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). Each pass discards non-actionable findings at machine cost rather than letting them reach humans. A finding must survive reproducibility, deduplication, and severity triage before a Firefox engineer sees it.
+Stacking is the lifecycle wrapper around discovery: "deduplicating against known issues, tracking bugs, triaging them, and getting fixes shipped" ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). Each pass discards non-actionable findings at machine cost rather than letting them reach humans. A finding must survive [reproducibility](../code-review/reproduce-before-report-verification-gate.md), deduplication, and severity triage before a Firefox engineer sees it.
 
 This is the load-bearing primitive. Steering and scaling without stacking produce slop at higher throughput.
 
 ## Why It Works
 
-The mechanism is signal-to-noise inversion against an asymmetric cost gradient. A model run against a large codebase produces O(N) findings of which a small fraction are real; without composition, maintainers face O(N) triage cost regardless of yield. Composition reverses the math: scaling produces *more* raw findings, but each stacking pass discards non-actionable candidates at machine cost, so the maintainer queue holds only the residual. Mozilla makes the mechanism concrete: "given the right interfaces and instructions, [the harness] can create and run reproducible test cases to dynamically test hypotheses about bugs in code... we built our own harness atop our existing fuzzing infrastructure" ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). The reproducibility check is what discriminates — a finding the harness cannot turn into an executable test case never reaches a reviewer.
+The mechanism is signal-to-noise inversion against an asymmetric cost gradient. A model run against a large codebase produces O(N) findings of which a small fraction are real; without composition, maintainers face O(N) [triage cost](../code-review/signal-over-volume-in-ai-review.md) regardless of yield. Composition reverses the math: scaling produces *more* raw findings, but each stacking pass discards non-actionable candidates at machine cost, so the maintainer queue holds only the residual. Mozilla makes the mechanism concrete: "given the right interfaces and instructions, [the harness] can create and run reproducible test cases to dynamically test hypotheses about bugs in code... we built our own harness atop our existing fuzzing infrastructure" ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). The reproducibility check is what discriminates — a finding the harness cannot turn into an executable test case never reaches a reviewer.
 
 The pipeline is durable across model swaps: "Once the end-to-end pipeline is in place, it's trivial to swap in different models... model upgrades increase the effectiveness of the entire pipeline" ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). The wrapper is project-specific; the three primitives are reusable.
 
@@ -103,7 +103,7 @@ Replications published after Mozilla's report found cheaper open-weight models r
 - The unlock is signal-to-noise inversion: stacked filtering passes paid in inference cost replace human triage as the rate-limiting step.
 - Steering, scaling, and stacking are reusable primitives; the pipeline that wires them is project-specific.
 - Without the stacking layer, steering and scaling produce slop faster — the maintainer-cost gradient stays inverted.
-- The harness must include a dynamic test-execution interface; static-only auditing reproduces the false-positive ceiling that made earlier LLM audits impractical.
+- The harness must include a [dynamic test-execution interface](../verification/coverage-guided-fuzz-harness-generation.md); static-only auditing reproduces the false-positive ceiling that made earlier LLM audits impractical.
 - Once the pipeline holds, model swaps are cheap and compound across discovery, proof-of-concept generation, and pathology articulation.
 
 ## Related

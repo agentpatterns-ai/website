@@ -23,7 +23,7 @@ maturity: established
 
 Default-private agent interactions — IDE chat, terminal sessions, agent DMs — concentrate learning on the prompter. The transcript is thrown away when the session closes; no one else watches a senior engineer scope a request, react to a failed plan, or refine a skill. Knowledge of *how to prompt this particular agent against this particular codebase* stays tacit.
 
-Forcing agent work into public channels makes the conversation a searchable artifact. The same transcript that solves one person's problem becomes the example by which the next N people learn to do the same thing without asking. Tobi Lütke calls the resulting environment a **Lehrwerkstatt** — a teaching workshop. "The whole shop floor is the classroom. You learn by being near the work." ([Simon Willison, *Learning on the Shop Floor*, 11 May 2026](https://simonwillison.net/2026/May/11/learning-on-the-shop-floor/))
+Forcing agent work into public channels makes the conversation a [searchable artifact](encoding-tacit-knowledge.md). The same transcript that solves one person's problem becomes the example by which the next N people learn to do the same thing without asking. Tobi Lütke calls the resulting environment a **Lehrwerkstatt** — a teaching workshop. "The whole shop floor is the classroom. You learn by being near the work." ([Simon Willison, *Learning on the Shop Floor*, 11 May 2026](https://simonwillison.net/2026/May/11/learning-on-the-shop-floor/))
 
 Two reinforcing loops drive the gain:
 
@@ -44,7 +44,7 @@ The pattern only works inside a specific operating envelope. Outside it, public-
 
 | Precondition | What it means in practice |
 |---|---|
-| **Psychological safety** | Asking a basic question, or being seen struggling with the agent, must not carry a career penalty. Without this, engineers reroute work to DMs and undocumented terminals. |
+| **Psychological safety** | Asking a basic question, or being seen struggling with the agent, must not carry a career penalty. Without this, engineers reroute work to Slack DMs and undocumented terminals. |
 | **Bounded data scope** | The channel topic must exclude customer records, secrets, PHI, and unreleased commercial details. Agents that need that data run in scoped or private channels. |
 | **A constant-learner norm** | Lütke names "being a constant learner" as a Shopify core value ([Simon Willison](https://simonwillison.net/2026/May/11/learning-on-the-shop-floor/)); the pattern depends on observers feeling licensed to drop into a stranger's channel and learn. |
 | **The agent itself enforces the policy** | River refuses DMs at the agent layer. A documented norm without a refusal mechanism collapses back to private channels within weeks. |

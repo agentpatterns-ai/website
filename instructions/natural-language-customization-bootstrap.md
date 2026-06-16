@@ -10,7 +10,7 @@ aliases:
   - natural-language agent scaffolding
   - agent customization bootstrap
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Natural-Language Customization Bootstrap
@@ -21,7 +21,7 @@ maturity: established
 
 AI coding tools accumulate customization surfaces — CLAUDE.md, AGENTS.md, `.github/copilot-instructions.md`, skill files, subagent definitions, hook configurations. Each carries syntax and convention cost: frontmatter keys, directory placement, validation rules, tool scopes. For users who would benefit from customizing but have not read the spec, authoring cost is the activation barrier.
 
-The bootstrap inverts the usual flow. Instead of the user writing scaffolding the agent consumes, the user describes intent in prose and the agent emits scaffolding the user reviews. The agent already knows the target schema — it is the consumer — so it can also produce conformant files from a description.
+The bootstrap inverts the usual flow. Instead of the user hand-authoring the files of the [instruction-file ecosystem](instruction-file-ecosystem.md) the agent consumes, the user describes intent in prose and the agent emits scaffolding the user reviews. The agent already knows the target schema — it is the consumer — so it can also produce conformant files from a description.
 
 ## How Tools Expose It
 
@@ -62,7 +62,7 @@ The frontmatter keys (`name`, `description`, `tools`), the file location, and th
 
 The agent encodes the schema because it is the consumer at runtime. The same model that validates frontmatter fields, resolves tool scopes, and interprets system prompts produces those structures from a description. The user contributes the only part the agent cannot infer — intent — and inherits schema compliance for free.
 
-The review gate is load-bearing. Drafts are scaffolding, not commits. The user reads, edits, commits — the file in the repository is the file the user approved, not the file the agent emitted.
+The review gate is load-bearing: a draft committed unread becomes an [auto-generated context file](evaluating-agents-md-context-files.md), the failure mode this pattern depends on avoiding. Drafts are scaffolding, not commits. The user reads, edits, commits — the file in the repository is the file the user approved, not the file the agent emitted.
 
 ## When To Use It Over Templates
 

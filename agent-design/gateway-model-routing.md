@@ -10,7 +10,7 @@ aliases:
   - gateway model discovery
   - anthropic-compatible gateway routing
 last_reviewed: 2026-06-02
-maturity: established
+maturity: adopted
 ---
 
 # Gateway Model Routing

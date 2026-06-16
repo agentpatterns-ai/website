@@ -108,9 +108,9 @@ graph LR
 The pattern adds cost without value in four conditions:
 
 - **Mature, well-specified problem spaces.** CRUD on a known schema, library upgrades, refactor under green tests. The design tree is shallow; the ceremony of building and discarding a prototype exceeds the information it surfaces. Run `/grill-me` → `/to-prd` directly.
-- **No import-graph or branch-protection enforcement.** Without the structural gates, the skill produces a working artefact that stakeholders or future agents pull into production. The "prototype that ships" anti-pattern dominates and the skill becomes a liability.
+- **No import-graph or branch-protection enforcement.** Without the structural gates, the skill produces a working artefact that stakeholders or future agents pull into production. The "prototype that ships" anti-pattern dominates and the skill becomes a liability — the same [demo-to-production gap](../anti-patterns/demo-to-production-gap.md) that turns any throwaway artefact into an unmaintained dependency.
 - **Solo work with no audience for the verdict.** The skill's value is the durable record. Solo developers under time pressure skip the capture step, lose the answer, and re-prototype the same question next sprint — paying the cost without compounding the learning.
-- **Pure-UI tasks with an approved design spec.** Generating "radically different variations" when the Figma is signed off is rework, not exploration. The UI branch fires correctly only when the visual treatment itself is the open question.
+- **Pure-UI tasks with an approved design spec.** Generating "radically different variations" behind the `?variant=` switcher when the Figma is signed off is rework, not exploration. The UI branch fires correctly only when the visual treatment itself is the open question.
 
 The Specification-Driven Development critique applies in those conditions: a `/prototype` skill invoked outside its preconditions is "sanctioned vibe-coding" ([SDD essay — DEV Community](https://dev.to/pockit_tools/specification-driven-development-how-to-stop-vibe-coding-and-actually-ship-production-ready-5788)). Audit whether the skill is firing only on real unknown-unknowns before keeping it in the library.
 

@@ -8,7 +8,7 @@ aliases:
   - human-centric documentation
   - human documentation in the agent era
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Human-Facing Docs in the Agent Era: Mental Models Over Reference
@@ -31,10 +31,10 @@ Outside those conditions the recommendation backfires — see [When This Backfir
 
 Each rule names what the human reader uniquely retains value from once an agent handles the rest ([Breunig, 2026](https://www.dbreunig.com/2026/05/31/what-do-humans-need-from-docs.html)):
 
-1. **Build mental models, not a reference.** Humans need a structural picture of what the tool is, how its parts relate, and where it fits. Agents enumerate; humans orient. Reference enumeration optimises for the wrong reader.
+1. **Build mental models, not a reference.** Humans need a structural picture of what the tool is, how its parts relate, and where it fits. Agents enumerate; humans orient. [Reference enumeration](../tool-engineering/designing-for-agent-consumers.md) optimises for the wrong reader.
 2. **Teach the art of the possible.** Show what the tool enables so the reader can prompt the agent with the right intent. A reader who does not know capability `X` exists cannot direct an agent to use it.
 3. **Explain the why.** Intent is the layer the agent cannot reconstruct from code alone. A reader who understands why a tool exists "can reason beyond the obvious"; a reader who only sees `what` is stuck at the literal surface.
-4. **Detail the design decisions.** What the tool deliberately chose *not* to do is high-signal context. Exclusions narrow the search space the agent — and the human supervising it — would otherwise wander.
+4. **Detail the design decisions.** What the tool deliberately chose *not* to do is high-signal context. Exclusions [narrow the search space](../instructions/agents-md-as-table-of-contents.md) the agent — and the human supervising it — would otherwise wander.
 5. **Don't optimise for completeness.** Introduce only what builds an effective mental model. The temptation to enumerate nuances is the failure mode being corrected; trust the agent to surface the rest.
 
 Breunig states the goal directly: "The goal is to prepare your audience to prompt an agent effectively" ([Breunig, 2026](https://www.dbreunig.com/2026/05/31/what-do-humans-need-from-docs.html)).
@@ -79,15 +79,15 @@ Breunig built `scaffold-docs`, an opinionated skill that operationalises the fiv
 
 1. **Getting Started** — a narrative tutorial covering a single representative use case.
 2. **Diving Deeper** — one file per topic, organised around *intent and design decisions* (not API surface).
-3. **Reference** — per-module API spec, lookup-oriented.
+3. **Reference** — [per-module API spec](../tool-engineering/designing-for-agent-consumers.md), lookup-oriented.
 
 Two structural choices reinforce the five rules. First, the tutorial is single-use-case — Breunig refuses to enumerate use cases in the mental-model layer; the agent does that on demand. Second, the *Diving Deeper* tier is organised by intent, not API surface, so the human reader reaches design decisions without traversing a reference they did not need. The skill builds each section in passes — structure first, then headers and topic sentences, then full prose — and "the agent pauses for your review between passes and does not advance until you approve" ([Breunig, 2026](https://www.dbreunig.com/2026/05/31/what-do-humans-need-from-docs.html)), keeping the human in the editorial loop the five rules require.
 
 ## Key Takeaways
 
-- The residual job of human-facing docs is mental models, intent, design exclusions, and trust calibration — not exhaustive reference. Agents retrieve details on demand.
+- The residual job of human-facing docs is mental models, intent, design exclusions, and [trust calibration](visible-thinking-ai-development.md) — not exhaustive reference. Agents retrieve details on demand.
 - The pivot is conditional on the audience being paired with an agent at read time and the surface not being a contractual reference. Reference-as-contract surfaces and reviewer-of-last-resort workflows still need the table.
-- Human-facing docs, project instruction files, curated site indexes, and agent-consumable SDK surfaces are four different artifacts with four different jobs. Conflating them produces predictable failures.
+- Human-facing docs, [project instruction files](../standards/agents-md.md), curated site indexes, and agent-consumable SDK surfaces are four different artifacts with four different jobs. Conflating them produces predictable failures.
 - Skills frequently read better than the docs they ostensibly support — a diagnostic signal that the original docs were over-serving completeness, not a prescription to replace docs with skills.
 
 ## Related

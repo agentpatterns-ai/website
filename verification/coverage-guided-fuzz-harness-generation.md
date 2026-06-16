@@ -10,7 +10,7 @@ aliases:
   - "fuzz target generation"
   - "automated harness generation"
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Coverage-Guided Agents for Fuzz Harness Generation
@@ -47,7 +47,7 @@ Harness generation requires the agent to work through three constraints:
 
 **Parameter constraints**: What values are valid for each argument — null-safety, range, format. The research agent queries type signatures, Javadoc, and codebase examples on-demand before generating harness code.
 
-**Call ordering**: Which methods must be called before others — constructor before method calls, open before read, initialize before use. The research agent queries the API surface to infer object lifecycle requirements.
+**Call ordering**: Which methods must be called before others — constructor before method calls, `open()` before `read()`, initialize before use. The research agent queries the API surface to infer object lifecycle requirements.
 
 **State coverage**: Which code paths require specific preconditions — an authenticated session, a populated collection, a configured subsystem. Coverage feedback identifies when state assumptions are wrong.
 
@@ -66,7 +66,7 @@ Coverage improvement is not a universal proxy for harness quality. The approach 
 - **Weakly typed or dynamically typed APIs**: The research agent's ability to infer parameter constraints depends on type information. APIs that rely on runtime duck-typing, `Object` parameters, or reflection give the agent less signal, increasing the rate of invalid call sequences.
 - **Deeply stateful initialization**: APIs that require complex, multi-step setup (authentication flows, database connections, protocol handshakes) may require state the agent cannot construct from documentation alone, resulting in harnesses that abort early on every input.
 - **Side-effecting APIs**: Harness generation calls methods in combinations that may not occur in production. APIs with destructive side effects — file deletion, network writes, irreversible state changes — can cause harnesses to be unsafe to run without sandboxing.
-- **Coverage plateau without semantic progress**: Branch coverage can increase while the harness reaches semantically uninteresting code paths. Coverage metrics do not distinguish bug-prone deep paths from shallow error handlers; high coverage numbers do not guarantee the harness is exercising security-relevant behavior.
+- **Coverage plateau without semantic progress**: Branch coverage can increase while the harness reaches [semantically uninteresting code paths](mutation-testing-quality-gate.md). Coverage metrics do not distinguish bug-prone deep paths from shallow error handlers; high coverage numbers do not guarantee the harness is exercising security-relevant behavior.
 - **Cost at scale**: At $3.20 per harness, generating harnesses for hundreds of API methods in a large library is expensive. The approach is most practical for targeted high-value APIs, not full-library coverage.
 - **Coverage is not correctness**: A concurrent line of work argues coverage-only signals fail to detect logic errors, API misuse, and lifecycle violations in the harness itself — issues that surface as false-positive crashes downstream. [Sheng et al. (2026)](https://arxiv.org/abs/2605.21824) frame this as a "Four Principles" gap (Logic Correctness, API Protocol Compliance, Security Boundary Respect, Entry Point Adequacy) and add an explicit generate-check-fix loop (the QuartetFuzz system) before fuzzing. Treat the coverage signal as necessary but not sufficient; pair it with a correctness check if you want the generated harnesses to be trusted in CI.
 

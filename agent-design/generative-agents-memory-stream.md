@@ -7,7 +7,7 @@ tags:
   - memory
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # Generative Agents Memory Stream
@@ -72,7 +72,7 @@ For coding agents, reflection synthesis converts sequences of tool-call observat
 
 This architecture pays off for **long, observation-dense, coherence-critical** sessions: multi-hour CI pipelines, multi-PR workflows where later decisions depend on earlier findings, debug sessions tracking many dead ends.
 
-It adds overhead without benefit for bounded tasks. Poignancy scoring requires one LLM call per substantive observation — at high observation frequency this cost compounds. Cold-start applies: retrieval returns low-quality results until sufficient observations accumulate. The pattern also requires a persistent memory store across invocations — agents starting fresh each run never build the density that makes retrieval valuable.
+It adds overhead without benefit for bounded tasks. Poignancy scoring requires one LLM call per substantive observation (idle events are scored `1` without a call) — at high observation frequency this cost compounds. Cold-start applies: retrieval returns low-quality results until sufficient observations accumulate. The pattern also requires a persistent memory store across invocations — agents starting fresh each run never build the density that makes retrieval valuable.
 
 A deeper limitation is architectural: the memory stream is *retrieval-based*, not weight-based. Critics argue this makes it a lookup mechanism rather than true memory — it generalizes by similarity to stored cases but cannot consolidate experience into abstract rules, leaving a ceiling on compositionally novel tasks that more context cannot raise ([Contextual Agentic Memory is a Memo, Not True Memory (2026)](https://arxiv.org/abs/2604.27707)). For coding agents this means the stream sharpens recall of prior observations but does not, on its own, teach the agent new general competence; novel synthesis still falls back on the frozen base model.
 
@@ -94,9 +94,9 @@ The architecture is an integrated system, not a single technique:
 ## Related
 
 - [Agent Memory Patterns](agent-memory-patterns.md)
-- [Episodic Memory Retrieval](episodic-memory-retrieval.md)
+- [Episodic Memory Retrieval](episodic-memory-retrieval.md) — companion on retrieval granularity; this page owns the observation-stream-plus-reflection axis
+- [Dual-Trace Memory Encoding](dual-trace-memory-encoding.md) — companion on the encoding-time axis, orthogonal to the observation stream here
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
-- [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
-- [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md)
-- [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md)
-- [AST-Guided Agent Memory for Repository-Level Code Generation](ast-guided-agent-memory.md)
+- [Subtask-Level Memory for SE Agents](subtask-level-memory.md) — companion on retrieval-granularity, a distinct axis from the memory stream
+- [Code-Native Memory Substrates](code-native-memory-substrates.md)
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md)

@@ -33,7 +33,7 @@ The disambiguation here is **vendor-aware and time-bound**:
 
 A system where LLMs and tools are orchestrated through predefined code paths ([Anthropic — Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)). The developer encodes control flow; the model fills in each step.
 
-- **Example.** A prompt-chain that summarises a document, then extracts entities, then writes a report — three sequential LLM calls wired in code.
+- **Example.** A [prompt chain](../context-engineering/prompt-chaining.md) that summarises a document, then extracts entities, then writes a report — three sequential LLM calls wired in code.
 - **Most-likely conflation: autonomous agent.** A workflow with many LLM calls is still a workflow if a human wrote the routing logic.
 
 ### Deterministic Orchestration

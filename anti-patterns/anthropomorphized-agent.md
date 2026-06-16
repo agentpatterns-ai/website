@@ -29,7 +29,7 @@ Agents produce fluent, contextually appropriate language. That fluency activates
 
 **Misplaced trust.** "It understood last time" is not a basis for trust. The same prompt can produce different results across sessions. Agents are [stateless by default](https://www.letta.com/blog/stateful-agents) — each session starts from a blank context unless memory infrastructure is explicitly added. Trust built on rapport, not verified output, is fragile.
 
-**Inappropriate frustration.** "Why does it keep forgetting?" is the wrong question. The agent has no memory of previous sessions unless explicitly configured with persistent storage. Frustration directed at the agent is misdirected.
+**Inappropriate frustration.** "Why does it keep forgetting?" is the wrong question. The agent has no memory of previous sessions unless you add it deliberately through [agent memory patterns](../agent-design/agent-memory-patterns.md). Frustration directed at the agent is misdirected.
 
 **Degradation misattributed to fatigue.** Agents don't tire. They degrade with [context overload](context-poisoning.md) — long conversations accumulate noise that competes with signal ([NoLiMa benchmark, ICML 2025](https://arxiv.org/abs/2502.05167), found GPT-4o accuracy drops from 99.3% on short contexts to 69.7% at longer lengths). Reset context, don't take a break.
 
@@ -41,7 +41,7 @@ Agents are tools with specific capabilities and limitations. Ask:
 
 - What context is this agent working with?
 - What instructions is it following?
-- How will I verify this output?
+- How will I verify this output, rather than [trust it without verifying](trust-without-verify.md)?
 
 Not: Does it understand me? Does it remember our previous work?
 
@@ -57,7 +57,7 @@ Not: Does it understand me? Does it remember our previous work?
 
 **Before — anthropomorphized:**
 
-A developer spends an afternoon pairing with Claude on a payment integration. It handles edge cases well. The next morning they open a new session: *"Continue with the payment module — remember we decided to use idempotency keys."* Claude has no record of yesterday's session. It generates payment code that omits idempotency keys entirely, but does so fluently and confidently. The developer, trusting that the agent "knows their codebase," ships without reviewing that specific decision. The bug surfaces in production.
+A developer spends an afternoon pairing with Claude on a payment integration. It handles edge cases well. The next morning they open a new session: *"Continue with the payment module — remember we decided to use idempotency keys."* Claude has no record of yesterday's session. Claude generates payment code that omits idempotency keys entirely, but does so fluently and confidently. The developer, trusting that the agent "knows their codebase," ships without reviewing that specific decision. The bug surfaces in production.
 
 **After — correct mental model:**
 

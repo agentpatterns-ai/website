@@ -132,8 +132,6 @@ All 50 runners produce one system-prompt prefix. The first runner pays the cache
 
 ## Related
 
-- [Prompt Cache Economics](prompt-cache-economics.md)
+- [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md)
 - [Static Content First for Cache Hits](static-content-first-caching.md)
-- [Extended Prompt Cache TTL for Long Agent Sessions](extended-prompt-cache-ttl.md)
-- [Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md)
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)

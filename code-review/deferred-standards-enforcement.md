@@ -10,7 +10,7 @@ aliases:
   - "CLAUDE.md standards split"
   - "review-time standards enforcement"
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Deferred Standards Enforcement via Review Agents
@@ -27,7 +27,7 @@ Standards documents can be large. Style guides, compliance checklists, naming co
 
 Not all standards need to be present during code generation. Standards fall into two categories:
 
-**Generation-shaping standards** — rules that affect the structure of the code being written. The agent must know these during generation or it will make architectural decisions that require rework, not revision.
+**Generation-shaping standards** — rules that affect the structure of the code being written. The agent must know these during generation — they belong with the other [standards loaded as agent instructions](../instructions/standards-as-agent-instructions.md) — or it will make architectural decisions that require rework, not revision.
 
 Examples: "Every new API endpoint requires an integration test", "Use repository pattern for all database access", "API keys must come from environment variables, never hardcoded"
 
@@ -86,7 +86,7 @@ The implementation agent carries only what shapes code decisions. The review age
 
 **Generation-shaping rules deferred by mistake.** Moving architectural rules to review time means the implementation agent makes structural decisions without knowing the constraints. The PR fails review and the agent must rework rather than revise — one iteration becomes two.
 
-**High-cost review cycles.** If each PR review cycle is expensive (slow CI, large codebase, costly review agents), the savings on generation context are outweighed by rework cost from deferred discovery. The economics only favor deferral when review catches style violations, not when it triggers re-implementation.
+**High-cost review cycles.** If each PR review cycle is expensive (slow CI, large codebase, costly review agents), the savings on generation context are outweighed by rework cost from deferred discovery — a pressure [tiered code review](tiered-code-review.md) exists to manage. The economics only favor deferral when review catches style violations, not when it triggers re-implementation.
 
 **No PR gate.** The pattern requires a review step. In direct-commit workflows or single-agent loops that skip PRs, there is no enforcement point — deferred standards are simply unenforced.
 

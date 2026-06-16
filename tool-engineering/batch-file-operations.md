@@ -11,7 +11,7 @@ tags:
   - tool-agnostic
   - tool-engineering
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Batch File Operations via Bash Scripts
@@ -34,7 +34,7 @@ The second cost is reasoning. Between each tool call, the model re-evaluates sta
 
 ## The Pattern
 
-The agent generates a bash script that encodes all file operations, then executes the script in a single tool call. The script accepts structured input (typically JSON) defining file paths, line numbers, and replacement content.
+The agent generates a bash script that [consolidates](consolidate-agent-tools.md) all file operations, then executes the script in a single tool call. The script accepts structured input (typically `JSON`) defining file paths, line numbers, and replacement content.
 
 ```bash
 #!/usr/bin/env bash

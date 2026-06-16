@@ -38,7 +38,7 @@ If any fails, prefer simpler tools: outcome assertions, [pre-completion checklis
 Four stages, mirroring the published method ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/validating-agentic-behavior-when-correct-isnt-deterministic/), [arxiv 2605.03159](https://arxiv.org/abs/2605.03159)):
 
 1. **Capture traces.** Each successful run is recorded as a sequence of `(state, action)` pairs. For a UI agent, states are screenshots; for a tool-using agent, states are observable post-conditions of each tool call (filesystem state, API response shape, exit codes).
-2. **Build a Prefix Tree Acceptor (PTA).** Traces are merged into a directed graph: nodes are observable states, edges are actions. Branching captures non-deterministic variation (a loading screen that appears in some runs); convergence captures where alternative paths rejoin.
+2. **Build a Prefix Tree Acceptor (PTA).** Traces are merged into a directed graph: nodes are observable states, edges are actions. Branching captures [non-deterministic variation](behavioral-testing-agents.md) (a loading screen that appears in some runs); convergence captures where alternative paths rejoin.
 3. **Merge equivalent states.** A three-tier comparison decides when two nodes are the same state: perceptual hashes / SSIM for near-identical visuals, multimodal LLM analysis for semantic equivalence, conservative merging only when both signals agree.
 4. **Compute dominators, validate by topological subsequence matching.** The Lengauer–Tarjan algorithm computes the dominator tree in near-linear time `O((V+E)·α(V+E))` ([Lengauer & Tarjan, TOPLAS 1979](https://dl.acm.org/doi/10.1145/357062.357071); [Boost Graph Library](https://www.boost.org/doc/libs/1_79_0/libs/graph/doc/lengauer_tarjan_dominator.htm)). A new run passes if its observed states include the dominator subtree in the required logical order — gaps and detours between dominators are allowed.
 
@@ -89,7 +89,7 @@ A new run that creates a PR without first reaching `failing test identified` fai
 
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — the alternative when the end state is directly assertable; the natural simpler baseline.
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — complementary technique that breaks trajectories into search / read / edit stages with IR metrics rather than dominance.
-- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) — motivates trajectory-aware checks: outcome-only grading misses 44% of safety violations.
+- [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — motivates trajectory-aware checks: outcome-only grading misses 44% of safety violations.
 - [Golden Journeys: Restartability as a First-Class Verification Primitive](golden-journeys.md) — sibling approach for naming end-to-end paths with per-step failure signals.
 - [Behavioral Testing for Agents](behavioral-testing-agents.md) — broader framing of non-deterministic agent testing; situates dominator-graph invariants within capability-matrix grading.
 - [Pre-Completion Checklists](pre-completion-checklists.md) — deterministic gating that pairs naturally with dominator-graph invariants for the constraints they do not cover.

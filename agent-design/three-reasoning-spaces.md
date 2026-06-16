@@ -49,7 +49,7 @@ The deeper a mistake lands, the more downstream structure has hardened around it
 Transitions between spaces should be decisions, not drift:
 
 - **Plan → Bead**: convert the plan into self-contained work units before any code is written.
-- **Bead → Code**: each work unit has acceptance criteria and dependencies; agents implement within those bounds.
+- **Bead → Code**: each [Code-Native Memory Substrates](code-native-memory-substrates.md) has acceptance criteria and dependencies; agents implement within those bounds.
 - **Replan checkpoints**: if code-space work invalidates a bead assumption, stop and surface it. Replanning is a feature, not a failure.
 
 ```mermaid
@@ -67,21 +67,21 @@ graph LR
 
 ## Why It Works
 
-Mixing reasoning spaces degrades quality because each space operates on a different scope of context. Plan space requires global visibility — the whole system in context — to make coherent architecture decisions. Code space operates on local context — a single file or function. When an agent shifts between these within a single session, the narrow local window of code space causes it to re-derive global constraints that should have been fixed in plan space, producing implicit architecture choices embedded invisibly in generated code (Osmani). Bead space breaks this by externalizing those constraints as written artifacts — acceptance criteria, dependency lists, required context — so code-space agents operate within explicit bounds rather than inferring them. The phase gates prevent context dilution: each space's reasoning remains coherent because it isn't competing with the concerns of the other two.
+Mixing reasoning spaces degrades quality because each space operates on a different scope of context. Plan space requires global visibility — the whole system in context — to make coherent architecture decisions. Code space operates on local context — a single file or function. When an agent shifts between these within a single session, the narrow local window of code space causes it to re-derive global constraints that should have been fixed in plan space, producing implicit architecture choices embedded invisibly in generated code, according to Osmani. Bead space breaks this by externalizing those constraints as written artifacts — acceptance criteria, dependency lists, required context — so code-space agents operate within explicit bounds rather than inferring them. The phase gates prevent context dilution: each space's reasoning remains coherent because it isn't competing with the concerns of the other two.
 
 ## When This Backfires
 
 Three-space separation adds overhead — it is not always the right default:
 
 - **Solo or prototype work**: formalizing plan and bead artifacts costs time that exceeds the rework risk for small, low-stakes codebases where the whole system fits comfortably in one context window.
-- **Rapidly shifting requirements**: if the plan is likely to be invalidated before beads execute, the bead layer becomes wasted overhead. A tighter plan-then-code loop without an explicit bead layer may be more efficient.
+- **Rapidly shifting requirements**: if the plan is likely to be invalidated before beads execute, the bead layer becomes wasted overhead. A tighter [plan-then-code loop](../workflows/plan-first-loop.md) without an explicit bead layer may be more efficient.
 - **Tasks with high reversibility**: when changes are cheap to undo (scripts, isolated utilities, feature flags), the cost differential between layers is lower and strict phase gates offer less advantage.
 - **Tooling unavailability**: the bead format (`.beads/` JSONL) requires harness support. Without it, a manual approximation can be maintained as a simple checklist, but enforcement gaps reduce the pattern's effectiveness.
 
 ## Key Takeaways
 
 - Plan, bead, and code spaces have different artifacts and decision types — treat them as distinct phases with explicit gates, not a continuous flow.
-- The cost of fixing a mistake compounds as it moves deeper — front-load decisions into plan space.
+- The cost of fixing a mistake compounds as it moves deeper — roughly 1x in plan space versus 25x in code space — so front-load decisions into plan space.
 - Transitions between spaces should be deliberate decisions, not gradual drift.
 - When code-space work invalidates a bead assumption, replan explicitly rather than adapting silently.
 
@@ -134,7 +134,7 @@ When `bead-002` reveals that the route handler needs a streaming response type t
 
 ## Related
 
-- [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md)
+- [Code-Native Memory Substrates](code-native-memory-substrates.md)
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md)
 - [Plan-First Loop](../workflows/plan-first-loop.md)

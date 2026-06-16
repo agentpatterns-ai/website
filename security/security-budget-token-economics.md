@@ -24,7 +24,7 @@ The headline result: Mythos Preview is the first model to solve "The Last Ones" 
 
 ## The Mechanism
 
-Vulnerability discovery is a search problem with verifiable outcomes: the agent proposes inputs, a sandbox confirms success or failure, and the reward signal is crisp. Inference-time compute buys more candidates and longer reasoning traces — which is why AISI's curves keep climbing. Because attackers and defenders search the same surface, whichever side funds the longer search finds more bugs first. That is the causal basis for the proof-of-work analogy.
+Vulnerability discovery is a search problem with verifiable outcomes: the agent proposes inputs, a sandbox confirms success or failure, and the reward signal is crisp. Inference-time compute buys more candidates and longer reasoning traces — which is why AISI's curves keep climbing to the 100M-token-per-attempt ceiling. Because attackers and defenders search the same surface, whichever side funds the longer search finds more bugs first. That is the causal basis for the proof-of-work analogy.
 
 ## Budgeting Loop
 
@@ -69,7 +69,7 @@ Contrast Bytecode Alliance's three-week Wasmtime sprint: 11 security issues surf
 ## Key Takeaways
 
 - Inference-time compute scales vulnerability-discovery performance with no diminishing returns visible inside 100M tokens per attempt on AISI's synthetic ranges.
-- Real-codebase sprints plateau much sooner; measure marginal findings and stop when the curve flattens.
+- Real-codebase sprints plateau much sooner — the Wasmtime sprint surfaced 11 issues and none new after week 2; measure marginal findings and stop when the curve flattens.
 - Open-source amortizes hardening spend across all consumers — strengthens, not weakens, the case for shared dependencies.
 - Downstream human triage capacity is a hard cap on useful findings.
 - The frame sizes pre-release audits on greenfield or OSS code; it does not replace structural controls that raise attacker cost.

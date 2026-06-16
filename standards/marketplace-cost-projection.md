@@ -9,7 +9,7 @@ aliases:
   - Pre-Install Token Cost Projection
   - Plugin Marketplace Cost Projection
 last_reviewed: 2026-06-03
-maturity: established
+maturity: emerging
 ---
 
 # Pre-Install Context-Cost Projection in Plugin Marketplaces

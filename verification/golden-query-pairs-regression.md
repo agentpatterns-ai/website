@@ -19,7 +19,7 @@ maturity: established
 > Maintain a curated set of question-answer pairs with known-good expected outputs, and run them continuously against agent changes using semantic grading rather than string matching.
 
 !!! note "Also known as"
-    Golden Query Pairs, Eval Regression Tests. A specific technique within [Eval-Driven Development](../workflows/eval-driven-development.md); see also [Eval-Driven Tool Development](../workflows/eval-driven-tool-development.md) for tool building.
+    Golden Query Pairs, Eval Regression Tests. A specific technique within [Eval-Driven Development](../workflows/eval-driven-development.md); see also [applying the loop to tool building](../workflows/eval-driven-development.md#applying-the-loop-to-tool-building).
 
 ## Evals as Regression Tests
 
@@ -156,7 +156,6 @@ The grader outputs a structured verdict for each pair, making it straightforward
 ## Related
 
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md)
-- [Evaluation-Driven Development for Agent Tools](../workflows/eval-driven-tool-development.md)
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md)
 - [Incident-to-Eval Synthesis: Production Failures as Evals](incident-to-eval-synthesis.md)
 - [Benchmark Contamination as an Eval Risk](benchmark-contamination-eval-risk.md)

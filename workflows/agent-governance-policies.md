@@ -8,7 +8,7 @@ tags:
   - tool-agnostic
   - workflows
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # Agent Governance Policies

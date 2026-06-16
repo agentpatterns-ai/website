@@ -9,7 +9,7 @@ aliases:
   - agent-to-UI protocol
   - generative UI standard
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # A2UI: Framework-Agnostic Generative UI Standard
@@ -86,7 +86,7 @@ Neither has won. [An upcoming bridge lets MCP servers return A2UI blueprints alo
 A2UI is the wrong choice in four situations:
 
 - **Catalog-poor hosts**: portability is bounded by host catalog ∩ agent references. The v0.9 "Standard" → "Basic" rename concedes there is no cross-host common set ([Google Developers Blog](https://developers.googleblog.com/a2ui-v0-9-generative-ui/)).
-- **Single-app single-framework deployments**: the wire format earns its overhead across trust boundaries. For one React app with one design system, direct tool calls are cheaper.
+- **Single-app single-framework deployments**: the wire format earns its overhead across trust boundaries. For one React app with one design system, [direct tool calls](tool-calling-schema-standards.md) are cheaper.
 - **Rapidly-iterating UI**: the catalog is a static contract. Products changing UI weekly spend more time syncing the catalog and agent prompt than they save.
 - **Consolidation risk**: A2UI is pre-1.0, Google-led, and competes with MCP Apps, AG-UI native rendering, and OpenAI ChatKit. Picking it now bets on spec survival.
 

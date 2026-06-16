@@ -11,7 +11,7 @@ aliases:
   - Seeding Agent Context
   - Breadcrumbs in Code
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # Context Priming: Pre-Loading Files for AI Agent Tasks
@@ -23,7 +23,7 @@ maturity: established
 
 ## How It Works
 
-Agents don't retrieve project knowledge on their own. They work with what's in the context window at the time they generate a response. A cold prompt — "add authentication to the API" — forces the agent to guess at existing patterns, naming conventions, and architecture. Priming reverses this: you load the relevant context first, then ask.
+Agents don't retrieve project knowledge on their own. They work with what's in the context window at the time they generate a response. A cold prompt — "add authentication to the API" — forces the agent to guess at existing patterns, naming conventions, and architecture. Priming reverses this: you [load the relevant context first](context-engineering.md), then ask.
 
 An agent that has read your middleware layer, auth config, and user model before implementing authentication produces output that fits the codebase. Without that context, it produces generic code that defaults to common framework boilerplate rather than project-specific patterns.
 
@@ -49,13 +49,13 @@ Use a read-only exploration phase before switching to implementation mode. Some 
 
 ### Use Plan Mode
 
-When your tool supports it, require a plan step before implementation. This forces the agent to surface its understanding of the codebase and the task. Review the plan, correct any misunderstandings, then approve execution. Catching a wrong assumption at plan time costs nothing; catching it after implementation costs a rewrite.
+When your tool supports it, require a [plan step](../tools/claude/plan-mode.md) before implementation. This forces the agent to surface its understanding of the codebase and the task. Review the plan, correct any misunderstandings, then approve execution. Catching a wrong assumption at plan time costs nothing; catching it after implementation costs a rewrite.
 
 ## Anti-Patterns
 
 **Cold implementation**: Asking the agent to implement without reading existing code first. The agent defaults to generic patterns rather than project-specific ones.
 
-**One-shot context dump**: Pasting all relevant files into a single prompt. This treats context as a bulk transfer rather than a structured loading sequence. Order within the dump still matters — information at the start and end of a context window receives more attention than information in the middle, a phenomenon documented in [lost-in-the-middle research](https://arxiv.org/abs/2307.03172).
+**One-shot context dump**: Pasting all relevant files into a single prompt. This treats context as a bulk transfer rather than a [structured loading sequence](phase-specific-context-assembly.md). Order within the dump still matters — information at the start and end of a context window receives more attention than information in the middle, a phenomenon documented in [lost-in-the-middle research](https://arxiv.org/abs/2307.03172).
 
 ## Example
 
@@ -94,7 +94,7 @@ Transformer models generate each token conditioned on all tokens currently in co
 
 - **Context window saturation**: Pre-loading large files pushes task instructions and earlier reasoning toward the middle of the context window, where attention degrades. Long files should be trimmed or summarized before loading ([Context Compression Strategies](context-compression-strategies.md)).
 - **Low-precision context**: Loading loosely related files adds noise that competes with the relevant signal. If the loaded content doesn't directly constrain the task output, it can steer the agent toward irrelevant patterns.
-- **Short, self-contained tasks**: For tasks with no codebase dependency — writing a pure-function utility, converting a data format — priming adds latency and token cost without affecting output quality. Apply selectively.
+- **Short, self-contained tasks**: For tasks with no codebase dependency — writing a pure-function utility, converting a data format — priming adds latency and [token cost](context-budget-allocation.md) without affecting output quality. Apply selectively.
 - **Stale context**: If loaded files don't reflect the current state of the codebase (out-of-date after a refactor), the agent anchors on the wrong patterns. Verify that primed files are current before loading.
 
 ## Key Takeaways

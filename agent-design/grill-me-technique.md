@@ -10,7 +10,7 @@ aliases:
   - grill me technique
   - plan interrogation technique
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Grill Me: Developer-Initiated Plan Interrogation
@@ -21,7 +21,7 @@ maturity: established
 
 The default agent workflow runs one way: developer specifies, agent executes. Grill Me reverses the direction for one focused session. You describe your plan; the agent interrogates it, asking probing questions until every branch of the decision tree is resolved.
 
-The inversion is developer-initiated and exhaustive. The agent is explicitly tasked to be difficult — not to be helpful in the "implement this" sense but helpful in the "expose what I haven't thought through" sense. This runs before any code is written.
+The inversion is developer-initiated and exhaustive — unlike the agent-initiated [Agent Pushback Protocol](agent-pushback-protocol.md), it fires on demand rather than on detection of a specific concern. The agent is explicitly tasked to be difficult — not to be helpful in the "implement this" sense but helpful in the "expose what I haven't thought through" sense. This runs before any code is written.
 
 ## How It Works
 
@@ -81,7 +81,7 @@ The technique adds cost without value in three conditions:
 
 **Fast-iteration loops on reversible work.** If the cost of a wrong assumption is one failing test rather than a shipped feature, implementation reveals gaps faster than interrogation.
 
-**No downstream artifact.** If the session findings are not captured (PRD, spec, written plan), agent statelessness erases them. The next session starts cold. Run Grill Me only when the output feeds a durable artifact.
+**No downstream artifact.** If the session findings are not captured in a durable artifact such as a [spec-driven](../workflows/spec-driven-development.md) plan, agent statelessness erases them. The next session starts cold. Run Grill Me only when the output feeds a durable artifact.
 
 AI Hero catalogues further anti-patterns specific to `/grill-me` and `/grill-with-docs` — common ways plan stress-testing goes wrong before agentic implementation begins ([AI Hero, 9 things people get wrong with /grill-me and /grill-with-docs](https://www.aihero.dev/things-people-get-wrong-with-grill-me-and-grill-with-docs)).
 

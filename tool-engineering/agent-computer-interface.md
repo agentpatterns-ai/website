@@ -87,9 +87,9 @@ Constraints work by the same principle in reverse: they eliminate branches the a
 - **Over-specialization**: Tools tuned to one model's quirks break when the model changes; customized formats and constraints often need rework each generation.
 - **Hidden failures**: Middleware that intercepts errors before the agent sees them prevents the agent from adapting — the tool absorbs signal it should be learning from.
 - **Abstraction overhead**: Wrapping generic tools in ACI layers adds maintenance surface; teams with simple tools and stronger prompts sometimes outperform teams maintaining complex tooling.
-- **Constraint mismatch**: Tight input rules (e.g., absolute paths only) fail in environments where those assumptions don't hold — containerized builds, cross-platform paths, dynamically mounted filesystems.
+- **Constraint mismatch**: Tight input rules (e.g., absolute paths only — the [poka-yoke](poka-yoke-agent-tools.md) constraint) fail in environments where those assumptions don't hold — containerized builds, cross-platform paths, dynamically mounted filesystems.
 
-These failure modes surface most when ACI is designed once and not iterated against real agent transcripts.
+These failure modes surface most when ACI is designed once and not iterated against real agent transcripts through an [observability feedback loop](../observability/observability-feedback-loop.md).
 
 ## Example
 
@@ -121,7 +121,7 @@ The redesign adds: absolute-path constraint (eliminates relative-path errors), w
 
 - ACI applies HCI discipline — affordances, constraints, feedback, error prevention — to the tools an agent uses.
 - Interface changes (tool descriptions, parameter constraints, output shape) have outperformed prompt and model changes on agent benchmarks.
-- Poka-yoke is the highest-leverage technique: one input constraint can eliminate an entire failure class.
+- [Poka-yoke](poka-yoke-agent-tools.md) is the highest-leverage technique: one input constraint can eliminate an entire failure class.
 - Semantic outputs and natural-language identifiers match the next-token distribution LLMs are trained on, so each result needs fewer inferential steps before action.
 - ACI must be iterated against real agent transcripts — over-specialization, hidden failures, and brittle assumptions are the dominant regression modes.
 

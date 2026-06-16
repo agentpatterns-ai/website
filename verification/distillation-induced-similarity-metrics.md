@@ -63,7 +63,7 @@ A controlled distillation experiment isolates the mechanism: fine-tuning Qwen2.5
 
 - **Outside tool-use trajectories.** RPS and AGS are defined over multi-stage tool-call traces. Single-turn classification, RAG QA, and chat tasks need different metrics.
 - **Without matched benchmark traces.** Computing RPS/AGS requires running both models on the same task suite under the same harness; teams without τ-Bench-style infrastructure cannot replicate the scores directly.
-- **Across model generations.** AGS describes two specific checkpoints. By the time measurement finishes, both providers have shipped a new generation — the metric is a snapshot, not a forecast.
+- **Across model generations.** AGS describes two specific checkpoints. By the time measurement finishes, both providers have shipped a new generation — the metric is a [snapshot, not a forecast](../agent-design/cross-vendor-competitive-routing.md).
 - **When consistency is the goal.** For systems whose parsers and templates depend on consistent verbal style, high RPS to a known-good primary is a feature. The metric tells you the cost-of-redundancy trade-off; it does not declare which side is right.
 
 ## Adjacent Failure Modes

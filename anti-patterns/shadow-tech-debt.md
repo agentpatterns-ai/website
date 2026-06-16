@@ -94,7 +94,7 @@ async def handle_search(query: str, db: AsyncSession):
     return result.scalars().all()
 ```
 
-The fix passes tests. But it duplicates filtering logic, skips the team's access-control scoping, and sets a precedent that future agent runs will replicate.
+The fix passes tests. But it duplicates filtering logic, skips the team's access-control scoping, and sets a precedent that future agent runs will replicate ([Pattern Replication Risk](pattern-replication-risk.md)).
 
 **With `AGENTS.md` rule — `All DB access must go through the repository layer`:**
 

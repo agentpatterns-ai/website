@@ -128,10 +128,10 @@ Sources: [Anthropic](https://www.anthropic.com/engineering/advanced-tool-use), [
 
 The checklist assumes a stable, internally-owned API. Conditions that invert that:
 
-- **Enums vs. evolving upstream APIs.** Enumerated values encode a snapshot; when the upstream adds one, agents hit validation failures until redeploy. Thin string types trade strict validation for durability.
+- **Enums vs. evolving upstream APIs.** Enumerated values (`enum`) encode a snapshot; when the upstream adds one, agents hit validation failures until redeploy. Thin string types trade strict validation for durability.
 - **Schemas do not cover input sanitization.** The STDIO execution model in Anthropic's official MCP SDKs runs commands even when the local process fails to start, exposing servers to command injection unless the author sanitizes inputs ([OX Security](https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem), [SecurityWeek](https://www.securityweek.com/by-design-flaw-in-mcp-could-enable-widespread-ai-supply-chain-attacks/)). Argument sanitization is the mitigation, not richer schemas.
 - **Description drift.** Hand-written descriptions are an artifact to keep in sync. Auto-generated wrappers lose prose quality but cannot drift.
-- **Over-consolidation hurts routing.** One polymorphic tool pushes disambiguation into the schema; the right ceiling depends on description distinctness, not count.
+- **[Over-consolidation](consolidate-agent-tools.md) hurts routing.** One polymorphic tool pushes disambiguation into the schema; the right ceiling depends on description distinctness, not count.
 
 ## Server Design Checklist
 

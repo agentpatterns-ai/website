@@ -98,7 +98,7 @@ The predecessor framework, Dynamic Cheatsheet, demonstrated the core mechanism: 
 
 - Brevity bias and context collapse are named failure modes of iterative prompt rewriting -- monolithic rewrites progressively lose domain knowledge.
 - Evolving playbooks replace full rewrites with structured delta entries that carry metadata and merge deterministically.
-- The generation-reflection-curation loop separates task execution, insight extraction, and knowledge organization into distinct phases.
+- The generation-reflection-curation loop separates task execution, [insight extraction](../agent-design/memory-synthesis-execution-logs.md), and knowledge organization into distinct phases.
 - The pattern requires reliable feedback signals and sufficient domain complexity to justify the infrastructure overhead.
 - Static prompts remain the better choice for well-understood, fixed-strategy tasks.
 
@@ -106,7 +106,7 @@ The predecessor framework, Dynamic Cheatsheet, demonstrated the core mechanism: 
 
 - [Context Compression Strategies](context-compression-strategies.md) -- tiered compression for managing context growth, complementary to playbook accumulation
 - [Memory Synthesis from Execution Logs](../agent-design/memory-synthesis-execution-logs.md) -- extracting lessons from agent traces, a prerequisite for the reflection phase
-- [Memory Reinforcement Learning](../agent-design/memory-reinforcement-learning.md) -- utility-scored episodic memory, a related approach to tracking strategy effectiveness
+- [Memory Retrieval as a Control Decision](../agent-design/memory-retrieval-as-control.md) -- utility-scored episodic memory, a related approach to tracking strategy effectiveness
 - [Goal Recitation](goal-recitation.md) -- countering drift in long sessions through periodic objective restatement
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md) -- building prompts from modular sections, the delivery mechanism for playbook content
 - [Objective Drift](../anti-patterns/objective-drift.md) -- the failure mode that evolving playbooks can cause if curation quality is poor

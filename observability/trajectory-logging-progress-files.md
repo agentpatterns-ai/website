@@ -42,7 +42,7 @@ graph TD
 
 ### 1. Progress File (`claude-progress.txt`)
 
-A plain text or markdown file updated at session end and read at session start. It captures what was completed, what is next (in priority order), and any blockers. Reading it before work begins gives each fresh context window a recoverable record of prior decisions without re-analysing the full codebase.
+A plain text or markdown file updated at session end and read at session start. It captures what was completed, what is next (in priority order), and any blockers. [Reading it before work begins](../agent-design/session-initialization-ritual.md) gives each fresh context window a recoverable record of prior decisions without re-analysing the full codebase.
 
 ### 2. Git Commits as Trajectory Checkpoints
 
@@ -149,7 +149,7 @@ Each session runs `bash init.sh`, reads `claude-progress.txt` to recover prior d
 - A progress file read at session start and written at session end eliminates cold-start context loss.
 - Git commit messages are a zero-cost audit trail when agents commit after each completed task.
 - Feature-state JSON provides a machine-readable snapshot independent of LLM memory.
-- LoopDetectionMiddleware and PreCompletionChecklistMiddleware extend passive logging into active trajectory monitoring.
+- [LoopDetectionMiddleware](loop-detection.md) and PreCompletionChecklistMiddleware extend passive logging into active trajectory monitoring.
 
 ## Related
 

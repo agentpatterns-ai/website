@@ -6,7 +6,7 @@ tags:
   - context-engineering
   - claude
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # Production System Prompt Architecture
@@ -109,7 +109,7 @@ Every choice above serves prompt prefix stability — Anthropic notes that promp
 - **Skills as pointers** — adding a new skill does not change the prompt prefix
 - **Temporal grounding at head, runtime params at tail** — stable content occupies the most cache-sensitive position
 
-See [prompt cache economics](../context-engineering/prompt-cache-economics.md) and [static content first](../context-engineering/static-content-first-caching.md) for the cost model.
+See [prompt cache economics](../context-engineering/prompt-caching-architectural-discipline.md) and [static content first](../context-engineering/static-content-first-caching.md) for the cost model.
 
 ## Example
 
@@ -180,13 +180,14 @@ The CL4R1T4S capture is a computer-use session prompt. The exact parameter names
 - [Context Engineering](../context-engineering/context-engineering.md)
 - [Dynamic System Prompt Composition](../context-engineering/dynamic-system-prompt-composition.md)
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
-- [Prompt Cache Economics](../context-engineering/prompt-cache-economics.md)
+- [Prompt Cache Economics](../context-engineering/prompt-caching-architectural-discipline.md)
 - [Static Content First Caching](../context-engineering/static-content-first-caching.md)
 - [System Prompt Altitude](system-prompt-altitude.md)
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [Instruction Polarity](instruction-polarity.md)
 - [Event-Driven System Reminders](event-driven-system-reminders.md)
 - [Domain-Specific System Prompts](domain-specific-system-prompts.md)
+- [System Prompt Replacement](system-prompt-replacement.md) — sibling on system-prompt design; replacing the default prompt wholesale rather than architecting a production layer
 - [Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
 - [Critical Instruction Repetition](critical-instruction-repetition.md)

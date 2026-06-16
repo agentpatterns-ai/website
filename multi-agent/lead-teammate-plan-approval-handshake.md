@@ -9,7 +9,7 @@ aliases:
   - peer plan approval handshake
   - teammate plan-gating handshake
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Lead-to-Teammate Plan-Approval Handshake
@@ -88,7 +88,7 @@ Require plan approval before they make any changes. Only approve plans that:
 - list which test files will be updated
 ```
 
-The architect explores the codebase in plan mode, then submits a plan-approval request describing a rewrite of the session store. The lead reads the plan, notices it omits the backward-compatibility shim, and rejects with the feedback: "Plan must include a shim for the existing `/auth/session` endpoint — current callers cannot break in this release." The teammate, still in plan mode, revises and resubmits. The lead approves. The teammate exits plan mode and begins editing.
+The architect explores the codebase in plan mode, then submits a plan-approval request describing a rewrite of the session store. The lead reads the plan, notices it omits the backward-compatibility shim, and rejects with the feedback: "Plan must include a shim for the existing `/auth/session` endpoint — current callers cannot break in this release." The teammate, still in plan mode, revises and resubmits. The lead approves. The teammate exits Claude Code plan mode and begins editing.
 
 No code was written during the rejection round. The cost of catching the missing shim was one extra model round-trip, not a revert.
 
@@ -97,7 +97,7 @@ No code was written during the rejection round. The cost of catching the missing
 - The handshake gates writes on peer review: a teammate stays in read-only plan mode until the lead approves its plan.
 - The gate is enforced by the permission model, not by prompt discipline — a teammate in plan mode is structurally incapable of editing.
 - Approval criteria live in the lead's spawn prompt, keeping policy scoped to the team rather than a global rule surface.
-- The pattern composes with the critic-agent pattern — same review stage, different reviewer purpose (cross-task coherence vs fresh-context grading).
+- The pattern composes with the [critic-agent pattern](../agent-design/critic-agent-plan-review.md) — same review stage, different reviewer purpose (cross-task coherence vs fresh-context grading).
 - Failure modes are predictable: solo-shaped tasks, same-model lead without rubric, lead-as-bottleneck queue depths, and exploratory work where plans must change mid-execution.
 
 ## Related

@@ -10,7 +10,7 @@ aliases:
   - Self-Healing Router
   - deterministic adaptive routing
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Self-Healing Tool Routing
@@ -19,13 +19,13 @@ maturity: established
 
 ## The Problem With LLM-Driven Control Flow
 
-In a ReAct-style loop, the LLM decides which tool to call on every step — including retries and fallbacks. Most retry and fallback decisions follow deterministic rules: "this tool failed, use the next available one." Routing them through the LLM wastes inference budget and adds latency for decisions requiring no reasoning.
+In a ReAct-style loop, the LLM decides which tool to call on every step — including retries and fallbacks. Most retry and fallback decisions follow deterministic rules: "this tool failed, use the next available one." Routing them through the LLM wastes inference budget and adds latency for decisions requiring no reasoning — the cost [Token-Efficient Tool Design](token-efficient-tool-design.md) targets.
 
 Static workflow baselines avoid this cost but produce silent failures: when a tool is unavailable, the workflow halts or skips. Neither failure mode is acceptable for production agents.
 
 ## The Pattern
 
-Model each tool as a node in a directed graph. Each edge carries two weights: cost (latency, tokens, or monetary) and availability (from live health monitors). Compute the lowest-cost path through available tools using Dijkstra's algorithm at each step — no LLM call in the routing decision itself.
+Model each tool as a node in a directed graph. Each edge carries two weights: cost (latency, tokens, or monetary) and availability (from live health monitors). Compute the lowest-cost path through available tools using Dijkstra's algorithm at each step — no LLM call in the routing decision itself, the [cost-aware](../agent-design/cost-aware-agent-design.md) inversion at the heart of the pattern.
 
 ```mermaid
 graph TD
@@ -45,7 +45,7 @@ Each node is a tool invocation; edges encode valid sequencing. Edge weights refl
 
 ### Parallel Health Monitors
 
-Dedicated monitors probe tool availability alongside execution. When a tool fails, its monitor resets outgoing edge weights to infinity. Dijkstra recomputes in-process — the next routing decision reflects current health without LLM involvement.
+Dedicated monitors probe tool availability alongside execution. When a tool fails, its monitor resets outgoing edge weights to infinity — the same health-state tripping that [Circuit Breakers](../observability/circuit-breakers.md) apply at the call boundary. Dijkstra recomputes in-process — the next routing decision reflects current health without LLM involvement.
 
 ### LLM Escalation on Infeasibility
 

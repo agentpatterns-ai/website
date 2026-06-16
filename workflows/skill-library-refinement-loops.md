@@ -13,7 +13,7 @@ aliases:
   - skill refinement loops
   - organisational skill feedback
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Skill Library Refinement Loops
@@ -42,7 +42,7 @@ graph TD
 
 A dedicated channel (e.g., `#ai` on Slack) where anyone can report issues with skills in real-time. The skill owner skims it daily.
 
-**What it catches**: edge cases, real-world failures, and confusion the author never anticipated — the widest possible input from people using skills in production workflows.
+**What it catches**: edge cases, [real-world failures](continuous-agent-improvement.md), and confusion the author never anticipated — the widest possible input from people using skills in production workflows.
 
 **What it misses**: low-visibility failures where users silently work around a broken skill rather than reporting it; structural problems that accumulate slowly; quantitative signal on which skills matter most.
 
@@ -127,3 +127,4 @@ Start with Loops 1 and 2. Add Loop 4 when the library grows large enough that pr
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md) — lifecycle governance, versioning, and pruning
 - [Introspective Skill Generation](introspective-skill-generation.md) — mining recurring corrections to generate new skills; complements Loops 1 and 3
 - [SDLC-Phase Skill Taxonomy](sdlc-skill-taxonomy.md) — organizing a shared library by SDLC phase so selection stays deterministic at scale
+- [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — the canonical home for skill authoring rules these loops feed back into

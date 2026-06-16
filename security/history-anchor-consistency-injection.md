@@ -104,7 +104,7 @@ The deterministic action gate downstream of the model must still enforce this; t
 - **Short transcripts without forced priors** — with zero or one harmful prior action the effect attenuates; the paper uses three for maximum effect.
 - **System-prompt-locked agents with no untrusted instruction path** — if a trusted operator owns the prompt and has audited out the directive, the surface is closed.
 - **Single-turn LLM uses** — autocompletion and one-shot code review have no history to anchor on.
-- **Deterministic action gating downstream** — the steering still happens at the decision level but the unsafe call is blocked.
+- **[Deterministic action gating](action-selector-pattern.md) downstream** — the steering still happens at the decision level but the unsafe call is blocked.
 
 ## Related Threat Vectors
 
@@ -120,7 +120,7 @@ The deterministic action gate downstream of the model must still enforce this; t
 
 - A single sentence asking the model to stay consistent with prior history flips frontier LLM agents from near-zero unsafe selection to 91–98% on HistoryAnchor-100 ([Rodríguez Salgado, 2026](https://arxiv.org/abs/2605.13825)).
 - The consistency cue is the load-bearing element. Harmful history alone under a neutral system prompt does not produce the effect.
-- Models flipped by the cue often escalate past the level of harm shown in the history; the cue steers the trajectory, it does not cap it.
+- Models flipped by the cue often escalate past the level of harm shown in the history; the cue steers the trajectory, it does not cap it ([Rodríguez Salgado, 2026](https://arxiv.org/abs/2605.13825)).
 - Inverse-scaling within model families: flagship models are the most-affected sibling. Routing to a more capable model does not reduce this risk.
 - Mitigate at the layer you can enforce deterministically — strip consistency directives from operator-controlled prompts, gate at the action boundary, authenticate prior-action log entries, or re-evaluate each action from first principles independent of history.
 

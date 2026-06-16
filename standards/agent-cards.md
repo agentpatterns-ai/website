@@ -6,7 +6,7 @@ tags:
   - tool-agnostic
   - standards
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Agent Cards: Capability Discovery Standard for AI Agents
@@ -101,14 +101,14 @@ Signing matters in federated environments where a client must verify the card wa
 Agent cards add friction that outweighs their value in four situations:
 
 - **Single-consumer integrations**: when one client calls one agent, a shared config or env var beats maintaining a well-known URL with correct caching.
-- **Rapidly-changing capability sets**: static cards go stale as skills change; dynamic cards add server complexity and cache-invalidation risk.
+- **Rapidly-changing capability sets**: static cards go stale as [skills](agent-skills-standard.md) change; dynamic cards add server complexity and cache-invalidation risk.
 - **Cold-start bootstrapping**: the card tells you *what* an agent does once you know its base URL — not *how to find that URL*. Registries or service meshes still need out-of-band coordination.
 - **A2A schema coupling**: consumers written against an early A2A version may break as the spec evolves; the `url` → `supportedInterfaces` rename is one example.
 
 ## Key Takeaways
 
 - Publish agent cards at `/.well-known/agent-card.json` for automated discovery by client agents.
-- Skills carry structured metadata (id, tags, input/output modes) that enable programmatic capability matching.
+- [Skills](agent-skills-standard.md) carry structured metadata (id, tags, input/output modes) that enable programmatic capability matching.
 - Capability flags (streaming, push notifications, extended cards) let clients select communication patterns before sending tasks.
 - Use dynamic cards when different callers should see different skill sets based on authentication.
 - Card signing (JWS) provides integrity verification for federated multi-agent environments.

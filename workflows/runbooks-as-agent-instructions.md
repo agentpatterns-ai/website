@@ -10,7 +10,7 @@ aliases:
   - agent-followable runbooks
   - agent-executable runbooks
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Runbooks as Agent Instructions
@@ -152,15 +152,15 @@ This is equivalent to the feature list and progress file pattern described in [h
 
 ## Adoption Driver: Measurable Goals
 
-A binary adoption target — "all runbooks followable by the agent" — works because it is auditable. A runbook either passes or fails the agent-followable test. Vague goals ("improve our runbooks") produce inconsistent effort. A binary test with a deadline produces a complete audit.
+A binary adoption target — "all runbooks followable by the agent" — works because it is auditable. A runbook either passes or fails the [agent-followable test](../verification/skill-evals.md). Vague goals ("improve our runbooks") produce inconsistent effort. A binary test with a deadline produces a complete audit.
 
-Operationally: assign one engineer to run each runbook against an agent in a test environment. Any step the agent fails to execute or evaluate becomes a tracked rewrite item. This surfaces the actual failure distribution across the runbook library before any rewriting begins.
+Operationally: assign 1 engineer to run each runbook against an agent in a test environment. Any step the agent fails to execute or evaluate becomes a tracked rewrite item. This surfaces the actual failure distribution across the runbook library before any rewriting begins.
 
 ## When This Backfires
 
 Agent-executable runbooks work when each step has a deterministic, tool-invokable form. The pattern breaks down in three conditions:
 
-- **Human-judgment steps that cannot be made explicit.** Some decisions depend on live context that no metric captures — a degraded-but-not-alerting system that an experienced operator would deprioritize. Converting these to thresholds produces either false positives or missed escalations. These steps are better handled with a human-in-the-loop gate than a scripted conditional.
+- **Human-judgment steps that cannot be made explicit.** Some decisions depend on live context that no metric captures — a degraded-but-not-alerting system that an experienced operator would deprioritize. Converting these to thresholds produces either false positives or missed escalations. These steps are better handled with a [human-in-the-loop gate](human-in-the-loop.md) than a scripted conditional.
 - **Cross-system state coordination.** Runbooks that span multiple teams, change-freeze windows, or external vendor actions assume the agent can verify state it cannot observe. If the agent cannot confirm the dependency is met, it proceeds on false assumptions.
 - **High blast-radius actions.** Failover triggers, database writes, and traffic reroutes carry irreversible consequences. The `disable-model-invocation: true` packaging mitigates this by requiring human initiation, but it does not prevent the agent from executing a step sequence in the wrong incident context if routing is misconfigured.
 

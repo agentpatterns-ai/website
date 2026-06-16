@@ -87,7 +87,7 @@ Without external persistence, the agent rediscovers the same facts — codebase 
 Persistent memory introduces failure modes an amnesiac agent avoids:
 
 - **Stale entries silently degrade output.** A correction accurate six months ago may now contradict a refactored API. The agent applies it confidently because it has no way to know the context changed.
-- **Contradictory entries produce unpredictable behavior.** When conflicting instructions accumulate — an updated rule added without removing the old one — the agent guesses which is correct, producing inconsistent results.
+- **Contradictory entries produce unpredictable behavior.** When conflicting instructions accumulate in `CLAUDE.md` — an updated rule added without removing the old one — the agent guesses which is correct, producing inconsistent results.
 - **High-volume environments cause context pollution.** Agents across many domains or users fill memory with low-signal entries that dilute retrieval quality and exceed token budgets.
 - **Shared-scope memory creates coordination problems.** Concurrent writes to shared project memory can introduce race conditions or leave stale artifacts visible after updates ([multi-agent memory challenges](https://arxiv.org/html/2603.10062v1)).
 
@@ -128,8 +128,10 @@ The first two sections belong in the project `CLAUDE.md` (version-controlled, sh
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md)
 - [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md)
 - [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
-- [Memory Reinforcement Learning](memory-reinforcement-learning.md)
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md)
 - [Generative Agents Memory Stream](generative-agents-memory-stream.md)
+- [CoALA Memory Taxonomy Classifier](coala-memory-taxonomy-classifier.md) — classify-what taxonomy that complements this page's scope-based architecture
+- [Continual-Learning Layers](continual-learning-layers.md) — update-target / persistence-scope taxonomy, a distinct lens on the same memory problem
 - [CLAUDE.md Convention](../instructions/claude-md-convention.md)
 - [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](../instructions/hierarchical-claude-md.md)
 - [Seeding Agent Context: Breadcrumbs in Code](../context-engineering/seeding-agent-context.md)

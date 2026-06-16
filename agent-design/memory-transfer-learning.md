@@ -101,5 +101,5 @@ Skip it when:
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md) — episode-level recall within a domain; contrast with cross-domain episode transfer here
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — extracting lessons from logs; this page covers what abstraction level makes those lessons transferable
 - [Subtask-Level Memory for SE Agents](subtask-level-memory.md) — granularity within a domain; complementary to cross-domain abstraction
-- [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md) — utility scoring for retrieval quality; orthogonal to cross-domain pooling
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — utility scoring for retrieval quality; orthogonal to cross-domain pooling
 - [Dual-Trace Memory Encoding](dual-trace-memory-encoding.md) — fact-plus-scene encoding for temporal recall; different memory encoding strategy

@@ -10,7 +10,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # Goal Recitation: Countering Drift in Long Sessions

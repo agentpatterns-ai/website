@@ -76,8 +76,7 @@ If any of these apply, prefer moving attribution data out of the prompt body and
 
 ## Related
 
-- [Prompt Cache Economics Across Providers](prompt-cache-economics.md)
+- [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md)
 - [Static Content First: Maximizing Prompt Cache Hits](static-content-first-caching.md)
-- [Stateless Agent Loop for Prompt Caching and Zero Data Retention](prompt-caching-architectural-discipline.md)
 - [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)

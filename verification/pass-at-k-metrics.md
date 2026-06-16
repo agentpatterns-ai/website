@@ -27,25 +27,23 @@ A single pass rate also treats an agent that always scores 6/10 identically to o
 
 ## The Two Metrics
 
-**pass@k** — the probability the agent produces at least one correct solution across *k* attempts. As *k* increases, pass@k rises. It measures the capability ceiling: given enough chances, can the agent ever get this right?
+**pass@k** — the probability the agent produces at least one correct solution across *k* attempts [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]. As *k* increases, pass@k rises. It measures the capability ceiling: given enough chances, can the agent ever get this right?
 
-**pass^k** — the probability *all k* attempts succeed. As *k* increases, pass^k falls. It measures consistency: can you trust the agent to get it right every time in production?
-
-[Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+**pass^k** — the probability *all k* attempts succeed [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]. As *k* increases, pass^k falls. It measures consistency: can you trust the agent to get it right every time in production?
 
 ## What the Combination Reveals
 
 | pass@k | pass^k | Interpretation |
 |--------|--------|----------------|
 | High | High | Capable and consistent. Production-ready for this task class. |
-| High | Low | Capable but flaky. Human review required; not safe for automation. |
+| High | Low | Capable but flaky. [Human review required](../workflows/human-in-the-loop.md); not safe for automation. |
 | Low | — | Cannot reliably solve this class of problem at all. |
 
 An agent with high pass@k and low pass^k signals a specific failure mode: it occasionally hits the right answer but cannot be trusted to do so every time. This is the pattern of an agent that is benchmarking well but failing in production.
 
 ## Choosing the Right Primary Metric
 
-**Human-in-the-loop workflows**: pass@k is the relevant metric. If a developer reviews every output, one correct answer in three attempts is often enough — the agent's job is to surface a good option.
+**[Human-in-the-loop](../workflows/human-in-the-loop.md) workflows**: pass@k is the relevant metric. If a developer reviews every output, one correct answer in three attempts is often enough — the agent's job is to surface a good option.
 
 **Automated pipelines**: pass^k is critical. If output is consumed directly — merging code, sending messages, modifying databases — you need consistency across all attempts. A 90% pass rate still means roughly 1-in-10 runs fails.
 

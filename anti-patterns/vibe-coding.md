@@ -51,7 +51,7 @@ Vibe coding produces [black box nodes](../anti-patterns/trust-without-verify.md)
 
 **Security-critical code.** Authentication, authorization, encryption, input validation — these require understanding, not vibes. A [Tenzai assessment](https://www.csoonline.com/article/4116923/output-from-vibe-coding-tools-prone-to-critical-security-flaws-study-finds.html) of five AI coding tools found 69 vulnerabilities across 15 test applications, concentrated in API authorization and business logic. [Kaspersky reports](https://www.kaspersky.com/blog/vibe-coding-2025-risks/54584/) that 20% of vibe-coded applications contain serious vulnerabilities or configuration errors, including hardcoded API keys and client-side authentication logic.
 
-**Architecturally sensitive changes.** Changes to system structure, module boundaries, or data models require understanding how components interact. Vibe coding optimizes for local correctness while introducing structural drift.
+**Architecturally sensitive changes.** Changes to system structure, module boundaries, or data models require understanding how components interact. Vibe coding optimizes for local correctness while introducing the structural drift of [shadow tech debt](shadow-tech-debt.md).
 
 **Novel functionality.** When the task requires discovering APIs, designing data structures, or solving problems the agent saw rarely in training, vibe coding produces output that appears correct but may use wrong abstractions or deprecated patterns.
 
@@ -81,11 +81,11 @@ These commits are rollback points. When the agent takes the code in a wrong dire
 
 ### Incremental Verification
 
-Run the output after each significant change. Do not let the agent make five changes before you check whether the first one works. Catching errors early prevents the agent from building on broken assumptions.
+Run the output after each significant change. Do not let the agent make five changes before you check whether the first one works ([incremental verification](../verification/incremental-verification.md)). Catching errors early prevents the agent from building on broken assumptions.
 
 ### Maintain Domain Knowledge
 
-Vibe coding does not mean abandoning understanding of the problem domain. You still need enough knowledge to evaluate whether the output is correct and to steer the agent toward appropriate APIs and patterns. Without domain knowledge, you cannot distinguish output that works from output that appears to work.
+Vibe coding does not mean abandoning understanding of the problem domain. You still need enough knowledge to evaluate whether the output is correct and to steer the agent toward appropriate APIs and patterns. Without domain knowledge, you cannot distinguish output that works from output that appears to work — the [trust-without-verify](trust-without-verify.md) trap.
 
 ### Set Scope Boundaries
 
@@ -113,7 +113,7 @@ A developer needs a CLI tool to convert CSV files to JSON. This is throwaway too
 Build a CLI tool that reads a CSV file and outputs JSON. Support --pretty for formatted output and --filter for column selection.
 ```
 
-The agent produces `csv2json.py`. The developer does not read the implementation — they test it:
+The agent produces `csv2json.py`. The developer does not read the implementation — they test the `csv2json.py` output instead:
 
 ```bash
 # Test with real data

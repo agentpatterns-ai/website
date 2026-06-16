@@ -27,7 +27,7 @@ Production multi-agent systems converge on three coordination topologies. The [a
 
 One orchestrator LLM holds the task graph, delegates subtasks to workers, and aggregates results.
 
-**When to use**: Sequential dependencies, shared global state, or result synthesis requiring awareness of all worker outputs.
+**When to use**: Sequential dependencies, shared global state, or [result synthesis](orchestrator-worker.md) requiring awareness of all worker outputs.
 
 **Failure modes**:
 
@@ -44,7 +44,7 @@ Agents coordinate via shared state or message passing. No central coordinator ho
 **Failure modes**:
 
 - **Coordination storms** — agents send competing updates to shared state, producing thrash
-- **Conflicting edits** — agents modify the same artifact without awareness of each other's changes
+- **Conflicting edits** — agents modify the same artifact without awareness of each other's changes (resolved by [observation-driven coordination](crdt-observation-driven-coordination.md))
 - **Lack of global coherence** — agents make locally correct but globally inconsistent decisions
 
 ### Hybrid
@@ -131,7 +131,7 @@ A document processing pipeline that ingests legal contracts, extracts clauses, c
 
 **Decentralised** — extraction and classification agents pull contracts from a shared queue and write results to a shared JSON store. No orchestrator coordinates intra-batch work. Conflicting edits emerge when two agents process the same contract simultaneously; a file lock or CRDT on the shared store resolves this (see [CRDT-Based Parallel Agent Coordination](crdt-observation-driven-coordination.md)).
 
-**Hybrid** — a coordinator routes contracts by type (NDA, MSA, SOW) to domain-specific clusters. Each cluster runs extraction and classification agents in parallel (decentralised intra-cluster). The coordinator handles inter-cluster routing and final report assembly. The topology boundary between coordinator and clusters must be typed: each cluster returns a structured report object, not raw text, to prevent coordinator context flooding.
+**Hybrid** — a coordinator routes contracts by type (NDA, MSA, SOW) to domain-specific clusters. Each cluster runs extraction and classification agents in parallel (decentralised intra-cluster). The coordinator handles inter-cluster routing and final report assembly. The topology boundary between coordinator and clusters must be [typed](typed-schemas-at-agent-boundaries.md): each cluster returns a structured report object, not raw text, to prevent coordinator context flooding.
 
 ## Key Takeaways
 

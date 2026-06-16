@@ -69,7 +69,7 @@ Conditions where templates add overhead without proportional value:
 - **Solo or inner-source repos with no external reviewers**: the author is also the reviewer; templates produce no engagement benefit.
 - **Trivial or mechanical PRs**: dependency bumps, formatting-only changes, and single-line fixes generate template friction that delays without aiding comprehension.
 - **Teams with strong ambient context**: reviewers familiar with the codebase and task domain get duplicated context.
-- **Code quality is the binding constraint**: presentation is a secondary lever. Applying templates to weak code shifts attention from the root problem.
+- **Code quality is the binding constraint**: presentation is a secondary lever, since [merge value tracks the work itself, not PR packaging](agent-pr-volume-vs-value.md). Applying templates to weak code shifts attention from the root problem.
 
 In these cases, make the template opt-in rather than mandatory.
 

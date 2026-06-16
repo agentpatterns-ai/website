@@ -8,7 +8,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Inversion Analysis: Surface Capabilities Competitors Cannot Replicate
@@ -64,7 +64,7 @@ Inversion against NATS (Go pub/sub):
 
 **Extract**: durable message queues, subject routing for task dispatch, at-least-once delivery.
 
-**Invert**: NATS routes messages but has no task graph with execution state, resumable context, or advisory locking. The Flywheel's JSONL bead model + graph routing + advisory locks enables:
+**Invert**: NATS routes messages but has no task graph with execution state, resumable context, or advisory locking. The Flywheel's [Code-Native Memory Substrates](code-native-memory-substrates.md) + graph routing + advisory locks enables:
 
 - Tasks that resume mid-execution after failure
 - Lock-free parallelism across steps with explicit dependency edges
@@ -95,7 +95,7 @@ Inversion works because architectural constraints are asymmetric: what a system 
 Inversion produces poor results when applied to weak structural differences:
 
 - **Shared primitives**: Teams on commodity LLM wrappers share nearly all primitives with competitors. Inversions exist in name only — the same architecture is replicable overnight.
-- **Novelty bias**: Enthusiastic inversion can justify maintaining unusual primitives *because* they are unique, even when a standard approach would serve better. Structural preclusivity does not imply value.
+- **Novelty bias**: Enthusiastic inversion can justify maintaining unusual primitives *because* they are unique, even when a [standard SE-pattern approach](classical-se-patterns-agent-analogues.md) would serve better. Structural preclusivity does not imply value.
 - **Reference system mismatch**: Inverting against a system in a different domain (e.g., a batch pipeline versus a real-time agent) yields false differentiation — the competitor never intended to support those patterns, not that they *cannot*.
 - **Premature commitment**: Running inversion before adequate study of the external system produces shallow outputs. Step 1 (Study) must be thorough or Step 3 (Invert) generates noise.
 
@@ -114,6 +114,6 @@ Inversion produces poor results when applied to weak structural differences:
 - [Convergence Detection](convergence-detection.md)
 - [Classical SE Patterns and Agent Analogues](classical-se-patterns-agent-analogues.md)
 - [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md)
-- [Beads, Task Graphs, and Agent Memory](beads-task-graph-agent-memory.md)
+- [Code-Native Memory Substrates](code-native-memory-substrates.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](../tool-engineering/advanced-tool-use.md)
 - [Plan-First Loop](../workflows/plan-first-loop.md)

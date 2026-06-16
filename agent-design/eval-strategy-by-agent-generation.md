@@ -12,7 +12,7 @@ aliases:
   - per-generation eval strategy
   - agent generation taxonomy
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Eval Strategy by Agent Generation: A Structure-to-Eval Locator
@@ -63,13 +63,13 @@ The causal claim is **structural, not generational**: more structure means more 
 - The six-generation taxonomy is a structure-to-eval locator, not a maturity ladder.
 - Eval surface must match the architectural failure surface — each structural addition opens failures the prior eval cannot see.
 - Apply the locator per component, not per system; production systems mix structures.
-- Some tasks correctly stay at a single-prompt structure forever — moving up the ladder is not the goal.
+- Some tasks correctly stay at a single-prompt structure forever — moving up the ladder is not the goal, as [agentless vs autonomous](agentless-vs-autonomous.md) argues empirically.
 - When in doubt, default to Anthropic's framing — workflow vs agent, add complexity only when it demonstrably improves outcomes.
 
 ## Related
 
 - [Agentic AI Architecture: From Prompt-Response to Goal-Directed Systems](agentic-ai-architecture-evolution.md) — sister structural framing; cognitive-execution separation as the boundary that makes the eval surface tractable
-- [Scaffold Architecture Taxonomy for Coding Agents](scaffold-architecture-taxonomy.md) — orthogonal three-layer taxonomy for the *scaffold* dimension; combine with this page for per-axis self-location
+- [Scaffold Architecture Taxonomy for Coding Agents](harness-design-dimensions.md) — orthogonal three-layer taxonomy for the *scaffold* dimension; combine with this page for per-axis self-location
 - [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md) — the empirical case against climbing the structural ladder unnecessarily
 - [Agent Terminology Disambiguation for AI Coding Systems](agent-terminology-disambiguation.md) — distinguishes workflow, autonomous agent, RAG pipeline, and workflow engine — paired with the eval-locator to name what you have before grading it
 - [Pass@k Metrics for AI Coding Agents](../verification/pass-at-k-metrics.md) — the Gen-5 metric; `pass^k` for consistency, `pass@k` for capability

@@ -10,7 +10,7 @@ tags:
   - tool-agnostic
   - security
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Blast Radius Containment: Least Privilege for AI Agents
@@ -22,7 +22,7 @@ maturity: established
 
 ## The Principle
 
-Every permission an agent does not need is an attack surface for hallucination-driven damage. A research agent with write access can corrupt files. A reviewer with merge access can close PRs it shouldn't. A draft writer with deploy access is one bad session away from a production incident.
+Every permission an agent does not need is an attack surface for hallucination-driven damage. A research agent with write access can corrupt files. A reviewer with merge access can close PRs it shouldn't. A draft writer with deploy access is one bad session away from a [production incident](../agent-design/rollback-first-design.md).
 
 The damage an agent can do is bounded by the permissions you grant it. This works because tool access is enforced at the runtime layer — the execution environment filters which tools are available before the model ever sees a request, so even a successfully injected prompt cannot invoke a restricted tool. Isolation is structural, not probabilistic.
 
@@ -66,7 +66,7 @@ tools:
 Audit tools and data sources exposed to an agent before deployment. Three questions:
 
 - What is the broadest action this agent could take with current permissions?
-- If successfully injected, what is the worst-case outcome?
+- If successfully injected, what is the worst-case outcome under the [lethal trifecta](lethal-trifecta-threat-model.md)?
 - Which permissions are present for convenience rather than necessity?
 
 Remove any permission that cannot be justified by the task definition. For file-writing agents, [worktrees](../workflows/worktree-isolation.md) supply hard filesystem isolation so the agent cannot affect the main branch or other agents' workspaces.
@@ -83,7 +83,7 @@ Narrow permission scopes impose a maintenance cost that grows with pipeline comp
 
 - **Early-stage pipelines**: For a single developer iterating on a local-only pipeline, per-agent YAML adds friction with limited gain — the blast radius is already low by environment.
 - **Permission creep**: Narrow initial scopes accumulate permissions as edge cases emerge. Without active audit, the YAML drifts toward broad access anyway, providing false confidence.
-- **Tool enumeration complexity**: In multi-agent chains, mapping each agent's exact required tools requires upfront analysis that teams skip under deadline pressure, defaulting to over-provisioned scopes.
+- **Tool enumeration complexity**: In multi-agent chains, mapping each agent's exact required `tools` list requires upfront analysis that teams skip under deadline pressure, defaulting to over-provisioned scopes.
 
 Apply full scoping in production pipelines with external data access or write access to shared state. In sandboxed, ephemeral, or single-user environments, prioritize auditing permissions before deployment over maintaining minimal permission manifests.
 

@@ -72,7 +72,7 @@ The typology adds value by naming the boundaries where each control class belong
 ## When This Backfires
 
 - **Three of the five layers inherit LLM-classifier brittleness.** Intent Guard, Playbook, and Output Formatter are model-mediated. Bypass attacks on classifier-style guardrails via character distribution and tokenization edge cases are documented ([Mindgard](https://mindgard.ai/resources/bypassing-llm-guardrails-character-and-aml-attacks-in-practice)). Anthropic's classifier-based Auto Mode using Sonnet-4.6 with chain-of-thought still misses 17% of real overeager actions ([Anthropic Engineering 2026-03-25](https://www.anthropic.com/engineering/claude-code-auto-mode)). These stages reduce rates; they do not eliminate them.
-- **Small action surfaces don't recoup the operational cost.** Three to five tools with a single operator get equivalent guarantees from a deny list plus a confirmation prompt. The five-type SDK adds policy versioning, conflict resolution, and upgrade overhead a small surface cannot pay back.
+- **Small action surfaces don't recoup the operational cost.** Three to five tools with a single operator get equivalent guarantees from a deny list plus a confirmation prompt, or the narrower [action-selector pattern](action-selector-pattern.md). The five-type SDK adds policy versioning, conflict resolution, and upgrade overhead a small surface cannot pay back.
 - **Headless automation collapses the typology to its deterministic subset.** Tool Approval that requires human confirmation has no signal in CI or scheduled agents — the taxonomy degrades to two layers.
 - **Multi-policy compositions introduce ordering bugs.** The CUGA priority system exists because multiple types can match one call; smaller deployments avoid that failure class entirely.
 
@@ -123,7 +123,7 @@ The Tool Approval policy carries the hard guarantee that no write reaches the da
 ## Key Takeaways
 
 - The typology's value is **labelling the five loop boundaries**, not the controls themselves. The boundaries make audit coverage discoverable.
-- Only **Tool Approval** and the deterministic portion of **Tool Guide** carry hard enforcement guarantees. The other three reduce error rates but inherit LLM-classifier brittleness.
+- Only **Tool Approval** and the deterministic portion of **Tool Guide** carry hard enforcement guarantees, the stage measured in isolation by [permission-framework-over-model](permission-framework-over-model.md). The other three reduce error rates but inherit LLM-classifier brittleness.
 - Adopt the full typology when the agent loop has all five stages, the action surface is broad, audit requires typed intervention records, and fine-tuning is unavailable.
 - For small action surfaces, headless automation, or single-tool agents, prefer a [deny list](permission-gated-commands.md) plus a [confirmation prompt](human-in-the-loop-confirmation-gates.md) over the full typology.
 

@@ -13,7 +13,7 @@ aliases:
   - "TRAJEVAL"
   - "stage decomposition"
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # Trajectory Decomposition: Diagnose Where Coding Agents Fail
@@ -46,10 +46,10 @@ graph LR
 | Stage | What it measures | Precision question | Recall question |
 |-------|-----------------|-------------------|-----------------|
 | **Search** | File localization | Did it open only relevant files? | Did it find all necessary files? |
-| **Read** | Function comprehension | Did it examine only needed functions? | Did it examine all needed functions? |
+| **Read** | Function comprehension ([semantic context loading](../context-engineering/semantic-context-loading.md)) | Did it examine only needed functions? | Did it examine all needed functions? |
 | **Edit** | Modification targeting | Did it change only the right locations? | Did it change all required locations? |
 
-Compare each stage against the reference patch to compute precision and recall independently.
+Compare each stage against the reference patch to compute precision and recall independently — the complement to [outcome grading](grade-agent-outcomes.md), which scores only the final state.
 
 Stage independence is why this works: precision and recall at each stage are computed against the same reference independently, so a failure in one stage does not distort scores in others.
 
@@ -103,7 +103,7 @@ Apply the same formula at the read and edit levels.
 
 ### 4. Inject real-time feedback
 
-Stage-level signals extend beyond post-hoc analysis. Feeding trajectory diagnostics back during execution improved two models by 2.2-4.6 percentage points while reducing token costs by 20-31% — aligning with [agent self-review loops](../agent-design/agent-self-review-loop.md). [Source: [TRAJEVAL](https://arxiv.org/abs/2603.24631)]
+Stage-level signals extend beyond post-hoc analysis. Feeding trajectory diagnostics back during execution improved two models by 2.2-4.6 percentage points while reducing token costs by 20-31% — aligning with [agent self-review loops](../code-review/agent-self-review-loop.md). [Source: [TRAJEVAL](https://arxiv.org/abs/2603.24631)]
 
 ## When to Use — and When Not To
 
@@ -111,9 +111,9 @@ Stage-level signals extend beyond post-hoc analysis. Feeding trajectory diagnost
 
 Skip it when:
 
-- **No reference patch**: Precision and recall require a known-correct solution. Open-ended tasks and production settings without ground truth cannot be evaluated this way.
+- **No reference patch**: Precision and recall require a known-correct solution. Open-ended tasks and production settings without ground truth cannot be evaluated this way — fall back to [outcome grading](grade-agent-outcomes.md), which needs no reference patch.
 - **Non-sequential stages**: The model assumes forward-linear traversal. Agents that interleave stages (read → search → read → edit) produce ambiguous per-stage metrics.
-- **Uninstrumented trajectories**: Stage decomposition requires logs that separate file-open, function-read, and location-edit events. Agents wrapped in opaque APIs or sandboxes cannot be decomposed.
+- **Uninstrumented trajectories**: Stage decomposition requires [trajectory logs](../observability/trajectory-logging-progress-files.md) that separate file-open, function-read, and location-edit events. Agents wrapped in opaque APIs or sandboxes cannot be decomposed.
 
 ## Key Takeaways
 
@@ -129,4 +129,4 @@ Skip it when:
 - [Outcome Grading](grade-agent-outcomes.md) — complement to trajectory decomposition for scoring
 - [Completion Failure Taxonomy](completion-failure-taxonomy.md) — categorizes why code suggestions fail
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — stage-level behavioral verification approach
-- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) — where outcome-only grading misses safety and robustness signals that trajectory-aware auditing catches
+- [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — where outcome-only grading misses safety and robustness signals that trajectory-aware auditing catches

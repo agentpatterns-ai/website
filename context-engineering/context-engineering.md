@@ -88,7 +88,7 @@ Context engineering introduces its own failure modes:
 
 - **Retrieval errors propagate**: if the retrieval layer selects wrong files, the agent has no fallback — selective loading without reliable retrieval produces worse results than loading everything.
 - **Compaction loses critical state**: lossy summarisation discards information that turns out to be needed later. Compaction requires knowing in advance what is task-critical, which is not always possible at summarisation time.
-- **Coordination overhead**: sub-agent architectures require well-designed handoff contracts. A coordinator that receives a poor summary from a sub-agent cannot recover missing context.
+- **Coordination overhead**: [sub-agent architectures](context-budget-allocation.md) require well-designed handoff contracts. A coordinator that receives a poor summary from a sub-agent cannot recover missing context.
 
 The pattern assumes retrieval quality and compaction fidelity. When those assumptions fail, an unfiltered context is more robust than a poorly filtered one.
 

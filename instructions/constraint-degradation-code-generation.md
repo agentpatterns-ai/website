@@ -78,7 +78,7 @@ Constrain output format programmatically rather than through natural language:
 }
 ```
 
-Schema validation enforces structural constraints — function name format, return type, parameter shape — that would otherwise compete for the model's constraint budget in the prompt. Behavioral constraints like "no imports" cannot be offloaded to schemas and must remain in the prompt or be enforced by a linter post-generation.
+Schema validation enforces structural constraints — function name format, return type, parameter shape — that would otherwise compete for the model's constraint budget in the prompt. Provider-level structured output (Anthropic, OpenAI, and Gemini APIs) enforces this shape at the decoding layer. Behavioral constraints like "no imports" cannot be offloaded to schemas and must remain in the prompt or be enforced by a linter post-generation.
 
 ### Prioritize Constraints by Enforcement Method
 
@@ -91,7 +91,7 @@ Not all constraints belong in the prompt:
 | Value range, input validation | Unit tests |
 | Algorithmic approach, style | Prompt (natural language) |
 
-Reserve prompt-based constraints for requirements that cannot be checked mechanically. The fewer constraints competing for attention during generation, the more reliably the remaining ones are followed.
+Reserve prompt-based constraints for requirements that cannot be checked mechanically. Below the ~4-constraint threshold where accuracy holds, the fewer constraints competing for attention during generation, the more reliably the remaining ones are followed.
 
 ### Verify After Generation
 
@@ -125,9 +125,9 @@ These methods require token-level logit access, making them **applicable only to
 
 Multi-turn decomposition trades accuracy for latency and token cost. In agentic pipelines with strict budget constraints or tight feedback loops, issuing five sequential turns to produce one function is often impractical — a single well-structured prompt with fewer constraints may deliver better end-to-end throughput.
 
-Schema-enforced constraints require upfront engineering investment and only cover structural requirements. If the codebase lacks JSON Schema tooling or the target API doesn't support structured output, schemas add integration overhead without offsetting the constraint budget in the prompt.
+Schema-enforced constraints require upfront engineering investment and only cover structural requirements. If the codebase lacks `JSON Schema` tooling or the target API doesn't support structured output, schemas add integration overhead without offsetting the constraint budget in the prompt.
 
-Mechanical enforcement (linters, type checkers, unit tests) works well for invariant constraints but breaks down for context-sensitive rules — "no external network calls in this module" or "align with the team's naming convention" cannot be reliably checked by static analysis. Prompt-based constraints are still necessary for any rule that requires semantic understanding of intent.
+Mechanical enforcement (linters, type checkers, unit tests) works well for invariant constraints but breaks down for context-sensitive rules — "no external network calls in this module" or "align with the team's naming convention" cannot be reliably checked by static analysis. Prompt-based constraints are still necessary for any rule that requires semantic understanding of intent, which is exactly the regime where the [instruction compliance ceiling](instruction-compliance-ceiling.md) bites.
 
 Turn-by-turn constraint application assumes the model preserves all prior constraints when asked to add new ones. In practice, later turns can silently regress earlier requirements — particularly for format or style rules that were satisfied in turn 1 but not re-checked in turn 5. Always re-run the full constraint checklist after the final turn.
 

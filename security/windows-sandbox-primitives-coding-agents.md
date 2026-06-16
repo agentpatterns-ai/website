@@ -21,7 +21,7 @@ OpenAI's [Codex Windows sandbox post](https://openai.com/index/building-codex-wi
 1. **Open-ended binary execution** — the agent picks binaries at runtime (Git, `node`, `pip`, MSBuild, user scripts).
 2. **Host workspace read-write** — the agent edits the user's actual checkout; editors, debuggers, and CI consume it live.
 3. **No admin elevation** — setup and per-task launch run as the standard developer user.
-4. **Policy propagates down the process tree** — spawned children inherit the same write and network restrictions.
+4. **Policy propagates down the process tree** — [spawned children inherit](subprocess-pid-namespace-sandboxing.md) the same write and network restrictions.
 
 No single Windows primitive satisfies all four — though each is still right for the workload it was designed for.
 

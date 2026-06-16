@@ -12,7 +12,7 @@ aliases:
   - context-aware agent routing
   - CADMAS-CTX
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Contextual Capability Calibration for Multi-Agent Delegation
@@ -73,7 +73,7 @@ Below these thresholds, prefer uniform routing with a judge layer (see [recursiv
 ## Failure Conditions
 
 - **Small agent pool (K = 2).** Exploration-exploitation benefit is small; A/B routing with a judge captures most of the gain.
-- **Cold-start regime.** Posteriors are uninformative early; behaviour degrades toward uniform random routing. The paper does not report cold-start latency — budget a warm-up phase or seed from prior deployments.
+- **Cold-start regime.** Posteriors are uninformative early; behaviour degrades toward uniform random routing. Qiao (2026) does not report cold-start latency — budget a warm-up phase or seed from prior deployments.
 - **Non-stationary agents.** Model upgrades, prompt changes, or tool additions invalidate posteriors. Reset any changed agent's row in the profile table.
 - **Subjective success criteria.** Beta updates require a binary signal. For taste-dependent outputs the posterior is only as calibrated as the judge — see [LLM-as-judge evaluation](../workflows/llm-as-judge-evaluation.md).
 
@@ -81,7 +81,7 @@ Below these thresholds, prefer uniform routing with a judge layer (see [recursiv
 
 | Pattern | Routing signal | Capability model |
 |---------|----------------|------------------|
-| [Code-health-gated tier routing](../agent-design/code-health-gated-tier-routing.md) | Pre-computed file health score | Static per-tier |
+| [Code-health-gated tier routing](../agent-design/auto-model-selection.md) | Pre-computed file health score | Static per-tier |
 | [Cross-vendor competitive routing](../agent-design/cross-vendor-competitive-routing.md) | Run both, select after | Implicit, per-task |
 | [Recursive best-of-N](recursive-best-of-n-delegation.md) | K candidates, judge selects | None — selection replaces routing |
 | Contextual capability calibration | Context classification + posterior | Per (agent, context) |
@@ -132,7 +132,7 @@ After 50 tasks, the long-horizon column for Agent A has updated to Beta(3, 18) �
 ## Related
 
 - [Recursive Best-of-N Delegation](recursive-best-of-n-delegation.md) — K candidates plus a judge instead of a routing decision
-- [Code-Health-Gated LLM Tier Routing](../agent-design/code-health-gated-tier-routing.md) — route on a pre-computed file-health score
+- [Code-Health-Gated LLM Tier Routing](../agent-design/auto-model-selection.md) — route on a pre-computed file-health score
 - [Cross-Vendor Competitive Routing](../agent-design/cross-vendor-competitive-routing.md) — surface capability differences across vendors
 - [The Delegation Decision](../agent-design/delegation-decision.md) — whether to delegate at all before choosing where
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) — structural choices that constrain where routing applies

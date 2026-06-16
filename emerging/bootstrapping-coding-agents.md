@@ -57,7 +57,7 @@ The paper identifies four properties that make a specification bootstrappable:
 
 - **Auditable** — under 1,500 words, readable in 15 minutes. A reviewer can hold the full spec in working memory.
 - **Behaviorally complete** — every tool call, error condition, and edge case is documented. Gaps produce divergent implementations.
-- **Convergence-testable** — two independent implementations from the same spec should produce identical external behavior. If they diverge, the spec is ambiguous.
+- **Convergence-testable** — two independent [implementations](../workflows/entropy-reduction-agents.md) from the same spec should produce identical external behavior. If they diverge, the spec is ambiguous.
 - **Abstraction-focused** — describes *what* the agent does, not *how*. Implementation details in the spec constrain regeneration without adding correctness.
 
 ## Connection to Existing Practices
@@ -75,10 +75,10 @@ This concept extends existing agent-driven development patterns:
 This is a single-paper finding with important caveats:
 
 - **Scale is unresolved.** The demonstration uses a 926-word spec. Whether specs of 10,000+ words maintain tractability is an open question. The companion [Attractor project](https://github.com/strongdm/attractor) uses 34,900-word specifications — roughly 38× larger — but the paper notes that verification difficulty grows with spec size: the test suite must cover a larger behavioral surface, and the specification itself may harbor internal inconsistencies ([source](https://arxiv.org/abs/2603.17399)).
-- **Model-dependent.** The bootstrap succeeds only with frontier models. Earlier or smaller models produce syntactically invalid or behaviorally incorrect implementations. This makes the property a moving target, not a universal guarantee.
+- **Model-dependent.** The bootstrap succeeds only with frontier models. Earlier or smaller models produce syntactically invalid or behaviorally incorrect implementations. This makes the property a moving target, not a universal guarantee: the 926-word demonstration assumes a model at least as capable as the one that produced it.
 - **Security risk.** Per Ken Thompson's "Reflections on Trusting Trust," a compromised model could inject subtle errors that propagate through every bootstrap generation. Countermeasures include version-pinning models and running generation in controlled CI environments.
 - **Industrial validation is thin.** The paper cites a team of three to seven engineers that built a million-line codebase over five months using Codex, with zero manually written lines of code, by treating their `docs/` directory as the reference system ([source](https://arxiv.org/abs/2603.17399)). This is reported as an industrial existence proof, not a peer-reviewed replication.
-- **Spec is necessary but not sufficient.** Real systems require test suites, deployment configs, and operational knowledge alongside the spec. The spec is *a* primary artifact, not *the only* artifact.
+- **Spec is necessary but not sufficient.** Real systems require test suites, deployment configs, and operational knowledge alongside the spec. The spec is *a* primary artifact, not *the only* artifact — in the industrial case the `docs/` directory served as the reference system.
 - **Convergence-testing conflates ambiguity with sampling variance.** The bootstrap framing treats any divergence between two implementations as evidence of an ambiguous spec. But LLM code generation is empirically non-deterministic: the same prompt produces non-equal output for 47–76% of tasks across benchmarks even at fixed settings ([Ouyang et al., 2023](https://arxiv.org/abs/2308.02828)). Two implementations can therefore diverge from a perfectly unambiguous spec, so a convergence test cannot cleanly separate spec defects from sampling noise without repeated trials.
 
 ## Example

@@ -18,9 +18,9 @@ last_reviewed: 2026-05-27
 
 > A staged transformation model for taking an existing codebase — with no agent considerations — and making it progressively more agent-friendly through sourced, incremental steps.
 
-Most teams start with agents on codebases that were never designed for them: undocumented conventions, weak type coverage, no machine-readable project instructions, manual workflows. This training course provides a diagnostic model and a concrete transformation workflow.
+Most teams start with agents on codebases that were never designed for them: undocumented conventions (the [implicit knowledge problem](../../anti-patterns/implicit-knowledge-problem.md)), weak type coverage, no machine-readable project instructions, manual workflows. This training course provides a diagnostic model and a concrete transformation workflow.
 
-The model is a diagnostic and investment guide, not a mandatory gate. You do not have to complete every level before using agents. Use the level descriptions to identify where your repo currently sits, then invest in moving to the next level.
+The model is a diagnostic and investment guide, not a mandatory gate — it scores the same signals catalogued in [Codebase Readiness for Agents](../../agent-design/codebase-readiness.md). You do not have to complete every level before using agents. Use the level descriptions to identify where your repo currently sits, then invest in moving to the next level.
 
 ## The Five Levels
 

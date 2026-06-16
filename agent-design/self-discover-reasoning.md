@@ -83,8 +83,8 @@ Skip it when:
 
 SELF-DISCOVER outperforms fixed reasoning strategies through three mechanisms identified in the original paper ([Wang et al., 2024](https://arxiv.org/abs/2402.03620)):
 
-1. **Multi-perspective integration** — a single CoT pass applies one reasoning lens. Composing multiple modules (e.g., root-cause analysis + constraint identification + verification) draws on the complementary strengths of each. Tasks requiring world knowledge and structured state benefit most.
-2. **Task-specific composition** — generic prompting applies the same approach regardless of problem category. Selecting modules that match the task's actual structure (algorithmic decomposition for code, backward reasoning for constraint problems) removes mismatched reasoning overhead.
+1. **Multi-perspective integration** — a single CoT pass applies one reasoning lens. Composing multiple modules (e.g., root-cause analysis + constraint identification + verification) draws on the complementary strengths of each. Tasks requiring world knowledge and structured state benefit most — the T4D grounded-agent-reasoning gain of +29pp over CoT is the clearest case.
+2. **Task-specific composition** — generic prompting applies the same approach regardless of problem category. Selecting modules that match the task's actual structure (algorithmic decomposition for code, backward reasoning for constraint problems) from the 39-primitive library removes mismatched reasoning overhead.
 3. **Explicit structure** — the JSON plan forces the model to state its reasoning approach before executing it. This prevents the model from silently switching strategies mid-response, making errors inspectable and correctable.
 
 The gains are not uniform: algorithmic tasks see only moderate improvement, while world-knowledge and multi-step planning tasks (T4D: +29pp over CoT) benefit most. Computational errors remain outside the framework's reach.

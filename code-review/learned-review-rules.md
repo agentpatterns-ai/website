@@ -24,7 +24,7 @@ The cause is feedback disposal: when a developer dismisses a comment or accepts 
 
 ## The Pattern
 
-A self-improving review agent captures accept/reject signals from each review and converts them into persistent rules. Each rule adjusts what the agent flags — or suppresses — on future reviews.
+A self-improving review agent captures accept/reject signals from each review and converts them into persistent rules — Cursor's Bugbot is the canonical implementation. Each rule adjusts what the agent flags — or suppresses — on future reviews.
 
 ```mermaid
 graph TD
@@ -74,7 +74,7 @@ The mechanism is not Cursor-specific. Any review agent with structured output ca
 
 **Rules encode team blind spots.** If a team consistently dismisses a class of security warning, the agent learns to suppress it. The rule system amplifies existing review culture, good or bad.
 
-**Suppression rules degrade over time.** A rule that was correct six months ago may become incorrect after a refactor. Without a TTL or periodic review, stale suppression rules cause the agent to miss real issues.
+**Suppression rules degrade over time.** A rule that was correct 6 months ago may become incorrect after a refactor. Without a TTL or periodic review, stale suppression rules cause the agent to miss real issues.
 
 **Rule quality depends on signal clarity.** "Dismiss" means different things: incorrect finding, not applicable here, low priority, or simply annoying. Without structured dismiss reasons, rule extraction conflates these signals.
 
@@ -89,6 +89,7 @@ The mechanism is not Cursor-specific. Any review agent with structured output ca
 ## Related
 
 - [Review-Then-Implement Loop](review-then-implement-loop.md)
+- [Review Feedback to Rule Loop](review-feedback-to-rule-loop.md) — the composing counterpart: this page tunes reviewer defaults, that one promotes an invariant into the harness
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Tiered Code Review](tiered-code-review.md)

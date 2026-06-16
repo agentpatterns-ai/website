@@ -50,7 +50,7 @@ You do not need to build a 21,000-task pipeline. Three practices protect against
 
 1. **Maintain a private eval suite.** Tasks drawn from your own codebase and real production incidents are unlikely to appear in any model's training data. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-2. **Refresh continuously.** Add eval tasks from recent work — last month's merged PRs, last week's incidents. Tasks that postdate the model's training cutoff are inherently decontaminated.
+2. **Refresh continuously.** Add eval tasks from recent work — last month's merged PRs, last week's [production incidents](incident-to-eval-synthesis.md). Tasks that postdate the model's training cutoff are inherently decontaminated.
 
 3. **Treat public benchmarks as upper bounds.** Use them for directional comparison, not absolute measurement. When two models score within a few points of each other on a public benchmark, the difference may be contamination rather than capability.
 
@@ -58,9 +58,9 @@ You do not need to build a 21,000-task pipeline. Three practices protect against
 
 Decontamination practices carry their own trade-offs:
 
-- **Loss of cross-team comparability.** A continuously refreshed private suite cannot be compared against other teams' or vendors' numbers. Standard public benchmarks remain the only shared yardstick for ecosystem-wide model ranking.
+- **Loss of cross-team comparability.** A continuously refreshed private suite cannot be compared against other teams' or vendors' numbers. Standard [public benchmarks](benchmark-driven-tool-selection.md) remain the only shared yardstick for ecosystem-wide model ranking.
 - **Selection bias in sourced tasks.** Mining recent merged PRs or production incidents biases the suite toward whatever work your team happens to do. Capability regressions on task types outside that distribution go undetected.
-- **Pipeline maintenance cost.** Running a fresh-task pipeline with isolated execution, quality filtering, and repeated runs can cost more engineering time than the measurement precision gained — especially for small teams making infrequent model decisions.
+- **Pipeline maintenance cost.** Running a fresh-task pipeline with isolated execution, quality filtering, and repeated runs can cost more engineering time than the measurement precision gained — especially for small teams making infrequent model decisions, for whom a lighter [golden query pairs](golden-query-pairs-regression.md) suite may suffice.
 - **Apparent regressions from task drift.** When the eval set changes between runs, score movements conflate model changes with task-difficulty drift. Static benchmarks at least hold the measurement rod constant.
 
 For teams making single model-selection decisions per year, triangulating two or three public benchmarks may be cheaper and nearly as informative as building a decontaminated pipeline.
@@ -86,5 +86,5 @@ A team using SWE-bench Verified scores alone to choose between models would rank
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — using realistic benchmarks for tool evaluation
 - [Golden Query Pairs as Regression Tests](golden-query-pairs-regression.md) — private regression suites as contamination-resistant measurement
 - [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md) — converting production incidents into fresh eval tasks
-- [Skill Retrieval Realism Gap](skill-retrieval-realism-gap.md) — idealized retrieval conditions as an adjacent eval-inflation mechanism
+- [Skill Retrieval Realism Gap](eval-blind-spots.md) — idealized retrieval conditions as an adjacent eval-inflation mechanism
 - [Eval Awareness](eval-awareness.md) — models detecting eval-shaped prompts as a parallel measurement-validity threat

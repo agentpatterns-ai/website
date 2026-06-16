@@ -9,7 +9,7 @@ aliases:
   - repository templates
   - project scaffolding
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Skeleton Projects as Agent Scaffolding
@@ -24,9 +24,9 @@ Agents working in unfamiliar languages or domains lack the architectural instinc
 
 [Laying the architectural foundation by hand](architectural-foundation-first.md) is one solution. Skeleton projects are another: instead of building the foundation yourself, source one from the community that has already been tested in production.
 
-The distinction matters. Hand-built foundations encode your team's specific patterns. Skeleton projects encode community consensus for a language or framework. Use skeleton projects when entering unfamiliar territory; use hand-built foundations when your team's conventions diverge from community defaults.
+The distinction matters. [Hand-built foundations](architectural-foundation-first.md) encode your team's specific patterns. Skeleton projects encode community consensus for a language or framework. Use skeleton projects when entering unfamiliar territory; use hand-built foundations when your team's conventions diverge from community defaults.
 
-**Why it works**: Agents generate code by predicting likely continuations given the context in their window. When the context already contains a coherent project layout, dependency declarations, and test patterns, the agent's predictions continue those patterns — the structural prior constrains the output space. Without that prior, the agent must make independent decisions about every structural question (where to put models, how to organize tests, what CI tooling to use), and each decision is an independent sampling event with no grounding in established practice. Research on guided project generation finds that supplying LLMs with a structured solution plan and code template materially improves the coherence of generated multi-file projects compared with unguided open-domain generation ([Xie et al., 2025 — Empowering AI to Generate Better AI Code](https://arxiv.org/abs/2504.15080)). Skeleton projects collapse those decisions by providing the ground truth upfront.
+**Why it works**: Agents generate code by predicting likely continuations given the [context in their window](../context-engineering/context-priming.md). When the context already contains a coherent project layout, dependency declarations, and test patterns, the agent's predictions continue those patterns — the structural prior constrains the output space. Without that prior, the agent must make independent decisions about every structural question (where to put models, how to organize tests, what CI tooling to use), and each decision is an independent sampling event with no grounding in established practice. Research on guided project generation finds that supplying LLMs with a structured solution plan and code template materially improves the coherence of generated multi-file projects compared with unguided open-domain generation ([Xie et al., 2025 — Empowering AI to Generate Better AI Code](https://arxiv.org/abs/2504.15080)). Skeleton projects collapse those decisions by providing the ground truth upfront.
 
 ## The Workflow
 
@@ -132,7 +132,7 @@ Skeleton projects introduce risk when the template's assumptions diverge signifi
 
 - **Template churn**: Popular templates accumulate stars against older versions; the dependency stack may lag the current ecosystem by 1–2 major versions, requiring immediate upgrades before any feature work begins.
 - **Over-adoption**: Agents treat template structure as authoritative. If a template includes components you don't need (e.g., a built-in ORM when you're using raw SQL), agents may build around those components rather than removing them, creating dead code paths.
-- **Convention mismatch**: Templates encode community consensus, not your team's conventions. Agents trained on the template's patterns may resist or misapply your team-specific abstractions when those diverge from the template's architecture.
+- **Convention mismatch**: Templates encode community consensus, not [your team's conventions](../instructions/convention-over-configuration.md). Agents trained on the template's patterns may resist or misapply your team-specific abstractions when those diverge from the template's architecture.
 - **Evaluation gaps**: A template that passes all evaluation criteria (stars, CI, tests) may still have weak abstractions in the specific domain you need — a Go template with solid HTTP handling but a poorly designed service layer, for example.
 
 Use a hand-built foundation instead when your team's conventions are well-established and differ substantially from community defaults, or when the target domain is specialized enough that no mature community template exists.

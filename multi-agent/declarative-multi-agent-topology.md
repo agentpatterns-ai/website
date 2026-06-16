@@ -9,7 +9,7 @@ aliases:
   - topology-as-code
   - agent graph definition
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
@@ -20,7 +20,7 @@ maturity: established
 
 ## The Problem
 
-Multi-agent systems built imperatively scatter orchestration logic across framework-specific code. Relationships between agents are implicit. Switching frameworks means rewriting coordination logic, not just adapting configs. The topology is not a reviewable artifact — it is an emergent property of the code.
+Multi-agent systems built imperatively scatter orchestration logic across framework-specific code. Relationships between agents are implicit. Switching frameworks means rewriting [coordination logic](multi-agent-topology-taxonomy.md), not just adapting configs. The topology is not a reviewable artifact — it is an emergent property of the code.
 
 Topology-as-code addresses this by separating graph structure from runtime implementation. The topology file is the single source of truth; a compiler emits the framework-specific code or configuration.
 

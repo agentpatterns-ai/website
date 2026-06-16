@@ -9,7 +9,7 @@ tags:
   - human-factors
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Nonstandard Errors in AI Agents
@@ -124,7 +124,7 @@ Multiverse analysis carries real costs that make it impractical in several condi
 - **Latency-sensitive tasks**: Running 10+ agents in parallel adds infrastructure and wall-clock time that is unjustifiable for tasks requiring a fast single answer (code completions, quick refactors, CI steps).
 - **Cost-constrained pipelines**: Running multiple model families at Opus-tier pricing multiplies inference cost linearly; for routine tasks, exemplar injection into a single agent achieves acceptable variance reduction at a fraction of the cost.
 - **Single-output requirements**: Some tasks require a deterministic commit — a migration script that will be applied once, a schema that will be deployed. Distributing results is not applicable; the right response is to tighten the exemplar, not report a distribution.
-- **Convergent tasks**: When agents consistently agree across runs regardless of model family (e.g., formatting, type errors, well-specified unit tests), multiverse overhead adds nothing. Sample first; escalate to multiverse only when dispersion is detected.
+- **Convergent tasks**: When agents consistently agree across runs regardless of model family — Sonnet and Opus reaching the same result on formatting, type errors, or well-specified unit tests — multiverse overhead adds nothing. Sample first; escalate to multiverse only when dispersion is detected.
 - **Exemplar dependency risk as a mitigation**: If variance reduction is achieved via exemplar injection rather than full multiverse reporting, the exemplar quality becomes a single point of failure. A flawed exemplar produces tight, wrong answers — harder to detect than spread-out answers from multiverse reporting.
 
 ## Key Takeaways

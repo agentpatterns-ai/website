@@ -40,7 +40,7 @@ Externalization works by converting reconstruction tasks (inferring state from w
 
 Memory converts internal recall (reconstructing past from weights) into external recognition (retrieving pre-surfaced history). The model doesn't need to remember — it needs to retrieve.
 
-Four distinct memory layers operate on different timescales and update policies:
+Four distinct memory layers, catalogued in [agent memory patterns](agent-memory-patterns.md), operate on different timescales and update policies:
 
 | Layer | Content | Update frequency |
 |-------|---------|-----------------|
@@ -55,7 +55,7 @@ Mixing these layers causes drift: working state in semantic storage goes stale; 
 
 Skills convert ad hoc generation into structured composition. The model invokes pre-built expertise rather than rederiving procedures each time. Skills accumulate knowledge through four paths: authored (human-written rules), distilled (from execution traces), discovered (from repeated behavioral patterns), and composed (assembled from smaller skills).
 
-Skills require explicit boundaries — semantic alignment, portability, safe composition rules, and defined fallback behavior. Without these, skills drift and produce inconsistent results across agents.
+Skills require explicit boundaries — semantic alignment, portability, safe composition rules, and defined fallback behavior — the governance that [skill library evolution](../tool-engineering/skill-library-evolution.md) formalises. Without these, skills drift and produce inconsistent results across agents.
 
 ### Protocols: Interaction Structure
 
@@ -69,13 +69,13 @@ Three protocol types cover different surfaces:
 | Agent–Agent | Coordination, delegation, and handoffs |
 | Agent–User | Human approval and clarification requests |
 
-Protocols become mandatory past single-agent setups — natural language coordination fails at scale; contracts provide reliability and auditability.
+Protocols become mandatory past single-agent setups — natural language coordination fails at scale, the gap [agent handoff protocols](../multi-agent/agent-handoff-protocols.md) close; contracts provide reliability and auditability.
 
 ### Harness: The Control Plane
 
 The harness is not a fourth externalization component — it is the control plane that coordinates the other three. It provides the runtime environment where memory, skills, and protocols operate together.
 
-Six design dimensions determine whether a system is governable, debuggable, and safe: agent loop and control flow, sandboxing and isolation, human oversight gates, observability and feedback, configuration and policy encoding, and context budget management.
+Six design dimensions, enumerated in [harness design dimensions](harness-design-dimensions.md), determine whether a system is governable, debuggable, and safe: agent loop and control flow, sandboxing and isolation, human oversight gates, observability and feedback, configuration and policy encoding, and context budget management.
 
 The components interact: skill traces write back to memory; retrieved memory guides protocol selection; protocol results update state. Isolated design breaks these feedback loops.
 
@@ -96,17 +96,17 @@ Choose externalization when reliability, composability, and governance matter mo
 
 A coding agent that reviews PRs across multiple repositories illustrates where each component applies.
 
-**Without externalization:** Every session starts cold. The agent re-reads conventions it already knows, re-invents the review checklist it used yesterday, and coordinates with the CI system using natural language that sometimes misinterprets error responses.
+**Without externalization:** Every session starts cold. The agent re-reads conventions it already knows, re-invents the review checklist it used yesterday, and coordinates with the CI system using natural language that sometimes misinterprets error responses — the gap a [session initialization ritual](session-initialization-ritual.md) closes.
 
 **With externalization:**
 
 *Memory* — project-scoped episodic storage holds past review decisions and known false-positive patterns. On session start, the agent retrieves only the relevant repository's history, not all history. Working context tracks the current PR state across tool calls.
 
-*Skills* — a versioned skill encodes the review checklist and security scanning heuristics. The agent invokes it rather than generating procedures from scratch. When the checklist changes, one file update propagates to all agents that use the skill.
+*Skills* — a versioned skill, managed as in [skill library evolution](../tool-engineering/skill-library-evolution.md), encodes the review checklist and security scanning heuristics. The agent invokes it rather than generating procedures from scratch. When the checklist changes, one file update propagates to all agents that use the skill.
 
-*Protocols* — a schema-validated agent-tool protocol defines exactly how CI status is fetched, what error shapes are valid, and what the agent should do on each status code. No natural language negotiation; the contract handles ambiguity.
+*Protocols* — a schema-validated agent-tool protocol defines exactly how CI status is fetched, what error shapes are valid, and what the agent should do on each status code. No natural language negotiation; the contract handles ambiguity the way [agent handoff protocols](../multi-agent/agent-handoff-protocols.md) remove it between stages.
 
-*Harness* — a PreToolUse hook intercepts any file write operation for human approval. Observability logs every tool call with the full argument and result. A configured context budget threshold triggers summarization of earlier turns before the window fills.
+*Harness* — a PreToolUse hook intercepts any file write operation for human approval. Observability logs every tool call with the full argument and result. A configured [context budget](../context-engineering/context-budget-allocation.md) threshold triggers summarization of earlier turns before the window fills.
 
 Each component addresses a specific failure mode. Together they make the system repeatable across sessions, repositories, and team members.
 
@@ -123,7 +123,7 @@ Each component addresses a specific failure mode. Together they make the system 
 - [Harness Engineering](harness-engineering.md) — the discipline of designing agent environments for reliable output
 - [Agent Memory Patterns](agent-memory-patterns.md) — scoped memory systems for cross-session knowledge accumulation
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md) — the three-layer skills/agents/commands structure
-- [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md) — classifying coding agent scaffolds across control, tool interface, and resource management dimensions
+- [Scaffold Architecture Taxonomy](harness-design-dimensions.md) — classifying coding agent scaffolds across control, tool interface, and resource management dimensions
 - [Agentic AI Architecture: From Prompt to Goal-Directed](agentic-ai-architecture-evolution.md) — cognitive/execution separation and enterprise hardening
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md) — lifecycle governance for skill libraries
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md) — the two-phase harness pattern for long-running agent work

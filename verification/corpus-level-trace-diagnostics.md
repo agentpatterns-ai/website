@@ -49,7 +49,7 @@ The split echoes the division of labor in [Anthropic's multi-agent research syst
 
 ## Why It Works
 
-Agent failures are governed by a few recurring causal patterns (tool misuse, context drift, reward hacking, missing capability), but each surfaces with high per-trace variance. Aggregating across many traces averages out task-specific noise so the signal becomes detectable.
+Agent failures are governed by a few recurring causal patterns (tool misuse, context drift, [reward hacking](anti-reward-hacking.md), missing capability), but each surfaces with high per-trace variance. Aggregating across many traces averages out task-specific noise so the signal becomes detectable.
 
 The scout-investigator split keeps this safe at scale: scout pattern recognition is cheap but error-prone; investigator verification is expensive but precise. Composed, they mirror clinical diagnostic reasoning — broad differential, then targeted confirmation. Reported payoff: 30.4 percentage points scaffold improvement over baseline across HLE, SWeBench Pro, TerminalBench, and FeatureBench. [Source: [Manglik et al., Insights Generator (arxiv 2605.21347)](https://arxiv.org/abs/2605.21347)]
 
@@ -76,7 +76,7 @@ The layers compose; they do not replace each other.
 
 1. **Decide the corpus**. Filter to a comparable trace set (same agent version, task family, time window).
 2. **Define the diagnostic question**. `Why do tool-use tasks fail at step 6-15?` beats `Why does the agent fail?` — failures cluster in mid-trajectory steps where early missteps cascade. [Source: [Where LLM Agents Fail (arxiv 2509.25370)](https://arxiv.org/pdf/2509.25370)]
-3. **Run the scout pass**. A cheap model emits capped candidate hypotheses — long lists dilute investigator effort.
+3. **Run the scout pass**. A cheap model emits capped candidate hypotheses (`tool X precedes tool Y in failed runs`) — long lists dilute investigator effort.
 4. **Run the investigator pass**. For each hypothesis, fetch supporting and counter-evidence traces; discard hypotheses with strong counter-examples or no corroboration.
 5. **Sample-review findings**. A domain expert reads 10-20% of cited traces per finding before any insight is ground truth. Non-optional.
 6. **Convert findings into eval cases**. Each confirmed pattern becomes a regression eval — see [incident-to-eval synthesis](incident-to-eval-synthesis.md).

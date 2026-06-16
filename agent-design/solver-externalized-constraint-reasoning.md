@@ -44,7 +44,7 @@ graph LR
 
 **1. Encode.** The agent writes Python that constructs the formal encoding — `z3.Solver()` calls for SMT, `pysat` clauses for MaxSAT, `ortools.sat.python.cp_model` for CP-SAT. Here natural-language preferences become hard constraints, weighted soft constraints, and an objective.
 
-**2. Solve.** An exact solver computes an optimal assignment. SAT, SMT, and MaxSAT solvers carry formal correctness guarantees on the encoded problem — the *only* layer with that property.
+**2. Solve.** An exact solver computes an optimal assignment — the [deterministic guardrail](../verification/deterministic-guardrails.md) wrapped around the probabilistic encoding step. SAT, SMT, and MaxSAT solvers carry formal correctness guarantees on the encoded problem — the *only* layer with that property.
 
 **3. Verify.** A separate check confirms the output satisfies the original prompt constraints, not just the ones the encoding captured. The cited paper uses a dual-encoding canonicalisation that accommodates multiple optima ([Orvalho et al. — arXiv:2605.29687](https://arxiv.org/abs/2605.29687)); practical setups re-run the constraints against the candidate and print the proof.
 

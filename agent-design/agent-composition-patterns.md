@@ -42,7 +42,7 @@ graph LR
 
 **Trade-off:** No parallelism; latency accumulates across steps.
 
-**Example:** Content pipeline — research → draft → review → publish.
+**Example:** a content pipeline (research → draft → review → publish), or the [evaluator-optimizer](evaluator-optimizer.md) loop as a two-stage chain.
 
 ### Multi-Phase Chain Tactics
 
@@ -74,7 +74,7 @@ graph TD
 
 **When to use:** N independent tasks — reviewing N files, fetching N URLs, analyzing N data sources.
 
-**Trade-off:** Fast (parallel execution). The orchestrator must synthesize results.
+**Trade-off:** Fast (parallel execution). The orchestrator must synthesize results (see [Fan-Out Synthesis](../multi-agent/fan-out-synthesis.md)).
 
 **Example:** Parallel reviewers for code quality, type safety, and test coverage — each sub-agent gets its own context window. See [Sub-Agents for Fan-Out](../multi-agent/sub-agents-fan-out.md) and [Specialized Agent Roles](specialized-agent-roles.md).
 
@@ -90,7 +90,7 @@ graph LR
     S2 -->|fail| S1
 ```
 
-**When to use:** Repeatable processes where output quality at each stage gates progress.
+**When to use:** Repeatable processes where output quality at each stage gates progress — the [command](agents-vs-commands.md) layer in agent-driven projects.
 
 **Trade-off:** Explicit pass/fail at each boundary, with feedback loops on failure.
 
@@ -102,7 +102,7 @@ A coordinator agent decides what to delegate, to whom, and when.
 
 **When to use:** Tasks where the sequence and delegation targets are not known upfront.
 
-**Trade-off:** More flexible but harder to debug. The supervisor needs sufficient context.
+**Trade-off:** More flexible but harder to debug. The supervisor needs sufficient context to delegate well (see [Delegation Decision](delegation-decision.md)).
 
 **Example:** An agent receives "make this codebase production-ready" and decomposes into: security review, test coverage, documentation.
 
@@ -180,7 +180,7 @@ tools: Bash, Read, Grep
 Return a JSON object with the page path and findings.
 ```
 
-Each worker runs a sequential chain internally (lint → links → frontmatter), while the orchestrator fans out across pages. This combines two patterns: fan-out at the top level, chains within each worker.
+Each worker runs a sequential chain internally (lint → links → frontmatter), while the orchestrator fans out across pages. This combines two patterns: fan-out at the top level, `lint → links → frontmatter` chains within each worker.
 
 If the audit later needs a gate — pages with critical findings block deployment — wrap the fan-out in a pipeline with a quality gate after synthesis.
 

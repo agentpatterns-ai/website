@@ -24,7 +24,7 @@ maturity: established
 
 Manually authored evals reflect what developers *think* will go wrong. Production incidents reveal what *actually* goes wrong — real users find edge cases no developer anticipates.
 
-Developers anchor on happy paths and known failure classes. Production traffic explores the full input distribution — rare phrasing, adversarial queries, and domain combinations no dev imagines. Each incident proves the failure class is real and reproducible, the minimum bar for a useful eval case.
+Developers anchor on happy paths and a known [failure taxonomy](completion-failure-taxonomy.md). Production traffic explores the full input distribution — rare phrasing, adversarial queries, and domain combinations no dev imagines. Each incident proves the failure class is real and reproducible, the minimum bar for a useful eval case.
 
 ## The Pipeline
 
@@ -176,7 +176,7 @@ Every postmortem should ask: "What eval would have caught this?"
 ## When This Backfires
 
 - **Eval drift**: Expected behavior in each case is hardcoded at incident time. When the product's intended behavior changes (new policy, updated model, shifting requirements), old eval cases silently become wrong — they now test the *previous* correct behavior. Without a review cadence, the suite drifts and passing CI stops being meaningful.
-- **Grader decay for LLM-as-judge**: LLM judges require periodic calibration against human ratings. If the judge model is updated or the prompt drifts, scoring shifts without any test case changing — a passing suite may no longer reflect actual quality.
+- **Grader decay for LLM-as-judge**: [LLM judges](../workflows/llm-as-judge-evaluation.md) require periodic calibration against human ratings. If the judge model is updated or the prompt drifts, scoring shifts without any test case changing — a passing suite may no longer reflect actual quality.
 - **Volume without triage**: High-traffic systems generate hundreds of incidents with overlapping failure modes. Without deduplication and priority labeling, the suite balloons with redundant cases that slow CI without improving coverage.
 
 ## Key Takeaways

@@ -63,7 +63,7 @@ This is the same shape as Bull's `SETNX`+`PX` stalled-job recovery: an atomic cl
 
 ### Layer 3: Lease-based recovery
 
-A claim comment older than its declared TTL means the worker crashed before completing. The next scan treats stale-claimed items as re-claimable — the worker checks the timestamp, drops the old claim, and starts the claim sequence itself. Crashed runs self-heal without human unsticking. Release-on-completion is the converse: finishing a stage removes the claim label *together with* the stage-label advance, so no item looks claimed forever.
+A claim comment older than its declared TTL (600 s in the example below) means the worker crashed before completing. The next scan treats stale-claimed items as re-claimable — the worker checks the timestamp, drops the old claim, and starts the claim sequence itself. Crashed runs self-heal without human unsticking. Release-on-completion is the converse: finishing a stage removes the claim label *together with* the stage-label advance, so no item looks claimed forever.
 
 This is the lease pattern documented broadly in distributed systems literature: by making the default state of a resource unlocked after a timeout, leases solve the deadlock problem, and recovery is no longer dependent on a potentially crashed or partitioned client ([Mastering Bull](https://app.studyraid.com/en/read/12483/403578/redis-atomic-operations), [Kleppmann 2016](https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html)).
 
@@ -78,7 +78,7 @@ The complementary mechanism — observable Kanban-shaped state for humans — is
 - **Sub-second contention**. Work items shorter than the claim round-trip put the tiebreaker inside the contention window. The cal.com `getNextBatch` bug (#24186) is the same failure at the database layer: two workers run the same `findMany` and both claim identical work because the read had no row lock ([cal.com #24186](https://github.com/calcom/cal.com/issues/24186)). Move to atomic claim-and-select (or a queue with broker-side delivery) for high-fan-out short tasks.
 - **Correctness-critical side effects**. Payments, deploys, emails. Prefect's Global Concurrency Limits had this exact bug in the HTTP `/increment-with-lease` endpoint: read of `active_slots` was not row-locked, so two requests could both observe `active_slots=0` and both claim a slot, yielding `active_slots=2` despite `limit=1`. The fix was external Redis locking or moving to deployment-level limits with atomic `bulk_increment_active_slots` ([Prefect Discussion #20520](https://github.com/PrefectHQ/prefect/discussions/20520)). The same constraint applies here.
 - **Strict read-after-write requirements**. The tracker API has documented eventual-consistency behavior — `labeled` webhooks can fire before the API reflects the new label set, and post-webhook 404s are routine enough that production GitHub apps budget retries for them ([Aviator: How we built one of the most complex apps on GitHub](https://www.aviator.co/blog/how-we-built-one-of-the-most-complex-apps-on-github/)).
-- **Sustained legitimate work exceeding TTL**. A healthy worker on a long task is treated as crashed. Tuning TTL trades crash-recovery latency for over-claim risk; both sides hurt if tuned wrong. Stick to minutes-scale work or add explicit heartbeat-renewal logic.
+- **Sustained legitimate work exceeding TTL**. A healthy worker on a long task is treated as crashed. Tuning the `TTL` trades crash-recovery latency for over-claim risk; both sides hurt if tuned wrong. Stick to minutes-scale work or add explicit heartbeat-renewal logic.
 - **Heavy multi-bot environments**. Many automations (dependency bots, custom workflows) react to `labeled`/`unlabeled` events; label flips can spawn cascading workflow runs and surface event-ordering races ([GitHub Community Discussion #69337](https://github.com/orgs/community/discussions/69337)).
 - **Cross-tracker or multi-region coordination**. TTL based on a claimer's local clock breaks under skew. Comment-timestamp ordering sidesteps this only if comparison stays server-side.
 
@@ -131,7 +131,7 @@ A separate sweep (cron or the same worker on idle) reclaims expired leases: find
 
 - Labels are not a compare-and-swap primitive — pair them with a server-timestamped claim comment so the tiebreaker total-orders concurrent claims.
 - TTL on the claim is for crash recovery, not for mutual exclusion. Crashed workers self-heal because the claim ages past its lease.
-- The work item must be idempotent. The pattern degrades to "no work done" or "work done twice with the same result," never "incorrect work done."
+- The work item must be [idempotent](../agent-design/idempotent-agent-operations.md). The pattern degrades to "no work done" or "work done twice with the same result," never "incorrect work done."
 - Suitable for minutes-scale, best-effort coordination on a single tracker. For correctness-critical or sub-second contention, graduate to an external atomic store with fencing tokens.
 - The benefit over Redis or a database lock is observability — the tracker is already the team's Kanban board, so coordination state is human-readable for free.
 

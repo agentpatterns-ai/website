@@ -3,15 +3,14 @@ title: "Agent Self-Review Loop for Iterative Self-Improvement"
 term: "Agent Self-Review Loop"
 description: "Agents review their own output — running code review, security scanning, and quality checks — before submitting work for human review."
 tags:
-  - testing-verification
-  - agent-design
   - code-review
+  - testing-verification
   - tool-agnostic
 aliases:
   - "Review-Then-Implement Loop"
   - "Agent Review Loops"
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Agent Self-Review Loop
@@ -25,7 +24,7 @@ maturity: established
 
 An agent that generates code runs a review pass on its own changes before opening a pull request — iterating on findings, fixing issues before a human ever sees the PR.
 
-This differs from the [Committee Review Pattern](../code-review/committee-review-pattern.md), where separate reviewer agents evaluate an implementer's output. In a self-review loop, the same agent (or a tightly integrated review step within the agent's workflow) evaluates and iterates on its own work as a built-in phase before submission.
+This differs from the [Committee Review Pattern](committee-review-pattern.md), where separate reviewer agents evaluate an implementer's output. In a self-review loop, the same agent (or a tightly integrated review step within the agent's workflow) evaluates and iterates on its own work as a built-in phase before submission.
 
 ## How It Works
 
@@ -73,8 +72,8 @@ For agents without built-in self-review:
 
 1. **Add a review step before PR creation.** After the agent completes code generation, run a separate review prompt or subagent against the diff. Use `git diff` to scope the review to changes only.
 2. **Include security tooling.** Run linters, static analysis (e.g., CodeQL, Semgrep, Bandit), and secret scanners as shell commands within the agent's workflow. Parse results and fix findings before proceeding.
-3. **Cap iteration rounds.** Set a maximum of two to three self-review cycles. If the agent cannot resolve its own findings within that limit, open the PR with remaining issues documented for human review.
-4. **Maintain independence where possible.** A fresh context for the review step reduces confirmation bias. If using a subagent for review, give it read-only tool access and a review-focused prompt distinct from the implementation prompt.
+3. **Cap iteration rounds.** Set a maximum of 2 to 3 self-review cycles. If the agent cannot resolve its own findings within that limit, open the PR with remaining issues documented for human review.
+4. **Maintain independence where possible.** A fresh context for the review step reduces confirmation bias (full independence is the [committee review](committee-review-pattern.md) alternative). If using a subagent for review, give it read-only tool access and a review-focused prompt distinct from the implementation prompt.
 
 ## Limitations
 
@@ -82,7 +81,7 @@ For agents without built-in self-review:
 
 **Scope ceiling.** Self-review catches mechanical issues — style, known vulnerability patterns, dependency problems. It does not catch architectural misjudgments, incorrect business logic, or design problems that require domain knowledge beyond the agent's context.
 
-**Diminishing returns.** After two to three rounds of self-review iteration, additional rounds rarely surface new issues. The agent converges on its own interpretation of correctness.
+**Diminishing returns.** After 2 to 3 rounds of self-review iteration, additional rounds rarely surface new issues. The agent converges on its own interpretation of correctness.
 
 ## Key Takeaways
 
@@ -151,11 +150,11 @@ The agent parses each JSON output and fixes findings before the PR opens. If fin
 
 ## Related
 
-- [Review-Then-Implement Loop](../code-review/review-then-implement-loop.md)
-- [Committee Review Pattern](../code-review/committee-review-pattern.md) — cross-agent alternative where independent reviewers evaluate an implementer's output
-- [Agent-Assisted Code Review](../code-review/agent-assisted-code-review.md)
-- [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
-- [Convergence Detection](convergence-detection.md) — deciding when self-review iterations have stopped surfacing new issues
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md) — accumulated vs fresh context tradeoffs across iteration loops
-- [Agent Harness](agent-harness.md) — the initializer + coding agent pattern that self-review integrates into as a built-in phase
+- [Review-Then-Implement Loop](review-then-implement-loop.md)
+- [Committee Review Pattern](committee-review-pattern.md) — cross-agent alternative where independent reviewers evaluate an implementer's output
+- [Agent-Assisted Code Review](agent-assisted-code-review.md)
+- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
+- [Convergence Detection](../agent-design/convergence-detection.md) — deciding when self-review iterations have stopped surfacing new issues
+- [Loop Strategy Spectrum](../agent-design/loop-strategy-spectrum.md) — accumulated vs fresh context tradeoffs across iteration loops
+- [Agent Harness](../agent-design/agent-harness.md) — the initializer + coding agent pattern that self-review integrates into as a built-in phase
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)

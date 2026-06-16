@@ -28,9 +28,9 @@ Wink classifies misbehaviors into three mutually exclusive categories:
 
 **Specification Drift** — the trajectory diverges from the stated goal. Common causes: ambiguous instructions, long-horizon context dilution, or the agent reprioritizing based on intermediate findings.
 
-**Reasoning Problems** — internal logic fails. Examples: circular reasoning loops, incorrect inferences from tool outputs, and wrong assumptions about codebase state. The agent applies instructions incorrectly rather than ignoring them.
+**Reasoning Problems** — internal logic fails; the correction supplies the missing inference step via [injected context](../context-engineering/context-injected-error-recovery.md). Examples: circular reasoning loops, incorrect inferences from tool outputs, and wrong assumptions about codebase state. The agent applies instructions incorrectly rather than ignoring them.
 
-**Tool Call Failures** — incorrect tool invocations: wrong arguments, non-existent file paths, malformed API calls, or tool sequences that violate execution preconditions.
+**Tool Call Failures** — incorrect tool invocations: wrong arguments, non-existent file paths, malformed API calls, or tool sequences that violate execution preconditions, including the repeated no-progress calls that [loop detection](../observability/loop-detection.md) catches.
 
 Each category requires a distinct correction strategy. A generic nudge applied to all three degrades performance; classification enables category-specific corrections.
 
@@ -130,5 +130,5 @@ This illustrates the category-specific correction value: a generic "you seem stu
 - [Steering Running Agents](steering-running-agents.md)
 - [Skill Program Functions](skill-program-functions.md) — the synchronous, compiled-predicate counterpart; Wink observes asynchronously while PFs fire mid-loop on deterministic triggers
 - [Agent Loop Middleware](agent-loop-middleware.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
 - [The Ralph Wiggum Loop](ralph-wiggum-loop.md)

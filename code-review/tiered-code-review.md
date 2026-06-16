@@ -101,7 +101,7 @@ This [severity-driven pattern](https://www.qodo.ai/blog/5-ai-code-review-pattern
 
 Deciding what counts as "critical" is the hardest part. Four heuristics:
 
-- **Security boundary**: code handling authentication, authorization, encryption, or PII requires human review.
+- **Security boundary**: code handling authentication, authorization, encryption, or PII requires human review — the paths where the [security review gap in AI-authored PRs](security-review-gap-in-ai-prs.md) is widest.
 - **Financial impact**: code processing payments, billing, or subscriptions requires human review.
 - **Blast radius**: bugs that affect all users rather than one feature. Higher [blast radius](../security/blast-radius-containment.md) demands human review.
 - **Reversibility**: changes that corrupt persistent state rather than rolling back in minutes need human eyes.
@@ -186,6 +186,7 @@ Tiered review is not a substitute for threat modeling or dependency scanning —
 ## Related
 
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
+- [Tunable Review Effort](tunable-review-effort.md) — per-PR effort routing as the operator-set counterpart to these review tiers
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Committee Review Pattern](committee-review-pattern.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md)

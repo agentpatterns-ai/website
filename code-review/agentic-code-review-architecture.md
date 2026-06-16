@@ -9,7 +9,7 @@ aliases:
   - "Agentic Code Review"
   - "Tool-Calling Code Review"
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Agentic Code Review Architecture
@@ -60,7 +60,7 @@ Any AI code review system benefits from the same structural shift:
 1. **Give the reviewer tools, not just data.** A reviewer with access to file reading, search, and dependency tracing produces more accurate findings than one that only sees the diff.
 2. **Blend analysis methods.** Use LLMs for judgment-requiring issues (architectural fit, naming quality, design patterns) and deterministic tools for rule-based issues (security patterns, style violations, type errors).
 3. **Plan before reviewing.** For large PRs, have the agent scan the overall change scope and create a review strategy before examining individual files — preventing early findings from being forgotten.
-4. **Read beyond the diff.** The most valuable comments come from understanding how changed code interacts with unchanged code — call sites, shared interfaces, and test coverage of affected paths.
+4. **Read beyond the diff.** The most valuable comments come from understanding how changed code interacts with unchanged code — call sites, shared interfaces, and test coverage of affected paths; this is the cross-file blind spot [diff-based review](diff-based-review.md) cannot cover on its own.
 
 ## Operational Considerations
 
@@ -81,7 +81,7 @@ Agentic code review adds overhead that can outweigh its benefits in several cond
 
 A pull request modifies a shared authentication helper used by six services. With static diff review, the AI sees only the changed lines in the helper and comments on syntax and naming. With agentic review, the workflow looks like:
 
-1. **Context gathering** — the agent reads the helper file, then calls file-read tools on each of the six services that import it, examining how each consumes the interface being changed.
+1. **Context gathering** — the agent reads the helper file, then calls file-read tools on each of the 6 services that import it, examining how each consumes the interface being changed.
 2. **Issue linkage** — the agent reads the linked issue to understand the intended behavior change versus what the diff actually implements.
 3. **Review strategy** — before commenting, the agent maps the full change scope: modified interface, affected call sites, related tests, and existing documentation.
 4. **Findings** — the agent surfaces that three of the six services rely on the old return shape; it flags this as a breaking change the diff-only view would miss, and references the specific call sites by file and line.

@@ -86,7 +86,7 @@ The captured trajectories make every iteration of step 4 cost one LLM call per r
 - Offline trajectory replay localises blame to the failing node in a multi-agent DAG without paying the cost of end-to-end re-runs.
 - The pattern applies under three conditions: fixed-DAG topology, graded per-node rubrics, and captured traces that still represent production.
 - Backward node evaluation lets you score intermediate nodes when only final-answer labels exist — but the synthesised expectations are a triage signal, not ground truth.
-- Cyclic workflows, drift-driven failures, and tightly coupled joint failures break the pattern; use live tracing or counterfactual replay instead.
+- Cyclic workflows, drift-driven failures, and tightly coupled joint failures break the pattern; use [live tracing](agent-debugging.md) or counterfactual replay instead.
 - Capture infrastructure (LangSmith, Langfuse, Phoenix, OTel) is already commodity — the new surface is the per-node rubric overlay plus editable prompt-revision UI ([PROTEA, arxiv 2605.18032](https://arxiv.org/abs/2605.18032)).
 
 ## Related

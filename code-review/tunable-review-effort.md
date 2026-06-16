@@ -67,8 +67,8 @@ graph TD
 
 - **File-path criticality** — auth, payment, or crypto paths route to High. Same axis [tiered code review](tiered-code-review.md) uses for human escalation.
 - **Change size** — diffs above an LOC threshold route to High.
-- **Author trust** — first-time contributors or external forks route to High. Same signal CODEOWNERS already encodes.
-- **Historical defect rate** — directories with elevated post-merge bug rates route to High. Vendor exposes no signal; encode in Custom.
+- **Author trust** — first-time contributors or external forks route to High. Same signal `CODEOWNERS` already encodes.
+- **Historical defect rate** — directories with elevated post-merge bug rates route to High. Cursor exposes no signal; encode in Custom.
 
 Cursor's Custom level encodes this as a natural-language policy evaluated [per PR](https://cursor.com/changelog/05-11-26).
 
@@ -111,7 +111,7 @@ Pinning Default at the team level and letting Custom escalate inverts biasing-up
 - Effort levels in code review agents are the per-PR analogue of [heuristic effort scaling](../agent-design/heuristic-effort-scaling.md) and [interactive effort sliders](../agent-design/interactive-effort-sliders.md), but with the unit of work bound to one PR and the decision delegated to a reviewer or routing policy.
 - The dial is meaningful only with a published bug-discovery curve. Effort labels without numbers are hedge words.
 - Resolution rate gates whether the higher-effort flags are useful; published rates are not the same as precision, and teams that need a precision floor measure it themselves.
-- Routing policies concentrate High on the axes that pay for it — file-path criticality, change size, author trust, historical defect rate. Pinning High globally collapses the pattern back to a fixed-pipeline calibration.
+- Routing policies concentrate High on the axes that pay for it — file-path criticality, change size, author trust, historical defect rate — the heuristic siblings of [risk-score threshold calibration](risk-score-threshold-calibration.md). Pinning High globally collapses the pattern back to a fixed-pipeline calibration.
 - Custom natural-language policies are themselves drift-prone instruction surfaces. Treat them like CLAUDE.md: review periodically, gate changes through eval.
 
 ## Related

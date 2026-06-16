@@ -11,7 +11,7 @@ aliases:
   - subagent context inheritance
   - forked subagent
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # Forked vs Fresh Subagents: When to Inherit the Parent Conversation
@@ -45,7 +45,7 @@ The mechanism cuts both ways. Forks are cheap precisely because they carry the p
 
 **Forking a trifecta-sensitive child.** A fork pulls in every accumulated tool result, including web fetches and MCP output. The [Claude docs](https://code.claude.com/docs/en/sub-agents#fork-the-current-conversation) call this out directly: a fork "drops the input isolation that subagents otherwise provide." If the parent has any [lethal-trifecta](../security/lethal-trifecta-threat-model.md) exposure, the fork inherits the injection surface. Fresh containment — only what the orchestrator chose to pass — is the safer default for any child that can act.
 
-**Forking past the context cliff.** Forks copy the entire parent window, so a parent already past the degradation threshold hands the fork a degraded baseline. Forking propagates session bloat rather than solving it.
+**Forking past the [context cliff](../context-engineering/context-window-dumb-zone.md).** Forks copy the entire parent window, so a parent already past the degradation threshold hands the fork a degraded baseline. Forking propagates session bloat rather than solving it.
 
 **Forking when the task must challenge prior decisions.** Counterfactual exploration breaks when the explorer remembers why each option was rejected. Fresh context is the lever that lets a subagent disagree.
 
@@ -63,14 +63,14 @@ The `/fork` command itself works with or without the variable set — the variab
 A team is 140k tokens into a design-system session — color tokens, component patterns, and spacing rules are all established in the conversation. Two parallel tasks come up:
 
 1. *Generate two Kanban-card variations that fit the existing system.* Fork twice. Both forks see the full design system byte-for-byte and produce variations consistent with it. A fresh subagent would receive Claude's compressed summary ("project uses Tailwind, dark theme, Inter font") and lose the specific spacing scale and shadow treatments that make variations belong together.
-2. *Review the authentication module the team just wrote for security issues.* Spawn fresh. The fresh subagent has no investment in the implementation choices and can flag the constant-time-comparison gap the author missed.
+2. *Review the authentication module the team just wrote for security issues.* [Spawn fresh](sub-agents-fan-out.md). The fresh subagent has no investment in the implementation choices and can flag the constant-time-comparison gap the author missed.
 
 Both delegations happen in the same session. The fork-vs-fresh choice is per-task, not per-session.
 
 ## Key Takeaways
 
 - The fork/fresh axis is a per-task choice, not a global setting — even with fork mode enabled, named subagents still spawn fresh.
-- Forks share the parent prompt cache; their first request bills at cache-read rates because the prefix matches.
+- Forks share the parent Claude prompt cache; their first request bills at cache-read rates because the prefix matches.
 - Fresh is the right default for reviews, audits, and any child that needs to disagree with the parent.
 - Forks earn their keep when the parent's reasoning is load-bearing and at least two siblings will run from the same starting point.
 - A fork drops input isolation — never fork a child that holds egress when the parent has touched untrusted content.

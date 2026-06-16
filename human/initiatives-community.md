@@ -6,7 +6,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Initiatives and Community: Tracking the Agentic Engineering Landscape
@@ -53,8 +53,8 @@ The meaningful signals in this space:
 
 Following these communities adds value only when the conditions below hold; when they don't, tracking overhead exceeds the signal yield:
 
-- **Curated lists go stale faster than the field moves** — resource directories require active maintenance. A community that was authoritative six months ago may have pivoted, gone dormant, or been superseded. Treat any curated list (including this one) as a starting point, not a permanent registry.
-- **Volume without filtering creates noise, not signal** — following every active community compounds context switching and information overload. The value is in selective depth: one or two primary sources tracked closely outperform five sources skimmed intermittently.
+- **Curated lists go stale faster than the field moves** — resource directories require active maintenance. A community that was authoritative six months ago may have pivoted, gone dormant, or been superseded. Treat [any curated list](evaluating-agent-patterns-catalog-as-a-source.md) (including this one) as a starting point, not a permanent registry.
+- **Volume without filtering creates noise, not signal** — following every active community compounds [context switching and information overload](cognitive-load-ai-fatigue.md). The value is in selective depth: one or two primary sources tracked closely outperform five sources skimmed intermittently.
 - **Commercial and tool-alignment bias** — course providers, tool vendors, and standards bodies have incentives that shape what they publish and what they omit. An "open standard" backed by a single vendor is advocacy; an initiative that attracts competing implementations is signal.
 
 ## Key Takeaways

@@ -30,7 +30,6 @@ last_reviewed: 2026-05-27
 - [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md) — Define evaluation tasks and success criteria before implementing agent features to make "done" objective and prevent requirement drift
 - [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md) — Create and iterate on your first CLAUDE.md, AGENTS.md, or copilot-instructions.md in under thirty minutes
 - [Google Search Console Monitoring Workflow](../geo/gsc-search-console-monitoring.md) — Automate GSC and Bing WMT verification, index coverage tracking, and weekly CWV + query reports via API
-- [Evaluation-Driven Development for Agent Tools](eval-driven-tool-development.md) — Build agent tools in a prototype-evaluate-analyze-iterate loop rather than optimizing in the dark
 - [LLM-as-Judge Evaluation with Human Spot-Checking](llm-as-judge-evaluation.md) — Combine automated LLM rubric scoring with targeted human review to evaluate multi-agent output at scale without sacrificing quality on edge cases
 - [Continuous Autonomous Task Loop](continuous-autonomous-task-loop.md) — Self-directed agent loop that selects, executes, commits, and iterates over a task backlog with fresh context per task and rate-limit handling
 - [Factory Over Assistant: Orchestrating Parallel Agent Fleets](factory-over-assistant.md) — Shift from watching one agent to orchestrating parallel agents with automated feedback loops — and the infrastructure required to make it viable

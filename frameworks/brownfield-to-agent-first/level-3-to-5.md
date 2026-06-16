@@ -9,7 +9,7 @@ tags:
   - tool-agnostic
   - frameworks
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # L3 → L5: Reaching Agent-First

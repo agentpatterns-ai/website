@@ -6,7 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Strategy Over Code Generation
@@ -56,7 +56,7 @@ The study measures ML projects broadly, not AI coding agents specifically. But t
 
 **Strategy failure looks like**: Using an agent to generate code before defining what the code should accomplish. [Vibe coding](../anti-patterns/vibe-coding.md) an entire feature without requirements. Automating the wrong workflow.
 
-**Process without ecosystem looks like**: Requiring code review for every agent PR but having no automated linting, no test suite, and no CI pipeline. The review burden scales with agent output volume.
+**Process without ecosystem looks like**: Requiring code review for every agent PR but having no automated linting, no test suite, and no CI pipeline. The review burden scales with agent output volume — the [bottleneck migration](bottleneck-migration.md) from generation to verification.
 
 **Ecosystem without strategy looks like**: A fully automated CI/CD pipeline producing well-tested code that solves a problem nobody has.
 
@@ -75,8 +75,8 @@ Jumping to step 4 (better tools, faster agents) without steps 1–3 is the patte
 
 The cascade model is most actionable for sustained production ML projects with identifiable business metrics. It is less applicable in three specific contexts:
 
-- **Short-horizon experiments**: Proofs of concept with a defined end date (under four weeks) often need just enough strategy to define a testable hypothesis — full cascade overhead exceeds the value delivered. Skip to process and ecosystem; treat strategy as a one-paragraph hypothesis rather than a full planning exercise.
-- **Deliberately undefined goals**: Research prototypes and exploratory ML work intentionally operate without fixed objectives. Forcing strategy clarity prematurely closes off the exploration needed to discover what the right goal should be. The cascade applies once a promising direction is found, not before.
+- **Short-horizon experiments**: Proofs of concept with a defined end date (under 4 weeks) often need just enough strategy to define a testable hypothesis — full cascade overhead exceeds the value delivered. Skip to process and ecosystem; treat strategy as a one-paragraph hypothesis rather than a full planning exercise.
+- **Deliberately undefined goals**: Research prototypes and exploratory ML work intentionally operate without fixed objectives. Forcing strategy clarity prematurely closes off the exploration needed to discover what the right goal should be. The cascade applies once a promising direction is found, not before ([Prause, 2026](https://arxiv.org/abs/2601.01839)).
 - **Skill-bottlenecked teams**: If the real constraint is that the team lacks technical capability to execute (wrong stack, missing domain knowledge, inadequate data infrastructure), strategy clarity does not unblock delivery. The SEM model assumes baseline execution capability exists; teams below that threshold need skill-building first.
 
 The study also measures ML projects broadly, not AI coding agents specifically — the structural relationships are plausible extensions but are not empirically verified in general software development contexts.
@@ -90,9 +90,9 @@ The study also measures ML projects broadly, not AI coding agents specifically �
 
 ## Example
 
-A data team at a logistics company adopts an AI coding agent to build a demand forecasting service. The lead engineer immediately starts generating model training pipelines, data loaders, and API endpoints. Within two weeks the agent has produced a working system: feature engineering, model selection, hyperparameter tuning, deployment scripts, monitoring dashboards.
+A data team at a logistics company adopts an AI coding agent to build a demand forecasting service. The lead engineer immediately starts generating model training pipelines, data loaders, and API endpoints. Within 2 weeks the agent has produced a working system: feature engineering, model selection, hyperparameter tuning, deployment scripts, monitoring dashboards.
 
-The project fails in production. The model optimizes for prediction accuracy on historical data, but the business needs order-level confidence intervals for warehouse staffing decisions. The metric was wrong. No amount of code velocity could fix a misaligned objective.
+The project fails in production. The model optimizes for prediction accuracy on historical data, but the business needs order-level confidence intervals for warehouse staffing decisions. The metric was wrong. No amount of code velocity could fix a misaligned objective — the case for [empowerment over automation](empowerment-over-automation.md), where human judgment defines the goal that fast code then serves.
 
 A second team at the same company applies the cascade:
 

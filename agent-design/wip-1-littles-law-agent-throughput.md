@@ -57,7 +57,7 @@ The metric that proves the harness works is not features-started but verified co
 ## When This Backfires
 
 - **Tightly bounded micro-tasks.** Renaming twelve helper functions in lockstep does not benefit from twelve serial verification cycles. Per-task overhead dominates per-task work. Batch the edit; verify once.
-- **Cross-cutting refactors.** Changing a public API signature legitimately touches many files in one logical change. Forcing per-file verification leaves intermediate states that do not compile.
+- **[Cross-cutting refactors](coding-agent-scope-expansion.md).** Changing a public API signature legitimately touches many files in one logical change. Forcing per-file verification leaves intermediate states that do not compile.
 - **No verification oracle.** If `passing` collapses to "looks reasonable," WIP=1 still applies but its gating mechanism evaporates. Add a real oracle (test, schema, runbook step) before relying on the rule.
 - **Orchestrator-level parallelism.** WIP=1 applies *within* a single verified-completion stream. Multi-agent systems running in parallel ([Anthropic's multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)) deliberately fan out; each sub-agent's *own* stream still runs WIP=1.
 

@@ -20,7 +20,7 @@ maturity: emerging
 
 For static reasoning — math, code, visual reasoning — base and RL pass@k curves converge at large *k*: RL raises pass@1 but does not expand what the model can ever solve [Source: [Yue et al., *Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model?*](https://arxiv.org/abs/2504.13837)]. That result has been read as a general ceiling on RL post-training.
 
-Agentic tool use breaks the assumption. Agents interleave reasoning with tool calls over *T* rounds. Compositional strategies — plan, retrieve, re-plan on retrieved content, retrieve again — depend on *T*, not on resampling. A metric that only varies *k* conflates "cannot do this at any k" with "cannot do this at this T."
+Agentic tool use breaks the assumption. Agents interleave reasoning with tool calls over *T* rounds. Compositional strategies — plan, retrieve, re-plan on retrieved content, retrieve again, the loop [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md) formalise — depend on *T*, not on resampling. A metric that only varies *k* conflates "cannot do this at any k" with "cannot do this at this T."
 
 ## The Two-Dimensional Metric
 
@@ -63,7 +63,7 @@ Single-turn benchmarks — HumanEval, MBPP, math word problems — do not requir
 - **T must span the compositional budget.** If the harness caps *T* below what a compositional plan requires, both base and RL agents fail and the metric reports no expansion. Size *T* from observed successful-trajectory lengths before fixing the grid.
 - **Early-training checkpoints understate the effect.** RL can narrow capability during an exploitation phase before an exploration phase recovers it [Source: [Yao et al., *The Debate on RLVR Reasoning Capability Boundary: Shrinkage, Expansion, or Both?*](https://arxiv.org/abs/2510.04028)].
 - **pass@k at large k is exponentially forgiving** — any non-zero-capability agent eventually hits the right answer. Interpret widening gaps at large *k* as capability expansion only when the base model's pass-curve has plateaued [Source: [Brooker, *Pass@k is Mostly Bunk*](https://brooker.co.za/blog/2026/01/21/pass-k.html)].
-- **Reward-hackable environments inflate the surface.** If the outcome check can be satisfied by surface patterns, RL exploits the reward; the widening gap reflects hacking, not reasoning. Audit with [trajectory-opaque evaluation](trajectory-opaque-evaluation-gap.md) before trusting outcome-only scores.
+- **Reward-hackable environments inflate the surface.** If the outcome check can be satisfied by surface patterns, RL exploits the reward; the widening gap reflects hacking, not reasoning. Audit with [trajectory-opaque evaluation](eval-blind-spots.md) before trusting outcome-only scores.
 - **Small suites give wide confidence intervals.** The 2D grid multiplies sample requirements; report intervals rather than point estimates per cell [Source: [Hariri et al., *Don't Pass@k: A Bayesian Framework for LLM Evaluation*](https://arxiv.org/abs/2510.04265)].
 
 ## Example
@@ -107,5 +107,5 @@ If the team had only measured pass@1 (+0.21 at T=32), they would call RL "better
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — single-turn pass@k versus pass^k
 - [Variance-Based RL Sample Selection](variance-based-rl-sample-selection.md) — upstream: which samples give RL a gradient signal
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — outcome-based grading that PASS@(k,T) builds on
-- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) — why outcome-only metrics need trajectory audits
+- [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — why outcome-only metrics need trajectory audits
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — multi-trial evaluation design

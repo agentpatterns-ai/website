@@ -104,7 +104,7 @@ A linter rule catches a dependency violation every time, in every session, for e
 Rigor relocation has real costs. The scaffolding-first bet fails or yields poor returns in several conditions:
 
 - **Scope too narrow**: A single-task agent that runs once or twice does not recoup the investment in linters, CI guardrails, and verification pipelines. The overhead only pays off when agents run repeatedly across sessions.
-- **Premature infrastructure lock-in**: Teams that build elaborate harnesses before understanding the task topology often optimize for the wrong constraints. High iteration velocity through prompt changes is faster than pipeline rewrites at early stages.
+- **Premature infrastructure lock-in**: Teams that build elaborate [harnesses](../agent-design/harness-engineering.md) before understanding the task topology often optimize for the wrong constraints. High iteration velocity through prompt changes is faster than pipeline rewrites at early stages.
 - **Harness correctness burden**: The harness itself can encode wrong invariants. A passing test suite that validates incorrect behavior is harder to debug than a failed prompt, because failures become invisible rather than explicit.
 - **Skill atrophy accelerates**: Mechanical enforcement reduces the need for engineers to reason about correctness directly, which compounds over time (see [Skill Atrophy](skill-atrophy.md)).
 

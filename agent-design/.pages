@@ -26,7 +26,6 @@ nav:
       - execution-first-delegation.md
       - execution-lineage-dag.md
       - runtime-scaffold-evolution.md
-      - scaffold-architecture-taxonomy.md
       - layered-domain-architecture.md
       - model-neutral-agent-architecture.md
       - inversion-analysis.md
@@ -44,16 +43,13 @@ nav:
       - task-specific-vs-role-based-agents.md
       - three-reasoning-spaces.md
   - "Memory & State":
-      - abstention-aware-memory-retrieval.md
       - acid-for-agent-repository-state.md
       - agent-memory-patterns.md
       - harness-memory-coupling.md
-      - ast-guided-agent-memory.md
       - ax-ux-dx-triad.md
-      - beads-task-graph-agent-memory.md
       - clock-in-clock-out-protocol.md
       - coala-memory-taxonomy-classifier.md
-      - component-isolated-memory-stress-testing.md
+      - code-native-memory-substrates.md
       - cross-cycle-consensus-relay.md
       - dual-trace-memory-encoding.md
       - durable-interactive-artifacts.md
@@ -61,8 +57,7 @@ nav:
       - generative-agents-memory-stream.md
       - handoff-skill-context-transfer.md
       - layered-mutability.md
-      - memory-as-governance-pre-action-gate.md
-      - memory-reinforcement-learning.md
+      - memory-retrieval-as-control.md
       - memory-synthesis-execution-logs.md
       - memory-transfer-learning.md
       - rag-over-thinking-traces.md
@@ -103,7 +98,6 @@ nav:
       - self-healing-production-agent.md
       - advisor-strategy.md
       - agent-backpressure.md
-      - agent-self-review-loop.md
       - behavioral-drivers-agent-success.md
       - cost-aware-agent-design.md
       - cross-vendor-competitive-routing.md
@@ -129,7 +123,6 @@ nav:
       - rubric-refine-pre-execution-tool-use.md
       - selective-checkpoint-restore.md
       - specialized-slm-as-agent-tool.md
-      - syntax-aware-completion-routing.md
       - task-feasibility-awareness.md
       - tenant-model-policy.md
       - wink-agent-misbehavior-correction.md
@@ -161,11 +154,9 @@ nav:
       - observability-driven-harness-evolution.md
       - per-model-harness-tuning.md
       - persistent-connection-agent-transport.md
-      - prebuilt-agent-environments.md
       - quality-score-rubric.md
       - recursive-agent-harnesses.md
       - session-harness-sandbox-separation.md
-      - subprocess-per-session-hosting-model.md
       - temporary-compensatory-mechanisms.md
       - think-tool.md
       - vscode-agents-parallel-tasks.md
@@ -180,22 +171,16 @@ nav:
   - classifier-gated-auto-permission.md
   - classifier-subagent-run-mode.md
   - cloud-agent-session-bootstrap.md
-  - cloud-agent-tiered-model-routing.md
-  - code-health-gated-tier-routing.md
-  - decentralized-memory-multi-agent.md
   - editor-manager-surface-separation.md
   - experience-graphs-self-evolving-agents.md
   - externalization-in-llm-agents.md
   - goal-contract-completion-evaluator.md
   - idle-time-speculative-planning.md
   - issue-requirements-preprocessing.md
-  - meta-engineering-harness.md
   - parameter-keyed-caching-plan-execute.md
-  - runtime-harness-adaptation.md
   - shared-agent-context-store-api.md
   - skill-program-functions.md
   - stochastic-deterministic-boundary.md
-  - typed-memory-from-vcs-history.md
   - utility-model-split.md
   - codebase-readiness.md
   - domain-specific-agent-challenges.md

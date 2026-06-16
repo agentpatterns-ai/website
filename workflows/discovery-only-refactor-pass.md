@@ -134,7 +134,7 @@ The skill stops here. The user picks candidate 3, and a follow-up grilling sessi
 
 - A discovery-only refactor pass produces ranked candidates and stops — no edits in the same session.
 - The pattern is **Qualified**: it requires a domain glossary, an established codebase, a candidates-not-backlog treatment, and a post-friction trigger.
-- Constrain the ranking vocabulary to module/interface/depth/seam/adapter — generic "code smell" framings invite low-leverage extract-a-helper edits.
+- Constrain the ranking vocabulary to `module`/`interface`/`depth`/`seam`/`adapter` — generic "code smell" framings invite low-leverage extract-a-helper edits.
 - The deletion test and the one-adapter-vs-two rule are the load-bearing guardrails against speculative seams.
 - Classify each candidate's dependencies (in-process, local-substitutable, remote-but-owned, true-external) before promoting it — the category determines whether a test strategy exists.
 - Agents in feature flows already refactor in 26.1% of commits, but concentrate on renames and type changes — separating discovery is what surfaces high-leverage candidates.
@@ -143,5 +143,5 @@ The skill stops here. The user picks candidate 3, and a follow-up grilling sessi
 
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — Sibling Pocock skill; same fixed-output, no-side-effects-without-explicit-pick discipline, applied to issue intake rather than refactor surfacing.
 - [Throwaway-Prototype Skill: Build to Discard, Keep Only the Answer](throwaway-prototype-skill.md) — Another scoped Matt Pocock skill — same constrained-output discipline applied to design-question prototyping rather than refactor candidate surfacing.
-- [Code-Health-Gated LLM Tier Routing](../agent-design/code-health-gated-tier-routing.md) — Complement: the discovery pass tells you *where* refactor cycles should be spent; tier routing tells you *which model* spends them.
+- [Code-Health-Gated LLM Tier Routing](../agent-design/auto-model-selection.md) — Complement: the discovery pass tells you *where* refactor cycles should be spent; tier routing tells you *which model* spends them.
 - [Demand-Driven Repository Auditing](../verification/demand-driven-repo-auditing.md) — Adjacent skill shape with a different goal: traces specific data flows to find bugs rather than ranking deepening opportunities.

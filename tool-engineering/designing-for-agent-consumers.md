@@ -23,7 +23,7 @@ Agent Experience (AX) is the discipline of designing the **external developer su
 AX is a design concern only when you **own an external surface that agents consume**. It earns its cost when:
 
 - You ship an SDK, CLI, API, or public docs that agents call on a developer's behalf.
-- The surface is stable enough that agent-legible signatures and structured errors will not be rewritten next sprint.
+- The surface is stable enough that agent-legible signatures and [structured errors](rfc9457-machine-readable-errors.md) will not be rewritten next sprint.
 
 It does not apply to internal-only apps with no third-party agent traffic, to single-human tools where agent-shaping competes with human affordances, or to pre-PMF surfaces still in flux. In those cases the rules below are overhead.
 
@@ -53,12 +53,12 @@ An agent's only contact with your product is the literal bytes of your surface �
 ## When This Backfires
 
 - **No agent traffic.** If no agent calls your surface, structured errors and response-sizing are overhead that competes with human-facing affordances.
-- **Unstable surface.** Investing in agent-legible signatures before the surface stabilises pays for a design that will be rewritten.
+- **Unstable surface.** Investing in [agent-legible signatures](openapi-documentation-smells.md) before the surface stabilises pays for a design that will be rewritten.
 - **The umbrella replaces the tactic.** AX adds no new rule on its own — it names a discipline and routes to tactics. A team that reads only this page and skips the tactic pages it points to has bought a buzzword, not a fix.
 
 ## Key Takeaways
 
-- AX is the discipline of designing your **external** SDK/CLI/API/docs surface for an agent consumer — distinct from harness engineering, which shapes the agent's own scaffold.
+- AX is the discipline of designing your **external** SDK/CLI/API/docs surface for an agent consumer — distinct from [harness engineering](../agent-design/harness-engineering.md), which shapes the agent's own scaffold.
 - The agent reads your surface literally and has no intuition to repair ambiguity, so errors, response size, naming, and signatures are the design surface.
 - It applies only when you own a stable surface agents consume; otherwise the rules are overhead.
 - The page names the discipline and routes to tactic pages — apply the linked rules, do not stop at the umbrella.

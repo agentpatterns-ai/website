@@ -11,7 +11,7 @@ tags:
   - multi-agent
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Adversarial Multi-Model Development Pipeline (VSDD)
@@ -23,7 +23,7 @@ maturity: established
 The pipeline separates two antagonistic roles across different model instances — ideally different providers:
 
 - **Builder** — owns specs, tests, and implementation. Accumulates context across phases and can develop confirmation bias toward its own decisions.
-- **Adversary** — gets a fresh context window each review pass and attacks specs, tests, and code with no prior investment. The context reset is the mechanism: the adversary cannot rationalize decisions it did not make.
+- **Adversary** — gets a [fresh context window](../agent-design/loop-strategy-spectrum.md) each review pass and attacks specs, tests, and code with no prior investment. The context reset is the mechanism: the adversary cannot rationalize decisions it did not make.
 
 Using a different model family for each role (e.g., Claude as Builder, Gemini as Adversary) reduces correlated failure modes — multi-model ensembles suppress shared error patterns that same-family models exhibit even with a fresh context ([LLM-TOPLA, EMNLP 2024](https://aclanthology.org/2024.findings-emnlp.698.pdf)). See [Loop Strategy Spectrum](../agent-design/loop-strategy-spectrum.md) for when fresh-context resets are appropriate.
 
@@ -76,7 +76,7 @@ This is a qualitative signal, not a counter. Tag each finding on intake as "subs
 
 ## When This Backfires
 
-VSDD's cost is proportional to convergence cycles. Skip it or expect degraded results when:
+VSDD's cost is proportional to [convergence](../agent-design/convergence-detection.md) cycles. Skip it or expect degraded results when:
 
 - **Low-stakes or small tasks.** Refactors, single-line patches, throwaway scripts, and prototypes produce low-signal critiques and stall on style. Orchestration cost — multiple model calls per phase, context management, finding triage — exceeds defect-prevention value when failure is cheap to fix post-deployment.
 - **Thin specs or weak Adversary prompts.** Both push the Adversary toward inventing gaps or surface-level stylistic feedback rather than finding real flaws. Phases 3 and 4 then cycle without meaningful signal — illusion of convergence rather than the reality. Multi-agent systems are specifically susceptible to premature consensus when reviewer incentives are not explicitly orthogonal ([Failure Modes in LLM Systems, 2025](https://arxiv.org/abs/2511.19933)).

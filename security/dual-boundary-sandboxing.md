@@ -7,7 +7,7 @@ tags:
   - security
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Dual-Boundary Sandboxing: Filesystem and Network Isolation
@@ -55,7 +55,7 @@ Granular per-action prompts produce [approval fatigue](safe-command-allowlisting
 
 The sandbox addresses two threat vectors:
 
-1. **Prompt injection** — malicious content in files or web pages instructs the agent to exfiltrate data or modify system files. Network and filesystem restrictions limit the damage scope.
+1. **Prompt injection** — malicious content in files or web pages instructs the agent to exfiltrate data or modify system files. Network and filesystem restrictions limit the [damage scope](blast-radius-containment.md).
 2. **Agent error** — the agent deletes a file outside the working directory or makes an unintended API call. OS-level restrictions contain the consequences.
 
 It does not prevent incorrect output, budget spent on allowed API calls, or leaks through allowed channels.

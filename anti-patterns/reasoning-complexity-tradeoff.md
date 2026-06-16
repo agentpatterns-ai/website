@@ -23,7 +23,7 @@ maturity: emerging
 
 - **Machine signature of defects** — AI-generated code carries a distinct flaw pattern, not a smaller version of human flaws.
 - **Reasoning-Complexity Trade-off** — capability and architectural quality move in opposite directions.
-- **Volume-Quality Inverse Law** — code volume is a near-perfect predictor of structural degradation.
+- **Volume-Quality Inverse Law** — code volume is a near-perfect predictor of structural degradation, the same bloat tracked in [Abstraction Bloat](abstraction-bloat.md).
 
 Functional correctness does not predict maintainability. Detailed prompting does not produce smaller, less-coupled code ([Zhu et al.](https://arxiv.org/abs/2605.02741)).
 
@@ -68,7 +68,7 @@ The trade-off framing has narrow applicability where bloat carries no maintenanc
 
 ## Example
 
-A team is choosing between two models for a billing-rules service. Both pass the test suite for the requested feature: apply a tiered discount given a customer plan and order total.
+A team is choosing between two models for a billing-rules service. Both pass the test suite for the requested feature: apply a tiered discount across the `free`/`pro`/`enterprise` plans given a customer plan and order total.
 
 **Model A — smaller capability tier:**
 
@@ -103,7 +103,7 @@ class DiscountAuditLog:
     def record(self, plan: str, total: float, applied: float): ...
 ```
 
-Six classes, an abstract base, an unrequested audit log. Tests pass. The result satisfies the requirement and predicts the [Volume-Quality Inverse Law](https://arxiv.org/abs/2605.02741): the stronger model's output is larger and more coupled — the rate-tier change next sprint now touches three files instead of one.
+6 classes, an abstract base, an unrequested audit log. Tests pass. The result satisfies the requirement and predicts the [Volume-Quality Inverse Law](https://arxiv.org/abs/2605.02741): the stronger model's output is larger and more coupled — the rate-tier change next sprint now touches three files instead of one.
 
 ## Key Takeaways
 

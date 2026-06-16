@@ -9,7 +9,7 @@ tags:
 aliases:
   - agent-readable codebase
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # Semantic Density Optimization for Agent Codebases
@@ -53,11 +53,11 @@ The conventional 50-character limit is agent-hostile. When agents trace history 
 
 ### 3. Abstraction Depth
 
-Deep call hierarchies force agents to traverse multiple files per task. Flat call chains with well-named functions reduce cross-file navigation. Enterprise frameworks that distribute a single request across many scaffolding layers make agents pay that read cost on every lookup.
+Deep call hierarchies force agents to traverse multiple files per task. Flat call chains with well-named functions reduce [cross-file navigation](semantic-context-loading.md). Enterprise frameworks that distribute a single request across many scaffolding layers make agents pay that read cost on every lookup.
 
 ### 4. File Splitting
 
-Human cognitive limits drive the convention of keeping files small. Agents do not share this limit but do pay a navigation cost per file. Let deployment boundaries and logical cohesion drive file organization, not human screen capacity.
+Human cognitive limits drive the convention of keeping files small. Agents do not share this limit but do pay a navigation cost per file. Let deployment boundaries and logical cohesion drive [file organization](../agent-design/agent-first-software-design.md), not human screen capacity.
 
 ### 5. SOLID Principles
 
@@ -116,7 +116,7 @@ The compressed version uses fewer input tokens per log line — real but modest 
 Semantic density optimization trades human ergonomics for agent performance. The trade-off is not always favorable:
 
 - **Human teams dominate the workflow.** If agents touch the codebase rarely — for code review, one-off generation, or ad hoc queries — optimizing conventions for agents degrades the daily experience of the human developers who live in the code.
-- **Single-study basis.** The evidence comes from one controlled experiment on log formats. Applying its conclusions to naming conventions, file structure, and SOLID principles is an extrapolation the paper acknowledges as theoretically motivated.
+- **Single-study basis.** The evidence comes from one controlled experiment on log formats ([arXiv:2604.07502](https://arxiv.org/abs/2604.07502)). Applying its conclusions to naming conventions, file structure, and SOLID principles is an extrapolation the paper acknowledges as theoretically motivated.
 - **Flatter files create their own problems.** Consolidating logic into fewer large files reduces agent traversal cost but increases merge conflict frequency, complicates code ownership, and may exceed the attention range of the model on very large files.
 - **Context window sizes are growing.** As models handle larger windows with better long-range attention, the navigation cost advantage of flatter structures shrinks; human-oriented organization may dominate again.
 

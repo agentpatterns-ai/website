@@ -5,7 +5,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Domain-Specific Agent Challenges
@@ -14,7 +14,7 @@ maturity: established
 
 ## Backend: The Baseline
 
-Agents perform best on backend code. The reasons are structural: backend tasks tend to be typed, testable, and specified precisely. A function signature, a test suite, and a documented API form an unambiguous target. Agents can generate code, run tests, and iterate against machine-verifiable feedback. Benchmarks such as SWE-bench and [ABC-Bench](https://arxiv.org/abs/2601.11077) measure agent performance almost exclusively on backend tasks — precisely because objective correctness criteria exist there that don't exist for visual or stateful domains.
+Agents perform best on backend code. The reasons are structural: backend tasks tend to be typed, testable, and specified precisely. A function signature, a test suite, and a documented API form an unambiguous target. Agents can generate code, run tests, and iterate against the machine-verifiable feedback that [effective feedback compute](effective-feedback-compute.md) turns into progress. Benchmarks such as SWE-bench and [ABC-Bench](https://arxiv.org/abs/2601.11077) measure agent performance almost exclusively on backend tasks — precisely because objective correctness criteria exist there that don't exist for visual or stateful domains.
 
 This is the reference point. Other domains deviate from it in specific ways.
 
@@ -27,14 +27,14 @@ Matt Pocock has noted that frontend is "WAY harder for AI than backend" because 
 **Adaptations that reduce friction:**
 
 - **Component libraries.** Constrain the agent's choices to a defined set of components. The agent selects from the library instead of generating arbitrary CSS. This converts a subjective problem (does this look right?) into a structural one (did the agent use an allowed component?).
-- **Visual regression tests.** Automated screenshot comparison provides feedback the agent can use without requiring human review for every change.
+- **Visual regression tests.** Automated screenshot comparison, for example via Playwright, provides feedback the agent can use without requiring human review for every change.
 - **Design system skills.** Encode your design system's conventions as agent skills. The agent should not derive these from first principles per task.
 
-Reduce autonomy for visual output tasks. Increase verification frequency.
+Reduce autonomy for visual output tasks, scaling it back the way [progressive autonomy](../human/progressive-autonomy-model-evolution.md) prescribes. Increase verification frequency.
 
 ## Infrastructure: High Blast Radius
 
-Infrastructure mistakes are expensive. A dropped database, a misconfigured security group, or an incorrect IAM policy can cause outages or data loss. Infrastructure is also stateful — the current state of a system matters to every action taken against it.
+Infrastructure mistakes are expensive. A dropped database, a misconfigured security group, or an incorrect IAM policy can cause outages or data loss. Infrastructure is also stateful — the current state of a system, such as a Terraform state file, matters to every action taken against it.
 
 Agents reason from context, not live observation. An agent that cannot query current infrastructure state will operate on assumptions that may be wrong — it has no mechanism to detect drift between its prior knowledge and reality.
 
@@ -47,15 +47,15 @@ Agents reason from context, not live observation. An agent that cannot query cur
 
 ## Data: Silent Failures
 
-Data engineering failures are often silent. A wrong join condition, a missed null check, or an off-by-one in a date range produces results that look plausible but are wrong. Unlike a failing test or a runtime exception, incorrect data may not surface until downstream consumers detect anomalies.
+Data engineering failures are often silent. A wrong join condition, a missed null check, or an off-by-one in a date range produces results that look plausible but are wrong. Unlike a failing test or a runtime exception, incorrect data may not surface until downstream consumers detect anomalies. Agents are prone to generating plausible-looking queries that contain subtle errors, which is why a [critic-agent plan review](critic-agent-plan-review.md) pass earns its keep here.
 
-Agents are prone to generating plausible-looking queries that contain subtle errors. Meta's engineering team documented this directly: agents without full pipeline context would produce code that compiled correctly but referenced wrong intermediate field names or violated append-only identifier rules, with failures propagating silently to downstream consumers ([source](https://engineering.fb.com/2026/04/06/developer-tools/how-meta-used-ai-to-map-tribal-knowledge-in-large-scale-data-pipelines/)). The correctness bar for data work is high because the verification cost is also high.
+Meta's engineering team documented this directly: agents without full pipeline context would produce code that compiled correctly but referenced wrong intermediate field names or violated append-only identifier rules, with failures propagating silently to downstream consumers ([source](https://engineering.fb.com/2026/04/06/developer-tools/how-meta-used-ai-to-map-tribal-knowledge-in-large-scale-data-pipelines/)). The correctness bar for data work is high because the verification cost is also high.
 
 **Adaptations:**
 
 - **Comprehensive test fixtures.** Agents working on queries or transformations should have access to representative test data and expected outputs.
 - **Schema validation as a gate.** Any agent output that touches a schema should be validated before merging.
-- **Second-agent query review.** Have a separate agent critique generated queries for correctness before execution.
+- **Second-agent query review.** Have a separate agent critique generated queries for correctness before execution, the [evaluator-optimizer](evaluator-optimizer.md) loop applied to SQL.
 - **Row count and shape checks.** Automated assertions on result shape catch gross errors that semantic review might miss.
 
 ## Autonomy vs. Risk

@@ -30,7 +30,7 @@ The research identified two categories requiring different strategies:
 | **Informational** | Expected behavior, error nature, acceptance criteria | "Fix the auth bug" — which bug? What should correct behavior look like? |
 | **Navigational** | File locations, module boundaries, where to change | "Update the config" — which config file, in which service? |
 
-Navigational gaps resolve through codebase exploration. Informational gaps require the user — no amount of code reading reveals expected behavior.
+Navigational gaps resolve through codebase exploration, including [domain-scoped parallel localization](domain-scoped-parallel-localization.md) when the change spans subsystems. Informational gaps require the user — no amount of code reading reveals expected behavior.
 
 ## Exploration-First, Questions Second
 

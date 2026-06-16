@@ -58,7 +58,7 @@ A headless browser owned by the agent starts clean. If a malicious page injects 
 
 Live tab sharing is structurally different on two axes:
 
-- **Session continuity** — the shared tab is post-auth. The agent reads the DOM after the developer's logins and cookies have loaded — the channel's value: no auth automation, no copy-paste.
+- **Session continuity** — the shared tab is [post-auth](../security/lethal-trifecta-threat-model.md). The agent reads the DOM after the developer's logins and cookies have loaded — the channel's value: no auth automation, no copy-paste.
 - **Adjacent-tab proximity** — the developer's other tabs (banking, admin console, internal HR) sit one approval click away. VS Code makes agents "aware of how many browser tabs you have open and are not shared" ([VS Code 1.119 release notes](https://code.visualstudio.com/updates/v1_119)).
 
 ## The Lethal-Trifecta Consequence
@@ -75,7 +75,7 @@ Use the channel when:
 
 - The task involves the page the developer is already looking at — debugging a UI bug, summarising a doc, validating a deployment.
 - The page requires logged-in state the agent could not cleanly reconstruct in a headless session.
-- The agent's other tools are read-only or sandboxed, so injected DOM content cannot reach a write surface.
+- The agent's other tools are read-only or sandboxed, so [injected DOM content](../security/prompt-injection-threat-model.md) cannot reach a write surface.
 
 Avoid the channel when:
 
@@ -97,7 +97,7 @@ VS Code 1.119 ships the consent gate as part of the channel. A developer has the
 
 **Setting up the share** — the developer drags the app tab into the chat input or selects it from the context picker. The browser tab "enters a sharing state where the agent can read and interact with the page" ([VS Code 1.119 release notes](https://code.visualstudio.com/updates/v1_119)). The agent now has DOM, console, and network for that tab.
 
-**Agent-initiated request** — mid-task, the agent decides it needs the API documentation tab to answer a question and surfaces a prompt: approve or deny. The developer approves the docs tab, leaves the admin console unshared.
+**Agent-initiated request** — mid-task, the agent decides it needs the API documentation tab to answer a question and surfaces a prompt: approve or deny. The developer approves the docs tab, [leaves the admin console unshared](../security/lethal-trifecta-threat-model.md).
 
 **Revocation** — when the task completes, the developer clicks the sharing button to stop sharing. Subsequent agent turns can no longer read the tab, but the transcript still contains the DOM excerpts the agent already ingested. A reflexive approval of the admin-console share request would have closed the lethal trifecta on that agent.
 
@@ -117,4 +117,4 @@ VS Code 1.119 ships the consent gate as part of the channel. A developer has the
 - [Lost in the Middle](lost-in-the-middle.md)
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](../security/prompt-injection-threat-model.md)
-- [Frontmost-Window Snapshot as Agent Context](frontmost-window-snapshot-context.md)
+- [App-Window Snapshot as Agent Context](app-window-snapshot-context.md)

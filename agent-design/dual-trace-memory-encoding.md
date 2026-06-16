@@ -10,7 +10,7 @@ tags:
   - memory
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # Dual-Trace Memory Encoding
@@ -19,7 +19,7 @@ maturity: established
 
 ## The Encoding Gap
 
-Most agent memory systems store facts as flat records: a sentence, an embedding, optionally a timestamp. The record answers *what* but erases *when and where* the fact was learned. Queries that depend on that context — "has the rate limit changed since last quarter?", "what was true before the refactor?" — fail because the signal was discarded at write time.
+Most [agent memory systems](agent-memory-patterns.md) store facts as flat records: a sentence, an embedding, optionally a timestamp. The record answers *what* but erases *when and where* the fact was learned. Queries that depend on that context — "has the rate limit changed since last quarter?", "what was true before the refactor?" — fail because the signal was discarded at write time.
 
 Dual-trace encoding stores two traces per entry:
 
@@ -123,7 +123,7 @@ The scene trace answers the temporal query directly ("six months before Oct 14")
 - Store a fact and its scene trace at encoding time, not just the fact — the extra commit resolves cross-session and temporal queries that fact-only storage cannot.
 - Expect gains on temporal reasoning, multi-session aggregation, and knowledge-update tracking; expect no gain on single-session retrieval.
 - Scene-trace generation is a write-time LLM cost — reserve dual-trace encoding for facts worth the overhead, not every observation.
-- Dual-trace is an encoding-time technique that composes with episodic retrieval and memory-stream reflection; adopt it alongside, not instead of, existing memory strategies.
+- Dual-trace is an encoding-time technique that composes with [episodic retrieval](episodic-memory-retrieval.md) and memory-stream reflection; adopt it alongside, not instead of, existing memory strategies.
 
 ## Related
 
@@ -131,7 +131,7 @@ The scene trace answers the temporal query directly ("six months before Oct 14")
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md)
 - [Generative Agents Memory Stream](generative-agents-memory-stream.md)
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
-- [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md)
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md)
 - [Memory Transfer Learning: Cross-Domain Memory Reuse in Coding Agents](memory-transfer-learning.md)
 - [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
-- [AST-Guided Agent Memory for Repository-Level Code Generation](ast-guided-agent-memory.md)
+- [Code-Native Memory Substrates](code-native-memory-substrates.md)

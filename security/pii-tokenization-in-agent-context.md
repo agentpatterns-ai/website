@@ -64,7 +64,7 @@ The agent reasons about structure, counts, and relationships — not the values 
 
 ## Deterministic Rules, Not Model Judgment
 
-The boundary is enforced by deterministic rules in the execution environment, not by model judgment. The model does not decide what is sensitive; the sandbox does.
+The boundary is enforced by [deterministic rules](../verification/deterministic-guardrails.md) in the execution environment, not by model judgment. The model does not decide what is sensitive; the sandbox does.
 
 Model judgment is probabilistic. An instruction like "do not include email addresses in your reasoning" is a prompt — it may be followed, ignored, or misinterpreted. A sandbox that intercepts and replaces all fields matching `^[\w.-]+@[\w.-]+$` before data reaches the model is a deterministic control that cannot be reasoned around.
 
@@ -87,7 +87,7 @@ Tokenization is a boundary control, not a complete privacy solution. It fails or
 
 - **Detection gaps**: regex-based PII detection misses contextual quasi-identifiers — job titles, internal employee IDs, composite fields. [Google Cloud's de-identification reference architecture](https://docs.cloud.google.com/architecture/de-identification-re-identification-pii-using-cloud-dlp) recommends post-tokenization re-identification risk analysis because pattern-matching alone leaves these gaps.
 - **Safety gate interference**: type-prefixed token labels like `SSN: {{IDENTIFIER_1}}` can trigger model safety refusals. The label alongside the token signals sensitive data even without the value — mitigation requires stripping or neutralizing the field label, adding complexity.
-- **Overlong agent sessions**: when session-scoped token maps span many hours or tool calls, the map itself becomes a high-value target. Long-lived maps require the same access controls as the underlying PII vault.
+- **Overlong agent sessions**: when session-scoped token maps span many hours or tool calls, the map itself becomes a high-value target. Long-lived maps require the same access controls as the underlying PII vault — treat the map as [managed secrets](secrets-management-for-agents.md).
 - **Rich semantic tasks**: agents asked to draft a personalized email or generate a narrative report need the actual values. Tokenization forces a de-tokenize-then-inject step that partially re-exposes data in tool inputs, narrowing the boundary's effectiveness.
 - **Observability blind spots**: traces, error reports, and request logs around the inference path frequently capture raw prompts and tool inputs that bypass the redaction layer. Practitioner reports attribute [25–40% of discovered PII exposure to observability surfaces even when the inference path itself was well-redacted](https://www.statsig.com/perspectives/piiredactionprivacyllms). The audit log and any tracing pipeline that touches the sandbox must inherit the same access controls as the PII vault; see also [PII redaction guidance for MCP servers](https://mcpmanager.ai/blog/pii-redaction-for-mcp-servers/) on extending redaction to every returned artifact.
 
@@ -95,7 +95,7 @@ Tokenization is a boundary control, not a complete privacy solution. It fails or
 
 - Sensitive values should never appear in the model's context window; the sandbox is the privacy boundary.
 - Enforce tokenization with deterministic rules, not model judgment — instructions are insufficient controls.
-- Agents can still reason about structure, counts, and relationships using tokenized representations.
+- Agents can still reason about structure, counts, and relationships using tokenized representations — the same [filter-and-aggregate-in-the-environment](../context-engineering/filter-aggregate-execution-env.md) capability.
 - De-tokenization happens inside the sandbox when downstream tools require real values.
 - Log every de-tokenization event for audit traceability.
 

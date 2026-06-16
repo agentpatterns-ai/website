@@ -7,7 +7,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Five-Pass Blunder Hunt
@@ -16,7 +16,7 @@ maturity: established
 
 ## The Problem
 
-A single review pass catches surface issues and stops. The model that wrote the content is also the reviewer, so it shares the same blind spots: it finds a satisfying number of issues, declares the document fine, and moves on.
+A single review pass catches surface issues and stops. The model that wrote the content is also the reviewer, so it shares the [same blind spots](chain-of-verification-coding-agents.md): it finds a satisfying number of issues, declares the document fine, and moves on.
 
 The problems that remain — inconsistencies, rationale gaps, dependency conflicts — need the whole document held in mind at once. A single-pass reviewer normalises them.
 
@@ -45,7 +45,7 @@ Five is a heuristic. The real signal is convergence:
 - **Output similarity is increasing** — consecutive critique responses resemble each other
 - **No new categories of problem appear** — only refinements of already-identified issues
 
-Stop when a pass finds nothing new; if you reach pass five first, continue until one does. Beyond five or six passes returns diminish to noise — reframe the document or accept the remaining findings.
+Stop when a pass finds nothing new; if you reach pass five first, continue until one does. Beyond five or six passes [returns diminish to noise](../agent-design/convergence-detection.md) — reframe the document or accept the remaining findings.
 
 **Oscillation is a stop signal.** If the model alternates between contradictory assessments, further passes will not resolve it. Reframe the section and restart.
 

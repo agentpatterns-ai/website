@@ -82,7 +82,7 @@ Instruction-guided completion increases prompt complexity and slows iteration ve
 - **Instruction adherence and functional correctness are orthogonal.** A model that writes correct code may still ignore your structural and scope constraints.
 - **Implementation instructions work; scale instructions do not.** Tell models *how* to implement (algorithm, pattern, flow) but do not rely on telling them *how much* to generate.
 - **Benchmark rankings do not predict instruction-following.** Evaluate models on the specific capability your workflow requires.
-- **Fine-tuning on instruction-completion pairs closes the gap.** If you run local models, synthetic instruction data is an effective lever.
+- **Fine-tuning on instruction-completion pairs closes the gap.** If you run local models, synthetic instruction data is an effective lever — it lifted scale-control adherence from 16.9% to 80.7% in the C3-Bench fine-tuning run above.
 
 ## Example
 

@@ -11,7 +11,7 @@ aliases:
   - dynamic sandbox parallelism
   - signal-driven fan-out
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
@@ -65,7 +65,7 @@ graph TD
 
 **Refine prompt** when error clustering is high — if >70% of runs fail with the same error signature, the problem is prompt underspecification, not task difficulty. More runs repeat the same mistake.
 
-**Decompose** when repeated refinement still fails. Consistent failure across diverse attempts signals the task is too ambiguous or too large for a single prompt. Switch to an investigative sub-agent.
+**Decompose** when repeated refinement still fails — switch to [oracle-based task decomposition](oracle-task-decomposition.md). Consistent failure across diverse attempts signals the task is too ambiguous or too large for a single prompt. Switch to an investigative sub-agent.
 
 ## Hysteresis Prevents Oscillation
 

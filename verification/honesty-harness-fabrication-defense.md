@@ -94,7 +94,7 @@ claim. For every named symbol or file: grep the working tree to confirm it
 exists. Report VERIFIED / WRONG / UNVERIFIABLE per claim. Do not edit files.
 ```
 
-The reviewer holds external tools (WebFetch for source verification, Bash+Grep for symbol existence) — without those, Liu et al.'s overcorrection risk applies. The Copilot equivalent is the [Copilot coding agent's pre-PR self-review](../agent-design/agent-self-review-loop.md), which runs code review, security scanning, and dependency checks before opening the PR; the structural shape is the same — fresh context, scoped tools, gate before commit.
+The reviewer holds external tools (WebFetch for source verification, Bash+Grep for symbol existence) — without those, Liu et al.'s overcorrection risk applies. The Copilot equivalent is the [Copilot coding agent's pre-PR self-review](../code-review/agent-self-review-loop.md), which runs code review, security scanning, and dependency checks before opening the PR; the structural shape is the same — fresh context, scoped tools, gate before commit.
 
 ## Key Takeaways
 
@@ -112,4 +112,4 @@ The reviewer holds external tools (WebFetch for source verification, Bash+Grep f
 - [Phantom Symbol Detection](phantom-symbol-detection.md) — the deterministic-lookup form of Layer 2 for API migration
 - [Layered Accuracy Defense](layered-accuracy-defense.md) — the same defense-in-depth idea applied to content pipelines instead of coding agents
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — why Layer 3 belongs in hooks, not the system prompt
-- [Agent Self-Review Loop](../agent-design/agent-self-review-loop.md) — Layer 4 as practised in Copilot's pre-PR review
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — Layer 4 as practised in Copilot's pre-PR review

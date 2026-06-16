@@ -8,7 +8,7 @@ tags:
   - memory
   - workflows
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Continual Learning for AI Agents: Three Layers of Knowledge Accumulation
@@ -33,7 +33,7 @@ Model-layer learning updates the weights themselves — supervised fine-tuning (
 
 The central challenge is **catastrophic forgetting**: new training degrades performance on previously-handled tasks. This is an open research problem.
 
-Model updates target the agent level — one model per agentic system. Per-user weight updates (e.g., LoRA per user) remain a research direction; production deployments are rare.
+Model updates target the agent level — one model per agentic system, the least mutable tier in [layered mutability](layered-mutability.md). Per-user weight updates (e.g., LoRA per user) remain a research direction; production deployments are rare.
 
 Model updates are expensive, slow, and hardest to reverse. Use them when the capability gap cannot be closed by better instructions or context.
 
@@ -62,7 +62,7 @@ Updates happen in two modes:
 - **Offline (batch)** — after execution, a background job analyzes traces and updates context. OpenClaw calls this ["dreaming"](https://docs.openclaw.ai/concepts/dreaming).
 - **Hot path (inline)** — the agent updates memory mid-task, either on user instruction or harness direction.
 
-Context-layer updates are cheapest and easiest to reverse. Edit a file, reload context. The tradeoff: context has limited scope — it does not improve base model capability and only affects instances that load it.
+Context-layer updates — the [agent memory](agent-memory-patterns.md) tier — are cheapest and easiest to reverse. Edit a file, reload context. The tradeoff: context has limited scope — it does not improve base model capability and only affects instances that load it.
 
 Cheapness masks silent failure modes. 2026 practitioner reports document stale memories surfacing after facts change and [recurring-correction loops where a written-down rule loses to competing retrievals](https://medium.com/@vivioo.io/your-ai-agent-keeps-forgetting-76d7bcefacf0). Retrieval quality, recency bias, and eviction policy decide whether an update actually lands.
 
@@ -112,7 +112,7 @@ A project-specific convention (e.g., always use `assert_raises` instead of `pyte
 ## Key Takeaways
 
 - Agents accumulate knowledge at three layers: model (weights), harness (scaffold), and context (external configuration). Each has a different cost, reversibility, and scope.
-- Most improvement opportunities target the context layer — it is cheapest, fastest, and easiest to reverse.
+- Most improvement opportunities target the context layer ([agent memory](agent-memory-patterns.md)) — it is cheapest, fastest, and easiest to reverse.
 - Model fine-tuning is rarely the right first response to a recurring agent failure; exhaust context and harness options first.
 - Traces are the input for improvements at all three layers; trace collection quality determines improvement velocity.
 
@@ -121,8 +121,9 @@ A project-specific convention (e.g., always use `assert_raises` instead of `pyte
 - [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md)
 - [Harness Engineering](harness-engineering.md)
 - [Agent Memory Patterns](agent-memory-patterns.md)
-- [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md)
-- [Scaffold Architecture Taxonomy for Coding Agents](scaffold-architecture-taxonomy.md)
+- [CoALA Memory Taxonomy Classifier](coala-memory-taxonomy-classifier.md) — companion taxonomy organised by classify-what, distinct from this update-target / persistence-scope axis
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md)
+- [Scaffold Architecture Taxonomy for Coding Agents](harness-design-dimensions.md)
 - [Layered Mutability](layered-mutability.md)
 - [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md)
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md)

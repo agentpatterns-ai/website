@@ -90,4 +90,4 @@ Diversity here comes from conditioning, not from heterogeneous weights. That dis
 - [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md) — two-layer split, typically across different models
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — summarisation-as-compression in the main agent loop
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — the summariser and corrector roles as removable scaffolding once models close the capability gap
-- [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md) — where role orchestration fits in the control-architecture layer
+- [Scaffold Architecture Taxonomy](harness-design-dimensions.md) — where role orchestration fits in the control-architecture layer

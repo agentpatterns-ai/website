@@ -61,7 +61,7 @@ The agent reads the blueprint and proposes a Rust crate layout — workspace str
 
 ### 3. Implement Modules and Reduce Unsafe
 
-Coding agents implement crates following the blueprint, check compilability after each module, and iteratively reduce `unsafe` blocks. Compilation is a hard gate — non-compiling output cannot proceed. Unsafe reduction is a soft gate — the agent surfaces remaining unsafe regions for human review rather than forcing them through autonomously.
+Coding agents implement crates following the blueprint, check compilability after each module, and iteratively reduce `unsafe` blocks. Compilation is a hard gate — non-compiling output cannot proceed. Unsafe reduction is a soft gate — the agent surfaces remaining `unsafe` regions for human review rather than forcing them through autonomously.
 
 ### 4. Re-Document and Diff
 
@@ -69,7 +69,7 @@ The validation step that distinguishes this pattern. Once the Rust compiles, run
 
 ### 5. Test-Guided Refinement
 
-Translate the C test suite to Rust and execute it against the new code. Runtime failures point to specific assertions, which point to specific modules, which the agent fixes in isolation. Without a usable test suite this step yields nothing — the absence of tests is a hard failure condition for the whole workflow.
+Translate the C test suite to Rust and execute it against the new code. Runtime failures point to specific assertions, which point to specific modules, which the agent fixes in isolation. Without a usable test suite this step yields nothing — the absence of tests is a hard failure condition for the whole workflow, the same convergence dependency that [staged literal porting](staged-literal-port-with-numeric-oracle.md) resolves with a numeric oracle.
 
 ## When to Apply
 
@@ -79,7 +79,7 @@ Skip the pattern when:
 
 - **The codebase is small (<5K LoC) and single-author.** Blueprint extraction adds overhead the maintainer's head already provides; `c2rust transpile` plus targeted refactoring is faster.
 - **The repo is dominated by inline assembly, compiler intrinsics, or hardware-register access.** The blueprint captures intent at module granularity but loses bit-level invariants; the agent produces idiomatic Rust that compiles and silently misbehaves on real hardware.
-- **There is no usable test suite.** The validation loop has nothing to converge against.
+- **There is no usable test suite.** The [eval-driven validation loop](eval-driven-development.md) has nothing to converge against.
 - **The repo uses heavy macro-driven metaprogramming.** Macros expand to context-specific code; the documentation layer abstracts past variation that matters, and the Rust output collapses cases the macros covered.
 
 The pattern generalizes beyond C-to-Rust. Any cross-language legacy migration where the source language encodes invariants implicitly and the target language requires them explicitly — COBOL to Java, Perl to Go, Fortran to modern numerical Rust — has the same structural mismatch the blueprint layer solves.
@@ -112,7 +112,7 @@ The diff surfaces a real bug: the Rust version changed ownership semantics from 
 
 - Treat documentation as an intermediate representation, not as a human deliverable — the agent reads it, not (only) the maintainer.
 - Validate by re-documenting the translation and diffing against the original blueprint; documentation divergence is a measurable proxy for semantic drift.
-- Compilation, test pass rate, and blueprint-diff convergence are three independent exit gates — pass all three before declaring a module migrated.
+- Compilation, test pass rate, and blueprint-diff convergence are 3 independent exit gates — pass all three before declaring a module migrated.
 - The pattern's cost is the blueprint pass; skip when a maintainer can produce the blueprint from memory, or when the source encodes invariants below module granularity.
 
 ## Related

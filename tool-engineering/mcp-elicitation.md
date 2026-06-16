@@ -16,7 +16,7 @@ maturity: established
 
 ## Elicitation vs. Upfront Parameters
 
-Tool schemas specify inputs statically at registration time. Some inputs are only knowable mid-task — after the server has inspected state, resolved dependencies, or reached a decision point. Elicitation covers that gap: the server requests structured input at the moment it needs it, not before.
+Tool schemas specify inputs statically at registration time. Some inputs are only knowable mid-task — after the server has inspected state, resolved dependencies, or reached a decision point. Elicitation covers that gap: the MCP server requests structured input at the moment it needs it, not before.
 
 | Approach | When inputs are known | Trade-off |
 |----------|----------------------|-----------|

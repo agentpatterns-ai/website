@@ -144,7 +144,7 @@ Small prompt changes in one agent unpredictably alter subagent behavior. [Source
 
 Behavioral testing pays off only when outputs are genuinely non-deterministic:
 
-- **Constrained function-calling agents**: Structured JSON with a fixed schema needs equality checks. LLM grading adds cost without signal.
+- **Constrained function-calling agents**: [Structured JSON with a fixed schema](structured-output-constraints.md) needs equality checks. LLM grading adds cost without signal.
 - **High-volume regression suites**: LLM-as-judge at thousands of cases per CI run is slow and expensive. Reserve it for the agentic layer; code-check structured outputs at scale. Grader cost at scale is itself a domain-grounded decision — LangChain describes co-designing efficient verifiers with Harvey for legal agents, trading verifier cost against domain economics. [Source: [Designing Efficient Verifiers for Legal Agents](https://www.langchain.com/blog/designing-efficient-verifiers-for-legal-agents)]
 - **Uncalibrated thresholds**: Thresholds set without real failure data either block valid outputs or pass defective ones.
 - **Uncalibrated LLM judge**: An LLM grader not calibrated against human experts introduces systematic bias that invalidates the eval pipeline.

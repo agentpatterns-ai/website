@@ -61,9 +61,9 @@ Specification richness is a budget, not a monotone good. Audit terminology and c
 Stack independent layers, not redundant prose:
 
 1. **Description** — what the function does in plain language.
-2. **Constraints** — explicit list of preconditions, bounds, ordering rules. Audit for vocabulary that could prime a wrong template.
+2. **Constraints** — explicit list of preconditions, bounds, ordering rules. Audit for vocabulary that could prime a wrong template — the [task-framing effect](../fallacies/task-framing-irrelevance-fallacy.md) the model does not filter out.
 3. **I/O examples** — at least one input/output pair with a one-line explanation. The explanation is its own surface.
-4. **Format spec** — input parsing rules and output shape, separate from the description.
+4. **Format spec** — input parsing rules and output shape, separate from the description, the same role types and schemas play in [specification as prompt](specification-as-prompt.md).
 
 Each layer must be derivable independently. If two layers paraphrase the same sentence, they collapse into one and the budget shrinks.
 
@@ -121,7 +121,7 @@ If the constraints block is dropped or the description verb is swapped from "com
 ## Key Takeaways
 
 - Robustness to prompt noise is a function of prompt structure, not model scale — API reasoning models degrade comparably to small open-source models on under-specified prompts.
-- Stack independent specification layers — description, constraints, I/O examples, format — not paraphrased prose.
+- Stack independent specification layers — description, constraints, I/O examples, format — not paraphrased prose; types, schemas, and tests add further layers as [specification as prompt](specification-as-prompt.md).
 - Redundancy is a budget, not a monotone good. Richness in domain vocabulary or numeric bounds can anchor the model to memorized-but-wrong templates.
 - Multi-layer specifications are a non-interactive remedy; interactive clarification handles the same gap when the agent can ask back.
 

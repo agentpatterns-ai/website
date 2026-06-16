@@ -26,7 +26,7 @@ maturity: established
 
 ## Identical Agents, Redundant Work
 
-When parallel agents receive the same instructions, they identify the same issues and make similar changes. Redundant effort produces marginal return: three agents finding the same ten bugs is not three times better than one. The compute cost multiplies; the output quality does not.
+When parallel agents receive the same instructions, they identify the same issues and make similar changes. Redundant effort produces marginal return: 3 agents finding the same 10 bugs is not 3× better than 1. The compute cost multiplies; the output quality does not.
 
 Role specialization reframes the parallel team. Each agent owns a distinct improvement dimension, so agents complement rather than compete, and the aggregate output covers more ground than any single agent — or any unspecialized set — could.
 
@@ -47,7 +47,7 @@ The scoping is exclusive: the documentation agent does not refactor performance-
 
 **One domain per role.** A role that covers both performance and code quality will split its attention across both and do neither as well as a dedicated agent.
 
-**Mutually exclusive scopes.** If two roles can both legitimately change the same code for different reasons, define a priority rule: which role owns the final decision? Without this, agents conflict and the merge step becomes unpredictable.
+**Mutually exclusive scopes.** If two roles can both legitimately change the same code for different reasons, define a priority rule: which role owns the final decision? Without this, agents conflict and the merge step becomes unpredictable — the failure that [file-based agent coordination](../multi-agent/file-based-agent-coordination.md) locks against.
 
 **Autonomy within scope.** Each agent self-directs within its assigned domain. Roles define boundaries, not micro-instructions. An over-specified role that tells the agent exactly which files to edit loses the benefit of autonomous exploration within the domain.
 
@@ -63,7 +63,7 @@ Role specialization reduces conflicts; it does not eliminate them when multiple 
 
 ## Why It Works
 
-Role specialization limits each agent's objective function to a single domain. An agent with an exclusive scope has no incentive to drift into adjacent concerns, so it spends its full context window on the one dimension it owns. The result is deeper coverage within each domain rather than shallow coverage across all of them.
+Role specialization limits each agent's objective function to a single domain. An agent with an exclusive scope has no incentive to drift into adjacent concerns, so it spends its full context window on the one dimension it owns. The result is deeper coverage within each domain rather than shallow coverage across all of them — the breadth a [fan-out synthesis](../multi-agent/fan-out-synthesis.md) step then recombines.
 
 The MetaGPT multi-agent framework illustrates the mechanism: standardized roles plus verification of intermediate results curb the cascading errors that arise when chained agents hallucinate in response to each other's conflicting changes. When two agents independently modify the same code for different reasons, each may interpret the other's changes as bugs and attempt to "fix" them, creating a compounding correction loop. Exclusive scopes shrink the shared surface area where this interference occurs ([Hong et al., 2023](https://arxiv.org/abs/2308.00352)).
 
@@ -134,10 +134,10 @@ Each agent's exclusive scope prevents overlap: the documentation agent cannot al
 
 Specialized roles degrade when tasks are inherently cross-cutting:
 
-- **Shared-file contention.** A refactor that requires both performance and style changes cannot be cleanly split. The performance agent and code quality agent will both modify the same functions, and neither has authority to make the final structural decision. The merge step absorbs the coordination cost that specialization was meant to avoid.
+- **Shared-file contention.** A refactor that requires both performance and style changes cannot be cleanly split. The performance agent and code quality agent will both modify the same functions, and neither has authority to make the final structural decision. The merge step absorbs the coordination cost that specialization was meant to avoid, pushing the work back onto the [orchestrator](../multi-agent/orchestrator-worker.md).
 - **Tightly-coupled domains.** When performance, style, and correctness cannot change independently — a hot loop where variable naming and algorithmic choice are inseparable — exclusive role boundaries generate contradictory edits requiring manual resolution.
 - **Over-narrow scope causes tunnel vision.** A deduplication agent instructed to merge redundant code may consolidate functions whose apparent similarity hides behavioral differences — a problem a context-aware agent would catch but a scope-limited agent may not.
-- **Role boundary ambiguity.** "Performance" and "code quality" often overlap (e.g., extracting a well-named helper function improves both). Without a defined priority rule for overlapping domains, agents produce conflicting changes and the merge step requires human judgment to resolve.
+- **Role boundary ambiguity.** "Performance" and "code quality" often overlap (e.g., extracting a well-named helper function improves both) — a reason to pin each scope down with [persona-as-code](persona-as-code.md). Without a defined priority rule for overlapping domains, agents produce conflicting changes and the merge step requires human judgment to resolve.
 - **Small codebases.** A single agent that fits the entire codebase in context covers all improvement dimensions in one pass; multiple specialized agents multiply cost without multiplying coverage.
 - **Role boundary violations.** [Research on multi-agent system failures](https://arxiv.org/html/2503.13657v1) finds agents frequently disobey role specifications and attempt changes outside their scope — when this happens, conflicts increase rather than decrease.
 

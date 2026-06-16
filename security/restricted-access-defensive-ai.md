@@ -49,7 +49,7 @@ graph TD
 
 - **Limited adversarial testing of the gating itself.** A vetted audience cannot pressure-test the gating mechanism, the partner-vetting process, or the safeguarded successor under adversarial use.
 - **Concentration risk.** Capability sits inside a hand-picked consortium with the deepest threat-intel reach; independent researchers operate outside it.
-- **Lock-in.** Detection built around Mythos faces re-pricing at GA and capability-regression risk if the safeguarded successor cannot reproduce findings.
+- **Lock-in.** Detection built around Claude Mythos faces re-pricing at GA and capability-regression risk if the safeguarded successor cannot reproduce findings.
 - **Marketing-overlap.** "Defensive-only" is a deployment posture, not a model property — any model that finds vulnerabilities autonomously can also exploit them. Gating is what makes the framing meaningful, and only as long as it holds.
 
 ## When the Pattern Does Not Apply
@@ -112,7 +112,7 @@ The disclosure-then-fix cadence and the safeguard-readiness exit criterion are t
 - Restricted access is a distinct deployment category, not a marketing posture — it earns its place only when the offense-defense asymmetry is large enough that broad release would proliferate exploits faster than defenders patch.
 - The mechanism is asymmetric latency: weeks of defender head start on high-blast-radius targets compound before broader release.
 - Validate the vendor's safeguard roadmap; absent an exit criterion, gating becomes permanent dependency.
-- The gating supplements, not replaces, structural controls like blast-radius containment and defense-in-depth.
+- The gating supplements, not replaces, structural controls like [blast-radius containment](blast-radius-containment.md) and defense-in-depth.
 - Plan integration cost against post-credit pricing, not preview credits.
 
 ## Related

@@ -64,7 +64,7 @@ If "correct" has a valid range of interpretations, prompts are appropriate. If t
 
 Escalating to structure has real costs:
 
-- **No hook infrastructure**: Without CI/CD or tool-call interception, deploying hooks costs more than the error does. Prompt-only is the right call for throwaway scripts.
+- **No hook infrastructure**: Without CI/CD or tool-call interception, [deploying hooks](../instructions/hooks-vs-prompts.md) costs more than the error does. Prompt-only is the right call for throwaway scripts.
 - **Interpretive tasks**: Binary enforcement on soft constraints (tone, approach, style) introduces rigidity without safety benefit.
 - **Premature hardening**: Tool restrictions set too early block valid use cases that emerge during development.
 

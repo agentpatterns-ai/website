@@ -84,7 +84,7 @@ Multi-vector evasion succeeds because per-prompt classifiers score each message'
 
 The three-vector framing is not always the right diagnostic. Four conditions where it adds cost without value:
 
-1. **One-shot stateless agents.** A formatter or extractor with no inter-turn memory has no temporal axis to fragment along. The three-vector grid produces empty cells without insight; standard single-turn injection analysis is the right primary check.
+1. **One-shot stateless agents.** A formatter or extractor with no inter-turn memory has no temporal axis to fragment along. The three-vector grid produces empty cells without insight; standard [single-turn injection analysis](prompt-injection-threat-model.md) is the right primary check.
 2. **Closed data pipelines with no external ingestion.** Agents consuming only internal, access-controlled sources have no spatial axis surface. Spending reviewer cycles on spatial-evasion benchmarks before the closed boundary is breached inverts the risk priority.
 3. **Structured workflows protected by a behavioral firewall.** Stable tool catalogs with pDFA enforcement report 0% ASR on multi-step attacks ([Dang, 2026](https://arxiv.org/abs/2604.26274)) — the temporal axis is already foreclosed by the architecture, so three-vector benchmarking measures a closed surface.
 4. **Premature optimisation against tail threats.** Teams that have not closed plain rule-file injection, credential exposure, or basic indirect injection should fix those first; the marginal-risk reduction from multi-vector benchmarking is lower than the unaddressed single-turn surface ([Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)).

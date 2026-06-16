@@ -4,7 +4,7 @@ tags:
   - claude
 description: "Add PID namespace isolation and env var scrubbing to Bash subprocesses in Claude Code, preventing daemon persistence and secret leakage beyond the session."
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Subprocess PID Namespace Sandboxing in Claude Code
@@ -35,11 +35,11 @@ Env var scrubbing prevents parent-environment secrets from leaking into child pr
 
 ### `CLAUDE_CODE_SCRIPT_CAPS`
 
-Sets a per-session ceiling on the number of script invocations. Without a cap, a runaway agent or injected payload can drive resource exhaustion by invoking scripts in a tight loop. `CLAUDE_CODE_SCRIPT_CAPS` enforces a hard limit so that loop terminates before it degrades the host.
+`CLAUDE_CODE_SCRIPT_CAPS` sets a per-session ceiling on the number of script invocations. Without a cap, a runaway agent or injected payload can drive resource exhaustion by invoking scripts in a tight loop. The variable enforces a hard limit so that loop terminates before it degrades the host.
 
 ## Linux-Only Constraint
 
-PID namespace isolation is a Linux kernel primitive. This feature does not apply on macOS or Windows. On those platforms, the filesystem and network boundaries from the standard sandbox remain the primary isolation mechanisms.
+PID namespace isolation is a Linux kernel primitive. This feature does not apply on macOS or Windows. On those platforms, the filesystem and network boundaries from [dual-boundary sandboxing](dual-boundary-sandboxing.md) remain the primary isolation mechanisms.
 
 For production agent deployments on Linux, all three layers should be configured together:
 

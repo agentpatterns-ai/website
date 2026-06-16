@@ -55,7 +55,7 @@ The shape is not Claude-specific. The cocoindex semantic-code tool independently
 
 The pattern is per-user desktop scoping. Several conditions invert the value:
 
-- **Single-session, single-machine usage.** One agent in one terminal pays the daemon's roster, socket, and log complexity for zero parallelism benefit. It earns its complexity only at two-plus concurrent sessions.
+- **Single-session, single-machine usage.** One agent in one terminal pays the daemon's roster, socket, and log complexity for zero parallelism benefit. It earns its complexity only at two-plus [concurrent sessions](../workflows/parallel-agent-sessions.md).
 - **Multi-user shared host.** A per-user supervisor scales by user count, not session count. Shared dev boxes give you N supervisors competing for the same binary watch and memory budget. The architecture is deliberately not multi-tenant — see Codex's open multi-user gap: "to serve N users, you need N processes" ([openai/codex#14916](https://github.com/openai/codex/issues/14916)).
 - **Restricted environments where daemons cannot persist.** Sandboxed CI runners and ephemeral containers where the supervisor cannot outlive the shell make roster and idle-eviction guarantees meaningless. The pattern presupposes the process survives the dispatcher's exit.
 - **Long-lived elevated permissions.** A supervisor holding `bypassPermissions` across reattach has a wider blast radius than a per-invocation foreground session, because it outlives user attention.

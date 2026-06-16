@@ -57,21 +57,21 @@ Agents retrieve context by syntactic and semantic similarity, not quality. The r
 
 Generation amplifies the match: few-shot conditioning on in-repo examples dominates prose instructions. The model treats surrounding code as higher-fidelity evidence of "what this codebase does" than any guidance, and every new usage becomes retrieval context for the next run.
 
-Mechanical enforcement beats guidance. A linter rejecting the deprecated pattern removes it from the retrieval surface; a prompt to "prefer the new API" competes with N existing calls and loses.
+Mechanical enforcement beats guidance, the case made in [hooks for enforcement vs prompts for guidance](../instructions/hooks-vs-prompts.md). A linter rejecting the deprecated pattern removes it from the retrieval surface; a prompt to "prefer the new API" competes with N existing calls and loses.
 
 ## The Fix: Clean the House Before Inviting the Agent
 
 OpenAI's Harness team spent [20% of sprint time cleaning up "AI slop"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/) before arriving at this approach:
 
 1. **Encode golden patterns as mechanical rules.** Linters and CI checks that reject known anti-patterns — prose guidance is routinely overridden by contradicting examples.
-2. **Auto-generate refactoring PRs.** Replace deprecated patterns with approved alternatives before scaling agent usage.
+2. **Auto-generate refactoring PRs.** Replace deprecated patterns with approved alternatives before scaling agent usage — part of getting to [codebase readiness](../agent-design/codebase-readiness.md).
 3. **Track quality metrics.** Monitor duplication rates, lint violations, and complexity scores. Degradation signals replication is outpacing remediation.
 
 ## When This Backfires
 
 Conditions where clean-first is worse than proceeding directly:
 
-**Mid-migration codebases.** Blanket lint rules fire on valid compatibility shims when two patterns intentionally coexist. Lint rules require pattern stability to add value.
+**Mid-migration codebases.** Blanket lint rules fire on valid compatibility shims when two patterns intentionally coexist. Lint rules require pattern stability to act as [deterministic guardrails](../verification/deterministic-guardrails.md).
 
 **Load-bearing deprecated APIs.** When the replacement isn't available in all deploy targets, encoding a rejection rule creates CI failures with no resolution path.
 
@@ -80,7 +80,7 @@ Conditions where clean-first is worse than proceeding directly:
 ## Key Takeaways
 
 - Agents replicate whatever patterns they find; legacy code and golden paths propagate at the same rate.
-- The risk compounds: each agent-generated instance becomes retrieval context for the next run.
+- The risk compounds: each agent-generated instance becomes retrieval context for the next run, accreting into [shadow tech debt](shadow-tech-debt.md).
 - Prose guidance loses to codebase examples — encode anti-patterns as CI-enforced lint rules.
 - Remediate before scaling, but scope rules narrowly when the codebase is mid-migration or the replacement API isn't universally reachable.
 

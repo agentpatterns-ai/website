@@ -100,9 +100,9 @@ Effective descriptions combine activation triggers, domain scope, and temporal c
 
 **Validation gates are slow or absent.** Cascade routing depends on deterministic, cheap validators (tests, linters, type checkers). If the validation step takes longer than the cost difference between tiers, the cascade adds latency without saving money. Measure gate cost before committing to escalation-based routing.
 
-**Single-task pipelines.** A three-tier routing system adds configuration and coordination overhead. For pipelines with one task type and low invocation volume, a single capable model at a fixed tier is simpler and often cheaper when amortized over setup and maintenance cost.
+**Single-task pipelines.** A three-tier routing system — whether by task type or by [code health](auto-model-selection.md) — adds configuration and coordination overhead. For pipelines with one task type and low invocation volume, a single capable model at a fixed tier is simpler and often cheaper when amortized over setup and maintenance cost.
 
-**Frequently-updated model rosters.** Role-based routing breaks when a provider deprecates or renames a model tier. Teams without automated model-ID management (display names, capability caching with TTL) spend engineering time on breakage rather than shipping features.
+**Frequently-updated model rosters.** Role-based routing breaks when a provider deprecates or renames a model tier. Teams without automated model-ID management (display names like `haiku`, capability caching with TTL) spend engineering time on breakage rather than shipping features.
 
 **High task interdependency.** When tasks cannot be cleanly separated by complexity — for example, a refactor that requires reasoning at every file edit — routing exploration to a fast model and implementation to a capable one creates friction: the fast model's findings must be re-ingested by the capable model, adding tokens and latency.
 
@@ -160,7 +160,7 @@ The `explorer` description combines "Use PROACTIVELY" with "Use immediately afte
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md) — budget reasoning effort the same way you budget tier choice
 - [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md) — heuristics that scale model effort by task signals
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — extend tier routing across providers
-- [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — route by file-level code health metrics rather than task type
+- [Code-Health-Gated LLM Tier Routing](auto-model-selection.md) — route by file-level code health metrics rather than task type
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md) — role split that complements tier routing
 - [Copilot vs Claude Billing Semantics](../human/copilot-vs-claude-billing-semantics.md) — premium request economics across vendors
 - [Claude Code Sub-Agents](../tools/claude/sub-agents.md) — per-agent model selection mechanic

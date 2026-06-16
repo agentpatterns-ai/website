@@ -10,7 +10,7 @@ aliases:
   - source applicability expiry triple
   - undead rule detection
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Rule Lifecycle Metadata for Prunable Instruction Surfaces
@@ -92,8 +92,8 @@ Lifecycle metadata is not free — every rule carries three extra fields that th
 
 - **Surfaces under ~50 rules** — the whole file is small enough to re-read in two minutes (the Walkinglabs threshold). A quarterly "delete what no one defends" pass achieves the same pruning outcome without per-rule schema overhead.
 - **Solo-author projects** — the implicit "why this rule exists" lives in the author's head. Writing it down duplicates context that has only one consumer.
-- **Universal safety rules** — "never commit secrets" needs no source/applicability/expiry. The triple earns its keep on project-specific, incident-driven rules where context fades over months.
-- **Teams without commit discipline** — if authors don't backfill metadata when adding rules, the triple becomes inconsistent decoration and the audit can't trust it. Enforce at PR review or skip the scheme entirely.
+- **Universal safety rules** — "never commit secrets" needs no source/applicability/expiry, and is better [enforced by a hook](enforcing-agent-behavior-with-hooks.md) than carried as metadata. The triple earns its keep on project-specific, incident-driven rules where context fades over months.
+- **Teams without commit discipline** — if authors don't backfill metadata when adding rules, the triple becomes inconsistent decoration and the audit can't trust it. Enforce at [PR review](prompt-governance-via-pr.md) or skip the scheme entirely.
 
 For medium-to-large instruction surfaces under repeated audit pressure, the per-rule cost is dominated by the gain: the surface can shrink. For small surfaces, plain deletion discipline wins.
 

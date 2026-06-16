@@ -9,7 +9,7 @@ aliases:
   - chat history as audit trail
   - queryable agent session log
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Agent Chat History as a First-Class Artifact
@@ -56,7 +56,7 @@ The shapes differ in window length, output format, and risk profile, and each fa
 
 - **Standup** — 24h window grouped by feature or branch. Value is recall, not narrative.
 - **Tips** — 7d analysis of prompting and tool-usage patterns. The riskiest shape: it reads a causal model ("you do better when you X") off correlation in a sample of one. Treat as a prompt for reflection, not a recommendation.
-- **Ad-hoc** — free-form NL query ("did I touch auth/login.py this week?"). Closest to log search and most defensible: the value is audit, not coaching.
+- **Ad-hoc** — free-form NL query ("did I touch auth/login.py this week?"). Closest to [in-session log search](transcript-search.md) and most defensible: the value is audit, not coaching.
 
 ## Mechanism: Why Chat History Has Leverage
 

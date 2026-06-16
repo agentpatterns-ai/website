@@ -136,9 +136,10 @@ Subtask-level memory adds overhead that outweighs benefits in several conditions
 
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md)
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md) -- retrieval mechanics for episodic memory using trigger, context, and outcome indexing
+- [Generative Agents Memory Stream](generative-agents-memory-stream.md) — companion on the observation-stream-plus-reflection axis, orthogonal to retrieval granularity
+- [Dual-Trace Memory Encoding](dual-trace-memory-encoding.md) — companion on the encoding-time axis, distinct from the retrieval-granularity angle here
 - [Seeding Agent Context: Breadcrumbs in Code](../context-engineering/seeding-agent-context.md)
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
-- [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md)
 - [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md)
-- [AST-Guided Agent Memory](ast-guided-agent-memory.md) -- uses AST representations instead of natural language as memory substrate for code generation agents
+- [Code-Native Memory Substrates](code-native-memory-substrates.md) -- uses AST representations instead of natural language as memory substrate for code generation agents
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)

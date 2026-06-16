@@ -33,9 +33,9 @@ Avoid inventing synthetic tasks that do not correspond to real usage patterns. S
 
 For each task, define what a correct output looks like. This is the hardest step and the one most teams rush through.
 
-**Binary outcomes** (the output is either right or wrong): test pass/fail, schema validation, state comparison. A coding agent either produces code that passes the test suite or it does not.
+**Binary outcomes** (the output is either right or wrong): test pass/fail, schema validation, state comparison — the code-based graders in [Grading Strategies](grading-strategies.md). A coding agent either produces code that passes the test suite or it does not.
 
-**Subjective outcomes** (correctness requires judgment): completeness, factual accuracy, style compliance, source quality. A summarization agent's output requires a rubric to evaluate.
+**Subjective outcomes** (correctness requires judgment): completeness, factual accuracy, style compliance, source quality. A summarization agent's output requires a rubric to evaluate — still graded on the [outcome, not the path](../../verification/grade-agent-outcomes.md).
 
 **The agreement test**: two domain experts should independently agree on the pass/fail verdict for every task before the task is committed to the suite. If they disagree, the task specification is ambiguous — and ambiguous task specifications are a leading source of misleading eval results. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)] See [Human-Review Golden Dataset Curation](../../verification/human-review-golden-dataset-curation.md) for running this agreement process as a repeatable curation loop.
 
@@ -137,7 +137,7 @@ After the initial 20 tasks, grow the suite from two sources:
 
 **Production incidents**: every failure report is a candidate eval task. See [Incident-to-Eval Synthesis](../../verification/incident-to-eval-synthesis.md) for the systematic pipeline from incident to eval case.
 
-**Edge cases discovered during development**: as you build the feature, you will encounter inputs that expose unexpected behavior. Add these immediately — they are the cases you will forget to test manually later.
+**Edge cases discovered during development**: as you build the feature, you will encounter inputs that expose unexpected behavior. Add these immediately, the "Monitor and Grow" step of [The Eval-First Development Loop](eval-first-loop.md) — they are the cases you will forget to test manually later.
 
 Do not add tasks to pad the count. Every task should represent a genuinely distinct scenario. Duplicate tasks inflate the pass rate without improving coverage.
 
@@ -147,7 +147,7 @@ Do not add tasks to pad the count. Every task should represent a genuinely disti
 
 **Writing tasks after implementation**: this embeds the agent's current behavior into the definition of correct. Write tasks based on what the agent *should* do, not what it *currently* does.
 
-**Graders that are too strict**: exact-match verifiers reject valid alternative solutions. Use outcome-based graders (state checks, test suites) or semantic equivalence rather than string matching.
+**Graders that are too strict**: exact-match verifiers reject valid alternative solutions, the failure mode that [outcome grading](../../verification/grade-agent-outcomes.md) avoids. Use outcome-based graders (state checks, test suites) or semantic equivalence rather than string matching.
 
 **No baseline run**: skipping the baseline means you cannot measure progress. A pass rate of 85% is meaningless without knowing the starting point.
 

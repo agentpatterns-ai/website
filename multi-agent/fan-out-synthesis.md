@@ -13,7 +13,7 @@ tags:
   - multi-agent
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Fan-Out Synthesis Pattern
@@ -43,7 +43,7 @@ graph TD
 
 ## Why Parallel Diversity Helps
 
-A single agent commits to one set of decisions. Parallel agents with identical instructions but independent contexts explore different trade-offs, edge cases, and risks. Synthesis extracts the strongest element from each attempt and assembles a composite no single agent would have reached. Unlike majority voting, which picks the most popular answer, synthesis combines complementary strengths deliberately.
+A single agent commits to one set of decisions. Parallel agents with identical instructions but independent contexts explore different trade-offs, edge cases, and risks. Synthesis extracts the strongest element from each attempt and assembles a composite no single agent would have reached. Unlike [majority voting](voting-ensemble-pattern.md), which picks the most popular answer, synthesis combines complementary strengths deliberately.
 
 ## Why It Works
 

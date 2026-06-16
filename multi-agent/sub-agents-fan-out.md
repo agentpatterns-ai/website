@@ -12,7 +12,7 @@ tags:
   - tool-agnostic
   - multi-agent
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Sub-Agents for Fan-Out Research and Context Isolation
@@ -127,7 +127,7 @@ Fan-out sub-agents add overhead that makes them worse than in-thread execution i
 
 - **Small tasks, low token volume** — spawning three sub-agents to read three 100-token files costs more latency and money than three sequential in-thread reads. Isolation pays off only when each sub-agent's exploration would otherwise pollute the main context.
 - **Interdependent tasks** — when sub-task B depends on sub-task A's output, fan-out collapses into a two-phase sequence that eliminates the parallelism benefit.
-- **Cost-sensitive workloads** — N parallel sub-agents means N simultaneous model invocations. For simple sub-tasks, a single agent with context compaction is cheaper.
+- **[Cost-sensitive workloads](../agent-design/cost-aware-agent-design.md)** — N parallel sub-agents means N simultaneous model invocations. For simple sub-tasks, a single agent with context compaction is cheaper.
 - **Synthesis is the bottleneck** — if assembling N summaries requires reading most of the raw detail anyway, the main thread context fills up regardless.
 
 ## Key Takeaways

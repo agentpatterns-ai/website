@@ -35,7 +35,7 @@ Assignment requires write access or higher on the repository. The draft PR requi
 
 Not every alert is a good candidate for agent assignment. Two mechanisms filter the queue before a human decides what to delegate:
 
-**Auto-triage rules** dismiss low-risk alerts automatically — before they appear in the queue. Rules can match on CVSS score, EPSS percentage, dependency scope (development vs. production), and whether a patch is available. Alerts that pass through become candidates for assignment.
+**Auto-triage rules** dismiss low-risk alerts automatically — before they appear in the queue. GitHub Code Security auto-triage rules can match on CVSS score, EPSS percentage, dependency scope (development vs. production), and whether a patch is available. Alerts that pass through become candidates for assignment.
 
 **Manual triage** decides which passing alerts to assign to the agent vs. a human. The decision turns on the fix complexity:
 
@@ -54,7 +54,7 @@ The assignment model enforces two controls that bound agent autonomy:
 
 1. **Write access gate** — only users with write/maintain/admin permissions can assign an alert to the agent. Anonymous or read-only collaborators cannot trigger fix generation.
 
-2. **Draft PR review** — the agent opens a draft, not a ready-to-merge PR. A human must inspect the diff, verify test coverage, and explicitly approve before merging. The agent cannot bypass this gate.
+2. **Draft PR review** — the [Copilot coding agent](coding-agent.md) opens a draft, not a ready-to-merge PR. A human must inspect the diff, verify test coverage, and explicitly approve before merging. The agent cannot bypass this gate.
 
 This positions agent assignment inside the [human-in-the-loop](../../security/defense-in-depth-agent-safety.md) boundary: autonomous execution, mandatory human verification.
 
@@ -75,7 +75,7 @@ This query surfaces all open Dependabot alerts currently delegated to the agent,
 Agent assignment degrades or fails in three conditions:
 
 1. **No test suite**: The agent opens a PR, but without automated tests there is no signal that the dependency bump is safe. Reviewers must manually exercise the diff — negating much of the time saving.
-2. **Complex transitive updates**: When a version bump pulls in a chain of transitive dependency upgrades, the agent may resolve conflicts mechanically while missing semantic breakage in nested packages. Human inspection of the full dependency graph remains necessary.
+2. **Complex transitive updates**: When a version bump pulls in a chain of transitive dependency upgrades, the Copilot agent may resolve conflicts mechanically while missing semantic breakage in nested packages. Human inspection of the full dependency graph remains necessary.
 3. **No available patch**: The agent cannot synthesise a fix for an advisory with no upstream patch. Assigning these alerts wastes a Copilot premium request and produces a draft PR with no actionable changes.
 
 ## Key Takeaways

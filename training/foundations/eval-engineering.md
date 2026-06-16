@@ -11,19 +11,18 @@ aliases:
   - evaluation engineering
 last_reviewed: 2026-06-09
 ---
+
 # Eval Engineering (Training Module)
 
 > Eval engineering is the discipline of measuring agent quality across sessions and over time — distinct from the harness engineering that catches mistakes during a single execution.
 
-A harness (type checker, test suite, linter) tells the agent whether *this run* succeeded. An eval suite tells *you* whether the agent is getting better or worse across runs, across prompt changes, and across model upgrades. Eval engineering builds the measurement layer that sits above runtime verification — giving you the data to decide whether a prompt change, model upgrade, or architectural shift actually improved quality. The two layers are complementary; neither replaces the other.
+A harness (type checker, test suite, linter) tells the agent whether *this run* succeeded. An eval suite tells *you* whether the agent is getting better or worse across runs, across prompt changes, and across model upgrades. Eval engineering builds the [measurement layer](../../workflows/eval-driven-development.md) that sits above runtime verification — giving you the data to decide whether a prompt change, model upgrade, or architectural shift actually improved quality. The two layers are complementary; neither replaces the other.
 
 ---
 
 ## Evals Are Not Tests
 
-Traditional tests assert that a specific input produces a specific output. Agent evals measure a distribution. The same prompt, same task, same environment can produce different results on successive runs because agents are non-deterministic.
-
-This distinction has structural consequences. A test suite that passes today passes tomorrow (assuming no code changes). An eval suite that scores 85% today may score 72% tomorrow after a model update, a prompt edit, or a context change — and you need to know that happened before users do.
+Traditional tests assert that a specific input produces a specific output. Agent evals measure a distribution. The same prompt, same task, same environment can produce different results on successive runs because agents are non-deterministic — the reason [behavioral testing](../../verification/behavioral-testing-agents.md) replaces single-input assertions. This distinction has structural consequences. A test suite that passes today passes tomorrow (assuming no code changes). An eval suite that scores 85% today may score 72% tomorrow after a model update, a prompt edit, or a context change — and you need to know that happened before users do.
 
 Evals serve two roles that tests do not: they act as **development guards** that catch regressions before deployment, and as **production canaries** that detect drift caused by model updates or context accumulation. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
@@ -33,7 +32,7 @@ Evals serve two roles that tests do not: they act as **development guards** that
 
 A single pass/fail result from one trial is a sample of size one. An agent that solves a benchmark 60% of the time on one run might score anywhere from 40% to 80% depending on sampling variation.
 
-Two metrics separate capability from consistency. **pass@k** measures whether the agent produces at least one correct solution across *k* attempts — the capability ceiling. **pass^k** measures whether *all k* attempts succeed — the consistency floor. High pass@k with low pass^k means the agent can solve the problem but cannot be trusted to do so reliably. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+Two metrics separate capability from consistency. **pass@k** measures whether the agent produces at least one correct solution across *k* attempts — the [capability ceiling](../../verification/pass-at-k-metrics.md). **pass^k** measures whether *all k* attempts succeed — the consistency floor. High pass@k with low pass^k means the agent can solve the problem but cannot be trusted to do so reliably. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 The choice of primary metric depends on the deployment context. For human-in-the-loop workflows where a developer reviews every output, pass@k matters — a single correct answer in three attempts is sufficient. For automated pipelines where outputs are consumed directly, pass^k is critical — a 90% pass rate means roughly 1-in-10 automated runs fails.
 
@@ -47,7 +46,7 @@ See [pass@k and pass^k Metrics](../../verification/pass-at-k-metrics.md) for mea
 
 ### Grade Outcomes, Not Paths
 
-Path-based evals check that an agent called tool X before tool Y. This penalizes agents that find valid alternative solutions the eval author did not anticipate. Outcome-based grading asks whether the system reached the correct state, regardless of how it got there. For coding agents, a passing test suite is the most reliable outcome grader — it is objective, fast, and path-agnostic. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+Path-based evals check that an agent called tool X before tool Y. This penalizes agents that find valid alternative solutions the eval author did not anticipate. [Outcome-based grading](../../verification/grade-agent-outcomes.md) asks whether the system reached the correct state, regardless of how it got there. For coding agents, a passing test suite is the most reliable outcome grader — it is objective, fast, and path-agnostic. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 See [Grade Agent Outcomes, Not Execution Paths](../../verification/grade-agent-outcomes.md) for implementation details.
 
@@ -67,7 +66,7 @@ Code-based grading first, LLM-as-judge for what code cannot assess, human gradin
 
 ## LLM-as-Judge Evaluation
 
-Using a model to grade another model's output enables evaluation at scale for free-form outputs that resist programmatic checks. Score orthogonal dimensions independently — factual accuracy, citation accuracy, completeness, source quality — rather than collapsing into a single aggregate score. An output can be factually accurate but incomplete, or complete but citing low-quality sources. A single score hides which dimension failed. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
+Using a model to grade another model's output enables evaluation at scale for free-form outputs that resist programmatic checks. [Score orthogonal dimensions independently](../../workflows/llm-as-judge-evaluation.md) — factual accuracy, citation accuracy, completeness, source quality — rather than collapsing into a single aggregate score. An output can be factually accurate but incomplete, or complete but citing low-quality sources. A single score hides which dimension failed. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
 
 Key design decisions:
 
@@ -129,7 +128,7 @@ See [Anti-Reward-Hacking: Rubrics That Resist Gaming](../../verification/anti-re
 
 ## Layered Accuracy Defense
 
-No single agent should be the sole accuracy gatekeeper. Distribute verification across every agent in the pipeline: the researcher outputs only findings with retrievable source URLs, the writer uses only material from the research notes and marks anything else `[unverified]`, the reviewer flags any unsourced claim the writer included without marking. Each layer only needs to catch *some* errors — the compounded probability of an error surviving all layers is lower than any single agent's miss rate. [unverified]
+No single agent should be the sole accuracy gatekeeper. Distribute verification across every agent in the pipeline: the researcher outputs only findings with retrievable source URLs, the writer uses only material from the research notes and flags anything else as unsourced, the reviewer flags any unsourced claim the writer included without marking. Each layer only needs to catch *some* errors — assuming the layers fail independently, the compounded probability of an error surviving all of them is lower than any single agent's miss rate.
 
 This mirrors [defense in depth](../../security/defense-in-depth-agent-safety.md) from security: assume each layer will sometimes fail, and build the pipeline so that one layer's failure is caught by the next.
 
@@ -209,7 +208,3 @@ The team runs this suite before every prompt change. When a new model version dr
 - [Harness Engineering](harness-engineering.md)
 - [How the Four Disciplines Compound](prompt-context-harness-capstone.md)
 - [GitHub Copilot: Context Engineering & Agent Workflows](../copilot/context-and-workflows.md)
-
-## Unverified Claims
-
-- The compounded probability of an error surviving all verification layers is lower than any single agent's miss rate [unverified]

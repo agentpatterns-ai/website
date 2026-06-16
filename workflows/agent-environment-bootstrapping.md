@@ -8,7 +8,7 @@ tags:
   - github-actions
   - workflows
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Agent Environment Bootstrapping
@@ -75,7 +75,7 @@ Every minute an agent spends figuring out its environment is a minute not spent 
 
 ## Why It Works
 
-Deterministic bootstrapping works because it moves environment reasoning out of the LLM's inference loop entirely. When dependencies are pre-installed, the agent starts with a known-good baseline and can direct its full context window toward the actual task. Trial-and-error discovery is expensive: each installation attempt consumes tokens, each failure branches the conversation tree, and partial installs leave the agent uncertain whether a subsequent error is a code bug or an environment artifact. A declarative setup spec makes failures binary — the job either succeeds completely or fails with an explicit exit code before the agent runs — eliminating the silent partial-failure mode where the agent proceeds with incorrect tool versions.
+Deterministic bootstrapping works because it moves environment reasoning out of the LLM's inference loop entirely. When dependencies are pre-installed by a spec like `copilot-setup-steps.yml`, the agent starts with a known-good baseline and can direct its full context window toward the actual task. Trial-and-error discovery is expensive: each installation attempt consumes tokens, each failure branches the conversation tree, and partial installs leave the agent uncertain whether a subsequent error is a code bug or an environment artifact. A declarative setup spec makes failures binary — the job either succeeds completely or fails with an explicit exit code before the agent runs — eliminating the silent partial-failure mode where the agent proceeds with incorrect tool versions.
 
 ## When This Backfires
 

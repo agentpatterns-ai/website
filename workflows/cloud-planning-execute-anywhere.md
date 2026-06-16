@@ -7,7 +7,7 @@ tags:
   - claude
 applies_to: "claude-code@2.x"
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 status: current
 ---
 
@@ -15,7 +15,7 @@ status: current
 
 > Generate the plan in the cloud, review it inline in a browser, then choose at approval whether to execute remotely or teleport to the terminal.
 
-Cloud planning decouples plan generation from plan execution. A cloud session running in plan mode drafts the plan asynchronously while the dispatching terminal stays free. The plan is reviewed in a browser with highlight-and-comment feedback on individual passages. At approval time, the same plan can run in the cloud (continuing as the implementer, opening a pull request) or teleport back to the original local session for execution. Claude Code ships this triad as [ultraplan](https://code.claude.com/docs/en/ultraplan), available from v2.1.91 onward.
+Cloud planning decouples plan generation from plan execution. A cloud session running in [plan mode](../tools/claude/plan-mode.md) drafts the plan asynchronously while the dispatching terminal stays free. The plan is reviewed in a browser with highlight-and-comment feedback on individual passages. At approval time, the same plan can run in the cloud (continuing as the implementer, opening a pull request) or teleport back to the original local session for execution. Claude Code ships this triad as [ultraplan](https://code.claude.com/docs/en/ultraplan), available from v2.1.91 onward.
 
 ## Why the Triad
 
@@ -93,7 +93,7 @@ The **Cancel** option is the failure-mode fallback: if the polling terminal clos
 
 ## Why It Works
 
-Plan generation and plan execution have different optimal runtimes. Plan generation benefits from an asynchronous, hands-off surface — the bottleneck is review quality, not iteration speed, and inline-comment review on a structured document is tighter than prose review. Plan execution benefits from a runtime that matches the plan: sometimes that is the cloud (fresh sandbox, network access, no local-config drift), sometimes that is local (working tree, secrets, local databases). Forcing the choice at dispatch loses information; deferring it to approval lets the plan itself reveal what runtime it needs. Anthropic's docs name this as "Flexible execution" — one of the three top-level value props of [ultraplan](https://code.claude.com/docs/en/ultraplan).
+Plan generation and plan execution have different optimal runtimes. Plan generation benefits from an asynchronous, hands-off surface — the bottleneck is review quality, not iteration speed, and inline-comment review on a structured document is tighter than prose review. Plan execution benefits from a runtime that matches the plan: sometimes that is the cloud (fresh sandbox, network access, no local-config drift), sometimes that is local (working tree, secrets, local databases) — the same [cloud-local handoff](cloud-local-agent-handoff.md) choice applied at the plan stage. Forcing the choice at dispatch loses information; deferring it to approval lets the plan itself reveal what runtime it needs. Anthropic's docs name this as "Flexible execution" — one of the three top-level value props of [ultraplan](https://code.claude.com/docs/en/ultraplan).
 
 The mechanism is the same separation that justifies build-time versus run-time configuration boundaries: bind late, when the most information is available. The browser inline-comment surface is the structural enabler — without per-passage feedback, "send the plan back to the planner to fix three specific things" collapses into a prose round-trip, and the cost of revising in the cloud exceeds the cost of just re-planning locally.
 

@@ -9,7 +9,7 @@ tags:
   - multi-agent
   - claude
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-06-13
+last_reviewed: 2026-06-14
 status: current
 ---
 
@@ -36,6 +36,8 @@ Enable via `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` in `settings.json` or as an en
 | State | Ephemeral | Persistent within session |
 
 Use sub-agents when you need quick, focused workers. Use agent teams when your agents need to share findings, challenge each other, and coordinate autonomously.
+
+Sub-agents themselves can now nest: the [Claude Code changelog](https://code.claude.com/docs/en/changelog) records support for multi-level sub-agent nesting — sub-agents spawning sub-agents up to five levels deep — alongside nested-usage attribution headers that trace token usage back through the spawn chain. This is distinct from agent teams, where teammates still cannot spawn their own teams (see [When This Backfires](#when-this-backfires)).
 
 ## Model Inheritance
 
@@ -102,7 +104,7 @@ The canonical docs list concrete [limitations](https://code.claude.com/docs/en/a
 
 - **Token costs scale linearly.** Each teammate is a full Claude Code instance with its own context window, so a 5-person team burns roughly 5x the tokens of a single session. For sequential tasks or routine edits, one session is cheaper and faster.
 - **No session resumption for in-process teammates.** `/resume` and `/rewind` do not restore them. After a resume the lead may try to message teammates that no longer exist.
-- **One team per session, no nested teams, fixed leadership.** The lead cannot be transferred, teammates cannot spawn their own teams, and cleanup must happen before a new team can start. File-locked task claiming prevents races but also rules out dynamic reshaping.
+- **One team per session, no nested teams, fixed leadership.** The lead cannot be transferred, teammates cannot spawn their own teams, and cleanup must happen before a new team can start. Claude Code's file-locked task claiming prevents races but also rules out dynamic reshaping.
 - **File conflicts are easy to create.** Two teammates editing the same file race each other. Teams need an up-front split of ownership — without it, parallelism destroys work instead of speeding it up.
 - **Split-pane mode is terminal-restricted.** It requires tmux or iTerm2 with the `it2` CLI and is unsupported in VS Code's integrated terminal, Windows Terminal, and Ghostty.
 

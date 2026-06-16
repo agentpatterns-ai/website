@@ -23,7 +23,7 @@ maturity: established
 A monolithic agent process couples model inference, session state, and execution environment. When any one churns — models shift, execution targets multiply, or a crash forces recovery — the others pay the cost. The pattern splits the process along layers whose churn rates differ by orders of magnitude ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)):
 
 - **Session** — an append-only event log of everything that happened. The authoritative state; not any in-memory harness object.
-- **Harness** — a stateless loop that calls the model and routes tool calls. Any harness instance can resume any session.
+- **Harness** — a stateless loop that calls the model and routes tool calls. Any harness instance can resume any session via `wake(sessionId)`.
 - **Sandbox** — a provisioned execution environment where the agent runs code and edits files. Uniform tool interface regardless of target.
 
 ```mermaid
@@ -86,7 +86,7 @@ For complex multi-agent coordination, "a flat log is fundamentally insufficient"
 
 A coding agent is asked to migrate a repository from Python 3.10 to 3.12 over a multi-hour run. Midway through, the harness process crashes.
 
-**Without virtualized primitives**: the in-memory conversation and partial tool results are lost. A new process cannot distinguish "git clone was attempted and failed" from "git clone completed successfully". The task restarts from scratch, rerunning destructive operations or producing inconsistent state.
+**Without virtualized primitives**: the in-memory conversation and partial tool results are lost. A new process cannot distinguish a `git clone` that was attempted and failed from one that completed successfully. The task restarts from scratch, rerunning destructive operations or producing inconsistent state.
 
 **With Session / Harness / Sandbox split**:
 
@@ -112,5 +112,5 @@ The user sees a brief pause, not a restart. Time-to-first-token on resume is dom
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md) — the two-phase initializer/worker pattern that predates full virtualization
 - [Harness Engineering](harness-engineering.md) — the broader discipline of environment design for reliable agent output
 - [Event Sourcing for Agents](../observability/event-sourcing-for-agents.md) — the event-sourcing pattern that the Session log instantiates
-- [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md) — where this pattern sits among agent scaffolding choices
+- [Scaffold Architecture Taxonomy](harness-design-dimensions.md) — where this pattern sits among agent scaffolding choices
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md) — a finer-grained split within the harness layer

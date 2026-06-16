@@ -7,7 +7,7 @@ tags:
   - copilot
   - mcp
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # MCP LLM Sampling: Servers Requesting AI Inference Mid-Tool
@@ -56,11 +56,11 @@ The key distinction from plain tool logic: these decisions benefit from language
 
 **Coupling.** The server's behavior depends on the host model's capability and behavior. The same tool may produce different results against different models. `CreateMessageResult` returns the actual model name so servers can detect this — but cannot compensate for it at the protocol level.
 
-**Latency.** Each sampling call adds at least one inference round-trip within the tool call. Tools that sample repeatedly compound this. Design sampling calls to batch what they need in a single request.
+**Latency.** Each `sampling/createMessage` call adds at least one inference round-trip within the tool call. Tools that sample repeatedly compound this. Design sampling calls to batch what they need in a single request.
 
 **Trust boundary.** The user-approval gate is the primary defense against a malicious or compromised server using sampling to exfiltrate context or manipulate the host model. Do not deploy MCP servers with sampling capability from untrusted sources without reviewing what they send in `messages` and `systemPrompt`.
 
-**Contrast with elicitation.** MCP elicitation requests structured input from the user mid-task. Sampling requests inference from the model. Both interrupt deterministic tool execution, but for different inputs: human judgment vs. AI reasoning. A tool can use both in sequence — elicit a decision from the user, then sample to process the result.
+**Contrast with elicitation.** MCP elicitation requests structured input from the user mid-task. Sampling requests inference from the model. Both interrupt deterministic tool execution, but for different inputs: human judgment vs. AI reasoning. A tool can use both in sequence — [elicit](mcp-elicitation.md) a decision from the user, then sample to process the result.
 
 ## Example
 

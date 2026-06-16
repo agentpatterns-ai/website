@@ -99,7 +99,7 @@ The decoupled measurement reveals which side of the compression Pareto your work
 - Token reductions measured on isolated single-turn benchmarks (30-60% in vendor benchmarks) shrink to 18-27% inside end-to-end agentic loops.
 - The accuracy cost is real: TRON regresses up to 14 percentage points, TOON ~9 percentage points vs JSON across four agentic benchmarks.
 - Input-side compression (schemas the LLM reads) and output-side compression (formats the LLM generates) carry different risk — measure them separately.
-- TOON has multi-turn failure modes — cascading parse errors and collapsed parallel tool calls — that single-turn tests cannot surface.
+- TOON has multi-turn failure modes — cascading parse errors and collapsed parallel tool calls — that single-turn tests cannot surface ([Kutschka & Geiger, 2026](https://arxiv.org/abs/2605.29676)).
 - Default to JSON. Validate any swap on replayed production traces with multi-turn and parallel-tool-call coverage before deploying.
 
 ## Related

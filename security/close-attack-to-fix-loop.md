@@ -12,7 +12,7 @@ aliases:
   - adversarial fine-tuning loop
   - rapid attack-to-checkpoint cycle
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Close the Attack-to-Fix Loop: Adversarially Train Agent Checkpoints Against New Injections
@@ -21,7 +21,7 @@ maturity: established
 
 ## Why Prompt Injection Resilience Degrades
 
-Prompt injection resilience is not a static property. As attackers or your own red teamers discover new attack strategies, defenses that were effective yesterday become obsolete. System-level mitigations (confirmation gates, narrow permissions, filtered inputs) address known attack patterns; they do not adapt as attack strategies evolve.
+Prompt injection resilience is not a static property. As attackers or your own [automated red teamers](rl-automated-red-teamers.md) discover new attack strategies, defenses that were effective yesterday become obsolete. System-level mitigations (confirmation gates, narrow permissions, filtered inputs) address known attack patterns; they do not adapt as attack strategies evolve.
 
 Model-level hardening — updating the agent's weights to resist novel attacks — provides resilience that adapts with the threat. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 

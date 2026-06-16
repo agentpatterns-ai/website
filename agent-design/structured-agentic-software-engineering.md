@@ -97,7 +97,7 @@ Reviewers cannot trust output they cannot audit, and agents cannot improve witho
 SASE adds process overhead that can exceed its benefits:
 
 - **Small teams or early-stage projects**: authoring BriefingScripts and MRPs rarely pays off when reviewers hold full context.
-- **Ill-defined requirements**: structured artifacts assume stable goals. When requirements shift mid-task, the BriefingScript becomes a constraint and agents over-optimize for the original spec.
+- **Ill-defined requirements**: structured artifacts assume stable goals. When requirements shift mid-task, the BriefingScript becomes a constraint and agents over-optimize for the original spec — the rigidity risk [spec-driven development](../workflows/spec-driven-development.md) carries.
 - **Low-trust agent pipelines**: MRPs are evidence bundles, not correctness proofs. At a 29.6% regression rate on "plausible" fixes, a polished evidence package can manufacture false confidence.
 - **Tooling immaturity**: ACE/AEE separation needs agents that consume structured artifacts reliably. Model adherence to structured formats varies.
 

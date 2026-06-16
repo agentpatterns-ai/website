@@ -171,3 +171,4 @@ Auto-formatting on every write is not universally correct. Prefer manual invocat
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../../tool-engineering/hook-catalog.md)
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md)
 - [Architecting a Central Repo for Shared Agent Standards](../../workflows/central-repo-shared-agent-standards.md)
+- [Hooks and Lifecycle Events](../../tool-engineering/hooks-lifecycle-events.md) — the canonical home for the lifecycle model and `PostToolUse` event this pattern uses

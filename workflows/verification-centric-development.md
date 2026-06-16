@@ -49,16 +49,16 @@ graph TD
     H -.- H1["Architectural fit, intent alignment"]
 ```
 
-**Snapshot testing deserves special attention.** In the TextForge project, snapshot tests (using the Verify library) caught "scores of unauthorized changes" in LLM output. Each snapshot produces a git-trackable approval file — the developer must explicitly approve any structural change. This prevents the silent regressions that occur when LLMs modify code outside the requested scope.
+**Snapshot testing deserves special attention.** In the TextForge project, snapshot tests (using the Verify library) caught "scores of unauthorized changes" in LLM output ([Stannard, TextForge case study](https://aaronstannard.com/software-2.0-case-study-textforge/)). Each snapshot produces a git-trackable approval file — the developer must explicitly approve any structural change. This prevents the silent regressions that occur when LLMs modify code outside the requested scope.
 
 !!! warning "Anchor to deterministic signals"
-    Reflection loops must verify against deterministic signals — compiler output, test results, lint errors, schema validation. Model self-critique ("let me check if that's correct") is not verification. The model that generated the bug cannot reliably detect it through introspection.
+    Reflection loops must verify against [deterministic signals](../verification/deterministic-guardrails.md) — compiler output, test results, lint errors, schema validation. Model self-critique ("let me check if that's correct") is not verification. The model that generated the bug cannot reliably detect it through introspection.
 
 ## Planning Is the Highest-Leverage Activity
 
 > Most developers who get bad results with AI usually do so because they skip the most important part: planning mode.
 
-Planning has always mattered. LLMs amplify the cost of skipping it. A missing architectural decision that a human developer would catch mid-implementation becomes a structural flaw replicated across dozens of generated files before anyone notices.
+Planning has always mattered. LLMs amplify the cost of skipping it. A missing architectural decision that a human developer would catch mid-implementation becomes a structural flaw [replicated across dozens of generated files](../anti-patterns/pattern-replication-risk.md) before anyone notices.
 
 Effective planning for LLM-assisted development includes:
 
@@ -77,7 +77,7 @@ The infrastructure works, but only if developers actually use it. Current eviden
 
 Martin Fowler's team calls this **rigor relocation** — quality assurance shifts from code authorship to environment design, feedback loops, and control systems, an emerging discipline known as [harness engineering](../agent-design/harness-engineering.md) ([Fowler, harness engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)). The developer who once ensured quality by writing careful code now ensures quality by building careful verification infrastructure.
 
-This relocation is not free. Structural linting and architectural constraints prove conformance but do not prove behavioral correctness. The verification pipeline reduces risk; it does not eliminate it.
+This relocation is not free. Structural linting and architectural constraints prove conformance but do not prove [behavioral correctness](../verification/behavioral-testing-agents.md). The verification pipeline reduces risk; it does not eliminate it.
 
 ## When This Backfires
 
@@ -85,7 +85,7 @@ A reasonable practitioner could defend the opposite recommendation in specific c
 
 - **The risk budget is smaller than the verification investment.** Throwaway scripts, one-off migrations, and exploratory prototypes do not justify snapshot suites, SAST pipelines, and architectural decision records. [Vibe coding](../anti-patterns/vibe-coding.md) is the correct mode for that end of the spectrum.
 - **Verifiers themselves are unreliable.** LLM-based verifiers miss defects at a rate much higher than deterministic tooling, and even benchmark-grade test suites can overestimate solution quality — 20–40% of LeetCode problems that passed LiveCodeBench's private tests still failed on the online judge ([Ma et al., "Rethinking Verification for LLM Code Generation"](https://arxiv.org/abs/2507.06920)). Treat any verifier as a fallible signal, not a proof of correctness.
-- **Snapshot tests encode the wrong baseline.** Verify-style approval tests lock in whatever structure the first reviewer approved. If that initial approval was sloppy, every later diff is compared against a flawed reference and scope-creep checks become noise.
+- **Snapshot tests encode the wrong baseline.** Verify-style approval tests lock in whatever structure the first reviewer approved. If that initial approval was sloppy, every later diff is compared against a flawed reference and [scope-creep checks](../anti-patterns/pr-scope-creep-review-bottleneck.md) become noise.
 - **Process load crowds out thinking.** Teams that add ceremony (plans, specs, approval steps) without pruning existing review steps slow down without catching proportionally more bugs. The pipeline should replace manual checks, not stack on top of them.
 
 ## Model Routing
@@ -106,7 +106,7 @@ A team is building a REST API with authentication. Instead of prompting an agent
 
 **1. Plan.** Write a spec defining endpoints, auth flow, data models, and error handling. Document which patterns to follow (e.g., vertical slice architecture, repository pattern for data access).
 
-**2. Generate.** Prompt the agent with the spec and architectural constraints. Use a capable model for the auth module, a cheaper model for CRUD endpoints.
+**2. Generate.** Prompt the agent with the spec and architectural constraints. Use a capable model for the auth module, a cheaper model for [CRUD endpoints](../anti-patterns/pattern-replication-risk.md).
 
 **3. Verify in layers.**
 

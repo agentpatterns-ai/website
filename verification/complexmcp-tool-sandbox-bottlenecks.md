@@ -44,11 +44,11 @@ graph TD
 
 As the action space scales, the agent cannot reliably identify the next correct tool from its partial plan. Vector-retrieval RAG — including iterative RAG, the best variant tested — does not match full-context tool listing. The paper notes: "without a comprehensive view of the full API set, the LLM may fail to invoke essential intermediate steps that are not explicitly surfaced by the retrieval mechanism." [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
 
-This is the same precision-drop-at-scale mechanism documented in the [Skill Retrieval Realism Gap](skill-retrieval-realism-gap.md) for skills — retrieval that looks adequate at 30 items degrades sharply at 300.
+This is the same precision-drop-at-scale mechanism documented in the [Skill Retrieval Realism Gap](eval-blind-spots.md) for skills — retrieval that looks adequate at 30 items degrades sharply at 300.
 
 ### 2. Over-confidence skipping environment verification
 
-Agents commit to actions without checking environment state first. A booking flow assumes a user exists; a trade assumes the account tier permits the order type. Because the seed-driven architecture varies users, accounts, and permissions between runs, any hardcoded assumption fails. The paper frames the needed shift as moving from "proactive executors" to "perceptive planners" — agents that reconcile their internal plan with a dynamic, non-empty environment state. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
+Agents commit to actions without [checking environment state first](deterministic-guardrails.md). A booking flow assumes a user exists; a trade assumes the account tier permits the order type. Because the seed-driven architecture varies users, accounts, and permissions between runs, any hardcoded assumption fails. The paper frames the needed shift as moving from "proactive executors" to "perceptive planners" — agents that reconcile their internal plan with a dynamic, non-empty environment state. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
 
 ### 3. Strategic defeatism
 
@@ -99,14 +99,14 @@ Each step is independently fixable. Scoping the toolset to LightStock alone (~30
 ## Key Takeaways
 
 - ComplexMCP demonstrates a 35-point gap between top models (55%) and humans (94%) on large, stateful, interdependent toolsets — the gap is decomposable into three measurable failure modes.
-- Tool retrieval saturation is the precision-at-scale problem; the [Skill Retrieval Realism Gap](skill-retrieval-realism-gap.md) showed the same mechanism for skills.
+- Tool retrieval saturation is the precision-at-scale problem; the [Skill Retrieval Realism Gap](eval-blind-spots.md) showed the same mechanism for skills.
 - Over-confidence on environment state and strategic defeatism on errors are harness-level problems — fix them with verification gates and retry policies, not better prompts.
 - The bottlenecks are deployment-conditional. Curated toolsets, scoped servers, and deterministic guardrails design most of them away.
 - Treat any agent benchmark as descriptive of the regime it tests; ComplexMCP's regime is flat 300-tool deployment, which production rarely ships.
 
 ## Related
 
-- [Skill Retrieval Realism Gap](skill-retrieval-realism-gap.md) — the same retrieval-precision-at-scale mechanism, applied to skills
+- [Skill Retrieval Realism Gap](eval-blind-spots.md) — the same retrieval-precision-at-scale mechanism, applied to skills
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — telemetry-derived benchmarks beat synthetic puzzles; ComplexMCP is the MCP analogue
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — wrap verification and retry around bottleneck 2 and 3
 - [Consolidate Agent Tools](../tool-engineering/consolidate-agent-tools.md) — fewer, higher-level tools address bottleneck 1 by design

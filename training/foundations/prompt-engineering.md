@@ -25,7 +25,7 @@ The productive altitude tells the agent *how to reason*, not *what to decide*. "
 
 The test: introduce an edge case the prompt did not anticipate. A well-calibrated instruction degrades gracefully — the agent applies the nearest heuristic. A too-brittle instruction falls through to default behavior with no constraint at all.
 
-Different sections of a prompt operate at different altitudes. Background context sits high (principles and scope). Tool guidance sits low (precise constraints on when and how). Mixing altitudes within a single section produces inconsistency.
+Different sections of a prompt operate at [different altitudes](../../instructions/system-prompt-altitude.md). Background context sits high (principles and scope). Tool guidance sits low (precise constraints on when and how). Mixing altitudes within a single section produces inconsistency.
 
 See [System Prompt Altitude](../../instructions/system-prompt-altitude.md) for the full framework and section-by-section guidance.
 
@@ -51,7 +51,7 @@ See [Instruction Polarity](../../instructions/instruction-polarity.md) for the f
 
 [Negative space instructions](../../instructions/negative-space-instructions.md) are a distinct technique from negative *polarity*. Where polarity asks "how do I frame this rule?", negative space asks "should I define the goal or the boundary?"
 
-Negative constraints eliminate known failure modes with precision. "No filler phrases: no 'in this guide', no 'let's explore', no 'as you may know'" is binary and verifiable — a grep confirms compliance. The equivalent positive guidance ("write in a direct, information-dense style") has no deterministic check; confirming it is a judgment call, not a grep.
+Negative constraints eliminate known failure modes with precision. "No filler phrases: no 'in this guide', no 'let's explore', no 'as you may know'" is binary and verifiable — a `grep` confirms compliance. The equivalent positive guidance ("write in a direct, information-dense style") has no deterministic check; confirming it is a judgment call, not a grep.
 
 The design criterion is greppability: if a constraint can be expressed as a deterministic check, negative space is the right form. Banned phrases, scope exclusions ("Do not modify files outside `docs/`"), tool restrictions, and format exclusions all fit this pattern.
 
@@ -77,24 +77,22 @@ Generic instructions ("reason carefully before acting") give the model no inform
 
 A [domain-specific system prompt](../../instructions/domain-specific-system-prompts.md) includes domain vocabulary, worked examples of reasoning chains for real edge cases, explicit guidance for ambiguous inputs, and success/failure definitions specific enough for the agent to self-check.
 
-The examples must come from observed failures, not imagined scenarios. Instrument the agent in production, identify where reasoning quality is low, write examples that demonstrate correct reasoning for those cases, and measure improvement. This is iterative maintenance, not a one-time authoring task.
-
-Complex guidance belongs in the system prompt, not in tool descriptions. [Anthropic's research](https://www.anthropic.com/engineering/claude-think-tool) found that the same content in tool descriptions was fragmented and inconsistently applied; in the system prompt, it integrated across all reasoning steps.
+The examples must come from observed failures, not imagined scenarios. Instrument the agent in production, identify where reasoning quality is low, write examples that demonstrate correct reasoning for those cases, and measure improvement. This is iterative maintenance, not a one-time authoring task. Complex guidance belongs in the system prompt, not in [tool descriptions](../../tool-engineering/tool-description-quality.md). [Anthropic's research](https://www.anthropic.com/engineering/claude-think-tool) found that the same content in tool descriptions was fragmented and inconsistently applied; in the system prompt, it integrated across all reasoning steps.
 
 ---
 
 ## The Compliance Ceiling: Why More Rules Produce Worse Behavior
 
-Instruction sets have a [compliance ceiling](../../instructions/instruction-compliance-ceiling.md). Below it, agents follow rules with reasonable precision. Above it, compliance degrades in a predictable sequence: modification errors first (the rule is followed imprecisely), then omission errors (the rule is skipped entirely).
+Instruction sets have a [compliance ceiling](../../instructions/instruction-compliance-ceiling.md). Below it, agents follow rules with reasonable precision. Above it, compliance degrades in a predictable sequence: modification errors first (the rule is followed imprecisely), then omission errors (the rule is skipped entirely). The agent does not choose which rules to ignore — finite [attention is distributed](../../context-engineering/context-budget-allocation.md) across the whole instruction set, so rules compete for it. Adding more rules past the ceiling does not improve behavior; it degrades it.
 
-The agent does not choose which rules to ignore — finite attention is distributed across the whole instruction set, so rules compete for it. Adding more rules past the ceiling does not improve behavior; it degrades it. A 200-rule monolithic instruction file is the canonical anti-pattern (the "mega-prompt"). Every incident adds another rule. The file grows; compliance shrinks.
+A 200-rule monolithic instruction file is the canonical anti-pattern (the "mega-prompt"). Every incident adds another rule. The file grows; compliance shrinks.
 
 Position within the instruction set affects compliance independent of importance. As [primacy bias](../../instructions/critical-instruction-repetition.md) documents, instructions near the top receive more reliable attention than those toward the end. A poorly ordered file effectively makes low-position rules optional.
 
 The architectural response is structural, not editorial:
 
 - **Modularize.** Move task-specific rules into skills or on-demand files loaded only when relevant.
-- **Layer by scope.** Project-wide instructions contain only conventions that apply to every task.
+- **Layer by scope.** Project-wide instructions contain only conventions that apply to every task ([layered instruction scopes](../../instructions/layered-instruction-scopes.md)).
 - **Move enforcement to hooks.** Rules that must never fail belong in linters, pre-commit hooks, or CI gates.
 - **Audit total rule count.** If all loaded instructions total hundreds of rules, cut.
 
@@ -120,11 +118,11 @@ These concepts are not independent techniques to apply in isolation. They form a
 
 - **Altitude** determines what kind of instruction you write: principle, heuristic, or precise constraint.
 - **Polarity** determines how you frame it: as a target behavior or a prohibition.
-- **Rules vs examples** determines the vehicle: abstract constraint or concrete anchor.
+- **Rules vs examples** determines the [vehicle](../../instructions/example-driven-vs-rule-driven-instructions.md): abstract constraint or concrete anchor.
 - **Negative space** closes off known failure modes that survive positive guidance.
 - **Domain specificity** grounds the instructions in real reasoning patterns from your context.
 - **The compliance ceiling** limits the total volume — every instruction added displaces attention from existing ones.
-- **Layered scopes** distribute instructions across the right granularity so each layer stays small.
+- **Layered scopes** distribute instructions across the right [granularity](../../instructions/layered-instruction-scopes.md) so each layer stays small.
 - **Repetition and position** determine which instructions survive attention pressure.
 
 An instruction set designed with all these constraints in mind is small, layered, positively framed where possible, at the right altitude for each section, anchored by examples where format precision matters, and backed by hooks for anything that must never fail.
@@ -136,7 +134,7 @@ An instruction set designed with all these constraints in mind is small, layered
 - Write instructions at the altitude that generalizes — principles and heuristics, not case-by-case lookup tables.
 - Frame rules positively ("use X") rather than negatively ("avoid Y") — reserve negative phrasing for absolute prohibitions and scope exclusions.
 - Combine rules with one example when format precision matters; point at existing code rather than reproducing it inline.
-- Ground system prompts in domain-specific worked examples drawn from observed failures, not imagined scenarios.
+- Ground system prompts in [domain-specific worked examples](../../instructions/domain-specific-system-prompts.md) drawn from observed failures, not imagined scenarios.
 - Respect the compliance ceiling: fewer, well-positioned rules outperform comprehensive lists that exceed attention capacity.
 - Layer instructions by scope (global, project, directory) so each file stays small and the most specific rule wins.
 - Move must-never-fail constraints to hooks — instructions are probabilistic, hooks are deterministic.

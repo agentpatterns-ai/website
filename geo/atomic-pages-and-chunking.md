@@ -82,7 +82,7 @@ Over-atomization has real costs. Splitting tightly coupled content into separate
 
 - **Procedural sequences are fragmented** — a multi-step workflow split across three pages may retrieve only step 2, leaving the LLM without the setup context needed to generate a complete answer.
 - **Pages are too short to be useful** — a 100-word page may not give the LLM enough context to answer confidently, even if retrieval succeeds. The NVIDIA benchmark showed 256–512 token chunks perform best; pages under ~200 words fall below this floor.
-- **Concepts require co-citation** — some topics are only meaningful in contrast (e.g., authentication vs. authorization). Splitting them prevents the retrieved passage from explaining the distinction, forcing the LLM to fabricate the relationship.
+- **Concepts require co-citation** — some topics are only meaningful in contrast (e.g., authentication vs. authorization). Splitting them prevents the [retrieved passage](../context-engineering/retrieval-augmented-agent-workflows.md) from explaining the distinction, forcing the LLM to fabricate the relationship.
 
 The rule is one *meaningful* concept per page, not one *sentence* per page. If splitting would strip the context that makes a concept understandable, keep related ideas together.
 
@@ -106,7 +106,7 @@ docs/api-auth.md  (~2,000 words)
   - Troubleshooting auth errors
 ```
 
-The embedding for this page is a blended average across five distinct subtopics. A query for "how to rotate API keys" scores low cosine similarity because the embedding is diluted by OAuth, troubleshooting, and conceptual content.
+The embedding for this single ~2,000-word page is a blended average across five distinct subtopics. A query for "how to rotate API keys" scores low cosine similarity because the embedding is diluted by OAuth, troubleshooting, and conceptual content.
 
 **After (atomic):**
 ```

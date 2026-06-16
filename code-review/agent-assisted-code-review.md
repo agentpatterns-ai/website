@@ -61,7 +61,7 @@ Agents over-flag — surfacing style issues in generated code and flagging inten
 
 **CRA-only configurations.** An empirical study of 3,109 PRs found CRA-only review achieves a 45% merge rate versus 68% for human-involved review, and 12 of 13 CRAs studied averaged signal ratios below 60% ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). Always require at least one human approval.
 
-**PRs exceeding context limits.** Large diffs produce generic, low-signal comments across truncated context. Keep PRs small.
+**PRs exceeding context limits.** Large diffs produce generic, low-signal comments across truncated context. Keep PRs small — see [agent-driven PR slicing](agent-driven-pr-slicing.md).
 
 **Agent reviewing its own output.** A reviewer in the same session validates the same assumptions the generating agent made. Route to a fresh-context reviewer ([Loop Strategy Spectrum](../agent-design/loop-strategy-spectrum.md)).
 

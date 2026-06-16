@@ -9,7 +9,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Progressive Disclosure for Layered Agent Definitions
@@ -20,7 +20,7 @@ maturity: established
 
 Every token in an agent definition consumes [context budget](../context-engineering/context-budget-allocation.md) on every invocation, whether relevant to the current task or not. A monolithic definition embedding every checklist and procedure is mostly noise for any given task.
 
-An agent drafting a blog post does not need its code review checklist loaded. An agent running a deployment does not need its content style guide. Monolithic definitions load everything unconditionally.
+An agent drafting a blog post does not need its code review checklist loaded. An agent running a deployment does not need its content style guide. Monolithic definitions [load everything unconditionally](cost-aware-agent-design.md).
 
 ## The Pattern
 
@@ -134,11 +134,11 @@ Context window size directly affects inference quality. When an agent receives a
 Progressive disclosure adds complexity that creates its own failure modes:
 
 - **Skill index rot**: If the definition lists skills by name but the actual skill files drift — renamed, moved, or deleted — the agent will attempt to load a non-existent skill and either fail or fall back to guessing. The index must be kept in sync with the filesystem.
-- **Wrong skill loaded**: Agents rely on their own judgment to select the relevant skill. Ambiguous task descriptions or poorly-named skills cause the agent to load the wrong skill and execute against incorrect procedures.
+- **Wrong skill loaded**: Agents rely on their own judgment to select the relevant skill. Ambiguous task descriptions or [poorly-named skills](../standards/agent-skills-standard.md) cause the agent to load the wrong skill and execute against incorrect procedures.
 - **Orchestration overhead**: Each skill load is an additional read operation. For tasks that genuinely require all skills simultaneously, progressive disclosure adds round-trips without reducing token load.
 - **Self-contained skill violations**: If a skill implicitly depends on another skill being loaded first (shared terminology, referenced templates), the agent may produce inconsistent output when it loads skills in a different order or loads only one.
 
-The pattern is most effective when tasks are clearly scoped and skills are genuinely orthogonal. It degrades when the agent's task space is broad and overlapping.
+The pattern is most effective when tasks are clearly scoped and [skills are genuinely orthogonal](separation-of-knowledge-and-execution.md). It degrades when the agent's task space is broad and overlapping.
 
 ## Key Takeaways
 

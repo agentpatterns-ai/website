@@ -103,6 +103,8 @@ The null is conditional on the tested envelope. The recommendation to stop rearr
 - [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — a parallel null result for constraint *formatting*; the compliance lever is rule design, not layout
 - [Critical Instruction Repetition](critical-instruction-repetition.md) — primacy and recency as positional levers in long contexts; complementary to the within-envelope null
 - [Hierarchical CLAUDE.md](hierarchical-claude-md.md) — splitting CLAUDE.md by scope is justified for human comprehension and scope discipline, not for compliance gains
+- [Instruction File Ecosystem](instruction-file-ecosystem.md) — the broader map of instruction-file types whose structure this study finds compliance-neutral
+- [Layered Instruction Scopes](layered-instruction-scopes.md) — scope layering as a comprehension lever, not the compliance lever this null result rules out
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — keeping files short is a content-budget argument, not a compliance-tuning argument
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — what context-file content does and does not change in agent behaviour
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — when compliance must not fail, move enforcement out of the instruction file entirely

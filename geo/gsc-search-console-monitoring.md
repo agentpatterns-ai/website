@@ -9,13 +9,13 @@ aliases:
   - "GSC monitoring"
   - "Search Console monitoring"
   - "GSC weekly report workflow"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-16
 maturity: established
 ---
 
 # Google Search Console Monitoring Workflow
 
-> Automate Google Search Console monitoring with GSC and Bing WMT: weekly API-driven reports and an on-demand `/gsc-report` skill replace manual dashboard checks.
+> Automate Google Search Console monitoring with GSC and Bing WMT: a scheduled API-driven report plus an on-demand pull replace manual dashboard checks.
 
 ## Why Automate Search Console
 
@@ -30,14 +30,14 @@ Bing WMT provides the same data for Bing and Microsoft Copilot Search. It has a 
 1. Verify ownership at [search.google.com/search-console](https://search.google.com/search-console):
    - DNS TXT record (preferred — survives server changes)
    - HTML meta tag (requires deploying to the site)
-2. Submit sitemap: `https://agentpatterns.dev/sitemap.xml`
+2. Submit sitemap: `https://agentpatterns.ai/sitemap.xml`
 3. Add the site as an `sc-domain:` property to cover all subdomains and protocols
 4. Add the service account email: Settings → Users and permissions → Add user → Restricted
 
 ### Bing Webmaster Tools
 
 1. Verify ownership at [bing.com/webmasters](https://www.bing.com/webmasters) — DNS TXT or HTML meta tag
-2. Submit sitemap: `https://agentpatterns.dev/sitemap.xml`
+2. Submit sitemap: `https://agentpatterns.ai/sitemap.xml`
 3. Enable IndexNow: Bing WMT → IndexNow → Auto-submit
 
 ### GCP Service Account for API Access
@@ -62,12 +62,12 @@ Store credentials as GitHub Actions secrets:
 | Secret | Value |
 |--------|-------|
 | `GSC_SERVICE_ACCOUNT_JSON` | Full content of `gsc-key.json` |
-| `GSC_SITE_URL` | `sc-domain:agentpatterns.dev` |
+| `GSC_SITE_URL` | `sc-domain:agentpatterns.ai` |
 | `CRUX_API_KEY` | GCP API key restricted to Chrome UX Report API |
 
 ## Automated Weekly Report
 
-A scheduled GitHub Actions workflow runs every Monday at 08:00 UTC, calls the GSC and CrUX APIs, and opens a GitHub issue with the results.
+Set up a scheduled GitHub Actions workflow that runs every Monday at 08:00 UTC, calls the GSC and CrUX APIs, and opens a GitHub issue with the results.
 
 ```mermaid
 graph LR
@@ -79,8 +79,7 @@ graph LR
     F --> G[Open GitHub issue — label: gsc-report]
 ```
 
-Workflow: `.github/workflows/gsc-weekly-report.yml`
-Report script: `scripts/gsc_report.py`
+The implementation is two files you add to your repo: a workflow at `.github/workflows/gsc-weekly-report.yml` that runs on the schedule, and a report script (for example `scripts/gsc_report.py`) that calls the APIs and formats the Markdown.
 
 Report sections:
 
@@ -92,11 +91,9 @@ Report sections:
 | Crawl anomalies | GSC dashboard | No bulk API — links to GSC Indexing → Pages |
 | Schema errors | GSC dashboard | No bulk API — links to GSC Enhancements |
 
-## On-Demand: `/gsc-report`
+## On-Demand Pull
 
-Run `/gsc-report` to fetch the latest data without waiting for the weekly schedule.
-
-The `gsc-report` skill (`.github/skills/gsc-report/SKILL.md`) provides:
+To fetch the latest data without waiting for the weekly schedule, wrap the same report script in an on-demand command or skill. That wrapper provides:
 
 - Authentication pattern using service account credentials
 - API call templates for queries, sitemaps, and CrUX
@@ -133,7 +130,7 @@ cat /tmp/gsc_report.md
 - A weekly GitHub Actions workflow pulls Search Console and Bing WMT data via API, replacing manual dashboard checks with a structured report.
 - Coverage spans index status, Core Web Vitals (via the CrUX API), and top queries — the signals worth tracking week over week.
 - Data is near-real-time, not live: Search Analytics lags ~3 days and CrUX reports a trailing 28-day window, so reports reflect recent rather than current state.
-- An on-demand `/gsc-report` skill covers ad-hoc checks between scheduled runs.
+- An on-demand command wrapping the same script covers ad-hoc checks between scheduled runs.
 - The overhead pays off only with sufficient traffic; low-traffic or single-property sites gain little over a manual 5-minute check.
 
 ## Related

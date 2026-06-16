@@ -10,7 +10,7 @@ aliases:
   - clone and own
   - fork and forget
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # The Copy-Paste Agent
@@ -19,9 +19,9 @@ maturity: established
 
 ## What It Looks Like
 
-A useful agent is built for one project. It gets copied to a second project. After a few projects, five slightly different versions exist. Each has been tuned locally. When the original is improved, the copies don't benefit.
+A useful agent is built for one project. It gets copied to a second project. After a few projects, 5 slightly different versions exist. Each has been tuned locally. When the original is improved, the copies don't benefit.
 
-The symptom is the same agent definition — same core instructions, same tool list, same behavior — appearing in multiple repositories with small variations. The variations are rarely intentional. They accumulate through local fixes that never make it back to a shared source.
+The symptom is the same agent definition — same core instructions, same tool list, same behavior — appearing in multiple repositories with small variations (the [pattern replication risk](pattern-replication-risk.md) made concrete). The variations are rarely intentional. They accumulate through local fixes that never make it back to a shared source.
 
 ## Why It Happens
 
@@ -29,7 +29,7 @@ The immediate cause is the absence of a sharing mechanism. When copying a file i
 
 ## The Fix
 
-Extract the shared parts of an agent definition into a skill. Skills are the reusable unit — they live in one place, and agents compose them. When the skill changes, all agents that reference it get the update automatically.
+Extract the shared parts of an agent definition into a skill — the [separation of knowledge and execution](../agent-design/separation-of-knowledge-and-execution.md) applied to agents. Skills are the reusable unit — they live in one place, and agents compose them. When the skill changes, all agents that reference it get the update automatically.
 
 For cross-project sharing, package skills and agents as plugins and install them across projects. For personal reuse across all projects, place agents and skills in `~/.claude/agents/` and `~/.claude/skills/` — they are available to any project session ([Skills documentation](https://code.claude.com/docs/en/skills#where-skills-live)).
 
@@ -49,7 +49,7 @@ A team builds a code-review agent for their backend repository. Its `.claude/age
 
 Six months later:
 
-- The backend copy has been updated to enforce a new API naming convention.
+- The backend copy — `code-review.md` — has been updated to enforce a new API naming convention.
 - The frontend copy has been tuned to flag React anti-patterns.
 - The mobile copy has been modified to skip certain checks that don't apply to native code.
 
@@ -59,11 +59,11 @@ When a new security rule is discovered and added to the backend copy, the fronte
 
 ## When This Backfires
 
-Extracting shared skills only helps when agents are maintained over time. Three conditions where the anti-pattern is less harmful than it appears:
+Extracting shared skills only helps when agents are maintained over time. 3 conditions where the anti-pattern is less harmful than it appears:
 
 - **True one-off agents**: an agent built for a single short project that will never be reused or updated doesn't accumulate drift — copies never diverge because changes never happen.
 - **Premature abstraction cost**: extracting a skill before the shared core stabilizes forces every downstream agent to absorb every experimental change. Waiting until the shared behavior is settled reduces churn.
-- **Transient fork intentionality**: occasionally a copy is an intentional fork — one project needs behavior that diverges fundamentally. In this case the copies are meant to diverge, and a shared skill adds coupling without benefit.
+- **Transient fork intentionality**: occasionally a copy is an intentional fork — one project needs behavior that diverges fundamentally. In this case the copies are meant to diverge, and a shared skill adds [coupling without benefit](abstraction-bloat.md).
 
 The pattern is harmful specifically when agents are expected to receive updates and improvements. If neither condition holds, audit whether the shared skill is pulling its weight.
 

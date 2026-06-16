@@ -56,7 +56,7 @@ Loading more context is not always wrong. The remediation loses to the anti-patt
 - **Retrieval is unreliable**: when semantic search has poor recall over a large space, loading directly may outperform RAG with high miss rates.
 - **Latency budget is tight**: on-demand retrieval adds round-trip overhead. If latency matters more than accuracy, preloading reduces tool calls.
 - **Context is truly homogeneous**: a task that genuinely needs every file (e.g., whole-repo rename) has no irrelevant content to exclude.
-- **Sub-agent overhead is prohibitive**: isolated windows add orchestration cost and failure modes; for short tasks, a single larger context is cheaper.
+- **Sub-agent overhead is prohibitive**: the isolated windows of [session partitioning](session-partitioning.md) add orchestration cost and failure modes; for short tasks, a single larger context is cheaper.
 
 ## Example
 
@@ -68,7 +68,7 @@ The fix was not in the extra context — the extra context is why the fix failed
 
 ## Key Takeaways
 
-- More context does not equal better output. Attention degrades with context volume regardless of window size.
+- More context does not equal better output. Attention degrades with context volume regardless of window size — the [context-window dumb zone](../context-engineering/context-window-dumb-zone.md).
 - Preloading irrelevant content for convenience is the most common cause of this anti-pattern.
 - Fix by loading on-demand, compacting aggressively, and using sub-agents to isolate retrieval from reasoning.
 

@@ -6,7 +6,7 @@ tags:
   - multi-agent
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Economic Value Signaling in Multi-Agent Networks
@@ -15,7 +15,7 @@ maturity: established
 
 ## The Problem
 
-Standard message queues treat all requests equally. In a large multi-agent network running many concurrent tasks, this causes priority inversion: low-value work blocks high-value work, and agents have no signal for where to focus capacity. A central scheduler solves this but adds infrastructure complexity and a coordination bottleneck.
+Standard message queues treat all requests equally. In a large multi-agent network running many concurrent tasks, this causes priority inversion: low-value work blocks high-value work, and agents have no signal for where to focus capacity. A central scheduler (the [orchestrator-worker](orchestrator-worker.md) model) solves this but adds infrastructure complexity and a coordination bottleneck.
 
 Economic value signaling addresses the problem by encoding priority directly in the message.
 
@@ -25,11 +25,11 @@ Each inter-agent request carries an optional token value alongside its payload. 
 
 The pattern has three components:
 
-**Value-bearing messages** — The sender attaches a token amount to the request. The value signals urgency or importance, functioning as a scheduling hint. Agents receiving multiple concurrent requests process higher-value ones first. Threshold-based filtering (accepting only work above a floor value) is implemented at the application layer by each receiving agent.
+**Value-bearing messages** — The sender attaches a token amount to the request, as defined by the [Beacon framework](https://github.com/Scottcjn/beacon-skill). The value signals urgency or importance, functioning as a scheduling hint. Agents receiving multiple concurrent requests process higher-value ones first. Threshold-based filtering (accepting only work above a floor value) is implemented at the application layer by each receiving agent.
 
 **Peer registry (Atlas)** — A self-hostable discovery service where agents register their capabilities at startup and refresh every 10 minutes. Agents query it to find peers with the capabilities they need. Liveness is tracked: agents silent for 15+ minutes are flagged as concerning; 1+ hour silence marks them presumed dead. The registry handles discovery, not message routing.
 
-**External ledger settlement** — Actual value transfer occurs on a shared external ledger. This eliminates bilateral trust: agents do not need prior relationships or shared accounts. Only task completion triggers settlement.
+**External ledger settlement** — Actual value transfer occurs on a shared external ledger, as provided by the [Beacon framework](https://github.com/Scottcjn/beacon-skill). This eliminates bilateral trust: agents do not need prior relationships or shared accounts. Only task completion triggers settlement.
 
 ```mermaid
 sequenceDiagram
@@ -48,7 +48,7 @@ sequenceDiagram
 
 ## Priority Thresholds
 
-Each agent can be configured with a minimum value threshold. Requests below the threshold are either queued at low priority or declined outright. This gives agents market-based backpressure: when overloaded, raising the threshold sheds low-value work automatically. Threshold logic is implemented by the receiving agent; the Beacon protocol transmits the value but does not enforce a floor.
+Each agent can be configured with a minimum value threshold. Requests below the threshold are either queued at low priority or declined outright. This gives agents market-based [backpressure](../agent-design/agent-backpressure.md): when overloaded, raising the threshold sheds low-value work automatically. Threshold logic is implemented by the receiving agent; the Beacon protocol transmits the value but does not enforce a floor.
 
 The threshold doubles as a routing mechanism. A sender can target only high-capability agents by offering a value above general thresholds, knowing lower-capability peers will pass on the request. This mirrors reserve-price mechanisms in multi-agent auction literature, where agents reject bids below a configurable floor — a well-studied pattern in market-based task allocation (Quinton et al., [2023](https://link.springer.com/article/10.1007/s10846-022-01803-0)).
 
@@ -65,7 +65,7 @@ The threshold doubles as a routing mechanism. A sender can target only high-capa
 
 ## Contrast with Orchestrator-Worker
 
-The [orchestrator-worker pattern](orchestrator-worker.md) assigns work through hierarchical control: a lead agent decomposes tasks and dispatches them to workers it manages directly. Economic value signaling is fully decentralized — no agent has authority over another. Agents advertise capabilities, senders choose peers based on registry data, and values determine execution priority. There is no decomposition step and no synthesis step; each value-bearing request is a complete unit of work.
+The [orchestrator-worker pattern](orchestrator-worker.md) assigns work through hierarchical control: a lead agent decomposes tasks and dispatches them to workers it manages directly. Economic value signaling is fully decentralized — no agent has authority over another. Agents advertise capabilities, senders choose peers based on registry data, and values determine execution priority. There is no decomposition step and no [synthesis step](fan-out-synthesis.md); each value-bearing request is a complete unit of work.
 
 Use orchestrator-worker when you control all agents in the system and need structured task decomposition. Use economic value signaling when agents are autonomous, potentially from different organizations, and priority ordering needs to emerge from business value rather than developer-assigned queue positions.
 

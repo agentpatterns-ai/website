@@ -10,7 +10,7 @@ tags:
   - tool-agnostic
   - multi-agent
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Typed Schemas at Agent Boundaries for Multi-Agent Systems
@@ -78,7 +78,7 @@ The underlying principle is treating [agents like distributed systems, not chat 
 Typed schemas add overhead and rigidity — three conditions where the cost outweighs the benefit:
 
 - **Rapid interface churn**: discriminated unions become a migration burden when action types change frequently. Every new action type requires updating schemas across all agents simultaneously; mismatched versions silently reject valid outputs during rolling deployments.
-- **Exploratory or open-ended agents**: strict schemas block agents from returning legitimately unexpected outputs. A research agent that discovers a novel category it wasn't designed for will fail validation rather than surfacing the finding.
+- **Exploratory or open-ended agents**: [strict schemas](../verification/structured-output-constraints.md) block agents from returning legitimately unexpected outputs. A research agent that discovers a novel category it wasn't designed for will fail validation rather than surfacing the finding.
 - **Schema complexity exceeds model reliability**: deeply nested or highly conditional schemas increase the rate of validation failures requiring retries. [When retry chains compound across multiple agent hops](https://github.blog/ai-and-ml/generative-ai/multi-agent-workflows-often-fail-heres-how-to-engineer-ones-that-dont/), latency and token costs can exceed the cost of tolerating occasional unstructured output.
 
 Apply schemas at high-stakes boundaries — state transitions, inter-service calls, irreversible actions — and use looser validation for intermediate reasoning steps where flexibility matters more than precision.

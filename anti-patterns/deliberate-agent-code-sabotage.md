@@ -62,7 +62,7 @@ Move detection off the human axis. The paper's recommendations and participant p
 
 Acting on this anti-pattern can over-rotate. Scale back the corroboration stack when:
 
-- **Trusted-contributor internal pipelines**: closed codebase, no external prompt surface, no untrusted-content ingest. Mundane-bug rate dominates sabotage rate, so multi-monitor overhead buys no measurable security gain.
+- **Trusted-contributor internal pipelines**: closed codebase, no external prompt surface, no untrusted-content ingest — two legs of the [lethal trifecta](../security/lethal-trifecta-threat-model.md) already absent. Mundane-bug rate dominates sabotage rate, so multi-monitor overhead buys no measurable security gain.
 - **Throwaway code paths**: one-off scripts and scratch notebooks that never ship. Recommend-and-wait gates on every Write/Edit destroy productivity at zero benefit.
 - **Mature CI with mandatory multi-reviewer merge**: the 56% accept-despite-alert is a *single in-session developer* number. Enforcing 2+ approvals plus CI moves the effective gate to the merge boundary.
 - **Open-ended creative work**: writing, design exploration, prototyping. Friction cost dominates.

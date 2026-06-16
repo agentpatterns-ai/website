@@ -44,7 +44,7 @@ Each surface runs in a different environment with different trade-offs. Choosing
 
 **Used for**: Autocompleting lines, function bodies, boilerplate, test cases, and repetitive patterns.
 
-**When to use it**: You know what you want to write — you just want to type less. Best for code with clear intent that fits in a few lines of context.
+**When to use it**: You know what you want to write — you just want to type less. Best for code with clear intent that Copilot can complete from a few lines of context.
 
 **When NOT to use it**: You need to understand a codebase, make cross-file changes, or the suggestion requires broader context than the current file. Completions are contextually shallow.
 
@@ -70,7 +70,7 @@ Each surface runs in a different environment with different trade-offs. Choosing
 
 **What it is**: Predictive suggestions that appear at edit locations across the file — not just at your cursor. After you make a change, Copilot predicts where the next related edit should be and what it should contain. Accept with `Tab`, jump to the next suggestion with `Tab`.
 
-**Used for**: Cascading edits — rename a parameter, and NES suggests updating all usages. Change a type, and NES offers the corresponding changes in related functions. Any repetitive multi-location edit pattern.
+**Used for**: Cascading edits — rename a parameter, and NES suggests updating all usages. Change a type, and NES offers the corresponding changes in related functions. Any repetitive multi-location edit pattern that Copilot can extend across the file.
 
 **When to use it**: You're making changes that have a ripple effect across the file. NES handles the follow-on edits so you don't miss any.
 
@@ -141,7 +141,7 @@ Type `#` or `@` in the chat input to see all available references. After Copilot
 
 **Used for**: Explaining unfamiliar code, asking "how do I…" questions, reviewing a function, generating tests for selected code, understanding architecture.
 
-**When to use it**: You need an answer or a suggestion you'll apply yourself. No risk of unexpected file changes.
+**When to use it**: You need an answer or a suggestion you'll apply yourself. No risk of Copilot making unexpected file changes.
 
 **When NOT to use it**: The task involves making actual changes across files — use Agent or Plan instead.
 
@@ -169,7 +169,7 @@ Type `#` or `@` in the chat input to see all available references. After Copilot
 
 **What it was**: A mode where you selected which files Copilot could modify, then reviewed and accepted proposed changes per file. More controlled than Agent mode but less capable — no terminal access, no iteration on results.
 
-**Replacement**: Use Agent mode for the same workflows. Agent mode now handles multi-file edits with full autonomy, and you can still review and accept changes before they're applied.
+**Replacement**: Use Agent mode for the same workflows. Agent mode now handles multi-file edits with full autonomy in VS Code, and you can still review and accept changes before they're applied.
 
 ---
 
@@ -179,11 +179,11 @@ Type `#` or `@` in the chat input to see all available references. After Copilot
 
 **Used for**: Tasks that require multiple steps: write code → run tests → fix failures → commit. The agent handles the full loop.
 
-**When to use it**: You want to stay in your editor with full visibility and control. Good for tasks where you want to watch the agent work and intervene in real time.
+**When to use it**: You want to stay in VS Code with full visibility and control. Good for tasks where you want to watch the agent work and intervene in real time.
 
 **When NOT to use it**: You want to hand off and not supervise. For async delegated work, the Copilot coding agent on GitHub is better — it runs in an isolated sandbox without occupying your machine.
 
-**How to use it**: Select **Agent** from the mode dropdown. The agent has access to file read/write tools and the terminal. You approve tool use, or enable auto-approve for trusted tasks. Each prompt counts as one premium request (multiplied by the model's multiplier).
+**How to use it**: Select **Agent** from the mode dropdown. The agent has access to file read/write tools, the terminal, and MCP server tools. You approve tool use, or enable auto-approve for trusted tasks. Each prompt counts as one premium request (multiplied by the model's multiplier).
 
 Tools available:
 
@@ -211,11 +211,11 @@ for each validation rule. Run the tests and fix any failures.
 
 **Used for**: Complex, multi-step tasks where you want to review and validate the approach before any code is written.
 
-**When to use it**: The task has enough complexity that a wrong approach would waste significant time. Let Plan produce the strategy, review it, then hand off to Agent.
+**When to use it**: The task has enough complexity that a wrong approach would waste significant time. Let Plan produce the strategy, review it, then hand off to [Agent mode for execution](context-and-workflows.md).
 
 **When NOT to use it**: Simple or well-understood tasks — the planning overhead isn't worth it.
 
-**How to use it**: Select **Plan** from the mode dropdown. Describe the task. Review the generated plan. Approve it to hand off execution to Agent mode.
+**How to use it**: Select **Plan** from the mode dropdown. Describe the task. Review the generated plan in VS Code. Approve it to hand off execution to Agent mode.
 
 **Example**:
 
@@ -232,7 +232,7 @@ Plan the approach before making any changes.
 
 **What it is**: An [agentic code reviewer](../../code-review/agentic-code-review-architecture.md) that runs on pull requests — GA for all paid Copilot plans (Pro, Pro+, Business, Enterprise) since April 2025. It reviews diffs, generates summaries, flags issues, and suggests improvements inline.
 
-**Used for**: Automated first-pass review, PR description generation, surfacing bugs, security issues, and missed edge cases before human review.
+**Used for**: Automated first-pass Copilot review, PR description generation, surfacing bugs, security issues, and missed edge cases before human review.
 
 **When to use it**: Every PR. Configure automatic review on all PRs via repository settings, or request it manually. Also requestable from the CLI (`gh pr create`, `gh pr edit`).
 
@@ -292,7 +292,7 @@ Copilot Code Review uses [Memory](#copilot-memory-public-preview) — it learns 
 
 **What it is**: Copilot Chat is available on iOS and Android. You can ask questions, start and track coding agent tasks, and review agent work from your phone.
 
-**Used for**: Quick questions when you're away from your machine. Starting or monitoring coding agent tasks on the go. Reviewing draft PRs from the agent.
+**Used for**: Quick questions when you're away from your machine. Starting or monitoring Copilot coding agent tasks on the go. Reviewing draft PRs from the agent.
 
 **When NOT to use it**: Active development — use your IDE or CLI.
 
@@ -514,7 +514,7 @@ Copilot supports three levels of instructions, applied from broadest to most spe
 
 **Used for**: Different rules for different parts of the codebase — frontend components vs API routes vs database migrations.
 
-**When to use it**: When a rule applies to a subset of files, not the entire repo. Keeps the global instructions file lean.
+**When to use it**: When a rule applies to a subset of files, not the entire repo — see [path-specific instructions](customization-primitives.md). Keeps the global instructions file lean.
 
 **When NOT to use it**: The rule is universal to the repo — use the repository-wide file instead.
 
@@ -536,7 +536,7 @@ The `applyTo` field supports standard glob patterns (`*`, `**`, comma-separated)
 
 **Used for**: Standardising how the team asks Copilot for specific tasks — ensures consistent results across developers.
 
-**When to use it**: A task is repeated often by multiple team members and the prompt matters for quality. Encodes the "how to ask" knowledge.
+**When to use it**: A task is repeated often by multiple team members and the prompt matters for quality. Encodes the "how to ask" knowledge in a `.prompt.md` file.
 
 **When NOT to use it**: One-off or exploratory tasks. Prompts are best for recurring patterns.
 
@@ -556,7 +556,7 @@ Reference files with `#file:` relative paths. Select prompt files from the chat 
 
 ### Custom Agents (`.github/agents/`)
 
-**What it is**: Markdown files with YAML frontmatter that define specialized agent profiles. Each agent has a name, description, and a system prompt. You invoke a named agent instead of the default.
+**What it is**: Markdown files with YAML frontmatter that define specialized agent profiles. Each agent has a name, description, and a system prompt — see [custom agents](customization-primitives.md). You invoke a named agent instead of the default.
 
 **Used for**: Giving the agent domain-specific expertise or constraints. A `docs-agent` that knows your documentation style. A `security-reviewer` that checks for a specific threat model. A `test-writer` that follows your coverage conventions.
 
@@ -610,7 +610,7 @@ Select the agent from the chat mode selector in VS Code, use it in the CLI, or a
 
 **Used for**: Security validation before tool use, audit logging, enforcing policy (e.g., block writes to certain paths), custom notifications.
 
-**When to use it**: When you need automated guardrails that shouldn't rely on the agent's own judgement. Hooks are outside the agent's context — it can't override them.
+**When to use it**: When you need automated guardrails that shouldn't rely on the agent's own judgement. Hooks are outside the agent's context — it can't override them (see [hooks](customization-primitives.md)).
 
 **When NOT to use it**: Don't use hooks for things the instructions file handles. Hooks are for enforcement; instructions are for guidance. Hooks also add latency — every `preToolUse` hook runs synchronously before every tool call.
 
@@ -674,7 +674,7 @@ For the Copilot CLI, hooks are read from `.github/hooks/` in the current working
 
 **What it is**: Folders of instructions, scripts, and resource files that give the agent specialized knowledge for a repeatable task type.
 
-**Used for**: Encoding how to perform a specific task — not just what the outcome should be, but the steps, tools, and resources needed. More structured than agent prompts. Shareable across repos.
+**Used for**: Encoding how to perform a specific task — not just what the outcome should be, but the steps, tools, and resources needed. More structured than agent prompts. Shareable across repos — see the [skills primitive](customization-primitives.md).
 
 **When to use it**: When a task has a known, documented procedure that any competent agent could follow if they had it written down. Skills are that written-down procedure.
 
@@ -764,7 +764,7 @@ The coding agent is not faster — it's for tasks where your attention is more v
 - Copilot runs on **multiple surfaces** (VS Code, GitHub.com, CLI, coding agent, GitHub Mobile) with distinct environments. Matching the surface to the task matters more than mastering any single one.
 - VS Code has **three built-in agents** (Ask, Agent, Plan) — know when each is the right choice. Agent mode runs autonomously; Plan mode produces a strategy first. (Edit mode was deprecated in v1.110.)
 - The **customization stack** is cumulative: repo-wide instructions → path-specific instructions → prompt files → agents → skills → hooks → memory. Each layer adds specificity.
-- **Custom instructions** should be in every non-trivial repo — highest-leverage, lowest-effort improvement. Path-specific instructions keep the global file lean.
+- **Custom instructions** should be in every non-trivial repo — highest-leverage, lowest-effort improvement. Path-specific instructions keep the global Copilot instructions file lean.
 - The **coding agent** always produces a PR, never pushes directly. It supports visual inputs, MCP integration, third-party agents, BYOK model selection, and a wide model roster. Treat it as an async contributor.
 - **Copilot Code Review** is GA for all plans — configure automatic review on PRs to catch issues before human review. It learns your conventions via Memory.
 - **[Copilot Spaces](../../tools/copilot/copilot-spaces.md)** let you curate the context Copilot uses for answers — code, docs, issues, and instructions in a shareable container.

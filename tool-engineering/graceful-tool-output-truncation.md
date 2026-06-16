@@ -8,7 +8,7 @@ tags:
   - context-engineering
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Graceful Tool-Output Truncation: The PARTIAL Signal
@@ -19,7 +19,7 @@ Graceful tool-output truncation is a contract: a tool that can produce variable-
 
 ## The Contract
 
-Three load-bearing parts. Drop any one and the pattern degrades into the failure it tried to fix.
+Three load-bearing parts. Drop any one and the `PARTIAL` contract degrades into the failure it tried to fix.
 
 | Part | Why it matters |
 |------|----------------|
@@ -95,7 +95,7 @@ For any tool whose output can grow past a fixed limit:
 ## Key Takeaways
 
 - Graceful truncation is a tool contract, not a harness workaround — the tool author owns the prefix-marker-continuation shape.
-- The marker is load-bearing. Trailing prose is ignored; structurally distinct slots (leading banner, separate field) survive the model's reading order.
+- The `PARTIAL` marker is load-bearing. Trailing prose is ignored; structurally distinct slots (leading banner, separate field) survive the model's reading order.
 - Pair the marker with a continuation handle. Without it, the contract collapses back to fail-hard with extra steps.
 - The pattern composes with harness-side compression, post-hoc rewriting, and MCP persistence annotations — it does not replace them.
 - For security-critical reads (policy files, guardrails), fail-closed beats partial: a silently truncated rules file is the same as a missing rules file.

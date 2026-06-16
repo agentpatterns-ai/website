@@ -9,7 +9,7 @@ aliases:
   - cursor self-hosted agents
   - cursor bring your own runner
 applies_to: "cursor@3.x"
-last_reviewed: 2026-06-13
+last_reviewed: 2026-06-14
 status: current
 ---
 
@@ -19,7 +19,7 @@ status: current
 
 Cursor [announced self-hosted cloud agents on March 25, 2026](https://cursor.com/changelog). The feature lets organizations keep code, secrets, and build artifacts inside their own network while still accessing Cursor's agent orchestration and multi-model harness. This is the primary use case for regulated industries, air-gapped networks, and teams whose policy blocks vendor-hosted code execution.
 
-This is distinct from bring-your-own-key (BYOK) patterns. BYOK addresses model API access. Self-hosted agents address where tool calls execute and where code artifacts reside.
+This is distinct from bring-your-own-key (BYOK) patterns. BYOK addresses model API access and its [token visibility](../../observability/byok-model-token-visibility.md). Self-hosted agents address where tool calls execute and where code artifacts reside.
 
 ## Architecture
 
@@ -60,6 +60,8 @@ agent worker start --pool
 Long-lived workers suit always-on environments (CI runners, shared team infrastructure). Single-use workers suit ephemeral compute (Lambda, container jobs) where you want clean state between tasks.
 
 **Kubernetes:** Deploy at scale via a Helm chart and Kubernetes operator. Define the desired pool size; the controller manages scaling, rolling updates, and lifecycle automatically. A fleet management API covers non-Kubernetes environments with utilization monitoring.
+
+The June 2026 [Cursor SDK](cursor-sdk.md) update tightens self-hosted control further: it adds custom `LocalAgentStore` backends, letting a self-hosted deployment persist agent state to its own storage rather than Cursor's, alongside `customTools` defined through the built-in MCP layer and recursive sub-agent nesting ([Cursor changelog](https://cursor.com/changelog)).
 
 ## When to Use Self-Hosted
 

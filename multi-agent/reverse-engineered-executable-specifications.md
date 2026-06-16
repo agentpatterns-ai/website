@@ -39,7 +39,7 @@ The first stage produces an executable contract — Given/When/Then scenarios de
 
 A single agent patching directly optimises two objectives at once: "understand what was meant" and "change as little as possible to achieve it". Failure modes conflate — an over-broad patch can be symptomatic of a misread spec, test, or stack trace, with no artefact isolating which.
 
-Separating the stages produces an inspectable intermediate. The inferred Gherkin scenarios are the contract; if they are wrong, the failure localises to the inference stage. The mechanism mirrors [test-driven intent clarification](../verification/test-driven-intent-clarification.md): validating a small input-output contract is cheaper than reviewing implementation ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100)).
+Separating the stages produces an inspectable intermediate that the two agents [hand off](agent-handoff-protocols.md). The inferred Gherkin scenarios are the contract; if they are wrong, the failure localises to the inference stage. The mechanism mirrors [test-driven intent clarification](../verification/test-driven-intent-clarification.md): validating a small input-output contract is cheaper than reviewing implementation ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100)).
 
 ## The Requirement Quality Assurance Loop
 
@@ -92,7 +92,7 @@ Feature: Date parsing contract
     Then the return value equals LocalDate.of(2024, 6, 15)
 ```
 
-The RQA step checks the scenarios against the reference implementation — the second scenario rules out a patch that returns null unconditionally. The repair agent then produces the minimal edit: a format check that returns null only for the specific malformed class, preserving valid-input behaviour. The inferred scenarios persist as regression tests.
+The RQA step checks the scenarios against the [reference implementation](oracle-task-decomposition.md) — the second scenario rules out a patch that returns null unconditionally. The repair agent then produces the minimal edit: a format check that returns null only for the specific malformed class, preserving valid-input behaviour. The inferred scenarios persist as regression tests.
 
 ## Key Takeaways
 

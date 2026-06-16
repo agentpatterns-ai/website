@@ -6,7 +6,7 @@ tags:
   - testing-verification
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Structured Output Constraints: Reducing Hallucination Surface
@@ -24,9 +24,9 @@ Structured output constraints reduce hallucination surface by giving the agent a
 Each structural constraint removes a degree of freedom:
 
 - **Required sections** — the agent must address each section. Missing sections become visible.
-- **Required fields** — a "sources" field forces the agent to name sources. An empty sources field is detectable. A paragraph with invisible sourcing gaps is not.
-- **Type constraints** — if the output must be valid JSON, the agent cannot produce narrative padding around the answer.
-- **Enum values** — if a verdict field must be "PASS" or "FAIL", the agent cannot hedge with "mostly pass" or produce a non-binary answer.
+- **Required fields** — a `sources` field forces the agent to name sources. An empty sources field is detectable. A paragraph with invisible sourcing gaps is not.
+- **Type constraints** — if the output must be valid `JSON`, the agent cannot produce narrative padding around the answer.
+- **Enum values** — if a verdict field must be `PASS` or `FAIL`, the agent cannot hedge with "mostly pass" or produce a non-binary answer.
 
 ## Structured Output for Code
 
@@ -51,7 +51,7 @@ This format is machine-readable, downstream-processable, and rejects hedging. Th
 
 ## Page Templates as Structural Constraints
 
-Document templates impose the same constraints on prose output that JSON schemas impose on data output. A content page template with required sections — title, summary blockquote, content sections, Key Takeaways, Related — forces the agent to populate each section explicitly.
+Document templates impose the same constraints on prose output that `JSON` schemas impose on data output. A content page template with required sections — title, summary blockquote, content sections, Key Takeaways, Related — forces the agent to populate each section explicitly.
 
 Required sections act as checklists:
 
@@ -85,7 +85,7 @@ Each field has a clear purpose. The "Unsourced" section forces the researcher to
 
 Structure reduces hallucination surface but constrains legitimate flexibility. The right level of structure depends on the task:
 
-- High-stakes, automatable tasks (code review output, schema generation) benefit from tight schema constraints
+- High-stakes, automatable tasks ([code review output](../code-review/diff-based-review.md), schema generation) benefit from tight schema constraints
 - Creative or exploratory tasks (early ideation, open-ended research) may need looser structure to avoid forcing artificial answers into ill-fitting fields
 - Progressive structuring — loose template first, tighter schema after validation — can balance both needs; start permissive to discover natural output shapes before locking in field names and types
 

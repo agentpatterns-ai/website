@@ -19,7 +19,7 @@ Chunking splits source documents into retrievable units before embedding. The ma
 
 ## Why Chunking Determines Retrieval Quality
 
-Embeddings compress text into fixed-length vectors. A dense retriever finds chunks whose embedding is close to the query embedding. If a chunk mixes two topics, its embedding averages them — it matches neither query well. If a chunk splits a sentence mid-thought, the embedding loses the sentence's meaning.
+Embeddings compress text into fixed-length vectors. A dense retriever finds chunks whose embedding is close to the query embedding. If a chunk mixes two topics, its embedding averages them — it matches neither query well, the core failure mode covered in [Retrieval and Re-Ranking](retrieval-and-reranking.md). If a chunk splits a sentence mid-thought, the embedding loses the sentence's meaning.
 
 The problem compounds in air-gapped deployments: you cannot call a cloud re-ranker to fix retrieval misses after the fact. Your chunking strategy must carry the load that cloud pipelines outsource to downstream correction.
 
@@ -49,7 +49,7 @@ splitter = DocumentSplitter(split_by="word", split_length=200, split_overlap=40)
 result = splitter.run(documents=docs)
 ```
 
-**Cost**: pure string manipulation — no embedding calls beyond the ones the Embed stage already makes on the resulting chunks. Nothing extra during chunking itself.
+**Cost**: pure string manipulation — no embedding calls beyond the ones the Embed stage (see [Architecture Fundamentals](architecture-fundamentals.md)) already makes on the resulting chunks. Nothing extra during chunking itself.
 
 **Weakness**: splits mid-sentence or mid-table. A 200-word chunk that starts mid-paragraph has no heading signal — its embedding is semantically dilute.
 
@@ -71,11 +71,11 @@ splitter = DocumentSplitter(
 )
 ```
 
-This preserves sentence-level semantic units. A paragraph with five short sentences becomes one chunk. A long explanatory paragraph with complex reasoning becomes two or three chunks that each contain whole sentences.
+This preserves sentence-level semantic units. A paragraph with five short sentences becomes one chunk. A long explanatory paragraph with complex reasoning becomes two or three chunks (the count set by `split_length`) that each contain whole sentences.
 
 **Cost**: the tokenizer pass for sentence detection is negligible on CPU. No extra computation over word-based splitting in practice.
 
-**Weakness**: variable chunk sizes. Five long sentences of dense legal text might exceed the embedding model's max tokens; five short dialogue lines might fit in a quarter of the window.
+**Weakness**: variable chunk sizes. Five long sentences of dense legal text might exceed the [embedding model's max tokens](local-embeddings-vector-stores.md); five short dialogue lines might fit in a quarter of the window.
 
 **When to use**: **this is the default for the reference stack**. Sentence-aware adds no measurable cost over word-based, measurably reduces boundary cuts, and gives the embedding model clean semantic units to work with. Simple boundary-respecting splitters hold up well under benchmarks — a [February 2026 Vecta benchmark across 7 chunking strategies](https://www.runvecta.com/blog/we-benchmarked-7-chunking-strategies-most-advice-was-wrong) placed recursive character splitting at 512 tokens first with 69% accuracy on academic papers, ahead of semantic chunking at 54%.
 
@@ -132,7 +132,7 @@ class SemanticChunker:
 
 Three threshold modes are common: percentile (split above the X percentile; recommended: 95), standard deviation (split above X standard deviations; recommended: 3), and interquartile (recommended: 1.5). Standard deviation mode produces more predictable chunk sizes.
 
-**Air-gapped constraint**: semantic chunking calls an embedding model at index time, not just at query time. In an offline deployment you need a local embedding model running during ingestion — the same model you use for query embedding works, but you must provision inference capacity for the full corpus ingestion pass.
+**Air-gapped constraint**: semantic chunking calls an embedding model (see [Local Embeddings and Vector Stores](local-embeddings-vector-stores.md)) at index time, not just at query time. In an offline deployment you need a local embedding model running during ingestion — the same model you use for query embedding works, but you must provision inference capacity for the full corpus ingestion pass.
 
 **Cost**: O(n) embedding calls during indexing, where n is sentence count. For a 10,000-page corpus this is non-trivial on CPU-only hardware.
 
@@ -163,7 +163,7 @@ result = splitter.run(documents=docs)
 
 At query time, use a combination of retriever + a custom expansion step that replaces each retrieved leaf with its parent before the chunks reach the generator. The pattern is a small custom component wrapping a document-store lookup by parent ID.
 
-**Air-gapped constraint**: none beyond the base embedding model. No extra inference beyond what sentence-aware splitting requires.
+**Air-gapped constraint**: none beyond the base embedding model. No extra inference beyond what the `DocumentSplitter` sentence-aware split requires.
 
 **Why this works**: small chunks embed more precisely (less semantic dilution). Large parent chunks give the LLM enough surrounding context to synthesize accurate answers without hallucinating missing information.
 

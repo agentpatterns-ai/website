@@ -11,7 +11,7 @@ aliases:
   - custom endpoint provider
   - BYOK API family declaration
 last_reviewed: 2026-06-02
-maturity: established
+maturity: adopted
 ---
 
 # Multi-Shape BYOK Provider

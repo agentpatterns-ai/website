@@ -21,9 +21,12 @@ maturity: established
 !!! note "Also known as"
     **How Hooks Work** · **Hook Lifecycle** · **Hook Lifecycle Events**. For practical enforcement patterns using hooks, see [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md).
 
+!!! info "Canonical home for hooks content"
+    Canonical entry point for "hooks" content site-wide — hook pages elsewhere link here for the lifecycle model rather than restate it (see [Related](#related)).
+
 ## The Role of Hooks
 
-Instructions are processed by the model; hooks are processed by the shell. Under task pressure the model may deprioritize an instruction — a hook executes unconditionally. The runtime spawns the hook as a subprocess before (or after) the model acts, then proceeds or blocks based on its exit code and JSON response. The model cannot override hook logic through reasoning.
+Instructions are processed by the model; hooks are processed by the shell. Under task pressure the model may deprioritize an instruction — a hook executes unconditionally. The runtime spawns the hook as a `PreToolUse` or `PostToolUse` subprocess before (or after) the model acts, then proceeds or blocks based on its exit code and JSON response. The model cannot override hook logic through reasoning.
 
 ## Lifecycle Events
 
@@ -108,7 +111,7 @@ In multi-agent workflows (Claude Code v2.1.69), hook events carry extra context:
 
 ## What Hooks Are Not For
 
-Hooks enforce what the model should not decide. Avoid them for:
+[Hooks enforce what the model should not decide](../instructions/hooks-vs-prompts.md). Avoid them for:
 
 - **Creative choices** — architecture or style; model judgment is the point.
 - **Conversation-dependent logic** — hooks see only the immediate tool call.
@@ -191,9 +194,9 @@ Hooks are subprocesses — each matched call pays the startup cost, so a slow `P
 
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
 - [Conditional Hook Execution](conditional-hook-execution.md)
-- [Reactive Environment Hooks](reactive-environment-hooks.md)
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md)
 - [On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation](on-demand-skill-hooks.md)
 - [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)
+- [Enforcing Agent Behavior with Hooks](../instructions/enforcing-agent-behavior-with-hooks.md) — block, rewrite, and completion-gate patterns built on these lifecycle events

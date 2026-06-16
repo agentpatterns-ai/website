@@ -37,13 +37,13 @@ Key properties:
 
 ## Why RL Suits This Problem
 
-Prompt injection attacks against long-horizon agents have sparse, delayed rewards. A successful attack may require specific setup across multiple early turns before the exploitation turn. This structure is difficult for standard supervised learning (which needs labeled examples of successful attacks) but natural for RL (which can discover effective sequences through exploration and feedback).
+[Prompt injection](prompt-injection-threat-model.md) attacks against long-horizon agents have sparse, delayed rewards. A successful attack may require specific setup across multiple early turns before the exploitation turn. This structure is difficult for standard supervised learning (which needs labeled examples of successful attacks) but natural for RL (which can discover effective sequences through exploration and feedback).
 
 RL is particularly effective for multi-step workflows where the attack unfolds across email retrieval, context accumulation, and a deferred action like sending or deleting. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 
 ## White-Box Advantage
 
-An internal automated attacker has white-box access to the defender's reasoning traces. This is an asymmetric advantage over external adversaries who observe only the agent's outputs.
+An internal automated attacker has white-box access to the defender's reasoning traces, complementing black-box [indirect-injection discovery](indirect-injection-discovery.md). This is an asymmetric advantage over external adversaries who observe only the agent's outputs.
 
 The reasoning trace reveals how the defender interpreted the injection attempt, which parts of the instruction it prioritized, and where its defenses held or failed. The attacker learns to exploit these patterns directly. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 

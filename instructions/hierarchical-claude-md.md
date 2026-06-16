@@ -12,7 +12,7 @@ aliases:
   - "Directory-Level Instruction Hierarchy"
   - "Hierarchical CLAUDE.md: Layered Context File Scoping"
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels

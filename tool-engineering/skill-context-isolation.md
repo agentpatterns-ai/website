@@ -66,7 +66,7 @@ If any condition fails, leaving the skill in the main context is the right defau
 
 - **Reference-only skills** — `context: fork` plus a body that is taxonomy, template, or knowledge produces empty output. The subagent receives the body as its task; with no instructions, there is nothing to do ([Skill Frontmatter Reference](skill-frontmatter-reference.md)).
 - **Follow-up sensitivity** — when the user routinely acts on intermediate findings ("now refactor the third caller"), forking discards exactly the state the next turn needs.
-- **Small auxiliary footprint** — subagent framing overhead (system prompt, tool definitions, result wrapping) can exceed what the fork saves on short-output skills.
+- **Small auxiliary footprint** — the [subagent](../multi-agent/sub-agents-fan-out.md) framing overhead (system prompt, tool definitions, result wrapping) can exceed what the fork saves on short-output skills.
 - **Determinism-required outputs** — security audits, diff review, and other workflows where the user must see the raw work cannot tolerate a summarised return.
 - **Debug iteration** — while the skill itself is being authored, the inner trace needs to be visible. Fork after the skill is stable.
 - **Self-dispatch recursion** — a known harness bug: a `context: fork` body shaped like a skill spec (a `# Name: tagline` header, third-person prose, an `ARGUMENTS:` block) can be pattern-matched by the forked subagent as a dispatch request, re-invoking itself instead of running. With no re-entry guard it loops until killed ([anthropics/claude-code#55592](https://github.com/anthropics/claude-code/issues/55592)). Write forked bodies as direct imperative steps.

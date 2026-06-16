@@ -64,7 +64,7 @@ The asymmetry has a mechanism: removing a step is a local edit defended by an ex
 Cost-aware distillation pays off only under specific conditions. Skip it when any of the following holds.
 
 - **Short sessions** — when a session has only a handful of steps, prune analysis has little to work with and counterfactual arguments collapse to "remove the cheapest step that didn't write a file."
-- **Latency-bound workloads** — USD cost is dominated by token spend, but if a session's bottleneck is a slow tool (browser, search, network calls), pruning expensive LLM calls saves money without reducing wall-clock time. Wrong optimisation target.
+- **Latency-bound workloads** — USD cost is dominated by token spend, but if a session's bottleneck is a slow tool (browser, search, network calls), pruning expensive LLM calls saves money without reducing wall-clock time. [Wrong optimisation target](../agent-design/cost-aware-agent-design.md).
 - **Stochastic sub-agents** — when sub-agents follow non-deterministic plans, a prune rule transferred to a new task can remove a step that was load-bearing under different inputs. Counterfactual arguments built on one trace do not necessarily hold under another.
 - **No oracle verifier** — prune decisions must be tested against a held-out eval. Without a SpreadsheetBench-style oracle, prune rules degrade to confident-sounding regressions ([From Multi-Agent to Single-Agent, 2026](https://arxiv.org/abs/2604.01608) finds the same gap in single-agent skill distillation).
 
@@ -125,7 +125,7 @@ The patch is defensible because it names the high-cost step, supplies a counterf
 
 - Per-step cost is the disambiguation signal that makes prune decisions economically meaningful and outcome-grounded.
 - TraceCard's redundancy flag — computed from a counterfactual replay — is what separates it from raw OTel spans.
-- Prune patches transfer across tasks; preserve patches do not. Bias the distillation pipeline toward prune.
+- Prune patches transfer across tasks; preserve patches do not. Bias the distillation pipeline toward prune (the quality safeguard across 30 held-out SpreadsheetBench tasks).
 - Skip cost-aware distillation when sessions are short, workloads are latency-bound, sub-agents are stochastic, or no oracle verifier is available.
 - For teams on OTel, redundancy detection at the trace-query layer is a cheaper first step than building a TraceCard intermediate.
 

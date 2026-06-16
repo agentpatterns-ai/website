@@ -37,11 +37,11 @@ Structured output (JSON with named fields, or concise text) is easier for the ag
 
 ### Eliminate Functional Overlap
 
-When two tools do similar things, the agent must reason about which to use before acting. That reasoning consumes tokens and introduces error. Give each tool a clear, non-overlapping scope; if two overlap, merge them or differentiate their descriptions explicitly.
+When two tools do similar things, the agent must reason about which to use before acting — the case for [consolidating overlapping tools](consolidate-agent-tools.md). That reasoning consumes tokens and introduces error. Give each tool a clear, non-overlapping scope; if two overlap, merge them or differentiate their descriptions explicitly.
 
 ### Write Precise Descriptions
 
-Tool names and descriptions are themselves context. An ambiguous description forces the agent to spend tokens resolving the ambiguity before invoking the tool. A precise description — what the tool does, when to use it, and what it returns — reduces that cost. See [Tool Selection Guidance](tool-description-quality.md) for how to write descriptions that prevent wrong tool choices.
+Tool names and descriptions are themselves context, scored for selection clarity in [Tool Selection Guidance](tool-description-quality.md). An ambiguous description forces the agent to spend tokens resolving the ambiguity before invoking the tool. A precise description — what the tool does, when to use it, and what it returns — reduces that cost. See [Tool Selection Guidance](tool-description-quality.md) for how to write descriptions that prevent wrong tool choices.
 
 ### Cap Toolset Size
 
@@ -68,7 +68,7 @@ A useful heuristic: tool output should fit in a paragraph. If it doesn't, consid
 Over-filtering introduces its own failure modes:
 
 - **Edge cases silently dropped.** A summary that omits "unimportant" fields will eventually omit a field a rare-but-valid path needs. The agent cannot ask for data it doesn't know exists.
-- **Abstraction breaks on schema change.** A bespoke summary layer tied to a specific response shape becomes a maintenance liability on every upstream API change.
+- **Abstraction breaks on schema change.** A bespoke summary layer tied to a specific response shape becomes a maintenance liability on every upstream API change — [Semantic Tool Output](semantic-tool-output.md) shapes the result at the source instead.
 - **Engineering overhead outweighs savings.** Building a custom summariser for a tool called once per session may cost more than the token savings justify.
 - **Debugging is harder.** Diagnosing incorrect agent behaviour requires tracing through the summarisation layer as well as the agent's reasoning.
 
@@ -122,7 +122,7 @@ The agent receives `"3 checks passed, 1 failed: lint"` and can immediately decid
 - Every tool response is a context injection — size it for the agent's next decision, not for completeness.
 - Functional overlap between tools forces agent reasoning before action; eliminate it.
 - Precise tool descriptions reduce selection cost; ambiguous ones increase it.
-- Keep toolsets small: more tools means more tokens spent on selection per call.
+- Keep toolsets small: more tools means more tokens spent on selection per call — the discipline of [Tool Minimalism](tool-minimalism.md).
 
 ## Related
 

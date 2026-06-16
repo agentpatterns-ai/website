@@ -25,7 +25,7 @@ maturity: established
 
 Parallelization is trivial when tasks are naturally independent. Many real-world engineering tasks are not. A single end-to-end integration test that requires the entire system to compile and run is a sequential bottleneck: no agent can verify its contribution until all contributions are assembled.
 
-Without decomposition, parallel agents either block on each other's output or produce unverifiable partial work. The oracle pattern dissolves the bottleneck.
+Without decomposition, parallel agents dispatched via [fan-out](sub-agents-fan-out.md) either block on each other's output or produce unverifiable partial work. The oracle pattern dissolves the bottleneck.
 
 ## The Oracle Mechanism
 
@@ -80,7 +80,7 @@ The question to ask: is there a trusted artifact that can produce expected outpu
 
 Oracle-based decomposition fails or degrades in three conditions:
 
-1. **No oracle exists.** Building a reference implementation from scratch costs more than the parallelization saves. If the only "oracle" would be the same implementation being written, the pattern collapses to manual test authoring.
+1. **No oracle exists.** Building a reference implementation from scratch costs more than the parallelization saves. If the only "oracle" would be the same implementation being written, the pattern collapses to manual test authoring — at which point [independent test generation](independent-test-generation-multi-agent.md) is the better fit.
 2. **Cross-unit dependencies are pervasive.** When every file's correct output depends on another file's implementation, raising the verification boundary to the cross-unit level eliminates the independence that makes parallelization valuable. The bottleneck moves rather than disappears.
 3. **Oracle correctness is disputed.** If the oracle itself has known bugs or behavioral differences from the target (e.g., GCC and a new compiler diverge intentionally on undefined behavior), agent fixes will target the oracle's behavior rather than correct behavior, embedding the oracle's defects into the output.
 

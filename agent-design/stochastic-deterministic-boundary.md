@@ -10,7 +10,7 @@ aliases:
   - stochastic deterministic boundary
   - proposer verifier commit reject contract
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Stochastic-Deterministic Boundary as First-Class Contract
@@ -24,7 +24,7 @@ The stochastic-deterministic boundary (SDB) names the transition where an LLM's 
 Apply the contract only when at least one condition holds:
 
 - **Multiple LLM-to-action transitions.** Two or more call-sites whose verifier and commit semantics differ (planner emitting patches, router emitting tool calls, refunder emitting API requests).
-- **Non-trivial commit side effects.** The commit writes to external state — database, billing API, deployment — where partial writes are expensive to reverse.
+- **Non-trivial commit side effects.** The commit writes to external state — database, billing API, deployment — where partial writes are expensive to reverse without [rollback-first design](rollback-first-design.md).
 - **Replay or audit requirements.** Compliance or eval pipelines need to re-run verifier and commit against new model versions without re-rolling the proposer.
 
 Single-call assistants and read-only flows do not need the contract. Anthropic warns frameworks "create extra layers of abstraction that can obscure the underlying prompts and responses" — start simple and add layers only when performance demands it ([Anthropic, Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents); see [Anthropic's Effective Agents Framework](anthropic-effective-agents-framework.md) for pattern selection guidance).
@@ -34,7 +34,7 @@ Single-call assistants and read-only flows do not need the contract. Anthropic w
 | Part | Role | Determinism |
 |------|------|-------------|
 | **Proposer** | LLM call that emits a candidate action (tool call, patch, JSON payload). | Stochastic |
-| **Verifier** | Typed check that the proposal is well-formed and policy-conformant. Schema validation, tests, lint, policy rules, or a second model. | Deterministic where possible |
+| **Verifier** | Typed check that the proposal is well-formed and policy-conformant. Schema validation, tests, lint, policy rules, or a second model — see [inference-time tool-call reviewer](inference-time-tool-call-reviewer.md). | Deterministic where possible |
 | **Commit** | The actual write — tool dispatch, DB write, API call, file mutation. | Deterministic |
 | **Reject signal** | Structured failure message returned to the proposer with enough specificity to drive a revision. | Deterministic |
 
@@ -46,7 +46,7 @@ graph LR
     C -->|effect| D[System state]
 ```
 
-The reject signal is the part most often missing. A boolean verifier leaves the proposer guessing; one that returns the failed field, the violated rule, and an example of acceptable input converges in one round.
+The reject signal is the part most often missing. A boolean verifier leaves the proposer guessing; one that returns the failed field, the violated rule, and an example of acceptable input converges in one round — the same structured-feedback loop an [evaluator-optimizer](evaluator-optimizer.md) runs.
 
 ## Why It Works
 

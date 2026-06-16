@@ -85,7 +85,7 @@ End-to-end task-success metrics aggregate over the full workflow, masking which 
 - Structural coverage of a typed coordination graph is a **test-adequacy layer**, not a correctness oracle.
 - The four criteria are reachable-agent, allowed-tool-edge, restricted-tool-edge, and delegation-edge coverage. Allowed and delegation edges have positive witnesses; restricted edges have adversarial probes.
 - It earns its keep when the workflow declares restrictions or delegation rules, the spec is stable, and the system is large enough that E2E tests miss declared edges.
-- Errors of omission are invisible — coverage cannot tell you the graph is missing an edge that should exist. Pair it with semantic evaluation and handoff-contract audits.
+- Errors of omission are invisible — coverage cannot tell you the graph is missing an edge that should exist. Pair it with semantic evaluation and [handoff-contract](../multi-agent/agent-handoff-protocols.md) audits.
 - Treat unwitnessed obligations as findings to triage (dead spec? infeasible edge? generator limit?), not as build failures.
 
 ## Related

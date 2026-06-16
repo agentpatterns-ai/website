@@ -63,7 +63,7 @@ BaxBench, an independent backend benchmark covering correctness and security, fi
 - **Single-file scripts and microservices** with no ORM, no fixed architectural pattern, and a self-contained API contract. Constraint decay does not bite when the structural surface is empty.
 - **Strong post-generation verification.** When the agent loop includes integration tests, schema validation, and lints that catch ORM defects before merge, the 30-point gap shrinks — failure becomes a feedback signal, not a final verdict. The benchmark measures one-shot agent output, not loop-augmented systems.
 - **Minimal-convention frameworks where the agent supplies the architecture.** Flask-style stacks let the agent define structure rather than conform to one — the implicit-invariant load that drives the decay does not exist.
-- **Mature retrieval over framework docs.** The benchmark does not measure agents augmented with current framework documentation in context. Retrieval-augmented setups may close part of the gap, though no public number quantifies how much.
+- **Mature retrieval over framework docs.** The benchmark does not measure agents augmented with current framework documentation in context. Retrieval-augmented (RAG) setups may close part of the gap, though no public number quantifies how much.
 
 ## Key Takeaways
 

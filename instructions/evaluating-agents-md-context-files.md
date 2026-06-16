@@ -115,5 +115,7 @@ The two studies also used different model and agent sets, so it is unclear wheth
 - [AGENTS.md Design Patterns: Commands, Boundaries, and Personas](agents-md-design-patterns.md)
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
+- [Instruction File Ecosystem](instruction-file-ecosystem.md) — the map of instruction-file types this evaluation lens sits inside
+- [Configuration File Structure Compliance Gap](configuration-file-structure-compliance-gap.md) — empirical null on file structure, complementary to this page's when-do-context-files-hurt question
 - [Convention Over Configuration](convention-over-configuration.md)
 - [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md)

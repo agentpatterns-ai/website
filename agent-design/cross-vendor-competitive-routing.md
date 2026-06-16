@@ -10,7 +10,7 @@ aliases:
   - cross-vendor routing
   - competitive model routing
 last_reviewed: 2026-05-27
-maturity: established
+maturity: emerging
 ---
 
 # Cross-Vendor Competitive Routing
@@ -102,7 +102,7 @@ This pattern operates at the **platform level** (which vendor agent handles the 
 
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Copilot vs Claude Billing Semantics](../human/copilot-vs-claude-billing-semantics.md) — premium request multipliers vs token billing
-- [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — pre-generation routing via file-level code health metrics
+- [Code-Health-Gated LLM Tier Routing](auto-model-selection.md) — pre-generation routing via file-level code health metrics
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — selecting between candidate outputs
 - [Event-Driven Agent Routing](event-driven-agent-routing.md)
 - [Agent Composition Patterns](agent-composition-patterns.md) — fan-out as a composition primitive

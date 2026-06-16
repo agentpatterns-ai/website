@@ -8,7 +8,7 @@ aliases:
   - "augmentation over automation"
   - "human-centered AI tooling"
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Empowerment Over Automation
@@ -30,7 +30,7 @@ AI excels at mechanical, repetitive tasks where the rules are clear and the cost
 - **Boilerplate and scaffolding**: Generating routine code structure, configuration files, and project setup.
 - **Documentation**: Writing and completing technical documentation, docstrings, and inline comments.
 - **Test generation**: Producing test cases from existing implementations.
-- **Mechanical code review**: Spotting typos, unused variables, style inconsistencies, and common vulnerability patterns like SQL injection or missing awaits.
+- **[Mechanical code review](../code-review/agent-assisted-code-review.md)**: Spotting typos, unused variables, style inconsistencies, and common vulnerability patterns like SQL injection or missing awaits.
 - **Naming suggestions**: Proposing better variable and function identifiers during refactoring.
 
 ## What Humans Must Retain
@@ -41,7 +41,7 @@ Three categories of work remain human ([GitHub Blog: Why Developers Will Always 
 
 **Mentorship and culture.** Pull request discussions function as team classrooms where organizational wisdom transfers between team members. AI cannot replace the cultural context that shapes how your team builds and reviews code.
 
-**Ethics and values.** The question "Should we build this?" demands your judgment. AI can tell you how to implement a feature — it cannot tell you whether you should.
+**Ethics and values.** The question "Should we build this?" [demands your judgment](../workflows/human-in-the-loop.md). AI can tell you how to implement a feature — it cannot tell you whether you should.
 
 The merge button embodies this boundary. GitHub's pull request model "hard-wired accountability into modern software" by requiring human approval before merging — a governance structure that remains essential regardless of agent capability ([GitHub Blog: Why Developers Will Always Own the Merge Button](https://github.blog/ai-and-ml/generative-ai/code-review-in-the-age-of-ai-why-developers-will-always-own-the-merge-button/)).
 
@@ -61,7 +61,7 @@ The recommended layering:
 
 1. **Development stage**: AI handles mechanical scanning (style, patterns, common bugs).
 2. **CI stage**: Automated gates enforce tests, security scans, and linters.
-3. **Review stage**: Humans focus on architectural decisions, organizational context, and cultural standards.
+3. **Review stage**: [Humans focus on architectural decisions](../agent-design/delegation-decision.md), organizational context, and cultural standards.
 
 This keeps AI in its strength zone (pattern matching, consistency enforcement) while reserving human attention for decisions AI cannot make.
 
@@ -75,9 +75,9 @@ The empowerment model breaks down in specific conditions:
 
 ## Example
 
-A team adds an AI-assisted code review step to their pull request workflow. Before the PR is opened, the agent scans for style violations, unused imports, and missing null checks — eliminating the mechanical nits that previously consumed reviewer attention. The CI pipeline then runs linters, tests, and security scans automatically. When the PR reaches human review, the reviewer skips style comments entirely and focuses on whether the service boundary introduced in the change is correct given a planned microservices migration the team has been planning. The AI handled the pattern-matching work; the human retained the architectural decision.
+A team adds an AI-assisted code review step to their pull request workflow. Before the PR is opened, [the agent scans for style violations](../code-review/agent-self-review-loop.md), unused imports, and missing null checks — eliminating the mechanical nits that previously consumed reviewer attention. The CI pipeline then runs linters, tests, and security scans automatically. When the PR reaches human review, the reviewer skips style comments entirely and focuses on whether the service boundary introduced in the change is correct given a planned microservices migration the team has been planning. The AI handled the pattern-matching work; the human retained the architectural decision.
 
-The same team rejects a proposal to let the agent auto-approve PRs that pass CI. The merge button stays human: the AI earns a place in the filter chain, not at the end of it.
+The same team rejects a proposal to let the agent [auto-approve PRs that pass CI](../workflows/human-in-the-loop.md). The merge button stays human: the AI earns a place in the filter chain, not at the end of it.
 
 ## Key Takeaways
 
@@ -91,7 +91,7 @@ The same team rejects a proposal to let the agent auto-approve PRs that pass CI.
 - [Progressive Autonomy with Model Evolution](../human/progressive-autonomy-model-evolution.md)
 - [Visible Thinking in AI-Assisted Development](visible-thinking-ai-development.md)
 - [Agent-Assisted Code Review](../code-review/agent-assisted-code-review.md)
-- [Agent Self-Review Loop](../agent-design/agent-self-review-loop.md)
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
 - [Agent-First Software Design](../agent-design/agent-first-software-design.md)
 - [Harness Engineering](../training/foundations/harness-engineering.md)
 - [The Delegation Decision](../agent-design/delegation-decision.md)

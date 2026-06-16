@@ -53,9 +53,9 @@ sequenceDiagram
     C-->>R: Bounded operation result
 ```
 
-- **Requester** — the agent. Proposes a canonical operation. **Does not retrieve secrets.**
+- **Requester** — the agent. Proposes a canonical operation. **Does not [retrieve secrets](../security/secrets-management-for-agents.md).**
 - **User** — the principal. Authorizes the proposed operation with a fresh authenticator-backed grant.
-- **Custodian** — the secret holder. Redeems the grant **once** to perform the bounded operation.
+- **Custodian** — the [secret holder](../security/scoped-credentials-proxy.md). Redeems the grant **once** to perform the bounded operation.
 
 Reusable authority never crosses the requester boundary. Compromise of the requester yields at most one operation, not durable account access ([Yu et al. 2026](https://arxiv.org/abs/2604.24920)).
 

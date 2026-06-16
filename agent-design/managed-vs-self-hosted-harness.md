@@ -35,7 +35,7 @@ Managed services run workloads on vendor infrastructure by default. If your thre
 
 Harnesses are coupled to memory management. An agent harness "is intimately tied to memory — a key role of the harness is to manage context" ([LangChain, April 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)). When an agent learns from interactions — adapting to user preferences, accumulating domain knowledge, building an internal model of your codebase — that memory accumulates inside the harness.
 
-With a managed service, that memory sits behind the provider's API; migration means resetting learned state — a cost that grows with every session. With a self-hosted harness, memory lives in your own databases and persists through vendor changes. This is the strongest argument for self-hosting when agents are long-lived or customer-facing, not just for batch tasks.
+With a managed service, that memory sits behind the provider's API; migration means resetting learned state — a cost that grows with every session. With a self-hosted harness, memory lives in your own databases and persists through vendor changes. This is the strongest argument for self-hosting when agents are long-lived or customer-facing, not just for batch tasks — memory is a [property of the harness, not a pluggable module](harness-memory-coupling.md).
 
 ### 3. Observability Ownership
 

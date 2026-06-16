@@ -18,7 +18,7 @@ last_reviewed: 2026-05-27
 
 ## Why Evals Come First
 
-Teams that write evals after the fact tend to reverse-engineer success criteria from a live system. This embeds the agent's current behavior — including its bugs — into the definition of correct. The eval suite then validates what the agent already does rather than what it should do.
+Teams that write evals after the fact tend to reverse-engineer success criteria from a live system. This embeds the agent's current behavior — including its bugs — into the definition of correct. The eval suite then validates what the agent already does rather than what it should do — the opposite of what evals are meant to measure (see [What Evals Are](what-evals-are.md)).
 
 Writing evals first forces clarity: you must decide what "done" means before building toward it. A low pass rate on a new capability eval is a feature, not a problem — it identifies the gap and makes progress visible as implementation proceeds. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
@@ -51,7 +51,7 @@ A 0% baseline on a new capability is expected — it means the agent cannot do t
 
 ### Step 3: Implement and Iterate
 
-Make changes. Run the suite. Compare against the baseline. Each iteration should show measurable progress on specific tasks. If it does not, the implementation is not addressing the failure modes the eval captured.
+Make changes. Run the suite. Compare against the baseline. Each iteration should show measurable progress on specific tasks, the core rhythm of [eval-driven development](../../workflows/eval-driven-development.md). If it does not, the implementation is not addressing the failure modes the eval captured.
 
 When a change improves some tasks but regresses others, the eval suite makes this visible immediately — before the regression reaches production.
 
@@ -69,7 +69,7 @@ Production incidents feed back into the suite as new eval tasks. See [Hardening 
 
 ## Evals as Executable Specifications
 
-Eval tasks function as executable specifications. When a task is well-defined, it answers "does this feature work?" with a reproducible, automatable check rather than a manual judgment call.
+Eval tasks function as executable specifications. When a task is well-defined, it answers "does this feature work?" with a reproducible, automatable check — the outcome-grading idea from [What Evals Are](what-evals-are.md) — rather than a manual judgment call.
 
 This reframes the development conversation. Instead of debating whether a feature is "good enough," the team looks at the pass rate and decides whether the remaining failure modes are acceptable for the current release.
 
@@ -106,7 +106,7 @@ Without evals, step 4 is "have three engineers manually test for two weeks and r
 Not all features require the same upgrade strategy. Anthropic's skill-creator distinguishes two categories that generalize beyond skills to any agent capability: [Source: [Improving Skill-Creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 
 - **Capability uplift** — encodes techniques that produce better output than the base model alone. These may become obsolete when a new model internalizes the technique. Model upgrade evals should compare the skill-augmented agent against the raw model on the same tasks; if the raw model matches or exceeds the skill, retire the skill rather than maintaining dead complexity.
-- **Encoded preference** — sequences existing capabilities according to team-specific workflows. These remain valuable across model generations because the model cannot infer your process. Upgrade evals should verify workflow fidelity (step ordering, output format, required checks) rather than raw output quality.
+- **Encoded preference** — sequences existing capabilities according to team-specific workflows, the pattern explored in [Eval-Driven Development for tool building](../../workflows/eval-driven-development.md#applying-the-loop-to-tool-building). These remain valuable across model generations because the model cannot infer your process. Upgrade evals should verify workflow fidelity (step ordering, output format, required checks) rather than raw output quality.
 
 ---
 
@@ -142,8 +142,7 @@ Run each version's evals with independent agents in parallel, each starting from
 - [Writing Your First Eval Suite](writing-first-eval-suite.md) — task design and suite construction
 - [Grading Strategies](grading-strategies.md) — previous module
 - [Hardening Evals for Production](hardening-evals.md) — next module
-- [Eval-Driven Development](../../workflows/eval-driven-development.md) — reference page
-- [Eval-Driven Tool Development](../../workflows/eval-driven-tool-development.md) — applying the loop to tool/skill design
+- [Eval-Driven Development](../../workflows/eval-driven-development.md) — reference page, including [applying the loop to tool/skill design](../../workflows/eval-driven-development.md#applying-the-loop-to-tool-building)
 - [What Evals Are](what-evals-are.md) — foundational concepts on agent evaluations
 - [Step-by-Step: Building Your First Eval-Driven Feature](step-by-step-first-feature.md) — hands-on walkthrough applying this loop
 - [Enterprise Skill Marketplace](../../workflows/enterprise-skill-marketplace.md) — skill lifecycle including eval-gated publishing

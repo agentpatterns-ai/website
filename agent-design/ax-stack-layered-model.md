@@ -12,7 +12,7 @@ aliases:
   - AX stack
   - agent prompt to compile stack
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # The AX Stack
@@ -94,7 +94,7 @@ The four-layer model adds taxonomy overhead and assumes a stable enough environm
 A working sequence when an agent fails or you want to invest:
 
 1. **Name the layer where the failure is visible** — and where it originates. The visible layer is often downstream of the cause.
-2. **Check the controllable layers first.** Extensions are the only layer where "changing them gives instant results"; model swap is the most expensive option.
+2. **Check the controllable layers first.** [Extensions](progressive-disclosure-agents.md) are the only layer where "changing them gives instant results"; model swap is the most expensive option.
 3. **Run the lift-vs-drag test on each candidate fix.** Same scenario, harness, and model — extension on vs off. Promote lifts, remove drags.
 4. **When the controllable layers are exhausted, accept the fixed-layer constraint.** Record it in the project's `AGENTS.md` so contributors do not relitigate it.
 
@@ -114,7 +114,7 @@ Lift-vs-drag test: add a one-paragraph `AGENTS.md` entry and an MCP server retur
 - Four layers — model, harness, agent extensions, technology surface — give a shared vocabulary for naming where an agent failure or optimisation lives.
 - The model and harness are mostly fixed by the vendor; extensions and the technology surface are where developers have leverage.
 - The fixed/controllable dichotomy is approximate, not absolute — vendors expose harness-level levers (hooks, settings, system-prompt overrides) that the binary framing hides.
-- Layers leak in predictable ways: model bias defeats extension steering; harness conventions change extension behaviour across platforms; tool descriptions interact with system prompts.
+- Layers leak in predictable ways: model bias defeats extension steering; harness conventions change extension behaviour across platforms (an MCP server can lift in Claude Code and drag in Copilot); tool descriptions interact with system prompts.
 - Pair the diagnostic with a lift-vs-drag measurement — without it the vocabulary justifies unfalsifiable claims.
 
 ## Related

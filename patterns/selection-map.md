@@ -28,7 +28,7 @@ It is scoped to this site's 14 patterns that share a common set of axes. Pattern
 | Pattern | Token cost | Latency overhead | Frontier-model dependency | Blast radius | Verification cost | Task class |
 |---------|------------|------------------|---------------------------|--------------|-------------------|------------|
 | [Harness Engineering](../agent-design/harness-engineering.md) | low | none | none | contained writes | linter-able | open-ended |
-| [Agent Self-Review Loop](../agent-design/agent-self-review-loop.md) | high | +N turns | one role | contained writes | eval-able | iterative |
+| [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) | high | +N turns | one role | contained writes | eval-able | iterative |
 | [Cognitive Reasoning vs Execution](../agent-design/cognitive-reasoning-execution-separation.md) | medium | +1 turn | one role | contained writes | linter-able | iterative |
 | [Episodic Memory Retrieval](../agent-design/episodic-memory-retrieval.md) | low | +1 turn | none | read-only | eval-able | iterative |
 | [Agent Circuit Breaker](../agent-design/agent-circuit-breaker.md) | low | none | none | read-only | linter-able | iterative |
@@ -90,7 +90,7 @@ The matrix compresses information already sourced on each pattern's canonical pa
 
 The matrix is a comparison aid, not a recommendation engine. Three failure modes to watch:
 
-- **Pattern shopping** — scanning the table and assembling several patterns at once produces the exact stack-everything failure mode the page exists to defuse. The TL;DR and the closing rule are deliberate counterweights.
+- **Pattern shopping** — scanning the table and assembling several patterns at once produces the exact stack-everything failure mode the page exists to defuse, the [cargo-cult agent setup](../anti-patterns/cargo-cult-agent-setup.md) anti-pattern. The TL;DR and the closing rule are deliberate counterweights.
 - **Stale rows** — pattern pages evolve over time. If a pattern page changes its cost or blast-radius characterisation, the matrix row diverges silently until the next periodic audit catches it. The `last_reviewed` frontmatter dates the synthesis.
 - **Axis flattening** — a single ordinal value per axis hides distributions. A pattern marked `medium` token cost in steady state may spike to `high` during cold start or on certain task shapes. The canonical page carries the nuance; the matrix row does not.
 

@@ -76,10 +76,10 @@ Safety guardrails tuned for single-turn classification are not the strongest cho
 Three placement strategies, ordered from weakest to strongest coverage:
 
 1. **Per-call evaluation** — guardrail sees each call independently. Catches single-call violations; misses multi-step patterns. Lowest cost.
-2. **Trajectory checkpoint evaluation** — guardrail reviews the trajectory at checkpoints (every N calls, at phase transitions). Catches distributed obfuscation.
+2. **Trajectory checkpoint evaluation** — guardrail reviews the trajectory at checkpoints (every N calls — the example below uses 5 — or at phase transitions). Catches distributed obfuscation.
 3. **Full-trajectory review** — guardrail re-evaluates the full trajectory before any high-impact action. Highest coverage and cost; reserve for security-critical workflows.
 
-Combine per-call evaluation for obvious violations with trajectory checkpoints for sequence-level detection.
+Combine per-call evaluation for obvious violations with trajectory checkpoints for sequence-level detection, the same trajectory surface a [behavioral firewall](behavioral-firewall-tool-call-trajectories.md) enforces deterministically.
 
 ## When This Backfires
 
@@ -176,7 +176,7 @@ Key decisions: the guard model is chosen for structured-data competence, not saf
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — layering principle that mid-trajectory guardrails extend
 - [Deterministic Guardrails Around Probabilistic Agents](../verification/deterministic-guardrails.md) — rule-based checks that complement LLM guard models
 - [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md) — anti-pattern that mid-trajectory obfuscation exploits
-- [Trajectory-Opaque Evaluation Gap](../verification/trajectory-opaque-evaluation-gap.md) — why outcome-only grading misses safety violations in intermediate steps
+- [Trajectory-Opaque Evaluation Gap](../verification/eval-blind-spots.md) — why outcome-only grading misses safety violations in intermediate steps
 - [Prompt Injection Threat Model](prompt-injection-threat-model.md) — foundational injection attack model that multi-step attacks build upon
 - [RL-Automated Red Teamers](rl-automated-red-teamers.md) — RL-based discovery of multi-step attack sequences that mid-trajectory guardrails must catch
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — deterministic pDFA enforcement that complements LLM guard models on the same trajectory surface

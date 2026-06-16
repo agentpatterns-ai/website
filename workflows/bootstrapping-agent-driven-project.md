@@ -9,7 +9,7 @@ tags:
 aliases:
   - Greenfield Agent Bootstrap
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # Bootstrapping an Agent-Driven Project from Scratch
@@ -26,7 +26,7 @@ Agent-first bootstrapping assumes you can pick a useful topology with no product
 
 - **Unknown domain shape.** If you do not yet know the product's core workloads, role boundaries are guesses. A topology chosen before any feature exists tends to lock in the wrong splits, and moving an agent's responsibilities later is more costly than moving a module.
 - **Single-developer or short-lived project.** The overhead of maintaining `AGENTS.md`, skill libraries, and agent definitions dominates when only one person and one or two agents touch the code. Retrofitting agent support once the project proves itself is cheaper than frontloading it.
-- **Rapidly changing model or tool capabilities.** Today's topology assumes today's context windows, tool budgets, and reliability. If any of those shift materially, an elaborate agent layout must be reworked; a thin codebase with minimal agent scaffolding absorbs that change more easily.
+- **Rapidly changing model or tool capabilities.** Today's topology assumes today's context windows, tool budgets, and reliability. If any of those shift materially, an elaborate [agent-driven greenfield layout](agent-driven-greenfield.md) must be reworked; a thin codebase with minimal agent scaffolding absorbs that change more easily.
 - **Team unfamiliar with agent workflows.** If contributors cannot yet tell a good agent definition from a bad one, the initial topology encodes inexperience. Building code first and retrofitting agent support once the team has operated agents in the small produces more durable decisions.
 
 If any of these hold, the [Repository Bootstrap Checklist](repository-bootstrap-checklist.md) approach — adding agent support to an existing repo in dependency order — is the safer path.

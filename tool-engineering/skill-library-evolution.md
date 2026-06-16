@@ -10,7 +10,7 @@ tags:
   - tool-agnostic
   - tool-engineering
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # Skill Library Evolution
@@ -135,8 +135,9 @@ Lifecycle governance adds overhead that may exceed its value in certain contexts
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
 - [Tool Minimalism](tool-minimalism.md)
 - [Skill Authoring Patterns](skill-authoring-patterns.md)
+- [Skill Library Technical Debt](skill-library-technical-debt.md) — the mechanical-repair counterpart to this page's governance-lifecycle view
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md)
-- [Evaluation-Driven Development for Agent Tools](../workflows/eval-driven-tool-development.md)
+- [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md)
 - [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
 - [Proprietary-to-Open-Standard Migration](copilot-extensions-to-mcp-migration.md)
 - [Tool Description Quality](tool-description-quality.md)

@@ -21,7 +21,7 @@ maturity: established
 
 ## The Decision
 
-The loop strategy spectrum is a three-way framework for choosing how context carries between iterations of a long-running agent workflow: accumulated context, within-session compression, or fresh context per iteration. The right choice depends on whether the workload is synthesis-heavy, execution-heavy, or mixed.
+The loop strategy spectrum is a three-way framework for choosing how context carries between iterations of a long-running agent workflow: accumulated context, within-session compression, or fresh context per iteration. The right choice depends on whether the workload is [synthesis-heavy or execution-heavy](cognitive-reasoning-execution-separation.md), or mixed.
 
 | Strategy | Context model | Best for | Primary risk |
 |----------|--------------|----------|-------------|
@@ -55,7 +55,7 @@ For a detailed treatment, see [Context Compression Strategies](../context-engine
 
 Each iteration starts a clean context window, reads persistent state from disk, completes one bounded task, writes results back, and restarts. State lives in files, not in conversation history.
 
-This eliminates context rot by design. Failed iterations leave disk state at the last successful write -- the next cycle continues cleanly.
+This eliminates [context rot](../context-engineering/context-window-dumb-zone.md) by design. Failed iterations leave disk state at the last successful write -- the next cycle continues cleanly.
 
 The trade-off: the agent cannot cross-reference findings from prior iterations except through what was explicitly written to disk. Research coherence depends entirely on the quality of persisted artifacts.
 
@@ -97,16 +97,16 @@ OpenAI's [agent-first codebase approach](https://alexlavaee.me/blog/openai-agent
 
 A code-quality agent runs nightly over a large repository. It needs to scan files, identify issues, and apply fixes across hundreds of modules.
 
-**Research phase** (accumulated context): The agent reads existing lint configs, prior issue reports, and a sample of files to understand the codebase's patterns. It produces a prioritised issue list as a durable artifact.
+**Research phase** (accumulated context): The agent reads existing lint configs, prior issue reports, and a sample of files to understand the codebase's patterns. It produces a prioritised issue list as a [durable artifact](../instructions/feature-list-files.md).
 
 **Implementation phase** (fresh context per module): Each module fix starts a clean session, reads the issue list and the target module, applies fixes, writes results back to disk. Context rot cannot accumulate because each session is bounded.
 
-If this were a single accumulated-context run, the agent would degrade after dozens of modules — BABILong-style context rot would cause it to miss or duplicate fixes. If it used Ralph loops for the research phase, it would lose cross-file pattern recognition. The hybrid matches the workload: synthesis needs accumulated context; execution needs fresh context.
+If this were a single accumulated-context run, the agent would degrade after dozens of modules — BABILong-style context rot would cause it to miss or duplicate fixes. If it used [Ralph loops](ralph-wiggum-loop.md) for the research phase, it would lose cross-file pattern recognition. The hybrid matches the workload: synthesis needs accumulated context; execution needs fresh context.
 
 ## Key Takeaways
 
 - Each strategy has a primary risk: context rot (accumulated), lossy compression (within-session), fragmented coherence (fresh). Choose based on which risk matters least for the workload.
-- Hybrid workflows -- research with accumulated context, then implement with fresh context -- combine the strengths of both strategies.
+- Hybrid workflows -- [research with accumulated context, then implement with fresh context](../workflows/research-plan-implement.md) -- combine the strengths of both strategies.
 - The choice is workload-dependent, not ideological. Match the strategy to the task.
 
 ## Related
@@ -115,7 +115,7 @@ If this were a single accumulated-context run, the agent would degrade after doz
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md)
 - [Context Window Dumb Zone](../context-engineering/context-window-dumb-zone.md)
 - [Objective Drift](../anti-patterns/objective-drift.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
 - [Agent Harness](agent-harness.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)

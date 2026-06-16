@@ -21,9 +21,9 @@ last_reviewed: 2026-05-27
 
 ## The Non-Determinism Problem
 
-Traditional software tests assert that a specific input produces a specific output. Run the test today, run it tomorrow — same result (assuming no code changes). This determinism is what makes test suites trustworthy as deployment gates.
+Traditional software tests assert that a specific input produces a specific output. Run the test today, run it tomorrow — same result (assuming no code changes). This determinism is what makes test suites trustworthy as deployment gates, and it is exactly what [Eval Engineering](../foundations/eval-engineering.md) shows agent quality lacks.
 
-Agents break this assumption. The same prompt, same task, same environment can produce different results on successive runs. Temperature settings, context window contents, model updates, and even the order of tool results introduce variance that no amount of test design eliminates. A test suite that passes today may fail tomorrow without any change to your code.
+Agents break this assumption. The same prompt, same task, same environment can produce different results on successive runs. Temperature settings, context window contents, model updates, and even the order of tool results introduce variance that no amount of test design eliminates. A test suite that passes today may fail tomorrow without any change to your code — which is why reliability needs the [pass@k and pass^k metrics](../../verification/pass-at-k-metrics.md).
 
 This is not a bug in agents — it is a fundamental property of systems built on language models. The testing discipline must adapt to it, not pretend it does not exist.
 
@@ -70,7 +70,7 @@ See [pass@k and pass^k Metrics](../../verification/pass-at-k-metrics.md) for mea
 
 Teams that try to apply traditional QA practices to agents encounter three failure modes:
 
-**Snapshot testing locks in bugs.** Recording "golden" outputs from the current agent and comparing future outputs against them embeds the agent's current behavior — including its bugs — into the definition of correct. Any improvement that changes the output format will fail the snapshot test.
+**Snapshot testing locks in bugs.** Recording "golden" outputs from the current agent and comparing future outputs against them embeds the agent's current behavior — including its bugs — into the definition of correct. Any improvement that changes the output format will fail the snapshot test, which is why evals [grade outcomes, not snapshots](../../verification/grade-agent-outcomes.md).
 
 **Path-based assertions penalize creativity.** Asserting that the agent called tool X before tool Y rejects valid alternative solutions the test author did not anticipate. An agent that finds a better path fails a test designed around the only path the author considered. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
@@ -80,7 +80,7 @@ Teams that try to apply traditional QA practices to agents encounter three failu
 
 ## What Evals Actually Measure
 
-Good evals measure outcomes, not paths. For a coding agent, the outcome grader is often a test suite: did the code pass the tests? For a research agent, the grader checks factual accuracy and source quality. For a summarization agent, the grader checks completeness and faithfulness to the source.
+Good evals measure outcomes, not paths. For a coding agent, the outcome grader is often a test suite (the [outcome-grading principle](../../verification/grade-agent-outcomes.md)): did the code pass the tests? For a research agent, the grader checks factual accuracy and source quality. For a summarization agent, the grader checks completeness and faithfulness to the source.
 
 The grader itself is a design decision with trade-offs covered in [Grading Strategies](grading-strategies.md). The key insight at this stage: the eval measures the *what* (did the agent produce the right result?) not the *how* (did the agent follow the expected sequence of actions?).
 

@@ -12,7 +12,7 @@ tags:
   - tool-agnostic
   - long-form
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Open Agent School Pattern Mapping
@@ -144,14 +144,14 @@ The five equivalences above are useful shorthand, not drop-in replacements. The 
 - **Schema-Aware Decomposition assumes a stable schema.** In greenfield code or during active refactors, the "real schema entities" the agent should ground plans in are themselves in flux. Priming against a schema that is about to change produces plans that break on merge.
 - **Perception Normalization's feedback loop requires an output quality signal.** On coding agents without deterministic test or lint feedback — interactive exploration, architectural planning — there is no degradation signal to close the loop on.
 
-If you need the formal guarantees OAS describes, budget for vector retrieval, an explicit policy engine, and multi-layer budget enforcement. The flat-file equivalents are the right default for small teams and solo practitioners; they are not the right default for multi-tenant or regulated deployments.
+If you need the formal guarantees OAS describes, budget for vector retrieval, an explicit policy engine, and [multi-layer budget enforcement](reasoning-budget-allocation.md). The flat-file equivalents are the right default for small teams and solo practitioners; they are not the right default for multi-tenant or regulated deployments.
 
 ## Key Takeaways
 
 - OAS provides formal names for patterns coding-agent practitioners already approximate with lighter-weight primitives — the vocabulary is useful for cross-team communication and training.
 - Five of eleven patterns have direct coding-agent equivalents; the other six are data-pipeline-specific.
 - The highest-value OAS insight is treating budget, policy, memory, schema grounding, and perception as a unified system rather than independent concerns.
-- OAS pattern pages describe the *what* and *why*; this site's pages provide the concrete commands, config, and hook scripts. Use them together.
+- OAS pattern pages describe the *what* and *why*; this site's pages provide the concrete commands, config, and `PreToolUse` hook scripts. Use them together.
 - The mapping is a translation layer, not a substitution. When the formal guarantees matter, implement the formal pattern — not the flat-file approximation.
 
 ## Related

@@ -8,7 +8,7 @@ tags:
   - tool-agnostic
   - frameworks
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # L1 → L2: Adding Feedback Loops
@@ -215,17 +215,17 @@ If the agent still needs you to correct mechanical errors (wrong imports, types,
 The L1→L2 transition is high-leverage but not free. Three conditions make it a poor investment:
 
 - **Large existing `any` surface**: strict mode on a codebase with hundreds of implicit `any` types floods unrelated files with errors. Fix cost dwarfs the agent benefit until most are annotated. Start with `noImplicitAny` scoped to new files; expand incrementally.
-- **High-churn paths with low test stability**: if integration tests on agent-critical paths break frequently from schema or environment drift, agents learn to ignore failing tests rather than treat them as signal. Stabilize the environment before relying on tests as a feedback source.
+- **High-churn paths with low test stability**: if integration tests on agent-critical paths break frequently from schema or environment drift, agents learn to ignore failing tests rather than treat them as [backpressure](../../agent-design/agent-backpressure.md) signal. Stabilize the environment before relying on tests as a feedback source.
 - **Monorepos with shared strict config**: enabling strict mode in one package cascades errors into shared libraries consumed elsewhere. Coordinate across package owners or use path-scoped tsconfig overrides to contain the blast radius.
 
 ---
 
 ## Key Takeaways
 
-- **Agent autonomy scales with backpressure quality**, not with model capability ([Anthropic](https://code.claude.com/docs/en/best-practices)). A codebase with strict types and meaningful test coverage on critical paths enables autonomous agent iteration. A codebase without them requires manual review of every output.
+- **Agent autonomy scales with backpressure quality**, not with model capability ([Anthropic](https://code.claude.com/docs/en/best-practices)). A codebase with strict types and meaningful test coverage on critical paths supplies the [backpressure](../../agent-design/agent-backpressure.md) that enables autonomous agent iteration. A codebase without them requires manual review of every output.
 - **Linter messages are the best form of agent context**: they fire at the exact moment and location of a violation. Write custom rules with actionable remediation messages.
-- **Prioritize integration tests** over mocked unit tests for agent-critical paths. They catch the errors agents actually make: ORM misuse, layer violations, transaction handling.
-- **Pre-commit hooks are not optional**. They are the gate that prevents the feedback loop from being bypassed. Without them, agents can commit and push non-compliant code.
+- **Prioritize integration tests** over mocked unit tests for agent-critical paths — the structural-verification finding LangChain reports from its Terminal Bench gains. They catch the errors agents actually make: ORM misuse, layer violations, transaction handling.
+- **Pre-commit hooks are not optional**. They are the gate that prevents the feedback loop from being bypassed. Without them, agents can commit and push non-compliant code that the [Ralph Wiggum Loop](../../agent-design/ralph-wiggum-loop.md) would otherwise catch at the commit boundary.
 - **Fix type errors incrementally**. Enabling strict mode produces errors — this is expected. Each error fixed is a potential agent mistake prevented.
 
 ## Related

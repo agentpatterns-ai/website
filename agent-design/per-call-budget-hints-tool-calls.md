@@ -10,14 +10,14 @@ aliases:
   - per-call reasoning budget
   - opt-in extended tool reasoning
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Per-Call Budget Hints on Tool Invocations
 
 > Raise the reasoning or returned-token cap on one tool call, only when that call is infrequent and dense, rather than re-tuning the global default.
 
-A coding agent's tool calls have uneven cost-quality curves. A grep returning ten matches needs no extra reasoning; a deep web search across a regulatory corpus does. A per-call budget hint flags one invocation as "spend more here" without raising the budget for every other call. It pays off only when the call is infrequent, information-dense, and the model or tool can spend the lifted ceiling productively — applied uniformly, quality drops while cost rises.
+A coding agent's tool calls have uneven [cost-quality curves](cost-aware-agent-design.md). A grep returning ten matches needs no extra reasoning; a deep web search across a regulatory corpus does. A per-call budget hint flags one invocation as "spend more here" without raising the budget for every other call. It pays off only when the call is infrequent, information-dense, and the model or tool can spend the lifted ceiling productively — applied uniformly, quality drops while cost rises.
 
 ## The Three Shapes the Hint Takes
 
@@ -71,7 +71,7 @@ The hint does not replace these; it composes with them. A reasoning sandwich all
 
 ## Example
 
-A research agent runs a sequence of tool calls during a regulatory analysis. Most are routine. One — a web search across a multi-document corpus — needs to inspect many pages without stopping at the standard returned-token cap. The hint goes on that one call.
+A research agent runs a sequence of tool calls during a regulatory analysis. Most are routine. One — a web search across a multi-document corpus — needs to inspect many pages without stopping at the OpenAI web-search tool's standard returned-token cap. The hint goes on that one call.
 
 **Before** — global ceiling set conservatively, deep-research call truncates:
 

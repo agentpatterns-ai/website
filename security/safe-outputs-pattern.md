@@ -41,7 +41,7 @@ graph TD
 The pipeline applies [three sequential deterministic checks](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/) before any write reaches the repository:
 
 1. **Operation filtering** — workflow authors specify which operation types are permitted and set volume limits (e.g., "at most three pull requests"). Any operation outside the declared set is rejected.
-2. **Content moderation** — pattern analysis removes unwanted elements such as URLs or other content that violates policy.
+2. **Content moderation** — pattern analysis removes unwanted elements such as URLs (see [URL exfiltration guard](./url-exfiltration-guard.md)) or other content that violates policy.
 3. **Secret removal** — output sanitization strips exposed credentials before the artifact reaches the repository.
 
 Only artifacts that pass through the entire pipeline are written. Each stage's side effects are transparent and audited.

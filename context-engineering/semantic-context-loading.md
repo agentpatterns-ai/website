@@ -43,7 +43,7 @@ LSP powers IDE features like "Go to Definition" and "Find All References." An ag
 
 Serena is an open-source MCP server that provides semantic code retrieval and editing tools across 40+ languages via a language server backend ([github.com/oraios/serena](https://github.com/oraios/serena)). The pattern applies to any LSP-compatible tooling — what matters is the capability, not the specific implementation.
 
-Agents using LSP-backed tools can answer: where is this type defined? what implements this interface? what calls this function? — without loading any file into context until they have a specific location to read.
+Agents using LSP-backed tools can answer: where is this type defined? what implements this interface? what calls this function (`findReferences`)? — without loading any file into context until they have a specific location to read.
 
 ## Comparison with Native Indexing
 
@@ -62,7 +62,7 @@ LSP-backed queries are most valuable when the codebase is large, the task requir
 
 **Setup cost.** LSP-backed tools need a running language server; not all repos are configured for one, and the tooling layer is more complex than file reading.
 
-**Precision vs. breadth.** Semantic queries return exactly what is asked for. If the agent doesn't know the right symbol or is exploring blindly, it may miss context a file scan would surface. Semantic loading works best with a clear target.
+**Precision vs. breadth.** Semantic queries return exactly what is asked for. If the agent doesn't know the right symbol or is exploring blindly, it may miss context a file scan (`grep`) would surface. Semantic loading works best with a clear target.
 
 **Language coverage.** TypeScript, Python, Go, and Rust have strong LSP implementations; less common languages may have limited or no support.
 
@@ -107,7 +107,7 @@ This returns call sites across the codebase with their file paths and line numbe
 
 - LSP-backed tools let agents retrieve symbols, references, and type hierarchies instead of reading entire files, reducing context consumption proportionally.
 - The approach is most effective for large codebases with clear navigation targets; exploratory tasks still benefit from file reading.
-- Setup requires a running language server; LSP quality and coverage vary by language.
+- Setup requires a running language server; LSP quality and coverage vary by language (TypeScript, Python, Go, and Rust have the strongest support).
 - The same pattern applies to any LSP-compatible tooling — the capability (semantic queries) matters more than the specific tool.
 
 ## Related

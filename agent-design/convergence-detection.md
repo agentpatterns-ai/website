@@ -11,8 +11,8 @@ aliases:
   - stopping criteria for iterative refinement
   - iteration stopping criteria
   - refinement termination detection
-last_reviewed: 2026-06-12
-maturity: established
+last_reviewed: 2026-06-14
+maturity: adopted
 ---
 
 # Convergence Detection in Iterative Agent Refinement
@@ -23,7 +23,7 @@ maturity: established
 
 Iterative refinement loops — plan polishing, critique passes, bead polishing, documentation drafts — have no natural stopping point. Agents and developers either stop too early (leaving unresolved issues) or over-refine (wasting compute on passes that change nothing). "It looks good enough" is not a stopping criterion.
 
-For tasks with a test harness, this is solved: tests pass → stop. For prose, specs, and design documents, no such machine-checkable gate exists. Convergence detection fills that gap.
+For tasks with a test harness, this is solved: tests pass → stop — the PASS/FAIL gate an [evaluator-optimizer loop](evaluator-optimizer.md) leans on. For prose, specs, and design documents, no such machine-checkable gate exists. Convergence detection fills that gap.
 
 ## The Three Signals
 
@@ -62,6 +62,8 @@ This technique applies the convergence signals: if pass 4 and pass 5 produce nea
 
 Convergence detection complements the [evaluator-optimizer pattern](evaluator-optimizer.md)'s max-round fallback: the evaluator-optimizer terminates on PASS or round limit; convergence detection tells you when to set that round limit or when to stop early without a formal evaluator.
 
+Production tools increasingly pair an evaluator with a hard round cap rather than relying on either alone. Microsoft's VS Code ships an Advanced Autopilot mode whose utility-model judge decides loop completion by reading the run transcript, bounded by a maximum of three loops ([VS Code 1.124 release notes](https://code.visualstudio.com/updates/v1_124)). This couples a transcript-aware, evaluator-style stopping decision with the max-round fallback.
+
 ## Example
 
 A developer is running critique passes on a system prompt for a coding agent. After each pass they compare the new version against the previous.
@@ -72,7 +74,7 @@ A developer is running critique passes on a system prompt for a coding agent. Af
 
 **Pass 4 → Pass 5:** 3% of lines changed (minor phrasing only). Output size unchanged. Diff near-zero. All three signals converge: stop.
 
-Running a sixth pass would likely produce cosmetic changes that may degrade quality by introducing unnecessary variation.
+Running a sixth pass — one beyond the [five-pass blunder hunt](../verification/five-pass-blunder-hunt.md) — would likely produce cosmetic changes that may degrade quality by introducing unnecessary variation.
 
 ## When Signal Convergence Misleads
 
@@ -90,11 +92,12 @@ Convergence signals measure whether the output is *stabilising*, not whether it 
 
 - Madaan et al., [Self-Refine: Iterative Refinement with Self-Feedback](https://arxiv.org/abs/2303.17651) (2023) — demonstrates iterative LLM refinement with quantitative stopping criteria based on feedback scores; underpins the convergence-signal approach
 - Lee et al., [RefineBench: Evaluating Refinement Capability of Language Models via Checklists](https://arxiv.org/abs/2511.22173) (2025) — counter-evidence that self-refinement without external feedback is unreliable and that frontier models halt prematurely
+- Microsoft, [VS Code 1.124 release notes](https://code.visualstudio.com/updates/v1_124) (2026) — Advanced Autopilot uses a utility-model judge for transcript-aware loop completion, capped at three loops; a production example of pairing an evaluator with a max-round fallback
 
 ## Related
 
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — external evaluator that complements convergence signals
-- [Agent Self-Review Loop](agent-self-review-loop.md) — self-review as a convergence signal source
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — self-review as a convergence signal source
 - [Five-Pass Blunder Hunt](../verification/five-pass-blunder-hunt.md) — applied convergence on critique loops
 - [Ralph Wiggum Loop](ralph-wiggum-loop.md) — fixed-prompt iteration that benefits from convergence stopping
 - [Failure-Driven Iteration](../workflows/failure-driven-iteration.md) — failure signals that override convergence

@@ -10,7 +10,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Risk-Based Task Sizing for Agent Verification Depth
@@ -75,7 +75,7 @@ Risk-tier systems inherit the weaknesses of [risk-based testing](https://en.wiki
 - **Tier drift after refactors.** Static per-file tiers assume file purpose is stable. A test helper that accretes production code over six months may still be tagged Low. Teams routinely stop updating risk matrices once maintenance cost exceeds perceived benefit ([TestRail, "Pros and Cons of Risk-Based Testing"](https://www.testrail.com/blog/risk-based-testing/)).
 - **Subjective classification.** Two engineers can reasonably disagree whether a billing calculator is "business logic" (Medium) or "data integrity surface" (High). Without a rubric enforced in review, tier assignments drift and create a false sense of rigor ([Technology.org, "Benefits and disadvantages of risk-based testing"](https://www.technology.org/2024/05/22/benefits-and-disadvantages-of-risk-based-testing/)).
 - **High-risk-file fatigue.** Auto-escalating every touch of an auth file discourages defensible small improvements — typo fixes, comment updates, dead-code removal. Teams route around the policy by avoiding the file.
-- **Low-tier blind spots.** Concentrating effort on High-tier files under-weights defects from interactions between Low-tier modules. A documentation change that invalidates a runbook can cause an incident the tiered cascade never catches.
+- **Low-tier blind spots.** Concentrating effort on High-tier files under-weights defects from interactions between Low-tier modules — the same cross-cutting-interaction risk [risk-based shipping](risk-based-shipping.md) flags. A documentation change that invalidates a runbook can cause an incident the tiered cascade never catches.
 
 If the risk map is not reviewed regularly, or the team lacks a shared rubric, uniform verification may be more honest than a stale tier map masquerading as risk awareness.
 

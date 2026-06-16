@@ -118,7 +118,7 @@ Task-specific design creates overhead that becomes a liability in some contexts:
 
 - **Fluid task boundaries**: Early-stage projects with poorly understood tasks require constant refactoring. A single broad agent evolving with the project is cheaper than narrow agents rebuilt every sprint.
 - **Interactive use**: Splitting "review this diff and update the changelog" across two agents adds friction where one agent with two instructions suffices.
-- **High coordination cost**: Tightly interdependent tasks (e.g., a canary promote that triggers secret rotation based on the deploy result) incur inter-agent communication complexity narrow scope does not eliminate.
+- **High coordination cost**: Tightly interdependent tasks (e.g., a canary promote that triggers secret rotation based on the deploy result) incur inter-agent communication complexity narrow scope does not eliminate — the coordination tax [specialized agent roles](specialized-agent-roles.md) also pay.
 - **Small teams with low agent volume**: The maintenance advantage only materialises when multiple agents coexist. One or two automated tasks get no isolation benefit.
 
 ## Key Takeaways

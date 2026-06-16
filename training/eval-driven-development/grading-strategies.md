@@ -59,7 +59,7 @@ def grade_code_based(output, expected):
     return "PASS", None
 ```
 
-**Strengths**: fast, deterministic, no external dependencies, easy to debug. When a code-based grader fails, you know exactly why.
+**Strengths**: fast, deterministic, no external dependencies, easy to debug — the qualities that make a test suite the strongest [outcome grader](../../verification/grade-agent-outcomes.md). When a code-based grader fails, you know exactly why.
 
 **Weakness**: limited to what can be verified programmatically. Cannot assess style, coherence, factual accuracy of free-form text, or whether an explanation is helpful.
 
@@ -86,7 +86,7 @@ Using a model to grade another model's output enables evaluation at scale for fr
 
 **Key design decisions**:
 
-**Score dimensions independently.** Track individual scores for each quality dimension rather than relying solely on a single aggregate. An output can be factually accurate but incomplete, or complete but citing low-quality sources. A single pass/fail hides which dimension failed. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
+**Score dimensions independently.** Track individual scores for each quality dimension rather than relying solely on a single aggregate, as the [LLM-as-judge pipeline](../../workflows/llm-as-judge-evaluation.md) does. An output can be factually accurate but incomplete, or complete but citing low-quality sources. A single pass/fail hides which dimension failed. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
 
 ```python
 RUBRIC = """
@@ -124,7 +124,7 @@ Human grading is the gold standard — it can assess anything. It is also the sl
 - Novel failure modes not yet covered by the rubric
 - Safety-critical evaluations where automated grading errors are unacceptable
 
-**In practice**: human grading is the calibration layer, not the production layer. Grade a sample with humans, use those grades to calibrate an LLM judge, then use the LLM judge for scale. Periodically re-sample with humans to detect judge drift.
+**In practice**: human grading is the calibration layer, not the production layer — the [golden-dataset curation](../../verification/human-review-golden-dataset-curation.md) step. Grade a sample with humans, use those grades to calibrate an LLM judge, then use the LLM judge for scale. Periodically re-sample with humans to detect judge drift.
 
 ---
 

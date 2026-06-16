@@ -9,7 +9,7 @@ aliases:
   - VS Code Agents App
   - Agent-Native Parallel Execution
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # VS Code Agents App: Agent-Native Parallel Task Execution
@@ -27,7 +27,7 @@ The [VS Code Agents app](https://code.visualstudio.com/updates/v1_115) (introduc
 Each session in the Agents app is an independent agent context:
 
 - **Workspace config inheritance** — custom instructions and MCP server configuration propagate automatically from workspace settings. You do not configure each session separately; all sessions operate under the same behavioral constraints as the main editor.
-- **Project isolation** — sessions can target different projects simultaneously. A refactor in one repo, a documentation pass in another, and a test-writing run in a third can all execute at the same time.
+- **Project isolation** — sessions can target different projects simultaneously. A refactor in one repo, a documentation pass in another, and a test-writing run in a third can all execute at the same time — the [fan-out shape](agent-composition-patterns.md) applied across projects.
 - **Headless execution** — sessions run without requiring the editor's foreground. You observe status in the Agents panel; the main editor remains unblocked.
 
 ## The send_to_terminal Tool

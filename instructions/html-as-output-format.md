@@ -9,7 +9,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # HTML as Agent Output Format: When to Ask for HTML Instead of Markdown
@@ -43,7 +43,7 @@ Each takes spatial information Markdown flattens — call graphs, severity, moti
 Switch back to Markdown when:
 
 - **Output flows into a Markdown-rendering surface** — GitHub issue/PR comments, Slack, READMEs, docs sites, CI annotations. HTML appears as raw tags or is escaped.
-- **Token budget dominates** — small models, free tiers, batch pipelines pay the verbosity tax without using the interactive layer.
+- **Token budget dominates** — small models, free tiers, batch pipelines pay the verbosity tax against a tight [context budget](../context-engineering/context-budget-allocation.md) without using the interactive layer.
 - **The artifact is read once and discarded** — a one-line answer, a quick command. Interactive scaffolding adds no signal.
 - **The output is post-processed programmatically** — Markdown is simpler to parse than agent-emitted HTML with arbitrary inline styles.
 
@@ -81,11 +81,11 @@ Output-format guidance belongs in the most precise section of the system prompt 
 
 ## Why the Mechanism Works
 
-Output format determines what the human can do with the artifact after the model stops talking. A Markdown plan is read, then the reader context-switches to act on it. An HTML plan encodes the next workspace inline — filters on the triage list, tabs in the explainer, severity columns on the review. The marginal token cost is dominated by the value of interactivity in the cases that warrant it. For ad-hoc replies that lack those affordances, the cost-benefit inverts — the technique is conditional, not a default.
+Output format determines what the human can do with the artifact after the model stops talking. A Markdown plan is read, then the reader context-switches to act on it. An HTML plan encodes the next workspace inline — filters on the triage list, tabs in the explainer, severity columns on the review — the kind of precise output-format directive [system prompt altitude](system-prompt-altitude.md) places well. The marginal token cost is dominated by the value of interactivity in the cases that warrant it. For ad-hoc replies that lack those affordances, the cost-benefit inverts — the technique is conditional, not a default.
 
 ## Key Takeaways
 
-- Markdown won the default by token efficiency on small context windows; on frontier models that constraint is no longer dominant for ad-hoc artifacts.
+- Markdown won the default by token efficiency on the 8,192-token windows of the GPT-4 era; on frontier models that constraint is no longer dominant for ad-hoc artifacts.
 - HTML pays off when the artifact will be opened in a browser as an end state — review pages, explainers, plans, reports, comparisons, custom editors.
 - Markdown still wins when output flows into a Markdown-rendering surface, when token budgets dominate, when the artifact is read once, or when the output is parsed programmatically.
 - Specify "self-contained, inline styles" in the prompt to avoid CDN dependence; never render agent-emitted HTML in a privileged surface.
@@ -113,7 +113,7 @@ for the author. Add filter buttons to show only files at a given risk
 level. Keep all CSS inline; no external scripts.
 ```
 
-The reply is one HTML file the reviewer opens in a browser, filters to the high-risk files, and walks through linearly. It survives the session, is shareable as a link, and gives the reviewer the interactive layer they were going to build manually anyway.
+The reply is one HTML file the reviewer opens in a browser, filters to the high-risk files, and walks through linearly — the format-to-task match [controlling agent output](controlling-agent-output.md) is built on. It survives the session, is shareable as a link, and gives the reviewer the interactive layer they were going to build manually anyway.
 
 The HTML version costs more tokens. It is worth them because the reviewer opens the file in a browser and acts on it, rather than skimming and discarding.
 

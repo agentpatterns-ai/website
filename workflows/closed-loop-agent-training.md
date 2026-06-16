@@ -46,7 +46,7 @@ This graph encodes which tool sequences are structurally valid without requiring
 
 ### Step 2: Constraint-Aware Trajectory Sampling
 
-Walk the tool graph using depth-first exploration with constraint tracking. At each step, maintain a memory buffer of available output values from prior tool calls. Only sample tool invocations whose required parameters can be satisfied by the buffer or by realistic synthetic inputs.
+Walk the [tool graph](../tool-engineering/mcp-client-server-architecture.md) using depth-first exploration with constraint tracking. At each step, maintain a memory buffer of available output values from prior tool calls. Only sample tool invocations whose required parameters can be satisfied by the buffer or by realistic synthetic inputs.
 
 This produces multi-step trajectories that respect schema constraints by construction -- no hallucinated arguments, no impossible parameter combinations.
 
@@ -94,7 +94,7 @@ For comparison, prior work required 26,000-60,000 manually curated examples to a
 
 The core mechanism is distribution alignment: training trajectories are derived from the exact same tool definitions the model will encounter at inference time. Unlike general-purpose instruction tuning -- where training data is drawn from a broad distribution that only partially overlaps with any given deployment -- schema-derived trajectories are guaranteed to cover the actual parameter types, argument shapes, and data-flow dependencies the model needs to navigate. The model never encounters a tool signature in production that it hasn't seen structurally during training.
 
-Trajectory-level optimization amplifies this further. Token-level fine-tuning rewards correct individual tokens but is indifferent to whether the overall tool-call sequence succeeds. Trajectory-level RL (GRPO, PPO with episode-level rewards) directly optimizes for complete workflow success, which better matches the evaluation criterion and suppresses locally-plausible but globally-failing call sequences.
+Trajectory-level optimization amplifies this further ([Agarwal et al., 2026](https://arxiv.org/abs/2603.21630)). Token-level fine-tuning rewards correct individual tokens but is indifferent to whether the overall tool-call sequence succeeds. Trajectory-level RL (GRPO, PPO with episode-level rewards) directly optimizes for complete workflow success, which better matches the evaluation criterion and suppresses locally-plausible but globally-failing call sequences.
 
 The "match frontier" result holds *within* the trained tool distribution. Counter-evidence cautions against over-reading it: standard fine-tuning leaves small models weak at generalizing to tools they did not see during training -- both genuinely new tools and upgraded versions of familiar ones ([He et al., 2025](https://arxiv.org/abs/2502.18990)). That limit is precisely what the incremental re-training loop below exists to manage: rather than expecting one checkpoint to generalize to schema changes for free, the pattern regenerates trajectories whenever the tool set shifts. Treat the parity claim as bounded to the schemas you actually train on, not as evidence that an 8B model has acquired tool-use competence that transfers to arbitrary unseen tools.
 

@@ -36,9 +36,9 @@ Ronacher's mitigation pins the human voice in place ([Ronacher, 2026](https://lu
 1. I ran this command.
 2. I expected this to happen.
 3. This happened instead.
-4. Here is the exact error or log.
+4. Here is the exact error or log — pasted verbatim, like the `src/session/log.rs:182:9` trace in the example below.
 
-Everything else — root-cause guess, suggested fix, related-code analogies — goes in a follow-up comment, not the issue body. The format leaves the LLM no "root cause" field to fill.
+Everything else — root-cause guess, suggested fix, related-code analogies — goes in a follow-up comment, not the issue body. The format leaves the LLM no "root cause" field to fill, the field [Ronacher, 2026](https://lucumr.pocoo.org/2026/5/24/pi-oss/) shows it otherwise stuffs with confident speculation.
 
 ## Example
 

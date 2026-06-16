@@ -108,7 +108,7 @@ The verbatim snippets come from [Running Codex safely at OpenAI](https://openai.
 - The triad is sandbox + approval policy + auto-review reviewer + agent-native telemetry, composed; treat the four as one posture or do not adopt the pattern.
 - Auto-review is a *reviewer swap*, not a permission grant — it does not expand writable roots, enable network access, or weaken protected paths.
 - Adopt the triad only when action volume is high enough to fatigue a human reviewer, the configuration surface is admin-enforced, OTel telemetry is wired, and irreversible actions are *not* routed through auto-review.
-- The dominant failure mode is approval fatigue causing escape to YOLO mode or overly permissive prefix rules — the triad addresses that failure, not the underlying sandbox bypass.
+- The dominant failure mode is [approval fatigue](pre-execution-command-risk-classification.md) causing escape to YOLO mode or overly permissive prefix rules — the triad addresses that failure, not the underlying sandbox bypass.
 - LLM-as-judge brittleness is a real attack surface against auto-review; pair the reviewer with rate-limited rejection trajectories and external monitoring, not blind trust.
 
 ## Related

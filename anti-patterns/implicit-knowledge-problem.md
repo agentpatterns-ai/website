@@ -65,7 +65,7 @@ Encode conventions as lint rules and CI checks. Agents respond to pass/fail sign
 Knowledge externalization adds overhead proportional to churn. Conditions where the cure is worse than the disease:
 
 - **Rapidly-changing conventions** — in early-stage projects where naming, structure, and patterns shift weekly, an AGENTS.md capturing yesterday's convention actively misleads agents. Stale documentation causes more silent errors than no documentation.
-- **One-person projects** — the problem is social: conventions exist only in one mind because there is no institutional memory to externalize. An instruction file in a solo codebase adds write cost with minimal agent benefit; discoverable code structure does more.
+- **One-person projects** — the problem is social: conventions exist only in one mind because there is no institutional memory to externalize. An instruction file in a solo codebase adds write cost with minimal agent benefit; [discoverable context](../context-engineering/discoverable-vs-nondiscoverable-context.md) in the code structure does more.
 - **The convention is already discoverable** — agents read code. Naming patterns evident from 50+ files don't need an AGENTS.md entry; adding them creates redundancy with no enforcement benefit.
 - **Overly large instruction files** — monolithic AGENTS.md that capture everything become noisy enough that agents hallucinate compliance. Keep files thin and point to reference directories; prefer mechanical enforcement over documentation for stable rules.
 

@@ -16,7 +16,7 @@ maturity: established
 
 # Continuous Autonomous Task Loop
 
-> A self-directed agent loop that reads a task backlog, selects the next item, executes it via a ReAct inner loop, commits results, and repeats — with fresh context per iteration and exponential-backoff rate-limit handling.
+> A self-directed agent loop reads a task backlog, executes each item via a ReAct inner loop, commits, and repeats with fresh context per iteration.
 
 ## How the Loop Works
 
@@ -149,5 +149,5 @@ The `--no-cache` flag ensures a genuinely clean context each cycle. Non-zero exi
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — human-triggered per-task delegation; the supervised alternative
 - [Parallel Agent Sessions](parallel-agent-sessions.md) — horizontal scaling via simultaneous sessions; complements this pattern's sequential execution
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — the upstream skill that produces the atomic, unambiguous tasks this loop requires
-- [Headless Claude in CI](headless-claude-ci.md) — non-interactive flags (`-p`, `--max-turns`) that complement `--dangerously-skip-permissions` for fully unattended runs
 - [The Plan-First Loop](plan-first-loop.md) — the design-before-code variant for non-trivial tasks where this pattern's mechanical execution is unsafe
+- [Continuous AI: A Navigation Map of Always-On Agent Workflows](continuous-ai.md) — the parent map of the continuous-* and triage families this loop belongs to

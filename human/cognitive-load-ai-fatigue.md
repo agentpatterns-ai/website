@@ -11,7 +11,7 @@ aliases:
   - verification anxiety
   - decision fatigue from oversight
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Managing Cognitive Load and AI Fatigue for Sustainable Agent Use
@@ -30,9 +30,9 @@ The underlying mechanism is working memory saturation. Human working memory is s
 
 **Output review fatigue.** Reading and validating generated code all day is not passive. Every suggestion requires a judgment call — accept, modify, reject. Over a full day, this load accumulates even when individual decisions are fast.
 
-**Context-switch cost.** Moving between AI-assisted work and independent reasoning has a switching cost. Mode boundaries are rarely clean — AI-augmented work establishes a different cognitive rhythm than unassisted deep work, and the transition overhead compounds across repeated shifts within a session.
+**[Context-switch cost.](attention-management-parallel-agents.md)** Moving between AI-assisted work and independent reasoning has a switching cost. Mode boundaries are rarely clean — AI-augmented work establishes a different cognitive rhythm than unassisted deep work, and the transition overhead compounds across repeated shifts within a session.
 
-**Decision fatigue from oversight.** Agentic workflows require monitoring and correcting AI behavior in real time. Sustained oversight of a probabilistic system differs from writing code directly — humans have limited tolerance before quality degrades.
+**[Decision fatigue from oversight.](../security/safe-command-allowlisting.md)** Agentic workflows require monitoring and correcting AI behavior in real time. Sustained oversight of a probabilistic system differs from writing code directly — humans have limited tolerance before quality degrades.
 
 **Verification anxiety.** Generated output may be wrong without indicating where. This ambient uncertainty differs from reviewing human-written code, where error patterns are more predictable.
 
@@ -40,7 +40,7 @@ The underlying mechanism is working memory saturation. Human working memory is s
 
 ### Batch Review, Not Continuous Review
 
-Reviewing AI output as a continuous stream is more fatiguing than batching review into discrete windows. Where the workflow allows, complete a generation task, then review the full output — rather than evaluating each line as it appears. Sustained evaluation of a probabilistic output stream forces the same micro-decision loop repeatedly; batching converts many small interrupts into a single focused review pass.
+Reviewing AI output as a continuous stream is more fatiguing than batching review into discrete windows. Where the workflow allows, complete a generation task, then review the full output — rather than evaluating each line as it appears. Sustained evaluation of a probabilistic output stream forces the same micro-decision loop repeatedly; batching converts many small interrupts into a single [focused review pass](bottleneck-migration.md).
 
 ### Scope Limits Per Session
 
@@ -48,7 +48,7 @@ Set explicit scope limits on agentic tasks per session. Long-running agents requ
 
 ### Designated Non-AI Work Blocks
 
-Reserve blocks for architecture decisions, debugging novel failures, and performance analysis requiring deep codebase knowledge. These blocks also serve as cognitive recovery from AI-assisted mode.
+Reserve blocks for architecture decisions, debugging novel failures, and performance analysis requiring [deep codebase knowledge](context-ceiling.md). These blocks also serve as cognitive recovery from AI-assisted mode.
 
 ### When Not to Use AI
 
@@ -62,7 +62,7 @@ In these scenarios, the overhead of directing and reviewing exceeds the value re
 
 ## Team-Level Considerations
 
-Individual fatigue patterns aggregate into team-level risk. Teams where senior engineers review all AI output face a bottleneck: high performers carry disproportionate load. Distributing review responsibility and establishing standards that don't require expert judgment for every case reduces concentration.
+Individual fatigue patterns aggregate into team-level risk. Teams where senior engineers review all AI output [face a bottleneck](bottleneck-migration.md): high performers carry disproportionate load. Distributing review responsibility and establishing standards that don't require expert judgment for every case reduces concentration.
 
 Adoption pressure that pushes engineers to use AI assistants before they have effective mental models creates additional stress. When the mental model is incomplete, every AI output requires more verification effort — the BCG study found that high oversight demands are the most draining aspect of AI work, raising mental fatigue 12% and information overload 19% compared to lower-oversight usage.
 

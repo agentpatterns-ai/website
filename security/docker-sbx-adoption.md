@@ -10,7 +10,7 @@ aliases:
   - Docker Sandboxes for agents
   - sbx adoption checklist
 last_reviewed: 2026-06-03
-maturity: established
+maturity: emerging
 ---
 
 # Docker sbx Adoption for Coding Agents
@@ -51,7 +51,7 @@ This closes most container-era leak paths — shared-kernel CVEs, `DOCKER_HOST` 
 - Instantiates [dual-boundary sandboxing](dual-boundary-sandboxing.md) — filesystem boundary at the VM, network boundary at the host proxy.
 - Ships the [scoped credentials proxy pattern](scoped-credentials-proxy.md) as a default — a compromised agent cannot read its own auth token.
 - Policy applies only inside the VM, so [sandbox rules stay scoped to harness-owned tools](sandbox-rules-harness-tools.md); third-party MCP servers outside the sandbox still need their own review.
-- `--template` and `sbx template save` extend [prebuilt agent environments](../agent-design/prebuilt-agent-environments.md) — pin base digests, rebuild on lock-file change.
+- `--template` and `sbx template save` extend [prebuilt agent environments](../agent-design/cloud-agent-session-bootstrap.md) — pin base digests, rebuild on lock-file change.
 
 ## Watch-This-Space Caveats
 
@@ -100,7 +100,7 @@ The `policy log` output names the matched rule and proxy type for every contacte
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Scope Sandbox Rules to Harness-Owned Tools](sandbox-rules-harness-tools.md)
-- [Prebuilt Agent Environments](../agent-design/prebuilt-agent-environments.md)
+- [Prebuilt Agent Environments](../agent-design/cloud-agent-session-bootstrap.md)
 - [Subprocess PID Namespace Sandboxing](subprocess-pid-namespace-sandboxing.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Secrets Management for Agents](secrets-management-for-agents.md)

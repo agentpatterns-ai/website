@@ -10,7 +10,7 @@ aliases:
   - agent-generated ramp-up guide
   - agent synthesised onboarding artefact
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Agent-Generated Onboarding Guide as a Durable Artefact
@@ -47,7 +47,7 @@ The Claude Code best-practices guide explicitly frames this kind of durable arte
 
 The causal mechanism is that an agent with codebase search and file-reading tools can assemble a repository-wide view in a single synthesis pass and compress it into a map for human consumption. [RepoAgent (arXiv 2402.16667)](https://arxiv.org/abs/2402.16667) formalises this as a framework for LLM-generated repository-level documentation, motivated by the observation that hand-written docs drift from implementation within weeks. The artefact amortises the comprehension cost: the human reviews once, the artefact serves many subsequent readers.
 
-The durable form also enables patterns the conversational form cannot:
+The durable form also enables patterns the [conversational form](codebase-qa-onboarding.md) cannot:
 
 - A newcomer can read it before their first terminal session, so they arrive with a mental model rather than constructing one from cold.
 - Reviewers can audit the *claims* the artefact makes, caught early rather than propagating through individual onboarding sessions.
@@ -81,7 +81,7 @@ Regeneration-on-trigger bounds drift by the frequency of significant change rath
 The artefact pattern has specific failure conditions. Prefer the interactive Q&A form, or skip onboarding tooling entirely, when any of these apply:
 
 - **Solo or two-person teams** — there is no audience downstream of the author. Regeneration and review cost more than the onboarding time saved.
-- **Rapidly-changing greenfield codebases** — the artefact is stale before the next teammate arrives. Live Q&A produces better results because it reflects current code.
+- **Rapidly-changing [greenfield codebases](agent-driven-greenfield.md)** — the artefact is stale before the next teammate arrives. Live Q&A produces better results because it reflects current code.
 - **Teams without review discipline** — unreviewed generated guides become a hallucination vector. Agents fabricate file paths and invent architectural rationale; the Claude Code best-practices guide warns that over-specified auto-generated docs cause agents to "ignore half of it because important rules get lost in the noise," and the same noise confuses humans ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)).
 - **Codebases dominated by tacit knowledge** — the agent reads what is in the repo; it cannot extract judgments that live in senior engineers' heads. The artefact will look complete while missing the conventions that actually matter. Pair with [encoding tacit knowledge](encoding-tacit-knowledge.md) rather than relying on synthesis alone.
 - **Over-reliance that deepens comprehension debt** — if newcomers read only the artefact and never engage with source, [comprehension debt](../anti-patterns/comprehension-debt.md) accumulates. Treat the guide as a map, not a substitute for the terrain.
@@ -118,7 +118,7 @@ claude /team-onboarding --out docs/onboarding/ramp-up.md
 ## Key Takeaways
 
 - The artefact pattern shifts onboarding from repeated individual Q&A to one-shot synthesis plus amortised review, producing a version-controlled map that survives across teammates.
-- The durable artefact typically covers entry points, hot files, conventions, must-read history, and glossary — content an agent with repository access can reliably produce.
+- The durable artefact typically covers entry points, hot files, conventions, must-read history, and glossary — the reader-facing content an agent with repository access produces from the same scan that generates CLAUDE.md.
 - Tie regeneration to architectural events, not the calendar — this bounds drift by significant change rather than by a fixed cadence.
 - The pattern fails on solo teams, rapidly-changing greenfield code, review-less cultures, and tacit-knowledge-heavy codebases; prefer interactive Q&A or skip the tooling in those conditions.
 - Review the generated guide the way you review agent code output: verify claims against the tree, check history against `git log`, and flag overgeneralisations rather than merging the first pass.

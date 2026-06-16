@@ -23,7 +23,7 @@ maturity: established
 
 ## The Gating Problem
 
-Every human approval gate in an agent pipeline has two costs: latency (the agent waits) and friction (the human interrupts their work). Placed at the wrong points, gates make automation slower than doing the work manually. Placed at no points, the first agent error that reaches production becomes a support incident.
+Every human approval gate in an agent pipeline has two costs: latency (the agent waits) and friction (the human interrupts their work). Placed at the wrong points — the misplacement the [risk-based shipping](../verification/risk-based-shipping.md) matrix exists to prevent — gates make automation slower than doing the work manually. Placed at no points, the first agent error that reaches production becomes a support incident.
 
 The goal is gate placement that captures actual risk without neutralizing the value of automation.
 
@@ -75,24 +75,24 @@ The human gate at merge/publish is a decision review, not an execution review. T
 
 Not:
 
-- Did the agent write valid markdown? (execution — CI handles this)
+- Did the agent write valid `Markdown`? (execution — CI handles this)
 - Is the YAML frontmatter syntactically correct? (execution — linting handles this)
 
 Execution review is waste. Decision review is value.
 
 ## Working Example
 
-A typical agent-driven content pipeline places one human gate: PR review before merge. Research, drafting, initial review, and PR creation all run without human approval — they are reversible (close the PR, update the branch). The human approves the merge, which publishes the content. The gate captures public impact without interrupting the automated stages.
+A typical agent-driven content pipeline places 1 human gate: PR review before merge. Research, drafting, initial review, and PR creation all run without human approval — they are reversible (close the PR, update the branch). The human approves the merge, which publishes the content. The gate captures public impact without interrupting the automated stages.
 
 ## Supervision Modes: In, On, and Out of the Loop
 
-Gate placement answers *where* the human engages. Supervision mode answers *how*. Three modes exist on a spectrum:
+Gate placement answers *where* the human engages. Supervision mode answers *how*. 3 modes exist on a spectrum:
 
-**In the loop** — the agent pauses at gates, the human approves or rejects before the agent proceeds. This is the model described above. The human is an active participant in the pipeline. Best for: high-risk workflows, early-stage trust building, compliance-sensitive contexts.
+**In the loop** — the agent pauses at gates, the human approves or rejects before the agent proceeds. This is the model described above. The human is an active participant in the pipeline. Best for: high-risk workflows, early-stage trust building, and the compliance-sensitive contexts that [agent governance policies](agent-governance-policies.md) codify.
 
 **On the loop** — the agent runs autonomously, shipping changes without pausing. The human monitors the output stream and intervenes only when something looks wrong. Geoffrey Huntley describes this as "I'm on the loop, not in the loop" — watching agent output from a phone or dashboard and stepping in only when the risk threshold is crossed ([source](https://x.com/GeoffreyHuntley/status/2030683143360119292)). Best for: proven workflows with [risk-based shipping](../verification/risk-based-shipping.md), where low-risk changes auto-ship and high-risk changes trigger gates.
 
-**Out of the loop** — fully autonomous, no human oversight. The agent operates independently, typically in CI/CD or scheduled automation. Best for: deterministic tasks with automated validation (linting, formatting, dependency updates with passing tests). Risky for any task where the error cost exceeds the automation value.
+**Out of the loop** — fully autonomous, no human oversight. The agent operates independently, typically in CI/CD or scheduled automation. Best for: the low-risk end of the [risk-based shipping](../verification/risk-based-shipping.md) spectrum — deterministic tasks with automated validation (linting, formatting, dependency updates with passing tests). Risky for any task where the error cost exceeds the automation value.
 
 ### Matching Mode to Risk
 
@@ -118,10 +118,10 @@ Each migration reduces human effort and increases throughput — but only when t
 
 Gates are not free insurance — they degrade as workload rises. A reasonable counter-position: placing humans in the loop at all creates a false sense of safety that can be worse than no gate.
 
-- **Rubber-stamping under load** — when reviewers approve dozens or hundreds of agent actions per day, decision fatigue turns review into a reflex. The gate exists in the workflow diagram but not in practice.
+- **Rubber-stamping under load** — when reviewers approve dozens or hundreds of agent actions per day, decision fatigue turns review into a reflex — the review-throughput bottleneck [humans and agents in development loops](humans-agents-development-loops.md) traces in detail. The gate exists in the workflow diagram but not in practice.
 - **Automation complacency** — the more reliable the agent appears, the less vigilant the human becomes. Operators whose job is "mostly approving" lose the ability to catch the rare error they were hired to catch ([source](https://www.defensenews.com/opinion/2026/03/26/the-militarys-fabled-human-in-the-loop-for-ai-is-dangerously-misleading/)).
 - **Bottleneck batching** — gates that require synchronous approval force the agent to queue work. Humans then review in batches, which compresses attention per item and pushes reviewers toward "approve all" heuristics.
-- **Mismatched cadence** — at machine speed, a single human cannot meaningfully supervise an agent that fires tens of actions per minute. The gate becomes either a rubber stamp or a throughput cap.
+- **Mismatched cadence** — at machine speed, a single human cannot meaningfully supervise an agent that fires tens of actions per minute. The gate becomes either a rubber stamp or a throughput cap — the [bottleneck migration](../human/bottleneck-migration.md) failure mode in a different guise.
 
 Mitigations: rotate reviewers to prevent complacency, include negative-sample injections in review queues to keep attention calibrated, and prefer asynchronous on-the-loop monitoring with alerting over synchronous gates once the workflow's error rate is measured.
 

@@ -11,7 +11,7 @@ aliases:
   - intent-based skill scanning
   - skill intent verification
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Semantic Intent Validation for Agent Skills
@@ -22,7 +22,7 @@ maturity: established
 
 Static analysis of skills detects 90.7% of adversarial samples using YARA-style patterns, AST dataflow, and credential regex ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081)). The remaining 2.5% evade both detection and model alignment because the attack is not a payload at all. Document-Driven Implicit Payload Execution (DDIPE) embeds malicious logic as code examples inside skill documentation. The example is syntactically benign and lexically innocent. The agent reproduces the pattern during normal task execution — in-context learning makes the documented example authoritative — and the payload assembles at runtime in the agent's generation.
 
-Signatures cannot match what is not in the file. The malicious behavior exists only after the agent synthesises it. Closing this gap requires a check on intent, not syntax.
+Signatures cannot match what is not in the file — this is the 2.5% residual that evades both static detection and model alignment. The malicious behavior exists only after the agent synthesises it. Closing this gap requires a check on intent, not syntax.
 
 [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) covers the threat model and registry-level controls (mirroring, hash pinning, blast-radius containment). What follows is the detection-paradigm shift itself.
 
@@ -63,7 +63,7 @@ Intent validation is the correct response to a narrow class of attacks. It is no
 | Latency-sensitive per-invocation execution | Restrict to intake-time, not every call |
 | Catalog of fewer than ~50 skills | No — manual review by a security engineer outperforms |
 
-The semantic layer adds seconds of latency per scan and produces false positives on legitimate security tooling and pentest utilities. Teams that fail-on-high without review capacity block productive skills. Teams that lower the threshold lose the detection the layer was added to provide. The threat model and the operating budget have to be honest before the architecture is justified.
+The semantic layer adds seconds of latency per scan and produces false positives on legitimate security tooling and pentest utilities. Teams that fail-on-high without review capacity block productive skills. Teams that lower the threshold lose the detection the layer was added to provide. The threat model — typically the [lethal trifecta](lethal-trifecta-threat-model.md) — and the operating budget have to be honest before the architecture is justified.
 
 An intake-time intent check is also not a complete answer. It validates the skill as it enters the catalog, so it is blind to skills that activate conditionally after admission, to post-deployment skill updates, and to runtime behavior that diverges from the scanned artifact. [Securing LLM Agents Need Intent-to-Execution Integrity](https://arxiv.org/abs/2605.16976) argues that intent-vs-behavior validation gives "only partial and non-compositional coverage" and that preserving user intent end-to-end requires four simultaneous properties — tool, instruction, judgment, and data-flow integrity — not a single gate. Treat the intake-time semantic check as one composable layer, paired with runtime monitoring such as a [behavioral firewall](behavioral-firewall-tool-call-trajectories.md), not as the place the problem is solved.
 

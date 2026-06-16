@@ -8,7 +8,7 @@ tags:
   - agent-design
   - workflows
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Permutation Frameworks for Batch Code Generation
@@ -58,7 +58,7 @@ Generate filters for:
 
 Variance across generated permutations is a direct measure of constraint quality. If three generated variations follow different file structures or use different error handling patterns, the constraints are underspecified.
 
-Systematic variance tracking: generate several variations, diff them against each other, and identify where they diverge unnecessarily. Each divergence point maps to a constraint gap. Tighten the constraint, regenerate, and measure again. This iterative loop — generate, measure variance, refine constraints — is the practical refinement process for converging on a stable framework.
+Systematic variance tracking: generate several variations, `diff` them against each other, and identify where they diverge unnecessarily. Each divergence point maps to a constraint gap. Tighten the constraint, regenerate, and measure again. This iterative loop — generate, measure variance, refine constraints — is the practical refinement process for converging on a stable framework.
 
 ## The Role Shift
 
@@ -74,7 +74,7 @@ The bottleneck moves from implementation speed to review throughput. This pairs 
 
 ## Why It Works
 
-Explicit constraints narrow the space of plausible outputs the model draws from when generating each variation. Without constraints, the model resolves structural ambiguity at generation time — choosing file layout, error handling style, naming patterns — and those choices vary across runs. Constraints pre-resolve those decisions: the model can see from the instruction file and reference implementations which choices are fixed, so it no longer samples freely over them. The result is that structural variance collapses toward zero, leaving only variation-specific logic to differ. The instruction file and reference examples act as in-context constraints that reduce randomness in generated output ([Domino](https://arxiv.org/html/2403.06988v1) shows the stronger, formal version of this idea — grammar-constrained decoding that masks the model's output distribution token by token).
+Explicit constraints narrow the space of plausible outputs the model draws from when generating each variation. Without constraints, the model resolves structural ambiguity at generation time — choosing file layout, error handling style, naming patterns — and those choices vary across runs. Constraints pre-resolve those decisions: the model can see from the instruction file and [reference implementations](architectural-foundation-first.md) which choices are fixed, so it no longer samples freely over them. The result is that structural variance collapses toward zero, leaving only variation-specific logic to differ. The instruction file and reference examples act as in-context constraints that reduce randomness in generated output ([Domino](https://arxiv.org/html/2403.06988v1) shows the stronger, formal version of this idea — grammar-constrained decoding that masks the model's output distribution token by token).
 
 ## When It Works and When It Breaks
 

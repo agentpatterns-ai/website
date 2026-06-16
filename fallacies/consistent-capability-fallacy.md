@@ -42,7 +42,7 @@ The natural language interface masks failures. Models produce plausible-looking,
 
 ## Example
 
-A team delegates a complex architectural refactoring task to Claude Code. The model navigates it well, restructuring several services with correct dependency handling. Encouraged, the team delegates a "simpler" task the next sprint: updating multi-step data validation logic across a module. This fails silently — the model propagates an incorrect assumption through all updated paths, and the output looks plausible. No one checks because the model "already proved itself" on a harder task.
+A team delegates a complex architectural refactoring task to Claude Code. The model navigates it well, restructuring several services with correct dependency handling. Encouraged, the team delegates a "simpler" task the next sprint: updating multi-step data validation logic across a module. This fails silently — the model propagates an incorrect assumption through all updated paths, and the output looks plausible. [No one checks](../anti-patterns/trust-without-verify.md) because the model "already proved itself" on a harder task.
 
 The architectural task was heavily represented in training patterns. The validation logic required algorithmic precision the model approximated badly. From the model's perspective, these were not similar tasks.
 
@@ -50,9 +50,9 @@ The architectural task was heavily represented in training patterns. The validat
 
 Treating all tasks as independent capability questions imposes overhead. This becomes counterproductive when:
 
-- **The task class is narrow and well-characterized** — for highly repetitive, formulaic operations (e.g., generating boilerplate CRUD endpoints against a fixed schema), repeated success is evidence that the training distribution covers the pattern well. Per-task verification is still warranted, but autonomy calibration based on prior runs is reasonable.
+- **The task class is narrow and well-characterized** — for highly repetitive, formulaic operations (e.g., generating boilerplate CRUD endpoints against a fixed schema), repeated success is evidence that the training distribution covers the pattern well. [Per-task verification](../verification/incremental-verification.md) is still warranted, but autonomy calibration based on prior runs is reasonable.
 - **The domain has high benchmark saturation** — tasks that appear verbatim or structurally in widely-used public benchmarks (standard algorithm implementations, common regex patterns) show more stable performance than tasks in unseen problem spaces. The jaggedness is real, but not uniform across all task types.
-- **Verification cost exceeds failure cost** — for low-stakes, easily-reverted operations, requiring explicit re-verification of each task type may slow delivery more than occasional failures cost. The pattern's guidance must be weighed against the practical verification budget.
+- **Verification cost exceeds failure cost** — for low-stakes, easily-reverted operations, [scaling re-verification to risk](../verification/risk-based-task-sizing.md) avoids slowing delivery more than occasional failures cost. The pattern's guidance must be weighed against the practical verification budget.
 
 The fallacy is most dangerous for tasks that appear familiar but require compositional reasoning the model has not practiced in exactly that combination.
 

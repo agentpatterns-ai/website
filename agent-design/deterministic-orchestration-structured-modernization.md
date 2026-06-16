@@ -35,7 +35,7 @@ The empirical case for deterministic orchestration on structured tasks comes fro
 The pattern wins on tasks with all of:
 
 - **Stable workflow shape** — the step sequence is enumerable in code (parse, translate per construct, validate, integrate). Branches exist but are knowable.
-- **Repeated execution** — the workflow runs many times over a corpus, so the cost of encoding the orchestration amortises.
+- **Repeated execution** — the workflow runs many times over a corpus, so the cost of encoding the orchestration amortises (the [cost-aware agent design](cost-aware-agent-design.md) calculus).
 - **Per-step uncertainty bounded to the LLM call** — the genuinely uncertain decision is *what does this construct translate to*, not *what should the agent do next*. Legacy modernization fits when source corpora share structural conventions: COBOL-to-Python, COBOL-to-Java, Java 8-to-17 upgrades, framework migrations.
 
 ```mermaid
@@ -79,8 +79,8 @@ The orchestrator owns:
 The pattern backfires on workloads that violate its preconditions.
 
 - **Heterogeneous corpora.** When source programs share little structure — embedded JCL, vendor extensions, undocumented business logic in comments — the deterministic orchestrator becomes a switch statement that costs more to maintain than the tokens it saves. The branch count grows faster than the corpus does.
-- **Evolving workflow.** Deterministic orchestration encodes the workflow in code. Iterating on the workflow itself requires code changes, code review, and redeploy. LLM-controlled orchestration iterates by editing the prompt, which is faster for early exploration.
-- **Mid-execution discovery.** If the workflow's shape depends on findings only revealed at runtime — "this program calls an undocumented vendor library" — the deterministic orchestrator hits a path it doesn't have. An LLM-controlled agent can re-plan; a deterministic one needs a code change.
+- **Evolving workflow.** Deterministic orchestration encodes the workflow in code, the core move of [harness engineering](harness-engineering.md). Iterating on the workflow itself requires code changes, code review, and redeploy. LLM-controlled orchestration iterates by editing the prompt, which is faster for early exploration.
+- **Mid-execution discovery.** If the workflow's shape depends on findings only revealed at runtime — "this program calls an undocumented vendor library" — the deterministic orchestrator hits a path it doesn't have. An LLM-controlled agent can re-plan; a deterministic one needs a code change — the [agentless-vs-autonomous](agentless-vs-autonomous.md) trade-off in miniature.
 - **One-off jobs.** The orchestration code only pays back across many runs. For a single migration, the engineering cost of building the scaffold exceeds the token cost of an agentic run.
 
 ## Example

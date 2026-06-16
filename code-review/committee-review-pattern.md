@@ -74,7 +74,7 @@ The committee pattern adds cost, latency, and orchestration complexity that can 
 
 - **Low-risk or trivial changes** — typo fixes, config tweaks, and one-liners rarely benefit from multi-reviewer overhead. A single scoped reviewer or no agent review costs less and finishes faster.
 - **Misaligned reviewer criteria** — when two reviewers evaluate overlapping dimensions (e.g., both correctness and security flag the same auth logic from different angles), the orchestrator receives contradictory feedback that is harder to act on than a single consolidated review.
-- **High-frequency iteration loops** — many small revisions with three or more reviewers per round multiply token cost and latency; consolidate reviewers until the implementation stabilizes.
+- **High-frequency iteration loops** — many small revisions with 3 or more reviewers per round multiply token cost and latency; consolidate reviewers until the implementation stabilizes.
 - **Underspecified tasks** — without clear acceptance criteria, reviewers FAIL for different reasons across rounds with no convergence. Fix task specification before scaling reviewer count.
 
 ## Cross-Model Adversarial Review
@@ -97,7 +97,7 @@ File-level risk classification drives automatic escalation — changes to authen
 
 ## Key Takeaways
 
-- Separate implementer and reviewer roles — [self-review](../agent-design/agent-self-review-loop.md) has inherent blind spots
+- Separate implementer and reviewer roles — [self-review](agent-self-review-loop.md) has inherent blind spots
 - Assign each reviewer a single evaluation dimension; do not combine concerns in one reviewer
 - Run reviewers in parallel and aggregate before routing feedback back
 - Require structured output (JSON) from reviewers so the orchestrator can triage without parsing prose

@@ -71,7 +71,7 @@ Native PDFs embed text as character data. Scanned PDFs embed images — OCR is r
 
 - Straightforward English text, minimal layout complexity → **Tesseract** via `pytesseract`. Minimal dependencies, widely supported, sufficient for most office documents.
 - Complex layouts, non-Latin scripts, tables within scans, or low-quality scans → **PaddleOCR** (PP-OCRv5). Significantly higher accuracy on difficult inputs. GPU speeds throughput but CPU works for batch processing.
-- Need PaddleOCR accuracy without the full PaddlePaddle installation → **RapidOCR**. Uses the same models via ONNX; multi-platform and cross-language.
+- Need PaddleOCR accuracy without the full PaddlePaddle installation → **RapidOCR**. Uses the same models via the `onnxruntime` package; multi-platform and cross-language.
 
 Image preprocessing before OCR raises accuracy for all engines: deskewing (rotate to horizontal baseline), denoising, binarization (grayscale → black/white), and scaling to 300 DPI minimum. [OpenCV](https://github.com/opencv/opencv) handles all of these without cloud dependencies.
 

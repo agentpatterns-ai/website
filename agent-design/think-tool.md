@@ -10,7 +10,7 @@ aliases:
   - reasoning checkpoint
   - mid-stream reasoning
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # The Think Tool
@@ -36,7 +36,7 @@ It does not help when tool calls are independent and parallel — there is nothi
 
 ## How It Works
 
-The agent invokes the think tool as a regular tool call. The written "thought" is not shown to the user but is included in the model's context, and the model can use that reasoning when formulating the next action.
+The agent invokes the `think` tool as a regular tool call. The written "thought" is not shown to the user but is included in the model's context, and the model can use that reasoning when formulating the next action.
 
 The tool only fires when the model chooses to use it. If the task is simple or the next step is obvious, the model skips it, so token overhead scales with how often reflection is actually needed.
 

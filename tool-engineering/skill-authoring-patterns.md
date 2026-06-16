@@ -22,6 +22,9 @@ maturity: established
 !!! note "Also known as"
     Skill design patterns, SKILL.md authoring. For the portable skill format itself, see [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md). For the progressive disclosure architecture, see [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md).
 
+!!! info "Canonical home for skill content"
+    This page is the canonical entry point for "skill" content across the site. Skill-related pages in other sections — `workflows/` (library taxonomy and refinement), `verification/` (skill evals), `agent-design/`, `human/`, and `standards/` — link here for authoring rules rather than restate them. The [Related](#related) cluster below maps the satellites.
+
 Sources: [Anthropic's Complete Guide to Building Skills for Claude](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf) (January 2026) and Anthropic's internal practice ([source](https://x.com/trq212/status/2033949937936085378)).
 
 ## Skill Categories
@@ -186,7 +189,7 @@ For critical validations, bundle a script — code is deterministic; language in
 
 ## Why It Works
 
-Skill patterns work because agents are context-constrained token predictors — they produce output proportional to the quality and specificity of their input context. A description field acts as a learned retrieval key: the agent matches incoming user intent against description tokens to decide what to load. Concise, trigger-rich descriptions raise that match probability. Gotchas sections work because they shift the prior toward correct behavior in the narrow set of cases where the base model would otherwise guess wrong; they do not teach the model general knowledge, they override its statistical default for a specific edge case. The delta principle (only write what the base model gets wrong) is efficient because it keeps context small — every token saved in skill instructions is a token available for task reasoning ([source](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)).
+Skill patterns work because agents are context-constrained token predictors — they produce output proportional to the quality and specificity of their input context. A description field acts as a learned retrieval key: the agent matches incoming user intent against description tokens to decide what to load, the [progressive-disclosure](../agent-design/progressive-disclosure-agents.md) gate that keeps the rest of the skill out of the prompt until needed. Concise, trigger-rich descriptions raise that match probability. Gotchas sections work because they shift the prior toward correct behavior in the narrow set of cases where the base model would otherwise guess wrong; they do not teach the model general knowledge, they override its statistical default for a specific edge case. The delta principle (only write what the base model gets wrong) is efficient because it keeps context small — every token saved in skill instructions is a token available for task reasoning ([source](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)).
 
 The free-form prose used here is not the only candidate representation: a structured graph/protocol form (the AIP representation) has been proposed as an alternative to free-form prose for agent skills, argued to improve reliability and editability ([AIP: A Graph Representation for Learning and Governing Agent Skills, 2026](https://arxiv.org/abs/2606.04781)).
 
@@ -195,7 +198,7 @@ The free-form prose used here is not the only candidate representation: a struct
 Apply skill authoring patterns selectively — over-engineering is a real cost:
 
 1. **Simple one-off tasks** — a skill with YAML frontmatter, a Gotchas section, and a CLI entry point for a two-command workflow adds setup overhead with no reliability gain. Inline shell or a single README block is sufficient.
-2. **Rapidly changing APIs** — skills encode domain knowledge that becomes wrong when the underlying API changes. A skill with stale Gotchas is worse than no skill: it actively misdirects the agent. Skills for fast-moving surfaces need an explicit owner and update cadence.
+2. **Rapidly changing APIs** — skills encode domain knowledge that becomes wrong when the underlying API changes, the staleness pressure [Skill Library Evolution](skill-library-evolution.md) tracks. A skill with stale Gotchas is worse than no skill: it actively misdirects the agent. Skills for fast-moving surfaces need an explicit owner and update cadence.
 3. **Skill proliferation** — with many skills loaded, descriptions are shortened to fit a character budget, which strips the trigger keywords that drive selection ([source](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)). A library of 40+ skills degrades all skills' triggering reliability; consolidating rarely-used skills reduces this pressure.
 4. **Security surface expansion** — each skill loaded from an external registry is a potential prompt-injection vector. Malicious skills can direct the agent to invoke tools in ways that don't match their stated purpose. Review all third-party skills before installation, especially those bundling shell scripts.
 
@@ -241,11 +244,11 @@ Asking the agent "When would you use the linear-issue-manager skill?" after savi
 
 ## Related
 
-- [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
-- [CLI-First Skill Design](cli-first-skill-design.md)
+- [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md) — the portable SKILL.md format
+- [CLI-First Skill Design](cli-first-skill-design.md) — the dual-use script shape for executable skills
 - [Skill Frontmatter Reference](skill-frontmatter-reference.md)
-- [Skill Library Evolution](skill-library-evolution.md)
-- [Skill Tool Runtime Enforcement](skill-tool-runtime-enforcement.md)
+- [Skill Library Evolution](skill-library-evolution.md) — lifecycle governance for authored skills
 - [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
-- [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
-- [Credential Hygiene for Agent Skill Authorship](../security/credential-hygiene-agent-skills.md)
+- [Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit](../verification/skill-evals.md) — evaluating an authored skill as a unit
+- [SDLC-Phase Skill Taxonomy](../workflows/sdlc-skill-taxonomy.md) — organizing an authored library by lifecycle phase at scale
+- [Daily-Use Skill Library](../workflows/daily-use-skill-library.md) — encoding a personal engineering process as a small skill set

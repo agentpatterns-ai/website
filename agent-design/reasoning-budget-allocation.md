@@ -33,7 +33,7 @@ graph LR
 
 **Planning — extra-high compute.** Map the problem space: requirements, approach, risks. Errors here propagate through every subsequent step.
 
-**Execution — high compute.** Follow the plan: writing code, running commands. Reduced compute handles mechanical steps while lowering per-step cost.
+**Execution — high compute.** Follow the plan: writing code, running commands. Reduced compute handles mechanical steps while [lowering per-step cost](cost-aware-agent-design.md).
 
 **Verification — extra-high compute.** Check output against requirements, run tests. A missed failure produces false completion.
 
@@ -62,7 +62,7 @@ This stacks with other techniques:
 
 1. **Extended thinking** — maximum reasoning tokens via trigger keyword
 2. **[Plan mode](../tools/claude/plan-mode.md)** — structured planning before execution
-3. **Iterative critique** — systematic [self-review cycles](agent-self-review-loop.md) to catch edge cases
+3. **Iterative critique** — systematic [self-review cycles](../code-review/agent-self-review-loop.md) to catch edge cases
 
 Each layer adds cost; combine them when the task warrants the investment.
 
@@ -93,7 +93,7 @@ Single-step tasks and independent parallel tool calls see no benefit from added 
 The 3% gap between the sandwich (66.5%) and uniform high (63.6%) does not always justify harness complexity. The sandwich is worse than uniform compute when:
 
 - **Phases are not cleanly separable.** Exploratory debugging and interleaved planning/execution force misclassified routing — the sandwich degrades to noisy uniform compute with routing overhead.
-- **Mode-switching adds more bugs than it prevents.** Teams without the budget for reliable planner/executor/verifier routing fare better with a single tier at uniform high reasoning.
+- **Mode-switching adds more bugs than it prevents.** Teams without the budget for reliable [planner/executor/verifier routing](discrete-phase-separation.md) fare better with a single tier at uniform high reasoning.
 - **Verification is cheap relative to planning.** When correctness is checked by tests or types, extra-high model-based verification duplicates what the test harness already does.
 - **Execution dominates the trajectory.** Bulk refactors and migrations spend most tokens in execution; reducing compute there saves little while planning/verification contribute a small share of cost.
 
@@ -142,7 +142,7 @@ In Claude Code skills, add `ultrathink` to the skill content for planning and ve
 - [Discrete Phase Separation](discrete-phase-separation.md)
 - [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
-- [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — pre-generation model tier selection via code health metrics
+- [Code-Health-Gated LLM Tier Routing](auto-model-selection.md) — pre-generation model tier selection via code health metrics
 - [Know When Not to Add Structured Reasoning](../anti-patterns/reasoning-overuse.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md)
 - [Think Tool](think-tool.md)

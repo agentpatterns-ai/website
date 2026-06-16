@@ -7,7 +7,7 @@ tags:
   - tool-agnostic
   - tool-engineering
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Consolidate Agent Tools
@@ -18,7 +18,7 @@ maturity: established
 
 Developers building tool-augmented agents often mirror the underlying API: one tool per endpoint, one tool per operation. This produces a large tool set where agents must chain multiple calls to complete a single logical action — finding a calendar slot and booking it requires two separate tools, two decisions, two opportunities for error.
 
-Agents select tools based on intent. A large set of overlapping or fine-grained tools creates ambiguity at the selection step: the agent must reason about which combination of tools achieves the goal, rather than selecting the tool that directly matches its intent. Per [Anthropic's writing tools for agents post](https://www.anthropic.com/engineering/writing-tools-for-agents), more tools do not improve agent outcomes — thoughtful selection beats abundance.
+Agents select tools by attending to their [descriptions](tool-description-quality.md), matching intent to a tool. A large set of overlapping or fine-grained tools creates ambiguity at the selection step: the agent must reason about which combination of tools achieves the goal, rather than selecting the tool that directly matches its intent. Per [Anthropic's writing tools for agents post](https://www.anthropic.com/engineering/writing-tools-for-agents), more tools do not improve agent outcomes — thoughtful selection beats abundance.
 
 ## Consolidation Principle
 
@@ -43,13 +43,13 @@ This is preferable to flat naming (`search`, `project_search`, `create_task`) wh
 
 ## Why It Works
 
-LLMs select tools by attending to their descriptions in the context window. When descriptions for ten narrow tools compete for attention, the model must reason about which subset achieves the goal — a multi-step inference problem layered on top of the actual task. Fewer, well-scoped tools reduce the selection decision to a direct mapping: intent → tool, rather than intent → combination of tools.
+LLMs select tools by attending to their [descriptions](tool-description-quality.md) in the context window. When descriptions for ten narrow tools compete for attention, the model must reason about which subset achieves the goal — a multi-step inference problem layered on top of the actual task. Fewer, well-scoped tools reduce the selection decision to a direct mapping: intent → tool, rather than intent → combination of tools.
 
 The mechanism is not merely ergonomic. [LongFuncEval (2025)](https://arxiv.org/abs/2505.10570) found that expanding a tool catalog caused accuracy drops of 7–85% depending on the model, with a pronounced [lost-in-the-middle](../context-engineering/lost-in-the-middle.md) effect ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)): the correct tool becomes harder to locate among distractors. Consolidation removes distractors at the source rather than relying on the model to filter them.
 
 ## Context Window Impact
 
-Each tool definition consumes context tokens. A large tool set with many narrow tools consumes context on definitions the agent may never use in a given task. Consolidating tools reduces context footprint proportionally — fewer tools means more context available for task data and reasoning.
+Each tool definition consumes context tokens. A large tool set with many narrow tools consumes context on definitions the agent may never use in a given task. Consolidating tools reduces context footprint proportionally — fewer tools means more context available for task data and reasoning ([token-efficient tool design](token-efficient-tool-design.md)).
 
 This matters most in long-running tasks where context pressure accumulates. A tool set designed for minimal context footprint is a latent performance advantage in complex multi-step workflows.
 
@@ -61,7 +61,7 @@ Consolidation has limits and backfires in specific conditions. Do not merge tool
 - Have significantly different permission requirements — combining them grants excess access to every caller regardless of which sub-task they need
 - Have output schemas so different that a merged interface becomes incoherent — the agent can't reliably pattern-match on the response
 
-**Drawbacks of over-consolidation:** A merged tool that handles too much becomes a black box. When it fails, the agent can't reason about which step failed. A merged `find_and_book_flight` that silently fails at the hold step looks identical to one that fails at confirmation. Narrow tools preserve failure granularity; merged tools trade it away for call-count efficiency.
+**Drawbacks of over-consolidation:** A merged tool that handles too much becomes a black box. When it fails, the agent can't reason about which step failed. A merged `find_and_book_flight` that silently fails at the hold step looks identical to one that fails at confirmation. Narrow tools preserve failure granularity; a merged `find_and_book_flight` trades it away for call-count efficiency.
 
 **The test:** Does the merged tool still map to a single, clear human-understandable action? If it requires a paragraph to describe, it has been over-consolidated. If two sub-tasks are *sometimes* called together but not always, keep them separate and let the agent compose them.
 

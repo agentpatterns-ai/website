@@ -75,7 +75,7 @@ Long-context degradation is the load-bearing mechanism: models retrieve content 
 The technique adds infrastructure overhead and introduces failure modes of its own. Three conditions where it harms more than it helps:
 
 1. **Bug lives in the filter's blind spot.** The noise filter is pattern-matching, not semantic. When the root cause sits in code the filter classifies as redundant — boilerplate that turned out to matter, a "scaffolding" file the bug routed through — the filter removes the evidence the investigator needs. Aggregate accuracy on a benchmark hides the false-negative rate on discarded spans.
-2. **Symptom and cause are decoupled.** The preliminary diagnosis is seeded from the test-failure report, biasing the investigator toward the region consistent with the test's framing. When the symptom (assertion A fails) and root cause (state corrupted three calls earlier in module B) are decoupled, the prior anchors in the wrong place.
+2. **[Symptom and cause are decoupled](../verification/trajectory-decomposition-diagnosis.md).** The preliminary diagnosis is seeded from the test-failure report, biasing the investigator toward the region consistent with the test's framing. When the symptom (assertion A fails) and root cause (state corrupted three calls earlier in module B) are decoupled, the prior anchors in the wrong place.
 3. **No test-failure artifact.** Runtime bugs that pass tests but produce wrong output, agent loops without test runs, and open-ended generation tasks all lack the structured report the diagnosis module consumes. Without that seed, the second pre-filter contributes nothing and the noise-filter overhead remains.
 
 A steelman of the opposite — feed the investigator the raw, unfiltered trajectory — is reasonable for small harnesses (<50k tokens), heterogeneous noise profiles, or workloads where dropping a critical line costs more than the latency saved. As long-context reasoning improves, the noise-filter layer's marginal value shrinks.
@@ -86,13 +86,13 @@ The TrajAudit evaluation runs on RootSE, 93 real-world failure instances drawn f
 
 A repository-level coding agent fails a maintenance task. The captured trajectory holds file dumps, tool-call results, repeated imports, and intermediate diffs. The test runner emits an assertion failure with a stack trace pointing into one module.
 
-**Without pre-filter** — the investigator LLM receives the full trajectory plus the test report. Localization scans the long trajectory against a vague prior; content near the centre is reached late or not at all.
+**Without pre-filter** — the investigator LLM receives the [full trajectory](../context-engineering/lost-in-the-middle.md) plus the test report. Localization scans the long trajectory against a vague prior; content near the centre is reached late or not at all.
 
 **With pre-filter** —
 
 1. Noise filter strips repeated imports, full file dumps where a function would suffice, and scaffolding boilerplate.
 2. Preliminary diagnosis converts the stack trace into hypotheses anchored on the modules named in the trace and their direct callers.
-3. The investigator retrieves filtered spans on demand, starting from those candidates, confirming or refining as it pulls more.
+3. The investigator [retrieves filtered spans on demand](../context-engineering/retrieval-augmented-agent-workflows.md), starting from those candidates, confirming or refining as it pulls more.
 
 The LLM operates on a smaller, prior-anchored window — the regime its long-context attention handles well. The trade-off: if the root cause sits in code the noise filter classified as redundant, the investigator never sees it.
 

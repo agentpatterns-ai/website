@@ -38,7 +38,7 @@ flowchart LR
 
 **Trigger model** — decides whether to invoke the LLM. Suppresses inference on signals of an unwanted completion (mid-word typing, rapid deletion, ambiguous scope).
 
-**Filter model** — evaluates the completion before display. Catches suggestions the LLM produced confidently but the developer would reject.
+**Filter model** — evaluates the completion before display; JetBrains runs this stage locally before showing a suggestion. Catches suggestions the LLM produced confidently but the developer would reject.
 
 JetBrains' production filter compiles to [2.5 MB and predicts in 1–2 ms](https://blog.jetbrains.com/ai/2025/03/ai-code-completion-less-is-more/), running locally with zero latency overhead.
 
@@ -107,7 +107,7 @@ Classifiers trained on aggregate accept/reject data may not generalize to every 
 
 - **Atypical coding patterns** — narrow domains (embedded, novel DSLs) diverge from the training distribution, so a filter calibrated on the majority suppresses high-value completions.
 - **Exploratory sessions** — learning a framework or prototyping drops natural accept rate. A filter tuned to production rates suppresses exactly when completions are most valuable.
-- **Rapid style evolution** — as habits change (verbose to terse, new idioms), a slow-updating filter lags until it observes enough fresh signal to recalibrate.
+- **Rapid style evolution** — as habits change (verbose to terse, new idioms), a slow-updating filter lags until it observes enough fresh signal to recalibrate; online-learning models like Cursor's Tab close this gap faster than statically-trained classifiers.
 
 When gating degrades DX, the fix is exposure controls: loosen the filter, accumulate fresh data, then re-enable.
 

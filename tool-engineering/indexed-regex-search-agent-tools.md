@@ -65,7 +65,7 @@ A trigram decomposition of `func (s *Server) Handle` against a corpus yields req
 
 ## Key Takeaways
 
-- Regex search is a harness-level bottleneck at monorepo scale: latency grows with repo size, multiplied by agent concurrency.
+- Regex search is a harness-level bottleneck at monorepo scale: `ripgrep` latency grows with repo size, multiplied by agent concurrency.
 - Trigram inverted indexes and suffix arrays both reduce full-corpus scans to candidate-set scans; trigram indexes scale to write-heavy workspaces, suffix arrays do not.
 - Production refinements (probabilistic quadgram masks, sparse n-grams) address the posting-list-length problem that kills naive trigram indexes at large scale.
 - Index freshness is the core engineering cost: an agent that edits files and then queries must read its own writes.

@@ -13,7 +13,7 @@ aliases:
   - model deprecation migration protocol
   - versioned model dependency
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Model-ID-as-Dependency: Migration Protocol for Deprecation Churn
@@ -58,7 +58,7 @@ graph TD
 Each surface fails on a different timeline when the ID retires:
 
 - **Instruction files** — phrases like "Sonnet 4 follows X" go stale silently. No request error. The agent operates on false premises about its own model's behavior.
-- **Eval baselines** — recorded outputs become non-reproducible. The suite still runs, but its comparison reference no longer exists, so regression detection breaks. The Anthropic migration guide flags response length, literal instruction following, tool-call frequency, subagent spawning, and effort-level honouring as drift-prone dimensions to keep covered ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)).
+- **Eval baselines** — recorded outputs become non-reproducible. The suite still runs, but its comparison reference no longer exists, so [regression detection](../verification/golden-query-pairs-regression.md) breaks. The Anthropic migration guide flags response length, literal instruction following, tool-call frequency, subagent spawning, and effort-level honouring as drift-prone dimensions to keep covered ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)).
 - **Gateway routing config** — API requests start failing at the retirement date. This is the loudest failure mode and the easiest to detect, but only if monitoring is in place.
 - **Harness env vars** — Claude Code reads `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL` and provider-specific equivalents. A stale value silently routes to a deprecated model until the retirement date.
 - **Prompt caches and prompt templates** — Anthropic prompt caching requires "100% identical prompt segments" for a hit ([Anthropic: Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). Prompt templates that name the model in the system prompt invalidate when the name changes. Templates that cite model behavior become incorrect on a cross-generation hop where the successor reads prompts differently — see [`prompt-rewrite-on-cross-generation-migration`](../instructions/prompt-rewrite-on-cross-generation-migration.md) for the rewrite discipline.
@@ -76,7 +76,7 @@ git grep -nE 'claude-(opus|sonnet|haiku)-[0-9]|gpt-[0-9]\.[0-9]|grok-' \
      '.claude/' 'docs/' 'evals/' 'gateway/' 'src/'
 ```
 
-The output is the canonical inventory. Commit it to the migration ticket — every surface that returned a hit must be updated atomically in one PR or be explicitly listed as out-of-scope.
+The `git grep` output is the canonical inventory. Commit it to the migration ticket — every surface that returned a hit must be updated atomically in one PR or be explicitly listed as out-of-scope.
 
 ### 2. Single Source of Truth Per Role
 
@@ -100,19 +100,19 @@ When a deprecation lands:
 
 1. Branch from main.
 2. Update every surface in the inventory in a single PR. Resist the temptation to update one surface and ship.
-3. Re-run the regression eval against the successor. The eval is the gate — the PR does not merge until the suite passes against the new ID. Coverage tracks the dimensions Anthropic flags as drift-prone: response length calibration, literal instruction following, tool-call frequency, subagent spawning, effort-level honouring ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)).
+3. Re-run the [regression eval](eval-driven-development.md) against the successor. The eval is the gate — the PR does not merge until the suite passes against the new ID. Coverage tracks the dimensions Anthropic flags as drift-prone: response length calibration, literal instruction following, tool-call frequency, subagent spawning, effort-level honouring ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)).
 4. For canary, traffic-split, and fallback mechanics, follow [`model-deprecation-lifecycle`](model-deprecation-lifecycle.md) — that page covers the runtime cutover; this protocol covers the codebase-side inventory and propagation.
 
 ### 5. Audit and Sweep on a Cadence
 
-When provider churn is weekly, re-run the inventory weekly. Diff the output against the manifest of expected IDs. Any unexpected hit is either drift (a developer hand-edited a model name in a file the protocol does not track) or a new surface that should be added to the inventory. Build the sweep into the same scheduled job that diffs the models API endpoint.
+When provider churn is weekly, re-run the inventory weekly. Diff the output against the manifest of expected IDs. Any unexpected hit is either drift (a developer hand-edited a model name in a file the protocol does not track) or a new surface that should be added to the inventory. Build the sweep into the same scheduled job that diffs the `/v1/models/list` endpoint.
 
 ## When This Backfires
 
 - **Single-vendor, single-reference codebase.** A CLAUDE.md with one model name and a default harness setting needs a grep, not a protocol. The overhead exceeds the failure cost.
 - **Consumer-tier Copilot or Claude Code users.** Provider transparently routes to successors; the user pins nothing they own.
 - **Workloads behind a Managed Agent.** Anthropic's migration guide states that for Claude Managed Agents, "no changes beyond updating model name are required" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)). The inventory has one entry.
-- **Short-lived prototypes.** A two-week build does not need standing migration discipline. The deprecation cliff is unlikely to land before the project ends.
+- **Short-lived prototypes.** A 2-week build does not need standing migration discipline. The deprecation cliff is unlikely to land before the project ends.
 - **Cross-generation hops.** Inventory-and-propagation alone is insufficient when the successor reads prompts differently. Pair with [`prompt-rewrite-on-cross-generation-migration`](../instructions/prompt-rewrite-on-cross-generation-migration.md) — the prompt stack itself needs rebuilding, not just renaming.
 
 ## Example
@@ -142,7 +142,7 @@ The eval suite is the gate. If response length or tool-call frequency drifts bey
 ## Key Takeaways
 
 - Model IDs sit in five surfaces an agent-driven codebase rarely audits together: instruction files, eval baselines, gateway routing, harness env vars, prompt caches and templates. Inventory consolidates them.
-- Provider notice windows vary by an order of magnitude. Build the protocol around the tightest window the codebase touches, not the average.
+- Provider notice windows vary by an order of magnitude. Build the protocol around the tightest window the codebase touches — a 7-day Copilot deprecation, not Anthropic's 60-day notice — not the average.
 - Pin per-role models in a single source of truth; reference roles by name in instruction files, eval suites, and templates.
 - Atomic update gated by regression eval is the unit of migration. One surface at a time is drift in slow motion.
 - Run the inventory on a cadence at least as frequent as provider deprecation announcements — weekly when the codebase rides Copilot.

@@ -29,7 +29,7 @@ Three conditions decide whether the macro layer is the right tool ([OpenAI Cookb
 - **Per-trace `eval_finding` reliable enough not to amplify systematically.** Macro aggregation concentrates judge bias rather than averaging it out. Below ~70% judge precision, "behavior patterns" can be recurring judge mistakes ([AgentRewardBench, 2025](https://arxiv.org/abs/2504.08942)).
 - **Cross-trace structure worth aggregating.** Multi-specialist workflows where the same agent recurs across scenarios, or where conditions (tariffs, capacity, compliance) vary across runs, expose patterns clustering can find. One-shot CI bots returning a patch per task do not.
 
-When these hold, macro evals catch failures the [trajectory-opaque evaluation gap](trajectory-opaque-evaluation-gap.md) and [outcome grading](grade-agent-outcomes.md) cannot see — population properties of a workflow, not of any single run.
+When these hold, macro evals catch failures the [trajectory-opaque evaluation gap](eval-blind-spots.md) and [outcome grading](grade-agent-outcomes.md) cannot see — population properties of a workflow, not of any single run.
 
 ## The Four-Label Taxonomy
 
@@ -66,7 +66,7 @@ Some failure classes are not properties of any single trace. An agent that drops
 
 ## Example
 
-A synthetic EV order workflow runs 992 traces. Specialist agents handle pricing, compliance, supply risk, factory routing, scheduling, and release decisions while market conditions vary. Per-call evals (helpfulness, policy compliance, routing correctness) report acceptable scores. The macro layer surfaces a different signal:
+A synthetic EV order workflow runs 992 traces. Specialist agents handle pricing, compliance, supply risk, factory routing, scheduling, and release decisions while market conditions vary. Per-call evals (helpfulness, policy compliance, routing correctness) report acceptable scores — the same [outcome-grading](grade-agent-outcomes.md) view that sees each trace in isolation. The macro layer surfaces a different signal:
 
 ```
 Cluster 7 — pricing-incentive-omission (impact_score: 0.42)
@@ -102,7 +102,7 @@ Macro evaluation pairs with — does not replace — per-call rubrics, trajector
 
 ## Related
 
-- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) — Per-trace safety blindness; macro evals are the population-level analogue across the corpus.
+- [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — Per-trace safety blindness; macro evals are the population-level analogue across the corpus.
 - [Multi-Turn Conversation Evaluation](multi-turn-conversation-evaluation.md) — Per-turn plus trace-level scoring within one conversation; macro evals extend the pattern across many conversations.
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — Per-trace outcome grading; macro evals aggregate outcomes plus findings across runs.
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — Per-trace stage-level diagnosis; macro evals look at recurring stage failures across the corpus.

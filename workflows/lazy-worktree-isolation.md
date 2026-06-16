@@ -8,7 +8,7 @@ tags:
   - claude
 applies_to: "claude-code@2.x"
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 status: current
 ---
 
@@ -28,7 +28,7 @@ The laziness contract is not a single feature — it composes three layers in th
 
 ### Layer 1: Detection
 
-The harness watches for the first Edit, Write, MultiEdit, or NotebookEdit tool call. Read, Grep, Glob, and Bash never trip the latch. The trigger is the agent's *demonstrated* intent to modify state, not its declared intent at dispatch.
+The harness watches for the first `Edit`, `Write`, `MultiEdit`, or `NotebookEdit` tool call. Read, Grep, Glob, and Bash never trip the latch. The trigger is the agent's *demonstrated* intent to modify state, not its declared intent at dispatch.
 
 ### Layer 2: Skip-Rule Evaluation
 
@@ -74,7 +74,7 @@ Lazy isolation has costs eager-on-dispatch does not have:
 
 - **Write-bound fan-outs pay the latch overhead for nothing.** When `/batch` decomposes work into 5–30 modify-and-test units, every sub-agent will write — the latch fires in every session, and the extra code branch saves zero disk. For these workflows, set `isolation: worktree` on the sub-agent ([sub-agents docs](https://code.claude.com/docs/en/sub-agents)) so the worktree is created at dispatch. See [Claude Code /batch and Worktrees](../tools/claude/batch-worktrees.md) and its *When This Backfires* section for the broader fan-out trade-off.
 - **The transition has a known recovery-path bug.** Issue [#62372](https://github.com/anthropics/claude-code/issues/62372) documents that the `bgIsolation` guard tells agents to call `EnterWorktree`, but the tool's schema is deferred and must be fetched via `ToolSearch` first; without that, the agent hits `InputValidationError` and stalls. The lazy design introduces a transition surface that eager-on-dispatch doesn't have.
-- **Orchestrators that snapshot cwd at dispatch break silently.** The session's working directory changes under it on first write. Any hook, transcript writer, or path-recording orchestrator that captured cwd at session start now points at the parent checkout, not the worktree. Coordinating the invariant across the harness is non-trivial.
+- **Orchestrators that snapshot `cwd` at dispatch break silently.** The session's working directory changes under it on first write. Any hook, transcript writer, or path-recording orchestrator that captured cwd at session start now points at the parent checkout, not the worktree. Coordinating the invariant across the harness is non-trivial.
 - **Non-git repos without a `WorktreeCreate` hook get no isolation.** The second skip rule routes writes straight to the working copy. Parallel sessions race. The docs warn but the default is unsafe for parallel non-git workflows ([issue #60418](https://github.com/anthropics/claude-code/issues/60418) tracks the docs gap).
 
 ## Example
@@ -99,7 +99,7 @@ backgrounded · 7c5dcf5d · investigate-flaky-test
 #   4. Subsequent Read/Edit/Bash resolve against the worktree path
 ```
 
-A read-only investigation that ends in *no* fix never creates a worktree — the latch was armed and never fired. A fan-out of ten such sessions where eight find the bug elsewhere and only two write produces two worktrees, not ten.
+A read-only investigation that ends in *no* fix never creates a worktree — the latch was armed and never fired. A fan-out of 10 such sessions where 8 find the bug elsewhere and only 2 write produces 2 worktrees, not 10.
 
 ## Key Takeaways
 

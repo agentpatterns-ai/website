@@ -118,7 +118,7 @@ The dashboard, the trace view, and the narration each carry one third of the tru
 ## Key Takeaways
 
 - Trust transfer requires three preconditions — error-analysis narration is happening, the headline is plural, the surface lives where the audience works — without any of which the workflow degrades to vanity metrics.
-- Three artefacts cover most audiences: a segmented dashboard for the standing meeting, a custom trace view for single-run review, and a natural-language query interface for the questions no chart exists for.
+- Three artefacts cover most audiences: a [segmented dashboard](../observability/prebuilt-agent-monitoring-dashboard.md) for the standing meeting, a custom trace view for single-run review, and a natural-language query interface for the questions no chart exists for.
 - Pair each artefact to a cadence and a written narration; the dashboard is the surface, the narration is the load-bearing trust signal.
 - A single composite quality score promoted to a KPI gets gamed — keep the headline plural and segment by user segment and task type.
 - Embed the artefacts in the audience's existing tools (Slack, Linear, Notion); standalone observability URLs get opened twice and abandoned.

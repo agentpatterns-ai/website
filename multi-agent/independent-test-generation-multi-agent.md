@@ -76,7 +76,7 @@ The non-linear jump when all three collaborate shows that closing the loop with 
 
 ## Iteration Budget
 
-[AgentCoder](https://arxiv.org/abs/2312.13010) evaluated up to five refinement rounds on HumanEval and MBPP; accuracy rises fastest in the first two iterations and flattens afterward. A 3–5 round cap is a reasonable starting point — beyond that, continued failures indicate a spec or approach problem rather than something iteration will fix. See also [agent self-review loops](../agent-design/agent-self-review-loop.md).
+[AgentCoder](https://arxiv.org/abs/2312.13010) evaluated up to five refinement rounds on HumanEval and MBPP; accuracy rises fastest in the first two iterations and flattens afterward. A 3–5 round cap is a reasonable starting point — beyond that, continued failures indicate a spec or approach problem rather than something iteration will fix. See also [agent self-review loops](../code-review/agent-self-review-loop.md).
 
 ## When This Backfires
 
@@ -87,7 +87,7 @@ The non-linear jump when all three collaborate shows that closing the loop with 
 
 ## Applying the Pattern
 
-- **Multi-agent frameworks**: Assign distinct system prompts. The test designer's prompt excludes code context; the programmer receives only execution errors, not test source.
+- **Multi-agent frameworks**: Assign distinct system prompts. The test designer's prompt excludes code context, applying [specialized agent roles](../agent-design/specialized-agent-roles.md); the programmer receives only execution errors, not test source.
 - **CI/CD pipelines**: Run code and test generation as separate agent invocations with isolated contexts. Route failures back with error context only.
 - **Single-agent tools**: Approximate by running test generation in a separate session with fresh context, using only requirements as input.
 

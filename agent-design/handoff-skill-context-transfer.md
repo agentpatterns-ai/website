@@ -13,7 +13,7 @@ aliases:
   - cross-session handoff skill
   - slash-command handoff
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Handoff Skill: Structured Context Transfer Between Agent Sessions
@@ -31,7 +31,7 @@ It fires at an explicit transfer point with a no-duplication rule that prevents 
 Matt Pocock's [AI Hero changelog (May 11 2026)](https://www.aihero.dev/skills/skills-changelog-handoff-prototype-review-and-writing) names two patterns:
 
 - **Fire-and-forget**: mid-session at ~60k tokens you need a tangent (fix a bug, prototype an alternative). Hand off to a fresh agent rather than burning the remaining context budget. The original session continues unaware.
-- **DIY sub-agent**: hand off during planning, work in the fresh session, then hand back to the original with what you learned. The handoff doc is the contract in both directions.
+- **DIY sub-agent**: hand off during planning, work in the fresh session, then hand back to the original with what you learned — a manual stand-in for [sub-agent fan-out](../multi-agent/sub-agents-fan-out.md). The handoff doc is the contract in both directions.
 
 Both substitute for a sub-agent primitive the harness doesn't surface.
 

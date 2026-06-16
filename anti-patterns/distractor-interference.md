@@ -28,7 +28,7 @@ An instruction that is accurate in general and related to the current task domai
 
 A prompt for a task that writes integration tests might include instructions about unit testing conventions, component testing patterns, and end-to-end test structure — all accurate, all related to the same domain, but only one of which applies.
 
-The model attends to all three. The applicable instruction competes for the model's focus with two related-but-wrong instructions. Compliance on the applicable instruction is lower than if the other two were absent.
+The model attends to all three. The applicable instruction competes for the model's focus with two related-but-wrong instructions — the same finite-attention pressure behind [the infinite context](infinite-context.md). Compliance on the applicable instruction is lower than if the other two were absent.
 
 This effect scales. A comprehensive instruction file is not a safety net — every inapplicable instruction dilutes the signal from the applicable one, with performance degrading as irrelevant context grows ([Ponnusamy et al., 2025](https://arxiv.org/abs/2601.11564)).
 
@@ -38,7 +38,7 @@ This effect scales. A comprehensive instruction file is not a safety net — eve
 
 **Prune before loading** — Remove instructions accurate-but-inapplicable to this task. The test is not "is this correct?" but "does including this improve output on this specific task?"
 
-**Modular instruction files** — Organise by task type, not domain. A file for "integration test writing" loads separately from "unit test writing".
+**Modular instruction files** — Organise by task type, not domain, as a deliberate [context-engineering](../context-engineering/context-engineering.md) choice. A file for "integration test writing" loads separately from "unit test writing".
 
 **Test by removal** — If compliance seems low, remove unrelated instructions and observe whether it improves. Improvement indicates distractor interference.
 
@@ -47,7 +47,7 @@ This effect scales. A comprehensive instruction file is not a safety net — eve
 Over-pruning creates its own failure mode. Narrowing context too aggressively risks:
 
 - **Under-informing the model** — edge cases that live in adjacent instructions get stripped, producing technically-compliant-but-wrong output on the margins.
-- **Brittle task detection** — if task classification is wrong, the model loads the wrong instruction set entirely; a broad fallback provides a partial safety net.
+- **Brittle task detection** — if task classification is wrong, the model loads the wrong instruction set entirely, the routing risk that [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md) also carry; a broad fallback provides a partial safety net.
 - **Cross-domain tasks** — a task spanning two instruction domains genuinely needs both files; pruning one causes real compliance failures, not interference.
 - **Maintenance overhead** — each task type needs its own instruction file; the pattern works best for well-defined, bounded tasks and offers less benefit for open-ended work where the applicable instruction set is uncertain at load time.
 

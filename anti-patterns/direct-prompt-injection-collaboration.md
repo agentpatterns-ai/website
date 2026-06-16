@@ -9,7 +9,7 @@ tags:
   - tool-agnostic
   - anti-pattern
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 status: current
 ---
 
@@ -66,7 +66,7 @@ Without these controls, the same scenario exfiltrates in 24 of 25 retries — th
 ## Key Takeaways
 
 - The user pastes the attacker's prompt, so model-layer classifiers anchored on user intent have nothing anomalous to flag — a distinct attack class.
-- Environmental defenses — egress controls and filesystem boundaries — are the only mitigation that holds: they refuse the action regardless of classification.
+- Environmental defenses — egress controls like a [URL exfiltration guard](../security/url-exfiltration-guard.md) and filesystem boundaries — are the only mitigation that holds: they refuse the action regardless of classification.
 - The ambient follow-on lets a payload from one mailbox become an indirect-injection source for every agent the moment the team discusses it.
 - The pattern matters most for credential-bearing workstations and teams whose agents read shared channels; production base rates stay dominated by indirect injection.
 

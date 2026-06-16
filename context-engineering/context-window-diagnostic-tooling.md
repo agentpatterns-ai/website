@@ -69,22 +69,22 @@ For harnesses without built-in diagnostics, instrument at the tool-call boundary
 
 ## Why It Works
 
-Aggregate context metrics (total tokens used, percentage full) tell you *that* you have a problem but not *which tool* caused it. Token counts are additive and stable: each tool call appends a fixed delta that persists for the session. Per-tool attribution exposes the delta at invocation time, so skew is visible immediately — one tool type dominating the distribution pinpoints the bottleneck. The mechanism is measurement-then-act rather than compress-and-hope; the same principle as per-query profiling in databases.
+Aggregate context metrics (total tokens used, percentage full) tell you *that* you have a problem but not *which tool* caused it. Token counts are additive and stable: each tool call appends a fixed delta that persists for the session, which is what makes [context budget allocation](context-budget-allocation.md) tractable in the first place. Per-tool attribution exposes the delta at invocation time, so skew is visible immediately — one tool type dominating the distribution pinpoints the bottleneck. The mechanism is measurement-then-act rather than compress-and-hope; the same principle as per-query profiling in databases.
 
 ## When This Backfires
 
 Per-tool attribution is most useful when the expensive tool is also *avoidable*. It produces no actionable output when:
 
 - **The tool cost is unavoidable** — a required full-repository scan or mandatory large-payload API response. Attribution identifies the culprit but offers no remediation.
-- **Inflation is outside tool calls** — long conversation histories, large system prompts, or accumulated reasoning traces do not show up in per-tool attribution. The diagnostic reports modest tool costs while context is still full.
+- **Inflation is outside tool calls** — long conversation histories, large system prompts, or accumulated reasoning traces do not show up in per-tool attribution; these are the targets [manual compaction](manual-compaction-dumb-zone-mitigation.md) addresses instead. The diagnostic reports modest tool costs while context is still full.
 - **Short-lived or stateless agents** — if context resets between turns, instrumentation overhead rarely pays off; there is no compounding to diagnose.
 - **Tool-sparse pipelines** — agents that call one or two tools repeatedly have a trivially uniform distribution; optimizing the single tool directly is faster.
-- **The harness lacks attribution APIs** — most frameworks don't expose per-tool token counts. Manual instrumentation adds overhead and is impractical without dedicated observability infrastructure.
+- **The harness lacks attribution APIs** — most frameworks don't expose per-tool token counts, so the boundary instrumentation falls to general [observability](../observability/index.md) tooling. Manual instrumentation adds overhead and is impractical without dedicated observability infrastructure.
 
 ## Key Takeaways
 
 - Per-tool context attribution enables targeted optimization — you fix the culprit, not the symptoms.
-- The most common high-cost tools are large file reads, verbose tool outputs, and unbounded memory files.
+- The most common high-cost tools are large file reads, verbose tool outputs (which [observation masking](observation-masking.md) filters), and unbounded memory files.
 - Diagnose before compressing: compression without attribution can discard valuable content while leaving the inflator in place.
 - For harnesses without built-in diagnostics, instrument token counts at the tool-call boundary.
 

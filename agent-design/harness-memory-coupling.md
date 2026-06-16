@@ -74,7 +74,7 @@ The axis is useful when portability, continuity, or data ownership matter. Condi
 
 - **Factual memory with no session continuity** — a stateless lookup assistant pulling preferences from a database each turn does not need harness-owned memory.
 - **Throwaway prototypes** — investing in an open harness before the memory shape is known is premature.
-- **Governed enterprise deployments where single-vendor is a feature** — if compliance requires one boundary around the whole agent, the managed-agents tier is the correct trade.
+- **Governed enterprise deployments where single-vendor is a feature** — if compliance requires one boundary around the whole agent, the [managed-agents tier](managed-vs-self-hosted-harness.md) is the correct trade.
 - **Short-lived memory** — in-session working memory discarded between runs carries no long-term lock-in risk.
 
 ## Using the Axis
@@ -87,9 +87,9 @@ Two options for an internal research assistant:
 
 **Option A — managed-agents tier.** The provider handles harness, session storage, and long-term memory behind one API. Setup is one week. Memory operations — compaction, retrieval, AGENTS.md loading, skill placement — are opaque. A year in, the team wants a different model with better retrieval; the stored memory (months of user-specific corrections) has no documented export format. Migration requires rebuilding memory from scratch.
 
-**Option B — open harness with owned storage.** The team runs an open-source harness (e.g. Deep Agents) with memory in their own Postgres. Setup is three weeks. Explicit decisions: AGENTS.md loaded at session start, skill metadata in system messages, compaction summary stored as plain JSON, interaction log queryable by user id. A year in, swapping the model only requires re-pointing the harness — memory is untouched.
+**Option B — open harness with owned storage.** The team runs an open-source harness (e.g. [Deep Agents](deep-agent-runtime.md)) with memory in their own Postgres. Setup is three weeks. Explicit decisions: AGENTS.md loaded at session start, skill metadata in system messages, compaction summary stored as plain JSON, interaction log queryable by user id. A year in, swapping the model only requires re-pointing the harness — memory is untouched.
 
-The difference is not that Option A has bad memory. Every seam in Option A was decided by the provider and is not retrievable. In Option B the seams are the team's choices and the memory rides along when the rest of the stack changes.
+The difference is not that Option A has bad memory. Every seam in the [managed Option A](managed-vs-self-hosted-harness.md) was decided by the provider and is not retrievable. In Option B the seams are the team's choices and the memory rides along when the rest of the stack changes.
 
 ## Key Takeaways
 

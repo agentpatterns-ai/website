@@ -8,7 +8,7 @@ tags:
   - tool-agnostic
   - tool-engineering
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Override Pattern: Reusing Interactive Commands in Automated Pipelines
@@ -127,7 +127,7 @@ For higher reliability, combine the prompt override with `disallowedTools: [AskU
 The prompt-level override trades reliability for simplicity. Avoid it when the cost of a wrong inference is high:
 
 - **Critical or irreversible operations** — if the agent guesses wrong (wrong deployment target, wrong file to delete), a stalled prompt would have caught the error. The override lets it proceed silently.
-- **Commands with many decision points** — each suppressed prompt is a value the agent must infer. Compound inference errors multiply; a command that asks three questions in sequence has three opportunities to diverge from intent.
+- **Commands with many decision points** — each suppressed `AskUserQuestion` prompt is a value the agent must infer. Compound inference errors multiply; a command that asks three questions in sequence has three opportunities to diverge from intent.
 - **Shared command definitions used across multiple callers** — an override tuned for one pipeline context may produce unexpected behavior when another pipeline invokes the same command with different implicit assumptions.
 
 For these cases, prefer [`disallowedTools`](https://docs.anthropic.com/en/docs/claude-code/sub-agents#subagent-configuration) at the subagent level (which makes the restriction explicit and auditable) or [headless mode](../workflows/headless-claude-ci.md) (which removes the interactive layer entirely rather than suppressing it).

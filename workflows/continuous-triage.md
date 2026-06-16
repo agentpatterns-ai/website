@@ -111,7 +111,7 @@ Service-level failures are also a real risk: AI services go down and rate limits
 
 1. **Read-only first** — start with summarization only (no labels, no routing). Observe classification quality in comments before enabling writes.
 2. **Label with review** — enable `add-label` safe outputs but review label accuracy for 1-2 weeks. Adjust prompts based on misclassifications.
-3. **Route to teams** — once labeling accuracy is validated, add assignment rules that route labeled issues to the appropriate team or individual.
+3. **Route to teams** — once labeling accuracy is validated, add assignment rules that route labeled issues to the appropriate team or individual, following the [classify-then-route composition pattern](../agent-design/agent-composition-patterns.md).
 4. **Close duplicates** — the highest-risk operation. Enable only after the classifier demonstrates reliable duplicate detection.
 
 ## Cost Model
@@ -172,4 +172,4 @@ Classify this issue into exactly one category:
 - [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md)
 - [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
 - [Continuous AI (Agentic CI/CD)](continuous-ai-agentic-cicd.md)
-- [Continuous Documentation](continuous-documentation.md)
+- [Continuous AI: A Navigation Map of Always-On Agent Workflows](continuous-ai.md) — the parent map of the continuous-* and triage families this page belongs to

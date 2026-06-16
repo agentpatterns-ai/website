@@ -19,7 +19,7 @@ Scaling Copilot from an individual developer tool to a team-wide capability intr
 
 ### Don't flip a switch — turn a dial
 
-The most common adoption mistake is binary thinking: either Copilot is off, or everyone gets full autonomy on day one. Neither works. Full restriction prevents learning. Full autonomy before the team has calibrated trust produces distrust when the first bad PR ships.
+The most common adoption mistake is binary thinking: either Copilot is off, or everyone gets full autonomy on day one. Neither works. Full restriction prevents the team from learning what Copilot does well. Full autonomy before the team has calibrated trust produces distrust when the first bad PR ships.
 
 Instead, treat autonomy as a dial you turn up based on evidence.
 
@@ -186,7 +186,7 @@ Agents read external content — web pages via `#fetch`, issue comments, PR desc
 **What teams should know**:
 
 - **No tool solves this completely.** Defence is architectural, not a single feature.
-- **The coding agent runs in a sandbox** with restricted network access and limited permissions. This is structural defence — even if injected, the agent's blast radius is constrained.
+- **The coding agent runs in a GitHub Actions sandbox** with restricted network access and limited permissions. This is structural defence — even if injected, the agent's blast radius is constrained.
 - **Copilot hooks** (Module B) provide pre-tool-use enforcement. A `preToolUse` hook can block writes to sensitive paths regardless of what the agent was instructed to do.
 - **Instructions files are an attack surface.** If you clone a repo with a malicious `.github/copilot-instructions.md`, those instructions apply to your Copilot session. Review instruction files in unfamiliar repos the same way you'd review a `Makefile` or `postinstall` script.
 
@@ -256,7 +256,7 @@ Recommended adoption sequence:
 Skills, instructions, and Spaces drift as the codebase evolves. A monthly check:
 
 - **Instructions audit**: Do the build/test commands still work? Do the conventions still match the code?
-- **Skill validation**: Do skill scripts still run? Do templates match current patterns?
+- **Skill validation**: Do the [skill](../../tools/copilot/custom-agents-skills.md) scripts still run? Do templates match current patterns?
 - **Space review**: Are the files in the Space still the right ones? Have key docs moved or been replaced?
 - **Link check**: Run a link checker against all `.md` files in `.github/` — broken links in skills and instructions silently degrade agent output.
 
@@ -285,7 +285,7 @@ Automate this with a monthly GitHub Action that validates URLs and flags files n
 
 ### Benchmarking merge rates
 
-Early research on agent-authored PRs shows merge rates vary significantly by agent, task type, and team process. Key patterns:
+Early research on agent-authored PRs shows merge rates vary significantly by agent, task type, and team process. Key patterns from [agent-authored PR integration research](../../code-review/agent-authored-pr-integration.md):
 
 - The variation isn't primarily model quality — it's task selection, PR scoping, and reviewer engagement.
 - The strongest predictor of merge success is substantive reviewer engagement.
@@ -303,7 +303,7 @@ Early research on agent-authored PRs shows merge rates vary significantly by age
 
 **Why it happens**: AI removes some effort (boilerplate, syntax recall, routine patterns) while requiring new effort (context engineering, verification, iteration). Teams that conflate "automates typing" with "automates thinking" are disappointed.
 
-**The fix**: Frame adoption as requiring **more rigour, not less** — at least initially. The effort shifts from writing code to engineering context (Module C), preparing the environment (Module D), and verifying output. Velocity gains materialise after the upfront investment, not instead of it.
+**The fix**: Frame adoption as requiring **more rigour, not less** — at least initially. The effort shifts from writing code to engineering context ([Module C](context-and-workflows.md)), preparing the environment ([Module D](harness-engineering.md)), and verifying output. Velocity gains materialise after the upfront investment, not instead of it.
 
 ### Cargo cult configuration
 
@@ -317,23 +317,23 @@ Early research on agent-authored PRs shows merge rates vary significantly by age
 
 ### Comprehension debt
 
-**What it is**: Agent-generated code ships faster than the team can understand it. Tests pass, the diff looks reasonable, you merge. Three days later, no one can explain how the feature works.
+**What it is**: Agent-generated code ships faster than the team can understand it. Tests pass, the diff looks reasonable, you merge. 3 days later, no one can explain how the feature works.
 
-**Why it's dangerous**: Comprehension debt compounds silently. The team becomes unable to debug, extend, or reason about code they nominally own. This is distinct from technical debt — the code may be well-structured, but the team's understanding of it is shallow.
+**Why it's dangerous**: [Comprehension debt](../../anti-patterns/comprehension-debt.md) compounds silently. The team becomes unable to debug, extend, or reason about code they nominally own. This is distinct from technical debt — the code may be well-structured, but the team's understanding of it is shallow.
 
 **Why it matters**: Usage mode shapes comprehension more than whether AI is used at all. Developers who engage with the problem first — asking Copilot to explain the approach before asking it to implement — retain significantly more understanding of the resulting code than developers who delegate directly without first engaging with the problem.
 
 **The fix**:
 
 - **Explain-before-code**: Before asking Copilot to implement, ask it to explain the approach. Review the explanation. Then implement.
-- **Review as comprehension exercise**: If a reviewer cannot explain what the code does — not predict, but explain — the PR doesn't merge until they can.
+- **Review as comprehension exercise**: If a reviewer cannot explain what the Copilot-authored code does — not predict, but explain — the PR doesn't merge until they can.
 - **Distribute review responsibility**: Don't concentrate review on senior engineers. Reviewing agent-authored code is a learning opportunity — spread it across the team.
 
 ### Skill atrophy
 
 **What it is**: Prolonged delegation to Copilot erodes independent problem-solving skills. Unlike fatigue (temporary), atrophy is cumulative capability loss.
 
-**Who it affects most**: Junior developers who delegate before building foundational skills. But seniors also lose depth in domains they consistently delegate.
+**Who it affects most**: Junior developers who delegate before building foundational skills. But seniors also lose depth in domains they consistently delegate to Copilot.
 
 **The fix**:
 
@@ -386,9 +386,9 @@ Early research on agent-authored PRs shows merge rates vary significantly by age
 - **Progressive autonomy, not binary adoption.** Start at Level 1 (suggestions) and escalate based on measured evidence — acceptance rate, merge rate, defect escapes. Define rollback triggers before granting autonomy.
 - **Tiered code review eliminates the review bottleneck.** Route by risk: automated-only for low-risk changes, AI + human for business logic, human-only for security-sensitive code. This reduces human review burden 40–60% while increasing coverage on critical paths.
 - **Content exclusions don't protect against agent workflows.** Agent mode, the CLI, and the coding agent bypass content exclusions entirely. Use repository isolation and filesystem permissions for truly sensitive code.
-- **Under-configuration is the norm.** Most teams stop at a basic instructions file. The full stack — path-specific instructions, custom agents, skills, hooks, Spaces — compounds. Adopt incrementally over 2–3 months.
+- **Under-configuration is the norm.** Most teams stop at a basic `.github/copilot-instructions.md` file. The full stack — path-specific instructions, custom agents, skills, hooks, Spaces — compounds. Adopt incrementally over 2–3 months.
 - **Measure outcomes, not activity.** PR cycle time, merge rate, defect escapes, and review burden tell you whether adoption is working. Lines generated and interaction count do not.
-- **Comprehension debt is the hidden cost.** Agent-generated code that ships faster than the team understands it creates fragility. Require explain-before-code, distribute review responsibility, and make review a learning exercise.
+- **[Comprehension debt](../../anti-patterns/comprehension-debt.md) is the hidden cost.** Agent-generated code that ships faster than the team understands it creates fragility. Require explain-before-code, distribute review responsibility, and make review a learning exercise.
 - **The effortless AI fallacy stalls adoption.** Frame Copilot as requiring more rigour initially — context engineering, verification, environment investment — with velocity gains materialising after the upfront effort, not instead of it.
 - **Environment beats prompts at team scale.** A fast test suite, strict types, and comprehensive linting (Module D) improve every team member's agent output simultaneously. This is the highest-leverage team-level investment.
 

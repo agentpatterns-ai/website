@@ -7,7 +7,7 @@ tags:
   - claude
 applies_to: "claude-code@2.x"
 last_reviewed: 2026-05-30
-maturity: established
+maturity: emerging
 ---
 
 # claudeMdExcludes: Selective Ancestor Instruction-File Exclusion

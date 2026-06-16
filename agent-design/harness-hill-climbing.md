@@ -8,7 +8,7 @@ tags:
   - evals
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Harness Hill-Climbing: Eval-Driven Iterative Improvement of Agent Harnesses
@@ -17,7 +17,7 @@ maturity: established
 
 ## The Loop
 
-Harness hill-climbing applies local search to agent configuration: run a benchmark suite, make one targeted change, re-score, keep the change if the score improves. Repeat. No model changes. No retraining. The eval score is the gradient signal.
+Harness hill-climbing applies local search to agent configuration: run a benchmark suite, make one targeted change, re-score, keep the change if the score improves — the manual counterpart to automated [DSPy prompt search](dspy-programmatic-prompt-optimization.md). Repeat. No model changes. No retraining. The eval score is the gradient signal.
 
 ```mermaid
 graph TD
@@ -51,7 +51,7 @@ The [reasoning sandwich pattern](reasoning-budget-allocation.md) is a concrete e
 
 The task suite must be representative and held out from production — otherwise you measure the eval fixture, not real capability.
 
-**Isolation**: Use a separate set for tuning and a second held-out set for final validation. Never tune against the validation set. Same discipline as train/validation/test splits in model training.
+**Isolation**: Use a separate set for tuning and a second held-out set for final validation. Never tune against the validation set. Same discipline as train/validation/test splits in model training — and the same defense against the [held-out test gap](../verification/eval-blind-spots.md).
 
 **Breadth**: Include tasks where the target behavior *should* trigger and tasks where it *shouldn't*. A harness optimized only on positive cases will over-trigger. Anthropic's eval guidance specifies testing both directions explicitly ([Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)).
 
@@ -74,7 +74,7 @@ Mitigations:
 Hill-climbing finds a local optimum, not a global one — if the baseline sits in a poor region of configuration space, iteration converges to the nearest local peak. Three further conditions degrade the loop:
 
 - **Benchmark cost exceeds benefit**: Building a graded task suite takes real effort. For narrow-scope agents, ad-hoc prompt editing reaches good-enough performance faster.
-- **Component interdependencies**: Single-variable iteration assumes harness components are approximately orthogonal. When prompt phrasing, tool descriptions, and reasoning budget interact, changing one variable masks or amplifies effects of another.
+- **Component interdependencies**: Single-variable iteration assumes harness components are approximately orthogonal — where they are not, [isometric harness ablation](isometric-harness-ablation.md) ranks per-subsystem contribution instead. When prompt phrasing, tool descriptions, and reasoning budget interact, changing one variable masks or amplifies effects of another.
 - **Benchmark-to-production drift**: The eval suite is a snapshot. If production workload shifts after tuning, the optimized configuration may degrade on new task types — see [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md).
 
 ## One Change at a Time

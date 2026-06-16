@@ -51,7 +51,7 @@ Execute in order; each step has a hard exit criterion.
 
 ### 1. Isolate impacted endpoints
 
-Identify every machine that installed an affected version in the breach window and pull it off the network. Suspend SSO sessions and refresh tokens. Do not wipe — preserve package cache and shell history for forensics.
+Identify every machine that installed an affected version in the breach window and pull it off the network — [blast-radius containment](blast-radius-containment.md) starts here. Suspend SSO sessions and refresh tokens. Do not wipe — preserve package cache and shell history for forensics.
 
 **Exit:** every confirmed host isolated; impacted users signed out of IdP, GitHub, npm, and cloud.
 
@@ -65,7 +65,7 @@ Rotate from what the worm targets outward: GitHub PATs and SSH keys, npm tokens,
 
 ### 3. Freeze deploys
 
-Halt automated deploys from any pipeline that touched an impacted credential — a rotation racing a deploy can ship a stolen-key binary that notarizes before the cert is revoked.
+Halt automated deploys from any pipeline that touched an impacted credential — narrowing the [credential blast radius](scoped-credentials-proxy.md) before a rotation racing a deploy can ship a stolen-key binary that notarizes before the cert is revoked.
 
 **Exit:** deploy workflows disabled; manual deploys gated through a small reviewer pool.
 
@@ -119,7 +119,7 @@ The May 13 announcement landed two days after the May 11 compromise — the dete
 - The consumer-side dev-machine vector is structurally distinct from the publisher-side CI vector. Most public analysis covers the publisher side; this playbook covers the consumer side.
 - The breach starts at `npm install` on one laptop and ends at the distribution channel when signing material is reachable from corporate repos.
 - Containment runs in a fixed order: isolate, rotate, freeze, re-sign, revoke, force-update. Each step has an exit criterion; skipping ahead leaves a window open.
-- A forcing-function client-update deadline closes the distribution channel. Window length trades breach exposure against user disruption.
+- A forcing-function client-update deadline closes the distribution channel. Window length — OpenAI's was ~30 days — trades breach exposure against user disruption.
 - Per-package allowlists and sandboxed installs are cheaper than the playbook. Budget prevention first.
 
 ## Related

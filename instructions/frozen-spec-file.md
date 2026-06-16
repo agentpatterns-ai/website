@@ -5,7 +5,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # Frozen Spec File
@@ -49,7 +49,7 @@ graph LR
     F -->|Yes| G[Complete]
 ```
 
-The re-read loop is the core mechanism. After every compaction event, the agent re-reads the frozen spec from disk. The spec survives because it lives in a file, not in conversation history.
+The re-read loop is the core mechanism. After every compaction event, the agent re-reads the frozen spec from disk — the discipline formalised in the [post-compaction re-read protocol](post-compaction-reread-protocol.md). The spec survives because it lives in a file, not in conversation history.
 
 Without structural protection, agents rewrite specs they find inconvenient. Anthropic's harness research found that agents are less likely to modify JSON files than Markdown files — format choice is itself a defense against mutation ([Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Strongly-worded prohibition language ("it is unacceptable to remove or edit tests") is necessary but not sufficient.
 
@@ -145,9 +145,9 @@ OpenAI's Codex long-horizon guide uses this exact split: Prompt.md is frozen (go
 
 A frozen spec adds overhead that only pays off under specific conditions. Skip it or treat it as mutable when:
 
-- **Requirements are genuinely exploratory.** If the goal is discovery — figuring out what to build, not building a known thing — locking constraints early causes thrash. Spec-first only works when you know what done looks like.
+- **Requirements are genuinely exploratory.** If the goal is discovery — figuring out what to build, not building a known thing — locking constraints early causes thrash. Spec-first — the [spec-driven development](../workflows/spec-driven-development.md) workflow — only works when you know what done looks like.
 - **Sessions are short enough that context doesn't compact.** The re-read loop is the core benefit. For tasks that complete in a single context window, the spec provides no protection that a well-written system prompt doesn't already provide.
-- **Scope changes are legitimate and frequent.** A frozen spec becomes adversarial when stakeholders update requirements mid-session. Agents blocked by an outdated constraint will either stall or find workarounds. Treat the spec as mutable — and accept the drift risk — when requirements aren't stable enough to freeze.
+- **Scope changes are legitimate and frequent.** A frozen spec becomes adversarial when stakeholders update requirements mid-session — without that churn, the spec is instead a guard against [objective drift](../anti-patterns/objective-drift.md). Agents blocked by an outdated constraint will either stall or find workarounds. Treat the spec as mutable — and accept the drift risk — when requirements aren't stable enough to freeze.
 
 ## Key Takeaways
 

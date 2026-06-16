@@ -78,7 +78,7 @@ The expanded eBook covers material the December 2024 post does not ([eBook landi
 
 ## Why It Works
 
-The framework's value is taxonomic, not algorithmic. By naming five patterns with distinct cost-predictability-debuggability profiles, it converts "build an agent" into a discrete selection: which control-flow shape — sequence, branch, parallel, dispatch, refine — matches this problem? Those shapes are classical CS primitives, and the contribution is in matching shape to task before writing code.
+The framework's value is taxonomic, not algorithmic. By naming five patterns with distinct cost-predictability-debuggability profiles, it converts "build an agent" into a discrete selection: which control-flow shape — sequence, branch, parallel, dispatch, refine — matches this problem? Those shapes are [classical CS primitives](classical-se-patterns-agent-analogues.md), and the contribution is in matching shape to task before writing code.
 
 Every additional LLM call adds latency, cost, and a compounding error rate. Workflows beat agents whenever a task's structure is stable enough to encode in code, because they pay the inference cost only at decision points the developer chose ([Anthropic blog](https://www.anthropic.com/engineering/building-effective-agents)).
 

@@ -15,7 +15,7 @@ maturity: established
 
 ## The Default Problem
 
-Agents default to verbose, explanatory output. Ask for a function and receive the function plus several paragraphs of context, rationale, and caveats. For experienced developers, this is friction: you already know the context. The explanation consumes tokens that could be used for more work.
+Agents default to verbose, explanatory output. Ask for a function and receive the function plus several paragraphs of context, rationale, and caveats. For experienced developers, this is friction: you already know the context. The explanation consumes tokens that could be used for more work — a direct draw on the [context budget](../context-engineering/context-budget-allocation.md).
 
 Output control is not about suppressing capability — it's about directing the response format to match the task.
 
@@ -99,7 +99,7 @@ The concise version cuts token cost by roughly two-thirds for the same deliverab
 Concise-output mode is wrong in three situations:
 
 - **Debugging unfamiliar failures**: verbose chain-of-thought traces are the primary diagnostic surface. Suppressing them means the agent silently makes wrong decisions without leaving reasoning evidence.
-- **Architecture and design decisions**: when the problem is underspecified, the agent's narrative explanation surfaces hidden assumptions. Asking for code-only output removes the only signal that the agent misunderstood the requirement.
+- **Architecture and design decisions**: when the problem is underspecified, the agent's narrative explanation surfaces hidden assumptions — the same signal [interactive clarification](../agent-design/interactive-clarification-underspecified-tasks.md) elicits by asking. Asking for code-only output removes the only signal that the agent misunderstood the requirement.
 - **First pass in new domains**: a practitioner expert in Python but new to Rust needs the caveats. Concise mode assumes shared context that doesn't yet exist.
 
 Set output mode per task category in system instructions, not as a global default.

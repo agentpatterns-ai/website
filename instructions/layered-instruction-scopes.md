@@ -25,7 +25,7 @@ maturity: established
 
 ## Why Flat Instruction Files Break at Scale
 
-A single instruction file at the repository root works for small, uniform codebases. As projects grow — multiple services, distinct frontend and backend conventions, mixed toolchains — a single file either becomes an unmanageable list of conditional rules or fails to cover the cases that matter.
+A single instruction file at the repository root works for small, uniform codebases. As projects grow — multiple services, distinct frontend and backend conventions, mixed toolchains — a single file either becomes an unmanageable list of conditional rules that hits the [instruction compliance ceiling](instruction-compliance-ceiling.md) or fails to cover the cases that matter.
 
 Layering by scope solves this. The agent receives instructions appropriate to where it is working, without requiring any manual switching.
 
@@ -128,5 +128,6 @@ The instruction "use uv not pip" from `api/AGENTS.md` appears last and takes pri
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
 - [AGENTS.md as Table of Contents](agents-md-as-table-of-contents.md)
 - [Instruction File Ecosystem](instruction-file-ecosystem.md)
+- [Configuration File Structure Compliance Gap](configuration-file-structure-compliance-gap.md) — empirical null: scope layering aids comprehension, not compliance; an orthogonal finding to scope design here
 - [@import Composition Pattern for Instruction Files](import-composition-pattern.md)
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md)

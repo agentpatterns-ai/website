@@ -52,7 +52,7 @@ Independent work probes the same gap with different instrumentation. TRAJEVAL de
 Perturbation diagnostics over-predict failure or measure the wrong thing under several specific conditions:
 
 - **Shallow-multi-file repositories.** When most issues resolve within one file, the diagnostic measures what the deployed agent never hits at scale, and the pipeline cost is not repaid.
-- **Proprietary surfaces unlikely to be in training corpora.** Contamination is already low, so perturbation buys little signal beyond a static custom benchmark.
+- **Proprietary surfaces unlikely to be in training corpora.** [Contamination](benchmark-contamination-eval-risk.md) is already low, so perturbation buys little signal beyond a static custom benchmark.
 - **No oracle to confirm semantics preservation.** A perturbation that subtly changes behaviour produces an artifact, not a signal. Without a passing reference test suite on both original and perturbed repo, the diagnostic is unreliable.
 - **Production agents pinned to a known repository set.** When the agent only sees one or two well-mapped codebases, structural exploration amortises across runs and perturbation over-predicts failure.
 - **Intermediate gold-context labels already exist.** ContextBench-style annotated contexts answer the same question more directly ([ContextBench, 2026](https://arxiv.org/pdf/2602.05892)).

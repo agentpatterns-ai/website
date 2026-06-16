@@ -12,6 +12,7 @@ tags:
   - code-generation
   - tool-agnostic
   - rag
+  - long-form
 last_reviewed: 2026-05-27
 maturity: established
 ---
@@ -82,6 +83,34 @@ This differs from [on-demand agent retrieval](retrieval-augmented-agent-workflow
 - **Cross-language gaps**: retrieval across language boundaries (e.g., Python calling a Go microservice) remains weak
 - **Privacy**: sending repository context to cloud-hosted models creates data exposure risk
 
+## Case Study: Stale Retrieval Induces Incorrect Code
+
+The staleness limitation above is not inert noise — stale snippets actively bias completion toward obsolete signatures. A controlled diagnostic study on 17 production helper-signature changes from five Python repositories compared four retrieval conditions (current-only, stale-only, no-retrieval, mixed) under prompts that hid commit recency from the model. Stale-only retrieval increased references to obsolete signatures by 88.2 percentage points on Qwen2.5-Coder-7B-Instruct (15 of 17 samples affected) and 76.5 percentage points on GPT-4.1-mini (13 of 17), with 75% overlap on which samples failed across the two models. The no-retrieval baseline produced zero stale references but only one passing completion overall — retrieval still helps; the problem is unfiltered temporal staleness, not retrieval itself. [Source: [Weng et al., 2026](https://arxiv.org/abs/2605.14478)]
+
+```mermaid
+graph TD
+    Q[Task: call helper X] --> R[Retriever]
+    R --> S[Stale snippet: X old signature]
+    S --> P[Prompt with snippet as exemplar]
+    P --> M[Model treats snippet as authoritative]
+    M --> O[Generates code against obsolete signature]
+```
+
+A retrieved snippet showing a helper called with its previous signature is a high-confidence textual exemplar. The model conditions on it as in-context-learning input and reproduces the call shape. The failure mode is not hallucination and not training-data lag — the model is doing exactly what RAG asks of it, with bad inputs.
+
+**Mixed current+stale retrieval largely resolves the failure.** Adding fresh evidence alongside stale snippets is enough — the model preferentially follows the current exemplar when both are present. This shapes the practical response: hard recency filters that drop older snippets risk losing structural and convention signal that is still valid, so co-retrieving current evidence (for example, fetching the current declaration of any helper referenced in a retrieved usage) addresses the failure without discarding context. This is related to but distinct from [Context Poisoning](../anti-patterns/context-poisoning.md), where a hallucinated premise propagates: stale retrieval's bad content comes from a real prior repository state, and co-retrieving current evidence remedies it, whereas it does not help once an agent has committed to a hallucinated premise.
+
+Three checks indicate exposure: **index freshness lag** (how far behind `HEAD` is the index? nightly rebuilds against a fast-moving codebase routinely retrieve snippets predating current signatures); **signature drift rate** (helpers whose signatures change frequently are the susceptible population — stable APIs are unaffected); and **co-retrieval of declarations** (when a usage snippet is retrieved, is the [current declaration](context-hub.md) of the called helper also pulled in?). [Source: [Weng et al., 2026](https://arxiv.org/abs/2605.14478)]
+
+**Scope and limits.** The study covers 17 samples and two models — the effect direction is consistent and the mechanism well-specified, but absolute percentages should not be extrapolated beyond signature-change tasks in Python. Mixed-context recovery depends on the current evidence actually being retrieved; a retriever that surfaces only stale snippets will not benefit. The finding does not generalise to retrieval tasks that do not depend on exact signatures (docstring generation, comment completion, naming suggestions). The broader RAG-for-code landscape treats keeping the index current as a failure mode distinct from semantic-relevance retrieval — semantic similarity scoring does not, on its own, surface temporal staleness. [Source: [survey of retrieval-augmented code generation](https://arxiv.org/abs/2510.04905), [kapa.ai on RAG failure modes](https://www.kapa.ai/blog/rag-gone-wrong-the-7-most-common-mistakes-and-how-to-avoid-them)]
+
+## Key Takeaways
+
+- Repository-level retrieval (dependency graphs, cross-file references, structural embeddings) outperforms single-file retrieval for code generation.
+- The strategy hierarchy runs lexical < semantic < graph-based < hybrid; graph-based gains most on tasks whose dependencies share no vocabulary with the task description.
+- Structure code for retrievability, prefer structurally-aware tools, scope retrieval to service boundaries, and verify cross-file output with tests.
+- Staleness is not inert: stale retrieved snippets bias completion toward obsolete signatures (76.5–88.2 pp on a 17-sample Python diagnostic); co-retrieve current declarations rather than hard recency-filtering.
+
 ## Example
 
 Aider uses a repository map built from ASTs (tree-sitter) and PageRank to select cross-file context before each code generation request. Given a task like "add rate limiting to the `/upload` endpoint," Aider:
@@ -101,8 +130,6 @@ The resulting prompt contains cross-file type signatures and conventions that a 
 - [Context Hub: On-Demand Versioned API Docs for Coding Agents](context-hub.md) -- documentation retrieval pattern complementary to code retrieval
 - [Environment Specification as Context](environment-specification-as-context.md) -- feeding dependency versions and runtime constraints into agent context
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md) -- framework for deciding how much context budget to allocate to retrieval results
-- [Context Priming](context-priming.md) -- pre-loading relevant context before generation, complementary to retrieval-based approaches
-- [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) -- classifying which context an agent can retrieve versus what must be provided upfront
-- [Structured Domain Retrieval](structured-domain-retrieval.md) -- knowledge graph and case-based retrieval strategies complementary to code-level graph retrieval
 - [Token-Efficient Code Generation](token-efficient-code-generation.md) -- reducing token cost of generated code, relevant when retrieval expands prompt size
 - [Context Compression Strategies](context-compression-strategies.md) -- compressing retrieved context to fit within budget after repository-level retrieval
+  - long-form

@@ -68,7 +68,7 @@ graph TD
 **Omission** — requirements underspecify intended behavior or constraints.  
 **Ambiguity** — vague descriptions that generate multiple valid interpretations.
 
-The Requirement Assessment Score (RAS = tests passed / total tests) drives iteration. High-temperature sampling generates ten test scripts per issue. If RAS < 1.0, the classified deficiency triggers a targeted refinement and the requirements regenerate. Non-improving feedback is logged as a counterexample so the agent avoids repeating failed refinements. After at most four iterations, the highest-RAS set is selected.
+The Requirement Assessment Score (RAS = tests passed / total tests) drives iteration, the same [evaluator-optimizer](evaluator-optimizer.md) loop applied to inputs rather than outputs. High-temperature sampling generates ten test scripts per issue. If RAS < 1.0, the classified deficiency triggers a targeted refinement and the requirements regenerate. Non-improving feedback is logged as a counterexample so the agent avoids repeating failed refinements. After at most four iterations, the highest-RAS set is selected.
 
 ## What the Ablation Study Shows
 
@@ -85,7 +85,7 @@ Replacing test-based assessment with LLM-as-judge caused the largest drop, parti
 
 ## Practical Implications
 
-**For teams writing issues**: The attribute list is a concrete checklist. Issues that specify reproduction steps, environment, expected vs. actual behavior, and root cause give agents the same advantage REAgent constructs automatically.
+**For teams writing issues**: The attribute list is a concrete checklist — the per-issue counterpart to [spec-driven development](../workflows/spec-driven-development.md). Issues that specify reproduction steps, environment, expected vs. actual behavior, and root cause give agents the same advantage REAgent constructs automatically.
 
 **For teams building agent pipelines**: A preprocessing agent before the coding agent adds one model call but recovers a meaningful share of failed patches. The benchmark cost was $1.47 per resolved issue with DeepSeek-V3.2.
 

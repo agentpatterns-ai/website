@@ -42,7 +42,7 @@ Interaction-pattern evaluation adds instrumentation cost and assumes enough PR v
 - **Curated, high-engagement populations** — Watanabe et al. found 567 Claude Code PRs across 157 maintained OSS projects merged at 83.8%, 54.9% un-modified ([arXiv:2509.14745](https://arxiv.org/abs/2509.14745)). When abandonment is rare by selection, outcome rates carry more signal.
 - **Internal deployments with SLA-bounded review** — if every PR is triaged within a fixed window and never closes stale, the 33.1% rationale-loss bucket shrinks. Public-OSS pathologies do not transfer to closed teams enforcing SLAs.
 - **Low PR volume** — stable interaction statistics need enough PRs per agent and task type to overcome variance; small teams may lack the data.
-- **Agents optimised against the metric** — engagement-tuned agents (chatty comments, artificial review loops) game interaction signals just as merge-rate tuning games outcomes. Audit for gaming pressure first.
+- **Agents optimised against the metric** — engagement-tuned agents (chatty comments, artificial review loops) game interaction signals just as [merge-rate tuning games outcomes](agent-pr-volume-vs-value.md). Audit for gaming pressure first.
 
 Aggregate merge rate is the cheapest procurement KPI and rank-orders agents directionally when samples are large and task mix is similar. Adopt interaction-pattern evaluation when those assumptions break.
 

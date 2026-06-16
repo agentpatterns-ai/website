@@ -20,7 +20,7 @@ maturity: established
 
 ## Pipeline vs. Control Loop
 
-Classic search-augmented generation retrieves once, then generates. The agent loop iterates until a termination condition fires.
+Classic search-augmented generation retrieves once, then generates. The agent loop iterates until a termination condition fires, with [loop detection](../observability/loop-detection.md) guarding against cycles that never settle.
 
 ```mermaid
 flowchart LR
@@ -54,7 +54,7 @@ Filter results before they enter context:
 | Signal | What to check |
 |---|---|
 | Relevance | Addresses the query or tangential? |
-| Credibility | Primary source vs. aggregator; official docs vs. blog |
+| Credibility | An arxiv paper or official docs (primary) over an aggregator or blog |
 | Freshness | Current enough for the question? |
 | Redundancy | New information or a duplicate? |
 

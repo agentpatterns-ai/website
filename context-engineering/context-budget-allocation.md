@@ -10,7 +10,7 @@ aliases:
   - The 50% Rule
   - Context Budget
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Context Budget Allocation: Spending Every Token Wisely
@@ -78,7 +78,7 @@ All skill descriptions share that budget, so adding more skills means each descr
 
 **Just-in-case preloading**: Loading reference material "in case it's needed" converts conditional cost into fixed overhead on every task.
 
-**Fat always-on instructions**: Instructions that include code samples, directory trees, and API signatures bloat the always-on layer. Replace with hints and pointers to discoverable content.
+**Fat always-on instructions**: Instructions that include code samples, directory trees, and API signatures bloat the always-on layer. Replace with hints and pointers to [discoverable content](discoverable-vs-nondiscoverable-context.md).
 
 **Single-agent monoliths for research-heavy tasks**: Forcing one agent to hold all research and implementation context simultaneously. Sub-agents isolate research cost.
 

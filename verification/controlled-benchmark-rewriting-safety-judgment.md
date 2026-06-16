@@ -82,7 +82,7 @@ Skip rewriting when:
 - **No curated trajectory bank** — ARISE requires 2,000+ ReAct-style exemplars; teams without one fall back to standard RAG. Rewriting alone still yields the diagnostic signal.
 - **Non-ReAct tool-call shapes** — retrieval matches on trajectory format. Production agents using freeform JSON need to restructure traces first.
 - **Latency-sensitive inline guards** — top-3 retrieval adds context tokens to every judgment call; disqualifying for high-throughput filters.
-- **Surface vs substance** — a guardrail that learns to detect "appeals to authority" still pattern-matches a register. Pair with [trajectory-aware auditing](trajectory-opaque-evaluation-gap.md) on real traces.
+- **Surface vs substance** — a guardrail that learns to detect "appeals to authority" still pattern-matches a register. Pair with [trajectory-aware auditing](eval-blind-spots.md) on real traces.
 
 ## Example
 
@@ -107,7 +107,7 @@ The source-set F1 alone would not separate the candidates — the rewrite delta 
 
 ## Related
 
-- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) — Why outcome-only grading misses safety violations that trajectory auditing catches
+- [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — Why outcome-only grading misses safety violations that trajectory auditing catches
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — Test-set leakage as a separate failure mode from rewriting
 - [Eval Awareness](eval-awareness.md) — Models recognising eval-shaped prompts and shifting behaviour
 - [Mid-Trajectory Guardrail Selection](../security/mid-trajectory-guardrail-selection.md) — Guardrail-side findings on single-turn vs trajectory safety scoring

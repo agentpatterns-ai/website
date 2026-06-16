@@ -54,10 +54,10 @@ A regression eval drop is a signal. A capability eval drop may be noise.
 Before reacting to perceived degradation:
 
 - [ ] Using a pinned model version, not a floating alias?
-- [ ] Eval results from before and after the perceived change?
+- [ ] [Golden-query](../verification/golden-query-pairs-regression.md) eval results from before and after the perceived change?
 - [ ] Sample size sufficient for statistical significance?
 - [ ] Controlled for prompt, context, and tool changes on your side?
-- [ ] Reproducible on a specific, repeatable test case?
+- [ ] Reproducible on a specific, repeatable test case in your [golden-query suite](../verification/golden-query-pairs-regression.md)?
 
 Fewer than three "yes" answers means you are operating on vibes.
 
@@ -68,7 +68,7 @@ Novel models get credit for wins; routine ones get blamed for failures. Eval sui
 ## When This Backfires
 
 1. **Evals lag real usage.** Suites reflect the authoring-time distribution; shifted user behavior means a passing eval masks degradation on the live workload.
-2. **Pinning delays improvements.** Pinning foregoes bug fixes and upgrades. Providers deprecate old snapshots; teams without a rotation policy face forced migrations with no baseline.
+2. **Pinning delays improvements.** Pinning foregoes bug fixes and upgrades. Providers such as Anthropic and OpenAI deprecate old snapshots; teams without a rotation policy face forced migrations with no baseline.
 3. **Underpowered tests miss real regressions.** McNemar's test requires sufficient paired samples; sparse traffic or narrow suites cannot detect small but real drops.
 
 ## Example

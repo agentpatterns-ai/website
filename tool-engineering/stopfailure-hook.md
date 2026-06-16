@@ -10,7 +10,7 @@ aliases:
   - StopFailure event
   - API error hook
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # StopFailure Hook: Observability for API Error Termination
@@ -19,7 +19,7 @@ maturity: established
 
 ## What It Is (and What It Is Not)
 
-`StopFailure` is an **observational hook** — not a control hook. The runtime ignores its exit code and output. It cannot block, retry, or resume the session; it fires after the turn has already failed.
+`StopFailure` is an **observational hook** — not a control hook. The runtime ignores its exit code and output. `StopFailure` cannot block, retry, or resume the session; it fires after the turn has already failed.
 
 The hook's role is notification: log, push a metric, trigger an alert. Retry or re-launch logic must live in an external process — a CI supervisor, cron job, or shell wrapper — that reads the hook's output and decides what to do next.
 

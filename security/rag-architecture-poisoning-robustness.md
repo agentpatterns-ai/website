@@ -113,7 +113,7 @@ Against vanilla RAG the document lands in the top-10 and the LLM weights its met
 
 - Architecture is a threat-model variable. Same retriever, model, documents — 58 pp ASR spread.
 - Three of four architectures fail at generation, not retrieval. Defensive prompting at generation is the broadly applicable intervention.
-- Agentic loops amplify adversarial framing rather than filter it. Goal-driven reasoning converges on confident answers when conflicting evidence is present.
+- Agentic loops amplify adversarial framing rather than filter it — the agent echoed the framing in 63% of its incorrect answers. Goal-driven reasoning converges on confident answers when conflicting evidence is present.
 - Multi-agent debate trades correctness for non-commitment. High contradiction detection, 41% non-answer rate — only useful if hedging is operationally acceptable.
 - Recursive decomposition wins by structural separation of content and credibility judgment, at an order-of-magnitude latency cost.
 - One study, one attack class, one dataset. Treat the ranking as a hypothesis under your own threat model.

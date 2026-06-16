@@ -11,7 +11,7 @@ aliases:
   - bypassPermissions plus allowedTools
   - allowedTools does not constrain bypass
 last_reviewed: 2026-06-02
-maturity: established
+maturity: adopted
 ---
 
 # bypassPermissions Silently Overrides allowedTools (The Restricted-Bypass Trap)

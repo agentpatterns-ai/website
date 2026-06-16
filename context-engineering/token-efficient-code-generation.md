@@ -143,8 +143,7 @@ Both functions produce identical output. The idiomatic version consumes fewer to
 - [Prompt Compression](prompt-compression.md) — Fewer words in instructions to cut token cost
 - [Context Compression Strategies](context-compression-strategies.md) — Broader techniques for reducing context size
 - [Context Budget Allocation](context-budget-allocation.md) — Distributing token budget across sources
-- [Prompt Cache Economics](prompt-cache-economics.md) — Cost savings from caching prompt prefixes
-- [Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md) — Cache-friendly prompt structure
+- [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — Cost savings and cross-provider economics of caching prompt prefixes
 - [Context Window Dumb Zone](context-window-dumb-zone.md) — Where tokens get lost in large windows
 - [Instruction-Guided Code Completion](instruction-guided-code-completion.md) — Controlling what models generate beyond correctness
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — Cross-file context retrieval using ASTs and dependency graphs

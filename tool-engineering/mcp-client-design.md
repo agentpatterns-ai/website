@@ -12,7 +12,7 @@ tags:
   - tool-engineering
   - mcp
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # MCP Client Design: Building Robust Host-Side Logic
@@ -127,7 +127,7 @@ Local Streamable HTTP servers must validate `Origin`, bind to localhost, and req
 
 **Tool list churn invalidates provider prompt caches.** Providers key prompt caching on the tool list; mid-session changes raise per-turn costs. Avoid designs that shift the visible tool set between turns.
 
-**Full routing stack overhead on single-server agents.** Namespace maps, priority ordering, and per-server lifecycle yield no benefit with one server. Apply multi-server routing only when collision risk is real.
+**Full routing stack overhead on single-server agents.** Namespace maps (the `serverId -> tools[]` table), priority ordering, and per-server lifecycle yield no benefit with one server. Apply multi-server routing only when collision risk is real.
 
 **OAuth 2.1 PKCE assumes a capable HTTP client.** CLI or embedded agents may lack the browser or system capabilities the flow expects.
 

@@ -9,7 +9,7 @@ aliases:
   - agent-friendly code
   - codebase readiness
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # Codebase Readiness for Agents: Agent-Friendly Code
@@ -18,7 +18,7 @@ maturity: established
 
 ## Agent-Hostile vs. Agent-Friendly
 
-Agents don't work from requirements. They pattern-match against existing code. A codebase with weak types, no tests, inconsistent patterns, and undocumented decisions gives agents nothing to match against — so they invent.
+Agents don't work from requirements. They pattern-match against existing code. A codebase with weak types, no tests, inconsistent patterns, and undocumented decisions gives agents nothing to match against — so they invent, the gap [laying the architectural foundation first](../workflows/architectural-foundation-first.md) is meant to close.
 
 The solution is not better prompts. It is better code.
 
@@ -34,7 +34,7 @@ A comprehensive test suite gives agents a binary answer to "did I break anything
 
 ### Consistent Patterns
 
-Agents extrapolate patterns from what they observe. Inconsistent code produces inconsistent agent output. If three modules do the same thing three different ways, an agent writing a fourth will pick one arbitrarily — or invent a fourth way.
+Agents extrapolate patterns from what they observe. Inconsistent code produces inconsistent agent output — the case for [convention over configuration](../instructions/convention-over-configuration.md). If three modules do the same thing three different ways, an agent writing a fourth will pick one arbitrarily — or invent a fourth way.
 
 ### Decision Comments
 
@@ -42,7 +42,7 @@ Intentional choices get reverted when agents don't know they were intentional. A
 
 ### Directory Structure
 
-Agents navigate by convention. A clear, predictable directory structure lets agents determine where new files belong without asking. Flat directories with mixed concerns force agents to guess.
+Agents navigate by convention, one item on the [repository bootstrap checklist](../workflows/repository-bootstrap-checklist.md). A clear, predictable directory structure lets agents determine where new files belong without asking. Flat directories with mixed concerns force agents to guess.
 
 ### Project Instructions
 
@@ -67,7 +67,7 @@ Improving codebase readiness benefits agents and human developers identically �
 
 Readiness work has real costs and does not always dominate. Consider deferring it when:
 
-- **The code is throwaway.** Prototypes, spikes, and one-off scripts may never survive long enough to amortise the investment. Strict types and test scaffolding slow the exploration loop.
+- **The code is throwaway.** Prototypes, spikes, and one-off scripts may never survive long enough to amortise the investment. Strict types and test scaffolding slow the exploration loop that [agent-driven greenfield work](../workflows/agent-driven-greenfield.md) depends on.
 - **Patterns are premature.** Locking in conventions before the shape of the problem is understood produces rigid scaffolding that agents then faithfully extend in the wrong direction. Early code is often better left malleable.
 - **The codebase is large enough that local readiness doesn't help.** Pattern-matching breaks down across enterprise codebases with hundreds of thousands of files regardless of how clean any single module is ([Qodo, 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/)). Readiness is necessary but not sufficient at scale; retrieval, sub-agents, and architectural boundaries carry more weight than local hygiene.
 - **Documentation drifts faster than it helps.** Large AGENTS.md files and verbose decision comments that go stale produce false confidence — agents trust out-of-date guidance and make it worse. If you cannot maintain the prose, terser is safer.
@@ -122,7 +122,7 @@ The decision comment explains the 1-based convention and where the contract live
 ## Key Takeaways
 
 - Agent output quality correlates with codebase quality — weak types, no tests, and inconsistent patterns produce worse agent output.
-- Decision comments prevent agents from reverting intentional choices.
+- Decision comments prevent agents from reverting intentional choices — the [non-discoverable context](../context-engineering/discoverable-vs-nondiscoverable-context.md) code alone cannot convey.
 - Consistent patterns give agents correct examples to extrapolate from.
 - Improving codebase readiness for agents and improving it for humans are the same task.
 

@@ -17,7 +17,7 @@ maturity: established
 
 ## The Problem with Agent Decisions
 
-Every choice an agent makes is an opportunity for a wrong answer. Where should this file go? What should this branch be called? Which label applies? When the answer isn't obvious, an agent guesses — and inconsistent guesses compound over time into a codebase that's hard to navigate and hard to automate further.
+Every choice an agent makes is an opportunity for a wrong answer. Where should this file go — and which [scope's instruction file](layered-instruction-scopes.md) governs it? What should this branch be called? Which label applies? When the answer isn't obvious, an agent guesses — and inconsistent guesses compound over time into a codebase that's hard to navigate and hard to automate further, the failure [standards-as-instructions](standards-as-agent-instructions.md) is meant to prevent.
 
 Convention over configuration solves this by making the right choice the only obvious choice. The [AGENTS.md standard](../standards/agents-md.md) and similar project instruction standards exist specifically to document these conventions in a form agents can read once and apply everywhere.
 
@@ -36,7 +36,7 @@ docs/workflows/         → end-to-end workflows
 docs/patterns/anti-patterns/ → what to avoid
 ```
 
-An agent given a category label can determine the output path without being told.
+An agent given a category label can determine the output path without being told — a `pattern` lands in `docs/patterns/`.
 
 ### Branch Naming
 
@@ -73,9 +73,9 @@ A convention that requires exceptions at every turn is a signal it was specified
 
 ## Why It Works
 
-Agents have no persistent memory between sessions. Each task starts cold. When naming and placement are deterministic — derivable from the issue number, content category, or file type — an agent needs no context about what previous agents chose. The correct output follows from the inputs alone.
+Agents have no persistent memory between sessions. Each task starts cold. When naming and placement are deterministic — derivable from the issue number, content category, or file type — an agent needs no context about what previous agents chose, because the answer is [discoverable from the inputs](../context-engineering/discoverable-vs-nondiscoverable-context.md) rather than remembered. The correct output follows from the inputs alone.
 
-Without conventions, an agent encountering an ambiguous situation guesses. Different agents make different guesses. Later agents must inspect prior outputs to infer which ad-hoc scheme was used — adding a disambiguation step that grows with every task. Conventions eliminate the disambiguation step entirely by removing the ambiguity at the source.
+Without conventions, an agent encountering an ambiguous situation guesses. Different agents make different guesses. Later agents must inspect prior outputs to infer which ad-hoc scheme was used — the re-derivation cost a project map like [AGENTS.md as a table of contents](agents-md-as-table-of-contents.md) eliminates — adding a disambiguation step that grows with every task. Conventions eliminate the disambiguation step entirely by removing the ambiguity at the source.
 
 ## Anti-Pattern: Per-Task Invention
 

@@ -111,7 +111,7 @@ Two confounds mimic reward hacking. Broken graders penalize correct answers — 
 
 ## Why It Works
 
-Each grader type checks a different representation of correctness — code-based checks the artifact, model-based checks reasoning and presentation, human checks intent. Collapsing all three simultaneously requires genuinely correct output, not a locally optimal exploit. Structured JSON constrains the output space so the agent cannot rephrase a "failing" field as passing without breaking schema validation. Pre-completion verification closes the remaining gap by evaluating the artifact *after* the agent's final action, outside its context window and tool access.
+Each grader type checks a different representation of correctness — code-based checks the artifact, model-based checks reasoning and presentation, human checks intent. Collapsing all three simultaneously requires genuinely correct output, not a locally optimal exploit. Structured JSON constrains the output space so the agent cannot rephrase a "failing" field as passing without breaking schema validation. [Pre-completion verification](pre-completion-checklists.md) closes the remaining gap by evaluating the artifact *after* the agent's final action, outside its context window and tool access.
 
 ## When This Backfires
 
@@ -125,7 +125,7 @@ These defenses add overhead and do not eliminate gaming under all conditions:
 
 - Agents game single metrics; combining orthogonal grader types forces genuine correctness.
 - Grade outcomes not process; test bidirectionally so no dominant class is exploitable.
-- Structured JSON criteria and independent pre-completion verification close the remaining gap.
+- Structured JSON criteria and independent [pre-completion verification](pre-completion-checklists.md) close the remaining gap.
 - Verify graders and infrastructure before trusting a low score — broken evals mimic hard tasks.
 
 Anti-gaming checklist:

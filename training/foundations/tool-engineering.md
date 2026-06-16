@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
 last_reviewed: 2026-05-27
 ---
+
 # Tool Engineering (Training Module)
 
 > The quality of an agent's tools bounds the quality of its output -- no prompt compensates for a tool interface the model cannot use reliably.
@@ -35,9 +36,9 @@ Three principles follow from this:
 
 The instinct to add more tools for coverage is counterproductive. [OpenAI's data agent team](https://openai.com/index/inside-our-in-house-data-agent/) found that exposing the full tool set created overlapping functionality that confused agents. Consolidating and restricting tool calls -- even removing valid options -- reduced ambiguity and improved end-to-end reliability.
 
-The mechanism: before each call, the agent evaluates available tools and selects one. More tools means more evaluation tokens spent per decision. Overlapping tools force the agent to reason about *which* tool to use before it can reason about *the task*. That selection overhead compounds across every invocation in a session.
+The mechanism: before each call, the agent evaluates available tools and selects one. More tools means more evaluation tokens spent per decision. [Overlapping tools](../../tool-engineering/consolidate-agent-tools.md) force the agent to reason about *which* tool to use before it can reason about *the task*. That selection overhead compounds across every invocation in a session.
 
-The audit is straightforward. Identify tool pairs with overlapping functionality -- multiple search tools without clear selection criteria, shell execution plus dedicated command tools for the same operations, multiple file-read mechanisms. For each overlap, either merge into one tool or add explicit selection criteria that make use cases non-overlapping. If the criteria are hard to articulate, merge. See [Tool Minimalism](../../tool-engineering/tool-minimalism.md) and [Consolidate Agent Tools](../../tool-engineering/consolidate-agent-tools.md) for detailed guidance.
+The audit is straightforward. Identify tool pairs with overlapping functionality -- multiple search tools without clear selection criteria, shell execution plus dedicated command tools for the same operations, multiple file-read mechanisms. For each overlap, either [merge into one tool](../../tool-engineering/tool-minimalism.md) or add explicit selection criteria that make use cases non-overlapping. If the criteria are hard to articulate, merge. See [Tool Minimalism](../../tool-engineering/tool-minimalism.md) and [Consolidate Agent Tools](../../tool-engineering/consolidate-agent-tools.md) for detailed guidance.
 
 Each surviving tool should map to a single, distinct sub-task. The test: if you cannot state in one sentence what a tool does that no other tool does, the tool set has overlap.
 
@@ -47,9 +48,7 @@ Each surviving tool should map to a single, distinct sub-task. The test: if you 
 
 Agents select tools by reasoning about descriptions, not by browsing documentation. A tool with a weak description is effectively invisible for use cases the description fails to communicate -- even if the implementation handles them correctly. [Improving tool ergonomics including descriptions reduced task completion time by 40%](https://www.anthropic.com/engineering/multi-agent-research-system) in Anthropic's multi-agent research system.
 
-The most common failure mode is a description accurate enough to explain what the tool does but not specific enough to tell the agent when to prefer it over alternatives. The fix is adding positive selection signals: "Use this tool when X" and "Prefer this over Y when Z." These are instructions to the agent, not documentation of the interface.
-
-Write descriptions assuming the agent has never seen the underlying system. Include query syntax, domain terminology, resource relationships, and return shape -- the implicit context an experienced user takes for granted but an agent cannot infer. [Anthropic's guidance on writing tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents) confirms that minor description refinements routinely yield dramatic accuracy improvements.
+The most common failure mode is a description accurate enough to explain what the tool does but not specific enough to tell the agent when to prefer it over alternatives. The fix is adding [positive selection signals](../../tool-engineering/tool-description-quality.md): "Use this tool when X" and "Prefer this over Y when Z." These are instructions to the agent, not documentation of the interface. Write descriptions assuming the agent has never seen the underlying system. Include query syntax, domain terminology, resource relationships, and return shape -- the implicit context an experienced user takes for granted but an agent cannot infer. [Anthropic's guidance on writing tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents) confirms that minor description refinements routinely yield dramatic accuracy improvements.
 
 For MCP servers exposing many tools, each description must be self-contained. Agents may not read adjacent tool descriptions before selecting. See [Tool Description Quality](../../tool-engineering/tool-description-quality.md) and [Tool Descriptions as Onboarding](../../tool-engineering/tool-descriptions-as-onboarding.md).
 
@@ -97,9 +96,7 @@ The [Model Context Protocol](../../standards/mcp-protocol.md) is the emerging st
 
 Skills extend the tool surface with domain knowledge. A well-authored skill includes the conventions, edge cases, and gotchas that the base model would otherwise get wrong -- written as a delta from baseline model behavior, not a comprehensive tutorial.
 
-The description field determines whether the agent loads a skill. Structure it as: what it does, when to use it, key capabilities. Include trigger phrases users would actually say. Add negative triggers to prevent over-firing. Debug by asking the agent "When would you use this skill?" -- it quotes the description back, revealing gaps.
-
-The highest-signal content in any skill is the Gotchas section: cases where the agent would do something plausible but wrong. Build it incrementally from real failures, not from anticipated ones. See [Skill Authoring Patterns](../../tool-engineering/skill-authoring-patterns.md) for the five implementation patterns and testing methodology.
+The description field determines whether the agent loads a skill. Structure it as: what it does, when to use it, [key capabilities](../../tool-engineering/skill-authoring-patterns.md). Include trigger phrases users would actually say. Add negative triggers to prevent over-firing. Debug by asking the agent "When would you use this skill?" -- it quotes the [description](../../tool-engineering/tool-description-quality.md) back, revealing gaps. The highest-signal content in any skill is the Gotchas section: cases where the agent would do something plausible but wrong. Build it incrementally from real failures, not from anticipated ones. See [Skill Authoring Patterns](../../tool-engineering/skill-authoring-patterns.md) for the five implementation patterns and testing methodology.
 
 ---
 
@@ -108,7 +105,7 @@ The highest-signal content in any skill is the Gotchas section: cases where the 
 - Every tool response is a context injection. Size it for the agent's next decision, not for completeness.
 - Fewer, non-overlapping tools outperform large tool sets. [Consolidating tools improved reliability even when it removed valid options](https://openai.com/index/inside-our-in-house-data-agent/).
 - Tool descriptions are prompt engineering surfaces. Add selection signals ("use this when X, prefer Y when Z"), not just capability summaries.
-- Poka-yoke eliminates error classes structurally. Require absolute paths, use enums, enforce read-before-write gates, validate early.
+- [Poka-yoke](../../tool-engineering/poka-yoke-agent-tools.md) eliminates error classes structurally. Require absolute paths, use enums, enforce read-before-write gates, validate early.
 - Typed schemas at agent boundaries prevent the primary multi-agent failure mode: missing structure at handoff points.
 - MCP tool surface design is a performance lever. Keep tools focused, defer large surfaces, implement both protocol and execution error channels.
 - Skill effectiveness depends on description craft and gotcha documentation, not comprehensiveness.

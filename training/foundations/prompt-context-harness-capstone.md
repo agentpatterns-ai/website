@@ -10,11 +10,12 @@ tags:
   - tool-agnostic
 last_reviewed: 2026-05-27
 ---
+
 # How the Four Disciplines Compound
 
 > Prompt engineering, context engineering, harness engineering, and tool engineering are not independent skills -- they multiply, and weakness in any one caps the value of the other three.
 
-Agent output quality is a product, not a sum. Each of the four disciplines -- prompt engineering, context engineering, tool engineering, and harness engineering -- acts as a multiplier. A zero in any factor zeros the result, regardless of investment in the others. The implication: diagnosing which factor is the bottleneck matters more than improving any single factor in isolation.
+Agent output quality is a product, not a sum. Each of the four disciplines -- prompt engineering, [context engineering](../../context-engineering/context-engineering.md), tool engineering, and harness engineering -- acts as a multiplier. A zero in any factor zeros the result, regardless of investment in the others. The implication: diagnosing which factor is the bottleneck matters more than improving any single factor in isolation.
 
 ---
 
@@ -59,7 +60,7 @@ A tool with ambiguous parameter names causes selection errors. A tool that retur
 
 ### Harness without prompts produces correct but wrong output
 
-A comprehensive test suite and strict type system ensure the agent's code compiles and passes checks. They do not ensure the code solves the right problem. [Prompt altitude](../../instructions/system-prompt-altitude.md) provides the reasoning heuristics -- how to approach authentication code, when to flag missing requirements, which patterns to prefer. Harness catches mechanical errors; prompts shape intent.
+A comprehensive test suite and strict type system provide the [mechanical backpressure](../../agent-design/harness-engineering.md) that ensures the agent's code compiles and passes checks. They do not ensure the code solves the right problem. [Prompt altitude](../../instructions/system-prompt-altitude.md) provides the reasoning heuristics -- how to approach authentication code, when to flag missing requirements, which patterns to prefer. Harness catches mechanical errors; prompts shape intent.
 
 ---
 
@@ -101,7 +102,7 @@ The diagnostic sequence: check harness first (is there mechanical feedback?), th
 Most teams follow a predictable sequence:
 
 1. **Prompts first.** Individual developers write better messages. Results improve for that developer, that session. Nothing compounds.
-2. **Context second.** Teams commit instruction files, configure progressive disclosure, manage context budgets. Results improve per-repo. Knowledge survives across sessions.
+2. **Context second.** Teams commit instruction files, configure [progressive disclosure](../../agent-design/progressive-disclosure-agents.md), manage context budgets. Results improve per-repo. Knowledge survives across sessions.
 3. **Tools third.** Teams invest in tool descriptions, [MCP server design](../../tool-engineering/mcp-server-design.md), structured output, and [poka-yoke parameter design](../../tool-engineering/poka-yoke-agent-tools.md). Agent actions become reliable. The gap between "knows what to do" and "can do it" closes.
 4. **Harness last.** Teams build [mechanical enforcement](../../agent-design/harness-engineering.md) -- custom linters, structural tests, CI gates. Agent output becomes self-verifying. The [verification bottleneck](../../human/rigor-relocation.md) breaks.
 
@@ -129,7 +130,7 @@ Take the last three agent failures your team encountered. For each:
 
 1. Identify the primary discipline: prompt, context, tool, or harness.
 2. Identify whether a secondary discipline contributed (e.g., a prompt problem amplified by poor context positioning).
-3. Propose a fix in the identified discipline. Assess its durability: does it fix one session (prompt), one repo (context/tool), or all future sessions (harness)?
+3. Propose a fix in the identified discipline. Assess its [durability](../../workflows/compound-engineering.md): does it fix one session (prompt), one repo (context/tool), or all future sessions (harness)?
 4. If the fix is a prompt change, ask: could this be a linter rule instead? If yes, the harness fix is more durable.
 
 The pattern that emerges from this exercise is consistent: most teams attribute failures to prompts, but most durable fixes live in harness and context.
@@ -140,8 +141,8 @@ The pattern that emerges from this exercise is consistent: most teams attribute 
 
 - Agent output quality is a product of four factors -- a zero in any one zeros the result, regardless of investment in the others.
 - Diagnose failures by discipline before fixing them. The symptom determines the factor; the factor determines the fix.
-- Harness engineering has the highest durability. A linter rule persists across all sessions, agents, and team members. A prompt fix lasts one message.
-- The natural progression (prompts, context, tools, harness) is suboptimal. Investing in harness earlier makes every subsequent prompt and context investment more effective.
+- [Harness engineering](../../agent-design/harness-engineering.md) has the highest durability. A linter rule persists across all sessions, agents, and team members. A prompt fix lasts one message.
+- The natural progression (prompts, context, tools, harness) is suboptimal. Investing in harness earlier makes every subsequent prompt and context investment more effective, the way the [compound engineering loop](../../workflows/compound-engineering.md) intends.
 - Context engineering makes prompts land -- position, recency, and budget determine whether instructions receive attention.
 - Tool engineering determines the action space -- agents cannot do what the tool interface does not support.
 - The [compound engineering workflow](../../workflows/compound-engineering.md) closes the loop: each cycle's learnings become the next cycle's harness, context, and tool improvements.
