@@ -116,6 +116,7 @@ In the LLM-controlled equivalent, the model decides whether to parse first, when
 ## Related
 
 - [Agentless vs Autonomous](agentless-vs-autonomous.md) — The same pattern applied to bug fixing on SWE-bench: a constrained two-phase workflow beats autonomous agents at lower cost
+- [LLM-as-Code Agentic Programming for Agent Harnesses](llm-as-code-agentic-programming.md) — The general architectural argument: programs hold control flow, LLM is a callable component, context scales with call-tree depth — of which modernization is one instance
 - [Cognitive Reasoning vs Execution Separation](cognitive-reasoning-execution-separation.md) — Two-layer architecture where typed tool interfaces enforce the boundary between deciding and acting
 - [Discrete Phase Separation](discrete-phase-separation.md) — Running phases in isolated contexts so only distilled artifacts cross the boundary
 - [Agents vs Commands](agents-vs-commands.md) — When command-style fixed execution beats full agent autonomy
