@@ -3,7 +3,7 @@
 > Patterns and techniques for experienced developers leveling up with AI coding assistants.
 
 ## Overview
-<!-- lastmod: 2026-06-16 -->
+<!-- lastmod: 2026-06-18 -->
 
 - [About Agent Patterns](https://agentpatterns.ai/about/): A practitioner's catalogue of patterns and primitives for engineers building with AI coding assistants.
 - [Concept Map](https://agentpatterns.ai/concepts/): All site content grouped by theme, cutting across sections. Find related concepts regardless of where they live in th...
