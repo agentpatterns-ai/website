@@ -162,6 +162,6 @@ The `explorer` description combines "Use PROACTIVELY" with "Use immediately afte
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — extend tier routing across providers
 - [Code-Health-Gated LLM Tier Routing](auto-model-selection.md) — route by file-level code health metrics rather than task type
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md) — role split that complements tier routing
-- [Copilot vs Claude Billing Semantics](../human/copilot-vs-claude-billing-semantics.md) — premium request economics across vendors
 - [Claude Code Sub-Agents](../tools/claude/sub-agents.md) — per-agent model selection mechanic
 - [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md) — pair tier routing with lean tool surfaces
+- [Minimum-Sufficient Control Ladder](minimum-sufficient-control-ladder.md) — orthogonal axis: this page escalates *model tier* by task complexity; the ladder escalates *control mechanism* by named failure mode

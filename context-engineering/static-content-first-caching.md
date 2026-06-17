@@ -120,5 +120,6 @@ The key changes: tools sorted by name (deterministic order), system prompt built
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
 - [Context Compression Strategies](context-compression-strategies.md)
+- [Stateful Iteration State-Carry](stateful-iteration-state-carry.md) — the application-tier complement: when loops are long and observations large, lifting state out of the transcript beats caching on its own
 - [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
 - [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)

@@ -102,4 +102,4 @@ Three instructions, all grounded in project reality. The copied configuration ha
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md)
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
 - [Pattern Replication Risk](pattern-replication-risk.md)
-- [Distractor Interference](distractor-interference.md)
+- [Minimum-Sufficient Control Ladder](../agent-design/minimum-sufficient-control-ladder.md) — the counter-pattern: an ordered algorithm for adding control mechanisms only when a named failure mode justifies them, rather than stacking sophisticated controls upfront

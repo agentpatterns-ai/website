@@ -112,3 +112,4 @@ The site's [Anti-Patterns](../anti-patterns/index.md) section catalogues specifi
 - [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md) — taxonomy that subsumes orchestrator-workers and parallelization
 - [Agentless vs Autonomous](agentless-vs-autonomous.md) — when simple workflows beat autonomous agents
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md) — control-flow choices for the autonomous agent loop
+- [Agentic Pattern Vocabulary Crosswalk](../patterns/pattern-vocabulary-crosswalk.md) — site-wide vocabulary crosswalk that uses this page as the Anthropic-column anchor

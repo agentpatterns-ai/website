@@ -31,3 +31,7 @@ Common failure modes in AI-assisted development — from abstraction bloat and c
 ## [Pattern Selection Map](selection-map.md)
 
 A trade-off matrix comparing 14 patterns from this site across token cost, latency, frontier-model dependency, blast radius, verification cost, and task class — to help you pick the cheapest pattern that solves your problem.
+
+## [Agentic Pattern Vocabulary Crosswalk](pattern-vocabulary-crosswalk.md)
+
+A navigation aid mapping four external agentic-pattern vocabularies — Ng's four, Anthropic's five, Gulli's twenty-one, CoALA's three axes — onto this site's canonical pages, with per-row scope-difference notes.

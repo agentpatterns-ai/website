@@ -128,3 +128,4 @@ Category recognition reduces over-engineering. The [Agentless paper](https://arx
 - [Deterministic Orchestration for Structured Modernization](deterministic-orchestration-structured-modernization.md) — concrete instance of stable workflow shape beating LLM routing
 - [Long-Running Agents](long-running-agents.md) — temporal dimension treated independently of autonomy
 - [Coding Agent Scope Expansion](coding-agent-scope-expansion.md) — what changes when an AI coding agent extends beyond the codebase
+- [Agentic Pattern Vocabulary Crosswalk](../patterns/pattern-vocabulary-crosswalk.md) — pattern-level companion: maps Ng's four, Anthropic's five, Gulli's twenty-one, and CoALA's three axes onto canonical site pages

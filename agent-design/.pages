@@ -32,6 +32,7 @@ nav:
       - governed-sources-of-truth-analytics-agents.md
       - open-agent-school-pattern-mapping.md
       - persona-as-code.md
+      - react-pattern.md
       - role-orchestration-single-model.md
       - graph-of-thoughts.md
       - hypothesis-driven-debugging.md
@@ -54,6 +55,7 @@ nav:
       - dual-trace-memory-encoding.md
       - durable-interactive-artifacts.md
       - episodic-memory-retrieval.md
+      - executable-memory-user-as-code.md
       - generative-agents-memory-stream.md
       - handoff-skill-context-transfer.md
       - layered-mutability.md
@@ -67,6 +69,7 @@ nav:
       - tiered-memory-architecture.md
   - "Control & Orchestration":
       - background-todo-agent.md
+      - in-agent-task-prioritization.md
       - interactive-clarification-underspecified-tasks.md
       - convergence-detection.md
       - critic-agent-plan-review.md
@@ -82,6 +85,7 @@ nav:
       - grill-me-technique.md
       - inference-time-tool-call-reviewer.md
       - loop-strategy-spectrum.md
+      - minimum-sufficient-control-ladder.md
       - plan-compliance-in-agents.md
       - proactive-idle-time-anticipation.md
       - progressive-disclosure-agents.md

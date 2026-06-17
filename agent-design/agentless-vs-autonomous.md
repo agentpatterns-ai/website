@@ -8,7 +8,7 @@ tags:
 aliases:
   - agentless approach
   - simple-first AI
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-16
 maturity: adopted
 ---
 
@@ -72,6 +72,8 @@ Simple approaches demonstrate superior cost-performance ratios when complexity o
 4. **Full autonomy**: AI plans and executes independently
 
 Most tasks stop at level 2-3 because the marginal benefits of full autonomy are often outweighed by the complexity, debugging overhead, and coordination costs that autonomous planning introduces.
+
+This gating shows up in production tooling: GitHub describes [making Copilot CLI more selective about delegation](https://github.blog/ai-and-ml/how-we-made-github-copilot-cli-more-selective-about-delegation/), tuning the CLI agent to handle more tasks inline rather than spinning up delegated autonomous work by default — a first-party account of choosing the constrained path until autonomy is demonstrably warranted.
 
 ### Harness Engineering Over Agent Engineering
 
