@@ -99,7 +99,7 @@ The captured gain is not a 30% speedup on old work — it is a new category of t
 - [PM on the AI Exponential](pm-on-the-ai-exponential.md) — Product-level response to capability step changes; side quests and release-triggered feature revisits
 - [The Bottleneck Migration](bottleneck-migration.md) — The review-side counterpart to ambition scaling on the supply side
 - [Strategy Over Code Generation](strategy-over-code-generation.md) — Ambition without upstream strategy amplifies the wrong goal
-- [Empirical Baseline for Agentic Config](../instructions/empirical-baseline-agentic-config.md) — Instrumented baseline needed to justify moving tasks between buckets
 - [Comprehension Debt](../anti-patterns/comprehension-debt.md) — What accumulates when ambition outruns review
 - [Rigor Relocation](rigor-relocation.md) — Harness and verification effort must scale with ambition
 - [Process Amplification](process-amplification.md) — Agents amplify whatever process they land in, including ambition decisions
+- [Intervention Rate as a Diagnostic North Star, Not a Target](intervention-rate-diagnostic-north-star.md) — The metric named in the routine-delegate row, with the conditions under which it is a useful signal rather than a Goodhart trap

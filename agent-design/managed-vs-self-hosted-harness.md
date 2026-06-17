@@ -9,7 +9,7 @@ aliases:
   - managed agent harness
   - self-hosted agent harness
   - agent harness deployment
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-16
 maturity: established
 ---
 
@@ -19,7 +19,7 @@ maturity: established
 
 ## The Decision
 
-Managed agent services — [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) — provide a pre-built harness, [sandboxed execution](../security/sandbox-runtime-comparison.md), and hosted infrastructure in exchange for vendor coupling. Self-hosted open-source harnesses — [LangChain Deep Agents Deploy](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/), Cursor's self-hosted cloud agents — trade ops burden for control over data, model selection, and accumulated [agent memory](agent-memory-patterns.md).
+Managed agent services — [Claude Managed Agents](https://claude.com/blog/building-with-claude-managed-agents) ([platform docs](https://platform.claude.com/docs/en/managed-agents/overview)) — provide a pre-built harness, [sandboxed execution](../security/sandbox-runtime-comparison.md), and hosted infrastructure in exchange for vendor coupling. Self-hosted open-source harnesses — [LangChain Deep Agents Deploy](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/), Cursor's self-hosted cloud agents — trade ops burden for control over data, model selection, and accumulated [agent memory](agent-memory-patterns.md).
 
 The choice mirrors the classic SaaS vs on-prem decision but with a compounding factor: agents accumulate memory over time. Locking memory behind a proprietary API raises migration cost with every session.
 

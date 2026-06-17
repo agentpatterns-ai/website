@@ -1149,15 +1149,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 
 > Structured curriculum modules and hands-on tracks for agent-assisted development.
 
-- [Air-Gapped RAG: Architecture Fundamentals](training/air-gapped-rag/architecture-fundamentals.md)
-- [Air-Gapped RAG: Chunking Strategies](training/air-gapped-rag/chunking-strategies.md)
-- [Air-Gapped RAG: Deployment, Operations, and Compliance](training/air-gapped-rag/deployment-operations-compliance.md)
-- [Air-Gapped RAG: Document Ingestion and Parsing](training/air-gapped-rag/document-ingestion-and-parsing.md)
-- [Air-Gapped RAG: Grounding, Citations, and Evaluation](training/air-gapped-rag/grounding-citations-evaluation.md)
-- [Air-Gapped RAG: Local Embeddings and Vector Stores](training/air-gapped-rag/local-embeddings-vector-stores.md)
-- [Air-Gapped RAG: Local LLM Inference](training/air-gapped-rag/local-llm-inference.md)
-- [Air-Gapped RAG: Overview and When to Use It](training/air-gapped-rag/overview.md)
-- [Air-Gapped RAG: Retrieval and Re-Ranking](training/air-gapped-rag/retrieval-and-reranking.md)
 - [Autonomous Research Loops: Loops That Know When to Stop](training/foundations/autonomous-research-loops.md)
 - [Context Engineering (Training Module)](training/foundations/context-engineering.md)
 - [Earned-Complexity Agent Maturity Ladder](training/foundations/agent-maturity-ladder.md)
