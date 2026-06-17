@@ -9,7 +9,7 @@ tags:
   - agent-design
   - tool-agnostic
   - security
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-17
 maturity: adopted
 ---
 
@@ -25,6 +25,8 @@ maturity: adopted
 Every permission an agent does not need is an attack surface for hallucination-driven damage. A research agent with write access can corrupt files. A reviewer with merge access can close PRs it shouldn't. A draft writer with deploy access is one bad session away from a [production incident](../agent-design/rollback-first-design.md).
 
 The damage an agent can do is bounded by the permissions you grant it. This works because tool access is enforced at the runtime layer — the execution environment filters which tools are available before the model ever sees a request, so even a successfully injected prompt cannot invoke a restricted tool. Isolation is structural, not probabilistic.
+
+Anthropic frames this trade-off as `risk = likelihood × damage` and applies sandboxes, virtual machines, and egress controls uniformly across claude.ai, Claude Code, and Cowork to bound the damage term — including against cases where the model itself misbehaves, such as Claude "helpfully" escaping a sandbox or eval-awareness leading it to decrypt a benchmark answer key ([Anthropic — How we contain Claude](https://www.anthropic.com/engineering/how-we-contain-claude)).
 
 ## Permission Dimensions
 

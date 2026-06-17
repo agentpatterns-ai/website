@@ -74,6 +74,7 @@ nav:
       - convergence-detection.md
       - critic-agent-plan-review.md
       - deterministic-orchestration-structured-modernization.md
+      - llm-as-code-agentic-programming.md
       - ast-grounded-doc-critic-loop.md
       - selective-autonomy-from-copilot-feedback.md
       - dspy-programmatic-prompt-optimization.md

@@ -210,6 +210,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Turn-Level Context Decisions for AI Coding Sessions](context-engineering/turn-level-context-decisions.md)
 - [Validating Token-Optimized Formats Inside Agentic Loops](context-engineering/validate-token-optimized-formats-in-agentic-loops.md)
 - [Prompt Caching: Architectural Discipline for Agents](context-engineering/prompt-caching-architectural-discipline.md)
+- [Stateful Iteration State-Carry: Typed Persistent State for Long Agent Loops](context-engineering/stateful-iteration-state-carry.md)
 
 ## Instructions & Prompts
 
@@ -501,6 +502,12 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Voting / Ensemble Pattern for AI Agent Development](multi-agent/voting-ensemble-pattern.md)
 - [VS Code Agents App: Agent-Native Parallel Task Execution](agent-design/vscode-agents-parallel-tasks.md)
 - [WIP=1 and Little's Law: Kanban Throughput Theory for Agent Task Design](agent-design/wip-1-littles-law-agent-throughput.md)
+- [Agentic Pattern Vocabulary Crosswalk](patterns/pattern-vocabulary-crosswalk.md)
+- [Executable Memory: User State as Code for Personalized Agents](agent-design/executable-memory-user-as-code.md)
+- [In-Agent Task Prioritization: Ranking the Next Action](agent-design/in-agent-task-prioritization.md)
+- [Minimum-Sufficient Control Ladder: Escalate by Failure Mode](agent-design/minimum-sufficient-control-ladder.md)
+- [ReAct (Reason + Act): Interleaved Reasoning-Action Loops](agent-design/react-pattern.md)
+- [Recursive Sub-Agent Delegation: Depth Limits and Trade-offs in Nested Hierarchies](multi-agent/recursive-sub-agent-delegation-depth.md)
 
 ## Tool Design
 
@@ -694,6 +701,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Verifying LLM-Generated Cryptographic Code](security/llm-cryptographic-code-verification.md)
 - [Windows Sandboxing for Coding Agents](security/windows-sandbox-primitives-coding-agents.md)
 - [Workload Identity Federation for Agent Runtimes](security/workload-identity-federation-for-agents.md)
+- [Skill Composition Risk in Agent Ecosystems](security/skill-composition-risk.md)
 
 ## Testing & Evaluation
 
@@ -985,6 +993,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](workflows/token-cost-profiling-always-on-workflows.md)
 - [Velocity-Quality Asymmetry: Why AI Speed Gains Fade](workflows/velocity-quality-asymmetry.md)
 - [Verification-Centric Development for AI-Generated Code](workflows/verification-centric-development.md)
+- [Continuous AI: A Navigation Map of Always-On Agent Workflows](workflows/continuous-ai.md)
 
 ## Human Factors
 
@@ -1027,6 +1036,8 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [The Context Ceiling -- Where AI Fails Expert Architects](human/context-ceiling.md)
 - [The Productivity-Experience Paradox in AI-Assisted Development](human/productivity-experience-paradox.md)
 - [Visible Thinking in AI-Assisted Development](human/visible-thinking-ai-development.md)
+- [Intervention Rate as a Diagnostic North Star, Not a Target](human/intervention-rate-diagnostic-north-star.md)
+- [Programming Language Choice Still Shapes Agent Artefacts](human/programming-language-choice-shapes-agent-artefacts.md)
 
 ## Anti-Patterns
 
@@ -1099,6 +1110,11 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [When Developers Understand Less of Their Own Codebase](anti-patterns/comprehension-debt.md)
 - [Density-Normalized Quality Metrics Mask AI-Driven Code Growth](anti-patterns/density-normalized-quality-metric.md)
 - [Unversioned Scaffolding Commands Pull Stale Templates](anti-patterns/unversioned-scaffolding-stale-templates.md)
+- [Agent Sprawl: Unmanaged Sub-Agent and Skill Proliferation](anti-patterns/agent-sprawl.md)
+- [Blind Tool Deference: Agents Parroting Callable Tools](anti-patterns/blind-tool-deference.md)
+- [Configuration Smells in AGENTS.md Files (Six-Smell Catalog)](anti-patterns/configuration-smells-agents-md.md)
+- [Constraint-Evasive Fabrication in Instruction Sets](anti-patterns/constraint-evasive-fabrication.md)
+- [Silent-Failure Mechanism Taxonomy in Production Agent Runtimes](anti-patterns/silent-failure-mechanism-taxonomy.md)
 
 ## Emerging Concepts
 

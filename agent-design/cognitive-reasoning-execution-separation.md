@@ -123,3 +123,4 @@ The reasoning layer never opens files. The execution layer never decides what to
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Context Engineering](../context-engineering/context-engineering.md)
 - [Permission-Gated Custom Commands](../security/permission-gated-commands.md)
+- [LLM-as-Code Agentic Programming for Agent Harnesses](llm-as-code-agentic-programming.md) — Pushes the layer boundary one step further: orchestration itself moves into the program, with the LLM as a callable component
