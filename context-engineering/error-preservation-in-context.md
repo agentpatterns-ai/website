@@ -62,7 +62,7 @@ graph TD
 
 **Preserve** when the failure is novel, contains architectural information, or recovery is still in progress.
 
-**Compact** when the same error has repeated three or more times (doom loop), or early errors are no longer relevant to the current task.
+**Compact** when the same error has repeated four or more times (doom loop), or early errors are no longer relevant to the current task.
 
 OpenDev implements five-stage progressive compaction: error traces are preserved in full during active recovery, then progressively summarized as the session continues ([Bui, 2026](https://arxiv.org/abs/2603.05344)).
 

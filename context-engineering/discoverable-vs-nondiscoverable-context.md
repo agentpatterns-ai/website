@@ -58,7 +58,7 @@ The pointer form is useful for discoverable content that benefits from direction
 
 ## Why It Works
 
-Instruction files are prepended to every context window before the agent reads a single file. Discoverable content placed there competes with task context for limited space and creates a second source of truth that diverges from the codebase over time. An agent given a stale directory tree may read from paths that no longer exist or skip new modules. A controlled evaluation found that human-authored context files increase inference cost by over 20% when they include structural overviews, with no improvement in task success — agents given high-level structural context explore the codebase more broadly, not more precisely ([Shi et al., "Evaluating AGENTS.md," 2026](https://arxiv.org/abs/2602.11988)).
+Instruction files are prepended to every context window before the agent reads a single file. Discoverable content placed there competes with task context for limited space and creates a second source of truth that diverges from the codebase over time. An agent given a stale directory tree may read from paths that no longer exist or skip new modules. A controlled evaluation found that human-authored context files increase inference cost by over 20% when they include structural overviews, with no improvement in task success — agents given high-level structural context explore the codebase more broadly, not more precisely ([Gloaguen et al., "Evaluating AGENTS.md," 2026](https://arxiv.org/abs/2602.11988)).
 
 ## Anti-Patterns
 

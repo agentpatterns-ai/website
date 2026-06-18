@@ -12,7 +12,7 @@ maturity: adopted
 
 # Assertion Density — Stats and Quotes Over Vague Claims
 
-> Replace vague qualifiers with specific numbers, dates, sample sizes, and attributed quotes. The Princeton GEO study found this is the highest-impact single rewrite technique for AI citation rates — up to 40–41% improvement in source visibility.
+> Replace vague qualifiers with specific numbers, dates, sample sizes, and attributed quotes. The Princeton GEO study found this is the highest-impact single rewrite technique for AI citation rates — up to 41% improvement in source visibility.
 
 ## Why Specificity Gets Cited
 
@@ -28,7 +28,7 @@ The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.
 | Technique | PAWC Improvement |
 |-----------|-----------------|
 | Quotation Addition | +41% |
-| Statistics Addition | +40% |
+| Statistics Addition | +30% |
 | Cite Sources | +30% |
 | Fluency Optimization | +15–30% |
 | Keyword Stuffing | –10% |
