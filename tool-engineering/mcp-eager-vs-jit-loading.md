@@ -12,7 +12,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - mcp
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-18
 maturity: adopted
 ---
 
@@ -26,7 +26,7 @@ Claude Code 2.1.121 added an `alwaysLoad` option to MCP server config: when `tru
 
 Without `alwaysLoad`, a server's tools sit behind tool search — the model invokes a search step that returns 3-5 matching `tool_reference` blocks, which expand into full definitions inline. With `alwaysLoad: true`, every tool from that server is in the system-prompt prefix from the first turn.
 
-The pattern generalises. Any host with deferred MCP discovery — current Claude Code, future MCP-aware Cursor or Copilot — faces the same per-server choice: which servers are core enough to deserve unconditional context residence, and which can be paid for only on demand?
+The pattern generalises. Any host with deferred MCP discovery — current Claude Code, future MCP-aware Cursor or Copilot — faces the same per-server choice: which servers are core enough to deserve unconditional context residence, and which can be paid for only on demand? Other harnesses push the deferral axis further than per-server: OpenAI Codex added per-thread MCP executor activation with plugin discovery, so executors activate per conversation thread rather than globally ([OpenAI Codex changelog](https://developers.openai.com/codex/changelog)) — narrowing the load decision to a per-conversation scope.
 
 ## What Each Side Costs
 

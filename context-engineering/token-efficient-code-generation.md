@@ -10,7 +10,7 @@ tags:
   - cost-performance
   - arxiv
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-18
 maturity: emerging
 ---
 
@@ -89,7 +89,7 @@ Idiomatic code compounds savings across turns: each time the model references co
 
 Apply structural approaches at the right layer:
 
-- **Model selection**: Models fine-tuned on high-quality Python corpora tend to favor idiomatic patterns; check whether your target model already applies them before adding post-processing
+- **Model selection**: Models fine-tuned on high-quality Python corpora tend to favor idiomatic patterns; check whether your target model already applies them before adding post-processing. [GitHub describes](https://github.blog/ai-and-ml/github-copilot/getting-more-from-each-token-how-copilot-improves-context-handling-and-model-routing/) per-token context-handling and model-routing techniques in Copilot aimed at extracting more useful work from each token rather than leaning on the model alone.
 - **Post-processing**: Lint rules or AST transforms catch non-idiomatic output before context entry
 - **[Example-driven instructions](../instructions/example-driven-vs-rule-driven-instructions.md)**: Code samples in prompts guide style without competing objectives
 

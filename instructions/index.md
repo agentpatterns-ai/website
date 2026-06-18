@@ -30,6 +30,7 @@ How you phrase, frame, and structure individual rules determines whether agents 
 
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) — Positive directives outperform negative instructions in agent compliance, especially as instruction count grows
 - [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — On SWE-bench, negative constraints are the only individually beneficial rule type; positive directives actively hurt — and rules work through context priming, not instruction specificity
+- [Security Knowledge Priming for Code Generation (SPARK)](security-knowledge-priming.md) — A brief task-relevant CWE cue in the prompt activates the model's latent security knowledge — supplementary to mechanical scanners, not a replacement
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md) — Exclusions and constraints eliminate entire classes of mistakes more efficiently than equivalent positive guidance
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — Rules generalize; examples anchor — knowing when to use each determines whether agents interpret your intent or invent their own
 - [Iterative Binary Feedback for Pattern Adherence](iterative-binary-feedback-pattern-adherence.md) — Looping yes/no pattern judgments through capable models beats verbose critique for design-pattern adherence when the predicate space is small and the judge is deterministic

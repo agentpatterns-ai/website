@@ -8,7 +8,7 @@ tags:
 aliases:
   - agentless approach
   - simple-first AI
-last_reviewed: 2026-06-16
+last_reviewed: 2026-06-18
 maturity: adopted
 ---
 
@@ -36,7 +36,7 @@ graph LR
 **Localization Phase**: Hierarchical process to identify fault locations
 **Repair Phase**: Generate multiple candidate patches in diff format
 
-This constrained approach avoided the complexity overhead of autonomous planning, tool selection, and execution coordination that characterizes agent-based systems.
+This constrained approach avoided the complexity overhead of autonomous planning, tool selection, and execution coordination that characterizes agent-based systems. The same argument extends beyond benchmarks: [Towards Data Science](https://towardsdatascience.com/you-probably-dont-need-an-agent-framework/) argues that many tasks are better served by explicit workflows than by reaching for an autonomous agent framework.
 
 ## When Autonomy Becomes Counterproductive
 

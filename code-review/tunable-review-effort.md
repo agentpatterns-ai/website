@@ -10,7 +10,7 @@ tags:
   - code-review
   - cost-performance
   - cursor
-last_reviewed: 2026-06-13
+last_reviewed: 2026-06-18
 maturity: established
 ---
 
@@ -38,7 +38,7 @@ The per-PR analogue of [heuristic effort scaling](../agent-design/heuristic-effo
 
 Single-calibration agents force a compromise. Calibrate for thoroughness and routine PRs drown in commentary — developers [override more than 30% of flags](https://www.codeant.ai/blogs/ai-code-review-false-positives) until the tool is functionally disabled. Calibrate for signal and the agent misses real regressions in high-stakes code.
 
-GitHub Copilot's review began as the implicit binary form: in [29% of reviews the agent stays silent and in 71% it surfaces actionable feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/). A multi-level dial generalises it — silence is the lowest rung, deep agentic exploration the highest. By mid-2026 Copilot had externalised the dial too: admins set a per-repository analysis tier of `low` — the fast, cost-efficient default — or a new `medium` tier that routes complex logic, security-sensitive code, and cross-service changes to a higher-reasoning model ([GitHub, 2026-06-02](https://github.blog/changelog/2026-06-02-shape-copilot-code-review-around-your-team/)). Cursor binds the choice to one PR, Copilot to one repository — coarser-grained, but the same effort-routing primitive.
+GitHub Copilot's review began as the implicit binary form: in [29% of reviews the agent stays silent and in 71% it surfaces actionable feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/). A multi-level dial generalises it — silence is the lowest rung, deep agentic exploration the highest. By mid-2026 Copilot had externalised the dial too: admins set a per-repository analysis tier of `low` — the fast, cost-efficient default — or a new `medium` tier that routes complex logic, security-sensitive code, and cross-service changes to a higher-reasoning model ([GitHub, 2026-06-02](https://github.blog/changelog/2026-06-02-shape-copilot-code-review-around-your-team/)), and weeks later widened the surface with [new configurations and controls for tuning the review agent](https://github.blog/changelog/2026-06-12-copilot-code-review-new-configurations-and-controls) (GitHub, 2026-06-12). Cursor binds the choice to one PR, Copilot to one repository — coarser-grained, but the same effort-routing primitive.
 
 ## Calibration is the Pattern
 

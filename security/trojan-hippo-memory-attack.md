@@ -14,7 +14,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-14
+last_reviewed: 2026-06-18
 maturity: emerging
 ---
 
@@ -24,7 +24,7 @@ maturity: emerging
 
 ## The Attack in Two Stages
 
-Trojan Hippo names a class of persistent memory attacks on LLM agents ([Das et al., 2026](https://arxiv.org/abs/2605.01970)). The attacker needs neither query control nor fine-tuning access: one untrusted tool input (crafted email, scraped webpage, API response) plants a payload the user later activates involuntarily.
+Trojan Hippo names a class of persistent memory attacks on LLM agents ([Das et al., 2026](https://arxiv.org/abs/2605.01970)). The attacker needs neither query control nor fine-tuning access: one untrusted tool input (crafted email, scraped webpage, API response) plants a payload the user later activates involuntarily. OWASP frames agent memory itself as an attack surface subject to poisoning and persistence attacks, not merely a convenience feature ([OWASP GenAI Security Project, 2026](https://genai.owasp.org/2026/05/13/memory-is-a-feature-it-is-also-an-attack-surface/)).
 
 ```mermaid
 graph TD

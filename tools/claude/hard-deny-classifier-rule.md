@@ -10,7 +10,7 @@ aliases:
   - autoMode hard_deny
   - unconditional classifier deny
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-18
 status: current
 ---
 
@@ -88,7 +88,7 @@ The classifier **does not read** `autoMode` from shared `.claude/settings.json`,
 
 Use `hard_deny` when the rule is **classifier-shaped** — it describes intent or destination ("never exfiltrate to third-party code-review APIs"), not a tool-pattern match. LLM-mediated interpretation is acceptable, and you want the rule to participate in the classifier's reasoning without being argued out of.
 
-Use `permissions.deny` instead when the rule is **tool-shaped** — it matches a specific command or domain pattern (`Bash(rm -rf /*)`, `WebFetch(domain:internal.example.com)`), compliance needs deterministic pre-classifier enforcement, or the block must apply even when auto mode is disabled.
+Use `permissions.deny` instead when the rule is **tool-shaped** — it matches a specific command or domain pattern (`Bash(rm -rf /*)`, `WebFetch(domain:internal.example.com)`), compliance needs deterministic pre-classifier enforcement, or the block must apply even when auto mode is disabled. Tool-shaped rules now reach below the tool name: Claude Code added `Tool(param:value)` parameter-scoped permission rules that match on a specific tool *parameter value* rather than only the tool name ([Claude Code changelog](https://code.claude.com/docs/en/changelog)), tightening the deterministic floor for cases where the danger lives in an argument, not the verb.
 
 Use OS-level [sandboxing](https://code.claude.com/docs/en/sandboxing) as a third layer when blast-radius containment matters at the process boundary, not just the agent decision boundary.
 

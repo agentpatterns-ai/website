@@ -7,7 +7,7 @@ tags:
   - human-factors
   - workflows
   - tool-agnostic
-last_reviewed: 2026-06-13
+last_reviewed: 2026-06-18
 maturity: established
 ---
 
@@ -56,6 +56,8 @@ Documentation is the clearest agent strength. Codex (88.6%) and Claude Code (85.
 
 20% of reviewers on agent PRs are bots, compared to 10% for human PRs. This suggests an emerging pattern: agent-authored code increasingly passes through automated review before (or instead of) human review. Teams adopting agents at scale need a review triage strategy — see [Tiered Code Review](tiered-code-review.md).
 
+As volume rises, the leverage shifts from writing code to judging it: [Addy Osmani argues](https://addyo.substack.com/p/agentic-code-review) that code review becomes the highest-leverage engineering skill as agent output volume grows, because deciding what to merge increasingly outweighs the act of authoring the change.
+
 Tooling vendors are responding to the same fixed-reviewer-capacity problem. Linear built a dedicated diff and review surface, [Linear Diffs](https://linear.app/blog/linear-diffs), specifically to make review fast enough to keep pace with the volume of agent-generated PRs — a tooling-side answer to the review bottleneck this page describes.
 
 ## Why Acceptance Rates Lag
@@ -99,6 +101,7 @@ Volume-first agent deployment underperforms when:
 - [arXiv:2604.03551](https://arxiv.org/abs/2604.03551) — "AgenticFlict: A Large-Scale Dataset of Merge Conflicts in AI Coding Agent Pull Requests on GitHub" — 27.67% conflict rate across 142K agent PRs
 - [arXiv:2601.20109](https://arxiv.org/abs/2601.20109) — "Beyond Bug Fixes: An Empirical Investigation of Post-Merge Code Quality Issues in Agent-Generated Pull Requests" — merge success does not reliably reflect post-merge code quality
 - [arXiv:2606.13468](https://arxiv.org/abs/2606.13468) — empirical study of agent-authored fixes: 46.41% rejected, with a taxonomy of 14 rejection reasons across four categories
+- [Agentic Code Review (Addy Osmani)](https://addyo.substack.com/p/agentic-code-review) — review becomes the highest-leverage engineering skill as agent output volume rises
 
 > Headline acceptance-rate figures derive primarily from the AIDev snapshot. Treat them as initial benchmarks corroborated by independent integration and post-merge-quality evidence, not as settled industry averages.
 
