@@ -102,7 +102,7 @@ Agent cards add friction that outweighs their value in four situations:
 
 - **Single-consumer integrations**: when one client calls one agent, a shared config or env var beats maintaining a well-known URL with correct caching.
 - **Rapidly-changing capability sets**: static cards go stale as [skills](agent-skills-standard.md) change; dynamic cards add server complexity and cache-invalidation risk.
-- **Cold-start bootstrapping**: the card tells you *what* an agent does once you know its base URL — not *how to find that URL*. Registries or service meshes still need out-of-band coordination.
+- **Cold-start bootstrapping**: the card tells you *what* an agent does once you know its base URL — not *how to find that URL*. Registries or service meshes still need out-of-band coordination. The [Agentic Resource Discovery](agentic-resource-discovery.md) draft spec is one proposed answer at the federated-search layer above agent cards.
 - **A2A schema coupling**: consumers written against an early A2A version may break as the spec evolves; the `url` → `supportedInterfaces` rename is one example.
 
 ## Key Takeaways
