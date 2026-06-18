@@ -8,7 +8,7 @@ tags:
   - source:opendev-paper
   - long-form
   - tool-agnostic
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-18
 maturity: established
 ---
 
@@ -47,6 +47,8 @@ Borrowed from [CPU architecture](https://en.wikipedia.org/wiki/Big.LITTLE): powe
 **Model rotation**: start with the cheaper model, escalate only on validation failure. This works when validation is cheap and deterministic — test suites, linters, type checkers.
 
 **Cascade routing**: [FrugalGPT](https://arxiv.org/abs/2305.05176) demonstrated up to 98% cost reduction by querying cheaper models first and escalating only when confidence is low. No coding tool implements this natively — the cascade pattern remains a manual or custom implementation. Approximate it with a two-pass pattern: fast model first, deterministic gate (tests, linter, type checker), escalate to capable model on failure.
+
+Beyond cutting average spend, routing also affects the *predictability* of spend — escalation paths make per-task cost variable. LangChain describes techniques for making a coding agent's token spend predictable, treating bounded cost as an explicit design goal rather than a side effect of tier choice ([LangChain — making coding-agent spend predictable](https://blog.langchain.com/how-we-made-coding-agent-spend-predictable)).
 
 ## Roo Code: Mode-Level Routing
 

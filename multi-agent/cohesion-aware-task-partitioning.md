@@ -10,7 +10,7 @@ aliases:
   - cohesion-aware partitioning
   - dependency-cohesion task partitioning
   - graph-partitioning multi-agent orchestration
-last_reviewed: 2026-06-13
+last_reviewed: 2026-06-18
 maturity: established
 ---
 
@@ -37,7 +37,7 @@ Co-Coder, the system Yang et al. evaluate, runs a three-stage pipeline on the st
 2. **Community detection via Infomap** — partition the remaining directed graph using the [Infomap algorithm](https://www.mapequation.org), which models the graph as a random walk and picks the partition that minimises the two-level description length. Heavy edges stay inside partitions; cuts cross sparse edges.
 3. **Leaf lifting** — independent leaf vertices are lifted into singleton partitions when latent parallelism exists that the community step missed.
 
-Partitions feed a dependency-aware scheduler that respects topological order and runs unrelated partitions in parallel.
+Partitions feed a dependency-aware scheduler that respects topological order and runs unrelated partitions in parallel. The same shape recurs in practitioner tooling: Towards Data Science describes a per-task dynamic harness that fits its orchestration layer to the job and coordinates a team of agents on that single task, rather than fixing one topology up front ([Towards Data Science — A Harness for Every Task](https://towardsdatascience.com/a-harness-for-every-task-putting-a-team-of-claudes-on-one-job/)).
 
 ```mermaid
 graph TD

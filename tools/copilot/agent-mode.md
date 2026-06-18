@@ -8,7 +8,7 @@ tags:
   - agent-design
   - copilot
 applies_to: "copilot@1.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-18
 status: current
 ---
 # GitHub Copilot Agent Mode
@@ -44,7 +44,7 @@ Agent mode degrades when the feedback loop is weak or the task exceeds its conte
 - **Large refactors across many files.** GitHub's own guidance positions agent mode for [low-to-medium complexity changes in well-tested repositories and small refactors — not massive rewrites, cross-repo changes, or codebases with little test coverage](https://github.blog/developer-skills/github/less-todo-more-done-the-difference-between-coding-agent-and-agent-mode-in-github-copilot/). One module at a time; avoid "rewrite the app in one shot."
 - **Trial-and-error loops.** When the agent cannot reconcile a failing test, it can [repeatedly retry without convergence, burning premium requests](https://github.com/orgs/community/discussions/182145) before stalling. Enforce a max-retry ceiling or hand off to ask/edit mode on stalls.
 - **First-step assumption drift.** A wrong assumption in step one propagates: every later edit, test, and fix inherits it. Planning mode reduces but does not eliminate this.
-- **Rate limits and context ceilings.** Agent mode consumes [premium requests and is subject to rate limits on the most powerful models](https://docs.github.com/en/billing/concepts/product-billing/github-copilot-premium-requests), making sustained exploratory work across dozens of interconnected files costly. On April 20, 2026, GitHub [paused new signups for Pro, Pro+, and Student plans, added session and weekly token-based limits, and removed Opus models from the Pro tier](https://github.blog/news-insights/company-news/changes-to-github-copilot-individual-plans/) — citing agent-mode workloads as the driver. Budget for the newer per-session and weekly ceilings, not just per-request premium counts.
+- **Rate limits and context ceilings.** Agent mode consumes [premium requests and is subject to rate limits on the most powerful models](https://docs.github.com/en/billing/concepts/product-billing/github-copilot-premium-requests), making sustained exploratory work across dozens of interconnected files costly. On April 20, 2026, GitHub [paused new signups for Pro, Pro+, and Student plans, added session and weekly token-based limits, and removed Opus models from the Pro tier](https://github.blog/news-insights/company-news/changes-to-github-copilot-individual-plans/) — citing agent-mode workloads as the driver. Budget for the newer per-session and weekly ceilings, not just per-request premium counts. To ease that budgeting, GitHub made [Auto mode in Copilot Chat generally available to all users on June 17, 2026, auto-selecting the model per request](https://github.blog/changelog/2026-06-17-auto-mode-in-copilot-chat-available-for-all-users) rather than pinning one premium model for every turn.
 
 ## Example
 

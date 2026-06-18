@@ -11,7 +11,7 @@ aliases:
   - Ralph loops
   - fresh-context loops
   - context loop strategy
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-18
 maturity: established
 ---
 
@@ -22,6 +22,8 @@ maturity: established
 ## The Decision
 
 The loop strategy spectrum is a three-way framework for choosing how context carries between iterations of a long-running agent workflow: accumulated context, within-session compression, or fresh context per iteration. The right choice depends on whether the workload is [synthesis-heavy or execution-heavy](cognitive-reasoning-execution-separation.md), or mixed.
+
+Treating this choice as a deliberate design decision is itself an emerging named discipline. LangChain frames the deliberate design of an agent's iterate/observe/act loop as "loop engineering" — a distinct engineering practice rather than an incidental implementation detail ([LangChain — The art of loop engineering](https://blog.langchain.com/the-art-of-loop-engineering)). Addy Osmani independently arrives at the same framing, positioning loop engineering as a core practice for agentic coding ([Addy Osmani — Loop engineering](https://addyo.substack.com/p/loop-engineering)); two sources converging on the same term mark it as a recognised discipline, not one author's coinage.
 
 | Strategy | Context model | Best for | Primary risk |
 |----------|--------------|----------|-------------|

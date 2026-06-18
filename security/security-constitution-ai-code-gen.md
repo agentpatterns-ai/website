@@ -133,4 +133,5 @@ The 16-hour upfront investment is from a single practitioner. Teams with existin
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — Layered safety mechanisms that a constitution feeds into
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — Mechanical enforcement layer for constitution MUST principles
 - [Hierarchical Instruction Files](../instructions/hierarchical-claude-md.md) — Where constitution references live in project configuration
+- [Security Knowledge Priming for Code Generation (SPARK)](../instructions/security-knowledge-priming.md) — The inference-time evidence for CWE-cue injection that the constitution operationalizes at specification time
 - [Spec-Driven Development](../workflows/spec-driven-development.md) — Workflow where the constitution becomes a specification input

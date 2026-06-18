@@ -6,7 +6,7 @@ tags:
   - agent-design
   - reliability
   - tool-agnostic
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-18
 maturity: established
 ---
 
@@ -77,6 +77,8 @@ Both solve the same problem: a 30-minute run should not lose all progress to a c
 ## Model Fallback
 
 When a model provider fails, route to an alternative. LangChain's [`ModelFallbackMiddleware`](https://docs.langchain.com/oss/python/langchain/middleware/built-in) chains models automatically (`Primary → Fallback 1 → Fallback 2`), handling outages and rate limits — though different models may produce different results for the same prompt.
+
+That divergence is the trap: a fallback that succeeds silently can mask a quality regression rather than surface a failure. One practitioner account describes silent LLM fallbacks breaking agent pipelines downstream and argues for an explicit recovery layer that makes the switch observable rather than transparent ([Towards Data Science — LLM fallbacks break agent pipelines](https://towardsdatascience.com/llm-fallbacks-break-agent-pipelines-i-built-the-missing-recovery-layer/)). Treat a fallback as a degraded-mode signal worth logging, not a transparent substitution.
 
 ## Circuit Breakers for Tool Calls
 

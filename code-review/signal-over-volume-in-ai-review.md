@@ -6,7 +6,7 @@ tags:
   - testing-verification
   - code-review
   - tool-agnostic
-last_reviewed: 2026-06-13
+last_reviewed: 2026-06-18
 maturity: established
 ---
 
@@ -23,6 +23,8 @@ GitHub's Copilot code review demonstrates this at scale: [in 71% of reviews, Cop
 ## Why Volume Fails
 
 Alert fatigue is the primary failure mode. When every PR gets a wall of comments — style nits, suggestions on intentional patterns, low-confidence speculation — you stop reading AI review output entirely. The one critical security finding gets buried in twenty stylistic preferences.
+
+The pressure intensifies as agents author more PRs: Linear describes [keeping the review quality bar high under the higher PR throughput agents generate](https://linear.app/now/reviewing-code-in-the-agent-era), treating volume as a reason to tighten the signal bar rather than relax it.
 
 ## Designing for Signal
 
@@ -112,7 +114,6 @@ A PR that receives a response of "No high-confidence findings." passes the bar. 
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Tiered Code Review](tiered-code-review.md)
 - [Tunable Review Effort](tunable-review-effort.md) — why High-by-default backfires; the per-PR effort lever that complements signal-over-volume
-- [Diff-Based Review](diff-based-review.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — complementary strengths of AI and human reviewers and how to structure collaboration
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical signal ratio data showing how actionable comment rates determine merge outcomes
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](../human/cognitive-load-ai-fatigue.md) — cognitive costs of review fatigue and how to manage them sustainably

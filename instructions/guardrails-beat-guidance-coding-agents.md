@@ -111,6 +111,7 @@ The negative rules reshape the agent's search by removing known failure branches
 ## Related
 
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md) — quality-and-greppability case for negative constraints
+- [Security Knowledge Priming for Code Generation (SPARK)](security-knowledge-priming.md) — the same context-priming lever specialized to secure-code generation via task-relevant CWE cues
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) — the opposite default for general prompting; this page is the coding-agent-specific refinement
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — complementary empirical data on context-file design
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the ceiling past which rule count dominates rule design

@@ -106,6 +106,7 @@ nav:
       - behavioral-drivers-agent-success.md
       - cost-aware-agent-design.md
       - cross-vendor-competitive-routing.md
+      - decoupled-search-grounding.md
       - dual-budget-control-search-agents.md
       - effective-feedback-compute.md
       - gateway-model-routing.md

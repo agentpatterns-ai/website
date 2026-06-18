@@ -7,7 +7,7 @@ tags:
   - copilot
   - github-actions
 applies_to: "copilot@1.x"
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-18
 status: current
 ---
 
@@ -19,7 +19,7 @@ status: current
 
 Developers write a Markdown file with YAML frontmatter and natural-language instructions. `gh aw compile` produces a `.lock.yml` — the executable GitHub Actions workflow. Only the Markdown file is hand-edited; the lock file is generated and committed alongside it ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
 
-GitHub reports that Agentic Workflows entered public preview on 2026-06-11 ([GitHub Changelog](https://github.blog/changelog/2026-06-11-github-agentic-workflows-is-now-in-public-preview)).
+GitHub reports that Agentic Workflows entered public preview on 2026-06-11 ([GitHub Changelog](https://github.blog/changelog/2026-06-11-github-agentic-workflows-is-now-in-public-preview)). It lands beside a wider programmable-agent push: GitHub reports the Agent Tasks REST API reached general availability for Copilot Pro, Pro+, and Max on 2026-06-04 ([GitHub Changelog](https://github.blog/changelog/2026-06-04-agent-tasks-rest-api-now-available-for-copilot-pro-pro-and-max)), and that agent apps now let developers extend GitHub with custom agents ([GitHub Changelog](https://github.blog/changelog/2026-06-02-extend-github-with-agent-apps)).
 
 The frontmatter declares:
 

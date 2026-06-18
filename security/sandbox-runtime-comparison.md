@@ -9,7 +9,7 @@ tags:
 aliases:
   - sandbox runtime comparison
   - agent sandbox runtime selection
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-18
 maturity: established
 ---
 
@@ -19,7 +19,7 @@ maturity: established
 
 ## The Three Runtime Families
 
-[Dual-boundary sandboxing](dual-boundary-sandboxing.md) defines *what* a sandbox enforces; this page picks *which runtime* enforces it:
+[Dual-boundary sandboxing](dual-boundary-sandboxing.md) defines *what* a sandbox enforces; this page picks *which runtime* enforces it. LangChain frames the same choice as a set of trade-offs across isolation strength, startup latency, and runtime compatibility — the axes this page's comparison table makes explicit ([LangChain — How to choose the right sandbox](https://blog.langchain.com/how-to-choose-the-right-sandbox)).
 
 - **Containerized** — Linux namespaces and cgroups, optionally hardened with [gVisor](https://github.com/google/gvisor) or seccomp. Examples: `docker sbx`, Podman.
 - **MicroVM** — KVM-backed lightweight VMs with a minimalist VMM. Examples: [Firecracker](https://github.com/firecracker-microvm/firecracker)-based providers (e2b, Daytona, Modal), Kata Containers.
