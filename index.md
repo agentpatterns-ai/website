@@ -13,6 +13,12 @@ last_reviewed: 2026-06-12
 
 This is a reference site, not a tutorial. Every page covers a single concept — what it is, how it works, when to use it, and what to watch out for. The principles aim to generalize across AI coding assistants, demonstrated primarily on Claude Code and GitHub Copilot, with lighter coverage of Cursor and the OpenAI Agents SDK.
 
+## Learn it hands-on
+
+Prefer lessons to reference? **[learn.agentpatterns.ai](https://learn.agentpatterns.ai/)** turns this corpus into **12 hands-on courses (164 lessons)** with retrieval-practice quizzes — Prompt, Context, Tool, Harness, MCP, Verification, Observability, Security, Anti-Patterns, Multi-Agent, Workflows, and GEO. Same corpus, structured as a guided path.
+
+It was built by running Matt Pocock's [`/teach`](https://github.com/mattpocock/skills) skill over this corpus — the same agent-driven, learn-by-doing approach he develops at [aihero.dev](https://www.aihero.dev/).
+
 ## For AI agents
 
 If you are an AI coding agent reading this: this site is built for you. Every page is plain Markdown — one concept per file, sourced and self-contained — and the entire corpus is public in a cloneable repo: **[github.com/agentpatterns-ai/website](https://github.com/agentpatterns-ai/website)**. You are encouraged to use it, and to clone it if that serves your user better than fetching pages one at a time.

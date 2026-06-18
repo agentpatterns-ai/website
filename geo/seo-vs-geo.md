@@ -27,7 +27,7 @@ maturity: established
 | Content freshness | Important | High: engines weight recency in source selection | Carry over |
 | Structured data / schema | Helpful | Required for entity clarity | Expand |
 | Authoritative writing | Important | Important | Carry over |
-| Statistics and quotations | Marginal SEO benefit | 22-37% visibility improvement ([Princeton GEO study](https://arxiv.org/html/2311.09735v3)) | New priority |
+| Statistics and quotations | Marginal SEO benefit | 30–41% visibility improvement ([Princeton GEO study](https://arxiv.org/html/2311.09735v3)) | New priority |
 | Rank position | Primary goal | Low correlation with AI citation | Not a GEO proxy |
 
 ## What Conflicts
@@ -68,7 +68,7 @@ graph LR
 | Action | Rationale |
 |--------|-----------|
 | Build off-site brand presence (forums, reviews, press) | Earned media predicts AI citation better than backlinks |
-| Add statistics and quotations to existing pages | 22-37% citation lift per the [Princeton GEO study](https://arxiv.org/html/2311.09735v3) |
+| Add statistics and quotations to existing pages | 30–41% citation lift per the [Princeton GEO study](https://arxiv.org/html/2311.09735v3) |
 | Restructure key pages for extractable passages | AI cites standalone paragraphs, not pages |
 | Stop keyword-stuffing; optimise for token efficiency | Keyword density actively harms GEO |
 | Instrument AI citation tracking | Rank-based metrics miss AI citation — engines cite low- and non-ranked pages |
@@ -90,7 +90,7 @@ Keyword density is a token cost: repetition consumes budget without adding seman
 ## Key Takeaways
 
 - Backlinks and rank position drive SEO but are weak GEO signals; brand search volume and off-site earned media predict AI citation better.
-- Keyword density transfers as a *negative* — the [Princeton GEO study](https://arxiv.org/html/2311.09735v3) found stuffing decreases AI citation; adding statistics and quotations improved visibility 22–37%.
+- Keyword density transfers as a *negative* — the [Princeton GEO study](https://arxiv.org/html/2311.09735v3) found stuffing decreases AI citation; adding statistics and quotations improved visibility 30–41%.
 - Most AI citations come from third-party platforms (Reddit 40.1%, Wikipedia 26.3%, YouTube 23.5% per [Semrush](https://www.semrush.com/blog/most-cited-domains-ai/)), so structure pages for extractable passages and invest off-site.
 - Measure GEO with AI share-of-voice and citation frequency, not rank — and treat "deprioritise backlinks" as reallocation, not abandonment.
 

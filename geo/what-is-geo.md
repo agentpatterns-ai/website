@@ -50,8 +50,8 @@ The [Princeton/ACM KDD 2024 GEO paper](https://arxiv.org/abs/2311.09735) defined
 
 | Technique | Visibility lift |
 |-----------|----------------|
-| Quotations from authoritative sources | +37% |
-| Statistics with citations | +22% |
+| Quotations from authoritative sources | +41% |
+| Statistics with citations | +30% |
 | Comparative / listicle structure | accounts for 32.5% of AI citations |
 | Content freshness (updated within 60 days) | 1.9× more likely to appear |
 | Author schema + structured data | 3× more likely to appear |
@@ -85,7 +85,7 @@ GEO investments carry real costs: structured data, freshness cycles, per-platfor
 
 **GEO-optimized equivalent** — specific, cited, structured for extraction:
 
-> "AI referral traffic grew 357–632% year-over-year ([Superlines, 2026](https://www.superlines.io/articles/ai-search-statistics/)). Google AI Overviews appear in 50%+ of searches ([Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/)). Replacing vague claims with cited statistics increases AI citation rates by up to 22% ([Princeton GEO paper, 2024](https://arxiv.org/abs/2311.09735))."
+> "AI referral traffic grew 357–632% year-over-year ([Superlines, 2026](https://www.superlines.io/articles/ai-search-statistics/)). Google AI Overviews appear in 50%+ of searches ([Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/)). Replacing vague claims with cited statistics increases AI citation rates by up to 30% ([Princeton GEO paper, 2024](https://arxiv.org/abs/2311.09735))."
 
 The second version gives an AI engine three discrete, attributable facts — each independently citable.
 
