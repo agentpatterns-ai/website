@@ -8,9 +8,10 @@ tags:
   - agent-design
   - copilot
 applies_to: "copilot@1.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-19
 status: current
 ---
+
 # GitHub Copilot Coding Agent
 
 > Asynchronous agent that works via GitHub Actions to plan, implement, test, and open pull requests.
@@ -23,7 +24,7 @@ The [coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-age
 
 ## Self-Review & Security
 
-Before opening a PR, the coding agent implements the [agent self-review loop](../../code-review/agent-self-review-loop.md): it [reviews its own changes](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/) using Copilot code review, iterates on feedback, and runs security scanning: [CodeQL code scanning, secret scanning, and dependency vulnerability checks](https://github.blog/changelog/2025-10-28-copilot-coding-agent-now-automatically-validates-code-security-and-quality/).
+Before opening a PR, the coding agent implements the [agent self-review loop](../../code-review/agent-self-review-loop.md): it [reviews its own changes](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/) using Copilot code review, iterates on feedback, and runs security scanning: [CodeQL code scanning, secret scanning, and dependency vulnerability checks](https://github.blog/changelog/2025-10-28-copilot-coding-agent-now-automatically-validates-code-security-and-quality/). As of [June 2026, GitHub Copilot code review reads a repository's `AGENTS.md`](https://github.blog/changelog/2026-06-18-copilot-code-review-agents-md-support-and-ui-improvements) to ground its review guidance in the project's own conventions.
 
 ## MCP Server Support
 
