@@ -10,7 +10,7 @@ aliases:
   - automated pattern mining
   - self-improving agents
   - meta-skill generation
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-19
 maturity: established
 ---
 
@@ -60,6 +60,8 @@ Feed the collected material to an analysis agent — a read-only subagent with a
 Agents can analyze evaluation transcripts and refactor tools based on the results — Anthropic reports using this approach internally to optimize tool implementations. [Source: [Anthropic — Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)] The same transcript-analysis capability applies directly to mining session logs for recurring corrections and manual steps: the agent reads transcripts, identifies patterns by frequency, and proposes automations in the same way it proposes tool improvements.
 
 OpenAI describes a production self-improving agent loop in the same shape — an agent that mines its own runs and generates improvements, built on Codex. [Source: [OpenAI — Building self-improving tax agents with Codex](https://openai.com/index/self-improving-tax-agents/)]
+
+A second variant skips autonomous transcript-mining and captures a *demonstrated* workflow instead: the user performs a task once and the tool turns that demonstration directly into a reusable skill. OpenAI Codex shipped a "Record & Replay" feature in this shape, capturing a demonstrated workflow and converting it into a reusable skill. [Source: [OpenAI Codex changelog (2026-06-18)](https://developers.openai.com/codex/changelog)] Cursor's `/automate skill` corroborates the same demonstration-to-skill direction, likewise turning a demonstrated workflow into a reusable skill. [Source: [Cursor changelog (2026-06-18)](https://cursor.com/changelog)] Demonstration-capture and transcript-mining are complementary: the former needs an explicit demonstration but no historical corpus, while the latter mines patterns from sessions already on disk.
 
 Rank candidates by frequency and impact. A correction that appears in 80% of sessions is a stronger automation candidate than one that appears in 10%.
 

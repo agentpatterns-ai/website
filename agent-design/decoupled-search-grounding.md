@@ -10,7 +10,7 @@ aliases:
   - DSG vendor-agnostic grounding boundary
   - search-induced verbosity boundary
   - MCP-compatible search grounding gateway
-last_reviewed: 2026-06-18
+last_reviewed: 2026-06-19
 maturity: emerging
 ---
 
@@ -53,6 +53,8 @@ graph LR
 ## Why It Works
 
 Each subsystem that native search bundles — provider choice, retrieval depth, evidence injection, caching, post-retrieval generation — has a different optimal setting per workload, and bundling forces a single compromise. Pulling the boundary outside the reasoning model lets each knob tune independently: the cache layer absorbs repeats (the [paper's](https://arxiv.org/abs/2606.18947) 99.4% warm-cache hit rate on a stable workload), provider routing sends recency-critical questions to live search and cacheable ones to a stored index, and source-aware context rendering reformats evidence into the exact shape the downstream contract expects. The mechanism is the same one [Production MCP Agent Stack](../tool-engineering/production-mcp-agent-stack.md) names for MCP generally — the gateway turns each axis of the design space into an independently observable, swappable control instead of a property of the model SDK.
+
+The grounding-not-the-model lever shows up in practitioner cost-performance reports too: Sourcegraph reports that augmenting a cheaper model with its MCP-server code-search grounding beat a Mythos-class frontier model used alone ([Sourcegraph blog](https://sourcegraph.com/blog)) — the same thesis that decoupled code-search grounding lets a cheaper model match a frontier one, measured on a coding workload rather than SimpleQA.
 
 ## When This Backfires
 
