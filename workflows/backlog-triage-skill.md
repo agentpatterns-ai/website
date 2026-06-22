@@ -4,6 +4,7 @@ description: "A single skill that converts messy inbound issues into agent-actio
 tags:
   - workflows
   - agent-design
+  - skills
   - tool-agnostic
 last_reviewed: 2026-06-12
 maturity: established

@@ -3,6 +3,7 @@ title: "GitHub Copilot: Customization Primitives and Stack"
 description: "How to extend Copilot with instructions, prompt files, agents, skills, hooks, MCP servers, memory, Spaces, and content exclusions across all surfaces."
 tags:
   - training
+  - agent-design
   - copilot
 last_reviewed: 2026-05-27
 ---
@@ -617,7 +618,7 @@ MCP servers configured here are available in Agent mode and to custom agents tha
 
 #### CLI
 
-The Copilot CLI reads MCP configuration from its config file. Use the `/mcp` slash command in an interactive session to list configured servers [unverified].
+The Copilot CLI reads MCP configuration from its config file.
 
 #### Coding Agent
 

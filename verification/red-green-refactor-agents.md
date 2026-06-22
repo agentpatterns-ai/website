@@ -5,6 +5,7 @@ description: "Apply the TDD cycle with separate agent invocations per phase: wri
 tags:
   - testing-verification
   - agent-design
+  - workflows
   - tool-agnostic
 aliases:
   - "Red-Green-Refactor for Agents"

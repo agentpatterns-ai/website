@@ -4,6 +4,7 @@ term: "Incremental Verification"
 description: "Insert verification checkpoints between agent steps to catch errors near their source — far cheaper than unwinding a cascade built on an early mistake."
 tags:
   - testing-verification
+  - workflows
   - tool-agnostic
 last_reviewed: 2026-06-12
 maturity: established

@@ -4,6 +4,7 @@ term: "Economic Value Signaling"
 description: "Attach token values to inter-agent messages so agents self-sort by priority and avoid priority inversion — decentralized scheduling, no central coordinator."
 tags:
   - multi-agent
+  - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-13
 maturity: adopted

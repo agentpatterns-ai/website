@@ -4,7 +4,7 @@ term: "Critic Agent Pattern"
 description: "A second model reviews the primary agent's plan before execution begins, catching structural errors early when recovery is cheap."
 tags:
   - agent-design
-  - copilot
+  - tool-agnostic
 aliases:
   - critic agent
   - dual-model plan review

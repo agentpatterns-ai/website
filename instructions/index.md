@@ -21,6 +21,7 @@ Every major AI coding tool ships a project-level instruction file. These pages c
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — Keep AGENTS.md to ~100 lines as a pointer map; put structured knowledge in a versioned docs/ directory
 - [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md) — Capture team-specific patterns, style rules, and tooling requirements in AGENTS.md files throughout the codebase
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — Auto-generated context files reduce task success rates; human-written files improve success only when they contain minimal, specific instructions
+- [Probe-and-Refine Tuning of Repository Guidance for Coding Agents](probe-and-refine-guidance-tuning.md) — Tune a repo-guidance file by probing the agent with synthetic bug-fix tasks and refining on the diagnosed failures; the artifact is model-specific, not transferable
 - [Encoding Values in AGENTS.md: Why Prose Without Verification Fails](encoding-values-in-agents-md.md) — Corpus studies show ethics, fairness, and accessibility are largely absent from AGENTS.md; pair every value with a verification command or move it to a lower layer
 - [Natural-Language Customization Bootstrap](natural-language-customization-bootstrap.md) — Describe the customization in plain language; the agent drafts the instruction file, skill, subagent, or hook for you to review and commit
 
@@ -74,6 +75,7 @@ Leveraging existing artifacts — specs, schemas, standards files — as agent i
 - [Convention Over Configuration for Agent Workflows](convention-over-configuration.md) — Reduce agent errors by encoding decisions into naming conventions, directory structure, and label schemes so agents follow patterns rather than invent them
 - [WRAP Framework for Agent Instructions](wrap-framework-agent-instructions.md) — A four-step checklist for writing agent-ready task descriptions that maximize autonomous execution quality
 - [Multi-Layer Specification Redundancy as a Robustness Budget](multi-layer-specification-redundancy.md) — Independent specification layers absorb prompt noise that would otherwise degrade code-generation correctness; prose repetition and brittle terminology do not
+- [Stage-Targeted Prompt Structure for Pull Request Outcomes](stage-targeted-prompt-structure-pr-outcomes.md) — Specificity, Context, and Verification each move a different stage of the LLM-assisted PR pipeline — diagnose which stage is failing, then raise that dimension
 - [Ubiquitous Language for AI Plans](ubiquitous-language-for-ai-plans.md) — A maintained domain glossary plus ADRs anchors agent plans in existing code so plans, source, and prompt share one vocabulary
 
 ## Governance & Maintenance

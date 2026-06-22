@@ -4,6 +4,7 @@ description: "Tool engineering shapes what agents can do and how much context ea
 tags:
   - training
   - cost-performance
+  - agent-design
   - tool-agnostic
 last_reviewed: 2026-05-27
 ---

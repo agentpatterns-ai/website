@@ -151,11 +151,11 @@ Each step has a single responsibility. Gate 1 prevents incomplete drafts from re
 
 ## Related
 
+- [Compositional Skill Routing for Large Skill Libraries](compositional-skill-routing.md)
 - [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
 - [Fan-Out Synthesis Pattern](../multi-agent/fan-out-synthesis.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
 - [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../agent-design/cognitive-reasoning-execution-separation.md)
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
 - [Prompt Layering](prompt-layering.md)

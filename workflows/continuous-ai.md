@@ -5,8 +5,9 @@ description: "A navigation parent for the continuous-* and triage workflow famil
 tags:
   - workflows
   - agent-design
+  - index
   - tool-agnostic
-last_reviewed: 2026-06-16
+last_reviewed: 2026-06-19
 maturity: established
 ---
 
@@ -37,6 +38,8 @@ These workflows continuously classify and route inbound work — issues, alerts,
 ## How to Choose
 
 Match the trigger to the family. A schedule or push against your own code points at the continuous-* family; an inbound stream of issues, alerts, or vulnerabilities points at the triage family. Within each, the distinguishing axis is authority: read-only classification ([continuous triage](continuous-triage.md)), constrained writes behind preconditions ([auto-triage](auto-triage-workflow.md), vulnerability triage), or full PR-producing loops ([agentic CI/CD](continuous-ai-agentic-cicd.md), continuous documentation).
+
+Tooling is converging on a concrete trigger taxonomy for these always-on agents. Cursor's Automations release ships event-triggered agents fired by a Slack emoji reaction, five GitHub events (issue comment, PR review comment, PR review submitted, review-thread updated, and workflow-run completed), and an `/automate` skill for authoring them ([Cursor changelog, 2026-06-18](https://cursor.com/changelog/06-18-26)) — a worked example of the event-stream triggers that distinguish the triage family from the schedule-driven continuous-* loops.
 
 ## Key Takeaways
 

@@ -3,6 +3,7 @@ title: "From Preventive to Reactive: Front-Loading Security in AI Coding Prompts
 description: "AI assistants shift security thinking from writing-time to review-time — front-loading explicit security requirements in the initial prompt narrows that gap, under specific conditions."
 tags:
   - human-factors
+  - security
   - tool-agnostic
   - arxiv
 aliases:

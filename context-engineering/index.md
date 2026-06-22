@@ -85,6 +85,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — Use one shared domain schema across graph construction, query decomposition, and typed retrieval to improve multi-hop reasoning precision over private knowledge bases
 - [Chunking Strategy for RAG-Based Code Completion](chunking-strategy-rag-code-completion.md) — Function-based chunking is dominated by every other strategy on line-level code completion; Sliding Window and cAST sit on the Pareto frontier, and doubling cross-file context length matters more than chunking choice
 - [LLM-Driven Logical Retrieval](llm-driven-logical-retrieval.md) — When the agent LLM is frontier-capable, letting it emit AND/OR/NOT Boolean queries against an inverted index matches an agentic hybrid baseline at 41× lower indexing cost — under specific lexical-overlap conditions
+- [Compositional Skill Routing](compositional-skill-routing.md) — Decompose a query into atomic sub-tasks, retrieve one skill per sub-task, then compose the plan — earns its cost only above hundreds of skills, where decomposition quality caps the system
 
 ## Error Handling & Drift Prevention
 

@@ -3,6 +3,7 @@ title: "Process Amplification: Scaling Human Work with Agents"
 description: "Agents amplify your engineering practices. Strong processes scale; weak ones degrade faster. Invest in your environment before scaling your prompts."
 tags:
   - agent-design
+  - workflows
   - tool-agnostic
   - human-factors
 last_reviewed: 2026-06-13

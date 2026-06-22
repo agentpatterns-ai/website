@@ -5,7 +5,6 @@ description: "Agents iterating against an oracle test will adjust coefficients i
 tags:
   - testing-verification
   - anti-pattern
-  - workflows
   - tool-agnostic
   - arxiv
   - long-form
