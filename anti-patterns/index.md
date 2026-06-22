@@ -4,6 +4,7 @@ description: "What not to do when working with AI agents, and why. - Assumption 
 tags:
   - anti-pattern
   - index
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 # Anti-Patterns

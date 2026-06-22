@@ -56,6 +56,7 @@ last_reviewed: 2026-05-27
 - [Golden Query Pairs as Continuous Regression Tests for Agents](golden-query-pairs-regression.md) — Maintain curated question-answer pairs with known-good outputs and run them continuously using semantic grading to catch capability regressions
 - [Human-Review-Driven Curation of Golden Eval Datasets](human-review-golden-dataset-curation.md) — Sample production traces on intent, attribute each disagreement to scorer or agent, and feed only agent-failure labels back into the golden set to keep an LLM-judge suite aligned with a moving production distribution
 - [Pre-Change Impact Analysis](pre-change-impact-analysis.md) — Build a code-to-test dependency map and deliver it as a lightweight agent skill so agents verify at-risk tests before committing, cutting regressions by 70%
+- [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md) — Run the test suite twice (baseline + patched) and gate the PR on the diff, not the absolute pass rate — under specific preconditions on test-suite strength, planner localization, and CI determinism
 
 ## Eval-Driven Development
 

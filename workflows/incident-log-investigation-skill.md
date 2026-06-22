@@ -6,6 +6,7 @@ tags:
   - agent-design
   - workflows
   - technique
+  - skills
   - tool-agnostic
 last_reviewed: 2026-06-12
 maturity: adopted

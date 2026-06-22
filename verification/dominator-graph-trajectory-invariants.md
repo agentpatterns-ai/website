@@ -7,7 +7,7 @@ tags:
   - evals
   - observability
   - agent-design
-  - copilot
+  - tool-agnostic
 aliases:
   - "dominator analysis for agent trajectories"
   - "trajectory dominance verification"

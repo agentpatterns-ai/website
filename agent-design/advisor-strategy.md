@@ -5,7 +5,7 @@ description: "Pair a cost-effective executor model with a frontier advisor that 
 tags:
   - agent-design
   - cost-performance
-  - claude
+  - tool-agnostic
 aliases:
   - advisor strategy
   - frontier model advisor

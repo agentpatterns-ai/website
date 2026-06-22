@@ -8,7 +8,7 @@ tags:
   - source:opendev-paper
   - long-form
   - tool-agnostic
-last_reviewed: 2026-06-18
+last_reviewed: 2026-06-22
 maturity: established
 ---
 
@@ -45,6 +45,8 @@ Agent initialization cost — tokens consumed by system prompt, tool definitions
 Borrowed from [CPU architecture](https://en.wikipedia.org/wiki/Big.LITTLE): powerful cores for demanding work, efficient cores for background tasks. [Claude Code's Explore subagent](https://code.claude.com/docs/en/sub-agents) implements this — Haiku handles read-only exploration while the main model reasons. A [community analysis](https://claudelog.com/mechanics/agent-engineering) reports 2–2.5x cost reduction at 85–95% quality on mixed workloads.
 
 **Model rotation**: start with the cheaper model, escalate only on validation failure. This works when validation is cheap and deterministic — test suites, linters, type checkers.
+
+Retrieval augmentation is a second lever on the same trade-off: a cheaper model with good context can beat a bigger model used alone. On a CodeScaleBench evaluation, Claude Sonnet 4.6 paired with code-search MCP beat Fable 5 alone on 6 of 9 large-codebase tasks at roughly half the cost per quality point ([Sourcegraph — MCP and a cheaper model beat a bigger model alone](https://sourcegraph.com/blog/sourcegraph-mcp-and-a-cheaper-model-beat-a-mythos-class-model-alone)). Pairing a lower tier with targeted retrieval can dominate a single high-tier call before you reach for escalation.
 
 **Cascade routing**: [FrugalGPT](https://arxiv.org/abs/2305.05176) demonstrated up to 98% cost reduction by querying cheaper models first and escalating only when confidence is low. No coding tool implements this natively — the cascade pattern remains a manual or custom implementation. Approximate it with a two-pass pattern: fast model first, deterministic gate (tests, linter, type checker), escalate to capable model on failure.
 

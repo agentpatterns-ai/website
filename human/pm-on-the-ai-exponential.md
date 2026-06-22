@@ -3,6 +3,7 @@ title: "PM on the AI Exponential"
 description: "Four workflow shifts for product management when AI model capabilities improve exponentially: short sprints, prototype-first, model-release revisits, and simplicity-first implementation."
 tags:
   - human-factors
+  - workflows
   - tool-agnostic
 aliases:
   - demos over docs

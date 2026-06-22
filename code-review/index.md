@@ -4,6 +4,7 @@ description: "Patterns for integrating AI agents into code review — from archi
 tags:
   - code-review
   - index
+  - tool-agnostic
 last_reviewed: 2026-06-10
 ---
 

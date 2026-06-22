@@ -4,6 +4,7 @@ description: "A problem-solving discipline that keeps AI as a thinking partner r
 tags:
   - human-factors
   - workflows
+  - code-review
   - tool-agnostic
 aliases:
   - small-steps AI discipline

@@ -5,6 +5,7 @@ description: "Partition a coding task by dependency cohesion before fanning out 
 tags:
   - multi-agent
   - cost-performance
+  - agent-design
   - tool-agnostic
 aliases:
   - cohesion-aware partitioning

@@ -6,7 +6,7 @@ tags:
   - agent-design
   - workflows
   - copilot
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-19
 maturity: adopted
 ---
 
@@ -52,7 +52,7 @@ The `&` shortcut in the CLI provides a [quick delegation mechanism](https://gith
 
 ## The Transferable Pattern
 
-The cloud-local handoff is specific to GitHub Copilot, but the underlying pattern applies broadly: agent sessions should be serializable and portable across execution surfaces. The key requirements are:
+GitHub Copilot was an early example, but the handoff is no longer single-vendor: Cursor ships the same primitives, with `/in-cloud` cloud subagents that each run on their own VM and branch, a `/babysit` command that prepares a cloud PR for merge remotely, and reliable session pull-back to local for verification ([Cursor — cloud agents in the agents window](https://cursor.com/changelog/cloud-in-agents-window)). The underlying pattern applies broadly: agent sessions should be serializable and portable across execution surfaces. The key requirements are:
 
 - **Branch as shared state** — Git branches are the universal coordination mechanism between any cloud and local agent
 - **Session logs as context** — the receiving surface needs to see what the sending surface did

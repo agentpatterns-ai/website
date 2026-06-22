@@ -3,6 +3,7 @@ title: "GitHub Copilot: Model Selection, Routing, and Costs"
 description: "Understand the Copilot model roster, premium multipliers, when to override Auto, cascade routing, the reasoning sandwich, and coding agent cost."
 tags:
   - training
+  - cost-performance
   - copilot
 last_reviewed: 2026-05-27
 ---

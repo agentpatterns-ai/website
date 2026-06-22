@@ -3,6 +3,7 @@ title: "GitHub Copilot: Team Adoption and Governance Guide"
 description: "Roll out Copilot across a team with progressive autonomy, tiered code review, cost management, security boundaries, shared configuration, and impact metrics."
 tags:
   - training
+  - human-factors
   - copilot
 last_reviewed: 2026-05-27
 ---

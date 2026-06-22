@@ -5,6 +5,7 @@ description: "Scale a shared skill library with MDM distribution, private plugin
 tags:
   - workflows
   - human-factors
+  - skills
   - tool-agnostic
   - agent-design
 last_reviewed: 2026-05-27

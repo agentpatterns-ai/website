@@ -3,6 +3,7 @@ title: "Cursor 3 Agents Window: Parallel Agents and Worktree Isolation"
 description: "Run multiple agents simultaneously across local, cloud, worktree, and SSH environments from a single Agents Window in Cursor 3."
 tags:
   - agent-design
+  - workflows
   - cursor
 aliases:
   - cursor parallel agents

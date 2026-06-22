@@ -4,6 +4,7 @@ term: "Declarative Multi-Agent Topology"
 description: "Define an entire agent graph — agents, flows, gates, hooks, group chats — in a single declarative file that compiles to any target runtime, making agent relationships auditable and portable."
 tags:
   - multi-agent
+  - agent-design
   - tool-agnostic
 aliases:
   - topology-as-code

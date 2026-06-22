@@ -140,3 +140,4 @@ The planning step took two minutes but prevented a scope creep that would have r
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — the supervision and review burden that control strategies impose
 - [Rigor Relocation](rigor-relocation.md) — where engineering discipline moves when agents write the code
 - [Strategy Over Code Generation](strategy-over-code-generation.md) — why planning matters more than generation speed
+- [Adapting AI Assistant Configuration to Developer Interaction Style](developer-interaction-style-adaptation.md) — control strategies vary by cognitive style; persona configuration is one way to encode them

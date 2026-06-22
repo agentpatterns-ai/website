@@ -4,6 +4,7 @@ term: "Security Knowledge Priming"
 description: "Appending a brief, task-relevant CWE cue to coding prompts activates the model's latent security representations and shifts the CWE distribution of generated code — supplementary to mechanical scanners, not a replacement."
 tags:
   - instructions
+  - security
   - tool-agnostic
 aliases:
   - SPARK Priming

@@ -3,6 +3,8 @@ title: "GitHub Copilot: Context Engineering & Agent Workflows"
 description: "How context engineering determines agent output quality. Covers context design, task decomposition, delegation, steering, and review workflows."
 tags:
   - training
+  - workflows
+  - context-engineering
   - copilot
 last_reviewed: 2026-05-27
 ---

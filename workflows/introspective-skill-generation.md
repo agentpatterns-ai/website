@@ -5,6 +5,7 @@ description: "A dedicated agent analyzes recurring corrections and repeated task
 tags:
   - agent-design
   - workflows
+  - skills
   - tool-agnostic
 aliases:
   - automated pattern mining

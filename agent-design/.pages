@@ -20,6 +20,7 @@ nav:
       - coala-structured-action-space.md
       - discrete-phase-separation.md
       - domain-scoped-parallel-localization.md
+      - fastcontext-trained-repository-explorer.md
       - continual-learning-layers.md
       - delegation-decision.md
       - eval-strategy-by-agent-generation.md
@@ -59,6 +60,7 @@ nav:
       - generative-agents-memory-stream.md
       - handoff-skill-context-transfer.md
       - layered-mutability.md
+      - ledger-agent-structured-task-state.md
       - memory-retrieval-as-control.md
       - memory-synthesis-execution-logs.md
       - memory-transfer-learning.md
@@ -68,6 +70,7 @@ nav:
       - subtask-level-memory.md
       - tiered-memory-architecture.md
   - "Control & Orchestration":
+      - agent-loop-go-no-go-gate.md
       - background-todo-agent.md
       - in-agent-task-prioritization.md
       - interactive-clarification-underspecified-tasks.md
@@ -90,6 +93,7 @@ nav:
       - plan-compliance-in-agents.md
       - proactive-idle-time-anticipation.md
       - progressive-disclosure-agents.md
+      - prompted-uncertainty-decomposition-clarification.md
       - remote-session-control.md
       - self-reporting-loops.md
       - self-rewriting-meta-prompt-loop.md

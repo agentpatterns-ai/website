@@ -5,6 +5,7 @@ tags:
   - training
   - workflows
   - human-factors
+  - agent-design
   - tool-agnostic
 last_reviewed: 2026-05-27
 ---
