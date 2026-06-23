@@ -39,6 +39,7 @@ Prompt injection is the primary attack vector for agents that consume untrusted 
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md) — Separate trusted control flow from untrusted data flow so injection attacks cannot alter tool invocation, regardless of model susceptibility
 - [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md) — Use new attack traces to adversarially train hardened model checkpoints immediately after discovery
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — Architectural patterns and defense-in-depth strategies for building coding agents that stay resilient when untrusted input lands in context
+- [Destyling Untrusted Input as a Prompt Injection Defense](destyling-untrusted-input.md) — Normalise the surface style of untrusted input before the model encodes who is speaking; cuts CoT-forgery attack success from 61% to 10% on a static benchmark by interrupting role perception at the representational layer
 - [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md) — Map retrieval paths, audit against the Lethal Trifecta, and test with synthetic payloads to find the vulnerabilities standard testing misses
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — Mandatory checkpoints before irreversible actions let humans catch injection-driven misbehavior before it causes harm
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — Tag every value with a sink-specific capability budget and intersect budgets through tool composition; closes permission laundering only with expert-crafted manifests and explicit-flow attacks
@@ -53,6 +54,7 @@ Prompt injection is the primary attack vector for agents that consume untrusted 
 
 Isolation limits what a compromised or misbehaving agent can affect.
 
+- [Browser Sandbox for Agent-Generated HTML (Sandboxed Iframe + Immutable CSP)](browser-sandbox-agent-generated-html.md) — Run untrusted agent- or LLM-generated HTML safely in the browser by composing a `sandbox="allow-scripts allow-forms"` iframe, an immutable `<meta>` Content-Security-Policy, and a MessageChannel-scoped allow-listed parent API
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md) — Enforce both filesystem and network isolation simultaneously; neither boundary alone prevents exfiltration
 - [Network-less Container + Unix-Socket Egress Proxy for Agent Sandboxes](network-less-container-unix-socket-egress.md) — `--network none` plus a mounted Unix socket makes the egress proxy the only path off the container, turning policy into topology
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md) — Define guardrail rules only for tools your harness controls; external tools must enforce their own
