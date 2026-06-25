@@ -18,6 +18,8 @@ maturity: established
 
 > Supervise an agent pipeline by gating before irreversible actions and public-impact decisions, not reversible steps — over-gating defeats automation, under-gating ships errors.
 
+**Related lesson:** [Where You Stand](https://learn.agentpatterns.ai/workflows/where-you-stand/) — this concept features in a hands-on lesson with quizzes.
+
 !!! info "Also known as"
     Human-in-the-Loop Approval Gates, Human-in-the-Loop. For the specific pattern on implementing confirmation gates as a HITL mechanism, see [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md).
 

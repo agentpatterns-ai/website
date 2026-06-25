@@ -15,6 +15,8 @@ maturity: adopted
 
 > Repository bootstrapping wires agents into an existing codebase in dependency order — project instructions first, then skills, then agent definitions, commands, hooks, and CI gates.
 
+**Related lesson:** [Snapshot and Roll Back](https://learn.agentpatterns.ai/workflows/snapshot-and-roll-back/) — this concept features in a hands-on lesson with quizzes.
+
 ## Why Order Matters
 
 Each layer in the checklist is a dependency for the next. Instructions define what correct output looks like — without them, agents cannot know which patterns to follow or avoid. Skills package the domain knowledge that agent definitions draw on — an agent definition that references a non-existent skill silently degrades to generic behavior. Commands invoke agents by name — in Claude Code, the Markdown files under `.claude/commands/` — so agent definitions must exist before commands can be wired. Hooks and CI gates enforce correctness criteria that only make sense once instructions have established what correct means.

@@ -14,6 +14,8 @@ maturity: established
 
 > Strip per-machine context from the Claude Code system prompt so SDK fleets and CI runners share one cached prefix across users and machines.
 
+**Related lesson:** [The Immutable Prefix](https://learn.agentpatterns.ai/context-engineering/caching-static-first/) — this concept features in a hands-on lesson with quizzes.
+
 The Claude Code `claude_code` preset embeds per-session context — working directory, git-repo flag, platform, active shell, OS version, and auto-memory paths — directly in the system prompt ahead of your `append` text. That makes the byte sequence different on every machine and directory, and Anthropic's prompt cache requires a 100% identical prefix to hit ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). Setting `excludeDynamicSections: true` (TypeScript) or `"exclude_dynamic_sections": True` (Python) moves the dynamic block into the first user message, leaving only the static preset and your `append` text in the system prompt so "identical configurations share a cache entry across users and machines" ([Anthropic SDK docs](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts#improve-prompt-caching-across-users-and-machines)).
 
 ## When to Enable It

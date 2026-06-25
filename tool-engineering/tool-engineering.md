@@ -21,6 +21,8 @@ maturity: established
 
 > Design agent tools like APIs — with documentation, examples, edge-case handling, and mistake-proofing — not as boilerplate wrappers around existing functions.
 
+**Learn it hands-on:** [What Makes a Tool Agent-Friendly](https://learn.agentpatterns.ai/tool-engineering/agent-friendly-tools/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     Tool Descriptions as Onboarding, Mistake-Proofing / Poka-Yoke
 

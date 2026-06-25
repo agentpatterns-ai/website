@@ -16,6 +16,8 @@ status: current
 
 > Background agent sessions start in the parent checkout and relocate into an isolated git worktree only on the first Edit or Write tool call.
 
+**Related lesson:** [Sandboxes for Swarms](https://learn.agentpatterns.ai/workflows/sandboxes-for-swarms/) — this concept features in a hands-on lesson with quizzes.
+
 The default in Claude Code v2.1.139+ is *lazy*, not eager: "Every background session, whether started from agent view, `/bg`, or `claude --bg`, starts in your working directory. Before editing files, Claude moves the session into an isolated git worktree under `.claude/worktrees/`" ([agent-view docs](https://code.claude.com/docs/en/agent-view#how-file-edits-are-isolated)). Read-only research costs nothing in worktree overhead; write-intent is the latch that triggers the relocation.
 
 ## The Eager-on-Dispatch Failure Mode

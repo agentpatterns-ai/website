@@ -15,6 +15,8 @@ maturity: emerging
 
 > Verify-gated completion makes a read-only verifier — not the producer — the admission-control authority over every "done" claim: ambiguous cases fail closed, each decision packetized.
 
+**Learn it hands-on:** [Verify-Gated Completion](https://learn.agentpatterns.ai/multi-agent/verify-gated-completion/) — guided lesson with quizzes.
+
 Verify-gated completion is an architecture in which the agent that produced a result is not the one that decides the work is done. A separate, read-only verifier sits on the critical path of every completion claim, admits or rejects it against deterministic checks, and writes the decision into a structured admission record ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)). It earns its cost only under the four conditions below.
 
 ## When This Pattern Applies

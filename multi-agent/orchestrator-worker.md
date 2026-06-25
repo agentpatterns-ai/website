@@ -18,6 +18,8 @@ maturity: established
 
 > A lead agent decomposes a complex task and assigns independent subtasks to specialized workers running in parallel, reducing resolution time compared to sequential single-agent approaches.
 
+**Learn it hands-on:** [Orchestrator-Worker](https://learn.agentpatterns.ai/harness-engineering/orchestrator-worker/) — guided lesson with quizzes.
+
 !!! note "Also known as"
     Orchestrator-Worker, Parallel Dispatch, Scatter-Gather. The delegation variant is described here. For the broader pattern survey, see [Agent Composition Patterns](../agent-design/agent-composition-patterns.md). For the synthesis variant, see [Fan-Out Synthesis](fan-out-synthesis.md). For implementation guidance, see [Sub-Agents Fan-Out](sub-agents-fan-out.md).
 

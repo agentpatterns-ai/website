@@ -14,6 +14,8 @@ maturity: established
 
 > Rather than maintaining a domain allow-list, cross-reference URLs against an independent public-web crawl index before allowing automatic fetching — URLs not in the index may encode user-specific data.
 
+**Related lesson:** [The URL Is the Leak](https://learn.agentpatterns.ai/security/the-url-is-the-leak/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Safety Property
 
 The key insight: a URL that was independently discoverable by a public crawler — one that had no access to any user's session, conversation, or account data — cannot by definition contain user-specific secrets that the crawler never saw.

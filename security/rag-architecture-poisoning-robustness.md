@@ -19,6 +19,8 @@ maturity: emerging
 
 > Under knowledge-base poisoning, attack success rates span 24.4% to 81.9% across four RAG architectures with comparable clean accuracy. Architecture is a threat-model decision.
 
+**Related lesson:** [The Chunk That Wasn't Yours](https://learn.agentpatterns.ai/security/the-chunk-that-wasnt-yours/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Threat Model
 
 An attacker who can write to a RAG knowledge base — via web ingestion, user-submitted documents, or compromised feeds — can plant passages that flip answers (*knowledge-base poisoning*). [Korn (2026)](https://arxiv.org/abs/2605.05632) holds the attack constant and varies the architecture across four designs on 921 Natural Questions QA pairs:

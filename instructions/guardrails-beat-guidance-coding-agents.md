@@ -17,6 +17,8 @@ maturity: emerging
 
 > For coding-agent rule files on SWE-bench, negative constraints are the only individually beneficial rule type; positive directives degrade success. Rules help mainly by priming context.
 
+**Learn it hands-on:** [Guardrails Beat Guidance](https://learn.agentpatterns.ai/prompt-engineering/guardrails-beat-guidance/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     Guardrails Over Guidance, Negative Rules for Coding Agents
 

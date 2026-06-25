@@ -17,6 +17,8 @@ maturity: adopted
 
 > The handshake holds a teammate in read-only plan mode until the lead approves its plan; rejections round-trip with feedback before any writes happen.
 
+**Related lesson:** [Handoffs and Coordination Contracts](https://learn.agentpatterns.ai/multi-agent/handoffs-and-contracts/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Handshake
 
 In a lead-and-teammates [topology](multi-agent-topology-taxonomy.md), each teammate works in its own context window and self-claims tasks from a shared list. A plan-approval handshake gates the first write: the teammate produces a plan in read-only mode, sends it to the lead as a structured approval request, and only begins editing after the lead approves.

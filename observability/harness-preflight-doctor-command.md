@@ -15,6 +15,8 @@ maturity: established
 
 > A doctor command runs one deterministic preflight pass over a harness's auth, MCP, config, tools, and version drift, reporting broken preconditions before work starts.
 
+**Related lesson:** [The Four Failure Modes](https://learn.agentpatterns.ai/observability/the-four-failure-modes/) — this concept features in a hands-on lesson with quizzes.
+
 A harness preflight doctor command is a diagnostics subcommand that validates an agent harness's runtime environment in one deterministic pass and reports each misconfigured precondition with an actionable message before work begins. It mirrors the `brew doctor` / `flutter doctor` ergonomic: scan the environment, name what is broken, leave the fix to the operator ([Flutter troubleshoot install](https://docs.flutter.dev/install/troubleshoot)).
 
 ## What a Doctor Command Checks

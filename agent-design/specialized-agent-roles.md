@@ -19,6 +19,8 @@ maturity: established
 
 > Specialized agent roles assign distinct improvement dimensions to parallel agents so they complement rather than compete on identical problems.
 
+**Related lesson:** [Commands vs Agents](https://learn.agentpatterns.ai/harness-engineering/commands-vs-agents/) — this concept features in a hands-on lesson with quizzes.
+
 !!! info "Also known as"
     Narrow Agent Scope Over Broad Role, Task-Specific Agents vs Role-Based Agents (parallel context)
 

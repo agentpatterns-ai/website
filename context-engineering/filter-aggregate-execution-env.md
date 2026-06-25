@@ -15,6 +15,8 @@ maturity: adopted
 
 > Run data processing logic inside the code execution sandbox before surfacing results to the model, so only the relevant subset of data enters context.
 
+**Related lesson:** [Code Mode](https://learn.agentpatterns.ai/mcp-server-design/code-mode/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Problem
 
 When an agent fetches a dataset to find a subset of matching records, the naive approach passes the full dataset through the model's context. A 10,000-row dataset fetched to find three matching records wastes 9,997 rows of context. This limits the size of datasets agents can reason about and increases cost proportionally.

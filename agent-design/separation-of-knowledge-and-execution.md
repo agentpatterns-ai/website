@@ -16,6 +16,8 @@ maturity: adopted
 
 > Structure agent systems in three layers — skills (knowledge), agents (execution), and commands (orchestration) — so each layer changes independently.
 
+**Related lesson:** [Commands vs Agents](https://learn.agentpatterns.ai/harness-engineering/commands-vs-agents/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Three Layers
 
 Agent systems that mix knowledge, execution, and orchestration into monolithic definitions become hard to maintain. The separation pattern assigns each concern to its own layer:

@@ -13,6 +13,8 @@ maturity: adopted
 
 > Constrain agent output with templates and schemas to reduce the degrees of freedom available for error.
 
+**Related lesson:** [Guardrails Beat Guidance](https://learn.agentpatterns.ai/verification/guardrails-beat-guidance/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Problem with Blank Pages
 
 A blank page is an invitation to hallucinate. When an agent has unlimited output freedom, it fills that freedom with confident-sounding prose, invented citations, and plausible-but-wrong details.

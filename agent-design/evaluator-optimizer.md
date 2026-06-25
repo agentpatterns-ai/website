@@ -18,6 +18,8 @@ maturity: adopted
 
 > The evaluator-optimizer pattern loops a generator and an evaluator: the generator produces output, the evaluator critiques it, and feedback recycles until quality is met.
 
+**Learn it hands-on:** [Evaluator-Optimizer](https://learn.agentpatterns.ai/harness-engineering/evaluator-optimizer/) — guided lesson with quizzes.
+
 ## Structure
 
 The pattern has two roles and a termination condition:

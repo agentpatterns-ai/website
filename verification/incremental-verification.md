@@ -14,6 +14,8 @@ maturity: established
 
 > Verify agent output at each logical step to catch errors close to their source, before they propagate.
 
+**Learn it hands-on:** [Verification Gates](https://learn.agentpatterns.ai/harness-engineering/verification-gates/) — guided lesson with quizzes.
+
 ## The Pattern
 
 An agent that generates 500 lines of code before any verification may have made a wrong assumption at line 10. Everything after that point is built on a mistake. Unwinding the cascade is expensive — each dependent decision must be re-evaluated.

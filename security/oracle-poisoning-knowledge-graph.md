@@ -18,6 +18,8 @@ maturity: adopted
 
 > Oracle poisoning corrupts the knowledge graph an agent queries via tool-use, carrying its payload on the data path rather than the instruction path.
 
+**Related lesson:** [The Payload That Waits](https://learn.agentpatterns.ai/security/the-payload-that-waits/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Threat Model
 
 Oracle Poisoning corrupts a structured knowledge graph the agent queries at runtime through a tool-use protocol — MCP, SDK tool calls, or any typed retrieval surface. Instructions are untouched; the *data the agent reasons over* is the attack vector ([Kereopa-Yorke et al., 2026; arxiv:2605.09822](https://arxiv.org/abs/2605.09822)).

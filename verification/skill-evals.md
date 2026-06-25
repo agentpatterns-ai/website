@@ -9,13 +9,15 @@ tags:
 aliases:
   - evaluating agent skills
   - skill quality evaluation
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-24
 maturity: established
 ---
 
 # Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit
 
 > Evaluate each skill as a unit: a labelled dataset, explicit assertions, paired with-skill and baseline runs, and a benchmark quantifying pass-rate, time, and token trade-offs.
+
+**Related lesson:** [Evals at Scale](https://learn.agentpatterns.ai/verification/evals-at-scale/) — this concept features in a hands-on lesson with quizzes.
 
 Skills are edited far more often than the agent harness, yet most teams have no objective signal that a skill still works after an edit or a model upgrade. Eval discipline applied to the skill itself closes that gap. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 
@@ -53,6 +55,8 @@ graph TD
 ```
 
 The benchmark records three metrics per configuration: pass rate, duration, token count. The **delta** between configurations quantifies what the skill costs and what it buys. A 13-second overhead for a 50-point pass-rate gain is a different trade-off than doubling token usage for a 2-point gain. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
+
+Microsoft frames this paired runner as an explicit with/without ablation (A/B) methodology: to prove a skill or extension actually lifts generated-code quality, compare the agent's output with the skill loaded against the same agent producing the same output unaided. [Source: [Is your agent extension actually working?](https://developer.microsoft.com/blog/is-your-agent-extension-actually-working)]
 
 ## Model Upgrade Strategy
 

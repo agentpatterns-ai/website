@@ -14,6 +14,8 @@ maturity: adopted
 
 > Replace vague qualifiers with specific numbers, dates, sample sizes, and attributed quotes. The Princeton GEO study found this is the highest-impact single rewrite technique for AI citation rates — up to 41% improvement in source visibility.
 
+**Learn it hands-on:** [Assertion Density](https://learn.agentpatterns.ai/geo/assertion-density/) — guided lesson with quizzes.
+
 ## Why Specificity Gets Cited
 
 AI answer engines use retrieval-augmented generation: they match queries against indexed content and generate answers from retrieved passages. Specific claims improve retrieval in two ways:

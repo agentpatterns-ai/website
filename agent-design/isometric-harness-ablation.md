@@ -20,6 +20,8 @@ maturity: established
 
 > Pin the model, remove one harness subsystem at a time, rerun the benchmark, record the drop. The per-subsystem drop table ranks where to invest next.
 
+**Related lesson:** [Eval-Driven Harness Improvement](https://learn.agentpatterns.ai/harness-engineering/eval-driven-harness-improvement/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Methodology
 
 [Harness engineering](harness-engineering.md) treats the agent environment as the dominant lever on output quality. Isometric ablation quantifies *which part* of that environment is doing the work. The walkinglabs course calls it the "controlled variable exclusion test": keep the model fixed, remove subsystems one at a time, measure which removal causes the biggest drop ([walkinglabs](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-02-what-a-harness-actually-is/index.md)). *Isometric ablation* names the same procedure here, by analogy with isometric exercise: hold one variable fixed while loading another.

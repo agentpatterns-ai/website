@@ -12,7 +12,7 @@ aliases:
   - classifier-gated auto-permission
   - classifier-mediated auto-mode
   - permission classifier pattern
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-24
 maturity: established
 ---
 
@@ -29,7 +29,7 @@ The pattern adds reviewer tokens, latency, and a new LLM attack surface. It pays
 - **Action volume produces approval fatigue.** OpenAI's internal Codex traffic reports roughly 720 boundary-crossing actions per 10,000 ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)) — well past the rubber-stamp threshold. At three escalations an hour, a human reviewer wins.
 - **The configuration surface is admin-enforced.** If a developer can flip `--dangerously-skip-permissions` or rewrite the classifier rule file inside the workspace, the whole scheme collapses to whichever layer the attacker reaches first. Claude Code documents this requirement explicitly: rules in shared `.claude/settings.json` are not read by the classifier, and `hard_deny` rules must be deployed through [managed settings](../tools/claude/managed-settings-drop-in.md) for organizational guarantees.
 - **The workload is in-distribution.** Anthropic reports 0.4% false-positive and 5.7–17% false-negative rates on real and synthetic exfiltration traffic ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)). An independent stress test (Ji et al., 2026) measured **81.0% FNR (95% CI 73.8%–87.4%)** on deliberately ambiguous authorization scenarios and **36.8% of state-changing actions bypassing classification entirely** via in-project file edits ([Measuring the Permission Gate](https://arxiv.org/abs/2604.04978)). The gap is workload, not a contradiction.
-- **Irreversible actions are routed elsewhere.** Production deploys, money movement, IAM rotation, and credential exposure belong on a human or cryptographic gate ([Cryptographic Governance Audit Trail](../security/cryptographic-governance-audit-trail.md)). A 99% auto-approval rate is the wrong tier for those.
+- **Irreversible actions are routed elsewhere.** Production deploys, money movement, IAM rotation, and credential exposure belong on a human or cryptographic gate ([Cryptographic Governance Audit Trail](../security/cryptographic-governance-audit-trail.md)). A 99% auto-approval rate is the wrong tier for those. Newer auto-mode implementations narrow this further with *intent-scoped* destructive-command rules rather than blanket risk tiers: Claude Code v2.1.183 blocks `git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`, `git commit --amend` on non-agent commits, and `terraform`/`pulumi`/`cdk destroy` unless the specific stack was named — gating on whether the user asked for *this* destructive action rather than on a static risk tier ([Claude Code changelog v2.1.183](https://code.claude.com/docs/en/changelog)).
 
 If any condition fails, simpler postures dominate: a static allowlist plus sandbox for low-volume sessions, or an evidence-based allowlist for steady-state workloads where the action distribution is enumerable.
 

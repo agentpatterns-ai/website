@@ -17,6 +17,8 @@ maturity: emerging
 
 > GEO for technical docs is the practice of structuring API references, tutorials, how-to guides, and pattern pages so AI engines can extract, quote, and cite them accurately — using format-specific schema, answer-first structure, and sourced claims matched to each content type.
 
+**Related lesson:** [Capstone — Measure & Decide](https://learn.agentpatterns.ai/geo/capstone-measure-and-decide/) — this concept features in a hands-on lesson with quizzes.
+
 Technical documentation requires the same GEO principles as any content but applies them differently across formats. An API reference page, a tutorial, and a pattern page each have different structural conventions, different user intents, and different schema types — each maps to a distinct checklist. The sections below provide format-specific checklists, schema selection guidance, and an agent-discovery loop for identifying citation gaps.
 
 ## Why Content Format Determines GEO Strategy

@@ -15,6 +15,8 @@ maturity: adopted
 
 > Feeding evaluation transcripts back to the agent surfaces tool-selection errors, description ambiguities, and cross-transcript failure patterns that manual review misses at scale.
 
+**Learn it hands-on:** [Gates That Catch Regressions](https://learn.agentpatterns.ai/observability/gates-that-catch-regressions/) — guided lesson with quizzes.
+
 ## The Manual Review Problem
 
 After running evaluation tasks, someone must read the transcripts and identify what went wrong. Manual review is slow and inconsistent — humans miss patterns that span dozens of transcripts and tend to focus on the most recent failure rather than the most common one.

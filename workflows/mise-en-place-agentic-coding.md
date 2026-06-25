@@ -20,6 +20,8 @@ maturity: emerging
 
 > Mise en place front-loads grounding, specification, and task decomposition before agents touch code, giving concurrent agents a shared written ground-truth to align on.
 
+**Related lesson:** [Research, Plan, Implement](https://learn.agentpatterns.ai/workflows/research-plan-implement/) — this concept features in a hands-on lesson with quizzes.
+
 Andrew Zigler proposes mise en place (MEP) as a three-phase preparation methodology for agentic coding, named after the culinary practice of arranging every ingredient before cooking starts ([Zigler, 2026 — arxiv 2605.05400](https://arxiv.org/abs/2605.05400)). The argument: code generation is rarely the bottleneck — alignment is. Agents working from thin context produce code that diverges from intent, conventions, or domain semantics, and the subsequent debugging cycle dominates total time. MEP shifts effort from reactive correction to proactive preparation.
 
 ## The Three Phases

@@ -18,6 +18,8 @@ maturity: established
 
 > Coding LLMs invent nonexistent package names; 43% reappear across re-runs, so attackers enumerate, pre-register them, and the agent's install pulls malware.
 
+**Learn it hands-on:** [The Package That Doesn't Exist](https://learn.agentpatterns.ai/security/the-package-that-doesnt-exist/) — guided lesson with quizzes.
+
 Slopsquatting is a supply-chain attack class in which an LLM recommends a package name that exists in no public registry, an attacker pre-registers that name on PyPI or npm, and an agent (or a developer copying the model's output) installs the attacker-controlled package. Seth Larson, a Python Software Foundation developer-in-residence, coined the term as a portmanteau of "AI slop" and "typosquatting" ([Wikipedia](https://en.wikipedia.org/wiki/Slopsquatting)). It is the package-name analogue of [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md): both are training-distribution bugs, but here the package does not exist until an attacker creates it.
 
 ## The Measurement

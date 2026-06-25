@@ -14,6 +14,8 @@ maturity: established
 
 > Grade agent outcomes — the final state produced — not the execution path taken, so valid alternative solutions are not penalized as failures.
 
+**Learn it hands-on:** [Grade the Outcome](https://learn.agentpatterns.ai/verification/grade-the-outcome/) — guided lesson with quizzes.
+
 ## The Problem with Path-Based Grading
 
 [Path-based evals](eval-blind-spots.md) check that an agent called tool X before tool Y, or edited file A before file B. This approach penalizes agents that find valid alternative solutions — a refactored approach, a different API call order, a more efficient sequence the eval author didn't anticipate.

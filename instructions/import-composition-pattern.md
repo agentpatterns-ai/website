@@ -15,6 +15,8 @@ maturity: emerging
 
 > Claude Code supports `@path/to/file` imports in CLAUDE.md, enabling modular instruction authoring. Other major agent tools do not — they rely on hierarchical discovery instead.
 
+**Related lesson:** [The Layer Stack](https://learn.agentpatterns.ai/context-engineering/prompt-layering/) — this concept features in a hands-on lesson with quizzes.
+
 ## How Claude Code Imports Work
 
 CLAUDE.md files can reference other files with `@path/to/file` syntax. At session start, Claude Code expands all imports and loads them into context ([docs](https://code.claude.com/docs/en/memory#import-additional-files)).

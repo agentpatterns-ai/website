@@ -17,6 +17,8 @@ maturity: established
 
 > A progress file, git commits, feature-state JSON, and a bootstrap script capture a replayable audit trail of agent decisions — no observability backend required.
 
+**Learn it hands-on:** [Breaking the Loop](https://learn.agentpatterns.ai/observability/breaking-the-loop/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     Progress File Pattern, Audit Trail for Agent Decisions
 

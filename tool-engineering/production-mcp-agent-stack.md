@@ -19,6 +19,8 @@ maturity: established
 
 > Moving an MCP agent from prototype to production means sequencing six orthogonal decisions that constrain each other. The patterns are well-documented; the sequence and the cross-pattern gotchas are where real deployments go wrong.
 
+**Learn it hands-on:** [Code Mode](https://learn.agentpatterns.ai/mcp-server-design/code-mode/) — guided lesson with quizzes.
+
 Anthropic's [production MCP guidance](https://claude.com/blog/building-agents-that-reach-production-systems-with-mcp) (April 2026) frames MCP as "the critical layer" for cloud-resident agents. The compositional order it skips — which decision forecloses which, which combinations silently break — is what this page captures.
 
 ## The Six-Axis Decision Space

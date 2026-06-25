@@ -19,6 +19,8 @@ maturity: emerging
 
 > A tagged side question lets the agent answer mid-task and return to the main goal — only in long sessions, for short questions, outside transactions.
 
+**Related lesson:** [Handoffs](https://learn.agentpatterns.ai/workflows/handoffs/) — this concept features in a hands-on lesson with quizzes.
+
 ## When the Pattern Applies
 
 The in-thread side-channel is a narrow tool, not a general-purpose one. Use it when all three conditions hold:

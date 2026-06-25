@@ -19,6 +19,8 @@ maturity: established
 
 > Run the TDD cycle as separate agent invocations: write failing tests, instruct the agent to pass them, then refactor against the green suite.
 
+**Learn it hands-on:** [Red-Green for Agents](https://learn.agentpatterns.ai/verification/red-green-for-agents/) — guided lesson with quizzes.
+
 !!! note "Also known as"
     Red-Green-Refactor for Agents, TDD with Agents, Tests as the Spec. For the broader methodology, see [Test-Driven Agent Development](tdd-agent-development.md).
 

@@ -18,6 +18,8 @@ maturity: adopted
 
 > Redesign agent tool interfaces so the wrong call cannot compile — prevention over documentation.
 
+**Learn it hands-on:** [Idempotent, Safe-to-Retry Tools](https://learn.agentpatterns.ai/tool-engineering/idempotent-tools/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     Mistake-Proofing, Error-Proof Tool Design, Structural Constraints
 

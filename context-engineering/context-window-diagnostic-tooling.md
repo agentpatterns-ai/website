@@ -14,6 +14,8 @@ maturity: established
 
 > Diagnostic tooling attributes context-window growth to specific tool calls so you optimize the real culprit rather than prune blindly.
 
+**Learn it hands-on:** [What's Eating the Window](https://learn.agentpatterns.ai/context-engineering/whats-eating-the-window/) — guided lesson with quizzes.
+
 Context-window diagnostic tooling is a class of commands that attribute token consumption to the specific tool calls, memory files, or outputs responsible — so an agent developer can shrink the actual culprit rather than guess. Claude Code's [`/context` command](https://code.claude.com/docs/en/changelog) (v2.1.74, 2026-03-12) is the first developer-facing example to ship in a major harness.
 
 ## The Blind Optimization Problem

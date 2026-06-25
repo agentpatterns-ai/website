@@ -19,6 +19,8 @@ maturity: adopted
 
 > Layer multiple independent safety mechanisms so no single failure point can compromise an autonomous agent's behavior.
 
+**Learn it hands-on:** [No Single Layer Holds](https://learn.agentpatterns.ai/security/no-single-layer-holds/) — guided lesson with quizzes.
+
 ## Why Layers Matter
 
 Any individual safety mechanism can fail. Prompt guardrails are bypassed by injection. Runtime checks miss edge cases. [Approval gates](human-in-the-loop-confirmation-gates.md) cause fatigue-driven rubber-stamping. Defense-in-depth assumes every layer will eventually fail and ensures each catches what the others miss. Perplexity's response to NIST's AI-agent security RFI reaches the same conclusion: "No single layer is sufficient on its own; the non-deterministic nature of LLM reasoning ensures that any individual defense can be circumvented under sufficiently adaptive attack strategies" ([Li et al., 2026](https://arxiv.org/abs/2603.12230)).

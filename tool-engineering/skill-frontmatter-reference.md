@@ -18,6 +18,8 @@ maturity: established
 
 > SKILL.md frontmatter controls how a skill is discovered, invoked, and executed — each field governs one aspect of that lifecycle: invocation control, subagent delegation, tool restriction, lifecycle hooks, and argument handling.
 
+**Related lesson:** [Skills as a Tool-Engineering Surface](https://learn.agentpatterns.ai/tool-engineering/skills-as-a-tool-surface/) — this concept features in a hands-on lesson with quizzes.
+
 !!! note "Also known as"
     Skill configuration, SKILL.md headers. See [Skill Authoring Patterns](skill-authoring-patterns.md) for authoring guidance; [Agent Skills Standard](../standards/agent-skills-standard.md) for the portable format.
 

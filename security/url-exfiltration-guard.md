@@ -18,6 +18,8 @@ maturity: established
 
 > The URL itself is a data channel — agents that follow URLs built from untrusted content can leak sensitive context before any response is read.
 
+**Learn it hands-on:** [The URL Is the Leak](https://learn.agentpatterns.ai/security/the-url-is-the-leak/) — guided lesson with quizzes.
+
 ## The Attack
 
 Attackers use [prompt injection](prompt-injection-threat-model.md) in web content (pages, emails, documents) to instruct the agent to fetch a crafted URL containing private data in the query string:

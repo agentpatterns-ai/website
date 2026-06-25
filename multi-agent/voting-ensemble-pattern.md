@@ -20,6 +20,8 @@ maturity: established
 
 > Run the same task N times in parallel, then aggregate results through voting to trade compute for confidence.
 
+**Related lesson:** [Fan-Out and Synthesis](https://learn.agentpatterns.ai/multi-agent/fan-out-and-synthesis/) — this concept features in a hands-on lesson with quizzes.
+
 !!! note "Also known as"
     Self-Consistency, Majority Voting, Multi-Model Consensus. For the complementary pattern that merges strengths rather than voting, see [Fan-Out Synthesis](fan-out-synthesis.md). For specialized multi-lens review, see [Committee Review](../code-review/committee-review-pattern.md).
 

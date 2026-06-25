@@ -15,6 +15,8 @@ maturity: emerging
 
 > An observation-to-update loop for maintaining and improving agent configurations over time.
 
+**Related lesson:** [Define "Done" First](https://learn.agentpatterns.ai/workflows/define-done-first/) — this concept features in a hands-on lesson with quizzes.
+
 ## Agent Configs Are Not Set-and-Forget
 
 Your initial AGENTS.md and first set of skills will have gaps. The project evolves. Tools update. Conventions shift. An agent that worked well at project start produces progressively worse output if its AGENTS.md and skills don't keep pace.

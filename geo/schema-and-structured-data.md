@@ -18,6 +18,8 @@ maturity: established
 
 > Structured data lifts AI citation rates by pre-packaging content in the Q&A and step formats engines reuse — studies report 2.7x–3.2x FAQPage gains.
 
+**Related lesson:** [Machine-Readable Corpora](https://learn.agentpatterns.ai/geo/machine-readable-corpora/) — this concept features in a hands-on lesson with quizzes.
+
 Independent studies report FAQPage citation improvements of 2.7x to 3.2x ([Frase.io](https://www.frase.io/blog/faq-schema-ai-search-geo-aeo); [DEV Community](https://dev.to/wilow445/schemaorg-is-your-secret-weapon-for-ai-citations-heres-the-data-1if3)) because structured data reduces extraction effort during indexing. Schema's primary value has shifted from SEO to AI citation — ChatGPT, Perplexity, Gemini, and Claude process it at indexing time. This site auto-injects Article, FAQPage, HowTo, DefinedTerm, and BreadcrumbList schemas via `hooks/structured_data.py`, plus a site-wide `DefinedTermSet` on the [concepts glossary](../concepts.md).
 
 ## What Changed: Google vs. AI Search

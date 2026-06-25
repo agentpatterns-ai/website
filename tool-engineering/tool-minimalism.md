@@ -16,6 +16,8 @@ maturity: established
 
 > Tool minimalism — exposing fewer, non-overlapping tools — paired with high-level prompting beats redundant tool sets and step-by-step procedures, a counter-intuitive result production data confirms.
 
+**Related lesson:** [Consolidation vs Sprawl](https://learn.agentpatterns.ai/tool-engineering/consolidation-vs-sprawl/) — this concept features in a hands-on lesson with quizzes.
+
 !!! info "Also known as"
     Tool Calling Schema Standards, Subagent Schema-Level Tool Filtering, Tool Schema Design
 

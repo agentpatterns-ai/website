@@ -21,6 +21,8 @@ maturity: established
 
 > Fetch current, versioned API documentation into agent context at generation time so agents write against the live spec rather than stale training-data snapshots.
 
+**Related lesson:** [Mind the Version Gap](https://learn.agentpatterns.ai/context-engineering/mind-the-version-gap/) — this concept features in a hands-on lesson with quizzes.
+
 !!! info "Also known as"
     Retrieval-Augmented Agent Workflows, Semantic Context Loading, JIT Context, RAG
 

@@ -18,6 +18,8 @@ maturity: emerging
 
 > Reformatting constraints — more structured, more compact, more formal — does not improve how reliably models follow them. Compliance is determined by what constraints say, not how they are laid out.
 
+**Related lesson:** [The Ceiling](https://learn.agentpatterns.ai/prompt-engineering/the-ceiling/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Experiment
 
 A study across 11 models, 16 benchmark tasks, and 830+ LLM invocations tested three encoding forms — including a compact header form — and four propagation modes against a constraint satisfaction rate (CSR) metric ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).

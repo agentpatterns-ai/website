@@ -17,6 +17,8 @@ maturity: established
 
 > Build system prompts from modular, priority-ordered sections rather than monolithic static text — enabling mode-specific variants, provider-specific injection, and efficient API caching.
 
+**Learn it hands-on:** [Assembling the Prompt](https://learn.agentpatterns.ai/context-engineering/assembling-the-prompt/) — guided lesson with quizzes.
+
 ## Why Static Prompts Break Down
 
 A single static system prompt works for simple agents. As capabilities grow, prompts accumulate sections for identity, code quality rules, safety constraints, interaction guidance, and context awareness. The result: every conversation pays the token cost for every section, regardless of relevance.

@@ -17,6 +17,8 @@ maturity: established
 
 > Automate Google Search Console monitoring with GSC and Bing WMT: a scheduled API-driven report plus an on-demand pull replace manual dashboard checks.
 
+**Learn it hands-on:** [The Deterministic Baseline](https://learn.agentpatterns.ai/geo/deterministic-baseline/) — guided lesson with quizzes.
+
 ## Why Automate Search Console
 
 GSC is the authoritative source for how Google sees the site. It exposes index coverage gaps, real CrUX performance (not lab data), crawl anomalies, schema errors, and query performance. Without a reporting loop, regressions are invisible until traffic drops.

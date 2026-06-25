@@ -17,6 +17,8 @@ maturity: established
 
 > Model attention is strongest at the start and end of a context window; content in the middle receives significantly less focus regardless of its importance.
 
+**Learn it hands-on:** [Lost in the Middle](https://learn.agentpatterns.ai/context-engineering/lost-in-the-middle/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     Attention Sinks, Critical Instruction Repetition, Attention Bias and Instruction Placement
 

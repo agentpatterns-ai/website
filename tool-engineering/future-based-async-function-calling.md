@@ -17,6 +17,8 @@ maturity: adopted
 
 > Return each function call as a symbolic future so a stock LLM keeps decoding while tools run in the background. Same synchronous schema, no retraining.
 
+**Related lesson:** [Annotations & Safe Concurrency](https://learn.agentpatterns.ai/tool-engineering/annotations-and-concurrency/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Latency Decomposition
 
 End-to-end latency on a function-calling turn decomposes into `decode_time + tool_time`. On tool-heavy workloads `tool_time` dominates. The synchronous protocol stops decoding when a tool call is emitted and resumes only after the call returns, so the two costs stack linearly.

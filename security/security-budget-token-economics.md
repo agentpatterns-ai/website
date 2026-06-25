@@ -16,6 +16,8 @@ maturity: established
 
 > Size a security audit as a token budget: when exploit discovery scales with spend, hardening becomes an outspend duel that ends when the curve plateaus.
 
+**Related lesson:** [The Bill Is the Attack](https://learn.agentpatterns.ai/security/the-bill-is-the-attack/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Framing
 
 Drew Breunig compresses the economic consequence of Anthropic's [Mythos Preview](restricted-access-defensive-ai.md) evaluation: *"to harden a system you need to spend more tokens discovering exploits than attackers will spend exploiting them"* ([Breunig, 2026](https://www.dbreunig.com/2026/04/14/cybersecurity-is-proof-of-work-now.html)). The UK AI Security Institute's evaluation showed vulnerability-discovery performance scaling with token budget across three frontier models, with no diminishing returns visible inside the 100M-token-per-attempt range ([AISI, 2026](https://www.aisi.gov.uk/blog/our-evaluation-of-claude-mythos-previews-cyber-capabilities)); Simon Willison summarises the open-source corollary ([Willison, 2026](https://simonwillison.net/2026/Apr/14/cybersecurity-proof-of-work/)).

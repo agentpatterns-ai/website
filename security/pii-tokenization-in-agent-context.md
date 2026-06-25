@@ -20,6 +20,8 @@ maturity: established
 
 > Sandbox-enforced PII tokenization replaces sensitive fields with deterministic tokens before data reaches the model, so real values never enter the context window.
 
+**Related lesson:** [The Payload That Waits](https://learn.agentpatterns.ai/security/the-payload-that-waits/) — this concept features in a hands-on lesson with quizzes.
+
 PII tokenization replaces sensitive field values — emails, names, account numbers — with deterministic placeholder tokens before they reach the model's context window. The sandbox enforces the boundary: real values never reach the model, and de-tokenization happens only inside the sandbox when downstream tools need the original data.
 
 ## Why Model Context Is a Data Risk

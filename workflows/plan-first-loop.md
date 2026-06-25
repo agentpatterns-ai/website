@@ -16,6 +16,8 @@ maturity: established
 
 > For non-trivial tasks, have the agent describe the system, correct its understanding, and co-design a written plan before it writes code — never the reverse.
 
+**Learn it hands-on:** [Plan Before Code](https://learn.agentpatterns.ai/workflows/plan-before-code/) — guided lesson with quizzes.
+
 ## Why Implementation-First Fails
 
 Jumping straight to "Here is the feature. Here are some files. Please build it." gives the agent [insufficient context](../context-engineering/context-priming.md) and no explicit alignment checkpoint. The result compiles but may stray from architectural goals and require significant correction.

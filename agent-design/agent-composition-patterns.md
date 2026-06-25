@@ -20,6 +20,8 @@ maturity: established
 
 > Multi-agent workflows follow four structural patterns — sequential chains, parallel fan-out, staged pipelines, and supervisor coordination — each suited to a different task structure.
 
+**Related lesson:** [Sub-Agents & Orchestration](https://learn.agentpatterns.ai/harness-engineering/sub-agents-and-orchestration/) — this concept features in a hands-on lesson with quizzes.
+
 !!! note "Also known as"
     Parallel Dispatch, Scatter-Gather, Orchestrator-Worker, Sub-Agents Fan-Out. For specific variants, see [Fan-Out Synthesis](../multi-agent/fan-out-synthesis.md), [Orchestrator-Worker](../multi-agent/orchestrator-worker.md), and [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md).
 

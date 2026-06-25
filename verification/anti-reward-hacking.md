@@ -19,6 +19,8 @@ maturity: established
 
 > Agents optimize for the literal metric, not the intent behind it. Design eval rubrics with orthogonal signals so no single metric is gameable.
 
+**Related lesson:** [Grade the Outcome](https://learn.agentpatterns.ai/verification/grade-the-outcome/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Problem
 
 When a measure becomes a target, it ceases to be a good measure:

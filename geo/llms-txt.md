@@ -15,6 +15,8 @@ maturity: emerging
 
 > `/llms.txt` gives AI agents a curated entry point to your site at inference time — it improves agent navigation, not citation rates or search rankings.
 
+**Learn it hands-on:** [Machine-Readable Corpora](https://learn.agentpatterns.ai/geo/machine-readable-corpora/) — guided lesson with quizzes.
+
 ## What the Spec Actually Specifies
 
 The [llms.txt specification](https://llmstxt.org) (Jeremy Howard, answer.ai) defines a Markdown file published at `{site-root}/llms.txt`. LLM context windows are too small to process full websites, and HTML adds noise. The file gives agents a curated, structured index instead.

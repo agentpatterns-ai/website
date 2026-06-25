@@ -21,6 +21,8 @@ maturity: established
 
 > The factory model replaces real-time human attention with automated feedback loops and parallel agents — but only once the supporting infrastructure is in place.
 
+**Related lesson:** [Becoming a Tech Lead](https://learn.agentpatterns.ai/workflows/becoming-a-tech-lead/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Two Models
 
 **Assistant model**: one human watches one agent in a sidebar. The human is the feedback loop — answering questions, correcting drift, approving actions in real time. The agent can only proceed as fast as the human can respond.

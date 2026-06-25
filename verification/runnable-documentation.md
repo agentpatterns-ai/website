@@ -13,6 +13,8 @@ maturity: established
 
 > Convert inline code examples into standalone files that CI executes on every build — catching doc rot with the same signals that catch broken code, and cutting stale-context failures in agents that retrieve docs via RAG.
 
+**Related lesson:** [Golden Journeys](https://learn.agentpatterns.ai/verification/golden-journeys/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Mechanism
 
 Every inline code example is a hidden assertion that the API works as shown — checked only when a reader copies the snippet and finds it broken. Runnable documentation promotes that assertion to a test.

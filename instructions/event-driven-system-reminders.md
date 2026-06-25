@@ -15,6 +15,8 @@ maturity: emerging
 
 > Inject targeted guidance at specific points during agent execution to combat instruction fade-out and reinforce safety constraints without bloating the static system prompt.
 
+**Learn it hands-on:** [When the Prompt Fades](https://learn.agentpatterns.ai/prompt-engineering/when-the-prompt-fades/) — guided lesson with quizzes.
+
 ## The Problem: Instruction Fade-Out
 
 Static system prompts lose effectiveness over extended sessions. The model progressively deprioritizes initial instructions as conversation history grows — even when those instructions remain present in context ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)).

@@ -16,6 +16,8 @@ maturity: established
 
 > Feature-scale AI-assisted development runs through seven alternating phases, each with a distinct human/agent ratio and a concrete handoff criterion.
 
+**Related lesson:** [Research, Plan, Implement](https://learn.agentpatterns.ai/workflows/research-plan-implement/) — this concept features in a hands-on lesson with quizzes.
+
 This model operates at the **feature lifecycle** level — a single feature or project from idea to production. It is distinct from the [Research-Plan-Implement pattern](research-plan-implement.md) (a per-task inner loop) and the [AI Development Maturity Model](ai-development-maturity-model.md) (a career-phase adoption arc).
 
 Matt Pocock documented this workflow from production use of Claude Code, publishing it in March 2026 ([My 7 Phases Of AI Development](https://www.aihero.dev/posts/my-7-phases-of-ai-development), [Real-world feature build with Claude Code](https://www.aihero.dev/posts/real-world-feature-build-with-claude-code)).

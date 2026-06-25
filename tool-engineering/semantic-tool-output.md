@@ -19,6 +19,8 @@ maturity: established
 
 > Return human-readable, contextually filtered output from agent tools to reduce hallucination and improve downstream call accuracy.
 
+**Learn it hands-on:** [Result Shaping](https://learn.agentpatterns.ai/tool-engineering/result-shaping/) — guided lesson with quizzes.
+
 !!! note "Also known as"
     Tool Output Design, Token-Efficient Tool Design, Agent-Friendly Output. For the cost angle — designing tool outputs to minimize token consumption — see [Token-Efficient Tool Design](token-efficient-tool-design.md).
 

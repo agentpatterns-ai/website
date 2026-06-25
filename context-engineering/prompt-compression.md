@@ -14,6 +14,8 @@ maturity: established
 
 > Write instructions that convey the same guidance in fewer words — because shorter, denser instructions improve agent compliance and reduce token cost.
 
+**Learn it hands-on:** [Signal Per Token](https://learn.agentpatterns.ai/context-engineering/signal-per-token/) — guided lesson with quizzes.
+
 ## Why Density Matters
 
 Claude Code's context window fills fast — a debugging session or codebase exploration can consume tens of thousands of tokens, and instructions near the end of a long context receive less attention than those at the start. The [Claude Code best practices documentation](https://code.claude.com/docs/en/best-practices) is blunt about the consequence: "Bloated CLAUDE.md files cause Claude to ignore your actual instructions!" A shorter file where every rule applies outperforms a longer file where important rules are buried and skipped.

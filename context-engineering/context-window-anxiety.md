@@ -18,6 +18,8 @@ maturity: established
 
 > Advanced models exhibit behavioral shortcuts as context limits approach — strategic buffers, counter-prompting, and token budget transparency counteract premature task closure.
 
+**Learn it hands-on:** [The Anxious Agent](https://learn.agentpatterns.ai/context-engineering/the-anxious-agent/) — guided lesson with quizzes.
+
 ## The Behavior
 
 As the context window fills, some models shift behavioral mode before hitting a hard capacity limit. [Cognition reported](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) this while rebuilding Devin for Claude Sonnet 4.5 — the first model they had seen that is aware of its own context window. The symptoms, also catalogued in [nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/context-window-anxiety-management.md), include:

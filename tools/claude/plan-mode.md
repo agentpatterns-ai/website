@@ -13,6 +13,8 @@ last_reviewed: 2026-05-27
 
 > Restrict the agent to read-only operations so it explores and proposes before it modifies anything.
 
+**Learn it hands-on:** [Plan Mode & Plan-First](https://learn.agentpatterns.ai/harness-engineering/plan-mode-and-plan-first/) — guided lesson with quizzes.
+
 Plan Mode is a permission mode in Claude Code that blocks all file writes and state-changing shell commands. The agent can read files, search code, and analyze the codebase — but cannot modify anything. This forces a separation between understanding and implementation that catches wrong approaches before they produce wrong code.
 
 ## Why It Works

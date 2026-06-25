@@ -85,3 +85,4 @@ The pattern relocates the freshness check from a network round-trip to local cry
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — Limit agent access to only what the current task requires
 - [Task-Based Access Control with Hybrid Inspection](task-based-access-control-hybrid-inspection.md) — Bind each tool call to the user's current task via short-lived signed credentials
 - [Credential Hygiene for Agent Skills](credential-hygiene-agent-skills.md) — Upstream hygiene practices that shrink the reusable-secret surface HBHC must revoke downstream
+- [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — Goal-bound (rather than liveness-bound) revocation at the subgoal scope; orthogonal axis to HBHC's time-bound hierarchy

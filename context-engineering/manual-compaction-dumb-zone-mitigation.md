@@ -14,6 +14,8 @@ maturity: established
 
 > Auto-compaction fires at ~95% context fill — long after reasoning quality has degraded. Manual compaction reframes context management from memory cleanup to reasoning quality preservation.
 
+**Learn it hands-on:** [Compaction](https://learn.agentpatterns.ai/harness-engineering/compaction/) — guided lesson with quizzes.
+
 ## The Gap
 
 Claude Code's auto-compaction triggers at [approximately 95% of the context window](https://code.claude.com/docs/en/sub-agents). Benchmark research shows [LLMs effectively leverage only 10-20% of a long context window](https://arxiv.org/abs/2406.10149) for multi-step reasoning tasks, and code bug fixing collapses from 29% accuracy at 32K to 3% at 256K per [LongCodeBench](https://arxiv.org/abs/2505.07897). By the time auto-compaction fires, the agent has been in the [dumb zone](context-window-dumb-zone.md) for most of the session.

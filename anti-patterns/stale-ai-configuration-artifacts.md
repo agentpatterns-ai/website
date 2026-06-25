@@ -16,6 +16,8 @@ maturity: emerging
 
 > AI configuration files drift out of sync with the code they describe; the agent loads stale guidance as authoritative context and confabulates around the gap.
 
+**Related lesson:** [Configuration Smells in AGENTS.md](https://learn.agentpatterns.ai/anti-patterns/configuration-smells/) — this concept features in a hands-on lesson with quizzes.
+
 CLAUDE.md, AGENTS.md, and `.cursorrules` are documentation — they describe code elements, paths, and conventions to a downstream reader, and they decay the same way every other documentation artifact decays as code evolves around them. Treude & Baltes (June 2026) call this drift **context rot** and show that an off-the-shelf README/wiki consistency checker, retargeted at AI configuration files in **356 repositories**, flagged stale code element references in **23%** of them ([arxiv 2606.09090](https://arxiv.org/abs/2606.09090)).
 
 ## Disambiguation

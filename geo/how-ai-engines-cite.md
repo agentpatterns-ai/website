@@ -18,6 +18,8 @@ maturity: established
 
 > The four major AI answer engines are four entirely different retrieval systems. Optimizing for one does not transfer to another.
 
+**Learn it hands-on:** [Four Engines, Four Backends](https://learn.agentpatterns.ai/geo/four-engines-four-backends/) — guided lesson with quizzes.
+
 Only **11% of cited domains appear on both ChatGPT and Perplexity** for identical queries ([Whitehat SEO, 2025](https://whitehat-seo.co.uk/blog/ai-engines-comparison-citations)). Each platform runs a different search backend, applies different freshness weights, and uses a different crawler. Understand which engine you are targeting before optimizing.
 
 ## The Crawler Split: Training vs Retrieval

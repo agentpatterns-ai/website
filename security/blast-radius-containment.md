@@ -17,6 +17,8 @@ maturity: adopted
 
 > Grant agents only the permissions their task requires — read-only for research, branch-scoped for code changes, no external write access by default.
 
+**Learn it hands-on:** [Sandboxing & Blast-Radius Containment](https://learn.agentpatterns.ai/harness-engineering/sandboxing-and-blast-radius/) — guided lesson with quizzes.
+
 !!! note "Also known as"
     **Permission Scoping** | **Least Privilege**
 

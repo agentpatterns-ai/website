@@ -57,6 +57,7 @@ Architecture and design guidance for MCP servers and clients -- the open protoco
 - [Tool Cloning and Provenance Assessment](tool-cloning-provenance-assessment.md) — Raw repository counts overstate the diversity of MCP and Skills marketplaces because many entries are cloned, lightly modified, or template-derived — pair Jaccard and ssdeep before drawing ecosystem conclusions
 - [Hint-Driven Concurrency for Read-Only MCP Tools](read-only-hint-concurrency.md) — The MCP `readOnlyHint` annotation became a concurrency dispatcher input once Codex CLI 0.134.0 shipped parallel execution for read-only tool calls — a wall-clock win that only holds when annotations are audited and trusted
 - [Push-Event MCP Channels: Inverting the Pull-Tool Polarity](push-event-mcp-channels.md) — An MCP server that declares `claude/channel` flips the polarity from pull-on-demand to push-when-it-happens, gated by sender allowlist and an always-open session — useful when warm context is worth keeping
+- [Auth-Isolation as the MCP-vs-CLI Selection Heuristic](mcp-auth-isolation-vs-cli-selection.md) — Reach for MCP when authenticated access needs its credentials kept out of the agent's context window; choose a CLI when there is no auth boundary to protect
 
 ## Skills
 

@@ -18,6 +18,8 @@ maturity: established
 
 > Tool design is an interface discipline: the same affordances, constraints, feedback, and error prevention that make human UIs usable make agent tools effective.
 
+**Related lesson:** [What Makes a Tool Agent-Friendly](https://learn.agentpatterns.ai/tool-engineering/agent-friendly-tools/) — this concept features in a hands-on lesson with quizzes.
+
 ## From HCI to ACI
 
 Agent-Computer Interface (ACI) applies the discipline of Human-Computer Interaction — clear labels, constrained inputs, informative feedback, error prevention by design — to the tools an LM agent uses. The [SWE-agent paper](https://arxiv.org/abs/2405.15793) (Yang et al., NeurIPS 2024) formalized the term and showed custom tool interfaces lifted SWE-bench pass@1 by 12.5% with no change to model weights.

@@ -19,6 +19,8 @@ maturity: established
 
 > Agent observability combines OpenTelemetry metrics and events, trajectory tracing, and structured audit trails to give you cost attribution, compliance evidence, and debugging data that survives context resets — all without custom instrumentation.
 
+**Learn it hands-on:** [Attributing the Context](https://learn.agentpatterns.ai/observability/attributing-the-context/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     Trajectory Logging via Progress Files, Progress File Pattern, Audit Trail for Agent Decisions
 

@@ -18,6 +18,8 @@ maturity: adopted
 
 > Encode resource allocation rules in system prompts so agents spend proportional effort: few tool calls for simple lookups, many subagents for complex research.
 
+**Related lesson:** [Orchestrator-Worker](https://learn.agentpatterns.ai/harness-engineering/orchestrator-worker/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Problem with Rigid Instructions
 
 Fixed instructions like "always use three subagents" waste tokens on simple fact-finding and under-invest on complex tasks. "Be thorough" gives no actionable constraint. [Anthropic's multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) spawned up to 50 subagents for queries needing one until explicit complexity tiers were encoded.

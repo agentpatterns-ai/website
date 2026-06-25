@@ -18,6 +18,8 @@ maturity: established
 
 > Perceived model degradation is the "the model got dumber" complaint after a release, when teams cannot tell whether quality actually dropped.
 
+**Related lesson:** [The Kitchen Sink Session](https://learn.agentpatterns.ai/anti-patterns/the-kitchen-sink-session/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Pattern
 
 After every model release, user forums fill with reports that quality has declined — persistent, cross-provider, and structurally identical each time. The anti-pattern is not the degradation itself (some is real); it is the inability to tell the difference, causing teams to either panic-switch without evidence or dismiss real problems as vibes.

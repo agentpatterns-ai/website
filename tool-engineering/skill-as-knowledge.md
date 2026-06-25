@@ -10,13 +10,15 @@ tags:
 aliases:
   - skill as knowledge container
   - knowledge-only skills
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-24
 maturity: established
 ---
 
 # Skill as Knowledge Pattern
 
-> Design skills as pure knowledge containers — domain rules, heuristics, and reference material — not executable behavior, so they remain portable across agents, tools, and sessions.
+> Design skills as knowledge containers — domain rules, heuristics, and reference material — not executable behavior, so they remain portable across agents, tools, and sessions.
+
+**Learn it hands-on:** [Skills as a Tool-Engineering Surface](https://learn.agentpatterns.ai/tool-engineering/skills-as-a-tool-surface/) — guided lesson with quizzes.
 
 ## Knowledge, Not Behavior
 
@@ -31,6 +33,8 @@ Claude Code's skill documentation draws an [explicit distinction between "refere
 Skills encoded as markdown knowledge work across [30+ tools](https://agentskills.io) — Claude Code, Cursor, VS Code Copilot, Gemini CLI, Codex, and others — because markdown knowledge has no tool-specific dependencies. A skill that names authoritative URL patterns works identically in any agent; a skill that embeds `claude_code_tool_call()` works in exactly one.
 
 [Anthropic's best practices guide](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) reinforces this by framing skill content as the delta of domain-specific knowledge the model lacks. The "degrees of freedom" framework maps from high (heuristic knowledge with multiple valid approaches) to low (deterministic scripts) — knowledge skills sit at the high end where portability and flexibility are greatest.
+
+Microsoft's developer guidance offers a concrete sizing heuristic for this delta: omit what the base model already knows — standard SDK and API patterns — and include only the project-specific knowledge the model lacks ([Microsoft: Stop Overloading Your Skills](https://developer.microsoft.com/blog/stop-overloading-your-skills)).
 
 ## Independent Change Cadence
 

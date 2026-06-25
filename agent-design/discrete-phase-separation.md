@@ -18,6 +18,8 @@ maturity: adopted
 
 > Each phase — research, planning, execution — runs in its own conversation. Only distilled artifacts cross boundaries, not full history.
 
+**Related lesson:** [Reasoning Budget — The Sandwich](https://learn.agentpatterns.ai/harness-engineering/reasoning-budget/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Problem with Mixed Phases
 
 When an agent researches, plans, and implements in a single context window, three things compete for the model's attention simultaneously. The result is degraded output in all three directions: exploration cuts short because the model is already thinking about the plan; the plan is distorted by implementation details the model pre-cached; execution is contaminated by the reasoning traces from research that no longer apply.

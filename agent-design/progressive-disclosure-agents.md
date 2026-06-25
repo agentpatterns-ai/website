@@ -16,6 +16,8 @@ maturity: adopted
 
 > Keep agent definitions minimal — identity and scope only — and load task knowledge on demand through skills rather than front-loading everything.
 
+**Learn it hands-on:** [Skills & Progressive Disclosure](https://learn.agentpatterns.ai/harness-engineering/skills-and-progressive-disclosure/) — guided lesson with quizzes.
+
 ## The Problem with Monolithic Definitions
 
 Every token in an agent definition consumes [context budget](../context-engineering/context-budget-allocation.md) on every invocation, whether relevant to the current task or not. A monolithic definition embedding every checklist and procedure is mostly noise for any given task.

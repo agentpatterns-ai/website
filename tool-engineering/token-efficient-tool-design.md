@@ -18,6 +18,8 @@ maturity: established
 
 > Design tools so that each call injects the minimum tokens needed for the next agent decision.
 
+**Learn it hands-on:** [Tool-Call Cost & Latency Budgeting](https://learn.agentpatterns.ai/tool-engineering/cost-and-latency-budgeting/) — guided lesson with quizzes.
+
 !!! note "Also known as"
     Tool Output Design, Semantic Tool Output, Agent-Friendly Output. For the usability angle — designing tool outputs for semantic clarity and agent comprehension — see [Semantic Tool Output](semantic-tool-output.md).
 

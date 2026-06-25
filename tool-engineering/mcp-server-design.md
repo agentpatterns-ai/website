@@ -16,6 +16,8 @@ maturity: established
 
 > A well-designed MCP server makes the right tool call obvious. A poorly designed one burns tokens on retries, confuses routing, and forces blind debugging.
 
+**Learn it hands-on:** [What a Server Exposes](https://learn.agentpatterns.ai/mcp-server-design/what-a-server-exposes/) — guided lesson with quizzes.
+
 ## First Decision: Tool, Resource, or Prompt?
 
 Picking the wrong primitive creates friction before naming or schema design matters.

@@ -18,6 +18,8 @@ maturity: established
 
 > Loop detection tracks repeated file edits within a session and nudges the agent to change approach when those edits stop making progress.
 
+**Learn it hands-on:** [Catching the Wasted Run](https://learn.agentpatterns.ai/observability/catching-the-wasted-run/) — guided lesson with quizzes.
+
 **Also known as:** Loop Detection & Stopping. For the broader pattern of automatic stopping mechanisms (iteration limits, cost thresholds, context budgets), see [Circuit Breakers for Agent Loops](circuit-breakers.md). For budgeting the context window itself, see [Context Budget Allocation](../context-engineering/context-budget-allocation.md).
 
 ## The Micro-Loop Problem

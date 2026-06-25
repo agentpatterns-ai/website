@@ -14,6 +14,8 @@ maturity: established
 
 > Prompt layering stacks agent instructions across four sources — system prompt, project instructions, skill content, user message — where specificity determines precedence on conflicts.
 
+**Learn it hands-on:** [The Layer Stack](https://learn.agentpatterns.ai/context-engineering/prompt-layering/) — guided lesson with quizzes.
+
 ## The Layer Stack
 
 Instructions reach an agent from several sources, each loaded at a different point in the session lifecycle:

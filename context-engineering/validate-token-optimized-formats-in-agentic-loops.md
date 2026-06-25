@@ -14,6 +14,8 @@ maturity: emerging
 
 > Token-optimized notations cut input tokens up to 27% but regress accuracy 9-14pp inside end-to-end agentic loops — validate before you swap.
 
+**Learn it hands-on:** [Measure Before You Optimize](https://learn.agentpatterns.ai/context-engineering/measure-before-you-optimize/) — guided lesson with quizzes.
+
 Token-optimized formats such as Token-Oriented Object Notation (TOON) and Token Reduced Object Notation (TRON) re-encode JSON to remove repeated property names and structural overhead. Isolated comprehension benchmarks report 30-60% savings ([TOON spec](https://github.com/toon-format/toon)), but the savings measured on single-turn tasks do not survive the multi-turn, parallel tool-call patterns that make up real agentic systems ([Kutschka & Geiger, 2026](https://arxiv.org/abs/2605.29676)).
 
 ## Input-Side vs Output-Side Compression

@@ -17,6 +17,8 @@ maturity: established
 
 > The Model Context Protocol is an open standard for connecting AI agents to external tools and data sources — agents speak MCP, tools implement MCP servers, and they interoperate regardless of which AI tool is running.
 
+**Learn it hands-on:** [Capstone — Ship a Server Agents Can Drive](https://learn.agentpatterns.ai/mcp-server-design/capstone/) — guided lesson with quizzes.
+
 ## What MCP Does
 
 Before MCP, every AI coding tool required its own integration format — Claude Code plugins, VS Code Copilot extensions, Cursor integrations — so a database connector had to be rebuilt for each host.

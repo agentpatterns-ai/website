@@ -16,6 +16,8 @@ maturity: emerging
 
 > LLM-pinned library versions routinely carry known CVEs because the model's prior favors popular-but-outdated releases; a bias shared across models, so pin against external CVE data.
 
+**Related lesson:** [The Package That Doesn't Exist](https://learn.agentpatterns.ai/security/the-package-that-doesnt-exist/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Finding
 
 Wang et al. (May 2026) evaluated 10 LLMs on PinTrace, a 1,000-task Python benchmark drawn from Stack Overflow, checking every generated `requirements.txt`, `pyproject.toml`, and inline `pip install` against the National Vulnerability Database ([arXiv:2605.06279](https://arxiv.org/abs/2605.06279)):

@@ -17,6 +17,8 @@ maturity: established
 
 > Indirect injection exploits transformer attention's lack of privilege separation: the model cannot tell operator instructions from attacker-controlled retrieved content. Standard testing misses it.
 
+**Related lesson:** [The Provenance-Blind Model](https://learn.agentpatterns.ai/security/the-provenance-blind-model/) — this concept features in a hands-on lesson with quizzes.
+
 ## Why Developers Underestimate the Risk
 
 Indirect prompt injection embeds malicious instructions in external data the agent retrieves — a web page, a repo file, an API response. Transformer attention is flat: no privilege boundary separates operator instructions from retrieved content. Attacker text [competes on equal terms with the system prompt](prompt-injection-threat-model.md) and wins when phrased authoritatively.

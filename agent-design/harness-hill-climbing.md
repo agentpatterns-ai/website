@@ -15,6 +15,8 @@ maturity: adopted
 
 > Use eval scores as the optimization signal to systematically improve agent harness configuration, replacing ad-hoc prompt tweaking with a structured feedback loop.
 
+**Learn it hands-on:** [Eval-Driven Harness Improvement](https://learn.agentpatterns.ai/harness-engineering/eval-driven-harness-improvement/) — guided lesson with quizzes.
+
 ## The Loop
 
 Harness hill-climbing applies local search to agent configuration: run a benchmark suite, make one targeted change, re-score, keep the change if the score improves — the manual counterpart to automated [DSPy prompt search](dspy-programmatic-prompt-optimization.md). Repeat. No model changes. No retraining. The eval score is the gradient signal.

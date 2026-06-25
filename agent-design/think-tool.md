@@ -17,6 +17,8 @@ maturity: adopted
 
 > The think tool is a mid-stream reasoning checkpoint between tool calls, giving agents space to reflect on tool output before deciding the next action.
 
+**Related lesson:** [Reasoning Budget — The Sandwich](https://learn.agentpatterns.ai/harness-engineering/reasoning-budget/) — this concept features in a hands-on lesson with quizzes.
+
 ## What the Think Tool Does
 
 The think tool fires between tool calls — after the agent receives a tool's output, before it decides what to do next. It is distinct from extended thinking, which reasons before the first generation token: extended thinking is pre-action; the think tool is mid-stream, firing after the agent has observed new information from the environment.

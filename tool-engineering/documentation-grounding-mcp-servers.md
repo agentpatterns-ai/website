@@ -17,6 +17,8 @@ maturity: established
 
 > Vendor-operated MCP servers expose live documentation to coding agents — preventing deprecated-API generation when SDK churn outruns model retraining.
 
+**Learn it hands-on:** [Data, Just in Time](https://learn.agentpatterns.ai/mcp-server-design/data-just-in-time/) — guided lesson with quizzes.
+
 ## When This Pattern Applies
 
 A documentation-grounding MCP server is the right choice when **four conditions hold simultaneously**:

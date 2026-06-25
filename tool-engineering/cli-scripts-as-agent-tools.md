@@ -19,6 +19,8 @@ maturity: adopted
 
 > Write thin wrapper scripts that pre-filter system output so agents receive a decision-ready summary rather than raw command output to parse.
 
+**Related lesson:** [Token-Efficient Tool Design](https://learn.agentpatterns.ai/tool-engineering/token-efficient-tool-design/) — this concept features in a hands-on lesson with quizzes.
+
 ## Raw Commands Waste Context
 
 When an agent runs `kubectl get pods`, it receives hundreds of lines for a production cluster but may need only pod names and states. [Context engineering](../context-engineering/context-engineering.md) ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)) identifies tool output as a direct context expenditure — the agent processes everything returned, useful or not. Anthropic reports a related pattern where [executing code that filters MCP tool output](https://www.anthropic.com/engineering/code-execution-with-mcp) before returning it to the model cut a representative workload from 150,000 to 2,000 tokens. Scripts that pre-filter at the source reduce that expenditure.

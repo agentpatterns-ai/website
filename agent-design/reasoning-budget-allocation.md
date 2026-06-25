@@ -17,6 +17,8 @@ maturity: established
 
 > Allocate maximum reasoning compute to planning and verification phases, reduced compute to execution — rather than using a fixed level throughout.
 
+**Learn it hands-on:** [Reasoning Budget — The Sandwich](https://learn.agentpatterns.ai/harness-engineering/reasoning-budget/) — guided lesson with quizzes.
+
 ## The Pattern
 
 Not all steps in an agent workflow require the same depth of reasoning. Planning and verification are high-stakes; execution is largely mechanical.

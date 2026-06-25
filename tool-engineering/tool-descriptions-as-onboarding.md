@@ -18,6 +18,8 @@ maturity: adopted
 
 > Write tool descriptions for an agent that has never seen the system — make implicit context, query formats, domain terminology, and resource relationships explicit.
 
+**Related lesson:** [Schema & Description Altitude](https://learn.agentpatterns.ai/tool-engineering/schema-and-description-altitude/) — this concept features in a hands-on lesson with quizzes.
+
 !!! info "Also known as"
     Tool Engineering, Mistake-Proofing / Poka-Yoke
 

@@ -19,6 +19,8 @@ maturity: adopted
 
 > Monitor three observable signals across refinement passes to replace intuition-based stopping with a mechanical criterion.
 
+**Related lesson:** [Evaluator-Optimizer](https://learn.agentpatterns.ai/harness-engineering/evaluator-optimizer/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Problem
 
 Iterative refinement loops — plan polishing, critique passes, bead polishing, documentation drafts — have no natural stopping point. Agents and developers either stop too early (leaving unresolved issues) or over-refine (wasting compute on passes that change nothing). "It looks good enough" is not a stopping criterion.

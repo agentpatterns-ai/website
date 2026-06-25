@@ -14,6 +14,8 @@ maturity: adopted
 
 > An agent handoff protocol is an explicit contract — what the upstream stage produces and the downstream stage expects — preventing information loss between agents.
 
+**Learn it hands-on:** [Handoffs and Coordination Contracts](https://learn.agentpatterns.ai/multi-agent/handoffs-and-contracts/) — guided lesson with quizzes.
+
 ## The Handoff Problem
 
 Each agent in a pipeline operates in its own context window. The research agent's findings don't automatically transfer to the draft agent. Each handoff is an information loss point: too little context and the next agent makes wrong assumptions; too much and it's burdened with noise. The [Multi-Agent System Failure Taxonomy](https://arxiv.org/abs/2503.13657) (MAST) annotates over 1,600 production traces and identifies inter-agent misalignment as one of three primary failure categories.

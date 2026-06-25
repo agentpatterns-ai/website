@@ -20,6 +20,8 @@ maturity: emerging
 
 > The permission framework drives overeager-action rates more than the base model: identical Sonnet-4.6 weights span 1.1% to 27.7% across harnesses ([Qu et al., 2026](https://arxiv.org/abs/2605.18583)).
 
+**Learn it hands-on:** [Permissions & Safety Boundaries](https://learn.agentpatterns.ai/harness-engineering/permissions-and-safety-boundaries/) — guided lesson with quizzes.
+
 ## When This Recommendation Applies
 
 The framework-over-model finding holds only inside these conditions:

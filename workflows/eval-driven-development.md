@@ -19,6 +19,8 @@ maturity: established
 
 > Define evaluation tasks and success criteria before implementing an agent feature so that "done" has an objective definition before any code is written.
 
+**Learn it hands-on:** [Define "Done" First](https://learn.agentpatterns.ai/workflows/define-done-first/) — guided lesson with quizzes.
+
 !!! note "Also known as"
     Write Evals Before Building, Eval-First Development, Eval-Driven Tool Development. For the specific technique of using input/output pairs as regression tests, see [Golden Query Pairs](../verification/golden-query-pairs-regression.md). For applying this methodology to tool building specifically, see [Applying the Loop to Tool Building](#applying-the-loop-to-tool-building) below.
 

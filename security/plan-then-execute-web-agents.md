@@ -18,6 +18,8 @@ maturity: emerging
 
 > Web content mixes many parties' inputs. Web agents fix a task-specific program before observing pages, so injected content changes values but never rewrites the plan.
 
+**Learn it hands-on:** [Decide Before You Look](https://learn.agentpatterns.ai/security/decide-before-you-look/) — guided lesson with quizzes.
+
 ## Why ReAct Is the Wrong Default
 
 [ReAct](https://arxiv.org/abs/2210.03629) interleaves reasoning and acting: at each step the model observes content, reasons about it, then chooses the next action. For a web agent, that observation is a page combining a seller's listing, customer reviews, and sponsored ads — each authored by a different party, any of which can carry injected instructions. Because the page enters the prompt that selects the next action, an injection in any segment can redirect the agent's control flow ([Piet et al., 2026](https://arxiv.org/abs/2605.14290)).

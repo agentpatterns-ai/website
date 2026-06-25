@@ -15,6 +15,8 @@ maturity: established
 
 > Planning tells the agent what to do. Monitoring tells you whether it actually did it — and whether it wandered off.
 
+**Related lesson:** [Steering Running Agents](https://learn.agentpatterns.ai/harness-engineering/steering-running-agents/) — this concept features in a hands-on lesson with quizzes.
+
 Long-running coding agents declare tasks complete prematurely, drift from objectives after [context compression](../context-engineering/context-compression-strategies.md), and enter doom loops. The root cause: no durable, machine-readable record of what "done" looks like and how far the agent has gotten.
 
 ## Planning vs. Monitoring

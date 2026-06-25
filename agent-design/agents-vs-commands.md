@@ -13,6 +13,8 @@ maturity: emerging
 
 > Commands define what to do; agents define who does it — separating orchestration from expertise lets you change either without touching the other.
 
+**Learn it hands-on:** [Commands vs Agents](https://learn.agentpatterns.ai/harness-engineering/commands-vs-agents/) — guided lesson with quizzes.
+
 ## The Split
 
 In agent-driven projects, two distinct concerns collapse into a single file when not deliberately separated: workflow orchestration (what steps run, in what order, with what conditions) and domain expertise (how to do a specific job well).

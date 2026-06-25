@@ -17,6 +17,8 @@ maturity: established
 
 > System prompts fail when too brittle on edge cases or too vague to constrain. The right altitude produces consistent behaviour across variation.
 
+**Learn it hands-on:** [The Compliance Stack](https://learn.agentpatterns.ai/prompt-engineering/the-compliance-stack/) — guided lesson with quizzes.
+
 ## The Two Failure Modes
 
 **Too brittle**: The system prompt enumerates cases. "If the user asks about X, do Y. If they ask about Z, do W." This works for the anticipated cases and fails on everything else. Each edge case requires a prompt update, and the enumerated list grows toward the [instruction-compliance ceiling](instruction-compliance-ceiling.md). The agent has no principle to reason from — only a lookup table.

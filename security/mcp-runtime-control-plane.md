@@ -19,6 +19,8 @@ maturity: established
 
 > Intercept every MCP tool call at a single policy evaluation point — identity, tool name, arguments, rate limits — before the call reaches the server.
 
+**Learn it hands-on:** [The Gateway in the Middle](https://learn.agentpatterns.ai/security/the-gateway-in-the-middle/) — guided lesson with quizzes.
+
 An agent connected to many MCP servers inherits each server's ad-hoc authorisation model. A runtime control plane collapses those N policies into one evaluation point between the agent and the tool: every call is intercepted, checked against a central policy corpus, and either forwarded or denied, with the decision logged. AWS, Microsoft, and Red Hat ship reference implementations of this pattern, all built on the same primitive — a policy decision point that runs before tool execution.
 
 ## Interception Loop

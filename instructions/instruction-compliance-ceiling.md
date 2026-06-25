@@ -18,6 +18,8 @@ maturity: established
 
 > Instruction compliance degrades as rule count grows — adding more rules past a threshold produces omission errors, not better behavior.
 
+**Learn it hands-on:** [The Ceiling](https://learn.agentpatterns.ai/prompt-engineering/the-ceiling/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     The Mega-Prompt Anti-Pattern, Instruction Overload, Compliance Degradation
 

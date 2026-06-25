@@ -18,6 +18,8 @@ maturity: established
 
 > Running multiple agent sessions in parallel shifts the bottleneck from writing code to architectural decisions, feedback, and integration — the engineer becomes a tech lead.
 
+**Learn it hands-on:** [Becoming a Tech Lead](https://learn.agentpatterns.ai/workflows/becoming-a-tech-lead/) — guided lesson with quizzes.
+
 !!! note "Also known as"
     Parallel Agent Infrastructure, Multi-Agent Parallelism. For the technical mechanism — git worktrees for filesystem isolation — see [Worktree Isolation](worktree-isolation.md).
 

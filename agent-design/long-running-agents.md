@@ -10,13 +10,15 @@ aliases:
   - long-horizon agent operations
   - long-running agent pattern
   - day-scale agent work
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-24
 maturity: adopted
 ---
 
 # Long-Running Agents: Durability and Resumability Across Sessions
 
 > A long-running agent makes progress across many sessions and sandboxes by moving state out of the context window into durable artifacts that resume it.
+
+**Learn it hands-on:** [Long-Running Agents](https://learn.agentpatterns.ai/harness-engineering/long-running-agents/) — guided lesson with quizzes.
 
 ## What "Long-Running" Means
 
@@ -67,7 +69,7 @@ The harness holds no run state; the sandbox is provisioned per session and destr
 
 ### 4. Separate Evaluator
 
-Generation and evaluation run as different roles, sometimes different models. Cursor's production design splits planner / worker / judge after flat coordination failed; a coding-tuned model proved worse for *extended autonomous work* because it "tended to stop early and take shortcuts" ([Cursor: Scaling Long-Running Coding](https://cursor.com/blog/scaling-agents)).
+Generation and evaluation run as different roles, sometimes different models. Cursor's production design splits planner / worker / judge after flat coordination failed; a coding-tuned model proved worse for *extended autonomous work* because it "tended to stop early and take shortcuts" ([Cursor: Scaling Long-Running Coding](https://cursor.com/blog/scaling-agents)). The durability primitives govern whether a run *survives*; a complementary practitioner playbook governs how much useful output it *produces* — framing the task tightly up front, steering mid-run rather than only at the end, and applying deliberate review tactics ([OpenAI: maximizing long-running work](https://openai.com/index/codex-maxxing-long-running-work)).
 
 ### 5. Checkpoint Cadence
 

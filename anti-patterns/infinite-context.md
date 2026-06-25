@@ -15,6 +15,8 @@ maturity: established
 
 > A larger context window does not produce better output — unfocused context dilutes attention and degrades performance.
 
+**Learn it hands-on:** [The Infinite Context](https://learn.agentpatterns.ai/anti-patterns/the-infinite-context/) — guided lesson with quizzes.
+
 ## The Pattern
 
 Load as much context as possible into the agent's prompt. Include every potentially relevant file, the full conversation history, all documentation, and complete tool results. Assume that more information cannot hurt.

@@ -17,6 +17,8 @@ maturity: adopted
 
 > Periodically rewrite objectives, to-do lists, and status summaries at the tail of context to exploit recency bias and prevent goal drift in long-running agent sessions.
 
+**Learn it hands-on:** [Staying on Target](https://learn.agentpatterns.ai/context-engineering/staying-on-target/) — guided lesson with quizzes.
+
 ## The Problem
 
 Agent sessions exceeding ~50 tool calls routinely drift from their original objective. Earlier instructions fall into the low-attention middle zone of the context window ([Liu et al., "Lost in the Middle," TACL 2023](https://arxiv.org/abs/2307.03172)). Arike et al. (2025) confirmed this across multiple models on 100k+ token sequences: all exhibited goal drift, predominantly through **inaction** ([Arike et al., 2025](https://arxiv.org/abs/2505.02709)).

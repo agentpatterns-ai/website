@@ -14,6 +14,8 @@ maturity: established
 
 > Use types, schemas, tests, and API definitions as agent instructions instead of natural language descriptions.
 
+**Learn it hands-on:** [Point at the Spec](https://learn.agentpatterns.ai/prompt-engineering/point-at-the-spec/) — guided lesson with quizzes.
+
 ## The Core Idea
 
 When a formal specification already exists, pointing the agent at it is more precise than writing a natural language description of the same thing. A TypeScript interface is unambiguous; an OpenAPI schema leaves no room for interpretation; a test file is a complete set of acceptance criteria. Re-describing in prose what already has a formal definition only adds noise and risks divergence between the description and the spec.

@@ -19,6 +19,8 @@ maturity: established
 
 > One concept per page makes documentation chunk cleanly, raising retrieval accuracy for AI answer engines.
 
+**Related lesson:** [Answer-First, Atomic Pages](https://learn.agentpatterns.ai/geo/answer-first-atomic-pages/) — this concept features in a hands-on lesson with quizzes.
+
 When an AI answer engine retrieves your documentation, it pulls the most relevant passage from a chunked and embedded index — not the full page. How you structure content determines which passages surface and whether they contain enough context to be cited accurately.
 
 ## How RAG Chunking Works

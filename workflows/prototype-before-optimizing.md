@@ -21,6 +21,8 @@ maturity: adopted
 
 > Prototype with generous budgets to establish a quality baseline before applying optimization pressure — otherwise compression hides regressions and locks in suboptimal architectures.
 
+**Related lesson:** [Monolith to Sub-Agents](https://learn.agentpatterns.ai/workflows/monolith-to-subagents/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Problem with Early Optimization
 
 Teams often apply token budgets and prompt compression at the start of development, before understanding what high-quality behavior requires. The compressed workflow may look faster while silently degrading quality — there is no baseline to detect the regression.

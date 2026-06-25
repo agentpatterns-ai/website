@@ -11,9 +11,12 @@ applies_to: "claude-code@2.x"
 last_reviewed: 2026-05-27
 status: current
 ---
+
 # Claude Code Sub-Agents
 
 > Ephemeral, isolated agents that execute focused tasks and return results to the parent.
+
+**Learn it hands-on:** [Sub-Agents & Orchestration](https://learn.agentpatterns.ai/harness-engineering/sub-agents-and-orchestration/) — guided lesson with quizzes.
 
 ## How They Work
 

@@ -21,6 +21,8 @@ maturity: adopted
 
 > Run Claude non-interactively in CI/CD pipelines using print mode (`-p`) and cap agentic steps with `--max-turns` to keep pipelines predictable and cost-bounded.
 
+**Learn it hands-on:** [Agents in the Pipeline](https://learn.agentpatterns.ai/workflows/agents-in-the-pipeline/) — guided lesson with quizzes.
+
 ## Print Mode
 
 `claude -p "<prompt>"` runs Claude non-interactively and exits when done ([CLI reference](https://code.claude.com/docs/en/cli-reference)). Output goes to stdout.

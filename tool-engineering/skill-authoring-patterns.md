@@ -19,6 +19,8 @@ maturity: established
 
 > Skill authoring patterns are repeatable structures that make agent skills reliable — covering description craft, the right implementation shape per task, and failure diagnosis.
 
+**Related lesson:** [Skills as a Tool-Engineering Surface](https://learn.agentpatterns.ai/tool-engineering/skills-as-a-tool-surface/) — this concept features in a hands-on lesson with quizzes.
+
 !!! note "Also known as"
     Skill design patterns, SKILL.md authoring. For the portable skill format itself, see [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md). For the progressive disclosure architecture, see [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md).
 

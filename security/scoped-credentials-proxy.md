@@ -17,6 +17,8 @@ maturity: established
 
 > Keep broad credentials entirely outside the agent's sandbox and use an external proxy that attaches scoped tokens only to validated, allowlisted requests.
 
+**Related lesson:** [Keep the Keys Out](https://learn.agentpatterns.ai/security/keep-the-keys-out/) — this concept features in a hands-on lesson with quizzes.
+
 !!! note "Also known as"
     Secrets & Credentials, Scoped Credentials Proxy. For the broader secrets management landscape including environment variable injection and wrapper scripts, see [Secrets Management for Agent Workflows](secrets-management-for-agents.md).
 

@@ -14,6 +14,8 @@ maturity: established
 
 > Position humans to manage the loop, not inspect every artefact — throughput and quality compound when humans engineer the harness rather than gate outputs.
 
+**Learn it hands-on:** [Where You Stand](https://learn.agentpatterns.ai/workflows/where-you-stand/) — guided lesson with quizzes.
+
 ## The Loop Hierarchy
 
 Software delivery runs as two nested feedback loops, as described by Kief Morris in [Humans and Agents in Software Engineering Loops](https://martinfowler.com/articles/exploring-gen-ai/humans-and-agents.html):

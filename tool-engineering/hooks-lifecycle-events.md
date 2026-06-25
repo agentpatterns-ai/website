@@ -18,6 +18,8 @@ maturity: established
 
 > Hooks run deterministic code at defined points in an agent's execution — around tool calls and session boundaries — enforcing what instructions cannot guarantee.
 
+**Related lesson:** [Hooks & Deterministic Lifecycle Enforcement](https://learn.agentpatterns.ai/tool-engineering/hooks-and-deterministic-enforcement/) — this concept features in a hands-on lesson with quizzes.
+
 !!! note "Also known as"
     **How Hooks Work** · **Hook Lifecycle** · **Hook Lifecycle Events**. For practical enforcement patterns using hooks, see [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md).
 

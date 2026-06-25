@@ -18,6 +18,8 @@ status: current
 
 > Claude Code hooks are deterministic automation at lifecycle points — shell commands, HTTP calls, or LLM prompts that fire on specific events.
 
+**Learn it hands-on:** [Hooks — Deterministic Guardrails](https://learn.agentpatterns.ai/harness-engineering/hooks-deterministic-guardrails/) — guided lesson with quizzes.
+
 ## How They Work
 
 [Hooks](https://code.claude.com/docs/en/hooks) are configured in `settings.json` (user, project, or local scope) under a top-level `hooks` object keyed by event name. Each matcher group pairs a `matcher` string with one or more `hooks` handlers of `type: "command"`, `http`, `prompt`, or `agent`. Hook input arrives on stdin as JSON rather than through environment variables, so scripts typically pipe stdin through `jq` to extract tool input fields ([reference](https://code.claude.com/docs/en/hooks)).

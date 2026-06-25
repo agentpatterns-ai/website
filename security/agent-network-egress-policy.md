@@ -18,6 +18,8 @@ maturity: established
 
 > Restrict which domains agent tools can reach via harness-enforced allow and deny lists; remove the model from the network trust boundary.
 
+**Learn it hands-on:** [The Model Is Not the Firewall](https://learn.agentpatterns.ai/security/the-model-is-not-the-firewall/) — guided lesson with quizzes.
+
 Agent tools that perform network I/O — fetch, integrated browser, MCP servers, shell commands that call `curl` or `wget` — are a primary exfiltration and lateral-movement channel. An admin-controlled domain policy moves the decision out of the model and into the harness runtime: the request is rejected before it leaves the process, regardless of what the model produced.
 
 ## Why the Model Cannot Be the Trust Boundary

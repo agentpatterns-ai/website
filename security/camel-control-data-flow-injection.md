@@ -19,6 +19,8 @@ maturity: emerging
 
 > Most prompt injection defenses are probabilistic. CaMeL eliminates whole classes of injection by construction: untrusted data can never alter which tools an agent calls.
 
+**Related lesson:** [Decide Before You Look](https://learn.agentpatterns.ai/security/decide-before-you-look/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Architectural Insight
 
 Probabilistic defenses (detection classifiers, [adversarial training](close-attack-to-fix-loop.md), instruction hierarchies) reduce injection success rates but cannot eliminate them. CaMeL, proposed by Debenedetti et al. at Google DeepMind, takes a different approach: enforce the instruction/data boundary at the harness level so the model's susceptibility to injection is irrelevant. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]

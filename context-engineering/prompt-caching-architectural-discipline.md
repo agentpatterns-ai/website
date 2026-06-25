@@ -19,6 +19,8 @@ maturity: established
 
 > Treat prompt caching as a structural constraint that shapes how you compose, extend, and compact agent context — not an optimization toggled on afterward.
 
+**Learn it hands-on:** [The Immutable Prefix](https://learn.agentpatterns.ai/context-engineering/caching-static-first/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     Keep Agent Loop Prompts Stateless, Stateless Agent Loop Design
 

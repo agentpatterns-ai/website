@@ -14,6 +14,8 @@ maturity: established
 
 > The Research-Plan-Implement pattern splits agent work into three phases: gather context, plan the approach, then execute. Skipping phases wastes context on rework.
 
+**Learn it hands-on:** [Research, Plan, Implement](https://learn.agentpatterns.ai/workflows/research-plan-implement/) — guided lesson with quizzes.
+
 Agents that jump straight to implementation produce code that compiles but misses edge cases, uses wrong patterns, or duplicates existing utilities. The fix is structural: separate information gathering from decision-making from execution.
 
 ## The Three Phases
