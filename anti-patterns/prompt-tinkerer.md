@@ -10,7 +10,7 @@ tags:
 aliases:
   - prompt bloat
   - instruction bloat
-last_reviewed: 2026-06-13
+last_reviewed: 2026-06-25
 maturity: established
 ---
 
@@ -27,6 +27,8 @@ Each time an agent makes a recurring mistake, the prompt grows: another sentence
 A prompt is not a contract. Instructions compete with each other, with context, and with the model's training distribution. [IFScale across 20 frontier models](https://arxiv.org/abs/2507.11538) found compliance drops to 68% at high instruction densities, with patterns ranging from threshold decay to exponential collapse. [ManyIFEval](https://arxiv.org/abs/2509.21051) calls this the "curse of instructions": all-rule compliance falls as per-rule accuracy raised to the rule count.
 
 Adding "IMPORTANT:" or "NEVER do X" applies social emphasis to a system with no concept of social emphasis. Each new prohibition dilutes attention for the existing ones. A hook blocks a write regardless of what the model attended to.
+
+Drew Breunig names this accrual "prompt debt" — a first-class maintenance liability that, like technical debt, compounds and must be paid down; he cites Datadog and Berkeley evidence that enterprises stay on older models because newer ones break brittle hand-tuned prompts, and prescribes eval-as-spec plus automated prompt optimization as the exit ([Drew Breunig — The problem is prompt debt](https://www.dbreunig.com/2026/06/22/the-problem-is-prompt-debt.html)).
 
 ## The Escalation Ladder
 

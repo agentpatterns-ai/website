@@ -133,3 +133,4 @@ After the second pass the surface dropped from 130 to 71 rules — under the cei
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
 - [Prompt Governance via PR Review](prompt-governance-via-pr.md)
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md)
+- [Agent Context File Evolution: Treating ACFs as Configuration Code](agent-context-file-evolution.md) — the file-level maintenance lifecycle that sits above per-rule pruning; the compact loop the metadata triple makes mechanical

@@ -119,3 +119,4 @@ The two studies also used different model and agent sets, so it is unclear wheth
 - [Configuration File Structure Compliance Gap](configuration-file-structure-compliance-gap.md) — empirical null on file structure, complementary to this page's when-do-context-files-hurt question
 - [Convention Over Configuration](convention-over-configuration.md)
 - [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md)
+- [Agent Context File Evolution: Treating ACFs as Configuration Code](agent-context-file-evolution.md) — for ACFs that already help, the empirical maintenance lifecycle on the same Chatlatanagulchai dataset

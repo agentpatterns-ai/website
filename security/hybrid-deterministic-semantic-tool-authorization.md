@@ -112,6 +112,7 @@ Now an injected instruction in a fetched issue body makes the LLM emit `db-reado
 
 - [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md)
 - [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md)
+- [Intent-Governed Tool Authorization for AI Agents (IGAC)](intent-governed-tool-authorization.md) — CASA gates call *form* via byte-level checks; IGAC gates call *justification* via a per-request manifest-narrowing certificate. Orthogonal layers.
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md)
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](mcp-runtime-control-plane.md)
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)

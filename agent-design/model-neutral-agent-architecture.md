@@ -10,7 +10,7 @@ aliases:
   - model-neutral harness
   - model portability vs cloud portability
   - neutral agent harness
-last_reviewed: 2026-06-08
+last_reviewed: 2026-06-25
 maturity: adopted
 ---
 
@@ -27,7 +27,7 @@ The bet is conditional. It pairs with [The Agent Stack Bet](agent-stack-bets.md)
 Four conditions must hold together. Miss one and the abstraction is overhead.
 
 - **Cross-vendor capability is churning at least quarterly.** As of 2026-06 "Anthropic is currently the model to reach for on coding, though OpenAI is closing the gap, and OpenAI is ahead on multimodal. The rankings shift every few months" ([LangChain](https://blog.langchain.com/model-neutrality)). When rankings are stable, the swap option is theoretical and the abstraction is dead weight.
-- **The team owns a portable eval suite.** The swap mechanism is the eval, not the abstraction — "every time you change a prompt, swap a model version, or add a tool, your eval suite should run automatically" with regression gates in CI ([Braintrust](https://www.braintrust.dev/articles/best-ai-evals-tools-cicd-2025)). Without measurement, "the right to switch" is just hope.
+- **The team owns a portable eval suite.** The swap mechanism is the eval, not the abstraction — "every time you change a prompt, swap a model version, or add a tool, your eval suite should run automatically" with regression gates in CI ([Braintrust](https://www.braintrust.dev/articles/best-ai-evals-tools-cicd-2025)). Without measurement, "the right to switch" is just hope. Prompt portability is the companion precondition: Drew Breunig argues "you can't be model-agnostic if you're hand-tuning prompts," citing Datadog/Berkeley evidence that enterprises stay on older models because newer ones break brittle hand-tuned prompts, and prescribes eval-as-spec plus automated prompt optimization (DSPy, GEPA) as the portability exit ([Drew Breunig](https://www.dbreunig.com/2026/06/22/the-problem-is-prompt-debt.html)).
 - **The workload is not bound to a single vendor's native capability.** Anthropic's `cache_control` breakpoints, OpenAI's Responses reasoning items, and provider-specific extended-thinking conventions do not round-trip through a Chat-Completions LCD ([Multi-Shape BYOK Provider](multi-shape-byok-provider.md)). Workloads dominated by these features pay a capability tax that the multiplier discount cannot recover.
 - **The harness is yours to declare neutrality on.** Provider-managed surfaces — Copilot cloud agent, Claude Managed Agents — expose vendor-side routing ([Auto Model Selection](auto-model-selection.md)) and remove the layer this pattern would attach to.
 
