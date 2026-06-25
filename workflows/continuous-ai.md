@@ -15,6 +15,8 @@ maturity: established
 
 > Continuous AI groups the always-on agent workflows here — each a distinct application with its own trigger, authority, and data source.
 
+**Related lesson:** [Agents in the Pipeline](https://learn.agentpatterns.ai/workflows/agents-in-the-pipeline/) — this concept features in a hands-on lesson with quizzes.
+
 "Continuous AI" is GitHub's umbrella term for running agents continuously inside a repository on schedules and events, producing reviewable artifacts rather than autonomous commits ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/continuous-ai-in-practice-what-developers-can-automate-today-with-agentic-ci/)). The pages below share that always-on shape but differ in what fires them, what they are allowed to write, and what they read. This page is a map, not a merge: each member is its own application and stays a separate page.
 
 ## The Continuous-* Family

@@ -18,6 +18,8 @@ maturity: established
 
 > Inject credentials as environment variables or wrapper scripts so agents can do authenticated work without secrets appearing in context, prompts, or generated code.
 
+**Learn it hands-on:** [Keep the Keys Out](https://learn.agentpatterns.ai/security/keep-the-keys-out/) — guided lesson with quizzes.
+
 !!! note "Also known as"
     Secrets & Credentials, Credential Injection Patterns. For the proxy-based approach to credential scoping, see [Scoped Credentials via Proxy](scoped-credentials-proxy.md).
 

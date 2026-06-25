@@ -19,6 +19,8 @@ maturity: emerging
 
 > Specify your software environment — dependency versions, runtime constraints, OS — as explicit agent context to prevent generated code from targeting the wrong API surface.
 
+**Learn it hands-on:** [Mind the Version Gap](https://learn.agentpatterns.ai/context-engineering/mind-the-version-gap/) — guided lesson with quizzes.
+
 ## The Version Gap
 
 Standard code-generation benchmarks (HumanEval+, MBPP) test isolated functions with no version constraints. Models score 80%+ on these tasks. When the same models must generate code that runs under specific library versions, accuracy drops to 13–28% Pass@1 ([Liu et al., "Environment-Aware Code Generation," ICSE 2026](https://arxiv.org/abs/2601.12262)).

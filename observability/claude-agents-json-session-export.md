@@ -17,6 +17,8 @@ maturity: adopted
 
 > `claude agents --json` prints live background Claude Code sessions as a JSON array — a scriptable inventory substrate for status bars, dashboards, and fleet checks.
 
+**Related lesson:** [Leaving a Trail](https://learn.agentpatterns.ai/observability/leaving-a-trail/) — this concept features in a hands-on lesson with quizzes.
+
 `claude agents --json` is the read-only inventory surface for background sessions — it answers "what is running, where, in what state" without scraping the TUI or reading state files.
 
 ## When the Inventory Primitive Earns Its Complexity

@@ -18,6 +18,8 @@ maturity: established
 
 > Comprehensive coverage of a topic domain drives persistent AI citation presence. A site with many interconnected pages on one subject consistently outperforms a site with one excellent page on a subtopic.
 
+**Learn it hands-on:** [Topical Authority](https://learn.agentpatterns.ai/geo/topical-authority/) — guided lesson with quizzes.
+
 AI systems map sources to topic domains and surface the domain most associated with a subject — topical authority determines whether your site is recognized as the authoritative entity.
 
 ## Core Concept

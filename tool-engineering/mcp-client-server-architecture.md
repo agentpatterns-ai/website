@@ -18,6 +18,8 @@ maturity: adopted
 
 > A well-designed MCP server is invisible to the agent — a poor one fails systematically: wrong tool selection, bloated context, silent errors, security gaps.
 
+**Learn it hands-on:** [MCP Tool Exposure](https://learn.agentpatterns.ai/tool-engineering/mcp-tool-exposure/) — guided lesson with quizzes.
+
 Five decisions determine whether an MCP integration holds up: transport, tool surface, error handling, capability negotiation, security. See [MCP protocol](../standards/mcp-protocol.md) for background.
 
 ## Transport Selection

@@ -17,6 +17,8 @@ maturity: established
 
 > Ground agents in multiple distinct context sources — schema, code, institutional knowledge, and persistent memory — rather than relying on any single signal.
 
+**Related lesson:** [Every Token Has a Cost](https://learn.agentpatterns.ai/context-engineering/every-token-has-a-cost/) — this concept features in a hands-on lesson with quizzes.
+
 !!! info "Also known as"
     Agent Memory Patterns, Multi-Layer Context Grounding
 

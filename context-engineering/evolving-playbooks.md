@@ -20,6 +20,8 @@ maturity: emerging
 
 > Structured delta entries that accumulate and refine agent strategies prevent the brevity bias and context collapse that erode knowledge during monolithic prompt rewrites.
 
+**Related lesson:** [Assembling the Prompt](https://learn.agentpatterns.ai/context-engineering/assembling-the-prompt/) — this concept features in a hands-on lesson with quizzes.
+
 ## When This Pattern Applies
 
 Evolving playbooks suit agents that improve by learning from execution feedback. The pattern fits when:

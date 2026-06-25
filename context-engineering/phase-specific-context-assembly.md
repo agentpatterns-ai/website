@@ -15,6 +15,8 @@ maturity: established
 
 > Phase-specific context assembly tailors the context bundle to each agent's role: planners get summaries, workers get file excerpts and validation commands, reviewers get diffs.
 
+**Related lesson:** [Assembling the Prompt](https://learn.agentpatterns.ai/context-engineering/assembling-the-prompt/) — this concept features in a hands-on lesson with quizzes.
+
 When an agent produces poor output, the instinct is to improve the prompt or switch models. A more productive target is the **context bundle delivered to the agent for that phase**. The question shifts from "what instructions should the agent follow?" to "what information does this agent need, at this step?"
 
 ## The Phase Model

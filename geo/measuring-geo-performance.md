@@ -19,6 +19,8 @@ maturity: established
 
 > Measurement of GEO performance is fundamentally harder than measuring SEO. There are no fixed positions, no platform APIs, and no guaranteed consistency across sessions.
 
+**Learn it hands-on:** [Capstone — Measure & Decide](https://learn.agentpatterns.ai/geo/capstone-measure-and-decide/) — guided lesson with quizzes.
+
 ## The Core Problem
 
 SEO rank tracking works because results are deterministic. GEO measurement does not — LLMs generate probabilistic outputs on-the-fly.

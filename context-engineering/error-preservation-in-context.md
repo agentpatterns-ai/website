@@ -18,6 +18,8 @@ maturity: established
 
 > Keep failed actions and error traces visible in the agent's context window. Error history acts as negative examples that shift model behavior — removing failures removes the signal the model needs to avoid repeating them.
 
+**Related lesson:** [Staying on Target](https://learn.agentpatterns.ai/context-engineering/staying-on-target/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Counter-Intuitive Tradeoff
 
 The natural instinct is to clean up after errors: remove stack traces, clear failed tool results, compact the context. This instinct is wrong in most cases.

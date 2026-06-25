@@ -17,6 +17,8 @@ maturity: established
 
 > Scheduled background agents that scan for architectural violations, documentation drift, and tech debt, producing targeted refactoring PRs for human review.
 
+**Learn it hands-on:** [Garbage-Collecting Entropy](https://learn.agentpatterns.ai/workflows/garbage-collecting-entropy/) — guided lesson with quizzes.
+
 ## The Problem: Silent Decay
 
 Entropy reduction agents are scheduled background processes that scan a codebase for violations of encoded standards — outdated docs, deprecated patterns, architectural drift — and open targeted PRs for human review. They run on a cadence whether or not anyone pushes a commit, catching decay that reactive CI misses entirely.

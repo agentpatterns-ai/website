@@ -18,6 +18,8 @@ maturity: adopted
 
 > Steering a running agent sends a mid-execution message that redirects its tool calls without discarding the context it has already built.
 
+**Learn it hands-on:** [Steering Running Agents](https://learn.agentpatterns.ai/harness-engineering/steering-running-agents/) — guided lesson with quizzes.
+
 !!! note "Also known as"
     **Mid-Run Correction**, **Unsticking Stuck Agents**. Proactive human intervention — redirecting agents before they go too far off course. For *reactive* pre-built recovery mechanisms, see [Escape Hatches](../workflows/escape-hatches.md).
 

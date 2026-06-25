@@ -15,6 +15,8 @@ maturity: emerging
 
 > Chain-of-Verification helps coding agents only in its factored variant, applied to claims no test, type checker, or LSP reaches; used naively, it overturns correct code.
 
+**Learn it hands-on:** [Chain-of-Verification](https://learn.agentpatterns.ai/verification/chain-of-verification/) — guided lesson with quizzes.
+
 Chain-of-Verification (CoVe) is a four-step self-correction loop — draft, plan verification questions, answer each independently, revise — introduced by [Dhuliawala et al. (2023)](https://arxiv.org/abs/2309.11495) for hallucination reduction on fact-recall and longform tasks. For coding agents it is conditional: it pays off only with the **factored** variant and only over claims no external oracle covers. Applied naively, it degrades code quality.
 
 ## The Four Variants and Why Only One Matters

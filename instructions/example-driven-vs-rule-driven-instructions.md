@@ -17,6 +17,8 @@ maturity: emerging
 
 > Rules generalize and examples anchor — choosing between these instructions determines whether agents interpret your intent or invent their own.
 
+**Learn it hands-on:** [Rules or Examples](https://learn.agentpatterns.ai/prompt-engineering/rules-or-examples/) — guided lesson with quizzes.
+
 !!! info "Also known as"
 
     [Hints Over Code Samples](hints-over-code-samples.md), Example-Based Instructions

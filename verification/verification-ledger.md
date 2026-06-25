@@ -19,6 +19,8 @@ maturity: established
 
 > Replace self-reported agent claims ("Build passed") with structured records — every verification step is an INSERT, every evidence bundle is a SELECT.
 
+**Learn it hands-on:** [The Verification Ledger](https://learn.agentpatterns.ai/verification/the-verification-ledger/) — guided lesson with quizzes.
+
 ## The Problem with Self-Reported Verification
 
 Agent workflows typically rely on the agent's own prose assertions about verification: "Build passed. Tests green. No issues found." These claims are unfalsifiable within the conversation. The agent may hallucinate that checks passed, skip steps silently, or assert results without running the actual tool — the [trust without verify](../anti-patterns/trust-without-verify.md) anti-pattern. Spotify's Honk team observed the same pattern and responded by wiring deterministic verifiers (format, build, test) into the agent loop and blocking PR creation when any verifier fails ([Spotify Engineering, "Background Coding Agents: Predictable Results Through Strong Feedback Loops"](https://engineering.atspotify.com/2025/12/feedback-loops-background-coding-agents-part-3)). See [Trust Without Verify](../anti-patterns/trust-without-verify.md) for the full anti-pattern.

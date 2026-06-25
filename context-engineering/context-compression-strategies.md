@@ -19,6 +19,8 @@ maturity: established
 
 > Tiered compression — offloading large payloads and summarising history — keeps long-running agents within the context window without losing task continuity.
 
+**Learn it hands-on:** [Offload vs Summarise](https://learn.agentpatterns.ai/context-engineering/context-compression/) — guided lesson with quizzes.
+
 ## The Problem
 
 Long-horizon tasks accumulate context from conversation turns, tool inputs, and tool outputs. Without compression, the agent truncates arbitrarily or the session fails. Compression preserves task intent and critical state while discarding low-value content.

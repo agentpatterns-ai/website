@@ -19,6 +19,8 @@ maturity: established
 
 > A seven-step debug runbook — query, correlate, reason, implement, restart, rerun, verify — that ties the agent's verification predicate back to the originating signal.
 
+**Learn it hands-on:** [Write and Hope](https://learn.agentpatterns.ai/observability/write-and-hope/) — guided lesson with quizzes.
+
 ## What the Loop Is
 
 When runtime observability is the source of truth, agents debug from execution evidence, not code inspection alone. The [walkinglabs harness-engineering SOP](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/resources/openai-advanced/sops/observability-feedback-loop.md) names seven explicit steps:

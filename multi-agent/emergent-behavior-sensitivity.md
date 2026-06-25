@@ -17,6 +17,8 @@ maturity: adopted
 
 > Small changes to a lead agent's prompt unpredictably alter subagent behavior. Multi-agent prompts must be frameworks for collaboration, not rigid instructions.
 
+**Learn it hands-on:** [Why Multi-Agent Systems Fail](https://learn.agentpatterns.ai/multi-agent/why-multi-agent-fails/) — guided lesson with quizzes.
+
 ## The Problem
 
 Subagents receive only their own system prompt and the delegation message -- not the lead's full context. Minor wording changes in the lead's prompt cascade unpredictably. Anthropic observed this directly: ["small changes to the lead agent can unpredictably change how subagents behave."](https://www.anthropic.com/engineering/multi-agent-research-system)

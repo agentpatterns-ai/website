@@ -17,6 +17,8 @@ maturity: established
 
 > A yes-man agent lacks explicit verification and [pushback instructions](../agent-design/agent-pushback-protocol.md), executing every request without flagging problems — shipping errors at machine speed.
 
+**Learn it hands-on:** [The Yes-Man Agent](https://learn.agentpatterns.ai/anti-patterns/the-yes-man-agent/) — guided lesson with quizzes.
+
 ## What It Looks Like
 
 The agent does exactly what it's told. Each response looks correct at a glance, but subtle problems accumulate: broken conventions, violated constraints, introduced vulnerabilities. The agent never flags them because it was never instructed to look.

@@ -14,6 +14,8 @@ maturity: adopted
 
 > Enforce both filesystem and network isolation simultaneously; neither boundary alone is sufficient to prevent security breaches or data exfiltration by an autonomous agent.
 
+**Learn it hands-on:** [Two Walls, Not One](https://learn.agentpatterns.ai/security/two-walls-not-one/) — guided lesson with quizzes.
+
 ## Why One Boundary Is Not Enough
 
 Restricting an agent to its working directory does not contain it. With filesystem access but unrestricted network, the agent can exfiltrate any file it can read — SSH keys, environment variables, secrets — via outbound connections.

@@ -14,6 +14,8 @@ maturity: established
 
 > Accepting agent output as correct because it looks polished — without independent verification.
 
+**Learn it hands-on:** [Trust Without Verify](https://learn.agentpatterns.ai/anti-patterns/trust-without-verify/) — guided lesson with quizzes.
+
 ## The Pattern
 
 Agent output is seductively plausible. Well-formatted prose with inline citations looks authoritative. [Code that compiles looks correct](happy-path-bias.md). None of these surface signals correlate reliably with correctness.

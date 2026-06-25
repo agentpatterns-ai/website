@@ -16,6 +16,8 @@ maturity: established
 
 > Output quality degrades as context fills, but the onset depends on task type — retrieval, reasoning, and code generation hit different thresholds.
 
+**Learn it hands-on:** [The Dumb Zone](https://learn.agentpatterns.ai/context-engineering/the-dumb-zone/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     **Context Rot**, **Context Window Dumb Zone**. For prescriptive allocation strategies, see [Context Budget Allocation](context-budget-allocation.md).
 

@@ -16,6 +16,8 @@ maturity: established
 
 > Design your public SDK, CLI, API, and docs so an agent consumer can discover, invoke, and recover from them — it reads the surface literally.
 
+**Related lesson:** [What Makes a Tool Agent-Friendly](https://learn.agentpatterns.ai/tool-engineering/agent-friendly-tools/) — this concept features in a hands-on lesson with quizzes.
+
 Agent Experience (AX) is the discipline of designing the **external developer surface you ship** — SDK, CLI, API, docs — so an AI coding agent can use it correctly as a first-class consumer. The term was coined by Netlify's Mathias Biilmann in January 2025 as "the holistic experience AI agents will have as the user of a product or platform" ([Biilmann, *Introducing AX*](https://biilmann.blog/articles/introducing-ax/)); Microsoft's 2026 series applies it to coding agents reading your technology ([Mastykarz, *How AI coding agents actually use your technology*](https://developer.microsoft.com/blog/how-ai-coding-agents-actually-use-your-technology)).
 
 ## When This Applies

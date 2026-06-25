@@ -18,6 +18,8 @@ maturity: established
 
 > Capture repo-setup fixes as dual-modality records, trial them under Docker snapshot rollback, verify with prosecutor-judge — only when prebuilt environments are off the table.
 
+**Learn it hands-on:** [Snapshot and Roll Back](https://learn.agentpatterns.ai/workflows/snapshot-and-roll-back/) — guided lesson with quizzes.
+
 An experiential-learning setup pipeline is a repository-setup workflow in which the agent stores each successful repair as a portable experience record, replays candidate fixes against a snapshotted Docker state it can revert from, and verifies the outcome with two distinct reasoning roles. SetupX ([Zhou et al., 2026](https://arxiv.org/abs/2605.26186)) introduces this composition under the names XPU (experience-representation unit), experience-augmented speculative execution backed by a LIFO Docker-snapshot stack, and prosecutor-judge verification.
 
 ## When to Use

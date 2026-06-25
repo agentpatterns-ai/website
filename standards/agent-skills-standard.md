@@ -16,6 +16,8 @@ maturity: established
 
 > The Agent Skills open standard packages task-specific knowledge into portable SKILL.md folders that AI coding tools can discover and load on demand.
 
+**Related lesson:** [Skills & Progressive Disclosure](https://learn.agentpatterns.ai/harness-engineering/skills-and-progressive-disclosure/) — this concept features in a hands-on lesson with quizzes.
+
 ## What the Standard Defines
 
 The [Agent Skills standard](https://agentskills.io) specifies a format for distributing task knowledge across AI coding tools. A skill is a directory containing a `SKILL.md` entrypoint with YAML frontmatter and markdown instructions, optionally accompanied by supporting files: scripts, templates, examples, or schemas.

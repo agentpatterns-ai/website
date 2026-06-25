@@ -20,6 +20,8 @@ maturity: adopted
 
 > Classify each MCP server as eager (`alwaysLoad`) or just-in-time by weighing always-paid context tax against on-demand discovery cost.
 
+**Related lesson:** [Tool-Call Cost & Latency Budgeting](https://learn.agentpatterns.ai/tool-engineering/cost-and-latency-budgeting/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Decision Surface
 
 Claude Code 2.1.121 added an `alwaysLoad` option to MCP server config: when `true`, all tools from that server skip tool-search deferral and are always available ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The flag is the server-level inverse of the API's per-tool `defer_loading: true` parameter ([Tool search tool docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)).

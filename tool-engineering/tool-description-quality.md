@@ -18,6 +18,8 @@ maturity: established
 
 > Tool descriptions — not just tool implementations — determine whether agents select the right tool for a task. Treating descriptions as prompt engineering surfaces is a direct multiplier on task success rate.
 
+**Learn it hands-on:** [The Right Call, Obvious](https://learn.agentpatterns.ai/mcp-server-design/the-right-call-obvious/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     Tool Selection Guidance, Selection Signals
 

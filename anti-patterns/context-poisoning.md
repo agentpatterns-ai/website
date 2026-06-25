@@ -18,6 +18,8 @@ maturity: established
 
 > Context poisoning is when an early hallucination becomes a trusted premise, and every later step builds confidently on that false foundation.
 
+**Learn it hands-on:** [When the Window Lies](https://learn.agentpatterns.ai/context-engineering/when-the-window-lies/) — guided lesson with quizzes.
+
 ## The Pattern
 
 An agent hallucinates an incorrect detail early in a session -- a wrong API signature, a misidentified file, a nonexistent function. The error is not caught. Each subsequent step treats the hallucination as ground truth, compounding the original mistake.

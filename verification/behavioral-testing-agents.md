@@ -15,6 +15,8 @@ maturity: established
 
 > Agent outputs are non-deterministic. Test decision quality and end-state, not exact execution paths, and define acceptable behavioral variance as a product decision.
 
+**Learn it hands-on:** [Testing What It Decides](https://learn.agentpatterns.ai/verification/testing-what-it-decides/) — guided lesson with quizzes.
+
 ## Why Traditional Testing Breaks Down
 
 Traditional tests assert exact outputs for given inputs. Agents produce different valid outputs for identical inputs — different tool call sequences, phrasings, and solution paths. Equality checks then yield false negatives on correct behavior and false positives on lucky runs.

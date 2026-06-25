@@ -16,6 +16,8 @@ maturity: emerging
 
 > Invest in problem statement quality before launching an agent — a lightweight exploration phase that adds reproduction steps, expected behaviours, and targeted exploration hints improves resolution rates by 20% on SWE-bench Verified.
 
+**Related lesson:** [Plan Before Code](https://learn.agentpatterns.ai/workflows/plan-before-code/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Root Cause of Agent Trajectory Failure
 
 Agent failures on software tasks correlate strongly with underspecified problem statements. When an agent receives a vague task, it over-explores — reading hundreds of files, filling its context with low-signal tokens — or loops on the same fix attempts without evolving its approach. The failure is upstream of agent execution, not inside it. ([arXiv:2603.05744](https://arxiv.org/abs/2603.05744))

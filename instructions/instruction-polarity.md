@@ -15,6 +15,8 @@ maturity: adopted
 
 > Positive directives — what to do — outperform negative instructions — what not to do — in agent compliance, especially as instruction count grows.
 
+**Learn it hands-on:** [Say What To Do](https://learn.agentpatterns.ai/prompt-engineering/say-what-to-do/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     Negative Space Instructions, Instruction Framing
 

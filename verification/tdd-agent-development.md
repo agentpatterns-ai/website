@@ -17,6 +17,8 @@ maturity: adopted
 
 > Write tests first, then let agents implement against them — tests define what the code must do and verify that the agent did it correctly.
 
+**Related lesson:** [Red-Green for Agents](https://learn.agentpatterns.ai/verification/red-green-for-agents/) — this concept features in a hands-on lesson with quizzes.
+
 !!! note "Also known as"
     TDD with Agents, Tests as the Spec, Red-Green-Refactor for Agents. For the specific red-green-refactor cycle adapted for agent workflows, see [Red-Green-Refactor with Agents](red-green-refactor-agents.md).
 

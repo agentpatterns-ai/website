@@ -15,6 +15,8 @@ maturity: established
 
 > The Ralph Wiggum Loop runs each iteration in a fresh context window, persisting state to disk so context never accumulates to the point of degradation.
 
+**Related lesson:** [Steering Running Agents](https://learn.agentpatterns.ai/harness-engineering/steering-running-agents/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Pattern
 
 Long agent sessions degrade as context fills. Early instructions get pushed out. The agent starts ignoring conventions it followed hours ago. [Accumulated context](loop-strategy-spectrum.md) is not a feature — it's a liability.

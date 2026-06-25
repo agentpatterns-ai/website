@@ -20,6 +20,8 @@ status: current
 
 > A CI/CD AI agent that reads PRs and issues while holding elevated repo permissions closes the lethal trifecta — one untrusted comment exfiltrates secrets.
 
+**Learn it hands-on:** [AI Agents in CI/CD](https://learn.agentpatterns.ai/anti-patterns/agents-in-ci-cd/) — guided lesson with quizzes.
+
 The anti-pattern is the default shape of "AI reviewer in GitHub Actions": the agent ingests PR titles, issue bodies, and review comments — all attacker-writable on a public repo — while the same runtime holds `GITHUB_TOKEN`, pipeline secrets, and write tools (`gh pr comment`, commit, file edit). GitInject ([Isbarov et al. 2026](https://arxiv.org/abs/2606.09935)) provisioned ephemeral repos against four AI providers in their default configurations and found **every provider susceptible to at least one attack class**, with the root cause attributed to CI/CD credential and configuration handling rather than model behaviour.
 
 ## Why It Works

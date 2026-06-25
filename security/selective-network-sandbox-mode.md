@@ -17,6 +17,8 @@ maturity: established
 
 > Keeping filesystem isolation while lifting network restrictions trades away the egress half of [dual-boundary sandboxing](dual-boundary-sandboxing.md) — safe only when egress is enforced below the harness.
 
+**Related lesson:** [The URL Is the Leak](https://learn.agentpatterns.ai/security/the-url-is-the-leak/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Two-Axis Model
 
 Agent sandboxes enforce two independent boundaries. Most discussions collapse them into one toggle — "sandboxed" or "unsandboxed" — but the underlying OS primitives keep them separate. bubblewrap's `--unshare-net` controls only network namespaces; `--bind` and `--ro-bind` control filesystem visibility. Apple Seatbelt's `(allow file-read*)` and `(deny network*)` are independent rule classes. The collapse happens at the harness.

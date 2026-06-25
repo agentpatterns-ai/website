@@ -18,6 +18,8 @@ maturity: adopted
 
 > A single `run(command)` tool backed by Unix CLI can replace large typed-function catalogs, exploiting the model's shell pretraining and Unix's discovery and composition primitives.
 
+**Learn it hands-on:** [The Unix CLI as a Tool Interface](https://learn.agentpatterns.ai/tool-engineering/unix-cli-as-tool-interface/) — guided lesson with quizzes.
+
 ## Core Concept
 
 Most agent frameworks register many typed tools — `read_file`, `search_code`, `list_directory` — each with its own schema and error handling. The alternative: expose one execution primitive and let the agent compose Unix commands directly. Models trained on large code corpora have extensive exposure to shell commands, man pages, and CLI documentation, making Unix primitives a high-alignment action space.

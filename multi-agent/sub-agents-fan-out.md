@@ -19,6 +19,8 @@ maturity: adopted
 
 > Spawn sub-agents to parallelize independent work in isolated context windows — the main thread receives only distilled results, not raw exploration.
 
+**Learn it hands-on:** [Breaking the Stack](https://learn.agentpatterns.ai/context-engineering/breaking-the-stack/) — guided lesson with quizzes.
+
 !!! note "Also known as"
     Sub-Agents Fan-Out, Parallel Dispatch, Scatter-Gather. For the broader pattern survey, see [Agent Composition Patterns](../agent-design/agent-composition-patterns.md). For the synthesis variant, see [Fan-Out Synthesis](fan-out-synthesis.md). For the delegation variant, see [Orchestrator-Worker](orchestrator-worker.md).
 

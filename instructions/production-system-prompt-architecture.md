@@ -13,6 +13,8 @@ maturity: adopted
 
 > Production system prompts are not paragraphs of instructions — they are structured documents with named sections, explicit concern boundaries, and cache-aware layering. Studying what ships reveals techniques that generic guidance omits.
 
+**Learn it hands-on:** [The Production Stack](https://learn.agentpatterns.ai/prompt-engineering/the-production-stack/) — guided lesson with quizzes.
+
 Anthropic recommends "XML tagging or Markdown headers to delineate sections" ([Anthropic, context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). A leaked 102K-character system prompt from a Claude.ai computer-use session shows what that looks like at scale ([CL4R1T4S capture, Feb 2026](https://github.com/elder-plinius/CL4R1T4S/blob/main/ANTHROPIC/Claude_Opus_4.6.txt)). The techniques below are visible in that prompt and corroborated by Anthropic's engineering publications.
 
 ## Architectural Overview

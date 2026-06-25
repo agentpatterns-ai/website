@@ -20,6 +20,8 @@ maturity: established
 
 > A five-step checklist for refactoring a brittle monolithic agent prototype into a production-grade pipeline — each step surfaces the failures the next one fixes.
 
+**Learn it hands-on:** [Monolith to Sub-Agents](https://learn.agentpatterns.ai/workflows/monolith-to-subagents/) — guided lesson with quizzes.
+
 A monolithic agent is a single linear script that calls one LLM with one large prompt. It works locally on small inputs. It fails silently in production. Google's Agent Development Kit team documented this exact transition in April 2026 by rebuilding "Titanium" — a sales-research agent whose job was to research a target company and draft an outreach email — from a monolithic `for` loop into a five-node `SequentialAgent` pipeline ([Production-Ready AI Agents: 5 Lessons from Refactoring a Monolith](https://developers.googleblog.com/production-ready-ai-agents-5-lessons-from-refactoring-a-monolith/)).
 
 The five lessons generalize across orchestration frameworks — they describe the shape of the refactor, not ADK-specific mechanics. Apply them in order: each step reveals the failure modes the next step addresses.

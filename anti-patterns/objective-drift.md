@@ -19,6 +19,8 @@ maturity: established
 
 > After context compression, agents can continue working productively on a subtly wrong objective — the original intent lost in summarisation.
 
+**Learn it hands-on:** [Objective Drift](https://learn.agentpatterns.ai/anti-patterns/objective-drift/) — guided lesson with quizzes.
+
 ## Why It Happens
 
 Summarisation favours high-frequency content. A constraint ("do not change public method signatures") appears once; the core task ("refactor for DI") recurs across many messages — the constraint is discarded as noise ([LangChain](https://blog.langchain.com/context-management-for-deepagents/)). Downstream steps compound the error: each tool call is consistent with the compressed objective, so the agent builds toward the wrong target with no internal signal.

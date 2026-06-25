@@ -16,6 +16,8 @@ maturity: established
 
 > SEO optimises for rank position in a list of links; GEO optimises for citation share inside synthesised answers — and the signals driving each differ.
 
+**Related lesson:** [The Citation Economy](https://learn.agentpatterns.ai/geo/the-citation-economy/) — this concept features in a hands-on lesson with quizzes.
+
 ## Signal Comparison
 
 | Signal | Traditional SEO | GEO | Direction |

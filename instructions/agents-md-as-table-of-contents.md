@@ -16,6 +16,8 @@ maturity: established
 
 > Keep AGENTS.md to ~100 lines as a pointer map into a versioned docs/ directory, and tag each terminal rule with source, applicability, and expiry.
 
+**Learn it hands-on:** [Instruction Files & Altitude](https://learn.agentpatterns.ai/harness-engineering/instruction-files-and-altitude/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     Pointer Map, AGENTS.md Content Strategy. For the complementary pattern on **where** to place AGENTS.md files (distributed across directory levels), see [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md).
 

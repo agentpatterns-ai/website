@@ -18,6 +18,8 @@ maturity: emerging
 
 > Idiomatic syntax patterns reduce generated code tokens by 18-38% while preserving correctness. Prompt-level "be concise" instructions can backfire.
 
+**Related lesson:** [Measure Before You Optimize](https://learn.agentpatterns.ai/context-engineering/measure-before-you-optimize/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Problem
 
 Every generated token costs compute, latency, and context budget. When generated code re-enters the context window, verbosity compounds.

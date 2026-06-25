@@ -17,6 +17,8 @@ maturity: adopted
 
 > Press `Ctrl+O` to enter transcript mode in a Claude Code session, then use `/`, `n`, and `N` to jump to specific moments instead of scrolling linearly.
 
+**Learn it hands-on:** [Leaving a Trail](https://learn.agentpatterns.ai/observability/leaving-a-trail/) — guided lesson with quizzes.
+
 Long agent sessions make linear scrollback hostile. A one-hour Claude Code session can emit thousands of tool-output lines; recalling the moment a plan changed, a tool first errored, or a specific file was touched means re-reading until you find it. Transcript-mode search collapses that to a keystroke, and when fullscreen rendering is active it is the only way to search the conversation at all.
 
 ## What the Surface Provides

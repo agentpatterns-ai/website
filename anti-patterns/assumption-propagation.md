@@ -16,6 +16,8 @@ maturity: established
 
 > The agent misunderstands a requirement early and builds on the faulty premise, reinforcing the wrong assumption until the error is too expensive to unwind.
 
+**Related lesson:** [Objective Drift](https://learn.agentpatterns.ai/anti-patterns/objective-drift/) — this concept features in a hands-on lesson with quizzes.
+
 ## What It Looks Like
 
 The agent forms a wrong interpretation and starts building. Output compiles and passes checks, deepening investment in the wrong direction. The error is at the root — looking correct until compared against the actual requirement.

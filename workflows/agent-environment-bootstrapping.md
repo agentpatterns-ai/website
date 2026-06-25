@@ -15,6 +15,8 @@ maturity: adopted
 
 > Deterministically configure an agent's ephemeral environment before it starts working, pre-installing dependencies instead of letting the agent discover them through trial and error.
 
+**Related lesson:** [Snapshot and Roll Back](https://learn.agentpatterns.ai/workflows/snapshot-and-roll-back/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Problem with Trial-and-Error Setup
 
 When a coding agent starts in a bare environment, it spends tokens and time discovering missing dependencies, installing tools, and debugging configuration failures. Each retry consumes context window space and introduces nondeterminism — the agent may install different versions across runs or fail silently on private dependencies it cannot resolve. By bootstrapping the environment deterministically, you eliminate this entire class of waste.

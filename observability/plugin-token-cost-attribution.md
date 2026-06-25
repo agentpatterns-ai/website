@@ -8,13 +8,15 @@ tags:
 aliases:
   - Per-Plugin Token Cost
   - Plugin Token Budget
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-24
 maturity: adopted
 ---
 
 # Per-Plugin Token-Cost Attribution via `claude plugin details`
 
 > Claude Code's `claude plugin details <name>` prints a plugin's component inventory and per-session token cost — the attribution cut between `/usage` and `/context all`.
+
+**Related lesson:** [Attributing the Context](https://learn.agentpatterns.ai/observability/attributing-the-context/) — this concept features in a hands-on lesson with quizzes.
 
 The plugin is the install/remove unit in Claude Code: one manifest bundles skills, agents, hooks, MCP servers, and LSP servers ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)). Without per-plugin token accounting, a maintainer who sees the session at 78% cannot rank installed plugins by cost — the only action is *"disable a plugin"* without knowing which carries the weight. Claude Code v2.1.139 (2026-05-11) closed that gap with the `plugin details` subcommand ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 
@@ -48,6 +50,8 @@ Two cost figures per component ([Plugins reference — plugin details](https://c
 The always-on total is computed via `count_tokens` for the active model; per-component numbers are proportionally scaled. If the API is unreachable, the command falls back to a character-based estimate.
 
 A single total confuses two budget regimes — a plugin can carry 50 tokens always-on and 8000 on-invoke, or the reverse. Always-on compounds across every session before any work is done ([Infinite Context anti-pattern](../anti-patterns/infinite-context.md) territory); on-invoke scales with invocation frequency. Sort each column separately, then cross-reference on-invoke with `/usage` for expensive-per-call components.
+
+The always-on column is what argues for curating rather than maximizing installed skills: Microsoft notes that the count of installed skills imposes an upfront session-start metadata-injection tax — each skill's name, description, and trigger is paid whether or not the skill ever fires ([Microsoft Developer Blog — Stop skillmaxxing, save your tokens](https://developer.microsoft.com/blog/stop-skillmaxxing-save-your-tokens)). That tax is distinct from the per-invocation on-invoke cost above; it scales with how many skills are installed, not how many fire.
 
 ## Component Inventory
 

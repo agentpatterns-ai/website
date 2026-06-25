@@ -17,6 +17,8 @@ maturity: established
 
 > When a vendor ships a new tokenizer alongside a new model, the same input maps to a different token count — per-token pricing stays flat, but effective cost, context window, and rate limits all shift before you change a line of code.
 
+**Related lesson:** [Measure Before You Optimize](https://learn.agentpatterns.ai/context-engineering/measure-before-you-optimize/) — this concept features in a hands-on lesson with quizzes.
+
 A tokenizer change is a silent migration variable. Flat per-token pricing and an unchanged nominal context window make the upgrade look cost-neutral on the pricing page. Same text, different count — the delta flows directly into spend forecasts, compaction triggers, and rate-limit planning.
 
 ## The Opus 4.6 → 4.7 Benchmark

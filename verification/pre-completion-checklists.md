@@ -14,6 +14,8 @@ maturity: adopted
 
 > Block agent completion signals with a mandatory verification sequence — agents must pass explicit checks before they are allowed to declare a task done.
 
+**Learn it hands-on:** [The Pre-Completion Checklist](https://learn.agentpatterns.ai/verification/the-pre-completion-checklist/) — guided lesson with quizzes.
+
 ## The Premature Completion Problem
 
 Agents optimize for task completion, not task correctness. Without an explicit gate, an agent will declare success after partial implementation, a failing test run it chose not to investigate, or a code change that compiles but does not satisfy the requirement.

@@ -17,6 +17,8 @@ maturity: established
 
 > Pick a coding-agent sandbox runtime by trading isolation strength against startup cost: containers fast but kernel-shared, microVMs hardware-isolated but slower, OS-level isolators fastest but weakest.
 
+**Learn it hands-on:** [Pick Your Sandbox](https://learn.agentpatterns.ai/security/pick-your-sandbox/) — guided lesson with quizzes.
+
 ## The Three Runtime Families
 
 [Dual-boundary sandboxing](dual-boundary-sandboxing.md) defines *what* a sandbox enforces; this page picks *which runtime* enforces it. LangChain frames the same choice as a set of trade-offs across isolation strength, startup latency, and runtime compatibility — the axes this page's comparison table makes explicit ([LangChain — How to choose the right sandbox](https://blog.langchain.com/how-to-choose-the-right-sandbox)).

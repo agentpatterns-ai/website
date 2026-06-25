@@ -14,6 +14,8 @@ maturity: established
 
 > Semantically related but inapplicable instructions actively reduce compliance with the instructions that are applicable — proximity in meaning creates interference, not safety.
 
+**Learn it hands-on:** [Distractor Interference](https://learn.agentpatterns.ai/anti-patterns/distractor-interference/) — guided lesson with quizzes.
+
 ## The Pattern
 
 Include every instruction that might be relevant. Cover all cases. Make the instruction file comprehensive so nothing is missed.

@@ -16,6 +16,8 @@ maturity: established
 
 > Negative space instructions — exclusions and banned patterns — eliminate entire classes of mistakes more efficiently than equivalent positive guidance.
 
+**Related lesson:** [Say What To Do](https://learn.agentpatterns.ai/prompt-engineering/say-what-to-do/) — this concept features in a hands-on lesson with quizzes.
+
 !!! info "Also known as"
     Instruction Polarity, Positive Rules Over Negative, Instruction Framing
 

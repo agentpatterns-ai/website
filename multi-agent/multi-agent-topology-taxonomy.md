@@ -16,6 +16,8 @@ maturity: established
 
 > Coordination topology choice is a primary source of multi-agent failures; centralised, decentralised, and hybrid each carry distinct failure modes.
 
+**Learn it hands-on:** [When Many Agents Beat One](https://learn.agentpatterns.ai/multi-agent/when-many-agents/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     Multi-Agent SE Design Patterns, Multi-Agent Architecture Patterns
 

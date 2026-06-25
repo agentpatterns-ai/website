@@ -12,6 +12,8 @@ maturity: established
 
 > Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces.
 
+**Learn it hands-on:** [Guardrails Beat Guidance](https://learn.agentpatterns.ai/verification/guardrails-beat-guidance/) — guided lesson with quizzes.
+
 ## The Core Distinction
 
 Telling an agent "don't break any links" is a prompt — probabilistic, sometimes ignored. Running a link checker on every URL in a pre-commit hook is a guardrail — deterministic, always runs, cannot be reasoned around.

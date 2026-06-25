@@ -14,6 +14,8 @@ maturity: established
 
 > A token preservation instruction creates a competing objective the agent resolves by doing less work, not by completing the task better.
 
+**Learn it hands-on:** [Token Preservation Backfire](https://learn.agentpatterns.ai/anti-patterns/token-preservation-backfire/) — guided lesson with quizzes.
+
 ## The Pattern
 
 Add instructions like "preserve tokens," "avoid waste," or "be efficient" to system prompts. The intent is cost savings. The effect is reduced output quality.

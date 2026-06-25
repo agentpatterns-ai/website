@@ -21,6 +21,7 @@ Fallacies differ from anti-patterns: an anti-pattern is a wrong *practice*, a fa
 - [The Consistent Capability Fallacy](consistent-capability-fallacy.md) — the belief that success on one task predicts success on similar tasks, and why capability doesn't generalize
 - [The Effortless AI Fallacy](../anti-patterns/effortless-ai-fallacy.md) — the belief that AI should work without effort, and why it produces the worst results
 - [The LLM Laziness Deficit Fallacy](llm-laziness-deficit-fallacy.md) — the belief that agents can be instructed into laziness; restraint must be enforced by harness gates, not prompts
+- [The Model Preference Fallacy](model-preference-fallacy.md) — bare-chat tallies of what models reach for measure prompt framing and training-data distribution, not a stable model preference
 - [The Synthetic Ground Truth Fallacy](synthetic-ground-truth-fallacy.md) — the belief that AI-generated artifacts can substitute for human-verified ones, and why it introduces compounding feedback loops
 - [The Task Framing Irrelevance Fallacy](task-framing-irrelevance-fallacy.md) — the belief that surface framing doesn't matter, only the underlying problem does
 

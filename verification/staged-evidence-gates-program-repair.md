@@ -17,6 +17,8 @@ maturity: established
 
 > Stage cheap evidence gates ahead of expensive ones in repair loops so costly checks run only on candidates that already cleared cheaper signals.
 
+**Related lesson:** [Check at Each Step](https://learn.agentpatterns.ai/verification/check-at-each-step/) — this concept features in a hands-on lesson with quizzes.
+
 ## When This Pattern Applies
 
 The pattern only earns its keep when three conditions hold. Lead with these — the headline gains evaporate when any one fails:

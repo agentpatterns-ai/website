@@ -18,6 +18,8 @@ maturity: established
 
 > Structure agent instructions in concentric layers — global defaults, project-level files, and directory overrides — so the most specific instruction always wins.
 
+**Learn it hands-on:** [The Most Specific Rule Wins](https://learn.agentpatterns.ai/prompt-engineering/most-specific-wins/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     **Layered Instruction Scopes** · **Directory-Level Instruction Hierarchy** · **Hierarchical CLAUDE.md**
 

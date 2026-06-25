@@ -211,6 +211,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Validating Token-Optimized Formats Inside Agentic Loops](context-engineering/validate-token-optimized-formats-in-agentic-loops.md)
 - [Prompt Caching: Architectural Discipline for Agents](context-engineering/prompt-caching-architectural-discipline.md)
 - [Stateful Iteration State-Carry: Typed Persistent State for Long Agent Loops](context-engineering/stateful-iteration-state-carry.md)
+- [Compositional Skill Routing for Large Skill Libraries](context-engineering/compositional-skill-routing.md)
 
 ## Instructions & Prompts
 
@@ -276,6 +277,9 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Shared Context Bundle Registry for Agent Teams](instructions/shared-context-bundle-registry.md)
 - [Ubiquitous Language for AI Plans](instructions/ubiquitous-language-for-ai-plans.md)
 - [WRAP Framework for Writing Agent-Ready Issue Descriptions](instructions/wrap-framework-agent-instructions.md)
+- [Probe-and-Refine Tuning of Repository Guidance for Coding Agents](instructions/probe-and-refine-guidance-tuning.md)
+- [Security Knowledge Priming for Code Generation (SPARK)](instructions/security-knowledge-priming.md)
+- [Stage-Targeted Prompt Structure for Pull Request Outcomes](instructions/stage-targeted-prompt-structure-pr-outcomes.md)
 
 ## Agent Architecture
 
@@ -508,6 +512,12 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Minimum-Sufficient Control Ladder: Escalate by Failure Mode](agent-design/minimum-sufficient-control-ladder.md)
 - [ReAct (Reason + Act): Interleaved Reasoning-Action Loops](agent-design/react-pattern.md)
 - [Recursive Sub-Agent Delegation: Depth Limits and Trade-offs in Nested Hierarchies](multi-agent/recursive-sub-agent-delegation-depth.md)
+- [Agent Loop Go/No-Go: When Looping Earns Its Cost](agent-design/agent-loop-go-no-go-gate.md)
+- [Decoupled Search Grounding: A Vendor-Agnostic Grounding Boundary](agent-design/decoupled-search-grounding.md)
+- [LLM-as-Code Agentic Programming for Agent Harnesses](agent-design/llm-as-code-agentic-programming.md)
+- [Prompted Uncertainty Decomposition for Clarification Routing](agent-design/prompted-uncertainty-decomposition-clarification.md)
+- [Structured Task-State Ledger for Tool-Calling Agents (LedgerAgent)](agent-design/ledger-agent-structured-task-state.md)
+- [Trained Repository Explorer Sub-Agent (FastContext)](agent-design/fastcontext-trained-repository-explorer.md)
 
 ## Tool Design
 
@@ -590,6 +600,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Toolset Agentization: Wrapping Co-Used Tools as Sub-Agents](tool-engineering/toolset-agentization.md)
 - [Unix CLI as the Native Tool Interface for AI Agents](tool-engineering/unix-cli-native-tool-interface.md)
 - [Web Search Agent Loop: Iterative Research Patterns](tool-engineering/web-search-agent-loop.md)
+- [Auth-Isolation as the MCP-vs-CLI Selection Heuristic](tool-engineering/mcp-auth-isolation-vs-cli-selection.md)
 
 ## Security & Safety
 
@@ -702,6 +713,9 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Windows Sandboxing for Coding Agents](security/windows-sandbox-primitives-coding-agents.md)
 - [Workload Identity Federation for Agent Runtimes](security/workload-identity-federation-for-agents.md)
 - [Skill Composition Risk in Agent Ecosystems](security/skill-composition-risk.md)
+- [Browser Sandbox for Agent-Generated HTML (Sandboxed Iframe + Immutable CSP)](security/browser-sandbox-agent-generated-html.md)
+- [Destyling Untrusted Input as a Prompt Injection Defense](security/destyling-untrusted-input.md)
+- [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](security/revocable-resource-effect-capabilities.md)
 
 ## Testing & Evaluation
 
@@ -815,6 +829,8 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Variance-Based RL Sample Selection](verification/variance-based-rl-sample-selection.md)
 - [Preempting Agentic PR Rejection by Failure-Mode Category](code-review/preempting-agentic-pr-rejection.md)
 - [Agent Self-Review Loop for Iterative Self-Improvement](code-review/agent-self-review-loop.md)
+- [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](verification/baseline-aware-test-evaluation-issue-resolution.md)
+- [Reviewer Habituation in Agent PR Review](code-review/reviewer-habituation-decay.md)
 
 ## Hooks & Guardrails
 
@@ -901,6 +917,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Swarm Skills: Multi-Agent Extension of the Agent Skills Standard](standards/swarm-skills-spec.md)
 - [Symphony: Open Spec for Issue-Tracker-Driven Coding Agent Orchestration](standards/symphony-orchestration-spec.md)
 - [WebMCP: Browser-Hosted Tool Contracts for In-Page AI Agents](standards/webmcp.md)
+- [Agentic Resource Discovery: Federated Pre-Invocation Search](standards/agentic-resource-discovery.md)
 
 ## Development Workflows
 
@@ -994,6 +1011,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Velocity-Quality Asymmetry: Why AI Speed Gains Fade](workflows/velocity-quality-asymmetry.md)
 - [Verification-Centric Development for AI-Generated Code](workflows/verification-centric-development.md)
 - [Continuous AI: A Navigation Map of Always-On Agent Workflows](workflows/continuous-ai.md)
+- [Dev Containers for AI Coding Agents: Claude Code vs Copilot CLI](workflows/devcontainers-for-ai-coding-agents.md)
 
 ## Human Factors
 
@@ -1038,6 +1056,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Visible Thinking in AI-Assisted Development](human/visible-thinking-ai-development.md)
 - [Intervention Rate as a Diagnostic North Star, Not a Target](human/intervention-rate-diagnostic-north-star.md)
 - [Programming Language Choice Still Shapes Agent Artefacts](human/programming-language-choice-shapes-agent-artefacts.md)
+- [Adapting AI Assistants to Developer Interaction Style](human/developer-interaction-style-adaptation.md)
 
 ## Anti-Patterns
 
@@ -1115,6 +1134,16 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Configuration Smells in AGENTS.md Files (Six-Smell Catalog)](anti-patterns/configuration-smells-agents-md.md)
 - [Constraint-Evasive Fabrication in Instruction Sets](anti-patterns/constraint-evasive-fabrication.md)
 - [Silent-Failure Mechanism Taxonomy in Production Agent Runtimes](anti-patterns/silent-failure-mechanism-taxonomy.md)
+- [Adversarial-Only Threat Modelling for Agent Data Leakage](anti-patterns/adversarial-only-leakage-threat-modelling.md)
+- [Agent Extension Conflicts: When Installed Skills and MCP Servers Fight Each Other](anti-patterns/agent-extension-conflicts.md)
+- [Assertion-Free Test Theater in Agent-Authored Patches](anti-patterns/assertion-free-test-theater.md)
+- [Destructive-Failure Mechanism Attribution by Mitigation Owner (ClayBuddy Three)](anti-patterns/destructive-failure-mechanism-attribution.md)
+- [LLM API Routers as Application-Layer Man-in-the-Middle](anti-patterns/llm-api-router-mitm.md)
+- [Multi-Agent Shared State Isolation Anomalies](anti-patterns/multi-agent-shared-state-isolation-anomalies.md)
+- [Pooled-Evidence Factuality Checks for MCP Agents (Cross-Source Conflation)](anti-patterns/pooled-evidence-mcp-factuality-conflation.md)
+- [The Model Preference Fallacy in Comparison Content](fallacies/model-preference-fallacy.md)
+- [Training-Data Gravity: Agents Default to Deprecated APIs](anti-patterns/training-data-gravity.md)
+- [Trusting Model-Level Privilege Restraint at Tool Selection](anti-patterns/over-privileged-tool-selection.md)
 
 ## Emerging Concepts
 

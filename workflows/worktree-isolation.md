@@ -17,6 +17,8 @@ maturity: established
 
 > Run each agent in its own git worktree, an isolated repo copy on its own branch, so agents never collide with each other or main.
 
+**Learn it hands-on:** [Sandboxes for Swarms](https://learn.agentpatterns.ai/workflows/sandboxes-for-swarms/) — guided lesson with quizzes.
+
 !!! note "Also known as"
     Parallel Agent Infrastructure, Multi-Agent Parallelism. For the human experience of managing parallel sessions — role shift, coordination overhead, and decision-making — see [Parallel Agent Sessions](parallel-agent-sessions.md).
 

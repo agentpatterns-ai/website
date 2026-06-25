@@ -18,6 +18,8 @@ maturity: established
 
 > AI crawlers split into retrieval bots (allow for citations), training scrapers (disallow), and non-compliant bots (WAF block) — each requiring a distinct robots.txt strategy.
 
+**Related lesson:** [Four Engines, Four Backends](https://learn.agentpatterns.ai/geo/four-engines-four-backends/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Three-Tier Taxonomy
 
 AI crawlers are not monolithic. Each major provider now operates separate bots for distinct purposes, each with its own user-agent string:

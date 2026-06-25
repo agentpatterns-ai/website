@@ -18,6 +18,8 @@ maturity: established
 
 > Answer-first writing places a direct 1–2 sentence response under every heading before elaborating, so RAG systems embed a tight, query-relevant signal at the start of each chunk rather than a diluted average of preamble and answer.
 
+**Learn it hands-on:** [Answer-First, Atomic Pages](https://learn.agentpatterns.ai/geo/answer-first-atomic-pages/) — guided lesson with quizzes.
+
 ## Why the Section Opening Controls Retrieval
 
 RAG systems score passages by cosine similarity between a query embedding and a chunk embedding. The chunk is typically 256–512 tokens. When a section opens with a direct answer, the chunk's dominant semantic signal is that answer — strongly similar to queries asking about that topic.

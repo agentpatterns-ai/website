@@ -8,13 +8,15 @@ tags:
   - source:opendev-paper
   - long-form
   - tool-agnostic
-last_reviewed: 2026-06-22
+last_reviewed: 2026-06-24
 maturity: established
 ---
 
 # Cost-Aware Agent Design: Route by Complexity, Not Habit
 
 > Cost-aware agent design routes each task to the cheapest model that meets its complexity, escalating tier only when validation fails.
+
+**Learn it hands-on:** [Cost Controls & Circuit Breakers](https://learn.agentpatterns.ai/harness-engineering/cost-controls-and-circuit-breakers/) — guided lesson with quizzes.
 
 ## The Routing Principle
 
@@ -102,7 +104,7 @@ Effective descriptions combine activation triggers, domain scope, and temporal c
 
 ## When This Backfires
 
-**Validation gates are slow or absent.** Cascade routing depends on deterministic, cheap validators (tests, linters, type checkers). If the validation step takes longer than the cost difference between tiers, the cascade adds latency without saving money. Measure gate cost before committing to escalation-based routing.
+**Validation gates are slow or absent.** Cascade routing depends on deterministic, cheap validators (tests, linters, type checkers). If the validation step takes longer than the cost difference between tiers, the cascade adds latency without saving money. Measure gate cost before committing to escalation-based routing. Routing is a design-time cost control; complement it with a runtime measurement — Braintrust treats cost-efficiency (tokens or dollars per task at fixed quality) as a first-class eval scoring axis alongside correctness, so a routing change that quietly raises spend without improving quality shows up as a regression ([Braintrust — testing agent cost-efficiency](https://braintrust.dev/blog/test-agent-cost-efficiency)).
 
 **Single-task pipelines.** A three-tier routing system — whether by task type or by [code health](auto-model-selection.md) — adds configuration and coordination overhead. For pipelines with one task type and low invocation volume, a single capable model at a fixed tier is simpler and often cheaper when amortized over setup and maintenance cost.
 

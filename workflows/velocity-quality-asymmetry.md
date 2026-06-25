@@ -17,6 +17,8 @@ maturity: established
 
 > AI coding tools deliver a velocity burst that fades within months while their quality debt compounds indefinitely, so sustainable speed demands QA investment up front.
 
+**Related lesson:** [Garbage-Collecting Entropy](https://learn.agentpatterns.ai/workflows/garbage-collecting-entropy/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Evidence
 
 A causal study of 806 Cursor-adopting repositories versus 1,380 matched controls reveals an asymmetry between velocity gains and quality costs ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427)):

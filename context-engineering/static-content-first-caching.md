@@ -17,6 +17,8 @@ maturity: established
 
 > Place static content (instructions, tool definitions) at the prompt's start and variable content last to maximize cache hits and keep inference cost linear.
 
+**Related lesson:** [The Immutable Prefix](https://learn.agentpatterns.ai/context-engineering/caching-static-first/) — this concept features in a hands-on lesson with quizzes.
+
 ## Why Prompt Structure Affects Cost
 
 Without prompt caching, the cost of running an agent loop is quadratic: each new inference call re-sends the entire accumulated context. An agent that makes 50 tool calls in a session sends the entire history 50 times — each call includes all preceding content.

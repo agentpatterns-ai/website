@@ -18,6 +18,8 @@ maturity: established
 
 > Agent harnesses bind DoS and denial-of-wallet to one control surface — per-call, per-task, concurrency, velocity, and budget bounds — that no single layer covers alone.
 
+**Learn it hands-on:** [The Bill Is the Attack](https://learn.agentpatterns.ai/security/the-bill-is-the-attack/) — guided lesson with quizzes.
+
 ## The Threat
 
 OWASP LLM10:2025 *Unbounded Consumption* names four sub-classes the same harness can produce ([OWASP LLM10:2025 mirror](https://github.com/microsoft/hve-core/blob/main/.github/skills/security/owasp-llm/references/10-unbounded-consumption.md)):

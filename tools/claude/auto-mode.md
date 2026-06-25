@@ -13,9 +13,12 @@ applies_to: "claude-code@2.x"
 last_reviewed: 2026-05-27
 status: current
 ---
+
 # Claude Code Auto Mode
 
 > A two-stage classifier evaluates each tool call before execution, automatically approving safe operations and blocking destructive patterns.
+
+**Related lesson:** [Permissions & Safety Boundaries](https://learn.agentpatterns.ai/harness-engineering/permissions-and-safety-boundaries/) — this concept features in a hands-on lesson with quizzes.
 
 ## The Permission Friction Problem
 

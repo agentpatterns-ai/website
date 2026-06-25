@@ -17,6 +17,8 @@ maturity: established
 
 > An agent-trace data layer is purpose-built storage for agent runs: deep nesting, hours-long spans, and multi-modal payloads each break a different assumption in general backends.
 
+**Related lesson:** [Catching the Wasted Run](https://learn.agentpatterns.ai/observability/catching-the-wasted-run/) — this concept features in a hands-on lesson with quizzes.
+
 An agent-trace data layer is the storage and query tier that holds agent run records and serves them to debugging UIs, evaluator pipelines, and replay tools. Reaching for a purpose-built layer — instead of OpenTelemetry on Postgres, Loki, or vanilla ClickHouse — is workload-shape-driven. Below the threshold, general-purpose stores work; above it, four properties of agent traces compound to break them.
 
 ## When To Reach For It

@@ -20,6 +20,8 @@ maturity: adopted
 
 > Enable humans to take over from background agents at the ~90% completion mark — using distilled context summaries and durable artifacts — rather than cold-starting from raw output or waiting for full automation to reach 100%.
 
+**Learn it hands-on:** [Handoffs](https://learn.agentpatterns.ai/workflows/handoffs/) — guided lesson with quizzes.
+
 ## The Problem
 
 Background agents running autonomously handle well-defined work efficiently, but most complex tasks have a nuanced tail: the final 10% requires judgment, aesthetic evaluation, or domain knowledge the agent cannot reliably supply. Without a structured handoff, humans face two bad options:

@@ -19,6 +19,8 @@ maturity: emerging
 
 > Six named defects appear in 91 of 100 popular AGENTS.md and CLAUDE.md files — a greppable checklist for auditing the always-loaded coding-agent context.
 
+**Learn it hands-on:** [Configuration Smells in AGENTS.md](https://learn.agentpatterns.ai/anti-patterns/configuration-smells/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     AGENTS.md Smells, CLAUDE.md Smells, Coding-Agent Config Smells
 

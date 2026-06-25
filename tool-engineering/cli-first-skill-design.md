@@ -17,6 +17,8 @@ maturity: adopted
 
 > Design agent skills as CLI tools so the same interface serves both humans debugging locally and agents automating through shell tool calls.
 
+**Related lesson:** [The Unix CLI as a Tool Interface](https://learn.agentpatterns.ai/tool-engineering/unix-cli-as-tool-interface/) — this concept features in a hands-on lesson with quizzes.
+
 When a skill is implemented as a shell script, a human can run it directly from a terminal and an agent can invoke it through a `Bash` or `run()` tool call — no separate interfaces required. The [awesome-agentic-patterns catalogue](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/cli-first-skill-design.md) documents this design, and Claude Code best practices identify CLI tools as "the most context-efficient way to interact with external services" ([source](https://code.claude.com/docs/en/best-practices)).
 
 ## Core Principles

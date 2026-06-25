@@ -14,6 +14,8 @@ maturity: established
 
 > Design agent operations so that running the same task twice produces the same end state — not duplicate artifacts, conflicting state, or compounded errors.
 
+**Related lesson:** [Reversibility & Idempotency](https://learn.agentpatterns.ai/harness-engineering/reversibility-and-idempotency/) — this concept features in a hands-on lesson with quizzes.
+
 ## Why Idempotency Matters for Agents
 
 Agents fail mid-task: context windows fill, API calls time out, tool errors interrupt execution (the territory of [exception handling and recovery patterns](exception-handling-recovery-patterns.md)). When you re-run the agent, it starts fresh — with no memory of what it already did. If the first run created a branch, posted a comment, or applied a label before failing, the second run encounters pre-existing state it doesn't know about.

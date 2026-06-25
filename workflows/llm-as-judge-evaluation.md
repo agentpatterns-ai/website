@@ -14,6 +14,8 @@ maturity: established
 
 > Combine automated LLM rubric scoring with targeted human review to evaluate multi-agent output at scale without sacrificing quality on edge cases.
 
+**Related lesson:** [Define "Done" First](https://learn.agentpatterns.ai/workflows/define-done-first/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Problem
 
 Multi-agent outputs resist traditional programmatic evaluation. Research reports, synthesized answers, and generated code are free-form; they rarely have a single correct answer. Evaluating them manually at scale is not feasible — but handing evaluation entirely to automation misses the subtle failures that matter most in production.

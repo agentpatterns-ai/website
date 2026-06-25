@@ -21,6 +21,8 @@ maturity: established
 
 > Pull context into the agent at the moment it is needed rather than preloading it at session start.
 
+**Learn it hands-on:** [Just-in-Time Retrieval](https://learn.agentpatterns.ai/context-engineering/just-in-time-retrieval/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     Context Hub, Semantic Context Loading, JIT Context, RAG
 

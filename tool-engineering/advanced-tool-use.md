@@ -17,6 +17,8 @@ maturity: adopted
 
 > Advanced tool use is a set of Anthropic API features — deferred tool loading with tool search, programmatic calling, and input examples — that trade extra orchestration for smaller context, faster inference, and higher selection accuracy once tool libraries grow past ~30 tools.
 
+**Learn it hands-on:** [Tool Discoverability at Scale](https://learn.agentpatterns.ai/tool-engineering/tool-discoverability-at-scale/) — guided lesson with quizzes.
+
 Well-designed tools ([Tool Engineering](tool-engineering.md)) and precise descriptions ([Tool Selection Guidance](tool-description-quality.md)) work at small scale. Past 30–50 tools, two problems compound: tool definitions consume the context budget before work begins, and selection accuracy degrades as the model evaluates more options. These are API-level features from [Anthropic's advanced tool use post](https://www.anthropic.com/engineering/advanced-tool-use) that address the scaling problem directly.
 
 ## The Scaling Wall

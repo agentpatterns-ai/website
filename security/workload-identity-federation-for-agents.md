@@ -17,6 +17,8 @@ maturity: established
 
 > Replace long-lived API keys with short-lived tokens minted from the runtime's existing workload identity — making the federation trust rule a security boundary.
 
+**Learn it hands-on:** [Keys That Expire in Minutes](https://learn.agentpatterns.ai/security/keys-that-expire-in-minutes/) — guided lesson with quizzes.
+
 A static `sk-ant-...` API key is the highest-blast-radius credential on an agent runtime — leakable from logs, hooks, and transcripts, with rotation cadences that never match incident timelines. Workload Identity Federation (WIF) removes the key: the workload presents a signed OIDC JWT from an identity provider it already runs inside, and Anthropic mints a short-lived access token bound to a service account. [[Source]](https://platform.claude.com/docs/en/manage-claude/workload-identity-federation)
 
 ## The Federation Contract

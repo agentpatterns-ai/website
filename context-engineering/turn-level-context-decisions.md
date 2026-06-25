@@ -17,6 +17,8 @@ maturity: adopted
 
 > Each completed turn is a context decision point with five moves: continue, rewind, clear, compact, or delegate to a subagent.
 
+**Learn it hands-on:** [The Five Moves](https://learn.agentpatterns.ai/context-engineering/the-five-moves/) — guided lesson with quizzes.
+
 ## Why This Decision Matters
 
 With 1M-token windows, sessions can run longer — but longer is not better. [Context rot](context-window-dumb-zone.md) degrades output as context grows: attention spreads thin, and signal competes with noise from superseded reasoning, resolved errors, and stale tool output. [Anthropic describes this as a performance gradient](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) across all models — a steady decline, not a cliff.

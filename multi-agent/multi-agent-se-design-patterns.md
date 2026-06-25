@@ -16,6 +16,8 @@ maturity: established
 
 > A study of 94 LLM-based multi-agent SE papers identifies 16 design patterns across five categories, with Role-Based Cooperation the dominant pattern.
 
+**Related lesson:** [Why Multi-Agent Systems Fail](https://learn.agentpatterns.ai/multi-agent/why-multi-agent-fails/) — this concept features in a hands-on lesson with quizzes.
+
 !!! info "Also known as"
     Multi-Agent Topology Taxonomy, Multi-Agent Architecture Patterns
 

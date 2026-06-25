@@ -14,6 +14,8 @@ maturity: adopted
 
 > Prefer fewer, higher-level tools that match how agents reason about tasks over many narrow tools that mirror API endpoint boundaries.
 
+**Learn it hands-on:** [Consolidation vs Sprawl](https://learn.agentpatterns.ai/tool-engineering/consolidation-vs-sprawl/) — guided lesson with quizzes.
+
 ## The Problem with API-Shaped Tool Sets
 
 Developers building tool-augmented agents often mirror the underlying API: one tool per endpoint, one tool per operation. This produces a large tool set where agents must chain multiple calls to complete a single logical action — finding a calendar slot and booking it requires two separate tools, two decisions, two opportunities for error.

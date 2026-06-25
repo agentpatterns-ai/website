@@ -16,6 +16,8 @@ maturity: adopted
 
 > Golden Journeys are named end-to-end paths through the running system, each with a per-step failure signal, gating completion on a clean restart.
 
+**Learn it hands-on:** [Golden Journeys](https://learn.agentpatterns.ai/verification/golden-journeys/) — guided lesson with quizzes.
+
 ## The Pattern
 
 A Golden Journey is a named, repeatable path through the running system with an explicit failure signal at each step, treated as the canonical verification artefact. The governing rule from the Walking Labs reliability framework: **"No feature is complete if the system cannot restart cleanly afterward"** ([RELIABILITY.md](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/resources/openai-advanced/repo-template/docs/RELIABILITY.md)).

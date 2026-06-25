@@ -17,6 +17,8 @@ maturity: adopted
 
 > Strip intermediate tool results from conversation history once they have served their purpose to keep active context lean without losing the work product.
 
+**Learn it hands-on:** [Masking the Tail](https://learn.agentpatterns.ai/context-engineering/observation-masking/) — guided lesson with quizzes.
+
 ## The Problem
 
 Tool calls are a primary source of context growth in agent workflows. Every tool output — a file read, a search result, test runner output, a lint report — injects tokens into the context window. In software engineering agent benchmarks, observation tokens account for roughly 84% of trajectory content, and most are consumed once during synthesis and not referenced again ([arXiv 2508.21433](https://arxiv.org/abs/2508.21433)). They remain in context, consuming budget and diluting attention.

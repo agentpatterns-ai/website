@@ -18,6 +18,8 @@ maturity: established
 
 > Custom commands pre-approve specific tools through an `allowed-tools` frontmatter list, so listed tools run without prompting — signaling the expected surface, not blocking unlisted tools.
 
+**Related lesson:** [Permissions & Safety Boundaries](https://learn.agentpatterns.ai/harness-engineering/permissions-and-safety-boundaries/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Default Exposure Problem
 
 Custom commands in Claude Code inherit the session's full tool permissions. A `/review-pr` command that only reads files and runs `git diff` still has implicit access to `Write`, delete, and arbitrary shell. Fine when you authored it; a problem when sharing with a team or running it in an unfamiliar context.

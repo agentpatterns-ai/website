@@ -18,6 +18,8 @@ maturity: established
 
 > The safe outputs pattern gives agents read-only access by default and gates every write behind explicit per-type authorization, bounding the blast radius.
 
+**Related lesson:** [Capstone — Symptom to Mitigation](https://learn.agentpatterns.ai/security/the-capstone/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Principle
 
 Every agent starts with zero write access. Read operations — querying files, reading issues, inspecting PR state — are unrestricted. Write operations — creating PRs, posting comments, modifying files — require explicit per-type authorization. This inverts the default GitHub Actions trust model, where [everything runs in the same trust domain](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/) and rogue agents can interfere with MCP servers, access authentication secrets, and make network requests to arbitrary hosts.

@@ -18,6 +18,8 @@ maturity: established
 
 > Hint-driven concurrency runs read-only MCP tools in parallel by reading the `readOnlyHint` annotation as a dispatch contract, not just a safety prompt.
 
+**Related lesson:** [Tool-Call Cost & Latency Budgeting](https://learn.agentpatterns.ai/tool-engineering/cost-and-latency-budgeting/) — this concept features in a hands-on lesson with quizzes.
+
 Hint-driven concurrency is a harness-side dispatch pattern that runs multiple MCP tool calls in one agent turn in parallel when each advertises `readOnlyHint: true`, while keeping annotated-mutating or unannotated tools strictly sequential. Codex CLI 0.134.0 shipped this in the open: read-only tools automatically qualify for parallel execution, and the server-level `supports_parallel_tool_calls` flag remains an additive override for tools that mutate ([Codex CLI changelog](https://developers.openai.com/codex/changelog), [openai/codex PR #23750](https://github.com/openai/codex/pull/23750)). The annotation stopped being a passive safety badge the moment a major harness wired it into the dispatch path.
 
 ## The Contract Shift

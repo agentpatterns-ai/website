@@ -11,13 +11,15 @@ aliases:
   - macro evaluation for agents
   - population-level agent evaluation
   - whole-task agent scoring
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-24
 maturity: established
 ---
 
 # Macro Evals for Agentic Systems
 
 > Macro evaluation aggregates per-trace findings across a corpus of agent runs to surface recurring behavior patterns that single-trace evals cannot expose.
+
+**Learn it hands-on:** [Evals at Scale](https://learn.agentpatterns.ai/verification/evals-at-scale/) — guided lesson with quizzes.
 
 Macro evaluation is the population-level layer above per-call and per-trace evals: it asks which problems repeat, where they concentrate, and which part of the workflow to inspect first — questions a single trace cannot answer because the signal is statistical, not local ([OpenAI Cookbook, 2026](https://developers.openai.com/cookbook/examples/partners/macro_evals_for_agentic_systems/macro_evals_for_agentic_systems)). Below the conditions where it earns its keep, it substitutes a heavy unsupervised pipeline for what a sorted frequency table would surface.
 
@@ -88,6 +90,7 @@ Macro evaluation is a heavy pipeline and a noisy aggregator. Narrow scope when:
 - **The analysis pool is selection-biased.** The cookbook's pipeline only clusters traces already carrying failure, review, or Promptfoo signals ([OpenAI Cookbook, 2026](https://developers.openai.com/cookbook/examples/partners/macro_evals_for_agentic_systems/macro_evals_for_agentic_systems)). Reading the clusters as "how the system behaves" is wrong; they describe the pathology of flagged traces. Acting on them as a triage queue is correct.
 - **Agents are one-shot, not corpus-shaped.** A CI agent that takes a task and returns a patch has no recurring cross-trace structure; the relevant failure modes are per-trace (correctness, safety) and per-call (tool selection). [pass@k metrics](pass-at-k-metrics.md) and [trajectory decomposition](trajectory-decomposition-diagnosis.md) cover the workload.
 - **Spec churn changes case-type distribution faster than the suite regenerates.** Clusters labelled last week describe a system that no longer exists; impact scores become a moving target rather than a comparable signal across releases.
+- **The eval definitions are locked to one platform.** The macro pipeline runs its per-call rubrics through Promptfoo, but a corpus-scale suite outlives any single harness. Keep eval definitions framework-agnostic so a platform deprecation does not strand the suite — OpenAI's cookbook walks through porting an existing suite off the deprecated OpenAI Evals product into Promptfoo for exactly this reason ([OpenAI Cookbook — moving from OpenAI Evals to Promptfoo, 2026](https://developers.openai.com/cookbook/examples/evaluation/moving-from-openai-evals-to-promptfoo)).
 - **Clusters are mistaken for diagnosis.** The cookbook itself warns that clustering is not proof of causality, and suspect scoring guides inspection rather than locating the fault ([OpenAI Cookbook, 2026](https://developers.openai.com/cookbook/examples/partners/macro_evals_for_agentic_systems/macro_evals_for_agentic_systems)). A cluster labelled "pricing-incentive-omission" is a hypothesis to test, not a verdict to ship a fix against.
 
 Macro evaluation pairs with — does not replace — per-call rubrics, trajectory-aware safety auditing, and outcome grading. It is the third eval tier when the first two are in place and the workload supplies the corpus to aggregate over.

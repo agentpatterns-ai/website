@@ -7,7 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
   - automation
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-24
 maturity: established
 ---
 
@@ -60,6 +60,8 @@ The Copilot coding agent accepts work via multiple channels, each suited to diff
 Claude Code uses `@claude` mentions in issue/PR comments as triggers, with support for custom trigger phrases and scheduled automation ([Claude Code docs](https://code.claude.com/docs/en/github-actions)).
 
 Both systems acknowledge receipt (Copilot: eye emoji reaction; Claude: comment response) and begin autonomous work.
+
+A triage-stage variant shifts the entry point earlier still: Linear describes an agent that catches a bug during issue triage and ships a fix before a human ever picks the issue up ([Linear: agent bug fix](https://linear.app/now/linear-agent-bug-fix)). This is distinct from the failing-CI-signal [one-click auto-fix](one-click-ci-auto-fix.md) — the trigger is the new bug report at triage, not a downstream red pipeline.
 
 ## Phase 3: Environment Preparation
 

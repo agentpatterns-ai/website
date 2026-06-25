@@ -18,6 +18,8 @@ maturity: established
 
 > Run a skill in a forked subagent context so its auxiliary tokens — search hits, plans, tool output — stay out of the main chat.
 
+**Related lesson:** [Skills as a Tool-Engineering Surface](https://learn.agentpatterns.ai/tool-engineering/skills-as-a-tool-surface/) — this concept features in a hands-on lesson with quizzes.
+
 !!! note "Also known as"
     Dedicated context for skills, skill fork context. For the broader sub-agent isolation pattern, see [Sub-Agents for Fan-Out](../multi-agent/sub-agents-fan-out.md). For the SKILL.md syntax, see [Skill Frontmatter Reference](skill-frontmatter-reference.md).
 

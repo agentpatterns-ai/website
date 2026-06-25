@@ -16,6 +16,8 @@ maturity: established
 
 > Distribute accuracy verification across every agent in a pipeline so no single agent is the sole gatekeeper.
 
+**Related lesson:** [Chain-of-Verification](https://learn.agentpatterns.ai/verification/chain-of-verification/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Pattern
 
 A fabricated claim can survive from research through to publish if only one stage checks accuracy. Layered accuracy defense assigns each agent in the pipeline an explicit verification responsibility, so claims must survive multiple independent checkpoints before they reach the reader.

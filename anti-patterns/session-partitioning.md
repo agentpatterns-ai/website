@@ -19,6 +19,8 @@ maturity: established
 
 > Mixing unrelated tasks in a single Claude Code session fills the context window with irrelevant history and degrades output quality.
 
+**Learn it hands-on:** [The Kitchen Sink Session](https://learn.agentpatterns.ai/anti-patterns/the-kitchen-sink-session/) — guided lesson with quizzes.
+
 ## The Problem
 
 It is tempting to keep one Claude Code session running all day and pile tasks onto it — review a PR, then start a feature, then debug a test failure. Each task leaves residue: file contents, command outputs, failed approaches, and off-topic reasoning. As the context fills, Claude begins making decisions influenced by stale information from earlier tasks.

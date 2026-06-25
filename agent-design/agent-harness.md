@@ -21,6 +21,8 @@ maturity: established
 
 > A two-phase agent harness pairs an initializer that prepares the environment with a coding agent that resumes from any prior session via git-based handoff artifacts.
 
+**Related lesson:** [Long-Running Agents](https://learn.agentpatterns.ai/harness-engineering/long-running-agents/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Stateless Session Problem
 
 Agents have no memory between sessions. Without explicit design, they lose track of progress, repeat completed work, or [declare premature completion](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) when context pressure rises. A deliberate harness — two coordinated agents with structured artifacts — gives every session a [reliable on-ramp](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).

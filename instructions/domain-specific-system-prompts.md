@@ -16,6 +16,8 @@ maturity: established
 
 > Generic instructions produce mediocre reasoning. Domain-specific system prompts with worked examples produce consistent, high-quality agent behavior in your specific context.
 
+**Learn it hands-on:** [Show Your Reasoning](https://learn.agentpatterns.ai/prompt-engineering/show-your-reasoning/) — guided lesson with quizzes.
+
 ## The Gap Between Generic and Domain-Specific
 
 A generic instruction like "reason carefully before acting" tells the model nothing about what good reasoning looks like in your domain. No worked examples, no domain vocabulary, no model of which edge cases matter. The result is reasoning that looks thoughtful but misses the failures you care about — the gap [example-driven instructions](example-driven-vs-rule-driven-instructions.md) close by supplying a concrete reasoning template.

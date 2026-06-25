@@ -16,6 +16,8 @@ maturity: emerging
 
 > Semantic density optimization maximizes task-relevant tokens for agents — cut structural ceremony while preserving naming, docs, and commit context agents cannot cheaply reconstruct.
 
+**Related lesson:** [Signal Per Token](https://learn.agentpatterns.ai/context-engineering/signal-per-token/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Compression Paradox
 
 Naively compressing codebase content for agents backfires. A controlled experiment on log format ([Ustynov, 2026](https://arxiv.org/abs/2604.07502)) shows why:

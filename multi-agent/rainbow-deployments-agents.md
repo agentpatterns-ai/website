@@ -18,6 +18,8 @@ maturity: adopted
 
 > Rainbow deployments shift agent traffic across versions gradually, not atomically, letting each new version prove itself alongside old ones and preventing broken in-flight sessions.
 
+**Learn it hands-on:** [Rainbow Deployments](https://learn.agentpatterns.ai/multi-agent/rainbow-deployments/) — guided lesson with quizzes.
+
 Rainbow deployment keeps N versions of an agent running simultaneously. New sessions route to the latest version; existing sessions stay on whichever version started them and drain as they complete. No forced cutover, no two-version ceiling.
 
 ## Why Agents Cannot Blue-Green

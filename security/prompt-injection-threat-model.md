@@ -17,6 +17,8 @@ maturity: established
 
 > Prompt injection hides malicious instructions in external content an agent consumes — web pages, documents, API responses — overriding agent behavior at the model level.
 
+**Learn it hands-on:** [The Provenance-Blind Model](https://learn.agentpatterns.ai/security/the-provenance-blind-model/) — guided lesson with quizzes.
+
 ## What Prompt Injection Is
 
 Prompt injection is an attack where malicious instructions embedded in external content redirect an agent's behavior. The agent consumes the content as data — a web page, email, or document — but the instructions inside are followed as if they came from the user or system prompt.

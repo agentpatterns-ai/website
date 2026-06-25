@@ -19,6 +19,8 @@ maturity: established
 
 > Decompose a complex task into a sequence of LLM calls where each step processes the previous output, enabling verification and gate-checking between stages.
 
+**Related lesson:** [Assembling the Prompt](https://learn.agentpatterns.ai/context-engineering/assembling-the-prompt/) — this concept features in a hands-on lesson with quizzes.
+
 ## Structure
 
 A prompt chain is a directed sequence of LLM calls. Each call has:

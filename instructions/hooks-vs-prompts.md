@@ -16,6 +16,8 @@ maturity: established
 
 > Prompts request behavior; hooks require it. Use prompts for judgment calls and context-dependent guidance; use hooks for rules that must not vary.
 
+**Learn it hands-on:** [Where Prompting Ends](https://learn.agentpatterns.ai/prompt-engineering/where-prompting-ends/) — guided lesson with quizzes.
+
 !!! note "Also known as"
     **Enforcement vs Advisory**, **Hooks Beat Prompts**.
 

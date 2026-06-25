@@ -17,6 +17,8 @@ maturity: adopted
 
 > Context is a finite budget — every token preloaded into the context window displaces a token available for reasoning, tool results, and implementation.
 
+**Learn it hands-on:** [Every Token Has a Cost](https://learn.agentpatterns.ai/context-engineering/every-token-has-a-cost/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     **The 50% Rule**, **Context Budget**. For the failure mode when budgets are ignored, see [Context Window Management: The Dumb Zone](context-window-dumb-zone.md).
 

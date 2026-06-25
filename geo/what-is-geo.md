@@ -17,6 +17,8 @@ maturity: emerging
 
 > Generative Engine Optimization (GEO) is the practice of structuring content so AI answer engines cite it — not just rank it.
 
+**Learn it hands-on:** [The Citation Economy](https://learn.agentpatterns.ai/geo/the-citation-economy/) — guided lesson with quizzes.
+
 Traditional search optimization targets a position in a results list. Generative engines — ChatGPT, Perplexity, Google AI Overviews, Claude, Gemini — don't return lists. They synthesize responses from sources and, in some cases, attribute those sources. Getting cited is the new getting ranked.
 
 ## The Metric Changed

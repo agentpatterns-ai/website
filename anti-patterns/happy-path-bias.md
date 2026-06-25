@@ -15,6 +15,8 @@ maturity: established
 
 > Happy path bias is the agent tendency to write code that handles the common case but skips error paths, edge cases, and type boundaries.
 
+**Related lesson:** [Trust Without Verify](https://learn.agentpatterns.ai/anti-patterns/trust-without-verify/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Pattern
 
 AI coding agents systematically neglect error handling, edge cases, and type safety. [CodeRabbit's analysis of 470 GitHub PRs](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) found AI-generated code has **2x more error handling issues** and **1.75x more logic/correctness errors** than human-written code.

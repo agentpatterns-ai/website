@@ -17,6 +17,8 @@ maturity: established
 
 > Across user, workspace, and project MCP configs, the most-specific scope defining a server name wins, and duplicate definitions are suppressed before the agent sees them.
 
+**Related lesson:** [Tool Discoverability at Scale](https://learn.agentpatterns.ai/tool-engineering/tool-discoverability-at-scale/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Three Scopes
 
 MCP server definitions can live at three places. Each scope answers a different question — "what do I always want available?" "what does this team agree on?" "what stays personal to this checkout?"

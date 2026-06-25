@@ -19,6 +19,8 @@ maturity: established
 
 > Request structured errors from HTTP APIs using `Accept` headers — and emit them from your own agent-facing services — to replace brittle HTML parsing with deterministic control flow.
 
+**Learn it hands-on:** [Errors as a Teaching Signal](https://learn.agentpatterns.ai/tool-engineering/errors-as-teaching-signal/) — guided lesson with quizzes.
+
 ## The Problem: Errors Designed for Humans
 
 When an agent calls an HTTP API and receives an error, it typically gets an HTML page designed for a browser. A Cloudflare 1015 rate-limit page is ~14,252 tokens as HTML. The agent must pattern-match through markup to extract the status, then guess at retry behaviour from heuristics. At scale, this burns context budget and produces unreliable recovery logic.

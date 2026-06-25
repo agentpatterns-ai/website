@@ -15,6 +15,8 @@ maturity: established
 
 > Relying on one safeguard — URL allow-listing, output filtering, or instruction hardening — leaves agents vulnerable to injection attacks that single layer does not address.
 
+**Learn it hands-on:** [Single-Layer Injection Defence](https://learn.agentpatterns.ai/anti-patterns/single-layer-injection-defence/) — guided lesson with quizzes.
+
 ## The Anti-Pattern
 
 A common approach is to add one mitigation and consider the problem solved:

@@ -14,6 +14,8 @@ maturity: adopted
 
 > At 10+ parallel agents committing small changes, branching becomes the bottleneck. Single-branch git with mechanical guards is the alternative — if guards exist first.
 
+**Related lesson:** [Sandboxes for Swarms](https://learn.agentpatterns.ai/workflows/sandboxes-for-swarms/) — this concept features in a hands-on lesson with quizzes.
+
 !!! warning "Conflicts with Claude Code's official recommendation"
     Claude Code's documented best practice is [worktree isolation](worktree-isolation.md) — one worktree per agent, one branch per task. The single-branch model described here is a direct counterpoint from the [Agent Flywheel methodology](https://agent-flywheel.com/core-flywheel), which rejects worktrees in favor of all agents committing directly to `main`. Industry practitioner guides [default to worktrees](https://nx.dev/blog/git-worktrees-ai-agents) for parallel agents; single-branch is the contrarian position.
 

@@ -13,6 +13,8 @@ last_reviewed: 2026-05-27
 
 > End-to-end workflows for agent-assisted development — from bootstrapping to team onboarding.
 
+**Learn it hands-on:** [Capstone — The Workflow Decision Table](https://learn.agentpatterns.ai/workflows/the-workflow-decision-table/) — guided lesson with quizzes.
+
 ## Pages
 
 - [Agent Debugging](../observability/agent-debugging.md) — Diagnosing bad agent output

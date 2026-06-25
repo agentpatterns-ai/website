@@ -14,6 +14,8 @@ maturity: established
 
 > The lethal trifecta is private data, untrusted input, and external egress on one path — remove at least one leg from every execution path.
 
+**Learn it hands-on:** [The Lethal Trifecta](https://learn.agentpatterns.ai/security/the-lethal-trifecta/) — guided lesson with quizzes.
+
 ## The Three Legs
 
 The **lethal trifecta** ([Willison, 2025](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)) names three capabilities that together create an exploitable surface:

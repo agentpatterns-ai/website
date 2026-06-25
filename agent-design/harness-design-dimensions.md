@@ -19,6 +19,8 @@ maturity: emerging
 
 > A source-grounded study of 70 agent-system projects reduces harness infrastructure to five recurring design dimensions and five archetypes — a population-level lens for reading and comparing harnesses.
 
+**Related lesson:** [What a Harness Is](https://learn.agentpatterns.ai/harness-engineering/what-a-harness-is/) — this concept features in a hands-on lesson with quizzes.
+
 ## Why Dimensions Beat Ad-Hoc Comparison
 
 Harness code — the non-LLM mediator handling tools, context, delegation, safety, and orchestration — determines agent behaviour as much as the model. Independent evidence: pure harness changes took Terminal Bench 2.0 from 52.8% to 66.5% ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). Projects therefore diverge sharply in how they engineer this layer.

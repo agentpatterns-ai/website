@@ -17,6 +17,8 @@ maturity: adopted
 
 > Repeating a critical instruction at a prompt's start and end exploits primacy and recency bias for higher compliance than a single placement.
 
+**Learn it hands-on:** [Top and Tail](https://learn.agentpatterns.ai/prompt-engineering/top-and-tail/) — guided lesson with quizzes.
+
 !!! info "Also known as"
     Attention Sinks, Lost in the Middle, Attention Bias and Instruction Placement
 

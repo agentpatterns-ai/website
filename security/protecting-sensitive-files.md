@@ -14,6 +14,8 @@ maturity: established
 
 > Use permission rules and hooks to prevent agents from reading credentials and secrets, even when those files are present in the working directory.
 
+**Related lesson:** [Keep the Keys Out](https://learn.agentpatterns.ai/security/keep-the-keys-out/) — this concept features in a hands-on lesson with quizzes.
+
 Sensitive-file protection is enforced by a combination of path-based permission rules and pre-read hooks that intercept tool calls before the agent can observe file contents. The principles below apply to any agent with filesystem access; the configuration examples use Claude Code — other tools implement equivalent mechanisms differently.
 
 ## The Exposure Problem

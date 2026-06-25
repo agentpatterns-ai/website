@@ -20,6 +20,8 @@ maturity: emerging
 
 > The multitenant RAG relevance-authorization gap: retrieval ranks by relevance, not authorization, so one tenant's top chunk may belong to another. Gate retrieval by policy.
 
+**Learn it hands-on:** [The Chunk That Wasn't Yours](https://learn.agentpatterns.ai/security/the-chunk-that-wasnt-yours/) — guided lesson with quizzes.
+
 ## The Gap
 
 Vector and lexical retrieval rank by similarity, BM25, or hybrid scoring. None of these signals know who the requester is. When tenants share an index, "most relevant chunk" and "chunk this tenant may see" are independent properties — the highest-scoring document for tenant A may belong to tenant B.

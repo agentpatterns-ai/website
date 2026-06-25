@@ -16,6 +16,8 @@ maturity: established
 
 > Before choosing how an agent performs an action, choose how you will undo it — if recovery costs more than one command, reconsider the approach.
 
+**Learn it hands-on:** [Reversibility & Idempotency](https://learn.agentpatterns.ai/harness-engineering/reversibility-and-idempotency/) — guided lesson with quizzes.
+
 ## The Premise
 
 Agents produce bad output. The question is not whether an agent will make a mistake, but what the [recovery cost](exception-handling-recovery-patterns.md) is when it does.

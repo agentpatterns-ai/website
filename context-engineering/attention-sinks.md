@@ -16,6 +16,8 @@ maturity: emerging
 
 > Transformer models disproportionately attend to initial tokens regardless of their semantic content — position determines attention weight, not importance.
 
+**Related lesson:** [Lost in the Middle](https://learn.agentpatterns.ai/context-engineering/lost-in-the-middle/) — this concept features in a hands-on lesson with quizzes.
+
 !!! info "Also known as"
     Lost in the Middle, Critical Instruction Repetition, Attention Bias and Instruction Placement
 

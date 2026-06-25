@@ -102,3 +102,4 @@ The patterns compose: the control plane gates on identity, capability budgets ga
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
+- [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — Subgoal-scoped revocation through a reference monitor; same envelope of mediated tools + typed catalog

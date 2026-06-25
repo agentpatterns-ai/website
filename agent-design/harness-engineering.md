@@ -18,6 +18,8 @@ maturity: established
 
 > The discipline of designing agent environments -- layered architecture, mechanical enforcement, legibility -- so agents reliably produce correct results. Environment design matters more than prompting.
 
+**Learn it hands-on:** [Capstone — The Harness Decision Table](https://learn.agentpatterns.ai/harness-engineering/capstone/) — guided lesson with quizzes.
+
 ## The Discipline
 
 Harness engineering is the practice of structuring a codebase, its tooling, and its documentation so that coding agents succeed by default. It treats the repository as the primary interface for agent work: if something is not in the repo, it does not exist for the agent.

@@ -15,6 +15,8 @@ maturity: adopted
 
 > Only put non-discoverable information in agent instruction files — if the agent can find it in the codebase, let it find it.
 
+**Learn it hands-on:** [Discoverable or Not](https://learn.agentpatterns.ai/context-engineering/discoverable-or-not/) — guided lesson with quizzes.
+
 ## The Cost of Instruction Files
 
 Agent instruction files (AGENTS.md, CLAUDE.md, [copilot-instructions.md](../tools/copilot/copilot-instructions-md-convention.md)) load into context on every interaction. Every line consumes context budget before the agent starts work, making inclusion a resource-allocation decision, not a documentation exercise.

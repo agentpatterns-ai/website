@@ -20,6 +20,8 @@ maturity: adopted
 
 > Fan-out spawns N independent agents on one problem, then a synthesis agent merges the strongest elements from each attempt into a single output.
 
+**Learn it hands-on:** [Fan-Out and Synthesis](https://learn.agentpatterns.ai/multi-agent/fan-out-and-synthesis/) — guided lesson with quizzes.
+
 !!! note "Also known as"
     Fan-Out Pattern, Parallel Dispatch, Scatter-Gather. The fan-out-then-synthesize variant adds a dedicated merge step after parallel execution. See [Agent Composition Patterns](../agent-design/agent-composition-patterns.md), [Orchestrator-Worker](orchestrator-worker.md), and [Sub-Agents Fan-Out](sub-agents-fan-out.md).
 

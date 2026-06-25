@@ -16,6 +16,8 @@ maturity: adopted
 
 > Circuit breakers stop agent loops when progress stalls — repeated errors, escalating costs, context exhaustion, or circular behavior signal a halt rather than continuation.
 
+**Related lesson:** [Cost Controls & Circuit Breakers](https://learn.agentpatterns.ai/harness-engineering/cost-controls-and-circuit-breakers/) — this concept features in a hands-on lesson with quizzes.
+
 > **Also known as:** Loop Detection & Stopping. For the complementary technique of detecting repetitive edits within a session, see [Loop Detection](loop-detection.md).
 
 ## The Loop Problem

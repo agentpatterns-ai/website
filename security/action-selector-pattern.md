@@ -20,6 +20,8 @@ maturity: adopted
 
 > The LLM decodes intent into a pre-approved action ID; tool outputs never re-enter the model, making control-flow hijacking structurally impossible.
 
+**Related lesson:** [Decide Before You Look](https://learn.agentpatterns.ai/security/decide-before-you-look/) — this concept features in a hands-on lesson with quizzes.
+
 ## The Feedback Loop Prompt Injection Requires
 
 Standard tool-enabled agents return tool outputs to the LLM context. This creates a feedback loop: external content (web pages, API responses, file contents) can contain injected instructions that redirect which action the agent selects next — the [cognitive poisoning via tool feedback](cognitive-poisoning-tool-feedback.md) failure mode. The action-selector pattern breaks this loop by architectural means, not by training or filtering.

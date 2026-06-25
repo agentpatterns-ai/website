@@ -18,6 +18,8 @@ maturity: emerging
 
 > Fork when the parent's mental model is an asset; start fresh when bias, trifecta exposure, or token budget makes inherited context a liability.
 
+**Learn it hands-on:** [Forked vs Fresh Subagents](https://learn.agentpatterns.ai/multi-agent/forked-vs-fresh/) — guided lesson with quizzes.
+
 A forked subagent inherits the parent's entire system prompt, tools, and message history; a fresh subagent starts with only the task brief the orchestrator constructs. Claude Code makes the choice explicit through `CLAUDE_CODE_FORK_SUBAGENT=1` and `/fork`, available since v2.1.117 ([Claude docs](https://code.claude.com/docs/en/sub-agents#fork-the-current-conversation)). The same axis exists implicitly in every harness that spawns child agents — and the choice is per-task, not global: one orchestrator can fork for one delegation and start fresh for the next.
 
 ## The Decision

@@ -10,7 +10,7 @@ aliases:
   - Providing Context to Agents
   - Context Priming
   - Breadcrumbs in Code
-last_reviewed: 2026-06-13
+last_reviewed: 2026-06-24
 maturity: established
 ---
 
@@ -88,6 +88,8 @@ Long-running agents maintain [progress files](../observability/trajectory-loggin
 | Progress files for multi-session work | Session corrections |
 
 Seed durable information; prompt session-specific intent. See [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) for the boundary.
+
+Some tools expose a deliberate interactive channel for injecting context mid-session. Claude Code's `!` shell escape runs a bash command inline; as of v2.1.186 its output is fed back to the model for a response by default, with a `respondToBashCommands: false` toggle to inject the output as context-only instead — a human-in-the-loop way to prime a session with live command output rather than codebase breadcrumbs ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 
 ## When This Backfires
 

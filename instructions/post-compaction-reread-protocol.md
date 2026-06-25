@@ -15,6 +15,8 @@ maturity: adopted
 
 > Compaction summarises conversation history but discards the soft operational knowledge agents accumulate by reading instruction files early in a session. A targeted re-read restores that knowledge.
 
+**Learn it hands-on:** [The Re-read Protocol](https://learn.agentpatterns.ai/prompt-engineering/the-reread-protocol/) — guided lesson with quizzes.
+
 ## Overview
 
 When Claude Code [compacts](../context-engineering/context-compression-strategies.md) a long session, it summarises older turns to free context space. The summary preserves task state — what was done, what remains — but paraphrases instruction file references, losing precision. The agent continues working with degraded rule fidelity rather than any visible error signal.

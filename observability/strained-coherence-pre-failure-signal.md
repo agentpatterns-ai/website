@@ -20,6 +20,8 @@ maturity: emerging
 
 > A trajectory judge flags spans where the agent acknowledges a conflict then acts against it — a late-stage triage signal, not an early-warning abort trigger.
 
+**Related lesson:** [Breaking the Loop](https://learn.agentpatterns.ai/observability/breaking-the-loop/) — this concept features in a hands-on lesson with quizzes.
+
 A coding agent's trajectory carries a structural failure signature: the agent quotes a fact that should change its next action, then issues the action the fact contradicts. The strained-coherence detector reads a full trajectory and flags those spans ([Pandya, Zhang, Lyu 2026, arxiv 2606.07889](https://arxiv.org/abs/2606.07889)). Flagged Terminal-bench-2 runs fail 94% vs. a 46% baseline — a 47-point gap at p=0.003 — but only when the agent verbalises and the judge is not the optimisation target.
 
 ## When This Applies

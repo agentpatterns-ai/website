@@ -19,6 +19,8 @@ maturity: adopted
 
 > Stored embeddings can be partially inverted to reconstruct source text — a vector index is a copy of the corpus, not metadata.
 
+**Related lesson:** [The Chunk That Wasn't Yours](https://learn.agentpatterns.ai/security/the-chunk-that-wasnt-yours/) — this concept features in a hands-on lesson with quizzes.
+
 Embedding inversion uses a learned decoder to map a stored vector back to its source text, reported at 92% exact recovery on 32-token inputs from `text-embedding-ada-002` ([Morris et al., EMNLP 2023](https://arxiv.org/abs/2310.06816)). It is the confidentiality slice of [OWASP LLM08:2025 Vector and Embedding Weaknesses](https://genai.owasp.org/llmrisk/llm082025-vector-and-embedding-weaknesses/) — distinct from the access slice (cross-tenant retrieval) and the integrity slice (knowledge-base poisoning).
 
 ## When the Threat Is Real

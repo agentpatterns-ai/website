@@ -17,6 +17,8 @@ maturity: emerging
 
 > `sbx` is a microVM-plus-proxy isolation harness, not a hardened container: four layers close most `docker run` leaks; the workspace mount and default wildcards stay yours.
 
+**Related lesson:** [Two Walls, Not One](https://learn.agentpatterns.ai/security/two-walls-not-one/) — this concept features in a hands-on lesson with quizzes.
+
 ## What `sbx` Actually Isolates
 
 Docker `sbx` (Early Access) does not run agents in containers. Each agent runs in a hypervisor-isolated microVM with its own kernel; all network traffic routes through a host-side proxy. The [Security model](https://docs.docker.com/ai/sandboxes/security/) documents four layers:

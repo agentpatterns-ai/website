@@ -19,6 +19,8 @@ maturity: emerging
 
 > Carry agent state across iterations through a state-read tool instead of replaying the full transcript each turn — converts O(n²) loop token cost to O(n).
 
+**Learn it hands-on:** [Remember, Don't Re-Read](https://learn.agentpatterns.ai/context-engineering/remember-dont-re-read/) — guided lesson with quizzes.
+
 ## When This Pattern Applies
 
 This refactor pays back only under specific conditions. Apply it when **all** of the following hold ([Jabbarvaziri, 2026](https://arxiv.org/abs/2606.14945)):
