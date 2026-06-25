@@ -84,6 +84,7 @@ Reviewing, versioning, and repairing instruction files over time so they remain 
 
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — Move critical behavioral rules out of prompts and into deterministic shell hooks that the model cannot override
 - [Rule Lifecycle Metadata for Prunable Instruction Surfaces](rule-lifecycle-metadata.md) — Tagging each rule with source, applies_to, and retire_when converts the rule-budget audit from a counting exercise into a pruning exercise so the instruction surface can actually shrink
+- [Agent Context File Evolution: Treating ACFs as Configuration Code](agent-context-file-evolution.md) — ACFs are actively-maintained artifacts that drift with code and grow monotonically; the maintenance discipline is two loops — add-on-drift and compact-on-add — that keep the file under the compliance ceiling
 - [Prompt Governance via PR](prompt-governance-via-pr.md) — Store agent instructions as plain markdown files in git and use pull requests to propose, review, and merge behaviour changes
 - [Post-Compaction Re-read Protocol](post-compaction-reread-protocol.md) — Restore behavioural contracts after context compaction by triggering a targeted re-read of CLAUDE.md or AGENTS.md
 - [Content Exclusion Gap in Agent Systems](content-exclusion-gap.md) — Security boundaries defined for one AI interaction mode may not apply across all modes; content exclusion rules for completions and chat can be silently ignored in agent mode

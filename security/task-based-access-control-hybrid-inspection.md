@@ -118,6 +118,7 @@ The deterministic axis stops the attack. The semantic axis makes it visible when
 ## Related
 
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md) — Five structural checks at the agent-tool boundary plus a semantic task-to-tool matcher; same two-axis decomposition framed around the interception layer.
+- [Intent-Governed Tool Authorization for AI Agents (IGAC)](intent-governed-tool-authorization.md) — Server-issued intent certificate narrows the static manifest per request; complements TBAC's signed-credential axis with a monotone-only manifest filter.
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md)
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](mcp-runtime-control-plane.md)

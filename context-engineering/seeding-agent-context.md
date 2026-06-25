@@ -182,3 +182,4 @@ An agent editing `ingest_raw.py` reads the package AGENTS.md, encounters the dec
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Prompt Layering](prompt-layering.md)
 - [Repository Map Pattern](repository-map-pattern.md)
+- [Grounding Agents in Code the Model Has Never Seen](grounding-zero-prior-code.md) — the subset of seeding where the model has no prior to fall back on, so breadcrumbs must include an explicit identity layer
