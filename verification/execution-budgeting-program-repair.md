@@ -1,0 +1,121 @@
+---
+title: "Execution Budgeting in Agentic Program Repair"
+term: "Execution Budgeting"
+description: "Treat test execution in agentic repair loops as a budgeted resource rather than a default reflex — under specific preconditions on model strength, codebase familiarity, and execution cost."
+tags:
+  - testing-verification
+  - cost-performance
+  - tool-agnostic
+aliases:
+  - "test-execution budget for repair agents"
+  - "execution-frequency cost trade-off"
+last_reviewed: 2026-06-26
+maturity: emerging
+---
+
+# Execution Budgeting in Agentic Program Repair
+
+> Cap how often a repair agent runs tests — frontier models converge with far fewer executions than they reflexively perform.
+
+Execution budgeting reframes the test run in a generate-run-revise loop as a resource the agent spends, not a reflex it fires. A two-stage study of 7,745 SWE-bench Verified agent traces and 3,000 controlled repair attempts across four execution paradigms finds that frontier commercial agents (Claude Code, Codex, OpenCode) execute tests an average of **8.8 times per task** with a range of 2–19, and that prohibiting execution entirely drops the resolve rate by only **~1.25 percentage points** — a statistically non-significant change against a substantial token and wall-clock saving ([Lin et al., 2026](https://arxiv.org/abs/2606.26978)).
+
+## When This Pattern Applies
+
+The headline result narrows hard. Lead with the preconditions; the savings evaporate when any one fails.
+
+1. **The agent is a frontier commercial model.** The 1.25-pp drop is measured on Claude Code, Codex, and OpenCode — agents backed by models that carry enough in-weight knowledge of common Python idioms and SWE-bench-representative bug patterns to converge on a fix without ground-truth feedback on every iteration ([Lin et al., 2026](https://arxiv.org/abs/2606.26978)). Smaller or open-weight models depend more heavily on execution feedback as a learning signal; RLEF demonstrates that a Llama-3.1-8B grounded in execution feedback outperforms GPT-4 in iterative mode on CodeContests ([Gehring et al., 2024](https://arxiv.org/abs/2410.02089)). Budgeting execution on a weaker agent regresses repair quality.
+2. **The codebase is in the model's training distribution.** SWE-bench draws from popular open-source Python projects the frontier models have seen during pre-training. On private monorepos, internal frameworks, or unfamiliar languages, the agent has no in-weight prior to substitute for runtime evidence. Lin et al. do not measure this case; do not extrapolate.
+3. **Each execution carries real cost.** The trade-off only matters when a test run costs API tokens, sandbox time, or container spin-up. When tests run locally in under a second with no metered cost, frequency-tuning is theatre — let the agent run tests freely.
+
+When all three hold, capping or strategically triggering execution recovers most of the cost while losing essentially none of the success rate. When any one fails, the simpler default (let the agent execute freely) is the right call.
+
+## The Mechanism
+
+Execution provides information; information has a cost; the question is the marginal value of the *next* execution given what the agent already knows from the diff. Lin et al. find that frontier agents iterate past the point of diminishing returns — re-running tests on variants whose outcomes the diff already implies. The empirical signature: execution's benefit is **concentrated, not uniform** — a small subset of instances accounts for most of the value, and current agents apply execution indiscriminately rather than where it pays off ([Lin et al., 2026](https://arxiv.org/abs/2606.26978)).
+
+Two mechanisms coexist. Execution feedback is causally load-bearing — RLEF's training-time grounding of code LLMs in real error messages shows an order-of-magnitude gain over blind sampling ([Gehring et al., 2024](https://arxiv.org/abs/2410.02089)). *And* frontier agents at inference time apply that signal past the point where the marginal run pays. The first mechanism justifies execution existing in the loop; the second justifies budgeting how often it fires.
+
+## How to Budget
+
+The paper compares four execution paradigms: **free** (the default — agent decides), **prohibited** (no execution allowed), **coarse-grained** (one execution per repair attempt), and **fine-grained** (selective execution based on repair stage) ([Lin et al., 2026](https://arxiv.org/abs/2606.26978)). The prohibition mode is the headline; coarse and fine-grained land between free and prohibited.
+
+Practical translations into a repair harness:
+
+- **Hard cap per task.** Set a maximum (3–5) test executions per repair attempt. Below the 8.8 average; above the floor where most agents converge on commercial models.
+- **Stage-gated execution.** Allow execution only after explicit checkpoints — initial reproduction, post-patch verification — not as a generic tool the agent invokes at will. This matches the fine-grained paradigm.
+- **Cost-aware tool description.** The MCP/tool description for the test runner reads "expensive; use sparingly; one run typically suffices per patch variant" rather than "runs the test suite." Models follow tool descriptions; the description is policy.
+- **No budget at all** on weak or out-of-distribution settings (see preconditions above).
+
+The exact cap is a tuning parameter, not a constant — Lin et al. did not publish a universal optimum. Calibrate on the actual repair workload before locking a number into harness code.
+
+## Why It Works
+
+The cost saving comes from skipping redundant confirmations; the success retention comes from the diff being informative enough to substitute. On SWE-bench-distribution bugs, a frontier model's first or second patch is already qualitatively close to the correct fix — subsequent runs largely confirm what the diff already implied. That is why prohibiting execution drops resolve rate by only ~1.25 pp on commercial models ([Lin et al., 2026](https://arxiv.org/abs/2606.26978)). The claim is narrow: execution remains causally load-bearing when models are trained to consume it well ([Gehring et al., 2024](https://arxiv.org/abs/2410.02089)); only the *frequency* at inference time has overshot the point of diminishing returns.
+
+## When This Backfires
+
+**The model is not a frontier commercial agent.** Smaller models, fine-tunes, or open-weight agents rely more on execution as a substitute for in-weight knowledge. The 1.25-pp number is not portable; on weaker setups, execution prohibition can collapse resolve rate ([Gehring et al., 2024](https://arxiv.org/abs/2410.02089)).
+
+**The codebase is unfamiliar to the model.** Lin et al. measured on SWE-bench Verified — popular Python OSS the frontier models have seen. On private monorepos, in-house DSLs, embedded firmware, or any setting where the model has no learned prior, execution is the agent's only correctness signal. Capping it blinds the loop.
+
+**The test suite is the only correctness oracle.** SWE-bench's developer tests are themselves an unreliable signal — 7.8% of test-passing patches fail the developer suite outright, and 29.6% diverge behaviourally from the ground-truth patch ([Aleithan et al., 2025](https://arxiv.org/abs/2503.15223)). When tests are the deployment gate and there is no human review or separate spec, fewer test runs means fewer chances to catch a near-miss. Pair execution budgeting with [baseline-aware test evaluation](baseline-aware-test-evaluation-issue-resolution.md) and [staged evidence gates](staged-evidence-gates-program-repair.md) rather than substituting it for them.
+
+**The test suite is flaky.** A single test run under-samples a stochastic outcome; the agent that runs more often gets a better posterior on whether a failure is real or noise. Capping execution under flakiness turns a recoverable signal into a hidden one. Stabilise the suite before budgeting how often it runs.
+
+**Execution is cheap.** Sub-second local pytest runs with no API cost invert the premise. The trade-off Lin et al. measured assumes each execution carries time and token cost large enough that 8.8 of them per task matter. Strip that cost away and budgeting is overhead.
+
+## Example
+
+A minimal budget in an MCP tool description:
+
+```yaml
+# Tool description the agent reads
+name: run_tests
+description: |
+  Run the project test suite against the current working tree.
+  EXPENSIVE: each run costs ~30s of sandbox time and ~5k tokens of output.
+  Budget: 3 invocations per repair attempt. After 3, the harness will refuse.
+  Use sparingly — usually one run after each patch variant is enough.
+inputs:
+  pattern: string  # optional pytest -k filter
+```
+
+And the harness enforcement:
+
+```python
+class BudgetedTestRunner:
+    MAX_RUNS_PER_ATTEMPT = 3
+
+    def __init__(self):
+        self.runs = 0
+
+    def run(self, pattern: str | None = None) -> dict:
+        if self.runs >= self.MAX_RUNS_PER_ATTEMPT:
+            return {
+                "error": "budget_exhausted",
+                "message": (
+                    f"{self.MAX_RUNS_PER_ATTEMPT} test runs already used. "
+                    "Submit your best patch — no further test feedback available."
+                ),
+            }
+        self.runs += 1
+        return _execute_pytest(pattern)
+```
+
+The shape is the load-bearing part — a hard cap with an explicit "submit your best patch" message when exhausted. The exact ceiling is a calibration knob, not a constant.
+
+## Key Takeaways
+
+- Test execution in a repair loop is a budgeted resource, not a default reflex — frontier agents reflexively over-execute past the point where each run produces new evidence ([Lin et al., 2026](https://arxiv.org/abs/2606.26978)).
+- Prohibiting execution drops resolve rate by only ~1.25 pp on commercial models against SWE-bench Verified — and that result narrows hard to frontier-model, in-distribution, expensive-execution settings.
+- Execution feedback is causally load-bearing during training and on weaker models — RLEF shows execution-grounded small models beat un-grounded large models ([Gehring et al., 2024](https://arxiv.org/abs/2410.02089)). Do not generalise budgeting to those settings.
+- Encode the budget in the tool description and in harness enforcement; both are policy. Cost-aware tool descriptions guide model behaviour, hard limits catch it when guidance fails.
+- Budget execution alongside, not instead of, other verification gates. The test signal itself is weak — about 20% of test-passing patches are semantically wrong on SWE-bench ([Aleithan et al., 2025](https://arxiv.org/abs/2503.15223)) — so fewer runs of a weak oracle is not a substitute for stronger gates.
+
+## Related
+
+- [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — staging orders *which* gates run; this page argues *how often* to run any of them.
+- [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md) — strengthens what one test run tells you, so the budget can stretch further.
+- [Cost-Aware Skill Rewriting](../instructions/cost-aware-skill-rewriting.md) — the broader practice of making cost explicit in instructions and tool descriptions agents read.
+- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md) — adjacent tool-level cost lever; reduces the cost per execution rather than the count of executions.
+- [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — why "execution prohibited" sounds dangerous but isn't on the measured slice — the slice itself is the load-bearing claim.
