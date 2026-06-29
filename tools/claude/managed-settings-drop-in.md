@@ -16,15 +16,15 @@ status: current
 
 > Deploy independent policy fragments per team using `managed-settings.d/`, eliminating merge conflicts and centralizing ownership without a single shared file.
 
-## The Problem It Solves
+## The problem it solves
 
-Enterprise Claude Code deployments typically start with a single `managed-settings.json` owned by one team. As more teams need to add policies — security, platform, product — the file becomes a shared resource with contention. Each change requires coordination, review, and deployment by whoever owns the file, creating a bottleneck.
+Enterprise Claude Code deployments typically start with a single `managed-settings.json` owned by one team. As more teams need to add policies — security, platform, product — the file becomes a shared resource with contention. Whoever owns the file must coordinate, review, and deploy each change, which creates a bottleneck.
 
 The `managed-settings.d/` drop-in directory follows the [systemd drop-in convention](https://manpages.ubuntu.com/manpages/bionic/man5/systemd.unit.5.html) — fragments in a `.d/` directory are [parsed alphabetically after the base file](https://code.claude.com/docs/en/settings#settings-files). Each team deploys its own fragment independently, and Claude Code composes them at runtime.
 
-## How Fragments Merge
+## How fragments merge
 
-Fragments in `managed-settings.d/` are [sorted alphabetically and merged on top](https://code.claude.com/docs/en/settings#settings-files) of the base `managed-settings.json`. Merge semantics differ by value type:
+Fragments in `managed-settings.d/` are [sorted alphabetically and merged on top](https://code.claude.com/docs/en/settings#settings-files) of the base `managed-settings.json`. Merge behavior differs by value type:
 
 | Value type | Merge behavior |
 |------------|---------------|
@@ -34,9 +34,9 @@ Fragments in `managed-settings.d/` are [sorted alphabetically and merged on top]
 
 `managed-settings.json` is always merged first as the base. All `*.json` files in `managed-settings.d/` are then applied in alphabetical order. Hidden files (starting with `.`) are ignored.
 
-**Ordering implication**: for scalar values, alphabetically later files win. A rule in `90-override.json` overwrites the same scalar from `10-base.json`. For arrays, both files contribute — order does not affect the final set, only de-duplication.
+Ordering matters for scalar values: an alphabetically later file wins. A rule in `90-override.json` overwrites the same scalar from `10-base.json`. For arrays, both files contribute — order does not affect the final set, only de-duplication.
 
-## Numeric Prefix Convention
+## Numeric prefix convention
 
 Use numeric prefixes to make merge order explicit:
 
@@ -47,9 +47,9 @@ managed-settings.d/
   80-product.json       # product team: tool-specific allow rules for known workflows
 ```
 
-Lower numbers run first. For scalar settings where the last writer wins, a lower-numbered fragment can be overridden by a higher-numbered one. Design fragments so teams own non-overlapping settings — this avoids silent overrides.
+Lower numbers run first. For scalar settings, the last writer wins, so a higher-numbered fragment overrides a lower-numbered one. Design fragments so teams own non-overlapping settings, which avoids silent overrides.
 
-## Interaction with the Primary File
+## Interaction with the primary file
 
 `managed-settings.json` is [merged first as the base](https://code.claude.com/docs/en/settings#settings-files), then all fragments in `managed-settings.d/` layer on top. Because later files win for scalar values, a fragment can override a scalar set in the primary file. Use the primary file for org-wide defaults, and design fragments to extend — not contradict — it.
 
@@ -61,7 +61,7 @@ Load order:
   managed-settings.d/80-product.json    ← merged last
 ```
 
-## System Directory Locations
+## System directory locations
 
 The `managed-settings.d/` directory sits alongside `managed-settings.json` in the [system directory](https://code.claude.com/docs/en/settings#settings-files) for each platform:
 
@@ -71,9 +71,9 @@ The `managed-settings.d/` directory sits alongside `managed-settings.json` in th
 | Linux / WSL | `/etc/claude-code/managed-settings.d/` |
 | Windows | `C:\Program Files\ClaudeCode\managed-settings.d\` |
 
-Each fragment is deployed independently — security CI can push `00-security.json` without touching the platform team's file.
+Each team deploys its fragment independently — security CI can push `00-security.json` without touching the platform team's file.
 
-## Trade-offs vs. Single-File Managed Settings
+## Trade-offs versus single-file managed settings
 
 | Factor | Single file | Drop-in directory |
 |--------|-------------|-------------------|
@@ -83,17 +83,17 @@ Each fragment is deployed independently — security CI can push `00-security.js
 | Conflict detection | Explicit (file diff) | Implicit (scalar silently overrides) |
 | Deployment complexity | One artifact | One artifact per team |
 
-The main risk with fragments is silent scalar conflicts: if two teams set the same scalar key, the alphabetically later file wins without warning. Keep teams to non-overlapping settings domains, or enforce this via policy review.
+The main risk with fragments is silent scalar conflicts: if two teams set the same scalar key, the alphabetically later file wins without warning. Keep teams to non-overlapping settings domains, or enforce this through policy review.
 
-## When Server-Managed Settings Apply Instead
+## When server-managed settings apply instead
 
-Claude Code 2.1.30+ (Enterprise) and 2.1.38+ (Teams) also support [server-managed settings](https://code.claude.com/docs/en/server-managed-settings) delivered from the Claude.ai admin console. Server-managed and endpoint-managed (file-based) settings occupy the same top tier of the [settings hierarchy](https://code.claude.com/docs/en/settings#settings-precedence) and [do not merge with each other](https://code.claude.com/docs/en/server-managed-settings) — if server-managed delivers any non-empty configuration, all endpoint-managed settings, including `managed-settings.d/` fragments, are ignored entirely. The drop-in directory pattern applies when your org deploys policy through MDM or managed files rather than through the admin console. Anthropic positions endpoint-managed as the stronger option on MDM-enrolled devices because the file can be OS-protected from user modification.
+Claude Code 2.1.30+ (Enterprise) and 2.1.38+ (Teams) also support [server-managed settings](https://code.claude.com/docs/en/server-managed-settings) delivered from the Claude.ai admin console. Server-managed and endpoint-managed (file-based) settings occupy the same top tier of the [settings hierarchy](https://code.claude.com/docs/en/settings#settings-precedence), and they [do not merge with each other](https://code.claude.com/docs/en/server-managed-settings). If server-managed delivers any non-empty configuration, Claude Code ignores all endpoint-managed settings, including `managed-settings.d/` fragments. The drop-in directory pattern applies when your org deploys policy through MDM or managed files rather than through the admin console. Anthropic positions endpoint-managed as the stronger option on MDM-enrolled devices because the OS can protect the file from user modification.
 
 ## Example
 
-Three teams each own a fragment deployed via their own CI pipeline.
+Three teams each own a fragment, deployed through their own CI pipeline.
 
-**`00-security.json`** — security team locks down permission rules and blocks bypass mode:
+`00-security.json` — the security team locks down permission rules and blocks bypass mode:
 
 ```json
 {
@@ -108,7 +108,7 @@ Three teams each own a fragment deployed via their own CI pipeline.
 }
 ```
 
-**`50-platform.json`** — platform team configures telemetry and MCP allowlist:
+`50-platform.json` — the platform team configures telemetry and the MCP allowlist:
 
 ```json
 {
@@ -124,7 +124,7 @@ Three teams each own a fragment deployed via their own CI pipeline.
 }
 ```
 
-**`80-product.json`** — product team adds allow rules for known safe workflows:
+`80-product.json` — the product team adds allow rules for known safe workflows:
 
 ```json
 {

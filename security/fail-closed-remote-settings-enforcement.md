@@ -18,15 +18,15 @@ maturity: adopted
 
 > Block agent startup until remote managed settings are freshly fetched; exit rather than run with stale or missing policy.
 
-## The Startup Gap
+## The startup gap
 
 Claude Code's managed settings system delivers organizational policy — permission deny lists, hook configurations, bypass-mode restrictions — from a central authority. By default, if the remote fetch fails at startup, the CLI continues with cached settings, or without any managed settings if no cache exists.
 
 This creates a brief unenforced window on first launch and a permanent gap whenever the policy store is unreachable: the agent starts, operates, and commits changes under policy that may be revoked, expired, or absent.
 
-The pattern is analogous to hard-fail certificate revocation in TLS. An OCSP responder that is unreachable fails closed in hard-fail mode — the handshake is rejected rather than proceeding without revocation data ([RFC 6960, §2.6](https://www.rfc-editor.org/rfc/rfc6960#section-2.6)). The cost (occasional connection failure) is lower than the risk (connecting to a server whose certificate has been revoked). The same logic applies here: an agent that cannot verify its current policy should not operate.
+The pattern works like hard-fail certificate revocation in TLS. When an OCSP responder is unreachable, hard-fail mode rejects the handshake rather than proceeding without revocation data ([RFC 6960, §2.6](https://www.rfc-editor.org/rfc/rfc6960#section-2.6)). The cost (an occasional connection failure) is lower than the risk (connecting to a server whose certificate has been revoked). The same logic applies here: an agent that cannot verify its current policy should not operate.
 
-## Enabling Fail-Closed Enforcement
+## Enabling fail-closed enforcement
 
 Set `forceRemoteSettingsRefresh: true` in your Claude Code managed settings configuration ([Claude Code settings docs](https://code.claude.com/docs/en/settings#available-settings)):
 
@@ -38,13 +38,13 @@ Set `forceRemoteSettingsRefresh: true` in your Claude Code managed settings conf
 
 When this setting is active ([Claude Code server-managed-settings docs](https://code.claude.com/docs/en/server-managed-settings#enforce-fail-closed-startup)):
 
-- The CLI blocks at startup until remote settings are freshly fetched from Anthropic's servers
+- The CLI blocks at startup until it freshly fetches remote settings from Anthropic's servers
 - If the fetch fails, the CLI exits — it does not fall back to cached or absent settings
-- The setting self-perpetuates: once delivered, it is cached locally so that subsequent startups enforce the same behavior even before the first successful fetch of a new session
+- The setting self-perpetuates: once delivered, the CLI caches it locally, so later startups enforce the same behavior even before the first successful fetch of a new session
 
-This is a managed-settings-only key. Placing it in user or project `settings.json` has no effect.
+This key works only in managed settings. Placing it in user or project `settings.json` has no effect.
 
-## Behavioral Comparison
+## Behavioral comparison
 
 ```mermaid
 graph TD
@@ -61,9 +61,9 @@ graph TD
     E --> K[Agent runs under current policy]
 ```
 
-## Failure Scenarios
+## Failure scenarios
 
-The Claude Code documentation provides a scenario table for this setting ([server-managed-settings docs](https://code.claude.com/docs/en/server-managed-settings#security-considerations)):
+The Claude Code documentation gives a scenario table for this setting ([server-managed-settings docs](https://code.claude.com/docs/en/server-managed-settings#security-considerations)):
 
 | Scenario | Without forceRemoteSettingsRefresh | With forceRemoteSettingsRefresh |
 |---|---|---|
@@ -71,7 +71,7 @@ The Claude Code documentation provides a scenario table for this setting ([serve
 | User deletes cached settings file | First-launch behavior: brief unenforced window | CLI exits until fetch succeeds |
 | User tampers with cached settings file | Tampered settings apply until next server fetch | CLI exits if fetch fails; fresh settings restore on success |
 
-## Operational Prerequisites
+## Operational prerequisites
 
 Before enabling this setting:
 
@@ -85,7 +85,7 @@ The availability trade-off is explicit: a `forceRemoteSettingsRefresh: true` dep
 
 Earlier Claude Code releases shipped a deadlock in which expired credentials plus `forceRemoteSettingsRefresh: true` blocked the `claude auth login`, `claude auth logout`, and `claude auth status` subcommands with no recovery path — users could not re-authenticate to fix the very failure that was blocking startup. Anthropic exempted the `claude auth` subcommands from the fail-closed check in [Claude Code v2.1.139](https://github.com/anthropics/claude-code/releases/tag/v2.1.139), and the [server-managed-settings docs](https://code.claude.com/docs/en/server-managed-settings#enforce-fail-closed-startup) now document this carve-out. Enforce a minimum CLI version of v2.1.139 (or later) before enabling the setting, or include "update Claude Code, then re-authenticate" in the break-glass procedure.
 
-## Layering with Endpoint-Managed Settings
+## Layering with endpoint-managed settings
 
 Server-managed settings are a client-side control. Users with admin or sudo access on unmanaged devices can modify the Claude Code binary or network configuration to circumvent them ([server-managed-settings docs](https://code.claude.com/docs/en/server-managed-settings#security-considerations)).
 

@@ -19,33 +19,33 @@ status: current
 
 Cursor 3.2 (April 24, 2026) added `/multitask` to the [Agents Window](agents-window.md). Instead of queueing prompts, `/multitask` spawns async subagents that run in parallel and can decompose a request into chunks "for a fleet of async subagents to tackle simultaneously" ([Cursor changelog](https://cursor.com/changelog)).
 
-## What /multitask Actually Does
+## What /multitask actually does
 
-Two behaviours, both routed through async subagents ([Cursor changelog](https://cursor.com/changelog)):
+`/multitask` has two behaviors, both routed through async subagents ([Cursor changelog](https://cursor.com/changelog)):
 
-1. **Queue parallelisation** — stacked prompts run concurrently as background subagents instead of sequentially.
-2. **Auto-decomposition** — a larger request is split into chunks, each dispatched to its own subagent.
+1. Queue parallelization — stacked prompts run concurrently as background subagents instead of sequentially.
+2. Auto-decomposition — Cursor splits a larger request into chunks and dispatches each to its own subagent.
 
-Each subagent runs in its own context window with no access to prior conversation history; the parent must pass required context in the dispatch prompt ([Cursor subagents docs](https://cursor.com/docs/subagents)).
+Each subagent runs in its own context window, with no access to prior conversation history. The parent must pass any required context in the dispatch prompt ([Cursor subagents docs](https://cursor.com/docs/subagents)).
 
-## Foreground vs Background — `/multitask` Uses Background
+## Foreground vs background — `/multitask` uses background
 
 Cursor subagents have two execution modes ([Cursor subagents docs](https://cursor.com/docs/subagents)):
 
-| Mode | Behaviour | When |
+| Mode | Behavior | When |
 |------|-----------|------|
 | Foreground | Blocks the parent until the subagent returns | Sequential tasks where the parent needs the output |
 | Background | Returns immediately; subagent runs independently | Long-running or parallel workstreams |
 
 `/multitask` is background dispatch — the parent stays interactive while subagents write state and can be resumed by agent ID.
 
-## How Results Surface
+## How results surface
 
 Each subagent returns "a final message with its results" to the parent ([Cursor subagents docs](https://cursor.com/docs/subagents)). In the Agents Window each surfaces as a separate entry to inspect, promote, or resume by agent ID.
 
 The parent's context window only receives the final summary — intermediate output (file searches, command logs, browser snapshots) stays inside the subagent. This is the same context-isolation mechanism the built-in `Explore`, `Bash`, and `Browser` subagents use ([Cursor subagents docs](https://cursor.com/docs/subagents)).
 
-## /multitask vs Adjacent Surfaces
+## /multitask vs adjacent surfaces
 
 Cursor 3.2 ships `/multitask` alongside improved worktrees and [multi-root workspaces](multi-root-workspaces.md) ([Cursor changelog](https://cursor.com/changelog)). The three surfaces solve different isolation problems:
 
@@ -55,9 +55,9 @@ Cursor 3.2 ships `/multitask` alongside improved worktrees and [multi-root works
 | `/worktree` | Filesystem (separate git checkout) | Subagents edit overlapping files or you need clean diffs per task |
 | Agents Window tabs | Visual / session | Driving multiple sessions manually rather than dispatching from one |
 
-`/multitask` and `/worktree` compose. For risky parallel edits, dispatch with `/multitask` against worktree-isolated subagents; for read-mostly fan-out, `/multitask` alone is enough.
+`/multitask` and `/worktree` compose. For risky parallel edits, dispatch `/multitask` against worktree-isolated subagents. For read-mostly fan-out, `/multitask` alone is enough.
 
-## Cross-Tool Comparison
+## Cross-tool comparison
 
 ```mermaid
 graph TD
@@ -81,29 +81,29 @@ graph TD
 | Auto-decomposition | Yes | No | No |
 | Result surfacing | Final messages plus resumable IDs | [Monitor streams events](../../multi-agent/async-non-blocking-subagent-dispatch.md) | Torn down per invocation |
 | Filesystem isolation | Compose with `/worktree` | `Worktree` tool separate | None built-in |
-| Recursion depth | N — nested since Cursor 2.5 ([docs](https://cursor.com/docs/subagents)) | 1 | 1 |
+| Recursion depth | N — nested since Cursor 2.5 ([Cursor subagents docs](https://cursor.com/docs/subagents)) | 1 | 1 |
 
 Sources: [Cursor subagents docs](https://cursor.com/docs/subagents), [Claude Code sub-agents](https://code.claude.com/docs/en/sub-agents), [Cross-tool subagent comparison](../../multi-agent/cross-tool-subagent-comparison.md).
 
-## When /multitask Backfires
+## When /multitask backfires
 
-`/multitask` specialises [async non-blocking subagent dispatch](../../multi-agent/async-non-blocking-subagent-dispatch.md) — those caveats apply, plus editor-specific failure modes.
+`/multitask` specializes [async non-blocking subagent dispatch](../../multi-agent/async-non-blocking-subagent-dispatch.md). Those caveats apply, plus editor-specific failure modes:
 
-- **No productive parent work during the wait** — Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) chose synchronous dispatch because "asynchronicity adds challenges in result coordination, state consistency, and error propagation across the subagents."
-- **Tightly-coupled refactor** — subagents lose shared context, produce inconsistent edits, and the user pays merge cost without parallelism gain.
-- **Sequential dependencies** — B must consume A's output; async degrades to effectively-synchronous with extra bookkeeping.
-- **Small task count (1–2 items)** — coordination overhead exceeds payoff.
-- **Overlapping file edits without `/worktree`** — multiple subagents writing the same file produce manual-merge work; Cursor 3.2 shipped improved worktrees alongside `/multitask` for this reason ([Cursor changelog](https://cursor.com/changelog)).
-- **Single-purpose, repeatable actions** — Cursor's docs recommend a Skill instead ([Cursor subagents docs](https://cursor.com/docs/subagents)).
-- **No cost ceiling on auto-decomposition** — practitioners report accidentally spawning dozens of subagents and burning through subscription quota; there is no in-IDE affordance to promote a background subagent to a full window for plan-mode follow-up, and subagent errors do not always bubble up ([Cursor Forum — Multi-task friction](https://forum.cursor.com/t/multi-task-friction-experience/160569), [Cursor Forum — Better subagent control](https://forum.cursor.com/t/better-subagent-control-in-the-cursor-ide/161413)). Cap fan-out manually.
+- No productive parent work during the wait — Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) chose synchronous dispatch because "asynchronicity adds challenges in result coordination, state consistency, and error propagation across the subagents."
+- Tightly-coupled refactor — subagents lose shared context, produce inconsistent edits, and you pay the merge cost without a parallelism gain.
+- Sequential dependencies — B must consume A's output, so async degrades to effectively synchronous with extra bookkeeping.
+- Small task count of one or two items — coordination overhead exceeds the payoff.
+- Overlapping file edits without `/worktree` — when several subagents write the same file you get manual-merge work. Cursor 3.2 shipped improved worktrees alongside `/multitask` for this reason ([Cursor changelog](https://cursor.com/changelog)).
+- Single-purpose, repeatable actions — Cursor's docs recommend a Skill instead ([Cursor subagents docs](https://cursor.com/docs/subagents)).
+- No cost ceiling on auto-decomposition — practitioners report accidentally spawning dozens of subagents and burning through subscription quota. There is no in-IDE way to promote a background subagent to a full window for plan-mode follow-up, and subagent errors do not always surface ([Cursor Forum — Multi-task friction](https://forum.cursor.com/t/multi-task-friction-experience/160569), [Cursor Forum — Better subagent control](https://forum.cursor.com/t/better-subagent-control-in-the-cursor-ide/161413)). Cap fan-out manually.
 
 ## Example
 
-A developer asks Cursor to update the docs site, run the linter, and regenerate the OpenAPI spec from one prompt:
+A developer asks Cursor to update the docs site, run the linter, and regenerate the OpenAPI spec from one prompt.
 
-**Without `/multitask`** — three queued prompts run sequentially. The developer waits for each before the next starts.
+Without `/multitask`, the three queued prompts run sequentially. The developer waits for each one before the next starts.
 
-**With `/multitask`**:
+With `/multitask`:
 
 ```
 /multitask Update the docs index, run the lint suite, and regenerate the OpenAPI spec from src/api

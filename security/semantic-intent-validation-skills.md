@@ -18,15 +18,15 @@ maturity: adopted
 
 > Semantic intent validation uses a separate model to check whether a skill's documented intent matches its observable behavior, catching payloads the agent synthesises at runtime.
 
-## The Gap Signature Scanning Cannot Close
+## The gap signature scanning cannot close
 
 Static analysis of skills detects 90.7% of adversarial samples using YARA-style patterns, AST dataflow, and credential regex ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081)). The remaining 2.5% evade both detection and model alignment because the attack is not a payload at all. Document-Driven Implicit Payload Execution (DDIPE) embeds malicious logic as code examples inside skill documentation. The example is syntactically benign and lexically innocent. The agent reproduces the pattern during normal task execution — in-context learning makes the documented example authoritative — and the payload assembles at runtime in the agent's generation.
 
-Signatures cannot match what is not in the file — this is the 2.5% residual that evades both static detection and model alignment. The malicious behavior exists only after the agent synthesises it. Closing this gap requires a check on intent, not syntax.
+Signatures cannot match what is not in the file — this is the 2.5% residual that evades both static detection and model alignment. The malicious behavior exists only after the agent synthesizes it. Closing this gap requires a check on intent, not syntax.
 
 [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) covers the threat model and registry-level controls (mirroring, hash pinning, blast-radius containment). What follows is the detection-paradigm shift itself.
 
-## What Intent Validation Actually Means
+## What intent validation actually means
 
 Three architectural primitives compose into an intent check:
 
@@ -42,15 +42,15 @@ graph TD
     F -->|Agree| G[Admit]
 ```
 
-1. **Intent extraction** — a separate model summarises what the skill claims to do from its description, examples, and configuration.
-2. **Behavioral inference** — a model traces what the code examples and tool invocations would actually accomplish if reproduced verbatim by an agent. AST dataflow surfaces the side effects; semantic analysis names the goal.
-3. **Divergence detection** — when the declared intent (`"summarise GitHub issues"`) does not match the inferred behavior (`reads ~/.aws/credentials, posts to webhook.site`), the skill fails.
+1. Intent extraction — a separate model summarizes what the skill claims to do from its description, examples, and configuration.
+2. Behavioral inference — a model traces what the code examples and tool invocations would actually accomplish if reproduced verbatim by an agent. AST dataflow surfaces the side effects; semantic analysis names the goal.
+3. Divergence detection — when the declared intent (`"summarise GitHub issues"`) does not match the inferred behavior (`reads ~/.aws/credentials, posts to webhook.site`), the skill fails.
 
 Multi-model consensus reduces adversarial bypass to 1.6% of payloads versus 11.6%–33.5% for single-model alignment alone ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081)). Two independently aligned models evaluating intent-vs-behavior is the runtime version of the same check.
 
 Production tooling that implements this composition: [Cisco AI Defense skill-scanner](https://github.com/cisco-ai-defense/skill-scanner) combines YARA signature engines, AST dataflow, LLM semantic analysis, and a meta-analyzer that filters false positives. The `--use-llm --enable-meta` flags activate the semantic layer; `--fail-on-severity high` gates CI.
 
-## When This Buys Real Risk Reduction
+## When this buys real risk reduction
 
 Intent validation is the correct response to a narrow class of attacks. It is not free.
 
@@ -97,7 +97,7 @@ jq -e '.verdict == "reject"' consensus.json \
   && { echo "BLOCK: second model rejected"; exit 1; }
 ```
 
-Stage 1 handles the bulk at low cost. Stage 2 is the intent check the static layer cannot do. Stage 3 is the cross-model consensus check that drives bypass to ~1.6% against the empirical attack set. Stage 3 is illustrative — implementations vary by how the second model is hosted; the load-bearing property is that the two models are independently aligned, not how they are wired.
+Stage 1 handles the bulk at low cost. Stage 2 is the intent check the static layer cannot do. Stage 3 is the cross-model consensus check that lowers bypass to ~1.6% against the empirical attack set. Stage 3 is illustrative — implementations vary by how the second model is hosted; the load-bearing property is that the two models are independently aligned, not how they are wired.
 
 ## Key Takeaways
 

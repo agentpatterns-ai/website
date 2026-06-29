@@ -17,7 +17,7 @@ maturity: established
 
 > AI adoption splits into power users, a chat-tool middle, and a refuser tail. The shape, not the headline number, drives where investment pays back.
 
-## The Pattern
+## The pattern
 
 Steve Yegge's April 2026 post described a Google contact's view as "20% agentic power users, 20% outright refusers, 60% still using Cursor or equivalent chat tool," and claimed "most of the industry has the same internal adoption curve" ([Simon Willison](https://simonwillison.net/2026/Apr/13/steve-yegge/)). Addy Osmani cited "over 40K SWEs use agentic coding weekly" at Google; Demis Hassabis called the post "pure clickbait" ([VentureBeat](https://venturebeat.com/orchestration/google-leaders-including-demis-hassabis-push-back-on-claim-of-uneven-ai-adoption-internally)).
 
@@ -35,15 +35,15 @@ graph LR
 
 The exact percentages are one practitioner's estimate; the segmentation pattern is corroborated by independent measurement.
 
-## What the Segmented Data Shows
+## What the segmented data shows
 
 Headline adoption hides the distribution. The Pragmatic Engineer 2026 survey (~3,000 respondents) reports 95% weekly AI use and 55% regular agent use — but only 15% run five or more tools, and 56% do 70%+ of work with AI against a long tail that does far less ([Pragmatic Engineer](https://newsletter.pragmaticengineer.com/p/ai-tooling-2026)).
 
-DORA 2025 finds 90% adoption with a median two hours/day, and inverts by seniority: juniors adopt fastest, Staff+ have the **lowest adoption rates** yet report the **largest time savings** (4.4 hours/week) ([DORA 2025](https://dora.dev/dora-report-2025/)). Segments reflect what each group extracts, not willingness.
+DORA 2025 finds 90% adoption with a median two hours/day, and inverts by seniority: juniors adopt fastest, Staff+ have the lowest adoption rates yet report the largest time savings (4.4 hours/week) ([DORA 2025](https://dora.dev/dora-report-2025/)). Segments reflect what each group extracts, not willingness.
 
 Rob Bowley's read of DX 2025 adds the plateau: "Time savings have plateaued around 4 hours even as adoption climbed from ~50% to 91%" ([Rob Bowley](https://blog.robbowley.net/2025/11/05/findings-from-dxs-2025-report-ai-wont-save-you-from-your-engineering-culture/)). Broad adoption has outrun capability gains — the shape a chat-tool middle produces.
 
-## The Mechanism: Capability Layering
+## The mechanism: capability layering
 
 Agentic workflows stack skills — prompt scaffolding, harness design, verification discipline, context engineering — and each layer filters the adopter pool. A 20% power-user ceiling coexists with 95% weekly usage because almost everyone clears the first gate (chat, autocomplete); far fewer reach multi-agent orchestration.
 
@@ -53,34 +53,34 @@ Osmani's "human 30%" supplies the floor: the tasks the 60% cannot delegate to ch
 
 The refuser segment is not one population. It mixes principled non-adopters, practitioners in domains with weak tool coverage, and engineers under data-egress restrictions.
 
-## Planning Implications
+## Planning implications
 
-### Enablement Returns Compound in the Middle
+### Enablement returns compound in the middle
 
-Moving a refuser to chat completion, or a chat user to harness design, unlocks new capability. Asking a refuser to design a harness skips a layer and usually fails. Enablement pays back highest in the 60% middle, where the next layer is in reach.
+Moving a refuser to chat completion, or a chat user to harness design, adds new capability. Asking a refuser to design a harness skips a layer and usually fails. Enablement pays back highest in the 60% middle, where the next layer is in reach.
 
 The refuser tail rarely converts under direct investment. Mandates produce surface compliance (license activation, weekly usage) without capability change — the plateau Bowley identifies.
 
-### Tooling Decisions Serve One Segment at a Time
+### Tooling decisions serve one segment at a time
 
 Optimizing a harness or CLI for the 20% power users often harms the 60% middle. Default-on agent modes and multi-agent primitives raise the learning curve for chat users; chat-first defaults make it harder for power users to operate at Level 5+.
 
 Platform teams should know which segment they serve. A tool that "serves everyone" usually serves the 60% and leaves the 20% on personal stacks.
 
-### Measurement Without Self-Reporting Bias
+### Measurement without self-reporting bias
 
 METR found a 39-point perception gap — developers estimated they were 20% faster while running 19% slower ([METR](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Adoption surveys inherit this. Observable proxies work better:
 
-- **Tool telemetry distribution**: per-engineer agent invocations or tokens consumed. A segmented org shows a heavy-tailed histogram, not a normal curve.
-- **Workflow depth signals**: project-level config files (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules`), custom skill or hook definitions — artifacts chat users do not produce.
-- **PR-level attribution**: fraction of PRs with agentic-authorship evidence (scaffolded commits, agent-generated test suites), by author.
+- Tool telemetry distribution: per-engineer agent invocations or tokens consumed. A segmented org shows a heavy-tailed histogram, not a normal curve.
+- Workflow depth signals: project-level config files (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules`), custom skill or hook definitions — artifacts chat users do not produce.
+- PR-level attribution: fraction of PRs with agentic-authorship evidence (scaffolded commits, agent-generated test suites), by author.
 
-## When the Pattern Does Not Apply
+## When the pattern does not apply
 
-- **Small teams (< 10 engineers)**: percentages have no statistical meaning; one person shifting segment swings the distribution 10–20%. The shape is a large-org planning input.
-- **Domain-specific teams**: ML, systems, and security teams often show higher refuser concentration driven by tool coverage gaps, not identity.
-- **Pre-agent-tooling orgs**: orgs without agentic CLIs or IDE agents deployed cannot produce a 20% power-user segment — the ceiling is tooling, not willingness.
-- **Heavy-regulation environments**: finance, healthcare, and defense orgs with data-egress restrictions collapse into two modes (air-gapped or unused), not a 20/60/20 curve.
+- Small teams (< 10 engineers): percentages have no statistical meaning; one person shifting segment swings the distribution 10–20%. The shape is a large-org planning input.
+- Domain-specific teams: ML, systems, and security teams often show higher refuser concentration driven by tool coverage gaps, not identity.
+- Pre-agent-tooling orgs: orgs without agentic CLIs or IDE agents deployed cannot produce a 20% power-user segment — the ceiling is tooling, not willingness.
+- Heavy-regulation environments: finance, healthcare, and defense orgs with data-egress restrictions collapse into two modes (air-gapped or unused), not a 20/60/20 curve.
 
 ## Key Takeaways
 

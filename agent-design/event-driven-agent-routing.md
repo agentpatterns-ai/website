@@ -19,15 +19,15 @@ maturity: adopted
 
 ## Overview
 
-In an [orchestrator-worker pipeline](../multi-agent/orchestrator-worker.md), a parent agent holds the full plan and dispatches each step explicitly. Event-driven routing inverts this: each step is a stateless handler triggered by a state transition. The handler fires, does its work, and emits the next state. No agent owns the full sequence.
+In an [orchestrator-worker pipeline](../multi-agent/orchestrator-worker.md), a parent agent holds the full plan and dispatches each step. Event-driven routing works the other way. Each step is a stateless handler that a state transition triggers. The handler fires, does its work, and emits the next state. No agent owns the full sequence.
 
-GitHub's accessibility feedback pipeline is a documented production deployment of this pattern: each stage in a multi-team pipeline (AI intake → human review → service team resolution) is a GitHub Actions workflow triggered by label additions and project board status changes — not by a central coordinator calling each step in turn. [Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/)
+GitHub's accessibility feedback pipeline runs this pattern in production. Each stage in a multi-team pipeline (AI intake, then human review, then service team resolution) is a GitHub Actions workflow. Label additions and project board status changes trigger each stage. No central coordinator calls each step in turn. [Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/)
 
-## How It Works
+## How it works
 
-GitHub Issues and Projects already provide the state machine primitives. Labels, project field values, and PR states are all observable events that Actions can subscribe to.
+GitHub Issues and Projects already provide the state machine primitives. Actions can subscribe to labels, project field values, and PR states as observable events.
 
-**Trigger events:**
+Trigger events:
 
 | Event | Activity types | Use for |
 |-------|---------------|---------|
@@ -37,9 +37,9 @@ GitHub Issues and Projects already provide the state machine primitives. Labels,
 
 [Source: GitHub Actions events docs](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#issues)
 
-**Handler design:** Each workflow is stateless — it reads current issue/PR state, applies its logic, and writes the next state. Because state is stored in GitHub, re-running a handler is safe: re-adding a label re-fires it from a clean starting point.
+Handler design: each workflow is stateless. It reads the current issue or PR state, applies its logic, and writes the next state. Because GitHub stores the state, re-running a handler is safe. Re-adding a label fires it again from a clean starting point.
 
-**Human-agent handoffs:** Humans and agents are interchangeable at each stage. A human reviewer marks an issue as `reviewed` by applying a label; an agent responds identically. Neither side needs to know what comes next — sequencing lives in the trigger configuration.
+Human-agent handoffs: humans and agents are interchangeable at each stage. A human reviewer marks an issue as `reviewed` by applying a label, and an agent responds the same way. Neither side needs to know what comes next. Sequencing lives in the trigger configuration.
 
 ## Diagram
 
@@ -54,7 +54,7 @@ graph LR
 
 Each node is a separate, stateless GitHub Actions workflow. No node knows about the others.
 
-## Versus Orchestrator-Worker
+## Versus orchestrator-worker
 
 | Dimension | Orchestrator-Worker | Event-Driven Routing |
 |-----------|--------------------|--------------------|
@@ -66,17 +66,17 @@ Each node is a separate, stateless GitHub Actions workflow. No node knows about 
 
 Google ADK and Anthropic's multi-agent research system use synchronous orchestrator-worker patterns. Anthropic notes that async event-driven execution would improve parallelism but "adds challenges in result coordination, state consistency, and error propagation." [Source](https://www.anthropic.com/engineering/multi-agent-research-system)
 
-## Failure Modes
+## Failure modes
 
-**Silent stall:** A state transition that fires no handler produces no error — the issue just stops advancing. Design for this explicitly:
+Silent stall: a state transition that fires no handler produces no error. The issue just stops advancing. Design for this case directly:
 
-- Every status must have a designated handler
-- Add a fallback handler for `issues.labeled` that posts a comment when an unrecognized label is applied
-- Include status timestamps so delayed advancement is detectable in reports
+- Give every status a designated handler
+- Add a fallback handler for `issues.labeled` that posts a comment when someone applies an unrecognized label
+- Include status timestamps so reports can surface delayed advancement
 
-**Ambiguous ownership:** If two teams both have handlers for the same label, both fire. Define exclusive ownership per label/status: each status has exactly one handler.
+Ambiguous ownership: if two teams both have handlers for the same label, both fire. Give each label or status exactly one handler so ownership stays exclusive.
 
-GitHub's implementation mitigates silent stalls with automated weekly reports and manual re-run capability — any Action can be re-triggered by re-applying the label. [Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/)
+GitHub's implementation softens silent stalls with automated weekly reports and a manual re-run. You re-trigger any Action by re-applying the label. [Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/)
 
 ## Example
 
@@ -96,7 +96,7 @@ jobs:
         # calls GitHub Models API, applies labels based on response
 ```
 
-Prompts live in [`.github/copilot-instructions.md`](../tools/copilot/copilot-instructions-md-convention.md) and are modified via pull requests — no ML expertise needed to update AI behavior. [Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/)
+Prompts live in [`.github/copilot-instructions.md`](../tools/copilot/copilot-instructions-md-convention.md), and you change them through pull requests. Updating the AI behavior needs no ML expertise. [Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/)
 
 ## Key Takeaways
 

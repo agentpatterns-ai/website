@@ -19,71 +19,71 @@ maturity: adopted
 
 > Feed each newly discovered prompt injection class straight from red teaming into adversarial fine-tuning, shipping a hardened agent checkpoint before the attack spreads.
 
-## Why Prompt Injection Resilience Degrades
+## Why prompt injection resilience degrades
 
-Prompt injection resilience is not a static property. As attackers or your own [automated red teamers](rl-automated-red-teamers.md) discover new attack strategies, defenses that were effective yesterday become obsolete. System-level mitigations (confirmation gates, narrow permissions, filtered inputs) address known attack patterns; they do not adapt as attack strategies evolve.
+Prompt injection resilience is not a fixed property. As attackers or your own [automated red teamers](rl-automated-red-teamers.md) find new attack strategies, defenses that worked yesterday stop working. System-level mitigations such as confirmation gates, narrow permissions, and filtered inputs cover known attack patterns. They do not adapt as attack strategies change.
 
-Model-level hardening — updating the agent's weights to resist novel attacks — provides resilience that adapts with the threat. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
+Model-level hardening updates the agent's weights to resist new attacks, so resilience adapts with the threat. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 
-## The Rapid Response Loop
+## The rapid response loop
 
-OpenAI's Atlas team implements a tight discovery-to-checkpoint cycle:
+OpenAI's Atlas team runs a tight discovery-to-checkpoint cycle:
 
-1. Automated red teamer discovers a new attack class
-2. Successful attack traces are immediately fed into adversarial fine-tuning of the defender model
-3. Training examples prioritize attacks the current checkpoint fails against — compute focuses on the frontier of the defense gap, not problems already solved
-4. A new hardened checkpoint is deployed before the novel attack class can be weaponized in the wild [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
+1. An automated red teamer finds a new attack class.
+2. The team feeds successful attack traces straight into adversarial fine-tuning of the defender model.
+3. Training examples prioritize attacks the current checkpoint fails against, so compute focuses on the defense gap rather than problems already solved.
+4. The team deploys a new hardened checkpoint before the new attack class spreads in the wild. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 
-## Prioritizing Training Examples
+## Prioritizing training examples
 
 Focus adversarial training on:
 
 - Attacks the agent checkpoint currently fails against
-- Novel attack classes discovered in the last training cycle
-- Long-horizon attacks (multi-step workflows, deferred actions) that require the most capability to execute
+- New attack classes found in the last training cycle
+- Long-horizon attacks such as multi-step workflows and deferred actions, which take the most capability to run
 
-Avoid spending compute on attacks the model already resists — the marginal return is low. Prioritize the current failure frontier. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
+Do not spend compute on attacks the model already resists, because the return is low. Prioritize the current failure frontier. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 
-## Beyond Model Weights: Full Stack Iteration
+## Beyond model weights: full-stack iteration
 
 Successful attack traces reveal weaknesses beyond the model:
 
-- **Monitoring blind spots**: attacks that succeeded undetected indicate gaps in observability
-- **Context instruction gaps**: attacks that exploited underspecified safety instructions indicate system prompt improvements
-- **Missing system-level safeguards**: attacks that wouldn't have succeeded if a confirmation gate existed
+- Monitoring blind spots: an attack that succeeded undetected points to gaps in observability
+- Context instruction gaps: an attack that exploited an underspecified safety instruction points to a system prompt to improve
+- Missing system-level safeguards: an attack that a confirmation gate would have stopped
 
-Iterate on the full defense stack, not just the model checkpoint. Adversarial training directly updates model behavior; it complements, rather than replaces, system-level mitigations. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
+Iterate on the full defense stack, not just the model checkpoint. Adversarial training updates model behavior directly. It complements system-level mitigations rather than replacing them. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 
-## The Compounding Defense
+## The compounding defense
 
-As base models improve, automated attackers grow more capable (see [RL-Trained Automated Red Teamers](rl-automated-red-teamers.md)). The same compounding applies to the defense: each hardened checkpoint becomes the baseline for the next red-teaming round, so each cycle must produce a model harder to attack than the last.
+As base models improve, automated attackers grow more capable (see [RL-Trained Automated Red Teamers](rl-automated-red-teamers.md)). The same compounding applies to the defense. Each hardened checkpoint becomes the baseline for the next red-teaming round, so each cycle must produce a model harder to attack than the last.
 
-## Why It Works
+## Why it works
 
-Preference optimization builds a dataset of prompt-injected inputs paired with a secure output (responds to the legitimate instruction) and an insecure output (responds to the injection), then trains the model to prefer the secure response. Because the gradient signal contrasts the two responses on the same injected context, the model learns to follow the trusted instruction even when an injected one arrives later in the data — without a separate inference-time filter. [Source: [SecAlign: Defending Against Prompt Injection with Preference Optimization (Chen et al., 2024)](https://arxiv.org/abs/2410.05451)]
+Preference optimization builds a dataset of prompt-injected inputs. Each input pairs a secure output that responds to the legitimate instruction with an insecure output that responds to the injection. It then trains the model to prefer the secure response. Because the gradient signal contrasts the two responses on the same injected context, the model learns to follow the trusted instruction even when an injected one arrives later in the data, with no separate inference-time filter. [Source: [SecAlign: Defending Against Prompt Injection with Preference Optimization (Chen et al., 2024)](https://arxiv.org/abs/2410.05451)]
 
-## When This Backfires
+## When this backfires
 
-- **No weight access**: API-only deployments cannot apply model-level hardening.
-- **Capability regression**: Fine-tuning on adversarial examples can degrade general task performance — a direct tension between robustness and utility.
-- **Limited generalization**: Architecture-aware adaptive attacks achieve 85–95% bypass rates against fine-tuning defenses on unseen prompts. [Source: [Pandya et al., 2025](https://arxiv.org/abs/2507.07417)]
-- **Operational overhead**: Requires fine-tuning infrastructure and a rapid deployment pipeline — investment that may not be justified for low-autonomy agents.
-- **Arms race ceiling**: Prompt injection "is unlikely to ever be fully solved" — the rapid cycle reduces risk materially but does not eliminate it; model-level hardening complements, not replaces, architectural controls. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
-- **Impossibility under contextual integrity**: A formal argument holds that any defender broad enough to block injected flows will also block genuinely legitimate flows, so training-based defenses — including the rapid attack-to-fix loop — address only "a shrinking fraction of future attack surfaces" and should be paired with contextual-integrity-aware alignment rather than treated as a terminal fix. [Source: [Abdelnabi et al., 2026 — AI Agents May Always Fall for Prompt Injections](https://arxiv.org/abs/2605.17634)]
+- No weight access: API-only deployments cannot apply model-level hardening.
+- Capability regression: fine-tuning on adversarial examples can degrade general task performance, a direct tension between robustness and utility.
+- Limited generalization: architecture-aware adaptive attacks reach 85 to 95% bypass rates against fine-tuning defenses on unseen prompts. [Source: [Pandya et al., 2025](https://arxiv.org/abs/2507.07417)]
+- Operational overhead: this needs fine-tuning infrastructure and a rapid deployment pipeline, an investment that low-autonomy agents may not justify.
+- Arms race ceiling: prompt injection "is unlikely to ever be fully solved". The rapid cycle reduces risk materially but does not remove it, so model-level hardening complements architectural controls rather than replacing them. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
+- Impossibility under contextual integrity: a formal argument holds that any defender broad enough to block injected flows will also block genuinely legitimate ones. So training-based defenses, including the rapid attack-to-fix loop, address only "a shrinking fraction of future attack surfaces" and should be paired with contextual-integrity-aware alignment rather than treated as a final fix. [Source: [Abdelnabi et al., 2026 — AI Agents May Always Fall for Prompt Injections](https://arxiv.org/abs/2605.17634)]
 
-## Scope and Prerequisites
+## Scope and prerequisites
 
 This approach requires:
 
-- An operational automated red teaming capability that generates attack traces
+- A working automated red teaming capability that generates attack traces
 - Infrastructure for model fine-tuning
-- A deployment pipeline that can ship hardened checkpoints rapidly
+- A deployment pipeline that can ship hardened checkpoints quickly
 
-This is an advanced technique for teams that have already deployed the system-level defenses (confirmation gates, least privilege permissions, narrow task instructions) and need to harden the underlying model against residual risks.
+This is an advanced technique. Use it once you have already deployed the system-level defenses (confirmation gates, least privilege permissions, narrow task instructions) and need to harden the underlying model against the risks that remain.
 
 ## Example
 
-The following shows how a team might operationalize the rapid attack-to-fix cycle. An automated red-teamer surfaces a new multi-step injection class; successful attack traces are immediately funnelled into fine-tuning, and a hardened checkpoint is shipped before the attack pattern reaches production.
+The following shows how a team might run the rapid attack-to-fix cycle. An automated red teamer surfaces a new multi-step injection class. The team feeds the successful attack traces straight into fine-tuning and ships a hardened checkpoint before the attack pattern reaches production.
 
 ```python
 # red_team_pipeline.py — discovery-to-training loop using the OpenAI fine-tuning API
@@ -129,7 +129,7 @@ def close_the_loop(target_model: str, probes: list[dict]) -> str:
     return job.fine_tuned_model  # hardened checkpoint ready for deployment
 ```
 
-Only the attack traces the current checkpoint *fails* are included in training — this focuses compute on the live defense frontier rather than re-training on already-solved problems. When `close_the_loop` returns, the new checkpoint is deployed and `collect_failing_traces` begins the next cycle using the hardened model as the target.
+Training includes only the attack traces the current checkpoint fails, which focuses compute on the live defense frontier rather than re-training on already-solved problems. When `close_the_loop` returns, the team deploys the new checkpoint, and `collect_failing_traces` starts the next cycle with the hardened model as the target.
 
 ## Key Takeaways
 

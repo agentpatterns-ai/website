@@ -18,33 +18,33 @@ maturity: emerging
 
 > A structured relay document that agents read at cycle start and write at cycle end, preserving decisions and forward momentum across multi-session autonomous loops.
 
-## The Problem
+## The problem
 
 Long-running autonomous loops — agents working over hours or days across repeated sessions — fail in three predictable ways when cross-session state is unstructured. [Anthropic's engineering team identified this directly](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents): "each new session begins with no memory of what came before," requiring explicit structured handoff artifacts so agents can "quickly understand the state of work when starting with a fresh context window."
 
-- **Drift**: Each restart discards prior decisions. The agent restarts without awareness of what was already resolved.
-- **Repetition**: Agents re-debate questions settled in earlier cycles, wasting tokens and compute on resolved trade-offs.
-- **Stalls**: Without a [convergence signal](convergence-detection.md), loops spin indefinitely without producing output.
+- Drift: each restart discards prior decisions. The agent starts again with no awareness of what was already resolved.
+- Repetition: agents re-debate questions settled in earlier cycles, wasting tokens and compute on resolved trade-offs.
+- Stalls: without a [convergence signal](../loop-engineering/convergence-detection.md), loops spin forever without producing output.
 
 A progress file records what happened. The relay addresses why it happened and what must happen next — a reasoning contract, not a log.
 
-## Relay Document Schema
+## Relay document schema
 
-The relay document is a single markdown file structured to drive the *next* cycle's reasoning, not to archive the current one. Every field serves a forward purpose:
+The relay document is a single markdown file structured to drive the next cycle's reasoning, not to archive the current one. Every field serves a forward purpose:
 
 | Field | Purpose |
 |---|---|
-| **Current Phase** | Progress checkpoint — where in the overall workflow |
-| **What We Did This Cycle** | Recent history — compact, not exhaustive |
-| **Key Decisions Made** | Institutional memory with rationale — prevents repetition |
-| **Active Projects** | In-flight work state — what is underway |
-| **Metrics** | Performance tracking — quantified progress signals |
-| **Next Action** | Single directive for the following cycle |
-| **Open Questions** | Forward pressure points — unresolved issues to carry forward |
+| Current Phase | Progress checkpoint — where in the overall workflow |
+| What We Did This Cycle | Recent history — compact, not exhaustive |
+| Key Decisions Made | Institutional memory with rationale — prevents repetition |
+| Active Projects | In-flight work state — what is underway |
+| Metrics | Performance tracking — quantified progress signals |
+| Next Action | Single directive for the following cycle |
+| Open Questions | Forward pressure points — unresolved issues to carry forward |
 
 Keep the relay under ~2,000 tokens to preserve context window space for agent reasoning. Archive older decisions to `memories/archive/` as the document grows. Commit the relay to Git after each cycle for audit trail and human inspection.
 
-## Atomic Write Protocol
+## Atomic write protocol
 
 Write the relay atomically to prevent partial-write corruption on crash or restart:
 
@@ -68,11 +68,11 @@ mv memories/.consensus.tmp memories/consensus.md
 
 Write to a temp file in the same directory, then rename. The rename is atomic on POSIX filesystems — the relay is either fully updated or unchanged, never in a partial state ([`rename(2)`](https://man7.org/linux/man-pages/man2/rename.2.html): "If newpath already exists, it will be atomically replaced").
 
-## Convergence Detection
+## Convergence detection
 
-Compare the **Next Action** field across consecutive cycles. If two cycles produce identical directives, the agent is stalling — it cannot make progress without intervention.
+Compare the Next Action field across consecutive cycles. If two cycles produce identical directives, the agent is stalling — it cannot make progress without intervention.
 
-When a stall is detected, inject a direction-change signal into the next cycle's prompt:
+When you detect a stall, inject a direction-change signal into the next cycle's prompt:
 
 ```bash
 prev_action=$(sed -n '/## Next Action/{n;p}' memories/prev_consensus.md)
@@ -85,7 +85,7 @@ fi
 
 The [nibzard/awesome-agentic-patterns catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/cross-cycle-consensus-relay.md) defines escalating convergence rules that complement stall detection: Cycle 1 brainstorms with ranked options, Cycle 2 selects a winner and validates via pre-mortem, Cycle 3 and beyond ship artifacts only — discussion is prohibited after the decision cycle.
 
-## Relay vs. Progress File
+## Relay versus progress file
 
 | Aspect | Relay Document | Progress File |
 |---|---|---|
@@ -100,9 +100,9 @@ The relay complements a [progress file](agent-harness.md) and [trajectory loggin
 
 ## Trade-offs
 
-**Advantages**: full context recovery after crashes; prevents drift through structured handoff; human-readable for inspection; Git-diffable for audit.
+Advantages: full context recovery after crashes; prevents drift through structured handoff; human-readable for inspection; Git-diffable for audit.
 
-**Limitations**: schema discipline must be consistent — degraded structure degrades reasoning; single-file relay becomes a bottleneck for loops running faster than once per minute; relay size grows and requires periodic archiving.
+Limitations: schema discipline must stay consistent — degraded structure degrades reasoning; a single-file relay becomes a bottleneck for loops running faster than once per minute; relay size grows and needs periodic archiving.
 
 ## Example
 
@@ -142,7 +142,7 @@ while [[ $CYCLE -lt $MAX_CYCLES ]]; do
 done
 ```
 
-The agent is responsible for writing the relay at cycle end using the temp-file-rename pattern. The runner is responsible for stall detection and injecting correction signals.
+The agent writes the relay at cycle end using the temp-file-rename pattern. The runner detects stalls and injects correction signals.
 
 ## Key Takeaways
 
@@ -156,9 +156,9 @@ The agent is responsible for writing the relay at cycle end using the temp-file-
 
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md) — the initializer/coding agent pattern that the relay extends with consensus structure
 - [Session Initialization Ritual](session-initialization-ritual.md) — startup sequence that reads the relay before acting
-- [The Ralph Wiggum Loop](ralph-wiggum-loop.md) — fresh-context iteration pattern that the relay enables across cycles
-- [Convergence Detection in Iterative Refinement](convergence-detection.md) — convergence signals for within-session refinement loops
+- [The Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md) — fresh-context iteration pattern that the relay enables across cycles
+- [Convergence Detection in Iterative Refinement](../loop-engineering/convergence-detection.md) — convergence signals for within-session refinement loops
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md) — progress file pattern that complements the relay
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md) — choosing between accumulated, compressed, and fresh context across loops
+- [Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md) — choosing between accumulated, compressed, and fresh context across loops
 - [Agent Memory Patterns](agent-memory-patterns.md) — scoped memory systems that persist knowledge across sessions and complement the relay
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — structured contracts for passing work between pipeline stages

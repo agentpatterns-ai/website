@@ -20,11 +20,11 @@ maturity: emerging
 
 > A reviewer agent inspects each provisional tool call before dispatch, gated by Helpfulness-Harmfulness metrics that quantify when feedback adds net value.
 
-## Where the Review Happens
+## Where the review happens
 
-Existing review stations sit elsewhere in the loop. The [critic agent](critic-agent-plan-review.md) reviews the *plan*; [evaluator-optimizer](evaluator-optimizer.md) reviews *output* in a refinement loop; [trajectory-aware audit](../verification/eval-blind-spots.md) reviews the *transcript* post-hoc.
+Existing review stations sit elsewhere in the loop. The [critic agent](critic-agent-plan-review.md) reviews the plan; [evaluator-optimizer](evaluator-optimizer.md) reviews output in a refinement loop; [trajectory-aware audit](../verification/eval-blind-spots.md) reviews the transcript after the fact.
 
-The inference-time tool-call reviewer occupies a different slot: between the base agent's decision to call a tool and the harness dispatching it. Each provisional call is intercepted, sent to a separate reviewer, and approved, rejected, or revised before it executes ([Ta et al., 2026](https://arxiv.org/abs/2604.27233)).
+The inference-time tool-call reviewer occupies a different slot: between the base agent's decision to call a tool and the harness dispatching it. The harness intercepts each provisional call, sends it to a separate reviewer, and approves, rejects, or revises it before it executes ([Ta et al., 2026](https://arxiv.org/abs/2604.27233)).
 
 ```mermaid
 graph TD
@@ -38,57 +38,57 @@ graph TD
 
 The contract is per-call. The reviewer sees the proposed tool, parameters, and surrounding context, then returns a verdict before any side effect occurs.
 
-## Helpfulness vs Harmfulness
+## Helpfulness vs harmfulness
 
 A reviewer that catches errors but also overrides correct calls is not free. [Ta et al. (2026)](https://arxiv.org/abs/2604.27233) introduce two metrics:
 
 | Metric | Definition |
 |--------|------------|
-| **Helpfulness** | Percentage of base-agent errors that reviewer feedback corrects |
-| **Harmfulness** | Percentage of correct base-agent responses that reviewer feedback degrades |
+| Helpfulness | Percentage of base-agent errors that reviewer feedback corrects |
+| Harmfulness | Percentage of correct base-agent responses that reviewer feedback degrades |
 
-The benefit-to-risk ratio (helpfulness:harmfulness) tells you whether a reviewer is net positive on a given task distribution. The paper reports **3:1 for o3-mini vs 2.1:1 for GPT-4o** — the reasoning-tier model caught more errors and introduced fewer false rejections.
+The benefit-to-risk ratio (helpfulness:harmfulness) tells you whether a reviewer is net positive on a given task distribution. The paper reports 3:1 for o3-mini against 2.1:1 for GPT-4o. The reasoning-tier model caught more errors and introduced fewer false rejections.
 
-The framing matters: the [self-critique paradox](https://snorkel.ai/blog/the-self-critique-paradox-why-ai-verification-fails-where-its-needed-most/) shows that on tasks where the base agent is near-ceiling, adding a critic dropped accuracy from ~98% to ~57% — the reviewer hallucinates flaws to justify its existence. Without measuring harmfulness, a reviewer can degrade the system while looking productive.
+The framing matters. The [self-critique paradox](https://snorkel.ai/blog/the-self-critique-paradox-why-ai-verification-fails-where-its-needed-most/) shows that on tasks where the base agent is near-ceiling, adding a critic dropped accuracy from about 98% to about 57% — the reviewer invents flaws to justify its existence. Without measuring harmfulness, a reviewer can degrade the system while looking productive.
 
-## What the Evidence Shows
+## What the evidence shows
 
 [Ta et al. (2026)](https://arxiv.org/abs/2604.27233) evaluate the pattern on two tool-calling benchmarks:
 
-- **[BFCL](https://arxiv.org/abs/2604.27233)** (single-turn): +5.5% on irrelevance detection — the reviewer is most useful for catching tool calls that should not have fired at all.
-- **[τ2-Bench](https://arxiv.org/abs/2506.07982)** (multi-turn, dual-control): +7.1% — the reviewer's value grows with turn count and state complexity.
+- [BFCL](https://arxiv.org/abs/2604.27233) (single-turn): +5.5% on irrelevance detection — the reviewer is most useful for catching tool calls that should not have fired at all.
+- [τ2-Bench](https://arxiv.org/abs/2506.07982) (multi-turn, dual-control): +7.1% — the reviewer's value grows with turn count and state complexity.
 
 Two findings constrain deployment:
 
-1. **Reviewer model choice dominates.** Swapping GPT-4o for o3-mini changed the benefit-to-risk ratio from 2.1:1 to 3:1 without touching the base agent ([Ta et al., 2026](https://arxiv.org/abs/2604.27233)). A reviewer sharing the base agent's training distribution inherits its blind spots — [blind-spot research](https://arxiv.org/abs/2507.02778) measured a 64.5% rate when models reviewed their own outputs.
-2. **Prompt optimisation compounds.** Applying [GEPA](gepa-reflective-prompt-evolution.md) to the reviewer prompt added **+1.5–2.8%** on top of the model swap ([Ta et al., 2026](https://arxiv.org/abs/2604.27233)). The reviewer is tunable independently of the base agent.
+1. Reviewer model choice dominates. Swapping GPT-4o for o3-mini changed the benefit-to-risk ratio from 2.1:1 to 3:1 without touching the base agent ([Ta et al., 2026](https://arxiv.org/abs/2604.27233)). A reviewer that shares the base agent's training distribution inherits its blind spots — [blind-spot research](https://arxiv.org/abs/2507.02778) measured a 64.5% rate when models reviewed their own outputs.
+2. Prompt optimization compounds. Applying [GEPA](gepa-reflective-prompt-evolution.md) to the reviewer prompt added +1.5–2.8% on top of the model swap ([Ta et al., 2026](https://arxiv.org/abs/2604.27233)). You can tune the reviewer independently of the base agent.
 
-## When to Apply
+## When to apply
 
 The pattern earns its place when:
 
-- **Tool calls have asymmetric blast radius** — destructive writes, external API calls, and stateful mutations expensive to roll back, beyond what [blast-radius containment](../security/blast-radius-containment.md) alone absorbs.
-- **The base agent has a documented tool-call failure mode** — irrelevance, parameter drift, or scope violations that show up empirically.
-- **A reasoning-tier or different-vendor reviewer is available** — same-base-model reviewers fail the blind-spot test.
-- **You can measure helpfulness and harmfulness** on a held-out trajectory set — without the metric, the reviewer is unfalsifiable.
+- Tool calls have asymmetric blast radius — destructive writes, external API calls, and stateful mutations expensive to roll back, beyond what [blast-radius containment](../security/blast-radius-containment.md) alone absorbs.
+- The base agent has a documented tool-call failure mode — irrelevance, parameter drift, or scope violations that show up empirically.
+- A reasoning-tier or different-vendor reviewer is available — same-base-model reviewers fail the blind-spot test.
+- You can measure helpfulness and harmfulness on a held-out trajectory set — without the metric, the reviewer is unfalsifiable.
 
-## When It Backfires
+## When it backfires
 
 Synchronous per-call review is not the right surface for every workflow:
 
-- **High base-agent accuracy.** Near-ceiling tasks invert the trade-off — the [self-critique paradox](https://snorkel.ai/blog/the-self-critique-paradox-why-ai-verification-fails-where-its-needed-most/) makes the reviewer a regression source.
-- **Read-only or sandboxed calls.** Allowlists and [blast-radius containment](../security/blast-radius-containment.md) absorb routine prompts more cheaply. Reserve the reviewer for the residual surface allowlists cannot encode.
-- **Latency-sensitive interactive flows.** Doubling round-trips per tool call breaks sub-second UI loops.
-- **Same-model reviewer.** Reviewing with the base model and a different prompt inherits its blind spots; harmfulness inflates.
+- High base-agent accuracy. Near-ceiling tasks invert the trade-off — the [self-critique paradox](https://snorkel.ai/blog/the-self-critique-paradox-why-ai-verification-fails-where-its-needed-most/) makes the reviewer a regression source.
+- Read-only or sandboxed calls. Allowlists and [blast-radius containment](../security/blast-radius-containment.md) absorb routine prompts more cheaply. Reserve the reviewer for the residual surface allowlists cannot encode.
+- Latency-sensitive interactive flows. Doubling round-trips per tool call breaks sub-second UI loops.
+- Same-model reviewer. Reviewing with the base model and a different prompt inherits its blind spots, so harmfulness inflates.
 
-## Reviewer Slot vs Other Stations
+## Reviewer slot vs other stations
 
 | Station | Reviews | Cost shape | Right for |
 |---------|---------|------------|-----------|
 | [Critic agent](critic-agent-plan-review.md) | The plan | One review per task | Multi-step plans with compounding errors |
-| **Inference-time tool-call reviewer** | Each provisional call | One review per tool call | Per-call risk and irrelevance detection |
+| Inference-time tool-call reviewer | Each provisional call | One review per tool call | Per-call risk and irrelevance detection |
 | [Evaluator-optimizer](evaluator-optimizer.md) | Output, in a loop | N rounds × 2 models | Iterative refinement against explicit criteria |
-| [Trajectory-opaque audit](../verification/eval-blind-spots.md) | Full transcript | Post-hoc, batched | Safety and compliance after the fact |
+| [Trajectory-opaque audit](../verification/eval-blind-spots.md) | Full transcript | After the fact, batched | Safety and compliance after the fact |
 
 These compose — a critic at plan time and a reviewer at call time inspect different error surfaces. They do not replace each other.
 
@@ -96,9 +96,9 @@ These compose — a critic at plan time and a reviewer at call time inspect diff
 
 A coding agent receives: "Drop the `users_legacy` table from staging."
 
-**Without the reviewer**, the agent emits `db.execute(sql="DROP TABLE users_legacy")` against the production cluster — the connection string in context still points at production from an earlier read.
+Without the reviewer, the agent emits `db.execute(sql="DROP TABLE users_legacy")` against the production cluster — the connection string in context still points at production from an earlier read.
 
-**With an inference-time reviewer**, the harness intercepts the call. The reviewer sees the SQL, the active connection string, and the task, and returns:
+With an inference-time reviewer, the harness intercepts the call. The reviewer sees the SQL, the active connection string, and the task, and returns:
 
 ```json
 {

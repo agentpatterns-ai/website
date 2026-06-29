@@ -18,17 +18,17 @@ maturity: emerging
 
 > Task-based access control authorizes each agent tool call against the current task, not a static OAuth scope: load-bearing deterministic axis, detective semantic axis.
 
-## The Gap OAuth Leaves Open
+## The gap OAuth leaves open
 
-OAuth 2.0 assumes a single principal with pre-defined scopes. Agentic AI breaks that: agents adapt capabilities at runtime, spawn sub-agents through multi-hop delegation, act for users and organizations at once, and run as ephemeral instances ([2505.19301](https://arxiv.org/abs/2505.19301)). A token granting `delete:repository` tells the server *what* the agent can do but not *which* task justifies the call.
+OAuth 2.0 assumes a single principal with pre-defined scopes. Agentic AI breaks that. Agents adapt capabilities at runtime, spawn sub-agents through multi-hop delegation, act for users and organizations at once, and run as ephemeral instances ([2505.19301](https://arxiv.org/abs/2505.19301)). A token granting `delete:repository` tells the server what the agent can do but not which task justifies the call.
 
 A compromised agent — or one redirected by [prompt injection](prompt-injection-threat-model.md) — can tamper with tool calls, falsify results, or escalate beyond intended task scope without the authorization server seeing anything wrong ([2509.13597](https://arxiv.org/abs/2509.13597)).
 
-Task-based access control (TBAC) closes the gap by binding each decision to the *current task*.
+Task-based access control (TBAC) closes the gap by binding each decision to the current task.
 
-## Two Independent Axes
+## Two independent axes
 
-Hybrid inspection decomposes the authorization decision along two axes that fail in different ways. An attacker has to defeat both.
+Hybrid inspection splits the authorization decision along two axes that fail in different ways. An attacker has to defeat both.
 
 ```mermaid
 graph TD
@@ -49,10 +49,10 @@ graph TD
 
 Every primitive on this axis is enforced outside the model:
 
-- **Just-in-time verifiable credentials**, signed and scoped to a specific task or job ID, with short windows referencing exact resource handles and operations ([2505.19301](https://arxiv.org/abs/2505.19301)).
-- **Allowlisted tool registry** — the agent's identity document declares which tools it may invoke; calls outside that set are refused at the policy decision point ([2505.19301](https://arxiv.org/abs/2505.19301)).
-- **Tool-call trajectory enforcement** — a [behavioural firewall](behavioral-firewall-tool-call-trajectories.md) compiled from verified-benign telemetry rejects sequences and parameter bounds outside the accepted shape, in O(1) at runtime ([2604.26274](https://arxiv.org/abs/2604.26274)).
-- **Intent-bound delegation tokens** — A-JWT binds each call to verifiable user intent and (optionally) a workflow step, with per-agent proof-of-possession keys blocking replay ([2509.13597](https://arxiv.org/abs/2509.13597)).
+- Just-in-time verifiable credentials, signed and scoped to a specific task or job ID, with short windows referencing exact resource handles and operations ([2505.19301](https://arxiv.org/abs/2505.19301)).
+- An allowlisted tool registry: the agent's identity document declares which tools it may invoke, and calls outside that set are refused at the policy decision point ([2505.19301](https://arxiv.org/abs/2505.19301)).
+- Tool-call trajectory enforcement: a [behavioral firewall](behavioral-firewall-tool-call-trajectories.md) compiled from verified-benign telemetry rejects sequences and parameter bounds outside the accepted shape, in O(1) at runtime ([2604.26274](https://arxiv.org/abs/2604.26274)).
+- Intent-bound delegation tokens: A-JWT binds each call to verifiable user intent and, optionally, a workflow step, with per-agent proof-of-possession keys blocking replay ([2509.13597](https://arxiv.org/abs/2509.13597)).
 
 Compromise on this axis requires breaking cryptography, the registry, or the PEP — not redirecting a model's natural-language interpretation.
 
@@ -62,17 +62,17 @@ The semantic axis runs alongside the deterministic checks at the same intercepti
 
 Its job is to flag scope creep the deterministic axis cannot see: a tool call that is allowlisted and within trajectory bounds but unrelated to the user's request. Without it, an attacker who stays inside the deterministic envelope is invisible.
 
-## Why The Asymmetry Matters
+## Why the asymmetry matters
 
 Treating the semantic axis as load-bearing inherits the LLM's failure modes:
 
-- **Cascading misclassification.** Wrong task extraction in multi-domain conversations propagates to every downstream check.
-- **Same input channel as the attack.** A prompt injection that rewrites the plan can also rewrite the "extracted task" the inspector reads. Semantic inspection over an attacker-controlled conversation is detective at best — the [lethal trifecta](lethal-trifecta-threat-model.md) is unaffected by another LLM evaluator on the same channel.
-- **False positives erode trust.** Legitimate but unusual workflows trigger alerts that get dismissed, causing fatigue on real attacks.
+- Cascading misclassification: wrong task extraction in multi-domain conversations propagates to every downstream check.
+- The same input channel as the attack: a prompt injection that rewrites the plan can also rewrite the "extracted task" the inspector reads. Semantic inspection over an attacker-controlled conversation is detective at best, and the [lethal trifecta](lethal-trifecta-threat-model.md) is unaffected by another LLM evaluator on the same channel.
+- False positives erode trust: legitimate but unusual workflows trigger alerts that get dismissed, causing fatigue on real attacks.
 
 Place the security guarantee on cryptography and registries. Use the semantic axis for audit and human review, not allow/deny in the hot path.
 
-## When To Add The Semantic Axis
+## When to add the semantic axis
 
 Add it when:
 
@@ -89,23 +89,23 @@ Skip it when:
 
 ## Example
 
-A coding agent gets OAuth access to a customer's GitHub. The user asks: "List the open issues in `acme/widget` and summarise them." An injected instruction in one issue body then tells the agent to push a commit to `main`.
+A coding agent gets OAuth access to a customer's GitHub. The user asks: "List the open issues in `acme/widget` and summarize them." An injected instruction in one issue body then tells the agent to push a commit to `main`.
 
-**OAuth-only:** the token covers `repo`. The push is allowed and logged as legitimate.
+OAuth-only: the token covers `repo`. The push is allowed and logged as legitimate.
 
-**TBAC with hybrid inspection:**
+TBAC with hybrid inspection:
 
-1. *Deterministic axis.* The agent holds a JIT credential scoped to `read:issues` on `acme/widget` for 15 minutes. The push call presents no credential authorising `write:contents`; the PEP refuses it before the call leaves the proxy ([2505.19301](https://arxiv.org/abs/2505.19301)).
-2. *Semantic axis.* Even with a broader session token, the extracted task — "list and summarise open issues" — does not cover `git push`. The check flags the call as out-of-task; with [confirmation gating](human-in-the-loop-confirmation-gates.md) the user sees the requested action and the conversation excerpt that justified it.
+1. Deterministic axis. The agent holds a JIT credential scoped to `read:issues` on `acme/widget` for 15 minutes. The push call presents no credential authorizing `write:contents`, so the PEP refuses it before the call leaves the proxy ([2505.19301](https://arxiv.org/abs/2505.19301)).
+2. Semantic axis. Even with a broader session token, the extracted task — "list and summarize open issues" — does not cover `git push`. The check flags the call as out-of-task. With [confirmation gating](human-in-the-loop-confirmation-gates.md) the user sees the requested action and the conversation excerpt that justified it.
 
 The deterministic axis stops the attack. The semantic axis makes it visible when the deterministic envelope was sized too generously.
 
 ## Trade-offs
 
-- **Implementation cost.** TBAC requires an authorization server that mints task-scoped credentials and a PEP between the agent and every tool — typically an [MCP runtime control plane](mcp-runtime-control-plane.md) plus a [scoped-credentials proxy](scoped-credentials-proxy.md).
-- **Token lifecycle.** JIT VCs need an authority that can mint on demand and revoke globally; lingering tokens defeat the model.
-- **Semantic-axis tuning.** Threshold drift produces alert fatigue or silent under-flagging. Treat the threshold as an evaluable artefact.
-- **Deterministic axis still needed.** A semantic inspector without the signed-credential and [trajectory-firewall](behavioral-firewall-tool-call-trajectories.md) layer is detection, not authorization. Build the deterministic side first.
+- Implementation cost: TBAC requires an authorization server that mints task-scoped credentials and a PEP between the agent and every tool — typically an [MCP runtime control plane](mcp-runtime-control-plane.md) plus a [scoped-credentials proxy](scoped-credentials-proxy.md).
+- Token lifecycle: JIT VCs need an authority that can mint on demand and revoke globally, because lingering tokens defeat the model.
+- Semantic-axis tuning: threshold drift produces alert fatigue or silent under-flagging. Treat the threshold as an evaluable artifact.
+- Deterministic axis still needed: a semantic inspector without the signed-credential and [trajectory-firewall](behavioral-firewall-tool-call-trajectories.md) layer is detection, not authorization. Build the deterministic side first.
 
 ## Key Takeaways
 

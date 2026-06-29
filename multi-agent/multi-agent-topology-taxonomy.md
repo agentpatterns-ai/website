@@ -16,46 +16,46 @@ maturity: established
 
 > Coordination topology choice is a primary source of multi-agent failures; centralised, decentralised, and hybrid each carry distinct failure modes.
 
-**Learn it hands-on:** [When Many Agents Beat One](https://learn.agentpatterns.ai/multi-agent/when-many-agents/) — guided lesson with quizzes.
+Learn it hands-on: [When Many Agents Beat One](https://learn.agentpatterns.ai/multi-agent/when-many-agents/) — guided lesson with quizzes.
 
 !!! info "Also known as"
     Multi-Agent SE Design Patterns, Multi-Agent Architecture Patterns
 
-## The Three Topologies
+## The three topologies
 
 Production multi-agent systems converge on three coordination topologies. The [arXiv:2602.10479 survey](https://arxiv.org/abs/2602.10479) covers related patterns — orchestrator-worker, router-solver, hierarchical, and swarm architectures — which map onto these categories.
 
-### Centralised Orchestration
+### Centralized orchestration
 
 One orchestrator LLM holds the task graph, delegates subtasks to workers, and aggregates results.
 
-**When to use**: Sequential dependencies, shared global state, or [result synthesis](orchestrator-worker.md) requiring awareness of all worker outputs.
+When to use: sequential dependencies, shared global state, or [result synthesis](orchestrator-worker.md) that needs awareness of all worker outputs.
 
-**Failure modes**:
+Failure modes:
 
-- **Orchestrator context saturation** — the coordinator accumulates worker results until it can no longer reason coherently about remaining subtasks
-- **Single point of failure** — orchestrator errors or stalls halt the entire pipeline
-- **Worker result flooding** — verbose worker results overwhelm the coordinator's context window
+- Orchestrator context saturation — the coordinator accumulates worker results until it can no longer reason coherently about the remaining subtasks
+- Single point of failure — an orchestrator error or stall halts the entire pipeline
+- Worker result flooding — verbose worker results overwhelm the coordinator's context window
 
-### Decentralised Peer-to-Peer
+### Decentralized peer-to-peer
 
 Agents coordinate via shared state or message passing. No central coordinator holds the task graph.
 
-**When to use**: Genuinely independent subtasks where global coherence is not required at runtime.
+When to use: genuinely independent subtasks where global coherence is not needed at runtime.
 
-**Failure modes**:
+Failure modes:
 
-- **Coordination storms** — agents send competing updates to shared state, producing thrash
-- **Conflicting edits** — agents modify the same artifact without awareness of each other's changes (resolved by [observation-driven coordination](crdt-observation-driven-coordination.md))
-- **Lack of global coherence** — agents make locally correct but globally inconsistent decisions
+- Coordination storms — agents send competing updates to shared state, producing thrash
+- Conflicting edits — agents change the same artifact without seeing each other's changes (resolved by [observation-driven coordination](crdt-observation-driven-coordination.md))
+- Lack of global coherence — agents make locally correct but globally inconsistent decisions
 
 ### Hybrid
 
 A coordinator manages clusters of peer agents. Each cluster handles a domain; the coordinator manages inter-cluster routing.
 
-**When to use**: Large pipelines with distinct phases where intra-phase parallelism is high but inter-phase dependencies exist.
+When to use: large pipelines with distinct phases, where intra-phase parallelism is high but inter-phase dependencies exist.
 
-**Failure modes**: Combines both centralised and decentralised failure modes. Requires explicit topology boundaries and typed [handoff contracts](agent-handoff-protocols.md) between clusters.
+Failure modes: combines both centralized and decentralized failure modes. It needs explicit topology boundaries and typed [handoff contracts](agent-handoff-protocols.md) between clusters.
 
 ```mermaid
 graph TD
@@ -74,23 +74,23 @@ graph TD
     end
 ```
 
-## Cross-Topology Failure Modes
+## Cross-topology failure modes
 
 Three failure modes appear across all topologies:
 
-**Self-verification bias** — an agent confirms its own output without independent checking. Mitigation: route outputs to an independent evaluator agent.
+Self-verification bias — an agent confirms its own output without independent checking. Mitigation: route outputs to an independent evaluator agent.
 
-**Doom loops** — an agent iterates 10+ times on the same broken approach. Mitigation: [loop detection](../observability/loop-detection.md) and budget warnings in the harness. [LangChain's harness engineering research](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) recommends [pre-completion checklists](../verification/pre-completion-checklists.md) as a structural counter.
+Doom loops — an agent iterates 10+ times on the same broken approach. Mitigation: [loop detection](../observability/loop-detection.md) and budget warnings in the harness. [LangChain's harness engineering research](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) recommends [pre-completion checklists](../verification/pre-completion-checklists.md) as a structural counter.
 
-**Context blindness** — agents act without orientation in unfamiliar environments, producing directory-unaware or toolchain-unaware errors. Mitigation: inject directory structure and tooling inventories at initialisation.
+Context blindness — agents act without orientation in unfamiliar environments, producing directory-unaware or toolchain-unaware errors. Mitigation: inject directory structure and tooling inventories at initialization.
 
-## Topology Constraints as Failure Prevention
+## Topology constraints as failure prevention
 
 [Claude Code's agent team architecture](https://code.claude.com/docs/en/agent-teams) enforces a topology constraint: sub-agents cannot spawn sub-agents, eliminating unbounded nesting by structural enforcement. The [sub-agents documentation](https://code.claude.com/docs/en/sub-agents) describes a single-coordinator model as the canonical Claude Code topology.
 
-[Anthropic's agent design patterns](https://www.anthropic.com/engineering/building-effective-agents) describe orchestrator-workers, parallelisation, and routing as general workflow patterns (alongside [prompt chaining](../context-engineering/prompt-chaining.md) and [evaluator-optimizer](../agent-design/evaluator-optimizer.md)). The guidance recommends starting with the simplest topology and adding complexity only when failure modes appear in production.
+[Anthropic's agent design patterns](https://www.anthropic.com/engineering/building-effective-agents) describe orchestrator-workers, parallelization, and routing as general workflow patterns (alongside [prompt chaining](../context-engineering/prompt-chaining.md) and [evaluator-optimizer](../agent-design/evaluator-optimizer.md)). The guidance recommends starting with the simplest topology and adding complexity only when failure modes appear in production.
 
-## Choosing a Topology
+## Choosing a topology
 
 | Task characteristic | Topology |
 |--------------------|----------|
@@ -99,15 +99,15 @@ Three failure modes appear across all topologies:
 | Mixed: phased with intra-phase parallelism | Hybrid |
 | Unknown — start here | Centralised |
 
-Centralised is the default because its failure modes are deterministic. Decentralised topologies require shared state primitives (file locks, [CRDTs](crdt-observation-driven-coordination.md)) that add implementation surface.
+Centralized is the default because its failure modes are deterministic. Decentralized topologies need shared-state primitives (file locks, [CRDTs](crdt-observation-driven-coordination.md)) that add implementation surface.
 
-## Choose a Coordination Pattern
+## Choose a coordination pattern
 
-Topology answers *where the task graph lives*; coordination pattern answers *how agents pass work*. Before reaching for any pattern, walk down the complexity ladder — only adopt the next level when the current one stops being reliable. Microsoft's [AI agent orchestration patterns](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns) page frames the same rule: "Use the lowest level of complexity that reliably meets your requirements."
+Topology answers where the task graph lives; the coordination pattern answers how agents pass work. Before reaching for any pattern, walk down the complexity ladder — adopt the next level only when the current one stops being reliable. Microsoft's [AI agent orchestration patterns](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns) page frames the same rule: "Use the lowest level of complexity that reliably meets your requirements."
 
-1. **Direct model call** — a single well-crafted prompt; no agent logic, no tool access. Solves classification, summarisation, single-step extraction.
-2. **Single agent with tools** — one agent that reasons and chooses from tools and knowledge sources, looping until done. The right default for most enterprise tasks; [delegation-decision](../agent-design/delegation-decision.md) covers when to stop here.
-3. **Multi-agent orchestration** — multiple specialised agents coordinated by an orchestrator or a peer protocol. Justified only when prompt complexity, tool overload, or security boundaries make a single agent unreliable. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) gives the same escalation: "add multi-step agentic systems only when simpler solutions fall short."
+1. Direct model call — a single well-crafted prompt, with no agent logic and no tool access. Solves classification, summarization, and single-step extraction.
+2. Single agent with tools — one agent that reasons and chooses from tools and knowledge sources, looping until done. The right default for most enterprise tasks; [delegation-decision](../agent-design/delegation-decision.md) covers when to stop here.
+3. Multi-agent orchestration — multiple specialized agents coordinated by an orchestrator or a peer protocol. Justified only when prompt complexity, tool overload, or security boundaries make a single agent unreliable. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) gives the same escalation: "add multi-step agentic systems only when simpler solutions fall short."
 
 Once multi-agent is justified, the coordination-pattern choice is a separate decision from topology. The table below maps the five patterns Microsoft documents to this site's canonical page for each — use the table as a router, then read the linked page for the trade-offs.
 
@@ -121,19 +121,19 @@ Once multi-agent is justified, the coordination-pattern choice is a separate dec
 
 Three constraints on reading this table:
 
-- **Don't pattern-shop.** Scanning the rows and assembling several at once produces the [cargo-cult agent setup](../anti-patterns/cargo-cult-agent-setup.md) failure mode. Pick the pattern your task structure actually demands; the [pattern selection map](../patterns/selection-map.md) compares this site's patterns on six orthogonal axes (token cost, latency, blast radius, frontier-model dependency, verification cost, task class) when the four columns above are not enough.
-- **Sequential / Concurrent / Handoff are framework-agnostic** — every multi-agent stack supports them as plain function calls. Group chat and Magentic typically require a framework primitive ([Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/workflows/orchestrations/), Semantic Kernel, LangChain, CrewAI); reach for them only when a built-in helper does the heavy lifting.
-- **Patterns compose with topologies, not replace them.** A Hybrid topology often runs Concurrent within a cluster and Sequential across clusters. The topology choice (above) is *where state lives*; the pattern choice (here) is *how state moves*.
+- Do not pattern-shop. Scanning the rows and assembling several at once produces the [cargo-cult agent setup](../anti-patterns/cargo-cult-agent-setup.md) failure mode. Pick the pattern your task structure actually demands; the [pattern selection map](../patterns/selection-map.md) compares this site's patterns on six orthogonal axes (token cost, latency, blast radius, frontier-model dependency, verification cost, task class) when the four columns above are not enough.
+- Sequential, Concurrent, and Handoff are framework-agnostic — every multi-agent stack supports them as plain function calls. Group chat and Magentic typically need a framework primitive ([Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/workflows/orchestrations/), Semantic Kernel, LangChain, CrewAI); reach for them only when a built-in helper does the work.
+- Patterns compose with topologies, they do not replace them. A Hybrid topology often runs Concurrent within a cluster and Sequential across clusters. The topology choice (above) is where state lives; the pattern choice (here) is how state moves.
 
 ## Example
 
 A document processing pipeline that ingests legal contracts, extracts clauses, classifies risks, and generates a summary report illustrates all three topologies.
 
-**Centralised** — an orchestrator agent receives each contract, delegates clause extraction to Worker A and risk classification to Worker B, and waits for both before synthesising the summary. The orchestrator accumulates worker results in its context; on large contracts (100+ pages) it hits context saturation before synthesis, requiring the harness to chunk worker outputs before returning them.
+Centralized — an orchestrator agent receives each contract, delegates clause extraction to Worker A and risk classification to Worker B, and waits for both before synthesizing the summary. The orchestrator accumulates worker results in its context; on large contracts (100+ pages) it hits context saturation before synthesis, so the harness must chunk worker outputs before returning them.
 
-**Decentralised** — extraction and classification agents pull contracts from a shared queue and write results to a shared JSON store. No orchestrator coordinates intra-batch work. Conflicting edits emerge when two agents process the same contract simultaneously; a file lock or CRDT on the shared store resolves this (see [CRDT-Based Parallel Agent Coordination](crdt-observation-driven-coordination.md)).
+Decentralized — extraction and classification agents pull contracts from a shared queue and write results to a shared JSON store. No orchestrator coordinates intra-batch work. Conflicting edits emerge when two agents process the same contract at the same time; a file lock or CRDT on the shared store resolves this (see [CRDT-Based Parallel Agent Coordination](crdt-observation-driven-coordination.md)).
 
-**Hybrid** — a coordinator routes contracts by type (NDA, MSA, SOW) to domain-specific clusters. Each cluster runs extraction and classification agents in parallel (decentralised intra-cluster). The coordinator handles inter-cluster routing and final report assembly. The topology boundary between coordinator and clusters must be [typed](typed-schemas-at-agent-boundaries.md): each cluster returns a structured report object, not raw text, to prevent coordinator context flooding.
+Hybrid — a coordinator routes contracts by type (NDA, MSA, SOW) to domain-specific clusters. Each cluster runs extraction and classification agents in parallel (decentralized within the cluster). The coordinator handles inter-cluster routing and final report assembly. The topology boundary between coordinator and clusters must be [typed](typed-schemas-at-agent-boundaries.md): each cluster returns a structured report object, not raw text, to prevent coordinator context flooding.
 
 ## Key Takeaways
 

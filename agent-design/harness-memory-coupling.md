@@ -17,13 +17,13 @@ maturity: established
 
 > Memory is a property of the harness, not a pluggable module. The seams where the two meet are the axis for choosing an agent system.
 
-## Memory Is Not a Plugin
+## Memory is not a plugin
 
-Agent memory is often discussed as a separate service bolted onto a harness. Harrison Chase (LangChain, April 2026) argues the opposite: "Managing context, and therefore memory, is a core capability and responsibility of the agent harness" ([LangChain](https://blog.langchain.com/your-harness-your-memory/)). Short-term memory (messages, tool results) is manipulated every turn; long-term memory (cross-session summaries, preferences, corrections) is written and read by the same loop. Both share one context window and one token budget. A memory system outside the harness re-implements turn-aware decisions the harness already makes.
+People often discuss agent memory as a separate service bolted onto a harness. Harrison Chase (LangChain, April 2026) argues the opposite: "Managing context, and therefore memory, is a core capability and responsibility of the agent harness" ([LangChain](https://blog.langchain.com/your-harness-your-memory/)). The harness manipulates short-term memory (messages, tool results) every turn. The same loop writes and reads long-term memory (cross-session summaries, preferences, corrections). Both share one context window and one token budget. A memory system outside the harness re-implements turn-aware decisions the harness already makes.
 
 Sarah Wooders (Letta): "Asking to plug memory into an agent harness is like asking to plug driving into a car" ([LangChain](https://blog.langchain.com/your-harness-your-memory/)).
 
-## The Load-Bearing Seams
+## The load-bearing seams
 
 Every harness answers a fixed set of questions where memory meets execution. Changing harnesses means changing the answers — which is why memory written under one is rarely portable to another ([LangChain](https://blog.langchain.com/your-harness-your-memory/)):
 
@@ -39,7 +39,7 @@ Every harness answers a fixed set of questions where memory meets execution. Cha
 
 None are memory-library decisions. They are harness decisions. A memory module that tries to own them reimplements scheduler and compaction logic in a second place.
 
-## Three Tiers of Coupling Risk
+## Three tiers of coupling risk
 
 Chase describes an escalating ladder of ownership loss when memory entangles with a provider-controlled harness ([LangChain](https://blog.langchain.com/your-harness-your-memory/)):
 
@@ -54,30 +54,30 @@ graph TD
     D -. "no ownership" .-> D
 ```
 
-**Stateful provider APIs** (OpenAI Responses API, Anthropic server-side compaction) hold conversation state on the provider; resuming a thread against a different model is blocked because memory is keyed to the provider's server.
+Stateful provider APIs (OpenAI Responses API, Anthropic server-side compaction) hold conversation state on the provider. You cannot resume a thread against a different model, because the memory is keyed to the provider's server.
 
-**Closed client harnesses** (Chase's example: Claude Agent SDK over closed-source Claude Code) write client-side memory artifacts in an unknown shape — the files sit on your disk but another harness cannot read them.
+Closed client harnesses (Chase's example: Claude Agent SDK over closed-source Claude Code) write client-side memory artifacts in an unknown shape. The files sit on your disk, but another harness cannot read them.
 
-**Fully managed harnesses with memory behind the API** are the highest-lock-in tier. [Anthropic's Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) is Chase's example: harness, session log, and long-term memory all behind one API, with no user-side inspection or migration path.
+Fully managed harnesses with memory behind the API are the highest-lock-in tier. [Anthropic's Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) is Chase's example: harness, session log, and long-term memory all behind one API, with no user-side inspection or migration path.
 
 Individual coupling points also leak lock-in. OpenAI's Codex is open source yet produces an encrypted compaction summary undecodable outside OpenAI ([LangChain](https://blog.langchain.com/your-harness-your-memory/)).
 
-## Why Coupling Matters Even When You Pick a Vendor
+## Why coupling matters even when you pick a vendor
 
 Stateless model APIs are nearly interchangeable: prompts differ, protocols are similar, migration is tractable. State changes that calculus. Memory accumulates a proprietary dataset of interactions and preferences that makes the agent more useful per user — and more expensive to replace ([LangChain](https://blog.langchain.com/your-harness-your-memory/)). The harness decides what enters that dataset and in what form, so owning the harness is how you own the memory.
 
 Industry architectures corroborate the coupling. Anthropic's Managed Agents and LangChain's Deep Agents Deploy both document the Session — the event log that is memory — as authoritative state owned and replayed by the harness loop ([Anthropic](https://www.anthropic.com/engineering/managed-agents)). See [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) for the three-primitive architecture.
 
-## When the Coupling Framing Does Not Apply
+## When the coupling framing does not apply
 
 The axis is useful when portability, continuity, or data ownership matter. Conditions that reduce its payoff:
 
-- **Factual memory with no session continuity** — a stateless lookup assistant pulling preferences from a database each turn does not need harness-owned memory.
-- **Throwaway prototypes** — investing in an open harness before the memory shape is known is premature.
-- **Governed enterprise deployments where single-vendor is a feature** — if compliance requires one boundary around the whole agent, the [managed-agents tier](managed-vs-self-hosted-harness.md) is the correct trade.
-- **Short-lived memory** — in-session working memory discarded between runs carries no long-term lock-in risk.
+- Factual memory with no session continuity — a stateless lookup assistant pulling preferences from a database each turn does not need harness-owned memory.
+- Throwaway prototypes — investing in an open harness before the memory shape is known is premature.
+- Governed enterprise deployments where single-vendor is a feature — if compliance requires one boundary around the whole agent, the [managed-agents tier](managed-vs-self-hosted-harness.md) is the correct trade.
+- Short-lived memory — in-session working memory discarded between runs carries no long-term lock-in risk.
 
-## Using the Axis
+## Using the axis
 
 For a new system, name each seam and decide who owns it before picking a harness. For an existing system, inventory the seams the current harness controls and ask which would have to be reimplemented to migrate. That list is the switching cost.
 
@@ -85,11 +85,11 @@ For a new system, name each seam and decide who owns it before picking a harness
 
 Two options for an internal research assistant:
 
-**Option A — managed-agents tier.** The provider handles harness, session storage, and long-term memory behind one API. Setup is one week. Memory operations — compaction, retrieval, AGENTS.md loading, skill placement — are opaque. A year in, the team wants a different model with better retrieval; the stored memory (months of user-specific corrections) has no documented export format. Migration requires rebuilding memory from scratch.
+Option A — managed-agents tier. The provider handles harness, session storage, and long-term memory behind one API. Setup is one week. Memory operations — compaction, retrieval, AGENTS.md loading, skill placement — are opaque. A year in, the team wants a different model with better retrieval. The stored memory (months of user-specific corrections) has no documented export format. Migration requires rebuilding memory from scratch.
 
-**Option B — open harness with owned storage.** The team runs an open-source harness (e.g. [Deep Agents](deep-agent-runtime.md)) with memory in their own Postgres. Setup is three weeks. Explicit decisions: AGENTS.md loaded at session start, skill metadata in system messages, compaction summary stored as plain JSON, interaction log queryable by user id. A year in, swapping the model only requires re-pointing the harness — memory is untouched.
+Option B — open harness with owned storage. The team runs an open-source harness (for example, [Deep Agents](deep-agent-runtime.md)) with memory in their own Postgres. Setup is three weeks. Explicit decisions: AGENTS.md loaded at session start, skill metadata in system messages, compaction summary stored as plain JSON, interaction log queryable by user id. A year in, swapping the model only requires re-pointing the harness — memory is untouched.
 
-The difference is not that Option A has bad memory. Every seam in the [managed Option A](managed-vs-self-hosted-harness.md) was decided by the provider and is not retrievable. In Option B the seams are the team's choices and the memory rides along when the rest of the stack changes.
+The difference is not that Option A has bad memory. The provider decided every seam in [managed Option A](managed-vs-self-hosted-harness.md), and none are retrievable. In Option B the seams are the team's choices, and the memory rides along when the rest of the stack changes.
 
 ## Key Takeaways
 

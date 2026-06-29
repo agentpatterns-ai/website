@@ -17,7 +17,7 @@ maturity: emerging
 
 > Independent specification layers — description, constraints, examples, format — absorb prompt noise that degrades code-generation correctness. Prose repetition of one layer does not.
 
-## What the Evidence Shows
+## What the evidence shows
 
 Akli et al. evaluated 10 LLMs on HumanEval and LiveCodeBench under three prompt-mutation classes — Under-Specification (US), Lexical Vagueness (LV), Syntax/Formatting (SF). Pass@1 dropped 11.8% on HumanEval under US, but only 0.9% on LiveCodeBench. LV and SF showed the same pattern: HumanEval is brittle, LiveCodeBench is near-flat ([Akli et al., 2026](https://arxiv.org/abs/2604.24712)).
 
@@ -25,7 +25,7 @@ The two benchmarks differ structurally. HumanEval relies on a single docstring. 
 
 Model scale does not rescue brittleness. API reasoning models (GPT-5-mini, Claude Sonnet 4) lose ~9.7% on US — comparable to the smallest open-source models tested ([Akli et al., 2026](https://arxiv.org/html/2604.24712)).
 
-## The Mechanism
+## The mechanism
 
 Independent specification layers encode overlapping information across surfaces the model attends to separately. When one surface is degraded — a missing constraint, a vague verb, a malformed example — the others still carry the signal. The model has fallback evidence ([Akli et al., 2026](https://arxiv.org/html/2604.24712)).
 
@@ -44,32 +44,32 @@ graph TD
     M --> O[Code]
 ```
 
-## When Redundancy Hurts
+## When redundancy hurts
 
-The same study identified 69 LiveCodeBench tasks where **removing** a constraint consistently improved Pass@1 across models. Three failure modes ([Akli et al., 2026](https://arxiv.org/html/2604.24712)):
+The same study identified 69 LiveCodeBench tasks where removing a constraint consistently improved Pass@1 across models. Three failure modes ([Akli et al., 2026](https://arxiv.org/html/2604.24712)):
 
 | Mechanism | What happens |
 |-----------|--------------|
 | Constraint-triggered wrong parsing | A specific constraint line primes the model toward incompatible I/O handling |
-| Constraint-anchored incorrect algorithm | A numeric bound activates a memorized shortcut (e.g., star-graph formula) misapplied to the actual problem |
+| Constraint-anchored incorrect algorithm | A numeric bound activates a memorized shortcut (for example, a star-graph formula) misapplied to the actual problem |
 | Retrieval-cue overfitting | Domain vocabulary ("currency exchange") anchors the model to a memorized but wrong template |
 
 Specification richness is a budget, not a monotone good. Audit terminology and constraints for retrieval-cue traps — words that name a known problem family the actual task does not belong to.
 
-## Applying the Pattern
+## Applying the pattern
 
 Stack independent layers, not redundant prose:
 
-1. **Description** — what the function does in plain language.
-2. **Constraints** — explicit list of preconditions, bounds, ordering rules. Audit for vocabulary that could prime a wrong template — the [task-framing effect](../fallacies/task-framing-irrelevance-fallacy.md) the model does not filter out.
-3. **I/O examples** — at least one input/output pair with a one-line explanation. The explanation is its own surface.
-4. **Format spec** — input parsing rules and output shape, separate from the description, the same role types and schemas play in [specification as prompt](specification-as-prompt.md).
+1. Description — what the function does in plain language.
+2. Constraints — explicit list of preconditions, bounds, ordering rules. Audit for vocabulary that could prime a wrong template — the [task-framing effect](../fallacies/task-framing-irrelevance-fallacy.md) the model does not filter out.
+3. I/O examples — at least one input/output pair with a one-line explanation. The explanation is its own surface.
+4. Format spec — input parsing rules and output shape, separate from the description. Types and schemas play the same role in [specification as prompt](specification-as-prompt.md).
 
 Each layer must be derivable independently. If two layers paraphrase the same sentence, they collapse into one and the budget shrinks.
 
 This pattern composes with [Specification as Prompt](specification-as-prompt.md) — types, OpenAPI schemas, and test files act as additional independent layers when they exist. It also composes with [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — examples and rules are independent surfaces for the same reason.
 
-## Limits and Caveats
+## Limits and caveats
 
 - HumanEval has documented training-data contamination (8–18% overlap acknowledged in the paper). Treat absolute deltas as direction-of-effect evidence, not point estimates ([Akli et al., 2026](https://arxiv.org/html/2604.24712)).
 - The study is exploratory and Python-only with Pass@1 greedy decoding; sampling variance is masked.
@@ -81,14 +81,14 @@ This pattern composes with [Specification as Prompt](specification-as-prompt.md)
 
 A prompt with one layer (description only) is fragile under specification noise. The same prompt with four independent layers absorbs it.
 
-**Single-layer (HumanEval-style):**
+Single-layer (HumanEval-style):
 
 ```
 Implement a function that returns the median of a list of integers.
 For even-length lists, return the average of the two middle values.
 ```
 
-**Multi-layer (LiveCodeBench-style):**
+Multi-layer (LiveCodeBench-style):
 
 ```
 Description:

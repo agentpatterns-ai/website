@@ -14,13 +14,13 @@ maturity: adopted
 
 > MCP sampling lets a server request the host's LLM mid-execution, turning a deterministic tool into a hybrid that embeds AI reasoning inline.
 
-## Inverted Request Direction
+## Inverted request direction
 
 Standard MCP flows in one direction: the client calls a tool on the server. Sampling inverts this. The server sends a `sampling/createMessage` request to the client, the client runs inference against its hosted model, and the result flows back to the server — all within a single tool execution.
 
 GitHub [Copilot CLI](../tools/copilot/copilot-cli-agentic-workflows.md) v1.0.13 (March 30, 2026) introduced this capability: [MCP servers can request LLM inference (sampling) with user approval via a new review prompt](https://github.com/github/copilot-cli/releases/tag/v1.0.13).
 
-## The sampling/createMessage Request
+## The sampling/createMessage request
 
 The server sends a `sampling/createMessage` request with the fields defined in the [MCP sampling specification](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-03-26/client/sampling.mdx):
 
@@ -38,29 +38,29 @@ The response (`CreateMessageResult`) returns the generated content, the name of 
 
 Two constraints apply regardless of server preferences:
 
-1. **Model selection is the client's decision.** `modelPreferences` expresses hints — `intelligencePriority`, `speedPriority`, `costPriority`, and ordered model name hints — but the client retains full discretion. A server cannot force a specific model: [hints are advisory, and clients make the final model selection](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-03-26/client/sampling.mdx).
-2. **The user approves each sampling request.** The host presents a review prompt before inference runs; users can allow or deny. This is a [spec-level SHOULD](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-03-26/client/sampling.mdx) requiring a human in the loop with the ability to deny sampling requests, not an implementation detail.
+1. The client decides which model runs. `modelPreferences` expresses hints — `intelligencePriority`, `speedPriority`, `costPriority`, and ordered model name hints — but the client keeps full discretion. A server cannot force a specific model: [hints are advisory, and clients make the final model selection](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-03-26/client/sampling.mdx).
+2. The user approves each sampling request. The host shows a review prompt before inference runs, and you can allow or deny it. This is a [spec-level SHOULD](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-03-26/client/sampling.mdx) that requires a human in the loop who can deny sampling requests, not an implementation detail.
 
-## When to Use Sampling
+## When to use sampling
 
 Sampling is appropriate when a tool encounters output that requires reasoning to interpret or act on:
 
-- **Unstructured output interpretation** — a fetch tool retrieves a web page; sampling classifies its content before deciding what to return
-- **Decision points in multi-step execution** — a build tool reads compiler errors; sampling determines which are actionable and summarizes them
-- **Summary generation** — a research tool collects raw results; sampling produces a structured synthesis before returning to the agent
-- **Conditional branching** — a monitoring tool reads log output; sampling decides which alert category applies
+- Unstructured output interpretation — a fetch tool retrieves a web page, and sampling classifies its content before deciding what to return
+- Decision points in multi-step execution — a build tool reads compiler errors, and sampling decides which are actionable and summarizes them
+- Summary generation — a research tool collects raw results, and sampling produces a structured synthesis before returning to the agent
+- Conditional branching — a monitoring tool reads log output, and sampling decides which alert category applies
 
-The key distinction from plain tool logic: these decisions benefit from language model reasoning rather than rules-based code. Sampling routes that reasoning through the host model rather than requiring the server to embed its own LLM client.
+The difference from plain tool logic is this: these decisions benefit from language model reasoning rather than rules-based code. Sampling routes that reasoning through the host model, so the server does not need to embed its own LLM client.
 
 ## Trade-offs
 
-**Coupling.** The server's behavior depends on the host model's capability and behavior. The same tool may produce different results against different models. `CreateMessageResult` returns the actual model name so servers can detect this — but cannot compensate for it at the protocol level.
+Coupling. The server's behavior depends on the host model's capability and behavior. The same tool may produce different results against different models. `CreateMessageResult` returns the actual model name so servers can detect this, but they cannot compensate for it at the protocol level.
 
-**Latency.** Each `sampling/createMessage` call adds at least one inference round-trip within the tool call. Tools that sample repeatedly compound this. Design sampling calls to batch what they need in a single request.
+Latency. Each `sampling/createMessage` call adds at least one inference round-trip within the tool call. Tools that sample repeatedly compound this. Design sampling calls to batch what they need in a single request.
 
-**Trust boundary.** The user-approval gate is the primary defense against a malicious or compromised server using sampling to exfiltrate context or manipulate the host model. Do not deploy MCP servers with sampling capability from untrusted sources without reviewing what they send in `messages` and `systemPrompt`.
+Trust boundary. The user-approval gate is the main defense against a malicious or compromised server that uses sampling to exfiltrate context or manipulate the host model. Do not deploy MCP servers with sampling capability from untrusted sources without reviewing what they send in `messages` and `systemPrompt`.
 
-**Contrast with elicitation.** MCP elicitation requests structured input from the user mid-task. Sampling requests inference from the model. Both interrupt deterministic tool execution, but for different inputs: human judgment vs. AI reasoning. A tool can use both in sequence — [elicit](mcp-elicitation.md) a decision from the user, then sample to process the result.
+Contrast with elicitation. MCP elicitation requests structured input from the user mid-task. Sampling requests inference from the model. Both interrupt deterministic tool execution, but for different inputs: human judgment for one, AI reasoning for the other. A tool can use both in sequence — [elicit](mcp-elicitation.md) a decision from the user, then sample to process the result.
 
 ## Example
 

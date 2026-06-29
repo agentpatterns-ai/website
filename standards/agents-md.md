@@ -16,15 +16,15 @@ maturity: established
 
 > AGENTS.md is an open standard for a project-level instruction file that gives AI coding agents the context they need to work effectively in a codebase.
 
-## What AGENTS.md Is
+## What AGENTS.md is
 
-[AGENTS.md](https://agents.md) is a markdown file placed at the root of a repository that provides project-specific guidance to AI coding agents. It functions as a README for agents: explaining the project, its conventions, its constraints, and how to navigate the codebase.
+[AGENTS.md](https://agents.md) is a markdown file at the root of a repository that gives AI coding agents project-specific guidance. It works as a README for agents: it explains the project, its conventions, its constraints, and how to navigate the codebase.
 
 Unlike a human README — which explains what software does to someone considering using it — AGENTS.md explains how the project works to someone about to modify it. The audience is an agent beginning a task, not a developer evaluating whether to adopt a tool.
 
-## The Discovery Convention
+## The discovery convention
 
-The convention is simple: any AI coding tool that supports AGENTS.md looks for the file at the repository root. When found, the file is loaded into the agent's context at session start. This gives the agent project context before it sees the task.
+The convention is simple: any AI coding tool that supports AGENTS.md looks for the file at the repository root. The tool then loads the file into the agent's context at session start. The agent has project context before it sees the task.
 
 Tools that implement this convention — or their own equivalent:
 
@@ -34,29 +34,29 @@ Tools that implement this convention — or their own equivalent:
 | Claude Code | `CLAUDE.md` ([docs](https://code.claude.com/docs/en/memory)) |
 | GitHub Copilot | `.github/copilot-instructions.md` ([docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)) |
 
-The AGENTS.md standard aims to provide a single, tool-agnostic location rather than requiring per-tool files. See [Project Instruction File Ecosystem](../instructions/instruction-file-ecosystem.md) for how these files relate.
+The AGENTS.md standard provides a single, tool-agnostic location rather than requiring per-tool files. See [how project instruction files relate](../instructions/instruction-file-ecosystem.md) for the full picture.
 
-## What to Put in AGENTS.md
+## What to put in AGENTS.md
 
-AGENTS.md is project orientation, not project documentation. It answers the questions an agent needs answered before starting any task:
+AGENTS.md is project orientation, not project documentation. It answers the questions an agent needs answered before it starts any task.
 
-**Include:**
+Include:
 
-- What this project is (2–3 sentences)
+- What this project is (2 to 3 sentences)
 - Where to find conventions, architecture docs, and workflow guides
 - Non-obvious constraints: "use bun, not npm", "tests run with `bun test`"
-- First steps: what to read before modifying a given area
+- First steps: what to read before you modify a given area
 
-**Exclude:**
+Exclude:
 
 - The conventions themselves (link to where they live)
 - Architecture documentation (link to it)
 - Workflow step-by-step instructions (link to them)
 - Anything task-specific
 
-The [AGENTS.md as Table of Contents](../instructions/agents-md-as-table-of-contents.md) pattern goes further: AGENTS.md should be ~100 lines of pointers, not an encyclopedia of project knowledge. The knowledge lives in a `docs/` directory that the agent navigates on demand.
+The [AGENTS.md as table of contents](../instructions/agents-md-as-table-of-contents.md) pattern goes further: AGENTS.md should be about 100 lines of pointers, not an encyclopedia of project knowledge. The knowledge lives in a `docs/` directory that the agent navigates on demand.
 
-## Why It Works
+## Why it works
 
 The mechanism is straightforward. Agents operate on context. An agent with no [project context](../instructions/instruction-file-ecosystem.md) defaults to generic behavior: common tooling, conventional patterns, assumptions drawn from training data. None of these are wrong in general; most are wrong for a specific project with specific constraints.
 
@@ -114,13 +114,13 @@ This file converts a generic agent into a project-aware one: it knows to use `bu
 
 For a real, high-profile production example, the SQLite project ships its own `AGENTS.md` ([Willison — sqlite AGENTS.md](https://simonwillison.net/2026/May/27/sqlite-agents/)) — a concrete instance of the same pointers-and-constraints shape outside this synthetic sample.
 
-## When This Backfires
+## When this backfires
 
 AGENTS.md degrades in three conditions:
 
-- **Stale content**: as the codebase evolves, AGENTS.md drifts. A file that correctly described tooling six months ago now misleads agents into using deprecated commands. Static files require active maintenance discipline — they do not self-update as conventions change.
-- **Context overconsumption**: every line in AGENTS.md consumes context budget before the agent sees the task. Verbose files — architecture writeups, process narratives, duplicated documentation — crowd out room for the task itself. An [ETH Zurich evaluation of AGENTS.md](https://arxiv.org/abs/2602.11988) found context files increased inference cost by over 20% on average, largely because agents followed their instructions into broader-than-necessary exploration. The file works against itself when it embeds knowledge instead of linking to it.
-- **Mismatch with dynamic environments**: AGENTS.md is a static snapshot. Projects with frequent toolchain changes, multiple distinct workflows, or environment-specific constraints that vary per run are poorly served by a single root file. MCP servers or runtime-loaded skill files handle dynamic context better than a committed static document.
+- Stale content: as the codebase evolves, AGENTS.md drifts. A file that correctly described tooling six months ago now misleads agents into using deprecated commands. Static files need active maintenance — they do not self-update as conventions change.
+- Context overconsumption: every line in AGENTS.md consumes context budget before the agent sees the task. Verbose files — architecture writeups, process narratives, duplicated documentation — crowd out room for the task itself. An [ETH Zurich evaluation of AGENTS.md](https://arxiv.org/abs/2602.11988) found context files increased inference cost by over 20% on average, largely because agents followed their instructions into broader-than-necessary exploration. The file works against itself when it embeds knowledge instead of linking to it.
+- Mismatch with dynamic environments: AGENTS.md is a static snapshot. A single root file serves projects poorly when they have frequent toolchain changes, several distinct workflows, or constraints that vary per run. MCP servers or runtime-loaded skill files handle dynamic context better than a committed static document.
 
 ## Key Takeaways
 

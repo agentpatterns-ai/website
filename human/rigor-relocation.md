@@ -18,13 +18,13 @@ maturity: established
 
 > Engineering discipline does not disappear when agents write the code -- it relocates from code style and abstractions to scaffolding, feedback loops, and constraint enforcement.
 
-## The Shift
+## The shift
 
-When agents write the code, the human's leverage point moves. Code quality becomes a function of environment quality.
+When agents write the code, the human's point of influence moves. Code quality now depends on the quality of the environment.
 
-Teams that invest in scaffolding outperform teams that invest in [prompt engineering](../training/foundations/prompt-engineering.md). LangChain's Terminal Bench improvements and Datadog's harness-first methodology both demonstrate gains from environment investment rather than model or prompt changes.
+Teams that invest in scaffolding outperform teams that invest in [prompt engineering](../training/foundations/prompt-engineering.md). LangChain's Terminal Bench improvements and Datadog's harness-first method both show gains from environment investment rather than model or prompt changes.
 
-## Old Rigor vs. New Rigor
+## Old rigor versus new rigor
 
 | Traditional discipline | Relocated discipline |
 |----------------------|---------------------|
@@ -37,17 +37,17 @@ Teams that invest in scaffolding outperform teams that invest in [prompt enginee
 
 The right column is the same engineering instinct applied to a different surface.
 
-## Why Environment Beats Prompts
+## Why environment beats prompts
 
-LangChain improved their coding agent from **rank 30 to rank 5** on Terminal Bench 2.0 without changing the model. The interventions were pure [harness engineering](../agent-design/harness-engineering.md): [pre-completion checklists](../verification/pre-completion-checklists.md), [loop detection middleware](../observability/loop-detection.md), and structured verification ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
+LangChain improved their coding agent from rank 30 to rank 5 on Terminal Bench 2.0 without changing the model. The changes were all [harness engineering](../agent-design/harness-engineering.md): [pre-completion checklists](../verification/pre-completion-checklists.md), [loop detection middleware](../observability/loop-detection.md), and structured verification ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
 OpenAI shipped roughly one million lines of agent-written production code over five months using machine-readable documentation, mechanical architectural boundaries, and telemetry-driven iteration ([InfoQ](https://www.infoq.com/news/2026/02/openai-harness-engineering-codex/)) -- [agent-first software design](../agent-design/agent-first-software-design.md) at scale.
 
-Better models *increase* infrastructure demands -- more autonomy requires better guardrails ([Lavaee](https://alexlavaee.me/blog/harness-engineering-why-coding-agents-need-infrastructure/)).
+Better models increase infrastructure demands -- more autonomy needs better guardrails ([Lavaee](https://alexlavaee.me/blog/harness-engineering-why-coding-agents-need-infrastructure/)).
 
-**Why this works**: Prompts degrade across long contexts -- instructions given at session start lose salience as context fills. Environment constraints have no such decay: a failing test returns the same signal on step 1 and step 100. The mechanism is enforcement locality -- the constraint fires at the exact moment the agent generates non-compliant output, before that output propagates further. Prompts create compliance pressure at session start; harnesses create compliance pressure at each decision point.
+This works because prompts degrade across long contexts. Instructions given at session start lose salience as context fills. Environment constraints have no such decay: a failing test returns the same signal on step 1 and step 100. The mechanism is enforcement locality. The constraint fires at the exact moment the agent generates non-compliant output, before that output spreads further. Prompts create compliance pressure at session start; harnesses create it at each decision point.
 
-## Mechanical Enforcement Beats Documentation
+## Mechanical enforcement beats documentation
 
 Written conventions rely on agents reading and following instructions. Custom linters, structural tests, and CI guardrails enforce constraints mechanically -- the agent cannot proceed without satisfying them.
 
@@ -63,9 +63,9 @@ flowchart LR
 
 DOM snapshots, visual regression tests, log queries, and metrics inspection serve as feedback signals -- agents work autonomously until objective criteria are met ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)).
 
-## The Verification Bottleneck Inversion
+## The verification bottleneck inversion
 
-Agents can now produce software faster than any team can verify it. The bottleneck has moved from *writing* code to *trusting* what was written.
+Agents can now produce software faster than any team can verify it. The bottleneck has moved from writing code to trusting what was written.
 
 ```mermaid
 flowchart LR
@@ -84,11 +84,11 @@ flowchart LR
 
 Formal verification methods -- historically too expensive -- become cost-effective when agents generate and iterate on proofs. The verification pyramid (symbolic/TLA+, DST, model checking, bounded verification, empirical) becomes the new quality architecture ([Datadog](https://www.datadoghq.com/blog/ai/harness-first-agents/)).
 
-## Context Engineering as Rigor Relocation
+## Context engineering as rigor relocation
 
 Quality shifts from "what the model knows" to "what the environment permits the model to access." JIT context loading, sub-agent isolation, and memory-as-infrastructure encode discipline into architecture rather than relying on instruction compliance ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
-## The Human Role Shift
+## The human role shift
 
 The engineer's job shifts from code reviewer to harness designer:
 
@@ -99,14 +99,14 @@ The engineer's job shifts from code reviewer to harness designer:
 
 A linter rule catches a dependency violation every time, in every session, for every agent -- compounding across iterations rather than catching one issue in one PR review.
 
-## When This Backfires
+## When this backfires
 
-Rigor relocation has real costs. The scaffolding-first bet fails or yields poor returns in several conditions:
+Rigor relocation has real costs. The scaffolding-first bet fails or pays off poorly in several conditions:
 
-- **Scope too narrow**: A single-task agent that runs once or twice does not recoup the investment in linters, CI guardrails, and verification pipelines. The overhead only pays off when agents run repeatedly across sessions.
-- **Premature infrastructure lock-in**: Teams that build elaborate [harnesses](../agent-design/harness-engineering.md) before understanding the task topology often optimize for the wrong constraints. High iteration velocity through prompt changes is faster than pipeline rewrites at early stages.
-- **Harness correctness burden**: The harness itself can encode wrong invariants. A passing test suite that validates incorrect behavior is harder to debug than a failed prompt, because failures become invisible rather than explicit.
-- **Skill atrophy accelerates**: Mechanical enforcement reduces the need for engineers to reason about correctness directly, which compounds over time (see [Skill Atrophy](skill-atrophy.md)).
+- Scope too narrow: a single-task agent that runs once or twice does not recoup the investment in linters, CI guardrails, and verification pipelines. The overhead only pays off when agents run repeatedly across sessions.
+- Premature infrastructure lock-in: teams that build elaborate [harnesses](../agent-design/harness-engineering.md) before they understand the task topology often optimize for the wrong constraints. Changing prompts is faster than rewriting pipelines at early stages.
+- Harness correctness burden: the harness itself can encode wrong invariants. A passing test suite that validates incorrect behavior is harder to debug than a failed prompt, because the failures become invisible rather than explicit.
+- Skill atrophy accelerates: mechanical enforcement reduces the need for engineers to reason about correctness directly, which compounds over time (see [Skill Atrophy](skill-atrophy.md)).
 
 ## Key Takeaways
 

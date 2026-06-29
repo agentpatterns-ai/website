@@ -18,16 +18,16 @@ maturity: adopted
 
 ---
 
-## What L3 Looks Like
+## What L3 looks like
 
-At L3, the agent executes scoped tasks reliably without per-action supervision. Mechanical enforcement, structured tasks, and progress files are in place. Remaining gaps:
+At L3, the agent runs scoped tasks reliably without per-action supervision. Mechanical enforcement, structured tasks, and progress files are in place. Gaps remain:
 
 - Agent PRs require full human review — no automated quality gate beyond lint/tests
 - No measurement of agent output quality over time
 - Tasks require explicit step-by-step specification; the agent cannot plan independently
 - No CI-level agentic workflow — every agent session is manually initiated
 
-## What L5 Looks Like
+## What L5 looks like
 
 At L5, the agent operates as a first-class contributor:
 
@@ -36,19 +36,19 @@ At L5, the agent operates as a first-class contributor:
 - The agent receives goal specifications (intent + success criteria) rather than step-by-step tasks
 - Agent work integrates into CI/CD — issues trigger agent sessions, agent sessions produce PRs
 
-**L4 is an intermediate state**: bounded-risk autonomy. L5 adds goal-driven planning and CI integration on top.
+L4 is an intermediate state: bounded-risk autonomy. L5 adds goal-driven planning and CI integration on top.
 
 [Anthropic autonomy data](https://www.anthropic.com/research/measuring-agent-autonomy) shows experienced users (~750 sessions) enable full auto-approve in 40%+ of their work, but 80% of tool calls still come from agents with at least one safeguard. L5 is the objective, not an expectation for every task type.
 
 ---
 
-## The L3 → L4 Transition: Adding Safety Gates
+## The L3 → L4 transition: adding safety gates
 
-### Step 1: Define Output Validation Rules
+### Step 1: define output validation rules
 
 At L3, agent output passes if lint, types, and tests pass. L4 adds policy-level validation: rules that check what the agent changed, not just whether the code compiles.
 
-**Diff validation in CI:**
+Diff validation in CI:
 
 ```yaml
 # .github/workflows/agent-pr.yml
@@ -86,15 +86,15 @@ jobs:
           node scripts/check-test-pairing.js
 ```
 
-**Coverage enforcement on changed files** beats global coverage thresholds in brownfield repos with uneven coverage: it prevents erosion on new code without forcing a big-bang coverage rewrite.
+Coverage enforcement on changed files beats global coverage thresholds in brownfield repos with uneven coverage. It prevents erosion on new code without forcing a big-bang coverage rewrite.
 
-### Step 2: Add Observability for Agent Sessions
+### Step 2: add observability for agent sessions
 
-L4 requires visibility into what agents did and why — not just whether the output is correct — for audit and debugging when results surprise. See [Agent Observability with OpenTelemetry](../../observability/agent-observability-otel.md) for the tracing layer underneath this.
+L4 needs visibility into what agents did and why, not just whether the output is correct. You need this for audit and for debugging when results surprise you. See [Agent Observability with OpenTelemetry](../../observability/agent-observability-otel.md) for the tracing layer underneath this.
 
-**Structured agent work branches:** name them consistently (`agent/issue-123-add-rate-limiting`, `copilot/feature/user-preferences`) so agent PRs are identifiable and CI can apply agent-specific validation rules.
+Structured agent work branches: name them consistently (`agent/issue-123-add-rate-limiting`, `copilot/feature/user-preferences`) so agent PRs are identifiable and CI can apply agent-specific validation rules.
 
-**Commit annotation:** include a structured trace in the commit message or as a PR comment:
+Commit annotation: include a structured trace in the commit message or as a PR comment:
 
 ```
 feat(rate-limit): implement sliding window rate limiter
@@ -109,9 +109,9 @@ Lint: clean
 Type check: clean
 ```
 
-An in-band audit trail — reviewers understand agent decisions without reading the full session transcript.
+This gives an in-band audit trail. Reviewers understand agent decisions without reading the full session transcript.
 
-### Step 3: Define Rollback Triggers
+### Step 3: define rollback triggers
 
 Define the conditions under which agent work is automatically rejected or flagged before granting broader autonomy — [rollback-first design](../../agent-design/rollback-first-design.md) applied to agent PRs:
 
@@ -119,16 +119,16 @@ Define the conditions under which agent work is automatically rejected or flagge
 |---------|----------|
 | CI fails on agent PR | Auto-close PR, comment with failure summary, re-open issue |
 | Coverage drops below threshold on changed files | Block merge, request human review |
-| Diff size exceeds limit (e.g., >500 lines) | Flag for human review before merge approval |
+| Diff size exceeds limit (for example, >500 lines) | Flag for human review before merge approval |
 | Agent PR modifies security-sensitive paths | Require security team approval |
 
 [Anthropic's autonomy research](https://www.anthropic.com/research/measuring-agent-autonomy) confirms 80% of tool calls come from agents with at least one safeguard — L4 formalizes and automates those safeguards.
 
 ---
 
-## The L4 → L5 Transition: Goal-Driven Execution
+## The L4 → L5 transition: goal-driven execution
 
-### Step 1: Write Goal Specifications
+### Step 1: write goal specifications
 
 L3 tasks prescribe steps; L5 goal specifications declare the outcome and acceptance criteria, leaving the plan to the agent.
 
@@ -156,9 +156,9 @@ out_of_scope:
 
 The agent decomposes the spec into steps, executes them, verifies against success criteria, and submits a PR. The human reviews the PR, not the plan.
 
-**Why goal specs outperform step-by-step tasks at L5**: structured task definitions constrain *how* the agent works; goal specs define *what* "done" means and let the agent find a better path than a human would prescribe. The [SASE paper (arXiv:2509.06216)](https://arxiv.org/abs/2509.06216) frames this as the SE 3.0 → SE 4.0 transition: goal-agentic to domain-autonomous.
+Goal specs outperform step-by-step tasks at L5 because they define the outcome, not the route. Structured task definitions constrain how the agent works. Goal specs define what "done" means and let the agent find a better path than a human would prescribe. The [SASE paper (arXiv:2509.06216)](https://arxiv.org/abs/2509.06216) frames this as the SE 3.0 → SE 4.0 transition: goal-agentic to domain-autonomous.
 
-### Step 2: Add Evals for Continuous Quality Measurement
+### Step 2: add evals for continuous quality measurement
 
 Evals measure agent output quality across runs and over time — answering "is the agent getting better or worse?" in a way pass/fail CI cannot. CI checks syntactic validity; evals check whether output is correct, complete, and consistent with your quality bar.
 
@@ -192,11 +192,11 @@ def test_agent_handles_existing_pattern():
 
 See the [Eval-Driven Development](../../workflows/eval-driven-development.md) and [Eval Engineering](../../training/foundations/eval-engineering.md) modules for full eval design methodology.
 
-### Step 3: Integrate Agents into CI/CD
+### Step 3: integrate agents into CI/CD
 
 At L5, agents enter the pipeline without manual invocation: an issue triggers a session, the session produces a PR, CI validates it, and human review focuses on design — not mechanical correctness.
 
-**GitHub Actions workflow for issue-triggered agent work:**
+GitHub Actions workflow for issue-triggered agent work:
 
 ```yaml
 # .github/workflows/agent-implementation.yml
@@ -232,7 +232,7 @@ jobs:
 
 This depends on L3 and L4 infrastructure: hooks, output validation gates, and rollback triggers are what make per-task autonomy safe.
 
-### Step 4: Verify the Transition
+### Step 4: verify the transition
 
 L4 exit check:
 
@@ -246,28 +246,28 @@ L5 exit check:
 
 ---
 
-## When to Stay at L3 or L4
+## When to stay at L3 or L4
 
 Not every team needs the full L3→L5 pipeline. Stop at L3 if:
 
-- **Low agent PR volume** — under a handful of agent sessions per week, CI automation overhead (evals, issue-triggered workflows, coverage gates) costs more than it saves.
-- **Unstable codebase structure** — eval suites break with every architecture change; in fast-moving repos where the service/repository pattern itself is evolving, they become a maintenance burden, not a quality gate.
-- **Unbounded API cost exposure** — issue-triggered sessions fire on every label with no per-task budget cap; backlogs can generate surprise spend before PR review catches systematic failure.
+- Low agent PR volume — under a handful of agent sessions per week, CI automation overhead (evals, issue-triggered workflows, coverage gates) costs more than it saves.
+- Unstable codebase structure — eval suites break with every architecture change; in fast-moving repos where the service/repository pattern itself is evolving, they become a maintenance burden, not a quality gate.
+- Unbounded API cost exposure — issue-triggered sessions fire on every label with no per-task budget cap; backlogs can generate surprise spend before PR review catches systematic failure.
 
 Stop at L4 if:
 
-- **Tasks are not goal-decomposable** — open-ended exploration, cross-cutting refactors, or work that depends on unwritten requirements lacks the verifiable acceptance criteria L5 needs.
-- **Insufficient test coverage** — evals are only meaningful for testable behaviors. Below ~50% coverage on the touched code paths, evals give false confidence rather than real signal.
+- Tasks are not goal-decomposable — open-ended exploration, cross-cutting refactors, or work that depends on unwritten requirements lacks the verifiable acceptance criteria L5 needs.
+- Insufficient test coverage — evals are only meaningful for testable behaviors. Below ~50% coverage on the touched code paths, evals give false confidence rather than real signal.
 
 ---
 
 ## Key Takeaways
 
-- **L4 is about trust, not capability.** The infrastructure that makes agent work reviewable and rollback-safe is what justifies expanding scope — not confidence in the model. Define rollback triggers before granting broader autonomy.
-- **Goal specifications unlock planning**. Structured tasks constrain how agents work; goal specs define what "done" means and let agents find better paths than step-by-step task lists.
-- **Evals are the L5 quality gate.** Pass/fail CI validates syntax; evals validate quality. You need both to operate at L5 without accumulating hidden quality debt.
-- **L5 is the objective, not the expectation for every task.** Experienced users enable full auto-approve in ~40% of sessions ([Anthropic](https://www.anthropic.com/research/measuring-agent-autonomy)). Reserve L5 workflows for well-specified, testable tasks in well-understood parts of the codebase.
-- **The transformation is the practice.** The infrastructure you build to reach L5 — types, tests, hooks, evals, structured tasks — benefits human developers equally. It is not agent-specific overhead; it is [engineering rigor relocated](../../human/rigor-relocation.md).
+- L4 is about trust, not capability. The infrastructure that makes agent work reviewable and rollback-safe is what justifies expanding scope — not confidence in the model. Define rollback triggers before granting broader autonomy.
+- Goal specifications enable planning. Structured tasks constrain how agents work; goal specs define what "done" means and let agents find better paths than step-by-step task lists.
+- Evals are the L5 quality gate. Pass/fail CI validates syntax; evals validate quality. You need both to operate at L5 without accumulating hidden quality debt.
+- L5 is the objective, not the expectation for every task. Experienced users enable full auto-approve in ~40% of sessions ([Anthropic](https://www.anthropic.com/research/measuring-agent-autonomy)). Reserve L5 workflows for well-specified, testable tasks in well-understood parts of the codebase.
+- The transformation is the practice. The infrastructure you build to reach L5 — types, tests, hooks, evals, structured tasks — benefits human developers equally. It is not agent-specific overhead; it is [engineering rigor relocated](../../human/rigor-relocation.md).
 
 ## Related
 

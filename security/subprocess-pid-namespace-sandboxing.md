@@ -11,16 +11,16 @@ maturity: adopted
 
 > A third isolation layer — separate from filesystem and network sandboxing — that prevents Bash subprocesses from escaping the agent's execution context through process-level tricks.
 
-## What This Adds
+## What this adds
 
-[Dual-boundary sandboxing](dual-boundary-sandboxing.md) restricts what the agent can read, write, and reach over the network — but not the *process tree* a Bash invocation produces. A subprocess can still:
+[Dual-boundary sandboxing](dual-boundary-sandboxing.md) restricts what the agent can read, write, and reach over the network — but not the process tree a Bash invocation produces. A subprocess can still:
 
 - Spawn background daemons that outlive the session
 - Inherit sensitive environment variables (API keys, tokens) from the parent
 
 Claude Code 2.1.98 (April 9, 2026) addressed this with [subprocess sandboxing using PID namespace isolation on Linux](https://code.claude.com/docs/en/changelog), controlled by two environment variables.
 
-## The Two Controls
+## The two controls
 
 ### `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB`
 
@@ -35,13 +35,13 @@ Env var scrubbing prevents parent-environment secrets from leaking into child pr
 
 ### `CLAUDE_CODE_SCRIPT_CAPS`
 
-`CLAUDE_CODE_SCRIPT_CAPS` sets a per-session ceiling on the number of script invocations. Without a cap, a runaway agent or injected payload can drive resource exhaustion by invoking scripts in a tight loop. The variable enforces a hard limit so that loop terminates before it degrades the host.
+`CLAUDE_CODE_SCRIPT_CAPS` sets a per-session ceiling on the number of script invocations. Without a cap, a runaway agent or injected payload can cause resource exhaustion by invoking scripts in a tight loop. The variable enforces a hard limit, so that loop ends before it degrades the host.
 
-## Linux-Only Constraint
+## Linux-only constraint
 
 PID namespace isolation is a Linux kernel primitive. This feature does not apply on macOS or Windows. On those platforms, the filesystem and network boundaries from [dual-boundary sandboxing](dual-boundary-sandboxing.md) remain the primary isolation mechanisms.
 
-For production agent deployments on Linux, all three layers should be configured together:
+For production agent deployments on Linux, configure all three layers together:
 
 | Layer | Mechanism | What it prevents |
 |-------|-----------|-----------------|
@@ -61,7 +61,7 @@ claude --dangerously-skip-permissions
 
 `CLAUDE_CODE_SCRIPT_CAPS` takes an integer. The right value depends on the workload — a build agent that runs many test invocations needs a higher cap than a read-only analysis agent.
 
-## Relationship to the Existing Sandbox
+## Relationship to the existing sandbox
 
 These controls augment the built-in `/sandbox` command; they do not replace it. The existing sandbox (enabled via `/sandbox` or `sandbox.enabled` in settings) enforces filesystem and network boundaries using bubblewrap. Subprocess PID sandboxing adds process-level isolation on top.
 
@@ -81,17 +81,17 @@ claude --dangerously-skip-permissions --print "Review the diff and run the test 
 
 The agent's Bash invocations run inside a PID namespace. Any background process started by the agent — intentionally or via prompt injection — is killed when the namespace's init exits at session end. `ANTHROPIC_API_KEY` and cloud provider credentials present in the CI environment are stripped from subprocesses before execution.
 
-## When This Backfires
+## When this backfires
 
-**Linux-only**: macOS and Windows deployments get no benefit from `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB`. On those platforms the env scrubbing still applies, but PID namespace isolation is silently skipped — process persistence remains possible.
+Linux-only: macOS and Windows deployments get no benefit from `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB`. On those platforms the env scrubbing still applies, but PID namespace isolation is silently skipped — process persistence remains possible.
 
-**Env scrubbing breaks tools that expect inherited credentials**: Some subprocess tools (e.g., AWS CLI, gcloud, GitHub CLI) rely on inheriting credentials from the environment. Scrubbing removes those variables, causing auth failures. Mitigation: pass credentials explicitly via config files, credential helpers, or application-default mechanisms rather than raw env vars.
+Env scrubbing breaks tools that expect inherited credentials: some subprocess tools (for example AWS CLI, gcloud, GitHub CLI) rely on inheriting credentials from the environment. Scrubbing removes those variables and causes auth failures. To work around this, pass credentials explicitly through config files, credential helpers, or application-default mechanisms rather than raw env vars.
 
-**Misconfigured `CLAUDE_CODE_SCRIPT_CAPS` terminates valid workloads**: A cap set too low for the actual workload (e.g., `CLAUDE_CODE_SCRIPT_CAPS=10` for a build agent that runs 80 test shards) causes the session to abort mid-task. Calibrate the cap against the actual script invocation profile before deploying.
+A misconfigured `CLAUDE_CODE_SCRIPT_CAPS` terminates valid workloads: a cap set too low for the actual workload (for example `CLAUDE_CODE_SCRIPT_CAPS=10` for a build agent that runs 80 test shards) makes the session abort mid-task. Calibrate the cap against the actual script invocation profile before deploying.
 
-**Namespace isolation is not a substitute for network sandboxing**: A process inside a PID namespace can still make outbound network calls. Process-level isolation must be combined with bubblewrap network namespacing to prevent exfiltration.
+Namespace isolation is not a substitute for network sandboxing: a process inside a PID namespace can still make outbound network calls. Combine process-level isolation with bubblewrap network namespacing to prevent exfiltration.
 
-**Silently forces bubblewrap, overriding `sandbox.enabled: false`**: Setting `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` activates bubblewrap regardless of `sandbox.enabled: false` or `sandbox.failIfUnavailable: false` in `settings.json`, with no warning or log. On hosts where bubblewrap cannot create a user namespace — Docker containers without `--privileged` or user-namespace support, older kernels (e.g., 4.4), Synology NAS, some restricted CI runners — every Bash invocation fails with a misleading `bwrap: Creating new namespace failed, kernel doesn't support user namespaces` error that looks like a kernel issue rather than a config conflict ([anthropics/claude-code#50167](https://github.com/anthropics/claude-code/issues/50167)). Verify bubblewrap works on the target host before enabling this variable.
+It silently forces bubblewrap, overriding `sandbox.enabled: false`: setting `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` activates bubblewrap regardless of `sandbox.enabled: false` or `sandbox.failIfUnavailable: false` in `settings.json`, with no warning or log. On hosts where bubblewrap cannot create a user namespace — Docker containers without `--privileged` or user-namespace support, older kernels (for example 4.4), Synology NAS, some restricted CI runners — every Bash invocation fails with a misleading `bwrap: Creating new namespace failed, kernel doesn't support user namespaces` error that looks like a kernel issue rather than a config conflict ([anthropics/claude-code#50167](https://github.com/anthropics/claude-code/issues/50167)). Verify bubblewrap works on the target host before enabling this variable.
 
 ## Key Takeaways
 

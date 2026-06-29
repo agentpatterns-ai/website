@@ -19,35 +19,35 @@ status: current
 ??? note "Also known as: Instruction File Convention, Project Instruction Files"
     Copilot-specific convention. See also [Instruction File Ecosystem](../../instructions/instruction-file-ecosystem.md) (tool-agnostic) and [CLAUDE.md Convention](../../instructions/claude-md-convention.md).
 
-## What It Does
+## What it does
 
-Copilot reads `.github/copilot-instructions.md` on every chat request, [agent mode](agent-mode.md) session, [coding agent](coding-agent.md) task, and code review ([docs](https://docs.github.com/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot), [GitHub Blog](https://github.blog/ai-and-ml/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)). Contents are appended to the system prompt automatically -- no reference or import needed.
+Copilot reads `.github/copilot-instructions.md` on every chat request, [agent mode](agent-mode.md) session, [coding agent](coding-agent.md) task, and code review ([docs](https://docs.github.com/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot), [GitHub Blog](https://github.blog/ai-and-ml/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)). Copilot appends the contents to the system prompt automatically. You do not reference or import the file.
 
-## File Location and Format
+## File location and format
 
-Place the file at `.github/copilot-instructions.md`. Standard Markdown. Keep it under two pages ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/)) -- files approaching 1,000 lines degrade code review consistency ([GitHub Blog](https://github.blog/ai-and-ml/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)).
+Place the file at `.github/copilot-instructions.md`. Write standard Markdown. Keep it under two pages ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/)) -- files approaching 1,000 lines degrade code review consistency ([GitHub Blog](https://github.blog/ai-and-ml/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)).
 
-## What to Include
+## What to include
 
 GitHub [recommends](https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/) five categories:
 
-1. **Project overview** -- purpose, audience, key features.
-2. **Tech stack** -- frameworks, ORMs, runtimes, test runners (the Example below shows a TypeScript/Node stack).
-3. **Coding guidelines** -- naming, error handling, formatting.
-4. **Project structure** -- folder layout and directory purposes.
-5. **Available resources** -- scripts, automation, MCP servers.
+1. Project overview: purpose, audience, key features.
+2. Tech stack: frameworks, ORMs, runtimes, test runners (the Example below shows a TypeScript/Node stack).
+3. Coding guidelines: naming, error handling, formatting.
+4. Project structure: folder layout and directory purposes.
+5. Available resources: scripts, automation, MCP servers.
 
-For the [coding agent](coding-agent.md), add exact build/test commands, environment setup, and CI requirements ([docs](https://docs.github.com/copilot/how-tos/agents/copilot-coding-agent/best-practices-for-using-copilot-to-work-on-tasks)).
+For the [coding agent](coding-agent.md), add exact build and test commands, environment setup, and CI requirements ([docs](https://docs.github.com/copilot/how-tos/agents/copilot-coding-agent/best-practices-for-using-copilot-to-work-on-tasks)).
 
-## What Not to Include
+## What not to include
 
-- **Task-specific instructions** -- belong in the prompt or path-specific files ([docs](https://docs.github.com/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot)).
-- **Full documentation** -- link instead of embedding. Exception: code review cannot follow links, so inline review-specific content ([GitHub Blog](https://github.blog/ai-and-ml/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)).
-- **Vague directives** -- "be more accurate" wastes tokens; use imperative rules.
-- **Narrative prose** -- lists and headings work more reliably than paragraphs ([GitHub Blog](https://github.blog/ai-and-ml/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)).
-- **Tool-specific syntax** -- Claude Code or Cursor directives are ignored; keep the file Copilot-specific or tool-neutral.
+- Task-specific instructions: put these in the prompt or path-specific files ([docs](https://docs.github.com/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot)).
+- Full documentation: link to it instead of embedding it. Exception: code review cannot follow links, so inline review-specific content ([GitHub Blog](https://github.blog/ai-and-ml/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)).
+- Vague directives: "be more accurate" wastes tokens, so use imperative rules.
+- Narrative prose: lists and headings work more reliably than paragraphs ([GitHub Blog](https://github.blog/ai-and-ml/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)).
+- Tool-specific syntax: Copilot ignores Claude Code or Cursor directives, so keep the file Copilot-specific or tool-neutral.
 
-## Instruction Hierarchy
+## Instruction hierarchy
 
 Copilot combines instructions from three scopes; higher-priority scopes win on conflict ([docs](https://docs.github.com/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot)):
 
@@ -57,7 +57,7 @@ Copilot combines instructions from three scopes; higher-priority scopes win on c
 | 2 | Repository | `.github/copilot-instructions.md` |
 | 3 (lowest) | Organization | Organization-level Copilot settings |
 
-## Path-Specific Instructions
+## Path-specific instructions
 
 For file-specific rules, create `*.instructions.md` files in `.github/instructions/` with an `applyTo` glob ([docs](https://docs.github.com/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot)):
 
@@ -70,7 +70,7 @@ Use type hints on all function signatures. Prefer `pathlib` over `os.path`.
 
 These files also support `excludeAgent` (`"code-review"` or `"coding-agent"`) to skip a feature. Move language-specific rules here to keep the repo-wide file short.
 
-## Feature Support Matrix
+## Feature support matrix
 
 Support varies by IDE ([docs](https://docs.github.com/en/copilot/reference/custom-instructions-support)):
 
@@ -82,7 +82,7 @@ Support varies by IDE ([docs](https://docs.github.com/en/copilot/reference/custo
 | Visual Studio | Repo only | Repo only | -- |
 | Xcode | Repo + Path | Repo + Path | Repo + Path + Agent |
 
-## copilot-instructions.md vs. AGENTS.md
+## copilot-instructions.md compared with AGENTS.md
 
 | Dimension | copilot-instructions.md | AGENTS.md |
 |-----------|------------------------|-----------|
@@ -94,12 +94,12 @@ Support varies by IDE ([docs](https://docs.github.com/en/copilot/reference/custo
 
 Multi-tool teams can maintain both or consolidate into AGENTS.md (losing path-specific `applyTo` globs). See [Instruction File Ecosystem](../../instructions/instruction-file-ecosystem.md) for convergence strategies.
 
-## When This Backfires
+## When this backfires
 
-- **Over-stuffed files**: Implementation details, full documentation, or task-specific context bloat the system prompt and consume token budget that would otherwise hold conversation or code context. Stick to project-wide rules ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/)).
-- **Personal settings override**: Personal-scope instructions silently override repository instructions on conflict, so teammates with conflicting personal Copilot settings see different behavior.
-- **IDE feature gaps**: Visual Studio only reads the repo-wide file -- path-specific and organization scopes are unsupported, so `applyTo` workflows break silently there.
-- **Instructions don't guarantee compliance**: GitHub notes that "providing instructions doesn't guarantee perfect code" -- the same request can yield different results across sessions ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/)). Treat instructions as a probabilistic nudge, not a contract.
+- Over-stuffed files: implementation details, full documentation, or task-specific context bloat the system prompt and use token budget that would otherwise hold conversation or code context. Stick to project-wide rules ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/)).
+- Personal settings override: personal-scope instructions silently override repository instructions on conflict, so teammates with conflicting personal Copilot settings see different behavior.
+- IDE feature gaps: Visual Studio only reads the repo-wide file -- it does not support path-specific and organization scopes, so `applyTo` workflows break silently there.
+- Instructions do not guarantee compliance: GitHub notes that "providing instructions doesn't guarantee perfect code" -- the same request can yield different results across sessions ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/)). Treat instructions as a probabilistic nudge, not a contract.
 
 ## Example
 

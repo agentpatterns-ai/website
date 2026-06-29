@@ -68,12 +68,12 @@ A comprehensive test suite and strict type system provide the [mechanical backpr
 
 | | Prompt Engineering | Context Engineering | Tool Engineering | Harness Engineering |
 |-|-------------------|-------------------|-----------------|-------------------|
-| **Scope** | The user message and system instructions | Everything in the context window: instructions, tool outputs, conversation history, file contents | The interfaces agents use to act: tool definitions, parameter schemas, output formats | The development environment: type system, test suite, linters, CI pipeline |
-| **When** | At the moment you ask or at session start | Before the session (instruction files, skills), during (tool results, steering), and across sessions (memory) | At design time -- before any agent session runs | Before any session -- baked into the codebase and toolchain |
-| **Optimises for** | A good answer to this question | Consistent quality across all questions in this codebase | Reliable agent actions -- correct tool selection, correct parameters, parseable output | Agent self-correction -- the agent iterates until checks pass without human intervention |
-| **Who does it** | The person asking | The team, via committed configuration files | The team, via tool definitions and MCP server design | The team, via tooling investments (types, tests, linters, hooks) |
-| **Failure mode** | Bad answer to one question | Inconsistent results across sessions; [context pollution](../../anti-patterns/session-partitioning.md) dilutes attention | Wrong tool selected, malformed parameters, [verbose output consuming budget](../../tool-engineering/semantic-tool-output.md) | Agent cannot verify its own work -- every output requires manual review |
-| **Durability** | Per-message | Per-repo, evolves with configuration | Per-tool, versioned with the tool definition | Permanent -- compounds across all agents, all sessions, all team members |
+| Scope | The user message and system instructions | Everything in the context window: instructions, tool outputs, conversation history, file contents | The interfaces agents use to act: tool definitions, parameter schemas, output formats | The development environment: type system, test suite, linters, CI pipeline |
+| When | At the moment you ask or at session start | Before the session (instruction files, skills), during (tool results, steering), and across sessions (memory) | At design time -- before any agent session runs | Before any session -- baked into the codebase and toolchain |
+| Optimises for | A good answer to this question | Consistent quality across all questions in this codebase | Reliable agent actions -- correct tool selection, correct parameters, parseable output | Agent self-correction -- the agent iterates until checks pass without human intervention |
+| Who does it | The person asking | The team, via committed configuration files | The team, via tool definitions and MCP server design | The team, via tooling investments (types, tests, linters, hooks) |
+| Failure mode | Bad answer to one question | Inconsistent results across sessions; [context pollution](../../anti-patterns/session-partitioning.md) dilutes attention | Wrong tool selected, malformed parameters, [verbose output consuming budget](../../tool-engineering/semantic-tool-output.md) | Agent cannot verify its own work -- every output requires manual review |
+| Durability | Per-message | Per-repo, evolves with configuration | Per-tool, versioned with the tool definition | Permanent -- compounds across all agents, all sessions, all team members |
 
 This table extends the comparison from the [Copilot context and workflows module](../copilot/context-and-workflows.md). The addition of tool engineering as a fourth column reflects a failure mode that the three-column model misses: agents that understand the task and have the right context but cannot execute because the tool interface is wrong.
 
@@ -101,10 +101,10 @@ The diagnostic sequence: check harness first (is there mechanical feedback?), th
 
 Most teams follow a predictable sequence:
 
-1. **Prompts first.** Individual developers write better messages. Results improve for that developer, that session. Nothing compounds.
-2. **Context second.** Teams commit instruction files, configure [progressive disclosure](../../agent-design/progressive-disclosure-agents.md), manage context budgets. Results improve per-repo. Knowledge survives across sessions.
-3. **Tools third.** Teams invest in tool descriptions, [MCP server design](../../tool-engineering/mcp-server-design.md), structured output, and [poka-yoke parameter design](../../tool-engineering/poka-yoke-agent-tools.md). Agent actions become reliable. The gap between "knows what to do" and "can do it" closes.
-4. **Harness last.** Teams build [mechanical enforcement](../../agent-design/harness-engineering.md) -- custom linters, structural tests, CI gates. Agent output becomes self-verifying. The [verification bottleneck](../../human/rigor-relocation.md) breaks.
+1. Prompts first. Individual developers write better messages. Results improve for that developer, that session. Nothing compounds.
+2. Context second. Teams commit instruction files, configure [progressive disclosure](../../agent-design/progressive-disclosure-agents.md), manage context budgets. Results improve per-repo. Knowledge survives across sessions.
+3. Tools third. Teams invest in tool descriptions, [MCP server design](../../tool-engineering/mcp-server-design.md), structured output, and [poka-yoke parameter design](../../tool-engineering/poka-yoke-agent-tools.md). Agent actions become reliable. The gap between "knows what to do" and "can do it" closes.
+4. Harness last. Teams build [mechanical enforcement](../../agent-design/harness-engineering.md) -- custom linters, structural tests, CI gates. Agent output becomes self-verifying. The [verification bottleneck](../../human/rigor-relocation.md) breaks.
 
 The progression is natural but suboptimal. Harness engineering has the highest durability -- a linter rule catches a dependency violation in every session, for every agent, for every team member. The earlier you invest in harness, the more the other three disciplines compound against a reliable verification base.
 
@@ -149,18 +149,18 @@ The pattern that emerges from this exercise is consistent: most teams attribute 
 
 ## Related
 
-**Preceding modules**
+Preceding modules
 
 - [Prompt Engineering](prompt-engineering.md) -- system prompt altitude, polarity, compliance ceiling
 - [Context Engineering](context-engineering.md) -- context window mechanics, attention, compression
 - [Harness Engineering](harness-engineering.md) -- repo legibility, mechanical enforcement, backpressure
 - [Tool Engineering](tool-engineering.md) -- tool descriptions, schema design, MCP, skill authoring
 
-**Complementary module**
+Complementary module
 
 - [Eval Engineering](eval-engineering.md) -- measuring agent quality across sessions and over time, above the runtime harness layer
 
-**Source pages**
+Source pages
 
 - [Context Engineering](../../context-engineering/context-engineering.md) -- the foundational discipline
 - [Harness Engineering](../../agent-design/harness-engineering.md) -- environment design for agent reliability

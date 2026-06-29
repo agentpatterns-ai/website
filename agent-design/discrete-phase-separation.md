@@ -18,23 +18,23 @@ maturity: adopted
 
 > Each phase — research, planning, execution — runs in its own conversation. Only distilled artifacts cross boundaries, not full history.
 
-**Related lesson:** [Reasoning Budget — The Sandwich](https://learn.agentpatterns.ai/harness-engineering/reasoning-budget/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Reasoning Budget — The Sandwich](https://learn.agentpatterns.ai/harness-engineering/reasoning-budget/) — this concept features in a hands-on lesson with quizzes.
 
-## The Problem with Mixed Phases
+## The problem with mixed phases
 
-When an agent researches, plans, and implements in a single context window, three things compete for the model's attention simultaneously. The result is degraded output in all three directions: exploration cuts short because the model is already thinking about the plan; the plan is distorted by implementation details the model pre-cached; execution is contaminated by the reasoning traces from research that no longer apply.
+When an agent researches, plans, and implements in one context window, all three compete for the model's attention. Output degrades in every direction. Exploration cuts short because the model is already thinking about the plan. The plan is distorted by implementation details the model cached early. Execution is contaminated by research reasoning that no longer applies.
 
 Sam Stettner's formulation: *"Don't make Claude do research while it's trying to plan, while it's trying to implement."* ([nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/discrete-phase-separation.md))
 
-## The Three Phases
+## The three phases
 
 Each phase runs in a dedicated conversation with a clean context window:
 
 | Phase | Context Input | Artifact Output |
 |---|---|---|
-| **Research** | Task description + codebase access | Distilled findings summary (1–2K tokens) |
-| **Planning** | Findings summary only | Structured implementation plan |
-| **Execution** | Plan only | Code changes, commits |
+| Research | Task description + codebase access | Distilled findings summary (1–2K tokens) |
+| Planning | Findings summary only | Structured implementation plan |
+| Execution | Plan only | Code changes, commits |
 
 Raw conversation history never moves between phases. Only the compact artifact does.
 
@@ -64,40 +64,40 @@ flowchart LR
     P3 --> D([Done])
 ```
 
-## Why Conversation Boundary Matters
+## Why conversation boundary matters
 
-Prompt-level separation — using section headers or instruction clauses within one conversation — does not achieve the same result. The model has already processed earlier content and its attention spans the full context. Distraction and crosstalk persist — the [distractor-interference](../anti-patterns/distractor-interference.md) failure mode.
+Prompt-level separation — using section headers or instruction clauses within one conversation — does not work the same way. The model has already processed the earlier content, and its attention spans the full context. Distraction and crosstalk persist — the [distractor-interference](../anti-patterns/distractor-interference.md) failure mode.
 
-Conversation boundary resets everything: KV cache, attention state, and implicit prior reasoning. The execution agent literally cannot see what the research agent concluded except through the artifact you pass it.
+A conversation boundary resets everything: the KV cache, attention state, and implicit prior reasoning. The execution agent cannot see what the research agent concluded, except through the artifact you pass it.
 
 [Anthropic's context engineering documentation](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) confirms this behavior for sub-agents: detailed search context remains isolated within sub-agents; only distilled summaries return to the orchestrator.
 
-## Distilled Artifacts as the Transfer Medium
+## Distilled artifacts as the transfer medium
 
-The handoff artifact is the mechanism that makes isolation possible without losing continuity. Effective artifacts are:
+The handoff artifact makes isolation possible without losing continuity. Effective artifacts share three traits:
 
-- **Structured** — numbered steps, not prose narrative
-- **Self-contained** — the receiving agent needs no access to phase history
-- **Opinionated** — conclusions, not raw findings; a plan, not a list of options
+- Structured — numbered steps, not prose narrative
+- Self-contained — the receiving agent needs no access to phase history
+- Opinionated — conclusions, not raw findings; a plan, not a list of options
 
 [Claude Code best practices](https://code.claude.com/docs/en/best-practices) formalizes a four-phase sequence (Explore → Plan → Implement → Commit) where [Plan Mode](../tools/claude/plan-mode.md) enforces read-only context during research and planning, preventing premature file writes. This is the same isolation enforced mechanically rather than by conversation boundary.
 
-## Model Selection Per Phase
+## Model selection per phase
 
-The separation enables workload-appropriate model routing. Research and planning benefit from deeper reasoning; execution benefits from speed and throughput. The nibzard catalog uses Opus for research/planning phases and Sonnet for execution ([nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/discrete-phase-separation.md)).
+Separate phases let you route each phase to a different model. Research and planning benefit from deeper reasoning. Execution benefits from speed and throughput. The nibzard catalog uses Opus for research and planning, and Sonnet for execution ([nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/discrete-phase-separation.md)).
 
 ## Trade-offs
 
-- **Latency**: Spinning up a fresh conversation per phase adds setup overhead compared to continuing one session.
-- **Artifact quality ceiling**: If the research summary omits a critical finding, the plan cannot recover it. The distillation step is a lossy compression.
-- **Orchestration overhead**: Requires an [agent harness](agent-harness.md) to spawn phases, pass artifacts, and handle phase-level failures.
-- **Loss of implicit context**: Intuitions the model formed during research (e.g., which files looked suspicious) do not survive the boundary unless written into the artifact.
+- Latency: spinning up a fresh conversation per phase adds setup overhead compared to continuing one session.
+- Artifact quality ceiling: if the research summary omits a critical finding, the plan cannot recover it. The distillation step is a lossy compression.
+- Orchestration overhead: it needs an [agent harness](agent-harness.md) to spawn phases, pass artifacts, and handle phase-level failures.
+- Loss of implicit context: intuitions the model formed during research (for example, which files looked suspicious) do not survive the boundary unless written into the artifact.
 
-## Distinction from Related Patterns
+## Distinction from related patterns
 
-- **[Cognitive Reasoning vs Execution Separation](cognitive-reasoning-execution-separation.md)** — enforces the boundary via typed tool interfaces within an architecture, not conversation resets. This pattern is structural; discrete phase separation is temporal.
-- **[Research-Plan-Implement Workflow](../workflows/research-plan-implement.md)** — describes the three-phase shape as a workflow; discrete phase separation is the isolation enforcement mechanism — why conversation boundary is stronger than prompt-level separation.
-- **[Loop Strategy Spectrum](loop-strategy-spectrum.md)** — addresses when to use fresh-context loops vs accumulated context; discrete phase separation is a specific application of fresh-context isolation.
+- [Cognitive Reasoning vs Execution Separation](cognitive-reasoning-execution-separation.md) — enforces the boundary via typed tool interfaces within an architecture, not conversation resets. That pattern is structural; discrete phase separation is temporal.
+- [Research-Plan-Implement Workflow](../workflows/research-plan-implement.md) — describes the three-phase shape as a workflow; discrete phase separation is the isolation enforcement mechanism — why a conversation boundary is stronger than prompt-level separation.
+- [Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md) — addresses when to use fresh-context loops versus accumulated context; discrete phase separation is a specific application of fresh-context isolation.
 
 ## Key Takeaways
 
@@ -110,11 +110,11 @@ The separation enables workload-appropriate model routing. Research and planning
 ## Related
 
 - [Cognitive Reasoning vs Execution Separation](cognitive-reasoning-execution-separation.md)
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md)
+- [Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md)
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md)
 - [Three Reasoning Spaces: Plan, Bead, and Code](three-reasoning-spaces.md)
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md)
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
 - [Domain-Scoped Parallel Exploration for Multi-File Change Localization](domain-scoped-parallel-localization.md)
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)

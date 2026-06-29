@@ -19,17 +19,17 @@ maturity: emerging
 
 > Embed defense mechanisms into each phase of the agent execution lifecycle so layers coordinate through feedback channels rather than operating in isolation.
 
-## Three Structural Gaps in Component-Level Defenses
+## Three structural gaps in component-level defenses
 
-Independent security components bolted on at fixed points create three gaps ([Lin et al., 2026 §1](https://arxiv.org/abs/2604.13630)):
+Independent components bolted on at fixed points create three gaps ([Lin et al., 2026 §1](https://arxiv.org/abs/2604.13630)):
 
-- **Context blindness** — external guardrails like [NeMo Guardrails](https://docs.nvidia.com/nemo/guardrails/latest/index.html) and [Llama Guard](https://arxiv.org/abs/2312.06674) filter conversational boundaries with no visibility into harness-internal state; a poisoned tool output in the reasoning chain shapes actions undetected.
-- **Inter-layer isolation** — checks cannot coordinate, so composite attacks leave each checkpoint seeing only a fragment of the signal.
-- **Lack of resilience** — once outer defenses are penetrated, binary pass/block offers no mechanism for progressive restriction or graceful degradation.
+- Context blindness — external guardrails like [NeMo Guardrails](https://docs.nvidia.com/nemo/guardrails/latest/index.html) and [Llama Guard](https://arxiv.org/abs/2312.06674) filter conversational boundaries blind to harness-internal state, so a poisoned tool output shapes actions undetected.
+- Inter-layer isolation — checks cannot coordinate, so composite attacks leave each checkpoint seeing only a signal fragment.
+- Lack of resilience — once outer defenses are breached, pass or block offers no progressive restriction or graceful degradation.
 
-## Four Defense Layers Mapped to the Execution Lifecycle
+## Four defense layers mapped to the execution lifecycle
 
-One defense layer maps to each phase of the agent execution loop ([Lin et al., 2026 §3.2](https://arxiv.org/abs/2604.13630)):
+One defense layer maps to each phase of the execution loop ([Lin et al., 2026 §3.2](https://arxiv.org/abs/2604.13630)):
 
 ```mermaid
 graph TD
@@ -44,39 +44,39 @@ graph TD
     style D fill:#e6f4ea,stroke:#1e8e3e
 ```
 
-### L1: Inform — Input Filtering with Provenance
+### L1: Inform — input filtering with provenance
 
-A three-stage pipeline sanitizes external content before it enters agent context ([Lin et al., 2026 §3.3.1](https://arxiv.org/abs/2604.13630)):
+A three-stage pipeline sanitizes content before it enters agent context ([Lin et al., 2026 §3.3.1](https://arxiv.org/abs/2604.13630)):
 
-1. **Structural sanitization** — strips encoding obfuscation (hidden Unicode, HTML comments, homoglyphs via NFKC)
-2. **Pattern detection** — regex fast-path for known injection patterns before LLM inference
-3. **Semantic filtering** — a judge model strips override attempts when Stage 2 flags content
+1. Structural sanitization strips encoding obfuscation: hidden Unicode, HTML comments, homoglyphs via NFKC.
+2. Pattern detection runs a regex fast-path for known injection patterns before LLM inference.
+3. Semantic filtering uses a judge model to strip override attempts when stage 2 flags content.
 
 Each chunk gets a provenance tag (source type, trust, modification). Tool outputs and retrieved content default to "low" trust, reflecting elevated [indirect prompt injection](https://arxiv.org/abs/2302.12173) risk.
 
-### L2: Verify — Tiered Decision Verification
+### L2: Verify — tiered decision verification
 
-Every tool invocation passes through three tiers ([Lin et al., 2026 §3.3.2](https://arxiv.org/abs/2604.13630)):
+Every tool call passes through three tiers ([Lin et al., 2026 §3.3.2](https://arxiv.org/abs/2604.13630)):
 
-- **Tier 1 (Rule):** deterministic scoring on tool identity, argument patterns, path constraints — low-risk passes, high-risk blocks, ambiguous escalates.
-- **Tier 2 (Judge):** a separate LLM rates the call as safe, uncertain, or unsafe given name, arguments, and recent reasoning.
-- **Tier 3 (Causal):** causal analysis determines whether an ambiguous call reflects legitimate intent or adversarial injection.
+- Tier 1 (rule): deterministic scoring on tool identity, argument patterns, path constraints — low-risk passes, high-risk blocks, ambiguous escalates.
+- Tier 2 (judge): a separate LLM rates the call as safe, uncertain, or unsafe given name, arguments, and reasoning.
+- Tier 3 (causal): causal analysis decides whether an ambiguous call reflects legitimate intent or adversarial injection.
 
-### L3: Constrain — Privilege-Separated Execution
+### L3: Constrain — privilege-separated execution
 
-Three mechanisms enforce least-privilege at execution ([Lin et al., 2026 §3.3.3](https://arxiv.org/abs/2604.13630)):
+Three mechanisms enforce least privilege at execution ([Lin et al., 2026 §3.3.3](https://arxiv.org/abs/2604.13630)):
 
-- **Risk tier classification** — five tiers (read-only, write, execute, network, destructive); each call is checked against the ceiling.
-- **Capability tokens** — session tokens carry TTL, max invocations, and a cryptographic signature, bounding blast radius of a compromised session.
-- **Integrity verification** — HMAC-SHA256 signatures on tool descriptions, recomputed on access to block tampering.
+- Risk tier classification defines five tiers (read-only, write, execute, network, destructive); each call is checked against the ceiling.
+- Capability tokens carry a TTL, max invocations, and a cryptographic signature, bounding blast radius of a compromised session.
+- Integrity verification adds HMAC-SHA256 signatures to tool descriptions, recomputed on access to block tampering.
 
-### L4: Correct — Rollback and Adaptive Degradation
+### L4: Correct — rollback and adaptive degradation
 
-Last-line defense when upstream layers fail ([Lin et al., 2026 §3.3.4](https://arxiv.org/abs/2604.13630)):
+These are the last-line defense when upstream layers fail ([Lin et al., 2026 §3.3.4](https://arxiv.org/abs/2604.13630)).
 
-**Checkpointing** snapshots file system, execution history, and memory at intervals; rollback restores environment and persistent state so memory corruption does not survive recovery.
+Checkpointing snapshots file system, execution history, and memory at intervals; rollback restores environment and persistent state so memory corruption does not survive recovery.
 
-**Adaptive degradation** replaces binary pass/block with progressive restriction — each confirmed attack raises the level:
+Adaptive degradation replaces pass or block with progressive restriction. Each confirmed attack raises the level:
 
 | Level | Effect |
 |-------|--------|
@@ -86,11 +86,11 @@ Last-line defense when upstream layers fail ([Lin et al., 2026 §3.3.4](https://
 | 3 | Execute tools disabled |
 | 4 | Read-only operations only |
 
-**Adaptive recovery** prevents permanent capability loss: after a window without violations (default 5 steps), degradation drops one step.
+Adaptive recovery prevents permanent capability loss: after a clean window (default 5 steps), degradation drops one step.
 
-## Cross-Layer Feedback
+## Cross-layer feedback
 
-Unlike independent [defense-in-depth](defense-in-depth-agent-safety.md), layers communicate through feedback channels ([Lin et al., 2026 §3.3.5-3.3.6](https://arxiv.org/abs/2604.13630)):
+Unlike independent [defense-in-depth](defense-in-depth-agent-safety.md), the layers communicate through feedback channels ([Lin et al., 2026 §3.3.5-3.3.6](https://arxiv.org/abs/2604.13630)):
 
 ```mermaid
 graph LR
@@ -100,25 +100,25 @@ graph LR
     L4 -->|recovery → de-escalate| L2
 ```
 
-**Entropy monitor.** A sliding window (default 20 actions) tracks violation rate across L1, L2, L3 signals. Exceeding the threshold (default 0.3) raises L2's minimum tier, forcing LLM scrutiny ([Lin et al., 2026 §3.3.5](https://arxiv.org/abs/2604.13630)) — catching bursts of borderline actions that individually pass but are jointly suspicious.
+An entropy monitor's sliding window (default 20 actions) tracks violation rate across L1, L2, and L3 signals. Exceeding the threshold (default 0.3) raises L2's minimum tier and forces LLM scrutiny ([Lin et al., 2026 §3.3.5](https://arxiv.org/abs/2604.13630)), catching bursts of actions that individually pass but are jointly suspicious.
 
 Feedback paths: L1→L2 raises the verification floor on injection detection; L2→L4 rolls back on confirmed attacks; L4→L3 caps the tool tier by degradation level; L4→L2 relaxes verification as privileges restore.
 
-## Empirical Results
+## Empirical results
 
-On Agent-SafetyBench with DeepSeek-V3.2 across three harness configurations (ReAct, Multi-Agent, Self-Evolving) and five attack types ([Lin et al., 2026 §4](https://arxiv.org/abs/2604.13630)):
+On Agent-SafetyBench with DeepSeek-V3.2 across three configurations (ReAct, Multi-Agent, Self-Evolving) and five attack types ([Lin et al., 2026 §4](https://arxiv.org/abs/2604.13630)):
 
-- **ReAct:** 22.4 pp UBR reduction, 22.8 pp ASR reduction vs baseline
-- **Aggregate:** ~38% UBR and ~42% ASR reduction; task completion within 1-2 pp of baselines
-- **Residual:** memory injection retains 55-56% UBR; composite attacks carry highest residual risk ([§4.3](https://arxiv.org/abs/2604.13630))
+- ReAct: 22.4 pp UBR reduction, 22.8 pp ASR reduction versus baseline
+- Aggregate: about 38% UBR and 42% ASR reduction, task completion within 1 to 2 pp of baselines
+- Residual: memory injection retains 55 to 56% UBR; composite attacks carry highest residual risk ([§4.3](https://arxiv.org/abs/2604.13630))
 
-## When This Pattern Fails
+## When this pattern fails
 
-- **Simulated evaluation only.** The paper's execution environment is simulated; production transfer is future work ([§5](https://arxiv.org/abs/2604.13630)).
-- **Memory injection remains potent.** Persistent memory still reaches 55%+ unsafe behavior rates.
-- **Cost exceeds ROI for low-risk agents.** For read-only agents or prototypes, independent [defense-in-depth](defense-in-depth-agent-safety.md) delivers most of the benefit at lower complexity.
-- **Coupling amplifies false positives.** A misconfigured entropy monitor can cascade blocks system-wide.
-- **Latency-sensitive pipelines.** LLM-judge escalation may add unacceptable overhead in high-frequency tool-calling.
+- Simulated evaluation only. The execution environment is simulated; production transfer is future work ([§5](https://arxiv.org/abs/2604.13630)).
+- Memory injection remains potent. Persistent memory still reaches over 55% unsafe behavior rates.
+- Cost outweighs the benefit for low-risk agents. For read-only agents or prototypes, independent [defense-in-depth](defense-in-depth-agent-safety.md) delivers most of the benefit at lower complexity.
+- Coupling amplifies false positives. A misconfigured entropy monitor can cascade blocks system-wide.
+- Latency-sensitive pipelines suffer. LLM-judge escalation may add unacceptable overhead in high-frequency tool-calling.
 
 ## Key Takeaways
 
@@ -132,7 +132,7 @@ On Agent-SafetyBench with DeepSeek-V3.2 across three harness configurations (ReA
 ## Related
 
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
-- [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — competing execution-surface framing of the same risks, organised by surface rather than lifecycle phase
+- [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — competing execution-surface framing of the same risks, organized by surface rather than lifecycle phase
 - [OWASP LLM Top 10 (2025): Agent Security Crosswalk](owasp-llm-top-10-2025-agent-crosswalk.md) — named-threat lookup table that maps onto the lifecycle phases here, not a competing taxonomy
 - [Constraint Drift: Why Safety Must Be Maintained, Not Asserted](constraint-drift-multi-agent-safety.md)
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md)

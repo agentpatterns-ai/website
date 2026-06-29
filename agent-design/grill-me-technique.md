@@ -17,13 +17,13 @@ maturity: adopted
 
 > Direct the agent to challenge your plan rather than execute it — surfacing hidden assumptions and decision gaps before implementation begins.
 
-## The Inversion
+## The inversion
 
-The default agent workflow runs one way: developer specifies, agent executes. Grill Me reverses the direction for one focused session. You describe your plan; the agent interrogates it, asking probing questions until every branch of the decision tree is resolved.
+The default agent workflow runs one way: developer specifies, agent executes. Grill Me reverses the direction for one focused session. You describe your plan, and the agent interrogates it. It asks probing questions until every branch of the decision tree is resolved.
 
-The inversion is developer-initiated and exhaustive — unlike the agent-initiated [Agent Pushback Protocol](agent-pushback-protocol.md), it fires on demand rather than on detection of a specific concern. The agent is explicitly tasked to be difficult — not to be helpful in the "implement this" sense but helpful in the "expose what I haven't thought through" sense. This runs before any code is written.
+You start the inversion, and it is exhaustive. Unlike the agent-initiated [Agent Pushback Protocol](agent-pushback-protocol.md), it fires on demand rather than when the agent detects a specific concern. You task the agent to be difficult — not helpful in the "implement this" sense but helpful in the "expose what I haven't thought through" sense. This runs before any code is written.
 
-## How It Works
+## How it works
 
 Matt Pocock's [grill-me skill](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) implements this as three directives to the agent:
 
@@ -33,11 +33,11 @@ Matt Pocock's [grill-me skill](https://github.com/mattpocock/skills/blob/main/sk
 
 The one-question-at-a-time constraint matters: it prevents the session from collapsing into a questionnaire the developer answers superficially. The recommended-answer per question prevents interrogation fatigue — the agent proposes, the developer confirms or corrects, and the session stays productive.
 
-The codebase-first heuristic eliminates noise: questions whose answers already exist in code are resolved by the agent without developer input, keeping the session focused on genuine unknowns.
+The codebase-first heuristic cuts noise: the agent resolves questions whose answers already exist in code, without developer input, so the session stays focused on genuine unknowns.
 
-The "walk every branch of the decision tree" framing predates the skill: Frederick Brooks catalogues this approach as a central design discipline in [_The Design of Design_ (ACM Digital Library)](https://dl.acm.org/doi/10.5555/1738960), where making the design tree explicit is what separates rigorous design from premature commitment.
+The "walk every branch of the decision tree" framing predates the skill. Frederick Brooks catalogs this approach as a central design discipline in [The Design of Design (ACM Digital Library)](https://dl.acm.org/doi/10.5555/1738960), where making the design tree explicit is what separates rigorous design from premature commitment.
 
-## When to Trigger It
+## When to trigger it
 
 Grill Me earns its overhead when:
 
@@ -48,19 +48,19 @@ Grill Me earns its overhead when:
 
 Skip it for single-step tasks, reversible experiments, and changes where the decision space is already fully constrained by external requirements.
 
-## Distinction from Related Patterns
+## Distinction from related patterns
 
 Three patterns involve agents and plan gaps; they differ in who triggers them and when:
 
 | Pattern | Who triggers | When | Goal |
 |---------|-------------|------|------|
-| **Grill Me** | Developer | Before implementation, explicitly | Exhaust all decision branches |
+| Grill Me | Developer | Before implementation, explicitly | Exhaust all decision branches |
 | [Agent Pushback Protocol](agent-pushback-protocol.md) | Agent | During execution, when detecting a concern | Surface a specific implementation or requirements concern |
 | [Interactive Clarification](interactive-clarification-underspecified-tasks.md) | Agent | When underspecification is detected | Resolve the minimal information gap needed to proceed |
 
 Grill Me is exhaustive by design. The pushback protocol and interactive clarification are targeted — they fire on detection of a specific problem. Grill Me fires unconditionally and walks everything.
 
-## In a Workflow Pipeline
+## In a workflow pipeline
 
 Grill Me functions as the first gate in a pre-implementation pipeline. Pocock's five-skill library uses it as the entry point: grill-me produces shared understanding, which feeds a PRD session, which decomposes into implementation tasks ([daily-use skill library](../workflows/daily-use-skill-library.md)):
 
@@ -73,21 +73,21 @@ graph LR
 
 The session output — the resolved decision tree — becomes the input for a PRD or specification step, making the interrogation findings durable across the stateless boundary of a new agent session.
 
-## When This Backfires
+## When this backfires
 
-The technique adds cost without value in three conditions:
+The technique adds cost without value in three conditions.
 
-**Constrained problems with one valid solution.** When external requirements (API contract, regulatory rule, existing interface) fully determine the answer, interrogation produces confirmation rather than discovery.
+Constrained problems with one valid solution. When external requirements (an API contract, a regulatory rule, an existing interface) fully determine the answer, interrogation produces confirmation rather than discovery.
 
-**Fast-iteration loops on reversible work.** If the cost of a wrong assumption is one failing test rather than a shipped feature, implementation reveals gaps faster than interrogation.
+Fast-iteration loops on reversible work. If the cost of a wrong assumption is one failing test rather than a shipped feature, implementation reveals gaps faster than interrogation.
 
-**No downstream artifact.** If the session findings are not captured in a durable artifact such as a [spec-driven](../workflows/spec-driven-development.md) plan, agent statelessness erases them. The next session starts cold. Run Grill Me only when the output feeds a durable artifact.
+No downstream artifact. If you do not capture the session findings in a durable artifact such as a [spec-driven](../workflows/spec-driven-development.md) plan, agent statelessness erases them. The next session starts cold. Run Grill Me only when the output feeds a durable artifact.
 
-AI Hero catalogues further anti-patterns specific to `/grill-me` and `/grill-with-docs` — common ways plan stress-testing goes wrong before agentic implementation begins ([AI Hero, 9 things people get wrong with /grill-me and /grill-with-docs](https://www.aihero.dev/things-people-get-wrong-with-grill-me-and-grill-with-docs)).
+AI Hero catalogs further anti-patterns specific to `/grill-me` and `/grill-with-docs` — common ways plan stress-testing goes wrong before agentic implementation begins ([AI Hero, 9 things people get wrong with /grill-me and /grill-with-docs](https://www.aihero.dev/things-people-get-wrong-with-grill-me-and-grill-with-docs)).
 
 ## Example
 
-The complete grill-me skill from [mattpocock/skills](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) is a minimal instruction set — the [daily-use skill library](../workflows/daily-use-skill-library.md) characterises it as "three sentences" — that changes agent behavior at this decision point:
+The complete grill-me skill from [mattpocock/skills](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) is a minimal instruction set — the [daily-use skill library](../workflows/daily-use-skill-library.md) characterizes it as "three sentences" — that changes agent behavior at this decision point:
 
 ```
 Interview me relentlessly about every aspect of this plan until we reach a

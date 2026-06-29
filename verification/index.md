@@ -36,6 +36,7 @@ last_reviewed: 2026-05-27
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — Four measurement-methodology gaps (held-out, trajectory-opaque, skill-retrieval, test-evolution) a stronger model cannot close — each needs a harness fix, not a better model
 - [Dominator-Graph Trajectory Invariants for Non-Deterministic Agents](dominator-graph-trajectory-invariants.md) — Validate branching agent runs by checking which states must dominate success — compiler-theory dominance over trajectory graphs replaces brittle scripted assertions when 2–10 successful traces are available
 - [Multi-Turn Conversation Evaluation](multi-turn-conversation-evaluation.md) — Pair per-turn scoring with a trace-level resolution check so the two layers catch context loss, intent drift, and circular exchange that single-turn metrics miss
+- [Stateful Agent Evals via State Snapshots and Transition Assertions](stateful-agent-state-and-transition-evals.md) — Assert on intermediate state and transitions, not just final output, to catch the four state-drift failures (wrong-but-consistent narrative, mid-context amnesia, stale assumptions, state corruption) that outcome-only and per-turn scorers structurally miss in side-effecting agents
 - [Macro Evals for Agentic Systems](macro-evals-agentic-systems.md) — Aggregate per-trace findings across a corpus of agent runs to surface recurring behavior patterns that single-trace evals cannot expose — when volume, judge quality, and selection bias permit
 - [Variance-Based RL Sample Selection](variance-based-rl-sample-selection.md) — Profile training samples by score variance before RL fine-tuning to identify the productive subset where the model sometimes succeeds and sometimes fails
 - [CoT Robustness in Code Generation](cot-robustness-code-generation.md) — Chain-of-thought is not a universal win for code generation; measure Pass@1 and Pass^k with and without CoT before enabling it as a default
@@ -57,6 +58,7 @@ last_reviewed: 2026-05-27
 - [Human-Review-Driven Curation of Golden Eval Datasets](human-review-golden-dataset-curation.md) — Sample production traces on intent, attribute each disagreement to scorer or agent, and feed only agent-failure labels back into the golden set to keep an LLM-judge suite aligned with a moving production distribution
 - [Pre-Change Impact Analysis](pre-change-impact-analysis.md) — Build a code-to-test dependency map and deliver it as a lightweight agent skill so agents verify at-risk tests before committing, cutting regressions by 70%
 - [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md) — Run the test suite twice (baseline + patched) and gate the PR on the diff, not the absolute pass rate — under specific preconditions on test-suite strength, planner localization, and CI determinism
+- [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — Multi-turn LLM code refinement silently breaks previously-passing code (Phi 0.089 between instruction adherence and functional correctness); pin the original suite, re-execute every turn, and gate on the pass-set diff
 
 ## Eval-Driven Development
 
@@ -88,6 +90,7 @@ last_reviewed: 2026-05-27
 - [Phantom Symbol Detection for LLM API Migration](phantom-symbol-detection.md) — Verify symbols in LLM-generated migration code against a documentation-derived knowledge base — a deterministic check that catches fabricated imports, constructors, and methods that probabilistic judges miss
 - [Generative Provenance Records for Tool-Using Agents](generative-provenance-records.md) — Emit a structured record (tool turn, evidence span, relation) alongside each output sentence so a mechanical verifier can check claim-level grounding before the answer leaves the loop
 - [Defense-in-Depth Against Coding Agent Fabrication (Honesty Harness)](honesty-harness-fabrication-defense.md) — Four uncorrelated layers — instruction-level honesty rules, verify-before-write, real-time hooks that feed output back, and an external-tool fact-checker subagent — that reduce fabrication survival without claiming elimination
+- [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — Stack scanner-pass, full-scanner, validate, plan, and plan-diff oracles so LLM-generated infrastructure-as-code security fixes have to clear behavioral checks — first-pass agent repairs cleared the targeted Checkov finding 83.3 percent of the time but 71.4 percent of plan-compared repairs were deceptive fixes
 
 ## Tooling
 

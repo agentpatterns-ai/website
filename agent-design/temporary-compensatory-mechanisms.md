@@ -16,58 +16,58 @@ maturity: adopted
 
 > Design scaffolding that compensates for current model limitations as removable layers, not load-bearing architecture. Track which mechanisms are compensatory and which are permanently valuable.
 
-## The Problem
+## The problem
 
 Agent harnesses accumulate mechanisms that compensate for model limitations — unreliable self-verification, instruction fade-out, infinite loops. When this scaffolding becomes load-bearing, removing it requires a rewrite. Design it for removal from the start.
 
-## Classifying Harness Mechanisms
+## Classifying harness mechanisms
 
 Every harness mechanism falls into one of three categories:
 
-| Category | Design Implication | Examples |
+| Category | Design implication | Examples |
 |---|---|---|
-| **Compensatory** | Removable middleware; feature-flag; track which model capability obsoletes it | Loop detection, forced verification, instruction reminders, iteration caps |
-| **Structurally valuable** | Invest in robustness; valuable regardless of model capability | Sandboxing, permission gates, [context compaction](../context-engineering/context-compression-strategies.md), tool discovery, feedback loops |
-| **Mixed permanence** | Design for graceful degradation; shrinks in scope but does not disappear | Context summarization, structured feature tracking, progress files |
+| Compensatory | Removable middleware; feature-flag; track which model capability obsoletes it | Loop detection, forced verification, instruction reminders, iteration caps |
+| Structurally valuable | Invest in reliability; valuable regardless of model capability | Sandboxing, permission gates, [context compaction](../context-engineering/context-compression-strategies.md), tool discovery, feedback loops |
+| Mixed permanence | Design for graceful degradation; shrinks in scope but does not disappear | Context summarization, structured feature tracking, progress files |
 
-The classification question: *If the model were perfect at this capability, would I still want this mechanism?* Yes = structural; No = compensatory; Partially = mixed.
+Ask one question to classify a mechanism: if the model were perfect at this capability, would you still want it? Yes means structural. No means compensatory. Partially means mixed.
 
-## Compensatory Mechanisms in Practice
+## Compensatory mechanisms in practice
 
-### Loop Detection Middleware
+### Loop detection middleware
 
-[LangChain's LoopDetectionMiddleware](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) intercepts agent actions and detects repetitive patterns because models lack consistent self-monitoring for circular behavior.
+[LangChain's LoopDetectionMiddleware](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) intercepts agent actions and detects repetitive patterns, because models lack consistent self-monitoring for circular behavior.
 
-**Design for removal**: implement as middleware disabled via configuration, not logic woven into the core agent loop.
+Design for removal: implement it as middleware you can disable through configuration, not as logic woven into the core agent loop.
 
-### Forced Verification Passes
+### Forced verification passes
 
-[Pre-completion checklists](../verification/pre-completion-checklists.md) force agents through verification before declaring completion. Without an explicit gate, agents frequently declare success before running tests or checking linter output — the [premature completion](../anti-patterns/premature-completion.md) failure of treating apparent completion as actual completion.
+[Pre-completion checklists](../verification/pre-completion-checklists.md) force agents through verification before they declare completion. Without an explicit gate, agents often declare success before running tests or checking linter output — the [premature completion](../anti-patterns/premature-completion.md) failure of treating apparent completion as actual completion.
 
-**Design for removal**: separate the gate from the criteria. The criteria (tests pass, linter clean) are permanently valuable. The gate forcing the agent to check them is compensatory.
+Design for removal: separate the gate from the criteria. The criteria (tests pass, linter clean) are permanently valuable. The gate that forces the agent to check them is compensatory.
 
-### Instruction Fade-Out Reminders
+### Instruction fade-out reminders
 
-The [OPENDEV agent](https://arxiv.org/abs/2603.05344) re-injects initial instructions during long sessions via event-driven system reminders, counteracting instruction fade-out as context fills.
+The [OPENDEV agent](https://arxiv.org/abs/2603.05344) re-injects initial instructions during long sessions through event-driven system reminders, countering instruction fade-out as context fills.
 
-**Design for removal**: implement as configurable middleware with a kill switch. If a future model maintains instruction adherence across its full context window, the reminders become noise.
+Design for removal: implement it as configurable middleware with a kill switch. If a future model holds instruction adherence across its full context window, the reminders become noise.
 
-### Doom-Loop Iteration Caps
+### Doom-loop iteration caps
 
-Hard iteration limits that terminate execution after N failed attempts — the [OPENDEV agent](https://arxiv.org/abs/2603.05344) includes this in its execution cycle.
+Hard iteration limits stop execution after N failed attempts. The [OPENDEV agent](https://arxiv.org/abs/2603.05344) includes this in its execution cycle.
 
-**Design for removal**: implement as a [circuit breaker](../observability/circuit-breakers.md) with configurable thresholds, removable independently of core execution logic.
+Design for removal: implement it as a [circuit breaker](../observability/circuit-breakers.md) with configurable thresholds, removable on its own apart from core execution logic.
 
-## Structurally Valuable Mechanisms
+## Structurally valuable mechanisms
 
-These remain necessary regardless of model capability:
+These mechanisms stay necessary regardless of model capability:
 
-- **Sandboxing and permission gates** — a more capable model is a *stronger* argument for sandboxing.
-- **Environmental feedback loops** — agents must observe effects of their actions (test output, build results, runtime errors).
-- **Tool discovery and lazy loading** — [deferred tool loading](../tool-engineering/filesystem-tool-discovery.md) manages finite tool schema budgets; selective loading stays efficient even with larger windows.
-- **Task decomposition** — bounded units are sound engineering regardless of model capability.
+- Sandboxing and permission gates: a more capable model is a stronger argument for sandboxing.
+- Environmental feedback loops: agents must observe the effects of their actions, such as test output, build results, and runtime errors.
+- Tool discovery and lazy loading: [deferred tool loading](../tool-engineering/filesystem-tool-discovery.md) manages finite tool schema budgets, and selective loading stays efficient even with larger windows.
+- Task decomposition: bounded units are sound engineering regardless of model capability.
 
-## Decision Framework
+## Decision framework
 
 ```mermaid
 graph TD
@@ -82,13 +82,13 @@ graph TD
     G --> J[Document the model<br/>capability that obsoletes it]
 ```
 
-For each compensatory mechanism, record:
+For each compensatory mechanism, record three things:
 
-1. **What limitation it compensates for** — e.g., "models do not self-verify before declaring completion"
-2. **What improvement would obsolete it** — e.g., "reliable self-verification with 95%+ accuracy"
-3. **How to remove it** — e.g., "disable PRE_COMPLETION_CHECKLIST_ENABLED flag; remove middleware registration"
+1. What limitation it compensates for — for example, "models do not self-verify before declaring completion".
+2. What improvement would obsolete it — for example, "reliable self-verification with 95%+ accuracy".
+3. How to remove it — for example, "disable PRE_COMPLETION_CHECKLIST_ENABLED flag; remove middleware registration".
 
-## Example: Annotating a Harness Config
+## Example: annotating a harness config
 
 ```yaml
 harness:
@@ -117,15 +117,15 @@ harness:
       enabled: true
 ```
 
-## When This Backfires
+## When this backfires
 
 Classifying scaffolding up front is not free. The steelman for building the mechanism directly:
 
-- **Short-lived projects** — for internal tooling with a 6-month horizon, feature flags and middleware boundaries cost more than the eventual removal would have.
-- **Stable model dependencies** — teams pinned to a specific model version do not get capability upgrades, so removability machinery is pure overhead.
-- **No middleware layer** — "implement as removable middleware" presumes a middleware layer exists, the kind the [scaffold architecture taxonomy](harness-design-dimensions.md) catalogs. Retrofitting one to support a single mechanism inverts the cost-benefit.
-- **Slow-improving capabilities** — self-verification, instruction adherence, and loop-avoidance remain unreliable years later. Many "temporary" compensations outlive the projects that built them.
-- **Mechanism interaction** — compensatory and structural mechanisms often share state (e.g., [loop detection](../observability/loop-detection.md) feeds iteration caps). Decoupling for independent removability can produce a thinner but more complex architecture.
+- Short-lived projects: for internal tooling with a 6-month horizon, feature flags and middleware boundaries cost more than the eventual removal would have.
+- Stable model dependencies: teams pinned to a specific model version do not get capability upgrades, so removability machinery is pure overhead.
+- No middleware layer: "implement as removable middleware" presumes a middleware layer exists, the kind the [scaffold architecture taxonomy](harness-design-dimensions.md) catalogs. Retrofitting one to support a single mechanism inverts the cost-benefit.
+- Slow-improving capabilities: self-verification, instruction adherence, and loop-avoidance stay unreliable years later. Many "temporary" compensations outlive the projects that built them.
+- Mechanism interaction: compensatory and structural mechanisms often share state. For example, [loop detection](../observability/loop-detection.md) feeds iteration caps. Decoupling them for independent removability can produce a thinner but more complex architecture.
 
 Treat classification as a tagging exercise on existing scaffolding, not a mandate to build every mechanism behind its own feature flag.
 

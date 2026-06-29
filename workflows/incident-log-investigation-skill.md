@@ -16,11 +16,11 @@ maturity: adopted
 
 > An incident log investigation skill that surfaces *any* log is worse than none: under time pressure a false signal actively misleads, so precision is non-negotiable.
 
-An incident log investigation skill is a specialist agent that dispatches parallel queries to multiple observability backends (logs, traces, metrics), correlates results on shared time windows and service identifiers, and returns only the cross-system signals that survive corroboration — never the raw query output.
+An incident log investigation skill is a specialist agent. It dispatches parallel queries to multiple observability backends (logs, traces, metrics), correlates results on shared time windows and service identifiers, and returns only the cross-system signals that survive corroboration — never the raw query output.
 
-## The Framing
+## The framing
 
-Incident investigation is one of the highest-leverage agentic use cases. The blast radius of a slow investigation is high; the relevant signals are scattered across multiple observability systems. A well-designed skill can navigate all of them and surface correlated evidence — but only if its output is trustworthy. The patterns here (parallel tool calls, context-budget discipline, eval-backed precision) apply beyond this specific 3-system setup.
+Incident investigation is one of the strongest uses for agents. A slow investigation is costly, and the signals you need are scattered across several observability systems. A well-designed skill can search all of them and surface correlated evidence, but only if you can trust its output. The patterns here — parallel tool calls, context-budget discipline, eval-backed precision — apply well beyond this 3-system setup.
 
 ## Architecture
 
@@ -40,15 +40,15 @@ graph TD
 
 The skill does not return raw query results. It aggregates before surfacing — only the signals that correlate across systems reach the incident context.
 
-## The Multi-System Orchestration Recipe
+## The multi-system orchestration recipe
 
-Querying three systems sequentially is slow and bloats the context with irrelevant intermediate data. The correct pattern is programmatic parallel dispatch.
+Querying three systems one after another is slow and fills the context with irrelevant intermediate data. The better pattern is programmatic parallel dispatch.
 
-**Step 1 — Translate the incident description to queries**
+Step 1 — translate the incident description to queries
 
 The skill accepts a structured input: incident description, affected service, approximate time window, and optional error signature. It translates these into system-specific queries without human intervention.
 
-**Step 2 — Dispatch queries in parallel**
+Step 2 — dispatch queries in parallel
 
 ```python
 # Pseudocode — adapt to your agent framework
@@ -61,26 +61,26 @@ results = await asyncio.gather(
 
 Parallel dispatch prevents any single slow backend from blocking the others. Each tool fetches, filters, and returns only relevant rows — not full result sets. [Source: [Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use)]
 
-**Step 3 — Correlate and return**
+Step 3 — correlate and return
 
 Align results on the shared time window and service identifier. Discard signals that appear in only one system and are not corroborated. Return a ranked summary with the most actionable signal first.
 
 The model never sees the raw telemetry — it sees the post-aggregation summary. This is what prevents [context pollution](../anti-patterns/session-partitioning.md) from large log volumes.
 
-## Context Budget Discipline
+## Context budget discipline
 
-Each observability backend has its own MCP server or tool definition. Anthropic reports that a typical five-server setup (e.g., GitHub, Slack, Sentry, Grafana, Splunk) consumes ~55K tokens in definitions before the model does any work, and that the Tool Search Tool reduces that by over 85% by loading only the 3–5 tools needed for a given request. [Source: [Tool Search Tool — Claude API Docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)]
+Each observability backend has its own MCP server or tool definition. Anthropic reports that a typical five-server setup (for example GitHub, Slack, Sentry, Grafana, Splunk) consumes about 55K tokens in definitions before the model does any work. The Tool Search Tool cuts that by over 85% by loading only the 3 to 5 tools a request needs. [Source: [Tool Search Tool — Claude API Docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)]
 
 | Loading strategy | Token cost (5 backends) |
 |-----------------|------------------------|
 | All tool definitions always loaded | ~55K tokens |
 | On-demand via Tool Search Tool | >85% reduction — 3–5 tools per request |
 
-The same ratio applied to an incident-investigation workload of 50 incidents per week compounds into a meaningful per-team context saving, though the exact figure depends on how many of the connected backends each incident actually touches.
+Apply the same ratio to a workload of 50 incidents per week and it adds up to a meaningful context saving per team. The exact figure depends on how many connected backends each incident actually touches.
 
-## Progressive Disclosure Routing
+## Progressive disclosure routing
 
-The generalist incident agent delegates to this skill via `context: fork`. The skill is self-contained — it does not require the parent agent's full context to operate.
+The generalist incident agent delegates to this skill via `context: fork`. The skill is self-contained — it does not need the parent agent's full context to operate.
 
 ```yaml
 # SKILL.md frontmatter (Claude Code / Agent Skills standard)
@@ -98,17 +98,17 @@ The `context: fork` declaration tells the runtime to spawn a clean sub-agent con
 
 This matches the orchestrator-workers pattern for scenarios where subtask discovery is unpredictable: the generalist agent cannot know in advance which observability system will hold the root-cause signal. [Source: [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)]
 
-## Eval Design
+## Eval design
 
-Precision is the core quality metric. An eval suite that tests whether the skill "returned logs" will pass on a skill that returns misleading signals. The grader must test whether the skill surfaced the **correct root-cause signal** — the precision-first discipline of [eval-driven development](eval-driven-development.md).
+Precision is the core quality metric. An eval suite that tests whether the skill "returned logs" will pass on a skill that returns misleading signals. The grader must test whether the skill surfaced the correct root-cause signal — the precision-first discipline of [eval-driven development](eval-driven-development.md).
 
-### Building the Test Set
+### Building the test set
 
 Hold out a set of known incidents with verified root causes. For each:
 
 - Record the incident description, affected service, and time window used as input
 - Record the ground-truth root-cause signal (the log line, trace ID, or metric spike that explains the incident)
-- Optionally record known red herrings — correlated-but-unrelated signals that should *not* be surfaced
+- Optionally record known red herrings — correlated-but-unrelated signals that should not be surfaced
 
 ### Metrics
 
@@ -119,9 +119,9 @@ Hold out a set of known incidents with verified root causes. For each:
 | Tool call count | Efficiency; high count signals the skill is fetching broadly and discarding |
 | Token consumption | Context cost per investigation |
 
-High tool call counts are the key signal that the skill is not filtering effectively — it is fetching everything and relying on the model to discard irrelevant results. [Source: [Eval-Driven Development for tool building](eval-driven-development.md#applying-the-loop-to-tool-building)]
+High tool call counts are the clearest sign that the skill is not filtering effectively — it is fetching everything and relying on the model to discard irrelevant results. [Source: [Eval-Driven Development for tool building](eval-driven-development.md#applying-the-loop-to-tool-building)]
 
-### Anti-Reward-Hacking Grader
+### Anti-reward-hacking grader
 
 A grader that accepts "any correlated log" passes a skill that returns noise. Design the grader to evaluate against the held-out ground-truth signal set:
 
@@ -138,21 +138,21 @@ def grade(output, ground_truth):
 
 False positives on known red herrings should reduce the score — surfacing a misleading signal during an incident is an active harm, not a neutral outcome. [Source: [Agentic Handbook](https://www.nibzard.com/agentic-handbook)]
 
-## What Makes a Good Eval Task
+## What makes a good eval task
 
 - Incidents where one system holds the root cause and the others are noise — tests that the skill does not over-surface
 - Incidents where the signal appears across all three systems — tests correlation logic
 - Incidents with tight time windows (seconds, not hours) — tests time-window precision
 - Incidents where the service name is ambiguous (multiple services with similar names) — tests disambiguation
 
-## When This Backfires
+## When this backfires
 
 Parallel multi-system correlation with a strict "discard uncorroborated signals" rule has failure modes worth naming.
 
-- **Rare single-system root causes get filtered out.** When the authoritative signal only appears in one backend — for example, an application-level panic captured by Snowflake logs but not yet visible in traces or metrics — the correlation rule drops it. Tune the corroboration threshold to the incident class rather than hard-coding a 2-of-3 minimum.
-- **Cross-system crosstalk produces false correlations.** Time-window alignment across heterogeneous clocks and sampling rates can surface signals that co-occur by coincidence. Practitioners consistently flag unrefined correlation rules as a leading source of alert-fatigue noise. [Source: [IT Event Correlation — Splunk](https://www.splunk.com/en_us/blog/learn/it-event-correlation.html)]
-- **Eval overhead is not free.** Building and maintaining a held-out set of incidents with verified root causes, red herrings, and graders is substantial work. For teams with infrequent incidents or mature human runbooks, the eval investment may outweigh the precision gains.
-- **The skill is only as good as its inputs.** An AI incident triage tool without full environmental context — identities, permissions, network exposure, dependencies — produces the same noise as traditional rule-based systems. [Source: [AI Incident Response — Wiz](https://www.wiz.io/academy/detection-and-response/ai-for-incident-response)]
+- Rare single-system root causes get filtered out. When the authoritative signal only appears in one backend — for example, an application-level panic captured by Snowflake logs but not yet visible in traces or metrics — the correlation rule drops it. Tune the corroboration threshold to the incident class rather than hard-coding a 2-of-3 minimum.
+- Cross-system crosstalk produces false correlations. Time-window alignment across heterogeneous clocks and sampling rates can surface signals that co-occur by coincidence. Practitioners consistently flag unrefined correlation rules as a leading source of alert-fatigue noise. [Source: [IT Event Correlation — Splunk](https://www.splunk.com/en_us/blog/learn/it-event-correlation.html)]
+- Eval overhead is not free. Building and maintaining a held-out set of incidents with verified root causes, red herrings, and graders is substantial work. For teams with infrequent incidents or mature human runbooks, the eval investment may outweigh the precision gains.
+- The skill is only as good as its inputs. An AI incident triage tool without full environmental context — identities, permissions, network exposure, dependencies — produces the same noise as traditional rule-based systems. [Source: [AI Incident Response — Wiz](https://www.wiz.io/academy/detection-and-response/ai-for-incident-response)]
 
 ## Example
 
@@ -165,7 +165,7 @@ Time window: 14:25–14:45 UTC
 Error signature: "connection refused: payment-gateway:5432"
 ```
 
-**Query translation** — the skill generates three parallel queries:
+Query translation — the skill generates three parallel queries:
 
 ```sql
 -- Snowflake: structured app logs
@@ -197,7 +197,7 @@ avg:system.net.tcp.retransmits{service:checkout-api} by {host}
   .last("20m")
 ```
 
-**Parallel dispatch** returns three result sets. **Correlation** aligns on the 14:30–14:35 window:
+Parallel dispatch returns three result sets. Correlation aligns on the 14:30–14:35 window:
 
 | Source | Signal | Corroborated |
 |--------|--------|-------------|
@@ -218,7 +218,7 @@ Confidence: high.
 
 The generalist incident agent receives only this summary — not the raw query results — and routes to the database on-call team.
 
-## Provenance Note
+## Provenance note
 
 The specific Intercom implementation (Snowflake + Honeycomb + Datadog combination, high-quality evals, progressive disclosure routing) that inspired this page is sourced from a Twitter/X post that requires authentication and could not be independently verified. All architectural claims on this page are sourced independently from Anthropic's engineering guidance and the Claude API docs.
 

@@ -18,29 +18,29 @@ maturity: adopted
 
 > A long-running agent makes progress across many sessions and sandboxes by moving state out of the context window into durable artifacts that resume it.
 
-**Learn it hands-on:** [Long-Running Agents](https://learn.agentpatterns.ai/harness-engineering/long-running-agents/) — guided lesson with quizzes.
+Learn it hands-on: [Long-Running Agents](https://learn.agentpatterns.ai/harness-engineering/long-running-agents/) — guided lesson with quizzes.
 
-## What "Long-Running" Means
+## What "long-running" means
 
 Three problems share an operational surface ([Osmani: Long-running Agents, 2026-04-30](https://addyo.substack.com/p/long-running-agents)):
 
-- **Long-horizon reasoning** — planning over many dependent steps; a model story. METR's [task-completion time horizon](https://metr.org/time-horizons/) doubles roughly every seven months.
-- **Long-running execution** — a process running for hours or days, the model invoked thousands of times; a harness story.
-- **Persistent agency** — identity that outlives any task; a memory story.
+- Long-horizon reasoning — planning over many dependent steps, a model story. METR's [task-completion time horizon](https://metr.org/time-horizons/) doubles roughly every seven months.
+- Long-running execution — a process running for hours or days, the model invoked thousands of times, a harness story.
+- Persistent agency — identity that outlives any task, a memory story.
 
 This page covers execution: agents that survive session boundaries, sandbox crashes, and HITL pauses.
 
-## Three Walls
+## Three walls
 
 Three failure modes recur across published write-ups ([Osmani](https://addyo.substack.com/p/long-running-agents)):
 
-**Finite context.** Even a 1M-token window fills, and [context rot](../context-engineering/context-window-dumb-zone.md) sets in well before the hard cap. No context window on the roadmap holds a 24-hour run.
+Context is finite. Even a 1M-token window fills, and [context rot](../context-engineering/context-window-dumb-zone.md) sets in well before the hard cap. No window on the roadmap holds a 24-hour run.
 
-**No persistent state.** A new session starts blank — Anthropic likens it to *"engineers working in shifts, where each new engineer arrives with no memory of what happened on the previous shift"* ([long-running Claude](https://www.anthropic.com/research/long-running-Claude)).
+State does not persist. A new session starts blank. Anthropic likens it to "engineers working in shifts, where each new engineer arrives with no memory of what happened on the previous shift" ([long-running Claude](https://www.anthropic.com/research/long-running-Claude)).
 
-**Unreliable self-verification.** Models skew positive on their own work; without a separate evaluator the agent ships half-done with full confidence.
+Self-verification is unreliable. Models skew positive on their own work. Without a separate evaluator, the agent ships half-done with full confidence.
 
-## The Convergent Design
+## The convergent design
 
 Anthropic, Cursor, Google, and open-source practitioners converge on the same shape. Five primitives recur:
 
@@ -55,57 +55,57 @@ graph TD
     J -->|verify against<br/>done-condition| A
 ```
 
-### 1. External Done-Condition
+### 1. External done-condition
 
-Write completion criteria before the agent starts. Anthropic calls it the [feature list](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents); Cursor calls it the planner's task spec. On disk so the agent cannot quietly redefine *done* mid-run ([Osmani](https://addyo.substack.com/p/long-running-agents)).
+Write completion criteria before the agent starts. Anthropic calls it the [feature list](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents); Cursor calls it the planner's task spec. Keep it on disk so the agent cannot quietly redefine 'done' mid-run ([Osmani](https://addyo.substack.com/p/long-running-agents)).
 
-### 2. Durable Session Log
+### 2. Durable session log
 
-Session state lives outside the harness process — an append-only log of every thought, tool call, and observation. Anthropic exposes `getEvents()` and `wake(sessionId)` so any harness instance can reboot a failed run and continue from the event stream ([Managed Agents](https://www.anthropic.com/engineering/managed-agents)). See [Session Harness Sandbox Separation](session-harness-sandbox-separation.md).
+Session state lives outside the harness process, as an append-only log of every thought, tool call, and observation. Anthropic exposes `getEvents()` and `wake(sessionId)` so any harness instance can reboot a failed run and continue from the event stream ([Managed Agents](https://www.anthropic.com/engineering/managed-agents)). See [Session Harness Sandbox Separation](session-harness-sandbox-separation.md).
 
-### 3. Stateless Harness, Disposable Sandbox
+### 3. Stateless harness, disposable sandbox
 
-The harness holds no run state; the sandbox is provisioned per session and destroyed after, so crash recovery becomes architectural. Anthropic reports p50 time-to-first-token dropped ~60% and p95 over 90% by starting inference against the session log before the sandbox finishes provisioning ([Managed Agents](https://www.anthropic.com/engineering/managed-agents)). See [Deep Agent Runtime](deep-agent-runtime.md).
+The harness holds no run state. The sandbox is provisioned per session and destroyed after, so crash recovery becomes architectural. Anthropic reports p50 time-to-first-token dropped about 60% and p95 over 90% by starting inference against the session log before the sandbox finishes provisioning ([Managed Agents](https://www.anthropic.com/engineering/managed-agents)). See [Deep Agent Runtime](deep-agent-runtime.md).
 
-### 4. Separate Evaluator
+### 4. Separate evaluator
 
-Generation and evaluation run as different roles, sometimes different models. Cursor's production design splits planner / worker / judge after flat coordination failed; a coding-tuned model proved worse for *extended autonomous work* because it "tended to stop early and take shortcuts" ([Cursor: Scaling Long-Running Coding](https://cursor.com/blog/scaling-agents)). The durability primitives govern whether a run *survives*; a complementary practitioner playbook governs how much useful output it *produces* — framing the task tightly up front, steering mid-run rather than only at the end, and applying deliberate review tactics ([OpenAI: maximizing long-running work](https://openai.com/index/codex-maxxing-long-running-work)).
+Generation and evaluation run as different roles, sometimes different models. Cursor's production design splits planner, worker, and judge after flat coordination failed. A coding-tuned model proved worse for extended autonomous work because it "tended to stop early and take shortcuts" ([Cursor: Scaling Long-Running Coding](https://cursor.com/blog/scaling-agents)). The durability primitives govern whether a run survives. A separate practitioner playbook governs how much useful output it produces, by framing the task tightly up front, steering mid-run rather than only at the end, and applying deliberate review tactics ([OpenAI: maximizing long-running work](https://openai.com/index/codex-maxxing-long-running-work)).
 
-### 5. Checkpoint Cadence
+### 5. Checkpoint cadence
 
-Write intermediate state every N units of work — not every step (waste), not only at the end (catastrophic on failure). [Trajectory logging via progress files](../observability/trajectory-logging-progress-files.md) is the filesystem form; managed runtimes ship `thread_id`-keyed checkpoints with run-level cancel/resume.
+Write intermediate state every few units of work — not every step, which wastes effort, and not only at the end, which is catastrophic on failure. [Trajectory logging via progress files](../observability/trajectory-logging-progress-files.md) is the filesystem form. Managed runtimes ship `thread_id`-keyed checkpoints with run-level cancel and resume.
 
-## Beyond Summarisation: Full Context Resets
+## Beyond summarization: full context resets
 
-Compaction-as-summarisation is not enough at day-plus durations. Anthropic resorts to *full context resets* — the harness tears the session down and rebuilds from a structured handoff file ([Osmani](https://addyo.substack.com/p/long-running-agents)). The [Ralph Wiggum loop](ralph-wiggum-loop.md) is the bash form: every iteration starts fresh and reads the filesystem before acting.
+Compaction-as-summarization is not enough at day-plus durations. Anthropic resorts to full context resets. The harness tears the session down and rebuilds from a structured handoff file ([Osmani](https://addyo.substack.com/p/long-running-agents)). The [Ralph Wiggum loop](../loop-engineering/ralph-wiggum-loop.md) is the bash form: every iteration starts fresh and reads the filesystem before acting.
 
-## When the Pattern Is Overhead
+## When the pattern is overhead
 
 The primitives pay only when work exceeds a single session. Four conditions where they do not:
 
-- **Short-horizon interactive work.** When the task fits one HITL session, checkpoint/resume adds latency without reliability gain.
-- **Pre-PMF or small-scope agents.** A scoped credential and session timeout are smaller and more portable before scale or compliance forces the trade-off ([Agent Stack Bets](agent-stack-bets.md)).
-- **Underspecified done-conditions.** Without external completion criteria a long run only amplifies self-grading harm.
-- **Unbounded session log.** Append-only logs grow linearly; long sessions force compaction with irreversible discards ([Managed Agents](https://www.anthropic.com/engineering/managed-agents)).
+- Short-horizon interactive work. When the task fits one HITL session, checkpoint and resume add latency without a reliability gain.
+- Pre-PMF or small-scope agents. A scoped credential and session timeout are smaller and more portable before scale or compliance forces the trade-off ([Agent Stack Bets](agent-stack-bets.md)).
+- Underspecified done-conditions. Without external completion criteria, a long run only amplifies self-grading harm.
+- Unbounded session log. Append-only logs grow linearly, so long sessions force compaction with irreversible discards ([Managed Agents](https://www.anthropic.com/engineering/managed-agents)).
 
-## Open Problems
+## Open problems
 
 Four areas remain unsolved ([Osmani](https://addyo.substack.com/p/long-running-agents)):
 
-- **Cost.** Without budgets and [circuit breakers](../observability/circuit-breakers.md), an agent can burn a week's API spend in an afternoon.
-- **Security.** Credentials and shell access yield a far larger attack surface than a chat session; brain/hands separation is part of the answer.
-- **Alignment drift.** Goals summarised and re-summarised lose fidelity. Hooks and judges defend; nothing eliminates.
-- **Verification.** Auditing 24 hours of autonomous activity is a human-time problem; structured artifacts (PRs, commits, test runs) make it tractable.
+- Cost. Without budgets and [circuit breakers](../observability/circuit-breakers.md), an agent can burn a week's API spend in an afternoon.
+- Security. Credentials and shell access yield a far larger attack surface than a chat session, so brain and hands separation is part of the answer.
+- Alignment drift. Goals summarized and re-summarized lose fidelity. Hooks and judges defend, but nothing eliminates the drift.
+- Verification. Auditing 24 hours of autonomous activity is a human-time problem. Structured artifacts such as PRs, commits, and test runs make it tractable.
 
-Anthropic's [Project Vend](https://www.anthropic.com/research/project-vend-1) — a Claude instance running a vending business for a month — "failed in informative ways," an early catalogue of week-plus coherence failures.
+Anthropic's [Project Vend](https://www.anthropic.com/research/project-vend-1) — a Claude instance running a vending business for a month — "failed in informative ways," an early catalog of week-plus coherence failures.
 
 ## Example
 
 Anthropic's published [long-running coding harness](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) is the reference structure. Two agents and three artifacts:
 
-- **Initializer agent** — runs once. Sets up the environment, expands the prompt into a structured `feature-list.json` (every feature marked failing initially), writes `init.sh` for future sessions to bootstrap from.
-- **Coding agent** — woken repeatedly. Each session reads `claude-progress.txt`, runs `git log` to see prior commits, picks one feature, implements, runs tests, updates progress, commits with a descriptive message.
-- **Test ratchet** — *"it is unacceptable to remove or edit tests because this could lead to missing or buggy functionality"* sits in the prompt to block the very common failure of an agent deleting failing tests to make them pass.
+- Initializer agent — runs once. It sets up the environment, expands the prompt into a structured `feature-list.json` with every feature marked failing initially, and writes `init.sh` for future sessions to bootstrap from.
+- Coding agent — woken repeatedly. Each session reads `claude-progress.txt`, runs `git log` to see prior commits, picks one feature, implements it, runs tests, updates progress, and commits with a descriptive message.
+- Test ratchet — the prompt carries the line "it is unacceptable to remove or edit tests because this could lead to missing or buggy functionality" to block the common failure of an agent deleting failing tests to make them pass.
 
 The plain-bash equivalent is the [Ralph loop](https://ghuntley.com/ralph/): a `for` loop that picks the next task from `prd.json`, builds a prompt, calls the agent, runs checks, appends to `progress.txt`, and updates the task list. Same shape, no managed runtime — state lives in three files on disk.
 
@@ -124,7 +124,7 @@ The plain-bash equivalent is the [Ralph loop](https://ghuntley.com/ralph/): a `f
 - [Deep Agent Runtime](deep-agent-runtime.md)
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md)
 - [The Agent Stack Bet](agent-stack-bets.md)
-- [The Ralph Wiggum Loop](ralph-wiggum-loop.md)
+- [The Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md)
 - [Trajectory Logging via Progress Files](../observability/trajectory-logging-progress-files.md)
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
 - [Durable Interactive Artifacts](durable-interactive-artifacts.md)

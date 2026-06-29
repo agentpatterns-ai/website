@@ -19,27 +19,27 @@ maturity: adopted
 
 > Spawn sub-agents to parallelize independent work in isolated context windows — the main thread receives only distilled results, not raw exploration.
 
-**Learn it hands-on:** [Breaking the Stack](https://learn.agentpatterns.ai/context-engineering/breaking-the-stack/) — guided lesson with quizzes.
+Learn it hands-on with [Breaking the Stack](https://learn.agentpatterns.ai/context-engineering/breaking-the-stack/), a guided lesson with quizzes.
 
 !!! note "Also known as"
     Sub-Agents Fan-Out, Parallel Dispatch, Scatter-Gather. For the broader pattern survey, see [Agent Composition Patterns](../agent-design/agent-composition-patterns.md). For the synthesis variant, see [Fan-Out Synthesis](fan-out-synthesis.md). For the delegation variant, see [Orchestrator-Worker](orchestrator-worker.md).
 
-## The Problem
+## The problem
 
-Sequential in-thread research exhausts context fast. An agent reviewing ten files or fetching five URLs accumulates all raw material in its context window. By the time it synthesizes results, the window is crowded with exploration artifacts — partial reads, dead ends, intermediate notes — that compete with the work that matters.
+Sequential in-thread research exhausts context fast. An agent reviewing ten files or fetching five URLs collects all the raw material in its context window. By the time it synthesizes results, the window is crowded with exploration artifacts: partial reads, dead ends, and intermediate notes that compete with the work that matters.
 
-## Context Isolation as the Core Benefit
+## Context isolation as the core benefit
 
 Sub-agents solve two problems, and isolation is the more important one:
 
-1. **Parallelism** — spawn N sub-agents simultaneously instead of running N tasks sequentially
-2. **Context isolation** — each sub-agent has its own context window; its exploration never enters the main thread
+1. Parallelism — spawn N sub-agents at once instead of running N tasks one after another.
+2. Context isolation — each sub-agent has its own context window, so its exploration never enters the main thread.
 
-The main thread dispatches tasks and receives only synthesized results. Raw work — file reads, URL fetches, retries — happens entirely within sub-agent contexts that are discarded when the sub-agent finishes.
+The main thread dispatches tasks and receives only synthesized results. Raw work such as file reads, URL fetches, and retries happens entirely within sub-agent contexts, which are discarded when the sub-agent finishes.
 
 This is the principle behind [context engineering](../context-engineering/context-engineering.md) ([Anthropic's framing](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)): sub-agents as a context management strategy, not just a parallelism strategy.
 
-## Fan-Out Pattern
+## Fan-out pattern
 
 ```mermaid
 graph TD
@@ -54,9 +54,9 @@ graph TD
 
 Each sub-agent receives a focused task and returns a distilled summary, not the full file contents.
 
-## Claude Code Implementation
+## Claude Code implementation
 
-Claude Code sub-agents are defined in `.claude/agents/` with YAML frontmatter controlling scope, tools, and permissions ([docs](https://code.claude.com/docs/en/sub-agents)). The parent agent invokes them by name; Claude Code manages the context boundary.
+You define Claude Code sub-agents in `.claude/agents/`, where YAML frontmatter controls scope, tools, and permissions ([docs](https://code.claude.com/docs/en/sub-agents)). The parent agent invokes them by name. Claude Code manages the context boundary.
 
 Key frontmatter fields for sub-agents:
 
@@ -66,13 +66,13 @@ Key frontmatter fields for sub-agents:
 
 Sub-agents can themselves fan out: as of [Claude Code v2.1.172](https://code.claude.com/docs/en/changelog), a sub-agent can spawn its own sub-agents up to five levels deep, giving nested fan-out a concrete depth bound.
 
-## Agent Teams
+## Agent teams
 
-[Agent teams](../tools/claude/agent-teams.md) ([docs](https://code.claude.com/docs/en/agent-teams)) are a distinct pattern: multiple coordinated agents working in parallel on related tasks with shared state. Sub-agents are fire-and-forget with isolated context; teams are persistent with coordination overhead.
+[Agent teams](../tools/claude/agent-teams.md) ([docs](https://code.claude.com/docs/en/agent-teams)) are a distinct pattern: multiple coordinated agents working in parallel on related tasks with shared state. Sub-agents are fire-and-forget with isolated context. Teams are persistent and carry coordination overhead.
 
 Use sub-agents when tasks are independent, produce distillable results, and context isolation matters more than shared state. Use agent teams when agents need to share evolving state, tasks are interdependent, or coordination is worth the overhead.
 
-## What to Return from Sub-Agents
+## What to return from sub-agents
 
 Sub-agents should return the minimum needed for synthesis, not the raw material:
 
@@ -117,20 +117,20 @@ each of these files simultaneously and return summaries:
 
 The main thread receives three 200-token summaries. The raw file contents — potentially thousands of tokens of implementation detail — never enter the main context window. The parent agent synthesizes the architecture from summaries alone.
 
-## Error Isolation in Parallel Tool Calls
+## Error isolation in parallel tool calls
 
-As of a June 2, 2026 Claude Code release ([changelog](https://code.claude.com/docs/en/changelog)), a failed `Bash` command in a batch of parallel tool calls no longer cancels the other calls in that batch — each tool returns its own result independently. Previously a single failed `Bash` call would abort its siblings running in parallel.
+As of a June 2, 2026 Claude Code release ([changelog](https://code.claude.com/docs/en/changelog)), a failed `Bash` command in a batch of parallel tool calls no longer cancels the other calls in that batch. Each tool returns its own result independently. Previously a single failed `Bash` call would abort its siblings running in parallel.
 
 This matters for fan-out because sub-agents routinely issue parallel calls. Before the change, one failing command could abort every parallel call in flight; now successful calls complete and only the failed call reports an error. Fan-out sub-agents handle partial failures gracefully instead of losing all concurrent work.
 
-## When This Backfires
+## When this backfires
 
-Fan-out sub-agents add overhead that makes them worse than in-thread execution in several conditions:
+Fan-out sub-agents add overhead that makes them worse than in-thread execution in several cases:
 
-- **Small tasks, low token volume** — spawning three sub-agents to read three 100-token files costs more latency and money than three sequential in-thread reads. Isolation pays off only when each sub-agent's exploration would otherwise pollute the main context.
-- **Interdependent tasks** — when sub-task B depends on sub-task A's output, fan-out collapses into a two-phase sequence that eliminates the parallelism benefit.
-- **[Cost-sensitive workloads](../agent-design/cost-aware-agent-design.md)** — N parallel sub-agents means N simultaneous model invocations. For simple sub-tasks, a single agent with context compaction is cheaper.
-- **Synthesis is the bottleneck** — if assembling N summaries requires reading most of the raw detail anyway, the main thread context fills up regardless.
+- Small tasks, low token volume — spawning three sub-agents to read three 100-token files costs more latency and money than three sequential in-thread reads. Isolation pays off only when each sub-agent's exploration would otherwise crowd the main context.
+- Interdependent tasks — when sub-task B depends on sub-task A's output, fan-out collapses into a two-phase sequence that removes the parallelism benefit.
+- [Cost-sensitive workloads](../token-engineering/cost-aware-agent-design.md) — N parallel sub-agents mean N model invocations at once. For simple sub-tasks, a single agent with context compaction is cheaper.
+- Synthesis is the bottleneck — if assembling N summaries means reading most of the raw detail anyway, the main thread context fills up regardless.
 
 ## Key Takeaways
 

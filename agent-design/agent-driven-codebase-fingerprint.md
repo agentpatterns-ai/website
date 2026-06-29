@@ -18,15 +18,15 @@ maturity: established
 
 > AI coding agents produce codebases with measurable architectural biases; recognizing the fingerprint lets teams audit what agents built before the biases compound.
 
-## The Core Problem
+## The core problem
 
-Human architects decide deliberately; agents decide locally. A codebase built by agents develops architectural character through accumulated bias rather than design intent — no single PR looks wrong; the aggregate does. The drivers are structural: context-window blindness to architectural rationale, training-frequency priors on tool selection, and output-completeness bias.
+Human architects decide deliberately; agents decide locally. A codebase built by agents accumulates character through bias, not design intent. No single PR looks wrong, but the aggregate does. The agent cannot see rationale beyond its context window, picks tools by training frequency, and favors complete-looking output.
 
-## The Four Measurable Biases
+## The four measurable biases
 
-### 1. Pattern Replication at Scale
+### 1. Pattern replication at scale
 
-Agents read existing code and reproduce patterns faithfully — including deprecated APIs, legacy workarounds, and known anti-patterns. They do not distinguish between golden-path implementations and code marked for removal.
+Agents reproduce the patterns they read, including deprecated APIs, legacy workarounds, and known anti-patterns. They cannot tell golden-path code from code marked for removal.
 
 | Metric | Finding | Source |
 |--------|---------|--------|
@@ -35,25 +35,25 @@ Agents read existing code and reproduce patterns faithfully — including deprec
 | Static analysis warnings | ~30% increase post-AI adoption | [CMU study, 807 repos](https://blog.robbowley.net/2025/12/04/ai-is-still-making-code-worse-a-new-cmu-study-confirms/) |
 | Cognitive complexity | 40%+ increase | [CMU study](https://blog.robbowley.net/2025/12/04/ai-is-still-making-code-worse-a-new-cmu-study-confirms/) |
 
-A legacy `fetchWithRetry` utility with three existing usages becomes 23 usages after two sprints of agent work. Each usage is correct in isolation. The utility now costs 23-file migrations to remove.
+A `fetchWithRetry` utility with three usages becomes 23 after two agent sprints. Each usage is correct alone. Removing it now costs a 23-file migration.
 
-A counter-finding qualifies the headline duplication number: a 2026 MSR mining study of agent-first and IDE-first repositories reports duplication effects are "small and inconsistent" and locates the quality risk in structural complexity rather than copy/paste proliferation ([Agarwal et al., MSR 2026](https://arxiv.org/abs/2601.13597)). Treat raw copy/paste rate as a weak signal; cognitive complexity and static-analysis warnings are the stable indicators.
+A 2026 MSR study qualifies that number: duplication effects are "small and inconsistent", with the real risk in structural complexity, not copy/paste growth ([Agarwal et al., MSR 2026](https://arxiv.org/abs/2601.13597)). Treat copy/paste rate as a weak signal; cognitive complexity and static-analysis warnings are the stable indicators.
 
-### 2. Abstraction Bloat
+### 2. Abstraction bloat
 
-Agents optimize for comprehensive-looking output: a notification sender returns a rate limiter, analytics hook, and abstract factory never requested. LoC increases 76% in agent-assisted repositories; cognitive complexity rises 39% ([Agile Pain Relief](https://agilepainrelief.com/blog/ai-generated-code-quality-problems/)). The bias is directional: agents add abstractions rather than collapse them, and refactoring drops as each task is treated as greenfield.
+A notification sender comes back with a rate limiter, an analytics hook, and an abstract factory no one asked for. Lines of code rise 76% in agent-assisted repositories, and cognitive complexity rises 39% ([Agile Pain Relief](https://agilepainrelief.com/blog/ai-generated-code-quality-problems/)). Agents add abstractions rather than remove them, and refactoring drops as each task is treated as greenfield.
 
-### 3. Symptomatic Fixes Over Root-Cause Diagnosis
+### 3. Symptomatic fixes over root-cause diagnosis
 
-Agents address observable failures rather than underlying causes ([Mason, 2026](https://mikemason.ca/writing/ai-coding-agents-jan-2026/)): memory limits raised instead of leaks found; retry loops added instead of error sources fixed; deprecated APIs wrapped in compatibility layers instead of migrated. These fixes pass tests; the structural issue persists under accumulating compatibility layers.
+Agents fix the failure you can see, not the cause underneath ([Mason, 2026](https://mikemason.ca/writing/ai-coding-agents-jan-2026/)). They raise memory limits instead of finding the leak, add retry loops instead of fixing the error source, and wrap deprecated APIs instead of migrating them. The fixes pass tests; the structural problem persists.
 
-### 4. Training-Frequency Stack Convergence
+### 4. Training-frequency stack convergence
 
-When asked to choose tools, agents recommend by training data frequency, not fitness. Greenfield projects tend to converge on a narrow stack regardless of requirements — the [boring-technology bias](../anti-patterns/boring-technology-bias.md). The mechanism: more training examples → higher confidence → stronger default recommendation.
+Asked to choose tools, agents recommend by training frequency, not fitness. Greenfield projects then converge on a narrow stack whatever the requirements, the [boring-technology bias](../anti-patterns/boring-technology-bias.md).
 
-## Why Biases Compound in Multi-Agent Systems
+## Why biases compound in multi-agent systems
 
-Coordinated agents assigned to separate files each optimize their slice without awareness of adjacent slices — per-file correctness with cross-file coherence gaps in shared types, naming, and error handling.
+Coordinated agents each own a file and optimize their slice, blind to the rest. Each file is correct alone, but coherence breaks across files in shared types, naming, and error handling.
 
 ```mermaid
 graph TD
@@ -66,26 +66,22 @@ graph TD
 
 [Lavaee (OpenAI)](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/): pattern replication amplifies with each successive agent run.
 
-## Auditing an Agent-Driven Codebase
+## Auditing an agent-driven codebase
 
-When inheriting an agent-built codebase, check these signals:
+Inheriting an agent-built codebase, check these signals:
 
-**Duplication and refactoring ratio** — compare refactoring to feature commits. Agent codebases often fall under 10% refactoring share (healthy: above 15%).
+- Duplication and refactoring ratio — compare refactoring to feature commits; agent codebases often fall under 10%, where healthy is above 15%.
+- ADR compliance — agents ignore ADRs outside the active context window.
+- Cross-cutting concerns — review error handling, logging, and auth across modules; gaps concentrate here.
+- Technology stack — check that tool choices fit the requirements, not training frequency.
+- Abstraction depth — single-implementation abstract base classes and factories wrapping simple operations are reliable [abstraction-bloat](../anti-patterns/abstraction-bloat.md) indicators.
 
-**ADR compliance** — agents ignore ADRs not in the active context window.
+## When this backfires
 
-**Cross-cutting concerns** — review error handling, logging, and auth across modules; coherence gaps concentrate here.
-
-**Technology stack** — verify tool choices fit requirements, not training-corpus frequency.
-
-**Abstraction depth** — single-implementation abstract base classes and factories wrapping simple operations are reliable [abstraction-bloat](../anti-patterns/abstraction-bloat.md) indicators.
-
-## When This Backfires
-
-- **Small codebases** — enforcement overhead (CI rules, ADR maintenance) rarely pays back in projects under 6 months old or 10 engineers.
-- **Partial enforcement** — rules ignored by half the repos create false confidence; inconsistent application is worse than none.
-- **Refactoring during scale-up** — simultaneous cleanup and agent expansion re-introduces biases faster than they're removed; stabilize scope first.
-- **Threshold-only duplication alerts** — copy/paste rate is not a proxy for architectural health; high duplication in generated test scaffolding is benign, and noise erodes trust in the signal.
+- Small codebases — overhead such as CI rules and ADR upkeep rarely pays back under 6 months or 10 engineers.
+- Partial enforcement — rules that half the repos ignore create false confidence. Inconsistent application is worse than none.
+- Refactoring during scale-up — cleaning up while you expand agent use re-introduces biases faster than you remove them. Stabilize scope first.
+- Threshold-only duplication alerts — copy/paste rate is not a proxy for architectural health. High duplication in generated test scaffolding is benign, and the noise erodes trust.
 
 ## Mitigations
 
@@ -97,21 +93,21 @@ When inheriting an agent-built codebase, check these signals:
 | Garbage-collection agents | Background agents scan for constraint violations and architectural inconsistencies | [Fowler/Bockeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html) |
 | Mandatory review gates | Prevents compounding drift on shared repositories | [Fowler/Bockeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html) |
 
-Remediate existing anti-patterns before scaling agent usage — OpenAI's harness team spent 20% of sprint time on cleanup before arriving at a systematic approach ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)).
+Fix existing anti-patterns before scaling agent use. OpenAI's harness team spent 20% of sprint time on cleanup before reaching a systematic approach ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)).
 
 ## Example
 
-An engineering team inherits a codebase built over six months using an autonomous coding agent. The handoff includes no ADRs and no architectural documentation.
+An engineering team inherits a codebase built over six months with an autonomous coding agent. The handoff includes no ADRs and no architectural documentation.
 
-**Audit findings using the fingerprint above:**
+Audit findings using the fingerprint above:
 
-- Duplication rate: 14.2% (elevated; baseline for this language is ~8%)
+- Duplication rate: 14.2%, elevated against a baseline of about 8% for this language
 - Refactoring commits: 4% of total commits
-- Cross-cutting concerns: 6 different error-handling patterns across 12 modules; logging format inconsistent across service boundaries
-- Technology stack: all external calls use `axios` with hand-rolled retry logic — team's standard is `got` with a centralized retry policy
+- Cross-cutting concerns: 6 error-handling patterns across 12 modules, with logging format inconsistent across service boundaries
+- Technology stack: all external calls use `axios` with hand-rolled retry logic, where the team's standard is `got` with a centralized retry policy
 - Abstraction depth: 11 abstract base classes, 9 with a single concrete implementation
 
-The team uses this scan to prioritize: the retry-logic inconsistency affects 14 integration points and is addressed first with a CI lint rule rejecting direct HTTP calls outside the approved wrapper.
+The team uses this scan to set priorities. The retry-logic inconsistency affects 14 integration points, so they fix it first with a CI lint rule that rejects direct HTTP calls outside the approved wrapper.
 
 ## Key Takeaways
 

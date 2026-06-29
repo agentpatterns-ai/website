@@ -26,13 +26,13 @@ Individual docs pages describe atomic patterns. A framework is a named collectio
 
 ## Inclusion Criteria
 
-A concept qualifies as a framework when it meets **all** of:
+A concept qualifies as a framework when it meets all of:
 
-1. **Multi-page scope** — decomposes into ≥4 distinct pages that do not trivially collapse into each other
-2. **Cross-section synthesis** — each page links to ≥2 atomic patterns in different `docs/` topic sections; frameworks compose, they do not duplicate
-3. **Named artifact** — the framework has a noun-phrase identity practitioners cite by name, declared in the index `aliases:` frontmatter
-4. **Unifying thesis** — the index states one claim every sub-page supports; no sub-page is orthogonal
-5. **Evidence of use** — ≥1 real-world practitioner, implementation, or case study
+1. Multi-page scope — decomposes into ≥4 distinct pages that do not trivially collapse into each other
+2. Cross-section synthesis — each page links to ≥2 atomic patterns in different `docs/` topic sections; frameworks compose, they do not duplicate
+3. Named artifact — the framework has a noun-phrase identity practitioners cite by name, declared in the index `aliases:` frontmatter
+4. Unifying thesis — the index states one claim every sub-page supports; no sub-page is orthogonal
+5. Evidence of use — ≥1 real-world practitioner, implementation, or case study
 
 Frameworks are captured as epics via `/save-epic` (≥4 angles required) and expanded to constituent idea issues via `/expand-epic`.
 

@@ -17,11 +17,11 @@ maturity: established
 
 > Allocate maximum reasoning compute to planning and verification phases, reduced compute to execution — rather than using a fixed level throughout.
 
-**Learn it hands-on:** [Reasoning Budget — The Sandwich](https://learn.agentpatterns.ai/harness-engineering/reasoning-budget/) — guided lesson with quizzes.
+Learn it hands-on: [Reasoning Budget — The Sandwich](https://learn.agentpatterns.ai/harness-engineering/reasoning-budget/) — guided lesson with quizzes.
 
-## The Pattern
+## The pattern
 
-Not all steps in an agent workflow require the same depth of reasoning. Planning and verification are high-stakes; execution is largely mechanical.
+Not all steps in an agent workflow need the same depth of reasoning. Planning and verification are high-stakes. Execution is largely mechanical.
 
 [LangChain's deep agent experiments](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) tested a "reasoning sandwich" — extra-high at planning, high at execution, extra-high at verification (xhigh-high-xhigh). It scored highest on Terminal Bench 2.0 (66.5%), beating both continuous maximum reasoning (53.9%, penalized by timeouts) and uniform high reasoning (63.6%).
 
@@ -31,56 +31,56 @@ graph LR
     B --> C[Verification<br/>Extra-high compute]
 ```
 
-## Phase Breakdown
+## Phase breakdown
 
-**Planning — extra-high compute.** Map the problem space: requirements, approach, risks. Errors here propagate through every subsequent step.
+Planning gets extra-high compute. Map the problem space: requirements, approach, and risks. Errors here propagate through every later step.
 
-**Execution — high compute.** Follow the plan: writing code, running commands. Reduced compute handles mechanical steps while [lowering per-step cost](cost-aware-agent-design.md).
+Execution gets high compute. Follow the plan: write code and run commands. Reduced compute handles mechanical steps while [lowering per-step cost](../token-engineering/cost-aware-agent-design.md).
 
-**Verification — extra-high compute.** Check output against requirements, run tests. A missed failure produces false completion.
+Verification gets extra-high compute. Check output against requirements and run tests. A missed failure produces false completion.
 
-## Dual-Mode Operation
+## Dual-mode operation
 
-The OPENDEV paper implements the sandwich architecturally through two modes ([Bui, 2026 §2.2.2](https://arxiv.org/abs/2603.05344)):
+The OPENDEV paper builds the sandwich into the architecture through two modes ([Bui, 2026 §2.2.2](https://arxiv.org/abs/2603.05344)):
 
-- **[Plan Mode](../workflows/plan-first-loop.md)**: planning delegated to a Planner subagent whose schema contains only read-only tools ([subagent schema-level tool filtering](../multi-agent/subagent-schema-level-tool-filtering.md)) — eliminating state machine complexity
-- **Normal Mode**: full tool access for implementation
+- [Plan mode](../workflows/plan-first-loop.md): planning goes to a Planner subagent whose schema holds only read-only tools ([subagent schema-level tool filtering](../multi-agent/subagent-schema-level-tool-filtering.md)), which removes state-machine complexity
+- Normal mode: full tool access for implementation
 
-Mode switching triggers via explicit command (`/plan`) or planning-intent heuristics. This maps to the sandwich: [Plan Mode](../tools/claude/plan-mode.md) (extra-high compute) → Normal Mode execution (high) → verification (extra-high).
+Mode switching triggers via an explicit command (`/plan`) or planning-intent heuristics. This maps to the sandwich: [plan mode](../tools/claude/plan-mode.md) (extra-high compute) to normal-mode execution (high) to verification (extra-high).
 
-An optional thinking phase adds a separate inference call using a dedicated Thinking model *before* action selection ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)) — amplifying any phase where deeper reasoning is needed.
+An optional thinking phase adds a separate inference call using a dedicated Thinking model before action selection ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)). It amplifies any phase that needs deeper reasoning.
 
-## Extended Thinking Budget Triggers
+## Extended thinking budget triggers
 
 Extended thinking allocates a dedicated reasoning budget before the model generates its response — distinct from the think tool, which reasons mid-stream between tool calls.
 
-In Claude Code, [including "ultrathink" in a skill's content enables extended thinking](https://code.claude.com/docs/en/skills), allocating maximum thinking tokens for that skill.
+In Claude Code, [adding "ultrathink" to a skill's content turns on extended thinking](https://code.claude.com/docs/en/skills), which allocates maximum thinking tokens for that skill.
 
-### Maximum Thinking as a Cost-Performance Tradeoff
+### Maximum thinking as a cost-performance tradeoff
 
-A [community analysis](https://claudelog.com/mechanics/ultrathink) positions maximum-thinking on a balanced model as an alternative to model tier upgrades. Exhausting the thinking budget on a cheaper model costs less than switching tiers — a tradeoff worth evaluating before moving to a higher-cost tier for reasoning-heavy tasks.
+A [community analysis](https://claudelog.com/mechanics/ultrathink) treats maximum thinking on a balanced model as an alternative to model-tier upgrades. Exhausting the thinking budget on a cheaper model costs less than switching tiers. Evaluate this tradeoff before you move to a higher-cost tier for reasoning-heavy tasks.
 
 This stacks with other techniques:
 
-1. **Extended thinking** — maximum reasoning tokens via trigger keyword
-2. **[Plan mode](../tools/claude/plan-mode.md)** — structured planning before execution
-3. **Iterative critique** — systematic [self-review cycles](../code-review/agent-self-review-loop.md) to catch edge cases
+- Extended thinking — maximum reasoning tokens via a trigger keyword
+- [Plan mode](../tools/claude/plan-mode.md) — structured planning before execution
+- Iterative critique — systematic [self-review cycles](../code-review/agent-self-review-loop.md) to catch edge cases
 
-Each layer adds cost; combine them when the task warrants the investment.
+Each layer adds cost. Combine them when the task warrants the investment.
 
-### Applying Budget Triggers
+### Applying budget triggers
 
-- **Claude Code skills**: include "ultrathink" in `SKILL.md` content to [enable extended thinking](https://code.claude.com/docs/en/skills)
-- **Claude API**: set the `thinking` budget parameter per call — high for planning/verification, standard for execution
-- **Any tool with model routing**: route planning and verification to a capable model, execution to a cheaper one
+- Claude Code skills: include "ultrathink" in `SKILL.md` content to [turn on extended thinking](https://code.claude.com/docs/en/skills)
+- Claude API: set the `thinking` budget parameter per call — high for planning and verification, standard for execution
+- Any tool with model routing: route planning and verification to a capable model, execution to a cheaper one
 
-For tools without per-call configuration, approximate through prompt structure: deep reasoning guidance in planning prompts, less in execution.
+For tools without per-call configuration, approximate through prompt structure: more reasoning guidance in planning prompts, less in execution.
 
-## Why It Works
+## Why it works
 
-Different phases impose structurally different cognitive demands ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)): planning requires exploring the possibility space and accounting for requirements, edge cases, and risks — errors here propagate downstream; execution follows a decided plan and is largely mechanical; verification must compare output against requirements precisely, where a missed failure produces false completion. Applying uniform maximum compute to execution wastes budget on mechanical steps and — as the LangChain benchmark showed — causes timeouts that degrade completion rates. Concentrating compute where ambiguity is highest balances cost against quality.
+Different phases make structurally different cognitive demands ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)). Planning explores the possibility space and accounts for requirements, edge cases, and risks; errors here propagate downstream. Execution follows a decided plan and is largely mechanical. Verification compares output against requirements precisely, where a missed failure produces false completion. Uniform maximum compute on execution wastes budget on mechanical steps. As the LangChain benchmark showed, it also causes timeouts that lower completion rates. Concentrating compute where ambiguity is highest balances cost against quality.
 
-## When to Apply
+## When to apply
 
 The sandwich pays off when:
 
@@ -90,14 +90,14 @@ The sandwich pays off when:
 
 Single-step tasks and independent parallel tool calls see no benefit from added reasoning overhead.
 
-## When This Backfires
+## When this backfires
 
 The 3% gap between the sandwich (66.5%) and uniform high (63.6%) does not always justify harness complexity. The sandwich is worse than uniform compute when:
 
-- **Phases are not cleanly separable.** Exploratory debugging and interleaved planning/execution force misclassified routing — the sandwich degrades to noisy uniform compute with routing overhead.
-- **Mode-switching adds more bugs than it prevents.** Teams without the budget for reliable [planner/executor/verifier routing](discrete-phase-separation.md) fare better with a single tier at uniform high reasoning.
-- **Verification is cheap relative to planning.** When correctness is checked by tests or types, extra-high model-based verification duplicates what the test harness already does.
-- **Execution dominates the trajectory.** Bulk refactors and migrations spend most tokens in execution; reducing compute there saves little while planning/verification contribute a small share of cost.
+- Phases are not cleanly separable. Exploratory debugging and interleaved planning and execution force misclassified routing, so the sandwich degrades to noisy uniform compute with routing overhead.
+- Mode switching adds more bugs than it prevents. Teams without the budget for reliable [planner, executor, and verifier routing](discrete-phase-separation.md) do better with a single tier at uniform high reasoning.
+- Verification is cheap relative to planning. When tests or types check correctness, extra-high model-based verification duplicates what the test harness already does.
+- Execution dominates the trajectory. Bulk refactors and migrations spend most tokens in execution; reducing compute there saves little, while planning and verification contribute a small share of cost.
 
 ## Key Takeaways
 
@@ -143,7 +143,7 @@ In Claude Code skills, add `ultrathink` to the skill content for planning and ve
 
 - [Discrete Phase Separation](discrete-phase-separation.md)
 - [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
 - [Code-Health-Gated LLM Tier Routing](auto-model-selection.md) — pre-generation model tier selection via code health metrics
 - [Know When Not to Add Structured Reasoning](../anti-patterns/reasoning-overuse.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md)

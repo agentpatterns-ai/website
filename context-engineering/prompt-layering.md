@@ -14,9 +14,9 @@ maturity: established
 
 > Prompt layering stacks agent instructions across four sources — system prompt, project instructions, skill content, user message — where specificity determines precedence on conflicts.
 
-**Learn it hands-on:** [The Layer Stack](https://learn.agentpatterns.ai/context-engineering/prompt-layering/) — guided lesson with quizzes.
+Learn it hands-on: [The Layer Stack](https://learn.agentpatterns.ai/context-engineering/prompt-layering/) — guided lesson with quizzes.
 
-## The Layer Stack
+## The layer stack
 
 Instructions reach an agent from several sources, each loaded at a different point in the session lifecycle:
 
@@ -32,40 +32,40 @@ Each layer is more specific than the one above it. Specificity generally determi
 
 This is a behavioral tendency, not a formal rule enforced by the model. Contradictions between layers produce unpredictable outputs.
 
-## What Each Layer Is For
+## What each layer is for
 
-**System prompt.** The outermost layer — set by the tool or platform. Defines the agent's role, permissions, and baseline constraints.
+The system prompt is the outermost layer, set by the tool or platform. It defines the agent's role, permissions, and baseline constraints.
 
-**Project instructions.** `AGENTS.md`, `CLAUDE.md`, [`.github/copilot-instructions.md`](../tools/copilot/copilot-instructions-md-convention.md) — loaded at session start, applies to every task in the project. Conventions, constraints, tooling preferences. This layer must apply universally; if a rule is task-specific, it does not belong here.
+Project instructions live in `AGENTS.md`, `CLAUDE.md`, and [`.github/copilot-instructions.md`](../tools/copilot/copilot-instructions-md-convention.md). They load at session start and apply to every task in the project: conventions, constraints, and tooling preferences. This layer must apply universally. If a rule is task-specific, it does not belong here.
 
-**Skill content.** Task-specific knowledge loaded when a skill runs (for example, a `SKILL.md` file). A code review skill carries review conventions; a documentation skill carries writing standards. Skills extend or refine project instructions for a specific task type — they do not repeat them. Repeating project conventions in a skill creates a [second source of truth that can drift](../instructions/instruction-file-ecosystem.md).
+Skill content is task-specific knowledge that loads when a skill runs, such as a `SKILL.md` file. A code review skill carries review conventions; a documentation skill carries writing standards. Skills extend or refine project instructions for a specific task type — they do not repeat them. Repeating project conventions in a skill creates a [second source of truth that can drift](../instructions/instruction-file-ecosystem.md).
 
-**User message.** The immediate task. Overrides everything below it because it represents the most specific current intent. If the user message contradicts a higher layer, the agent typically follows the user message — correct for the immediate task, but may violate project conventions.
+The user message is the immediate task. It overrides everything below it because it represents the most specific current intent. If the user message contradicts a higher layer, the agent typically follows the user message. That is correct for the immediate task, but it may violate project conventions.
 
-## Subagents Break the Stack
+## Subagents break the stack
 
 Subagents do not inherit the parent agent's context. A subagent invoked by a parent agent starts fresh with its own system prompt — typically one injected at invocation time ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)). The parent's project instructions, loaded skills, and conversation history are not present unless explicitly passed.
 
 A subagent can violate project conventions the parent was following unless the parent explicitly passes the relevant constraints. Debugging requires knowing what the subagent received at invocation, not what the parent had.
 
-## Conflicts and Debugging
+## Conflicts and debugging
 
 When an agent ignores an instruction, diagnose by layer:
 
-1. **Which layer does the instruction come from?** An instruction buried in the middle of a long AGENTS.md competes with positional bias — instruction compliance varies significantly with a constraint's position in the prompt, with measured primacy and recency effects ([Purpura et al., 2026](https://arxiv.org/abs/2601.18554)); constraints near the start are followed more reliably than those buried in the middle. For critical rules, [repeat them at both ends](../instructions/critical-instruction-repetition.md).
-2. **Is there a conflicting instruction closer to the task?** A user message that says "skip tests for now" overrides a project instruction to always write tests.
-3. **Is the agent a subagent?** If so, the project-level instructions may not be in its context.
-4. **Is the instruction past the compliance ceiling?** The more rules in the stack, the more likely lower-priority rules are ignored.
+1. Which layer does the instruction come from? An instruction buried in the middle of a long AGENTS.md competes with positional bias. Instruction compliance varies significantly with a constraint's position in the prompt, with measured primacy and recency effects ([Purpura et al., 2026](https://arxiv.org/abs/2601.18554)). Constraints near the start are followed more reliably than those buried in the middle. For critical rules, [repeat them at both ends](../instructions/critical-instruction-repetition.md).
+2. Is there a conflicting instruction closer to the task? A user message that says "skip tests for now" overrides a project instruction to always write tests.
+3. Is the agent a subagent? If so, the project-level instructions may not be in its context.
+4. Is the instruction past the compliance ceiling? The more rules in the stack, the more likely lower-priority rules are ignored.
 
-## Designing for the Stack
+## Designing for the stack
 
 Avoid duplicating instructions across layers. If a convention is in both AGENTS.md and a skill, changing one without the other produces a contradiction. The convention belongs in one layer; other layers refer to it or omit it.
 
 Scope each layer tightly:
 
-- **Project layer:** only what applies to every task
-- **Skill layer:** only what applies to this task type
-- **User message:** only the immediate task
+- Project layer: only what applies to every task
+- Skill layer: only what applies to this task type
+- User message: only the immediate task
 
 Instructions that belong in the skill layer but sit in the project layer crowd context for every task, including those where the skill is not running.
 
@@ -77,7 +77,7 @@ The user message overrides the project instruction. Claude Code generates the fu
 
 Now the team adds a code-review skill that includes the rule `Flag any function without a corresponding test`. When this skill runs on the same helper function, it flags the missing test — because the skill layer is more specific than the project layer for that task type, and the instruction to flag is not in conflict with the earlier user message (which was about generation, not review).
 
-The gap is intentional: the project layer sets policy, the skill layer enforces it contextually, and the user message scopes the immediate action. Keeping these concerns in separate layers prevents the skill from being silenced by a user message that wasn't meant to apply to it.
+The gap is intentional: the project layer sets policy, the skill layer enforces it contextually, and the user message scopes the immediate action. Keeping these concerns in separate layers prevents the skill from being silenced by a user message that was not meant to apply to it.
 
 ## Key Takeaways
 
@@ -86,13 +86,13 @@ The gap is intentional: the project layer sets policy, the skill layer enforces 
 - Duplicate instructions across layers create drift; each convention belongs in exactly one layer
 - When an agent ignores an instruction, check: layer position, conflicting instructions closer to the task, subagent context isolation, total compliance ceiling
 
-## When This Backfires
+## When this backfires
 
-Prompt layering assumes the model will respect layer precedence — but that assumption fails:
+Prompt layering assumes the model will respect layer precedence, but that assumption fails:
 
-- **Silent contradictions go undetected.** When project instructions and a skill both define a convention differently, the model picks one without signaling the conflict. A flat single-layer system prompt makes contradictions at least visible in one file.
-- **[Compliance degrades with stack depth](../instructions/instruction-compliance-ceiling.md).** Each added layer increases total instruction volume. Beyond the compliance ceiling, low-priority rules (typically the project layer) are silently dropped. Ten critical rules in a flat prompt outperform forty rules spread across four layers.
-- **Subagent isolation amplifies drift.** [Subagents](../multi-agent/sub-agents-fan-out.md) start fresh — if the parent's project layer isn't explicitly passed, the subagent ignores those conventions entirely. Layering without an explicit injection protocol is operationally equivalent to having no project layer for subagents.
+- Silent contradictions go undetected. When project instructions and a skill both define a convention differently, the model picks one without signaling the conflict. A flat single-layer system prompt makes contradictions at least visible in one file.
+- [Compliance degrades with stack depth](../instructions/instruction-compliance-ceiling.md). Each added layer increases total instruction volume. Beyond the compliance ceiling, low-priority rules (typically the project layer) are silently dropped. Ten critical rules in a flat prompt outperform forty rules spread across four layers.
+- Subagent isolation amplifies drift. [Subagents](../multi-agent/sub-agents-fan-out.md) start fresh. If the parent's project layer is not explicitly passed, the subagent ignores those conventions entirely. Layering without an explicit injection protocol is operationally equivalent to having no project layer for subagents.
 
 ## Related
 

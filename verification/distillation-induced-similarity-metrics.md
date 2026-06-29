@@ -20,11 +20,11 @@ maturity: emerging
 
 > Two metrics quantify how much distilled models share non-mandatory tool-use behaviour, so routing and ensemble voting stop treating correlated failure modes as independent.
 
-## Why Behavioural Overlap Matters
+## Why behavioral overlap matters
 
-Cross-vendor routing and ensembling assume vendor diversity buys behavioural diversity. Distillation breaks that assumption: a student trained on a teacher's trajectories inherits the teacher's *non-mandatory* preferences (when to verify after writing, which optional tools to invoke) alongside task capability. Benchmark scores measure success rate, not behavioural overlap, so the inheritance is invisible at the leaderboard layer.
+Cross-vendor routing and ensembling assume vendor diversity buys behavioral diversity. Distillation breaks that assumption: a student trained on a teacher's trajectories inherits the teacher's non-mandatory preferences (when to verify after writing, which optional tools to invoke) alongside task capability. Benchmark scores measure success rate, not behavioral overlap, so the inheritance is invisible at the leaderboard layer.
 
-Yang et al. propose two metrics that isolate non-mandatory behaviour, evaluated across 18 models from 8 providers on τ-Bench against Claude Sonnet 4.5 (thinking) ([arxiv.org/abs/2604.21255](https://arxiv.org/abs/2604.21255)) — τ-Bench is the substrate (Yao et al., [arxiv.org/abs/2406.12045](https://arxiv.org/abs/2406.12045)).
+Yang et al. propose two metrics that isolate non-mandatory behavior, evaluated across 18 models from 8 providers on τ-Bench against Claude Sonnet 4.5 (thinking) ([arxiv.org/abs/2604.21255](https://arxiv.org/abs/2604.21255)) — τ-Bench is the substrate (Yao et al., [arxiv.org/abs/2406.12045](https://arxiv.org/abs/2406.12045)).
 
 ## Response Pattern Similarity (RPS)
 
@@ -34,23 +34,23 @@ RPS measures verbal alignment. Each trajectory is segmented into five canonical 
 
 AGS treats a trajectory as a directed graph — nodes are tool calls, edges are output dependencies — and decomposes similarity into three sub-metrics ([arxiv.org/abs/2604.21255](https://arxiv.org/abs/2604.21255)):
 
-- **SnodeS — optional tool agreement.** Of the tools a model invokes that the task does not require, which overlap?
-- **SseqS — local sequence patterns.** Habits like post-write verification, pre-write confirmation, and error-retry shape.
-- **SdepS — dependency patterns.** Output-reuse rate, dependency chain depth, fan-out from a single tool's output.
+- SnodeS — optional tool agreement. Of the tools a model invokes that the task does not require, which overlap?
+- SseqS — local sequence patterns. Habits like post-write verification, pre-write confirmation, and error-retry shape.
+- SdepS — dependency patterns. Output-reuse rate, dependency chain depth, fan-out from a single tool's output.
 
 A model can match a teacher on one dimension and diverge on others — verbal style alone (RPS) or topology alone (SdepS) does not capture the full distillation footprint.
 
-## What the Paper Measured
+## What the paper measured
 
-Three findings are load-bearing for routing decisions:
+Three findings matter most for routing decisions:
 
-- **Within-family pairs cluster.** Same-provider pairs score 5.9 percentage points higher in AGS than cross-family pairs — measurable but not the dominant effect.
-- **Cross-family convergence happens.** Kimi-K2 (thinking) reaches 82.6% SnodeS and 94.7% SdepS against Claude Sonnet 4.5, exceeding Anthropic's own Opus 4.1 on the same metrics. Vendor boundaries do not protect against convergence when a teacher's traces have leaked into a student's training pipeline.
-- **RPS and AGS are not redundant.** Pearson r = 0.491 between them — verbal style and tool-invocation choices capture distinct dimensions, so routing decisions need both.
+- Within-family pairs cluster. Same-provider pairs score 5.9 percentage points higher in AGS than cross-family pairs — measurable but not the dominant effect.
+- Cross-family convergence happens. Kimi-K2 (thinking) reaches 82.6% SnodeS and 94.7% SdepS against Claude Sonnet 4.5, exceeding Anthropic's own Opus 4.1 on the same metrics. Vendor boundaries do not protect against convergence when a teacher's traces have leaked into a student's training pipeline.
+- RPS and AGS are not redundant. Pearson r = 0.491 between them — verbal style and tool-invocation choices capture distinct dimensions, so routing decisions need both.
 
 A controlled distillation experiment isolates the mechanism: fine-tuning Qwen2.5-14B-Instruct on Sonnet 4.5 trajectories via LoRA shifted AGS toward the teacher (+0.13) and away from a control (−0.05), while a graph-edit-distance baseline rose equally toward both — the AGS decomposition picks up teacher-specific transfer that simpler graph metrics miss ([arxiv.org/abs/2604.21255](https://arxiv.org/abs/2604.21255)).
 
-## When the Metrics Apply
+## When the metrics apply
 
 | Use case | Why the metrics help |
 |----------|----------------------|
@@ -59,18 +59,18 @@ A controlled distillation experiment isolates the mechanism: fine-tuning Qwen2.5
 | [Adversarial multi-model pipeline](../multi-agent/adversarial-multi-model-pipeline.md) | Pre-screen candidate adversaries by RPS/AGS distance |
 | Fallback model selection | Pick the lowest-AGS competent model, not the closest one |
 
-## Failure Conditions
+## Failure conditions
 
-- **Outside tool-use trajectories.** RPS and AGS are defined over multi-stage tool-call traces. Single-turn classification, RAG QA, and chat tasks need different metrics.
-- **Without matched benchmark traces.** Computing RPS/AGS requires running both models on the same task suite under the same harness; teams without τ-Bench-style infrastructure cannot replicate the scores directly.
-- **Across model generations.** AGS describes two specific checkpoints. By the time measurement finishes, both providers have shipped a new generation — the metric is a [snapshot, not a forecast](../agent-design/cross-vendor-competitive-routing.md).
-- **When consistency is the goal.** For systems whose parsers and templates depend on consistent verbal style, high RPS to a known-good primary is a feature. The metric tells you the cost-of-redundancy trade-off; it does not declare which side is right.
+- Outside tool-use trajectories. RPS and AGS are defined over multi-stage tool-call traces. Single-turn classification, RAG QA, and chat tasks need different metrics.
+- Without matched benchmark traces. Computing RPS/AGS requires running both models on the same task suite under the same harness; teams without τ-Bench-style infrastructure cannot replicate the scores directly.
+- Across model generations. AGS describes two specific checkpoints. By the time measurement finishes, both providers have shipped a new generation — the metric is a [snapshot, not a forecast](../agent-design/cross-vendor-competitive-routing.md).
+- When consistency is the goal. For systems whose parsers and templates depend on consistent verbal style, high RPS to a known-good primary is a feature. The metric tells you the cost-of-redundancy trade-off; it does not declare which side is right.
 
-## Adjacent Failure Modes
+## Adjacent failure modes
 
 The same root cause — correlated blind spots from shared lineage — surfaces at other layers:
 
-| Layer | Pattern | Defence |
+| Layer | Pattern | Defense |
 |-------|---------|---------|
 | Tool-use agents (this page) | Students inherit teacher's optional-tool habits | Measure RPS/AGS before assuming routing diversity |
 | Test generation | LLM-written tests share LLM-written code's blind spots ([test-homogenization-trap.md](../anti-patterns/test-homogenization-trap.md)) | Different model for tests vs code; mutation-guided generation |

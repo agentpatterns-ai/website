@@ -14,7 +14,7 @@ status: current
 
 A [Routine](https://code.claude.com/docs/en/routines) is a saved Claude Code configuration — prompt, repos, connectors, environment — that executes on Anthropic-managed cloud infrastructure on a schedule, API call, or GitHub event. It is the cloud counterpart to in-session `/loop` and `CronCreate` ([Session Scheduling](session-scheduling.md)) and to local [Desktop scheduled tasks](https://code.claude.com/docs/en/desktop-scheduled-tasks). The deployment choice is a clean trade: cloud fixes host-uptime and env-drift failures but breaks working-tree fidelity, the permission gate, and sub-hour cadence.
 
-## The Decision Axis
+## The decision axis
 
 The Claude Code docs ship a comparison table that maps the trade directly. [Source: [Compare scheduling options](https://code.claude.com/docs/en/scheduled-tasks#compare-scheduling-options)]
 
@@ -29,43 +29,43 @@ The Claude Code docs ship a comparison table that maps the trade directly. [Sour
 
 Move scheduled work to the cloud when the local box is the failure point — laptops that sleep, reboots that drop cron, dev-env drift, secrets that rotated since the last run. Keep it local when the work needs the current branch, sub-hour cadence, mid-run approvals, or local-only MCP servers and `localhost` resources.
 
-## When to Choose Cloud
+## When to choose cloud
 
-A cloud routine fits when **all** of the following hold:
+A cloud routine fits when all of the following hold:
 
-- **Cadence is hourly or slower.** Cron expressions firing more often than every hour are rejected. [Source: [Add a schedule trigger](https://code.claude.com/docs/en/routines#add-a-schedule-trigger)]
-- **Work runs against the default branch.** Each run clones the repo fresh from the default branch — in-flight feature work is invisible unless the prompt checks it out. [Source: [Repositories and branch permissions](https://code.claude.com/docs/en/routines#repositories-and-branch-permissions)]
-- **No mid-run human approval is needed.** Routines run autonomously; reachability is fixed at creation by repos, environment policy, env vars, and connectors. [Source: [Create a routine](https://code.claude.com/docs/en/routines#create-a-routine)]
-- **All required resources are reachable from the cloud environment.** The Default environment's Trusted allowlist covers common package registries, cloud APIs, and dev domains; arbitrary hosts return `403`. Local stdio MCP servers added via `claude mcp add` are not visible — re-add them as claude.ai connectors or declare them in a committed `.mcp.json`. [Source: [Connectors](https://code.claude.com/docs/en/routines#connectors)]
+- Cadence is hourly or slower. Cron expressions that fire more often than every hour are rejected. [Source: [Add a schedule trigger](https://code.claude.com/docs/en/routines#add-a-schedule-trigger)]
+- Work runs against the default branch. Each run clones the repo fresh from the default branch, so in-flight feature work is invisible unless the prompt checks it out. [Source: [Repositories and branch permissions](https://code.claude.com/docs/en/routines#repositories-and-branch-permissions)]
+- No mid-run human approval is needed. Routines run on their own. Repos, environment policy, env vars, and connectors fix what a run can reach at creation time. [Source: [Create a routine](https://code.claude.com/docs/en/routines#create-a-routine)]
+- All required resources are reachable from the cloud environment. The Default environment's Trusted allowlist covers common package registries, cloud APIs, and dev domains; other hosts return `403`. Local stdio MCP servers added with `claude mcp add` are not visible, so re-add them as claude.ai connectors or declare them in a committed `.mcp.json`. [Source: [Connectors](https://code.claude.com/docs/en/routines#connectors)]
 
 Backlog grooming against a hosted tracker, weekly docs-drift sweeps, GitHub-event-driven PR reviews, and webhook-triggered deploy verification all fit. [Source: [Example use cases](https://code.claude.com/docs/en/routines#example-use-cases)]
 
-## When This Backfires
+## When this backfires
 
-- **Working-tree drift.** A scheduled audit reading `STANDARDS.md` from `main` does not see the unmerged edit on your feature branch — the cloud snapshot is the default branch at clone time.
-- **Sub-hour cadence is impossible.** Queue-depth checks, build-status polling, and deploy-window verification need minute granularity. The 1-hour floor forces a hybrid local+cloud setup, doubling the failure surface.
-- **Identity collapse.** Routines act as the creator on every connector and on GitHub — commits, PRs, Slack messages, and Linear tickets carry one person's name, creating single points of attribution, departure, and credential compromise. [Source: [Create a routine](https://code.claude.com/docs/en/routines#create-a-routine)]
-- **Autonomous-run trifecta.** A routine combining a private-data connector, an untrusted-input source (web fetch, issue bodies), and an egress connector (push, Slack) closes the [Lethal Trifecta](../../security/lethal-trifecta-threat-model.md) with no prompts to interrupt the chain — an injected instruction in a fetched URL produces an immediate write under the creator's identity. The [confirmation-gate](../../security/human-in-the-loop-confirmation-gates.md) posture cannot apply: no human-in-the-loop surface exists during a run.
-- **Quota competition.** Routines share subscription usage with interactive sessions and carry an additional daily run cap. One-off runs are exempt from the cap but still draw down subscription usage. [Source: [Usage and limits](https://code.claude.com/docs/en/routines#usage-and-limits)]
-- **Local resources are unreachable.** `localhost` services, local databases, and VPN-only internal endpoints are invisible unless re-exposed.
+- Working-tree drift. A scheduled audit that reads `STANDARDS.md` from `main` does not see the unmerged edit on your feature branch. The cloud snapshot is the default branch at clone time.
+- Sub-hour cadence is impossible. Queue-depth checks, build-status polling, and deploy-window verification need minute granularity. The 1-hour floor forces a hybrid local-and-cloud setup, which doubles the failure surface.
+- Identity collapse. Routines act as the creator on every connector and on GitHub. Commits, PRs, Slack messages, and Linear tickets all carry one person's name, which creates single points of attribution, departure, and credential compromise. [Source: [Create a routine](https://code.claude.com/docs/en/routines#create-a-routine)]
+- Autonomous-run trifecta. A routine that combines a private-data connector, an untrusted-input source (web fetch, issue bodies), and an egress connector (push, Slack) closes the [Lethal Trifecta](../../security/lethal-trifecta-threat-model.md) with no prompts to interrupt the chain. An injected instruction in a fetched URL produces an immediate write under the creator's identity. The [confirmation-gate](../../security/human-in-the-loop-confirmation-gates.md) posture cannot apply, because no human-in-the-loop surface exists during a run.
+- Quota competition. Routines share subscription usage with interactive sessions and carry an extra daily run cap. One-off runs are exempt from the cap but still draw down subscription usage. [Source: [Usage and limits](https://code.claude.com/docs/en/routines#usage-and-limits)]
+- Local resources are unreachable. `localhost` services, local databases, and VPN-only internal endpoints are invisible unless you re-expose them.
 
-## Why It Works
+## Why it works
 
-Cloud scheduling works by decoupling the run from the local host: the two dominant failure modes of local scheduled work — host sleep/reboot and local-env drift between invocations — disappear because the execution environment is always on and its state is explicit, captured in a cached setup script, declared env vars, and a per-routine connector list. That same "always on, no prompts, acts as creator" posture is precisely what opens the failure surfaces above. [Source: [Select an environment](https://code.claude.com/docs/en/routines#create-a-routine)]
+Cloud scheduling decouples the run from the local host. The two main failure modes of local scheduled work disappear: host sleep or reboot, and local-env drift between runs. The execution environment is always on, and its state is explicit, captured in a cached setup script, declared env vars, and a per-routine connector list. That same "always on, no prompts, acts as creator" posture is what opens the failure surfaces above. [Source: [Select an environment](https://code.claude.com/docs/en/routines#create-a-routine)]
 
-## Risk-Reduction Posture
+## Risk-reduction posture
 
-When the decision lands on cloud, three settings shrink the blast radius:
+When the decision lands on cloud, three settings shrink the damage a bad run can do:
 
-- **Keep the `claude/`-prefixed branch restriction.** Enable **Allow unrestricted branch pushes** per repo only when the routine needs a long-lived branch. [Source: [Repositories and branch permissions](https://code.claude.com/docs/en/routines#repositories-and-branch-permissions)]
-- **Trim the connector list.** All connected claude.ai connectors are included by default and callable with no per-tool prompt; remove anything the routine does not need. [Source: [Create a routine](https://code.claude.com/docs/en/routines#create-a-routine)]
-- **Keep the network policy at Trusted.** Widen to Custom or Full only when the prompt fails on a `403`; the change is per-environment and inherited by every routine using it. [Source: [Environments and network access](https://code.claude.com/docs/en/routines#environments-and-network-access)]
+- Keep the `claude/`-prefixed branch restriction. Turn on **Allow unrestricted branch pushes** per repo only when the routine needs a long-lived branch. [Source: [Repositories and branch permissions](https://code.claude.com/docs/en/routines#repositories-and-branch-permissions)]
+- Trim the connector list. Every connected claude.ai connector is included by default and callable with no per-tool prompt, so remove anything the routine does not need. [Source: [Create a routine](https://code.claude.com/docs/en/routines#create-a-routine)]
+- Keep the network policy at Trusted. Widen to Custom or Full only when the prompt fails on a `403`. The change is per-environment and inherited by every routine that uses it. [Source: [Environments and network access](https://code.claude.com/docs/en/routines#environments-and-network-access)]
 
 ## Example
 
 A weekly dependency-audit routine fits cloud cleanly. A hotfix loop watching CI on a feature branch does not.
 
-**Cloud-suited** — weekly dependency audit:
+Cloud-suited, a weekly dependency audit:
 
 ```text
 /schedule weekly on Monday at 9am, review the dependency manifests in
@@ -75,7 +75,7 @@ claude/dep-audit-<date> PR with proposed bumps.
 
 Runs against `main`, well under the 1-hour floor, no mid-run approvals, all sources (npm, PyPI advisory feeds) are on the Trusted allowlist, the autonomous PR posture is the point.
 
-**Local-suited** — hotfix loop on the current feature branch:
+Local-suited, a hotfix loop on the current feature branch:
 
 ```text
 /loop 5m check whether CI passed on this branch — if it failed, pull the

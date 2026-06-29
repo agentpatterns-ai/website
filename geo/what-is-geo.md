@@ -17,11 +17,11 @@ maturity: emerging
 
 > Generative Engine Optimization (GEO) is the practice of structuring content so AI answer engines cite it — not just rank it.
 
-**Learn it hands-on:** [The Citation Economy](https://learn.agentpatterns.ai/geo/the-citation-economy/) — guided lesson with quizzes.
+Learn it hands-on with [The Citation Economy](https://learn.agentpatterns.ai/geo/the-citation-economy/), a guided lesson with quizzes.
 
-Traditional search optimization targets a position in a results list. Generative engines — ChatGPT, Perplexity, Google AI Overviews, Claude, Gemini — don't return lists. They synthesize responses from sources and, in some cases, attribute those sources. Getting cited is the new getting ranked.
+Traditional search optimization targets a position in a results list. Generative engines — ChatGPT, Perplexity, Google AI Overviews, Claude, Gemini — do not return lists. They synthesize responses from sources and, in some cases, attribute those sources. Getting cited is the new getting ranked.
 
-## The Metric Changed
+## The metric changed
 
 | SEO era | GEO era |
 |---------|---------|
@@ -32,21 +32,21 @@ Traditional search optimization targets a position in a results list. Generative
 
 Backlinks — the core currency of SEO — show weak or neutral correlation with AI citation rates. Domain traffic volume is now the strongest single predictor of AI citations ([SHAP value 0.63](https://www.superlines.io/articles/ai-search-statistics/), 2026).
 
-## GEO and AEO: The Same Discipline
+## GEO and AEO: the same discipline
 
-**Answer Engine Optimization (AEO)** predates GEO as a practitioner label. Both target the same outcome: getting content selected as an attributable source when an AI engine answers a user's question. The terms are used interchangeably in the industry; this section uses GEO as the primary term.
+Answer Engine Optimization (AEO) predates GEO as a practitioner label. Both target the same outcome: getting content selected as an attributable source when an AI engine answers a user's question. The industry uses the terms interchangeably; this section uses GEO as the primary term.
 
-## Why This Matters for Developer Content
+## Why this matters for developer content
 
-Developers use AI assistants as their primary discovery channel. When a developer asks ChatGPT about [agent memory patterns](../agent-design/agent-memory-patterns.md), [context engineering](../context-engineering/context-engineering.md), or tool design, the assistant synthesizes from whatever content it retrieves and cites. If your documentation isn't structured for AI comprehension, it won't be cited — even if it's the most accurate source available.
+Developers use AI assistants as their primary discovery channel. When a developer asks ChatGPT about [agent memory patterns](../agent-design/agent-memory-patterns.md), [context engineering](../context-engineering/context-engineering.md), or tool design, the assistant synthesizes from whatever content it retrieves and cites. If your documentation is not structured for AI comprehension, it will not be cited — even when it is the most accurate source available.
 
 The scale signal:
 
 - AI referral traffic grew 357–632% year-over-year ([Superlines, 2026](https://www.superlines.io/articles/ai-search-statistics/))
 - Google AI Overviews appear in 50%+ of searches ([Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/))
-- AI search drives fundamentally different user behavior than traditional search: the answer itself is the destination, not a gateway to clicks
+- AI search changes how users behave: the answer itself is the destination, not a gateway to clicks
 
-## What GEO Optimizes For
+## What GEO optimizes for
 
 The [Princeton/ACM KDD 2024 GEO paper](https://arxiv.org/abs/2311.09735) defined GEO and benchmarked techniques against a large query set. Top visibility lifts:
 
@@ -60,32 +60,32 @@ The [Princeton/ACM KDD 2024 GEO paper](https://arxiv.org/abs/2311.09735) defined
 
 GEO techniques boosted visibility by up to 40% in benchmark testing. Effectiveness varies by domain.
 
-## Why It Works
+## Why it works
 
 Generative engines retrieve candidate content chunks, score them for relevance and quality, then synthesize a response. Specific, [cited statistics](assertion-density.md) give retrieval models a discrete, attributable fact — extractable without paraphrasing risk. Vague prose offers no extractable fact and no attribution target. Citations also signal external validation, reducing the engine's uncertainty about including the claim. The [Princeton GEO paper](https://arxiv.org/abs/2311.09735) benchmarked these effects at scale; the underlying mechanism is content that minimizes retrieval ambiguity and maximizes attribution confidence.
 
-## The Citation Economy
+## The citation economy
 
 AI answer engines exhibit a citation gap: [only 11% of domains appear across both ChatGPT and Perplexity citations](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/). Citation patterns also vary drastically by platform — the same brand can see a [615× difference in citation rate](https://www.superlines.io/articles/ai-search-statistics/) between the highest-citing and lowest-citing AI platform.
 
 This fragmentation means GEO is not a one-time optimization — it requires per-platform awareness and measurement. See [Measuring GEO Performance](measuring-geo-performance.md) for tooling and metrics.
 
-## When This Backfires
+## When this backfires
 
 GEO investments carry real costs: structured data, freshness cycles, per-platform tracking, and ongoing rework as engines change retrieval strategies. These costs outweigh benefits when:
 
-- **Niche audiences**: if total readership is small, citation volume is a small target regardless of optimization quality.
-- **Fast-moving technical domains**: the [Princeton paper](https://arxiv.org/abs/2311.09735) notes generative engines are "black-box" systems that are "fast-moving" — techniques tuned to current behavior become stale quickly.
-- **Low query volume**: AI engines cite content only when users ask relevant questions; low-query topics yield little return.
-- **Credential-dependent verticals**: legal and medical content depends on institutional trust signals that structural optimization cannot replicate.
+- Niche audiences: if total readership is small, citation volume is a small target regardless of optimization quality.
+- Fast-moving technical domains: the [Princeton paper](https://arxiv.org/abs/2311.09735) notes generative engines are "black-box" systems that are "fast-moving" — techniques tuned to current behavior become stale quickly.
+- Low query volume: AI engines cite content only when users ask relevant questions, so low-query topics yield little return.
+- Credential-dependent verticals: legal and medical content depends on institutional trust signals that structural optimization cannot replicate.
 
 ## Example
 
-**Un-optimized paragraph** — vague, no citations, hard for AI to extract a discrete fact:
+Un-optimized paragraph — vague, no citations, hard for AI to extract a discrete fact:
 
 > "AI search is growing rapidly and content creators should consider optimizing for it. The way people find information is changing and traditional SEO may not be enough anymore."
 
-**GEO-optimized equivalent** — specific, cited, structured for extraction:
+GEO-optimized equivalent — specific, cited, structured for extraction:
 
 > "AI referral traffic grew 357–632% year-over-year ([Superlines, 2026](https://www.superlines.io/articles/ai-search-statistics/)). Google AI Overviews appear in 50%+ of searches ([Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/)). Replacing vague claims with cited statistics increases AI citation rates by up to 30% ([Princeton GEO paper, 2024](https://arxiv.org/abs/2311.09735))."
 

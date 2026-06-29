@@ -17,15 +17,15 @@ maturity: established
 
 > Automate Google Search Console monitoring with GSC and Bing WMT: a scheduled API-driven report plus an on-demand pull replace manual dashboard checks.
 
-**Learn it hands-on:** [The Deterministic Baseline](https://learn.agentpatterns.ai/geo/deterministic-baseline/) — guided lesson with quizzes.
+Learn it hands-on: [The Deterministic Baseline](https://learn.agentpatterns.ai/geo/deterministic-baseline/) — guided lesson with quizzes.
 
-## Why Automate Search Console
+## Why automate Search Console
 
-GSC is the authoritative source for how Google sees the site. It exposes index coverage gaps, real CrUX performance (not lab data), crawl anomalies, schema errors, and query performance. Without a reporting loop, regressions are invisible until traffic drops.
+GSC is the authoritative source for how Google sees the site. It exposes index coverage gaps, real CrUX performance (not lab data), crawl anomalies, schema errors, and query performance. Without a reporting loop, you cannot see regressions until traffic drops.
 
 Bing WMT provides the same data for Bing and Microsoft Copilot Search. It has a public API ([Bing Webmaster Tools API](https://learn.microsoft.com/en-us/bingwebmaster/)) but no bulk CSV export equivalent to GSC's Search Analytics API — trend monitoring still relies on the dashboard.
 
-## One-Time Setup
+## One-time setup
 
 ### Google Search Console
 
@@ -42,7 +42,7 @@ Bing WMT provides the same data for Bing and Microsoft Copilot Search. It has a 
 2. Submit sitemap: `https://agentpatterns.ai/sitemap.xml`
 3. Enable IndexNow: Bing WMT → IndexNow → Auto-submit
 
-### GCP Service Account for API Access
+### GCP service account for API access
 
 ```bash
 # Create service account
@@ -67,7 +67,7 @@ Store credentials as GitHub Actions secrets:
 | `GSC_SITE_URL` | `sc-domain:agentpatterns.ai` |
 | `CRUX_API_KEY` | GCP API key restricted to Chrome UX Report API |
 
-## Automated Weekly Report
+## Automated weekly report
 
 Set up a scheduled GitHub Actions workflow that runs every Monday at 08:00 UTC, calls the GSC and CrUX APIs, and opens a GitHub issue with the results.
 
@@ -93,7 +93,7 @@ Report sections:
 | Crawl anomalies | GSC dashboard | No bulk API — links to GSC Indexing → Pages |
 | Schema errors | GSC dashboard | No bulk API — links to GSC Enhancements |
 
-## On-Demand Pull
+## On-demand pull
 
 To fetch the latest data without waiting for the weekly schedule, wrap the same report script in an on-demand command or skill. That wrapper provides:
 
@@ -117,7 +117,7 @@ python scripts/gsc_report.py
 cat /tmp/gsc_report.md
 ```
 
-## Data Constraints
+## Data constraints
 
 | Constraint | Detail |
 |------------|--------|
@@ -148,10 +148,10 @@ cat /tmp/gsc_report.md
 - [Bing Webmaster Tools](https://www.bing.com/webmasters/about)
 - [IndexNow protocol](https://www.indexnow.org/)
 
-## When This Backfires
+## When this backfires
 
 Automating GSC adds real infrastructure overhead — a GCP service account, stored credentials, and a weekly Actions workflow. The return on that investment degrades under these conditions:
 
-- **Insufficient traffic**: CrUX requires a minimum volume of real user data; the API returns 404 for low-traffic origins, making the Core Web Vitals section empty for most of its life.
-- **Search Analytics lag**: The 3-day data lag means the weekly report reflects conditions from 10+ days ago by the time it is acted on — too stale for incident response, where manual GSC checks are faster.
-- **Single-property sites**: GSC's Search Analytics API caps at 10 rows by default; sites with fewer than 50 indexed pages gain little over a manual 5-minute weekly check.
+- Insufficient traffic: CrUX requires a minimum volume of real user data, so the API returns 404 for low-traffic origins. The Core Web Vitals section then stays empty for most of its life.
+- Search Analytics lag: the 3-day data lag means the weekly report reflects conditions from 10 or more days ago by the time you act on it. That is too stale for incident response, where manual GSC checks are faster.
+- Single-property sites: GSC's Search Analytics API caps at 10 rows by default. Sites with fewer than 50 indexed pages gain little over a manual 5-minute weekly check.

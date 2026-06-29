@@ -16,19 +16,19 @@ status: current
 
 ## Architecture
 
-GitHub Models exposes 40+ AI models (OpenAI, Mistral, xAI, and others) via a single inference endpoint. Access from Actions requires only `permissions: models: read` and authenticates with the built-in `GITHUB_TOKEN` — no external API key management ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/automate-your-project-with-github-models-in-actions/)).
+GitHub Models exposes 40+ AI models (OpenAI, Mistral, xAI, and others) through a single inference endpoint. Access from Actions needs only `permissions: models: read` and authenticates with the built-in `GITHUB_TOKEN`, so you manage no external API keys ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/automate-your-project-with-github-models-in-actions/)).
 
-Three integration methods are available:
+You can use three integration methods:
 
-| Method | Use Case |
+| Method | Use case |
 |--------|----------|
 | `actions/ai-inference@v1` | Inline or file-based prompts in workflow steps |
 | `gh models run` CLI | Piping content through models in shell steps |
 | `.prompt.yml` files | Versioned, templated prompts with variable substitution |
 
-Models are swappable via a single parameter (e.g., `model: openai/gpt-4.1`, `model: xai/grok-3-mini`), decoupling workflow logic from model choice ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/automate-your-project-with-github-models-in-actions/)).
+You swap models with a single parameter (for example `model: openai/gpt-4.1` or `model: xai/grok-3-mini`), which keeps workflow logic separate from model choice ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/automate-your-project-with-github-models-in-actions/)).
 
-## Prompt File Format
+## Prompt file format
 
 `.prompt.yml` files version-control AI prompts alongside code. The format supports multi-message conversations, template variables with `{{variable}}` syntax, JSON schema response formatting, and per-prompt parameter overrides (`temperature`, `topP`, `maxCompletionTokens`) ([`actions/ai-inference` README](https://github.com/actions/ai-inference)):
 
@@ -48,9 +48,9 @@ messages:
 
 The `response-file` output handles large responses that exceed Actions output size limits ([`actions/ai-inference` README](https://github.com/actions/ai-inference)).
 
-## Deterministic Branching on AI Output
+## Deterministic branching on AI output
 
-The core pattern: constrain model output to fixed return values, then branch deterministically. Instruct the model to return a known string (e.g., `"pass"`) when criteria are met, enabling standard workflow conditionals ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/automate-your-project-with-github-models-in-actions/)):
+The core pattern: constrain model output to fixed return values, then branch deterministically. Instruct the model to return a known string (for example `"pass"`) when criteria are met, which enables standard workflow conditionals ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/automate-your-project-with-github-models-in-actions/)):
 
 ```yaml
 - id: analyze-issue
@@ -70,39 +70,39 @@ The core pattern: constrain model output to fixed return values, then branch det
       })
 ```
 
-This works because LLMs constrained to a small vocabulary of valid tokens (e.g., `"pass"`, `"bug"`, `"feature"`) have far fewer degrees of freedom than open-ended generation — reducing variance enough to treat the output as an enum value. The same conditional mechanics drive any Actions workflow.
+This works because LLMs constrained to a small vocabulary of valid tokens (for example `"pass"`, `"bug"`, `"feature"`) have far fewer degrees of freedom than open-ended generation, which reduces variance enough to treat the output as an enum value. The same conditional mechanics apply to any Actions workflow.
 
-## Pre-Built Actions
+## Pre-built actions
 
-Two production-ready Actions implement common patterns using GitHub Models:
+Two ready-made Actions implement common patterns using GitHub Models:
 
-**AI Assessment Comment Labeler** ([`github/ai-assessment-comment-labeler`](https://github.com/github/ai-assessment-comment-labeler)) — runs multiple prompts in parallel against issues, applies structured labels (`ai:<prompt-stem>:<assessment>`), and supports comment suppression ([GitHub Changelog](https://github.blog/changelog/2025-09-05-github-actions-ai-labeler-and-moderator-with-the-github-models-inference-api/)).
+AI Assessment Comment Labeler ([`github/ai-assessment-comment-labeler`](https://github.com/github/ai-assessment-comment-labeler)) runs multiple prompts in parallel against issues, applies structured labels (`ai:<prompt-stem>:<assessment>`), and supports comment suppression ([GitHub Changelog](https://github.blog/changelog/2025-09-05-github-actions-ai-labeler-and-moderator-with-the-github-models-inference-api/)).
 
-**AI Moderator** ([`github/ai-moderator`](https://github.com/github/ai-moderator)) — detects spam, link spam, and AI-generated content on issues and comments. Auto-labels flagged content and can minimize it. Supports custom prompt overrides ([GitHub Changelog](https://github.blog/changelog/2025-09-05-github-actions-ai-labeler-and-moderator-with-the-github-models-inference-api/)).
+AI Moderator ([`github/ai-moderator`](https://github.com/github/ai-moderator)) detects spam, link spam, and AI-generated content on issues and comments. It auto-labels flagged content and can minimize it. It also supports custom prompt overrides ([GitHub Changelog](https://github.blog/changelog/2025-09-05-github-actions-ai-labeler-and-moderator-with-the-github-models-inference-api/)).
 
 Both use the same `models: read` permission pattern with no separate API key management.
 
-## MCP Integration
+## MCP integration
 
-The `actions/ai-inference` action supports GitHub MCP for read-only access to repos, issues, PRs, users, actions, and code security toolsets. MCP requires a PAT or GitHub App token — the built-in `GITHUB_TOKEN` is insufficient for MCP. Toolsets are selectable: `github-mcp-toolsets: 'repos,issues,pull_requests'` ([`actions/ai-inference` README](https://github.com/actions/ai-inference)).
+The `actions/ai-inference` action supports GitHub MCP for read-only access to repos, issues, PRs, users, actions, and code security toolsets. MCP needs a PAT or GitHub App token — the built-in `GITHUB_TOKEN` is not enough for MCP. You select toolsets: `github-mcp-toolsets: 'repos,issues,pull_requests'` ([`actions/ai-inference` README](https://github.com/actions/ai-inference)).
 
-## Security Considerations
+## Security considerations
 
-The primary risk is prompt injection via user-controlled content (issue bodies, PR descriptions, comments) passed as model input. Mitigations ([GitHub Docs: Actions Security Hardening](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions)):
+The main risk is prompt injection through user-controlled content (issue bodies, PR descriptions, comments) passed as model input. To reduce it ([GitHub Docs: Actions Security Hardening](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions)):
 
 - Grant minimum permissions — avoid `issues: write` if only read is needed
 - Scope `GITHUB_TOKEN` tightly per job
 - Use intermediate environment variables for untrusted input rather than inline shell interpolation
 - Sensitive headers are not automatically masked — use `::add-mask::` explicitly to redact secrets from logs
 
-## When This Backfires
+## When this backfires
 
-GitHub Models in Actions is a preview feature — model availability, API surface, and rate limits can change without notice, making it unsuitable for workflows where reliability guarantees matter. Specific failure conditions:
+GitHub Models in Actions is a preview feature — model availability, API surface, and rate limits can change without notice, which makes it unsuitable for workflows where reliability guarantees matter. Specific failure conditions:
 
-- **Rate limits cause silent failures**: GitHub Models applies per-user and per-workflow quotas. Exceeding them causes steps to fail or return empty responses — if your workflow does not assert on response content, failures become invisible.
-- **Non-determinism persists at temperature:0**: Constrained single-word output reduces variance but does not eliminate it. Edge-case inputs (malformed issue bodies, unusually long content) can still produce unexpected output, causing deterministic branching to mis-route.
-- **Prompt injection cannot be fully mitigated**: User-controlled content passed directly into prompts can override instructions regardless of system-prompt framing. Workflows that take irreversible actions (closing issues, applying restrictive labels, modifying code) should require human confirmation for high-stakes outcomes.
-- **Endpoint vendor lock-in**: Workflows built on `actions/ai-inference@v1` and the `models: read` permission are GitHub-specific; porting to other CI platforms requires replacing the inference layer.
+- Rate limits cause silent failures: GitHub Models applies per-user and per-workflow quotas. Exceeding them causes steps to fail or return empty responses. If your workflow does not assert on response content, failures become invisible.
+- Non-determinism persists at temperature:0: constrained single-word output reduces variance but does not remove it. Edge-case inputs (malformed issue bodies, unusually long content) can still produce unexpected output, which makes deterministic branching mis-route.
+- Prompt injection cannot be fully mitigated: user-controlled content passed directly into prompts can override instructions regardless of system-prompt framing. Workflows that take irreversible actions (closing issues, applying restrictive labels, modifying code) should require human confirmation for high-stakes outcomes.
+- Endpoint vendor lock-in: workflows built on `actions/ai-inference@v1` and the `models: read` permission are GitHub-specific. Porting to other CI platforms means replacing the inference layer.
 
 ## Key Takeaways
 
@@ -181,7 +181,7 @@ messages:
       Body: {{issue_body}}
 ```
 
-The workflow uses `temperature: 0` and single-word constrained output to maximize determinism. The `models: read` permission grants access to GitHub Models via the built-in `GITHUB_TOKEN`, requiring no additional secrets.
+The workflow uses `temperature: 0` and single-word constrained output to maximize determinism. The `models: read` permission grants access to GitHub Models through the built-in `GITHUB_TOKEN`, so it needs no additional secrets.
 
 ## Related
 

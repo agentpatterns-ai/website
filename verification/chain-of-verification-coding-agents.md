@@ -15,13 +15,13 @@ maturity: emerging
 
 > Chain-of-Verification helps coding agents only in its factored variant, applied to claims no test, type checker, or LSP reaches; used naively, it overturns correct code.
 
-**Learn it hands-on:** [Chain-of-Verification](https://learn.agentpatterns.ai/verification/chain-of-verification/) — guided lesson with quizzes.
+Learn it hands-on with the [Chain-of-Verification guided lesson](https://learn.agentpatterns.ai/verification/chain-of-verification/), which includes quizzes.
 
-Chain-of-Verification (CoVe) is a four-step self-correction loop — draft, plan verification questions, answer each independently, revise — introduced by [Dhuliawala et al. (2023)](https://arxiv.org/abs/2309.11495) for hallucination reduction on fact-recall and longform tasks. For coding agents it is conditional: it pays off only with the **factored** variant and only over claims no external oracle covers. Applied naively, it degrades code quality.
+Chain-of-Verification (CoVe) is a four-step self-correction loop — draft, plan verification questions, answer each independently, revise — introduced by [Dhuliawala et al. (2023)](https://arxiv.org/abs/2309.11495) for hallucination reduction on fact-recall and longform tasks. For coding agents it is conditional: it pays off only with the factored variant and only over claims no external oracle covers. Applied naively, it degrades code quality.
 
-## The Four Variants and Why Only One Matters
+## The four variants and why only one matters
 
-The original paper compares four variants and the choice is load-bearing ([Dhuliawala et al., 2023](https://arxiv.org/abs/2309.11495)):
+The original paper compares four variants, and the choice matters ([Dhuliawala et al., 2023](https://arxiv.org/abs/2309.11495)):
 
 | Variant | What it does | Result |
 |--------|-------------|--------|
@@ -32,7 +32,7 @@ The original paper compares four variants and the choice is load-bearing ([Dhuli
 
 The mechanism is anti-anchoring. If the draft contains a fabricated `df.write_to_csv()` call, a verifier that sees the draft attends to that token sequence and re-emits it. Answering questions in separate prompts that exclude the draft forces independent recall ([Dhuliawala et al., 2023, §3.2](https://arxiv.org/abs/2309.11495)).
 
-## Claim-Class-Aware Routing for Coding Agents
+## Claim-class-aware routing for coding agents
 
 The original CoVe paper does not evaluate code tasks ([Dhuliawala et al., 2023](https://arxiv.org/abs/2309.11495)). For coding agents, treat CoVe as one layer in a [layered accuracy defense](layered-accuracy-defense.md): classify the agent's draft claims and route each to the cheapest reliable check.
 
@@ -46,25 +46,25 @@ The original CoVe paper does not evaluate code tasks ([Dhuliawala et al., 2023](
 | Citation, version, fact in commentary | Factored CoVe | Use |
 | Cross-file refactor consistency | Factored CoVe over the change set | Use |
 
-The discipline matches ConVerTest, which integrates factored CoVe with external test execution (dual execution agreement) and reports +39% test validity, +28% line coverage, and +18% mutation scores over baselines on BigCodeBench and LBPP ([Taherkhani et al., 2026](https://arxiv.org/abs/2602.10522)). The gains come from CoVe **paired with** an external oracle, not CoVe alone.
+The discipline matches ConVerTest, which integrates factored CoVe with external test execution (dual execution agreement) and reports +39% test validity, +28% line coverage, and +18% mutation scores over baselines on BigCodeBench and LBPP ([Taherkhani et al., 2026](https://arxiv.org/abs/2602.10522)). The gains come from CoVe paired with an external oracle, not CoVe alone.
 
-## Why It Works
+## Why it works
 
 Factored verification breaks the attention path that produced the hallucination. The draft is a continuation conditioned on prior context; an invented API call sits inside a coherent token sequence any verifier sharing that context treats as a strong prior. Answering each verification question in a separate prompt without the draft forces the model to retrieve from underlying API knowledge rather than continue its earlier sentence ([Dhuliawala et al., 2023, §3.2](https://arxiv.org/abs/2309.11495)) — the same anti-anchoring principle behind the [five-pass blunder hunt](five-pass-blunder-hunt.md). LangChain reports task-score improvements from 52.8% to 66.5% with self-verification bundled into other harness changes ([LangChain, 2025](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
-## When This Backfires
+## When this backfires
 
-- **Strong external oracles already in the loop** — when fast tests, a type checker, and a working LSP cover the claim space, intrinsic verification adds latency and produces no new signal. Huang et al. (2023) found LLMs cannot reliably self-correct reasoning errors without external feedback ([arxiv:2310.01798](https://arxiv.org/abs/2310.01798)).
-- **Joint or two-step variants on the same draft** — the verifier attends to the draft's hallucinations and repeats them. CoVe collapses to a no-op or worse ([Dhuliawala et al., 2023](https://arxiv.org/abs/2309.11495)).
-- **Naive self-correction prompts on code** — Liu et al. (2024) report 21.9% of correct GPT-4o code solutions and 28.3% of correct GPT-3.5 solutions are overturned to wrong answers under intrinsic self-correction prompts. They identify three mechanisms: answer wavering, prompt bias, and human-like cognitive bias ([arxiv:2412.14959](https://arxiv.org/html/2412.14959v1)).
-- **Strong-hypothesis debugging** — once the agent commits to "this is a null-pointer bug", verification questions framed in that frame re-confirm the wrong hypothesis. The anchor is upstream of the technique ([Liu et al., 2024](https://arxiv.org/html/2412.14959v1)).
-- **Single-file refactors with mature tests** — the test suite is already the verification step; adding CoVe duplicates work and burns tokens for no measured gain.
+- Strong external oracles already in the loop: when fast tests, a type checker, and a working LSP cover the claim space, intrinsic verification adds latency and produces no new signal. Huang et al. (2023) found LLMs cannot reliably self-correct reasoning errors without external feedback ([arxiv:2310.01798](https://arxiv.org/abs/2310.01798)).
+- Joint or two-step variants on the same draft: the verifier attends to the draft's hallucinations and repeats them. CoVe collapses to a no-op or worse ([Dhuliawala et al., 2023](https://arxiv.org/abs/2309.11495)).
+- Naive self-correction prompts on code: Liu et al. (2024) report 21.9% of correct GPT-4o code solutions and 28.3% of correct GPT-3.5 solutions are overturned to wrong answers under intrinsic self-correction prompts. They identify three mechanisms: answer wavering, prompt bias, and human-like cognitive bias ([arxiv:2412.14959](https://arxiv.org/html/2412.14959v1)).
+- Strong-hypothesis debugging: once the agent commits to "this is a null-pointer bug", verification questions framed that way re-confirm the wrong hypothesis. The anchor is upstream of the technique ([Liu et al., 2024](https://arxiv.org/html/2412.14959v1)).
+- Single-file refactors with mature tests: the test suite is already the verification step, so adding CoVe duplicates work and burns tokens for no measured gain.
 
 ## Example
 
-A coding agent drafts a Python script using `polars`. The draft contains `df.write_to_csv("out.csv")`. A factored verification step asks, in a separate prompt with no draft context: *"What is the method name to write a polars DataFrame to CSV?"* The model retrieves `write_csv` from its knowledge of the polars API, the mismatch surfaces, and the agent revises. A joint variant — asking "does this script use the right polars methods?" while showing the draft — re-emits `write_to_csv` because the verifier attends to its own earlier output ([Dhuliawala et al., 2023, §3.2](https://arxiv.org/abs/2309.11495)).
+A coding agent drafts a Python script using `polars`. The draft contains `df.write_to_csv("out.csv")`. A factored verification step asks, in a separate prompt with no draft context: "What is the method name to write a polars DataFrame to CSV?" The model retrieves `write_csv` from its knowledge of the polars API, the mismatch surfaces, and the agent revises. A joint variant — asking "does this script use the right polars methods?" while showing the draft — re-emits `write_to_csv` because the verifier attends to its own earlier output ([Dhuliawala et al., 2023, §3.2](https://arxiv.org/abs/2309.11495)).
 
-The same draft contains an `import polars as pl` line. Do **not** route this through CoVe — an LSP or `python -c "import polars"` answers the same question deterministically and faster ([phantom symbol detection](phantom-symbol-detection.md) is the right layer here).
+The same draft contains an `import polars as pl` line. Do not route this through CoVe — an LSP or `python -c "import polars"` answers the same question deterministically and faster ([phantom symbol detection](phantom-symbol-detection.md) is the right layer here).
 
 ## Key Takeaways
 

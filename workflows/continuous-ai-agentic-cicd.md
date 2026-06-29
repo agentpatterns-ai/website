@@ -15,13 +15,13 @@ maturity: established
 
 > Continuous AI runs agents alongside CI/CD pipelines to handle judgment-heavy tasks deterministic rules cannot express, producing reviewable artifacts instead of autonomous commits.
 
-## The Gap Between CI and Judgment
+## The gap between CI and judgment
 
-Traditional CI/CD handles binary outcomes: tests pass or fail, builds succeed or break, linters flag or approve. These deterministic checks work when correctness can be reduced to rules. But many repository tasks require interpretation and intent — detecting mismatches between documentation and implementation, identifying semantic regressions, or evaluating whether a refactor actually simplifies code. Continuous AI fills this gap by applying [natural-language rules and agentic reasoning continuously inside a repository](https://github.blog/ai-and-ml/generative-ai/continuous-ai-in-practice-what-developers-can-automate-today-with-agentic-ci/).
+Traditional CI/CD handles binary outcomes: tests pass or fail, builds succeed or break, linters flag or approve. These deterministic checks work when you can reduce correctness to rules. But many repository tasks need interpretation and intent. Examples include detecting mismatches between documentation and implementation, spotting semantic regressions, or judging whether a refactor actually simplifies code. Continuous AI fills this gap by applying [natural-language rules and agentic reasoning continuously inside a repository](https://github.blog/ai-and-ml/generative-ai/continuous-ai-in-practice-what-developers-can-automate-today-with-agentic-ci/).
 
-## How It Works
+## How it works
 
-Continuous AI workflows execute coding agents within standard CI infrastructure (e.g., GitHub Actions), triggered by the same mechanisms as traditional pipelines: schedules, repository events, or manual dispatch. The difference is the instruction format. Instead of YAML-encoded rules, you express expectations in plain language: "Check whether documented behavior matches implementation, explain mismatches, and propose fixes." The agent interprets these instructions, reasons about the codebase, and produces [reviewable outputs like pull requests, issues, or reports](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/).
+Continuous AI workflows run coding agents inside standard CI infrastructure (for example, GitHub Actions). The same mechanisms that fire traditional pipelines trigger them: schedules, repository events, or manual dispatch. The difference is the instruction format. Instead of YAML-encoded rules, you express expectations in plain language: "Check whether documented behavior matches implementation, explain mismatches, and propose fixes." The agent reads these instructions, reasons about the codebase, and produces [reviewable outputs like pull requests, issues, or reports](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/).
 
 ```mermaid
 graph TD
@@ -34,28 +34,28 @@ graph TD
     G --> H[Human Review]
 ```
 
-## Safe Outputs and Human Authority
+## Safe outputs and human authority
 
-The critical design constraint is that agents produce artifacts, never autonomous changes. [Workflows run with read-only repository permissions by default](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/). Write operations require explicit authorization through "safe outputs" — pre-approved operations like creating pull requests or adding issue comments. Pull requests are never merged automatically; your review remains the final gate. This preserves the existing PR-based checkpoint you already trust while expanding what automation can address.
+The critical design constraint is that agents produce artifacts, never autonomous changes. [Workflows run with read-only repository permissions by default](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/). Write operations need explicit authorization through "safe outputs" — pre-approved operations like creating pull requests or adding issue comments. Pull requests are never merged automatically, so your review stays the final gate. This preserves the PR-based checkpoint you already trust while expanding what automation can handle.
 
-## Task Categories
+## Task categories
 
-The following categories represent common applications of this pattern, adapted from [seven use cases identified by GitHub](https://github.blog/ai-and-ml/generative-ai/continuous-ai-in-practice-what-developers-can-automate-today-with-agentic-ci/):
+The categories below are common applications of this pattern, adapted from [seven use cases identified by GitHub](https://github.blog/ai-and-ml/generative-ai/continuous-ai-in-practice-what-developers-can-automate-today-with-agentic-ci/):
 
-- **Triage** — Label and route incoming issues based on content analysis
-- **Documentation** — Detect drift between docs and implementation, propose updates
-- **Code simplification** — Identify refactoring opportunities and submit focused PRs
-- **Test improvement** — Generate tests for uncovered paths through iterative reasoning
-- **Quality hygiene** — Investigate CI failures, flag semantic regressions
-- **Reporting** — Synthesize project health summaries across multiple data sources
+- Triage — label and route incoming issues based on content analysis
+- Documentation — detect drift between docs and implementation, then propose updates
+- Code simplification — identify refactoring opportunities and submit focused PRs
+- Test improvement — generate tests for uncovered paths through iterative reasoning
+- Quality hygiene — investigate CI failures and flag semantic regressions
+- Reporting — synthesize project health summaries across multiple data sources
 
-## When to Use Continuous AI vs. Traditional CI
+## When to use Continuous AI instead of traditional CI
 
-Use traditional CI when correctness is binary and the check can be expressed as a deterministic rule. Use Continuous AI when the task requires reasoning about intent, context, or subjective quality — for example, [continuous documentation](continuous-documentation.md) that detects drift no linter can express. The two are complementary — Continuous AI does not replace linters, tests, or build checks. It extends automation into territory that previously required human attention on every occurrence.
+Use traditional CI when correctness is binary and you can express the check as a deterministic rule. Use Continuous AI when the task needs reasoning about intent, context, or subjective quality — for example, [continuous documentation](continuous-documentation.md) that detects drift no linter can express. The two are complementary. Continuous AI does not replace linters, tests, or build checks. It extends automation into work that used to need human attention every time.
 
-## Security Considerations
+## Security considerations
 
-Continuous AI workflows inherit the same threat surface as any agent with repository access. [Defense-in-depth protections apply](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/): sandboxed execution environments, tool allowlisting, network isolation, audit logging, and prompt-injection defenses. The read-only default combined with explicit safe-output declarations creates a deterministic blast radius — anything outside declared boundaries is forbidden.
+Continuous AI workflows inherit the same threat surface as any agent with repository access. [Defense-in-depth protections apply](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/): sandboxed execution environments, tool allowlisting, network isolation, audit logging, and prompt-injection defenses. Combine the read-only default with explicit safe-output declarations and you get a deterministic blast radius — anything outside the declared boundaries is forbidden.
 
 ## Example
 
@@ -93,17 +93,17 @@ jobs:
           allowed_tools: "Read,Write,Bash,mcp__github__create_pull_request"
 ```
 
-The `permissions` block enforces the read-only default described in the Safe Outputs section — the agent can only write via the explicitly allowed `create_pull_request` tool. Because the agent receives a plain-language instruction rather than a YAML rule, it can reason about semantic drift that no linter could express.
+The `permissions` block enforces the read-only default described in the safe outputs section above — the agent can only write through the explicitly allowed `create_pull_request` tool. Because the agent gets a plain-language instruction rather than a YAML rule, it can reason about semantic drift that no linter could express.
 
-## When This Backfires
+## When this backfires
 
 Continuous AI is not a drop-in upgrade to every CI pipeline. Failure conditions include:
 
-- **Cost-sensitive pipelines** — LLM inference runs on every trigger; a nightly schedule across a large monorepo can accumulate significant token costs that deterministic linters never incur.
-- **Compliance environments requiring reproducibility** — agent outputs are non-deterministic by nature; if audit trails require bit-for-bit reproducible CI results, agentic steps break that contract.
-- **High-churn codebases** — when the repository changes faster than agents can review it, a backlog of stale agent-authored PRs accumulates and becomes [noise rather than signal](../code-review/agent-pr-volume-vs-value.md).
-- **Tasks already expressible as rules** — applying LLM reasoning to checks that a linter handles precisely adds latency and cost without improving accuracy; the non-determinism becomes a liability, not an asset.
-- **Prompt-injection attack surface** — any workflow that feeds user-controlled content (issue bodies, PR titles, commit messages) into an agent prompt is a potential injection vector; safe-output guardrails reduce but do not eliminate this risk.
+- Cost-sensitive pipelines — LLM inference runs on every trigger. A nightly schedule across a large monorepo can build up token costs that deterministic linters never incur.
+- Compliance environments that need reproducibility — agent outputs are non-deterministic by nature. If audit trails need bit-for-bit reproducible CI results, agentic steps break that contract.
+- High-churn codebases — when the repository changes faster than agents can review it, a backlog of stale agent-authored PRs builds up and becomes [noise rather than signal](../code-review/agent-pr-volume-vs-value.md).
+- Tasks already expressible as rules — applying LLM reasoning to checks a linter handles precisely adds latency and cost without improving accuracy. The non-determinism becomes a liability, not an asset.
+- Prompt-injection attack surface — any workflow that feeds user-controlled content (issue bodies, PR titles, commit messages) into an agent prompt is a potential injection vector. Safe-output guardrails reduce but do not eliminate this risk.
 
 Recent empirical work tempers the optimistic framing: an [MSR 2026 Mining Challenge study of 11,771 pull requests](https://2026.msrconf.org/details/msr-2026-mining-challenge/25/On-the-Reliability-of-Agentic-AI-in-Continuous-Integration-Pipelines) reports that agentic PRs introduce 79.15% of CI failures but perform only 60.63% of the corresponding fixes — a capability/autonomy gap where agents resolve failures quickly yet still rely on humans to repair the ones they cause. Treat Continuous AI as an augmentation that shifts repair work rather than eliminating it, and budget explicit human-review capacity for the failures agents will inevitably generate.
 

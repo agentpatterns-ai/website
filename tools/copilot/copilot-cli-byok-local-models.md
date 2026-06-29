@@ -17,7 +17,7 @@ status: current
 
 > Connect Copilot CLI to your own model provider — Ollama, Azure OpenAI, Anthropic, or any OpenAI-compatible endpoint — for cost control, data residency compliance, and fully air-gapped workflows.
 
-Released April 7, 2026, Copilot CLI BYOK lets you replace GitHub-hosted model routing with your own provider ([GitHub Changelog](https://github.blog/changelog/2026-04-07-copilot-cli-now-supports-byok-and-local-models)). Configuration is four environment variables.
+Released April 7, 2026, Copilot CLI BYOK lets you replace GitHub-hosted model routing with your own provider ([GitHub Changelog](https://github.blog/changelog/2026-04-07-copilot-cli-now-supports-byok-and-local-models)). Four environment variables configure it.
 
 ## Configuration
 
@@ -30,16 +30,16 @@ Set these variables before launching `copilot` ([GitHub Docs](https://docs.githu
 | `COPILOT_PROVIDER_TYPE` | No | `openai` (default), `azure`, or `anthropic` |
 | `COPILOT_PROVIDER_API_KEY` | No | API key — omit for unauthenticated local endpoints |
 
-## Supported Providers
+## Supported providers
 
-**OpenAI-compatible (Ollama, vLLM, Foundry Local, OpenAI):**
+OpenAI-compatible providers (Ollama, vLLM, Foundry Local, OpenAI):
 
 ```shell
 export COPILOT_PROVIDER_BASE_URL=http://localhost:11434
 export COPILOT_MODEL=llama3.2
 ```
 
-**Azure OpenAI:**
+Azure OpenAI:
 
 ```shell
 export COPILOT_PROVIDER_BASE_URL=https://YOUR-RESOURCE.openai.azure.com/openai/deployments/YOUR-DEPLOYMENT
@@ -48,7 +48,7 @@ export COPILOT_PROVIDER_API_KEY=YOUR-AZURE-API-KEY
 export COPILOT_MODEL=YOUR-DEPLOYMENT-NAME
 ```
 
-**Anthropic:**
+Anthropic:
 
 ```shell
 export COPILOT_PROVIDER_TYPE=anthropic
@@ -57,19 +57,19 @@ export COPILOT_PROVIDER_API_KEY=YOUR-ANTHROPIC-API-KEY
 export COPILOT_MODEL=claude-opus-4-5
 ```
 
-## Offline Mode
+## Offline mode
 
-`COPILOT_OFFLINE=true` disables telemetry and restricts the CLI to communicate only with the configured provider ([GitHub Changelog](https://github.blog/changelog/2026-04-07-copilot-cli-now-supports-byok-and-local-models)). Combined with a local Ollama instance, this enables fully air-gapped workflows.
+`COPILOT_OFFLINE=true` disables telemetry and restricts the CLI to talk only to the configured provider ([GitHub Changelog](https://github.blog/changelog/2026-04-07-copilot-cli-now-supports-byok-and-local-models)). Paired with a local Ollama instance, this gives you fully air-gapped workflows.
 
-**Important caveat**: isolation is only complete when `COPILOT_PROVIDER_BASE_URL` also points to a local or on-prem endpoint. A remote URL sends prompts and code context over the network to that provider regardless of offline mode ([GitHub Docs](https://docs.github.com/copilot/how-tos/copilot-cli/customize-copilot/use-byok-models)).
+Isolation is only complete when `COPILOT_PROVIDER_BASE_URL` also points to a local or on-prem endpoint. A remote URL sends prompts and code context over the network to that provider, even in offline mode ([GitHub Docs](https://docs.github.com/copilot/how-tos/copilot-cli/customize-copilot/use-byok-models)).
 
-## GitHub Authentication
+## GitHub authentication
 
-GitHub login is optional when using BYOK. With only provider credentials, the full local agentic experience runs without a Copilot subscription. Adding GitHub authentication re-enables `/delegate`, GitHub Code Search, and the GitHub MCP server ([GitHub Changelog](https://github.blog/changelog/2026-04-07-copilot-cli-now-supports-byok-and-local-models)).
+GitHub login is optional with BYOK. With only provider credentials, you run the full local agent without a Copilot subscription. Adding GitHub authentication re-enables `/delegate`, GitHub Code Search, and the GitHub MCP server ([GitHub Changelog](https://github.blog/changelog/2026-04-07-copilot-cli-now-supports-byok-and-local-models)).
 
-## Model Requirements
+## Model requirements
 
-Any model must support **tool calling** and **streaming**. A 128k context window is recommended for complex tasks. All built-in sub-agents (explore, task, code-review) inherit the provider configuration automatically — there is no per-agent routing ([GitHub Changelog](https://github.blog/changelog/2026-04-07-copilot-cli-now-supports-byok-and-local-models)).
+Any model must support tool calling and streaming. GitHub recommends a 128k context window for complex tasks. All built-in sub-agents (explore, task, code-review) inherit the provider configuration automatically — there is no per-agent routing ([GitHub Changelog](https://github.blog/changelog/2026-04-07-copilot-cli-now-supports-byok-and-local-models)).
 
 ## Trade-offs
 
@@ -97,7 +97,7 @@ export COPILOT_OFFLINE=true
 copilot
 ```
 
-The team loses access to `/delegate` and GitHub MCP server but gains full data-residency compliance. For tasks requiring stronger reasoning, swapping `COPILOT_MODEL` and `COPILOT_PROVIDER_BASE_URL` to a hosted provider (without `COPILOT_OFFLINE`) routes those sessions externally while preserving the same CLI experience.
+The team loses `/delegate` and the GitHub MCP server but gains full data-residency compliance. For tasks that need stronger reasoning, swap `COPILOT_MODEL` and `COPILOT_PROVIDER_BASE_URL` to a hosted provider and drop `COPILOT_OFFLINE`. Those sessions then route externally, with the same CLI experience.
 
 ## Key Takeaways
 

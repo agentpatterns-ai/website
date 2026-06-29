@@ -20,22 +20,22 @@ maturity: emerging
 
 > A tuned BM25 index plus a frontier agent loop with deep retrieval can match dense retrieval on deep-research benchmarks — when the loop filters noise.
 
-## The Default Worth Questioning
+## The default worth questioning
 
-The reflex choice for retrieval-augmented agents is a dense vector index plus optional reranker. The reasoning was sound when LLMs were weaker: ranking precision had to come from the retriever because the generator could not discard irrelevant context. Frontier agents in a search loop change that contract — they reformulate queries, read documents in-context, and discard non-evidence themselves ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
+The reflex choice for retrieval-augmented agents is a dense vector index plus optional reranker. The reasoning was sound when LLMs were weaker: ranking precision had to come from the retriever, because the generator could not discard irrelevant context. Frontier agents in a search loop change that contract. They reformulate queries, read documents in context, and discard non-evidence themselves ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
 
-Pi-Serini tests this directly. The system pairs Pyserini's BM25 with gpt-5.5 in a three-tool agent (retrieve, browse, read) and evaluates on BrowseComp-Plus, a controlled 100k-document corpus of 830 deep-research queries. The configuration reaches **83.1% answer accuracy and 94.7% surfaced evidence recall**, outperforming released search agents built on dense retrievers ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
+Pi-Serini tests this directly. The system pairs Pyserini's BM25 with gpt-5.5 in a three-tool agent (retrieve, browse, read), then runs it against BrowseComp-Plus, a controlled 100k-document corpus of 830 deep-research queries. The configuration reaches 83.1% answer accuracy and 94.7% surfaced evidence recall. That beats released search agents built on dense retrievers ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
 
 Two levers do the work:
 
-- **BM25 tuning** — adjusting `b` and `k1` parameters lifts answer accuracy by **18.0%** and evidence recall by **11.1%** over an untuned baseline.
-- **Retrieval depth** — fetching more candidates per query lifts evidence recall by **25.3%** over a shallow-retrieval setting.
+- BM25 tuning — adjusting the `b` and `k1` parameters lifts answer accuracy by 18.0% and evidence recall by 11.1% over an untuned baseline.
+- Retrieval depth — fetching more candidates per query lifts evidence recall by 25.3% over a shallow-retrieval setting.
 
-Both levers are cheap to apply and require no embedding infrastructure.
+Both levers are cheap to apply and need no embedding infrastructure.
 
-## When the Default Inverts
+## When the default inverts
 
-The same benchmark that hosts Pi-Serini's victory shows the conditions under which it fails. On BrowseComp-Plus, Search-R1 paired with BM25 reaches **3.86% accuracy** — the same retriever, a weaker agent. GPT-5 paired with BM25 reaches 55.9%. GPT-5 paired with Qwen3-Embedding-8B reaches **70.1% with fewer search calls** ([Chen et al., 2025](https://arxiv.org/abs/2508.06600)).
+The same benchmark that hosts Pi-Serini's win shows when it fails. On BrowseComp-Plus, Search-R1 paired with BM25 reaches 3.86% accuracy — the same retriever, a weaker agent. GPT-5 paired with BM25 reaches 55.9%. GPT-5 paired with Qwen3-Embedding-8B reaches 70.1% with fewer search calls ([Chen et al., 2025](https://arxiv.org/abs/2508.06600)).
 
 The pattern: lexical retrieval works when the agent loop can pay the precision cost the retriever no longer pays.
 
@@ -50,20 +50,20 @@ graph TD
     E --> H[Graceful Degradation]
 ```
 
-## Conditions for Lexical-First
+## Conditions for lexical-first
 
 Pi-Serini's result is real but conditional. Choose lexical-first only when all four hold:
 
-- **Frontier-class agent** — gpt-5.5, Claude Opus 4.6, or equivalent. Sub-frontier models lose more on ranking noise than they recover through agent loop work.
-- **Tuned BM25** — `b` and `k1` calibrated against representative queries, not stock defaults. The 18.0% accuracy delta is the cost of skipping this step.
-- **Deep retrieval allowed** — the agent can pull dozens of candidates per query rather than top-k=10. Without depth, BM25's recall ceiling becomes the agent's recall ceiling.
-- **Search-call cost is acceptable** — dense retrieval reaches similar recall with fewer calls. If you bill per search-API invocation, the depth strategy is more expensive even when the index is cheaper.
+- Frontier-class agent — gpt-5.5, Claude Opus 4.6, or equivalent. Sub-frontier models lose more on ranking noise than they recover through agent loop work.
+- Tuned BM25 — `b` and `k1` calibrated against representative queries, not stock defaults. The 18.0% accuracy gap is the cost of skipping this step.
+- Deep retrieval allowed — the agent can pull dozens of candidates per query rather than top-k=10. Without depth, BM25's recall ceiling becomes the agent's recall ceiling.
+- Search-call cost is acceptable — dense retrieval reaches similar recall with fewer calls. If you bill per search-API call, the depth strategy costs more even when the index is cheaper.
 
 When any condition fails, the safer default is hybrid retrieval — BM25 plus dense embeddings fused with reciprocal rank fusion, orchestrated by the agent ([Terrenzi et al., 2026](https://arxiv.org/abs/2604.16394)). Hybrid degrades gracefully when the model weakens; pure lexical does not.
 
-## The Mechanism
+## The mechanism
 
-BM25 fails by surfacing literal-but-irrelevant matches — documents that share query terms but not query meaning. Dense retrieval reduces this by encoding semantic similarity. Frontier agents close the gap from the other direction: they read more documents and classify each one against the query in-context. The selection burden shifts from the index to the agent loop ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
+BM25 fails by surfacing literal-but-irrelevant matches — documents that share query terms but not query meaning. Dense retrieval reduces this by encoding semantic similarity. Frontier agents close the gap from the other direction: they read more documents and judge each one against the query in context. The selection burden shifts from the index to the agent loop ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
 
 This is the same mechanism behind Direct Corpus Interaction, which removes the retriever entirely — agents grep and read the raw corpus with shell tools, no vector index, no embedding model ([Li et al., 2026](https://arxiv.org/abs/2605.05242)). And behind SIRA's collapse to a single weighted BM25 call with agent-validated query expansion ([Yang et al., 2026](https://arxiv.org/abs/2605.06647)). The direction is consistent: precision moves out of the retriever and into the loop.
 
@@ -71,7 +71,7 @@ This is the same mechanism behind Direct Corpus Interaction, which removes the r
 
 A deep-research agent over a fixed technical corpus (RFCs, internal architecture docs, postmortems). The team currently runs a managed dense embedding service plus a reranker.
 
-**Before** — dense + reranker pipeline:
+Before — dense plus reranker pipeline:
 
 ```yaml
 retrieval:
@@ -86,7 +86,7 @@ infra:
   - reranker_endpoint: hosted
 ```
 
-**After** — lexical-first under the conditions above:
+After — lexical-first under the conditions above:
 
 ```yaml
 retrieval:
@@ -105,7 +105,7 @@ The dense pipeline carries three managed dependencies and per-call API costs on 
 
 ## Key Takeaways
 
-- BM25 with tuning and depth matches dense retrieval on deep-research benchmarks **when paired with a frontier agent** — 83.1% accuracy / 94.7% recall on BrowseComp-Plus.
+- BM25 with tuning and depth matches dense retrieval on deep-research benchmarks when paired with a frontier agent — 83.1% accuracy / 94.7% recall on BrowseComp-Plus.
 - The same benchmark shows BM25 collapses to 3.86% with a weaker agent — the condition is not optional.
 - Two levers carry most of the gain: BM25 parameter tuning (+18.0%) and retrieval depth (+25.3% recall).
 - Choose hybrid retrieval as the safe default — it degrades gracefully when the model weakens.

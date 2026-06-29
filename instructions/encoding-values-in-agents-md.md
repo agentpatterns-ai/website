@@ -18,7 +18,7 @@ maturity: emerging
 
 > Values written as AGENTS.md prose rarely change agent behavior; pair each one with a verification command or move it to a lower enforcement layer.
 
-## The Empirical Gap
+## The empirical gap
 
 Two recent corpus studies measured what developers encode in context files. Functional content dominates; values content is sparse.
 
@@ -32,11 +32,11 @@ Two recent corpus studies measured what developers encode in context files. Func
 | Performance | 14.5% | — |
 | Accessibility, fairness, sustainability, tone | Not measured (rare) | None found |
 
-Liu et al. classified instructions by writing style — descriptive, prescriptive, prohibitive, explanatory, conditional — and reported **no explicit ethical, accessibility, fairness, or tone instructions** across the analyzed AGENTS.md files ([Liu et al., 2025](https://arxiv.org/abs/2510.21413)). Wei et al. note the same gap: developers "provide few guardrails to ensure that agent-written code is secure or performant" ([Wei et al., 2025](https://arxiv.org/abs/2511.12884)).
+Liu et al. classified instructions by writing style — descriptive, prescriptive, prohibitive, explanatory, conditional — and found no explicit ethical, accessibility, fairness, or tone instructions across the analyzed AGENTS.md files ([Liu et al., 2025](https://arxiv.org/abs/2510.21413)). Wei et al. note the same gap: developers "provide few guardrails to ensure that agent-written code is secure or performant" ([Wei et al., 2025](https://arxiv.org/abs/2511.12884)).
 
-A later vision paper tempers how absolute that gap is: [Treude et al., 2026](https://arxiv.org/abs/2605.05584) report that developers *are* already embedding fairness, accessibility, sustainability, tone, and privacy guidance, framing AGENTS.md as a "developer-authored governance layer." But the authors explicitly defer the question that matters here — *whether agents reliably adhere to* those values — to future work. Presence of values prose is not evidence it changes behavior, which is the gap this page addresses.
+A later vision paper tempers how absolute that gap is. [Treude et al., 2026](https://arxiv.org/abs/2605.05584) report that developers already embed fairness, accessibility, sustainability, tone, and privacy guidance, framing AGENTS.md as a "developer-authored governance layer." But the authors defer the question that matters here — whether agents reliably follow those values — to future work. Values prose can be present without changing behavior, and that gap is what this page addresses.
 
-## Why Values-as-Prose Fails
+## Why values-as-prose fails
 
 ```mermaid
 graph TD
@@ -48,9 +48,9 @@ graph TD
     F --> G[Documented value,<br>unchanged behavior]
 ```
 
-Frontier models top out at roughly 68% accuracy at 500 simultaneous instructions, and earlier instructions are satisfied more reliably than later ones — primacy effects peak around 150–200 instructions ([Jaroslawicz et al. — How Many Instructions Can LLMs Follow at Once?](https://arxiv.org/abs/2507.11538)). A "be accessible" sentence in a 500-line AGENTS.md inherits both penalties. Gloaguen et al. add a direct cost: verbose AGENTS.md files **reduce** task success and add ~20% inference cost on SWE-bench Lite and AGENTbench ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)).
+Frontier models top out at roughly 68% accuracy at 500 simultaneous instructions, and earlier instructions are satisfied more reliably than later ones — primacy effects peak around 150–200 instructions ([Jaroslawicz et al. — How Many Instructions Can LLMs Follow at Once?](https://arxiv.org/abs/2507.11538)). A "be accessible" sentence in a 500-line AGENTS.md inherits both penalties. Gloaguen et al. add a direct cost: verbose AGENTS.md files reduce task success and add about 20% inference cost on SWE-bench Lite and AGENTbench ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)).
 
-## Verification, Not Prose
+## Verification, not prose
 
 Pair every value with a mechanical check the agent runs; reduce the AGENTS.md line to a pointer.
 
@@ -63,32 +63,32 @@ Pair every value with a mechanical check the agent runs; reduce the AGENTS.md li
 
 This matches the broader finding that [guardrails beat guidance](guardrails-beat-guidance-coding-agents.md) — tool-specific commands are the only AGENTS.md content with reliable behavioral effect ([Wei et al., 2025](https://arxiv.org/abs/2511.12884)).
 
-## Where Values Actually Belong
+## Where values actually belong
 
-If the goal is enforced values, AGENTS.md is rarely the right layer; each value usually has a lower-level mechanism:
+To enforce values, AGENTS.md is rarely the right layer. Each value usually has a lower-level mechanism:
 
-- **Permissions / sandboxes** — deny rules enforce "do not exfiltrate data" without prose
-- **CI checks** — accessibility linters, license scanners, dataset audits, dependency scans
-- **Pre-commit hooks** — secret scanning, formatting, deny-rule enforcement
-- **Branch protection** — "do not commit to main" becomes a server-side rule
+- Permissions and sandboxes — deny rules enforce "do not exfiltrate data" without prose
+- CI checks — accessibility linters, license scanners, dataset audits, dependency scans
+- Pre-commit hooks — secret scanning, formatting, deny-rule enforcement
+- Branch protection — "do not commit to main" becomes a server-side rule
 
 AGENTS.md then references the mechanism: "Run `make check-a11y`. If it fails, do not propose merging." That works because the agent can verify the outcome. Prose still earns space when it is short and points to a mechanism; a long ethics preamble with no follow-through does not.
 
-## When This Backfires
+## When this backfires
 
 Verification-pairing is the right default, but it has failure conditions:
 
-- **Not every value is mechanizable.** "Use inclusive tone" has no clean linter; forcing one yields a brittle matcher that misfires — worse than honest prose plus human review.
-- **Over-mechanization breeds checkbox theater.** Reduce a value to "CI is green" and teams optimize the check, not the value: a passing `dataset-audit.py` can certify data that is fair on the measured axis and biased on an unmeasured one.
-- **Premature mechanisms misdirect.** Wiring a check before the value is understood freezes a wrong proxy into CI; some values are better left as reviewed prose until a faithful check exists.
+- Not every value can be mechanized. "Use inclusive tone" has no clean linter, and forcing one yields a brittle matcher that misfires — worse than honest prose plus human review.
+- Over-mechanization breeds checkbox theater. Reduce a value to "CI is green" and teams optimize the check, not the value: a passing `dataset-audit.py` can certify data that is fair on the measured axis and biased on an unmeasured one.
+- Premature mechanisms misdirect. Wiring a check before the value is understood freezes a wrong proxy into CI, so some values are better left as reviewed prose until a faithful check exists.
 
 Where no faithful, cheap check exists, prose pointing at human review beats a misleading green check.
 
 ## Example
 
-A real "before" pattern, rewritten for verification:
+A real "before" pattern, rewritten for verification.
 
-**Before** — values as advisory prose:
+Before — values as advisory prose:
 
 ```markdown
 # AGENTS.md
@@ -104,7 +104,7 @@ pnpm install
 pnpm build
 ```
 
-**After** — values pinned to mechanisms:
+After — values pinned to mechanisms:
 
 ```markdown
 # AGENTS.md

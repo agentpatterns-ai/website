@@ -13,7 +13,7 @@ maturity: established
 
 > Wire browser automation, metrics, and structured logs into agent context so agents can reproduce bugs, verify fixes visually, and reason about system behavior.
 
-## The Gap
+## The gap
 
 !!! note "Not about observing agents"
     [Agent Observability (OTel)](agent-observability-otel.md) covers humans watching agent behavior. The inverse: agents watching application behavior through tools.
@@ -26,7 +26,7 @@ Agents write code, run tests, and read output. They cannot:
 
 Without these signals, agents operate in "write and hope" mode. [Closing the loop](observability-feedback-loop.md) enables "write, observe, and verify" workflows.
 
-## Three Signal Categories
+## Three signal categories
 
 ```mermaid
 graph LR
@@ -38,7 +38,7 @@ graph LR
     M -->|counters, latencies,<br/>error rates| A
 ```
 
-### Visual Signals: Browser Automation
+### Visual signals: browser automation
 
 Agents verify rendering and UI behavior by driving a browser.
 
@@ -49,14 +49,14 @@ Agents verify rendering and UI behavior by driving a browser.
 | [agent-browser](https://github.com/vercel-labs/agent-browser) | Accessibility-first Rust CLI | Elements as `@e1`, `@e2` references; built-in network interception and profiling |
 | Puppeteer MCP (generic) | Screenshots | Visual verification via captured images; no structured DOM access |
 
-**Accessibility snapshots vs. screenshots.** Snapshots return structured text (roles, names, states) that LLMs reason about directly. Screenshots require a vision model -- use them only for layout bugs.
+Accessibility snapshots and screenshots serve different needs. Snapshots return structured text (roles, names, states) that LLMs reason about directly. Screenshots need a vision model, so use them only for layout bugs.
 
 !!! warning "Blind spot: modal dialogs"
     Puppeteer MCP cannot see browser-native alert modals (`window.alert`, `window.confirm`, `window.prompt`) -- this is a known architectural gap. Use Playwright MCP when the workflow includes native dialog interactions; its accessibility snapshot model captures dialog state that screenshot-only tools miss.
 
-**Executable proof of work:** [Showboat](https://github.com/simonw/showboat) mixes narrative and runnable code blocks with captured output. Its `verify` command re-executes every block and checks outputs match.
+[Showboat](https://github.com/simonw/showboat) gives executable proof of work. It mixes narrative and runnable code blocks with captured output. Its `verify` command re-executes every block and checks that the outputs match.
 
-### Log Signals: Structured Logs as Agent Context
+### Log signals: structured logs as agent context
 
 Agents need structured, filterable log data -- not raw streams:
 
@@ -66,7 +66,7 @@ Agents need structured, filterable log data -- not raw streams:
 | [Datadog MCP](https://github.com/winor30/mcp-server-datadog) | Datadog | Log search, APM traces, incident management, RUM events (20 tools) |
 | [Datadog Labs MCP](https://github.com/datadog-labs/mcp-server) | Datadog | Official preview -- logs, metrics, traces, incidents |
 
-### Metric Signals: Application Metrics as Verification
+### Metric signals: application metrics as verification
 
 Agents use metrics to verify a change had the intended effect:
 
@@ -76,11 +76,11 @@ Agents use metrics to verify a change had the intended effect:
 
 The same MCP servers that expose logs also expose metrics. [Arize Phoenix MCP](https://github.com/Arize-ai/phoenix/tree/main/js/packages/phoenix-mcp) adds span retrieval and annotation.
 
-## Context Management: JIT Loading
+## Context management: JIT loading
 
 Observability data is high-volume. Two patterns keep context lean:
 
-**JIT references:** Agents store lightweight identifiers -- query strings, metric names, time ranges -- and load data on demand rather than pulling full payloads upfront.
+JIT references. Agents store lightweight identifiers -- query strings, metric names, time ranges -- and load data on demand instead of pulling full payloads upfront.
 
 ```text
 # Agent stores a reference, not the data
@@ -91,9 +91,9 @@ datadog_log_search(query=log_query)
 Result: 3 results (down from 47 before the fix)
 ```
 
-**[Programmatic tool calling](../tool-engineering/advanced-tool-use.md#programmatic-tool-calling-code-based-orchestration):** Agents write code that calls observability tools and filters large payloads before they hit the context window.
+[Programmatic tool calling](../tool-engineering/advanced-tool-use.md#programmatic-tool-calling-code-based-orchestration). Agents write code that calls observability tools and filters large payloads before they reach the context window.
 
-## Verification Ladder: Cheap to Expensive
+## Verification ladder: cheap to expensive
 
 Simon Willison's [agentic manual testing guide](https://simonwillison.net/guides/agentic-engineering-patterns/agentic-manual-testing/) maps the verification spectrum:
 
@@ -130,14 +130,14 @@ datadog_metric_query(query="sum:auth.errors{service:auth}.as_count()", from="-1h
 
 The agent closed the loop: logs identified the root cause, tests confirmed the code fix, browser automation verified the UI, and metrics proved errors dropped.
 
-## When This Backfires
+## When this backfires
 
 Wiring observability into agent context adds complexity that can degrade reliability:
 
-- **MCP server outage = blind agent.** If the Datadog or Axiom MCP server is down, the agent loses all log and metric visibility. It may silently proceed without realizing its verification step returned nothing.
-- **Stale or sampled data misleads.** Metrics dashboards aggregate and sample. An agent querying error rate 30 seconds after a deploy may read pre-deploy data and incorrectly conclude the fix worked.
-- **Context bloat from large payloads.** Log queries without tight time/count limits can return thousands of entries, consuming context window and [reducing reasoning quality](../context-engineering/context-window-dumb-zone.md). JIT references (described above) mitigate this but require deliberate query discipline.
-- **Screenshot-heavy workflows are slow.** Vision-model verification via screenshots adds latency per check. On long test suites this compounds; prefer accessibility snapshots for functional checks and screenshots only for layout verification.
+- MCP server outage blinds the agent. If the Datadog or Axiom MCP server is down, the agent loses all log and metric visibility. It may proceed silently without realizing its verification step returned nothing.
+- Stale or sampled data misleads. Metrics dashboards aggregate and sample. An agent querying error rate 30 seconds after a deploy may read pre-deploy data and wrongly conclude the fix worked.
+- Large payloads bloat the context. Log queries without tight time or count limits can return thousands of entries, consuming the context window and [reducing reasoning quality](../context-engineering/context-window-dumb-zone.md). JIT references (described above) reduce this but require deliberate query discipline.
+- Screenshot-heavy workflows are slow. Vision-model verification via screenshots adds latency to each check. On long test suites this compounds, so prefer accessibility snapshots for functional checks and screenshots only for layout verification.
 
 ## Key Takeaways
 

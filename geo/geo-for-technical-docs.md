@@ -17,36 +17,36 @@ maturity: emerging
 
 > GEO for technical docs is the practice of structuring API references, tutorials, how-to guides, and pattern pages so AI engines can extract, quote, and cite them accurately — using format-specific schema, answer-first structure, and sourced claims matched to each content type.
 
-**Related lesson:** [Capstone — Measure & Decide](https://learn.agentpatterns.ai/geo/capstone-measure-and-decide/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Capstone — Measure & Decide](https://learn.agentpatterns.ai/geo/capstone-measure-and-decide/) — this concept features in a hands-on lesson with quizzes.
 
-Technical documentation requires the same GEO principles as any content but applies them differently across formats. An API reference page, a tutorial, and a pattern page each have different structural conventions, different user intents, and different schema types — each maps to a distinct checklist. The sections below provide format-specific checklists, schema selection guidance, and an agent-discovery loop for identifying citation gaps.
+Technical documentation needs the same GEO principles as any content, but you apply them differently by format. An API reference page, a tutorial, and a pattern page each have their own structure, reader intent, and schema type, so each maps to a distinct checklist. The sections below give format-specific checklists, schema selection guidance, and an agent-discovery loop for finding citation gaps.
 
-## Why Content Format Determines GEO Strategy
+## Why content format determines GEO strategy
 
-GEO techniques are not uniform across content types. The [arxiv GEO paper (KDD 2024)](https://arxiv.org/abs/2311.09735) found that quotation addition, statistics, and citing sources each produced 30–40% visibility gains — but the mechanism matters. A tutorial page gains most from HowTo schema and sequential answer-first steps; a pattern page gains from TechArticle schema and quotable assertions. Applying the wrong technique to the wrong format produces neutral or negative results.
+GEO techniques are not uniform across content types. The [arxiv GEO paper (KDD 2024)](https://arxiv.org/abs/2311.09735) found that quotation addition, statistics, and citing sources each produced 30–40% visibility gains — but the mechanism matters. A tutorial page gains most from HowTo schema and sequential answer-first steps. A pattern page gains from TechArticle schema and quotable assertions. Applying the wrong technique to the wrong format produces neutral or negative results.
 
 The formats this site produces map to three schema types:
 
-| Format | Primary Schema | Top GEO Technique |
+| Format | Primary schema | Top GEO technique |
 |--------|---------------|-------------------|
 | Pattern / concept page | TechArticle | Quotable assertions + statistics |
 | Tutorial / step-by-step | HowTo | Sequential steps + prerequisites |
 | Anti-pattern page | FAQPage | Question-framed headings + direct answers |
 | API reference section | FAQPage | Parameter Q&A format |
 
-## New Page Checklist
+## New page checklist
 
 Apply these to every new page before pushing. Order reflects impact on AI citation probability.
 
-**Structure**
+### Structure
 
-- [ ] H1 title is a noun phrase, not a verb phrase — it names the concept, not the task (e.g., "Answer-First Writing", not "How to Write Answer-First")
+- [ ] H1 title is a noun phrase, not a verb phrase — it names the concept, not the task (for example "Answer-First Writing", not "How to Write Answer-First")
 - [ ] Opening paragraph (40–60 words) directly answers the question the title implies — no context-setting preamble
 - [ ] Each H2 section opens with a 40–60 word self-contained answer before elaborating
 - [ ] Page covers exactly one concept — split if two mechanisms each stand alone as distinct topics
 - [ ] Headings are descriptive, not generic ("How RAG Systems Score Sections", not "Overview")
 
-**Content quality**
+### Content quality
 
 - [ ] At least one statistic or quantitative claim with a source link
 - [ ] At least one direct quotation from a primary source (paper, docs, or spec)
@@ -54,7 +54,7 @@ Apply these to every new page before pushing. Order reflects impact on AI citati
 - [ ] Code examples are minimal, runnable, and tagged with a language identifier
 - [ ] No "in this article we will..." or "let's explore" preamble — start with the answer
 
-**Schema (MkDocs Material)**
+### Schema (MkDocs Material)
 
 - [ ] Select the correct schema for the format (see table above)
 - [ ] For pattern/concept pages: add `TechArticle` JSON-LD in a `<script>` block at the bottom of the page
@@ -78,13 +78,13 @@ Minimal `TechArticle` block to place at the end of a pattern page:
 
 See [Schema and Structured Data](schema-and-structured-data.md) for FAQPage and HowTo templates.
 
-**Metadata**
+### Metadata
 
 - [ ] `title` frontmatter: includes the concept name and a brief qualifier
 - [ ] `description` frontmatter: one sentence, answers the question "what does this page help me do?"
 - [ ] `tags` frontmatter: at minimum `geo` + category tag + tool-scope tag
 
-## Existing Page Review Checklist
+## Existing page review checklist
 
 Audit in priority order — highest citation impact first.
 
@@ -99,18 +99,18 @@ Audit in priority order — highest citation impact first.
 | 7 | All URLs are stable and human-readable | Fix or redirect slugs with noise |
 | 8 | Page was updated within the last 90 days | Refresh statistics, examples, or sources |
 
-## Format-Specific Guidance
+## Format-specific guidance
 
-### Pattern and Concept Pages
+### Pattern and concept pages
 
 Pattern pages document a repeatable design — a mechanism, a structure, or an approach that applies across multiple contexts. GEO priority: quotable assertions and statistics, because AI tools retrieve concept definitions using short declarative matches — a direct one-sentence definition gives the retrieval model a high-confidence anchor.
 
 - Lead with a one-sentence definition the reader can quote verbatim
 - Include a quantitative outcome where available ("reduces [context pollution](../anti-patterns/session-partitioning.md) by eliminating N token categories")
 - Use `TechArticle` schema with `author`, `dateModified`, and `description` fields
-- Add a `## Key Takeaways` section — terminal summaries provide a self-contained chunk that can be retrieved independently from the body.
+- Add a `## Key Takeaways` section — terminal summaries give a self-contained chunk that can be retrieved independently from the body.
 
-### Tutorial Pages
+### Tutorial pages
 
 Tutorial pages teach a procedure through sequenced steps. GEO priority: `HowTo` schema and sequential structure. `HowTo` schema maps directly to the step-list format AI assistants use when answering procedural questions.
 
@@ -118,9 +118,9 @@ Tutorial pages teach a procedure through sequenced steps. GEO priority: `HowTo` 
 - List prerequisites explicitly before step 1 — prerequisite lists are discrete, structured chunks that retrieval models can extract without parsing surrounding prose.
 - Number steps; avoid prose that buries the sequence
 - Each step: one action + one expected output — no compound steps
-- Include estimated time in `HowTo` schema `totalTime` field (ISO 8601, e.g., `PT20M`)
+- Include estimated time in `HowTo` schema `totalTime` field (ISO 8601, for example `PT20M`)
 
-### Anti-Pattern Pages
+### Anti-pattern pages
 
 Anti-pattern pages describe what goes wrong and why. GEO priority: `FAQPage` schema, because the natural structure of an anti-pattern (symptom → cause → fix) matches the Q&A retrieval pattern.
 
@@ -129,7 +129,7 @@ Anti-pattern pages describe what goes wrong and why. GEO priority: `FAQPage` sch
 - Include a "What to do instead" section — corrective guidance answers a different (and more actionable) query than the failure description alone, increasing the range of questions this page can answer.
 - Apply `FAQPage` schema with one `Question`/`Answer` pair per H2 section
 
-### API Reference Sections
+### API reference sections
 
 API reference pages document parameters, endpoints, and return values. GEO priority: scannable structure and `FAQPage` schema on troubleshooting subsections.
 
@@ -138,9 +138,9 @@ API reference pages document parameters, endpoints, and return values. GEO prior
 - Common errors section: frame each error as a question ("What does `403 Forbidden` mean here?") and answer in ≤60 words
 - Apply `FAQPage` schema to the errors/troubleshooting subsection only
 
-## The Agent-Discovery Loop
+## The agent-discovery loop
 
-The agent-discovery loop is a repeatable workflow for identifying which topics on this site are missing AI citation coverage, then feeding those gaps into content production.
+The agent-discovery loop is a repeatable workflow for finding which topics on this site are missing AI citation coverage, then feeding those gaps into content production.
 
 ```mermaid
 graph LR
@@ -152,29 +152,24 @@ graph LR
     F --> A
 ```
 
-**Step 1: Pick a topic area** (e.g., "agent context engineering", "tool calling patterns")
+1. Pick a topic area, for example "agent context engineering" or "tool calling patterns".
+2. Query the questions a developer would ask when they meet the topic:
+    - "What is [concept]?"
+    - "How do I [task]?"
+    - "What's the difference between [A] and [B]?"
+    - "What are common mistakes with [pattern]?"
+3. Check whether the site is cited. Use at least two AI tools (ChatGPT, Perplexity, Claude). Absence of a citation does not always mean a coverage gap — it can mean a GEO quality issue on an existing page.
+4. Classify the gap. For a missing topic, create a new issue via `/pipeline`. For an existing page that is not cited, apply the existing page review checklist first.
+5. Feed the gap into `/pipeline`. A topic string from step 2 becomes a pipeline issue.
 
-**Step 2: Query representative questions** — the questions a developer would ask when encountering this topic:
-
-- "What is [concept]?"
-- "How do I [task]?"
-- "What's the difference between [A] and [B]?"
-- "What are common mistakes with [pattern]?"
-
-**Step 3: Check whether the site is cited.** Use at least two AI tools (ChatGPT, Perplexity, Claude). Note: absence of citation does not always mean a coverage gap — it may mean a GEO quality issue on an existing page.
-
-**Step 4: Classify the gap.** Missing topic → create a new issue via `/pipeline`. Existing page not cited → apply the existing page review checklist first.
-
-**Step 5: Feed into `/pipeline`.** A topic string from step 2 becomes a pipeline issue.
-
-## When This Backfires
+## When this backfires
 
 GEO techniques developed for general web content do not transfer uniformly to all technical documentation formats.
 
-- **Versioned API references**: answer-first structure and JSON-LD schema add maintenance cost on every release cycle. For frequently-versioned endpoints, the cost often outweighs citation gains — internal developer portals rarely earn external AI citations regardless of optimization.
-- **HowTo schema on linear tutorials**: numbering steps and adding `totalTime` estimates is only worthwhile when the tutorial covers a self-contained task. Multi-page tutorials or modular guides do not map cleanly to a single `HowTo` block; forcing the schema produces malformed structured data.
-- **Statistics requirement on thin pages**: the GEO paper ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)) measured visibility gains for statistics on general web content. For narrow technical reference pages (a single API parameter, one error code), forcing a statistic into a section that does not call for one degrades readability without confirmed citation benefit.
-- **Internal-only documentation**: GEO techniques apply to content indexed by AI crawlers. Private or intranet documentation is not in scope — applying GEO structure there wastes editorial effort.
+- Versioned API references: answer-first structure and JSON-LD schema add maintenance cost on every release cycle. For frequently-versioned endpoints, the cost often outweighs citation gains — internal developer portals rarely earn external AI citations regardless of optimization.
+- HowTo schema on linear tutorials: numbering steps and adding `totalTime` estimates is only worthwhile when the tutorial covers a self-contained task. Multi-page tutorials or modular guides do not map cleanly to a single `HowTo` block; forcing the schema produces malformed structured data.
+- Statistics requirement on thin pages: the GEO paper ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)) measured visibility gains for statistics on general web content. For narrow technical reference pages (a single API parameter, one error code), forcing a statistic into a section that does not call for one degrades readability without confirmed citation benefit.
+- Internal-only documentation: GEO techniques apply to content indexed by AI crawlers. Private or intranet documentation is not in scope — applying GEO structure there wastes editorial effort.
 
 ## Sources
 
@@ -198,4 +193,3 @@ GEO techniques developed for general web content do not transfer uniformly to al
 - [Topical Authority](topical-authority.md)
 - [AI Crawler Policy](ai-crawler-policy.md)
 - [llms.txt](llms-txt.md)
-

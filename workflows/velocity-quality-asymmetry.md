@@ -17,11 +17,11 @@ maturity: established
 
 > AI coding tools deliver a velocity burst that fades within months while their quality debt compounds indefinitely, so sustainable speed demands QA investment up front.
 
-**Related lesson:** [Garbage-Collecting Entropy](https://learn.agentpatterns.ai/workflows/garbage-collecting-entropy/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Garbage-Collecting Entropy](https://learn.agentpatterns.ai/workflows/garbage-collecting-entropy/) covers this concept in a hands-on lesson with quizzes.
 
-## The Evidence
+## The evidence
 
-A causal study of 806 Cursor-adopting repositories versus 1,380 matched controls reveals an asymmetry between velocity gains and quality costs ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427)):
+A causal study of 806 Cursor-adopting repositories against 1,380 matched controls shows an asymmetry between velocity gains and quality costs ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427)):
 
 | Metric | Effect | Duration |
 |--------|--------|----------|
@@ -30,16 +30,16 @@ A causal study of 806 Cursor-adopting repositories versus 1,380 matched controls
 | Static analysis warnings | +30% | Persistent (6+ months) |
 | Code complexity | +42% | Persistent (6+ months) |
 
-The velocity spike is real but transient. The quality degradation is real and persistent. This is not a trade-off — it is an asymmetry.
+The velocity spike is real but transient. The quality degradation is real and persistent. This is not a trade-off. It is an asymmetry.
 
-## The Feedback Loop
+## The feedback loop
 
-Quality debt does not just accumulate — it actively destroys future velocity. Panel GMM estimation from the same study quantifies the mechanism:
+Quality debt does not just accumulate. It destroys future velocity. Panel GMM estimation from the same study measures the mechanism:
 
-- A **100% increase in code complexity** causes a **64.5% decrease** in subsequent lines added
-- A **100% increase in static analysis warnings** causes a **50.3% decrease** in subsequent velocity
+- A 100% increase in code complexity causes a 64.5% decrease in subsequent lines added
+- A 100% increase in static analysis warnings causes a 50.3% decrease in subsequent velocity
 
-The initial velocity gain is fully cancelled out by approximately a 5x increase in static warnings or a 3x increase in complexity. Teams that adopt AI tools without scaling QA end up slower than they started.
+A 5x increase in static warnings, or a 3x increase in complexity, cancels the initial velocity gain. Teams that adopt AI tools without scaling QA end up slower than they started.
 
 ```mermaid
 graph LR
@@ -54,38 +54,38 @@ graph LR
     style F fill:#f44336,color:#fff
 ```
 
-## Why It Happens
+## Why it happens
 
-The study identifies a direct complexity effect: even controlling for codebase growth, AI tool adoption increases code complexity by ~9% independently ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427)). The paper measures this effect statistically but does not directly observe the architectural mechanism; the authors hypothesize that multi-file edits introduce architectural inconsistencies — generated code that is locally correct but structurally incoherent.
+The study finds a direct complexity effect. Even controlling for codebase growth, AI tool adoption raises code complexity by about 9% on its own ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427)). The paper measures this effect statistically but does not directly observe the architectural mechanism. The authors suggest that multi-file edits introduce architectural inconsistencies: generated code that is locally correct but structurally incoherent.
 
-Independent data corroborates the pattern:
+Independent data backs up the pattern:
 
-- AI-generated code produces **1.7x more bugs** than human code, with 75% more logic and correctness errors per PR ([CodeRabbit Report](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report))
-- AI adoption increases PR size by ~18%, incidents per PR by ~24%, and change failure rate by ~30% ([Osmani, The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding))
+- AI-generated code produces 1.7x more bugs than human code, with 75% more logic and correctness errors per PR ([CodeRabbit Report](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report))
+- AI adoption raises PR size by about 18%, incidents per PR by about 24%, and change failure rate by about 30% ([Osmani, The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding))
 
-## The QA Scaling Workflow
+## The QA scaling workflow
 
-Capturing the velocity benefit without accruing the debt requires scaling verification proportionally to output volume.
+To capture the velocity benefit without the debt, scale verification in proportion to output volume.
 
-### Phase 1: Automated Quality Gates (Before Merge)
+### Phase 1: automated quality gates before merge
 
-Deploy deterministic checks that run on every AI-generated change:
+Run deterministic checks on every AI-generated change:
 
-1. **Static analysis** — linters, type checkers, complexity thresholds that block merges above a ceiling
-2. **Test coverage gates** — AI-generated code must meet the same coverage requirements as human code
-3. **Complexity budgets** — set per-PR cognitive complexity limits; reject changes that increase complexity without justification
+1. Static analysis: linters, type checkers, and complexity thresholds that block merges above a ceiling.
+2. Test coverage gates: AI-generated code must meet the same coverage requirements as human code.
+3. Complexity budgets: set per-PR cognitive complexity limits and reject changes that raise complexity without justification.
 
 These gates are non-negotiable. See [Deterministic Guardrails Around Probabilistic Agents](../verification/deterministic-guardrails.md) for implementation patterns.
 
-### Phase 2: Scaled Code Review
+### Phase 2: scaled code review
 
 Traditional review cannot absorb AI-era output volume. Restructure review around the bottleneck:
 
-- **AI-first review pass** — route mechanical checks (style, correctness, boundary conditions) to an agent reviewer. Anthropic's Code Review system raised substantive review coverage from 16% to 54% of changes with <1% false positive rate ([TechCrunch, March 2026](https://techcrunch.com/2026/03/09/anthropic-launches-code-review-tool-to-check-flood-of-ai-generated-code/))
-- **Human review for architecture** — reserve human attention for design decisions, intent alignment, and cross-module coherence. This is where the complexity debt originates and where humans still outperform agents
-- **Tiered routing** — non-critical code merges after AI-only review; critical code escalates to mandatory human review. See [Tiered Code Review](../code-review/tiered-code-review.md)
+- AI-first review pass: route mechanical checks (style, correctness, boundary conditions) to an agent reviewer. Anthropic's Code Review system raised substantive review coverage from 16% to 54% of changes with under 1% false positive rate ([TechCrunch, March 2026](https://techcrunch.com/2026/03/09/anthropic-launches-code-review-tool-to-check-flood-of-ai-generated-code/))
+- Human review for architecture: reserve human attention for design decisions, intent alignment, and cross-module coherence. This is where the complexity debt starts and where humans still outperform agents
+- Tiered routing: non-critical code merges after AI-only review, while critical code escalates to mandatory human review. See [Tiered Code Review](../code-review/tiered-code-review.md)
 
-### Phase 3: Continuous Quality Monitoring
+### Phase 3: continuous quality monitoring
 
 Track quality metrics alongside velocity metrics at the project level:
 
@@ -96,30 +96,30 @@ Track quality metrics alongside velocity metrics at the project level:
 
 If quality metrics trend upward, slow down. The velocity gain is not worth it if it reverses within two months.
 
-## The Adoption Window
+## The adoption window
 
-The first two months after AI tool adoption are a critical window. Teams experience peak velocity while quality processes have not yet adapted. This is where most of the technical debt originates.
+The first two months after AI tool adoption are a critical window. Teams hit peak velocity while quality processes have not yet adapted. This is where most of the technical debt starts.
 
 Use this window deliberately:
 
-1. **Do not celebrate the velocity spike** — it is transient by default
-2. **Invest the freed time in QA infrastructure** — automated gates, agent reviewers, complexity monitoring
-3. **Set a complexity baseline before adoption** — you cannot detect drift without a starting point
-4. **Review AI-generated multi-file changes with extra scrutiny** — this is where architectural inconsistencies enter
+1. Do not celebrate the velocity spike. It is transient by default.
+2. Invest the freed time in QA infrastructure: automated gates, agent reviewers, and complexity monitoring.
+3. Set a complexity baseline before adoption. You cannot detect drift without a starting point.
+4. Review AI-generated multi-file changes with extra care. This is where architectural inconsistencies enter.
 
-## When This Backfires
+## When this backfires
 
-The QA-scaling recommendation is strongest for long-lived production codebases. It weakens or reverses in three cases:
+The QA-scaling advice is strongest for long-lived production codebases. It weakens or reverses in three cases:
 
-- **[Throwaway prototypes and spikes](throwaway-prototype-skill.md)** — code slated for deletion within weeks does not accrue debt that matters. Imposing complexity budgets and coverage gates on exploratory work wastes the velocity windfall the tooling provides.
-- **Small teams without review capacity** — if a two-person team cannot staff either human reviewers or an agent-reviewer pipeline, mandatory quality gates become a merge bottleneck that erases the velocity gain before the quality debt would have. The correct response may be to [limit AI-generated code volume](../code-review/agent-pr-volume-vs-value.md) rather than scale QA.
-- **Early-stage products seeking product-market fit** — shipping the wrong feature fast is often cheaper than shipping the right feature correctly. Teams whose dominant risk is building something nobody wants may rationally accept the quality debt in exchange for faster learning cycles, then pay it down once the product direction stabilizes.
+- [Throwaway prototypes and spikes](throwaway-prototype-skill.md): code slated for deletion within weeks does not build up debt that matters. Imposing complexity budgets and coverage gates on exploratory work wastes the velocity windfall the tooling gives you.
+- Small teams without review capacity: if a two-person team cannot staff either human reviewers or an agent-reviewer pipeline, mandatory quality gates become a merge bottleneck that erases the velocity gain before the quality debt would have. The better response may be to [limit AI-generated code volume](../code-review/agent-pr-volume-vs-value.md) rather than scale QA.
+- Early-stage products seeking product-market fit: shipping the wrong feature fast is often cheaper than shipping the right feature correctly. Teams whose main risk is building something nobody wants may reasonably accept the quality debt in exchange for faster learning cycles, then pay it down once the product direction settles.
 
-The underlying asymmetry still holds — velocity fades by month 3 and debt compounds. The question is whether compounding debt is a problem on your timeline. For short-horizon work it may not be.
+The underlying asymmetry still holds: velocity fades by month 3 and debt compounds. The question is whether compounding debt is a problem on your timeline. For short-horizon work it may not be.
 
 ## Example
 
-A team adopting Cursor adds quality gates to their CI pipeline during the first week. Their GitHub Actions workflow enforces complexity budgets and static analysis thresholds on every PR:
+A team adopting Cursor adds quality gates to their CI pipeline in the first week. Their GitHub Actions workflow enforces complexity budgets and static analysis thresholds on every PR:
 
 ```yaml
 # .github/workflows/quality-gate.yml
@@ -169,7 +169,7 @@ The team tracks three metrics weekly in a shared dashboard:
 | Avg cognitive complexity | 12.3 | 12.1 | 11.8 | Declining |
 | Change failure rate | 8% | 7% | 6% | Declining |
 
-By investing the velocity windfall in QA infrastructure during weeks 1-2, the team maintains the productivity gain through month 3 instead of losing it to compounding complexity.
+By spending the velocity windfall on QA infrastructure in weeks 1 to 2, the team keeps the productivity gain through month 3 instead of losing it to compounding complexity.
 
 ## Key Takeaways
 

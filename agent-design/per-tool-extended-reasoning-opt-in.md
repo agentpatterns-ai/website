@@ -18,7 +18,7 @@ maturity: adopted
 
 > A tool-design pattern in which one tool invocation opts itself into deeper reasoning via a per-call parameter, while the surrounding turn keeps its default effort.
 
-## The Primitive
+## The primitive
 
 Per-tool extended reasoning opt-in is a tool-design pattern in which a single tool invocation carries a parameter that asks the runtime to spend more reasoning on this specific call — without raising the turn's global `reasoning_effort`. OpenAI shipped this shape in 2026 with the `return_token_budget` parameter on the Responses API web-search tool: callers opt into longer GPT-5+ reasoning web-search runs "for high-effort research and evaluation workloads" while every other call in the turn keeps its default budget ([OpenAI API changelog](https://platform.openai.com/docs/changelog), [Web search guide](https://platform.openai.com/docs/guides/tools-web-search)).
 
@@ -34,7 +34,7 @@ Three controls share the budget vocabulary but differ in scope:
 
 The per-tool control occupies the slot that turn-level knobs cannot reach: heterogeneous depth across tool calls in the same turn. Turn-level effort control is itself spreading across tools — GitHub Copilot now exposes configurable reasoning levels (alongside larger context windows) that users can dial per request ([GitHub Copilot changelog](https://github.blog/changelog/2026-06-04-larger-context-windows-and-configurable-reasoning-levels-for-github-copilot)), a concrete instance of the turn-level row in the table above; the per-call form remains the rarer, finer-grained surface.
 
-## How It Works
+## How it works
 
 The runtime exposes a budget parameter on the tool's input schema and documents it in the tool description. The model decides whether to set the parameter from what the description teaches; the description carries the entire trigger burden, including which values to populate ([Agent Skills: optimizing descriptions](https://agentskills.io/skill-creation/optimizing-descriptions)).
 
@@ -48,15 +48,15 @@ graph TD
     D --> E
 ```
 
-Two design choices keep the pattern from collapsing into a turn-level knob. The default must be the cost-optimal common case — opting in is the rare path, not the safe path. OpenAI's guidance is explicit: keep the default for most requests; use `"unlimited"` selectively because it raises latency and cost ([Web search guide](https://platform.openai.com/docs/guides/tools-web-search)). And the description must teach *when* to opt in — trigger phrases like "for high-effort research and evaluation workloads" tell the model which prompts should set the parameter.
+Two design choices keep the pattern from collapsing into a turn-level knob. The default must be the cost-optimal common case — opting in is the rare path, not the safe path. OpenAI's guidance is explicit: keep the default for most requests; use `"unlimited"` selectively because it raises latency and cost ([Web search guide](https://platform.openai.com/docs/guides/tools-web-search)). And the description must teach when to opt in — trigger phrases like "for high-effort research and evaluation workloads" tell the model which prompts should set the parameter.
 
-## Why It Works
+## Why it works
 
 The mechanism is decoupling marginal value-of-information from a single global compute knob. Turn-level `reasoning_effort` commits the same depth to every call — uniform allocation across actions with sharply different expected-value-per-token. Routine lookups, formatting calls, and deep research queries do not benefit equally from extra reasoning; pricing them the same wastes surplus on cheap calls and starves expensive ones.
 
-[Lin et al. (2026)](https://arxiv.org/abs/2511.17006) establish this for tool-use: budget-aware agents push the cost-performance Pareto frontier, and "a tool-call limit offers a more relevant and direct constraint on an agent's ability to acquire external knowledge than tokens used for internal reasoning." Adaptive per-call allocation beats uniform empirically — [AdaTIR](https://arxiv.org/abs/2601.14696) cuts tool calls by up to 97.6% on simple tasks at equivalent accuracy, and [Ares](https://arxiv.org/abs/2603.07915) cuts reasoning-token usage by up to 52.7% versus fixed high-effort reasoning with minimal accuracy loss; the same compute-optimal-beats-uniform result holds for test-time compute generally ([Snell et al. (2024)](https://arxiv.org/abs/2408.03314)). `return_token_budget` is the productised instance at the tool-call boundary.
+[Lin et al. (2026)](https://arxiv.org/abs/2511.17006) establish this for tool-use: budget-aware agents push the cost-performance Pareto frontier, and "a tool-call limit offers a more relevant and direct constraint on an agent's ability to acquire external knowledge than tokens used for internal reasoning." Adaptive per-call allocation beats uniform empirically — [AdaTIR](https://arxiv.org/abs/2601.14696) cuts tool calls by up to 97.6% on simple tasks at equivalent accuracy, and [Ares](https://arxiv.org/abs/2603.07915) cuts reasoning-token usage by up to 52.7% versus fixed high-effort reasoning with minimal accuracy loss; the same compute-optimal-beats-uniform result holds for test-time compute generally ([Snell et al. (2024)](https://arxiv.org/abs/2408.03314)). `return_token_budget` is the productized instance at the tool-call boundary.
 
-## Where the Parameter Lives
+## Where the parameter lives
 
 | Placement | Example | Reach |
 |-----------|---------|-------|
@@ -66,17 +66,17 @@ The mechanism is decoupling marginal value-of-information from a single global c
 
 MCP is not yet viable. Its annotation surface — `readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`, `title` — covers risk and behavior, not compute budget, and the spec says "clients MUST consider tool annotations to be untrusted unless they come from trusted servers" ([MCP blog: tool annotations](https://blog.modelcontextprotocol.io/posts/2026-03-16-tool-annotations/)). A per-call budget belongs on the tool's input schema, not in a server-declared hint. For project-defined tools routing to expensive backends — deep research, plan-synthesis subagents — adding the parameter and teaching its trigger phrases in the description is the portable form.
 
-## When This Backfires
+## When this backfires
 
-**Sycophantic always-on.** The model reads the opt-in as "be thorough" and engages it on every call, turning the budget into fixed overhead. The budget-aware literature documents this overthinking: LLMs miscalibrate effort in both directions, generating unnecessarily long paths when unconstrained ([Plan and Budget (arxiv 2505.16122)](https://arxiv.org/abs/2505.16122)). The fix lives in the description's trigger phrases — frame the cost ("increases latency and cost — use selectively") and restrict the trigger to a narrow vocabulary.
+Sycophantic always-on. The model reads the opt-in as "be thorough" and engages it on every call, turning the budget into fixed overhead. The budget-aware literature documents this overthinking: LLMs miscalibrate effort in both directions, generating unnecessarily long paths when unconstrained ([Plan and Budget (arxiv 2505.16122)](https://arxiv.org/abs/2505.16122)). The fix lives in the description's trigger phrases — frame the cost ("increases latency and cost — use selectively") and restrict the trigger to a narrow vocabulary.
 
-**Never-on dead capability.** The description names the parameter but offers no trigger phrases, examples, or cost framing, so the model defaults it and the capability sits unused. The description carries the entire trigger burden ([Agent Skills docs](https://agentskills.io/skill-creation/optimizing-descriptions)).
+Never-on dead capability. The description names the parameter but offers no trigger phrases, examples, or cost framing, so the model defaults it and the capability sits unused. The description carries the entire trigger burden ([Agent Skills docs](https://agentskills.io/skill-creation/optimizing-descriptions)).
 
-**Non-monotonic depth backfire.** Deeper reasoning is not unconditionally a win. ["Brief Is Better" (arxiv 2604.02155)](https://arxiv.org/abs/2604.02155) found brief 32-token reasoning improves function-calling accuracy by +45% relative while extended 256-token reasoning degrades it. An opt-in tuned past the inflection point worsens the very calls it was meant to help.
+Non-monotonic depth backfire. Deeper reasoning is not unconditionally a win. ["Brief Is Better" (arxiv 2604.02155)](https://arxiv.org/abs/2604.02155) found brief 32-token reasoning improves function-calling accuracy by +45% relative while extended 256-token reasoning degrades it. An opt-in tuned past the inflection point worsens the very calls it was meant to help.
 
-**Misalignment with turn budget.** A late opt-in can land after the turn-level effort has spent its slack on cheaper calls; without coordination between the two controls, the call-level request is one the harness cannot fulfil.
+Misalignment with turn budget. A late opt-in can land after the turn-level effort has spent its slack on cheaper calls; without coordination between the two controls, the call-level request is one the harness cannot fulfill.
 
-**Portability illusion.** The only documented production instance is OpenAI's `return_token_budget` on one hosted tool. MCP annotations don't carry the hint, and re-implementing it as a custom function-tool parameter loses the host's hosted-tool integration — portability is real only for the project-defined form.
+Portability illusion. The only documented production instance is OpenAI's `return_token_budget` on one hosted tool. MCP annotations don't carry the hint, and re-implementing it as a custom function-tool parameter loses the host's hosted-tool integration — portability is real only for the project-defined form.
 
 ## Example
 

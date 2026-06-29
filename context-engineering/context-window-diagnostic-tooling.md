@@ -14,28 +14,28 @@ maturity: established
 
 > Diagnostic tooling attributes context-window growth to specific tool calls so you optimize the real culprit rather than prune blindly.
 
-**Learn it hands-on:** [What's Eating the Window](https://learn.agentpatterns.ai/context-engineering/whats-eating-the-window/) — guided lesson with quizzes.
+Learn it hands-on: [What's Eating the Window](https://learn.agentpatterns.ai/context-engineering/whats-eating-the-window/) — guided lesson with quizzes.
 
 Context-window diagnostic tooling is a class of commands that attribute token consumption to the specific tool calls, memory files, or outputs responsible — so an agent developer can shrink the actual culprit rather than guess. Claude Code's [`/context` command](https://code.claude.com/docs/en/changelog) (v2.1.74, 2026-03-12) is the first developer-facing example to ship in a major harness.
 
-## The Blind Optimization Problem
+## The blind optimization problem
 
-Agents accumulate context silently. A large file read, verbose grep output, and an accumulated error trace each inflate the window by thousands of tokens without any single call appearing expensive. Without per-tool attribution, you cannot tell whether the bottleneck is a file read, a search result, or an API response — so optimization becomes guesswork.
+Agents accumulate context silently. A large file read, verbose grep output, and an accumulated error trace each inflate the window by thousands of tokens, yet no single call looks expensive. Without per-tool attribution, you cannot tell whether the bottleneck is a file read, a search result, or an API response. So optimization becomes guesswork.
 
-## Per-Tool Attribution
+## Per-tool attribution
 
-The `/context` command identifies which tools are consuming the most context, flags memory bloat, and provides specific remediation suggestions alongside capacity warnings.
+The `/context` command identifies which tools consume the most context, flags memory bloat, and suggests specific fixes alongside capacity warnings.
 
 The command exposes:
 
-- **Tool-level attribution** — which tool calls are consuming the most tokens
-- **Memory bloat flags** — memory files that have grown unnecessarily large
-- **Capacity warnings** — proximity to context limits with quantified headroom
-- **Actionable tips** — specific suggestions per finding
+- Tool-level attribution: which tool calls consume the most tokens
+- Memory bloat flags: memory files that have grown larger than they need to be
+- Capacity warnings: how close you are to context limits, with the headroom quantified
+- Actionable tips: a specific suggestion per finding
 
-This moves context management from reactive (compress when full) to diagnostic (identify and fix the culprit before compression becomes necessary).
+This moves context management from reactive (compress when full) to diagnostic (find and fix the culprit before you need to compress).
 
-## Common High-Cost Culprits
+## Common high-cost culprits
 
 Per-tool attribution typically surfaces a short list of offenders:
 
@@ -46,7 +46,7 @@ Per-tool attribution typically surfaces a short list of offenders:
 | Accumulated error traces | Repeated errors with full stack traces compound quickly | Apply [error preservation](error-preservation-in-context.md) discipline — keep the first occurrence, drop duplicates |
 | Memory files | CLAUDE.md or scratch files that grow unbounded across sessions | Periodically compact or reset memory entries |
 
-## Diagnostic Flow
+## Diagnostic flow
 
 ```mermaid
 graph TD
@@ -59,9 +59,9 @@ graph TD
     D --> G[Monitor at next threshold]
 ```
 
-Run the diagnostic before applying [context compression strategies](context-compression-strategies.md). Compression without attribution risks discarding high-value content while leaving the actual inflator in place.
+Run the diagnostic before you apply [context compression strategies](context-compression-strategies.md). Compression without attribution risks discarding high-value content while leaving the actual inflator in place.
 
-## Generalizing to Other Harnesses
+## Generalizing to other harnesses
 
 `/context` exposes tool-call attribution directly to the developer rather than compressing behind the scenes. No other major AI coding harness currently documents an equivalent developer-facing diagnostic. The pattern generalizes: any harness that tracks per-tool token contribution can expose the same surface.
 
@@ -69,19 +69,19 @@ LangChain's [Deep Agents framework](https://github.com/langchain-ai/deepagents) 
 
 For harnesses without built-in diagnostics, instrument at the tool-call boundary: log token counts before and after each invocation, then aggregate by tool type.
 
-## Why It Works
+## Why it works
 
-Aggregate context metrics (total tokens used, percentage full) tell you *that* you have a problem but not *which tool* caused it. Token counts are additive and stable: each tool call appends a fixed delta that persists for the session, which is what makes [context budget allocation](context-budget-allocation.md) tractable in the first place. Per-tool attribution exposes the delta at invocation time, so skew is visible immediately — one tool type dominating the distribution pinpoints the bottleneck. The mechanism is measurement-then-act rather than compress-and-hope; the same principle as per-query profiling in databases.
+Aggregate context metrics (total tokens used, percentage full) tell you that you have a problem, but not which tool caused it. Token counts are additive and stable. Each tool call appends a fixed delta that persists for the session, which is what makes [context budget allocation](context-budget-allocation.md) tractable in the first place. Per-tool attribution exposes the delta at invocation time, so skew is visible immediately: one tool type dominating the distribution pinpoints the bottleneck. The mechanism is measure-then-act rather than compress-and-hope, the same principle as per-query profiling in databases.
 
-## When This Backfires
+## When this backfires
 
-Per-tool attribution is most useful when the expensive tool is also *avoidable*. It produces no actionable output when:
+Per-tool attribution helps most when the expensive tool is also avoidable. It produces no actionable output when:
 
-- **The tool cost is unavoidable** — a required full-repository scan or mandatory large-payload API response. Attribution identifies the culprit but offers no remediation.
-- **Inflation is outside tool calls** — long conversation histories, large system prompts, or accumulated reasoning traces do not show up in per-tool attribution; these are the targets [manual compaction](manual-compaction-dumb-zone-mitigation.md) addresses instead. The diagnostic reports modest tool costs while context is still full.
-- **Short-lived or stateless agents** — if context resets between turns, instrumentation overhead rarely pays off; there is no compounding to diagnose.
-- **Tool-sparse pipelines** — agents that call one or two tools repeatedly have a trivially uniform distribution; optimizing the single tool directly is faster.
-- **The harness lacks attribution APIs** — most frameworks don't expose per-tool token counts, so the boundary instrumentation falls to general [observability](../observability/index.md) tooling. Manual instrumentation adds overhead and is impractical without dedicated observability infrastructure.
+- The tool cost is unavoidable: a required full-repository scan or a mandatory large-payload API response. Attribution names the culprit but offers no fix.
+- Inflation sits outside tool calls: long conversation histories, large system prompts, or accumulated reasoning traces do not show up in per-tool attribution. These are the targets [manual compaction](manual-compaction-dumb-zone-mitigation.md) addresses instead. The diagnostic reports modest tool costs while context is still full.
+- The agents are short-lived or stateless: if context resets between turns, instrumentation rarely pays off, because there is no compounding to diagnose.
+- The pipeline is tool-sparse: agents that call one or two tools repeatedly have a trivially uniform distribution, so optimizing the single tool directly is faster.
+- The harness lacks attribution APIs: most frameworks do not expose per-tool token counts, so the boundary instrumentation falls to general [observability](../observability/index.md) tooling. Manual instrumentation adds overhead and is impractical without dedicated observability infrastructure.
 
 ## Key Takeaways
 

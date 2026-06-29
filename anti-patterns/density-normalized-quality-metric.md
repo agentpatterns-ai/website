@@ -18,39 +18,39 @@ maturity: emerging
 
 > A density-normalized quality metric falls when AI adoption inflates the denominator faster than smells grow — the ratio reports code growth, not improvement.
 
-Density-normalized quality metrics — architectural smells per KLOC, warnings per file, complexity per method — appear to fall after AI coding assistants are adopted, and platform teams cite the drop as evidence the tools improve code. A 151-repo causal study of Java codebases found the apparent improvement is arithmetic: smell *counts* stay flat (+1.1%, p = 0.82) while lines of code grow +12.8% (p = 0.003), mechanically producing the headline −6.7% density figure (p = 0.004) without a single architectural defect being removed ([Larsen & Moghaddam, 2026, *arxiv:2606.13298*](https://arxiv.org/abs/2606.13298)).
+Density-normalized quality metrics — architectural smells per KLOC, warnings per file, complexity per method — appear to fall after a team adopts AI coding assistants. Platform teams cite the drop as evidence the tools improve code. A 151-repo causal study of Java codebases found the apparent improvement is arithmetic: smell counts stay flat (+1.1%, p = 0.82) while lines of code grow +12.8% (p = 0.003), mechanically producing the headline −6.7% density figure (p = 0.004) without a single architectural defect being removed ([Larsen & Moghaddam, 2026, *arxiv:2606.13298*](https://arxiv.org/abs/2606.13298)).
 
-## The Pattern
+## The pattern
 
-The metric ships as a single ratio — `smell_count / loc`, `warnings / files`, `complexity / methods` — and the period-over-period delta is presented as the quality signal. Adoption decks pair the falling ratio with the AI rollout date and infer causation. The numerator and denominator are rarely shown alongside the ratio, so readers cannot tell which moved.
+The metric ships as a single ratio — `smell_count / loc`, `warnings / files`, `complexity / methods` — and teams present the period-over-period delta as the quality signal. Adoption decks pair the falling ratio with the AI rollout date and infer causation. Reports rarely show the numerator and denominator alongside the ratio, so readers cannot tell which one moved.
 
-## Why It Fails
+## Why it fails
 
-A causal estimator can hold everything else constant and the ratio still misleads, because the denominator is part of the treatment. The Larsen & Moghaddam study used a staggered difference-in-differences design with the Borusyak imputation estimator across 1,811 monthly Arcan snapshots of 74 agentic-AI-adopting Java repos against 77 propensity-matched controls; pre-trends were flat (Wald p = 0.90) and wild cluster bootstrap, Lee bounds, and stale-observation checks all held ([Larsen & Moghaddam, 2026](https://arxiv.org/abs/2606.13298)). The clean design still cannot rescue the ratio — the authors' own warning is explicit: *"density-normalized outcomes can mislead when treatment affects system size."*
+A causal estimator can hold everything else constant and the ratio still misleads, because the denominator is part of the treatment. The Larsen & Moghaddam study used a staggered difference-in-differences design with the Borusyak imputation estimator across 1,811 monthly Arcan snapshots of 74 agentic-AI-adopting Java repos against 77 propensity-matched controls; pre-trends were flat (Wald p = 0.90) and wild cluster bootstrap, Lee bounds, and stale-observation checks all held ([Larsen & Moghaddam, 2026](https://arxiv.org/abs/2606.13298)). The clean design still cannot rescue the ratio. The authors warn directly: "density-normalized outcomes can mislead when treatment affects system size."
 
 An independent MSR '26 DiD study of Cursor adoption finds the symmetric shape from the opposite side: a "statistically significant, large, but transient" velocity gain paired with a "substantial and persistent" rise in static-analysis warnings and complexity ([Wang et al., 2025, *arxiv:2511.04427*](https://arxiv.org/abs/2511.04427)). Both papers triangulate to: AI grows the codebase faster than it grows architectural debt, and reports that frame that as a quality win are reading the denominator.
 
-## Why It Works
+## Why it works
 
-The ratio survives because it is the canonical cross-repo comparator — without normalization, a 10k-LOC repo and a 100k-LOC repo cannot be compared at all, and pre-AI tooling correctly treated density as a quality measure when the denominator drifted slowly. AI adoption broke that assumption: when treatment inflates the denominator faster than the numerator, the ratio crosses from quality signal to artifact, and no internal property of the ratio flags the transition.
+The ratio survives because it is the standard cross-repo comparator. Without normalization, you cannot compare a 10k-LOC repo and a 100k-LOC repo at all, and pre-AI tooling correctly treated density as a quality measure when the denominator drifted slowly. AI adoption broke that assumption: when treatment inflates the denominator faster than the numerator, the ratio crosses from quality signal to artifact, and no internal property of the ratio flags the transition.
 
-## Substitute Metrics
+## Substitute metrics
 
 Report the decomposition, not the ratio:
 
-- **Raw numerator and denominator alongside any density figure.** Smell count and LOC, warning count and file count, complexity and method count — published together so the reader sees which moved. The Larsen & Moghaddam recommendation is "raw counts and explicit decomposition" ([Larsen & Moghaddam, 2026](https://arxiv.org/abs/2606.13298)).
-- **Period-over-period delta on the numerator alone.** A flat or rising raw smell count is the quality signal; a falling density with a flat numerator is the artifact warning.
-- **Industry baselines for the denominator.** GitClear's 2025 longitudinal analysis of 211M changed lines found AI-era refactor share fell from 25% to <10% while copy-paste share rose from 8.3% to 12.3% — denominator-inflating patterns documented at scale ([GitClear, 2025](https://www.gitclear.com/ai_assistant_code_quality_2025_research)). A density drop in a repo following the industry trend is presumptively artifact until decomposed.
+- Raw numerator and denominator alongside any density figure. Smell count and LOC, warning count and file count, complexity and method count — published together so the reader sees which one moved. The Larsen & Moghaddam recommendation is "raw counts and explicit decomposition" ([Larsen & Moghaddam, 2026](https://arxiv.org/abs/2606.13298)).
+- Period-over-period delta on the numerator alone. A flat or rising raw smell count is the quality signal; a falling density with a flat numerator is the artifact warning.
+- Industry baselines for the denominator. GitClear's 2025 longitudinal analysis of 211M changed lines found AI-era refactor share fell from 25% to under 10% while copy-paste share rose from 8.3% to 12.3% — denominator-inflating patterns documented at scale ([GitClear, 2025](https://www.gitclear.com/ai_assistant_code_quality_2025_research)). A density drop in a repo following the industry trend is presumptively artifact until decomposed.
 
-## When This Backfires
+## When this backfires
 
-- **Net-deletion AI usage.** Teams using AI for refactoring sweeps, dead-code removal, or migration consolidation may see LOC flat or shrinking; density changes there track real architectural movement and decomposition adds noise without value.
-- **High-baseline-smell repos.** A codebase entering AI adoption with already-saturated absolute smell counts can show genuine density falls as new LOC accretes against a fixed numerator — the decomposition shows the same story but does not falsify the ratio.
-- **Tech stacks without mature smell detection.** Arcan covers Java; for Go, Rust, or modern TypeScript-first stacks where architectural-smell tooling is weak, the numerator becomes noisy enough that neither density nor count is reliable. Decomposition does not rescue an untrustworthy numerator.
+- Net-deletion AI usage. Teams using AI for refactoring sweeps, dead-code removal, or migration consolidation may see LOC flat or shrinking; density changes there track real architectural movement and decomposition adds noise without value.
+- High-baseline-smell repos. A codebase entering AI adoption with already-saturated absolute smell counts can show genuine density falls as new LOC accretes against a fixed numerator — the decomposition shows the same story but does not falsify the ratio.
+- Tech stacks without mature smell detection. Arcan covers Java; for Go, Rust, or modern TypeScript-first stacks where architectural-smell tooling is weak, the numerator becomes noisy enough that neither density nor count is reliable. Decomposition does not rescue an untrustworthy numerator.
 
 ## Example
 
-**Before — reporting a single ratio:**
+Before — reporting a single ratio:
 
 ```text
 Q2 architecture review: AI adoption update
@@ -61,7 +61,7 @@ Q2 architecture review: AI adoption update
 
 The ratio fell, the p-value clears, and the conclusion follows — except the numerator and denominator are absent, so the reader cannot tell that the smell count was flat and LOC grew 13%.
 
-**After — reporting the decomposition:**
+After — reporting the decomposition:
 
 ```text
 Q2 architecture review: AI adoption update

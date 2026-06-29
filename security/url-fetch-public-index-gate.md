@@ -14,46 +14,46 @@ maturity: established
 
 > Rather than maintaining a domain allow-list, cross-reference URLs against an independent public-web crawl index before allowing automatic fetching — URLs not in the index may encode user-specific data.
 
-**Related lesson:** [The URL Is the Leak](https://learn.agentpatterns.ai/security/the-url-is-the-leak/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [The URL Is the Leak](https://learn.agentpatterns.ai/security/the-url-is-the-leak/) covers this concept in a hands-on lesson with quizzes.
 
-## The Safety Property
+## The safety property
 
-The key insight: a URL that was independently discoverable by a public crawler — one that had no access to any user's session, conversation, or account data — cannot by definition contain user-specific secrets that the crawler never saw.
+A URL that a public crawler discovered on its own cannot contain user-specific secrets. The crawler had no access to any user's session, conversation, or account data, so it never saw those secrets.
 
 This shifts the safety question from "is this domain reputable?" (a domain-level check) to "has this specific URL been independently observed on the public web?" (a URL-level check). [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/)]
 
-## Why Domain Allow-Lists Fail
+## Why domain allow-lists fail
 
-Domain allow-lists are insufficient because:
+Domain allow-lists are not enough, for these reasons:
 
-- The attacker-crafted URL can point to a trusted domain that immediately redirects to an attacker-controlled destination
+- An attacker-crafted URL can point to a trusted domain that immediately redirects to an attacker-controlled destination
 - Query parameters on a trusted domain can still encode user-specific data
 - The breadth of legitimate web content means any reasonably permissive allow-list causes alert fatigue
 
-Strict allow-lists train users to approve everything; loose allow-lists provide little protection. Neither approach handles redirects. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/)]
+Strict allow-lists train users to approve everything. Loose allow-lists give little protection. Neither approach handles redirects. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/)]
 
-## How the Index Gate Works
+## How the index gate works
 
 An independent crawler builds the URL index with no access to user conversations, accounts, or session data. The index contains URLs the crawler discovered through public links.
 
 At fetch time, the agent's tool checks the requested URL against this index:
 
-- **URL found in index**: fetch can proceed automatically — the URL was publicly observable before this user session existed
-- **URL not found in index**: treat as unverified — block automatic fetch, or surface to the user with an explicit warning requesting manual approval
+- URL found in index: the fetch can proceed automatically, because the URL was publicly observable before this user session existed
+- URL not found in index: treat it as unverified, then block the automatic fetch or surface it to the user with a warning that asks for manual approval
 
-The same check applies to embedded resources (images, iframes, script tags) — not just top-level navigation links. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/), [Exploiting Web Search Tools of AI Agents for Data Exfiltration](https://arxiv.org/abs/2510.09093)]
+The same check applies to embedded resources (images, iframes, script tags), not just top-level navigation links. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/), [Exploiting Web Search Tools of AI Agents for Data Exfiltration](https://arxiv.org/abs/2510.09093)]
 
-## Handling False Negatives
+## Handling false negatives
 
-New URLs are continuously created. A legitimate URL that was published after the last crawl will not appear in the index. The correct response to a missing URL is user confirmation, not rejection:
+People create new URLs all the time. A legitimate URL published after the last crawl will not appear in the index. The right response to a missing URL is user confirmation, not rejection:
 
 > "This URL hasn't been seen by the public web index. Would you like to fetch it anyway?"
 
-This preserves utility for new content while maintaining the safety property as the default.
+This keeps new content usable while the safety property stays the default.
 
-## Comparison to Domain Allow-Lists
+## Comparison to domain allow-lists
 
-| Property | Domain Allow-List | Public Index Gate |
+| Property | Domain allow-list | Public index gate |
 |----------|-------------------|-------------------|
 | Handles redirects | No | Partially (depends on resolution before check) |
 | Scales with web breadth | No — maintenance burden | Yes — crawl handles discovery |
@@ -69,7 +69,7 @@ This preserves utility for new content while maintaining the safety property as 
 
 ## Example
 
-The following shows a Python fetch tool that wraps HTTP requests with an index gate. URLs found in the Common Crawl index proceed automatically; unknown URLs require explicit user confirmation.
+The following Python fetch tool wraps HTTP requests with an index gate. URLs found in the Common Crawl index proceed automatically. Unknown URLs need explicit user confirmation.
 
 ```python
 import httpx

@@ -11,25 +11,25 @@ status: archived
 
 # GitHub Copilot Extensions
 
-> **Deprecated.** GitHub App-based Copilot Extensions were [sunset on November 10, 2025](https://github.blog/changelog/2025-09-24-deprecate-github-copilot-extensions-github-apps/). Build [MCP servers](mcp-integration.md) instead. This page is retained as historical reference.
+> Deprecated. GitHub App-based Copilot Extensions were [sunset on November 10, 2025](https://github.blog/changelog/2025-09-24-deprecate-github-copilot-extensions-github-apps/). Build [MCP servers](mcp-integration.md) instead. This page is retained as historical reference.
 
 > GitHub Copilot Extensions let you integrate external tools and services into Copilot Chat.
 
 ---
 
-## Extension Types
+## Extension types
 
-Copilot Extensions come in two forms: [agents and skillsets](https://github.blog/changelog/2024-11-19-build-copilot-extensions-faster-with-skillsets/). An extension cannot be both simultaneously.
+Copilot Extensions come in two forms: [agents and skillsets](https://github.blog/changelog/2024-11-19-build-copilot-extensions-faster-with-skillsets/). An extension cannot be both.
 
 ### Skillsets
 
-Skillsets are lightweight integrations where you define [up to 5 API endpoints](https://github.blog/changelog/2024-11-19-build-copilot-extensions-faster-with-skillsets/) and let Copilot handle all AI interactions. Copilot analyzes the user query, selects the appropriate skill, structures the API request using your JSON schema, calls your endpoint, and formats the response.
+Skillsets are lightweight integrations. You define [up to 5 API endpoints](https://github.blog/changelog/2024-11-19-build-copilot-extensions-faster-with-skillsets/) and let Copilot handle all AI interactions. Copilot analyzes the user query, selects the right skill, builds the API request from your JSON schema, calls your endpoint, and formats the response.
 
-Skillsets require no LLM logic on your side. You provide endpoints and schemas; Copilot handles routing, prompt crafting, function evaluation, and response generation. Copilot's function-calling mechanism maps user intent to your JSON schema at inference time, so your endpoint receives a structured, schema-validated payload without prompt engineering on your side. Use skillsets for straightforward integrations like data retrieval and basic actions.
+Skillsets need no LLM logic on your side. You provide endpoints and schemas; Copilot handles routing, prompt crafting, function evaluation, and response generation. Copilot's function-calling mechanism maps user intent to your JSON schema at inference time, so your endpoint receives a structured, schema-validated payload without prompt engineering. Use skillsets for straightforward integrations like data retrieval and basic actions.
 
 ### Agents
 
-Copilot agent extensions give you full control over user interactions and custom logic. The agent receives the user message, processes it (potentially calling its own LLM), and returns a response. Use agents for complex workflows requiring custom prompt crafting, specific LLM models, or multi-step reasoning.
+Copilot agent extensions give you full control over user interactions and custom logic. The agent receives the user message, processes it (sometimes by calling its own LLM), and returns a response. Use agents for complex workflows that need custom prompt crafting, specific LLM models, or multi-step reasoning.
 
 ## Authentication
 
@@ -41,8 +41,8 @@ You build extensions as GitHub Apps, inheriting the GitHub Apps permission model
 
 Extensions can be [public or private](https://github.blog/changelog/2025-02-19-announcing-the-general-availability-of-github-copilot-extensions/):
 
-- **Public**: Listed on GitHub Marketplace, available to any Copilot subscriber
-- **Private**: Scoped to an organization, not publicly discoverable
+- Public: listed on GitHub Marketplace, available to any Copilot subscriber
+- Private: scoped to an organization, not publicly discoverable
 
 Building extensions requires a [Free, Team, or supported Enterprise Cloud organization](https://github.blog/changelog/2024-11-19-build-copilot-extensions-faster-with-skillsets/).
 
@@ -56,16 +56,16 @@ Building extensions requires a [Free, Team, or supported Enterprise Cloud organi
 | Copilot subscription | Required for all users |
 | Platform support | VS Code, Visual Studio, JetBrains IDEs, GitHub.com |
 
-## When to Use What
+## When to use what
 
-| Approach | Best For |
+| Approach | Best for |
 |----------|----------|
 | Skillset | Data retrieval, simple API calls, no custom LLM logic needed |
 | Agent extension | Complex workflows, custom prompts, multi-turn conversations |
 | MCP server | Cross-tool compatibility (works beyond Copilot), tool-level integrations |
 | Local agent (`.agent.md`) | Team-specific workflows within a repository, no external hosting |
 
-Skillsets and agent extensions run as hosted services. MCP servers and local agents run alongside the editor. Choose hosted extensions when you need marketplace distribution or centralized deployment; choose local approaches when portability and zero-infrastructure are priorities.
+Skillsets and agent extensions run as hosted services. MCP servers and local agents run alongside the editor. Choose hosted extensions when you need marketplace distribution or centralized deployment. Choose local approaches when you need portability and no infrastructure.
 
 ## Key Takeaways
 
@@ -75,17 +75,17 @@ Skillsets and agent extensions run as hosted services. MCP servers and local age
 - An extension is either a skillset or an agent — not both.
 - Use MCP servers instead when you need cross-tool compatibility beyond the Copilot ecosystem.
 
-## When This Backfires
+## When this backfires
 
-GitHub App-based Copilot Extensions sunset on November 10, 2025 — these patterns no longer apply to new development. For active development, use MCP servers.
+GitHub App-based Copilot Extensions sunset on November 10, 2025, so these patterns no longer apply to new development. For active development, use MCP servers.
 
 For historical context on failure conditions:
 
-- **Skillset endpoint limits**: The 5-endpoint cap per skillset forces artificial splitting of related functionality across multiple extensions, complicating deployment and version management.
-- **OIDC dependency**: OIDC authentication requires your extension backend to validate tokens on every request; misconfigured token validation silently fails under load, producing 401s that appear as Copilot unresponsiveness.
-- **Agent extension latency**: Agent extensions that invoke their own LLMs add one full LLM round-trip on top of Copilot's own inference, making multi-turn agent conversations noticeably slower than native Copilot responses.
-- **GitHub App permission scope creep**: Extensions inherit the GitHub Apps permission model; requesting broad repository permissions to support power users creates friction for standard users who see an overly permissive install prompt.
-- **Marketplace lock-in**: Public extensions distributed via GitHub Marketplace are tied to GitHub's extension infrastructure — cross-tool portability requires a full rewrite as MCP servers.
+- Skillset endpoint limits: the 5-endpoint cap per skillset forces you to split related functionality across multiple extensions, which complicates deployment and version management.
+- OIDC dependency: your extension backend must validate tokens on every request. Misconfigured token validation fails silently under load, producing 401s that look like Copilot being unresponsive.
+- Agent extension latency: agent extensions that call their own LLMs add one full LLM round-trip on top of Copilot's own inference, so multi-turn agent conversations run noticeably slower than native Copilot responses.
+- GitHub App permission scope creep: extensions inherit the GitHub Apps permission model. Requesting broad repository permissions to support power users creates friction for standard users, who see an overly permissive install prompt.
+- Marketplace lock-in: public extensions distributed through GitHub Marketplace are tied to GitHub's extension infrastructure, so cross-tool portability needs a full rewrite as MCP servers.
 
 ## Related
 

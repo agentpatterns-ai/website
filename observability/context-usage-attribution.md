@@ -17,14 +17,14 @@ maturity: adopted
 
 > Break the context window into rules, skills, MCP returns, subagent transcripts, and conversation — so operators prune the source actually responsible, not the wrong one.
 
-## Two Cuts of the Same Telemetry
+## Two cuts of the same telemetry
 
-A single *"78% of the context window"* indicator names the symptom, not the cause. Two attribution cuts close it:
+A single "78% of the context window" indicator names the symptom, not the cause. Two attribution cuts close it:
 
-- **Per-tool attribution** — which tool calls dumped the most tokens. Claude Code's [`/context` command](../context-engineering/context-window-diagnostic-tooling.md) is the developer-facing example ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
-- **Per-source attribution** — which configuration source (rules, skills, MCP servers, subagents, conversation) is consuming the budget, regardless of which call put it there.
+- Per-tool attribution — which tool calls produced the most tokens. Claude Code's [`/context` command](../context-engineering/context-window-diagnostic-tooling.md) is the developer-facing example ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+- Per-source attribution — which configuration source (rules, skills, MCP servers, subagents, conversation) consumes the budget, regardless of which call produced it.
 
-Cursor shipped per-source attribution on 2026-05-06: *"You can now see a breakdown of your agent's context usage"* ([Cursor changelog](https://cursor.com/changelog)). The categories — rules, skills, MCPs, subagents — match the units an operator can act on: unload a skill, disable an MCP server, prune a rule file, kill a subagent.
+Cursor shipped per-source attribution on 2026-05-06: "You can now see a breakdown of your agent's context usage" ([Cursor changelog](https://cursor.com/changelog)). The categories — rules, skills, MCPs, subagents — match the units an operator can act on: unload a skill, disable an MCP server, prune a rule file, kill a subagent.
 
 ```mermaid
 graph LR
@@ -34,9 +34,9 @@ graph LR
     S -->|skills 22%, MCP 31%| SR[Unload skill / disable server]
 ```
 
-## Categories the Breakdown Should Expose
+## Categories the breakdown should expose
 
-Each category maps to a distinct remediation surface. A breakdown that collapses two of them — *"static prompt: 36%"* — leaves the operator unable to choose between unloading a skill and pruning a rule.
+Each category maps to a distinct remediation surface. A breakdown that collapses two of them — "static prompt: 36%" — leaves the operator unable to choose between unloading a skill and pruning a rule.
 
 | Category | Why it's separate | Remediation |
 |----------|-------------------|-------------|
@@ -48,7 +48,7 @@ Each category maps to a distinct remediation surface. A breakdown that collapses
 | Conversation history | Compounds with turns | Compact, or split into a fresh session |
 | Cache prefix | Read-only; cheap but counts against window | Stable across turns — flag only when prefix bloats |
 
-## OTel Path: The Same Cut, Exported
+## OTel path: the same cut, exported
 
 Claude Code's OTel exporter ships the attributes that make per-source attribution computable from telemetry rather than UI inspection. The `claude_code.token.usage` metric carries ([Claude Code monitoring reference](https://code.claude.com/docs/en/monitoring-usage)):
 
@@ -56,28 +56,28 @@ Claude Code's OTel exporter ships the attributes that make per-source attributio
 - `query_source` — `"main"`, `"subagent"`, `"auxiliary"`, or compaction/auxiliary thread names
 - `model`, `effort`, request-id correlation
 
-Grouping by `query_source` produces the subagent-vs-main split; grouping by `type` separates active-input from cached-prefix tokens. The UI breakdown and the OTel export consume the same counts — Cursor's panel is the always-on surface, an OTel collector the post-hoc audit path. See [agent observability via OTel](agent-observability-otel.md) for export wiring.
+Grouping by `query_source` produces the subagent-vs-main split. Grouping by `type` separates active-input from cached-prefix tokens. The UI breakdown and the OTel export consume the same counts — Cursor's panel is the always-on surface, an OTel collector the post-hoc audit path. See [agent observability via OTel](agent-observability-otel.md) for export wiring.
 
-## Action Signals
+## Action signals
 
 A breakdown without thresholds is just a chart. Useful signals:
 
-- **MCP returns > 30% with rising trend** — at least one server's outputs are unbounded. Drill into per-server tool-output token cost to find the offender.
-- **Skills > 20% on a session that didn't invoke them** — descriptions are too verbose; move low-priority skills to `name-only`.
-- **Subagent transcripts > 15%** — handoff schemas are missing; agents forward raw transcripts.
-- **Cache prefix > 50% with active < 30%** — the harness pays full attention cost on cached tokens. Confirm cache hit rate via OTel `cacheRead`.
+- MCP returns above 30% and rising — at least one server's outputs are unbounded. Drill into per-server tool-output token cost to find it.
+- Skills above 20% on a session that did not invoke them — descriptions are too long. Move low-priority skills to `name-only`.
+- Subagent transcripts above 15% — handoff schemas are missing. Agents forward raw transcripts.
+- Cache prefix above 50% with active below 30% — the harness pays full attention cost on cached tokens. Confirm cache hit rate via OTel `cacheRead`.
 
-## When the Cut Is Wrong
+## When the cut is wrong
 
-Per-source attribution is the right axis when configuration sources are non-trivial. It misleads when:
+Per-source attribution is the right axis when configuration sources are substantial. It misleads when:
 
-- **Tool calls dominate the session.** A long agentic run buckets file reads and grep output into one giant "tools"/"MCP" slice that points at no specific call. Switch to per-tool attribution ([`/context`](../context-engineering/context-window-diagnostic-tooling.md)).
-- **Single-shot deterministic prompts.** No compounding, no point in attribution.
-- **Tightly-pruned harnesses.** When rules, skills, and MCPs are already minimal, the breakdown reports rounding noise.
-- **The harness can't act on the cut.** Without per-skill or per-MCP unload commands, knowing skills consume 22% offers no remediation path beyond restarting the session.
-- **The headline counts only a subset of token types.** A breakdown is trustworthy only when it sums input, output, and cache tokens; counting input alone undercounts the budget — Claude Code's percentage showed ~20% while the session was at its limit ([claude-code#28167](https://github.com/anthropics/claude-code/issues/28167), [#17959](https://github.com/anthropics/claude-code/issues/17959)). Confirm the denominator covers every `type` before trusting a slice.
+- Tool calls dominate the session. A long agentic run buckets file reads and grep output into one large "tools"/"MCP" slice that points at no specific call. Switch to per-tool attribution ([`/context`](../context-engineering/context-window-diagnostic-tooling.md)).
+- Single-shot deterministic prompts. Nothing compounds, so attribution has no value.
+- Tightly pruned harnesses. When rules, skills, and MCPs are already minimal, the breakdown reports rounding noise.
+- The harness cannot act on the cut. Without per-skill or per-MCP unload commands, knowing skills consume 22% offers no fix beyond restarting the session.
+- The headline counts only a subset of token types. A breakdown is trustworthy only when it sums input, output, and cache tokens. Counting input alone undercounts the budget — Claude Code's percentage showed about 20% while the session was at its limit ([claude-code#28167](https://github.com/anthropics/claude-code/issues/28167), [#17959](https://github.com/anthropics/claude-code/issues/17959)). Confirm the denominator covers every `type` before trusting a slice.
 
-The two cuts are complementary — exposing both lets operators pick the axis matching the suspected cause. [The Infinite Context anti-pattern](../anti-patterns/infinite-context.md) is the failure both work against; per-source attribution is the cheaper always-on signal, pointing at slow-growing static sources before an emergency compaction.
+The two cuts are complementary — exposing both lets operators pick the axis matching the suspected cause. [The Infinite Context anti-pattern](../anti-patterns/infinite-context.md) is the failure both work against. Per-source attribution is the cheaper always-on signal, pointing at slow-growing static sources before an emergency compaction.
 
 ## Example
 
@@ -85,7 +85,7 @@ A session is at 82% full after twelve turns. Without attribution, the operator's
 
 The per-source breakdown shows: rules 8%, skills 28%, MCP returns 34%, subagent transcripts 6%, conversation 6%. The skills slice is the surprise — the session never explicitly invoked a skill. Listing loaded skills shows fourteen descriptions in the always-on context, each averaging 1,200 characters. The operator marks ten of them `"name-only"` in `skillOverrides` ([Claude Code skills reference](https://code.claude.com/docs/en/skills#override-skill-visibility-from-settings)). The next session at the same point loads at 64%.
 
-The breakdown made the difference between *"prune skills"* (right answer) and *"compact the conversation"* (the default reflex when only a single percentage is visible).
+The breakdown made the difference between "prune skills" (the right answer) and "compact the conversation" (the default reflex when only a single percentage is visible).
 
 ## Key Takeaways
 

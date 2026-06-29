@@ -17,15 +17,15 @@ maturity: adopted
 
 > Periodically rewrite objectives, to-do lists, and status summaries at the tail of context to exploit recency bias and prevent goal drift in long-running agent sessions.
 
-**Learn it hands-on:** [Staying on Target](https://learn.agentpatterns.ai/context-engineering/staying-on-target/) — guided lesson with quizzes.
+Learn it hands-on: [Staying on Target](https://learn.agentpatterns.ai/context-engineering/staying-on-target/) — guided lesson with quizzes.
 
-## The Problem
+## The problem
 
-Agent sessions exceeding ~50 tool calls routinely drift from their original objective. Earlier instructions fall into the low-attention middle zone of the context window ([Liu et al., "Lost in the Middle," TACL 2023](https://arxiv.org/abs/2307.03172)). Arike et al. (2025) confirmed this across multiple models on 100k+ token sequences: all exhibited goal drift, predominantly through **inaction** ([Arike et al., 2025](https://arxiv.org/abs/2505.02709)).
+Agent sessions that run past about 50 tool calls routinely drift from their original objective. Earlier instructions fall into the low-attention middle zone of the context window ([Liu et al., "Lost in the Middle," TACL 2023](https://arxiv.org/abs/2307.03172)). Arike et al. (2025) confirmed this across multiple models on sequences of 100k or more tokens: all of them drifted, mostly through inaction ([Arike et al., 2025](https://arxiv.org/abs/2505.02709)).
 
-## The Technique
+## The technique
 
-The agent maintains a running objectives file (e.g., `todo.md`) and rewrites it after each completed step — checking off finished items, restating remaining goals, and noting status. This pushes global objectives into the high-attention recency zone.
+The agent keeps a running objectives file, for example `todo.md`, and rewrites it after each completed step. It checks off finished items, restates the remaining goals, and notes status. This pushes the global objectives into the high-attention recency zone.
 
 ```mermaid
 graph LR
@@ -37,13 +37,13 @@ graph LR
     F --> A
 ```
 
-Manus uses this pattern for tasks averaging ~50 tool calls: a `todo.md` maintained step-by-step, where rewriting recites objectives into the model's recent attention span ([Manus, "Context Engineering for AI Agents"](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)). No controlled metrics have been published for this practice; the claim rests on Manus's engineering blog post.
+Manus uses this pattern for tasks that average about 50 tool calls: a `todo.md` kept current step by step, where each rewrite recites the objectives into the model's recent attention span ([Manus, "Context Engineering for AI Agents"](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)). No one has published controlled metrics for this practice; the claim rests on Manus's engineering blog post.
 
-## How It Differs from Related Techniques
+## How it differs from related techniques
 
 | Technique | Who initiates | When it fires | Mechanism |
 |-----------|--------------|---------------|-----------|
-| **Goal recitation** | Agent | Every step (continuous) | Rewrites objectives into context tail |
+| Goal recitation | Agent | Every step (continuous) | Rewrites objectives into context tail |
 | [Critical instruction repetition](../instructions/critical-instruction-repetition.md) | Author | Prompt design time (static) | Duplicates rules at start and end of prompt |
 | [Event-driven system reminders](../instructions/event-driven-system-reminders.md) | Harness | Detected conditions (reactive) | Injects user-role messages |
 | [Trajectory logging / progress files](../observability/trajectory-logging-progress-files.md) | Agent | Session boundaries | Filesystem state for cross-session recovery |
@@ -62,7 +62,7 @@ Manus uses this pattern for tasks averaging ~50 tool calls: a `todo.md` maintain
 - When compacting context, always preserve the full contents of `todo.md`
 ```
 
-### Via Harness / Orchestrator
+### Via harness / orchestrator
 
 ```python
 def post_step_recitation(agent_state: AgentState) -> str:
@@ -79,9 +79,9 @@ def post_step_recitation(agent_state: AgentState) -> str:
     return {"role": "user", "content": recitation}
 ```
 
-## Amplifying Recitation with Strong Goal Elicitation
+## Amplifying recitation with strong goal elicitation
 
-Arike et al. (2025) found that **strong goal elicitation** — restating the core objective in imperative language — significantly reduced drift across all tested models.
+Arike et al. (2025) found that strong goal elicitation — restating the core objective in imperative language — sharply reduced drift across all tested models.
 
 Weak (task list only):
 
@@ -102,13 +102,13 @@ WITHOUT changing any public method signatures.
 
 Strong elicitation reduces drift but does not eliminate it.
 
-## When Recitation Is Not Enough
+## When recitation is not enough
 
-Goal recitation addresses within-session attention decay but not:
+Goal recitation handles within-session attention decay, but it does not handle these problems:
 
-- **Post-compaction drift** — if the todo file is lost during context compression, recitation cannot help. Instruct compaction to preserve it verbatim ([LangChain](https://blog.langchain.com/context-management-for-deepagents/)).
-- **Instruction fade-out** — over long-running sessions, agents drift from foundational instructions regardless of recitation ([Bui, 2026 §3.2](https://arxiv.org/abs/2603.05344)). Event-driven system reminders are the complementary defense.
-- **Cross-session continuity** — recitation is ephemeral. For persistence, use [trajectory logging via progress files](../observability/trajectory-logging-progress-files.md).
+- Post-compaction drift — if the todo file is lost during context compression, recitation cannot help. Tell compaction to preserve it verbatim ([LangChain](https://blog.langchain.com/context-management-for-deepagents/)).
+- Instruction fade-out — over long sessions, agents drift from their foundational instructions regardless of recitation ([Bui, 2026 §3.2](https://arxiv.org/abs/2603.05344)). Event-driven system reminders are the complementary defense.
+- Cross-session continuity — recitation is ephemeral. For persistence, use [trajectory logging via progress files](../observability/trajectory-logging-progress-files.md).
 
 ## Related
 

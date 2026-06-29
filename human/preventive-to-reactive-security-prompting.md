@@ -19,9 +19,9 @@ status: current
 
 > AI assistants shift security thinking from writing-time to review-time — front-loading explicit security requirements in the initial prompt narrows that gap.
 
-AI assistants reorganise rather than eliminate security thinking — they shift it from the act of writing code to the act of reviewing it. Bappy et al. (2026) found that 15 professional engineers, observed completing security-relevant tasks with AI assistance, rarely specified security requirements in their initial prompts — even when they had just articulated the relevant vulnerability concerns moments earlier ([arxiv 2605.23130](https://arxiv.org/abs/2605.23130)). Front-loading explicit security requirements at specification time narrows that gap, under the conditions covered below.
+AI assistants reorganize rather than eliminate security thinking. They shift it from writing code to reviewing code. Bappy et al. (2026) observed 15 professional engineers completing security-relevant tasks with AI assistance. The engineers rarely specified security requirements in their initial prompts, even when they had just named the relevant vulnerability concerns moments earlier ([arxiv 2605.23130](https://arxiv.org/abs/2605.23130)). Front-loading explicit security requirements at specification time narrows that gap, under the conditions covered below.
 
-## The Prompting Gap
+## The prompting gap
 
 Bappy et al. (2026) interviewed 15 professional engineers and observed them completing security-relevant coding tasks with AI assistance:
 
@@ -32,19 +32,19 @@ Bappy et al. (2026) interviewed 15 professional engineers and observed them comp
 | Experience cohort did not reliably predict security performance | [Bappy et al., 2026](https://arxiv.org/abs/2605.23130) |
 | ~65% of LLM-generated code is insecure under naive prompts; 94–100% secure under security-specific prompts across Copilot, ChatGPT, CodeWhisperer, CodeLlama | [Götz et al., 2024](https://arxiv.org/abs/2408.07106) |
 
-The gap is not a knowledge gap. Engineers who had just named SQL injection or hard-coded credentials as concerns omitted any mention of them when prompting the assistant. Because experience cohort did not predict performance, the issue is structural to the interaction model, not a matter of seniority. Götz et al. (2024) supply the quantitative leg — the prompt does drive the security delta, developers just are not writing it.
+The gap is not a knowledge gap. Engineers who had just named SQL injection or hard-coded credentials as concerns left out any mention of them when prompting the assistant. Because experience cohort did not predict performance, the issue is structural to the interaction model, not a matter of seniority. Götz et al. (2024) supply the quantitative side: the prompt sets the security outcome, but developers are not writing it.
 
-## What Front-Loading Looks Like
+## What front-loading looks like
 
 A front-loaded prompt names the threat class and the expected control before the AI generates code:
 
-**Naive**:
+Naive:
 
 ```
 Write a login endpoint in Flask that checks the password against the users table.
 ```
 
-**Front-loaded**:
+Front-loaded:
 
 ```
 Write a login endpoint in Flask that checks the password against the users table.
@@ -55,20 +55,20 @@ return identical error messages for unknown user vs wrong password (CWE-203).
 
 The same shape transfers to persistent instruction files — `AGENTS.md`, `CLAUDE.md`, `.cursorrules` — so the constraints fire on every session without the developer having to recall them per prompt. The [OpenSSF Security-Focused Guide for AI Code Assistant Instructions](https://best.openssf.org/Security-Focused-Guide-for-AI-Code-Assistant-Instructions.html) and OWASP's [Secure Coding with AI Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secure_Coding_with_AI_Cheat_Sheet.html) both describe this approach.
 
-## Why It Works
+## Why it works
 
-AI assistants produce functional code so fluently that developers experience it as already-done, which suppresses the in-progress security thinking that previously fired while writing each line. Bappy et al. (2026) characterise the interaction model as one that frames code generation as a functional task, leaving security considerations for later review ([arxiv 2605.23130](https://arxiv.org/abs/2605.23130)). Front-loading at specification time re-injects that thinking before the AI has produced output that feels finished — narrowing the generation distribution toward security-conformant tokens rather than asking the developer to spot non-conformant ones after.
+AI assistants produce working code so fluently that developers experience it as already done. That feeling suppresses the in-progress security thinking that used to fire while writing each line. Bappy et al. (2026) describe the interaction model as one that frames code generation as a functional task and leaves security for later review ([arxiv 2605.23130](https://arxiv.org/abs/2605.23130)). Front-loading at specification time re-injects that thinking before the AI produces output that feels finished. It steers the generation toward security-conformant tokens, rather than asking the developer to spot non-conformant ones afterward.
 
-## When This Backfires
+## When this backfires
 
 Front-loading security in prompts has real costs and known failure conditions:
 
-- **Throwaway code does not earn the overhead.** Prototyping, scratch scripts, and exploratory notebooks do not recoup the per-prompt cost of restating OWASP-aligned constraints. The intervention is best suited to code headed to production.
-- **Long multi-turn sessions degrade salience.** Instructions given at session start lose weight as context fills — a security clause in turn 1 may not influence turn 30 (see [Rigor Relocation](rigor-relocation.md) on enforcement locality). Persistent instruction files partially compensate but do not eliminate the decay.
-- **Prompt phrasing is not a security guarantee.** Tessa et al. (2026) showed that semantic-preserving prompt perturbations collapse the secure-and-functional rate of hardened code generators to 3–17% ([arxiv 2601.07084](https://arxiv.org/abs/2601.07084)). Front-loading shifts the distribution toward secure outputs; it does not certify any single output as secure. See [Prompt as Security Knob](../anti-patterns/prompt-as-security-knob.md) — independent verification of every deployed path remains non-negotiable.
-- **Developers can only front-load what they can articulate.** A novel framework, unfamiliar language, or new deployment context produces an empty security specification. The intervention assumes a known threat model.
-- **Teams with [rigorous SAST/CI gates](../security/security-constitution-ai-code-gen.md) may see redundant ceremony.** Snyk, Semgrep, or CodeQL on every PR catch the same vulnerability classes mechanically. Front-loading still helps by reducing the number of findings the gates surface — but the marginal value drops.
-- **Over-stuffed prompts create their own injection surface.** Context-window poisoning attacks hide instructions in comments, metadata, or rule files that AI assistants automatically read ([Knostic, 2026](https://www.knostic.ai/blog/context-window-poisoning-coding-assistants)). Treat persistent security instructions as code — review them, version them, and keep them short enough to audit.
+- Throwaway code does not earn the overhead. Prototyping, scratch scripts, and exploratory notebooks do not recoup the per-prompt cost of restating OWASP-aligned constraints. The intervention suits code headed to production.
+- Long multi-turn sessions weaken salience. Instructions given at session start lose weight as context fills, so a security clause in turn 1 may not influence turn 30 (see [Rigor Relocation](rigor-relocation.md) on enforcement locality). Persistent instruction files compensate in part but do not remove the decay.
+- Prompt phrasing is not a security guarantee. Tessa et al. (2026) showed that semantic-preserving prompt perturbations collapse the secure-and-functional rate of hardened code generators to 3–17% ([arxiv 2601.07084](https://arxiv.org/abs/2601.07084)). Front-loading shifts the distribution toward secure outputs. It does not certify any single output as secure. See [Prompt as Security Knob](../anti-patterns/prompt-as-security-knob.md): independent verification of every deployed path remains required.
+- Developers can only front-load what they can articulate. A novel framework, unfamiliar language, or new deployment context produces an empty security specification. The intervention assumes a known threat model.
+- Teams with [strict SAST/CI gates](../security/security-constitution-ai-code-gen.md) may see redundant ceremony. Snyk, Semgrep, or CodeQL on every PR catch the same vulnerability classes mechanically. Front-loading still helps by reducing the number of findings the gates surface, but the marginal value drops.
+- Over-stuffed prompts create their own injection surface. Context-window poisoning attacks hide instructions in comments, metadata, or rule files that AI assistants automatically read ([Knostic, 2026](https://www.knostic.ai/blog/context-window-poisoning-coding-assistants)). Treat persistent security instructions as code: review them, version them, and keep them short enough to audit.
 
 ## Key Takeaways
 

@@ -13,9 +13,9 @@ maturity: established
 
 > Mine checkable rules from a requirements spec with one LLM, then audit the code rule by rule with a second. A human reviews flags.
 
-Use an LLM to statically verify code against a natural-language requirements document only when the verification is **factored into two stages** — an *AI rule miner* that extracts discrete checkable rules from the spec and surfaces ambiguities, followed by an *AI code auditor* that judges each rule against the implementation independently ([Zhou, Towey, Chen, 2026](https://arxiv.org/abs/2605.17926)). The single-prompt variant — handing the LLM the whole spec and the whole code base and asking "does this match?" — systematically misclassifies correct implementations as non-conforming and gets worse with elaborate prompting ([Jin & Chen, ASE 2025](https://arxiv.org/abs/2508.12358); [Jin & Chen, 2026](https://arxiv.org/abs/2603.00539)).
+Use an LLM to statically verify code against a natural-language requirements document only when you factor the verification into two stages. An AI rule miner extracts discrete checkable rules from the spec and surfaces ambiguities. An AI code auditor then judges each rule against the implementation independently ([Zhou, Towey, Chen, 2026](https://arxiv.org/abs/2605.17926)). The single-prompt variant — handing the LLM the whole spec and the whole code base and asking "does this match?" — systematically misclassifies correct implementations as non-conforming, and gets worse with elaborate prompting ([Jin & Chen, ASE 2025](https://arxiv.org/abs/2508.12358); [Jin & Chen, 2026](https://arxiv.org/abs/2603.00539)).
 
-## The Two-Stage Workflow
+## The two-stage workflow
 
 ```mermaid
 graph LR
@@ -30,23 +30,23 @@ graph LR
     H --> I[Human review of flagged items]
 ```
 
-**Stage 1 — Rule Miner.** The LLM reads the requirements document and emits two outputs: a list of discrete, individually checkable rules ("the password reset endpoint must invalidate all prior session tokens"), and a list of statements it cannot reduce to rules — vague quality attributes, contradictions between paragraphs, missing actors ([Zhou et al., 2026](https://arxiv.org/abs/2605.17926)). The second list is the early-warning channel. Half the value of the stage is exposing what the spec leaves unsaid.
+Stage 1 is the rule miner. The LLM reads the requirements document and emits two outputs: a list of discrete, individually checkable rules ("the password reset endpoint must invalidate all prior session tokens"), and a list of statements it cannot reduce to rules — vague quality attributes, contradictions between paragraphs, missing actors ([Zhou et al., 2026](https://arxiv.org/abs/2605.17926)). The second list is the early-warning channel. Half the value of the stage is exposing what the spec leaves unsaid.
 
-**Stage 2 — Code Auditor.** The LLM evaluates each extracted rule against the implementation in isolation. The auditor sees one rule and the relevant code surface, not the entire spec. The structured intermediate representation is the load-bearing constraint — it reduces the context the auditor must hold, which is the mechanism the experience report credits for reduced hallucination ([Zhou et al., 2026](https://arxiv.org/abs/2605.17926)).
+Stage 2 is the code auditor. The LLM evaluates each extracted rule against the implementation in isolation. The auditor sees one rule and the relevant code surface, not the entire spec. The structured intermediate representation is the load-bearing constraint. It reduces the context the auditor must hold, which is the mechanism the experience report credits for reduced hallucination ([Zhou et al., 2026](https://arxiv.org/abs/2605.17926)).
 
-## Why It Works
+## Why it works
 
-Splitting verification into rule extraction and per-rule judgment is the same mechanism behind factored chain-of-verification: answering each check in a context that excludes the rest forces independent recall instead of anchoring on the draft ([Dhuliawala et al., 2023](https://arxiv.org/abs/2309.11495)). The rule miner adds a second mechanism on top — it commits the verifier to discrete, named rules before any code is judged, which constrains the output surface. The over-correction paper found that **enriching the verifier prompt** (asking for explanations and proposed corrections) raises the false-negative rate, while narrowing the verifier's surface area does the opposite ([Jin & Chen, 2026](https://arxiv.org/abs/2603.00539)). The two-stage design implements that narrowing structurally rather than relying on prompt discipline.
+Splitting verification into rule extraction and per-rule judgment is the same mechanism behind factored chain-of-verification: answering each check in a context that excludes the rest forces independent recall instead of anchoring on the draft ([Dhuliawala et al., 2023](https://arxiv.org/abs/2309.11495)). The rule miner adds a second mechanism on top. It commits the verifier to discrete, named rules before any code is judged, which constrains the output surface. The over-correction paper found that enriching the verifier prompt (asking for explanations and proposed corrections) raises the false-negative rate, while narrowing the verifier's surface area does the opposite ([Jin & Chen, 2026](https://arxiv.org/abs/2603.00539)). The two-stage design implements that narrowing structurally rather than relying on prompt discipline.
 
-## When This Backfires
+## When this backfires
 
-- **Plain single-prompt verification.** Handing the LLM the full spec and the full code in one prompt inherits the systematic false-negative pattern documented in [Jin & Chen, ASE 2025](https://arxiv.org/abs/2508.12358) — correct implementations get flagged as non-conforming at rates that overwhelm reviewers. The two-stage structure is necessary, not optional.
-- **Chain-of-explanation prompts in the auditor.** Asking the code auditor to *explain* its verdict or *propose corrections* raises the misjudgment rate. The intuitive prompt-engineering instinct inverts the desired outcome ([Jin & Chen, 2026](https://arxiv.org/abs/2603.00539)).
-- **Requirements that lean on vague quality attributes.** "The system should be intuitive" or "must scale appropriately" cannot be reduced to checkable rules. The miner flags them, but the auditor has nothing to evaluate — coverage of the spec drops silently.
-- **Treated as a substitute for tests.** The pattern is a complement to runtime evidence, not a replacement. Teams that retire test investment because LLM verification "covers requirements" lose the runtime oracle that catches the residual false negatives — the oracle a pipeline like [multi-agent RAG spec-to-test](multi-agent-rag-spec-to-test.md) preserves by compiling the spec into executable tests. Even strong models score only ~64% on coding judge benchmarks ([JudgeBench, ICLR 2025](https://openreview.net/pdf?id=G0dksFayVq)) and are sensitive to formatting and paraphrase changes ([CodeJudgeBench](https://arxiv.org/abs/2507.10535)).
-- **No human gate on flagged items.** Without a reviewer triaging miner-flagged ambiguities and auditor-flagged failures, the noise dominates. Treat the LLM output as a queue that routes work to humans, not as a verdict.
+- Plain single-prompt verification. Handing the LLM the full spec and the full code in one prompt inherits the systematic false-negative pattern documented in [Jin & Chen, ASE 2025](https://arxiv.org/abs/2508.12358) — correct implementations get flagged as non-conforming at rates that overwhelm reviewers. The two-stage structure is necessary, not optional.
+- Chain-of-explanation prompts in the auditor. Asking the code auditor to explain its verdict or propose corrections raises the misjudgment rate. The intuitive prompt-engineering instinct inverts the desired outcome ([Jin & Chen, 2026](https://arxiv.org/abs/2603.00539)).
+- Requirements that lean on vague quality attributes. "The system should be intuitive" or "must scale appropriately" cannot be reduced to checkable rules. The miner flags them, but the auditor has nothing to evaluate — coverage of the spec drops silently.
+- Treated as a substitute for tests. The pattern is a complement to runtime evidence, not a replacement. Teams that retire test investment because LLM verification "covers requirements" lose the runtime oracle that catches the residual false negatives — the oracle a pipeline like [multi-agent RAG spec-to-test](multi-agent-rag-spec-to-test.md) preserves by compiling the spec into executable tests. Even strong models score only ~64% on coding judge benchmarks ([JudgeBench, ICLR 2025](https://openreview.net/pdf?id=G0dksFayVq)) and are sensitive to formatting and paraphrase changes ([CodeJudgeBench](https://arxiv.org/abs/2507.10535)).
+- No human gate on flagged items. Without a reviewer triaging miner-flagged ambiguities and auditor-flagged failures, the noise dominates. Treat the LLM output as a queue that routes work to humans, not as a verdict.
 
-## Where It Fits Among Verification Techniques
+## Where it fits among verification techniques
 
 | Approach | What it checks | Oracle type |
 |----------|---------------|-------------|
@@ -62,9 +62,9 @@ LLM static verification covers the gap between a written spec and the implementa
 
 A requirements document for an authentication service contains the paragraph:
 
-> *"The password reset flow must invalidate all existing session tokens for the user. After a successful reset, the user is signed out of all devices and must re-authenticate. Reset tokens expire after 15 minutes and may only be used once."*
+> "The password reset flow must invalidate all existing session tokens for the user. After a successful reset, the user is signed out of all devices and must re-authenticate. Reset tokens expire after 15 minutes and may only be used once."
 
-**Stage 1 output (rule miner).** The miner emits four discrete rules and one ambiguity:
+Stage 1 output, the rule miner. The miner emits four discrete rules and one ambiguity:
 
 ```yaml
 rules:
@@ -86,7 +86,7 @@ ambiguities:
 
 The ambiguity goes to a human reviewer before Stage 2 runs.
 
-**Stage 2 output (code auditor).** For rule `R4`, the auditor receives only `R4`, the reset-token redemption handler, and the relevant schema — not the rest of the spec or the rest of the code base. It returns:
+Stage 2 output, the code auditor. For rule `R4`, the auditor receives only `R4`, the reset-token redemption handler, and the relevant schema — not the rest of the spec or the rest of the code base. It returns:
 
 ```yaml
 rule_id: R4

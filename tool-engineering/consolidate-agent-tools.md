@@ -14,58 +14,58 @@ maturity: adopted
 
 > Prefer fewer, higher-level tools that match how agents reason about tasks over many narrow tools that mirror API endpoint boundaries.
 
-**Learn it hands-on:** [Consolidation vs Sprawl](https://learn.agentpatterns.ai/tool-engineering/consolidation-vs-sprawl/) — guided lesson with quizzes.
+Learn it hands-on with the [Consolidation vs Sprawl guided lesson](https://learn.agentpatterns.ai/tool-engineering/consolidation-vs-sprawl/), which includes quizzes.
 
-## The Problem with API-Shaped Tool Sets
+## The problem with API-shaped tool sets
 
-Developers building tool-augmented agents often mirror the underlying API: one tool per endpoint, one tool per operation. This produces a large tool set where agents must chain multiple calls to complete a single logical action — finding a calendar slot and booking it requires two separate tools, two decisions, two opportunities for error.
+Developers building tool-augmented agents often mirror the underlying API: one tool per endpoint, one tool per operation. This produces a large tool set. Agents then chain several calls to finish a single logical action. Finding a calendar slot and booking it needs two separate tools, two decisions, and two chances for error.
 
-Agents select tools by attending to their [descriptions](tool-description-quality.md), matching intent to a tool. A large set of overlapping or fine-grained tools creates ambiguity at the selection step: the agent must reason about which combination of tools achieves the goal, rather than selecting the tool that directly matches its intent. Per [Anthropic's writing tools for agents post](https://www.anthropic.com/engineering/writing-tools-for-agents), more tools do not improve agent outcomes — thoughtful selection beats abundance.
+Agents pick tools by reading their [descriptions](tool-description-quality.md) and matching intent to a tool. A large set of overlapping or fine-grained tools makes that choice ambiguous. The agent has to work out which combination of tools reaches the goal, instead of picking the one tool that matches its intent. Anthropic's [writing tools for agents post](https://www.anthropic.com/engineering/writing-tools-for-agents) reports that more tools do not improve outcomes. Careful selection beats abundance.
 
-## Consolidation Principle
+## Consolidation principle
 
 Each tool should map to a distinct, human-understandable sub-task. If two tools are always called together, they should be one tool. If a tool's output always feeds into another specific tool, merge them.
 
 Example: Instead of `list_calendar_events` + `create_calendar_event`, define a single `schedule_event` tool that finds availability and books in one call. The agent expresses intent ("schedule a meeting") and the tool handles the mechanics.
 
-## Overlapping Functions
+## Overlapping functions
 
 Overlapping tool functions produce two failure modes:
 
-1. **Redundant calls** — the agent calls both tools when one would have been sufficient
-2. **Wrong tool selection** — the agent selects the less appropriate tool because the distinction is unclear
+1. Redundant calls — the agent calls both tools when one would have been enough
+2. Wrong tool selection — the agent picks the less appropriate tool because the distinction is unclear
 
-Eliminate overlap by defining mutually exclusive responsibilities for each tool. If you cannot state in one sentence what each tool does that no other tool does, the tool set has overlap.
+Remove overlap by giving each tool a responsibility no other tool shares. If you cannot say in one sentence what each tool does that no other tool does, the set still overlaps.
 
-## Namespace Grouping
+## Namespace grouping
 
-When multiple related tools are necessary, group them under a common namespace prefix. For example: `asana_search`, `asana_projects_search`, `asana_task_create`. The prefix signals to the agent that these tools operate on the same system and reduces confusion when selecting between them.
+When you do need several related tools, group them under a common namespace prefix. For example: `asana_search`, `asana_projects_search`, `asana_task_create`. The prefix tells the agent that these tools work on the same system, and it reduces confusion when the agent picks between them.
 
-This is preferable to flat naming (`search`, `project_search`, `create_task`) where the relationship between tools is implicit.
+This works better than flat naming (`search`, `project_search`, `create_task`), where the relationship between tools stays implicit.
 
-## Why It Works
+## Why it works
 
-LLMs select tools by attending to their [descriptions](tool-description-quality.md) in the context window. When descriptions for ten narrow tools compete for attention, the model must reason about which subset achieves the goal — a multi-step inference problem layered on top of the actual task. Fewer, well-scoped tools reduce the selection decision to a direct mapping: intent → tool, rather than intent → combination of tools.
+LLMs pick tools by reading their [descriptions](tool-description-quality.md) in the context window. When ten narrow tool descriptions compete for attention, the model has to reason about which subset reaches the goal. That is a multi-step inference problem stacked on top of the real task. Fewer, well-scoped tools turn the choice into a direct mapping: intent to tool, rather than intent to a combination of tools.
 
-The mechanism is not merely ergonomic. [LongFuncEval (2025)](https://arxiv.org/abs/2505.10570) found that expanding a tool catalog caused accuracy drops of 7–85% depending on the model, with a pronounced [lost-in-the-middle](../context-engineering/lost-in-the-middle.md) effect ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)): the correct tool becomes harder to locate among distractors. Consolidation removes distractors at the source rather than relying on the model to filter them.
+The benefit is not only ergonomic. [LongFuncEval (2025)](https://arxiv.org/abs/2505.10570) found that growing a tool catalog dropped accuracy by 7 to 85%, depending on the model, with a strong [lost-in-the-middle](../context-engineering/lost-in-the-middle.md) effect ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)): the correct tool gets harder to find among distractors. Consolidation removes the distractors at the source, rather than relying on the model to filter them.
 
-## Context Window Impact
+## Context window impact
 
-Each tool definition consumes context tokens. A large tool set with many narrow tools consumes context on definitions the agent may never use in a given task. Consolidating tools reduces context footprint proportionally — fewer tools means more context available for task data and reasoning ([token-efficient tool design](token-efficient-tool-design.md)).
+Each tool definition uses context tokens. A large set of narrow tools spends those tokens on definitions the agent may never use in a given task. Consolidating tools cuts that context footprint in proportion: fewer tools leave more context for task data and reasoning ([token-efficient tool design](../token-engineering/token-efficient-tool-design.md)).
 
-This matters most in long-running tasks where context pressure accumulates. A tool set designed for minimal context footprint is a latent performance advantage in complex multi-step workflows.
+This matters most in long-running tasks, where context pressure builds up. A tool set with a small context footprint gives a performance advantage that shows up in long, multi-step workflows.
 
-## When Not to Consolidate
+## When not to consolidate
 
-Consolidation has limits and backfires in specific conditions. Do not merge tools that:
+Consolidation has limits, and it backfires in some cases. Do not merge tools that:
 
-- Serve genuinely distinct sub-tasks that are not always performed together — forcing the agent to call a merged tool when it only needs one sub-operation wastes tokens and obscures intent
-- Have significantly different permission requirements — combining them grants excess access to every caller regardless of which sub-task they need
-- Have output schemas so different that a merged interface becomes incoherent — the agent can't reliably pattern-match on the response
+- Serve genuinely distinct sub-tasks that are not always done together — forcing the agent to call a merged tool when it needs only one sub-operation wastes tokens and hides intent
+- Have very different permission requirements — combining them grants excess access to every caller, whatever sub-task they need
+- Have output schemas so different that a merged interface makes no sense — the agent cannot reliably pattern-match on the response
 
-**Drawbacks of over-consolidation:** A merged tool that handles too much becomes a black box. When it fails, the agent can't reason about which step failed. A merged `find_and_book_flight` that silently fails at the hold step looks identical to one that fails at confirmation. Narrow tools preserve failure granularity; a merged `find_and_book_flight` trades it away for call-count efficiency.
+Over-consolidation has its own drawbacks. A merged tool that handles too much becomes a black box. When it fails, the agent cannot tell which step failed. A merged `find_and_book_flight` that silently fails at the hold step looks identical to one that fails at confirmation. Narrow tools keep failure granularity. A merged `find_and_book_flight` trades that away for fewer calls.
 
-**The test:** Does the merged tool still map to a single, clear human-understandable action? If it requires a paragraph to describe, it has been over-consolidated. If two sub-tasks are *sometimes* called together but not always, keep them separate and let the agent compose them.
+Here is the test. Does the merged tool still map to a single, clear, human-understandable action? If it takes a paragraph to describe, it has been over-consolidated. If two sub-tasks are sometimes called together but not always, keep them separate and let the agent compose them.
 
 ## Example
 
@@ -112,7 +112,7 @@ Two tools, two clear intents. `find_flights` merges search and detail retrieval 
 - [Tool Engineering](tool-engineering.md)
 - [Tool Description Quality](tool-description-quality.md)
 - [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md)
 - [Advanced Tool Use](advanced-tool-use.md)
 - [Poka-Yoke Agent Tools](poka-yoke-agent-tools.md)

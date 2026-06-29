@@ -17,15 +17,15 @@ maturity: established
 
 > The comprehension fallacy treats correct output as evidence of understanding — when it is only evidence of a favorable pattern match.
 
-## The Fallacy
+## The fallacy
 
-Practitioners assume that when a model produces correct output, it *understood* the input. This leads to over-trust, skipped verification, and prompts that rely on implied meaning the model cannot access.
+Practitioners assume that when a model produces correct output, it understood the input. This leads to over-trust, skipped verification, and prompts that rely on implied meaning the model cannot access.
 
-## Why It's Wrong
+## Why it's wrong
 
 LLMs operate on statistical correlations between token embeddings. Words that appear in similar contexts cluster mathematically in high-dimensional space, but the model has no access to the underlying referents — the actual things those words point to. [Bender et al. (2021)](https://s10251.pcdn.co/pdf/2021-bender-parrots.pdf) established this directly: LLMs "stitch together sequences of linguistic forms without any reference to meaning."
 
-A 2025 analysis ([arxiv 2507.05448](https://arxiv.org/html/2507.05448v1)) frames this as Fregean *sense* (relational meaning within context) without *reference* (connection to reality): the model relates tokens to each other but not to the world they describe.
+A 2025 analysis ([arxiv 2507.05448](https://arxiv.org/html/2507.05448v1)) frames this as Fregean sense (relational meaning within context) without reference (connection to reality): the model relates tokens to each other but not to the world they describe.
 
 The practical consequence is [jagged intelligence](https://www.marktechpost.com/2024/08/11/andrej-karpathy-coined-a-new-term-jagged-intelligence-understanding-the-inconsistencies-in-advanced-ai/): the same model that solves a Math Olympiad problem cannot reliably count letters in a word. Minute wording changes produce [15–66% accuracy swings](https://www.ikangai.com/jagged-agi-superhuman-ai-flaws/), so "correct output on this prompt" is weak evidence about behavior on any other.
 
@@ -33,35 +33,35 @@ The model also produces no internal signal distinguishing reliable from unreliab
 
 The "pure surface statistics" framing is contested. Probing studies show models can build structured internal representations: an Othello-playing transformer encodes a linearly-recoverable board state ([Li et al. (2023)](https://arxiv.org/abs/2210.13382), refined by [Nanda et al. (2023)](https://arxiv.org/abs/2309.00941)), and a chess model shows the same ([Karvonen (2024)](https://arxiv.org/abs/2403.15498)). This does not rescue the fallacy: a recoverable representation is not the model's own self-monitored, reliably-deployed knowledge, and a correct answer still does not signal which kind of competence produced it — so the practical caution holds.
 
-## Connection to Coding Agent Practice
+## Connection to coding agent practice
 
 The fallacy shows up in three specific failure modes:
 
-**Skipping context priming.** Assuming the model "understands the codebase" leads to omitting explicit context. Models cannot infer unwritten conventions, architectural decisions, or implicit domain knowledge — they require [deliberate context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents). Every session starts without awareness of prior sessions or established conventions.
+Skipping context priming: assuming the model "understands the codebase" leads to omitting explicit context. Models cannot infer unwritten conventions, architectural decisions, or implicit domain knowledge — they require [deliberate context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents). Every session starts without awareness of prior sessions or established conventions.
 
-**Trusting model-reported confidence.** The model's tone (assertive, hedged, detailed) carries no reliable signal about accuracy. Self-correction instructions ("review your work") have [minimal effect](https://engineering.atspotify.com/2025/12/feedback-loops-background-coding-agents-part-3) without external feedback — the model cannot detect its own comprehension gaps.
+Trusting model-reported confidence: the model's tone (assertive, hedged, detailed) carries no reliable signal about accuracy. Self-correction instructions ("review your work") have [minimal effect](https://engineering.atspotify.com/2025/12/feedback-loops-background-coding-agents-part-3) without external feedback — the model cannot detect its own comprehension gaps.
 
-**Skipping verification.** Only [48% of developers consistently review AI-generated code](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) before committing, yet 38% find such reviews more demanding than reviewing human-written code. The fallacy drives this gap: if the model understood the problem, why review the output?
+Skipping verification: only [48% of developers consistently review AI-generated code](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) before committing, yet 38% find such reviews more demanding than reviewing human-written code. The fallacy drives this gap: if the model understood the problem, why review the output?
 
 ## Example
 
-**Before — comprehension fallacy applied:**
+Before, with the comprehension fallacy applied:
 
 A developer asks the model to "update the auth flow to match the new spec" without providing the spec, the existing auth code, or the team's convention for error handling. The model produces a plausible-looking implementation. The developer [reviews it briefly because it looks correct](../anti-patterns/trust-without-verify.md) and merges it. The implementation silently breaks a session-invalidation edge case that exists only in the codebase's internal documentation.
 
-**After — treating the model as a pattern matcher:**
+After, treating the model as a pattern matcher:
 
 The developer [primes the model](../context-engineering/context-priming.md) with the existing auth code, the new spec document, and a note on the error-handling convention. They request a diff, not a full rewrite. They run the existing test suite against the output before review. The model's output is constrained to the provided context; deviations from it are visible and reviewable.
 
-## When This Backfires
+## When this backfires
 
 Treating the fallacy as universally dangerous can itself produce errors:
 
-**Over-priming on stable task types.** For well-bounded tasks the model has high training coverage for — standard library usage, boilerplate generation, format conversion — extensive context priming yields diminishing returns. The pattern match is reliable; time spent priming is overhead.
+Over-priming on stable task types: for well-bounded tasks the model has high training coverage for — standard library usage, boilerplate generation, format conversion — extensive context priming yields diminishing returns. The pattern match is reliable, so time spent priming is overhead.
 
-**Verification paralysis on low-stakes outputs.** Applying external verification to every output regardless of consequence (a one-line docstring, a variable rename) slows delivery [without proportional risk reduction](../verification/risk-based-task-sizing.md). The fallacy's danger scales with the cost of a silent failure, not uniformly across all output types.
+Verification paralysis on low-stakes outputs: applying external verification to every output regardless of consequence (a one-line docstring, a variable rename) slows delivery [without proportional risk reduction](../verification/risk-based-task-sizing.md). The fallacy's danger scales with the cost of a silent failure, not uniformly across all output types.
 
-**Misattributing inconsistency to comprehension gaps.** Some output variance stems from temperature, prompt phrasing, or context placement — not from the model "not understanding." Framing every inconsistency as a comprehension failure obscures tractable prompt-engineering fixes.
+Misattributing inconsistency to comprehension gaps: some output variance stems from temperature, prompt phrasing, or context placement — not from the model "not understanding." Framing every inconsistency as a comprehension failure obscures tractable prompt-engineering fixes.
 
 The boundary: apply comprehension-skeptic discipline where silent failures are expensive (auth flows, data migrations, security logic) and relax it where failures are cheap and visible.
 

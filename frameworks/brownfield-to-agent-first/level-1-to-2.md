@@ -17,7 +17,7 @@ maturity: adopted
 
 ---
 
-## What L1 Looks Like
+## What L1 looks like
 
 The agent orients itself but cannot verify its output:
 
@@ -28,26 +28,26 @@ The agent orients itself but cannot verify its output:
 
 You are the feedback loop.
 
-## What L2 Looks Like
+## What L2 looks like
 
 The agent validates most of its own work:
 
 - Strong types catch structural errors at write time
 - A test suite gives a binary "did I break anything?" signal
 - Linter rules carry remediation messages the agent can act on
-- Iteration runs through the [Ralph Wiggum Loop](../../agent-design/ralph-wiggum-loop.md): write → lint fails → fix → lint passes → tests fail → fix → tests pass
+- Iteration runs through the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md): write → lint fails → fix → lint passes → tests fail → fix → tests pass
 
-**Exit criterion**: the agent completes a scoped task (add a function with tests) and verifies its output without human review of mechanical errors.
+Exit criterion: the agent completes a scoped task (add a function with tests) and verifies its output without human review of mechanical errors.
 
 ---
 
-## The L1 → L2 Transformation
+## The L1 → L2 transformation
 
-### Step 1: Enable a Strong Type System
+### Step 1: Enable a strong type system
 
 Type errors fire at write time, at the exact location of the violation, with a specific message about what the type should be — the most actionable form of backpressure.
 
-**TypeScript strict mode**:
+TypeScript strict mode:
 
 ```json
 // tsconfig.json
@@ -63,7 +63,7 @@ Type errors fire at write time, at the exact location of the violation, with a s
 
 Enabling strict mode on an existing repo produces type errors. Fix them incrementally — they represent real bugs or assumptions agents would otherwise replicate.
 
-**Python**:
+Python:
 
 ```bash
 # Add mypy to your dev dependencies
@@ -75,13 +75,13 @@ strict = true
 disallow_untyped_defs = true
 ```
 
-**Why agents benefit disproportionately**: a human reasons from experience; an agent reads the message literally. Error specificity and location determine whether the agent self-corrects ([Anthropic](https://code.claude.com/docs/en/best-practices)).
+Why agents benefit more: a human reasons from experience; an agent reads the message literally. Error specificity and location determine whether the agent self-corrects ([Anthropic](https://code.claude.com/docs/en/best-practices)).
 
-### Step 2: Build Test Coverage on Critical Paths
+### Step 2: Build test coverage on critical paths
 
 A test suite gives a binary answer to "did I break anything?" Agents run tests, read failures, and fix — only if the suite exists.
 
-**Prioritize by agent risk, not business risk:**
+Prioritize by agent risk, not business risk:
 
 | Path | Why it matters | Priority |
 |------|----------------|----------|
@@ -93,7 +93,7 @@ A test suite gives a binary answer to "did I break anything?" Agents run tests, 
 
 Cover the paths agents modify most before chasing edge cases.
 
-**Write assertions with informative failure output:**
+Write assertions with informative failure output:
 
 ```typescript
 // Less useful for agent feedback
@@ -109,25 +109,25 @@ expect(result).toEqual({
 
 The more structured the assertion, the more specific the agent's fix.
 
-**Integration tests over unit tests** for agent-critical paths: they catch ORM misuse, transaction errors, and layer violations that mocked unit tests miss. LangChain's Terminal Bench gains came from structural verification, not mock-based unit tests ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
+Use integration tests over unit tests for agent-critical paths: they catch ORM misuse, transaction errors, and layer violations that mocked unit tests miss. LangChain's Terminal Bench gains came from structural verification, not mock-based unit tests ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
-### Step 3: Write Linter Rules with Remediation Messages
+### Step 3: Write linter rules with remediation messages
 
 Standard linter rules flag violations; agent-useful rules explain the fix. The message enters context at the exact moment of the wrong decision — just-in-time delivery.
 
-**Good remediation message:**
+Good remediation message:
 ```
 ERROR: Direct database imports are not allowed.
   Use repository classes from src/repositories/ instead.
   See src/repositories/user.repository.ts for an example.
 ```
 
-**Poor (agent must infer the fix):**
+Poor message, where the agent must infer the fix:
 ```
 ERROR: Forbidden import from 'src/db/connection'.
 ```
 
-**Custom ESLint rule example** — enforcing the repository pattern:
+Custom ESLint rule that enforces the repository pattern:
 
 ```javascript
 // eslint-rules/no-direct-db-import.js
@@ -150,7 +150,7 @@ module.exports = {
 };
 ```
 
-**High-value rule targets:**
+High-value rule targets:
 
 | Rule | Prevents | Remediation should say |
 |------|----------|------------------------|
@@ -160,7 +160,7 @@ module.exports = {
 | No console.log in src/ | Debug output in production | "Use the logger from src/utils/logger.ts" |
 | Import boundaries by directory | Architecture violations | "This layer cannot import from X; put shared code in Y" |
 
-### Step 4: Add a Pre-Commit Hook
+### Step 4: Add a pre-commit hook
 
 A pre-commit hook gates agent output before it enters version history.
 
@@ -198,35 +198,35 @@ Or with Node tooling directly:
 npm run lint && npm run type-check
 ```
 
-Commit → hook runs → on failure the commit is rejected with the error → agent reads, fixes, commits again. This is the [Ralph Wiggum Loop](../../agent-design/ralph-wiggum-loop.md) at the commit boundary.
+Commit → hook runs → on failure the commit is rejected with the error → agent reads, fixes, commits again. This is the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md) at the commit boundary.
 
-### Step 5: Verify the Transition
+### Step 5: Verify the transition
 
 Exit check:
 
-1. Ask the agent to add a function to an existing service that calls a repository
+1. Ask the agent to add a function to an existing service that calls a repository.
 2. Does it write code, run lint, read the error, and self-correct without intervention?
-3. Introduce a deliberate type error — does the agent fix it?
+3. Introduce a deliberate type error. Does the agent fix it?
 
 If the agent still needs you to correct mechanical errors (wrong imports, types, error class), the loops are not tight enough. Typical causes: linter rules without remediation messages, too many `any` types, tests that miss the paths the agent modifies.
 
-## When This Backfires
+## When this backfires
 
-The L1→L2 transition is high-leverage but not free. Three conditions make it a poor investment:
+The L1→L2 transition pays off, but it is not free. Three conditions make it a poor investment:
 
-- **Large existing `any` surface**: strict mode on a codebase with hundreds of implicit `any` types floods unrelated files with errors. Fix cost dwarfs the agent benefit until most are annotated. Start with `noImplicitAny` scoped to new files; expand incrementally.
-- **High-churn paths with low test stability**: if integration tests on agent-critical paths break frequently from schema or environment drift, agents learn to ignore failing tests rather than treat them as [backpressure](../../agent-design/agent-backpressure.md) signal. Stabilize the environment before relying on tests as a feedback source.
-- **Monorepos with shared strict config**: enabling strict mode in one package cascades errors into shared libraries consumed elsewhere. Coordinate across package owners or use path-scoped tsconfig overrides to contain the blast radius.
+- Large existing `any` surface: strict mode on a codebase with hundreds of implicit `any` types floods unrelated files with errors. Fix cost dwarfs the agent benefit until most are annotated. Start with `noImplicitAny` scoped to new files, then expand incrementally.
+- High-churn paths with low test stability: if integration tests on agent-critical paths break often from schema or environment drift, agents learn to ignore failing tests rather than treat them as a [backpressure](../../agent-design/agent-backpressure.md) signal. Stabilize the environment before you rely on tests as a feedback source.
+- Monorepos with shared strict config: enabling strict mode in one package cascades errors into shared libraries used elsewhere. Coordinate across package owners, or use path-scoped tsconfig overrides to limit how far the errors spread.
 
 ---
 
 ## Key Takeaways
 
-- **Agent autonomy scales with backpressure quality**, not with model capability ([Anthropic](https://code.claude.com/docs/en/best-practices)). A codebase with strict types and meaningful test coverage on critical paths supplies the [backpressure](../../agent-design/agent-backpressure.md) that enables autonomous agent iteration. A codebase without them requires manual review of every output.
-- **Linter messages are the best form of agent context**: they fire at the exact moment and location of a violation. Write custom rules with actionable remediation messages.
-- **Prioritize integration tests** over mocked unit tests for agent-critical paths — the structural-verification finding LangChain reports from its Terminal Bench gains. They catch the errors agents actually make: ORM misuse, layer violations, transaction handling.
-- **Pre-commit hooks are not optional**. They are the gate that prevents the feedback loop from being bypassed. Without them, agents can commit and push non-compliant code that the [Ralph Wiggum Loop](../../agent-design/ralph-wiggum-loop.md) would otherwise catch at the commit boundary.
-- **Fix type errors incrementally**. Enabling strict mode produces errors — this is expected. Each error fixed is a potential agent mistake prevented.
+- Agent autonomy scales with backpressure quality, not with model capability ([Anthropic](https://code.claude.com/docs/en/best-practices)). A codebase with strict types and meaningful test coverage on critical paths supplies the [backpressure](../../agent-design/agent-backpressure.md) that enables autonomous agent iteration. A codebase without them requires manual review of every output.
+- Linter messages are the best form of agent context: they fire at the exact moment and location of a violation. Write custom rules with actionable remediation messages.
+- Prioritize integration tests over mocked unit tests for agent-critical paths — the structural-verification finding LangChain reports from its Terminal Bench gains. They catch the errors agents actually make: ORM misuse, layer violations, transaction handling.
+- Pre-commit hooks are not optional. They are the gate that prevents the feedback loop from being bypassed. Without them, agents can commit and push non-compliant code that the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md) would otherwise catch at the commit boundary.
+- Fix type errors incrementally. Enabling strict mode produces errors — this is expected. Each error fixed is a potential agent mistake prevented.
 
 ## Related
 

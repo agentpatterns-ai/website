@@ -17,70 +17,73 @@ maturity: adopted
 
 > Strip intermediate tool results from conversation history once they have served their purpose to keep active context lean without losing the work product.
 
-**Learn it hands-on:** [Masking the Tail](https://learn.agentpatterns.ai/context-engineering/observation-masking/) — guided lesson with quizzes.
+Learn it hands-on with [Masking the Tail](https://learn.agentpatterns.ai/context-engineering/observation-masking/), a guided lesson with quizzes.
 
-## The Problem
+## The problem
 
-Tool calls are a primary source of context growth in agent workflows. Every tool output — a file read, a search result, test runner output, a lint report — injects tokens into the context window. In software engineering agent benchmarks, observation tokens account for roughly 84% of trajectory content, and most are consumed once during synthesis and not referenced again ([arXiv 2508.21433](https://arxiv.org/abs/2508.21433)). They remain in context, consuming budget and diluting attention.
+Tool calls are a primary source of context growth in agent workflows. Every tool output injects tokens into the context window: a file read, a search result, test runner output, a lint report. In software engineering agent benchmarks, observation tokens account for roughly 84% of trajectory content. The agent consumes most of them once during synthesis and never references them again ([arXiv 2508.21433](https://arxiv.org/abs/2508.21433)). They stay in context, consuming budget and diluting attention.
 
-The useful artifact of a tool call is typically what the agent produced from it (the code written, the decision made, the summary), not the raw tool output that informed it.
+The useful artifact of a tool call is usually what the agent produced from it: the code written, the decision made, the summary. The raw tool output that informed it is not.
 
-## How Observation Masking Works
+## How observation masking works
 
-Observation masking removes processed tool outputs from conversation history before the next inference call. The agent synthesises a result from the tool output; once synthesis is complete, the raw output is replaced with a [compact summary](context-compression-strategies.md) or dropped entirely.
+Observation masking removes processed tool outputs from conversation history before the next inference call. The agent synthesizes a result from the tool output. Once synthesis is complete, the raw output is replaced with a [compact summary](context-compression-strategies.md) or dropped entirely.
 
-The retention decision is based on whether the agent will need to reference the tool output again:
+The retention decision turns on whether the agent will need to reference the tool output again:
 
 | Tool output type | Retain or mask? |
 |-----------------|----------------|
 | File content (read once, then edited) | Mask after edit |
-| Search results (synthesised into plan) | Mask after synthesis |
+| Search results (synthesized into plan) | Mask after synthesis |
 | Test output (failure mode identified) | Mask after fix is applied |
 | Schema definition (queried throughout task) | Retain |
 | API response (used in one step) | Mask after use |
 | Reference documentation (checked repeatedly) | Retain |
 
-The heuristic: if the agent has extracted what it needs from the tool output and expressed it as a decision or artifact, the raw output is no longer needed.
+The heuristic is simple. Once the agent has extracted what it needs from the tool output and expressed it as a decision or artifact, the raw output is no longer needed.
 
-## Implementation Considerations
+## Implementation considerations
 
-Observation masking is applied at the conversation history management layer — post-processing the message list before each inference call, not after:
+Apply observation masking at the conversation history management layer. Post-process the message list before each inference call, not after:
 
-1. Track which tool outputs have been referenced in agent outputs
-2. After an agent turn that references a tool output, flag the output as processed
-3. Before the next inference call, remove flagged tool outputs from the history
-4. Optionally replace them with a one-line summary ("read `src/auth.ts`, identified session validation pattern")
+1. Track which tool outputs the agent has referenced in its outputs.
+2. After an agent turn that references a tool output, flag the output as processed.
+3. Before the next inference call, remove flagged tool outputs from the history.
+4. Optionally replace them with a one-line summary, such as "read `src/auth.ts`, identified session validation pattern".
 
-The one-line replacement preserves agent traceability (the agent can see what it consulted) without the full token cost of the original output.
+The one-line replacement preserves traceability, so the agent can see what it consulted, without the full token cost of the original output.
 
-## Why It Works
+## Why it works
 
-Retaining stale tool outputs degrades inference quality through two mechanisms. First, transformer attention is quadratic: adding tokens raises the cost of every subsequent call and spreads attention thinner across all token pairs ([context rot research, Chroma 2025](https://www.trychroma.com/research/context-rot)). Second, semantically similar but outdated content — a file read that has since been edited — acts as a distractor; models attend to it even when it no longer reflects the current state, skewing generation toward stale assumptions. Removing processed outputs eliminates both the cost and the distraction without discarding the synthesised result that the agent actually needs.
+Retaining stale tool outputs degrades inference quality two ways. First, transformer attention is quadratic: adding tokens raises the cost of every later call and spreads attention thinner across all token pairs ([context rot research, Chroma 2025](https://www.trychroma.com/research/context-rot)). Second, outdated content that still looks relevant acts as a distractor. A file read that has since been edited is one example. Models attend to it even when it no longer reflects the current state, which skews generation toward stale assumptions. Removing processed outputs cuts both the cost and the distraction, and it keeps the synthesized result that the agent actually needs.
 
-## What Masking Does Not Address
+## What masking does not address
 
-Observation masking reduces context growth from intermediate tool results — it does not address:
+Observation masking reduces context growth from intermediate tool results. It does not address:
 
 - System prompt size
 - Conversation history from prior reasoning turns
 - Tool outputs the agent needs to retain for repeated reference
 
-For those cases, combine masking with context compression (tiered summarisation and offloading) and on-demand retrieval for content the agent needs to consult multiple times.
+For those cases, combine masking with context compression (tiered summarization and offloading) and on-demand retrieval for content the agent needs to consult several times.
 
-## When This Backfires
+## When this backfires
 
-Masking is a heuristic, not a guarantee. It degrades quality when:
+Masking is a heuristic, not a guarantee. It degrades quality in four cases.
 
-- **Reference outputs are masked too early.** Schema definitions, API contracts, or documentation the agent consults repeatedly are not "single-use" — masking them forces the agent to re-read or hallucinate their contents on subsequent turns. Keep such content available through [on-demand retrieval](retrieval-augmented-agent-workflows.md) instead.
-- **Synthesis is not yet complete.** Masking a test failure output before the agent has produced and verified a fix removes the ground truth mid-task. The retention decision must be confirmed, not assumed.
-- **Models use extended reasoning.** Benchmarks show that masking reduces solve rate by ~10% for models with extended thinking enabled, where the model benefits from inspecting its full observation history during long chains of thought ([arXiv 2508.21433](https://arxiv.org/abs/2508.21433)). Prefer LLM-based summarisation over hard masking in those configurations.
-- **Domain differs from software engineering.** The efficiency advantage of masking assumes observation tokens dominate context (≈84% in SE benchmarks). In domains where observations are brief and reasoning turns are long, the gain is smaller and the risk of over-masking is higher.
+Reference outputs are masked too early. Schema definitions, API contracts, or documentation the agent consults repeatedly are not single-use. Masking them forces the agent to re-read or hallucinate their contents on later turns. Keep such content available through [on-demand retrieval](retrieval-augmented-agent-workflows.md) instead.
+
+Synthesis is not yet complete. Masking a test failure output before the agent has produced and verified a fix removes the ground truth mid-task. Confirm the retention decision, do not assume it.
+
+Models use extended reasoning. Benchmarks show that masking reduces solve rate by about 10% for models with extended thinking enabled, where the model benefits from inspecting its full observation history during long chains of thought ([arXiv 2508.21433](https://arxiv.org/abs/2508.21433)). Prefer LLM-based summarization over hard masking in those configurations.
+
+Domain differs from software engineering. The efficiency advantage of masking assumes observation tokens dominate context, about 84% in SE benchmarks. In domains where observations are brief and reasoning turns are long, the gain is smaller and the risk of over-masking is higher.
 
 ## Example
 
-An agent is asked to refactor `src/auth/session.ts`. It reads the file, makes the edit, then runs the test suite. Without masking, all three tool outputs remain in the conversation history:
+An agent is asked to refactor `src/auth/session.ts`. It reads the file, makes the edit, then runs the test suite. Without masking, all three tool outputs stay in the conversation history.
 
-**Before masking — conversation history after three tool calls:**
+Before masking, the conversation history after three tool calls:
 
 ```
 [tool: read_file] → 312 lines of session.ts content
@@ -88,9 +91,9 @@ An agent is asked to refactor `src/auth/session.ts`. It reads the file, makes th
 [tool: run_tests] → 847 lines of pytest output, 1 failure
 ```
 
-All three outputs stay in context for the next inference call, even though the file content is now stale (it has been edited) and the passing test lines provide no further signal.
+All three outputs stay in context for the next inference call, even though the file content is now stale after the edit and the passing test lines give no further signal.
 
-**After masking — conversation history before the next inference call:**
+After masking, the conversation history before the next inference call:
 
 ```
 [masked: read_file src/auth/session.ts — read 312 lines, identified validateSession return type]

@@ -16,23 +16,23 @@ maturity: established
 
 > Distribute accuracy verification across every agent in a pipeline so no single agent is the sole gatekeeper.
 
-**Related lesson:** [Chain-of-Verification](https://learn.agentpatterns.ai/verification/chain-of-verification/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Chain-of-Verification](https://learn.agentpatterns.ai/verification/chain-of-verification/) covers this concept in a hands-on lesson with quizzes.
 
-## The Pattern
+## The pattern
 
-A fabricated claim can survive from research through to publish if only one stage checks accuracy. Layered accuracy defense assigns each agent in the pipeline an explicit verification responsibility, so claims must survive multiple independent checkpoints before they reach the reader.
+A fabricated claim can survive from research to publish if only one stage checks accuracy. Layered accuracy defense gives each agent in the pipeline an explicit verification job. Claims must then survive several independent checkpoints before they reach the reader.
 
-This mirrors [defense in depth](../security/defense-in-depth-agent-safety.md) from security — [NIST](https://csrc.nist.gov/glossary/term/defense_in_depth) defines it as layering heterogeneous controls "to ensure that attacks missed by one technology are caught by another." Assume each layer will sometimes fail, and build the pipeline so one layer's failure is caught by the next.
+This mirrors [defense in depth](../security/defense-in-depth-agent-safety.md) from security. [NIST](https://csrc.nist.gov/glossary/term/defense_in_depth) defines it as layering varied controls "to ensure that attacks missed by one technology are caught by another." Assume each layer will sometimes fail, and build the pipeline so the next layer catches that failure.
 
-## Layer Responsibilities
+## Layer responsibilities
 
-Each agent receives explicit instructions to reject unsourced information, not just "be accurate."
+Give each agent explicit instructions to reject unsourced information, not just to "be accurate."
 
-**Researcher** — output only findings that have a retrievable source URL. If a claim cannot be linked, exclude it. Do not summarize from memory — the [honesty-harness fabrication defense](honesty-harness-fabrication-defense.md) treats memory-sourced claims as the primary fabrication risk — and do not emit hedge tags, which push the verification burden onto downstream layers with less context.
+Researcher: output only findings that have a retrievable source URL. If you cannot link a claim, exclude it. Do not summarize from memory — the [honesty-harness fabrication defense](honesty-harness-fabrication-defense.md) treats memory-sourced claims as the main fabrication risk. Do not emit hedge tags either, because they push the verification work onto downstream layers that have less context.
 
-**Writer** — use only material present in the research notes. If a load-bearing claim has no supporting note, omit it and append an outstanding-research item naming the missing source.
+Writer: use only material present in the research notes. If a load-bearing claim has no supporting note, omit it and append an outstanding-research item naming the missing source.
 
-**Reviewer** — flag any assertion in the draft that has no inline citation, the [chain-of-verification](chain-of-verification-coding-agents.md) pass applied to prose. This is the catch layer for anything that slipped through, and treats an unsourced claim as a critical defect to be removed or sourced before merge.
+Reviewer: flag any assertion in the draft that has no inline citation. This is the [chain-of-verification](chain-of-verification-coding-agents.md) pass applied to prose. It is the catch layer for anything that slipped through, and it treats an unsourced claim as a critical defect to remove or source before merge.
 
 ```mermaid
 graph TD
@@ -47,23 +47,23 @@ graph TD
     F -->|Yes| G[Publish]
 ```
 
-## Why Multiple Layers
+## Why multiple layers
 
-A single "fact-checker" agent at the end of the pipeline has to re-examine the entire artifact. It may miss confidently-stated claims, may trust citations without verifying them, or may share the writer's knowledge gaps. Splitting the work helps because each layer checks a distinct property — source existence, note fidelity, and citation completeness — so an error must evade three different detection criteria to reach the reader, not the same check repeated. A [2025 review of LLM fact-checking](https://arxiv.org/abs/2508.03860) reaches a similar conclusion: integrated approaches that combine retrieval, prompting, and external evidence validation outperform any single metric or checkpoint.
+A single "fact-checker" agent at the end of the pipeline has to re-examine the whole artifact. It may miss confidently stated claims, may trust citations without verifying them, or may share the writer's knowledge gaps. Splitting the work helps because each layer checks a distinct property — source existence, note fidelity, and citation completeness. An error must then evade three different detection criteria to reach the reader, rather than the same check repeated. A [2025 review of LLM fact-checking](https://arxiv.org/abs/2508.03860) reaches a similar conclusion: integrated approaches that combine retrieval, prompting, and external evidence validation outperform any single metric or checkpoint.
 
-## What Each Layer Checks
+## What each layer checks
 
-| Layer | Input | Check | Reject Condition |
+| Layer | Input | Check | Reject condition |
 |-------|-------|-------|-----------------|
 | Researcher | Raw sources | Can this claim be linked? | No URL → exclude |
 | Writer | Research notes | Is this from my notes? | Unknown source → omit, open research item |
 | Reviewer | Draft page | Is every claim sourced inline? | Unsourced claim → flag for [removal or sourcing](chain-of-verification-coding-agents.md) |
 
-## Anti-Pattern
+## Anti-pattern
 
-Relying on a single review agent at the end of the pipeline — instead of a [multi-pass review](five-pass-blunder-hunt.md) — means it sees confident, well-written prose with plausible citations and cannot distinguish fabricated confidence from real sourcing unless it re-verifies every claim, which is expensive and still fallible.
+Relying on a single review agent at the end of the pipeline, instead of a [multi-pass review](five-pass-blunder-hunt.md), means it sees confident, well-written prose with plausible citations. It cannot tell fabricated confidence from real sourcing unless it re-verifies every claim, which is expensive and still fallible.
 
-A second anti-pattern is letting intermediate layers emit hedge tags instead of excluding the claim. Hedge tags defer the work to a downstream layer with less context, and in auto-merged pipelines no human is positioned to clear them. The claim either has a source or it does not exist.
+A second anti-pattern lets intermediate layers emit hedge tags instead of excluding the claim. Hedge tags defer the work to a downstream layer with less context, and in auto-merged pipelines no human is positioned to clear them. The claim either has a source or it does not exist.
 
 ## Key Takeaways
 
@@ -74,15 +74,15 @@ A second anti-pattern is letting intermediate layers emit hedge tags instead of 
 - This is defense in depth applied to content accuracy, not security
 - Anti-pattern: a single fact-checker at the end of the pipeline
 
-## When This Backfires
+## When this backfires
 
-Layered verification adds latency and cost proportional to the number of agents. Three round-trips through researcher → writer → reviewer is appropriate for high-stakes content pipelines, but can be excessive for:
+Layered verification adds latency and cost in proportion to the number of agents. Three round-trips through researcher → writer → reviewer suits high-stakes content pipelines, but can be excessive for:
 
-- **Simple lookup tasks** where a single agent retrieves and returns a fact — adding a reviewer layer adds cost without addressing the root failure mode (model fabrication without retrieval).
-- **Rapid iteration contexts** where speed matters more than accuracy — under [risk-based shipping](risk-based-shipping.md), a draft that ships in one pass and gets corrected by a human may be faster than a three-agent pipeline.
-- **Correlated knowledge gaps** — if the writer and reviewer share the same training data blind spots, both layers will miss the same class of errors. Independent layers require genuinely different perspectives or constraints, not just role labels.
+- simple lookup tasks where a single agent retrieves and returns a fact — a reviewer layer adds cost without addressing the root failure mode (model fabrication without retrieval)
+- rapid iteration contexts where speed matters more than accuracy — under [risk-based shipping](risk-based-shipping.md), a draft that ships in one pass and gets corrected by a human may be faster than a three-agent pipeline
+- correlated knowledge gaps — if the writer and reviewer share the same training-data blind spots, both layers miss the same class of errors. Independent layers need genuinely different perspectives or constraints, not just role labels
 
-Chaining agents does not automatically reduce errors — without disciplined handoffs it can amplify them. A 2025 study of role-specialized pipelines ([Planner → Executor → Critic](https://arxiv.org/abs/2510.07614)) finds that in sequential multi-agent systems "errors quietly pass from one stage to the next": a confident but wrong intermediate output gets written into shared context as ground truth, and a downstream layer tends to align with it rather than push back. Layered accuracy defense only pays off when each handoff forces the next layer to re-derive what it checks from the source — the same logic as [incremental verification](incremental-verification.md), where each checkpoint re-checks rather than trusting the prior step. A reviewer that trusts the writer's framing instead of re-verifying against the citation adds latency without adding a real checkpoint.
+Chaining agents does not automatically reduce errors. Without disciplined handoffs it can amplify them. A 2025 study of role-specialized pipelines ([Planner → Executor → Critic](https://arxiv.org/abs/2510.07614)) finds that in sequential multi-agent systems "errors quietly pass from one stage to the next": a confident but wrong intermediate output gets written into shared context as ground truth, and a downstream layer tends to align with it rather than push back. Layered accuracy defense only pays off when each handoff forces the next layer to re-derive what it checks from the source. This is the same logic as [incremental verification](incremental-verification.md), where each checkpoint re-checks rather than trusting the prior step. A reviewer that trusts the writer's framing instead of re-verifying against the citation adds latency without adding a real checkpoint.
 
 The pattern works when each layer has a structurally different task: the researcher fetches real URLs, the writer is constrained to those notes, and the reviewer checks every assertion against a citation. If two layers are doing the same check, one is redundant.
 
@@ -90,7 +90,7 @@ The pattern works when each layer has a structurally different task: the researc
 
 A three-agent content pipeline where each agent's system prompt encodes its verification responsibility.
 
-**Researcher prompt excerpt:**
+Researcher prompt excerpt:
 
 ```text
 You are a research agent. For every claim you include in your output,
@@ -99,7 +99,7 @@ URL for a claim, exclude it entirely. Never summarize from memory —
 only output findings backed by a URL you retrieved in this session.
 ```
 
-**Writer prompt excerpt:**
+Writer prompt excerpt:
 
 ```text
 You are a writer agent. Use ONLY the research notes provided below.
@@ -109,7 +109,7 @@ an "Outstanding Research" item naming the missing source instead of
 writing the claim into the draft. Do not emit hedge tags.
 ```
 
-**Reviewer prompt excerpt:**
+Reviewer prompt excerpt:
 
 ```text
 You are a reviewer agent. Read the draft and check every factual claim.

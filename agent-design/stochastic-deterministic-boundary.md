@@ -19,24 +19,24 @@ maturity: adopted
 
 The stochastic-deterministic boundary (SDB) names the transition where an LLM's probabilistic output becomes a deterministic system effect. Naming it as a first-class object places a typed verifier and structured reject signal at every such transition, instead of scattering ad-hoc `try/except` downstream where the error context is gone ([Srinivasan, 2026 — arXiv:2605.20173](https://arxiv.org/abs/2605.20173)).
 
-## When to Apply
+## When to apply
 
 Apply the contract only when at least one condition holds:
 
-- **Multiple LLM-to-action transitions.** Two or more call-sites whose verifier and commit semantics differ (planner emitting patches, router emitting tool calls, refunder emitting API requests).
-- **Non-trivial commit side effects.** The commit writes to external state — database, billing API, deployment — where partial writes are expensive to reverse without [rollback-first design](rollback-first-design.md).
-- **Replay or audit requirements.** Compliance or eval pipelines need to re-run verifier and commit against new model versions without re-rolling the proposer.
+- Multiple LLM-to-action transitions: two or more call-sites whose verifier and commit semantics differ (planner emitting patches, router emitting tool calls, refunder emitting API requests).
+- Non-trivial commit side effects: the commit writes to external state — database, billing API, deployment — where partial writes are expensive to reverse without [rollback-first design](rollback-first-design.md).
+- Replay or audit requirements: compliance or eval pipelines need to re-run verifier and commit against new model versions without re-rolling the proposer.
 
 Single-call assistants and read-only flows do not need the contract. Anthropic warns frameworks "create extra layers of abstraction that can obscure the underlying prompts and responses" — start simple and add layers only when performance demands it ([Anthropic, Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents); see [Anthropic's Effective Agents Framework](anthropic-effective-agents-framework.md) for pattern selection guidance).
 
-## The Four Parts
+## The four parts
 
 | Part | Role | Determinism |
 |------|------|-------------|
-| **Proposer** | LLM call that emits a candidate action (tool call, patch, JSON payload). | Stochastic |
-| **Verifier** | Typed check that the proposal is well-formed and policy-conformant. Schema validation, tests, lint, policy rules, or a second model — see [inference-time tool-call reviewer](inference-time-tool-call-reviewer.md). | Deterministic where possible |
-| **Commit** | The actual write — tool dispatch, DB write, API call, file mutation. | Deterministic |
-| **Reject signal** | Structured failure message returned to the proposer with enough specificity to drive a revision. | Deterministic |
+| Proposer | LLM call that emits a candidate action (tool call, patch, JSON payload). | Stochastic |
+| Verifier | Typed check that the proposal is well-formed and policy-conformant. Schema validation, tests, lint, policy rules, or a second model — see [inference-time tool-call reviewer](inference-time-tool-call-reviewer.md). | Deterministic where possible |
+| Commit | The actual write — tool dispatch, DB write, API call, file mutation. | Deterministic |
+| Reject signal | Structured failure message returned to the proposer with enough specificity to guide a revision. | Deterministic |
 
 ```mermaid
 graph LR
@@ -48,30 +48,30 @@ graph LR
 
 The reject signal is the part most often missing. A boolean verifier leaves the proposer guessing; one that returns the failed field, the violated rule, and an example of acceptable input converges in one round — the same structured-feedback loop an [evaluator-optimizer](evaluator-optimizer.md) runs.
 
-## Why It Works
+## Why it works
 
 Most production agent incidents happen at the transition point, not inside the proposer or commit. In the MAST failure taxonomy that Augment Code's production analysis draws on, inter-agent misalignment — where one component's output is incompatible with what the next consumes, such as a planner emitting YAML while the executor expects JSON — is one of the largest failure categories, roughly a third of observed multi-agent failures ([Augment Code, 2026](https://www.augmentcode.com/guides/why-multi-agent-llm-systems-fail-and-how-to-fix-them)). Naming the SDB forces a typed verifier and structured reject at every transition, where failure context is still local.
 
 Separating the stochastic proposer from the deterministic commit also makes "replay divergence" debuggable — the failure mode where re-executing a logged session against an updated model produces different outputs. With the proposer's output logged separately, verifier and commit can be replayed deterministically against any new model version ([Srinivasan, 2026](https://arxiv.org/abs/2605.20173)).
 
-## Where It Fits
+## Where it fits
 
-The SDB generalises the boundary that several existing patterns implement at different points in the loop:
+The SDB generalizes the boundary that several existing patterns implement at different points in the loop:
 
-- [Critic Agent](critic-agent-plan-review.md) places the contract at the *plan* stage — the verifier is a second model reviewing the full plan.
-- [Evaluator-Optimizer](evaluator-optimizer.md) places it around *generated output* in a refinement loop — the reject drives revisions until PASS.
-- [Inference-Time Tool-Call Reviewer](inference-time-tool-call-reviewer.md) places it at *each provisional tool call* — intercepted between proposer and harness dispatch.
+- [Critic Agent](critic-agent-plan-review.md) places the contract at the plan stage — the verifier is a second model reviewing the full plan.
+- [Evaluator-Optimizer](evaluator-optimizer.md) places it around generated output in a refinement loop — the reject drives revisions until PASS.
+- [Inference-Time Tool-Call Reviewer](inference-time-tool-call-reviewer.md) places it at each provisional tool call — intercepted between proposer and harness dispatch.
 
 Naming the SDB lets you discuss whether a system has a verifier at all, where it lives, and whether the reject is structured — independently of where in the loop the boundary sits.
 
-## When This Backfires
+## When this backfires
 
 The contract is over-engineered in these conditions:
 
-- **Single-call assistants.** With one LLM call and one downstream effect, the four parts collapse to "parse the JSON; if it parses, write it." Spelling out four roles adds vocabulary without reducing defects ([Anthropic, Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
-- **Idempotent read-only flows.** If the commit has no side effect (search, RAG read, summarisation), there is nothing to roll back — the reject is just "show retry" and the contract is over-specified.
-- **Low-stakes internal tools.** When the cost of a bad commit is low, verifier overhead exceeds the avoided incident cost; premature modelling "can slow iteration" ([Speakeasy, Agentic Architectures](https://www.speakeasy.com/mcp/using-mcp/ai-agents/architecture-patterns)).
-- **Tight latency budgets with no cheap verifier.** An independent verifier model serialises an extra call into the critical path. For sub-second budgets the verifier becomes the bottleneck unless it is a deterministic function check.
+- Single-call assistants: with one LLM call and one downstream effect, the four parts collapse to "parse the JSON; if it parses, write it." Spelling out four roles adds vocabulary without reducing defects ([Anthropic, Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
+- Idempotent read-only flows: if the commit has no side effect (search, RAG read, summarization), there is nothing to roll back — the reject is just "show retry" and the contract is over-specified.
+- Low-stakes internal tools: when the cost of a bad commit is low, verifier overhead exceeds the avoided incident cost; premature modeling "can slow iteration" ([Speakeasy, Agentic Architectures](https://www.speakeasy.com/mcp/using-mcp/ai-agents/architecture-patterns)).
+- Tight latency budgets with no cheap verifier: an independent verifier model serializes an extra call into the critical path. For sub-second budgets the verifier becomes the bottleneck unless it is a deterministic function check.
 
 ## Example
 

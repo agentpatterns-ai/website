@@ -18,24 +18,24 @@ maturity: emerging
 
 > Load relevant context before asking an agent to act — the order information enters the context window shapes the quality of everything that follows.
 
-**Learn it hands-on:** [Prime the Pump](https://learn.agentpatterns.ai/context-engineering/prime-the-pump/) — guided lesson with quizzes.
+Learn it hands-on: [Prime the Pump](https://learn.agentpatterns.ai/context-engineering/prime-the-pump/) — guided lesson with quizzes.
 
 !!! note "Also known as"
     Providing Context to Agents, Seeding Agent Context, Breadcrumbs in Code. Context priming is the general technique of loading context before a task. For embedding persistent contextual hints directly in the codebase for agents to discover, see [Seeding Agent Context](seeding-agent-context.md).
 
-## How It Works
+## How it works
 
-Agents don't retrieve project knowledge on their own. They work with what's in the context window at the time they generate a response. A cold prompt — "add authentication to the API" — forces the agent to guess at existing patterns, naming conventions, and architecture. Priming reverses this: you [load the relevant context first](context-engineering.md), then ask.
+Agents do not retrieve project knowledge on their own. They work with whatever is in the context window when they generate a response. A cold prompt — "add authentication to the API" — forces the agent to guess at existing patterns, naming conventions, and architecture. Priming reverses this: you [load the relevant context first](context-engineering.md), then ask.
 
 An agent that has read your middleware layer, auth config, and user model before implementing authentication produces output that fits the codebase. Without that context, it produces generic code that defaults to common framework boilerplate rather than project-specific patterns.
 
-## Priming Strategies
+## Priming strategies
 
-### Read Before Write
+### Read before write
 
 Have the agent read the files it will touch — and the files adjacent to them — before making any changes. For a new feature, that means existing similar features, the relevant module's entry point, and any shared utilities it will call.
 
-### Progressive Context Loading
+### Progressive context loading
 
 Start broad, then narrow:
 
@@ -45,23 +45,23 @@ Start broad, then narrow:
 
 Dumping everything at once is less effective than building understanding incrementally. Language models attend more reliably to content at the start and end of a context window than to content buried in the middle — the [lost-in-the-middle effect](https://arxiv.org/abs/2307.03172). Loading architecture first, then specifics, keeps the most critical framing at the attention-favored start of context rather than interleaved with detail.
 
-### Explore Before Implement
+### Explore before implement
 
 Use a read-only exploration phase before switching to implementation mode. Some tools support this explicitly — Claude Code's [plan mode](../tools/claude/plan-mode.md) separates reasoning from execution, letting the agent map out its approach before writing any code.
 
-### Use Plan Mode
+### Use plan mode
 
 When your tool supports it, require a [plan step](../tools/claude/plan-mode.md) before implementation. This forces the agent to surface its understanding of the codebase and the task. Review the plan, correct any misunderstandings, then approve execution. Catching a wrong assumption at plan time costs nothing; catching it after implementation costs a rewrite.
 
-## Anti-Patterns
+## Anti-patterns
 
-**Cold implementation**: Asking the agent to implement without reading existing code first. The agent defaults to generic patterns rather than project-specific ones.
+Cold implementation: asking the agent to implement without reading existing code first. The agent defaults to generic patterns rather than project-specific ones.
 
-**One-shot context dump**: Pasting all relevant files into a single prompt. This treats context as a bulk transfer rather than a [structured loading sequence](phase-specific-context-assembly.md). Order within the dump still matters — information at the start and end of a context window receives more attention than information in the middle, a phenomenon documented in [lost-in-the-middle research](https://arxiv.org/abs/2307.03172).
+One-shot context dump: pasting all relevant files into a single prompt. This treats context as a bulk transfer rather than a [structured loading sequence](phase-specific-context-assembly.md). Order within the dump still matters — information at the start and end of a context window receives more attention than information in the middle, a phenomenon documented in [lost-in-the-middle research](https://arxiv.org/abs/2307.03172).
 
 ## Example
 
-The following Claude Code session demonstrates progressive context loading before implementing a new authentication endpoint. Context is built broad-to-narrow before any changes are made.
+The following Claude Code session shows progressive context loading before implementing a new authentication endpoint. It builds context broad-to-narrow before making any changes.
 
 ```bash
 # Step 1 — architecture overview
@@ -88,16 +88,16 @@ Use the refreshToken field on the User model. Return a new access token signed w
 
 Contrast this with a cold prompt that provides none of the above context — the agent would fall back to generic Express boilerplate, require rework to match the actual middleware signature, and likely miss the `refreshToken` field entirely.
 
-## Why It Works
+## Why it works
 
-Transformer models generate each token conditioned on all tokens currently in context — there is no separate "memory" step. When the agent generates code, it pattern-matches against the examples it can see right now. Loading your actual middleware signature, naming conventions, and config shape before the task puts those patterns directly in the distribution the model samples from, making project-specific outputs more probable and generic boilerplate less probable. This is the same mechanism that makes [few-shot prompting effective](https://arxiv.org/abs/2005.14165): in-context examples shift output distribution without any weight update. [Repository-level prompt generation research](https://arxiv.org/abs/2206.12839) shows that conditioning code models on relevant repository files measurably improves output fit compared to single-file prompts.
+Transformer models generate each token conditioned on all tokens currently in context — there is no separate "memory" step. When the agent generates code, it pattern-matches against the examples it can see right now. Loading your actual middleware signature, naming conventions, and config shape before the task puts those patterns directly in the distribution the model samples from. That makes project-specific outputs more probable and generic boilerplate less probable. This is the same mechanism that makes [few-shot prompting effective](https://arxiv.org/abs/2005.14165): in-context examples shift output distribution without any weight update. [Repository-level prompt generation research](https://arxiv.org/abs/2206.12839) shows that conditioning code models on relevant repository files measurably improves output fit compared to single-file prompts.
 
-## When This Backfires
+## When this backfires
 
-- **Context window saturation**: Pre-loading large files pushes task instructions and earlier reasoning toward the middle of the context window, where attention degrades. Long files should be trimmed or summarized before loading ([Context Compression Strategies](context-compression-strategies.md)).
-- **Low-precision context**: Loading loosely related files adds noise that competes with the relevant signal. If the loaded content doesn't directly constrain the task output, it can steer the agent toward irrelevant patterns.
-- **Short, self-contained tasks**: For tasks with no codebase dependency — writing a pure-function utility, converting a data format — priming adds latency and [token cost](context-budget-allocation.md) without affecting output quality. Apply selectively.
-- **Stale context**: If loaded files don't reflect the current state of the codebase (out-of-date after a refactor), the agent anchors on the wrong patterns. Verify that primed files are current before loading.
+- Context window saturation: pre-loading large files pushes task instructions and earlier reasoning toward the middle of the context window, where attention degrades. Trim or summarize long files before loading them ([Context Compression Strategies](context-compression-strategies.md)).
+- Low-precision context: loading loosely related files adds noise that competes with the relevant signal. If the loaded content does not directly constrain the task output, it can steer the agent toward irrelevant patterns.
+- Short, self-contained tasks: for tasks with no codebase dependency — writing a pure-function utility, converting a data format — priming adds latency and [token cost](context-budget-allocation.md) without improving output quality. Apply it selectively.
+- Stale context: if loaded files do not reflect the current state of the codebase (out-of-date after a refactor), the agent anchors on the wrong patterns. Verify that primed files are current before loading them.
 
 ## Key Takeaways
 

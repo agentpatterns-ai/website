@@ -17,17 +17,17 @@ maturity: emerging
 
 > The reasoning-complexity trade-off: more capable models produce more bloated, coupled code, not cleaner architecture — and output volume predicts the decay.
 
-## The Finding
+## The finding
 
-[Zhu, Tsantalis, and Rigby (2026)](https://arxiv.org/abs/2605.02741) audited technical debt in AI-generated software across single-file tasks and agent-generated systems. Three findings:
+[Zhu, Tsantalis, and Rigby (2026)](https://arxiv.org/abs/2605.02741) audited technical debt in AI-generated software across single-file tasks and agent-generated systems. They report three findings:
 
-- **Machine signature of defects** — AI-generated code carries a distinct flaw pattern, not a smaller version of human flaws.
-- **Reasoning-Complexity Trade-off** — capability and architectural quality move in opposite directions.
-- **Volume-Quality Inverse Law** — code volume is a near-perfect predictor of structural degradation, the same bloat tracked in [Abstraction Bloat](abstraction-bloat.md).
+- Machine signature of defects: AI-generated code carries a distinct flaw pattern, not a smaller version of human flaws.
+- Reasoning-complexity trade-off: capability and architectural quality move in opposite directions.
+- Volume-quality inverse law: code volume predicts structural degradation almost perfectly, the same bloat tracked in [Abstraction Bloat](abstraction-bloat.md).
 
 Functional correctness does not predict maintainability. Detailed prompting does not produce smaller, less-coupled code ([Zhu et al.](https://arxiv.org/abs/2605.02741)).
 
-## Why It Matters
+## Why it matters
 
 The default upgrade path — swap to the next-generation model — buys capability and pays in maintenance debt. AI-assisted repos show the same direction independently: a [76% rise in LOC and 39% rise in cognitive complexity](https://agilepainrelief.com/blog/ai-generated-code-quality-problems/), an [8x spike in duplicated blocks 2021-2024](https://mikemason.ca/writing/ai-coding-agents-jan-2026/), and a [refactoring share that fell from 25% to under 10%](https://mikemason.ca/writing/ai-coding-agents-jan-2026/) of commits.
 
@@ -41,36 +41,36 @@ graph LR
     F --> H[Architectural decay]
 ```
 
-## What Doesn't Fix It
+## What does not fix it
 
-**Tests passing.** Functional correctness does not predict structural quality ([Zhu et al.](https://arxiv.org/abs/2605.02741)). Green CI is consistent with steeply declining maintainability.
+Tests passing. Functional correctness does not predict structural quality ([Zhu et al.](https://arxiv.org/abs/2605.02741)). Green CI sits alongside steeply declining maintainability.
 
-**Longer prompts.** Detailed instructions do not reverse the trend at the model layer. The [Fowler/Garg notification case study](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) records a single-channel request returning rate limiting, analytics, and webhooks — features the prompt did not request.
+Longer prompts. Detailed instructions do not reverse the trend at the model layer. The [Fowler/Garg notification case study](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) records a single-channel request returning rate limiting, analytics, and webhooks — features the prompt did not request.
 
-**Bigger models.** This is the trade-off itself ([Zhu et al.](https://arxiv.org/abs/2605.02741)).
+Bigger models. This is the trade-off itself ([Zhu et al.](https://arxiv.org/abs/2605.02741)).
 
-## What Does Help
+## What does help
 
-Workflow gates that operate above the prompt layer:
+Use workflow gates that operate above the prompt layer:
 
-- **Architectural foresight before generation.** [Design-first collaboration](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) gates implementation behind explicit approval — no code until the approach is agreed.
-- **Volume as a quality signal.** Treat output size as a leading indicator; if line count is high relative to the requirement, structural degradation is the prior.
-- **Post-generation cleanup.** [Entropy-reduction agents](../workflows/entropy-reduction-agents.md) and scheduled garbage-collection runs ([Fowler/Boeckeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)) target bloat that prompt-time controls miss.
-- **Deterministic enforcement.** Cyclomatic complexity, function-length, and duplication thresholds catch what prompts cannot — see [hooks for enforcement vs prompts for guidance](../instructions/hooks-vs-prompts.md).
+- Architectural foresight before generation: [design-first collaboration](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) gates implementation behind explicit approval, so no code lands until the approach is agreed.
+- Volume as a quality signal: treat output size as a leading indicator. If line count is high relative to the requirement, expect structural degradation.
+- Post-generation cleanup: [entropy-reduction agents](../workflows/entropy-reduction-agents.md) and scheduled garbage-collection runs ([Fowler/Boeckeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)) target bloat that prompt-time controls miss.
+- Deterministic enforcement: cyclomatic complexity, function-length, and duplication thresholds catch what prompts cannot, as in [hooks for enforcement vs prompts for guidance](../instructions/hooks-vs-prompts.md).
 
-## When This Doesn't Apply
+## When this does not apply
 
-The trade-off framing has narrow applicability where bloat carries no maintenance cost:
+The trade-off framing applies narrowly where bloat carries no maintenance cost:
 
-- **Greenfield throwaway code.** One-off scripts, demos, and prototypes are not maintained, so volume-quality drift has no observable cost surface.
-- **Templated boilerplate.** When LOC inflation comes from explicit scaffolding (CRUD, IaC, test fixtures), volume is not a structural signal — the inverse law's predictive power degrades.
-- **Solo small repos.** Without long-running maintenance horizons or shared ownership, structural degradation is local and tolerable.
+- Greenfield throwaway code: one-off scripts, demos, and prototypes are not maintained, so volume-quality drift has no cost surface to observe.
+- Templated boilerplate: when line-count inflation comes from explicit scaffolding (CRUD, IaC, test fixtures), volume is not a structural signal, and the inverse law's predictive power degrades.
+- Solo small repos: without long-running maintenance horizons or shared ownership, structural degradation stays local and tolerable.
 
 ## Example
 
 A team is choosing between two models for a billing-rules service. Both pass the test suite for the requested feature: apply a tiered discount across the `free`/`pro`/`enterprise` plans given a customer plan and order total.
 
-**Model A — smaller capability tier:**
+Model A, the smaller capability tier:
 
 ```python
 def apply_discount(plan: str, total: float) -> float:
@@ -80,7 +80,7 @@ def apply_discount(plan: str, total: float) -> float:
 
 Eight lines. One function. One responsibility.
 
-**Model B — larger capability tier, same prompt:**
+Model B, the larger capability tier, same prompt:
 
 ```python
 class DiscountStrategy(ABC):

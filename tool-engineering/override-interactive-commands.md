@@ -15,13 +15,13 @@ maturity: adopted
 
 > Suppress interactive prompts with a one-line instruction override so the same command definition serves both human-in-the-loop and fully automated execution.
 
-## The Problem
+## The problem
 
-Commands designed for human use include interactive decision points -- confirmation dialogs, picker menus, review steps -- via tools like `AskUserQuestion`. Pipeline agents running those same commands unattended hit these prompts and stall. The obvious fix -- duplicating each command into "interactive" and "batch" variants -- creates maintenance burden and drift.
+Commands built for people include interactive decision points: confirmation dialogs, picker menus, review steps. They reach those points through tools like `AskUserQuestion`. Pipeline agents run those same commands unattended, hit the prompts, and stall. The obvious fix is to duplicate each command into "interactive" and "batch" variants. That creates maintenance burden and drift.
 
 The override pattern keeps a single command definition and toggles interaction behavior at invocation time.
 
-## How It Works
+## How it works
 
 A pipeline agent invokes the Skill tool with an instruction override prepended to the command's normal arguments:
 
@@ -29,7 +29,7 @@ A pipeline agent invokes the Skill tool with an instruction override prepended t
 IMPORTANT: Do not use AskUserQuestion. Process this issue directly.
 ```
 
-The model's instruction-following suppresses the interactive tool call. The agent infers the values that would have come from user input and continues execution without pausing. (Note: background subagents suppress `AskUserQuestion` automatically — the tool call fails silently — but lack the explicit "infer values" framing this override provides. See [Claude Code subagent docs](https://docs.anthropic.com/en/docs/claude-code/sub-agents) for the distinction between foreground and background subagent behavior, and [anthropics/claude-code#18721](https://github.com/anthropics/claude-code/issues/18721) documenting that `AskUserQuestion` calls from subagents spawned via the Task tool are unavailable without explicit fallback guidance.)
+The model follows the instruction and suppresses the interactive tool call. The agent infers the values that would have come from user input, then continues without pausing. Background subagents suppress `AskUserQuestion` automatically — the tool call fails silently — but they lack the explicit "infer values" framing this override provides. See the [Claude Code subagent docs](https://docs.anthropic.com/en/docs/claude-code/sub-agents) for the difference between foreground and background subagent behavior, and [anthropics/claude-code#18721](https://github.com/anthropics/claude-code/issues/18721) documenting that `AskUserQuestion` calls from subagents spawned via the Task tool are unavailable without explicit fallback guidance.
 
 ```mermaid
 flowchart LR
@@ -44,25 +44,25 @@ flowchart LR
     A -->|override active| I[Infer values]
 ```
 
-## Structural Alternatives
+## Structural alternatives
 
-The prompt-level override is one of several mechanisms for non-interactive operation. Each trades off differently:
+The prompt-level override is one of several ways to run without interaction. Each makes a different trade-off:
 
 | Mechanism | Scope | Configuration | When to use |
 |-----------|-------|---------------|-------------|
-| **Prompt override** | Single invocation | None -- one line in the spawn prompt | Pipeline stages reusing interactive commands |
-| **Background subagent** | Subagent lifetime | `run_in_background: true` | Fire-and-forget tasks where `AskUserQuestion` failures are acceptable |
-| **`disallowedTools`** | Subagent definition | Frontmatter field | Permanently non-interactive subagents |
-| **`permissionMode: dontAsk`** | Subagent definition | Frontmatter field | Suppressing permission prompts (not `AskUserQuestion`) |
-| [**Headless mode** (`claude -p`)](../workflows/headless-claude-ci.md) | Entire session | CLI flag | CI/CD, cron jobs, no user session at all |
+| Prompt override | Single invocation | None -- one line in the spawn prompt | Pipeline stages reusing interactive commands |
+| Background subagent | Subagent lifetime | `run_in_background: true` | Fire-and-forget tasks where `AskUserQuestion` failures are acceptable |
+| `disallowedTools` | Subagent definition | Frontmatter field | Permanently non-interactive subagents |
+| `permissionMode: dontAsk` | Subagent definition | Frontmatter field | Suppressing permission prompts (not `AskUserQuestion`) |
+| [Headless mode (`claude -p`)](../workflows/headless-claude-ci.md) | Entire session | CLI flag | CI/CD, cron jobs, no user session at all |
 
-The prompt override is the lightest-weight option: no configuration changes, no separate command file, no architectural commitment. It works because the command already separates input-gathering from execution logic.
+The prompt override is the lightest option: no configuration changes, no separate command file, no architectural commitment. It works because the command already separates input-gathering from execution logic.
 
-## Design Implication: Separate Gather from Execute
+## Design implication: separate gather from execute
 
-The override pattern only works cleanly when commands separate "gather input" from "execute logic." If user interaction is interleaved with execution -- confirm after each step, pick mid-workflow -- the override suppresses prompts but leaves the agent guessing at partially-specified state.
+The override pattern only works cleanly when commands separate "gather input" from "execute logic". When interaction is interleaved with execution — confirm after each step, pick mid-workflow — the override suppresses the prompts but leaves the agent guessing at partially-specified state.
 
-**Fragile structure** -- interaction woven into execution:
+Fragile structure, with interaction woven into execution:
 
 ```markdown
 1. List open issues
@@ -74,7 +74,7 @@ The override pattern only works cleanly when commands separate "gather input" fr
 7. Commit and push
 ```
 
-**Clean structure** -- input gathered upfront, execution runs uninterrupted:
+Clean structure, with input gathered upfront so execution runs uninterrupted:
 
 ```markdown
 1. List open issues
@@ -89,9 +89,9 @@ With the clean structure, the override suppresses steps 2-3 and the rest runs id
 
 ## Example
 
-This repository's `pipeline.md` orchestrator reuses two interactive commands -- `save-idea.md` and `draft-content.md` -- in fully automated stages. Each command was written for human use with `AskUserQuestion` at decision points.
+This repository's `pipeline.md` orchestrator reuses two interactive commands — `save-idea.md` and `draft-content.md` — in fully automated stages. Each command was written for people, with `AskUserQuestion` at decision points.
 
-**Interactive invocation** (human user):
+Interactive invocation (human user):
 
 ```
 /save-idea
@@ -99,7 +99,7 @@ This repository's `pipeline.md` orchestrator reuses two interactive commands -- 
 
 The command presents a draft issue for user review and confirmation before creating it.
 
-**Pipeline invocation** (orchestrator agent):
+Pipeline invocation (orchestrator agent):
 
 ```
 You are a draft agent. Follow the instructions in
@@ -110,25 +110,25 @@ Issue: 1313
 IMPORTANT: Do not use AskUserQuestion. Process this issue directly.
 ```
 
-The override instruction tells the agent to infer all values and skip confirmation. The command file is unchanged -- the same steps execute, but the agent fills in decisions that the human would have made interactively.
+The override instruction tells the agent to infer all values and skip confirmation. The command file is unchanged. The same steps run, but the agent fills in the decisions a person would have made interactively.
 
-## Reliability Considerations
+## Reliability considerations
 
-Prompt-level suppression is not guaranteed. The model may still occasionally attempt the suppressed tool call, especially:
+Prompt-level suppression is not guaranteed. The model can still attempt the suppressed tool call now and then, especially:
 
 - In long contexts where the override instruction competes with other directives
 - With weaker models that have lower instruction-following compliance
 - When the command text explicitly names the tool ("Use AskUserQuestion to confirm")
 
-For higher reliability, combine the prompt override with `disallowedTools: [AskUserQuestion]` in subagent frontmatter. The prompt override handles graceful degradation (the agent infers values instead of prompting); the tool restriction provides a hard block if the model attempts the call anyway.
+For higher reliability, combine the prompt override with `disallowedTools: [AskUserQuestion]` in subagent frontmatter. The prompt override handles graceful degradation, where the agent infers values instead of prompting. The tool restriction adds a hard block if the model attempts the call anyway.
 
-## When This Backfires
+## When this backfires
 
-The prompt-level override trades reliability for simplicity. Avoid it when the cost of a wrong inference is high:
+The prompt-level override trades reliability for simplicity. Avoid it when a wrong inference is costly:
 
-- **Critical or irreversible operations** — if the agent guesses wrong (wrong deployment target, wrong file to delete), a stalled prompt would have caught the error. The override lets it proceed silently.
-- **Commands with many decision points** — each suppressed `AskUserQuestion` prompt is a value the agent must infer. Compound inference errors multiply; a command that asks three questions in sequence has three opportunities to diverge from intent.
-- **Shared command definitions used across multiple callers** — an override tuned for one pipeline context may produce unexpected behavior when another pipeline invokes the same command with different implicit assumptions.
+- Critical or irreversible operations: if the agent guesses wrong, such as the wrong deployment target or the wrong file to delete, a stalled prompt would have caught the error. The override lets it proceed silently.
+- Commands with many decision points: each suppressed `AskUserQuestion` prompt is a value the agent must infer. Inference errors compound. A command that asks three questions in sequence has three chances to diverge from intent.
+- Shared command definitions used across multiple callers: an override tuned for one pipeline may behave unexpectedly when another pipeline invokes the same command with different implicit assumptions.
 
 For these cases, prefer [`disallowedTools`](https://docs.anthropic.com/en/docs/claude-code/sub-agents#subagent-configuration) at the subagent level (which makes the restriction explicit and auditable) or [headless mode](../workflows/headless-claude-ci.md) (which removes the interactive layer entirely rather than suppressing it).
 

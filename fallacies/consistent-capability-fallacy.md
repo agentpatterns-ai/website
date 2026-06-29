@@ -18,43 +18,43 @@ maturity: established
 
 > Capability on one task does not predict capability on a similar-seeming task — LLM performance is jagged, not consistent.
 
-## The Belief
+## The belief
 
-After a model handles a complex task successfully, practitioners generalize: "this model is good at this kind of problem." They raise the autonomy level for subsequent tasks that appear related, skip per-task verification, and are surprised by failures on tasks that seem simpler than ones the model already passed.
+When a model handles one complex task well, people generalize: "this model is good at this kind of problem." They then raise the autonomy level for later tasks that look related and skip per-task verification. They are surprised when the model fails a task that seems simpler than one it already passed.
 
-## Why It Fails
+## Why it fails
 
-LLM capability is [jagged, not smooth](https://www.ikangai.com/jagged-agi-superhuman-ai-flaws/). A model may pass an international Math Olympiad problem but fail at multi-digit long division, because the former is heavily represented in training data as a recognizable pattern, while the latter requires an algorithmic process the model approximates poorly.
+LLM capability is [jagged, not smooth](https://www.ikangai.com/jagged-agi-superhuman-ai-flaws/). A model may pass an international Math Olympiad problem yet fail at multi-digit long division. The Olympiad problem is well represented in training data as a recognizable pattern. Long division needs an algorithmic process the model approximates poorly.
 
-The model's performance profile is determined by training data distribution, not by any generalizable "skill level." Perceived difficulty and model difficulty are uncorrelated. Tasks that look harder to a human are sometimes easier for the model — and vice versa.
+Training data distribution sets the model's performance profile, not any general "skill level." Perceived difficulty and model difficulty are unrelated. A task that looks harder to a human is sometimes easier for the model, and a task that looks easy is sometimes harder.
 
-Concrete evidence of the failure mode:
+Evidence of the failure mode:
 
-- Adding irrelevant details to arithmetic problems causes [17–66% accuracy drops](https://www.ikangai.com/jagged-agi-superhuman-ai-flaws/) in models that otherwise pass the clean version
-- Semantically equivalent code variants with symbol and structure obfuscation [degrade test pass rates by up to 62.5%](https://arxiv.org/abs/2412.08109) — the model doesn't generalize to logically identical tasks
-- Coding agent success rates vary dramatically between greenfield and mature codebases, [even within the same domain](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)
+- Adding irrelevant details to arithmetic problems causes [17 to 66% accuracy drops](https://www.ikangai.com/jagged-agi-superhuman-ai-flaws/) in models that pass the clean version
+- Code that behaves identically, with symbols renamed and structure reshaped, [degrades test pass rates by up to 62.5%](https://arxiv.org/abs/2412.08109) — the model does not generalize to logically identical tasks
+- Coding agent success rates vary widely between greenfield and mature codebases, [even within the same domain](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)
 
-Minor prompt wording changes cause [~15% accuracy swings](https://www.ikangai.com/jagged-agi-superhuman-ai-flaws/); consistent input does not yield stable output.
+Small changes to prompt wording cause [around 15% accuracy swings](https://www.ikangai.com/jagged-agi-superhuman-ai-flaws/). The same input does not yield stable output.
 
-## The Compounding Risk
+## The compounding risk
 
-The natural language interface masks failures. Models produce plausible-looking, confident outputs even when the underlying reasoning is wrong, which [creates false confidence](https://undark.org/2026/02/19/opinion-jagged-intelligence/) in both the current output and the model's general reliability. The primary danger is not a model failing obviously — it is practitioners [overestimating capability](https://undark.org/2026/02/19/opinion-jagged-intelligence/) based on visible success.
+The natural language interface masks failures. Models produce confident, plausible-looking output even when the reasoning behind it is wrong. This [creates false confidence](https://undark.org/2026/02/19/opinion-jagged-intelligence/) in both the current output and the model's general reliability. The main danger is not a model that fails obviously. It is people who [overestimate capability](https://undark.org/2026/02/19/opinion-jagged-intelligence/) because they saw it succeed.
 
 ## Example
 
-A team delegates a complex architectural refactoring task to Claude Code. The model navigates it well, restructuring several services with correct dependency handling. Encouraged, the team delegates a "simpler" task the next sprint: updating multi-step data validation logic across a module. This fails silently — the model propagates an incorrect assumption through all updated paths, and the output looks plausible. [No one checks](../anti-patterns/trust-without-verify.md) because the model "already proved itself" on a harder task.
+A team delegates a complex architectural refactor to Claude Code. The model handles it well and restructures several services with correct dependency handling. Encouraged, the team delegates a "simpler" task the next sprint: updating multi-step data validation logic across a module. This task fails silently. The model carries an incorrect assumption through every updated path, and the output looks plausible. [No one checks](../anti-patterns/trust-without-verify.md) because the model "already proved itself" on a harder task.
 
-The architectural task was heavily represented in training patterns. The validation logic required algorithmic precision the model approximated badly. From the model's perspective, these were not similar tasks.
+The architectural task was well represented in training patterns. The validation logic needed algorithmic precision the model approximated badly. From the model's point of view, these were not similar tasks.
 
-## When This Backfires
+## When this backfires
 
-Treating all tasks as independent capability questions imposes overhead. This becomes counterproductive when:
+Treating every task as an independent capability question adds overhead. That overhead is not worth it when:
 
-- **The task class is narrow and well-characterized** — for highly repetitive, formulaic operations (e.g., generating boilerplate CRUD endpoints against a fixed schema), repeated success is evidence that the training distribution covers the pattern well. [Per-task verification](../verification/incremental-verification.md) is still warranted, but autonomy calibration based on prior runs is reasonable.
-- **The domain has high benchmark saturation** — tasks that appear verbatim or structurally in widely-used public benchmarks (standard algorithm implementations, common regex patterns) show more stable performance than tasks in unseen problem spaces. The jaggedness is real, but not uniform across all task types.
-- **Verification cost exceeds failure cost** — for low-stakes, easily-reverted operations, [scaling re-verification to risk](../verification/risk-based-task-sizing.md) avoids slowing delivery more than occasional failures cost. The pattern's guidance must be weighed against the practical verification budget.
+- The task class is narrow and well understood. For highly repetitive, formulaic work, such as generating boilerplate CRUD endpoints against a fixed schema, repeated success shows the training distribution covers the pattern well. [Per-task verification](../verification/incremental-verification.md) still helps, but calibrating autonomy from prior runs is reasonable.
+- The domain has high benchmark saturation. Tasks that appear word for word or structurally in widely used public benchmarks, such as standard algorithm implementations and common regex patterns, perform more stably than tasks in unseen problem spaces. The jaggedness is real, but not uniform across all task types.
+- Verification cost exceeds failure cost. For low-stakes work that is easy to revert, [scaling re-verification to risk](../verification/risk-based-task-sizing.md) keeps you from slowing delivery more than the occasional failure costs. Weigh this pattern's guidance against your verification budget.
 
-The fallacy is most dangerous for tasks that appear familiar but require compositional reasoning the model has not practiced in exactly that combination.
+The fallacy is most dangerous for tasks that look familiar but need compositional reasoning the model has not practiced in exactly that combination.
 
 ## Key Takeaways
 

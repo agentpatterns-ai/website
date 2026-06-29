@@ -34,23 +34,23 @@ graph TD
     D -->|Missing controls| F
 ```
 
-## Governance Gate
+## Governance gate
 
-Claude Code's sub-agent permission modes (`default`, `acceptEdits`, `dontAsk`, `bypassPermissions`, `plan`) restrict tool access per agent; a parent's `bypassPermissions` cannot be overridden by children. `PreToolUse` hooks enforce operation-level validation — exit code 2 blocks the tool and feeds stderr to the model ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)). See [Blast Radius Containment](blast-radius-containment.md) for deny-list and allowlist syntax.
+Claude Code's sub-agent permission modes (`default`, `acceptEdits`, `dontAsk`, `bypassPermissions`, `plan`) restrict tool access per agent. Children cannot override a parent's `bypassPermissions`. `PreToolUse` hooks enforce operation-level validation — exit code 2 blocks the tool and feeds stderr to the model ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)). See [Blast Radius Containment](blast-radius-containment.md) for deny-list and allowlist syntax.
 
-### Deny Lists and Agent Type Restrictions
+### Deny lists and agent type restrictions
 
-`permissions.deny` with `Agent(subagent-name)` blocks specific subagent types from spawning. `Agent(worker, researcher)` allowlist restricts which types a coordinator can spawn, limiting blast radius if compromised ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)).
+`permissions.deny` with `Agent(subagent-name)` blocks specific subagent types from spawning. An `Agent(worker, researcher)` allowlist restricts which types a coordinator can spawn, which limits the blast radius if it is compromised ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)).
 
-### Managed Settings for Org-Wide Enforcement
+### Managed settings for org-wide enforcement
 
 Managed settings via MDM, Group Policy, or the Anthropic admin console enforce governance rules users cannot override: `allowManagedPermissionRulesOnly`, `disableBypassPermissionsMode`, and plugin allowlists ([Claude Code settings docs](https://code.claude.com/docs/en/settings)). `ConfigChange` hooks audit or block runtime settings changes ([Claude Code security docs](https://code.claude.com/docs/en/security)).
 
-### Policy Enforcement Gateway
+### Policy enforcement gateway
 
-The survey identifies a Policy Enforcement Gateway: tool invocations mediated through typed interfaces with schema validation and sandboxing. RBAC/ABAC, SSO, and immutable audit logs capturing principal identity, prompt version, and policy decisions are MUST requirements ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)).
+The survey identifies a policy enforcement gateway: tool invocations pass through typed interfaces with schema validation and sandboxing. RBAC/ABAC, SSO, and immutable audit logs that capture principal identity, prompt version, and policy decisions are MUST requirements ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)).
 
-## Observability Gate
+## Observability gate
 
 `CLAUDE_CODE_ENABLE_TELEMETRY=1` enables native OpenTelemetry export (OTLP, Prometheus, or console) covering session counts, token usage, cost, and tool decisions. `prompt.id` links all events from a single prompt for trace correlation ([Claude Code monitoring docs](https://code.claude.com/docs/en/monitoring-usage)).
 
@@ -60,31 +60,31 @@ LangSmith records every agent action with latency, token counts, and cost; TrueF
 
 See [Pre-Completion Checklists](../verification/pre-completion-checklists.md) for governance at the completion boundary.
 
-## Reproducibility Gate
+## Reproducibility gate
 
-`claude-progress.txt` combined with git history creates a session-portable audit trail. Sessions read progress state rather than relying on [agent memory](../agent-design/agent-memory-patterns.md), so any session can resume where a prior left off. Feature-state JSON holds pass/fail flags per feature; agents toggle `passes` while scope and acceptance criteria stay read-only ([Anthropic harness engineering blog](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+`claude-progress.txt` combined with git history creates a session-portable audit trail. Sessions read progress state rather than rely on [agent memory](../agent-design/agent-memory-patterns.md), so any session can resume where a prior one left off. Feature-state JSON holds pass/fail flags per feature. Agents toggle `passes` while scope and acceptance criteria stay read-only ([Anthropic harness engineering blog](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
-Git snapshots log each session's work; sessions verify before new work to prevent compounding failures (see [Worktree Isolation](../workflows/worktree-isolation.md) and [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md)).
+Git snapshots log each session's work. Sessions verify before new work to prevent compounding failures (see [Worktree Isolation](../workflows/worktree-isolation.md) and [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md)).
 
 Claude Code's persistent memory scopes (`user`, `project`, `local`) carry institutional knowledge across sessions ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)). ZenML and TrueFoundry add reproducibility through artifact versioning ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)).
 
-## When This Backfires
+## When this backfires
 
-**Overfitted deny patterns block legitimate operations.** Broad glob patterns like `Bash(rm*)` silently block needed cleanup commands; agents loop or fail instead of explaining the denial. Scope deny lists to the narrowest form (`Bash(rm -rf /)` not `Bash(rm*)`).
+Overfitted deny patterns block legitimate operations. Broad glob patterns like `Bash(rm*)` silently block needed cleanup commands, so agents loop or fail instead of explaining the denial. Scope deny lists to the narrowest form (`Bash(rm -rf /)` not `Bash(rm*)`).
 
-**Provider coupling raises switching costs.** Claude Code primitives (`bypassPermissions`, `PreToolUse` hooks, `CLAUDE_CODE_ENABLE_TELEMETRY`) are not portable. An org that hard-wires governance to these APIs faces rewrite-level switching costs if it migrates to a different runtime.
+Provider coupling raises switching costs. Claude Code primitives (`bypassPermissions`, `PreToolUse` hooks, `CLAUDE_CODE_ENABLE_TELEMETRY`) are not portable. An org that hard-wires governance to these APIs faces rewrite-level switching costs if it migrates to a different runtime.
 
-**Reproducibility ceremony slows iteration.** `claude-progress.txt` updates and git snapshots per session add mandatory steps that stall rapid prototyping loops. Apply the reproducibility gate only to long-running or multi-session tasks, not interactive one-shot usage.
+Reproducibility ceremony slows iteration. Per-session `claude-progress.txt` updates and git snapshots add mandatory steps that stall rapid prototyping loops. Apply the reproducibility gate only to long-running or multi-session tasks, not interactive one-shot usage.
 
-## Open Challenge
+## Open challenge
 
 Verifiability and safe autonomy remain unsolved. Current hardening reduces but does not eliminate human oversight ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)). Hard-wiring governance to one provider creates rewrite-level switching costs; the survey paper notes conformance testing and interoperability contracts as open research directions but does not prescribe specific migration strategies ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)).
 
-Passing these gates is not sufficient. Industry data from early 2026 identifies a "governance-containment gap" — 58–59% of organizations report continuous monitoring and human-in-the-loop oversight, but only 37% have purpose binding and 40% have kill-switch capability, a 15–20 point spread between *watching* agents and *stopping* them ([CSA AI Agent Governance Framework Gap, April 2026](https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-agent-governance-framework-gap-20260403/); [RSAC 2026 coverage](https://www.techrepublic.com/article/news-agentic-ai-governance-rsac-2026-insights/)). Observability without containment leaves the response path unimplemented: alerts fire, but nothing halts the agent. Pair the observability gate with enforceable containment — kill-switches, purpose binding, network isolation — or the audit trail only documents incidents after the fact.
+Passing these gates is not enough. Industry data from early 2026 identifies a "governance-containment gap" — 58–59% of organizations report continuous monitoring and human-in-the-loop oversight, but only 37% have purpose binding and 40% have kill-switch capability, a 15–20 point spread between watching agents and stopping them ([CSA AI Agent Governance Framework Gap, April 2026](https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-agent-governance-framework-gap-20260403/); [RSAC 2026 coverage](https://www.techrepublic.com/article/news-agentic-ai-governance-rsac-2026-insights/)). Observability without containment leaves the response path unimplemented: alerts fire, but nothing halts the agent. Pair the observability gate with enforceable containment — kill-switches, purpose binding, network isolation — or the audit trail only documents incidents after the fact.
 
 ## Example
 
-The following `.claude/settings.json` wires up all three gates for a production deployment. Governance uses deny lists and a `PreToolUse` hook to block destructive operations; observability is enabled via environment variable; reproducibility is enforced through a `claude-progress.txt` convention referenced in `CLAUDE.md`.
+The following `.claude/settings.json` configures all three gates for a production deployment. Governance uses deny lists and a `PreToolUse` hook to block destructive operations. An environment variable enables observability. A `claude-progress.txt` convention referenced in `CLAUDE.md` enforces reproducibility.
 
 ```json
 {
@@ -119,7 +119,7 @@ export OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector.internal:4318
 claude
 ```
 
-For reproducibility, begin every session by reading `claude-progress.txt` rather than relying on conversation memory:
+For reproducibility, begin every session by reading `claude-progress.txt` rather than relying on conversation memory. This restores task state from disk:
 
 ```markdown
 <!-- CLAUDE.md -->
@@ -133,9 +133,9 @@ This setup satisfies all three gates: denied operations and hook rejections are 
 
 ## Key Takeaways
 
-- **Governance**: permission modes, `PreToolUse` hooks, deny lists, [managed settings](../tools/claude/managed-settings-drop-in.md).
-- **Observability**: `CLAUDE_CODE_ENABLE_TELEMETRY=1` for `tool_decision` events and `prompt.id` correlation.
-- **Reproducibility**: session-portable artifacts (progress files, feature-state JSON, git snapshots) over memory.
+- Governance: permission modes, `PreToolUse` hooks, deny lists, [managed settings](../tools/claude/managed-settings-drop-in.md).
+- Observability: `CLAUDE_CODE_ENABLE_TELEMETRY=1` for `tool_decision` events and `prompt.id` correlation.
+- Reproducibility: session-portable artifacts (progress files, feature-state JSON, git snapshots) over memory.
 
 ## Related
 

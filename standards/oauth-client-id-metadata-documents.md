@@ -18,13 +18,13 @@ maturity: adopted
 
 > CIMD makes an OAuth `client_id` a URL that dereferences to a JSON metadata document — so any MCP client can authenticate to any MCP-exposing auth server without a prior registration step.
 
-## The M×N Registration Problem
+## The M×N registration problem
 
-Production MCP servers exposing databases, APIs, and infrastructure use OAuth to mediate access ([Anthropic: Building agents that reach production systems with MCP](https://claude.com/blog/building-agents-that-reach-production-systems-with-mcp)). Traditional OAuth requires each client to register with each authorization server, either manually or through Dynamic Client Registration (DCR, [RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591)). As the MCP ecosystem grows, DCR puts every AS in the business of persisting, lifecycling, and invalidating an unbounded registry of clients it may never see again ([MCP blog: Evolving OAuth Client Registration](https://blog.modelcontextprotocol.io/posts/client_registration/)).
+Production MCP servers expose databases, APIs, and infrastructure, and they use OAuth to control access ([Anthropic: Building agents that reach production systems with MCP](https://claude.com/blog/building-agents-that-reach-production-systems-with-mcp)). Traditional OAuth requires each client to register with each authorization server, either manually or through Dynamic Client Registration (DCR, [RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591)). As MCP adoption grows, DCR forces every authorization server to persist, lifecycle, and invalidate an unbounded registry of clients it may never see again ([MCP blog: Evolving OAuth Client Registration](https://blog.modelcontextprotocol.io/posts/client_registration/)).
 
 CIMD ([draft-ietf-oauth-client-id-metadata-document-00](https://www.ietf.org/archive/id/draft-ietf-oauth-client-id-metadata-document-00.html), October 2025) removes the registration step. The client publishes a JSON metadata document once at a stable HTTPS URL; the AS dereferences that URL on demand. Nothing persists on the AS side.
 
-## Document Structure
+## Document structure
 
 The `client_id` is a URL that MUST use HTTPS, contain a path, and have no fragment, username, or password. The document it resolves to is a JSON object using fields from the [IANA OAuth client metadata registry](https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#client-metadata):
 
@@ -41,7 +41,7 @@ The `client_id` is a URL that MUST use HTTPS, contain a path, and have no fragme
 
 The `client_id` field MUST match the document URL exactly. Shared-secret auth methods (`client_secret_basic`, `client_secret_post`, `client_secret_jwt`) are forbidden — there is no shared secret to bootstrap. Confidential clients authenticate with `private_key_jwt` against the `jwks_uri` published in the document ([§4.1, §6.2](https://www.ietf.org/archive/id/draft-ietf-oauth-client-id-metadata-document-00.html)).
 
-## How MCP Uses CIMD
+## How MCP uses CIMD
 
 The [MCP 2025-11-25 authorization spec](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization) makes MCP servers OAuth 2.1 resource servers and requires them to implement [RFC 9728 Protected Resource Metadata](https://datatracker.ietf.org/doc/html/rfc9728). MCP clients and authorization servers SHOULD support CIMD, and the client-registration priority order is:
 
@@ -52,17 +52,17 @@ The [MCP 2025-11-25 authorization spec](https://modelcontextprotocol.io/specific
 
 Anthropic recommends CIMD as the default for new MCP server implementations and has shipped it in MCP SDKs, Claude.ai, and Claude Code ([Claude blog](https://claude.com/blog/building-agents-that-reach-production-systems-with-mcp)). [Claude Managed Agents Vaults](https://platform.claude.com/docs/en/managed-agents/vaults) persist the issued OAuth tokens per-user and inject them into each MCP connection.
 
-## Trust Model and Limits
+## Trust model and limits
 
-CIMD anchors client identity to DNS and TLS: whoever controls the domain controls the `client_id`. That is a smaller leap than it sounds — the AS already trusts DNS+TLS for HTTPS itself — but it shifts threats:
+CIMD anchors client identity to DNS and TLS: whoever controls the domain controls the `client_id`. That is a smaller leap than it sounds — the AS already trusts DNS+TLS for HTTPS itself — but it shifts the threats:
 
-- **Domain control is not trustworthiness.** CIMD proves the app controls its hosting origin; it does not prove the app is safe. Authorization servers still need domain reputation checks, allowlists, and unknown-domain warnings ([MCP Authorization spec §Client ID Metadata Document Security](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization)).
-- **Localhost impersonation is unsolved.** A malicious app on `http://localhost` can impersonate a legitimate desktop client using the same redirect. The MCP working group is layering [Software Statements (RFC 7591 §2.3)](https://datatracker.ietf.org/doc/html/rfc7591) on top of CIMD for non-web clients ([MCP blog: Evolving OAuth Client Registration](https://blog.modelcontextprotocol.io/posts/client_registration/)).
-- **SSRF is introduced.** The AS must now make outbound HTTPS fetches at auth time. The IETF draft requires blocking private/loopback addresses and caps response size at 5 KB ([§6.5, §6.6](https://www.ietf.org/archive/id/draft-ietf-oauth-client-id-metadata-document-00.html)).
-- **Metadata hosting becomes an auth dependency.** If the metadata document is unreachable, the AS SHOULD abort the authorization request (§4.3). DCR-registered clients are not affected by their own infra outages.
-- **Key rotation is observable.** If the `jwks_uri` or its contents change between fetches, the AS MAY revoke tokens or consent (§6.3). Caches should respect [RFC 9111](https://datatracker.ietf.org/doc/html/rfc9111) and MUST NOT cache error responses.
+- Domain control is not trustworthiness. CIMD proves the app controls its hosting origin; it does not prove the app is safe. Authorization servers still need domain reputation checks, allowlists, and unknown-domain warnings ([MCP Authorization spec §Client ID Metadata Document Security](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization)).
+- Localhost impersonation is unsolved. A malicious app on `http://localhost` can impersonate a legitimate desktop client using the same redirect. The MCP working group is layering [Software Statements (RFC 7591 §2.3)](https://datatracker.ietf.org/doc/html/rfc7591) on top of CIMD for non-web clients ([MCP blog: Evolving OAuth Client Registration](https://blog.modelcontextprotocol.io/posts/client_registration/)).
+- SSRF is a new risk. The AS must now make outbound HTTPS fetches at auth time. The IETF draft requires blocking private and loopback addresses, and caps response size at 5 KB ([§6.5, §6.6](https://www.ietf.org/archive/id/draft-ietf-oauth-client-id-metadata-document-00.html)).
+- Metadata hosting becomes an auth dependency. If the metadata document is unreachable, the AS SHOULD abort the authorization request (§4.3). DCR-registered clients are not affected by their own hosting outages.
+- Key rotation is observable. If the `jwks_uri` or its contents change between fetches, the AS MAY revoke tokens or consent (§6.3). Caches should respect [RFC 9111](https://datatracker.ietf.org/doc/html/rfc9111) and MUST NOT cache error responses.
 
-## When to Choose CIMD
+## When to choose CIMD
 
 | Situation | Use |
 |-----------|-----|

@@ -16,7 +16,7 @@ maturity: adopted
 
 > Slash commands become model-callable primitives when the planner reads their descriptions and invokes them mid-loop, collapsing the boundary between user-invoked shortcuts and agent tools.
 
-## The Shift
+## The shift
 
 Slash commands were a human surface — typed in the prompt bar, invisible to the planner. Treating them as model-discoverable turns `/review`, `/refresh-context`, or `/commit` into callable nodes in the planner's tool graph.
 
@@ -24,7 +24,7 @@ Claude Code 2.1.108 shipped the shift: the model can now invoke built-in command
 
 User-authored workflows now become tool-graph nodes — `/research-topic` becomes a planning step a supervisor agent selects. This extends [Agents vs Commands](agents-vs-commands.md): commands gain the "who" dimension previously owned by agents, without erasing what-vs-how.
 
-## The Control Matrix
+## The control matrix
 
 Claude Code exposes two frontmatter fields that gate the user/agent axis ([Skills reference](https://code.claude.com/docs/en/skills)):
 
@@ -34,30 +34,30 @@ Claude Code exposes two frontmatter fields that gate the user/agent axis ([Skill
 | `disable-model-invocation: true` | Yes | No | Description not in context; body loads when user invokes |
 | `user-invocable: false` | No | Yes | Description always in context; body loads on invocation |
 
-Side-effectful commands (`/deploy`, `/commit`, `/send-slack-message`) should set `disable-model-invocation: true` — Anthropic: "you don't want Claude deciding to deploy because your code looks ready" ([Skills reference](https://code.claude.com/docs/en/skills#control-who-invokes-a-skill)). Background-knowledge skills set `user-invocable: false` — `/legacy-system-context` is not an action users would type.
+Commands with side effects (`/deploy`, `/commit`, `/send-slack-message`) should set `disable-model-invocation: true` — Anthropic: "you don't want Claude deciding to deploy because your code looks ready" ([Skills reference](https://code.claude.com/docs/en/skills#control-who-invokes-a-skill)). Background-knowledge skills set `user-invocable: false` — `/legacy-system-context` is not an action users would type.
 
-## Descriptions Become Tool Descriptions
+## Descriptions become tool descriptions
 
 The `description` sits in the system prompt at all times ([Skills reference](https://code.claude.com/docs/en/skills#skill-content-lifecycle)) and drives agent invocation. Four rules from tool-description craft ([Anthropic best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices#writing-effective-descriptions)):
 
-1. **Third person** — Anthropic's example is "Processes Excel files", not "I can help you…"; point-of-view shift causes discovery misses.
-2. **What and when** — "Extract text from PDFs. Use when the user mentions PDFs, forms, or document extraction." Trigger phrases anchor selection.
-3. **Specific over vague** — "Fills PDF forms and merges documents" selects on those verbs; "Helps with documents" selects nothing.
-4. **Front-load the use case** — combined `description` and `when_to_use` is capped at 1,536 characters per skill ([Skills reference](https://code.claude.com/docs/en/skills)).
+1. Third person — Anthropic's example is "Processes Excel files", not "I can help you…". A point-of-view shift causes discovery misses.
+2. What and when — "Extract text from PDFs. Use when the user mentions PDFs, forms, or document extraction." Trigger phrases anchor selection.
+3. Specific over vague — "Fills PDF forms and merges documents" selects on those verbs. "Helps with documents" selects nothing.
+4. Front-load the use case — the combined `description` and `when_to_use` is capped at 1,536 characters per skill ([Skills reference](https://code.claude.com/docs/en/skills)).
 
 Negative triggers constrain over-firing: `Do NOT use for Jira or GitHub Issues workflows`.
 
-## The Idempotency Contract
+## The idempotency contract
 
-User invocation is an explicit authorisation signal; agent invocation is not. The planner does not read the conversation the way a human does. Model-invokable commands need:
+User invocation is an explicit authorization signal; agent invocation is not. The planner does not read the conversation the way a human does. Model-invokable commands need:
 
-- **Up-front input validation** — reject obviously wrong arguments rather than acting on them
-- **Read-only first** — a `/review` that only reads is safer to promote than a `/commit` that writes
-- **Two-step destructive ops** — plan/execute split lets the planner stage changes without committing
+- Up-front input validation — reject obviously wrong arguments rather than acting on them
+- Read-only first — a `/review` that only reads is safer to promote than a `/commit` that writes
+- Two-step destructive operations — a plan/execute split lets the planner stage changes without committing
 
 When a command cannot be [idempotent](idempotent-agent-operations.md), default to `disable-model-invocation: true`.
 
-## Permission Controls
+## Permission controls
 
 Claude Code exposes allow/deny rules — `Skill(name)` for exact match, `Skill(name *)` for any arguments ([Skills reference](https://code.claude.com/docs/en/skills#restrict-claudes-skill-access)):
 
@@ -69,16 +69,16 @@ Skill(deploy *)      # deny
 
 The `allowed-tools` frontmatter pre-approves tools while the skill runs — `/commit` can include `Bash(git add *) Bash(git commit *)` without per-use approval. That pre-approval surface expands with every model-invocable command.
 
-## When This Backfires
+## When this backfires
 
-1. **Destructive side effects without `disable-model-invocation`** — the agent infers authorisation from context that looked "ready" and runs a command the user would have reviewed.
-2. **Large skill libraries** — descriptions are shortened to fit a character budget that defaults to 1% of the model's context window (`skillListingBudgetFraction`), stripping trigger keywords when the listing overflows ([Skills reference](https://code.claude.com/docs/en/skills#skill-descriptions-are-cut-short)).
-3. **Prompt injection surface** — a tool output or README naming a skill can cause the planner to invoke it with attacker-controlled arguments.
-4. **Commands authored pre-shift** — existing commands often reference "the user's last message" or emit prose confirmations. Agent invocation breaks those assumptions.
+1. Destructive side effects without `disable-model-invocation` — the agent infers authorization from context that looked "ready" and runs a command the user would have reviewed.
+2. Large skill libraries — descriptions are shortened to fit a character budget that defaults to 1% of the model's context window (`skillListingBudgetFraction`), stripping trigger keywords when the listing overflows ([Skills reference](https://code.claude.com/docs/en/skills#skill-descriptions-are-cut-short)).
+3. Prompt injection surface — a tool output or README naming a skill can cause the planner to invoke it with attacker-controlled arguments.
+4. Commands authored before the shift — existing commands often reference "the user's last message" or emit prose confirmations. Agent invocation breaks those assumptions.
 
-## Counterpoint: MCP Keeps the Boundary
+## Counterpoint: MCP keeps the boundary
 
-The [Model Context Protocol](../standards/mcp-protocol.md) takes the opposite stance: `prompts` are user-controlled — surfaced as slash commands — while `tools` are model-controlled ([MCP Prompts spec](https://modelcontextprotocol.io/specification/2025-06-18/server/prompts)). Erasing that boundary is a choice: typing `/deploy` is itself the authorisation. Claude Code and Cursor trade that for planner composability; MCP does not.
+The [Model Context Protocol](../standards/mcp-protocol.md) takes the opposite stance: `prompts` are user-controlled — surfaced as slash commands — while `tools` are model-controlled ([MCP Prompts spec](https://modelcontextprotocol.io/specification/2025-06-18/server/prompts)). Erasing that boundary is a choice: typing `/deploy` is itself the authorization. Claude Code and Cursor trade that for planner composability; MCP does not.
 
 ## Example
 
@@ -102,7 +102,7 @@ Review PR $ARGUMENTS:
 3. Return findings as a structured list
 ```
 
-Contrast with a `/deploy` command, where `disable-model-invocation: true` is non-negotiable because the operation is destructive and the agent inferring "ready to ship" from context is not equivalent to the user explicitly authorising release:
+Contrast with a `/deploy` command, where `disable-model-invocation: true` is non-negotiable because the operation is destructive and the agent inferring "ready to ship" from context is not equivalent to the user explicitly authorizing release:
 
 ```yaml
 ---

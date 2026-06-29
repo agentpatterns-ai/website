@@ -15,9 +15,9 @@ maturity: adopted
 
 > Use eval scores as the optimization signal to systematically improve agent harness configuration, replacing ad-hoc prompt tweaking with a structured feedback loop.
 
-**Learn it hands-on:** [Eval-Driven Harness Improvement](https://learn.agentpatterns.ai/harness-engineering/eval-driven-harness-improvement/) — guided lesson with quizzes.
+Learn it hands-on: [Eval-Driven Harness Improvement](https://learn.agentpatterns.ai/harness-engineering/eval-driven-harness-improvement/) — guided lesson with quizzes.
 
-## The Loop
+## The loop
 
 Harness hill-climbing applies local search to agent configuration: run a benchmark suite, make one targeted change, re-score, keep the change if the score improves — the manual counterpart to automated [DSPy prompt search](dspy-programmatic-prompt-optimization.md). Repeat. No model changes. No retraining. The eval score is the gradient signal.
 
@@ -34,7 +34,7 @@ graph TD
 
 LangChain applied this on Terminal Bench 2.0 and moved from 52.8% to 66.5% through harness-only changes ([LangChain: Improving Deep Agents with Harness Engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). Each iteration targeted one variable at a time.
 
-## What to Tune
+## What to tune
 
 Tunable variables with measurable impact:
 
@@ -49,45 +49,45 @@ Tunable variables with measurable impact:
 
 The [reasoning sandwich pattern](reasoning-budget-allocation.md) is a concrete example: allocating maximum reasoning compute for planning and verification phases with moderate compute for implementation scored 63.6% vs. 53.9% for uniform maximum — a measurable delta from a single configuration change ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
-## Eval Design for Tuning
+## Eval design for tuning
 
 The task suite must be representative and held out from production — otherwise you measure the eval fixture, not real capability.
 
-**Isolation**: Use a separate set for tuning and a second held-out set for final validation. Never tune against the validation set. Same discipline as train/validation/test splits in model training — and the same defense against the [held-out test gap](../verification/eval-blind-spots.md).
+Isolation: use a separate set for tuning and a second held-out set for final validation. Never tune against the validation set. Same discipline as train/validation/test splits in model training — and the same defense against the [held-out test gap](../verification/eval-blind-spots.md).
 
-**Breadth**: Include tasks where the target behavior *should* trigger and tasks where it *shouldn't*. A harness optimized only on positive cases will over-trigger. Anthropic's eval guidance specifies testing both directions explicitly ([Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)).
+Breadth: include tasks where the target behavior should trigger and tasks where it should not. A harness optimized only on positive cases will over-trigger. Anthropic's eval guidance specifies testing both directions explicitly ([Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)).
 
-**Grading**: Prefer [deterministic outcome graders](../verification/grade-agent-outcomes.md) (pass/fail, schema checks) over LLM-as-judge for the tuning loop — cheaper to run repeatedly, eliminates evaluator variance from the signal. Use [pass^k](../verification/pass-at-k-metrics.md) rather than single-trial pass rate when consistency matters.
+Grading: prefer [deterministic outcome graders](../verification/grade-agent-outcomes.md) (pass/fail, schema checks) over LLM-as-judge for the tuning loop — cheaper to run repeatedly, eliminates evaluator variance from the signal. Use [pass^k](../verification/pass-at-k-metrics.md) rather than single-trial pass rate when consistency matters.
 
-## Overfitting Risk
+## Overfitting risk
 
 A harness tuned to a specific eval suite can score high on that suite while degrading on real workloads — it over-indexes on surface patterns in eval tasks rather than the underlying capability.
 
-Signs: tuning-suite score keeps rising while production error rates stay flat or increase; harness changes that "work" are narrow prompt additions that match eval phrasing; held-out validation score doesn't track the tuning score.
+Signs: the tuning-suite score keeps rising while production error rates stay flat or increase; harness changes that "work" are narrow prompt additions that match eval phrasing; the held-out validation score does not track the tuning score.
 
 Mitigations:
 
-- **Rotate eval tasks**: periodically replace tuning tasks with fresh ones drawn from production traces; see [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md)
-- **Held-out validation**: run a final check on a task set that never touched the tuning loop before promoting a harness change
-- **Monitor production**: treat eval score as a leading indicator; production outcomes are ground truth
+- Rotate eval tasks: periodically replace tuning tasks with fresh ones drawn from production traces; see [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md)
+- Held-out validation: run a final check on a task set that never touched the tuning loop before promoting a harness change
+- Monitor production: treat the eval score as a leading indicator; production outcomes are ground truth
 
-## When This Backfires
+## When this backfires
 
 Hill-climbing finds a local optimum, not a global one — if the baseline sits in a poor region of configuration space, iteration converges to the nearest local peak. Three further conditions degrade the loop:
 
-- **Benchmark cost exceeds benefit**: Building a graded task suite takes real effort. For narrow-scope agents, ad-hoc prompt editing reaches good-enough performance faster.
-- **Component interdependencies**: Single-variable iteration assumes harness components are approximately orthogonal — where they are not, [isometric harness ablation](isometric-harness-ablation.md) ranks per-subsystem contribution instead. When prompt phrasing, tool descriptions, and reasoning budget interact, changing one variable masks or amplifies effects of another.
-- **Benchmark-to-production drift**: The eval suite is a snapshot. If production workload shifts after tuning, the optimized configuration may degrade on new task types — see [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md).
+- Benchmark cost exceeds benefit: building a graded task suite takes real effort. For narrow-scope agents, ad-hoc prompt editing reaches good-enough performance faster.
+- Component interdependencies: single-variable iteration assumes harness components are approximately orthogonal — where they are not, [isometric harness ablation](isometric-harness-ablation.md) ranks per-subsystem contribution instead. When prompt phrasing, tool descriptions, and reasoning budget interact, changing one variable masks or amplifies the effects of another.
+- Benchmark-to-production drift: the eval suite is a snapshot. If the production workload shifts after tuning, the optimized configuration may degrade on new task types — see [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md).
 
-## One Change at a Time
+## One change at a time
 
 The hill-climbing loop depends on isolating variables. Changing system prompt wording and tool descriptions in the same iteration conflates two signals — you cannot attribute a score delta to either change.
 
 Single-variable changes make rollback unambiguous; multi-variable changes require untangling which component caused the regression. Same principle as [incremental verification](../verification/incremental-verification.md): small, checkpointed steps, each reversible. Persist each accepted baseline in the benchmark-snapshots table of the [quality score rubric](quality-score-rubric.md) so a later regression has a date-stamped configuration to revert to.
 
-## Relationship to Continuous Improvement
+## Relationship to continuous improvement
 
-Hill-climbing is an eval-mediated version of the [continuous agent improvement](../workflows/continuous-agent-improvement.md) loop — that loop uses human observation; hill-climbing substitutes measurement. Use continuous improvement to identify *which component* to target, then hill-climbing to find the best configuration.
+Hill-climbing is an eval-mediated version of the [continuous agent improvement](../workflows/continuous-agent-improvement.md) loop — that loop uses human observation; hill-climbing substitutes measurement. Use continuous improvement to identify which component to target, then hill-climbing to find the best configuration.
 
 The [agentic flywheel](agentic-flywheel.md) extends this: agents propose candidate changes automatically, with the eval loop as the validation gate.
 

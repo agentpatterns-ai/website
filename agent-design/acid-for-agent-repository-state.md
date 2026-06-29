@@ -17,9 +17,9 @@ maturity: established
 
 > Apply database transaction theory — Atomicity, Consistency, Isolation, Durability — as the operating contract for how an agent commits, verifies, partitions, and persists repository work.
 
-## Why ACID, Not Another Mnemonic
+## Why ACID, not another mnemonic
 
-"Save your state," "commit progress," "leave the repo clean" — each phrase is vague. ACID — Codd and Gray's four-property contract for database transactions — supplies a precise mapping. Each letter names an observable discipline with a verification step; together they describe a repository that survives both context compaction and concurrent writers.
+"Save your state," "commit progress," "leave the repo clean" — each phrase is vague. ACID, Codd and Gray's four-property contract for database transactions, gives you a precise mapping instead. Each letter names a discipline you can observe, with a verification step. Together they describe a repository that survives both context compaction and concurrent writers.
 
 The [WalkingLabs harness-engineering lecture](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-03-why-the-repository-must-become-the-system-of-record/index.md) applies ACID directly to agent state. The four properties are not metaphors — they are the operating contract.
 
@@ -27,7 +27,7 @@ The [WalkingLabs harness-engineering lecture](https://github.com/walkinglabs/lea
 
 > Each logical operation maps to exactly one commit; a partial failure rolls the working tree back to a clean state.
 
-The unit is the logical operation, not the file. "Add new endpoint and update tests" is one commit. The [WalkingLabs lecture](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-03-why-the-repository-must-become-the-system-of-record/index.md) is explicit: "Each 'logical operation' (e.g., 'add new endpoint and update tests') gets one git commit." On partial failure the agent stashes or resets to the pre-operation state — half-applied changes do not persist.
+The unit is the logical operation, not the file. "Add new endpoint and update tests" is one commit. The [WalkingLabs lecture](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-03-why-the-repository-must-become-the-system-of-record/index.md) is explicit: "Each 'logical operation' (e.g., 'add new endpoint and update tests') gets one git commit." On partial failure, the agent stashes or resets to the pre-operation state. Half-applied changes do not persist.
 
 Atomicity is what makes [Rollback-First Design](rollback-first-design.md) tractable. If a commit holds one logical unit, `git revert <sha>` undoes that unit cleanly. If a commit holds three half-finished units, revert is ambiguous.
 
@@ -37,7 +37,7 @@ Atomicity is what makes [Rollback-First Design](rollback-first-design.md) tracta
 
 Tests pass, lint passes, build passes — the predicate. The [WalkingLabs lecture](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-03-why-the-repository-must-become-the-system-of-record/index.md) states it directly: "all tests pass, lint reports zero errors" before committing, with "the agent runs verification after each operation; inconsistent intermediate states don't get committed."
 
-This converts agent self-report into an externalised contract. Per [Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents), agents are optimistic about completion when not externally verified — they "make code changes, and even do testing with unit tests or `curl` commands against a development server, but would fail to recognize that the feature didn't work end-to-end." A predicate satisfied via tool calls — not via the agent's assertion that it ran — closes the optimism loop. Pair this with a [Feature List File](../instructions/feature-list-files.md) and the predicate becomes auditable.
+This turns the agent's self-report into an external contract. Per [Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents), agents are optimistic about completion when nothing verifies them. They "make code changes, and even do testing with unit tests or `curl` commands against a development server, but would fail to recognize that the feature didn't work end-to-end." A predicate satisfied through tool calls, not through the agent's claim that it ran, closes that optimism loop. Pair this with a [Feature List File](../instructions/feature-list-files.md) and the predicate becomes auditable.
 
 ## Isolation
 
@@ -45,7 +45,7 @@ This converts agent self-report into an externalised contract. Per [Anthropic's 
 
 The [WalkingLabs lecture](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-03-why-the-repository-must-become-the-system-of-record/index.md) prescribes: "each agent uses its own progress file, or use git branches for isolation." Branches isolate file writes; per-agent progress files isolate scratchpad state.
 
-Git provides no transaction manager — isolation here is partitioning by convention, not serialization. If two agents target the same file on different branches, the conflict surfaces at merge time, not at write time. Treat branch-per-agent as write-disjoint coordination, not serialization — see [Worktree Isolation](../workflows/worktree-isolation.md) for the filesystem-level enforcement.
+Git provides no transaction manager. Isolation here is partitioning by convention, not serialization. If two agents target the same file on different branches, the conflict surfaces at merge time, not at write time. Treat branch-per-agent as write-disjoint coordination, not serialization. See [Worktree Isolation](../workflows/worktree-isolation.md) for filesystem-level enforcement.
 
 ## Durability
 
@@ -53,18 +53,18 @@ Git provides no transaction manager — isolation here is partitioning by conven
 
 Per the [WalkingLabs lecture](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-03-why-the-repository-must-become-the-system-of-record/index.md), "critical project knowledge lives in git-tracked files" and "cross-session knowledge must be persisted to files." [Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) supplies the operational form: a `claude-progress.txt` log committed alongside code so subsequent sessions read the prior session's state from the repo, not from an absent context window.
 
-Durability defeats compaction. The context window forgets; git does not. The corollary is [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md) — once knowledge is in the repo, the agent finds it via file reads instead of re-loading it every turn.
+Durability defeats compaction. The context window forgets; git does not. The corollary is [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md). Once knowledge is in the repo, the agent finds it by reading files instead of re-loading it every turn.
 
-## When Strict ACID Backfires
+## When strict ACID backfires
 
 The four properties are not equally valuable in every workflow:
 
-- **Single-session greenfield tasks.** No cross-session continuity, no shared workspace — durability and isolation are overhead; atomicity and consistency carry the workflow.
-- **Throwaway environments.** Per-task containers reset on each invocation. Durability via `git` is duplicative — the environment is already ephemeral.
-- **High-frequency inner loops.** One commit per logical operation inflates history at sub-minute cadences. Squash-on-merge or commit-per-task scales better than strict per-operation atomicity.
-- **Multi-agent with shared file ownership.** Branch isolation handles write-disjoint tasks but does not coordinate writes to the same file. Git has no transaction manager — the conflict surfaces at rebase, not at write (see [Worktree Isolation](../workflows/worktree-isolation.md)).
+- Single-session greenfield tasks: no cross-session continuity and no shared workspace, so durability and isolation are overhead. Atomicity and consistency carry the work.
+- Throwaway environments: per-task containers reset on each invocation, so durability through `git` is duplicative. The environment is already ephemeral.
+- High-frequency inner loops: one commit per logical operation inflates history at sub-minute cadences. Squash-on-merge or commit-per-task scales better than strict per-operation atomicity.
+- Multi-agent with shared file ownership: branch isolation handles write-disjoint tasks but does not coordinate writes to the same file. Git has no transaction manager, so the conflict surfaces at rebase, not at write (see [Worktree Isolation](../workflows/worktree-isolation.md)).
 
-Consistency and durability carry the most weight in typical single-agent workflows. Atomicity and isolation gain importance at scale and across sessions.
+Consistency and durability carry the most weight in a typical single-agent workflow. Atomicity and isolation matter more at scale and across sessions.
 
 ## Example
 

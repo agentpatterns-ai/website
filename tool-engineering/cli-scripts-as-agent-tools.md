@@ -19,13 +19,13 @@ maturity: adopted
 
 > Write thin wrapper scripts that pre-filter system output so agents receive a decision-ready summary rather than raw command output to parse.
 
-**Related lesson:** [Token-Efficient Tool Design](https://learn.agentpatterns.ai/tool-engineering/token-efficient-tool-design/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Token-Efficient Tool Design](https://learn.agentpatterns.ai/tool-engineering/token-efficient-tool-design/) — this concept features in a hands-on lesson with quizzes.
 
-## Raw Commands Waste Context
+## Raw commands waste context
 
-When an agent runs `kubectl get pods`, it receives hundreds of lines for a production cluster but may need only pod names and states. [Context engineering](../context-engineering/context-engineering.md) ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)) identifies tool output as a direct context expenditure — the agent processes everything returned, useful or not. Anthropic reports a related pattern where [executing code that filters MCP tool output](https://www.anthropic.com/engineering/code-execution-with-mcp) before returning it to the model cut a representative workload from 150,000 to 2,000 tokens. Scripts that pre-filter at the source reduce that expenditure.
+When an agent runs `kubectl get pods`, it receives hundreds of lines for a production cluster. It may need only pod names and states. [Context engineering](../context-engineering/context-engineering.md) ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)) treats tool output as a direct context cost — the agent processes everything returned, useful or not. Anthropic reports a related pattern: [executing code that filters MCP tool output](https://www.anthropic.com/engineering/code-execution-with-mcp) before returning it to the model cut a representative workload from 150,000 to 2,000 tokens. Scripts that pre-filter at the source cut that cost.
 
-## The Pattern
+## The pattern
 
 Write a wrapper script that runs the underlying command and returns only what the agent needs for the next decision:
 
@@ -46,36 +46,36 @@ The agent receives `"payments-worker CrashLoopBackOff 4"` instead of the full po
 
 Return structured output (JSON or concise text) when possible. Structured output is easier to parse and less likely to be misinterpreted.
 
-## High-Value Applications
+## High-value applications
 
-Scripts as agent tools are most effective when:
+Scripts as agent tools work best for:
 
-- **Log queries.** `grep` and `awk` pipelines that extract error counts or time-windowed summaries rather than streaming raw logs.
-- **Database lookups.** Queries that return specific records or aggregates, not table dumps — `"ORDER-4821: shipped 2026-03-07"` rather than all joined columns.
-- **API status checks.** Scripts that return a single status field or formatted summary, not the full JSON response.
-- **Cloud resource inspection.** Scripts that return resource names, states, and anomalies — not raw API output with timestamps and metadata.
+- Log queries: `grep` and `awk` pipelines that extract error counts or time-windowed summaries rather than streaming raw logs.
+- Database lookups: queries that return specific records or aggregates, not table dumps — `"ORDER-4821: shipped 2026-03-07"` rather than all joined columns.
+- API status checks: scripts that return a single status field or formatted summary, not the full JSON response.
+- Cloud resource inspection: scripts that return resource names, states, and anomalies — not raw API output with timestamps and metadata.
 
-## Abstraction and Access Control
+## Abstraction and access control
 
-Scripts decouple the agent's interface from the underlying system. If a Kubernetes cluster migrates to a different orchestrator, the script changes — the tool interface does not.
+Scripts separate the agent's interface from the underlying system. If a Kubernetes cluster moves to a different orchestrator, the script changes — the tool interface does not.
 
-Scripts also enforce read-only access as a side effect: a status script exposes no write operations, so the agent cannot mutate the system through it.
+Scripts also enforce read-only access as a side effect. A status script exposes no write operations, so the agent cannot change the system through it.
 
-## Design Checklist
+## Design checklist
 
-When writing a CLI script for agent consumption:
+When you write a CLI script for an agent to use:
 
-- **Filter at the source.** Remove irrelevant columns, rows, and metadata before returning.
-- **Aggregate where possible.** A count is better than a list when the count is sufficient.
-- **Format for parsing.** JSON or `key: value` pairs are easier to process than columnar text.
-- **Bound the output.** Use `head` or query limits to prevent runaway responses from large data sets.
-- **Return a clear empty state.** `"No errors found"` is more useful than empty output that the agent may misinterpret.
+- Filter at the source: remove irrelevant columns, rows, and metadata before returning.
+- Aggregate where you can: a count beats a list when the count is enough.
+- Format for parsing: JSON or `key: value` pairs are easier to process than columnar text.
+- Bound the output: use `head` or query limits so large data sets cannot produce runaway responses.
+- Return a clear empty state: `"No errors found"` is more useful than empty output that the agent may misread.
 
-## Agents Writing and Iterating on Scripts
+## Agents writing and iterating on scripts
 
-A complementary pattern is agents authoring bash scripts — as in [batch file operations](batch-file-operations.md) — and iterating through a write-execute-debug cycle. Bash has zero startup time, no compilation step, and surfaces errors in the same terminal the agent already occupies — each iteration costs seconds.
+A related pattern is agents writing bash scripts — as in [batch file operations](batch-file-operations.md) — and iterating through a write-execute-debug cycle. Bash has no startup time, no compilation step, and surfaces errors in the same terminal the agent already occupies. Each iteration costs seconds.
 
-Give the agent explicit input/output contracts so the first attempt is closer to correct:
+Give the agent clear input and output contracts so the first attempt is closer to correct:
 
 ```text
 Write a bash script that:
@@ -84,17 +84,17 @@ Write a bash script that:
 - Exit 1 with a message if the directory does not exist
 ```
 
-Keep scripts modular — monolithic scripts are harder to debug when one part fails. Design the architecture yourself and delegate components to the agent. Once it works, have the agent add comments on platform assumptions (GNU vs BSD tools), which a [PostToolUse hook can detect](posttooluse-bsd-gnu-detection.md), for future modifications.
+Keep scripts modular. One large script is harder to debug when a single part fails. Design the architecture yourself and hand components to the agent. Once it works, have the agent add comments on platform assumptions (GNU versus BSD tools), which a [PostToolUse hook can detect](posttooluse-bsd-gnu-detection.md), to help future changes.
 
-Best for data-processing pipelines, build automation, and exploratory prototyping. Less effective when the task requires complex data structures, type safety, or cross-platform compatibility.
+Best for data-processing pipelines, build automation, and exploratory prototyping. Less suited to tasks that need complex data structures, type safety, or cross-platform compatibility.
 
-## When This Backfires
+## When this backfires
 
-**Script maintenance burden.** Wrappers hard-code assumptions about command output. When the underlying CLI changes its schema — a new column, a renamed field, a different exit code — the script silently breaks or produces wrong output. Every wrapper is a synchronization point.
+Script maintenance burden. Wrappers hard-code assumptions about command output. When the underlying CLI changes its schema — a new column, a renamed field, a different exit code — the script silently breaks or returns wrong output. Every wrapper is a point you must keep in sync.
 
-**Over-filtering hides signals.** A script that filters to "only errors" — without the [graceful-truncation contract](graceful-tool-output-truncation.md) of a useful prefix plus a continuation handle — will miss warnings that precede errors or status transitions the agent needs. Pre-filtering bets that the script author knew exactly what the agent would need — a bet that becomes wrong when incident types change.
+Over-filtering hides signals. A script that filters to "only errors" — without the [graceful-truncation contract](graceful-tool-output-truncation.md) of a useful prefix plus a continuation handle — will miss warnings that precede errors, or status changes the agent needs. Pre-filtering bets that the author knew exactly what the agent would need. That bet becomes wrong when incident types change.
 
-**Hard to debug through the abstraction.** When an agent produces a wrong action, tracing the cause through a wrapper adds a layer to the investigation. Reconstructing what the raw command (for example `kubectl get pods`) returned requires running it manually.
+Hard to debug through the abstraction. When an agent takes a wrong action, tracing the cause through a wrapper adds a layer to the investigation. To see what the raw command (for example `kubectl get pods`) returned, you have to run it manually.
 
 These conditions most often arise in novel incident types, rapidly evolving CLIs, and exploratory tasks where broad context beats a narrow summary.
 
@@ -102,7 +102,7 @@ These conditions most often arise in novel incident types, rapidly evolving CLIs
 
 An agent investigating a failing deployment needs to check which pods are unhealthy and retrieve recent error logs. Without wrapper scripts, it issues two raw commands and parses hundreds of lines. With wrapper scripts registered as tools, the agent gets decision-ready output.
 
-**`check-pods.sh`** — registered as the `check_pods` tool:
+`check-pods.sh` — registered as the `check_pods` tool:
 
 ```bash
 #!/usr/bin/env bash
@@ -114,7 +114,7 @@ kubectl get pods -n "$NAMESPACE" --no-headers \
   || echo '[]'
 ```
 
-**`pod-errors.sh`** — registered as the `pod_errors` tool:
+`pod-errors.sh` — registered as the `pod_errors` tool:
 
 ```bash
 #!/usr/bin/env bash
@@ -151,7 +151,7 @@ Two tool calls, two concise responses. The agent identifies the root cause (data
 
 ## Related
 
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Semantic Tool Output](semantic-tool-output.md)
 - [Unix CLI as the Native Tool Interface for AI Agents](unix-cli-native-tool-interface.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)

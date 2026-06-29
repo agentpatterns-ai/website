@@ -14,24 +14,24 @@ maturity: established
 
 > Design agent operations so that running the same task twice produces the same end state — not duplicate artifacts, conflicting state, or compounded errors.
 
-**Related lesson:** [Reversibility & Idempotency](https://learn.agentpatterns.ai/harness-engineering/reversibility-and-idempotency/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Reversibility & Idempotency](https://learn.agentpatterns.ai/harness-engineering/reversibility-and-idempotency/) covers this concept in a hands-on lesson with quizzes.
 
-## Why Idempotency Matters for Agents
+## Why idempotency matters for agents
 
-Agents fail mid-task: context windows fill, API calls time out, tool errors interrupt execution (the territory of [exception handling and recovery patterns](exception-handling-recovery-patterns.md)). When you re-run the agent, it starts fresh — with no memory of what it already did. If the first run created a branch, posted a comment, or applied a label before failing, the second run encounters pre-existing state it doesn't know about.
+Agents fail mid-task. Context windows fill, API calls time out, and tool errors interrupt execution (the territory of [exception handling and recovery patterns](exception-handling-recovery-patterns.md)). When you re-run the agent, it starts fresh, with no memory of what it already did. If the first run created a branch, posted a comment, or applied a label before failing, the second run meets pre-existing state it does not know about.
 
 Without idempotent design:
 
 - Second run creates a duplicate branch → both exist, conflict
 - Second run posts a duplicate comment → noise in the issue thread
-- Second run applies a label that's already set → harmless but wasteful
+- Second run applies a label that is already set → harmless but wasteful
 - Second run tries to create a PR that already exists → error and confusion
 
 With idempotent design, the second run detects existing state and produces the same result as if the first run had succeeded.
 
-## Core Techniques
+## Core techniques
 
-**Check before act.** Before creating, check if it already exists. Before posting, check if an equivalent already exists. The overhead is one read operation (the `git checkout` probe below); the alternative is duplicate state.
+Check before act. Before creating, check whether it already exists. Before posting, check whether an equivalent already exists. The overhead is one read operation (the `git checkout` probe below). The alternative is duplicate state.
 
 ```
 # Non-idempotent
@@ -41,23 +41,23 @@ git checkout -b feature/123
 git checkout feature/123 2>/dev/null || git checkout -b feature/123
 ```
 
-**Upsert over create.** Update existing artifacts rather than failing on existence. A comment that updates rather than appends, a label transition that checks current state before applying.
+Upsert over create. Update existing artifacts rather than failing on existence. A comment that updates rather than appends. A label transition that checks the current state before applying.
 
-**Unique identifiers.** Use issue numbers, commit SHAs, or task IDs as keys. A comment containing `[#123]` can be found and updated rather than duplicated. A branch named `feature/issue-123` has a natural uniqueness constraint.
+Unique identifiers. Use issue numbers, commit SHAs, or task IDs as keys. You can find and update a comment containing `[#123]` rather than duplicate it. A branch named `feature/issue-123` has a natural uniqueness constraint.
 
-**State labels as checkpoints.** Issue labels encode pipeline state: `idea → researching → researched → drafting`. An agent that checks the current label before transitioning avoids re-processing work that is already done.
+State labels as checkpoints. Issue labels encode pipeline state: `idea → researching → researched → drafting`. An agent that checks the current label before transitioning avoids re-processing work that is already done.
 
-**Git as natural idempotency.** Committing identical content twice produces the same tree SHA — git deduplicates at the object level. Pushing an already-pushed branch with `git push` is a no-op if no new commits exist. File writes are idempotent by nature; comment posts are not.
+Git as natural idempotency. Committing identical content twice produces the same tree SHA, because git deduplicates at the object level. Pushing an already-pushed branch with `git push` is a no-op when no new commits exist. File writes are idempotent by nature; comment posts are not.
 
 ## Checkpoints
 
-[Claude Code checkpoints](https://code.claude.com/docs/en/checkpointing) automatically capture file state before each user prompt. When a task goes wrong, run `/rewind` (or press `Esc` twice at an empty prompt) to restore to an earlier checkpoint — reverting code, conversation, or both — rather than re-running from the beginning. This reduces the window of work that must be idempotent — only the segment since the last checkpoint needs to be safe to retry.
+[Claude Code checkpoints](https://code.claude.com/docs/en/checkpointing) capture file state automatically before each user prompt. When a task goes wrong, run `/rewind` (or press `Esc` twice at an empty prompt) to restore an earlier checkpoint, reverting code, conversation, or both, rather than re-running from the beginning. This shrinks the window of work that must be idempotent. Only the segment since the last checkpoint needs to be safe to retry.
 
-The catch: checkpoints only capture edits made through Claude's file-editing tools. [Changes made by bash commands are not tracked](https://code.claude.com/docs/en/checkpointing) — an `rm`, `mv`, or migration script run as a shell call cannot be rewound. Since most agent side effects (branch creation, API calls, deployments) happen through tool and shell calls rather than file edits, checkpoints shrink the retry window but do not replace per-artifact idempotency.
+The catch: checkpoints only capture edits made through Claude's file-editing tools. [Changes made by bash commands are not tracked](https://code.claude.com/docs/en/checkpointing). You cannot rewind an `rm`, `mv`, or migration script run as a shell call. Most agent side effects (branch creation, API calls, deployments) happen through tool and shell calls rather than file edits. So checkpoints shrink the retry window but do not replace per-artifact idempotency.
 
-## What Cannot Be Made Idempotent
+## What cannot be made idempotent
 
-Some operations are inherently non-idempotent and should be gated or deduplication-tracked:
+Some operations are inherently non-idempotent. Gate them, or track them for deduplication:
 
 - External API calls that create resources (payment processing, email sending, webhook triggers)
 - Deployments that have side effects beyond git state
@@ -65,14 +65,14 @@ Some operations are inherently non-idempotent and should be gated or deduplicati
 
 For these, log the operation with a unique key before executing and check the log before re-executing. The log is the idempotency record.
 
-## When This Backfires
+## When this backfires
 
 Check-before-act idempotency has known failure modes that make it the wrong tool in some contexts:
 
-- **Concurrency introduces TOCTOU gaps.** Two runs that read "no branch exists" at the same moment will both create it. The [AWS Builders' Library](https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/) recommends server-side idempotency keys with atomic claim semantics — a client-side existence check is not enough when multiple actors can target the same resource.
-- **Partial state defeats existence checks.** If the first run crashed after creating the branch but before posting the comment, the second run still needs to finish the comment. Guard each artifact, not the workflow — the per-action granularity [rollback-first design](rollback-first-design.md) also depends on.
-- **Silent skip hides drift.** Short-circuiting on pre-existing state also skips when that state came from a different actor or a stale run. "Fail loudly" surfaces conflicts that silent skips bury.
-- **Marker stores have TTLs.** A 24-hour deduplication table silently stops protecting older replays. For Kafka-style replays or offline queues, the idempotency record must outlive the worst-case retry horizon.
+- Concurrency introduces TOCTOU gaps. Two runs that read "no branch exists" at the same moment will both create it. The [AWS Builders' Library](https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/) recommends server-side idempotency keys with atomic claim semantics. A client-side existence check is not enough when multiple actors can target the same resource.
+- Partial state defeats existence checks. If the first run crashed after creating the branch but before posting the comment, the second run still needs to finish the comment. Guard each artifact, not the workflow — the per-action granularity that [rollback-first design](rollback-first-design.md) also depends on.
+- Silent skip hides drift. Short-circuiting on pre-existing state also skips when that state came from a different actor or a stale run. "Fail loudly" surfaces conflicts that silent skips bury.
+- Marker stores have TTLs. A 24-hour deduplication table silently stops protecting older replays. For Kafka-style replays or offline queues, the idempotency record must outlive the worst-case retry horizon.
 
 Prefer atomic upserts, database-backed keys, or server-enforced unique constraints when duplicates are costly.
 
@@ -113,7 +113,7 @@ def run_issue_workflow(repo, task_title, task_body):
 
 Running `run_issue_workflow` twice with the same inputs produces the same end state: one issue, one branch, one comment. The second run skips every creation step because the check-before-act guards short-circuit on existing state.
 
-The unique identifier (`issue.number`) is the key throughout: it names the branch and marks the comment. This makes every artifact findable rather than requiring creation.
+The unique identifier (`issue.number`) is the key throughout: it names the branch and marks the comment. This makes every artifact findable rather than requiring a new one.
 
 ## Key Takeaways
 
@@ -132,4 +132,4 @@ The unique identifier (`issue.number`) is the key throughout: it names the branc
 - [Human-in-the-Loop Placement: Where to Gate Agent Pipelines](../workflows/human-in-the-loop.md)
 - [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md)
 - [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md)
-- [The Ralph Wiggum Loop](ralph-wiggum-loop.md)
+- [The Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md)

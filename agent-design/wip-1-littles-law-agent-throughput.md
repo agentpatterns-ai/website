@@ -17,9 +17,9 @@ maturity: established
 
 > Cap an agent's active task count at one until verification passes. Little's Law makes the resulting cycle time a quantitative harness property, not a guess.
 
-## The Queueing Identity
+## The queueing identity
 
-Little's Law states that in any stable queueing system, the average number of items in the system equals the average arrival rate multiplied by the average time each item spends in the system: `L = λ × W`. The result was [proved in full generality by John Little in 1961](https://www.jstor.org/stable/167570) and holds regardless of arrival distribution or service discipline.
+Little's Law states that in any stable queueing system, the average number of items in the system equals the average arrival rate multiplied by the average time each item spends in the system: `L = λ × W`. John Little [proved the result in full generality in 1961](https://www.jstor.org/stable/167570), and it holds regardless of arrival distribution or service discipline.
 
 Map the variables to an agent's task stream:
 
@@ -29,15 +29,15 @@ Map the variables to an agent's task stream:
 | `λ` | Rate at which new tasks enter the active state |
 | `W` | Average cycle time per task — start to verified completion |
 
-The harness controls `L` directly through a work-in-progress (WIP) cap. With `λ` set by the user, lowering `L` forces `W` down. The empirical lever — the number you tune — is the WIP limit.
+The harness controls `L` directly through a work-in-progress (WIP) cap. The user sets `λ`, so lowering `L` forces `W` down. The lever you tune is the WIP limit.
 
-## The WIP=1 Rule
+## The WIP=1 rule
 
-WIP limits come from Kanban, where they exist to expose flow problems and shorten lead time. For a single coding agent, the safest default is `WIP=1`: at most one task may be in `active` state. A new task cannot enter `active` until the current one's status flips to `passing` against its acceptance criteria — the contract from [Feature List Files](../instructions/feature-list-files.md).
+WIP limits come from Kanban, where they expose flow problems and shorten lead time. For a single coding agent, the safest default is `WIP=1`: at most one task may be in `active` state. A new task cannot enter `active` until the current one's status flips to `passing` against its acceptance criteria — the contract from [Feature List Files](../instructions/feature-list-files.md).
 
 Anthropic's harness team reports the same rule from production agent work: "the next iteration of the coding agent was then asked to work on only one feature at a time. This incremental approach turned out to be critical" ([Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). The failure mode it prevents — "the agent tended to try to do too much at once—essentially to attempt to one-shot the app" — is the same overreach Little's Law predicts when L grows.
 
-## The State Machine
+## The state machine
 
 ```mermaid
 graph LR
@@ -50,16 +50,16 @@ graph LR
 
 `active` has cardinality exactly one. `blocked` does not free the slot — a blocked task still holds the WIP=1 token. Only `passing` releases it. This is what makes the rule load-bearing: the agent cannot satisfy `passing` by gesturing at code that looks done; the [backpressure signal](agent-backpressure.md) has to flip green.
 
-## Verified Completion Rate as the Throughput Metric
+## Verified completion rate as the throughput metric
 
-The metric that proves the harness works is not features-started but verified completion rate (VCR) — features passing end-to-end verification per unit time. The walkinglabs course documents a case study where WIP=1 raised completion from 37.5% to 87.5% across an 8-feature build with *less total code* ([learn-harness-engineering lecture 07](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-07-why-agents-overreach-and-under-finish/index.md)). The course also reports a counter-intuitive empirical claim worth tracking on your own runs: lines-of-code generated correlates weakly *negatively* with feature-completion rate. Track VCR, not LOC.
+The metric that proves the harness works is not features-started but verified completion rate (VCR) — features passing end-to-end verification per unit time. The walkinglabs course documents a case study where WIP=1 raised completion from 37.5% to 87.5% across an 8-feature build with less total code ([learn-harness-engineering lecture 07](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-07-why-agents-overreach-and-under-finish/index.md)). The course also reports a counter-intuitive empirical claim worth tracking on your own runs: lines-of-code generated correlates weakly negatively with feature-completion rate. Track VCR, not LOC.
 
-## When This Backfires
+## When this backfires
 
-- **Tightly bounded micro-tasks.** Renaming twelve helper functions in lockstep does not benefit from twelve serial verification cycles. Per-task overhead dominates per-task work. Batch the edit; verify once.
-- **[Cross-cutting refactors](coding-agent-scope-expansion.md).** Changing a public API signature legitimately touches many files in one logical change. Forcing per-file verification leaves intermediate states that do not compile.
-- **No verification oracle.** If `passing` collapses to "looks reasonable," WIP=1 still applies but its gating mechanism evaporates. Add a real oracle (test, schema, runbook step) before relying on the rule.
-- **Orchestrator-level parallelism.** WIP=1 applies *within* a single verified-completion stream. Multi-agent systems running in parallel ([Anthropic's multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)) deliberately fan out; each sub-agent's *own* stream still runs WIP=1.
+- Tightly bounded micro-tasks. Renaming twelve helper functions in lockstep does not benefit from twelve serial verification cycles. Per-task overhead dominates per-task work. Batch the edit; verify once.
+- [Cross-cutting refactors](coding-agent-scope-expansion.md). Changing a public API signature legitimately touches many files in one logical change. Forcing per-file verification leaves intermediate states that do not compile.
+- No verification oracle. If `passing` collapses to "looks reasonable," WIP=1 still applies but its gating mechanism evaporates. Add a real oracle (test, schema, runbook step) before relying on the rule.
+- Orchestrator-level parallelism. WIP=1 applies within a single verified-completion stream. Multi-agent systems running in parallel ([Anthropic's multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)) deliberately fan out; each sub-agent's own stream still runs WIP=1.
 
 ## Example
 

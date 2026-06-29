@@ -25,11 +25,11 @@ This framing redefines what "good tool design" means for agents. A well-designed
 
 Three principles follow from this:
 
-1. **Return only the next decision's inputs.** A CI status tool should return `"3 checks passed, 1 failed: lint"` -- not the full GitHub Actions run object with 40+ fields. See [Token-Efficient Tool Design](../../tool-engineering/token-efficient-tool-design.md) for the full pattern.
+1. Return only the next decision's inputs. A CI status tool should return `"3 checks passed, 1 failed: lint"` -- not the full GitHub Actions run object with 40+ fields. See [Token-Efficient Tool Design](../../token-engineering/token-efficient-tool-design.md) for the full pattern.
 
-2. **Replace opaque identifiers with semantic equivalents.** UUIDs, MIME types, and internal codes are noise the agent must carry but cannot reason about. Return `"Q3 Budget Review"` and `"Word document"` instead. See [Semantic Tool Output](../../tool-engineering/semantic-tool-output.md).
+2. Replace opaque identifiers with semantic equivalents. UUIDs, MIME types, and internal codes are noise the agent must carry but cannot reason about. Return `"Q3 Budget Review"` and `"Word document"` instead. See [Semantic Tool Output](../../tool-engineering/semantic-tool-output.md).
 
-3. **Apply filtering and pagination at the tool layer.** Tools that return full datasets shift the filtering burden to the agent, which either hallucinates the filter logic or consumes the entire dataset in context. Accept filter parameters and return bounded pages with sensible defaults.
+3. Apply filtering and pagination at the tool layer. Tools that return full datasets shift the filtering burden to the agent, which either hallucinates the filter logic or consumes the entire dataset in context. Accept filter parameters and return bounded pages with sensible defaults.
 
 ---
 
@@ -61,11 +61,11 @@ Documentation tells the agent how to use a tool correctly. Poka-yoke (mistake-pr
 
 Production patterns from real agent systems:
 
-- **Absolute paths over relative.** Relative paths failed after directory changes. Requiring absolute paths [eliminated the failure mode entirely](https://www.anthropic.com/engineering/swe-bench-sonnet).
-- **Enums over free text.** `file_type: Literal["python", "typescript", "all"]` prevents the agent from inventing values.
-- **Read-before-write gates.** Claude Code's Edit tool rejects calls if the file has not been read in the current session -- a structural prerequisite, not an instruction.
-- **Uniqueness constraints.** String replacement that requires `old_str` to match exactly one location forces the agent to provide sufficient context.
-- **Training-aligned formats.** Inputs close to naturally-occurring text (JSON, markdown, prose) leverage model priors. Formats requiring line counting or custom DSLs [increase error rates](https://www.anthropic.com/engineering/building-effective-agents).
+- Absolute paths over relative. Relative paths failed after directory changes. Requiring absolute paths [eliminated the failure mode entirely](https://www.anthropic.com/engineering/swe-bench-sonnet).
+- Enums over free text. `file_type: Literal["python", "typescript", "all"]` prevents the agent from inventing values.
+- Read-before-write gates. Claude Code's Edit tool rejects calls if the file has not been read in the current session -- a structural prerequisite, not an instruction.
+- Uniqueness constraints. String replacement that requires `old_str` to match exactly one location forces the agent to provide sufficient context.
+- Training-aligned formats. Inputs close to naturally-occurring text (JSON, markdown, prose) leverage model priors. Formats requiring line counting or custom DSLs [increase error rates](https://www.anthropic.com/engineering/building-effective-agents).
 
 The design question for any new tool: can any parameter accept values that are never valid? Does the tool depend on prior state without enforcing it? Can the output overwhelm the context window? See [Poka-Yoke for Agent Tools](../../tool-engineering/poka-yoke-agent-tools.md) for the full catalog.
 
@@ -85,11 +85,11 @@ MCP adds a runtime enforcement layer by defining input and output schemas on too
 
 The [Model Context Protocol](../../standards/mcp-protocol.md) is the emerging standard for agent-tool integration. The architectural decisions that matter are not protocol mechanics but deployment topology and tool surface design.
 
-**Transport selection** is a deployment decision. Use stdio (server runs as subprocess of the client) unless you need multiple clients connecting to the same server or the server must run on a different machine. Streamable HTTP introduces network exposure, authentication requirements, and [Origin header validation to prevent DNS rebinding attacks](https://modelcontextprotocol.io/docs/concepts/transports).
+Transport selection is a deployment decision. Use stdio (server runs as subprocess of the client) unless you need multiple clients connecting to the same server or the server must run on a different machine. Streamable HTTP introduces network exposure, authentication requirements, and [Origin header validation to prevent DNS rebinding attacks](https://modelcontextprotocol.io/docs/concepts/transports).
 
-**Tool surface design** determines agent performance. [Claude Code automatically defers MCP tool definitions when they exceed 10% of the context window](https://www.anthropic.com/engineering/advanced-tool-use), achieving an 85% token reduction compared to pre-loading. Servers with large tool surfaces should support lazy loading and the `listChanged` capability for dynamic refresh.
+Tool surface design determines agent performance. [Claude Code automatically defers MCP tool definitions when they exceed 10% of the context window](https://www.anthropic.com/engineering/advanced-tool-use), achieving an 85% token reduction compared to pre-loading. Servers with large tool surfaces should support lazy loading and the `listChanged` capability for dynamic refresh.
 
-**Error handling** has two distinct mechanisms that serve different purposes: JSON-RPC protocol errors (infrastructure failures -- unknown tool, malformed arguments) and tool execution errors with `isError: true` (application failures the agent can reason about). A server that returns a generic protocol error for a database timeout denies the agent the information it needs to retry or fall back. See [MCP Client/Server Architecture](../../tool-engineering/mcp-client-server-architecture.md).
+Error handling has two distinct mechanisms that serve different purposes: JSON-RPC protocol errors (infrastructure failures -- unknown tool, malformed arguments) and tool execution errors with `isError: true` (application failures the agent can reason about). A server that returns a generic protocol error for a database timeout denies the agent the information it needs to retry or fall back. See [MCP Client/Server Architecture](../../tool-engineering/mcp-client-server-architecture.md).
 
 ---
 
@@ -113,10 +113,10 @@ The description field determines whether the agent loads a skill. Structure it a
 
 ## Related
 
-**Source pages (detailed patterns)**
+Source pages (detailed patterns)
 
 - [Tool Engineering](../../tool-engineering/tool-engineering.md) -- foundational principles
-- [Token-Efficient Tool Design](../../tool-engineering/token-efficient-tool-design.md) -- output shaping for context cost
+- [Token-Efficient Tool Design](../../token-engineering/token-efficient-tool-design.md) -- output shaping for context cost
 - [Tool Minimalism](../../tool-engineering/tool-minimalism.md) -- fewer tools, goal-oriented prompting
 - [Tool Description Quality](../../tool-engineering/tool-description-quality.md) -- selection signals and iteration
 - [Tool Descriptions as Onboarding](../../tool-engineering/tool-descriptions-as-onboarding.md) -- implicit context for agents
@@ -127,13 +127,13 @@ The description field determines whether the agent loads a skill. Structure it a
 - [MCP Client/Server Architecture](../../tool-engineering/mcp-client-server-architecture.md) -- transport, errors, security
 - [Skill Authoring Patterns](../../tool-engineering/skill-authoring-patterns.md) -- building reusable agent skills
 
-**Sibling modules**
+Sibling modules
 
 - [Prompt Engineering](prompt-engineering.md) -- [system prompt altitude](../../instructions/system-prompt-altitude.md), polarity, compliance ceiling
 - [Context Engineering](context-engineering.md) -- context window mechanics, compression, caching
 - [Harness Engineering](harness-engineering.md) -- repo legibility, mechanical enforcement, [backpressure](../../agent-design/agent-backpressure.md)
 - [How the Four Disciplines Compound](prompt-context-harness-capstone.md) -- the multiplication model and diagnostic framework
 
-**Other training modules**
+Other training modules
 
 - [GitHub Copilot: Context Engineering & Agent Workflows](../copilot/context-and-workflows.md)

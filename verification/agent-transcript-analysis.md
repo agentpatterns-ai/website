@@ -15,15 +15,15 @@ maturity: adopted
 
 > Feeding evaluation transcripts back to the agent surfaces tool-selection errors, description ambiguities, and cross-transcript failure patterns that manual review misses at scale.
 
-**Learn it hands-on:** [Gates That Catch Regressions](https://learn.agentpatterns.ai/observability/gates-that-catch-regressions/) — guided lesson with quizzes.
+Learn it hands-on with [Gates That Catch Regressions](https://learn.agentpatterns.ai/observability/gates-that-catch-regressions/), a guided lesson with quizzes.
 
-## The Manual Review Problem
+## The manual review problem
 
-After running evaluation tasks, someone must read the transcripts and identify what went wrong. Manual review is slow and inconsistent — humans miss patterns that span dozens of transcripts and tend to focus on the most recent failure rather than the most common one.
+Manual transcript review is slow and inconsistent. After running evaluation tasks, someone has to read the transcripts and work out what went wrong. People miss patterns that span dozens of transcripts. They also tend to focus on the most recent failure rather than the most common one.
 
-The same agent you are building tools for can perform this analysis at scale. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
+The same agent you are building tools for can do this analysis at scale. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
-## What the Agent Is Good at Here
+## What the agent is good at here
 
 Agents analyzing transcripts tend to surface:
 
@@ -32,49 +32,48 @@ Agents analyzing transcripts tend to surface:
 - Response format problems — fields that are never used, or structured data that forces unnecessary parsing
 - Patterns of confusion repeated across multiple tasks that look different on the surface
 
-Agents are also effective at making consistent changes across multiple tool definitions at once — something humans do unevenly when editing several related descriptions in one pass. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
+Agents are also good at making consistent changes across many tool definitions at once. People do this unevenly when they edit several related descriptions in one pass. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
-The mechanism: when all transcripts and tool definitions sit in a single context window, the agent applies one criterion uniformly across every instance — without the recency bias and inconsistent framing that accumulate when a human reads transcripts sequentially.
+Here is why it works. When all the transcripts and tool definitions sit in a single context window, the agent applies one criterion to every instance. It avoids the recency bias and inconsistent framing that build up when a person reads transcripts one after another.
 
 ## Setup
 
-**What to provide:**
+What to provide:
 
-- A batch of evaluation transcripts (5-20 is useful; more can be summarized first)
+- A batch of evaluation transcripts (5 to 20 is useful; summarize more first)
 - The current tool definitions (name, description, parameters)
-- A description of what the agent was trying to accomplish in each task
+- A description of what the agent was trying to do in each task
 
-**What to ask for:**
+What to ask for:
 
 - Patterns of failure across transcripts
 - Specific tool descriptions that appear to have caused confusion
 - Concrete proposed rewrites, not just observations
-- Whether any tools should be consolidated, split, or removed
+- Whether any tools should be merged, split, or removed
 
-**Instruction to trigger deeper analysis:**
-Ask the agent to output its reasoning before each proposed change. Anthropic's tool guidance recommends reasoning blocks before tool calls — the same principle here separates diagnosis from prescription. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
+What to ask for to trigger deeper analysis: tell the agent to output its reasoning before each proposed change. Anthropic's tool guidance recommends reasoning blocks before tool calls, and the same principle here separates diagnosis from prescription. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
-## Interpreting the Output
+## Interpreting the output
 
-Treat proposed changes as hypotheses, not conclusions — the agent is good at pattern recognition but may fix the observed failure while introducing a new one.
+Treat proposed changes as hypotheses, not conclusions. The agent is good at pattern recognition, but it may fix the observed failure while introducing a new one.
 
-Before applying a proposed change:
+Before you apply a proposed change:
 
-1. Verify it addresses the root cause identified in the transcript, not just the symptom
-2. Consider whether it could break correctly-functioning cases
-3. Prefer targeted edits over broad rewrites — smaller diffs are easier to evaluate
+1. Verify it addresses the root cause identified in the transcript, not just the symptom.
+2. Consider whether it could break cases that work correctly today.
+3. Prefer targeted edits over broad rewrites, because smaller diffs are easier to evaluate.
 
-After applying changes, re-run the eval suite to confirm the targeted failure is resolved and no regressions appear.
+After you apply changes, re-run the eval suite. Confirm the targeted failure is resolved and no regressions appear.
 
-## Combined Human and Agent Review
+## Combined human and agent review
 
-Neither approach alone is enough. Human reviewers catch issues that require domain context and judgment about intended behavior; agents apply consistent criteria across large transcript volumes without attention fatigue. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
+Neither approach alone is enough. Human reviewers catch issues that need domain context and judgment about intended behavior. Agents apply consistent criteria across large transcript volumes without attention fatigue. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
-A practical split: run agent analysis first to identify the top 3-5 issue classes, then focus human review on root causes and whether the agent's proposed fixes are sound.
+A practical split works well. Run agent analysis first to find the top 3 to 5 issue classes. Then focus human review on root causes and on whether the agent's proposed fixes are sound.
 
-## Avoiding Overfitting
+## Avoiding overfitting
 
-After agent-assisted refinement, run a held-out test set before declaring the tool improved. Changes that fix development-task transcripts can overfit to those inputs; a held-out set reveals whether improvements generalize. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
+Run a held-out test set before you declare the tool improved. Changes that fix development-task transcripts can overfit to those inputs. A held-out set shows whether the improvements generalize. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
 ## Example
 
@@ -113,7 +112,7 @@ response = client.messages.create(
 print(response.content[0].text)
 ```
 
-The key instruction is to reason through the root cause before proposing a rewrite. This separates diagnosis from prescription and makes it easier to evaluate whether the proposed change actually addresses the underlying issue. After applying any changes, re-run the eval suite against a [held-out test set](eval-blind-spots.md) before treating the tool as improved.
+The key instruction is to reason through the root cause before proposing a rewrite. This separates diagnosis from prescription. It also makes it easier to judge whether the proposed change addresses the underlying issue. After you apply any changes, re-run the eval suite against a [held-out test set](eval-blind-spots.md) before you treat the tool as improved.
 
 ## Key Takeaways
 
@@ -123,15 +122,15 @@ The key instruction is to reason through the root cause before proposing a rewri
 - Apply changes as targeted hypotheses, then re-run evaluations to confirm resolution and check for regressions
 - Validate improvements against a held-out test set to avoid overfitting to development transcripts
 
-## When This Backfires
+## When this backfires
 
-Agents miss by omission as much as by commission — the Anthropic engineering team notes that "what agents omit in their feedback and responses can often be more important than what they include." An agent that confidently lists five issue classes may silently skip a sixth that is harder to articulate.
+Agents miss by omission as much as by commission. The Anthropic engineering team notes that "what agents omit in their feedback and responses can often be more important than what they include." An agent that confidently lists five issue classes may quietly skip a sixth that is harder to put into words.
 
-Agent-proposed fixes can overfit to the surface of a failure rather than its root cause. A description rewrite may resolve the visible symptom while introducing a subtler ambiguity that only surfaces on task types not covered by your eval set — which is why re-running a [held-out test set after changes](eval-blind-spots.md) is not optional.
+Agent-proposed fixes can overfit to the surface of a failure rather than its root cause. A description rewrite may resolve the visible symptom while introducing a subtler ambiguity. That ambiguity only surfaces on task types your eval set does not cover. This is why re-running a [held-out test set after changes](eval-blind-spots.md) is not optional.
 
-When the same model both generates and reviews, self-preference bias compounds the problem: judges mark their own outputs as satisfying rubrics up to 50% more often than a neutral evaluator would, even on objectively verifiable criteria. [Source: [Self-Preference Bias in Rubric-Based Evaluation](https://arxiv.org/abs/2604.06996)] Cross-check proposed fixes with a different model family.
+When the same model both generates and reviews, self-preference bias makes the problem worse. Judges mark their own outputs as satisfying rubrics up to 50% more often than a neutral evaluator would, even on objectively verifiable criteria. [Source: [Self-Preference Bias in Rubric-Based Evaluation](https://arxiv.org/abs/2604.06996)] Cross-check proposed fixes with a different model family.
 
-Do not rely on agent analysis as the sole quality gate. Use it to narrow the search space for human review, not to replace the judgment needed to validate fixes.
+Do not rely on agent analysis as the only quality gate. Use it to narrow the search space for human review, not to replace the judgment needed to validate fixes.
 
 ## Related
 

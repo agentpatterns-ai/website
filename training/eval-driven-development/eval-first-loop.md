@@ -79,10 +79,10 @@ This reframes the development conversation. Instead of debating whether a featur
 
 You likely already have inputs suitable for an eval suite:
 
-- **Manual development checks**: any scenario you tested by hand during development is a candidate eval task
-- **Production failures**: incidents and bug reports are high-value eval tasks because they represent real cases the agent actually mishandled
-- **Exploratory tests**: ad hoc prompts you ran while figuring out how a feature should behave
-- **Reviewer feedback**: patterns that come up repeatedly in code review ("the agent keeps doing X") indicate missing eval coverage
+- Manual development checks: any scenario you tested by hand during development is a candidate eval task
+- Production failures: incidents and bug reports are high-value eval tasks because they represent real cases the agent actually mishandled
+- Exploratory tests: ad hoc prompts you ran while figuring out how a feature should behave
+- Reviewer feedback: patterns that come up repeatedly in code review ("the agent keeps doing X") indicate missing eval coverage
 
 Converting these to formal eval tasks avoids duplicating effort and anchors the suite to problems that actually matter. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
@@ -105,8 +105,8 @@ Without evals, step 4 is "have three engineers manually test for two weeks and r
 
 Not all features require the same upgrade strategy. Anthropic's skill-creator distinguishes two categories that generalize beyond skills to any agent capability: [Source: [Improving Skill-Creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 
-- **Capability uplift** — encodes techniques that produce better output than the base model alone. These may become obsolete when a new model internalizes the technique. Model upgrade evals should compare the skill-augmented agent against the raw model on the same tasks; if the raw model matches or exceeds the skill, retire the skill rather than maintaining dead complexity.
-- **Encoded preference** — sequences existing capabilities according to team-specific workflows, the pattern explored in [Eval-Driven Development for tool building](../../workflows/eval-driven-development.md#applying-the-loop-to-tool-building). These remain valuable across model generations because the model cannot infer your process. Upgrade evals should verify workflow fidelity (step ordering, output format, required checks) rather than raw output quality.
+- Capability uplift — encodes techniques that produce better output than the base model alone. These may become obsolete when a new model internalizes the technique. Model upgrade evals should compare the skill-augmented agent against the raw model on the same tasks; if the raw model matches or exceeds the skill, retire the skill rather than maintaining dead complexity.
+- Encoded preference — sequences existing capabilities according to team-specific workflows, the pattern explored in [Eval-Driven Development for tool building](../../workflows/eval-driven-development.md#applying-the-loop-to-tool-building). These remain valuable across model generations because the model cannot infer your process. Upgrade evals should verify workflow fidelity (step ordering, output format, required checks) rather than raw output quality.
 
 ---
 
@@ -120,11 +120,11 @@ Run each version's evals with independent agents in parallel, each starting from
 
 ## Common Anti-Patterns
 
-**Writing evals and code simultaneously**: if you write tasks while building the feature, you may unconsciously write tasks that match what the agent already does rather than what it should do. The temporal separation is the discipline.
+Writing evals and code simultaneously: if you write tasks while building the feature, you may unconsciously write tasks that match what the agent already does rather than what it should do. The temporal separation is the discipline.
 
-**Moving the bar to match the pass rate**: if the agent reaches 82% and your bar was 90%, do not lower the bar to ship. Either improve the agent or explicitly accept the risk with documentation of which failure modes remain.
+Moving the bar to match the pass rate: if the agent reaches 82% and your bar was 90%, do not lower the bar to ship. Either improve the agent or explicitly accept the risk with documentation of which failure modes remain.
 
-**Treating the eval suite as immutable**: the suite should grow with every incident and every edge case discovered. A suite that does not change after launch is a suite that is not learning from production.
+Treating the eval suite as immutable: the suite should grow with every incident and every edge case discovered. A suite that does not change after launch is a suite that is not learning from production.
 
 ---
 

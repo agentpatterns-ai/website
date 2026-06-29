@@ -21,9 +21,9 @@ maturity: adopted
 
 Evidence-based allowlist auto-discovery builds the allow list incrementally from real agent usage. [Manual allowlisting](safe-command-allowlisting.md) pre-authorizes known-safe commands, but teams must predict the list before they have usage data. Auto-discovery removes that requirement: each manual approval increments a counter, and once a command crosses a threshold it is written to the allow list.
 
-## How It Works
+## How it works
 
-Claude Code's `PermissionRequest` hook fires before the permission dialog is shown. When it approves a call (`hookSpecificOutput.decision.behavior: "allow"`), the sibling `updatedPermissions` array can carry an `addRules` entry whose `destination` writes the allow rule to a settings file ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)).
+Claude Code's `PermissionRequest` hook fires before Claude Code shows the permission dialog. When it approves a call (`hookSpecificOutput.decision.behavior: "allow"`), the sibling `updatedPermissions` array can carry an `addRules` entry whose `destination` writes the allow rule to a settings file ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)).
 
 ```mermaid
 sequenceDiagram
@@ -43,9 +43,9 @@ sequenceDiagram
     end
 ```
 
-A `PostToolUse` hook tracks outcomes after execution. The rule is written only after a command has been manually approved N times without flagged side effects.
+A `PostToolUse` hook tracks outcomes after execution. The rule lands only after you manually approve a command N times without flagged side effects.
 
-## The Two-Hook Implementation
+## The two-hook implementation
 
 `PermissionRequest` is the only hook with an `updatedPermissions` write-back path, per the [Claude Code hooks reference](https://code.claude.com/docs/en/hooks). `PostToolUse` cannot write settings via its return value; it writes to the counter log.
 
@@ -54,7 +54,7 @@ A `PostToolUse` hook tracks outcomes after execution. The rule is written only a
 | `PermissionRequest` | Checks count; writes allow rule when threshold met | Yes — via `updatedPermissions` |
 | `PostToolUse` | Records outcome; increments counter on success | No — must write to a sidecar log file |
 
-### PermissionRequest Hook
+### PermissionRequest hook
 
 ```bash
 #!/bin/bash
@@ -92,7 +92,7 @@ fi
 # Fall through: show dialog as normal
 ```
 
-### PostToolUse Hook (Outcome Tracker)
+### PostToolUse hook (outcome tracker)
 
 ```bash
 #!/bin/bash
@@ -117,13 +117,13 @@ TMP=$(mktemp)
 jq --arg k "$KEY" --argjson v "$NEW" '.[$k] = $v' "$LOG_FILE" > "$TMP" && mv "$TMP" "$LOG_FILE"
 ```
 
-## When This Backfires
+## When this backfires
 
 Counter-based auto-promotion assumes past approvals predict future safety. That assumption breaks under several conditions:
 
-- **Broad key matching**: First-token normalization (`git` from `git status`) counts safe reads toward the same key as destructive variants. The [v2.1.77 Claude Code changelog](https://code.claude.com/docs/en/changelog) noted the related bug of compound bash commands saving a single rule for the full string rather than per-subcommand.
-- **Scripted or CI runs**: Automated pipelines can accumulate approval counts for commands no human ever consciously reviewed, silently promoting them.
-- **Accidental approvals**: Five rushed approvals promote a command permanently; threshold counts do not filter careless clicks.
+- Broad key matching: first-token normalization (`git` from `git status`) counts safe reads toward the same key as destructive variants. The [v2.1.77 Claude Code changelog](https://code.claude.com/docs/en/changelog) noted the related bug of compound bash commands saving a single rule for the full string rather than per-subcommand.
+- Scripted or CI runs: automated pipelines can build up approval counts for commands no human ever consciously reviewed, then promote them silently.
+- Accidental approvals: five rushed approvals promote a command permanently, and threshold counts do not filter careless clicks.
 
 Mitigations:
 
@@ -138,7 +138,7 @@ for blocked in $NEVER_AUTO_ALLOW; do
 done
 ```
 
-## Relationship to Static Allowlists
+## Relationship to static allowlists
 
 Static and evidence-based allowlists are additive, not competing:
 

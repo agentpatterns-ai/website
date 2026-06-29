@@ -20,18 +20,18 @@ Agent-led dev-environment iteration is the workflow where the coding agent — n
 
 This is the next shape after [operator-authored bootstrapping](agent-environment-bootstrapping.md). Bootstrapping is what an operator does once and freezes; agent-led iteration is what the harness does on every dependency change.
 
-## When To Use It
+## When to use it
 
 Four preconditions decide whether this workflow saves time or quietly adds risk:
 
-1. **Deterministic validator exists.** A fast, reliable command (project unit tests, `make build`, a smoke-test script) returns non-zero when the env is broken. Without it, the rollback signal never fires and the agent promotes broken configs.
-2. **Snapshot-and-rollback substrate is in place.** Either per-command snapshotting (Repo2Run-style, via `docker commit`) or per-environment version history (Cursor-style). Failed attempts must cost only the build time, not the working baseline — the [rollback-first design](../agent-design/rollback-first-design.md) discipline applied to infrastructure.
-3. **Layer caching is effective.** Most layers stay cached across attempts. On stacks where most layers invalidate per change (heavy native builds, monorepos with cross-cutting base images), iteration cost can exceed the savings.
-4. **Audit-log review cadence exists.** Someone reads the env-change log — the team-wide audit log Cursor records for every change. Without it, the log is theatre and the agent's freedom to edit infrastructure becomes an undetected drift vector.
+1. A deterministic validator exists. A fast, reliable command (project unit tests, `make build`, a smoke-test script) returns non-zero when the env is broken. Without it, the rollback signal never fires and the agent promotes broken configs.
+2. A snapshot-and-rollback substrate is in place. Use either per-command snapshotting (Repo2Run-style, via `docker commit`) or per-environment version history (Cursor-style). Failed attempts must cost only the build time, not the working baseline — the [rollback-first design](../agent-design/rollback-first-design.md) discipline applied to infrastructure.
+3. Layer caching is effective. Most layers stay cached across attempts. On stacks where most layers invalidate per change (heavy native builds, monorepos with cross-cutting base images), iteration cost can exceed the savings.
+4. An audit-log review cadence exists. Someone reads the env-change log — the team-wide audit log Cursor records for every change. Without it, the log does nothing and the agent's freedom to edit infrastructure becomes an undetected drift vector.
 
 If any precondition is missing, fall back to operator-authored bootstrapping or treat env work as a human-gated change.
 
-## How It Works
+## How it works
 
 ```mermaid
 graph TD
@@ -49,29 +49,29 @@ graph TD
 
 Two reference implementations:
 
-**Repo2Run (academic — the mechanism).** [Hu et al. (2025)](https://arxiv.org/abs/2502.13681) describe a dual-environment design: the agent operates inside a Docker container sandbox while the external harness manages snapshots. Each command is wrapped — `docker commit` snapshots state, the command runs, and a non-zero exit code triggers an atomic rollback to the previous snapshot. Only successful commands are synthesised into the final Dockerfile, with version constraints replaced by the actual resolved versions. Reaches 86.0% success on 420 Python repos vs. SWE-agent's 9.0% — a 77.0-point gap attributable to the atomic-execution substrate ([arxiv 2502.13681](https://arxiv.org/abs/2502.13681)).
+Repo2Run (academic — the mechanism). [Hu et al. (2025)](https://arxiv.org/abs/2502.13681) describe a dual-environment design: the agent operates inside a Docker container sandbox while the external harness manages snapshots. Each command is wrapped — `docker commit` snapshots state, the command runs, and a non-zero exit code triggers an atomic rollback to the previous snapshot. Only successful commands are synthesized into the final Dockerfile, with version constraints replaced by the actual resolved versions. The approach reaches 86.0% success on 420 Python repos against SWE-agent's 9.0% — a 77.0-point gap attributable to the atomic-execution substrate ([arxiv 2502.13681](https://arxiv.org/abs/2502.13681)).
 
-**Cursor cloud agent environments (production — the controls).** Cursor's [2026-05-13 release](https://cursor.com/changelog) added agent-led env authoring for cloud agents: the harness inspects the repos, generates a Dockerfile, asks clarifying questions, flags missing credentials, and validates the build before promoting it ([Cursor blog](https://cursor.com/blog/cloud-agent-development-environments)). Layer caching makes cached builds 70% faster, which is what makes per-change iteration economical. Build secrets are scoped to the build step and not exposed to the running agent. Every environment has its own version history with admin-restrictable rollback and a team-wide audit log of every change ([Cursor blog](https://cursor.com/blog/cloud-agent-development-environments)). If configuration fails, the harness falls back to a base image with explicit warnings rather than hard-failing.
+Cursor cloud agent environments (production — the controls). Cursor's [2026-05-13 release](https://cursor.com/changelog) added agent-led env authoring for cloud agents: the harness inspects the repos, generates a Dockerfile, asks clarifying questions, flags missing credentials, and validates the build before promoting it ([Cursor blog](https://cursor.com/blog/cloud-agent-development-environments)). Layer caching makes cached builds 70% faster, which is what makes per-change iteration economical. Build secrets are scoped to the build step and not exposed to the running agent. Every environment has its own version history with admin-restrictable rollback and a team-wide audit log of every change ([Cursor blog](https://cursor.com/blog/cloud-agent-development-environments)). If configuration fails, the harness falls back to a base image with explicit warnings rather than hard-failing.
 
-## Why It Works
+## Why it works
 
 The mechanism has three coupled parts. The validator gives the agent a binary `worked / did not work` signal per attempt. The snapshot-and-rollback substrate makes failed attempts cost only build time, not the working baseline. Layer caching makes the per-attempt cost low enough that the iteration converges instead of being abandoned for cost reasons.
 
-Without snapshotting, every failed command pollutes the environment state and the agent cannot distinguish whether the next failure is a new bug or residue from the previous one ([Repo2Run, arxiv 2502.13681](https://arxiv.org/html/2502.13681v2)). With snapshotting, each attempt is independent and the agent can converge — which is why the Repo2Run benchmark gap of 77.0 points opens against SWE-agent precisely on the rollback dimension.
+Without snapshotting, every failed command pollutes the environment state. The agent then cannot tell whether the next failure is a new bug or residue from the previous one ([Repo2Run, arxiv 2502.13681](https://arxiv.org/html/2502.13681v2)). With snapshotting, each attempt is independent and the agent can converge — which is why the Repo2Run benchmark gap of 77.0 points opens against SWE-agent precisely on the rollback dimension.
 
-This is the same loop-strategy reasoning as [Convergence Detection](../agent-design/convergence-detection.md) and [Rollback-First Design](../agent-design/rollback-first-design.md) applied to infrastructure rather than code.
+This is the same loop-strategy reasoning as [Convergence Detection](../loop-engineering/convergence-detection.md) and [Rollback-First Design](../agent-design/rollback-first-design.md) applied to infrastructure rather than code.
 
-## When This Backfires
+## When this backfires
 
-- **No deterministic validator.** Without a fast `worked / did not work` gate, the harness promotes configs that build cleanly but break runtime — the agent's smoke test is only as strong as the conditions it exercises.
-- **The agent under-uses the validator it has.** Repo2Run's 86.0% is one benchmark; later process-level evaluation finds the gate itself is a weak point. [Kuang et al. (2025)](https://arxiv.org/abs/2510.25694) introduce EnConda-Bench and report that even strong models exhibit "validation gaps" — failing to properly verify the environment before proceeding — alongside redundant rebuilds and command-ordering errors, so a nominally-present validator does not guarantee the agent actually exercises it each attempt. Treat the gate as something to instrument and confirm fired, not assume.
-- **Cold-cache stacks.** Heavy native builds (Rust, C++) where most layers invalidate per change make each iteration attempt expensive enough that manual env authoring is faster. The 70% caching speedup in the [Cursor announcement](https://cursor.com/blog/cloud-agent-development-environments) assumes most layers stay cached.
-- **Regulated infrastructure.** Sectors that require human change-management approval for env edits (SOX, HIPAA-scoped infra) cannot delegate spec authorship without invalidating the control. A rollback button does not substitute for prior review.
-- **Lethal-trifecta exposure on the build step.** If the agent holds private-data read, build secrets, and egress (e.g. `RUN curl` against a private registry it can also exfiltrate to), agent-authored Dockerfiles become a prompt-injection surface — a malicious README in a dependency can rewrite the Dockerfile to leak credentials. Cursor mitigates this by scoping build secrets to the build step only ([Cursor blog](https://cursor.com/blog/cloud-agent-development-environments)); teams without that scoping inherit the risk. Agent-authored Dockerfiles have been observed exposing unnecessary ports, installing outdated packages, and embedding hardcoded credentials, with the failure modes only surfacing at runtime after the build passes ([Docker: Secure AI Agents at Runtime](https://www.docker.com/blog/secure-ai-agents-runtime-security/)).
-- **No audit-log review cadence.** The Cursor audit log only protects you if someone reads it. For teams without a security on-call who reviews env changes, the log accumulates without gating anything.
-- **Even with the substrate, iteration is bounded.** Cursor's environments are "configured at a point in time and rebuilt when they fall out of sync with the codebase" ([Cursor blog](https://cursor.com/blog/cloud-agent-development-environments)) — not continuously adaptive. Agent-led iteration is a discrete loop triggered by drift, not a perpetual background process.
+- No deterministic validator. Without a fast `worked / did not work` gate, the harness promotes configs that build cleanly but break at runtime — the agent's smoke test is only as strong as the conditions it exercises.
+- The agent under-uses the validator it has. Repo2Run's 86.0% is one benchmark; later process-level evaluation finds the gate itself is a weak point. [Kuang et al. (2025)](https://arxiv.org/abs/2510.25694) introduce EnConda-Bench and report that even strong models exhibit "validation gaps" — failing to properly verify the environment before proceeding — alongside redundant rebuilds and command-ordering errors. So a nominally-present validator does not guarantee the agent actually exercises it each attempt. Treat the gate as something to instrument and confirm fired, not assume.
+- Cold-cache stacks. Heavy native builds (Rust, C++) where most layers invalidate per change make each iteration attempt expensive enough that manual env authoring is faster. The 70% caching speedup in the [Cursor announcement](https://cursor.com/blog/cloud-agent-development-environments) assumes most layers stay cached.
+- Regulated infrastructure. Sectors that require human change-management approval for env edits (SOX, HIPAA-scoped infra) cannot delegate spec authorship without invalidating the control. A rollback button does not substitute for prior review.
+- Lethal-trifecta exposure on the build step. If the agent holds private-data read, build secrets, and egress (for example, `RUN curl` against a private registry it can also exfiltrate to), agent-authored Dockerfiles become a prompt-injection surface — a malicious README in a dependency can rewrite the Dockerfile to leak credentials. Cursor mitigates this by scoping build secrets to the build step only ([Cursor blog](https://cursor.com/blog/cloud-agent-development-environments)); teams without that scoping inherit the risk. Agent-authored Dockerfiles have been observed exposing unnecessary ports, installing outdated packages, and embedding hardcoded credentials, with the failure modes only surfacing at runtime after the build passes ([Docker: Secure AI Agents at Runtime](https://www.docker.com/blog/secure-ai-agents-runtime-security/)).
+- No audit-log review cadence. The Cursor audit log only protects you if someone reads it. For teams without a security on-call who reviews env changes, the log accumulates without gating anything.
+- Even with the substrate, iteration is bounded. Cursor's environments are "configured at a point in time and rebuilt when they fall out of sync with the codebase" ([Cursor blog](https://cursor.com/blog/cloud-agent-development-environments)) — not continuously adaptive. Agent-led iteration is a discrete loop triggered by drift, not a perpetual background process.
 
-## Contrast with the Bootstrap Pattern
+## Contrast with the bootstrap pattern
 
 | Dimension | [Operator-authored bootstrap](agent-environment-bootstrapping.md) | Agent-led iteration |
 |---|---|---|
@@ -129,7 +129,7 @@ The validator (`make smoke-test`) is the gate. `env:working` is the rollback tar
 
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md) — the operator-authored predecessor pattern this workflow contrasts against
 - [Rollback-First Design](../agent-design/rollback-first-design.md) — the design discipline this workflow applies to infrastructure
-- [Convergence Detection](../agent-design/convergence-detection.md) — deciding when iteration has stopped making progress
+- [Convergence Detection](../loop-engineering/convergence-detection.md) — deciding when iteration has stopped making progress
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — the analogous validate-then-promote loop applied to code rather than infrastructure
 - [Experiential-Learning Setup Agents with Snapshot Rollback](experiential-setup-agents-snapshot-rollback.md) — the sibling workflow that reuses the snapshot-rollback substrate for repository setup, adding experience replay and prosecutor-judge verification
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — what the smoke-test validator looks like in practice

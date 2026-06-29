@@ -20,29 +20,29 @@ maturity: emerging
 
 > Structured delta entries that accumulate and refine agent strategies prevent the brevity bias and context collapse that erode knowledge during monolithic prompt rewrites.
 
-**Related lesson:** [Assembling the Prompt](https://learn.agentpatterns.ai/context-engineering/assembling-the-prompt/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Assembling the Prompt](https://learn.agentpatterns.ai/context-engineering/assembling-the-prompt/) — this concept features in a hands-on lesson with quizzes.
 
-## When This Pattern Applies
+## When this pattern applies
 
 Evolving playbooks suit agents that improve by learning from execution feedback. The pattern fits when:
 
-- The domain generates **reusable strategies** (coding patterns, tool usage sequences, error recovery)
-- **Reliable feedback signals** exist (test pass/fail, task completion, validation outcomes)
-- Iterations are frequent enough to **accumulate meaningful entries**
+- The domain generates reusable strategies: coding patterns, tool usage sequences, error recovery
+- Reliable feedback signals exist: test pass/fail, task completion, validation outcomes
+- Iterations are frequent enough to accumulate meaningful entries
 
-For tasks with a single optimal strategy or environments without clear success signals, a static prompt remains simpler and sufficient.
+A static prompt stays simpler and is enough when a task has one optimal strategy, or when the environment gives no clear success signals.
 
-## Two Failure Modes of Iterative Rewriting
+## Two failure modes of iterative rewriting
 
-### Brevity Bias
+### Brevity bias
 
-When an LLM rewrites a context, it systematically drops domain-specific knowledge in favor of conciseness. Strategies that took multiple iterations to discover -- specific error recovery sequences, tool ordering preferences, edge case handling -- are the first to be cut because they appear verbose relative to high-level guidance ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
+When an LLM rewrites a context, it drops domain-specific knowledge to stay concise. Strategies that took several iterations to find -- specific error recovery sequences, tool ordering preferences, edge case handling -- are cut first, because they look verbose next to high-level guidance ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
 
-### Context Collapse
+### Context collapse
 
-Repeated full rewrites compound brevity bias into progressive knowledge loss: each cycle uses the previous output as input and drops more nuance. In measured runs, monolithic rewrites reduced a working context from 18,282 tokens to 122 tokens over multiple cycles, with a 9.6-point accuracy drop -- because rewriting inherently loses information the model considers redundant ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
+Repeated full rewrites turn brevity bias into steady knowledge loss. Each cycle takes the previous output as input and drops more nuance. In measured runs, monolithic rewrites shrank a working context from 18,282 tokens to 122 tokens over several cycles, with a 9.6-point accuracy drop -- because rewriting loses information the model treats as redundant ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
 
-## The Generation-Reflection-Curation Loop
+## The generation-reflection-curation loop
 
 The ACE framework (Agentic Context Engineering) replaces monolithic rewrites with a three-phase loop where each phase has a distinct role ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)):
 
@@ -56,45 +56,45 @@ graph TD
     C -->|Up to 5 rounds| C
 ```
 
-**Generator**: Executes tasks and produces reasoning trajectories -- tool calls, intermediate outputs, decision points -- capturing both successful strategies and failure modes.
+Generator: executes tasks and produces reasoning trajectories -- tool calls, intermediate outputs, decision points -- capturing both successful strategies and failure modes.
 
-**Reflector**: Extracts concrete, reusable insights from traces. Iterates up to 5 rounds to distill lessons from successes and errors, using execution feedback signals rather than labeled training data.
+Reflector: extracts concrete, reusable insights from traces. It runs up to 5 rounds to distill lessons from successes and errors, using execution feedback signals rather than labeled training data.
 
-**Curator**: Synthesizes reflections into compact **delta entries** -- itemized units representing a single strategy, domain concept, or failure mode. Each entry carries a unique ID and helpful/harmful counters tracking outcome frequency.
+Curator: turns reflections into compact delta entries -- itemized units that each represent a single strategy, domain concept, or failure mode. Each entry carries a unique ID and helpful/harmful counters that track outcome frequency.
 
-The critical design choice: the Curator merges deltas through **deterministic, non-LLM logic** (semantic embedding comparison for deduplication, ID-based updates), avoiding the rewriting bottleneck that forces an LLM to compress the full context.
+The critical design choice: the Curator merges deltas through deterministic, non-LLM logic -- semantic embedding comparison for deduplication, plus ID-based updates. This avoids the rewriting bottleneck that forces an LLM to compress the full context.
 
-## Delta Entries vs. Monolithic Rewrites
+## Delta entries versus monolithic rewrites
 
 | Approach | Update mechanism | Knowledge preservation | Scaling |
 |----------|-----------------|----------------------|---------|
 | Monolithic rewrite | LLM regenerates full context | Lossy -- each cycle drops nuance | Degrades as context grows |
 | Delta entries | Add/update/remove items | Structural -- entries persist independently | Grows with domain complexity |
 
-Each delta entry is independently addressable, so updating one strategy does not regenerate the context. Helpful/harmful counters provide lightweight reinforcement: consistently useful strategies surface more prominently while harmful ones are deprioritized or removed -- without explicit labels ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
+Each delta entry is independently addressable, so updating one strategy does not regenerate the whole context. Helpful/harmful counters give lightweight reinforcement: consistently useful strategies surface more prominently, while harmful ones are deprioritized or removed -- without explicit labels ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
 
-## Offline and Online Optimization
+## Offline and online optimization
 
-**Offline (system prompts)**: Run the loop over a task batch, then update the system prompt with the accumulated playbook -- analogous to updating `CLAUDE.md` or `.github/copilot-instructions.md` based on observed failures.
+Offline (system prompts): run the loop over a task batch, then update the system prompt with the accumulated playbook -- like updating `CLAUDE.md` or `.github/copilot-instructions.md` based on observed failures.
 
-**Online (agent memory)**: Run the loop within a session, accumulating strategies as the agent works. The playbook persists for future sessions, as in Claude Code's [memory system](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents).
+Online (agent memory): run the loop within a session, accumulating strategies as the agent works. The playbook persists for future sessions, as in Claude Code's [memory system](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents).
 
-## Results in Practice
+## Results in practice
 
 On agent benchmarks, evolving playbooks outperform both static prompts and monolithic rewriting:
 
-- **AppWorld**: +10.6% task completion, matching IBM CUGA (60.3%) on smaller open-source models (DeepSeek-V3.1) ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618))
-- **Finance**: +8.6% average accuracy across financial NER and formula tasks ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618))
-- **Adaptation latency**: 82.3% reduction vs. GEPA, because delta merges are cheaper than full regenerations ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618))
+- AppWorld: +10.6% task completion, matching IBM CUGA (60.3%) on smaller open-source models (DeepSeek-V3.1) ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618))
+- Finance: +8.6% average accuracy across financial NER and formula tasks ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618))
+- Adaptation latency: 82.3% reduction versus GEPA, because delta merges are cheaper than full regenerations ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618))
 
-The predecessor framework, Dynamic Cheatsheet, demonstrated the core mechanism: GPT-4o went from 10% to 99% on Game of 24 by reusing discovered solution strategies ([Suzgun et al., 2025](https://arxiv.org/abs/2504.07952)).
+The predecessor framework, Dynamic Cheatsheet, showed the core mechanism: GPT-4o went from 10% to 99% on Game of 24 by reusing discovered solution strategies ([Suzgun et al., 2025](https://arxiv.org/abs/2504.07952)).
 
-## When This Backfires
+## When this backfires
 
-- **Low-feedback environments**: Without clear success/failure signals, the Reflector cannot distinguish useful strategies from noise, and the playbook accumulates entries of unknown quality.
-- **Rapidly shifting domains**: If the domain changes faster than the playbook adapts, stale strategies persist; helpful/harmful counters need enough samples to decay outdated entries.
-- **Reflector quality dependency**: The framework is only as good as the Reflector's ability to extract causal insights rather than surface correlations. Poor reflection produces noisy contexts that degrade performance ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
-- **Compliance-critical systems**: In regulated environments, the overhead of auditing individual deltas may exceed the cost of manual prompt iteration.
+- Low-feedback environments: without clear success/failure signals, the Reflector cannot tell useful strategies from noise, and the playbook fills with entries of unknown quality.
+- Rapidly shifting domains: if the domain changes faster than the playbook adapts, stale strategies persist. Helpful/harmful counters need enough samples to decay outdated entries.
+- Reflector quality dependency: the framework is only as good as the Reflector's ability to extract causal insights rather than surface correlations. Poor reflection produces noisy contexts that degrade performance ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
+- Compliance-critical systems: in regulated environments, auditing individual deltas may cost more than manual prompt iteration.
 
 ## Key Takeaways
 

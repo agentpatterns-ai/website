@@ -27,12 +27,12 @@ Autonomous research takes two distinct forms. Both share loop architecture, term
 
 | | Autonomous Experimentation | Autonomous Information Research |
 |---|---|---|
-| **Reference** | Karpathy's [autoresearch](https://github.com/karpathy/autoresearch) | Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) |
-| **What the agent modifies** | Code (a single `train.py`) | A growing knowledge base |
-| **Evaluation** | Quantitative metric (e.g., validation bits-per-byte) | Source quality, coverage, coherence |
-| **Architecture** | Single agent, serial loop | Orchestrator spawning parallel subagents |
-| **Termination** | Time budget or manual interrupt | Completion-based with hard limits |
-| **Primary failure mode** | Wasted compute on low-signal changes | Hallucination spirals from compounding grounding errors |
+| Reference | Karpathy's [autoresearch](https://github.com/karpathy/autoresearch) | Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) |
+| What the agent modifies | Code (a single `train.py`) | A growing knowledge base |
+| Evaluation | Quantitative metric (e.g., validation bits-per-byte) | Source quality, coverage, coherence |
+| Architecture | Single agent, serial loop | Orchestrator spawning parallel subagents |
+| Termination | Time budget or manual interrupt | Completion-based with hard limits |
+| Primary failure mode | Wasted compute on low-signal changes | Hallucination spirals from compounding grounding errors |
 
 Understanding which variant you are building determines every downstream design decision.
 
@@ -53,17 +53,17 @@ graph LR
     F --> A
 ```
 
-**Three minimal components:**
+Three minimal components:
 
-1. **Modifiable artifact** — a file the agent can edit freely
-2. **Single measurable metric** — one number that determines keep/discard
-3. **Fixed time budget** — per-experiment wall clock limit
+1. Modifiable artifact — a file the agent can edit freely
+2. Single measurable metric — one number that determines keep/discard
+3. Fixed time budget — per-experiment wall clock limit
 
 The human steers through `program.md` — a natural-language file carrying instructions, constraints, and exploration priorities. The human never touches the code; the agent never touches the program file. This separation is the control surface.
 
 The design philosophy is deliberately aggressive: the agent runs until manually interrupted, never requests permission, and responds to stalling by intensifying exploration rather than pausing. This works because the single `validation bits-per-byte` metric provides unambiguous feedback — every change is either an improvement or it is not.
 
-**When this pattern applies:** optimization problems with a clear, computable metric. Karpathy argues any efficiently-evaluable metric can be autoresearched. Results: ~12 experiments/hour, ~100 overnight, with measurable gains (11% in the reference run, 19% in Shopify's independent test).
+When this pattern applies: optimization problems with a clear, computable metric. Karpathy argues any efficiently-evaluable metric can be autoresearched. Results: ~12 experiments/hour, ~100 overnight, with measurable gains (11% in the reference run, 19% in Shopify's independent test).
 
 ---
 
@@ -94,7 +94,7 @@ Anthropic's multi-agent research system uses this pattern with scaling rules:
 
 Each subagent gets a clean context window, searches independently, evaluates source quality, and returns condensed findings. The orchestrator synthesizes, identifies gaps, and decides whether to spawn more subagents.
 
-**When this pattern applies:** knowledge gathering where coverage matters more than a single number — literature reviews, competitive analysis, technology evaluations, due diligence.
+When this pattern applies: knowledge gathering where coverage matters more than a single number — literature reviews, competitive analysis, technology evaluations, due diligence.
 
 ---
 
@@ -104,9 +104,9 @@ The hardest engineering decision in autonomous loops is when to stop. Three stra
 
 | Strategy | Mechanism | Strength | Weakness |
 |---|---|---|---|
-| **Completion-based** | Agent determines task is done | Adapts to task complexity | Agent may declare done prematurely |
-| **Hard limits** | Max iterations, time budget, token budget | Prevents runaway cost | May stop mid-progress |
-| **Human-triggered** | Pause at checkpoints or uncertainty thresholds | Catches subtle quality issues | Breaks autonomy |
+| Completion-based | Agent determines task is done | Adapts to task complexity | Agent may declare done prematurely |
+| Hard limits | Max iterations, time budget, token budget | Prevents runaway cost | May stop mid-progress |
+| Human-triggered | Pause at checkpoints or uncertainty thresholds | Catches subtle quality issues | Breaks autonomy |
 
 Karpathy's autoresearch uses only hard limits (a ~5-minute time budget per experiment, manual interrupt for the outer loop). This is viable because the metric makes every iteration self-evaluating. For information research, where quality assessment is subjective, completion-based termination requires explicit verification — a pre-completion checklist or a separate evaluator agent.
 
@@ -116,9 +116,9 @@ Agents can enter unproductive cycles: repeatedly editing the same file, oscillat
 
 Concrete mitigations:
 
-- **Per-file edit counters** — track how many times each file has been modified; after N edits, force the agent to reconsider its approach ([loop detection](../../observability/loop-detection.md) middleware)
-- **Change velocity monitoring** — if the rate of meaningful changes drops below a threshold, trigger a strategy reset
-- **[Reasoning sandwich](../../agent-design/reasoning-budget-allocation.md)** — allocate maximum reasoning tokens to planning and verification phases, moderate tokens to implementation. Front-load thinking, do not let it accumulate at the end
+- Per-file edit counters — track how many times each file has been modified; after N edits, force the agent to reconsider its approach ([loop detection](../../observability/loop-detection.md) middleware)
+- Change velocity monitoring — if the rate of meaningful changes drops below a threshold, trigger a strategy reset
+- [Reasoning sandwich](../../agent-design/reasoning-budget-allocation.md) — allocate maximum reasoning tokens to planning and verification phases, moderate tokens to implementation. Front-load thinking, do not let it accumulate at the end
 
 ---
 
@@ -156,10 +156,10 @@ Autonomous research agents that lose grounding produce confident, internally con
 
 | Strategy | How it works | What it prevents |
 |---|---|---|
-| **Citation tracking** | Every claim links to a retrievable source | Fabricated evidence |
-| **Source quality scoring** | Heuristics to prefer authoritative sources over SEO-optimized content | Anthropic found early versions preferred "content farms over authoritative sources" |
-| **Fact anchoring** | Key claims are verified against multiple independent sources before entering the synthesis | Single-source errors propagating |
-| **Multi-agent validation** | Separate agent checks claims against sources | Confirmation bias within a single agent's context |
+| Citation tracking | Every claim links to a retrievable source | Fabricated evidence |
+| Source quality scoring | Heuristics to prefer authoritative sources over SEO-optimized content | Anthropic found early versions preferred "content farms over authoritative sources" |
+| Fact anchoring | Key claims are verified against multiple independent sources before entering the synthesis | Single-source errors propagating |
+| Multi-agent validation | Separate agent checks claims against sources | Confirmation bias within a single agent's context |
 
 No single strategy is sufficient. Hybrid approaches (RAG + self-reflection + multi-agent validation) outperform any individual mitigation.
 
@@ -171,10 +171,10 @@ The human steers autonomous agents through a control surface — not by editing 
 
 | Control element | Experimentation loop | Information research loop |
 |---|---|---|
-| **Instructions** | What to explore, what hypotheses to test | What questions to answer, what depth is needed |
-| **Constraints** | What must not change, invariants to preserve | What sources to prioritize or exclude |
-| **Stopping criteria** | Metric threshold, time budget | Coverage requirements, confidence threshold |
-| **Progress visibility** | Experiment log with metrics | Findings document with citations |
+| Instructions | What to explore, what hypotheses to test | What questions to answer, what depth is needed |
+| Constraints | What must not change, invariants to preserve | What sources to prioritize or exclude |
+| Stopping criteria | Metric threshold, time budget | Coverage requirements, confidence threshold |
+| Progress visibility | Experiment log with metrics | Findings document with citations |
 
 The principle: the human defines *what* and *why*; the agent determines *how* and *when* (within the defined budget). This separation scales — the human can review the progress artifact asynchronously without blocking the agent's loop.
 
@@ -182,12 +182,12 @@ The principle: the human defines *what* and *why*; the agent determines *how* an
 
 ## Key Takeaways
 
-- **Two patterns, one challenge.** Autonomous experimentation (single metric, serial loop) and autonomous information research (multi-agent, coverage-based) share the core problem: designing loops that stop at the right time and stay grounded throughout.
-- **Three components make the minimal loop.** A modifiable artifact, a measurable evaluation criterion, and a time/iteration budget. Start here; add complexity only when the problem demands it.
-- **Layer your termination strategies.** Completion-based [convergence detection](../../agent-design/convergence-detection.md) for the happy path, hard limits for cost control, human checkpoints for quality-sensitive decisions. Never rely on a single strategy.
-- **Context rot is the primary degradation mechanism.** Compaction and sub-agent isolation keep context fresh. Progress files bridge sessions without accumulating stale conversation history.
-- **Grounding requires redundancy.** Citation tracking, source quality scoring, RAG, and multi-agent validation compound. A single mitigation is insufficient for long-running autonomous work.
-- **Design the control surface, not the steps.** Steer through instructions, constraints, and stopping criteria in a structured artifact. Let the agent determine execution within those bounds.
+- Two patterns, one challenge. Autonomous experimentation (single metric, serial loop) and autonomous information research (multi-agent, coverage-based) share the core problem: designing loops that stop at the right time and stay grounded throughout.
+- Three components make the minimal loop. A modifiable artifact, a measurable evaluation criterion, and a time/iteration budget. Start here; add complexity only when the problem demands it.
+- Layer your termination strategies. Completion-based [convergence detection](../../loop-engineering/convergence-detection.md) for the happy path, hard limits for cost control, human checkpoints for quality-sensitive decisions. Never rely on a single strategy.
+- Context rot is the primary degradation mechanism. Compaction and sub-agent isolation keep context fresh. Progress files bridge sessions without accumulating stale conversation history.
+- Grounding requires redundancy. Citation tracking, source quality scoring, RAG, and multi-agent validation compound. A single mitigation is insufficient for long-running autonomous work.
+- Design the control surface, not the steps. Steer through instructions, constraints, and stopping criteria in a structured artifact. Let the agent determine execution within those bounds.
 
 ## Sources
 
@@ -203,14 +203,14 @@ The principle: the human defines *what* and *why*; the agent determines *how* an
 
 ## Related
 
-**Training**
+Training
 
 - [Harness Engineering](harness-engineering.md) — [backpressure](../../agent-design/agent-backpressure.md), convergence detection, and pre-completion checklists apply directly to autonomous loops
 - [Context Engineering](context-engineering.md) — context rot, compression strategies, and attention mechanics
 - [Eval Engineering](eval-engineering.md) — designing the metrics that autonomous experimentation loops optimize against
 - [Tool Engineering](tool-engineering.md) — designing tools agents can use reliably in unsupervised loops
 
-**Source Pages**
+Source Pages
 
-- [Convergence Detection](../../agent-design/convergence-detection.md) — three-signal model for knowing when to stop iterating
+- [Convergence Detection](../../loop-engineering/convergence-detection.md) — three-signal model for knowing when to stop iterating
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) — verification gates before task completion

@@ -19,9 +19,9 @@ maturity: established
 
 > A seven-step debug runbook — query, correlate, reason, implement, restart, rerun, verify — that ties the agent's verification predicate back to the originating signal.
 
-**Learn it hands-on:** [Write and Hope](https://learn.agentpatterns.ai/observability/write-and-hope/) — guided lesson with quizzes.
+Learn it hands-on with the [Write and Hope guided lesson](https://learn.agentpatterns.ai/observability/write-and-hope/), which includes quizzes.
 
-## What the Loop Is
+## What the loop is
 
 When runtime observability is the source of truth, agents debug from execution evidence, not code inspection alone. The [walkinglabs harness-engineering SOP](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/resources/openai-advanced/sops/observability-feedback-loop.md) names seven explicit steps:
 
@@ -36,15 +36,15 @@ graph TD
     G -->|signal still present| A
 ```
 
-The steps are scaffolding. The load-bearing piece is the verification predicate at step 7 — *the originating signal is absent*, not "no errors now." This is the fix for the [trust-then-verify gap](https://code.claude.com/docs/en/best-practices).
+The steps are scaffolding. The load-bearing piece is the verification predicate at step 7 — the originating signal is absent, not "no errors now." This is the fix for the [trust-then-verify gap](https://code.claude.com/docs/en/best-practices).
 
-## Prerequisites: The Minimum Stack
+## Prerequisites: the minimum stack
 
 The loop assumes runtime signals exist and are queryable. The SOP enumerates the minimum: structured logs on startup and the critical path, metrics for latency and failure counts, traces for multi-step flows, query interfaces in dev, and one repeatable workload to rerun. Without this stack, there is nothing to query. See [Making Observability Legible to Agents](observability-legible-to-agents.md) for wiring patterns.
 
-This loop is reactive — it starts once a signal has surfaced. A complementary posture, "active observability," shifts tooling from passively recording traces to continuously analysing them: clustering production traces into named patterns and surfacing the ones worth investigating before anyone queries for them ([Braintrust: AI observability is active observability](https://www.braintrust.dev/blog/active-observability)). Active analysis feeds step 1 with candidate signals; it does not replace the verification predicate the loop closes on.
+This loop is reactive — it starts once a signal has surfaced. A complementary posture, "active observability," shifts tooling from passively recording traces to continuously analyzing them: clustering production traces into named patterns and surfacing the ones worth investigating before anyone queries for them ([Braintrust: AI observability is active observability](https://www.braintrust.dev/blog/active-observability)). Active analysis feeds step 1 with candidate signals; it does not replace the verification predicate the loop closes on.
 
-## The Seven Steps
+## The seven steps
 
 ### 1. Query
 
@@ -56,7 +56,7 @@ Connect the signal to the responsible layer. A front-end exception triggered by 
 
 ### 3. Reason
 
-Name a hypothesis with falsifiable predictions *before* editing. This is the entry point to [hypothesis-driven debugging](../agent-design/hypothesis-driven-debugging.md) — enumerate competing explanations, then identify which one the evidence supports. The hypothetico-deductive method Google SRE codifies in its [Effective Troubleshooting chapter](https://sre.google/sre-book/effective-troubleshooting/) names the same discipline. Skipping it is the classic agent failure mode: edit-rerun-repeat cycles with no discrimination between causes.
+Name a hypothesis with falsifiable predictions before editing. This is the entry point to [hypothesis-driven debugging](../agent-design/hypothesis-driven-debugging.md) — enumerate competing explanations, then identify which one the evidence supports. The hypothetico-deductive method Google SRE codifies in its [Effective Troubleshooting chapter](https://sre.google/sre-book/effective-troubleshooting/) names the same discipline. Skipping it is the classic agent failure mode: edit-rerun-repeat cycles with no discrimination between causes.
 
 ### 4. Implement
 
@@ -68,37 +68,37 @@ Confirm a clean restart path before testing the fix. Anthropic's harness enginee
 
 ### 6. Rerun
 
-Exercise the workload that *originally surfaced* the signal, not a simpler proxy. A unit test passing while the integration scenario still fails is the most common false-positive in this loop.
+Exercise the workload that originally surfaced the signal, not a simpler proxy. A unit test passing while the integration scenario still fails is the most common false-positive in this loop.
 
 ### 7. Verify
 
 The predicate says "the prior signal is absent" — not "no errors now," not "the test suite is green." Anthropic's [best-practices guide](https://code.claude.com/docs/en/best-practices) calls verification predicates "the single highest-leverage thing you can do" for agent quality. The predicate is bound at step 1 and consumed here — the same signal, now absent.
 
-## Why the Steps Are Named
+## Why the steps are named
 
-A named procedure lets a human or upstream agent invoke "run the observability feedback loop on bug X" with unambiguous steps. Each step produces an artefact (signal value, layer assignment, hypothesis, diff, restart log, rerun output, verification result) that the next consumes, and a [trajectory log](trajectory-logging-progress-files.md) of those seven artefacts makes the session reviewable after the fact.
+A named procedure lets a human or upstream agent invoke "run the observability feedback loop on bug X" with unambiguous steps. Each step produces an artifact (signal value, layer assignment, hypothesis, diff, restart log, rerun output, verification result) that the next consumes, and a [trajectory log](trajectory-logging-progress-files.md) of those seven artifacts makes the session reviewable after the fact.
 
 ## Example
 
 A repeatable bug: API returns 500 on `/users/me` after token refresh, intermittently.
 
-- **Query** — the 500 carries `error_id=auth-token-stale-3f2a` in the body and the log line `level=error fn=refreshToken cause=stale_cache`. That `error_id` is the signal.
-- **Correlate** — the line is emitted by the auth middleware (`src/auth/middleware.ts`), not the route handler. Layer assignment: *middleware token-refresh*.
-- **Reason** — three hypotheses: (a) cache invalidation runs after the refresh, (b) the refresh races a parallel refresh in another worker, (c) the cache TTL is shorter than the refresh window. One log line per hypothesis ([hypothesis-driven debugging](../agent-design/hypothesis-driven-debugging.md)) fires for (a).
-- **Implement** — invalidate the cache before the refresh, not after. One-line change in `middleware.ts`.
-- **Restart** — `init.sh` restarts the local API and verifies `/healthz` plus `/users/me` unauthenticated. Both pass; clean restart confirmed.
-- **Rerun** — the original workload: authenticated session, idle past TTL, then `/users/me`. Not a cache-layer unit test — the same end-to-end path that surfaced the 500.
-- **Verify** — search logs for `error_id=auth-token-stale-3f2a` across the rerun window. Zero occurrences. Signal absent. Loop closes.
+- Query — the 500 carries `error_id=auth-token-stale-3f2a` in the body and the log line `level=error fn=refreshToken cause=stale_cache`. That `error_id` is the signal.
+- Correlate — the line is emitted by the auth middleware (`src/auth/middleware.ts`), not the route handler. Layer assignment: middleware token-refresh.
+- Reason — three hypotheses: (a) cache invalidation runs after the refresh, (b) the refresh races a parallel refresh in another worker, (c) the cache TTL is shorter than the refresh window. One log line per hypothesis ([hypothesis-driven debugging](../agent-design/hypothesis-driven-debugging.md)) fires for (a).
+- Implement — invalidate the cache before the refresh, not after. One-line change in `middleware.ts`.
+- Restart — `init.sh` restarts the local API and verifies `/healthz` plus `/users/me` unauthenticated. Both pass; clean restart confirmed.
+- Rerun — the original workload: authenticated session, idle past TTL, then `/users/me`. Not a cache-layer unit test — the same end-to-end path that surfaced the 500.
+- Verify — search logs for `error_id=auth-token-stale-3f2a` across the rerun window. Zero occurrences. Signal absent. Loop closes.
 
 Had verify returned occurrences, the loop restarts at step 1 with the new signal value — not at step 4 with a different fix.
 
-## When This Backfires
+## When this backfires
 
 Three conditions where the procedure adds ceremony without proportional value:
 
-1. **Fast feedback loops with clear stack traces** — when `npm test` reports a line number and the fix is obvious, step-naming is overhead. The loop earns its keep when runtime evidence must discriminate hypotheses.
-2. **Single-layer, single-signal failures** — if the failure surfaces in one log line with full context in one layer, "correlate to the layer" collapses to zero work.
-3. **Exploratory bug hunts without a clear signal** — step 1 assumes a specific signal exists. For "feels slow sometimes" with no metric anchor, instrumentation comes first.
+1. Fast feedback loops with clear stack traces — when `npm test` reports a line number and the fix is obvious, step-naming is overhead. The loop earns its keep when runtime evidence must discriminate hypotheses.
+2. Single-layer, single-signal failures — if the failure surfaces in one log line with full context in one layer, "correlate to the layer" collapses to zero work.
+3. Exploratory bug hunts without a clear signal — step 1 assumes a specific signal exists. For "feels slow sometimes" with no metric anchor, instrumentation comes first.
 
 The rule from [research-plan-implement](../workflows/research-plan-implement.md): run the loop when runtime evidence is the source of truth; compress it when the stack trace is.
 

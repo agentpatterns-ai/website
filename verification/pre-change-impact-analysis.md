@@ -18,21 +18,21 @@ maturity: established
 
 > Build a graph of code-to-test dependencies and deliver it as a lightweight agent skill — agents query which tests are at risk before committing, cutting regressions by 70%.
 
-## The Problem
+## The problem
 
 AI coding agents fix issues but frequently break things that were working. On SWE-bench Verified, vanilla agent runs show a 6.08% test-level regression rate ([TDAD paper](https://arxiv.org/abs/2603.17973), Table 3). [METR's March 2026 review](https://metr.org/notes/2026-03-10-many-swe-bench-passing-prs-would-not-be-merged-into-main/) of 296 SWE-bench Verified patches found roughly half would not be merged by maintainers — with regressions and code quality cited among top rejection reasons.
 
 Agents lack visibility into which tests exercise the code they modify.
 
-## The Technique
+## The technique
 
 Pre-change impact analysis gives agents a dependency map between source and test files. The agent queries the map before committing, runs at-risk tests, and self-corrects if any fail.
 
-The [TDAD tool](https://github.com/pepealonso95/TDAD) (Alonso, Yovine, Braberman 2026) implements three steps:
+The [TDAD tool](https://github.com/pepealonso95/TDAD) (Alonso, Yovine, Braberman 2026) follows three steps:
 
-1. **Index** — Parse source files via AST to build a dependency graph (functions, classes, imports, call targets, inheritance)
-2. **Impact** — Traverse the graph from changed files to identify affected tests
-3. **Verify** — Run only impacted tests; fix regressions before submission
+1. Index — parse source files with an AST to build a dependency graph of functions, classes, imports, call targets, and inheritance.
+2. Impact — traverse the graph from changed files to find affected tests.
+3. Verify — run only impacted tests, then fix regressions before submission.
 
 ```mermaid
 graph LR
@@ -44,7 +44,7 @@ graph LR
     F --> C
 ```
 
-### Graph Structure
+### Graph structure
 
 The dependency graph maps five edge types:
 
@@ -56,20 +56,20 @@ The dependency graph maps five edge types:
 | TESTS | `test_api.py` → `handle_request()` |
 | INHERITS | `AdminUser` → `BaseUser` |
 
-Tests are identified via naming conventions (`test_*.py`), prefix matching, and proximity.
+TDAD finds tests by naming convention (`test_*.py`), prefix matching, and proximity.
 
-### Delivery as a Lightweight Skill
+### Delivery as a lightweight skill
 
-Deliver the dependency map as **static text files**, not a runtime API or graph database:
+Deliver the dependency map as static text files, not a runtime API or graph database:
 
-- **`test_map.txt`** — One line per source-to-test mapping, grep-able
-- **`SKILL.md`** — 20 lines of concise guidance: fix, grep test_map, verify
+- `test_map.txt` — one line per source-to-test mapping, ready to grep
+- `SKILL.md` — 20 lines of short guidance: fix, grep test_map, verify
 
-The agent queries the map with `grep` — no special tools required. The skill must work within the agent's existing tool set.
+The agent queries the map with `grep`, so it needs no special tools. The skill must work within the agent's existing tool set.
 
-## The TDD Prompting Paradox
+## The TDD prompting paradox
 
-**Procedural TDD instructions without dependency context make regressions worse, not better.**
+Procedural TDD instructions without dependency context make regressions worse, not better.
 
 | Approach | Regression Rate | vs. Baseline |
 |----------|----------------|-------------|
@@ -81,17 +81,17 @@ Source: [TDAD paper](https://arxiv.org/abs/2603.17973), evaluated on SWE-bench V
 
 Why procedural TDD backfires:
 
-- **Context consumption** — Verbose instructions consume tokens, pushing out repository knowledge needed for accurate changes
-- **Unfocused ambition** — Without knowing *which* tests matter, agents touch more files and cause collateral damage
-- **Procedure without information** — "Run the tests" is useless without "run *these* tests"
+- Context consumption — verbose instructions consume tokens and push out the repository knowledge needed for accurate changes
+- Unfocused ambition — without knowing which tests matter, agents touch more files and cause collateral damage
+- Procedure without information — "run the tests" is useless without "run these tests"
 
-Simplifying from 107 lines to 20 lines of concise guidance quadrupled resolution rate (12% to 50%).
+Simplifying from 107 lines to 20 lines of short guidance quadrupled the resolution rate, from 12% to 50%.
 
-**The principle: context over procedure.** When designing agent skills, prioritize decision-relevant facts over step-by-step processes.
+The principle is context over procedure. When you design an agent skill, put decision-relevant facts ahead of step-by-step processes.
 
-## Practical Implementation
+## Practical implementation
 
-### Building the Map
+### Building the map
 
 ```bash
 # Install TDAD from source (Python, MIT license)
@@ -107,16 +107,16 @@ tdad impact /path/to/repo --files src/module.py
 
 TDAD uses Python's `ast` module. For other languages, [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) provides a unified parsing interface.
 
-### Integrating with Agent Workflows
+### Integrating with agent workflows
 
 Place both files in the repository root. For CI, run impact analysis on the diff and execute only affected tests.
 
 ### Limitations
 
-- **Static analysis only** — Cannot capture dynamic dispatch, monkey-patching, or runtime-generated code
-- **Python-focused** — AST parsing is language-specific; multi-language repos need per-language parsers
-- **Sparse test suites** — Weak test-code coupling reduces effectiveness
-- **Smaller model bias** — Observed with 30B models on 32K context; frontier models may differ
+- Static analysis only — cannot capture dynamic dispatch, monkey-patching, or runtime-generated code
+- Python-focused — AST parsing is language-specific, so multi-language repos need a parser per language
+- Sparse test suites — weak test-code coupling reduces how well it works
+- Smaller model bias — observed with 30B models on 32K context, so frontier models may differ
 
 ## Example
 
@@ -153,10 +153,10 @@ Without the map, the agent would either skip tests entirely or run the full suit
 
 ## Key Takeaways
 
-- **Map dependencies before agents commit** — A static text file mapping source to tests reduces regressions by 70%
-- **Context beats procedure** — Targeted facts outperform prescriptive TDD workflows; verbose instructions can harm performance
-- **Keep skills minimal** — 20 lines outperformed 107 lines by 4x on resolution rate
-- **Use standard tools** — grep-able text files work within any agent's existing tool set
+- Map dependencies before agents commit — A static text file mapping source to tests reduces regressions by 70%
+- Context beats procedure — Targeted facts outperform prescriptive TDD workflows; verbose instructions can harm performance
+- Keep skills minimal — 20 lines outperformed 107 lines by 4x on resolution rate
+- Use standard tools — grep-able text files work within any agent's existing tool set
 
 ## Related
 

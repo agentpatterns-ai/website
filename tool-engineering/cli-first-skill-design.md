@@ -17,15 +17,15 @@ maturity: adopted
 
 > Design agent skills as CLI tools so the same interface serves both humans debugging locally and agents automating through shell tool calls.
 
-**Related lesson:** [The Unix CLI as a Tool Interface](https://learn.agentpatterns.ai/tool-engineering/unix-cli-as-tool-interface/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [The Unix CLI as a Tool Interface](https://learn.agentpatterns.ai/tool-engineering/unix-cli-as-tool-interface/) — this concept features in a hands-on lesson with quizzes.
 
-When a skill is implemented as a shell script, a human can run it directly from a terminal and an agent can invoke it through a `Bash` or `run()` tool call — no separate interfaces required. The [awesome-agentic-patterns catalogue](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/cli-first-skill-design.md) documents this design, and Claude Code best practices identify CLI tools as "the most context-efficient way to interact with external services" ([source](https://code.claude.com/docs/en/best-practices)).
+Write a skill as a shell script, and a human can run it from a terminal while an agent invokes it through a `Bash` or `run()` tool call. You need no separate interfaces. The [awesome-agentic-patterns catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/cli-first-skill-design.md) documents this design, and Claude Code best practices call CLI tools "the most context-efficient way to interact with external services" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)).
 
-## Core Principles
+## Core principles
 
-**One executable per skill.** Each capability lives in a single script at `~/.claude/skills/<name>/scripts/<name>.sh`. Composition happens via Unix pipes, not by building a monolithic skill.
+One executable per skill. Each capability lives in a single script at `~/.claude/skills/<name>/scripts/<name>.sh`. Compose with Unix pipes rather than building one monolithic skill.
 
-**Subcommands for CRUD.** Structure operations as positional arguments:
+Subcommands for CRUD. Structure operations as positional arguments:
 
 ```bash
 trello.sh boards              # list
@@ -35,15 +35,15 @@ trello.sh create <LIST_ID> "Title"  # write
 
 This mirrors how `gh`, `aws`, and other agent-friendly CLIs work — tools the agent already knows from pretraining.
 
-**Adaptive output.** Return JSON for programmatic use; human-readable text when attached to a TTY. Detect with `[ -t 1 ]` (POSIX) or [`sys.stdout.isatty()`](https://docs.python.org/3/library/io.html#io.IOBase.isatty) in Python. The agent always gets structured output; a human running the script manually gets formatted text.
+Adaptive output. Return JSON for programmatic use, and human-readable text when attached to a TTY. Detect the terminal with `[ -t 1 ]` (POSIX) or [`sys.stdout.isatty()`](https://docs.python.org/3/library/io.html#io.IOBase.isatty) in Python. The agent always gets structured output. A human running the script gets formatted text.
 
-**Standard exit codes.** Use POSIX conventions ([IEEE Std 1003.1](https://pubs.opengroup.org/onlinepubs/9699919799/)): `0` success, `1` error, `2` usage problem, `127` command not found. Agents branch on exit codes rather than parsing error messages.
+Standard exit codes. Use POSIX conventions ([IEEE Std 1003.1](https://pubs.opengroup.org/onlinepubs/9699919799/)): `0` success, `1` error, `2` usage problem, `127` command not found. Agents branch on exit codes rather than parsing error messages.
 
-**Credentials via environment variables.** Follow the [12-Factor App config principle](https://12factor.net/config): never hardcode tokens or API keys. Read from `$TRELLO_API_KEY`, `$GITHUB_TOKEN`, etc. The agent sets these before calling the script; humans export them in their shell profile.
+Credentials via environment variables. Follow the [12-Factor App config principle](https://12factor.net/config): never hardcode tokens or API keys. Read from environment variables such as `$TRELLO_API_KEY` and `$GITHUB_TOKEN`. The agent sets these before calling the script. Humans export them in their shell profile.
 
-**Non-interactive by default.** Skills must not block on prompts. Expose `--yes` or `--force` flags for destructive operations. An agent has no stdin to answer questions.
+Non-interactive by default. Skills must not block on prompts. Expose `--yes` or `--force` flags for destructive operations. An agent has no stdin to answer questions.
 
-## Why CLI-First Beats API-First for Dual-Use Skills
+## Why CLI-first beats API-first for dual-use skills
 
 | Property | CLI-first | In-process function | Structured API |
 |----------|-----------|---------------------|----------------|
@@ -58,9 +58,9 @@ This mirrors how `gh`, `aws`, and other agent-friendly CLIs work — tools the a
 
 CLI-first wins when skills run infrequently (seconds between calls), operate on text or JSON, and need to be debuggable by a human. It loses when a skill is called hundreds of times per task, needs rich object graphs, or streams data in real time.
 
-## Composition via Pipes
+## Composition via pipes
 
-The payoff of one-script-per-skill is Unix composability. A priority report that draws from three services:
+One script per skill pays off in Unix composability. Here is a priority report that draws from three services:
 
 ```bash
 #!/usr/bin/env bash
@@ -76,14 +76,14 @@ The payoff of one-script-per-skill is Unix composability. A priority report that
 '
 ```
 
-Each skill is independently testable; the composition script is a thin orchestrator. The agent calls `priority-report.sh` and receives a bounded JSON array — not three separate tool calls with three separate outputs to reconcile.
+Each skill is independently testable, and the composition script is a thin orchestrator. The agent calls `priority-report.sh` and receives a bounded JSON array, not three separate tool calls with three outputs to reconcile.
 
-## When to Choose Something Else
+## When to choose something else
 
-- **High call frequency** — process spawn overhead accumulates; use an in-process function or [consolidate into a single tool](consolidate-agent-tools.md)
-- **Complex object graphs** — shell arrays and associative maps are fragile; use a Python/Node script with proper data structures
-- **Real-time streaming** — shell scripts cannot hold open WebSocket or SSE connections gracefully
-- **Windows without WSL** — POSIX scripts require a compatibility layer; evaluate whether your audience is exclusively Unix-based
+- High call frequency — process spawn overhead adds up, so use an in-process function or [consolidate into a single tool](consolidate-agent-tools.md)
+- Complex object graphs — shell arrays and associative maps are fragile, so use a Python or Node script with proper data structures
+- Real-time streaming — shell scripts cannot hold open WebSocket or SSE connections gracefully
+- Windows without WSL — POSIX scripts need a compatibility layer, so check whether your audience is only Unix-based
 
 ## Example
 
@@ -141,6 +141,6 @@ An agent calling `github.sh issues` receives a JSON array it can filter with `jq
 - [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md)
 - [Override Interactive Commands](override-interactive-commands.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Skill as Knowledge Pattern](skill-as-knowledge.md)
 - [Batch File Operations via Bash Scripts](batch-file-operations.md)

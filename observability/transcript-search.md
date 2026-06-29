@@ -17,11 +17,11 @@ maturity: adopted
 
 > Press `Ctrl+O` to enter transcript mode in a Claude Code session, then use `/`, `n`, and `N` to jump to specific moments instead of scrolling linearly.
 
-**Learn it hands-on:** [Leaving a Trail](https://learn.agentpatterns.ai/observability/leaving-a-trail/) — guided lesson with quizzes.
+Learn it hands-on with [Leaving a Trail](https://learn.agentpatterns.ai/observability/leaving-a-trail/) — a guided lesson with quizzes.
 
-Long agent sessions make linear scrollback hostile. A one-hour Claude Code session can emit thousands of tool-output lines; recalling the moment a plan changed, a tool first errored, or a specific file was touched means re-reading until you find it. Transcript-mode search collapses that to a keystroke, and when fullscreen rendering is active it is the only way to search the conversation at all.
+Long agent sessions make linear scrollback painful. A one-hour Claude Code session can emit thousands of tool-output lines. Recalling the moment a plan changed, a tool first errored, or a specific file was touched means re-reading until you find it. Transcript-mode search collapses that to a keystroke. When fullscreen rendering is active, it is the only way to search the conversation at all.
 
-## What the Surface Provides
+## What the surface provides
 
 `Ctrl+O` toggles transcript mode — the view that shows verbose tool calls and output instead of the collapsed default. Inside transcript mode, navigation is `less`-style ([fullscreen reference](https://code.claude.com/docs/en/fullscreen#search-and-review-the-conversation)) — the same `/`-then-`n`/`N` pattern documented in the [GNU `less` manual](https://www.gnu.org/software/less/) and inherited by `git log`, `man`, and other pagers:
 
@@ -37,30 +37,30 @@ Long agent sessions make linear scrollback hostile. A one-hour Claude Code sessi
 | `v` | Dump the conversation to `$VISUAL` or `$EDITOR` |
 | `q` / `Esc` / `Ctrl+o` | Exit transcript mode |
 
-Transcript search shipped in Claude Code v2.1.83 (2026-03-25): "Added transcript search — press `/` in transcript mode (`Ctrl+O`) to search, `n`/`N` to step through matches" ([changelog](https://code.claude.com/docs/en/changelog)). `Ctrl+O` was refined in v2.1.110 to toggle transcript mode only; the focus view moved to the separate `/focus` command ([changelog](https://code.claude.com/docs/en/changelog)).
+Transcript search shipped in Claude Code v2.1.83 (2026-03-25): "Added transcript search — press `/` in transcript mode (`Ctrl+O`) to search, `n`/`N` to step through matches" ([changelog](https://code.claude.com/docs/en/changelog)). `Ctrl+O` was refined in v2.1.110 to toggle transcript mode only. The focus view moved to the separate `/focus` command ([changelog](https://code.claude.com/docs/en/changelog)).
 
-## Anchors That Make Search Useful
+## Anchors that make search useful
 
 Search is cheapest when you know what string to type. Useful anchors in a Claude Code transcript:
 
-- **Tool error text** — `Error`, `exit code`, `ENOENT`, `timeout`
-- **Plan revision boundaries** — `/plan`, the title of the plan file, or the phrase you used to request a new plan
-- **File-first-touched** — the filename; the first hit is where the agent first read or edited it
-- **Prompt boundaries** — a phrase from your own input; jump backward from the current turn to find where a topic started
-- **Scheduled-task timestamps** — v2.1.84 added timestamp markers whenever [`/loop` or `CronCreate`](../tools/claude/session-scheduling.md) fires, which become natural section markers in long sessions ([changelog](https://code.claude.com/docs/en/changelog))
+- Tool error text — `Error`, `exit code`, `ENOENT`, `timeout`
+- Plan revision boundaries — `/plan`, the title of the plan file, or the phrase you used to request a new plan
+- File first touched — the filename; the first hit is where the agent first read or edited it
+- Prompt boundaries — a phrase from your own input; jump backward from the current turn to find where a topic started
+- Scheduled-task timestamps — v2.1.84 added timestamp markers whenever [`/loop` or `CronCreate`](../tools/claude/session-scheduling.md) fires, which become natural section markers in long sessions ([changelog](https://code.claude.com/docs/en/changelog))
 
-## When Search Is the Wrong Tool
+## When search is the wrong tool
 
 Transcript search is session-scoped, substring-only, and lives in the fullscreen alternate screen buffer. It is not a replacement for:
 
-- **Cross-session investigation.** Matching a symptom across multiple saved sessions requires grepping transcripts on disk or structured telemetry — see [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md).
-- **Post-mortem analysis.** Once a session exits, the in-memory buffer is gone. Retrospective review of what the agent did and why belongs to [Using the Agent to Analyze Its Own Evaluation Transcripts](../verification/agent-transcript-analysis.md).
-- **Legacy (non-fullscreen) rendering.** Fullscreen mode is opt-in via `/tui fullscreen` or `CLAUDE_CODE_NO_FLICKER=1`. In the default renderer the conversation is in the terminal's native scrollback, so `Cmd+F` and tmux copy mode already work; transcript-mode search does not apply ([fullscreen reference](https://code.claude.com/docs/en/fullscreen)).
-- **Noisy sessions.** Substring search with no event-type filter surfaces every occurrence of generic tokens like `error` or `test`. For verbose builds or read-heavy sessions, use `[` to dump the conversation to the terminal's scrollback and grep it, or redirect the analysis to an offline transcript pass.
+- Cross-session investigation. Matching a symptom across multiple saved sessions means grepping transcripts on disk or reading structured telemetry — see [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md).
+- Post-mortem analysis. Once a session exits, the in-memory buffer is gone. Retrospective review of what the agent did and why belongs to [Using the Agent to Analyze Its Own Evaluation Transcripts](../verification/agent-transcript-analysis.md).
+- Legacy (non-fullscreen) rendering. Fullscreen mode is opt-in via `/tui fullscreen` or `CLAUDE_CODE_NO_FLICKER=1`. In the default renderer the conversation sits in the terminal's native scrollback, so `Cmd+F` and tmux copy mode already work. Transcript-mode search does not apply ([fullscreen reference](https://code.claude.com/docs/en/fullscreen)).
+- Noisy sessions. Substring search with no event-type filter surfaces every occurrence of generic tokens like `error` or `test`. For verbose builds or read-heavy sessions, use `[` to dump the conversation to the terminal's scrollback and grep it, or redirect the analysis to an offline transcript pass.
 
 ## Example
 
-A 90-minute session fixing an auth race condition touched twelve files, ran the test suite six times, and produced one plan revision after the third failure. Recovering the plan-revision moment by scrolling is slow; by search it is one keystroke:
+A 90-minute session fixing an auth race condition touched twelve files, ran the test suite six times, and produced one plan revision after the third failure. Recovering the plan-revision moment by scrolling is slow. By search it is one keystroke:
 
 ```text
 Ctrl+O                    → enter transcript mode

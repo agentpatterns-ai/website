@@ -20,7 +20,7 @@ maturity: established
 !!! info "Also known as"
     Multi-Constraint Degradation, Constraint Count Ceiling
 
-## The Problem
+## The problem
 
 When a code generation prompt includes multiple simultaneous constraints — data types, return formats, length limits, value ranges, architectural rules — model performance degrades measurably with each additional constraint. This is not a prompt quality issue. It is a structural limitation of how LLMs distribute attention across competing requirements during decoding.
 
@@ -33,7 +33,7 @@ graph LR
     C -->|sharp drop| D["Constraint omissions"]
 ```
 
-## Why It Happens
+## Why it happens
 
 Models prioritize some constraints over others when given too many simultaneously — satisfying the most prominent and quietly dropping the rest ([Fang et al., 2026](https://arxiv.org/abs/2602.00066)). Logit analysis shows that even when the model appears to understand the intent, the intent signal is too weak to override competing token probabilities during greedy decoding.
 
@@ -41,7 +41,7 @@ This is the same degradation pattern as the [instruction compliance ceiling](ins
 
 ## Mitigations
 
-### Decompose Constraints Across Turns
+### Decompose constraints across turns
 
 Instead of a single prompt with all constraints, issue them sequentially:
 
@@ -61,7 +61,7 @@ Turn 5: "Remove any import statements."
 
 Each turn addresses one constraint while the model can verify prior constraints against existing code. After each turn, confirm prior constraints still hold — sequential editing can silently regress earlier requirements.
 
-### Use Structured Output Schemas
+### Use structured output schemas
 
 Constrain output format programmatically rather than through natural language:
 
@@ -80,7 +80,7 @@ Constrain output format programmatically rather than through natural language:
 
 Schema validation enforces structural constraints — function name format, return type, parameter shape — that would otherwise compete for the model's constraint budget in the prompt. Provider-level structured output (Anthropic, OpenAI, and Gemini APIs) enforces this shape at the decoding layer. Behavioral constraints like "no imports" cannot be offloaded to schemas and must remain in the prompt or be enforced by a linter post-generation.
 
-### Prioritize Constraints by Enforcement Method
+### Prioritize constraints by enforcement method
 
 Not all constraints belong in the prompt:
 
@@ -93,7 +93,7 @@ Not all constraints belong in the prompt:
 
 Reserve prompt-based constraints for requirements that cannot be checked mechanically. Below the ~4-constraint threshold where accuracy holds, the fewer constraints competing for attention during generation, the more reliably the remaining ones are followed.
 
-### Verify After Generation
+### Verify after generation
 
 Add a verification pass that checks each constraint explicitly:
 
@@ -108,11 +108,11 @@ Fix any failures."
 
 Separating generation from verification lets the model focus on checking each requirement independently rather than satisfying all constraints during generation.
 
-## What About Intent Amplification?
+## Whether intent amplification helps
 
 Contrastive decoding — comparing logits from a full prompt against an intent-masked version — shows up to 71% improvement in constraint adherence ([Fang et al., 2026](https://arxiv.org/abs/2602.00066)), building on classifier-free guidance adapted from image generation ([Sanchez et al., 2023](https://arxiv.org/abs/2306.17806)).
 
-These methods require token-level logit access, making them **applicable only to open-weight models** (vLLM, llama.cpp). Developers using closed-source APIs cannot modify decoding behavior. The mitigations above work with any model.
+These methods require token-level logit access, so they apply only to open-weight models (vLLM, llama.cpp). If you use a closed-source API, you cannot change the decoding behavior. The mitigations above work with any model.
 
 ## Key Takeaways
 
@@ -121,11 +121,11 @@ These methods require token-level logit access, making them **applicable only to
 - Reserve prompt-based constraints for requirements that no tool can check — the fewer constraints competing during generation, the more reliably each is followed
 - Decoding-level fixes (intent amplification) exist but require open-weight models with logit access
 
-## When This Backfires
+## When this backfires
 
 Multi-turn decomposition trades accuracy for latency and token cost. In agentic pipelines with strict budget constraints or tight feedback loops, issuing five sequential turns to produce one function is often impractical — a single well-structured prompt with fewer constraints may deliver better end-to-end throughput.
 
-Schema-enforced constraints require upfront engineering investment and only cover structural requirements. If the codebase lacks `JSON Schema` tooling or the target API doesn't support structured output, schemas add integration overhead without offsetting the constraint budget in the prompt.
+Schema-enforced constraints require upfront engineering investment and only cover structural requirements. If the codebase lacks `JSON Schema` tooling or the target API does not support structured output, schemas add integration overhead without offsetting the constraint budget in the prompt.
 
 Mechanical enforcement (linters, type checkers, unit tests) works well for invariant constraints but breaks down for context-sensitive rules — "no external network calls in this module" or "align with the team's naming convention" cannot be reliably checked by static analysis. Prompt-based constraints are still necessary for any rule that requires semantic understanding of intent, which is exactly the regime where the [instruction compliance ceiling](instruction-compliance-ceiling.md) bites.
 

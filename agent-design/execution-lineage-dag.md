@@ -19,21 +19,21 @@ maturity: adopted
 
 > Execution lineage models revisable AI work as a DAG of artifacts with explicit dependencies and identity-based replay, so unrelated edits never perturb the output.
 
-## The Maintained-State Quality Gap
+## The maintained-state quality gap
 
-An agent loop that interleaves reasoning, tool use, and iterative refinement can produce a polished final answer while leaving the underlying state inconsistent. Rosen and Rosen call this the gap between *final answer quality* and *maintained-state quality* — both can be measured, and they don't move together ([arXiv:2605.06365](https://arxiv.org/abs/2605.06365)).
+An agent loop interleaves reasoning, tool use, and iterative refinement. It can produce a polished final answer while leaving the underlying state inconsistent. Rosen and Rosen call this the gap between final-answer quality and maintained-state quality. You can measure both, and they do not move together ([arXiv:2605.06365](https://arxiv.org/abs/2605.06365)).
 
-The mechanism is implicit conversational state. When the agent revises a multi-artifact work product (a memo with sources, summaries, and conclusions; a PR with research notes, plan, and code), the loop has no structural way to say *which* artifacts must change, which must remain identical, and how a change should propagate. The model regenerates plausible outputs each pass and contamination leaks in from unrelated context.
+The cause is implicit conversational state. The agent revises a multi-artifact work product (a memo with sources, summaries, and conclusions; a PR with research notes, plan, and code). The loop has no structural way to say which artifacts must change, which must stay identical, and how a change should propagate. The model regenerates plausible outputs each pass, and contamination leaks in from unrelated context.
 
-## The Three Structural Primitives
+## The three structural primitives
 
 Execution lineage replaces the loop with a directed acyclic graph of artifact-producing computations and adds three properties ([arXiv:2605.06365](https://arxiv.org/abs/2605.06365)):
 
-1. **Explicit dependencies** — each node declares the artifacts it consumes; nothing is read implicitly from a transcript.
-2. **Stable intermediate boundaries** — intermediate artifacts (summaries, plans, draft sections) are first-class outputs with stable identity, not throwaway scratch.
-3. **Identity-based replay** — when an input changes, only descendants of the changed node re-run; everything else is reused by identity.
+1. Explicit dependencies — each node declares the artifacts it consumes. Nothing is read implicitly from a transcript.
+2. Stable intermediate boundaries — intermediate artifacts (summaries, plans, draft sections) are first-class outputs with stable identity, not throwaway scratch.
+3. Identity-based replay — when an input changes, only descendants of the changed node re-run. Everything else is reused by identity.
 
-The mechanism is the same one that gives Make, Bazel, and asset-based orchestrators like [Dagster](https://dagster.io/learn/data-pipeline-orchestration-tools) reproducibility on data pipelines. The contribution of the paper is applying it to LLM-produced artifacts and measuring the gap empirically.
+This is the same mechanism that gives Make, Bazel, and asset-based orchestrators like [Dagster](https://dagster.io/learn/data-pipeline-orchestration-tools) their reproducibility on data pipelines. The paper applies it to LLM-produced artifacts and measures the gap empirically.
 
 ```mermaid
 graph TD
@@ -51,16 +51,16 @@ graph TD
 
 When Source B changes, only `Summarize B`, `Plan`, and `Draft memo` re-run; `Summarize A` and `Summarize C` are reused. When an unrelated branch is added, none of the existing nodes re-run.
 
-## What the Experiments Showed
+## What the experiments showed
 
 Rosen and Rosen ran two controlled policy-memo update tasks against loop-centric baselines ([arXiv:2605.06365](https://arxiv.org/abs/2605.06365)):
 
-- **Unrelated-branch update** — DAG replay preserved the final memo exactly across all runs, with zero churn and zero contamination from the unrelated branch. Loop baselines regenerated the memo and frequently imported unrelated context — the [context-poisoning](../anti-patterns/context-poisoning.md) failure mode.
-- **Intermediate-artifact edit** — all systems reflected the new constraint in the final memo, but only DAG replay achieved upstream preservation, downstream propagation, unaffected-artifact preservation, and cross-artifact consistency.
+- Unrelated-branch update — DAG replay preserved the final memo exactly across all runs, with zero churn and zero contamination from the unrelated branch. Loop baselines regenerated the memo and often imported unrelated context — the [context-poisoning](../anti-patterns/context-poisoning.md) failure mode.
+- Intermediate-artifact edit — all systems reflected the new constraint in the final memo. Only DAG replay achieved upstream preservation, downstream propagation, unaffected-artifact preservation, and cross-artifact consistency.
 
-The authors are explicit that loop baselines remain competitive on bounded one-shot synthesis where every source fits in context. The DAG earns its keep when work is *revised* across time.
+The authors are clear that loop baselines stay competitive on bounded one-shot synthesis where every source fits in context. The DAG earns its keep when work is revised across time.
 
-## When Loops Beat the DAG
+## When loops beat the DAG
 
 The pattern is conditional, not universal. A loop is the right shape when:
 
@@ -71,13 +71,13 @@ The pattern is conditional, not universal. A loop is the right shape when:
 
 Classical DAG schedulers also don't handle non-deterministic LLM output, reasoning-failure-as-primary-error-mode, or non-idempotent retries without explicit additions ([Kinde, *Orchestrating Multi-Step Agents*](https://www.kinde.com/learn/ai-for-software-engineering/ai-devops/orchestrating-multi-step-agents-temporal-dagster-langgraph-patterns-for-long-running-work/)).
 
-## Relation to Existing Patterns
+## Relation to existing patterns
 
 The DAG-of-artifacts model composes with — and is distinct from — three adjacent patterns already documented:
 
-- [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md) splits *what to do* from *how to do it* via typed tool boundaries. Execution lineage operates one layer up: it structures the *artifacts* that flow between calls.
-- [Event Sourcing for Agents](../observability/event-sourcing-for-agents.md) (ESAA) uses an append-only event log for replay-verifiable execution. The log gives *temporal* replay; execution lineage gives *dependency-scoped* replay — only descendants of changed inputs re-run.
-- [Durable Interactive Artifacts](durable-interactive-artifacts.md) treats agent outputs as persistent re-openable workspace objects. Execution lineage adds the dependency edges between them.
+- [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md) splits what to do from how to do it via typed tool boundaries. Execution lineage operates one layer up: it structures the artifacts that flow between calls.
+- [Event Sourcing for Agents](../observability/event-sourcing-for-agents.md) (ESAA) uses an append-only event log for replay-verifiable execution. The log gives temporal replay. Execution lineage gives dependency-scoped replay — only descendants of changed inputs re-run.
+- [Durable Interactive Artifacts](durable-interactive-artifacts.md) treats agent outputs as persistent, re-openable workspace objects. Execution lineage adds the dependency edges between them.
 
 Productized analogues are starting to ship: Cloudflare Artifacts (May 2026 beta) gives agent outputs git-like versioning with parent lineage ([InfoQ coverage](https://www.infoq.com/news/2026/05/cloudflare-artifacts-ai-agents/)); [Union.ai](https://www.union.ai/blog-post/move-fast-and-dont-break-things-introducing-artifacts-lineage-and-reactive-workflows) wires artifact lineage as the medium of exchange between workflows.
 
@@ -85,7 +85,7 @@ Productized analogues are starting to ship: Cloudflare Artifacts (May 2026 beta)
 
 A multi-file PR being revised after review feedback is the canonical use case. The naive loop:
 
-**Before — agent loop regenerates everything:**
+Before — agent loop regenerates everything:
 
 ```
 1. Read review comment "rename `User` to `Account` in module B"
@@ -94,7 +94,7 @@ A multi-file PR being revised after review feedback is the canonical use case. T
 4. Test fixtures reshuffled because the model re-decided shape
 ```
 
-**After — DAG replay scoped by dependency:**
+After — DAG replay scoped by dependency:
 
 ```
 1. Mutate input: rename in module B's spec node
@@ -103,7 +103,7 @@ A multi-file PR being revised after review feedback is the canonical use case. T
 4. Final PR diff is exactly the rename plus its closure
 ```
 
-The loop produces a polished PR that may pass review on second look. The DAG replay produces a PR whose diff is *provably* the closure of the requested change.
+The loop produces a polished PR that may pass review on second look. The DAG replay produces a PR whose diff is provably the closure of the requested change.
 
 ## Key Takeaways
 

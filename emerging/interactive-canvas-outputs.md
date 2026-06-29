@@ -19,9 +19,9 @@ maturity: established
 
 Claude Artifacts (Claude 3.5 Sonnet, June 2024) introduced a dedicated window for generated content "alongside their conversation" for code snippets, text documents, and website designs ([Anthropic](https://www.anthropic.com/news/claude-3-5-sonnet)). Cursor 3.1 extended the primitive to agent-built visualizations: "Cursor can now respond by creating interactive canvases" with first-party components — tables, boxes, diagrams, charts — plus diffs and to-do lists ([Cursor changelog](https://cursor.com/changelog)). The shape is now available across mainstream tools; the question is when to produce one.
 
-This page covers the **output-shape decision**: when a canvas beats text or a Git-tracked file, and what changes about review once one exists.
+This page covers the output-shape decision: when a canvas beats text or a Git-tracked file, and what changes about review once one exists.
 
-## When a Canvas Earns Its Overhead
+## When a canvas earns its overhead
 
 A canvas costs render time, an extra surface the reader must interact with, and a verification gap (see below). It pays that cost back only when the output has structure a sentence cannot carry. The Cursor blog describes canvases as combining "data from multiple sources into single visualizations" with "logic and interactivity tailored to user requests" ([Cursor](https://cursor.com/blog/canvas)) — which is the real criterion: irreducible multi-dimensionality.
 
@@ -38,7 +38,7 @@ Do not use a canvas when:
 - The output already lives in Git (a diff, a config file) — review belongs in the PR, not an ephemeral side panel
 - The reader will copy the result elsewhere — plain text travels better than a rendered component
 
-## The Source-Traceability Gap
+## The source-traceability gap
 
 A rendered dashboard looks authoritative. The query behind it may be wrong. A canvas presents the synthesis — the chart, the aggregation, the filter — without automatically surfacing the inputs. This is the same failure mode as any LLM output that [hides its intermediate reasoning](../human/visible-thinking-ai-development.md), amplified by the visual confidence the rendering provides.
 
@@ -46,20 +46,20 @@ Mitigations belong in the canvas itself:
 
 - A visible "source" affordance that shows the query, tool call, or data slice that produced each panel
 - A way to expand any aggregate into its constituent rows
-- Timestamps and data versioning so a stale canvas is recognisable as stale
+- Timestamps and data versioning so a stale canvas is recognizable as stale
 
 Without these, reviewing a canvas means trusting the render. With them, the canvas becomes auditable — which is the condition under which it is worth producing at all.
 
-## Review and Handoff Implications
+## Review and handoff implications
 
 Canvases live in the agent window, not the Git tree. For a pull-request-centric team, this splits the review surface: the code diff is in GitHub, the canvas that motivated it is in the agent. Reviewers cannot inspect the canvas unless they re-run the prompt, and re-runs may produce a different canvas.
 
 Two practical consequences:
 
-1. **Canvas outputs are not review artifacts on their own.** If a decision hinges on what the canvas showed, export the canvas (or its underlying data and query) into the PR description, an issue comment, or a committed file. The canvas is a working surface; the PR is the record.
-2. **Canvases do not replace written answers in async review.** A reviewer reading the PR at 2 a.m. cannot interact with a live Cursor canvas. Any claim the canvas was meant to communicate needs a prose or screenshot version in the durable channel.
+1. Canvas outputs are not review artifacts on their own. If a decision hinges on what the canvas showed, export the canvas (or its underlying data and query) into the PR description, an issue comment, or a committed file. The canvas is a working surface; the PR is the record.
+2. Canvases do not replace written answers in async review. A reviewer reading the PR at 2 a.m. cannot interact with a live Cursor canvas. Any claim the canvas was meant to communicate needs a prose or screenshot version in the durable channel.
 
-## Why This Is an Output-Shape Pattern, Not an Architectural One
+## Why this is an output-shape pattern, not an architectural one
 
 Anthropic's canonical list of agent patterns — prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer — does not include artifacts or canvases ([Anthropic](https://www.anthropic.com/engineering/building-effective-agents)). That is deliberate. The underlying agent architecture is unchanged whether the output ships as Markdown, JSON, a chart, or a dashboard. Canvases are a UI affordance that changes [what the human does with the result](../agent-design/durable-interactive-artifacts.md); they do not change what the agent did to produce it.
 
@@ -71,7 +71,7 @@ This framing is contested. One line of research treats agent-generated interface
 
 An agent is asked to audit dependency versions across five services in a monorepo and recommend upgrades.
 
-**Without a canvas** — prose output:
+Without a canvas, prose output:
 
 ```
 service-a: express 4.18.2 (latest 4.21.1, 3 minor versions behind, 2 CVEs)
@@ -81,7 +81,7 @@ service-b: express 4.19.0 (latest 4.21.1, 2 minor versions behind, 1 CVE)
 
 A reviewer scans 30 lines, trying to remember which services had CVEs.
 
-**With a canvas** — table output in Cursor 3.1:
+With a canvas, table output in Cursor 3.1:
 
 | Service | Package | Current | Latest | Severity |
 |---------|---------|---------|--------|----------|

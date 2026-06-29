@@ -14,9 +14,9 @@ maturity: adopted
 
 > A `PostToolUse` or `PostToolUseFailure` hook can catch "command not found" and BSD/GNU incompatibility errors the moment they occur, feed the fix back to the agent via `additionalContext`, and optionally update CLAUDE.md for the next session.
 
-## The Problem
+## The problem
 
-macOS ships with BSD versions of core utilities. GNU and BSD implementations diverge in ways that silently break agent-generated shell commands:
+macOS ships BSD versions of core utilities. GNU and BSD implementations diverge in ways that silently break agent-generated shell commands:
 
 | Tool | BSD (macOS) | GNU (Linux) |
 |------|-------------|-------------|
@@ -25,9 +25,9 @@ macOS ships with BSD versions of core utilities. GNU and BSD implementations div
 | `date` | `-d` not supported | `-d` parses date strings |
 | `xargs` | No `-r` (no-run-if-empty) | `-r` supported |
 
-The agent doesn't know which variant is present. CLAUDE.md instructions help but must be written before the problem is observed. A runtime hook catches the failure and corrects it in the same session.
+The agent does not know which variant is present. CLAUDE.md instructions help, but you have to write them before you see the problem. A runtime hook catches the failure and corrects it in the same session.
 
-## Hook Events
+## Hook events
 
 Two events are relevant:
 
@@ -42,7 +42,7 @@ Both `PostToolUse` and `PostToolUseFailure` hooks can return `additionalContext`
 
 ## Implementation
 
-### 1. Detect and Return additionalContext
+### 1. Detect and return additionalContext
 
 ```bash
 #!/bin/bash
@@ -97,9 +97,9 @@ Register in `.claude/settings.json`:
 }
 ```
 
-### 2. Once-Per-Session Enforcement
+### 2. Once-per-session enforcement
 
-To avoid repeating the same advice every invocation, gate the response on a sentinel file keyed to `session_id`. The `session_id` field is present in every hook input:
+To avoid repeating the same advice on every invocation, gate the response on a sentinel file keyed to `session_id`. Every hook input carries the `session_id` field:
 
 ```bash
 #!/bin/bash
@@ -150,7 +150,7 @@ if ! grep -qF "BSD grep" "$CLAUDE_PROJECT_DIR/CLAUDE.md" 2>/dev/null; then
 fi
 ```
 
-**Important constraint:** CLAUDE.md is loaded at session start, not on every turn. Writes mid-session take effect next session — use `additionalContext` for immediate in-session feedback and CLAUDE.md for cross-session persistence.
+One constraint matters here. CLAUDE.md loads at session start, not on every turn. A mid-session write takes effect next session, so use `additionalContext` for immediate in-session feedback and CLAUDE.md for cross-session persistence.
 
 ## Flow
 
@@ -171,7 +171,7 @@ sequenceDiagram
     Agent->>Shell: bash grep -E "pattern" file.txt
 ```
 
-## Auto-Remediation via Homebrew
+## Auto-remediation via Homebrew
 
 The hook can run `brew install` as a side-effect:
 
@@ -187,24 +187,24 @@ fi
 
 This is viable — hooks can spawn subprocesses — but only opt in if you accept hooks installing system packages without normal review.
 
-## Relationship to PreToolUse Prevention
+## Relationship to PreToolUse prevention
 
-The official [bash_command_validator example](https://github.com/anthropics/claude-code/blob/main/examples/hooks/bash_command_validator_example.py) uses a `PreToolUse` hook to rewrite commands before they run — e.g., redirecting `grep` to `ripgrep`. BSD/GNU divergence is a documented portability concern ([GNU sed manual](https://www.gnu.org/software/sed/manual/sed.html#The-_0022s_0022-Command), [GNU grep manual](https://www.gnu.org/software/grep/manual/grep.html)). These two approaches are complementary:
+The official [bash_command_validator example](https://github.com/anthropics/claude-code/blob/main/examples/hooks/bash_command_validator_example.py) uses a `PreToolUse` hook to rewrite commands before they run — for example, redirecting `grep` to `ripgrep`. BSD/GNU divergence is a documented portability concern ([GNU sed manual](https://www.gnu.org/software/sed/manual/sed.html#The-_0022s_0022-Command), [GNU grep manual](https://www.gnu.org/software/grep/manual/grep.html)). The two approaches complement each other:
 
 | Approach | Event | Mechanism | Use when |
 |----------|-------|-----------|----------|
 | PreToolUse rewrite | `PreToolUse` | Block + redirect | Known incompatibility, safe substitute exists |
 | PostToolUse detection | `PostToolUseFailure` | additionalContext | Unknown missing tool, discovered at runtime |
 
-Static allowlisting catches known patterns. Runtime detection handles the cases that weren't anticipated.
+Static allowlisting catches known patterns. Runtime detection handles the cases you did not anticipate.
 
-## When This Backfires
+## When this backfires
 
 Runtime hook detection adds overhead to every failing Bash call. Three conditions make this pattern worse than the alternative:
 
-- **Overly broad pattern matching produces false positives.** If the regex matches "invalid option" in output unrelated to BSD/GNU divergence, the agent receives misleading advice and may spend turns chasing the wrong fix. Test detection patterns against real failure output before deploying.
-- **Sentinel files break in ephemeral environments.** Containerised CI runners, sandboxed shells, or environments where `$HOME` is not persistent will fail to find or create the sentinel file, causing the hook to emit the context message on every invocation rather than once per session. Use an in-process variable or skip once-per-session gating when `$HOME` is not guaranteed.
-- **The hook can mask the original error.** When `additionalContext` fires alongside a non-zero exit, the agent sees both the error and the advisory message. If the advisory message is confident ("use grep -E instead"), the agent may act on it even when the actual error has a different root cause, bypassing diagnostic steps. Keep advisory text conditional and hedged.
+- Overly broad pattern matching produces false positives. If the regex matches "invalid option" in output unrelated to BSD/GNU divergence, the agent gets misleading advice and may spend turns chasing the wrong fix. Test detection patterns against real failure output before you deploy.
+- Sentinel files break in ephemeral environments. Containerized CI runners, sandboxed shells, or environments where `$HOME` is not persistent will fail to find or create the sentinel file. The hook then emits the context message on every invocation rather than once per session. Use an in-process variable, or skip once-per-session gating when `$HOME` is not guaranteed.
+- The hook can mask the original error. When `additionalContext` fires alongside a non-zero exit, the agent sees both the error and the advisory message. If the advisory message is confident ("use grep -E instead"), the agent may act on it even when the actual error has a different root cause, and skip diagnostic steps. Keep advisory text conditional and hedged.
 
 ### `additionalContext` delivery regressions
 
@@ -213,7 +213,7 @@ The entire mechanism assumes `additionalContext` from the hook reaches the model
 - [anthropics/claude-code#24788](https://github.com/anthropics/claude-code/issues/24788) (Feb 2026) — `PostToolUse` hooks emitting `additionalContext` produce no visible output when triggered by MCP tool calls.
 - [anthropics/claude-code#55889](https://github.com/anthropics/claude-code/issues/55889) (May 2026) — in v2.1.123, all three context-injection channels (`additionalContext`, `systemMessage`, plain stdout) are dropped for hooks matching `Bash` — the same matcher this pattern uses.
 
-Verify in your target version that a trivial hook (e.g. `jq -n '{additionalContext: "ping"}'` on a failing `Bash` call) actually surfaces to the model before assuming the mechanism is wired end-to-end. If it doesn't, fall back to writing the advisory to a file the next turn can read, or use the `PreToolUse` rewrite approach described earlier.
+Verify in your target version that a trivial hook (for example, `jq -n '{additionalContext: "ping"}'` on a failing `Bash` call) actually surfaces to the model before assuming the mechanism is wired end-to-end. If it doesn't, fall back to writing the advisory to a file the next turn can read, or use the `PreToolUse` rewrite approach described earlier.
 
 ## Key Takeaways
 

@@ -19,48 +19,48 @@ maturity: adopted
 
 > Layer multiple independent safety mechanisms so no single failure point can compromise an autonomous agent's behavior.
 
-**Learn it hands-on:** [No Single Layer Holds](https://learn.agentpatterns.ai/security/no-single-layer-holds/) — guided lesson with quizzes.
+Learn it hands-on: [No Single Layer Holds](https://learn.agentpatterns.ai/security/no-single-layer-holds/) — guided lesson with quizzes.
 
-## Why Layers Matter
+## Why layers matter
 
-Any individual safety mechanism can fail. Prompt guardrails are bypassed by injection. Runtime checks miss edge cases. [Approval gates](human-in-the-loop-confirmation-gates.md) cause fatigue-driven rubber-stamping. Defense-in-depth assumes every layer will eventually fail and ensures each catches what the others miss. Perplexity's response to NIST's AI-agent security RFI reaches the same conclusion: "No single layer is sufficient on its own; the non-deterministic nature of LLM reasoning ensures that any individual defense can be circumvented under sufficiently adaptive attack strategies" ([Li et al., 2026](https://arxiv.org/abs/2603.12230)).
+Any single safety mechanism can fail. Injection bypasses prompt guardrails. Runtime checks miss edge cases. [Approval gates](human-in-the-loop-confirmation-gates.md) cause fatigue-driven rubber-stamping. Defense-in-depth assumes every layer will eventually fail. It makes each layer catch what the others miss. Perplexity's response to NIST's AI-agent security RFI reaches the same conclusion: "No single layer is sufficient on its own; the non-deterministic nature of LLM reasoning ensures that any individual defense can be circumvented under sufficiently adaptive attack strategies" ([Li et al., 2026](https://arxiv.org/abs/2603.12230)).
 
-The OPENDEV agent implements five independent safety layers, each operating at a different level of the stack ([Bui, 2026 §2.1](https://arxiv.org/abs/2603.05344)):
+The OPENDEV agent runs five independent safety layers, each operating at a different level of the stack ([Bui, 2026 §2.1](https://arxiv.org/abs/2603.05344)):
 
-1. **Prompt guardrails** — safety instructions in the system prompt
-2. **Schema restrictions** — subagents see only tools in their allowlist
-3. **Runtime approvals** — user confirmation before dangerous operations
-4. **Tool validation** — inputs validated before execution
-5. **Lifecycle hooks** — pre-tool hooks can block execution with an explanation
+1. Prompt guardrails — safety instructions in the system prompt
+2. Schema restrictions — subagents see only tools in their allowlist
+3. Runtime approvals — user confirmation before dangerous operations
+4. Tool validation — the agent validates inputs before execution
+5. Lifecycle hooks — pre-tool hooks can block execution with an explanation
 
-Each layer is independent. Failure of one does not compromise the others ([Bui, 2026 §2.1](https://arxiv.org/abs/2603.05344)).
+Each layer is independent. If one fails, the others still hold ([Bui, 2026 §2.1](https://arxiv.org/abs/2603.05344)).
 
-## Schema-Level Tool Filtering
+## Schema-level tool filtering
 
-The strongest form of tool restriction prevents the model from even knowing a tool exists. When a subagent's schema excludes write operations, the model cannot hallucinate calls to tools it has never seen ([Bui, 2026 §3.3](https://arxiv.org/abs/2603.05344)).
+The strongest form of tool restriction stops the model from even knowing a tool exists. When a subagent's schema excludes write operations, the model cannot hallucinate calls to tools it has never seen ([Bui, 2026 §3.3](https://arxiv.org/abs/2603.05344)).
 
-This is stronger than runtime rejection. A runtime check denies a forbidden call after the fact; schema filtering prevents the model from ever forming the intent. The attack surface shrinks before inference. See [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md) for implementation details.
+This is stronger than runtime rejection. A runtime check denies a forbidden call after the fact. Schema filtering stops the model from ever forming the intent. The attack surface shrinks before inference. See [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md) for implementation details.
 
-## Three-Level Approval System
+## Three-level approval system
 
-Runtime approvals use a three-level system ([Bui, 2026 §2.4.1](https://arxiv.org/abs/2603.05344)):
+Runtime approvals use three levels ([Bui, 2026 §2.4.1](https://arxiv.org/abs/2603.05344)):
 
-- **Manual** — every tool call requires explicit user approval
-- **Semi-Auto** — only dangerous commands require approval; safe patterns execute freely
-- **Auto** — all tool calls approved without user interaction
+- Manual — every tool call needs explicit user approval
+- Semi-auto — only dangerous commands need approval; safe patterns run freely
+- Auto — all tool calls are approved without user interaction
 
-Approval persistence prevents fatigue: users grant blanket permission for safe patterns, and the agent remembers these grants across turns ([Bui, 2026 §3.3](https://arxiv.org/abs/2603.05344)). Pattern-based rules match command prefixes, danger patterns, and command types. Without persistence, repeated approval prompts train users to rubber-stamp everything — undermining the safety layer entirely.
+Approval persistence prevents fatigue: users grant blanket permission for safe patterns, and the agent remembers these grants across turns ([Bui, 2026 §3.3](https://arxiv.org/abs/2603.05344)). Pattern-based rules match command prefixes, danger patterns, and command types. Without persistence, repeated approval prompts train users to rubber-stamp everything, which undermines the safety layer entirely.
 
-## Designing for Approximate Outputs
+## Designing for approximate outputs
 
 Agents produce approximate outputs. Safety-conscious harness design accounts for this rather than treating it as a bug ([Bui, 2026 §3.4](https://arxiv.org/abs/2603.05344)):
 
-- Auto-promote server commands to background tasks when the LLM misformats long-running commands
-- Auto-install missing dependencies when the agent produces incomplete execution plans
+- Promote server commands to background tasks when the LLM misformats long-running commands
+- Install missing dependencies when the agent produces incomplete execution plans
 
-These compensations reduce friction without compromising safety boundaries.
+These compensations reduce friction without weakening safety boundaries.
 
-## Layer Interactions
+## Layer interactions
 
 The layers reinforce each other:
 
@@ -69,7 +69,7 @@ The layers reinforce each other:
 - Tool validation catches what schema filtering does not address (valid tool, invalid inputs)
 - Approval gates provide human oversight for operations that pass all automated checks
 
-No single layer is sufficient. The combination produces safety properties that no individual mechanism can achieve alone.
+No single layer is enough. Together, the layers produce safety properties that no single mechanism can achieve alone.
 
 ## Example
 
@@ -111,15 +111,15 @@ fi
 
 Even if the prompt guardrail is bypassed by injection, the hook still blocks production-targeted commands. Schema filtering ensures the agent cannot commit changes even if both the prompt and hook are somehow circumvented. Each layer catches what the others miss.
 
-## When This Backfires
+## When this backfires
 
-Each layer adds configuration, testing, and maintenance cost — and misconfigured layers can block legitimate work or create false confidence while remaining ineffective.
+Each layer adds configuration, testing, and maintenance cost. Misconfigured layers can block legitimate work, or create false confidence while staying ineffective.
 
-- **Approval fatigue compounds across layers.** If every layer raises its own prompts, users approve everything to keep moving — converting the stack into security theater. The three-level system mitigates this only when safe patterns are classified correctly upfront.
-- **[Schema filtering](../multi-agent/subagent-schema-level-tool-filtering.md) limits legitimate capability.** Narrow subagent schemas cannot adapt outside their defined scope. In exploratory or general-purpose contexts, strict schema restrictions force constant operator intervention or fan-out into specialized agents where one broader agent would do.
-- **Hooks and validation add latency.** In streaming, high-frequency, or real-time pipelines, per-call lifecycle hooks compound response time. A single well-tuned [approval gate](human-in-the-loop-confirmation-gates.md) may beat five independent layers with inspection overhead at each level.
+- Approval fatigue compounds across layers. If every layer raises its own prompts, users approve everything to keep moving, which turns the stack into security theater. The three-level system helps only when you classify safe patterns correctly upfront.
+- [Schema filtering](../multi-agent/subagent-schema-level-tool-filtering.md) limits legitimate capability. Narrow subagent schemas cannot adapt outside their defined scope. In exploratory or general-purpose work, strict schema restrictions force constant operator intervention, or fan-out into specialized agents where one broader agent would do.
+- Hooks and validation add latency. In streaming, high-frequency, or real-time pipelines, per-call lifecycle hooks add up. A single well-tuned [approval gate](human-in-the-loop-confirmation-gates.md) may beat five independent layers that each add inspection overhead.
 
-Apply the full five-layer stack to production agents with write access, external integrations, or multi-agent pipelines. For short-lived, read-only, or sandboxed internal tools, one or two targeted layers (schema restrictions plus lifecycle hooks) often deliver sufficient protection at lower cost.
+Apply the full five-layer stack to production agents with write access, external integrations, or multi-agent pipelines. For short-lived, read-only, or sandboxed internal tools, one or two targeted layers (schema restrictions plus lifecycle hooks) often give enough protection at lower cost.
 
 ## Key Takeaways
 

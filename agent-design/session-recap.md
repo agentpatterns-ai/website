@@ -18,30 +18,30 @@ maturity: adopted
 
 > A session recap is an agent-authored, fixed-schema artifact written at a context boundary that preserves goal-state, not text-density, for the next turn to resume from.
 
-## What a Recap Is (and Isn't)
+## What a recap is, and is not
 
-Recap is the *goal-shaped* counterpart to compaction's *text-density* compression. [Compaction](../context-engineering/context-compression-strategies.md) summarises turns into prose to free context; a recap fires at a known boundary to produce a fixed-schema artifact the next turn reads as its starting context.
+A recap is the goal-shaped counterpart to compaction's text-density compression. [Compaction](../context-engineering/context-compression-strategies.md) summarizes turns into prose to free context. A recap fires at a known boundary to produce a fixed-schema artifact, which the next turn reads as its starting context.
 
 | Artifact | Trigger | Shape | Consumer | Scope |
 |----------|---------|-------|----------|-------|
 | Compaction summary | Context threshold (e.g. 85–95%) | Prose, text-dense | Same session, post-compression | History compression |
 | [Progress file](../observability/trajectory-logging-progress-files.md) (`todo.md`) | Every step (continuous) | File, incrementally updated | Agent + human, any turn | Running state |
 | [Goal recitation](../context-engineering/goal-recitation.md) | Every step (continuous) | Prose at context tail | Same session | Objective reinforcement |
-| **Session recap** | Discrete boundary (compaction / resume / fork) | Fixed schema, goal-shaped | Next turn (agent) or returning human | Handoff |
+| Session recap | Discrete boundary (compaction / resume / fork) | Fixed schema, goal-shaped | Next turn (agent) or returning human | Handoff |
 
 Compaction answers "what happened, compressed?" Recap answers "why are we here and what's next?"
 
-## When Recap Earns Its Cost
+## When a recap earns its cost
 
 Authoring a recap costs tokens. It pays off only under specific conditions:
 
-- A **natural boundary** exists — compaction fired, the session was resumed after a pause, a fork was spawned for parallel work, or a scheduled checkpoint reached
+- A natural boundary exists — compaction fired, the session was resumed after a pause, a fork was spawned for parallel work, or a scheduled checkpoint reached
 - No continuous progress-file pattern already owns the same state — if the agent already maintains a `todo.md` every step ([goal recitation](../context-engineering/goal-recitation.md)), a recap duplicates it
-- The **consumer is defined** — an agent resuming needs different fields than a human returning to a stale terminal. Claude Code's `/recap` is framed as "context when returning to a session" ([Claude Code v2.1.108 changelog](https://code.claude.com/docs/en/changelog), April 14, 2026), where the consumer may be either
+- The consumer is defined — an agent resuming needs different fields than a human returning to a stale terminal. Claude Code's `/recap` is framed as "context when returning to a session" ([Claude Code v2.1.108 changelog](https://code.claude.com/docs/en/changelog), April 14, 2026), where the consumer may be either
 
 Outside these conditions, a recap adds a second surface of truth that can drift from existing state.
 
-## Minimal Schema
+## Minimal schema
 
 A goal-shaped recap preserves four fields — not observations, not tool outputs:
 
@@ -61,7 +61,7 @@ next_action: Run the updated test file and confirm all pass
 
 The schema is small on purpose. [LangChain's analysis of DeepAgents context management](https://blog.langchain.com/context-management-for-deepagents/) reports that adding dedicated fields for `session_intent` and next steps to the DeepAgents summarization prompt improved performance on their targeted compression evals. A fixed schema gives the next turn a predictable handle.
 
-## Who Authors It, When
+## Who authors it, and when
 
 The agent authors its own recap. The harness fires the authoring step at a detectable boundary:
 
@@ -77,28 +77,28 @@ graph TD
     F --> G[Next turn reads recap as starting context]
 ```
 
-Claude Code implements the resume-return case directly: v2.1.108 added `/recap` as a manually invocable command and `CLAUDE_CODE_ENABLE_AWAY_SUMMARY` to force it when telemetry is disabled ([changelog](https://code.claude.com/docs/en/changelog)). Tool-agnostic harnesses replicate the primitive by invoking the agent at the boundary with a prompt that names the schema fields explicitly, then persisting the output to a known path (`.session/recap.md`, `session_intent.json`) for the next turn to read.
+Claude Code implements the resume-return case directly: v2.1.108 added `/recap` as a manually invocable command and `CLAUDE_CODE_ENABLE_AWAY_SUMMARY` to force it when telemetry is disabled ([changelog](https://code.claude.com/docs/en/changelog)). Tool-agnostic harnesses replicate the primitive. They invoke the agent at the boundary with a prompt that names the schema fields, then persist the output to a known path (`.session/recap.md`, `session_intent.json`) for the next turn to read.
 
-## Why It Works
+## Why it works
 
-Compaction optimises for information density; continuity requires decision-density: *why* a choice was made, *what* is open, *what* comes next. These fields appear once in the trajectory and are cheap to discard during prose compression. The [objective-drift](../anti-patterns/objective-drift.md) anti-pattern captures the failure mode — a single-instance constraint dissolves in summarisation while the repeated core task survives, so the agent keeps working on a subtly wrong objective.
+Compaction optimizes for information density. Continuity needs decision-density: why a choice was made, what is open, what comes next. These fields appear once in the trajectory and are cheap to discard during prose compression. The [objective-drift](../anti-patterns/objective-drift.md) anti-pattern captures the failure mode. A single-instance constraint dissolves in summarization while the repeated core task survives, so the agent keeps working on a subtly wrong objective.
 
-A recap authored before compression preserves decision-density verbatim; the next turn reads it as seed context rather than reconstructing from compressed history.
+A recap authored before compression preserves decision-density verbatim. The next turn reads it as seed context rather than reconstructing from compressed history.
 
-## When This Backfires
+## When this backfires
 
 Recap is not always the right move. Conditions under which a recap is worse than no recap:
 
-- **Duplicates a continuous progress file.** If the agent already maintains a `todo.md` or runs [goal recitation](../context-engineering/goal-recitation.md) every step, a recap introduces a second surface of truth — the next turn now has two seeds that may disagree.
-- **Rigid schema outlives the task shape.** The fixed fields (`session_intent`, `decisions_made`, `open_questions`, `current_focus`, `next_action`) work while they map to the work. When the task mutates mid-session — scope widens, a constraint emerges, the objective splits — the schema traps the agent in the old frame. Amp's handoff implementation explicitly rejects static compression in favour of letting users specify a *new* goal at the boundary ([Tessl analysis of Amp's handoff](https://tessl.io/blog/amp-retires-compaction-for-a-cleaner-handoff-in-the-coding-agent-context-race/), Nov 14 2025).
-- **Author predicts the wrong salience.** The authoring agent decides what the next turn needs. If it classifies a needed detail as disposable, the recap locks in that omission — and the full history is already compressed behind it.
-- **Boundary is not real.** If the authoring step fires every turn regardless of compaction/resume/fork, recap overhead compounds with no decision-density payoff — pure waste.
+- Duplicates a continuous progress file. If the agent already maintains a `todo.md` or runs [goal recitation](../context-engineering/goal-recitation.md) every step, a recap introduces a second surface of truth — the next turn now has two seeds that may disagree.
+- Rigid schema outlives the task shape. The fixed fields (`session_intent`, `decisions_made`, `open_questions`, `current_focus`, `next_action`) work while they map to the work. When the task mutates mid-session — scope widens, a constraint emerges, the objective splits — the schema traps the agent in the old frame. Amp's handoff implementation explicitly rejects static compression in favor of letting users specify a new goal at the boundary ([Tessl analysis of Amp's handoff](https://tessl.io/blog/amp-retires-compaction-for-a-cleaner-handoff-in-the-coding-agent-context-race/), Nov 14 2025).
+- Author predicts the wrong salience. The authoring agent decides what the next turn needs. If it classifies a needed detail as disposable, the recap locks in that omission — and the full history is already compressed behind it.
+- Boundary is not real. If the authoring step fires every turn regardless of compaction/resume/fork, recap overhead compounds with no decision-density payoff — pure waste.
 
 ## Example
 
-An agent midway through a multi-hour refactor hits its compaction threshold. Before summarising, the harness invokes the recap step:
+An agent midway through a multi-hour refactor hits its compaction threshold. Before summarizing, the harness invokes the recap step:
 
-**Before** — compaction alone:
+Before — compaction alone:
 
 ```
 [Long prose summary of conversation turns, tool calls, and outputs.
@@ -106,7 +106,7 @@ Mentions the refactor goal repeatedly. The constraint "no public method
 signature changes" appeared once, 20 turns ago, in the original brief.]
 ```
 
-**After** — recap authored first, then compaction:
+After — recap authored first, then compaction:
 
 ```yaml
 # .session/recap.md — authored by the agent pre-compaction

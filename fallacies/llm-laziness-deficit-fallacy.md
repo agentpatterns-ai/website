@@ -19,17 +19,17 @@ maturity: established
 
 > The belief agents can be instructed into the virtue of laziness; because LLMs pay no time cost, restraint comes from harness gates, not prompts.
 
-## The Fallacy
+## The fallacy
 
-Larry Wall named laziness a programmer virtue: the drive to produce crisp abstractions so future you spends less time on clunky ones. Bryan Cantrill's ["The peril of laziness lost"](https://bcantrill.dtrace.org/2026/04/12/the-peril-of-laziness-lost/) identifies the cost function that produces it: *"The best engineering is always borne of constraints, and the constraint of our time places limits on the cognitive load of the system that we're willing to accept."*
+Larry Wall named laziness a programmer virtue: the drive to produce crisp abstractions so future you spends less time on clunky ones. Bryan Cantrill's ["The peril of laziness lost"](https://bcantrill.dtrace.org/2026/04/12/the-peril-of-laziness-lost/) names the cost function that produces it: "The best engineering is always borne of constraints, and the constraint of our time places limits on the cognitive load of the system that we're willing to accept."
 
-LLMs do not pay that cost. *"Work costs nothing to an LLM. LLMs do not feel a need to optimize for their own (or anyone's) future time, and will happily dump more and more onto a layercake of garbage"* ([Cantrill](https://bcantrill.dtrace.org/2026/04/12/the-peril-of-laziness-lost/), via [Simon Willison](https://simonwillison.net/2026/Apr/13/bryan-cantrill/)).
+LLMs do not pay that cost. "Work costs nothing to an LLM. LLMs do not feel a need to optimize for their own (or anyone's) future time, and will happily dump more and more onto a layercake of garbage" ([Cantrill](https://bcantrill.dtrace.org/2026/04/12/the-peril-of-laziness-lost/), via [Simon Willison](https://simonwillison.net/2026/Apr/13/bryan-cantrill/)).
 
-The fallacy is the response: add "be concise" or "write minimum code" to the system prompt and expect restraint to follow. The asymmetry is in the cost function, not the attitude — and prompts do not change cost functions.
+The fallacy is the response: add "be concise" or "write minimum code" to the system prompt and expect restraint to follow. The asymmetry sits in the cost function, not the attitude — and prompts do not change cost functions.
 
-## Why Instruction Alone Fails
+## Why instruction alone fails
 
-Attitude instructions have a documented backfire mode. Cursor found that telling a Codex agent to "preserve tokens" caused it to refuse substantive work rather than execute more cheaply ([Cursor](https://cursor.com/blog/codex-model-harness)). See [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md).
+Attitude instructions have a documented backfire mode. Cursor found that telling a Codex agent to "preserve tokens" made it refuse substantive work rather than work more cheaply ([Cursor](https://cursor.com/blog/codex-model-harness)). See [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md).
 
 Empirical signal without restraint gates:
 
@@ -37,35 +37,35 @@ Empirical signal without restraint gates:
 - Lines of code rose 76% and cognitive complexity 39% in agent-assisted repositories ([Agile Pain Relief](https://agilepainrelief.com/blog/ai-generated-code-quality-problems/)).
 - Agents scaffold "1,000 lines where 100 would suffice" ([Addy Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
 
-## The Correct Mental Model
+## The correct mental model
 
-Human laziness is an emergent property of time scarcity. The agent equivalent must be an emergent property of the harness — objective constraints applied where output meets a measurable gate.
+Human laziness emerges from time scarcity. The agent equivalent must emerge from the harness — objective constraints applied where output meets a measurable gate.
 
 Three gate categories bind:
 
-- **Diff-size budgets** — hard limits per change, split enforced by tooling. Oversized PRs are a documented rejection cause ([Xiao et al., 2025](https://arxiv.org/abs/2509.14745)); a cap forces consolidation because the tool rejects sprawl.
-- **Complexity budgets** — cyclomatic complexity, function length, and duplication thresholds in CI detect bloat mechanically ([Addy Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
-- **Deletion targets** — a "delete more than you add" rule, or periodic garbage-collection passes. Martin Fowler documents this as harness-engineered cleanup ([Fowler/Böckeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
+- Diff-size budgets — hard limits per change, with the split enforced by tooling. Oversized PRs are a documented rejection cause ([Xiao et al., 2025](https://arxiv.org/abs/2509.14745)); a cap forces consolidation because the tool rejects sprawl.
+- Complexity budgets — thresholds in CI for cyclomatic complexity, function length, and duplication detect bloat mechanically ([Addy Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
+- Deletion targets — a "delete more than you add" rule, or periodic garbage-collection passes. Martin Fowler documents this as harness-engineered cleanup ([Fowler/Böckeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 
-Each is an objective constraint the agent can observe. The prompt does not ask for laziness; the environment makes sprawl expensive.
+The agent can observe each constraint. The prompt does not ask for laziness; the environment makes sprawl expensive.
 
-## Where Restraint Gates Are Wrong
+## Where restraint gates are wrong
 
 Gates are not universal:
 
-- **Exploratory generation inside a harness** — when the harness curates and discards intermediate output, per-call gates add latency without quality gain ([venture-bystander](https://venture-bystander.ghost.io/garry-tan-loc-maxxing-and-code-abundance/)): intermediate code is search, not product.
-- **Known-growth systems** — when a factory or registry is on the roadmap, a [diff cap](../verification/deterministic-guardrails.md) forces a later refactor. Scope gates to the current task.
-- **Small single-author projects** — one person's cognitive-load budget is their own; layered review adds process without addressing debt.
+- Exploratory generation inside a harness — when the harness curates and discards intermediate output, per-call gates add latency without quality gain ([venture-bystander](https://venture-bystander.ghost.io/garry-tan-loc-maxxing-and-code-abundance/)): intermediate code is search, not product.
+- Known-growth systems — when a factory or registry is on the roadmap, a [diff cap](../verification/deterministic-guardrails.md) forces a later refactor. Scope gates to the current task.
+- Small single-author projects — one person's cognitive-load budget is their own; layered review adds process without addressing debt.
 
 The operative question is not "are agents lazy enough?" but "does my harness impose a cost the agent can observe?"
 
 ## Example
 
-**Applying the fallacy — attitude instruction without gates:**
+Applying the fallacy — attitude instruction without gates:
 
-The team adds to `CLAUDE.md`: *"Prefer simple solutions. Do not over-engineer."* An agent ships a notification feature: one function requested, six classes delivered, plus a rate limiter and retry policy nobody asked for ([Fowler/Garg case study](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html)). Next week, the same prompt produces another 800-line change. The instruction was read; the cost function was unchanged.
+The team adds to `CLAUDE.md`: "Prefer simple solutions. Do not over-engineer." An agent ships a notification feature: one function requested, six classes delivered, plus a rate limiter and retry policy nobody asked for ([Fowler/Garg case study](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html)). Next week, the same prompt produces another 800-line change. The agent read the instruction; the cost function did not change.
 
-**Avoiding the fallacy — harness gates that enforce the constraint:**
+Avoiding the fallacy — harness gates that enforce the constraint:
 
 The team removes the "be concise" instruction and installs three gates:
 

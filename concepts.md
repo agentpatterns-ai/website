@@ -37,6 +37,14 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 
     [Jump to section →](#agent-architecture)
 
+-   **Loop Engineering**
+
+    ---
+
+    Designing, controlling, and terminating the loops agents run in
+
+    [Jump to section →](#loop-engineering)
+
 -   **Tool Design**
 
     ---
@@ -44,6 +52,14 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
     Descriptions, discovery, filtering, and engineering
 
     [Jump to section →](#tool-design)
+
+-   **Token Engineering**
+
+    ---
+
+    Routing, lean context, caching, and batch timing to cut token spend
+
+    [Jump to section →](#token-engineering)
 
 -   **Security & Safety**
 
@@ -205,8 +221,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Semantic Density Optimization for Agent Codebases](context-engineering/semantic-density-optimization.md)
 - [Source Code Minification for State-in-Context Agents](context-engineering/source-code-minification-trade-off.md)
 - [Structured Domain Retrieval: Knowledge Graphs and Case-Based Reasoning](context-engineering/structured-domain-retrieval.md)
-- [Token-Efficient Code Generation: Structural Beats Prompting](context-engineering/token-efficient-code-generation.md)
-- [Tokenizer Swap Tax: Budgeting for Model Migrations That Change Token Counts](context-engineering/tokenizer-swap-tax.md)
 - [Turn-Level Context Decisions for AI Coding Sessions](context-engineering/turn-level-context-decisions.md)
 - [Validating Token-Optimized Formats Inside Agentic Loops](context-engineering/validate-token-optimized-formats-in-agentic-loops.md)
 - [Prompt Caching: Architectural Discipline for Agents](context-engineering/prompt-caching-architectural-discipline.md)
@@ -304,7 +318,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [File-Based Agent Coordination](multi-agent/file-based-agent-coordination.md)
 - [Orchestrator-Worker Pattern](multi-agent/orchestrator-worker.md)
 - [Progressive Disclosure for Agent Definitions](agent-design/progressive-disclosure-agents.md)
-- [The Ralph Wiggum Loop](agent-design/ralph-wiggum-loop.md)
 - [Specialized Agent Roles](agent-design/specialized-agent-roles.md)
 - [Task-Specific Agents vs Role-Based Agents](agent-design/task-specific-vs-role-based-agents.md)
 - [Worktree Isolation](workflows/worktree-isolation.md)
@@ -321,7 +334,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Agent Development Lifecycle for Agent Products](agent-design/agent-development-lifecycle.md)
 - [Agent Event Streaming: Consumer Contract Above the Tokens](agent-design/agent-event-streaming-model.md)
 - [Agent JIT Compilation: Compile Tasks Into Executable Plans](agent-design/agent-jit-compilation.md)
-- [Agent Loop Middleware — Safety Nets and Message Injection](agent-design/agent-loop-middleware.md)
 - [Agent Project State Purge: Clean-Slate Session Reset](agent-design/agent-project-state-purge.md)
 - [Agent Runtime Middleware: Per-Call Interception Pipeline](agent-design/agent-runtime-middleware.md)
 - [Agent Self-Review Loop for Iterative Self-Improvement](code-review/agent-self-review-loop.md)
@@ -358,7 +370,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Component-Isolated Memory Stress Testing for LLM Agents](verification/component-isolated-memory-stress-testing.md)
 - [Contextual Capability Calibration for Multi-Agent Delegation](multi-agent/contextual-capability-calibration.md)
 - [Continual Learning for AI Agents: Three Layers of Knowledge Accumulation](agent-design/continual-learning-layers.md)
-- [Convergence Detection in Iterative Agent Refinement](agent-design/convergence-detection.md)
 - [Critic Agent Pattern: Dual-Model Plan Review](agent-design/critic-agent-plan-review.md)
 - [Cross-Cycle Consensus Relay](agent-design/cross-cycle-consensus-relay.md)
 - [Cross-Tool Subagent Comparison](multi-agent/cross-tool-subagent-comparison.md)
@@ -399,7 +410,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Generative Agents Memory Stream: Three-Layer Architecture for Long-Running Agent Sessions](agent-design/generative-agents-memory-stream.md)
 - [Goal Contract: Separating the Doer from the Done-Checker](agent-design/goal-contract-completion-evaluator.md)
 - [Goal Monitoring and Progress Tracking for Long-Running Agents](agent-design/goal-monitoring-progress-tracking.md)
-- [Goal-Driven Autonomous Loop with Budget Cap](agent-design/goal-driven-autonomous-loop.md)
 - [Governed Sources of Truth for Analytics Agents (Structure Over Access)](agent-design/governed-sources-of-truth-analytics-agents.md)
 - [Graph of Thoughts: Directed Graph Reasoning for Multi-Path Problems](agent-design/graph-of-thoughts.md)
 - [Grill Me: Developer-Initiated Plan Interrogation](agent-design/grill-me-technique.md)
@@ -424,7 +434,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Lead-to-Teammate Plan-Approval Handshake for Multi-Agent Work](multi-agent/lead-teammate-plan-approval-handshake.md)
 - [LLM Map-Reduce Pattern for Parallel Input Processing](multi-agent/llm-map-reduce.md)
 - [Long-Running Agents: Durability and Resumability Across Sessions](agent-design/long-running-agents.md)
-- [Loop Strategy Spectrum: Accumulated vs Fresh Context](agent-design/loop-strategy-spectrum.md)
 - [Magentic Orchestration: Task-Ledger-Driven Adaptive Multi-Agent Planning](multi-agent/magentic-orchestration.md)
 - [Managed vs Self-Hosted Agent Harness: Deployment Trade-offs](agent-design/managed-vs-self-hosted-harness.md)
 - [Memory Retrieval as a Control Decision](agent-design/memory-retrieval-as-control.md)
@@ -495,7 +504,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [The Advisor Strategy: Frontier Model as Strategic Advisor](agent-design/advisor-strategy.md)
 - [The Agent Stack Bet: Architectural Decisions for Production Agents](agent-design/agent-stack-bets.md)
 - [The AX Stack: A Layered Model of an AI Coding Agent's Prompt-to-Compile Path](agent-design/ax-stack-layered-model.md)
-- [The Three Loops of Agentic Coding: A Diagnostic Vocabulary](agent-design/three-loops-agentic-coding.md)
 - [Three Reasoning Spaces: Plan-Bead-Code Phase Gates](agent-design/three-reasoning-spaces.md)
 - [Tiered Memory Architecture: Episodic-to-Semantic Consolidation for Long-Running Agents](agent-design/tiered-memory-architecture.md)
 - [Tool Confirmation Carousel: Batched UI for Per-Call Approvals](agent-design/tool-confirmation-carousel.md)
@@ -512,12 +520,25 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Minimum-Sufficient Control Ladder: Escalate by Failure Mode](agent-design/minimum-sufficient-control-ladder.md)
 - [ReAct (Reason + Act): Interleaved Reasoning-Action Loops](agent-design/react-pattern.md)
 - [Recursive Sub-Agent Delegation: Depth Limits and Trade-offs in Nested Hierarchies](multi-agent/recursive-sub-agent-delegation-depth.md)
-- [Agent Loop Go/No-Go: When Looping Earns Its Cost](agent-design/agent-loop-go-no-go-gate.md)
 - [Decoupled Search Grounding: A Vendor-Agnostic Grounding Boundary](agent-design/decoupled-search-grounding.md)
 - [LLM-as-Code Agentic Programming for Agent Harnesses](agent-design/llm-as-code-agentic-programming.md)
 - [Prompted Uncertainty Decomposition for Clarification Routing](agent-design/prompted-uncertainty-decomposition-clarification.md)
 - [Structured Task-State Ledger for Tool-Calling Agents (LedgerAgent)](agent-design/ledger-agent-structured-task-state.md)
 - [Trained Repository Explorer Sub-Agent (FastContext)](agent-design/fastcontext-trained-repository-explorer.md)
+
+## Loop Engineering
+
+> Designing, controlling, and terminating the iterative loops agents run in — so they converge instead of spinning or burning budget.
+
+- [Loop Engineering (hub + crosswalk)](loop-engineering/index.md)
+- [The Three Loops of Agentic Coding: A Diagnostic Vocabulary](loop-engineering/three-loops-agentic-coding.md)
+- [Loop Engineering: Stacking Outer Loops Around the Agent](loop-engineering/loop-engineering.md)
+- [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-engineering/loop-strategy-spectrum.md)
+- [The Ralph Wiggum Loop: Fresh-Context Iteration Pattern](loop-engineering/ralph-wiggum-loop.md)
+- [Goal-Driven Autonomous Loop with Budget Cap](loop-engineering/goal-driven-autonomous-loop.md)
+- [Agent Loop Middleware — Safety Nets and Message Injection](loop-engineering/agent-loop-middleware.md)
+- [Convergence Detection in Iterative Agent Refinement](loop-engineering/convergence-detection.md)
+- [Agent Loop Go/No-Go: When Looping Earns Its Cost](loop-engineering/agent-loop-go-no-go-gate.md)
 
 ## Tool Design
 
@@ -526,7 +547,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Consolidate Agent Tools](tool-engineering/consolidate-agent-tools.md)
 - [Feature List Files](instructions/feature-list-files.md)
 - [Filesystem-Based Tool Discovery](tool-engineering/filesystem-tool-discovery.md)
-- [Token-Efficient Tool Design](tool-engineering/token-efficient-tool-design.md)
 - [Tool Minimalism and High-Level Prompting](tool-engineering/tool-minimalism.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](tool-engineering/advanced-tool-use.md)
 - [Batch File Operations via Bash Scripts](tool-engineering/batch-file-operations.md)
@@ -601,6 +621,18 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Unix CLI as the Native Tool Interface for AI Agents](tool-engineering/unix-cli-native-tool-interface.md)
 - [Web Search Agent Loop: Iterative Research Patterns](tool-engineering/web-search-agent-loop.md)
 - [Auth-Isolation as the MCP-vs-CLI Selection Heuristic](tool-engineering/mcp-auth-isolation-vs-cli-selection.md)
+
+## Token Engineering
+
+> Getting the same result for fewer, cheaper tokens — the right model, the right token, the right cache, at the right time.
+
+- [Token Engineering (hub + crosswalk)](token-engineering/index.md)
+- [Cost-Aware Agent Design: Route by Complexity, Not Habit](token-engineering/cost-aware-agent-design.md)
+- [Token-Efficient Tool Design](token-engineering/token-efficient-tool-design.md)
+- [Token-Efficient Code Generation: Structural Beats Prompting](token-engineering/token-efficient-code-generation.md)
+- [Tokenizer Swap Tax: Budgeting for Model Migrations That Change Token Counts](token-engineering/tokenizer-swap-tax.md)
+- [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-engineering/token-cost-profiling-always-on-workflows.md)
+- [Code Cleanliness as an Agent Cost Lever](token-engineering/code-cleanliness-agent-cost-lever.md)
 
 ## Security & Safety
 
@@ -850,7 +882,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 > Error handling, cost control, and recovery — circuit breakers, rollbacks, loop detection, and performance budgets.
 
 - [Circuit Breakers for Agent Loops](observability/circuit-breakers.md)
-- [Cost-Aware Agent Design](agent-design/cost-aware-agent-design.md)
 - [Idempotent Agent Operations](agent-design/idempotent-agent-operations.md)
 - [Rollback-First Design](agent-design/rollback-first-design.md)
 - [Layered Accuracy Defense](verification/layered-accuracy-defense.md)
@@ -956,7 +987,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Closed-Loop CI Failure Remediation with Cloud Coding Agents](workflows/closed-loop-ci-failure-remediation.md)
 - [Cloud Planning with Inline-Comment Review and Execute-Anywhere Choice](workflows/cloud-planning-execute-anywhere.md)
 - [Cloud-Local Agent Handoff for AI Agent Development](workflows/cloud-local-agent-handoff.md)
-- [Code Cleanliness as an Agent Cost Lever](workflows/code-cleanliness-agent-cost-lever.md)
 - [Compound Engineering: Learning Loops That Make Each Feature Easier](workflows/compound-engineering.md)
 - [Continuous AI (Agentic CI/CD) for AI Agent Development](workflows/continuous-ai-agentic-cicd.md)
 - [Continuous Autonomous Task Loop](workflows/continuous-autonomous-task-loop.md)
@@ -1007,7 +1037,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [The Research-Plan-Implement Pattern](workflows/research-plan-implement.md)
 - [Throwaway-Prototype Skill: Build to Discard, Keep Only the Answer](workflows/throwaway-prototype-skill.md)
 - [Tiled Agent Layout: Supervising Parallel Agents Through Dedicated Panes](workflows/tiled-agent-layout.md)
-- [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](workflows/token-cost-profiling-always-on-workflows.md)
 - [Velocity-Quality Asymmetry: Why AI Speed Gains Fade](workflows/velocity-quality-asymmetry.md)
 - [Verification-Centric Development for AI-Generated Code](workflows/verification-centric-development.md)
 - [Continuous AI: A Navigation Map of Always-On Agent Workflows](workflows/continuous-ai.md)

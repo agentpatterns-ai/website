@@ -21,17 +21,17 @@ maturity: established
 
 A Method Map is a lookup table — one row per recurring failure mode an agent exhibits, mapped to the single primary-fix artifact that binds that failure. When a new failure is observed, add the row's named artifact and nothing else ([walkinglabs/learn-harness-engineering, method-map.md](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/resources/reference/method-map.md)).
 
-## When This Earns Its Place
+## When this earns its place
 
 The Method Map pays off only under three conditions:
 
-- **Failures have been observed** — applying the table prophylactically adds files for problems that do not exist
-- **Instruction count is approaching the compliance ceiling** — below the ~150-rule degradation point ([IFScale, 2025](https://arxiv.org/abs/2507.11538)), an `AGENTS.md` line is cheaper than a separate artifact; above it, every new rule pushes existing rules into omission territory ([Instruction Compliance Ceiling](instruction-compliance-ceiling.md))
-- **Tasks span multiple sessions** — cold-start, handoff, and scope-sprawl failures exist only for work that crosses context windows
+- Failures have been observed — applying the table before any failure adds files for problems that do not exist
+- Instruction count is nearing the compliance ceiling — below the ~150-rule degradation point ([IFScale, 2025](https://arxiv.org/abs/2507.11538)), an `AGENTS.md` line is cheaper than a separate artifact; above it, every new rule pushes existing rules into omission territory ([Instruction Compliance Ceiling](instruction-compliance-ceiling.md))
+- Tasks span multiple sessions — cold-start, handoff, and scope-sprawl failures exist only for work that crosses context windows
 
 Below these thresholds, an `AGENTS.md` rule is the smallest artifact, and the Method Map collapses into the instruction file itself.
 
-## The Canonical Table
+## The canonical table
 
 The published Method Map covers six failure modes from long-running coding-agent work ([walkinglabs, method-map.md](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/resources/reference/method-map.md)):
 
@@ -46,36 +46,36 @@ The published Method Map covers six failure modes from long-running coding-agent
 
 Five of these artifacts come directly from Anthropic's effective-harnesses writeup — `feature_list.json` with its `passes` field, `claude-progress.txt`, `init.sh`, and the clean-state criterion ("the kind of code that would be appropriate for merging to a main branch") ([Anthropic, Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
-The table is not a checklist; it is invoked when an observation matches a row. The first column — the triggering observation in concrete terms — is what distinguishes the Method Map from a generic list of artifacts.
+The table is not a checklist. You invoke it when an observation matches a row. The first column — the triggering observation in concrete terms — is what distinguishes the Method Map from a generic list of artifacts.
 
-## The Doctrine
+## The doctrine
 
-Three rules govern how the table is used:
+Three rules govern how you use the table.
 
-**Add the smallest artifact that directly addresses the observed failure.** A `feature_list.json` binds scope sprawl; it does not also encode commit conventions or test runners.
+Add the smallest artifact that directly addresses the observed failure. A `feature_list.json` binds scope sprawl; it does not also encode commit conventions or test runners.
 
-**Never solve a single failure by enlarging a global instruction file.** Appending another rule to `AGENTS.md` pushes existing rules closer to the compliance ceiling, where attention drops them ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). The reflex to add a rule is the failure mode the Method Map is designed to interrupt.
+Never solve a single failure by enlarging a global instruction file. Appending another rule to `AGENTS.md` pushes existing rules closer to the compliance ceiling, where attention drops them ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). The reflex to add a rule is the failure mode the Method Map is designed to interrupt.
 
-**Per-failure additions must be removable when the failure no longer recurs.** Every artifact has a removal condition, not just an addition condition.
+Make every per-failure addition removable once the failure no longer recurs. Every artifact has a removal condition, not just an addition condition.
 
-## Why This Works
+## Why this works
 
-Each row pairs a failure with an artifact that creates *external state the agent cannot rewrite during reasoning*. A `feature_list.json` constrains the agent to edit only the `passes` field; an instruction line that says "do not declare done early" has no external referent and competes with every other rule under attention degradation ([Instruction Compliance Ceiling](instruction-compliance-ceiling.md)). Anthropic documents the mechanism directly: "after some features had already been built, a later agent instance would look around, see that progress had been made, and declare the job done" — only an external contract stopped it, not more prose ([Anthropic harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+Each row pairs a failure with an artifact that creates external state the agent cannot rewrite during reasoning. A `feature_list.json` constrains the agent to edit only the `passes` field. An instruction line that says "do not declare done early" has no external referent and competes with every other rule under attention degradation ([Instruction Compliance Ceiling](instruction-compliance-ceiling.md)). Anthropic documents the mechanism directly: "after some features had already been built, a later agent instance would look around, see that progress had been made, and declare the job done" — only an external contract stopped it, not more prose ([Anthropic harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
-## When This Backfires
+## When this backfires
 
 The discipline carries its own failure modes:
 
-- **Stale artifacts mislead.** An out-of-date `feature_list.json` actively misdirects the agent; an artifact without an update discipline is worse than no artifact. The [Evaluating AGENTS.md study](evaluating-agents-md-context-files.md) shows auto-generated context files *reduce* task success rates
-- **Prophylactic application.** Adding all six rows before any failure has been observed violates the operating principle and creates speculative complexity
-- **Solo developer overhead.** For a project well under the compliance ceiling, file-discovery and maintenance cost more than the compliance gain
-- **Dogma about "no more rules".** For some failures the smallest artifact genuinely is one line in the instruction file
+- Stale artifacts mislead. An out-of-date `feature_list.json` actively misdirects the agent. An artifact without an update discipline is worse than no artifact. The [Evaluating AGENTS.md study](evaluating-agents-md-context-files.md) shows auto-generated context files reduce task success rates
+- Premature application. Adding all six rows before any failure has been observed violates the operating principle and creates speculative complexity
+- Solo developer overhead. For a project well under the compliance ceiling, file-discovery and maintenance cost more than the compliance gain
+- Dogma about "no more rules". For some failures the smallest artifact genuinely is one line in the instruction file
 
 ## Example
 
 A project starts noticing that its agent declares features complete after editing code but before running tests. The reflex fix is a new line in `AGENTS.md`: "Always run `make test` before marking a feature complete."
 
-**Reflex (instruction-file growth):**
+Reflex, the instruction-file-growth path:
 
 ```markdown
 # AGENTS.md (line 187 of 240)
@@ -84,9 +84,9 @@ A project starts noticing that its agent declares features complete after editin
 
 This adds rule 188 to a file already near the compliance ceiling. Under IFScale-style benchmarks the rule will be dropped some fraction of the time, exactly when it matters ([IFScale, 2025](https://arxiv.org/abs/2507.11538)).
 
-**Method Map (smallest artifact):**
+Method Map, the smallest-artifact path:
 
-The observation matches "premature completion." The project adds a `clean-state-checklist.md` whose presence the agent must verify before declaring done, and removes any corresponding instruction line:
+The observation matches "premature completion." The project adds a `clean-state-checklist.md` that the agent must verify before declaring done, and removes any corresponding instruction line:
 
 ```markdown
 # clean-state-checklist.md

@@ -13,35 +13,35 @@ maturity: established
 
 > Comprehension debt is the gap between code an AI agent produces and the developer's understanding of it. It lives in people, not the codebase.
 
-## The Problem
+## The problem
 
 AI coding agents generate code faster than developers can thoroughly read it. Tests pass, the diff looks reasonable, you merge — the [trust-without-verify](trust-without-verify.md) reflex that accepts output because it looks polished. Three days later you cannot explain how the feature works. You own code you did not write and do not understand.
 
-## Why It Is Distinct
+## Why it is distinct
 
 | Concept | Where it lives | Accumulation mechanism | Observable symptom |
 |---------|---------------|----------------------|-------------------|
-| **Technical debt** | Codebase | Shortcuts in implementation | Slower feature velocity |
-| **Comprehension debt** | People | Accepting code without understanding it | Cannot debug, plan, or extend without AI |
+| Technical debt | Codebase | Shortcuts in implementation | Slower feature velocity |
+| Comprehension debt | People | Accepting code without understanding it | Cannot debug, plan, or extend without AI |
 | [Skill atrophy](../human/skill-atrophy.md) | People | Reduced practice over time | Cannot write similar code independently |
 | [Cognitive load / fatigue](../human/cognitive-load-ai-fatigue.md) | People | Sustained oversight | Exhaustion during work |
 
-## The Velocity-Comprehension Gap
+## The velocity-comprehension gap
 
 Code accumulates faster than understanding. Developers ask AI to fix code they never understood — paying off debt with more debt.
 
-## The Evidence: Usage Mode Matters
+## The evidence: usage mode matters
 
-An [Anthropic RCT with 52 junior engineers](https://www.anthropic.com/research/AI-assistance-coding-skills) found AI-assisted developers scored 17 percentage points lower on comprehension tests (50% vs 67%). The critical finding was not *whether* developers used AI but *how*:
+An [Anthropic RCT with 52 junior engineers](https://www.anthropic.com/research/AI-assistance-coding-skills) found AI-assisted developers scored 17 percentage points lower on comprehension tests (50% vs 67%). The critical finding was not whether developers used AI but how they used it:
 
 | Usage mode | Comprehension score | What it looks like |
 |-----------|-------------------|-------------------|
-| **Conceptual inquiry** | 65%+ | "Why would a sliding-window algorithm work here?" |
-| **Code generation delegation** | Below 40% | "Write me a rate limiter for this endpoint" |
+| Conceptual inquiry | 65%+ | "Why would a sliding-window algorithm work here?" |
+| Code generation delegation | Below 40% | "Write me a rate limiter for this endpoint" |
 
 ## Countermeasures
 
-**Explain before generate.** Ask AI to explain its approach *before* requesting code. Conceptual inquiry preserves comprehension; delegation destroys it.
+Explain before you generate. Ask AI to explain its approach before requesting code. Conceptual inquiry preserves comprehension; delegation destroys it.
 
 ```
 # Builds comprehension debt
@@ -52,19 +52,19 @@ An [Anthropic RCT with 52 junior engineers](https://www.anthropic.com/research/A
 What are the invalidation tradeoffs?"
 ```
 
-**Interactive explanations.** When you receive complex generated code, ask the agent for an annotated walkthrough rather than accepting it.
+Ask for an annotated walkthrough. When you receive complex generated code, ask the agent to walk you through it rather than accepting it.
 
-## Why It Accumulates
+## Why it accumulates
 
-Code generation bypasses the retrieval effort that consolidates memory. Writing code requires applying knowledge; accepting generated code substitutes recognition ("this looks right") for recall ("I can reconstruct why this works"). [Retrieval-practice research](https://pmc.ncbi.nlm.nih.gov/articles/PMC5912918/) finds that effortful recall — not re-reading or recognition — integrates new knowledge with prior memory and drives consolidation. Recognition fades; recall persists. The Anthropic study's [debugging score gap](https://www.anthropic.com/research/AI-assistance-coding-skills) is consistent with this: the largest comprehension deficit appeared on debugging tasks — understanding when code fails and why requires the highest retrieval effort.
+Code generation bypasses the retrieval effort that consolidates memory. Writing code requires applying knowledge; accepting generated code substitutes recognition ("this looks right") for recall ("I can reconstruct why this works"). [Retrieval-practice research](https://pmc.ncbi.nlm.nih.gov/articles/PMC5912918/) finds that effortful recall — not re-reading or recognition — integrates new knowledge with prior memory and consolidates it. Recognition fades; recall persists. The Anthropic study's [debugging score gap](https://www.anthropic.com/research/AI-assistance-coding-skills) is consistent with this: the largest comprehension deficit appeared on debugging tasks — understanding when code fails and why requires the highest retrieval effort.
 
-## When This Backfires
+## When this backfires
 
-Debt does not accumulate uniformly. Three conditions where it is low or zero:
+Debt does not accumulate uniformly. Three conditions keep it low or zero:
 
-1. **Active inquiry mode.** Developers who ask for explanations before generating code show comprehension comparable to hand-coders — the 65%+ conceptual-inquiry score above, versus below 40% for delegation.
-2. **Throwaway code.** Scaffolding, one-off scripts, and test fixtures that will never be debugged carry minimal debt.
-3. **Single-owner modules.** A specialist who owns a module end-to-end can tolerate local debt. The pattern is most damaging in shared infrastructure maintained by multiple developers who all delegated its creation.
+1. Active inquiry mode. Developers who ask for explanations before generating code show comprehension comparable to hand-coders — the 65%+ conceptual-inquiry score above, versus below 40% for delegation.
+2. Throwaway code. Scaffolding, one-off scripts, and test fixtures that will never be debugged carry minimal debt.
+3. Single-owner modules. A specialist who owns a module end-to-end can tolerate local debt. The pattern is most damaging in shared infrastructure maintained by multiple developers who all delegated its creation.
 
 ## Example
 
@@ -95,13 +95,13 @@ A coding agent produces a retry utility with exponential backoff, jitter, and [c
 
     Before merging, the developer asks the agent to explain the function:
 
-    > **Agent:** The function retries `fn` up to 5 times. Each retry waits `base * 2^attempt` seconds plus random jitter (0--1 s) to avoid thundering-herd retries, capped at 30 s. If cumulative failures hit `CIRCUIT_THRESHOLD`, it stops retrying entirely to protect the downstream service.
+    > Agent: The function retries `fn` up to 5 times. Each retry waits `base * 2^attempt` seconds plus random jitter (0--1 s) to avoid thundering-herd retries, capped at 30 s. If cumulative failures hit `CIRCUIT_THRESHOLD`, it stops retrying entirely to protect the downstream service.
 
     The developer follows up:
 
-    > **Developer:** What resets the circuit breaker?
+    > Developer: What resets the circuit breaker?
     >
-    > **Agent:** Nothing in this code -- `fails` is local to each call. You would need shared state (e.g., a class attribute with a cooldown timer) for a real circuit breaker.
+    > Agent: Nothing in this code -- `fails` is local to each call. You would need shared state (e.g., a class attribute with a cooldown timer) for a real circuit breaker.
 
     The developer now understands the design gap, requests a fix, and merges with full comprehension.
 

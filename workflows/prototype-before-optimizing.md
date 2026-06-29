@@ -21,9 +21,9 @@ maturity: adopted
 
 > Prototype with generous budgets to establish a quality baseline before applying optimization pressure — otherwise compression hides regressions and locks in suboptimal architectures.
 
-**Related lesson:** [Monolith to Sub-Agents](https://learn.agentpatterns.ai/workflows/monolith-to-subagents/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Monolith to Sub-Agents](https://learn.agentpatterns.ai/workflows/monolith-to-subagents/) — this concept features in a hands-on lesson with quizzes.
 
-## The Problem with Early Optimization
+## The problem with early optimization
 
 Teams often apply token budgets and prompt compression at the start of development, before understanding what high-quality behavior requires. The compressed workflow may look faster while silently degrading quality — there is no baseline to detect the regression.
 
@@ -31,9 +31,9 @@ The [nibzard/awesome-agentic-patterns catalog](https://github.com/nibzard/awesom
 
 See also: [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — the failure mode where efficiency instructions create a competing objective that overrides the agent's actual task.
 
-## The Temporal Dimension
+## The temporal dimension
 
-Existing budget allocation patterns address structure: what to load and how much reasoning to allocate per phase. This pattern adds a temporal dimension: *when in the development lifecycle* to apply optimization pressure.
+Existing budget allocation patterns address structure: what to load and how much reasoning to allocate per phase. This pattern adds a temporal dimension: when in the development lifecycle to apply optimization pressure.
 
 ```mermaid
 graph LR
@@ -51,34 +51,34 @@ Two separate stages with a hard gate between them:
 | Prototype | Discover what quality looks like | Minimal — remove limits that hide failure modes |
 | Production | Deliver quality efficiently | Enforce — but only against a measured baseline |
 
-## How to Prototype Without Hiding Failure Modes
+## How to prototype without hiding failure modes
 
-During prototyping, the objective is *learning*, not efficiency. Constraints that make the workflow look fast before failure modes surface create false confidence.
+During prototyping, the objective is learning, not efficiency. Constraints that make the workflow look fast before failure modes surface create false confidence.
 
-**Remove hard token ceilings per call.** Let [reasoning run until the model is done](../agent-design/reasoning-budget-allocation.md), not until a budget is exhausted. If the model hits a limit and produces a truncated result, you learn nothing about the actual failure boundary.
+Remove hard token ceilings per call. Let [reasoning run until the model is done](../agent-design/reasoning-budget-allocation.md), not until a budget is exhausted. If the model hits a limit and produces a truncated result, you learn nothing about the actual failure boundary.
 
-**Enable multiple reasoning passes.** Self-consistency and self-reflection loops enhance reasoning quality but require generous budgets. [Compressing these before understanding them removes the signal that reveals where the workflow actually breaks](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/no-token-limit-magic.md).
+Enable multiple reasoning passes. Self-consistency and self-reflection loops improve reasoning quality but need generous budgets. [Compressing these before you understand them removes the signal that reveals where the workflow actually breaks](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/no-token-limit-magic.md).
 
-**Set temporary spending ceilings per experiment, not per call.** Bound the total cost of a discovery run, not individual responses within it. This caps expenditure without distorting individual outputs.
+Set temporary spending ceilings per experiment, not per call. Bound the total cost of a discovery run, not individual responses within it. This caps spending without distorting individual outputs.
 
-**Track quality and token consumption together from the start.** Without parallel measurement, you have no basis for the [optimization phase](eval-driven-development.md#applying-the-loop-to-tool-building).
+Track quality and token consumption together from the start. Without parallel measurement, you have no basis for the [optimization phase](eval-driven-development.md#applying-the-loop-to-tool-building).
 
-### What "Generous" Does Not Mean
+### What "generous" does not mean
 
-Unlimited budgets in all phases is not the goal. LangChain's deep agent research found that continuous maximum reasoning compute across all phases scored *lower* (53.9% completion) than structured allocation (66.5%) due to agent timeouts — the model was spending resources on reasoning that didn't improve execution steps ([LangChain: harness engineering for deep agents](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
+Unlimited budgets in all phases is not the goal. LangChain's deep agent research found that continuous maximum reasoning compute across all phases scored lower (53.9% completion) than structured allocation (66.5%) because of agent timeouts — the model was spending resources on reasoning that did not improve execution steps ([LangChain: harness engineering for deep agents](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
 "Generous" means: don't apply constraints that prevent failure modes from surfacing. It does not mean maximum compute everywhere regardless of phase.
 
-## The Optimization Gate
+## The optimization gate
 
-The shift from prototype to optimization requires a baseline — a documented, reproducible quality measurement. Without it, you cannot distinguish compression that degrades quality from compression that is safe.
+The shift from prototype to optimization needs a baseline — a documented, reproducible quality measurement. Without it, you cannot tell compression that degrades quality from compression that is safe.
 
-The optimization phase runs as A/B comparison:
+The optimization phase runs as an A/B comparison:
 
-1. **Define your eval suite** — tasks representative of real production use
-2. **Record baseline metrics** — quality scores, completion rates, error rates under unconstrained conditions
-3. **Apply one optimization at a time** — token budget reduction, prompt compression, or context pruning
-4. **Compare against baseline** — if quality metrics fall below threshold, the optimization is unsafe
+1. Define your eval suite — tasks representative of real production use.
+2. Record baseline metrics — quality scores, completion rates, and error rates under unconstrained conditions.
+3. Apply one optimization at a time — token budget reduction, prompt compression, or context pruning.
+4. Compare against the baseline — if quality metrics fall below threshold, the optimization is unsafe.
 
 [Eval-Driven Development for tool building](eval-driven-development.md#applying-the-loop-to-tool-building) covers the prototype-evaluate-analyze-iterate loop that makes this systematic.
 

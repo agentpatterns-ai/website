@@ -18,7 +18,7 @@ maturity: established
 
 > Three detection gaps — idle-state, build parity, per-model ablation — name the axes along which harness-layer bugs evade standard evals.
 
-## The Case File
+## The case file
 
 Anthropic's [April 23 2026 postmortem](https://www.anthropic.com/engineering/april-23-postmortem) documents three Claude Code harness bugs that each degraded output for days or weeks before detection. Each evaded the existing eval suite through a different structural gap:
 
@@ -28,30 +28,30 @@ Anthropic's [April 23 2026 postmortem](https://www.anthropic.com/engineering/apr
 | Idle-session thinking-history cache clear fired every turn after idle instead of once | Mar 26 – Apr 10 (15 days) | Evals ran on fresh sessions; idle-then-resume was untested |
 | Verbosity-reduction system prompt capped inter-tool text at 25 words, final responses at 100 | Apr 16 – Apr 20 (4 days) | Narrow eval set passed; per-model ablation later showed 3% drop for Opus 4.6 and 4.7 |
 
-The bugs are specific; the detection gaps generalise.
+The bugs are specific. The detection gaps generalize.
 
-## Pattern 1: Idle-State Evals
+## Pattern 1: idle-state evals
 
 The thinking-history bug only triggered after a session idled for one hour, then compounded every subsequent turn. Unit tests, E2E tests, and dogfooding all ran on fresh sessions and missed it ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
-Standard evals sweep input space. [Idle-state evals](../verification/incident-to-eval-synthesis.md) sweep *temporal* state — where caches, TTL-bound headers, and partially-expired context interact with the next turn. Resumed sessions are a different input distribution from sessions that never paused.
+Standard evals sweep input space. [Idle-state evals](../verification/incident-to-eval-synthesis.md) sweep temporal state — where caches, TTL-bound headers, and partially-expired context interact with the next turn. Resumed sessions are a different input distribution from sessions that never paused.
 
 Add eval cases that:
 
 - Issue N turns, sleep past the longest TTL, resume, issue N more turns, and score the post-resume turns.
-- Repeat on every TTL the harness declares (1 minute, 1 hour, 1 day) for boundary behaviour.
+- Repeat on every TTL the harness declares (1 minute, 1 hour, 1 day) for boundary behavior.
 
-## Pattern 2: Internal-vs-Public Build Parity
+## Pattern 2: internal-versus-public build parity
 
 The thinking-history bug was active in the public build but masked internally by "an internal-only server-side experiment related to message queuing" and a CLI thinking-display suppression, so staff dogfooding did not reproduce it ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
 When the internal build carries unshipped experiments, different flags, or different display layers, public-only failures stay invisible to staff running the same commands daily. The postmortem's remedy — "increase staff usage of exact public builds" — means:
 
 - List every flag, experiment, and feature gate that differs between internal and public.
-- Run a [canary lane](../multi-agent/rainbow-deployments-agents.md) on the exact public artefact against the same eval suite and dogfood workflows.
-- Track the diff as a first-class release artefact.
+- Run a [canary lane](../multi-agent/rainbow-deployments-agents.md) on the exact public artifact against the same eval suite and dogfood workflows.
+- Track the diff as a first-class release artifact.
 
-## Pattern 3: Per-Model Ablation
+## Pattern 3: per-model ablation
 
 The verbosity-reduction prompt dropped quality 3% for both Opus 4.6 and Opus 4.7. The original evaluation "showed no regressions"; the drop only appeared when broader ablation ran per-model comparisons ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
@@ -65,7 +65,7 @@ Structure the ablation as:
 
 The signal extends to the reviewer layer: the thinking-history bug was caught by a code-review eval with Opus 4.7 and missed with Opus 4.6 ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)). Reviewer-model choice is itself a harness variable.
 
-## When To Apply
+## When to apply
 
 Apply when a change touches harness state (caches, TTLs, system prompts, reasoning defaults, tool-choice logic) and is visible to users:
 
@@ -84,18 +84,18 @@ graph TD
     H -->|No| J[Skip Pattern 3]
 ```
 
-## When This Backfires
+## When this backfires
 
 The patterns are detection insurance, not free coverage:
 
-- **Per-model ablation inflates CI cost.** Running every suite twice for every model multiplies CI minutes by 2N. Reserve it for changes touching system prompts, tool-call formatting, or reasoning defaults. The [McNemar's-test paper](https://arxiv.org/html/2602.10144) sets the floor at ~0.3% empirical loss; below that, signal does not justify spend.
-- **Idle-state evals introduce wall-clock flakiness.** Sleeping past a one-hour TTL is either expensive (real wait) or unfaithful (mocked clock that diverges from production). Scope to the specific TTLs the harness declares, not every temporal boundary.
-- **Build-parity gates block legitimate experimentation.** A rigid gate treats every internal flag as a defect; track the diff as a release artefact and route only high-risk divergences through a [canary lane](../multi-agent/rainbow-deployments-agents.md).
-- **Skip all three for prototypes and single-turn apps** — they presume multi-turn harnesses with caches, model fan-out, and an internal/public split.
+- Per-model ablation inflates CI cost. Running every suite twice for every model multiplies CI minutes by 2N. Reserve it for changes touching system prompts, tool-call formatting, or reasoning defaults. The [McNemar's-test paper](https://arxiv.org/html/2602.10144) sets the floor at ~0.3% empirical loss; below that, signal does not justify spend.
+- Idle-state evals introduce wall-clock flakiness. Sleeping past a one-hour TTL is either expensive (real wait) or unfaithful (mocked clock that diverges from production). Scope to the specific TTLs the harness declares, not every temporal boundary.
+- Build-parity gates block legitimate experimentation. A rigid gate treats every internal flag as a defect; track the diff as a release artifact and route only high-risk divergences through a [canary lane](../multi-agent/rainbow-deployments-agents.md).
+- Skip all three for prototypes and single-turn apps — they presume multi-turn harnesses with caches, model fan-out, and an internal/public split.
 
 ## Example
 
-**Before** — narrow eval run before shipping a verbosity-reduction system prompt:
+Before — narrow eval run before shipping a verbosity-reduction system prompt:
 
 ```yaml
 eval_suite: coding_quality_v3
@@ -106,7 +106,7 @@ result: no_regression
 decision: ship
 ```
 
-**After** — same change gated by the three patterns:
+After — same change gated by the three patterns:
 
 ```yaml
 eval_suite: coding_quality_v3

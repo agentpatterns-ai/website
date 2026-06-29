@@ -18,21 +18,21 @@ maturity: adopted
 
 > Agent Context Files grow monotonically; pair every add-on-drift update with a compact pass that deletes or consolidates.
 
-Agent Context Files (ACFs) — `CLAUDE.md`, `AGENTS.md`, `.github/copilot-instructions.md` — are not write-once documentation. The first large-scale empirical study of 2,303 ACFs from 1,925 repositories found that **67.4% of Claude Code files are modified in multiple commits**, in short bursts at median intervals of **24.1h (Claude Code), 22.0h (Codex), 70.7h (Copilot)** ([Chatlatanagulchai et al., 2025](https://arxiv.org/abs/2511.12884)). Median deletions are under 15 words per commit. The maintenance discipline is the one those numbers imply: update triggers tied to code-evolution events, paired with an explicit pruning pass.
+Agent Context Files (ACFs) — `CLAUDE.md`, `AGENTS.md`, `.github/copilot-instructions.md` — are not write-once documentation. The first large-scale empirical study of 2,303 ACFs from 1,925 repositories found that 67.4% of Claude Code files are modified in multiple commits, in short bursts at median intervals of 24.1h (Claude Code), 22.0h (Codex), and 70.7h (Copilot) ([Chatlatanagulchai et al., 2025](https://arxiv.org/abs/2511.12884)). Median deletions are under 15 words per commit. Those numbers imply one maintenance discipline: update triggers tied to code-evolution events, paired with an explicit pruning pass.
 
-## When This Applies
+## When this applies
 
 The evidence applies under specific conditions. Lead with these or the recommendation backfires:
 
-- **Active multi-contributor codebase with a load-bearing ACF.** The 67.4% multi-commit cohort is real projects whose agents work daily. On a prototype, a pinned-model deployment, or a well-documented OSS repo, the empirical baseline is different — added context files traded ~19% cost for marginal or negative accuracy in [Gloaguen et al.'s evaluation](https://arxiv.org/abs/2602.11988) ([Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md)).
-- **The ACF is human-written, not auto-generated.** Auto-generated files reduced success rates by 3% and increased cost 20% in the same study; running `/init` more often is not the lever. Maintenance discipline applies to files that already contain non-inferable signal.
-- **Codebase evolves faster than the ACF tracks.** Build commands move, test runners change, architectural invariants shift — drift is what the discipline corrects.
+- Active multi-contributor codebase with a load-bearing ACF: the 67.4% multi-commit cohort is real projects whose agents work daily. On a prototype, a pinned-model deployment, or a well-documented OSS repo, the empirical baseline is different — added context files traded ~19% cost for marginal or negative accuracy in [Gloaguen et al.'s evaluation](https://arxiv.org/abs/2602.11988) ([Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md)).
+- The ACF is human-written, not auto-generated: auto-generated files reduced success rates by 3% and increased cost 20% in the same study, and running `/init` more often is not the lever. Maintenance discipline applies to files that already contain non-inferable signal.
+- The codebase evolves faster than the ACF tracks: build commands move, test runners change, and architectural invariants shift. Drift is what the discipline corrects.
 
 If those conditions hold, the file is configuration code, not documentation, and warrants the same review rigor as a Dockerfile or CI workflow.
 
-## The Two-Loop Discipline
+## The two-loop discipline
 
-The Chatlatanagulchai data exposes one specific failure mode: monotonic accretion. Developers respond to drift by adding new instructions, almost never by removing stale ones. Combined with the [Instruction Compliance Ceiling](instruction-compliance-ceiling.md) (compliance degrades as rule count grows; even frontier models hit only 68% accuracy at high instruction densities — [IFScale, 2025](https://arxiv.org/abs/2507.11538)), unbounded growth turns each new rule into a *reduction* in agent compliance, not an addition.
+The Chatlatanagulchai data exposes one specific failure mode: monotonic accretion. Developers respond to drift by adding new instructions, almost never by removing stale ones. Combined with the [Instruction Compliance Ceiling](instruction-compliance-ceiling.md) (compliance degrades as rule count grows; even frontier models hit only 68% accuracy at high instruction densities — [IFScale, 2025](https://arxiv.org/abs/2507.11538)), unbounded growth turns each new rule into a reduction in agent compliance, not an addition.
 
 The maintenance loop therefore has two halves that must run together:
 
@@ -48,16 +48,16 @@ graph LR
 
 | Loop | Trigger | Action |
 |------|---------|--------|
-| **Add-on-drift** | PR modifies build system, test runner, lint config, or core architectural module | Reviewer checklist asks whether the ACF needs an update ([Eisele, 2026](https://www.the-main-thread.com/p/coding-agent-operating-manual)) |
-| **Compact-on-add** | ACF receives a new rule | Same PR (or a follow-up audit) removes a now-stale rule, consolidates an overlapping section, or moves a rule to a hook |
+| Add-on-drift | PR modifies build system, test runner, lint config, or core architectural module | Reviewer checklist asks whether the ACF needs an update ([Eisele, 2026](https://www.the-main-thread.com/p/coding-agent-operating-manual)) |
+| Compact-on-add | ACF receives a new rule | Same PR (or a follow-up audit) removes a now-stale rule, consolidates an overlapping section, or moves a rule to a hook |
 
 The compact loop is what most teams skip. Without it, the discipline produces what one practitioner observed: "after a few weeks, the file is 400 lines long and Claude is ignoring more rules than ever" ([Pan, 2026](https://tianpan.co/blog/2026-02-14-writing-effective-agent-instruction-files)).
 
-## Why It Works
+## Why it works
 
-ACFs and the code they describe form a tight runtime feedback loop: the file is read on every agent invocation ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents); [GitHub Docs — repository custom instructions](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions)), so an unmaintained ACF produces wrong agent actions on the very next session. That coupling makes ACFs *configuration*, not documentation. The compact half of the loop is forced by the [compliance ceiling](instruction-compliance-ceiling.md) — instruction compliance is a function of file size and attention budget, so a discipline that only adds is one that gradually disables itself. Practitioners report the same: ["context files drift as codebases evolve, and there is no automated way to detect staleness"](https://www.augmentcode.com/blog/your-agents-context-is-a-junk-drawer); Chatlatanagulchai et al. explicitly recommend a "configuration-as-code mindset … semantic versioning and changelogs" for ACF governance.
+ACFs and the code they describe form a tight runtime feedback loop: the file is read on every agent invocation ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents); [GitHub Docs — repository custom instructions](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions)), so an unmaintained ACF produces wrong agent actions on the very next session. That coupling makes ACFs configuration, not documentation. The compact half of the loop is forced by the [compliance ceiling](instruction-compliance-ceiling.md) — instruction compliance depends on file size and attention budget, so a discipline that only adds is one that gradually disables itself. Practitioners report the same: ["context files drift as codebases evolve, and there is no automated way to detect staleness"](https://www.augmentcode.com/blog/your-agents-context-is-a-junk-drawer); Chatlatanagulchai et al. explicitly recommend a "configuration-as-code mindset … semantic versioning and changelogs" for ACF governance.
 
-## A Maintenance-Theory Taxonomy
+## A maintenance-theory taxonomy
 
 [Voria et al. (2026)](https://arxiv.org/abs/2606.25257) propose mapping ACF changes onto classical software-maintenance categories — Corrective, Preventive, Adaptive, Perfective, Additive. (The paper is a registered report; the taxonomy is the design, not yet validated against measured outcomes.) Used as a checklist at PR time it makes the compact-on-add loop concrete:
 
@@ -86,9 +86,9 @@ m1n2o3p CLAUDE.md | 12 +++++         # added architectural rule
 
 Twenty-four commits in three months. Median +6 lines per commit. Zero deletions.
 
-**Without the discipline** the team's next response is to add the linting rule too, pushing the file to 290 lines, well past the [compliance ceiling](instruction-compliance-ceiling.md) for their ~150-rule budget.
+Without the discipline, the team's next response is to add the linting rule too, pushing the file to 290 lines, well past the [compliance ceiling](instruction-compliance-ceiling.md) for their ~150-rule budget.
 
-**With the two-loop discipline** the PR that adds the new lint step is gated on the reviewer checklist:
+With the two-loop discipline, the PR that adds the new lint step is gated on the reviewer checklist:
 
 ```markdown
 - [ ] If this PR changed build/test/lint config or a core module,
@@ -99,21 +99,21 @@ Twenty-four commits in three months. Median +6 lines per commit. Zero deletions.
 
 The agent author runs the compact pass and finds three rules describing the old test runner, two superseded architecture notes, and one rule already enforced by a [pre-commit hook](enforcing-agent-behavior-with-hooks.md). Net change: +1 rule, -6 rules. File shrinks from 280 lines to 245. Compliance stays inside the ceiling.
 
-## When This Backfires
+## When this backfires
 
 The discipline is not free, and several conditions invert its sign:
 
-- **Prototypes and short-lived repos.** The 67.4% multi-commit cohort comes from active projects. A repo with three contributors and six weeks of life will not accumulate enough drift to justify the review overhead.
-- **Auto-generated ACFs.** A file produced by running `/init` and never edited is duplicating discoverable context already in the codebase. Maintaining the duplicate raises cost without raising accuracy ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). The fix is deletion, not cadence.
-- **High update frequency without the compact pass.** Running only the add loop reproduces the monotonic-growth pattern the empirical data already shows. The Chatlatanagulchai numbers (deletions <15 words/commit) are the warning, not the prescription.
-- **Reviewers without prompt-engineering literacy.** PR-gated ACF changes degrade into rubber-stamps when reviewers cannot predict the behavioural delta of a wording change — addressed in [Prompt Governance via PR](prompt-governance-via-pr.md).
-- **Pinned-model deployments.** Maintenance overhead assumes that future model updates will reveal new ACF-vs-code drift. On a frozen model with a stable codebase, the rationale collapses; see also [Harness Impermanence](../agent-design/harness-impermanence.md) for the related discipline applied to scaffolding rather than ACFs.
+- Prototypes and short-lived repos: the 67.4% multi-commit cohort comes from active projects. A repo with three contributors and six weeks of life will not accumulate enough drift to justify the review overhead.
+- Auto-generated ACFs: a file produced by running `/init` and never edited is duplicating discoverable context already in the codebase. Maintaining the duplicate raises cost without raising accuracy ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). The fix is deletion, not cadence.
+- High update frequency without the compact pass: running only the add loop reproduces the monotonic-growth pattern the empirical data already shows. The Chatlatanagulchai numbers (deletions <15 words/commit) are the warning, not the prescription.
+- Reviewers without prompt-engineering literacy: PR-gated ACF changes degrade into rubber-stamps when reviewers cannot predict the behavioral delta of a wording change — addressed in [Prompt Governance via PR](prompt-governance-via-pr.md).
+- Pinned-model deployments: maintenance overhead assumes that future model updates will reveal new ACF-vs-code drift. On a frozen model with a stable codebase, the rationale collapses; see also [Harness Impermanence](../agent-design/harness-impermanence.md) for the related discipline applied to scaffolding rather than ACFs.
 
-## Differentiation From Adjacent Patterns
+## Differentiation from adjacent patterns
 
-- [Harness Impermanence](../agent-design/harness-impermanence.md) — about deleting scaffolding *code* when models subsume it. This page is about maintaining the instruction *file*.
-- [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md) — about *what* belongs in the ACF. This page is about *how* the ACF changes over time.
-- [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — about *whether* an ACF helps. This page is about the maintenance of one that already does.
+- [Harness Impermanence](../agent-design/harness-impermanence.md) — about deleting scaffolding code when models subsume it. This page is about maintaining the instruction file.
+- [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md) — about what belongs in the ACF. This page is about how the ACF changes over time.
+- [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — about whether an ACF helps. This page is about the maintenance of one that already does.
 - [Rule Lifecycle Metadata](rule-lifecycle-metadata.md) — the per-rule lifecycle (the `source` / `applies_to` / `retire_when` triple). This page is the file-level lifecycle that sits above it; the metadata makes the compact loop mechanical.
 - [Prompt Governance via PR](prompt-governance-via-pr.md) — the review mechanism. This page names the cadence and the update triggers that feed that review queue.
 
@@ -134,3 +134,4 @@ The discipline is not free, and several conditions invert its sign:
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — the structural target the compact pass aims at
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — the destination for rules the compact pass moves out of prose
 - [Harness Impermanence](../agent-design/harness-impermanence.md) — the analogous discipline applied to scaffolding code rather than instruction files
+</content>

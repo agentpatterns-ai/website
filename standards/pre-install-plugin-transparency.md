@@ -17,26 +17,26 @@ maturity: emerging
 
 > Pre-install plugin transparency is a two-column marketplace contract: a static inventory of the plugin's commands, agents, skills, hooks, and servers, beside its projected token cost.
 
-Pre-install plugin transparency surfaces two facts beside the install button: *what* the plugin adds (capability inventory) and *how much* context it costs (cost projection). Claude Code v2.1.145 (2026-05-19) shipped the inventory half — a **Will install** section listing commands, agents, skills, hooks, and MCP and LSP servers ([Discover and install plugins](https://code.claude.com/docs/en/discover-plugins)). The cost half landed in v2.1.143 (2026-05-15) and is treated in [pre-install context-cost projection](marketplace-cost-projection.md); the two columns are one contract.
+Pre-install plugin transparency surfaces two facts beside the install button: what the plugin adds (capability inventory) and how much context it costs (cost projection). Claude Code v2.1.145 (2026-05-19) shipped the inventory half — a **Will install** section listing commands, agents, skills, hooks, and MCP and LSP servers ([Discover and install plugins](https://code.claude.com/docs/en/discover-plugins)). The cost half landed in v2.1.143 (2026-05-15) and is treated in [pre-install context-cost projection](marketplace-cost-projection.md); the two columns are one contract.
 
-## When the Contract Earns Its Place
+## When the contract earns its place
 
-- **Operator comparison-shops in the browse pane.** `claude plugin install <name>@<marketplace>` and README-link installs bypass the disclosure ([Discover and install plugins](https://code.claude.com/docs/en/discover-plugins)).
-- **Inventory or cost differs meaningfully between candidates.** Two security plugins each shipping one MCP server and two skills do not differentiate on the inventory column.
-- **A downstream budget gate exists.** Without a per-session quota, runtime warning, or eval, awareness rarely changes behaviour. The Android permissions evidence is canonical: **17%** of users paid attention to pre-install permission listings and only **3%** answered comprehension questions correctly ([Felt et al., SOUPS '12](https://cups.cs.cmu.edu/soups/2012/proceedings/a3_Felt.pdf)). Disclosure without enforcement is default-ignored.
+- Operator comparison-shops in the browse pane. `claude plugin install <name>@<marketplace>` and README-link installs bypass the disclosure ([Discover and install plugins](https://code.claude.com/docs/en/discover-plugins)).
+- Inventory or cost differs meaningfully between candidates. Two security plugins each shipping one MCP server and two skills do not differentiate on the inventory column.
+- A downstream budget gate exists. Without a per-session quota, runtime warning, or eval, awareness rarely changes behavior. The Android permissions evidence is canonical: 17% of users paid attention to pre-install permission listings and only 3% answered comprehension questions correctly ([Felt et al., SOUPS '12](https://cups.cs.cmu.edu/soups/2012/proceedings/a3_Felt.pdf)). Disclosure without enforcement is default-ignored.
 
-## The Two Columns
+## The two columns
 
 | Column | What it answers | Reference implementation |
 |--------|-----------------|--------------------------|
 | Capability inventory | *Which commands, agents, skills, hooks, MCP servers, and LSP servers will this plugin add?* | `/plugin` Discover/Browse **Will install** section, v2.1.145 ([Discover and install plugins](https://code.claude.com/docs/en/discover-plugins)) |
 | Cost projection | *How many tokens will it cost per turn?* | `/plugin` Browse Context cost estimate, v2.1.143 ([Claude Code changelog](https://code.claude.com/docs/en/changelog)) |
 
-The inventory column answers a precision question — *exactly* which components arrive — and the cost column a budget question. Collapsing them to one number erases two independent decision axes.
+The inventory column answers a precision question — which components arrive — and the cost column a budget question. Collapsing them to one number erases two independent decision axes.
 
-## How the Host Derives the Inventory
+## How the host derives the inventory
 
-The harness owns the registry of every component a plugin contributes — skills in `skills/`, agents in `agents/`, hooks in declared paths, MCP and LSP servers in manifest entries ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)). Marketplace catalogues cache the manifest, so the same enumeration that resolves a skill at invocation time can list components before any plugin code runs. No plugin sandbox is started.
+The harness owns the registry of every component a plugin contributes — skills in `skills/`, agents in `agents/`, hooks in declared paths, MCP and LSP servers in manifest entries ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)). Marketplace catalogs cache the manifest, so the same enumeration that resolves a skill at invocation time can list components before any plugin code runs. The host starts no plugin sandbox.
 
 ```mermaid
 graph LR
@@ -49,18 +49,18 @@ graph LR
 
 LSP servers joined `claude plugin details` in v2.1.141 and the same component model in v2.1.145; future component types like [background monitors](../tools/claude/plugin-background-monitors.md) inherit the convention without protocol changes.
 
-## Why It Works
+## Why it works
 
-Registry ownership makes both columns precise. The harness reads each component from a typed manifest slot, so the inventory is what the plugin *will* contribute, not what the marketplace claims ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)). The OS package-manager precedent is identical: `apt show` reads the same database `dpkg` consults at install, so the pre-install view matches post-install reality. The contract moves the *what* and *how much* signals from the post-install accountability moment — when the only remediation is uninstall — to the choice moment, when remediation is picking a lighter alternative for free.
+Registry ownership makes both columns precise. The harness reads each component from a typed manifest slot, so the inventory is what the plugin will contribute, not what the marketplace claims ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)). The OS package-manager precedent is identical: `apt show` reads the same database `dpkg` consults at install, so the pre-install view matches post-install reality. The contract moves the what and how-much signals from the post-install accountability moment — when the only remediation is uninstall — to the choice moment, when remediation is picking a lighter alternative for free.
 
-## When This Backfires
+## When this backfires
 
-- **CLI bypass.** `claude plugin install <name>@<marketplace>` does not render either column; operators installing from peer recommendations or repo READMEs never see the disclosure ([Discover and install plugins](https://code.claude.com/docs/en/discover-plugins)).
-- **Disclosure-fatigue baseline.** The Felt et al. result generalises: pre-install listings are read by a small minority. Without a budget primitive — a token cap, a hook that blocks install over a threshold, an eval that fails on regression — the inventory is decoration ([Felt et al., SOUPS '12](https://cups.cs.cmu.edu/soups/2012/proceedings/a3_Felt.pdf)).
-- **MCP-server-heavy plugins.** An MCP server entry hides dynamic tool surface area — servers return varying tool sets per session, and the static listing names the server, not the tools ([apideck — MCP context window cost](https://www.apideck.com/blog/mcp-server-eating-context-window-cli-alternative)). Operators undercount exposure.
-- **Cost-API fallback.** When the tokenizer API is unreachable, the cost column falls back to a character-based estimate that distorts rankings ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)). The inventory stays accurate; the cost column drifts.
-- **Comparable ecosystems do not ship it.** The Visual Studio Marketplace has had an [open feature request for install-size disclosure since 2022](https://github.com/microsoft/vscode/issues/158670) without resolution — operating without the contract is feasible, so the disclosure is a deliberate design choice, not table stakes.
-- **Single-plugin install, no comparison.** A user installing one specific plugin for one task does not benefit from a comparison surface — the contract pays off only when alternatives are evaluated side by side.
+- CLI bypass. `claude plugin install <name>@<marketplace>` does not render either column; operators installing from peer recommendations or repo READMEs never see the disclosure ([Discover and install plugins](https://code.claude.com/docs/en/discover-plugins)).
+- Disclosure-fatigue baseline. The Felt et al. result generalizes: a small minority read pre-install listings. Without a budget primitive — a token cap, a hook that blocks install over a threshold, an eval that fails on regression — the inventory is decoration ([Felt et al., SOUPS '12](https://cups.cs.cmu.edu/soups/2012/proceedings/a3_Felt.pdf)).
+- MCP-server-heavy plugins. An MCP server entry hides dynamic tool surface area — servers return varying tool sets per session, and the static listing names the server, not the tools ([apideck — MCP context window cost](https://www.apideck.com/blog/mcp-server-eating-context-window-cli-alternative)). Operators undercount exposure.
+- Cost-API fallback. When the tokenizer API is unreachable, the cost column falls back to a character-based estimate that distorts rankings ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)). The inventory stays accurate; the cost column drifts.
+- Comparable marketplaces do not ship it. The Visual Studio Marketplace has had an [open feature request for install-size disclosure since 2022](https://github.com/microsoft/vscode/issues/158670) without resolution — operating without the contract is feasible, so the disclosure is a deliberate design choice, not table stakes.
+- Single-plugin install, no comparison. A user installing one specific plugin for one task does not benefit from a comparison surface — the contract pays off only when you evaluate alternatives side by side.
 
 ## Example
 

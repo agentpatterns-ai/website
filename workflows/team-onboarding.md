@@ -15,23 +15,23 @@ maturity: adopted
 
 > Team onboarding for agent workflows aligns a team on shared infrastructure, trust calibration, and vocabulary before individual adoption diverges.
 
-## Why Teams Stall
+## Why teams stall
 
-You can adopt agent workflows individually through personal experimentation. Teams need coordination. Without [shared conventions](central-repo-shared-agent-standards.md), team members develop incompatible habits: different prompt styles, conflicting agent configurations, no agreement on when to trust output. The result is inconsistent quality and a lack of compounding improvement — each person reinvents the same lessons.
+You can adopt agent workflows on your own through experimentation. Teams need coordination. Without [shared conventions](central-repo-shared-agent-standards.md), team members build incompatible habits: different prompt styles, conflicting agent configurations, and no agreement on when to trust output. Quality stays inconsistent and improvements never compound, because each person relearns the same lessons.
 
-Effective onboarding addresses this by aligning the team on three things: shared infrastructure, calibrated trust, and a common vocabulary.
+Good onboarding fixes this. It aligns the team on three things: shared infrastructure, calibrated trust, and a common vocabulary.
 
-## Shared Infrastructure First
+## Shared infrastructure first
 
-The foundation is a project-level instructions file. Per the [AGENTS.md standard](https://agents.md), this file describes project conventions, constraints, and agent guidance in a location all tools can read. Every team member reads it; every agent reads it. It becomes the source of truth for how agents should behave on your project.
+Start with a project-level instructions file. Following the [AGENTS.md standard](https://agents.md), this file describes project conventions, constraints, and agent guidance in a place all tools can read. Every team member reads it, and every agent reads it. It becomes the source of truth for how agents should behave on your project.
 
-[Skills and commands live in version control](../instructions/prompt-governance-via-pr.md) alongside the code they support. Your team reviews changes to agent configuration the same way you review code changes — through pull requests, with comment and approval. This prevents configuration drift and creates an audit trail.
+[Skills and commands live in version control](../instructions/prompt-governance-via-pr.md) alongside the code they support. Your team reviews changes to agent configuration the same way you review code changes: through pull requests, with comment and approval. This prevents configuration drift and creates an audit trail.
 
 The [repository bootstrap checklist](repository-bootstrap-checklist.md) covers the mechanics of setting this up.
 
-## Onboarding Sequence
+## Onboarding sequence
 
-Start with read-only agent tasks before write tasks. Research and analysis carry lower risk — the agent produces output the developer evaluates before acting. Write tasks (code generation, file editing, PRs) require more trust and better review habits. Starting with read-only [builds familiarity with agent behavior](codebase-qa-onboarding.md) without the risk of bad output landing in the codebase.
+Start with read-only agent tasks before write tasks. Research and analysis carry lower risk, because the agent produces output the developer checks before acting. Write tasks such as code generation, file editing, and PRs need more trust and better review habits. Starting read-only [builds familiarity with agent behavior](codebase-qa-onboarding.md) without the risk of bad output landing in the codebase.
 
 A practical sequence:
 
@@ -43,30 +43,30 @@ graph TD
     D --> E[Graduate to agentic workflows with oversight]
 ```
 
-Teach the trust spectrum early. Agents do their most reliable work on high-context, well-specified tasks: boilerplate generation, mechanical refactoring with clear rules, summarizing documentation, writing tests against defined interfaces. An [empirical study of agentic refactoring](https://arxiv.org/abs/2511.04824) found agents handle exactly this kind of low-level, consistency-oriented edit — renames, type changes — and deliver small but statistically significant structural improvements, while *not* improving high-level design. That boundary is the point: agents perform poorly on novel architecture decisions, ambiguous requirements, and tasks requiring judgment about business context. Making this explicit prevents both over-reliance and under-use.
+Teach the trust spectrum early. Agents do their most reliable work on high-context, well-specified tasks: boilerplate generation, mechanical refactoring with clear rules, summarizing documentation, and writing tests against defined interfaces. An [empirical study of agentic refactoring](https://arxiv.org/abs/2511.04824) found agents handle exactly this kind of low-level, consistency-oriented edit, such as renames and type changes, and deliver small but statistically significant structural improvements, while not improving high-level design. That boundary is the point. Agents do poorly on novel architecture decisions, ambiguous requirements, and tasks that need judgment about business context. Saying so prevents both over-reliance and under-use.
 
-## Shifting Review Culture
+## Shifting review culture
 
-Reviewing agent output is structurally different from reviewing human code. Human code review often focuses on style, naming, and structural preferences. [Agent output review focuses on correctness](../code-review/agent-assisted-code-review.md): does this do what was intended, are there subtle errors, did the agent hallucinate an API or misunderstand a constraint?
+Reviewing agent output differs from reviewing human code. Human code review often focuses on style, naming, and structural preferences. [Agent output review focuses on correctness](../code-review/agent-assisted-code-review.md): does this do what was intended, are there subtle errors, did the agent hallucinate an API or misunderstand a constraint?
 
-Common patterns to teach reviewers:
+Teach reviewers these patterns:
 
 - Verify imports and API calls against actual library documentation, not just the agent's claim
 - Check for edge cases the agent handled silently — agents often assume happy paths
 - Confirm the agent addressed the actual requirement, not a simpler adjacent one
 - Look for context gaps: the agent may have missed a constraint not in its context window
 
-## Common Pitfalls
+## Common pitfalls
 
-**Over-reliance**: Trusting agent output without review because it "looks right." Agent output can be plausible and wrong. Verification habits must be built early.
+Over-reliance is trusting agent output without review because it looks right. Agent output can be plausible and wrong, so build verification habits early.
 
-**Under-trust**: [Refusing to delegate anything meaningful](ai-development-maturity-model.md) because of occasional errors. This loses most of the productivity gain. Calibrate based on task type, not general skepticism.
+Under-trust is [refusing to delegate anything meaningful](ai-development-maturity-model.md) because of occasional errors. This loses most of the productivity gain. Calibrate on task type, not general skepticism.
 
-**Inconsistent usage**: [Some team members use agents heavily, others not at all](agent-governance-policies.md). This creates knowledge asymmetry and makes the shared infrastructure undervalued. Minimum baseline adoption helps.
+Inconsistent usage is when [some team members use agents heavily and others not at all](agent-governance-policies.md). This creates knowledge gaps and makes the shared infrastructure look unimportant. A minimum baseline of adoption helps.
 
-**Vocabulary mismatch**: [Terms like "agent," "skill," "command," and "prompt"](../agent-design/agent-terminology-disambiguation.md) mean different things in different tools. Establish shared definitions early — what your team means by these terms in your specific setup.
+Vocabulary mismatch is when [terms like agent, skill, command, and prompt](../agent-design/agent-terminology-disambiguation.md) mean different things in different tools. Agree on shared definitions early: what your team means by these terms in your specific setup.
 
-## Shared Vocabulary
+## Shared vocabulary
 
 Align the team on these terms before deeper adoption:
 
@@ -80,25 +80,25 @@ Align the team on these terms before deeper adoption:
 
 Shared vocabulary prevents confusion in code reviews and discussions about agent behavior.
 
-## Maintaining the Infrastructure
+## Maintaining the infrastructure
 
-Agent infrastructure decays without maintenance. Skills become outdated as codebases evolve. Commands that worked for one project phase may not fit the next. Assign ownership: someone is responsible for keeping AGENTS.md current, reviewing skill changes, and evaluating new agent capabilities as they ship.
+Agent infrastructure decays without maintenance. Skills go out of date as codebases evolve. Commands that worked for one project phase may not fit the next. Assign ownership, so one person keeps AGENTS.md current, reviews skill changes, and evaluates new agent capabilities as they ship.
 
-Schedule periodic reviews of agent output quality. If output quality drops, the cause is usually stale instructions or changed codebase conventions — not a change in the model. Treat infrastructure maintenance as ongoing, not a one-time setup.
+Schedule regular reviews of agent output quality. If output quality drops, the cause is usually stale instructions or changed codebase conventions, not a change in the model. Treat infrastructure maintenance as ongoing, not a one-time setup.
 
-## When This Backfires
+## When this backfires
 
 Structured team onboarding adds coordination overhead. On small or short-lived teams, that overhead can outweigh the benefit:
 
-- **Team of two or three**: Synchronizing on shared conventions, reviewing AGENTS.md changes via PR, and scheduling group calibration sessions costs more time than individual drift would. Small teams converge naturally through pair work.
-- **Exploratory or prototype phases**: When requirements change weekly, shared agent infrastructure becomes outdated before it stabilizes. Premature standardization locks in conventions that don't yet fit the problem.
-- **Low CI discipline**: AGENTS.md and shared skills decay quickly without consistent maintenance and code review. Teams that skip reviewing agent configuration changes in PRs will find infrastructure diverges from codebase reality within weeks, producing worse agent output than no instructions at all.
+- Team of two or three: agreeing on shared conventions, reviewing AGENTS.md changes via PR, and scheduling group calibration sessions costs more time than individual drift would. Small teams converge naturally through pair work
+- Exploratory or prototype phases: when requirements change weekly, shared agent infrastructure goes out of date before it settles. Standardizing too early locks in conventions that do not yet fit the problem
+- Low CI discipline: AGENTS.md and shared skills decay quickly without steady maintenance and code review. Teams that skip reviewing agent configuration changes in PRs find the infrastructure drifts from codebase reality within weeks, producing worse agent output than no instructions at all
 
 ## Example
 
-The following illustrates a concrete onboarding sequence for a team adopting Claude Code for the first time. It follows the read-only-first approach described above.
+Here is a concrete onboarding sequence for a team adopting Claude Code for the first time. It follows the read-only-first approach described above.
 
-**Week 1 — Read-only tasks only.** Each team member runs the same research prompt against the codebase and compares output:
+Week 1, read-only tasks only. Each team member runs the same research prompt against the codebase and compares output:
 
 ```
 Using the codebase, answer: what happens when a payment authorization fails?
@@ -106,9 +106,9 @@ Trace the code path from the API handler to the database write.
 Cite specific file paths and function names.
 ```
 
-The team reviews the responses together, noting where the agent was accurate, where it hallucinated file names, and where it missed branching logic. This calibrates trust without risking any writes to the codebase.
+The team reviews the responses together, noting where the agent was accurate, where it made up file names, and where it missed branching logic. This calibrates trust without risking any writes to the codebase.
 
-**Week 2 — Write tasks with mandatory review.** Team members use Claude Code to generate test stubs for existing functions:
+Week 2, write tasks with mandatory review. Team members use Claude Code to generate test stubs for existing functions:
 
 ```bash
 claude "Write Vitest unit tests for src/services/payments.ts.
@@ -117,9 +117,9 @@ Use vi.mock('../http-client') for external HTTP calls.
 Do not modify the source file."
 ```
 
-Each generated test file is reviewed before running — reviewers check that the agent tested the actual function signatures, not invented ones, and that assertions reflect the real return types.
+Reviewers check each generated test file before running it. They confirm the agent tested the actual function signatures, not invented ones, and that assertions reflect the real return types.
 
-**Week 3 — Establish shared vocabulary and AGENTS.md ownership.** The team aligns on the shared vocabulary table from this page and assigns one person as AGENTS.md maintainer. Any PR that changes agent-visible conventions (naming rules, test patterns, directory layout) must also update AGENTS.md.
+Week 3, establish shared vocabulary and AGENTS.md ownership. The team aligns on the shared vocabulary table from this page and assigns one person as AGENTS.md maintainer. Any PR that changes agent-visible conventions, such as naming rules, test patterns, or directory layout, must also update AGENTS.md.
 
 This three-week sequence surfaces agent failure modes in a controlled way before write access is standard practice.
 

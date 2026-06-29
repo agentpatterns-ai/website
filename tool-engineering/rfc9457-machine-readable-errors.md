@@ -19,15 +19,15 @@ maturity: established
 
 > Request structured errors from HTTP APIs using `Accept` headers — and emit them from your own agent-facing services — to replace brittle HTML parsing with deterministic control flow.
 
-**Learn it hands-on:** [Errors as a Teaching Signal](https://learn.agentpatterns.ai/tool-engineering/errors-as-teaching-signal/) — guided lesson with quizzes.
+Learn it hands-on with the [Errors as a Teaching Signal guided lesson](https://learn.agentpatterns.ai/tool-engineering/errors-as-teaching-signal/), which includes quizzes.
 
-## The Problem: Errors Designed for Humans
+## The problem: errors designed for humans
 
-When an agent calls an HTTP API and receives an error, it typically gets an HTML page designed for a browser. A Cloudflare 1015 rate-limit page is ~14,252 tokens as HTML. The agent must pattern-match through markup to extract the status, then guess at retry behaviour from heuristics. At scale, this burns context budget and produces unreliable recovery logic.
+When an agent calls an HTTP API and hits an error, it usually gets back an HTML page built for a browser. A Cloudflare 1015 rate-limit page costs about 14,252 tokens as HTML. The agent has to pattern-match through markup to find the status, then guess at retry behavior from heuristics. At scale, this burns context budget and produces unreliable recovery logic.
 
-The same information as Markdown is 221 tokens (~64.5x reduction). As RFC 9457 JSON: 256 tokens (~55.7x).
+The same information as Markdown costs 221 tokens, a reduction of about 64.5 times. As RFC 9457 JSON it costs 256 tokens, about 55.7 times less.
 
-## RFC 9457: The Standard
+## RFC 9457: the standard
 
 [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) defines `application/problem+json` — a standard structure for HTTP error details:
 
@@ -41,9 +41,9 @@ The same information as Markdown is 221 tokens (~64.5x reduction). As RFC 9457 J
 }
 ```
 
-Five base fields: `type`, `status`, `title`, `detail`, `instance`. Servers may add extension fields for operational metadata.
+RFC 9457 defines five base fields: `type`, `status`, `title`, `detail`, and `instance`. Servers can add extension fields for operational metadata.
 
-## Operational Extension Fields (Cloudflare Pattern)
+## Operational extension fields (Cloudflare pattern)
 
 [Cloudflare's agent-facing error implementation](https://blog.cloudflare.com/rfc-9457-agent-error-pages/) adds extension fields that map directly to agent control-flow branches:
 
@@ -52,10 +52,10 @@ Five base fields: `type`, `status`, `title`, `detail`, `instance`. Servers may a
 | `retryable` | boolean | Whether retrying the same request can succeed |
 | `retry_after` | integer (seconds) | Minimum wait before retrying |
 | `owner_action_required` | boolean | Whether a human must intervene |
-| `error_code` | string | Machine-readable code (e.g., `1015`) |
+| `error_code` | string | Machine-readable code (for example `1015`) |
 | `error_category` | string | Broad category for routing logic |
 
-### Error Category Taxonomy
+### Error category taxonomy
 
 Five error category groups map to three agent actions:
 
@@ -77,7 +77,7 @@ graph TD
 
 The agent branches on explicit signals rather than inferring intent from status codes or HTML content.
 
-## Requesting Structured Errors
+## Requesting structured errors
 
 Set the `Accept` header on outbound API calls:
 
@@ -109,7 +109,7 @@ owner_action_required: false
 You have been rate limited. Wait 60 seconds before retrying.
 ```
 
-## Integration with Claude Tool Results
+## Integration with Claude tool results
 
 Claude's tool-use API forwards structured error content to the model via `is_error: true` in `tool_result` blocks:
 
@@ -129,9 +129,9 @@ Claude's tool-use API forwards structured error content to the model via `is_err
 
 Claude receives the structured fields and can branch deterministically: if `retryable` is true and `retry_after` is set, wait and retry; if `owner_action_required` is true, surface to the user; otherwise fail fast.
 
-## Emitting RFC 9457 Errors from Agent-Facing Services
+## Emitting RFC 9457 errors from agent-facing services
 
-When building services that agents will call, emit RFC 9457 responses rather than generic HTTP errors:
+When you build services that agents will call, emit RFC 9457 responses rather than generic HTTP errors:
 
 ```python
 from flask import jsonify
@@ -151,13 +151,13 @@ def rate_limit_error(retry_after: int):
 
 This pattern connects three cost and reliability concerns under a single design decision: token spend, retry waste, and escalation routing.
 
-## When This Backfires
+## When this backfires
 
 RFC 9457 adoption is uneven. Most third-party APIs do not support `application/problem+json` and silently ignore the `Accept` header, returning HTML regardless. Three conditions make this pattern unreliable:
 
-1. **Third-party APIs without RFC 9457 support** — the agent still receives an HTML error body. Parse defensively: always attempt structured extraction first, then fall back to plain-text error extraction.
-2. **Middleware that rewrites Accept headers** — some proxies, API gateways, or WAFs strip or replace `Accept` before the request reaches the origin. Verify that the `Accept` header survives the full request path.
-3. **First-party services that haven't adopted the format** — emitting RFC 9457 requires active implementation work. The pattern pays off once agents make enough API calls to justify the engineering cost; for low-volume integrations, generic error handling may be sufficient.
+1. Third-party APIs without RFC 9457 support still hand the agent an HTML error body. Parse defensively: always try structured extraction first, then fall back to plain-text error extraction.
+2. Middleware that rewrites Accept headers can break the pattern. Some proxies, API gateways, or WAFs strip or replace `Accept` before the request reaches the origin. Check that the `Accept` header survives the full request path.
+3. First-party services that have not adopted the format need active implementation work. The pattern pays off once agents make enough API calls to justify the engineering cost; for low-volume integrations, generic error handling may be enough.
 
 ## Key Takeaways
 
@@ -174,4 +174,4 @@ RFC 9457 adoption is uneven. Most third-party APIs do not support `application/p
 - [Error Preservation in Context](../context-engineering/error-preservation-in-context.md)
 - [Self-Healing Tool Routing](self-healing-tool-routing.md)
 - [Scoped Credentials Proxy](../security/scoped-credentials-proxy.md)
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)

@@ -17,9 +17,9 @@ maturity: established
 
 > When a proprietary extension system gets replaced by an open protocol, the right response is to rebuild on the standard — not port the old architecture. The Copilot Extensions deprecation exemplifies this pattern.
 
-GitHub [deprecated Copilot Extensions (GitHub Apps) on September 24, 2025](https://github.blog/changelog/2025-09-24-deprecate-github-copilot-extensions-github-apps/). New extension creation was blocked immediately; all functionality was disabled on November 10, 2025. GitHub replaced the system with [MCP servers](../standards/mcp-protocol.md).
+GitHub [deprecated Copilot Extensions (GitHub Apps) on September 24, 2025](https://github.blog/changelog/2025-09-24-deprecate-github-copilot-extensions-github-apps/). It blocked new extension creation immediately and disabled all functionality on November 10, 2025. GitHub replaced the system with [MCP servers](../standards/mcp-protocol.md).
 
-## What Changed Architecturally
+## What changed architecturally
 
 | Dimension | Copilot Extensions (deprecated) | MCP Servers |
 |-----------|----------------------------------|-------------|
@@ -31,33 +31,33 @@ GitHub [deprecated Copilot Extensions (GitHub Apps) on September 24, 2025](https
 | AI abstraction | Skillsets: Copilot handles all LLM logic | None — server exposes tools, client decides when to call them |
 | Enterprise governance | GitHub App permissions | [Registry allow lists and access policies](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-mcp-usage/configure-mcp-server-access), project `.mcp.json` |
 
-## What You Gain
+## What you gain
 
-**Cross-tool portability.** Build once; the same [MCP server](../standards/mcp-protocol.md) works with every MCP-compatible agent — Copilot, Claude Code, Cursor, and beyond.
+Cross-tool portability. Build the [MCP server](../standards/mcp-protocol.md) once and it works with every MCP-compatible agent: Copilot, Claude Code, Cursor, and others.
 
-**No mandatory hosting for local tools.** Unlike Copilot Extensions (always remote), stdio transport runs the server as a local process with zero infrastructure. Remote tools still need hosting.
+No mandatory hosting for local tools. Copilot Extensions always ran remotely. With MCP, stdio transport runs the server as a local process and needs no infrastructure. Remote tools still need hosting.
 
-**Autonomous invocation.** Copilot's agent mode and coding agent can call MCP tools without user `@mention`. The agent discovers available tools at startup via [`tools/list`](https://raw.githubusercontent.com/modelcontextprotocol/specification/main/schema/2024-11-05/schema.ts) and calls them as needed during task execution.
+Autonomous invocation. Copilot's agent mode and coding agent call MCP tools without a user `@mention`. The agent discovers available tools at startup through [`tools/list`](https://raw.githubusercontent.com/modelcontextprotocol/specification/main/schema/2024-11-05/schema.ts) and calls them as it works.
 
-**Open ecosystem.** The [GitHub MCP Registry](https://github.blog/ai-and-ml/generative-ai/how-to-find-install-and-manage-mcp-servers-with-the-github-mcp-registry/) (github.com/mcp) offers [1-click VS Code installation](https://code.visualstudio.com/docs/copilot/customization/mcp-servers), namespace conventions, and enterprise allow lists. The same registry serves all MCP clients.
+Open registry. The [GitHub MCP Registry](https://github.blog/ai-and-ml/generative-ai/how-to-find-install-and-manage-mcp-servers-with-the-github-mcp-registry/) (github.com/mcp) offers [one-click VS Code installation](https://code.visualstudio.com/docs/copilot/customization/mcp-servers), namespace conventions, and enterprise allow lists. The same registry serves all MCP clients.
 
-## What You Lose
+## What you lose
 
-**Skillset abstraction.** [Skillsets](../tools/copilot/copilot-extensions.md) abstracted all AI logic — routing, prompt crafting, response generation — with no LLM code required. MCP servers expose raw tools; orchestration is the host agent's responsibility.
+Skillset abstraction. [Skillsets](../tools/copilot/copilot-extensions.md) handled all AI logic: routing, prompt crafting, and response generation, with no LLM code required. MCP servers expose raw tools, and orchestration becomes the host agent's job.
 
-**Marketplace distribution.** No single marketplace equivalent exists yet — MCP servers require self-hosted distribution or a registry listing.
+Marketplace distribution. No single marketplace equivalent exists yet. You distribute MCP servers yourself or list them in a registry.
 
-## The Broader Pattern
+## The broader pattern
 
-The Copilot Extensions deprecation is one instance of a recurring pattern: **proprietary extension ecosystems converge on open protocols once the protocol reaches critical adoption mass**.
+The Copilot Extensions deprecation shows a recurring pattern: proprietary extension systems converge on open protocols once a protocol reaches wide adoption.
 
 The sequence is predictable:
 
-1. Vendor ships proprietary plugin/extension system to capture early ecosystem value
-2. Competing vendors ship incompatible systems — you must maintain N integrations
-3. An open protocol emerges with broad vendor support
-4. Early-mover vendors deprecate their proprietary system and adopt the standard
-5. If you built on the open protocol, you get cross-tool reach for free
+1. A vendor ships a proprietary plugin system to capture early value.
+2. Competing vendors ship incompatible systems, so you maintain many integrations.
+3. An open protocol emerges with broad vendor support.
+4. Early-mover vendors deprecate their proprietary system and adopt the standard.
+5. If you built on the open protocol, you get cross-tool reach for free.
 
 ```mermaid
 graph TD
@@ -69,27 +69,27 @@ graph TD
     C -->|deploy to| G[Any MCP client]
 ```
 
-MCP follows the same trajectory as USB-C (connector standards), LSP (language server protocol for editor integrations), and OAuth (auth delegation). Once a critical mass of agents support MCP, the economics of proprietary extension systems invert — maintaining Copilot-only tooling costs more than maintaining an MCP server.
+MCP follows the same path as USB-C (connector standards), LSP (language server protocol for editors), and OAuth (auth delegation). Once enough agents support MCP, the economics flip: maintaining Copilot-only tooling costs more than maintaining one MCP server.
 
-## Migration Approach
+## Migration approach
 
-**For existing Copilot Extensions:**
+For existing Copilot Extensions:
 
-1. Identify each tool/skill endpoint in the extension
-2. Implement each as an MCP `tool` with the same input/output schema
-3. Choose transport: stdio for local tools, Streamable HTTP for remote
-4. Configure per client: `claude mcp add` for Claude Code, `.vscode/mcp.json` for Copilot, native MCP settings for Cursor
-5. Remove `@mention` documentation — agents call MCP tools autonomously
+1. Identify each tool or skill endpoint in the extension.
+2. Implement each one as an MCP `tool` with the same input and output schema.
+3. Choose a transport: stdio for local tools, Streamable HTTP for remote ones.
+4. Configure each client: `claude mcp add` for Claude Code, `.vscode/mcp.json` for Copilot, and native MCP settings for Cursor.
+5. Remove the `@mention` documentation, since agents call MCP tools on their own.
 
-**For new integrations:**
+For new integrations:
 
-Build MCP servers from the start. Do not build Copilot Extensions — the system is deprecated and non-functional.
+Build MCP servers from the start. Do not build Copilot Extensions, since the system is deprecated and no longer works.
 
 ## Example
 
-A Copilot Extension that queries a deployment status API migrates to an MCP server exposing the same capability as a tool.
+A Copilot Extension that queries a deployment status API moves to an MCP server that exposes the same capability as a tool.
 
-**Before — Copilot Extension (skillset definition in GitHub App manifest):**
+Before, with a Copilot Extension skillset definition in a GitHub App manifest:
 
 ```yaml
 # github-app/skillset.yml (no longer functional)
@@ -102,9 +102,9 @@ skills:
         required: true
 ```
 
-The extension ran on a remote server, handled Copilot's callback protocol, and was invoked via `@deploy-bot get-deploy-status payments`.
+The extension ran on a remote server, handled Copilot's callback protocol, and you invoked it with `@deploy-bot get-deploy-status payments`.
 
-**After — MCP server (Python, stdio transport):**
+After, the MCP server (Python, stdio transport):
 
 ```python
 # deploy_status_server.py
@@ -123,7 +123,7 @@ if __name__ == "__main__":
     mcp.run(transport="stdio")
 ```
 
-**Client configuration:**
+Client configuration:
 
 ```json
 // .vscode/mcp.json (Copilot)
@@ -142,7 +142,7 @@ if __name__ == "__main__":
 claude mcp add deploy-status -- python deploy_status_server.py
 ```
 
-The same server binary works across Copilot, Claude Code, and Cursor with no code changes — only client config differs.
+The same server binary works across Copilot, Claude Code, and Cursor with no code changes. Only the client config differs.
 
 ## Key Takeaways
 

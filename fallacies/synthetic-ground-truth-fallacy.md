@@ -19,15 +19,15 @@ maturity: established
 
 > AI-generated artifacts reflect the model's statistical priors, not ground truth. Treating them as equivalent to human-verified artifacts introduces feedback loops that compound errors.
 
-## The Fallacy
+## The fallacy
 
-Teams use AI to generate tests, evals, documentation, or training examples and [treat the outputs as interchangeable](../anti-patterns/trust-without-verify.md) with human-verified artifacts. The reasoning: AI is fast and the outputs look correct, so accepting them as ground truth is a productivity gain.
+Teams use AI to generate tests, evals, documentation, or training examples and [treat the outputs as interchangeable](../anti-patterns/trust-without-verify.md) with human-verified artifacts. The reasoning: AI is fast and the outputs look correct, so accepting them as ground truth saves time.
 
-But the outputs look correct because the model generates *plausible* outputs, not *verified* ones. They measure what the model finds likely, not what is true.
+But the outputs look correct because the model generates plausible outputs, not verified ones. They measure what the model finds likely, not what is true.
 
-## Why It Fails
+## Why it fails
 
-### Feedback Loops Degrade Over Generations
+### Feedback loops degrade over generations
 
 When AI-generated artifacts feed back into training, evaluation, or quality gates, distributional shift compounds across each cycle. "The Curse of Recursion" documented this in OPT-125m: by generation 9, outputs degraded from coherent English to fragmented, repetitive text — the model's distribution had drifted far from the original. [Source: [The Curse of Recursion: Training on Generated Data Makes Models Forget](https://arxiv.org/abs/2305.17493)]
 
@@ -37,19 +37,19 @@ Smaller-scale versions of this loop appear in daily coding agent workflows:
 - AI-generated evals score plausibility, not actual quality
 - Fine-tuning datasets from AI completions amplify existing biases without introducing corrective signal
 
-### Eval Scores Are Not Self-Validating
+### Eval scores are not self-validating
 
 Anthropic's multi-agent research documentation notes that "people testing agents find edge cases that evals miss" and recommends you "[c]alibrate against humans: Frequently compare LLM judge outputs against expert human judgment." [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
 
 Broken graders compound the problem. In the CORE-Bench case, rigid string-match grading penalized correct answers — "96.12" failed against the expected "96.124991" — and scores jumped from 42% to 95% after the graders were fixed. A pass rate that reflects a broken grader, not agent capability, is what treating unvalidated evaluation infrastructure as ground truth produces. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-### Environmental Feedback Is the Correct Ground Truth
+### Environmental feedback is the correct ground truth
 
 Anthropic's agent design guidance recommends that agents gain "ground truth from the environment at each step (such as tool call results or code execution)" — not from AI-generated assessments. [Source: [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)]
 
 The agentic handbook anchors reflection loops to "objective signals: tests, lints, schema validation, compilation, eval rubric" and notes explicitly that "self-critique without objective checks is also brittle — models can rationalize." [Source: [The Agentic AI Handbook](https://www.nibzard.com/agentic-handbook)]
 
-## The Scope of the Problem
+## The scope of the problem
 
 | Artifact | Synthetic Ground Truth Risk |
 |----------|----------------------------|
@@ -69,14 +69,14 @@ The evals measured what the model found plausible. They never measured what the 
 
 The fix: seed evals from real production failures and user-reported bugs, then calibrate LLM judge scores against human expert review before using them as a quality gate.
 
-## When This Backfires
+## When this backfires
 
-The fallacy is over-applying the rule. Synthetic and AI-generated artifacts are legitimate inputs when used as *starting points* feeding [incremental verification](../verification/incremental-verification.md), not ground truth.
+The fallacy is over-applying the rule. Synthetic and AI-generated artifacts are legitimate inputs when used as starting points feeding [incremental verification](../verification/incremental-verification.md), not ground truth.
 
-- **Bootstrapping test coverage**: AI-generated test stubs seeded from real code paths are a win — the risk is trusting pass/fail rates before humans verify the stubs reflect correct behavior
-- **Data augmentation**: Synthetic examples improve coverage of rare cases when added to a dataset with real-world grounding — the fallacy fires only when synthetic data *replaces* real data
-- **Eval templating**: LLM-generated rubrics reduce scaffolding work; calibrating them against human judgment converts them from synthetic ground truth into validated artifacts
-- **Short feedback loops**: An agent checking its output against a compiler or test runner uses environmental ground truth — the fallacy is AI-on-AI assessment, not AI-plus-deterministic-signal loops
+- Bootstrapping test coverage: AI-generated test stubs seeded from real code paths help — the risk is trusting pass/fail rates before humans verify the stubs reflect correct behavior
+- Data augmentation: synthetic examples improve coverage of rare cases when added to a dataset with real-world grounding — the fallacy fires only when synthetic data replaces real data
+- Eval templating: LLM-generated rubrics reduce scaffolding work; calibrating them against human judgment converts them from synthetic ground truth into validated artifacts
+- Short feedback loops: an agent checking its output against a compiler or test runner uses environmental ground truth — the fallacy is AI-on-AI assessment, not AI-plus-deterministic-signal loops
 
 The pattern to avoid is circular: AI generates artifact → AI judges artifact → scores accepted without external grounding. Any external validation signal — human review, test execution, real user behavior — breaks the circularity.
 

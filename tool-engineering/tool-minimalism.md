@@ -16,14 +16,14 @@ maturity: established
 
 > Tool minimalism — exposing fewer, non-overlapping tools — paired with high-level prompting beats redundant tool sets and step-by-step procedures, a counter-intuitive result production data confirms.
 
-**Related lesson:** [Consolidation vs Sprawl](https://learn.agentpatterns.ai/tool-engineering/consolidation-vs-sprawl/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Consolidation vs Sprawl](https://learn.agentpatterns.ai/tool-engineering/consolidation-vs-sprawl/) — this concept features in a hands-on lesson with quizzes.
 
 !!! info "Also known as"
     Tool Calling Schema Standards, Subagent Schema-Level Tool Filtering, Tool Schema Design
 
-## The Over-Tooling Problem
+## The over-tooling problem
 
-Developers add tools for coverage: multiple ways to read files, search the codebase, run code. The intent is redundancy; the effect is ambiguity the model resolves on every call.
+Developers add tools for coverage: multiple ways to read files, search the codebase, run code. The intent is redundancy. The effect is ambiguity the model has to resolve on every call.
 
 OpenAI's data agent team found: "We exposed our full tool set to the agent, and quickly ran into problems with overlapping functionality... it's confusing to agents." Consolidating and restricting tool calls — even removing valid options — reduced ambiguity and improved end-to-end reliability. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
@@ -33,9 +33,9 @@ Anthropic's engineering team reaches the same conclusion from the tool-authoring
 
 A controlled study reinforces the direction empirically. Across 102 tasks against a 100-tool menu, filtering each step's visible tools down to the causally necessary options matched the strongest baseline's task-success rate while cutting token cost by roughly 90% — restricting the menu did not trade away success. [Source: [ToolChoiceConfusion: Causal Minimal Tool Filtering for Reliable LLM Agents](https://arxiv.org/abs/2606.06284)]
 
-## Removing Overlapping Tools
+## Removing overlapping tools
 
-The first audit: identify tool pairs that have overlapping functionality. For coding agents, common overlaps:
+Start with one audit: find tool pairs with overlapping functionality. For coding agents, common overlaps:
 
 - Multiple search tools (semantic search, text search, symbol search) with unclear selection criteria
 - Multiple file read mechanisms (read full file, read range, search for pattern within file)
@@ -43,25 +43,25 @@ The first audit: identify tool pairs that have overlapping functionality. For co
 
 For each overlap, decide: consolidate into one tool, or add explicit selection criteria that make the use cases non-overlapping. If the selection criteria are hard to articulate, consolidate. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
-## The Over-Specification Problem
+## The over-specification problem
 
-The complementary mistake: writing detailed step-by-step system prompts that prescribe exactly how the agent should execute the task.
+The opposite mistake is writing detailed step-by-step system prompts that prescribe exactly how the agent should do the task.
 
-The data agent team found: "rigid instructions often pushed the agent down incorrect paths" when question details varied. Prescriptive prompts anchor the agent to a procedure designed for one variant of the task; when the task shifts slightly, the procedure no longer fits and the agent follows it anyway — the brittleness [System Prompt Altitude](../instructions/system-prompt-altitude.md) is written to avoid.
+The data agent team found that "rigid instructions often pushed the agent down incorrect paths" when question details varied. Prescriptive prompts anchor the agent to a procedure designed for one variant of the task. When the task shifts slightly, the procedure no longer fits, and the agent follows it anyway — the brittleness [System Prompt Altitude](../instructions/system-prompt-altitude.md) is written to avoid.
 
-Shifting to higher-level guidance and trusting the model's reasoning to choose execution paths produced more robust outcomes. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
+Higher-level guidance, which trusts the model to choose its own execution paths, produced more reliable outcomes. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
-## High-Level Prompting in Practice
+## High-level prompting in practice
 
-**Prescriptive (avoid):**
+Prescriptive, which you should avoid:
 > "First, search for the table name in the schema file. Then find all usages of the table in the query files. Then check the migration files for recent changes to that table. Finally, summarize what you found."
 
-**Goal-oriented (prefer):**
+Goal-oriented, which you should prefer:
 > "Find all places in the codebase that interact with the `users` table, including schema, queries, and migrations. Provide a summary of recent changes and current usage patterns."
 
 The prescriptive version anchors the agent to one search sequence. The goal-oriented version lets the agent start with schema, queries, or migrations based on what it finds.
 
-## For Coding Agent Design
+## For coding agent design
 
 The practical implications:
 
@@ -70,14 +70,14 @@ The practical implications:
 - Consolidate overlapping tools into the smallest set that covers the task space without redundancy
 - Add explicit selection criteria only when use cases are genuinely distinct
 
-## When This Backfires
+## When this backfires
 
 Minimalism is not a universal rule. Common failure conditions:
 
-- **Multi-system orchestrators.** Agents coordinating distinct systems (ticketing, CRM, deployment) benefit from one tool per system operation. Collapsing into a generic `do_action(system, verb, payload)` moves the selection decision into parameter space and loses per-tool schemas.
-- **Consolidation that expands the parameter surface.** A unified `search` tool with `mode={text,semantic,symbol}` only helps if the model picks the mode reliably. If parameter choice is as ambiguous as tool choice, you have traded one ambiguity for another.
-- **Compliance-driven work.** Goal-oriented prompts assume a shared definition of "done". For regulated workflows where the procedure itself is the artifact (audit trails), prescriptive steps are safer.
-- **Weaker models.** Gains from trusting model reasoning shrink with capability, though [iterative feedback can equalize](../agent-design/feedback-capability-equalizer.md) much of that gap. Smaller models benefit more from procedural scaffolding than open-ended goals.
+- Multi-system orchestrators: agents coordinating distinct systems (ticketing, CRM, deployment) benefit from one tool per system operation. Collapsing into a generic `do_action(system, verb, payload)` moves the selection decision into parameter space and loses per-tool schemas.
+- Consolidation that expands the parameter surface: a unified `search` tool with `mode={text,semantic,symbol}` only helps if the model picks the mode reliably. If parameter choice is as ambiguous as tool choice, you have traded one ambiguity for another.
+- Compliance-driven work: goal-oriented prompts assume a shared definition of "done". For regulated workflows where the procedure itself is the artifact (audit trails), prescriptive steps are safer.
+- Weaker models: gains from trusting model reasoning shrink with capability, though [iterative feedback can equalize](../agent-design/feedback-capability-equalizer.md) much of that gap. Smaller models benefit more from procedural scaffolding than open-ended goals.
 
 ## Key Takeaways
 
@@ -116,7 +116,7 @@ Three tools, no overlapping functionality. `read_file` absorbed `read_lines` via
 
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
 - [Tool Selection Guidance](tool-description-quality.md)
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
 - [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md)
 - [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)

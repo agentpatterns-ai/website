@@ -16,23 +16,23 @@ maturity: established
 
 > AI agents replace manual issue triage by classifying, labeling, and routing issues on every event or schedule, running continuously with read-only defaults and constrained writes.
 
-## Three Triage Operations
+## Three triage operations
 
-Continuous triage decomposes into three discrete operations, each independently automatable:
+Continuous triage splits into three operations. You can automate each one on its own:
 
 | Operation | Input | Output | Frequency |
 |-----------|-------|--------|-----------|
-| **Summarize** | Issue body, comments | Structured summary for triagers | On issue creation |
-| **Label** | Issue content, repo context | Category labels (bug, feature, docs) | On issue creation/update |
-| **Route** | Labels, team assignments | Assignment to team or individual | After labeling |
+| Summarize | Issue body, comments | Structured summary for triagers | On issue creation |
+| Label | Issue content, repo context | Category labels (bug, feature, docs) | On issue creation/update |
+| Route | Labels, team assignments | Assignment to team or individual | After labeling |
 
-These operations compose into a pipeline: summarize provides context, labeling classifies, and routing dispatches. Each can run independently or chain sequentially.
+These operations form a pipeline. Summarize provides context, labeling classifies, and routing dispatches. Each can run on its own or chain in sequence.
 
 ## Implementation with GitHub Agentic Workflows
 
-[GitHub Agentic Workflows](../tools/copilot/github-agentic-workflows.md) provide the primary implementation vehicle for continuous triage. Each workflow is defined as a Markdown file with YAML frontmatter specifying triggers, permissions, and safe outputs, compiled to a `.lock.yml` file for GitHub Actions execution ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
+[GitHub Agentic Workflows](../tools/copilot/github-agentic-workflows.md) are the main way to build continuous triage. You define each workflow as a Markdown file with YAML frontmatter that specifies triggers, permissions, and safe outputs. GitHub compiles it to a `.lock.yml` file that GitHub Actions runs ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
 
-A triage workflow operates read-only by default. Write operations require explicit declaration as safe outputs — pre-approved actions like `add-label`, `create-comment`, or `add-assignee`. Each safe output is volume-limited and content-sanitized before execution ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
+A triage workflow runs read-only by default. To let it write, you declare safe outputs — pre-approved actions like `add-label`, `create-comment`, or `add-assignee`. Each safe output has a volume limit, and its content is sanitized before it runs ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
 
 ```yaml
 # Frontmatter for a triage workflow
@@ -50,19 +50,19 @@ safe-outputs:
       max-count: 1
 ```
 
-This permission model enables running agents continuously — the agent can classify thousands of issues without risk of unbounded mutations.
+This permission model lets agents run continuously. The agent can classify thousands of issues without risk of unbounded writes.
 
-## Pre-Built Triage Actions
+## Pre-built triage actions
 
-GitHub ships two dedicated Actions for AI-powered triage, both using the workflow `GITHUB_TOKEN` with `models: read` permission — no external API keys required ([GitHub Changelog](https://github.blog/changelog/2025-09-05-github-actions-ai-labeler-and-moderator-with-the-github-models-inference-api/)):
+GitHub ships two Actions for AI triage. Both use the workflow `GITHUB_TOKEN` with `models: read` permission, so you need no external API keys ([GitHub Changelog](https://github.blog/changelog/2025-09-05-github-actions-ai-labeler-and-moderator-with-the-github-models-inference-api/)):
 
-**AI Assessment Comment Labeler** (`github/ai-assessment-comment-labeler`) — runs multiple prompt files in parallel against issue content, applies structured labels (`ai:<prompt-stem>:<assessment>`), supports comment suppression for silent classification, and outputs JSON for downstream workflow steps.
+AI Assessment Comment Labeler (`github/ai-assessment-comment-labeler`) runs multiple prompt files in parallel against issue content. It applies structured labels (`ai:<prompt-stem>:<assessment>`), supports comment suppression for silent classification, and outputs JSON for later workflow steps.
 
-**AI Moderator** (`github/ai-moderator`) — detects spam, link spam, and AI-generated content on issues and comments. Auto-labels flagged content and can minimize it. Supports custom prompt overrides for team-specific moderation rules.
+AI Moderator (`github/ai-moderator`) detects spam, link spam, and AI-generated content on issues and comments. It auto-labels flagged content and can minimize it. It also supports custom prompt overrides for team-specific moderation rules.
 
-## Classify-Then-Route Pattern
+## Classify-then-route pattern
 
-The routing pattern from Anthropic's agent design maps directly to triage: a classifier agent determines the issue category, then routes to specialized follow-up processes. This prevents performance degradation from optimizing a single prompt for heterogeneous inputs ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
+The routing pattern from Anthropic's agent design maps directly to triage. A classifier agent determines the issue category, then routes to a specialized follow-up process. This avoids the performance loss that comes from tuning a single prompt for mixed inputs ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
 
 ```mermaid
 graph TD
@@ -74,49 +74,49 @@ graph TD
     B -->|Needs Info| G[Request Details]
 ```
 
-Each downstream handler can use a different prompt, different model, or different safe-output set — specialized for its category rather than handling all categories in one pass.
+Each downstream handler can use a different prompt, model, or safe-output set, tuned for its category rather than handling every category in one pass.
 
-## Tool Design for Classification
+## Tool design for classification
 
-Label definitions in triage tools should be explicit, mutually exclusive, and include concrete examples showing when each label applies. Anthropic's advanced tool use guidance recommends 1-5 examples per tool to reduce classification ambiguity ([Anthropic: Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use)).
+Label definitions in triage tools should be explicit and mutually exclusive. Each should include concrete examples that show when the label applies. Anthropic's advanced tool use guidance recommends one to five examples per tool to reduce classification ambiguity ([Anthropic: Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use)).
 
 Effective label definitions include:
 
-- **Name and description** — what the label means in this project's context
-- **Inclusion criteria** — concrete examples of issues that receive this label
-- **Exclusion criteria** — what this label does not cover, to prevent overlap
-- **Priority signal** — whether this label implies urgency
+- Name and description — what the label means in this project's context
+- Inclusion criteria — concrete examples of issues that receive this label
+- Exclusion criteria — what this label does not cover, to prevent overlap
+- Priority signal — whether this label implies urgency
 
-## Context Loading for High-Volume Repos
+## Context loading for high-volume repos
 
-JIT context loading applies directly to triage: load issue metadata lightly (title, labels, first paragraph), then retrieve full details only when classification requires deeper analysis. This avoids context exhaustion on repos processing hundreds of issues per day ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+Just-in-time context loading applies directly to triage. Load issue metadata lightly (title, labels, first paragraph), then fetch full details only when classification needs deeper analysis. This avoids context exhaustion on repos that process hundreds of issues per day ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
-For high-volume repos, schedule batch triage rather than triggering on every event. This amortizes the cost — each run processes accumulated issues in a single agent session rather than spawning separate sessions per issue.
+For high-volume repos, schedule batch triage rather than triggering on every event. This spreads the cost. Each run processes accumulated issues in one agent session rather than spawning a separate session per issue.
 
-## Why It Works
+## Why it works
 
-The classify-then-route pattern outperforms a single general-purpose triage prompt because LLMs lose classification accuracy when one prompt must handle disjoint intent types simultaneously — each category pulls the generation distribution toward different output structures. Routing to a specialized prompt per category lets each prompt be tuned to a narrower label space, improving both precision and reliability. Research on LLM-based intent detection confirms that narrowing the label space reduces out-of-scope errors and increases confidence on in-scope classifications ([Intent Detection in the Age of LLMs, arXiv 2410.01627](https://arxiv.org/abs/2410.01627)).
+The classify-then-route pattern beats a single general-purpose triage prompt. LLMs lose accuracy when one prompt must handle unrelated intent types at once, because each category pulls the output toward a different structure. Routing to a specialized prompt per category tunes each prompt to a narrower label space, which improves both precision and reliability. Research on LLM-based intent detection confirms that a narrower label space reduces out-of-scope errors and raises confidence on in-scope classifications ([Intent Detection in the Age of LLMs, arXiv 2410.01627](https://arxiv.org/abs/2410.01627)).
 
-## When This Backfires
+## When this backfires
 
-Continuous AI triage adds cost and complexity that manual triage avoids on low-volume repos. Three conditions make it worse than the alternative:
+Continuous AI triage adds cost and complexity that manual triage avoids on low-volume repos. Three conditions make it worse than the manual alternative:
 
-- **Small repos with predictable issue types** — when a repo receives fewer than 20 issues per month and labels rarely change, a human can triage in seconds with better judgment on edge cases than a general-purpose model.
-- **High-volume bursts with large context** — models handling hundreds of issues simultaneously can fail to follow instructions or skip tasks when context windows fill with accumulated issue content. GitHub's own documentation of Agentic Workflows notes that large context and complex tasks cause tasks to be skipped or instructions to be ignored ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/building-ai-powered-github-issue-triage-with-the-copilot-sdk/)).
-- **Non-determinism in mission-critical routing** — the same workflow can produce different label assignments on different runs. Where incorrect routing causes SLA breaches or security escalation misses, AI triage requires a human review layer rather than operating fully autonomously ([GitHub Agentic Workflows technical preview](https://github.blog/changelog/2026-02-13-github-agentic-workflows-are-now-in-technical-preview/)).
+- Small repos with predictable issue types — when a repo gets fewer than 20 issues per month and labels rarely change, a human triages in seconds, with better judgment on edge cases than a general-purpose model.
+- High-volume bursts with large context — models handling hundreds of issues at once can fail to follow instructions or skip tasks when context windows fill with accumulated issue content. GitHub's own documentation of Agentic Workflows notes that large context and complex tasks cause tasks to be skipped or instructions to be ignored ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/building-ai-powered-github-issue-triage-with-the-copilot-sdk/)).
+- Non-determinism in mission-critical routing — the same workflow can produce different label assignments on different runs. Where incorrect routing causes SLA breaches or security escalation misses, AI triage needs a human review layer rather than running fully autonomously ([GitHub Agentic Workflows technical preview](https://github.blog/changelog/2026-02-13-github-agentic-workflows-are-now-in-technical-preview/)).
 
-Service-level failures are also a real risk: AI services go down and rate limits apply. Triage pipelines should degrade gracefully — falling back to unlabeled open state rather than blocking issue creation when the model is unavailable.
+Service failures are also a real risk. AI services go down and rate limits apply. Triage pipelines should degrade gracefully. When the model is unavailable, fall back to an unlabeled open state rather than blocking issue creation.
 
-## Rollout Sequencing
+## Rollout sequencing
 
-1. **Read-only first** — start with summarization only (no labels, no routing). Observe classification quality in comments before enabling writes.
-2. **Label with review** — enable `add-label` safe outputs but review label accuracy for 1-2 weeks. Adjust prompts based on misclassifications.
-3. **Route to teams** — once labeling accuracy is validated, add assignment rules that route labeled issues to the appropriate team or individual, following the [classify-then-route composition pattern](../agent-design/agent-composition-patterns.md).
-4. **Close duplicates** — the highest-risk operation. Enable only after the classifier demonstrates reliable duplicate detection.
+1. Read-only first. Start with summarization only — no labels, no routing. Observe classification quality in comments before enabling writes.
+2. Label with review. Enable `add-label` safe outputs, but review label accuracy for one to two weeks. Adjust prompts based on misclassifications.
+3. Route to teams. Once labeling accuracy holds, add assignment rules that route labeled issues to the right team or individual, following the [classify-then-route composition pattern](../agent-design/agent-composition-patterns.md).
+4. Close duplicates. This is the highest-risk operation. Enable it only after the classifier shows reliable duplicate detection.
 
-## Cost Model
+## Cost model
 
-Copilot-powered triage workflows consume Copilot premium requests per run — event-triggered workflows scale linearly with issue volume, while scheduled batch workflows amortize cost across all accumulated issues ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
+Copilot-powered triage workflows consume Copilot premium requests per run. Event-triggered workflows scale with issue volume. Scheduled batch workflows spread the cost across all accumulated issues ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
 
 ## Key Takeaways
 
@@ -130,7 +130,7 @@ Copilot-powered triage workflows consume Copilot premium requests per run — ev
 
 A repository uses GitHub Agentic Workflows to triage every new issue through a three-stage pipeline: summarize, label, and route.
 
-**Workflow file** (`.github/workflows/triage.md`):
+Workflow file (`.github/workflows/triage.md`):
 
 ```yaml
 on:
@@ -149,7 +149,7 @@ safe-outputs:
       max-count: 1
 ```
 
-**Prompt instructions** (`.github/prompts/triage-classify.prompt.md`):
+Prompt instructions (`.github/prompts/triage-classify.prompt.md`):
 
 ```markdown
 Classify this issue into exactly one category:
@@ -161,7 +161,7 @@ Classify this issue into exactly one category:
 - **needs-info** — the issue lacks enough detail to classify; request reproduction steps or expected behavior
 ```
 
-**Result**: when a new issue is opened, the workflow runs the classifier prompt against the issue body, applies the matching label, posts a structured summary comment, and assigns the issue to the team mapped to that label. The entire pipeline executes within the safe-output constraints — at most one label, one comment, and one assignee per run.
+Result: when a new issue opens, the workflow runs the classifier prompt against the issue body, applies the matching label, posts a structured summary comment, and assigns the issue to the team mapped to that label. The whole pipeline runs within the safe-output constraints — at most one label, one comment, and one assignee per run.
 
 ## Related
 

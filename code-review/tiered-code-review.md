@@ -18,13 +18,13 @@ maturity: established
 
 > Route review effort by risk: AI handles the first pass, non-critical code merges after AI-only review, and critical code escalates to human review.
 
-## The Problem
+## The problem
 
 AI-generated code is [increasing PR volume](agent-pr-volume-vs-value.md). PRs are [~18% larger and change failure rates are up ~30%](https://addyo.substack.com/p/code-review-in-the-age-of-ai) compared to human-only codebases. Review is the rate limiter, and uniform human depth does not scale.
 
-Tiered code review treats review as a **risk-routing problem**: classify code by criticality, then match review effort to risk level.
+Tiered code review treats review as a risk-routing problem: classify code by criticality, then match review effort to risk level.
 
-## How It Works
+## How it works
 
 ```mermaid
 flowchart TD
@@ -42,19 +42,19 @@ Three tiers, each with a different review bar:
 
 | Tier | Code types | Review requirement | Merge gate |
 |------|-----------|-------------------|------------|
-| **Automated** | Tests, docs, config, CSS, migrations | AI review only | AI passes, CI green |
-| **AI + Human** | Business logic, API contracts, data models | AI first pass + human approval | CODEOWNERS approval |
-| **Human-only** | Auth, payments, cryptography, PII handling | Mandatory human review | Security team approval |
+| Automated | Tests, docs, config, CSS, migrations | AI review only | AI passes, CI green |
+| AI + Human | Business logic, API contracts, data models | AI first pass + human approval | CODEOWNERS approval |
+| Human-only | Auth, payments, cryptography, PII handling | Mandatory human review | Security team approval |
 
-## Real-World Implementations
+## Real-world implementations
 
-**OpenAI Codex team** runs AI review via GitHub webhook when a PR transitions from draft to review. Their custom model achieves [~90% accuracy](https://newsletter.pragmaticengineer.com/p/how-codex-is-built). Non-critical code merges after AI-only review; core agent code and open source components require human review.
+The OpenAI Codex team runs AI review via GitHub webhook when a PR moves from draft to review. Their custom model achieves [~90% accuracy](https://newsletter.pragmaticengineer.com/p/how-codex-is-built). Non-critical code merges after AI-only review; core agent code and open source components require human review.
 
-**GitHub Copilot code review** passed [60M+ reviews](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) and can be enabled on all PRs at org/repo level. It surfaces actionable feedback in 71% of reviews and stays silent on the remaining 29%.
+GitHub Copilot code review passed [60M+ reviews](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) and can be enabled on all PRs at org or repo level. It surfaces actionable feedback in 71% of reviews and stays silent on the remaining 29%.
 
-**Claude Code** provides [automated security review](https://claude.com/blog/automate-security-reviews-with-claude-code) via CLI and GitHub Actions. Anthropic uses it internally as a CI gate, catching RCE and SSRF vulnerabilities before merge.
+Claude Code provides [automated security review](https://claude.com/blog/automate-security-reviews-with-claude-code) via CLI and GitHub Actions. Anthropic uses it internally as a CI gate, catching RCE and SSRF vulnerabilities before merge.
 
-## Implementing with GitHub Native Tools
+## Implementing with GitHub native tools
 
 GitHub does not offer path-based review routing natively. Approximate tiered review by layering three existing mechanisms:
 
@@ -85,26 +85,26 @@ Configure [Copilot automatic code review](https://docs.github.com/en/copilot/how
 
 Require CODEOWNERS approval in branch protection. PRs that touch only Tier 1 paths (no CODEOWNERS match) need only AI review and passing CI. PRs touching Tier 2 or 3 paths require the designated human reviewers.
 
-## Severity-Driven Merge Gates
+## Severity-driven merge gates
 
 Within each tier, classify AI findings by severity to prevent critical issues from drowning under cosmetic noise:
 
 | Severity | Effect | Example |
 |----------|--------|---------|
-| **Action Required** | Blocks merge | SQL injection, auth bypass, data loss risk |
-| **Recommended** | Advisory, mergeable | Missing error handling, suboptimal algorithm |
-| **Minor Suggestion** | Optional | Naming improvements, style preferences |
+| Action Required | Blocks merge | SQL injection, auth bypass, data loss risk |
+| Recommended | Advisory, mergeable | Missing error handling, suboptimal algorithm |
+| Minor Suggestion | Optional | Naming improvements, style preferences |
 
 This [severity-driven pattern](https://www.qodo.ai/blog/5-ai-code-review-pattern-predictions-in-2026/) keeps the merge gate meaningful. Only Action Required findings on critical paths block the pipeline.
 
-## Classification Framework
+## Classification framework
 
 Deciding what counts as "critical" is the hardest part. Four heuristics:
 
-- **Security boundary**: code handling authentication, authorization, encryption, or PII requires human review — the paths where the [security review gap in AI-authored PRs](security-review-gap-in-ai-prs.md) is widest.
-- **Financial impact**: code processing payments, billing, or subscriptions requires human review.
-- **Blast radius**: bugs that affect all users rather than one feature. Higher [blast radius](../security/blast-radius-containment.md) demands human review.
-- **Reversibility**: changes that corrupt persistent state rather than rolling back in minutes need human eyes.
+- Security boundary: code handling authentication, authorization, encryption, or PII requires human review — the paths where the [security review gap in AI-authored PRs](security-review-gap-in-ai-prs.md) is widest.
+- Financial impact: code processing payments, billing, or subscriptions requires human review.
+- Blast radius: bugs that affect all users rather than one feature. Higher [blast radius](../security/blast-radius-containment.md) demands human review.
+- Reversibility: changes that corrupt persistent state rather than rolling back in minutes need human eyes.
 
 Non-critical is everything else: tests, docs, configuration, CSS, build scripts, and reversible migrations.
 
@@ -166,13 +166,13 @@ jobs:
 
 Pair this with the CODEOWNERS file from the implementation section above. Tier 1 PRs (tests, docs, config) merge after AI review and green CI. Tier 2 and 3 PRs wait for the designated human reviewers defined in CODEOWNERS.
 
-## When This Backfires
+## When this backfires
 
 Tiered review depends entirely on correct classification. Three conditions cause it to fail:
 
-- **Misclassified security code**: a database migration that adds a PII column, a config change that broadens CORS policy, or a utility function called from an auth path — none of these match a CODEOWNERS pattern for `/src/auth/`, so they route to Tier 1 and merge without human review.
-- **Cross-cutting changes**: a refactor touching both `tests/` (Tier 1) and `src/api/` (Tier 2) in one PR. If classification logic checks the *first* matching tier, the PR may under-escalate.
-- **AI confidence drift**: AI reviewers trained on earlier code patterns silently degrade on novel architectural styles. Without periodic accuracy audits, the Tier 1 gate erodes while appearing functional.
+- Misclassified security code: a database migration that adds a PII column, a config change that broadens CORS policy, or a utility function called from an auth path — none of these match a CODEOWNERS pattern for `/src/auth/`, so they route to Tier 1 and merge without human review.
+- Cross-cutting changes: a refactor touching both `tests/` (Tier 1) and `src/api/` (Tier 2) in one PR. If classification logic checks the first matching tier, the PR may under-escalate.
+- AI confidence drift: AI reviewers trained on earlier code patterns silently degrade on novel architectural styles. Without periodic accuracy audits, the Tier 1 gate erodes while appearing functional.
 
 Tiered review is not a substitute for threat modeling or dependency scanning — it reduces the volume reaching human reviewers, not the need for human judgment on the paths that matter.
 

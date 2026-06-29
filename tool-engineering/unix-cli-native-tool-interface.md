@@ -18,15 +18,15 @@ maturity: adopted
 
 > A single `run(command)` tool backed by Unix CLI can replace large typed-function catalogs, exploiting the model's shell pretraining and Unix's discovery and composition primitives.
 
-**Learn it hands-on:** [The Unix CLI as a Tool Interface](https://learn.agentpatterns.ai/tool-engineering/unix-cli-as-tool-interface/) — guided lesson with quizzes.
+Learn it hands-on with the [guided lesson on the Unix CLI as a tool interface](https://learn.agentpatterns.ai/tool-engineering/unix-cli-as-tool-interface/), which includes quizzes.
 
-## Core Concept
+## Core concept
 
-Most agent frameworks register many typed tools — `read_file`, `search_code`, `list_directory` — each with its own schema and error handling. The alternative: expose one execution primitive and let the agent compose Unix commands directly. Models trained on large code corpora have extensive exposure to shell commands, man pages, and CLI documentation, making Unix primitives a high-alignment action space.
+Most agent frameworks register many typed tools — `read_file`, `search_code`, `list_directory` — each with its own schema and error handling. The alternative is to expose one execution primitive and let the agent compose Unix commands directly. Models trained on large code corpora have seen a lot of shell commands, man pages, and CLI documentation, which makes Unix primitives a high-alignment action space.
 
 This is the extreme end of the [tool minimalism](tool-minimalism.md) spectrum: where tool consolidation reduces overlap, the single-tool hypothesis eliminates tool selection entirely.
 
-## How It Works
+## How it works
 
 The agent receives one tool:
 
@@ -37,17 +37,17 @@ def run(command: str, timeout: int = 30) -> str:
 
 Three techniques replace typed tool schemas:
 
-1. **`--help` discovery** -- the agent runs `tool --help` to learn capabilities on demand. Lazy tool discovery using the OS's own mechanism — no upfront schema loading.
+1. `--help` discovery — the agent runs `tool --help` to learn what a tool can do, on demand. This is lazy discovery through the OS's own mechanism, with no upfront schema loading.
 
-2. **Error messages as navigation** -- stderr guides the next action. `command not found` → try an alternative; `permission denied` → adjust approach.
+2. Error messages as navigation — stderr guides the next action. `command not found` means try an alternative; `permission denied` means adjust the approach.
 
-3. **Consistent output format** -- every invocation returns the same structure (`stdout`, `stderr`, `exit code`), letting the agent build success/failure patterns across commands.
+3. Consistent output format — every call returns the same structure (`stdout`, `stderr`, `exit code`), so the agent can build success and failure patterns across commands.
 
 Pipes, `&&`, `||`, and `;` combine search, filter, and transform in a single call.
 
-## Two-Layer Architecture
+## Two-layer architecture
 
-Separate execution from presentation. The agent works in raw CLI; results are formatted afterward.
+Separate execution from presentation. The agent works in raw CLI, and the presentation layer formats the results afterward.
 
 ```mermaid
 graph LR
@@ -59,15 +59,15 @@ graph LR
     C -->|metadata| D
 ```
 
-**Execution layer** -- pure Unix semantics: raw output, exit codes, error streams.
+Execution layer — pure Unix semantics: raw output, exit codes, error streams.
 
-**Presentation layer** -- handles what the agent should not:
+Presentation layer — it handles what the agent should not:
 
-- **Binary guard** -- detects non-text output (e.g., PNG) and returns a placeholder
-- **Overflow mode** -- truncates large outputs, preserving head and tail, as in [Graceful Tool Output Truncation](graceful-tool-output-truncation.md)
-- **Stderr attachment** -- surfaces stderr alongside stdout
+- Binary guard — detects non-text output, for example a PNG, and returns a placeholder
+- Overflow mode — truncates large output while keeping the head and tail, as in [Graceful Tool Output Truncation](graceful-tool-output-truncation.md)
+- Stderr attachment — surfaces stderr alongside stdout
 
-Without these, binary output fills the context window with uninterpretable content, and silent stderr hides failure signals that the agent needs to route to the next action.
+Without these guards, binary output fills the context window with content the model cannot read. Silent stderr also hides the failure signals the agent needs to choose its next action.
 
 ## Trade-offs
 
@@ -81,24 +81,24 @@ Without these, binary output fills the context window with uninterpretable conte
 | Discoverability | `--help`, `man`, `--version` | Tool descriptions in schema |
 | Structured output | Requires `--json` or `jq` | Native structured returns |
 
-**Where typed tools win**: strongly-typed interactions, high-security environments needing parameter constraints, and multimodal processing (images, audio).
+Typed tools win for strongly-typed interactions, high-security environments that need parameter constraints, and multimodal processing (images, audio).
 
-## The Spectrum in Practice
+## The spectrum in practice
 
 The [CodeAct paper (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030) shows executable code actions outperform JSON function calls by up to 20% success rate across 17 LLMs — though CodeAct uses Python as the action space, not shell. Manus itself integrates dozens of tools in production — not a single tool.
 
 Five well-designed tools plus shell access captures most of the benefit without unrestricted execution risk.
 
-## Designing CLIs for Agent Consumption
+## Designing CLIs for agent consumption
 
 Design CLI tools for machine consumption:
 
-- **`--json` flag** for structured output agents can parse without `awk`/`sed`
-- **Distinct exit codes** beyond 0/1 to signal specific failure modes
-- **`--dry-run`** for safe mutation preview
-- **`--yes`/`--force`** to eliminate interactive prompts that block agents
-- **Batch operations** to reduce call count
-- **`--schema`** for runtime introspection of accepted arguments
+- `--json` flag for structured output agents can parse without `awk` or `sed`
+- Distinct exit codes beyond 0 and 1 to signal specific failure modes
+- `--dry-run` for a safe preview of a mutation
+- `--yes` or `--force` to remove interactive prompts that block agents
+- Batch operations to reduce the call count
+- `--schema` for runtime introspection of accepted arguments
 
 Example: `gh pr list --json number,title` returns structured JSON, `gh pr create --fill` skips prompts, and distinct exit codes distinguish auth from API errors.
 
@@ -150,4 +150,4 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - [Agent-Computer Interface](agent-computer-interface.md)
 - [Semantic Tool Output](semantic-tool-output.md)
 - [Override Interactive Commands](override-interactive-commands.md)
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)

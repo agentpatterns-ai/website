@@ -19,19 +19,19 @@ maturity: established
 
 > A single pass rate conflates two agent properties: whether it *can* solve a problem and whether it *reliably* does. pass@k and pass^k separate them.
 
-## The Problem with a Single Pass Rate
+## The problem with a single pass rate
 
-AI agents are non-deterministic: the same prompt and environment can produce different results across runs. A single pass/fail tells you what happened once, not what to expect across your workflow.
+AI agents are non-deterministic: the same prompt and environment can produce different results across runs. A single pass or fail tells you what happened once, not what to expect across your workflow.
 
-A single pass rate also treats an agent that always scores 6/10 identically to one that randomly scores 0/10 or 10/10. The two have very different production behaviour, and one number cannot distinguish them.
+A single pass rate also treats an agent that always scores 6/10 the same as one that randomly scores 0/10 or 10/10. The two behave very differently in production, and one number cannot tell them apart.
 
-## The Two Metrics
+## The two metrics
 
-**pass@k** — the probability the agent produces at least one correct solution across *k* attempts [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]. As *k* increases, pass@k rises. It measures the capability ceiling: given enough chances, can the agent ever get this right?
+pass@k is the probability the agent produces at least one correct solution across k attempts [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]. As k increases, pass@k rises. It measures the capability ceiling: given enough chances, can the agent ever get this right?
 
-**pass^k** — the probability *all k* attempts succeed [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]. As *k* increases, pass^k falls. It measures consistency: can you trust the agent to get it right every time in production?
+pass^k is the probability all k attempts succeed [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]. As k increases, pass^k falls. It measures consistency: can you trust the agent to get it right every time in production?
 
-## What the Combination Reveals
+## What the combination reveals
 
 | pass@k | pass^k | Interpretation |
 |--------|--------|----------------|
@@ -39,25 +39,25 @@ A single pass rate also treats an agent that always scores 6/10 identically to o
 | High | Low | Capable but flaky. [Human review required](../workflows/human-in-the-loop.md); not safe for automation. |
 | Low | — | Cannot reliably solve this class of problem at all. |
 
-An agent with high pass@k and low pass^k signals a specific failure mode: it occasionally hits the right answer but cannot be trusted to do so every time. This is the pattern of an agent that is benchmarking well but failing in production.
+An agent with high pass@k and low pass^k signals a specific failure mode: it occasionally hits the right answer but cannot be trusted to do so every time. This is the pattern of an agent that benchmarks well but fails in production.
 
-## Choosing the Right Primary Metric
+## Choosing the right primary metric
 
-**[Human-in-the-loop](../workflows/human-in-the-loop.md) workflows**: pass@k is the relevant metric. If a developer reviews every output, one correct answer in three attempts is often enough — the agent's job is to surface a good option.
+In [human-in-the-loop](../workflows/human-in-the-loop.md) workflows, pass@k is the relevant metric. If a developer reviews every output, one correct answer in three attempts is often enough. The agent's job is to surface a good option.
 
-**Automated pipelines**: pass^k is critical. If output is consumed directly — merging code, sending messages, modifying databases — you need consistency across all attempts. A 90% pass rate still means roughly 1-in-10 runs fails.
+In automated pipelines, pass^k is the relevant metric. If output is consumed directly (merging code, sending messages, modifying databases), you need consistency across all attempts. A 90% pass rate still means roughly 1 in 10 runs fails.
 
-## How to Run the Measurement
+## How to run the measurement
 
-1. Define the task and a deterministic correctness check (test suite pass, schema validation, expected output)
-2. Run the agent on the same task *k* times (typically k=3–10 depending on cost tolerance)
+1. Define the task and a deterministic correctness check (test suite pass, schema validation, expected output).
+2. Run the agent on the same task k times, typically 3 to 10 depending on cost tolerance.
 3. Compute pass@k: did any run succeed?
 4. Compute pass^k: did all runs succeed?
-5. Aggregate across the task suite to get rates
+5. Aggregate across the task suite to get rates.
 
-Report both numbers. A benchmark that reports only pass@1 hides the consistency story; one that reports only pass^1 treats a single data point as if it were stable.
+Report both numbers. A benchmark that reports only pass@1 hides the consistency story. One that reports only pass^1 treats a single data point as if it were stable.
 
-## Practical Guidance
+## Practical guidance
 
 Run at least k=3 for any task that matters — single-trial evaluation is a sample of size one.
 
@@ -65,20 +65,20 @@ Use pass^k to set deployment thresholds. If your automated pipeline cannot toler
 
 Use pass@k during development to separate capability gaps from consistency gaps. If pass@k is low, the agent cannot solve the problem. If pass@k is high but pass^k is low, address consistency with better instructions, lower temperature, or added verification steps — not retraining.
 
-## When This Backfires
+## When this backfires
 
-Both metrics have failure modes worth weighing before treating them as headline results.
+Both metrics have failure modes worth weighing before you treat them as headline results.
 
-- **pass@k is "exponentially forgiving" at larger k.** As *k* grows, almost any non-zero-capability agent eventually hits the right answer, so pass@k can rank a lucky agent above a more reliable one — users rarely judge a tool by its best of ten attempts [Source: [Brooker, *Pass@k is Mostly Bunk*](https://brooker.co.za/blog/2026/01/21/pass-k.html)].
-- **Small-suite, small-k estimates are statistically unstable.** With a handful of tasks and *k*=3, both metrics have wide confidence intervals that most reports omit; Bayesian posterior estimates give more honest uncertainty [Source: [Hariri et al., *Don't Pass@k: A Bayesian Framework for LLM Evaluation*](https://arxiv.org/abs/2510.04265)].
-- **pass^k is dominated by the flakiest test.** A single noisy oracle — a timing-race integration test, an LLM-as-judge with temperature > 0 — can collapse pass^k even when the agent is correct. Verify the check is itself deterministic before using pass^k as a deployment gate.
-- **pass@k assumes independent attempts.** If your harness shares context, seeds, or cached state across the *k* runs, samples are correlated and the metric no longer measures what its definition claims.
+- pass@k is "exponentially forgiving" at larger k. As k grows, almost any non-zero-capability agent eventually hits the right answer, so pass@k can rank a lucky agent above a more reliable one. Users rarely judge a tool by its best of ten attempts [Source: [Brooker, *Pass@k is Mostly Bunk*](https://brooker.co.za/blog/2026/01/21/pass-k.html)].
+- Small-suite, small-k estimates are statistically unstable. With a handful of tasks and k=3, both metrics have wide confidence intervals that most reports omit. Bayesian posterior estimates give more honest uncertainty [Source: [Hariri et al., *Don't Pass@k: A Bayesian Framework for LLM Evaluation*](https://arxiv.org/abs/2510.04265)].
+- pass^k is dominated by the flakiest test. A single noisy oracle (a timing-race integration test, an LLM-as-judge with temperature above 0) can collapse pass^k even when the agent is correct. Check the oracle is deterministic before you use pass^k as a deployment gate.
+- pass@k assumes independent attempts. If your harness shares context, seeds, or cached state across the k runs, the samples are correlated and the metric no longer measures what its definition claims.
 
 When these conditions apply, pair the point estimates with posterior intervals rather than reporting them alone.
 
 ## Example
 
-An agent is evaluated on a suite of 5 code-generation tasks. Each task is run k=3 times and the output is checked by running the project's test suite. Results:
+An agent runs against a suite of 5 code-generation tasks. Each task runs k=3 times, and the project's test suite checks each output. Results:
 
 ```
 Task                          Run 1   Run 2   Run 3   pass@3  pass^3
@@ -96,9 +96,9 @@ The suite pass@3 is 0.8 — the agent can produce at least one correct solution 
 
 Reading the combination:
 
-- **"Add null check"** and **"Add rate-limit header"**: pass@3 = 1.0, pass^3 = 1.0. Production-safe for automation; no human review required.
-- **"Refactor auth middleware"** and **"Generate OpenAPI schema stub"**: pass@3 = 1.0, pass^3 = 0.0. The agent can produce a correct answer but does not reliably do so. These tasks are appropriate for human-in-the-loop workflows only — flag them for review rather than auto-merging.
-- **"Fix off-by-one in paginator"**: pass@3 = 0.0. The agent cannot solve this class of problem at all. It is a capability gap, not a consistency gap — address it with better task decomposition or additional context, not lower temperature.
+- "Add null check" and "Add rate-limit header": pass@3 = 1.0, pass^3 = 1.0. Safe to automate; no human review required.
+- "Refactor auth middleware" and "Generate OpenAPI schema stub": pass@3 = 1.0, pass^3 = 0.0. The agent can produce a correct answer but does not reliably do so. Send these tasks through human-in-the-loop workflows only, and flag them for review, not auto-merging.
+- "Fix off-by-one in paginator": pass@3 = 0.0. The agent cannot solve this class of problem at all. This is a capability gap, not a consistency gap, so address it with better task decomposition or more context, not lower temperature.
 
 To compute these numbers in Python from a results matrix:
 

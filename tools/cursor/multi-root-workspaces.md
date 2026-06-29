@@ -20,9 +20,9 @@ Cursor 3.2 (2026-04-24) added multi-root workspaces to the Agents Window: one ag
 
 The mechanism is inherited from VS Code: a `.code-workspace` file lists folder roots and the editor treats them as one window with folder-scoped settings ([VS Code multi-root workspaces](https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces)). Cursor 3.2 lifts that surface to the agent.
 
-## When Multi-Root Beats Per-Repo Sessions
+## When multi-root beats per-repo sessions
 
-Use multi-root when one semantic intent fragments across repos — for example, renaming `Order.id` from `int` to `UUID` across a frontend, backend, and shared schema package. A per-repo agent rebuilds intent from PR descriptions on each handoff; a multi-root agent retains it for the full edit.
+Use multi-root when one intent fragments across repos. For example, renaming `Order.id` from `int` to `UUID` across a frontend, backend, and shared schema package. A per-repo agent rebuilds that intent from PR descriptions on each handoff. A multi-root agent keeps it for the full edit.
 
 | Use multi-root when | Use per-repo sessions when |
 |---|---|
@@ -32,11 +32,11 @@ Use multi-root when one semantic intent fragments across repos — for example, 
 
 For narrow work inside one service of a monorepo, the opposite isolation usually wins — see [Sparse-Checkout Worktrees for Monorepo Agent Isolation](../claude/sparse-paths-monorepo-isolation.md).
 
-## Instruction-File Scoping Across Roots
+## Instruction-file scoping across roots
 
-Cursor's rule precedence is **Team Rules → Project Rules → User Rules**, and `AGENTS.md` files in subdirectories "are automatically applied" when working in those areas ([Cursor docs — Rules](https://cursor.com/docs/context/rules)). The published docs do not specify how Project Rules from each root combine inside a multi-root session — only that nested AGENTS.md activate when the agent is working in their subtree.
+Cursor's rule precedence is Team Rules, then Project Rules, then User Rules. `AGENTS.md` files in subdirectories "are automatically applied" when working in those areas ([Cursor docs — Rules](https://cursor.com/docs/context/rules)). The published docs do not specify how Project Rules from each root combine inside a multi-root session. They say only that nested AGENTS.md activate when the agent works in their subtree.
 
-Practical implication: anything that must always apply belongs at **workspace scope** (User Rules or workspace-level config), not in a single root's `.cursor/rules`. Root-specific build, lint, and framework conventions belong in that root's `AGENTS.md` so they activate only when the agent edits inside that root.
+So anything that must always apply belongs at workspace scope (User Rules or workspace-level config), not in a single root's `.cursor/rules`. Root-specific build, lint, and framework conventions belong in that root's `AGENTS.md`, so they activate only when the agent edits inside that root.
 
 ```mermaid
 graph TD
@@ -47,31 +47,31 @@ graph TD
     S --> E[Agent edit loop]
 ```
 
-## Settings and Variable Precedence
+## Settings and variable precedence
 
-Multi-root inherits VS Code semantics. Settings precedence is **folder → workspace → user**, but **only resource (file/folder) settings apply at folder level** — UI and editor settings collapse to workspace or user scope ([VS Code multi-root workspaces](https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces)). Folder-scoped settings that do not qualify show greyed out in the Settings editor.
+Multi-root inherits VS Code semantics. Settings precedence is folder, then workspace, then user. Only resource (file or folder) settings apply at folder level. UI and editor settings collapse to workspace or user scope ([VS Code multi-root workspaces](https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces)). Folder-scoped settings that do not qualify show grayed out in the Settings editor.
 
-Per-folder paths in tasks and launch configs require explicit qualification with `${workspaceFolder:FolderName}`. Bare `${workspaceFolder}` resolves against whichever folder is active — a frequent source of "ran the test in the wrong repo" failures.
+Per-folder paths in tasks and launch configs need explicit qualification with `${workspaceFolder:FolderName}`. Bare `${workspaceFolder}` resolves against whichever folder is active. This is a frequent source of "ran the test in the wrong repo" failures.
 
-## Composition With Worktrees and Multitask
+## Composition with worktrees and multitask
 
-The 3.2 release ships three nominally composable features: multi-root (one session, N folders), worktrees ([Cursor docs](https://cursor.com/docs/configuration/worktrees)), and `/multitask` async subagents ([Cursor changelog 3.2](https://cursor.com/changelog/04-24-26)).
+The 3.2 release ships three features that nominally compose: multi-root (one session, N folders), worktrees ([Cursor docs](https://cursor.com/docs/configuration/worktrees)), and `/multitask` async subagents ([Cursor changelog 3.2](https://cursor.com/changelog/04-24-26)).
 
-**Current limitation**: worktree and cloud-agent surfaces are disabled inside multi-root workspaces. Cursor shows a "Disabled in multi-root workspaces" tooltip on Cloud Agents and there is an open request to allow sub-workspace selection so they can target one root inside a multi-root session ([Cursor forum](https://forum.cursor.com/t/support-worktree-and-cloud-features-in-multi-root-workspaces-with-sub-workspace-selection/154911)); a separate report covers SIGSEGV crashes on source-control actions in multi-root worktree windows ([Cursor forum](https://forum.cursor.com/t/sigsegv-crash-on-source-control-actions-broken-git-ui-state-when-cursor-worktree-window-is-open-multi-root-workspace-3-machines/161315)).
+One current limitation cuts that short: worktree and cloud-agent surfaces are disabled inside multi-root workspaces. Cursor shows a "Disabled in multi-root workspaces" tooltip on Cloud Agents. An open request asks for sub-workspace selection so they can target one root inside a multi-root session ([Cursor forum](https://forum.cursor.com/t/support-worktree-and-cloud-features-in-multi-root-workspaces-with-sub-workspace-selection/154911)). A separate report covers SIGSEGV crashes on source-control actions in multi-root worktree windows ([Cursor forum](https://forum.cursor.com/t/sigsegv-crash-on-source-control-actions-broken-git-ui-state-when-cursor-worktree-window-is-open-multi-root-workspace-3-machines/161315)).
 
-So composition is partial: `/multitask` fans steps across the roots in one session, but worktree isolation per subagent has to be arranged outside the multi-root session (open a single-root window for the worktree). See [Cursor /multitask](multitask-subagents.md) and [Cursor 3 Agents Window](agents-window.md).
+So composition is partial. `/multitask` fans steps across the roots in one session, but you have to arrange worktree isolation per subagent outside the multi-root session by opening a single-root window for the worktree. See [Cursor /multitask](multitask-subagents.md) and [Cursor 3 Agents Window](agents-window.md).
 
-## When Multi-Root Backfires
+## When multi-root backfires
 
-- **Filename and symbol collisions.** Two repos with `auth.py`, `User`, or `package.json` force per-retrieval disambiguation. Multi-root inflates the collision surface.
-- **Asymmetric build/test commands.** Cursor's published rule precedence does not specify how Project Rules from each root combine inside one session ([Cursor docs — Rules](https://cursor.com/docs/context/rules)) — drift between root tooling lands on the agent.
-- **Single-repo work inside a monorepo.** Per [sparse-paths monorepo isolation](../claude/sparse-paths-monorepo-isolation.md), narrow service refactors benefit from *less* surface, not more.
-- **Sensitive credential boundaries.** A session reading both a credential-bearing repo and an open-source repo widens blast radius. VS Code's per-folder settings cover only resource settings ([VS Code multi-root workspaces](https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces)); credential isolation per folder is not a built-in guarantee.
-- **Mixed VCS or read-only mounts.** Multi-root assumes each folder is a usable checkout — mixed Git/Hg or read-only mounts break the symmetry the workspace presents.
+- Filename and symbol collisions: two repos with `auth.py`, `User`, or `package.json` force per-retrieval disambiguation, and multi-root inflates the collision surface
+- Asymmetric build and test commands: Cursor's published rule precedence does not specify how Project Rules from each root combine inside one session ([Cursor docs — Rules](https://cursor.com/docs/context/rules)), so drift between root tooling lands on the agent
+- Single-repo work inside a monorepo: per [sparse-paths monorepo isolation](../claude/sparse-paths-monorepo-isolation.md), narrow service refactors benefit from less surface, not more
+- Sensitive credential boundaries: a session reading both a credential-bearing repo and an open-source repo widens the blast radius, and VS Code's per-folder settings cover only resource settings ([VS Code multi-root workspaces](https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces)), so per-folder credential isolation is not a built-in guarantee
+- Mixed VCS or read-only mounts: multi-root assumes each folder is a usable checkout, so mixed Git or Hg checkouts and read-only mounts break the symmetry the workspace presents
 
-If most apply, prefer per-repo agent sessions coordinated via PRs, or a single root with [orchestrator-worker](../../multi-agent/orchestrator-worker.md) handoffs.
+If most apply, prefer per-repo agent sessions coordinated through PRs, or a single root with [orchestrator-worker](../../multi-agent/orchestrator-worker.md) handoffs.
 
-## Multi-Root vs Adjacent Patterns
+## Multi-root vs adjacent patterns
 
 | Approach | When it fits |
 |---|---|
@@ -99,7 +99,7 @@ Open in Cursor, attach the Agents Window session to the workspace, and run a sin
 
 > Rename `Order.id` from `int` to `UUID` across all three folders. Update the schema package first, then the backend (regenerate types), then the frontend.
 
-Folder roots are explicit (`frontend`, `backend`, `schema`), so the agent can address them by name. Each root's `AGENTS.md` still drives root-specific build/test commands — `pnpm build` in `frontend`, `uv run pytest` in `backend`, `pnpm changeset` in `schema` — without the session retargeting.
+Folder roots are explicit (`frontend`, `backend`, `schema`), so the agent can address them by name. Each root's `AGENTS.md` still sets root-specific build and test commands — `pnpm build` in `frontend`, `uv run pytest` in `backend`, `pnpm changeset` in `schema` — without the session retargeting.
 
 ## Key Takeaways
 

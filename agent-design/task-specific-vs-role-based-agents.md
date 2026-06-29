@@ -19,15 +19,15 @@ maturity: established
 
     Narrow Agent Scope Over Broad Role, Specialized Agent Roles (sequential context)
 
-    Scope: **sequential task decomposition** — discrete, bounded tasks running one at a time. For **parallel specialization** — concurrent agents on the same codebase — see [Specialized Agent Roles](specialized-agent-roles.md).
+    Scope: sequential task decomposition — discrete, bounded tasks running one at a time. For parallel specialization — concurrent agents on the same codebase — see [Specialized Agent Roles](specialized-agent-roles.md).
 
-## The Failure Mode of Role-Based Agents
+## The failure mode of role-based agents
 
-Role-based agents mirror org charts: "DevOps engineer", "frontend developer", "QA analyst". This feels natural, but a role is not a task. A "kubernetes admin" handles cluster upgrades, canary deployments, secret rotation, ingress configuration, and incident response — entirely different tasks with different steps, checks, and success criteria.
+Role-based agents mirror org charts: "DevOps engineer", "frontend developer", "QA analyst". This feels natural, but a role is not a task. A "kubernetes admin" handles cluster upgrades, canary deployments, secret rotation, ingress configuration, and incident response. These are different tasks with different steps, checks, and success criteria.
 
-Combining all of that into one agent produces mediocrity at many tasks rather than effectiveness at specific ones. The scope is too wide for precise instructions, context carries irrelevant expertise for any given job, and success criteria are ambiguous.
+Combine all of that into one agent and you get mediocrity at many tasks, not strength at specific ones. The scope is too wide for precise instructions. The context carries irrelevant expertise. The success criteria are ambiguous.
 
-## Task-Specific Agents
+## Task-specific agents
 
 A task-specific agent has a single, bounded job:
 
@@ -37,11 +37,11 @@ A task-specific agent has a single, bounded job:
 
 Each agent knows exactly what it does. Steps are explicit, success criteria unambiguous, context scoped to the task.
 
-## The Trade-Off
+## The trade-off
 
 Task-specific design means more agents — one per task rather than one per role. This trade-off suits teams that value precision and independent maintainability:
 
-| Dimension | Role-Based | Task-Specific |
+| Dimension | Role-based | Task-specific |
 |-----------|------------|---------------|
 | Agent count | Low | High |
 | Agent size | Large | Small |
@@ -55,13 +55,13 @@ Smaller agents are easier to test, update, and replace. A broken `canary-upgrade
 
 The counter-pressure is agent sprawl. [OutSystems' State of AI survey](https://www.prnewswire.com/apac/news-releases/agentic-ai-goes-mainstream-in-the-enterprise-but-94-raise-concern-about-sprawl-outsystems-research-finds-302739251.html) reports 94% of enterprises are concerned that proliferating agents increase complexity, technical debt, and security risk. Task-specific design is worth the extra agents only when paired with governance: shared skills, naming conventions, and a registry so teams do not build three near-identical `pr-reviewer` agents in parallel.
 
-## Shared Knowledge Through Skills
+## Shared knowledge through skills
 
-The concern with task-specific design is duplication: each agent needs some of the same knowledge (git conventions, coding standards, project context). Shared skills address this — common knowledge lives in skills that any agent loads on demand. Each task-specific agent loads only the skills it needs; the agent definition stays small while the skill carries shared knowledge.
+The concern with task-specific design is duplication: each agent needs some of the same knowledge (git conventions, coding standards, project context). Shared skills address this. Common knowledge lives in skills that any agent loads on demand. Each task-specific agent loads only the skills it needs, so the agent definition stays small while the skill carries shared knowledge.
 
 See [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md) for the three-layer model. Claude Code's [sub-agents](../tools/claude/sub-agents.md) implement the same pattern: each sub-agent receives a focused `description` so the orchestrator delegates to the right agent, with context isolation keeping verbose output out of the main conversation.
 
-## Identifying the Right Task Boundary
+## Identifying the right task boundary
 
 The right task boundary is where success criteria are natural and atomic. A task has the right granularity when you can answer without ambiguity: "did this agent succeed or fail?"
 
@@ -72,9 +72,9 @@ When success is ambiguous, split or narrow the task until it isn't.
 
 ## Example
 
-The contrast below shows the same deployment work modelled first as a role-based agent and then split into task-specific agents. The task-specific version has explicit steps and unambiguous success criteria for each unit.
+The contrast below shows the same deployment work modeled first as a role-based agent and then split into task-specific agents. The task-specific version has explicit steps and unambiguous success criteria for each unit.
 
-**Role-based (avoid):**
+Role-based (avoid):
 
 ```yaml
 # .claude/agents/kubernetes-admin.md
@@ -90,7 +90,7 @@ You are a senior Kubernetes administrator. Handle all cluster operations includi
 upgrades, canary deployments, secret rotation, ingress changes, and incident response.
 ```
 
-**Task-specific (prefer):**
+Task-specific (prefer):
 
 ```yaml
 # .claude/agents/canary-promote.md
@@ -112,14 +112,14 @@ Failure: any step returns a non-zero exit code, or error rate threshold is breac
 
 The `canary-promote` agent knows exactly what it does, what tools it needs, and what success and failure look like. A separate `rotate-secrets` agent handles secret rotation without carrying canary deployment context.
 
-## When This Backfires
+## When this backfires
 
 Task-specific design creates overhead that becomes a liability in some contexts:
 
-- **Fluid task boundaries**: Early-stage projects with poorly understood tasks require constant refactoring. A single broad agent evolving with the project is cheaper than narrow agents rebuilt every sprint.
-- **Interactive use**: Splitting "review this diff and update the changelog" across two agents adds friction where one agent with two instructions suffices.
-- **High coordination cost**: Tightly interdependent tasks (e.g., a canary promote that triggers secret rotation based on the deploy result) incur inter-agent communication complexity narrow scope does not eliminate — the coordination tax [specialized agent roles](specialized-agent-roles.md) also pay.
-- **Small teams with low agent volume**: The maintenance advantage only materialises when multiple agents coexist. One or two automated tasks get no isolation benefit.
+- Fluid task boundaries: early-stage projects with poorly understood tasks require constant refactoring. A single broad agent that evolves with the project is cheaper than narrow agents rebuilt every sprint.
+- Interactive use: splitting "review this diff and update the changelog" across two agents adds friction where one agent with two instructions does the job.
+- High coordination cost: tightly interdependent tasks (for example, a canary promote that triggers secret rotation based on the deploy result) incur inter-agent communication complexity that narrow scope does not eliminate — the coordination tax [specialized agent roles](specialized-agent-roles.md) also pay.
+- Small teams with low agent volume: the maintenance advantage only materializes when multiple agents coexist. One or two automated tasks get no isolation benefit.
 
 ## Key Takeaways
 
@@ -137,5 +137,5 @@ Agent effectiveness depends on matching coordination structure to task structure
 - [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md)
 - [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
-- [Cost-Aware Agent Design](cost-aware-agent-design.md) — applies task-specific framing to balance capability against inference cost
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — applies task-specific framing to balance capability against inference cost
 - [Treat Task Scope as a Security Boundary](../security/task-scope-security-boundary.md) — narrow scope reduces prompt injection attack surface, not just context noise

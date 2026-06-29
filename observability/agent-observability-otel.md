@@ -19,14 +19,14 @@ maturity: established
 
 > Agent observability combines OpenTelemetry metrics and events, trajectory tracing, and structured audit trails to give you cost attribution, compliance evidence, and debugging data that survives context resets — all without custom instrumentation.
 
-**Learn it hands-on:** [Attributing the Context](https://learn.agentpatterns.ai/observability/attributing-the-context/) — guided lesson with quizzes.
+Learn it hands-on: [Attributing the Context](https://learn.agentpatterns.ai/observability/attributing-the-context/) — guided lesson with quizzes.
 
 !!! info "Also known as"
     Trajectory Logging via Progress Files, Progress File Pattern, Audit Trail for Agent Decisions
 
 ## Enable OTel on Claude Code
 
-Claude Code ships native OTel support — one env var enables it, then configure the exporter.
+Claude Code ships native OTel support. One environment variable enables it, then you configure the exporter.
 
 ```bash
 # Minimum: enable telemetry
@@ -68,7 +68,7 @@ Use the [managed settings file](https://code.claude.com/docs/en/settings#setting
 }
 ```
 
-## Metrics and Events Schema
+## Metrics and events schema
 
 Claude Code exports [metrics](https://code.claude.com/docs/en/monitoring-usage#metrics) (time-series counters) and [events](https://code.claude.com/docs/en/monitoring-usage#events) (structured log records; require `OTEL_LOGS_EXPORTER`).
 
@@ -97,38 +97,38 @@ All carry: `session.id`, `user.account_uuid`, `organization.id`, `user.email`, `
 
 All events in a prompt cycle share a `prompt.id` (UUID v4), excluded from metrics (unbounded cardinality) — event-level queries only.
 
-## Cost Dashboards
+## Cost dashboards
 
-`claude_code.cost.usage` supports per-user (`user.account_uuid`), per-team (`OTEL_RESOURCE_ATTRIBUTES="team.id=platform"`), and per-model attribution. For unique-user counts, prefer ClickHouse or Datadog — the [official monitoring docs](https://code.claude.com/docs/en/monitoring-usage#backend-considerations) note Prometheus suits time-series aggregations while columnar stores handle distinct-counts. Values are approximations; reconcile against the billing console.
+`claude_code.cost.usage` supports per-user (`user.account_uuid`), per-team (`OTEL_RESOURCE_ATTRIBUTES="team.id=platform"`), and per-model attribution. For unique-user counts, prefer ClickHouse or Datadog — the [official monitoring docs](https://code.claude.com/docs/en/monitoring-usage#backend-considerations) note Prometheus suits time-series aggregations while columnar stores handle distinct-counts. Values are approximations. Reconcile them against the billing console.
 
-## Prometheus + Grafana Monitoring Stack
+## Prometheus and Grafana monitoring stack
 
 The [claude-code-monitoring-guide](https://github.com/anthropics/claude-code-monitoring-guide) ships a Docker Compose stack with OTel Collector, Prometheus, and Grafana pre-configured — a starting point before integrating into an existing platform.
 
-## Compliance Audit Trail via Tool Decision Events
+## Compliance audit trail via tool decision events
 
 `claude_code.tool_decision` records every tool permission decision: `tool_name`, `decision` (`accept`/`reject`), and `source` (`config` = allow/deny rule; `hook` = PreToolUse hook; `user_permanent` = standing permission). This answers "what tool ran, when, by whom, under what authorization" — no custom instrumentation needed.
 
-Pair with `tool_result` events (which carry `tool_parameters`); store in Elasticsearch, Loki, or ClickHouse. `tool_parameters` may include secrets — configure backend redaction.
+Pair these with `tool_result` events, which carry `tool_parameters`, and store them in Elasticsearch, Loki, or ClickHouse. `tool_parameters` may include secrets — configure backend redaction.
 
-## LangSmith Trajectory Tracing for LangChain Agents
+## LangSmith trajectory tracing for LangChain agents
 
-[LangSmith](https://docs.langchain.com/langsmith/trace-with-langchain) records each agent action with tool name, inputs, outputs, latency, and token counts. Running parallel analysis agents over retrieved traces to synthesize harness improvements is a natural automation loop.
+[LangSmith](https://docs.langchain.com/langsmith/trace-with-langchain) records each agent action with tool name, inputs, outputs, latency, and token counts. You can run parallel analysis agents over the retrieved traces to synthesize harness improvements — a natural automation loop.
 
-## Progress Files as Human-Readable Audit Trails
+## Progress files as human-readable audit trails
 
-OTel traces are machine-readable. For human-readable trails that survive context resets, use the [trajectory logging pattern](trajectory-logging-progress-files.md): `claude-progress.txt` read at session start and written at end, with git commits providing a diff-linked trail. Watch for [goal drift](../anti-patterns/objective-drift.md) via diffs; the [post-compaction re-read protocol](../instructions/post-compaction-reread-protocol.md) restores compliance.
+OTel traces are machine-readable. For human-readable trails that survive context resets, use the [trajectory logging pattern](trajectory-logging-progress-files.md): `claude-progress.txt` read at session start and written at end, with git commits providing a diff-linked trail. Watch for [goal drift](../anti-patterns/objective-drift.md) via diffs. The [post-compaction re-read protocol](../instructions/post-compaction-reread-protocol.md) restores compliance.
 
-## Why It Works
+## Why it works
 
-OTel's push-based model fits agent workloads: agents emit bursts of activity across many tool calls, so pull-based scraping risks missing short-lived sessions. `prompt.id` is necessary because a single prompt triggers dozens of API calls; without it, tracing a cost spike post-hoc is infeasible. Structured audit trails let teams query by authorization source without parsing free text.
+OTel's push-based model fits agent workloads: agents emit bursts of activity across many tool calls, so pull-based scraping risks missing short-lived sessions. `prompt.id` matters because a single prompt triggers dozens of API calls. Without it, you cannot trace a cost spike after the fact. Structured audit trails let teams query by authorization source without parsing free text.
 
-## When This Backfires
+## When this backfires
 
-- **Label cardinality explosion**: per-request IDs as metric labels create unbounded time series. `prompt.id` is excluded from metrics for this reason — apply the same discipline to custom `OTEL_RESOURCE_ATTRIBUTES`.
-- **Secrets in tool parameters**: `tool_parameters` on `tool_result` events may include credentials. Without backend redaction, `OTEL_LOG_TOOL_DETAILS=1` leaks secrets.
-- **Context loss across agent boundaries**: `TRACEPARENT` propagates only to direct subprocesses. Agents communicating via queues, webhooks, or separate processes produce data islands, not end-to-end traces.
-- **Cost approximations as billing data**: `claude_code.cost.usage` values are estimates — chargebacks built on them drift from actual invoices.
+- Label cardinality explosion: per-request IDs as metric labels create unbounded time series. `prompt.id` is excluded from metrics for this reason — apply the same discipline to custom `OTEL_RESOURCE_ATTRIBUTES`.
+- Secrets in tool parameters: `tool_parameters` on `tool_result` events may include credentials. Without backend redaction, `OTEL_LOG_TOOL_DETAILS=1` leaks secrets.
+- Context loss across agent boundaries: `TRACEPARENT` propagates only to direct subprocesses. Agents communicating via queues, webhooks, or separate processes produce data islands, not end-to-end traces.
+- Cost approximations as billing data: `claude_code.cost.usage` values are estimates — chargebacks built on them drift from actual invoices.
 
 ## Key Takeaways
 

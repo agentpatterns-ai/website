@@ -13,49 +13,49 @@ status: current
 
 > Custom agents, skills, and plugins are GitHub Copilot's three extensibility layers — agents codify team workflows, skills teach Copilot specialized tasks via progressive disclosure, and plugins bundle everything into shareable packages.
 
-## Custom Agents
+## Custom agents
 
-Define [`CUSTOM-AGENT-NAME.md` files](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-custom-agents) under `.github/agents/` to create specialized agents with their own tools, [MCP servers](mcp-integration.md), and instructions. Agents become available in the [coding agent on GitHub.com, coding agent in IDEs, and GitHub Copilot CLI](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-custom-agents).
+Define [`CUSTOM-AGENT-NAME.md` files](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-custom-agents) under `.github/agents/` to create specialized agents with their own tools, [MCP servers](mcp-integration.md), and instructions. Agents then become available in the [coding agent on GitHub.com, coding agent in IDEs, and GitHub Copilot CLI](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-custom-agents).
 
-## Agent Skills
+## Agent skills
 
-[Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills) are `SKILL.md` folders containing instructions, scripts, and resources. Copilot auto-loads them when relevant using progressive disclosure — it reads skill metadata first, then loads actual scripts and templates only when needed to avoid context window bloat.
+[Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills) are `SKILL.md` folders that hold instructions, scripts, and resources. Copilot auto-loads them when relevant through progressive disclosure: it reads the skill metadata first, then loads the scripts and templates only when needed, so the context window stays small.
 
-Skills [surface as slash commands](https://code.visualstudio.com/docs/copilot/customization/agent-skills) in chat. Available across Copilot coding agent, CLI, and VS Code.
+Skills [surface as slash commands](https://code.visualstudio.com/docs/copilot/customization/agent-skills) in chat. They work across the Copilot coding agent, CLI, and VS Code.
 
 The [Agent Skills specification](https://agentskills.io) defines the open standard. The [microsoft/skills](https://github.com/microsoft/skills) repository provides Azure SDK-specific skills and plugin packages.
 
-## Prompt Files
+## Prompt files
 
-Stored in `.github/prompts/`, [prompt files](../../instructions/prompt-file-libraries.md) define specialized prompts invocable via `/` commands. They support YAML frontmatter to specify which model to use and are source-controlled for team sharing.
+[Prompt files](../../instructions/prompt-file-libraries.md) live in `.github/prompts/` and define specialized prompts you invoke with `/` commands. They use YAML frontmatter to set which model to use, and you keep them in source control to share across the team.
 
 ## Plugins
 
-[Plugins](https://github.com/microsoft/skills) bundle MCP servers, agents, skills, and hooks into installable packages. Install from GitHub repos with `npx skills add owner/repo`. Plugins extend Copilot's capabilities — skills from plugins appear alongside local skills.
+[Plugins](https://github.com/microsoft/skills) bundle MCP servers, agents, skills, and hooks into installable packages. Install from GitHub repos with `npx skills add owner/repo`. Skills from a plugin appear alongside local skills.
 
-**Plugin marketplace management** ([VS Code 1.113+](https://code.visualstudio.com/updates/v1_113)): The `Chat: Manage Plugin Marketplaces` command lists configured marketplaces with options to browse, locate directories, and remove plugins. URL handler installation uses the format `vscode://chat-plugin/install?source=<source>`.
+Plugin marketplace management arrived in [VS Code 1.113+](https://code.visualstudio.com/updates/v1_113). The `Chat: Manage Plugin Marketplaces` command lists configured marketplaces, with options to browse them, locate their directories, and remove plugins. URL handler installation uses the format `vscode://chat-plugin/install?source=<source>`.
 
-## Custom Instructions
+## Custom instructions
 
-- **Repository instructions**: `copilot-instructions.md` in `.github/` applies to all requests in that repo
-- **Path-specific instructions**: `NAME.instructions.md` in `.github/instructions/` applies only to matching file paths
-- **AGENTS.md**: Auto-detected in workspace root; supports subfolder-level instructions
+- Repository instructions: `copilot-instructions.md` in `.github/` applies to every request in that repo
+- Path-specific instructions: `NAME.instructions.md` in `.github/instructions/` applies only to matching file paths
+- AGENTS.md: auto-detected in the workspace root, and supports subfolder-level instructions
 
 See [custom instructions](https://docs.github.com/en/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot) in the GitHub docs.
 
 ## Limitations
 
-The extensibility layers have sharp edges that the official docs flag explicitly:
+The official docs flag three sharp edges in these layers:
 
-- **Skills silently fail to load when the `name` field contains invalid characters** — slashes, colons, dots, or manually-added namespace prefixes like `myorg/skillname` cause the skill to be dropped without an error ([VS Code: Use Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills)). The parent directory name must also match the `name` field exactly or the skill is not loaded.
-- **Activation depends on description quality** — Copilot reads the skill description to decide whether to load it, so vague descriptions cause Copilot to miss relevant invocations ([VS Code: Use Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills)).
-- **Instruction and skill bloat degrades adherence** — skills stack on top of base instructions, and practitioners report that once combined instruction context gets long, the agent follows it less reliably ([Your Agent Instructions Are Probably Making Things Worse](https://www.wordman.dev/blog/agent-instructions)). Keep individual skills narrow and prune instruction files aggressively.
+- Skills silently fail to load when the `name` field contains invalid characters. Slashes, colons, dots, or hand-added namespace prefixes like `myorg/skillname` drop the skill without an error ([VS Code: Use Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills)). The parent directory name must also match the `name` field exactly, or the skill does not load.
+- Activation depends on description quality. Copilot reads the skill description to decide whether to load it, so a vague description makes Copilot miss relevant invocations ([VS Code: Use Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills)).
+- Long instruction and skill context degrades adherence. Skills stack on top of base instructions, and practitioners report that once the combined instruction context gets long, the agent follows it less reliably ([Your Agent Instructions Are Probably Making Things Worse](https://www.wordman.dev/blog/agent-instructions)). Keep each skill narrow and prune instruction files often.
 
 ## Example
 
-The following shows a minimal custom agent definition file and a companion skill, demonstrating how the two layers work together. The agent lives at `.github/agents/release-engineer.md` and declares which tools and MCP servers it may use; the skill lives at `.github/skills/changelog/SKILL.md` and is auto-loaded by Copilot when the task is relevant.
+This example pairs a minimal custom agent with a companion skill to show how the two layers work together. The agent lives at `.github/agents/release-engineer.md` and declares which tools and MCP servers it may use. The skill lives at `.github/skills/changelog/SKILL.md`, and Copilot auto-loads it when the task is relevant.
 
-**`.github/agents/release-engineer.md`**
+`.github/agents/release-engineer.md`
 
 ```markdown
 ---
@@ -76,7 +76,7 @@ You are a release engineer agent. When asked to cut a release, you:
 4. Create and push a git tag.
 ```
 
-**`.github/skills/changelog/SKILL.md`**
+`.github/skills/changelog/SKILL.md`
 
 ```markdown
 ---
@@ -90,7 +90,7 @@ Markdown section ready for insertion into CHANGELOG.md.
 Scripts: generate-changelog.sh
 ```
 
-Copilot reads only the skill metadata until `/changelog` is invoked, keeping context budget low. The agent's `tools` list restricts it to `shell` and `file_edit`, preventing it from accessing resources outside the release workflow.
+Copilot reads only the skill metadata until you invoke `/changelog`, which keeps the context budget low. The agent's `tools` list restricts it to `shell` and `file_edit`, so it cannot reach resources outside the release workflow.
 
 ## Key Takeaways
 

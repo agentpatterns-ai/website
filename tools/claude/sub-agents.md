@@ -16,13 +16,13 @@ status: current
 
 > Ephemeral, isolated agents that execute focused tasks and return results to the parent.
 
-**Learn it hands-on:** [Sub-Agents & Orchestration](https://learn.agentpatterns.ai/harness-engineering/sub-agents-and-orchestration/) — guided lesson with quizzes.
+Learn it hands-on with the [Sub-Agents & Orchestration](https://learn.agentpatterns.ai/harness-engineering/sub-agents-and-orchestration/) guided lesson, which includes quizzes.
 
-## How They Work
+## How they work
 
-[Sub-agents](https://code.claude.com/docs/en/sub-agents) are defined as Markdown files with YAML frontmatter in `.claude/agents/` (project scope) or `~/.claude/agents/` (user scope). Each sub-agent runs in its own fresh context window. Only the final result returns to the parent — the parent never sees the sub-agent's intermediate reasoning or tool calls.
+You define a [sub-agent](https://code.claude.com/docs/en/sub-agents) as a Markdown file with YAML frontmatter. Put it in `.claude/agents/` for project scope or `~/.claude/agents/` for user scope. Each sub-agent runs in its own fresh context window. Only the final result returns to the parent. The parent never sees the sub-agent's intermediate reasoning or tool calls.
 
-## Definition Format
+## Definition format
 
 ```yaml
 ---
@@ -38,30 +38,32 @@ model: sonnet
 Review the provided code changes for...
 ```
 
-Key frontmatter fields: `name`, `description`, `tools` (restrict which tools are available), `model` (route to a specific Claude model — e.g. `opus`, `sonnet`, `haiku`). Only `name` and `description` are required; all others are optional.
+The frontmatter fields are `name`, `description`, `tools` (restrict which tools are available), and `model` (route to a specific Claude model, for example `opus`, `sonnet`, or `haiku`). Only `name` and `description` are required. The rest are optional.
 
-## Agent Tool `model` Parameter
+## Agent tool `model` parameter
 
-The `Agent` tool accepts a `model` parameter for per-invocation model selection (e.g. `model: opus`, `model: sonnet`, `model: haiku`). This allows the parent to route individual sub-agent invocations to a specific model regardless of the default.
+The `Agent` tool accepts a `model` parameter to select a model per invocation, for example `model: opus`, `model: sonnet`, or `model: haiku`. The parent can route an individual sub-agent invocation to a specific model regardless of the default.
 
-The `model` field in the sub-agent definition sets the default; the per-invocation parameter overrides it. Both `model` aliases (`sonnet`, `opus`, `haiku`) and full model IDs (e.g., `claude-opus-4-6`) are accepted.
+The `model` field in the sub-agent definition sets the default. The per-invocation parameter overrides it. The tool accepts both `model` aliases (`sonnet`, `opus`, `haiku`) and full model IDs, for example `claude-opus-4-6`.
 
 ## Properties
 
-- **Context isolation**: each sub-agent only sees what it needs
-- **Parallelization**: multiple sub-agents run concurrently
-- **Error isolation**: each sub-agent's failures are contained within its own context — a failed sub-agent does not cancel sibling sub-agents running in parallel
-- **Specialized instructions**: tailored system prompts per agent
-- **Tool restrictions**: limit access to reduce unintended actions
-- **Worktree isolation**: optional `isolation: "worktree"` for filesystem-level isolation — see [Worktree Isolation](../../workflows/worktree-isolation.md)
+Sub-agents give you:
 
-## SDK Sub-Agents
+- context isolation: each sub-agent only sees what it needs
+- parallelization: multiple sub-agents run concurrently
+- error isolation: each sub-agent's failure stays within its own context, so a failed sub-agent does not cancel sibling sub-agents running in parallel
+- specialized instructions: a system prompt tailored to each agent
+- tool restrictions: limit access to reduce unintended actions
+- worktree isolation: an optional `isolation: "worktree"` setting for filesystem-level isolation, described in [Worktree Isolation](../../workflows/worktree-isolation.md)
 
-The [Agent SDK](https://platform.claude.com/docs/en/agent-sdk/subagents) supports programmatic sub-agents defined inline via the `agents` option — no filesystem dependency needed. Claude spawns them via the `Agent` tool.
+## SDK sub-agents
 
-## When to Use
+The [Agent SDK](https://platform.claude.com/docs/en/agent-sdk/subagents) supports programmatic sub-agents defined inline through the `agents` option, with no filesystem dependency. Claude spawns them through the `Agent` tool.
 
-Use sub-agents for quick, focused tasks that report back: code review, research, file search, test execution. For tasks requiring coordination between agents, consider [agent teams](agent-teams.md) instead.
+## When to use
+
+Use sub-agents for quick, focused tasks that report back: code review, research, file search, and test execution. When a task needs agents to coordinate, use [agent teams](agent-teams.md) instead.
 
 ## Example
 
@@ -91,19 +93,19 @@ The parent invokes this sub-agent via the `Agent` tool:
 Agent(agent: "reviewer", prompt: "Review src/parser.ts for correctness and style issues.")
 ```
 
-The sub-agent runs in its own context window with access only to `Read`, `Grep`, and `Glob`. The parent receives only the final findings — never the sub-agent's intermediate tool calls or reasoning.
+The sub-agent runs in its own context window with access only to `Read`, `Grep`, and `Glob`. The parent receives only the final findings, never the sub-agent's intermediate tool calls or reasoning.
 
-## Why It Works
+## Why it works
 
-Sub-agents achieve isolation because each runs in its own fresh context window with only the content provided in its prompt — no inherited conversation history, no parent reasoning, no sibling tool outputs. The parent passes a scoped task description; the sub-agent produces a focused result. This boundary is structural: the Claude Code runtime enforces that sub-agents cannot read the parent context and the parent receives only the final text response, not intermediate tool calls or reasoning traces. Parallelization follows from the same structure — because sub-agents share nothing, multiple can execute concurrently without coordination overhead.
+Sub-agents stay isolated because each one runs in its own fresh context window. It sees only the content in its prompt: no inherited conversation history, no parent reasoning, no sibling tool outputs. The parent passes a scoped task description, and the sub-agent produces a focused result. This boundary is structural. The Claude Code runtime stops sub-agents from reading the parent context, and the parent receives only the final text response, not intermediate tool calls or reasoning traces. Parallelization follows from the same structure. Because sub-agents share nothing, several can run at once without coordination overhead.
 
-## When This Backfires
+## When this backfires
 
-Sub-agents add overhead that outweighs the benefit for small tasks. When the work takes fewer tokens to complete than it takes to describe and delegate, spawning a sub-agent is slower and more expensive than doing the work inline. Anthropic's own research-system retrospective reports that [multi-agent systems use roughly 15× more tokens than a single-thread chat](https://www.anthropic.com/engineering/built-multi-agent-research-system), so the value of the delegated task has to justify that markup.
+Sub-agents add overhead that outweighs the benefit for small tasks. When the work takes fewer tokens to finish than it takes to describe and delegate, a sub-agent is slower and more expensive than doing the work inline. Anthropic's research-system retrospective reports that [multi-agent systems use roughly 15× more tokens than a single-thread chat](https://www.anthropic.com/engineering/built-multi-agent-research-system), so the value of the delegated task has to justify that cost.
 
-Debugging is harder because the parent only sees the final result. If a sub-agent silently misunderstands the task or produces a wrong output, the parent has no visibility into the intermediate steps that led there — the isolation that prevents context pollution also prevents inspection.
+Debugging is harder because the parent only sees the final result. If a sub-agent quietly misunderstands the task or returns a wrong output, the parent cannot see the steps that led there. The isolation that prevents context pollution also prevents inspection.
 
-Sub-agents cannot communicate with each other. If the task requires agents to exchange partial results, coordinate decisions, or share state, [agent teams](agent-teams.md) provide the right model; sub-agents are for fire-and-forget delegation only.
+Sub-agents cannot talk to each other. When a task needs agents to exchange partial results, coordinate decisions, or share state, [agent teams](agent-teams.md) are the right model. Sub-agents are for fire-and-forget delegation only.
 
 ## Key Takeaways
 

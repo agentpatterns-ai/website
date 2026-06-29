@@ -17,15 +17,15 @@ maturity: adopted
 
 > A carousel control reviews multiple pending tool calls in one navigable surface instead of scattered modals — useful only for the residual approvals that allowlists and sandboxes cannot absorb.
 
-## The Residual-Prompt Problem
+## The residual-prompt problem
 
-Allowlists and sandboxes remove most permission prompts. Anthropic reports an [84% reduction](https://www.anthropic.com/engineering/claude-code-sandboxing) in Claude Code through pre-authorising read-only and locally scoped operations (see [Safe Command Allowlisting](../security/safe-command-allowlisting.md)). The residue — destructive writes, unknown commands, network calls — must stay per-call because each decision depends on context the allowlist cannot encode.
+Allowlists and sandboxes remove most permission prompts. Anthropic reports an [84% reduction](https://www.anthropic.com/engineering/claude-code-sandboxing) in Claude Code from pre-authorizing read-only and locally scoped operations (see [Safe Command Allowlisting](../security/safe-command-allowlisting.md)). The residue — destructive writes, unknown commands, network calls — must stay per-call because each decision depends on context the allowlist cannot encode.
 
-When a 50-step task produces ten of those residual prompts, the harness UI determines whether the operator reviews each one or dispatches the queue reflexively. Scattered modals interleaved with agent output train the reflex: scroll, click, scroll, click. The same Anthropic post names the failure mode directly: "Constantly clicking 'approve' slows down development cycles and can lead to 'approval fatigue', where users might not pay close attention to what they're approving, and in turn making development less safe" ([Claude Code sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing)).
+When a 50-step task produces ten of those residual prompts, the harness UI decides whether the operator reviews each one or dispatches the queue reflexively. Scattered modals interleaved with agent output train the reflex: scroll, click, scroll, click. The same Anthropic post names the failure mode directly: "Constantly clicking 'approve' slows down development cycles and can lead to 'approval fatigue', where users might not pay close attention to what they're approving, and in turn making development less safe" ([Claude Code sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing)).
 
 The carousel reframes where those residual prompts live — not whether they exist.
 
-## What the Carousel Does
+## What the carousel does
 
 VS Code 1.116 (April 2026) ships an experimental Tool Confirmation Carousel. From the [release notes](https://code.visualstudio.com/updates/v1_116): "To make approving or rejecting multiple tool calls more efficient, chat now shows a carousel control for tool confirmations." The control provides "a compact and navigable way to review and approve multiple tool calls in sequence without scrolling through the conversation."
 
@@ -44,11 +44,11 @@ graph TD
 
 Three properties distinguish the pattern from a stack of modals:
 
-- **Consistent geography.** Each pending call renders in the same visual frame, so scanning the queue costs less than jumping between differently positioned dialogs.
-- **Visible queue depth.** A "3 of 12" counter exposes the batch size the agent is asking about, information a single modal hides.
-- **Preserved per-call verdict.** The carousel batches review, not execution — each tool call still requires its own approve or reject. Per the release notes, the UI does not change execution order or introduce a blanket-approve path.
+- Consistent geography: each pending call renders in the same visual frame, so scanning the queue costs less than jumping between differently positioned dialogs.
+- Visible queue depth: a "3 of 12" counter shows the batch size the agent is asking about, information a single modal hides.
+- Preserved per-call verdict: the carousel batches review, not execution — each tool call still needs its own approve or reject. Per the release notes, the UI does not change execution order or add a blanket-approve path.
 
-## When It Helps
+## When it helps
 
 The carousel is a UX addition to the residual approval surface. It earns its place when:
 
@@ -58,18 +58,18 @@ The carousel is a UX addition to the residual approval surface. It earns its pla
 
 For off-terminal or headless flows, the carousel is the wrong surface. [Deferred Permission Pattern](deferred-permission-pattern.md) pauses a headless session and hands the pending call to the caller; [Channels Permission Relay](../tools/claude/channels-permission-relay.md) forwards individual prompts to chat apps. Neither benefits from a carousel — they replace the terminal review surface entirely.
 
-## When It Backfires
+## When it backfires
 
-Smoother approval is orthogonal to better approval; in some conditions it makes review quality worse:
+Smoother approval is not the same as better approval. In some conditions it makes review quality worse:
 
-- **Low-variance queues.** Twenty near-identical file reads train the operator to tap approve without reading. A coarser allowlist entry would remove the prompts entirely — the right fix.
-- **Risk heterogeneity.** A destructive `rm -rf` inside a queue of benign reads gets the same card geometry. Uniform framing hides uneven blast radius.
-- **Rubber-stamp culture.** Teams already inclined to rubber-stamp AI output (see [Law of Triviality in AI PRs](../anti-patterns/law-of-triviality-ai-prs.md) and [Context Ceiling](../human/context-ceiling.md)) dispatch a carousel faster than they dispatched modals.
-- **Parallel agent fleets.** A single operator supervising multiple sessions stacks carousel surfaces per session — off-terminal relay fits that shape better.
+- Low-variance queues: twenty near-identical file reads train the operator to tap approve without reading. A coarser allowlist entry would remove the prompts entirely — the right fix.
+- Mixed risk: a destructive `rm -rf` inside a queue of benign reads gets the same card geometry. Uniform framing hides uneven blast radius.
+- Rubber-stamp culture: teams already inclined to rubber-stamp AI output (see [Law of Triviality in AI PRs](../anti-patterns/law-of-triviality-ai-prs.md) and [Context Ceiling](../human/context-ceiling.md)) dispatch a carousel faster than they dispatched modals.
+- Parallel agent fleets: a single operator supervising multiple sessions stacks carousel surfaces per session — off-terminal relay fits that shape better.
 
 VS Code ships the feature behind an experimental flag because the net effect on review quality is not measured. Treat it as a candidate UI for residual prompts, not a safety improvement.
 
-## Stack It, Don't Substitute It
+## Stack it, do not substitute it
 
 The carousel belongs at the end of a layered permission stack, not the top:
 
@@ -79,7 +79,7 @@ The carousel belongs at the end of a layered permission stack, not the top:
 | Allowlist ([safe-command allowlisting](../security/safe-command-allowlisting.md)) | Removes routine prompts entirely |
 | Auto-mode ([auto-mode](../tools/claude/auto-mode.md)) | Removes classifier-confident prompts |
 | Deferred or relay ([deferred permission](deferred-permission-pattern.md), [channels relay](../tools/claude/channels-permission-relay.md)) | Moves remaining prompts off-terminal |
-| **Carousel** | Organises whatever survives the earlier layers |
+| Carousel | Organizes whatever survives the earlier layers |
 
 Skip the earlier layers and the carousel is a smoother path to rubber-stamping. Exhaust them first and only genuinely ambiguous calls remain — the surface where a review UI can plausibly help.
 
@@ -92,7 +92,7 @@ Skip the earlier layers and the carousel is a smoother path to rubber-stamping. 
 }
 ```
 
-A chat turn that emits multiple pending tool calls renders a carousel card. The operator steps through "1 of N" with navigation controls and approves or rejects each; disabling the setting reverts to the prior inline layout ([VS Code 1.116 release notes](https://code.visualstudio.com/updates/v1_116)). Pair with allowlisting so the carousel only surfaces calls that need a human judgement.
+A chat turn that emits multiple pending tool calls renders a carousel card. The operator steps through "1 of N" with navigation controls and approves or rejects each; disabling the setting reverts to the prior inline layout ([VS Code 1.116 release notes](https://code.visualstudio.com/updates/v1_116)). Pair it with allowlisting so the carousel only surfaces calls that need a human judgment.
 
 ## Key Takeaways
 

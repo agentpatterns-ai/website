@@ -17,11 +17,11 @@ maturity: adopted
 
 > Tagging each rule with its source, applicability, and expiry condition turns the rule-budget audit from a counting exercise into a pruning exercise.
 
-The [instruction compliance ceiling](instruction-compliance-ceiling.md) makes pruning non-optional — even frontier models drop to 68% accuracy at high instruction densities ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). But the ceiling argument only tells you *that* you must cut, not *what* to cut. Without an explicit retirement signal per rule, every audit defaults to "leave it in, just in case." Surfaces grow monotonically; they do not shrink.
+The [instruction compliance ceiling](instruction-compliance-ceiling.md) makes pruning non-optional — even frontier models drop to 68% accuracy at high instruction densities ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). But the ceiling argument only tells you that you must cut, not what to cut. Without an explicit retirement signal per rule, every audit defaults to "leave it in, just in case." Surfaces grow but never shrink.
 
 The fix is per-rule lifecycle metadata: every rule declares its origin, its scope, and the condition under which removing it is safe.
 
-## The Triple
+## The triple
 
 The Walkinglabs harness-engineering curriculum names the three fields explicitly: "Every instruction should have a source ('why was this rule added?'), an applicability condition ('when is this rule needed?'), and an expiry condition ('under what circumstances can this rule be removed?')" ([lecture-04](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md)).
 
@@ -31,9 +31,9 @@ The Walkinglabs harness-engineering curriculum names the three fields explicitly
 | `applies_to` | When is this rule active? | "Any task that writes files outside `docs/`" |
 | `retire_when` | What signals it is safe to remove? | "Pre-commit hook rejects `.env` paths in commits" |
 
-The triple is not a writing-style preference. It changes what an audit can do: with `retire_when` present, the auditor can mechanically check whether the condition has been met and propose the deletion. Without it, deletion is a judgment call no reviewer wants to make alone.
+The triple is not a writing-style preference. It changes what an audit can do. With `retire_when` present, the auditor can check whether the condition has been met and propose the deletion. Without it, deletion is a judgment call no reviewer wants to make alone.
 
-## The Undead-Rule Failure Mode
+## The undead-rule failure mode
 
 Walkinglabs frames the bloat mechanism directly: "Outdated instructions rarely get deleted — because the consequences of deletion are uncertain ('maybe something else depends on this rule?'), while adding new instructions feels free" ([lecture-04](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md)). The companion anti-patterns list calls out "encoding obsolete rules that nobody audits" as a named anti-pattern ([anti-patterns.md](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/code/anti-patterns.md)).
 
@@ -41,7 +41,7 @@ A rule with no expiry condition and no recent invocation evidence is undead — 
 
 The lifecycle triple kills the undead-rule failure mode at the write site: a rule without `retire_when` does not pass review.
 
-## How the Audit Uses It
+## How the audit uses it
 
 An instruction-rule-budget audit counts rules, classifies them by safety/correctness/style, and detects duplication. Lifecycle metadata adds three roll-up percentages and one new finding class:
 
@@ -62,7 +62,7 @@ An instruction-rule-budget audit counts rules, classifies them by safety/correct
 
 The audit becomes actionable: each undead row is a one-line pruning candidate the auditor can defend with evidence. Without the metadata, the same audit can only emit "70 rules, ceiling is 150, you have room" — which is exactly the report that lets surfaces grow forever.
 
-## Authoring Template
+## Authoring template
 
 Attach lifecycle metadata at write-time, not after-the-fact. The cheapest form is an inline comment trailing the rule:
 
@@ -86,14 +86,14 @@ Never commit `.env*` or `.dev.vars*` files.
 
 The audit runbook in `bootstrap-skill-template` form can ship this template as a fragment the agent attaches to every new rule it authors. Once the template is the default, the undead-rule rate trends to zero.
 
-## When the Triple Is Overhead
+## When the triple is overhead
 
 Lifecycle metadata is not free — every rule carries three extra fields that themselves consume the [context budget](instruction-compliance-ceiling.md) the audit defends. The break-even point depends on surface size and team shape:
 
-- **Surfaces under ~50 rules** — the whole file is small enough to re-read in two minutes (the Walkinglabs threshold). A quarterly "delete what no one defends" pass achieves the same pruning outcome without per-rule schema overhead.
-- **Solo-author projects** — the implicit "why this rule exists" lives in the author's head. Writing it down duplicates context that has only one consumer.
-- **Universal safety rules** — "never commit secrets" needs no source/applicability/expiry, and is better [enforced by a hook](enforcing-agent-behavior-with-hooks.md) than carried as metadata. The triple earns its keep on project-specific, incident-driven rules where context fades over months.
-- **Teams without commit discipline** — if authors don't backfill metadata when adding rules, the triple becomes inconsistent decoration and the audit can't trust it. Enforce at [PR review](prompt-governance-via-pr.md) or skip the scheme entirely.
+- Surfaces under ~50 rules — the whole file is small enough to re-read in two minutes (the Walkinglabs threshold). A quarterly "delete what no one defends" pass achieves the same pruning outcome without per-rule schema overhead.
+- Solo-author projects — the implicit "why this rule exists" lives in the author's head. Writing it down duplicates context that has only one consumer.
+- Universal safety rules — "never commit secrets" needs no source, applicability, or expiry, and is better [enforced by a hook](enforcing-agent-behavior-with-hooks.md) than carried as metadata. The triple earns its keep on project-specific, incident-driven rules where context fades over months.
+- Teams without commit discipline — if authors do not backfill metadata when adding rules, the triple becomes inconsistent decoration and the audit cannot trust it. Enforce at [PR review](prompt-governance-via-pr.md) or skip the scheme entirely.
 
 For medium-to-large instruction surfaces under repeated audit pressure, the per-rule cost is dominated by the gain: the surface can shrink. For small surfaces, plain deletion discipline wins.
 

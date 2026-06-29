@@ -18,11 +18,11 @@ maturity: emerging
 
 > Gating decides *whether* to suggest before deciding *what* to suggest — fixing the ~90% of AI completion inference generated but never usefully shown.
 
-## The Waste Problem
+## The waste problem
 
-JetBrains measured their completion pipeline: only 31% of inferences produce a shown suggestion, and 31% of those get accepted — [~10% useful output from raw inference](https://arxiv.org/abs/2601.20223). Every unwanted suggestion interrupts flow and erodes trust, mirroring the [alert fatigue dynamic](../code-review/signal-over-volume-in-ai-review.md) in AI code review: when signal-to-noise drops, developers ignore the signal.
+JetBrains measured its completion pipeline: only 31% of inferences produce a shown suggestion, and 31% of those get accepted — [~10% useful output from raw inference](https://arxiv.org/abs/2601.20223). Every unwanted suggestion interrupts flow and erodes trust. This mirrors the [alert fatigue dynamic](../code-review/signal-over-volume-in-ai-review.md) in AI code review: when signal-to-noise drops, developers ignore the signal.
 
-## How Gating Works
+## How gating works
 
 Gating inserts lightweight classifiers between the LLM and the developer:
 
@@ -36,13 +36,13 @@ flowchart LR
     F -->|High quality| S[Show to developer]
 ```
 
-**Trigger model** — decides whether to invoke the LLM. Suppresses inference on signals of an unwanted completion (mid-word typing, rapid deletion, ambiguous scope).
+Trigger model — decides whether to invoke the LLM. It suppresses inference when it sees signs of an unwanted completion: mid-word typing, rapid deletion, or ambiguous scope.
 
-**Filter model** — evaluates the completion before display; JetBrains runs this stage locally before showing a suggestion. Catches suggestions the LLM produced confidently but the developer would reject.
+Filter model — checks the completion before display. JetBrains runs this stage locally before showing a suggestion. It catches suggestions the LLM produced confidently but the developer would reject.
 
-JetBrains' production filter compiles to [2.5 MB and predicts in 1–2 ms](https://blog.jetbrains.com/ai/2025/03/ai-code-completion-less-is-more/), running locally with zero latency overhead.
+JetBrains' production filter compiles to [2.5 MB and predicts in 1–2 ms](https://blog.jetbrains.com/ai/2025/03/ai-code-completion-less-is-more/), running locally and adding no perceptible latency.
 
-## Production Evidence
+## Production evidence
 
 ### JetBrains: CatBoost classifiers
 
@@ -50,8 +50,8 @@ A/B study across Java (n=278), Python (n=205), and Kotlin (n=157) with the filte
 
 | Metric | Change |
 |--------|--------|
-| Accept rate | **+33% to +48%** |
-| Cancel rate | **-16% to -37%** |
+| Accept rate | +33% to +48% |
+| Cancel rate | -16% to -37% |
 | Ratio of completed code | -10% to -14% |
 
 The trigger model, tested on Kotlin (n=3,511), reduced generations by 13.8% while improving accept rate +2.7% and cutting cancel rate -4.5%.
@@ -68,32 +68,32 @@ As of 2022, Copilot used a logistic regression with 11 features to decide when t
 
 NES independently converged on the same principle: [24.5% fewer suggestions, 26.5% higher acceptance](../tools/copilot/next-edit-suggestions.md).
 
-## What the Classifiers See
+## What the classifiers see
 
 JetBrains uses ~120 features for the trigger and several hundred for the filter ([de Moor et al., 2026](https://arxiv.org/abs/2601.20223)):
 
-- **Typing dynamics** — speed, pause duration, deletion patterns
-- **Caret context** — scope depth, surrounding syntax, file structure
-- **Code signals** — imports, reference resolution, token-level scores
-- **Session state** — recent accept/reject history, time since last interaction
+- Typing dynamics — speed, pause duration, deletion patterns
+- Caret context — scope depth, surrounding syntax, file structure
+- Code signals — imports, reference resolution, token-level scores
+- Session state — recent accept/reject history, time since last interaction
 
-Gating outperforms simple confidence thresholds because the decision depends on developer state, not just completion quality.
+Gating beats simple confidence thresholds because the decision depends on developer state, not just completion quality.
 
-## Language-Specific Behavior
+## Language-specific behavior
 
-Kotlin benefits more from post-generation filtering while PHP benefits more from pre-generation triggering; Python and C# fall between. Per-language tuning outperforms a uniform threshold ([de Moor et al., 2026](https://arxiv.org/abs/2601.20223)).
+Kotlin benefits more from post-generation filtering, while PHP benefits more from pre-generation triggering. Python and C# fall between. Per-language tuning beats a uniform threshold ([de Moor et al., 2026](https://arxiv.org/abs/2601.20223)).
 
-## The Perception Gap
+## The perception gap
 
-Open-source developers perceived +20% productivity while producing −19% less ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Higher interruption rates from ungated completions widen this gap; gating is one lever for realigning perceived and actual productivity.
+Open-source developers perceived a 20% productivity gain while producing 19% less ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Higher interruption rates from ungated completions widen this gap. Gating is one way to realign perceived and actual productivity.
 
-## Implications for Developers
+## Implications for developers
 
-**Acceptance rate matters more than volume.** A tool showing 40 suggestions at 45% acceptance beats one showing 100 at 15%.
+Acceptance rate matters more than volume. A tool that shows 40 suggestions at 45% acceptance beats one that shows 100 at 15%.
 
-**Configure aggressively.** Copilot and VS Code extensions expose sensitivity and trigger delay settings. If you routinely dismiss suggestions, raise thresholds before switching tools.
+Tune the settings before switching tools. Copilot and VS Code extensions expose sensitivity and trigger-delay settings. If you routinely dismiss suggestions, raise the thresholds first.
 
-**Context signals improve over time.** Cursor's RL-based Tab model trains on accept/reject history ([Cursor, 2024](https://cursor.com/blog/tab-rl)); tools using online learning get better at individual preference modeling as usage accumulates.
+Context signals improve over time. Cursor's RL-based Tab model trains on your accept/reject history ([Cursor, 2024](https://cursor.com/blog/tab-rl)). Tools that use online learning model your preferences better as you keep using them.
 
 ## Key Takeaways
 
@@ -101,15 +101,15 @@ Open-source developers perceived +20% productivity while producing −19% less (
 - Lightweight classifiers (2.5 MB, 1–2 ms) gate with no perceptible latency cost
 - Developers type more themselves, but acceptance rates improve 26–48% and interruptions drop
 
-## When This Backfires
+## When this backfires
 
 Classifiers trained on aggregate accept/reject data may not generalize to every developer:
 
-- **Atypical coding patterns** — narrow domains (embedded, novel DSLs) diverge from the training distribution, so a filter calibrated on the majority suppresses high-value completions.
-- **Exploratory sessions** — learning a framework or prototyping drops natural accept rate. A filter tuned to production rates suppresses exactly when completions are most valuable.
-- **Rapid style evolution** — as habits change (verbose to terse, new idioms), a slow-updating filter lags until it observes enough fresh signal to recalibrate; online-learning models like Cursor's Tab close this gap faster than statically-trained classifiers.
+- Atypical coding patterns — narrow domains such as embedded work or novel DSLs diverge from the training distribution, so a filter calibrated on the majority suppresses high-value completions.
+- Exploratory sessions — learning a framework or prototyping lowers your natural accept rate. A filter tuned to production rates then suppresses completions exactly when they are most valuable.
+- Rapid style evolution — as your habits change, from verbose to terse or adopting new idioms, a slow-updating filter lags until it sees enough fresh signal to recalibrate. Online-learning models like Cursor's Tab close this gap faster than statically trained classifiers.
 
-When gating degrades DX, the fix is exposure controls: loosen the filter, accumulate fresh data, then re-enable.
+When gating hurts DX, the fix is exposure controls: loosen the filter, let it gather fresh data, then re-enable.
 
 ## Related
 

@@ -18,13 +18,13 @@ maturity: established
 
 > Wrap agent tool calls with middleware that validates policy before execution and signs each action receipt with a post-quantum signature, forming a tamper-evident append-only chain.
 
-## The Compliance Gap
+## The compliance gap
 
 Mutable logs carry no compliance weight. An agent that logs tool calls to a writable file gives no proof the log was not altered after the fact. Regulated environments — finance, healthcare, EU AI Act Article 12 — require evidence that agents operated within defined bounds and that the record cannot be modified retroactively.
 
 A cryptographic audit trail closes this gap: each action produces a signed receipt, and receipts are hash-chained so any modification or omission is detectable on verification.
 
-## Architecture: Three-Phase Middleware
+## Architecture: three-phase middleware
 
 Middleware wraps the agent's tool-calling interface. Every tool invocation passes through three sequential phases ([nibzard catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/cryptographic-governance-audit-trail.md)):
 
@@ -40,13 +40,13 @@ graph TD
 
 | Phase | Action |
 |---|---|
-| **Policy validation** | Check allowed tools, rate limits, data access rules before executing |
-| **Tool execution** | Run the tool normally — no change to tool behavior |
-| **Receipt signing** | Sign the action record (tool name, parameters, result hash, timestamp, policy outcome) with ML-DSA-65 and append to the chain |
+| Policy validation | Check allowed tools, rate limits, data access rules before executing |
+| Tool execution | Run the tool normally — no change to tool behavior |
+| Receipt signing | Sign the action record (tool name, parameters, result hash, timestamp, policy outcome) with ML-DSA-65 and append to the chain |
 
 The chain is tamper-evident by construction: each receipt includes a hash of the previous one. Modifying or omitting any entry breaks the chain — verification fails automatically ([asqav-sdk](https://github.com/jagmarques/asqav-sdk)).
 
-## Post-Quantum Signatures: ML-DSA
+## Post-quantum signatures: ML-DSA
 
 Standard ECDSA or RSA signatures are adequate today but vulnerable to quantum attack. For audit records that must remain verifiable for years or decades, the signature algorithm must stay secure against a quantum adversary.
 
@@ -66,23 +66,23 @@ Each signed receipt contains ([asqav-sdk](https://github.com/jagmarques/asqav-sd
 }
 ```
 
-## IETF SCITT Alignment
+## IETF SCITT alignment
 
 The append-only signed receipt architecture maps onto [IETF SCITT](https://datatracker.ietf.org/wg/scitt/) (Supply Chain Integrity, Transparency, and Trust) — an active IETF working group defining how statements (agent actions) are registered with a Transparency Service, which issues receipts as cryptographic proof of registration. Alignment with SCITT enables interoperability with compliance tooling built on the standard.
 
-## Enforcement Tiers
+## Enforcement tiers
 
 Three deployment configurations trade enforcement strength for integration complexity ([asqav-sdk](https://github.com/jagmarques/asqav-sdk)):
 
 | Tier | Mechanism | Guarantee |
 |---|---|---|
-| **Strong** | Non-bypassable MCP proxy — signs before and after each tool call | Tool cannot execute without a signed bilateral receipt |
-| **Bounded** | Pre-execution gate (`gate_action`) + post-execution close (`complete_action`) | Approval is cryptographically linked to outcome |
-| **Detectable** | Sign and chain each action post-hoc | Tampering or omission is detectable on verification |
+| Strong | Non-bypassable MCP proxy — signs before and after each tool call | Tool cannot execute without a signed bilateral receipt |
+| Bounded | Pre-execution gate (`gate_action`) + post-execution close (`complete_action`) | Approval is cryptographically linked to outcome |
+| Detectable | Sign and chain each action post-hoc | Tampering or omission is detectable on verification |
 
 Strong enforcement has the highest assurance but requires routing all tool calls through a proxy. Detectable enforcement adds minimal latency and suits workflows where post-hoc verification is acceptable.
 
-## Implementation: Decorator Pattern
+## Implementation: decorator pattern
 
 The reference implementation ([asqav-sdk](https://github.com/jagmarques/asqav-sdk)) wraps tool functions with a decorator:
 
@@ -108,19 +108,19 @@ with asqav.session() as s:
 
 | Factor | Impact |
 |---|---|
-| **Per-call latency** | Each tool call incurs signing overhead; profiling required for latency-sensitive agents |
-| **Key management** | Requires infrastructure for key generation, rotation, storage, and distribution |
-| **Storage growth** | Audit chain grows linearly with agent activity |
-| **Regulatory credibility** | Tamper-evident receipts carry evidentiary weight that mutable logs do not |
-| **Quantum durability** | ML-DSA receipts remain verifiable against quantum computers; ECDSA receipts do not |
+| Per-call latency | Each tool call incurs signing overhead; profiling required for latency-sensitive agents |
+| Key management | Requires infrastructure for key generation, rotation, storage, and distribution |
+| Storage growth | Audit chain grows linearly with agent activity |
+| Regulatory credibility | Tamper-evident receipts carry evidentiary weight that mutable logs do not |
+| Quantum durability | ML-DSA receipts remain verifiable against quantum computers; ECDSA receipts do not |
 
 This pattern targets compliance-first use cases where regulatory credibility outweighs infrastructure cost. It is not a hardening mechanism — it does not prevent a malicious agent from acting; it produces unforgeable evidence of what the agent did. Pair with [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) for preventive controls.
 
-## Regulatory Targets
+## Regulatory targets
 
-- **EU AI Act Article 12** — requires record-keeping for high-risk AI systems; signed receipts satisfy this obligation
-- **SOC 2 audit trails** — demonstrable, tamper-evident action logs support Type II audits
-- **Litigation defense** — a verifiable chain of agent actions with policy-validation outcomes provides evidentiary proof of compliant operation
+- EU AI Act Article 12 — requires record-keeping for high-risk AI systems; signed receipts satisfy this obligation
+- SOC 2 audit trails — demonstrable, tamper-evident action logs support Type II audits
+- Litigation defense — a verifiable chain of agent actions with policy-validation outcomes provides evidentiary proof of compliant operation
 
 The [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/) lists insufficient logging and observability as a cross-cutting mitigation requirement, recommending signed, immutable audit logs of agent tool invocations and context changes across multiple risk categories.
 

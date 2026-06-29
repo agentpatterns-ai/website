@@ -20,19 +20,19 @@ status: current
 
 > Agents adopt a callable tool's output wholesale instead of judging it, and stronger backbones defer more, not less.
 
-## The Anti-Pattern
+## The anti-pattern
 
-The assumption is that an LLM agent exercises judgment over a callable tool — picking the right one, weighing the answer against context, overriding it when other signals disagree. Testing this with a frozen GNN exposed as a tool to a ReAct-style agent on node classification (ogbn-arxiv, replicated on WikiCS), agreement with the raw tool output sits at **97.6-99.2% across 5 seeds** — the agent collapses into a "GNN parrot" that bypasses its own reasoning ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)).
+You expect an LLM agent to exercise judgment over a callable tool: pick the right one, weigh the answer against context, and override it when other signals disagree. Test that with a frozen GNN exposed as a tool to a ReAct-style agent on node classification (ogbn-arxiv, replicated on WikiCS), and agreement with the raw tool output sits at 97.6-99.2% across 5 seeds. The agent collapses into a "GNN parrot" that bypasses its own reasoning ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)).
 
-The capability sweep breaks intuition. On Qwen2.5 from 1.5B to 7B, agreement rises from **0.60 to 0.98** — stronger backbones defer *more*, not less ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)). "Use a bigger model to get better tool judgment" fails here.
+The capability sweep breaks intuition. On Qwen2.5 from 1.5B to 7B, agreement rises from 0.60 to 0.98 — stronger backbones defer more, not less ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)). "Use a bigger model to get better tool judgment" fails here.
 
-The shape generalises beyond GNNs. Any deterministic sub-model an agent calls — a linter, type checker, SAST scanner, semantic-search index, classifier sub-agent — is a candidate for the same wholesale adoption when nothing in the planner's context could contradict the tool.
+The shape generalizes beyond GNNs. Any deterministic sub-model an agent calls — a linter, type checker, SAST scanner, semantic-search index, or classifier sub-agent — is a candidate for the same wholesale adoption when nothing in the planner's context could contradict the tool.
 
-## Why It Works
+## Why it works
 
-The mechanism is **automation bias / complacency** from human-factors research: a confident-looking automated output reallocates attention away from cross-checking ([Parasuraman & Manzey, 2010](https://journals.sagepub.com/doi/10.1177/0018720810376055)). With no orthogonal signal about the GNN's per-node confidence, the cheapest policy is to narrate the tool's output; stronger backbones reach that minimum-loss policy more reliably, which is *why* deference rises with capability ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)).
+The mechanism is automation bias, or complacency, from human-factors research: a confident-looking automated output pulls attention away from cross-checking ([Parasuraman & Manzey, 2010](https://journals.sagepub.com/doi/10.1177/0018720810376055)). With no orthogonal signal about the GNN's per-node confidence, the cheapest policy is to narrate the tool's output. Stronger backbones reach that minimum-loss policy more reliably, which is why deference rises with capability ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)).
 
-The latent capacity is there but unused: tool necessity is linearly decodable from pre-generation representations at **AUROC 0.89-0.96**, materially above the model's verbalized reasoning ([Hung et al., 2026](https://arxiv.org/abs/2605.09252)). Nothing in the standard tool-call interface surfaces it.
+The latent capacity is there but unused: tool necessity is linearly decodable from pre-generation representations at AUROC 0.89-0.96, well above the model's verbalized reasoning ([Hung et al., 2026](https://arxiv.org/abs/2605.09252)). Nothing in the standard tool-call interface surfaces it.
 
 ```mermaid
 graph LR
@@ -47,7 +47,7 @@ The author-stated limit closes the loop: "reliable selective invocation looks li
 
 ## Example
 
-**Before — single-source pipeline dressed as a two-stage one:**
+Before — a single-source pipeline dressed up as a two-stage one:
 
 ```python
 # Agent narrates whatever the tool returns; no cross-check
@@ -58,9 +58,9 @@ def classify_node(node_id: str) -> str:
     )
 ```
 
-The agent prompt asks the model to "use its judgment" over `label`, but no orthogonal signal is in scope. Agreement with `gnn_tool.predict` is effectively 1.0; the agent layer is decorative.
+The agent prompt asks the model to "use its judgment" over `label`, but no orthogonal signal is in scope. Agreement with `gnn_tool.predict` is effectively 1.0, so the agent layer is decorative.
 
-**After — wire an external check the agent can actually use:**
+After — wire in an external check the agent can use:
 
 ```python
 def classify_node(node_id: str) -> str:
@@ -75,16 +75,16 @@ def classify_node(node_id: str) -> str:
     )
 ```
 
-The second prompt gives the agent a signal it can act on. The fix is not "distrust the tool" — it is "give the agent something the tool's output can be wrong *against*."
+The second prompt gives the agent a signal it can act on. The fix is not "distrust the tool" — it is "give the agent something the tool's output can be wrong against."
 
-## When This Backfires
+## When this backfires
 
 Treating every callable as suspect is its own anti-pattern. The "blind deference" framing is over-broad in four cases:
 
-- **Tool more accurate than the agent on the modal case.** A verified deterministic tool (compiler, type checker, formatter) where the agent's domain reasoning is weaker — high agreement is the *target* behaviour, and second-guessing burns tokens for nothing.
-- **No disambiguating signal in scope.** If nothing could contradict the tool — no second tool, test, or spec — "add verification" is a slogan; Wang & Vemuri's "limited by available information" caveat applies ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)).
-- **Cheap downstream gate.** When the tool feeds CI, code review, or a test suite, re-judging every call is belt-and-braces without adding safety.
-- **Calibrated tool with confidence bands.** A classifier returning `(label, p)` lets the harness route low-confidence cases without involving the agent — [classifier-gated routing](../agent-design/classifier-gated-auto-permission.md) is the better lever.
+- Tool more accurate than the agent on the typical case. A verified deterministic tool such as a compiler, type checker, or formatter, where the agent's domain reasoning is weaker. High agreement is the target behavior, and second-guessing burns tokens for nothing.
+- No disambiguating signal in scope. If nothing could contradict the tool — no second tool, test, or spec — then "add verification" is a slogan. Wang & Vemuri's "limited by available information" caveat applies ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)).
+- Cheap downstream gate. When the tool feeds CI, code review, or a test suite, re-judging every call adds cost without adding safety.
+- Calibrated tool with confidence bands. A classifier returning `(label, p)` lets the harness route low-confidence cases without involving the agent. [Classifier-gated routing](../agent-design/classifier-gated-auto-permission.md) is the better fix.
 
 The pattern is a problem specifically when (a) the tool has known unreliability bands, (b) no orthogonal signal is in scope, and (c) the harness pretends the agent is the second-opinion layer.
 

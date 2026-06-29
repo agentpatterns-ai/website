@@ -18,16 +18,16 @@ maturity: established
 
 > Pair a PR-time security reviewer with a scheduled whole-codebase scanner: the reviewer covers new risk in each diff, the scanner resident risk no PR reaches.
 
-## Two Coverage Gaps
+## Two coverage gaps
 
 Security review fails along two temporal axes:
 
-- **New risk** — vulnerabilities in today's changes. Diff-scoped, cheap to review when the `pull_request` opens, lost if not caught before merge.
-- **Resident risk** — vulnerabilities already in the codebase, plus dependency, config, and policy drift. No PR may touch the affected files for months.
+- New risk — vulnerabilities in today's changes. Diff-scoped, cheap to review when the `pull_request` opens, lost if not caught before merge.
+- Resident risk — vulnerabilities already in the codebase, plus dependency, config, and policy drift. No PR may touch the affected files for months.
 
-PR-only review never finds resident risk; scheduled-only scanning delays new-code coverage.
+PR-only review never finds resident risk. Scheduled-only scanning delays new-code coverage.
 
-## The Pattern
+## The pattern
 
 Two agents share one finding format and one triage queue.
 
@@ -52,46 +52,46 @@ graph TD
 | Output | Inline comment at the changed line | Aggregated report to a channel |
 | Failure mode | Block merge or post warning | File issue or notify owner |
 
-Cursor shipped this split in beta on 2026-04-30: a *Security Reviewer* that "checks every PR for security vulnerabilities, auth regressions, privacy and data-handling risks, agent tool auto-approvals, and prompt injection attacks" plus a *Vulnerability Scanner* that "runs scheduled scans of your codebase to check for known vulnerabilities, outdated dependencies, and configuration issues." [Source: [Cursor changelog](https://cursor.com/changelog/04-30-26)] Anthropic's [`claude-code-security-review`](https://github.com/anthropics/claude-code-security-review) Action is the convergent PR-time component; `/security-review` runs the same review locally before commit. [Source: [Anthropic Help](https://support.claude.com/en/articles/11932705-automated-security-reviews-in-claude-code)] GitHub shipped the same component into Copilot CLI on 2026-06-10 as a dedicated security-review command. [Source: [GitHub Changelog](https://github.blog/changelog/2026-06-10-dedicated-security-review-command-now-available-in-copilot-cli)]
+Cursor shipped this split in beta on 2026-04-30: a 'Security Reviewer' that "checks every PR for security vulnerabilities, auth regressions, privacy and data-handling risks, agent tool auto-approvals, and prompt injection attacks" plus a 'Vulnerability Scanner' that "runs scheduled scans of your codebase to check for known vulnerabilities, outdated dependencies, and configuration issues." [Source: [Cursor changelog](https://cursor.com/changelog/04-30-26)] Anthropic's [`claude-code-security-review`](https://github.com/anthropics/claude-code-security-review) Action is the convergent PR-time component; `/security-review` runs the same review locally before commit. [Source: [Anthropic Help](https://support.claude.com/en/articles/11932705-automated-security-reviews-in-claude-code)] GitHub shipped the same component into Copilot CLI on 2026-06-10 as a dedicated security-review command. [Source: [GitHub Changelog](https://github.blog/changelog/2026-06-10-dedicated-security-review-command-now-available-in-copilot-cli)]
 
-## Prompt-Injection Review Is a Distinct Dimension
+## Prompt-injection review is a distinct dimension
 
-The reviewer flags injection vectors *in the diff* — content that, once shipped, will land in another agent's context and rewrite its instructions.
+The reviewer flags injection vectors in the diff — content that, once shipped, will land in another agent's context and rewrite its instructions.
 
 | Check class | Looks for | Signal |
 |---|---|---|
 | CVE / dependency | Known-vulnerable package versions | Advisory database |
 | SAST | Tainted data flow to a sink | AST / data-flow graph |
 | Secrets | High-entropy strings, known patterns | Regex + entropy |
-| Prompt-injection | New retrieval paths into agent context, untrusted-input boundaries, system-prompt mutations, tool descriptions, skill `SKILL.md` text | Heuristic + LLM judgement |
+| Prompt-injection | New retrieval paths into agent context, untrusted-input boundaries, system-prompt mutations, tool descriptions, skill `SKILL.md` text | Heuristic + LLM judgment |
 
-The attack surface is semantic — the same string is benign in a code comment and dangerous in a runtime-loaded system prompt. Deterministic SAST will not flag a `SKILL.md` whose `## Examples` section contains injected instructions; an LLM reviewer scoped to the [Lethal Trifecta](lethal-trifecta-threat-model.md) and [task-scope boundary](task-scope-security-boundary.md) will. [Source: [Prompt Injection Resistant Agent Design](prompt-injection-resistant-agent-design.md)]
+The attack surface is semantic — the same string is benign in a code comment and dangerous in a runtime-loaded system prompt. Deterministic SAST will not flag a `SKILL.md` whose `## Examples` section contains injected instructions. An LLM reviewer scoped to the [Lethal Trifecta](lethal-trifecta-threat-model.md) and [task-scope boundary](task-scope-security-boundary.md) will. [Source: [Prompt Injection Resistant Agent Design](prompt-injection-resistant-agent-design.md)]
 
-## The Reviewer Itself Is a Target
+## The reviewer itself is a target
 
 A PR-triggered reviewer reading PR titles, descriptions, and comments runs untrusted input through an LLM with repository credentials in scope — the [Lethal Trifecta](lethal-trifecta-threat-model.md) at the reviewer.
 
-The April 2026 *Comment and Control* disclosure exploited this against Claude Code Security Review, Gemini CLI Action, and GitHub Copilot Agent. The attacker injects instructions in a PR title; the agent auto-triggers on `pull_request`, runs the directive, and exfiltrates `ANTHROPIC_API_KEY`, `GITHUB_TOKEN`, and `GEMINI_API_KEY` as a "security finding" comment. Anthropic rated it CVSS 9.4. [Source: [Comment and Control writeup](https://oddguan.com/blog/comment-and-control-prompt-injection-credential-theft-claude-code-gemini-cli-github-copilot/); [SecurityWeek](https://www.securityweek.com/claude-code-gemini-cli-github-copilot-agents-vulnerable-to-prompt-injection-via-comments/); [The Register](https://www.theregister.com/2026/04/15/claude_gemini_copilot_agents_hijacked/)]
+The April 2026 'Comment and Control' disclosure exploited this against Claude Code Security Review, Gemini CLI Action, and GitHub Copilot Agent. The attacker injects instructions in a PR title. The agent auto-triggers on `pull_request`, runs the directive, and exfiltrates `ANTHROPIC_API_KEY`, `GITHUB_TOKEN`, and `GEMINI_API_KEY` as a "security finding" comment. Anthropic rated it CVSS 9.4. [Source: [Comment and Control writeup](https://oddguan.com/blog/comment-and-control-prompt-injection-credential-theft-claude-code-gemini-cli-github-copilot/); [SecurityWeek](https://www.securityweek.com/claude-code-gemini-cli-github-copilot-agents-vulnerable-to-prompt-injection-via-comments/); [The Register](https://www.theregister.com/2026/04/15/claude_gemini_copilot_agents_hijacked/)]
 
 Mitigations are structural:
 
 - Treat PR title, description, and comments as untrusted data — never as instructions
 - Avoid `pull_request_target` for forked PRs unless secrets are scoped via a [credentials proxy](scoped-credentials-proxy.md)
-- Restrict the reviewer's tool catalog to read-only operations on the diff; gate writes and network calls behind [confirmation gates](human-in-the-loop-confirmation-gates.md)
-- Apply the [Action-Selector pattern](action-selector-pattern.md) so the reviewer cannot synthesise arbitrary tool calls from PR text
+- Restrict the reviewer's tool catalog to read-only operations on the diff, gating writes and network calls behind [confirmation gates](human-in-the-loop-confirmation-gates.md)
+- Apply the [Action-Selector pattern](action-selector-pattern.md) so the reviewer cannot synthesize arbitrary tool calls from PR text
 
-## False-Positive Economics
+## False-positive economics
 
 Single-stage detection is the wrong shape. One observed mitigation pairs a cheap stage-1 filter accepting an 8.5% false-positive rate with a stage-2 reasoning pass that drops it to 0.4%. [Source: [ARMO: Detecting Prompt Injection in Production AI Agent Workloads](https://www.armosec.io/blog/how-to-detect-prompt-injection-in-production-ai-agent-workloads/)]
 
 Suppression must be first-class. Cursor accepts custom instructions and MCP-wrapped SAST/SCA/secrets scanners so deterministic tools own high-confidence classes and the LLM judges residual semantic surface. [Self-improving review agents](../code-review/learned-review-rules.md) persist accept/reject signals as rules, narrowing over time.
 
-## When the Pattern Backfires
+## When the pattern backfires
 
-- **No AppSec triage owner.** Findings land on the PR author; without a triage queue, noise leads to dismissal.
-- **Mature deterministic tooling already covers the surface.** Tuned CodeQL, Semgrep, Snyk, Dependabot — incremental coverage may not exceed cost.
-- **High-volume, low-security churn.** Docs sites, generated code, config-heavy monorepos produce findings the reviewer cannot prioritise.
-- **`pull_request_target` with secrets.** A Comment-and-Control precondition; fix the trust boundary first.
+- No AppSec triage owner. Findings land on the PR author — without a triage queue, noise leads to dismissal.
+- Mature deterministic tooling already covers the surface. Tuned CodeQL, Semgrep, Snyk, Dependabot — incremental coverage may not exceed cost.
+- High-volume, low-security churn. Docs sites, generated code, config-heavy monorepos produce findings the reviewer cannot prioritize.
+- `pull_request_target` with secrets. A Comment-and-Control precondition. Fix the trust boundary first.
 
 ## Example
 

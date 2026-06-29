@@ -19,25 +19,25 @@ maturity: emerging
 
 > Per-agent foresight simulation detects the diversity collapse that signals an infectious jailbreak, then surgically removes the contaminated retrieval entry without homogenizing healthy agent behavior.
 
-## The Threat Model
+## The threat model
 
-Infectious jailbreak is a propagation attack on multi-agent systems with shared multimodal retrieval. [Gu et al. (ICML 2024)](https://arxiv.org/abs/2402.08567) showed a single adversarial image inserted into one agent's memory spreads exponentially through randomized pair-wise chat — up to one million LLaVA-1.5 agents compromised without further attacker action. The contagion channel is retrieval: poisoned entries get pulled by neighbours during routine inter-agent communication.
+Infectious jailbreak is a propagation attack on multi-agent systems with shared multimodal retrieval. [Gu et al. (ICML 2024)](https://arxiv.org/abs/2402.08567) showed that a single adversarial image inserted into one agent's memory spreads exponentially through randomized pair-wise chat. Up to one million LLaVA-1.5 agents were compromised without further attacker action. The contagion channel is retrieval: neighbours pull poisoned entries during routine inter-agent communication.
 
-Preconditions:
+The attack needs three preconditions:
 
-- Agents share a retrieval pool crossing agent boundaries
+- Agents share a retrieval pool that crosses agent boundaries
 - Inter-agent communication includes content drawn from that pool
 - The pool accepts multimodal input
 
-Production coding-agent topologies with isolated sub-agent context typically do not satisfy these. This defense targets retrieval-coupled multimodal MAS, not generic agent fleets.
+Production coding-agent topologies with isolated sub-agent context usually do not meet these. This defense targets retrieval-coupled multimodal MAS, not generic agent fleets.
 
-## Why Global Cure-Factor Defenses Fail
+## Why global cure-factor defenses fail
 
-First-generation defenses (e.g., Cowpox) train a more contagious counter-stimulus — a "cure factor" — that wins the retrieval race against the virus adversarial example (VirAE). [Ma, Yang, and Zhang (2026)](https://arxiv.org/abs/2605.01758) identify the structural cost: a globally-shared cure homogenizes responses across agents, destroying the diversity that justified multi-agent deployment.
+First-generation defenses, for example Cowpox, train a more contagious counter-stimulus — a "cure factor" — that wins the retrieval race against the virus adversarial example (VirAE). [Ma, Yang, and Zhang (2026)](https://arxiv.org/abs/2605.01758) identify the structural cost: a globally-shared cure homogenizes responses across agents and destroys the diversity that justified multi-agent deployment.
 
-## The Foresight-Guided Local Purification Mechanism
+## The foresight-guided local purification mechanism
 
-[FLP (Ma et al., 2026)](https://arxiv.org/abs/2605.01758) is training-free and per-agent. Each agent simulates near-future behavior across multiple personas and uses inconsistency in the simulated outputs as an infection signal.
+[FLP (Ma et al., 2026)](https://arxiv.org/abs/2605.01758) is training-free and works per-agent. Each agent simulates near-future behavior across several personas. It then treats inconsistency in the simulated outputs as an infection signal.
 
 ```mermaid
 graph TD
@@ -51,18 +51,18 @@ graph TD
     G --> D
 ```
 
-**Multi-persona simulation.** Before responding, the agent runs the upcoming interaction under several distinct personas, each producing a candidate retrieval and response ([Ma et al., 2026](https://arxiv.org/abs/2605.01758)). In a healthy MAS, these candidates differ in expected ways.
+Multi-persona simulation. Before responding, the agent runs the upcoming interaction under several distinct personas. Each persona produces a candidate retrieval and response ([Ma et al., 2026](https://arxiv.org/abs/2605.01758)). In a healthy MAS, these candidates differ in expected ways.
 
-**Diversity inconsistency as signal.** A VirAE collapses persona-driven diversity: every persona retrieves the same poisoned entry and converges on the same target. The collapse is measurable at retrieval-result level (which entries get pulled) and semantic level (what responses say). [Ma et al. (2026)](https://arxiv.org/abs/2605.01758) report this diagnostic holds across LLaVA-1.5-7B, InternVL2-8B, InstructBLIP-7B, and Qwen2-VL-8B.
+Diversity inconsistency as the signal. A VirAE collapses persona-driven diversity: every persona retrieves the same poisoned entry and converges on the same target. You can measure the collapse at the retrieval-result level (which entries get pulled) and the semantic level (what responses say). [Ma et al. (2026)](https://arxiv.org/abs/2605.01758) report that this diagnostic holds across LLaVA-1.5-7B, InternVL2-8B, InstructBLIP-7B, and Qwen2-VL-8B.
 
-**Two remediation paths:**
+Two remediation paths follow:
 
-- **Album rollback** — remove the most recent FIFO entry; cheap and surgical when the infection just landed
-- **Recursive Binary Diagnosis (RBD)** — partition the album in half, apply the diversity test to each half, recurse on the failing half until subset size ≤3, then remove. Complexity `O(log m · T_sim)` for `m` images
+- Album rollback — remove the most recent FIFO entry. Cheap and surgical when the infection just landed.
+- Recursive Binary Diagnosis (RBD) — partition the album in half, apply the diversity test to each half, recurse on the failing half until subset size ≤3, then remove. Complexity is `O(log m · T_sim)` for `m` images.
 
-## Reported Effectiveness
+## Reported effectiveness
 
-Against the Agent Smith attack ([arXiv:2402.08567](https://arxiv.org/abs/2402.08567)) under border perturbations (widths h=6,8,10,12) and pixel perturbations (`ε=4/255` to `32/255`):
+The table below covers the Agent Smith attack ([arXiv:2402.08567](https://arxiv.org/abs/2402.08567)) under border perturbations (widths h=6,8,10,12) and pixel perturbations (`ε=4/255` to `32/255`):
 
 | Condition | Cumulative infection (no defense) | Cumulative infection (FLP) |
 |---|---|---|
@@ -70,30 +70,30 @@ Against the Agent Smith attack ([arXiv:2402.08567](https://arxiv.org/abs/2402.08
 | Most other settings | ~100% | 0.00% |
 | Current infection rate | up to 100% | 0–3.12% |
 
-Source: [Ma et al., 2026](https://arxiv.org/abs/2605.01758). Retrieval and semantic metrics under FLP "closely match benign baselines" — the diversity preservation that motivated the design holds empirically.
+Source: [Ma et al., 2026](https://arxiv.org/abs/2605.01758). Retrieval and semantic metrics under FLP "closely match benign baselines", so the diversity preservation that motivated the design holds empirically.
 
-## When This Pattern Applies
+## When this pattern applies
 
 Apply FLP-style local purification when all three conditions hold:
 
-1. **Shared retrieval pool across agents** — without a propagation channel there is nothing to defend against
-2. **Multimodal or otherwise opaque inputs** — text-only retrieval is out of scope; the paper restricts evaluation to multimodal MAS and excludes "purely textual interactions or different task types"
-3. **Diversity is worth preserving** — if a homogenizing defense is acceptable, simpler global filters cost less than per-round simulation
+1. Shared retrieval pool across agents — without a propagation channel there is nothing to defend against
+2. Multimodal or otherwise opaque inputs — text-only retrieval is out of scope. The paper restricts evaluation to multimodal MAS and excludes "purely textual interactions or different task types".
+3. Diversity is worth preserving — if a homogenizing defense is acceptable, simpler global filters cost less than per-round simulation
 
-## When Simpler Defenses Suffice
+## When simpler defenses suffice
 
-Coding-agent fleets with isolated sub-agent contexts already break the contagion channel — there is no shared pool to poison. Standard isolation and sandboxing ([Blast Radius Containment](blast-radius-containment.md), [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)) contain the threat without per-round simulation overhead. [Anthropic's context engineering guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) treats sub-agent isolation as a primary tool for cross-agent failure modes.
+Coding-agent fleets with isolated sub-agent contexts already break the contagion channel, because there is no shared pool to poison. Standard isolation and sandboxing contain the threat without per-round simulation overhead, as covered in [Blast Radius Containment](blast-radius-containment.md) and [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md). [Anthropic's context engineering guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) treats sub-agent isolation as a primary tool for cross-agent failure modes.
 
 ## Limitations
 
-- **Inference overhead** — per-round multi-persona simulation adds cost the paper flags for "large-scale MASs or long interaction processes" ([Ma et al., 2026](https://arxiv.org/abs/2605.01758))
-- **Adversary-controlled diagnostic** — the simulation runs on the same model class as the agents; prompt injection against the simulation step can suppress the diversity signal. Not addressed by the paper.
-- **No provable containment** — [Gu et al. (2024)](https://arxiv.org/abs/2402.08567) state designing a defense provably restraining spread "remains an open question." FLP shows empirical reduction, not formal guarantees.
-- **Modality scope** — evaluation is multimodal-RAG-specific; generalising to tool-use chains or code pipelines requires re-deriving the diversity-signal premise
+- Inference overhead — per-round multi-persona simulation adds cost. The paper flags this for "large-scale MASs or long interaction processes" ([Ma et al., 2026](https://arxiv.org/abs/2605.01758)).
+- Adversary-controlled diagnostic — the simulation runs on the same model class as the agents, so prompt injection against the simulation step can suppress the diversity signal. The paper does not address this.
+- No provable containment — [Gu et al. (2024)](https://arxiv.org/abs/2402.08567) state that designing a defense to provably restrain spread "remains an open question". FLP shows empirical reduction, not formal guarantees.
+- Modality scope — evaluation is multimodal-RAG-specific. Generalizing to tool-use chains or code pipelines requires re-deriving the diversity-signal premise.
 
 ## Example
 
-A multimodal customer-support MAS with five agents sharing a CLIP-indexed image album receives a poisoned product photo via one user upload. Without defense, by chat round 24 every agent in the fleet returns a malicious response. With FLP wired into each agent:
+A multimodal customer-support MAS has five agents that share a CLIP-indexed image album. One user upload delivers a poisoned product photo. Without defense, every agent in the fleet returns a malicious response by chat round 24. With FLP wired into each agent:
 
 ```yaml
 # per-agent defense config
@@ -109,7 +109,7 @@ remediation:
   rbd_min_subset: 3               # stop recursing at 3 entries
 ```
 
-When the user-uploaded VirAE lands in agent A's album, A's next chat round triggers the diagnostic: all four personas retrieve the same entry and converge on the same harmful response. Diversity collapse is detected; the FIFO-most-recent entry is rolled back; A's next response is benign and the contagion never reaches agents B–E. The reported numbers translate: 100% cumulative infection at round 24 drops to under 5.5% across the fleet.
+When the user-uploaded VirAE lands in agent A's album, A's next chat round triggers the diagnostic: all four personas retrieve the same entry and converge on the same harmful response. The agent detects the diversity collapse, rolls back the FIFO-most-recent entry, and returns a benign next response. The contagion never reaches agents B–E. The reported numbers translate: 100% cumulative infection at round 24 drops to under 5.5% across the fleet.
 
 ## Key Takeaways
 

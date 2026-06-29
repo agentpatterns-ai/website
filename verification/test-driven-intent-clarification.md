@@ -17,15 +17,15 @@ maturity: emerging
 
 > Generate tests that expose specification ambiguity, validate them against your intent, then constrain code generation — validating tests is cheaper and more precise than review.
 
-## The Intent Gap
+## The intent gap
 
-"Sort users by activity" could mean descending by last-active timestamp, ascending by total actions, or weighted by recency. An LLM picks one reading; if it differs from your intent, you discover the mismatch during [code review](../code-review/diff-based-review.md) — the most expensive place to catch it.
+"Sort users by activity" could mean descending by last-active timestamp, ascending by total actions, or weighted by recency. An LLM picks one reading. If it differs from your intent, you discover the mismatch during [code review](../code-review/diff-based-review.md) — the most expensive place to catch it.
 
 The gap between what you mean and what the model generates is a specification failure, not a generation failure. Better models do not close it — clearer specs do.
 
-## The Technique
+## The technique
 
-Use AI-generated tests as an intermediate artifact to surface and resolve ambiguity *before* code is written.
+Use AI-generated tests as an intermediate artifact to surface and resolve ambiguity before code is written.
 
 ```mermaid
 graph TD
@@ -40,32 +40,32 @@ graph TD
 
 The cognitive shift: instead of "is this 50-line function correct?" you answer "should `sort_users(['alice', 'bob'])` return `['bob', 'alice']`?"
 
-### Why Tests, Not Code
+### Why tests, not code
 
-A test case is one input, one expected output, one assertion. `assert sort_users(input) == expected` either matches your intent or it doesn't. Code review reasons about implementation logic, control flow, and edge cases at once; test validation handles one input-output pair at a time. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
+A test case is one input, one expected output, one assertion. `assert sort_users(input) == expected` either matches your intent or it does not. Code review reasons about implementation logic, control flow, and edge cases at once. Test validation handles one input-output pair at a time. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
 
-## Discriminative Test Selection
+## Discriminative test selection
 
-A test every candidate passes carries zero information. The highest-value tests are *discriminative*: they split candidates into groups that disagree on expected output. Score each test by how evenly it splits candidates — a 50/50 split maximizes information gain at *points of ambiguity* where reasonable interpretations diverge. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
+A test every candidate passes carries zero information. The highest-value tests are discriminative: they split candidates into groups that disagree on expected output. Score each test by how evenly it splits candidates — a 50/50 split maximizes information gain at points of ambiguity where reasonable interpretations diverge. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
 
-## Quantitative Evidence
+## Quantitative evidence
 
-**User study (n=15)**: code review scored 40% correctness; test validation scored 84% (p=0.001). NASA-TLX load dropped from 45.46 to 28.00 (p=0.012). ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
+User study (n=15): code review scored 40% correctness; test validation scored 84% (p=0.001). NASA-TLX load dropped from 45.46 to 28.00 (p=0.012). ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
 
-**Benchmark (7 LLMs, 2 Python datasets)**: 45.97% average absolute pass@1 improvement on MBPP and HumanEval within 5 rounds. CodeGen-6B with validated tests (69.55% on MBPP) beat baseline GPT-3.5-turbo (61.91%). ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
+Benchmark (7 LLMs, 2 Python datasets): pass@1 improved by 45.97% on average across MBPP and HumanEval within 5 rounds. CodeGen-6B with validated tests (69.55% on MBPP) beat baseline GPT-3.5-turbo (61.91%). ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
 
-**Tests beat prompt-based specification**: adding tests to the prompt reached 80.88% pass@1 (GPT-4-32k, MBPP). Execution-based pruning reached 81.56% using pass/fail alone — LLMs do not reliably satisfy tests given only as prompt context. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
+Tests beat prompt-based specification. Adding tests to the prompt reached 80.88% pass@1 (GPT-4-32k, MBPP). Execution-based pruning reached 81.56% using pass/fail alone — LLMs do not reliably satisfy tests given only as prompt context. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
 
-## When This Backfires
+## When this backfires
 
-- **Developers misjudge tests.** The TiCoder study found participants sometimes approved incorrect surfaced tests, formalizing wrong intent into code. Validation is only cheaper than code review when the reviewer can recognize wrong expected outputs. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
-- **Shared blind spots.** When one model both drafts tests and interprets the prompt, tests inherit its misreading. An alternative is having the model ask a clarifying question rather than commit to tests. ([Wu et al., 2025](https://arxiv.org/abs/2504.16331))
-- **Unfamiliar domain.** If the developer doesn't yet know the right answer (new subsystem, unfamiliar library), the loop encodes guesses as ground truth.
-- **Out of scope.** Evidence covers single-function Python with an idealized oracle; multi-file refactors and stateful systems are untested.
+- Developers misjudge tests. The TiCoder study found participants sometimes approved incorrect surfaced tests, formalizing wrong intent into code. Validation is only cheaper than code review when the reviewer can recognize wrong expected outputs. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
+- Shared blind spots. When one model both drafts tests and interprets the prompt, tests inherit its misreading. An alternative is having the model ask a clarifying question rather than commit to tests. ([Wu et al., 2025](https://arxiv.org/abs/2504.16331))
+- Unfamiliar domain. If the developer does not yet know the right answer (new subsystem, unfamiliar library), the loop encodes guesses as ground truth.
+- Out of scope. Evidence covers single-function Python with an idealized oracle. Multi-file refactors and stateful systems are untested.
 
-## How This Differs from TDD with Agents
+## How this differs from TDD with agents
 
-[Test-driven agent development](tdd-agent-development.md) is *developer writes tests, agent implements* — the spec is already known. Intent clarification inverts the roles: *agent generates tests, developer validates*, formalizing the spec incrementally as tests are approved or rejected.
+In [test-driven agent development](tdd-agent-development.md), the developer writes the tests and the agent implements — the spec is already known. Intent clarification inverts the roles: the agent generates tests and the developer validates them, formalizing the spec incrementally as tests are approved or rejected.
 
 | Dimension | TDD with Agents | Intent Clarification |
 |-----------|----------------|----------------------|
@@ -76,24 +76,24 @@ A test every candidate passes carries zero information. The highest-value tests 
 
 Use intent clarification when the spec is fuzzy, TDD when it is precise.
 
-## Applying the Technique Today
+## Applying the technique today
 
 No mainstream AI assistant ships a TiCoder-style test-validate-then-generate loop. Approximate it manually:
 
-1. **Prompt for tests first**: "Generate 5-10 test cases covering expected behavior, including ambiguous edge cases. Do not implement yet."
-2. **Review each test**: does it match your intent? Reject ones that don't and say why.
-3. **Constrain generation**: "Implement the function so all approved tests pass; discard the rejected ones."
-4. **Iterate**: if implementation reveals new ambiguity, ask for more discriminative tests targeting it.
+1. Prompt for tests first. Ask the assistant to "generate 5-10 test cases covering expected behavior, including ambiguous edge cases. Do not implement yet."
+2. Review each test. Decide whether it matches your intent. Reject the ones that do not and say why.
+3. Constrain generation. Ask the assistant to "implement the function so all approved tests pass; discard the rejected ones."
+4. Iterate. If the implementation reveals new ambiguity, ask for more discriminative tests targeting it.
 
-Key discipline: review tests *before* seeing any implementation — once you've seen code, your judgment anchors to it, not your intent.
+Review tests before you see any implementation. Once you have seen code, your judgment anchors to it, not to your intent.
 
 ## Example
 
 A developer prompts: "Write a function that extracts email addresses from text."
 
-**Without intent clarification** — the AI generates an implementation. During review, the developer discovers it does not handle emails in angle brackets (`<user@example.com>`), does not deduplicate, and includes `mailto:` prefixed addresses. Each issue is a specification gap discovered during code review.
+Without intent clarification, the AI generates an implementation. During review, the developer discovers it does not handle emails in angle brackets (`<user@example.com>`), does not deduplicate, and includes `mailto:` prefixed addresses. Each issue is a specification gap discovered during code review.
 
-**With intent clarification** — the developer first asks for discriminative tests:
+With intent clarification, the developer first asks for discriminative tests:
 
 ```python
 # AI-generated tests surfacing ambiguity points

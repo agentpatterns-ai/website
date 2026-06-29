@@ -15,36 +15,36 @@ maturity: emerging
 
 > Inject targeted guidance at specific points during agent execution to combat instruction fade-out and reinforce safety constraints without bloating the static system prompt.
 
-**Learn it hands-on:** [When the Prompt Fades](https://learn.agentpatterns.ai/prompt-engineering/when-the-prompt-fades/) — guided lesson with quizzes.
+Learn it hands-on with [When the Prompt Fades](https://learn.agentpatterns.ai/prompt-engineering/when-the-prompt-fades/) — a guided lesson with quizzes.
 
-## The Problem: Instruction Fade-Out
+## The problem: instruction fade-out
 
-Static system prompts lose effectiveness over extended sessions. The model progressively deprioritizes initial instructions as conversation history grows — even when those instructions remain present in context ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)).
+Static system prompts lose effect over long sessions. The model gradually deprioritizes the initial instructions as the conversation history grows, even when those instructions stay present in context ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)).
 
-This is distinct from context compression. Instructions may survive compaction but still fail to influence behavior because they occupy a low-attention region of the context ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)). Research on long-context LLMs confirms that models attend most reliably to content at the beginning and end of context, with degraded recall for middle-positioned content ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)).
+This differs from context compression. Instructions can survive compaction but still fail to shape behavior, because they sit in a low-attention region of the context ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)). Research on long-context LLMs confirms that models attend most reliably to content at the start and end of the context, and recall middle content less well ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)).
 
-## Event Detectors
+## Event detectors
 
-Rather than repeating all instructions continuously, event detectors monitor for specific conditions that warrant targeted re-injection ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)):
+Rather than repeat every instruction continuously, event detectors watch for specific conditions that warrant a targeted re-injection ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)):
 
-- **Repeated tool failures** — the agent is stuck in a retry loop
-- **Approaching token budget** — context pressure requires strategy adjustment
-- **Safety violations** — dangerous commands attempted or approval denied
-- **Extended execution time** — long-running sessions where fade-out is likely
+- Repeated tool failures — the agent is stuck in a retry loop
+- Approaching token budget — context pressure calls for a strategy change
+- Safety violations — a dangerous command was attempted or approval was denied
+- Extended execution time — long-running sessions where fade-out is likely
 
-Each detector triggers reminder injection at the next decision point rather than interrupting mid-execution.
+Each detector triggers a reminder injection at the next decision point rather than interrupting mid-execution.
 
-## Template Resolution
+## Template resolution
 
-Triggered events are matched against reminder templates that combine static guidance with dynamic variables — current file, last error, iteration count, tool failure count. Templates fall into three categories ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)):
+Each triggered event is matched against reminder templates. The templates combine static guidance with dynamic variables — current file, last error, iteration count, tool failure count. They fall into three categories ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)):
 
-- **Safety guardrails** — reinforce constraints on destructive operations
-- **Tool-usage guidance** — redirect tool selection when the agent is using the wrong approach
-- **Error-recovery strategies** — provide escalating recovery tactics
+- Safety guardrails — reinforce constraints on destructive operations
+- Tool-usage guidance — redirect tool selection when the agent uses the wrong approach
+- Error-recovery strategies — supply escalating recovery tactics
 
-## Escalating Severity via Guardrail Counters
+## Escalating severity via guardrail counters
 
-Guardrail counters track violation frequency and escalate reminder severity accordingly ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)):
+Guardrail counters track how often violations occur and raise reminder severity to match ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)):
 
 | Count | Severity | Tone |
 |-------|----------|------|
@@ -52,19 +52,19 @@ Guardrail counters track violation frequency and escalate reminder severity acco
 | 2--3 | Warning | State constraint explicitly |
 | 4+ | Mandatory | Require compliance, block progress |
 
-This graduated response avoids overreacting to a single misstep while preventing persistent violations.
+This graduated response avoids overreacting to a single misstep, while still stopping persistent violations.
 
-## User-Role Injection
+## User-role injection
 
-Reminders are injected as user messages rather than appended to the system prompt. User messages appear in conversation history and remain in the model's attention window more reliably than system prompt additions. This placement also allows explicit user commands to override reminders when appropriate ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)).
+Inject reminders as user messages rather than append them to the system prompt. User messages appear in the conversation history and stay in the model's attention window more reliably than system prompt additions. This placement also lets explicit user commands override a reminder when appropriate ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)).
 
-## Graceful Degradation
+## Graceful degradation
 
-If an event detector fails, the system continues without reminder injection. Reminders are additive safety — not critical-path requirements. The agent operates with its baseline system prompt, which remains functional. This prevents reminder infrastructure failures from cascading into agent failures ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)).
+If an event detector fails, the system carries on without injecting a reminder. Reminders are additive safety, not critical-path requirements. The agent runs on its baseline system prompt, which still works. This stops a failure in the reminder infrastructure from cascading into an agent failure ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)).
 
 ## Example
 
-The following shows a minimal Python implementation of event-driven reminder injection. A `ReminderMiddleware` class wraps the message list, monitors tool call outcomes, and injects a user-role message when a detector fires.
+This minimal Python implementation shows event-driven reminder injection. A `ReminderMiddleware` class wraps the message list, watches tool call outcomes, and injects a user-role message when a detector fires.
 
 ```python
 class ReminderMiddleware:
@@ -103,18 +103,18 @@ class ReminderMiddleware:
         return messages + [{"role": "user", "content": reminder}]
 ```
 
-A reminder is only generated when the failure count crosses the threshold. The `inject` method appends it as a `user` message — not a system prompt addition — consistent with the user-role injection pattern described above. If `record_tool_result` is never called (e.g., the detector crashes), `messages` is returned unchanged, preserving graceful degradation.
+A reminder is generated only when the failure count crosses the threshold. The `inject` method appends it as a `user` message, not a system prompt addition, in line with the user-role injection pattern above. If `record_tool_result` is never called, for example because the detector crashes, `messages` is returned unchanged and graceful degradation holds.
 
-## When This Backfires
+## When this backfires
 
-Event-driven reminders add value for long-running, multi-step agents but introduce real costs in simpler contexts:
+Event-driven reminders help long-running, multi-step agents, but they cost more than they are worth in simpler settings:
 
-- **Short sessions**: Reminder infrastructure is pure overhead when a session rarely exceeds a few dozen exchanges. Instruction fade-out is negligible; a well-structured static [system prompt](system-prompt-altitude.md) covers the case, and detector and template machinery adds complexity without benefit.
-- **Detector false positives**: A badly tuned failure threshold fires on normal retry behavior, injecting redundant guidance into a functioning flow. Accumulated user-role injections consume tokens and can themselves occupy the [low-attention middle](../context-engineering/lost-in-the-middle.md) of the context — recreating the problem they're meant to solve.
-- **Template drift**: If reminder templates are not kept consistent with the system prompt, injected user messages can contradict baseline instructions, producing confused behavior that is harder to debug than simple fade-out.
-- **Context token pressure**: Each injected reminder consumes tokens. Under tight context budgets, frequent reminder injection accelerates the context pressure it aims to mitigate ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)).
+- Short sessions: the reminder infrastructure is pure overhead when a session rarely runs past a few dozen exchanges. Instruction fade-out is negligible, a well-structured static [system prompt](system-prompt-altitude.md) covers the case, and the detector and template machinery adds complexity for no benefit.
+- Detector false positives: a badly tuned failure threshold fires on normal retries and injects redundant guidance into a working flow. The piled-up user-role injections consume tokens and can themselves sit in the [low-attention middle](../context-engineering/lost-in-the-middle.md) of the context, recreating the problem they are meant to solve.
+- Template drift: if you do not keep reminder templates consistent with the system prompt, injected user messages can contradict the baseline instructions and produce confused behavior that is harder to debug than plain fade-out.
+- Context token pressure: each injected reminder consumes tokens. Under a tight context budget, frequent injection speeds up the context pressure it aims to ease ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)).
 
-Prefer event-driven reminders for long-running or safety-critical agents. For short-lived, well-scoped tasks, a well-structured static system prompt is lower risk.
+Prefer event-driven reminders for long-running or safety-critical agents. For short, well-scoped tasks, a well-structured static system prompt carries lower risk.
 
 ## Key Takeaways
 

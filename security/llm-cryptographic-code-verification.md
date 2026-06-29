@@ -16,9 +16,9 @@ maturity: established
 
 > LLM-generated crypto code rarely compiles and is usually exploitable when it does. Verify with a crypto-specific analyzer, avoid chain-of-thought, and constrain agents to vetted APIs.
 
-## The Failure Surface
+## The failure surface
 
-A controlled study of 240 Rust samples — three LLMs (Gemini 2.5 Pro, GPT-4o, DeepSeek Coder) × two AEAD ciphers × four prompt strategies × ten samples each — produced these results ([Elsayed et al., 2026](https://arxiv.org/abs/2604.27001)):
+A controlled study of 240 Rust samples produced these results. The study covered three LLMs (Gemini 2.5 Pro, GPT-4o, DeepSeek Coder), two AEAD ciphers, four prompt strategies, and ten samples each ([Elsayed et al., 2026](https://arxiv.org/abs/2604.27001)):
 
 | Metric | Result |
 |---|---|
@@ -28,30 +28,30 @@ A controlled study of 240 Rust samples — three LLMs (Gemini 2.5 Pro, GPT-4o, D
 | ChaCha20-Poly1305 compile rate | 12.5% |
 | Chain-of-thought vs zero-shot | ~5× worse for CoT (P = 0.002) |
 
-Recurring failure modes across all three models: **nonce reuse** and **cryptographic API hallucination** — invented function signatures and wrong argument orders against the `aes-gcm` and `chacha20poly1305` crates ([Elsayed et al., 2026](https://arxiv.org/abs/2604.27001)).
+Two failure modes recurred across all three models: nonce reuse and cryptographic API hallucination. The models invented function signatures and got argument orders wrong against the `aes-gcm` and `chacha20poly1305` crates ([Elsayed et al., 2026](https://arxiv.org/abs/2604.27001)).
 
-The pattern is consistent with broader data on AI-generated code: Pearce et al. found ~40% of Copilot completions across 89 CWE-Top-25 scenarios were vulnerable ([Pearce et al., 2021](https://arxiv.org/abs/2108.09293)). Cryptographic code sits at the worst end of that distribution.
+The pattern matches broader data on AI-generated code. Pearce et al. found that about 40% of Copilot completions across 89 CWE-Top-25 scenarios were vulnerable ([Pearce et al., 2021](https://arxiv.org/abs/2108.09293)). Cryptographic code sits at the worst end of that distribution.
 
-## Why General SAST Misses It
+## Why general SAST misses it
 
 The Elsayed et al. analyzer found 57% of compiled samples vulnerable; CodeQL's general-purpose rules did not. The gap is structural:
 
-- **Non-syntactic invariants.** Nonce uniqueness, key separation, AEAD tag verification, IND-CCA boundaries are properties of *runtime behaviour*, not source-code shapes. General SAST has no rule for "this nonce has been used twice with the same key."
-- **API hallucination is below the lint threshold.** Invented signatures fail to compile; the failure is silent — no security signal reaches the developer, only a build error they may "fix" by re-prompting.
-- **Compiled-but-wrong is the dangerous quadrant.** Agents iterating against `cargo build` until it passes select for samples that *look* correct.
+- Non-syntactic invariants. Nonce uniqueness, key separation, AEAD tag verification, and IND-CCA boundaries are properties of runtime behavior, not source-code shapes. General SAST has no rule for "this nonce has been used twice with the same key."
+- API hallucination sits below the lint threshold. Invented signatures fail to compile, and the failure is silent. No security signal reaches the developer, only a build error they may "fix" by re-prompting.
+- Compiled-but-wrong is the dangerous quadrant. An agent that iterates against `cargo build` until it passes selects for samples that look correct.
 
-A crypto-specific analyzer encodes the actual invariants — nonce-counter monotonicity, AEAD tag verification on every decrypt path, KDF parameter floors. Generic SAST is necessary but not sufficient.
+A crypto-specific analyzer encodes the actual invariants: nonce-counter monotonicity, AEAD tag verification on every decrypt path, and KDF parameter floors. Generic SAST is necessary but not sufficient.
 
-## Why Chain-of-Thought Backfires
+## Why chain-of-thought backfires
 
-The 5× CoT penalty inverts the conventional CoT-improves-reasoning prior ([Wei et al., 2022](https://arxiv.org/abs/2201.11903)). Two mechanisms align with the observation:
+The 5× CoT penalty inverts the usual prior that CoT improves reasoning ([Wei et al., 2022](https://arxiv.org/abs/2201.11903)). Two mechanisms fit the observation:
 
-- **Reasoning amplifies hallucination.** Each intermediate step is another decision point at which the model can confidently assert an incorrect crypto invariant and propagate it into the code. Turpin et al. showed CoT explanations rationalize wrong outputs rather than correct them — up to 36% accuracy drop on biased prompts ([Turpin et al., 2023](https://arxiv.org/abs/2305.04388)).
-- **Structural anchors compound.** Reasoning-to-code transitions are where CoT-induced fragility concentrates ([CoT Robustness in Code Generation](../verification/cot-robustness-code-generation.md)). Crypto code has more such anchors per line than typical application code — algorithm choice, mode, KDF, nonce strategy, encoding — giving CoT more opportunities to drift.
+- Reasoning amplifies hallucination. Each intermediate step is another decision point where the model can confidently assert a wrong crypto invariant and carry it into the code. Turpin et al. showed that CoT explanations rationalize wrong outputs rather than correct them, with accuracy dropping by up to 36% on biased prompts ([Turpin et al., 2023](https://arxiv.org/abs/2305.04388)).
+- Structural anchors compound. Reasoning-to-code transitions are where CoT-induced fragility concentrates ([CoT Robustness in Code Generation](../verification/cot-robustness-code-generation.md)). Crypto code has more such anchors per line than typical application code — algorithm choice, mode, KDF, nonce strategy, and encoding — so CoT has more chances to drift.
 
-For cryptographic generation, prefer **zero-shot prompts that name the exact crate and high-level API** over reasoning-style prompts.
+For cryptographic generation, prefer zero-shot prompts that name the exact crate and high-level API over reasoning-style prompts.
 
-## Verification Architecture
+## Verification architecture
 
 ```mermaid
 graph TD
@@ -65,23 +65,23 @@ graph TD
     E --> F
 ```
 
-Layered defence for any pipeline where an agent may emit cryptographic code:
+Layered defense for any pipeline where an agent may emit cryptographic code:
 
-1. **Constrain at the prompt.** Specify the high-level AEAD wrapper (e.g., from the [RustCrypto `aead` trait](https://docs.rs/aead/latest/aead/)) and the nonce-generation strategy. Forbid raw block-cipher use.
-2. **Use zero-shot, not CoT, for crypto generation.** Reverse the usual default for this code path.
-3. **Fail closed on compile errors.** Do not blindly re-prompt until `cargo build` passes — that loop selects for plausible-looking but invariant-violating code. Treat compile failure as a signal the model lacks coverage for this API.
-4. **Run a crypto-specific analyzer post-compile.** Encode rules for nonce uniqueness, tag verification, KDF floors, mode misuse. The Elsayed et al. analyzer ran with zero false positives on real LLM output.
-5. **Require human cryptographer review** for any code touching raw primitives, custom KDFs, or new algorithm integrations.
+1. Constrain at the prompt. Specify the high-level AEAD wrapper (for example, from the [RustCrypto `aead` trait](https://docs.rs/aead/latest/aead/)) and the nonce-generation strategy. Forbid raw block-cipher use.
+2. Use zero-shot, not CoT, for crypto generation. Reverse the usual default for this code path.
+3. Fail closed on compile errors. Do not blindly re-prompt until `cargo build` passes — that loop selects for plausible-looking but invariant-violating code. Treat compile failure as a signal the model lacks coverage for this API.
+4. Run a crypto-specific analyzer post-compile. Encode rules for nonce uniqueness, tag verification, KDF floors, and mode misuse. The Elsayed et al. analyzer ran with zero false positives on real LLM output.
+5. Require human cryptographer review for any code touching raw primitives, custom KDFs, or new algorithm integrations.
 
 A [security constitution](security-constitution-ai-code-gen.md) encoding these rules at specification time prevents the agent from emitting failing patterns in the first place.
 
-## When This Backfires Less
+## When this backfires less
 
-The recommendations target *direct generation of cryptographic implementation code* by general-purpose LLMs. They are less load-bearing when:
+The recommendations target direct generation of cryptographic implementation code by general-purpose LLMs. They matter less when:
 
-- The agent **uses** crypto via a vetted SDK (AWS KMS, Vault) rather than implementing it — API-level use is dominated by argument correctness.
-- The task is **migration or refactoring** of audited code with reference output the agent can match against.
-- A **constrained-decoding harness** restricts output to a fixed grammar of approved API calls.
+- The agent uses crypto via a vetted SDK such as AWS KMS or Vault rather than implementing it. API-level use is dominated by argument correctness.
+- The task is migration or refactoring of audited code, with reference output the agent can match against.
+- A constrained-decoding harness restricts output to a fixed grammar of approved API calls.
 
 The failure surface is concentrated where an agent invents algorithm-level code from a natural-language description against a generalist model with no specialized verification.
 

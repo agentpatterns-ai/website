@@ -18,21 +18,21 @@ maturity: emerging
 
 > A scheduled GitHub Actions agent that reads CLAUDE.md and all `@path`-referenced instruction files, verifies each factual claim against the live codebase, and opens a correction PR — keeping instruction files accurate as the project evolves.
 
-## The Problem
+## The problem
 
 Instruction files are written at a point in time. The codebase changes continuously. File paths move, command names change, deprecated patterns propagate, new conventions emerge. The agent following CLAUDE.md silently degrades as the gap between "what the file says" and "what the project actually is" widens.
 
 [Continuous agent improvement](continuous-agent-improvement.md) documents this as the staleness problem and prescribes periodic manual review. This page documents the automated version: a scheduled agent that runs the review for you.
 
-## What This Differs From
+## What this differs from
 
-| Page | Covers | Does Not Cover |
+| Page | Covers | Does not cover |
 |------|--------|----------------|
 | [Continuous Documentation](continuous-documentation.md) | Code → docs drift | Instruction file → codebase drift |
 | [Entropy Reduction Agents](entropy-reduction-agents.md) | Architectural violations in code | Inaccurate claims in instruction files |
 | [Continuous Agent Improvement](continuous-agent-improvement.md) | Manual observation → update loop | Automated fact-checking |
 
-The unique angle here is **closed-loop automation** applied specifically to instruction files: not just detecting drift after a human notices it, but running a scheduled agent that reads the file, verifies each claim against the codebase, and proposes corrections.
+The angle here is closed-loop automation for instruction files. It does not just detect drift after a human notices it. It runs a scheduled agent that reads the file, verifies each claim against the codebase, and proposes corrections.
 
 ## Mechanism
 
@@ -49,11 +49,11 @@ graph TD
     H --> A
 ```
 
-Three things the agent verifies per claim:
+The agent verifies three things per claim:
 
-1. **File paths exist** — does `src/handlers/` still exist? Did it move to `src/api/handlers/`?
-2. **Commands work** — does `npm run lint` still exist in `package.json`? Has it been renamed?
-3. **Patterns are current** — is the referenced convention still the recommended approach, or has it been superseded?
+1. File paths exist — does `src/handlers/` still exist? Did it move to `src/api/handlers/`?
+2. Commands work — does `npm run lint` still exist in `package.json`? Has it been renamed?
+3. Patterns are current — is the referenced convention still the recommended approach, or has it been superseded?
 
 The agent does not rewrite strategy or intent — only verifiable facts that can be checked against disk.
 
@@ -100,7 +100,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### Scope: What to Fact-Check
+### Scope: what to fact-check
 
 | Claim type | Verifiable? | Example |
 |-----------|-------------|---------|
@@ -111,9 +111,9 @@ jobs:
 | Architectural intent | No — skip | "use the repository pattern" |
 | Style rules | No — skip | "prefer named exports" |
 
-Restrict the agent to verifiable facts. Style rules and architectural intent cannot be fact-checked against the codebase and should be left unchanged.
+Restrict the agent to verifiable facts. Leave style rules and architectural intent unchanged — you cannot fact-check them against the codebase.
 
-## Output Constraints
+## Output constraints
 
 The agent's output must always be a reviewable PR — never a direct commit to main. This is consistent with the safe-output model that GitHub's agentic workflow documentation requires ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
 
@@ -125,9 +125,9 @@ A well-scoped correction PR is typically small and fast to review:
 
 ## Cadence
 
-Weekly is the right default cadence for most projects. Daily runs produce noise if the codebase changes slowly. The right trigger is the same trigger that drives [entropy reduction agents](entropy-reduction-agents.md): a slow-moving background process that catches drift the reactive CI pipeline misses.
+Weekly is the right default cadence for most projects. Daily runs produce noise if the codebase changes slowly. The right trigger is the same one that [entropy reduction agents](entropy-reduction-agents.md) use: a slow-moving background process that catches drift the reactive CI pipeline misses.
 
-For high-churn projects, augment the schedule with a push trigger scoped to instruction files' direct dependencies — the directories and files they reference:
+For high-churn projects, add a push trigger scoped to the directories and files the instruction files reference:
 
 ```yaml
 on:
@@ -140,18 +140,18 @@ on:
       - '.claude/**'
 ```
 
-## Extension: Learning From Session Logs
+## Extension: learning from session logs
 
-A natural extension of the fact-checker is a workflow that also learns — not just verifying existing claims but surfacing new patterns from agent session logs worth adding to the instruction file.
+One extension of the fact-checker also learns. It does not just verify existing claims. It surfaces new patterns from agent session logs worth adding to the instruction file.
 
-That extension is a separate workflow from fact-checking. The fact-checker answers "is what we wrote still true?" Session log mining answers "what should we add?" Conflating them in one agent produces a low-precision output that is harder to review.
+That extension is a separate workflow from fact-checking. The fact-checker answers "is what we wrote still true?" Session log mining answers "what should we add?" Conflating them in one agent produces low-precision output that is harder to review.
 
-## When This Backfires
+## When this backfires
 
-- **Stable, low-churn projects** — if the codebase changes rarely, weekly PRs with zero corrections are noise. Disable the schedule and trigger only on directory changes.
-- **Intent drift masquerading as fact drift** — the agent may propose "correcting" a path that moved intentionally as part of a refactor, without knowing the convention itself changed (the manual-review loop in [continuous agent improvement](continuous-agent-improvement.md) catches what disk-checking cannot). Each correction PR still needs human review; this is a feature, not a bug, but reviewers who rubber-stamp will erode the quality of the instruction file over time.
-- **High-rename velocity** — projects that rename paths and commands frequently will produce a steady stream of correction PRs. At that point, better investment is a single post-refactor hook that prompts the developer to update CLAUDE.md before the schedule runs.
-- **Over-scoped prompts** — if the agent prompt allows editing strategy or intent (not just verifiable facts), it will rewrite the instruction file's meaning rather than its accuracy. Restrict `--allowedTools` to `Read,Bash,Write` and constrain the prompt to fact-checking only.
+- Stable, low-churn projects — if the codebase changes rarely, weekly PRs with zero corrections are noise. Disable the schedule and trigger only on directory changes.
+- Intent drift masquerading as fact drift — the agent may propose "correcting" a path that moved intentionally as part of a refactor, without knowing the convention itself changed (the manual-review loop in [continuous agent improvement](continuous-agent-improvement.md) catches what disk-checking cannot). Each correction PR still needs human review. That review is a feature, not a bug, but reviewers who rubber-stamp will erode the quality of the instruction file over time.
+- High-rename velocity — projects that rename paths and commands frequently will produce a steady stream of correction PRs. At that point, a better investment is a single post-refactor hook that prompts the developer to update CLAUDE.md before the schedule runs.
+- Over-scoped prompts — if the agent prompt allows editing strategy or intent (not just verifiable facts), it will rewrite the instruction file's meaning rather than its accuracy. Restrict `--allowedTools` to `Read,Bash,Write` and constrain the prompt to fact-checking only.
 
 ## Example
 
@@ -168,9 +168,9 @@ The team renames `src/handlers/` to `src/api/routes/` and replaces `npm run lint
 
 On Monday at 06:00 UTC the scheduled workflow runs. The agent reads CLAUDE.md, extracts three verifiable claims, and checks each:
 
-1. **`src/handlers/` exists** — `ls src/handlers/` fails. Agent finds `src/api/routes/` via `find src -type d -name routes`. Proposes correction: `src/handlers/` → `src/api/routes/`.
-2. **`npm run lint` exists** — `jq '.scripts.lint' package.json` returns null. Agent finds `npm run check` instead. Proposes correction: `npm run lint` → `npm run check`.
-3. **`src/repositories/` exists** — `ls src/repositories/` succeeds. No correction needed.
+1. `src/handlers/` exists — `ls src/handlers/` fails. The agent finds `src/api/routes/` via `find src -type d -name routes`. Proposes correction: `src/handlers/` → `src/api/routes/`.
+2. `npm run lint` exists — `jq '.scripts.lint' package.json` returns null. The agent finds `npm run check` instead. Proposes correction: `npm run lint` → `npm run check`.
+3. `src/repositories/` exists — `ls src/repositories/` succeeds. No correction needed.
 
 The agent opens a single PR with two surgical edits to CLAUDE.md. A human reviews and merges.
 

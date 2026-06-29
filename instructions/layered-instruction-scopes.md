@@ -18,28 +18,28 @@ maturity: established
 
 > Structure agent instructions in concentric layers — global defaults, project-level files, and directory overrides — so the most specific instruction always wins.
 
-**Learn it hands-on:** [The Most Specific Rule Wins](https://learn.agentpatterns.ai/prompt-engineering/most-specific-wins/) — guided lesson with quizzes.
+Learn it hands-on: [The Most Specific Rule Wins](https://learn.agentpatterns.ai/prompt-engineering/most-specific-wins/) — guided lesson with quizzes.
 
 !!! info "Also known as"
-    **Layered Instruction Scopes** · **Directory-Level Instruction Hierarchy** · **Hierarchical CLAUDE.md**
+    Layered Instruction Scopes · Directory-Level Instruction Hierarchy · Hierarchical CLAUDE.md
 
-    For the Claude Code–specific implementation of this pattern, see [Hierarchical CLAUDE.md](hierarchical-claude-md.md).
+    For the Claude Code–specific version of this pattern, see [Hierarchical CLAUDE.md](hierarchical-claude-md.md).
 
-## Why Flat Instruction Files Break at Scale
+## Why flat instruction files break at scale
 
 A single instruction file at the repository root works for small, uniform codebases. As projects grow — multiple services, distinct frontend and backend conventions, mixed toolchains — a single file either becomes an unmanageable list of conditional rules that hits the [instruction compliance ceiling](instruction-compliance-ceiling.md) or fails to cover the cases that matter.
 
-Layering by scope solves this. The agent receives instructions appropriate to where it is working, without requiring any manual switching.
+Layering by scope solves this. The agent gets the instructions that fit where it is working, with no manual switching.
 
-## The Codex Harness Model
+## The Codex harness model
 
-[OpenAI's Codex harness](https://openai.com/index/unlocking-the-codex-harness/) implements a three-scope hierarchy:
+[OpenAI's Codex harness](https://openai.com/index/unlocking-the-codex-harness/) uses a three-scope hierarchy:
 
-1. **Global config** (`$CODEX_HOME`): defaults and preferences that apply across all repositories
-2. **Git root**: the project-wide AGENTS.md at the repository root
-3. **Working directory**: AGENTS.md files in subdirectories, from git root down to the current directory
+1. Global config (`$CODEX_HOME`): defaults and preferences that apply across all repositories
+2. Git root: the project-wide AGENTS.md at the repository root
+3. Working directory: AGENTS.md files in subdirectories, from git root down to the current directory
 
-The harness traverses from global to working directory, concatenating AGENTS.md files in order of increasing specificity. More specific instructions appear later in the prompt and take priority over earlier, more general ones.
+The harness walks from global to working directory and concatenates AGENTS.md files in order of increasing specificity. More specific instructions appear later in the prompt and take priority over earlier, more general ones.
 
 ```mermaid
 graph TD
@@ -50,35 +50,35 @@ graph TD
     D --> E[Agent receives context]
 ```
 
-## Priority Rules
+## Priority rules
 
-Later instructions take priority over earlier ones when they conflict. A directory-level file that specifies "use Bun, not npm" overrides a project-root file that specifies "use npm" for that directory and its children.
+Later instructions take priority over earlier ones when they conflict. A directory-level file that says "use Bun, not npm" overrides a project-root file that says "use npm" for that directory and its children.
 
-Priority is implicit in the concatenation order, not declared with explicit keywords: global config provides defaults, project root narrows them, subdirectory files override for their scope.
+Priority comes from the concatenation order, not from explicit keywords. Global config provides defaults, the project root narrows them, and subdirectory files override for their scope.
 
-## Why It Works
+## Why it works
 
-LLMs exhibit recency bias: instructions appearing later in a prompt carry higher effective weight when they conflict with earlier ones. By concatenating from general to specific, the harness exploits this property to produce scoped behavior without requiring the model to evaluate conditionals.
+LLMs show recency bias: instructions later in a prompt carry more weight when they conflict with earlier ones. By concatenating from general to specific, the harness uses this property to produce scoped behavior without making the model evaluate conditionals.
 
-A flat file saying "if in `api/`, use uv; otherwise use pip" requires the model to evaluate that condition correctly every time. A concatenated prompt replaces it with a later, unconditional "use uv" — the latter wins without conditional reasoning.
+A flat file saying "if in `api/`, use uv; otherwise use pip" makes the model evaluate that condition correctly every time. A concatenated prompt replaces it with a later, unconditional "use uv" — the latter wins without conditional reasoning.
 
-## AGENTS.override.md: Per-Directory Alternative to AGENTS.md
+## AGENTS.override.md: per-directory alternative to AGENTS.md
 
-[Codex's harness](https://openai.com/index/unlocking-the-codex-harness/) supports `AGENTS.override.md`: when both files exist in the same directory, the harness selects `AGENTS.override.md` and ignores `AGENTS.md` for that directory. Parent directory files are still concatenated normally — the override only affects which file is chosen within its own directory.
+[Codex's harness](https://openai.com/index/unlocking-the-codex-harness/) supports `AGENTS.override.md`: when both files exist in the same directory, the harness picks `AGENTS.override.md` and ignores `AGENTS.md` for that directory. Parent directory files still concatenate normally — the override only affects which file the harness picks within its own directory.
 
-Use override files when the directory has conventions that diverge enough to warrant a separate file. Override files do not suppress parent directory instructions — those are still included in the assembled prompt.
+Use override files when the directory's conventions diverge enough to warrant a separate file. Override files do not suppress parent directory instructions — those are still included in the assembled prompt.
 
-## Context Budget Limits
+## Context budget limits
 
-[Codex applies a 32 KiB default cap](https://openai.com/index/unlocking-the-codex-harness/) on assembled instruction content. Without a cap, deeply nested directories can consume the entire context budget before task work begins.
+[Codex applies a 32 KiB default cap](https://openai.com/index/unlocking-the-codex-harness/) on assembled instruction content. Without a cap, deeply nested directories can use the entire context budget before task work begins.
 
-If your harness does not enforce a size limit, apply the same discipline manually:
+If your harness does not enforce a size limit, apply the same discipline by hand:
 
 - Keep each instruction file to 50–100 lines
 - Prefer pointers to documentation over embedded content
-- Audit the total assembled size for deeply nested directories
+- Check the total assembled size for deeply nested directories
 
-## Applying This Pattern Without Codex
+## Applying this pattern without Codex
 
 Any [agent harness](../agent-design/agent-harness.md) that reads instruction files from the filesystem can implement this pattern:
 
@@ -89,13 +89,13 @@ Any [agent harness](../agent-design/agent-harness.md) that reads instruction fil
 
 The [AGENTS.md standard](https://agents.md) describes the directory traversal convention. Tools that implement AGENTS.md support — including [GitHub Copilot](https://github.blog/changelog/2025-08-28-copilot-coding-agent-now-supports-agents-md-custom-instructions/) and Cursor — load these files automatically when working within a repository.
 
-## When This Backfires
+## When this backfires
 
 Layering works when scopes are independent. It degrades in several conditions:
 
-- **Conflicting rules without clear resolution**: If a global file says "always use TypeScript" and a directory file says "use JavaScript", the directory file wins by position — but only if the agent respects concatenation order. Agents that weight by relevance rather than position may resolve the conflict unpredictably.
-- **Instruction bloat in deep hierarchies**: A file six directories deep inherits instructions from every ancestor. A few verbose ancestor files saturate the 32 KiB Codex default before task-specific content reaches the model.
-- **Inconsistent tool support**: Not all tools implement the full traversal spec. Some load only the root AGENTS.md; others support nesting but not `AGENTS.override.md`. Instructions written assuming full traversal may be silently ignored.
+- Conflicting rules without clear resolution: if a global file says "always use TypeScript" and a directory file says "use JavaScript", the directory file wins by position — but only if the agent respects concatenation order. Agents that weight by relevance rather than position may resolve the conflict unpredictably.
+- Instruction bloat in deep hierarchies: a file six directories deep inherits instructions from every ancestor. A few verbose ancestor files fill the 32 KiB Codex default before task-specific content reaches the model.
+- Inconsistent tool support: not all tools implement the full traversal spec. Some load only the root AGENTS.md; others support nesting but not `AGENTS.override.md`. Instructions written for full traversal may be silently ignored.
 
 ## Example
 

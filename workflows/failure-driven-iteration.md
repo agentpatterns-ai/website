@@ -15,7 +15,7 @@ maturity: established
 
 > Failure-driven iteration feeds real error output back to the agent as the primary context for each fix, grounding solutions in signals rather than speculation.
 
-## Core Loop
+## Core loop
 
 The technique follows a four-step cycle: run the code, observe the failure, pass the error to the agent, verify the fix. This loop is sourced directly from GitHub's [Copilot CLI](../tools/copilot/copilot-cli-agentic-workflows.md) guide, which describes it as "run, inspect, ask, review diff — keeps the agent grounded in real output instead of abstract prompts" ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/from-idea-to-pull-request-a-practical-guide-to-building-with-github-copilot-cli/)).
 
@@ -30,7 +30,7 @@ graph TD
 
 Claude Code best practices call this "the single highest-leverage thing you can do" — giving the agent a way to verify its own work. The recommended prompt pattern: paste the error, ask the agent to fix it and verify the build succeeds, and address root cause rather than suppress the error ([Claude Code Best Practices](https://code.claude.com/docs/en/best-practices)).
 
-## Why Error Output Is Superior Context
+## Why error output is better context
 
 Error output contains structured, machine-generated information with higher signal density than human descriptions:
 
@@ -43,29 +43,29 @@ Error output contains structured, machine-generated information with higher sign
 
 A stack trace tells the agent exactly where the problem is, what type of error occurred, and the execution path that led there. A human description ("the login page is broken") provides none of this. Pasting the actual error output eliminates ambiguity and reduces wasted iterations — the mechanism behind [context-injected error recovery](../context-engineering/context-injected-error-recovery.md).
 
-## Fast Feedback Tools
+## Fast feedback tools
 
 The technique works best with tools that produce immediate output — seconds, not minutes:
 
-- **Type checkers** (TypeScript `tsc`, mypy, Rust `cargo check`) — catch type errors without running the program
-- **Linters** (ESLint, Ruff, Clippy) — catch style and correctness issues with auto-fix suggestions
-- **Unit tests** — validate behavior against specific expectations
-- **REPL sessions** — test individual functions in isolation
-- **Build systems** — catch compilation errors before runtime
+- Type checkers (TypeScript `tsc`, mypy, Rust `cargo check`) catch type errors without running the program
+- Linters (ESLint, Ruff, Clippy) catch style and correctness issues with auto-fix suggestions
+- Unit tests validate behavior against specific expectations
+- REPL sessions test individual functions in isolation
+- Build systems catch compilation errors before runtime
 
 Slow feedback (full integration suites, manual QA, staging deployments) breaks the iteration cadence. Invest in fast verification loops to make this technique effective.
 
-## Prompt Patterns
+## Prompt patterns
 
 Effective failure-driven prompts share a structure: paste the error, request a fix, and specify verification ([Claude Code Best Practices](https://code.claude.com/docs/en/best-practices)):
 
-**Root cause fix**: "The build fails with this error: [paste error]. Fix it and verify the build succeeds. Address the root cause, don't suppress the error."
+Root cause fix: "The build fails with this error: [paste error]. Fix it and verify the build succeeds. Address the root cause, don't suppress the error."
 
-**Test-driven fix**: "This test fails: [paste output]. Write a fix that makes the test pass without modifying the test."
+Test-driven fix: "This test fails: [paste output]. Write a fix that makes the test pass without modifying the test."
 
-**Cascading fix**: "Running `npm test` produces these 3 failures: [paste output]. Fix them one at a time and verify each fix before moving to the next."
+Cascading fix: "Running `npm test` produces these 3 failures: [paste output]. Fix them one at a time and verify each fix before moving to the next."
 
-The key constraint in each pattern: the agent must verify via the same tool that produced the error, closing the loop.
+Each pattern shares one constraint: the agent must verify with the same tool that produced the error, which closes the loop.
 
 ## Relationship to TDD
 
@@ -73,7 +73,7 @@ Failure-driven iteration is broader than TDD. [TDD](../verification/tdd-agent-de
 
 When combined with TDD, failure-driven iteration accelerates the red-green cycle: the failing test provides the error context, the agent generates the fix, and the test re-run verifies it.
 
-## Structured Verification Cycles
+## Structured verification cycles
 
 Anthropic's [evaluator-optimizer](../agent-design/evaluator-optimizer.md) pattern formalizes this loop: one LLM generates a response while another provides evaluation and feedback, iterating until quality criteria are met. Agents "iterate on solutions using test results as feedback" ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
 
@@ -81,7 +81,7 @@ For long-running agents, Anthropic recommends running "a basic end-to-end test b
 
 LangChain's [harness engineering](../agent-design/harness-engineering.md) research validates the approach with a structured "Plan & Discovery, Build, Verify, Fix" cycle. [Pre-completion checklists](../verification/pre-completion-checklists.md) force verification before the agent exits, preventing premature completion without testing ([LangChain: Harness Engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
-## When to Stop Iterating
+## When to stop iterating
 
 The failure mode of this technique is the doom loop — iterating on the same error without making progress. Signs to watch for:
 
@@ -91,12 +91,12 @@ The failure mode of this technique is the doom loop — iterating on the same er
 
 When iteration stalls, stop the agent, revert to the last working state, and re-approach the problem with a different strategy. [Loop detection](../observability/loop-detection.md) middleware (edit-count tracking, identical-failure detection) automates this judgment.
 
-### Known Failure Conditions
+### Known failure conditions
 
-The most concrete failure mode is **context pollution** — also called context rot. Each pasted error, failed attempt, and debug dump accumulates in the window, and the model starts referencing outdated or contradictory chunks rather than the current code. Sessions that involve large file pastes, long error dumps, or repeated iteration on the same code can see quality degrade after as few as 20–30 exchanges ([MindStudio: Context Rot in AI Coding Agents](https://www.mindstudio.ai/blog/context-rot-ai-coding-agents-explained), [Liip: Preventing Context Pollution for AI Agents](https://www.liip.ch/en/blog/preventing-context-pollution-for-ai-agents)). Two secondary failure modes follow from this:
+The most concrete failure mode is context pollution, also called context rot. Each pasted error, failed attempt, and debug dump piles up in the window, and the model starts referencing outdated or contradictory chunks rather than the current code. Sessions with large file pastes, long error dumps, or repeated iteration on the same code can see quality degrade after as few as 20 to 30 exchanges ([MindStudio: Context Rot in AI Coding Agents](https://www.mindstudio.ai/blog/context-rot-ai-coding-agents-explained), [Liip: Preventing Context Pollution for AI Agents](https://www.liip.ch/en/blog/preventing-context-pollution-for-ai-agents)). Two secondary failure modes follow from this:
 
-- **Out-of-distribution tasks**: when the current step is genuinely outside what the model can solve, more iterations will not converge — the signal is repeated near-identical failures rather than convergence. Switch from iteration to a fresh [plan-first](plan-first-loop.md) pass that decomposes the step into simpler sub-steps.
-- **Tests that validate flawed assumptions**: when the agent authors both the code and the tests, the failing-test signal can encode the same misunderstanding the fix would need to overturn, so green tests do not imply correctness. Keep the test human-authored, or review agent-authored tests separately before trusting them as the verification loop.
+- Out-of-distribution tasks: when the current step is genuinely outside what the model can solve, more iterations will not converge. The signal is repeated near-identical failures rather than convergence. Switch from iteration to a fresh [plan-first](plan-first-loop.md) pass that breaks the step into simpler sub-steps.
+- Tests that validate flawed assumptions: when the agent writes both the code and the tests, the failing-test signal can encode the same misunderstanding the fix would need to overturn, so green tests do not imply correctness. Keep the test human-authored, or review agent-authored tests separately before trusting them as the verification loop.
 
 In all three cases the mitigation is the same: start a fresh session, compact the conversation, or hand the task back to a plan-first loop rather than iterating on degraded context.
 
@@ -104,19 +104,19 @@ In all three cases the mitigation is the same: start a fresh session, compact th
 
 A TypeScript project fails its CI build. The engineer pastes the compiler output directly into the agent prompt:
 
-**Error output**:
+Error output:
 ```
 src/api/auth.ts(42,18): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
 ```
 
-**Prompt**: "The build fails with this error: [paste above]. Fix the root cause and verify `tsc --noEmit` passes. Do not suppress with a type cast."
+Prompt: "The build fails with this error: [paste above]. Fix the root cause and verify `tsc --noEmit` passes. Do not suppress with a type cast."
 
-**Agent fix**: The agent reads `auth.ts` at line 42, finds that `process.env.JWT_SECRET` is typed as `string | undefined`, and adds a null check that throws a startup error if the variable is absent — addressing the root cause rather than suppressing the type error.
+Agent fix: The agent reads `auth.ts` at line 42, finds that `process.env.JWT_SECRET` is typed as `string | undefined`, and adds a null check that throws a startup error if the variable is absent — addressing the root cause rather than suppressing the type error.
 
-**Verification**: The agent runs `tsc --noEmit`. Output: no errors. The loop closes.
+Verification: The agent runs `tsc --noEmit`. Output: no errors. The loop closes.
 
-The full cycle — paste error, fix root cause, re-run tool — took 1 iteration. No description of "the auth module is broken" was needed; the compiler error provided complete, unambiguous context.
+The full cycle — paste error, fix root cause, re-run tool — took one iteration. It needed no description like "the auth module is broken"; the compiler error gave complete, unambiguous context.
 
 ## Key Takeaways
 

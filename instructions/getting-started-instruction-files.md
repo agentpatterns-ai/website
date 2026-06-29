@@ -18,9 +18,9 @@ maturity: adopted
 
 > The instruction file is the highest-leverage artifact in agent-assisted development: it gives agents the context to navigate your codebase, follow conventions, and run your toolchain.
 
-## Pick Your File
+## Pick your file
 
-Each tool reads a different file. Pick the one that matches your tool, or maintain multiple if your team uses more than one:
+Each tool reads a different file. Pick the one that matches your tool, or keep several if your team uses more than one:
 
 | Tool | File | Location |
 |------|------|----------|
@@ -28,17 +28,17 @@ Each tool reads a different file. Pick the one that matches your tool, or mainta
 | GitHub Copilot | `copilot-instructions.md` | `.github/copilot-instructions.md` |
 | Any AGENTS.md-compatible tool | `AGENTS.md` | Repo root |
 
-Using multiple tools? See [Project Instruction File Ecosystem](../instructions/instruction-file-ecosystem.md) for convergence strategies. The rest of this page is tool-agnostic -- the principles apply regardless of file name.
+Using more than one tool? See [how to converge multiple instruction files](../instructions/instruction-file-ecosystem.md). The rest of this page is tool-agnostic -- the principles apply whatever the file name.
 
-## Bootstrap or Start from Scratch
+## Bootstrap or start from scratch
 
-**Claude Code users**: run `/init`. Claude analyzes your codebase -- build systems, test frameworks, code patterns -- and generates a starting file ([Anthropic, Best Practices for Claude Code](https://code.claude.com/docs/en/best-practices)). If a `CLAUDE.md` exists, `/init` suggests improvements rather than overwriting.
+Claude Code users: run `/init`. Claude reads your codebase -- build systems, test frameworks, code patterns -- and generates a starting file ([Anthropic, Best Practices for Claude Code](https://code.claude.com/docs/en/best-practices)). If a `CLAUDE.md` already exists, `/init` suggests improvements rather than overwriting it.
 
-**Everyone else**: create the file manually. A blank file with four sections beats no file at all.
+Everyone else: create the file by hand. A blank file with four sections beats no file at all.
 
-## Minimal Viable Structure
+## Minimal viable structure
 
-Start with these four sections. Each one answers a question the agent will ask within its first few actions:
+Start with these four sections. Each one answers a question the agent asks within its first few actions:
 
 ```markdown
 # project-name
@@ -68,7 +68,7 @@ Brief description of what the project does and its primary language/framework.
 
 That is roughly 20 lines. It gives the agent enough to navigate, build, test, and follow your conventions from the first interaction.
 
-## What Belongs In vs. Out
+## What to include and what to leave out
 
 | Include | Exclude |
 |---------|---------|
@@ -77,11 +77,11 @@ That is roughly 20 lines. It gives the agent enough to navigate, build, test, an
 | Architectural constraints and navigation pointers | Task-specific instructions (put in the prompt) |
 | Things the agent gets wrong repeatedly | Knowledge the agent can discover from code |
 
-**Pruning test**: for each line, ask "Would removing this cause the agent to make mistakes?" If not, cut it.
+Pruning test: for each line, ask "Would removing this cause the agent to make mistakes?" If not, cut it.
 
-## Iterate, Don't Prewrite
+## Iterate, do not prewrite
 
-The most effective instruction files are grown, not designed upfront. The recommended progression:
+The most effective instruction files are grown, not designed upfront. The progression we recommend:
 
 ```mermaid
 graph LR
@@ -90,25 +90,25 @@ graph LR
     C --> D["Week 4+<br/>Encode principles<br/>as lint rules"]
 ```
 
-**Week 1**: project identity, build/test commands, directory layout. ~20 lines. Enough to stop the agent from guessing where things live.
+Week 1: project identity, build/test commands, directory layout. About 20 lines. Enough to stop the agent from guessing where things live.
 
-**Week 2**: add the convention the agent violates most often. One rule, stated specifically. "Use `unknown` over `any` in TypeScript" is useful; "follow TypeScript best practices" is not. GitHub's guidance for `copilot-instructions.md` echoes this: "start small and iterate based on results, beginning with 10–20 specific instructions that address your most common review needs, then test whether these are influencing Copilot" ([GitHub, Adding repository custom instructions for GitHub Copilot](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions)).
+Week 2: add the convention the agent breaks most often. One rule, stated specifically. "Use `unknown` over `any` in TypeScript" is useful; "follow TypeScript best practices" is not. GitHub's guidance for `copilot-instructions.md` says the same: "start small and iterate based on results, beginning with 10–20 specific instructions that address your most common review needs, then test whether these are influencing Copilot" ([GitHub, Adding repository custom instructions for GitHub Copilot](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions)).
 
-**Week 3**: add a feedback loop -- a command the agent should run to verify its own output. "Run `npm test` before committing" or "Run `npx eslint --fix` after editing `.ts` files."
+Week 3: add a feedback loop -- a command the agent should run to check its own output. "Run `npm test` before committing" or "Run `npx eslint --fix` after editing `.ts` files."
 
-**Week 4 onward**: when you find yourself adding the same instruction repeatedly, encode it as a lint rule or pre-commit hook instead. Deterministic enforcement beats probabilistic compliance.
+Week 4 onward: when you find yourself adding the same instruction again and again, encode it as a lint rule or pre-commit hook instead. Deterministic enforcement beats probabilistic compliance.
 
-## Keep It Short
+## Keep it short
 
 Target under 200 lines per file. Every line consumes context budget before the agent starts working on your actual task. Long instruction files reduce adherence — instruction-following accuracy degrades as instruction density increases, with even leading frontier models achieving only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538)).
 
 When you outgrow 200 lines:
 
-- **Claude Code**: split into [`@path` imports](../instructions/import-composition-pattern.md) or `.claude/rules/` files with path-scoped frontmatter
-- **Copilot**: use `.github/instructions/*.instructions.md` files with `applyTo` globs
-- **AGENTS.md**: break into multiple `AGENTS.md` files in subdirectories
+- Claude Code: split into [`@path` imports](../instructions/import-composition-pattern.md) or `.claude/rules/` files with path-scoped frontmatter
+- Copilot: use `.github/instructions/*.instructions.md` files with `applyTo` globs
+- AGENTS.md: break into multiple `AGENTS.md` files in subdirectories
 
-## Instructions Are Context, Not Enforcement
+## Instructions are context, not enforcement
 
 Agents read instruction files on a best-effort basis. They are not configuration. Specificity and conciseness improve compliance, but they cannot guarantee it — adherence is bounded by the [instruction compliance ceiling](../instructions/instruction-compliance-ceiling.md).
 
@@ -121,7 +121,7 @@ For rules that must never be violated, use deterministic mechanisms:
 
 The instruction file tells the agent what to aim for. Hooks and CI tell it what it cannot ship. Both are necessary; neither is sufficient alone. Anthropic's own guidance agrees: "Use hooks for actions that must happen every time with zero exceptions. Unlike CLAUDE.md instructions which are advisory, hooks are deterministic and guarantee the action happens" ([Anthropic, Best Practices for Claude Code](https://code.claude.com/docs/en/best-practices)).
 
-## Let the Agent Write Its Own File
+## Let the agent write its own file
 
 Ask the agent to draft or improve the instruction file after it has explored the codebase. It surfaces context it actually needs rather than what you guess:
 
@@ -132,7 +132,7 @@ commands, key conventions, and directory layout. Keep it under 50 lines.
 
 Review and trim the output -- the agent often discovers conventions you follow implicitly but never documented. Treat it as a first draft, not a finished file.
 
-## Example: From Zero to Effective
+## Example: from zero to effective
 
 A real progression for a TypeScript API project:
 
@@ -203,13 +203,13 @@ A real progression for a TypeScript API project:
 
 Each version adds only what the agent needed and did not have. Nothing is added speculatively.
 
-## When This Backfires
+## When this backfires
 
 Instruction files create value when they are maintained. They create liability when they are not:
 
-- **Stale structural references mislead.** Directory paths, file names, and module boundaries change. An instruction file that documents `src/api/handlers/` after a refactor actively directs the agent to the wrong place. Update the file or remove the reference when the codebase changes.
-- **Auto-generated files underperform.** Asking the agent to draft its own instruction file is a useful bootstrapping technique, but LLM-generated context files tend to be generic and verbose. The output works as a first draft — not a finished file; shipping it unread is the [cargo-cult agent setup](../anti-patterns/cargo-cult-agent-setup.md) failure. Review and trim aggressively before committing.
-- **Over-specification reduces adherence.** Adding more rules does not guarantee more compliance. Instruction-following accuracy degrades as instruction density increases. A file with 30 specific, high-signal rules outperforms one with 150 that includes noise.
+- Stale structural references mislead. Directory paths, file names, and module boundaries change. An instruction file that documents `src/api/handlers/` after a refactor actively directs the agent to the wrong place. Update the file or remove the reference when the codebase changes.
+- Auto-generated files underperform. Asking the agent to draft its own instruction file is a useful bootstrapping technique, but LLM-generated context files tend to be generic and verbose. The output works as a first draft — not a finished file; shipping it unread is the [cargo-cult agent setup](../anti-patterns/cargo-cult-agent-setup.md) failure. Review and trim hard before committing.
+- Over-specification reduces adherence. Adding more rules does not guarantee more compliance. Instruction-following accuracy degrades as instruction density increases. A file with 30 specific, high-signal rules outperforms one with 150 that includes noise.
 
 ## Key Takeaways
 

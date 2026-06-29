@@ -16,23 +16,23 @@ maturity: adopted
 
 > Persisted as a queryable database, chat history becomes a practitioner-facing artifact that answers standup, coaching, and audit questions without re-instrumenting the workflow.
 
-## Three Surfaces, Three Consumers
+## Three surfaces, three consumers
 
 | Surface | Consumer | Scope | Question it answers |
 |---------|----------|-------|---------------------|
 | [In-session transcript search](transcript-search.md) | Practitioner, mid-session | One session | "Where did the plan change?" |
 | [Trajectory logging via progress files](trajectory-logging-progress-files.md) | Agent, next session | Cross-session, agent-shaped | "What was decided last time?" |
-| **History-as-artifact** | Practitioner, after the fact | Cross-session, practitioner-shaped | "What did I do this week?" |
+| History-as-artifact | Practitioner, after the fact | Cross-session, practitioner-shaped | "What did I do this week?" |
 
 The third surface serves the engineer who wants a standup summary, a coaching tip, or an audit answer — not the harness developer debugging an agent, nor the next-session agent reconstructing state.
 
-## The Concrete Implementation
+## The concrete implementation
 
-VS Code 1.118 (2026-04-29) ships **Chronicle**, an experimental feature that "tracks your chat interactions in a local SQLite database" and exposes three query commands ([VS Code 1.118 release notes](https://code.visualstudio.com/updates/v1_118)):
+VS Code 1.118 (2026-04-29) ships Chronicle, an experimental feature that "tracks your chat interactions in a local SQLite database" and exposes three query commands ([VS Code 1.118 release notes](https://code.visualstudio.com/updates/v1_118)):
 
 - `/chronicle:standup` — generates a standup report from the last 24 hours of coding sessions, grouped by feature/branch, with summaries, file lists, and PR links
 - `/chronicle:tips` — analyzes 7 days of usage to give personalized tips on prompting, tool usage, and workflow
-- `/chronicle [query]` — free-form natural-language search across session history (e.g. "what files did I edit yesterday?")
+- `/chronicle [query]` — free-form natural-language search across session history (for example, "what files did I edit yesterday?")
 
 Chronicle is gated behind `github.copilot.chat.localIndex.enabled` and stores data locally. Recorded shape: session metadata (branch, repo, timestamps), conversation turns, files touched via tool calls, and references to PRs, issues, and commits ([VS Code 1.118](https://code.visualstudio.com/updates/v1_118)).
 
@@ -40,7 +40,7 @@ By VS Code 1.123 (2026-06-04), Chronicle moved past the local-only experiment: t
 
 Chronicle is the first commodity implementation. The same idea at infrastructure level appears in the [OTel GenAI span conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/): structured attributes for chat turns, tool calls, and outputs that any harness can emit and any backend can query.
 
-## The Three Query Shapes
+## The three query shapes
 
 ```mermaid
 graph TD
@@ -54,23 +54,23 @@ graph TD
 
 The shapes differ in window length, output format, and risk profile, and each fails differently when misused.
 
-- **Standup** — 24h window grouped by feature or branch. Value is recall, not narrative.
-- **Tips** — 7d analysis of prompting and tool-usage patterns. The riskiest shape: it reads a causal model ("you do better when you X") off correlation in a sample of one. Treat as a prompt for reflection, not a recommendation.
-- **Ad-hoc** — free-form NL query ("did I touch auth/login.py this week?"). Closest to [in-session log search](transcript-search.md) and most defensible: the value is audit, not coaching.
+- Standup — 24h window grouped by feature or branch. Value is recall, not narrative.
+- Tips — 7d analysis of prompting and tool-usage patterns. The riskiest shape: it reads a causal model ("you do better when you X") off correlation in a sample of one. Treat as a prompt for reflection, not a recommendation.
+- Ad-hoc — free-form NL query ("did I touch auth/login.py this week?"). Closest to [in-session log search](transcript-search.md) and most defensible: the value is audit, not coaching.
 
-## Mechanism: Why Chat History Has Leverage
+## Mechanism: why chat history is cheap to query
 
-Chat history is already a structured trace: every turn names files, runs commands, references issues, and records decisions. Querying that database costs less than building a parallel tracker, for the same reason `git log` is a productivity surface — it is produced as a side-effect of normal work.
+Chat history is already a structured trace: every turn names files, runs commands, references issues, and records decisions. Querying that database costs less than building a parallel tracker, for the same reason `git log` is a productivity surface — it is produced as a side effect of normal work.
 
-The leverage compounds because the chat database is the only surface that captures *intent*. Git captures the diff; CI captures the test result; the chat turn captures why the diff was made and what was tried before it landed.
+The benefit compounds because the chat database is the only surface that captures intent. Git captures the diff; CI captures the test result; the chat turn captures why the diff was made and what was tried before it landed.
 
-## When This Backfires
+## When this backfires
 
-- **Privacy leak through generated reports.** Standup output naming files, branches, or issues can be pasted into a Slack channel that includes people without access to the repo. Pasted secrets in prior chat turns appear verbatim in NL query results. Local-first storage protects data at rest; it does not protect what the practitioner shares.
-- **History-driven tips become superstition.** A 7-day correlation in a sample of one is not a causal claim. Acting on "you prompt better when you start with X" as advice over-fits to noise.
-- **Standup theatre.** A generated summary read aloud without prior reflection replaces the reasoning conversation with a list of touched files.
-- **Cross-tool gaps.** Practitioners using more than one agent surface (VS Code Copilot Chat plus Claude Code in a terminal) get a Chronicle that only sees the VS Code half — partial picture, complete framing.
-- **Noise overwhelms signal in long sessions.** Twenty-four hours of exploratory work can produce thirty equally-weighted bullets. Without salience scoring, the report is harder to scan than the practitioner's own memory.
+- Privacy leak through generated reports. Standup output naming files, branches, or issues can be pasted into a Slack channel that includes people without access to the repo. Pasted secrets in prior chat turns appear verbatim in NL query results. Local-first storage protects data at rest; it does not protect what the practitioner shares.
+- History-driven tips become superstition. A 7-day correlation in a sample of one is not a causal claim. Acting on "you prompt better when you start with X" as advice over-fits to noise.
+- Standup theatre. A generated summary read aloud without prior reflection replaces the reasoning conversation with a list of touched files.
+- Cross-tool gaps. Practitioners using more than one agent surface (VS Code Copilot Chat plus Claude Code in a terminal) get a Chronicle that only sees the VS Code half — partial picture, complete framing.
+- Noise overwhelms signal in long sessions. Twenty-four hours of exploratory work can produce thirty equally-weighted bullets. Without salience scoring, the report is harder to scan than the practitioner's own memory.
 
 When more than one condition applies, the database is still useful for ad-hoc queries (the audit shape) but the standup and tips shapes should be disabled or treated as drafts the practitioner edits before sharing.
 

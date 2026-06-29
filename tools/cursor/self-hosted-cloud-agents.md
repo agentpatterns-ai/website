@@ -23,7 +23,7 @@ This is distinct from bring-your-own-key (BYOK) patterns. BYOK addresses model A
 
 ## Architecture
 
-The key split: **Cursor's cloud handles inference and planning; your worker handles tool execution.**
+The split is simple. Cursor's cloud handles inference and planning. Your worker handles tool execution.
 
 ```mermaid
 sequenceDiagram
@@ -42,7 +42,7 @@ sequenceDiagram
 
 The worker connects outbound via HTTPS to Cursor's cloud — no inbound ports, firewall changes, or VPN tunnels required. The worker receives tool calls, executes them against your local environment (filesystem, internal APIs, private registries), and returns results to the cloud for the next inference round. Code never leaves your network.
 
-## Worker Deployment
+## Worker deployment
 
 Start a worker with ([full options in Cursor docs](https://cursor.com/docs/cloud-agent/self-hosted)):
 
@@ -50,7 +50,7 @@ Start a worker with ([full options in Cursor docs](https://cursor.com/docs/cloud
 agent worker start --pool
 ```
 
-**Worker lifetime options:**
+Workers run in one of two modes:
 
 | Mode | Behavior |
 |------|----------|
@@ -59,11 +59,11 @@ agent worker start --pool
 
 Long-lived workers suit always-on environments (CI runners, shared team infrastructure). Single-use workers suit ephemeral compute (Lambda, container jobs) where you want clean state between tasks.
 
-**Kubernetes:** Deploy at scale via a Helm chart and Kubernetes operator. Define the desired pool size; the controller manages scaling, rolling updates, and lifecycle automatically. A fleet management API covers non-Kubernetes environments with utilization monitoring.
+On Kubernetes, deploy at scale with a Helm chart and a Kubernetes operator. Define the pool size you want, and the controller manages scaling, rolling updates, and lifecycle. A fleet management API covers non-Kubernetes environments, with utilization monitoring.
 
-The June 2026 [Cursor SDK](cursor-sdk.md) update tightens self-hosted control further: it adds custom `LocalAgentStore` backends, letting a self-hosted deployment persist agent state to its own storage rather than Cursor's, alongside `customTools` defined through the built-in MCP layer and recursive sub-agent nesting ([Cursor changelog](https://cursor.com/changelog)).
+The June 2026 [Cursor SDK](cursor-sdk.md) update tightens self-hosted control further. It adds custom `LocalAgentStore` backends, so a self-hosted deployment can persist agent state to its own storage rather than Cursor's. It also adds `customTools` defined through the built-in MCP layer, plus recursive sub-agent nesting ([Cursor changelog](https://cursor.com/changelog)).
 
-## When to Use Self-Hosted
+## When to use self-hosted
 
 Use self-hosted execution when:
 
@@ -84,15 +84,15 @@ Use vendor-hosted execution (the default) when you have no residency constraints
 | Code residency | Cursor's cloud | Your network |
 | Compliance posture | Depends on Cursor's certifications | Under your control |
 
-The same agent capabilities are available in both modes: parallel execution, long-horizon tasks, multi-model harnesses, plugin support. Self-hosted does not add agent capability — it relocates execution.
+Both modes offer the same agent capabilities: parallel execution, long-horizon tasks, multi-model harnesses, and plugin support. Self-hosted does not add capability — it relocates execution.
 
-### What Self-Hosted Does Not Solve
+### What self-hosted does not solve
 
 Relocating execution closes the data-residency gap, but it does not by itself satisfy enterprise governance. Independent analyses ([Qovery — "Cursor Cloud Agents Are Incredible — Until You Need Production Governance"](https://www.qovery.com/blog/cursor-cloud-agents-enterprise-limitations), [Oasis/Cursor governance partnership](https://www.oasis.security/blog/cursor-oasis-governing-agentic-access)) flag three residual gaps that self-hosted workers do not address:
 
-- **Audit-trail completeness for change review** — workers log tool calls locally, but enterprise change-management evidence (who approved which agent action, against which policy) still requires an external control plane.
-- **Identity delegation per subagent** — workers run with the host environment's credentials, so multi-agent fan-out cannot prove which subagent invoked which privileged action without additional identity wrapping.
-- **Post-PR pipeline ownership** — Cursor agents stop at the PR boundary. Deployment, staging, rollback, and production governance remain entirely the platform team's problem; self-hosting workers does not change this scope.
+- Audit-trail completeness for change review — workers log tool calls locally, but enterprise change-management evidence (who approved which agent action, against which policy) still needs an external control plane.
+- Identity delegation per subagent — workers run with the host environment's credentials, so multi-agent fan-out cannot prove which subagent invoked which privileged action without extra identity wrapping.
+- Post-PR pipeline ownership — Cursor agents stop at the PR boundary. Deployment, staging, rollback, and production governance stay the platform team's problem, and self-hosting workers does not change that scope.
 
 Plan for these with an external policy-as-code layer or governance partner if you are deploying agents into a regulated SDLC, not just a regulated network.
 
@@ -115,7 +115,7 @@ The inference (planning which commands to run) happens in Cursor's cloud. The `n
 - Cursor self-hosted agents split inference (Cursor cloud) from execution (your worker) — code never leaves your network
 - Workers connect outbound via HTTPS only — no inbound firewall changes needed
 - Kubernetes deployment uses a Helm chart and operator for pool management; a fleet API covers non-Kubernetes environments
-- The trade-off is operational overhead (worker provisioning and maintenance) vs. data residency and internal resource access
+- The trade-off is operational overhead (worker provisioning and maintenance) versus data residency and internal resource access
 - Use self-hosted for compliance requirements and internal tooling access; use vendor-hosted when residency is not a constraint
 
 ## Related

@@ -51,16 +51,16 @@ Evals serve two roles that tests do not: during development they function like u
 
 A single pass/fail result from one trial is a sample of size one. Two metrics separate capability from consistency:
 
-**pass@k** measures whether the agent produces at least one correct solution across *k* attempts — the capability ceiling. If the agent solves the task in 1 out of 5 runs, pass@5 = 100%. This answers: "can the agent do this at all?"
+pass@k measures whether the agent produces at least one correct solution across *k* attempts — the capability ceiling. If the agent solves the task in 1 out of 5 runs, pass@5 = 100%. This answers: "can the agent do this at all?"
 
-**pass^k** measures whether *all k* attempts succeed — the consistency floor. If the agent solves the task in 4 out of 5 runs, pass^5 = 0% (because one run failed). This answers: "can the agent do this reliably?"
+pass^k measures whether *all k* attempts succeed — the consistency floor. If the agent solves the task in 4 out of 5 runs, pass^5 = 0% (because one run failed). This answers: "can the agent do this reliably?"
 
 High pass@k with low pass^k means the agent can solve the problem but cannot be trusted to do so without supervision. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 The choice of primary metric depends on deployment context:
 
-- **Human-in-the-loop** (developer reviews every output): pass@k matters — a single correct answer in three attempts is sufficient
-- **Automated pipelines** (outputs consumed directly): pass^k is critical — a 90% pass rate means roughly 1-in-10 automated runs fails
+- Human-in-the-loop (developer reviews every output): pass@k matters — a single correct answer in three attempts is sufficient
+- Automated pipelines (outputs consumed directly): pass^k is critical — a 90% pass rate means roughly 1-in-10 automated runs fails
 
 See [pass@k and pass^k Metrics](../../verification/pass-at-k-metrics.md) for measurement methodology and worked examples.
 
@@ -70,11 +70,11 @@ See [pass@k and pass^k Metrics](../../verification/pass-at-k-metrics.md) for mea
 
 Teams that try to apply traditional QA practices to agents encounter three failure modes:
 
-**Snapshot testing locks in bugs.** Recording "golden" outputs from the current agent and comparing future outputs against them embeds the agent's current behavior — including its bugs — into the definition of correct. Any improvement that changes the output format will fail the snapshot test, which is why evals [grade outcomes, not snapshots](../../verification/grade-agent-outcomes.md).
+Snapshot testing locks in bugs. Recording "golden" outputs from the current agent and comparing future outputs against them embeds the agent's current behavior — including its bugs — into the definition of correct. Any improvement that changes the output format will fail the snapshot test, which is why evals [grade outcomes, not snapshots](../../verification/grade-agent-outcomes.md).
 
-**Path-based assertions penalize creativity.** Asserting that the agent called tool X before tool Y rejects valid alternative solutions the test author did not anticipate. An agent that finds a better path fails a test designed around the only path the author considered. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+Path-based assertions penalize creativity. Asserting that the agent called tool X before tool Y rejects valid alternative solutions the test author did not anticipate. An agent that finds a better path fails a test designed around the only path the author considered. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-**One-shot runs hide reliability problems.** Running each test once and reporting pass/fail gives a misleading confidence level. An agent that passes 70% of the time will produce a passing test run often enough to seem reliable — until production traffic reveals the true failure rate.
+One-shot runs hide reliability problems. Running each test once and reporting pass/fail gives a misleading confidence level. An agent that passes 70% of the time will produce a passing test run often enough to seem reliable — until production traffic reveals the true failure rate.
 
 ---
 
@@ -92,15 +92,15 @@ See [Grade Agent Outcomes, Not Execution Paths](../../verification/grade-agent-o
 
 Evals are not just a CI step. Run them:
 
-- **Before development**: establish a baseline pass rate before writing any feature code
-- **During development**: measure progress against the baseline as you iterate
-- **Before deployment**: gate releases on pass rate thresholds
-- **After model updates**: a model upgrade can silently degrade quality — evals catch this before users do
-- **Periodically**: context drift, data changes, and upstream API changes can degrade quality even without code changes
+- Before development: establish a baseline pass rate before writing any feature code
+- During development: measure progress against the baseline as you iterate
+- Before deployment: gate releases on pass rate thresholds
+- After model updates: a model upgrade can silently degrade quality — evals catch this before users do
+- Periodically: context drift, data changes, and upstream API changes can degrade quality even without code changes
 
 Teams with eval suites in place can adopt new model releases in days; those without face weeks of manual regression testing per upgrade. See [Model Upgrade Testing](eval-first-loop.md#model-upgrade-testing) for the workflow. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-**Multi-turn and feedback-loop evals.** Single-turn evals miss an important dynamic: weaker models with sufficient iterative feedback can outperform stronger models operating without feedback. ConvCodeWorld research found that the specific combination of feedback types (error messages, test results, type checker output) matters more than raw model capability for conversational code generation. This means eval suites for agentic workflows should test the agent *within its harness* — with the feedback loops it will actually receive in production — not just the model in isolation. [Source: [ConvCodeWorld](https://arxiv.org/abs/2502.19852)] See [Feedback as Capability Equalizer](../../agent-design/feedback-capability-equalizer.md) for the full breakdown of feedback type hierarchy and iteration budget tradeoffs, and [Multi-Turn Conversation Evaluation](../../verification/multi-turn-conversation-evaluation.md) for scoring agents across a dialogue rather than a single turn.
+Multi-turn and feedback-loop evals. Single-turn evals miss an important dynamic: weaker models with sufficient iterative feedback can outperform stronger models operating without feedback. ConvCodeWorld research found that the specific combination of feedback types (error messages, test results, type checker output) matters more than raw model capability for conversational code generation. This means eval suites for agentic workflows should test the agent *within its harness* — with the feedback loops it will actually receive in production — not just the model in isolation. [Source: [ConvCodeWorld](https://arxiv.org/abs/2502.19852)] See [Feedback as Capability Equalizer](../../agent-design/feedback-capability-equalizer.md) for the full breakdown of feedback type hierarchy and iteration budget tradeoffs, and [Multi-Turn Conversation Evaluation](../../verification/multi-turn-conversation-evaluation.md) for scoring agents across a dialogue rather than a single turn.
 
 ---
 
@@ -108,7 +108,7 @@ Teams with eval suites in place can adopt new model releases in days; those with
 
 A coding agent that generates unit tests from function signatures. A traditional test and an eval for the same task:
 
-**Traditional test** — asserts one expected output:
+Traditional test — asserts one expected output:
 
 ```python
 def test_generate_tests():
@@ -119,7 +119,7 @@ def test_generate_tests():
 
 This fails whenever the agent produces a valid but differently worded test — `assert add(2, 3) == 5` would fail even though it is correct.
 
-**Eval** — measures outcomes across multiple runs:
+Eval — measures outcomes across multiple runs:
 
 ```python
 def eval_generate_tests(runs=5):

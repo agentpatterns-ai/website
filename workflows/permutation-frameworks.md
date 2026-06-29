@@ -15,19 +15,19 @@ maturity: adopted
 
 > Define constrained code templates with shared signatures, then use agents to generate reliable variations at scale — shifting the developer role from implementer to reviewer.
 
-## The Pattern
+## The pattern
 
-Many codebases contain families of similar features: API endpoints with the same middleware chain, UI components with shared props interfaces, test suites following identical setup/teardown patterns. Implementing each by hand is linear work. A permutation framework defines the shared structure once, then instructs the agent to generate each variation within strict constraints ([Source: ClaudeLog](https://claudelog.com/mechanics/permutation-frameworks/)).
+Many codebases contain families of similar features: API endpoints with the same middleware chain, UI components with shared props interfaces, test suites following identical setup and teardown patterns. Building each by hand is linear work. A permutation framework defines the shared structure once, then tells the agent to generate each variation within strict constraints ([ClaudeLog: permutation frameworks](https://claudelog.com/mechanics/permutation-frameworks/)).
 
-The technique requires investing in constraint definition upfront. Without explicit boundaries, the agent produces inconsistent output across variations — what the ClaudeLog source calls "permutations of slop."
+This technique needs upfront work to define the constraints. Without explicit boundaries, the agent produces inconsistent output across variations — what the ClaudeLog source calls "permutations of slop."
 
-## Building the Framework
+## Building the framework
 
-A permutation framework has three components:
+A permutation framework has three components.
 
-**1. Reference implementations.** Build several features manually with matching function signatures, file structures, and naming conventions. These serve as concrete examples the agent can pattern-match against. More reference implementations reduce the ambiguity the agent resolves at generation time — each additional example narrows the space of plausible outputs.
+Start with reference implementations. Build several features by hand with matching function signatures, file structures, and naming conventions. These give the agent concrete examples to pattern-match against. More reference implementations reduce the ambiguity the agent resolves at generation time — each example narrows the range of plausible outputs.
 
-**2. Constraint specification.** Define explicitly in your instruction file (CLAUDE.md, copilot-instructions.md, or equivalent):
+Add a constraint specification. Define it explicitly in your instruction file (CLAUDE.md, copilot-instructions.md, or equivalent):
 
 - The shared function signature or interface each variation must implement
 - Which files to create or edit — and which to leave untouched
@@ -45,7 +45,7 @@ Each new filter must:
 5. Use the filter name as the display label, title-cased
 ```
 
-**3. Variation parameters.** Provide the list of variations to generate, with any per-variation data the agent needs:
+List the variation parameters. Give the agent the variations to generate, with any per-variation data it needs:
 
 ```markdown
 Generate filters for:
@@ -54,13 +54,13 @@ Generate filters for:
 - `amount-threshold` — filters transactions above/below a specified amount
 ```
 
-## Variance as a Diagnostic
+## Variance as a diagnostic
 
-Variance across generated permutations is a direct measure of constraint quality. If three generated variations follow different file structures or use different error handling patterns, the constraints are underspecified.
+Variance across generated permutations measures constraint quality directly. If three generated variations follow different file structures or use different error handling, the constraints are underspecified.
 
-Systematic variance tracking: generate several variations, `diff` them against each other, and identify where they diverge unnecessarily. Each divergence point maps to a constraint gap. Tighten the constraint, regenerate, and measure again. This iterative loop — generate, measure variance, refine constraints — is the practical refinement process for converging on a stable framework.
+Track variance systematically. Generate several variations, `diff` them against each other, and find where they diverge for no reason. Each divergence point maps to a constraint gap. Tighten the constraint, regenerate, and measure again. This loop — generate, measure variance, refine constraints — converges on a stable framework.
 
-## The Role Shift
+## The role shift
 
 With a well-defined framework, the developer's work changes:
 
@@ -72,11 +72,11 @@ With a well-defined framework, the developer's work changes:
 
 The bottleneck moves from implementation speed to review throughput. This pairs well with [parallel agent sessions](../workflows/parallel-agent-sessions.md) — multiple agents can generate different variations simultaneously, each working from the same constraint specification.
 
-## Why It Works
+## Why it works
 
-Explicit constraints narrow the space of plausible outputs the model draws from when generating each variation. Without constraints, the model resolves structural ambiguity at generation time — choosing file layout, error handling style, naming patterns — and those choices vary across runs. Constraints pre-resolve those decisions: the model can see from the instruction file and [reference implementations](architectural-foundation-first.md) which choices are fixed, so it no longer samples freely over them. The result is that structural variance collapses toward zero, leaving only variation-specific logic to differ. The instruction file and reference examples act as in-context constraints that reduce randomness in generated output ([Domino](https://arxiv.org/html/2403.06988v1) shows the stronger, formal version of this idea — grammar-constrained decoding that masks the model's output distribution token by token).
+Explicit constraints narrow the range of plausible outputs the model draws from when generating each variation. Without constraints, the model resolves structural ambiguity at generation time — choosing file layout, error handling style, naming patterns — and those choices vary across runs. Constraints pre-resolve those decisions. The model can see from the instruction file and [reference implementations](architectural-foundation-first.md) which choices are fixed, so it no longer samples freely over them. Structural variance then collapses toward zero, leaving only variation-specific logic to differ. The instruction file and reference examples act as in-context constraints that reduce randomness in generated output ([Domino, grammar-constrained decoding](https://arxiv.org/html/2403.06988v1) shows the stronger, formal version of this idea — masking the model's output distribution token by token).
 
-## When It Works and When It Breaks
+## When it works and when it breaks
 
 The technique works when:
 

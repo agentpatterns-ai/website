@@ -14,22 +14,22 @@ maturity: emerging
 
 > Token-optimized notations cut input tokens up to 27% but regress accuracy 9-14pp inside end-to-end agentic loops — validate before you swap.
 
-**Learn it hands-on:** [Measure Before You Optimize](https://learn.agentpatterns.ai/context-engineering/measure-before-you-optimize/) — guided lesson with quizzes.
+Learn it hands-on: [Measure Before You Optimize](https://learn.agentpatterns.ai/context-engineering/measure-before-you-optimize/) — guided lesson with quizzes.
 
 Token-optimized formats such as Token-Oriented Object Notation (TOON) and Token Reduced Object Notation (TRON) re-encode JSON to remove repeated property names and structural overhead. Isolated comprehension benchmarks report 30-60% savings ([TOON spec](https://github.com/toon-format/toon)), but the savings measured on single-turn tasks do not survive the multi-turn, parallel tool-call patterns that make up real agentic systems ([Kutschka & Geiger, 2026](https://arxiv.org/abs/2605.29676)).
 
-## Input-Side vs Output-Side Compression
+## Input-side vs output-side compression
 
 The two compression directions behave asymmetrically:
 
 | Direction | What the LLM does | Why behavior differs |
 |-----------|------------------|----------------------|
-| **Input-side** (tool schemas, retrieved context) | Reads the format only | Comprehension degrades gracefully on unfamiliar notation |
-| **Output-side** (tool calls, structured responses) | Generates the format | Generation regresses sharply — LLMs were trained predominantly on JSON |
+| Input-side (tool schemas, retrieved context) | Reads the format only | Comprehension degrades gracefully on unfamiliar notation |
+| Output-side (tool calls, structured responses) | Generates the format | Generation regresses sharply — LLMs were trained predominantly on JSON |
 
 Treating "switch the wire format" as a single decision conflates two different changes. Input-only swaps (compress the schema, keep JSON tool responses) carry less accuracy risk than full bidirectional swaps.
 
-## What the Agentic-Loop Study Found
+## What the agentic-loop study found
 
 [Kutschka & Geiger (2026)](https://arxiv.org/abs/2605.29676) benchmarked TOON, TRON, and JSON across four agentic suites (BFCL, MCPToolBenchPP, MCP-Universe, StableToolBench) on five open-weight LLMs:
 
@@ -41,34 +41,34 @@ Treating "switch the wire format" as a single decision conflates two different c
 
 The same paper documents two operational failure modes specific to multi-turn agentic loops:
 
-- TOON exhibits **cascading parse failures** when used across multi-turn interactions — one mis-parsed turn corrupts the next.
-- TOON **collapses parallel tool-call output** on most tested open-weight models, breaking concurrent tool dispatch.
+- TOON shows cascading parse failures across multi-turn interactions — one mis-parsed turn corrupts the next.
+- TOON collapses parallel tool-call output on most tested open-weight models, breaking concurrent tool dispatch.
 
-An earlier benchmark on isolated structured generation found **plain JSON had the best one-shot accuracy**, and for simple structures even constrained decoding outperformed TOON ([arxiv 2603.03306](https://arxiv.org/abs/2603.03306)).
+An earlier benchmark on isolated structured generation found plain JSON had the best one-shot accuracy, and for simple structures even constrained decoding outperformed TOON ([arxiv 2603.03306](https://arxiv.org/abs/2603.03306)).
 
-## Why It Works
+## Why it works
 
 Token-efficient notations save tokens by eliminating repeated property names and structural punctuation — mechanical compression of the serialized form. The accuracy cost has a separate mechanism: LLMs were trained predominantly on JSON, so unfamiliar notation forces them to spend reasoning capacity on parsing rather than the task ([InfoQ, 2025](https://www.infoq.com/news/2025/11/toon-reduce-llm-cost-tokens/)). The asymmetry between input and output compression follows from this — reading an unfamiliar format degrades less than producing it, because production requires the model to commit to a low-probability token distribution at every step.
 
-The net effect is a Pareto frontier between tokens and accuracy, not a free lunch. The decision is whether the savings on *your* workload sit on the favorable side of the curve.
+The net effect is a Pareto frontier between tokens and accuracy, not free savings. The decision is whether the savings on your workload sit on the favorable side of the curve.
 
-## When This Backfires
+## When this backfires
 
 The pattern degrades or inverts in five conditions:
 
-1. **Short, single-turn interactions** — the instructional overhead teaching the LLM the format consumes more tokens than the compression saves ([arxiv 2603.03306](https://arxiv.org/abs/2603.03306)).
-2. **Multi-turn loops with parallel tool calls** — TOON collapses parallel tool-call output on most open-weight LLMs, producing cascading parse failures ([Kutschka & Geiger, 2026](https://arxiv.org/abs/2605.29676)).
-3. **Nested or heterogeneous schemas** — token savings concentrate on uniform tabular data; nested objects see negligible compression while paying the full accuracy cost ([TOON spec](https://github.com/toon-format/toon)).
-4. **Accuracy-critical workflows** — billing, code synthesis, or safety-critical decisions cannot absorb a 9-14pp accuracy regression for an 18-27% token win.
-5. **Mixed-model fleets** — format behavior varies across the five open-weight LLMs tested; a notation that works on one model in the pipeline can regress on another.
+1. Short, single-turn interactions — the instructional overhead teaching the LLM the format consumes more tokens than the compression saves ([arxiv 2603.03306](https://arxiv.org/abs/2603.03306)).
+2. Multi-turn loops with parallel tool calls — TOON collapses parallel tool-call output on most open-weight LLMs, producing cascading parse failures ([Kutschka & Geiger, 2026](https://arxiv.org/abs/2605.29676)).
+3. Nested or heterogeneous schemas — token savings concentrate on uniform tabular data; nested objects see negligible compression while paying the full accuracy cost ([TOON spec](https://github.com/toon-format/toon)).
+4. Accuracy-critical workflows — billing, code synthesis, or safety-critical decisions cannot absorb a 9-14pp accuracy regression for an 18-27% token win.
+5. Mixed-model fleets — format behavior varies across the five open-weight LLMs tested; a notation that works on one model in the pipeline can regress on another.
 
-For most production stacks the right baseline is JSON plus orthogonal levers — prompt caching, field projection at the tool boundary ([Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)), and smaller models — which deliver token wins without the accuracy gamble.
+For most production stacks the right baseline is JSON plus separate measures — prompt caching, field projection at the tool boundary ([Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)), and smaller models — which save tokens without the accuracy gamble.
 
 ## Example
 
 A practical evaluation plan before swapping a tool schema from JSON to TOON or TRON:
 
-**Before** — single-turn comprehension benchmark only:
+Before — single-turn comprehension benchmark only:
 
 ```
 1. Generate 100 sample tool schemas in JSON and TOON.
@@ -79,7 +79,7 @@ A practical evaluation plan before swapping a tool schema from JSON to TOON or T
 
 This is the failure mode the agentic-loop study calls out — the test does not match the production workload.
 
-**After** — measure the swap inside the actual loop:
+After — measure the swap inside the actual loop:
 
 ```
 1. Replay 100 production agent sessions with three configurations:
@@ -106,8 +106,8 @@ The decoupled measurement reveals which side of the compression Pareto your work
 
 ## Related
 
-- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md) — A different lever on the same problem: shape tool output to return only the next decision's inputs, regardless of serialization format.
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md) — A different lever on the same problem: shape tool output to return only the next decision's inputs, regardless of serialization format.
 - [Semantic Tool Output](../tool-engineering/semantic-tool-output.md) — Output design for agent readability, complementary to notation choice.
 - [Prompt Compression](prompt-compression.md) — Compress instructions and prose for the same goal at a different layer of the prompt.
 - [Semantic Density Optimization](semantic-density-optimization.md) — Why naive compression backfires: removing semantic content shifts cost to inference, paralleling the input-vs-output asymmetry seen with format swaps.
-- [Tokenizer Swap Tax](tokenizer-swap-tax.md) — Another notation-layer change with hidden costs that only surface in end-to-end measurement.
+- [Tokenizer Swap Tax](../token-engineering/tokenizer-swap-tax.md) — Another notation-layer change with hidden costs that only surface in end-to-end measurement.

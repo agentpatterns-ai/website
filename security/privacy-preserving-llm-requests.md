@@ -19,9 +19,9 @@ maturity: emerging
 
 > Privacy-preserving LLM requests combine local routing with redact-and-rephrase, cutting PII leakage to 0.6% while leaving 31% of proprietary code exposed.
 
-Coding agents and LLM-powered tools send prompts to cloud APIs that may log, retain, or train on request content. Organisation-level DLP and TLS address transport and egress; neither protects the content of the prompt itself. An empirical evaluation across 1,300 labelled samples compared eight techniques on leakage, utility, latency, and cost ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064)).
+Coding agents and LLM-powered tools send prompts to cloud APIs that may log, retain, or train on request content. Organization-level DLP and TLS protect transport and egress. Neither protects the content of the prompt itself. An empirical evaluation across 1,300 labeled samples compared eight techniques on leakage, utility, latency, and cost ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064)).
 
-## The Eight Techniques
+## The eight techniques
 
 | ID | Technique | Practical today |
 |----|-----------|-----------------|
@@ -36,13 +36,13 @@ Coding agents and LLM-powered tools send prompts to cloud APIs that may log, ret
 
 D–G require hardware enclaves, cryptographic protocols, or multi-party coordination not generally available from cloud LLM providers. A, B, C, and H run on unmodified OpenAI-compatible APIs ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064)).
 
-## How A+B+C Compose
+## How A+B+C compose
 
-The authors benchmark every technique individually and in combination. The empirical winner is A+B+C:
+The authors benchmark every technique on its own and in combination. The empirical winner is A+B+C:
 
-1. **Route locally when possible (A).** A small local model handles requests that fit its capability envelope. The egress path never opens.
-2. **Redact what remains (B).** Detect PII, secrets, and identifiers in the remaining prompts and substitute typed placeholders. The client keeps a placeholder → real-value map, the same mechanism as [PII tokenization](pii-tokenization-in-agent-context.md) at the tool boundary.
-3. **Rephrase the prose (C).** Rewrite surrounding natural-language context so residual style, phrasing, and collocations do not re-identify the redacted entities.
+1. Route locally when possible (A). A small local model handles requests that fit its capability envelope. The egress path never opens.
+2. Redact what remains (B). Detect PII, secrets, and identifiers in the remaining prompts, then substitute typed placeholders. The client keeps a placeholder → real-value map, the same mechanism as [PII tokenization](pii-tokenization-in-agent-context.md) at the tool boundary.
+3. Rephrase the prose (C). Rewrite the surrounding natural-language context so residual style, phrasing, and collocations do not re-identify the redacted entities.
 
 ```mermaid
 graph TD
@@ -58,7 +58,7 @@ graph TD
 
 The client restores placeholders in the response before the agent acts on it. The cloud model sees only typed shells and paraphrased context.
 
-## Measured Leakage
+## Measured leakage
 
 Across 500 test prompts against the combined pipeline ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064)):
 
@@ -69,18 +69,18 @@ Across 500 test prompts against the combined pipeline ([arXiv:2604.12064](https:
 
 PII redaction is near-complete because emails, account numbers, and names match regular patterns. Proprietary code is structural: function names, API shapes, architectural conventions, and domain idioms carry information that survives identifier renaming. A third of proprietary-code content leaks through even with A+B+C applied.
 
-## Where Each Technique Fails
+## Where each technique fails
 
-The evaluation reports that no single technique dominates — each has a characteristic failure mode that composition can mitigate but not remove ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064)):
+The evaluation reports that no single technique dominates. Each has a characteristic failure mode that composition can reduce but not remove ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064)):
 
-- **Local-only (A)** — constrained by local model capability. Tasks requiring frontier-class reasoning fall back to cloud, and the privacy gain is lost for that fraction.
-- **Redaction (B)** — pattern-based detectors miss contextual identifiers: job title plus office, composite IDs, role-based references. Regex alone misses context-dependent PII, which is why hybrid detectors pair patterns with context-aware models ([RECAP, arXiv:2510.07551](https://arxiv.org/abs/2510.07551)).
-- **Rephrasing (C)** — aggressive rephrasing degrades task utility when exact wording matters (code, legal text, structured output), and paraphrase models themselves are cloud-hosted in many deployments.
-- **Differential-privacy noise (H)** — calibrated noise damages generation quality for tasks where token-level precision matters; the compute–privacy–utility tradeoff is characterised for DP language models ([arXiv:2501.18914](https://arxiv.org/abs/2501.18914)).
+- Local-only (A) — limited by local model capability. Tasks that need frontier-class reasoning fall back to cloud, and the privacy gain is lost for that fraction.
+- Redaction (B) — pattern-based detectors miss contextual identifiers: job title plus office, composite IDs, role-based references. Regex alone misses context-dependent PII, which is why hybrid detectors pair patterns with context-aware models ([RECAP, arXiv:2510.07551](https://arxiv.org/abs/2510.07551)).
+- Rephrasing (C) — heavy rephrasing degrades task utility when exact wording matters (code, legal text, structured output), and paraphrase models themselves are cloud-hosted in many deployments.
+- Differential-privacy noise (H) — calibrated noise damages generation quality for tasks where token-level precision matters. The compute–privacy–utility tradeoff is characterized for DP language models ([arXiv:2501.18914](https://arxiv.org/abs/2501.18914)).
 
 Composing A+B+C reduces leakage further but does not eliminate it — the 31.3% proprietary-code residual is the empirical floor reported for the combined pipeline ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064)).
 
-## Scope Limits for Production Use
+## Scope limits for production use
 
 The A+B+C combination is defensible for PII-heavy workloads — customer-support content, healthcare records, form data — where the 0.6% residual leak is tolerable against the compliance baseline. It is not a general privacy control for proprietary source code. For code bases where architectural leakage is disqualifying, the remaining defensible postures are:
 
@@ -88,11 +88,11 @@ The A+B+C combination is defensible for PII-heavy workloads — customer-support
 - Not sending the content to a cloud LLM at all
 - Waiting for TEE-hosted inference (D) to reach general production availability
 
-Treat the redaction pipeline as a layer, not a seal. For PII this is adequate for most threat models; for code it narrows but does not close the window.
+Treat the redaction pipeline as a layer, not a seal. For PII this is adequate for most threat models. For code it narrows the window but does not close it.
 
-## Relation to Tokenization at the Agent-Tool Boundary
+## Relation to tokenization at the agent-tool boundary
 
-[PII Tokenization in Agent Context](pii-tokenization-in-agent-context.md) addresses the same concern at a different layer: the sandbox boundary between the agent and downstream tools. Tokenization keeps sensitive values out of the model's reasoning context during tool use; request-level redaction keeps them out of the outbound API call. The layers are complementary.
+[PII Tokenization in Agent Context](pii-tokenization-in-agent-context.md) addresses the same concern at a different layer: the sandbox boundary between the agent and downstream tools. Tokenization keeps sensitive values out of the model's reasoning context during tool use. Request-level redaction keeps them out of the outbound API call. The two layers are complementary.
 
 ## Example
 

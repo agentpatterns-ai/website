@@ -18,7 +18,7 @@ status: current
 
 > Repository-scoped persistent memory that Copilot builds autonomously from agent interactions, shared across coding agent, code review, and CLI, with citation-based verification and 28-day auto-expiry.
 
-## How Copilot Memory Works
+## How Copilot Memory works
 
 Copilot Memory captures knowledge from agent interactions without manual curation. Agents identify patterns worth remembering and store them as structured entries ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)).
 
@@ -33,27 +33,27 @@ Each entry contains four components ([GitHub engineering blog](https://github.bl
 
 Memories are repository-scoped: write access to create, read access to use ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)).
 
-## Cross-Agent Sharing
+## Cross-agent sharing
 
 Three Copilot surfaces share the same memory pool ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)):
 
-- **Coding agent** — reads and writes memories during code generation
-- **Code review** — reads and writes memories during PR review
-- **CLI** — reads and writes memories during terminal interactions
+- Coding agent — reads and writes memories during code generation
+- Code review — reads and writes memories during PR review
+- CLI — reads and writes memories during terminal interactions
 
 When code review discovers a naming convention violation, that knowledge becomes available to the coding agent on the next task — each agent both contributes to and benefits from the shared knowledge base ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)).
 
-## Citation-Based Verification and Self-Healing
+## Citation-based verification and self-healing
 
 Every entry is grounded in specific code locations. Before applying a memory, the agent performs just-in-time verification — checking that cited locations still exist and align with the stored fact ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)).
 
 When verification reveals a contradiction, the agent generates a corrected version. GitHub tested this by seeding adversarial memories — agents consistently detected and corrected the conflicts ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)). The memory pool self-corrects through use rather than manual curation.
 
-## Auto-Expiry
+## Auto-expiry
 
 Memories expire after 28 days. Use refreshes the timestamp, so actively relevant memories persist while unused entries are pruned ([GitHub changelog, Jan 2026](https://github.blog/changelog/2026-01-15-agentic-memory-for-github-copilot-is-in-public-preview/)). By contrast, Claude Code's auto memory persists without built-in expiry ([Claude Code docs](https://code.claude.com/docs/en/memory)).
 
-## Measured Impact
+## Measured impact
 
 Internal evaluation results ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)):
 
@@ -64,7 +64,7 @@ Internal evaluation results ([GitHub engineering blog](https://github.blog/ai-an
 
 Both results were statistically significant (p < 0.00001).
 
-## Availability and Controls
+## Availability and controls
 
 | Date | Change | Source |
 |------|--------|--------|
@@ -72,13 +72,13 @@ Both results were statistically significant (p < 0.00001).
 | Mar 4, 2026 | Enabled by default for Pro and Pro+ individual users | [GitHub changelog](https://github.blog/changelog/2026-03-04-copilot-memory-now-on-by-default-for-pro-and-pro-users-in-public-preview/) |
 | Jun 2, 2026 | User preferences supported for Business and Enterprise plans | [GitHub changelog](https://github.blog/changelog/2026-06-02-copilot-memory-supports-user-preferences-for-business-enterprise) |
 
-**Developer controls:**
+Developer controls:
 
 - Individual toggle: `github.com/settings/copilot` > Features > Copilot Memory ([GitHub changelog](https://github.blog/changelog/2026-03-04-copilot-memory-now-on-by-default-for-pro-and-pro-users-in-public-preview/))
 - Repository owners: Repository Settings > Copilot > Memory — review and delete stored memories ([GitHub changelog](https://github.blog/changelog/2026-01-15-agentic-memory-for-github-copilot-is-in-public-preview/))
 - Organization/enterprise admins: policy-level enable/disable ([GitHub changelog](https://github.blog/changelog/2026-03-04-copilot-memory-now-on-by-default-for-pro-and-pro-users-in-public-preview/))
 
-## Comparison with Other Memory Approaches
+## Comparison with other memory approaches
 
 | Dimension | Copilot Memory | Claude Code Memory | OPENDEV (Research) |
 |-----------|---------------|-------------------|-------------------|
@@ -106,7 +106,7 @@ The next time the coding agent implements a new feature that adds a `Notificatio
 
 If a refactor later moves `UserService.ts`, the citation becomes stale. When the coding agent next accesses this memory, it checks whether `src/services/UserService.ts:12` still exists and still shows constructor injection. If the file moved but the pattern holds, the agent updates the citation. If the pattern was removed, the agent marks the memory as contradicted and generates a corrected version.
 
-To inspect or delete stored memories for a repository, navigate to **Repository Settings > Copilot > Memory** — entries are listed with their citations and can be removed individually.
+To inspect or delete stored memories for a repository, go to **Repository Settings > Copilot > Memory**. Each entry shows its citations, and you can remove entries one at a time.
 
 ## Key Takeaways
 
@@ -115,14 +115,14 @@ To inspect or delete stored memories for a repository, navigate to **Repository 
 - 28-day auto-expiry with use-based renewal balances freshness against unbounded growth.
 - Measured impact: 7% increase in PR merge rates for the coding agent (p < 0.00001).
 
-## When This Backfires
+## When this backfires
 
 Autonomous memory creation without human curation works against you in several conditions:
 
-- **Security-sensitive repositories**: an incorrectly stored memory (e.g., "always skip validation for internal services") can propagate to the coding agent and be applied silently, bypassing code review for the violation that created the false memory.
-- **Repositories with contested conventions**: during a mid-refactor, agents may store memories from the old convention and resist the new one, creating a feedback loop where stale patterns self-reinforce until the memory expires.
-- **Teams using explicit context files**: organizations that treat `.github/copilot-instructions.md` as the source of truth may find autonomous memories create ambiguity when the two diverge — the instruction file takes precedence, but the agent may still surface the contradicting memory.
-- **Multi-repository workflows**: memories are repository-scoped, so patterns do not transfer across repos. Teams spanning a monorepo split or separate service repos must rebuild memory in each context.
+- Security-sensitive repositories: an incorrectly stored memory (for example, "always skip validation for internal services") can propagate to the coding agent and be applied silently, bypassing code review for the violation that created the false memory.
+- Repositories with contested conventions: during a mid-refactor, agents may store memories from the old convention and resist the new one, creating a feedback loop where stale patterns self-reinforce until the memory expires.
+- Teams using explicit context files: organizations that treat `.github/copilot-instructions.md` as the source of truth may find autonomous memories create ambiguity when the two diverge — the instruction file takes precedence, but the agent may still surface the contradicting memory.
+- Multi-repository workflows: memories are repository-scoped, so patterns do not transfer across repos. Teams spanning a monorepo split or separate service repos must rebuild memory in each context.
 
 ## Related
 

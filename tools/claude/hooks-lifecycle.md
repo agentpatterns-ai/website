@@ -18,15 +18,15 @@ status: current
 
 > Claude Code hooks are deterministic automation at lifecycle points — shell commands, HTTP calls, or LLM prompts that fire on specific events.
 
-**Learn it hands-on:** [Hooks — Deterministic Guardrails](https://learn.agentpatterns.ai/harness-engineering/hooks-deterministic-guardrails/) — guided lesson with quizzes.
+Learn it hands-on: [Hooks — Deterministic Guardrails](https://learn.agentpatterns.ai/harness-engineering/hooks-deterministic-guardrails/) — guided lesson with quizzes.
 
-## How They Work
+## How they work
 
-[Hooks](https://code.claude.com/docs/en/hooks) are configured in `settings.json` (user, project, or local scope) under a top-level `hooks` object keyed by event name. Each matcher group pairs a `matcher` string with one or more `hooks` handlers of `type: "command"`, `http`, `prompt`, or `agent`. Hook input arrives on stdin as JSON rather than through environment variables, so scripts typically pipe stdin through `jq` to extract tool input fields ([reference](https://code.claude.com/docs/en/hooks)).
+You configure [hooks](https://code.claude.com/docs/en/hooks) in `settings.json` at user, project, or local scope. They live under a top-level `hooks` object keyed by event name. Each matcher group pairs a `matcher` string with one or more `hooks` handlers of `type: "command"`, `http`, `prompt`, or `agent`. Hook input arrives on stdin as JSON rather than through environment variables, so scripts typically pipe stdin through `jq` to read tool input fields ([reference](https://code.claude.com/docs/en/hooks)).
 
-Hooks are deterministic because the harness — not the model — runs them at fixed points in the request loop: the harness invokes `PreToolUse` before dispatching a tool call and `PostToolUse` after receiving the result, independent of any sampling. That guarantee is what makes exit code 2 a reliable block for `PreToolUse`, `PermissionRequest`, `UserPromptSubmit`, `Stop`, and config-change events; for post-tool and notification events, exit code 2 feeds stderr back to Claude without blocking because the action has already run ([reference](https://code.claude.com/docs/en/hooks)). Beyond stderr, `Stop` and `SubagentStop` hooks can now return `hookSpecificOutput.additionalContext` to give Claude feedback and continue the turn without being treated as a hook error — inverting the prior limitation where only `PostToolUse` hooks could inject context ([Claude Code changelog v2.1.163](https://code.claude.com/docs/en/changelog)).
+Hooks are deterministic because the harness runs them, not the model. The harness invokes them at fixed points in the request loop: `PreToolUse` before it dispatches a tool call, `PostToolUse` after it receives the result, independent of any sampling. That guarantee makes exit code 2 a reliable block for `PreToolUse`, `PermissionRequest`, `UserPromptSubmit`, `Stop`, and config-change events. For post-tool and notification events, exit code 2 feeds stderr back to Claude without blocking, because the action has already run ([reference](https://code.claude.com/docs/en/hooks)). Beyond stderr, `Stop` and `SubagentStop` hooks can now return `hookSpecificOutput.additionalContext`. This gives Claude feedback and continues the turn without counting as a hook error. It inverts the earlier limit, where only `PostToolUse` hooks could inject context ([Claude Code changelog v2.1.163](https://code.claude.com/docs/en/changelog)).
 
-## Lifecycle Events
+## Lifecycle events
 
 Claude Code fires 25+ hook events across session, prompt, tool, subagent, task, compaction, worktree, config, and file-change lifecycles. A representative subset:
 
@@ -51,9 +51,9 @@ See the [official event list](https://code.claude.com/docs/en/hooks) for the com
 
 ## Matchers
 
-A matcher is a string: `"*"` or empty matches all; a plain identifier or pipe-separated list (`"Bash"`, `"Write|Edit"`) matches exactly; anything with other characters is parsed as a JavaScript regex. What the matcher filters depends on the event — tool name for `PreToolUse` / `PostToolUse`, session source (`startup`, `resume`, `clear`, `compact`) for `SessionStart`, notification type for `Notification`, and so on ([reference](https://code.claude.com/docs/en/hooks)).
+A matcher is a string. `"*"` or an empty string matches everything. A plain identifier or pipe-separated list (`"Bash"`, `"Write|Edit"`) matches exactly. Anything with other characters parses as a JavaScript regex. What the matcher filters depends on the event — tool name for `PreToolUse` / `PostToolUse`, session source (`startup`, `resume`, `clear`, `compact`) for `SessionStart`, notification type for `Notification`, and so on ([reference](https://code.claude.com/docs/en/hooks)).
 
-## Hooks vs Prompts
+## Hooks vs prompts
 
 Hooks are deterministic "must-do" rules — they run as shell commands regardless of the model's choices ([hooks guide](https://code.claude.com/docs/en/hooks-guide)). CLAUDE.md instructions are probabilistic "should-do" suggestions. Use hooks when compliance is non-negotiable — formatting, security checks, validation. Use prompts when flexibility is acceptable.
 
@@ -61,7 +61,7 @@ The `/hooks` interactive command walks through setup.
 
 ## Example
 
-The following `settings.json` snippet shows three hooks that together enforce a non-negotiable rule set: block dangerous shell commands before execution, auto-format Python files after every Write or Edit, and save a progress snapshot when the session ends.
+This `settings.json` snippet shows three hooks that enforce one non-negotiable rule set: block dangerous shell commands before they run, auto-format Python files after every Write or Edit, and save a progress snapshot when the session ends.
 
 ```json
 {
@@ -102,7 +102,7 @@ The following `settings.json` snippet shows three hooks that together enforce a 
 }
 ```
 
-**`block-dangerous-commands.sh`** — hook input arrives on stdin as JSON; exit 2 blocks the call
+`block-dangerous-commands.sh` — hook input arrives on stdin as JSON; exit 2 blocks the call
 
 ```bash
 #!/usr/bin/env bash
@@ -115,7 +115,7 @@ for pattern in "rm -rf /" "dd if=/dev" ":(){ :|:& }"; do
 done
 ```
 
-**`ruff-format.sh`** — read the edited path from stdin and format it in place
+`ruff-format.sh` — read the edited path from stdin and format it in place
 
 ```bash
 #!/usr/bin/env bash
@@ -123,17 +123,17 @@ FILE=$(jq -r '.tool_input.file_path' < /dev/stdin)
 [[ "$FILE" == *.py ]] && ruff format "$FILE"
 ```
 
-The `PreToolUse` hook fires before every Bash call; exit code 2 cancels the tool call and sends the stderr message back to Claude as feedback. The `PostToolUse` hook fires after every Write or Edit call, then the script filters to `.py` files and runs `ruff format`. The `SessionEnd` hook has no matcher and fires unconditionally when the session terminates, making it the right place to write progress files or close audit logs.
+The `PreToolUse` hook fires before every Bash call. Exit code 2 cancels the call and sends the stderr message back to Claude as feedback. The `PostToolUse` hook fires after every Write or Edit call, then the script filters to `.py` files and runs `ruff format`. The `SessionEnd` hook has no matcher and fires whenever the session ends, so it is the right place to write progress files or close audit logs.
 
-## When This Backfires
+## When this backfires
 
 Hooks are the wrong tool when the rule they encode is aspirational rather than absolute. Common failure modes:
 
-- **Hidden global state.** A misbehaving agent is often a hook silently rewriting, blocking, or reformatting files. Because hooks are invisible in the transcript unless they exit non-zero, debugging can take longer than the hook saves.
-- **Brittle schema coupling.** Hook scripts parse `tool_input` JSON; when a tool's schema changes in a new Claude Code release (new field names, renamed events, added matcher semantics), scripts fail silently or block legitimate calls.
-- **Over-scoped blocks.** A `PreToolUse` Bash blocker that matches `rm` with a substring check will block `rm node_modules` and `echo "term"` — pushing users to disable the hook entirely rather than accept the false positives.
-- **Performance tax.** Every `PostToolUse` hook runs synchronously on the hot path; a slow formatter or network call inflates every edit. Move expensive work to `SessionEnd` or async out-of-band jobs.
-- **CLAUDE.md would have worked.** If the rule bends gracefully under load (prefer a style, avoid a phrase), a prompt instruction fails softer than a hook rejection and keeps the model in the loop.
+- Hidden global state. A misbehaving agent is often a hook silently rewriting, blocking, or reformatting files. Hooks stay invisible in the transcript unless they exit non-zero, so debugging can take longer than the hook saves.
+- Brittle schema coupling. Hook scripts parse `tool_input` JSON. When a tool's schema changes in a new Claude Code release — new field names, renamed events, added matcher semantics — scripts fail silently or block valid calls.
+- Over-scoped blocks. A `PreToolUse` Bash blocker that matches `rm` with a substring check blocks `rm node_modules` and `echo "term"`. The false positives push users to disable the hook rather than live with them.
+- Performance tax. Every `PostToolUse` hook runs synchronously on the hot path, so a slow formatter or network call slows every edit. Move expensive work to `SessionEnd` or out-of-band jobs.
+- CLAUDE.md would have worked. If the rule bends gracefully under load — prefer a style, avoid a phrase — a prompt instruction fails softer than a hook rejection and keeps the model in the loop.
 
 ## Key Takeaways
 

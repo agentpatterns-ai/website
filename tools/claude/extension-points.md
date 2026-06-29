@@ -9,11 +9,12 @@ applies_to: "claude-code@2.x"
 last_reviewed: 2026-05-27
 status: current
 ---
+
 # Claude Code Extension Points: When to Use What
 
 > Choose the right extension point — CLAUDE.md, rules, skills, hooks, subagents, MCP servers, or plugins — based on enforcement needs, context cost, and portability.
 
-## At a Glance
+## At a glance
 
 | Extension point | Purpose | Loads when | Context cost |
 |---|---|---|---|
@@ -26,7 +27,7 @@ status: current
 | [Agent teams](https://code.claude.com/docs/en/agent-teams) | Multi-agent coordination | On session creation | Zero per teammate |
 | [Plugins](https://code.claude.com/docs/en/plugins) | Distribution bundles | On install | Varies |
 
-## Decision Framework
+## Decision framework
 
 ```mermaid
 flowchart TD
@@ -51,56 +52,56 @@ flowchart TD
 
 Based on the [official features overview](https://code.claude.com/docs/en/features-overview) and community models ([Ottmann](https://marioottmann.com/articles/claude-code-customization-guide), [GenAI Unplugged](https://genaiunplugged.substack.com/p/claude-code-skills-commands-hooks-agents)).
 
-## CLAUDE.md vs .claude/rules/ vs Skills
+## CLAUDE.md vs .claude/rules/ vs skills
 
 All three deliver instructions, but differ in scope and context cost.
 
 | | CLAUDE.md | .claude/rules/ | Skills |
 |---|---|---|---|
-| **When to use** | Core conventions, under ~200 lines | Domain rules scoped to file paths | On-demand reference or `/name` workflows |
-| **Loads** | Every session, unconditionally | Session start or on file-path match | Descriptions at start; full on invocation |
-| **Context cost** | High — always present | Medium — path-targeted | Low — progressive |
-| **Typical content** | Architecture, test commands, conventions | Lint rules for `frontend/`, API rules for `api/` | Procedures, checklists, templates |
+| When to use | Core conventions, under ~200 lines | Domain rules scoped to file paths | On-demand reference or `/name` workflows |
+| Loads | Every session, unconditionally | Session start or on file-path match | Descriptions at start; full on invocation |
+| Context cost | High — always present | Medium — path-targeted | Low — progressive |
+| Typical content | Architecture, test commands, conventions | Lint rules for `frontend/`, API rules for `api/` | Procedures, checklists, templates |
 
 Keep CLAUDE.md lean: path-specific rules go in `.claude/rules/`, detailed procedures go in skills. See [Hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md) and [Progressive Disclosure](../../agent-design/progressive-disclosure-agents.md).
 
-## Deterministic vs Probabilistic
+## Deterministic vs probabilistic
 
-**Deterministic** — model cannot override:
+Deterministic — the model cannot override:
 
-- **Hooks**: fire at [18 lifecycle events](hooks-lifecycle.md). The agent cannot skip or override them.
-- **CLAUDE.md loading**: loaded unconditionally at session start ([memory docs](https://code.claude.com/docs/en/memory)).
+- Hooks fire at [18 lifecycle events](hooks-lifecycle.md). The agent cannot skip or override them.
+- CLAUDE.md loads unconditionally at session start ([memory docs](https://code.claude.com/docs/en/memory)).
 
-**Probabilistic** — model decides when to invoke:
+Probabilistic — the model decides when to invoke:
 
-- **Skills**: Claude invokes based on description relevance ([skills docs](https://code.claude.com/docs/en/skills)). Set `disable-model-invocation: true` for explicit-only.
-- **Subagent delegation**: the parent decides when to spawn.
+- Skills: Claude invokes them based on description relevance ([skills docs](https://code.claude.com/docs/en/skills)). Set `disable-model-invocation: true` for explicit-only.
+- Subagent delegation: the parent decides when to spawn.
 
 For non-negotiable rules, prefer hooks. See [Hooks vs Prompts](../../instructions/hooks-vs-prompts.md).
 
-## When Extension Points Combine
+## When extension points combine
 
-- **CLAUDE.md + hooks**: CLAUDE.md states the rule; a `PreToolUse` hook enforces it. See [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md).
-- **Skills + subagents**: a skill defines the procedure; a [subagent](sub-agents.md) executes it in isolation.
-- **MCP + skills**: MCP exposes external tools; a skill provides the workflow using them.
-- **Plugins**: [bundle](../../standards/plugin-packaging.md) agents, skills, hooks, and MCP configs for distribution. Plugins solve distribution, not logic.
+- CLAUDE.md and hooks: CLAUDE.md states the rule; a `PreToolUse` hook enforces it. See [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md).
+- Skills and subagents: a skill defines the procedure; a [subagent](sub-agents.md) runs it in isolation.
+- MCP and skills: MCP exposes external tools; a skill provides the workflow that uses them.
+- Plugins [bundle](../../standards/plugin-packaging.md) agents, skills, hooks, and MCP configs for distribution. Plugins solve distribution, not logic.
 
 Commands are [merged into skills](https://code.claude.com/docs/en/skills) — existing `.claude/commands/` files continue to work.
 
-## Why the Determinism Boundary Matters
+## Why the determinism boundary matters
 
-Hooks are shell processes spawned by the CLI at lifecycle events, independent of the model's token stream — the model cannot see or suppress them. Skills, subagents, and `.claude/rules/` are text in the model's context; a confusing context can cause them to be skipped. Anything routed through model reasoning is probabilistic; anything executed at the infrastructure layer is deterministic.
+The CLI spawns hooks as shell processes at lifecycle events, independent of the model's token stream. The model cannot see or suppress them. Skills, subagents, and `.claude/rules/` are text in the model's context, so a confusing context can cause the model to skip them. Anything routed through model reasoning is probabilistic; anything run at the infrastructure layer is deterministic.
 
-CLAUDE.md's high context cost follows: injected into every request unconditionally. Skills load full content only on invocation.
+CLAUDE.md's high context cost follows from this: it is injected into every request unconditionally. Skills load full content only on invocation.
 
-## When This Backfires
+## When this backfires
 
-- **Overlapping extension points**: A path-scoped rule that also needs enforcement requires both a `.claude/rules/` entry and a hook. Maintaining the rule in two places creates drift.
-- **Hook proliferation**: Applying hooks to stylistic preferences rather than non-negotiable compliance accumulates startup latency and failure modes.
-- **CLAUDE.md bloat**: At 500+ lines, unconditional injection degrades instruction-following on unrelated tasks. Move domain content to rules or skills early.
-- **Premature plugins**: Bundling before two or more repos need the config adds release overhead; a shared git subtree is cheaper at small scale.
+- Overlapping extension points: a path-scoped rule that also needs enforcement requires both a `.claude/rules/` entry and a hook. You then maintain the rule in two places, which creates drift.
+- Hook proliferation: hooks applied to stylistic preferences, rather than non-negotiable compliance, add startup latency and more failure modes.
+- CLAUDE.md bloat: at 500+ lines, unconditional injection weakens instruction-following on unrelated tasks. Move domain content to rules or skills early.
+- Premature plugins: bundling before two or more repos need the config adds release overhead. A shared git subtree is cheaper at small scale.
 
-## Security: Per-Server MCP Trust
+## Security: per-server MCP trust
 
 Before v2.1.69, `.mcp.json` silently trusted all servers. Claude Code now shows a per-server trust dialog on first session ([changelog](https://code.claude.com/docs/en/changelog)) — automated setups relying on silent enablement will see a prompt per server after updating.
 
@@ -114,11 +115,11 @@ A team wants to enforce that all SQL migrations include a `DOWN` migration. They
 
 | Requirement | Extension point | Why |
 |---|---|---|
-| Every migration file must contain `DOWN` | **Hook** (`PreToolUse` on `Write`) | Non-negotiable — must fire 100% of the time, not skip-able by the model |
-| "Review this migration" workflow | **Skill** (`.claude/skills/review-migration.md`) | On-demand procedure with steps; loads only when invoked |
-| "All SQL uses snake_case" convention | **`.claude/rules/db.md`** with glob `db/migrations/**` | Path-scoped rule; only loads when touching migration files |
-| Schema registry lookup | **MCP server** | External service access; exposes `get_schema` tool |
-| Share all of the above across repos | **Plugin** | Bundles the hook, skill, rule, and MCP config for `npm install` distribution |
+| Every migration file must contain `DOWN` | Hook (`PreToolUse` on `Write`) | Non-negotiable — must fire 100% of the time, the model cannot skip it |
+| "Review this migration" workflow | Skill (`.claude/skills/review-migration.md`) | On-demand procedure with steps; loads only when invoked |
+| "All SQL uses snake_case" convention | `.claude/rules/db.md` with glob `db/migrations/**` | Path-scoped rule; only loads when touching migration files |
+| Schema registry lookup | MCP server | External service access; exposes `get_schema` tool |
+| Share all of the above across repos | Plugin | Bundles the hook, skill, rule, and MCP config for `npm install` distribution |
 
 The hook script (`hooks/check-down-migration.sh`) runs deterministically. The skill and rule are probabilistic but scoped. The MCP server bridges to an external system. The plugin packages everything for distribution.
 

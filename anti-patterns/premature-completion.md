@@ -20,63 +20,63 @@ maturity: established
 
 > Coding agents stop after the first visible signal of progress and declare done while failing tests, unmet objectives, or unverified artifacts persist. Distinct from continuing past completion — same surface symptom, different cause, different fix.
 
-## Four Names for the Same Failure
+## Four names for the same failure
 
 Independent teams have named this pattern four different ways within a year:
 
 | Source | Name | Evidence |
 |--------|------|----------|
-| [SRI Lab, ETH Zurich](https://www.sri.inf.ethz.ch/blog/fixedcode) | "Fixing correct code" | Agents patch already-passing code **>50%** of the time across Claude Opus 4.6, Sonnet 4.6, GLM-5, GPT-5.4, Gemini 3 Pro, Qwen3.5 on 235 tasks |
+| [SRI Lab, ETH Zurich](https://www.sri.inf.ethz.ch/blog/fixedcode) | "Fixing correct code" | Agents patch already-passing code >50% of the time across Claude Opus 4.6, Sonnet 4.6, GLM-5, GPT-5.4, Gemini 3 Pro, Qwen3.5 on 235 tasks |
 | [ForgeCode](https://forgecode.dev/blog/gpt-5-4-agent-improvements/) | "Premature completion" | GPT-5.4 implements, sounds confident, stops — "edge cases missed, files not saved, tests not run" |
 | [SWE-EVO (arxiv 2512.18470)](https://arxiv.org/abs/2512.18470) | "Premature termination" | Table 5: *"stopped or concluded early after encountering difficulty, without exhausting reasonable next steps"* |
-| [arxiv 2503.15223](https://arxiv.org/html/2503.15223v1) | "Inflated resolution rates" | Full test suites expose **6.2 pp** of reported SWE-Bench resolution as patches that fail untouched tests |
+| [arxiv 2503.15223](https://arxiv.org/html/2503.15223v1) | "Inflated resolution rates" | Full test suites expose 6.2 pp of reported SWE-Bench resolution as patches that fail untouched tests |
 
 Converging terminology across four unrelated teams is strong evidence the failure is real and underdescribed.
 
-## Why It Happens
+## Why it happens
 
-The agent's "I'm done" token is triggered by a first-signal-of-progress pattern — tests pass, patch applied, reasoning chain terminates — that is a valid proxy on most training data but under-specified for multi-file or multi-test scope.
+A first-signal-of-progress pattern triggers the agent's "I'm done" token — tests pass, patch applied, reasoning chain terminates. That pattern is a valid proxy on most training data, but under-specified for multi-file or multi-test scope.
 
-- **Training distribution**: single-fix trajectories dominate the corpus; the stop token is conditioned on first-fix success ([SRI Lab](https://www.sri.inf.ethz.ch/blog/fixedcode)).
-- **Context pressure**: as trajectories grow, attention to the original spec degrades; stopping early is cheaper than re-reading ([ForgeCode](https://forgecode.dev/blog/gpt-5-4-agent-improvements/)).
-- **No reproduction step**: agents that patch without first reproducing cannot tell already-passing code from a real bug. A reproduction-first prompt moves GPT-5.4 mini from **24% to 77%** on the correct-code task ([SRI Lab](https://www.sri.inf.ethz.ch/blog/fixedcode)).
+- Training distribution: single-fix trajectories dominate the corpus, so the stop token learns to fire on first-fix success ([SRI Lab](https://www.sri.inf.ethz.ch/blog/fixedcode)).
+- Context pressure: as trajectories grow, attention to the original spec degrades, and stopping early is cheaper than re-reading ([ForgeCode](https://forgecode.dev/blog/gpt-5-4-agent-improvements/)).
+- No reproduction step: agents that patch without first reproducing cannot tell already-passing code from a real bug. A reproduction-first prompt moves GPT-5.4 mini from 24% to 77% on the correct-code task ([SRI Lab](https://www.sri.inf.ethz.ch/blog/fixedcode)).
 
-## Capability-Band Skew
+## Capability-band skew
 
 SWE-EVO's Figure 6 shows "o3, gpt-4.1, gpt-4o exhibit more syntax, looping, and early-termination failures on SWE-EVO, indicating less robust long-horizon trajectories compared to gpt-5" ([arxiv 2512.18470](https://arxiv.org/abs/2512.18470)). GPT-5 shows near-zero early termination — its failures are instruction-following.
 
 Weak models fail before reaching a stopping point. Strong models verify internally. Mid-band models are just good enough to see green and declare done — the band where mitigations matter most.
 
-## Distinguish From Adjacent Failures
+## Distinguish from adjacent failures
 
 Same surface symptom, different cause, different fix:
 
 | Failure | Primary cause | Fix |
 |---------|--------------|-----|
-| **Premature completion** | First-signal-of-progress stop token | Externalise stopping criterion to test-suite state |
+| Premature completion | First-signal-of-progress stop token | Externalize stopping criterion to test-suite state |
 | [Objective drift](objective-drift.md) | Context compression lost specifics | Structured session intent re-read after compaction |
 | Continuing past completion | Missing termination signal | Max-iteration cap; sentinel hash check |
 | Context-pressure abandonment | Token budget exhausted | Context compression; sub-agent delegation |
 
-## Mitigations That Work
+## Mitigations that work
 
-- **Reproduction-first prompting.** Require the agent to trigger the bug before patching — moves GPT-5.4 mini from 24% to 77% on the correct-code task ([SRI Lab](https://www.sri.inf.ethz.ch/blog/fixedcode)).
-- **Runtime-enforced verification.** If the model skips the verification skill, the runtime injects a reminder and blocks termination. No opt-out. ForgeCode reports reaching 81.8% on TermBench 2.0 with this change ([ForgeCode](https://forgecode.dev/blog/gpt-5-4-agent-improvements/)).
-- **Pre-completion checklists as harness variables.** LangChain moved Terminal Bench 2.0 from 52.8% to 66.5% through harness-only changes including pre-completion checklists, tunable in the [harness hill-climbing](../agent-design/harness-hill-climbing.md) loop ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
-- **Stopping criteria tied to observable state.** Transcript-based verifiers that pattern-match "all tests passing" in agent output provide zero additional signal — execute against the git branch.
+- Reproduction-first prompting. Require the agent to trigger the bug before patching — this moves GPT-5.4 mini from 24% to 77% on the correct-code task ([SRI Lab](https://www.sri.inf.ethz.ch/blog/fixedcode)).
+- Runtime-enforced verification. If the model skips the verification skill, the runtime injects a reminder and blocks termination. There is no opt-out. ForgeCode reports reaching 81.8% on TermBench 2.0 with this change ([ForgeCode](https://forgecode.dev/blog/gpt-5-4-agent-improvements/)).
+- Pre-completion checklists as harness variables. LangChain moved Terminal Bench 2.0 from 52.8% to 66.5% through harness-only changes including pre-completion checklists, tunable in the [harness hill-climbing](../agent-design/harness-hill-climbing.md) loop ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
+- Stopping criteria tied to observable state. Transcript-based verifiers that pattern-match "all tests passing" in agent output give no extra signal — execute against the git branch.
 
-## Mitigations That Don't Work Alone
+## Mitigations that do not work alone
 
-- **"Be thorough" instructions** — no behavioural hook tied to observable state.
-- **Longer reasoning chains** — defer the stopping-criterion choice without changing it.
-- **Chain-of-thought prompting** — can mask the failure by producing more confident-sounding wrong completions.
+- "Be thorough" instructions — no behavioral hook tied to observable state.
+- Longer reasoning chains — defer the stopping-criterion choice without changing it.
+- Chain-of-thought prompting — can mask the failure by producing more confident-sounding wrong completions.
 
-## When This Backfires
+## When this backfires
 
-- **Strong-model deployments.** GPT-5 and Claude Opus 4.6 show near-zero premature-termination on SWE-EVO. Pre-completion checklists add cost without benefit — upgrading the model is the honest fix.
-- **Trivial stopping criteria.** For single-assertion tasks, agent self-assessment matches observable state already.
-- **Over-verification spiral.** Runtime-enforced verification without an iteration cap can trigger the inverse pathology, [continuing past completion](../verification/completion-failure-taxonomy.md).
-- **Benchmark masking.** Harnesses that only check final-state pass hide premature completion when agents happen to fix the first bug. Score unfixed-but-should-have-been tests, not net-pass delta.
+- Strong-model deployments. GPT-5 and Claude Opus 4.6 show near-zero premature-termination on SWE-EVO. Pre-completion checklists add cost without benefit — upgrading the model is the honest fix.
+- Trivial stopping criteria. For single-assertion tasks, agent self-assessment matches observable state already.
+- Over-verification spiral. Runtime-enforced verification without an iteration cap can trigger the inverse pathology, [continuing past completion](../verification/completion-failure-taxonomy.md).
+- Benchmark masking. Harnesses that only check final-state pass hide premature completion when agents happen to fix the first bug. Score unfixed-but-should-have-been tests, not net-pass delta.
 
 ## Key Takeaways
 

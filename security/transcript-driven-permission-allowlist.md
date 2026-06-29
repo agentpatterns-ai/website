@@ -17,7 +17,7 @@ maturity: established
 
 > Mine session transcripts for repeated read-only tool calls and propose a prioritized allowlist for the permission layer — narrower than bypass, tighter than manual curation.
 
-## Permission Fatigue as a Permission Failure Mode
+## Permission fatigue as a permission failure mode
 
 Interactive agents prompt on every new tool call. Day two, a fresh session re-prompts for the same commands. Operators respond in one of three ways:
 
@@ -29,7 +29,7 @@ The third option is correct but skipped. Extracting the "safe and frequent" set 
 
 Transcript-driven allowlisting automates curation: the session log records every tool call the agent ran on this codebase. The mining loop reads that log, ranks read-only calls by frequency, and proposes a scoped allowlist for review.
 
-## The Loop
+## The loop
 
 ```mermaid
 graph TD
@@ -41,7 +41,7 @@ graph TD
     E -->|Rejected| G[Log and skip]
 ```
 
-The four stages specialise the generic [introspective skill generation](../workflows/introspective-skill-generation.md) workflow: same collect-analyse-generate-validate shape, narrower artifact (permission rules), narrower gate (read-only).
+The four stages specialize the generic [introspective skill generation](../workflows/introspective-skill-generation.md) workflow: same collect-analyze-generate-validate shape, narrower artifact (permission rules), narrower gate (read-only).
 
 ### 1. Classify
 
@@ -62,27 +62,27 @@ Claude Code's permission syntax supports several specificity levels ([permission
 | Tool-scope | `mcp__puppeteer__*` | All read tools from one MCP server are safe |
 | Domain-scope | `WebFetch(domain:github.com)` | Read-only fetches to trusted domains |
 
-The miner proposes the narrowest scope covering the observed calls. Argument-level filtering (e.g. `Bash(curl https://api.example.com/*)`) is unreliable — Claude Code's docs warn that argument patterns can be bypassed via flag reordering, variables, redirects, or whitespace ([permissions docs](https://code.claude.com/docs/en/permissions)). Propose binary-prefix rules; defer argument-level enforcement to a [PreToolUse hook](../tool-engineering/hook-catalog.md).
+The miner proposes the narrowest scope covering the observed calls. Argument-level filtering, for example `Bash(curl https://api.example.com/*)`, is unreliable — Claude Code's docs warn that argument patterns can be bypassed via flag reordering, variables, redirects, or whitespace ([permissions docs](https://code.claude.com/docs/en/permissions)). Propose binary-prefix rules; defer argument-level enforcement to a [PreToolUse hook](../tool-engineering/hook-catalog.md).
 
 ### 4. Gate
 
 The output is a proposal, not a write. Claude Code's deny/ask/allow precedence ([permissions docs](https://code.claude.com/docs/en/permissions)) bounds the downside: a bad allowlist entry can only promote an ask-by-default call to auto-allowed — it cannot override a deny rule.
 
-## Why It Generalises
+## Why it generalizes
 
 Any harness that logs its tool-call trajectory can run the same loop:
 
-- **Claude Code** ships `/less-permission-prompts` as of 2.1.111 (April 16, 2026): "scans transcripts for common read-only Bash and MCP tool calls and proposes a prioritized allowlist for `.claude/settings.json`" ([changelog](https://code.claude.com/docs/en/changelog)).
-- **Copilot CLI** exposes the same primitive via `--allow-tool 'shell(COMMAND)'` and per-MCP-tool scoping via `--deny-tool 'My-MCP-Server(tool_name)'`; deny takes precedence over allow ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)).
+- Claude Code ships `/less-permission-prompts` as of 2.1.111 (April 16, 2026): "scans transcripts for common read-only Bash and MCP tool calls and proposes a prioritized allowlist for `.claude/settings.json`" ([changelog](https://code.claude.com/docs/en/changelog)).
+- Copilot CLI exposes the same primitive via `--allow-tool 'shell(COMMAND)'` and per-MCP-tool scoping via `--deny-tool 'My-MCP-Server(tool_name)'`; deny takes precedence over allow ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)).
 
-The generalisable pattern is transcript-as-corpus for permission refinement: the session log is the ground truth of which calls actually run on this codebase — a better input than operator memory.
+The generalizable pattern is transcript-as-corpus for permission refinement: the session log is the ground truth of which calls actually run on this codebase — a better input than operator memory.
 
-## When the Loop Backfires
+## When the loop backfires
 
-- **High tool churn.** Projects that swap test runners, add MCP servers, or rename scripts generate stale proposals within days. If re-mined weekly, maintenance cost exceeds prompt savings.
-- **Shared settings across a team.** `.claude/settings.json` is typically checked in. A transcript from one operator may encode local quirks — personal aliases, machine-specific paths — that fail on teammates' machines. Aggregate across operators before committing.
-- **Argument-filter over-reach.** Proposing `Bash(git log --oneline *)` instead of `Bash(git log *)` creates false security; flag reordering trivially bypasses it. Keep proposals at binary-prefix scope; use hooks for argument-level rules.
-- **Small, stable projects.** A 3-file repo with two test commands does not need transcript mining. A 5-line hand-curated allowlist covers the same surface.
+- High tool churn. Projects that swap test runners, add MCP servers, or rename scripts generate stale proposals within days. If re-mined weekly, maintenance cost exceeds prompt savings.
+- Shared settings across a team. `.claude/settings.json` is typically checked in. A transcript from one operator may encode local quirks — personal aliases, machine-specific paths — that fail on teammates' machines. Aggregate across operators before committing.
+- Argument-filter over-reach. Proposing `Bash(git log --oneline *)` instead of `Bash(git log *)` creates false security; flag reordering trivially bypasses it. Keep proposals at binary-prefix scope; use hooks for argument-level rules.
+- Small, stable projects. A 3-file repo with two test commands does not need transcript mining. A 5-line hand-curated allowlist covers the same surface.
 
 ## Example
 

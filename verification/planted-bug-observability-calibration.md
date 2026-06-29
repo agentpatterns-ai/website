@@ -18,9 +18,9 @@ maturity: emerging
 
 > Plant deterministic bugs, then verify captured signals lead an agent to the responsible layer. Logs that exist but don't reveal cause are noise, not observability.
 
-Planted bugs are deterministic, deliberately-injected defects whose role is to calibrate the observability stack rather than to be fixed. They are the inverse of [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md): incidents validate end-to-end behaviour against known failures; planted bugs validate the instrumentation that watches it against known causes.
+Planted bugs are deterministic, deliberately injected defects. Their role is to calibrate the observability stack, not to be fixed. They are the inverse of [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md): incidents validate end-to-end behavior against known failures; planted bugs validate the instrumentation that watches it against known causes.
 
-## Why Plant Bugs
+## Why plant bugs
 
 Chaos experiments depend on observability to determine whether the system behaved acceptably — [without logs, traces, and metrics you cannot detect deviations from steady state](https://principlesofchaos.org/). That makes observability a prerequisite for every chaos experiment, but leaves the prerequisite itself untested. The question "does our observability work?" has no falsifiable answer when you only observe the organic incidents that feed [incident-to-eval synthesis](incident-to-eval-synthesis.md).
 
@@ -28,9 +28,9 @@ Planted bugs convert that question into a measurable one. Each fixture has a kno
 
 This mirrors the [mutation testing](mutation-testing-quality-gate.md) mechanism — surviving mutants name the failure modes the test suite misses. Surviving planted bugs name the failure modes the observability misses.
 
-## The Pass Criterion
+## The pass criterion
 
-A planted-bug probe passes when an agent reading *only* the captured signals — logs, metrics, traces, transcripts — identifies the responsible layer within N steps, without source-code spelunking.
+A planted-bug probe passes when an agent reading only the captured signals — logs, metrics, traces, transcripts — identifies the responsible layer within N steps, without reading source code.
 
 ```mermaid
 graph TD
@@ -45,7 +45,7 @@ graph TD
 
 Fixing the bug is not the goal — the bug exists to test the signals. If signals don't lead to it, the remediation is at the instrumentation layer, not the application layer.
 
-## Building a Fixture Catalogue
+## Building a fixture catalogue
 
 A small catalogue of planted bugs across layers gives broad calibration coverage:
 
@@ -61,9 +61,9 @@ Each fixture should be deterministic — same input, same failure, every time �
 
 Rerun the catalogue on every major harness change. Instrumentation refactors, log-level changes, and new MCP server additions all shift what an agent can see — the catalogue is the regression suite for the observability stack.
 
-## What This Catches
+## What this catches
 
-The anti-pattern this surfaces most often is **structured logging that exists but obscures**: a high-volume `INFO` storm that buries the one `WARN` line that matters. The signals are technically present; the calibration probe still fails because the relevant entry is invisible within N steps. [Monitoring detects the known; observability explains the unknown](https://www.simform.com/blog/observability-driven-development/) — high-volume info-level logs satisfy monitoring but fail observability when the explanation cost exceeds the diagnostic budget.
+The anti-pattern this surfaces most often is structured logging that exists but obscures: a high-volume `INFO` storm that buries the one `WARN` line that matters. The signals are technically present; the calibration probe still fails because the relevant entry is invisible within N steps. [Monitoring detects the known; observability explains the unknown](https://www.simform.com/blog/observability-driven-development/) — high-volume info-level logs satisfy monitoring but fail observability when the explanation cost exceeds the diagnostic budget.
 
 Other failures the catalogue exposes:
 
@@ -72,13 +72,13 @@ Other failures the catalogue exposes:
 - Logs from the failing component with no correlation ID tying them to the request
 - Per-component logs individually clear but producing no joint narrative when combined
 
-## When This Backfires
+## When this backfires
 
-- **Solo engineer with full system context** can mentally simulate the failure path and reach the same gap by reading code. Fixtures add ceremony without diagnostic value at that scale.
-- **Pre-production prototype.** Every refactor breaks the catalogue; calibration shifts faster than the bugs.
-- **High-fidelity production replay already in place.** Shadow traffic gives organic calibration from the real signals an [OTel-based observability stack](../observability/agent-observability-otel.md) already records — synthetic planted bugs are duplicative unless coverage gaps remain.
-- **Observability stack itself is broken.** Planted bugs reveal the gap but offer no remediation path — the methodology surfaces the symptom without naming the fix.
-- **Fixtures drift from real failure modes.** Engineers plant the bugs they already know how to instrument for, rather than the ones [incident-to-eval synthesis](incident-to-eval-synthesis.md) would surface from production. Without periodic refresh from the incident-to-eval pipeline, the catalogue calibrates against a fake distribution.
+- Solo engineer with full system context: they can mentally simulate the failure path and reach the same gap by reading code. Fixtures add ceremony without diagnostic value at that scale.
+- Pre-production prototype: every refactor breaks the catalogue, so calibration shifts faster than the bugs.
+- High-fidelity production replay already in place: shadow traffic gives organic calibration from the real signals an [OTel-based observability stack](../observability/agent-observability-otel.md) already records. Synthetic planted bugs are duplicative unless coverage gaps remain.
+- Observability stack itself is broken: planted bugs reveal the gap but offer no remediation path. The methodology surfaces the symptom without naming the fix.
+- Fixtures drift from real failure modes: engineers plant the bugs they already know how to instrument for, rather than the ones [incident-to-eval synthesis](incident-to-eval-synthesis.md) would surface from production. Without periodic refresh from the incident-to-eval pipeline, the catalogue calibrates against a fake distribution.
 
 ## Example
 

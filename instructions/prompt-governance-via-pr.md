@@ -17,28 +17,28 @@ maturity: established
 
 ## Overview
 
-Instruction files (`CLAUDE.md`, `.github/copilot-instructions.md`, `AGENTS.md`) are already plain text in version control. That makes them subject to the same change management infrastructure the team already uses for code: branches, diffs, reviews, merge approvals, and revert.
+Instruction files (`CLAUDE.md`, `.github/copilot-instructions.md`, `AGENTS.md`) are already plain text in version control. So they fall under the same change-management tools the team already uses for code: branches, diffs, reviews, merge approvals, and revert.
 
-Treating this as a deliberate governance strategy — rather than an incidental storage decision — gives teams a structured way to own and iterate on AI behaviour without ML infrastructure or data science involvement.
+Treat this as deliberate governance, not an incidental storage choice. Teams then get a structured way to own and improve AI behavior without ML infrastructure or data scientists.
 
-GitHub's accessibility team adopted this explicitly: they chose stored prompt files over model fine-tuning so that any team member could update AI behaviour through a pull request. When accessibility standards evolve, the team edits the instruction files and merges a PR; the AI adapts on the next run, not the next training cycle. ([Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/))
+GitHub's accessibility team chose this on purpose: they stored prompt files instead of fine-tuning a model, so that any team member could update AI behavior through a pull request. When accessibility standards change, the team edits the instruction files and merges a PR. The AI adapts on the next run, not the next training cycle. ([Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/))
 
-## How It Works
+## How it works
 
-Instruction files are loaded at agent session start and are not cached between runs:
+Agents load instruction files at session start and do not cache them between runs:
 
-- **Claude Code** reads `CLAUDE.md` at session start, including for subagents ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents))
-- **GitHub Copilot** reads `.github/copilot-instructions.md` (repo-wide) and matching `.github/instructions/*.instructions.md` files on each request ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions))
-- **AGENTS.md-compatible tools** (Codex, Jules, Cursor, Aider, and others) read `AGENTS.md` from the repo root ([agents.md standard](https://agents.md))
+- Claude Code reads `CLAUDE.md` at session start, including for subagents ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents))
+- GitHub Copilot reads `.github/copilot-instructions.md` (repo-wide) and matching `.github/instructions/*.instructions.md` files on each request ([GitHub repository instructions docs](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions))
+- AGENTS.md-compatible tools (Codex, Jules, Cursor, Aider, and others) read `AGENTS.md` from the repo root ([agents.md standard](https://agents.md))
 
-Because files are loaded at runtime, a merged PR takes effect immediately — no deployment, no retraining, no restart.
+Because agents load files at runtime, a merged PR takes effect immediately — no deployment, no retraining, no restart.
 
 The PR review process applies unchanged:
 
-1. Open a branch, edit the instruction file
-2. The diff shows exactly what behaviour is changing — reviewers see the delta, not a black box
-3. Merge approval gates the change, the same as any code review
-4. `git revert` is a full rollback; git history is the audit log
+1. Open a branch and edit the instruction file.
+2. The diff shows exactly what behavior is changing, so reviewers see the change, not a black box.
+3. Merge approval gates the change, the same as any code review.
+4. `git revert` gives a full rollback, and git history is the audit log.
 
 ## Trade-offs
 
@@ -48,25 +48,25 @@ The PR review process applies unchanged:
 | Model fine-tuning | Days | None (weight update) | ML infrastructure | Retrain from prior checkpoint |
 | Ad-hoc prompt iteration | Minutes | None | None | Manual reconstruction |
 
-## When This Backfires
+## When this backfires
 
 PR-gated prompt changes are not the right default in every context:
 
-- **Fast experimental iteration.** Eval-driven prompt tuning often involves dozens of variants per session. Routing each through a review queue adds latency that swamps the experiment loop; a sandboxed prompt registry or feature-flag system fits better until a winner is promoted to the reviewed file.
-- **Reviewers lack prompt-engineering literacy.** A diff is only as useful as the reviewer's ability to predict its behavioural effect. If approvers cannot reason about how a wording change shifts model output, the review becomes a rubber stamp — what some practitioners call "liability laundering" rather than governance ([Dev.to, 2026](https://dev.to/amit_kochman/ai-code-without-governance-is-now-a-legal-liability-520p)).
-- **No canary stage.** Because instruction files load on the next agent run, a merged PR is effectively an instant production deploy with full [blast radius](../security/blast-radius-containment.md). Teams that need staged rollouts (percentage-based, cohort-gated) must layer additional infrastructure on top — branching alone does not provide it.
-- **Secrets or sensitive context in prompts.** Anything committed to git is recoverable from history. Prompts that legitimately contain customer data, credentials, or proprietary policy text need a separate secret-management path; PR review does not redact what the diff exposes.
+- Fast experimental iteration. Eval-driven prompt tuning often runs dozens of variants per session. Routing each one through a review queue adds latency that swamps the experiment loop. A sandboxed prompt registry or feature-flag system fits better until you promote a winner to the reviewed file.
+- Reviewers lack prompt-engineering literacy. A diff is only as useful as the reviewer's ability to predict its effect on behavior. If approvers cannot reason about how a wording change shifts model output, the review becomes a rubber stamp — what some practitioners call "liability laundering" rather than governance ([Dev.to, 2026](https://dev.to/amit_kochman/ai-code-without-governance-is-now-a-legal-liability-520p)).
+- No canary stage. Instruction files load on the next agent run, so a merged PR is effectively an instant production deploy with full [blast radius](../security/blast-radius-containment.md). Teams that need staged rollouts (percentage-based, cohort-gated) must add infrastructure on top, because branching alone does not provide it.
+- Secrets or sensitive context in prompts. Anything committed to git is recoverable from history. Prompts that legitimately contain customer data, credentials, or proprietary policy text need a separate secret-management path. PR review does not redact what the diff exposes.
 
 ## Example
 
 GitHub's accessibility team runs a triage pipeline that calls the [GitHub Models API](../tools/copilot/github-models-in-actions.md). Their instruction file serves two roles: classifying issues by WCAG violation severity, and coaching engineers on accessible code. The file references internal accessibility policies and their component library — the [standards-as-agent-instructions](standards-as-agent-instructions.md) pattern.
 
-**Before** (generic severity guidance):
+Before (generic severity guidance):
 ```markdown
 Classify accessibility issues as high, medium, or low severity.
 ```
 
-**After** (domain-specific, reviewable via PR):
+After (domain-specific, reviewable via PR):
 ```markdown
 Classify accessibility issues using the following severity scale:
 - sev1: Critical — blocks all access for a user group (e.g., no keyboard navigation)
@@ -78,7 +78,7 @@ Apply WCAG 2.2 AA criteria. Reference our component library at /docs/components
 for expected accessible patterns before classifying.
 ```
 
-The PR diff makes the severity definition change explicit. Reviewers can assess whether the thresholds are correct before the change affects production triage. If the classification produces wrong results, `git revert` restores the prior behaviour.
+The PR diff makes the severity definition change explicit. Reviewers can judge whether the thresholds are correct before the change affects production triage. If the classification produces wrong results, `git revert` restores the prior behavior.
 
 ## Key Takeaways
 

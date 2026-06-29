@@ -18,9 +18,9 @@ maturity: emerging
 
 > Per-agent GitHub Actions workflow success rates span 29 points — 64.86% (Claude) to 94.44% (Codex) — but uneven samples and public-repo selection bound the reading.
 
-## The Measurement
+## The measurement
 
-A 2026 MSR Mining Challenge study analysed 61,837 GitHub Actions workflow runs from 2,355 public repositories, linking each run to a pull request authored by one of five agents: Claude, Devin, Cursor, Copilot, or Codex ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334)). Runs come from the AIDev dataset ([arXiv:2602.09185](https://arxiv.org/abs/2602.09185)), which aggregates 932,791 agentic PRs across 116,211 repositories.
+A 2026 MSR Mining Challenge study analyzed 61,837 GitHub Actions workflow runs from 2,355 public repositories. It linked each run to a pull request authored by one of five agents: Claude, Devin, Cursor, Copilot, or Codex ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334)). The runs come from the AIDev dataset ([arXiv:2602.09185](https://arxiv.org/abs/2602.09185)), which aggregates 932,791 agentic PRs across 116,211 repositories.
 
 | Agent | Workflow Runs | Success Rate |
 |-------|--------------:|-------------:|
@@ -32,28 +32,28 @@ A 2026 MSR Mining Challenge study analysed 61,837 GitHub Actions workflow runs f
 
 Differences across agents are statistically significant (p<0.01). Copilot shows 7.53x higher odds of workflow success than Claude and 4.05x higher odds than Devin ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334)).
 
-## What the Spread Means — and Does Not
+## What the spread means and does not
 
-The 29-point gap between Codex (94.44%) and Claude (64.86%) is real in the dataset, but three properties of the measurement constrain how far it generalises.
+The 29-point gap between Codex (94.44%) and Claude (64.86%) is real in the dataset. But three properties of the measurement constrain how far it generalizes.
 
-**Sample-size asymmetry.** Devin and Copilot contribute 94% of the runs; Claude contributes 37 and Codex contributes 180. A success rate computed on 37 runs is indicative, not authoritative — the confidence interval is wide enough that Claude's "true" rate could overlap with Cursor's.
+Sample-size asymmetry. Devin and Copilot contribute 94% of the runs; Claude contributes 37 and Codex contributes 180. A success rate computed on 37 runs is indicative, not authoritative. The confidence interval is wide enough that Claude's "true" rate could overlap with Cursor's.
 
-**Public-repo selection.** The dataset is restricted to public GitHub repositories. The paper explicitly notes findings may not generalise to "private or enterprise CI/CD environments, which typically involve more complex workflows" ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334)). Enterprise CI uses self-hosted runners, stricter gates, and custom orchestration not represented here.
+Public-repo selection. The dataset covers only public GitHub repositories. The paper notes that findings may not generalize to "private or enterprise CI/CD environments, which typically involve more complex workflows" ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334)). Enterprise CI uses self-hosted runners, stricter gates, and custom orchestration not represented here.
 
-**Attribution noise for low-volume agents.** A separate fingerprinting study of the same five agents achieved 97.2% overall F1, but Claude Code alone scored 0.67 F1 with 57% recall ([arXiv:2601.17406](https://arxiv.org/html/2601.17406)). Some PRs labelled "Claude" in the reliability study may be misattributed, and misattribution dominates more heavily where the labelled population is smallest.
+Attribution noise for low-volume agents. A separate fingerprinting study of the same five agents achieved 97.2% overall F1, but Claude Code alone scored 0.67 F1 with 57% recall ([arXiv:2601.17406](https://arxiv.org/html/2601.17406)). Some PRs labeled "Claude" in the reliability study may be misattributed. Misattribution dominates more heavily where the labeled population is smallest.
 
-## Repository-Level Correlation
+## Repository-level correlation
 
-At the repository level, agent contribution frequency correlates negatively with workflow success rate — repos receiving more agentic PRs tend to show lower aggregate CI reliability ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334)). The direction of causation is not established by the [MSR 2026 study](https://arxiv.org/abs/2604.18334). Two readings are consistent with the data:
+At the repository level, agent contribution frequency correlates negatively with workflow success rate. Repos that receive more agentic PRs tend to show lower aggregate CI reliability ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334)). The [MSR 2026 study](https://arxiv.org/abs/2604.18334) does not establish the direction of causation. Two readings fit the data:
 
 - Agent PRs introduce more failures, dragging repository CI success rates down as volume grows.
 - Repositories with less mature CI attract more agent experimentation (reverse causality).
 
-The practical implication is the same either way: repositories planning to absorb high agentic PR volume should expect CI reliability to become a first-class operational concern, not a background assumption.
+The practical implication is the same either way: a repository that plans to absorb high agentic PR volume should expect CI reliability to become a first-order operational concern, not a background assumption.
 
-## Failure Category Distribution
+## Failure category distribution
 
-Across 3,067 failed agentic PRs the paper classifies failures into 13 categories. The largest slices:
+Across 3,067 failed agentic PRs the paper sorts failures into 13 categories. The largest slices:
 
 - Bug Fixes — 17.57%
 - UI/UX — 11.64%
@@ -66,26 +66,26 @@ Across 3,067 failed agentic PRs the paper classifies failures into 13 categories
 
 Testing/QA, APIs/SDKs, Docs/Examples, Performance, and Maintenance make up the remainder ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334)). The paper classifies PR categories with GPT-5.0; inter-rater agreement is Cohen's κ=0.88.
 
-## How CI/CD-Specific Edits Compare
+## How CI/CD-specific edits compare
 
-A complementary study (99,930 workflow runs, 8,031 PRs that touch CI/CD files) found that when the scope is narrowed to CI/CD configuration changes, build success rates are statistically indistinguishable between CI/CD and non-CI/CD edits (75.59% vs 74.87%, p=0.138) ([arXiv:2601.17413](https://arxiv.org/html/2601.17413v1)). The per-agent reliability gap in the primary paper is therefore not driven by config-file edits specifically — it reflects PR work as a whole, not a CI-file handling deficit.
+A complementary study (99,930 workflow runs, 8,031 PRs that touch CI/CD files) narrowed the scope to CI/CD configuration changes. It found build success rates statistically indistinguishable between CI/CD and non-CI/CD edits (75.59% vs 74.87%, p=0.138) ([arXiv:2601.17413](https://arxiv.org/html/2601.17413v1)). So config-file edits do not drive the per-agent reliability gap in the primary paper. The gap reflects PR work as a whole, not a CI-file handling deficit.
 
-## Practical Implications
+## Practical implications
 
-**Monitor CI reliability per agent, not in aggregate.** A 30-point spread across agents in the same repository will be invisible if CI success is tracked only at the repo level. Attribute runs to the agent that authored the triggering PR.
+Monitor CI reliability per agent, not in aggregate. A 30-point spread across agents in the same repository stays invisible if you track CI success only at the repo level. Attribute each run to the agent that authored the triggering PR.
 
-**Weight sample size when ranking.** Codex's 94.44% comes from 180 runs. Treat the Codex/Copilot ordering as a tie within the observed data, and treat Claude's rate as "unresolved" until more runs accumulate.
+Weight sample size when ranking. Codex's 94.44% comes from 180 runs. Treat the Codex/Copilot ordering as a tie within the observed data, and treat Claude's rate as "unresolved" until more runs accumulate.
 
-**Anticipate a reliability tax on agent PR volume.** The repo-level negative correlation holds regardless of direction of causation — higher agentic volume tracks with lower CI success. Capacity planning for CI infrastructure should scale with agent deployment, not with human contributor counts.
+Anticipate a reliability tax on agent PR volume. The repo-level negative correlation holds whichever way causation runs: higher agentic volume tracks with lower CI success. Plan CI infrastructure capacity to scale with agent deployment, not with human contributor counts.
 
-**Do not port these numbers into private-repo decisions.** The selection bias is large enough that internal or enterprise CI reliability must be measured in-place.
+Do not port these numbers into private-repo decisions. The selection bias is large enough that you must measure internal or enterprise CI reliability in place.
 
-## When This Data Doesn't Apply
+## When this data does not apply
 
-- **Low-volume agents in-sample** — Claude (37 runs) and Codex (180 runs) carry confidence intervals too wide for tool-selection decisions. A practitioner choosing between Claude and Copilot on these numbers over-reads 37 observations.
-- **Private / enterprise environments** — public-GitHub CI patterns are simpler than enterprise stacks with self-hosted runners, stricter gating, and custom orchestration.
-- **Non-representative task mix** — 3.42% of failures are CI/CD-specific. A repository whose agent workload is dominated by bug fixes (17.57% failure share) will show a different reliability profile from the aggregate.
-- **Single-agent deployments** — the cross-agent ranking is irrelevant when only one agent is in use; in that case, absolute success rate trending over time is the signal.
+- Low-volume agents in-sample: Claude (37 runs) and Codex (180 runs) carry confidence intervals too wide for tool-selection decisions. Choosing between Claude and Copilot on these numbers over-reads 37 observations.
+- Private or enterprise environments: public-GitHub CI patterns are simpler than enterprise stacks with self-hosted runners, stricter gating, and custom orchestration.
+- Non-representative task mix: 3.42% of failures are CI/CD-specific. A repository whose agent workload centers on bug fixes (17.57% failure share) will show a different reliability profile from the aggregate.
+- Single-agent deployments: the cross-agent ranking does not matter when only one agent is in use. In that case, the signal is the absolute success rate trending over time.
 
 ## Key Takeaways
 

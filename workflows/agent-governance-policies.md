@@ -15,7 +15,7 @@ maturity: adopted
 
 > Enterprise policy controls for AI agent behavior — agent mode access, model availability, MCP server allowlists, and agent activity metrics — implemented through a hierarchical override model.
 
-## Policy Hierarchy
+## Policy hierarchy
 
 GitHub Copilot governance follows a three-tier hierarchy where higher tiers override lower ones:
 
@@ -25,68 +25,68 @@ graph TD
     B -->|overrides| C[User Preferences]
 ```
 
-Enterprise owners can enforce uniform policies across all organizations or delegate decisions to individual organization owners ([GitHub Docs: Managing Copilot policies for your organization](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/manage-policies)). This delegation model lets enterprises set guardrails while giving organizations flexibility within those bounds.
+Enterprise owners can enforce uniform policies across all organizations or delegate decisions to individual organization owners ([GitHub Docs: Managing Copilot policies for your organization](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/manage-policies)). This delegation model lets enterprises set guardrails while organizations keep some flexibility within those bounds.
 
-## Core Policy Controls
+## Core policy controls
 
-### Agent Mode Access
+### Agent mode access
 
 A dedicated policy controls whether Copilot agent mode is available in the IDE. The policy defaults to `Enabled` to maintain backward compatibility — organizations that want to restrict agent mode must actively disable it ([GitHub Changelog: Agent Mode Policy](https://github.blog/changelog/2025-11-03-github-copilot-policy-now-supports-agent-mode-in-the-ide/)).
 
 Configuration surfaces:
 
-- **Enterprise level**: AI Controls tab on github.com
-- **Organization level**: Copilot policies tab on github.com
+- Enterprise level: AI Controls tab on github.com
+- Organization level: Copilot policies tab on github.com
 
-### Model Availability
+### Model availability
 
-Enterprise administrators control which AI models are available to Copilot users. This determines which models appear in the model picker across IDE integrations. Restricting model availability lets organizations limit exposure to models that have not cleared internal data-handling or compliance review.
+Enterprise administrators control which AI models Copilot users can reach. This setting determines which models appear in the model picker across IDE integrations. Restricting model availability lets organizations limit exposure to models that have not cleared internal data-handling or compliance review.
 
-### MCP Server Allowlists
+### MCP server allowlists
 
 The MCP servers policy controls access to [Model Context Protocol](../standards/mcp-protocol.md) server support where it is generally available. MCP is disabled by default for Business and Enterprise plans — administrators must explicitly enable it and can maintain allowlists of approved servers ([GitHub Docs: Configure MCP server access](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-mcp-usage/configure-mcp-server-access)).
 
 This default-deny posture prevents unvetted MCP servers from accessing repository context without administrative approval.
 
-**Enforcement caveat**: Allowlist enforcement is name-based, not cryptographic — for local stdio servers the policy validates only the server name, so a developer editing `.vscode/mcp.json` or the user-profile `mcp.json` directly can sideload a server that matches an allowlisted name without going through the registry ([GitHub Docs: MCP allowlist enforcement](https://docs.github.com/en/copilot/reference/mcp-allowlist-enforcement)). The policy also scopes per-client — the same Copilot identity used in JetBrains, Neovim, or third-party hosts like Cursor and Claude is not covered by a VS Code allowlist. Treat the allowlist as an honesty layer for compliant developers, not as a hard boundary; pair it with auditable MCP gateways or disable MCP entirely for high-risk repos until strict path-and-argument matching ships.
+Enforcement caveat: allowlist enforcement is name-based, not cryptographic. For local stdio servers the policy validates only the server name. So a developer who edits `.vscode/mcp.json` or the user-profile `mcp.json` directly can sideload a server that matches an allowlisted name without going through the registry ([GitHub Docs: MCP allowlist enforcement](https://docs.github.com/en/copilot/reference/mcp-allowlist-enforcement)). The policy also scopes per-client: the same Copilot identity used in JetBrains, Neovim, or third-party hosts like Cursor and Claude is not covered by a VS Code allowlist. Treat the allowlist as an honesty layer for compliant developers, not as a hard boundary. Pair it with auditable MCP gateways, or disable MCP entirely for high-risk repos until strict path-and-argument matching ships.
 
-### Third-Party Agent Access
+### Third-party agent access
 
-Policies govern whether third-party AI tools (beyond Copilot itself) can access repositories. This controls the blast radius of agent integrations and ensures that only approved tools interact with organizational code.
+Policies govern whether third-party AI tools (beyond Copilot itself) can access repositories. This controls the blast radius of agent integrations, so only approved tools interact with organizational code.
 
-### Preview Feature Controls
+### Preview feature controls
 
 Toggle switches enable or disable access to preview and experimental Copilot features at the enterprise or organization level. This lets security-conscious organizations wait for general availability before exposing new capabilities.
 
-## Agent Activity Metrics
+## Agent activity metrics
 
 Governance requires visibility. GitHub provides agent activity metrics through both API and dashboard interfaces ([GitHub Changelog: Plan Mode Metrics](https://github.blog/changelog/2026-03-02-copilot-metrics-now-includes-plan-mode/)):
 
-### Tracked Dimensions
+### Tracked dimensions
 
-- **Feature usage**: Requests broken down by Copilot feature (chat, agent mode, [plan mode](plan-first-loop.md))
-- **Model usage**: Which models are consumed, broken down by feature and programming language
-- **Adoption trends**: Engagement patterns across teams and time periods
+- Feature usage: requests broken down by Copilot feature (chat, agent mode, [plan mode](plan-first-loop.md))
+- Model usage: which models are consumed, broken down by feature and programming language
+- Adoption trends: engagement patterns across teams and time periods
 
-### Access Channels
+### Access channels
 
-- **API**: Usage data appears under `totals_by_feature`, `totals_by_language_feature`, and `totals_by_model_feature` keys
-- **Dashboard**: Insights > Copilot usage in the GitHub UI
+- API: usage data appears under `totals_by_feature`, `totals_by_language_feature`, and `totals_by_model_feature` keys
+- Dashboard: Insights > Copilot usage in the GitHub UI
 
-Plan mode metrics were previously aggregated under "Custom" usage. The separation into a distinct `chat_panel_plan_mode` category provides granular visibility into how teams use research-and-planning workflows versus direct code generation ([GitHub Changelog: Plan Mode Metrics](https://github.blog/changelog/2026-03-02-copilot-metrics-now-includes-plan-mode/)).
+Plan mode metrics were previously grouped under "Custom" usage. A distinct `chat_panel_plan_mode` category now separates them, so you can see how teams use research-and-planning workflows versus direct code generation ([GitHub Changelog: Plan Mode Metrics](https://github.blog/changelog/2026-03-02-copilot-metrics-now-includes-plan-mode/)).
 
-## Implementation Approach
+## Implementation approach
 
-### Rolling Out Agent Governance
+### Rolling out agent governance
 
-1. **Audit current state**: Review which agent features are currently enabled across the enterprise before applying restrictions.
-2. **Set enterprise guardrails**: Establish enterprise-level policies for high-risk controls (MCP servers, third-party agent access, model availability).
-3. **Delegate where appropriate**: Allow organizations to manage lower-risk controls (agent mode access, preview features) within enterprise bounds.
-4. **Monitor adoption metrics**: Use the Copilot metrics API and dashboard to track feature adoption and identify teams that may need guidance or training.
+1. Audit current state: review which agent features are enabled across the enterprise before you apply restrictions.
+2. Set enterprise guardrails: establish enterprise-level policies for high-risk controls (MCP servers, third-party agent access, model availability).
+3. Delegate where appropriate: let organizations manage lower-risk controls (agent mode access, preview features) within enterprise bounds.
+4. Monitor adoption metrics: use the Copilot metrics API and dashboard to track feature adoption and find teams that may need guidance or training.
 
-### Governance as Enablement
+### Governance as enablement
 
-Effective governance is not about restricting AI usage — it is about creating the conditions where teams can adopt agent capabilities confidently. Default-deny for high-risk features (MCP servers, third-party access) combined with default-enable for standard features (agent mode) balances security with adoption velocity.
+Effective governance is not about restricting AI usage. It is about creating the conditions where teams adopt agent capabilities with confidence. Default-deny for high-risk features (MCP servers, third-party access), paired with default-enable for standard features (agent mode), balances security against adoption speed.
 
 ## Example
 
@@ -130,11 +130,11 @@ gh api \
   --jq '.[] | {date: .date, agent_mode: .totals_by_feature.agent_mode, plan_mode: .totals_by_feature.chat_panel_plan_mode}'
 ```
 
-This lets governance teams confirm that agent mode is being adopted at the expected rate and identify teams that may need onboarding support, without reviewing individual conversation contents.
+This lets governance teams confirm that teams are adopting agent mode at the expected rate, and spot teams that need onboarding support, without reviewing individual conversation contents.
 
-## When This Backfires
+## When this backfires
 
-Centralized governance creates bottlenecks when allowlist approval cycles are slower than team delivery cadence — developers route around blocked MCP servers using personal Copilot subscriptions outside the enterprise plan, which eliminates the visibility the policy was designed to create. Overly broad model restrictions that block capable models for compliance reasons not grounded in actual data-handling requirements reduce output quality without reducing risk. Default-deny postures applied uniformly across all teams ignore maturity differences — a team with mature code review and CI checks has lower blast radius from agent access than one without, making uniform restrictions a poor fit for heterogeneous organizations. Monitor shadow-IT signals (personal subscription usage, local MCP server adoption) as leading indicators that governance friction is exceeding its value.
+Centralized governance creates bottlenecks when allowlist approval cycles are slower than the team's delivery pace. Developers then route around blocked MCP servers using personal Copilot subscriptions outside the enterprise plan, which eliminates the visibility the policy was designed to create. Overly broad model restrictions cause a second problem: when they block capable models for compliance reasons that are not grounded in actual data-handling requirements, they reduce output quality without reducing risk. Default-deny postures applied uniformly across all teams also ignore maturity differences. A team with mature code review and CI checks has a lower blast radius from agent access than one without, so uniform restrictions fit heterogeneous organizations poorly. Monitor shadow-IT signals (personal subscription usage, local MCP server adoption) as early indicators that governance friction is exceeding its value.
 
 ## Key Takeaways
 

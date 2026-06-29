@@ -16,25 +16,25 @@ maturity: adopted
 
 > Keep agent definitions minimal — identity and scope only — and load task knowledge on demand through skills rather than front-loading everything.
 
-**Learn it hands-on:** [Skills & Progressive Disclosure](https://learn.agentpatterns.ai/harness-engineering/skills-and-progressive-disclosure/) — guided lesson with quizzes.
+Learn it hands-on: [Skills & Progressive Disclosure](https://learn.agentpatterns.ai/harness-engineering/skills-and-progressive-disclosure/) — guided lesson with quizzes.
 
-## The Problem with Monolithic Definitions
+## The problem with monolithic definitions
 
 Every token in an agent definition consumes [context budget](../context-engineering/context-budget-allocation.md) on every invocation, whether relevant to the current task or not. A monolithic definition embedding every checklist and procedure is mostly noise for any given task.
 
-An agent drafting a blog post does not need its code review checklist loaded. An agent running a deployment does not need its content style guide. Monolithic definitions [load everything unconditionally](cost-aware-agent-design.md).
+An agent drafting a blog post does not need its code review checklist loaded. An agent running a deployment does not need its content style guide. Monolithic definitions [load everything unconditionally](../token-engineering/cost-aware-agent-design.md).
 
-## The Pattern
+## The pattern
 
 Structure agent definitions in two layers:
 
-**Layer 1 — The definition (always loaded):** Identity, scope, quality bar, and references to available skills. Typically under 50 lines. Answers: who is this agent, what is it for, what standards apply, and where are detailed procedures?
+Layer 1 — the definition (always loaded): identity, scope, quality bar, and references to available skills. Typically under 50 lines. It answers four questions. Who is this agent? What is it for? What standards apply? And where are the detailed procedures?
 
-**Layer 2 — Skills (loaded on demand):** Detailed how-to knowledge, checklists, step-by-step procedures, domain-specific rules. Each skill is self-contained and loaded when a task requires it.
+Layer 2 — skills (loaded on demand): detailed how-to knowledge, checklists, step-by-step procedures, and domain-specific rules. Each skill is self-contained, and the agent loads it when a task requires it.
 
 The agent reads the definition, then reads only the skills relevant to the current task.
 
-## What Goes Where
+## What goes where
 
 | Content | Definition | Skill |
 |---------|-----------|-------|
@@ -47,11 +47,11 @@ The agent reads the definition, then reads only the skills relevant to the curre
 | Templates and examples | No | Yes |
 | Tool-specific instructions | No | Yes |
 
-## Context Budget Impact
+## Context budget impact
 
-A monolithic 2000-token definition loads 2000 tokens on every invocation. Separated into a 200-token definition and five 400-token skills, a task requiring two skills loads 200 + 400 + 400 = 1000 tokens — half the baseline, same available knowledge.
+A monolithic 2000-token definition loads 2000 tokens on every invocation. Split it into a 200-token definition and five 400-token skills, and a task that needs two skills loads 200 + 400 + 400 = 1000 tokens. That is half the baseline, with the same knowledge available.
 
-For sub-agents spawned at scale, this compounds: each one inheriting a bloated definition multiplies the waste across the entire fan-out.
+For sub-agents spawned at scale, this compounds. Each one that inherits a bloated definition multiplies the waste across the whole fan-out.
 
 ## Implementation
 
@@ -76,9 +76,9 @@ The skills live in `.github/skills/` or `.claude/skills/` — separate files loa
 
 The [Agent Skills standard](../standards/agent-skills-standard.md) formalizes this pattern with a portable `SKILL.md` entrypoint format supported across Claude Code, GitHub Copilot, Cursor, and other tools ([agentskills.io](https://agentskills.io)).
 
-## Self-Contained Skills
+## Self-contained skills
 
-Each skill must be self-contained — it should work without the agent having to cross-reference other skills. A `writing-rules` skill that depends on `style-guide` being loaded creates implicit ordering requirements that the agent may not follow.
+Each skill must be self-contained. It should work without the agent having to cross-reference other skills. A `writing-rules` skill that depends on `style-guide` being loaded creates implicit ordering requirements that the agent may not follow.
 
 Skills that grow large are a signal to decompose further, not to merge back into the definition.
 
@@ -125,22 +125,22 @@ You are the CI review agent.
 Read only the skill matching the requested check before executing.
 ```
 
-Each skill lives in its own file (e.g., `.claude/skills/lint-check.md`) and is loaded only when that specific check runs. A lint-only invocation loads 120 + 350 = 470 tokens instead of 1800.
+Each skill lives in its own file (for example, `.claude/skills/lint-check.md`) and loads only when that specific check runs. A lint-only invocation loads 120 + 350 = 470 tokens instead of 1800.
 
-## Why It Works
+## Why it works
 
-Context window size directly affects inference quality. When an agent receives a 2000-token monolithic definition, its attention mechanism must distribute weight across all 2000 tokens — including the 80% irrelevant to the current task. This is attention dilution: critical instructions compete with noise, reducing the probability that the model will weight them correctly ([Marta Fernández García, Feb 2026](https://medium.com/@martia_es/progressive-disclosure-the-technique-that-helps-control-context-and-tokens-in-ai-agents-8d6108b09289)). Irrelevant rules in the same context window can also cause instruction interference — the model enters self-reconciliation mode when rules that don't apply to the current task appear to conflict with rules that do, producing hedged output rather than precise execution. Smaller, focused contexts eliminate both failure modes.
+Context window size directly affects inference quality. Give an agent a 2000-token monolithic definition and its attention mechanism must spread weight across all 2000 tokens — including the 80% irrelevant to the current task. This is attention dilution: critical instructions compete with noise, which lowers the chance that the model weights them correctly ([Marta Fernández García, Feb 2026](https://medium.com/@martia_es/progressive-disclosure-the-technique-that-helps-control-context-and-tokens-in-ai-agents-8d6108b09289)). Irrelevant rules in the same context window can also cause instruction interference. The model enters self-reconciliation mode when rules that do not apply to the task appear to conflict with rules that do, producing hedged output rather than precise execution. Smaller, focused contexts remove both failure modes.
 
-## When This Backfires
+## When this backfires
 
 Progressive disclosure adds complexity that creates its own failure modes:
 
-- **Skill index rot**: If the definition lists skills by name but the actual skill files drift — renamed, moved, or deleted — the agent will attempt to load a non-existent skill and either fail or fall back to guessing. The index must be kept in sync with the filesystem.
-- **Wrong skill loaded**: Agents rely on their own judgment to select the relevant skill. Ambiguous task descriptions or [poorly-named skills](../standards/agent-skills-standard.md) cause the agent to load the wrong skill and execute against incorrect procedures.
-- **Orchestration overhead**: Each skill load is an additional read operation. For tasks that genuinely require all skills simultaneously, progressive disclosure adds round-trips without reducing token load.
-- **Self-contained skill violations**: If a skill implicitly depends on another skill being loaded first (shared terminology, referenced templates), the agent may produce inconsistent output when it loads skills in a different order or loads only one.
+- Skill index rot: if the definition lists skills by name but the skill files drift — renamed, moved, or deleted — the agent tries to load a skill that no longer exists and either fails or falls back to guessing. Keep the index in sync with the filesystem.
+- Wrong skill loaded: agents use their own judgment to pick the relevant skill. Ambiguous task descriptions or [poorly named skills](../standards/agent-skills-standard.md) lead the agent to load the wrong skill and run against the wrong procedures.
+- Orchestration overhead: each skill load is another read operation. For tasks that genuinely need all skills at once, progressive disclosure adds round-trips without reducing token load.
+- Self-contained skill violations: if a skill quietly depends on another skill loading first (shared terminology, referenced templates), the agent may produce inconsistent output when it loads skills in a different order or loads only one.
 
-The pattern is most effective when tasks are clearly scoped and [skills are genuinely orthogonal](separation-of-knowledge-and-execution.md). It degrades when the agent's task space is broad and overlapping.
+The pattern works best when tasks are clearly scoped and [skills are genuinely orthogonal](separation-of-knowledge-and-execution.md). It degrades when the agent's task space is broad and overlapping.
 
 ## Key Takeaways
 
@@ -159,4 +159,4 @@ The pattern is most effective when tasks are clearly scoped and [skills are genu
 - [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)

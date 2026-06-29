@@ -15,25 +15,25 @@ maturity: established
 
 > Relying on one safeguard — URL allow-listing, output filtering, or instruction hardening — leaves agents vulnerable to injection attacks that single layer does not address.
 
-**Learn it hands-on:** [Single-Layer Injection Defence](https://learn.agentpatterns.ai/anti-patterns/single-layer-injection-defence/) — guided lesson with quizzes.
+Learn it hands-on: [Single-Layer Injection Defence](https://learn.agentpatterns.ai/anti-patterns/single-layer-injection-defence/) — guided lesson with quizzes.
 
-## The Anti-Pattern
+## The anti-pattern
 
-A common approach is to add one mitigation and consider the problem solved:
+Teams often add one mitigation and consider the problem solved:
 
 - URL allow-listing — concluding the agent cannot exfiltrate data
 - Instruction hardening — concluding injected content cannot override the system prompt
 - Output filtering — concluding injections are neutralized
 
-Each protects against specific vectors, but none is sufficient alone — attackers adapt to every published mitigation.
+Each one protects against specific vectors, but none is enough alone. Attackers adapt to every published mitigation.
 
 [OpenAI's AI agent link safety research](https://openai.com/index/ai-agent-link-safety/) demonstrates this: URL validation prevents exfiltration via the URL itself but does not stop malicious page content from socially engineering the user or issuing further injected instructions.
 
-## Why Single-Layer Defence Fails
+## Why single-layer defence fails
 
 Each defensive layer addresses attacks the others miss:
 
-| Layer | Protects Against | Does Not Protect Against |
+| Layer | Protects against | Does not protect against |
 |-------|-----------------|--------------------------|
 | URL allow-listing | Explicit exfiltration URLs | Malicious page content at allowed URLs |
 | Instruction hardening | Direct override attempts | Contextually plausible redirects |
@@ -42,23 +42,23 @@ Each defensive layer addresses attacks the others miss:
 
 An attacker who knows your defence strategy targets the gaps.
 
-## "Quiet" Side-Effects Are Hard to Detect
+## Quiet side-effects are hard to detect
 
 [OpenAI's link safety research](https://openai.com/index/ai-agent-link-safety/) notes that background URL loads — such as loading an embedded image — can leak data without producing visible output for the user to question. This is the motivation for their URL verification approach.
 
 A hardened system may still fall to injections that trigger a background HTTP request. The user sees nothing; the agent has exfiltrated data.
 
-## Defence-in-Depth Design
+## Defence-in-depth design
 
-Effective defence requires at least three independent layers — [OpenAI's defence-in-depth approach](https://openai.com/index/designing-agents-to-resist-prompt-injection/) and [OWASP LLM01:2025](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) both enumerate the same three categories:
+Effective defence needs at least three independent layers. [OpenAI's defence-in-depth approach](https://openai.com/index/designing-agents-to-resist-prompt-injection/) and [OWASP LLM01:2025](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) both list the same three categories:
 
-1. **Model-level**: injection resistance in the model itself, updated as attacks evolve
-2. **Infrastructure-level**: fetch controls, URL validation, rate limiting, and egress monitoring — applied regardless of model behavior
-3. **Product-level**: confirmation flows for any action with external effects, making silent side-effects visible
+1. Model-level: injection resistance in the model itself, updated as attacks evolve.
+2. Infrastructure-level: fetch controls, URL validation, rate limiting, and egress monitoring, applied regardless of model behavior.
+3. Product-level: confirmation flows for any action with external effects, making silent side-effects visible.
 
 User-facing URL warnings convert a silent background action into an explicit user decision.
 
-## Ongoing Red-Teaming Is Required
+## Ongoing red-teaming is required
 
 [OpenAI's research](https://openai.com/index/ai-agent-link-safety/) treats agent security as a continuous discipline — attackers adapt as each layer is published. Test defences regularly.
 
@@ -75,14 +75,14 @@ The agent fetches the page, reads the injected instruction, and issues a follow-
 
 A product-level confirmation flow ("Do you want to send data to partner.example.com?") would surface the silent side-effect before it executes.
 
-## When This Backfires
+## When this backfires
 
 Three independent layers add real complexity:
 
-- **Low-sensitivity, read-only agents** — no egress channels means URL allow-listing alone may be proportionate; the full three-layer overhead is not always warranted.
-- **Model-level hardening as a substitute** — [instruction hardening](../security/prompt-injection-resistant-agent-design.md) reduces injection success rates but does not create a hard security boundary; treat it as one layer, not a replacement for infrastructure controls.
-- **Confirmation fatigue** — overly broad confirmation flows train users to approve blindly; scope confirmations to high-impact or irreversible actions only.
-- **Layer interdependency** — if all three layers share the same trust root, independence collapses and the defence-in-depth guarantee breaks.
+- Low-sensitivity, read-only agents — with no egress channels, URL allow-listing alone may be proportionate, so the full three-layer overhead is not always warranted.
+- Model-level hardening as a substitute — [instruction hardening](../security/prompt-injection-resistant-agent-design.md) reduces injection success rates but does not create a hard security boundary; treat it as one layer, not a replacement for infrastructure controls.
+- Confirmation fatigue — overly broad confirmation flows train users to approve blindly, so scope confirmations to high-impact or irreversible actions only.
+- Layer interdependency — if all three layers share the same trust root, independence collapses and the defence-in-depth guarantee breaks.
 
 ## Key Takeaways
 

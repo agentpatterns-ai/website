@@ -18,32 +18,32 @@ maturity: established
 
 > Coding LLMs invent nonexistent package names; 43% reappear across re-runs, so attackers enumerate, pre-register them, and the agent's install pulls malware.
 
-**Learn it hands-on:** [The Package That Doesn't Exist](https://learn.agentpatterns.ai/security/the-package-that-doesnt-exist/) — guided lesson with quizzes.
+Learn it hands-on with [The Package That Doesn't Exist](https://learn.agentpatterns.ai/security/the-package-that-doesnt-exist/) — a guided lesson with quizzes.
 
 Slopsquatting is a supply-chain attack class in which an LLM recommends a package name that exists in no public registry, an attacker pre-registers that name on PyPI or npm, and an agent (or a developer copying the model's output) installs the attacker-controlled package. Seth Larson, a Python Software Foundation developer-in-residence, coined the term as a portmanteau of "AI slop" and "typosquatting" ([Wikipedia](https://en.wikipedia.org/wiki/Slopsquatting)). It is the package-name analogue of [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md): both are training-distribution bugs, but here the package does not exist until an attacker creates it.
 
-## The Measurement
+## The measurement
 
 Spracklen et al. ran 576,000 code generations across 16 LLMs in Python and JavaScript, then checked every recommended package against the official PyPI and npm registries (USENIX Security 2025; [arXiv:2406.10279](https://arxiv.org/abs/2406.10279)):
 
 | Property | Result |
 |---|:---:|
-| Total unique hallucinated package names | **205,474** |
-| Average hallucination rate — commercial models (GPT family) | **5.2%** |
-| Average hallucination rate — open-source models (DeepSeek, CodeLlama, WizardCoder) | **21.7%** |
-| Names that reappeared in every one of 10 re-runs of the same prompt | **43%** |
-| Names that reappeared at least once across re-runs | **58%** |
-| Names within Levenshtein distance 1-2 of a real package (typosquat-like) | **13.4%** |
-| Names at Levenshtein distance ≥6 from any real package | **48.6%** |
-| Python hallucinations that match a valid JavaScript package | **8.7%** |
+| Total unique hallucinated package names | 205,474 |
+| Average hallucination rate — commercial models (GPT family) | 5.2% |
+| Average hallucination rate — open-source models (DeepSeek, CodeLlama, WizardCoder) | 21.7% |
+| Names that reappeared in every one of 10 re-runs of the same prompt | 43% |
+| Names that reappeared at least once across re-runs | 58% |
+| Names within Levenshtein distance 1-2 of a real package (typosquat-like) | 13.4% |
+| Names at Levenshtein distance ≥6 from any real package | 48.6% |
+| Python hallucinations that match a valid JavaScript package | 8.7% |
 
 The 43% persistence number is load-bearing — it is what makes the attack economic. Random per-call hallucinations would be unexploitable; a stable hallucination prior turns "predict what the model recommends next" into a tractable enumeration problem.
 
 A 2026 re-evaluation of the same benchmark against the current frontier-model cohort reports that package-hallucination rates have fallen but not closed, confirming the original figures still describe an open surface ([arXiv:2605.17062](https://arxiv.org/abs/2605.17062)).
 
-## Why It Works
+## Why it works
 
-The mechanism is **persistent hallucination + low semantic similarity to real names**. The model's training distribution carries co-occurrence statistics over `(task, package-name)` pairs; for popular libraries the prior points at a real name, but in the long tail it points at a plausible-looking synthesis. That synthesis is deterministic-ish across re-runs because it reflects a stable point in the prior, not random noise — which is why the persistence rate is high enough to enumerate ([arXiv:2406.10279](https://arxiv.org/html/2406.10279v3)).
+The mechanism is persistent hallucination plus low semantic similarity to real names. The model's training distribution carries co-occurrence statistics over `(task, package-name)` pairs; for popular libraries the prior points at a real name, but in the long tail it points at a plausible-looking synthesis. That synthesis is deterministic-ish across re-runs because it reflects a stable point in the prior, not random noise — which is why the persistence rate is high enough to enumerate ([arXiv:2406.10279](https://arxiv.org/html/2406.10279v3)).
 
 The semantic-distance finding closes the second half: hallucinated names sit mostly far from any real package, not minor typos. Registry-side typosquat heuristics key off small edit distance from popular names, so they miss the bulk of the surface — they look for the wrong shape.
 
@@ -62,23 +62,23 @@ graph LR
     style Install fill:#ffd,stroke:#cc6
 ```
 
-## The Real-World Proof of Concept
+## The real-world proof of concept
 
-In December 2023, Bar Lanyado at Lasso Security registered `huggingface-cli` on PyPI as an empty, benign artifact after observing that LLMs repeatedly recommended that name in place of the real `huggingface-hub` tool. Within three months it received **>30,000 authentic downloads** and was pulled into the README of Alibaba's `GraphTranslator` project as an install dependency ([The Register, March 2024](https://www.theregister.com/2024/03/28/ai_bots_hallucinate_software_packages/)). The payload was deliberately benign, but the result confirmed that a hallucinated name on a public registry will be installed at scale — by humans and, transitively, by build pipelines reading agent output.
+In December 2023, Bar Lanyado at Lasso Security registered `huggingface-cli` on PyPI as an empty, benign artifact after observing that LLMs repeatedly recommended that name in place of the real `huggingface-hub` tool. Within three months it received more than 30,000 authentic downloads and was pulled into the README of Alibaba's `GraphTranslator` project as an install dependency ([The Register, March 2024](https://www.theregister.com/2024/03/28/ai_bots_hallucinate_software_packages/)). The payload was deliberately benign, but the result confirmed that a hallucinated name on a public registry will be installed at scale — by humans and, transitively, by build pipelines reading agent output.
 
-As of late 2025 no in-the-wild slopsquatting *malware* campaign is confirmed, though researchers have flagged packages whose names match the pattern where intent cannot be proven ([Wikipedia](https://en.wikipedia.org/wiki/Slopsquatting)). The threat status is documented PoC plus measurement, not incident loss.
+As of late 2025 no in-the-wild slopsquatting malware campaign is confirmed, though researchers have flagged packages whose names match the pattern where intent cannot be proven ([Wikipedia](https://en.wikipedia.org/wiki/Slopsquatting)). The threat status is documented proof of concept plus measurement, not incident loss.
 
-## Closing the Vector
+## Closing the vector
 
-Each defense routes around the hallucination prior, which cannot be prompted away. The install authority is what must be gated.
+Each defense routes around the hallucination prior, which cannot be prompted away. You must gate the install authority instead.
 
-- **Existence + provenance check before install.** Gate agent `uv add` / `npm install` / `pip install` on a hook that resolves the name against registry metadata first — package exists, has a non-zero download history, has a maintainer not registered in the last N days. Snyk and similar scanners ship this surface ([Snyk — Package Hallucinations](https://snyk.io/articles/package-hallucinations/)).
-- **Lockfile-enforced install path.** `uv lock` / `pip-compile --generate-hashes` / `npm ci` against a committed lockfile fails closed on any name the lockfile doesn't endorse. The agent proposes; a human or CI gate accepts the lockfile change before install — the same workflow that catches [LLM-pinned vulnerable versions](llm-pinned-vulnerable-versions.md).
-- **Internal mirror with allowlist.** Artifactory, Nexus, or an OS package mirror set to refuse unknown upstream packages blocks the slopsquatted name at egress, regardless of what the agent typed.
-- **Gate agent install authority.** Remove the install leg from the agent and require a human-reviewed PR for manifest changes — see [Blast Radius Containment](blast-radius-containment.md) and the project's own `block-malicious-deps` hook gating `uv add` (`AGENTS.md` §Runtime and tooling).
-- **Pin against an external registry, not the model's prior.** Treat the agent's manifest as a hint; validate against an authoritative source ([LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md)).
+- Existence and provenance check before install. Gate agent `uv add` / `npm install` / `pip install` on a hook that resolves the name against registry metadata first — the package exists, has a non-zero download history, and has a maintainer not registered in the last N days. Snyk and similar scanners ship this surface ([Snyk — Package Hallucinations](https://snyk.io/articles/package-hallucinations/)).
+- Lockfile-enforced install path. `uv lock` / `pip-compile --generate-hashes` / `npm ci` against a committed lockfile fails closed on any name the lockfile does not endorse. The agent proposes; a human or CI gate accepts the lockfile change before install — the same workflow that catches [LLM-pinned vulnerable versions](llm-pinned-vulnerable-versions.md).
+- Internal mirror with an allowlist. Artifactory, Nexus, or an OS package mirror set to refuse unknown upstream packages blocks the slopsquatted name at egress, regardless of what the agent typed.
+- Gate agent install authority. Remove the install leg from the agent and require a human-reviewed PR for manifest changes — see [Blast Radius Containment](blast-radius-containment.md) and the project's own `block-malicious-deps` hook gating `uv add` (`AGENTS.md` §Runtime and tooling).
+- Pin against an external registry, not the model's prior. Treat the agent's manifest as a hint and validate it against an authoritative source ([LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md)).
 
-The defense to *not* invest in is registry-side typosquat detection — the Levenshtein-distance distribution above shows why it does not match this surface ([arXiv:2406.10279](https://arxiv.org/html/2406.10279v3)).
+The defense to skip is registry-side typosquat detection — the Levenshtein-distance distribution above shows why it does not match this surface ([arXiv:2406.10279](https://arxiv.org/html/2406.10279v3)).
 
 ## Example
 
@@ -125,15 +125,15 @@ $ npm ci
 
 The first install completes silently; the second fails closed. Both took the same model output as input — the lockfile path refused to resolve a name no human had audited.
 
-## When This Backfires
+## When this backfires
 
 Not every project needs a slopsquatting-specific gate; the defense duplicates work in some shapes:
 
-- **Lockfile-enforced workflows already in place.** When `npm ci` / `uv pip sync` / `pip-sync` runs against a human-reviewed lockfile, the slopsquatted name is rejected before resolution — a second per-install existence check is redundant.
-- **Curated internal mirrors.** When Artifactory or Nexus already filters unknown upstream packages, an agent-side check adds nothing.
-- **Mature canonical libraries only.** Hallucination concentrates in the long tail; a manifest importing only well-known top-1000 packages (`requests`, `pandas`, `numpy`, `axios`) has minimal exposure. The 5.2% commercial rate is *average across all tasks*, not per-call on canonical libraries ([arXiv:2406.10279](https://arxiv.org/abs/2406.10279)).
-- **Throwaway prototypes and ephemeral sandboxes.** A verification step adds latency for code that never leaves a laptop or a torn-down container; its cost dominates the per-install risk for short-lived workloads.
-- **Registry-side defenses are improving.** PyPI and npm have invested in supply-chain hardening since the Lanyado experiment ([Wikipedia](https://en.wikipedia.org/wiki/Slopsquatting)); the residual threat concentrates where agents install outside the gates above.
+- Lockfile-enforced workflows already in place. When `npm ci` / `uv pip sync` / `pip-sync` runs against a human-reviewed lockfile, the slopsquatted name is rejected before resolution — a second per-install existence check is redundant.
+- Curated internal mirrors. When Artifactory or Nexus already filters unknown upstream packages, an agent-side check adds nothing.
+- Mature canonical libraries only. Hallucination concentrates in the long tail; a manifest importing only well-known top-1000 packages (`requests`, `pandas`, `numpy`, `axios`) has minimal exposure. The 5.2% commercial rate is an average across all tasks, not per-call on canonical libraries ([arXiv:2406.10279](https://arxiv.org/abs/2406.10279)).
+- Throwaway prototypes and ephemeral sandboxes. A verification step adds latency for code that never leaves a laptop or a torn-down container; its cost dominates the per-install risk for short-lived workloads.
+- Registry-side defenses are improving. PyPI and npm have invested in supply-chain hardening since the Lanyado experiment ([Wikipedia](https://en.wikipedia.org/wiki/Slopsquatting)); the residual threat concentrates where agents install outside the gates above.
 
 Same shape as the LLM-pinned-CVE finding: a measurement-grounded threat that ordinary supply-chain hygiene neutralizes, but that stays dangerous wherever an agent's install authority bypasses that hygiene.
 

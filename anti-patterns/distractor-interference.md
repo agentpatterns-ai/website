@@ -14,44 +14,44 @@ maturity: established
 
 > Semantically related but inapplicable instructions actively reduce compliance with the instructions that are applicable — proximity in meaning creates interference, not safety.
 
-**Learn it hands-on:** [Distractor Interference](https://learn.agentpatterns.ai/anti-patterns/distractor-interference/) — guided lesson with quizzes.
+Learn it hands-on: [Distractor Interference guided lesson](https://learn.agentpatterns.ai/anti-patterns/distractor-interference/) with quizzes.
 
-## The Pattern
+## The pattern
 
 Include every instruction that might be relevant. Cover all cases. Make the instruction file comprehensive so nothing is missed.
 
-## Why It Fails
+## Why it fails
 
-LLMs show significantly degraded performance when irrelevant but contextually plausible content is present alongside applicable instructions — [Shi et al. (2023)](https://arxiv.org/abs/2302.00093) demonstrate that model reasoning accuracy drops dramatically when irrelevant but domain-coherent context is added to the prompt. The same principle applies to instruction sets: instructions *related to* the applicable instruction compete for the model's attention, drawing it *away* from the one that matters.
+LLMs perform worse when irrelevant but plausible content sits alongside applicable instructions. [Shi et al. (2023)](https://arxiv.org/abs/2302.00093) show that model reasoning accuracy drops sharply when you add irrelevant but domain-coherent context to a prompt. The same holds for instruction sets. Instructions related to the applicable one compete for the model's attention and draw it away from the instruction that matters.
 
-An instruction that is accurate in general and related to the current task domain, but not applicable to this specific task, is not a neutral presence in the context. It is a distractor that reduces compliance with the instruction that does apply.
+Take an instruction that is accurate in general and related to the current task domain but does not apply to this specific task. It is not neutral. It is a distractor that reduces compliance with the instruction that does apply.
 
-## An Example
+## An example
 
-A prompt for a task that writes integration tests might include instructions about unit testing conventions, component testing patterns, and end-to-end test structure — all accurate, all related to the same domain, but only one of which applies.
+A prompt for a task that writes integration tests might include instructions about unit testing conventions, component testing patterns, and end-to-end test structure. All are accurate. All relate to the same domain. But only one applies.
 
-The model attends to all three. The applicable instruction competes for the model's focus with two related-but-wrong instructions — the same finite-attention pressure behind [the infinite context](infinite-context.md). Compliance on the applicable instruction is lower than if the other two were absent.
+The model attends to all three. The applicable instruction now competes for focus with two related-but-wrong instructions, the same finite-attention pressure behind [the infinite context](infinite-context.md). Compliance on the applicable instruction is lower than if the other two were absent.
 
-This effect scales. A comprehensive instruction file is not a safety net — every inapplicable instruction dilutes the signal from the applicable one, with performance degrading as irrelevant context grows ([Ponnusamy et al., 2025](https://arxiv.org/abs/2601.11564)).
+This effect scales. A comprehensive instruction file is not a safety net. Every inapplicable instruction dilutes the signal from the applicable one, and performance degrades as irrelevant context grows ([Ponnusamy et al., 2025](https://arxiv.org/abs/2601.11564)).
 
 ## Remediation
 
-**Load task-scoped context** — Load only instructions applicable to the current task. Skill-based architectures support this: skill content loads on invocation, so the agent receives only what it is using.
+Load task-scoped context. Load only the instructions that apply to the current task. Skill-based architectures support this: skill content loads on invocation, so the agent receives only what it is using.
 
-**Prune before loading** — Remove instructions accurate-but-inapplicable to this task. The test is not "is this correct?" but "does including this improve output on this specific task?"
+Prune before loading. Remove instructions that are accurate but do not apply to this task. The test is not "is this correct?" but "does including this improve output on this specific task?"
 
-**Modular instruction files** — Organise by task type, not domain, as a deliberate [context-engineering](../context-engineering/context-engineering.md) choice. A file for "integration test writing" loads separately from "unit test writing".
+Use modular instruction files. Organize by task type, not domain, as a deliberate [context-engineering](../context-engineering/context-engineering.md) choice. A file for "integration test writing" loads separately from "unit test writing".
 
-**Test by removal** — If compliance seems low, remove unrelated instructions and observe whether it improves. Improvement indicates distractor interference.
+Test by removal. If compliance seems low, remove unrelated instructions and check whether it improves. Improvement points to distractor interference.
 
-## When This Backfires
+## When this backfires
 
 Over-pruning creates its own failure mode. Narrowing context too aggressively risks:
 
-- **Under-informing the model** — edge cases that live in adjacent instructions get stripped, producing technically-compliant-but-wrong output on the margins.
-- **Brittle task detection** — if task classification is wrong, the model loads the wrong instruction set entirely, the routing risk that [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md) also carry; a broad fallback provides a partial safety net.
-- **Cross-domain tasks** — a task spanning two instruction domains genuinely needs both files; pruning one causes real compliance failures, not interference.
-- **Maintenance overhead** — each task type needs its own instruction file; the pattern works best for well-defined, bounded tasks and offers less benefit for open-ended work where the applicable instruction set is uncertain at load time.
+- Under-informing the model: edge cases that live in adjacent instructions get stripped, producing technically-compliant-but-wrong output on the margins.
+- Brittle task detection: if task classification is wrong, the model loads the wrong instruction set entirely, the routing risk that [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md) also carry. A broad fallback provides a partial safety net.
+- Cross-domain tasks: a task spanning two instruction domains genuinely needs both files. Pruning one causes real compliance failures, not interference.
+- Maintenance overhead: each task type needs its own instruction file. The pattern works best for well-defined, bounded tasks and offers less benefit for open-ended work where the applicable instruction set is uncertain at load time.
 
 ## Key Takeaways
 

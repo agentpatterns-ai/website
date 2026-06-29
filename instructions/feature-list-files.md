@@ -18,11 +18,11 @@ maturity: emerging
 
 > Maintain a JSON feature list with per-feature status and acceptance criteria; agents work it sequentially and cannot mark a feature passing until its criteria pass.
 
-## The Problem with Agent Self-Report
+## The problem with agent self-report
 
-Agents left to self-report progress are optimistic. [Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) documents a specific failure mode: "after some features had already been built, a later agent instance would look around, see that progress had been made, and declare the job done." Without an external contract, an agent marks a feature complete on whether the implementation looks plausible — not whether it passes acceptance criteria, so partially implemented work gets labeled done and the error compounds across sessions.
+Agents left to self-report progress are optimistic. [Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) documents a specific failure mode: "after some features had already been built, a later agent instance would look around, see that progress had been made, and declare the job done." Without an external contract, an agent marks a feature complete on whether the implementation looks plausible, not whether it passes acceptance criteria. Partially implemented work gets labeled done, and the error compounds across sessions.
 
-A machine-readable feature list with explicit pass/fail status replaces self-report with a verifiable contract — the foundation of reliable long-running agent work.
+A machine-readable feature list with explicit pass/fail status replaces self-report with a verifiable contract. This is the foundation of reliable long-running agent work.
 
 ## Structure
 
@@ -43,7 +43,7 @@ Each feature entry includes:
 
 All features start with `status: "failing"`. The agent cannot change status to `passing` unless the acceptance criteria are met.
 
-## Agent Contract
+## Agent contract
 
 The system prompt makes the feature list the system of record. This aligns with [LangChain's harness engineering findings](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/): "the more that agents know about their environment, constraints, and evaluation criteria, the better they can autonomously self-direct their work."
 
@@ -55,18 +55,18 @@ The system prompt makes the feature list the system of record. This aligns with 
 
 The explicit instruction from [Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) is blunt: "it is unacceptable to remove or edit tests because this could lead to missing or buggy functionality." This rule must appear verbatim in the agent's instructions.
 
-## Pass-Gate Policy
+## Pass-gate policy
 
-"Agent did not self-promote" is not enough — the harness needs explicit commit semantics for the `failing → passing` transition. The [walkinglabs harness-engineering lecture on feature lists](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-08-why-feature-lists-are-harness-primitives/code/pass-gate-policy.md) specifies four conditions, all required:
+"Agent did not self-promote" is not enough. The harness needs explicit commit semantics for the `failing → passing` transition. The [walkinglabs harness-engineering lecture on feature lists](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-08-why-feature-lists-are-harness-primitives/code/pass-gate-policy.md) specifies four conditions, all required:
 
 1. The expected workflow has been exercised end-to-end
 2. The evidence of success is recorded
 3. No blocking error is present in the tested path
 4. The implementation does not leave the app in a broken or ambiguous state
 
-Treat the gate as a database trigger, not an application-level check: a separate verifier runs the conditions on each transition attempt and rejects the write if any fail. Conditions 1–2 defeat the tests-pass-but-feature-doesn't-work failure mode [Anthropic documents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents); condition 4 forces the agent to account for half-applied migrations, partial config edits, and inconsistent background-job state.
+Treat the gate as a database trigger, not an application-level check. A separate verifier runs the conditions on each transition attempt and rejects the write if any fail. Conditions 1 and 2 defeat the tests-pass-but-feature-doesn't-work failure mode [Anthropic documents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents). Condition 4 forces the agent to account for half-applied migrations, partial config edits, and inconsistent background-job state.
 
-## Feature List as State Machine
+## Feature list as state machine
 
 The feature list defines four states and one allowed transition path:
 
@@ -75,15 +75,15 @@ The feature list defines four states and one allowed transition path:
 - `blocked` — a prerequisite is unmet; resolved by working a dependency first
 - `passing` — verifier accepted the transition
 
-Per the [walkinglabs lecture](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-08-why-feature-lists-are-harness-primitives/index.md), `active → passing` is irreversible and only the verifier can write it. The list outranks conversation history: if the transcript says a feature works but the list says `failing`, the list wins. The agent re-reads it every turn — recorded state, not remembered state. Four harness roles operate on the same list: scheduler, verifier, handoff reporter, and progress tracker — none of them the agent itself.
+Per the [walkinglabs lecture](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-08-why-feature-lists-are-harness-primitives/index.md), `active → passing` is irreversible and only the verifier can write it. The list outranks conversation history: if the transcript says a feature works but the list says `failing`, the list wins. The agent re-reads it every turn, recording state rather than remembering it. Four harness roles operate on the same list: scheduler, verifier, handoff reporter, and progress tracker. None of them is the agent itself.
 
-## Validation Strategy
+## Validation strategy
 
-Unit tests alone are insufficient for many feature validations. Per the [Anthropic harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents): "Claude tended to make code changes, and even do testing with unit tests or `curl` commands against a development server, but would fail to recognize that the feature didn't work end-to-end." [Browser automation](../tool-engineering/browser-automation-for-research.md) (Playwright, Puppeteer) validates user-facing features the way a human user would.
+Unit tests alone are not enough for many feature validations. Per the [Anthropic harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents): "Claude tended to make code changes, and even do testing with unit tests or `curl` commands against a development server, but would fail to recognize that the feature didn't work end-to-end." [Browser automation](../tool-engineering/browser-automation-for-research.md) (Playwright, Puppeteer) validates user-facing features the way a human user would.
 
 Each feature entry's acceptance criteria should specify which validation method applies: automated test suite, browser automation, or both.
 
-## The Feature List as Cross-Session State
+## The feature list as cross-session state
 
 The feature list is the primary source of truth for multi-session progress. At the start of each session, the agent reads:
 
@@ -95,17 +95,17 @@ This triad replaces context window memory. The feature list does not forget, doe
 
 ## Scale
 
-[Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) documents using 200+ features defined upfront, all initial statuses set to failing. At this scale the feature list becomes a project management artifact as well as an agent contract — it shows scope, progress, and remaining work in one format both agents and humans read.
+[Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) documents using 200+ features defined upfront, all initial statuses set to failing. At this scale the feature list becomes a project management artifact as well as an agent contract. It shows scope, progress, and remaining work in one format both agents and humans read.
 
-## When This Backfires
+## When this backfires
 
 Feature list files add overhead that outweighs the benefit in several situations:
 
-- **Exploratory or greenfield work**: when requirements are unknown upfront, writing acceptance criteria before any implementation forces premature specification. The list becomes a fiction that diverges from what actually gets built.
-- **Short single-session tasks**: for a task completing in one session with no state continuity needed, a feature list is unnecessary scaffolding — the same threshold at which a [frozen spec file](frozen-spec-file.md) stops paying off. The agent's own working memory is sufficient.
-- **Criteria that can be gamed**: acceptance criteria defined as command outputs can be satisfied by hardcoding responses. A poorly designed criterion (`task list` shows a checkmark) can be met without the underlying feature working correctly — the list gives false confidence rather than genuine verification.
-- **Feature list staleness**: in fast-moving projects requirements shift mid-build. Without a human reviewing and updating the list between sessions, the agent dutifully implements outdated entries while actual priorities diverge.
-- **Scale without decomposition**: at 200+ features a flat list with no dependency ordering forces the agent to attempt entries whose prerequisites have not been built. Priority order alone does not capture dependency graphs.
+- Exploratory or greenfield work: when requirements are unknown upfront, writing acceptance criteria before any implementation forces premature specification. The list becomes a fiction that diverges from what actually gets built.
+- Short single-session tasks: for a task completing in one session with no state continuity needed, a feature list is unnecessary scaffolding — the same threshold at which a [frozen spec file](frozen-spec-file.md) stops paying off. The agent's own working memory is sufficient.
+- Criteria that can be gamed: acceptance criteria defined as command outputs can be satisfied by hardcoding responses. A poorly designed criterion (`task list` shows a checkmark) can be met without the underlying feature working correctly — the list gives false confidence rather than genuine verification.
+- Feature list staleness: in fast-moving projects requirements shift mid-build. Without a human reviewing and updating the list between sessions, the agent dutifully implements outdated entries while actual priorities diverge.
+- Scale without decomposition: at 200+ features a flat list with no dependency ordering forces the agent to attempt entries whose prerequisites have not been built. Priority order alone does not capture dependency graphs.
 
 ## Example
 

@@ -18,18 +18,18 @@ maturity: adopted
 
 > Deploy two agents with structurally opposed incentives to independently critique each other's reasoning, then synthesize the result.
 
-## How It Differs from Related Patterns
+## How it differs from related patterns
 
-The pattern is often conflated with three others — each solves a different problem:
+People often confuse this pattern with three others. Each solves a different problem:
 
 | Pattern | Structure | Critique phase |
 |---------|-----------|---------------|
-| **Voting / Ensemble** | N agents run same task independently → aggregate | No — just aggregate |
-| **Adversarial Multi-Model Pipeline (VSDD)** | Builder produces artifacts → adversary attacks with fresh context | Sequential, one-directional |
-| **Critic Agent** | Primary agent plans → critic gates before execution | One-directional, pre-execution |
-| **Opponent Processor (this page)** | Two co-equal agents with opposing incentives → mutual critique | Bidirectional, structured debate |
+| Voting / Ensemble | N agents run same task independently → aggregate | No — just aggregate |
+| Adversarial Multi-Model Pipeline (VSDD) | Builder produces artifacts → adversary attacks with fresh context | Sequential, one-directional |
+| Critic Agent | Primary agent plans → critic gates before execution | One-directional, pre-execution |
+| Opponent Processor (this page) | Two co-equal agents with opposing incentives → mutual critique | Bidirectional, structured debate |
 
-The defining feature is structural: opposition is role-encoded in system prompts from the start, and each co-equal agent critiques the other before synthesis.
+The defining feature is structural. Opposition is role-encoded in the system prompts from the start, and each co-equal agent critiques the other before synthesis.
 
 ## Mechanism
 
@@ -47,17 +47,17 @@ graph TD
     D -->|High-stakes| G[Human review]
 ```
 
-The mechanism is **uncorrelated context windows**: each agent receives the same input but reasons independently before seeing the other's output. This prevents the first agent's framing from anchoring the second — the primary source of groupthink in correlated-context approaches.
+The mechanism is uncorrelated context windows. Each agent receives the same input but reasons independently before seeing the other's output. This stops the first agent's framing from anchoring the second, the main source of groupthink in correlated-context approaches.
 
 Steps:
 
-1. Assign opposing system prompts with explicit, conflicting incentives
-2. Spawn both agents with identical input context
-3. Collect independent outputs — neither agent sees the other's result yet
-4. Cross-critique: each agent reviews and challenges the other's reasoning
-5. Route revised outputs to synthesis
+1. Assign opposing system prompts with explicit, conflicting incentives.
+2. Spawn both agents with identical input context.
+3. Collect independent outputs. Neither agent sees the other's result yet.
+4. Cross-critique: each agent reviews and challenges the other's reasoning.
+5. Route the revised outputs to synthesis.
 
-## Role Pair Design
+## Role pair design
 
 Opposing roles must be structurally incompatible to generate genuine disagreement:
 
@@ -69,11 +69,11 @@ Opposing roles must be structurally incompatible to generate genuine disagreemen
 | Risk assessment | Optimistic analyst | Conservative risk officer |
 | Content moderation | Free expression advocate | Safety reviewer |
 
-Encode opposition in the system prompt as a role with explicit incentives — not a vague "be critical." An agent told to defend a decision surfaces different evidence than one told to challenge it.
+Encode opposition in the system prompt as a role with explicit incentives, not a vague "be critical." An agent told to defend a decision surfaces different evidence than one told to challenge it.
 
-## Synthesis Options
+## Synthesis options
 
-Three synthesis strategies with different cost and latency profiles:
+Three synthesis strategies carry different cost and latency profiles:
 
 | Strategy | Mechanism | When to use |
 |----------|-----------|-------------|
@@ -81,15 +81,15 @@ Three synthesis strategies with different cost and latency profiles:
 | Weighted aggregation | Combine outputs by confidence scores or domain authority | Classification tasks with measurable confidence |
 | Human-in-the-loop | Present the competing analyses for human judgment | Highest-stakes decisions; irresolvable value conflicts |
 
-Include a **max-round limit** and **deadlock detection** in any automated synthesis. Two agents with opposing incentives can loop without convergence — the loop must have an exit condition.
+Include a max-round limit and deadlock detection in any automated synthesis. Two agents with opposing incentives can loop without convergence, so the loop must have an exit condition.
 
-## When to Apply
+## When to apply
 
 Apply when:
 
-- The decision is **consequential and hard to reverse** — architecture choices, security policies, resource allocation
-- Single-agent outputs show systematic bias toward one framing (e.g., always recommending the simpler solution)
-- The decision requires surfacing a **value conflict** — trade-offs where reasonable people disagree
+- The decision is consequential and hard to reverse — architecture choices, security policies, resource allocation
+- Single-agent outputs show systematic bias toward one framing (for example, always recommending the simpler solution)
+- The decision requires surfacing a value conflict — trade-offs where reasonable people disagree
 - You have an existing critic or voting pattern but need adversarial pressure before synthesis, not just parallel aggregation
 
 Skip when:
@@ -98,13 +98,13 @@ Skip when:
 - Latency is a constraint — debate rounds add 2–4 model round-trips
 - The decision is routine — the overhead is not justified for low-stakes tasks
 
-## Cost Profile
+## Cost profile
 
-Minimum 2× the token cost of a single-agent run; with cross-critique and third-agent synthesis, expect 3–4×. Debate is justified only where decision quality has asymmetric value relative to compute cost.
+Debate costs at least 2× the tokens of a single-agent run. With cross-critique and third-agent synthesis, expect 3–4×. It is justified only where decision quality has asymmetric value relative to compute cost.
 
 The [Voting / Ensemble Pattern](voting-ensemble-pattern.md) at N=3 costs 3× but skips the critique phase — where debate's quality gain originates.
 
-## Empirical Caveats
+## Empirical caveats
 
 Controlled studies show mixed results. [Zhang et al. (2025)](https://arxiv.org/abs/2502.08788) found MAD often fails to outperform Chain-of-Thought or Self-Consistency at equal compute. [Becker et al. (2025)](https://arxiv.org/abs/2502.18965) document problem drift: 35% of debate rounds show lack of progress. Majority pressure can suppress independent correction — agents converge on a confident wrong answer.
 

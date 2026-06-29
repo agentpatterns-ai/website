@@ -22,46 +22,46 @@ maturity: adopted
 !!! info "Also known as"
     Tool Calling Schema Standards, Tool Minimalism, Tool Schema Design
 
-## Schema Filtering vs. Runtime Checks
+## Schema filtering versus runtime checks
 
-Runtime checks reject forbidden tool calls after the model has already planned to use them. Schema filtering removes tools from the subagent's schema entirely, so the model cannot form the intent to call tools it has never seen ([Bui, 2026 §2.2.2](https://arxiv.org/abs/2603.05344)).
+Runtime checks reject forbidden tool calls after the model has already planned to use them. Schema filtering removes tools from the subagent's schema entirely. The model cannot form the intent to call tools it has never seen ([Bui, 2026 §2.2.2](https://arxiv.org/abs/2603.05344)).
 
-This distinction matters. A runtime rejection occurs after the model has already expended tokens planning the call; recovery requires an additional inference turn. Schema filtering eliminates the failure mode at the structural level — the model selects only from tools it can see.
+This distinction matters. A runtime rejection happens after the model has already spent tokens planning the call, and recovery needs another inference turn. Schema filtering removes the failure mode at the structural level. The model selects only from tools it can see.
 
-## Filtered Tool Sets by Role
+## Filtered tool sets by role
 
-The OPENDEV agent defines built-in subagent types, each receiving a filtered subset of the shared tool registry ([Bui, 2026 §2.2.7, App G](https://arxiv.org/abs/2603.05344)):
+The OPENDEV agent defines built-in subagent types. Each one receives a filtered subset of the shared tool registry ([Bui, 2026 §2.2.7, App G](https://arxiv.org/abs/2603.05344)):
 
-| Subagent | Tool Access |
+| Subagent | Tool access |
 |----------|-------------|
 | Strategic Planner | Read-only tools plus extended reasoning — no write operations |
 | Code Explorer | Read-only codebase navigation tools |
 
-Additional specialized subagents are registered in the subagent capability matrix (Appendix G). Each subagent's schema is the minimum set required for its role. Tools outside the allowlist do not appear in the schema sent to the model.
+Other specialized subagents are registered in the subagent capability matrix (Appendix G). Each subagent's schema is the minimum set its role needs. Tools outside the allowlist do not appear in the schema sent to the model.
 
-## Prompt + Schema Dual Constraint
+## Prompt and schema dual constraint
 
-Schema filtering pairs with prompt specialization. Subagent prompts inherit the base system prompt plus role-specific sections that emphasize constraints and responsibilities ([Bui, 2026 §2.2.7](https://arxiv.org/abs/2603.05344)). Anthropic's guidance on writing effective agent tools makes the same point: giving an agent only the tools relevant to its task reduces ambiguity and improves selection accuracy ([Anthropic Engineering, 2025](https://www.anthropic.com/engineering/writing-tools-for-agents)).
+Schema filtering pairs with prompt specialization. Subagent prompts inherit the base system prompt plus role-specific sections that stress constraints and responsibilities ([Bui, 2026 §2.2.7](https://arxiv.org/abs/2603.05344)). Anthropic's guidance on writing effective agent tools makes the same point: giving an agent only the tools relevant to its task reduces ambiguity and improves selection accuracy ([Anthropic Engineering, 2025](https://www.anthropic.com/engineering/writing-tools-for-agents)).
 
-The prompt tells the model what to do; the schema prevents it from doing anything else. Neither mechanism alone is sufficient — prompts can be overridden by strong context, and schema filtering does not guide the model toward the *right* tool among those available. Together, they create a dual constraint that is harder to violate than either alone.
+The prompt tells the model what to do. The schema stops it from doing anything else. Neither mechanism is enough alone. Strong context can override prompts, and schema filtering does not guide the model toward the right tool among those available. Together they create a dual constraint that is harder to violate than either alone.
 
-## Declarative Subagent Specs
+## Declarative subagent specs
 
-The design evolved from inline subagent code to a declarative SubAgentSpec registry ([Bui, 2026 §2.2.1](https://arxiv.org/abs/2603.05344)). Each spec declares:
+The design moved from inline subagent code to a declarative SubAgentSpec registry ([Bui, 2026 §2.2.1](https://arxiv.org/abs/2603.05344)). Each spec declares:
 
 - Role description and specialized prompt sections
 - Tool allowlist (schema filter)
-- Execution constraints (e.g., read-only, no network)
+- Execution constraints (for example, read-only, no network)
 
-Compilation (SubAgentSpec → CompiledSubAgent) shares the tool registry for cheap construction while isolating runtime state through filtered schemas and fresh message history.
+Compilation (SubAgentSpec → CompiledSubAgent) shares the tool registry for cheap construction. It isolates runtime state through filtered schemas and fresh message history.
 
-## Parallel Execution
+## Parallel execution
 
-Multiple subagents with filtered schemas can run concurrently for independent exploration tasks ([Bui, 2026 §2.2.7](https://arxiv.org/abs/2603.05344)). Schema filtering makes this safe — each subagent operates within its structural capability boundary regardless of what other subagents are doing.
+Multiple subagents with filtered schemas can run at the same time for independent exploration tasks ([Bui, 2026 §2.2.7](https://arxiv.org/abs/2603.05344)). Schema filtering makes this safe. Each subagent works within its structural capability boundary, whatever other subagents are doing.
 
 ## Example
 
-The following shows a declarative SubAgentSpec for a read-only Code Explorer subagent, demonstrating how the tool allowlist is the schema filter — the model receives only these tools in its schema and cannot form intent to call anything else.
+The example below shows a declarative SubAgentSpec for a read-only Code Explorer subagent. The tool allowlist is the schema filter: the model receives only these tools in its schema and cannot form intent to call anything else.
 
 ```python
 from opendev import SubAgentSpec, ToolRegistry
@@ -100,17 +100,17 @@ strategic_planner_spec = SubAgentSpec(
 )
 ```
 
-Both subagents can run concurrently — their filtered schemas ensure neither can touch files the other is reading, and neither can perform write operations regardless of what appears in their prompts.
+Both subagents can run at the same time. Their filtered schemas mean neither can touch files the other is reading, and neither can perform write operations whatever appears in their prompts.
 
-## When This Backfires
+## When this backfires
 
-Schema filtering adds structural rigidity — when it fails to match the actual workload, costs outweigh the safety benefit:
+Schema filtering adds structural rigidity. When it fails to match the actual workload, the costs outweigh the safety benefit:
 
-- **Over-scoped allowlists**: A subagent given too broad a tool allowlist provides false safety assurance while still being able to cause harm within its scope. Allowlists require ongoing maintenance as the tool registry evolves.
-- **Allowlist maintenance lag**: Adding a new tool to the [shared registry](../standards/tool-calling-schema-standards.md) does not automatically grant it to existing subagents. Conversely, removing a tool from a spec that still references it causes compilation errors. The SubAgentSpec layer requires synchronization with the live tool registry.
-- **Misuse within the allowlist**: Schema filtering prevents calls to *absent* tools but does not prevent misuse of *present* ones. A Code Explorer subagent with `search_code` can still perform excessive queries or leak discovered content — prompt specialization must handle intra-allowlist safety.
-- **Parallel execution overhead**: Spawning multiple filtered subagents introduces orchestration overhead (compilation, context initialization, result aggregation). For simple linear tasks, a single agent with a broad schema is cheaper.
-- **"Structurally impossible" is a ceiling, not a guarantee**: Schema filtering narrows intent to the visible tool set, but tools inside the allowlist still expose indirect pathways. [CVE-2026-22708](https://github.com/cursor/cursor/security/advisories/GHSA-82wg-qcm4-fp2w) showed that Cursor Agent's terminal allowlist could be bypassed through shell built-ins and environment-variable manipulation — poisoning the environment of allowed commands produced effects the allowlist never sanctioned. The same pattern recurs whenever an allowlisted tool (shell, package manager, HTTP client) can be steered into unintended behavior via its inputs. Treat schema filtering as one layer of defense in depth, not as a boundary the model cannot reason around.
+- Over-scoped allowlists: a subagent given too broad a tool allowlist gives false safety assurance while it can still cause harm within its scope. Allowlists need ongoing maintenance as the tool registry changes.
+- Allowlist maintenance lag: adding a new tool to the [shared registry](../standards/tool-calling-schema-standards.md) does not grant it to existing subagents. Removing a tool from a spec that still references it causes compilation errors. The SubAgentSpec layer must stay in sync with the live tool registry.
+- Misuse within the allowlist: schema filtering stops calls to absent tools but does not stop misuse of present ones. A Code Explorer subagent with `search_code` can still run excessive queries or leak discovered content, so prompt specialization must handle safety within the allowlist.
+- Parallel execution overhead: spawning multiple filtered subagents adds orchestration overhead (compilation, context initialization, result aggregation). For simple linear tasks, a single agent with a broad schema is cheaper.
+- "Structurally impossible" is a ceiling, not a guarantee: schema filtering narrows intent to the visible tool set, but tools inside the allowlist still expose indirect pathways. [CVE-2026-22708](https://github.com/cursor/cursor/security/advisories/GHSA-82wg-qcm4-fp2w) showed that Cursor Agent's terminal allowlist could be bypassed through shell built-ins and environment-variable manipulation. Poisoning the environment of allowed commands produced effects the allowlist never sanctioned. The same pattern recurs whenever an allowlisted tool (shell, package manager, HTTP client) can be steered into unintended behavior through its inputs. Treat schema filtering as one layer of defense in depth, not as a boundary the model cannot reason around.
 
 ## Key Takeaways
 

@@ -20,15 +20,15 @@ maturity: emerging
 
 > Instrument the MCP transport so agent reasoning, prompts, and tool calls become a runtime detection signal that endpoint tools cannot reconstruct.
 
-Agentic Detection and Response (ADR) is the runtime monitoring half of MCP-mediated agent security: an in-process sensor captures prompts, reasoning, tool calls, and server responses, and a two-tier detector classifies sessions as benign or compromised before the action chain completes. Uber's production deployment reports **97.2% precision** at **>10,000 agent sessions daily across 7,200+ hosts** ([Li et al., 2026](https://arxiv.org/abs/2605.17380)).
+Agentic Detection and Response (ADR) is the runtime monitoring half of MCP-mediated agent security. An in-process sensor captures prompts, reasoning, tool calls, and server responses. A two-tier detector then classifies each session as benign or compromised before the action chain completes. Uber's production deployment reports 97.2% precision at >10,000 agent sessions daily across 7,200+ hosts ([Li et al., 2026](https://arxiv.org/abs/2605.17380)).
 
-ADR complements the [MCP Runtime Control Plane](mcp-runtime-control-plane.md): the control plane gates calls before execution, ADR observes the full trajectory so detection can fire on signals the gate cannot evaluate in isolation.
+ADR complements the [MCP Runtime Control Plane](mcp-runtime-control-plane.md). The control plane gates calls before execution. ADR observes the full trajectory, so detection can fire on signals the gate cannot evaluate in isolation.
 
-## Why Endpoint Tools Miss MCP Attacks
+## Why endpoint tools miss MCP attacks
 
-EDR sees file writes, process exec, and network connections, but not agent reasoning, prompts, or the causal chains linking intent to execution ([Li et al., 2026](https://arxiv.org/abs/2605.17380)). A compromised agent looks identical to a benign one at the OS layer — same process, same outbound HTTPS, same syscalls. MCP tool servers sit at the junction of protocol traffic, OS execution, and agent decision-making, and attacks live in the gaps.
+EDR sees file writes, process exec, and network connections, but not agent reasoning, prompts, or the causal chains linking intent to execution ([Li et al., 2026](https://arxiv.org/abs/2605.17380)). A compromised agent looks identical to a benign one at the OS layer: same process, same outbound HTTPS, same syscalls. MCP tool servers sit at the junction of protocol traffic, OS execution, and agent decision-making. Attacks live in the gaps between them.
 
-## How It Works
+## How it works
 
 ```mermaid
 graph LR
@@ -45,25 +45,25 @@ graph LR
 
 Three components compose the system ([Li et al., 2026](https://arxiv.org/abs/2605.17380)):
 
-- **ADR Sensor** — captures telemetry at the MCP transport: prompts, reasoning, tool arguments, server responses, and the causal chains linking them. Closes the observability gap EDR cannot.
-- **ADR Explorer** — runs offline red-teaming before deployment, generating test cases that calibrate the detector against attacker behaviour the production stream has not yet seen.
-- **ADR Detector** — the two-tier online classifier that reaches the 97.2% production precision above. Fast triage handles bulk traffic deterministically; only suspicious sessions pay the cost of context-aware LLM reasoning, amortising inference cost across volume.
+- ADR Sensor captures telemetry at the MCP transport: prompts, reasoning, tool arguments, server responses, and the causal chains linking them. It closes the observability gap EDR cannot.
+- ADR Explorer runs offline red-teaming before deployment. It generates test cases that calibrate the detector against attacker behavior the production stream has not yet seen.
+- ADR Detector is the two-tier online classifier that reaches the 97.2% production precision above. Fast triage handles bulk traffic deterministically. Only suspicious sessions pay the cost of context-aware LLM reasoning, which amortizes inference cost across volume.
 
-On the public ADR-Bench evaluation the system reported **zero false positives at 67% attack recall**, a 2-4x F1 improvement over three baselines ([Li et al., 2026](https://arxiv.org/abs/2605.17380)).
+On the public ADR-Bench evaluation, the system reported zero false positives at 67% attack recall, a 2 to 4x F1 improvement over three baselines ([Li et al., 2026](https://arxiv.org/abs/2605.17380)).
 
-## Why It Works
+## Why it works
 
-The mechanism is **co-occurrence at a single transport**. Prompt, reasoning, and tool call all pass through the MCP envelope in structured form, so instrumenting that boundary captures the causal chain EDR cannot reconstruct from OS-layer events ([Li et al., 2026](https://arxiv.org/abs/2605.17380)). The two-tier detector then makes the economics work: cheap triage for the bulk, context-aware LLM reasoning only for the suspicious tail. That amortisation keeps a 10,000-sessions-per-day deployment affordable rather than "prohibitively expensive at scale" ([Li et al., 2026](https://arxiv.org/abs/2605.17380)).
+The mechanism is co-occurrence at a single transport. Prompt, reasoning, and tool call all pass through the MCP envelope in structured form. Instrumenting that boundary captures the causal chain EDR cannot reconstruct from OS-layer events ([Li et al., 2026](https://arxiv.org/abs/2605.17380)). The two-tier detector then makes the economics work: cheap triage for the bulk, context-aware LLM reasoning only for the suspicious tail. That amortization keeps a 10,000-sessions-per-day deployment affordable rather than "prohibitively expensive at scale" ([Li et al., 2026](https://arxiv.org/abs/2605.17380)).
 
-## When This Backfires
+## When this backfires
 
-The pattern is calibrated for enterprise deployments; smaller or differently-shaped workloads may pay net cost.
+The pattern is calibrated for enterprise deployments. Smaller or differently shaped workloads may pay net cost.
 
-- **Small deployments and single-developer workflows.** Value comes from enterprise scale (7,200+ hosts in the Uber report) where cross-host correlation drives detection quality ([Li et al., 2026](https://arxiv.org/abs/2605.17380)). For a single agent on one developer machine, sensor overhead adds cost without enabling cross-session signal — a [policy gate alone](mcp-runtime-control-plane.md) fits better.
-- **Tightly constrained tool catalogs.** When tool sequences are fully enumerable, a [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) gives deterministic enforcement at ~2.2 ms per call. A probabilistic detector only generates alerts the firewall already blocks.
-- **Slow-drift and memory-poisoning attacks.** Triggered backdoors in agent memory or RAG stores activate only on attacker-chosen conditions — AgentPoison achieves >80% attack success with <1% benign-task degradation ([Chen et al., arXiv:2407.12784](https://arxiv.org/abs/2407.12784)) — so per-session detectors that never observe the trigger miss them. Pair ADR with offline baselining or memory provenance; see [Trojan Hippo: Dormant Memory Payloads](trojan-hippo-memory-attack.md).
-- **No SOC capacity to action alerts.** A ~97% precision detector at 67% recall still generates triage load. Teams without incident response accumulate unactioned alerts and devalue the signal.
-- **Naive telemetry without two-tier amortisation.** Provenance-EDR systems have historically added up to **821% runtime overhead** and 10x the industry-expected memory footprint per host ([Dong et al., arXiv:2307.08349](https://arxiv.org/pdf/2307.08349)). Copying the sensor without the triage architecture reproduces that cost problem.
+- Small deployments and single-developer workflows. Value comes from enterprise scale (7,200+ hosts in the Uber report), where cross-host correlation improves detection quality ([Li et al., 2026](https://arxiv.org/abs/2605.17380)). For a single agent on one developer machine, sensor overhead adds cost without enabling cross-session signal. A [policy gate alone](mcp-runtime-control-plane.md) fits better.
+- Tightly constrained tool catalogs. When tool sequences are fully enumerable, a [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) gives deterministic enforcement at ~2.2 ms per call. A probabilistic detector only generates alerts the firewall already blocks.
+- Slow-drift and memory-poisoning attacks. Triggered backdoors in agent memory or RAG stores activate only on attacker-chosen conditions. AgentPoison achieves >80% attack success with <1% benign-task degradation ([Chen et al., arXiv:2407.12784](https://arxiv.org/abs/2407.12784)), so per-session detectors that never observe the trigger miss them. Pair ADR with offline baselining or memory provenance; see [Trojan Hippo: Dormant Memory Payloads](trojan-hippo-memory-attack.md).
+- No SOC capacity to action alerts. A ~97% precision detector at 67% recall still generates triage load. Teams without incident response accumulate unactioned alerts and devalue the signal.
+- Naive telemetry without two-tier amortization. Provenance-EDR systems have historically added up to 821% runtime overhead and 10x the industry-expected memory footprint per host ([Dong et al., arXiv:2307.08349](https://arxiv.org/pdf/2307.08349)). Copying the sensor without the triage architecture reproduces that cost problem.
 
 ## Trade-offs
 

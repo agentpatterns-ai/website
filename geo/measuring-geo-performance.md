@@ -19,33 +19,33 @@ maturity: established
 
 > Measurement of GEO performance is fundamentally harder than measuring SEO. There are no fixed positions, no platform APIs, and no guaranteed consistency across sessions.
 
-**Learn it hands-on:** [Capstone — Measure & Decide](https://learn.agentpatterns.ai/geo/capstone-measure-and-decide/) — guided lesson with quizzes.
+Learn this hands-on with the [Capstone: Measure and Decide lesson](https://learn.agentpatterns.ai/geo/capstone-measure-and-decide/), a guided lesson with quizzes.
 
-## The Core Problem
+## The core problem
 
-SEO rank tracking works because results are deterministic. GEO measurement does not — LLMs generate probabilistic outputs on-the-fly.
+SEO rank tracking works because results are deterministic. GEO measurement is different: LLMs generate probabilistic outputs on the fly.
 
 - Brand citation presence is inconsistent across consecutive runs on the same prompt — citations vary by session
 - Monthly citation drift is substantial across major platforms; the same brand may appear in week one and disappear by week four
 - AI platforms expose no impression counts, referral data, or ranking signals
 - All measurement relies on repeated sampling, not platform APIs
 
-## Metric Vocabulary
+## Metric vocabulary
 
 | Metric | Definition |
 |--------|------------|
-| **AI Visibility Score** | Normalised composite: mention frequency × position × platform coverage |
-| **Share of Model (SoM)** | % of AI responses where your brand appears for relevant category queries |
-| **Citation Share of Voice** | Your brand's citation count as a % of total category citations |
-| **Generative Position** | Average rank when AI outputs a list; first-mentioned brands receive more prominent framing in the response |
-| **Citation Frequency** | How often AI includes clickable links or footnotes to your domain |
-| **Sentiment Score** | Qualitative tone (positive / neutral / negative) when your brand is described |
-| **Hallucination Rate** | How often AI states factually incorrect information about your brand |
-| **Platform Coverage Rate** | % of tracked platforms where your brand appears for target prompts |
+| AI Visibility Score | Normalised composite: mention frequency × position × platform coverage |
+| Share of Model (SoM) | % of AI responses where your brand appears for relevant category queries |
+| Citation Share of Voice | Your brand's citation count as a % of total category citations |
+| Generative Position | Average rank when AI outputs a list; first-mentioned brands receive more prominent framing in the response |
+| Citation Frequency | How often AI includes clickable links or footnotes to your domain |
+| Sentiment Score | Qualitative tone (positive / neutral / negative) when your brand is described |
+| Hallucination Rate | How often AI states factually incorrect information about your brand |
+| Platform Coverage Rate | % of tracked platforms where your brand appears for target prompts |
 
 LLMs typically cite a small number of domains per response — far fewer than Google's 10 blue links — making citation share intensely competitive.
 
-## Tool Landscape
+## Available tools
 
 | Tool | Starting Price | Platforms Tracked | Differentiator |
 |------|---------------|-------------------|----------------|
@@ -54,9 +54,9 @@ LLMs typically cite a small number of domains per response — far fewer than Go
 | [Profound](https://www.tryprofound.com/) | from $99/mo | ChatGPT (entry) → 10+ LLMs (enterprise) | Enterprise; hallucination detection; compliance |
 | [Scrunch](https://scrunch.com/) | from $100/mo | ChatGPT (entry) → Claude, Perplexity, Gemini | Content gap and outdated information detection |
 
-Starting prices are entry tiers verified June 2026; the cheapest plan is usually single-platform, with multi-LLM coverage on higher tiers. Confirm current pricing with each vendor. All tools sample by running prompts — none access platform-internal data.
+Starting prices are entry tiers verified June 2026. The cheapest plan is usually single-platform, with multi-LLM coverage on higher tiers. Confirm current pricing with each vendor. All tools sample by running prompts. None access platform-internal data.
 
-## What No Tool Solves
+## What no tool solves
 
 ```mermaid
 graph TD
@@ -69,34 +69,34 @@ graph TD
     G --> H[Brand discovered in ChatGPT<br>visits site 3 days later<br>shows as direct traffic]
 ```
 
-**Attribution gap**: ChatGPT-discovered visits that land days later show as direct traffic — the discovery touch is invisible.
+The attribution gap: ChatGPT-discovered visits that land days later show as direct traffic, so the discovery touch is invisible.
 
-**Zero-click gap**: [GPTBot](ai-crawler-policy.md) crawls heavily, but crawl-to-click conversion is very low — AI answers inform without driving referral traffic.
+The zero-click gap: [GPTBot](ai-crawler-policy.md) crawls heavily, but crawl-to-click conversion is very low, so AI answers inform readers without sending referral traffic.
 
-**Unannounced model updates**: Providers update models silently, making visibility shifts unattributable to content versus model behaviour.
+Unannounced model updates: providers update models silently, which makes visibility shifts hard to attribute to content or to model behavior.
 
-**GEO/SEO tension**: Restructuring for AI extraction can raise citation rates while reducing organic rankings.
+The GEO and SEO tension: restructuring for AI extraction can raise citation rates while reducing organic rankings.
 
-## Monitoring Cadence
+## Monitoring cadence
 
 | Frequency | Activity |
 |-----------|----------|
-| **Daily** | Run 20–30 target prompts across platforms (automated via tool or script) |
-| **Weekly** | Review mention frequency, citation share, position, and sentiment; flag anomalies |
-| **Monthly** | Aggregate visibility trends; analyse citation source breakdown; benchmark competitors |
-| **Quarterly** | Deep-dive sentiment analysis; update competitive benchmarks; reassess prompt set |
+| Daily | Run 20–30 target prompts across platforms (automated via tool or script) |
+| Weekly | Review mention frequency, citation share, position, and sentiment; flag anomalies |
+| Monthly | Aggregate visibility trends; analyse citation source breakdown; benchmark competitors |
+| Quarterly | Sentiment analysis in depth; update competitive benchmarks; reassess prompt set |
 
 Brand web mention volume correlates with AI Overview visibility — stronger organic presence tends to mean more frequent AI citation.
 
-## When This Backfires
+## When this backfires
 
 GEO monitoring can mislead or waste investment under specific conditions:
 
-- **High-drift queries**: Broad prompts ("best tools for X") vary so widely session-to-session that sampled data reflects noise, not visibility. Narrow, brand-specific prompts are more stable.
-- **Small sample budgets**: Fewer than 20–30 prompts daily cannot distinguish genuine change from session variance — under-sampling causes false positives and missed drops.
-- **Single-platform fixation**: A brand optimised for ChatGPT may see zero lift on Perplexity or Gemini — models differ in training data, retrieval, and citation behaviour. Per-platform results are not portable.
-- **Attribution substitution**: Treating [citation counts](how-ai-engines-cite.md) as a revenue proxy confuses visibility with intent. A mention in a category response may yield no commercial consideration.
-- **Model update blindness**: Providers update models without changelogs. A sustained drop may reflect a weight change, not content failure — rewriting in response can cause SEO regressions for no GEO benefit.
+- High-drift queries: broad prompts ("best tools for X") vary so widely from session to session that sampled data reflects noise, not visibility. Narrow, brand-specific prompts are more stable.
+- Small sample budgets: fewer than 20 to 30 prompts daily cannot separate genuine change from session variance. Under-sampling causes false positives and missed drops.
+- Single-platform fixation: a brand optimized for ChatGPT may see no lift on Perplexity or Gemini. Models differ in training data, retrieval, and citation behavior, so per-platform results are not portable.
+- Attribution substitution: treating [citation counts](how-ai-engines-cite.md) as a revenue proxy confuses visibility with intent. A mention in a category response may bring no commercial consideration.
+- Model update blindness: providers update models without changelogs. A sustained drop may reflect a weight change, not content failure, and rewriting in response can cause SEO regressions for no GEO benefit.
 
 ## Example
 

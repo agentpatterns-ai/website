@@ -18,15 +18,15 @@ maturity: adopted
 
 > Claude Code v2.1.133 exposes the active effort level as a first-class hook input, so deterministic gates can branch on the reasoning tier without parsing transcripts.
 
-## The Signal
+## The signal
 
 Claude Code [v2.1.133, May 7, 2026](https://code.claude.com/docs/en/changelog) added two equivalent surfaces to every hook: an `effort` object in the JSON stdin payload, and a `$CLAUDE_EFFORT` environment variable (also set for Bash tool commands).
 
-The [hooks reference](https://code.claude.com/docs/en/hooks) documents `effort` as an object with a `level` field carrying the active tier — `"low"`, `"medium"`, `"high"`, `"xhigh"`, or `"max"` — present on tool-use events including `PreToolUse`, `PostToolUse`, `Stop`, and `SubagentStop`. Two properties matter. The level is the *downgraded* level — when requested effort exceeds what the active model supports, the field reports what actually ran. And the field is absent on session-level events outside a tool-use context, so a `UserPromptSubmit` hook cannot read it.
+The [hooks reference](https://code.claude.com/docs/en/hooks) documents `effort` as an object with a `level` field carrying the active tier — `"low"`, `"medium"`, `"high"`, `"xhigh"`, or `"max"` — present on tool-use events including `PreToolUse`, `PostToolUse`, `Stop`, and `SubagentStop`. Two properties matter. The level is the downgraded level: when requested effort exceeds what the active model supports, the field reports what actually ran. The field is also absent on session-level events outside a tool-use context, so a `UserPromptSubmit` hook cannot read it.
 
-## Asymmetry Rule
+## Asymmetry rule
 
-A tier-aware hook is safe when it gets *stricter* at higher tiers and dangerous when it gets *weaker* at lower tiers. A security gate that relaxes deny-rules at `low` is a gate an attacker bypasses by running cheaper. The Anthropic effort docs reinforce why: ["Effort is a behavioral signal, not a strict token budget"](https://platform.claude.com/docs/en/build-with-claude/effort) — the level reflects what the model will spend, not what an invariant requires.
+A tier-aware hook is safe when it gets stricter at higher tiers and dangerous when it gets weaker at lower tiers. A security gate that relaxes deny-rules at `low` is a gate an attacker bypasses by running cheaper. The Anthropic effort docs explain why: ["Effort is a behavioral signal, not a strict token budget"](https://platform.claude.com/docs/en/build-with-claude/effort). The level reflects what the model will spend, not what an invariant requires.
 
 | Direction | Safe? | Example |
 |-----------|-------|---------|
@@ -35,35 +35,35 @@ A tier-aware hook is safe when it gets *stricter* at higher tiers and dangerous 
 | Different threshold per tier | Conditional | Loop-detector limits scaled to call volume |
 | Pure observability per tier | Yes | Tag every metric with `effort.level` |
 
-## Three Concrete Uses
+## Three concrete uses
 
-### Loop-Detector Threshold Scaling
+### Loop-detector threshold scaling
 
-The bootstrap loop detector hook counts per-file edits at `PostToolUse` and escalates from nudge → pause → block. Lower-effort runs naturally make fewer tool calls — the [effort docs](https://platform.claude.com/docs/en/build-with-claude/effort) note that lower levels "combine multiple operations into fewer tool calls" and "make fewer tool calls." A static threshold tuned for `xhigh` produces false negatives at `low`. The fix is to scale the threshold by tier (read `$CLAUDE_EFFORT`, pick from a table) — never to disable the detector.
+The bootstrap loop detector hook counts per-file edits at `PostToolUse` and escalates from nudge to pause to block. Lower-effort runs naturally make fewer tool calls. The [effort docs](https://platform.claude.com/docs/en/build-with-claude/effort) note that lower levels "combine multiple operations into fewer tool calls" and "make fewer tool calls." A static threshold tuned for `xhigh` produces false negatives at `low`. The fix is to scale the threshold by tier: read `$CLAUDE_EFFORT` and pick from a table. Never disable the detector.
 
-### Pre-Completion Check Selection
+### Pre-completion check selection
 
-The bootstrap pre-completion hook runs deterministic checks at `Stop`. Effort-aware variants require a stricter checklist when the operator paid for a stricter run: every tier runs the standard set (lint, build, test); `high` adds a slow check; `xhigh` / `max` add the slowest. Higher tiers add; no tier subtracts.
+The bootstrap pre-completion hook runs deterministic checks at `Stop`. Effort-aware variants require a stricter checklist when the operator paid for a stricter run. Every tier runs the standard set (lint, build, test); `high` adds a slow check; `xhigh` and `max` add the slowest. Higher tiers add checks; no tier subtracts them.
 
-### Telemetry Labelling
+### Telemetry labeling
 
 The cheapest pattern is observational. Emit `effort.level` as a label on every hook-side metric and trace span (see [agent observability with OpenTelemetry](../observability/agent-observability-otel.md)). Cost dashboards then filter by tier without inferring it from transcript content. The hook never blocks differently.
 
-## Calibration Drift
+## Calibration drift
 
 The default effort level changes silently across versions. As of [v2.1.117](https://code.claude.com/docs/en/model-config#adjust-effort-level), the default is `xhigh` on Opus 4.7 and `high` on Opus 4.6 / Sonnet 4.6. A hook with thresholds calibrated against `high`-tier traffic on Opus 4.6 now applies to `xhigh`-tier traffic on Opus 4.7 by default, with no project setting changed. Branch on `effort.level` directly rather than on which model is configured, and re-calibrate tier-shaped thresholds when the Claude Code version is bumped.
 
 The Claude Code docs are explicit about cross-model semantics: ["The effort scale is calibrated per model, so the same level name does not represent the same underlying value across models"](https://code.claude.com/docs/en/model-config#adjust-effort-level). A hook that branches identically on `level === "high"` against Sonnet 4.6 and Opus 4.7 is treating two different things as one.
 
-## Tool-Agnostic Restatement
+## Tool-agnostic restatement
 
-The structural primitive — the harness exposes its reasoning-tier selection to deterministic gates — generalizes beyond Claude Code. The Anthropic API's [effort parameter](https://platform.claude.com/docs/en/build-with-claude/effort) carries the same five levels at the SDK boundary. When a harness lacks a structural signal, the only fallback is to infer tier from prompt content — forfeiting the determinism that makes hooks worth running.
+The structural primitive — the harness exposes its reasoning-tier selection to deterministic gates — generalizes beyond Claude Code. The Anthropic API's [effort parameter](https://platform.claude.com/docs/en/build-with-claude/effort) carries the same five levels at the SDK boundary. When a harness lacks a structural signal, the only fallback is to infer tier from prompt content, which forfeits the determinism that makes hooks worth running.
 
-## When This Backfires
+## When this backfires
 
-- **Tier-induced flakiness.** "The same change passes on `low` and fails on `high`" turns the cheap signal into noise. Keep gates uniform; vary *what tasks route to which tier* at the agent or model-routing level.
-- **Multi-model fleets.** Read both `effort.level` and the model identifier when thresholds depend on absolute capability — the same level name has different semantics across models.
-- **Inferred-tier security gates.** Security gates ignore `effort` entirely, or get stricter — never weaker.
+- Tier-induced flakiness: "the same change passes on `low` and fails on `high`" turns the cheap signal into noise. Keep gates uniform, and vary what tasks route to which tier at the agent or model-routing level.
+- Multi-model fleets: read both `effort.level` and the model identifier when thresholds depend on absolute capability, because the same level name has different semantics across models.
+- Inferred-tier security gates: security gates ignore `effort` entirely, or get stricter, but never weaker.
 
 ## Example
 

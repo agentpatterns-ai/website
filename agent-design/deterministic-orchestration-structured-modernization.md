@@ -19,24 +19,24 @@ maturity: established
 
 > When a modernization workflow has a stable shape, encode orchestration in code and reserve the LLM for translation: comparable accuracy at 3.5x lower token cost.
 
-## The Decision
+## The decision
 
 Two orchestration strategies sit at opposite ends of a control axis:
 
-- **LLM-controlled** — the model decides which tool to call next, when to validate, when to retry, when to stop. The model holds execution control across the entire workflow.
-- **Deterministic** — the surrounding code decides the step sequence; the model is called only at the steps that require translation, classification, or judgement.
+- LLM-controlled — the model decides which tool to call next, when to validate, when to retry, when to stop. The model holds execution control across the whole workflow.
+- Deterministic — the surrounding code decides the step sequence. It calls the model only at steps that need translation, classification, or judgment.
 
-[Anthropic's workflows-vs-agents framing](https://www.anthropic.com/engineering/building-effective-agents) describes the same split: workflows orchestrate LLMs through predefined code paths; agents let LLMs direct their own processes. The guidance is to default to workflows for well-defined tasks and reserve agents for when the required steps cannot be predicted.
+[Anthropic's workflows-versus-agents framing](https://www.anthropic.com/engineering/building-effective-agents) describes the same split: workflows orchestrate LLMs through predefined code paths; agents let LLMs direct their own processes. The guidance is simple. Default to workflows for well-defined tasks, and reserve agents for when you cannot predict the required steps.
 
 The empirical case for deterministic orchestration on structured tasks comes from [Lwin and Kumar's controlled study](https://arxiv.org/abs/2605.09894) of COBOL-to-Python modernization. Holding constant models, prompts, tools, and source programs — varying only execution control — deterministic orchestration achieved comparable computational accuracy, improved worst-case robustness across repeated runs, and reduced token consumption by up to 3.5x across multiple models.
 
-## When the Pattern Applies
+## When the pattern applies
 
 The pattern wins on tasks with all of:
 
-- **Stable workflow shape** — the step sequence is enumerable in code (parse, translate per construct, validate, integrate). Branches exist but are knowable.
-- **Repeated execution** — the workflow runs many times over a corpus, so the cost of encoding the orchestration amortises (the [cost-aware agent design](cost-aware-agent-design.md) calculus).
-- **Per-step uncertainty bounded to the LLM call** — the genuinely uncertain decision is *what does this construct translate to*, not *what should the agent do next*. Legacy modernization fits when source corpora share structural conventions: COBOL-to-Python, COBOL-to-Java, Java 8-to-17 upgrades, framework migrations.
+- Stable workflow shape — the step sequence is enumerable in code (parse, translate per construct, validate, integrate). Branches exist but are knowable.
+- Repeated execution — the workflow runs many times over a corpus, so the cost of encoding the orchestration pays back (the [cost-aware agent design](../token-engineering/cost-aware-agent-design.md) calculus).
+- Per-step uncertainty bounded to the LLM call — the genuinely uncertain decision is what this construct translates to, not what the agent should do next. Legacy modernization fits when source corpora share structural conventions: COBOL-to-Python, COBOL-to-Java, Java 8-to-17 upgrades, framework migrations.
 
 ```mermaid
 graph TD
@@ -48,23 +48,23 @@ graph TD
     C -->|Yes| Y[Deterministic orchestration]
 ```
 
-## Why It Works
+## Why it works
 
 Two mechanisms explain the cost and robustness gap.
 
-**Token amplification.** An LLM-controlled orchestrator consumes context — instructions, tool registry, prior tool calls, reasoning traces — on every step, even when the step is mechanical. A deterministic orchestrator invokes the model only on steps that need one, replacing N full-context turns with K << N targeted prompts. The 3.5x token reduction reported by [Lwin and Kumar](https://arxiv.org/abs/2605.09894) is consistent with this mechanism.
+The first is token amplification. An LLM-controlled orchestrator consumes context — instructions, tool registry, prior tool calls, reasoning traces — on every step, even when the step is mechanical. A deterministic orchestrator invokes the model only on steps that need one, replacing N full-context turns with K << N targeted prompts. The 3.5x token reduction reported by [Lwin and Kumar](https://arxiv.org/abs/2605.09894) is consistent with this mechanism.
 
-**Variance reduction.** LLM-controlled orchestration introduces a stochastic branch at every decision point — which tool, what arguments, when to stop. These compound across steps, widening the outcome distribution. Fixing branches in code collapses that distribution to the variance of the model call itself, which is why worst-case robustness improves without average-case accuracy dropping.
+The second is variance reduction. LLM-controlled orchestration introduces a stochastic branch at every decision point — which tool, what arguments, when to stop. These compound across steps, widening the outcome distribution. Fixing branches in code collapses that distribution to the variance of the model call itself, which is why worst-case robustness improves without average-case accuracy dropping.
 
-The same mechanism explains the [Agentless result on SWE-bench Lite](https://arxiv.org/abs/2407.01489): a fixed localization-and-repair workflow beat autonomous agents at lower cost. Note the asymmetry, though. On open-ended repair, iterative agents have since pulled ahead on raw SWE-bench Verified accuracy while fixed workflows trail at a fraction of the cost ([SWE-bench leaderboard 2026](https://www.codeant.ai/blogs/swe-bench-scores)). The deterministic win is one of *cost and variance*, not an accuracy ceiling — which is why this pattern is scoped to structured tasks, not open-ended exploration.
+The same mechanism explains the [Agentless result on SWE-bench Lite](https://arxiv.org/abs/2407.01489): a fixed localization-and-repair workflow beat autonomous agents at lower cost. Note the asymmetry, though. On open-ended repair, iterative agents have since pulled ahead on raw SWE-bench Verified accuracy while fixed workflows trail at a fraction of the cost ([SWE-bench leaderboard 2026](https://www.codeant.ai/blogs/swe-bench-scores)). The deterministic win is one of cost and variance, not an accuracy ceiling — which is why this pattern is scoped to structured tasks, not open-ended exploration.
 
-## What Stays in the Model
+## What stays in the model
 
 Deterministic orchestration is not "no LLM." The model still owns:
 
-- **Translation choices** — mapping a COBOL `PERFORM VARYING` to a Python `for` loop with the correct iteration semantics
-- **Disambiguation** — resolving identifier shadowing, type inference, or business-logic intent in comments
-- **Validation interpretation** — explaining why a test failed in terms a downstream step can act on
+- Translation choices — mapping a COBOL `PERFORM VARYING` to a Python `for` loop with the correct iteration semantics
+- Disambiguation — resolving identifier shadowing, type inference, or business-logic intent in comments
+- Validation interpretation — explaining why a test failed in terms a downstream step can act on
 
 The orchestrator owns:
 
@@ -74,14 +74,14 @@ The orchestrator owns:
 - Retry policy with bounded attempts
 - Validation harness invocation
 
-## Failure Conditions
+## Failure conditions
 
 The pattern backfires on workloads that violate its preconditions.
 
-- **Heterogeneous corpora.** When source programs share little structure — embedded JCL, vendor extensions, undocumented business logic in comments — the deterministic orchestrator becomes a switch statement that costs more to maintain than the tokens it saves. The branch count grows faster than the corpus does.
-- **Evolving workflow.** Deterministic orchestration encodes the workflow in code, the core move of [harness engineering](harness-engineering.md). Iterating on the workflow itself requires code changes, code review, and redeploy. LLM-controlled orchestration iterates by editing the prompt, which is faster for early exploration.
-- **Mid-execution discovery.** If the workflow's shape depends on findings only revealed at runtime — "this program calls an undocumented vendor library" — the deterministic orchestrator hits a path it doesn't have. An LLM-controlled agent can re-plan; a deterministic one needs a code change — the [agentless-vs-autonomous](agentless-vs-autonomous.md) trade-off in miniature.
-- **One-off jobs.** The orchestration code only pays back across many runs. For a single migration, the engineering cost of building the scaffold exceeds the token cost of an agentic run.
+- Heterogeneous corpora. When source programs share little structure — embedded JCL, vendor extensions, undocumented business logic in comments — the deterministic orchestrator becomes a switch statement that costs more to maintain than the tokens it saves. The branch count grows faster than the corpus does.
+- Evolving workflow. Deterministic orchestration encodes the workflow in code, the core move of [harness engineering](harness-engineering.md). Iterating on the workflow itself needs code changes, code review, and redeploy. LLM-controlled orchestration iterates by editing the prompt, which is faster for early exploration.
+- Mid-execution discovery. When the workflow's shape depends on findings only revealed at runtime — "this program calls an undocumented vendor library" — the deterministic orchestrator hits a path it does not have. An LLM-controlled agent can re-plan; a deterministic one needs a code change — the [agentless-versus-autonomous](agentless-vs-autonomous.md) trade-off in miniature.
+- One-off jobs. The orchestration code only pays back across many runs. For a single migration, the engineering cost of building the scaffold exceeds the token cost of an agentic run.
 
 ## Example
 
@@ -121,5 +121,5 @@ In the LLM-controlled equivalent, the model decides whether to parse first, when
 - [Discrete Phase Separation](discrete-phase-separation.md) — Running phases in isolated contexts so only distilled artifacts cross the boundary
 - [Agents vs Commands](agents-vs-commands.md) — When command-style fixed execution beats full agent autonomy
 - [Harness Engineering](harness-engineering.md) — The broader discipline of constraining agent environments to reliably produce correct outputs
-- [Cost-Aware Agent Design](cost-aware-agent-design.md) — Matching model capability and orchestration strategy to task complexity
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — Matching model capability and orchestration strategy to task complexity
 - [Stochastic vs Deterministic Boundary](stochastic-deterministic-boundary.md) — Where the LLM call hands off to deterministic code, and how to design that interface

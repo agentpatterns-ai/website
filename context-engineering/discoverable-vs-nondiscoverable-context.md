@@ -15,60 +15,60 @@ maturity: adopted
 
 > Only put non-discoverable information in agent instruction files — if the agent can find it in the codebase, let it find it.
 
-**Learn it hands-on:** [Discoverable or Not](https://learn.agentpatterns.ai/context-engineering/discoverable-or-not/) — guided lesson with quizzes.
+Learn it hands-on: [Discoverable or Not](https://learn.agentpatterns.ai/context-engineering/discoverable-or-not/) — guided lesson with quizzes.
 
-## The Cost of Instruction Files
+## The cost of instruction files
 
-Agent instruction files (AGENTS.md, CLAUDE.md, [copilot-instructions.md](../tools/copilot/copilot-instructions-md-convention.md)) load into context on every interaction. Every line consumes context budget before the agent starts work, making inclusion a resource-allocation decision, not a documentation exercise.
+Agent instruction files (AGENTS.md, CLAUDE.md, [copilot-instructions.md](../tools/copilot/copilot-instructions-md-convention.md)) load into context on every interaction. Every line spends context budget before the agent starts work. So each line you add is a resource-allocation decision, not a documentation exercise.
 
-The test for inclusion is simple: can the agent discover this information itself using the tools available to it — file reads, grep, glob searches? If yes, the information does not belong in the instruction file.
+The test for inclusion is simple. Can the agent find this itself with its own tools — file reads, grep, glob searches? If yes, the information does not belong in the instruction file.
 
-## What Is Discoverable
+## What is discoverable
 
-Agents have read, search, and exploration tools. Everything reachable through those tools is discoverable:
+Agents have read, search, and exploration tools. Everything those tools can reach is discoverable:
 
-- **File structure**: directory trees, module organization, entry points
-- **API signatures**: function names, parameters, return types — present in the actual source
-- **Test patterns**: how tests are structured, what test utilities are used — readable from test files
-- **Dependency versions**: package.json, requirements.txt, go.mod are readable files
-- **Code conventions**: variable naming, imports, error handling — visible in any existing file
-- **Configuration**: .eslintrc, tsconfig.json, pyproject.toml are readable
+- File structure: directory trees, module organization, entry points
+- API signatures: function names, parameters, return types, all present in the source
+- Test patterns: how tests are structured and what test utilities they use, readable from test files
+- Dependency versions: package.json, requirements.txt, and go.mod are readable files
+- Code conventions: variable naming, imports, error handling, visible in any existing file
+- Configuration: .eslintrc, tsconfig.json, and pyproject.toml are readable
 
-Including any of these creates a maintenance problem: the instruction diverges from the real codebase as the project evolves, and the agent then follows a stale description rather than what is actually there.
+Including any of these creates a maintenance problem. The instruction drifts from the real codebase as the project evolves, and the agent then follows a stale description rather than the code itself.
 
-## What Is Non-Discoverable
+## What is non-discoverable
 
-Some information cannot be inferred from the codebase through reading files:
+Some information you cannot infer from the codebase by reading files:
 
-- **Architectural decisions**: why this approach was chosen over alternatives — not visible in code
-- **Constraints and gotchas**: "never deploy directly to prod-db, use the migration pipeline" — not encoded in files
-- **Domain knowledge**: business rules, terminology, context the codebase assumes but doesn't explain
-- **Non-obvious conventions**: "the `*Service` suffix is reserved for classes that talk to external APIs" — present in the pattern but not stated anywhere
-- **Out-of-band context**: dependencies, integrations, or constraints that live outside the repository
+- Architectural decisions: why this approach was chosen over alternatives, not visible in code
+- Constraints and gotchas: "never deploy directly to prod-db, use the migration pipeline", not encoded in files
+- Domain knowledge: business rules, terminology, and context the codebase assumes but does not explain
+- Non-obvious conventions: "the `*Service` suffix is reserved for classes that talk to external APIs", present in the pattern but stated nowhere
+- Out-of-band context: dependencies, integrations, or constraints that live outside the repository
 
 These are the only things that earn a place in agent instruction files. Anthropic's own Claude Code guide draws the same line: exclude "anything Claude can figure out by reading code," because "bloated CLAUDE.md files cause Claude to ignore your actual instructions" ([Anthropic, "Best Practices for Claude Code"](https://code.claude.com/docs/en/best-practices)). The [AGENTS.md as Table of Contents](../instructions/agents-md-as-table-of-contents.md) pattern applies the same logic at the macro level: keep the file as a pointer map, not an encyclopedia.
 
-## Applying the Test
+## Applying the test
 
 For each candidate entry in an instruction file, ask:
 
 1. Can the agent discover this by reading the codebase?
-2. If yes: remove it. Add a pointer if helpful ("see `src/repos/` for repository patterns").
-3. If no: include it.
+2. If yes, remove it. Add a pointer if it helps ("see `src/repos/` for repository patterns").
+3. If no, include it.
 
-The pointer form is useful for discoverable content that benefits from direction: "Use the repository pattern in `src/repos/`" tells the agent where to look without duplicating what it will find there.
+The pointer form works well for discoverable content that benefits from direction. "Use the repository pattern in `src/repos/`" tells the agent where to look without duplicating what it will find there.
 
-## Why It Works
+## Why it works
 
-Instruction files are prepended to every context window before the agent reads a single file. Discoverable content placed there competes with task context for limited space and creates a second source of truth that diverges from the codebase over time. An agent given a stale directory tree may read from paths that no longer exist or skip new modules. A controlled evaluation found that human-authored context files increase inference cost by over 20% when they include structural overviews, with no improvement in task success — agents given high-level structural context explore the codebase more broadly, not more precisely ([Gloaguen et al., "Evaluating AGENTS.md," 2026](https://arxiv.org/abs/2602.11988)).
+Instruction files sit at the front of every context window before the agent reads a single file. Discoverable content placed there competes with task context for limited space. It also creates a second source of truth that drifts from the codebase over time. An agent given a stale directory tree may read paths that no longer exist or skip new modules. A controlled evaluation found that human-authored context files raise inference cost by over 20% when they include structural overviews, with no gain in task success. Agents given high-level structural context explore the codebase more broadly, not more precisely ([Gloaguen et al., "Evaluating AGENTS.md," 2026](https://arxiv.org/abs/2602.11988)).
 
-## Anti-Patterns
+## Anti-patterns
 
-**Directory trees in instruction files**: The agent can run a glob. The tree in the file is stale within a sprint.
+Directory trees in instruction files: the agent can run a glob, and the tree in the file is stale within a sprint.
 
-**Code samples that mirror real code**: The agent can read the real file. The sample [drifts the moment the code changes](../instructions/agents-md-as-table-of-contents.md).
+Code samples that mirror real code: the agent can read the real file, and the sample [drifts the moment the code changes](../instructions/agents-md-as-table-of-contents.md).
 
-**API signatures as documentation**: The agent can read the source. Duplicating signatures creates two sources of truth and one of them will be wrong.
+API signatures as documentation: the agent can read the source. Duplicating signatures creates two sources of truth, and one of them will be wrong.
 
 ## Example
 
@@ -110,15 +110,15 @@ Tests use Jest with `@testing-library/react`. Run with `npm test`.
   queries against staging carry real production load.
 ```
 
-The "after" version is shorter and will never go stale: the project structure, API signatures, and test runner are all readable directly from the codebase. The architectural decisions and operational constraints cannot be inferred from any file in the repository — these are the only entries that earn a place in the instruction file.
+The "after" version is shorter and will never go stale. The project structure, API signatures, and test runner are all readable directly from the codebase. The architectural decisions and operational constraints cannot be inferred from any file in the repository, so these are the only entries that earn a place in the instruction file.
 
-## When This Backfires
+## When this backfires
 
-**Agents without exploration tools**: If the agent lacks file-read or search capabilities, the discoverable/non-discoverable distinction collapses — structural information becomes non-discoverable by that agent. Audit actual tool access before applying this filter.
+Agents without exploration tools: if the agent lacks file-read or search tools, the discoverable and non-discoverable split collapses, and structural information becomes non-discoverable to that agent. Check actual tool access before you apply this filter.
 
-**Large monorepos**: With hundreds of modules, a scoped pointer ("see `services/payments/`") crosses into discoverable territory but may be worth including to prevent broad traversal. The pointer form — a path, not a full tree — limits token cost.
+Large monorepos: with hundreds of modules, a scoped pointer ("see `services/payments/`") crosses into discoverable territory but may be worth including to prevent broad traversal. The pointer form, a path rather than a full tree, limits token cost.
 
-**High-churn codebases**: Context files go stale within a sprint during rapid restructuring. Bias toward non-discoverable content and keep any structural pointers in a separate, frequently-updated file rather than the main instruction file.
+High-churn codebases: context files go stale within a sprint during rapid restructuring. Lean toward non-discoverable content, and keep any structural pointers in a separate, frequently updated file rather than the main instruction file.
 
 ## Key Takeaways
 

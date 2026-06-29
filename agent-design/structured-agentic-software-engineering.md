@@ -17,7 +17,7 @@ maturity: emerging
 
 > Structured agentic software engineering closes the gap between agent speed and human trust with durable artifacts — not faster models.
 
-## The Speed-vs-Trust Gap
+## The speed-vs-trust gap
 
 Agents are fast but unreliable where code meets review.
 
@@ -30,7 +30,7 @@ Agents are fast but unreliable where code meets review.
 
 The bottleneck is verification, not generation. An independent replication found roughly half of SWE-bench-passing PRs would be rejected by real maintainers, most often for functional failure ([METR, 2026](https://metr.org/notes/2026-03-10-many-swe-bench-passing-prs-would-not-be-merged-into-main/)).
 
-## SE Maturity Levels
+## SE maturity levels
 
 A maturity model analogous to SAE driving automation:
 
@@ -44,19 +44,19 @@ graph LR
     style L3 stroke:#f90,stroke-width:3px
 ```
 
-**SE 3.0 (Goal-Agentic)** is the current frontier: the agent receives a goal, decomposes it, executes with tools, and iterates under human oversight. SE 4.0 and 5.0 remain research targets. Parallels the [AI Development Maturity Model](../workflows/ai-development-maturity-model.md).
+SE 3.0 (Goal-Agentic) is the current frontier: the agent receives a goal, decomposes it, executes with tools, and iterates under human oversight. SE 4.0 and 5.0 remain research targets. This parallels the [AI development maturity model](../workflows/ai-development-maturity-model.md).
 
-## Two Environments
+## Two environments
 
 SASE splits developer and agent workspaces:
 
-**Agent Command Environment (ACE)** — the human command center for triaging MRPs and CRPs, setting goals, and reviewing evidence.
+Agent Command Environment (ACE) — the human command center for triaging MRPs and CRPs, setting goals, and reviewing evidence.
 
-**Agent Execution Environment (AEE)** — the agent workbench: AST-level tools, semantic search, and MCP servers, scoped by permissions. Extends [agent-first software design](agent-first-software-design.md).
+Agent Execution Environment (AEE) — the agent workbench: AST-level tools, semantic search, and MCP servers, scoped by permissions. It extends [agent-first software design](agent-first-software-design.md).
 
 The split mirrors the [cognitive-execution separation](cognitive-reasoning-execution-separation.md): ACE decides, AEE executes.
 
-## Structured Artifacts
+## Structured artifacts
 
 The core contribution: replace ephemeral chat with durable artifacts.
 
@@ -80,26 +80,26 @@ Structured agent-to-human escalation: the agent packages context, options, and a
 
 Repeatable workflow and SOP definitions — analogous to CI/CD pipeline specs but for agent workflows.
 
-## Practical Implications
+## Practical implications
 
-**Specification is the new implementation.** BriefingScript quality reduces agent rework — see [frozen spec file](../instructions/frozen-spec-file.md).
+Specification is the new implementation. BriefingScript quality reduces agent rework — see the [frozen spec file](../instructions/frozen-spec-file.md).
 
-**Review evidence, not diffs.** MRPs shift review from "read every line" to "verify the evidence chain," addressing the [review bottleneck](../anti-patterns/pr-scope-creep-review-bottleneck.md) ([arXiv:2509.06216](https://arxiv.org/abs/2509.06216)).
+Review evidence, not diffs. MRPs shift review from reading every line to verifying the evidence chain, which addresses the [review bottleneck](../anti-patterns/pr-scope-creep-review-bottleneck.md) ([arXiv:2509.06216](https://arxiv.org/abs/2509.06216)).
 
-**Instruction files need structure.** MentorScript argues freeform files (AGENTS.md, CLAUDE.md, .cursorrules) should evolve toward machine-readable formats.
+Instruction files need structure. MentorScript argues that freeform files (AGENTS.md, CLAUDE.md, .cursorrules) should evolve toward machine-readable formats.
 
-## Why It Works
+## Why it works
 
 Reviewers cannot trust output they cannot audit, and agents cannot improve without durable feedback. BriefingScripts and LoopScripts give agents machine-readable contracts that cut the ambiguity driving rework. MRPs give reviewers an auditable evidence chain instead of a line-by-line diff. CRPs with Version Controlled Resolutions stop the same escalation recurring by persisting decisions as referenceable context ([arXiv:2509.06216](https://arxiv.org/abs/2509.06216)).
 
-## When This Backfires
+## When this backfires
 
 SASE adds process overhead that can exceed its benefits:
 
-- **Small teams or early-stage projects**: authoring BriefingScripts and MRPs rarely pays off when reviewers hold full context.
-- **Ill-defined requirements**: structured artifacts assume stable goals. When requirements shift mid-task, the BriefingScript becomes a constraint and agents over-optimize for the original spec — the rigidity risk [spec-driven development](../workflows/spec-driven-development.md) carries.
-- **Low-trust agent pipelines**: MRPs are evidence bundles, not correctness proofs. At a 29.6% regression rate on "plausible" fixes, a polished evidence package can manufacture false confidence.
-- **Tooling immaturity**: ACE/AEE separation needs agents that consume structured artifacts reliably. Model adherence to structured formats varies.
+- Small teams or early-stage projects: authoring BriefingScripts and MRPs rarely pays off when reviewers hold full context.
+- Ill-defined requirements: structured artifacts assume stable goals. When requirements shift mid-task, the BriefingScript becomes a constraint and agents over-optimize for the original spec — the rigidity risk [spec-driven development](../workflows/spec-driven-development.md) carries.
+- Low-trust agent pipelines: MRPs are evidence bundles, not correctness proofs. At a 29.6% regression rate on "plausible" fixes, a polished evidence package can manufacture false confidence.
+- Tooling immaturity: ACE/AEE separation needs agents that consume structured artifacts reliably. Model adherence to structured formats varies.
 
 ## Key Takeaways
 

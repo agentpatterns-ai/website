@@ -21,9 +21,9 @@ maturity: established
 !!! info "Also known as"
     Subagent Schema-Level Tool Filtering, Tool Minimalism, Tool Schema Design
 
-## The Shared Core
+## The shared core
 
-Every major provider defines tools using the same structural pattern: a name, a natural-language description, and a JSON Schema object describing the input parameters. The model reads the description to decide when to call the tool, and uses the parameter schema to generate valid arguments.
+Every major provider defines tools with the same structure: a name, a natural-language description, and a JSON Schema object that describes the input parameters. The model reads the description to decide when to call the tool. It uses the parameter schema to generate valid arguments.
 
 ```json
 {
@@ -41,7 +41,7 @@ Every major provider defines tools using the same structural pattern: a name, a 
 
 The `<parameters_field>` key is where providers diverge.
 
-## Provider Schema Comparison
+## Provider schema comparison
 
 | Field | OpenAI | Anthropic | Gemini | MCP |
 |-------|--------|-----------|--------|-----|
@@ -54,15 +54,15 @@ The `<parameters_field>` key is where providers diverge.
 
 Sources: [OpenAI function calling](https://developers.openai.com/docs/guides/function-calling), [Anthropic tool use](https://docs.anthropic.com/en/docs/build-with-claude/tool-use), [Gemini function calling](https://ai.google.dev/gemini-api/docs/function-calling), [MCP tools specification](https://modelcontextprotocol.io/specification/2025-06-18/server/tools).
 
-## Description Quality Matters Most
+## Description quality matters most
 
-The `description` field has the highest impact on tool calling reliability. Models use it to decide *whether* to call a tool and *how* to populate parameters. A vague description causes incorrect tool selection; a missing parameter description causes hallucinated arguments.
+The `description` field has the greatest effect on tool calling reliability. Models use it to decide whether to call a tool and how to populate parameters. A vague description causes incorrect tool selection. A missing parameter description causes hallucinated arguments.
 
-Anthropic's guidance on [building effective agents](https://www.anthropic.com/research/building-effective-agents) recommends treating tool descriptions with the same care as human-facing UX — including example usage, edge cases, input format requirements, and clear boundaries from other tools.
+Anthropic's guidance on [building effective agents](https://www.anthropic.com/research/building-effective-agents) recommends treating tool descriptions with the same care as human-facing UX. Include example usage, edge cases, input format requirements, and clear boundaries from other tools.
 
-## Strict Mode
+## Strict mode
 
-Both OpenAI and Anthropic support `strict: true` on tool definitions. When enabled, the provider [guarantees](https://developers.openai.com/docs/guides/structured-outputs) that generated arguments conform exactly to the provided JSON Schema — eliminating type mismatches and missing required fields.
+Both OpenAI and Anthropic support `strict: true` on tool definitions. When you enable it, the provider [guarantees](https://developers.openai.com/docs/guides/structured-outputs) that generated arguments conform exactly to the provided JSON Schema. This removes type mismatches and missing required fields.
 
 Strict mode constraints:
 
@@ -71,24 +71,24 @@ Strict mode constraints:
 
 Use strict mode in production when invalid tool parameters would cause downstream failures.
 
-## MCP as Convergence Point
+## MCP as convergence point
 
-MCP tool definitions use `inputSchema` (JSON Schema) and are consumed by any MCP-compatible host — Copilot, Claude Code, Cursor, and others. A tool defined once in an MCP server works across all hosts without per-provider schema translation.
+MCP tool definitions use `inputSchema` (JSON Schema). Any MCP-compatible host can consume them — Copilot, Claude Code, Cursor, and others. A tool defined once in an MCP server works across all hosts without per-provider schema translation.
 
-This makes MCP the practical convergence standard: write the tool definition once, and every compatible agent can discover and call it through the [MCP server manifest](https://modelcontextprotocol.io/specification/2025-06-18/server/tools).
+This makes MCP the practical convergence standard. You write the tool definition once, and every compatible agent can discover and call it through the [MCP server manifest](https://modelcontextprotocol.io/specification/2025-06-18/server/tools).
 
-## Schema Design Guidance
+## Schema design guidance
 
-- **Keep schemas flat.** Deeply nested objects increase token count and can introduce parsing complexity. Prefer top-level properties over nested structures.
-- **Describe every parameter.** A `description` on each property tells the model what value to provide. Without it, the model guesses from the parameter name alone.
-- **Use absolute identifiers.** Anthropic found that [requiring absolute filepaths](https://www.anthropic.com/research/building-effective-agents) instead of relative paths eliminated an entire class of agent errors ([poka-yoke principle](../tool-engineering/poka-yoke-agent-tools.md)).
-- **Minimize parameter count.** Each additional parameter increases the probability of an incorrect argument. Consolidate related fields when possible.
+- Keep schemas flat. Deeply nested objects increase token count and can make parsing harder. Prefer top-level properties over nested structures.
+- Describe every parameter. A `description` on each property tells the model what value to provide. Without it, the model guesses from the parameter name alone.
+- Use absolute identifiers. Anthropic found that [requiring absolute filepaths](https://www.anthropic.com/research/building-effective-agents) instead of relative paths removed an entire class of agent errors ([poka-yoke principle](../tool-engineering/poka-yoke-agent-tools.md)).
+- Minimize parameter count. Each extra parameter raises the chance of an incorrect argument. Consolidate related fields where you can.
 
 ## Example
 
 The same `get_weather` tool defined for each provider:
 
-**OpenAI**
+OpenAI:
 
 ```json
 {
@@ -109,7 +109,7 @@ The same `get_weather` tool defined for each provider:
 }
 ```
 
-**Anthropic**
+Anthropic:
 
 ```json
 {
@@ -125,7 +125,7 @@ The same `get_weather` tool defined for each provider:
 }
 ```
 
-**Gemini**
+Gemini:
 
 ```json
 {
@@ -143,7 +143,7 @@ The same `get_weather` tool defined for each provider:
 }
 ```
 
-**MCP**
+MCP:
 
 ```json
 {
@@ -161,11 +161,11 @@ The same `get_weather` tool defined for each provider:
 
 The logic is identical across all four; only the wrapper structure and the parameters key name differ.
 
-## When This Backfires
+## When this backfires
 
-- **Vendor-specific schema features**: Some providers support schema extensions beyond core JSON Schema. Gemini accepts OpenAPI-compatible constraints; OpenAI's strict mode requires `additionalProperties: false` on every nested object. Designing for portability means avoiding these extensions, trading expressiveness for compatibility.
-- **Strict mode schema constraints**: OpenAI and Anthropic strict mode requires all properties to be listed in `required`. This prevents using optional fields with defaults in ways that feel natural in JSON Schema — tools that rely heavily on optional parameters need redesign to use strict mode.
-- **MCP overhead in local integrations**: MCP adds a client-server protocol layer. For tools that only ever run in one host (e.g., a Claude Code-only tool), defining a full MCP server adds operational overhead with no portability benefit. Inline tool definitions in the host's native format are simpler.
+- Vendor-specific schema features: some providers support schema extensions beyond core JSON Schema. Gemini accepts OpenAPI-compatible constraints. OpenAI's strict mode requires `additionalProperties: false` on every nested object. Designing for portability means avoiding these extensions, trading expressiveness for compatibility.
+- Strict mode schema constraints: OpenAI and Anthropic strict mode requires all properties to be listed in `required`. This prevents using optional fields with defaults in ways that feel natural in JSON Schema. Tools that rely heavily on optional parameters need a redesign to use strict mode.
+- MCP overhead in local integrations: MCP adds a client-server protocol layer. For a tool that only ever runs in one host (for example, a Claude Code-only tool), defining a full MCP server adds operational overhead with no portability benefit. Inline tool definitions in the host's native format are simpler.
 
 ## Key Takeaways
 
@@ -181,7 +181,7 @@ The logic is identical across all four; only the wrapper structure and the param
 - [OpenAPI as Agent Tool Specification](openapi-agent-tool-spec.md)
 - [Agent Definition Formats](agent-definition-formats.md)
 - [Agent Skills Standard](agent-skills-standard.md)
-- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Tool Minimalism and High-Level Prompting](../tool-engineering/tool-minimalism.md)
 - [Tool Descriptions as Onboarding](../tool-engineering/tool-descriptions-as-onboarding.md) — writing tool descriptions with implicit context agents need
 - [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md)

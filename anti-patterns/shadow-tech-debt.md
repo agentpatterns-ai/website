@@ -18,11 +18,11 @@ maturity: established
 
 > Shadow tech debt is the silent architectural drift agents leave when they change *what* a codebase does without knowing *why* it is shaped that way.
 
-JetBrains coined the term **Shadow Tech Debt** ([The New Stack](https://thenewstack.io/jetbrains-names-the-debt-ai-agents-leave-behind/)) — debt that is invisible, diffuse, and compounded when agents run without structural codebase understanding.
+JetBrains coined the term Shadow Tech Debt ([The New Stack](https://thenewstack.io/jetbrains-names-the-debt-ai-agents-leave-behind/)) — debt that is invisible, diffuse, and that compounds when agents run without a structural understanding of the codebase.
 
-## What It Looks Like
+## What it looks like
 
-An agent fixes a bug and the PR passes tests — but the agent skipped ADRs, ignored naming conventions, and replicated a suboptimal pattern. One such PR is invisible. Ten per day compounds into structural incoherence.
+An agent fixes a bug and the PR passes tests. But the agent skipped ADRs, ignored naming conventions, and copied a suboptimal pattern. One such PR is invisible. Ten per day compound into structural incoherence.
 
 ```mermaid
 graph TD
@@ -35,38 +35,38 @@ graph TD
     G --> H[Later changes become risky and expensive]
 ```
 
-## Why It Compounds
+## Why it compounds
 
-**Agents amplify existing patterns.** Suboptimal approaches propagate when agents replicate whatever is in the repository ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)).
+Agents amplify the patterns already in the repository. Suboptimal approaches spread when agents copy whatever they find ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)).
 
-**Review burden migrates, not disappears.** High-AI-adoption teams merged 98% more PRs, but review time grew 91% and PR size grew 154% ([Faros AI](https://www.faros.ai/blog/ai-software-engineering); [Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
+Review burden moves, it does not disappear. High-AI-adoption teams merged 98% more PRs, but review time grew 91% and PR size grew 154% ([Faros AI](https://www.faros.ai/blog/ai-software-engineering); [Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
 
-**Context window blindness is structural.** ADRs, tribal knowledge, and style rationale live outside the context window by default.
+Context window blindness is structural. ADRs, tribal knowledge, and style rationale live outside the context window by default.
 
-## The Risk Escalates in CI/CD
+## The risk escalates in CI/CD
 
-Without review gates, Shadow Tech Debt accumulates at machine speed — JetBrains Air concluded that complex codebases aren't yet ready for pure agentic coding ([JetBrains Air blog](https://blog.jetbrains.com/air/2026/03/air-launches-as-public-preview-a-new-wave-of-dev-tooling-built-on-26-years-of-experience/)).
+Without review gates, Shadow Tech Debt accumulates at machine speed. JetBrains Air concluded that complex codebases are not yet ready for pure agentic coding ([JetBrains Air blog](https://blog.jetbrains.com/air/2026/03/air-launches-as-public-preview-a-new-wave-of-dev-tooling-built-on-26-years-of-experience/)).
 
-## When This Backfires
+## When this backfires
 
-Mitigation overhead may exceed benefit when:
+Mitigation can cost more than it saves when:
 
-- **Greenfield or throwaway codebases** — no accumulated architectural rationale to violate.
-- **Comprehensive automated enforcement** — linting and module-boundary tests catch deviations before merge.
-- **Infrequent agentic use** — occasional tasks under close review don't accumulate drift.
+- the codebase is greenfield or throwaway, so there is no accumulated architectural rationale to violate
+- automated enforcement is comprehensive, so linting and module-boundary tests catch deviations before merge
+- agentic use is infrequent, so occasional tasks under close review do not accumulate drift
 
-## Mitigation Stack
+## Mitigation stack
 
 | Step | Effort | Action |
 |------|--------|--------|
-| 1 | Low | **Machine-readable context files** — [AGENTS.md](https://agents.md/) at the repo root; CLAUDE.md for Claude Code. Scoped files (`docs/CLAUDE.md`) for monorepos. |
-| 2 | Medium | **Deterministic enforcement** — linters and structural tests for module boundaries, naming, and duplication ("[rigor relocation](../human/rigor-relocation.md)" — [Fowler/Boeckeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)). |
-| 3 | Medium | **Review gates** — autonomous agents must not merge without human review on shared repositories. |
-| 4 | High | **Garbage-collection agents** — background scans for architectural inconsistencies ([Fowler/Boeckeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html); [Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)). Requires step 1. |
+| 1 | Low | Machine-readable context files — [AGENTS.md](https://agents.md/) at the repo root; CLAUDE.md for Claude Code. Scoped files (`docs/CLAUDE.md`) for monorepos. |
+| 2 | Medium | Deterministic enforcement — linters and structural tests for module boundaries, naming, and duplication ("[rigor relocation](../human/rigor-relocation.md)" — [Fowler/Boeckeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)). |
+| 3 | Medium | Review gates — autonomous agents must not merge without human review on shared repositories. |
+| 4 | High | Garbage-collection agents — background scans for architectural inconsistencies ([Fowler/Boeckeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html); [Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)). Requires step 1. |
 
-**Caveat on step 1.** An ETH Zurich evaluation (Gloaguen et al., [arXiv:2602.11988](https://arxiv.org/abs/2602.11988)) found that LLM-generated or overly detailed AGENTS.md files reduced task success rates by ~3% and increased inference cost by >20% — agents obediently followed unnecessary instructions. The finding narrows, rather than overturns, step 1: limit instruction files to non-inferable details (custom build commands, repository-specific conventions) and omit content an agent would infer from the code itself.
+A caveat on step 1. An ETH Zurich evaluation (Gloaguen et al., [arXiv:2602.11988](https://arxiv.org/abs/2602.11988)) found that LLM-generated or overly detailed AGENTS.md files cut task success rates by about 3% and raised inference cost by more than 20%. Agents followed the unnecessary instructions to the letter. The finding narrows step 1 rather than overturning it: limit instruction files to details an agent cannot infer, such as custom build commands and repository-specific conventions, and omit anything an agent would read from the code itself.
 
-## What Good Looks Like
+## What good looks like
 
 ```mermaid
 graph LR
@@ -82,7 +82,7 @@ graph LR
 
 An agent is asked to fix a bug where deactivated users can still appear in search results. It writes a working fix — but queries the database directly in the handler, bypassing the repository layer the team uses for all data access.
 
-**Without architectural context — the agent takes a shortcut:**
+Without architectural context, the agent takes a shortcut:
 
 ```python
 # handlers/users.py
@@ -96,7 +96,7 @@ async def handle_search(query: str, db: AsyncSession):
 
 The fix passes tests. But it duplicates filtering logic, skips the team's access-control scoping, and sets a precedent that future agent runs will replicate ([Pattern Replication Risk](pattern-replication-risk.md)).
 
-**With `AGENTS.md` rule — `All DB access must go through the repository layer`:**
+With an `AGENTS.md` rule — `All DB access must go through the repository layer`:
 
 ```python
 # handlers/users.py

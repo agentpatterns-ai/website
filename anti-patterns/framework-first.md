@@ -15,41 +15,41 @@ maturity: established
 
 > Framework-first agent development reaches for LangChain or CrewAI before the raw LLM API, adding abstraction layers that obscure failures and lock in architecture early.
 
-## The Problem
+## The problem
 
-Frameworks reduce boilerplate. They also hide the mechanics that matter when things go wrong, a cost related to [abstraction bloat](abstraction-bloat.md). When an agent misbehaves in a framework-built system, the failure source is ambiguous: the prompt formatting, memory layer, tool routing, or framework error handling may each be contributing. The mechanism is hidden intermediate state — each abstraction layer transforms inputs and outputs without exposing them, so a single misbehavior requires traversing every layer to locate the source. An empirical study of agent developer practices across ten frameworks found that developers must navigate multiple abstraction layers and that frameworks like LangChain require significant expertise to debug ([Wang et al., 2025](https://arxiv.org/abs/2512.01939)). Debugging requires understanding the full abstraction stack, not just the code you wrote.
+Frameworks reduce boilerplate. They also hide the mechanics that matter when things go wrong, a cost related to [abstraction bloat](abstraction-bloat.md). When an agent misbehaves in a framework-built system, the failure source is unclear: prompt formatting, the memory layer, tool routing, or error handling may each be at fault. The cause is hidden intermediate state. Each layer transforms inputs and outputs without showing them, so one misbehavior makes you traverse every layer to find the source. An empirical study of agent developer practices across ten frameworks found that developers must navigate multiple abstraction layers, and that frameworks like LangChain take significant expertise to debug ([Wang et al., 2025](https://arxiv.org/abs/2512.01939)). To debug, you must understand the full abstraction stack, not just the code you wrote.
 
-Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), starting simple — often a single LLM call or a short chain — covers a surprising share of real use cases. The instinct to reach for a framework inverts the appropriate development order. LangChain's own analysis of [how to think about agent frameworks](https://blog.langchain.com/how-to-think-about-agent-frameworks/) acknowledges that once custom logic or unusual orchestration flows are needed, the abstraction becomes a ceiling rather than a foundation.
+Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), starting simple — often a single LLM call or a short chain — covers a surprising share of use cases. The instinct to reach for a framework inverts the right development order. LangChain's own analysis of [how to think about agent frameworks](https://blog.langchain.com/how-to-think-about-agent-frameworks/) admits that once you need custom logic or unusual orchestration flows, the abstraction becomes a ceiling rather than a foundation.
 
-## What Gets Hidden
+## What gets hidden
 
-- **Prompt formatting** — frameworks modify prompts before sending; the model receives something different from what you wrote
-- **Context management** — frameworks decide what context to include, affecting behavior invisibly
-- **Error handling** — framework retry and failure behavior can mask root causes
+- Prompt formatting: frameworks change prompts before sending, so the model receives something different from what you wrote
+- Context management: frameworks decide what context to include, changing behavior invisibly
+- Error handling: framework retry and failure behavior can mask root causes
 
-## When to Introduce a Framework
+## When to introduce a framework
 
-Introduce a framework once you have identified a specific capability gap the raw API cannot fill cleanly — complex stateful conversation management, standardized multi-agent handoffs, or ecosystem tool integration. "I don't want to write boilerplate" is not sufficient; boilerplate you write is behavior you understand.
+Introduce a framework once you have found a specific capability gap the raw API cannot fill cleanly. Examples include complex stateful conversation management, standardized multi-agent handoffs, or third-party tool integration. "I don't want to write boilerplate" is not enough. Boilerplate you write is behavior you understand.
 
-## Signs You Have Adopted Too Early
+## Signs you have adopted too early
 
-- Debugging requires reading framework source to understand what prompt is sent
-- Simple tasks require framework-specific abstractions that raw API calls would not
+- You have to read framework source to understand what prompt is sent
+- Simple tasks need framework-specific abstractions that raw API calls would not
 - The team cannot reproduce framework behavior with a direct API call
 
-## When This Backfires
+## When this backfires
 
 Framework-first development causes the most damage in these conditions:
 
-- **Requirements are unknown** — locking in a framework's memory and routing model before you understand your data flow forces refactoring once real constraints emerge; the abstraction locks in the wrong decisions.
-- **Team lacks framework internals knowledge** — when the first failure occurs (wrong tool selected, context truncated, unexpected retry), no one can read the framework source fast enough to diagnose it under production pressure, the [comprehension debt](comprehension-debt.md) of code you did not write.
-- **Simple use case** — a single-turn Q&A or one-tool workflow routed through an agent executor adds latency, complexity, and failure surface for no capability gain; the framework's orchestration overhead exceeds its value.
+- Requirements are unknown: locking in a framework's memory and routing model before you understand your data flow forces a refactor once real constraints emerge. The abstraction locks in the wrong decisions.
+- The team lacks framework internals knowledge: when the first failure happens (wrong tool selected, context truncated, unexpected retry), no one can read the framework source fast enough to diagnose it under production pressure — the [comprehension debt](comprehension-debt.md) of code you did not write.
+- The use case is simple: a single-turn question-and-answer or one-tool workflow routed through an agent executor adds latency, complexity, and failure surface for no capability gain. The orchestration overhead exceeds its value.
 
-The counterargument has merit: frameworks provide provider-agnostic interfaces and pre-built retry/error handling that save real time on complex multi-agent systems. Starting with LangGraph for a system that genuinely needs stateful graph orchestration is defensible — but that threshold is higher than most teams assume.
+The counterargument has merit. Frameworks provide provider-agnostic interfaces and pre-built retry and error handling that save time on complex multi-agent systems. Starting with LangGraph for a system that genuinely needs stateful graph orchestration is defensible, but that threshold is higher than most teams assume.
 
 ## Example
 
-The following contrast shows the same tool-calling agent implemented first with LangChain, then directly with the Anthropic SDK. Both accomplish identical behaviour; the raw version makes the prompt and tool schema fully visible.
+The contrast below shows the same tool-calling agent built first with LangChain, then directly with the Anthropic SDK. Both produce identical behavior, but the raw version makes the prompt and tool schema fully visible.
 
 ```python
 # ❌ Framework-first: LangChain tool agent

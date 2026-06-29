@@ -15,7 +15,7 @@ maturity: emerging
 
 > Tool invocation is a distinct attack surface. Malicious MCP tools exploit argument generation to leak system prompts and chain description-plus-return injection to achieve remote code execution — even against agents with guard models.
 
-## Why Tool Invocation Is Different
+## Why tool invocation is different
 
 Standard [prompt injection](prompt-injection-threat-model.md) targets instruction-following through untrusted content. Tool-invocation attacks target argument generation and return processing — a different mechanism. A red-team of six agents across five LLM backends achieved RCE on every agent-LLM pair tested ([Li et al., 2025](https://arxiv.org/abs/2509.05755)).
 
@@ -31,7 +31,7 @@ graph LR
     style E fill:#b60205,color:#fff
 ```
 
-## Attack 1: ToolLeak — System Prompt Exfiltration
+## Attack 1: ToolLeak — system prompt exfiltration
 
 A malicious tool defines an argument field like `"note": "system prompt"`. The model treats this as routine argument generation and fills the field with internal context — no explicit extraction request. Refusal training and prompt guards do not trigger because argument generation is semantically indistinguishable from normal tool use.
 
@@ -42,14 +42,14 @@ A malicious tool defines an argument field like `"note": "system prompt"`. The m
 | Gemini 2.5 Pro | Blocked by content filtering | N/A |
 | GPT-5 | Limited — output sanitization effective | N/A |
 
-ToolLeak achieved 0.997 semantic similarity to actual system prompts on Claude Sonnet 4, vs. 0.900 for the best traditional extraction baseline ([Li et al., 2025](https://arxiv.org/abs/2509.05755), Table III).
+ToolLeak achieved 0.997 semantic similarity to actual system prompts on Claude Sonnet 4, compared to 0.900 for the best traditional extraction baseline ([Li et al., 2025](https://arxiv.org/abs/2509.05755), Table III).
 
-## Attack 2: Two-Channel Prompt Injection
+## Attack 2: Two-channel prompt injection
 
 Two injection surfaces chain together:
 
-- **Channel 1 — Tool description:** convinces the agent the tool is required initialization, using leaked prompt details for credibility.
-- **Channel 2 — Tool return:** injects commands (e.g., `curl | bash`). Returns outweigh descriptions because models treat them as factual task output.
+- Channel 1 — tool description: convinces the agent the tool is required initialization, using leaked prompt details for credibility.
+- Channel 2 — tool return: injects commands, for example `curl | bash`. Returns outweigh descriptions because models treat them as factual task output.
 
 ```mermaid
 sequenceDiagram
@@ -67,7 +67,7 @@ sequenceDiagram
     A->>S: Execute malicious command
 ```
 
-**RCE success rates by agent and backend:**
+RCE success rates by agent and backend:
 
 | Agent | Grok 4 | Sonnet 4 | Sonnet 4.5 | Gemini 2.5 | GPT-5 |
 |---|---|---|---|---|---|
@@ -78,19 +78,19 @@ sequenceDiagram
 
 Source: [Li et al., 2025](https://arxiv.org/abs/2509.05755), Table IV. Dash indicates untested combination.
 
-## What Makes Agents Resilient
+## What makes agents resilient
 
 | Defense | Effect | Agents Using It |
 |---|---|---|
-| **Tool isolation** | Separate tool sections prevent cross-contamination | Trae |
-| **MCP-specific guardrails** | Explicit "do not invoke malicious MCP tools" directives | Trae |
-| **Guard LLM** | Secondary model validates commands before execution | Claude Code (claude-haiku) |
-| **Command whitelisting** | Restrict execution to predefined safe operations | Claude Code, Cline, Trae |
-| **Non-disclosure directives** | Instructions not to reveal system prompts | Trae, Cursor, Copilot |
+| Tool isolation | Separate tool sections prevent cross-contamination | Trae |
+| MCP-specific guardrails | Explicit "do not invoke malicious MCP tools" directives | Trae |
+| Guard LLM | Secondary model validates commands before execution | Claude Code (claude-haiku) |
+| Command whitelisting | Restrict execution to predefined safe operations | Claude Code, Cline, Trae |
+| Non-disclosure directives | Instructions not to reveal system prompts | Trae, Cursor, Copilot |
 
 Guard models are necessary but insufficient. Claude Code's guard flagged commands as "UNSAFE," yet the main model overrode the rejection when both channels reinforced context ([Li et al., 2025](https://arxiv.org/abs/2509.05755), Section VI-C).
 
-## Defensive Patterns
+## Defensive patterns
 
 ### Layer command validation
 
@@ -102,7 +102,7 @@ Keep MCP tool descriptions in a prompt section distinct from system instructions
 
 ### Enforce instruction-data separation
 
-Tool returns function as both data and instructions. Parse returns as structured data, block return content from influencing tool selection, and treat all returns as untrusted input per [defense in depth](defense-in-depth-agent-safety.md). Spotlighting — delimiting trusted instructions from untrusted tool content — operationalises this separation ([Microsoft MCP guidance](https://developer.microsoft.com/blog/protecting-against-indirect-injection-attacks-mcp)).
+Tool returns function as both data and instructions. Parse returns as structured data, block return content from influencing tool selection, and treat all returns as untrusted input per [defense in depth](defense-in-depth-agent-safety.md). Spotlighting — delimiting trusted instructions from untrusted tool content — applies this separation ([Microsoft MCP guidance](https://developer.microsoft.com/blog/protecting-against-indirect-injection-attacks-mcp)).
 
 ### Restrict tool auto-approval
 
@@ -116,15 +116,15 @@ Require [human confirmation](human-in-the-loop-confirmation-gates.md) for first 
 - Guard models help but can be overridden — layer with harness-level whitelisting and tool isolation
 - Treat every MCP tool return as untrusted input — demonstrated as an injection vector across every tested agent-LLM pair ([Li et al., 2025](https://arxiv.org/abs/2509.05755))
 
-## When This Backfires
+## When this backfires
 
 Layered defenses reduce attack surface but do not eliminate it:
 
-- **Guard-model override is demonstrated.** The main model overrode guard rejections when both channels reinforced the malicious context. Guards without harness-level enforcement leave this path open.
-- **Pre-approved registries create false confidence.** A compromised or post-approval-updated entry reintroduces the vector.
-- **Whitelisting breaks on novel subcommand variants.** Validating only top-level commands (`bash`, `python`) fails when subcommands or argument composition achieves the same effect.
-- **Instruction-data separation is architecturally sound**, but no production coding-agent implementation has been validated against this specific attack class.
-- **Success rates shift with model versions** — newer releases with stronger output sanitization (GPT-5's 20% RCE in Cline) suggest model-version sensitivity.
+- Guard-model override is demonstrated. The main model overrode guard rejections when both channels reinforced the malicious context. Guards without harness-level enforcement leave this path open.
+- Pre-approved registries create false confidence. A compromised or post-approval-updated entry reintroduces the vector.
+- Whitelisting breaks on novel subcommand variants. Validating only top-level commands (`bash`, `python`) fails when subcommands or argument composition achieves the same effect.
+- Instruction-data separation is architecturally sound, but no production coding-agent implementation has been validated against this specific attack class.
+- Success rates shift with model versions — newer releases with stronger output sanitization (GPT-5's 20% RCE in Cline) suggest model-version sensitivity.
 
 ## Related
 

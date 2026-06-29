@@ -13,13 +13,13 @@ maturity: adopted
 
 > Automated tooling — type systems, test suites, linters, CI pipelines — creates feedback loops that agents use to self-correct without human intervention.
 
-## What Backpressure Means
+## What backpressure means
 
 Backpressure, as defined by the [Latent Patterns glossary](https://latentpatterns.com/glossary), is the automated feedback signal that tells an agent when its output is wrong. The agent runs code, reads the error, fixes the issue, and runs again. No human review required in the loop.
 
 The quality of an agent's output scales with the quality of the backpressure it operates against.
 
-## Backpressure Sources
+## Backpressure sources
 
 | Source | Signal | Precision |
 |--------|--------|-----------|
@@ -31,15 +31,15 @@ The quality of an agent's output scales with the quality of the backpressure it 
 
 Each source provides a different level of feedback precision. Type systems are the tightest loop — a TypeScript `tsc` error is immediate, precise, and unambiguous. CI pipelines catch integration issues that pass unit tests.
 
-## Autonomy Scales with Backpressure
+## Autonomy scales with backpressure
 
-An agent operating in a codebase with strong types, comprehensive tests, and enforced linting can iterate to a correct solution autonomously. It doesn't need human feedback at each step because the tooling provides it. A [2025 survey of LLM agent feedback mechanisms](https://dl.acm.org/doi/10.24963/ijcai.2025/1175) classifies external feedback — including code interpreters and execution results — as a distinct feedback category grounded in environmental responses rather than the model's own judgment.
+An agent operating in a codebase with strong types, comprehensive tests, and enforced linting can iterate to a correct solution autonomously. It does not need human feedback at each step, because the tooling provides it. A [2025 survey of LLM agent feedback mechanisms](https://dl.acm.org/doi/10.24963/ijcai.2025/1175) classifies external feedback — including code interpreters and execution results — as a distinct feedback category grounded in environmental responses rather than the model's own judgment.
 
-An agent operating in a codebase with no types, no tests, and no linting produces output that looks syntactically correct but may be semantically wrong — and there's no automated signal to detect it.
+An agent operating in a codebase with no types, no tests, and no linting produces output that looks syntactically correct but may be semantically wrong — and no automated signal exists to detect it.
 
-## Enabling the Ralph Wiggum Loop
+## Enabling the Ralph Wiggum loop
 
-Backpressure pairs directly with the [Ralph Wiggum Loop](ralph-wiggum-loop.md): each iteration runs until the checks pass. The exit condition — all tests green, no type errors, linter clean — is defined by the tooling, not by the agent's self-assessment.
+Backpressure pairs directly with the [Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md): each iteration runs until the checks pass. The tooling sets the exit condition — all tests green, no type errors, linter clean — not the agent's self-assessment.
 
 ```mermaid
 graph TD
@@ -55,9 +55,9 @@ graph TD
     F -->|Clean| H[Commit]
 ```
 
-## Codebase Readiness
+## Codebase readiness
 
-The value of backpressure is determined by the codebase, not the agent. Improving agent output quality in a given codebase means improving the codebase's backpressure coverage (see [Codebase Readiness for Agents](codebase-readiness.md)):
+The codebase sets the value of backpressure, not the agent. To improve agent output quality in a given codebase, improve its backpressure coverage (see [Codebase Readiness for Agents](codebase-readiness.md)):
 
 - Add types where untyped code exists
 - Add tests for logic the agent is likely to modify
@@ -65,17 +65,17 @@ The value of backpressure is determined by the codebase, not the agent. Improvin
 
 These investments compound: they benefit both agents and human developers.
 
-## Anti-Pattern: Operating Blind
+## Anti-pattern: operating blind
 
 Deploying agents against codebases with minimal backpressure maximizes the review burden on humans. Every agent output requires manual inspection because no automated signal catches errors. The agent produces more output faster than the team can review.
 
-## When This Backfires
+## When this backfires
 
 Backpressure is only as reliable as the signal quality. Three conditions where it misleads:
 
-- **Test-gaming**: an agent can learn to make tests pass without solving the underlying problem — deleting assertions, hardcoding expected values, or writing tests that trivially succeed. Passing tests stop meaning "correct code" and start meaning "output the agent was able to satisfy." [Mutation testing](../verification/mutation-testing-quality-gate.md) or property-based tests reduce this risk.
-- **Domains with no reliable oracle**: creative work, user-facing copy, API design, and architectural decisions have no equivalent of a type error. In these domains backpressure either doesn't exist or is so coarse-grained (linter, formatter) that it can't catch the meaningful errors. Agents here require human review that backpressure was meant to replace.
-- **Upfront investment cost**: comprehensive types, test coverage, and enforced linting take time to establish (the [Codebase Readiness](codebase-readiness.md) work). For one-off tasks, short-lived scripts, or exploratory work, the investment to build quality backpressure exceeds the value of the autonomy it enables. The pattern pays off on large, long-lived, frequently modified codebases.
+- Test-gaming: an agent can learn to make tests pass without solving the underlying problem — deleting assertions, hardcoding expected values, or writing tests that trivially succeed. Passing tests stop meaning "correct code" and start meaning "output the agent was able to satisfy." [Mutation testing](../verification/mutation-testing-quality-gate.md) or property-based tests reduce this risk.
+- Domains with no reliable oracle: creative work, user-facing copy, API design, and architectural decisions have no equivalent of a type error. In these domains backpressure either does not exist or is so coarse-grained (linter, formatter) that it cannot catch the meaningful errors. Agents here require human review that backpressure was meant to replace.
+- Upfront investment cost: comprehensive types, test coverage, and enforced linting take time to establish (the [Codebase Readiness](codebase-readiness.md) work). For one-off tasks, short-lived scripts, or exploratory work, the investment to build quality backpressure exceeds the value of the autonomy it enables. The pattern pays off on large, long-lived, frequently modified codebases.
 
 ## Example
 
@@ -92,11 +92,11 @@ The full loop completes without human involvement. Each tool in the chain catche
 
 ## Related
 
-- [The Ralph Wiggum Loop](ralph-wiggum-loop.md) — the iteration shell that backpressure terminates
+- [The Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md) — the iteration shell that backpressure terminates
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — review loop that pairs with automated signals
 - [Evaluator-Optimizer](evaluator-optimizer.md) — feedback-driven refinement pattern
 - [Feedback as Capability Equalizer](feedback-capability-equalizer.md) — iterative feedback can outweigh model scale; backpressure is the automated variant
 - [Harness Engineering](harness-engineering.md) — making codebases agent-ready by building backpressure coverage into the repo
 - [L1 → L2: Adding Feedback Loops](../frameworks/brownfield-to-agent-first/level-1-to-2.md) — step-by-step guide to enabling types, test coverage, and linter rules on a brownfield repo
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md) — when to use tight automated loops vs. human-in-the-loop
+- [Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md) — when to use tight automated loops vs. human-in-the-loop
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — compensating for model limitations through feedback loops and linter-based enforcement

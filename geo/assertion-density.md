@@ -14,16 +14,16 @@ maturity: adopted
 
 > Replace vague qualifiers with specific numbers, dates, sample sizes, and attributed quotes. The Princeton GEO study found this is the highest-impact single rewrite technique for AI citation rates — up to 41% improvement in source visibility.
 
-**Learn it hands-on:** [Assertion Density](https://learn.agentpatterns.ai/geo/assertion-density/) — guided lesson with quizzes.
+Learn it hands-on with the [Assertion Density guided lesson and quizzes](https://learn.agentpatterns.ai/geo/assertion-density/).
 
-## Why Specificity Gets Cited
+## Why specificity gets cited
 
 AI answer engines use retrieval-augmented generation: they match queries against indexed content and generate answers from retrieved passages. Specific claims improve retrieval in two ways:
 
-1. **Token-level matching** — a query for "how much does X improve Y" matches numeric passages more precisely than "significantly" or "substantially"
-2. **Attribution confidence** — attributed quotes with named credentials and dated statistics are easier to cite verbatim than generalities
+1. Token-level matching — a query for "how much does X improve Y" matches numeric passages more precisely than "significantly" or "substantially"
+2. Attribution confidence — attributed quotes with named credentials and dated statistics are easier to cite verbatim than generalities
 
-## The Evidence
+## The evidence
 
 The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.09735)) tested 9 optimization techniques against a 10,000-query benchmark (GEO-bench) across 25 domains, measuring source visibility using Position-Adjusted Word Count (PAWC — word count weighted by exponential decay based on citation position):
 
@@ -35,26 +35,26 @@ The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.
 | Fluency Optimization | +15–30% |
 | Keyword Stuffing | –10% |
 
-**Caveats**: All three top techniques add content rather than modifying it — PAWC rewards length, giving content-addition techniques a structural advantage. The study permitted fabricated statistics, limiting real-world applicability (see [Sandbox SEO's critique](https://sandboxseo.com/generative-engine-optimization-experiment/) of the methodology). The directional finding — specific over vague — is robust; exact percentages are an upper bound.
+Caveats: all three top techniques add content rather than modifying it — PAWC rewards length, giving content-addition techniques a structural advantage. The study permitted fabricated statistics, which limits real-world applicability (see [Sandbox SEO's critique of the methodology](https://sandboxseo.com/generative-engine-optimization-experiment/)). The directional finding — specific over vague — holds; the exact percentages are an upper bound.
 
-## What Counts
+## What counts
 
-**Strong assertions** (retrieval-friendly):
+Strong assertions (retrieval-friendly):
 
 - Specific numbers with units: "reduces latency by 23ms at p99"
-- Named sources with credentials: "according to Martin Fowler, author of *Refactoring*"
+- Named sources with credentials: "according to Martin Fowler, author of 'Refactoring'"
 - Dated research: "a 2024 Stanford study of 1,200 developers found..."
 - Sample sizes: "across 10,000 queries in 25 domains"
 - Bounded ranges: "8–12 citations per 1,500 words"
 
-**Weak assertions** (retrieval-unfriendly):
+Weak assertions (retrieval-unfriendly):
 
 - Vague quantifiers: "many", "often", "most", "significantly"
 - Unattributed authority: "experts say", "research shows", "it is widely known"
 - Relative comparisons without anchors: "much faster", "far more accurate"
 - Undated generalizations: "historically", "in recent years"
 
-## Rewrite Guide
+## Rewrite guide
 
 Find vague qualifiers and replace with specifics. If no source exists for a claim, weaken it to a factually-supportable form or remove it — do not invent statistics or use hedge tags.
 
@@ -65,17 +65,17 @@ Find vague qualifiers and replace with specifics. If no source exists for a clai
 | "Keyword stuffing is counterproductive." | "Keyword stuffing reduced source visibility by 10% in the Princeton GEO benchmark (Aggarwal et al., KDD 2024)." |
 | "Large context windows help with complex tasks." | "Claude 3.5 Sonnet supports a 200K-token context window, sufficient to load an entire mid-size codebase before implementing." |
 
-## Unsourceable Claims
+## Unsourceable claims
 
 If a claim cannot be backed by a real source, rewrite it in a weaker factually-supportable form or remove it entirely. Hedge tags produce a false-confidence signal without adding retrieval value — the GEO study found PAWC rewards length and attributed specificity, not vague generalities.
 
 ## Limits
 
-- **Fabrication risk**: manufactured statistics are detectable; only add specifics you can source
-- **Structural prerequisites**: if the page buries answers (see [Answer-First Writing](answer-first-writing.md)), assertion density won't compensate for a retrieval miss at the section level
-- **Diminishing returns**: past a threshold, additional citations add length without citability
+- Fabrication risk: manufactured statistics are detectable, so only add specifics you can source
+- Structural prerequisites: if the page buries answers (see [Answer-First Writing](answer-first-writing.md)), assertion density cannot compensate for a retrieval miss at the section level
+- Diminishing returns: past a threshold, additional citations add length without citability
 
-## Recency and Assertion Density
+## Recency and assertion density
 
 Content freshness and assertion density are independent citation signals — improving one does not substitute for the other. See [Measuring GEO Performance](measuring-geo-performance.md) for tracking both.
 

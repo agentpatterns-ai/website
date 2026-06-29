@@ -16,15 +16,15 @@ maturity: established
 
 > Before choosing how an agent performs an action, choose how you will undo it — if recovery costs more than one command, reconsider the approach.
 
-**Learn it hands-on:** [Reversibility & Idempotency](https://learn.agentpatterns.ai/harness-engineering/reversibility-and-idempotency/) — guided lesson with quizzes.
+Learn it hands-on with the [Reversibility and Idempotency guided lesson](https://learn.agentpatterns.ai/harness-engineering/reversibility-and-idempotency/), which includes quizzes.
 
-## The Premise
+## The premise
 
 Agents produce bad output. The question is not whether an agent will make a mistake, but what the [recovery cost](exception-handling-recovery-patterns.md) is when it does.
 
 Rollback-first design treats recovery cost as a first-class constraint. For every agent action, ask "how hard is this to undo?" If the answer is "very," choose an approach that produces a reversible result.
 
-## The Undo Cost Spectrum
+## The undo cost spectrum
 
 ```mermaid
 graph LR
@@ -35,23 +35,23 @@ graph LR
 
 Design agent workflows to stay in the left half. When a step must land in the right half, add a human gate before it — see [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md).
 
-## Reversible Primitives
+## Reversible primitives
 
-**Git branches.** Agent work on a branch is reversible: delete the branch, nothing on main is affected. Git's [branching model](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell) makes creation and deletion nearly free, which is what makes it viable as a per-task primitive.
+Git branches. Agent work on a branch is reversible: delete the branch, and nothing on main is affected. Git's [branching model](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell) makes creation and deletion nearly free, which makes it work as a per-task primitive.
 
-**Draft PRs.** A draft PR is visible and reviewable but not merged. Closing it discards the changes. Use draft PRs instead of [direct pushes to main](../workflows/worktree-isolation.md).
+Draft PRs. A draft PR is visible and reviewable but not merged. Closing it discards the changes. Use draft PRs instead of [direct pushes to main](../workflows/worktree-isolation.md).
 
-**Labels over status.** Changing a label is reversible. Closing an issue muddies history; deleting is irreversible on most platforms.
+Labels over status. Changing a label is reversible. Closing an issue muddies history, and deleting is irreversible on most platforms.
 
-**Comments over edits.** Appending a comment is reversible (delete it). Editing a GitHub issue or PR body overwrites the original. Prefer comments for agent-generated observations; reserve body edits for structured fields.
+Comments over edits. Appending a comment is reversible: delete it. Editing a GitHub issue or PR body overwrites the original. Prefer comments for agent-generated observations, and reserve body edits for structured fields.
 
-**Checkpoints.** [Claude Code checkpoints](https://code.claude.com/docs/en/checkpointing) capture file state before each user prompt. Restoration is [selective — code only, conversation only, or both](selective-checkpoint-restore.md).
+Checkpoints. [Claude Code checkpoints](https://code.claude.com/docs/en/checkpointing) capture file state before each user prompt. You can restore them [selectively — code only, conversation only, or both](selective-checkpoint-restore.md).
 
-**Staging environments.** Agent output affecting live systems should pass through staging. A bad draft in staging costs nothing to discard; a bad production deployment costs recovery time.
+Staging environments. Route agent output that touches live systems through staging. A bad draft in staging costs nothing to discard, while a bad production deployment costs recovery time.
 
-**Transactional boundaries.** IBM Research's STRATUS system uses a "transactional-no-regression" rule: mitigation agents may only take reversible actions within a transaction, and commands per transaction are capped to keep rollbacks tractable ([IBM Research, 2025](https://research.ibm.com/blog/undo-agent-for-cloud)). The same applies to coding agents — bound each turn to changes that can be undone in one step.
+Transactional boundaries. IBM Research's STRATUS system uses a "transactional-no-regression" rule: mitigation agents may only take reversible actions within a transaction, and it caps the commands per transaction to keep rollbacks tractable ([IBM Research, 2025](https://research.ibm.com/blog/undo-agent-for-cloud)). The same applies to coding agents — bound each turn to changes you can undo in one step.
 
-## What Cannot Be Made Reversible
+## What cannot be made reversible
 
 Some actions have inherent irreversibility:
 
@@ -62,7 +62,7 @@ Some actions have inherent irreversibility:
 
 For these, apply human gates before the action, not after. There is no rollback; the gate is the only defense.
 
-## Designing for Reversibility
+## Designing for reversibility
 
 Checklist for each agent action:
 
@@ -77,13 +77,13 @@ If the one-command undo does not exist, redesign the step before shipping the wo
 
 An agent refactors a module across 40 files. Halfway through, it makes a wrong assumption about the interface and produces broken code in 15 files.
 
-**Without rollback-first design:**
+Without rollback-first design:
 
 - The agent pushed directly to main
 - Recovery requires reverting individual commits or manually fixing 15 files
-- CI is broken; other developers are blocked
+- CI is broken, so other developers are blocked
 
-**With rollback-first design:**
+With rollback-first design:
 
 - All changes happened on a branch (`agent/refactor-module-xyz`)
 - A draft PR was opened for human review before any merge
@@ -92,14 +92,14 @@ An agent refactors a module across 40 files. Halfway through, it makes a wrong a
 
 The design choice was made before execution: work on a branch, open a draft PR, require human approval before merge. Each step has a one-command undo at the point it was created.
 
-## When This Backfires
+## When this backfires
 
-Rollback-first design is not free. Conditions where it is worse than the alternative:
+Rollback-first design is not free. It is worse than the alternative under these conditions:
 
-- **Reversibility hides root cause.** When rollback is trivial, teams lean on "undo and retry" instead of fixing the underlying bug. A reliable undo path can delay diagnosis until the failure surfaces somewhere harder to reverse.
-- **Gate latency dominates.** In high-frequency loops (inner-loop edits, [self-review cycles](../code-review/agent-self-review-loop.md)), forcing every action through a draft/approval gate adds human-scale delay to machine-scale work. The recovery saved is smaller than the throughput lost.
-- **The action is already cheap to redo.** For idempotent operations where re-running is faster than engineering a rollback primitive, the reversibility machinery is overhead. Prefer [idempotent design](idempotent-agent-operations.md) when the natural answer is "just run it again."
-- **Ephemeral environments.** If the environment is throwaway (container spun up per task, test database that resets on each run), branch-level isolation is redundant — the environment itself is the rollback primitive.
+- Reversibility hides root cause. When rollback is trivial, teams lean on "undo and retry" instead of fixing the underlying bug. A reliable undo path can delay diagnosis until the failure surfaces somewhere harder to reverse.
+- Gate latency dominates. In high-frequency loops (inner-loop edits, [self-review cycles](../code-review/agent-self-review-loop.md)), forcing every action through a draft or approval gate adds human-scale delay to machine-scale work. The recovery saved is smaller than the throughput lost.
+- The action is already cheap to redo. For idempotent operations where re-running is faster than building a rollback primitive, the reversibility machinery is overhead. Prefer [idempotent design](idempotent-agent-operations.md) when the natural answer is "just run it again."
+- Ephemeral environments. If the environment is throwaway (a container spun up per task, or a test database that resets on each run), branch-level isolation is redundant — the environment itself is the rollback primitive.
 
 The pattern scales with stakes. Apply it fully for agents touching shared codebases, production systems, or customer-facing data. Relax it when the blast radius is small and recovery is already trivial.
 
@@ -116,7 +116,7 @@ The pattern scales with stakes. Apply it fully for agents touching shared codeba
 - [Human-in-the-Loop Placement: Where to Gate Agent Pipelines](../workflows/human-in-the-loop.md)
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)
+- [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md)
 - [Agent Pushback Protocol](agent-pushback-protocol.md)
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)
 - [Wink: Agent Misbehavior Correction](wink-agent-misbehavior-correction.md)

@@ -21,7 +21,7 @@ Most-restrictive-wins is the merge function for parallel agent-control decisions
 
 The teaching here is the merge — not the hooks, the classifiers, or the settings layers that produce the inputs to it. The merge is what lets each input be authored independently.
 
-## The Ladder
+## The ladder
 
 | Decision | Meaning | Slot |
 |---|---|---|
@@ -30,45 +30,45 @@ The teaching here is the merge — not the hooks, the classifiers, or the settin
 | `ask` | Surface an interactive prompt to the developer. | Beats `allow` only |
 | `allow` | Proceed without modification. | Weakest — loses to every other value |
 
-`defer` is a first-class state distinct from `ask` and `allow` — it ends the headless query so the caller can collect approval through its own UI, then resumes via `--resume` (see [Deferred Permission Pattern](deferred-permission-pattern.md) for the headless-pause mechanics). The merge slots it between `deny` and `ask` because pausing is a stronger restriction than prompting, but not as strong as a hard block.
+`defer` is a first-class state, distinct from `ask` and `allow`. It ends the headless query so the caller can collect approval through its own UI, then resumes via `--resume` (see the [deferred permission pattern](deferred-permission-pattern.md) for the headless-pause mechanics). The merge slots it between `deny` and `ask` because pausing is a stronger restriction than prompting, but not as strong as a hard block.
 
-## How the Merge Composes
+## How the merge composes
 
-Three properties make the function work, and dropping any one of them silently breaks it.
+Three properties make the function work. Drop any one and it breaks silently.
 
-**Parallel evaluation.** The SDK fires every matching hook concurrently: *"When an event fires, all matching hooks run in parallel. For permission decisions, the most restrictive result wins: a single `deny` blocks the tool call regardless of what the other hooks return."* ([SDK — Register multiple hooks](https://code.claude.com/docs/en/agent-sdk/hooks#register-multiple-hooks)) Hooks are deduplicated by command string or URL before dispatch ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)) so identical handlers fire once.
+Parallel evaluation. The SDK fires every matching hook concurrently: *"When an event fires, all matching hooks run in parallel. For permission decisions, the most restrictive result wins: a single `deny` blocks the tool call regardless of what the other hooks return."* ([SDK — Register multiple hooks](https://code.claude.com/docs/en/agent-sdk/hooks#register-multiple-hooks)) The SDK deduplicates hooks by command string or URL before dispatch ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)), so identical handlers fire once.
 
-**Author-time independence.** Because completion order is non-deterministic, the SDK requires each hook to act independently rather than rely on another hook running first. An authorization check, an input validator, and an audit logger registered against the same `PreToolUse` event each return their own verdict; the harness merges them. No hook needs to know its siblings exist.
+Author-time independence. Completion order is non-deterministic, so the SDK requires each hook to act on its own rather than rely on another hook running first. An authorization check, an input validator, and an audit logger registered against the same `PreToolUse` event each return their own verdict, and the harness merges them. No hook needs to know its siblings exist.
 
-**Reason-string discipline.** When a single deny in a parallel set blocks the call, debugging which hook denied collapses into log archaeology unless every hook attaches `permissionDecisionReason` to its return. The SDK surfaces the field for exactly this purpose — populate it on every non-`allow` return.
+Reason-string discipline. When a single deny in a parallel set blocks the call, working out which hook denied collapses into log archaeology unless every hook attaches `permissionDecisionReason` to its return. The SDK surfaces the field for exactly this purpose. Populate it on every non-`allow` return.
 
-## The Same Merge Beyond Hooks
+## The same merge beyond hooks
 
-The function generalises wherever an agent has multiple parallel decision sources for one action:
+The function generalizes wherever an agent has several parallel decision sources for one action:
 
-- **Settings-scope rules.** Managed-policy, project, and user rules all evaluate against a tool call. The most restrictive wins, and managed settings additionally win at the disable-layer — `disableAllHooks` set in user or project settings cannot turn off managed hooks ([hooks reference](https://code.claude.com/docs/en/hooks)).
-- **Classifier verdicts.** When a [classifier-gated auto-permission](classifier-gated-auto-permission.md) inspector returns alongside PreToolUse hooks, its verdict is one more input to the same merge. The classifier becomes a parallel `ask` or `deny` source; the merge picks the strongest.
-- **Plugin and project hooks.** A vetted plugin hook that requires approval composes with a project hook that auto-allows the same tool — the plugin's `ask` wins over the project's `allow` without either side knowing about the other.
+- settings-scope rules: managed-policy, project, and user rules all evaluate against a tool call. The most restrictive wins, and managed settings also win at the disable layer — `disableAllHooks` set in user or project settings cannot turn off managed hooks ([hooks reference](https://code.claude.com/docs/en/hooks))
+- classifier verdicts: when a [classifier-gated auto-permission](classifier-gated-auto-permission.md) inspector returns alongside PreToolUse hooks, its verdict is one more input to the same merge. The classifier becomes a parallel `ask` or `deny` source, and the merge picks the strongest
+- plugin and project hooks: a vetted plugin hook that requires approval composes with a project hook that auto-allows the same tool. The plugin's `ask` wins over the project's `allow` without either side knowing about the other
 
-## Why It Works
+## Why it works
 
-The merge is correct because the underlying decision is binary (proceed or don't) and the harm is asymmetric — a wrongful proceed exfiltrates a secret or runs a destructive shell; a wrongful block costs a re-prompt. Under asymmetric harm, picking the strongest restriction across parallel evaluators is the minimax-regret strategy: it minimises the worst-case outcome regardless of which evaluator is wrong. This is the same argument [XACML's `deny-overrides` combining algorithm](https://docs.oasis-open.org/xacml/3.0/xacml-3.0-core-spec-os-en.html) rests on — *"if a single Rule or Policy element is encountered that evaluates to Deny, then, regardless of the evaluation result of the other Rule or Policy elements in the applicable policy, the combined result is Deny"* — and the same one [AWS IAM policy evaluation](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html) follows: explicit deny in any policy overrides any allow. The pattern is decades-validated outside agent harnesses, and the SDK adopts it for the same reason those engines did.
+The merge is correct because the underlying decision is binary (proceed or don't) and the harm is asymmetric. A wrongful proceed exfiltrates a secret or runs a destructive shell; a wrongful block costs a re-prompt. Under asymmetric harm, picking the strongest restriction across parallel evaluators is the minimax-regret strategy: it minimizes the worst-case outcome regardless of which evaluator is wrong. This is the same argument [XACML's `deny-overrides` combining algorithm](https://docs.oasis-open.org/xacml/3.0/xacml-3.0-core-spec-os-en.html) rests on — *"if a single Rule or Policy element is encountered that evaluates to Deny, then, regardless of the evaluation result of the other Rule or Policy elements in the applicable policy, the combined result is Deny"* — and the same one [AWS IAM policy evaluation](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html) follows: explicit deny in any policy overrides any allow. The pattern is decades-validated outside agent harnesses, and the SDK adopts it for the same reason those engines did.
 
-The independence property the SDK requires flows directly from this: because the merge does not depend on evaluation order, each hook author can reason locally. The merge function is what permits the parallel execution model in the first place.
+The independence property the SDK requires flows directly from this. Because the merge does not depend on evaluation order, each hook author can reason locally. The merge function is what permits the parallel execution model in the first place.
 
-## When This Backfires
+## When this backfires
 
-**Hooks that side-effect between siblings.** Most-restrictive-wins only composes when each evaluator is pure with respect to ordering. If an audit logger mutates state on every call and a downstream deny fires, the side effect already happened even though the operation was blocked. Hooks that need to commit state belong in `PostToolUse`, not `PreToolUse`.
+Hooks that side-effect between siblings. Most-restrictive-wins only composes when each evaluator is pure with respect to ordering. If an audit logger mutates state on every call and a downstream deny fires, the side effect already happened even though the operation was blocked. Hooks that need to commit state belong in `PostToolUse`, not `PreToolUse`.
 
-**Buggy or chronically wrong deny.** One rogue deny in a parallel set blocks the agent indefinitely. Without per-hook `permissionDecisionReason` strings, identifying which of six hooks denied turns into log archaeology. The merge tolerates one bad evaluator only when reason attribution is disciplined.
+Buggy or chronically wrong deny. One rogue deny in a parallel set blocks the agent indefinitely. Without per-hook `permissionDecisionReason` strings, working out which of six hooks denied turns into log archaeology. The merge tolerates one bad evaluator only when reason attribution is disciplined.
 
-**Asymmetric tools where allow-wins is the right model.** Coding-agent harnesses default to `deny-overrides` because of harm asymmetry, but XACML defines `permit-overrides` as the alternative combining algorithm precisely because some resource classes invert the asymmetry. Read-only retrieval against several curated sources, where each source independently certifies "this content is safe", may model better as allow-wins. Forcing most-restrictive across the board ignores that the combining algorithm is a choice per resource class. The fact that the Claude SDK exposes only `deny-overrides` is a design decision, not a logical necessity ([XACML 3.0 spec](https://docs.oasis-open.org/xacml/3.0/xacml-3.0-core-spec-os-en.html)).
+Asymmetric tools where allow-wins is the right model. Coding-agent harnesses default to `deny-overrides` because of harm asymmetry, but XACML defines `permit-overrides` as the alternative combining algorithm precisely because some resource classes invert the asymmetry. Read-only retrieval against several curated sources, where each source independently certifies "this content is safe", may model better as allow-wins. Forcing most-restrictive across the board ignores that the combining algorithm is a choice per resource class. The Claude SDK exposes only `deny-overrides`, which is a design decision, not a logical necessity ([XACML 3.0 spec](https://docs.oasis-open.org/xacml/3.0/xacml-3.0-core-spec-os-en.html)).
 
-**Settings-scope confusion masking the merge.** Developers expect their project rule to win over a managed-org rule and get surprised when the managed deny overrides it. Most-restrictive-wins composes with the managed-overrides-everything settings hierarchy in non-obvious ways — the merge picks the strongest decision *across* scopes, and managed additionally wins on the meta-question of which hooks can fire at all.
+Settings-scope confusion masking the merge. Developers expect their project rule to win over a managed-org rule, then get surprised when the managed deny overrides it. Most-restrictive-wins composes with the managed-overrides-everything settings hierarchy in non-obvious ways. The merge picks the strongest decision across scopes, and managed also wins on the meta-question of which hooks can fire at all.
 
-**Inflexibility critique acknowledged.** The cost of the pattern is real: once an explicit deny is in place, no allow elsewhere overrides it ([Datadog: least-privilege IAM](https://www.datadoghq.com/blog/iam-least-privilege/)). For coding agents this is the desired property — break-glass exceptions belong on a managed-settings update path, not on a per-call allow elsewhere — but call the trade-off out explicitly when documenting the harness for new authors.
+Inflexibility critique acknowledged. The cost of the pattern is real: once an explicit deny is in place, no allow elsewhere overrides it ([Datadog: least-privilege IAM](https://www.datadoghq.com/blog/iam-least-privilege/)). For coding agents this is the property you want — break-glass exceptions belong on a managed-settings update path, not on a per-call allow elsewhere — but call the trade-off out explicitly when documenting the harness for new authors.
 
-**Indeterminate handling is unspecified.** XACML deny-overrides stops on `Indeterminate`; the SDK is silent on what happens if a hook errors mid-evaluation. Treat a thrown exception inside a hook as an unhandled state until the contract is clarified — wrap each hook body in error handling that returns a deterministic value rather than letting the harness decide for you.
+Indeterminate handling is unspecified. XACML deny-overrides stops on `Indeterminate`; the SDK is silent on what happens if a hook errors mid-evaluation. Treat a thrown exception inside a hook as an unhandled state until the contract is clarified. Wrap each hook body in error handling that returns a deterministic value rather than letting the harness decide for you.
 
 ## Example
 
@@ -93,7 +93,7 @@ If `authorization_check` returns `deny`, the call is blocked regardless of what 
 - The ladder is `deny > defer > ask > allow`. A single deny anywhere in a parallel set blocks the call.
 - Parallel execution plus author-time independence plus reason-string discipline are the three properties that make the merge compose; dropping any one breaks it silently.
 - The merge is the minimax-regret choice under asymmetric harm — the same argument XACML, AWS IAM, Azure Policy, and Istio all settle on.
-- The function generalises beyond `PreToolUse` hooks: settings-scope rules, classifier verdicts, plugin hooks, and managed-policy decisions all feed the same merge.
+- The function generalizes beyond `PreToolUse` hooks: settings-scope rules, classifier verdicts, plugin hooks, and managed-policy decisions all feed the same merge.
 - `permit-overrides` (allow-wins) is a legitimate alternative for resource classes with inverted harm asymmetry — coding agents default to deny-overrides because the asymmetry runs the other way.
 
 ## Related

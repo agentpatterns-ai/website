@@ -19,31 +19,31 @@ maturity: established
 
 > After context compression, agents can continue working productively on a subtly wrong objective — the original intent lost in summarisation.
 
-**Learn it hands-on:** [Objective Drift](https://learn.agentpatterns.ai/anti-patterns/objective-drift/) — guided lesson with quizzes.
+Learn it hands-on: work through the [Objective Drift guided lesson](https://learn.agentpatterns.ai/anti-patterns/objective-drift/), which includes quizzes.
 
-## Why It Happens
+## Why it happens
 
-Summarisation favours high-frequency content. A constraint ("do not change public method signatures") appears once; the core task ("refactor for DI") recurs across many messages — the constraint is discarded as noise ([LangChain](https://blog.langchain.com/context-management-for-deepagents/)). Downstream steps compound the error: each tool call is consistent with the compressed objective, so the agent builds toward the wrong target with no internal signal.
+Summarization favors high-frequency content. A constraint such as "do not change public method signatures" appears once. The core task, "refactor for DI", recurs across many messages. So summarization discards the constraint as noise ([LangChain on context management](https://blog.langchain.com/context-management-for-deepagents/)). Downstream steps compound the error. Each tool call is consistent with the compressed objective, so the agent builds toward the wrong target with no internal signal.
 
-A second trigger is instruction fade-out: models deprioritize initial instructions as history grows, even when they remain present ([Bui, 2026 §3.2](https://arxiv.org/abs/2603.05344)).
+A second trigger is instruction fade-out. Models deprioritize the initial instructions as history grows, even when those instructions remain present ([Bui, 2026 §3.2](https://arxiv.org/abs/2603.05344)).
 
-## Detection and Mitigation
+## Detection and mitigation
 
-Signals: the agent "completes" without satisfying the original requirement, output format diverges from spec, or a subtly different problem is solved.
+Watch for these signals: the agent "completes" without satisfying the original requirement, the output format diverges from the spec, or the agent solves a subtly different problem.
 
-**Preserve intent in structured summaries.** A named `session_intent` field survives compression better than prose — [LangChain recommends](https://blog.langchain.com/context-management-for-deepagents/) structured summaries that retain task objectives. A [session recap](../agent-design/session-recap.md) formalises this as a fixed-schema, agent-authored artifact written at each boundary (compaction, resume, or fork).
+Preserve intent in structured summaries. A named `session_intent` field survives compression better than prose. [LangChain recommends](https://blog.langchain.com/context-management-for-deepagents/) structured summaries that keep task objectives. A [session recap](../agent-design/session-recap.md) formalizes this as a fixed-schema, agent-authored artifact, written at each boundary: compaction, resume, or fork.
 
-**Anchor constraints in system prompt.** System-prompt content is less likely to be paraphrased away during summarisation.
+Anchor constraints in the system prompt. System-prompt content is less likely to be paraphrased away during summarization.
 
-**Bounded tasks.** The [Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md) bounds each session to one task; each restart re-reads the original specification from disk.
+Use bounded tasks. The [Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md) bounds each session to one task. Each restart re-reads the original specification from disk.
 
-**[Event-driven reminders](../instructions/event-driven-system-reminders.md).** Re-inject objectives at decision points ([Bui, 2026 §2.3.4](https://arxiv.org/abs/2603.05344)).
+Add [event-driven reminders](../instructions/event-driven-system-reminders.md). Re-inject objectives at decision points ([Bui, 2026 §2.3.4](https://arxiv.org/abs/2603.05344)).
 
 ## Example
 
-A long-running agent is given the task: "Refactor the `UserService` class to use dependency injection. Do not change any public method signatures." After dozens of tool calls the context is compressed. The prose summary retains "refactor UserService for DI" but drops the constraint about method signatures. The agent subsequently renames `get_user_by_id` to `find_user` — coherent with the refactor goal, but violating the original constraint.
+A long-running agent receives this task: "Refactor the `UserService` class to use dependency injection. Do not change any public method signatures." After dozens of tool calls, compaction compresses the context. The prose summary keeps "refactor UserService for DI" but drops the constraint about method signatures. The agent then renames `get_user_by_id` to `find_user`. That fits the refactor goal, but it violates the original constraint.
 
-The mitigation is a structured session intent file written before the agent starts, preserved verbatim through compression:
+The fix is a structured session-intent file. You write it before the agent starts, and it survives compression verbatim:
 
 ```json
 // session_intent.json — written by the orchestrator, re-read after compaction
@@ -69,13 +69,13 @@ You are a refactoring agent. Before each action:
 """
 ```
 
-This combination — structured intent file plus system-prompt anchor — ensures the exact constraints survive summarisation and remain attended to throughout the session.
+Together, the structured intent file and the system-prompt anchor keep the exact constraints through summarization and hold the agent's attention on them all session.
 
-## When This Backfires
+## When this backfires
 
-- **Short sessions**: `session_intent.json` adds overhead for sessions that will never reach compaction.
-- **Exploratory tasks**: Strict anchoring prevents legitimate course corrections mid-session.
-- **Compaction policy mismatch**: Structured summaries only help if the compressor preserves named fields; many paraphrase them anyway.
+- Short sessions: `session_intent.json` adds overhead for sessions that never reach compaction.
+- Exploratory tasks: strict anchoring blocks legitimate course corrections mid-session.
+- Compaction policy mismatch: structured summaries only help if the compressor keeps named fields, and many paraphrase them anyway.
 
 ## Key Takeaways
 
@@ -83,11 +83,11 @@ This combination — structured intent file plus system-prompt anchor — ensure
 - The agent appears productive but solves the wrong problem — drift is subtle, not obvious.
 - Structured summaries with a named session-intent field resist drift better than prose.
 - [Event-driven reminders](../instructions/event-driven-system-reminders.md) counter fade-out by re-injecting objectives at decision points.
-- Bounded sessions ([Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md)) prevent drift from accumulating across iterations.
+- Bounded sessions ([Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md)) prevent drift from accumulating across iterations.
 
 ## Related
 
-- [The Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md)
+- [The Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md)
 - [Attention Latch: When Agents Stay Anchored to Stale Instructions](../agent-design/attention-latch.md) — the structural over-squashing mechanism behind instruction fade-out
 - [Post-Compaction Re-read Protocol](../instructions/post-compaction-reread-protocol.md) — restores instruction compliance after compaction
 - [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md) — counters fade-out by injecting targeted reminders

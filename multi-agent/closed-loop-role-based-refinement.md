@@ -18,7 +18,7 @@ maturity: adopted
 
 > Role-based refinement splits the self-improving agent loop into five specialized roles, adding persistent knowledge and gated persistence to prevent regression.
 
-## Beyond the Single-Loop Flywheel
+## Beyond the single-loop flywheel
 
 Closed-loop role-based refinement structures the self-improvement cycle as five specialized roles -- Competitor, Analyst, Coach, Architect, and Curator -- each with a bounded contract, feeding output into the next role in sequence.
 
@@ -26,7 +26,7 @@ Single-loop patterns like the [agentic flywheel](../agent-design/agentic-flywhee
 
 [AutoContext](https://github.com/greyhaven-ai/autocontext) implements this as five collaborating agent roles, with knowledge persisting between runs to avoid cold starts.
 
-## Five-Role Decomposition
+## Five-role decomposition
 
 Each role maps to a stage in the improvement loop, but with explicit contracts that prevent scope bleed:
 
@@ -41,28 +41,28 @@ graph LR
 
 | Role | Responsibility | Contract |
 |------|---------------|----------|
-| **Competitor** | Propose and execute strategies against the current task | Produces results; does not analyze or persist them |
-| **Analyst** | Explain why strategies succeeded or failed | Produces explanations; does not modify playbooks |
-| **Coach** | Update playbooks and hints based on analysis | Modifies knowledge artifacts; does not propose strategies |
-| **Architect** | Suggest structural changes to the system itself | Proposes tool and pipeline modifications; does not execute tasks |
-| **Curator** | Gate what persists -- approve, reject, or roll back knowledge changes | Controls persistence; does not generate content |
+| Competitor | Propose and execute strategies against the current task | Produces results; does not analyze or persist them |
+| Analyst | Explain why strategies succeeded or failed | Produces explanations; does not modify playbooks |
+| Coach | Update playbooks and hints based on analysis | Modifies knowledge artifacts; does not propose strategies |
+| Architect | Suggest structural changes to the system itself | Proposes tool and pipeline modifications; does not execute tasks |
+| Curator | Gate what persists -- approve, reject, or roll back knowledge changes | Controls persistence; does not generate content |
 
-The key constraint: each role's output is the next role's input, and no role exceeds its contract.
+The constraint that holds the pattern together: each role's output is the next role's input, and no role exceeds its contract.
 
-## Persistent Knowledge Layers
+## Persistent knowledge layers
 
 Cold starts waste each session rediscovering context. Role-based refinement counters this with structured knowledge that survives across runs:
 
 | Layer | Contents | Update frequency |
 |-------|----------|-----------------|
-| **Playbooks** | Validated strategies and approaches | Updated by Coach after each analysis cycle |
-| **Hints** | Tactical observations not yet promoted to playbook status | Updated frequently; pruned by Curator |
-| **Tools** | Reusable scripts and utilities discovered during execution | Added by Architect; validated before persistence |
-| **Reports** | Analysis outputs and progress snapshots | Append-only; used for trend detection |
+| Playbooks | Validated strategies and approaches | Updated by Coach after each analysis cycle |
+| Hints | Tactical observations not yet promoted to playbook status | Updated frequently; pruned by Curator |
+| Tools | Reusable scripts and utilities discovered during execution | Added by Architect; validated before persistence |
+| Reports | Analysis outputs and progress snapshots | Append-only; used for trend detection |
 
-Unlike simpler patterns (`claude-progress.txt`, AGENTS.md), hints are tentative and playbooks are validated -- promotion between them is gated by the Curator.
+Unlike simpler patterns (`claude-progress.txt`, AGENTS.md), hints are tentative and playbooks are validated. The Curator gates promotion between them.
 
-## Staged Validation and Rollback
+## Staged validation and rollback
 
 Not every proposed improvement should persist. The system applies validation gates at multiple stages:
 
@@ -79,15 +79,15 @@ graph TD
     V4 -->|fail| R
 ```
 
-Weak strategies roll back automatically, preventing regressions where changes pass initial tests but degrade edge cases. Guards include stagnation detection, dead-end management, and rapid gating.
+Weak strategies roll back automatically. This prevents regressions where changes pass initial tests but degrade edge cases. Guards include stagnation detection, dead-end management, and rapid gating.
 
-## Frontier-to-Local Distillation
+## Frontier-to-local distillation
 
 A cost-performance pattern: use frontier models (Claude, GPT-4) for exploration in the Competitor and Analyst roles, encode validated strategies in playbooks, then execute with local models (Ollama, vLLM, MLX) on later runs. Frontier models re-engage only on stagnation or novel problems.
 
-The ACE framework ([arxiv:2510.04618](https://arxiv.org/abs/2510.04618)) applies the same Generate/Reflect/Curate decomposition and reports +10.6% on agent benchmarks (and +8.6% on finance) over strong baselines without fine-tuning; on AppWorld it matches the top-ranked production agent overall and surpasses it on the harder test-challenge split -- evidence that structured role decomposition with persistent context beats single-loop patterns.
+The ACE framework ([arxiv:2510.04618](https://arxiv.org/abs/2510.04618)) applies the same Generate/Reflect/Curate decomposition. It reports +10.6% on agent benchmarks and +8.6% on finance over strong baselines, without fine-tuning. On AppWorld it matches the top-ranked production agent overall and surpasses it on the harder test-challenge split. That is evidence that structured role decomposition with persistent context beats single-loop patterns.
 
-## Applying the Pattern
+## Applying the pattern
 
 The five roles map to any multi-agent system without requiring AutoContext's full implementation:
 
@@ -98,7 +98,7 @@ The five roles map to any multi-agent system without requiring AutoContext's ful
 | A manual review process | Five review passes, each checking one dimension |
 | A single-agent loop | Five phases within the same session, with explicit transitions |
 
-The minimum viable version: separate "generate" from "evaluate" from "persist." The [evaluator-optimizer](../agent-design/evaluator-optimizer.md) pattern covers the first two; a Curator role to gate persistence is the third step that prevents regression.
+The minimum viable version separates "generate" from "evaluate" from "persist." The [evaluator-optimizer](../agent-design/evaluator-optimizer.md) pattern covers the first two. A Curator role to gate persistence is the third step that prevents regression.
 
 ## Example
 
@@ -139,17 +139,17 @@ else:
     print("Rolled back:", decision)
 ```
 
-Each role receives only the prior role output -- no shared context window. The Curator decision gates persistence; rejected proposals are discarded without modifying the knowledge store.
+Each role receives only the prior role output, with no shared context window. The Curator decision gates persistence. The loop discards rejected proposals without changing the knowledge store.
 
-## When This Backfires
+## When this backfires
 
 Role decomposition adds coordination overhead that pays off only across many iterations. Three conditions where the pattern is worse than a simpler alternative:
 
-- **Single-session or low-iteration tasks.** Persistent knowledge layers add no value if the agent runs once or twice; the five-role handoff just adds latency.
-- **Curator as bottleneck.** A synchronous Curator gate on the critical path stalls the loop when approval is cautious. Teams needing rapid iteration may find a two-role [evaluator-optimizer](../agent-design/evaluator-optimizer.md) loop more practical than the full five-role handshake.
-- **Fuzzy role contracts.** If the Analyst proposes playbook edits or the Coach analyses results, boundaries collapse and handoff failures become hard to attribute. The pattern needs strict prompt discipline.
+- Single-session or low-iteration tasks. Persistent knowledge layers add no value if the agent runs once or twice. The five-role handoff just adds latency.
+- Curator as bottleneck. A synchronous Curator gate on the critical path stalls the loop when approval is cautious. Teams that need fast iteration may find a two-role [evaluator-optimizer](../agent-design/evaluator-optimizer.md) loop more practical than the full five-role handshake.
+- Fuzzy role contracts. If the Analyst proposes playbook edits or the Coach analyzes results, boundaries collapse and handoff failures become hard to attribute. The pattern needs strict prompt discipline.
 
-A two-role [evaluator-optimizer](../agent-design/evaluator-optimizer.md) loop is often sufficient when tasks are bounded, the improvement signal is clear, and persistence is not a goal.
+A two-role [evaluator-optimizer](../agent-design/evaluator-optimizer.md) loop is often enough when tasks are bounded, the improvement signal is clear, and persistence is not a goal.
 
 ## Key Takeaways
 

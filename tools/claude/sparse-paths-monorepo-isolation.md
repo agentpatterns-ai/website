@@ -12,15 +12,15 @@ last_reviewed: 2026-06-13
 
 > Sparse-checkout worktrees (`worktree.sparsePaths`) restrict an agent's working tree to one monorepo subtree, so it cannot touch unrelated services.
 
-## The Problem
+## The problem
 
-Agents working inside a full monorepo checkout accumulate noise from every service. Glob results, file listings, and search outputs span the entire repo. An agent assigned to the payments service will encounter ML infrastructure, frontend assets, and shared tooling — context it cannot use and may accidentally modify.
+An agent in a full monorepo checkout sees noise from every service. Glob results, file listings, and search outputs span the entire repo. An agent assigned to the payments service still sees ML infrastructure, frontend assets, and shared tooling. It cannot use that context, and it may change those files by accident.
 
-[Worktree isolation](../../workflows/worktree-isolation.md) solves the multi-agent collision problem. It does not solve the scope problem: each agent still operates on a full repo checkout.
+[Worktree isolation](../../workflows/worktree-isolation.md) solves the multi-agent collision problem. It does not solve the scope problem. Each agent still works on a full repo checkout.
 
 ## worktree.sparsePaths
 
-Claude Code's [`worktree.sparsePaths` setting](https://code.claude.com/docs/en/settings#worktree-settings) (added in [v2.1.76](https://code.claude.com/docs/en/changelog)) configures git sparse-checkout in cone mode when `claude --worktree` creates a new worktree. Only the listed directories are written to disk.
+Claude Code's [`worktree.sparsePaths` setting](https://code.claude.com/docs/en/settings#worktree-settings) (added in [v2.1.76](https://code.claude.com/docs/en/changelog)) sets up git sparse-checkout in cone mode when `claude --worktree` creates a new worktree. Only the listed directories are written to disk.
 
 ```json
 {
@@ -36,9 +36,9 @@ Claude Code's [`worktree.sparsePaths` setting](https://code.claude.com/docs/en/s
 
 Place this in `.claude/settings.json` (shared with the team) or `~/.claude/settings.json` (personal default).
 
-When the worktree is created, Claude Code runs `git sparse-checkout set --cone` with these paths. Files outside the listed directories are not written to disk — the agent cannot read or write them, and they do not appear in file listings or glob results.
+When it creates the worktree, Claude Code runs `git sparse-checkout set --cone` with these paths. Files outside the listed directories are not written to disk. The agent cannot read or write them, and they do not appear in file listings or glob results.
 
-A companion setting, `worktree.symlinkDirectories`, symlinks large directories like `node_modules` and `.cache` from the main repo into each worktree instead of duplicating them:
+A companion setting, `worktree.symlinkDirectories`, symlinks large directories such as `node_modules` and `.cache` from the main repo into each worktree, rather than copying them:
 
 ```json
 {
@@ -49,7 +49,7 @@ A companion setting, `worktree.symlinkDirectories`, symlinks large directories l
 }
 ```
 
-## Effects on Agent Behavior
+## Effects on agent behavior
 
 | Behavior | Without sparsePaths | With sparsePaths |
 |----------|-------------------|-----------------|
@@ -59,32 +59,32 @@ A companion setting, `worktree.symlinkDirectories`, symlinks large directories l
 | Write outside cone | Succeeds | File not present; write fails |
 | Startup time | Full checkout | Only listed paths written |
 
-The scope constraint is enforced at the filesystem level, not by the agent. The agent cannot expand its own view — it would need a new worktree with updated `sparsePaths`.
+The filesystem enforces the scope constraint, not the agent. The agent cannot widen its own view. It would need a new worktree with updated `sparsePaths`.
 
-## When to Use
+## When to use
 
 Use `worktree.sparsePaths` when:
 
-- The monorepo has more than a few thousand files and agents show sluggish startup or noisy search results
-- Agent tasks are bounded to a known service or package
-- You want hard isolation: agents physically cannot touch sibling services
+- The monorepo has more than a few thousand files, and agents show slow startup or noisy search results
+- Agent tasks stay within a known service or package
+- You want hard isolation, so agents physically cannot touch sibling services
 
 Skip it when:
 
-- The task explicitly crosses service boundaries (API contract changes, cross-service refactors) — the narrow cone will block necessary reads
-- The repo is small enough that full checkout is fast and noise is not a problem
+- The task crosses service boundaries (API contract changes, cross-service refactors), because the narrow cone blocks reads it needs
+- The repo is small enough that a full checkout is fast and noise is not a problem
 
 ## Trade-offs
 
-**Blast radius**: Agents cannot write outside the sparse cone. An agent cannot accidentally corrupt a sibling service's files.
+Blast radius stays small. Agents cannot write outside the sparse cone, so an agent cannot corrupt a sibling service's files by accident.
 
-**Cross-service tasks**: Any task that requires reading or writing paths outside the declared cone cannot complete. The worktree must be recreated with wider `sparsePaths` to accommodate cross-service work — this is intentional friction.
+Cross-service tasks cannot complete. Any task that reads or writes paths outside the declared cone fails. You recreate the worktree with wider `sparsePaths` to take on cross-service work, and this friction is intentional.
 
-**Path drift**: If `sparsePaths` is committed to `.claude/settings.json`, it applies to all worktrees regardless of task. For a repo where most tasks are payments-scoped, this is a win. For a repo with variable task domains, keep `sparsePaths` in personal settings or override per-task at session start.
+Path drift is the cost of committing the setting. If `sparsePaths` lives in `.claude/settings.json`, it applies to all worktrees, whatever the task. For a repo where most tasks are payments-scoped, that helps. For a repo with varied task domains, keep `sparsePaths` in personal settings, or override it per task at session start.
 
-## Pairing with EnterWorktree / ExitWorktree
+## Pairing with EnterWorktree and ExitWorktree
 
-The [`EnterWorktree` and `ExitWorktree` tools](batch-worktrees.md#enterworktree-exitworktree) ([changelog](https://code.claude.com/docs/en/changelog)) enable programmatic worktree session management within an agent conversation. A sub-agent can enter a sparse worktree scoped to its assigned service, complete its task, and exit — without the orchestrator needing to manage worktree lifecycle in a shell script.
+The [`EnterWorktree` and `ExitWorktree` tools](batch-worktrees.md#enterworktree-exitworktree) ([changelog](https://code.claude.com/docs/en/changelog)) let an agent manage a worktree session inside its conversation. A sub-agent can enter a sparse worktree scoped to its assigned service, finish its task, and exit. The orchestrator does not have to manage the worktree lifecycle in a shell script.
 
 ## Example
 

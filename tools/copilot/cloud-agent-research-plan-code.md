@@ -16,7 +16,7 @@ status: current
 
 [Announced April 2026](https://github.blog/changelog/2026-04-01-research-plan-and-code-with-copilot-cloud-agent/), this capability extends the original cloud agent (which produced a PR directly) with explicit steering points: a research summary, an implementation plan, and a diff — each requiring developer action before proceeding.
 
-## The Three Phases
+## The three phases
 
 ```mermaid
 graph LR
@@ -41,14 +41,14 @@ Access via the **Agents tab** in the repository or through **Copilot Chat**.
 Request a plan by including it in your prompt: `"Make a plan before taking any action"`. Copilot generates a proposed implementation approach — what changes it intends to make and why — without writing any code yet.
 
 At this checkpoint, you can:
-- **Approve** the plan and proceed to code generation
-- **Redirect** with feedback: correct misidentified files, missing constraints, wrong architectural approach
+- Approve the plan and proceed to code generation
+- Redirect with feedback to correct misidentified files, missing constraints, or the wrong architectural approach
 
 This is the cheapest point to correct the agent. A paragraph of feedback here prevents a complete rewrite after code is generated.
 
 ### Code
 
-With the plan approved, Copilot implements on a branch. No pull request is created automatically.
+With the plan approved, Copilot implements on a branch. It does not open a pull request automatically.
 
 At this checkpoint:
 - Click **Diff** to review all changes before proceeding
@@ -57,7 +57,7 @@ At this checkpoint:
 
 The manual PR gate means the agent never opens a review request without developer sign-off.
 
-## Cost Asymmetry
+## Cost asymmetry
 
 The three-phase model formalizes a known cost distribution in agentic coding: errors caught at the research-to-plan boundary cost a redirect comment; errors caught at the plan-to-code boundary cost an approval click; errors caught post-implementation cost a branch revert and a new task. The model enforces early-stage investment through UI gates rather than developer discipline — the plan gate is the cheapest point to correct the agent.
 
@@ -68,7 +68,7 @@ The three-phase model formalizes a known cost distribution in agentic coding: er
 | After Code (diff review) | Inline iteration |
 | After PR opened | Branch revert, new task |
 
-## When to Use Planning vs. Direct Assignment
+## When to use planning or direct assignment
 
 The three-phase flow adds latency at each gate. For simple or well-specified tasks, direct cloud agent assignment (issue → PR) is faster.
 
@@ -79,19 +79,19 @@ The three-phase flow adds latency at each gate. For simple or well-specified tas
 | Investigation before any coding | Research → Plan → Code |
 | Unfamiliar codebase, complex cross-file change | Research → Plan → Code |
 
-## Runner and Policy Requirements
+## Runner and policy requirements
 
 The three-phase model runs on the same infrastructure as the Copilot cloud agent:
 - Requires a paid Copilot plan (Pro, Business, or Enterprise)
 - Business and Enterprise users need administrator enablement — cloud agent is [off by default](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/manage-agents/manage-copilot-cloud-agent) at every tier
 - Runner configuration, firewall policy, and org-level governance apply identically — see [Cloud Agent Organization Controls](cloud-agent-org-controls.md)
 
-## When This Backfires
+## When this backfires
 
-- **Simple tasks**: The plan gate is overhead when the implementation is obvious. A one-line fix doesn't warrant a research → plan → code cycle — direct [Coding Agent](coding-agent.md) assignment is faster.
-- **Well-specified issues**: If the issue body already documents the exact changes needed, the research phase adds latency without new information.
-- **Incomplete repository context**: Research grounding is limited to repository content. If key constraints live in internal wikis, Jira, or external APIs, the research summary will be incomplete — and a plan built on it may be flawed.
-- **Bulk automation workflows**: Teams using cloud agent for high-volume tasks (security patches across many repos) pay the plan-review tax on every task. Total throughput drops significantly.
+- Simple tasks: the plan gate is overhead when the implementation is obvious. A one-line fix does not warrant a research → plan → code cycle — direct [Coding Agent](coding-agent.md) assignment is faster.
+- Well-specified issues: if the issue body already documents the exact changes needed, the research phase adds latency without new information.
+- Incomplete repository context: research grounding is limited to repository content. If key constraints live in internal wikis, Jira, or external APIs, the research summary will be incomplete — and a plan built on it may be flawed.
+- Bulk automation workflows: teams using cloud agent for high-volume tasks (security patches across many repos) pay the plan-review tax on every task. Total throughput drops sharply.
 
 ## Example
 

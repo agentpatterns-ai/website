@@ -20,32 +20,32 @@ maturity: emerging
 
 > A single hit@k confounds embedder lift with lexical overlap; pin BM25 with shared-entity distractors and stratify queries by tag.
 
-## When This Protocol Is the Right Instrument
+## When this protocol is the right instrument
 
-Entity-collision answers one question: **does this embedder add signal beyond keyword overlap on agent-memory retrieval?** Adopt it when choosing between embedders for an agent-memory or RAG store, with the index held constant, and an eval set you can stratify into 3–5 query categories by retrieval mode. Skip it for end-to-end agent-memory quality — that requires production traces and task-level grading. See *When This Backfires*.
+Entity-collision answers one question: does this embedder add signal beyond keyword overlap on agent-memory retrieval? Adopt it when choosing between embedders for an agent-memory or RAG store, with the index held constant, and an eval set you can stratify into 3–5 query categories by retrieval mode. Skip it for end-to-end agent-memory quality — that requires production traces and task-level grading. See When this backfires.
 
-## The Confound a Single hit@k Hides
+## The confound a single hit@k hides
 
 A naïve agent-memory eval gives every retriever one number — hit@k or NDCG@k over a fixed query set — and ranks embedders by it. Two effects mix inside:
 
-1. **Lexical leakage.** When the gold answer shares words with the query, BM25 finds it for free, and any retriever above BM25 inherits that free win. The reported hit@k is partly a *property of the dataset*.
-2. **Tag mixing.** Queries vary by retrieval mode — phrase lookup, paraphrase, intent, multi-hop. Averaging hides where each embedder wins or loses.
+1. Lexical leakage. When the gold answer shares words with the query, BM25 finds it for free, and any retriever above BM25 inherits that free win. The reported hit@k is partly a property of the dataset.
+2. Tag mixing. Queries vary by retrieval mode — phrase lookup, paraphrase, intent, multi-hop. Averaging hides where each embedder wins or loses.
 
 The LoCo benchmark surfaced this: BM25 alone reached NDCG > 90 on 4 of 5 tasks, meaning lexical overlap dominated and any "win" over BM25 by a dense retriever was small and possibly noise. [Source: [LoCo Benchmark BM25 insights (HazyResearch/m2 issue #23)](https://github.com/HazyResearch/m2/issues/23)]
 
 Entity-collision resolves both confounds at construction time. [Source: [Entity-Collision: A Stratified Protocol for Attributing Retrieval Lift in Agent Memory](https://arxiv.org/abs/2605.29630)]
 
-## The Protocol: Two Construction Rules
+## The protocol: two construction rules
 
-### Rule 1: Pin BM25 with Shared-Entity Distractors
+### Rule 1: pin BM25 with shared-entity distractors
 
-For each evaluation query, construct the candidate pool so that **every distractor shares the gold answer's entity tokens**. Pull the named entities, IDs, and content words from the gold answer; ensure each distractor carries the same set. BM25's score is dominated by IDF-weighted term overlap, so when every candidate shares the high-signal tokens, BM25 ranks them comparably by construction. The lexical baseline is *pinned*. [Source: [Entity-Collision](https://arxiv.org/abs/2605.29630)]
+For each evaluation query, construct the candidate pool so that every distractor shares the gold answer's entity tokens. Pull the named entities, IDs, and content words from the gold answer; ensure each distractor carries the same set. BM25's score is dominated by IDF-weighted term overlap, so when every candidate shares the high-signal tokens, BM25 ranks them comparably by construction. This pins the lexical baseline. [Source: [Entity-Collision](https://arxiv.org/abs/2605.29630)]
 
 Any retriever that now outranks BM25 must be using non-lexical signal — the lexical channel is saturated for every candidate.
 
-### Rule 2: Stratify Queries by Discriminator Tag
+### Rule 2: stratify queries by discriminator tag
 
-Partition the query set into 3–5 disjoint tags that name the *retrieval mode* the query exercises. The paper uses 5 tags; team-scale evals can start with fewer. Tags should be orthogonal to topic — they describe how the embedder has to retrieve, not what the user asked about. Examples:
+Partition the query set into 3–5 disjoint tags that name the retrieval mode the query exercises. The paper uses 5 tags; team-scale evals can start with fewer. Tags should be orthogonal to topic — they describe how the embedder has to retrieve, not what the user asked about. Examples:
 
 - `lexical` — exact term match should dominate
 - `paraphrase` — same intent, different surface form
@@ -53,22 +53,22 @@ Partition the query set into 3–5 disjoint tags that name the *retrieval mode* 
 - `multi-hop` — gold answer is reached only through an intermediate memory
 - `temporal` — gold answer depends on session ordering
 
-Report hit@k and NDCG@k **per tag**, not averaged. This surfaces the asymmetries averaging hides: in the paper's results, MiniLM-384 beats BGE-large on lexical tasks while losing on intent-based ones — a finding a single hit@k erases. [Source: [Entity-Collision](https://arxiv.org/abs/2605.29630)]
+Report hit@k and NDCG@k per tag, not averaged. This surfaces the asymmetries averaging hides: in the paper's results, MiniLM-384 beats BGE-large on lexical tasks while losing on intent-based ones — a finding a single hit@k erases. [Source: [Entity-Collision](https://arxiv.org/abs/2605.29630)]
 
-## Why It Works
+## Why it works
 
-The mechanism is well-grounded outside this protocol: hard-negative mining at *training* time exploits the same logic — force the model past easy lexical cues so it learns harder semantic ones. A 2025 ACL Industry paper on hard-negative mining for enterprise retrieval reports 15% MRR@3 and 19% MRR@10 improvements over baselines from this principle. [Source: [Hard Negative Mining for Domain-Specific Retrieval in Enterprise Systems (ACL 2025 Industry)](https://aclanthology.org/2025.acl-industry.72/)]
+The mechanism is well-grounded outside this protocol: hard-negative mining at training time exploits the same logic — force the model past easy lexical cues so it learns harder semantic ones. A 2025 ACL Industry paper on hard-negative mining for enterprise retrieval reports 15% MRR@3 and 19% MRR@10 improvements over baselines from this principle. [Source: [Hard Negative Mining for Domain-Specific Retrieval in Enterprise Systems (ACL 2025 Industry)](https://aclanthology.org/2025.acl-industry.72/)]
 
 Stratification compounds the effect. 2026 work on semantic stratification shows aggregate metrics regularly obscure per-region failures that only appear when queries are partitioned by semantic class. [Source: [Coverage, Not Averages: Semantic Stratification for Trustworthy Retrieval Evaluation](https://arxiv.org/abs/2604.20763)]
 
-## When This Backfires
+## When this backfires
 
 Entity-collision answers a model-selection question, not a deployment-quality question. It is the wrong instrument when:
 
-- **Production retrieval is hybrid.** Most production stacks fuse BM25 and dense retrieval. The protocol erases the BM25 component's real contribution and over-penalises the embedder on queries where BM25 was doing the work. [Source: [Hybrid Search: BM25 and Dense Retrieval Combined](https://mbrenndoerfer.com/writing/hybrid-search-bm25-dense-retrieval-fusion)]
-- **The domain rewards lexical match.** Code search, error-code lookup, function-name resolution — exact term overlap is the correct signal, so forcing entity-collision distractors makes the eval bear no resemblance to the production query mix. [Source: [Sparse Embedding or BM25 (Infiniflow)](https://medium.com/@infiniflowai/sparse-embedding-or-bm25-84c942b3eda7)]
-- **Small teams without eval headcount.** Per-tag stratification, distractor construction, and BM25 calibration cost real time. For teams making one model-selection decision a year, end-to-end task evals on production traffic are cheaper and more directly informative.
-- **Embedder change paired with index change.** The protocol measures combined lift unless the index is held constant — rare in upgrade cycles where teams rebuild the index for the new embedder dimensions.
+- Production retrieval is hybrid. Most production stacks fuse BM25 and dense retrieval. The protocol erases the BM25 component's real contribution and over-penalizes the embedder on queries where BM25 was doing the work. [Source: [Hybrid Search: BM25 and Dense Retrieval Combined](https://mbrenndoerfer.com/writing/hybrid-search-bm25-dense-retrieval-fusion)]
+- The domain rewards lexical match. Code search, error-code lookup, function-name resolution — exact term overlap is the correct signal, so forcing entity-collision distractors makes the eval bear no resemblance to the production query mix. [Source: [Sparse Embedding or BM25 (Infiniflow)](https://medium.com/@infiniflowai/sparse-embedding-or-bm25-84c942b3eda7)]
+- Small teams without eval headcount. Per-tag stratification, distractor construction, and BM25 calibration cost real time. For teams making one model-selection decision a year, end-to-end task evals on production traffic are cheaper and more directly informative.
+- Embedder change paired with index change. The protocol measures combined lift unless the index is held constant — rare in upgrade cycles where teams rebuild the index for the new embedder dimensions.
 
 ## Example
 
@@ -96,13 +96,13 @@ The lexical tier was carrying embedder A's average and BM25 was retrieving most 
 - A single hit@k for agent-memory retrieval confounds embedder lift with lexical overlap and tag mixing — model-selection decisions made on it can pick the wrong embedder
 - Pinning BM25 by construction — every distractor shares the gold answer's entity tokens — converts the metric from "lexical overlap plus semantics" to "semantics only"
 - Stratifying queries by retrieval mode (lexical / paraphrase / intent / multi-hop / temporal) surfaces per-mode asymmetries that averaging hides, and is the discipline the protocol couples with BM25-pinning
-- Entity-collision answers a model-selection question, not a deployment-quality question; hybrid retrievers, lexical-favoured domains, and small teams may be better served by end-to-end task evals
+- Entity-collision answers a model-selection question, not a deployment-quality question; hybrid retrievers, lexical-favored domains, and small teams may be better served by end-to-end task evals
 - The protocol's mechanism (controlled hard-negative construction) is independently validated by 2025 ACL work on hard-negative mining showing 15–19% MRR improvements at training time
 
 ## Related
 
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — a parallel measurement-validity failure mode where the eval set itself leaks signal to the system under test
-- [Skill Retrieval Realism Gap](eval-blind-spots.md) — idealised retrieval conditions inflate skill-augmented agent benchmarks the same way unstratified hit@k inflates embedder benchmarks
+- [Skill Retrieval Realism Gap](eval-blind-spots.md) — idealized retrieval conditions inflate skill-augmented agent benchmarks the same way unstratified hit@k inflates embedder benchmarks
 - [Golden Query Pairs as Continuous Regression Tests](golden-query-pairs-regression.md) — the production-trace half of the eval discipline this protocol does not cover
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — the agent-memory systems this eval discipline measures
 - [Memory Retrieval as a Control Decision](../agent-design/memory-retrieval-as-control.md) — adjacent agent-memory retrieval concern where false positives matter more than recall

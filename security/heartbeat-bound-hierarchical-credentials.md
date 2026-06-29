@@ -24,19 +24,19 @@ Heartbeat-Bound Hierarchical Credentials (HBHC) bind every sub-agent credential 
 
 For short-task agents already on SPIFFE-style short-TTL rotation, TTL expiry bounds zombie risk on its own and HBHC adds complexity without changing realized blast radius. [Source: SPIFFE Concepts](https://spiffe.io/docs/latest/spiffe-about/spiffe-concepts/)
 
-## When This Pattern Applies
+## When this pattern applies
 
 The mechanism pays its complexity cost in three conditions:
 
-- **Hierarchical sub-agent swarms where cascading revocation is the design goal.** Revoking a parent must cascade transitively to every descendant within a known time bound. The paper demonstrates this across a 49-agent four-level hierarchy. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
-- **Long-running agents holding broad credentials.** When agent lifetime exceeds short-TTL rotation intervals, OAuth/OCSP/Status-List approaches leave a zombie window of minutes to hours after operator shutdown. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
-- **Parent signing keys live in an HSM or TEE.** The freshness guarantee is conditional on parent keys in secure enclaves; without that, the deterministic-revocation property is lost. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
+- Hierarchical sub-agent swarms where cascading revocation is the design goal. Revoking a parent must cascade transitively to every descendant within a known time bound. The paper demonstrates this across a 49-agent four-level hierarchy. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
+- Long-running agents holding broad credentials. When agent lifetime exceeds short-TTL rotation intervals, OAuth, OCSP, and Status-List approaches leave a zombie window of minutes to hours after operator shutdown. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
+- Parent signing keys that live in an HSM or TEE. The freshness guarantee depends on parent keys in secure enclaves. Without that, the deterministic-revocation property is lost. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
 
 Outside these conditions, short-TTL workload identity (SPIFFE/SPIRE: 1-hour or shorter SVIDs with proactive rotation) is the simpler default. [Source: SPIFFE Concepts](https://spiffe.io/docs/latest/spiffe-about/spiffe-concepts/)
 
-## How It Works
+## How it works
 
-Every descendant credential carries an expectation that "a heartbeat signed by my parent's key was issued at time `t` with TTL `Δ_h`". A verifier with the cached parent public key checks the heartbeat's signature and compares `t + Δ_h + ε` against its local clock — no network call to an issuer. When the parent stops signing, the next verifier evaluating a descendant after the bound rejects it independently. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
+Every descendant credential carries an expectation that "a heartbeat signed by my parent's key was issued at time `t` with TTL `Δ_h`". A verifier with the cached parent public key checks the heartbeat's signature and compares `t + Δ_h + ε` against its local clock — no network call to an issuer. When the parent stops signing, the next verifier to evaluate a descendant after the bound rejects it on its own. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
 
 ```mermaid
 graph TD
@@ -52,23 +52,23 @@ graph TD
 
 Stopping the parent's heartbeat is the revocation event. There is no status list to update and no introspection to wait on; descendants simply fail the next local check after the bound elapses.
 
-## Reported Results
+## Reported results
 
-The paper's evaluation against OAuth 2.0 introspection, OCSP, and W3C Status Lists reports a 90x reduction in zombie window over OAuth 2.0, 0.26 ms full authentication in Rust, 18,000+ verifications/second, stable per-verification latency from 10 to 10,000 agents, 0.71% end-to-end overhead on GPT-4o-mini tool calls, zero post-revocation tool calls under prompt-injection bypass, and successful cascading revocation across a 49-agent four-level hierarchy. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
+The paper evaluates HBHC against OAuth 2.0 introspection, OCSP, and W3C Status Lists. It reports a 90x reduction in zombie window over OAuth 2.0, 0.26 ms full authentication in Rust, more than 18,000 verifications per second, stable per-verification latency from 10 to 10,000 agents, 0.71% end-to-end overhead on GPT-4o-mini tool calls, zero post-revocation tool calls under prompt-injection bypass, and cascading revocation across a 49-agent four-level hierarchy. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
 
 The 90x figure is over OAuth 2.0 specifically. SPIFFE-style rotation collapses zombie windows by implicit expiry, so the relevant baseline depends on what the deployment runs today.
 
-## Why It Works
+## Why it works
 
-The pattern relocates the freshness check from a network round-trip to local cryptographic verification — signature plus clock, applied transitively up a credential chain. The novelty is the chain itself: revoking the parent cascades to every descendant by construction, so the revocation event is the absence of new heartbeats rather than a positive write to a status server. That eliminates the consistency-window problem defining OAuth 2.0 introspection and OCSP. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
+The pattern moves the freshness check from a network round-trip to local cryptographic verification — signature plus clock, applied transitively up a credential chain. The novelty is the chain itself: revoking the parent cascades to every descendant by construction, so the revocation event is the absence of new heartbeats rather than a write to a status server. That removes the consistency-window problem that defines OAuth 2.0 introspection and OCSP. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
 
-## When This Backfires
+## When this backfires
 
-- **Unbounded clock skew.** The freshness bound holds only while skew stays within `ε`; drift past `ε` either reopens the zombie window or rejects valid credentials. NTP discipline is a prerequisite. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
-- **No secure enclave for parent keys.** If the parent process can have its memory dumped, an attacker exfiltrates the signing key and forges heartbeats post-shutdown — the deterministic-revocation property is lost. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
-- **Heartbeat issuer as a new SPOF.** The parent becomes a hard liveness dependency for every descendant. A parent crash or a partition isolating the parent revokes the entire subtree even when descendants are healthy — fail-closed by design, operationally severe for long-running batch jobs.
-- **Short-task agents already on rotation.** When the entire lifecycle fits inside one short-TTL SVID, the TTL approach already bounds zombie risk to the TTL window. HBHC adds a heartbeat broker and protocol without reducing realized blast radius. [Source: SPIFFE Concepts](https://spiffe.io/docs/latest/spiffe-about/spiffe-concepts/)
-- **Downstream cache desync.** Cryptographically correct revocation at the verifier does not bind downstream APIs, queues, or replicated systems that may honour a cached token after local rejection. HBHC closes the verifier window, not the downstream coherence window. [Source: GitGuardian, *Short-Lived Credentials in Agentic Systems*](https://blog.gitguardian.com/short-lived-credentials-in-agentic-systems-a-practical-trade-off-guide/)
+- Unbounded clock skew. The freshness bound holds only while skew stays within `ε`. Drift past `ε` either reopens the zombie window or rejects valid credentials. NTP discipline is a prerequisite. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
+- No secure enclave for parent keys. If an attacker can dump the parent process memory, they exfiltrate the signing key and forge heartbeats after shutdown. The deterministic-revocation property is lost. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
+- Heartbeat issuer as a new single point of failure. The parent becomes a hard liveness dependency for every descendant. A parent crash, or a partition that isolates the parent, revokes the whole subtree even when descendants are healthy. This fails closed by design, but it hits long-running batch jobs hard.
+- Short-task agents already on rotation. When the whole lifecycle fits inside one short-TTL SVID, the TTL approach already bounds zombie risk to the TTL window. HBHC adds a heartbeat broker and protocol without reducing realized blast radius. [Source: SPIFFE Concepts](https://spiffe.io/docs/latest/spiffe-about/spiffe-concepts/)
+- Downstream cache desync. Cryptographically correct revocation at the verifier does not bind downstream APIs, queues, or replicated systems that may honor a cached token after local rejection. HBHC closes the verifier window, not the downstream coherence window. [Source: GitGuardian, *Short-Lived Credentials in Agentic Systems*](https://blog.gitguardian.com/short-lived-credentials-in-agentic-systems-a-practical-trade-off-guide/)
 
 ## Key Takeaways
 

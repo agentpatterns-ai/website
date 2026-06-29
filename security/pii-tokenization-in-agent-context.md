@@ -20,17 +20,17 @@ maturity: established
 
 > Sandbox-enforced PII tokenization replaces sensitive fields with deterministic tokens before data reaches the model, so real values never enter the context window.
 
-**Related lesson:** [The Payload That Waits](https://learn.agentpatterns.ai/security/the-payload-that-waits/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [The Payload That Waits](https://learn.agentpatterns.ai/security/the-payload-that-waits/) covers this concept in a hands-on lesson with quizzes.
 
 PII tokenization replaces sensitive field values — emails, names, account numbers — with deterministic placeholder tokens before they reach the model's context window. The sandbox enforces the boundary: real values never reach the model, and de-tokenization happens only inside the sandbox when downstream tools need the original data.
 
-## Why Model Context Is a Data Risk
+## Why model context is a data risk
 
-Any data an agent reasons about enters its context window, where it may be logged, cached, or observed by inference infrastructure. For regulated domains — healthcare, finance, legal — patient identifiers, financial account numbers, or contact details in model context create data residency and compliance exposure.
+Any data an agent reasons about enters its context window. Inference infrastructure can log, cache, or observe what sits there. In regulated domains such as healthcare, finance, and legal, putting patient identifiers, account numbers, or contact details into model context creates data residency and compliance exposure.
 
 [Anthropic's MCP code execution research](https://www.anthropic.com/engineering/code-execution-with-mcp) describes the sandbox-as-privacy-boundary pattern: sensitive values move between tools inside the sandbox while the model sees only deterministic placeholders.
 
-## How Tokenization Works
+## How tokenization works
 
 Before data surfaces to the model, the execution environment replaces sensitive field values with deterministic tokens:
 
@@ -53,29 +53,29 @@ graph TD
 
 The model only ever sees tokens. Real values stay inside the sandbox.
 
-## What the Agent Can Still Do
+## What the agent can still do
 
-Tokenization does not block meaningful work. With tokenized data, the agent can:
+Tokenization does not block useful work. With tokenized data, the agent can:
 
 - Count records: "847 records have `{{EMAIL_N}}` fields"
 - Filter by structure: "Records where `{{CC_N}}` is present but `{{EMAIL_N}}` is missing"
 - Detect patterns: "All `{{NAME_N}}` values follow a given format"
 - Route records to queues
 
-The agent reasons about structure, counts, and relationships — not the values themselves. For most analytical and routing tasks, this is sufficient.
+The agent reasons about structure, counts, and relationships — not the values themselves. This is enough for most analytical and routing tasks.
 
-## Deterministic Rules, Not Model Judgment
+## Deterministic rules, not model judgment
 
-The boundary is enforced by [deterministic rules](../verification/deterministic-guardrails.md) in the execution environment, not by model judgment. The model does not decide what is sensitive; the sandbox does.
+[Deterministic rules](../verification/deterministic-guardrails.md) in the execution environment enforce the boundary, not model judgment. The model does not decide what is sensitive; the sandbox does.
 
-Model judgment is probabilistic. An instruction like "do not include email addresses in your reasoning" is a prompt — it may be followed, ignored, or misinterpreted. A sandbox that intercepts and replaces all fields matching `^[\w.-]+@[\w.-]+$` before data reaches the model is a deterministic control that cannot be reasoned around.
+Model judgment is probabilistic. An instruction like "do not include email addresses in your reasoning" is a prompt — the model may follow, ignore, or misinterpret it. A sandbox that intercepts and replaces all fields matching `^[\w.-]+@[\w.-]+$` before data reaches the model is a deterministic control that nothing can reason around.
 
-## Implementation Considerations
+## Implementation considerations
 
-- **Token determinism**: the same real value must produce the same token within a session so the agent can correlate references across tool calls.
-- **Token namespace by type**: type-prefixed tokens (`{{EMAIL_N}}`, `{{NAME_N}}`) let the agent reason about field kind without seeing the value.
-- **De-tokenization audit log**: log every de-tokenization — which token, when, and for which downstream call.
-- **Scope and expiry**: tokens should be session-scoped. Short-lived maps reduce compliance exposure and support GDPR right-to-erasure — delete the map and de-tokenization becomes impossible by design.
+- Token determinism: the same real value must produce the same token within a session so the agent can correlate references across tool calls.
+- Token namespace by type: type-prefixed tokens (`{{EMAIL_N}}`, `{{NAME_N}}`) let the agent reason about field kind without seeing the value.
+- De-tokenization audit log: log every de-tokenization — which token, when, and for which downstream call.
+- Scope and expiry: keep tokens session-scoped. Short-lived maps reduce compliance exposure and support GDPR right-to-erasure — delete the map and de-tokenization becomes impossible by design.
 
 ## Example
 
@@ -83,15 +83,15 @@ A healthcare data-processing agent needs to triage patient records. Before any d
 
 When the agent issues `send_summary(patient="{{NAME_1}}")`, the sandbox intercepts the call, resolves the token against the session map, passes the real name to the downstream API, and logs the de-tokenization event with timestamp and call context.
 
-## When This Backfires
+## When this backfires
 
-Tokenization is a boundary control, not a complete privacy solution. It fails or becomes insufficient in these conditions:
+Tokenization is a boundary control, not a complete privacy solution. It fails or falls short in these conditions:
 
-- **Detection gaps**: regex-based PII detection misses contextual quasi-identifiers — job titles, internal employee IDs, composite fields. [Google Cloud's de-identification reference architecture](https://docs.cloud.google.com/architecture/de-identification-re-identification-pii-using-cloud-dlp) recommends post-tokenization re-identification risk analysis because pattern-matching alone leaves these gaps.
-- **Safety gate interference**: type-prefixed token labels like `SSN: {{IDENTIFIER_1}}` can trigger model safety refusals. The label alongside the token signals sensitive data even without the value — mitigation requires stripping or neutralizing the field label, adding complexity.
-- **Overlong agent sessions**: when session-scoped token maps span many hours or tool calls, the map itself becomes a high-value target. Long-lived maps require the same access controls as the underlying PII vault — treat the map as [managed secrets](secrets-management-for-agents.md).
-- **Rich semantic tasks**: agents asked to draft a personalized email or generate a narrative report need the actual values. Tokenization forces a de-tokenize-then-inject step that partially re-exposes data in tool inputs, narrowing the boundary's effectiveness.
-- **Observability blind spots**: traces, error reports, and request logs around the inference path frequently capture raw prompts and tool inputs that bypass the redaction layer. Practitioner reports attribute [25–40% of discovered PII exposure to observability surfaces even when the inference path itself was well-redacted](https://www.statsig.com/perspectives/piiredactionprivacyllms). The audit log and any tracing pipeline that touches the sandbox must inherit the same access controls as the PII vault; see also [PII redaction guidance for MCP servers](https://mcpmanager.ai/blog/pii-redaction-for-mcp-servers/) on extending redaction to every returned artifact.
+- Detection gaps: regex-based PII detection misses contextual quasi-identifiers — job titles, internal employee IDs, composite fields. [Google Cloud's de-identification reference architecture](https://docs.cloud.google.com/architecture/de-identification-re-identification-pii-using-cloud-dlp) recommends post-tokenization re-identification risk analysis because pattern-matching alone leaves these gaps.
+- Safety gate interference: type-prefixed token labels like `SSN: {{IDENTIFIER_1}}` can trigger model safety refusals. The label next to the token signals sensitive data even without the value, so you have to strip or neutralize the field label, which adds complexity.
+- Overlong agent sessions: when session-scoped token maps span many hours or tool calls, the map itself becomes a high-value target. Long-lived maps need the same access controls as the underlying PII vault — treat the map as [managed secrets](secrets-management-for-agents.md).
+- Rich semantic tasks: agents asked to draft a personalized email or generate a narrative report need the actual values. Tokenization forces a de-tokenize-then-inject step that partially re-exposes data in tool inputs, which narrows how well the boundary works.
+- Observability blind spots: traces, error reports, and request logs around the inference path often capture raw prompts and tool inputs that bypass the redaction layer. Practitioner reports attribute [25–40% of discovered PII exposure to observability surfaces even when the inference path itself was well-redacted](https://www.statsig.com/perspectives/piiredactionprivacyllms). The audit log and any tracing pipeline that touches the sandbox must inherit the same access controls as the PII vault; see also [PII redaction guidance for MCP servers](https://mcpmanager.ai/blog/pii-redaction-for-mcp-servers/) on extending redaction to every returned artifact.
 
 ## Key Takeaways
 

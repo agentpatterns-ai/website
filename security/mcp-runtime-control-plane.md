@@ -19,11 +19,11 @@ maturity: established
 
 > Intercept every MCP tool call at a single policy evaluation point — identity, tool name, arguments, rate limits — before the call reaches the server.
 
-**Learn it hands-on:** [The Gateway in the Middle](https://learn.agentpatterns.ai/security/the-gateway-in-the-middle/) — guided lesson with quizzes.
+Learn it hands-on with [The Gateway in the Middle](https://learn.agentpatterns.ai/security/the-gateway-in-the-middle/), a guided lesson with quizzes.
 
-An agent connected to many MCP servers inherits each server's ad-hoc authorisation model. A runtime control plane collapses those N policies into one evaluation point between the agent and the tool: every call is intercepted, checked against a central policy corpus, and either forwarded or denied, with the decision logged. AWS, Microsoft, and Red Hat ship reference implementations of this pattern, all built on the same primitive — a policy decision point that runs before tool execution.
+An agent connected to many MCP servers inherits each server's ad-hoc authorization model. A runtime control plane collapses those N policies into one evaluation point between the agent and the tool. The plane intercepts every call, checks it against a central policy corpus, and either forwards or denies it, then logs the decision. AWS, Microsoft, and Red Hat ship reference implementations of this pattern, all built on the same primitive: a policy decision point that runs before tool execution.
 
-## Interception Loop
+## Interception loop
 
 ```mermaid
 sequenceDiagram
@@ -44,9 +44,9 @@ sequenceDiagram
     end
 ```
 
-AWS Bedrock AgentCore wires this shape explicitly: Policy in AgentCore "intercepts all agent traffic through Amazon Bedrock AgentCore Gateways and evaluates each request against defined policies in the policy engine before allowing tool access" ([AgentCore Policy](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html)). Microsoft's Agent Governance Toolkit takes the same position one layer up, inside the framework: "every tool call, resource access, and inter-agent message is evaluated against policy *before* execution" ([agent-governance-toolkit](https://github.com/microsoft/agent-governance-toolkit)). Microsoft frames the broader pattern as a dedicated control plane that mediates and authorises every agent tool execution before it reaches the MCP server — an enforcement-gateway model ([Securing MCP: A Control Plane for Agent Tool Execution](https://developer.microsoft.com/blog/securing-mcp-a-control-plane-for-agent-tool-execution)).
+AWS Bedrock AgentCore wires this shape explicitly: Policy in AgentCore "intercepts all agent traffic through Amazon Bedrock AgentCore Gateways and evaluates each request against defined policies in the policy engine before allowing tool access" ([AgentCore Policy](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html)). Microsoft's Agent Governance Toolkit takes the same position one layer up, inside the framework: "every tool call, resource access, and inter-agent message is evaluated against policy *before* execution" ([agent-governance-toolkit](https://github.com/microsoft/agent-governance-toolkit)). Microsoft frames the broader pattern as a dedicated control plane that mediates and authorizes every agent tool execution before it reaches the MCP server — an enforcement-gateway model ([Securing MCP: A Control Plane for Agent Tool Execution](https://developer.microsoft.com/blog/securing-mcp-a-control-plane-for-agent-tool-execution)).
 
-## Policy Dimensions
+## Policy dimensions
 
 Implementations converge on the same evaluation inputs:
 
@@ -61,28 +61,28 @@ Implementations converge on the same evaluation inputs:
 
 AgentCore expresses these in [Cedar](https://www.cedarpolicy.com/); Red Hat's MCP Gateway reference uses OPA with JWT `resource_access` claims ([Red Hat Developer](https://developers.redhat.com/articles/2025/12/12/advanced-authentication-authorization-mcp-gateway)). The Microsoft toolkit ships a native evaluator keyed on the same fields ([agent-governance-toolkit](https://github.com/microsoft/agent-governance-toolkit)).
 
-## Distinct from Lower Layers
+## Distinct from lower layers
 
-The control plane is the *runtime governance* layer. It is not:
+The control plane is the runtime governance layer. It is not:
 
-- **Network egress policy.** Domain allow/deny decides whether a TCP connection leaves the sandbox, below any MCP-level decision — see [Agent Network Egress Policy](agent-network-egress-policy.md).
-- **Process sandbox.** Filesystem and PID isolation constrain what a running tool process can touch; the control plane runs before the process starts — see [Scope Sandbox Rules to Harness-Owned Tools](sandbox-rules-harness-tools.md).
-- **MCP transport.** `initialize`, capability negotiation, and JSON-RPC framing describe how messages move; policy evaluation rides on top — see [MCP Client/Server Architecture](../tool-engineering/mcp-client-server-architecture.md).
+- Network egress policy. Domain allow or deny decides whether a TCP connection leaves the sandbox, below any MCP-level decision — see [Agent Network Egress Policy](agent-network-egress-policy.md).
+- Process sandbox. Filesystem and PID isolation constrain what a running tool process can touch. The control plane runs before the process starts — see [Scope Sandbox Rules to Harness-Owned Tools](sandbox-rules-harness-tools.md).
+- MCP transport. `initialize`, capability negotiation, and JSON-RPC framing describe how messages move, and policy evaluation rides on top — see [MCP Client/Server Architecture](../tool-engineering/mcp-client-server-architecture.md).
 
-Defence in depth combines all four. The arxiv survey places control planes alongside sandboxing, provenance tracking, and DLP as complementary controls, not substitutes ([Securing the MCP — arxiv 2511.20920](https://arxiv.org/abs/2511.20920)).
+Defense in depth combines all four. The arxiv survey places control planes alongside sandboxing, provenance tracking, and DLP as complementary controls, not substitutes ([Securing the MCP — arxiv 2511.20920](https://arxiv.org/abs/2511.20920)).
 
-## Why Deterministic Enforcement
+## Why deterministic enforcement
 
 Prompt-based safety depends on the model following instructions. Microsoft's Agent Governance Toolkit benchmark reports a 26.67% policy violation rate for prompt-only controls against red-team inputs, versus 0.00% for deterministic application-layer enforcement ([agent-governance-toolkit benchmark](https://github.com/microsoft/agent-governance-toolkit)). The control plane's value is that the decision is independent of model judgment — an injected prompt that instructs the agent to call a denied tool still hits the policy check and is rejected.
 
-## When This Backfires
+## When this backfires
 
 Real limits, documented by practitioners:
 
-1. **Off-protocol actions bypass the plane.** The gateway sees MCP traffic only; shell commands, direct HTTP, DB drivers, and headless browsers are invisible to it, creating blind spots that look like coverage ([Security Boulevard](https://securityboulevard.com/2026/03/why-mcp-gateways-are-a-bad-idea-and-what-to-do-instead/)).
-2. **Clients can skip the plane.** Unless every agent runtime is wired through the gateway, direct API calls or shadow connectors reach the server unchecked; partial coverage gives false confidence ([Strata: Prevent MCP Bypass](https://www.strata.io/blog/agentic-identity/prevent-mcp-bypass/)).
-3. **Tool-name policies without argument inspection miss injection.** Argument-injection attacks against pre-approved commands (e.g., `shell.exec` with unchecked args) escalate to RCE even with the policy in place ([Trail of Bits: Prompt injection to RCE](https://blog.trailofbits.com/2025/10/22/prompt-injection-to-rce-in-ai-agents/)).
-4. **Centralised secrets and single-point-of-failure.** Routing all tool calls through one broker makes it a target for compromise and an outage surface; replicate regionally and keep credentials out of the proxy where possible ([Security Boulevard](https://securityboulevard.com/2026/03/why-mcp-gateways-are-a-bad-idea-and-what-to-do-instead/)).
+1. Off-protocol actions bypass the plane. The gateway sees MCP traffic only. Shell commands, direct HTTP, DB drivers, and headless browsers are invisible to it, creating blind spots that look like coverage ([Security Boulevard](https://securityboulevard.com/2026/03/why-mcp-gateways-are-a-bad-idea-and-what-to-do-instead/)).
+2. Clients can skip the plane. Unless every agent runtime is wired through the gateway, direct API calls or shadow connectors reach the server unchecked, so partial coverage gives false confidence ([Strata: Prevent MCP Bypass](https://www.strata.io/blog/agentic-identity/prevent-mcp-bypass/)).
+3. Tool-name policies without argument inspection miss injection. Argument-injection attacks against pre-approved commands, for example `shell.exec` with unchecked args, escalate to RCE even with the policy in place ([Trail of Bits: Prompt injection to RCE](https://blog.trailofbits.com/2025/10/22/prompt-injection-to-rce-in-ai-agents/)).
+4. Centralized secrets and a single point of failure. Routing all tool calls through one broker makes it a target for compromise and an outage surface. Replicate regionally and keep credentials out of the proxy where possible ([Security Boulevard](https://securityboulevard.com/2026/03/why-mcp-gateways-are-a-bad-idea-and-what-to-do-instead/)).
 
 Pair the control plane with an MCP registry (what tools exist) and framework-level runtime hooks (what the agent did off-protocol) to close these gaps.
 

@@ -15,7 +15,7 @@ maturity: established
 
 > Distribute shared agent skills, instruction files, and coding conventions from a central repository to downstream projects — enforcing consistency without monolithic coupling.
 
-## The Multi-Repo Drift Problem
+## The multi-repo drift problem
 
 When agent instructions live only in individual repositories, drift is inevitable. [Team A updates their linting conventions, Team B copies an older version, and Team C writes their own from scratch](../anti-patterns/copy-paste-agent.md). Within months, agents across the organization follow different standards for the same concerns — code style, commit format, security checks, naming patterns.
 
@@ -23,11 +23,11 @@ The problem compounds because agent instruction files lack the dependency manage
 
 A [canonicalize-then-fan-out](https://dev.to/tawe/one-memory-to-rule-them-all-taming-ai-cli-instruction-sprawl-2m8l) architecture solves this: maintain one canonical source and distribute it to every project that needs it.
 
-## What Belongs Centralised vs Local
+## What belongs centralized vs local
 
-Not everything belongs in a central repo. Centralise standards that are uniform across the organization; keep project-specific knowledge local — the boundary the [AGENTS.md standard](../standards/agents-md.md) leaves to each project.
+Not everything belongs in a central repo. Centralize standards that are uniform across the organization. Keep project-specific knowledge local — the boundary the [AGENTS.md standard](../standards/agents-md.md) leaves to each project.
 
-| Centralised | Local |
+| Centralized | Local |
 |---|---|
 | Language style guides | Project architecture |
 | Commit message format | Service-specific API patterns |
@@ -36,23 +36,23 @@ Not everything belongs in a central repo. Centralise standards that are uniform 
 | Naming conventions | Domain model documentation |
 | CI/CD agent policies | Feature flags and toggles |
 
-The dividing line: if changing the standard in one project should change it everywhere, centralise it. If a project legitimately needs a different value, keep it local. For how to structure the local side of this boundary, see [Layered Instruction Scopes](../instructions/layered-instruction-scopes.md).
+The dividing line: if changing the standard in one project should change it everywhere, centralize it. If a project legitimately needs a different value, keep it local. For how to structure the local side of this boundary, see [Layered Instruction Scopes](../instructions/layered-instruction-scopes.md).
 
-## Distribution Mechanisms
+## Distribution mechanisms
 
-Five mechanisms exist for pushing central standards into downstream repositories. Each has different trade-offs in automation, cross-tool support, and versioning granularity.
+Five mechanisms push central standards into downstream repositories. Each trades off differently on automation, cross-tool support, and versioning granularity.
 
-| Mechanism | How It Works | Versioning | Cross-Tool | Automation | Best For |
+| Mechanism | How it works | Versioning | Cross-tool | Automation | Best for |
 |---|---|---|---|---|---|
-| **Symlinks** | Symlink files from a shared checkout into each repo | Git ref of shared repo | All tools | Manual setup | Small teams, single machine |
-| **@-imports** | Tool-specific import syntax (e.g., `@path/to/file` in CLAUDE.md — see [@import Composition Pattern](../instructions/import-composition-pattern.md)) | None built-in | Tool-specific | Manual | Quick prototyping |
-| **Canonicalize-then-fan-out** | Pre-commit hooks or CI generate tool-specific files from a canonical source | Git ref + CI validation | All tools | Automated | Cross-tool orgs |
-| **Package managers** | Distribute as npm/pip packages containing SKILL.md or instruction files | Semver | All tools | `npm install` / `pip install` | Open-source skills, versioned releases |
-| **Plugin systems** | Platform-native distribution (Claude Code plugins, Copilot extensions) | Platform-managed | Single platform | Auto-install | Enterprise single-vendor |
+| Symlinks | Symlink files from a shared checkout into each repo | Git ref of shared repo | All tools | Manual setup | Small teams, single machine |
+| @-imports | Tool-specific import syntax (for example `@path/to/file` in CLAUDE.md — see [@import Composition Pattern](../instructions/import-composition-pattern.md)) | None built-in | Tool-specific | Manual | Quick prototyping |
+| Canonicalize-then-fan-out | Pre-commit hooks or CI generate tool-specific files from a canonical source | Git ref + CI validation | All tools | Automated | Cross-tool orgs |
+| Package managers | Distribute as npm/pip packages containing SKILL.md or instruction files | Semver | All tools | `npm install` / `pip install` | Open-source skills, versioned releases |
+| Plugin systems | Platform-native distribution (Claude Code plugins, Copilot extensions) | Platform-managed | Single platform | Auto-install | Enterprise single-vendor |
 
 Sources: [sync approaches comparison](https://coding-with-ai.dev/posts/sync-claude-code-codex-cursor-memory/), [@intellectronica/ruler](https://github.com/intellectronica/ruler), [npm skill distribution](https://gist.github.com/uhyo/e42484189de45c3e1c6f26154c1f2fc0), [Claude Code plugins](https://claude.com/blog/cowork-plugins-across-enterprise).
 
-### Choosing a Mechanism
+### Choosing a mechanism
 
 ```mermaid
 flowchart TD
@@ -69,27 +69,27 @@ flowchart TD
     I -->|No| K["@-imports"]
 ```
 
-## Enterprise Distribution
+## Enterprise distribution
 
-Platform vendors now offer first-class organizational distribution, removing the need to build custom sync infrastructure.
+Platform vendors now offer first-class organizational distribution, so you need not build custom sync infrastructure.
 
-**GitHub Copilot** supports [organization-level custom instructions](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-organization-instructions) configured through the organization settings UI. Instructions apply to all Copilot users in the organization without per-repo configuration. The [Enterprise AI Controls and Agent Control Plane](https://github.blog/changelog/2026-02-26-enterprise-ai-controls-agent-control-plane-now-generally-available/) extends this with governance policies for agent behavior. [Agent HQ](../tools/copilot/agent-hq.md) provides a unified control plane for managing multiple agents across repositories.
+GitHub Copilot supports [organization-level custom instructions](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-organization-instructions) configured through the organization settings UI. Instructions apply to all Copilot users in the organization without per-repo configuration. The [Enterprise AI Controls and Agent Control Plane](https://github.blog/changelog/2026-02-26-enterprise-ai-controls-agent-control-plane-now-generally-available/) extends this with governance policies for agent behavior. [Agent HQ](../tools/copilot/agent-hq.md) provides a unified control plane for managing multiple agents across repositories.
 
-**Claude Code** supports [managed-settings.json](https://code.claude.com/docs/en/settings) distributed via MDM or OS-level configuration, enforcing settings across all users in an organization. The [enterprise plugin marketplace](https://claude.com/blog/cowork-plugins-across-enterprise) enables private org-scoped plugin distribution with auto-install from GitHub repo sync.
+Claude Code supports [managed-settings.json](https://code.claude.com/docs/en/settings) distributed via MDM or OS-level configuration, enforcing settings across all users in an organization. The [enterprise plugin marketplace](https://claude.com/blog/cowork-plugins-across-enterprise) enables private org-scoped plugin distribution with auto-install from GitHub repo sync.
 
-These platform capabilities complement — not replace — a central standards repo. The repo remains the canonical source; platform distribution is one of the fan-out targets.
+These platform capabilities complement a central standards repo, they do not replace it. The repo remains the canonical source; platform distribution is one of the fan-out targets.
 
-## Versioning and Sync Strategies
+## Versioning and sync strategies
 
 Central standards without versioning create a different problem: silent breaking changes. When the central repo updates a convention, downstream repos may not be ready to adopt it.
 
-**Pin to a version.** Use git tags, npm semver, or commit SHAs to let downstream repos control when they upgrade. The [canonicalize-then-fan-out](https://dev.to/tawe/one-memory-to-rule-them-all-taming-ai-cli-instruction-sprawl-2m8l) pattern supports this through CI validation that checks downstream repos against a pinned version of the canonical source.
+Pin to a version. Use git tags, npm semver, or commit SHAs to let downstream repos control when they upgrade. The [canonicalize-then-fan-out](https://dev.to/tawe/one-memory-to-rule-them-all-taming-ai-cli-instruction-sprawl-2m8l) pattern supports this through CI validation that checks downstream repos against a pinned version of the canonical source.
 
-**Validate on CI.** A downstream repo's CI pipeline should verify that its local instruction files match the expected version of the central source. Fail the build if they drift. This catches both unauthorized local edits and missed updates.
+Validate on CI. A downstream repo's CI pipeline should verify that its local instruction files match the expected version of the central source. Fail the build if they drift. This catches both unauthorized local edits and missed updates.
 
-**Staged rollout.** For large organizations, roll out standard changes in waves: [canary repos first](canary-rollout-agent-policy.md), then wider adoption. Treat standard updates like dependency upgrades — test before shipping.
+Stage the rollout. For large organizations, roll out standard changes in waves: [canary repos first](canary-rollout-agent-policy.md), then wider adoption. Treat standard updates like dependency upgrades — test before shipping.
 
-## The Central Repo Architecture
+## The central repo architecture
 
 A recommended directory structure for the canonical standards repository:
 
@@ -131,7 +131,7 @@ The [Nx monorepo approach](https://nx.dev/blog/nx-ai-agent-skills) demonstrates 
 
 A team uses canonicalize-then-fan-out to distribute coding standards to three downstream repos. The central repo contains canonical skill files in the [Agent Skills format](../standards/agent-skills-standard.md) and convention files; a CI job generates tool-specific outputs.
 
-**Central repo structure:**
+Central repo structure:
 
 ```
 agent-standards/
@@ -148,7 +148,7 @@ agent-standards/
     └── .github/copilot-instructions.md
 ```
 
-**Downstream repo pins a version via git submodule:**
+Downstream repo pins a version via git submodule:
 
 ```bash
 # Add the central standards repo as a submodule pinned to a tag
@@ -162,7 +162,7 @@ cp .agent-standards/dist/.github/copilot-instructions.md \
    .github/copilot-instructions.md
 ```
 
-**CI validates that local files match the pinned version:**
+CI validates that local files match the pinned version:
 
 ```yaml
 # .github/workflows/standards-check.yml
@@ -186,25 +186,25 @@ To upgrade, a team bumps the submodule tag and re-runs the copy step. The CI dif
 
 ## Antipatterns
 
-**Monolithic instruction file.** A single massive file that covers every convention for every tool. It exceeds context windows, confuses agents with irrelevant rules, and creates merge conflicts. Use [modular rules directories](https://claudefa.st/blog/guide/mechanics/rules-directory) with path-specific YAML frontmatter targeting instead.
+Monolithic instruction file. A single massive file that covers every convention for every tool. It exceeds context windows, confuses agents with irrelevant rules, and creates merge conflicts. Use [modular rules directories](https://claudefa.st/blog/guide/mechanics/rules-directory) with path-specific YAML frontmatter targeting instead.
 
-**Copy-paste distribution.** Manually copying instruction files between repos. Without automated sync, copies diverge as the source evolves — there is no mechanism to detect or prevent drift. See [The Copy-Paste Agent](../anti-patterns/copy-paste-agent.md) for the full anti-pattern. Use any of the five distribution mechanisms above instead.
+Copy-paste distribution. Manually copying instruction files between repos. Without automated sync, copies diverge as the source evolves — there is no mechanism to detect or prevent drift. See [The Copy-Paste Agent](../anti-patterns/copy-paste-agent.md) for the full anti-pattern. Use any of the five distribution mechanisms above instead.
 
-**No versioning.** Pushing changes to all downstream repos simultaneously with no opt-in. Breaks projects that depend on specific convention versions, the [copy-paste-agent](../anti-patterns/copy-paste-agent.md) drift surfacing at version boundaries. Pin versions and validate on CI.
+No versioning. Pushing changes to all downstream repos at once with no opt-in. Breaks projects that depend on specific convention versions, the [copy-paste-agent](../anti-patterns/copy-paste-agent.md) drift surfacing at version boundaries. Pin versions and validate on CI.
 
-**Centralising everything.** Putting project-specific architecture decisions in the central repo. Forces unnecessary coupling and creates conflicts when teams legitimately diverge. Apply the [centralised-vs-local boundary](../instructions/layered-instruction-scopes.md) the table above defines.
+Centralizing everything. Putting project-specific architecture decisions in the central repo. Forces unnecessary coupling and creates conflicts when teams legitimately diverge. Apply the [centralized-vs-local boundary](../instructions/layered-instruction-scopes.md) the table above defines.
 
-**Ignoring the local layer.** Distributing central standards without allowing local overrides. Teams work around the system instead of with it. Use [layered instruction scopes](../instructions/layered-instruction-scopes.md) so local files can extend or override central defaults.
+Ignoring the local layer. Distributing central standards without allowing local overrides. Teams work around the system instead of with it. Use [layered instruction scopes](../instructions/layered-instruction-scopes.md) so local files can extend or override central defaults.
 
-## When This Backfires
+## When this backfires
 
-Centralisation is not free. The pattern earns its cost in mid-sized and larger organizations where drift across teams is a real problem. In other settings it can hurt more than it helps:
+Centralization is not free. The pattern earns its cost in mid-sized and larger organizations where drift across teams is a real problem. In other settings it can hurt more than it helps:
 
-- **Single-team or single-repo organizations.** A team running one product does not have a drift problem to solve. Standing up a separate canonical repo, generators, and CI sync infrastructure adds operational weight to a workflow that could live in one AGENTS.md edited in place.
-- **Fast-moving experimental work.** When conventions change weekly — [early greenfield](agent-driven-greenfield.md), research code, prototype-heavy teams — the coordination overhead of a central PR, review, and downstream sync cycle outpaces the local-edit-and-go loop. Standards should stabilise before they centralise.
-- **Teams that resist abstraction to canonical form.** Some conventions are tacit, contextual, or contested. Forcing them into a single canonical document tends to either flatten the nuance or generate a "consensus version" no team actually follows. The [ETH Zurich AGENTS.md evaluation](https://arxiv.org/abs/2602.11988) found that LLM-generated or over-prescriptive context files reduced task success by roughly 3% and increased inference cost by over 20% — more rules, applied uniformly, is not the same as better rules.
-- **Catalogues that outgrow their selection mechanism.** Mega-repositories of shared skills accumulate quality, ownership, and discovery problems at scale — an [ecosystem analysis of 673 skills across 41 repositories](https://dacharycarey.com/2026/03/13/agent-skill-mega-repo-woes/) reported 22% failing structural validation and majority-token waste on non-standard files. Central distribution without a curation and trust mechanism shifts the drift problem from "many copies" to "one bloated source".
-- **CI and governance capacity is missing.** The pattern depends on automated validation downstream and the [governance policies](agent-governance-policies.md) that enforce it. Without a working CI pipeline that diffs local files against the pinned canonical source, the central repo becomes advisory — and an advisory standard drifts the same way no standard does.
+- Single-team or single-repo organizations. A team running one product does not have a drift problem to solve. Standing up a separate canonical repo, generators, and CI sync infrastructure adds operational weight to a workflow that could live in one AGENTS.md edited in place.
+- Fast-moving experimental work. When conventions change weekly — [early greenfield](agent-driven-greenfield.md), research code, prototype-heavy teams — the coordination overhead of a central PR, review, and downstream sync cycle outpaces the local-edit-and-go loop. Standards should stabilize before they centralize.
+- Teams that resist abstraction to canonical form. Some conventions are tacit, contextual, or contested. Forcing them into a single canonical document tends to either flatten the nuance or generate a "consensus version" no team actually follows. The [ETH Zurich AGENTS.md evaluation](https://arxiv.org/abs/2602.11988) found that LLM-generated or over-prescriptive context files reduced task success by roughly 3% and increased inference cost by over 20% — more rules, applied uniformly, is not the same as better rules.
+- Catalogs that outgrow their selection mechanism. Mega-repositories of shared skills accumulate quality, ownership, and discovery problems at scale — an [analysis of 673 skills across 41 repositories](https://dacharycarey.com/2026/03/13/agent-skill-mega-repo-woes/) reported 22% failing structural validation and majority-token waste on non-standard files. Central distribution without a curation and trust mechanism shifts the drift problem from "many copies" to "one bloated source".
+- CI and governance capacity is missing. The pattern depends on automated validation downstream and the [governance policies](agent-governance-policies.md) that enforce it. Without a working CI pipeline that diffs local files against the pinned canonical source, the central repo becomes advisory — and an advisory standard drifts the same way no standard does.
 
 If the steelman fits the org, leave the standards local until at least one of these conditions changes.
 

@@ -19,19 +19,19 @@ maturity: adopted
 
 > Parsimonious agent routing emits one delegation plan — keep, single-route, or split-and-route — jointly optimizing decompose, worker, and budget decisions that pipelines treat separately.
 
-## The Disjoint-Decisions Problem
+## The disjoint-decisions problem
 
-Multi-agent dispatch involves three latent decisions: whether to decompose at all, which worker to send each branch to, and how much inference budget that branch deserves. Most production orchestrators bind two of the three at design time — decomposition depth in a workflow graph, budget in a global cap — and learn only the worker choice. The result is globally-wasteful plans: deep decompositions sent to expensive models, or shallow plans starving complex queries.
+Multi-agent dispatch makes three hidden decisions: whether to decompose at all, which worker handles each branch, and how much inference budget that branch deserves. Most production orchestrators fix two of the three at design time. They set decomposition depth in a workflow graph and budget in a global cap, then learn only the worker choice. The result is globally wasteful plans: deep decompositions sent to expensive models, or shallow plans that starve complex queries.
 
 [Cemri et al. (2025)](https://arxiv.org/abs/2503.13657) attribute a primary cluster of multi-agent failures to agent-selection errors. Budget misallocation and unnecessary decomposition are adjacent failure modes a worker-only router cannot fix.
 
-## The Pattern
+## The pattern
 
 A single learned policy observes the query and the current worker roster, then emits a three-way action plus a per-branch budget:
 
-- **Keep** — answer with the current model and current context, no delegation.
-- **Single-route** — delegate the whole query to one (model, primitive) pair.
-- **Split-and-route** — decompose into branches, dispatch each to its own (model, primitive) pair, allocate budget per branch.
+- Keep — answer with the current model and current context, no delegation.
+- Single-route — delegate the whole query to one (model, primitive) pair.
+- Split-and-route — decompose into branches, dispatch each to its own (model, primitive) pair, and allocate budget per branch.
 
 ```mermaid
 graph TD
@@ -46,34 +46,34 @@ graph TD
 
 [Uno-Orchestra (2026)](https://arxiv.org/abs/2605.05007) trains the policy on curated RL trajectories grounded in real worker interactions; reward combines task outcome and per-query cost, so the policy learns when keep beats route and when single-route beats split.
 
-## Reported Results
+## Reported results
 
 Uno-Orchestra reports 77.0% macro pass@1 on a 13-benchmark suite spanning math, code, knowledge, long-context, and agentic tool-use — about 16 points above the strongest workflow baseline at roughly an order-of-magnitude lower per-query cost ([Uno-Orchestra, 2026](https://arxiv.org/abs/2605.05007)). Treat as a single-paper claim pending independent replication; the cost reduction depends on a worker roster that includes cheap leaf models.
 
-## Convergent Evidence
+## Convergent evidence
 
 [MasRouter (Yue et al., 2025)](https://aclanthology.org/2025.acl-long.757.pdf) and [Optimal-Agent-Selection (2025)](https://arxiv.org/abs/2511.02200) frame multi-agent routing as a learned policy but route per-query without joint decomposition or budget. The novelty in Uno-Orchestra is emitting all three decisions from one policy.
 
-## When the Pattern Pays Off
+## When the pattern pays off
 
-Three conditions gate the gain:
+Three conditions decide the gain:
 
-**Heterogeneous worker roster.** The router needs cheap workers that win some branches and expensive workers that win others. With homogeneous capability the keep / single-route / split decision collapses and router inference cost exceeds routing gain.
+A heterogeneous worker roster. The router needs cheap workers that win some branches and expensive workers that win others. With homogeneous capability the keep, single-route, or split decision collapses, and router inference costs more than routing saves.
 
-**Stable task distribution.** RL-trained routers ship with their training distribution baked in. Roster churn and distribution drift invalidate the learned policy without a re-curation pipeline, where an online alternative like [contextual capability calibration](contextual-capability-calibration.md) keeps adapting.
+A stable task distribution. RL-trained routers ship with their training distribution baked in. Roster churn and distribution drift invalidate the learned policy unless you run a re-curation pipeline. An online alternative like [contextual capability calibration](contextual-capability-calibration.md) keeps adapting instead.
 
-**Rare sequential dependencies.** Split-and-route adds handoff latency and context-token overhead. When subtasks share state, [Cemri et al. (2025)](https://arxiv.org/abs/2503.13657) shows single-agent baselines often win.
+Rare sequential dependencies. Split-and-route adds handoff latency and context-token overhead. When subtasks share state, [Cemri et al. (2025)](https://arxiv.org/abs/2503.13657) shows single-agent baselines often win.
 
 Below any threshold, prefer static rule-based routing or a posterior-based selector over a learned three-way policy.
 
-## Failure Conditions
+## Failure conditions
 
-- **Small or homogeneous roster.** The router's inference latency dominates the routing gain.
-- **Roster churn.** Each add/remove/upgrade requires re-curated RL trajectories; the policy lags and routes to retired workers.
-- **Out-of-distribution queries.** Novel domains (security review, regulatory compliance) sit outside the training envelope; the router emits incorrect plans without a fallback.
-- **One-shot plans without re-evaluation.** When an early branch reveals the decomposition was wrong, budget the option to re-plan or pair with [recursive best-of-N delegation](recursive-best-of-n-delegation.md) at leaves.
+- Small or homogeneous roster — the router's inference latency dominates the routing gain.
+- Roster churn — each add, remove, or upgrade needs re-curated RL trajectories, so the policy lags and routes to retired workers.
+- Out-of-distribution queries — novel domains such as security review or regulatory compliance sit outside the training envelope, so the router emits incorrect plans without a fallback.
+- One-shot plans without re-evaluation — when an early branch reveals the decomposition was wrong, budget the option to re-plan, or pair with [recursive best-of-N delegation](recursive-best-of-n-delegation.md) at leaves.
 
-## Relationship to Other Routing Patterns
+## Relationship to other routing patterns
 
 | Pattern | What is learned | Decisions emitted |
 |---------|-----------------|-------------------|

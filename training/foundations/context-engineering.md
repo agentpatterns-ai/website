@@ -40,7 +40,7 @@ Model attention follows a U-shape: strongest at the start and end of the context
 
 The practical consequence: a long `CLAUDE.md` buries most of its rules in the zone where they are least likely to be followed. Each instruction added to the middle pushes existing instructions further from the high-attention edges. See [Lost in the Middle: The U-Shaped Attention Curve](../../context-engineering/lost-in-the-middle.md).
 
-**Applying both properties together**: open instruction files with your most critical constraint. Close with a restated reminder of the same constraint. Reserve the middle for reference material.
+Applying both properties together: open instruction files with your most critical constraint. Close with a restated reminder of the same constraint. Reserve the middle for reference material.
 
 ---
 
@@ -56,9 +56,9 @@ Two strategies manage this budget:
 
 | | Preload (always-on) | On-demand (JIT) |
 |-|---------------------|-----------------|
-| **Latency** | Zero | One tool call |
-| **Context cost** | Paid on every task | Paid only when used |
-| **Best for** | Always-needed context (role, constraints) | Conditionally-needed context (skill content, file reads) |
+| Latency | Zero | One tool call |
+| Context cost | Paid on every task | Paid only when used |
+| Best for | Always-needed context (role, constraints) | Conditionally-needed context (skill content, file reads) |
 
 [Anthropic describes JIT loading](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) as maintaining lightweight identifiers in the always-on layer and loading actual data dynamically when needed. Preload what every task needs; load everything else on-demand.
 
@@ -74,9 +74,9 @@ For the full budget framework including anti-patterns, see [Context Budget Alloc
 
 Long-running agents accumulate context that eventually fills the window. Without compression, the session fails or truncates arbitrarily. Two tiers apply in sequence.
 
-**Tier 1 — Offload large tool responses.** Replace large payloads (full files, API responses) with a filesystem reference and brief summary. The full content is written to disk; the agent re-reads it when needed. [LangChain's Deep Agents framework](https://blog.langchain.com/context-management-for-deepagents/) implements this as the first compression stage.
+Tier 1 — Offload large tool responses. Replace large payloads (full files, API responses) with a filesystem reference and brief summary. The full content is written to disk; the agent re-reads it when needed. [LangChain's Deep Agents framework](https://blog.langchain.com/context-management-for-deepagents/) implements this as the first compression stage.
 
-**Tier 2 — Summarise conversation history.** When context fills further, summarise prior turns. Effective summaries preserve the current objective, key artifacts, decisions and rationale, and next steps. [Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies this as "compaction." The risk: summaries that capture only "what happened" without "what matters next" cause [objective drift](../../anti-patterns/objective-drift.md).
+Tier 2 — Summarise conversation history. When context fills further, summarise prior turns. Effective summaries preserve the current objective, key artifacts, decisions and rationale, and next steps. [Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies this as "compaction." The risk: summaries that capture only "what happened" without "what matters next" cause [objective drift](../../anti-patterns/objective-drift.md).
 
 More graduated approaches exist. The [OPENDEV framework](https://arxiv.org/abs/2603.05344) implements five-stage Adaptive Context Compaction, triggered at specific budget thresholds from 70% to 99%, degrading gracefully rather than hitting a single compression cliff.
 
@@ -108,9 +108,9 @@ The architectural constraint: a stable prefix followed by a growing tail. System
 
 Three patterns consistently bust the cache:
 
-1. **Adding or removing tools mid-session.** Tool definitions sit in the prefix; changing them invalidates everything after.
-2. **Switching models.** Model-specific instructions in the prefix change, breaking the byte-level match.
-3. **Mutating the prefix to convey state.** Timestamps, config, or metadata in early sections bust the cache on every call.
+1. Adding or removing tools mid-session. Tool definitions sit in the prefix; changing them invalidates everything after.
+2. Switching models. Model-specific instructions in the prefix change, breaking the byte-level match.
+3. Mutating the prefix to convey state. Timestamps, config, or metadata in early sections bust the cache on every call.
 
 For the full immutable prefix pattern, cache-safe compaction, and the cross-provider cost comparison (Anthropic, OpenAI, Gemini), see [Prompt Caching as Architectural Discipline](../../context-engineering/prompt-caching-architectural-discipline.md). For ordering rules and common cache-busting bugs, see [Static Content First: Maximizing Prompt Cache Hits](../../context-engineering/static-content-first-caching.md).
 
@@ -122,10 +122,10 @@ Agents explore codebases by reading files. What they find determines what they d
 
 Four techniques embed [discoverable context](../../context-engineering/discoverable-vs-nondiscoverable-context.md) where agents encounter it naturally:
 
-1. **Directory-scoped instruction files** (AGENTS.md, CLAUDE.md) — scope conventions to where they apply. Subdirectory files override or extend project-level instructions.
-2. **Inline decision comments** — explain *why* a decision was made, preventing agents from reverting intentional choices.
-3. **Type annotations** (as in `TypeScript` or typed Python) — eliminate agent guesswork about return types, parameter shapes, and nullability.
-4. **Example files** — agents pattern-match against existing code. A reference implementation communicates conventions more precisely than prose.
+1. Directory-scoped instruction files (AGENTS.md, CLAUDE.md) — scope conventions to where they apply. Subdirectory files override or extend project-level instructions.
+2. Inline decision comments — explain *why* a decision was made, preventing agents from reverting intentional choices.
+3. Type annotations (as in `TypeScript` or typed Python) — eliminate agent guesswork about return types, parameter shapes, and nullability.
+4. Example files — agents pattern-match against existing code. A reference implementation communicates conventions more precisely than prose.
 
 The rule of thumb: seed durable information in the codebase; prompt session-specific intent interactively. See [Seeding Agent Context: Breadcrumbs in Code](../../context-engineering/seeding-agent-context.md).
 
@@ -143,7 +143,7 @@ The rule of thumb: seed durable information in the codebase; prompt session-spec
 
 ## Related
 
-**Source pages**
+Source pages
 
 - [Context Engineering: The Discipline of Designing Agent Context](../../context-engineering/context-engineering.md)
 - [Attention Sinks: Why First Tokens Always Win](../../context-engineering/attention-sinks.md)
@@ -156,7 +156,7 @@ The rule of thumb: seed durable information in the codebase; prompt session-spec
 - [Prompt Caching as Architectural Discipline](../../context-engineering/prompt-caching-architectural-discipline.md)
 - [Static Content First: Maximizing Prompt Cache Hits](../../context-engineering/static-content-first-caching.md)
 
-**Training modules**
+Training modules
 
 - [Prompt Engineering](prompt-engineering.md)
 - [Harness Engineering](harness-engineering.md)

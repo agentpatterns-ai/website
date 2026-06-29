@@ -19,42 +19,42 @@ maturity: established
 
 > Mixing unrelated tasks in a single Claude Code session fills the context window with irrelevant history and degrades output quality.
 
-**Learn it hands-on:** [The Kitchen Sink Session](https://learn.agentpatterns.ai/anti-patterns/the-kitchen-sink-session/) — guided lesson with quizzes.
+Learn it hands-on with [The Kitchen Sink Session guided lesson](https://learn.agentpatterns.ai/anti-patterns/the-kitchen-sink-session/), which includes quizzes.
 
-## The Problem
+## The problem
 
-It is tempting to keep one Claude Code session running all day and pile tasks onto it — review a PR, then start a feature, then debug a test failure. Each task leaves residue: file contents, command outputs, failed approaches, and off-topic reasoning. As the context fills, Claude begins making decisions influenced by stale information from earlier tasks.
+You keep one Claude Code session running all day and pile tasks onto it: review a PR, then start a feature, then debug a test failure. Each task leaves residue: file contents, command outputs, failed approaches, and off-topic reasoning. As the context fills, Claude starts making decisions shaped by stale information from earlier tasks.
 
-The [Claude Code best practices](https://code.claude.com/docs/en/best-practices) documentation describes this as the "kitchen sink session" anti-pattern: context full of irrelevant information that degrades performance on the current task. According to the same source, LLM performance degrades as context fills — the context window is the primary resource to manage. Independent research by Chroma on [context rot](https://github.com/chroma-core/context-rot) corroborates this: across 18 frontier models, performance varies significantly with input length even on simple tasks, and irrelevant tokens degrade reliability more than length alone would predict.
+The [Claude Code best practices](https://code.claude.com/docs/en/best-practices) docs call this the "kitchen sink session" anti-pattern: context full of irrelevant information that degrades performance on the current task. The same source says LLM performance drops as the context fills, so the context window is the main resource to manage. Independent research by Chroma on [context rot](https://github.com/chroma-core/context-rot) backs this up. Across 18 frontier models, performance varies widely with input length even on simple tasks, and irrelevant tokens hurt reliability more than length alone would predict.
 
-Token costs reflect this directly. A session that runs through code review, feature development, and a debugging investigation accumulates far more context than three focused sessions would. You pay for the noise.
+Token costs reflect this directly. A session that runs through code review, feature development, and a debugging investigation builds up far more context than three focused sessions would. You pay for the noise.
 
-## What to Do Instead
+## What to do instead
 
-Give each session a single objective. When you finish a task and move to something unrelated, start a new session — not a `/clear`.
+Give each session a single objective. When you finish a task and move to something unrelated, start a new session, not a `/clear`.
 
-**Clear context within a session** when switching between loosely related tasks where shared background still applies:
+Clear context within a session when you switch between loosely related tasks that still share background:
 
 ```
 /clear
 ```
 
-**Resume a specific thread** without re-entering context manually:
+Resume a specific thread without re-entering context by hand:
 
 ```bash
 claude --continue    # resume the most recent session
 claude --resume      # choose from recent sessions
 ```
 
-Claude Code saves conversations locally, so starting a new session does not mean losing prior work ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). Use `/rename` to give sessions descriptive names (`oauth-migration`, `debugging-memory-leak`) so you can find them later with `--resume`.
+Claude Code saves conversations locally, so a new session does not lose prior work ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). Use `/rename` to give sessions descriptive names (`oauth-migration`, `debugging-memory-leak`) so you can find them later with `--resume`.
 
-**For multi-step workflows with a clear dependency chain**, structured sub-agents are the correct model. Each sub-agent runs in its own context window and reports back a summary, keeping your main session clean.
+For multi-step workflows with a clear dependency chain, use structured sub-agents. Each sub-agent runs in its own context window and reports back a summary, which keeps your main session clean.
 
 ## Example
 
 A developer spends the morning reviewing a pull request in Claude Code, then switches to scaffolding a new feature, then investigates a flaky test — all in the same session. By the third task, the context contains diff hunks, file reads, and unrelated error logs. Claude now has tens of thousands of tokens of history, most irrelevant. When asked what to name a new service class, Claude may anchor on naming patterns from the PR rather than the feature being built.
 
-**Correct approach — three focused sessions:**
+Correct approach, three focused sessions:
 
 ```bash
 # Session 1: PR review only
@@ -69,11 +69,11 @@ claude "Investigate why tests/integration/auth_test.py fails intermittently"
 
 Each session starts clean. Context stays low, costs stay low, and output quality is higher because Claude reasons only over relevant history.
 
-## When This Backfires
+## When this backfires
 
-Splitting sessions adds overhead. Claude re-reads CLAUDE.md and any shared context files on startup; if two tasks share significant background (a codebase you have already walked through, an architectural decision you established earlier), that re-loading cost can outweigh the noise reduction from a clean start.
+Splitting sessions adds overhead. Claude re-reads CLAUDE.md and any shared context files on startup. If two tasks share a lot of background (a codebase you have already walked through, an architectural decision you set earlier), that re-loading cost can outweigh the noise you avoid with a clean start.
 
-Auto-compaction also changes the calculus. Claude Code now automatically compacts long conversations when approaching context limits — summarizing decisions, file states, and patterns while discarding ephemeral noise. For loosely coupled tasks where auto-compaction fires before quality degrades, an explicit session split may not be necessary. Use `/compact` manually for finer control.
+Auto-compaction also changes the calculus. Claude Code now compacts long conversations automatically as they approach context limits, summarizing decisions, file states, and patterns while dropping throwaway noise. For loosely coupled tasks where auto-compaction fires before quality drops, an explicit session split may not be needed. Use `/compact` by hand for finer control.
 
 Split sessions remain the right call when: tasks are unrelated enough that shared history actively misleads (naming anchored to a prior PR, debugging instincts from a fixed bug); context is already full of failed approaches; or you are starting a review of code Claude itself just wrote in the same session.
 

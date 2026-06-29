@@ -16,19 +16,19 @@ maturity: emerging
 
 > A `PreToolUse` hook returns `"defer"` to pause a headless Claude Code session at a tool call, exit cleanly with the pending call serialized, and resume after the caller collects human approval through its own UI.
 
-## The Problem
+## The problem
 
-[Headless Claude Code sessions](../workflows/headless-claude-ci.md) (invoked with `-p`) cannot display interactive permission prompts. When an agent running in CI or inside an Agent SDK subprocess reaches a sensitive operation — a deployment command, a file deletion, an `AskUserQuestion` — the session either blocks waiting for input that will never come, or it fails.
+[Headless Claude Code sessions](../workflows/headless-claude-ci.md) (invoked with `-p`) cannot show interactive permission prompts. An agent in CI or inside an Agent SDK subprocess reaches a sensitive operation — a deployment command, a file deletion, an `AskUserQuestion`. The session blocks waiting for input that never comes, or it fails.
 
-The alternatives before `"defer"` existed:
+Before `"defer"` existed, the caller had three choices:
 
-- **`"deny"`** — blocks the tool call, but the agent loses in-flight state and must start over
-- **`"allow"` with broad rules** — bypasses approval entirely, removing the human gate
-- **Restructure the task** — split into pre-approval and post-approval phases, complicating the agent design
+- `"deny"` — blocks the tool call, but the agent loses in-flight state and must start over
+- `"allow"` with broad rules — skips approval and removes the human gate
+- restructure the task — split it into pre-approval and post-approval phases, complicating the agent design
 
-`"defer"` adds a fourth path: pause cleanly, hand the pending call to the caller, and resume exactly where execution stopped.
+`"defer"` adds a fourth path: pause cleanly, hand the pending call to the caller, and resume where execution stopped.
 
-## How It Works
+## How it works
 
 `PreToolUse` hooks accept four return values for `permissionDecision`: `allow`, `deny`, `ask`, and `defer`. When a hook returns `"defer"` in headless mode ([Claude Code v2.1.89+](https://code.claude.com/docs/en/changelog)):
 
@@ -59,19 +59,19 @@ sequenceDiagram
     CC-->>C: exit · stop_reason: end_turn
 ```
 
-## Key Constraints
+## Key constraints
 
-**Headless mode only.** `"defer"` only works with the `-p` flag. In interactive sessions it has no effect ([hooks reference](https://code.claude.com/docs/en/hooks)).
+Headless mode only. `"defer"` works only with the `-p` flag. In interactive sessions it has no effect ([hooks reference](https://code.claude.com/docs/en/hooks)).
 
-**Single tool call per turn.** If Claude issues multiple tool calls in one turn, `defer` is ignored with a warning. Structure prompts to elicit one tool call at a time when deferred approval is needed.
+Single tool call per turn. If Claude issues several tool calls in one turn, `defer` is ignored with a warning. When you need deferred approval, prompt for one tool call at a time.
 
-**Decision precedence.** When multiple PreToolUse hooks return different decisions, `deny > defer > ask > allow`. A `deny` from any hook overrides a `defer`.
+Decision precedence. When several PreToolUse hooks return different decisions: `deny > defer > ask > allow`. A `deny` from any hook overrides a `defer`.
 
-**Same permission mode on resume.** Pass the same `--permission-mode` flag used in the original invocation when resuming. Omitting it triggers a warning and may alter behavior.
+Same permission mode on resume. Pass the same `--permission-mode` flag you used in the original invocation. Omitting it triggers a warning and may change behavior.
 
-**No timeout.** Sessions persist on disk indefinitely. The caller is responsible for expiry and cleanup.
+No timeout. Sessions persist on disk indefinitely. The caller is responsible for expiry and cleanup.
 
-## Example: AskUserQuestion in Headless Mode
+## Example: AskUserQuestion in headless mode
 
 `AskUserQuestion` normally requires an interactive terminal. With defer, the caller owns the interaction. When Claude calls `AskUserQuestion`, the hook returns `"defer"`:
 
@@ -113,29 +113,29 @@ The caller surfaces this in its own UI, collects `"Yes"`, then resumes. On resum
 }
 ```
 
-## Why It Works
+## Why it works
 
-Claude Code serializes the full session transcript — conversation history, tool state, and the pending invocation — to disk under the session ID before exiting. `--resume` rehydrates that transcript, so the model context is byte-identical to the moment before exit. The `deferred_tool_use` payload gives the caller the tool name, ID, and input it needs to surface the approval. On resume, `PreToolUse` fires again for the same call, and `"allow"` with `updatedInput` injects the answer before execution. The design separates the *approval moment* (owned by the caller's UI) from the *execution moment* (owned by Claude Code), without blocking, polling, or restarting.
+Before exiting, Claude Code serializes the full session transcript — conversation history, tool state, and the pending invocation — to disk under the session ID. `--resume` rehydrates that transcript, so the model context is byte-identical to the moment before exit. The `deferred_tool_use` payload gives the caller the tool name, ID, and input it needs to surface the approval. On resume, `PreToolUse` fires again for the same call, and `"allow"` with `updatedInput` injects the answer before execution. The design separates the approval moment, owned by the caller's UI, from the execution moment, owned by Claude Code — without blocking, polling, or restarting.
 
-## When This Backfires
+## When this backfires
 
 `"defer"` adds caller-side complexity. Consider the alternatives when:
 
-- **Task state is negligible.** For short, stateless tasks where a restart costs less than wiring up pause/resume, splitting into pre- and post-approval phases is simpler.
-- **Multi-tool turns are unavoidable.** If the agent reliably issues several tool calls per turn, `"defer"` silently no-ops. Forcing single-tool turns can degrade agent quality more than it gains in safety.
-- **Session storage is constrained.** Deferred sessions persist indefinitely. High-volume CI with many concurrent agents accumulates unresumed sessions and requires explicit cleanup the caller must own.
-- **The caller has no UI surface.** `"defer"` assumes the process can route `deferred_tool_use` to a human. Fully automated pipelines with no approval channel hang unless the hook falls back to `"allow"` or `"deny"` after a timeout — reintroducing the ambiguity `"defer"` was meant to resolve.
+- task state is negligible. For short, stateless tasks, a restart can cost less than wiring up pause and resume. Splitting into pre-approval and post-approval phases is simpler.
+- multi-tool turns are unavoidable. If the agent reliably issues several tool calls per turn, `"defer"` silently no-ops. Forcing single-tool turns can cost more in agent quality than it gains in safety.
+- session storage is constrained. Deferred sessions persist indefinitely. High-volume CI with many concurrent agents builds up unresumed sessions, and the caller must own the cleanup.
+- the caller has no UI surface. `"defer"` assumes the process can route `deferred_tool_use` to a human. A fully automated pipeline with no approval channel hangs, unless the hook falls back to `"allow"` or `"deny"` after a timeout. That fallback reintroduces the ambiguity `"defer"` was meant to resolve.
 
-## Comparison with PermissionDenied Hook
+## Comparison with PermissionDenied hook
 
 v2.1.89 also added a `PermissionDenied` hook event that fires when the [auto-mode](../tools/claude/auto-mode.md) classifier denies a tool call. Returning `{retry: true}` tells Claude it can retry. This is distinct from deferred permission:
 
-| | Deferred Permission | PermissionDenied Hook |
+| | Deferred permission | PermissionDenied hook |
 |---|---|---|
-| **Trigger** | Hook returns `"defer"` | Auto-mode classifier blocks |
-| **Effect** | Session pauses, exits | Model retries the call |
-| **Human involvement** | Required (caller collects input) | Optional (hook may auto-retry) |
-| **State preservation** | Full session on disk | In-flight, no exit |
+| Trigger | Hook returns `"defer"` | Auto-mode classifier blocks |
+| Effect | Session pauses, exits | Model retries the call |
+| Human involvement | Required (caller collects input) | Optional (hook may auto-retry) |
+| State preservation | Full session on disk | In-flight, no exit |
 
 ## Key Takeaways
 

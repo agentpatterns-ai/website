@@ -18,25 +18,25 @@ maturity: established
 
 Cross-tool translation means learning agentic concepts from the clearest documentation available — regardless of which tool wrote it — then applying them in every AI assistant you use. Two open standards ([Agent Skills](https://agentskills.io) and [AGENTS.md](https://agents.md)) and cross-tool file compatibility make skills and instruction files portable across 30+ tools.
 
-## Open Standards Enable Portability
+## Open standards enable portability
 
 Two formal standards make cross-tool translation concrete:
 
-**Agent Skills (agentskills.io)** — Adopted by 30+ tools (Claude Code, Copilot, VS Code, Cursor, Codex, Gemini CLI, Junie, Roo Code, Goose). A single `SKILL.md` works across all compatible agents.
+Agent Skills (agentskills.io) is adopted by 30+ tools: Claude Code, Copilot, VS Code, Cursor, Codex, Gemini CLI, Junie, Roo Code, and Goose. A single `SKILL.md` works across all compatible agents.
 
-**AGENTS.md** — Under the Linux Foundation's Agentic AI Foundation, supported by 20+ platforms. Provides build steps, test commands, and conventions to any agent.
+AGENTS.md sits under the Linux Foundation's Agentic AI Foundation, supported by 20+ platforms. It gives any agent build steps, test commands, and conventions.
 
-## Cross-Tool File Compatibility
+## Cross-tool file compatibility
 
-Tools actively read each other's configuration files:
+Tools read each other's configuration files:
 
-- **VS Code reads `.claude/agents/*.md`** — maps Claude-specific tool names to its own system, so one agent definition works in both
-- **Copilot reads `.claude/skills/`** — discovers skills in Claude's directories alongside `.github/skills/` paths
-- **MCP servers** — both Claude Code and Copilot support the Model Context Protocol using the same server ecosystem
+- VS Code reads `.claude/agents/*.md` and maps Claude-specific tool names to its own system, so one agent definition works in both
+- Copilot reads `.claude/skills/` and discovers skills in Claude's directories alongside `.github/skills/` paths
+- Both Claude Code and Copilot support the Model Context Protocol using the same set of servers
 
-Investing in one tool's configuration format yields benefits across multiple tools.
+Configure one tool's format and the work pays off across several tools.
 
-## Terminology Translation Table
+## Terminology translation table
 
 The same underlying patterns use different names across tools:
 
@@ -52,13 +52,13 @@ The same underlying patterns use different names across tools:
 
 Both agent and skill definitions use markdown with YAML frontmatter — the format is converging even where no formal standard exists.
 
-## Learning from the Best Docs
+## Learning from the best docs
 
-Claude Code's docs explain sub-agents with clear semantics; Copilot's docs excel at configuration specifics.
+Claude Code's docs explain sub-agents with clear semantics. Copilot's docs are strongest on configuration specifics.
 
-- **Concept unclear?** Read whichever tool documents it best
-- **Need configuration?** Use your target tool's reference material
-- **Patterns transfer** — [context engineering](../context-engineering/context-engineering.md) principles ([prompt altitude](../instructions/system-prompt-altitude.md), JIT loading, sub-agent architectures) apply identically across tools
+- When a concept is unclear, read whichever tool documents it best
+- When you need configuration detail, use your target tool's reference material
+- Patterns transfer: [context engineering](../context-engineering/context-engineering.md) principles such as [prompt altitude](../instructions/system-prompt-altitude.md), just-in-time loading, and sub-agent architectures apply the same way across tools
 
 ```mermaid
 graph LR
@@ -70,36 +70,36 @@ graph LR
     style A fill:#f0f0f0,stroke:#333
 ```
 
-## Asking the Tool to Translate
+## Asking the tool to translate
 
-AI assistants can perform concept translation directly:
+AI assistants can translate concepts directly:
 
 ```text
 In Copilot, .github/copilot-instructions.md sets project-wide behavior.
 What's the Claude Code equivalent and what differences should I expect?
 ```
 
-The assistant maps `CLAUDE.md` to the instructions file and explains additional capabilities. This works because both tools expose project instructions as a single context-injected file — the mechanism is the same even when the filename differs.
+The assistant maps `CLAUDE.md` to the instructions file and explains the extra capabilities. This works because both tools expose project instructions as a single context-injected file — the mechanism is the same even when the filename differs.
 
-## Anti-Pattern: Isolated Learning
+## Anti-pattern: isolated learning
 
-The failure mode is learning each tool in a silo without recognizing you are learning the same patterns twice. Teams that cross-pollinate documentation can ramp up faster by recognizing patterns they already know rather than treating each tool as entirely new.
+The failure mode is learning each tool in a silo without noticing you are learning the same patterns twice. Teams that share documentation across tools ramp up faster, because they recognize patterns they already know instead of treating each tool as entirely new.
 
-## Gaps in Translation
+## Gaps in translation
 
 Not all concepts have equivalents:
 
-- **Agent teams** (multi-agent coordination with shared task lists) exist in Claude Code but have no Copilot equivalent yet
-- **Hooks** have similar concepts across tools but different event models
-- Translation works best for foundational patterns; advanced features may remain tool-specific
+- Agent teams (multi-agent coordination with shared task lists) exist in Claude Code but have no Copilot equivalent yet
+- Hooks have similar concepts across tools but use different event models
+- Translation works best for foundational patterns; advanced features may stay tool-specific
 
-## When This Backfires
+## When this backfires
 
 Cross-tool translation fails in three recurring scenarios:
 
-- **Execution-model mismatch**: Tools differ in token budgets, tool-call approval flows, and sandboxing policies. A skill that runs silently in Claude Code may surface approval prompts or fail outright in Copilot due to different permission models.
-- **Tool-name mapping gaps**: When VS Code reads `.claude/agents/*.md`, it maps Claude tool names to its own equivalents. If the agent references a tool with no counterpart (e.g., a Claude-specific built-in), the definition loads but behaves differently or fails silently.
-- **Standard version drift**: Agent Skills and AGENTS.md are actively evolving. A `SKILL.md` written against one tool's interpretation of the spec may rely on a feature another tool hasn't implemented yet. Test portability claims; don't assume them.
+- Execution-model mismatch: tools differ in token budgets, tool-call approval flows, and sandboxing policies. A skill that runs silently in Claude Code may surface approval prompts or fail outright in Copilot because the permission models differ.
+- Tool-name mapping gaps: when VS Code reads `.claude/agents/*.md`, it maps Claude tool names to its own equivalents. If the agent references a tool with no counterpart, for example a Claude-specific built-in, the definition loads but behaves differently or fails silently.
+- Standard version drift: Agent Skills and AGENTS.md are still evolving. A `SKILL.md` written against one tool's reading of the spec may rely on a feature another tool has not implemented yet. Test portability claims; do not assume them.
 
 ## Example
 
@@ -132,10 +132,10 @@ Copilot finds the skill in `.claude/skills/` (or `.github/skills/`), maps `Bash`
 
 ## Key Takeaways
 
-- **Open standards make skills and agents portable** — Agent Skills and AGENTS.md work across 30+ tools without modification
-- **Tools read each other's files** — VS Code reads `.claude/agents/`, Copilot discovers `.claude/skills/`
-- **Learn concepts, not tool syntax** — [context engineering](../context-engineering/context-engineering.md) principles apply regardless of which tool runs them
-- **Use AI assistants to translate** — ask the tool itself to map concepts between ecosystems
+- Open standards make skills and agents portable — Agent Skills and AGENTS.md work across 30+ tools without modification
+- Tools read each other's files — VS Code reads `.claude/agents/`, Copilot discovers `.claude/skills/`
+- Learn concepts, not tool syntax — [context engineering](../context-engineering/context-engineering.md) principles apply regardless of which tool runs them
+- Use AI assistants to translate — ask the tool itself to map concepts between ecosystems
 
 ## Sources
 

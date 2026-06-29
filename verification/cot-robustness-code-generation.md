@@ -18,7 +18,7 @@ maturity: established
 
 > Enabling chain-of-thought for code generation can help, hurt, or do nothing depending on the model and task. Measure robustness before making it a default.
 
-## What the Evidence Shows
+## What the evidence shows
 
 Adding "think step by step" to a code-gen prompt is often treated as strictly additive. Empirical work on prompt perturbation shows that assumption fails in measurable ways.
 
@@ -26,13 +26,13 @@ Liu et al. tested four code LLMs on MHPP and BigCodeBench with seven perturbatio
 
 Concrete results from the same study: [Source: [Liu et al., §5](https://arxiv.org/html/2604.12214)]
 
-- **CodeLlama-7B/13B — CoT consistently hurts.** Pass@1 on MHPP dropped 17.1%→8.1% at temperature 0.5; Pass@10 fell 31.4%→25.2%.
-- **DeepSeek-Coder-6.7B — task-dependent.** No gain on MHPP (25.2%→21.4%); significant gain on BigCodeBench (Pass@1 7.4%→10.4%, Pass@10 11.1%→17.1%).
-- **Qwen2.5-Coder-7B — instruction-dependent.** CoT helped with standard prompts (26.2%→27.6%) but diminished when the prompt included explicit perturbation definitions.
+- CodeLlama-7B/13B — CoT consistently hurts. Pass@1 on MHPP dropped 17.1%→8.1% at temperature 0.5; Pass@10 fell 31.4%→25.2%.
+- DeepSeek-Coder-6.7B — task-dependent. No gain on MHPP (25.2%→21.4%); significant gain on BigCodeBench (Pass@1 7.4%→10.4%, Pass@10 11.1%→17.1%).
+- Qwen2.5-Coder-7B — instruction-dependent. CoT helped with standard prompts (26.2%→27.6%) but diminished when the prompt included explicit perturbation definitions.
 
 Parallel work on misleading natural-language context found a 13.8% average CoT performance drop on code-reasoning tasks and "reasoning collapse" on reasoning-heavy models (QwQ-32B) — 2–3× token usage on pathological self-reflection. [Source: [Lam et al., *CodeCrash*, 2025](https://arxiv.org/abs/2504.14119)]
 
-## Three Failure Modes
+## Three failure modes
 
 Liu et al. name three recurring deformations when CoT interacts with perturbed input. [Source: [Liu et al., §4](https://arxiv.org/html/2604.12214)]
 
@@ -44,30 +44,30 @@ Liu et al. name three recurring deformations when CoT interacts with perturbed i
 
 These failures concentrate at three "structural anchors" — reasoning-to-code transitions, symbolic commitment points, and algorithmic articulation steps. The mechanism: CoT adds sequentially dependent decisions, and each one is another place an input perturbation can propagate. [Source: [Liu et al., §4](https://arxiv.org/html/2604.12214)]
 
-## How to Measure the Effect
+## How to measure the effect
 
 Treat CoT as a configuration change that needs evaluation, not a free default.
 
 1. Define a representative task suite with known-good outputs and a deterministic correctness check.
-2. Run each task *k* times (k≥3) with CoT off and on, holding model and temperature constant. See [pass@k and pass^k](pass-at-k-metrics.md).
-3. Compare Pass@1 *and* Pass^k. A CoT prompt that raises Pass@1 but reduces Pass^k has traded consistency for capability — acceptable for human-in-the-loop, harmful for automated pipelines.
+2. Run each task k times (k≥3) with CoT off and on, holding model and temperature constant. See [pass@k and pass^k](pass-at-k-metrics.md).
+3. Compare Pass@1 and Pass^k. A CoT prompt that raises Pass@1 but reduces Pass^k has traded consistency for capability — acceptable for human-in-the-loop, harmful for automated pipelines.
 4. Repeat with lightly perturbed prompts (typos, synonym swaps, paraphrase) to estimate robustness under realistic noise. ReCode supplies natural perturbation transforms. [Source: [Wang et al., *ReCode*](https://arxiv.org/abs/2212.10264)]
 
-Early-token uncertainty is a weak predictor of failure (AUROC 0.55–0.60) but reliably identifies *where* trajectories destabilize — useful for flagging which prompts to inspect first. [Source: [Liu et al., §6](https://arxiv.org/html/2604.12214)]
+Early-token uncertainty is a weak predictor of failure (AUROC 0.55–0.60) but reliably identifies where trajectories destabilize — useful for flagging which prompts to inspect first. [Source: [Liu et al., §6](https://arxiv.org/html/2604.12214)]
 
 ## Mitigations
 
 Two 2025 techniques reduce the fragility above:
 
-- **Structured CoT (SCoT).** Scaffold the reasoning with program-structure placeholders (sequence, branch, loop) instead of free-form prose. SCoT outperformed plain CoT by up to 13.79% on HumanEval and remained stable across example orderings. [Source: [Li et al., arxiv:2305.06599](https://arxiv.org/abs/2305.06599)]
-- **Reverse CoT.** Generate code first, then produce CoT to explain it — sidestepping the reasoning-to-code anchor. A 9.86% relative improvement over reasoning-first order was reported at ICML 2025. [Source: [Liu et al., PMLR 267:38809–38826](https://proceedings.mlr.press/v267/liu25ah.html)]
+- Structured CoT (SCoT). Scaffold the reasoning with program-structure placeholders (sequence, branch, loop) instead of free-form prose. SCoT outperformed plain CoT by up to 13.79% on HumanEval and remained stable across example orderings. [Source: [Li et al., arxiv:2305.06599](https://arxiv.org/abs/2305.06599)]
+- Reverse CoT. Generate code first, then produce CoT to explain it — sidestepping the reasoning-to-code anchor. ICML 2025 reported a 9.86% relative improvement over reasoning-first order. [Source: [Liu et al., PMLR 267:38809–38826](https://proceedings.mlr.press/v267/liu25ah.html)]
 
-## When This Matters Most
+## When this matters most
 
-- **Smaller base-model code LLMs.** CodeLlama-7B/13B showed consistent CoT harm on Pass@1 and Pass@10. [Source: [Liu et al., §5](https://arxiv.org/html/2604.12214)]
-- **Noisy prompts.** Typos, paraphrases, and synonym swaps — common in real user input — amplify CoT destabilization. [Source: [Lam et al., 2025](https://arxiv.org/abs/2504.14119)]
-- **Reasoning-heavy models given misleading hints.** They enter "reasoning collapse" and consume 2–3× tokens without converging. [Source: [Lam et al., 2025](https://arxiv.org/abs/2504.14119)]
-- **Free-form CoT without structural scaffolding.** Plain "think step by step" underperforms SCoT by up to 13.79%. [Source: [Li et al., TOSEM 2025](https://dl.acm.org/doi/10.1145/3690635)]
+- Smaller base-model code LLMs. CodeLlama-7B/13B showed consistent CoT harm on Pass@1 and Pass@10. [Source: [Liu et al., §5](https://arxiv.org/html/2604.12214)]
+- Noisy prompts. Typos, paraphrases, and synonym swaps — common in real user input — amplify CoT destabilization. [Source: [Lam et al., 2025](https://arxiv.org/abs/2504.14119)]
+- Reasoning-heavy models given misleading hints. They enter "reasoning collapse" and consume 2–3× tokens without converging. [Source: [Lam et al., 2025](https://arxiv.org/abs/2504.14119)]
+- Free-form CoT without structural scaffolding. Plain "think step by step" underperforms SCoT by up to 13.79%. [Source: [Li et al., TOSEM 2025](https://dl.acm.org/doi/10.1145/3690635)]
 
 ## Example
 
@@ -83,8 +83,8 @@ Qwen2.5-Coder    with CoT (std) 27.6%      —
 
 How to read the rows:
 
-- **CodeLlama-13B**: adding a CoT instruction halved Pass@1 and dropped Pass@10 by six points. A team shipping CodeLlama-13B in an automated pipeline should *disable* CoT by default and only re-enable it per-task after a positive evaluation.
-- **Qwen2.5-Coder-7B**: CoT produced a small Pass@1 gain with a standard prompt. The same study reports the gain diminishes or flips when the prompt includes explicit perturbation definitions — i.e. closer to [real noisy input](tool-use-sim-to-real-perturbation-taxonomy.md).
+- CodeLlama-13B: adding a CoT instruction halved Pass@1 and dropped Pass@10 by six points. A team shipping CodeLlama-13B in an automated pipeline should disable CoT by default and only re-enable it per-task after a positive evaluation.
+- Qwen2.5-Coder-7B: CoT produced a small Pass@1 gain with a standard prompt. The same study reports the gain diminishes or flips when the prompt includes explicit perturbation definitions — that is, closer to [real noisy input](tool-use-sim-to-real-perturbation-taxonomy.md).
 
 The contrast shows why a single "CoT helps code" benchmark result cannot generalize across models. Before enabling CoT as a harness default, run the same A/B on the target model and task distribution.
 

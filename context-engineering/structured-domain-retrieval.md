@@ -19,15 +19,15 @@ maturity: emerging
 
 > A knowledge graph of package-function hierarchies plus coverage-driven case selection retrieves domain context that flat similarity search misses.
 
-## The Problem with Flat Retrieval
+## The problem with flat retrieval
 
-Standard RAG retrieves context by embedding similarity — vectorize the query, return the closest chunks. This fails for domain-specific code generation because API knowledge is **hierarchical**: a function belongs to a module, belongs to a package, with specific parameter types and return conventions. Embedding distance does not encode these relationships. Graph-structured retrieval was shown to better capture relational context in knowledge-intensive tasks ([Edge et al., "From Local to Global", 2024](https://arxiv.org/abs/2404.16130)).
+Standard RAG retrieves context by embedding similarity — it vectorizes the query and returns the closest chunks. This fails for domain-specific code generation because API knowledge is hierarchical. A function belongs to a module, which belongs to a package, with specific parameter types and return conventions. Embedding distance does not encode these relationships. Graph-structured retrieval captures relational context better in knowledge-intensive tasks ([Edge et al., "From Local to Global", 2024](https://arxiv.org/abs/2404.16130)).
 
 DomAgent demonstrated this: a 7B model with flat retrieval scored ~40% pass@1 on truck software tasks; with structured KG retrieval plus case-based reasoning it scored 96.6% ([DomAgent, 2025](https://arxiv.org/abs/2603.21430)).
 
-## Two Retrieval Paths
+## Two retrieval paths
 
-Structured domain retrieval operates through two complementary paths: understanding what exists (top-down) and seeing how it is used (bottom-up).
+Structured domain retrieval works through two complementary paths: understanding what exists (top-down) and seeing how it is used (bottom-up).
 
 ```mermaid
 graph TD
@@ -46,46 +46,46 @@ graph TD
     CTX --> LLM[Code Generation]
 ```
 
-### Top-Down: Knowledge Graph Retrieval
+### Top-down: knowledge graph retrieval
 
-Build a knowledge graph from your domain's API surface — packages, modules, classes, functions as entities with containment and dependency edges. At retrieval time:
+Build a knowledge graph from your domain's API surface — packages, modules, classes, and functions as entities with containment and dependency edges. At retrieval time:
 
-1. **Package classification** — an LLM determines which packages are relevant to the current task
-2. **Function ranking** — cosine similarity between task and function embeddings within selected packages
-3. **Top-T selection** — the highest-ranked functions and their documentation are returned
+1. Package classification: an LLM decides which packages are relevant to the current task.
+2. Function ranking: cosine similarity between task and function embeddings within the selected packages.
+3. Top-T selection: the highest-ranked functions and their documentation are returned.
 
-The agent receives package location, parameter types, and sibling relationships — not just an isolated signature.
+The agent receives package location, parameter types, and sibling relationships, not just an isolated signature.
 
-### Bottom-Up: Case-Based Reasoning
+### Bottom-up: case-based reasoning
 
-Working code examples show how API functions are actually used. The key insight is **coverage-driven selection**: cluster, then select a minimal representative set.
+Working code examples show how API functions are actually used. The idea is coverage-driven selection: cluster the functions, then select a minimal representative set.
 
-1. **Cluster functions** by semantic similarity within each package (K-means)
-2. **Select cases iteratively** — add a case if it covers a new package or cluster
-3. **Stop at coverage thresholds** — typically 90% of packages and 90% of clusters
+1. Cluster functions by semantic similarity within each package, using K-means.
+2. Select cases one at a time, adding a case if it covers a new package or cluster.
+3. Stop at coverage thresholds, typically 90% of packages and 90% of clusters.
 
 DomAgent found that 30% of coverage-selected cases matched the performance of 80% randomly selected cases on the benchmarks tested (DS-1000 and a truck CAN signal domain); generalizability to other domains has not been established ([DomAgent, 2025](https://arxiv.org/abs/2603.21430)).
 
-## Refinement Gate
+## Refinement gate
 
-The LLM reviews retrieved items against the task, removing entries that are superficially similar but functionally irrelevant — the structured equivalent of [observation masking](observation-masking.md).
+The LLM reviews the retrieved items against the task and removes entries that look similar but are not functionally relevant. This is the structured equivalent of [observation masking](observation-masking.md).
 
-## When to Use This
+## When to use this
 
-Structured domain retrieval pays off when:
+Structured domain retrieval pays off when you have:
 
-- **Well-defined API surface** — SDKs, internal libraries, or frameworks with package-function hierarchies
-- **Large API surface** — hundreds of functions across dozens of packages
-- **Repetitive tasks** — the same API patterns recur, making case curation worthwhile
-- **High accuracy requirements** — regulated or safety-critical domains where 40% pass@1 is unacceptable
+- a well-defined API surface: SDKs, internal libraries, or frameworks with package-function hierarchies
+- a large API surface: hundreds of functions across dozens of packages
+- repetitive tasks: the same API patterns recur, so case curation is worthwhile
+- high accuracy requirements: regulated or safety-critical domains where 40% pass@1 is unacceptable
 
-Skip it when the API fits in a system prompt, tasks are exploratory, or the team cannot maintain the knowledge graph (see *When This Backfires* below).
+Skip it when the API fits in a system prompt, when tasks are exploratory, or when the team cannot maintain the knowledge graph (see When this backfires below).
 
 ## Construction
 
-**Knowledge graph**: parse API docs or source for packages, classes, functions, params, and return types; build containment and dependency edges; embed each function from its name, description, and signature; store in a graph DB, JSON index, or MCP server.
+For the knowledge graph: parse the API docs or source for packages, classes, functions, params, and return types. Build containment and dependency edges. Embed each function from its name, description, and signature. Store it in a graph DB, JSON index, or MCP server.
 
-**Case base**: collect working examples from tests, docs, or production; embed, cluster by similarity, and select via coverage thresholds (90% package, 90% cluster); store with metadata linking each case to the KG entities it exercises.
+For the case base: collect working examples from tests, docs, or production. Embed them, cluster them by similarity, and select via coverage thresholds (90% package, 90% cluster). Store each case with metadata linking it to the KG entities it exercises.
 
 Then expose both paths as tools, following the [retrieval-augmented agent workflow](retrieval-augmented-agent-workflows.md) pattern:
 
@@ -101,7 +101,7 @@ The agent starts lean — only tool descriptions preloaded — then calls `searc
 
 A vehicle diagnostics agent generates code against a CAN signal SDK with 400+ functions across 30 packages.
 
-**Knowledge graph entry** (stored in a JSON index or graph DB):
+Knowledge graph entry (stored in a JSON index or graph DB):
 
 ```json
 {
@@ -114,7 +114,7 @@ A vehicle diagnostics agent generates code against a CAN signal SDK with 400+ fu
 }
 ```
 
-**Case base entry** (coverage-selected working example):
+Case base entry (coverage-selected working example):
 
 ```python
 # Case: Toggle hazard lights via CAN bus
@@ -125,13 +125,13 @@ result = set_indicator_mode(IndicatorMode.HAZARD, bus_id=0)
 send_frame(result.frame, timeout_ms=100)
 ```
 
-**Agent tool call sequence**:
+Agent tool call sequence:
 
-1. Task arrives: "Write a function to activate high-beam headlights on bus 1"
-2. Agent calls `search_domain_kg("headlight high beam")` — returns `set_headlight_mode` with its package path, params, and dependency on `send_frame`
-3. Agent calls `search_case_base("headlight")` — returns the hazard light case showing the `set_*` → `send_frame` pattern
-4. Refinement gate keeps both (direct relevance); would discard an unrelated `body.doors` result
-5. Agent generates code grounded in the KG signature and the case pattern
+1. The task arrives: "Write a function to activate high-beam headlights on bus 1".
+2. The agent calls `search_domain_kg("headlight high beam")`, which returns `set_headlight_mode` with its package path, params, and dependency on `send_frame`.
+3. The agent calls `search_case_base("headlight")`, which returns the hazard light case showing the `set_*` to `send_frame` pattern.
+4. The refinement gate keeps both for direct relevance, and would discard an unrelated `body.doors` result.
+5. The agent generates code grounded in the KG signature and the case pattern.
 
 ## Key Takeaways
 
@@ -140,15 +140,15 @@ send_frame(result.frame, timeout_ms=100)
 - A refinement gate removes superficially similar but irrelevant context before generation.
 - Expose KG and case base as [on-demand tools](retrieval-augmented-agent-workflows.md) rather than preloading into the context window.
 
-## When This Backfires
+## When this backfires
 
-Structured domain retrieval adds significant upfront cost and ongoing maintenance. Three failure conditions to assess before committing:
+Structured domain retrieval adds significant upfront cost and ongoing maintenance. Assess three failure conditions before committing:
 
-- **API churn outpaces graph updates** — when the API surface changes faster than the KG and case base can be refreshed, the agent retrieves stale signatures and outdated examples. Fast-moving internal SDKs or pre-release frameworks are high-risk.
-- **KG construction ROI is negative below ~100 functions** — parsing, embedding, and indexing a small API surface costs more in engineering time than switching to curated few-shot examples in the system prompt. Measure actual retrieval failures before building graph infrastructure.
-- **Case base diversity is insufficient** — coverage-driven selection depends on having enough working examples to form meaningful clusters. Projects with thin test suites or sparse documentation produce a case base that mimics the gaps of flat retrieval.
+- API churn outpaces graph updates: when the API surface changes faster than the KG and case base can be refreshed, the agent retrieves stale signatures and outdated examples. Fast-moving internal SDKs or pre-release frameworks are high-risk.
+- KG construction pays off only above about 100 functions: parsing, embedding, and indexing a small API surface costs more engineering time than curated few-shot examples in the system prompt. Measure actual retrieval failures before building graph infrastructure.
+- Case base diversity is too thin: coverage-driven selection depends on enough working examples to form meaningful clusters. Projects with thin test suites or sparse documentation produce a case base that mimics the gaps of flat retrieval.
 
-Graph retrieval is not universally better than flat vector search even once built: GraphRAG-Bench finds graph-structured retrieval frequently underperforms vanilla RAG, with benefits showing up only under specific conditions ([Xiang et al., "When to use Graphs in RAG", 2025](https://arxiv.org/abs/2506.05690)). Treat the DomAgent gains as evidence for *well-defined, hierarchical API domains*, not a blanket win — measure against a vector-RAG baseline before committing.
+Graph retrieval is not universally better than flat vector search, even once built. GraphRAG-Bench finds graph-structured retrieval often underperforms vanilla RAG, with benefits showing up only under specific conditions ([Xiang et al., "When to use Graphs in RAG", 2025](https://arxiv.org/abs/2506.05690)). Treat the DomAgent gains as evidence for well-defined, hierarchical API domains, not a blanket win, and measure against a vector-RAG baseline before committing.
 
 ## Related
 

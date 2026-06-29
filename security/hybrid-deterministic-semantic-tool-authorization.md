@@ -18,16 +18,16 @@ maturity: established
 
 > Deterministic checks at the agent-tool layer cover structural attacks; a semantic task-to-tool matcher covers intent drift. The two attack classes are orthogonal.
 
-## Two Orthogonal Attack Classes
+## Two orthogonal attack classes
 
 A compromised agent attacks tool calls along two independent dimensions:
 
-- **Structural attacks** — the call's *form* is wrong: tampered description, name swap (`get_balance` → `transfer_amount`), parameter mutation, falsified return.
-- **Semantic attacks** — the *form* is correct but the *purpose* is not: a typed call to a tool unrelated to the user's task — `delete_repository` during a documentation read.
+- Structural attacks — the call's form is wrong: tampered description, name swap (`get_balance` → `transfer_amount`), parameter mutation, falsified return.
+- Semantic attacks — the form is correct but the purpose is not: a typed call to a tool unrelated to the user's task, such as `delete_repository` during a documentation read.
 
 Each layer passes the other's attack class. The CASA framework ([El Helou et al., 2026](https://arxiv.org/abs/2605.02682)) combines both at a zero-trust layer between agent and MCP server.
 
-## The Five Deterministic Checks
+## The five deterministic checks
 
 Each check is a binary comparison enforced before the call leaves the layer ([El Helou et al., 2026, §III-A](https://arxiv.org/html/2605.02682)):
 
@@ -51,16 +51,16 @@ graph LR
     style BLOCK fill:#b60205,color:#fff
 ```
 
-## The Semantic Layer: Task-to-Tool Matching
+## The semantic layer: task-to-tool matching
 
 Structural checks pass a clean call to an unrelated tool. Two stages add intent matching ([El Helou et al., 2026, §III-B](https://arxiv.org/html/2605.02682)):
 
-1. **Task extraction** — emit a concise natural-language description of the user's objective from the conversation. Separating extraction from matching keeps raw conversation off the authorization server.
-2. **Task-tool matching** — binary classify whether each requested tool [aligns with the task](task-scope-security-boundary.md). Mismatches deny; matches proceed to deterministic checks.
+1. Task extraction emits a concise natural-language description of the user's objective from the conversation. Separating extraction from matching keeps raw conversation off the authorization server.
+2. Task-tool matching classifies whether each requested tool [aligns with the task](task-scope-security-boundary.md). Mismatches deny; matches proceed to deterministic checks.
 
-This extends **Task-Based Access Control (TBAC)** ([El Helou et al., 2025](https://arxiv.org/abs/2510.26702)) to multi-turn, handling "clarification exchanges, tangential information, and conversational drifts" without re-prompting.
+This extends Task-Based Access Control (TBAC) ([El Helou et al., 2025](https://arxiv.org/abs/2510.26702)) to multi-turn use, handling "clarification exchanges, tangential information, and conversational drifts" without re-prompting.
 
-## What the Empirical Numbers Buy You
+## What the empirical numbers buy you
 
 Accuracy on the extended ASTRA benchmark for Claude Sonnet 4.6 ([§V](https://arxiv.org/html/2605.02682)):
 
@@ -70,35 +70,35 @@ Accuracy on the extended ASTRA benchmark for Claude Sonnet 4.6 ([§V](https://ar
 | Multi-turn (augmented) | 0.97 | 0.97 | 2% | 4% |
 | Multi-turn (multi-agent) | 0.92 | 0.92 | 10% | 7% |
 
-Single-turn is near-deterministic. Multi-turn degrades: 7% FNR denies ~1 in 14 legitimate calls; 10% FPR over-allows on multi-agent traffic. The paper concludes semantic checks remain "insufficient for high-stakes, long-horizon autonomous tool use" ([§VII](https://arxiv.org/html/2605.02682)) — design fallbacks.
+Single-turn is near-deterministic. Multi-turn degrades: a 7% FNR denies about 1 in 14 legitimate calls, and a 10% FPR over-allows on multi-agent traffic. The paper concludes semantic checks remain "insufficient for high-stakes, long-horizon autonomous tool use" ([§VII](https://arxiv.org/html/2605.02682)), so design fallbacks.
 
-## When Hybrid Beats Deterministic-Only
+## When hybrid beats deterministic-only
 
 The deterministic-only alternative pairs a [Scoped Credentials Proxy](scoped-credentials-proxy.md) with the [Action-Selector pattern](action-selector-pattern.md): pre-declared (URL, method) tuples and a fixed action set. For small action spaces this beats hybrid on latency, predictability, and FPR.
 
-Hybrid earns its complexity only when **both** conditions hold:
+Hybrid earns its complexity only when both conditions hold:
 
-- Tool catalogue is large and dynamic — pre-declaring every (task, tool) pair is impractical.
+- Tool catalog is large and dynamic, so pre-declaring every (task, tool) pair is impractical.
 - Conversations are multi-turn with drifting per-turn tasks (interactive coding, research, support).
 
-## Where It Sits in the Defense Stack
+## Where it sits in the defense stack
 
 The [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) and [Task Scope Security Boundary](task-scope-security-boundary.md) define the contracts; deterministic checks catch in-flight violations; the semantic matcher enforces task scope at runtime; the [MCP Runtime Control Plane](mcp-runtime-control-plane.md) is the architectural slot.
 
 ## Example
 
-A coding agent has read access to `github` and `db-readonly` MCP servers. The user asks: *"Summarize the last week's failing tests in the auth-service repo."* The interception layer extracts: *"Read CI test results from the auth-service repository."*
+A coding agent has read access to `github` and `db-readonly` MCP servers. The user asks: "Summarize the last week's failing tests in the auth-service repo." The interception layer extracts: "Read CI test results from the auth-service repository."
 
 The agent emits `github.list_workflow_runs(repo="auth-service", status="failure")`. Checks 1–4 pass; semantic match aligns; check 5 verifies the relayed content matches the raw response.
 
 Now an injected instruction in a fetched issue body makes the LLM emit `db-readonly.export_full_users_table()`. Checks 1–4 still pass — structurally clean. The semantic matcher rejects: `export_full_users_table` does not align with "read CI test results". Only the semantic layer sees the drift.
 
-## When This Backfires
+## When this backfires
 
-- **High-frequency tool use.** Each decision adds an LLM round-trip for task extraction. AgentSpec-style declarative predicates run with millisecond-level overhead ([Wang et al., 2025](https://arxiv.org/abs/2503.18666)) vs. hundreds of ms per LLM call. Cache per turn or fall back to deterministic allowlists for hot paths.
-- **Shared-failure mode.** Same model class for policy and agent creates correlated weakness — a jailbreak misleading one may mislead both ([§V](https://arxiv.org/html/2605.02682)). Use a different family for policy.
-- **High FNR on critical paths.** 7% multi-turn FNR is unacceptable for utility-critical workflows without a fallback (operator review or allowlist for known-good pairs).
-- **PII in tasks.** Summaries may carry PII to the auth server — encrypt at rest, minimise retention.
+- High-frequency tool use. Each decision adds an LLM round-trip for task extraction. AgentSpec-style declarative predicates run with millisecond-level overhead ([Wang et al., 2025](https://arxiv.org/abs/2503.18666)), against hundreds of milliseconds per LLM call. Cache per turn or fall back to deterministic allowlists for hot paths.
+- Shared-failure mode. The same model class for policy and agent creates correlated weakness, because a jailbreak that misleads one may mislead both ([§V](https://arxiv.org/html/2605.02682)). Use a different family for policy.
+- High FNR on critical paths. A 7% multi-turn FNR is unacceptable for utility-critical workflows without a fallback (operator review or an allowlist for known-good pairs).
+- PII in tasks. Summaries may carry PII to the auth server, so encrypt at rest and keep retention short.
 
 ## Key Takeaways
 

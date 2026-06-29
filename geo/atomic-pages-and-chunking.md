@@ -19,23 +19,23 @@ maturity: established
 
 > One concept per page makes documentation chunk cleanly, raising retrieval accuracy for AI answer engines.
 
-**Related lesson:** [Answer-First, Atomic Pages](https://learn.agentpatterns.ai/geo/answer-first-atomic-pages/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Answer-First, Atomic Pages](https://learn.agentpatterns.ai/geo/answer-first-atomic-pages/) covers this concept in a hands-on lesson with quizzes.
 
-When an AI answer engine retrieves your documentation, it pulls the most relevant passage from a chunked and embedded index — not the full page. How you structure content determines which passages surface and whether they contain enough context to be cited accurately.
+An AI answer engine retrieves the most relevant passage from a chunked and embedded index, not the full page. How you structure content decides which passages surface and whether they carry enough context to be cited accurately.
 
-## How RAG Chunking Works
+## How RAG chunking works
 
 RAG systems ingest documents in three steps:
 
-1. **Chunk** — split documents into passages (typically 256–512 tokens, ~200–400 words)
-2. **Embed** — convert each passage to a vector representation via an embedding model
-3. **Score** — at query time, rank passages by cosine similarity to the query embedding
+1. Chunk — split documents into passages (typically 256–512 tokens, about 200–400 words).
+2. Embed — convert each passage to a vector representation through an embedding model.
+3. Score — at query time, rank passages by cosine similarity to the query embedding.
 
-The returned passage is what gets cited. When a passage spans multiple unrelated topics, its embedding becomes a blended average — less similar to any single query than a focused passage. [NVIDIA research (2024)](https://developer.nvidia.com/blog/finding-the-best-chunking-strategy-for-accurate-ai-responses/) found page-level chunking achieves the highest average retrieval accuracy (0.648), and 256–512 token chunks perform best for factoid queries.
+AI engines cite the returned passage. When a passage spans several unrelated topics, its embedding becomes a blended average — less similar to any single query than a focused passage. [NVIDIA research (2024)](https://developer.nvidia.com/blog/finding-the-best-chunking-strategy-for-accurate-ai-responses/) found page-level chunking achieves the highest average retrieval accuracy (0.648), and 256–512 token chunks perform best for factoid queries.
 
-## The Atomic Page Principle
+## The atomic page principle
 
-One concept per page means each page maps cleanly to one chunk — the top passage is about exactly that concept, not a mix of tangents.
+One concept per page means each page maps cleanly to one chunk. The top passage is about exactly that concept, not a mix of tangents.
 
 [GitBook GEO guide](https://gitbook.com/docs/guides/seo-and-llm-optimization/geo-guide): keep each page focused on a single concept, task, or API area so it chunks cleanly during LLM ingestion.
 
@@ -44,49 +44,49 @@ One concept per page means each page maps cleanly to one chunk — the top passa
 | One concept, one page | Tight semantic cluster | High cosine similarity to on-topic queries |
 | Multiple concepts, one page | Blended average embedding | Diluted signal, lower ranking for any single query |
 
-## Section Length: The 200–400 Word Rule
+## Section length: the 200–400 word rule
 
 Sections of 200–400 words produce chunks that are:
 
-- **Long enough** to give the LLM sufficient context to generate an accurate answer
-- **Short enough** that the embedding remains semantically tight
+- long enough to give the LLM enough context to generate an accurate answer
+- short enough that the embedding stays semantically tight
 
 [Unstructured.io identifies ~250 tokens (~1,000 characters) as a sensible baseline](https://unstructured.io/blog/chunking-for-rag-best-practices), adjustable based on document style and query patterns. The [GEO paper (Aggarwal et al., KDD 2024)](https://arxiv.org/html/2311.09735v3) found structurally optimized content delivers up to 40% relative improvement in source visibility, with citations and statistics boosting visibility 22–37% further.
 
-Every H2 section should answer one question independently. If a section requires another to make sense, split them into separate pages.
+Every H2 section should answer one question on its own. If a section needs another to make sense, split them into separate pages.
 
-## Descriptive Headings as Topic Anchors
+## Descriptive headings as topic anchors
 
-H1/H2/H3 headings are the strongest semantic signals in a document — they define the semantic outline LLMs use to map topic boundaries and concept relationships, and mark chunk boundaries when chunking by title.
+H1, H2, and H3 headings are the strongest semantic signals in a document. They define the semantic outline LLMs use to map topic boundaries and concept relationships, and they mark chunk boundaries when chunking by title.
 
-[Search Engine Journal (2024)](https://www.searchenginejournal.com/how-llms-interpret-content-structure-information-for-ai-search/544308/) found flat heading structures reduce retrieval precision. Logical nesting (H1 to H2 to H3) communicates concept hierarchy to LLMs and embedding models.
+[Search Engine Journal (2024)](https://www.searchenginejournal.com/how-llms-interpret-content-structure-information-for-ai-search/544308/) found flat heading structures reduce retrieval precision. Logical nesting (H1 to H2 to H3) shows concept hierarchy to LLMs and embedding models.
 
-- **H1**: one per page, matches the concept the page is about
-- **H2**: each covers a distinct facet or subtopic
-- **H3**: optional for sub-facets within an H2 — keep nesting shallow
-- **Avoid vague headings** like "Overview" or "Details" — zero semantic load
+- H1: one per page, matching the concept the page is about
+- H2: each covers a distinct facet or subtopic
+- H3: optional for sub-facets within an H2, with shallow nesting
+- avoid vague headings like "Overview" or "Details" that carry no semantic load
 
-Descriptive headings also enable deep links — an AI tool can cite `page.md#how-rag-chunking-works`, not just `page.md`.
+Descriptive headings also enable deep links. An AI tool can cite `page.md#how-rag-chunking-works`, not just `page.md`.
 
-## Why Monolithic Pages Underperform
+## Why monolithic pages underperform
 
-Multi-concept pages hurt AI retrieval:
+Multi-concept pages hurt AI retrieval in three ways:
 
-- A 3,000-word page covering five techniques produces five blended embeddings — each weaker than a dedicated page embedding
-- Chunk boundaries may split an explanation mid-argument, stripping context needed for citation
-- Off-topic surrounding content blends a passage's embedding — the same penalty multi-topic pages suffer, applied within a page
+- a 3,000-word page covering five techniques produces five blended embeddings, each weaker than a dedicated page embedding
+- chunk boundaries may split an explanation mid-argument, stripping context needed for citation
+- off-topic surrounding content blends a passage's embedding, the same penalty multi-topic pages suffer, applied within a page
 
 Traditional SEO tactics like keyword density show negligible or negative effects on generative engine visibility.
 
-## When This Backfires
+## When this backfires
 
 Over-atomization has real costs. Splitting tightly coupled content into separate pages can hurt retrieval when:
 
-- **Procedural sequences are fragmented** — a multi-step workflow split across three pages may retrieve only step 2, leaving the LLM without the setup context needed to generate a complete answer.
-- **Pages are too short to be useful** — a 100-word page may not give the LLM enough context to answer confidently, even if retrieval succeeds. The NVIDIA benchmark showed 256–512 token chunks perform best; pages under ~200 words fall below this floor.
-- **Concepts require co-citation** — some topics are only meaningful in contrast (e.g., authentication vs. authorization). Splitting them prevents the [retrieved passage](../context-engineering/retrieval-augmented-agent-workflows.md) from explaining the distinction, forcing the LLM to fabricate the relationship.
+- procedural sequences are fragmented: a multi-step workflow split across three pages may retrieve only step 2, leaving the LLM without the setup context needed to generate a complete answer
+- pages are too short to be useful: a 100-word page may not give the LLM enough context to answer confidently, even when retrieval succeeds. The NVIDIA benchmark showed 256–512 token chunks perform best, and pages under about 200 words fall below this floor
+- concepts require co-citation: some topics are only meaningful in contrast, for example authentication versus authorization. Splitting them stops the [retrieved passage](../context-engineering/retrieval-augmented-agent-workflows.md) from explaining the distinction, forcing the LLM to fabricate the relationship
 
-The rule is one *meaningful* concept per page, not one *sentence* per page. If splitting would strip the context that makes a concept understandable, keep related ideas together.
+The rule is one meaningful concept per page, not one sentence per page. If splitting would strip the context that makes a concept understandable, keep related ideas together.
 
 ## Key Takeaways
 
@@ -98,7 +98,7 @@ The rule is one *meaningful* concept per page, not one *sentence* per page. If s
 
 A documentation site covers the topic "API authentication". A monolithic approach puts everything on one page:
 
-**Before (monolithic):**
+Before (monolithic):
 ```
 docs/api-auth.md  (~2,000 words)
   - What is authentication
@@ -110,7 +110,7 @@ docs/api-auth.md  (~2,000 words)
 
 The embedding for this single ~2,000-word page is a blended average across five distinct subtopics. A query for "how to rotate API keys" scores low cosine similarity because the embedding is diluted by OAuth, troubleshooting, and conceptual content.
 
-**After (atomic):**
+After (atomic):
 ```
 docs/auth/api-keys.md          (~300 words) — what API keys are and when to use them
 docs/auth/oauth2-setup.md      (~350 words) — implementing OAuth 2.0 step by step

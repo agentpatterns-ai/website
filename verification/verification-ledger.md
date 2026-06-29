@@ -19,15 +19,15 @@ maturity: established
 
 > Replace self-reported agent claims ("Build passed") with structured records — every verification step is an INSERT, every evidence bundle is a SELECT.
 
-**Learn it hands-on:** [The Verification Ledger](https://learn.agentpatterns.ai/verification/the-verification-ledger/) — guided lesson with quizzes.
+Learn it hands-on with [The Verification Ledger guided lesson](https://learn.agentpatterns.ai/verification/the-verification-ledger/), which includes quizzes.
 
-## The Problem with Self-Reported Verification
+## The problem with self-reported verification
 
-Agent workflows typically rely on the agent's own prose assertions about verification: "Build passed. Tests green. No issues found." These claims are unfalsifiable within the conversation. The agent may hallucinate that checks passed, skip steps silently, or assert results without running the actual tool — the [trust without verify](../anti-patterns/trust-without-verify.md) anti-pattern. Spotify's Honk team observed the same pattern and responded by wiring deterministic verifiers (format, build, test) into the agent loop and blocking PR creation when any verifier fails ([Spotify Engineering, "Background Coding Agents: Predictable Results Through Strong Feedback Loops"](https://engineering.atspotify.com/2025/12/feedback-loops-background-coding-agents-part-3)). See [Trust Without Verify](../anti-patterns/trust-without-verify.md) for the full anti-pattern.
+Agent workflows usually rely on the agent's own prose claims about verification: "Build passed. Tests green. No issues found." You cannot falsify these claims within the conversation. The agent may hallucinate that checks passed, skip steps silently, or assert results without running the tool — the [trust without verify](../anti-patterns/trust-without-verify.md) anti-pattern. Spotify's Honk team saw the same problem. They wired deterministic verifiers (format, build, test) into the agent loop and blocked PR creation when any verifier fails ([Spotify Engineering, "Background Coding Agents: Predictable Results Through Strong Feedback Loops"](https://engineering.atspotify.com/2025/12/feedback-loops-background-coding-agents-part-3)). See [Trust Without Verify](../anti-patterns/trust-without-verify.md) for the full anti-pattern.
 
-## Structured Proof
+## Structured proof
 
-A verification ledger records every check as structured data rather than prose. Burke Holland's [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) implements this with a SQL table:
+A verification ledger records every check as structured data rather than prose. Burke Holland's [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) does this with a SQL table:
 
 ```sql
 CREATE TABLE IF NOT EXISTS anvil_checks (
@@ -46,49 +46,49 @@ CREATE TABLE IF NOT EXISTS anvil_checks (
 
 The core rule: every verification step must be an INSERT with the tool name, command, exit code, and output. The evidence bundle is a SELECT query against this table, not agent-written prose. If the INSERT did not happen, the verification did not happen.
 
-## Baseline Capture
+## Baseline capture
 
-Before making any changes, the agent captures the current system state — IDE diagnostics, build exit code, test results — and INSERTs them with `phase = 'baseline'`. This enables regression detection: any check that was `passed=1` before changes but `passed=0` after reveals a regression the agent introduced, not a pre-existing failure.
+Before making any changes, the agent captures the current system state — IDE diagnostics, build exit code, test results — and INSERTs them with `phase = 'baseline'`. This lets you detect regressions: any check that was `passed=1` before the changes but `passed=0` after reveals a regression the agent introduced, not a pre-existing failure.
 
-## Gate Enforcement
+## Gate enforcement
 
-Gates prevent the agent from skipping ahead. The Anvil pattern uses SQL count checks as gates ([Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md)):
+Gates stop the agent from skipping ahead. The Anvil pattern uses SQL count checks as gates ([Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md)):
 
 - "Do NOT proceed to implementation until baseline INSERTs are complete"
 - "Do NOT present evidence until `SELECT COUNT(*) FROM anvil_checks WHERE phase = 'after'` returns sufficient rows"
 
 This enforces ordering through data, not through trusting the agent to follow instructions. The agent cannot present a passing evidence bundle if the rows do not exist.
 
-## Evidence Bundles
+## Evidence bundles
 
-The bundle is generated from a query, eliminating hallucinated results:
+A query generates the bundle, which rules out hallucinated results:
 
 ```sql
 SELECT phase, check_name, tool, command, exit_code, passed, output_snippet
 FROM anvil_checks WHERE task_id = '{task_id}' ORDER BY phase DESC, id;
 ```
 
-The output is presented as a structured table showing baseline state, post-change state, regressions (baseline passed but after failed), and review verdicts. Confidence levels derive from data: "High" means all tiers passed and reviewers found zero issues; "Low" means a check failed or a reviewer raised an unresolved concern.
+The output is shown as a structured table: baseline state, post-change state, regressions (baseline passed but after failed), and review verdicts. Confidence levels come from the data. "High" means all tiers passed and reviewers found zero issues. "Low" means a check failed or a reviewer raised an unresolved concern.
 
-## Applying the Pattern
+## Applying the pattern
 
-The full SQL-backed ledger requires tooling that supports persistent databases across agent turns (Anvil uses VS Code's session storage). Lighter implementations use the same principle:
+The full SQL-backed ledger needs tooling that supports persistent databases across agent turns (Anvil uses VS Code's session storage). Lighter versions use the same principle:
 
-- **File-based**: write verification results to a JSON or YAML file after each check, read it back to generate the bundle
-- **Inline structured output**: require the agent to emit verification in a fixed schema (tool, command, exit_code, passed) rather than prose — parseable by downstream gates
-- **CI integration**: pipe verification records into existing CI reporting, making agent-produced evidence auditable alongside human CI runs
+- File-based: write verification results to a JSON or YAML file after each check, then read it back to generate the bundle
+- Inline structured output: have the agent emit verification in a fixed schema (tool, command, exit_code, passed) rather than prose, so downstream gates can parse it
+- CI integration: pipe verification records into existing CI reporting, so agent-produced evidence is auditable alongside human CI runs
 
-The key constraint is that evidence must be produced by tool calls, not asserted by the agent. See [Deterministic Guardrails](deterministic-guardrails.md) for the broader principle.
+The key constraint is that tool calls must produce the evidence, not the agent's own claims. See [Deterministic Guardrails](deterministic-guardrails.md) for the broader principle.
 
-## When This Backfires
+## When this backfires
 
-The ledger is not free — schema, INSERTs, gate queries, and bundle reads all cost time. Conditions where it costs more than it returns:
+The ledger is not free. Schema, INSERTs, gate queries, and bundle reads all cost time. It can cost more than it returns in these cases:
 
-- **Throwaway or exploratory work**: one-shot edits, spikes, and scratch scripts do not need baseline/after bookkeeping; the overhead outweighs regression-detection value on work that will be discarded.
-- **Unreliable underlying checks**: flaky tests or false-positive linters mean the ledger faithfully records noise rather than the signal [deterministic guardrails](deterministic-guardrails.md) are meant to produce. Green rows mislead reviewers when the checks themselves do not discriminate signal.
-- **Wrong checks recorded**: complete rows for the wrong surface (e.g., unit tests when the change breaks an integration contract) produce a clean bundle for a broken change. Ledger completeness is not verification completeness, the same gap a [pre-completion checklist](pre-completion-checklists.md) closes by enumerating the checks that must run.
-- **Agent writes its own rows**: if the same agent runs the tool and writes the row, it can fake exit codes or skip the INSERT when a check fails. The ledger only holds when execution and recording are separated — CI, a harness, or a hook.
-- **Single-turn agents without persistent state**: a SQL ledger is architecturally heavy here; inline [structured output](structured-output-constraints.md) (JSON per check) captures the same invariants with less plumbing.
+- Throwaway or exploratory work: one-shot edits, spikes, and scratch scripts do not need baseline/after bookkeeping. The overhead outweighs the regression-detection value on work you will discard.
+- Unreliable underlying checks: flaky tests or false-positive linters mean the ledger faithfully records noise rather than the signal [deterministic guardrails](deterministic-guardrails.md) are meant to produce. Green rows mislead reviewers when the checks themselves do not tell signal from noise.
+- Wrong checks recorded: complete rows for the wrong surface (for example, unit tests when the change breaks an integration contract) produce a clean bundle for a broken change. Ledger completeness is not verification completeness, the same gap a [pre-completion checklist](pre-completion-checklists.md) closes by listing the checks that must run.
+- Agent writes its own rows: if the same agent runs the tool and writes the row, it can fake exit codes or skip the INSERT when a check fails. The ledger only holds when execution and recording are separated — CI, a harness, or a hook.
+- Single-turn agents without persistent state: a SQL ledger is too heavy here. Inline [structured output](structured-output-constraints.md) (JSON per check) captures the same invariants with less plumbing.
 
 ## Example
 

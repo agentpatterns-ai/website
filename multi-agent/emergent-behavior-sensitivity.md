@@ -17,9 +17,9 @@ maturity: adopted
 
 > Small changes to a lead agent's prompt unpredictably alter subagent behavior. Multi-agent prompts must be frameworks for collaboration, not rigid instructions.
 
-**Learn it hands-on:** [Why Multi-Agent Systems Fail](https://learn.agentpatterns.ai/multi-agent/why-multi-agent-fails/) — guided lesson with quizzes.
+Learn it hands-on with the [Why Multi-Agent Systems Fail](https://learn.agentpatterns.ai/multi-agent/why-multi-agent-fails/) guided lesson and quizzes.
 
-## The Problem
+## The problem
 
 Subagents receive only their own system prompt and the delegation message -- not the lead's full context. Minor wording changes in the lead's prompt cascade unpredictably. Anthropic observed this directly: ["small changes to the lead agent can unpredictably change how subagents behave."](https://www.anthropic.com/engineering/multi-agent-research-system)
 
@@ -43,28 +43,28 @@ graph TD
 
 This is not a bug -- it is a property of systems where agents interpret instructions rather than execute them deterministically.
 
-## Why Prescriptive Prompts Break
+## Why prescriptive prompts break
 
-Rigid, step-by-step instructions create brittle multi-agent systems:
+Rigid, step-by-step instructions create brittle multi-agent systems.
 
-**Interpretation drift.** Each subagent filters delegation through its own context. A phrasing shift changes what the subagent infers about scope or priority -- without any explicit instruction changing.
+Interpretation drift comes first. Each subagent filters delegation through its own context. A phrasing shift changes what the subagent infers about scope or priority, without any explicit instruction changing.
 
-**Cascade convergence.** In [Anthropic's parallel C compiler project](https://www.anthropic.com/engineering/building-c-compiler), agents on a monolithic task would "hit the same bug, fix that bug, and then overwrite each other's changes."
+Cascade convergence follows. In [Anthropic's parallel C compiler project](https://www.anthropic.com/engineering/building-c-compiler), agents on a monolithic task would "hit the same bug, fix that bug, and then overwrite each other's changes."
 
-**Emergent over-scaling.** Without effort boundaries, [Anthropic's research system](https://www.anthropic.com/engineering/multi-agent-research-system) "spawned 50 subagents for simple queries, scouring the web endlessly for nonexistent sources."
+Emergent over-scaling is the third failure. Without effort boundaries, [Anthropic's research system](https://www.anthropic.com/engineering/multi-agent-research-system) "spawned 50 subagents for simple queries, scouring the web endlessly for nonexistent sources."
 
-## Framework Prompts Over Prescriptive Prompts
+## Framework prompts over prescriptive prompts
 
 Effective multi-agent prompts [encode "heuristics rather than rigid rules"](https://www.anthropic.com/engineering/multi-agent-research-system). Anthropic's guidance on prompt altitude describes the goal as ["specific enough to guide behavior effectively, yet flexible enough to provide the model with strong heuristics"](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) -- the Goldilocks zone between brittle hard-coded logic and vague high-level guidance.
 
 | Prompt Style | Characteristic | Cascade Behavior |
 |---|---|---|
-| **Prescriptive** | Step-by-step instructions, exact formats | Brittle -- small changes break downstream agents |
-| **Framework** | Principles, effort budgets, heuristics | Resilient -- subagents adapt within boundaries |
+| Prescriptive | Step-by-step instructions, exact formats | Brittle -- small changes break downstream agents |
+| Framework | Principles, effort budgets, heuristics | Resilient -- subagents adapt within boundaries |
 
 A framework prompt defines division of labor, problem-solving heuristics, effort budgets, and quality criteria -- what "done" looks like, not how to get there.
 
-## Mitigation Strategies
+## Mitigation strategies
 
 ### Task granularity as isolation
 
@@ -88,7 +88,7 @@ A Claude Code orchestrator delegates code review to three subagents using `Task`
 
 A developer edits it to: "Thoroughly review the pull request for correctness, security, and performance."
 
-**Prescriptive result:** Subagent A interprets "thoroughly" as exhaustive and runs `grep -r` across the entire repository for related patterns. Subagent B treats "security" as its primary scope and flags every `eval()` and `subprocess.run()` call regardless of context. Subagent C combines both signals and spawns its own sub-tasks for each file, exceeding the API rate limit. The orchestrator receives three incompatible review summaries with overlapping, contradictory recommendations.
+Prescriptive result: Subagent A interprets "thoroughly" as exhaustive and runs `grep -r` across the entire repository for related patterns. Subagent B treats "security" as its primary scope and flags every `eval()` and `subprocess.run()` call regardless of context. Subagent C combines both signals and spawns its own sub-tasks for each file, exceeding the API rate limit. The orchestrator receives three incompatible review summaries with overlapping, contradictory recommendations.
 
 ```python
 # Prescriptive delegation -- brittle under prompt changes
@@ -98,7 +98,7 @@ task = Task(
 )
 ```
 
-**Framework result:** The lead prompt instead encodes effort boundaries: "Review only changed files in the diff; flag at most 5 issues per category; stop after evaluating the diff once." Adding "thorough" language has no effect -- the effort budget caps behavior regardless of adjective choice.
+Framework result: The lead prompt instead encodes effort boundaries: "Review only changed files in the diff; flag at most 5 issues per category; stop after evaluating the diff once." Adding "thorough" language has no effect -- the effort budget caps behavior regardless of adjective choice.
 
 ```python
 # Framework delegation -- cascade-resistant
@@ -119,13 +119,13 @@ The framework version produces the same behavioral outcome whether the prompt sa
 - Task granularity is the primary isolation mechanism
 - Evaluate changes end-to-end; individual agent correctness does not predict system behavior
 
-## When This Backfires
+## When this backfires
 
-Framework prompts assume subagents handle ambiguity well -- this breaks down in three conditions:
+Framework prompts assume subagents handle ambiguity well. This breaks down in three conditions:
 
-- **Compliance-critical contexts.** Regulated pipelines (finance, healthcare, legal) may require step-by-step auditability. Framework prompts produce flexible behavior that is harder to trace back to specific instructions, making post-hoc compliance review difficult.
-- **Brittle task types.** Tasks with a single correct execution path -- exact database migrations, deterministic build steps -- benefit from rigid instruction sequences and a high [instruction-compliance ceiling](../instructions/instruction-compliance-ceiling.md). Framework prompts introduce unwanted interpretation where none should occur.
-- **Undertrained subagents.** Heuristic delegation relies on subagents having enough domain knowledge to infer intent. A model without sufficient instruction-following capability or domain context will interpret framework prompts erratically, producing worse outcomes than a prescriptive approach.
+- Compliance-critical contexts. Regulated pipelines (finance, healthcare, legal) may require step-by-step auditability. Framework prompts produce flexible behavior that is harder to trace back to specific instructions, which makes later compliance review difficult.
+- Brittle task types. Tasks with a single correct execution path -- exact database migrations, deterministic build steps -- benefit from rigid instruction sequences and a high [instruction-compliance ceiling](../instructions/instruction-compliance-ceiling.md). Framework prompts introduce unwanted interpretation where none should occur.
+- Undertrained subagents. Heuristic delegation relies on subagents having enough domain knowledge to infer intent. A model without enough instruction-following capability or domain context will interpret framework prompts erratically, producing worse outcomes than a prescriptive approach.
 
 ## Related
 
@@ -134,7 +134,7 @@ Framework prompts assume subagents handle ambiguity well -- this breaks down in 
 - [Orchestrator-Worker](orchestrator-worker.md)
 - [Fan-Out Synthesis](fan-out-synthesis.md)
 - [Harness Engineering](../agent-design/harness-engineering.md)
-- [The Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md)
+- [The Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md)
 - [Staggered Agent Launch](staggered-agent-launch.md)
 - [Subagent Schema-Level Tool Filtering](subagent-schema-level-tool-filtering.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)

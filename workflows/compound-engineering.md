@@ -15,13 +15,13 @@ maturity: adopted
 
 > A four-step loop -- Plan, Work, Assess, Compound -- where each feature feeds learnings back as prompts, making subsequent features easier.
 
-## The Core Idea
+## The core idea
 
 Most agent workflows treat each task as independent. You prompt, the agent builds, you review, you ship. The next task starts from scratch with no [memory](../agent-design/agent-memory-patterns.md) of what went wrong or what worked.
 
-Compound engineering breaks this by adding a deliberate **Compound** step after every feature cycle. Bugs, performance issues, novel approaches, and architectural decisions are captured as prompts that automatically prime future agent sessions. Over time, the system accumulates institutional knowledge -- the equivalent of a senior engineer's experience encoded in the repository itself.
+Compound engineering breaks this. It adds a deliberate Compound step after every feature cycle. You capture bugs, performance issues, novel approaches, and architectural decisions as prompts that prime future agent sessions. Over time, the system builds up institutional knowledge, the equivalent of a senior engineer's experience encoded in the repository itself.
 
-## The Cycle
+## The cycle
 
 ```mermaid
 graph LR
@@ -33,34 +33,34 @@ graph LR
 
 | Phase | Effort | Activity |
 |-------|--------|----------|
-| **Plan** | ~40% | Research, architecture, success criteria, written spec |
-| **Work** | ~20% | Agent implements against the plan |
-| **Assess** | ~30% | Parallel multi-dimension code review |
-| **Compound** | ~10% | Extract learnings, encode as prompts in the repo |
+| Plan | ~40% | Research, architecture, success criteria, written spec |
+| Work | ~20% | Agent implements against the plan |
+| Assess | ~30% | Parallel multi-dimension code review |
+| Compound | ~10% | Extract learnings, encode as prompts in the repo |
 
-The effort distribution is deliberately inverted from traditional development. Roughly 80% goes to planning and review; 20% to execution and compounding ([Shipper & Klaassen, Every, 2025](https://every.to/chain-of-thought/compound-engineering-how-every-codes-with-agents)). This aligns with broader findings that most agentic coding failures trace to insufficient problem definition, not implementation quality ([Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
+The effort split is deliberately inverted from traditional development. Roughly 80% goes to planning and review; 20% to execution and compounding ([Shipper & Klaassen, Every, 2025](https://every.to/chain-of-thought/compound-engineering-how-every-codes-with-agents)). This matches broader findings that most agentic coding failures trace to weak problem definition, not implementation quality ([Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
 
-## Phase Details
+## Phase details
 
 ### Plan
 
-Planning is the highest-leverage phase. Before agents write any code:
+Planning is the phase that pays off most. Before agents write any code, do four things:
 
-1. **Research** the problem space -- existing code, dependencies, edge cases
-2. **Define architecture** -- which files change, what patterns to follow, integration points
-3. **Set success criteria** -- concrete, testable conditions the implementation must satisfy
-4. **Write a spec** -- a document the agent reads at session start
+1. Research the problem space: existing code, dependencies, and edge cases.
+2. Define the architecture: which files change, what patterns to follow, and where the integration points sit.
+3. Set success criteria: concrete, testable conditions the implementation must satisfy.
+4. Write a spec: a document the agent reads at session start.
 
-This is the [plan-first loop](plan-first-loop.md) applied as organizational discipline, not just a per-task technique. The spec becomes the agent's primary context, replacing vague task descriptions with precise implementation guidance.
+This is the [plan-first loop](plan-first-loop.md) applied as team discipline, not just a per-task technique. The spec becomes the agent's primary context. It replaces vague task descriptions with precise implementation guidance.
 
 ### Work
 
 The agent implements against the plan. Two mechanisms improve reliability during this phase:
 
-- **MCP-driven verification**: agents interact with running applications (via Playwright, build tools, etc.) to test functionality during implementation, not just after
-- **Plan-as-constraint**: the written spec bounds what the agent should build, reducing scope drift and speculative additions
+- MCP-driven verification: the agent works with running applications, through Playwright or build tools, to test functionality during implementation, not just after
+- plan-as-constraint: the written spec bounds what the agent should build, which reduces scope drift and speculative additions
 
-The Work phase is deliberately short. If planning was thorough, implementation is execution of a known approach rather than exploratory coding.
+The Work phase is deliberately short. If the planning was thorough, the agent executes a known approach rather than exploring.
 
 ### Assess
 
@@ -83,21 +83,21 @@ graph TD
     S --> F[Actionable feedback]
 ```
 
-This is the [committee review pattern](../code-review/committee-review-pattern.md) applied to every feature. Each reviewer focuses on a single dimension, preventing the attention dilution that occurs when one reviewer checks everything. The synthesizer consolidates findings into actionable feedback, filtering noise from signal.
+This is the [committee review pattern](../code-review/committee-review-pattern.md) applied to every feature. Each reviewer focuses on a single dimension. That prevents the attention dilution that happens when one reviewer checks everything. The synthesizer pulls the findings into actionable feedback and filters noise from signal.
 
 ### Compound
 
-The step most teams skip. After assessment is complete:
+This is the step most teams skip. After the assessment is complete, do three things:
 
-1. **Identify learnings** -- bugs found, performance pitfalls, patterns that worked well, architectural decisions
-2. **Encode as prompts** -- write learnings into files that live in the repository (instruction files, skill files, or dedicated learnings directories)
-3. **Verify priming** -- confirm new sessions pick up the encoded learnings automatically
+1. Identify the learnings: bugs found, performance pitfalls, patterns that worked well, and architectural decisions.
+2. Encode them as prompts: write the learnings into files that live in the repository, such as instruction files, skill files, or dedicated learnings directories.
+3. Verify the priming: confirm new sessions pick up the encoded learnings automatically.
 
-What makes this different from simply updating documentation: the learnings are structured as **prompts that prime agent behavior**, not prose for humans to read. They live in the repo alongside the code, version-controlled and automatically loaded by agent sessions.
+This differs from simply updating documentation. The learnings are written as prompts that prime agent behavior, not as prose for humans to read. They live in the repo alongside the code, version-controlled and loaded automatically by agent sessions.
 
-## Why It Compounds
+## Why it compounds
 
-Traditional engineering assumes complexity grows monotonically -- each feature makes the next harder. Compound engineering inverts this assumption: if institutional knowledge grows faster than complexity, each feature becomes easier.
+Traditional engineering assumes complexity only grows: each feature makes the next harder. Compound engineering inverts that assumption. If institutional knowledge grows faster than complexity, each feature becomes easier.
 
 ```mermaid
 graph TD
@@ -114,11 +114,11 @@ graph TD
     F2C -.->|accumulated learnings| FN
 ```
 
-The mechanism: every bug caught in Assess that gets encoded in Compound makes [tacit knowledge explicit](../anti-patterns/implicit-knowledge-problem.md) so it cannot recur. Every architectural decision recorded means the next agent session does not need to rediscover it. New team members -- and new agent sessions -- inherit the equivalent of senior engineer knowledge from their first interaction.
+Here is the mechanism. Every bug caught in Assess and then encoded in Compound makes [tacit knowledge explicit](../anti-patterns/implicit-knowledge-problem.md), so it cannot recur. Every architectural decision you record means the next agent session does not have to rediscover it. New team members, and new agent sessions, inherit the equivalent of senior engineer knowledge from their first interaction.
 
-This is the same principle described in [agent memory patterns](../agent-design/agent-memory-patterns.md) (persistence across sessions), the [implicit knowledge problem](../anti-patterns/implicit-knowledge-problem.md) (making tacit knowledge explicit), and [encoding tacit knowledge into agent improvement loops](encoding-tacit-knowledge.md) (active elicitation and encoding), but applied as a **systematic workflow** rather than an ad-hoc practice.
+This is the same principle described in [agent memory patterns](../agent-design/agent-memory-patterns.md) (persistence across sessions), the [implicit knowledge problem](../anti-patterns/implicit-knowledge-problem.md) (making tacit knowledge explicit), and [encoding tacit knowledge into agent improvement loops](encoding-tacit-knowledge.md) (active elicitation and encoding). The difference is that compound engineering applies it as a systematic workflow rather than an ad-hoc practice.
 
-## Learnings as Prompts
+## Learnings as prompts
 
 The Compound step produces artifacts that look like this:
 
@@ -139,17 +139,17 @@ migration_001_create_users.sql  -- must exist before
 migration_002_create_orders.sql -- references users.id
 ```
 
-These are not documentation. They are agent instructions stored as repository artifacts, loaded into context at session start. The format follows the [skill authoring patterns](../tool-engineering/skill-authoring-patterns.md) approach: context, rule, example.
+These are not documentation. They are agent instructions stored as repository artifacts and loaded into context at session start. The format follows the [skill authoring patterns](../tool-engineering/skill-authoring-patterns.md) approach: context, rule, example.
 
 ## Implementation
 
-The compound engineering workflow is available as an open-source plugin: [EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin). It provides slash commands (`/ce-plan`, `/ce-work`, `/ce-code-review`, `/ce-compound`, and more) that orchestrate the cycle within Claude Code, Cursor, Copilot, and other tools.
+The compound engineering workflow comes as an open-source plugin: [EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin). It provides slash commands (`/ce-plan`, `/ce-work`, `/ce-code-review`, `/ce-compound`, and more) that run the cycle within Claude Code, Cursor, Copilot, and other tools.
 
-You do not need the plugin to practice compound engineering. The workflow is tool-agnostic -- any team can implement Plan-Work-Assess-Compound using their existing agent setup, instruction files, and review process.
+You do not need the plugin to practice compound engineering. The workflow is tool-agnostic. Any team can run Plan-Work-Assess-Compound with their existing agent setup, instruction files, and review process.
 
-## Relationship to Existing Patterns
+## Relationship to existing patterns
 
-Compound engineering is a **workflow that orchestrates** patterns already documented on this site:
+Compound engineering is a workflow that orchestrates patterns already documented on this site:
 
 | Phase | Orchestrated pattern |
 |-------|---------------------|
@@ -158,7 +158,7 @@ Compound engineering is a **workflow that orchestrates** patterns already docume
 | Assess | [Committee review](../code-review/committee-review-pattern.md), [agent self-review loop](../code-review/agent-self-review-loop.md) |
 | Compound | [Agent memory patterns](../agent-design/agent-memory-patterns.md), [implicit knowledge capture](../anti-patterns/implicit-knowledge-problem.md) |
 
-The value is not in any individual pattern but in the **closed loop** that connects them. Without the Compound step, learnings from Assess evaporate between sessions. Without structured Plan, agents build against incomplete context. The closed loop is what converts isolated patterns into cumulative improvement.
+The value is not in any individual pattern. It is in the closed loop that connects them. Without the Compound step, learnings from Assess evaporate between sessions. Without a structured Plan, agents build against incomplete context. The closed loop is what turns isolated patterns into cumulative improvement.
 
 ## Key Takeaways
 
@@ -168,13 +168,13 @@ The value is not in any individual pattern but in the **closed loop** that conne
 - Each encoded learning prevents an entire class of future errors, making the next feature genuinely easier
 - The workflow orchestrates existing patterns (committee review, agent memory, plan-first loop) into a self-reinforcing cycle
 
-## When This Backfires
+## When this backfires
 
-Compound engineering requires sustained discipline across all four phases. Several conditions reduce its effectiveness or make it counterproductive:
+Compound engineering needs sustained discipline across all four phases. Several conditions reduce its value or make it counterproductive:
 
-- **Deadline pressure collapses the Compound step.** The 10% effort allocation for Compound is the first budget cut when teams are under pressure. Without consistent compounding, the workflow degrades to a standard plan-build-review cycle with no cumulative benefit.
-- **Stale or contradictory prompt files.** Encoded learnings accumulate over time, the same staleness [continuous agent improvement](continuous-agent-improvement.md) prunes for. If the codebase evolves but the prompt files are not pruned, agents receive conflicting instructions — older rules that no longer apply alongside current ones. The maintenance cost of a learnings library grows with the project's age.
-- **Front-loading planning is only valuable when the problem is well-defined.** The ~40% planning allocation assumes research can yield a precise spec. For genuinely exploratory work (novel integrations, prototyping in unknown domains), a fixed upfront plan may constrain agents toward premature decisions and prevent useful divergence.
+- Deadline pressure collapses the Compound step. The 10% effort budget for Compound is the first cut when teams are under pressure. Without steady compounding, the workflow degrades to a standard plan-build-review cycle with no cumulative benefit.
+- Stale or contradictory prompt files. Encoded learnings build up over time, the same staleness [continuous agent improvement](continuous-agent-improvement.md) prunes for. If the codebase evolves but the prompt files are not pruned, agents get conflicting instructions: older rules that no longer apply alongside current ones. The cost of maintaining a learnings library grows with the project's age.
+- Front-loading the planning only pays off when the problem is well-defined. The ~40% planning budget assumes research can yield a precise spec. For genuinely exploratory work, such as novel integrations or prototyping in unknown domains, a fixed upfront plan can push agents toward premature decisions and prevent useful divergence.
 
 ## Related
 

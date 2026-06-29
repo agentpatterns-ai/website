@@ -18,11 +18,11 @@ maturity: established
 
 > Advanced models exhibit behavioral shortcuts as context limits approach — strategic buffers, counter-prompting, and token budget transparency counteract premature task closure.
 
-**Learn it hands-on:** [The Anxious Agent](https://learn.agentpatterns.ai/context-engineering/the-anxious-agent/) — guided lesson with quizzes.
+Learn it hands-on: [The Anxious Agent](https://learn.agentpatterns.ai/context-engineering/the-anxious-agent/) — guided lesson with quizzes.
 
-## The Behavior
+## The behavior
 
-As the context window fills, some models shift behavioral mode before hitting a hard capacity limit. [Cognition reported](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) this while rebuilding Devin for Claude Sonnet 4.5 — the first model they had seen that is aware of its own context window. The symptoms, also catalogued in [nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/context-window-anxiety-management.md), include:
+As the context window fills, some models shift behavioral mode before they hit a hard capacity limit. [Cognition reported](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) this while rebuilding Devin for Claude Sonnet 4.5 — the first model they had seen that is aware of its own context window. The symptoms, also cataloged in [nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/context-window-anxiety-management.md), include:
 
 - Hasty decisions and abbreviated reasoning chains
 - Premature task closure: marking work done before it is
@@ -33,7 +33,7 @@ This is distinct from the [context window dumb zone](context-window-dumb-zone.md
 
 [Anthropic's best-practices documentation](https://code.claude.com/docs/en/best-practices) confirms that performance degrades as context fills and that models may "forget earlier instructions or make more mistakes" — but frames this as cognitive load, not a behavioral mode shift. The behavioral framing comes from practitioner observation rather than public benchmarks, and specific token thresholds at which the behavior triggers remain model-dependent.
 
-## How It Differs from Related Patterns
+## How it differs from related patterns
 
 | Pattern | Mechanism | Trigger | Mitigation |
 |---------|-----------|---------|------------|
@@ -41,19 +41,19 @@ This is distinct from the [context window dumb zone](context-window-dumb-zone.md
 | Context Window Anxiety | Behavioral shortcuts, premature closure | Model's perception of approaching context limit | Buffer allocation, counter-prompting, budget transparency |
 | Compaction | Memory loss via summarization | ~95% fill (auto-compaction) | Manual compaction before degradation onset |
 
-## Three Mitigations
+## Three mitigations
 
-### 1. Context Buffer Allocation
+### 1. Context buffer allocation
 
-Provision a larger context window than you need, then cap actual usage well below it. [Cognition reports](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) that enabling Claude's 1M-token beta mode while capping Devin's use at 200K "convinced the model it had plenty of runway" and restored normal behavior.
+Set up a larger context window than you need, then cap actual usage well below it. [Cognition reports](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) that enabling Claude's 1M-token beta mode while capping Devin's use at 200K "convinced the model it had plenty of runway" and restored normal behavior.
 
 This is an architectural decision, not a per-request one. It applies when you control the API parameters or harness configuration.
 
-### 2. Counter-Prompting
+### 2. Counter-prompting
 
-Embed explicit instructions that directly override premature-closure behavior. [Cognition found](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) that prompts at the start of the conversation were not enough — reminders at both the beginning and the end of the prompt were needed to keep Devin from prematurely wrapping up. This aligns with [primacy and recency effects](lost-in-the-middle.md) — see [Critical Instruction Repetition](../instructions/critical-instruction-repetition.md) for the full technique:
+Add explicit instructions that directly override premature-closure behavior. [Cognition found](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) that prompts at the start of the conversation were not enough — reminders at both the beginning and the end of the prompt were needed to keep Devin from wrapping up early. This aligns with [primacy and recency effects](lost-in-the-middle.md) — see [Critical Instruction Repetition](../instructions/critical-instruction-repetition.md) for the full technique:
 
-**Example counter-prompt:**
+Example counter-prompt:
 
 ```
 You have substantial context space remaining. Do not rush task completion,
@@ -63,7 +63,7 @@ fully before declaring the work done.
 
 The instruction mirrors how Anthropic's best-practices documentation recommends using emphasis for compliance-critical rules: "IMPORTANT" and "YOU MUST" phrasing improves adherence when standard instructions are ignored.
 
-### 3. Token Budget Transparency
+### 3. Token budget transparency
 
 Tell the model explicitly how many tokens remain. A model that underestimates available space acts on that underestimate. Communicating the actual budget — or a deliberately padded estimate — corrects the trigger.
 
@@ -73,13 +73,13 @@ Practical approaches:
 
 Tools are beginning to ship this transparency as a first-class surface. Cursor's in-product context-usage report breaks token usage across system prompt, tool definitions, rules, and skills, and pairs it with a "Debug with Agent" action that surfaces reduction opportunities ([Cursor — Context explorer changelog](https://cursor.com/changelog/canvas-improvements)).
 
-## When to Apply
+## When to apply
 
 Context window anxiety is most damaging in:
 
-- **Extended development sessions** where premature closure abandons in-progress refactors
-- **Multi-step research tasks** where early summarization drops relevant findings
-- **Complex planning tasks** where the model stops generating sub-tasks before the plan is complete
+- Extended development sessions, where premature closure abandons in-progress refactors
+- Multi-step research tasks, where early summarization drops relevant findings
+- Complex planning tasks, where the model stops generating sub-tasks before the plan is complete
 
 It is less relevant for short, single-turn interactions where context fill is not a concern.
 

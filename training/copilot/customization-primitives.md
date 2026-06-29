@@ -38,7 +38,7 @@ Each layer addresses a different problem. Instructions tell Copilot *what to do*
 
 They compose — a custom agent can reference skills, consume MCP server tools, and operate under the constraints of both instructions and hooks simultaneously.
 
-**Chat Customizations Editor** (v1.113+ Preview): A [unified interface](https://code.visualstudio.com/updates/v1_113) organizing custom instructions, prompt files, custom agents, and agent skills into separate tabs with an embedded code editor and marketplace access. Open it from the Copilot chat panel settings.
+Chat Customizations Editor (v1.113+ Preview): A [unified interface](https://code.visualstudio.com/updates/v1_113) organizing custom instructions, prompt files, custom agents, and agent skills into separate tabs with an embedded code editor and marketplace access. Open it from the Copilot chat panel settings.
 
 ### Surface Support Overview
 
@@ -82,33 +82,33 @@ Every non-trivial repository should have at least a repository-wide instructions
 
 ### Organization Instructions
 
-**What it is**: Instructions set by org admins, applied to every repo and every user on supported surfaces (GitHub.com and the coding agent).
+What it is: Instructions set by org admins, applied to every repo and every user on supported surfaces (GitHub.com and the coding agent).
 
-**Configured in**: GitHub.com → Organization Settings → Copilot → Custom instructions.
+Configured in: GitHub.com → Organization Settings → Copilot → Custom instructions.
 
-**Used for**: Company-wide coding standards, security policies, approved patterns, compliance rules. Applied silently — individual users don't see them in their workspace. Copilot applies these standards across every repository in the org — language preferences, security practices, forbidden patterns.
+Used for: Company-wide coding standards, security policies, approved patterns, compliance rules. Applied silently — individual users don't see them in their workspace. Copilot applies these standards across every repository in the org — language preferences, security practices, forbidden patterns.
 
-**When to use it**: Standards that apply across all repositories — language preferences, security practices, forbidden patterns.
+When to use it: Standards that apply across all repositories — language preferences, security practices, forbidden patterns.
 
-**When NOT to use it**: Rules specific to a single repo or codebase area. Those belong in repository or path-specific instructions.
+When NOT to use it: Rules specific to a single repo or codebase area. Those belong in repository or path-specific instructions.
 
-**Surfaces**: GitHub.com (Chat, code review) and the coding agent. Not currently supported in VS Code or the CLI.
+Surfaces: GitHub.com (Chat, code review) and the coding agent. Not currently supported in VS Code or the CLI.
 
 ---
 
 ### Repository Instructions (`.github/copilot-instructions.md`)
 
-**What it is**: A Markdown file at the root of `.github/` injected into every Copilot session in this repository. Applied to all requests regardless of which files are open.
+What it is: A Markdown file at the root of `.github/` injected into every Copilot session in this repository. Applied to all requests regardless of which files are open.
 
-**Used for**: Repo-specific conventions in `.github/copilot-instructions.md` — stack details, build/test commands, architectural rules, do-not-do lists.
+Used for: Repo-specific conventions in `.github/copilot-instructions.md` — stack details, build/test commands, architectural rules, do-not-do lists.
 
-**When to use it**: Every non-trivial repository. This is the highest-leverage, lowest-effort customization. If you've ever corrected Copilot for the same thing twice, put it here.
+When to use it: Every non-trivial repository. This is the highest-leverage, lowest-effort customization. If you've ever corrected Copilot for the same thing twice, put it here.
 
-**When NOT to use it**: Rules that only apply to a subset of files — use path-specific instructions instead. Rules that must be enforced mechanically — use hooks. Copilot loads `.github/copilot-instructions.md` on every request across all four surfaces. The coding agent reads it from the default branch.
+When NOT to use it: Rules that only apply to a subset of files — use path-specific instructions instead. Rules that must be enforced mechanically — use hooks. Copilot loads `.github/copilot-instructions.md` on every request across all four surfaces. The coding agent reads it from the default branch.
 
-**Surfaces**: All four. The coding agent reads it from the default branch. The CLI and VS Code read it from the working directory.
+Surfaces: All four. The coding agent reads it from the default branch. The CLI and VS Code read it from the working directory.
 
-**How to use it**:
+How to use it:
 
 ```markdown
 # Project: Payments API
@@ -134,23 +134,23 @@ Every non-trivial repository should have at least a repository-wide instructions
 - Write tests that mock the database (use the real test DB)
 ```
 
-**What makes a good instructions file**: Actionable rules, not descriptions. Short enough that every line gets attention. Focus on things Copilot gets wrong without guidance — it already reads your code, types, and configs.
+What makes a good instructions file: Actionable rules, not descriptions. Short enough that every line gets attention. Focus on things Copilot gets wrong without guidance — it already reads your code, types, and configs.
 
 ---
 
 ### Path-Specific Instructions (`.github/instructions/*.instructions.md`)
 
-**What it is**: Instructions that apply only when Copilot works with files matching an `applyTo` glob pattern. They merge with repository-wide instructions when both match — they don't replace them.
+What it is: Instructions that apply only when Copilot works with files matching an `applyTo` glob pattern. They merge with repository-wide instructions when both match — they don't replace them.
 
-**Used for**: Different rules for different parts of the codebase in `.github/instructions/` — frontend components, API routes, database migrations, infrastructure config.
+Used for: Different rules for different parts of the codebase in `.github/instructions/` — frontend components, API routes, database migrations, infrastructure config.
 
-**When to use it**: A rule applies to a subset of files and would dilute the global instructions file. Keeps repo-wide instructions lean and focused.
+When to use it: A rule applies to a subset of files and would dilute the global instructions file. Keeps repo-wide instructions lean and focused.
 
-**When NOT to use it**: The rule is universal to the repo — put it in `.github/copilot-instructions.md` instead.
+When NOT to use it: The rule is universal to the repo — put it in `.github/copilot-instructions.md` instead.
 
-**Surfaces**: VS Code, CLI, coding agent. Not supported on GitHub.com.
+Surfaces: VS Code, CLI, coding agent. Not supported on GitHub.com.
 
-**How to use it**:
+How to use it:
 
 ```markdown
 ---
@@ -168,19 +168,19 @@ The `applyTo` field supports standard glob patterns (`*`, `**`, comma-separated)
 
 ### Personal Instructions (GitHub.com)
 
-**What it is**: Instructions configured in your GitHub personal settings that apply to all Copilot interactions on GitHub.com, regardless of what repo-level instructions exist.
+What it is: Instructions configured in your GitHub personal settings that apply to all Copilot interactions on GitHub.com, regardless of what repo-level instructions exist.
 
-**Used for**: Your personal preferences — language style, response format, coding conventions — that follow you across repos on GitHub.com.
+Used for: Your personal preferences — language style, response format, coding conventions — that follow you across repos on GitHub.com.
 
-**When to use it**: Preferences that aren't repo-specific and should apply wherever you use Copilot on GitHub.com (Chat, code review).
+When to use it: Preferences that aren't repo-specific and should apply wherever you use Copilot on GitHub.com (Chat, code review).
 
-**When NOT to use it**: Rules the team should share — those belong in repository instructions.
+When NOT to use it: Rules the team should share — those belong in repository instructions.
 
-**Surfaces**: GitHub.com only (Chat, code review). Not available in VS Code, CLI, or the coding agent.
+Surfaces: GitHub.com only (Chat, code review). Not available in VS Code, CLI, or the coding agent.
 
-**How to configure**: GitHub.com → Settings → Copilot → Personal instructions.
+How to configure: GitHub.com → Settings → Copilot → Personal instructions.
 
-> **Note**: The VS Code setting `github.copilot.chat.codeGeneration.instructions` was deprecated in VS Code 1.102. Use file-based instructions (`.instructions.md` files) for IDE-level customization instead.
+> Note: The VS Code setting `github.copilot.chat.codeGeneration.instructions` was deprecated in VS Code 1.102. Use file-based instructions (`.instructions.md` files) for IDE-level customization instead.
 
 ---
 
@@ -194,7 +194,7 @@ Personal > Repository > Organization
 
 More specific instructions take precedence over more general ones. Path-specific instructions merge with repository-wide instructions when both match — they layer, not replace.
 
-**In practice**: An organization instruction says "use camelCase." A repository instruction says "use snake_case for database columns." A path-specific instruction for `src/components/` says "prefix event handler props with `on`." All three apply simultaneously to a React component file — the agent follows all three because they address different concerns. When instructions conflict on the same concern, the more specific one wins.
+In practice: An organization instruction says "use camelCase." A repository instruction says "use snake_case for database columns." A path-specific instruction for `src/components/` says "prefix event handler props with `on`." All three apply simultaneously to a React component file — the agent follows all three because they address different concerns. When instructions conflict on the same concern, the more specific one wins.
 
 ### Further reading
 
@@ -326,7 +326,7 @@ Read the full diff before commenting. Only flag real issues — no style nits.
 
 | Field | Required | Purpose |
 |-------|:--------:|---------|
-| `description` | **Yes** | Shown in the VS Code dropdown and used for agent selection — be specific |
+| `description` | Yes | Shown in the VS Code dropdown and used for agent selection — be specific |
 | `tools` | No | Restrict which tools the agent can use (allowlist) |
 | `mcp-servers` | No | Additional MCP servers available to this agent |
 | `model` | No | Override the default model |
@@ -340,19 +340,19 @@ The body (below the frontmatter) is the system prompt.
 
 | Surface | How it works |
 |---------|-------------|
-| **VS Code** | Appears in the agents dropdown alongside Ask, Agent, and Plan. Select it to activate the agent's persona and constraints for the session. |
-| **GitHub.com** | Available for the coding agent when assigning tasks. |
-| **CLI** | Available in interactive sessions. |
-| **JetBrains** | Preview support. |
-| **Coding agent** | Assignable when creating a task. The agent's system prompt and constraints apply in the Actions sandbox. Use `target: github-copilot` to restrict an agent to only the coding agent surface. |
+| VS Code | Appears in the agents dropdown alongside Ask, Agent, and Plan. Select it to activate the agent's persona and constraints for the session. |
+| GitHub.com | Available for the coding agent when assigning tasks. |
+| CLI | Available in interactive sessions. |
+| JetBrains | Preview support. |
+| Coding agent | Assignable when creating a task. The agent's system prompt and constraints apply in the Actions sandbox. Use `target: github-copilot` to restrict an agent to only the coding agent surface. |
 
 ### How agents compose with other primitives
 
 Agents inherit repository and organization instructions — the agent prompt layers on top, it doesn't replace the instruction stack. An agent can also:
 
-- **Reference MCP servers** via the `mcp-servers` frontmatter field, gaining access to tools from those servers.
-- **Use skills** — if a skill matches the task, the agent's context includes the skill's `SKILL.md` and resources.
-- **Operate under hooks** — hooks fire regardless of which agent is active.
+- Reference MCP servers via the `mcp-servers` frontmatter field, gaining access to tools from those servers.
+- Use skills — if a skill matches the task, the agent's context includes the skill's `SKILL.md` and resources.
+- Operate under hooks — hooks fire regardless of which agent is active.
 
 ### Custom agents vs built-in agents
 
@@ -428,10 +428,10 @@ Skills follow the [Agent Skills open standard](https://agentskills.io). A skill 
 
 | Surface | How it works |
 |---------|-------------|
-| **VS Code** | Agent mode discovers and uses skills when the task matches the skill's description. `SKILL.md` and referenced resources are injected into context. |
-| **GitHub.com** | Available for coding agent tasks initiated from the web. |
-| **CLI** | Same as VS Code — the CLI agent discovers skills from the working directory. |
-| **Coding agent** | Reads skills from the repo's default branch. Uses them when the task matches the skill's description. |
+| VS Code | Agent mode discovers and uses skills when the task matches the skill's description. `SKILL.md` and referenced resources are injected into context. |
+| GitHub.com | Available for coding agent tasks initiated from the web. |
+| CLI | Same as VS Code — the CLI agent discovers skills from the working directory. |
+| Coding agent | Reads skills from the repo's default branch. Uses them when the task matches the skill's description. |
 
 ### Skill selection
 
@@ -449,10 +449,10 @@ The agent decides whether to use a skill based on the `description` field in the
 
 | | Agent | Skill |
 |-|-------|-------|
-| **Defines** | Who the agent is (persona, constraints) | How to do a task (steps, resources) |
-| **Format** | Single `.agent.md` file | Directory with `SKILL.md` + resource files |
-| **Composable** | An agent *uses* skills | A skill is used *by* agents |
-| **Portable** | Copilot-specific | Cross-tool via Agent Skills standard |
+| Defines | Who the agent is (persona, constraints) | How to do a task (steps, resources) |
+| Format | Single `.agent.md` file | Directory with `SKILL.md` + resource files |
+| Composable | An agent *uses* skills | A skill is used *by* agents |
+| Portable | Copilot-specific | Cross-tool via Agent Skills standard |
 
 An agent can use a skill. A skill can be used by any agent. Design them to compose.
 
@@ -470,7 +470,7 @@ An agent can use a skill. A skill can be used by any agent. Design them to compo
 
 ### What it is
 
-A `hooks.json` file that registers shell commands to execute at specific points in the agent's lifecycle. Hooks run **outside** the agent's context — the agent cannot see, skip, or reason about them. They are enforcement, not guidance.
+A `hooks.json` file that registers shell commands to execute at specific points in the agent's lifecycle. Hooks run outside the agent's context — the agent cannot see, skip, or reason about them. They are enforcement, not guidance.
 
 ### Used for
 
@@ -546,22 +546,22 @@ VS Code supports a different set of eight events (PascalCase):
 
 | Surface | How it works |
 |---------|-------------|
-| **VS Code** | Preview (v1.109+). Reads `.github/hooks/*.json` from the workspace. Uses the PascalCase event set above. |
-| **GitHub.com** | Not applicable. |
-| **CLI** | Reads `.github/hooks/*.json` from the current working directory. Hooks execute locally on your machine with your user permissions. Uses the camelCase event set above. |
-| **Coding agent** | Reads `.github/hooks/*.json` from the repo's default branch. Hooks execute inside the GitHub Actions sandbox with the same constraints as the agent. Uses the camelCase event set above. |
+| VS Code | Preview (v1.109+). Reads `.github/hooks/*.json` from the workspace. Uses the PascalCase event set above. |
+| GitHub.com | Not applicable. |
+| CLI | Reads `.github/hooks/*.json` from the current working directory. Hooks execute locally on your machine with your user permissions. Uses the camelCase event set above. |
+| Coding agent | Reads `.github/hooks/*.json` from the repo's default branch. Hooks execute inside the GitHub Actions sandbox with the same constraints as the agent. Uses the camelCase event set above. |
 
 ### Hooks vs instructions
 
 | | Instructions | Hooks |
 |-|-------------|-------|
-| **Nature** | Guidance — the agent reads and interprets them | Enforcement — the agent can't see or override them |
-| **Mechanism** | Injected into context as text | Shell commands executed by the harness |
-| **Failure mode** | Agent may ignore, misinterpret, or override | Hook blocks the action mechanically |
-| **Performance** | No runtime cost | Synchronous execution adds latency per tool call |
-| **Use for** | Conventions, preferences, architecture patterns | Security policy, audit requirements, hard constraints |
+| Nature | Guidance — the agent reads and interprets them | Enforcement — the agent can't see or override them |
+| Mechanism | Injected into context as text | Shell commands executed by the harness |
+| Failure mode | Agent may ignore, misinterpret, or override | Hook blocks the action mechanically |
+| Performance | No runtime cost | Synchronous execution adds latency per tool call |
+| Use for | Conventions, preferences, architecture patterns | Security policy, audit requirements, hard constraints |
 
-**Rule of thumb**: If the consequence of violation is "the code is inconsistent," use instructions. If the consequence is "production data is exposed," use a hook.
+Rule of thumb: If the consequence of violation is "the code is inconsistent," use instructions. If the consequence is "production data is exposed," use a hook.
 
 ### Further reading
 
@@ -589,7 +589,7 @@ The task requires data or actions from an external system, and you want the agen
 ### When NOT to use it
 
 - The external system has a CLI or REST API the agent can call via shell/curl — an MCP server may be unnecessary overhead.
-- The **coding agent** only supports MCP **tool calls** — resources and prompts are not available. VS Code supports tools, resources, and prompts from MCP servers.
+- The coding agent only supports MCP tool calls — resources and prompts are not available. VS Code supports tools, resources, and prompts from MCP servers.
 - Untrusted MCP servers are a security risk — they can inject arbitrary content into the agent's context via tool responses.
 
 ### Configuration per surface
@@ -646,9 +646,9 @@ Not supported in the web chat interface. MCP servers for the coding agent are *c
 
 | Surface | Transport types | Configuration location | MCP capabilities |
 |---------|----------------|----------------------|-----------------|
-| **VS Code** | `stdio` | `.vscode/mcp.json` or settings.json | Tools, resources, prompts |
-| **CLI** | `stdio` | `~/.copilot/mcp-config.json` | Tools |
-| **Coding agent** | `local`, `stdio`, `http`, `sse` | GitHub.com → Settings → Code & automation → Copilot → Coding agent | Tools only |
+| VS Code | `stdio` | `.vscode/mcp.json` or settings.json | Tools, resources, prompts |
+| CLI | `stdio` | `~/.copilot/mcp-config.json` | Tools |
+| Coding agent | `local`, `stdio`, `http`, `sse` | GitHub.com → Settings → Code & automation → Copilot → Coding agent | Tools only |
 
 ### Further reading
 
@@ -658,7 +658,7 @@ Not supported in the web chat interface. MCP servers for the coding agent are *c
 - [Copilot MCP Integration](../../tools/copilot/mcp-integration.md) — Copilot-specific MCP server guidance
 - [Copilot Extensions to MCP Migration](../../tool-engineering/copilot-extensions-to-mcp-migration.md) — migrating from Copilot extensions to MCP
 - [Tool Description Quality](../../tool-engineering/tool-description-quality.md) — writing tool descriptions that enable proper routing
-- [Token-Efficient Tool Design](../../tool-engineering/token-efficient-tool-design.md) — optimizing tool definitions for token efficiency
+- [Token-Efficient Tool Design](../../token-engineering/token-efficient-tool-design.md) — optimizing tool definitions for token efficiency
 
 ---
 
@@ -686,10 +686,10 @@ You find yourself repeatedly correcting Copilot about repo-specific details that
 
 | Surface | How it works |
 |---------|-------------|
-| **VS Code** | Not supported. |
-| **GitHub.com** | Used by Copilot code review on pull requests. |
-| **CLI** | Reads and writes repository-level memories during interactive sessions. |
-| **Coding agent** | Copilot reads repository-level memories and stores new ones during task execution. |
+| VS Code | Not supported. |
+| GitHub.com | Used by Copilot code review on pull requests. |
+| CLI | Reads and writes repository-level memories during interactive sessions. |
+| Coding agent | Copilot reads repository-level memories and stores new ones during task execution. |
 
 Memory is stored at the repository level — all collaborators with access share the same memory pool. Memories are automatically deleted after 28 days. Enabled by default for Pro and Pro+ users (public preview as of March 2026).
 
@@ -697,12 +697,12 @@ Memory is stored at the repository level — all collaborators with access share
 
 | | Instructions | Memory |
 |-|-------------|--------|
-| **Source** | You write them in a file | Copilot learns them through interaction |
-| **Reliability** | Always applied (deterministic) | Applied when judged relevant (probabilistic) |
-| **Visibility** | Readable in the repo | Managed through Copilot settings |
-| **Use for** | Rules that must always apply | Context that's helpful but not critical |
+| Source | You write them in a file | Copilot learns them through interaction |
+| Reliability | Always applied (deterministic) | Applied when judged relevant (probabilistic) |
+| Visibility | Readable in the repo | Managed through Copilot settings |
+| Use for | Rules that must always apply | Context that's helpful but not critical |
 
-**Lifecycle**: When a memory proves consistently useful, promote it to the instructions file. Memory is where conventions are discovered; instructions are where they're codified.
+Lifecycle: When a memory proves consistently useful, promote it to the instructions file. Memory is where conventions are discovered; instructions are where they're codified.
 
 ### Further reading
 
@@ -726,10 +726,10 @@ Curating the reference material that Copilot uses when answering questions. Inst
 
 ### When to use it
 
-- **Large, multi-team codebases** where automatic context selection misses relevant material or surfaces too much noise.
-- **Cross-repo context** — a Space can pull from multiple repositories, which no instruction file or skill can do. See the [Surface Map](surface-map.md) for how Spaces sit among the other surfaces.
-- **Onboarding bundles** — curate the key files, ADRs, and issues that a new team member needs to understand a system.
-- **Recurring task templates** — a "telemetry event" Space with the event schema, SDK wrapper, and prior PRs, reused every time someone adds a new event.
+- Large, multi-team codebases where automatic context selection misses relevant material or surfaces too much noise.
+- Cross-repo context — a Space can pull from multiple repositories, which no instruction file or skill can do. See the [Surface Map](surface-map.md) for how Spaces sit among the other surfaces.
+- Onboarding bundles — curate the key files, ADRs, and issues that a new team member needs to understand a system.
+- Recurring task templates — a "telemetry event" Space with the event schema, SDK wrapper, and prior PRs, reused every time someone adds a new event.
 
 ### When NOT to use it
 
@@ -739,7 +739,7 @@ Curating the reference material that Copilot uses when answering questions. Inst
 
 ### How it works
 
-A Space contains **sources** (things that sync automatically) and **uploads** (things you add manually):
+A Space contains sources (things that sync automatically) and uploads (things you add manually):
 
 | Source type | Auto-syncs | Notes |
 |------------|:----------:|-------|
@@ -768,17 +768,17 @@ Instructions tell the agent *how to behave*. A Copilot Space tells it *what to k
 
 | Ownership | Visibility options |
 |----------|-------------------|
-| **Organization** | Private, shared with specific teams, or org-wide. Tiered RBAC — viewers only see sources they already have GitHub permission to access. |
-| **Individual** | Private, shared with collaborators, or public (view-only). |
+| Organization | Private, shared with specific teams, or org-wide. Tiered RBAC — viewers only see sources they already have GitHub permission to access. |
+| Individual | Private, shared with collaborators, or public (view-only). |
 
 ### Surface support
 
 | Surface | How it works |
 |---------|-------------|
-| **GitHub.com** | Create, edit, and chat with Spaces from github.com/copilot/spaces. |
-| **VS Code** | Reference a Space in chat. Spaces appear alongside other context sources. |
-| **CLI** | Not directly supported — use instruction files or skills instead. |
-| **Coding agent** | Not directly referenced. For coding agent context, use instruction files, skills, or MCP servers. |
+| GitHub.com | Create, edit, and chat with Spaces from github.com/copilot/spaces. |
+| VS Code | Reference a Space in chat. Spaces appear alongside other context sources. |
+| CLI | Not directly supported — use instruction files or skills instead. |
+| Coding agent | Not directly referenced. For coding agent context, use instruction files, skills, or MCP servers. |
 
 ### Spaces vs instructions vs skills
 
@@ -797,11 +797,11 @@ Instructions tell the agent *how to behave*. A Copilot Space tells it *what to k
 
 ## Content Exclusions
 
-**What it is**: An admin-level control (Copilot Business/Enterprise) that prevents Copilot from accessing or suggesting content from specified files and repositories.
+What it is: An admin-level control (Copilot Business/Enterprise) that prevents Copilot from accessing or suggesting content from specified files and repositories.
 
-**Scope**: Inline completions and non-agent chat modes. **Content exclusions are not respected by Agent mode (in any IDE), the CLI, or the coding agent.** This is a significant limitation — if you rely on exclusions for compliance, be aware that agent-based workflows bypass them. See [Content Exclusion Gap](../../instructions/content-exclusion-gap.md) for a detailed analysis of this gap and mitigation strategies.
+Scope: Inline completions and non-agent chat modes. Content exclusions are not respected by Agent mode (in any IDE), the CLI, or the coding agent. This is a significant limitation — if you rely on exclusions for compliance, be aware that agent-based workflows bypass them. See [Content Exclusion Gap](../../instructions/content-exclusion-gap.md) for a detailed analysis of this gap and mitigation strategies.
 
-**Configured in**: Organization or enterprise settings on GitHub.com. Manageable via the REST API (added February 2026, public preview).
+Configured in: Organization or enterprise settings on GitHub.com. Manageable via the REST API (added February 2026, public preview).
 
 ---
 
@@ -847,18 +847,18 @@ Instructions provide baseline context. Path-specific instructions refine per dir
 
 ## Key Takeaways
 
-- **Instructions are the highest-leverage, lowest-effort customization**. Start there. Every non-trivial repo needs `.github/copilot-instructions.md`.
-- **Match the primitive to the problem**: guidance → instructions, reusable prompt → prompt file, persona → agent, procedure → skill, enforcement → hook, external tools → MCP, curated context → Spaces.
-- **Surface support varies significantly**. Repository instructions work on all surfaces. Organization instructions only work on GitHub.com and the coding agent. Prompt files work in IDEs only. Hooks run in VS Code (Preview), the CLI, and the coding agent — but with different event sets. Check the support matrix before investing effort.
-- **Hooks and instructions serve different purposes**. Instructions are guidance Copilot interprets. Hooks are enforcement the agent cannot override. Using one when you need the other creates either false confidence or unnecessary rigidity. Note: CLI/coding agent and VS Code support different lifecycle events.
-- **Skills are portable** across tools via the [Agent Skills open standard](https://agentskills.io). A skill written for Copilot works in Claude Code without modification.
-- **Memory is a stepping stone**. It captures learned conventions. When a memory proves consistently useful, promote it to the instructions file where it's guaranteed to apply. The [Surface Map](surface-map.md) shows which surfaces read it.
-- **Content exclusions have limited scope**. Copilot honours them only in inline completions and non-agent chat. Agent mode, the CLI, and the coding agent bypass them entirely.
-- **The primitives compose**. An agent can use skills, consume MCP tools, and operate under hooks and instructions simultaneously. Design them to layer, not overlap.
+- Instructions are the highest-leverage, lowest-effort customization. Start there. Every non-trivial repo needs `.github/copilot-instructions.md`.
+- Match the primitive to the problem: guidance → instructions, reusable prompt → prompt file, persona → agent, procedure → skill, enforcement → hook, external tools → MCP, curated context → Spaces.
+- Surface support varies significantly. Repository instructions work on all surfaces. Organization instructions only work on GitHub.com and the coding agent. Prompt files work in IDEs only. Hooks run in VS Code (Preview), the CLI, and the coding agent — but with different event sets. Check the support matrix before investing effort.
+- Hooks and instructions serve different purposes. Instructions are guidance Copilot interprets. Hooks are enforcement the agent cannot override. Using one when you need the other creates either false confidence or unnecessary rigidity. Note: CLI/coding agent and VS Code support different lifecycle events.
+- Skills are portable across tools via the [Agent Skills open standard](https://agentskills.io). A skill written for Copilot works in Claude Code without modification.
+- Memory is a stepping stone. It captures learned conventions. When a memory proves consistently useful, promote it to the instructions file where it's guaranteed to apply. The [Surface Map](surface-map.md) shows which surfaces read it.
+- Content exclusions have limited scope. Copilot honours them only in inline completions and non-agent chat. Agent mode, the CLI, and the coding agent bypass them entirely.
+- The primitives compose. An agent can use skills, consume MCP tools, and operate under hooks and instructions simultaneously. Design them to layer, not overlap.
 
 ## Related
 
-**Training**
+Training
 
 - [GitHub Copilot: Platform Surface Map](surface-map.md) — all surfaces in depth
 - [GitHub Copilot: Context Engineering & Agent Workflows](context-and-workflows.md) — context design, task decomposition, and steering
@@ -867,7 +867,7 @@ Instructions provide baseline context. Path-specific instructions refine per dir
 - [GitHub Copilot: Team Adoption & Governance](team-adoption.md) — rolling out Copilot with [progressive autonomy](../../human/progressive-autonomy-model-evolution.md) and shared configuration
 - [GitHub Copilot: Model Selection & Routing](model-selection.md) — model roster, premium multipliers, and override strategies
 
-**Context & Instructions**
+Context & Instructions
 
 - [Context Engineering](../../context-engineering/context-engineering.md) — foundational discipline of designing what enters agent context windows
 - [Context Priming](../../context-engineering/context-priming.md) — pre-loading relevant files before agent tasks
@@ -875,14 +875,14 @@ Instructions provide baseline context. Path-specific instructions refine per dir
 - [Context Compression Strategies](../../context-engineering/context-compression-strategies.md) — reducing context consumption while preserving signal
 - [Critical Instruction Repetition](../../instructions/critical-instruction-repetition.md) — when and how to repeat critical instructions across layers
 
-**Tool Engineering**
+Tool Engineering
 
 - [Tool Engineering](../../tool-engineering/tool-engineering.md) — foundational principles for designing tools agents can use
 - [Advanced Tool Use](../../tool-engineering/advanced-tool-use.md) — advanced patterns for agent-tool interactions
 - [Poka-Yoke Agent Tools](../../tool-engineering/poka-yoke-agent-tools.md) — error-proofing tool design
 - [Tool Minimalism](../../tool-engineering/tool-minimalism.md) — keeping tool surfaces small and focused
 
-**External**
+External
 
 - [GitHub Copilot docs](https://docs.github.com/en/copilot)
 - [Agent Skills standard](https://agentskills.io)

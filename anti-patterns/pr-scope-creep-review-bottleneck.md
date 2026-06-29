@@ -18,13 +18,13 @@ maturity: established
 
 > When a stalled PR blocks dependent work, you add that work to the same PR — making it larger, slower to review, and harder to merge, compounding the bottleneck AI already created.
 
-## The Pattern
+## The pattern
 
 AI coding assistants shift the delivery constraint from writing code to reviewing it. [Faros AI telemetry (10,000+ developers)](https://www.faros.ai/blog/ai-software-engineering) shows high-adoption teams merge 98% more PRs but experience 91% longer review times and 154% larger PRs — pushing changesets past the threshold for effective review.
 
 When a PR sits unreviewed, adding dependent work to it is the rational local response. [SmartBear's 10-month, 2,500-review study](https://smartbear.com/resources/ebooks/best-kept-secrets-of-code-review/) sets the threshold: defect detection peaks at 200–400 lines and drops sharply beyond.
 
-## The Feedback Loop
+## The feedback loop
 
 ```mermaid
 graph TD
@@ -40,21 +40,21 @@ The loop is self-reinforcing. [Pullflow's analysis](https://pullflow.com/blog/wh
 
 ## Mitigations
 
-**Stacked PRs.** [Stacked PRs](https://graphite.com/blog/stacked-prs) let you branch on top of an unmerged PR, running development and review in parallel without adding to the stalled changeset.
+[Stacked PRs](https://graphite.com/blog/stacked-prs) let you branch on top of an unmerged PR. You run development and review in parallel, without adding to the stalled changeset.
 
-**Atomic PR discipline.** One logical change per PR, under 400 lines; enforce with CI diff-size checks.
+Atomic PR discipline keeps one logical change per PR, under 400 lines. Enforce it with CI diff-size checks.
 
-**AI pre-review.** Triage issues and flag high-risk areas before human review to reduce per-PR cognitive load. See [Agentic Code Review Architecture](../code-review/agentic-code-review-architecture.md).
+AI pre-review triages issues and flags high-risk areas before human review. This cuts the cognitive load on each PR. See [Agentic Code Review Architecture](../code-review/agentic-code-review-architecture.md).
 
-**Distribute review load.** Concentrated review on a small senior cohort amplifies the bottleneck. Rotate reviewers and use risk-based assignment.
+Distribute the review load. When review concentrates on a small senior group, it amplifies the bottleneck. Rotate reviewers and assign by risk.
 
-## When This Backfires
+## When this backfires
 
 Stacked PRs and strict atomic discipline create overhead that outweighs the benefit in some contexts:
 
-- **Small or solo teams.** One person reviewing everything still sees all the work sequentially; stacking adds branching complexity without shortening the queue.
-- **Fast-merge workflows.** Teams merging to trunk multiple times per day may find maintaining stacked chains slower than batching and merging once.
-- **Tooling gaps.** Stacked PRs need explicit support (Graphite, ghstack); without it, rebasing chains is error-prone and breaks dependents on force-push.
+- Small or solo teams: one person reviews everything in sequence anyway, so stacking adds branching complexity without shortening the queue.
+- Fast-merge workflows: teams that merge to trunk many times a day may find stacked chains slower to maintain than batching and merging once.
+- Tooling gaps: stacked PRs need explicit support such as Graphite or ghstack, and without it rebasing chains is error-prone and breaks dependents on force-push.
 
 The 400-line threshold is a heuristic — a 600-line rename diff may be trivial while a 200-line cryptographic change is not. Apply limits to complexity, not character count.
 
@@ -64,9 +64,9 @@ A team runs three AI coding agents in parallel on a feature sprint. Agent A fini
 
 Agent B finishes the dependent session-management update. Rather than open a new PR that will also sit in the queue, the developer adds the 280-line change onto PR #101, now at 630 lines — exceeding the cognitive review threshold.
 
-When the reviewer opens PR #101, the combined diff takes 90 minutes rather than 30. The reviewer flags two issues and approves the rest; defect detection drops sharply above 400 lines, so the authentication logic carries higher undetected-bug risk.
+When the reviewer opens PR #101, the combined diff takes 90 minutes rather than 30. The reviewer flags two issues and approves the rest. Defect detection drops sharply above 400 lines, so the authentication logic carries higher undetected-bug risk.
 
-The structural fix: Agent B opens PR #102 targeting PR #101's branch using stacked PRs. Both PRs stay under 400 lines and can be reviewed independently. Merge order is preserved without blocking pressure accumulating.
+The structural fix: Agent B opens PR #102 targeting PR #101's branch using stacked PRs. Both PRs stay under 400 lines, and the reviewer can read each one on its own. This preserves merge order without letting blocking pressure build up.
 
 ## Key Takeaways
 

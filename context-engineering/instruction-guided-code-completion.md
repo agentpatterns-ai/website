@@ -16,13 +16,13 @@ maturity: emerging
 
 > Functional correctness and instruction adherence are independent capabilities — a model that completes code correctly may still ignore your structural, algorithmic, and scope constraints.
 
-## The Problem
+## The problem
 
-Standard benchmarks measure whether generated code passes tests — HumanEval ([Chen et al., 2021](https://arxiv.org/abs/2107.03374)) scores functional correctness via unit tests and gives no signal on *how* the model implemented the solution. Developers routinely specify implementation constraints: a specific algorithm, a structural pattern, a limited completion scope. C3-Bench results show most models treat scale instructions as suggestions — even advanced proprietary models score as low as 7% on scale-control tasks — while implementation-control adherence reaches only 50–60% even for top proprietary models.
+Standard benchmarks measure whether generated code passes tests. HumanEval ([Chen et al., 2021](https://arxiv.org/abs/2107.03374)) scores functional correctness with unit tests and gives no signal on how the model implemented the solution. Developers routinely specify implementation constraints: a specific algorithm, a structural pattern, a limited completion scope. C3-Bench results show most models treat scale instructions as suggestions. Even advanced proprietary models score as low as 7% on scale-control tasks, while implementation-control adherence reaches only 50 to 60% even for top proprietary models.
 
 C3-Bench (arxiv [2601.15879](https://arxiv.org/abs/2601.15879)) is the first benchmark to measure this gap directly, testing 2,195 Python tasks across two instruction categories.
 
-## Two Types of Completion Instructions
+## Two types of completion instructions
 
 ```mermaid
 graph LR
@@ -32,28 +32,28 @@ graph LR
     C --> E[Line count<br/>Block scope<br/>Statement boundaries]
 ```
 
-**Implementation-Control (ICC)** instructions specify *how* to implement: use recursion instead of iteration, follow a specific design pattern, constrain parameter types. Models handle these reasonably well — proprietary models reach 50-60% instruction-following rates.
+Implementation-control (ICC) instructions specify how to implement: use recursion instead of iteration, follow a specific design pattern, constrain parameter types. Models handle these reasonably well. Proprietary models reach 50 to 60% instruction-following rates.
 
-**Scale-Control (SCC)** instructions specify *how much* to generate: complete only the next three lines, fill in just the if-block, stop at the function boundary. Even advanced models like Gemini-2.0-Flash (7.0% SCC) and GPT-4o (24.1% SCC) fail to respect scope boundaries in most cases.
+Scale-control (SCC) instructions specify how much to generate: complete only the next three lines, fill in just the if-block, stop at the function boundary. Even advanced models like Gemini-2.0-Flash (7.0% SCC) and GPT-4o (24.1% SCC) fail to respect scope boundaries in most cases.
 
-## Benchmark Rankings Mislead
+## Benchmark rankings mislead
 
-Open-source models that top standard leaderboards underperform on instruction adherence. Qwen2.5-Coder-32B scores 49.2 EM on CrossCodeEval but only 28.8% on ICC instruction-following. Claude 3.5 Sonnet reaches 60.9% ICC — a gap invisible in standard rankings.
+Open-source models that top standard leaderboards underperform on instruction adherence. Qwen2.5-Coder-32B scores 49.2 EM on CrossCodeEval but only 28.8% on ICC instruction-following. Claude 3.5 Sonnet reaches 60.9% ICC, a gap invisible in standard rankings.
 
-If your workflow involves guided completions (Cursor Composer, Copilot Chat, agent-driven code generation), benchmark scores are not a reliable proxy for how well the model will follow your instructions.
+If your workflow involves guided completions (Cursor Composer, Copilot Chat, agent-driven code generation), benchmark scores do not reliably predict how well the model will follow your instructions.
 
-## What Works
+## What works
 
-### Be Explicit About Implementation Constraints
+### Be explicit about implementation constraints
 
-Ablation studies show that removing instructions from prompts causes instruction-following scores to drop while functional correctness stays roughly the same — models do respond to fine-grained guidance. Specify:
+Ablation studies show that removing instructions from prompts causes instruction-following scores to drop while functional correctness stays roughly the same. Models do respond to fine-grained guidance. Specify:
 
-- **Algorithmic approach**: "Use iterative depth-first search, not recursion"
-- **Structural patterns**: "Implement as a generator that yields results"
-- **Control flow**: "Handle the error case first with an early return"
-- **Parameter constraints**: "Accept only keyword arguments"
+- Algorithmic approach: "Use iterative depth-first search, not recursion"
+- Structural patterns: "Implement as a generator that yields results"
+- Control flow: "Handle the error case first with an early return"
+- Parameter constraints: "Accept only keyword arguments"
 
-### Do Not Rely on Scale Instructions
+### Do not rely on scale instructions
 
 Asking a model to "complete only the next 3 lines" or "just fill in the if-block" is unreliable across most models. Instead:
 
@@ -61,28 +61,28 @@ Asking a model to "complete only the next 3 lines" or "just fill in the if-block
 - Post-process completions to trim to the desired scope
 - Structure prompts so the completion boundary is syntactically unambiguous
 
-### Select Models for Instruction Adherence
+### Select models for instruction adherence
 
-For workflows with heavy instruction guidance — which is the norm for agent-assisted coding — instruction-following capability matters more than raw completion accuracy. At the time of the C3-Bench evaluation (early 2025), proprietary models led on instruction-following: Claude 3.5 Sonnet reached 60.9% ICC and 50.8% SCC, while the top open-source model (Qwen2.5-Coder-32B-Instruct) scored 28.8% ICC and 16.9% SCC. Model capabilities shift with each release — re-evaluate when adopting a new model version.
+For workflows with heavy instruction guidance, which is the norm for agent-assisted coding, instruction-following capability matters more than raw completion accuracy. At the time of the C3-Bench evaluation (early 2025), proprietary models led on instruction-following: Claude 3.5 Sonnet reached 60.9% ICC and 50.8% SCC, while the top open-source model (Qwen2.5-Coder-32B-Instruct) scored 28.8% ICC and 16.9% SCC. Model capabilities shift with each release, so re-evaluate when adopting a new model version.
 
-### Training Improves Instruction-Following
+### Training improves instruction-following
 
-Qwen2.5-Coder-32B-C3 (a fine-tuned Qwen2.5-Coder variant) improved ICC instruction-following from 28.8% to 52.5% and SCC from 16.9% to 80.7% using 200K synthetic instruction-completion pairs — while also improving functional correctness (ICC Pass@1 rose from 49.8% to 62.0%). This suggests instruction-following is a trainable capability, not an inherent limitation. Teams running local models can invest in instruction-tuning data to close the gap.
+Qwen2.5-Coder-32B-C3 (a fine-tuned Qwen2.5-Coder variant) improved ICC instruction-following from 28.8% to 52.5% and SCC from 16.9% to 80.7% using 200K synthetic instruction-completion pairs, while also improving functional correctness (ICC Pass@1 rose from 49.8% to 62.0%). This suggests instruction-following is a trainable capability, not an inherent limitation. Teams running local models can invest in instruction-tuning data to close the gap.
 
-## When This Backfires
+## When this backfires
 
-Instruction-guided completion increases prompt complexity and slows iteration velocity. These conditions reduce its value or make it counterproductive:
+Instruction-guided completion increases prompt complexity and slows iteration. These conditions reduce its value or make it counterproductive:
 
-- **Exploratory or prototype code**: When constraints are not yet known, injecting implementation instructions prematurely locks in decisions before the design is stable. Models constrained to a specific algorithm or structural pattern resist pivoting as the solution evolves.
-- **Low ICC compliance models**: If the model in use scores below ~40% on implementation-control adherence, instruction guidance produces inconsistent results. Prompts grow longer, constraint satisfaction varies run-to-run, and the overhead outweighs the benefit. Verify model ICC rates before investing in instruction-heavy workflows.
-- **Scale control remains unreliable**: Even with best-practice prompting, most models ignore scope boundaries more than half the time (C3-Bench SCC median: under 25% for non-fine-tuned models). Workflows that depend on precise output length control require post-processing or syntactic delimiters — instruction guidance alone is not sufficient.
+- Exploratory or prototype code: when constraints are not yet known, injecting implementation instructions early locks in decisions before the design is stable. Models constrained to a specific algorithm or structural pattern resist changing direction as the solution evolves.
+- Low ICC compliance models: if the model in use scores below about 40% on implementation-control adherence, instruction guidance produces inconsistent results. Prompts grow longer, constraint satisfaction varies run-to-run, and the overhead outweighs the benefit. Verify model ICC rates before investing in instruction-heavy workflows.
+- Scale control remains unreliable: even with best-practice prompting, most models ignore scope boundaries more than half the time (C3-Bench SCC median: under 25% for non-fine-tuned models). Workflows that depend on precise output length control need post-processing or syntactic delimiters; instruction guidance alone is not enough.
 
 ## Key Takeaways
 
-- **Instruction adherence and functional correctness are orthogonal.** A model that writes correct code may still ignore your structural and scope constraints.
-- **Implementation instructions work; scale instructions do not.** Tell models *how* to implement (algorithm, pattern, flow) but do not rely on telling them *how much* to generate.
-- **Benchmark rankings do not predict instruction-following.** Evaluate models on the specific capability your workflow requires.
-- **Fine-tuning on instruction-completion pairs closes the gap.** If you run local models, synthetic instruction data is an effective lever — it lifted scale-control adherence from 16.9% to 80.7% in the C3-Bench fine-tuning run above.
+- Instruction adherence and functional correctness are orthogonal. A model that writes correct code may still ignore your structural and scope constraints.
+- Implementation instructions work; scale instructions do not. Tell models *how* to implement (algorithm, pattern, flow) but do not rely on telling them *how much* to generate.
+- Benchmark rankings do not predict instruction-following. Evaluate models on the specific capability your workflow requires.
+- Fine-tuning on instruction-completion pairs closes the gap. If you run local models, synthetic instruction data is an effective lever — it lifted scale-control adherence from 16.9% to 80.7% in the C3-Bench fine-tuning run above.
 
 ## Example
 
@@ -125,12 +125,12 @@ def flatten_dict(nested, sep='/'):
                 yield full_key, value
 ```
 
-The second prompt specifies algorithm (iterative with stack), output structure (generator), separator choice, and scope boundary. C3-Bench results show that models follow these implementation-control instructions roughly 50-60% of the time — better than scale instructions but still unreliable enough to require verification.
+The second prompt specifies algorithm (iterative with stack), output structure (generator), separator choice, and scope boundary. C3-Bench results show that models follow these implementation-control instructions roughly 50 to 60% of the time. That beats scale instructions but is still unreliable enough to require verification.
 
 ## Related
 
 - [Context Priming](context-priming.md) — Loading relevant context before completion shapes output quality; instruction-guided completion is a specific form of this discipline
 - [Prompt Layering](prompt-layering.md) — Instructions arrive from multiple sources simultaneously; understanding precedence affects whether completion instructions are followed
 - [Pass@k Metrics](../verification/pass-at-k-metrics.md) — Standard evaluation metric that measures functional correctness but not instruction adherence
-- [Token-Efficient Code Generation](token-efficient-code-generation.md) — Structural patterns that reduce generated code tokens; a complementary lens on controlling model output quality
+- [Token-Efficient Code Generation](../token-engineering/token-efficient-code-generation.md) — Structural patterns that reduce generated code tokens; a complementary lens on controlling model output quality
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — Cross-file context improves completion accuracy; instruction adherence and retrieval quality are complementary dimensions of code generation control

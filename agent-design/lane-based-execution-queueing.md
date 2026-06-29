@@ -17,17 +17,17 @@ maturity: established
 
 > Organize agent task execution into named, isolated queues — each draining independently with configurable concurrency — to eliminate the three core hazards of concurrent agent systems.
 
-## The Problem
+## The problem
 
 Concurrent agent systems face three failure modes that a single shared queue cannot prevent:
 
-- **Interleaving** — simultaneous stdout/stdin writes corrupt terminal output
-- **Race conditions** — unsynchronized shared state produces inconsistent results
-- **Deadlocks** — cross-task dependencies with no structured resolution
+- Interleaving — simultaneous stdout/stdin writes corrupt terminal output
+- Race conditions — unsynchronized shared state produces inconsistent results
+- Deadlocks — cross-task dependencies with no structured resolution
 
-Lane-based queueing addresses all three by giving each class of work its own isolated execution context.
+Lane-based queueing addresses all three. Each class of work gets its own isolated execution context.
 
-## Lane Structure
+## Lane structure
 
 Each lane is an independent queue with a concurrency cap. A minimal TypeScript representation from the [Clawdbot reference implementation](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/lane-based-execution-queueing.md):
 
@@ -40,14 +40,14 @@ type LaneState = {
 };
 ```
 
-Two operations drive each lane:
+Two operations run each lane:
 
 - `drainLane()` — pumps tasks from the queue up to `maxConcurrent`, then yields
 - `enqueueCommandInLane<T>()` — schedules work and returns a promise the caller can await
 
 Lanes never share state or communicate directly. Isolation is structural, not enforced by locks.
 
-## Lane Taxonomy
+## Lane taxonomy
 
 A typical multi-agent platform uses four lane types ([nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/lane-based-execution-queueing.md)):
 
@@ -58,9 +58,9 @@ A typical multi-agent platform uses four lane types ([nibzard/awesome-agentic-pa
 | `subagent` | N | Spawned agent work — parallelizable |
 | `session:<id>` | 1 | Per-user auto-reply — hierarchical ID |
 
-The `session:<id>` pattern enables per-user isolation without cross-session interference. Use stable identifiers — dynamic lane proliferation with unstable IDs causes unbounded memory growth.
+The `session:<id>` pattern gives each user isolation without cross-session interference. Use stable identifiers. Unstable IDs spawn new lanes without limit, and memory grows without bound.
 
-## Hierarchical Composition
+## Hierarchical composition
 
 Nested lanes (a `subagent` lane spawning `session` lanes) prevent deadlocks through structured completion: inner lanes complete before outer lanes proceed. This replaces ad-hoc locking with a deterministic hierarchy. Direct cross-lane dependencies outside this hierarchy will deadlock.
 
@@ -76,7 +76,7 @@ graph TD
 
 ## Observability
 
-Each lane is independently monitorable. Key signals per lane ([nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/lane-based-execution-queueing.md)):
+You can monitor each lane on its own. The signals to watch per lane ([nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/lane-based-execution-queueing.md)):
 
 - `queue_size_per_lane` — backlog depth
 - `active_tasks_per_lane` — in-flight count
@@ -94,9 +94,9 @@ Per-lane metrics let you diagnose starvation (a busy `subagent` lane blocking `c
 
 This pattern draws on established foundations: [Actor Model](https://en.wikipedia.org/wiki/Actor_model) isolation (Hewitt, Bishop & Steiger, 1973), [Work-Stealing](https://dl.acm.org/doi/10.1145/324133.324234) scheduling (Blumofe & Leiserson, JACM 1999), and queue-based routing in [Sidekiq](https://github.com/sidekiq/sidekiq/wiki/Advanced-Options), [BullMQ](https://github.com/taskforcesh/bullmq), and Airflow pools. Per-queue concurrency without dedicated worker processes is a [long-standing pain point](https://github.com/sidekiq/sidekiq/issues/983) in those systems — lane isolation makes the constraint explicit rather than emergent.
 
-## Relation to Worktree Isolation
+## Relation to worktree isolation
 
-Worktree isolation operates at the process and filesystem level — each agent gets its own working directory. Lane-based queueing operates at the task-scheduling level — each class of work gets its own queue. The two are complementary: worktrees prevent filesystem conflicts between parallel agents; lanes prevent scheduling conflicts between concurrent tasks within a platform. See [Worktree Isolation](../workflows/worktree-isolation.md) and [/batch and Worktrees](../tools/claude/batch-worktrees.md) for Claude Code's built-in worktree orchestration.
+Worktree isolation works at the process and filesystem level. Each agent gets its own working directory. Lane-based queueing works at the task-scheduling level. Each class of work gets its own queue. The two complement each other: worktrees prevent filesystem conflicts between parallel agents, and lanes prevent scheduling conflicts between concurrent tasks within a platform. See [Worktree Isolation](../workflows/worktree-isolation.md) and [/batch and Worktrees](../tools/claude/batch-worktrees.md) for Claude Code's built-in worktree orchestration.
 
 ## Key Takeaways
 
@@ -110,7 +110,7 @@ Worktree isolation operates at the process and filesystem level — each agent g
 
 - [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)
+- [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)
 - [VS Code Agents App: Agent-Native Parallel Task Execution](vscode-agents-parallel-tasks.md)
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)

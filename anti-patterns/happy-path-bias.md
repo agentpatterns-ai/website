@@ -15,11 +15,11 @@ maturity: established
 
 > Happy path bias is the agent tendency to write code that handles the common case but skips error paths, edge cases, and type boundaries.
 
-**Related lesson:** [Trust Without Verify](https://learn.agentpatterns.ai/anti-patterns/trust-without-verify/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Trust Without Verify](https://learn.agentpatterns.ai/anti-patterns/trust-without-verify/) covers this concept in a hands-on lesson with quizzes.
 
-## The Pattern
+## The pattern
 
-AI coding agents systematically neglect error handling, edge cases, and type safety. [CodeRabbit's analysis of 470 GitHub PRs](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) found AI-generated code has **2x more error handling issues** and **1.75x more logic/correctness errors** than human-written code.
+AI coding agents skip error handling, edge cases, and type safety. [CodeRabbit's analysis of 470 GitHub PRs](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) found that AI-generated code has 2x more error-handling issues and 1.75x more logic and correctness errors than human-written code.
 
 | Symptom | What the agent does | What breaks |
 |---------|--------------------|----|
@@ -27,9 +27,9 @@ AI coding agents systematically neglect error handling, edge cases, and type saf
 | Type escape hatches | Reaches for `any` (TS) or empty-string defaults | Voids downstream type safety |
 | Over-specification | Generates hyper-specific solutions | Fails on variations |
 
-## Why It Happens
+## Why it happens
 
-The agent's objective is task completion: the code compiles, the tests pass, and the requested feature exists. Error handling, validation, and edge-case coverage are implicit requirements that rarely appear in the task description. A catch-all handler or type escape hatch satisfies that surface goal while deferring failures to production.
+The agent aims for task completion: the code compiles, the tests pass, and the requested feature exists. Error handling, validation, and edge-case coverage are implicit requirements that rarely appear in the task description. A catch-all handler or type escape hatch meets that surface goal but defers failures to production.
 
 ## Detection
 
@@ -59,24 +59,24 @@ repos:
 
 ## Mitigation
 
-**In prompts:** "raise ValueError for invalid input, never use bare except" is actionable; "handle errors" is not. Naming anti-patterns by CWE or rule ID reduces vulnerability density by 59-64% ([Endor Labs](https://www.endorlabs.com/learn/anti-pattern-avoidance-a-simple-prompt-pattern-for-safer-ai-generated-code)).
+In prompts: "raise ValueError for invalid input, never use bare except" is actionable; "handle errors" is not. Naming anti-patterns by CWE or rule ID reduces vulnerability density by 59 to 64% ([Endor Labs](https://www.endorlabs.com/learn/anti-pattern-avoidance-a-simple-prompt-pattern-for-safer-ai-generated-code)).
 
-**In CI:** Lint, type check, then test every agent-generated change — catches roughly 60% of AI code failures ([Augment Code](https://www.augmentcode.com/guides/debugging-ai-generated-code-8-failure-patterns-and-fixes)).
+In CI: lint, type check, then test every agent-generated change. This catches roughly 60% of AI code failures ([Augment Code](https://www.augmentcode.com/guides/debugging-ai-generated-code-8-failure-patterns-and-fixes)).
 
-**In review:** Look for what the agent *omitted* — missing `finally` blocks, absent validation, no error paths in tests.
+In review: look for what the agent omitted — missing `finally` blocks, absent validation, no error paths in tests.
 
-## When This Backfires
+## When this backfires
 
-Exhaustive error handling is not always right. Where it overreaches:
+Exhaustive error handling is not always right. It overreaches in these cases:
 
-- **Prototyping and throwaway scripts** — code that never reaches production can defer error paths; handling costs more than its signal.
-- **Framework-managed boundaries** — when a runtime or web framework already catches unhandled exceptions at the top level, per-function try/catch adds noise, not recovery; reserve depth for the runtime [exception handling and recovery patterns](../agent-design/exception-handling-recovery-patterns.md) that the boundary does not cover.
-- **Tight feedback loops with known input** — test harnesses and internal tooling on controlled input rarely need user-facing defensive depth.
-- **Over-specified exception types** — catching `FileNotFoundError` and `PermissionError` separately is correct; catching 15 OS exceptions per function obscures intent.
-- **Linter false positives** — `BLE001` and `TRY003` fire on legitimate broad handlers in plugin systems where catching `Exception` is intentional; blanket rules churn suppressions.
-- **Prompt over-specification** — long error-handling instructions in every prompt dilute the task signal with verbose scaffolding.
+- Prototyping and throwaway scripts — code that never reaches production can defer error paths, where handling costs more than its signal.
+- Framework-managed boundaries — when a runtime or web framework already catches unhandled exceptions at the top level, per-function try/catch adds noise, not recovery. Reserve depth for the runtime [exception handling and recovery patterns](../agent-design/exception-handling-recovery-patterns.md) that the boundary does not cover.
+- Tight feedback loops with known input — test harnesses and internal tooling on controlled input rarely need user-facing defensive depth.
+- Over-specified exception types — catching `FileNotFoundError` and `PermissionError` separately is correct, but catching 15 OS exceptions per function obscures intent.
+- Linter false positives — `BLE001` and `TRY003` fire on legitimate broad handlers in plugin systems where catching `Exception` is intentional, so blanket rules churn suppressions.
+- Prompt over-specification — long error-handling instructions in every prompt dilute the task signal with verbose scaffolding.
 
-The anti-pattern targets *production-bound* code. Enforce at the CI boundary, not the prompt boundary.
+The anti-pattern targets production-bound code. Enforce at the CI boundary, not the prompt boundary.
 
 ## Example
 

@@ -20,13 +20,13 @@ maturity: emerging
 
 > Decompose an agent's trajectory into search, read, and edit stages, scoring each independently to diagnose where a failing run went wrong.
 
-## The Problem with Binary Outcomes
+## The problem with binary outcomes
 
-[pass@k metrics](pass-at-k-metrics.md) tell you whether an agent solved a problem. [Outcome grading](grade-agent-outcomes.md) tells you whether the final state is correct. Neither tells you *where* the agent went wrong when it fails.
+[pass@k metrics](pass-at-k-metrics.md) tell you whether an agent solved a problem. [Outcome grading](grade-agent-outcomes.md) tells you whether the final state is correct. Neither tells you where the agent went wrong when it fails.
 
 A coding agent that fails a [SWE-bench](https://arxiv.org/abs/2310.06770) task could have failed at any point: wrong files, wrong functions, or wrong edits. Binary metrics collapse these into a single "fail," making targeted improvement impossible.
 
-## Three-Stage Decomposition
+## Three-stage decomposition
 
 The TRAJEVAL framework decomposes every agent trajectory into three stages, each measured with standard information retrieval metrics. [Source: [TRAJEVAL: Decomposing Code Agent Trajectories for Fine-Grained Diagnosis](https://arxiv.org/abs/2603.24631)]
 
@@ -45,21 +45,21 @@ graph LR
 
 | Stage | What it measures | Precision question | Recall question |
 |-------|-----------------|-------------------|-----------------|
-| **Search** | File localization | Did it open only relevant files? | Did it find all necessary files? |
-| **Read** | Function comprehension ([semantic context loading](../context-engineering/semantic-context-loading.md)) | Did it examine only needed functions? | Did it examine all needed functions? |
-| **Edit** | Modification targeting | Did it change only the right locations? | Did it change all required locations? |
+| Search | File localization | Did it open only relevant files? | Did it find all necessary files? |
+| Read | Function comprehension ([semantic context loading](../context-engineering/semantic-context-loading.md)) | Did it examine only needed functions? | Did it examine all needed functions? |
+| Edit | Modification targeting | Did it change only the right locations? | Did it change all required locations? |
 
 Compare each stage against the reference patch to compute precision and recall independently — the complement to [outcome grading](grade-agent-outcomes.md), which scores only the final state.
 
-Stage independence is why this works: precision and recall at each stage are computed against the same reference independently, so a failure in one stage does not distort scores in others.
+Stage independence is why this works: you compute precision and recall at each stage against the same reference, so a failure in one stage does not distort the scores in others.
 
-## What the Evidence Shows
+## What the evidence shows
 
-Analysis of 16,758 trajectories across three architectures and seven models reveals patterns binary metrics hide. [Source: [TRAJEVAL](https://arxiv.org/abs/2603.24631)]
+Analysis of 16,758 trajectories across three architectures and seven models reveals patterns that binary metrics hide. [Source: [TRAJEVAL](https://arxiv.org/abs/2603.24631)]
 
 ### Universal over-reading
 
-All agents examine approximately 22x more functions than necessary — a structural property of how agents explore code, not a model-specific bug. Reducing read scope has the highest ROI for most configurations.
+All agents examine about 22x more functions than necessary — a structural property of how agents explore code, not a model-specific bug. Reducing read scope has the highest ROI for most configurations.
 
 ### Model-specific failure stages
 
@@ -76,7 +76,7 @@ A single Pass@1 score would rank both equally. Stage decomposition reveals they 
 
 Stage-level metrics predict Pass@1 within 0.87-2.1% MAE at the model level, reconstructing aggregate outcomes while providing richer diagnostic signal.
 
-## Applying This in Practice
+## Applying this in practice
 
 ### 1. Log trajectories with stage boundaries
 
@@ -105,15 +105,15 @@ Apply the same formula at the read and edit levels.
 
 Stage-level signals extend beyond post-hoc analysis. Feeding trajectory diagnostics back during execution improved two models by 2.2-4.6 percentage points while reducing token costs by 20-31% — aligning with [agent self-review loops](../code-review/agent-self-review-loop.md). [Source: [TRAJEVAL](https://arxiv.org/abs/2603.24631)]
 
-## When to Use — and When Not To
+## When to use it, and when not to
 
-[Outcome grading](grade-agent-outcomes.md) is the right default — it avoids penalizing valid alternative solutions. Add trajectory decomposition when an agent is failing and you need to know *why*, when comparing models by failure profile, or when deciding which component (search, context, edit) to improve next.
+[Outcome grading](grade-agent-outcomes.md) is the right default — it avoids penalizing valid alternative solutions. Add trajectory decomposition when an agent is failing and you need to know why, when comparing models by failure profile, or when deciding which component (search, context, edit) to improve next.
 
 Skip it when:
 
-- **No reference patch**: Precision and recall require a known-correct solution. Open-ended tasks and production settings without ground truth cannot be evaluated this way — fall back to [outcome grading](grade-agent-outcomes.md), which needs no reference patch.
-- **Non-sequential stages**: The model assumes forward-linear traversal. Agents that interleave stages (read → search → read → edit) produce ambiguous per-stage metrics.
-- **Uninstrumented trajectories**: Stage decomposition requires [trajectory logs](../observability/trajectory-logging-progress-files.md) that separate file-open, function-read, and location-edit events. Agents wrapped in opaque APIs or sandboxes cannot be decomposed.
+- No reference patch: precision and recall require a known-correct solution. Open-ended tasks and production settings without ground truth cannot be evaluated this way — fall back to [outcome grading](grade-agent-outcomes.md), which needs no reference patch.
+- Non-sequential stages: the model assumes forward-linear traversal. Agents that interleave stages (read → search → read → edit) produce ambiguous per-stage metrics.
+- Uninstrumented trajectories: stage decomposition requires [trajectory logs](../observability/trajectory-logging-progress-files.md) that separate file-open, function-read, and location-edit events. Agents wrapped in opaque APIs or sandboxes cannot be decomposed.
 
 ## Key Takeaways
 

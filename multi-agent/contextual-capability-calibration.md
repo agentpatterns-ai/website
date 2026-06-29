@@ -19,15 +19,15 @@ maturity: adopted
 
 > Skill-level capability profiles average over heterogeneous task contexts and misdelegate; condition the routing decision on the task features that actually predict success.
 
-## The Misdelegation Problem
+## The misdelegation problem
 
 Multi-agent delegation typically treats capability as a fixed per-agent property. Routing then marginalizes over task context — the assumption breaks when performance depends on features the profile discards: horizon length, dependency depth, file health, repo familiarity.
 
 Frontier models drop from 70%+ resolve on SWE-bench Verified to 23% on SWE-bench Pro ([Patel et al., 2025](https://arxiv.org/html/2509.16941v1)), which differs mainly in horizon and realism. A static "Opus-best-at-SWE" profile routes correctly on the first and badly on the second. Failure analysis of multi-agent LLM systems ([Cemri et al., 2025](https://arxiv.org/abs/2503.13657)) identifies agent-selection errors as a primary failure cluster — the symptom of profiles that average away the routing signal.
 
-## The Pattern
+## The pattern
 
-Partition the task stream into **contexts** along features that plausibly differentiate capability (horizon, presence of failing tests, file health). For each (agent, context) pair, maintain a Beta posterior over success probability and route using a score that penalises uncertainty.
+Partition the task stream into contexts along features that plausibly differentiate capability (horizon, presence of failing tests, file health). For each (agent, context) pair, maintain a Beta posterior over success probability and route using a score that penalizes uncertainty.
 
 ```mermaid
 graph TD
@@ -41,15 +41,15 @@ graph TD
 
 Three components from [CADMAS-CTX (Qiao, 2026)](https://arxiv.org/abs/2604.17950):
 
-- **Hierarchical contextual profiles** — one Beta(α, β) per (agent, context). Success updates α, failure updates β; the posterior mean is the per-context success estimate.
-- **Risk-aware routing** — route on `score = mean − λ · stddev`. Low-evidence contexts carry wider posteriors, so the penalty suppresses switches until observations accumulate.
-- **Regret bound** — Qiao (2026) proves cumulative regret is lower than static routing under per-context heterogeneity; the bound is the standard Bayesian-bandit form adapted to per-context arms ([Agrawal & Goyal, 2012](https://arxiv.org/abs/1111.1797)).
+- Hierarchical contextual profiles — one Beta(α, β) per (agent, context). Success updates α, failure updates β; the posterior mean is the per-context success estimate.
+- Risk-aware routing — route on `score = mean − λ · stddev`. Low-evidence contexts carry wider posteriors, so the penalty suppresses switches until observations accumulate.
+- Regret bound — Qiao (2026) proves cumulative regret is lower than static routing under per-context heterogeneity; the bound is the standard Bayesian-bandit form adapted to per-context arms ([Agrawal & Goyal, 2012](https://arxiv.org/abs/1111.1797)).
 
-## Convergent Evidence
+## Convergent evidence
 
-[REDEREF (2026)](https://arxiv.org/abs/2603.13256) arrives at the same Beta-posterior mechanism via Thompson sampling without an explicit taxonomy — 28% fewer tokens, 17% fewer calls, 19% lower time-to-success versus uniform random delegation. Convergence on `Beta(α, β)` posteriors plus a calibrated judgment step suggests the mechanism is not a single-benchmark artefact.
+[REDEREF (2026)](https://arxiv.org/abs/2603.13256) arrives at the same Beta-posterior mechanism via Thompson sampling without an explicit taxonomy — 28% fewer tokens, 17% fewer calls, 19% lower time-to-success than uniform random delegation. Convergence on `Beta(α, β)` posteriors plus a calibrated judgment step suggests the mechanism is not a single-benchmark artifact.
 
-## Reported Results
+## Reported results
 
 CADMAS-CTX on GPT-4o agents ([Qiao, 2026](https://arxiv.org/abs/2604.17950)):
 
@@ -60,24 +60,24 @@ CADMAS-CTX on GPT-4o agents ([Qiao, 2026](https://arxiv.org/abs/2604.17950)):
 
 Treat both as research claims pending independent replication. SWE-bench Lite has documented contamination concerns ([Mündler et al., 2025](https://arxiv.org/abs/2510.08996)); the resolve-rate gain has not been validated on mutated or held-out sets.
 
-## When the Pattern Pays Off
+## When the pattern pays off
 
 Two conditions must hold for contextual calibration to beat static routing:
 
-**Condition 1 — Task heterogeneity.** The task stream must span contexts with genuinely different per-agent reward distributions. Under a narrow distribution, context buckets carry no discriminative information and the per-context overhead is net-negative. ICLR 2026 workshop analysis ([Agents in the Wild](https://arxiv.org/pdf/2510.14133)) reports adaptive routing gains are architecture-specific and static baselines often win when task distribution is narrow.
+Condition 1 — task heterogeneity. The task stream must span contexts with genuinely different per-agent reward distributions. Under a narrow distribution, context buckets carry no discriminative information and the per-context overhead is net-negative. ICLR 2026 workshop analysis ([Agents in the Wild](https://arxiv.org/pdf/2510.14133)) reports adaptive routing gains are architecture-specific and static baselines often win when task distribution is narrow.
 
-**Condition 2 — Reliable context classification.** Noisy task → context mapping flattens posteriors and the uncertainty penalty masks the signal. Prefer deterministic heuristics (file health, token count, failing-test presence) over an LLM classifier, which introduces its own capability drift.
+Condition 2 — reliable context classification. Noisy task → context mapping flattens posteriors and the uncertainty penalty masks the signal. Prefer deterministic heuristics (file health, token count, failing-test presence) over an LLM classifier, which introduces its own capability drift.
 
 Below these thresholds, prefer uniform routing with a judge layer (see [recursive-best-of-N](recursive-best-of-n-delegation.md)) or Thompson sampling over a flat pool as in REDEREF — both capture heterogeneity without requiring a taxonomy.
 
-## Failure Conditions
+## Failure conditions
 
-- **Small agent pool (K = 2).** Exploration-exploitation benefit is small; A/B routing with a judge captures most of the gain.
-- **Cold-start regime.** Posteriors are uninformative early; behaviour degrades toward uniform random routing. Qiao (2026) does not report cold-start latency — budget a warm-up phase or seed from prior deployments.
-- **Non-stationary agents.** Model upgrades, prompt changes, or tool additions invalidate posteriors. Reset any changed agent's row in the profile table.
-- **Subjective success criteria.** Beta updates require a binary signal. For taste-dependent outputs the posterior is only as calibrated as the judge — see [LLM-as-judge evaluation](../workflows/llm-as-judge-evaluation.md).
+- Small agent pool (K = 2). Exploration-exploitation benefit is small; A/B routing with a judge captures most of the gain.
+- Cold-start regime. Posteriors are uninformative early; behavior degrades toward uniform random routing. Qiao (2026) does not report cold-start latency — budget a warm-up phase or seed from prior deployments.
+- Non-stationary agents. Model upgrades, prompt changes, or tool additions invalidate posteriors. Reset any changed agent's row in the profile table.
+- Subjective success criteria. Beta updates require a binary signal. For taste-dependent outputs the posterior is only as calibrated as the judge — see [LLM-as-judge evaluation](../workflows/llm-as-judge-evaluation.md).
 
-## Relationship to Other Routing Patterns
+## Relationship to other routing patterns
 
 | Pattern | Routing signal | Capability model |
 |---------|----------------|------------------|
@@ -86,7 +86,7 @@ Below these thresholds, prefer uniform routing with a judge layer (see [recursiv
 | [Recursive best-of-N](recursive-best-of-n-delegation.md) | K candidates, judge selects | None — selection replaces routing |
 | Contextual capability calibration | Context classification + posterior | Per (agent, context) |
 
-Contextual calibration generalises the first (route on pre-computed task features) and formalises the insight behind the second. It is complementary to the third: use recursive best-of-N inside a context when its posterior is high-variance.
+Contextual calibration generalizes the first (route on pre-computed task features) and formalizes the insight behind the second. It complements the third: use recursive best-of-N inside a context when its posterior is high-variance.
 
 ## Example
 
@@ -119,7 +119,7 @@ def update(agent, ctx, success: bool):
     profiles[(agent, ctx)][key] += 1
 ```
 
-After 50 tasks, the long-horizon column for Agent A has updated to Beta(3, 18) — a posterior mean near 0.14 and wide variance; Agent B's long column has updated to Beta(15, 4) — mean 0.79, narrow. The risk-aware score routes long tasks to B with growing confidence. The short-horizon columns converge in the opposite direction. A static profile averaging success across all tasks would have routed to B on every task and spent 5–10× more on short tasks.
+After 50 tasks, the long-horizon column for Agent A has updated to Beta(3, 18) — a posterior mean near 0.14 and wide variance; Agent B's long column has updated to Beta(15, 4) — mean 0.79, narrow. The risk-aware score routes long tasks to B with growing confidence. The short-horizon columns converge in the opposite direction. A static profile averaging success across all tasks would have routed to B on every task and spent 5 to 10× more on short tasks.
 
 ## Key Takeaways
 

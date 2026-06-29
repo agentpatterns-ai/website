@@ -19,24 +19,24 @@ maturity: emerging
 
 > Expose the auto-approval cutoff on a learned diff-risk score as an explicit yield-vs-safety knob, with revert and incident telemetry to recalibrate it.
 
-## The Pattern
+## The pattern
 
-A learned diff-risk model scores each diff by likelihood of revert or production incident. A single percentile threshold separates auto-approved diffs from those routed to human review ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208)). Moving it up automates more diffs at strictly higher marginal risk; moving it down trades yield for safety. The point on the curve is an operator choice, not a property of the model.
+A learned diff-risk model scores each diff by likelihood of revert or production incident. A single percentile threshold separates auto-approved diffs from those routed to human review ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208)). Moving it up automates more diffs at strictly higher marginal risk. Moving it down trades yield for safety. The point on the curve is an operator choice, not a property of the model.
 
-It differs from two adjacent patterns. [Tiered code review](tiered-code-review.md) routes by *static path criticality* — auth and payment paths escalate regardless of score. [Tunable per-PR effort](tunable-review-effort.md) picks review depth per PR. Threshold calibration is the *organization-wide* dial on a learned score deciding whether human review happens at all.
+This pattern differs from two adjacent ones. [Tiered code review](tiered-code-review.md) routes by static path criticality — auth and payment paths escalate regardless of score. [Tunable per-PR effort](tunable-review-effort.md) picks review depth per PR. Threshold calibration is the organization-wide dial on a learned score that decides whether human review happens at all.
 
-## How RADAR Implements It
+## How RADAR implements it
 
 Meta's RADAR system is the documented industrial case. It chains six stages:
 
 1. Diff classification by authorship and source type
 2. Eligibility gates (deterministic exclusions)
 3. Static heuristics
-4. Machine-learned **Diff Risk Score**
+4. Machine-learned Diff Risk Score
 5. LLM-based Automated Code Review
 6. Deterministic validation before landing
 
-The Diff Risk Score is where the calibration knob sits. Diffs at or below the chosen percentile proceed; diffs above it route to a human ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208)).
+The Diff Risk Score is where the calibration knob sits. Diffs at or below the chosen percentile proceed. Diffs above it route to a human reviewer ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208)).
 
 ```mermaid
 graph TD
@@ -51,7 +51,7 @@ graph TD
     V --> M[Land]
 ```
 
-## What Calibration Buys
+## What calibration buys
 
 Published RADAR metrics quantify the tradeoff. At Meta scale (535K+ diffs reviewed, 331K+ landed without manual intervention), relaxing the threshold from the 25th to the 50th percentile raised approval rate to 60.31% ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208)). Safety outcomes versus the non-RADAR baseline:
 
@@ -64,7 +64,7 @@ Published RADAR metrics quantify the tradeoff. At Meta scale (535K+ diffs review
 
 Source: [arXiv:2605.30208](https://arxiv.org/abs/2605.30208).
 
-## Why It Works
+## Why it works
 
 Risk calibration works because three things hold at once. First, the empirical revert-rate distribution across the score is monotonic, so each threshold move maps to a known marginal change in expected reverts ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208)). Second, organization-scale telemetry — revert and incident counts per score bucket — funds recalibration when the diff distribution drifts. Third, a deterministic validation pass catches model under-estimates, so the threshold is not the sole safety boundary. Remove any one and the dial degrades: a monotonic score without telemetry is unmeasured; telemetry without validation makes every miscalibration a production incident.
 
@@ -72,21 +72,21 @@ Risk calibration works because three things hold at once. First, the empirical r
 
 Calibration requires infrastructure the pattern's industrial provenance can hide:
 
-- **Revert/incident telemetry per score bucket** — without per-percentile observation, the curve is unmeasured.
-- **Deterministic validation backstop** — linters, type checks, and sandboxed test execution catch score under-estimates before they land.
-- **Stable feature signals** — authorship, churn, and blast-radius features must be stably observable ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208)). Microservice sprawl with rotating owners degrades feature quality.
-- **Periodic recalibration cadence** — the diff distribution shifts as the codebase, tooling, and AI-author mix change. A threshold set in Q1 will not be right in Q4.
+- Revert and incident telemetry per score bucket — without per-percentile observation, the curve is unmeasured.
+- Deterministic validation backstop — linters, type checks, and sandboxed test execution catch score under-estimates before they land.
+- Stable feature signals — authorship, churn, and blast-radius features must be stably observable ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208)). Microservice sprawl with rotating owners degrades feature quality.
+- Periodic recalibration cadence — the diff distribution shifts as the codebase, tooling, and AI-author mix change. A threshold set in Q1 will not be right in Q4.
 
 Adopting the pattern without these inherits an opaque knob with no way to know which direction to turn it.
 
-## When This Backfires
+## When this backfires
 
-- **Small / low-telemetry teams** cannot measure revert or incident rate per percentile bucket, so the threshold becomes an unverifiable guess. Static path-based routing via [tiered code review](tiered-code-review.md) gives equivalent safety at lower overhead here.
-- **Regulated domains** (medical devices, automotive safety, financial compliance) often mandate documented human sign-off on every change, so auto-approval may violate audit requirements regardless of empirical safety.
-- **Calibration-aware adversaries** can structure malicious diffs to land in the auto-approved tier; single-knob calibration optimizes for the average diff, not a worst-case adversary.
-- **Novel architectural styles** — risk scores trained on prior distributions misclassify the first wave of a new framework or AI-generated pattern: correct on average, wrong on the new thing.
-- **Ground-truth deficiencies cap the dial.** No threshold tuning compensates when human review labels encode workflow constraints rather than objective risk ([arXiv:2604.24525](https://arxiv.org/abs/2604.24525)). Static analysis baselines have measured ~50% false-negative rates on real vulnerable commits, 22% triggering no warning ([Endor Labs: False Negatives in SAST](https://www.endorlabs.com/learn/false-negatives-in-sast-hidden-risks-behind-the-noise)) — when an upstream stage is that noisy, tuning the downstream score moves the visible curve without moving the actual one.
-- **CRA-only credibility gap** — agent-only review showed a 23-point merge-rate gap (45.20% vs. 68.37%) versus human-reviewed PRs in open source ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). Meta's validation backstop and corporate trust loop may not transfer without equivalent guardrails.
+- Small or low-telemetry teams cannot measure revert or incident rate per percentile bucket, so the threshold becomes an unverifiable guess. Static path-based routing via [tiered code review](tiered-code-review.md) gives equivalent safety at lower overhead here.
+- Regulated domains (medical devices, automotive safety, financial compliance) often mandate documented human sign-off on every change, so auto-approval may violate audit requirements regardless of empirical safety.
+- Calibration-aware adversaries can structure malicious diffs to land in the auto-approved tier. Single-knob calibration optimizes for the average diff, not a worst-case adversary.
+- Novel architectural styles break the score — models trained on prior distributions misclassify the first wave of a new framework or AI-generated pattern: correct on average, wrong on the new thing.
+- Ground-truth deficiencies cap the dial. No threshold tuning compensates when human review labels encode workflow constraints rather than objective risk ([arXiv:2604.24525](https://arxiv.org/abs/2604.24525)). Static analysis baselines have measured ~50% false-negative rates on real vulnerable commits, 22% triggering no warning ([Endor Labs: False Negatives in SAST](https://www.endorlabs.com/learn/false-negatives-in-sast-hidden-risks-behind-the-noise)) — when an upstream stage is that noisy, tuning the downstream score moves the visible curve without moving the actual one.
+- CRA-only credibility gap — agent-only review showed a 23-point merge-rate gap (45.20% versus 68.37%) compared with human-reviewed PRs in open source ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). Meta's validation backstop and corporate trust loop may not transfer without equivalent guardrails.
 
 ## Example
 

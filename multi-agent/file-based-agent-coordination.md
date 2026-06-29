@@ -18,22 +18,22 @@ maturity: adopted
 
 > Coordinate parallel agents using lightweight file locks in a shared repository — git's merge mechanics enforce task exclusivity without requiring a central orchestrator.
 
-## The Problem with Orchestrator-First Design
+## The problem with orchestrator-first design
 
-The common assumption when running parallel agents is that a scheduler or controller process is required to assign tasks, detect conflicts, and prevent duplicate work. This adds infrastructure complexity, creates a coordination bottleneck, and introduces another failure point. For many multi-agent setups, the coordination mechanism is already available: git.
+Most teams assume parallel agents need a scheduler or controller to assign tasks, detect conflicts, and prevent duplicate work. That process adds infrastructure, creates a bottleneck, and introduces another failure point. For many multi-agent setups, you already have the coordination mechanism: git.
 
-Per [Anthropic's C compiler case study](https://www.anthropic.com/engineering/building-c-compiler), parallel agents can self-coordinate using file-based locks and git's sync behavior, with no dedicated orchestration service.
+[Anthropic's C compiler case study](https://www.anthropic.com/engineering/building-c-compiler) shows that parallel agents can coordinate themselves using file-based locks and git's sync behavior, with no dedicated orchestration service.
 
 ## Mechanism
 
 Each agent runs in its own container with a mounted shared repository. To claim a task:
 
-1. Agent reads the task queue (a directory or file listing available work)
-2. Agent writes a lock file to `current_tasks/` (e.g., `current_tasks/task-42.lock`) identifying itself as the owner
-3. Agent pushes the lock file to the shared repository
-4. If two agents claim the same task simultaneously, git's push will reject the second — the losing agent fetches the updated state and selects a different task
+1. The agent reads the task queue, a directory or file listing available work.
+2. The agent writes a lock file to `current_tasks/`, for example `current_tasks/task-42.lock`, naming itself as the owner.
+3. The agent pushes the lock file to the shared repository.
+4. If two agents claim the same task at once, git rejects the second push. The losing agent fetches the updated state and picks a different task.
 
-The lock file contents can be minimal: agent ID, timestamp, task identifier. The filesystem write is the claim; the git push is the enforcement mechanism.
+The lock file can be minimal: agent ID, timestamp, task identifier. The filesystem write makes the claim. The git push enforces it.
 
 ```mermaid
 sequenceDiagram
@@ -46,7 +46,7 @@ sequenceDiagram
     A2->>R: write current_tasks/task-55.lock, push
 ```
 
-## Git Log as Audit Trail
+## Git log as audit trail
 
 Every lock write and task completion is a git commit. The commit history becomes a human-readable record of:
 
@@ -54,21 +54,21 @@ Every lock write and task completion is a git commit. The commit history becomes
 - When each task was started and completed
 - The sequence of decisions across the parallel team
 
-This audit trail is available without any additional logging infrastructure — it is a side effect of the coordination mechanism itself.
+You get this audit trail without any extra logging infrastructure. It is a side effect of the coordination mechanism itself.
 
-## What This Pattern Does Not Cover
+## What this pattern does not cover
 
 File-based coordination handles task exclusivity. It does not handle:
 
-- **Dependency ordering** — if task B requires task A's output, you need explicit dependency tracking or a sequencing step
-- **Agent failure recovery** — a crashed agent leaves a stale lock file; the harness needs a timeout or cleanup mechanism
-- **Load balancing** — agents self-select tasks based on queue order; skewed task complexity can leave some agents idle
+- Dependency ordering — if task B needs task A's output, you need explicit dependency tracking or a sequencing step.
+- Agent failure recovery — a crashed agent leaves a stale lock file, so the harness needs a timeout or cleanup mechanism.
+- Load balancing — agents self-select tasks in queue order, so uneven task complexity can leave some agents idle.
 
-For projects where these concerns are significant, a dedicated orchestrator is warranted. The file-based pattern works best when tasks are genuinely independent and roughly uniform in complexity. Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) illustrates the alternative: when tasks are interdependent or require shared context, explicit task boundaries in agent instructions become necessary to prevent duplication.
+When these concerns matter, use a dedicated orchestrator. The file-based pattern works best when tasks are genuinely independent and roughly uniform in complexity. Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) shows the alternative: when tasks depend on each other or share context, you need explicit task boundaries in agent instructions to prevent duplication.
 
-## Scaling Properties
+## Scaling properties
 
-The pattern scales horizontally: adding more agents requires no changes to the coordination mechanism. Each new agent reads the same task queue and participates in the same lock contention protocol. Contention surfaces at the git push step rather than at a central coordinator process.
+The pattern scales horizontally. Adding more agents needs no changes to the coordination mechanism. Each new agent reads the same task queue and follows the same lock contention protocol. Contention surfaces at the git push step, not at a central coordinator.
 
 ## Key Takeaways
 

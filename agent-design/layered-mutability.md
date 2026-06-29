@@ -15,7 +15,7 @@ maturity: emerging
 
 > Persistent agents mutate at five layers with very different speed, coupling, reversibility, and observability — most governance failures come from treating them as one surface.
 
-## The Five Layers
+## The five layers
 
 [Tallam, 2026](https://arxiv.org/abs/2604.14717) frames a persistent agent as a stack of mutable layers that all influence future behavior, not just the current prompt:
 
@@ -27,34 +27,34 @@ maturity: emerging
 | Memory | Retrieved notes, episodes, conventions written across sessions | Per action |
 | Weight-level adaptation | LoRA/SFT updates applied to a deployed agent | Minutes to days |
 
-Three of the five — self-narrative, memory, and weight-level adaptation — now happen *inside the agent's own operating loop*, not only at vendor release time. That shift is what makes the governance problem new.
+Three of the five — self-narrative, memory, and weight-level adaptation — now happen inside the agent's own operating loop, not only at vendor release time. That shift is what makes the governance problem new.
 
-## Four Dimensions That Decide Governance Load
+## Four dimensions that decide governance load
 
 For each layer, [Tallam](https://arxiv.org/abs/2604.14717) argues governance difficulty rises along four axes:
 
-1. **Speed** — how fast mutations land.
-2. **Downstream coupling** — how strongly this layer's state drives future tool calls and planning.
-3. **Reversibility** — whether rolling the layer back restores prior behavior, the property [rollback-first design](rollback-first-design.md) makes a precondition.
-4. **Observability** — whether an operator can inspect the current state before it fires.
+1. Speed — how fast mutations land.
+2. Downstream coupling — how strongly this layer's state shapes future tool calls and planning.
+3. Reversibility — whether rolling the layer back restores prior behavior, the property [rollback-first design](rollback-first-design.md) makes a precondition.
+4. Observability — whether an operator can inspect the current state before it fires.
 
-The paper's core observation: the layers that most affect behavior (memory, self-narrative) are often the least inspectable, while the layers humans can inspect most easily (pretraining artifacts, published alignment cards) change slowly enough that inspection rarely matters. This mismatch is the governance gap.
+The paper's core observation: the layers that most affect behavior (memory, self-narrative) are often the least inspectable. The layers humans can inspect most easily (pretraining artifacts, published alignment cards) change slowly enough that inspection rarely matters. This mismatch is the governance gap.
 
-## Compositional Drift, Not Abrupt Misalignment
+## Compositional drift, not abrupt misalignment
 
-The dominant failure mode for persistent agents is **compositional drift**: locally reasonable memory writes and self-narrative updates that accumulate into a behavioral trajectory never explicitly authorized ([Tallam, 2026](https://arxiv.org/abs/2604.14717)). Each write looks fine against a local utility signal; the cumulative effect is only evaluated after drift is already visible.
+The dominant failure mode for persistent agents is compositional drift: locally reasonable memory writes and self-narrative updates that accumulate into a behavioral trajectory never explicitly authorized ([Tallam, 2026](https://arxiv.org/abs/2604.14717)). Each write looks fine against a local utility signal. You only see the cumulative effect after drift is already visible.
 
 This is distinct from [objective drift](../anti-patterns/objective-drift.md), which is a single-session compression failure where summarization drops constraints. Compositional drift is cross-session and cumulative — reverting the last update does not restore baseline.
 
-An independent framework makes the same argument from a memory-systems angle: [Lam et al., 2026 (SSGM)](https://arxiv.org/abs/2603.11768v1) document how "knowledge degrades through iterative summarization" and propose consistency verification, temporal decay, and dynamic access control *before* memory consolidation.
+An independent framework makes the same argument from a memory-systems angle: [Lam et al., 2026 (SSGM)](https://arxiv.org/abs/2603.11768v1) document how "knowledge degrades through iterative summarization" and propose consistency verification, temporal decay, and dynamic access control before memory consolidation.
 
-## Ratchet Effects and Identity Hysteresis
+## Ratchet effects and identity hysteresis
 
-A preliminary experiment in [Tallam, 2026](https://arxiv.org/abs/2604.14717) reverts an agent's visible self-description after memory accumulation and measures whether baseline behavior returns. It does not — the paper reports an estimated **identity hysteresis ratio of 0.68** on that single experiment. Treat this as preliminary evidence that visible-layer rollback does not imply behavioral rollback when memory is tightly coupled to self-narrative, not as a general constant.
+A preliminary experiment in [Tallam, 2026](https://arxiv.org/abs/2604.14717) reverts an agent's visible self-description after memory accumulation and measures whether baseline behavior returns. It does not — the paper reports an estimated identity hysteresis ratio of 0.68 on that single experiment. Treat this as preliminary evidence, not a general constant: visible-layer rollback does not imply behavioral rollback when memory is tightly coupled to self-narrative.
 
 The mechanism is a ratchet: writes happen at a fine granularity with local evaluation; rollbacks happen at a coarse granularity with global evaluation. Without a rollback contract that operates at the same granularity as the writes, behavior lags the visible state.
 
-## Applying the Lens
+## Applying the lens
 
 ```mermaid
 graph TD
@@ -69,20 +69,20 @@ graph TD
     F -->|Yes| H[Roll back the specific write; re-run]
 ```
 
-**Practical moves per layer**:
+Practical moves per layer:
 
-- **Self-narrative** — version every self-description change; keep the prior version loadable; measure behavior before/after revert, not just the visible description.
-- **Memory** — apply consolidation gates (consistency, decay, access control) as in [SSGM](https://arxiv.org/abs/2603.11768v1); structure writes so each has a rollback handle; audit the couplings from memory to planning.
-- **Weight-level adaptation** — track adaptation frequency; require a reversal path that is tested, not theoretical; treat per-user LoRA as experimental rather than production-default (see [Continual Learning Layers](continual-learning-layers.md)).
+- Self-narrative — version every self-description change; keep the prior version loadable; measure behavior before and after revert, not just the visible description.
+- Memory — apply consolidation gates (consistency, decay, access control) as in [SSGM](https://arxiv.org/abs/2603.11768v1); structure writes so each has a rollback handle; audit the couplings from memory to planning.
+- Weight-level adaptation — track adaptation frequency; require a reversal path that is tested, not theoretical; treat per-user LoRA as experimental rather than production-default (see [Continual Learning Layers](continual-learning-layers.md)).
 
-## When This Lens Does Not Pay Off
+## When this lens does not pay off
 
 The five-layer framework is overhead for systems where most layers are inert:
 
-- **Stateless or short-session agents** — no cross-session accumulation, so memory and self-narrative collapse. Standard prompt engineering is sufficient.
-- **Well-governed memory stores** — teams already running SSGM-style consolidation gates, temporal decay, and versioning (see [agent memory patterns](agent-memory-patterns.md)) see residual drift dominated by retrieval quality rather than layer coupling.
-- **Weak self-narrative coupling** — when the agent's self-description does not feed back into tool selection or planning, reverting memory reliably restores behavior and the hysteresis effect does not appear.
-- **Single-tenant, single-user agents** — without distinct users and contexts feeding the ratchet, accretion is slow enough to govern with periodic review.
+- Stateless or short-session agents — no cross-session accumulation, so memory and self-narrative collapse. Standard prompt engineering is enough.
+- Well-governed memory stores — teams already running SSGM-style consolidation gates, temporal decay, and versioning (see [agent memory patterns](agent-memory-patterns.md)) see residual drift dominated by retrieval quality rather than layer coupling.
+- Weak self-narrative coupling — when the agent's self-description does not feed back into tool selection or planning, reverting memory reliably restores behavior and the hysteresis effect does not appear.
+- Single-tenant, single-user agents — without distinct users and contexts feeding the ratchet, accretion is slow enough to govern with periodic review.
 
 Read the lens as diagnostic: apply it to the layers that actually mutate in your system, not all five by default.
 
@@ -95,7 +95,7 @@ A persistent coding agent with a `SOUL.md`-style self-narrative and a vector mem
 + I follow the conventions present in the codebase.
 ```
 
-Tool-call behavior does not revert. The agent still retrieves the accumulated memory entries about inline error handling and plans around them. The visible layer changed; the coupled layer ([memory synthesised from prior sessions](memory-synthesis-execution-logs.md)) did not. A rollback contract at the same granularity as the writes — versioning each memory write and providing a per-write revert — is required to restore baseline, not a self-narrative edit.
+Tool-call behavior does not revert. The agent still retrieves the accumulated memory entries about inline error handling and plans around them. The visible layer changed; the coupled layer ([memory synthesized from prior sessions](memory-synthesis-execution-logs.md)) did not. Restoring baseline needs a rollback contract at the same granularity as the writes — versioning each memory write and providing a per-write revert — not a self-narrative edit.
 
 ## Key Takeaways
 

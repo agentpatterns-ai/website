@@ -17,13 +17,13 @@ maturity: established
 
 > A one-or-two-sentence visible update emitted before tool calls in a multi-step task. It exists to break the silent gap between user request and first observable action so the run does not read as a stall.
 
-## What the Pattern Is
+## What the pattern is
 
-A tool preamble is a short user-facing message the model writes before it begins calling tools, acknowledging the request and naming the first step. OpenAI defines it in the GPT-5.5 prompting guide under the section "Improve time to first visible token with a preamble" and gives the canonical instruction: "Before any tool calls for a multi-step task, send a short user-visible update that acknowledges the request and states the first step. Keep it to one or two sentences." ([OpenAI: Prompt guidance for GPT-5.5](https://developers.openai.com/api/docs/guides/prompt-guidance?model=gpt-5.5))
+A tool preamble is a short user-facing message the model writes before it starts calling tools. It acknowledges the request and names the first step. OpenAI defines it in the GPT-5.5 prompting guide under the section "Improve time to first visible token with a preamble" and gives the canonical instruction: "Before any tool calls for a multi-step task, send a short user-visible update that acknowledges the request and states the first step. Keep it to one or two sentences." ([OpenAI: Prompt guidance for GPT-5.5](https://developers.openai.com/api/docs/guides/prompt-guidance?model=gpt-5.5))
 
-The mechanism is perceptual, not behavioural. Reasoning models can spend several seconds planning before any tool call, and during that gap the user sees nothing. A preface message replaces the silence with evidence of work, so longer runs feel less like the model has crashed ([Simon Willison, 2026-04-25](https://simonwillison.net/2026/Apr/25/gpt-5-5-prompting-guide/)).
+The mechanism is perceptual, not behavioral. Reasoning models can spend several seconds planning before any tool call, and during that gap the user sees nothing. A preface message replaces the silence with evidence of work, so longer runs feel less like the model has crashed ([Simon Willison, 2026-04-25](https://simonwillison.net/2026/Apr/25/gpt-5-5-prompting-guide/)).
 
-## When to Use It
+## When to use it
 
 ```mermaid
 graph TD
@@ -39,9 +39,9 @@ graph TD
 
 The conditions stack — a preamble pays off only when all four are true. OpenAI's own guidance restricts the pattern to "longer or tool-heavy tasks" ([OpenAI: Prompt guidance for GPT-5.5](https://developers.openai.com/api/docs/guides/prompt-guidance?model=gpt-5.5)).
 
-## Cadence: Per Phase, Not Per Call
+## Cadence: per phase, not per call
 
-The most common failure is interpreting the rule as "narrate every tool call". OpenAI's GPT-5.2 prompting guide defines the cadence rule explicitly:
+The most common failure is reading the rule as "narrate every tool call". OpenAI's GPT-5.2 prompting guide defines the cadence rule explicitly:
 
 > Send brief updates (1-2 sentences) only when:
 > - You start a new major phase of work, or
@@ -53,11 +53,11 @@ The most common failure is interpreting the rule as "narrate every tool call". O
 
 Per-call narration collapses into the [three-act response anti-pattern](../instructions/controlling-agent-output.md) — explain, do, explain again — at the cost of every tool call.
 
-## Newer Models Calibrate by Default
+## Newer models calibrate by default
 
-Claude Opus 4.7 already provides "more regular, higher-quality updates to the user throughout long agentic traces" without prompt scaffolding, and Anthropic explicitly tells teams to remove forced-status instructions like "After every 3 tool calls, summarize progress" because they fight the model's calibrated pacing ([Anthropic: Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)). Before adding a preamble instruction, check whether the model already does this — layered scaffolding produces redundant output and burns tokens.
+Claude Opus 4.7 already provides "more regular, higher-quality updates to the user throughout long agentic traces" without prompt scaffolding. Anthropic explicitly tells teams to remove forced-status instructions like "After every 3 tool calls, summarize progress" because they fight the model's calibrated pacing ([Anthropic: Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)). Before you add a preamble instruction, check whether the model already does this. Layered scaffolding produces redundant output and wastes tokens.
 
-## Where to Enforce It
+## Where to enforce it
 
 Two points of enforcement, with different trade-offs:
 
@@ -66,15 +66,15 @@ Two points of enforcement, with different trade-offs:
 | System prompt | Instruction in the persistent system message | Cheap to add; cost is one-or-two sentences per turn; subject to the model ignoring it under load |
 | Harness wrapper | The harness injects a fixed preface around the first tool dispatch in a run | Deterministic; preface text is generic ("Working on your request...") rather than task-aware |
 
-The system-prompt approach matches what OpenAI ships in Codex and is what the GPT-5.5 guide recommends. The harness approach is appropriate when determinism matters more than relevance — for example, audit-logged enterprise agents where every run must show a visible update regardless of model behaviour.
+The system-prompt approach matches what OpenAI ships in Codex and is what the GPT-5.5 guide recommends. The harness approach suits cases where determinism matters more than relevance — for example, audit-logged enterprise agents where every run must show a visible update regardless of model behavior.
 
-## When This Backfires
+## When this backfires
 
-- **Harness already streams tool calls.** When the user can see live tool indicators (Claude Code's tool panel, Cursor's agent panel), the preamble is duplicate signal that adds tokens and noise.
-- **Single-step or sub-second tasks.** A preface before a fast tool call triples the visible turn for no perceived-latency gain.
-- **Per-call instead of per-phase.** "Reading file X. Running test Y. Reading file Z." matches the GPT-5.2 anti-pattern and is what readers report as chatty agent output.
-- **Headless or batch agents.** No human is watching the stream, so the preface is dead tokens.
-- **Default-progress models.** Layering a forced preface on Claude Opus 4.7 fights its calibrated update behaviour ([Anthropic: Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)).
+- Harness already streams tool calls: when the user can see live tool indicators (Claude Code's tool panel, Cursor's agent panel), the preamble is duplicate signal that adds tokens and noise.
+- Single-step or sub-second tasks: a preface before a fast tool call triples the visible turn for no perceived-latency gain.
+- Per-call instead of per-phase: "Reading file X. Running test Y. Reading file Z." matches the GPT-5.2 anti-pattern and is what readers report as chatty agent output.
+- Headless or batch agents: no human is watching the stream, so the preface is dead tokens.
+- Default-progress models: a forced preface layered on Claude Opus 4.7 fights its calibrated update behavior ([Anthropic: Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)).
 
 ## Example
 
@@ -103,7 +103,7 @@ The first sentence is OpenAI's recommended preamble instruction. The remainder a
 
 - [Controlling Agent Output: Concise Answers, Not Essays](../instructions/controlling-agent-output.md)
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)
+- [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md)
 - [Observability Legible to Agents](../observability/observability-legible-to-agents.md)
 - [Trajectory Logging and Progress Files](../observability/trajectory-logging-progress-files.md)
 - [Steering Running Agents](steering-running-agents.md)

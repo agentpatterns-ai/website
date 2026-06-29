@@ -19,25 +19,25 @@ maturity: emerging
 
 > Most prompt injection defenses are probabilistic. CaMeL eliminates whole classes of injection by construction: untrusted data can never alter which tools an agent calls.
 
-**Related lesson:** [Decide Before You Look](https://learn.agentpatterns.ai/security/decide-before-you-look/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Decide Before You Look](https://learn.agentpatterns.ai/security/decide-before-you-look/) — this concept features in a hands-on lesson with quizzes.
 
-## The Architectural Insight
+## The architectural insight
 
-Probabilistic defenses (detection classifiers, [adversarial training](close-attack-to-fix-loop.md), instruction hierarchies) reduce injection success rates but cannot eliminate them. CaMeL, proposed by Debenedetti et al. at Google DeepMind, takes a different approach: enforce the instruction/data boundary at the harness level so the model's susceptibility to injection is irrelevant. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
+Probabilistic defenses (detection classifiers, [adversarial training](close-attack-to-fix-loop.md), instruction hierarchies) reduce injection success rates but cannot eliminate them. CaMeL, proposed by Debenedetti et al. at Google DeepMind, takes a different approach. It enforces the instruction/data boundary at the harness level, so the model's susceptibility to injection no longer matters. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
 
-The key observation: prompt injection succeeds because untrusted data (tool outputs, web pages, emails) and trusted control flow (the user's query) enter the same context. CaMeL separates them.
+Prompt injection succeeds because untrusted data (tool outputs, web pages, emails) and trusted control flow (the user's query) enter the same context. CaMeL keeps the two apart.
 
-## How CaMeL Works
+## How CaMeL works
 
 CaMeL uses four components: [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
 
-**Privileged LLM (P-LLM)** — sees only the trusted user query. Converts it into an execution plan expressed as restricted Python. Never receives raw tool outputs or untrusted content.
+Privileged LLM (P-LLM) — sees only the trusted user query. It converts the query into a plan in restricted Python and never receives raw tool outputs or untrusted content.
 
-**Quarantined LLM (Q-LLM)** — the [Dual LLM pattern](prompt-injection-resistant-agent-design.md)'s quarantined half — processes untrusted external data (emails, web pages, documents). Has no ability to invoke tools directly. The P-LLM delegates specific extraction tasks to it ("extract the sender's email address from this text"), receives the result, but never exposes the raw untrusted content to the P-LLM.
+Quarantined LLM (Q-LLM) — the quarantined half of the [Dual LLM pattern](prompt-injection-resistant-agent-design.md). It processes untrusted external data (emails, web pages, documents) and cannot invoke tools directly. The P-LLM delegates extraction tasks to it ("extract the sender's email address"), receives the result, but never sees the raw untrusted content.
 
-**Custom Python interpreter** — executes the P-LLM's plan. Performs taint tracking: every value carries capability metadata encoding its provenance and permitted uses. Security policies are enforced at tool-call time.
+Custom Python interpreter — executes the P-LLM's plan and tracks taint. Every value carries capability metadata that records its provenance and permitted uses. The interpreter enforces security policies at tool-call time.
 
-**Security policies** — capability labels on each value specify what can be done with it. If untrusted data tries to flow into a tool it is not permitted to reach, the Python interpreter blocks it regardless of what the model intends.
+Security policies — capability labels on each value specify what you can do with it. If untrusted data tries to flow into a tool it is not permitted to reach, the Python interpreter blocks it regardless of what the model intends.
 
 ```mermaid
 graph TD
@@ -58,7 +58,7 @@ graph TD
 
 The P-LLM is never exposed to raw untrusted tokens. The interpreter enforces that data cannot alter control flow — which tools are called, in what order, with what parameters — regardless of injected content.
 
-## Security Guarantee
+## Security guarantee
 
 CaMeL's security is architectural rather than behavioral. Because:
 
@@ -69,17 +69,17 @@ a successful injection in a tool output cannot redirect the agent to call unauth
 
 ## Trade-offs
 
-**Task completion**: CaMeL solves 77% of AgentDojo tasks with provable security, versus 84% for an undefended system — a 7 percentage point cost for architectural security guarantees. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
+Task completion: CaMeL solves 77% of AgentDojo tasks with provable security, versus 84% for an undefended system — a 7 percentage point cost for architectural security guarantees. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
 
-**Latency**: The dual-LLM design roughly doubles model invocations. When the Q-LLM processes complex artifacts, latency can exceed 10 seconds — unsuitable for interactive applications. [Source: [Tallam & Miller, 2025](https://arxiv.org/abs/2505.22852)]
+Latency: The dual-LLM design roughly doubles model invocations. When the Q-LLM processes complex artifacts, latency can exceed 10 seconds — too slow for interactive applications. [Source: [Tallam & Miller, 2025](https://arxiv.org/abs/2505.22852)]
 
-**Residual risk**: CaMeL does not protect against text-to-text attacks. An injected email can instruct the Q-LLM to produce a misleading summary, which the P-LLM then acts on. The structural guarantee covers tool invocation; it does not cover the semantic content of Q-LLM outputs. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
+Residual risk: CaMeL does not protect against text-to-text attacks. An injected email can instruct the Q-LLM to produce a misleading summary, which the P-LLM then acts on. The structural guarantee covers tool invocation; it does not cover the semantic content of Q-LLM outputs. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
 
-**Side channels**: The authors explicitly exclude side-channel attacks from the guarantee. An adversary can still leak a secret by observing data-dependent behavior — for example, a loop whose iteration count depends on a private value, or execution that halts only when a condition on the secret holds. Capability labels constrain explicit data flow, not these implicit channels. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
+Side channels: The authors explicitly exclude side-channel attacks from the guarantee. An adversary can still leak a secret by observing data-dependent behavior — for example, a loop whose iteration count depends on a private value, or execution that halts only when a condition on the secret holds. Capability labels constrain explicit data flow, not these implicit channels. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
 
-**Policy maintenance**: Security policies must be authored and maintained. As tool sets evolve, policies require updates. [Source: [Tallam & Miller, 2025](https://arxiv.org/abs/2505.22852)]
+Policy maintenance: You must author and maintain the security policies. As tool sets evolve, the policies need updates. [Source: [Tallam & Miller, 2025](https://arxiv.org/abs/2505.22852)]
 
-## Relation to the Dual LLM Pattern
+## Relation to the Dual LLM pattern
 
 CaMeL is a formally implemented instance of the [Dual LLM pattern](prompt-injection-resistant-agent-design.md). The conceptual pattern separates a privileged LLM from a quarantined LLM; CaMeL adds:
 
@@ -89,7 +89,7 @@ CaMeL is a formally implemented instance of the [Dual LLM pattern](prompt-inject
 
 The distinction matters: the conceptual pattern relies on careful system design and prompt discipline; CaMeL's interpreter enforces the boundary mechanically.
 
-## When to Use CaMeL
+## When to use CaMeL
 
 Use CaMeL-style control/data separation when:
 

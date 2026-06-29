@@ -18,13 +18,13 @@ maturity: established
 
 > Agents optimize for comprehensive-looking output, not minimal implementation. The result: over-engineered code passing tests but burdening maintenance with needless hierarchies, dead code, and unrequested features.
 
-## What It Looks Like
+## What it looks like
 
 You ask for a notification service. The agent delivers one — plus a rate limiter, an analytics hook, a webhook system, and an abstract factory. None were requested, a pattern the [Fowler/Garg case study](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) records verbatim. Together they triple the surface area you maintain.
 
 This is not a prompting failure. It is a training incentive: agents are optimized to look comprehensive, so they produce code that appears thorough rather than sized for the task.
 
-## Measurable Impact
+## Measurable impact
 
 | Metric | Finding | Source |
 |--------|---------|--------|
@@ -34,7 +34,7 @@ This is not a prompting failure. It is a training incentive: agents are optimize
 | Readability issues | 3x more in AI-generated code | [Stack Overflow / CodeRabbit](https://stackoverflow.blog/2026/01/28/are-bugs-and-incidents-inevitable-with-ai-coding-agents/) |
 | Refactoring share | Dropped from 25% to under 10% | [Mason](https://mikemason.ca/writing/ai-coding-agents-jan-2026/) |
 
-## How It Manifests
+## How it manifests
 
 ```mermaid
 graph LR
@@ -51,13 +51,13 @@ graph LR
     H --> I[Compounding maintenance debt]
 ```
 
-**Excessive scaffolding** — [1,000 lines where 100 suffice](https://addyo.substack.com/p/the-80-problem-in-agentic-coding). Class hierarchies where a function would do. Abstract base classes for single implementations.
+Excessive scaffolding — [1,000 lines where 100 suffice](https://addyo.substack.com/p/the-80-problem-in-agentic-coding). Class hierarchies where a function would do. Abstract base classes for single implementations.
 
-**Dead code accumulation** — Agents regenerate rather than reuse, leaving orphans. Refactoring drops because each task is greenfield — the [Mason](https://mikemason.ca/writing/ai-coding-agents-jan-2026/) figure above puts the share falling from 25% to under 10%.
+Dead code accumulation — Agents regenerate rather than reuse, leaving orphans. Refactoring drops because each task is greenfield — the [Mason](https://mikemason.ca/writing/ai-coding-agents-jan-2026/) figure above puts the share falling from 25% to under 10%.
 
-**Unrequested features** — A [Fowler/Garg case study](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) records a notification request returning rate limiting, analytics, and webhooks unprompted.
+Unrequested features — A [Fowler/Garg case study](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) records a notification request returning rate limiting, analytics, and webhooks unprompted.
 
-**Comment saturation** — Inline comments restating the obvious.
+Comment saturation — Inline comments restating the obvious.
 
 ## Mitigations
 
@@ -79,28 +79,28 @@ Do not add features, abstractions, or error handling beyond what is specified.
 
 Set thresholds that catch bloat mechanically:
 
-- **Cyclomatic complexity** per function
-- **Function length** limits
-- **Dead code detection** via static analysis
-- **Duplication scanners** in CI
+- Cyclomatic complexity per function
+- Function length limits
+- Dead code detection via static analysis
+- Duplication scanners in CI
 
 ### Post-implementation cleanup
 
 Run a simplification pass — a second agent or human review targeting bloat. [Harness engineering](../agent-design/harness-engineering.md) teams use periodic [entropy reduction agents](../workflows/entropy-reduction-agents.md) — scheduled "garbage collection" of tech debt ([Fowler/Bockeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 
-## When This Backfires
+## When this backfires
 
 Simplicity directives applied unconditionally have costs:
 
-- **Known-growth systems** — A service gaining Slack/SMS channels this sprint benefits from the factory pattern upfront. Flat functions force a refactor days later.
-- **Team conventions** — Flat functions in a layered codebase create architectural inconsistency.
-- **Security and observability** — Abstractions for audit logging, rate limiting, and auth exist for non-functional reasons. "Minimum code" can strip them silently unless a [deterministic guardrail](../verification/deterministic-guardrails.md) fails the build when they go missing.
+- Known-growth systems — A service gaining Slack/SMS channels this sprint benefits from the factory pattern upfront. Flat functions force a refactor days later.
+- Team conventions — Flat functions in a layered codebase create architectural inconsistency.
+- Security and observability — Abstractions for audit logging, rate limiting, and auth exist for non-functional reasons. "Minimum code" can strip them silently unless a [deterministic guardrail](../verification/deterministic-guardrails.md) fails the build when they go missing.
 
-Scope the directive: *"Write minimum code for this task. Do not add abstractions unless named in the requirements."*
+Scope the directive: 'Write minimum code for this task. Do not add abstractions unless named in the requirements.'
 
 ## Example
 
-**Before** — You ask: *"Write a notification sender."* The agent delivers:
+Before — You ask: 'Write a notification sender.' The agent delivers:
 
 ```python
 class NotificationStrategy(ABC):
@@ -123,7 +123,7 @@ class RetryPolicy:
 
 Six classes, ~150 lines after implementation — for a system that only ever sends email.
 
-**After** — Same request with an explicit simplicity directive (*"Write the minimum code. Prefer functions over classes."*):
+After — Same request with an explicit simplicity directive ('Write the minimum code. Prefer functions over classes.'):
 
 ```python
 import smtplib

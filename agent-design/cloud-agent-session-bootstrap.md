@@ -19,19 +19,19 @@ maturity: established
 
 > Split a cloud agent's session bootstrap into a cached install phase and a per-session start phase so dependency churn amortises while ephemeral setup stays explicit.
 
-Cursor reports that the single biggest factor in cloud-agent output quality is giving the agent a full development environment — the kind a local agent inherits from a developer's laptop for free ([What we've learned building cloud agents](https://cursor.com/blog/cloud-agent-lessons)). A cloud agent has no laptop to inherit, so it must bootstrap that environment explicitly. That makes *how* the bootstrap is structured a first-order quality lever, not just a latency optimisation.
+Cursor reports that the single biggest factor in cloud-agent output quality is giving the agent a full development environment — the kind a local agent inherits from a developer's laptop for free ([What we've learned building cloud agents](https://cursor.com/blog/cloud-agent-lessons)). A cloud agent has no laptop to inherit, so it must bootstrap that environment explicitly. That makes how you structure the bootstrap a first-order quality lever, not just a latency optimization.
 
-## When This Pattern Applies
+## When this pattern applies
 
 Three conditions need to hold for the install/start split to pay off:
 
 - The platform exposes a cached-install primitive (Cursor's `environment.json` `install`, Copilot's `copilot-setup-steps.yml`) and a per-session primitive (Cursor's `start`, Copilot's `sessionStart` hook)
 - Cacheable work (`npm ci`, `bazel build`, MCP-server install) is meaningfully separable from per-session work (DB seeding, server startup, token rotation)
-- The bootstrap script is treated as production code — pinned versions, lockfile-gated rebuilds, review discipline
+- You treat the bootstrap script as production code — pinned versions, lockfile-gated rebuilds, review discipline
 
-Without all three, fall through to an adjacent lever: the prebuilt-image lever (see [The Prebuilt-Image Lever](#the-prebuilt-image-lever) below) when toolchain is stable, or [runtime-install only](../workflows/agent-environment-bootstrapping.md) when no lifecycle split is available.
+Without all three, fall through to an adjacent lever: the [prebuilt-image lever](#the-prebuilt-image-lever) below when the toolchain is stable, or [runtime-install only](../workflows/agent-environment-bootstrapping.md) when no lifecycle split is available.
 
-## The Lifecycle Split
+## The lifecycle split
 
 Dependency installation has a bimodal cost structure. Most work is cacheable — a locked dependency tree produces the same `node_modules` every time. The rest is per-session — ephemeral credentials, DB seeds, server processes that must be alive when the agent attaches. Splitting these onto separate phases keeps cacheable work off the hot path.
 
@@ -44,23 +44,23 @@ Cursor is explicit about the cache boundary: "After `install` completes, if it t
 
 Copilot is more loosely coupled. `copilot-setup-steps.yml` runs in a separate Actions context before the agent starts ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment)); `sessionStart` hooks live under `.github/hooks/NAME.json` with `version: 1` and a `hooks.sessionStart` array of bash/powershell commands ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/use-hooks)). The platform composes them; the bootstrap author splits work across both files.
 
-## Why It Works
+## Why it works
 
-Cacheable installation is isomorphic to a build artifact; per-session startup is isomorphic to a runtime process. Treating them as one obscures the boundary. The cacheable layer pays the install cost once per snapshot generation and amortises it across N sessions; the start layer keeps per-session actions explicit so failures attribute correctly. Cursor's snapshot is the agent-session-boundary equivalent of Docker layer caching — identical inputs produce identical disk state, and one checkpoint serves every subsequent session until inputs change ([Cursor Docs](https://cursor.com/docs/cloud-agent/setup)). The same separation lets Copilot's `sessionStart` hook run with a 10–30 second timeout while heavy work lives in the cached Actions layer ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/use-hooks)).
+Cacheable installation is isomorphic to a build artifact; per-session startup is isomorphic to a runtime process. Treating them as one obscures the boundary. The cacheable layer pays the install cost once per snapshot generation and amortizes it across many sessions. The start layer keeps per-session actions explicit so failures attribute correctly. Cursor's snapshot is the agent-session-boundary equivalent of Docker layer caching — identical inputs produce identical disk state, and one checkpoint serves every subsequent session until inputs change ([Cursor Docs](https://cursor.com/docs/cloud-agent/setup)). The same separation lets Copilot's `sessionStart` hook run with a 10 to 30 second timeout while heavy work lives in the cached Actions layer ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/use-hooks)).
 
-## When This Backfires
+## When this backfires
 
-- **High dispatch volume on a stable toolchain** — when the toolchain is stable enough to justify the supply-chain pipeline, a prebuilt image (see [The Prebuilt-Image Lever](#the-prebuilt-image-lever)) pulls in less time than a cached install resumes from snapshot; GitHub measured >20% startup improvement from custom Actions images ([GitHub Changelog, 2026-04-27](https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images/)).
-- **Bootstrap-time credential exposure** — the install hook reads more credentials than agent code should ever see: registry tokens, private-package access, baseline OAuth. Without strict secret scoping the install phase becomes a credential exfiltration surface, and any process it starts inherits its environment.
-- **Partial-install proceed-anyway semantics** — Copilot's documented behaviour when `copilot-setup-steps.yml` fails is that "Copilot will start working anyway" ([GitHub Changelog, 2025-07-30](https://github.blog/changelog/2025-07-30-copilot-coding-agent-custom-setup-steps-are-more-reliable-and-easier-to-debug/)). The agent then runs with a half-installed environment and no signal. A bootstrap script must fail loud or the start phase inherits an environment that compiles but does not run.
-- **Unpinned versions** — GitHub's onboarding guide is direct: be "explicit about versions and installation methods rather than letting the agent resolve them ad hoc, precisely to avoid unexpected versions" ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/onboarding-your-ai-peer-programmer-setting-up-github-copilot-coding-agent-for-success/)). Floating versions defeat the snapshot mechanism — the snapshot is only as deterministic as the install that produced it.
-- **Snapshot staleness drift** — long-lived snapshots mask dependency churn the same way stale prebuilt images do; the agent runs against tooling that diverges from what developers see locally.
+- High dispatch volume on a stable toolchain — when the toolchain is stable enough to justify the supply-chain pipeline, a prebuilt image (see [the prebuilt-image lever](#the-prebuilt-image-lever)) pulls in less time than a cached install resumes from snapshot. GitHub measured more than 20% startup improvement from custom Actions images ([GitHub Changelog, 2026-04-27](https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images/)).
+- Bootstrap-time credential exposure — the install hook reads more credentials than agent code should ever see: registry tokens, private-package access, baseline OAuth. Without strict secret scoping the install phase becomes a credential exfiltration surface, and any process it starts inherits its environment.
+- Partial-install proceed-anyway semantics — Copilot's documented behavior when `copilot-setup-steps.yml` fails is that "Copilot will start working anyway" ([GitHub Changelog, 2025-07-30](https://github.blog/changelog/2025-07-30-copilot-coding-agent-custom-setup-steps-are-more-reliable-and-easier-to-debug/)). The agent then runs with a half-installed environment and no signal. A bootstrap script must fail loud or the start phase inherits an environment that compiles but does not run.
+- Unpinned versions — GitHub's onboarding guide is direct: be "explicit about versions and installation methods rather than letting the agent resolve them ad hoc, precisely to avoid unexpected versions" ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/onboarding-your-ai-peer-programmer-setting-up-github-copilot-coding-agent-for-success/)). Floating versions defeat the snapshot mechanism — the snapshot is only as deterministic as the install that produced it.
+- Snapshot staleness drift — long-lived snapshots mask dependency churn the same way stale prebuilt images do. The agent then runs against tooling that diverges from what developers see locally.
 
 ## Example
 
 A team running Cursor cloud agents on a Node monorepo wants to compress per-session bootstrap without committing to a baked image.
 
-**Before** — monolithic bootstrap with everything in one script:
+Before — monolithic bootstrap with everything in one script:
 
 ```json
 {
@@ -71,7 +71,7 @@ A team running Cursor cloud agents on a Node monorepo wants to compress per-sess
 
 `npm ci` is snapshot-cached, but so are `db:seed` and the backgrounded dev server — neither should persist into the snapshot. The DB seed embeds session-specific state into the cached disk image; the snapshot captures whatever filesystem state happens to exist when install returns.
 
-**After** — lifecycle-aware split:
+After — lifecycle-aware split:
 
 ```json
 {
@@ -106,9 +106,9 @@ The Copilot equivalent puts the cacheable work in `.github/workflows/copilot-set
 
 The hook config is on the default branch (Copilot only reads default-branch hook files) and bash/powershell variants run on the matching runner OS ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/use-hooks)).
 
-## The Prebuilt-Image Lever
+## The prebuilt-image lever
 
-When dispatch volume is high and the toolchain is stable, a third structure beats the cached install: bake the runtime — toolchain, dependencies, MCP servers — into a custom container image, so each session pays an image-pull instead of an install. Two cold-start levers compose: compress provisioning (prebuild so the runner pulls a cached artifact instead of running `apt-get`/`npm ci`/`pip install` on the hot path) and remove provisioning from the hot path (start inference against the session log while the sandbox is still spinning up — see [Session Harness Sandbox Separation](session-harness-sandbox-separation.md)). GitHub reported that switching the Copilot cloud agent to GitHub Actions custom images cut startup time by over 20%, a layer on top of an earlier 50% improvement from March 2026 ([GitHub Changelog, 2026-04-27](https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images/)).
+When dispatch volume is high and the toolchain is stable, a third structure beats the cached install: bake the runtime — toolchain, dependencies, MCP servers — into a custom container image, so each session pays an image-pull instead of an install. Two cold-start levers compose: compress provisioning (prebuild so the runner pulls a cached artifact instead of running `apt-get`/`npm ci`/`pip install` on the hot path) and remove provisioning from the hot path (start inference against the session log while the sandbox is still spinning up — see [Session Harness Sandbox Separation](session-harness-sandbox-separation.md)). GitHub reported that switching the Copilot cloud agent to GitHub Actions custom images cut startup time by more than 20%, a layer on top of an earlier 50% improvement from March 2026 ([GitHub Changelog, 2026-04-27](https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images/)).
 
 Bake what is stable across sessions; keep dynamic what is per-session:
 
@@ -140,7 +140,7 @@ jobs:
       - run: ln -s /opt/node_modules node_modules
 ```
 
-Skip this lever when dispatch volume is low (the saved seconds do not amortise the rebuild pipeline and image-review overhead), when the toolchain churns weekly (the image is stale before its next rebuild), or when no signed-registry pipeline exists — without provenance review and signed registries, a custom image trades cold-start latency for amplified supply-chain risk, and the runtime-only path ([Agent Environment Bootstrapping](../workflows/agent-environment-bootstrapping.md)) is safer.
+Skip this lever when dispatch volume is low (the saved seconds do not amortize the rebuild pipeline and image-review overhead), when the toolchain churns weekly (the image is stale before its next rebuild), or when no signed-registry pipeline exists — without provenance review and signed registries, a custom image trades cold-start latency for amplified supply-chain risk, and the runtime-only path ([Agent Environment Bootstrapping](../workflows/agent-environment-bootstrapping.md)) is safer.
 
 ## Key Takeaways
 

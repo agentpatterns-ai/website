@@ -13,9 +13,9 @@ maturity: adopted
 
 > `PostToolUse` hooks replace the string the model sees from any tool call via `updatedToolOutput` — enabling secret redaction, output compression, and platform normalisation.
 
-## The Capability
+## The capability
 
-Claude Code v2.1.121 (April 28, 2026) extended `PostToolUse` hooks to replace tool output for **all** tools, generalising what was previously MCP-only ([changelog](https://code.claude.com/docs/en/changelog)). The hook returns `hookSpecificOutput.updatedToolOutput`; the model receives that string instead of the tool's actual output. The modified output is what gets written to the transcript — the original output is not preserved anywhere ([PostToolUse decision control](https://code.claude.com/docs/en/hooks#posttooluse)).
+Claude Code v2.1.121 (April 28, 2026) extended `PostToolUse` hooks to replace tool output for all tools, generalizing what was previously MCP-only ([changelog](https://code.claude.com/docs/en/changelog)). The hook returns `hookSpecificOutput.updatedToolOutput`; the model receives that string instead of the tool's actual output. The modified output is what gets written to the transcript — the original output is not preserved anywhere ([PostToolUse decision control](https://code.claude.com/docs/en/hooks#posttooluse)).
 
 This is distinct from the two pre-existing modes:
 
@@ -27,18 +27,18 @@ This is distinct from the two pre-existing modes:
 
 `additionalContext` and `updatedToolOutput` can be returned together. `decision: "block"` can also be combined with either to stop the loop with a `reason` ([hooks reference](https://code.claude.com/docs/en/hooks#posttooluse)).
 
-## When To Replace
+## When to replace
 
 Replacement is the right mode when the original output is unsafe or unhelpful for the model to reason over directly:
 
-- **Secret redaction.** Output contains tokens, keys, or PII the model should not see or echo. Asking the model to redact post-hoc fails — the secret has already entered context.
-- **Output compression.** Long shell output (test runners, build logs) consumes context budget; a hook-side summary keeps budget for downstream reasoning, as in [Terminal Output Compression](terminal-output-compression.md).
-- **Platform normalisation.** BSD vs GNU output shape divergence is rewritten to a canonical form so the model's parsing logic works on both.
-- **Structured annotation injection.** Wrap raw tool output in a small envelope (`{"summary": "...", "raw": "..."}`) the model is trained to parse.
+- Secret redaction. Output contains tokens, keys, or PII the model should not see or echo. Asking the model to redact post-hoc fails — the secret has already entered context.
+- Output compression. Long shell output (test runners, build logs) consumes context budget. A hook-side summary keeps budget for downstream reasoning, as in [Terminal Output Compression](terminal-output-compression.md).
+- Platform normalization. A hook rewrites BSD versus GNU output divergence to a canonical form, so the model's parsing logic works on both.
+- Structured annotation injection. Wrap raw tool output in a small envelope (`{"summary": "...", "raw": "..."}`) the model is trained to parse.
 
 For formatting, advisories, or logging — observe-only `PostToolUse` is the right tool. See [Auto-Formatting](../tools/claude/posttooluse-auto-formatting.md) and [BSD/GNU Detection](posttooluse-bsd-gnu-detection.md).
 
-## Hook Shape
+## Hook shape
 
 The input includes `tool_name`, `tool_input`, and `tool_output` (the actual tool result as a string), plus `duration_ms` since v2.1.119 ([Claude Code changelog](https://code.claude.com/docs/en/changelog)):
 
@@ -66,9 +66,9 @@ The hook returns:
 
 The transcript records the replacement string — once replaced, the original output is not preserved anywhere.
 
-## Relationship to Adjacent Primitives
+## Relationship to adjacent primitives
 
-PostToolUse replacement is the harness-side counterpart to the [MCP `_meta` persistence annotation](mcp-result-persistence-annotation.md): the server-side annotation decides whether a result survives compaction; the local hook decides what the result looks like to the model.
+PostToolUse replacement is the harness-side counterpart to the [MCP `_meta` persistence annotation](mcp-result-persistence-annotation.md). The server-side annotation decides whether a result survives compaction. The local hook decides what the result looks like to the model.
 
 | Control point | Owner | Decides |
 |---------------|-------|---------|
@@ -83,7 +83,7 @@ Server-owned and harness-owned controls compose: an MCP server can mark a result
 
 A `PostToolUse` hook on `Bash` redacts AWS access keys and bearer tokens from any output before the model sees it. The original output is not preserved once replaced — only the redacted form exists in the transcript.
 
-**`.claude/hooks/redact-secrets.sh`**:
+`.claude/hooks/redact-secrets.sh`:
 
 ```bash
 #!/usr/bin/env bash
@@ -103,7 +103,7 @@ if [ "$OUTPUT" != "$REDACTED" ]; then
 fi
 ```
 
-**`.claude/settings.json`**:
+`.claude/settings.json`:
 
 ```json
 {
@@ -120,16 +120,16 @@ fi
 }
 ```
 
-The agent runs `kubectl get secrets`; the model sees the redacted form and cannot leak the actual token in subsequent responses or tool calls. Once replaced, only the redacted form exists in the transcript.
+The agent runs `kubectl get secrets`. The model sees the redacted form and cannot leak the actual token in subsequent responses or tool calls. Once replaced, only the redacted form exists in the transcript.
 
-## When This Backfires
+## When this backfires
 
 Replacement is the sharpest mode of `PostToolUse` and the easiest to misuse. Four conditions make it worse than the alternative:
 
-- **Lossy summarisation drops the field the model needs next.** Compressing 50KB of test output to "200 lines, 3 errors" works until the model needs the exact line number from line 47 — which is no longer in context or transcript. Prefer `additionalContext` for hints layered onto the full output unless context budget is the actual bottleneck.
-- **Concurrent hooks race on the same tool.** Multiple `PostToolUse` hooks registered on the same matcher each return their own `updatedToolOutput`; the docs do not guarantee deterministic merge order. The same race is documented for `PreToolUse` `updatedInput` ([Hooks and Lifecycle Events](hooks-lifecycle-events.md)). Register at most one rewriting hook per matcher.
-- **Silent error masking.** A redactor that strips stderr-style fragments to make output cleaner can hide real failures from the model — the tool succeeded by exit code, the hook sanitised the output, and the model never sees the warning that would have triggered a fix. Test rewrite rules against actual failure transcripts before deploying.
-- **Replacement is permanent — there is no audit log of the original.** The transcript records only the replacement string from `updatedToolOutput`. If the hook strips a warning that would have identified a bug, neither the model nor the developer can recover the original text post-session. Keep rewrites minimal and reversible (regex substitution, not summarisation) and test rewrite rules against actual failure transcripts before deploying.
+- Lossy summarization drops the field the model needs next. Compressing 50KB of test output to "200 lines, 3 errors" works until the model needs the exact line number from line 47 — which is no longer in context or transcript. Prefer `additionalContext` for hints layered onto the full output unless context budget is the actual bottleneck.
+- Concurrent hooks race on the same tool. Multiple `PostToolUse` hooks registered on the same matcher each return their own `updatedToolOutput`. The docs do not guarantee deterministic merge order. The same race is documented for `PreToolUse` `updatedInput` ([Hooks and Lifecycle Events](hooks-lifecycle-events.md)). Register at most one rewriting hook per matcher.
+- Silent error masking. A redactor that strips stderr-style fragments to make output cleaner can hide real failures from the model — the tool succeeded by exit code, the hook sanitized the output, and the model never sees the warning that would have triggered a fix. Test rewrite rules against actual failure transcripts before deploying.
+- Replacement is permanent — there is no audit log of the original. The transcript records only the replacement string from `updatedToolOutput`. If the hook strips a warning that would have identified a bug, neither the model nor the developer can recover the original text post-session. Keep rewrites minimal and reversible (regex substitution, not summarization) and test rewrite rules against actual failure transcripts before deploying.
 
 ## Key Takeaways
 

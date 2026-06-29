@@ -19,26 +19,26 @@ maturity: emerging
 
 > Decentralized memory gives each agent a private store instead of a shared one, so each specialises on its own task distribution.
 
-Decentralized memory in a multi-agent system gives each agent its own persistent local store rather than a shared central repository — improvement becomes a federated process where each agent accumulates role-specific expertise without coordinating writes. The trade is write contention and central-store staleness in exchange for divergence between agents and loss of the shared-signal benefit a central store provides.
+Decentralized memory gives each agent in a multi-agent system its own persistent local store, rather than a shared central repository. Improvement becomes a federated process: each agent builds role-specific expertise without coordinating writes. The trade swaps write contention and central-store staleness for divergence between agents and the loss of the shared-signal benefit a central store provides.
 
-## When This Pattern Applies
+## When this pattern applies
 
-The architecture is **qualified** — verify all four preconditions before adopting:
+This is a qualified architecture. Verify all four preconditions before adopting:
 
-1. **Large enough agent population** — at single-digit agent counts, central-store contention is not a real cost; the dual-pool machinery is pure overhead.
-2. **Heterogeneous-enough workloads** — per-agent specialisation assumes each agent sees a consistent task distribution; under uniform workloads, agents redundantly relearn the same lessons.
-3. **Long-enough deployments** — the regret bound is asymptotic in T ([Hao, Long, Zhao 2026, §3](https://arxiv.org/abs/2605.22721)); short deployments never amortise the bandit machinery.
-4. **Trusted writers** — N independent stores multiply the memory-poisoning surface ([Memory Poisoning in MAS, arxiv 2603.20357](https://arxiv.org/abs/2603.20357)).
+1. Large enough agent population: at single-digit agent counts, central-store contention is not a real cost, and the dual-pool machinery is pure overhead.
+2. Heterogeneous-enough workloads: per-agent specialization assumes each agent sees a consistent task distribution. Under uniform workloads, agents relearn the same lessons.
+3. Long-enough deployments: the regret bound is asymptotic in T ([Hao, Long, Zhao 2026, §3](https://arxiv.org/abs/2605.22721)). Short deployments never amortize the bandit machinery.
+4. Trusted writers: N independent stores multiply the memory-poisoning surface ([Memory Poisoning in MAS, arxiv 2603.20357](https://arxiv.org/abs/2603.20357)).
 
 If any precondition fails, prefer a shared store or a single-agent design — see [agent memory patterns](../agent-design/agent-memory-patterns.md) or [tiered memory architecture](../agent-design/tiered-memory-architecture.md).
 
 ## Architecture
 
-Each agent maintains a **dual-pool memory** that the agent updates without coordination with peers ([Hao, Long, Zhao 2026](https://arxiv.org/abs/2605.22721)):
+Each agent maintains a dual-pool memory and updates it without coordinating with peers ([Hao, Long, Zhao 2026](https://arxiv.org/abs/2605.22721)):
 
-- **Exploitation pool** — consolidated past trajectories for solutions the agent has verified
-- **Exploration pool** — LLM-generated candidates for novel contexts the exploitation pool does not cover
-- **Stage-wise reweighting** — an LLM-as-judge scores recent stages and adjusts the relative weight of each pool from feedback
+- Exploitation pool: consolidated past trajectories for solutions the agent has verified
+- Exploration pool: LLM-generated candidates for novel contexts the exploitation pool does not cover
+- Stage-wise reweighting: an LLM-as-judge scores recent stages and adjusts the weight of each pool from feedback
 
 ```mermaid
 graph LR
@@ -56,26 +56,26 @@ graph LR
 
 Other agents in the system run the same loop against their own pools. Writes never cross agents.
 
-## Why It Works
+## Why it works
 
-Decentralized memory works because it **separates write contention from retrieval competition** and lets each agent's exploitation pool anchor on its own task distribution rather than diluting against unrelated peers' episodes — the dilution argument that motivates [tiered memory architectures](../agent-design/tiered-memory-architecture.md) at the single-agent level. The exploration pool adds a stochastic-bandit term bounded at O(log T) cumulative regret, giving each agent a controlled rate of trying novel candidates against accumulated solutions ([Hao, Long, Zhao 2026, §3](https://arxiv.org/abs/2605.22721)). Independent results from [G-Memory](https://arxiv.org/abs/2506.07398) and [Trainable Graph Memory](https://arxiv.org/html/2511.07800v1) reach comparable improvements via explicit relational structure rather than per-agent isolation — evidence that the operative variable is separating retrieval competition from write contention, not isolation per se. Tiering and graph-structuring are alternative levers on the same trade.
+Decentralized memory works because it separates write contention from retrieval competition. Each agent's exploitation pool anchors on its own task distribution, rather than diluting against unrelated peers' episodes. This is the same dilution argument that motivates [tiered memory architectures](../agent-design/tiered-memory-architecture.md) at the single-agent level. The exploration pool adds a stochastic-bandit term bounded at O(log T) cumulative regret. That gives each agent a controlled rate of trying novel candidates against accumulated solutions ([Hao, Long, Zhao 2026, §3](https://arxiv.org/abs/2605.22721)). Independent results from [G-Memory](https://arxiv.org/abs/2506.07398) and [Trainable Graph Memory](https://arxiv.org/html/2511.07800v1) reach comparable improvements through explicit relational structure rather than per-agent isolation. This is evidence that the operative variable is separating retrieval competition from write contention, not isolation by itself. Tiering and graph-structuring are alternative levers on the same trade.
 
-## Reported Numbers
+## Reported numbers
 
-DecentMem reports up to **+23.8% accuracy** over the strongest centralized-memory baseline, **+52.5%** over no-memory systems, and **49% token reduction** across AutoGen, DyLAN, and AgentNet on Qwen3 (4B/8B/14B) and Gemma4 (E2B/E4B) backbones across five math, code, QA, and embodied benchmarks ([Hao, Long, Zhao 2026](https://arxiv.org/abs/2605.22721)). These are preprint numbers, unreplicated — treat the architecture as defensible, not the numbers as load-bearing.
+DecentMem reports up to +23.8% accuracy over the strongest centralized-memory baseline, +52.5% over no-memory systems, and a 49% token reduction. These results span AutoGen, DyLAN, and AgentNet on Qwen3 (4B/8B/14B) and Gemma4 (E2B/E4B) backbones, across five math, code, QA, and embodied benchmarks ([Hao, Long, Zhao 2026](https://arxiv.org/abs/2605.22721)). These are preprint numbers, and unreplicated. Treat the architecture as defensible, but not the numbers as load-bearing.
 
-## What Coordination Actually Remains
+## What coordination actually remains
 
-The system is more accurately described as **locally-decentralized, globally-coordinated**. The published design retains a task router, a shared LLM backbone (de facto alignment through identical weights), the LLM-as-judge that reweights pools (a shared evaluator with cross-agent influence), and shared benchmark definitions. Central-store contention is only one of several centralised dependencies — account for the rest when sizing the gain.
+The system is more accurately described as locally-decentralized but globally-coordinated. The published design keeps a task router, a shared LLM backbone (aligned in effect through identical weights), the LLM-as-judge that reweights pools (a shared evaluator with cross-agent influence), and shared benchmark definitions. Central-store contention is only one of several centralized dependencies. Account for the rest when sizing the gain.
 
-## When This Backfires
+## When this backfires
 
-Beyond the precondition failures above, two additional failure modes are worth naming:
+Beyond the precondition failures above, two more failure modes are worth naming:
 
-- **Tasks requiring global coherence** — when agents must produce mutually consistent artifacts (shared schemas, joined outputs), per-agent divergent memory produces locally-correct but globally-inconsistent decisions, the canonical decentralised-topology failure mode ([Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)).
-- **Faithfulness gaps** — agents with private memory frequently regress, acknowledge mistakes then repeat them, and apply learned strategies inconsistently ([arxiv 2601.22436](https://arxiv.org/pdf/2601.22436)). Private memory alone does not produce reliable self-improvement.
+- Tasks requiring global coherence: when agents must produce mutually consistent artifacts (shared schemas, joined outputs), per-agent divergent memory produces locally-correct but globally-inconsistent decisions. This is the canonical decentralized-topology failure mode ([Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)).
+- Faithfulness gaps: agents with private memory frequently regress, acknowledge mistakes then repeat them, and apply learned strategies inconsistently ([arxiv 2601.22436](https://arxiv.org/pdf/2601.22436)). Private memory alone does not produce reliable self-improvement.
 
-A poisoned LLM-as-judge is a particular concern even with the "trusted writers" precondition held — the judge is shared across the supposedly-independent agents and propagates incorrect reweighting to every agent simultaneously.
+A poisoned LLM-as-judge is a particular concern even when the "trusted writers" precondition holds. The judge is shared across the supposedly-independent agents, so it propagates incorrect reweighting to every agent at once.
 
 ## Key Takeaways
 

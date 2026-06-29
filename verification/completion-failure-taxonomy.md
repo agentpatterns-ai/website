@@ -16,9 +16,9 @@ maturity: emerging
 
 > Not every rejected completion is a model failure. A quarter of real-world completion failures trace to integration problems — when the tool fires, what context it sends, and whether the suggestion was even needed.
 
-## The Three Failure Categories
+## The three failure categories
 
-Code4Me collected 600K+ real completions from 1,200+ developers across 12 languages. Analysis of 8,312 failures revealed three categories with stable proportions. [Source: [Izadi et al., ICSE 2024](https://arxiv.org/abs/2402.16197)]
+Code4Me collected 600K+ real completions from 1,200+ developers across 12 languages. The researchers analyzed 8,312 failures and found three categories with stable proportions. [Source: [Izadi et al., ICSE 2024](https://arxiv.org/abs/2402.16197)]
 
 ```mermaid
 pie title Completion Failure Distribution (n = 8,312)
@@ -48,7 +48,7 @@ The integration layer caused the failure, not the model:
 | Insufficient context | 482 | The IDE sent too little surrounding code for the model to produce a useful completion |
 | Redundant invocation | 240 | Completion fired when no suggestion was needed — wasting a round-trip and interrupting flow |
 
-Nearly **one in four failures** had nothing to do with model capability — the actionable category for agent builders.
+Nearly one in four failures had nothing to do with model capability. This is the category agent builders can act on.
 
 ### User overrides (9.3%)
 
@@ -61,9 +61,9 @@ The model output was acceptable but rejected:
 
 Not true failures — the irreducible gap between prediction and developer intent.
 
-## The Benchmark Gap
+## The benchmark gap
 
-The study's key finding: **offline evaluations substantially misrepresent real-world effectiveness**.
+The study's main finding: offline evaluations substantially misrepresent real-world effectiveness.
 
 | Setting | Metric behavior |
 |---------|----------------|
@@ -72,21 +72,21 @@ The study's key finding: **offline evaluations substantially misrepresent real-w
 
 Corroboration: LLMs achieve 84–89% on synthetic benchmarks but only 25–34% on real-world class-level tasks. [Source: [arxiv 2510.26130](https://arxiv.org/abs/2510.26130)]
 
-The gap stems from:
+The gap comes from:
 
 - Benchmark inputs are clean; real code has typos, partial expressions, and mid-edit states
 - Benchmarks provide full file context; real invocations often have truncated context
-- Benchmarks measure correctness; real usage also requires timing and style match
+- Benchmarks measure correctness; real usage also needs timing and style match
 
-## Practical Implications for Agent Builders
+## Practical implications for agent builders
 
 ### 1. Audit the integration layer, not just the model
 
-If ~25% of failures are application-oriented, improving the model alone hits diminishing returns. Measure and optimize:
+If ~25% of failures are application-oriented, improving the model alone hits diminishing returns. Measure and improve:
 
-- **Invocation timing** — debounce triggers to avoid mid-token firing
-- **Context assembly** — include surrounding code, imports, and type information
-- **Relevance gating** — suppress completions when editing patterns suggest none is needed
+- Invocation timing: debounce triggers to avoid mid-token firing
+- Context assembly: include surrounding code, imports, and type information
+- Relevance gating: suppress completions when editing patterns suggest none is needed
 
 ### 2. Use real-world telemetry for evaluation
 
@@ -100,15 +100,15 @@ Roughly 1-in-10 suggestions is correct but unwanted — a signal for style misma
 
 InCoder led across 12 languages, but mainstream ones (Python, Java) scored higher than less common ones. Do not assume Python performance predicts Rust or Kotlin — evaluate per-language.
 
-## When This Taxonomy Backfires
+## When this taxonomy backfires
 
 The 66 / 24 / 9 split is a useful prior, not a fixed budget:
 
-- **Ratios are model- and cohort-specific.** The study used first-gen code LMs (InCoder, UniXcoder, CodeGPT). Better models shrink the model-oriented share and raise the relative weight of integration errors.
-- **Integration gains plateau.** Smart-invocation work raised acceptance from ~4.9% to ~18.6% [Source: [Koohestani et al., arxiv 2405.14753](https://arxiv.org/abs/2405.14753)]. Past that, gains come from model capability and context quality, not more timing heuristics.
-- **Narrow cohorts may skip harness work.** Single-language teams on recent models often clear the bar off-the-shelf; the "just upgrade the model" steelman holds in that regime.
-- **Non-mainstream languages invert priorities.** For Rust, Kotlin, or niche DSLs, thin training data dominates; invocation tuning cannot compensate.
-- **Override data needs good instrumentation.** If telemetry cannot separate "rejected because wrong" from "rejected because already typed", the 9.3% bucket is noise.
+- Ratios are model- and cohort-specific. The study used first-gen code LMs (InCoder, UniXcoder, CodeGPT). Better models shrink the model-oriented share and raise the relative weight of integration errors.
+- Integration gains plateau. Smart-invocation work raised acceptance from ~4.9% to ~18.6% [Source: [Koohestani et al., arxiv 2405.14753](https://arxiv.org/abs/2405.14753)]. Past that, gains come from model capability and context quality, not more timing heuristics.
+- Narrow cohorts may skip harness work. Single-language teams on recent models often clear the bar off-the-shelf; the "just upgrade the model" steelman holds in that regime.
+- Non-mainstream languages invert priorities. For Rust, Kotlin, or niche DSLs, thin training data dominates; invocation tuning cannot compensate.
+- Override data needs good instrumentation. If telemetry cannot separate "rejected because wrong" from "rejected because already typed", the 9.3% bucket is noise.
 
 ## Key Takeaways
 

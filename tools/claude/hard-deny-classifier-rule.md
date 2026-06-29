@@ -18,7 +18,7 @@ status: current
 
 > The `autoMode.hard_deny` field blocks tool calls unconditionally inside the auto-mode classifier — user intent and allow exceptions do not apply.
 
-## Three Deny Layers, Not One
+## Three deny layers, not one
 
 Claude Code stacks three distinct deny mechanisms. They run at different stages and offer different guarantees:
 
@@ -30,9 +30,9 @@ Claude Code stacks three distinct deny mechanisms. They run at different stages 
 
 `hard_deny` shipped in Claude Code 2.1.136 (2026-05-08): "Added `settings.autoMode.hard_deny` for auto mode classifier rules that block unconditionally regardless of user intent or allow exceptions" ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 
-`permissions.deny` is the deterministic, pre-classifier floor. `hard_deny` is the inside-classifier floor — still evaluated by an LLM, but unaffected by the argumentation that can lift a `soft_deny`. For actions that must never run regardless of intent or classifier config, the [permissions docs](https://code.claude.com/docs/en/permissions) direct you to `permissions.deny` in managed settings; it blocks before the classifier is consulted.
+`permissions.deny` is the deterministic, pre-classifier floor. `hard_deny` is the inside-classifier floor — still evaluated by an LLM, but unaffected by the argument that can lift a `soft_deny`. For actions that must never run regardless of intent or classifier config, the [permissions docs](https://code.claude.com/docs/en/permissions) direct you to `permissions.deny` in managed settings; it blocks before the classifier is consulted.
 
-## Precedence Inside the Classifier
+## Precedence inside the classifier
 
 Auto mode's classifier evaluates its four list fields in this order ([Configure auto mode](https://code.claude.com/docs/en/auto-mode-config)):
 
@@ -53,7 +53,7 @@ graph TD
 
 "Explicit user intent" means the user's message describes the exact action — asking Claude to "force-push this branch" counts; asking to "clean up the repo" does not.
 
-## Syntax and the `$defaults` Sentinel
+## Syntax and the `$defaults` sentinel
 
 Each list field is an array of prose strings. Entries are natural-language rules, not regex or tool patterns:
 
@@ -69,9 +69,9 @@ Each list field is an array of prose strings. Entries are natural-language rules
 }
 ```
 
-The literal `"$defaults"` splices in Anthropic's built-in rules at that position. **Omitting `"$defaults"` replaces the entire default list** — the [auto-mode config docs](https://code.claude.com/docs/en/auto-mode-config) flag this with a Danger callout: "A `hard_deny` array without `"$defaults"` discards the built-in data exfiltration and auto-mode bypass rules." Adding one custom rule without the sentinel silently deletes that floor. Print the built-ins with `claude auto-mode defaults` before taking full ownership.
+The literal `"$defaults"` splices in Anthropic's built-in rules at that position. Omitting `"$defaults"` replaces the entire default list — the [auto-mode config docs](https://code.claude.com/docs/en/auto-mode-config) flag this with a Danger callout: "A `hard_deny` array without `"$defaults"` discards the built-in data exfiltration and auto-mode bypass rules." Adding one custom rule without the sentinel silently deletes that floor. Print the built-ins with `claude auto-mode defaults` before you take full ownership.
 
-## Where the Classifier Reads `autoMode`
+## Where the classifier reads `autoMode`
 
 The classifier merges `autoMode` from these scopes ([Configure auto mode](https://code.claude.com/docs/en/auto-mode-config)):
 
@@ -82,17 +82,17 @@ The classifier merges `autoMode` from these scopes ([Configure auto mode](https:
 | Organization-wide | [Managed settings](managed-settings-drop-in.md) | Distributed policy |
 | Inline | `--settings` flag or Agent SDK | Per-invocation overrides |
 
-The classifier **does not read** `autoMode` from shared `.claude/settings.json`, so a checked-in repo cannot inject its own allow rules. Entries are additive across scopes: a developer can extend `hard_deny` with personal entries but cannot remove entries that managed settings provide.
+The classifier does not read `autoMode` from shared `.claude/settings.json`, so a checked-in repo cannot inject its own allow rules. Entries are additive across scopes: a developer can extend `hard_deny` with personal entries but cannot remove entries that managed settings provide.
 
-## When `hard_deny` Is the Right Tool
+## When `hard_deny` is the right tool
 
-Use `hard_deny` when the rule is **classifier-shaped** — it describes intent or destination ("never exfiltrate to third-party code-review APIs"), not a tool-pattern match. LLM-mediated interpretation is acceptable, and you want the rule to participate in the classifier's reasoning without being argued out of.
+Use `hard_deny` when the rule is classifier-shaped — it describes intent or destination ("never exfiltrate to third-party code-review APIs"), not a tool-pattern match. LLM-mediated interpretation is acceptable, and you want the rule to join the classifier's reasoning without being argued out of it.
 
-Use `permissions.deny` instead when the rule is **tool-shaped** — it matches a specific command or domain pattern (`Bash(rm -rf /*)`, `WebFetch(domain:internal.example.com)`), compliance needs deterministic pre-classifier enforcement, or the block must apply even when auto mode is disabled. Tool-shaped rules now reach below the tool name: Claude Code added `Tool(param:value)` parameter-scoped permission rules that match on a specific tool *parameter value* rather than only the tool name ([Claude Code changelog](https://code.claude.com/docs/en/changelog)), tightening the deterministic floor for cases where the danger lives in an argument, not the verb.
+Use `permissions.deny` instead when the rule is tool-shaped — it matches a specific command or domain pattern (`Bash(rm -rf /*)`, `WebFetch(domain:internal.example.com)`), compliance needs deterministic pre-classifier enforcement, or the block must apply even when auto mode is disabled. Tool-shaped rules now reach below the tool name: Claude Code added `Tool(param:value)` parameter-scoped permission rules that match on a specific tool parameter value rather than only the tool name ([Claude Code changelog](https://code.claude.com/docs/en/changelog)), tightening the deterministic floor for cases where the danger lives in an argument, not the verb.
 
 Use OS-level [sandboxing](https://code.claude.com/docs/en/sandboxing) as a third layer when blast-radius containment matters at the process boundary, not just the agent decision boundary.
 
-## Inspect and Validate
+## Inspect and validate
 
 Three CLI subcommands check what the classifier sees ([Configure auto mode](https://code.claude.com/docs/en/auto-mode-config)):
 
@@ -102,15 +102,15 @@ claude auto-mode config      # effective rules with "$defaults" expanded
 claude auto-mode critique    # AI feedback on custom allow/deny rules
 ```
 
-Run `claude auto-mode config` after saving settings to confirm the merged result is what you expect. `claude auto-mode critique` flags entries that are ambiguous, redundant, or likely to cause false positives — useful before committing a fragment to managed settings.
+Run `claude auto-mode config` after saving settings to confirm the merged result is what you expect. `claude auto-mode critique` flags entries that are ambiguous, redundant, or likely to cause false positives — useful before you commit a fragment to managed settings.
 
-## When This Backfires
+## When this backfires
 
-- **Treating `hard_deny` as deterministic** — the classifier is an LLM. Rule interpretation is probabilistic; a novel re-framing can still slip through. Compliance-grade enforcement belongs in `permissions.deny` or the sandbox layer.
-- **Auto mode disabled or unavailable** — `hard_deny` is part of `autoMode`. On Pro plans or Bedrock/Vertex/Foundry providers, auto mode is unavailable ([Configure auto mode](https://code.claude.com/docs/en/auto-mode-config)) and the rules never run. Settings with `permissions.disableAutoMode: "disable"` produce the same silent no-op.
-- **Replacement-without-`$defaults`** — the single most common configuration mistake. Always include `"$defaults"` unless you have explicitly chosen to take full ownership of the list.
-- **Solo developer settings** — `hard_deny` only delivers organizational guarantees when an admin owns managed settings. In user or local settings, the same developer can remove the rule they added.
-- **In-project file writes skip the classifier entirely** — auto mode tiers its actions: file writes and edits inside the project directory run without a classifier call ([How we built Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)). A `hard_deny` rule like "never write production credentials to a file" never fires when the write lands inside the repo. Only operations the classifier sees — shell commands, web fetches, out-of-project writes — are subject to it.
+- Treating `hard_deny` as deterministic — the classifier is an LLM. Rule interpretation is probabilistic; a novel re-framing can still slip through. Compliance-grade enforcement belongs in `permissions.deny` or the sandbox layer.
+- Auto mode disabled or unavailable — `hard_deny` is part of `autoMode`. On Pro plans or Bedrock/Vertex/Foundry providers, auto mode is unavailable ([Configure auto mode](https://code.claude.com/docs/en/auto-mode-config)) and the rules never run. Settings with `permissions.disableAutoMode: "disable"` produce the same silent no-op.
+- Replacement without `$defaults` — the single most common configuration mistake. Always include `"$defaults"` unless you have explicitly chosen to take full ownership of the list.
+- Solo developer settings — `hard_deny` only delivers organizational guarantees when an admin owns managed settings. In user or local settings, the same developer can remove the rule they added.
+- In-project file writes skip the classifier entirely — auto mode tiers its actions: file writes and edits inside the project directory run without a classifier call ([How we built Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)). A `hard_deny` rule like "never write production credentials to a file" never fires when the write lands inside the repo. Only operations the classifier sees — shell commands, web fetches, out-of-project writes — are subject to it.
 
 ## Example
 
@@ -143,7 +143,7 @@ Failures appear in `/permissions` under Recently denied. To react programmatical
 
 ## Key Takeaways
 
-- `hard_deny` is the unconditional layer **inside** the auto-mode classifier — distinct from `permissions.deny` (pre-classifier, deterministic) and `soft_deny` (overridable by `allow` or explicit intent)
+- `hard_deny` is the unconditional layer inside the auto-mode classifier — distinct from `permissions.deny` (pre-classifier, deterministic) and `soft_deny` (overridable by `allow` or explicit intent)
 - User intent and `allow` exceptions do not lift a `hard_deny` match
 - Entries are prose, read as natural-language rules — not tool patterns or regex
 - Omitting `"$defaults"` from any `autoMode` list replaces the entire default — including built-in exfiltration and safety-check rules
@@ -154,3 +154,4 @@ Failures appear in `/permissions` under Recently denied. To react programmatical
 - [Auto Mode](auto-mode.md) — Classifier architecture, evaluation order, false-negative rates
 - [Managed Settings Drop-In Directory](managed-settings-drop-in.md) — Deploying `autoMode` policy across an org
 - [Confirmation Gates](../../security/human-in-the-loop-confirmation-gates.md) — Human-in-the-loop checks for consequential actions
+- [Parameter-Level Permission Rules](tool-param-value-permission-rules.md) — Deterministic `Tool(param:value)` rules outside the classifier layer

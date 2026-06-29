@@ -16,13 +16,13 @@ maturity: established
 
 > Store reusable, parameterized prompt templates as version-controlled files that team members invoke on demand, reducing prompt variation and embedding file-based context into repeatable workflows.
 
-## The Concept
+## The concept
 
-Prompt files are Markdown files (`.prompt.md`) stored in a repository that encode repeatable agent tasks — generating tests, reviewing code, creating components, or migrating patterns. Unlike always-on repository instructions, they are invoked manually and sit in the **task-specific, on-demand layer** of the instruction hierarchy.
+Prompt files are Markdown files (`.prompt.md`) stored in a repository. They encode repeatable agent tasks: generating tests, reviewing code, creating components, or migrating patterns. Unlike always-on repository instructions, you invoke them by hand. They sit in the task-specific, on-demand layer of the instruction hierarchy.
 
-The value is standardization: five developers writing their own "add unit tests" prompt produce five different results, while a shared prompt file with embedded file references and structured conventions produces consistent output across the team.
+The value is standardization. Five developers writing their own "add unit tests" prompt produce five different results. A shared prompt file with embedded file references and structured conventions produces consistent output across the team.
 
-## Anatomy of a Prompt File
+## Anatomy of a prompt file
 
 In GitHub Copilot, prompt files live in `.github/prompts/` and use YAML frontmatter plus Markdown body content ([VS Code: Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files)).
 
@@ -46,7 +46,7 @@ Generate tests for the specified module using Arrange-Act-Assert pattern.
 Ensure coverage of edge cases and error paths.
 ```
 
-### Frontmatter Fields
+### Frontmatter fields
 
 | Field | Purpose |
 |-------|---------|
@@ -59,16 +59,16 @@ Ensure coverage of edge cases and error paths.
 
 Source: [VS Code Prompt Files documentation](https://code.visualstudio.com/docs/copilot/customization/prompt-files)
 
-### File References
+### File references
 
 Prompt files embed workspace context through two mechanisms:
 
-- **Markdown links**: `[label](../../relative/path)` — injects the referenced file's content
-- **Hash references**: `#file:../../relative/path` — alternative syntax for the same purpose
+- Markdown links: `[label](../../relative/path)` inject the referenced file's content
+- Hash references: `#file:../../relative/path` are an alternative syntax for the same purpose
 
-File references are the differentiating feature: they ground a generic prompt in the project's actual schemas, conventions, and examples. A test generation prompt that references real test files produces output matching the team's patterns rather than the model's defaults.
+File references are the feature that sets prompt files apart. They ground a generic prompt in the project's actual schemas, conventions, and examples. A test-generation prompt that references real test files produces output matching the team's patterns rather than the model's defaults.
 
-### Variable Substitution
+### Variable substitution
 
 Prompts support dynamic values ([VS Code: Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files)):
 
@@ -77,7 +77,7 @@ Prompts support dynamic values ([VS Code: Prompt Files](https://code.visualstudi
 | `${selection}` | Current editor selection |
 | `${input:name:placeholder}` | User-provided value at invocation |
 
-## Where Prompt Files Fit in the Instruction Hierarchy
+## Where prompt files fit in the instruction hierarchy
 
 Copilot uses three instruction layers, each with different scoping and activation ([GitHub Docs: Custom Instructions](https://docs.github.com/en/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot)):
 
@@ -87,13 +87,13 @@ Copilot uses three instruction layers, each with different scoping and activatio
 | Path-specific | `.github/instructions/*.instructions.md` | Automatic when file path matches glob | Domain-specific rules |
 | Task-specific | `.github/prompts/*.prompt.md` | Manual invocation via `/` command | On-demand workflows |
 
-Applicable layers combine rather than replace each other: a prompt file invocation receives repository-wide instructions, matching path-specific instructions, and the prompt file content together.
+Applicable layers combine rather than replace each other. When you invoke a prompt file, it receives repository-wide instructions, matching path-specific instructions, and the prompt file content together.
 
-### Tool Priority Resolution
+### Tool priority resolution
 
 When a prompt file specifies `tools` in frontmatter, the resolution order is: prompt file tools > referenced agent tools > default agent tools ([VS Code: Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files)).
 
-## Cross-Tool Equivalents
+## Cross-tool equivalents
 
 | Tool | Mechanism | Location | Invocation |
 |------|-----------|----------|------------|
@@ -101,11 +101,11 @@ When a prompt file specifies `tools` in frontmatter, the resolution order is: pr
 | Claude Code | Skills (`SKILL.md`) | `.claude/skills/<name>/` | `/` slash commands |
 | Cursor | Project Rules | `.cursor/rules/` | Auto-apply or glob-matched |
 
-**Claude Code Skills** follow the [Agent Skills open standard](https://agentskills.io) — see [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md) — supporting `$ARGUMENTS` substitution, subagent execution via `context: fork`, and dynamic shell injection.
+Claude Code Skills follow the [Agent Skills open standard](https://agentskills.io) — see [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md). They support `$ARGUMENTS` substitution, subagent execution via `context: fork`, and dynamic shell injection.
 
-**Cursor Rules** activate based on context via glob-pattern scoping ([Cursor: Rules](https://cursor.com/docs/context/rules)) — unlike prompt files, they are not manually invoked.
+Cursor Rules activate based on context via glob-pattern scoping ([Cursor: Rules](https://cursor.com/docs/context/rules)). Unlike prompt files, you do not invoke them by hand.
 
-## Library Organization
+## Library organization
 
 Organize prompt files by workflow stage or domain:
 
@@ -150,14 +150,14 @@ For the given resource:
 
 A developer invokes `/add-endpoint` in Copilot Chat, enters "invoices" as the argument, and receives scaffolded code that follows the team's existing routing, validation, and test patterns — because the prompt file references those real project files rather than relying on the model's generic knowledge.
 
-## When This Backfires
+## When this backfires
 
 Prompt file libraries degrade in several predictable conditions:
 
-- **Stale file references** — embedded paths to test examples, schemas, or convention docs go silently wrong when the source files are renamed, moved, or updated, leaving the prompt to generate output from outdated context.
-- **Single-workspace scope** — files in `.github/prompts/` apply only to that workspace; teams sharing conventions across repos must copy and synchronize, reintroducing the variation the library was meant to solve.
-- **Silent tool unavailability** — tools declared in `tools:` frontmatter that are not installed or authorized at invocation are ignored without warning, producing different results with no signal that capabilities are missing.
-- **Overhead on small teams** — PR-driven creation and review adds process; for teams under three developers or with infrequent task repetition, the overhead exceeds the consistency benefit of inline prompting.
+- Stale file references: embedded paths to test examples, schemas, or convention docs go silently wrong when the source files are renamed, moved, or updated, leaving the prompt to generate output from outdated context.
+- Single-workspace scope: files in `.github/prompts/` apply only to that workspace, so teams sharing conventions across repos must copy and synchronize, reintroducing the variation the library was meant to solve.
+- Silent tool unavailability: tools declared in `tools:` frontmatter that are not installed or authorized at invocation are ignored without warning, producing different results with no signal that capabilities are missing.
+- Overhead on small teams: PR-driven creation and review adds process, so for teams under three developers or with infrequent task repetition, the overhead exceeds the consistency benefit of inline prompting.
 
 ## Key Takeaways
 

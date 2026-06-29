@@ -21,9 +21,9 @@ maturity: adopted
 
 > Run Claude non-interactively in CI/CD pipelines using print mode (`-p`) and cap agentic steps with `--max-turns` to keep pipelines predictable and cost-bounded.
 
-**Learn it hands-on:** [Agents in the Pipeline](https://learn.agentpatterns.ai/workflows/agents-in-the-pipeline/) — guided lesson with quizzes.
+Learn it hands-on: [Agents in the Pipeline](https://learn.agentpatterns.ai/workflows/agents-in-the-pipeline/) — guided lesson with quizzes.
 
-## Print Mode
+## Print mode
 
 `claude -p "<prompt>"` runs Claude non-interactively and exits when done ([CLI reference](https://code.claude.com/docs/en/cli-reference)). Output goes to stdout.
 
@@ -33,9 +33,9 @@ Claude accepts piped stdin as context:
 git diff main --name-only | claude -p "review these changed files for security issues"
 ```
 
-No additional prompt engineering is needed — piped content arrives before the prompt is processed.
+You do not need extra prompt engineering. The piped content arrives before Claude processes the prompt.
 
-## Capping Agentic Steps
+## Capping agentic steps
 
 Without a turn limit, an agentic run can loop indefinitely on ambiguous tasks. `--max-turns <N>` sets a hard ceiling on reasoning steps and exits with an error when reached ([CLI reference](https://code.claude.com/docs/en/cli-reference)):
 
@@ -45,7 +45,7 @@ claude -p "run the test suite and fix any failures" --max-turns 5
 
 `--max-turns` is only available in print mode. There is no default — without it, there is no limit.
 
-## Machine-Readable Output
+## Machine-readable output
 
 `--output-format json` wraps the response for downstream script consumption ([CLI reference](https://code.claude.com/docs/en/cli-reference)):
 
@@ -73,7 +73,7 @@ The `anthropics/claude-code-action@v1` action runs Claude in GitHub Actions ([do
 
 Store the API key as a repository secret named `ANTHROPIC_API_KEY`. Install the Claude GitHub App via `/install-github-app` or manually from [github.com/apps/claude](https://github.com/apps/claude) to enable PR comments and commits ([docs](https://code.claude.com/docs/en/github-actions#setup)).
 
-## Permissions in Non-Interactive Mode
+## Permissions in non-interactive mode
 
 `PermissionRequest` hooks do not fire in non-interactive mode ([hooks docs](https://code.claude.com/docs/en/hooks-guide#limitations)). For automated permission decisions, use `PreToolUse` hooks or `--allowedTools` to enumerate permitted tools explicitly:
 
@@ -82,14 +82,14 @@ claude -p "run lint and fix errors" \
   --allowedTools "Bash(bun run lint *)" "Edit" "Read"
 ```
 
-Two purpose-built permission modes serve headless runs and should be preferred over `--dangerously-skip-permissions` for most CI work ([permission modes docs](https://code.claude.com/docs/en/permission-modes)):
+Two purpose-built permission modes serve headless runs. Prefer them over `--dangerously-skip-permissions` for most CI work ([permission modes docs](https://code.claude.com/docs/en/permission-modes)):
 
 - `--permission-mode dontAsk` — explicitly labeled "Locked-down CI and scripts". Auto-denies any tool call that would otherwise prompt; only actions matching `permissions.allow` and read-only Bash commands execute. Use when you can enumerate every tool the run needs up front.
 - `--permission-mode auto` — requires v2.1.83+. A server-side classifier evaluates each tool call before execution, blocking destructive patterns automatically. Anthropic's official guidance is "For background safety checks without prompts, use auto mode instead" of `bypassPermissions`. See [Claude Code auto mode](../tools/claude/auto-mode.md) for the full classifier rules.
 
 `--dangerously-skip-permissions` disables all prompts and safety checks ([CLI reference](https://code.claude.com/docs/en/cli-reference)). Reserve it for ephemeral, isolated runners where unintended writes have bounded [blast radius](../security/blast-radius-containment.md) — not as a default for CI.
 
-## Cost Control
+## Cost control
 
 Three flags limit spend in automated contexts ([CLI reference](https://code.claude.com/docs/en/cli-reference)):
 
@@ -101,14 +101,14 @@ Three flags limit spend in automated contexts ([CLI reference](https://code.clau
 
 Set workflow-level timeouts in GitHub Actions as a second layer against hung jobs.
 
-## When This Backfires
+## When this backfires
 
-Headless Claude in CI is not a free improvement — it shifts work from humans to a pipeline that runs without review. Conditions where gated interactive sessions beat print mode:
+Headless Claude in CI is not a free improvement — it shifts work from humans to a pipeline that runs without review. Gated interactive sessions beat print mode under these conditions:
 
-- **Ambiguous or exploratory tasks** — `--max-turns` cuts off mid-solution when the task underspecifies the goal; the run exits non-zero but the partial work still costs budget. Interactive sessions let a human redirect before the spend accumulates.
-- **Auto-merged output** — when the workflow commits or merges without review, low-quality patches ship silently. Every PR carries noise that downstream reviewers learn to ignore, eroding review discipline across the repo.
-- **Rate-limit regressions on the underlying plan** — token consumption on Claude Code plans has spiked in past updates ([The New Stack, March 2026](https://thenewstack.io/claude-code-usage-limits/)); `--max-budget-usd` caps API-billed spend but does not protect subscription-based runners from session exhaustion.
-- **Tasks requiring `PermissionRequest` hooks** — those hooks do not fire in `-p` mode. Enforcement shifts to `PreToolUse` or `--allowedTools`, and any policy that relied on dynamic approval must be rewritten or removed.
+- Ambiguous or exploratory tasks — `--max-turns` cuts off mid-solution when the task underspecifies the goal; the run exits non-zero but the partial work still costs budget. Interactive sessions let a human redirect before the spend accumulates.
+- Auto-merged output — when the workflow commits or merges without review, low-quality patches ship silently. Every PR carries noise that downstream reviewers learn to ignore, eroding review discipline across the repo.
+- Rate-limit regressions on the underlying plan — token consumption on Claude Code plans has spiked in past updates ([The New Stack, March 2026](https://thenewstack.io/claude-code-usage-limits/)); `--max-budget-usd` caps API-billed spend but does not protect subscription-based runners from session exhaustion.
+- Tasks requiring `PermissionRequest` hooks — those hooks do not fire in `-p` mode. Enforcement shifts to `PreToolUse` or `--allowedTools`, and any policy that relied on dynamic approval must be rewritten or removed.
 
 For sensitive operations in headless mode, combine the [deferred permission pattern](../agent-design/deferred-permission-pattern.md) with `PreToolUse` hooks so the pipeline can pause for out-of-band approval instead of denying or auto-allowing.
 

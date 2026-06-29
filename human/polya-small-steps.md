@@ -17,38 +17,38 @@ maturity: adopted
 
 > Use AI to think better, not think less — working in small steps with instant feedback so comprehension stays ahead of the code you commit.
 
-## The Problem This Solves
+## The problem this solves
 
 Most AI-assisted coding advice optimizes for throughput: generate more code faster. That optimization has a cost. A [randomized controlled trial by Anthropic (2026)](https://www.anthropic.com/research/AI-assistance-coding-skills) with 52 software engineers found that AI-assisted developers scored 17 percentage points lower on comprehension tests than those who coded by hand (50% vs 67%). The largest gap was in debugging — precisely the skill needed to supervise AI output.
 
-The critical finding was not that AI causes skill loss. It was that **interaction mode determines outcome**. Developers who used AI as a code dispenser (delegation mode) scored below 40% ([Anthropic, 2026](https://www.anthropic.com/research/AI-assistance-coding-skills)). Developers who used AI as a thinking partner (conceptual inquiry mode) scored 65% or above — and were the second-fastest group overall, after pure delegation.
+The critical finding was not that AI causes skill loss. It was that interaction mode determines the outcome. Developers who used AI as a code dispenser (delegation mode) scored below 40% ([Anthropic, 2026](https://www.anthropic.com/research/AI-assistance-coding-skills)). Developers who used AI as a thinking partner (conceptual inquiry mode) scored 65% or above — and were the second-fastest group overall, after pure delegation.
 
-## The Four-Step Structure
+## The four-step structure
 
-George Polya's problem-solving framework from *[How to Solve It](https://en.wikipedia.org/wiki/How_to_Solve_It)* (1945) is a practitioner-applied lens for LLM-assisted coding — the mapping below is a structured application of the original four steps, not a published finding:
+George Polya's problem-solving framework from '[How to Solve It](https://en.wikipedia.org/wiki/How_to_Solve_It)' (1945) applies to LLM-assisted coding. The mapping below is a structured application of the original four steps, not a published finding:
 
 | Polya step | What it means with AI |
 |-----------|----------------------|
-| **Understand the problem** | Formulate the problem precisely before prompting. Ask AI: "What are the constraints here?" not "Write me a solution." |
-| **Devise a plan** | Outline an approach with AI as a sounding board. "What algorithm would you use for this and why?" before requesting any code. |
-| **Carry out the plan** | Execute 1–2 logical steps at a time with immediate feedback — run, test, or verify before proceeding. |
-| **Look back** | Review what was produced. If you cannot [explain every line you commit](../anti-patterns/comprehension-debt.md), that is your signal to ask for an explanation or rewrite it yourself. |
+| Understand the problem | Formulate the problem precisely before prompting. Ask AI: "What are the constraints here?" not "Write me a solution." |
+| Devise a plan | Outline an approach with AI as a sounding board. "What algorithm would you use for this and why?" before requesting any code. |
+| Carry out the plan | Execute 1–2 logical steps at a time with immediate feedback — run, test, or verify before proceeding. |
+| Look back | Review what was produced. If you cannot [explain every line you commit](../anti-patterns/comprehension-debt.md), that is your signal to ask for an explanation or rewrite it yourself. |
 
-The discipline is explicit about the fourth step: **comprehension is the exit gate**. Code you cannot explain does not get committed.
+The discipline is explicit about the fourth step: comprehension is the exit gate. Code you cannot explain does not get committed.
 
-## Why Small Steps
+## Why small steps
 
 Working in small increments is not just about catching errors early. It keeps the developer's mental model current with the codebase. Large-batch generation produces output faster than review speed — the [velocity-comprehension gap](../anti-patterns/comprehension-debt.md) that accumulates comprehension debt. This tracks a core result from [cognitive load theory](https://journals.sagepub.com/doi/10.1177/0963721420922183): working memory is bounded, so learners build durable schemas when new material arrives in chunks small enough to process — not when it arrives faster than it can be integrated.
 
 Small steps also expose reasoning gaps: a gap in a 3-line function is recoverable; the same gap across 200 lines of generated code is structural.
 
-## The Comprehension Gate
+## The comprehension gate
 
 The comprehension gate is the one rule that distinguishes this discipline from standard AI-assisted coding:
 
 > If you cannot explain what the AI produced, you do not commit it. You ask for an explanation, or you rewrite it by hand with AI as a tutor.
 
-This is not a speed optimization — it makes you slower. It is a **skill and oversight optimization**. The [Anthropic study](https://www.anthropic.com/research/AI-assistance-coding-skills) found that the "conceptual inquiry" group independently resolved more errors than the delegation group, even though they encountered more of them. The errors they fixed themselves mapped directly to quiz topics they later scored well on.
+This is not a speed optimization — it makes you slower. It is a skill and oversight optimization. The [Anthropic study](https://www.anthropic.com/research/AI-assistance-coding-skills) found that the "conceptual inquiry" group independently resolved more errors than the delegation group, even though they encountered more of them. The errors they fixed themselves mapped directly to quiz topics they later scored well on.
 
 ```mermaid
 graph TD
@@ -63,30 +63,30 @@ graph TD
     G -->|Yes| H[Review: what did you learn?]
 ```
 
-## When This Beats Delegation Mode
+## When this beats delegation mode
 
 Use the small-steps discipline when:
 
-- **Learning a new domain or library** — the Anthropic study used this exact scenario. Comprehension during learning compounds; delegation during learning doesn't.
-- **Novel or research-grade problems** — unfamiliar solution space means you [cannot evaluate whether the output is correct](developer-control-strategies-ai-agents.md) without understanding it.
-- **High-stakes code** — authentication, data models, financial logic. Black-box code in these paths creates compounding risk.
-- **Skill preservation is a goal** — deliberately maintaining capability in areas you would otherwise delegate entirely.
+- Learning a new domain or library — the Anthropic study used this exact scenario. Comprehension during learning compounds; delegation during learning does not.
+- Novel or research-grade problems — an unfamiliar solution space means you [cannot evaluate whether the output is correct](developer-control-strategies-ai-agents.md) without understanding it.
+- High-stakes code — authentication, data models, financial logic. Black-box code in these paths creates compounding risk.
+- Skill preservation is a goal — you deliberately maintain capability in areas you would otherwise delegate entirely.
 
-## When Delegation Mode Is Correct
+## When delegation mode is correct
 
 The discipline has a cost: it is slower than pure delegation for tasks where comprehension is not the goal.
 
-- **Boilerplate and scaffolding** — repeated structural patterns where the approach is known and the cost of error is low.
-- **Permutation work** — generating variants of a proven pattern across multiple files.
-- **Throwaway scripts** — one-off tooling where you discard and rewrite rather than maintain ([vibe coding](../anti-patterns/vibe-coding.md) is appropriate here).
+- Boilerplate and scaffolding — repeated structural patterns where the approach is known and the cost of error is low.
+- Permutation work — generating variants of a proven pattern across multiple files.
+- Throwaway scripts — one-off tooling where you discard and rewrite rather than maintain ([vibe coding](../anti-patterns/vibe-coding.md) is appropriate here).
 
-The distinction: **does comprehension of this specific code matter for your ability to debug, extend, or supervise it later?** If yes, small steps. If no, delegate freely.
+The distinction: does comprehension of this specific code matter for your ability to debug, extend, or supervise it later? If yes, small steps. If no, delegate freely.
 
 ## Example
 
 A developer is learning `asyncio` and needs to implement a rate-limited API client. They have not used asyncio semaphores before.
 
-**Delegation mode** (scores below 40%):
+Delegation mode (scores below 40%):
 
 ```
 Prompt: "Write an async API client with rate limiting using asyncio semaphore"
@@ -94,7 +94,7 @@ Prompt: "Write an async API client with rate limiting using asyncio semaphore"
 
 The agent produces 60 lines. Tests pass. The developer [commits without reading](../anti-patterns/vibe-coding.md). Three days later the rate limiter behaves unexpectedly under burst load. They cannot debug it without asking the agent — paying off comprehension debt with more debt.
 
-**Small-steps mode** (scores 65%+):
+Small-steps mode (scores 65%+):
 
 ```
 Step 1 — Understand:

@@ -16,7 +16,7 @@ maturity: established
 
 > Reliable agents externalize cognitive burdens into persistent infrastructure rather than waiting for larger models — across four components: memory, skills, protocols, and a coordinating harness.
 
-## The Core Shift
+## The core shift
 
 Early LLM agents assumed the model's weights would handle everything: recall past decisions, apply consistent procedures, coordinate with tools, and manage execution. This assumption fails at moderate complexity.
 
@@ -30,17 +30,17 @@ The alternative — externalization — moves each cognitive burden into dedicat
 
 The shift from context to harness requires treating memory, skills, protocols, and harness as first-class design objects, not engineering afterthoughts.
 
-## Why It Works
+## Why it works
 
-Externalization works by converting reconstruction tasks (inferring state from weights) into retrieval tasks — operations LLMs perform more consistently. A system with vast storage but weak retrieval still presents the wrong problem representation; strong indexing and contextual selection make downstream reasoning significantly easier ([Zhou et al., 2025](https://arxiv.org/abs/2604.08224)). Active memory management with deliberate curation achieves 58% memory reuse and 17–18% net efficiency gains over passive retrieval ([Shi et al., 2025](https://arxiv.org/abs/2508.13171)).
+Externalization converts reconstruction tasks (inferring state from weights) into retrieval tasks — operations LLMs perform more consistently. A system with vast storage but weak retrieval still presents the wrong problem representation. Strong indexing and contextual selection make downstream reasoning much easier ([Zhou et al., 2025](https://arxiv.org/abs/2604.08224)). Active memory management with deliberate curation achieves 58% memory reuse and 17–18% net efficiency gains over passive retrieval ([Shi et al., 2025](https://arxiv.org/abs/2508.13171)).
 
-## Four Externalization Components
+## Four externalization components
 
-### Memory: State Across Time
+### Memory: state across time
 
-Memory converts internal recall (reconstructing past from weights) into external recognition (retrieving pre-surfaced history). The model doesn't need to remember — it needs to retrieve.
+Memory converts internal recall (reconstructing past from weights) into external recognition (retrieving pre-surfaced history). The model does not need to remember — it needs to retrieve.
 
-Four distinct memory layers, catalogued in [agent memory patterns](agent-memory-patterns.md), operate on different timescales and update policies:
+Four distinct memory layers, cataloged in [agent memory patterns](agent-memory-patterns.md), operate on different timescales and update policies:
 
 | Layer | Content | Update frequency |
 |-------|---------|-----------------|
@@ -49,15 +49,15 @@ Four distinct memory layers, catalogued in [agent memory patterns](agent-memory-
 | Semantic knowledge | Stable abstractions, facts, heuristics | On change |
 | Personalized memory | User and environment preferences | As preferences evolve |
 
-Mixing these layers causes drift: working state in semantic storage goes stale; heuristics in episodic storage get discarded prematurely.
+Mixing these layers causes drift. Working state in semantic storage goes stale. Heuristics in episodic storage get discarded too early.
 
-### Skills: Procedural Expertise
+### Skills: procedural expertise
 
 Skills convert ad hoc generation into structured composition. The model invokes pre-built expertise rather than rederiving procedures each time. Skills accumulate knowledge through four paths: authored (human-written rules), distilled (from execution traces), discovered (from repeated behavioral patterns), and composed (assembled from smaller skills).
 
-Skills require explicit boundaries — semantic alignment, portability, safe composition rules, and defined fallback behavior — the governance that [skill library evolution](../tool-engineering/skill-library-evolution.md) formalises. Without these, skills drift and produce inconsistent results across agents.
+Skills require explicit boundaries — semantic alignment, portability, safe composition rules, and defined fallback behavior — the governance that [skill library evolution](../tool-engineering/skill-library-evolution.md) formalizes. Without these, skills drift and produce inconsistent results across agents.
 
-### Protocols: Interaction Structure
+### Protocols: interaction structure
 
 Protocols convert ad hoc communication into governed contracts. The model follows explicit rules rather than negotiating each interaction.
 
@@ -69,9 +69,9 @@ Three protocol types cover different surfaces:
 | Agent–Agent | Coordination, delegation, and handoffs |
 | Agent–User | Human approval and clarification requests |
 
-Protocols become mandatory past single-agent setups — natural language coordination fails at scale, the gap [agent handoff protocols](../multi-agent/agent-handoff-protocols.md) close; contracts provide reliability and auditability.
+Protocols become mandatory past single-agent setups. Natural language coordination fails at scale — the gap [agent handoff protocols](../multi-agent/agent-handoff-protocols.md) close. Contracts provide reliability and auditability.
 
-### Harness: The Control Plane
+### Harness: the control plane
 
 The harness is not a fourth externalization component — it is the control plane that coordinates the other three. It provides the runtime environment where memory, skills, and protocols operate together.
 
@@ -79,7 +79,7 @@ Six design dimensions, enumerated in [harness design dimensions](harness-design-
 
 The components interact: skill traces write back to memory; retrieved memory guides protocol selection; protocol results update state. Isolated design breaks these feedback loops.
 
-## The Trade-off Space
+## The trade-off space
 
 Externalization is not universally better than parametric knowledge — it is differently suited.
 
@@ -96,17 +96,17 @@ Choose externalization when reliability, composability, and governance matter mo
 
 A coding agent that reviews PRs across multiple repositories illustrates where each component applies.
 
-**Without externalization:** Every session starts cold. The agent re-reads conventions it already knows, re-invents the review checklist it used yesterday, and coordinates with the CI system using natural language that sometimes misinterprets error responses — the gap a [session initialization ritual](session-initialization-ritual.md) closes.
+Without externalization, every session starts cold. The agent re-reads conventions it already knows, re-invents the review checklist it used yesterday, and coordinates with the CI system using natural language that sometimes misinterprets error responses — the gap a [session initialization ritual](session-initialization-ritual.md) closes.
 
-**With externalization:**
+With externalization, each component does a specific job:
 
-*Memory* — project-scoped episodic storage holds past review decisions and known false-positive patterns. On session start, the agent retrieves only the relevant repository's history, not all history. Working context tracks the current PR state across tool calls.
+Memory — project-scoped episodic storage holds past review decisions and known false-positive patterns. On session start, the agent retrieves only the relevant repository's history, not all history. Working context tracks the current PR state across tool calls.
 
-*Skills* — a versioned skill, managed as in [skill library evolution](../tool-engineering/skill-library-evolution.md), encodes the review checklist and security scanning heuristics. The agent invokes it rather than generating procedures from scratch. When the checklist changes, one file update propagates to all agents that use the skill.
+Skills — a versioned skill, managed as in [skill library evolution](../tool-engineering/skill-library-evolution.md), encodes the review checklist and security scanning heuristics. The agent invokes it rather than generating procedures from scratch. When the checklist changes, one file update propagates to all agents that use the skill.
 
-*Protocols* — a schema-validated agent-tool protocol defines exactly how CI status is fetched, what error shapes are valid, and what the agent should do on each status code. No natural language negotiation; the contract handles ambiguity the way [agent handoff protocols](../multi-agent/agent-handoff-protocols.md) remove it between stages.
+Protocols — a schema-validated agent-tool protocol defines exactly how CI status is fetched, what error shapes are valid, and what the agent should do on each status code. There is no natural language negotiation. The contract handles ambiguity the way [agent handoff protocols](../multi-agent/agent-handoff-protocols.md) remove it between stages.
 
-*Harness* — a PreToolUse hook intercepts any file write operation for human approval. Observability logs every tool call with the full argument and result. A configured [context budget](../context-engineering/context-budget-allocation.md) threshold triggers summarization of earlier turns before the window fills.
+Harness — a PreToolUse hook intercepts any file write operation for human approval. Observability logs every tool call with the full argument and result. A configured [context budget](../context-engineering/context-budget-allocation.md) threshold triggers summarization of earlier turns before the window fills.
 
 Each component addresses a specific failure mode. Together they make the system repeatable across sessions, repositories, and team members.
 

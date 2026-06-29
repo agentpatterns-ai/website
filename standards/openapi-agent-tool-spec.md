@@ -17,7 +17,7 @@ maturity: established
 
 > Use existing OpenAPI 3.x specs as the source of truth for agent tool definitions — generating tool schemas, descriptions, and parameter constraints from API documentation instead of writing them by hand.
 
-## The Mapping
+## The mapping
 
 OpenAPI operation objects map directly to agent tool schema fields:
 
@@ -30,49 +30,49 @@ OpenAPI operation objects map directly to agent tool schema fields:
 
 This mapping means a team maintaining an OpenAPI spec already has most of a tool definition's structure — names, parameter schemas, types, and constraints transfer directly. The remaining work is description quality.
 
-## Generating MCP Servers from OpenAPI
+## Generating MCP servers from OpenAPI
 
-An ecosystem of tooling converts OpenAPI specs to functional MCP servers. The [AutoMCP research](https://arxiv.org/html/2507.16044v3) showed that static code generation from OpenAPI produces MCP servers where 76.5% of tool calls succeed out of the box, reaching 99.9% after averaging 19 lines of spec changes per API.
+Several tools convert OpenAPI specs to working MCP servers. The [AutoMCP research](https://arxiv.org/html/2507.16044v3) showed that static code generation from OpenAPI produces MCP servers where 76.5% of tool calls succeed out of the box, reaching 99.9% after averaging 19 lines of spec changes per API.
 
 Common generators include:
 
-- **openapi-mcp-generator** — [Automates generation](https://github.com/harsha-iiiv/openapi-mcp-generator) of MCP servers that proxy requests to existing REST APIs
-- **openapi-mcp-codegen** — [Parses paths and operations](https://github.com/cnoe-io/openapi-mcp-codegen) to render structured MCP server code
+- `openapi-mcp-generator` — [generates MCP servers](https://github.com/harsha-iiiv/openapi-mcp-generator) that proxy requests to existing REST APIs
+- `openapi-mcp-codegen` — [parses paths and operations](https://github.com/cnoe-io/openapi-mcp-codegen) to render structured MCP server code
 
-The recommended workflow: [autogenerate the groundwork from OpenAPI, then curate](https://www.speakeasy.com/mcp/tool-design/generate-mcp-tools-from-openapi) by enriching descriptions for agent consumption.
+The recommended workflow is to [autogenerate the groundwork from OpenAPI, then curate](https://www.speakeasy.com/mcp/tool-design/generate-mcp-tools-from-openapi) by enriching descriptions for agents to read.
 
-**Curation is not optional.** Exposing every endpoint as an individual tool without filtering is a recognized anti-pattern: an API with 200 endpoints becomes 200 tools, burning context-window space and producing tool selection failures. Practitioners at GitHub Copilot and Block cut their tool counts by 60–93% before seeing reliable agent behavior. The generation step reduces boilerplate; the curation step — selecting which operations to surface and how to group them — determines whether the resulting server is usable. See [MCP tool design guidance](https://dev.to/aws-heroes/mcp-tool-design-why-your-ai-agent-is-failing-and-how-to-fix-it-40fc) and [semantics-first MCP design](https://blog.christianposta.com/semantics-matter-exposing-openapi-as-mcp-tools/) for practitioner evidence.
+Curation is not optional. Exposing every endpoint as an individual tool without filtering is a recognized anti-pattern: an API with 200 endpoints becomes 200 tools, burning context-window space and producing tool selection failures. Practitioners at GitHub Copilot and Block cut their tool counts by 60–93% before seeing reliable agent behavior. The generation step reduces boilerplate. The curation step — selecting which operations to surface and how to group them — determines whether the resulting server is usable. See [MCP tool design guidance](https://dev.to/aws-heroes/mcp-tool-design-why-your-ai-agent-is-failing-and-how-to-fix-it-40fc) and [semantics-first MCP design](https://blog.christianposta.com/semantics-matter-exposing-openapi-as-mcp-tools/) for practitioner evidence.
 
-## Description Quality Gap
+## Description quality gap
 
-OpenAPI descriptions written for human developers frequently underperform for agents. A description like "Retrieve a task by ID" tells a human enough; an agent needs to know *when* to call this endpoint versus alternatives, what the response contains, and what edge cases to expect.
+OpenAPI descriptions written for human developers frequently underperform for agents. A description like "Retrieve a task by ID" tells a human enough. An agent needs to know when to call this endpoint versus alternatives, what the response contains, and what edge cases to expect.
 
 [Agent-optimized descriptions](https://www.speakeasy.com/mcp/tool-design/generate-mcp-tools-from-openapi) should include:
 
 - When to use this tool versus alternatives
-- Expected parameter formats (e.g., "UUID v4, not integer ID")
+- Expected parameter formats (for example, "UUID v4, not integer ID")
 - What the response contains and what an empty result means
 - Error conditions and what they indicate
 
 This is the same principle Anthropic describes for [agent-computer interface design](../tool-engineering/agent-computer-interface.md): tool descriptions need the same care as human-facing UX.
 
-## The Arazzo Layer
+## The Arazzo layer
 
 [Arazzo](https://www.openapis.org/arazzo-specification) is a companion specification that defines deterministic multi-step workflows across OpenAPI-described APIs. Where OpenAPI describes individual endpoints, Arazzo describes how to chain them to complete a business outcome.
 
 For agents, Arazzo provides a machine-readable workflow plan that eliminates the need for an LLM to reason about API call ordering. The [upcoming Arazzo 1.1.0 release](https://www.openapis.org/arazzo-specification) plans to introduce AsyncAPI support, enabling workflows that span both HTTP and event-driven protocols.
 
-## Versioning and Sync
+## Versioning and sync
 
 When an API changes, the tool schema must change with it. Teams using OpenAPI as the tool source can enforce this through CI:
 
-1. Generate tool schemas from the OpenAPI spec on every build
-2. Diff generated schemas against committed schemas
-3. Fail the build if they diverge
+1. Generate tool schemas from the OpenAPI spec on every build.
+2. Diff the generated schemas against the committed schemas.
+3. Fail the build if they diverge.
 
 This prevents the common failure where a tool definition references a deprecated parameter or missing endpoint.
 
-## When Not to Use OpenAPI
+## When not to use OpenAPI
 
 OpenAPI covers HTTP APIs exclusively. These tool types need manual schemas:
 
@@ -132,7 +132,7 @@ The auto-generated MCP tool definition preserves the structure but needs enriche
 }
 ```
 
-The `operationId` becomes the tool name, the parameter schema transfers directly, and the description is rewritten to include when-to-use context, format constraints, and 404 semantics.
+The `operationId` becomes the tool name, the parameter schema transfers directly, and you rewrite the description to add when-to-use context, format constraints, and 404 semantics.
 
 ## Key Takeaways
 
@@ -147,7 +147,7 @@ The `operationId` becomes the tool name, the parameter schema transfers directly
 - [Tool Calling Schema Standards](tool-calling-schema-standards.md)
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)
 - [OpenAPI Documentation Smells for Agent-Ready APIs](../tool-engineering/openapi-documentation-smells.md)
-- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Plugin Packaging](plugin-packaging.md)
 - [Agent Cards: Capability Discovery Standard for AI Agents](agent-cards.md)
 - [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md)

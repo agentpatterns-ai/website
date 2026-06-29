@@ -17,19 +17,19 @@ maturity: established
 
 > Agent-assisted code review routes the mechanical first pass — style, types, security patterns, test coverage — to an agent, reserving human reviewers for the design and architecture judgment that agents cannot reliably provide.
 
-## The Technique
+## The technique
 
-Human reviewers excel at judgment; agents excel at checklists. The agent handles the first pass — style consistency, type correctness, test coverage gaps, security patterns, naming conventions — while humans focus on design, architecture fit, and scalability.
+Human reviewers excel at judgment. Agents excel at checklists. The agent handles the first pass — style consistency, type correctness, test coverage gaps, security patterns, naming conventions — while humans focus on design, architecture fit, and scalability.
 
-The mechanism is attention allocation: eliminating repetitive pattern-matching from the human review queue directs reviewer attention to architectural concerns. An interview study of 20 engineers reports that engagement with AI-assisted review is distinct from peer review along cognitive, emotional, and behavioral dimensions ([arXiv:2501.02092](https://arxiv.org/abs/2501.02092)).
+This works by reallocating attention. Take repetitive pattern-matching off the human review queue, and reviewers can focus on architecture. An interview study of 20 engineers reports that engagement with AI-assisted review is distinct from peer review along cognitive, emotional, and behavioral dimensions ([arXiv:2501.02092](https://arxiv.org/abs/2501.02092)).
 
-## How It Works
+## How it works
 
-### GitHub Copilot Code Review
+### GitHub Copilot code review
 
 Copilot [always leaves a 'Comment' review](https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review), never 'Approve' or 'Request changes' — findings are advisory and do not count toward required approvals. Reviews typically complete in under 30 seconds ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/)). Customize focus via `.github/copilot-instructions.md` or `.github/instructions/**/*.instructions.md`.
 
-### Claude Code Subagents
+### Claude Code subagents
 
 Claude Code's [subagents documentation](https://code.claude.com/docs/en/sub-agents) includes a `code-reviewer` example — read-only, runs `git diff`, returns findings by priority.
 
@@ -42,32 +42,32 @@ model: inherit
 ---
 ```
 
-Excluding `Edit` and `Write` is structural: review agents suggest fixes, they do not apply them. For specialized domains, deploy multiple focused reviewers — security, performance, style — rather than one general-purpose agent.
+Excluding `Edit` and `Write` is structural: review agents suggest fixes, they do not apply them. For specialized domains, run several focused reviewers — security, performance, style — rather than one general-purpose agent.
 
-## Structuring Review Output
+## Structuring review output
 
 Free-form comments are hard to triage. Structure findings by severity:
 
-- **Critical** — correctness, security, data integrity
-- **High** — test coverage gaps, API contract violations
-- **Medium** — style, naming, missing documentation
-- **Low** — suggestions, minor improvements
+- Critical — correctness, security, data integrity
+- High — test coverage gaps, API contract violations
+- Medium — style, naming, missing documentation
+- Low — suggestions, minor improvements
 
-## Calibrating False Positives
+## Calibrating false positives
 
 Agents over-flag — surfacing style issues in generated code and flagging intentional patterns. False positive rates run 5–15% for well-configured tools, higher when poorly tuned ([Graphite](https://graphite.com/guides/ai-code-review-false-positives)). Tune prompts to specify what to ignore, and apply severity thresholds so low-severity findings are optional.
 
-## When This Backfires
+## When this backfires
 
-**CRA-only configurations.** An empirical study of 3,109 PRs found CRA-only review achieves a 45% merge rate versus 68% for human-involved review, and 12 of 13 CRAs studied averaged signal ratios below 60% ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). Always require at least one human approval.
+CRA-only configurations backfire. An empirical study of 3,109 PRs found CRA-only review achieves a 45% merge rate versus 68% for human-involved review, and 12 of 13 CRAs studied averaged signal ratios below 60% ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). Always require at least one human approval.
 
-**PRs exceeding context limits.** Large diffs produce generic, low-signal comments across truncated context. Keep PRs small — see [agent-driven PR slicing](agent-driven-pr-slicing.md).
+PRs that exceed context limits backfire too. Large diffs produce generic, low-signal comments across truncated context. Keep PRs small — see [agent-driven PR slicing](agent-driven-pr-slicing.md).
 
-**Agent reviewing its own output.** A reviewer in the same session validates the same assumptions the generating agent made. Route to a fresh-context reviewer ([Loop Strategy Spectrum](../agent-design/loop-strategy-spectrum.md)).
+An agent reviewing its own output is another trap. A reviewer in the same session validates the same assumptions the generating agent made. Route to a fresh-context reviewer ([Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md)).
 
-**Skipping human review after agent approval.** The pattern only works if humans remain accountable for design. Treating agent approval as sufficient accumulates architectural debt the agent cannot see.
+Skipping human review after agent approval breaks the pattern. It only works if humans remain accountable for design. Treating agent approval as enough accumulates architectural debt the agent cannot see.
 
-**Uncalibrated false positive rates.** AI suggestions are adopted at 16.6% versus 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)) — untuned prompts reduce adoption even for correct findings.
+Uncalibrated false positive rates lower adoption. AI suggestions are adopted at 16.6% versus 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)). Untuned prompts reduce adoption even for correct findings.
 
 ## Example
 

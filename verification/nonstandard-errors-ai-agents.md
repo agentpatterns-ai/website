@@ -16,17 +16,17 @@ maturity: adopted
 
 > AI agents analyzing identical data with identical instructions reach different conclusions systematically by model family — a single run hides this nonstandard variance.
 
-## The Problem
+## The problem
 
-When 150 Claude Code agents (Sonnet and Opus) independently analyzed the same NYSE market microstructure dataset, they diverged substantially — not from random noise, but from *systematic methodological preferences* stable within each model family.
+When 150 Claude Code agents (Sonnet and Opus) independently analyzed the same NYSE market microstructure dataset, they diverged substantially — not from random noise, but from systematic methodological preferences stable within each model family.
 
-This is the AI analog of **nonstandard errors (NSEs)** from human-researcher studies: variation from discretionary analytical choices rather than sampling or measurement error. [Gao & Xiao (2026)](https://arxiv.org/abs/2603.16744) documented this in a controlled 150-agent experiment.
+This is the AI analog of nonstandard errors (NSEs) from human-researcher studies: variation from discretionary analytical choices rather than sampling or measurement error. [Gao & Xiao (2026)](https://arxiv.org/abs/2603.16744) documented this in a controlled 150-agent experiment.
 
 Run one agent and report its result, and you report one point from a distribution you have never sampled.
 
-## Empirical Styles by Model Family
+## Empirical styles by model family
 
-Different model families exhibit **stable, systematic methodological preferences** — "empirical styles" — rather than random variation:
+Different model families show stable, systematic methodological preferences — "empirical styles" — rather than random variation:
 
 | Choice | Sonnet 4.6 | Opus 4.6 |
 |--------|------------|----------|
@@ -35,7 +35,7 @@ Different model families exhibit **stable, systematic methodological preferences
 | Volume measure | Mixed | Volume-weighted (dominant) |
 | H1 measure | Autocorrelation (87%) | Variance ratio (100%) |
 
-On H1, Sonnet and Opus chose *different statistical tests* for the same hypothesis — they ran different experiments on the same question.
+On H1, Sonnet and Opus chose different statistical tests for the same hypothesis — they ran different experiments on the same question.
 
 For H4 (trading volume trends), measure choice alone flipped the conclusion:
 
@@ -45,28 +45,28 @@ For H4 (trading volume trends), measure choice alone flipped the conclusion:
 
 Two agents with different empirical styles, given identical instructions and identical data, would report opposite conclusions.
 
-## Why Peer Review Between Agents Does Not Fix This
+## Why peer review between agents does not fix this
 
-A common response is to add a review loop — one agent critiques another's output. The evidence does not support it: AI peer review had **minimal effect** on dispersion, and agents did not revise their methodological choices based on written critiques.
+A common response is to add a review loop — one agent critiques another's output. The evidence does not support it: AI peer review had minimal effect on dispersion, and agents did not revise their methodological choices based on written critiques.
 
-For pipeline designers using evaluator-critic loops: critique loops address *output quality* but not *methodological bias*.
+For pipeline designers using evaluator-critic loops: critique loops address output quality but not methodological bias.
 
-## What Does Reduce Variance: Exemplar Injection
+## What does reduce variance: exemplar injection
 
-Showing agents **exemplar outputs** before analysis reduced the interquartile range of estimates by **80–99%**.
+Showing agents exemplar outputs before analysis reduced the interquartile range of estimates by 80–99%.
 
-Agents did not reason toward a better methodology — they *imitated* the exemplar, switching measure families en masse:
+Agents did not reason toward a better methodology — they imitated the exemplar, switching measure families all at once:
 
 - 78 of 90 dollar-volume agents switched to share volume simultaneously
 - 41 of 60 share-volume agents switched the opposite direction simultaneously
 
 Cross-switching produced apparent convergence, not analytical agreement.
 
-**Implication:** Exemplar injection reduces variance, but the exemplar determines the result. A flawed exemplar produces tight, wrong answers.
+Exemplar injection reduces variance, but the exemplar determines the result. A flawed exemplar produces tight, wrong answers.
 
-## Recommended Mitigation: Multiverse Analysis
+## Recommended mitigation: multiverse analysis
 
-The structural fix is to treat agent analytical output as a **distribution, not a point estimate**. The parallel study at [arXiv:2602.18710](https://arxiv.org/abs/2602.18710) corroborates this and advocates **multiverse-style reporting** for AI-generated analysis.
+The structural fix is to treat agent analytical output as a distribution, not a point estimate. The parallel study at [arXiv:2602.18710](https://arxiv.org/abs/2602.18710) supports this and recommends multiverse-style reporting for AI-generated analysis.
 
 ```mermaid
 graph TD
@@ -84,11 +84,11 @@ graph TD
 
 In practice:
 
-1. Run the task across multiple model families (Sonnet + Opus) or varied configurations (temperature, prompt phrasing)
-2. Collect results as a distribution
-3. Report the distribution, not just the modal result
-4. Flag conclusions sensitive to analytical choice (high IQR = low robustness)
-5. Reserve single-run reporting for conclusions stable across the distribution
+1. Run the task across multiple model families (Sonnet and Opus) or varied configurations (temperature, prompt phrasing).
+2. Collect results as a distribution.
+3. Report the distribution, not just the modal result.
+4. Flag conclusions sensitive to analytical choice (high IQR means low confidence).
+5. Reserve single-run reporting for conclusions stable across the distribution.
 
 For software-engineering tasks (code generation, architecture reviews, test writing), analogous variance is plausible in code style, framework choice, security posture, and test-coverage strategy — though not yet documented at the scale of the market-microstructure findings.
 
@@ -117,15 +117,15 @@ The agents produce structurally different recommendations:
 
 Rather than picking one result, the team reports both clusters, identifies the shared constraints both agree on, and escalates the point of divergence to human review.
 
-## When This Backfires
+## When this backfires
 
 Multiverse analysis carries real costs that make it impractical in several conditions:
 
-- **Latency-sensitive tasks**: Running 10+ agents in parallel adds infrastructure and wall-clock time that is unjustifiable for tasks requiring a fast single answer (code completions, quick refactors, CI steps).
-- **Cost-constrained pipelines**: Running multiple model families at Opus-tier pricing multiplies inference cost linearly; for routine tasks, exemplar injection into a single agent achieves acceptable variance reduction at a fraction of the cost.
-- **Single-output requirements**: Some tasks require a deterministic commit — a migration script that will be applied once, a schema that will be deployed. Distributing results is not applicable; the right response is to tighten the exemplar, not report a distribution.
-- **Convergent tasks**: When agents consistently agree across runs regardless of model family — Sonnet and Opus reaching the same result on formatting, type errors, or well-specified unit tests — multiverse overhead adds nothing. Sample first; escalate to multiverse only when dispersion is detected.
-- **Exemplar dependency risk as a mitigation**: If variance reduction is achieved via exemplar injection rather than full multiverse reporting, the exemplar quality becomes a single point of failure. A flawed exemplar produces tight, wrong answers — harder to detect than spread-out answers from multiverse reporting.
+- Latency-sensitive tasks: Running 10+ agents in parallel adds infrastructure and wall-clock time that is unjustifiable for tasks requiring a fast single answer (code completions, quick refactors, CI steps).
+- Cost-constrained pipelines: Running multiple model families at Opus-tier pricing multiplies inference cost linearly. For routine tasks, exemplar injection into a single agent achieves acceptable variance reduction at a fraction of the cost.
+- Single-output requirements: Some tasks require a deterministic commit — a migration script that will be applied once, a schema that will be deployed. Distributing results is not applicable. The right response is to tighten the exemplar, not report a distribution.
+- Convergent tasks: When agents consistently agree across runs regardless of model family — Sonnet and Opus reaching the same result on formatting, type errors, or well-specified unit tests — multiverse overhead adds nothing. Sample first. Escalate to multiverse only when dispersion is detected.
+- Exemplar dependency risk as a mitigation: If you reduce variance through exemplar injection rather than full multiverse reporting, exemplar quality becomes a single point of failure. A flawed exemplar produces tight, wrong answers — harder to detect than spread-out answers from multiverse reporting.
 
 ## Key Takeaways
 

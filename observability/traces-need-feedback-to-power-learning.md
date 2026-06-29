@@ -18,15 +18,15 @@ maturity: established
 
 > A trace shows what an agent did; feedback shows whether it was right. Couple them and the trace store becomes a learning corpus.
 
-## The Gap a Trace Alone Cannot Close
+## The gap a trace alone cannot close
 
 Tracing-as-debugging works for one bug at a time. It does not scale into a learning loop, because the trace alone does not say whether the trajectory was good. As Harrison Chase puts it: "Traces alone do not create that loop. You also need feedback: signals that tell you whether the agent's behavior was useful, accepted, rejected, inefficient, risky, or wrong" ([LangChain, May 5 2026](https://www.langchain.com/blog/agent-observability-needs-feedback-to-power-learning)).
 
-The same trace can describe a 40-step success or a 40-step failure. Without a verdict you cannot filter failures worth turning into evals, compare good and bad trajectories on one task, drive [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md) from production volume, or detect drift across the three improvement layers — model weights, harness scaffolding, retrieved context.
+The same trace can describe a 40-step success or a 40-step failure. Without a verdict you cannot filter failures worth turning into evals, compare good and bad trajectories on one task, feed [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md) from production volume, or detect drift across the three improvement layers — model weights, harness scaffolding, retrieved context.
 
 The fix is structural: every trace gets a verdict attached to the run, not stored in a parallel analytics system whose join keys never line up with the trace ID.
 
-## The Four Sources of Feedback
+## The four sources of feedback
 
 The article names four feedback sources. Each has a different cost, latency, and noise profile, and a production system usually wires several together ([LangChain](https://www.langchain.com/blog/agent-observability-needs-feedback-to-power-learning)).
 
@@ -39,26 +39,26 @@ The article names four feedback sources. Each has a different cost, latency, and
 
 The article's deterministic example: Claude Code's leaked `userPromptKeywords.ts` regex scans prompts for frustration words like "wtf", "horrible", "awful" and emits the hit as a feedback signal ([PCWorld](https://www.pcworld.com/article/3104748/claude-code-is-scanning-your-messages-for-curse-words.html), [Blake Crosley analysis](https://blakecrosley.com/blog/claude-code-source-leak)). When a cheap rule captures the signal, no model call is needed to label the trace.
 
-## What the Platform Has to Do
+## What the platform has to do
 
-Chase reduces the platform contract to three behaviours: store traces (trajectory, tool calls, metadata, timing, errors), store feedback attached to the run/trace/thread, and generate feedback (rules, online evaluators, sampling, annotation queues) ([LangChain](https://www.langchain.com/blog/agent-observability-needs-feedback-to-power-learning)).
+Chase reduces the platform contract to three behaviors: store traces (trajectory, tool calls, metadata, timing, errors), store feedback attached to the run/trace/thread, and generate feedback (rules, online evaluators, sampling, annotation queues) ([LangChain](https://www.langchain.com/blog/agent-observability-needs-feedback-to-power-learning)).
 
-The middle requirement is load-bearing. Feedback that lives in a different system than the trace breaks the join — you can describe how often users gave thumbs-down, but you cannot pull the *trajectories* that earned them for replay, eval seeding, or ablation.
+The middle requirement is load-bearing. Feedback that lives in a different system than the trace breaks the join — you can describe how often users gave thumbs-down, but you cannot pull the trajectories that earned them for replay, eval seeding, or ablation.
 
 Braintrust makes the same case from the eval side: traces and eval data belong on one surface because unifying them closes the iteration loop, rather than splitting feedback and evals into a separate analytics tool ([Braintrust — Why your traces and evals belong in the same place](https://www.braintrust.dev/blog/traces-and-evals-same-place)).
 
-## Tool-Agnostic Channel: OTel `gen_ai.evaluation.result`
+## Tool-agnostic channel: OTel `gen_ai.evaluation.result`
 
 OpenTelemetry has codified the channel. The GenAI semantic conventions define a `gen_ai.evaluation.result` event for attaching evaluator output to a run, parallel to the inference span ([OpenTelemetry GenAI events spec](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-events/)). Emit one event per verdict source — human thumbs-down, judge score, regex hit — each carrying the trace ID; downstream queries join on it.
 
 This is the tool-agnostic equivalent of LangSmith's per-run feedback API or Phoenix's annotation primitives, ingestible by any backend that speaks the spec.
 
-## When This Backfires
+## When this backfires
 
-- **Ungrounded LLM-as-judge** — Judges never recalibrated against human verdicts encode their own biases — verbosity, position, self-preference — into the eval corpus. Frontier judges exceeded 50% error rates on bias benchmarks ([Justice or Prejudice, arxiv 2410.02736](https://arxiv.org/html/2410.02736v1)). Treat judge output as a triage signal, not a ground-truth label.
-- **Indirect-signal misattribution** — A reverted diff might be a stylistic preference; a reopened ticket might be a follow-up question. Treating either as a binary failure label without causal validation poisons the corpus with false negatives.
-- **Trace volume outpacing labelling capacity** — High-traffic agents accumulate traces faster than humans or judges can label them; without sampling rules the [trace store](agent-trace-data-layer.md) becomes a graveyard.
-- **Feedback decoupled from the trace** — Thumbs-up/down in product analytics while traces sit in an APM tool means the trace ID never appears in the analytics fact table. The loop never closes.
+- Ungrounded LLM-as-judge — Judges never recalibrated against human verdicts encode their own biases — verbosity, position, self-preference — into the eval corpus. Frontier judges exceeded 50% error rates on bias benchmarks ([Justice or Prejudice, arxiv 2410.02736](https://arxiv.org/html/2410.02736v1)). Treat judge output as a triage signal, not a ground-truth label.
+- Indirect-signal misattribution — A reverted diff might be a stylistic preference; a reopened ticket might be a follow-up question. Treating either as a binary failure label without causal validation poisons the corpus with false negatives.
+- Trace volume outpacing labeling capacity — High-traffic agents accumulate traces faster than humans or judges can label them; without sampling rules the [trace store](agent-trace-data-layer.md) becomes a graveyard.
+- Feedback decoupled from the trace — Thumbs-up/down in product analytics while traces sit in an APM tool means the trace ID never appears in the analytics fact table. The loop never closes.
 
 ## Example
 

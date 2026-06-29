@@ -14,13 +14,13 @@ maturity: emerging
 
 > Build a new product agent-first: define agent roles as the architecture, decompose work to context-safe tasks, and execute through agent loops reviewed at PR boundaries.
 
-## Why Greenfield Is Different
+## Why greenfield is different
 
-Most agent workflows assume an existing codebase. Greenfield projects offer a different opportunity: you can design the project structure, conventions, and workflow around agent collaboration from the start rather than retrofitting it.
+Most agent workflows assume an existing codebase. Greenfield projects offer a different opportunity. You design the project structure, conventions, and workflow around agent collaboration from the start, rather than retrofitting it.
 
-The key insight is that in a greenfield agent-first project, the agent topology is the architecture. The agents you define, the skills they carry, and the boundaries between them shape how the codebase is structured — just as team structure shapes system architecture ([Conway's Law](https://en.wikipedia.org/wiki/Conway%27s_law)).
+In a greenfield agent-first project, the agent topology is the architecture. The agents you define, the skills they carry, and the boundaries between them shape how the codebase is structured. This mirrors the way team structure shapes system architecture ([Conway's Law](https://en.wikipedia.org/wiki/Conway%27s_law)).
 
-## The Workflow
+## The workflow
 
 ```mermaid
 graph TD
@@ -35,7 +35,7 @@ graph TD
     I --> D
 ```
 
-### Phase 1: Define Agents Before Code
+### Phase 1: define agents before code
 
 Start by identifying what agents will do, not what code they will produce. Map discrete task types to [agent definitions](../agent-design/agent-first-software-design.md):
 
@@ -46,11 +46,11 @@ Start by identifying what agents will do, not what code they will produce. Map d
 
 Each role maps to a separate agent definition with the scoped tools, specific instructions, and bounded context of a single-purpose [agent harness](../agent-design/agent-harness.md).
 
-Write AGENTS.md, standards files, and skill definitions before writing a single line of product code. These artifacts serve as both human documentation and agent instructions. The [AGENTS.md standard](https://agents.md) provides the format for expressing project-level context.
+Write AGENTS.md, standards files, and skill definitions before writing a single line of product code. These files serve as both human documentation and agent instructions. The [AGENTS.md standard](https://agents.md) gives the format for expressing project-level context.
 
-### Phase 2: Shape Epics Interactively
+### Phase 2: shape epics interactively
 
-Use an agent interactively to decompose product requirements into epics. The agent surfaces questions, trade-offs, and dependencies that a solo developer might miss or defer.
+Use an agent interactively to break product requirements into epics. The agent surfaces questions, trade-offs, and dependencies that a solo developer might miss or defer.
 
 Example prompt:
 
@@ -61,26 +61,26 @@ For each epic, identify dependencies on other epics,
 the key technical decisions, and acceptance criteria.
 ```
 
-Capture decisions and trade-offs as [issue comments](../agent-design/agent-memory-patterns.md) — not just in conversation history. Conversation history is ephemeral; issue comments persist and seed future agent sessions with context about why decisions were made.
+Capture decisions and trade-offs as [issue comments](../agent-design/agent-memory-patterns.md), not just in conversation history. Conversation history is ephemeral. Issue comments persist and seed future agent sessions with context about why you made each decision.
 
-### Phase 3: Recursive Decomposition to Context-Safe Tasks
+### Phase 3: recursive decomposition to context-safe tasks
 
-Epics must be decomposed until each work item fits within an agent's effective context window. The [context window dumb zone](../context-engineering/context-window-dumb-zone.md) defines the constraint: output quality degrades beyond a model-specific token threshold, and tasks that push into that zone produce unreliable results.
+Break epics down until each work item fits within an agent's effective context window. The [context window dumb zone](../context-engineering/context-window-dumb-zone.md) sets the constraint. Output quality drops beyond a model-specific token threshold, and tasks that push into that zone produce unreliable results.
 
-**Right-sizing heuristic.** A task is agent-safe when:
+A task is agent-safe when:
 
 - It touches a bounded set of files (typically 3–5)
 - The full context of those files plus instructions fits within the model's effective context range — see [context window dumb zone](../context-engineering/context-window-dumb-zone.md) for per-model thresholds
 - Success criteria can be verified without understanding the entire system
 - The task has no ambiguous dependencies on concurrent work
 
-If a task fails this test, decompose further. A feature that requires reading 20 files to understand is not one agent task — it is four or five.
+If a task fails this test, break it down further. A feature that requires reading 20 files to understand is not one agent task. It is four or five.
 
-### Phase 4: Execute Through Agent Loops
+### Phase 4: execute through agent loops
 
-Point agents at backlog items in a continuous loop. Each cycle follows the [Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md) pattern: read state from disk, complete a bounded task, write results, restart with fresh context.
+Point agents at backlog items in a continuous loop. Each cycle follows the [Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md) pattern: read state from disk, complete a bounded task, write results, restart with fresh context.
 
-For parallel execution, assign independent tasks to separate agent sessions using [worktree isolation](worktree-isolation.md). Each session operates on its own branch without file conflicts. The developer's role shifts from writing code to [making decisions and reviewing PRs](parallel-agent-sessions.md).
+For parallel execution, assign independent tasks to separate agent sessions using [worktree isolation](worktree-isolation.md). Each session works on its own branch without file conflicts. The developer's role shifts from writing code to [making decisions and reviewing PRs](parallel-agent-sessions.md).
 
 ```text
 # Session 1: implements user auth
@@ -93,18 +93,18 @@ claude -w data-models
 claude -w api-endpoints
 ```
 
-### Phase 5: Feedback Integration
+### Phase 5: feedback integration
 
 Agent output quality is a signal about your decomposition and instructions, not just about agent capability. When output quality drops:
 
-- **Tasks too large**: agent output degrades toward the end of implementation. [Decompose further](../context-engineering/context-window-dumb-zone.md).
-- **Tasks too vague**: agent makes wrong assumptions. Add explicit acceptance criteria and reference files.
-- **Missing context**: agent reinvents patterns that exist elsewhere in the codebase. Add references to AGENTS.md pointing to example implementations.
-- **Wrong patterns**: agent follows conventions that differ from your intent. Add or refine standards files.
+- Tasks too large: agent output degrades toward the end of implementation. [Decompose further](../context-engineering/context-window-dumb-zone.md).
+- Tasks too vague: agent makes wrong assumptions. Add explicit acceptance criteria and reference files.
+- Missing context: agent reinvents patterns that exist elsewhere in the codebase. Add references to AGENTS.md pointing to example implementations.
+- Wrong patterns: agent follows conventions that differ from your intent. Add or refine standards files.
 
 Treat each quality issue as a signal to improve the infrastructure (agent definitions, task templates, standards) rather than just fixing the output.
 
-## Design Issue Templates as Agent Intake Forms
+## Design issue templates as agent intake forms
 
 GitHub issue templates (or equivalent) define the structured input agents receive. Design them to capture what agents actually need:
 
@@ -113,15 +113,15 @@ GitHub issue templates (or equivalent) define the structured input agents receiv
 - Labels that route issues to the correct agent role
 - References section — known sources relevant to the task
 
-Issue templates that are human-friendly but agent-hostile force a translation step. Templates that capture structured context eliminate that step and reduce misinterpretation.
+Issue templates that are human-friendly but agent-hostile force a translation step. Templates that capture structured context remove that step and reduce misinterpretation.
 
-## Dog-Food the Pipeline
+## Dog-food the pipeline
 
-Use the pipeline you just built to build the project itself. This is the most effective validation step. If agents cannot use the pipeline to produce project content, the pipeline has problems that should be fixed before adding complexity — the [repository bootstrap checklist](repository-bootstrap-checklist.md) is the minimum that has to work first.
+Use the pipeline you just built to build the project itself. This is the most effective validation step. If agents cannot use the pipeline to produce project content, the pipeline has problems you should fix before adding complexity — the [repository bootstrap checklist](repository-bootstrap-checklist.md) is the minimum that has to work first.
 
-For a code project, use the pipeline to generate the initial scaffold. For a documentation project, generate the first content pages using the content agents. Issues that surface during dog-fooding reveal gaps in standards, missing skills, or unclear pipeline stage definitions — the same gaps [bootstrapping an agent-driven project](bootstrapping-agent-driven-project.md) closes one at a time. Dog-fooding also produces the pipeline's first real history — commit logs that demonstrate agent behavior under the actual conventions.
+For a code project, use the pipeline to generate the initial scaffold. For a documentation project, generate the first content pages using the content agents. Issues that surface during dog-fooding reveal gaps in standards, missing skills, or unclear pipeline stage definitions — the same gaps [bootstrapping an agent-driven project](bootstrapping-agent-driven-project.md) closes one at a time. Dog-fooding also produces the pipeline's first real history: commit logs that show agent behavior under the actual conventions.
 
-## Minimum Viable Agent Project
+## Minimum viable agent project
 
 Before adding commands, multiple agents, or CI gates, a project needs:
 
@@ -131,27 +131,27 @@ Before adding commands, multiple agents, or CI gates, a project needs:
 4. One pipeline command that invokes that agent
 5. A pre-commit hook or CI check that validates output format
 
-This is sufficient to produce validated output from day one. Add complexity only when the minimum proves insufficient.
+This is enough to produce validated output from day one. Add complexity only when the minimum proves insufficient.
 
-## Greenfield vs. Brownfield Agent Integration
+## Greenfield vs brownfield agent integration
 
 | Dimension | Greenfield (this workflow) | Brownfield (adding agents to existing code) |
 |-----------|---------------------------|---------------------------------------------|
-| **Starting point** | Agent definitions and standards | Existing codebase and conventions |
-| **Architecture driver** | Agent topology shapes code structure | Code structure constrains agent roles |
-| **Convention source** | Written before code exists | Extracted from existing patterns |
-| **Primary challenge** | Getting decomposition right | Getting context loading right |
-| **Key reference** | This page | [Repository Bootstrap Checklist](repository-bootstrap-checklist.md) |
+| Starting point | Agent definitions and standards | Existing codebase and conventions |
+| Architecture driver | Agent topology shapes code structure | Code structure constrains agent roles |
+| Convention source | Written before code exists | Extracted from existing patterns |
+| Primary challenge | Getting decomposition right | Getting context loading right |
+| Key reference | This page | [Repository Bootstrap Checklist](repository-bootstrap-checklist.md) |
 
-## When This Backfires
+## When this backfires
 
 The agent-first greenfield approach is worse than conventional development in several specific conditions:
 
-- **Domain uncertainty outweighs delivery speed.** Agent topology commits early to a division of responsibilities. If the product's domain model is still being discovered, those role boundaries will likely be wrong and force rework of AGENTS.md, standards, and agent definitions rather than code alone.
-- **Comprehensive AGENTS.md files hurt more than help.** Recent research evaluating repository-level context files found that LLM-generated AGENTS.md files reduced task success compared with no context at all, while increasing inference cost by over 20% and adding 2–4 extra steps per task; developer-written files gave only a ~4% gain ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). Write only non-inferable tooling, commands, and constraints — not architectural overviews the agent can reconstruct.
-- **The team is still learning the codebase patterns.** Agent-first workflows shift humans toward reviewing PRs rather than writing code. On a greenfield project with no existing conventions, that review loop becomes the primary source of architectural learning — and newcomers lose the manual coding experience that traditionally builds foundational skills and intuition ([Rao, 2026](https://www.cio.com/article/4120168/is-ai-eradicating-the-junior-developer.html)).
-- **Decomposition cost exceeds implementation cost.** For very small projects (a single service, a CLI with fewer than ~10 commands), the overhead of defining agents, writing standards, and authoring issue templates outweighs the leverage. A solo developer writing the code directly often ships faster.
-- **Acceptance criteria cannot be mechanically verified.** [Agent loops](../agent-design/ralph-wiggum-loop.md) depend on verifiable success signals. Research prototypes, UX-heavy frontends, and code whose quality is judged subjectively produce weak feedback and push quality work back onto human review at every iteration.
+- Domain uncertainty outweighs delivery speed. Agent topology commits early to a division of responsibilities. If you are still discovering the product's domain model, those role boundaries will likely be wrong and force rework of AGENTS.md, standards, and agent definitions rather than code alone.
+- Comprehensive AGENTS.md files hurt more than help. Recent research evaluating repository-level context files found that LLM-generated AGENTS.md files reduced task success compared with no context at all, while increasing inference cost by over 20% and adding 2–4 extra steps per task; developer-written files gave only a ~4% gain ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). Write only non-inferable tooling, commands, and constraints, not architectural overviews the agent can reconstruct.
+- The team is still learning the codebase patterns. Agent-first workflows shift humans toward reviewing PRs rather than writing code. On a greenfield project with no existing conventions, that review loop becomes the primary source of architectural learning — and newcomers lose the manual coding experience that traditionally builds foundational skills and intuition ([Rao, 2026](https://www.cio.com/article/4120168/is-ai-eradicating-the-junior-developer.html)).
+- Decomposition cost exceeds implementation cost. For very small projects (a single service, a CLI with fewer than ~10 commands), the overhead of defining agents, writing standards, and authoring issue templates outweighs the benefit. A solo developer writing the code directly often ships faster.
+- Acceptance criteria cannot be mechanically verified. [Agent loops](../loop-engineering/ralph-wiggum-loop.md) depend on verifiable success signals. Research prototypes, UX-heavy frontends, and code whose quality is judged subjectively produce weak feedback and push quality work back onto human review at every iteration.
 
 If several of these conditions apply, start with a thin agent stack — one agent, one standards file, one command — and grow it only when the minimum proves insufficient.
 
@@ -159,13 +159,13 @@ If several of these conditions apply, start with a thin agent stack — one agen
 
 A team builds a Kubernetes deployment CLI with rollback support using the agent-first greenfield workflow.
 
-**Step 1 — Define agents.** Before writing code, the team creates three agent definitions: `implement` (feature code), `test` (test suites), and `review` (PR review). Each agent has scoped tools and a standards file reference. They write `AGENTS.md` describing project conventions: Go modules, Cobra CLI framework, table-driven tests.
+Step 1 — define agents. Before writing code, the team creates three agent definitions: `implement` (feature code), `test` (test suites), and `review` (PR review). Each agent has scoped tools and a standards file reference. They write `AGENTS.md` describing project conventions: Go modules, Cobra CLI framework, table-driven tests.
 
-**Step 2 — Shape epics.** An interactive agent session decomposes the product into four epics: CLI scaffold, deployment commands, rollback logic, and status reporting. Each epic's trade-offs and dependencies are captured as GitHub issue comments.
+Step 2 — shape epics. An interactive agent session breaks the product into four epics: CLI scaffold, deployment commands, rollback logic, and status reporting. The team captures each epic's trade-offs and dependencies as GitHub issue comments.
 
-**Step 3 — Decompose to context-safe tasks.** The "deployment commands" epic splits into five tasks: `deploy create` subcommand, Kubernetes client wrapper, deployment status polling, configuration validation, and integration test harness. Each task touches 3–4 files and stays well within the model's effective context range.
+Step 3 — decompose to context-safe tasks. The "deployment commands" epic splits into five tasks: `deploy create` subcommand, Kubernetes client wrapper, deployment status polling, configuration validation, and integration test harness. Each task touches 3–4 files and stays well within the model's effective context range.
 
-**Step 4 — Execute in parallel.**
+Step 4 — execute in parallel.
 
 ```text
 claude -w deploy-create    # implements deploy create subcommand
@@ -175,14 +175,14 @@ claude -w deploy-status    # implements status polling
 
 Each session reads `AGENTS.md`, picks up its assigned issue, and produces a PR. The developer reviews PRs, not code-in-progress.
 
-**Step 5 — Iterate on infrastructure.** The first round of PRs reveals that the `implement` agent reinvents error handling patterns. The team adds an `errors.go` reference to the standards file. Subsequent tasks produce consistent error handling without per-task instructions.
+Step 5 — iterate on infrastructure. The first round of PRs reveals that the `implement` agent reinvents error handling patterns. The team adds an `errors.go` reference to the standards file. Later tasks produce consistent error handling without per-task instructions.
 
 ## Key Takeaways
 
 - In greenfield projects, define agent roles, skills, and AGENTS.md before writing product code — the agent topology shapes the architecture
 - Shape epics interactively with agents and persist decisions in issue comments, not conversation history
 - Decompose tasks until each fits within the model's effective context range — the [dumb zone](../context-engineering/context-window-dumb-zone.md) makes oversized tasks unreliable
-- Execute through [fresh-context loops](../agent-design/loop-strategy-spectrum.md) with human review at PR boundaries, not mid-implementation
+- Execute through [fresh-context loops](../loop-engineering/loop-strategy-spectrum.md) with human review at PR boundaries, not mid-implementation
 - Treat agent output quality as feedback on your decomposition and instructions, not just agent capability
 - Design issue templates as agent intake forms — capture structured context, not just human-readable descriptions
 - Dog-food the pipeline immediately; issues surface faster under real use than inspection
@@ -194,7 +194,7 @@ Each session reads `AGENTS.md`, picks up its assigned issue, and produces a PR. 
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
 - [Lay the Architectural Foundation by Hand Before Delegating to Agents](architectural-foundation-first.md)
 - [Agent-First Software Design](../agent-design/agent-first-software-design.md)
-- [The Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md)
+- [The Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)
 - [Context Window Management: The Dumb Zone](../context-engineering/context-window-dumb-zone.md)
 - [Skeleton Projects as Agent Scaffolding](skeleton-projects-as-scaffolding.md)

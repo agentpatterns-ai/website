@@ -23,15 +23,15 @@ maturity: established
 !!! info "Also known as"
     [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md), [Context Hub](context-hub.md), JIT Context, RAG
 
-## What It Is
+## What it is
 
 Semantic context loading is a retrieval pattern where the agent queries a codebase through Language Server Protocol (LSP) operations — symbol lookup, reference finding, type hierarchy — instead of reading whole files. Each query returns only the requested symbol's definition, signature, or call sites, so token cost scales with the result, not the file size.
 
-## The Problem with File-Based Context Loading
+## The problem with file-based context loading
 
 The default agent approach is file reading: open a file, scan, repeat. This loads imports, unrelated functions, comments, and boilerplate regardless of what the agent needs. A 500-line module loaded to find one function signature consumes all 500 lines of context.
 
-## Semantic Queries as an Alternative
+## Semantic queries as an alternative
 
 LSP powers IDE features like "Go to Definition" and "Find All References." An agent with LSP-backed tools can issue targeted queries:
 
@@ -39,13 +39,13 @@ LSP powers IDE features like "Go to Definition" and "Find All References." An ag
 - `findReferences("AuthService")` — returns all call sites
 - `getTypeHierarchy("User")` — returns parent and child types
 
-## Serena: LSP for Agents
+## Serena: LSP for agents
 
 Serena is an open-source MCP server that provides semantic code retrieval and editing tools across 40+ languages via a language server backend ([github.com/oraios/serena](https://github.com/oraios/serena)). The pattern applies to any LSP-compatible tooling — what matters is the capability, not the specific implementation.
 
 Agents using LSP-backed tools can answer: where is this type defined? what implements this interface? what calls this function (`findReferences`)? — without loading any file into context until they have a specific location to read.
 
-## Comparison with Native Indexing
+## Comparison with native indexing
 
 GitHub Copilot and Cursor implement their own codebase indexing that approximates semantic lookup. Copilot combines a semantic index over repository files with text search and symbol tracing ([VS Code Copilot workspace context docs](https://code.visualstudio.com/docs/copilot/workspace-context)); Cursor's internal mechanism is not publicly documented. GitHub has also shown the LSP-backed approach running in a CLI agent directly: Copilot CLI can attach Language Server Protocol servers to give the agent real, type-aware code intelligence — go-to-definition, references, and diagnostics — rather than relying on text search alone ([GitHub — give Copilot CLI real code intelligence with language servers](https://github.blog/ai-and-ml/github-copilot/give-github-copilot-cli-real-code-intelligence-with-language-servers/)).
 
@@ -60,21 +60,21 @@ LSP-backed queries are most valuable when the codebase is large, the task requir
 
 ## Trade-offs
 
-**Setup cost.** LSP-backed tools need a running language server; not all repos are configured for one, and the tooling layer is more complex than file reading.
+Setup cost. LSP-backed tools need a running language server. Not all repos are configured for one, and the tooling layer is more complex than file reading.
 
-**Precision vs. breadth.** Semantic queries return exactly what is asked for. If the agent doesn't know the right symbol or is exploring blindly, it may miss context a file scan (`grep`) would surface. Semantic loading works best with a clear target.
+Precision versus breadth. Semantic queries return exactly what you ask for. If the agent does not know the right symbol, or is exploring blindly, it may miss context a file scan (`grep`) would surface. Semantic loading works best with a clear target.
 
-**Language coverage.** TypeScript, Python, Go, and Rust have strong LSP implementations; less common languages may have limited or no support.
+Language coverage. TypeScript, Python, Go, and Rust have strong LSP implementations. Less common languages may have limited or no support.
 
-**Protocol-level critique.** LSP was designed for editors, not agents. Armin Ronacher argues LSP forces agents to chain many atomic calls (open file, calculate offset, request definition, parse URI, extract snippet) and that agents often skip LSP entirely when working from doc snippets or ad-hoc reads ([A Language For Agents](https://lucumr.pocoo.org/2026/2/9/a-language-for-agents/)). The LSAP project layers higher-level agent-native operations on top of LSP to avoid this overhead ([github.com/lsp-client/LSAP](https://github.com/lsp-client/LSAP)). Treat LSP-backed retrieval as a floor — wrappers like Serena or LSAP-style protocols carry most of the benefit.
+Protocol-level critique. LSP was designed for editors, not agents. Armin Ronacher argues that LSP forces agents to chain many atomic calls (open file, calculate offset, request definition, parse URI, extract snippet), and that agents often skip LSP entirely when working from doc snippets or ad-hoc reads ([A Language For Agents](https://lucumr.pocoo.org/2026/2/9/a-language-for-agents/)). The LSAP project layers higher-level, agent-native operations on top of LSP to avoid this overhead ([LSAP on GitHub](https://github.com/lsp-client/LSAP)). Treat LSP-backed retrieval as a floor — wrappers like Serena or LSAP-style protocols carry most of the benefit.
 
-**Grep is the baseline to beat, not file reading.** The realistic alternative most coding agents already default to is not naive whole-file reading — it is well-aimed `grep`/`ripgrep`. Claude Code, Cursor, Codex CLI, and similar agents lean on text search as their primary code-retrieval backbone, and a controlled comparison found grep-based retrieval generally more accurate than vector retrieval for agentic search ([_Is Grep All You Need?_, arXiv 2605.15184](https://arxiv.org/abs/2605.15184)). Grep needs zero infrastructure and never returns stale results. The honest case for LSP-backed loading is high-precision, symbol-grounded confirmation (exact definition site, every reference, the real type) on top of grep's broad exploratory sweep — not a replacement for it. If a single grep pins the symbol, the LSP round-trip rarely pays for itself.
+Grep is the baseline to beat, not file reading. The realistic alternative most coding agents already default to is not naive whole-file reading — it is well-aimed `grep` or `ripgrep`. Claude Code, Cursor, Codex CLI, and similar agents lean on text search as their primary code-retrieval backbone, and a controlled comparison found grep-based retrieval generally more accurate than vector retrieval for agentic search ([_Is Grep All You Need?_, arXiv 2605.15184](https://arxiv.org/abs/2605.15184)). Grep needs zero infrastructure and never returns stale results. The honest case for LSP-backed loading is high-precision, symbol-grounded confirmation (exact definition site, every reference, the real type) on top of grep's broad exploratory sweep — not a replacement for it. If a single grep pins the symbol, the LSP round-trip rarely pays for itself.
 
 ## Example
 
 Contrast between file-based and LSP-backed context loading for the same navigation task using Serena's MCP tools in Claude Code.
 
-**File-based approach** — loads the entire module to find one function signature:
+File-based approach — loads the entire module to find one function signature:
 
 ```bash
 # Agent reads the full file to locate AuthService
@@ -82,7 +82,7 @@ Contrast between file-based and LSP-backed context loading for the same navigati
 cat src/auth/auth_service.py
 ```
 
-**LSP-backed approach** — queries only the relevant symbol:
+LSP-backed approach — queries only the relevant symbol:
 
 ```
 # Agent calls Serena's find_symbol tool
@@ -115,7 +115,7 @@ This returns call sites across the codebase with their file paths and line numbe
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
 - [Repository Map Pattern](repository-map-pattern.md)
-- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Context Budget Allocation](context-budget-allocation.md)
 - [Structured Domain Retrieval](structured-domain-retrieval.md)
 - [Context Engineering](context-engineering.md)

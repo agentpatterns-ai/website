@@ -15,7 +15,7 @@ status: current
 
 Claude Code v2.1.152 added two ways to re-scan skill directories inside a running session: the `/reload-skills` command and a `SessionStart` hook that returns `reloadSkills: true`. Both refresh the set of skills the model can invoke in place, leaving the conversation context untouched. [Source: [Claude Code changelog](https://code.claude.com/docs/en/changelog), 2026-05-27]
 
-## Two Reload Paths
+## Two reload paths
 
 The two paths differ by who triggers them and when they fire:
 
@@ -26,27 +26,27 @@ The two paths differ by who triggers them and when they fire:
 
 `/reload-skills` is the manual path for an authoring loop. The `reloadSkills: true` return is for hooks that fetch, generate, or install skills before the first turn — without it, hook-installed skills would not register until the next launch. [Source: [Claude Code changelog](https://code.claude.com/docs/en/changelog), 2026-05-27] The same release lets a `SessionStart` hook set the session title via `hookSpecificOutput.sessionTitle` on startup and resume. [Source: [Claude Code changelog](https://code.claude.com/docs/en/changelog), 2026-05-27]
 
-## Why It Works
+## Why it works
 
-Claude Code scans skill directories to build the set of skills the model can invoke. Historically this scan ran once, at launch, so the available-skills set was fixed for the session's lifetime — picking up an edit meant restarting, which discards the conversation transcript, files read into context, the active task list, and any reasoning built up so far. A reload re-runs the directory scan against the live session, swapping in the current on-disk `SKILL.md` set while leaving the context object intact. The causal win is decoupling capability discovery (a cheap, re-runnable directory scan) from context accumulation (expensive, lost on restart), so editing a skill no longer forces you to pay the context-rebuild cost. [Source: [Claude Code changelog](https://code.claude.com/docs/en/changelog), 2026-05-27] This mirrors `/reload-plugins`, the analogous hot-reload for the plugin layer that reloads plugins, skills, agents, hooks, and plugin MCP servers without a restart. [Source: [Claude Code plugins guide](https://code.claude.com/docs/en/plugins)]
+Claude Code scans skill directories to build the set of skills the model can invoke. Historically this scan ran once, at launch, so the available-skills set was fixed for the session. Picking up an edit meant restarting, which discards the conversation transcript, files read into context, the active task list, and any reasoning built up so far. A reload re-runs the directory scan against the live session. It swaps in the current on-disk `SKILL.md` set while leaving the context object intact. This decouples capability discovery (a cheap, re-runnable directory scan) from context accumulation (expensive, lost on restart), so editing a skill no longer forces you to pay the context-rebuild cost. [Source: [Claude Code changelog](https://code.claude.com/docs/en/changelog), 2026-05-27] This mirrors `/reload-plugins`, the analogous hot-reload for the plugin layer that reloads plugins, skills, agents, hooks, and plugin MCP servers without a restart. [Source: [Claude Code plugins guide](https://code.claude.com/docs/en/plugins)]
 
-## What a Reload Preserves
+## What a reload preserves
 
 A restart loses everything the model has accumulated; a reload keeps it.
 
-- **Preserved**: conversation transcript, files already read into context, the active todo/task list, sub-agent results gathered so far, and accumulated reasoning.
-- **Refreshed**: the set of skills discoverable from the scanned directories — newly added, edited, or removed `SKILL.md` definitions.
+- Preserved: conversation transcript, files already read into context, the active todo/task list, sub-agent results gathered so far, and accumulated reasoning.
+- Refreshed: the set of skills discoverable from the scanned directories — newly added, edited, or removed `SKILL.md` definitions.
 
 This is what collapses the authoring loop to edit → reload → test inside one session.
 
-## When This Backfires
+## When this backfires
 
 Reloading is not always the better choice over a clean restart:
 
-- **Short sessions with little context** — with no accumulated transcript or state to protect, a restart is simpler and removes any risk of a stale registration.
-- **Edits that interact with loaded context** — the model retains reasoning and tool selections made *before* the skill set changed; a reloaded or removed skill can leave earlier in-context decisions stale, which a clean restart avoids.
-- **Untrusted hook-installed skills** — a `SessionStart` hook that fetches and installs skills from an external source then registers them via `reloadSkills: true` widens the trust surface, since an installed `SKILL.md` is model-readable instruction. Auto-installing skills from untrusted input couples external content to the agent's capability set.
-- **Debugging skill triggering** — when a skill mis-fires, reloading after an edit keeps prior-turn context that can mask whether the fix actually changed behaviour; a clean restart isolates the variable.
+- Short sessions with little context — with no accumulated transcript or state to protect, a restart is simpler and removes any risk of a stale registration.
+- Edits that interact with loaded context — the model retains reasoning and tool selections made before the skill set changed; a reloaded or removed skill can leave earlier in-context decisions stale, which a clean restart avoids.
+- Untrusted hook-installed skills — a `SessionStart` hook that fetches and installs skills from an external source then registers them via `reloadSkills: true` widens the trust surface, since an installed `SKILL.md` is model-readable instruction. Auto-installing skills from untrusted input couples external content to the agent's capability set.
+- Debugging skill triggering — when a skill mis-fires, reloading after an edit keeps prior-turn context that can mask whether the fix actually changed behavior; a clean restart isolates the variable.
 
 A reload also does not refresh everything a restart would. Reloading updates the model-facing skill set but does not rebuild the `/` command parser index, so a newly added skill can be invocable by the model yet still return "Unknown skill" on direct slash invocation or be missing from `/` autocomplete until a full restart. [Source: [anthropics/claude-code#37862](https://github.com/anthropics/claude-code/issues/37862)] When you need a skill reachable by name from the command line in the same session, restart rather than reload.
 

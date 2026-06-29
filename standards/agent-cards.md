@@ -13,21 +13,21 @@ maturity: adopted
 
 > A machine-readable JSON descriptor at a well-known URL advertising an agent's capabilities, protocols, authentication, and skills — enabling automated discovery without docs or hardcoded integrations.
 
-## What Agent Cards Solve
+## What agent cards solve
 
-Orchestrators in multi-agent systems need to discover what sub-agents can do. Without a standard format, discovery requires reading docs, hardcoding capability lists, or per-agent config. Agent cards provide a structured capability contract — analogous to [OpenAPI specs for HTTP APIs](openapi-agent-tool-spec.md) — that a client agent reads programmatically.
+Orchestrators in multi-agent systems need to discover what sub-agents can do. Without a standard format, discovery means reading docs, hardcoding capability lists, or keeping per-agent config. An agent card gives a client agent a structured capability contract it reads programmatically. The card works like an [OpenAPI spec for HTTP APIs](openapi-agent-tool-spec.md).
 
-The A2A protocol [formalized agent cards](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/) as its discovery mechanism, but the concept is useful independently of A2A for any system that needs machine-readable capability advertisements.
+The A2A protocol [formalized agent cards](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/) as its discovery mechanism. The concept works on its own too, for any system that needs machine-readable capability advertisements.
 
-## Publishing Location
+## Publishing location
 
-Agent cards are hosted at a well-known path under the agent's base URL:
+Agent cards live at a well-known path under the agent's base URL:
 
 `{base-url}/.well-known/agent-card.json`
 
-Clients fetch the card via HTTP GET, following the [RFC 8615](https://www.rfc-editor.org/rfc/rfc8615) well-known URI convention.
+Clients fetch the card with an HTTP GET, following the [RFC 8615 well-known URI convention](https://www.rfc-editor.org/rfc/rfc8615).
 
-## Card Structure
+## Card structure
 
 An [agent card](https://github.com/google/A2A/blob/main/docs/specification.md) contains these top-level fields:
 
@@ -45,9 +45,9 @@ An [agent card](https://github.com/google/A2A/blob/main/docs/specification.md) c
 | `defaultOutputModes` | string[] | Produced MIME types for output |
 | `skills` | array | Individual capability units |
 
-## Skills Schema
+## Skills schema
 
-Each [skill](https://github.com/google/A2A/blob/main/docs/specification.md#agentskill) describes a specific capability the agent can perform:
+Each [skill](https://github.com/google/A2A/blob/main/docs/specification.md#agentskill) describes one capability the agent can perform:
 
 ```json
 {
@@ -61,49 +61,49 @@ Each [skill](https://github.com/google/A2A/blob/main/docs/specification.md#agent
 }
 ```
 
-Per-skill `inputModes`/`outputModes` override card-level defaults. Tags enable filtering: a client searching for "security" matches this skill without parsing descriptions.
+Per-skill `inputModes` and `outputModes` override the card-level defaults. Tags let a client filter: a client searching for "security" matches this skill without parsing descriptions.
 
-## Capabilities Declaration
+## Capabilities declaration
 
 The [capabilities object](https://github.com/google/A2A/blob/main/docs/specification.md#agentcapabilities) declares protocol-level features:
 
-- **`streaming`**: SSE-based real-time update delivery
-- **`pushNotifications`**: webhook delivery to client endpoints
-- **`extendedAgentCard`**: support for `GetExtendedAgentCard`, which returns richer cards after authentication
+- `streaming`: real-time update delivery over SSE
+- `pushNotifications`: webhook delivery to client endpoints
+- `extendedAgentCard`: support for `GetExtendedAgentCard`, which returns richer cards after authentication
 
-Clients read these flags to pick a communication pattern before sending a task.
+Clients read these flags to pick a communication pattern before they send a task.
 
 ## Authentication
 
-Two fields declare auth: `securitySchemes` defines available schemes in OpenAPI-compatible format; `security` specifies which apply. Supported scheme types:
+Two fields declare auth. `securitySchemes` defines the available schemes in OpenAPI-compatible format, and `security` specifies which ones apply. Supported scheme types:
 
 - API keys
 - OAuth2 (flow types, token URLs, scopes)
 - Mutual TLS
 - OpenID Connect
 
-Clients determine auth requirements before attempting a connection.
+Clients work out the auth requirements before they attempt a connection.
 
-## Static vs Dynamic Cards
+## Static vs dynamic cards
 
-**Static cards** are fixed JSON files for agents with one capability set for all callers — served as a static file with standard HTTP caching.
+Static cards are fixed JSON files for agents with one capability set for all callers. You serve them as a static file with standard HTTP caching.
 
-**Dynamic cards** are generated per-request based on caller identity or permissions, exposing different skills to different callers (e.g., authenticated enterprise users see internal skills hidden from anonymous callers). A2A supports this through [`GetExtendedAgentCard`](https://github.com/google/A2A/blob/main/docs/specification.md), which returns a richer card after authentication.
+Dynamic cards are generated per request, based on caller identity or permissions. They expose different skills to different callers. For example, authenticated enterprise users see internal skills hidden from anonymous callers. A2A supports this through [`GetExtendedAgentCard`](https://github.com/google/A2A/blob/main/docs/specification.md), which returns a richer card after authentication.
 
-## Card Signing
+## Card signing
 
-Cards may be [signed with JWS (RFC 7515)](https://github.com/google/A2A/blob/main/docs/specification.md) for authenticity and integrity. The JSON is canonicalized per RFC 8785 before signing, producing consistent hashes regardless of property order.
+Cards may be [signed with JWS (RFC 7515)](https://github.com/google/A2A/blob/main/docs/specification.md) for authenticity and integrity. The JSON is canonicalized per RFC 8785 before signing, which produces consistent hashes whatever the property order.
 
-Signing matters in federated environments where a client must verify the card was published by the claimed provider, not a man-in-the-middle.
+Signing matters in federated environments, where a client must verify the card came from the claimed provider rather than a man-in-the-middle.
 
-## When This Backfires
+## When this backfires
 
 Agent cards add friction that outweighs their value in four situations:
 
-- **Single-consumer integrations**: when one client calls one agent, a shared config or env var beats maintaining a well-known URL with correct caching.
-- **Rapidly-changing capability sets**: static cards go stale as [skills](agent-skills-standard.md) change; dynamic cards add server complexity and cache-invalidation risk.
-- **Cold-start bootstrapping**: the card tells you *what* an agent does once you know its base URL — not *how to find that URL*. Registries or service meshes still need out-of-band coordination. The [Agentic Resource Discovery](agentic-resource-discovery.md) draft spec is one proposed answer at the federated-search layer above agent cards.
-- **A2A schema coupling**: consumers written against an early A2A version may break as the spec evolves; the `url` → `supportedInterfaces` rename is one example.
+- Single-consumer integrations: when one client calls one agent, a shared config or env var beats maintaining a well-known URL with correct caching.
+- Rapidly changing capability sets: static cards go stale as [skills](agent-skills-standard.md) change, and dynamic cards add server complexity and cache-invalidation risk.
+- Cold-start bootstrapping: the card tells you what an agent does once you know its base URL, not how to find that URL. Registries or service meshes still need out-of-band coordination. The [Agentic Resource Discovery](agentic-resource-discovery.md) draft spec is one proposed answer at the federated-search layer above agent cards.
+- A2A schema coupling: consumers written against an early A2A version may break as the spec evolves. The `url` to `supportedInterfaces` rename is one example.
 
 ## Key Takeaways
 

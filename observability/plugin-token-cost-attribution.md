@@ -16,11 +16,11 @@ maturity: adopted
 
 > Claude Code's `claude plugin details <name>` prints a plugin's component inventory and per-session token cost — the attribution cut between `/usage` and `/context all`.
 
-**Related lesson:** [Attributing the Context](https://learn.agentpatterns.ai/observability/attributing-the-context/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Attributing the Context](https://learn.agentpatterns.ai/observability/attributing-the-context/) — this concept features in a hands-on lesson with quizzes.
 
-The plugin is the install/remove unit in Claude Code: one manifest bundles skills, agents, hooks, MCP servers, and LSP servers ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)). Without per-plugin token accounting, a maintainer who sees the session at 78% cannot rank installed plugins by cost — the only action is *"disable a plugin"* without knowing which carries the weight. Claude Code v2.1.139 (2026-05-11) closed that gap with the `plugin details` subcommand ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+The plugin is the install/remove unit in Claude Code: one manifest bundles skills, agents, hooks, MCP servers, and LSP servers ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)). Without per-plugin token accounting, a maintainer who sees the session at 78% cannot rank installed plugins by cost. The only action is 'disable a plugin', without knowing which one carries the weight. Claude Code v2.1.139 (2026-05-11) closed that gap with the `plugin details` subcommand ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 
-## The Attribution Hierarchy
+## The attribution hierarchy
 
 Three cuts of the same telemetry, each pointing at a different remediation primitive:
 
@@ -40,22 +40,22 @@ graph LR
 
 Session names the symptom; plugin names the unit you act on with one command; component names the skill, tool, or hook to rewrite. [Context-usage attribution](context-usage-attribution.md) covers the orthogonal per-source cut (rules vs skills vs MCP vs subagent) — the same skill counts toward "skills 28%" in the source view and its parent plugin in the plugin view.
 
-## Always-On vs On-Invoke
+## Always-on versus on-invoke
 
 Two cost figures per component ([Plugins reference — plugin details](https://code.claude.com/docs/en/plugins-reference)):
 
-- **Always-on** — tokens added to every session by listing text (skill descriptions, agent descriptions, command names). Paid whether any component fires or not.
-- **On-invoke** — tokens a component costs when it fires. Shown per component, not summed, because a session invokes only a subset.
+- Always-on — tokens added to every session by listing text (skill descriptions, agent descriptions, command names). You pay this whether any component fires or not.
+- On-invoke — tokens a component costs when it fires. Shown per component, not summed, because a session invokes only a subset.
 
-The always-on total is computed via `count_tokens` for the active model; per-component numbers are proportionally scaled. If the API is unreachable, the command falls back to a character-based estimate.
+Claude Code computes the always-on total via `count_tokens` for the active model, then scales the per-component numbers proportionally. If the API is unreachable, the command falls back to a character-based estimate.
 
-A single total confuses two budget regimes — a plugin can carry 50 tokens always-on and 8000 on-invoke, or the reverse. Always-on compounds across every session before any work is done ([Infinite Context anti-pattern](../anti-patterns/infinite-context.md) territory); on-invoke scales with invocation frequency. Sort each column separately, then cross-reference on-invoke with `/usage` for expensive-per-call components.
+A single total confuses two budget regimes — a plugin can carry 50 tokens always-on and 8000 on-invoke, or the reverse. Always-on compounds across every session before any work happens ([Infinite Context anti-pattern](../anti-patterns/infinite-context.md) territory); on-invoke scales with invocation frequency. Sort each column separately, then cross-reference on-invoke with `/usage` for expensive-per-call components.
 
-The always-on column is what argues for curating rather than maximizing installed skills: Microsoft notes that the count of installed skills imposes an upfront session-start metadata-injection tax — each skill's name, description, and trigger is paid whether or not the skill ever fires ([Microsoft Developer Blog — Stop skillmaxxing, save your tokens](https://developer.microsoft.com/blog/stop-skillmaxxing-save-your-tokens)). That tax is distinct from the per-invocation on-invoke cost above; it scales with how many skills are installed, not how many fire.
+The always-on column argues for curating installed skills rather than maximizing them. Microsoft notes that the count of installed skills imposes an upfront session-start metadata-injection tax: you pay for each skill's name, description, and trigger whether or not the skill ever fires ([Microsoft Developer Blog — Stop skillmaxxing, save your tokens](https://developer.microsoft.com/blog/stop-skillmaxxing-save-your-tokens)). That tax is distinct from the per-invocation on-invoke cost above. It scales with how many skills are installed, not how many fire.
 
-## Component Inventory
+## Component inventory
 
-Components are grouped as Skills (skills and commands), Agents, Hooks, MCP servers, and LSP servers (added in v2.1.139). Hooks are tagged *"harness-only — no model context cost"* because they execute outside the model context — wall-clock and CPU, not tokens ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)).
+Claude Code groups components as Skills (skills and commands), Agents, Hooks, MCP servers, and LSP servers (added in v2.1.139). Hooks are tagged 'harness-only — no model context cost' because they run outside the model context — wall-clock and CPU, not tokens ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)).
 
 A plugin's budget is not its always-on number alone. A verbose MCP server returning 8000 tokens per call sits in the on-invoke column and only matters if it fires. Pair the detail view with `/usage` to separate cold heavy plugins from hot light ones.
 
@@ -70,14 +70,14 @@ A plugin's budget is not its always-on number alone. A verbose MCP server return
    - Hot on-invoke skill → rewrite output to cut tool-output token cost
    - Plugin unused in this workflow → `claude plugin disable <name>`
 
-## When This Cut Misleads
+## When this cut misleads
 
 Per-plugin attribution is the right axis when installed plugins carry non-trivial cost. It produces noise when:
 
-- **Most config is standalone `.claude/`, not plugins.** When skills, agents, and hooks live in the project directory, the per-plugin column rounds the offenders into "everything else". Use the per-source cut ([context-usage attribution](context-usage-attribution.md)) instead.
-- **Plugins are small and homogeneous.** Ranking ten plugins at 100–300 tokens always-on each is rounding noise — the target is one skill, not one plugin.
-- **`count_tokens` is unreachable.** The character-based fallback overcounts JSON-heavy descriptions and undercounts dense prose. Rankings stay directionally useful; absolute numbers drift.
-- **Heavy components billed on-invoke rarely fire.** Reading on-invoke without `/usage` mis-prioritises cold heavy plugins over hot light ones.
+- Most config is standalone `.claude/`, not plugins. When skills, agents, and hooks live in the project directory, the per-plugin column rounds the offenders into "everything else". Use the per-source cut ([context-usage attribution](context-usage-attribution.md)) instead.
+- Plugins are small and homogeneous. Ranking ten plugins at 100–300 tokens always-on each is rounding noise — the target is one skill, not one plugin.
+- `count_tokens` is unreachable. The character-based fallback overcounts JSON-heavy descriptions and undercounts dense prose. Rankings stay directionally useful; absolute numbers drift.
+- Heavy components billed on-invoke rarely fire. Reading on-invoke without `/usage` mis-prioritizes cold heavy plugins over hot light ones.
 
 The per-component cut (`/context all`) is the right axis when the plugin column points to a plugin with one heavy skill among five.
 
@@ -108,7 +108,7 @@ Per-component (rounded)
   Token counts are estimates and may differ from actual usage.
 ```
 
-The 180-token always-on figure is paid every session, regardless of whether either skill fires. Cross-checking `/usage` shows `scan-dependencies` fired six times in the previous session — six × 2400 = 14400 tokens of on-invoke cost from a 100-token always-on listing. The remediation is not to disable the plugin; the always-on cost is already minimal. It is to audit `scan-dependencies` output for tool-output token cost and shrink the per-call output.
+You pay the 180-token always-on figure every session, regardless of whether either skill fires. Cross-checking `/usage` shows `scan-dependencies` fired six times in the previous session — six × 2400 = 14400 tokens of on-invoke cost from a 100-token always-on listing. The remediation is not to disable the plugin, because the always-on cost is already minimal. Instead, audit `scan-dependencies` output for tool-output token cost and shrink the per-call output.
 
 The opposite finding from the same command: `claude plugin details` against a plugin with twelve skills shows ~1400 tokens always-on and ~0 on-invoke across the session — none fired. The remediation here is to split the plugin, or mark the unused skills `name-only` in `skillOverrides`.
 

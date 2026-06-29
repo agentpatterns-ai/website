@@ -21,24 +21,24 @@ maturity: established
 
 > Design agent tools like APIs — with documentation, examples, edge-case handling, and mistake-proofing — not as boilerplate wrappers around existing functions.
 
-**Learn it hands-on:** [What Makes a Tool Agent-Friendly](https://learn.agentpatterns.ai/tool-engineering/agent-friendly-tools/) — guided lesson with quizzes.
+Learn it hands-on: [What Makes a Tool Agent-Friendly](https://learn.agentpatterns.ai/tool-engineering/agent-friendly-tools/) — guided lesson with quizzes.
 
 !!! info "Also known as"
     Tool Descriptions as Onboarding, Mistake-Proofing / Poka-Yoke
 
-## Tools as the Agent's Interface to the World
+## Tools as the agent's interface to the world
 
-Agent quality is bounded by tool quality. No prompt compensates for a tool interface the model cannot use reliably. Tool interface defects — wrong selection, incorrect parameters, misinterpreted output — recur as a failure mode in agent loops.
+Tool quality bounds agent quality. No prompt compensates for a tool interface the model cannot use reliably. Tool interface defects — wrong selection, incorrect parameters, misinterpreted output — recur as a failure mode in agent loops.
 
 Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), tool design deserves the same investment as prompt engineering.
 
-## Minimize Formatting Overhead
+## Minimize formatting overhead
 
 Inputs requiring precise formatting — exact line counts, complex escaping, specific delimiters — create failure surface. Design inputs to accept formats with strong model priors from training data (JSON, markdown, plain prose). Anthropic's guidance is explicit: avoid formatting "overhead such as having to keep an accurate count of thousands of lines of code, or string-escaping any code it writes" ([Building Effective Agents, Appendix 2](https://www.anthropic.com/engineering/building-effective-agents)).
 
 The same applies to outputs: return formats the model can parse without counting characters or matching offsets.
 
-## Comprehensive Documentation
+## Comprehensive documentation
 
 Tool docstrings should include:
 
@@ -51,7 +51,7 @@ A model with no prior knowledge of your system forms its understanding entirely 
 
 This works because LLMs reason over tool descriptions via in-context learning — the docstring is the model's only ground truth about what a tool does and how to call it correctly, which is why [tool descriptions read like onboarding docs](tool-descriptions-as-onboarding.md). A well-written docstring is a compact, always-present reference that shapes every tool invocation.
 
-## Poka-Yoke: Mistake-Proofing
+## Poka-yoke: mistake-proofing
 
 Poka-yoke is the engineering practice of making errors structurally impossible or structurally obvious. Applied to tool design:
 
@@ -62,25 +62,25 @@ Poka-yoke is the engineering practice of making errors structurally impossible o
 
 The goal is to make the correct call easier than the incorrect call.
 
-## Independent Testing
+## Independent testing
 
 Test tools independently before full agent integration. Observe how the model calls each tool in isolation: correct selection, correct parameters, correct output handling — the junior-developer test [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) recommends. Errors in full agent loops are ambiguous — prompt, tool, or interaction. Isolated testing surfaces tool-specific misuse and eliminates one variable from loop-level failures.
 
-## Tool Result Optimization
+## Tool result optimization
 
-The preceding sections address tool *inputs*; this section addresses tool *outputs*. The OPENDEV paper reports ~54% reduction in peak context consumption through per-tool-type summarization and large output offloading ([Bui, 2026 §2.3.2](https://arxiv.org/abs/2603.05344)):
+The preceding sections address tool inputs; this section addresses tool outputs. The OPENDEV paper reports a roughly 54% reduction in peak context consumption through per-tool-type summarization and large output offloading ([Bui, 2026 §2.3.2](https://arxiv.org/abs/2603.05344)):
 
-- **Per-type summarization**: file reads replaced with metadata (line count, character count), search results collapsed to match counts, directory listings reduced to item counts, command outputs truncated to line counts for longer outputs
-- **Large output offloading**: results exceeding 8,000 characters written to session-specific scratch files with a 500-character preview — the agent can retrieve full output on demand without default context cost
-- **Agent-aware truncation hints**: when output is offloaded, the truncation message includes a recovery hint tailored to the agent's capabilities (e.g., suggesting subagent delegation or incremental search)
+- Per-type summarization: file reads replaced with metadata (line count, character count), search results collapsed to match counts, directory listings reduced to item counts, command outputs truncated to line counts for longer outputs
+- Large output offloading: results exceeding 8,000 characters written to session-specific scratch files with a 500-character preview — the agent can retrieve full output on demand without default context cost
+- Agent-aware truncation hints: when output is offloaded, the truncation message includes a recovery hint tailored to the agent's capabilities (for example, suggesting subagent delegation or incremental search)
 
 Pre-computed summaries are reused during context compaction, avoiding redundant re-processing and improving both speed and quality of emergency compaction ([Bui, 2026 §2.3.2](https://arxiv.org/abs/2603.05344)). See also [Semantic Tool Output](semantic-tool-output.md) for complementary output formatting patterns.
 
 ## Example
 
-The following shows a poorly designed tool definition contrasted with one that applies tool engineering principles — comprehensive documentation, poka-yoke parameter names, structured errors, and summarised output.
+The following shows a poorly designed tool definition contrasted with one that applies tool engineering principles — comprehensive documentation, poka-yoke parameter names, structured errors, and summarized output.
 
-**Before: minimal wrapper with vague parameters**
+Before: minimal wrapper with vague parameters
 
 ```python
 def search(query, type, limit):
@@ -89,7 +89,7 @@ def search(query, type, limit):
     return results  # returns raw list, potentially thousands of items
 ```
 
-**After: engineered tool with documentation, validated inputs, and summarised output**
+After: engineered tool with documentation, validated inputs, and summarized output
 
 ```python
 def search_codebase(
@@ -133,13 +133,13 @@ def search_codebase(
 
 The docstring gives the model a concrete call example, documents every return key, and explains what happens on error — so the model can handle failure without guessing. The `file_type` enumeration eliminates free-text guessing. The structured error response tells the model exactly what to fix.
 
-## When This Backfires
+## When this backfires
 
 Tool engineering investment pays off when tools are reused across many agent sessions and workflows. It adds friction without payoff in these conditions:
 
-- **Rapidly-changing interfaces**: when the tool's API contract is still unstable, heavyweight docstrings become maintenance debt — the description drifts from actual behavior, misleading the model more than a terse stub would.
-- **One-off or exploratory scripts**: a tool called once in a single session does not need edge-case documentation or enumerated parameter values; the cost of engineering it outweighs the benefit.
-- **Upstream documentation already exists**: if the tool wraps a well-documented external API the model has strong training priors for, a thin wrapper that exposes the native interface may outperform a custom docstring that introduces inconsistencies — the rationale behind a [Unix CLI-native tool interface](unix-cli-native-tool-interface.md).
+- Rapidly-changing interfaces: when the tool's API contract is still unstable, heavyweight docstrings become maintenance debt — the description drifts from actual behavior, misleading the model more than a terse stub would.
+- One-off or exploratory scripts: a tool called once in a single session does not need edge-case documentation or enumerated parameter values; the cost of engineering it outweighs the benefit.
+- Upstream documentation already exists: if the tool wraps a well-documented external API the model has strong training priors for, a thin wrapper that exposes the native interface may outperform a custom docstring that introduces inconsistencies — the rationale behind a [Unix CLI-native tool interface](unix-cli-native-tool-interface.md).
 
 Apply the full pattern to stable, shared tools that are called repeatedly across agent runs. Apply minimal-viable documentation to throwaway or prototype tooling.
 
@@ -157,7 +157,7 @@ Apply the full pattern to stable, shared tools that are called repeatedly across
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) — deep dive on structural constraint patterns
 - [Tool Description Quality](tool-description-quality.md)
 - [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
 - [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md)
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — tool design as a UX discipline

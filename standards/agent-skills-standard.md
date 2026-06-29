@@ -16,15 +16,15 @@ maturity: established
 
 > The Agent Skills open standard packages task-specific knowledge into portable SKILL.md folders that AI coding tools can discover and load on demand.
 
-**Related lesson:** [Skills & Progressive Disclosure](https://learn.agentpatterns.ai/harness-engineering/skills-and-progressive-disclosure/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Skills and Progressive Disclosure](https://learn.agentpatterns.ai/harness-engineering/skills-and-progressive-disclosure/) — this concept features in a hands-on lesson with quizzes.
 
-## What the Standard Defines
+## What the standard defines
 
-The [Agent Skills standard](https://agentskills.io) specifies a format for distributing task knowledge across AI coding tools. A skill is a directory containing a `SKILL.md` entrypoint with YAML frontmatter and markdown instructions, optionally accompanied by supporting files: scripts, templates, examples, or schemas.
+The [Agent Skills standard](https://agentskills.io) defines a format for sharing task knowledge across AI coding tools. A skill is a directory with a `SKILL.md` entrypoint that holds YAML frontmatter and markdown instructions. It can also include supporting files: scripts, templates, examples, or schemas.
 
-The standard is tool-agnostic. Claude Code and GitHub Copilot (VS Code, CLI, and cloud agent) both implement it ([VS Code Agent Skills docs](https://code.visualstudio.com/docs/copilot/customization/agent-skills), [Claude Code skills docs](https://code.claude.com/docs/en/skills)). Other tools including Cursor and Gemini CLI have adopted the standard per the agentskills.io registry, but cross-tool portability is only confirmed for tools that have published implementation documentation.
+The standard is tool-agnostic. Claude Code and GitHub Copilot (VS Code, CLI, and cloud agent) both implement it ([VS Code Agent Skills docs](https://code.visualstudio.com/docs/copilot/customization/agent-skills), [Claude Code skills docs](https://code.claude.com/docs/en/skills)). Other tools, including Cursor and Gemini CLI, have adopted it per the agentskills.io registry. Cross-tool portability is confirmed only for tools that have published implementation documentation.
 
-## Skill Structure
+## Skill structure
 
 ```
 skills/
@@ -44,25 +44,25 @@ version: 1.0.0
 ---
 ```
 
-The markdown body contains the actual instructions the agent reads.
+The markdown body holds the instructions the agent reads.
 
-## Discovery and Loading
+## Discovery and loading
 
-Skills are discovered from three locations, in order of precedence:
+Tools discover skills from three locations, in order of precedence:
 
-1. **Project skills** — `.claude/skills/` or `.github/skills/` — committed to the repo, shared with all contributors
-2. **User skills** — `~/.claude/skills/` — local to the developer, available across all projects
-3. **Plugin skills** — distributed as part of an installable plugin bundle
+1. Project skills — `.claude/skills/` or `.github/skills/` — committed to the repo, shared with all contributors
+2. User skills — `~/.claude/skills/` — local to the developer, available across all projects
+3. Plugin skills — distributed as part of an installable plugin bundle
 
-Agents load skills on demand: when a task matches a skill's scope, the agent reads `SKILL.md` and any referenced supporting files. This is the progressive disclosure pattern applied to knowledge distribution — see [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md).
+Agents load skills on demand. When a task matches a skill's scope, the agent reads `SKILL.md` and any referenced supporting files. This applies the progressive disclosure pattern to knowledge distribution — see [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md).
 
-## Portability Value
+## Portability value
 
 Without a standard, skill knowledge is embedded in tool-specific formats. A checklist written for Claude Code's agent format doesn't transfer to GitHub Copilot without manual adaptation. With the standard, the same `SKILL.md` works wherever the standard is implemented.
 
-This matters for teams using multiple tools and for open-source skill distribution. The [github/awesome-copilot](https://github.com/github/awesome-copilot) repository demonstrates community-scale skill sharing.
+This matters for teams using multiple tools and for open-source skill distribution. The [github/awesome-copilot](https://github.com/github/awesome-copilot) repository shows community-scale skill sharing.
 
-## Relationship to Agent Definitions and Commands
+## Relationship to agent definitions and commands
 
 Skills carry domain knowledge. Agent definitions carry identity and skill references. Commands carry orchestration logic. The three layers are distinct:
 
@@ -72,9 +72,9 @@ Skills carry domain knowledge. Agent definitions carry identity and skill refere
 
 Skills are the reusable knowledge layer; agents and commands are not.
 
-## In Practice
+## In practice
 
-A documentation project might maintain skills covering content pipeline management, writing standards, accuracy frameworks, and site navigation. Each agent definition references the skills it needs; each skill is self-contained. A typical project keeps 5--15 skills, each focused on one domain concern.
+A documentation project might maintain skills covering content pipeline management, writing standards, accuracy frameworks, and site navigation. Each agent definition references the skills it needs; each skill is self-contained. A typical project keeps 5 to 15 skills, each focused on one domain concern.
 
 Claude Code implementation: [code.claude.com/docs/en/skills](https://code.claude.com/docs/en/skills).
 
@@ -113,20 +113,20 @@ Every page opens with a `>` blockquote that defines the concept, not describes t
 Active voice. Present tense. No hedging or meta-framing phrases.
 ```
 
-When a contributor runs `/draft-content`, the agent definition for `content-writer` references `writing-rules`. The tool discovers `.github/skills/writing-rules/SKILL.md`, loads it into context, and the agent applies the style rules without the contributor needing to specify them. The same skill file works unchanged in Claude Code, GitHub Copilot, and Cursor.
+When a contributor runs `/draft-content`, the agent definition for `content-writer` references `writing-rules`. The tool discovers `.github/skills/writing-rules/SKILL.md` and loads it into context. The agent then applies the style rules, and the contributor does not need to specify them. The same skill file works unchanged in Claude Code, GitHub Copilot, and Cursor.
 
-## Why the Standard Works
+## Why the standard works
 
-Portability comes from two design decisions. First, the `SKILL.md` entrypoint is a fixed path that any tool can locate without configuration — tools scan `.claude/skills/`, `.github/skills/`, and user-level equivalents because the standard specifies those paths. Second, YAML frontmatter makes skill metadata machine-readable: a tool can match a skill to a task by comparing the `description` field against the current context without loading the full instruction body. The progressive disclosure effect follows directly — only the metadata pays the context cost until the skill activates. ([Source: Claude Code skills docs](https://code.claude.com/docs/en/skills))
+Portability comes from two design decisions. First, the `SKILL.md` entrypoint sits at a fixed path that any tool can find without configuration. Tools scan `.claude/skills/`, `.github/skills/`, and user-level equivalents because the standard specifies those paths. Second, YAML frontmatter makes skill metadata machine-readable. A tool can match a skill to a task by comparing the `description` field against the current context, without loading the full instruction body. The progressive disclosure effect follows: only the metadata pays the context cost until the skill activates. ([Source: Claude Code skills docs](https://code.claude.com/docs/en/skills))
 
-## When This Backfires
+## When this backfires
 
 The standard adds value only when skills need to cross tool or team boundaries. Four conditions make it the wrong choice:
 
-- **Single-tool, single-developer projects** — if one person uses one tool, the portability guarantee is unused overhead. A plain markdown file in `CLAUDE.md` or a tool-specific command has less structure with no loss.
-- **Rapidly changing instructions** — skill files are versioned assets. When guidance evolves daily, the structure and tooling overhead of maintaining SKILL.md directories slows iteration relative to ad-hoc prompting.
-- **Tool mismatch on frontmatter extensions** — tools extend the standard with non-portable frontmatter fields (Claude Code adds `disable-model-invocation`, `context: fork`; VS Code adds its own fields). Skills that rely on these extensions lose portability silently — the file loads, but tool-specific behavior is silently ignored.
-- **Untrusted skill sources** — the same portability that enables cross-tool reuse also enables prompt-injection payloads to run wherever the standard is implemented. Snyk's [ToxicSkills audit of 3,984 published skills](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/) found 534 (13.4%) contained critical-severity issues — 76 confirmed malicious payloads including credential theft and data exfiltration, with 91% of malicious skills combining native code patterns and prompt injection. Skills from community registries should be treated like any other third-party code dependency — reviewed, pinned, and sandboxed — not trusted by default because they loaded cleanly.
+- Single-tool, single-developer projects — if one person uses one tool, the portability guarantee is unused overhead. A plain markdown file in `CLAUDE.md` or a tool-specific command has less structure with no loss.
+- Rapidly changing instructions — skill files are versioned assets. When guidance evolves daily, the overhead of maintaining SKILL.md directories slows iteration relative to ad-hoc prompting.
+- Tool mismatch on frontmatter extensions — tools extend the standard with non-portable frontmatter fields (Claude Code adds `disable-model-invocation`, `context: fork`; VS Code adds its own fields). Skills that rely on these extensions lose portability quietly — the file loads, but the tool-specific behavior is ignored.
+- Untrusted skill sources — the same portability that enables cross-tool reuse also lets prompt-injection payloads run wherever the standard is implemented. Snyk's [ToxicSkills audit of 3,984 published skills](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/) found 534 (13.4%) contained critical-severity issues — 76 confirmed malicious payloads including credential theft and data exfiltration, with 91% of malicious skills combining native code patterns and prompt injection. Treat skills from community registries like any other third-party code dependency: review them, pin them, and sandbox them, rather than trusting them by default because they loaded cleanly.
 
 ## Key Takeaways
 

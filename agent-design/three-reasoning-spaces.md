@@ -20,21 +20,21 @@ maturity: adopted
 
 ## Overview
 
-Agent development spans three reasoning spaces with different artifacts and decision types. Mixing them — debating architecture while writing code, or redesigning task boundaries during implementation — degrades quality in all three. The [Agent Flywheel methodology](https://agent-flywheel.com/complete-guide) formalises this separation; the same principle appears independently in Osmani's 80% problem, LangChain's reasoning sandwich, and nibzard's agentic handbook.
+Agent development spans three reasoning spaces, each with its own artifacts and decisions. Mixing them degrades quality in all three — for example, debating architecture while writing code, or redesigning task boundaries during implementation. The [Agent Flywheel methodology](https://agent-flywheel.com/complete-guide) formalizes this separation. The same principle appears on its own in Osmani's 80% problem, LangChain's reasoning sandwich, and nibzard's agentic handbook.
 
-## The Three Spaces
+## The three spaces
 
 | Space | Focus | Primary Artifact | Failure when mixed |
 |-------|-------|------------------|--------------------|
-| **Plan space** | Architecture, technology choices, system trade-offs | Large markdown plan | Agent improvises architecture from a narrow local window |
-| **Bead space** | Task boundaries, dependencies, context requirements, acceptance criteria | Self-contained work units (`.beads/` JSONL) | Execution order and context requirements are re-derived per session |
-| **Code space** | Implementation, testing, verification against bead definitions | Code changes, test results | Settled decisions get re-debated; scope creeps mid-task |
+| Plan space | Architecture, technology choices, system trade-offs | Large markdown plan | Agent improvises architecture from a narrow local window |
+| Bead space | Task boundaries, dependencies, context requirements, acceptance criteria | Self-contained work units (`.beads/` JSONL) | Execution order and context requirements are re-derived per session |
+| Code space | Implementation, testing, verification against bead definitions | Code changes, test results | Settled decisions get re-debated; scope creeps mid-task |
 
 Plan space works while the whole system fits in context. Bead space converts that plan into self-contained work units. Code space executes within those constraints.
 
-## The Law of Rework Escalation
+## The law of rework escalation
 
-Mistakes injected at each layer compound downstream:
+A mistake costs more the deeper the layer it lands in:
 
 ```
 Plan layer   →  1x cost  (pure reasoning, zero code churn)
@@ -42,15 +42,15 @@ Bead layer   →  5x cost  (orchestration rewrites, coordination overhead)
 Code layer   → 25x cost  (implementation fixes + cleanup)
 ```
 
-The deeper a mistake lands, the more downstream structure has hardened around it — front-loading decisions into plan space is the highest-leverage investment.
+The deeper a mistake lands, the more structure has hardened around it. So getting decisions right in plan space pays off the most.
 
-## Transitions as Explicit Gates
+## Transitions as explicit gates
 
 Transitions between spaces should be decisions, not drift:
 
-- **Plan → Bead**: convert the plan into self-contained work units before any code is written.
-- **Bead → Code**: each [Code-Native Memory Substrates](code-native-memory-substrates.md) has acceptance criteria and dependencies; agents implement within those bounds.
-- **Replan checkpoints**: if code-space work invalidates a bead assumption, stop and surface it. Replanning is a feature, not a failure.
+- Plan to bead: convert the plan into self-contained work units before you write any code.
+- Bead to code: each bead carries acceptance criteria and dependencies — see [Code-Native Memory Substrates](code-native-memory-substrates.md). Agents implement within those bounds.
+- Replan checkpoints: if code-space work breaks a bead assumption, stop and flag it. Replanning is a feature, not a failure.
 
 ```mermaid
 graph LR
@@ -59,24 +59,24 @@ graph LR
     C -->|replan checkpoint| B
 ```
 
-## Corroborating Evidence
+## Corroborating evidence
 
-- **Addy Osmani** observes that effective AI-assisted development requires 70% effort on problem definition before 30% on execution — skipping plan space embeds architectural choices invisibly in generated code.
-- **LangChain's reasoning sandwich** allocates maximum compute to planning and verification, standard compute to implementation — enforcing phase separation at the harness level.
-- **nibzard's agentic handbook** describes a plan-then-execute gate: the agent proposes goals, steps, tools, constraints, and done checks before execution begins.
+- Addy Osmani finds that good AI-assisted development puts 70% of the effort into defining the problem before 30% on execution. Skip plan space and the architecture choices end up buried in generated code.
+- LangChain's reasoning sandwich gives the most compute to planning and verification, and standard compute to implementation. This enforces phase separation at the harness level.
+- nibzard's agentic handbook describes a plan-then-execute gate: the agent proposes goals, steps, tools, constraints, and done checks before it starts.
 
-## Why It Works
+## Why it works
 
-Mixing reasoning spaces degrades quality because each space operates on a different scope of context. Plan space requires global visibility — the whole system in context — to make coherent architecture decisions. Code space operates on local context — a single file or function. When an agent shifts between these within a single session, the narrow local window of code space causes it to re-derive global constraints that should have been fixed in plan space, producing implicit architecture choices embedded invisibly in generated code, according to Osmani. Bead space breaks this by externalizing those constraints as written artifacts — acceptance criteria, dependency lists, required context — so code-space agents operate within explicit bounds rather than inferring them. The phase gates prevent context dilution: each space's reasoning remains coherent because it isn't competing with the concerns of the other two.
+Mixing reasoning spaces degrades quality because each space works on a different scope of context. Plan space needs global visibility — the whole system in context — to make coherent architecture decisions. Code space works on local context, a single file or function. When an agent shifts between the two in one session, the narrow window of code space makes it re-derive global constraints that plan space should have fixed. The result, according to Osmani, is implicit architecture choices buried in generated code. Bead space prevents this. It writes those constraints down as artifacts — acceptance criteria, dependency lists, required context — so code-space agents work within explicit bounds instead of guessing them. The phase gates keep each space's reasoning coherent, because it no longer competes with the concerns of the other two.
 
-## When This Backfires
+## When this backfires
 
-Three-space separation adds overhead — it is not always the right default:
+Three-space separation adds overhead. It is not always the right default:
 
-- **Solo or prototype work**: formalizing plan and bead artifacts costs time that exceeds the rework risk for small, low-stakes codebases where the whole system fits comfortably in one context window.
-- **Rapidly shifting requirements**: if the plan is likely to be invalidated before beads execute, the bead layer becomes wasted overhead. A tighter [plan-then-code loop](../workflows/plan-first-loop.md) without an explicit bead layer may be more efficient.
-- **Tasks with high reversibility**: when changes are cheap to undo (scripts, isolated utilities, feature flags), the cost differential between layers is lower and strict phase gates offer less advantage.
-- **Tooling unavailability**: the bead format (`.beads/` JSONL) requires harness support. Without it, a manual approximation can be maintained as a simple checklist, but enforcement gaps reduce the pattern's effectiveness.
+- Solo or prototype work: writing plan and bead artifacts costs more time than the rework risk is worth on small, low-stakes codebases where the whole system fits in one context window.
+- Rapidly shifting requirements: if the plan is likely to be out of date before the beads run, the bead layer is wasted overhead. A tighter [plan-then-code loop](../workflows/plan-first-loop.md) without a bead layer may work better.
+- Tasks that are easy to undo: when changes are cheap to reverse (scripts, isolated utilities, feature flags), the cost gap between layers is smaller and strict phase gates help less.
+- Without bead tooling: the bead format (`.beads/` JSONL) needs harness support. Without it, you can keep a manual checklist instead, but enforcement gaps make the pattern weaker.
 
 ## Key Takeaways
 
@@ -89,7 +89,7 @@ Three-space separation adds overhead — it is not always the right default:
 
 A feature request arrives: "add CSV export to the report dashboard." The three spaces produce distinct artifacts before any code is written.
 
-**Plan space** — the whole system fits in context; global decisions are made:
+Plan space — the whole system fits in context, so global decisions happen here:
 
 ```markdown
 # CSV Export Plan
@@ -107,7 +107,7 @@ loading the full report into memory.
 - No custom column mapping UI (fixed schema for v1)
 ```
 
-**Bead space** — the plan converts into self-contained work units, each carrying its own context:
+Bead space — the plan converts into self-contained work units, each carrying its own context:
 
 ```json
 {"id": "bead-001", "title": "Add ExportService", "depends_on": [],
@@ -121,7 +121,7 @@ loading the full report into memory.
  "tools_needed": ["read", "write", "test"]}
 ```
 
-**Code space** — each bead executes within its stated bounds; the `ExportService` bead is implemented without reopening the architecture question of whether to use an async queue.
+Code space — each bead runs within its stated bounds. The agent implements the `ExportService` bead without reopening the question of whether to use an async queue.
 
 When `bead-002` reveals that the route handler needs a streaming response type that wasn't anticipated, the agent stops and surfaces it — triggering a replan checkpoint rather than silently adding a new dependency.
 

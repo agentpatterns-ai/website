@@ -21,21 +21,21 @@ maturity: established
 
 > A two-phase agent harness pairs an initializer that prepares the environment with a coding agent that resumes from any prior session via git-based handoff artifacts.
 
-**Related lesson:** [Long-Running Agents](https://learn.agentpatterns.ai/harness-engineering/long-running-agents/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Long-Running Agents](https://learn.agentpatterns.ai/harness-engineering/long-running-agents/) — this concept features in a hands-on lesson with quizzes.
 
-## The Stateless Session Problem
+## The stateless session problem
 
-Agents have no memory between sessions. Without explicit design, they lose track of progress, repeat completed work, or [declare premature completion](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) when context pressure rises. A deliberate harness — two coordinated agents with structured artifacts — gives every session a [reliable on-ramp](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).
+Agents have no memory between sessions. Without a deliberate design, they lose track of progress, repeat completed work, or [declare premature completion](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) when context pressure rises. A harness of two coordinated agents with structured artifacts gives every session a [reliable on-ramp](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).
 
-## Initializer Agent
+## Initializer agent
 
-The initializer runs once at the start of the overall task (not per session):
+The initializer runs once at the start of the task, not once per session. It does three things:
 
-- Run environment setup scripts (e.g., `init.sh`) and verify readiness
+- Run environment setup scripts (for example, `init.sh`) and verify readiness
 - Create a `claude-progress.txt` recording what is started, completed, and remaining
 - Make a baseline git commit so the coding agent has a clean starting point
 
-## Coding Agent
+## Coding agent
 
 Each session starts with the coding agent reading orientation artifacts before touching any code:
 
@@ -45,7 +45,7 @@ Each session starts with the coding agent reading orientation artifacts before t
 
 The agent selects the highest-priority incomplete work, completes it, and leaves clean artifacts for the next session.
 
-## Git Commits as Cross-Session Memory
+## Git commits as cross-session memory
 
 Each commit message is a structured handoff note documenting:
 
@@ -55,42 +55,42 @@ Each commit message is a structured handoff note documenting:
 
 `git log` becomes a human- and agent-readable audit trail of session progress.
 
-## Lazy Tool Discovery
+## Lazy tool discovery
 
-Keep the active tool set small instead of loading every schema up front. The OPENDEV agent uses lazy tool discovery to hold down context bloat and reasoning degradation, surfacing tools to the model on demand rather than registering them all at construction time ([Bui, 2026](https://arxiv.org/abs/2603.05344)). Subagents still compile from spec to runtime and share a tool registry, but each isolates the schemas it actually exposes through [schema filtering](../multi-agent/subagent-schema-level-tool-filtering.md) — so a session pays the schema cost only for the tools it reaches for.
+Keep the active tool set small instead of loading every schema up front. The OPENDEV agent uses lazy tool discovery to hold down context bloat and reasoning degradation. It surfaces tools to the model on demand rather than registering them all at construction time ([Bui, 2026](https://arxiv.org/abs/2603.05344)). Subagents still compile from spec to runtime and share a tool registry, but each isolates the schemas it actually exposes through [schema filtering](../multi-agent/subagent-schema-level-tool-filtering.md). So a session pays the schema cost only for the tools it reaches for.
 
-## Inner Loop: Execution Cycle
+## Inner loop: execution cycle
 
 Each iteration follows a six-phase cycle ([Bui, 2026 §2.2.2](https://arxiv.org/abs/2603.05344)):
 
-1. **Pre-check/compaction** — assess context pressure, compact if needed
-2. **Thinking** — optional extended reasoning
-3. **Self-critique** — evaluate the approach before committing
-4. **Action** — LLM call with tool schemas
-5. **Tool execution** — run the selected tool
-6. **Post-processing** — update state, check termination conditions
+1. Pre-check and compaction — assess context pressure, compact if needed
+2. Thinking — optional extended reasoning
+3. Self-critique — evaluate the approach before committing
+4. Action — LLM call with tool schemas
+5. Tool execution — run the selected tool
+6. Post-processing — update state, check termination conditions
 
 LangChain's build-your-own walkthrough traces the same primitives — the loop, the tool set, and the state passed between iterations — when assembling a custom agent harness from scratch ([LangChain, how to build a custom agent harness](https://www.langchain.com/blog/how-to-build-a-custom-agent-harness)).
 
-## Failure Modes and Fixes
+## Failure modes and fixes
 
-**Agent tries to do too much in one session** — exhausts context mid-feature, leaving partial work.
+The agent tries to do too much in one session — it exhausts context mid-feature and leaves partial work.
 
-Fix: enforce single-feature-per-session in the coding agent's instructions. Anthropic's engineering practice confirms this constraint [prevents context mid-feature exhaustion](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).
+Fix: tell the coding agent to do one feature per session. Anthropic's engineering practice confirms this constraint [prevents context mid-feature exhaustion](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).
 
-**Agent prematurely declares completion** — marks a feature done before tests pass.
+The agent declares completion too early — it marks a feature done before tests pass.
 
-Fix: require passing tests as the completion gate. This rule must be explicit in the system prompt; agents without it will [optimistically self-report](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).
+Fix: require passing tests as the completion gate. State this rule in the system prompt. Agents without it will [optimistically self-report](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).
 
-## When This Backfires
+## When this backfires
 
-The two-phase harness adds structure and overhead — it is not always the right choice.
+The two-phase harness adds structure and overhead, so it is not always the right choice. Skip it in three cases:
 
-- **Short-lived or predictable tasks** — a task that fits in a single context window needs no initializer, progress file, or multi-session handoff machinery. The overhead of maintaining `claude-progress.txt` and baseline commits outweighs the benefit.
-- **Human-in-the-loop workflows** — if a human reviews and redirects after every subtask, rigid single-feature sessions introduce unnecessary checkpointing friction. An interactive back-and-forth agent is simpler and faster.
-- **Environments without reliable git access** — the pattern depends on `git log` commit history as cross-session memory. Without git, the handoff mechanism degrades to manual file management with no audit trail.
+- Short-lived or predictable tasks — a task that fits in a single context window needs no initializer, progress file, or multi-session handoff machinery. The cost of maintaining `claude-progress.txt` and baseline commits outweighs the benefit.
+- Human-in-the-loop workflows — if a person reviews and redirects after every subtask, rigid single-feature sessions add needless checkpointing friction. An interactive back-and-forth agent is simpler and faster.
+- Environments without reliable git access — the pattern depends on `git log` commit history as cross-session memory. Without git, the handoff degrades to manual file management with no audit trail.
 
-## Session Handoff Checklist
+## Session handoff checklist
 
 Every coding session ends with:
 

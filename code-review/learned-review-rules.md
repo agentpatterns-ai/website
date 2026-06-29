@@ -16,15 +16,15 @@ maturity: established
 
 > Code review agents that persist rules extracted from accepted and rejected PR feedback, improving future reviews without manual reconfiguration.
 
-## The Problem
+## The problem
 
 A first-generation review agent treats every PR as a fresh start. It flags the same false positives your team has dismissed dozens of times — including the systematic [overcorrection bias](../anti-patterns/llm-review-overcorrection.md) where LLMs misclassify correct code as non-compliant — misses patterns your codebase convention already handles, and produces a noise-to-signal ratio that degrades trust. The agent does not learn.
 
-The cause is feedback disposal: when a developer dismisses a comment or accepts a fix, that signal is discarded. The agent's behavior on the next PR is identical to its behavior on the first. An [empirical study of 278,790 code review conversations across 300 open-source projects](https://arxiv.org/abs/2603.15911) found that AI agent suggestions are adopted into the codebase at a significantly lower rate than suggestions from human reviewers — a gap that persists in part because agents cannot adjust their defaults based on team-specific dismissal patterns.
+The cause is feedback disposal: when a developer dismisses a comment or accepts a fix, that signal is discarded. The agent behaves the same way on the next PR as it did on the first. An [empirical study of 278,790 code review conversations across 300 open-source projects](https://arxiv.org/abs/2603.15911) found that teams adopt AI agent suggestions at a much lower rate than suggestions from human reviewers. The gap persists in part because agents cannot adjust their defaults to team-specific dismissal patterns.
 
-## The Pattern
+## The pattern
 
-A self-improving review agent captures accept/reject signals from each review and converts them into persistent rules — Cursor's Bugbot is the canonical implementation. Each rule adjusts what the agent flags — or suppresses — on future reviews.
+A self-improving review agent captures accept and reject signals from each review and turns them into persistent rules — Cursor's Bugbot is the canonical implementation. Each rule adjusts what the agent flags, or suppresses, on future reviews.
 
 ```mermaid
 graph TD
@@ -38,19 +38,19 @@ graph TD
     RuleStore -->|Injected into context| Agent
 ```
 
-The rule store accumulates repository-specific knowledge: which patterns to catch, which false positives to suppress, which conventions the team enforces. The agent improves on this codebase as it processes more PRs.
+The rule store builds up repository-specific knowledge: which patterns to catch, which false positives to suppress, which conventions the team enforces. The agent improves on this codebase as it processes more PRs.
 
-## Cursor Bugbot Implementation
+## Cursor Bugbot implementation
 
-Cursor's Bugbot applied this pattern in its [April 8, 2026 release](https://cursor.com/blog/bugbot-learning):
+Cursor's Bugbot applied this pattern in its [April 8, 2026 release](https://cursor.com/blog/bugbot-learning).
 
-**Learned rules from feedback.** When a developer accepts a Bugbot suggestion, Bugbot extracts a rule and stores it. When a developer dismisses a suggestion, Bugbot records a suppression rule. Future reviews on the same repository apply the accumulated rule set.
+Bugbot learns rules from feedback. When a developer accepts a Bugbot suggestion, Bugbot extracts a rule and stores it. When a developer dismisses a suggestion, Bugbot records a suppression rule. Future reviews on the same repository apply the accumulated rule set.
 
-**Learned rule accumulation at scale.** Since launching learned rules, more than 110,000 repositories have enabled learning. Cursor [reports a resolution rate nearing 78%](https://cursor.com/blog/bugbot-learning) — up from 52% at general availability in July 2025 — attributed to the accumulated rule set sharpening detection and reducing false positive noise.
+The rules accumulate at scale. Since learned rules launched, more than 110,000 repositories have turned learning on. Cursor [reports a resolution rate nearing 78%](https://cursor.com/blog/bugbot-learning) — up from 52% at general availability in July 2025 — and attributes the rise to the accumulated rule set sharpening detection and reducing false positives.
 
-**MCP server integration.** The same release [added MCP support](https://cursor.com/changelog/04-08-26): Bugbot can connect to MCP servers to pull additional context during review — project documentation, team conventions, or codebase-specific data from tools like GitHub, GitLab, and Linear — enriching its analysis beyond the PR diff.
+The same release also [added MCP support](https://cursor.com/changelog/04-08-26). Bugbot can connect to MCP servers to pull more context during review — project documentation, team conventions, or codebase-specific data from tools like GitHub, GitLab, and Linear — so its analysis reaches beyond the PR diff.
 
-## What Rules Capture
+## What rules capture
 
 Rules extracted from feedback fall into two categories:
 
@@ -59,24 +59,24 @@ Rules extracted from feedback fall into two categories:
 | Developer accepts fix | Positive rule | Reinforce: flag this pattern in future reviews |
 | Developer dismisses comment | Suppression rule | Filter: do not flag this pattern in future reviews |
 
-Over time, suppression rules reduce false positive rate. Positive rules sharpen detection of patterns the team cares about. The agent's behavior shifts toward the team's established conventions rather than the model's default priors. Cursor's aggregate data across 110,000+ repos that enabled learning shows [more than 44,000 rules generated](https://cursor.com/blog/bugbot-learning), with resolution rates climbing from 52% at general availability in July 2025 to near 80% by April 2026.
+Over time, suppression rules reduce the false positive rate. Positive rules sharpen detection of patterns the team cares about. The agent shifts toward the team's established conventions rather than the model's default priors. Cursor's aggregate data across the 110,000+ repos that turned learning on shows [more than 44,000 rules generated](https://cursor.com/blog/bugbot-learning), with resolution rates climbing from 52% at general availability in July 2025 to near 80% by April 2026.
 
-## Building This Pattern Without Bugbot
+## Building this pattern without Bugbot
 
 The mechanism is not Cursor-specific. Any review agent with structured output can implement it:
 
-1. **Capture feedback.** Store each comment with its file context, the suggested change, and the developer's response (accepted, dismissed, ignored).
-2. **Extract rules.** After enough signals on a pattern, summarize them into a compact rule: "Do not flag missing JSDoc on private functions in this repo" or "Always flag direct `process.env` access outside config files."
-3. **Inject rules into context.** Prepend the rule set to the review agent's system prompt or context window before each run.
-4. **Review rules periodically.** Rules can encode stale conventions. Build a review step — human or automated — to prune rules that no longer reflect team standards.
+1. Capture feedback. Store each comment with its file context, the suggested change, and the developer's response (accepted, dismissed, ignored).
+2. Extract rules. After enough signals on a pattern, summarize them into a compact rule: "Do not flag missing JSDoc on private functions in this repo" or "Always flag direct `process.env` access outside config files."
+3. Inject rules into context. Prepend the rule set to the review agent's system prompt or context window before each run.
+4. Review rules periodically. Rules can encode stale conventions. Build a review step — human or automated — to prune rules that no longer reflect team standards.
 
 ## Limitations
 
-**Rules encode team blind spots.** If a team consistently dismisses a class of security warning, the agent learns to suppress it. The rule system amplifies existing review culture, good or bad.
+Rules encode team blind spots. If a team consistently dismisses a class of security warning, the agent learns to suppress it. The rule system amplifies existing review culture, good or bad.
 
-**Suppression rules degrade over time.** A rule that was correct 6 months ago may become incorrect after a refactor. Without a TTL or periodic review, stale suppression rules cause the agent to miss real issues.
+Suppression rules degrade over time. A rule that was correct 6 months ago may become wrong after a refactor. Without a TTL or periodic review, stale suppression rules cause the agent to miss real issues.
 
-**Rule quality depends on signal clarity.** "Dismiss" means different things: incorrect finding, not applicable here, low priority, or simply annoying. Without structured dismiss reasons, rule extraction conflates these signals.
+Rule quality depends on signal clarity. "Dismiss" means different things: incorrect finding, not applicable here, low priority, or simply annoying. Without structured dismiss reasons, rule extraction conflates these signals.
 
 ## Key Takeaways
 

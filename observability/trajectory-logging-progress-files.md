@@ -17,20 +17,20 @@ maturity: established
 
 > A progress file, git commits, feature-state JSON, and a bootstrap script capture a replayable audit trail of agent decisions — no observability backend required.
 
-**Learn it hands-on:** [Breaking the Loop](https://learn.agentpatterns.ai/observability/breaking-the-loop/) — guided lesson with quizzes.
+Learn it hands-on with [Breaking the Loop](https://learn.agentpatterns.ai/observability/breaking-the-loop/) — a guided lesson with quizzes.
 
 !!! info "Also known as"
     Progress File Pattern, Audit Trail for Agent Decisions
 
-## The Problem
+## The problem
 
-Long-running agents produce decisions spread across multiple sessions. Without a persistent record, each new session loses the trajectory: what was tried, what failed, what the agent decided next. Rebuilding that context wastes tokens and produces inconsistent outcomes.
+Long-running agents make decisions across many sessions. Without a persistent record, each new session loses the trajectory: what was tried, what failed, and what the agent decided next. Rebuilding that context wastes tokens and produces inconsistent outcomes.
 
-[OTel GenAI semantic conventions](../standards/opentelemetry-agent-observability.md) solve this at infrastructure level ([OTel GenAI span conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/)). The filesystem pattern solves the same problem with no backend and no additional dependencies.
+[OTel GenAI semantic conventions](../standards/opentelemetry-agent-observability.md) solve this at the infrastructure level ([OTel GenAI span conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/)). The filesystem pattern solves the same problem with no backend and no extra dependencies.
 
-## The Four-Component Harness
+## The four-component harness
 
-[Anthropic's harness engineering guidance](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) describes a pattern for long-running agents built from four components that together form a complete trajectory log.
+[Anthropic's harness engineering guidance](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) describes a pattern for long-running agents. It uses four components that together form a complete trajectory log.
 
 ```mermaid
 graph TD
@@ -42,48 +42,48 @@ graph TD
     F -->|next session| A
 ```
 
-### 1. Progress File (`claude-progress.txt`)
+### 1. Progress file (`claude-progress.txt`)
 
-A plain text or markdown file updated at session end and read at session start. It captures what was completed, what is next (in priority order), and any blockers. [Reading it before work begins](../agent-design/session-initialization-ritual.md) gives each fresh context window a recoverable record of prior decisions without re-analysing the full codebase.
+A plain text or markdown file, updated at session end and read at session start. It captures what was completed, what is next in priority order, and any blockers. [Reading it before work begins](../agent-design/session-initialization-ritual.md) gives each fresh context window a recoverable record of prior decisions, without re-analyzing the full codebase.
 
-### 2. Git Commits as Trajectory Checkpoints
+### 2. Git commits as trajectory checkpoints
 
-Agents commit after each completed task with descriptive messages. The git history becomes a chronological, diff-linked record of every agent decision — readable by humans and queryable by future sessions via `git log`. [A community best-practices guide](https://github.com/shanraisshan/claude-code-best-practice) recommends committing at minimum once per completed task.
+Agents commit after each completed task with descriptive messages. The git history then becomes a chronological, diff-linked record of every agent decision. Humans can read it and future sessions can query it via `git log`. [A community best-practices guide](https://github.com/shanraisshan/claude-code-best-practice) recommends committing at least once per completed task.
 
-### 3. Feature-State JSON as Machine-Readable Snapshot
+### 3. Feature-state JSON as machine-readable snapshot
 
-A JSON file tracks discrete features with `passes`/`fails` status. Agents toggle `passes` only after verification. The file survives context resets as an independent state snapshot, preventing premature completion.
+A JSON file tracks discrete features with `passes`/`fails` status. Agents set `passes` only after verification. The file survives context resets as an independent state snapshot, so the agent does not declare premature completion.
 
-### 4. `init.sh` as Environment Trajectory
+### 4. `init.sh` as environment trajectory
 
-The initializer agent writes `init.sh` to reconstruct the development environment. Subsequent sessions run it at startup to verify the environment is in a known-good state before any code changes.
+The initializer agent writes `init.sh` to rebuild the development environment. Later sessions run it at startup to confirm the environment is in a known-good state before any code changes.
 
-## Filesystem Write-on-Summarisation
+## Filesystem write-on-summarization
 
-When context is compressed, the [LangChain context management pattern](https://blog.langchain.com/context-management-for-deepagents/) writes full conversation messages to the filesystem alongside a structured summary (session intent, artifacts created, next steps). The trajectory is offloaded rather than discarded.
+When context is compressed, the [LangChain context management pattern](https://blog.langchain.com/context-management-for-deepagents/) writes full conversation messages to the filesystem alongside a structured summary: session intent, artifacts created, and next steps. The trajectory is offloaded rather than discarded.
 
-A visible failure mode when absent: [goal drift](../anti-patterns/objective-drift.md). After summarisation, agents request unnecessary clarification or declare premature completion — signals that trajectory was lost.
+When this is missing, a visible failure mode is [goal drift](../anti-patterns/objective-drift.md). After summarization, agents ask for clarification they do not need or declare premature completion. Both signal that the trajectory was lost.
 
-## Active Trajectory Monitoring
+## Active trajectory monitoring
 
 Two middleware patterns from [LangChain's harness engineering post](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) extend the static logging pattern into active monitoring:
 
-- **LoopDetectionMiddleware** — tracks per-file edit counts via tool-call hooks; excessive edits inject a contextual reminder, catching doom loops before they exhaust the context budget.
-- **PreCompletionChecklistMiddleware** — intercepts the agent before it signals completion and forces a verification pass against the task spec, preventing premature task closure.
+- LoopDetectionMiddleware tracks per-file edit counts via tool-call hooks. When edits pile up, it injects a contextual reminder that catches doom loops before they exhaust the context budget.
+- PreCompletionChecklistMiddleware intercepts the agent before it signals completion. It forces a verification pass against the task spec, so the agent does not close the task too early.
 
-## When This Backfires
+## When this backfires
 
-The filesystem pattern assumes a persistent, local working directory — which breaks in three common scenarios:
+The filesystem pattern assumes a persistent, local working directory. That assumption breaks in three common cases:
 
-- **Serverless or ephemeral agents** — containers spun up per-request have no stable filesystem between invocations; progress files and git state disappear on teardown.
-- **Parallel agent pools** — multiple concurrent sessions writing to the same progress file or committing to the same branch produce conflicts and race conditions.
-- **Teams with existing observability infrastructure** — when OTel pipelines, structured logging, or cost dashboards are already in place, duplicating trajectory data in flat files adds maintenance overhead with no additional insight.
+- Serverless or ephemeral agents: containers spun up per request have no stable filesystem between invocations, so progress files and git state disappear on teardown.
+- Parallel agent pools: several concurrent sessions writing to the same progress file or committing to the same branch produce conflicts and race conditions.
+- Teams with existing observability infrastructure: when OTel pipelines, structured logging, or cost dashboards are already in place, copying trajectory data into flat files adds upkeep with no extra insight.
 
 When any of these conditions apply, prefer structured observability backends (see [OTel GenAI span conventions](../standards/opentelemetry-agent-observability.md)) over the filesystem approach.
 
 ## Example
 
-The following shows the four-component harness in a real project layout. Each file is maintained by the agent across sessions and committed after every completed task.
+This shows the four-component harness in a real project layout. The agent maintains each file across sessions and commits it after every completed task.
 
 ```
 my-project/
@@ -93,7 +93,7 @@ my-project/
 └── src/
 ```
 
-**1. `claude-progress.txt` — written by the agent at session end**
+1. `claude-progress.txt`, written by the agent at session end:
 
 ```
 ## Session 2026-03-11
@@ -110,7 +110,7 @@ Blockers:
 - None
 ```
 
-**3. `feature-state.json` — toggled only after verified completion**
+3. `feature-state.json`, set only after verified completion:
 
 ```json
 {
@@ -122,7 +122,7 @@ Blockers:
 }
 ```
 
-**4. `init.sh` — run at the start of every session**
+4. `init.sh`, run at the start of every session:
 
 ```bash
 #!/usr/bin/env bash
@@ -134,7 +134,7 @@ timeout 5 npm run start:check || { echo "Server health check failed"; exit 1; }
 echo "Environment OK"
 ```
 
-**2. Git commit as trajectory checkpoint**
+2. Git commit as a trajectory checkpoint:
 
 ```bash
 git add src/auth/login.ts feature-state.json claude-progress.txt
@@ -144,7 +144,7 @@ git commit -m "feat(auth): implement POST /auth/login with RS256 JWT
 - progress file: /auth/refresh listed as next task"
 ```
 
-Each session runs `bash init.sh`, reads `claude-progress.txt` to recover prior decisions, consults `feature-state.json` to pick the next unfinished feature, implements and verifies it, then commits all artefacts — a replayable audit trail with no external backend.
+Each session runs `bash init.sh`, reads `claude-progress.txt` to recover prior decisions, consults `feature-state.json` to pick the next unfinished feature, implements and verifies it, then commits all artifacts. The result is a replayable audit trail with no external backend.
 
 ## Key Takeaways
 

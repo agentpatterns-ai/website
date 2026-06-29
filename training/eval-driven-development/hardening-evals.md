@@ -19,9 +19,9 @@ last_reviewed: 2026-05-27
 
 A freshly written eval suite reflects what the team *thinks* will go wrong. Production reveals what *actually* goes wrong — and the two sets overlap less than expected. Suites also degrade through three mechanisms:
 
-- **Gaming**: agents optimize for the literal metric, not the intent behind it
-- **Distribution drift**: real inputs diverge from the eval task distribution over time
-- **Grader rot**: the grading criteria stop matching current quality standards
+- Gaming: agents optimize for the literal metric, not the intent behind it
+- Distribution drift: real inputs diverge from the eval task distribution over time
+- Grader rot: the grading criteria stop matching current quality standards
 
 Hardening addresses all three.
 
@@ -33,8 +33,8 @@ Static benchmarks degrade as models train on their data (see [Benchmark Contamin
 
 Teams that rely solely on published benchmarks for model comparison or upgrade decisions risk selecting models that memorized the benchmark rather than models that generalize. Two defenses:
 
-1. **Maintain a private eval suite** sourced from your own codebase and real incidents, built with the task-authoring approach in [Writing Your First Eval Suite](writing-first-eval-suite.md). Tasks drawn from internal repositories are unlikely to appear in training data.
-2. **Refresh continuously.** SWE-rebench's pipeline sources tasks from recent merged PRs linked to resolved issues — tasks that postdate the model's training cutoff. The same principle applies at team scale: periodically add eval tasks from recent work to keep the suite ahead of potential contamination.
+1. Maintain a private eval suite sourced from your own codebase and real incidents, built with the task-authoring approach in [Writing Your First Eval Suite](writing-first-eval-suite.md). Tasks drawn from internal repositories are unlikely to appear in training data.
+2. Refresh continuously. SWE-rebench's pipeline sources tasks from recent merged PRs linked to resolved issues — tasks that postdate the model's training cutoff. The same principle applies at team scale: periodically add eval tasks from recent work to keep the suite ahead of potential contamination.
 
 ---
 
@@ -56,15 +56,15 @@ Agents optimize for the literal metric, not the intent behind it. A coding agent
 
 Five defenses compound:
 
-1. **Combine orthogonal grader types** — code-based, model-based, and human graders measure different dimensions that no single exploit can collapse. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+1. Combine orthogonal grader types — code-based, model-based, and human graders measure different dimensions that no single exploit can collapse. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-2. **Test bidirectionally** — add a negative case for every positive one. Class-imbalanced evals let agents exploit the dominant class. If 90% of tasks expect "PASS," an agent that always outputs the happy path scores 90%. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+2. Test bidirectionally — add a negative case for every positive one. Class-imbalanced evals let agents exploit the dominant class. If 90% of tasks expect "PASS," an agent that always outputs the happy path scores 90%. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-3. **Use structured acceptance criteria** — JSON [feature lists](../../instructions/feature-list-files.md) with explicit `passes` boolean fields are harder for agents to silently rewrite than Markdown checklists. [Source: [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)]
+3. Use structured acceptance criteria — JSON [feature lists](../../instructions/feature-list-files.md) with explicit `passes` boolean fields are harder for agents to silently rewrite than Markdown checklists. [Source: [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)]
 
-4. **Require end-to-end verification before completion** — prompt the agent to verify each feature as a user would (e.g., using browser automation for web apps) rather than accepting self-reported status. Start each session by running baseline tests to catch undocumented regressions. [Source: [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)]
+4. Require end-to-end verification before completion — prompt the agent to verify each feature as a user would (e.g., using browser automation for web apps) rather than accepting self-reported status. Start each session by running baseline tests to catch undocumented regressions. [Source: [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)]
 
-5. **Validate graders before trusting them** — grader bugs can produce false confidence. In one case, fixing grader bugs in CORE-Bench pushed scores from 42% to 95%. See [Grader Validation](grading-strategies.md#grader-validation) for testing methodology. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+5. Validate graders before trusting them — grader bugs can produce false confidence. In one case, fixing grader bugs in CORE-Bench pushed scores from 42% to 95%. See [Grader Validation](grading-strategies.md#grader-validation) for testing methodology. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 See [Anti-Reward-Hacking: Rubrics That Resist Gaming](../../verification/anti-reward-hacking.md) for the full checklist.
 
@@ -74,10 +74,10 @@ See [Anti-Reward-Hacking: Rubrics That Resist Gaming](../../verification/anti-re
 
 Every production incident involving an LLM feature is a candidate for a regression eval case. The pipeline:
 
-1. **Extract the failure mode**: what did the agent do wrong? What was the input?
-2. **Define expected behavior**: what should the agent have done?
-3. **Create the eval task**: formalize the input and expected output
-4. **Add to the suite**: the task gates future deploys against this specific failure
+1. Extract the failure mode: what did the agent do wrong? What was the input?
+2. Define expected behavior: what should the agent have done?
+3. Create the eval task: formalize the input and expected output
+4. Add to the suite: the task gates future deploys against this specific failure
 
 Not every incident justifies the maintenance cost of an eval case. Use assertions for deterministic format errors (wrong JSON, missing fields). Use LLM-as-judge for persistent semantic failures — save it for problems you will iterate on repeatedly. [Source: [Hamel Husain — LLM Evals FAQ](https://hamel.dev/blog/posts/evals-faq/)] Skip one-off data issues that test infrastructure rather than the LLM feature, but always prioritize evals for security and safety violations regardless of frequency.
 
@@ -106,9 +106,9 @@ Start with 20-50 pairs and grow the suite continuously. See [Golden Query Pairs 
 
 No single grader should be the sole accuracy gatekeeper. Distribute verification across the pipeline:
 
-- The **researcher** outputs only findings with retrievable source URLs
-- The **writer** uses only material from research notes and flags anything it cannot source
-- The **reviewer** flags any unsourced claim the writer included without marking
+- The researcher outputs only findings with retrievable source URLs
+- The writer uses only material from research notes and flags anything it cannot source
+- The reviewer flags any unsourced claim the writer included without marking
 
 Each layer only needs to catch *some* errors — the compounded probability of an error surviving all layers is lower than any single layer's miss rate.
 
@@ -122,9 +122,9 @@ See [Layered Accuracy Defense](../../verification/layered-accuracy-defense.md) f
 
 Graders are code. They accumulate bugs, drift from intent, and stop matching current quality standards. Maintain them:
 
-- **Periodic human spot-checks**: sample 10-20 passing tasks per month and verify the output genuinely meets quality expectations. If the grader is passing outputs that humans would fail, the grader has drifted. [Human-Review Golden Dataset Curation](../../verification/human-review-golden-dataset-curation.md) is the reference loop for sampling and re-grading.
-- **Recalibrate LLM judges**: when the query distribution changes (new task types, new domains), the judge's calibration may no longer hold. Re-run the calibration process from [Grading Strategies](grading-strategies.md).
-- **Version the rubric and suite**: when grading criteria or task definitions change, record why. Tag eval results with the suite version so pass rates remain comparable across runs. A pass rate measured against version 2 of the suite is not directly comparable to one measured against version 1.
+- Periodic human spot-checks: sample 10-20 passing tasks per month and verify the output genuinely meets quality expectations. If the grader is passing outputs that humans would fail, the grader has drifted. [Human-Review Golden Dataset Curation](../../verification/human-review-golden-dataset-curation.md) is the reference loop for sampling and re-grading.
+- Recalibrate LLM judges: when the query distribution changes (new task types, new domains), the judge's calibration may no longer hold. Re-run the calibration process from [Grading Strategies](grading-strategies.md).
+- Version the rubric and suite: when grading criteria or task definitions change, record why. Tag eval results with the suite version so pass rates remain comparable across runs. A pass rate measured against version 2 of the suite is not directly comparable to one measured against version 1.
 
 ---
 
@@ -132,15 +132,15 @@ Graders are code. They accumulate bugs, drift from intent, and stop matching cur
 
 A team runs a summarization agent graded by an LLM judge on "accuracy" and "completeness." Pass rate is 88%. After a production incident where the agent hallucinated a statistic in a customer-facing summary, they harden the suite:
 
-1. **Incident-to-eval**: they extract the failing input and expected output from the incident report, creating a new eval task that specifically tests for hallucinated statistics.
+1. Incident-to-eval: they extract the failing input and expected output from the incident report, creating a new eval task that specifically tests for hallucinated statistics.
 
-2. **Anti-reward hacking**: they discover the LLM judge rates verbose summaries higher regardless of accuracy. They add a code-based grader that checks every named entity and number against the source document — an orthogonal dimension the judge alone missed.
+2. Anti-reward hacking: they discover the LLM judge rates verbose summaries higher regardless of accuracy. They add a code-based grader that checks every named entity and number against the source document — an orthogonal dimension the judge alone missed.
 
-3. **Bidirectional testing**: the suite had 40 tasks expecting correct summaries but zero tasks with deliberately misleading source documents. They add 10 adversarial tasks where the correct behavior is to flag ambiguity rather than summarize confidently.
+3. Bidirectional testing: the suite had 40 tasks expecting correct summaries but zero tasks with deliberately misleading source documents. They add 10 adversarial tasks where the correct behavior is to flag ambiguity rather than summarize confidently.
 
-4. **Golden query pairs**: they curate 25 question-answer pairs from domain experts — summaries that are definitively correct. These run on every model change and catch regressions before deployment.
+4. Golden query pairs: they curate 25 question-answer pairs from domain experts — summaries that are definitively correct. These run on every model change and catch regressions before deployment.
 
-5. **Grader validation**: they test the LLM judge against 50 pre-labeled examples and find it agrees with human raters only 71% of the time on accuracy. After rewriting the rubric with concrete scoring anchors, agreement rises to 89%.
+5. Grader validation: they test the LLM judge against 50 pre-labeled examples and find it agrees with human raters only 71% of the time on accuracy. After rewriting the rubric with concrete scoring anchors, agreement rises to 89%.
 
 After hardening, the suite catches three regressions in the next quarter that would have reached production under the original eval.
 

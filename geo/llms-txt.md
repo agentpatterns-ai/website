@@ -15,9 +15,9 @@ maturity: emerging
 
 > `/llms.txt` gives AI agents a curated entry point to your site at inference time — it improves agent navigation, not citation rates or search rankings.
 
-**Learn it hands-on:** [Machine-Readable Corpora](https://learn.agentpatterns.ai/geo/machine-readable-corpora/) — guided lesson with quizzes.
+Learn it hands-on with [Machine-Readable Corpora](https://learn.agentpatterns.ai/geo/machine-readable-corpora/) — a guided lesson with quizzes.
 
-## What the Spec Actually Specifies
+## What the spec specifies
 
 The [llms.txt specification](https://llmstxt.org) (Jeremy Howard, answer.ai) defines a Markdown file published at `{site-root}/llms.txt`. LLM context windows are too small to process full websites, and HTML adds noise. The file gives agents a curated, structured index instead.
 
@@ -25,7 +25,7 @@ The spec defines exactly one required element:
 
 | Element | Required? | Purpose |
 |---------|-----------|---------|
-| H1 heading (project/site name) | **Yes** | Only mandatory element |
+| H1 heading (project/site name) | Yes | Only mandatory element |
 | Blockquote summary | No | Brief description of the project |
 | H2-delimited sections | No | Curated link lists by topic |
 | `## Optional` section | No | Content skippable under context pressure |
@@ -47,27 +47,27 @@ The spec defines exactly one required element:
 
 File lists use `[name](url)` with an optional colon-prefixed description. Content under `## Optional` signals material agents can skip under context pressure.
 
-## How Agents Use It
+## How agents use it
 
-Per the spec's intended usage model ([llmstxt.org](https://llmstxt.org)), an agent researching a site fetches `/llms.txt` first — a structured index replacing undirected crawling with a single fetch and curated list:
+Per the spec's intended usage model ([llmstxt.org](https://llmstxt.org)), an agent researching a site fetches `/llms.txt` first. The structured index replaces undirected crawling with a single fetch and a curated list:
 
-1. Fetch `{site}/llms.txt`
-2. Identify the relevant section
-3. Fetch only the linked pages that apply to the task
+1. Fetch `{site}/llms.txt`.
+2. Identify the relevant section.
+3. Fetch only the linked pages that apply to the task.
 
-A companion convention (not in the formal spec) is to also publish `/llms-full.txt`: all linked pages concatenated into one file for full site context in a single fetch. This eliminates the multi-step index-then-fetch pattern when an agent needs complete site context.
+A companion convention, not in the formal spec, is to also publish `/llms-full.txt`. This file concatenates all linked pages into one, so an agent gets full site context in a single fetch. It removes the multi-step index-then-fetch pattern when an agent needs complete site context.
 
-## Why It Works
+## Why it works
 
-LLM context windows impose a hard ceiling on how much a site can serve to an agent in one request. Undirected crawling wastes tokens: agents fetch pages that turn out to be irrelevant, then discard them. `llms.txt` moves the selection step outside the inference call — a human editor curates the index once, and every agent invocation starts with a pre-filtered list. The agent spends its context budget on content, not discovery. The `## Optional` convention extends this: under context pressure, agents can drop entire sections without losing the core index, giving the site author control over what survives the cut ([llmstxt.org](https://llmstxt.org)).
+LLM context windows set a hard ceiling on how much a site can serve an agent in one request. Undirected crawling wastes tokens: agents fetch pages that turn out to be irrelevant, then discard them. `llms.txt` moves the selection step outside the inference call. A human editor curates the index once, and every agent invocation starts with a pre-filtered list. The agent then spends its context budget on content, not discovery. The `## Optional` convention extends this. Under context pressure, agents can drop entire sections without losing the core index, so the author controls what survives the cut ([llmstxt.org](https://llmstxt.org)).
 
-## What It Is Not
+## What it is not
 
-- **Not a robots.txt replacement**: `robots.txt` controls crawler access; `llms.txt` guides inference-time navigation.
-- **Not a sitemap alternative**: Sitemaps cover all crawlable URLs — too many to fit in a context window with no curation. `llms.txt` is a curated editorial index.
-- **Not a training data submission**: The spec is for inference-time use. It has no defined role in model training pipelines.
+- Not a robots.txt replacement: `robots.txt` controls crawler access; `llms.txt` guides inference-time navigation.
+- Not a sitemap alternative: sitemaps cover all crawlable URLs, too many to fit in a context window with no curation. `llms.txt` is a curated editorial index.
+- Not a training data submission: the spec is for inference-time use. It has no defined role in model training pipelines.
 
-## The Citation Limitation
+## The citation limitation
 
 `llms.txt` is infrastructure for agentic navigation, not a GEO ranking signal:
 
@@ -75,7 +75,7 @@ LLM context windows impose a hard ceiling on how much a site can serve to an age
 - The spec itself frames the format as inference-time tooling with no defined role in training or citation pipelines ([llmstxt.org](https://llmstxt.org))
 - Citation signals are dominated by content authority, structured data, and entity recognition — not file conventions ([How AI Engines Cite](how-ai-engines-cite.md))
 
-## Real Adoption Examples
+## Real adoption examples
 
 | Site | Implementation note |
 |------|---------------------|
@@ -83,7 +83,7 @@ LLM context windows impose a hard ceiling on how much a site can serve to an age
 | [cursor.com/llms.txt](https://cursor.com/llms.txt) | Full docs structure including 10-language internationalization |
 | Anthropic platform | Developer Guide, API Reference, and SDKs — auto-generated via Mintlify hosting |
 
-[Mintlify's November 2024 rollout](https://www.mintlify.com/blog/what-is-llms-txt) of auto-generated `llms.txt` across all hosted documentation sites drove rapid adoption — sites on Mintlify's platform, including Anthropic and Cursor, received `llms.txt` without manual effort.
+[Mintlify's November 2024 rollout](https://www.mintlify.com/blog/what-is-llms-txt) auto-generated `llms.txt` across all hosted documentation sites and spread the format quickly. Sites on Mintlify's platform, including Anthropic and Cursor, received `llms.txt` without manual effort.
 
 ## Example
 
@@ -108,20 +108,20 @@ A minimal `llms.txt` for a documentation site:
 
 Publish an accompanying `/llms-full.txt` with the concatenated text of all linked pages. Agents can load complete site context in a single fetch instead of fetching each page individually.
 
-## MkDocs Material Implementation
+## MkDocs Material implementation
 
-This site auto-generates both files from `mkdocs.yml` via `scripts/generate-llms-txt.py`. It:
+This site auto-generates both files from `mkdocs.yml` via `scripts/generate-llms-txt.py`. The script:
 
-1. Reads each page's H1 and opening blockquote for titles and descriptions
-2. Annotates sections with `git log`-sourced `lastmod` dates
-3. Places high-priority sections in the main file; lower-priority under `## Optional`
-4. Writes two committed files: `docs/llms.txt` and `docs/llms-full.txt`
+1. Reads each page's H1 and opening blockquote for titles and descriptions.
+2. Annotates sections with `git log`-sourced `lastmod` dates.
+3. Places high-priority sections in the main file and lower-priority ones under `## Optional`.
+4. Writes two committed files: `docs/llms.txt` and `docs/llms-full.txt`.
 
-CI enforces freshness: `python scripts/generate-llms-txt.py --check` exits non-zero if committed files are out of date.
+CI enforces freshness: `python scripts/generate-llms-txt.py --check` exits non-zero if the committed files are out of date.
 
-For a simpler approach: a static `docs/llms.txt` with 5-10 manually curated entries takes minutes to create. Keep it current — stale entries pointing to dead links are worse than no file.
+For a simpler approach, a static `docs/llms.txt` with 5 to 10 hand-curated entries takes minutes to create. Keep it current — stale entries pointing to dead links are worse than no file.
 
-## Tooling Ecosystem
+## Tooling to generate llms.txt
 
 | Tool | Purpose |
 |------|---------|

@@ -16,11 +16,11 @@ maturity: adopted
 
 > At 50+ engineers, a shared GitHub repo is no longer sufficient. Skills need managed distribution, usage instrumentation, and a quality maintenance process.
 
-A central repo solves the canonical-source problem — see [Architecting a Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md). At scale it introduces a new set of concerns: how do skills reach every developer machine reliably, which skills are actually being used, and how do high-traffic skills stay correct over time?
+A central repo solves the canonical-source problem — see [Architecting a Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md). At scale it raises new concerns: how do skills reach every developer machine reliably, which skills do people actually use, and how do high-traffic skills stay correct over time?
 
 These are operational concerns, not authoring concerns. They require platform infrastructure.
 
-## Maturity Arc
+## Maturity arc
 
 ```mermaid
 graph LR
@@ -31,45 +31,45 @@ graph LR
 
 Each stage builds on the previous. Distribution without visibility is fire-and-forget. Visibility without quality maintenance turns popular skills into unreviewed technical debt.
 
-## Stage 1: Managed Distribution
+## Stage 1: managed distribution
 
 A shared repo requires every developer to clone it and configure their tool. This breaks whenever someone onboards, switches machines, or the repo URL changes.
 
 Claude Code provides two managed distribution paths:
 
-**MDM-managed settings** — Deploy `managed-settings.json` via any MDM (JAMF, Intune, Mosyle, Kandji) or as a macOS plist / Windows registry key. Settings apply to all users on managed devices at OS level and cannot be overridden by user or project settings. This is the highest-trust distribution path. [Source: [Claude Code settings](https://code.claude.com/docs/en/settings)]
+MDM-managed settings — deploy `managed-settings.json` via any MDM (JAMF, Intune, Mosyle, Kandji) or as a macOS plist or Windows registry key. The settings apply to every user on a managed device at OS level, and user or project settings cannot override them. This is the highest-trust distribution path. [Source: [Claude Code settings](https://code.claude.com/docs/en/settings)]
 
-**Server-managed settings** — For teams without MDM infrastructure, server-managed settings push policy via Anthropic's servers at every startup and on an hourly poll. Weaker security guarantees than endpoint-managed settings (no OS-level enforcement), but requires zero MDM setup. [Source: [Server-managed settings](https://code.claude.com/docs/en/server-managed-settings)]
+Server-managed settings — for teams without MDM infrastructure, these push policy through Anthropic's servers at every startup and on an hourly poll. They give weaker security guarantees than endpoint-managed settings, since they have no OS-level enforcement, but they need no MDM setup. [Source: [Server-managed settings](https://code.claude.com/docs/en/server-managed-settings)]
 
 Both paths support configuring `extraKnownMarketplaces` and `enabledPlugins` — which defines what the next layer handles.
 
-### Private Plugin Marketplace
+### Private plugin marketplace
 
 Skills distribute via a `marketplace.json` catalog hosted in a private GitHub or GitLab repo. The catalog lists plugin bundles, each containing skill files, agent definitions, hooks, and supporting assets.
 
-Key controls:
+The controls:
 
 | Control | Mechanism | Effect |
 |---|---|---|
 | Restrict to approved sources | `strictKnownMarketplaces` in managed settings | Block unapproved plugin installs |
 | Auto-install on startup | `enabledPlugins` in managed settings | Skills land on every machine at launch |
 | Version pinning | `sha` field in marketplace.json | Reproducible deploys, no silent updates |
-| Release channels | Separate `ref` values (e.g., `stable` vs `latest`) | Staged rollouts |
+| Release channels | Separate `ref` values (for example `stable` vs `latest`) | Staged rollouts |
 | Container seeding | `CLAUDE_CODE_PLUGIN_SEED_DIR` at image build time | Pre-populated dev containers, no runtime cloning |
 
 [Source: [Plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)]
 
-Governance is controlled at the git repo level: who can merge to the marketplace repo determines who can publish skills to the organization.
+Governance happens at the git repo level: whoever can merge to the marketplace repo decides who can publish skills to the organization.
 
-## Stage 2: Usage Visibility
+## Stage 2: usage visibility
 
 Without usage data, skill investment is a guess. Two data sources are available:
 
-**Analytics dashboard** — The claude.ai analytics dashboard tracks lines accepted, suggestion accept rate, DAUs, PRs with Claude Code assistance, and a per-user leaderboard. Covers aggregate productivity signals, not skill-specific adoption. [Source: [Analytics](https://code.claude.com/docs/en/analytics)]
+Analytics dashboard — the claude.ai dashboard tracks lines accepted, suggestion accept rate, DAUs, PRs with Claude Code assistance, and a per-user leaderboard. It covers aggregate productivity signals, not skill-specific adoption. [Source: [Analytics](https://code.claude.com/docs/en/analytics)]
 
-**OpenTelemetry events** — The `claude_code.tool_result` OTel event includes `skill_name` when `OTEL_LOG_TOOL_DETAILS=1` is set. Route events to any OTel-compatible backend (Datadog, Honeycomb, Grafana). Tag by team using `OTEL_RESOURCE_ATTRIBUTES`. [Source: [Monitoring](https://code.claude.com/docs/en/monitoring-usage)]
+OpenTelemetry events — the `claude_code.tool_result` OTel event includes `skill_name` when you set `OTEL_LOG_TOOL_DETAILS=1`. Route events to any OTel-compatible backend (Datadog, Honeycomb, Grafana). Tag by team using `OTEL_RESOURCE_ATTRIBUTES`. [Source: [Monitoring](https://code.claude.com/docs/en/monitoring-usage)]
 
-### The Telemetry Gap
+### The telemetry gap
 
 The platform tracks whether a skill was invoked. It does not track whether it worked well. A skill called 500 times per week may be producing subtly wrong output on 30% of those invocations — OTel will not surface this.
 
@@ -84,9 +84,9 @@ jq -r 'select(.name == "claude_code.tool_result") | .attributes.skill_name' otel
   | sort | uniq -c | sort -rn
 ```
 
-Rank skills by invocation count. This ranking drives the quality maintenance prioritization in Stage 3.
+Rank skills by invocation count. This ranking sets the quality maintenance priorities in Stage 3.
 
-## Stage 3: Quality Maintenance
+## Stage 3: quality maintenance
 
 No built-in eval infrastructure for skills exists in the Claude Code platform. Quality maintenance is a manual practice, not a platform feature.
 
@@ -102,7 +102,7 @@ graph TD
     F --> C
 ```
 
-### Practical Eval Cadence
+### Practical eval cadence
 
 A lightweight process that scales:
 
@@ -114,18 +114,18 @@ A lightweight process that scales:
 
 For each high-traffic skill, maintain a small set of representative test inputs and expected outputs. Run the skill against these inputs manually or via a CI job that triggers on skill file changes. An LLM-as-judge evaluation can score outputs against a rubric without requiring exact match — see [LLM-as-Judge Evaluation](llm-as-judge-evaluation.md). Anthropic's enterprise guidance requires skill authors to submit evaluation suites and re-run them to detect drift, but provides no built-in eval runner — the suite and harness are the team's responsibility. [Source: [Skills for enterprise](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/enterprise)]
 
-### Quality Gates for Updates
+### Quality gates for updates
 
 Skills above the high-usage threshold should require eval coverage before updates ship:
 
-1. Developer modifies skill file in the marketplace repo
-2. CI runs the skill's eval suite against the representative task set
-3. An LLM-as-judge scores outputs — must meet a minimum score threshold
-4. PR requires approval from a platform team member before merge
+1. A developer modifies a skill file in the marketplace repo.
+2. CI runs the skill's eval suite against the representative task set.
+3. An LLM-as-judge scores the outputs, which must meet a minimum score threshold.
+4. The PR needs approval from a platform team member before merge.
 
 This prevents a popular skill from silently regressing after an update. The gate does not need to be sophisticated — even a one-prompt eval run by CI that flags obvious failures is better than shipping blind.
 
-## Governance Model
+## Governance model
 
 | Concern | Mechanism |
 |---|---|
@@ -137,14 +137,14 @@ This prevents a popular skill from silently regressing after an update. The gate
 
 Install-time controls alone do not constrain what a loaded plugin can do. Plugins run fully trusted code inside developer sessions — no sandboxing, no binary signing, trust is transitive through the git host and the plugin's authors. Runtime policy enforcement belongs in PreToolUse hooks shipped as part of the managed settings: block `Bash` invocations that match `curl | sh`, reject `Edit`/`Write` targets under `~/.ssh/` or `~/.aws/credentials`, log every filesystem mutation. [Source: [Your Claude Plugin Marketplace Needs More Than a Git Repo](https://dev.to/michaeltuszynski/your-claude-plugin-marketplace-needs-more-than-a-git-repo-5631)]
 
-## When This Backfires
+## When this backfires
 
 The full distribution stack — MDM policies, a private marketplace repo with SHA pinning, OTel ingestion, and a monthly manual eval rotation — is operational overhead. A reasonable practitioner can defend the shared git repo + README approach at the 50-engineer boundary when:
 
-- **Operational cost exceeds drift cost.** A small platform team running MDM policy rollouts, marketplace PR reviews, OTel pipeline maintenance, and monthly eval rotations can consume more engineer-hours than the occasional "skill out of date" incidents the infrastructure prevents.
-- **Skill churn is low and the library is narrow.** If the org uses 5–10 stable skills that change a few times a year, SHA pinning and release channels add ceremony without catching failures — reviewer attention at PR time covers the same ground.
-- **Usage telemetry is not actionable.** Invocation counts only justify eval investment if someone acts on them. Teams that collect `skill_name` events but have no reviewer capacity turn OTel into a compliance theatre — data gathered, never read.
-- **Security posture depends on runtime enforcement, not distribution control.** `strictKnownMarketplaces` prevents unreviewed plugins from being installed but does nothing about credentials and filesystem access once a reviewed plugin is loaded. Orgs that skip PreToolUse hooks and trust the allowlist ship the illusion of governance.
+- Operational cost exceeds drift cost. A small platform team running MDM policy rollouts, marketplace PR reviews, OTel pipeline maintenance, and monthly eval rotations can consume more engineer-hours than the occasional "skill out of date" incidents the infrastructure prevents.
+- Skill churn is low and the library is narrow. If the org uses 5 to 10 stable skills that change a few times a year, SHA pinning and release channels add ceremony without catching failures — reviewer attention at PR time covers the same ground.
+- Usage telemetry is not actionable. Invocation counts only justify eval investment if someone acts on them. Teams that collect `skill_name` events but have no reviewer capacity turn OTel into compliance theater — data gathered, never read.
+- Security posture depends on runtime enforcement, not distribution control. `strictKnownMarketplaces` prevents unreviewed plugins from being installed but does nothing about credentials and filesystem access once a reviewed plugin is loaded. Orgs that skip PreToolUse hooks and trust the allowlist ship the illusion of governance.
 
 Treat the stack as incremental: adopt managed distribution first, add telemetry when ranking decisions need data, add evals when a specific skill failure forces the investment.
 

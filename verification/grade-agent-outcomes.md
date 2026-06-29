@@ -14,15 +14,15 @@ maturity: established
 
 > Grade agent outcomes — the final state produced — not the execution path taken, so valid alternative solutions are not penalized as failures.
 
-**Learn it hands-on:** [Grade the Outcome](https://learn.agentpatterns.ai/verification/grade-the-outcome/) — guided lesson with quizzes.
+Learn it hands-on with [the Grade the Outcome lesson](https://learn.agentpatterns.ai/verification/grade-the-outcome/), a guided lesson with quizzes.
 
-## The Problem with Path-Based Grading
+## The problem with path-based grading
 
-[Path-based evals](eval-blind-spots.md) check that an agent called tool X before tool Y, or edited file A before file B. This approach penalizes agents that find valid alternative solutions — a refactored approach, a different API call order, a more efficient sequence the eval author didn't anticipate.
+[Path-based evals](eval-blind-spots.md) check that an agent called tool X before tool Y, or edited file A before file B. This approach penalizes agents that find valid alternative solutions — a refactored approach, a different API call order, a more efficient sequence the eval author did not anticipate.
 
-Frontier models regularly discover solutions their authors didn't expect. Checking for a specific path marks these as failures and produces misleading results, making agents appear worse than they are. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+Frontier models regularly discover solutions their authors did not expect. Checking for a specific path marks these as failures and produces misleading results, making agents appear worse than they are. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-## Outcome Grading
+## Outcome grading
 
 Outcome grading asks: "Is the system in the correct state?" rather than "Did the agent follow the expected procedure?"
 
@@ -35,11 +35,11 @@ Examples of outcome-based checks:
 - The API response contains the expected fields
 - The file was created with the correct content
 
-## Handling Subjective Outcomes
+## Handling subjective outcomes
 
-Not all outcomes are deterministic. When correctness involves code quality, readability, or style, combine outcome checks with LLM rubric graders. Specify the criteria (e.g., "follows team conventions," "avoids global state") and have a model evaluate the result against them — rather than prescribing the steps the agent must take to achieve it. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+Not all outcomes are deterministic. When correctness involves code quality, readability, or style, combine outcome checks with LLM rubric graders. Specify the criteria (for example, "follows team conventions," "avoids global state") and have a model evaluate the result against them — rather than prescribing the steps the agent must take to achieve it. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-## Common Grading Bugs
+## Common grading bugs
 
 Over-specification causes false negatives. Common examples:
 
@@ -54,7 +54,7 @@ These bugs embed the eval author's implementation assumptions into the definitio
 
 The contrast below shows a path-based grader that produces false negatives versus an outcome-based grader that accepts any correct solution. Both evaluate an agent tasked with writing a function that returns unique sorted values from a list.
 
-**Path-based grader (fragile — fails valid solutions)**
+Path-based grader (fragile — fails valid solutions):
 
 ```python
 def grade_path_based(agent_trace: list[dict]) -> bool:
@@ -65,9 +65,9 @@ def grade_path_based(agent_trace: list[dict]) -> bool:
     return tool_calls == expected_sequence
 ```
 
-This grader rejects an agent that reads multiple files first, or that runs the tests before finalising the file, even if the final result is correct.
+This grader rejects an agent that reads multiple files first, or that runs the tests before finalizing the file, even if the final result is correct.
 
-**Outcome-based grader (robust — accepts any correct implementation)**
+Outcome-based grader (accepts any correct implementation):
 
 ```python
 import subprocess, textwrap
@@ -104,17 +104,17 @@ def grade_code_quality(file_contents: str) -> dict:
 
 `grade_outcome` passes as long as the test suite is green — the agent may have taken two tool calls or twenty. The optional `grade_code_quality` function uses an LLM rubric to handle the subjective dimension without prescribing implementation steps.
 
-## Why It Works
+## Why it works
 
 Path-based grading structurally narrows the solution space because the same correct final state is reachable via many valid execution sequences. When an eval author encodes one anticipated path, every other valid path becomes a false negative. The number of valid paths grows combinatorially with task complexity — so path-based graders become [more misleading as agents and tasks grow more capable](behavioral-testing-agents.md). Outcome grading sidesteps this by anchoring correctness to the state the task requires, not the implementation choices the grader anticipated. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-## When This Backfires
+## When this backfires
 
 Outcome-only grading breaks down in three categories:
 
-- **Side-effecting tasks**: An agent that makes irreversible API calls, sends emails, or modifies production data en route to a correct final state passes an outcome grader despite causing unintended damage. For tasks with destructive side effects, intermediate-step constraints or [pre-flight checks](incremental-verification.md) are necessary.
-- **Compliance-critical paths**: Some domains (finance, healthcare, security) require specific procedural steps regardless of the outcome. An agent that achieves the correct result while skipping a required audit step or approval gate is non-compliant even if the final state is correct.
-- **Trace-as-deliverable tasks**: When the execution trace itself is the output — step-by-step reasoning chains, audit logs, explainability reports — [path quality](trajectory-decomposition-diagnosis.md) is the correctness criterion and outcome grading cannot evaluate it.
+- Side-effecting tasks: An agent that makes irreversible API calls, sends emails, or modifies production data on the way to a correct final state passes an outcome grader despite causing unintended damage. For tasks with destructive side effects, intermediate-step constraints or [pre-flight checks](incremental-verification.md) are necessary.
+- Compliance-critical paths: Some domains (finance, healthcare, security) require specific procedural steps regardless of the outcome. An agent that achieves the correct result while skipping a required audit step or approval gate is non-compliant even if the final state is correct.
+- Trace-as-deliverable tasks: When the execution trace itself is the output — step-by-step reasoning chains, audit logs, explainability reports — [path quality](trajectory-decomposition-diagnosis.md) is the correctness criterion and outcome grading cannot evaluate it.
 
 In these cases, combine outcome checks with targeted trajectory constraints scoped to the specific steps that matter, rather than prescribing the full path.
 
@@ -132,10 +132,10 @@ Industry practice as of 2025–2026 increasingly adopts hybrid evaluation that u
 ## Related
 
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md)
-- [Use the Agent Itself to Analyze Evaluation Transcripts](agent-transcript-analysis.md)
 - [Incremental Verification](incremental-verification.md)
 - [Anti-Reward Hacking](anti-reward-hacking.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md)
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md)
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md)
+- [Stateful Agent Evals via State Snapshots and Transition Assertions](stateful-agent-state-and-transition-evals.md)

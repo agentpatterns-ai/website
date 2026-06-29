@@ -24,13 +24,13 @@ File-by-file and function-by-function LLM translators lose architectural intent.
 
 RustPrint, the system that introduced this pattern, reported 93.26% feature preservation against a 52.52% Claude Code agentic baseline and a 95.17% test pass rate against 79.85%, evaluated on eight real-world C repositories from 11K to 84K LoC ([arXiv:2605.14634](https://arxiv.org/abs/2605.14634)).
 
-## Why Source-Level Translation Fails
+## Why source-level translation fails
 
 Transpilation tools like [c2rust](https://github.com/immunant/c2rust) produce unsafe Rust that mirrors C control flow. The project itself documents the constraint: "the translator produces unsafe Rust code that closely mirrors the input C code" and "generating safe and idiomatic Rust code from C ultimately requires manual effort." LLM-based translators improve on this — [SACTOR](https://arxiv.org/abs/2503.12511) reaches 85% semantic preservation through a two-step unidiomatic-then-idiomatic pass — but idiomatic refinement still fails 48% of the time on CRust-Bench because the agent reasons about syntax, not intent.
 
-The mechanism failure is structural. C ownership and lifetimes are implicit in pointer arithmetic, allocator pairing, and naming conventions. When an agent reads C and writes Rust, those implicit conventions never get reified — the Rust output is plausible but does not encode the model the original maintainer carried in their head.
+The failure is structural. C ownership and lifetimes are implicit in pointer arithmetic, allocator pairing, and naming conventions. When an agent reads C and writes Rust, those implicit conventions never get reified. The Rust output is plausible, but it does not encode the model the original maintainer carried in their head.
 
-## The Pattern
+## The pattern
 
 ```mermaid
 graph TD
@@ -49,38 +49,38 @@ graph TD
 
 Five stages, each with a measurable exit signal.
 
-### 1. Generate the Blueprint
+### 1. Generate the blueprint
 
-Run an agent over the source repository and have it emit architecture-aware documentation: module structure, data flow between modules, public and internal API contracts, and the design rationale for non-obvious decisions. The output is not API reference docs — it is a structured description of *what the system does and why*, deep enough that a new engineer could reimplement it from the document alone ([arXiv:2605.14634](https://arxiv.org/abs/2605.14634)).
+Run an agent over the source repository and have it emit architecture-aware documentation: module structure, data flow between modules, public and internal API contracts, and the design rationale for non-obvious decisions. The output is not API reference docs. It is a structured description of what the system does and why, deep enough that a new engineer could reimplement it from the document alone ([arXiv:2605.14634](https://arxiv.org/abs/2605.14634)).
 
 This pass is the most expensive part of the workflow. It pays for itself only when no current maintainer holds the full architecture in their head — exactly the legacy-repo case the pattern targets.
 
-### 2. Plan Crates from the Blueprint
+### 2. Plan crates from the blueprint
 
-The agent reads the blueprint and proposes a Rust crate layout — workspace structure, module boundaries, public types. This step is structurally identical to [architectural-foundation-first](architectural-foundation-first.md) but operates on derived documentation rather than human intent. The blueprint is the contract: every C module in scope must map to a Rust crate or module, every C API must map to a public Rust signature.
+The agent reads the blueprint and proposes a Rust crate layout — workspace structure, module boundaries, public types. This step is structurally identical to [laying the architectural foundation first](architectural-foundation-first.md), but it operates on derived documentation rather than human intent. The blueprint is the contract: every C module in scope must map to a Rust crate or module, and every C API must map to a public Rust signature.
 
-### 3. Implement Modules and Reduce Unsafe
+### 3. Implement modules and reduce unsafe
 
-Coding agents implement crates following the blueprint, check compilability after each module, and iteratively reduce `unsafe` blocks. Compilation is a hard gate — non-compiling output cannot proceed. Unsafe reduction is a soft gate — the agent surfaces remaining `unsafe` regions for human review rather than forcing them through autonomously.
+Coding agents implement crates following the blueprint, check compilability after each module, and reduce `unsafe` blocks step by step. Compilation is a hard gate: non-compiling output cannot proceed. Unsafe reduction is a soft gate: the agent surfaces remaining `unsafe` regions for human review rather than forcing them through on its own.
 
-### 4. Re-Document and Diff
+### 4. Re-document and diff
 
-The validation step that distinguishes this pattern. Once the Rust compiles, run the same documentation-generation pass over the *translated* Rust and diff the resulting document against the original blueprint. Discrepancies are repair signals: a module whose data-flow diagram differs, an API whose contract has drifted, a design rationale the Rust version no longer expresses ([arXiv:2605.14634](https://arxiv.org/abs/2605.14634)). The agent uses these diffs as targeted fix prompts rather than re-running the full translation.
+This validation step distinguishes the pattern. Once the Rust compiles, run the same documentation-generation pass over the translated Rust and diff the resulting document against the original blueprint. Discrepancies are repair signals: a module whose data-flow diagram differs, an API whose contract has drifted, a design rationale the Rust version no longer expresses ([arXiv:2605.14634](https://arxiv.org/abs/2605.14634)). The agent uses these diffs as targeted fix prompts rather than re-running the full translation.
 
-### 5. Test-Guided Refinement
+### 5. Test-guided refinement
 
 Translate the C test suite to Rust and execute it against the new code. Runtime failures point to specific assertions, which point to specific modules, which the agent fixes in isolation. Without a usable test suite this step yields nothing — the absence of tests is a hard failure condition for the whole workflow, the same convergence dependency that [staged literal porting](staged-literal-port-with-numeric-oracle.md) resolves with a numeric oracle.
 
-## When to Apply
+## When to apply
 
-The pattern earns its cost on **large legacy repos with no current architectural owner** — the case where the alternatives (hand-port plus c2rust scaffold, or pure LLM transpilation) both fail because the implicit knowledge has been lost.
+The pattern earns its cost on large legacy repos with no current architectural owner. That is the case where the alternatives — hand-port plus c2rust scaffold, or pure LLM transpilation — both fail because the implicit knowledge has been lost.
 
 Skip the pattern when:
 
-- **The codebase is small (<5K LoC) and single-author.** Blueprint extraction adds overhead the maintainer's head already provides; `c2rust transpile` plus targeted refactoring is faster.
-- **The repo is dominated by inline assembly, compiler intrinsics, or hardware-register access.** The blueprint captures intent at module granularity but loses bit-level invariants; the agent produces idiomatic Rust that compiles and silently misbehaves on real hardware.
-- **There is no usable test suite.** The [eval-driven validation loop](eval-driven-development.md) has nothing to converge against.
-- **The repo uses heavy macro-driven metaprogramming.** Macros expand to context-specific code; the documentation layer abstracts past variation that matters, and the Rust output collapses cases the macros covered.
+- the codebase is small (under 5K LoC) and single-author. Blueprint extraction adds overhead the maintainer's head already provides, and `c2rust transpile` plus targeted refactoring is faster
+- the repo is dominated by inline assembly, compiler intrinsics, or hardware-register access. The blueprint captures intent at module granularity but loses bit-level invariants, so the agent produces idiomatic Rust that compiles and silently misbehaves on real hardware
+- there is no usable test suite. The [eval-driven validation loop](eval-driven-development.md) has nothing to converge against
+- the repo uses heavy macro-driven metaprogramming. Macros expand to context-specific code, the documentation layer abstracts past variation that matters, and the Rust output collapses cases the macros covered
 
 The pattern generalizes beyond C-to-Rust. Any cross-language legacy migration where the source language encodes invariants implicitly and the target language requires them explicitly — COBOL to Java, Perl to Go, Fortran to modern numerical Rust — has the same structural mismatch the blueprint layer solves.
 
@@ -88,7 +88,7 @@ The pattern generalizes beyond C-to-Rust. Any cross-language legacy migration wh
 
 Documentation diff as repair signal, from the RustPrint methodology ([arXiv:2605.14634](https://arxiv.org/abs/2605.14634)):
 
-**Original blueprint excerpt** (generated from C):
+Original blueprint excerpt, generated from C:
 
 ```text
 Module: cache
@@ -97,7 +97,7 @@ Module: cache
   API: cache_get() returns borrowed pointer; caller must not free
 ```
 
-**Re-generated documentation** (from translated Rust):
+Re-generated documentation, from translated Rust:
 
 ```text
 Module: cache

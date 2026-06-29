@@ -19,13 +19,13 @@ maturity: established
 
 > Reviewers bikeshed small changes and rubber-stamp large ones. AI agents produce large diffs by default, so the code that needs the most scrutiny gets the least.
 
-## The Pattern
+## The pattern
 
-Parkinson's Law of Triviality (1957): attention scales inversely with complexity. Small diffs get scrutinized; large diffs get rubber-stamped.
+Parkinson's Law of Triviality (1957) says attention scales inversely with complexity. Reviewers scrutinize small diffs and rubber-stamp large ones.
 
-Agents routinely produce PRs past the threshold where review stays effective -- hand-written tweaks attract debate while AI diffs pass unexamined. Distinct from [PR Scope Creep](pr-scope-creep-review-bottleneck.md): this is **reviewer psychology**, not scope.
+Agents routinely produce PRs past the threshold where review stays effective. Hand-written tweaks attract debate while AI diffs pass unexamined. This differs from [PR Scope Creep](pr-scope-creep-review-bottleneck.md): the cause is reviewer psychology, not scope.
 
-## Defect Detection Collapses with Size
+## Defect detection collapses with size
 
 The [SmartBear/Cisco study](https://mikeconley.ca/blog/2009/09/14/smart-bear-cisco-and-the-largest-study-on-code-review-ever/) (2,500 reviews) puts optimal review at 100-300 LOC in 30-60 minutes; effectiveness drops past 400. [Propel](https://www.propelcode.ai/blog/pr-size-impact-code-review-quality-data-study) quantifies the drop:
 
@@ -36,15 +36,15 @@ The [SmartBear/Cisco study](https://mikeconley.ca/blog/2009/09/14/smart-bear-cis
 | 301-600 | 65% | ~2 hr | 2.4 |
 | 1,000+ | 28% | ~4.2 hr | 1.8 |
 
-Four hours on 1,000 LOC yields fewer comments than 45 minutes on 200 -- fatigue drives disengagement, not depth.
+Four hours on 1,000 LOC yields fewer comments than 45 minutes on 200. Fatigue causes disengagement, not depth.
 
-## AI Makes It Worse
+## AI makes it worse
 
-[CodeRabbit](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) finds AI PRs contain 1.7x more issues than human code -- 3x more readability issues, 75% more logic defects. Three mechanisms compound the problem:
+[CodeRabbit](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) finds AI PRs contain 1.7x more issues than human code: 3x more readability issues and 75% more logic defects. Three mechanisms compound the problem:
 
-- **Template blindness.** AI output follows familiar patterns; reviewers skim, bugs hide in boilerplate. ([AsyncSquad Labs](https://asyncsquadlabs.com/blog/code-review-bottleneck-ai-era/))
-- **AI brain fry.** Sustained AI oversight produces mental fog and higher error rates. ([HBR / Help Net Security](https://www.helpnetsecurity.com/2026/03/09/harvard-business-review-ai-workplace-fatigue-report/))
-- **Nyquist under-sampling.** Code production tripled; review sampling stayed flat -- defects alias as passing. ([Bryan Finster](https://bryanfinster.substack.com/p/ai-broke-your-code-review-heres-how))
+- Template blindness: AI output follows familiar patterns, so reviewers skim and bugs hide in boilerplate. ([AsyncSquad Labs](https://asyncsquadlabs.com/blog/code-review-bottleneck-ai-era/))
+- AI brain fry: sustained AI oversight produces mental fog and higher error rates. ([HBR / Help Net Security](https://www.helpnetsecurity.com/2026/03/09/harvard-business-review-ai-workplace-fatigue-report/))
+- Nyquist under-sampling: code production tripled while review sampling stayed flat, so defects alias as passing. ([Bryan Finster](https://bryanfinster.substack.com/p/ai-broke-your-code-review-heres-how))
 
 ```mermaid
 graph LR
@@ -56,11 +56,11 @@ graph LR
     F --> B
 ```
 
-## Mitigation Stack
+## Mitigation stack
 
 ### 1. Constrain batch size
 
-Target 100-300 LOC per PR. Split agent work into atomic commits; enforce size gates in CI.
+Target 100-300 LOC per PR. Split agent work into atomic commits and enforce size gates in CI.
 
 ### 2. Tiered review
 
@@ -80,9 +80,9 @@ Review behavior changes, not raw lines. AST diffs and API-contract analysis surf
 
 ### 4. BDD-first specification
 
-Define expected behavior before the agent codes; review becomes validation against pre-agreed criteria. See [Spec-Driven Development](../workflows/spec-driven-development.md).
+Define expected behavior before the agent codes. Review then becomes validation against pre-agreed criteria. See [Spec-Driven Development](../workflows/spec-driven-development.md).
 
-## When This Backfires
+## When this backfires
 
 Size limits fail for genuinely atomic changes (cross-cutting refactors, schema migrations), when monorepo coordination exceeds review benefit, or when LOC gates force superficial splits — many small PRs, collectively incoherent.
 
@@ -90,7 +90,7 @@ Size limits fail for genuinely atomic changes (cross-cutting refactors, schema m
 
 An agent completes a feature sprint and opens a single 1,400-LOC PR touching auth, billing, and the data model. The reviewer spends 3 hours skimming and approves with two style comments. A logic error in the billing calculation ships.
 
-The same work split into three PRs -- auth (180 LOC), billing (220 LOC), data model (160 LOC) -- would have received an average of 4+ comments each at 87% defect detection rate. The billing bug would have been caught.
+The same work split into three PRs (auth at 180 LOC, billing at 220 LOC, data model at 160 LOC) would have received an average of 4 or more comments each at an 87% defect detection rate. The billing bug would have been caught.
 
 CI enforcement keeps scope in check:
 

@@ -18,19 +18,19 @@ maturity: established
 
 > Perceived model degradation is the "the model got dumber" complaint after a release, when teams cannot tell whether quality actually dropped.
 
-**Related lesson:** [The Kitchen Sink Session](https://learn.agentpatterns.ai/anti-patterns/the-kitchen-sink-session/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [The Kitchen Sink Session](https://learn.agentpatterns.ai/anti-patterns/the-kitchen-sink-session/) walks through this concept in a hands-on lesson with quizzes.
 
-## The Pattern
+## The pattern
 
-After every model release, user forums fill with reports that quality has declined — persistent, cross-provider, and structurally identical each time. The anti-pattern is not the degradation itself (some is real); it is the inability to tell the difference, causing teams to either panic-switch without evidence or dismiss real problems as vibes.
+After every model release, user forums fill with reports that quality has declined. The reports are persistent, cross-provider, and structurally identical each time. The anti-pattern is not the degradation itself, because some is real. It is the inability to tell the difference. Teams then either panic-switch without evidence or dismiss real problems as vibes.
 
-## Why It Happens
+## Why it happens
 
-Candidate causes: post-training adjustments, confirmation bias (consistent with OpenAI VP Peter Welinder's [statement](https://twitter.com/npew/status/1681578562419056641)), A/B routing, and weight quantization. None has definitive proof.
+Candidate causes include post-training adjustments, confirmation bias (consistent with OpenAI VP Peter Welinder's [statement](https://twitter.com/npew/status/1681578562419056641)), A/B routing, and weight quantization. None has definitive proof.
 
-**LLM drift** (behavioral change over time) differs from **degradation** (inability to solve previously solvable tasks). Chen, Zaharia, and Zou ([2023](https://arxiv.org/abs/2307.09009)) documented GPT-4 prime-identification accuracy dropping from 84% to 51% — the drop coincided with reduced chain-of-thought compliance, making root cause difficult to isolate.
+LLM drift (behavioral change over time) differs from degradation (inability to solve previously solvable tasks). Chen, Zaharia, and Zou ([2023](https://arxiv.org/abs/2307.09009)) documented GPT-4 prime-identification accuracy dropping from 84% to 51%. The drop coincided with reduced chain-of-thought compliance, which makes the root cause hard to isolate.
 
-## What to Do Instead
+## What to do instead
 
 ### Pin model versions
 
@@ -38,7 +38,7 @@ Per Anthropic's [model versioning guidance](https://docs.anthropic.com/en/docs/a
 
 ### Build golden-query eval suites
 
-Maintain task-specific prompts with known-good outputs; run on every version change and on a schedule. See [Golden Query Pairs](../verification/golden-query-pairs-regression.md) for implementation.
+Maintain task-specific prompts with known-good outputs. Run them on every version change and on a schedule. See [Golden Query Pairs](../verification/golden-query-pairs-regression.md) for implementation.
 
 ### Use statistical tests, not eyeballing
 
@@ -46,12 +46,12 @@ Maintain task-specific prompts with known-good outputs; run on every version cha
 
 ### Separate capability evals from regression evals
 
-- **Capability evals** — low initial pass rate, track improvement
-- **Regression evals** — near-100% baseline, detect degradation
+- Capability evals — low initial pass rate, track improvement
+- Regression evals — near-100% baseline, detect degradation
 
 A regression eval drop is a signal. A capability eval drop may be noise.
 
-## Decision Checklist
+## Decision checklist
 
 Before reacting to perceived degradation:
 
@@ -63,21 +63,21 @@ Before reacting to perceived degradation:
 
 Fewer than three "yes" answers means you are operating on vibes.
 
-## Why It Works
+## Why it works
 
-Novel models get credit for wins; routine ones get blamed for failures. Eval suites substitute systematic sampling for selective memory — identical prompts against the same rubric produce a signal independent of observer bias. Pinned snapshots isolate change attribution: any observed difference originated in your code, prompts, or data, not a silent upstream update.
+Novel models get credit for wins, and routine ones get blamed for failures. Eval suites replace selective memory with systematic sampling. Identical prompts against the same rubric produce a signal independent of observer bias. Pinned snapshots isolate change attribution: any observed difference came from your code, prompts, or data, not a silent upstream update.
 
-## When This Backfires
+## When this backfires
 
-1. **Evals lag real usage.** Suites reflect the authoring-time distribution; shifted user behavior means a passing eval masks degradation on the live workload.
-2. **Pinning delays improvements.** Pinning foregoes bug fixes and upgrades. Providers such as Anthropic and OpenAI deprecate old snapshots; teams without a rotation policy face forced migrations with no baseline.
-3. **Underpowered tests miss real regressions.** McNemar's test requires sufficient paired samples; sparse traffic or narrow suites cannot detect small but real drops.
+1. Evals lag real usage. Suites reflect the authoring-time distribution, so shifted user behavior means a passing eval masks degradation on the live workload.
+2. Pinning delays improvements. Pinning foregoes bug fixes and upgrades. Providers such as Anthropic and OpenAI deprecate old snapshots, so teams without a rotation policy face forced migrations with no baseline.
+3. Underpowered tests miss real regressions. McNemar's test requires enough paired samples, and sparse traffic or narrow suites cannot detect small but real drops.
 
 ## Example
 
-A team using the `claude-opus-4` floating alias notices their summarization quality “feels worse” after a model update. Without pinned versions or evals, they can’t confirm whether a real regression occurred.
+A team using the `claude-opus-4` floating alias notices their summarization quality “feels worse” after a model update. Without pinned versions or evals, they cannot confirm whether a real regression occurred.
 
-**Before (vibes-driven reaction):**
+Before (vibes-driven reaction):
 
 ```
 # No pinning, no evals
@@ -89,7 +89,7 @@ response = client.messages.create(
 # "Quality seems worse this week" → team debates switching to GPT-4o
 ```
 
-**After (evidence-driven response):**
+After (evidence-driven response):
 
 ```python
 # Pin to a specific snapshot

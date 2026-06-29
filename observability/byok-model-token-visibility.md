@@ -17,11 +17,11 @@ maturity: adopted
 
 > BYOK model token visibility surfaces in-IDE token counts, context-window percent, and thinking effort for bring-your-own-key routes — the same telemetry IDE-owned routes already get.
 
-## The Gap
+## The gap
 
-An IDE owns its first-party route end-to-end. BYOK inverts that contract: provider unknown until configured, variable response shape, and the IDE sees only what the adapter forwards. Until VS Code 1.120, BYOK token counts displayed as zero because accounting only ran for built-in offerings; 1.120 plumbs adapter responses into the existing indicator ([VS Code 1.120 release notes](https://code.visualstudio.com/updates/v1_120)).
+An IDE owns its first-party route end to end. BYOK breaks that contract: you do not know the provider until you configure it, the response shape varies, and the IDE sees only what the adapter forwards. Until VS Code 1.120, BYOK token counts showed zero because accounting ran only for built-in models. Version 1.120 feeds adapter responses into the existing indicator ([VS Code 1.120 release notes](https://code.visualstudio.com/updates/v1_120)).
 
-The pattern is **first-class telemetry for routes the IDE does not own**. A provider's billing dashboard lags by minutes and lives in another tab — it cannot drive prompt-time decisions about compacting, pruning skills, or falling back to a cheaper model.
+This pattern gives first-class telemetry to routes the IDE does not own. A provider's billing dashboard lags by minutes and sits in another tab, so it cannot inform prompt-time choices about compacting, pruning skills, or falling back to a cheaper model.
 
 ```mermaid
 graph LR
@@ -32,7 +32,7 @@ graph LR
     M --> O
 ```
 
-## Telemetry Slots a BYOK Route Must Fill
+## Telemetry slots a BYOK route must fill
 
 Four slots, each tied to a distinct decision:
 
@@ -45,32 +45,32 @@ Four slots, each tied to a distinct decision:
 
 VS Code surfaces the first two on the chat input and the third on the model picker for reasoning models ([VS Code 1.120 release notes](https://code.visualstudio.com/updates/v1_120)). The effort knob trades latency for quality before the request, not after the bill arrives. Claude Code's OTel exporter ships the same counts as `claude_code.token.usage` attributes (`type`, `query_source`, `model`, `effort`) — exported instead of displayed ([Claude Code monitoring reference](https://code.claude.com/docs/en/monitoring-usage)).
 
-## When the Displayed Number Diverges From Billing
+## When the displayed number diverges from billing
 
 The IDE only shows what the adapter receives. Four drift conditions:
 
-- **No `usage` object returned.** Self-hosted endpoints and proxies that strip non-essential fields report nothing; the indicator falls back to zero or a client tokenizer estimate.
-- **Streaming without explicit usage opt-in.** OpenAI-compatible streaming omits the usage chunk unless the adapter sets `stream_options: {"include_usage": true}`; otherwise the per-turn count stays at zero for every stream ([OpenAI streaming reference](https://developers.openai.com/api/reference/resources/chat/subresources/completions/streaming-events)).
-- **Tokenizer drift.** Percent is computed against the client's tokenizer; the provider may bill on its own (BPE variants across Llama, GPT, Claude). The percent is directionally right but not the billing total.
-- **Effort knob with no effect.** Non-reasoning models silently ignore the parameter; surfacing the control trains operators that the knob does nothing.
+- No `usage` object returned. Self-hosted endpoints and proxies that strip non-essential fields report nothing. The indicator then falls back to zero or a client tokenizer estimate.
+- Streaming without explicit usage opt-in. OpenAI-compatible streaming omits the usage chunk unless the adapter sets `stream_options: {"include_usage": true}`. Otherwise the per-turn count stays at zero for every stream ([OpenAI streaming reference](https://developers.openai.com/api/reference/resources/chat/subresources/completions/streaming-events)).
+- Tokenizer drift. The percent uses the client's tokenizer, but the provider may bill on its own (BPE variants across Llama, GPT, Claude). The percent points the right way but is not the billing total.
+- Effort knob with no effect. Non-reasoning models ignore the parameter. Showing the control teaches operators that the knob does nothing.
 
 Name these conditions or the indicator's authority will exceed its accuracy.
 
-## Scope: Chat Only
+## Scope is chat only
 
-The visibility fix applies to the chat experience. VS Code is explicit that BYOK "only applies to the chat experience and doesn't affect inline suggestions or other AI-powered features in VS Code" ([VS Code language-models docs](https://code.visualstudio.com/docs/copilot/customization/language-models)). Inline completions, edits, and background agents still route through first-party infrastructure on most IDEs — the BYOK observability gap closes for the surface where developers see context-window percent today.
+The visibility fix applies to the chat experience. VS Code is explicit that BYOK "only applies to the chat experience and doesn't affect inline suggestions or other AI-powered features in VS Code" ([VS Code language-models docs](https://code.visualstudio.com/docs/copilot/customization/language-models)). Inline completions, edits, and background agents still route through first-party infrastructure on most IDEs. The BYOK observability gap closes only for the surface where developers see context-window percent today.
 
-## Route Observability vs Source Observability
+## Route observability versus source observability
 
-This pattern is the route-level sibling of [context-usage attribution](context-usage-attribution.md). Source attribution answers *which configuration source is filling the window*; route observability answers *is the BYOK route reporting at all, and at what cost*. Both consume the same `usage` counts on different axes. Expose both so operators pick route-level when their custom provider may silently misreport, and source-level when the percent is high and they need to know which input to prune.
+This pattern is the route-level sibling of [context-usage attribution](context-usage-attribution.md). Source attribution answers which configuration source is filling the window. Route observability answers whether the BYOK route reports at all, and at what cost. Both use the same `usage` counts on different axes. Expose both: operators pick route-level when a custom provider may misreport, and source-level when the percent is high and they need to know which input to prune.
 
-## When This Backfires
+## When this backfires
 
-Surfacing in-IDE BYOK telemetry is net-negative under three conditions:
+In-IDE BYOK telemetry is net-negative under three conditions:
 
-- **Provider billing is the only contract.** When cost ownership lives in finance and provider dashboards are reconciled monthly, the in-IDE indicator becomes a false-precision anchor: developers trust a number that the provider does not bill on (tokenizer drift, missing usage chunk). The dashboard is authoritative; the indicator is at best a hint.
-- **High-variance routes mislead trend reading.** Self-hosted endpoints with intermittent `usage` reporting (streaming without opt-in, custom proxies stripping fields) produce indicator values that swing between accurate and zero turn-to-turn. Operators reading a swinging indicator over-react to noise instead of tracking real spend.
-- **Effort knob on non-reasoning routes.** Surfacing the thinking-effort dropdown for a route whose model silently ignores the parameter trains the operator that the knob does nothing, eroding trust in the same control for routes where it does work.
+- Provider billing is the only contract. When finance owns cost and reconciles provider dashboards monthly, the in-IDE indicator becomes a false-precision anchor: developers trust a number the provider does not bill on (tokenizer drift, missing usage chunk). The dashboard is authoritative. The indicator is at best a hint.
+- High-variance routes mislead trend reading. Self-hosted endpoints with intermittent `usage` reporting (streaming without opt-in, custom proxies stripping fields) produce indicator values that swing between accurate and zero turn to turn. Operators reading a swinging indicator over-react to noise instead of tracking real spend.
+- Effort knob on non-reasoning routes. Showing the thinking-effort dropdown for a route whose model ignores the parameter teaches the operator that the knob does nothing, which erodes trust in the same control for routes where it does work.
 
 ## Example
 

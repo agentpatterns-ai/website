@@ -12,7 +12,7 @@ status: current
 
 > Tool-specific reference for Claude Code's agentic features.
 
-These features run on Anthropic's current model line. As of June 2026 the Claude models reference lists **Claude Fable 5** at general availability and **Claude Mythos 5** in preview, both fronting adaptive thinking and a 1M-token context window — positioned above the prior Opus 4.8 generation ([Claude models overview](https://platform.claude.com/docs/en/docs/about-claude/models)).
+These features run on Anthropic's current model line. As of June 2026 the Claude models reference lists Claude Fable 5 at general availability and Claude Mythos 5 in preview, both fronting adaptive thinking and a 1M-token context window — positioned above the prior Opus 4.8 generation ([Claude models overview](https://platform.claude.com/docs/en/docs/about-claude/models)).
 
 ## Pages
 
@@ -21,6 +21,7 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [Agent View](agent-view.md) — Dispatch-attach-monitor surface for parallel background sessions, with blocked-on-input as a first-class state
 - [Auto Mode](auto-mode.md) — Classifier-based permission gating for unattended execution
 - [Hard-Deny Classifier Rule](hard-deny-classifier-rule.md) — Unconditional block layer inside auto mode's classifier — user intent and allow exceptions do not apply
+- [Parameter-Level Permission Rules](tool-param-value-permission-rules.md) — `Tool(param:value)` syntax matches deny/ask rules against a tool's input-parameter values, e.g. `Agent(model:opus)` to block Opus subagents
 - [Bare Mode](bare-mode.md) — Deterministic headless CI mode — skip all local config discovery with `--bare`
 - [Extension Points](extension-points.md) — Decision framework for choosing between CLAUDE.md, rules, skills, hooks, subagents, MCP, and plugins
 - [Hooks & Lifecycle](hooks-lifecycle.md) — Deterministic automation at 12+ lifecycle events

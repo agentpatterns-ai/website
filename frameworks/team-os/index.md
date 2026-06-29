@@ -25,8 +25,8 @@ The pattern is documented in Aakash Gupta's interview with Hannah Stulberg, a Pr
 
 The repo is the team's brain. The coding agent is the shared interface over it. Two problems collapse into one artifact:
 
-- **Context delivery to the agent.** Nested `CLAUDE.md` and a functional folder taxonomy implement [progressive disclosure](../../agent-design/progressive-disclosure-agents.md) — the agent pulls only the tokens relevant to the current query instead of traversing the whole repo.
-- **Self-service retrieval for humans.** The same markdown the agent reads is the canonical source the team reads, removing the PM-as-router bottleneck Stulberg names directly: *"every question goes through you. Every answer lives in your head or in a doc no one can find. That does not scale."* ([source](https://www.news.aakashg.com/p/claude-code-team-os))
+- Context delivery to the agent. Nested `CLAUDE.md` and a functional folder taxonomy implement [progressive disclosure](../../agent-design/progressive-disclosure-agents.md) — the agent pulls only the tokens relevant to the current query instead of traversing the whole repo.
+- Self-service retrieval for humans. The same markdown the agent reads is the canonical source the team reads, removing the PM-as-router bottleneck Stulberg names directly: *"every question goes through you. Every answer lives in your head or in a doc no one can find. That does not scale."* ([source](https://www.news.aakashg.com/p/claude-code-team-os))
 
 The causal lever is [natural-language git](natural-language-git.md). Once a non-engineer can author and merge through the agent, the marginal contributor cost stops being "learn git" and becomes "know what to write" — which matches the [strategy-over-code-generation](../../human/strategy-over-code-generation.md) shift already observed in agent-driven teams.
 
@@ -57,30 +57,30 @@ Each node above is a page in this framework. The context-routing mechanism — n
 | 6 | [Plan files as resumable artifacts](plan-files-resumable-artifacts.md) | Committed plan files — qualified pattern: survive context compaction and enable ~80% reuse on recurring workflows, require supersession discipline to avoid retrieval hazards |
 | 7 | [Self-explanation loop](self-explanation-loop.md) | "Why is this structured this way?" as an active learning prompt |
 
-**Atomic patterns Team OS composes (cross-links):** [hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md), [CLAUDE.md convention](../../instructions/claude-md-convention.md), [AGENTS.md as table of contents](../../instructions/agents-md-as-table-of-contents.md), [progressive disclosure for agents](../../agent-design/progressive-disclosure-agents.md), [strategy over code generation](../../human/strategy-over-code-generation.md), [plan mode](../../tools/claude/plan-mode.md).
+Atomic patterns Team OS composes (cross-links): [hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md), [CLAUDE.md convention](../../instructions/claude-md-convention.md), [AGENTS.md as table of contents](../../instructions/agents-md-as-table-of-contents.md), [progressive disclosure for agents](../../agent-design/progressive-disclosure-agents.md), [strategy over code generation](../../human/strategy-over-code-generation.md), [plan mode](../../tools/claude/plan-mode.md).
 
 ## Adoption Gradient
 
 | Stage | Shape | Prerequisites | Who adopts |
 |-------|-------|---------------|-----------|
-| **Solo** | Flat repo, single root `CLAUDE.md`, no sub-agents | Coding agent installed; IDE over terminal; ~1 hour | 1 contributor |
-| **Pod** (2–5) | Root + 2–3 functional folders, nested `CLAUDE.md`, shared MCPs | Agreed folder taxonomy; 1 git-fluent champion; PR review norm | Small cross-functional pod |
-| **Cross-functional team** (6–15) | Full taxonomy, `.claude/{agents,commands,skills}/`, natural-language git for non-engineers, plan mode as norm | Hard launch gate: features not launched until metrics, queries, and schemas are checked in; analyst-audited data playbooks; 30-day runway | PM-led with analyst, design, eng partners |
-| **Scaled** (15+) | Multiple sub-agents per function, skill library, committed plan files, cross-repo MCP federation | Skills explicitly invoked (not auto); context-rot review cadence; owner per functional folder | Multi-function org unit |
+| Solo | Flat repo, single root `CLAUDE.md`, no sub-agents | Coding agent installed; IDE over terminal; ~1 hour | 1 contributor |
+| Pod (2–5) | Root + 2–3 functional folders, nested `CLAUDE.md`, shared MCPs | Agreed folder taxonomy; 1 git-fluent champion; PR review norm | Small cross-functional pod |
+| Cross-functional team (6–15) | Full taxonomy, `.claude/{agents,commands,skills}/`, natural-language git for non-engineers, plan mode as norm | Hard launch gate: features not launched until metrics, queries, and schemas are checked in; analyst-audited data playbooks; 30-day runway | PM-led with analyst, design, eng partners |
+| Scaled (15+) | Multiple sub-agents per function, skill library, committed plan files, cross-repo MCP federation | Skills explicitly invoked (not auto); context-rot review cadence; owner per functional folder | Multi-function org unit |
 
 Prerequisite ordering is strict. Skip the pod stage and folder drift accumulates; skip natural-language git and non-engineers silently churn.
 
 ## When to Adopt — and When Not To
 
-**Adopt when:** the primary consumer of team knowledge is a coding agent; repeated cross-functional handoffs require a shared artifact; at least one git-fluent contributor treats the repo as sacred; the team has a 30-day-plus planning runway.
+Adopt when: the primary consumer of team knowledge is a coding agent; repeated cross-functional handoffs require a shared artifact; at least one git-fluent contributor treats the repo as sacred; the team has a 30-day-plus planning runway.
 
-**Do not adopt when:**
+Do not adopt when:
 
-- **Mature collaboration stack already works.** Teams with disciplined Notion/Confluence/Jira hygiene and dedicated analytics docs lose on mobile UX, permissioning, real-time co-authoring, and search ([Document360 analysis](https://document360.com/blog/wiki-as-knowledge-base-software/)).
-- **Regulated or audited knowledge** (legal, HR, finance). Access controls, attestations, and retention policies are bolt-ons in GitHub; PII or privileged material in a repo is an audit finding waiting to happen.
-- **No version-control literacy and no interest in building it.** Git's learning curve is real; the natural-language escape hatch still leaks at merge conflicts, CI failures, and `gh auth` errors ([docs-as-code critique](https://thisisimportant.net/posts/docs-as-code-broken-promise/)).
-- **Knowledge is genuinely ephemeral.** Sales tactics, campaign assets, or weekly pivots that churn faster than PR review cadence do not reward versioning.
-- **Heavy synchronous co-authoring.** OKR drafting and roadmap workshops favor multiplayer editors over async PR review.
+- Mature collaboration stack already works. Teams with disciplined Notion/Confluence/Jira hygiene and dedicated analytics docs lose on mobile UX, permissioning, real-time co-authoring, and search ([Document360 analysis](https://document360.com/blog/wiki-as-knowledge-base-software/)).
+- Regulated or audited knowledge (legal, HR, finance). Access controls, attestations, and retention policies are bolt-ons in GitHub; PII or privileged material in a repo is an audit finding waiting to happen.
+- No version-control literacy and no interest in building it. Git's learning curve is real; the natural-language escape hatch still leaks at merge conflicts, CI failures, and `gh auth` errors ([docs-as-code critique](https://thisisimportant.net/posts/docs-as-code-broken-promise/)).
+- Knowledge is genuinely ephemeral. Sales tactics, campaign assets, or weekly pivots that churn faster than PR review cadence do not reward versioning.
+- Heavy synchronous co-authoring. OKR drafting and roadmap workshops favor multiplayer editors over async PR review.
 
 ## Example — The Stulberg Workflow
 

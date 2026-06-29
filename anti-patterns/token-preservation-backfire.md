@@ -14,21 +14,21 @@ maturity: established
 
 > A token preservation instruction creates a competing objective the agent resolves by doing less work, not by completing the task better.
 
-**Learn it hands-on:** [Token Preservation Backfire](https://learn.agentpatterns.ai/anti-patterns/token-preservation-backfire/) — guided lesson with quizzes.
+Learn it hands-on with the [guided Token Preservation Backfire lesson and quizzes](https://learn.agentpatterns.ai/anti-patterns/token-preservation-backfire/).
 
-## The Pattern
+## The pattern
 
-Add instructions like "preserve tokens," "avoid waste," or "be efficient" to system prompts. The intent is cost savings. The effect is reduced output quality.
+You add instructions like "preserve tokens," "avoid waste," or "be efficient" to a system prompt. The intent is cost savings. The effect is reduced output quality.
 
-## Why It Fails
+## Why it fails
 
-Efficiency instructions create a second objective: minimise resource use. When this competes with the user's task objective, the agent resolves the conflict by doing less work -- refusing explorations, skipping file reads, and stopping early.
+Efficiency instructions create a second objective: minimize resource use. When this competes with the user's task, the agent resolves the conflict by doing less work. It refuses explorations, skips file reads, and stops early.
 
-Cursor discovered this during their Codex model harness development. GPT-5-Codex, instructed to "preserve tokens and not be wasteful," would sometimes stop with:
+Cursor found this while developing their Codex model harness. GPT-5-Codex, told to "preserve tokens and not be wasteful," would sometimes stop with:
 
 > "I'm not supposed to waste tokens, and I don't think it's worth continuing with this task!"
 
-The model treated token conservation as a goal in its own right. Rather than optimising *how* it worked, the instruction changed *whether* it worked on substantial problems.
+The model treated token conservation as a goal in its own right. The instruction did not change how it worked. It changed whether it worked on substantial problems at all.
 
 ```mermaid
 flowchart LR
@@ -42,19 +42,19 @@ flowchart LR
     E --> H["Stops early"]
 ```
 
-## The Mechanism
+## The mechanism
 
-System-level instructions override user-level task requests. When token preservation is a system directive, the efficiency constraint takes precedence over the user's objective — the agent is not being lazy, it is faithfully following a conflicting instruction.
+System-level instructions override user-level task requests. When token preservation is a system directive, the efficiency constraint takes precedence over the user's objective. The agent is not being lazy. It is faithfully following a conflicting instruction.
 
-Any instruction framing work as a *cost to be minimised* risks reducing agent ambition — a form of [objective drift](objective-drift.md) where the resource budget displaces the task goal. The effect is most documented for long-horizon coding agents; evidence for other task types is limited to a small number of practitioner reports.
+Any instruction that frames work as a cost to cut down risks reducing agent ambition. This is a form of [objective drift](objective-drift.md), where the resource budget displaces the task goal. The effect is most documented for long-horizon coding agents. Evidence for other task types is limited to a small number of practitioner reports.
 
-## When This Applies
+## When this applies
 
-The failure mode is specific to long-horizon, tool-using tasks where the agent chooses whether to explore or continue — coding and file-system work.
+The failure mode is specific to long-horizon, tool-using tasks where the agent chooses whether to explore or continue, such as coding and file-system work.
 
-Brevity framing stays safe for conversational assistants, summarisation, and single-turn tasks without tool use — where the model has no opportunity to do *less work*.
+Brevity framing stays safe for conversational assistants, summarization, and single-turn tasks without tool use. There the model has no chance to do less work.
 
-The backfire is not universal — a *bounded* budget differs from an open-ended "don't waste tokens" directive. The Token-Budget-Aware LLM Reasoning framework reports a 68% token reduction with under 5% accuracy loss by inserting an estimated budget into the prompt ([arxiv 2412.18547](https://arxiv.org/abs/2412.18547), ACL 2025 Findings; [code](https://github.com/GeniusHTX/TALE)). The failure is a property of vague resource-minimisation framing, not of efficiency goals as such.
+The backfire is not universal. A bounded budget differs from an open-ended "don't waste tokens" directive. The Token-Budget-Aware LLM Reasoning framework reports a 68% token reduction with under 5% accuracy loss by inserting an estimated budget into the prompt ([arxiv 2412.18547](https://arxiv.org/abs/2412.18547), ACL 2025 Findings; [code](https://github.com/GeniusHTX/TALE)). The failure is a property of vague minimization framing, not of efficiency goals as such.
 
 ## Mitigation
 
@@ -66,13 +66,13 @@ The backfire is not universal — a *bounded* budget differs from an open-ended 
 | "Minimise tool calls" | "Use the tools needed to verify your work" |
 | "Only read files when necessary" | "Read files to build context before acting" |
 
-Reframe constraints as **quality targets** rather than **resource limits**.
+Reframe constraints as quality targets rather than resource limits.
 
-**Frame around action.** OpenAI's Codex prompting guide: "Bias to action: default to implementing with reasonable assumptions; do not end on clarifications unless truly blocked."
+Frame the work around action. OpenAI's Codex prompting guide says: "Bias to action: default to implementing with reasonable assumptions; do not end on clarifications unless truly blocked."
 
-**Use completion criteria.** LangChain structures agent phases (Planning, Build, Verify, Fix) with pre-completion checklists — done means quality criteria met, not budget hit.
+Use completion criteria. LangChain structures agent phases (Planning, Build, Verify, Fix) with pre-completion checklists, so done means quality criteria met, not budget hit.
 
-**Make constraints mechanical.** Anthropic recommends requiring absolute filepaths rather than instructing "don't use relative paths" — the constraint enforces itself.
+Make constraints mechanical. Anthropic recommends requiring absolute filepaths rather than instructing "don't use relative paths," so the constraint enforces itself.
 
 ## Sources
 

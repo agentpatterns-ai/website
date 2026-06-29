@@ -16,13 +16,13 @@ maturity: emerging
 
 > Agents produce better output in codebases with strong types, comprehensive tests, consistent patterns, and documented decisions — the same qualities that improve code for humans.
 
-## Agent-Hostile vs. Agent-Friendly
+## Agent-hostile versus agent-friendly
 
-Agents don't work from requirements. They pattern-match against existing code. A codebase with weak types, no tests, inconsistent patterns, and undocumented decisions gives agents nothing to match against — so they invent, the gap [laying the architectural foundation first](../workflows/architectural-foundation-first.md) is meant to close.
+Agents do not work from requirements. They pattern-match against existing code. A codebase with weak types, no tests, inconsistent patterns, and undocumented decisions gives agents nothing to match against, so they invent. [Laying the architectural foundation first](../workflows/architectural-foundation-first.md) is meant to close that gap.
 
-The solution is not better prompts. It is better code.
+The fix is not better prompts. It is better code.
 
-## Readiness Dimensions
+## Readiness dimensions
 
 ### Types
 
@@ -30,25 +30,25 @@ Strong type annotations tell agents what functions expect, what they return, and
 
 ### Tests
 
-A comprehensive test suite gives agents a binary answer to "did I break anything?" Agents can run tests, read failure output, fix the issue, and run again without human intervention. A codebase without tests forces every agent output through human review.
+A complete test suite gives agents a yes-or-no answer to "did I break anything?" Agents can run tests, read failure output, fix the issue, and run again without human help. A codebase without tests forces every agent output through human review.
 
-### Consistent Patterns
+### Consistent patterns
 
-Agents extrapolate patterns from what they observe. Inconsistent code produces inconsistent agent output — the case for [convention over configuration](../instructions/convention-over-configuration.md). If three modules do the same thing three different ways, an agent writing a fourth will pick one arbitrarily — or invent a fourth way.
+Agents extrapolate patterns from what they observe. Inconsistent code produces inconsistent agent output — the case for [convention over configuration](../instructions/convention-over-configuration.md). If three modules do the same thing three different ways, an agent writing a fourth will pick one arbitrarily, or invent a fourth way.
 
-### Decision Comments
+### Decision comments
 
-Intentional choices get reverted when agents don't know they were intentional. A comment explaining why an unusual approach was taken — "Using X instead of Y because Y doesn't handle Z" — survives context resets and prevents agents from "fixing" deliberate decisions.
+Agents revert intentional choices when they do not know the choice was intentional. A comment that explains why an unusual approach was taken — "Using X instead of Y because Y does not handle Z" — survives context resets and stops agents from "fixing" deliberate decisions.
 
-### Directory Structure
+### Directory structure
 
-Agents navigate by convention, one item on the [repository bootstrap checklist](../workflows/repository-bootstrap-checklist.md). A clear, predictable directory structure lets agents determine where new files belong without asking. Flat directories with mixed concerns force agents to guess.
+Agents navigate by convention, one item on the [repository bootstrap checklist](../workflows/repository-bootstrap-checklist.md). A clear, predictable directory structure lets agents work out where new files belong without asking. Flat directories with mixed concerns force agents to guess.
 
-### Project Instructions
+### Project instructions
 
-[AGENTS.md and equivalent project instruction files](https://agents.md) provide [non-discoverable context](../context-engineering/discoverable-vs-nondiscoverable-context.md): decisions that can't be inferred from code alone. Architecture choices, external constraints, "don't do X because" rules. The AGENTS.md format is now an [open standard stewarded by the Linux Foundation's Agentic AI Foundation](https://www.infoq.com/news/2025/08/agents-md/), with wide adoption across coding-agent tools.
+[AGENTS.md and equivalent project instruction files](https://agents.md) provide [non-discoverable context](../context-engineering/discoverable-vs-nondiscoverable-context.md): decisions you cannot infer from code alone. These cover architecture choices, external constraints, and "do not do X because" rules. The AGENTS.md format is now an [open standard stewarded by the Linux Foundation's Agentic AI Foundation](https://www.infoq.com/news/2025/08/agents-md/), with wide adoption across coding-agent tools.
 
-## Readiness Signals
+## Readiness signals
 
 | Signal | Agent-Friendly | Agent-Hostile |
 |--------|---------------|---------------|
@@ -59,22 +59,22 @@ Agents navigate by convention, one item on the [repository bootstrap checklist](
 | Files | Small, single-responsibility | Large, mixed-concern |
 | Project instructions | Present and current | Absent |
 
-## Compounding Investment
+## Compounding investment
 
-Improving codebase readiness benefits agents and human developers identically — it's the same work. Adding types, writing tests, and documenting decisions are not agent-specific investments. They pay off regardless of whether an agent is involved.
+Improving codebase readiness benefits agents and human developers in the same way — it is the same work. Adding types, writing tests, and documenting decisions are not agent-specific investments. They pay off whether or not an agent is involved.
 
-## When Readiness Investment Backfires
+## When readiness investment backfires
 
-Readiness work has real costs and does not always dominate. Consider deferring it when:
+Readiness work has real costs and does not always win out. Consider deferring it when one of these holds:
 
-- **The code is throwaway.** Prototypes, spikes, and one-off scripts may never survive long enough to amortise the investment. Strict types and test scaffolding slow the exploration loop that [agent-driven greenfield work](../workflows/agent-driven-greenfield.md) depends on.
-- **Patterns are premature.** Locking in conventions before the shape of the problem is understood produces rigid scaffolding that agents then faithfully extend in the wrong direction. Early code is often better left malleable.
-- **The codebase is large enough that local readiness doesn't help.** Pattern-matching breaks down across enterprise codebases with hundreds of thousands of files regardless of how clean any single module is ([Qodo, 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/)). Readiness is necessary but not sufficient at scale; retrieval, sub-agents, and architectural boundaries carry more weight than local hygiene.
-- **Documentation drifts faster than it helps.** Large AGENTS.md files and verbose decision comments that go stale produce false confidence — agents trust out-of-date guidance and make it worse. If you cannot maintain the prose, terser is safer.
+- The code is throwaway. Prototypes, spikes, and one-off scripts may never survive long enough to repay the investment. Strict types and test scaffolding slow the exploration loop that [agent-driven greenfield work](../workflows/agent-driven-greenfield.md) depends on.
+- Patterns are premature. Locking in conventions before you understand the shape of the problem produces rigid scaffolding that agents then faithfully extend in the wrong direction. Early code is often better left malleable.
+- The codebase is large enough that local readiness does not help. Pattern-matching breaks down across enterprise codebases with hundreds of thousands of files, however clean any single module is ([Qodo, 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/)). Readiness is necessary but not sufficient at scale: retrieval, sub-agents, and architectural boundaries carry more weight than local hygiene.
+- Documentation drifts faster than it helps. Large AGENTS.md files and verbose decision comments that go stale produce false confidence — agents trust out-of-date guidance and make it worse. If you cannot maintain the prose, terser is safer.
 
 ## Example
 
-The two TypeScript snippets below show the same utility function before and after applying codebase readiness improvements. The agent-hostile version gives an agent nothing to pattern-match: no types, no test, no explanation of the deliberate behaviour.
+The two TypeScript snippets below show the same utility function before and after codebase readiness improvements. The agent-hostile version gives an agent nothing to pattern-match: no types, no test, no explanation of the deliberate behavior.
 
 ```typescript
 // Before: agent-hostile
@@ -117,7 +117,7 @@ test("throws on zero page", () => {
 });
 ```
 
-The decision comment explains the 1-based convention and where the contract lives. An agent extending or refactoring this function will preserve the behaviour rather than silently switching to 0-based indexing because "that's the usual convention".
+The decision comment explains the 1-based convention and where the contract lives. An agent extending or refactoring this function will preserve the behavior rather than silently switching to 0-based indexing because "that is the usual convention".
 
 ## Key Takeaways
 
@@ -130,7 +130,7 @@ The decision comment explains the 1-based convention and where the contract live
 
 - [Agent Backpressure](../agent-design/agent-backpressure.md)
 - [Convention Over Configuration](../instructions/convention-over-configuration.md)
-- [The Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md)
+- [The Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md)
 - [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md)
 - [Agent-Driven Greenfield Projects](../workflows/agent-driven-greenfield.md)
 - [Repository Bootstrap Checklist](../workflows/repository-bootstrap-checklist.md)
