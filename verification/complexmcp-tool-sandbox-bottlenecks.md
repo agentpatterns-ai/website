@@ -19,15 +19,15 @@ maturity: emerging
 
 > ComplexMCP, a 300+ tool MCP benchmark, caps top models near 55% against a 94% human baseline through three deployment-conditional failure modes.
 
-## The Benchmark and the Gap
+## The benchmark and the gap
 
-[ComplexMCP](https://arxiv.org/abs/2605.10787) evaluates LLM agents on 47 hand-curated tasks routed through seven stateful application sandboxes — operating system, social, e-commerce, weather, flight, stock trading, and news. The benchmark exposes 150+ interdependent tools and another 150+ stateless APIs through the Model Context Protocol, then perturbs the environment with seed-driven state initialization and injected API failures.
+[ComplexMCP](https://arxiv.org/abs/2605.10787) tests LLM agents on 47 hand-curated tasks across seven stateful application sandboxes: operating system, social, e-commerce, weather, flight, stock trading, and news. The benchmark exposes 150+ interdependent tools and another 150+ stateless APIs through the Model Context Protocol. It then perturbs the environment with seed-driven state initialization and injected API failures.
 
-The headline result is a persistent ceiling. Across 16 evaluated models, the top score is Gemini-3-Flash at **55.31%**, followed by GLM-4.7 (42.55%) and Claude-Opus-4 (41.84%). Three human evaluators averaged **93.61%**. No model crossed 60%. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
+The result is a persistent ceiling. Across 16 models tested, the top score is Gemini-3-Flash at 55.31%, followed by GLM-4.7 (42.55%) and Claude-Opus-4 (41.84%). Three human evaluators averaged 93.61%. No model crossed 60%. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
 
-Trajectory analysis decomposes the gap into three reproducible failure modes.
+Trajectory analysis breaks the gap into three reproducible failure modes.
 
-## Three Bottlenecks
+## Three bottlenecks
 
 ```mermaid
 graph TD
@@ -42,19 +42,19 @@ graph TD
 
 ### 1. Tool retrieval saturation
 
-As the action space scales, the agent cannot reliably identify the next correct tool from its partial plan. Vector-retrieval RAG — including iterative RAG, the best variant tested — does not match full-context tool listing. The paper notes: "without a comprehensive view of the full API set, the LLM may fail to invoke essential intermediate steps that are not explicitly surfaced by the retrieval mechanism." [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
+As the action space grows, the agent cannot reliably pick the next correct tool from its partial plan. Vector-retrieval RAG does not match full-context tool listing, even with iterative RAG, the best variant tested. The paper notes: "without a comprehensive view of the full API set, the LLM may fail to invoke essential intermediate steps that are not explicitly surfaced by the retrieval mechanism." [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
 
-This is the same precision-drop-at-scale mechanism documented in the [Skill Retrieval Realism Gap](eval-blind-spots.md) for skills — retrieval that looks adequate at 30 items degrades sharply at 300.
+This is the same precision-drop-at-scale mechanism documented in the [Skill Retrieval Realism Gap](eval-blind-spots.md) for skills. Retrieval that looks adequate at 30 items degrades sharply at 300.
 
 ### 2. Over-confidence skipping environment verification
 
-Agents commit to actions without [checking environment state first](deterministic-guardrails.md). A booking flow assumes a user exists; a trade assumes the account tier permits the order type. Because the seed-driven architecture varies users, accounts, and permissions between runs, any hardcoded assumption fails. The paper frames the needed shift as moving from "proactive executors" to "perceptive planners" — agents that reconcile their internal plan with a dynamic, non-empty environment state. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
+Agents commit to actions without [checking environment state first](deterministic-guardrails.md). A booking flow assumes a user exists. A trade assumes the account tier permits the order type. The seed-driven architecture varies users, accounts, and permissions between runs, so any hardcoded assumption fails. The paper frames the needed shift as moving from "proactive executors" to "perceptive planners" — agents that reconcile their internal plan with a dynamic, non-empty environment state. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
 
 ### 3. Strategic defeatism
 
-When an action fails — a transient API error, a missing precondition — agents tend to abandon the task rather than attempt recovery. GPT-5 reaches only 19.14%, attributed to "polite surrender" after the first error. Models trained heavily on refusal and hedging are more susceptible. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
+When an action fails — a transient API error, a missing precondition — agents tend to abandon the task rather than try to recover. GPT-5 reaches only 19.14%, attributed to "polite surrender" after the first error. Models trained heavily on refusal and hedging are more prone to it. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
 
-## When These Bottlenecks Bite
+## When these bottlenecks bite
 
 The three bottlenecks are conditional on deployment shape, not inherent to agents.
 
@@ -66,25 +66,25 @@ The three bottlenecks are conditional on deployment shape, not inherent to agent
 
 Narrow MCP servers see different failure profiles than the benchmark predicts. [Consolidate Agent Tools](../tool-engineering/consolidate-agent-tools.md) and [Tool Minimalism](../tool-engineering/tool-minimalism.md) address bottleneck 1 by design — fewer, higher-level tools never saturate retrieval; scoped discovery and partitioned servers achieve the same at the harness layer.
 
-## Design Responses
+## Design responses
 
-**For bottleneck 1 (retrieval):** keep the active toolset small enough to fit in context. If the surface is large, partition by task phase or sub-agent rather than retrieve from a flat pool. Track which tools the agent selects across a trajectory sample — unselected tools are dead weight.
+Bottleneck 1 (retrieval): keep the active toolset small enough to fit in context. If the surface is large, partition by task phase or sub-agent rather than retrieve from a flat pool. Track which tools the agent selects across a trajectory sample — unselected tools are dead weight.
 
-**For bottleneck 2 (over-confidence):** require state-reading tool calls before any mutating call, enforced at the harness layer. Schema-level checks on tool outputs catch agents that assume entities exist. The [Deterministic Guardrails](deterministic-guardrails.md) pattern wraps this around probabilistic agent decisions.
+Bottleneck 2 (over-confidence): require state-reading tool calls before any mutating call, enforced at the harness layer. Schema-level checks on tool outputs catch agents that assume entities exist. The [Deterministic Guardrails](deterministic-guardrails.md) pattern wraps this around probabilistic agent decisions.
 
-**For bottleneck 3 (defeatism):** the harness, not the prompt, owns recovery. Pre-completion checklists that re-run failed tool calls with backoff prevent single-error abandonment. [RFC 9457 machine-readable errors](../tool-engineering/rfc9457-machine-readable-errors.md) give the agent a structured signal that an error is retryable versus terminal.
+Bottleneck 3 (defeatism): the harness, not the prompt, owns recovery. Pre-completion checklists that re-run failed tool calls with backoff prevent single-error abandonment. [RFC 9457 machine-readable errors](../tool-engineering/rfc9457-machine-readable-errors.md) give the agent a structured signal for whether an error is retryable or terminal.
 
-## Limitations of the Benchmark
+## Limitations of the benchmark
 
 Reproducible but bounded:
 
-- **47 hand-curated tasks** with 3 human evaluators, 1 attempt each — narrow diversity and wide confidence intervals on the human baseline. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
-- **Synthetic sandboxes** omit concurrency, fraud detection, and rate limits real systems enforce.
-- **Full-context retrieval as upper bound** is not a viable production posture; the RAG vs full-context gap measures a regime no one ships.
+- 47 hand-curated tasks with 3 human evaluators, 1 attempt each — narrow diversity and wide confidence intervals on the human baseline. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
+- Synthetic sandboxes omit the concurrency, fraud detection, and rate limits that real systems enforce.
+- Full-context retrieval as an upper bound is not a viable production posture; the RAG versus full-context gap measures a regime no one ships.
 
 Treat the bottlenecks as design hypotheses to test against your own toolset, not universal agent claims.
 
-Adjacent benchmarks corroborate the shape: [τ-bench](https://arxiv.org/abs/2406.12045) reports SOTA function-calling agents under 50% and "quite inconsistent" on tool-agent-user tasks (over-confidence and defeatism without MCP); [MCP-Bench](https://arxiv.org/abs/2508.20453) wires 250 tools across 28 servers and finds retrieval breaks down on fuzzy instructions without explicit tool names (the same saturation dynamic).
+Adjacent benchmarks corroborate the shape. [τ-bench](https://arxiv.org/abs/2406.12045) reports SOTA function-calling agents under 50% and "quite inconsistent" on tool-agent-user tasks (over-confidence and defeatism without MCP). [MCP-Bench](https://arxiv.org/abs/2508.20453) wires 250 tools across 28 servers and finds retrieval breaks down on fuzzy instructions without explicit tool names (the same saturation dynamic).
 
 ## Example
 

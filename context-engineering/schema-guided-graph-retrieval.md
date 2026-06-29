@@ -19,18 +19,18 @@ maturity: emerging
 
 > Use one shared domain schema across graph construction, query decomposition, and typed retrieval to reduce noise and improve multi-hop reasoning precision.
 
-## The Problem with Naive GraphRAG
+## The problem with naive GraphRAG
 
-Standard GraphRAG pipelines split into three stages: graph construction, query decomposition, and retrieval. Each stage typically operates under its own assumptions about the domain — entity granularity, relation vocabulary, node types. The misalignment produces two failure modes:
+Standard GraphRAG pipelines split into three stages: graph construction, query decomposition, and retrieval. Each stage usually makes its own assumptions about the domain — entity granularity, relation vocabulary, node types. The mismatch produces two failure modes:
 
-- **Retrieval noise**: entity, relation, keyword, and summary nodes compete equally during semantic search, returning irrelevant candidates
-- **Decomposition drift**: sub-questions are generated without knowledge of what types exist in the graph, producing queries that don't match stored structure
+- Retrieval noise: entity, relation, keyword, and summary nodes compete equally during semantic search, so the search returns irrelevant candidates
+- Decomposition drift: the pipeline generates sub-questions without knowing what types exist in the graph, so the queries do not match the stored structure
 
 The result is overly broad retrieval and disconnected reasoning chains on multi-hop questions.
 
-## Schema as Control Surface
+## Schema as a control surface
 
-Schema-guided graph retrieval treats one domain schema as the control surface threading through all three stages. The Youtu-GraphRAG framework ([Dong et al., 2025; arXiv:2508.19855](https://arxiv.org/abs/2508.19855)) demonstrates this approach across six benchmarks, reporting 16.62% higher accuracy and up to 90.71% lower token cost versus state-of-the-art baselines.
+Schema-guided graph retrieval threads one domain schema through all three stages. The Youtu-GraphRAG framework ([Dong et al., 2025; arXiv:2508.19855](https://arxiv.org/abs/2508.19855)) tests this approach across six benchmarks. It reports 16.62% higher accuracy and up to 90.71% lower token cost than the best prior baselines.
 
 ```mermaid
 graph TD
@@ -49,35 +49,35 @@ graph TD
     E --> A[Answer]
 ```
 
-### Stage 1: Schema-Guided Construction
+### Stage 1: Schema-guided construction
 
-The seed schema defines allowed entity types, relation types, and attribute types. An extraction agent is bounded by this schema when processing documents — nodes tagged with `schema_type` metadata at creation. High-confidence new types discovered during extraction can be proposed for schema expansion, reducing the risk of premature closure without allowing unbounded ontology sprawl.
+The seed schema defines allowed entity types, relation types, and attribute types. This schema bounds the extraction agent as it processes documents, and the agent tags each node with `schema_type` metadata at creation. The agent can propose high-confidence new types found during extraction for schema expansion. This reduces the risk of premature closure without letting the ontology sprawl unbounded.
 
-A hierarchical layer sits above the base graph: community detection fuses [structural topology](repository-map-pattern.md) with subgraph semantics to produce community summaries. This enables routing at multiple abstraction levels — individual nodes for precise lookups, community summaries for broader context.
+A hierarchical layer sits above the base graph. Community detection fuses [structural topology](repository-map-pattern.md) with subgraph semantics to produce community summaries. So the system can route at multiple abstraction levels: individual nodes for precise lookups, community summaries for broader context.
 
-### Stage 2: Schema-Aware Query Decomposition
+### Stage 2: Schema-aware query decomposition
 
-The decomposer outputs two things for each sub-question: the sub-question text and the schema types involved. This is the critical coupling: sub-questions without type annotations provide minimal retrieval benefit — the decomposer must produce typed sub-questions or the downstream filtering gains disappear ([nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/schema-guided-graph-retrieval.md)).
+The decomposer outputs two things for each sub-question: the sub-question text and the schema types involved. This is the critical coupling. Sub-questions without type annotations give little retrieval benefit, so the decomposer must produce typed sub-questions or the downstream filtering gains disappear ([nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/schema-guided-graph-retrieval.md)).
 
-### Stage 3: Typed Retrieval
+### Stage 3: Typed retrieval
 
-Each sub-question retrieval is filtered by its declared `schema_types` before semantic scoring. Type-filtered candidates are ranked, then merged across parallel sub-question searches. Typed filtering is the primary source of precision gain; semantic scoring operates on a pre-narrowed candidate set.
+Each sub-question filters to its declared `schema_types` before semantic scoring. The system ranks the type-filtered candidates, then merges them across parallel sub-question searches. Typed filtering is the main source of precision gain; semantic scoring runs on an already-narrowed candidate set.
 
-The precision gain is bounded by the decomposer's ability to map an informal query onto the right schema types. [Multi-Agent GraphRAG (Maslej et al., 2025; arXiv:2511.08274)](https://arxiv.org/abs/2511.08274) finds schema-aware querying strongly model-dependent — its strongest model reached 77.23% average accuracy while weaker models trailed substantially — and reports that compositional queries (disjunctions, symmetric relations) and multi-intent questions remain hard regardless of typing. Mis-typed sub-questions filter to the wrong candidate set, so the filter's precision is no better than the model doing the typing.
+The decomposer's ability to map an informal query onto the right schema types bounds the precision gain. [Multi-Agent GraphRAG (Maslej et al., 2025; arXiv:2511.08274)](https://arxiv.org/abs/2511.08274) finds schema-aware querying strongly model-dependent: its strongest model reached 77.23% average accuracy while weaker models trailed far behind. The same study reports that compositional queries (disjunctions, symmetric relations) and multi-intent questions stay hard regardless of typing. Mis-typed sub-questions filter to the wrong candidate set, so the filter's precision is no better than the model doing the typing.
 
-## When to Use
+## When to use
 
 Schema-guided graph retrieval suits:
 
-- **Multi-hop QA over private corpora** — internal documentation, domain-specific knowledge bases, support knowledge graphs
-- **Stable ontologies** — domains where entity and relation types are known and don't shift rapidly
-- **High-noise retrieval environments** — large graphs where flat semantic search returns too many irrelevant nodes
+- multi-hop QA over private corpora: internal documentation, domain-specific knowledge bases, support knowledge graphs
+- stable ontologies: domains where entity and relation types are known and do not shift rapidly
+- high-noise retrieval environments: large graphs where flat semantic search returns too many irrelevant nodes
 
 Skip it when:
 
-- The domain is exploratory or the ontology is premature — schema design cost exceeds retrieval noise cost
-- A well-maintained hierarchical API surface already exists — [structured domain retrieval](structured-domain-retrieval.md) with a knowledge graph is simpler
-- Flat vector search over chunks already meets accuracy requirements
+- the domain is exploratory or the ontology is premature, so schema design cost exceeds retrieval noise cost
+- a well-maintained hierarchical API surface already exists, where [structured domain retrieval](structured-domain-retrieval.md) with a knowledge graph is simpler
+- flat vector search over chunks already meets your accuracy requirements
 
 ## Trade-offs
 
@@ -94,7 +94,7 @@ Skip it when:
 
 A legal knowledge base covering contract law, case precedents, and regulatory filings — one of the domain types used in the Youtu-GraphRAG benchmarks ([Dong et al., 2025](https://arxiv.org/abs/2508.19855)). Flat semantic search on "which cases support the indemnification clause in jurisdiction X" retrieves entity nodes, keyword nodes, and summary nodes indiscriminately.
 
-**Schema definition** (excerpt):
+Schema definition (excerpt):
 
 ```json
 {
@@ -104,7 +104,7 @@ A legal knowledge base covering contract law, case precedents, and regulatory fi
 }
 ```
 
-**Typed sub-question output** from decomposer:
+Typed sub-question output from the decomposer:
 
 ```
 Sub-question: "Which cases cite indemnification clauses?"

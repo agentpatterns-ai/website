@@ -6,7 +6,7 @@ aliases:
   - ShortCoder patterns
   - idiomatic code generation
 tags:
-  - context-engineering
+  - token-engineering
   - cost-performance
   - arxiv
   - tool-agnostic
@@ -18,19 +18,19 @@ maturity: emerging
 
 > Idiomatic syntax patterns reduce generated code tokens by 18-38% while preserving correctness. Prompt-level "be concise" instructions can backfire.
 
-**Related lesson:** [Measure Before You Optimize](https://learn.agentpatterns.ai/context-engineering/measure-before-you-optimize/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Measure Before You Optimize](https://learn.agentpatterns.ai/context-engineering/measure-before-you-optimize/) — a hands-on lesson with quizzes covers this concept.
 
-## The Problem
+## The problem
 
-Every generated token costs compute, latency, and context budget. When generated code re-enters the context window, verbosity compounds.
+Every generated token costs compute, latency, and context budget. Verbosity compounds when generated code re-enters the context window.
 
-## Two Approaches to Conciseness
+## Two approaches to conciseness
 
-### Prompt Engineering (Fragile)
+### Prompt engineering (fragile)
 
 Adding "write concise code" creates a competing objective — the agent does less work, not better work. [Cursor reported](https://cursor.com/blog/codex-model-harness) that GPT-5-Codex refused tasks, replying "I'm not supposed to waste tokens, and I don't think it's worth continuing with this task!" after harness instructions pushed token preservation.
 
-### Structural Optimization (Reliable)
+### Structural optimization (reliable)
 
 [ShortCoder (Liu et al., 2026)](https://arxiv.org/abs/2601.09703) shows that AST-preserving syntax transformations achieve 18.1-37.8% token reduction on [HumanEval](https://arxiv.org/abs/2107.03374) without degrading correctness.
 
@@ -48,7 +48,7 @@ flowchart LR
     style F fill:#6f6,stroke:#333
 ```
 
-## Ten Idiomatic Python Patterns That Cut Tokens
+## Ten idiomatic Python patterns that cut tokens
 
 ShortCoder's ten AST-equivalent transforms:
 
@@ -67,9 +67,9 @@ ShortCoder's ten AST-equivalent transforms:
 
 These align with long-standing Python idioms codified in [PEP 8](https://peps.python.org/pep-0008/). Applied systematically to LLM output, they produce measurable token savings.
 
-## Practical Implications
+## Practical implications
 
-### For Agent Instruction Authors
+### For agent instruction authors
 
 Skip "be concise" in agent prompts. Include idiomatic code examples — agents pattern-match from examples more reliably than they follow abstract directives.
 
@@ -85,19 +85,19 @@ for item in data:
         results.append(process(item))
 ```
 
-### For Tool and Harness Designers
+### For tool and harness designers
 
 Idiomatic code compounds savings across turns: each time the model references code it generated previously, shorter code means fewer tokens consumed from the context budget.
 
 Apply structural approaches at the right layer:
 
-- **Model selection**: Models fine-tuned on high-quality Python corpora tend to favor idiomatic patterns; check whether your target model already applies them before adding post-processing. [GitHub describes](https://github.blog/ai-and-ml/github-copilot/getting-more-from-each-token-how-copilot-improves-context-handling-and-model-routing/) per-token context-handling and model-routing techniques in Copilot aimed at extracting more useful work from each token rather than leaning on the model alone.
-- **Post-processing**: Lint rules or AST transforms catch non-idiomatic output before context entry
-- **[Example-driven instructions](../instructions/example-driven-vs-rule-driven-instructions.md)**: Code samples in prompts guide style without competing objectives
+- Model selection: Models fine-tuned on high-quality Python corpora tend to favor idiomatic patterns; check whether your target model already applies them before adding post-processing. [GitHub describes](https://github.blog/ai-and-ml/github-copilot/getting-more-from-each-token-how-copilot-improves-context-handling-and-model-routing/) per-token context-handling and model-routing techniques in Copilot aimed at extracting more useful work from each token rather than leaning on the model alone.
+- Post-processing: Lint rules or AST transforms catch non-idiomatic output before context entry
+- [Example-driven instructions](../instructions/example-driven-vs-rule-driven-instructions.md): Code samples in prompts guide style without competing objectives
 
-### For Cost-Aware Workflows
+### For cost-aware workflows
 
-Combine with [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md): route simple tasks to cheaper models and ensure all produce idiomatic output. Generation-side reduction complements [tool-output-side](../tool-engineering/token-efficient-tool-design.md) reduction.
+Combine with [Cost-Aware Agent Design](cost-aware-agent-design.md): route simple tasks to cheaper models and ensure all produce idiomatic output. Generation-side reduction complements [tool-output-side](token-efficient-tool-design.md) reduction.
 
 ## Example
 
@@ -125,10 +125,10 @@ Both functions produce identical output. The idiomatic version consumes fewer to
 
 ## Limitations
 
-- **Python-only evidence**: ShortCoder targets Python; other languages need language-specific rules.
-- **Small benchmark**: Results are on HumanEval (164 problems). Production codebases may differ.
-- **Diminishing returns with frontier models**: ShortCoder tested against smaller models; frontier models tend to produce more idiomatic output by default, so measure actual token savings before investing in systematic transforms.
-- **Accuracy-conciseness trade-off**: The paper reports that reductions exceeding 30% correlate with an 18.7% drop in unit test pass rates in DeepSeek Code experiments — aggressive compression can collapse multi-step logic into single expressions that fail edge cases. Validate transformed code against a test suite.
+- Python-only evidence: ShortCoder targets Python; other languages need language-specific rules.
+- Small benchmark: Results are on HumanEval (164 problems). Production codebases may differ.
+- Diminishing returns with frontier models: ShortCoder tested against smaller models; frontier models tend to produce more idiomatic output by default, so measure actual token savings before investing in systematic transforms.
+- Accuracy-conciseness trade-off: The paper reports that reductions exceeding 30% correlate with an 18.7% drop in unit test pass rates in DeepSeek Code experiments — aggressive compression can collapse multi-step logic into single expressions that fail edge cases. Validate transformed code against a test suite.
 
 ## Key Takeaways
 
@@ -140,13 +140,10 @@ Both functions produce identical output. The idiomatic version consumes fewer to
 ## Related
 
 - [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — Prompt-level "be efficient" degrades output
-- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md) — Minimizing tokens on the tool output side
-- [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md) — Routing by complexity and model tier
-- [Prompt Compression](prompt-compression.md) — Fewer words in instructions to cut token cost
-- [Context Compression Strategies](context-compression-strategies.md) — Broader techniques for reducing context size
-- [Context Budget Allocation](context-budget-allocation.md) — Distributing token budget across sources
-- [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — Cost savings and cross-provider economics of caching prompt prefixes
-- [Context Window Dumb Zone](context-window-dumb-zone.md) — Where tokens get lost in large windows
-- [Instruction-Guided Code Completion](instruction-guided-code-completion.md) — Controlling what models generate beyond correctness
-- [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — Cross-file context retrieval using ASTs and dependency graphs
-- [Semantic Density Optimization](semantic-density-optimization.md) — Codebase conventions that raise information-per-token for agents
+- [Token-Efficient Tool Design](token-efficient-tool-design.md) — Minimizing tokens on the tool output side
+- [Cost-Aware Agent Design](cost-aware-agent-design.md) — Routing by complexity and model tier
+- [Prompt Compression](../context-engineering/prompt-compression.md) — Fewer words in instructions to cut token cost
+- [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — Broader techniques for reducing context size
+- [Context Budget Allocation](../context-engineering/context-budget-allocation.md) — Distributing token budget across sources
+- [Prompt Caching: Architectural Discipline for Agents](../context-engineering/prompt-caching-architectural-discipline.md) — Cost savings and cross-provider economics of caching prompt prefixes
+- [Semantic Density Optimization](../context-engineering/semantic-density-optimization.md) — Codebase conventions that raise information-per-token for agents

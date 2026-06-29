@@ -16,36 +16,36 @@ maturity: established
 
 > A well-designed MCP server makes the right tool call obvious. A poorly designed one burns tokens on retries, confuses routing, and forces blind debugging.
 
-**Learn it hands-on:** [What a Server Exposes](https://learn.agentpatterns.ai/mcp-server-design/what-a-server-exposes/) — guided lesson with quizzes.
+Learn it hands-on: [What a Server Exposes](https://learn.agentpatterns.ai/mcp-server-design/what-a-server-exposes/) — guided lesson with quizzes.
 
-## First Decision: Tool, Resource, or Prompt?
+## First decision: tool, resource, or prompt
 
 Picking the wrong primitive creates friction before naming or schema design matters.
 
-| Primitive | Controlled By | Use When | Example |
+| Primitive | Controlled by | Use when | Example |
 |-----------|--------------|----------|---------|
-| **Tool** | Model (agent invokes) | Agent takes action or fetches dynamic data | `create_issue`, `search_logs` |
-| **Resource** | Application (client attaches) | Read-only context the agent sees but cannot invoke | Project config, schema, env info |
-| **Prompt** | User (slash command) | Reusable multi-step workflows | `/summarize-pr`, `/deploy-staging` |
+| Tool | Model (agent invokes) | Agent takes action or fetches dynamic data | `create_issue`, `search_logs` |
+| Resource | Application (client attaches) | Read-only context the agent sees but cannot invoke | Project config, schema, env info |
+| Prompt | User (slash command) | Reusable multi-step workflows | `/summarize-pr`, `/deploy-staging` |
 
-Resources support `audience` and `priority` annotations for client-side filtering; tools can return `resource_link` references instead of embedding full content.
+Resources support `audience` and `priority` annotations for client-side filtering. Tools can return `resource_link` references instead of embedding full content.
 
-## Tool Naming
+## Tool naming
 
 The spec allows 1--128 characters using `A-Z a-z 0-9 _ - .` with no spaces. Conventions that work:
 
-- **snake_case** -- used by >90% of public MCP servers ([zazencodes analysis](https://zazencodes.com/blog/mcp-server-naming-conventions))
-- **verb_noun pattern** -- `search_customer_orders` not `query_db_orders`
-- **32 characters or fewer** -- descriptive but still matches tool search
-- **No version numbers or abbreviations** -- `search_products` not `prod_lookup_v2`
+- snake_case -- used by more than 90% of public MCP servers ([zazencodes analysis](https://zazencodes.com/blog/mcp-server-naming-conventions))
+- verb_noun pattern -- `search_customer_orders` not `query_db_orders`
+- 32 characters or fewer -- descriptive but still matches tool search
+- No version numbers or abbreviations -- `search_products` not `prod_lookup_v2`
 
-Tool search matches names and descriptions; opaque names cause routing failures ([Anthropic](https://www.anthropic.com/engineering/advanced-tool-use)).
+Tool search matches names and descriptions. Opaque names cause routing failures ([Anthropic](https://www.anthropic.com/engineering/advanced-tool-use)).
 
-## Schema Design
+## Schema design
 
 `inputSchema` must be a valid JSON Schema object (use `{"type":"object","additionalProperties":false}` for parameterless tools). Schemas define types and constraints but not format conventions or domain usage -- supplement with examples. In Anthropic tests, 1--5 realistic examples raised accuracy from 72% to 90% ([Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use)).
 
-### What Good Schema Design Looks Like
+### What good schema design looks like
 
 ```json
 {
@@ -74,13 +74,13 @@ Tool search matches names and descriptions; opaque names cause routing failures 
 }
 ```
 
-Enums reduce guesswork, defaults handle common cases, descriptions pair constraints with examples, and negative guidance tells the agent when *not* to call.
+Enums reduce guesswork, defaults handle common cases, descriptions pair constraints with examples, and negative guidance tells the agent when not to call.
 
-### Output Schema and Annotations
+### Output schema and annotations
 
 `outputSchema` enables structured content validation. Return both `structuredContent` (validated) and serialized JSON in `content` for backwards compatibility. Tool annotations (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`) are metadata only, not trustable from untrusted servers. Set `idempotentHint: true` for tools following the [idempotent operations pattern](../agent-design/idempotent-agent-operations.md).
 
-## Error Handling
+## Error handling
 
 MCP has two error channels:
 
@@ -92,25 +92,25 @@ flowchart LR
     D --> E["Agent reads error,<br/>self-corrects, retries"]
 ```
 
-**Protocol errors** (JSON-RPC codes) are for the client. **Tool execution errors** (`isError: true`) are for the agent; the spec states these should contain "actionable feedback that language models can use to self-correct and retry."
+Protocol errors (JSON-RPC codes) are for the client. Tool execution errors (`isError: true`) are for the agent. The spec states these should contain "actionable feedback that language models can use to self-correct and retry."
 
-### Actionable Error Pattern
+### Actionable error pattern
 
-| Error Style | Agent Can Self-Correct? |
+| Error style | Agent can self-correct |
 |-------------|------------------------|
 | `"Error"` | No |
 | `"Invalid date format"` | Maybe |
 | `"Invalid departure date: must be in the future. Current date is 2026-03-13."` | Yes |
 
-Include what was wrong, the constraint, and context to fix it -- the poka-yoke principle applied to errors, eliminating guesswork that drives retry loops ([Anthropic](https://www.anthropic.com/engineering/building-effective-agents)).
+Include what was wrong, the constraint, and context to fix it -- the poka-yoke principle applied to errors, eliminating guesswork that causes retry loops ([Anthropic](https://www.anthropic.com/engineering/building-effective-agents)).
 
-## Token Efficiency
+## Token efficiency
 
 Large tool catalogs can consume tens of thousands of tokens before the agent processes a request -- a server problem, not just a client problem.
 
-### The Scale of the Problem
+### The scale of the problem
 
-| Approach | Tokens | Success Rate |
+| Approach | Tokens | Success rate |
 |----------|--------|-------------|
 | All tools loaded upfront (2,500 endpoints) | ~1,170,000 | Variable |
 | Tool search (top-k matching) | ~8,700 | Comparable |
@@ -119,23 +119,23 @@ Large tool catalogs can consume tens of thousands of tokens before the agent pro
 
 Sources: [Anthropic](https://www.anthropic.com/engineering/advanced-tool-use), [Cloudflare](https://blog.cloudflare.com/code-mode-mcp/), [Speakeasy](https://www.speakeasy.com/blog/how-we-reduced-token-usage-by-100x-dynamic-toolsets-v2).
 
-### Server-Side Mitigations
+### Server-side mitigations
 
-- **Keep tool lists small.** Single responsibility per server; non-overlapping toolsets.
-- **Design for lazy discovery.** Agents discover tools contextually, not upfront ([Bui 2026](https://arxiv.org/abs/2603.05344)). Write clear server instructions so tool search finds yours.
-- **Make responses clearable.** Return only what the agent needs next. Tool result clearing is "one of the safest lightest touch forms of compaction" ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
-- **Schemas dominate per-tool token cost.** Trim optional fields; consider `$ref` deduplication for shared types.
+- Keep tool lists small. Give each server a single responsibility and non-overlapping toolsets.
+- Design for lazy discovery. Agents discover tools contextually, not upfront ([Bui 2026](https://arxiv.org/abs/2603.05344)). Write clear server instructions so tool search finds yours.
+- Make responses clearable. Return only what the agent needs next. Tool result clearing is "one of the safest lightest touch forms of compaction" ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+- Schemas dominate per-tool token cost. Trim optional fields and consider `$ref` deduplication for shared types.
 
-## When This Backfires
+## When this backfires
 
 The checklist assumes a stable, internally-owned API. Conditions that invert that:
 
-- **Enums vs. evolving upstream APIs.** Enumerated values (`enum`) encode a snapshot; when the upstream adds one, agents hit validation failures until redeploy. Thin string types trade strict validation for durability.
-- **Schemas do not cover input sanitization.** The STDIO execution model in Anthropic's official MCP SDKs runs commands even when the local process fails to start, exposing servers to command injection unless the author sanitizes inputs ([OX Security](https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem), [SecurityWeek](https://www.securityweek.com/by-design-flaw-in-mcp-could-enable-widespread-ai-supply-chain-attacks/)). Argument sanitization is the mitigation, not richer schemas.
-- **Description drift.** Hand-written descriptions are an artifact to keep in sync. Auto-generated wrappers lose prose quality but cannot drift.
-- **[Over-consolidation](consolidate-agent-tools.md) hurts routing.** One polymorphic tool pushes disambiguation into the schema; the right ceiling depends on description distinctness, not count.
+- Enums versus evolving upstream APIs. Enumerated values (`enum`) encode a snapshot. When the upstream adds one, agents hit validation failures until redeploy. Thin string types trade strict validation for durability.
+- Schemas do not cover input sanitization. The STDIO execution model in Anthropic's official MCP SDKs runs commands even when the local process fails to start, exposing servers to command injection unless the author sanitizes inputs ([OX Security](https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem), [SecurityWeek](https://www.securityweek.com/by-design-flaw-in-mcp-could-enable-widespread-ai-supply-chain-attacks/)). Argument sanitization is the mitigation, not richer schemas.
+- Description drift. Hand-written descriptions are an artifact to keep in sync. Auto-generated wrappers lose prose quality but cannot drift.
+- [Over-consolidation](consolidate-agent-tools.md) hurts routing. One polymorphic tool pushes disambiguation into the schema. The right ceiling depends on description distinctness, not count.
 
-## Server Design Checklist
+## Server design checklist
 
 ```
 [ ] Each tool follows verb_noun snake_case naming
@@ -162,7 +162,7 @@ The checklist assumes a stable, internally-owned API. Conditions that invert tha
 - [MCP Client/Server Architecture](mcp-client-server-architecture.md)
 - [MCP Client Design](mcp-client-design.md)
 - [Tool Description Quality](tool-description-quality.md)
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Poka-Yoke Agent Tools](poka-yoke-agent-tools.md)
 - [Advanced Tool Use](advanced-tool-use.md)
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md)

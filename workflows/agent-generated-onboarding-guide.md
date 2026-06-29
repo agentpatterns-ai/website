@@ -17,9 +17,9 @@ maturity: adopted
 
 > An agent synthesises a teammate onboarding guide from the repository; you version-control that artefact and regenerate it on architectural change rather than on a calendar.
 
-## Artefact, Not Conversation
+## Artefact, not conversation
 
-An agent that can read a codebase can answer onboarding questions interactively — see [Agent-Powered Codebase Q&A and Onboarding](codebase-qa-onboarding.md). The artefact variant is the complement: instead of a live Q&A session that evaporates when the newcomer closes the terminal, the agent emits a single structured document that is reviewed, committed, and reused.
+An agent that reads a codebase can answer onboarding questions live — see [Agent-Powered Codebase Q&A and Onboarding](codebase-qa-onboarding.md). The artefact variant is the complement. A live Q&A session disappears when the newcomer closes the terminal. The artefact is instead a single structured document that you review, commit, and reuse.
 
 Claude Code shipped `/team-onboarding` in the week of 2026-04-06 to 2026-04-10 "for packaging your setup" ([Claude Code documentation index](https://code.claude.com/docs/llms.txt)). The command is one implementation of the artefact pattern. The durable shape is tool-agnostic: any agent that can read the repository and a curated set of usage traces can produce the same output.
 
@@ -31,29 +31,29 @@ Claude Code shipped `/team-onboarding` in the week of 2026-04-06 to 2026-04-10 "
 | Review surface | Nothing to review | PR-sized document |
 | Failure mode | Newcomer asks wrong question | Unreviewed hallucinations enter history |
 
-## Artefact Shape
+## Artefact shape
 
-A ramp-up guide produced by an agent typically covers five sections:
+A ramp-up guide an agent produces typically covers five sections:
 
-- **Entry points** — top-level scripts, service binaries, `main` functions, CI entrypoints
-- **Hot files** — modules changed most often in the last N months and the directories where most pull-request review time accumulates
-- **Conventions** — naming patterns, directory layout, test structure, commit style
-- **Must-read history** — commits that introduced current architectural invariants, post-mortems, ADRs
-- **Glossary** — project-specific vocabulary mapped to the modules and types that implement it
+- Entry points — top-level scripts, service binaries, `main` functions, CI entrypoints
+- Hot files — modules changed most often in the last N months, and the directories where most pull-request review time builds up
+- Conventions — naming patterns, directory layout, test structure, commit style
+- Must-read history — commits that introduced current architectural invariants, post-mortems, ADRs
+- Glossary — project-specific vocabulary mapped to the modules and types that implement it
 
-The Claude Code best-practices guide explicitly frames this kind of durable artefact — `/init` "analyzes your codebase to detect build systems, test frameworks, and code patterns, giving you a solid foundation to refine" and the resulting CLAUDE.md "compounds in value over time" when checked into git ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). The onboarding guide is the reader-facing sibling to CLAUDE.md: CLAUDE.md tells future agents how to behave; the ramp-up guide tells future humans how to read the code.
+The Claude Code best-practices guide frames this kind of durable artefact — `/init` "analyzes your codebase to detect build systems, test frameworks, and code patterns, giving you a solid foundation to refine" and the resulting CLAUDE.md "compounds in value over time" when checked into git ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). The onboarding guide is the reader-facing sibling to CLAUDE.md: CLAUDE.md tells future agents how to behave; the ramp-up guide tells future humans how to read the code.
 
-## Why Synthesise Instead of Q&A
+## Why synthesise instead of Q&A
 
-The causal mechanism is that an agent with codebase search and file-reading tools can assemble a repository-wide view in a single synthesis pass and compress it into a map for human consumption. [RepoAgent (arXiv 2402.16667)](https://arxiv.org/abs/2402.16667) formalises this as a framework for LLM-generated repository-level documentation, motivated by the observation that hand-written docs drift from implementation within weeks. The artefact amortises the comprehension cost: the human reviews once, the artefact serves many subsequent readers.
+An agent with codebase search and file-reading tools can assemble a repository-wide view in one synthesis pass, then compress it into a map people can read. [RepoAgent (arXiv 2402.16667)](https://arxiv.org/abs/2402.16667) formalises this as a framework for LLM-generated repository-level documentation, motivated by the observation that hand-written docs drift from implementation within weeks. The artefact amortises the comprehension cost: you review once, and it serves every later reader.
 
 The durable form also enables patterns the [conversational form](codebase-qa-onboarding.md) cannot:
 
 - A newcomer can read it before their first terminal session, so they arrive with a mental model rather than constructing one from cold.
-- Reviewers can audit the *claims* the artefact makes, caught early rather than propagating through individual onboarding sessions.
+- Reviewers can audit the claims the artefact makes, catching errors early rather than letting them spread through individual onboarding sessions.
 - Git history of the artefact itself becomes a signal — when the file changes significantly between regenerations, that is a prompt to tell the team about the architectural shift.
 
-## Regeneration Cadence
+## Regeneration cadence
 
 Calendar-based regeneration (monthly, quarterly) creates churn without reliably matching code change. Tie regeneration to architectural events instead:
 
@@ -76,24 +76,24 @@ graph TD
 
 Regeneration-on-trigger bounds drift by the frequency of significant change rather than by an arbitrary calendar. Between triggers, the artefact is stable enough to cite.
 
-## When This Backfires
+## When this backfires
 
 The artefact pattern has specific failure conditions. Prefer the interactive Q&A form, or skip onboarding tooling entirely, when any of these apply:
 
-- **Solo or two-person teams** — there is no audience downstream of the author. Regeneration and review cost more than the onboarding time saved.
-- **Rapidly-changing [greenfield codebases](agent-driven-greenfield.md)** — the artefact is stale before the next teammate arrives. Live Q&A produces better results because it reflects current code.
-- **Teams without review discipline** — unreviewed generated guides become a hallucination vector. Agents fabricate file paths and invent architectural rationale; the Claude Code best-practices guide warns that over-specified auto-generated docs cause agents to "ignore half of it because important rules get lost in the noise," and the same noise confuses humans ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)).
-- **Codebases dominated by tacit knowledge** — the agent reads what is in the repo; it cannot extract judgments that live in senior engineers' heads. The artefact will look complete while missing the conventions that actually matter. Pair with [encoding tacit knowledge](encoding-tacit-knowledge.md) rather than relying on synthesis alone.
-- **Over-reliance that deepens comprehension debt** — if newcomers read only the artefact and never engage with source, [comprehension debt](../anti-patterns/comprehension-debt.md) accumulates. Treat the guide as a map, not a substitute for the terrain.
+- Solo or two-person teams — there is no audience downstream of the author. Regeneration and review cost more than the onboarding time they save.
+- Rapidly-changing [greenfield codebases](agent-driven-greenfield.md) — the artefact is stale before the next teammate arrives. Live Q&A works better because it reflects current code.
+- Teams without review discipline — unreviewed generated guides become a hallucination vector. Agents fabricate file paths and invent architectural rationale. The Claude Code best-practices guide warns that over-specified auto-generated docs make agents "ignore half of it because important rules get lost in the noise," and the same noise confuses humans ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)).
+- Codebases dominated by tacit knowledge — the agent reads only what is in the repo. It cannot extract judgments that live in senior engineers' heads. The artefact will look complete while missing the conventions that actually matter. Pair with [encoding tacit knowledge](encoding-tacit-knowledge.md) rather than relying on synthesis alone.
+- Over-reliance that deepens comprehension debt — if newcomers read only the artefact and never look at the source, [comprehension debt](../anti-patterns/comprehension-debt.md) builds up. Treat the guide as a map, not a substitute for the terrain.
 
-## Review Discipline
+## Review discipline
 
 Treat the generated guide like any agent output: the artefact must pass review before it enters the repo. Specific checks:
 
-- Every file path and symbol name the guide references is verified to exist in the current tree
-- Architectural claims (service boundaries, dependency directions) are cross-checked against the import graph or configuration
-- Historical claims (who introduced a pattern, why a convention exists) are checked against `git log`, not accepted from the agent's summary — agents confabulate history readily
-- Conventions listed in the guide match what the team actually does today, not what it did when the pattern was first introduced
+- Verify that every file path and symbol name the guide references exists in the current tree.
+- Cross-check architectural claims (service boundaries, dependency directions) against the import graph or configuration.
+- Check historical claims (who introduced a pattern, why a convention exists) against `git log` rather than the agent's summary, because agents confabulate history readily.
+- Confirm the conventions the guide lists match what the team does today, not what it did when the pattern first appeared.
 
 The review is lighter than writing the guide from scratch, heavier than rubber-stamping. That is the trade the artefact pattern buys.
 
@@ -101,19 +101,19 @@ The review is lighter than writing the guide from scratch, heavier than rubber-s
 
 A platform team maintaining a payments service regenerates their ramp-up guide whenever the service topology changes.
 
-**Trigger.** A PR splits the capture module into two services. The merge hook invokes the agent:
+The trigger is a PR that splits the capture module into two services. The merge hook invokes the agent:
 
 ```bash
 claude /team-onboarding --out docs/onboarding/ramp-up.md
 ```
 
-**Agent output — structured ramp-up.** The agent produces a Markdown file with the five sections above. Entry points list the new binary for the split-out service; hot files are computed from the last 90 days of commits, excluding generated code; conventions enumerate the processor-adapter naming pattern and the event-sourcing layout.
+The agent produces a structured ramp-up: a Markdown file with the five sections above. Entry points list the new binary for the split-out service. Hot files come from the last 90 days of commits, excluding generated code. Conventions list the processor-adapter naming pattern and the event-sourcing layout.
 
-**Review.** The module owner compares the diff against the previous version. Two sections changed materially: the entry-points section now lists two services instead of one, and the glossary adds "capture sidecar" with a link to the new module. The reviewer spot-checks three claims against the code — the first entry point exists at the claimed path, the second is correct, and a claimed "retry policy convention" is accurate in two adapters but overgeneralised as universal; the reviewer corrects the phrasing to "retry policy convention in processor adapters, see `adapters/stripe.ts` for the canonical example."
+In review, the module owner compares the diff against the previous version. Two sections changed materially: the entry-points section now lists two services instead of one, and the glossary adds "capture sidecar" with a link to the new module. The reviewer spot-checks three claims against the code. The first entry point exists at the claimed path, and the second is correct. A claimed "retry policy convention" is accurate in two adapters but overgeneralised as universal, so the reviewer corrects the phrasing to "retry policy convention in processor adapters, see `adapters/stripe.ts` for the canonical example."
 
-**Commit.** The corrected artefact lands as `docs/onboarding/ramp-up.md`. The next teammate who joins reads it before opening their first file.
+The corrected artefact then lands as `docs/onboarding/ramp-up.md`. The next teammate who joins reads it before opening their first file.
 
-**Regeneration-on-arrival.** When that teammate starts, the guide is regenerated once more and the diff reviewed; stale sections surface naturally against a fresh reader's questions, which become the next round of corrections.
+When that teammate starts, the agent regenerates the guide once more and the team reviews the diff. Stale sections surface against a fresh reader's questions, which become the next round of corrections.
 
 ## Key Takeaways
 

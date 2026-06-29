@@ -17,7 +17,7 @@ maturity: adopted
 
 > The `terminalSequence` field on hook JSON output lets a hook ping the human — desktop notification, window title, bell — without writing to the agent's transcript and without depending on `osascript`, `notify-send`, or a writable `/dev/tty`.
 
-## The Channel
+## The channel
 
 [Claude Code v2.1.141](https://code.claude.com/docs/en/changelog) (May 13, 2026) added `terminalSequence` to hook JSON output. When a hook returns
 
@@ -37,7 +37,7 @@ This replaces three legacy patterns:
 
 The structured field works inside `tmux`, over `ssh`, on Windows, and from any language that can emit JSON.
 
-## The Allowlist
+## The allowlist
 
 The field accepts a string of escape sequences from a fixed set ([hooks reference](https://code.claude.com/docs/en/hooks)). Anything outside this set is rejected and the field is silently ignored:
 
@@ -53,7 +53,7 @@ Sequences may terminate with `BEL` (`\007`) or `ST` (`\\`). Rejected sequences i
 
 The allowlist is a security control. By excluding cursor-move, color, clipboard, and hyperlink sequences, a hook cannot corrupt the on-screen prompt, smuggle a hidden link, or write to the system clipboard ([hooks reference](https://code.claude.com/docs/en/hooks)).
 
-## Where It Belongs
+## Where it belongs
 
 Hook events that fire when the human is the next actor justify a notification. Hook events that fire on every tool call do not.
 
@@ -70,7 +70,7 @@ Hook events that fire when the human is the next actor justify a notification. H
 
 A `Stop` hook that pings the desktop and updates the window title with the completion status.
 
-**`.claude/hooks/notify-stop.sh`**:
+`.claude/hooks/notify-stop.sh`:
 
 ```bash
 #!/usr/bin/env bash
@@ -90,7 +90,7 @@ jq -nc \
   '{terminalSequence: $seq}'
 ```
 
-**`.claude/settings.json`**:
+`.claude/settings.json`:
 
 ```json
 {
@@ -108,18 +108,18 @@ jq -nc \
 
 The same hook works on macOS iTerm2, Windows Terminal, a Linux Ghostty, and `tmux` over `ssh` into a remote dev box. The agent's transcript is unchanged.
 
-## Why It Works
+## Why it works
 
-Two properties carry the load. The bytes leave the JSON parser and go straight to the terminal Claude Code already owns — race-free, working inside `tmux`/`screen` and on Windows where `/dev/tty` does not exist ([hooks reference](https://code.claude.com/docs/en/hooks)). And the sequence never appears in the model's transcript: a `Stop` notification adds zero tokens to the next turn, unlike stdout output that is treated as `additionalContext` and re-enters the reasoning loop. The OSC mechanism itself is decades-old; the novelty is the **structured channel** — the harness, not the hook, owns the tty write.
+Two properties carry the load. The bytes leave the JSON parser and go straight to the terminal Claude Code already owns — race-free, working inside `tmux`/`screen` and on Windows where `/dev/tty` does not exist ([hooks reference](https://code.claude.com/docs/en/hooks)). The sequence also never appears in the model's transcript: a `Stop` notification adds zero tokens to the next turn, unlike stdout output that is treated as `additionalContext` and re-enters the reasoning loop. The OSC mechanism itself is decades-old; the new part is the structured channel — the harness, not the hook, owns the tty write.
 
-## When It Backfires
+## When it backfires
 
-- **Headless / CI runs** — `claude --headless` has no terminal user; the sequence clutters captured logs and produces no notification. Gate on `$CLAUDE_HEADLESS` or skip on non-interactive sessions.
-- **Unsupported terminal** — bare `xterm`, basic Linux console, or piping to a file emits the sequence but produces no notification, with no acknowledgment to distinguish delivered from silently dropped.
-- **Notification fatigue** — wiring to high-frequency events (`PostToolUse`, `PreCompact`) produces dozens of bells per task. Restrict to events where the human is the next actor.
-- **DnD and Focus modes are terminal-specific** — OSC 9 in iTerm2 routes through Notification Center and honors DnD; OSC 777 in urxvt or Ghostty may not.
-- **Composed writes are not transactional** — a title-then-notification-then-bell sequence interrupted mid-write leaves the title set. Order most important first.
-- **Regression risk in the path itself** — [`claude-code#58909`](https://github.com/anthropics/claude-code/issues/58909) reports `Notification:permission_prompt` stopping during active thinking in 2.1.141. Smoke-test the hook on each minor version.
+- Headless or CI runs — `claude --headless` has no terminal user; the sequence clutters captured logs and produces no notification. Gate on `$CLAUDE_HEADLESS` or skip on non-interactive sessions.
+- Unsupported terminal — bare `xterm`, basic Linux console, or piping to a file emits the sequence but produces no notification, with no acknowledgment to distinguish delivered from silently dropped.
+- Notification fatigue — wiring to high-frequency events (`PostToolUse`, `PreCompact`) produces dozens of bells per task. Restrict to events where the human is the next actor.
+- DnD and Focus modes are terminal-specific — OSC 9 in iTerm2 routes through Notification Center and honors DnD; OSC 777 in urxvt or Ghostty may not.
+- Composed writes are not transactional — a title-then-notification-then-bell sequence interrupted mid-write leaves the title set. Order most important first.
+- Regression risk in the path itself — [`claude-code#58909`](https://github.com/anthropics/claude-code/issues/58909) reports `Notification:permission_prompt` stopping during active thinking in 2.1.141. Smoke-test the hook on each minor version.
 
 ## Key Takeaways
 

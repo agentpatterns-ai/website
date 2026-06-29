@@ -18,53 +18,53 @@ status: current
 
 > Bound a desktop-controlling agent along four axes — time, visibility, presence, recovery — so failure on any single axis is contained by the others.
 
-## The Threat Shape
+## The threat shape
 
-A desktop-controlling agent — Codex driving Mac apps, a browser-use harness, an RPA bridge — holds the user's session credentials and operates the machine the user just locked. Four failure modes follow: a long-lived authorisation outlives the operator's attention and a token replays after the task ends; an uncovered display leaks what the agent surfaces; a returning user finds an already-privileged agent acting under their identity; and an agent in an ambiguous state retries silently into a half-controlled desktop.
+A desktop-controlling agent holds the user's session credentials and operates the machine the user just locked. Examples include Codex driving Mac apps, a browser-use harness, and an RPA bridge. Four failure modes follow. A long-lived authorization outlives the operator's attention, so a token replays after the task ends. An uncovered display leaks what the agent surfaces. A returning user finds an already-privileged agent acting under their identity. An agent in an ambiguous state retries silently into a half-controlled desktop.
 
-The Codex 2026-05-21 release names four safeguards that close all four: "short-lived authorization, covered displays, relock on local input, and manual-unlock fallback" ([Codex changelog, 2026-05-21](https://developers.openai.com/codex/changelog)). It generalises to any agent-drives-the-machine surface.
+The Codex 2026-05-21 release names four safeguards that close all four: "short-lived authorization, covered displays, relock on local input, and manual-unlock fallback" ([Codex changelog, 2026-05-21](https://developers.openai.com/codex/changelog)). It generalizes to any agent-drives-the-machine surface.
 
-## The Four Axes
+## The four axes
 
-### Short-Lived Authorisation (Time Axis)
+### Short-lived authorization (time axis)
 
-The Codex docs describe the authorisation as "short-lived and scoped to the current unlock attempt" ([Codex computer use docs](https://developers.openai.com/codex/app/computer-use#locked-use)). A leaked token expires before the threat can use it; the window is per-turn, not per-session. Two choices follow:
+The Codex docs describe the authorization as "short-lived and scoped to the current unlock attempt" ([Codex computer use docs](https://developers.openai.com/codex/app/computer-use#locked-use)). A leaked token expires before the threat can use it. The window is per-turn, not per-session. Two choices follow:
 
-- **Default-deny on expiry**: the agent does not auto-renew — the next action takes fresh authorisation or terminates to the manual-unlock fallback.
-- **No refresh on agent activity**: refresh is tied to operator presence, not agent liveness, or any task extends the window indefinitely.
+- Default-deny on expiry: the agent does not auto-renew, so the next action takes fresh authorization or terminates to the manual-unlock fallback
+- No refresh on agent activity: refresh ties to operator presence, not agent liveness, or any task extends the window indefinitely
 
-### Covered Displays (Visibility Axis)
+### Covered displays (visibility axis)
 
-Codex "covers every display while the desktop is temporarily unlocked" ([Codex computer use docs](https://developers.openai.com/codex/app/computer-use#locked-use)). Coverage protects against shoulder-surfing and screen-share software capturing the session. It is the weakest axis — a soft defence that does not stop a co-located adversary who lifts the cover or photographs the screen.
+Codex "covers every display while the desktop is temporarily unlocked" ([Codex computer use docs](https://developers.openai.com/codex/app/computer-use#locked-use)). Coverage protects against shoulder-surfing and against screen-share software capturing the session. It is the weakest axis. The cover is a soft defense that does not stop a co-located adversary who lifts it or photographs the screen.
 
-### Relock on Local Input (Presence Axis)
+### Relock on local input (presence axis)
 
-Codex's docs are explicit: "If Codex detects local keyboard or pointer input, it relocks the Mac and pauses automatic unlock until you unlock it manually" ([Codex computer use docs](https://developers.openai.com/codex/app/computer-use#locked-use)). This serves two purposes:
+The Codex docs are explicit: "If Codex detects local keyboard or pointer input, it relocks the Mac and pauses automatic unlock until you unlock it manually" ([Codex computer use docs](https://developers.openai.com/codex/app/computer-use#locked-use)). This serves two purposes:
 
-- **User-presence signal**: the returning operator ejects the agent by touching the keyboard or trackpad.
-- **Adversarial-takeover defence**: a local attacker who interacts with the session triggers the relock instead of inheriting the agent-driven keyboard.
+- User-presence signal: the returning operator ejects the agent by touching the keyboard or trackpad
+- Adversarial-takeover defense: a local attacker who interacts with the session triggers the relock instead of inheriting the agent-driven keyboard
 
-The pause-until-manual-unlock is load-bearing — without it the agent re-acquires control the moment the user steps away.
+The pause-until-manual-unlock is load-bearing. Without it the agent re-acquires control the moment the user steps away.
 
-### Manual-Unlock Fallback (Recovery Axis)
+### Manual-unlock fallback (recovery axis)
 
-When the agent's state becomes ambiguous — denied permission, network drop, unexpected dialog — it surfaces back to the human rather than retrying: "Codex denies the unlock and asks you to unlock manually if needed" ([Codex computer use docs](https://developers.openai.com/codex/app/computer-use#locked-use)). The shape matches [Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md), engaged on failure paths: a confused agent retrying silently can blunder into write actions or credential prompts; one that terminates to a manual unlock cannot.
+When the agent's state becomes ambiguous — denied permission, network drop, unexpected dialog — it surfaces back to the human rather than retrying: "Codex denies the unlock and asks you to unlock manually if needed" ([Codex computer use docs](https://developers.openai.com/codex/app/computer-use#locked-use)). The shape matches [Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md), engaged on failure paths. A confused agent retrying silently can blunder into write actions or credential prompts. One that terminates to a manual unlock cannot.
 
-## Why It Works
+## Why it works
 
-The axes are independent: a failure on any one is contained by the other three, and the agent's authority collapses unless all four hold. This is [defense-in-depth](defense-in-depth-agent-safety.md) applied to a single principal — the [task scope](task-scope-security-boundary.md) is a logged-in human session the agent is borrowing. The Codex docs make the intent explicit: locked use is "not a general-purpose remote-unlock path for your Mac" ([Codex computer use docs](https://developers.openai.com/codex/app/computer-use#locked-use)) — the authorisation is the smallest that works.
+The axes are independent. A failure on any one is contained by the other three, and the agent's authority collapses unless all four hold. This is [defense-in-depth](defense-in-depth-agent-safety.md) applied to a single principal: the [task scope](task-scope-security-boundary.md) is a logged-in human session the agent is borrowing. The Codex docs make the intent explicit. Locked use is "not a general-purpose remote-unlock path for your Mac" ([Codex computer use docs](https://developers.openai.com/codex/app/computer-use#locked-use)), so the authorization is the smallest that works.
 
-## When This Backfires
+## When this backfires
 
-The four mechanisms compose well but each has a known failure mode:
+The four mechanisms compose well, but each has a known failure mode:
 
-- **Display-cover bypass**: a system-modal dialog or full-screen overlay drawn above the cover defeats the visibility axis — the cover is a process-level mask, not a hardware one.
-- **Lock-state spoofing**: a malicious local process that pretends the machine is still locked tricks the safeguard logic, which trusts the OS lock state — broken on a compromised host.
-- **Input-detection race**: relock-on-input has non-zero latency, so an attacker with physical access acting during the relock interval reads what the agent just surfaced.
-- **Fallback fatigue**: an agent that repeatedly prompts for manual unlock conditions the user to approve without reading — [confirmation-gate](human-in-the-loop-confirmation-gates.md) rubber-stamping defences apply here.
-- **Screen-share collision**: a user who joins a video call mid-task may share-screen before the cover engages, leaking the session to call participants.
+- Display-cover bypass: a system-modal dialog or full-screen overlay drawn above the cover defeats the visibility axis, because the cover is a process-level mask, not a hardware one
+- Lock-state spoofing: a malicious local process that pretends the machine is still locked tricks the safeguard logic, which trusts the OS lock state and breaks on a compromised host
+- Input-detection race: relock-on-input has non-zero latency, so an attacker with physical access acting during the relock interval reads what the agent just surfaced
+- Fallback fatigue: an agent that repeatedly prompts for manual unlock conditions the user to approve without reading, so [confirmation-gate](human-in-the-loop-confirmation-gates.md) rubber-stamping defenses apply here
+- Screen-share collision: a user who joins a video call mid-task may share-screen before the cover engages, leaking the session to call participants
 
-A reasonable alternative sidesteps all four: run the agent in an isolated VM or service account with its own credentials, so it never borrows the user's session — better for sensitive workloads. Lock-state safeguards fit when the alternative is no automation at all, the data on screen is the user's own, and the operator wants the agent to act with their identity, not a delegated one.
+A reasonable alternative sidesteps all four: run the agent in an isolated VM or service account with its own credentials, so it never borrows the user's session. That is better for sensitive workloads. Lock-state safeguards fit when the alternative is no automation at all, the data on screen is the user's own, and the operator wants the agent to act with their identity, not a delegated one.
 
 ## Example
 
@@ -79,13 +79,13 @@ The implementation choices behind each safeguard ([Codex computer use docs](http
 | Presence | "If Codex detects local keyboard or pointer input, it relocks the Mac and pauses automatic unlock until you unlock it manually." |
 | Recovery | "Codex denies the unlock and asks you to unlock manually if needed." |
 
-The scope statement — "not a general-purpose remote-unlock path for your Mac" — is the design contract every implementation of this pattern should make explicit. The authorisation exists for one narrowly-scoped capability, not as a backdoor into the lock screen.
+The scope statement — "not a general-purpose remote-unlock path for your Mac" — is the design contract every implementation of this pattern should make explicit. The authorization exists for one narrowly-scoped capability, not as a backdoor into the lock screen.
 
 ## Key Takeaways
 
 - A desktop-controlling agent is a single principal that holds the user's session credentials while the user is away — four independent axes (time, visibility, presence, recovery) bound that authority.
-- Short-lived authorisation in Codex expires per-turn, not per-session, and never auto-refreshes on the agent's own activity.
-- Display coverage is a soft defence; it stops shoulder-surfing, not determined local attackers.
+- Short-lived authorization in Codex expires per-turn, not per-session, and never auto-refreshes on the agent's own activity.
+- Display coverage is a soft defense; it stops shoulder-surfing, not determined local attackers.
 - Relock on local input must pause auto-unlock until manual recovery — without the pause, the agent re-takes control the next time the user steps away.
 - Manual-unlock fallback is a [confirmation gate](human-in-the-loop-confirmation-gates.md) on ambiguous failure paths, preventing silent degradation into a half-controlled state.
 - For sensitive workloads, a separate VM or service account is often the better alternative — these safeguards fit the consumer-desktop case where the agent must act as the user.
@@ -95,5 +95,5 @@ The scope statement — "not a general-purpose remote-unlock path for your Mac" 
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — the broader pattern these four axes instantiate for a single principal
 - [Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — the recovery axis is a confirmation gate on the failure path
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — narrows what a successful breach of any single axis can affect
-- [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md) — per-turn authorisation scoping is task-scope thinking applied to lock state
+- [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md) — per-turn authorization scoping is task-scope thinking applied to lock state
 - [Heartbeat-Bound Hierarchical Credentials](heartbeat-bound-hierarchical-credentials.md) — credential lifetime bounded to operator presence rather than agent liveness

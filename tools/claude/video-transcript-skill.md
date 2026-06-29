@@ -18,7 +18,7 @@ last_reviewed: 2026-05-27
 
 Recordings are poor knowledge artifacts: unsearchable, non-linkable, and impossible to skim. A structured transcript with visual anchors at key moments turns the same content into documentation that can be indexed, shared as a decision record, or used for onboarding — without manual editing.
 
-## Why This Is a Multi-Tool Problem
+## Why this is a multi-tool problem
 
 Claude has no native audio or video ingestion. The Files API accepts PDF, images (JPEG, PNG, GIF, WebP), and plain text only. Audio and video must be externally processed before Claude can work with the content.
 
@@ -32,7 +32,7 @@ The full pipeline requires three tools Claude does not provide natively:
 
 This is what makes it a skill build, not a one-shot prompt.
 
-## Pipeline Architecture
+## Pipeline architecture
 
 ```mermaid
 graph TD
@@ -46,7 +46,7 @@ graph TD
 
 Each step is a separate tool call. The skill orchestrates them in sequence.
 
-## Skill Definition
+## Skill definition
 
 Save this at `.claude/skills/video-transcript.md`:
 
@@ -74,7 +74,7 @@ Steps:
 8. Derive output path from `$VIDEO_PATH`: same directory, same stem, with `-transcript.md` suffix. Write the output there.
 ```
 
-## Files API Usage
+## Files API usage
 
 The Files API requires the beta header shown below; check the [Files API docs](https://platform.claude.com/docs/en/docs/build-with-claude/files) for current availability status. Upload a frame by sending a multipart POST to the `/v1/files` endpoint:
 
@@ -100,9 +100,9 @@ The response returns a `file_id`. Use it in the Claude API request as:
 
 Files persist until explicitly deleted via the [Files API](https://platform.claude.com/docs/en/docs/build-with-claude/files). Using `file_id` references avoids re-uploading the same frame if the skill needs to retry the assembly step.
 
-**Availability constraint**: The Files API requires the `anthropic-beta: files-api-2025-04-14` header and is not available on Amazon Bedrock or Google Vertex AI.
+Availability constraint: the Files API requires the `anthropic-beta: files-api-2025-04-14` header and is not available on Amazon Bedrock or Google Vertex AI.
 
-## Screenshot Density Control
+## Screenshot density control
 
 Each uploaded image costs approximately 1,334 tokens at 1 megapixel (1000×1000 px), scaling to ~1,600 tokens at 1.19 megapixels — [the practical maximum](https://platform.claude.com/docs/en/docs/build-with-claude/vision) before Claude downsamples the image. A one-hour meeting with 60 visual cues would use ~80,000–96,000 tokens on images alone — before the transcript text.
 
@@ -124,7 +124,7 @@ ffmpeg -i "$VIDEO_PATH" -vf "select=gt(scene\,0.4),showinfo" -vsync vfr /tmp/tra
 
 The `scene=0.4` threshold captures significant visual transitions (slide changes) rather than camera jitter.
 
-## Transcript Output Format
+## Transcript output format
 
 ```markdown
 # Meeting Transcript: {filename}
@@ -152,9 +152,9 @@ The `scene=0.4` threshold captures significant visual transitions (slide changes
 **[01:14]** Speaker A: Right, so we're proposing to make this configurable per-service.
 ```
 
-Speaker labels require diarization (e.g., pyannote.audio). Without diarization, the transcript uses generic `[Speaker]` labels or omits labels entirely. Whisper alone does not identify speakers.
+Speaker labels require diarization (for example, pyannote.audio). Without diarization, the transcript uses generic `[Speaker]` labels or omits labels entirely. Whisper alone does not identify speakers.
 
-## Whisper Options
+## Whisper options
 
 | Option | When to use |
 |---|---|
@@ -165,7 +165,7 @@ Speaker labels require diarization (e.g., pyannote.audio). Without diarization, 
 
 All produce JSON output with `--output_format json`. Word-level timestamps require `--word_timestamps true` (not all backends support this flag identically).
 
-## `context: fork` Rationale
+## `context: fork` rationale
 
 The `context: fork` field in the [skill frontmatter](../../tool-engineering/skill-frontmatter-reference.md) isolates this skill in a forked conversation context. This is appropriate because:
 
@@ -173,7 +173,7 @@ The `context: fork` field in the [skill frontmatter](../../tool-engineering/skil
 - Frame paths, file IDs, and transcript JSON should not accumulate in the main conversation context
 - Failures (missing ffmpeg, Whisper not installed) should not corrupt the calling session's context
 
-## Environment Prerequisites
+## Environment prerequisites
 
 The skill requires:
 
@@ -189,14 +189,14 @@ command -v whisper >/dev/null 2>&1 || { echo "whisper not found"; exit 1; }
 command -v ffmpeg >/dev/null 2>&1 || { echo "ffmpeg not found"; exit 1; }
 ```
 
-## When This Backfires
+## When this backfires
 
 This pipeline makes sense when you need programmable customization — cue-phrase detection, custom output formats, or integration with downstream Claude skills. It is the wrong choice when:
 
-- **A native tool already exists**: Zoom, Teams, and Google Meet produce auto-transcripts with speaker labels without any installation. Otter.ai and rev.ai offer more accurate diarization than Whisper alone and handle the full pipeline as a service.
-- **Token costs exceed the value**: A 60-frame, one-hour meeting consumes ~80–96k tokens just on images — before the transcript text. For large meeting libraries, costs accumulate quickly without aggressive frame capping.
-- **The runtime environment is sandboxed**: CI systems and container environments often block `ffmpeg` and `whisper` CLI installs. The skill fails silently if prerequisites are absent without the guard check; verify the environment before deploying.
-- **Audio quality is low**: Whisper transcription quality degrades sharply with background noise, heavy accents, or multiple simultaneous speakers. Without diarization, the output is a single-speaker stream regardless of how many participants spoke.
+- A native tool already exists: Zoom, Teams, and Google Meet produce auto-transcripts with speaker labels without any installation. Otter.ai and rev.ai offer more accurate diarization than Whisper alone and handle the full pipeline as a service.
+- Token costs exceed the value: A 60-frame, one-hour meeting consumes ~80–96k tokens just on images — before the transcript text. For large meeting libraries, costs accumulate quickly without aggressive frame capping.
+- The runtime environment is sandboxed: CI systems and container environments often block `ffmpeg` and `whisper` CLI installs. The skill fails silently if prerequisites are absent without the guard check; verify the environment before deploying.
+- Audio quality is low: Whisper transcription quality degrades sharply with background noise, heavy accents, or multiple simultaneous speakers. Without diarization, the output is a single-speaker stream regardless of how many participants spoke.
 
 ## Key Takeaways
 

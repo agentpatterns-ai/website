@@ -15,7 +15,7 @@ maturity: established
 
 > Agent demos curate inputs and ignore edge cases. Production requires scale, security constraints, partial context, and failing tools. The gap is systematically underestimated.
 
-## Why Demos Mislead
+## Why demos mislead
 
 Demos use curated inputs, full context, and reliable tools. Production exposes what demos hide ([HumAI](https://www.humai.blog/why-your-ai-agent-works-in-the-demo-and-breaks-in-the-real-world/)):
 
@@ -28,9 +28,9 @@ Demos use curated inputs, full context, and reliable tools. Production exposes w
 | Single [happy path](happy-path-bias.md) | Edge cases, error recovery, rollback |
 | 80% success rate is impressive | 80% means 1-in-5 requests fails ([ODSC](https://opendatascience.com/the-ai-trends-shaping-2026/)) |
 
-## Compound Error Amplification
+## Compound error amplification
 
-Per-step accuracy compounds: 0.9^10 = ~35% end-to-end. Each step's output becomes the next step's input — a wrong intermediate result propagates forward, and without per-step validation, it cannot be recovered downstream. Production workflows with more than a few steps face steep end-to-end accuracy decay.
+Per-step accuracy compounds: 0.9^10 = ~35% end-to-end. Each step's output becomes the next step's input. A wrong intermediate result propagates forward, and without per-step validation you cannot recover it downstream. Production workflows with more than a few steps face steep end-to-end accuracy decay.
 
 ```mermaid
 graph LR
@@ -48,19 +48,19 @@ graph LR
     style F fill:#ffb3b3,color:#000
 ```
 
-## Failure Modes
+## Failure modes
 
 Production agents fail in patterns demos never exercise:
 
-- **Doom loops.** Agents fixate on a failed approach, making 10+ repetitive variations without reconsidering, consuming 10x expected cost ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
+- Doom loops. Agents fixate on a failed approach and make 10+ repetitive variations without reconsidering, which consumes 10x the expected cost ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
-- **Context rot.** Recall accuracy drops non-linearly as context fills. Compression causes [objective drift](objective-drift.md) where agents declare tasks complete or request unnecessary clarification ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+- Context rot. Recall accuracy drops non-linearly as context fills. Compression causes [objective drift](objective-drift.md), where agents declare tasks complete or request unnecessary clarification ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
-- **Premature completion.** Agents report "done" on partial work. Long-running tasks hit this reliably ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+- Premature completion. Agents report "done" on partial work. Long-running tasks hit this reliably ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
-- **Tool output injection.** User-provided data, web content, or logs can steer agent actions -- the [Lethal Trifecta](../security/lethal-trifecta-threat-model.md) of private data + untrusted content + exfiltration ([nibzard](https://www.nibzard.com/agentic-handbook)).
+- Tool output injection. User-provided data, web content, or logs can steer agent actions — the [Lethal Trifecta](../security/lethal-trifecta-threat-model.md) of private data, untrusted content, and exfiltration ([nibzard](https://www.nibzard.com/agentic-handbook)).
 
-## The Numbers
+## The numbers
 
 | Metric | Value | Source |
 |---|---|---|
@@ -70,16 +70,16 @@ Production agents fail in patterns demos never exercise:
 | Teams citing quality as top blocker | 32% | [LangChain Survey](https://www.langchain.com/state-of-agent-engineering) |
 | Agents in production with offline evals | 52% | LangChain Survey |
 
-## Engineering Countermeasures
+## Engineering countermeasures
 
 The fix is [harness engineering](../agent-design/harness-engineering.md), not better prompts:
 
-- **Loop detection.** Monitor for repeated tool calls; force reconsideration on doom loops ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
-- **Pre-completion checklists.** Verify completion criteria before reporting done ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
-- **Deterministic validation.** Test suites, linters, and type checkers as ground-truth ([Simon Willison](https://simonwillison.net/2025/Oct/25/coding-agent-tips/)).
-- **Production-representative evals.** Include malformed inputs, tool failures, and adversarial content.
-- **Cost guards.** Per-task token budgets; kill sessions exceeding budget.
-- **Bounded sessions.** Checkpoint between steps; avoid unbounded execution.
+- Loop detection. Monitor for repeated tool calls and force reconsideration on doom loops ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
+- Pre-completion checklists. Verify completion criteria before reporting done ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+- Deterministic validation. Use test suites, linters, and type checkers as ground truth ([Simon Willison](https://simonwillison.net/2025/Oct/25/coding-agent-tips/)).
+- Production-representative evals. Include malformed inputs, tool failures, and adversarial content.
+- Cost guards. Set per-task token budgets and kill sessions that exceed budget.
+- Bounded sessions. Checkpoint between steps and avoid unbounded execution.
 
 ## Example
 
@@ -89,7 +89,7 @@ Production reality: PRs include merge conflicts and binary files (tool failures)
 
 At 95% per-step over an 8-step workflow, end-to-end success is 0.95^8 = ~66%. One-third of reviews are wrong. Fixes: eval on production-representative samples, add a pre-completion checklist verifying all files were reviewed, and reject oversized diffs above a token budget.
 
-## When This Backfires
+## When this backfires
 
 Applying full harness engineering to simple, single-step, or heavily supervised workflows is over-engineering. Compound error decay only applies when steps chain automatically without per-step validation. Reserve these countermeasures for workflows with: (1) 5+ sequential automated steps, (2) tool calls that depend on prior tool outputs, and (3) no mandatory human checkpoints between steps.
 

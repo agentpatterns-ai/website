@@ -17,23 +17,23 @@ maturity: adopted
 
 > Write tests first, then let agents implement against them — tests define what the code must do and verify that the agent did it correctly.
 
-**Related lesson:** [Red-Green for Agents](https://learn.agentpatterns.ai/verification/red-green-for-agents/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Red-Green for Agents](https://learn.agentpatterns.ai/verification/red-green-for-agents/) covers this concept in a hands-on lesson with quizzes.
 
 !!! note "Also known as"
     TDD with Agents, Tests as the Spec, Red-Green-Refactor for Agents. For the specific red-green-refactor cycle adapted for agent workflows, see [Red-Green-Refactor with Agents](red-green-refactor-agents.md).
 
-## The Technique
+## The technique
 
-Ask an agent to "implement a function that sorts users by activity" and it interprets the requirement. Hand it a test file with five cases defining exact expected behavior and the output is constrained by the tests. Ambiguity is resolved at specification time, not during review — the same shift toward executable specs covered in [test-driven intent clarification](test-driven-intent-clarification.md).
+Ask an agent to "implement a function that sorts users by activity" and it interprets the requirement. Hand it a test file with five cases that define the exact expected behavior, and the tests constrain the output. You resolve ambiguity at specification time, not during review. This is the same shift toward executable specs covered in [test-driven intent clarification](test-driven-intent-clarification.md).
 
-Tests serve two roles simultaneously:
+Tests serve two roles at once:
 
-- **Specification** — executable, unambiguous definition of expected behavior
-- **Guardrail** — automated verification the agent can run without human involvement
+- Specification: an executable, unambiguous definition of the expected behavior
+- Guardrail: automated verification the agent can run without a human
 
-The agent loop that follows is tight: implement → run tests → fix failures → repeat until green. Human review is still required, but the mechanical "does it work?" question is answered automatically.
+The agent loop that follows is tight: implement, run tests, fix failures, and repeat until green. You still need human review, but the mechanical "does it work?" question is answered automatically.
 
-## The Agent Loop
+## The agent loop
 
 ```mermaid
 graph TD
@@ -46,44 +46,44 @@ graph TD
     D -->|Changes needed| B
 ```
 
-You write the tests; the agent writes the implementation; the suite is the contract between them. Claude Code's [common workflows documentation](https://code.claude.com/docs/en/common-workflows) recommends asking Claude to "run tests and fix any failures" — the agent reads test output and iterates without human involvement in each cycle.
+You write the tests, the agent writes the implementation, and the suite is the contract between them. Claude Code's [common workflows documentation](https://code.claude.com/docs/en/common-workflows) recommends asking Claude to "run tests and fix any failures". The agent reads the test output and iterates without a human in each cycle.
 
-## Test Types and Their Roles
+## Test types and their roles
 
-**Unit tests with explicit assertions** — define exact expected outputs for specific inputs via `assert` statements. Each test case is a constraint the implementation must satisfy. Write tests for happy paths, edge cases, and error conditions before any implementation exists.
+Unit tests with explicit assertions define exact expected outputs for specific inputs through `assert` statements. Each test case is a constraint the implementation must satisfy. Write tests for happy paths, edge cases, and error conditions before any implementation exists.
 
-**Property-based tests** — define invariants the implementation must always satisfy (e.g., "sort output length equals input length"). These are harder to satisfy accidentally than example-based tests, and they suit the variance-tolerant style described in [behavioral testing for non-deterministic agents](behavioral-testing-agents.md).
+Property-based tests define invariants the implementation must always satisfy, for example "sort output length equals input length". These are harder to satisfy by accident than example-based tests, and they suit the variance-tolerant style described in [behavioral testing for non-deterministic agents](behavioral-testing-agents.md).
 
-**Snapshot tests** — define exact expected output for known inputs. Useful when the output format matters as much as the values. The agent cannot pass a snapshot test by producing a plausible-looking but different output.
+Snapshot tests define the exact expected output for known inputs. They help when the output format matters as much as the values. The agent cannot pass a snapshot test by producing a plausible-looking but different output.
 
-**Integration tests** — verify the agent's output works with the rest of the system, not just in isolation, the same end-to-end concern behind [golden query pairs as regression tests](golden-query-pairs-regression.md). These catch the "implementation is internally consistent but incompatible with the calling code" failure mode.
+Integration tests verify that the agent's output works with the rest of the system, not just in isolation. This is the same end-to-end concern behind [golden query pairs as regression tests](golden-query-pairs-regression.md). They catch the "implementation is internally consistent but incompatible with the calling code" failure mode.
 
-## What You Control, What the Agent Controls
+## What you control, what the agent controls
 
-- You control the specification — what the code must do
-- The agent handles the labor — how to satisfy the specification
-- The test suite is the verification layer — neither party decides if it works; the suite does
+- You control the specification: what the code must do
+- The agent handles the labor: how to satisfy the specification
+- The test suite is the verification layer: neither party decides if it works, the suite does
 
-If the agent writes both tests and implementation, the tests verify nothing: they pass its own code, not independently-defined behavior.
+If the agent writes both the tests and the implementation, the tests verify nothing. They pass its own code, not behavior you defined independently.
 
-## Anti-Patterns
+## Anti-patterns
 
-**Agent writes tests and implementation** — tests are written to match the implementation, not to specify correct behavior. The suite passes but verifies the wrong thing.
+Agent writes tests and implementation: the agent writes tests to match the implementation, not to specify correct behavior. The suite passes but verifies the wrong thing.
 
-**No tests** — verification is manual review only. Review quality is inconsistent, review fatigue accumulates, and subtle errors pass undetected — the [trust-without-verify](../anti-patterns/trust-without-verify.md) failure mode.
+No tests: verification is manual review only. Review quality is inconsistent, review fatigue accumulates, and subtle errors pass undetected. This is the [trust-without-verify](../anti-patterns/trust-without-verify.md) failure mode.
 
-**Tests written after implementation** — the agent writes tests to match what it already built. Edge cases it didn't handle aren't tested.
+Tests written after implementation: the agent writes tests to match what it already built. Edge cases it did not handle are not tested.
 
-**Overly broad tests** — tests that pass even when the implementation is wrong (e.g., `assert result is not None`). Precision in test assertions correlates directly with precision in the implementation the agent produces.
+Overly broad tests: tests that pass even when the implementation is wrong, for example `assert result is not None`. Precision in test assertions correlates directly with precision in the implementation the agent produces.
 
-## When This Backfires
+## When this backfires
 
-Tests-first is not universally the right move. Specific conditions where the pattern degrades:
+Tests-first is not always the right move. The pattern degrades under specific conditions:
 
-- **Exploratory or research code where the problem shape is unclear** — writing tests first ossifies a premature interface. When the goal is to learn what the correct behavior *should* be, tests written up front encode guesses, and the agent optimizes toward those guesses instead of the underlying question.
-- **Regression risk beyond the focal tests** — an agent that makes the target tests green can still break unrelated behavior in the same codebase, the case for [golden query pairs as continuous regression tests](golden-query-pairs-regression.md). Anthropic's own guidance warns about the "trust-then-verify gap": a "plausible-looking implementation that doesn't handle edge cases" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). A green focal suite is not the same as a green full suite; run the whole regression set, not just the new tests.
-- **Fuzzy or evolving requirements where precise assertions are expensive** — property-based and snapshot tests have higher authoring cost, and hand-written examples for every edge case do not scale when the spec is still in flux. Enforced TDD in this regime slows the feedback loop it was meant to tighten.
-- **Behaviors that resist cheap oracles** — UI polish, performance under load, and stochastic output (LLM responses, ML model outputs) are poorly captured by unit-style assertions, the non-determinism handled in [behavioral testing for non-deterministic agents](behavioral-testing-agents.md). Tests pass without confirming the thing you actually care about.
+- Exploratory or research code where the problem shape is unclear: writing tests first locks in a premature interface. When the goal is to learn what the correct behavior should be, tests written up front encode guesses, and the agent optimizes toward those guesses instead of the underlying question.
+- Regression risk beyond the focal tests: an agent that makes the target tests green can still break unrelated behavior in the same codebase, which is the case for [golden query pairs as continuous regression tests](golden-query-pairs-regression.md). Anthropic's own guidance warns about the "trust-then-verify gap": a "plausible-looking implementation that doesn't handle edge cases" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). A green focal suite is not the same as a green full suite, so run the whole regression set, not just the new tests.
+- Fuzzy or evolving requirements where precise assertions are expensive: property-based and snapshot tests cost more to author, and hand-written examples for every edge case do not scale when the spec is still in flux. Enforced TDD here slows the feedback loop it was meant to tighten.
+- Behaviors that resist cheap oracles: unit-style assertions capture UI polish, performance under load, and stochastic output (LLM responses, ML model outputs) poorly. This is the non-determinism handled in [behavioral testing for non-deterministic agents](behavioral-testing-agents.md). Tests pass without confirming the thing you actually care about.
 
 ## Example
 
@@ -125,7 +125,7 @@ Hand this file to Claude Code with the prompt:
 Implement `sort_users.py` so that all tests in `tests/test_sort_users.py` pass. Run `pytest tests/test_sort_users.py` after each change and fix any failures before stopping.
 ```
 
-The agent cannot pass the tie-ordering test by sorting carelessly — the test encodes a specific stable-sort requirement that forces a precise implementation choice. The suite is the specification; `pytest` is the verifier.
+The agent cannot pass the tie-ordering test by sorting carelessly. The test encodes a specific stable-sort requirement that forces a precise implementation choice. The suite is the specification, and `pytest` is the verifier.
 
 ## Key Takeaways
 

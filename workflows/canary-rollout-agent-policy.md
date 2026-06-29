@@ -19,13 +19,13 @@ maturity: established
 
 > Apply traffic-split deployment discipline to agent policy updates — route a small percentage of requests to the new policy, monitor behavior under load, and trigger automatic rollback if monitored thresholds breach.
 
-## Why Policy Changes Need Deployment Discipline
+## Why policy changes need deployment discipline
 
-Agent policy changes — system prompt updates, model swaps, tool configuration changes, permission scope adjustments — carry blast-radius risk proportional to traffic volume. A policy change that looks correct in offline testing can still degrade production behavior in ways that only emerge at scale: latency spikes, elevated safety flag rates, unexpected spend patterns, or goal achievement regressions.
+Agent policy changes carry risk that grows with traffic volume. These changes include system prompt updates, model swaps, tool configuration changes, and permission scope adjustments. A change that looks correct in offline testing can still degrade production behavior at scale. The damage shows up as latency spikes, higher safety flag rates, unexpected spend, or goal achievement regressions.
 
-Full-cutover is the common failure mode. Teams update the policy and immediately route 100% of traffic to it. If something is wrong, the entire user base experiences the degradation before it is caught.
+The common failure mode is full cutover. Teams update the policy and immediately route 100% of traffic to it. If something is wrong, the whole user base hits the degradation before anyone catches it.
 
-Canary rollout applies the same traffic-split discipline that software deployment uses to the policy layer.
+Canary rollout brings the same traffic-split discipline that software deployment uses to the policy layer.
 
 ## Mechanism
 
@@ -41,9 +41,9 @@ graph TD
     G --> H[Alert + Post-mortem]
 ```
 
-**Traffic split**: Route a configurable slice (typically 5–10%) of incoming requests to the candidate policy while the remainder continue on the stable policy. Split at the router level, not inside the agent — the agent receives one policy and executes it.
+Traffic split. Route a configurable slice of incoming requests, typically 5 to 10%, to the candidate policy. The rest continue on the stable policy. Split at the router level, not inside the agent. The agent receives one policy and runs it.
 
-**Monitored metrics**: Define pass/fail thresholds before rollout begins:
+Monitored metrics. Define pass and fail thresholds before the rollout begins:
 
 | Metric | Typical threshold |
 |---|---|
@@ -53,9 +53,9 @@ graph TD
 | Token spend per task | ≤ baseline × 1.15 |
 | Human escalation rate | ≤ baseline + 1% |
 
-**Rollback trigger**: If any metric breaches its threshold within the observation window, revert the canary slice to the stable policy automatically. Do not wait for human review.
+Rollback trigger. If any metric breaches its threshold within the observation window, revert the canary slice to the stable policy automatically. Do not wait for human review.
 
-**Bake time**: Hold each traffic percentage for a minimum observation window (typically 1–4 hours depending on volume) before expanding. Low-volume deployments may require longer windows to accumulate statistical significance.
+Bake time. Hold each traffic percentage for a minimum observation window before expanding, typically 1 to 4 hours depending on volume. Low-volume deployments may need longer windows to reach statistical significance.
 
 ## Implementation
 
@@ -71,14 +71,14 @@ def get_policy(request_id: str, canary_config: dict) -> str:
     return canary_config["stable_policy"]
 ```
 
-Attach the policy version to every telemetry event so metrics can be segmented by version:
+Attach the policy version to every telemetry event so you can segment metrics by version:
 
 ```python
 span.set_attribute("agent.policy_version", policy_version)
 span.set_attribute("agent.is_canary", policy_version == canary_config["candidate_policy"])
 ```
 
-The rollback check runs on a schedule or event-driven on each telemetry flush:
+Run the rollback check on a schedule, or trigger it on each telemetry flush:
 
 ```python
 def check_rollback(metrics: dict, thresholds: dict, canary_config: dict) -> None:
@@ -90,7 +90,7 @@ def check_rollback(metrics: dict, thresholds: dict, canary_config: dict) -> None
             return
 ```
 
-## Rollout Schedule
+## Rollout schedule
 
 A standard schedule for moderate-volume deployments:
 
@@ -103,7 +103,7 @@ A standard schedule for moderate-volume deployments:
 
 Skip phases only when volume is high enough to reach statistical significance faster.
 
-## When to Use
+## When to use
 
 - Any system prompt change that affects agent decision boundaries (not cosmetic wording)
 - Model version upgrades or swaps
@@ -113,14 +113,14 @@ Skip phases only when volume is high enough to reach statistical significance fa
 
 Skip canary rollout for: documentation-only prompt changes, fixing obvious bugs with no behavioral surface, and internal tooling with a single operator.
 
-## When This Backfires
+## When this backfires
 
-Canary rollout is not a default — it is a control that assumes enough traffic to produce statistically significant signal within a reasonable observation window, and metrics that actually capture the kind of regression the change can produce. Several conditions flip the cost-benefit:
+Canary rollout is not a default. It is a control that assumes two things: enough traffic to produce a statistically significant signal within a reasonable observation window, and metrics that capture the kind of regression the change can produce. Several conditions flip the cost-benefit:
 
-- **Low-volume agent traffic.** With fewer than roughly 50 samples per metric inside the bake window, threshold breaches become dominated by noise and the router oscillates between canary and stable. Google's SRE-led canary analysis work emphasises that thin canary populations produce more false-positive rollbacks than real-signal catches ([canary-analysis lessons](https://cloud.google.com/blog/products/devops-sre/canary-analysis-lessons-learned-and-best-practices-from-google-and-waze)). For low-QPS internal tools, shadow-traffic replay against production inputs produces cleaner signal without exposing any user to the candidate policy.
-- **Multi-turn conversational agents.** Randomised per-request routing splits a single session across both policies, which confuses users and masks per-policy behaviour. Route at the session or user level, or prefer shadow testing until the candidate is ready for a flagged cohort.
-- **Regressions that only appear across long trajectories.** Goal-achievement, compounding drift, and retention effects cannot be measured inside a 1–4 hour bake window. A canary that passes on p95 latency and safety-flag rate can still ship a policy that degrades week-over-week user outcomes.
-- **Quantitative thresholds alone miss behavioural regressions.** OpenAI's April 2025 GPT-4o sycophancy post-mortem reported that offline evals and A/B tests indicated positive results while expert testers flagged that the model "felt" off; the quantitative signals did not capture the qualitative shift before full rollout ([OpenAI post-mortem](https://openai.com/index/sycophancy-in-gpt-4o/), [expanded analysis](https://openai.com/index/expanding-on-sycophancy/)). Pair every canary with a human "vibe check" gate on behavioural dimensions that the threshold table cannot enumerate.
+- Low-volume agent traffic. With fewer than roughly 50 samples per metric inside the bake window, noise dominates threshold breaches and the router oscillates between canary and stable. Google's SRE-led canary analysis work emphasizes that thin canary populations produce more false-positive rollbacks than real-signal catches ([Google canary-analysis lessons](https://cloud.google.com/blog/products/devops-sre/canary-analysis-lessons-learned-and-best-practices-from-google-and-waze)). For low-QPS internal tools, shadow-traffic replay against production inputs gives a cleaner signal without exposing any user to the candidate policy.
+- Multi-turn conversational agents. Randomized per-request routing splits a single session across both policies, which confuses users and masks per-policy behavior. Route at the session or user level, or use shadow testing until the candidate is ready for a flagged cohort.
+- Regressions that only appear across long trajectories. You cannot measure goal achievement, compounding drift, and retention effects inside a 1 to 4 hour bake window. A canary that passes on p95 latency and safety-flag rate can still ship a policy that degrades week-over-week user outcomes.
+- Quantitative thresholds alone miss behavioral regressions. OpenAI's April 2025 GPT-4o sycophancy post-mortem reported that offline evals and A/B tests showed positive results, while expert testers flagged that the model "felt" off. The quantitative signals did not capture the qualitative shift before full rollout ([OpenAI post-mortem](https://openai.com/index/sycophancy-in-gpt-4o/), [expanded analysis](https://openai.com/index/expanding-on-sycophancy/)). Pair every canary with a human "vibe check" gate on behavioral dimensions that the threshold table cannot list.
 
 ## Key Takeaways
 

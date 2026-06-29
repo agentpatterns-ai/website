@@ -18,11 +18,11 @@ maturity: established
 
 > Prioritization is the agent's ranking of pending tasks by composite score — distinct from routing (who) and scheduling (when).
 
-In-agent task prioritization is the decision an agent makes, every turn, about *which* pending item to advance next. It is structurally distinct from [parsimonious agent routing](../multi-agent/parsimonious-agent-routing.md) (which worker handles a task) and from scheduling (when a task runs); prioritization is the agent's own next-action ranking over work it has already accepted. Antonio Gulli treats it as a first-class pattern in *Agentic Design Patterns* ([Chapter 20](https://link.springer.com/book/10.1007/978-3-032-01402-3)).
+In-agent task prioritization is the decision an agent makes, every turn, about which pending item to advance next. It is distinct from [parsimonious agent routing](../multi-agent/parsimonious-agent-routing.md) (which worker handles a task) and from scheduling (when a task runs). Prioritization is the agent's own next-action ranking over work it has already accepted. Antonio Gulli treats it as a first-class pattern in 'Agentic Design Patterns' ([Chapter 20](https://link.springer.com/book/10.1007/978-3-032-01402-3)).
 
-## When This Pattern Pays Off
+## When this pattern pays off
 
-The pattern earns its complexity under four conditions; outside them, FIFO is the correct answer.
+The pattern earns its complexity under four conditions. Outside them, FIFO is the correct answer.
 
 | Condition | Why ranking pays back |
 |-----------|----------------------|
@@ -31,29 +31,29 @@ The pattern earns its complexity under four conditions; outside them, FIFO is th
 | Heterogeneous item value | A 10× spread in expected payoff makes ranking strictly dominate arrival order |
 | Estimable signals | Urgency, dependency, or blast radius can be derived from state without guessing |
 
-When the constraint is resource contention rather than attention, the answer is strict FIFO plus [lane-based execution queueing](lane-based-execution-queueing.md). Block's [agent-task-queue](https://github.com/block/agent-task-queue) ships *exactly* that — "FIFO Queuing: Strict first-in-first-out ordering within each exact queue_name" — because it serialises expensive operations to keep one machine responsive, not to maximise per-turn payoff.
+When the constraint is resource contention rather than attention, the answer is strict FIFO plus [lane-based execution queueing](lane-based-execution-queueing.md). Block's [agent-task-queue](https://github.com/block/agent-task-queue) ships exactly that — "FIFO Queuing: Strict first-in-first-out ordering within each exact queue_name" — because it serializes expensive operations to keep one machine responsive, not to maximize per-turn payoff.
 
-## Ranking Signals
+## Ranking signals
 
 A composite score combines several dimensions so no one signal dominates:
 
-- **Urgency** — deadline proximity or external state changes that age out the item.
-- **Economic value** — expected payoff if completed (the per-task equivalent of [economic-value signalling](../multi-agent/economic-value-signaling.md), which carries the same signal across agents).
-- **Dependency / unblocking** — items that unblock other waiting work; ranking by transitive unblock count is what an autonomous backlog agent does instead of issue-number order.
-- **Blast radius** — irreversibility or scope; some teams *invert* this signal and rank irreversible work *last* to keep options open.
-- **Staleness** — items whose ground truth is decaying.
+- Urgency — deadline proximity or external state changes that age out the item.
+- Economic value — expected payoff if completed (the per-task equivalent of [economic-value signaling](../multi-agent/economic-value-signaling.md), which carries the same signal across agents).
+- Dependency or unblocking — items that unblock other waiting work; ranking by transitive unblock count is what an autonomous backlog agent does instead of issue-number order.
+- Blast radius — irreversibility or scope; some teams invert this signal and rank irreversible work last to keep options open.
+- Staleness — items whose ground truth is decaying.
 
-## Why It Works
+## Why it works
 
 Per-turn attention is the scarce resource, and arrival order has no relationship to marginal value. Pure FIFO produces head-of-line blocking — a high-value program waits behind low-value calls. [Autellix](https://arxiv.org/abs/2502.13965) identifies this as the dominant inefficiency in LLM-agent workloads and reports 4–15× program-throughput gains at equivalent latency from program-aware priority scheduling. A composite score reorders the queue so each turn pays back more of the goal; the mechanism is attention-budget allocation under head-of-line blocking, not "agents need lists".
 
-## When This Backfires
+## When this backfires
 
 Three failure modes recur:
 
-- **Starvation of low-priority tasks.** Pure top-K priority leaves low-priority items waiting indefinitely; [HEXGEN-FLOW](https://arxiv.org/pdf/2505.05286) documents this for agentic text-to-SQL and applies aging — promote an item's priority after it has waited past a threshold, borrowed from Solaris TS and MLFQ. Without aging, the queue eats its own tail.
-- **Thrashing from constant re-ranking.** Recomputing scores every turn flips order under noise and the agent never finishes anything. Re-rank on state change, not on every turn; debounce.
-- **Gaming a single signal.** When one dimension (self-declared urgency) is the only input, the system optimises that signal at the expense of throughput. Cap per-signal weight, or split high-stakes work into a separate lane rather than racing it through the main queue.
+- Starvation of low-priority tasks. Pure top-K priority leaves low-priority items waiting indefinitely; [HEXGEN-FLOW](https://arxiv.org/pdf/2505.05286) documents this for agentic text-to-SQL and applies aging — promote an item's priority after it has waited past a threshold, borrowed from Solaris TS and MLFQ. Without aging, the queue eats its own tail.
+- Thrashing from constant re-ranking. Recomputing scores every turn flips order under noise and the agent never finishes anything. Re-rank on state change, not on every turn; debounce.
+- Gaming a single signal. When one dimension (self-declared urgency) is the only input, the system optimizes that signal at the expense of throughput. Cap per-signal weight, or split high-stakes work into a separate lane rather than racing it through the main queue.
 
 ## Example
 

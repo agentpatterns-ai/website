@@ -17,11 +17,11 @@ maturity: established
 
 > The same harness produces different behaviour on different backing models. Treat the model as a first-class harness variable — tune prompt structure, tool descriptions, and middleware per model — instead of forcing one generic configuration to work everywhere.
 
-## The Pattern
+## The pattern
 
-Frontier vendors train models on provider-specific prompt and tool conventions. A harness shaped for one violates the other's training distribution. Declare per-model overrides — system-prompt prefix and suffix, tool inclusion and naming, middleware, subagent configuration — that the harness applies whenever a particular model is selected.
+Frontier vendors train models on provider-specific prompt and tool conventions. A harness shaped for one violates the other's training distribution. Declare per-model overrides — system-prompt prefix and suffix, tool inclusion and naming, middleware, subagent configuration — that the harness applies whenever you select a particular model.
 
-LangChain's deepagents library shipped this as **harness profiles** on 2026-04-29. On a tau2-bench subset, profiles produced a 10-20 point jump per model: GPT 5.3 Codex went from 33% to 53%; Claude Opus 4.7 from 43% to 53% ([LangChain](https://blog.langchain.com/tuning-deep-agents-different-models)).
+LangChain's deepagents library shipped this as harness profiles on 2026-04-29. On a tau2-bench subset, profiles produced a 10-20 point jump per model: GPT 5.3 Codex went from 33% to 53%, and Claude Opus 4.7 from 43% to 53% ([LangChain](https://blog.langchain.com/tuning-deep-agents-different-models)).
 
 ```mermaid
 graph TD
@@ -34,27 +34,27 @@ graph TD
     G --> R
 ```
 
-## What Varies Per Model
+## What varies per model
 
-The override surface covers components that vendor prompting guides prescribe differently:
+The override surface covers the components that vendor prompting guides prescribe differently:
 
 | Component | Why it varies | Source |
 |---|---|---|
 | System prompt prefix/suffix | XML sections for Claude vs batch-call instructions for Codex | [Claude prompting](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices); [Codex prompting](https://developers.openai.com/codex/prompting) |
 | Tool inclusion and naming | Codex is trained on `apply_patch` and shell-style names; generic file-edit tools score worse | [LangChain](https://blog.langchain.com/tuning-deep-agents-different-models) |
 | Tool descriptions | Calibrate against each model's literal-interpretation profile | [Anthropic migration](https://platform.claude.com/docs/en/about-claude/models/migration-guide) |
-| Middleware selection | Summarisation middleware tuned for one model's verbosity over-corrects on another | [Cursor](https://cursor.com/blog/codex-model-harness) |
+| Middleware selection | Summarization middleware tuned for one model's verbosity over-corrects on another | [Cursor](https://cursor.com/blog/codex-model-harness) |
 | Subagent configuration | Spawn-frequency defaults differ across models | [Anthropic migration](https://platform.claude.com/docs/en/about-claude/models/migration-guide) |
 
 Structural mechanisms — sandboxing, permission gates, file-persistent context, observability hooks — depend on the harness contract, not the model, and port cleanly. See [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) for the structural-vs-compensatory split.
 
-## Concrete Per-Model Deltas
+## Concrete per-model deltas
 
-LangChain published the actual changes that produced their tau2-bench deltas ([LangChain](https://blog.langchain.com/tuning-deep-agents-different-models)).
+LangChain published the actual changes that produced its tau2-bench deltas ([LangChain](https://blog.langchain.com/tuning-deep-agents-different-models)).
 
 For Codex, the changes were tool-shape: replace the default `file_edit` with [`apply_patch`](https://developers.openai.com/api/docs/guides/tools-apply-patch), alias `execute` as `shell_command`, and add a parallel-batch prompt: "Before any tool call, decide ALL files and resources you will need. Batch reads, searches, and other independent operations into parallel tool calls instead of issuing them one at a time."
 
-For Opus 4.7, the changes were prompt-only — XML-tagged blocks the model is trained to recognise:
+For Opus 4.7, the changes were prompt-only — XML-tagged blocks the model is trained to recognize:
 
 ```xml
 <tool_result_reflection>
@@ -71,7 +71,7 @@ memory about what it probably contains.
 
 Cursor reports the same shape independently: shell-style tool names for Codex, explicit `read_lints` triggers, removed mid-turn user-talk language because Codex models cannot "talk" until the end of a turn ([Cursor](https://cursor.com/blog/codex-model-harness)).
 
-## Expressing the Deltas
+## Expressing the deltas
 
 LangChain's profile API keys overrides on a bare provider name (`"openai"`) or fully qualified `provider:model` (`"openai:gpt-5.4"`) ([Deep Agents Profiles docs](https://docs.langchain.com/oss/python/deepagents/profiles)).
 
@@ -90,9 +90,9 @@ register_harness_profile(
 
 Merge semantics are field-typed: prompts last-wins, tool-description mappings merge per key, excluded sets union, extra middleware appended by class identity. Provider-level and model-level profiles compose at resolve time — model-level inherits from provider-level. The `create_deep_agent` call site does not change.
 
-The mechanism generalises beyond deepagents — any harness can adopt a model key, a delta record, and resolution at agent construction. The discipline is keeping deltas declarative so they version, diff, and ship as plugins rather than scattering `if model == ...` branches through the loop.
+The mechanism generalizes beyond deepagents — any harness can adopt a model key, a delta record, and resolution at agent construction. The discipline is keeping deltas declarative so they version, diff, and ship as plugins rather than scattering `if model == ...` branches through the loop.
 
-## Relation to Adjacent Harness Patterns
+## Relation to adjacent harness patterns
 
 ```mermaid
 graph LR
@@ -110,15 +110,15 @@ Per-model tuning is the orthogonal axis to existing harness disciplines:
 - [Harness Impermanence](harness-impermanence.md) designs for cheap removal when the next model subsumes the capability — author profiles as declarative overrides so the same removal seam applies.
 - [Prompt-Rewrite on Cross-Generation Migration](../instructions/prompt-rewrite-on-cross-generation-migration.md) handles the temporal dimension (one model upgrades). Per-model tuning handles the spatial dimension (N models against one harness).
 
-## When This Backfires
+## When this backfires
 
 Per-model profiles cost more than they pay back under specific conditions:
 
-- **Single-model deployments.** No portability surface to manage; profile machinery is dead weight.
-- **Minor-version successors with stable evals.** "Claude Opus 4.7 should have strong out-of-the-box performance on existing Claude Opus 4.6 prompts and evals" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)) — a profile per minor version is churn without measurable gain.
-- **No representative eval suite.** Per-model deltas need measurement to validate the override actually improves the target model. See [Harness Hill-Climbing](harness-hill-climbing.md) for the eval discipline.
-- **Provider-managed harnesses.** Claude Managed Agents and Copilot consumer tiers route to successors automatically; the user has no harness surface to tune.
-- **Capability convergence.** As frontier models converge on shared tool conventions (`apply_patch`, shell, structured outputs), the eval gap shrinks while maintenance cost stays flat.
+- Single-model deployments. No portability surface to manage, so profile machinery is dead weight.
+- Minor-version successors with stable evals. "Claude Opus 4.7 should have strong out-of-the-box performance on existing Claude Opus 4.6 prompts and evals" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)). A profile per minor version is churn without measurable gain.
+- No representative eval suite. Per-model deltas need measurement to confirm the override improves the target model. See [Harness Hill-Climbing](harness-hill-climbing.md) for the eval discipline.
+- Provider-managed harnesses. Claude Managed Agents and Copilot consumer tiers route to successors automatically, so you have no surface to tune.
+- Capability convergence. As frontier models converge on shared tool conventions (`apply_patch`, shell, structured outputs), the eval gap shrinks while maintenance cost stays flat.
 
 Per-model deltas are exactly the kind of hand-coded knowledge model releases tend to subsume. Author profiles as declarative overrides so deletion is one config change, not a refactor.
 

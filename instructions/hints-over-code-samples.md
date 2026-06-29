@@ -16,14 +16,14 @@ maturity: adopted
 
 A hint is a path reference: "follow the repository pattern in `src/repos/UserRepo.ts`." The agent reads the current file, not a frozen copy. Coding agents operate inside a live codebase — few-shot examples that work well in isolated prompts become a liability when the source of truth is already on disk.
 
-## The Problem with Embedded Code Samples
+## The problem with embedded code samples
 
 Code samples in instruction files create a shadow codebase. The real implementation changes while the prompt example stays frozen. Two failure modes emerge:
 
-- **Divergence.** The agent follows the frozen example, producing outdated patterns or incompatible signatures.
-- **Token waste.** A 30-line sample loaded at session start consumes [context budget](../context-engineering/context-budget-allocation.md) on every task, including unrelated ones. Multiply by several examples and a meaningful share of the window holds stale reference material.
+- Divergence: the agent follows the frozen example, producing outdated patterns or incompatible signatures.
+- Token waste: a 30-line sample loaded at session start spends [context budget](../context-engineering/context-budget-allocation.md) on every task, including unrelated ones. Multiply by several examples and a meaningful share of the window holds stale reference material.
 
-## How Hints Work
+## How hints work
 
 A hint replaces a code block with a path reference:
 
@@ -51,38 +51,38 @@ graph LR
     style F fill:#ffcdd2
 ```
 
-## Why Hints Are More Effective
+## Why hints work better
 
-**Zero maintenance.** The hint stays valid as the referenced code evolves. No one needs to update the instruction file when the implementation changes.
+Zero maintenance. The hint stays valid as the referenced code evolves. No one needs to update the instruction file when the implementation changes.
 
-**Context efficiency.** A one-line hint costs a fraction of the tokens a multi-line sample consumes. For files loaded at session start, this compounds across every interaction as a recurring draw on the [context budget](../context-engineering/context-budget-allocation.md).
+Context efficiency. A one-line hint costs a fraction of the tokens a multi-line sample consumes. For files loaded at session start, this compounds across every interaction as a recurring draw on the [context budget](../context-engineering/context-budget-allocation.md).
 
-**KV-cache stability.** Prompt caching works by hashing the token sequence up to a cache breakpoint. Because a hint is a fixed string, it hashes identically across sessions. An embedded code sample that changes with the codebase produces a different hash each time, breaking the cache and forcing a full re-computation ([Anthropic prompt caching docs](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)).
+KV-cache stability. Prompt caching works by hashing the token sequence up to a cache breakpoint. Because a hint is a fixed string, it hashes identically across sessions. An embedded code sample that changes with the codebase produces a different hash each time, breaking the cache and forcing a full re-computation ([Anthropic prompt caching docs](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)).
 
-**Reduced few-shot brittleness.** Repeated examples can make agents copy structure verbatim rather than generalizing. A hint forces the agent to read and interpret the real code, producing more adaptive output.
+Less few-shot brittleness. Repeated examples can make agents copy structure verbatim rather than generalizing. A hint forces the agent to read and interpret the real code, which produces more adaptive output.
 
-## When to Still Use Code Samples
+## When to still use code samples
 
 Hints require something to point at. Use an inline code sample when:
 
-- **Introducing a genuinely novel pattern** with no existing implementation. The sample serves as the initial [specification-as-prompt](specification-as-prompt.md).
-- **Defining output formats** where the exact structure matters (commit message templates, API response schemas, file naming conventions).
-- **Tool definitions** where example usage and edge cases improve tool selection accuracy, a core move in [skill authoring patterns](../tool-engineering/skill-authoring-patterns.md).
+- introducing a genuinely novel pattern with no existing implementation. The sample serves as the initial [specification-as-prompt](specification-as-prompt.md).
+- defining output formats where the exact structure matters, such as commit message templates, API response schemas, or file naming conventions.
+- writing tool definitions where example usage and edge cases improve tool selection accuracy, a core move in [skill authoring patterns](../tool-engineering/skill-authoring-patterns.md).
 
 Once a file implements the novel pattern, replace the sample with a hint. The sample was a bootstrap; the hint is the steady state.
 
-## When This Backfires
+## When this backfires
 
-Hints add a file-read step at task time. In contexts where that overhead matters, the trade-off shifts:
+Hints add a file-read step at task time. Where that overhead matters, the trade-off shifts:
 
-- **Large referenced files.** If the hint points at a 500-line module, the agent may load the entire file into context — far more tokens than a targeted 20-line embedded sample. Use hints for files where the agent will read selectively, not monolithic ones.
-- **Deleted or renamed targets.** A hint pointing at a deleted file silently fails. The agent either errors or, with the [discoverable context](../context-engineering/discoverable-vs-nondiscoverable-context.md) gone, invents a pattern. Embedded samples survive refactors; hints require the target to exist.
-- **Low-latency agent loops.** Short-lived agents (e.g., a CI bot that runs hundreds of small tasks) pay the file-read cost on every invocation. For high-frequency, low-complexity tasks, pre-loading a short sample may be cheaper than repeated disk reads — the read-versus-explore cost trade-off [cost-aware skill rewriting](cost-aware-skill-rewriting.md) formalises.
-- **Isolated execution environments.** Sandboxed or remote agents without filesystem access cannot follow a hint. Embedded samples are the only option when the referenced code is unavailable.
+- Large referenced files. If the hint points at a 500-line module, the agent may load the whole file into context, far more tokens than a targeted 20-line embedded sample. Use hints for files the agent will read selectively, not monolithic ones.
+- Deleted or renamed targets. A hint pointing at a deleted file silently fails. The agent either errors or, with the [discoverable context](../context-engineering/discoverable-vs-nondiscoverable-context.md) gone, invents a pattern. Embedded samples survive refactors; hints require the target to exist.
+- Low-latency agent loops. Short-lived agents, for example a CI bot that runs hundreds of small tasks, pay the file-read cost on every invocation. For high-frequency, low-complexity tasks, pre-loading a short sample may be cheaper than repeated disk reads, the read-versus-explore cost trade-off that [cost-aware skill rewriting](cost-aware-skill-rewriting.md) formalizes.
+- Isolated execution environments. Sandboxed or remote agents without filesystem access cannot follow a hint. Embedded samples are the only option when the referenced code is unavailable.
 
 ## Example
 
-**Before** — embedded sample in CLAUDE.md:
+Before, an embedded sample in CLAUDE.md:
 
 ```markdown
 # API Handlers
@@ -106,7 +106,7 @@ export const createHandler: Handler = async (req, res) => {
 ​```
 ```
 
-**After** — hint in CLAUDE.md:
+After, a hint in CLAUDE.md:
 
 ```markdown
 # API Handlers

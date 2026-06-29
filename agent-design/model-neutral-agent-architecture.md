@@ -22,32 +22,32 @@ A model-neutral agent architecture treats the backing model as a swappable compo
 
 The bet is conditional. It pairs with [The Agent Stack Bet](agent-stack-bets.md) (platform-layer bets), [Per-Model Harness Tuning](per-model-harness-tuning.md) (the spatial mechanic that keeps neutrality from collapsing to the LCD), and [Managed vs Self-Hosted Harness](managed-vs-self-hosted-harness.md) (the deployment decision that determines whether the harness surface exists at all).
 
-## When the Bet Pays
+## When the bet pays
 
 Four conditions must hold together. Miss one and the abstraction is overhead.
 
-- **Cross-vendor capability is churning at least quarterly.** As of 2026-06 "Anthropic is currently the model to reach for on coding, though OpenAI is closing the gap, and OpenAI is ahead on multimodal. The rankings shift every few months" ([LangChain](https://blog.langchain.com/model-neutrality)). When rankings are stable, the swap option is theoretical and the abstraction is dead weight.
-- **The team owns a portable eval suite.** The swap mechanism is the eval, not the abstraction — "every time you change a prompt, swap a model version, or add a tool, your eval suite should run automatically" with regression gates in CI ([Braintrust](https://www.braintrust.dev/articles/best-ai-evals-tools-cicd-2025)). Without measurement, "the right to switch" is just hope. Prompt portability is the companion precondition: Drew Breunig argues "you can't be model-agnostic if you're hand-tuning prompts," citing Datadog/Berkeley evidence that enterprises stay on older models because newer ones break brittle hand-tuned prompts, and prescribes eval-as-spec plus automated prompt optimization (DSPy, GEPA) as the portability exit ([Drew Breunig](https://www.dbreunig.com/2026/06/22/the-problem-is-prompt-debt.html)).
-- **The workload is not bound to a single vendor's native capability.** Anthropic's `cache_control` breakpoints, OpenAI's Responses reasoning items, and provider-specific extended-thinking conventions do not round-trip through a Chat-Completions LCD ([Multi-Shape BYOK Provider](multi-shape-byok-provider.md)). Workloads dominated by these features pay a capability tax that the multiplier discount cannot recover.
-- **The harness is yours to declare neutrality on.** Provider-managed surfaces — Copilot cloud agent, Claude Managed Agents — expose vendor-side routing ([Auto Model Selection](auto-model-selection.md)) and remove the layer this pattern would attach to.
+- Cross-vendor capability is churning at least quarterly. As of 2026-06 "Anthropic is currently the model to reach for on coding, though OpenAI is closing the gap, and OpenAI is ahead on multimodal. The rankings shift every few months" ([LangChain](https://blog.langchain.com/model-neutrality)). When rankings are stable, the swap option is theoretical and the abstraction is dead weight.
+- The team owns a portable eval suite. The swap mechanism is the eval, not the abstraction — "every time you change a prompt, swap a model version, or add a tool, your eval suite should run automatically" with regression gates in CI ([Braintrust](https://www.braintrust.dev/articles/best-ai-evals-tools-cicd-2025)). Without measurement, "the right to switch" is just hope. Prompt portability is the companion precondition. Drew Breunig argues "you can't be model-agnostic if you're hand-tuning prompts," citing Datadog/Berkeley evidence that enterprises stay on older models because newer ones break brittle hand-tuned prompts, and prescribes eval-as-spec plus automated prompt optimization (DSPy, GEPA) as the portability exit ([Drew Breunig](https://www.dbreunig.com/2026/06/22/the-problem-is-prompt-debt.html)).
+- The workload is not bound to a single vendor's native capability. Anthropic's `cache_control` breakpoints, OpenAI's Responses reasoning items, and provider-specific extended-thinking conventions do not round-trip through a Chat-Completions LCD ([Multi-Shape BYOK Provider](multi-shape-byok-provider.md)). Workloads dominated by these features pay a capability tax that the multiplier discount cannot recover.
+- The harness is yours to declare neutrality on. Provider-managed surfaces — Copilot cloud agent, Claude Managed Agents — expose vendor-side routing ([Auto Model Selection](auto-model-selection.md)) and remove the layer this pattern would attach to.
 
-## The Three-Property Neutral Harness
+## The three-property neutral harness
 
-LangChain's definition of a neutral harness is three properties — none alone is sufficient:
+LangChain defines a neutral harness as three properties — none alone is enough:
 
 | Property | What it means | Why all three matter |
 |----------|----------------|---------------------|
-| **Open source** | Every line of code is readable and forkable | Closed agent frameworks shipped by a model lab are not neutral regardless of marketing |
-| **Multi-model out of the box** | One agent definition; every provider first-class | No provider owns the abstraction; the SDK is not a re-labelled vendor harness |
-| **Profile-aware, not lowest-common-denominator** | Per-model prompt, tool, and middleware deltas | Capability is preserved per backend instead of flattened to the shared subset |
+| Open source | Every line of code is readable and forkable | Closed agent frameworks shipped by a model lab are not neutral regardless of marketing |
+| Multi-model out of the box | One agent definition; every provider first-class | No provider owns the abstraction; the SDK is not a relabeled vendor harness |
+| Profile-aware, not lowest-common-denominator | Per-model prompt, tool, and middleware deltas | Capability is preserved per backend instead of flattened to the shared subset |
 
-[LangChain](https://blog.langchain.com/model-neutrality) is explicit: "Neutrality is not the obligation to pretend every model is interchangeable. The right to switch. Not the requirement to flatten." The profile-aware property is what closes the LCD trap that doomed naive "OpenAI-compatible" adapters — see [Multi-Shape BYOK Provider](multi-shape-byok-provider.md) for the per-endpoint shape declaration that preserves cache_control, reasoning items, and native tool blocks across three concurrent envelope contracts.
+[LangChain](https://blog.langchain.com/model-neutrality) is explicit: "Neutrality is not the obligation to pretend every model is interchangeable. The right to switch. Not the requirement to flatten." The profile-aware property closes the LCD trap that doomed naive "OpenAI-compatible" adapters — see [the per-endpoint shape declaration in Multi-Shape BYOK Provider](multi-shape-byok-provider.md), which preserves cache_control, reasoning items, and native tool blocks across three concurrent envelope contracts.
 
-The profile-aware property is also empirically load-bearing. LangChain's deepagents profiles produced a 10-20 point tau2-bench jump per model when the harness applied model-keyed deltas — Codex went 33% to 53%, Opus 4.7 went 43% to 53% ([LangChain](https://blog.langchain.com/tuning-deep-agents-different-models)). A neutral harness without profiles converges on the LCD by default.
+The profile-aware property also earns its keep in the numbers. LangChain's deepagents profiles produced a 10-20 point tau2-bench jump per model when the harness applied model-keyed deltas — Codex went 33% to 53%, Opus 4.7 went 43% to 53% ([LangChain](https://blog.langchain.com/tuning-deep-agents-different-models)). A neutral harness without profiles converges on the LCD by default.
 
-## Where the Abstraction Boundary Belongs
+## Where the abstraction boundary belongs
 
-The seam sits at the **model invocation**, not at the agent loop:
+The seam sits at the model invocation, not at the agent loop:
 
 ```mermaid
 graph TD
@@ -62,31 +62,31 @@ graph TD
 
 Three things stay on the team's side of the seam:
 
-- **Tool and prompt schemas** declared once; per-model deltas applied as profile records ([Per-Model Harness Tuning](per-model-harness-tuning.md)).
-- **Eval suite** that runs on every swap and gates regression. Without portable evals the swap is unmeasured and the neutrality property does not actually pay back.
-- **Observability** instrumented against OpenTelemetry GenAI semconv so traces stay vendor-agnostic ([digitalapplied](https://www.digitalapplied.com/blog/agent-observability-2026-evals-traces-cost-guide)).
+- Tool and prompt schemas, declared once; per-model deltas applied as profile records ([Per-Model Harness Tuning](per-model-harness-tuning.md)).
+- The eval suite, which runs on every swap and gates regression. Without portable evals the swap is unmeasured and the neutrality property does not actually pay back.
+- Observability, instrumented against OpenTelemetry GenAI semconv so traces stay vendor-agnostic ([digitalapplied](https://www.digitalapplied.com/blog/agent-observability-2026-evals-traces-cost-guide)).
 
 Three things stay on the model's side of the seam:
 
-- **Envelope shape** — Chat Completions vs Responses vs Messages — declared per endpoint, not auto-detected ([Multi-Shape BYOK Provider](multi-shape-byok-provider.md)).
-- **Reasoning-trace conventions and tool-call shapes** — these are model-specific training-distribution artefacts; the harness exposes them as profile fields, not as one universal schema.
-- **Native acceleration features** — `cache_control` breakpoints, Batch API, extended-thinking caching — kept native rather than abstracted; the harness routes around models that don't support them rather than down-translating.
+- Envelope shape — Chat Completions, Responses, or Messages — declared per endpoint, not auto-detected ([Multi-Shape BYOK Provider](multi-shape-byok-provider.md)).
+- Reasoning-trace conventions and tool-call shapes. These are model-specific training-distribution artifacts; the harness exposes them as profile fields, not as one universal schema.
+- Native acceleration features — `cache_control` breakpoints, Batch API, extended-thinking caching. The harness keeps these native rather than abstracted, and routes around models that do not support them rather than down-translating.
 
-## Why It Works
+## Why it works
 
-The mechanism is **rate-of-change asymmetry between architectural layers**. Lock-in cost over time is `(cost-per-swap) × (swaps-per-time)`. Cloud lock-in had high cost-per-swap (re-platforming) but very low frequency (contract cycles, outages — "once every few years"). Model lock-in has lower cost-per-swap (re-prompt, re-tune) but much higher frequency (frontier rankings shifting quarterly to monthly). The integral over `cost × frequency` is therefore larger on the model axis even though cost-per-swap is smaller, which inverts where to invest neutrality first ([LangChain](https://blog.langchain.com/model-neutrality)). The "labs are selling commodities, locking you in at the tooling layer" framing is the same play AWS, Azure, and GCP ran with CloudFormation, ARM templates, and Vertex — Terraform won by being the neutral layer one step up. Claude Agent SDK, OpenAI Agents API, and Vertex AI Agent Builder are "all the same shape" and have no commercial incentive to make competitors' models feel first-class ([LangChain](https://blog.langchain.com/model-neutrality)). The profile-aware property is the engineering escape from the LCD trap: per-model deltas as declarative overrides ([Per-Model Harness Tuning](per-model-harness-tuning.md)) preserve capability while keeping the swap seam shallow.
+The mechanism is rate-of-change asymmetry between architectural layers. Lock-in cost over time is `(cost-per-swap) × (swaps-per-time)`. Cloud lock-in had high cost-per-swap (re-platforming) but very low frequency (contract cycles, outages — "once every few years"). Model lock-in has lower cost-per-swap (re-prompt, re-tune) but much higher frequency (frontier rankings shifting quarterly to monthly). So the integral over `cost × frequency` is larger on the model axis even though cost-per-swap is smaller, which inverts where to invest neutrality first ([LangChain](https://blog.langchain.com/model-neutrality)). The "labs are selling commodities, locking you in at the tooling layer" framing is the same play AWS, Azure, and GCP ran with CloudFormation, ARM templates, and Vertex — Terraform won by being the neutral layer one step up. Claude Agent SDK, OpenAI Agents API, and Vertex AI Agent Builder are "all the same shape" and have no commercial incentive to make competitors' models feel first-class ([LangChain](https://blog.langchain.com/model-neutrality)). The profile-aware property is the engineering escape from the LCD trap: per-model deltas as declarative overrides ([Per-Model Harness Tuning](per-model-harness-tuning.md)) preserve capability while keeping the swap seam shallow.
 
-## When This Backfires
+## When this backfires
 
 The bet inverts inside the source's own carve-out and several adjacent conditions:
 
-- **Single-CLI agent platforms whose value is depth of integration with one harness.** Claude Code itself, the in-IDE Copilot CLI bound to GitHub's roster, and other lab-shipped tools are products *of* a single harness — portability is a cost they will never recover.
-- **Pre-eval-suite teams.** Without portable evals the swap is unmeasured. Teams discover that "portability" is a property of the eval suite, not the abstraction, and switch providers anyway at the cost of an eval rewrite ([Braintrust](https://www.braintrust.dev/articles/best-ai-evals-tools-cicd-2025)).
-- **Workloads heavy on `cache_control` or extended-thinking caching.** Cross-provider feature decay is concrete: extended thinking and prompt caching "don't mix well across providers — if you're running multi-provider, disable extended thinking in caching-critical paths for now, as Anthropic Direct handles it cleanly, but Bedrock, Vertex, and older model versions each fail differently, and none of it is documented" ([mager.co](https://www.mager.co/blog/2026-04-29-claude-prompt-caching/)). An LCD abstraction silently drops cache breakpoints, costing more per request than the discount it pretended to preserve.
-- **Regulated workloads pinned to a model version.** The swap option is removed by policy; portability machinery is pure overhead, the same way [Harness Impermanence](harness-impermanence.md) flags removability machinery as dead weight on pinned deployments.
-- **Pre-PMF startups.** Iteration speed beats portability before product-market fit — the same call [Agent Stack Bets](agent-stack-bets.md) makes for stack bets in general.
-- **Provider-managed cloud agents.** Copilot cloud agent and Claude Managed Agents expose [Auto Model Selection](auto-model-selection.md) inside the vendor's pool; the operator has no harness surface to declare neutrality on.
-- **Naive LCD abstractions that lose what they pretended to preserve.** A unified API that normalises every provider to the shared subset trades portability for capability — frontier features like reasoning items and native tool blocks disappear from the abstraction, and "the right to switch" becomes "the requirement to flatten" ([LangChain](https://blog.langchain.com/model-neutrality)).
+- Single-CLI agent platforms whose value is depth of integration with one harness. Claude Code itself, the in-IDE Copilot CLI bound to GitHub's roster, and other lab-shipped tools are products of a single harness — portability is a cost they will never recover.
+- Pre-eval-suite teams. Without portable evals the swap is unmeasured. Teams discover that "portability" is a property of the eval suite, not the abstraction, and switch providers anyway at the cost of an eval rewrite ([Braintrust](https://www.braintrust.dev/articles/best-ai-evals-tools-cicd-2025)).
+- Workloads heavy on `cache_control` or extended-thinking caching. Cross-provider feature decay is concrete: extended thinking and prompt caching "don't mix well across providers — if you're running multi-provider, disable extended thinking in caching-critical paths for now, as Anthropic Direct handles it cleanly, but Bedrock, Vertex, and older model versions each fail differently, and none of it is documented" ([mager.co](https://www.mager.co/blog/2026-04-29-claude-prompt-caching/)). An LCD abstraction silently drops cache breakpoints, costing more per request than the discount it pretended to preserve.
+- Regulated workloads pinned to a model version. The swap option is removed by policy, so portability machinery is pure overhead — the same way [Harness Impermanence](harness-impermanence.md) flags removability machinery as dead weight on pinned deployments.
+- Pre-PMF startups. Iteration speed beats portability before product-market fit — the same call [Agent Stack Bets](agent-stack-bets.md) makes for stack bets in general.
+- Provider-managed cloud agents. Copilot cloud agent and Claude Managed Agents expose [Auto Model Selection](auto-model-selection.md) inside the vendor's pool; the operator has no harness surface to declare neutrality on.
+- Naive LCD abstractions that lose what they pretended to preserve. A unified API that normalizes every provider to the shared subset trades portability for capability — frontier features like reasoning items and native tool blocks disappear from the abstraction, and "the right to switch" becomes "the requirement to flatten" ([LangChain](https://blog.langchain.com/model-neutrality)).
 
 ## Example
 

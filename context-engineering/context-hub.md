@@ -21,22 +21,22 @@ maturity: established
 
 > Fetch current, versioned API documentation into agent context at generation time so agents write against the live spec rather than stale training-data snapshots.
 
-**Related lesson:** [Mind the Version Gap](https://learn.agentpatterns.ai/context-engineering/mind-the-version-gap/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Mind the Version Gap](https://learn.agentpatterns.ai/context-engineering/mind-the-version-gap/) covers this concept in a hands-on lesson with quizzes.
 
 !!! info "Also known as"
     Retrieval-Augmented Agent Workflows, Semantic Context Loading, JIT Context, RAG
 
-## The Problem: Training-Time API Snapshots
+## The problem: training-time API snapshots
 
-Model weights encode API surfaces from training time. When a library ships breaking changes, adds new endpoints, or deprecates parameters after the training cutoff, agents hallucinate calls against the old spec. Andrew Ng [demonstrated this directly](https://www.deeplearning.ai/the-batch/issue-343/) — when asked to call a newer model API, agents default to older completion patterns because the current interface did not exist during training.
+Model weights encode API surfaces from training time. When a library ships breaking changes, adds new endpoints, or deprecates parameters after the training cutoff, agents hallucinate calls against the old spec. Andrew Ng [showed this directly](https://www.deeplearning.ai/the-batch/issue-343/): asked to call a newer model API, agents default to older completion patterns because the current interface did not exist during training.
 
-The failure mode is subtle: generated code compiles and looks correct but targets a deprecated or nonexistent surface. Static documentation in system prompts does not scale — you cannot preload every API the agent might call.
+The failure mode is subtle. Generated code compiles and looks correct, but it targets a deprecated or nonexistent surface. Static documentation in system prompts does not scale, because you cannot preload every API the agent might call.
 
 ## Context Hub (chub)
 
 [Context Hub](https://github.com/andrewyng/context-hub) is an open-source npm CLI (`npm install -g @aisuite/chub`) that retrieves current API documentation on demand. The agent calls a shell command before generating code against a specific API, injecting the live spec into its context window.
 
-### Core Commands
+### Core commands
 
 | Command | Purpose |
 |---------|---------|
@@ -45,39 +45,39 @@ The failure mode is subtle: generated code compiles and looks correct but target
 | `chub annotate <id> <note>` | Attach persistent local notes to a doc |
 | `chub feedback <id> <up\|down>` | Rate doc quality — flows back to maintainers |
 
-A typical agent integration adds one instruction: *"Before writing code against an external API, run `chub get <provider>/<endpoint> --lang <lang>` and use the returned documentation."*
+A typical agent integration adds one instruction: "Before writing code against an external API, run `chub get <provider>/<endpoint> --lang <lang>` and use the returned documentation."
 
-### How It Complements llms.txt
+### How it complements llms.txt
 
-[llms.txt](../geo/llms-txt.md) is a passive, site-level index — it tells agents where to find documentation. Context Hub is active, provider-specific retrieval — it delivers the documentation content itself. The two compose naturally: `llms.txt` for discovery, `chub get` for on-demand injection.
+[llms.txt](../geo/llms-txt.md) is a passive, site-level index that tells agents where to find documentation. Context Hub does active, provider-specific retrieval that delivers the documentation content itself. The two work together: `llms.txt` for discovery, `chub get` for on-demand injection.
 
-### Incremental Fetching
+### Incremental fetching
 
 Docs are stored as markdown with YAML frontmatter, split into multiple reference files per provider. The `--file` flag fetches a single reference selectively; `--full` fetches the complete doc set. This keeps token cost proportional to what the agent actually needs.
 
-## The Annotation Feedback Loop
+## The annotation feedback loop
 
-Context Hub persists local annotations across sessions. When an agent discovers an undocumented quirk or workaround, `chub annotate` records it. On subsequent fetches, annotations surface automatically — the agent does not rediscover the same issue. As Ng describes it: [agents can "save a note so as not to have to rediscover it from scratch next time"](https://www.deeplearning.ai/the-batch/issue-343/).
+Context Hub keeps local annotations across sessions. When an agent finds an undocumented quirk or workaround, `chub annotate` records it. On later fetches, annotations surface automatically, so the agent does not rediscover the same issue. As Ng describes it, [agents can "save a note so as not to have to rediscover it from scratch next time"](https://www.deeplearning.ai/the-batch/issue-343/).
 
 Feedback ratings (`chub feedback`) flow upstream to doc maintainers, creating an improvement loop where real agent usage identifies gaps in documentation.
 
-## Private and Internal APIs
+## Private and internal APIs
 
-The same on-demand retrieval pattern applies to proprietary APIs. Because docs are plain markdown with YAML frontmatter, teams can author internal chub-compatible doc sets in the same format and inject them into agent context using the same `chub get` workflow — without submitting them to the public registry.
+The same on-demand retrieval pattern applies to proprietary APIs. Because docs are plain markdown with YAML frontmatter, teams can write internal chub-compatible doc sets in the same format and inject them into agent context with the same `chub get` workflow, without submitting them to the public registry.
 
-## Relationship to JIT Context Loading
+## Relationship to JIT context loading
 
-Context Hub implements what Anthropic calls [just-in-time context loading](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — maintaining lightweight identifiers (provider names, endpoint IDs) and resolving them to full documentation at runtime rather than preloading everything upfront. This avoids both the staleness of pre-computed embeddings and the token waste of blanket context injection.
+Context Hub implements what Anthropic calls [just-in-time context loading](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): it keeps lightweight identifiers (provider names, endpoint IDs) and resolves them to full documentation at runtime rather than preloading everything upfront. This avoids both the staleness of pre-computed embeddings and the token waste of blanket context injection.
 
 ## Example
 
 An agent tasked with writing a Python function that calls the OpenAI Chat Completions API runs `chub get openai/chat-completions --lang py` before generating code. The command returns current parameter names, required fields, and deprecation notices as markdown, which the agent reads into its context window. It then generates code against the live spec rather than the training-time snapshot.
 
-If the agent discovers that `stream=True` requires explicit iterator handling not covered in the docs, it runs `chub annotate openai/chat-completions "stream=True returns a generator; call next() to advance"`. On the next fetch, this annotation surfaces automatically -- no need to rediscover the quirk.
+If the agent finds that `stream=True` needs explicit iterator handling the docs do not cover, it runs `chub annotate openai/chat-completions "stream=True returns a generator; call next() to advance"`. On the next fetch, this annotation surfaces automatically, so the agent does not rediscover the quirk.
 
-## When This Backfires
+## When this backfires
 
-On-demand doc retrieval adds a network round-trip before every code-generation step — in latency-sensitive pipelines or offline environments, this is a non-starter. The pattern also requires the agent to have shell tool-calling capability; agents confined to pure text completion cannot invoke `chub get`. The public registry [covers roughly 68 providers as of March 2026](https://dev.to/aws/context-hub-has-68-apis-add-yours-33ma); for APIs not in the registry, the agent falls back to training data anyway, offering no improvement over the baseline. Finally, teams already running a well-tuned local embeddings-based retrieval system may see marginal gains — chub's value is highest when no other retrieval layer exists.
+On-demand doc retrieval adds a network round-trip before every code-generation step. In latency-sensitive pipelines or offline environments, that is a non-starter. The pattern also needs the agent to have shell tool-calling, so agents confined to pure text completion cannot invoke `chub get`. The public registry [covers roughly 68 providers as of March 2026](https://dev.to/aws/context-hub-has-68-apis-add-yours-33ma); for APIs outside the registry, the agent falls back to training data anyway and gains nothing over the baseline. Finally, teams already running a well-tuned local embeddings-based retrieval system may see only marginal gains, because chub helps most when no other retrieval layer exists.
 
 ## Key Takeaways
 

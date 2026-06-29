@@ -16,25 +16,25 @@ maturity: emerging
 
 > ACDL is a notation for specifying how an LLM agent's context is assembled and evolves across interaction steps, with tooling published at acdlang.org.
 
-## What ACDL Is
+## What ACDL is
 
-The Agentic Context Description Language (ACDL) is a formal language for specifying the structure and dynamics of LLM input contexts. It was introduced by Peleg Pelc, Kaminka, and Goldberg in [arxiv:2605.01920](https://arxiv.org/abs/2605.01920) (May 2026) under a CC-BY 4.0 licence, with tooling at [acdlang.org](http://www.acdlang.org).
+The Agentic Context Description Language (ACDL) is a formal language for specifying the structure and dynamics of LLM input contexts. Peleg Pelc, Kaminka, and Goldberg introduced it in [arxiv:2605.01920](https://arxiv.org/abs/2605.01920) (May 2026) under a CC-BY 4.0 license, with tooling at [acdlang.org](http://www.acdlang.org).
 
 The motivating gap, in the authors' words: context construction "is typically conveyed through informal prose, ad hoc diagrams, or direct inspection of code, none of which precisely capture how a prompt evolves across interaction steps or how two context representation strategies differ" ([abstract](https://arxiv.org/abs/2605.01920)).
 
-The paper's empirical lever: "even small variations in how a basic ReAct agent's context is assembled lead to measurable differences in agent performance" ([§1](https://arxiv.org/html/2605.01920)). If macro-structure moves benchmark numbers, it deserves a notation.
+The paper's empirical finding: "even small variations in how a basic ReAct agent's context is assembled lead to measurable differences in agent performance" ([§1](https://arxiv.org/html/2605.01920)). If macro-structure moves benchmark numbers, it deserves a notation.
 
-## Core Constructs
+## Core constructs
 
-ACDL captures a prompt's architecture independent of its content. The constructs documented in [the paper](https://arxiv.org/html/2605.01920):
+ACDL captures a prompt's architecture independent of its content. The paper documents these [constructs](https://arxiv.org/html/2605.01920):
 
 | Construct | Purpose |
 |-----------|---------|
-| Role messages | Sequences labelled `S` (System), `U` (User), `A` (Assistant), `T` (Tool) |
+| Role messages | Sequences labeled `S` (System), `U` (User), `A` (Assistant), `T` (Tool) |
 | Time indices | `@T` for the current step, `@t` for iteration over past steps, `@T.I` for substeps |
 | Namespaces | `env` (environment), `sys` (system state), `resp` (LLM responses) |
 | Control flow | `ForEach`, `If`/`ElseIf`/`Else`, `Switch`/`Case` |
-| Functions | Computed content — retrieval, summarisation, compaction |
+| Functions | Computed content — retrieval, summarization, compaction |
 | Templates | `ALL_CAPS` placeholders for variable content |
 | Fragments | Reusable string or role blocks |
 | Mark blocks | Numbered annotations referenced from surrounding prose |
@@ -54,27 +54,27 @@ The [acdlang.org](http://www.acdlang.org) site ships:
 
 The paper notes the resources are open and welcome contributions ([§6](https://arxiv.org/html/2605.01920)).
 
-## When to Use It
+## When to use it
 
 ACDL earns its keep when the audience for an agent's architecture is broader than the team that wrote it:
 
-- **Cross-team handoffs** — passing an agent system to a team or vendor that cannot read the original code
-- **Papers and RFCs** — published artifacts that must stay intelligible without the implementation
-- **Comparing variants** — ablations across ReAct, ReWOO, or Plan-and-Execute that need to show what actually differs
-- **Prompt-restructure reviews** — diffing one architecture against another when the source diff is dominated by content changes
+- Cross-team handoffs — passing an agent system to a team or vendor that cannot read the original code
+- Papers and RFCs — published artifacts that must stay intelligible without the implementation
+- Comparing variants — ablations across ReAct, ReWOO, or Plan-and-Execute that need to show what actually differs
+- Prompt-restructure reviews — diffing one architecture against another when the source diff is dominated by content changes
 
-## When This Backfires
+## When this backfires
 
 The notation overhead has to be earned. ACDL backfires in three conditions:
 
-- **Solo or small-team projects**: when the same person reads and writes the prompt, the spec is parallel work nobody consults. An `.acdl` file alongside the implementation becomes a liability the moment it drifts.
-- **Rapid iteration tempo**: any restructure invalidates the spec. Teams iterating multiple times a day let `.acdl` files rot, recreating the informal-prose problem the language is meant to solve. The same drift problem affects any specification that lives outside the implementation.
-- **Content-dominated agents**: when most context volume is dynamic tool output — long file contents, retrieval results, search dumps — ACDL's macro structure is a thin layer over content the language deliberately abstracts away. The hard engineering happens inside `resp` values ACDL does not describe.
+- Solo or small-team projects: when the same person reads and writes the prompt, the spec is parallel work nobody consults. An `.acdl` file alongside the implementation becomes a liability the moment it drifts.
+- Rapid iteration tempo: any restructure invalidates the spec. Teams iterating multiple times a day let `.acdl` files rot, recreating the informal-prose problem the language is meant to solve. The same drift problem affects any specification that lives outside the implementation.
+- Content-dominated agents: when most context volume is dynamic tool output — long file contents, retrieval results, search dumps — ACDL's macro structure is a thin layer over content the language deliberately abstracts away. The hard engineering happens inside `resp` values ACDL does not describe.
 
 The paper flags two structural limitations the language does not yet handle ([§7](https://arxiv.org/html/2605.01920)):
 
-- Agents whose state mutates *within* a single context construction; ACDL assumes state is immutable during construction.
-- Multi-agent systems with desynchronised clocks against shared mutable state; the current workaround — explicit clock synchronisation — the authors call "inelegant."
+- Agents whose state mutates within a single context construction; ACDL assumes state is immutable during construction.
+- Multi-agent systems with desynchronized clocks against shared mutable state; the current workaround — explicit clock synchronization — the authors call "inelegant."
 
 The authors commit to addressing both in future versions.
 

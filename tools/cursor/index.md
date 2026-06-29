@@ -17,6 +17,7 @@ status: current
 
 - [Agents Window](agents-window.md) — Parallel agents across local, cloud, worktree, and SSH environments with `/worktree` and `/best-of-n` commands
 - [Cursor SDK](cursor-sdk.md) — Programmable TypeScript runtime that embeds Cursor's harness in your applications, with local, Cursor-hosted, and self-hosted modes
+- [Customize Page](customize-page.md) — Cursor 3.9's single surface for plugins, skills, MCPs, subagents, rules, commands, and hooks at user/team/workspace scope, with leaderboard, canvases, and team marketplaces
 - [/multitask: Async Subagent Dispatch](multitask-subagents.md) — Cursor 3.2's `/multitask` runs async subagents from the editor session and decomposes large tasks across a background fleet
 - [Self-Hosted Cloud Agents](self-hosted-cloud-agents.md) — Run agent tool execution inside your own infrastructure while Cursor's cloud handles inference
 - [Visual-Prompt Agent Steering (Cursor Design Mode)](visual-prompt-agent-steering.md) — Click, multi-select, or sketch on a running UI to direct an agent; when spatial intent beats text and where the trade-offs land

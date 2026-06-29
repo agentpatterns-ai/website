@@ -9,11 +9,12 @@ applies_to: "copilot@1.x"
 last_reviewed: 2026-05-27
 status: current
 ---
+
 # Copilot Cloud Agent Organization Controls
 
 > Three-tier governance model for managing Copilot cloud agent at enterprise, organization, and repository scope.
 
-## Policy Hierarchy
+## Policy hierarchy
 
 Copilot cloud agent governance follows a strict top-down hierarchy: enterprise settings override org settings, which override repository defaults.
 
@@ -24,28 +25,28 @@ graph TD
     R -->|overrides if permitted| S[Session]
 ```
 
-**Enterprise-level**: Enterprise owners control whether cloud agent is available at all. Options are `Enabled everywhere`, `Let organizations decide`, or block the agent for all enterprise-owned repositories from the AI Controls tab. Cloud agent and MCP server access are [disabled by default](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/manage-agents/manage-copilot-cloud-agent) for all assigned Copilot Enterprise and Copilot Business license holders.
+Enterprise level: enterprise owners control whether cloud agent is available at all. Options are `Enabled everywhere`, `Let organizations decide`, or blocking the agent for all enterprise-owned repositories from the AI Controls tab. Cloud agent and MCP server access are [disabled by default](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/manage-agents/manage-copilot-cloud-agent) for all assigned Copilot Enterprise and Copilot Business license holders.
 
-**One caveat**: enterprise and organization policies only control users holding a [license granted by that organization](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/manage-policies). Users on personal Copilot Pro or Pro+ subscriptions hold their own license and are not bound by those policy settings when accessing your repositories.
+One caveat: enterprise and organization policies only control users who hold a [license granted by that organization](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/manage-policies). Users on personal Copilot Pro or Pro+ subscriptions hold their own license. Those policy settings do not bind them when they access your repositories.
 
-**Organization-level**: Org owners control runner configuration, firewall settings, repository access scope, and whether repositories can customize any of these defaults.
+Organization level: org owners control runner configuration, firewall settings, repository access scope, and whether repositories can customize any of these defaults.
 
-**Repository-level**: Repository admins can customize within the bounds the org permits — or receive locked settings with no override capability.
+Repository level: repository admins can customize within the bounds the org permits, or receive locked settings they cannot override.
 
-## Runner Configuration
+## Runner configuration
 
 By default, cloud agent runs on `ubuntu-latest`. Org owners can [change the default runner type](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/configure-runner-for-coding-agent) for all repositories:
 
-- **Standard GitHub runner**: `ubuntu-latest` (default)
-- **Labeled runner**: a runner matching a specified group name and/or label — use this for larger runners, GPU access, or self-hosted runners with internal network access
+- Standard GitHub runner: `ubuntu-latest` (default)
+- Labeled runner: a runner matching a specified group name, label, or both. Use this for larger runners, GPU access, or self-hosted runners with internal network access
 
 A separate toggle controls whether individual repositories can override the org default using a [`copilot-setup-steps.yml` workflow](../../workflows/agent-environment-bootstrapping.md). Disable it to enforce a consistent runner type across the organization.
 
-## Firewall Controls
+## Firewall controls
 
-Cloud agent's internet access is restricted by a firewall to limit data exfiltration risks. Org owners configure all firewall settings; repositories can customize within org-permitted bounds.
+A firewall restricts cloud agent's internet access to limit data exfiltration risks. Org owners configure all firewall settings. Repositories can customize within the bounds the org permits.
 
-Org-level controls are in the [cloud agent settings page](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/customize-the-agent-firewall#configuring-the-firewall-at-the-organization-level):
+Org-level controls live on the [cloud agent settings page](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/customize-the-agent-firewall#configuring-the-firewall-at-the-organization-level):
 
 | Setting | Options |
 |---------|---------|
@@ -56,19 +57,19 @@ Org-level controls are in the [cloud agent settings page](https://docs.github.co
 
 The [recommended allowlist](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/customize-the-agent-firewall) — enabled by default — covers OS package repositories, container registries, popular language package registries, certificate authorities, and Playwright browser hosts.
 
-**Known limitations**: The firewall only applies to processes the agent starts via its Bash tool. It does not cover MCP servers or processes running in `copilot-setup-steps`. Self-hosted runners operate outside the GitHub Actions appliance environment entirely — the firewall does not apply to them.
+Known limitations: the firewall only applies to processes the agent starts through its Bash tool. It does not cover MCP servers or processes running in `copilot-setup-steps`. Self-hosted runners operate outside the GitHub Actions appliance environment, so the firewall does not apply to them.
 
-## Commit Traceability
+## Commit traceability
 
-All cloud agent commits are [signed and appear as "Verified"](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/risks-and-mitigations) on GitHub — cryptographic evidence the commits came from the agent and have not been altered. Commits are authored by Copilot with the triggering developer as co-author, making agent-generated code identifiable in git history.
+All cloud agent commits are [signed and appear as "Verified"](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/risks-and-mitigations) on GitHub. This gives cryptographic evidence that the commits came from the agent and have not been altered. Copilot authors the commits with the triggering developer as co-author, which makes agent-generated code identifiable in git history.
 
-Each commit message links back to the agent session log, enabling code review and forensic audit.
+Each commit message links back to the agent session log, which supports code review and forensic audit.
 
-**Audit log**: Filter the enterprise audit log with `actor:Copilot` to view [agentic activity over 180 days](https://docs.github.com/en/copilot/reference/agentic-audit-log-events). Key fields: `action`, `actor_is_agent`, `agent_session_id`, `user`.
+Audit log: filter the enterprise audit log with `actor:Copilot` to view [agentic activity over 180 days](https://docs.github.com/en/copilot/reference/agentic-audit-log-events). The main fields are `action`, `actor_is_agent`, `agent_session_id`, and `user`.
 
-## Comparison: Claude Code Enterprise Controls
+## Comparison: Claude Code enterprise controls
 
-Claude Code's enterprise governance works through [`managed-settings.json`](https://code.claude.com/docs/en/settings) deployed via MDM (JAMF, Intune) or OS-level configuration. Settings apply at the endpoint level and cannot be overridden by user or project settings. Server-managed settings offer a lighter alternative — pushed via Anthropic's servers on startup and hourly polls, without MDM infrastructure.
+Claude Code's enterprise governance works through [`managed-settings.json`](https://code.claude.com/docs/en/settings), deployed via MDM (JAMF, Intune) or OS-level configuration. Settings apply at the endpoint level, and user or project settings cannot override them. Server-managed settings offer a lighter alternative: Anthropic's servers push them on startup and hourly polls, without MDM infrastructure.
 
 The models differ in trust anchor: Copilot's controls live in GitHub.com settings (platform-managed), while Claude Code's controls live on the endpoint or Anthropic's servers (IT-managed). Neither approach is strictly stronger — the right choice depends on whether your threat model prioritizes platform-side enforcement or endpoint-level enforcement.
 

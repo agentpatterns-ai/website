@@ -15,49 +15,49 @@ maturity: established
 
 > A plan committed to the repo is a resumable, version-controlled artifact — a pattern that holds for multi-session work, recurring workflows, and cross-functional review, and backfires without a supersession discipline.
 
-## What a Persisted Plan File Is
+## What a persisted plan file is
 
-A *persisted* plan lives in the repo at a stable path, tracked in git — mutable companion to the [frozen spec](../../instructions/frozen-spec-file.md): the spec fixes goals and done-when, the plan tracks approach and progress. Claude Code's in-session plan mode defaults `plansDirectory` to `~/.claude/plans` — outside the repo ([Claude Code settings](https://code.claude.com/docs/en/settings)). Checking the plan in turns session memory into a team-visible hand-off.
+A persisted plan lives in the repo at a stable path, tracked in git. It is the mutable companion to the [frozen spec](../../instructions/frozen-spec-file.md): the spec fixes goals and done-when, the plan tracks approach and progress. Claude Code's in-session plan mode defaults `plansDirectory` to `~/.claude/plans`, outside the repo ([Claude Code settings](https://code.claude.com/docs/en/settings)). Committing the plan turns session memory into a team-visible hand-off.
 
-## When It Pays
+## When it pays
 
-The pattern is **qualified**. Treat these as prerequisites:
+The pattern is qualified. Treat these as prerequisites:
 
-- **Multi-session work.** The plan [externalises state](../../agent-design/externalization-in-llm-agents.md) the context window cannot retain ([Anthropic harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
-- **Recurring workflows with template value.** Stulberg reports that reusing plan files lets the next run "start at 80% done" ([Aakash x Stulberg](https://www.news.aakashg.com/p/claude-code-team-os)).
-- **Cross-functional review.** When a PM, designer, or domain expert must approve the approach, the plan PR is the review surface ([transcript](https://www.aakashg.com/hannah-stulberg-podcast/)).
+- Multi-session work. The plan [externalizes state](../../agent-design/externalization-in-llm-agents.md) the context window cannot retain ([Anthropic harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+- Recurring workflows with template value. Stulberg reports that reusing plan files lets the next run "start at 80% done" ([Aakash x Stulberg](https://www.news.aakashg.com/p/claude-code-team-os)).
+- Cross-functional review. When a PM, designer, or domain expert must approve the approach, the plan PR is the review surface ([Stulberg podcast transcript](https://www.aakashg.com/hannah-stulberg-podcast/)).
 
 Outside these conditions, a disposable in-session plan is cheaper.
 
-## Three Canonical Shapes
+## Three canonical shapes
 
 No single convention has won. Three are in active use:
 
-- **Ralph single-root.** One `IMPLEMENTATION_PLAN.md` at the repo root; one task per iteration, one commit per update. The author "throws it out often" — durability is not the goal ([Huntley](https://ghuntley.com/ralph/); [how-to-ralph-wiggum](https://github.com/ghuntley/how-to-ralph-wiggum)).
-- **Codex `.agent/PLANS.md`.** Referenced from `AGENTS.md`, with the invariant that "it should always be possible to restart from only the ExecPlan." The plan is "fully self-contained" — progress, decision log, surprises, outcomes ([Codex cookbook](https://developers.openai.com/cookbook/articles/codex_exec_plans)).
-- **Manus tripartite.** Split across `task_plan.md`, `findings.md`, `progress.md`. Rewriting the todo list ["recites objectives into the end of the context"](../../context-engineering/goal-recitation.md) — the plan doubles as attention bias ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus); [planning-with-files](https://github.com/OthmanAdi/planning-with-files)).
+- Ralph single-root. One `IMPLEMENTATION_PLAN.md` at the repo root, one task per iteration, one commit per update. The author "throws it out often", so durability is not the goal ([Huntley on Ralph](https://ghuntley.com/ralph/); [how-to-ralph-wiggum](https://github.com/ghuntley/how-to-ralph-wiggum)).
+- Codex `.agent/PLANS.md`. Referenced from `AGENTS.md`, with the invariant that "it should always be possible to restart from only the ExecPlan." The plan is "fully self-contained": progress, decision log, surprises, and outcomes ([Codex cookbook](https://developers.openai.com/cookbook/articles/codex_exec_plans)).
+- Manus tripartite. Split across `task_plan.md`, `findings.md`, and `progress.md`. Rewriting the todo list ["recites objectives into the end of the context"](../../context-engineering/goal-recitation.md), so the plan doubles as attention bias ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus); [planning-with-files](https://github.com/OthmanAdi/planning-with-files)).
 
-Pick by team size: Ralph for solo iteration, Codex for long-horizon runs, Manus for phase/findings separation.
+Pick by team size: Ralph for solo iteration, Codex for long-horizon runs, Manus for phase and findings separation.
 
-## Resumption Mechanic
+## Resumption mechanic
 
-The next session reads the plan as context — it does not reconstruct reasoning. Anthropic frames resumption as "engineers working in shifts, where each new engineer arrives with no memory of what happened on the previous shift": read git log and progress files, then pick the highest-priority unfinished feature ([Anthropic harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). In Claude Code, accepting a plan auto-names the session from its content, tying `claude --resume <name>` to the artifact ([common workflows](https://code.claude.com/docs/en/common-workflows)). Filesystem plays disk; context window plays RAM ([planning-with-files](https://github.com/OthmanAdi/planning-with-files)).
+The next session reads the plan as context. It does not reconstruct reasoning. Anthropic frames resumption as "engineers working in shifts, where each new engineer arrives with no memory of what happened on the previous shift": read the git log and progress files, then pick the highest-priority unfinished feature ([Anthropic harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). In Claude Code, accepting a plan auto-names the session from its content, which ties `claude --resume <name>` to the artifact ([common workflows](https://code.claude.com/docs/en/common-workflows)). The filesystem plays disk; the context window plays RAM ([planning-with-files](https://github.com/OthmanAdi/planning-with-files)).
 
-## The Supersession Discipline
+## The supersession discipline
 
-Persistence without invalidation is actively harmful. Claude Code issue [#13740](https://github.com/anthropics/claude-code/issues/13740) reports plan mode "repeatedly displaying stale plans" instead of fresh analysis; Cursor generates [dozens of `.plan.md` snapshots per plan](https://forum.cursor.com/t/plan-mode-creates-many-plan-md-snapshots-in-home-user-cursor-plans-for-a-single-plan-2-2-36-linux/146772). Make supersession first-class:
+Persistence without invalidation is actively harmful. Claude Code issue [#13740](https://github.com/anthropics/claude-code/issues/13740) reports plan mode "repeatedly displaying stale plans" instead of fresh analysis, and Cursor generates [dozens of `.plan.md` snapshots per plan](https://forum.cursor.com/t/plan-mode-creates-many-plan-md-snapshots-in-home-user-cursor-plans-for-a-single-plan-2-2-36-linux/146772). Make supersession first-class:
 
 - Archive completed plans under a dated path; do not leave them active.
 - Use `supersedes:` / `superseded-by:` frontmatter for a machine-readable chain.
 - Add a CI staleness check that fails when a plan references missing code paths.
-- Treat drift as a pager event — Prassanna's "chain-of-thought that was correct at turn ten becomes actively misleading at turn sixty" applies to persisted plans ([Agent Drift](https://prassanna.io/blog/agent-drift/)).
+- Treat drift as a pager event. Prassanna's "chain-of-thought that was correct at turn ten becomes actively misleading at turn sixty" applies to persisted plans ([Agent Drift](https://prassanna.io/blog/agent-drift/)).
 
-## When NOT to Use
+## When not to use
 
-- **Single-session work inside one context window.** The PR round-trip is pure latency; regenerate per-task instead.
-- **Teams without an invalidation discipline.** The plan becomes a retrieval hazard — outdated context creates mismatches the agent may rationalise rather than surface ([Tacnode](https://tacnode.io/post/your-ai-agents-are-spinning-their-wheels)).
-- **High-churn exploratory sessions.** A speculative plan written before investigation is always wrong.
-- **Regulated domains.** A committed plan is a discoverable record — in legal, HR, or finance it may surface pre-decisional reasoning the team did not intend to preserve.
+- Single-session work inside one context window. The PR round-trip is pure latency, so regenerate per task instead.
+- Teams without an invalidation discipline. The plan becomes a retrieval hazard, because outdated context creates mismatches the agent may rationalize rather than surface ([Tacnode](https://tacnode.io/post/your-ai-agents-are-spinning-their-wheels)).
+- High-churn exploratory sessions. A speculative plan written before investigation is always wrong.
+- Regulated domains. A committed plan is a discoverable record. In legal, HR, or finance it may surface pre-decisional reasoning the team did not intend to preserve.
 
 ## Example
 

@@ -17,9 +17,9 @@ maturity: emerging
 
 > Package an entire agent -- identity, model, tools, compliance rules, and composition hierarchy -- as a version-controlled, framework-agnostic artifact that any runtime can consume.
 
-## The Config Fragmentation Problem
+## The config fragmentation problem
 
-Agent definitions are scattered across tool-specific formats:
+Each tool stores agent definitions in its own format:
 
 | Tool | Config file | Scope |
 |------|------------|-------|
@@ -30,9 +30,9 @@ Agent definitions are scattered across tool-specific formats:
 
 None captures the full stack: model, tools, compliance, composition, and memory. Moving agents between tools means manual, lossy translation. ([Source: DeployHQ cross-tool comparison](https://www.deployhq.com/blog/ai-coding-config-files-guide))
 
-[Agent Definition Formats](agent-definition-formats.md) catalogues per-tool formats. The layer above is a portable definition that sits on top of tool-specific runtimes.
+[Agent Definition Formats](agent-definition-formats.md) catalogs per-tool formats. The layer above is a portable definition that sits on top of tool-specific runtimes.
 
-## gitagent: One Concrete Implementation
+## gitagent: one concrete implementation
 
 [gitagent](https://github.com/open-gitagent/gitagent) (MIT, v0.2.0, ~2.7k GitHub stars as of April 2026) defines an agent as a git repository with two required files and several optional directories:
 
@@ -46,7 +46,7 @@ my-agent/
   memory/           # Runtime state
 ```
 
-### agent.yaml: The Manifest
+### agent.yaml: the manifest
 
 `agent.yaml` declares what a runtime needs to instantiate the agent:
 
@@ -66,11 +66,11 @@ agents:
     ref: git@github.com:org/doc-checker-agent.git@v1.2.0
 ```
 
-### SOUL.md: Agent Identity
+### SOUL.md: agent identity
 
-`SOUL.md` defines personality, communication style, and boundaries -- the part of identity that transcends tool config. It is plain Markdown, loadable as a system prompt by any runtime.
+`SOUL.md` defines personality, communication style, and boundaries -- the part of identity that goes beyond tool config. It is plain Markdown, and any runtime can load it as a system prompt.
 
-## What Portability Actually Means
+## What portability actually means
 
 Export adapters translate one definition into tool-specific formats:
 
@@ -85,7 +85,7 @@ graph LR
 
 Translation is necessarily lossy -- each runtime has unique capabilities. Treat exported configs as starting points, not finished products.
 
-## Composable Agent Hierarchy
+## Composable agent hierarchy
 
 Agents reference sub-agents as versioned git dependencies:
 
@@ -100,28 +100,28 @@ agents:
 
 Child agents inherit parent configuration and can override fields, enabling monorepo-scale reuse. This extends [Central Repo for Shared Agent Standards](../workflows/central-repo-shared-agent-standards.md) from instruction files to full agent definitions.
 
-## Git-Native Governance
+## Git-native governance
 
 Because the agent is a repository, standard git workflows become agent governance: PR review diffs behavior changes, branch promotion deploys through environments, `git revert` rolls back any change, and git history provides the audit trail.
 
 This extends [Prompt Governance via PR](../instructions/prompt-governance-via-pr.md) from instruction files to the full definition stack.
 
-## Built-in Compliance
+## Built-in compliance
 
 gitagent includes first-class compliance primitives: segregation of duties (role conflict matrices), supervision policies (human review checkpoints), and recordkeeping (FINRA 4511 / SEC logging specs). As of April 2026, open issues in the repository include a request for review by a FINRA/SEC practitioner ([Issue #7](https://github.com/open-gitagent/gitagent/issues/7)), indicating these features have not yet been validated by regulated-industry compliance teams.
 
-## Limitations and Risks
+## Limitations and risks
 
 The pattern is sound. The specific implementation has open questions:
 
-- **Secrets management** -- relies on `.gitignore` alone, the same mechanism behind credential leaks. ([Source: HN thread](https://news.ycombinator.com/item?id=47376584))
-- **Prompt injection surface** -- every repo file loads into agent context with no sandboxing defined
-- **Spec churn** -- still pre-1.0 (v0.2.0 as of April 2026), so adapters must track breaking changes across all supported frameworks
-- **Adoption** -- ~2.7k GitHub stars (April 2026), no public production data; compare [AGENTS.md](agents-md.md) at 60k+ repos under Linux Foundation
+- Secrets management: relies on `.gitignore` alone, the same mechanism behind credential leaks. ([Source: HN thread](https://news.ycombinator.com/item?id=47376584))
+- Prompt injection surface: every repo file loads into agent context with no sandboxing defined
+- Spec churn: still pre-1.0 (v0.2.0 as of April 2026), so adapters must track breaking changes across all supported frameworks
+- Adoption: ~2.7k GitHub stars (April 2026), no public production data; compare [AGENTS.md](agents-md.md) at 60k+ repos under Linux Foundation
 
-## The Pattern vs. The Tool
+## The pattern versus the tool
 
-The underlying pattern is validated by convergent evolution:
+Convergent evolution validates the underlying pattern:
 
 | Implementation | Scope | Governance |
 |---|---|---|
@@ -145,7 +145,7 @@ The open question: can a single portable format survive framework evolution, or 
 
 ## Related
 
-- [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md) -- per-tool format catalogue
+- [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md) -- per-tool format catalog
 - [AGENTS.md: A README for AI Coding Agents](agents-md.md) -- the dominant project-level instruction standard
 - [Agent Cards: Capability Discovery Standard for AI Agents](agent-cards.md) -- capability advertisement for agent-to-agent discovery
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md) -- portable skill definitions across runtimes

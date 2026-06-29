@@ -12,39 +12,39 @@ maturity: established
 
 > Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces.
 
-**Learn it hands-on:** [Guardrails Beat Guidance](https://learn.agentpatterns.ai/verification/guardrails-beat-guidance/) — guided lesson with quizzes.
+Learn it hands-on with the [Guardrails Beat Guidance guided lesson](https://learn.agentpatterns.ai/verification/guardrails-beat-guidance/), which includes quizzes.
 
-## The Core Distinction
+## The core distinction
 
 Telling an agent "don't break any links" is a prompt — probabilistic, sometimes ignored. Running a link checker on every URL in a pre-commit hook is a guardrail — deterministic, always runs, cannot be reasoned around.
 
 Agents are probabilistic and will sometimes produce bad output — the premise behind [trust without verify](../anti-patterns/trust-without-verify.md). Guardrails pass or fail, every time, for every output. Use both: prompts guide agent behavior, guardrails enforce properties of the output.
 
-## Guardrail Categories
+## Guardrail categories
 
-### Pre-Commit Hooks
+### Pre-commit hooks
 
 Hooks run before a commit is accepted, catching problems at the point of introduction. Claude Code supports [`PreToolUse` and `PostToolUse` hooks](https://code.claude.com/docs/en/hooks) that intercept agent tool calls.
 
 Common pre-commit guardrails:
 
-- **URL validation** — follow every link and verify it resolves; catches hallucinated citations
-- **Secret detection** — scan for API keys, tokens, credentials before they reach the repository
-- **Formatting** — enforce consistent code style without relying on the agent to apply it correctly
-- **Linting** — static analysis catches syntax errors and undefined variables the agent introduced
+- URL validation: follow every link and check it resolves, which catches hallucinated citations
+- Secret detection: scan for API keys, tokens, and credentials before they reach the repository
+- Formatting: enforce consistent code style without relying on the agent to apply it correctly
+- Linting: static analysis catches syntax errors and undefined variables the agent introduced
 
-### CI Gates
+### CI gates
 
 CI checks run after a commit is pushed, providing a second layer independent of the local environment. [GitHub Copilot coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent) executes automated tests and linters within its development environment before opening a PR; CI workflows run only after a human approves them.
 
 Common CI guardrails:
 
-- **Test suites** — automated tests the agent must not break
-- **Type checking** — compile-time or static type analysis across the full codebase
-- **Build verification** — the artifact must build without errors
-- **Coverage thresholds** — fail the build when total coverage drops below a floor; [`pytest --cov-fail-under=N`](https://pytest-cov.readthedocs.io/en/latest/config.html) exits non-zero below `N`
+- Test suites: automated tests the agent must not break
+- Type checking: compile-time or static type analysis across the full codebase
+- Build verification: the artifact must build without errors
+- Coverage thresholds: fail the build when total coverage drops below a floor, since [`pytest --cov-fail-under=N`](https://pytest-cov.readthedocs.io/en/latest/config.html) exits non-zero below `N`
 
-### Schema Validation
+### Schema validation
 
 Structured agent output — JSON review results, research notes, frontmatter blocks — can be validated against a schema. Invalid structure is rejected before downstream processing begins.
 
@@ -52,15 +52,15 @@ Structured agent output — JSON review results, research notes, frontmatter blo
 - Frontmatter blocks can be validated for required fields (`tags`, title structure)
 - API responses from agent tool calls can be validated before the agent acts on them
 
-### PostToolUse Validation
+### PostToolUse validation
 
-Claude Code's [`PostToolUse` hooks](https://code.claude.com/docs/en/hooks) run after the agent executes a tool call. This allows validation of the action's result before the agent continues:
+Claude Code's [`PostToolUse` hooks](https://code.claude.com/docs/en/hooks) run after the agent executes a tool call. You can validate the result of the action before the agent continues:
 
 - Validate that a file the agent wrote conforms to a template
 - Check that a URL the agent navigated to actually loaded
 - Confirm that a command the agent ran exited with code 0
 
-## Layering Guardrails
+## Layering guardrails
 
 No single guardrail catches everything. Layer them:
 
@@ -81,22 +81,22 @@ Each layer catches what the previous missed:
 - CI gates catch integration errors that only manifest in the full build
 - Human review catches semantic errors that automated tools cannot assess
 
-## What Guardrails Cannot Do
+## What guardrails cannot do
 
 Guardrails check properties, not intent. A URL validator confirms a link resolves — not that it points to the claimed content. A linter confirms syntax, not logic. A schema validator confirms structure, not correctness — the syntactic-vs-semantic limit detailed in [structured output constraints](structured-output-constraints.md).
 
 Design guardrails to be specific. "File is valid YAML" is weaker than "file matches the required schema with all required fields present."
 
-## When This Backfires
+## When this backfires
 
 Guardrails impose fixed costs that do not scale linearly with value. The pattern is worse than the alternative when:
 
-- **Coverage is thin but visible.** Cheap checks create the impression of verification without covering the errors that actually ship — the false-confidence failure mode in [Layered Accuracy Defense](layered-accuracy-defense.md).
-- **CI latency dominates the agent loop.** When every iteration waits on a multi-minute test matrix, agents batch fixes into larger, less reviewable diffs. Move heavy checks to merge gates and keep pre-commit hooks fast.
-- **Hook noise trains bypass behaviour.** Aggressive checks that fire on legitimate exploratory work push operators toward `--no-verify`. Once bypass is normalised, the deterministic guarantee is gone.
-- **The guardrail drifts from the property.** A rule written years ago can encode a stale invariant — the check passes while the thing it protected has changed. Guardrails need the same maintenance as the code they guard.
+- Coverage is thin but visible. Cheap checks create the impression of verification without covering the errors that actually ship, the false-confidence failure mode in [Layered Accuracy Defense](layered-accuracy-defense.md).
+- CI latency dominates the agent loop. When every iteration waits on a multi-minute test matrix, agents batch fixes into larger, less reviewable diffs. Move heavy checks to merge gates and keep pre-commit hooks fast.
+- Hook noise trains bypass behavior. Aggressive checks that fire on legitimate exploratory work push operators toward `--no-verify`. Once bypass is normal, the deterministic guarantee is gone.
+- The guardrail drifts from the property. A rule written years ago can encode a stale invariant: the check passes while the thing it protected has changed. Guardrails need the same maintenance as the code they guard.
 
-## Anti-Pattern
+## Anti-pattern
 
 Relying solely on prompt instructions for properties that can be checked programmatically. "Don't include broken links" in a system prompt is a suggestion. A pre-commit hook that curls every URL is a guarantee.
 
@@ -114,7 +114,7 @@ Relying solely on prompt instructions for properties that can be checked program
 
 A Python project uses Claude Code to write code. Three guardrail layers enforce quality:
 
-**Pre-commit hook** (`pre-commit-config.yaml`):
+Pre-commit hook (`pre-commit-config.yaml`):
 ```yaml
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
@@ -128,14 +128,14 @@ repos:
       - id: gitleaks      # secret detection — blocks API keys before they reach the repo
 ```
 
-**CI gate** (`.github/workflows/ci.yml`):
+CI gate (`.github/workflows/ci.yml`):
 ```yaml
 - run: pytest --tb=short          # test suite must pass
 - run: pyright src/               # type checking across full codebase
 - run: pytest --cov=src --cov-fail-under=80  # coverage threshold — exits non-zero below 80%
 ```
 
-**PostToolUse hook** (`.claude/settings.json`):
+PostToolUse hook (`.claude/settings.json`):
 ```json
 {
   "hooks": {
@@ -147,7 +147,7 @@ repos:
 }
 ```
 
-Each layer is independent: the PostToolUse hook catches issues file-by-file as the agent writes; the pre-commit hook catches anything missed before the commit lands; CI catches integration failures the local environment didn’t surface.
+Each layer is independent: the PostToolUse hook catches issues file-by-file as the agent writes; the pre-commit hook catches anything missed before the commit lands; CI catches integration failures the local environment did not surface.
 
 ## Related
 

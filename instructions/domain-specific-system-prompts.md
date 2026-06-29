@@ -16,78 +16,78 @@ maturity: established
 
 > Generic instructions produce mediocre reasoning. Domain-specific system prompts with worked examples produce consistent, high-quality agent behavior in your specific context.
 
-**Learn it hands-on:** [Show Your Reasoning](https://learn.agentpatterns.ai/prompt-engineering/show-your-reasoning/) — guided lesson with quizzes.
+Learn it hands-on: [Show Your Reasoning](https://learn.agentpatterns.ai/prompt-engineering/show-your-reasoning/) — guided lesson with quizzes.
 
-## The Gap Between Generic and Domain-Specific
+## The gap between generic and domain-specific
 
-A generic instruction like "reason carefully before acting" tells the model nothing about what good reasoning looks like in your domain. No worked examples, no domain vocabulary, no model of which edge cases matter. The result is reasoning that looks thoughtful but misses the failures you care about — the gap [example-driven instructions](example-driven-vs-rule-driven-instructions.md) close by supplying a concrete reasoning template.
+A generic instruction like "reason carefully before acting" tells the model nothing about what good reasoning looks like in your domain. It gives no worked examples, no domain vocabulary, and no model of which edge cases matter. The result is reasoning that looks thoughtful but misses the failures you care about. [Example-driven instructions](example-driven-vs-rule-driven-instructions.md) close that gap by supplying a concrete reasoning template.
 
 !!! note "Also known as"
-    Domain-Specific Personas, Domain-Specific System Prompts. For replacing the default system prompt entirely with a domain-specific identity, see [System Prompt Replacement](system-prompt-replacement.md).
+    Domain-Specific Personas, Domain-Specific System Prompts. To replace the default system prompt entirely with a domain-specific identity, see [System Prompt Replacement](system-prompt-replacement.md).
 
-[Anthropic's think tool post](https://www.anthropic.com/engineering/claude-think-tool) documents this gap quantitatively: on the τ-Bench airline domain, switching from a baseline prompt to one with detailed domain-specific guidance and examples produced a **54% relative improvement** in task pass rate. The model and tools were identical; only the prompt changed.
+[Anthropic's think tool post](https://www.anthropic.com/engineering/claude-think-tool) documents this gap with numbers. On the τ-Bench airline domain, switching from a baseline prompt to one with detailed domain-specific guidance and examples produced a 54% relative improvement in task pass rate. The model and tools were identical; only the prompt changed.
 
-## What "Domain-Specific" Means
+## What domain-specific means
 
 A domain-specific system prompt includes:
 
-- **Domain vocabulary** — the specific terms, resource types, and relationships that exist in your system, not generic descriptions
-- **Worked examples of reasoning** — concrete sequences showing what good thinking looks like for cases the agent handles, including edge cases
-- **Explicit edge case guidance** — what to do when inputs are ambiguous, when resources are missing, when multiple valid paths exist
-- **Success and failure definitions** — what a correct outcome looks like, stated specifically enough that the agent can self-check
+- Domain vocabulary — the specific terms, resource types, and relationships that exist in your system, not generic descriptions
+- Worked examples of reasoning — concrete sequences showing what good thinking looks like for cases the agent handles, including edge cases
+- Explicit edge case guidance — what to do when inputs are ambiguous, when resources are missing, when multiple valid paths exist
+- Success and failure definitions — what a correct outcome looks like, stated specifically enough that the agent can self-check
 
-Abstract rules ("be careful with edge cases") are harder to apply than concrete examples ("when the requested flight is full, check for connecting routes before returning no availability"). [Chain-of-thought research](https://arxiv.org/abs/2201.11903) establishes that showing intermediate reasoning steps in prompts produces substantially better performance on complex tasks than stating rules alone — the mechanism is that exemplars guide which reasoning path the model follows. Earlier [few-shot prompting research](https://arxiv.org/abs/2005.14165) found a similar pattern at the task level: worked examples in the prompt produced substantially better performance than task descriptions alone across a wide range of benchmarks.
+Abstract rules ("be careful with edge cases") are harder to apply than concrete examples ("when the requested flight is full, check for connecting routes before returning no availability"). [Chain-of-thought research](https://arxiv.org/abs/2201.11903) shows that intermediate reasoning steps in prompts produce much better performance on complex tasks than rules alone. The exemplars guide which reasoning path the model follows. Earlier [few-shot prompting research](https://arxiv.org/abs/2005.14165) found a similar pattern at the task level: worked examples in the prompt beat task descriptions alone across a wide range of benchmarks.
 
-## Where Examples Belong
+## Where examples belong
 
-Complex guidance belongs in the system prompt, not in tool descriptions. Tool descriptions answer "what does this tool do?"; the system prompt answers "how should you reason about this domain?". System prompt content applies across all reasoning steps, not just at tool-selection time. Per [Anthropic's post](https://www.anthropic.com/engineering/claude-think-tool), complex guidance in tool descriptions is fragmented; the same content in the system prompt produces more consistent application.
+Complex guidance belongs in the system prompt, not in tool descriptions. Tool descriptions answer "what does this tool do?"; the system prompt answers "how should you reason about this domain?". System prompt content applies across all reasoning steps, not just at tool-selection time. Per [Anthropic's post](https://www.anthropic.com/engineering/claude-think-tool), complex guidance in tool descriptions is fragmented; the same content in the system prompt applies more consistently.
 
-## Writing Effective Examples
+## Writing effective examples
 
 Effective examples in a system prompt:
 
-1. Describe a scenario that represents a real edge case — not the happy path the agent already handles
-2. Show the reasoning chain explicitly — what the agent should consider, in what order
-3. Show the correct action at the end — grounded in the reasoning shown
+1. Describe a scenario that represents a real edge case — not the happy path the agent already handles.
+2. Show the reasoning chain explicitly — what the agent should consider, in what order.
+3. Show the correct action at the end — grounded in the reasoning shown.
 
-Use examples from your actual domain. Invented examples miss real failure patterns. Instrument your agent in production, observe where reasoning fails, and write examples for those cases.
+Use examples from your actual domain. Invented examples miss real failure patterns. Instrument your agent in production, watch where reasoning fails, and write examples for those cases.
 
-## Iterative Refinement
+## Iterative refinement
 
 [Prompt engineering](../training/foundations/prompt-engineering.md) for domain-specific reasoning is iterative:
 
-1. Deploy the agent and log the think-tool output (or reasoning trace)
-2. Identify cases where reasoning quality is low or reasoning reaches wrong conclusions
-3. Write examples that demonstrate correct reasoning for those cases
-4. Add examples to the system prompt
-5. Measure improvement via benchmark or targeted eval
-6. Repeat
+1. Deploy the agent and log the think-tool output (or reasoning trace).
+2. Find cases where reasoning quality is low or reaches wrong conclusions.
+3. Write examples that show correct reasoning for those cases.
+4. Add the examples to the system prompt.
+5. Measure the improvement with a benchmark or targeted eval.
+6. Repeat.
 
-This is not a one-time effort. The example set needs maintenance as the agent encounters new cases and the domain evolves.
+This is not a one-time effort. The example set needs maintenance as the agent meets new cases and the domain evolves.
 
-## When This Backfires
+## When this backfires
 
 Domain-specific prompts with worked examples do not help uniformly. [Anthropic's analysis](https://www.anthropic.com/engineering/claude-think-tool) identifies conditions where the approach produces no measurable gains:
 
-- **Single or parallel tool calls** — if the task requires only one tool call, or multiple parallel calls with no sequential dependency, there is no multi-step reasoning chain for examples to shape
-- **Low-constraint tasks** — when the agent's default behavior is already adequate and few constraints need to be enforced, adding examples increases prompt length without improving outcomes
-- **Insufficient production data** — examples written from imagined failure cases tend to miss actual failure modes; without instrumented production traffic, the example set reflects guesswork rather than observed gaps
-- **High-churn domains** — if the domain vocabulary, tool signatures, or business rules change frequently, example sets can become stale or actively misleading; the maintenance cost rises proportionally with change velocity
+- Single or parallel tool calls — if the task needs only one tool call, or several parallel calls with no sequential dependency, there is no multi-step reasoning chain for examples to shape
+- Low-constraint tasks — when the agent's default behavior is already adequate and few constraints need enforcing, adding examples increases prompt length without improving outcomes
+- Insufficient production data — examples written from imagined failure cases tend to miss actual failure modes; without instrumented production traffic, the example set reflects guesswork rather than observed gaps
+- High-churn domains — if the domain vocabulary, tool signatures, or business rules change often, example sets can become stale or misleading, and the maintenance cost rises with the rate of change
 
-The token overhead of a detailed example set is non-trivial. For short, simple tasks where the model already performs near ceiling, a domain-specific prompt adds latency and cost without observable benefit.
+The token cost of a detailed example set is significant. For short, simple tasks where the model already performs near ceiling, a domain-specific prompt adds latency and cost without observable benefit.
 
 ## Example
 
-The following shows the difference between a generic instruction and a domain-specific example for a support agent handling subscription billing. The generic version gives the model no information about what correct reasoning looks like; the domain-specific version shows the exact reasoning chain for a real edge case.
+The example below shows the difference between a generic instruction and a domain-specific example for a support agent handling subscription billing. The generic version gives the model no information about what correct reasoning looks like; the domain-specific version shows the exact reasoning chain for a real edge case.
 
-**Generic (before):**
+Generic (before):
 
 ```text
 You are a helpful customer support agent. Reason carefully before taking action.
 If a customer asks about their subscription, check the relevant account details.
 ```
 
-**Domain-specific (after):**
+Domain-specific (after):
 
 ```text
 You are a billing support agent for Acme SaaS. You handle subscription changes,

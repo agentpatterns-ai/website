@@ -18,22 +18,22 @@ maturity: adopted
 
 > A primitive that tears down per-project session state — transcripts, auto-memory, indexed sessions — when contamination is the diagnosis, not an instruction or hook bug.
 
-A project state purge deletes every artefact a coding-agent harness accumulated for one project — transcripts, auto-memory, sessions index, and the harness's project record. Claude Code v2.1.126 (May 1, 2026) added `claude project purge [path]` with `--dry-run`, `-y/--yes`, `-i/--interactive`, and `--all` ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). It matters because long-running projects accumulate stale plans and half-finished todos that bias future sessions; without it, operators hand-edit state files they do not understand.
+A project state purge deletes every artifact a coding-agent harness built up for one project — transcripts, auto-memory, sessions index, and the harness's project record. Claude Code v2.1.126 (May 1, 2026) added `claude project purge [path]` with `--dry-run`, `-y/--yes`, `-i/--interactive`, and `--all` ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). It matters because long-running projects build up stale plans and half-finished todos that bias future sessions. Without it, operators hand-edit state files they do not understand.
 
-## When the Purge Is the Right Move
+## When the purge is the right move
 
-The trigger is specific: **the agent keeps proposing the old plan after you changed direction**. Error output useful at turn 5 becomes actively misleading at turn 40 ([TianPan.co: Stale World Model Problem](https://tianpan.co/blog/2026-04-10-stale-world-model-long-running-agents)).
+The trigger is specific: the agent keeps proposing the old plan after you changed direction. Error output that was useful at turn 5 becomes misleading at turn 40 ([TianPan.co: Stale World Model Problem](https://tianpan.co/blog/2026-04-10-stale-world-model-long-running-agents)).
 
-Diagnostic gate — run these before reaching for the purge:
+Run this diagnostic gate before you reach for the purge:
 
-1. **Stale direction in `CLAUDE.md` or a rule file?** Edit the file. Purging will not help; the next session re-reads the same stale instruction.
-2. **Hook auto-injecting an old recap or progress file?** The hook is the bug — disable or fix it.
-3. **One session contaminating?** Use `/resume` and abandon that session rather than nuke the project record.
-4. **Direction genuinely changed?** Post-mortem hand-off, scope inversion, or abandoned approach — this is what the primitive is for.
+1. Is the direction stale in `CLAUDE.md` or a rule file? Edit the file. Purging will not help, because the next session re-reads the same stale instruction.
+2. Is a hook auto-injecting an old recap or progress file? The hook is the bug, so disable or fix it.
+3. Is one session contaminating the rest? Use `/resume` and abandon that session rather than wipe the project record.
+4. Has the direction genuinely changed? A post-mortem hand-off, scope inversion, or abandoned approach is what the primitive is for.
 
-## What Survives, What Dies
+## What survives, what dies
 
-Claude Code's `.claude/` directory separates **project source** (version-controlled files the team shares) from **project state** (ambient artefacts the harness writes) ([Claude Code: Explore the .claude directory](https://code.claude.com/docs/en/claude-directory)). The purge crosses only the second boundary.
+Claude Code's `.claude/` directory separates project source (version-controlled files the team shares) from project state (the ambient files the harness writes) ([Claude Code: Explore the .claude directory](https://code.claude.com/docs/en/claude-directory)). The purge crosses only the second boundary.
 
 | Surface | Survives `claude project purge` |
 |---------|---------------------------------|
@@ -45,9 +45,9 @@ Claude Code's `.claude/` directory separates **project source** (version-control
 | `~/.claude/projects/<project>/sessions-index.json` | No — deleted |
 | Claude Code's per-project config entry | No — deleted |
 
-Instruction surfaces and tool-source files are untouched, so the next session boots against the same rules and skills but reconstructs context from current code rather than persisted history.
+Instruction surfaces and tool-source files stay untouched, so the next session boots against the same rules and skills but rebuilds context from current code rather than persisted history.
 
-## How It Works
+## How it works
 
 ```mermaid
 graph TD
@@ -65,32 +65,32 @@ graph TD
 
 Three modes matter:
 
-- **`--dry-run`** lists what would be deleted without touching disk. Run it first every time; if the inventory looks wrong, the diagnosis was wrong.
-- **`-i/--interactive`** lets the operator pick which sessions to drop. Use this when only part of the project record is contaminated.
-- **`-y`** (with or without `--all`) is the unattended form. Reserve it for batch cleanups in disposable environments.
+- `--dry-run` lists what would be deleted without touching disk. Run it first; a wrong inventory means a wrong diagnosis.
+- `-i/--interactive` lets the operator pick which sessions to drop, for when only part of the record is contaminated.
+- `-y` (with or without `--all`) is the unattended form. Reserve it for batch cleanups in disposable environments.
 
-The snapshot-then-purge variant (`cp -r ~/.claude/projects/<project> /tmp/backup-$(date +%s) && claude project purge -y`) preserves the JSONL audit trail — purging without a snapshot deletes the diagnostic record at the moment something went wrong.
+The snapshot-then-purge variant (`cp -r ~/.claude/projects/<project> /tmp/backup-$(date +%s) && claude project purge -y`) keeps the JSONL audit trail; without it, you delete the diagnostic record at the worst moment.
 
-## Why It Works
+## Why it works
 
-Three kinds of state accumulate under `~/.claude/projects/<project>/`: JSONL transcripts, auto-memory the agent wrote, and indexed session metadata ([Claude Code: Manage sessions](https://code.claude.com/docs/en/sessions)). Each is loaded back on resume — explicitly via `--resume`/`--continue`, or implicitly when auto-memory is consulted. When that state diverges from current intent, the next session reconstructs the old objective and reasons on a wrong goal — the "stale world model" failure where agents look operational while reasoning on outdated information ([TianPan.co](https://tianpan.co/blog/2026-04-10-stale-world-model-long-running-agents)).
+Each kind of state under `~/.claude/projects/<project>/` loads back on resume ([Claude Code: Manage sessions](https://code.claude.com/docs/en/sessions)). When it diverges from current intent, the next session rebuilds the old objective on a wrong goal — the "stale world model" failure, where agents look operational while reasoning on outdated information ([TianPan.co](https://tianpan.co/blog/2026-04-10-stale-world-model-long-running-agents)).
 
-A purge breaks the loop at the surface that reintroduces stale context. An empty baseline forces the next session to reconstruct from authoritative sources — current `CLAUDE.md`, current code, current prompt. Removing stale tokens is context engineering: every token competes for the model's attention ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
+A purge breaks that loop. An empty baseline forces the next session to rebuild from current sources — `CLAUDE.md`, code, and prompt. Removing stale tokens is context engineering: every token competes for the model's attention ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
-## When This Backfires
+## When this backfires
 
 The purge is the wrong move under four conditions:
 
-- **Purging masks an instruction bug.** If `CLAUDE.md` still contains the old direction or a `SessionStart` hook auto-injects an old recap, the purge wipes the symptom and the bug re-appears next session. If you find yourself purging weekly, fix upstream — narrower rules, tighter hooks, smaller [recap schemas](session-recap.md).
-- **Purging destroys cross-session learning.** Auto-memory under `~/.claude/projects/<project>/memory/` holds build commands, debugging insights, and architecture notes — the same surface [agent memory patterns](agent-memory-patterns.md) treat as a durable asset. On the LOCOMO benchmark, persistent-memory architectures outperform stateless approaches ([Mem0 research](https://mem0.ai/research-3)); reflexive purges undo what the memory infrastructure was meant to compound.
-- **No backup-before-purge means no forensics.** Per-session JSONL files *are* the audit trail. `--dry-run` does not preserve state; only an explicit copy does.
-- **Tool-agnostic harnesses lack an equivalent.** Claude Code is the only first-class implementation today. Copilot CLI has `/clear` and `/reset` (in-session) but no per-session-folder deletion; users manually `rm -rf ~/.copilot/session-state/` ([open request](https://github.com/github/copilot-cli/issues/2869)). "Use the purge primitive" is misleading as cross-tool advice until equivalents ship.
+- Purging masks an instruction bug. If `CLAUDE.md` still holds the old direction, or a `SessionStart` hook auto-injects an old recap, the purge wipes the symptom and the bug returns next session. If this recurs weekly, fix upstream — narrower rules, tighter hooks, smaller [recap schemas](session-recap.md).
+- Purging destroys cross-session learning. Auto-memory under `~/.claude/projects/<project>/memory/` holds build commands, debugging insights, and architecture notes — the durable asset [agent memory patterns](agent-memory-patterns.md) describe. On the LOCOMO benchmark, persistent-memory architectures outperform stateless approaches ([Mem0 research](https://mem0.ai/research-3)), so reflexive purges undo what that memory was meant to compound.
+- No backup before a purge means no forensics. The per-session JSONL files are the audit trail, and `--dry-run` does not preserve them — only an explicit copy does.
+- Tool-agnostic harnesses lack an equivalent. Copilot CLI has `/clear` and `/reset` in-session but no per-session-folder deletion, so users manually `rm -rf ~/.copilot/session-state/` ([open request](https://github.com/github/copilot-cli/issues/2869)). The advice does not port across tools until equivalents ship.
 
 ## Example
 
 A team spent two weeks on a refactor that the architect cancelled this morning. The next agent session opens with "let's continue the dependency-injection migration on `UserService`" — the abandoned direction, not the new one.
 
-**Before** — without a purge, hand-editing state:
+Before, without a purge, hand-editing state:
 
 ```bash
 # The operator tries to find and remove just the stale auto-memory
@@ -101,7 +101,7 @@ $ rm -rf ~/.claude/projects/-home-team-app/memory/
 # The session picker resurfaces a transcript from yesterday — same stale plan.
 ```
 
-**After** — using the primitive:
+After, using the primitive:
 
 ```bash
 $ claude project purge ~/team/app --dry-run

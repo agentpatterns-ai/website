@@ -18,11 +18,11 @@ maturity: adopted
 
 > Pair a cost-effective executor model with a frontier advisor that provides strategic guidance on hard decisions — within a single API call, no orchestration required.
 
-## The Pattern
+## The pattern
 
-Most agent turns are mechanical — reading files, running commands, writing code. A few need strategic reasoning: choosing an architecture, recovering from a dead end, verifying completeness. An Opus call on every turn wastes compute; a Haiku-class executor alone misses the critical decisions.
+Most agent turns are mechanical: reading files, running commands, writing code. A few need strategic reasoning, such as choosing an architecture, recovering from a dead end, or verifying completeness. An Opus call on every turn wastes compute. A Haiku-class executor alone misses the critical decisions.
 
-The advisor strategy separates these at the API level. A cost-effective executor (Sonnet or Haiku) handles tool use; on hard decisions it consults a frontier advisor (Opus) that reads the full transcript and returns strategic guidance. Anthropic's [`advisor_20260301` tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) implements this server-side in a single `/v1/messages` request — no decomposition logic, no extra round-trips.
+The advisor strategy separates these at the API level. A cost-effective executor (Sonnet or Haiku) handles tool use. On hard decisions it consults a frontier advisor (Opus) that reads the full transcript and returns strategic guidance. Anthropic's [`advisor_20260301` tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) runs this server-side in a single `/v1/messages` request, with no decomposition logic and no extra round-trips.
 
 ```mermaid
 sequenceDiagram
@@ -38,11 +38,11 @@ sequenceDiagram
     E->>U: Result
 ```
 
-## How It Works
+## How it works
 
-The executor decides when to call the advisor. The server runs a separate inference pass with the executor's full transcript. The advisor returns text guidance — thinking blocks are dropped, no tool calls, no user-facing output. Informed by that advice, the executor resumes its own [reasoning-vs-execution](cognitive-reasoning-execution-separation.md) work.
+The executor decides when to call the advisor. The server then runs a separate inference pass over the executor's full transcript. The advisor returns text guidance only: the server drops thinking blocks, allows no tool calls, and produces no user-facing output. The executor takes that advice and resumes its own [reasoning-versus-execution](cognitive-reasoning-execution-separation.md) work.
 
-## API Integration
+## API integration
 
 Add the advisor to `tools` alongside your existing tools. The beta header `advisor-tool-2026-03-01` is required ([API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool)):
 
@@ -71,9 +71,9 @@ response = client.beta.messages.create(
 | `max_uses` | integer | unlimited | Per-request cap on advisor calls |
 | `caching`  | object  | off       | Advisor-side prompt caching; breaks even at ~3 calls per conversation |
 
-The advisor must be at least as capable as the executor; check the [API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) for the current supported pairs.
+The advisor must be at least as capable as the executor. Check the [supported advisor and executor pairs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) for the current list.
 
-## Benchmark Results
+## Benchmark results
 
 From [Anthropic's announcement](https://claude.com/blog/the-advisor-strategy):
 
@@ -82,40 +82,40 @@ From [Anthropic's announcement](https://claude.com/blog/the-advisor-strategy):
 | Haiku + Opus advisor | BrowseComp | 41.2% vs 19.7% solo (+109%) | 85% cheaper than Sonnet alone |
 | Sonnet + Opus advisor | SWE-bench Multilingual | +2.7pp over Sonnet solo | -11.9% cost per agentic task |
 
-## When to Consult the Advisor
+## When to consult the advisor
 
-The advisor pays off on decisions with high downstream cost if wrong. Anthropic's [recommended timing](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) for coding:
+The advisor pays off on decisions that cost a lot downstream if you get them wrong. Anthropic's [recommended timing](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) for coding is:
 
-1. **After initial exploration** — once the executor understands the problem, consult before committing to an approach.
-2. **When stuck** — errors recurring, approach not converging.
-3. **Before declaring done** — make the deliverable durable first (write the file, commit the change), then consult for a final review.
+1. After initial exploration. Once the executor understands the problem, consult the advisor before committing to an approach.
+2. When stuck. Consult when errors keep recurring or the approach is not converging.
+3. Before declaring done. Make the deliverable durable first by writing the file and committing the change, then consult for a final review.
 
-## Cost Controls
+## Cost controls
 
-Advisor tokens bill at Opus rates; executor tokens at executor rates. Savings come from the advisor producing only short guidance, not the full output ([API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool)).
+Advisor tokens bill at Opus rates, and executor tokens bill at executor rates. Savings come from the advisor producing only short guidance, not the full output ([API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool)).
 
-- **Per-request cap**: set `max_uses` to limit advisor calls per request.
-- **Conversation-level cap**: track client-side. At the ceiling, remove the advisor from `tools` and strip `advisor_tool_result` blocks from history.
-- **Output compression**: a per-message instruction (e.g., "keep guidance under 80 words") shortens output; Anthropic recommends asking for ~80% of your true ceiling since the advisor occasionally exceeds it.
-- **Effort pairing**: Sonnet at medium [effort](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) + Opus advisor matches Sonnet at default effort.
+- Per-request cap: set `max_uses` to limit advisor calls per request.
+- Conversation-level cap: track this client-side. At the ceiling, remove the advisor from `tools` and strip `advisor_tool_result` blocks from history.
+- Output compression: a per-message instruction such as "keep guidance under 80 words" shortens the output. Anthropic recommends asking for about 80% of your true ceiling, since the advisor occasionally exceeds it.
+- Effort pairing: Sonnet at medium [effort](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) plus an Opus advisor matches Sonnet at default effort.
 
-## When This Backfires
+## When this backfires
 
 Each consultation is a second inference pass at Opus rates. A single strong model is better when ([API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool)):
 
-- **The executor consults often.** Frequent calls shift the token mix toward Opus rates and can exceed Opus solo cost.
-- **Every turn needs frontier capability.** Uniformly hard tasks offer no mechanical turns to offload.
-- **Single-turn Q&A or pass-through routing.** No plan to form.
-- **Latency budgets are tight.** Each call pauses the executor stream while Opus runs.
-- **Priority Tier is only on the executor.** It does not cascade to the advisor, which rate-limits independently.
+- The executor consults often. Frequent calls shift the token mix toward Opus rates and can exceed the cost of Opus alone.
+- Every turn needs frontier capability. Uniformly hard tasks offer no mechanical turns to offload.
+- The task is single-turn question-and-answer or pass-through routing. There is no plan to form.
+- Latency budgets are tight. Each call pauses the executor stream while Opus runs.
+- Priority Tier covers only the executor. It does not cascade to the advisor, which rate-limits on its own.
 
-## Relationship to General Patterns
+## Relationship to general patterns
 
-An API-native implementation of established patterns:
+The advisor strategy is an API-native form of established patterns:
 
-- **[Cognitive reasoning vs execution separation](cognitive-reasoning-execution-separation.md)** — advisor as reasoning layer, executor as execution layer, boundary enforced server-side.
-- **[Cost-aware agent design](cost-aware-agent-design.md)** — model routing by complexity without manual cascade logic.
-- **[Reasoning budget allocation](reasoning-budget-allocation.md)** — the reasoning sandwich via selective advisor calls rather than per-phase model switching.
+- [Cognitive reasoning versus execution separation](cognitive-reasoning-execution-separation.md): the advisor is the reasoning layer and the executor is the execution layer, with the boundary enforced server-side.
+- [Cost-aware agent design](../token-engineering/cost-aware-agent-design.md): route models by complexity without manual cascade logic.
+- [Reasoning budget allocation](reasoning-budget-allocation.md): build the reasoning sandwich through selective advisor calls rather than per-phase model switching.
 
 ## Key Takeaways
 
@@ -128,7 +128,7 @@ An API-native implementation of established patterns:
 ## Related
 
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md)
 - [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)

@@ -20,19 +20,19 @@ maturity: established
 
 > A five-step checklist for refactoring a brittle monolithic agent prototype into a production-grade pipeline — each step surfaces the failures the next one fixes.
 
-**Learn it hands-on:** [Monolith to Sub-Agents](https://learn.agentpatterns.ai/workflows/monolith-to-subagents/) — guided lesson with quizzes.
+Learn it hands-on: [Monolith to Sub-Agents](https://learn.agentpatterns.ai/workflows/monolith-to-subagents/) — a guided lesson with quizzes.
 
 A monolithic agent is a single linear script that calls one LLM with one large prompt. It works locally on small inputs. It fails silently in production. Google's Agent Development Kit team documented this exact transition in April 2026 by rebuilding "Titanium" — a sales-research agent whose job was to research a target company and draft an outreach email — from a monolithic `for` loop into a five-node `SequentialAgent` pipeline ([Production-Ready AI Agents: 5 Lessons from Refactoring a Monolith](https://developers.googleblog.com/production-ready-ai-agents-5-lessons-from-refactoring-a-monolith/)).
 
 The five lessons generalize across orchestration frameworks — they describe the shape of the refactor, not ADK-specific mechanics. Apply them in order: each step reveals the failure modes the next step addresses.
 
-## When to Apply This Refactor
+## When to apply this refactor
 
-The refactor assumes your prototype's sub-tasks are **loosely coupled and independently verifiable** — research a company, plan a search, pick a case study, draft an email. If your workflow's steps share dense mutable state (a coding agent editing interconnected files; a conversational agent whose turns depend on nuanced history), decomposition will serialize state across schemas and lose context the monolith carried implicitly. [Cognition's argument against parallel multi-agent architectures](https://cognition.ai/blog/dont-build-multi-agents) applies to those workflows: context isolation produces incoherent outputs the orchestrator cannot reconcile.
+The refactor assumes your prototype's sub-tasks are loosely coupled and independently verifiable — research a company, plan a search, pick a case study, draft an email. If your workflow's steps share dense mutable state, decomposition will serialize that state across schemas and lose context the monolith carried implicitly. Examples of such workflows are a coding agent editing interconnected files, or a conversational agent whose turns depend on nuanced history. [Cognition's argument against parallel multi-agent architectures](https://cognition.ai/blog/dont-build-multi-agents) applies to those workflows: context isolation produces incoherent outputs the orchestrator cannot reconcile.
 
 Unstructured decomposition is also worse than a monolith. Splitting into sub-agents without a defined topology — sequential, orchestrator-worker, or evaluator — amplifies errors because each agent's hallucinations feed the next. One analysis measured up to a 17.2× error multiplier in "bag of agents" systems ([Why Your Multi-Agent System Is Failing](https://towardsdatascience.com/why-your-multi-agent-system-is-failing-escaping-the-17x-error-trap-of-the-bag-of-agents/)).
 
-## The Five-Step Checklist
+## The five-step checklist
 
 ```mermaid
 graph TD
@@ -44,15 +44,15 @@ graph TD
     F --> G[Production-ready pipeline]
 ```
 
-### 1. Replace the Monolithic Loop with Sequenced Sub-Agents
+### 1. Replace the monolithic loop with sequenced sub-agents
 
-The monolith's primary failure mode is silent collapse: "If one sub-task failed (an API timeout or hallucination), the entire process stalled out and failed silently" ([Google](https://developers.googleblog.com/production-ready-ai-agents-5-lessons-from-refactoring-a-monolith/)). A single LLM juggling five responsibilities in one prompt produces one generic error when any one of them breaks, and hallucinations in step 2 silently corrupt step 5's inputs because they share the prompt.
+The monolith's primary failure mode is silent collapse: "If one sub-task failed (an API timeout or hallucination), the entire process stalled out and failed silently" ([Google](https://developers.googleblog.com/production-ready-ai-agents-5-lessons-from-refactoring-a-monolith/)). A single LLM juggling five responsibilities in one prompt produces one generic error when any one of them breaks. Hallucinations in step 2 silently corrupt step 5's inputs because they share the prompt.
 
-Split the workflow into named nodes, each with one responsibility. Titanium became Company Researcher → Search Planner → Case Study Researcher → Selector → Email Drafter. Each boundary is a *failure seam*: a step either succeeds under contract or raises, and the pipeline surfaces which step failed rather than which prompt.
+Split the workflow into named nodes, each with one responsibility. Titanium became Company Researcher → Search Planner → Case Study Researcher → Selector → Email Drafter. Each boundary is a failure seam: a step either succeeds under contract or raises, and the pipeline surfaces which step failed rather than which prompt.
 
 This is the sequential form of the split described in [Cognitive Reasoning vs Execution](../agent-design/cognitive-reasoning-execution-separation.md) — extend the two-layer seam to N nodes. For the per-node role design principles, see [Specialized Agent Roles](../agent-design/specialized-agent-roles.md).
 
-### 2. Push Structured Outputs into the Schema, Not the Prompt
+### 2. Push structured outputs into the schema, not the prompt
 
 Monolithic prototypes encode output shape in the prompt string: "Give me the answer in this JSON format: {...}". The result is dirty code, fragile parsing, and wasted tokens repeating the schema on every call.
 
@@ -60,13 +60,13 @@ Move the contract from natural language into a typed object the runtime validate
 
 The monolith's prompt-as-schema approach is the exact anti-pattern [Structured Output Constraints](../verification/structured-output-constraints.md) documents: without a machine-validatable contract, the agent can hedge, omit fields, or produce plausible-but-wrong shapes undetectably.
 
-### 3. Replace Hardcoded Context with a Dynamic Retrieval Pipeline
+### 3. Replace hardcoded context with a dynamic retrieval pipeline
 
 Titanium's original corpus was 12 case studies written inline in the Python source. No refresh path. Every product update required a code change. The ADK refactor replaced this with a Playwright async crawler feeding [Google Cloud Vector Search](https://cloud.google.com/vertex-ai/docs/vector-search/overview), queried by the Case Study Researcher at runtime with Hybrid Search (semantic + keyword).
 
 The generalized lesson: hardcoded context is fine for a prototype's first week and fails for its second month. Any corpus the agent depends on — case studies, product catalogs, policy documents — needs a refresh path that does not require re-deploying the agent.
 
-### 4. Add Distributed Tracing Before, Not After, Production
+### 4. Add distributed tracing before, not after, production
 
 A standard monolithic script is a black box under failure: something broke, but which of the five responsibilities caused it? Wire [agent observability](../observability/agent-observability-otel.md) in before deploying, not in response to the first incident.
 
@@ -74,7 +74,7 @@ The ADK refactor used [OpenTelemetry-based Cloud Trace instrumentation for ADK](
 
 See [Agent Observability in Practice](../observability/agent-observability-otel.md) for the concrete OTel setup on Claude Code and LangChain. The rule the Google team states directly: "You cannot put an agent into production without live diagnostics."
 
-### 5. Delegate Loop Boundaries to the Orchestration Framework
+### 5. Delegate loop boundaries to the orchestration framework
 
 Agentic loops burn tokens fast: "If an agent hits an error and continually retries a prompt without strict boundaries, it will burn through your token budget in minutes" ([Google](https://developers.googleblog.com/production-ready-ai-agents-5-lessons-from-refactoring-a-monolith/)). Hand-written try/catch/retry logic is both verbose and fragile — every bug in the retry handler is its own failure mode.
 

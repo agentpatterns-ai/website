@@ -17,15 +17,15 @@ maturity: adopted
 
 > Decouple the orchestrator's loop from subagent lifecycle so it keeps working while delegates run — but only when it has genuine work during the wait.
 
-## The Qualifying Condition
+## The qualifying condition
 
-Standard [fan-out patterns](sub-agents-fan-out.md) and [bounded batch dispatch](bounded-batch-dispatch.md) treat the orchestrator as a passive waiter: launch N agents, block until all return, synthesize. When the orchestrator itself has productive work — planning next waves, processing partial results, managing cross-agent state — blocking wastes its execution budget.
+Standard [fan-out patterns](sub-agents-fan-out.md) and [bounded batch dispatch](bounded-batch-dispatch.md) treat the orchestrator as a passive waiter: it launches N agents, blocks until all return, then synthesizes. Blocking wastes the orchestrator's execution budget when it has productive work of its own — planning next waves, processing partial results, or managing cross-agent state.
 
 Async dispatch decouples orchestration from subagent lifecycle. The [orchestrator](orchestrator-worker.md) dispatches and continues its own loop, handling results as they arrive.
 
-**The condition matters.** When the orchestrator is a pure dispatch-and-synthesize node with no intermediate work, async adds coordination complexity — task tracking, timeout detection, partial-result reconciliation — without throughput gain. The orchestrator busy-waits or idle-polls instead of blocking cleanly. Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) chose synchronous execution because "asynchronicity adds challenges in result coordination, state consistency, and error propagation across the subagents."
+The condition matters. When the orchestrator is a pure dispatch-and-synthesize node with no intermediate work, async adds coordination complexity — task tracking, timeout detection, partial-result reconciliation — without any throughput gain. The orchestrator busy-waits or idle-polls instead of blocking cleanly. Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) chose synchronous execution because "asynchronicity adds challenges in result coordination, state consistency, and error propagation across the subagents."
 
-## Blocking vs Non-Blocking Dispatch
+## Blocking and non-blocking dispatch
 
 ```mermaid
 sequenceDiagram
@@ -55,36 +55,36 @@ sequenceDiagram
     end
 ```
 
-The difference is what the orchestrator does between dispatch and result collection. Blocking idles; async dispatch performs productive work — planning, partial synthesis, state management, or further dispatch.
+The difference is what the orchestrator does between dispatch and result collection. Blocking idles. Async dispatch does productive work — planning, partial synthesis, state management, or further dispatch.
 
-## The Continuation Pattern
+## The continuation pattern
 
-Async dispatch requires a mechanism for the orchestrator to learn when subagents complete. Two models:
+Async dispatch needs a way for the orchestrator to learn when subagents complete. Two models:
 
-**Polling.** The orchestrator periodically checks task status. LangChain Deep Agents v0.5 implements this via the [Agent Protocol](https://blog.langchain.com/deep-agents-v0-5/) — `start_async_task` returns a task ID immediately, and the supervisor uses `check_async_task` to poll status while continuing its own work. The supervisor also gets `update_async_task` for mid-execution instructions and `cancel_async_task` for cleanup.
+Polling: the orchestrator checks task status at intervals. LangChain Deep Agents v0.5 does this through the [Agent Protocol](https://blog.langchain.com/deep-agents-v0-5/) — `start_async_task` returns a task ID at once, and the supervisor uses `check_async_task` to poll status while continuing its own work. The supervisor also gets `update_async_task` for mid-execution instructions and `cancel_async_task` for cleanup.
 
-**Event streaming.** The orchestrator subscribes to completion events. Claude Code's [Monitor tool](https://code.claude.com/docs/en/changelog) (v2.1.98) streams events from background processes, and [background subagents](https://code.claude.com/docs/en/sub-agents) run concurrently while the orchestrator continues working. Background subagents are configured via the `background: true` frontmatter field in the subagent definition.
+Event streaming: the orchestrator subscribes to completion events. Claude Code's [Monitor tool](https://code.claude.com/docs/en/changelog) (v2.1.98) streams events from background processes, and [background subagents](https://code.claude.com/docs/en/sub-agents) run concurrently while the orchestrator keeps working. You configure a background subagent through the `background: true` frontmatter field in its definition.
 
-## Backpressure: Bounding In-Flight Delegates
+## Backpressure: bounding in-flight delegates
 
 Unbounded async dispatch floods the orchestrator's context with pending task state and returning results. Apply backpressure:
 
-- **WIP limits.** Cap the number of concurrent in-flight delegates. When the limit is reached, the orchestrator queues new dispatch requests until a slot opens. This is the same mechanism as [bounded batch dispatch](bounded-batch-dispatch.md), but applied per-slot rather than per-batch.
-- **Result buffering.** Process returning results in order of arrival rather than accumulating all results. Each processed result frees context space for the next.
-- **Dispatch gating.** Make subsequent dispatch waves contingent on partial results from earlier waves — the orchestrator uses early returns to refine later dispatches.
+- WIP limits: cap the number of concurrent in-flight delegates. When the cap is reached, the orchestrator queues new dispatch requests until a slot opens. This is the same mechanism as [bounded batch dispatch](bounded-batch-dispatch.md), applied per-slot rather than per-batch.
+- Result buffering: process returning results in order of arrival rather than holding all of them. Each processed result frees context space for the next.
+- Dispatch gating: make later dispatch waves depend on partial results from earlier waves, so the orchestrator uses early returns to refine later dispatches.
 
 Without backpressure, async dispatch degenerates into the ["bag of agents" anti-pattern](https://towardsdatascience.com/why-your-multi-agent-system-is-failing-escaping-the-17x-error-trap-of-the-bag-of-agents/) where unstructured fire-and-forget dispatch amplifies errors up to 17x.
 
-## Failure Handling Differs from Blocking Dispatch
+## Failure handling differs from blocking dispatch
 
-Blocking dispatch gets failure detection for free — if a subagent fails, the join point raises an error. Async dispatch requires explicit mechanisms:
+Blocking dispatch gets failure detection for free — if a subagent fails, the join point raises an error. Async dispatch needs explicit mechanisms:
 
-- **Timeout detection.** Hung background subagents must be detected and cancelled — no implicit join surfaces the timeout.
-- **Partial-progress reporting.** Claude Code v2.1.89 added [partial-progress reporting](https://code.claude.com/docs/en/changelog) for failed background subagents; previously failures could go undetected.
-- **Ghost agents.** Context compaction can make background subagents invisible, causing duplicate spawns. [Fixed in Claude Code v2.1.83](https://code.claude.com/docs/en/changelog), but illustrative of the bug class async introduces.
-- **Permission model.** Background subagents in Claude Code prompt for all tool permissions upfront; once running, they auto-deny anything not pre-approved. A clarifying-question tool call fails but the subagent continues without the answer ([source](https://code.claude.com/docs/en/sub-agents)).
+- Timeout detection: you must detect and cancel hung background subagents, because no implicit join surfaces the timeout.
+- Partial-progress reporting: Claude Code v2.1.89 added [partial-progress reporting](https://code.claude.com/docs/en/changelog) for failed background subagents. Earlier, such failures could go undetected.
+- Ghost agents: context compaction can make background subagents invisible, which causes duplicate spawns. Claude Code v2.1.83 [fixed this](https://code.claude.com/docs/en/changelog), but it shows the bug class async introduces.
+- Permission model: background subagents in Claude Code prompt for all tool permissions upfront, then auto-deny anything not pre-approved once running. A clarifying-question tool call fails, but the subagent continues without the answer ([Claude Code subagents docs](https://code.claude.com/docs/en/sub-agents)).
 
-## When Not to Use Async Dispatch
+## When not to use async dispatch
 
 | Condition | Why blocking is better |
 |-----------|----------------------|

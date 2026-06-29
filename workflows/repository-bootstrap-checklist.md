@@ -15,19 +15,19 @@ maturity: adopted
 
 > Repository bootstrapping wires agents into an existing codebase in dependency order — project instructions first, then skills, then agent definitions, commands, hooks, and CI gates.
 
-**Related lesson:** [Snapshot and Roll Back](https://learn.agentpatterns.ai/workflows/snapshot-and-roll-back/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Snapshot and Roll Back](https://learn.agentpatterns.ai/workflows/snapshot-and-roll-back/) — this concept features in a hands-on lesson with quizzes.
 
-## Why Order Matters
+## Why order matters
 
-Each layer in the checklist is a dependency for the next. Instructions define what correct output looks like — without them, agents cannot know which patterns to follow or avoid. Skills package the domain knowledge that agent definitions draw on — an agent definition that references a non-existent skill silently degrades to generic behavior. Commands invoke agents by name — in Claude Code, the Markdown files under `.claude/commands/` — so agent definitions must exist before commands can be wired. Hooks and CI gates enforce correctness criteria that only make sense once instructions have established what correct means.
+Each layer in the checklist is a dependency for the next. Instructions define what correct output looks like. Without them, agents cannot know which patterns to follow or avoid. Skills package the domain knowledge that agent definitions draw on, so an agent definition that references a missing skill quietly falls back to generic behavior. Commands invoke agents by name — in Claude Code, the Markdown files under `.claude/commands/` — so agent definitions must exist before you can wire commands. Hooks and CI gates enforce correctness criteria that only make sense once instructions have established what correct means.
 
-Skipping ahead breaks this chain: adding CI gates before instructions creates enforcement rules with no defined standard to enforce against. Adding hooks before skills means hooks may reject output that would have been correct with domain context in place.
+Skipping ahead breaks this chain. Adding CI gates before instructions creates enforcement rules with no defined standard to enforce against. Adding hooks before skills means hooks may reject output that would have been correct with domain context in place.
 
-## The Checklist
+## The checklist
 
-### Step 1: Project Instructions File
+### Step 1: Project instructions file
 
-Create `AGENTS.md` in the repository root. This file is the entry point for any agent that opens the project — it tells the agent what the repo is, how it's structured, and what conventions it must follow. The [AGENTS.md open format](https://github.com/agentsmd/agents.md) is a cross-tool convention — a dedicated, predictable place for coding-agent instructions that multiple tools can read from the same file.
+Create `AGENTS.md` in the repository root. This file is the entry point for any agent that opens the project. It tells the agent what the repo is, how it is structured, and what conventions it must follow. The [AGENTS.md open format](https://github.com/agentsmd/agents.md) is a cross-tool convention — a dedicated, predictable place for coding-agent instructions that multiple tools read from the same file.
 
 The `AGENTS.md` convention uses standard Markdown with any headings you need. Include at minimum:
 
@@ -37,11 +37,11 @@ The `AGENTS.md` convention uses standard Markdown with any headings you need. In
 - Commit message format
 - What agents should and should not modify
 
-For Claude Code, the equivalent is `CLAUDE.md` at the repo root or `.claude/CLAUDE.md`. [Claude Code loads CLAUDE.md files hierarchically](https://code.claude.com/docs/en/memory#claude-md-files) — the project file is shared with the team via version control and applies to every session.
+For Claude Code, the equivalent is `CLAUDE.md` at the repo root or `.claude/CLAUDE.md`. [Claude Code loads CLAUDE.md files hierarchically](https://code.claude.com/docs/en/memory#claude-md-files). You share the project file with the team through version control, and it applies to every session.
 
-Keep the file under 200 lines. Longer files consume more context window and reduce adherence — Claude Code's own documentation states that files over this threshold produce lower instruction-following rates ([source](https://code.claude.com/docs/en/memory#claude-md-files)).
+Keep the file under 200 lines. Longer files use more context window and reduce adherence. Claude Code's own documentation states that files over this threshold produce lower instruction-following rates ([source](https://code.claude.com/docs/en/memory#claude-md-files)).
 
-### Step 2: Standards File
+### Step 2: Standards file
 
 Create a `STANDARDS.md` (or equivalent) that captures conventions too detailed for `AGENTS.md`:
 
@@ -51,29 +51,29 @@ Create a `STANDARDS.md` (or equivalent) that captures conventions too detailed f
 
 Reference `STANDARDS.md` from `AGENTS.md` using an import or a direct mention so agents can locate it.
 
-### Step 3: Skills for Domain Knowledge
+### Step 3: Skills for domain knowledge
 
 Skills are Markdown files that package repeatable knowledge — domain conventions, workflows, research patterns — that agents load on demand rather than on every session.
 
-Place skills under `.github/skills/` (Copilot convention) or `.claude/skills/` (Claude Code convention). One skill per topic. Examples:
+Place skills under `.github/skills/` (Copilot convention) or `.claude/skills/` (Claude Code convention). Use one skill per topic. For example:
 
 - `conventions.md` — naming rules, file structure decisions
 - `testing.md` — how to run tests, what to test, test data setup
 - `release.md` — release process, versioning rules
 
-Skills reduce `AGENTS.md` size and improve targeting — an agent working on tests only loads the testing skill, not the full project context.
+Skills reduce `AGENTS.md` size and improve targeting. An agent working on tests loads only the testing skill, not the full project context.
 
-### Step 4: Agent Definitions
+### Step 4: Agent definitions
 
-Define agents as named configurations that compose a role from skills. An agent definition specifies: what the agent's task is, which skills it has access to, and what tools it may use.
+Define agents as named configurations that compose a role from skills. An agent definition specifies the agent's task, which skills it can access, and what tools it may use.
 
-In Copilot, agent definitions live under `.github/agents/`. In Claude Code, subagents are configured in `.claude/agents/`. Keep each agent scoped to one task — a content agent, a review agent, a test-writing agent — rather than building a general-purpose agent that does everything.
+In Copilot, agent definitions live under `.github/agents/`. In Claude Code, you configure subagents in `.claude/agents/`. Keep each agent scoped to one task — a content agent, a review agent, a test-writing agent — rather than building a general-purpose agent that does everything.
 
 ### Step 5: Commands
 
 Commands are user-facing pipeline triggers that orchestrate agents through a task. A command like `review-pr` or `run-tests` invokes a specific agent with specific inputs.
 
-In Copilot, commands live under `.github/copilot-instructions.md` or as prompt files. In Claude Code, commands are Markdown files under `.claude/commands/`. Commands are the interface between the human and the agent layer — they translate intent into structured agent invocations.
+In Copilot, commands live under `.github/copilot-instructions.md` or as prompt files. In Claude Code, commands are Markdown files under `.claude/commands/`. Commands are the interface between the human and the agent layer, and they translate intent into structured agent invocations.
 
 ### Step 6: Hooks
 
@@ -81,14 +81,14 @@ Hooks run deterministic checks on agent output before it lands in the codebase. 
 
 Add hooks for:
 
-- **Linting** — agents often produce code that passes logic checks but fails style checks
-- **Secret detection** — agents may echo back test credentials or example tokens
-- **Link validation** — agents writing documentation may include broken URLs
-- **Commit message format** — verify conventional commit shape before push
+- Linting — agents often produce code that passes logic checks but fails style checks
+- Secret detection — agents may echo back test credentials or example tokens
+- Link validation — agents writing documentation may include broken URLs
+- Commit message format — verify conventional commit shape before push
 
-In Claude Code, hooks are configured in `.claude/settings.json` under the `hooks` key. Use pre-commit hooks via Git or CI for cross-tool coverage.
+In Claude Code, you configure hooks in `.claude/settings.json` under the `hooks` key. Use pre-commit hooks through Git or CI for cross-tool coverage.
 
-### Step 7: CI Gates
+### Step 7: CI gates
 
 CI validates what hooks catch locally, plus long-running checks that hooks cannot run synchronously:
 
@@ -96,9 +96,9 @@ CI validates what hooks catch locally, plus long-running checks that hooks canno
 - Build verification
 - Agent-generated file schema validation (if agents produce structured output)
 
-CI gates create a trust boundary: output that passes CI is safe to merge regardless of whether a human reviewed every line.
+CI gates create a trust boundary: output that passes CI is safe to merge whether or not a human reviewed every line.
 
-## Minimum Viable Agent Infrastructure
+## Minimum viable agent infrastructure
 
 Start here before adding anything else:
 
@@ -108,25 +108,25 @@ Start here before adding anything else:
 
 One instruction file and one skill is more useful on day one than a full framework that takes a week to build.
 
-## When This Order Doesn't Apply
+## When this order does not apply
 
 The checklist assumes a greenfield setup — starting from a repo with no agent infrastructure. Several conditions change the calculus:
 
-- **Existing CI already in place**: Most repos already have CI before agents are introduced. Do not remove or delay CI to match the checklist sequence; instead, add instructions (Step 1) and point agents at the existing CI workflow rather than treating Step 7 as future work.
-- **Small teams or solo projects**: The full seven-step sequence is overkill for a one-person project. Steps 2, 4, and 5 (standards file, agent definitions, commands) are optional until the project grows enough to need them. Jumping straight from instructions to hooks is defensible.
-- **Tool-specific adoption**: If only one tool (e.g., Claude Code) is being onboarded, skip `.github/`-convention steps entirely. The Copilot-specific paths for skills and agent definitions are not relevant until Copilot is also in scope.
+- Existing CI already in place: most repos already have CI before agents arrive. Do not remove or delay CI to match the checklist sequence. Instead, add instructions (Step 1) and point agents at the existing CI workflow rather than treating Step 7 as future work.
+- Small teams or solo projects: the full seven-step sequence is too much for a one-person project. Steps 2, 4, and 5 (standards file, agent definitions, commands) are optional until the project grows enough to need them. Jumping straight from instructions to hooks is defensible.
+- Tool-specific adoption: if you are onboarding only one tool, for example Claude Code, skip the `.github/`-convention steps entirely. The Copilot-specific paths for skills and agent definitions do not matter until Copilot is also in scope.
 
-## When This Backfires
+## When this backfires
 
-The instructions-first sequence has a strong steelman against it: instructions are advisory and hooks are deterministic, so for teams whose primary failure mode is non-compliance with written rules, inverting the order — hooks and CI gates first, instructions last — may be more effective. The sequence above can backfire under three specific conditions:
+The instructions-first sequence has a strong steelman against it. Instructions are advisory and hooks are deterministic, so for teams whose main failure mode is non-compliance with written rules, inverting the order — hooks and CI gates first, instructions last — may work better. The sequence above can backfire under three specific conditions:
 
-- **Compliance is the bottleneck, not context**. If your agents already produce structurally sound output but fail review for repeatable, mechanically detectable reasons (formatting, secrets, broken links), spending the first sprint writing `AGENTS.md` adds latency without addressing the failure. Add the relevant hooks first; the documentation can follow. Claude Code's own documentation makes this contrast explicit: instruction files are "context, not enforced configuration," whereas hooks "execute as shell commands at fixed lifecycle events and apply regardless of what Claude decides to do" ([source](https://code.claude.com/docs/en/memory#troubleshoot-memory-issues)).
-- **The instruction file grows beyond its useful window**. The instructions-first sequence creates an incentive to put every standard into `AGENTS.md` because that's the layer being built. ETH Zurich's evaluation — spanning SWE-bench tasks with LLM-generated context files plus AGENTbench, a set of 138 issues drawn from 12 repositories with developer-committed context files — found that context files reduced task success rates and increased inference cost by over 20%, and that hand-written context files helped only when they described minimal, precise requirements ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). A `AGENTS.md` that grows past the size the model can actually attend to becomes net-negative.
-- **CI already exists and works**. Teams adopting agents into a mature repo already have linters, type checks, and test gates. Treating Step 7 as future work is wasted motion; in that environment the right sequence is "point agents at the existing CI" first, then add domain context where the agent demonstrably needs it.
+- Compliance is the bottleneck, not context. If your agents already produce structurally sound output but fail review for repeatable, mechanically detectable reasons (formatting, secrets, broken links), spending the first sprint writing `AGENTS.md` adds latency without addressing the failure. Add the relevant hooks first; the documentation can follow. Claude Code's own documentation makes this contrast explicit: instruction files are "context, not enforced configuration," whereas hooks "execute as shell commands at fixed lifecycle events and apply regardless of what Claude decides to do" ([source](https://code.claude.com/docs/en/memory#troubleshoot-memory-issues)).
+- The instruction file grows beyond its useful window. The instructions-first sequence creates an incentive to put every standard into `AGENTS.md` because that is the layer being built. ETH Zurich's evaluation — spanning SWE-bench tasks with LLM-generated context files plus AGENTbench, a set of 138 issues drawn from 12 repositories with developer-committed context files — found that context files reduced task success rates and increased inference cost by over 20%, and that hand-written context files helped only when they described minimal, precise requirements ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). An `AGENTS.md` that grows past the size the model can actually attend to becomes net-negative.
+- CI already exists and works. Teams adopting agents into a mature repo already have linters, type checks, and test gates. Treating Step 7 as future work is wasted motion. In that environment the right sequence is "point agents at the existing CI" first, then add domain context where the agent demonstrably needs it.
 
-The order above assumes a greenfield repository where context is genuinely missing. In environments where enforcement is the missing piece, walk the sequence backwards.
+The order above assumes a greenfield repository where context is genuinely missing. Where enforcement is the missing piece, walk the sequence backwards.
 
-## Mermaid: Bootstrap Sequence
+## Bootstrap sequence
 
 ```mermaid
 graph TD
@@ -142,7 +142,7 @@ graph TD
 
 The following shows a minimal but complete bootstrap for a TypeScript project, covering Steps 1, 3, and 6 from the checklist above.
 
-**`AGENTS.md`** (Step 1 — project instructions file):
+`AGENTS.md` (Step 1 — project instructions file):
 
 ```markdown
 # Project: payments-service
@@ -161,7 +161,7 @@ TypeScript monorepo. Services under `src/services/`, shared types under `src/typ
 - Do not modify `src/types/generated/` — these files are auto-generated
 ```
 
-**`.claude/skills/testing.md`** (Step 3 — one skill covering the most-needed domain knowledge):
+`.claude/skills/testing.md` (Step 3 — one skill covering the most-needed domain knowledge):
 
 ```markdown
 # Testing Skill
@@ -172,7 +172,7 @@ Mock external HTTP calls with `vi.mock('../http-client')`.
 Do not use `describe` blocks for single-assertion tests.
 ```
 
-**`.claude/settings.json`** (Step 6 — pre-commit lint hook):
+`.claude/settings.json` (Step 6 — pre-commit lint hook):
 
 ```json
 {
@@ -192,7 +192,7 @@ Do not use `describe` blocks for single-assertion tests.
 }
 ```
 
-This is the Minimum Viable Agent Infrastructure described above. Add agent definitions (Step 4), commands (Step 5), and CI gates (Step 7) only after agents are producing useful output through the instruction file and skill.
+This is the minimum viable agent infrastructure described above. Add agent definitions (Step 4), commands (Step 5), and CI gates (Step 7) only after agents are producing useful output through the instruction file and skill.
 
 ## Key Takeaways
 

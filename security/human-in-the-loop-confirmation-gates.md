@@ -21,27 +21,27 @@ maturity: established
 !!! info "Also known as"
     Confirmation Gates, Human-in-the-Loop Approval Gates. For the broader pattern on where and how to place human oversight in agent pipelines, see [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md).
 
-## Why Confirmation Gates Exist
+## Why confirmation gates exist
 
-Well-scoped agents with tight instructions can still be successfully injected. A confirmed injection that passes all model-level defenses will proceed unless a human has the opportunity to review the specific action before it's committed.
+Well-scoped agents with tight instructions can still be injected. An injection that passes every model-level defense proceeds unless a human reviews the specific action before it is committed.
 
-Confirmation gates turn a fully autonomous failure into a recoverable near-miss. This is the last line of defense in a [defense-in-depth](defense-in-depth-agent-safety.md) approach to agent security. [Source: [Prompt Injections](https://openai.com/index/prompt-injections/)]
+Confirmation gates turn a fully autonomous failure into a recoverable near-miss. They are the last line of defense in a [defense-in-depth](defense-in-depth-agent-safety.md) approach to agent security. [Source: [Prompt Injections](https://openai.com/index/prompt-injections/)]
 
-## Identifying Consequential Actions
+## Identifying consequential actions
 
-The first design step: enumerate which of your agent's actions are consequential. The common categories:
+Start by listing which of your agent's actions are consequential. The common categories:
 
-- **Send**: email, message, notification, form submission
-- **Purchase/transact**: payments, subscriptions, API requests with billing implications
-- **Delete**: files, records, branches, resources
-- **Share**: publishing, permissions changes, external forwarding
-- **Modify auth**: credential rotation, permission grants
+- Send: email, message, notification, form submission
+- Purchase or transact: payments, subscriptions, API requests with billing implications
+- Delete: files, records, branches, resources
+- Share: publishing, permissions changes, external forwarding
+- Modify auth: credential rotation, permission grants
 
-For each action type, determine: if a successful injection caused this action to be taken, what is the worst-case outcome? Gate the actions where that outcome is unacceptable.
+For each action type, ask: if an injection triggered this action, what is the worst-case outcome? Gate the actions where that outcome is unacceptable.
 
-## What to Surface at Confirmation
+## What to surface at confirmation
 
-At confirmation time, show the exact action and exact data — not a summary. Summaries can obscure injection artifacts that are visible in raw form.
+At confirmation time, show the exact action and exact data — not a summary. A summary can hide injection artifacts that show in raw form.
 
 For an email action, surface:
 
@@ -49,17 +49,17 @@ For an email action, surface:
 - The exact subject and body text
 - The exact attachments
 
-An injected email that says "forward to `attacker@external.com`" is immediately visible when the recipient field is shown verbatim. It may not be visible in a summary that says "forwarding to a contact."
+An injected email that says "forward to `attacker@external.com`" shows immediately when the recipient field appears verbatim. A summary that says "forwarding to a contact" would hide it.
 
-Make it easy to say no. A confirmation UX that buries the rejection option or auto-approves on timeout works against its own purpose. [Source: [Prompt Injections](https://openai.com/index/prompt-injections/)]
+Make it easy to say no. A confirmation flow that buries the rejection option or auto-approves on timeout works against its own purpose. [Source: [Prompt Injections](https://openai.com/index/prompt-injections/)]
 
-## Watch Mode for High-Stakes Contexts
+## Watch mode for high-stakes contexts
 
-For sensitive contexts (banking, medical records, access control), the confirmation model changes. Rather than approving individual actions at the end, require the user to observe the agent working in real time — "watch mode."
+For sensitive contexts (banking, medical records, access control), the confirmation model changes. Rather than approving individual actions at the end, ask the user to watch the agent work in real time — "watch mode."
 
-Watch mode means the user sees each tool call as it happens, with the option to pause or abort at any point. This provides higher assurance at the cost of requiring more sustained attention. [Source: [Prompt Injections](https://openai.com/index/prompt-injections/)]
+In watch mode, the user sees each tool call as it happens and can pause or abort at any point. This gives higher assurance but needs more sustained attention. [Source: [Prompt Injections](https://openai.com/index/prompt-injections/)]
 
-## Logging Confirmed and Rejected Actions
+## Logging confirmed and rejected actions
 
 Log all confirmed and rejected actions at the gate with:
 
@@ -67,11 +67,11 @@ Log all confirmed and rejected actions at the gate with:
 - The timestamp
 - Whether it was confirmed or rejected
 
-Anomalous confirmation patterns — unusually high rejection rates, repeated similar rejections, rejections at unusual times — may indicate active attacks or model behavior that the prompt-level defenses missed.
+Unusual confirmation patterns — high rejection rates, repeated similar rejections, rejections at odd times — may point to active attacks or model behavior that the prompt-level defenses missed.
 
-The log is independent of the agent's session transcript, which may be truncated, corrupted, or not retained.
+The log stays independent of the agent's session transcript, which may be truncated, corrupted, or not retained.
 
-## Placement in the Defense Stack
+## Placement in the defense stack
 
 Confirmation gates are not a substitute for other defenses — they are the last layer in a stack:
 
@@ -80,20 +80,20 @@ Confirmation gates are not a substitute for other defenses — they are the last
 3. Prompt injection detection or filtering
 4. Confirmation gates for the remaining consequential action set
 
-Gates placed too early (gating on every minor action) create alert fatigue. Gates placed at the right level cover the irreversible and high-stakes actions where the cost of a mistake exceeds the cost of the interruption.
+Gates placed too early (gating on every minor action) create alert fatigue. Gates placed at the right level cover the irreversible and high-stakes actions where a mistake costs more than the interruption.
 
-## When This Backfires
+## When this backfires
 
-- **Confirmation fatigue**: High gate frequency causes reviewers to rubber-stamp without evaluation. Adversaries can exploit this deliberately — flooding the approval queue is classified as threat T10 in Rippling's 2025 Agentic AI Security guide. [Source: [The Agent Approval Fatigue Problem](https://molten.bot/blog/agent-approval-fatigue/)]
-- **Lies-in-the-Loop attacks**: Injected content manipulates how the confirmation dialog renders — pushing dangerous commands out of view or exploiting Markdown rendering — so the user approves an action that appears safe. Demonstrated against Claude Code and Copilot Chat in 2025. [Source: [Bypassing AI Agent Defenses With Lies-In-The-Loop](https://checkmarx.com/zero-post/bypassing-ai-agent-defenses-with-lies-in-the-loop/)]
-- **Headless pipelines**: Background jobs and server-side agents cannot pause for interactive review; gates either block execution or are bypassed by design.
-- **Injections that mimic legitimate actions**: A well-crafted injection within normal operating parameters may pass review because it resembles an expected action.
+- Confirmation fatigue: frequent gates push reviewers to rubber-stamp without evaluating. Adversaries can exploit this on purpose — flooding the approval queue is classified as threat T10 in Rippling's 2025 Agentic AI Security guide. [Source: [The Agent Approval Fatigue Problem](https://molten.bot/blog/agent-approval-fatigue/)]
+- Lies-in-the-Loop attacks: injected content changes how the confirmation dialog renders — pushing dangerous commands out of view or exploiting Markdown rendering — so the user approves an action that looks safe. Demonstrated against Claude Code and Copilot Chat in 2025. [Source: [Bypassing AI Agent Defenses With Lies-In-The-Loop](https://checkmarx.com/zero-post/bypassing-ai-agent-defenses-with-lies-in-the-loop/)]
+- Headless pipelines: background jobs and server-side agents cannot pause for interactive review. Gates either block execution or are bypassed by design.
+- Injections that mimic legitimate actions: a well-crafted injection that stays within normal operating parameters may pass review because it resembles an expected action.
 
-Mitigations: limit gates to the genuinely irreversible subset, constrain dialog rendering, validate that the approved operation matches what was shown, and use out-of-band confirmation for the highest-stakes actions.
+To mitigate these risks, limit gates to the genuinely irreversible subset, constrain dialog rendering, validate that the approved operation matches what was shown, and use out-of-band confirmation for the highest-stakes actions.
 
 ## Example
 
-The following Python snippet shows a confirmation gate implemented before an agent sends an email. The gate surfaces the exact recipient, subject, and body — not a summary — so that an injected recipient address is immediately visible.
+The Python snippet below shows a confirmation gate before an agent sends an email. The gate surfaces the exact recipient, subject, and body — not a summary — so an injected recipient address shows immediately.
 
 ```python
 import sys
@@ -121,7 +121,7 @@ if not confirm_send_email(recipient, subject, body):
 send_email(recipient, subject, body)
 ```
 
-Because the recipient is shown verbatim, `attacker@external.com` is immediately visible to the reviewer — a summary that said "forwarding to the requester" would have concealed it. The gate defaults to rejection (`[y/N]`), making it easy to say no without extra effort.
+Because the recipient is shown verbatim, the reviewer sees `attacker@external.com` at once — a summary that said "forwarding to the requester" would have hidden it. The gate defaults to rejection (`[y/N]`), making it easy to say no.
 
 ## Key Takeaways
 

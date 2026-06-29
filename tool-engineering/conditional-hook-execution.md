@@ -15,9 +15,9 @@ maturity: adopted
 
 > Use the `if` field on hook handlers to declare which tool calls a hook applies to — preventing subprocess spawns for non-matching calls without embedding filter logic in the hook script itself.
 
-## The Problem
+## The problem
 
-Claude Code hooks run synchronously in the agent loop. A `PreToolUse` hook registered on `Bash` fires for every Bash call — including trivial reads like `ls` or `echo` — and spawns a subprocess each time. With many hooks registered or in long sessions, this adds measurable overhead to every turn.
+Claude Code hooks run synchronously in the agent loop. A `PreToolUse` hook registered on `Bash` fires for every Bash call, including trivial reads like `ls` or `echo`, and spawns a subprocess each time. With many hooks registered, or in long sessions, this adds measurable overhead to every turn.
 
 Before v2.1.85, the workaround was to put the filter inside the hook script:
 
@@ -31,11 +31,11 @@ fi
 # ... enforcement logic
 ```
 
-This still spawns a subprocess to immediately exit. The filtering happens inside the process, not before it.
+This still spawns a subprocess just to exit again. The filter runs inside the process, not before it.
 
-## The `if` Field
+## The `if` field
 
-Claude Code v2.1.85 introduced an `if` field on individual hook handlers. It uses [permission rule syntax](https://code.claude.com/docs/en/permissions) — the same syntax as `allow`/`deny` rules — to filter by both tool name and arguments. The full `if` field behavior is documented in the [hooks guide](https://code.claude.com/docs/en/hooks-guide#filter-by-tool-name-and-arguments-with-the-if-field) and [hooks reference](https://code.claude.com/docs/en/hooks).
+Claude Code v2.1.85 introduced an `if` field on individual hook handlers. It uses the same [permission rule syntax](https://code.claude.com/docs/en/permissions) as `allow` and `deny` rules, so you filter by both tool name and arguments. The full `if` field behavior is documented in the [hooks guide](https://code.claude.com/docs/en/hooks-guide#filter-by-tool-name-and-arguments-with-the-if-field) and [hooks reference](https://code.claude.com/docs/en/hooks).
 
 The execution flow:
 
@@ -46,17 +46,17 @@ Tool call fires
       → Hook handler spawns only when both match
 ```
 
-When `if` does not match, the handler process is never spawned. The filter is evaluated in Claude Code's process before any subprocess is launched.
+When `if` does not match, the handler process never spawns. Claude Code evaluates the filter in its own process before it launches any subprocess.
 
-## Why It Works
+## Why it works
 
-Hooks run synchronously in the agent loop — Claude Code waits for each matched handler to exit before the tool call proceeds. Each `"type": "command"` handler requires spawning a shell subprocess, which on most systems means a fork/exec pair plus shell startup before the handler script even reads stdin. An in-script filter still pays this cost on every matched call, exits fast, and returns.
+Hooks run synchronously in the agent loop. Claude Code waits for each matched handler to exit before the tool call proceeds. Each `"type": "command"` handler spawns a shell subprocess, which on most systems means a fork/exec pair plus shell startup before the handler script even reads stdin. An in-script filter still pays this cost on every matched call, exits fast, and returns.
 
-The `if` field moves the filter into Claude Code's own process, where it is evaluated against the already-parsed tool input. Non-matching calls skip the subprocess entirely, so the only cost is a string match against the permission-rule pattern.
+The `if` field moves the filter into Claude Code's own process, where it runs against the already-parsed tool input. Non-matching calls skip the subprocess entirely, so the only cost is a string match against the permission-rule pattern.
 
 ## Configuration
 
-**Before** — inline filter inside the script:
+Before, with the filter inside the script:
 
 ```json
 {
@@ -76,7 +76,7 @@ The `if` field moves the filter into Claude Code's own process, where it is eval
 }
 ```
 
-**After** — declarative `if` field on the handler:
+After, with the `if` field on the handler:
 
 ```json
 {
@@ -97,7 +97,7 @@ The `if` field moves the filter into Claude Code's own process, where it is eval
 }
 ```
 
-The hook script no longer needs to handle non-git Bash calls — they never reach it.
+The hook script no longer needs to handle non-git Bash calls. They never reach it.
 
 ## Syntax
 
@@ -113,11 +113,11 @@ The `if` value follows `ToolName(argument_pattern)`:
 
 The `if` field is only evaluated on tool events: `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `PermissionRequest`, `PermissionDenied`. On session-level events, a hook with `if` set never runs.
 
-Compound commands (`ls && git push`) and env-var prefixes (`FOO=bar git push`) interact with pattern matching the same way they do in permission rules. Test patterns against representative commands before relying on them — see the [permission rule reference](https://code.claude.com/docs/en/permissions) for current matching semantics.
+Compound commands (`ls && git push`) and env-var prefixes (`FOO=bar git push`) interact with pattern matching the same way they do in permission rules. Test patterns against representative commands before relying on them. See the [permission rule reference](https://code.claude.com/docs/en/permissions) for current matching semantics.
 
-## Composing Multiple Hooks
+## Composing multiple hooks
 
-The `if` field makes it practical to register multiple targeted handlers under a single event, each with its own condition:
+The `if` field lets you register several targeted handlers under a single event, each with its own condition:
 
 ```json
 {
@@ -148,15 +148,15 @@ The `if` field makes it practical to register multiple targeted handlers under a
 }
 ```
 
-Each handler fires only for its matching call pattern. A `git status` call matches the `Bash` matcher but triggers none of the handlers — no subprocesses are spawned.
+Each handler fires only for its matching call pattern. A `git status` call matches the `Bash` matcher but triggers none of the handlers, so no subprocesses are spawned.
 
-## When This Backfires
+## When this backfires
 
 The `if` field is not always the right choice:
 
-- **Version pinning requirement**: the `if` field requires Claude Code v2.1.85 or later. Teams running mixed or older installations must keep the filter inside the hook script to avoid silently skipping hooks on earlier versions.
-- **Reduced observability**: a hook that never spawns leaves no trace — no subprocess, no log entry. In-script filtering at least exits with code 0 and can log its decisions. If you need an audit trail of every hook evaluation (including non-matches), keep the filter inside the script.
-- **Pattern mismatch on edge cases**: permission-rule syntax uses a single `*` that matches across spaces, so `Bash(git *)` matches `git push origin main` as expected but also matches `git` with any multi-word argument. Test patterns against your actual command set before relying on them in production hooks.
+- Version pinning: the `if` field requires Claude Code v2.1.85 or later. Teams running mixed or older installations must keep the filter inside the hook script, or they will silently skip hooks on earlier versions.
+- Reduced observability: a hook that never spawns leaves no trace, no subprocess and no log entry. In-script filtering at least exits with code 0 and can log its decisions. If you need an audit trail of every hook evaluation, including non-matches, keep the filter inside the script.
+- Pattern mismatch on edge cases: permission-rule syntax uses a single `*` that matches across spaces, so `Bash(git *)` matches `git push origin main` as expected but also matches `git` with any multi-word argument. Test patterns against your actual command set before relying on them in production hooks.
 
 ## Key Takeaways
 

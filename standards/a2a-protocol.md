@@ -5,36 +5,38 @@ tags:
   - agent-design
   - tool-agnostic
   - standards
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-28
 maturity: adopted
 ---
 
 # Agent-to-Agent (A2A) Protocol
 
-> An open standard for inter-agent communication — enabling agents built on different frameworks to discover capabilities, delegate tasks, and exchange structured results over HTTP.
+> An open protocol for inter-agent communication — enabling agents built on different frameworks to discover capabilities, delegate tasks, and exchange structured results over HTTP.
 
-## What A2A Solves
+## What A2A solves
 
-MCP connects agents to tools. A2A connects agents to agents. When a client needs capabilities it does not have, A2A provides a standard way to discover a remote agent, delegate a task, track its lifecycle, and collect structured results — without requiring both agents to share a framework, runtime, or orchestrator.
+MCP connects agents to tools. A2A connects agents to agents. When a client needs capabilities it does not have, A2A gives it a standard way to discover a remote agent, delegate a task, track the task lifecycle, and collect structured results. Neither agent has to share a framework, runtime, or orchestrator.
+
+Google frames peer delegation as a way to keep each agent's working context clean: handing a task to a specialist agent [avoids polluting the delegating agent's context and preserves data privacy](https://developers.googleblog.com/en/how-a2a-is-building-a-world-of-collaborative-agents/), because the remote agent sees only the task it was given rather than the caller's full state. The same Google write-up surveys cross-domain use cases — spanning enterprise workflow automation and multi-vendor agent teams — to argue the standard is not tied to any one application.
 
 Google [introduced A2A in April 2025](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/) with 50+ partners including Atlassian, Salesforce, SAP, LangChain, and ServiceNow, and released the specification as open source.
 
-## Core Concepts
+## Core concepts
 
 ### Agent Cards
 
-An [Agent Card](https://a2a-protocol.org/latest/specification/) is a JSON metadata document advertising an agent's identity, capabilities, skills, endpoint, and auth requirements. Clients read the card to decide whether a remote agent can handle a task.
+An [Agent Card](https://a2a-protocol.org/latest/specification/) is a JSON metadata document that advertises an agent's identity, capabilities, skills, endpoint, and auth requirements. Clients read the card to decide whether a remote agent can handle a task.
 
 Agent Cards declare:
 
-- **Skills**: Functional capabilities with descriptions
-- **Security schemes**: API keys, OAuth2, mutual TLS, OpenID Connect
-- **Capabilities**: Boolean flags for streaming, push notifications, extended cards
-- **Interfaces**: Supported protocol bindings (JSON-RPC, gRPC, HTTP/REST)
+- Skills: functional capabilities with descriptions
+- Security schemes: API keys, OAuth2, mutual TLS, OpenID Connect
+- Capabilities: boolean flags for streaming, push notifications, and extended cards
+- Interfaces: supported protocol bindings (JSON-RPC, gRPC, HTTP/REST)
 
-Optional cryptographic signing enables card verification.
+Optional cryptographic signing lets clients verify a card.
 
-### Task Lifecycle
+### Task lifecycle
 
 Every A2A interaction produces a [Task](https://a2a-protocol.org/latest/specification/) — a stateful object that progresses through defined states:
 
@@ -50,21 +52,21 @@ Every A2A interaction produces a [Task](https://a2a-protocol.org/latest/specific
 
 This state machine gives client agents deterministic handling logic for every outcome.
 
-### Messages, Parts, and Artifacts
+### Messages, parts, and artifacts
 
-Communication uses **messages** with a role (`user` or `agent`) and a collection of **parts** — the atomic content units. Parts support text, file references, structured data, and forms, letting agents negotiate content types and exchange rich media.
+Communication uses messages with a role (`user` or `agent`) and a collection of parts, the atomic content units. Parts support text, file references, structured data, and forms, so agents can negotiate content types and exchange rich media.
 
-Completed tasks produce **artifacts** — structured output composed of parts. Artifacts are the deliverables: generated code, analysis results, transformed data.
+Completed tasks produce artifacts: structured output composed of parts. Artifacts are the deliverables, such as generated code, analysis results, and transformed data.
 
-## Update Delivery
+## Update delivery
 
 A2A supports three [update delivery patterns](https://a2a-protocol.org/latest/specification/):
 
-- **Polling**: Client calls `GetTask` periodically. Simple, higher latency.
-- **Streaming**: Real-time event delivery via persistent connections using `SendStreamingMessage`. Requires `capabilities.streaming: true` in the Agent Card.
-- **Push notifications (webhooks)**: Server sends HTTP POST to client-registered endpoints. Requires `capabilities.pushNotifications: true`.
+- Polling: the client calls `GetTask` periodically. Simple, with higher latency.
+- Streaming: real-time event delivery over persistent connections using `SendStreamingMessage`. Requires `capabilities.streaming: true` in the Agent Card.
+- Push notifications (webhooks): the server sends an HTTP POST to client-registered endpoints. Requires `capabilities.pushNotifications: true`.
 
-## A2A vs MCP vs Direct Orchestration
+## A2A vs MCP vs direct orchestration
 
 | Dimension | MCP | A2A | Direct Orchestration |
 |-----------|-----|-----|---------------------|
@@ -76,17 +78,19 @@ A2A supports three [update delivery patterns](https://a2a-protocol.org/latest/sp
 
 Use A2A to delegate across organizational or framework boundaries, MCP to call tools, and direct orchestration when all agents share a framework.
 
-## Protocol Foundation
+The framework-agnostic claim holds end-to-end across runtimes, not just on paper: Google published a [worked example wiring a Python agent and a Go agent into one team over A2A](https://developers.googleblog.com/en/build-cross-language-multi-agent-team-with-google-agent-development-kit-and-a2a/), with each language's agent exposing an Agent Card the other consumes over HTTP — a concrete heterogeneous-runtime demonstration of agents collaborating without a shared stack.
+
+## Protocol foundation
 
 A2A runs over [HTTP, SSE, and JSON-RPC](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/). Core operations include `SendMessage`, `GetTask`, `ListTasks`, `CancelTask`, and `SubscribeToTask`. [`A2A-` prefixed HTTP headers](https://a2a-protocol.org/latest/specification/) carry version negotiation and extension declarations.
 
-The protocol is asynchronous-first — operations return immediately while processing continues — with a `blocking` parameter on `SendMessage` for simple request-response flows.
+The protocol is asynchronous-first: operations return immediately while processing continues. A `blocking` parameter on `SendMessage` covers simple request-response flows.
 
 ## Example
 
-The following shows a minimal A2A exchange: a client agent reads a remote agent's Agent Card, sends a task, and polls until completion.
+This example shows a minimal A2A exchange. A client agent reads a remote agent's Agent Card, sends a task, and polls until completion.
 
-**Agent Card** (served at `https://data-agent.example.com/.well-known/agent.json`):
+Agent Card, served at `https://data-agent.example.com/.well-known/agent.json`:
 
 ```json
 {
@@ -110,7 +114,7 @@ The following shows a minimal A2A exchange: a client agent reads a remote agent'
 }
 ```
 
-**Client agent** — sends a task and polls for completion:
+Client agent — sends a task and polls for completion:
 
 ```python
 import httpx, time
@@ -140,19 +144,19 @@ if task["status"]["state"] == "completed":
     print(report)
 ```
 
-The client handles each terminal state explicitly, giving deterministic error handling regardless of what the remote agent produces.
+The client handles each terminal state explicitly, giving deterministic error handling whatever the remote agent produces.
 
-## When This Backfires
+## When this backfires
 
 A2A is the wrong choice in three common situations:
 
-- **Tightly coupled single-framework systems**: When agents share a runtime and memory, HTTP overhead and task-lifecycle complexity add latency and code surface over native framework calls. Direct orchestration is cheaper.
-- **Simple tool access**: A2A wraps tool semantics in a full agent boundary. For a function call rather than an autonomous agent, use MCP.
-- **High-frequency or low-latency paths**: Every A2A operation carries HTTP overhead — prohibitive for control loops, real-time collaboration, or sub-second decision cycles.
+- Tightly coupled single-framework systems: when agents share a runtime and memory, HTTP overhead and task-lifecycle complexity add latency and code over native framework calls. Direct orchestration is cheaper.
+- Simple tool access: A2A wraps tool semantics in a full agent boundary. For a function call rather than an autonomous agent, use MCP.
+- High-frequency or low-latency paths: every A2A operation carries HTTP overhead, which is too costly for control loops, real-time collaboration, or sub-second decision cycles.
 
-A2A also pushes security enforcement to each agent implementation: the protocol does not centrally audit what agents expose or access, so cross-agent access control must be handled externally via RBAC or a gateway.
+A2A also pushes security enforcement to each agent implementation. The protocol does not centrally audit what agents expose or access, so you must handle cross-agent access control externally with RBAC or a gateway.
 
-Practitioners have flagged a further constraint at scale: because A2A uses direct HTTP connections between peers, large agent meshes incur [O(n²) connectivity overhead](https://www.hivemq.com/blog/a2a-enterprise-scale-agentic-ai-collaboration-part-1/) — each new agent adds configuration, authentication, and monitoring against every existing peer. For enterprise-scale deployments this has motivated layering A2A on top of an [event mesh or publish/subscribe backbone](https://solace.com/blog/why-googles-agent2agent-needs-an-event-mesh/) rather than relying on point-to-point calls alone.
+Practitioners have flagged a further constraint at scale. Because A2A uses direct HTTP connections between peers, large agent meshes incur [O(n²) connectivity overhead](https://www.hivemq.com/blog/a2a-enterprise-scale-agentic-ai-collaboration-part-1/) — each new agent adds configuration, authentication, and monitoring against every existing peer. For large deployments, this has prompted teams to layer A2A on top of an [event mesh or publish/subscribe backbone](https://solace.com/blog/why-googles-agent2agent-needs-an-event-mesh/) rather than rely on point-to-point calls alone.
 
 ## Key Takeaways
 

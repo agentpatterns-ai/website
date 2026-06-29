@@ -21,9 +21,9 @@ maturity: adopted
 
 The critic agent pattern inserts a dedicated review agent between the planning phase and execution:
 
-1. **Planner** — the primary agent reads the task, explores context, and produces a structured plan
-2. **Critic** — a complementary model reviews the plan for risks, gaps, and incorrect assumptions
-3. **Gating decision** — execution proceeds only if the critic approves; otherwise the planner receives structured feedback and revises
+1. Planner — the primary agent reads the task, explores context, and produces a structured plan.
+2. Critic — a complementary model reviews the plan for risks, gaps, and incorrect assumptions.
+3. Gating decision — execution proceeds only if the critic approves. Otherwise the planner gets structured feedback and revises the plan.
 
 ```mermaid
 graph TD
@@ -33,35 +33,35 @@ graph TD
     C -->|Rejected + feedback| B
 ```
 
-The critic is a distinct agent role, not self-review. Using a different model creates genuine disagreement — the critic is not subject to the same blind spots as the planner. Research on the ["self-correction blind spot"](https://arxiv.org/abs/2507.02778) measured an average 64.5% blind-spot rate across 14 tested LLMs, where models failed to correct errors in their own outputs even while successfully correcting identical errors from external sources — evidence that same-model review inherits the producer's failure modes.
+The critic is a distinct agent role, not self-review. A different model creates genuine disagreement, because the critic does not share the planner's blind spots. Research on the [self-correction blind spot](https://arxiv.org/abs/2507.02778) measured an average 64.5% blind-spot rate across 14 tested LLMs. The models failed to correct errors in their own outputs even while correcting identical errors from external sources. This shows that same-model review inherits the producer's failure modes.
 
-## Why Plan-Gating Matters
+## Why plan-gating matters
 
-The pattern's value is timing. The [evaluator-optimizer pattern](evaluator-optimizer.md) applies a reviewer inside a generation loop — useful for iterative refinement. The critic agent applies review at the plan stage, before any tool calls or code changes execute.
+The pattern's value is timing. The [evaluator-optimizer pattern](evaluator-optimizer.md) applies a reviewer inside a generation loop, which helps with iterative refinement. The critic agent applies review at the plan stage, before any tool calls or code changes run.
 
-Plan-stage errors are cheap. A structurally flawed plan caught before execution costs one extra model call. The same error caught mid-execution requires [rollback](rollback-first-design.md), re-planning, and re-execution — each of which re-incurs the token cost of the already-consumed steps.
+Plan-stage errors are cheap. A structurally flawed plan caught before execution costs one extra model call. The same error caught mid-execution needs [rollback](rollback-first-design.md), re-planning, and re-execution. Each of those re-incurs the token cost of the steps already run.
 
-Multi-step agentic plans amplify single errors. If step 3 of a 10-step plan assumes the wrong environment state, every subsequent step inherits that assumption. A critic that reviews the full plan detects cross-step inconsistencies that per-step review misses.
+Multi-step agentic plans amplify single errors. If step 3 of a 10-step plan assumes the wrong environment state, every later step inherits that assumption. A critic that reviews the full plan finds cross-step inconsistencies that per-step review misses.
 
-## When to Apply
+## When to apply
 
 The pattern pays off when:
 
-- The task involves multiple sequential steps with compounding dependencies
-- Mistakes are expensive to reverse (destructive operations, external API calls, database writes)
-- The primary model has a documented tendency to miss a specific class of error (e.g., environment assumptions, API contract mismatches)
+- The task involves multiple sequential steps with compounding dependencies.
+- Mistakes are expensive to reverse, such as destructive operations, external API calls, or database writes.
+- The primary model has a documented tendency to miss a specific class of error, for example environment assumptions or API contract mismatches.
 
 Skip it when:
 
-- The task is short enough that re-running from scratch is cheaper than critic overhead
-- The plan has no branching — a single-step task has nothing for a critic to evaluate
-- Evaluation criteria are vague; a critic without clear scoring criteria produces inconsistent verdicts
+- The task is short enough that re-running from scratch is cheaper than critic overhead.
+- The plan has no branching. A single-step task has nothing for a critic to evaluate.
+- Evaluation criteria are vague. A critic without clear scoring criteria produces inconsistent verdicts.
 
-## Copilot CLI Implementation
+## Copilot CLI implementation
 
-Copilot CLI [v1.0.18](https://github.com/github/copilot-cli/releases/tag/v1.0.18) (April 4, 2026) introduced an experimental critic agent that automatically reviews plans and complex implementations using a complementary model to catch errors early. The feature is available in experimental mode for Claude models.
+Copilot CLI [v1.0.18](https://github.com/github/copilot-cli/releases/tag/v1.0.18) (April 4, 2026) introduced an experimental critic agent. It automatically reviews plans and complex implementations with a complementary model to catch errors early. The feature is available in experimental mode for Claude models.
 
-The release does not describe how the complementary model is selected — whether it is a different vendor model, a different reasoning configuration, or a separate context. Operators should treat the specific routing as an implementation detail subject to change.
+The release does not describe how the complementary model is selected, whether a different vendor model, a different reasoning configuration, or a separate context. Treat the specific routing as an implementation detail that may change.
 
 ## Trade-offs
 
@@ -72,25 +72,25 @@ The release does not describe how the complementary model is selected — whethe
 | Coverage | A complementary model surfaces errors the planner's reasoning style systematically misses |
 | Diminishing returns | For simple one-step tasks, critic overhead exceeds the value of catching errors |
 
-### When a Critic Backfires
+### When a critic backfires
 
-A high-accuracy critic is not automatically a net-positive intervention. Vasudev et al. (2026) report that a critic with strong offline accuracy (AUROC 0.94) can still induce a 26-percentage-point collapse on one model while leaving another near-unchanged, because interventions face a [disruption–recovery tradeoff](https://arxiv.org/abs/2602.03338) — recovering failing trajectories while also disrupting trajectories that would have succeeded. Validate the critic on a sample of representative tasks before deploying it on a high-success-rate workload; if the critic disrupts more than it recovers, gate or disable it.
+A high-accuracy critic is not automatically a net-positive intervention. Vasudev et al. (2026) report that a critic with strong offline accuracy (AUROC 0.94) can still cause a 26-percentage-point collapse on one model while leaving another near-unchanged. Interventions face a [disruption-recovery tradeoff](https://arxiv.org/abs/2602.03338): they recover failing trajectories, but they also disrupt trajectories that would have succeeded. Validate the critic on a sample of representative tasks before you deploy it on a high-success-rate workload. If the critic disrupts more than it recovers, gate or disable it.
 
-A separate theoretical result bounds the upside. Ao, Gao, and Simchi-Levi (2026) show that any delegated planner-plus-critic network is [decision-theoretically dominated by a centralized Bayes decision-maker with the same information access](https://arxiv.org/abs/2603.26993) — language-based handoff between agents is a lossy channel. A critic adds value only when it brings information the planner lacked, not when it merely re-reads the same context with the same model family. Pair the critic with a different model and a structured rubric the planner did not see at plan time.
+A separate theoretical result bounds the upside. Ao, Gao, and Simchi-Levi (2026) show that any delegated planner-plus-critic network is [decision-theoretically dominated by a centralized Bayes decision-maker with the same information access](https://arxiv.org/abs/2603.26993). Language-based handoff between agents is a lossy channel. A critic adds value only when it brings information the planner lacked, not when it re-reads the same context with the same model family. Pair the critic with a different model and a structured rubric the planner did not see at plan time.
 
 ## Example
 
 A developer runs: `copilot -p "Migrate the users table to add a new required column with no default"`
 
-**Without a critic:** The planner generates a migration script and executes it. If the script omits a backfill step for existing rows, production fails at runtime.
+Without a critic, the planner generates a migration script and executes it. If the script omits a backfill step for existing rows, production fails at runtime.
 
-**With a critic:** The critic reviews the plan and flags: "Required column with no default will fail on existing rows — backfill step missing between `ALTER TABLE` and constraint enforcement." Execution is blocked. The planner revises the plan to include the backfill step before the constraint is applied.
+With a critic, the critic reviews the plan and flags a problem: "Required column with no default will fail on existing rows — backfill step missing between `ALTER TABLE` and constraint enforcement." Execution is blocked. The planner revises the plan to add the backfill step before the constraint is applied.
 
 The error is caught before a single query runs.
 
 ## Key Takeaways
 
-- The critic agent reviews the plan before execution, not output after generation — catching errors when they are cheapest to fix
+- The critic agent reviews the plan before execution, not the output after generation, so it catches errors when they are cheapest to fix
 - A complementary model creates genuine disagreement; self-review by the same model reproduces the same blind spots
 - The pattern is most cost-effective for multi-step plans where errors compound across steps
 - Copilot CLI v1.0.18 ships an experimental critic for Claude models that fires automatically
@@ -105,4 +105,4 @@ The error is caught before a single query runs.
 - [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md)
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
 - [Agent Composition Patterns](agent-composition-patterns.md)
-- [Convergence Detection in Iterative Refinement](convergence-detection.md)
+- [Convergence Detection in Iterative Refinement](../loop-engineering/convergence-detection.md)

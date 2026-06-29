@@ -18,31 +18,31 @@ maturity: adopted
 
 > Write tool descriptions for an agent that has never seen the system — make implicit context, query formats, domain terminology, and resource relationships explicit.
 
-**Related lesson:** [Schema & Description Altitude](https://learn.agentpatterns.ai/tool-engineering/schema-and-description-altitude/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Schema & Description Altitude](https://learn.agentpatterns.ai/tool-engineering/schema-and-description-altitude/) — a hands-on lesson with quizzes on this concept.
 
 !!! info "Also known as"
     Tool Engineering, Mistake-Proofing / Poka-Yoke
 
-## The New Hire Analogy
+## The new-hire analogy
 
-A terse API reference is sufficient for a developer who already knows the system. An agent integrating for the first time has no background knowledge — it cannot infer what "user" means in your domain, whether a date parameter expects ISO 8601 or a timestamp, or how resource A relates to resource B.
+A terse API reference is enough for a developer who already knows the system. An agent integrating for the first time has no background knowledge. It cannot infer what "user" means in your domain, whether a date parameter expects ISO 8601 or a timestamp, or how resource A relates to resource B.
 
 Write as if training a competent new hire on their first day: not a tutorial, but explicit about the things documentation omits because experienced users already know them.
 
-Per [Anthropic's writing tools for agents post](https://www.anthropic.com/engineering/writing-tools-for-agents), minor description refinements routinely yield dramatic accuracy improvements — precise refinements to tool descriptions dramatically reduced error rates in SWE-bench Verified evaluations. Description gaps are a leading cause of agent tool misuse; an agent cannot infer what it was never told.
+[Anthropic's writing tools for agents post](https://www.anthropic.com/engineering/writing-tools-for-agents) reports that small refinements to tool descriptions sharply reduced error rates in SWE-bench Verified evaluations. Description gaps are a leading cause of agent tool misuse. An agent cannot infer what it was never told.
 
-## What Implicit Context Looks Like
+## What implicit context looks like
 
-Systems accumulate implicit knowledge over time:
+Systems build up implicit knowledge over time:
 
-- Specialized query syntax (e.g., `status:open assignee:me` in a search API)
-- Domain terminology (e.g., "sprint" vs "iteration" — which term does the API use?)
-- Resource relationships (e.g., projects contain issues, issues belong to sprints — what order do you need to traverse?)
-- Encoding conventions (e.g., IDs are strings, not integers; dates are UTC, not local)
+- Specialized query syntax, for example `status:open assignee:me` in a search API
+- Domain terminology, for example "sprint" versus "iteration" — which term does the API use?
+- Resource relationships, for example projects contain issues and issues belong to sprints — what order do you need to traverse?
+- Encoding conventions, for example IDs are strings, not integers, and dates are UTC, not local
 
-None of this is typically documented in terse API references. All of it is necessary for an agent to use the tool correctly without trial and error. [Research on rewriting tool descriptions](https://arxiv.org/abs/2602.20426) finds that tool descriptions are often written for human developers and tolerate ambiguity that agents cannot resolve, with targeted rewrites producing consistent accuracy gains on unseen tools.
+None of this usually appears in terse API references. All of it is needed for an agent to use the tool correctly without trial and error. [Research on rewriting tool descriptions](https://arxiv.org/abs/2602.20426) finds that tool descriptions are often written for human developers and tolerate ambiguity that agents cannot resolve, and that targeted rewrites produce consistent accuracy gains on unseen tools.
 
-## Unambiguous Parameter Names
+## Unambiguous parameter names
 
 Parameter names are the first point of failure. A parameter named `user` is ambiguous: is it a user ID, a username, an email, a display name? The agent will guess — and guess wrong at a rate proportional to the ambiguity.
 
@@ -54,7 +54,7 @@ This applies to all parameters:
 - `id` → `project_id`, `task_id`, `user_id`
 - `type` → `event_type`, `resource_type`
 
-## Steering Behavior Through Error Messages
+## Steering behavior through error messages
 
 Error messages are part of the tool description in practice — they are what the agent reads when a call fails. Treat them as guidance, not just diagnostics:
 
@@ -63,7 +63,7 @@ Error messages are part of the tool description in practice — they are what th
 
 An error message that tells the agent what to try next reduces retry failures and context waste.
 
-## Iterating on Descriptions
+## Iterating on descriptions
 
 Description quality degrades silently. Accurate descriptions go stale as the system changes, and new use cases expose gaps. Treat description iteration as code maintenance:
 
@@ -130,9 +130,9 @@ The improved description makes explicit three things a new hire would learn on d
 - Minor description refinements produce dramatic accuracy improvements — iterate on descriptions the same way you would on code
 - Keep descriptions current as the underlying system evolves; stale descriptions are a silent failure source
 
-## When This Backfires
+## When this backfires
 
-Verbose descriptions consume context budget. A description that covers every edge case can add hundreds of tokens per tool call; in agents that invoke many tools per session, this compounds into measurable cost and latency increases, the budget [Token-Efficient Tool Design](token-efficient-tool-design.md) protects. The right level of detail is the minimum needed to prevent misuse — not exhaustive documentation.
+Verbose descriptions consume context budget. A description that covers every edge case can add hundreds of tokens per tool call; in agents that invoke many tools per session, this compounds into measurable cost and latency increases, the budget [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md) protects. The right level of detail is the minimum needed to prevent misuse — not exhaustive documentation.
 
 Over-specifying expected call sequences limits valid solution paths. If a description prescribes "always call `list_sprints` first," the agent cannot adapt when a sprint ID is already known from context. Describe what parameters require, not how to obtain them from scratch every time.
 
@@ -148,5 +148,5 @@ Description maintenance is ongoing cost. As the underlying API evolves, descript
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md) — structured errors that guide agents to the correct next action
 - [Semantic Tool Output](semantic-tool-output.md) — designing tool output for agent readability
 - [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md) — enforcing correct tool inputs through schema design
-- [Token-Efficient Tool Design](token-efficient-tool-design.md) — designing tools that minimize context consumption
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md) — designing tools that minimize context consumption
 - [The Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md) — why implicit context that agents cannot find causes silent failures

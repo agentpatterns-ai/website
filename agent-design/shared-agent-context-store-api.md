@@ -14,47 +14,47 @@ maturity: adopted
 
 > Use an API-backed shared context store only when the writer is a system, ingestion is controlled, and the team accepts retrieval-time selection over deterministic reads.
 
-A shared agent context store API is a programmatic CRUD interface over a team-scoped, retrieval-grounded knowledge bundle that agents and humans both read from. The first shipped instance is the [Copilot Spaces REST API, GA on 2026-05-18](https://github.blog/changelog/2026-05-18-copilot-spaces-api-now-generally-available/) — it exposes the same Spaces a human curates in the GitHub UI ([reference](https://docs.github.com/en/rest/copilot-spaces/copilot-spaces)) so CI jobs, sub-agents, and orchestrators can create, update, and attach resources at runtime. The pattern generalises to any tool shipping an API alongside a curated context surface.
+A shared agent context store API is a programmatic CRUD interface over a team-scoped, retrieval-grounded knowledge bundle that agents and humans both read from. The first shipped instance is the [Copilot Spaces REST API, GA on 2026-05-18](https://github.blog/changelog/2026-05-18-copilot-spaces-api-now-generally-available/) — it exposes the same Spaces a human curates in the GitHub UI ([reference](https://docs.github.com/en/rest/copilot-spaces/copilot-spaces)) so CI jobs, sub-agents, and orchestrators can create, update, and attach resources at runtime. The pattern generalizes to any tool shipping an API alongside a curated context surface.
 
-## When to Apply
+## When to apply
 
-Apply this pattern only when **all** of the following hold:
+Apply this pattern only when all of the following hold:
 
-- **The writer is a system, not a person.** CI publishes release notes, a reviewer agent posts decisions, an orchestrator seeds sub-agent context. If the only writer is a human, a version-controlled repo file like AGENTS.md is simpler.
-- **Ingestion is controlled.** Inputs are first-party artifacts — your own CI output or agent transcripts — not auto-attached untrusted content like external issue bodies or webhook payloads.
-- **Retrieval-time selection is acceptable.** Readers take a relevant *subset* per query, not a deterministic full read. Copilot Chat only processes a portion of a Space per response ([Responsible use of Copilot Spaces](https://docs.github.com/en/copilot/responsible-use/copilot-spaces)).
-- **Vendor-hosted is acceptable.** The team is on GitHub and needs neither airgapped operation nor point-in-time reproducibility — auto-syncing sources mean the same query can return a different answer tomorrow ([concept docs](https://docs.github.com/en/copilot/concepts/context/spaces)).
+- The writer is a system, not a person. CI publishes release notes, a reviewer agent posts decisions, an orchestrator seeds sub-agent context. If the only writer is a human, a version-controlled repo file like AGENTS.md is simpler.
+- Ingestion is controlled. Inputs are first-party artifacts — your own CI output or agent transcripts — not auto-attached untrusted content like external issue bodies or webhook payloads.
+- Retrieval-time selection is acceptable. Readers take a relevant subset per query, not a deterministic full read. Copilot Chat only processes a portion of a Space per response ([Responsible use of Copilot Spaces](https://docs.github.com/en/copilot/responsible-use/copilot-spaces)).
+- Vendor-hosted is acceptable. The team is on GitHub and needs neither airgapped operation nor point-in-time reproducibility — auto-syncing sources mean the same query can return a different answer tomorrow ([concept docs](https://docs.github.com/en/copilot/concepts/context/spaces)).
 
 If any condition fails, prefer a file-based shared context surface ([AGENTS.md](../instructions/agents-md-distributed-conventions.md), pinned repo docs) and stop here.
 
-## How It Differs From File-Based Shared Context
+## How it differs from file-based shared context
 
 | Surface | Read mechanism | Write mechanism | Trifecta posture |
 |---------|---------------|-----------------|------------------|
 | `AGENTS.md` / `CLAUDE.md` / repo docs | Deterministic file read | Human PR | Closed by default |
 | [Per-agent memory](agent-memory-patterns.md) | Auto-loaded by harness | Agent-authored, scoped | Closed within agent |
-| **API-backed shared context store** | **Retrieval-grounded (RAG)** | **Any authenticated principal** | **Open unless inputs are controlled** |
+| API-backed shared context store | Retrieval-grounded (RAG) | Any authenticated principal | Open unless inputs are controlled |
 | Ad-hoc chat context | Per-message | Per-message | Closed |
 
 Files give reproducibility and offline operation; the API gives runtime mutability, multi-writer concurrency, and per-viewer RBAC. It adds a second surface to keep in sync, not a replacement.
 
-## How It Works
+## How it works
 
 The API changes the producer/consumer topology of the index, not what the store does. A Space stays a curated bundle of repos, files, PRs, issues, notes, and uploads grounded through retrieval-augmented generation: sources are indexed, the top-k passages for a prompt are retrieved, and only those reach the model ([GitHub Blog: RAG](https://github.blog/ai-and-ml/generative-ai/what-is-retrieval-augmented-generation-and-what-does-it-do-for-generative-ai/), [Copilot Spaces concept](../tools/copilot/copilot-spaces.md)).
 
 It exposes full CRUD at user and org scope — `GET/POST /orgs/{org}/copilot-spaces`, `GET/PATCH/DELETE` per space, plus a resources sub-endpoint for attaching repos, files, issues, PRs, and notes ([API ref](https://docs.github.com/en/rest/copilot-spaces/copilot-spaces), [awesome-copilot skill](https://github.com/github/awesome-copilot/blob/main/skills/copilot-spaces/SKILL.md)). Classic PATs need `read:org` to list; fine-grained tokens and Apps need grants on the owning org and *every repository referenced by Space resources*.
 
-## Why It Works
+## Why it works
 
 The API drops the manual sync step without changing retrieval: indexed sources still drive the prompt, but the index updates as the system runs. Anthropic's guidance for long-running agents recommends sharing state through external, addressable artifacts so agents and humans read and write the same context without re-deriving it each session ([Anthropic: harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)); Manus reports the same — a programmable context store lets sub-processes converge without thrash ([Manus: context engineering](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
 
-## When This Backfires
+## When this backfires
 
-- **Single-repo teams already on `AGENTS.md`.** A pinned repo file plus existing agent memory covers their shared context; the API adds a second source of truth with no offsetting model-behaviour change.
-- **High-write workflows hit undocumented quotas.** Capacity is enforced on indexed semantic content (tokens/embeddings), not file size, and GitHub has not published the limits. Community reports describe a progress bar passing 100% with ~185 small files ([community discussion #182622](https://github.com/orgs/community/discussions/182622)), after which the Space hard-errors — "You've exceeded the size limit for this space. Remove some references to continue." — and blocks further writes until a human removes references. CI that appends every release note eventually fails its write step rather than degrading silently.
-- **Mixed-permission audiences produce divergent answers.** RBAC is enforced per viewer even on shared and public Spaces ([GitHub Changelog, Dec 2025](https://github.blog/changelog/2025-12-01-copilot-spaces-public-spaces-and-code-view-support/)). Two readers asking the same question receive different effective context — a reproducibility hazard for a decision record.
-- **Untrusted ingestion closes a [lethal trifecta](../security/lethal-trifecta-threat-model.md).** If the API attaches external issue bodies, third-party PR descriptions, or webhook payloads, every later reader carries private repo data, untrusted content, and a write-capable token in one context — the classic prompt-injection loop ([Prompt Injection Threat Model](../security/prompt-injection-threat-model.md)).
-- **Airgapped or non-GitHub regimes.** Spaces are GitHub-hosted ([Copilot Spaces page](../tools/copilot/copilot-spaces.md)), so the API is unavailable there; auto-syncing sources also mean the same Space returns different answers over time without a code change, disqualifying it as a compliance system of record.
+- Single-repo teams already on `AGENTS.md`. A pinned repo file plus existing agent memory covers their shared context; the API adds a second source of truth with no offsetting model-behavior change.
+- High-write workflows hit undocumented quotas. Capacity is enforced on indexed semantic content (tokens/embeddings), not file size, and GitHub has not published the limits. Community reports describe a progress bar passing 100% with ~185 small files ([community discussion #182622](https://github.com/orgs/community/discussions/182622)), after which the Space hard-errors — "You've exceeded the size limit for this space. Remove some references to continue." — and blocks further writes until a human removes references. CI that appends every release note eventually fails its write step rather than degrading silently.
+- Mixed-permission audiences produce divergent answers. RBAC is enforced per viewer even on shared and public Spaces ([GitHub Changelog, Dec 2025](https://github.blog/changelog/2025-12-01-copilot-spaces-public-spaces-and-code-view-support/)). Two readers asking the same question receive different effective context — a reproducibility hazard for a decision record.
+- Untrusted ingestion closes a [lethal trifecta](../security/lethal-trifecta-threat-model.md). If the API attaches external issue bodies, third-party PR descriptions, or webhook payloads, every later reader carries private repo data, untrusted content, and a write-capable token in one context — the classic prompt-injection loop ([Prompt Injection Threat Model](../security/prompt-injection-threat-model.md)).
+- Airgapped or non-GitHub regimes. Spaces are GitHub-hosted ([Copilot Spaces page](../tools/copilot/copilot-spaces.md)), so the API is unavailable there; auto-syncing sources also mean the same Space returns different answers over time without a code change, disqualifying it as a compliance system of record.
 
 ## Example
 

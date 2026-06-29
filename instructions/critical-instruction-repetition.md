@@ -17,23 +17,23 @@ maturity: adopted
 
 > Repeating a critical instruction at a prompt's start and end exploits primacy and recency bias for higher compliance than a single placement.
 
-**Learn it hands-on:** [Top and Tail](https://learn.agentpatterns.ai/prompt-engineering/top-and-tail/) — guided lesson with quizzes.
+Learn it hands-on with the [Top and Tail guided lesson](https://learn.agentpatterns.ai/prompt-engineering/top-and-tail/), which includes quizzes.
 
 !!! info "Also known as"
     Attention Sinks, Lost in the Middle, Attention Bias and Instruction Placement
 
-## The Mechanism
+## The mechanism
 
 Transformer attention is not uniform across a context window. Two structural biases sit at opposite ends:
 
-- **Primacy bias** — initial tokens receive disproportionate attention. Xiao et al. (2023) showed softmax attention concentrates on early tokens as a "sink," independent of semantic relevance ([Efficient Streaming Language Models with Attention Sinks](https://arxiv.org/abs/2309.17453)).
-- **Recency bias** — recent tokens are freshest in the model's working state and directly shape the next token. Liu et al. (2023) measured a 30%+ accuracy drop when relevant information moved to the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172)).
+- Primacy bias — initial tokens receive disproportionate attention. Xiao et al. (2023) showed softmax attention concentrates on early tokens as a "sink," independent of semantic relevance ([Efficient Streaming Language Models with Attention Sinks](https://arxiv.org/abs/2309.17453)).
+- Recency bias — recent tokens are freshest in the model's working state and directly shape the next token. Liu et al. (2023) measured a 30%+ accuracy drop when relevant information moved to the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172)).
 
 A critical instruction placed once in the middle of a prompt sits in the weakest-attention trough. Placing it at both ends puts it in both high-attention positions.
 
-## When to Use Repetition
+## When to use repetition
 
-Reserve repetition for instructions where non-compliance has real consequences. If everything is repeated, the repetition conveys no priority information — and adding rules indiscriminately runs into the [instruction compliance ceiling](instruction-compliance-ceiling.md).
+Reserve repetition for instructions where non-compliance has real consequences. If you repeat everything, the repetition conveys no priority information, and adding rules indiscriminately runs into the [instruction compliance ceiling](instruction-compliance-ceiling.md).
 
 Criteria for repetition:
 
@@ -43,7 +43,7 @@ Criteria for repetition:
 
 Examples: "Never include credentials in output", "Always validate input before writing to the database", "Do not modify files outside the specified directory".
 
-## How to Apply It
+## How to apply it
 
 State the critical rule immediately — before background context, before role-setting prose:
 
@@ -59,19 +59,19 @@ Remember: never output authentication credentials or session tokens.
 
 The closing restatement exploits recency bias. In long conversations, restate the constraint at the end of your most recent message once context has grown substantially.
 
-## Reasoning vs. Non-Reasoning Models
+## Reasoning vs non-reasoning models
 
 The effect of repetition varies by model type:
 
-- **Non-reasoning models** are more susceptible to positional effects and benefit most from explicit repetition.
-- **Reasoning models** internally restate instructions during their thinking phase, which may reduce (but not eliminate) positional bias. Liao et al. (2025) showed that long chain-of-thought models still exhibit a position effect: the first reasoning step disproportionately shapes the final answer ([Lost at the Beginning of Reasoning](https://arxiv.org/abs/2506.22058)).
+- Non-reasoning models are more susceptible to positional effects and benefit most from explicit repetition.
+- Reasoning models restate instructions during their thinking phase, which may reduce (but not eliminate) positional bias. Liao et al. (2025) showed that long chain-of-thought models still exhibit a position effect: the first reasoning step disproportionately shapes the final answer ([Lost at the Beginning of Reasoning](https://arxiv.org/abs/2506.22058)).
 
-## When This Backfires
+## When this backfires
 
-- **Too many repeated rules**: If several rules are all repeated, the repetition carries no priority signal — the model cannot distinguish which constraint is truly critical.
-- **Reasoning models with long thinking phases**: Models that internally re-examine instructions during chain-of-thought are less susceptible to positional attention decay. Repetition still does no harm, but yields diminishing returns compared to non-reasoning models.
-- **Short prompts**: In a 200-token prompt, there is no middle zone to avoid. Repetition here adds noise rather than focus.
-- **Contradictory restatements**: If the opening and closing versions of a rule differ in wording enough to imply different behaviors, the model may treat them as conflicting constraints rather than reinforcing ones.
+- Too many repeated rules: if you repeat several rules, the repetition carries no priority signal, and the model cannot tell which constraint is truly critical.
+- Reasoning models with long thinking phases: models that re-examine instructions during chain-of-thought are less susceptible to positional attention decay. Repetition still does no harm, but yields diminishing returns compared to non-reasoning models.
+- Short prompts: in a 200-token prompt, there is no middle zone to avoid. Repetition here adds noise rather than focus.
+- Contradictory restatements: if the opening and closing versions of a rule differ enough in wording to imply different behaviors, the model may treat them as conflicting constraints rather than reinforcing ones.
 
 ## Cost
 

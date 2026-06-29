@@ -16,11 +16,11 @@ maturity: adopted
 
 > CoALA splits agent actions into internal (reason, retrieve, learn) and external (ground) — the boundary surfaces cost, reversibility, and permission profiles tool lists hide.
 
-## When the Split Pays Off
+## When the split pays off
 
-The boundary earns its keep when the agent has at least two of: persistent long-term memory, a multi-tool harness with mixed side-effect profiles, or permission gating that discriminates read-only inference from consequential writes. On a one-tool ReAct loop with no long-term memory it adds vocabulary without changing the architecture ([§5, Table 2](https://arxiv.org/html/2309.02427v3) lists no writable memory and digital grounding only for ReAct).
+The boundary pays off when the agent has at least two of these: persistent long-term memory, a multi-tool harness with mixed side-effect profiles, or permission gating that separates read-only inference from consequential writes. On a one-tool ReAct loop with no long-term memory, it adds vocabulary without changing the architecture ([§5, Table 2](https://arxiv.org/html/2309.02427v3) lists no writable memory and digital grounding only for ReAct).
 
-## The Action Space
+## The action space
 
 CoALA structures the action space along one top-level boundary:
 
@@ -34,16 +34,16 @@ The four resulting action types:
 
 | Type | Direction | Working memory | Long-term memory | External world |
 |------|-----------|----------------|------------------|----------------|
-| **Reason** (internal) | LLM call | read + write | — | — |
-| **Retrieve** (internal) | LT → WM | write | read | — |
-| **Learn** (internal) | WM → LT | read | write | — |
-| **Ground** (external) | WM ↔ world | read + write | — | read + write |
+| Reason (internal) | LLM call | read + write | — | — |
+| Retrieve (internal) | LT → WM | write | read | — |
+| Learn (internal) | WM → LT | read | write | — |
+| Ground (external) | WM ↔ world | read + write | — | read + write |
 
-Grounding subsumes everything that reaches outside the agent: physical environments (robotic manipulation), dialogue environments (human/agent interaction), and digital environments (APIs, websites, code execution) — see [CoALA §5.1](https://arxiv.org/html/2309.02427v3).
+Grounding covers everything that reaches outside the agent: physical environments (robotic manipulation), dialogue environments (human/agent interaction), and digital environments (APIs, websites, code execution) — see [CoALA §5.1](https://arxiv.org/html/2309.02427v3).
 
-## Why The Boundary Matters For Engineering
+## Why the boundary matters for engineering
 
-Internal and external actions have categorically different cost, reversibility, permission, and observability profiles. Naming the boundary makes those differences architectural defaults rather than per-tool ad-hoc decisions.
+Internal and external actions have very different cost, reversibility, permission, and observability profiles. Naming the boundary makes those differences architectural defaults rather than one-off per-tool decisions.
 
 | Profile | Internal actions | External actions |
 |---------|------------------|------------------|
@@ -52,9 +52,9 @@ Internal and external actions have categorically different cost, reversibility, 
 | Permission gating | none required (no egress) | the [lethal trifecta's](../security/lethal-trifecta-threat-model.md) egress leg sits here |
 | Observability | invisible to outside observers | produces real telemetry |
 
-Conflating the two — treating a memory read and a `curl` call as one "tool call" — pushes permission, durability, and rollback questions to per-tool decisions. The boundary is also where the [reasoning-execution split](cognitive-reasoning-execution-separation.md) anchors at runtime: reasoning and retrieval stay on the cheap, reversible side; learning and grounding cross into permanence.
+Merging the two — treating a memory read and a `curl` call as one "tool call" — pushes permission, durability, and rollback questions down to per-tool decisions. The boundary is also where the [reasoning-execution split](cognitive-reasoning-execution-separation.md) anchors at runtime: reasoning and retrieval stay on the cheap, reversible side; learning and grounding cross into permanence.
 
-## Mapping CoALA Actions to a Coding-Agent Harness
+## Mapping CoALA actions to a coding-agent harness
 
 | CoALA action | Claude Code / Copilot / Cursor equivalent |
 |--------------|-------------------------------------------|
@@ -65,19 +65,19 @@ Conflating the two — treating a memory read and a `curl` call as one "tool cal
 
 The mapping lets you audit a harness for asymmetry: most production coding agents have rich grounding, decent reasoning, partial retrieval, and almost no learning — which is why session-to-session knowledge stays in the user's head or in `CLAUDE.md`. CoALA's survey of existing systems ([§5/Table 2](https://arxiv.org/html/2309.02427v3)) shows the same gap across the academic systems it classifies.
 
-## Why It Works
+## Why it works
 
-The boundary is load-bearing because the *direction of memory access* (the formal criterion in [CoALA §5](https://arxiv.org/html/2309.02427v3)) correlates with the *operational profile* (the engineering criterion in the table above). A read against working memory cannot have a side effect; a write against the external world generally does. Naming the boundary at the architecture layer lets one ontology drive permission gating, telemetry, and rollback policy at once — without it, those three policies get wired independently per tool and drift apart.
+The boundary is load-bearing because the direction of memory access (the formal criterion in [CoALA §5](https://arxiv.org/html/2309.02427v3)) lines up with the operational profile (the engineering criterion in the table above). A read against working memory cannot have a side effect; a write against the external world generally does. Naming the boundary at the architecture layer lets one classification set permission gating, telemetry, and rollback policy at once. Without it, those three policies get wired independently per tool and drift apart.
 
-## When This Backfires
+## When this backfires
 
-The four-way split is a modelling choice, not a physical fact. Three conditions where forcing it adds work without insight:
+The four-way split is a modeling choice, not a physical fact. Three conditions where forcing it adds work without insight:
 
-- **Single-tool ReAct loops with no long-term memory.** CoALA's own classification of ReAct in [Table 2](https://arxiv.org/html/2309.02427v3) shows no writable memory and digital grounding only — the four-way split collapses to "reason vs tool-call". A typed-tool-call boundary captures the same information with one ontology instead of two.
-- **Tools that both retrieve and mutate.** A vector store that returns documents *and* updates relevance counters straddles retrieval (internal read) and grounding (external side effect). Force-classifying it on one side hides the [trifecta-relevant fact](../security/lethal-trifecta-threat-model.md) that it touches both — explicit per-tool annotation is needed. The boundary is contested in the paper itself: a Wikipedia database could be internal semantic memory or external digital environment depending on framing ([CoALA §5 discussion](https://arxiv.org/html/2309.02427v3)).
-- **Knowledge-layer category error.** CoALA lumps facts and experiences under "semantic memory" without distinguishing persistence semantics. [The Missing Knowledge Layer (arXiv:2604.11364)](https://arxiv.org/abs/2604.11364) argues this "produces a category error: systems apply cognitive decay to factual claims, or treat facts and experiences with identical update mechanics." Pair CoALA's action taxonomy with [tiered memory architecture](tiered-memory-architecture.md) when both facts and episodes are stored.
+- Single-tool ReAct loops with no long-term memory. CoALA's own classification of ReAct in [Table 2](https://arxiv.org/html/2309.02427v3) shows no writable memory and digital grounding only — the four-way split collapses to "reason vs tool-call". A typed-tool-call boundary captures the same information with one ontology instead of two.
+- Tools that both retrieve and mutate. A vector store that returns documents and updates relevance counters straddles retrieval (internal read) and grounding (external side effect). Force-classifying it on one side hides the [trifecta-relevant fact](../security/lethal-trifecta-threat-model.md) that it touches both — so it needs explicit per-tool annotation. The boundary is contested in the paper itself: a Wikipedia database could be internal semantic memory or external digital environment depending on framing ([CoALA §5 discussion](https://arxiv.org/html/2309.02427v3)).
+- Knowledge-layer category error. CoALA lumps facts and experiences under "semantic memory" without distinguishing persistence semantics. [The Missing Knowledge Layer (arXiv:2604.11364)](https://arxiv.org/abs/2604.11364) argues this "produces a category error: systems apply cognitive decay to factual claims, or treat facts and experiences with identical update mechanics." Pair CoALA's action taxonomy with [tiered memory architecture](tiered-memory-architecture.md) when both facts and episodes are stored.
 
-Frontier-context expansion also weakens the split over time: the CoALA authors themselves note that "a longer context might downplay the importance of long-term memory" ([§7](https://arxiv.org/html/2309.02427v3)) — internal retrieval loses operational meaning when working memory holds the corpus.
+Growing context windows also weaken the split over time: the CoALA authors themselves note that "a longer context might downplay the importance of long-term memory" ([§7](https://arxiv.org/html/2309.02427v3)) — internal retrieval loses operational meaning when working memory holds the corpus.
 
 ## Example
 

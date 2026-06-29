@@ -19,22 +19,22 @@ maturity: established
 
 ## Overview
 
-GitHub's analysis of over 2,500 `AGENTS.md` files identified a single primary failure mode: vagueness. Files that say "you are a helpful coding assistant" produce inconsistent results. Files that specify runnable commands, show style via code examples, define explicit permission tiers, and name specialist agents produce consistent behaviour without ongoing [prompt engineering](../training/foundations/prompt-engineering.md).
+GitHub's analysis of over 2,500 `AGENTS.md` files identified a single primary failure mode: vagueness. Files that say "you are a helpful coding assistant" produce inconsistent results. Files that specify runnable commands, show style via code examples, define explicit permission tiers, and name specialist agents produce consistent behavior without ongoing [prompt engineering](../training/foundations/prompt-engineering.md).
 
 The four patterns below cover the authoring decisions that differentiate effective files from ineffective ones. They are independent and composable.
 
-## Pattern 1 — Executable Commands
+## Pattern 1 — executable commands
 
 Place runnable commands early in the file. Agents reference them throughout their work.
 
-**What not to write:**
+What not to write:
 
 ```
 Testing: run the test suite
 Linting: use the linter
 ```
 
-**What to write:**
+What to write:
 
 ```
 Testing: pytest -v tests/
@@ -46,15 +46,15 @@ Include the actual flags. "Run tests" leaves the invocation open to interpretati
 
 Six areas to cover: commands, testing practices, project structure, code style, git workflow, and boundaries. Missing any one area is the second-most-common failure pattern after vagueness. Within project structure, specificity helps: "React 18 with TypeScript, Vite, and Tailwind CSS" is more actionable than "React project."
 
-## Pattern 2 — Code Over Prose for Style
+## Pattern 2 — code over prose for style
 
 One real code snippet demonstrating your project's conventions is more reliable than three paragraphs describing them. Show what correct output looks like; agents infer the pattern.
 
-**Instead of:**
+Instead of:
 
 > Use descriptive variable names and prefer functional style. Keep functions short and avoid side effects where possible.
 
-**Write:**
+Write:
 
 ```typescript
 // Correct
@@ -70,7 +70,7 @@ function getUser(id) {
 
 This approach also works for commit message format, file naming, and any output that must conform to a specific shape.
 
-## Pattern 3 — Three-Tier Boundaries
+## Pattern 3 — three-tier boundaries
 
 Structure permissions as three explicit tiers rather than a flat list of prohibitions.
 
@@ -94,9 +94,9 @@ Structure permissions as three explicit tiers rather than a flat list of prohibi
 
 The always/ask/never structure makes the permission model scannable and explicit. The most common constraint across the 2,500+ repositories was "Never commit secrets" — it appeared across nearly all effective files regardless of stack.
 
-Note: this three-tier format is a community convention. The AGENTS.md spec itself provides no standardised boundary syntax; the emoji tiers are an emergent pattern, not a spec requirement.
+Note: this three-tier format is a community convention. The AGENTS.md spec itself provides no standardized boundary syntax; the emoji tiers are an emergent pattern, not a spec requirement.
 
-## Pattern 4 — Specialist Personas
+## Pattern 4 — specialist personas
 
 Define narrow, named agents with explicit scope exclusions rather than one generalist. Start with one and expand based on observed mistakes.
 
@@ -117,7 +117,7 @@ Reads source code and generates API documentation. Never modifies source files.
 
 Each persona answers: what does this agent produce, and what is it not allowed to touch? This is the [persona-as-code](../agent-design/persona-as-code.md) discipline applied inline. The scope exclusion is as important as the responsibility — it prevents an agent from drifting into adjacent work during a long session.
 
-The recommended starting point is one specialist (e.g. `@test-agent`), not a full suite. Upfront over-specification produces personas that conflict or leave gaps that no agent owns.
+The recommended starting point is one specialist (for example `@test-agent`), not a full suite. Upfront over-specification produces personas that conflict or leave gaps that no agent owns.
 
 ## Trade-offs
 
@@ -125,9 +125,9 @@ The recommended starting point is one specialist (e.g. `@test-agent`), not a ful
 |----------|------|------|
 | Specific executable commands | Agents invoke correctly on first try | Requires updating when tooling changes |
 | Code examples for style | Zero interpretation error on format | Longer file; more context consumed |
-| Three-tier boundaries | Scannable permission model | Boundary syntax is not standardised across tools |
+| Three-tier boundaries | Scannable permission model | Boundary syntax is not standardized across tools |
 | Specialist personas | Reduces scope creep and conflicts | Requires knowing failure modes before defining them |
-| Vague generalist file | Fast to write initially | Inconsistent agent behaviour, difficult to debug |
+| Vague generalist file | Fast to write initially | Inconsistent agent behavior, difficult to debug |
 
 ## Key Takeaways
 

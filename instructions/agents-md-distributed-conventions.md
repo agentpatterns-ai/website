@@ -18,47 +18,47 @@ maturity: established
 > Capture team-specific patterns, style rules, and tooling requirements in AGENTS.md files throughout the codebase so every agent session inherits consistent guidance.
 
 !!! info "Also known as"
-    Distributed Conventions, AGENTS.md Distributed Conventions. For the complementary pattern on **what** to put in AGENTS.md (a pointer map, not an encyclopedia), see [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md).
+    Distributed Conventions, AGENTS.md Distributed Conventions. For the complementary pattern on what to put in AGENTS.md (a pointer map, not an encyclopedia), see [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md).
 
-## The Stateless Agent Problem
+## The stateless agent problem
 
-Each agent session starts cold. Without persistent conventions encoded in the codebase, the agent defaults to its training-data patterns: common tooling, conventional naming, generic architectural choices. These defaults are frequently wrong for a specific team's standards.
+Each agent session starts cold. Without persistent conventions encoded in the codebase, the agent defaults to its training-data patterns: common tooling, conventional naming, generic architectural choices. These defaults are often wrong for a specific team's standards.
 
 [OpenAI's Sora Android team](https://openai.com/index/shipping-sora-for-android-with-codex/) observed this directly. Without explicit conventions, Codex introduced extra view models, pushed logic into incorrect architectural layers, and ignored CI requirements. The fix was distributing AGENTS.md files that encoded the team's standards — including a mandatory `./gradlew detektFix` before every commit.
 
-## What to Encode
+## What to encode
 
 AGENTS.md files at each scope should capture conventions most likely to be violated:
 
-**Repository root** — standards that apply everywhere:
+Repository root — standards that apply everywhere:
 
 - Mandatory CI commands (linting, formatting, test runner invocations)
 - Naming conventions that deviate from language defaults
-- Prohibited patterns and why (e.g., "do not use X, we use Y because Z")
+- Prohibited patterns and why (for example, "do not use X, we use Y because Z")
 - How to run the project locally
 
-**Service or module directory** — standards specific to that area:
+Service or module directory — standards specific to that area:
 
 - Architecture layer responsibilities in that module
 - Different lint rules or build commands from the project default
 - Module-specific testing conventions
 
-**Global agent config** — multi-repo context:
+Global agent config — multi-repo context:
 
 - Where local repositories live (for agents operating across multiple repos)
 - Cross-repo conventions and personal workflow preferences
 
-## Have the Agent Write and Maintain the Files
+## Have the agent write and maintain the files
 
-[The Sora team](https://openai.com/index/shipping-sora-for-android-with-codex/) had Codex create and maintain its own AGENTS.md files throughout the codebase. This approach surfaces the context the agent actually encounters in practice — naming gaps, missing architecture notes, undocumented CI steps — rather than what a human predicts upfront.
+[The Sora team](https://openai.com/index/shipping-sora-for-android-with-codex/) had Codex create and maintain its own AGENTS.md files throughout the codebase. This surfaces the context the agent actually meets in practice — naming gaps, missing architecture notes, undocumented CI steps — rather than what a human predicts upfront.
 
 To bootstrap this:
 
-1. Ask the agent to attempt a task and note what it had to ask about or look up
-2. Ask the agent to encode those learnings in the appropriate AGENTS.md file
-3. Validate the encoded conventions before committing them
+1. Ask the agent to attempt a task and note what it had to ask about or look up.
+2. Ask the agent to encode those learnings in the appropriate AGENTS.md file.
+3. Validate the encoded conventions before committing them.
 
-## What Not to Encode
+## What not to encode
 
 AGENTS.md files should contain instructions, not documentation. Avoid:
 
@@ -69,13 +69,13 @@ AGENTS.md files should contain instructions, not documentation. Avoid:
 
 AGENTS.md content is injected into the agent's context before task work begins, subject to per-tool limits (Codex applies a [32 KiB cap by default](https://developers.openai.com/codex/guides/agents-md)). Each unnecessary line consumes context budget that could be used for implementation.
 
-## Mandatory CI Commands as Conventions
+## Mandatory CI commands as conventions
 
-Mandatory CI commands in AGENTS.md are high-value. Agents that skip linting or formatting introduce expensive build failures. An explicit instruction — "run `./gradlew detektFix` before committing" — converts an advisory reminder into a mandatory step.
+Mandatory CI commands in AGENTS.md pay off. Agents that skip linting or formatting cause expensive build failures. An explicit instruction — "run `./gradlew detektFix` before committing" — turns an advisory reminder into a required step.
 
 This works best paired with a pre-commit hook: the instruction makes the agent comply; the hook catches any bypass.
 
-## Multi-Repo Navigation
+## Multi-repo navigation
 
 For agents operating across multiple repositories, a global config file — `~/.codex/AGENTS.md` or equivalent — should document where local repos are checked out, which repo serves which purpose, and how to navigate between them.
 
@@ -127,12 +127,12 @@ The root file encodes repo-wide enforcement rules (CI commands, naming, prohibit
 - Keep files short and instruction-focused; link to documentation rather than embedding it.
 - Multi-repo agents need a global config documenting repository layout.
 
-## When This Backfires
+## When this backfires
 
-- **Agent-written files can be redundant**: LLM-generated AGENTS.md files risk duplicating documentation the agent already accesses directly from the codebase. Validate agent-written files by reviewing for content that the agent could discover from existing code, tests, or README files.
-- **Files drift as the codebase evolves**: Static convention files go stale when the code they describe changes. Treat AGENTS.md updates as part of the same PR as the code change they document.
-- **Conflicting instructions across levels**: Distributed files at root and module level can conflict without explicit priority ordering. When a module-level instruction contradicts a root instruction, agents may skip verification steps rather than ask for clarification.
-- **Small or stable codebases gain less**: Distributed convention files add maintenance overhead. For small repos where conventions are few and stable, a single root AGENTS.md (or none at all) may outperform a hierarchy.
+- Agent-written files can be redundant: LLM-generated AGENTS.md files risk duplicating documentation the agent already reads directly from the codebase. Validate agent-written files by reviewing for content the agent could discover from existing code, tests, or README files.
+- Files drift as the codebase evolves: static convention files go stale when the code they describe changes. Treat AGENTS.md updates as part of the same PR as the code change they document.
+- Conflicting instructions across levels: distributed files at root and module level can conflict without explicit priority ordering. When a module-level instruction contradicts a root instruction, agents may skip verification steps rather than ask for clarification.
+- Small or stable codebases gain less: distributed convention files add maintenance overhead. For small repos where conventions are few and stable, a single root AGENTS.md (or none at all) may do better than a hierarchy.
 
 ## Related
 

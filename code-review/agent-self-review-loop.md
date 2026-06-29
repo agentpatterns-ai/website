@@ -20,13 +20,13 @@ maturity: adopted
 !!! info "Also known as"
     Review-Then-Implement Loop, Agent Review Loops
 
-## The Pattern
+## The pattern
 
-An agent that generates code runs a review pass on its own changes before opening a pull request — iterating on findings, fixing issues before a human ever sees the PR.
+An agent that generates code runs a review pass on its own changes before it opens a pull request. It iterates on the findings and fixes issues before a human ever sees the PR.
 
-This differs from the [Committee Review Pattern](committee-review-pattern.md), where separate reviewer agents evaluate an implementer's output. In a self-review loop, the same agent (or a tightly integrated review step within the agent's workflow) evaluates and iterates on its own work as a built-in phase before submission.
+This differs from the [Committee Review Pattern](committee-review-pattern.md), where separate reviewer agents evaluate an implementer's output. In a self-review loop, the same agent evaluates and iterates on its own work as a built-in phase before submission. A tightly integrated review step in the agent's workflow counts as the same agent here.
 
-## How It Works
+## How it works
 
 ```mermaid
 graph TD
@@ -40,48 +40,48 @@ graph TD
     F -->|No| G[Open PR for human review]
 ```
 
-### GitHub Copilot Coding Agent
+### GitHub Copilot coding agent
 
-GitHub's [Copilot coding agent](../tools/copilot/coding-agent.md) implements this pattern natively. The agent [reviews its own changes using Copilot code review before it opens the pull request](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/). It receives feedback, iterates, and improves the patch — only requesting human review after completing its own review cycle.
+GitHub's [Copilot coding agent](../tools/copilot/coding-agent.md) implements this pattern natively. The agent [reviews its own changes using Copilot code review before it opens the pull request](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/). It takes the feedback, iterates, and improves the patch. It requests human review only after it finishes its own review cycle.
 
 The agent also runs security checks during its workflow:
 
-- **Code scanning** — static analysis for vulnerability patterns
-- **Secret scanning** — detects accidentally committed credentials
-- **Dependency vulnerability checks** — flags dependencies with known CVEs
+- Code scanning — static analysis for vulnerability patterns
+- Secret scanning — detects accidentally committed credentials
+- Dependency vulnerability checks — flags dependencies with known CVEs
 
 As GitHub documents: ["If a dependency has a known issue, or something looks like a committed API key, it gets flagged before the pull request opens."](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/) Code scanning, normally part of GitHub Advanced Security, is included at no additional cost.
 
 Copilot code review has processed [over 60 million reviews](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) since its April 2025 launch.
 
-## What Human Reviewers Gain
+## What human reviewers gain
 
-Self-review eliminates the issues humans should not spend time on: style violations, unused imports, common vulnerability patterns, and accidental secret exposure — shifting attention to areas where judgment is irreplaceable.
+Self-review removes the issues humans should not spend time on: style violations, unused imports, common vulnerability patterns, and accidental secret exposure. This shifts their attention to the areas where judgment is irreplaceable.
 
 GitHub identifies [three functions that remain exclusively human](https://github.blog/ai-and-ml/generative-ai/code-review-in-the-age-of-ai-why-developers-will-always-own-the-merge-button/):
 
-1. **Architectural decisions** — "should we split this service?" requires contextual judgment
-2. **Mentorship** — PR threads function as team classrooms where experience transfers
-3. **Ethical evaluation** — determining whether features align with organizational values
+1. Architectural decisions. A question like "should we split this service?" needs contextual judgment.
+2. Mentorship. PR threads work as team classrooms where experience transfers.
+3. Ethical evaluation. People decide whether features align with organizational values.
 
-Self-review [reduces back-and-forth by roughly a third](https://github.blog/ai-and-ml/generative-ai/code-review-in-the-age-of-ai-why-developers-will-always-own-the-merge-button/) by eliminating trivial corrections — while the merge button remains a human decision.
+Self-review [reduces back-and-forth by roughly a third](https://github.blog/ai-and-ml/generative-ai/code-review-in-the-age-of-ai-why-developers-will-always-own-the-merge-button/) by removing trivial corrections, and the merge button stays a human decision.
 
-## Implementing the Pattern
+## Implementing the pattern
 
 For agents without built-in self-review:
 
-1. **Add a review step before PR creation.** After the agent completes code generation, run a separate review prompt or subagent against the diff. Use `git diff` to scope the review to changes only.
-2. **Include security tooling.** Run linters, static analysis (e.g., CodeQL, Semgrep, Bandit), and secret scanners as shell commands within the agent's workflow. Parse results and fix findings before proceeding.
-3. **Cap iteration rounds.** Set a maximum of 2 to 3 self-review cycles. If the agent cannot resolve its own findings within that limit, open the PR with remaining issues documented for human review.
-4. **Maintain independence where possible.** A fresh context for the review step reduces confirmation bias (full independence is the [committee review](committee-review-pattern.md) alternative). If using a subagent for review, give it read-only tool access and a review-focused prompt distinct from the implementation prompt.
+1. Add a review step before PR creation. After the agent finishes code generation, run a separate review prompt or subagent against the diff. Use `git diff` to scope the review to changes only.
+2. Include security tooling. Run linters, static analysis (for example, CodeQL, Semgrep, Bandit), and secret scanners as shell commands in the agent's workflow. Parse the results and fix findings before proceeding.
+3. Cap the iteration rounds. Set a maximum of 2 to 3 self-review cycles. If the agent cannot resolve its own findings within that limit, open the PR with the remaining issues documented for human review.
+4. Maintain independence where you can. A fresh context for the review step reduces confirmation bias, and full independence is the [committee review](committee-review-pattern.md) alternative. If you use a subagent for review, give it read-only tool access and a review-focused prompt distinct from the implementation prompt.
 
 ## Limitations
 
-**Confirmation bias.** An agent reviewing its own output in the same context tends to validate the same assumptions it made during generation. This is structurally less independent than cross-agent or cross-model review — a single-context reviewer shares the same training biases and blind spots as the generator. The pattern is operationally simpler and faster than coordinating separate reviewers, at the cost of that independence. When an external LLM reviewer is added, a separate failure mode applies: LLMs systematically flag correct code as non-compliant, and adding explanation requirements worsens the false positive rate — see [LLM Code Review Overcorrection](../anti-patterns/llm-review-overcorrection.md).
+Confirmation bias. An agent that reviews its own output in the same context tends to validate the same assumptions it made during generation. This is structurally less independent than cross-agent or cross-model review, because a single-context reviewer shares the same training biases and blind spots as the generator. The pattern is simpler to run and faster than coordinating separate reviewers, at the cost of that independence. When you add an external LLM reviewer, a separate failure mode applies: LLMs systematically flag correct code as non-compliant, and adding explanation requirements worsens the false positive rate. See [LLM Code Review Overcorrection](../anti-patterns/llm-review-overcorrection.md).
 
-**Scope ceiling.** Self-review catches mechanical issues — style, known vulnerability patterns, dependency problems. It does not catch architectural misjudgments, incorrect business logic, or design problems that require domain knowledge beyond the agent's context.
+Scope ceiling. Self-review catches mechanical issues: style, known vulnerability patterns, and dependency problems. It does not catch architectural misjudgments, incorrect business logic, or design problems that need domain knowledge beyond the agent's context.
 
-**Diminishing returns.** After 2 to 3 rounds of self-review iteration, additional rounds rarely surface new issues. The agent converges on its own interpretation of correctness.
+Diminishing returns. After 2 to 3 rounds of self-review iteration, more rounds rarely surface new issues. The agent converges on its own interpretation of correctness.
 
 ## Key Takeaways
 
@@ -95,7 +95,7 @@ For agents without built-in self-review:
 
 A Claude Code agent implementing a feature branch runs a self-review loop before opening a PR.
 
-**Review step prompt (runs after code generation):**
+Review step prompt, which runs after code generation:
 
 ```
 Review the following diff for issues before I open a pull request.
@@ -115,7 +115,7 @@ $(git diff main)
 </diff>
 ```
 
-**Agent workflow:**
+Agent workflow:
 
 ```python
 MAX_ROUNDS = 3
@@ -133,7 +133,7 @@ else:
     open_pr(unresolved=[])
 ```
 
-**Security scan step (runs in parallel with review):**
+Security scan step, which runs in parallel with the review:
 
 ```bash
 # Static analysis
@@ -154,7 +154,7 @@ The agent parses each JSON output and fixes findings before the PR opens. If fin
 - [Committee Review Pattern](committee-review-pattern.md) — cross-agent alternative where independent reviewers evaluate an implementer's output
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
 - [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
-- [Convergence Detection](../agent-design/convergence-detection.md) — deciding when self-review iterations have stopped surfacing new issues
-- [Loop Strategy Spectrum](../agent-design/loop-strategy-spectrum.md) — accumulated vs fresh context tradeoffs across iteration loops
+- [Convergence Detection](../loop-engineering/convergence-detection.md) — deciding when self-review iterations have stopped surfacing new issues
+- [Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md) — accumulated vs fresh context tradeoffs across iteration loops
 - [Agent Harness](../agent-design/agent-harness.md) — the initializer + coding agent pattern that self-review integrates into as a built-in phase
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)

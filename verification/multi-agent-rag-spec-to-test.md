@@ -16,11 +16,11 @@ maturity: emerging
 
 > A retrieval-augmented multi-agent pipeline converts test specifications to executable scripts by grounding generation in your team's existing test corpus.
 
-## The Spec-to-Test Bottleneck
+## The spec-to-test bottleneck
 
-Multi-Agent RAG for spec-to-test automation uses a retrieval-augmented pipeline — typically planner, generator, and validator agents — to convert natural-language acceptance criteria into runnable test scripts grounded in a team's existing test corpus. It addresses the gap where agile teams produce specs faster than they can manually implement them as tests.
+Multi-Agent RAG for spec-to-test automation turns natural-language acceptance criteria into runnable test scripts. A retrieval-augmented pipeline — usually a planner, a generator, and a validator — does the work, grounded in your team's existing test corpus. It closes the gap where teams write specs faster than they implement them as tests.
 
-The [Hacon/Siemens study](https://arxiv.org/abs/2603.08190) shows a RAG multi-agent approach raises test script throughput while preserving human review gates. The pattern may generalize to other domains where formal specs exist and spec production outpaces implementation.
+The [Hacon/Siemens study](https://arxiv.org/abs/2603.08190) shows a RAG multi-agent approach raises test script throughput while keeping human review gates. The pattern may carry over to other domains where formal specs exist and outpace implementation.
 
 ## Architecture
 
@@ -38,15 +38,15 @@ graph TD
     H -->|Changes requested| G
 ```
 
-**Planner**: Decomposes the spec into implementable steps using retrieved scripts as structural reference — your team's setup, assertion, and teardown patterns. This role is an architectural inference; the [Hacon/Siemens implementation](https://arxiv.org/abs/2603.08190) uses a Generator/Evaluator split without a discrete planner.
+Planner: breaks the spec into implementable steps, using retrieved scripts as a structural reference — your team's setup, assertion, and teardown patterns. This role is an inference. The [Hacon/Siemens implementation](https://arxiv.org/abs/2603.08190) uses a generator/evaluator split with no separate planner.
 
-**Generator**: Produces candidate test scripts via retrieval-augmented generation over historical specification–script pairs ([arXiv:2603.08190](https://arxiv.org/abs/2603.08190)). RAG grounds library choices in your existing corpus rather than the model's training data.
+Generator: produces candidate test scripts by RAG over past specification–script pairs ([arXiv:2603.08190](https://arxiv.org/abs/2603.08190)). RAG grounds library choices in your existing corpus, not the model's training data.
 
-**Validator**: Checks syntactical correctness and executability before the script reaches a human reviewer ([arXiv:2603.08190](https://arxiv.org/abs/2603.08190)). Feeds failures back to the generator.
+Validator: checks syntax and executability before the script reaches a human reviewer ([arXiv:2603.08190](https://arxiv.org/abs/2603.08190)), then feeds failures back to the generator.
 
-## RAG Grounding
+## RAG grounding
 
-The retrieval step provides stylistic grounding. Without it, generators produce syntactically valid but stylistically inconsistent scripts reviewers must normalize. RAG over code examples reduces hallucinated API calls by anchoring generation in real usage patterns ([Lewis et al., 2020](https://arxiv.org/abs/2005.11401)). With it:
+The retrieval step grounds output in your team's style. Without it, generators produce scripts that pass syntax checks but read inconsistently, so reviewers must normalize them. RAG over code examples reduces hallucinated API calls by anchoring generation in real usage patterns ([Lewis et al., 2020](https://arxiv.org/abs/2005.11401)). With it:
 
 - Library choices match your existing test framework
 - Assertion patterns match team conventions
@@ -63,9 +63,9 @@ Ambiguous specs produce ambiguous scripts. Before feeding specs to the pipeline:
 - Confirm preconditions and expected outcomes are explicit
 - Remove specs that depend on undocumented system state
 
-## Human Review Gate
+## Human review gate
 
-Keep a mandatory human review gate on each generated script before merge. The pipeline gives throughput; the gate preserves quality. Reviewers focus on:
+Keep a human review gate on each generated script before merge. The pipeline gives throughput; the gate keeps quality. Reviewers focus on:
 
 - Test intent matches spec intent
 - Edge cases the generator may have missed
@@ -127,16 +127,16 @@ The validator runs `npx playwright test --dry-run` plus import resolution checks
 
 The retrieval step is what makes this work at scale. Without it, the generator would invent import paths and helper function names. With the retrieved examples, it uses `loginAsPassenger`, `searchJourney`, and `data-testid` selectors that already exist in the codebase.
 
-## When This Backfires
+## When this backfires
 
 The pattern degrades or fails under several conditions:
 
-- **Thin corpus**: Retrieval is only as useful as the existing test library. When the corpus is too small or thin in a given domain, top-k results return generic examples, and the generator falls back to its training priors and produces style-inconsistent output.
-- **Unstable specs**: If acceptance criteria change frequently between writing and review, retrieved examples from an older spec style diverge from the incoming spec — a recurring entry in the [RAG/agent reliability problem map](rag-agent-reliability-problem-map.md). Spec quality must be locked before pipeline entry, not after.
-- **High API churn**: The generator anchors to helper functions and selectors from retrieved examples. When the codebase is under heavy refactoring, those anchors break — retrieved examples become misleading rather than grounding, and hallucination rates increase rather than decrease, the freshness failure mode [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md) have to manage.
-- **Semantically narrow test suites**: If the existing corpus covers only one test pattern (e.g., all smoke tests), retrieval degenerates into retrieving the same unhelpful example for every spec regardless of type.
+- Thin corpus: retrieval is only as useful as the existing test library. When the corpus is too small or thin in a domain, top-k results return generic examples. The generator then falls back to its training priors and produces style-inconsistent output.
+- Unstable specs: when acceptance criteria change often between writing and review, retrieved examples from an older spec style diverge from the incoming spec — a recurring entry in the [RAG/agent reliability problem map](rag-agent-reliability-problem-map.md). Lock spec quality before pipeline entry, not after.
+- High API churn: the generator anchors to helper functions and selectors from retrieved examples. When the codebase is under heavy refactoring, those anchors break. Retrieved examples then mislead rather than ground, and hallucination rates go up rather than down — the freshness failure mode that [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md) have to manage.
+- Narrow test suites: when the existing corpus covers only one test pattern (for example, all smoke tests), retrieval keeps returning the same unhelpful example for every spec, whatever its type.
 
-Treat RAG as a style-grounding mechanism, not a correctness mechanism. A systematic study across five Python ML/DL libraries found that RAG did **not** improve the correctness of LLM-generated unit tests and only improved line coverage by 6.5% on average ([Shin et al., 2026](https://arxiv.org/abs/2409.12682), ICSE 2026). The throughput and style-consistency gains justify the pattern; human review of assertion semantics remains load-bearing for correctness.
+Treat RAG as a style-grounding mechanism, not a correctness mechanism. A systematic study across five Python ML/DL libraries found that RAG did not improve the correctness of LLM-generated unit tests and improved line coverage by only 6.5% on average ([Shin et al., 2026](https://arxiv.org/abs/2409.12682), ICSE 2026). The throughput and style-consistency gains justify the pattern. Human review of assertion semantics stays load-bearing for correctness.
 
 ## Key Takeaways
 

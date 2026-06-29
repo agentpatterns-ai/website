@@ -18,15 +18,15 @@ maturity: adopted
 
 > CwdChanged and FileChanged hooks let the agent trigger shell-level side effects in response to directory changes and file modifications — the same trigger model that direnv and similar tools use — without requiring a prompt.
 
-## The Problem
+## The problem
 
-Developers using Claude Code across projects with different toolchains — Node versions, Python environments, Nix shells — must either pre-configure the environment before the session or manually prompt the agent to reload it after a directory change. Neither option is reliable: pre-configuration is fragile, and prompts are easy to forget.
+You work across projects with different toolchains — Node versions, Python environments, Nix shells. With Claude Code you have two options: pre-configure the environment before the session, or prompt the agent to reload it after each directory change. Neither is reliable. Pre-configuration is fragile, and prompts are easy to forget.
 
-Claude Code [v2.1.83](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md) added two state-change hook events that address this: [`CwdChanged`](https://code.claude.com/docs/en/hooks) fires when the agent's working directory changes; [`FileChanged`](https://code.claude.com/docs/en/hooks) fires when a watched file is modified on disk. Both are observational — they cannot block execution — but they have access to `CLAUDE_ENV_FILE`, the same environment persistence mechanism used by `SessionStart`, which lets hooks propagate shell variables to all subsequent Bash tool calls.
+Claude Code [v2.1.83](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md) added two state-change hook events to fix this. [`CwdChanged`](https://code.claude.com/docs/en/hooks) fires when the agent's working directory changes. [`FileChanged`](https://code.claude.com/docs/en/hooks) fires when a watched file changes on disk. Both are observational — they cannot block execution. But both can write to `CLAUDE_ENV_FILE`, the same environment persistence mechanism `SessionStart` uses. That lets a hook pass shell variables to every later Bash tool call.
 
 ## CwdChanged
 
-Fires after every working directory change (e.g., after the agent runs `cd`). No matcher is supported — it fires unconditionally.
+Fires after every working directory change, for example when the agent runs `cd`. No matcher is supported. It fires unconditionally.
 
 Input payload:
 
@@ -39,11 +39,11 @@ Input payload:
 }
 ```
 
-The `cwd` field contains the new directory path. Use it to detect which project the agent has entered and load the appropriate environment.
+The `cwd` field holds the new directory path. Use it to detect which project the agent has entered, then load the matching environment.
 
 ## FileChanged
 
-Fires when a watched file is created, modified, or deleted. The `matcher` field specifies which filenames to watch using pipe-separated literal names — not regex patterns, unlike PreToolUse/PostToolUse matchers.
+Fires when a watched file is created, modified, or deleted. The `matcher` field lists which filenames to watch, as pipe-separated literal names. These are not regex patterns, unlike PreToolUse and PostToolUse matchers.
 
 Input payload:
 
@@ -60,9 +60,9 @@ Input payload:
 
 `change_type` is one of `"created"`, `"modified"`, or `"deleted"`.
 
-## Environment Persistence via CLAUDE_ENV_FILE
+## Environment persistence via CLAUDE_ENV_FILE
 
-Both events expose the `CLAUDE_ENV_FILE` environment variable. Writing `KEY=value` lines to this file persists variables into the agent's subsequent Bash invocations — the same mechanism `SessionStart` hooks use. Without this, environment changes made inside a hook script don't reach Claude Code's tool execution context.
+Both events expose the `CLAUDE_ENV_FILE` environment variable. Write `KEY=value` lines to this file and the variables persist into the agent's later Bash calls — the same mechanism `SessionStart` hooks use. Without it, environment changes made inside a hook script never reach Claude Code's tool execution context.
 
 ```bash
 # Inside any CwdChanged or FileChanged hook:
@@ -72,9 +72,9 @@ echo "MY_VAR=$MY_VAR" >> "$CLAUDE_ENV_FILE"
 
 ## Example
 
-Auto-load [direnv](https://direnv.net/) whenever the agent changes directory. direnv reads `.envrc` files and exports environment variables scoped to that directory tree — the canonical use case for `CwdChanged`.
+Auto-load [direnv](https://direnv.net/) whenever the agent changes directory. direnv reads `.envrc` files and exports environment variables scoped to that directory tree. This is the main use case for `CwdChanged`.
 
-**`.claude/hooks/sync-direnv.sh`**:
+`.claude/hooks/sync-direnv.sh`:
 
 ```bash
 #!/bin/bash
@@ -89,7 +89,7 @@ fi
 exit 0
 ```
 
-**`.claude/settings.json`**:
+`.claude/settings.json`:
 
 ```json
 {
@@ -108,9 +108,9 @@ exit 0
 }
 ```
 
-With this in place, moving into any project subdirectory automatically reloads the directory's `.envrc` — Node version, Python virtualenv, AWS profile, or any other variable direnv manages.
+With this in place, moving into any project subdirectory reloads that directory's `.envrc` automatically — the Node version, Python virtualenv, AWS profile, or any other variable direnv manages.
 
-For `FileChanged`, use the same `CLAUDE_ENV_FILE` pattern but scope the hook to specific config filenames:
+For `FileChanged`, use the same `CLAUDE_ENV_FILE` pattern, but scope the hook to specific config filenames:
 
 ```json
 {
@@ -131,13 +131,13 @@ For `FileChanged`, use the same `CLAUDE_ENV_FILE` pattern but scope the hook to 
 }
 ```
 
-## When This Backfires
+## When this backfires
 
-- **direnv not available**: The hook silently no-ops when direnv is absent. On Windows dev containers or minimal CI images, you need a fallback or a different environment loader entirely.
-- **Malformed `.envrc`**: `direnv allow` succeeds but `direnv export bash` fails on syntax errors in `.envrc`. The hook exits 0, `CLAUDE_ENV_FILE` receives no writes, and the agent proceeds with a stale environment — no error surfaced.
-- **CwdChanged fires unconditionally**: Every `cd` invocation triggers the hook, including directory changes inside a single task. On repos with many subdirectories, this adds latency on each directory change.
-- **Observational constraint**: Hooks cannot block the agent from proceeding. If environment loading fails, the next Bash invocation runs in the wrong environment with no signal to the agent.
-- **FileChanged is blind to Bash-driven edits**: `FileChanged` only fires for changes made by Claude Code's Edit/Write tools — not for files modified via the Bash tool ([claude-code#44925](https://github.com/anthropics/claude-code/issues/44925)). If the agent runs `mise use`, appends to `.envrc` via a shell redirect, or otherwise edits a watched file through Bash, the hook does not fire and the environment remains stale. Trigger a reload explicitly or depend on `CwdChanged` instead.
+- direnv not available: the hook silently does nothing when direnv is absent. On Windows dev containers or minimal CI images, you need a fallback or a different environment loader.
+- Malformed `.envrc`: `direnv allow` succeeds, but `direnv export bash` fails on syntax errors in `.envrc`. The hook exits 0, `CLAUDE_ENV_FILE` receives no writes, and the agent proceeds with a stale environment. No error surfaces.
+- CwdChanged fires unconditionally: every `cd` triggers the hook, including directory changes inside a single task. On repos with many subdirectories, this adds latency to each directory change.
+- Observational constraint: hooks cannot block the agent. If environment loading fails, the next Bash call runs in the wrong environment, with no signal to the agent.
+- FileChanged is blind to Bash-driven edits: `FileChanged` only fires for changes made by Claude Code's Edit and Write tools, not for files changed through the Bash tool ([claude-code#44925](https://github.com/anthropics/claude-code/issues/44925)). If the agent runs `mise use`, appends to `.envrc` with a shell redirect, or otherwise edits a watched file through Bash, the hook does not fire and the environment stays stale. Trigger a reload yourself, or rely on `CwdChanged` instead.
 
 ## Key Takeaways
 

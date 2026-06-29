@@ -15,11 +15,11 @@ maturity: established
 
 > Continuous AI groups the always-on agent workflows here — each a distinct application with its own trigger, authority, and data source.
 
-**Related lesson:** [Agents in the Pipeline](https://learn.agentpatterns.ai/workflows/agents-in-the-pipeline/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Agents in the Pipeline](https://learn.agentpatterns.ai/workflows/agents-in-the-pipeline/) — this concept features in a hands-on lesson with quizzes.
 
 "Continuous AI" is GitHub's umbrella term for running agents continuously inside a repository on schedules and events, producing reviewable artifacts rather than autonomous commits ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/continuous-ai-in-practice-what-developers-can-automate-today-with-agentic-ci/)). The pages below share that always-on shape but differ in what fires them, what they are allowed to write, and what they read. This page is a map, not a merge: each member is its own application and stays a separate page.
 
-## The Continuous-* Family
+## The continuous-* family
 
 These workflows run agents on a recurring loop or event stream against a codebase or backlog.
 
@@ -28,7 +28,7 @@ These workflows run agents on a recurring loop or event stream against a codebas
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — an observe-categorize-update-verify loop that keeps AGENTS.md and skills accurate as the project evolves.
 - [Continuous Autonomous Task Loop](continuous-autonomous-task-loop.md) — a self-directed loop that reads a backlog, executes each item via a ReAct inner turn, commits, and repeats with fresh context.
 
-## The Triage Family
+## The triage family
 
 These workflows continuously classify and route inbound work — issues, alerts, or security findings.
 
@@ -37,9 +37,9 @@ These workflows continuously classify and route inbound work — issues, alerts,
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — a single skill that encodes a label state machine and emits a durable agent brief as the hand-off contract.
 - [AI-Powered Vulnerability Triage](ai-powered-vulnerability-triage.md) — decomposes security analysis into threat-model, suggest, and audit stages to suppress hallucinated findings.
 
-## How to Choose
+## How to choose
 
-Match the trigger to the family. A schedule or push against your own code points at the continuous-* family; an inbound stream of issues, alerts, or vulnerabilities points at the triage family. Within each, the distinguishing axis is authority: read-only classification ([continuous triage](continuous-triage.md)), constrained writes behind preconditions ([auto-triage](auto-triage-workflow.md), vulnerability triage), or full PR-producing loops ([agentic CI/CD](continuous-ai-agentic-cicd.md), continuous documentation).
+Match the trigger to the family. A schedule or push against your own code points at the continuous-* family. An inbound stream of issues, alerts, or vulnerabilities points at the triage family. Within each family, the distinguishing axis is authority: read-only classification ([continuous triage](continuous-triage.md)), constrained writes behind preconditions ([auto-triage](auto-triage-workflow.md), vulnerability triage), or full PR-producing loops ([agentic CI/CD](continuous-ai-agentic-cicd.md), continuous documentation).
 
 Tooling is converging on a concrete trigger taxonomy for these always-on agents. Cursor's Automations release ships event-triggered agents fired by a Slack emoji reaction, five GitHub events (issue comment, PR review comment, PR review submitted, review-thread updated, and workflow-run completed), and an `/automate` skill for authoring them ([Cursor changelog, 2026-06-18](https://cursor.com/changelog/06-18-26)) — a worked example of the event-stream triggers that distinguish the triage family from the schedule-driven continuous-* loops.
 

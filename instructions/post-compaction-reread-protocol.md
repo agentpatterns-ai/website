@@ -15,23 +15,21 @@ maturity: adopted
 
 > Compaction summarises conversation history but discards the soft operational knowledge agents accumulate by reading instruction files early in a session. A targeted re-read restores that knowledge.
 
-**Learn it hands-on:** [The Re-read Protocol](https://learn.agentpatterns.ai/prompt-engineering/the-reread-protocol/) — guided lesson with quizzes.
+Learn it hands-on with [The Re-read Protocol](https://learn.agentpatterns.ai/prompt-engineering/the-reread-protocol/), a guided lesson with quizzes.
 
 ## Overview
 
-When Claude Code [compacts](../context-engineering/context-compression-strategies.md) a long session, it summarises older turns to free context space. The summary preserves task state — what was done, what remains — but paraphrases instruction file references, losing precision. The agent continues working with degraded rule fidelity rather than any visible error signal.
+When Claude Code [compacts](../context-engineering/context-compression-strategies.md) a long session, it summarizes older turns to free context space. The summary preserves task state — what was done, what remains — but paraphrases instruction file references, losing precision. The agent continues working with degraded rule fidelity rather than any visible error signal.
 
 Users report consistent behavioral drift after compaction — rules followed reliably before the event are violated afterward — not because CLAUDE.md was removed, but because the paraphrased summary no longer carries the full constraint set.
 
 Claude Code does reload CLAUDE.md after compaction (the `InstructionsLoaded` hook fires with `load_reason: "compact"`), but reload alone does not reliably restore behavioral compliance ([anthropics/claude-code#14258](https://github.com/anthropics/claude-code/issues/14258)). The re-read protocol makes the refresh explicit and confirms it took effect.
 
-## How It Works
+## How it works
 
-There are two implementation forms:
+There are two implementation forms.
 
-**Manual (prompt-based):**
-
-After any compaction event, issue a targeted prompt before resuming task work:
+Manual, prompt-based. After any compaction event, issue a targeted prompt before resuming task work:
 
 ```
 Reread AGENTS.md so it's still fresh in your mind.
@@ -43,9 +41,7 @@ For higher compliance, add a confirmation requirement:
 Reread AGENTS.md and confirm the key rules you found before continuing.
 ```
 
-**Automated (SessionStart hook with compact matcher):**
-
-`SessionStart` hooks fire when a session resumes — including after compaction. Filtering on `matcher: "compact"` restricts the hook to compaction events only. Stdout from `SessionStart` hooks is injected into Claude's context.
+Automated, with a `SessionStart` hook and a compact matcher. These hooks fire when a session resumes — including after compaction. Filtering on `matcher: "compact"` restricts the hook to compaction events only. Stdout from `SessionStart` hooks is injected into Claude's context.
 
 Configure in `.claude/settings.json`:
 

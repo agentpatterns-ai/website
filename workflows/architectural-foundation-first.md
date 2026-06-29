@@ -15,29 +15,29 @@ maturity: established
 
 > Build the structural skeleton and a few representative features by hand before delegating — the foundation is the investment that makes large-scale delegation safe.
 
-## The Cost of Skipping the Foundation
+## The cost of skipping the foundation
 
-Prompting an agent to build a feature or application from scratch without a foundation produces output that compiles but deviates from your architectural goals. The agent defaults to patterns it has seen frequently in training, which may not match your team's standards for modularity, layer separation, or naming.
+Prompt an agent to build a feature or application from scratch with no foundation, and you get output that compiles but drifts from your architectural goals. The agent falls back on the patterns it saw most often in training. Those patterns may not match your team's standards for modularity, layer separation, or naming.
 
-[OpenAI's Sora Android team](https://openai.com/index/shipping-sora-for-android-with-codex/) discovered this directly. Their initial prompt — "Build the Sora Android app based on the iOS code. Go." — produced code that was technically functional but had structural problems: extra view models, logic placed in the wrong architectural layer, and patterns inconsistent with the team's standards.
+[OpenAI's Sora Android team](https://openai.com/index/shipping-sora-for-android-with-codex/) hit this directly. Their first prompt — "Build the Sora Android app based on the iOS code. Go." — produced code that ran but had structural problems: extra view models, logic placed in the wrong architectural layer, and patterns that did not match the team's standards.
 
-Thoughtworks frames the same phenomenon through ["ambient affordances"](https://martinfowler.com/articles/harness-engineering.html) — structural properties of the codebase that make it legible and tractable to the agent. Clear module boundaries, consistent package structure, and established patterns act as implicit constraints that raise the agent's success rate without needing to be re-specified in every prompt.
+Thoughtworks describes the same effect as ["ambient affordances"](https://martinfowler.com/articles/harness-engineering.html) — structural properties of the codebase that make it easy for the agent to read and work in. Clear module boundaries, a consistent package structure, and established patterns act as implicit constraints. They raise the agent's success rate, and you do not have to restate them in every prompt.
 
-## What the Foundation Includes
+## What the foundation includes
 
-Human engineers should personally build:
+Human engineers should build these by hand:
 
-- **Modularization**: the module boundaries and package structure
-- **Dependency injection**: the DI setup and how components are wired
-- **Navigation**: the navigation framework and routing conventions
-- **Authentication**: the auth flow and session management
-- **Representative features**: two to three features end-to-end that embody the correct patterns
+- Modularization: the module boundaries and package structure
+- Dependency injection: the DI setup and how components are wired
+- Navigation: the navigation framework and routing conventions
+- Authentication: the auth flow and session management
+- Representative features: two or three features end-to-end that show the correct patterns
 
-The representative features are the most important element. They demonstrate correct patterns in concrete, executable form. The agent can match against them. "We needed to show Codex what's 'correct' on our team" — examples beat instructions.
+The representative features matter most. They show correct patterns in concrete, runnable form, and the agent can match against them. As the Sora team put it, "We needed to show Codex what's 'correct' on our team" — examples beat instructions.
 
-## What to Document
+## What to document
 
-After building the foundation, document what the agent needs to know to extend it correctly:
+After you build the foundation, document what the agent needs to know to extend it correctly:
 
 - Which architectural layer owns which responsibilities
 - How to add a new feature using the existing pattern (point to the example features)
@@ -46,29 +46,29 @@ After building the foundation, document what the agent needs to know to extend i
 
 This documentation belongs in AGENTS.md or equivalent instruction files, not in the prompt. It needs to persist across every agent session.
 
-## The Result of Getting This Right
+## The result of getting this right
 
-The Sora team shipped an Android app where 85% of the final codebase was agent-written, with a 99.9% crash-free rate at launch ([source](https://openai.com/index/shipping-sora-for-android-with-codex/)). The foundation — built by hand — made that ratio possible.
+The Sora team shipped an Android app where 85% of the final codebase was agent-written, with a 99.9% crash-free rate at launch ([OpenAI's Sora for Android writeup](https://openai.com/index/shipping-sora-for-android-with-codex/)). The hand-built foundation made that ratio possible.
 
-The investment in the foundation is not overhead. It is the primary control mechanism that determines whether agent-written code meets your standards or requires constant correction.
+The investment in the foundation is not overhead. It is the main control you have over whether agent-written code meets your standards or needs constant correction.
 
-## The Tradeoff
+## The tradeoff
 
-Building the foundation yourself takes time upfront. The alternative — prompting without a [skeleton foundation](skeleton-projects-as-scaffolding.md) — produces architectural drift that compounds with every agent session. Correcting structural problems after the fact is significantly more expensive than establishing the structure before delegation begins.
+Building the foundation yourself takes time upfront. The alternative — prompting without a [skeleton foundation](skeleton-projects-as-scaffolding.md) — produces architectural drift that compounds with every agent session. Correcting structural problems after the fact costs far more than setting up the structure before delegation begins.
 
 The rule of thumb: if you cannot describe the correct architectural pattern in code, the agent cannot infer it from your instructions.
 
-## When This Backfires
+## When this backfires
 
-The steelman for skipping the hand-built foundation is real: for the right project, the upfront investment never pays back, and committing to a structure too early locks in choices you have not yet earned the right to make. Foundation-first is the wrong call when:
+The steelman for skipping the hand-built foundation is real. For the right project, the upfront investment never pays back, and committing to a structure too early locks in choices you have not yet earned the right to make. Foundation-first is the wrong call when:
 
-- **The project is a throwaway prototype or spike.** When the goal is to learn whether an idea is viable, the foundation is sunk cost — the code is meant to be discarded. Let the agent build the fastest path to a runnable answer, then rebuild on a foundation only if the idea survives — the [prototype-before-optimizing](prototype-before-optimizing.md) ordering.
-- **The architecture is genuinely unknown.** If you cannot yet describe the correct pattern in code because the problem is unexplored, hand-building a foundation is premature architecture — you risk encoding the wrong invariants and forcing the agent to match a flawed exemplar. Explore first; codify the foundation once the shape is clear.
-- **The project is small enough that drift never compounds.** A single-module script or a few-hundred-line tool has no layer separation to protect — the same size threshold below which [agent-driven greenfield](agent-driven-greenfield.md) setup stops paying back. The foundation's payoff scales with the volume of agent-written code that has to match it; below a threshold, the setup cost exceeds the correction cost it prevents.
+- The project is a throwaway prototype or spike. When the goal is to learn whether an idea is viable, the foundation is sunk cost — the code is meant to be discarded. Let the agent build the fastest path to a runnable answer, then rebuild on a foundation only if the idea survives — the [prototype-before-optimizing](prototype-before-optimizing.md) ordering.
+- The architecture is genuinely unknown. If you cannot yet describe the correct pattern in code because the problem is unexplored, hand-building a foundation is premature architecture — you risk encoding the wrong invariants and forcing the agent to match a flawed exemplar. Explore first, then codify the foundation once the shape is clear.
+- The project is small enough that drift never compounds. A single-module script or a few-hundred-line tool has no layer separation to protect — the same size threshold below which [agent-driven greenfield](agent-driven-greenfield.md) setup stops paying back. The foundation's payoff scales with the volume of agent-written code that has to match it. Below a threshold, the setup cost exceeds the correction cost it prevents.
 
 ## Example
 
-The following shows an `AGENTS.md` file that communicates the hand-built architectural foundation to the coding agent. Without this file, the agent defaults to whatever patterns it encountered most frequently in training — which may not match the team's standards.
+The following shows an `AGENTS.md` file that conveys the hand-built architectural foundation to the coding agent. Without this file, the agent falls back on whatever patterns it saw most often in training — which may not match the team's standards.
 
 ```markdown
 # AGENTS.md

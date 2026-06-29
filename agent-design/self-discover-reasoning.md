@@ -19,23 +19,23 @@ maturity: adopted
 
 > The model composes a task-specific reasoning structure from atomic modules before solving, rather than applying one fixed strategy to every problem.
 
-## The Technique
+## The technique
 
 Fixed reasoning strategies — CoT, ReAct, Chain-of-Thought Self-Consistency — apply the same cognitive approach to every problem. SELF-DISCOVER ([Wang et al., 2024](https://arxiv.org/abs/2402.03620)) inverts this: the model first identifies which reasoning primitives fit the task, composes them into an explicit JSON plan, then executes that plan.
 
-The key architectural insight is that Stage 1 (structure composition) runs **once per task type**, not per instance. The composed plan is then reused across all instances of that task, making the approach 10–40x more compute-efficient than CoT-Self-Consistency while exceeding its accuracy.
+Stage 1 (structure composition) runs once per task type, not per instance. The model then reuses the composed plan across every instance of that task. This makes the approach 10–40x more compute-efficient than CoT-Self-Consistency, while still exceeding its accuracy.
 
-## The Three-Stage Process
+## The three-stage process
 
-**Stage 1: Self-Discovery** — run once per task type, produces a reusable reasoning structure.
+Stage 1, self-discovery, runs once per task type and produces a reusable reasoning structure.
 
-1. **Select** — identify 3–5 relevant reasoning modules from a library of 39 atomic primitives (critical thinking, step-by-step analysis, analogical reasoning, backward reasoning, constraint identification, risk analysis, and others)
-2. **Adapt** — rephrase selected modules from generic descriptions into concrete, task-specific instructions
-3. **Implement** — convert the adapted descriptions into a structured JSON reasoning plan
+1. Select — identify 3–5 relevant reasoning modules from a library of 39 atomic primitives (critical thinking, step-by-step analysis, analogical reasoning, backward reasoning, constraint identification, risk analysis, and others)
+2. Adapt — rephrase the selected modules from generic descriptions into concrete, task-specific instructions
+3. Implement — convert the adapted descriptions into a structured JSON reasoning plan
 
-**Stage 2: Structured Execution** — run per instance using the cached plan.
+Stage 2, structured execution, runs per instance using the cached plan.
 
-The model fills in the JSON plan, reasoning specifically about the task. Each key corresponds to an adapted reasoning module, producing an explicit, inspectable trace.
+The model fills in the JSON plan, reasoning specifically about the task. Each key maps to an adapted reasoning module and produces an explicit, inspectable trace.
 
 ```mermaid
 graph LR
@@ -47,15 +47,15 @@ graph LR
     D --> G[Execute on Instance N]
 ```
 
-## Benchmark Results
+## Benchmark results
 
 On PaLM 2-L ([Wang et al., 2024](https://arxiv.org/abs/2402.03620)):
 
 | Benchmark | SELF-DISCOVER | Chain-of-Thought | Direct |
 |-----------|--------------|-----------------|--------|
-| BigBench-Hard (23 tasks) | **67%** | 60% | 56% |
-| Grounded Agent Reasoning (T4D) | **69%** | 40% | 30% |
-| MATH (200 samples) | **50.5%** | 42% | 45% |
+| BigBench-Hard (23 tasks) | 67% | 60% | 56% |
+| Grounded Agent Reasoning (T4D) | 69% | 40% | 30% |
+| MATH (200 samples) | 50.5% | 42% | 45% |
 
 The grounded agent reasoning gain (+29pp over CoT) is the strongest signal: tasks requiring multi-step planning over structured state benefit most from explicit reasoning scaffolds.
 
@@ -63,7 +63,7 @@ On MATH, 74.7% of remaining failures are computational errors, not reasoning err
 
 Structures transfer across model families: a plan discovered with PaLM 2-L applies to GPT-4, and vice versa — the JSON format is model-agnostic.
 
-## When to Apply
+## When to apply
 
 Use SELF-DISCOVER when reasoning quality is the bottleneck:
 
@@ -79,21 +79,21 @@ Skip it when:
 - Failures are computational (arithmetic errors) rather than reasoning failures — structure won't help
 - Per-query latency is the primary constraint and caching is not applicable
 
-## Why It Works
+## Why it works
 
 SELF-DISCOVER outperforms fixed reasoning strategies through three mechanisms identified in the original paper ([Wang et al., 2024](https://arxiv.org/abs/2402.03620)):
 
-1. **Multi-perspective integration** — a single CoT pass applies one reasoning lens. Composing multiple modules (e.g., root-cause analysis + constraint identification + verification) draws on the complementary strengths of each. Tasks requiring world knowledge and structured state benefit most — the T4D grounded-agent-reasoning gain of +29pp over CoT is the clearest case.
-2. **Task-specific composition** — generic prompting applies the same approach regardless of problem category. Selecting modules that match the task's actual structure (algorithmic decomposition for code, backward reasoning for constraint problems) from the 39-primitive library removes mismatched reasoning overhead.
-3. **Explicit structure** — the JSON plan forces the model to state its reasoning approach before executing it. This prevents the model from silently switching strategies mid-response, making errors inspectable and correctable.
+1. Multi-perspective integration — a single CoT pass applies one reasoning lens. Composing multiple modules (for example, root-cause analysis + constraint identification + verification) draws on the complementary strengths of each. Tasks that need world knowledge and structured state benefit most — the T4D grounded-agent-reasoning gain of +29pp over CoT is the clearest case.
+2. Task-specific composition — generic prompting applies the same approach no matter the problem category. Selecting modules that match the task's actual structure (algorithmic decomposition for code, backward reasoning for constraint problems) from the 39-primitive library removes mismatched reasoning overhead.
+3. Explicit structure — the JSON plan makes the model state its reasoning approach before executing it. This stops the model from silently switching strategies mid-response, and makes errors inspectable and correctable.
 
 The gains are not uniform: algorithmic tasks see only moderate improvement, while world-knowledge and multi-step planning tasks (T4D: +29pp over CoT) benefit most. Computational errors remain outside the framework's reach.
 
-The "explicit structure helps" claim is also contested. An instance-level reproduction, iSelf-Discover ([Gunasekara & Ratnayake, 2025](https://arxiv.org/abs/2507.03347)), found that *unstructured* reasoning plans consistently beat structured ones — by up to 18.90% relative on MATH, with zero-shot unstructured variants exceeding five-shot structured ones. The takeaway is that the per-task-type composition step, not the JSON rigidity, likely carries the benefit; forcing reasoning into a fixed structure can cost accuracy when the task does not need it.
+The "explicit structure helps" claim is also contested. An instance-level reproduction, iSelf-Discover ([Gunasekara & Ratnayake, 2025](https://arxiv.org/abs/2507.03347)), found that unstructured reasoning plans consistently beat structured ones — by up to 18.90% relative on MATH, with zero-shot unstructured variants exceeding five-shot structured ones. The takeaway is that the per-task-type composition step, not the JSON rigidity, likely carries the benefit. Forcing reasoning into a fixed structure can cost accuracy when the task does not need it.
 
-## Compute Trade-offs
+## Compute trade-offs
 
-Stage 1 costs 3 additional LLM calls (Select, Adapt, Implement) per task type. Once composed, the plan is reused at no extra overhead per instance — one inference call per instance, same as plain CoT.
+Stage 1 costs 3 additional LLM calls (Select, Adapt, Implement) per task type. After that, each instance costs one inference call — the same as plain CoT, with no extra overhead per instance.
 
 The meaningful comparison is against CoT-Self-Consistency (multiple CoT passes per instance): SELF-DISCOVER needs 10–40x fewer inference calls while exceeding CoT-SC accuracy ([Wang et al., 2024](https://arxiv.org/abs/2402.03620)). Stage 1 overhead is pure cost for a one-off task type, but amortizes quickly across any recurring one.
 
@@ -110,7 +110,7 @@ The meaningful comparison is against CoT-Self-Consistency (multiple CoT passes p
 
 A SELF-DISCOVER workflow for analyzing a failing CI pipeline:
 
-**Stage 1 — compose plan (once, reused for all pipeline failures):**
+Stage 1, compose the plan (once, reused for all pipeline failures):
 
 ```json
 {
@@ -121,7 +121,7 @@ A SELF-DISCOVER workflow for analyzing a failing CI pipeline:
 }
 ```
 
-**Stage 2 — execute on each instance:**
+Stage 2, execute on each instance:
 
 The model fills in each key with instance-specific reasoning, producing a structured trace that maps directly to the plan. When the diagnosis is wrong, the trace shows exactly which step introduced the error.
 

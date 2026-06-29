@@ -20,34 +20,34 @@ maturity: emerging
 
 An observation contract is any tool output that an external system will later validate by exact bytes, by a timestamp, or by a one-use rule. When the agent reasons about the artifact instead of carrying it verbatim, the second call breaks — even if every individual step looks correct in isolation. The benchmark that defines the term, [ContractBench](https://arxiv.org/abs/2605.17281), found no frontier model clears 80% on contract preservation across 38 evaluated models, with the best score 77.8% (Claude Opus 4.6).
 
-## When This Pattern Applies
+## When this pattern applies
 
-This pattern is the **prompt-and-spec-level fallback** for harnesses that pass raw artifacts through the LLM context. Apply when all three hold:
+This pattern is the prompt-and-spec-level fallback for harnesses that pass raw artifacts through the LLM context. Apply when all three hold:
 
-- A tool call produces an artifact (URL, token, key, nonce) that a *later* call will validate
+- A tool call produces an artifact (URL, token, key, nonce) that a later call will validate
 - The artifact crosses an LLM turn — it lands in the model's context window before the second call
 - The validator is external — the harness cannot rewrite the call after the model emits it
 
 Skip when the harness keeps the artifact opaque end-to-end. MCP servers can mark individual results to bypass truncation via the [`_meta["anthropic/maxResultSizeChars"]` annotation](https://modelcontextprotocol.io/specification/2025-06-18/basic) — when bytes survive verbatim through the harness, agent-side discipline is redundant.
 
-## The Two Failure Axes
+## The two failure axes
 
 [ContractBench](https://arxiv.org/abs/2605.17281) factors agent failures into two orthogonal modes:
 
 | Mode | What breaks | Typical artifact | Example failure |
 |------|------------|------------------|-----------------|
-| **Validity** | Temporal constraint | Presigned URLs, OAuth tokens, session cookies | Agent calls after `Expires` timestamp |
-| **Integrity** | Byte constraint | Signed URLs, idempotency keys, opaque handles | Agent re-encodes, normalizes whitespace, or paraphrases |
+| Validity | Temporal constraint | Presigned URLs, OAuth tokens, session cookies | Agent calls after `Expires` timestamp |
+| Integrity | Byte constraint | Signed URLs, idempotency keys, opaque handles | Agent re-encodes, normalizes whitespace, or paraphrases |
 
 The two are independent — a model that hands back the exact URL can still call past expiry, and a model that calls inside the window can still corrupt the signature. ContractBench scores each axis separately.
 
-## How It Works
+## How it works
 
 Three controls preserve contracts across an LLM turn:
 
-1. **Mark contract-bound fields in the tool description.** Name the contract explicitly — `presigned_url (opaque, expires 15m, use verbatim)` — and the model is more likely to carry it untouched. ContractBench found that feeding the failure-class label back as an in-context signal lifts paired-failure performance by +7.1 pp on GPT-5.1 ([paper](https://arxiv.org/abs/2605.17281)).
-2. **Quote artifacts in tool I/O, not in prose.** Reference fields by key (`response.url`) in plans; only emit the bytes inside the next tool call's argument slot. Reasoning-tuned models hallucinate tool outputs more often than base models ([Yin et al., 2025](https://arxiv.org/abs/2510.22977)).
-3. **Stamp issuance time.** Capture `issued_at` next to the artifact so the agent can reason about freshness. Without an explicit timestamp, long-horizon chains and context compaction strip the original time and the agent calls past expiry.
+1. Mark contract-bound fields in the tool description. Name the contract explicitly — `presigned_url (opaque, expires 15m, use verbatim)` — and the model is more likely to carry it untouched. ContractBench found that feeding the failure-class label back as an in-context signal lifts paired-failure performance by +7.1 pp on GPT-5.1 ([ContractBench paper](https://arxiv.org/abs/2605.17281)).
+2. Quote artifacts in tool I/O, not in prose. Reference fields by key (`response.url`) in plans, and only emit the bytes inside the next tool call's argument slot. Reasoning-tuned models hallucinate tool outputs more often than base models ([Yin et al., 2025](https://arxiv.org/abs/2510.22977)).
+3. Stamp issuance time. Capture `issued_at` next to the artifact so the agent can reason about freshness. Without an explicit timestamp, long-horizon chains and context compaction strip the original time and the agent calls past expiry.
 
 ## Diagram
 
@@ -60,22 +60,22 @@ graph LR
     C --> F[External system<br>validates bytes + expiry]
 ```
 
-## Why It Works
+## Why it works
 
-Contract failures are mechanical, not capability-bound. [ContractBench](https://arxiv.org/abs/2605.17281) attributes failure to two causes: tokenization and re-emission normalize byte-level fields — URL-encoding, whitespace, smart quotes, base64 padding — breaking signatures even when the model intends to copy verbatim; and long-horizon reasoning loses the issuance timestamp, so the freshness check has no anchor and the agent calls past expiry. The +7.1 pp lift from feeding failure-class labels back in-context is direct evidence the model *can* preserve contracts when told the field is contract-bound, but does not infer this from generic descriptions. The same paper documents non-monotonic scaling across the GPT-5 family — agentic post-training can *erode* compliance through sycophancy-driven regression. Bigger is not safer; explicit labels are.
+Contract failures are mechanical, not capability-bound. [ContractBench](https://arxiv.org/abs/2605.17281) attributes failure to two causes. First, tokenization and re-emission normalize byte-level fields — URL-encoding, whitespace, smart quotes, base64 padding — breaking signatures even when the model intends to copy verbatim. Second, long-horizon reasoning loses the issuance timestamp, so the freshness check has no anchor and the agent calls past expiry. The +7.1 pp lift from feeding failure-class labels back in-context is direct evidence the model can preserve contracts when told the field is contract-bound, but does not infer this from generic descriptions. The same paper documents non-monotonic scaling across the GPT-5 family — agentic post-training can erode compliance through sycophancy-driven regression. Bigger is not safer. Explicit labels are.
 
-## When This Backfires
+## When this backfires
 
-- **Single-step tools with no second call.** The artifact has no validator on a follow-up — preservation adds ceremony without benefit. Idempotency-key plumbing in particular is wasted on read-only chains.
-- **Opaque-handle harnesses.** When the harness already mediates artifacts (MCP `_meta` persistence, sealed-envelope adapters, server-side opaque handle indirection), prompt-level discipline fights the layer below it. The right fix is to push more state behind the harness, not to add more rules ([Towards Verifiably Safe Tool Use](https://arxiv.org/abs/2601.08012)).
-- **Reasoning-tuned models with deep thinking enabled.** Paraphrasing during extended reasoning erodes verbatim instructions ([Yin et al., 2025](https://arxiv.org/abs/2510.22977)) — only out-of-band storage or a runtime validator survives.
-- **When formal verification is available.** Solver-aided runtime checks prove some violations away ([Mishra et al., 2026](https://arxiv.org/abs/2603.20449)) — preferable to a prompt-level pattern where the option exists.
+- Single-step tools with no second call. The artifact has no validator on a follow-up, so preservation adds ceremony without benefit. Idempotency-key plumbing in particular is wasted on read-only chains.
+- Opaque-handle harnesses. When the harness already mediates artifacts (MCP `_meta` persistence, sealed-envelope adapters, server-side opaque handle indirection), prompt-level discipline fights the layer below it. The right fix is to push more state behind the harness, not to add more rules ([Towards Verifiably Safe Tool Use](https://arxiv.org/abs/2601.08012)).
+- Reasoning-tuned models with deep thinking enabled. Paraphrasing during extended reasoning erodes verbatim instructions ([Yin et al., 2025](https://arxiv.org/abs/2510.22977)), so only out-of-band storage or a runtime validator survives.
+- When formal verification is available. Solver-aided runtime checks prove some violations away ([Mishra et al., 2026](https://arxiv.org/abs/2603.20449)), which is preferable to a prompt-level pattern where the option exists.
 
 ## Example
 
 A retrieval tool returns a presigned S3 URL; a download tool consumes it.
 
-**Tool description that leaks contract information:**
+A tool description that leaks contract information:
 
 ```json
 {
@@ -85,7 +85,7 @@ A retrieval tool returns a presigned S3 URL; a download tool consumes it.
 }
 ```
 
-**Tool description that names the contract:**
+A tool description that names the contract:
 
 ```json
 {

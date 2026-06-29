@@ -19,13 +19,13 @@ maturity: emerging
 
 > A mutable scaffold lets capable agents synthesize domain-specific tools at runtime, outperforming fixed toolkits.
 
-## The Core Insight
+## The core insight
 
-A sufficiently capable LLM already knows how to write code and reason about tooling. The missing piece is *permission and prompting* — explicitly asking the agent to consider tool creation as a first-class action alongside tool use.
+A capable LLM already knows how to write code and reason about tooling. The missing piece is permission and prompting: you explicitly ask the agent to treat tool creation as a first-class action alongside tool use.
 
 Live-SWE-agent demonstrated this by starting with bash-only access and autonomously evolving its toolkit — achieving 77.4% on SWE-bench Verified and 45.8% on SWE-Bench Pro without offline training or pre-built tool libraries ([Xia et al., 2025](https://arxiv.org/abs/2511.13646); [live-swe-agent leaderboard](https://live-swe-agent.github.io/); [reference implementation](https://github.com/OpenAutoCoder/live-swe-agent)).
 
-## How It Works
+## How it works
 
 ```mermaid
 graph TD
@@ -43,16 +43,16 @@ graph TD
 
 The mechanism is simple:
 
-1. **Minimal start** — the agent begins with only bash access, no specialized tools
-2. **Step-reflection prompt** — after each action, a prompt asks: "Would creating or revising a tool accelerate progress?"
-3. **Tool synthesis** — the agent writes a script with clear inputs, outputs, and error handling
-4. **Iterative refinement** — tools are modified as understanding deepens, not designed upfront
+1. Minimal start: the agent begins with only bash access and no specialized tools.
+2. Step-reflection prompt: after each action, a prompt asks, "Would creating or revising a tool accelerate progress?"
+3. Tool synthesis: the agent writes a script with clear inputs, outputs, and error handling.
+4. Iterative refinement: the agent revises tools as its understanding deepens, rather than designing them upfront.
 
-No changes to the agentic loop. Just a reflection prompt and permission to create scripts.
+The agentic loop does not change. It adds only a reflection prompt and permission to create scripts.
 
-## What the Agent Builds
+## What the agent builds
 
-Runtime tools consolidate multi-step bash sequences into single domain-specific operations:
+Runtime tools fold multi-step bash sequences into single domain-specific operations:
 
 | Scenario | Bash approach | Runtime-synthesized tool |
 |----------|--------------|------------------------|
@@ -60,42 +60,42 @@ Runtime tools consolidate multi-step bash sequences into single domain-specific 
 | Binary parsing | Chained `xxd`, `awk`, `sed` | Dedicated parser with structured output |
 | Multi-file edits | Sequential `sed` commands | Batch editor with AST awareness and rollback |
 
-Tool-creation opportunities emerge from encountering friction, not from upfront design.
+Tool-creation opportunities come from friction the agent hits, not from upfront design.
 
-## The Model-Capability Threshold
+## The model-capability threshold
 
-This is **not a universal technique**. It requires frontier-class models:
+This is not a universal technique. It requires frontier-class models:
 
 | Model tier | Effect | Mechanism |
 |-----------|--------|-----------|
-| **Frontier** | Significant improvement | Synthesizes useful, targeted tools that reduce step count |
-| **Mid-tier** | Modest improvement | Creates tools but sometimes over-engineers them |
-| **Small** | **Performance degrades** | Gets stuck in tool-creation loops, never solves the actual problem |
+| Frontier | Significant improvement | Synthesizes useful, targeted tools that reduce step count |
+| Mid-tier | Modest improvement | Creates tools but sometimes over-engineers them |
+| Small | Performance degrades | Gets stuck in tool-creation loops, never solves the actual problem |
 
 In ablation experiments, the pattern yielded +22.6% improvement with Claude 4.5 Sonnet and −68.2% degradation with GPT-5-Nano. Weaker models lack the meta-reasoning to judge when tool creation is worthwhile, turning the reflection prompt into a distraction trap ([Xia et al., 2025](https://arxiv.org/abs/2511.13646)).
 
-## Runtime vs Offline Evolution
+## Runtime versus offline evolution
 
 | Approach | Timescale | Persistence | Human involvement |
 |----------|-----------|-------------|-------------------|
-| **Runtime scaffold evolution** | Single session | Ephemeral | None |
+| Runtime scaffold evolution | Single session | Ephemeral | None |
 | [Introspective skill generation](../workflows/introspective-skill-generation.md) | Across sessions | Persisted to library | Validation gate |
 | [Continuous agent improvement](../workflows/continuous-agent-improvement.md) | Weeks/months | Config updates | Human-driven |
 | [Agentic flywheel](agentic-flywheel.md) | Continuous | Harness modifications | Tiered approval |
 
 Tools vanish when the session ends. Promoting useful ones to a [skill library](../tool-engineering/skill-library-evolution.md) bridges ad-hoc creation and governed reuse.
 
-## Cost and Context Trade-offs
+## Cost and context trade-offs
 
 Token overhead is modest: on SWE-bench Verified, Live-SWE-agent averaged $0.68 per issue versus $0.56 for the baseline agent — roughly $0.12 incremental cost — which the authors describe as "minimal" relative to the accuracy gain ([Xia et al., 2025](https://arxiv.org/abs/2511.13646)).
 
-The hidden cost is context pressure. Each [synthesized tool definition consumes tokens](../tool-engineering/tool-minimalism.md). In long sessions, accumulated definitions may crowd out problem-relevant context. Active tool pruning strategies are not addressed by current implementations.
+The hidden cost is context pressure. Each [synthesized tool definition consumes tokens](../tool-engineering/tool-minimalism.md). In long sessions, accumulated definitions may crowd out problem-relevant context. Current implementations do not address active tool pruning.
 
-## When to Use
+## When to use
 
-**Good fit:** complex unfamiliar codebases, domain-specific file formats, frontier-class models with large context windows.
+Good fit: complex unfamiliar codebases, domain-specific file formats, and frontier-class models with large context windows.
 
-**Poor fit:** well-defined workflows with known tool sets (use a [fixed skill library](../tool-engineering/skill-library-evolution.md)), smaller models, short tasks where tool creation overhead exceeds time saved.
+Poor fit: well-defined workflows with known tool sets (use a [fixed skill library](../tool-engineering/skill-library-evolution.md)), smaller models, and short tasks where tool-creation overhead exceeds the time saved.
 
 ## Example
 
@@ -107,9 +107,9 @@ accelerate the remaining work? If yes, write it to /tmp/tools/ and
 invoke it in subsequent steps.
 ```
 
-**Turn 1** — The agent runs `grep -r "csv" src/` and gets 200+ matches across test fixtures and vendored code.
+Turn 1: the agent runs `grep -r "csv" src/` and gets 200+ matches across test fixtures and vendored code.
 
-**Turn 2 (reflection fires)** — The agent creates `/tmp/tools/search_src.py`:
+Turn 2, reflection fires: the agent creates `/tmp/tools/search_src.py`:
 
 ```python
 #!/usr/bin/env python3
@@ -125,9 +125,9 @@ for p in pathlib.Path("src").rglob("*.py"):
             print(f"{p}:{i}: {line.strip()}")
 ```
 
-**Turn 3** — The agent calls `python /tmp/tools/search_src.py "csv.*parse"` and immediately narrows to 4 relevant files, then locates and fixes the bug.
+Turn 3: the agent calls `python /tmp/tools/search_src.py "csv.*parse"`, immediately narrows to 4 relevant files, then locates and fixes the bug.
 
-The tool was created in response to friction (noisy grep results), used for the remainder of the session, and discarded on completion.
+The agent created the tool in response to friction (noisy grep results), used it for the rest of the session, and discarded it on completion.
 
 ## Key Takeaways
 

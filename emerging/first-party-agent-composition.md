@@ -14,9 +14,9 @@ maturity: established
 
 > Instead of integrating third-party SaaS products and stitching them together with webhooks, instruct coding agents to build each capability as a native, first-party feature within your application.
 
-First-party agent composition is an approach where coding agents generate the CRM, analytics, and support tooling your product needs directly in your own codebase, storing all data in a single database. This eliminates the integration layer — no webhooks, no API rate limits, no cross-vendor data sync — and lets business-automation agents operate across the full dataset without translation overhead.
+With first-party agent composition, coding agents build the CRM, analytics, and support tooling your product needs directly in your own codebase. All data lives in a single database. This removes the integration layer. There are no webhooks, no API rate limits, and no cross-vendor data sync. Business-automation agents can then work across the full dataset without translation overhead.
 
-## The Pattern
+## The pattern
 
 Traditional approach:
 
@@ -36,16 +36,16 @@ Need support → tell the coding agent "build a support desk with ticket managem
 
 The data lives in your own database. Features share the same data model. No webhook plumbing, no vendor API rate limits, no data sync failures.
 
-## How It Works
+## How it works
 
-Geoffrey Huntley demonstrates this approach at Latent Patterns, where he describes prompting his coding harness with *"Hey, I want PipeDrive, Trello, and ZenDesk"* and having the equivalent functionality emerge in his own codebase ([Huntley, "rapid application dev is back"](https://ghuntley.com/rad/)). He has separately reported cloning Posthog, Jira, Pipedrive, and Calendly the same way, framing it as building "a hyper-personalised business... with full control and everything first-party" ([Huntley, "Software development now costs less than the wage of a minimum wage worker"](https://ghuntley.com/real/)):
+Geoffrey Huntley shows this approach at Latent Patterns. He describes prompting his coding harness with "Hey, I want PipeDrive, Trello, and ZenDesk" and watching the equivalent features emerge in his own codebase ([Huntley, "rapid application dev is back"](https://ghuntley.com/rad/)). He has separately reported cloning Posthog, Jira, Pipedrive, and Calendly the same way. He frames it as building "a hyper-personalised business... with full control and everything first-party" ([Huntley, "Software development now costs less than the wage of a minimum wage worker"](https://ghuntley.com/real/)):
 
-1. **Describe the capability** — rough instruction to the coding harness: "I want Pipedrive, Trello, and Zendesk"
-2. **Agent builds it** — the coding agent implements the feature against the existing codebase and data model
-3. **Data stays first-party** — all customer records, analytics events, support tickets, and meeting notes live in the same database
-4. **Layer agents on top** — with all data in one place, business automation agents can operate across the full dataset (e.g. customer enrichment feeds into sales prioritization feeds into automated follow-up)
+1. Describe the capability. Give the coding harness a rough instruction: "I want Pipedrive, Trello, and Zendesk".
+2. The agent builds it. The coding agent implements the feature against the existing codebase and data model.
+3. Data stays first-party. All customer records, analytics events, support tickets, and meeting notes live in the same database.
+4. Layer agents on top. With all data in one place, business automation agents can work across the full dataset. For example, customer enrichment feeds into sales prioritization, which feeds into automated follow-up.
 
-## The Integration Advantage
+## The integration advantage
 
 When data is first-party, cross-cutting concerns become straightforward:
 
@@ -55,48 +55,48 @@ When data is first-party, cross-cutting concerns become straightforward:
 | Enrich customer profile from meeting notes | Export from transcription tool, import to CRM, map fields | Write to same customer record |
 | Prioritize sales outreach by engagement | Export analytics, export CRM, merge in spreadsheet | Query across tables |
 
-The elimination of integration middleware (Zapier, Make, custom webhooks) removes an entire failure surface.
+Dropping integration middleware (Zapier, Make, custom webhooks) removes an entire failure surface.
 
-## Agent-Layered Business Automation
+## Agent-layered business automation
 
-First-party data enables agent automation that would require complex multi-vendor orchestration otherwise:
+First-party data enables agent automation that would otherwise need complex multi-vendor orchestration:
 
-- **Customer enrichment** — enrich profiles via data providers (e.g. People Data Labs), store directly in customer records
-- **Meeting transcription** — bot joins calls, transcribes, extracts action items, writes to the same CRM record
-- **Sales analysis** — apply LLM prompts (Challenger, SPIN Selling frameworks) to transcripts, generate follow-up plans
-- **Engagement scoring** — combine analytics, support history, and meeting notes into a unified priority score
+- Customer enrichment: enrich profiles through data providers such as People Data Labs, then store the result directly in customer records
+- Meeting transcription: a bot joins calls, transcribes them, extracts action items, and writes to the same CRM record
+- Sales analysis: apply LLM prompts (Challenger, SPIN Selling frameworks) to transcripts to generate follow-up plans
+- Engagement scoring: combine analytics, support history, and meeting notes into a single priority score
 
 Each layer reads from and writes to the same data model. No API translation, no webhook failures, no data sync lag.
 
-## Trade-Offs
+## Trade-offs
 
 This pattern has real costs:
 
-- **Maintenance is yours** — no vendor handles security patches, scaling, or compliance certifications for your custom features
-- **Quality ceiling** — a purpose-built SaaS product (Zendesk, PostHog) has years of refinement; an agent-built clone may lack edge case handling
-- **Scaling limits** — custom implementations may not handle the load that dedicated SaaS infrastructure handles
-- **Rebuild risk** — if the agent builds something poorly, you debug it; with SaaS, you file a support ticket
+- Maintenance is yours: no vendor handles security patches, scaling, or compliance certifications for your custom features
+- Quality ceiling: a purpose-built SaaS product (Zendesk, PostHog) has years of refinement, so an agent-built clone may miss edge cases
+- Scaling limits: custom implementations may not handle the load that dedicated SaaS infrastructure handles
+- Rebuild risk: if the agent builds something poorly, you debug it; with SaaS, you file a support ticket
 
-## Where It Fits
+## Where it fits
 
 First-party agent composition works best when:
 
 - You are a small team or solo operator where integration overhead exceeds build cost
 - Your data model is the competitive advantage and you cannot afford to fragment it across vendors
-- The capabilities you need are standard (CRUD, dashboards, notifications) rather than domain-specialized (e.g. advanced email deliverability)
+- The capabilities you need are standard (CRUD, dashboards, notifications) rather than domain-specialized, such as advanced email deliverability
 
 It is less appropriate when:
 
 - Compliance requires vendor-certified infrastructure (SOC 2, HIPAA)
 - The capability requires deep domain expertise (payment processing, advanced analytics)
 - You need to scale to thousands of concurrent users immediately
-- The function is *deterministic* — accounting, payroll, ERP reconciliation, regulated workflows where 100% precision is required and probabilistic agent-built code is a poor substitute for hardened SaaS ([UncoverAlpha, "The Great SaaS Unbundling"](https://www.uncoveralpha.com/p/the-great-saas-unbundling-why-ai))
+- The function is deterministic — accounting, payroll, ERP reconciliation, or regulated workflows that need 100% precision, where probabilistic agent-built code is a poor substitute for hardened SaaS ([UncoverAlpha, "The Great SaaS Unbundling"](https://www.uncoveralpha.com/p/the-great-saas-unbundling-why-ai))
 
 ## Example
 
-A solo operator running a B2B SaaS product needs basic CRM and support-ticket tracking. Instead of subscribing to HubSpot and Zendesk, they use a coding agent (Claude with an [agent harness](../agent-design/agent-harness.md)):
+A solo operator running a B2B SaaS product needs basic CRM and support-ticket tracking. Instead of subscribing to HubSpot and Zendesk, they use a coding agent (Claude with an [agent harness](../agent-design/agent-harness.md)).
 
-**Prompt to the coding agent:**
+Prompt to the coding agent:
 
 ```
 Add a customer management module to this Rails app:
@@ -106,7 +106,7 @@ Add a customer management module to this Rails app:
 - No external integrations -- all data in the existing PostgreSQL database
 ```
 
-**The agent produces:**
+The agent produces:
 
 ```
 db/migrate/20240901_add_crm.rb         -- migration for customers and tickets
@@ -118,7 +118,7 @@ app/views/admin/customers/index.html.erb  -- table with ticket count column
 app/views/admin/support_tickets/show.html.erb  -- ticket + customer panel
 ```
 
-**What this enables:** A second agent prompt adds engagement scoring because the data is unified:
+A second agent prompt then adds engagement scoring, because the data is unified:
 
 ```
 Add an engagement_score column to customers. Populate it nightly:
@@ -141,5 +141,5 @@ No webhook setup, no API key management, no data export. The scoring agent reads
 - [Bootstrapping Coding Agents](bootstrapping-coding-agents.md)
 - [Hyper-Personalized Software](hyper-personalized-software.md)
 - [Product-as-IDE](product-as-ide.md)
-- [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
 - [Agent Harness](../agent-design/agent-harness.md)

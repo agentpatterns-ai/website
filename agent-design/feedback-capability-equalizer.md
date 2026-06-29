@@ -18,23 +18,23 @@ maturity: emerging
 
 > Weaker models with high-quality iterative feedback outperform stronger models operating without feedback — feedback loop investment yields higher returns than model upgrades.
 
-## The Evidence
+## The evidence
 
-ConvCodeWorld, an ICLR 2025 benchmark for conversational code generation, tested 16 LLMs across 9 feedback combinations. The central finding: **DeepSeek-Coder-6.7B with expert verbal feedback achieved 82.8% Recall, exceeding GPT-4o's single-turn 50.8%** — a 6.7B parameter model outperforming a frontier model through iterative feedback alone ([Han et al., ICLR 2025](https://arxiv.org/abs/2502.19852)).
+ConvCodeWorld, an ICLR 2025 benchmark for conversational code generation, tested 16 LLMs across 9 feedback combinations. The central finding: DeepSeek-Coder-6.7B with expert verbal feedback achieved 82.8% Recall, exceeding GPT-4o's single-turn 50.8% — a 6.7B parameter model outperforming a frontier model through iterative feedback alone ([Han et al., ICLR 2025](https://arxiv.org/abs/2502.19852)).
 
 This is not an isolated result. LangChain improved Terminal Bench 2.0 scores from 52.8% to 66.5% through pure harness changes — no model change ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). LLMloop's five automated feedback loops raised pass@10 from 76.2% to 90.2% ([Ravi et al., ICSME 2025](https://arxiv.org/html/2603.23613v1)).
 
-The pattern holds across contexts: **improving the feedback loop outperforms upgrading the model**.
+The pattern holds across contexts: improving the feedback loop outperforms upgrading the model.
 
-## Feedback Type Hierarchy
+## Feedback type hierarchy
 
 Not all feedback is equal. ConvCodeWorld categorized feedback into three types, each with quality tiers ([Han et al., ICLR 2025](https://arxiv.org/abs/2502.19852)):
 
 | Type | Description | Impact |
 |------|-------------|--------|
-| **Compilation (fc)** | Syntax and type errors only; no refinement guidance | Lowest — catches surface errors but provides no direction |
-| **Execution (fe/fe\*)** | Runtime errors with partial or full test coverage | Moderate to high — full coverage (fe\*) enables precise fault localization |
-| **Verbal (fv/fv\*)** | Natural language feedback at novice or expert level | Highest when expert-level — detailed fault localization and refinement guidance |
+| Compilation (fc) | Syntax and type errors only; no refinement guidance | Lowest — catches surface errors but provides no direction |
+| Execution (fe/fe\*) | Runtime errors with partial or full test coverage | Moderate to high — full coverage (fe\*) enables precise fault localization |
+| Verbal (fv/fv\*) | Natural language feedback at novice or expert level | Highest when expert-level — detailed fault localization and refinement guidance |
 
 The strongest combination was full test coverage + expert verbal feedback (fc, fe\*, fv\*), which pushed GPT-4 to 92.5% Recall. Compilation-only feedback produced significantly lower gains.
 
@@ -46,34 +46,34 @@ graph TD
     A & C & E --> G[Combined: Highest Improvement]
 ```
 
-The practical implication: **invest in the richest feedback your harness can provide**. A type checker alone is a floor; adding test execution and remediation-bearing error messages unlocks substantially more capability.
+The practical implication: invest in the richest feedback your harness can provide. A type checker alone is a floor. Adding test execution and remediation-bearing error messages adds substantially more capability.
 
-## The Generalization Trap
+## The generalization trap
 
 Models trained on specific feedback combinations fail when encountering unfamiliar feedback types. ReflectionCoder, fine-tuned on compilation + execution + novice verbal feedback, degraded sharply on expert-level verbal feedback — the base DeepSeek-Coder model outperformed its fine-tuned variant on the unfamiliar type ([Han et al., ICLR 2025](https://arxiv.org/abs/2502.19852)).
 
-Design principle: **match feedback types to what the model was trained on**. A model trained with execution feedback extracts more from test output than from verbose natural-language critique. When introducing new feedback types, verify the model can use them — do not assume generalization.
+Design principle: match feedback types to what the model was trained on. A model trained with execution feedback extracts more from test output than from verbose natural-language critique. When introducing new feedback types, verify the model can use them — do not assume generalization.
 
-## Efficiency vs Coverage Tradeoff
+## Efficiency versus coverage tradeoff
 
 Models that solve problems quickly do not solve the most problems. GPT-4o achieved the highest MRR (65.3 — fewest turns per solved problem) but GPT-4 led in Recall (92.5 — most problems solved overall) under full feedback ([Han et al., ICLR 2025](https://arxiv.org/abs/2502.19852)).
 
-This tradeoff drives iteration-budget decisions:
+This tradeoff guides iteration-budget decisions:
 
-- **Optimize for MRR** when token cost matters and partial coverage is acceptable — fast model, tight feedback loops
-- **Optimize for Recall** when completeness matters and you can afford more turns — persistent model, comprehensive feedback
+- Optimize for MRR when token cost matters and partial coverage is acceptable — fast model, tight feedback loops
+- Optimize for Recall when completeness matters and you can afford more turns — persistent model, comprehensive feedback
 
 Most agentic coding workflows should optimize for Recall: an agent that takes more turns but solves the problem beats one that gives up quickly.
 
-## Models Cannot Self-Evaluate
+## Models cannot self-evaluate
 
 A critical enabler: models perform "very poorly" at detecting their own correctness or safety issues. Only with explicit feedback from external tools — test runners, static analyzers, type checkers — do repair capabilities emerge ([Fakhoury et al., 2024](https://arxiv.org/abs/2412.14841)).
 
-This confirms that [agent backpressure](agent-backpressure.md) is not optional: self-assessment is unreliable, and external feedback signals are the mechanism that unlocks iterative improvement.
+This confirms that [agent backpressure](agent-backpressure.md) is not optional: self-assessment is unreliable, and external feedback signals are the mechanism that enables iterative improvement.
 
-## Designing for Feedback Quality
+## Designing for feedback quality
 
-Feedback quality has two dimensions: **signal precision** (how accurately the feedback localizes the problem) and **LLM consumability** (how effectively the model can act on it).
+Feedback quality has two dimensions: signal precision (how accurately the feedback localizes the problem) and LLM consumability (how effectively the model can act on it).
 
 Custom linter messages that include remediation instructions outperform raw error output because they provide actionable context at the moment of violation ([Fowler/Bockeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)):
 
@@ -90,11 +90,11 @@ ERROR: Service layer cannot import from UI layer.
 
 The remediation message gives the model what it needs: what is wrong, what to do instead, and where to find context — feedback optimized for LLM consumption.
 
-## Static Benchmarks as Cheap Proxies
+## Static benchmarks as cheap proxies
 
 ConvCodeBench, a static benchmark using pre-generated feedback logs, correlated 0.82-0.99 (Spearman's rank) with the dynamic ConvCodeWorld benchmark ([Han et al., ICLR 2025](https://arxiv.org/abs/2502.19852)). This validates using cheaper static evaluation as a proxy when measuring how models respond to feedback — you do not need to run full interactive environments to compare feedback strategies.
 
-## Where Feedback Hits Diminishing Returns
+## Where feedback hits diminishing returns
 
 The equalizing effect has a ceiling. Models exhibit "feedback friction" — resistance to external correction even under near-ideal, ground-truth feedback — strongest exactly where a model is confidently wrong, so it plateaus below target accuracy no matter how many correction turns it gets ([Jiang et al., 2025](https://arxiv.org/abs/2506.11930)). The friction is worst on complex reasoning tasks — the same tasks where a stronger base model pays off. Feedback substitutes for scale on routine work bound by fault localization; on the reasoning-bound tail, upgrading the model is still the higher-return move. Treat "improve the feedback loop first" as the default, not an absolute.
 
@@ -102,9 +102,9 @@ The equalizing effect has a ceiling. Models exhibit "feedback friction" — resi
 
 A team runs an agentic coding workflow with Claude Sonnet for implementation tasks. The agent produces correct code ~60% of the time on first attempt. Two improvement paths:
 
-**Path A — Upgrade the model:** Switch to Claude Opus. Higher per-token cost, marginal improvement on straightforward tasks where Sonnet already succeeds, meaningful improvement only on complex reasoning tasks.
+Path A — upgrade the model: Switch to Claude Opus. Higher per-token cost, marginal improvement on straightforward tasks where Sonnet already succeeds, meaningful improvement only on complex reasoning tasks.
 
-**Path B — Improve the feedback loop:** Add strict TypeScript types (compilation feedback), targeted test cases for the areas the agent modifies (execution feedback), and linter rules with remediation messages (structured verbal feedback). The agent now self-corrects through a write-check-fix loop — each error message guides the next attempt.
+Path B — improve the feedback loop: Add strict TypeScript types (compilation feedback), targeted test cases for the areas the agent modifies (execution feedback), and linter rules with remediation messages (structured verbal feedback). The agent now self-corrects through a write-check-fix loop — each error message guides the next attempt.
 
 Path B produces higher success rates at lower cost: the model did not change, the feedback environment did. Path A still fits the subset of tasks needing deeper reasoning, but Path B addresses the larger volume of work where feedback quality is the binding constraint.
 
@@ -120,7 +120,7 @@ Path B produces higher success rates at lower cost: the model did not change, th
 
 - [Agent Backpressure](agent-backpressure.md) — the automated feedback loops this pattern depends on
 - [L1 → L2: Adding Feedback Loops](../frameworks/brownfield-to-agent-first/level-1-to-2.md) — how to implement compilation, execution, and structured verbal feedback in a brownfield repo
-- [Cost-Aware Agent Design](cost-aware-agent-design.md) — routing by complexity; feedback quality changes which tier is needed
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — routing by complexity; feedback quality changes which tier is needed
 - [Harness Engineering](harness-engineering.md) — designing the environment that provides high-quality feedback
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — the generator-evaluator loop that operationalizes iterative feedback
 - [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md) — allocating iteration budget proportional to task complexity

@@ -19,23 +19,23 @@ maturity: emerging
 
 > When a tool call fails, inject structured error context — the error message, previous attempts, and targeted recovery suggestions — into the next inference call to prevent retry loops before they form.
 
-## The Problem: Blind Retries
+## The problem: blind retries
 
-When a tool call returns an error, most agent harnesses pass only the raw error message back to the model ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)). The model retries with minimal additional information, often repeating the same approach. After several identical failures, the agent enters a retry loop — consuming context window and tokens without progress.
+When a tool call returns an error, most agent harnesses pass only the raw error message back to the model ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)). The model retries with little extra information, and often repeats the same approach. After several identical failures, the agent enters a retry loop that consumes context window and tokens without progress.
 
-The root cause is information asymmetry: the model lacks the context needed to choose a different strategy on the first retry ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)).
+The root cause is information asymmetry. The model lacks the context it needs to choose a different strategy on the first retry ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)).
 
-## How Context Injection Works
+## How context injection works
 
-Instead of forwarding the raw error, the harness constructs a structured error context block containing three components ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)):
+Instead of forwarding the raw error, the harness builds a structured error context block with three parts ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)):
 
-1. **Error message** — the original error output, preserved verbatim
-2. **Previous attempts** — a record of prior attempts at the same operation within the current session, including what was tried and what failed
-3. **Targeted recovery suggestions** — harness-generated hints based on the error type (e.g., "file not found" suggests checking the path; "permission denied" suggests checking credentials or sandbox restrictions)
+1. Error message — the original error output, preserved word for word.
+2. Previous attempts — a record of prior tries at the same operation within the current session, including what was tried and what failed.
+3. Targeted recovery suggestions — harness-generated hints based on the error type. For example, "file not found" suggests checking the path, and "permission denied" suggests checking credentials or sandbox restrictions.
 
-This block is injected into the next LLM prompt, giving the model a complete picture of the failure situation rather than a single data point.
+The harness injects this block into the next prompt. The model then sees the full failure situation rather than a single data point.
 
-## Structured Context Format
+## Structured context format
 
 A practical error context block follows this shape:
 
@@ -54,41 +54,41 @@ Recovery suggestions:
   - The file may have been moved or renamed earlier in this session
 ```
 
-The key property is structure: the model receives not just what went wrong, but what has already been tried and what the viable alternatives are ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)).
+The key property is structure. The model receives not just what went wrong, but what has already been tried and which alternatives are still open ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)).
 
 ## Impact
 
-Context-injected error recovery reduces retry loops by 25–40% compared to passing raw error messages alone ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)). The improvement comes from eliminating the first two to three redundant retries that would otherwise occur before the model independently discovers that a different approach is needed.
+Context-injected error recovery reduces retry loops by 25–40% compared to passing raw error messages alone ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)). The improvement comes from removing the first two to three redundant retries that would otherwise happen before the model works out on its own that a different approach is needed.
 
-## Relationship to Loop Detection
+## Relationship to loop detection
 
-Loop detection and error recovery are complementary but operate at different points in the failure lifecycle:
+Loop detection and error recovery work together, but act at different points in the failure lifecycle:
 
-- **Error recovery** acts at the moment of failure — it prevents loops from forming by giving the model better information on the first retry ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344))
-- **Loop detection** acts after repeated failures — it detects and interrupts loops that have already formed
+- error recovery acts at the moment of failure — it stops loops from forming by giving the model better information on the first retry ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344))
+- loop detection acts after repeated failures — it spots and interrupts loops that have already formed
 
-Error recovery reduces the workload on loop detection: the 25–40% reduction in retry loops means fewer cases reach the threshold that triggers detection ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)). Loop detection remains necessary as a safety net for cases where enriched context is insufficient.
+Error recovery lightens the load on loop detection. The 25–40% reduction in retry loops means fewer cases reach the threshold that triggers detection ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)). Loop detection is still needed as a safety net when the enriched context is not enough.
 
-## Implementation Considerations
+## Implementation considerations
 
-The harness maintains a per-session log of failed tool calls keyed by operation type and target. On each failure:
+The harness keeps a per-session log of failed tool calls, keyed by operation type and target. On each failure, the harness does four things:
 
-1. Look up prior failures for the same operation/target pair
-2. Select recovery suggestions from a mapping of error patterns to hints
-3. Assemble the structured context block
-4. Inject the block into the next prompt, positioned immediately after the error result
+1. Look up prior failures for the same operation and target pair.
+2. Select recovery suggestions from a mapping of error patterns to hints.
+3. Assemble the structured context block.
+4. Inject the block into the next prompt, right after the error result.
 
-Recovery suggestions should be generic enough to avoid prescribing a single fix, but specific enough to exclude approaches already attempted. The suggestion catalog is maintained as a static mapping — no LLM inference is needed to generate suggestions.
+Recovery suggestions should be general enough to avoid prescribing a single fix, but specific enough to rule out approaches already tried. The harness keeps the suggestion catalog as a static mapping, so no LLM inference is needed to generate suggestions.
 
 This aligns with emerging ReAct-agent reliability guidance: the LangGraph [Production Reliability RFC](https://github.com/langchain-ai/langgraph/issues/6617) proposes classifying errors and surfacing structured reasoning so retries are informed rather than blind.
 
-## When This Backfires
+## When this backfires
 
-Context injection adds tokens to every retry prompt. Three conditions make this trade-off unfavorable:
+Context injection adds tokens to every retry prompt. Three conditions make this trade-off a poor one:
 
-1. **Near-context-limit sessions** — injecting prior-attempt history and recovery hints into a prompt that is already large can push the total context past the model's limit, truncating earlier session history and introducing new errors.
-2. **High-frequency, low-variance errors** — when errors repeat across many different operations (e.g., a systemic auth failure or a network outage), the recovery suggestion catalog produces the same generic hints on every retry, adding tokens without adding signal.
-3. **Static suggestion catalog staleness** — if the hint mappings are not maintained as the tool surface evolves, they can suggest approaches that no longer apply or contradict current tool behavior, actively misleading the model.
+1. Near-context-limit sessions — injecting prior-attempt history and recovery hints into a prompt that is already large can push the total context past the model's limit. This truncates earlier session history and introduces new errors.
+2. High-frequency, low-variance errors — when errors repeat across many different operations, such as a systemic auth failure or a network outage, the recovery catalog produces the same generic hints on every retry. This adds tokens without adding signal.
+3. Stale suggestion catalog — if the hint mappings are not kept current as the tool surface changes, they can suggest approaches that no longer apply or that contradict current tool behavior, which misleads the model.
 
 ## Example
 

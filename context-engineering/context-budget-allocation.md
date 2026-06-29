@@ -17,24 +17,24 @@ maturity: adopted
 
 > Context is a finite budget — every token preloaded into the context window displaces a token available for reasoning, tool results, and implementation.
 
-**Learn it hands-on:** [Every Token Has a Cost](https://learn.agentpatterns.ai/context-engineering/every-token-has-a-cost/) — guided lesson with quizzes.
+Learn it hands-on: [Every Token Has a Cost](https://learn.agentpatterns.ai/context-engineering/every-token-has-a-cost/) — a guided lesson with quizzes.
 
 !!! info "Also known as"
-    **The 50% Rule**, **Context Budget**. For the failure mode when budgets are ignored, see [Context Window Management: The Dumb Zone](context-window-dumb-zone.md).
+    The 50% Rule, Context Budget. For the failure mode when budgets are ignored, see [Context Window Management: The Dumb Zone](context-window-dumb-zone.md).
 
-## The Budget Framing
+## The budget framing
 
-Context budget allocation is the practice of deciding, before a task starts, which content goes into the always-on layer and which loads on demand — treating the context window as a finite budget that must cover preloaded instructions, tool calls, reasoning, and file reads within a single session.
+Context budget allocation means deciding, before a task starts, which content goes into the always-on layer and which loads on demand. It treats the context window as a finite budget that must cover preloaded instructions, tool calls, reasoning, and file reads in one session.
 
 A 200K token context window sounds large. Load AGENTS.md, five skill definitions, three reference files, and the system prompt, and the agent may start a task with 150K tokens already consumed. The remaining 50K must cover tool calls, intermediate reasoning, file reads, and implementation — and shrinks further as the conversation accumulates turns.
 
-Claude Opus 4.6 and Sonnet 4.6 support a [1M token context window](https://docs.anthropic.com/en/docs/about-claude/models) natively — no beta header required, at flat pricing. Older models (Sonnet 4.5 and Sonnet 4) still require the `context-1m-2025-08-07` beta header and face a pricing cliff above 200K tokens. Use 1M context when retaining full history matters; prefer compaction when prior context can be safely summarized.
+Claude Opus 4.6 and Sonnet 4.6 support a [1M token context window](https://docs.anthropic.com/en/docs/about-claude/models) natively — no beta header required, at flat pricing. Older models (Sonnet 4.5 and Sonnet 4) still require the `context-1m-2025-08-07` beta header and face a pricing cliff above 200K tokens. Use 1M context when retaining full history matters. Prefer compaction when you can safely summarize prior context.
 
 [Anthropic frames this](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) as an attention budget: the n² cost of token-pair relationships means a fully packed context is computationally thinner. Signal injected early competes with signal injected later.
 
-## The Two Loading Strategies
+## The two loading strategies
 
-### Preload (Always-On)
+### Preload (always-on)
 
 Content loaded at session start, present for every interaction:
 
@@ -44,7 +44,7 @@ Content loaded at session start, present for every interaction:
 
 Cost: paid on every task. Benefit: zero latency.
 
-### On-Demand (JIT)
+### On-demand (JIT)
 
 Content loaded when actually needed, via tool calls:
 
@@ -56,7 +56,7 @@ Content loaded when actually needed, via tool calls:
 
 Cost: one tool call. Benefit: budget preserved until needed.
 
-### The Trade-off
+### The trade-off
 
 | | Preload | On-demand |
 |-|---------|-----------|
@@ -64,29 +64,29 @@ Cost: one tool call. Benefit: budget preserved until needed.
 | Context cost | Paid on every task | Paid only when used |
 | Best for | Always-needed context | Conditionally-needed context |
 
-Hybrid: preload what every task needs; load everything else on-demand.
+A hybrid works best: preload what every task needs, and load everything else on-demand.
 
-## Sub-Agents as Context Isolation
+## Sub-agents as context isolation
 
-Sub-agents are a budget tool, not just an architecture pattern. Each sub-agent runs in its own isolated context — a research sub-agent can read 50 files without that overhead appearing in the coordinator's context. [Anthropic describes](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) sub-agent architectures as one of three complementary approaches — alongside compaction and structured note-taking — for managing context across long-horizon tasks.
+Sub-agents are a budget tool, not just an architecture pattern. Each sub-agent runs in its own isolated context. A research sub-agent can read 50 files without that overhead appearing in the coordinator's context. [Anthropic describes](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) sub-agent architectures as one of three approaches — alongside compaction and structured note-taking — for managing context across long tasks.
 
-## Measuring What You Load
+## Measuring what you load
 
 Skill descriptions in Claude Code's skill architecture [use a dynamic budget of 1% of the context window for all skill descriptions combined](https://code.claude.com/docs/en/skills), with a fallback cap of 8,000 characters. Full skill content loads only on invocation.
 
 All skill descriptions share that budget, so adding more skills means each description must be leaner.
 
-## Anti-Patterns
+## Anti-patterns
 
-**Just-in-case preloading**: Loading reference material "in case it's needed" converts conditional cost into fixed overhead on every task.
+Just-in-case preloading: loading reference material in case you might need it turns conditional cost into fixed overhead on every task.
 
-**Fat always-on instructions**: Instructions that include code samples, directory trees, and API signatures bloat the always-on layer. Replace with hints and pointers to [discoverable content](discoverable-vs-nondiscoverable-context.md).
+Fat always-on instructions: instructions that include code samples, directory trees, and API signatures swell the always-on layer. Replace them with hints and pointers to [discoverable content](discoverable-vs-nondiscoverable-context.md).
 
-**Single-agent monoliths for research-heavy tasks**: Forcing one agent to hold all research and implementation context simultaneously. Sub-agents isolate research cost.
+Single-agent monoliths for research-heavy tasks: forcing one agent to hold all research and implementation context at once. Sub-agents isolate research cost.
 
 ## Example
 
-A Claude Code skill configuration demonstrating the preload vs. on-demand split:
+A Claude Code skill configuration shows the split between preload and on-demand:
 
 ```yaml
 # .claude/skills/migrate-api.yaml  — full content, loaded on invocation only
@@ -106,7 +106,7 @@ steps:
   - run: "gh pr view $PR_NUMBER --json title,body,files"
 ```
 
-At session start, Claude Code loads only the two `description` strings (~30 tokens total). When `migrate-api` is triggered, the full YAML — including the three `steps` entries and the file paths — enters context for that task alone. A research sub-agent that reads `src/api/v1/` does so in its own isolated context window; only its condensed summary appears in the coordinator's context, leaving the coordinator's budget available for synthesis and implementation.
+At session start, Claude Code loads only the two `description` strings (~30 tokens total). When you trigger `migrate-api`, the full YAML — including the three `steps` entries and the file paths — enters context for that task alone. A research sub-agent that reads `src/api/v1/` does so in its own isolated context window. Only its condensed summary appears in the coordinator's context, which leaves the coordinator's budget free for synthesis and implementation.
 
 ## Key Takeaways
 

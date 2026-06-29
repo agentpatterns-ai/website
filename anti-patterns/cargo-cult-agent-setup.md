@@ -18,25 +18,25 @@ maturity: established
 
 > Copying agent configurations without understanding why they work produces agents that follow irrelevant conventions and miss project-specific needs.
 
-## The Pattern
+## The pattern
 
 A developer finds a well-regarded AGENTS.md or agent configuration from a tutorial and copies it into their project. The agent now follows conventions from someone else's React app or data pipeline — none of which match the project at hand. The configuration looks complete but doesn't serve the actual work.
 
-## Why It Happens
+## Why it happens
 
 Good configurations are visible; the reasoning behind them is not. Curated repositories surface polished, community-validated configurations that look authoritative. The friction of writing from scratch is real, so copying feels like a safe shortcut — the same impulse behind the [copy-paste agent](copy-paste-agent.md).
 
 The result: a cargo cult. The forms are present (AGENTS.md, system prompt, skills directory), but the function is missing.
 
-## What Goes Wrong
+## What goes wrong
 
-**Irrelevant conventions.** An AGENTS.md written for a typed functional codebase pushes an agent toward patterns that conflict with an imperative OOP project. The agent follows the instructions, but the instructions are wrong for the context.
+Irrelevant conventions are the first cost. An AGENTS.md written for a typed functional codebase pushes an agent toward patterns that conflict with an imperative OOP project. The agent follows the instructions, but the instructions are wrong for the context.
 
-**Missing domain knowledge.** Skills encoding one project's deployment process, test conventions, or API patterns don't transfer — they are exactly the [implicit knowledge](implicit-knowledge-problem.md) that is specific to one team. The agent invokes the wrong tools or skips actual workflow steps.
+Domain knowledge goes missing too. Skills that encode one project's deployment process, test conventions, or API patterns do not transfer — they are exactly the [implicit knowledge](implicit-knowledge-problem.md) specific to one team. The agent invokes the wrong tools or skips real workflow steps.
 
-**False confidence.** A populated configuration looks like a working one. Teams assume coverage that doesn't exist and skip verification they would have done with a blank slate.
+False confidence follows. A populated configuration looks like a working one. Teams assume coverage that does not exist and skip the verification they would have done with a blank slate.
 
-## What to Copy vs. What to Build
+## What to copy versus what to build
 
 | Copy structural patterns | Build from project knowledge |
 |--------------------------|------------------------------|
@@ -45,23 +45,23 @@ The result: a cargo cult. The forms are present (AGENTS.md, system prompt, skill
 | Pipeline stage design | Tool-specific configuration |
 | Verification gate patterns | Skill implementations |
 
-Structural patterns transfer because they're abstract. Content — instructions, skills, domain rules — is specific and doesn't transfer.
+Structural patterns transfer because they are abstract. Content — instructions, skills, domain rules — is specific and does not transfer.
 
-## The Fix
+## The fix
 
 Start your AGENTS.md from the [agents.md open standard](https://agents.md) with only the fields that describe your project's actual architecture. GitHub's analysis of 2,500+ repositories found that effective agent files are project-specific — covering exact commands, tech stack versions, and explicit workflow boundaries for that codebase ([How to write a great agents.md](https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/)). Add instructions when you've identified a recurring problem they would solve. Add skills when a task recurs and benefits from encoded knowledge.
 
 Use community configurations for pattern reference — to see what kinds of instructions work and what structure a skill file or [AGENTS.md](../standards/agents-md.md) can take. Do not copy them as solutions.
 
-## When This Critique Backfires
+## When this critique backfires
 
-Avoiding all templates can be worse than copying selectively. Cases where copy-then-prune beats blank-slate:
+Avoiding all templates can be worse than copying selectively. Copy-then-prune beats a blank slate in these cases:
 
-- **First AGENTS.md in a project** — a template surfaces categories (stack, tests, commits) you would otherwise forget.
-- **Migrating between agents** — the instructions already match your project; structural copying is the point.
-- **Small configs (<50 lines)** — a practitioner can read end-to-end in one pass and keep or drop each line. Risk scales with size.
+- First AGENTS.md in a project: a template surfaces categories (stack, tests, commits) you would otherwise forget.
+- Migrating between agents: the instructions already match your project, so structural copying is the point.
+- Small configs under 50 lines: you can read them end-to-end in one pass and keep or drop each line. Risk scales with size.
 
-The anti-pattern is copying without the prune-and-audit pass, not copying per se.
+The anti-pattern is copying without the prune-and-audit pass, not copying itself.
 
 ## Key Takeaways
 

@@ -13,39 +13,39 @@ maturity: emerging
 
 > Commands define what to do; agents define who does it — separating orchestration from expertise lets you change either without touching the other.
 
-**Learn it hands-on:** [Commands vs Agents](https://learn.agentpatterns.ai/harness-engineering/commands-vs-agents/) — guided lesson with quizzes.
+Learn this hands-on with the [Commands vs Agents lesson](https://learn.agentpatterns.ai/harness-engineering/commands-vs-agents/) — a guided lesson with quizzes.
 
-## The Split
+## The split
 
-In agent-driven projects, two distinct concerns collapse into a single file when not deliberately separated: workflow orchestration (what steps run, in what order, with what conditions) and domain expertise (how to do a specific job well).
+Two concerns often collapse into a single file when you do not deliberately separate them: workflow orchestration and domain expertise. Orchestration covers what steps run, in what order, and under what conditions. Expertise covers how to do a specific job well.
 
-**Commands** are workflow definitions. They describe the pipeline: fetch the issue, research the topic, draft the content, review it, open a PR. Commands name the steps, sequence them, and define what passes between them — the [knowledge/execution split](separation-of-knowledge-and-execution.md). They do not know how to research or how to draft — that is someone else's job.
+Commands are workflow definitions. They describe the pipeline: fetch the issue, research the topic, draft the content, review it, open a PR. Commands name the steps, sequence them, and define what passes between them — the [knowledge and execution split](separation-of-knowledge-and-execution.md). They do not know how to research or how to draft. That is someone else's job.
 
-**Agents** carry expertise. An agent definition specifies role, quality bar, constraints, and relevant skills. It knows what good output looks like for its domain (see [Specialized Agent Roles](specialized-agent-roles.md)). It does not know, or need to know, what pipeline called it.
+Agents carry expertise. An agent definition sets the role, quality bar, constraints, and relevant skills. It knows what good output looks like for its domain (see [Specialized Agent Roles](specialized-agent-roles.md)). It does not know, or need to know, what pipeline called it.
 
-This mirrors how effective teams operate: a project manager defines the process; specialists execute the work. The process is separable from the people — the [delegation decision](delegation-decision.md) in agent terms.
+This mirrors how effective teams work: a project manager defines the process and specialists do the work. You can separate the process from the people — the [delegation decision](delegation-decision.md) in agent terms.
 
-## Why It Matters
+## Why it matters
 
-When orchestration and expertise live in the same file, every change touches both concerns. Adding a pipeline step requires editing the expert's definition. Improving an agent's quality bar requires editing the pipeline. The two evolve at different rates and for different reasons — separating them is the [composition](agent-composition-patterns.md) win.
+When orchestration and expertise live in the same file, every change touches both. Adding a pipeline step means editing the expert's definition. Improving an agent's quality bar means editing the pipeline. The two change at different rates and for different reasons, so separating them is the [composition](agent-composition-patterns.md) win.
 
-Separated, they become composable. The same `content-writer` agent can serve a `draft-content` command and an `implement-issue` command. The same `research-topic` command can delegate to a different specialist depending on the domain. Neither change requires touching the other file.
+Once separated, they become composable. The same `content-writer` agent can serve a `draft-content` command and an `implement-issue` command. The same `research-topic` command can delegate to a different specialist depending on the domain. Neither change means touching the other file.
 
 Concrete examples of this split in a repository:
 
-- A commands directory (e.g. `.claude/commands/` or `.github/commands/`) — pipeline definitions: step sequences, delegation targets, handoff criteria
-- An agents directory (e.g. `.claude/agents/` or `.github/agents/`) — expertise definitions: content-writer, researcher, reviewer
+- A commands directory (for example `.claude/commands/` or `.github/commands/`) — pipeline definitions: step sequences, delegation targets, handoff criteria
+- An agents directory (for example `.claude/agents/` or `.github/agents/`) — expertise definitions: content-writer, researcher, reviewer
 
-## The Anti-Pattern
+## The anti-pattern
 
-A monolithic command file that contains both the pipeline logic and the complete domain instructions for every agent it calls. Recognizable symptoms:
+A single command file holds both the pipeline logic and the full domain instructions for every agent it calls. You can recognize it by these symptoms:
 
 - Commands exceed 300 lines because they embed all agent knowledge inline
 - The same expert instructions are copy-pasted across multiple commands
 - Updating quality standards requires editing N command files instead of one agent definition
 - Swapping one agent for a specialist alternative requires rewriting the command
 
-## Scope Boundaries
+## Scope boundaries
 
 | Concern | Command | Agent |
 |---------|---------|-------|
@@ -59,7 +59,7 @@ A monolithic command file that contains both the pipeline logic and the complete
 
 ## Example
 
-The following shows the separation in a `.claude` directory. The command defines the pipeline; the agent carries the expertise. Neither file knows the internals of the other.
+This shows the separation in a `.claude` directory. The command defines the pipeline and the agent carries the expertise. Neither file knows the internals of the other.
 
 ```
 .claude/
@@ -91,17 +91,17 @@ You write documentation pages for the Agent Patterns repo.
 - Headings follow the established page schema: Problem → Technique → Example → Key Takeaways
 ```
 
-The command can be extended with new pipeline steps (e.g., an additional review stage) without editing `content-writer.md`. The agent's quality bar can be tightened without touching any command file.
+You can extend the command with new pipeline steps, for example an extra review stage, without editing `content-writer.md`. You can tighten the agent's quality bar without touching any command file.
 
-## When This Backfires
+## When this backfires
 
 The pattern adds overhead without payoff in three conditions:
 
-1. **Single-use pipelines**: If a command will never be reused and only one agent ever runs it, the separation is pure indirection. The cost of two files and an indirection layer outweighs the composability benefit that never materialises.
-2. **Rapidly changing scope**: When both the pipeline *and* the domain expertise are in flux simultaneously, maintaining the boundary actively slows iteration — every decision requires updating 2 files to stay coherent.
-3. **Solo projects without reuse**: On projects where agent definitions are never shared across commands, the abstraction is notional. The separation only pays off when the same agent genuinely serves multiple callers, or when the pipeline genuinely evolves independent of the expert definition.
+1. Single-use pipelines: If a command will never be reused and only one agent ever runs it, the separation is pure indirection. The cost of two files and an indirection layer outweighs a composability benefit that never arrives.
+2. Rapidly changing scope: When both the pipeline and the domain expertise change at the same time, keeping the boundary slows iteration. Every decision means updating two files to stay coherent.
+3. Solo projects without reuse: When agent definitions are never shared across commands, the abstraction is notional. The separation only pays off when the same agent serves multiple callers, or when the pipeline evolves independently of the expert definition.
 
-The principle derives from [separation of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns) and the [single-responsibility principle](https://en.wikipedia.org/wiki/Single-responsibility_principle) — foundational software design heuristics with well-documented trade-offs: they improve long-term maintainability at the cost of upfront complexity and indirection. The same cost-benefit calculus applies here.
+The principle comes from [separation of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns) and the [single-responsibility principle](https://en.wikipedia.org/wiki/Single-responsibility_principle). Both are foundational software design heuristics with well-documented trade-offs: they improve long-term maintainability at the cost of upfront complexity and indirection. The same cost-benefit calculus applies here.
 
 ## Key Takeaways
 

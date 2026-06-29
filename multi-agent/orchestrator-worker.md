@@ -18,7 +18,7 @@ maturity: established
 
 > A lead agent decomposes a complex task and assigns independent subtasks to specialized workers running in parallel, reducing resolution time compared to sequential single-agent approaches.
 
-**Learn it hands-on:** [Orchestrator-Worker](https://learn.agentpatterns.ai/harness-engineering/orchestrator-worker/) — guided lesson with quizzes.
+Learn it hands-on with the [Orchestrator-Worker guided lesson and quizzes](https://learn.agentpatterns.ai/harness-engineering/orchestrator-worker/).
 
 !!! note "Also known as"
     Orchestrator-Worker, Parallel Dispatch, Scatter-Gather. The delegation variant is described here. For the broader pattern survey, see [Agent Composition Patterns](../agent-design/agent-composition-patterns.md). For the synthesis variant, see [Fan-Out Synthesis](fan-out-synthesis.md). For implementation guidance, see [Sub-Agents Fan-Out](sub-agents-fan-out.md).
@@ -27,8 +27,8 @@ maturity: established
 
 The pattern has two roles:
 
-- **Orchestrator** -- receives the task, analyzes its structure, decomposes it into independent subtasks, assigns each to a worker, and synthesizes results
-- **Workers** -- each receives a bounded subtask with its own tool set, explores independently, and returns results to the orchestrator
+- Orchestrator -- receives the task, analyzes its structure, decomposes it into independent subtasks, assigns each to a worker, and synthesizes results
+- Workers -- each receives a bounded subtask with its own tool set, explores independently, and returns results to the orchestrator
 
 The orchestrator does not execute subtasks. Workers do not coordinate with each other.
 
@@ -42,7 +42,7 @@ graph TD
     F --> G[Output]
 ```
 
-## When Parallelization Helps
+## When parallelization helps
 
 Parallelization is effective when the task requires "multiple independent directions simultaneously" ([Anthropic's multi-agent research system post](https://www.anthropic.com/engineering/multi-agent-research-system)). A review of 94 multi-agent SE papers ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475)) confirms parallelism and specialization as the primary rationale for multi-agent over single-agent architectures. This includes:
 
@@ -52,9 +52,9 @@ Parallelization is effective when the task requires "multiple independent direct
 
 It is not effective when subtasks are sequentially dependent -- sequential dependencies require chaining, not parallelization.
 
-The benefit is conditional, not automatic. A controlled, protocol-aligned evaluation across ten benchmarks -- single-agent versus fixed multi-agent versus evolving multi-agent under one normalized execution and logging protocol -- found most multi-agent configurations underperformed a single-agent baseline, with only one of six tested workflows beating it ([Do More Agents Help? Controlled and Protocol-Aligned Evaluation of LLM Agent Workflows](https://arxiv.org/abs/2606.05670)). Parallel dispatch pays off when subtasks are genuinely independent; adding workers to a task that does not decompose cleanly buys coordination cost with no quality return.
+The benefit is conditional, not automatic. A controlled, protocol-aligned evaluation across ten benchmarks -- single-agent versus fixed multi-agent versus evolving multi-agent under one normalized execution and logging protocol -- found most multi-agent configurations underperformed a single-agent baseline, with only one of six tested workflows beating it ([Do More Agents Help? Controlled and Protocol-Aligned Evaluation of LLM Agent Workflows](https://arxiv.org/abs/2606.05670)). Parallel dispatch pays off when subtasks are genuinely independent. Adding workers to a task that does not decompose cleanly buys coordination cost with no quality return.
 
-## Effort Scaling
+## Effort scaling
 
 The orchestrator should match worker count and tool allocation to task complexity. [Anthropic's research system](https://www.anthropic.com/engineering/multi-agent-research-system) documents explicit effort-scaling rules:
 
@@ -64,7 +64,7 @@ The orchestrator should match worker count and tool allocation to task complexit
 
 These rules belong in the orchestrator's system prompt, not in code. Hard-coding agent counts removes the flexibility to match scale to complexity.
 
-## Worker Independence
+## Worker independence
 
 Each worker should have:
 
@@ -74,9 +74,9 @@ Each worker should have:
 
 Workers returning results to the orchestrator is the only coordination point. Any state sharing between workers during execution is a design smell.
 
-## Orchestrator Sensitivity
+## Orchestrator sensitivity
 
-[Anthropic's post](https://www.anthropic.com/engineering/multi-agent-research-system) reports that small changes to the orchestrator's prompt can unpredictably affect subagent behavior. The orchestrator's decomposition decisions determine which subtasks workers receive, making it the highest-leverage component. Test decomposition behavior explicitly across a range of input queries.
+[Anthropic's post](https://www.anthropic.com/engineering/multi-agent-research-system) reports that small changes to the orchestrator's prompt can unpredictably affect subagent behavior. The orchestrator's decomposition decisions determine which subtasks workers receive, making it the highest-impact component. Test decomposition behavior explicitly across varied input queries.
 
 ## Synthesis
 
@@ -88,7 +88,7 @@ After workers complete, the orchestrator synthesizes their outputs. Synthesis is
 
 If the orchestrator simply concatenates worker outputs, the pattern adds latency without improving quality.
 
-## Token Economics
+## Token economics
 
 Multi-agent orchestration multiplies token consumption. [Anthropic's research system data](https://www.anthropic.com/engineering/multi-agent-research-system) reports multipliers of ~4x for single agents and ~15x for multi-agent (orchestrator + workers), with token usage explaining roughly 80% of performance variance across research tasks. Effort-scaling rules in the orchestrator's prompt are the primary cost-control mechanism.
 
@@ -96,14 +96,14 @@ Multi-agent orchestration multiplies token consumption. [Anthropic's research sy
 
 [Anthropic's internal evaluations](https://www.anthropic.com/engineering/multi-agent-research-system) report multi-agent systems with Opus 4 orchestrating Sonnet 4 workers outperformed single-agent Opus by 90.2% on complex research tasks. The orchestrator needs stronger reasoning for decomposition and synthesis; workers need adequate capability for bounded subtasks.
 
-## Common Failure Modes
+## Common failure modes
 
-- **Over-spawning** -- launching too many workers for simple queries; effort-scaling rules prevent this
-- **Source quality drift** -- workers selecting SEO-optimized content farms over authoritative sources
-- **Premature termination** -- workers stopping after first results rather than exploring thoroughly
-- **Sequential bottleneck** -- synchronous wait for all workers creates latency spikes when one worker is slow
-- **Orchestrator as single point of failure** -- misclassified decompositions route every worker to the wrong subtask, and the orchestrator's own LLM call caps throughput ([Cogent, *Multi-Agent Orchestration Failure Playbook for 2026*](https://cogentinfo.com/resources/when-ai-agents-collide-multi-agent-orchestration-failure-playbook-for-2026))
-- **Synthesis context overflow** -- the orchestrator must hold the task plus every worker's results; beyond 4+ substantive outputs this routinely exceeds practical context budgets
+- Over-spawning -- launching too many workers for simple queries; effort-scaling rules prevent this
+- Source quality drift -- workers selecting SEO-optimized content farms over authoritative sources
+- Premature termination -- workers stopping after first results rather than exploring thoroughly
+- Sequential bottleneck -- synchronous wait for all workers creates latency spikes when one worker is slow
+- Orchestrator as single point of failure -- misclassified decompositions route every worker to the wrong subtask, and the orchestrator's own LLM call caps throughput ([Cogent, *Multi-Agent Orchestration Failure Playbook for 2026*](https://cogentinfo.com/resources/when-ai-agents-collide-multi-agent-orchestration-failure-playbook-for-2026))
+- Synthesis context overflow -- the orchestrator must hold the task plus every worker's results; beyond 4+ substantive outputs this routinely exceeds practical context budgets
 
 ## Example
 
@@ -121,7 +121,7 @@ Worker prompt (per repo):
    missing test coverage, secrets in code. Return structured findings."
 ```
 
-The orchestrator dispatches 50 workers simultaneously, each scoped to one repository with read-only file tools. Workers return structured JSON findings. The orchestrator then evaluates conflicts (e.g., a dependency flagged critical in one repo but patched in another) and produces a consolidated report -- rather than concatenating 50 raw outputs.
+The orchestrator dispatches 50 workers simultaneously, each scoped to one repository with read-only file tools. Workers return structured JSON findings. The orchestrator then evaluates conflicts (for example, a dependency flagged critical in one repo but patched in another) and produces a consolidated report -- rather than concatenating 50 raw outputs.
 
 ## Key Takeaways
 
@@ -148,7 +148,7 @@ The orchestrator dispatches 50 workers simultaneously, each scoped to one reposi
 - [Voting / Ensemble Pattern](voting-ensemble-pattern.md)
 - [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)
 - [Claude Code Sub-Agents](../tools/claude/sub-agents.md)
-- [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
 - [Rainbow Deployments for Agents](rainbow-deployments-agents.md)
 - [Oracle-Based Task Decomposition](oracle-task-decomposition.md)
 - [Staggered Agent Launch](staggered-agent-launch.md)

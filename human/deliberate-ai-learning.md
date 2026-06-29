@@ -16,13 +16,13 @@ maturity: established
 
 > The study that documented AI-driven skill atrophy found the inverse too: *how* developers interacted with AI, not whether they used it, decided the outcome.
 
-## The Mechanism: Adaptive Scaffolding
+## The mechanism: adaptive scaffolding
 
-Vygotsky's Zone of Proximal Development (ZPD) defines the gap between what a learner can do unaided and what they can accomplish with appropriate support. AI assistants can act as adaptive scaffolding: providing targeted help at the edge of current ability, then [fading support as competence builds](agentic-education-persona-progression.md).
+Vygotsky's Zone of Proximal Development (ZPD) defines the gap between what a learner can do unaided and what they can do with support. AI assistants can act as adaptive scaffolding. They give targeted help at the edge of current ability, then [fade support as competence builds](agentic-education-persona-progression.md).
 
-The critical word is *adaptive*. Scaffolding only accelerates learning when it operates at the difficulty edge — too easy, and there is no growth; too complete, and the learner offloads the cognition that builds skill. This is the same mechanism that explains [skill atrophy](skill-atrophy.md): full delegation removes the learner from the ZPD entirely.
+The critical word is adaptive. Scaffolding only speeds learning when it works at the difficulty edge. Too easy, and there is no growth. Too complete, and the learner offloads the cognition that builds skill. This is the same mechanism that explains [skill atrophy](skill-atrophy.md): full delegation removes the learner from the ZPD entirely.
 
-## The Evidence
+## The evidence
 
 The [Anthropic (Shen & Tamkin, 2026) RCT](https://www.anthropic.com/research/AI-assistance-coding-skills) found sharply differentiated outcomes by interaction pattern across 52 participants:
 
@@ -36,11 +36,11 @@ The [Anthropic (Shen & Tamkin, 2026) RCT](https://www.anthropic.com/research/AI-
 
 The Anthropic study's differentiated outcomes suggest the largest gains from deliberate interaction patterns accrue to developers who default to passive delegation — a pattern more common among less experienced practitioners still building mental models of unfamiliar domains.
 
-## Interaction Patterns That Build Skill
+## Interaction patterns that build skill
 
-### Socratic Prompting
+### Socratic prompting
 
-Ask questions rather than request answers. The AI explains the reasoning; you apply it.
+Ask questions rather than request answers. The AI explains the reasoning, and you apply it.
 
 ```
 # Instead of:
@@ -55,9 +55,9 @@ burst tolerance, and why?"
 
 This keeps the cognitive work — [the part that builds skill](skill-atrophy.md) — with you.
 
-### Generation-Then-Comprehension
+### Generation-then-comprehension
 
-When you do request implementation, interrogate it before using it. Ask the AI to explain what a specific block does, [what edge cases it handles](../anti-patterns/comprehension-debt.md), and what would break under different inputs. This turns passive acceptance into active learning.
+When you do request an implementation, question it before you use it. Ask the AI to explain what a specific block does, [what edge cases it handles](../anti-patterns/comprehension-debt.md), and what would break under different inputs. This turns passive acceptance into active learning.
 
 ```
 # After receiving generated code:
@@ -65,7 +65,7 @@ When you do request implementation, interrogate it before using it. Ask the AI t
 What happens if the connection pool is exhausted?"
 ```
 
-### Request Alternatives
+### Request alternatives
 
 Ask for multiple valid approaches to the same problem. Comparing solutions exposes trade-offs that a single correct answer hides.
 
@@ -75,11 +75,11 @@ one optimized for zero downtime, one for simplicity.
 What does each sacrifice?"
 ```
 
-Observing multiple valid solutions — and understanding *why* they differ — is a mechanism the nibzard/awesome-agentic-patterns catalogue identifies as a primary learning accelerator unavailable in traditional mentorship ([source](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/ai-accelerated-learning-and-skill-development.md)).
+Observing multiple valid solutions, and understanding why they differ, is a mechanism the nibzard/awesome-agentic-patterns catalogue identifies as a primary learning accelerator unavailable in traditional mentorship ([source](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/ai-accelerated-learning-and-skill-development.md)).
 
-### Fading Support
+### Fading support
 
-Deliberately reduce AI involvement as competence grows in a domain. Start with full explanations, move to hints-only, then attempt problems independently before checking your solution.
+Reduce AI involvement on purpose as competence grows. Start with full explanations, move to hints-only, then attempt problems independently before checking your solution.
 
 ```
 Week 1: "Explain and implement a consistent-hashing ring in Go"
@@ -88,30 +88,30 @@ Week 3: "I'm implementing a consistent-hashing ring. Hint at what
 Week 6: Implement independently, then ask "What did I miss?"
 ```
 
-### Deliberate Practice Blocks
+### Deliberate practice blocks
 
 Reserve time for AI-free coding in domains where you've been delegating. The [Anthropic study](https://www.anthropic.com/research/AI-assistance-coding-skills) noted that participants who encountered more errors through independent work showed stronger debugging outcomes — "getting painfully stuck" is a feature, not a failure, of learning.
 
 See [Skill Atrophy](skill-atrophy.md) for the dual-mode competency framing.
 
-## The Trap: Superficial Learning
+## The trap: superficial learning
 
-The five patterns above require metacognitive discipline — deliberate choice to engage with reasoning rather than accept output. The risk is the appearance of learning: following along with an AI's explanation produces a feeling of comprehension that evaporates when you attempt the same problem unaided.
+The five patterns above need metacognitive discipline: a deliberate choice to engage with reasoning rather than accept output. The risk is the appearance of learning. Following along with an AI's explanation produces a feeling of comprehension that evaporates when you attempt the same problem unaided.
 
 Two signals that engagement is superficial:
 - You can follow the AI's explanation but cannot reproduce the approach from scratch
 - Debugging questions expose gaps that code generation questions did not
 
-The Anthropic study found debugging scores showed the steepest divergence between interaction patterns. Debugging requires independent reconstruction of understanding — it cannot be offloaded.
+The Anthropic study found debugging scores showed the steepest divergence between interaction patterns. Debugging needs independent reconstruction of understanding, which you cannot offload.
 
-## When This Backfires
+## When this backfires
 
 The pattern degrades under specific conditions:
 
-- **Hard deadline pressure.** Socratic dialog and fading support lengthen time-to-working-code. When the goal is shipping, not skill-building, [full delegation is faster](../agent-design/delegation-decision.md) — deferring learning to a calmer window is the honest trade-off.
-- **Missing foundational vocabulary.** Socratic prompting assumes the learner can parse the AI's response. In a genuinely unfamiliar domain, "why" questions yield answers the learner cannot evaluate, producing confident misunderstanding rather than growth.
-- **Unverifiable domains.** When output cannot be independently checked (obscure libraries, niche regulatory logic, specialised hardware), interrogating the AI creates a [feedback loop with no ground truth](process-amplification.md). Pairing with a human expert beats deliberate AI dialog here.
-- **Rote or mechanical tasks.** Generation-then-comprehension on boilerplate or well-understood refactors wastes cognition without retention benefit. The ZPD only exists at the edge of capability; below that edge, delegation is correct.
+- Hard deadline pressure. Socratic dialog and fading support lengthen the time to working code. When the goal is shipping, not skill-building, [full delegation is faster](../agent-design/delegation-decision.md). Deferring learning to a calmer window is the honest trade-off.
+- Missing foundational vocabulary. Socratic prompting assumes the learner can parse the AI's response. In a genuinely unfamiliar domain, "why" questions yield answers the learner cannot evaluate, producing confident misunderstanding rather than growth.
+- Unverifiable domains. When you cannot check the output yourself (obscure libraries, niche regulatory logic, specialized hardware), questioning the AI creates a [feedback loop with no ground truth](process-amplification.md). Pairing with a human expert beats deliberate AI dialog here.
+- Rote or mechanical tasks. Generation-then-comprehension on boilerplate or well-understood refactors wastes cognition without retention benefit. The ZPD only exists at the edge of capability. Below that edge, delegation is correct.
 
 ## Key Takeaways
 

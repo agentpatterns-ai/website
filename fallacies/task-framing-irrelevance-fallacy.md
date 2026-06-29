@@ -15,13 +15,13 @@ maturity: established
 
 > The belief that task framing doesn't matter — only the underlying problem does — is demonstrably wrong and reliably produces lower output quality.
 
-## The Fallacy
+## The fallacy
 
 If a model is capable enough, it should solve a problem regardless of presentation. Variable names, [surrounding context](../context-engineering/context-engineering.md), and prompt wording are noise the model filters out. Prompt engineering is aesthetics, not substance.
 
 This leads practitioners to underinvest in prompt construction, leave irrelevant files open, use vague task descriptions, and dismiss output quality differences as model inconsistency rather than framing variation.
 
-## Why It Fails
+## Why it fails
 
 LLMs are pattern matchers. A model that appears to "understand" a task is finding statistical associations between your framing and training data. Change the framing, and different associations activate.
 
@@ -34,7 +34,7 @@ Documented consequences:
 
 Anthropic's guidance on building agents states that tool definitions deserve ["just as much prompt engineering attention as your overall prompts"](https://www.anthropic.com/engineering/building-effective-agents) and frames parameter naming directly: "How can you change parameter names or descriptions to make things more obvious?" If framing were irrelevant, tool parameter names would not matter.
 
-## How It Manifests
+## How it manifests
 
 - Submitting vague prompts assuming "the model knows what I mean"
 - Leaving open files or stale conversation history that shifts the model's pattern associations
@@ -43,27 +43,27 @@ Anthropic's guidance on building agents states that tool definitions deserve ["j
 
 ## Example
 
-**Fallacy applied** — leaving irrelevant files open and using a generic description:
+Fallacy applied — leaving irrelevant files open and using a generic description:
 
 > "Refactor the payment service."
 
 No files specified, no constraints, no goal. Relevant files [compete for attention](../anti-patterns/distractor-interference.md) with everything else in context, and the output addresses surface structure rather than the intended change.
 
-**Fallacy corrected** — closed irrelevant files, provided specific framing:
+Fallacy corrected — closed irrelevant files, provided specific framing:
 
 > "Refactor `src/payments/processor.ts` to separate the authorization step from charge execution. The current `processPayment()` function does both. Create `authorizePayment()` and `chargePayment()` as separate functions. Keep the existing public interface unchanged."
 
 Same underlying problem. Different framing. Different output.
 
-## When Framing Matters Less
+## When framing matters less
 
 The framing effect is real but uneven. In specific conditions, surface presentation has minimal measurable impact:
 
-- **Structured-output and function-calling modes** — a strict JSON schema or typed function signature constrains the response space, so surrounding-prompt framing produces negligible output differences.
-- **Highly fine-tuned task-specific models** — narrow-domain fine-tuning builds strong priors that partially override prompt framing.
-- **Very short, unambiguous queries** — retrieval-style tasks with one determinate answer (`What is the return type of X?`) rarely shift with framing.
+- Structured-output and function-calling modes — a strict JSON schema or typed function signature constrains the response space, so surrounding-prompt framing produces negligible output differences.
+- Highly fine-tuned task-specific models — narrow-domain fine-tuning builds strong priors that partially override prompt framing.
+- Very short, unambiguous queries — retrieval-style tasks with one determinate answer (`What is the return type of X?`) rarely shift with framing.
 
-Optimizing framing here yields diminishing returns. The fallacy is the *blanket* claim that framing never matters — not the observation that it matters less in constrained modes.
+Optimizing framing here yields diminishing returns. The fallacy is the blanket claim that framing never matters — not the observation that it matters less in constrained modes.
 
 ## Key Takeaways
 

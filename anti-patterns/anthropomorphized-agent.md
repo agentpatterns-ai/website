@@ -17,25 +17,25 @@ maturity: established
 
 > Treating an AI agent as a team member with memory, feelings, and personality leads to misplaced trust, incorrect mental models, and systematic misuse.
 
-## The Pattern
+## The pattern
 
-Developers working extensively with AI agents often attribute human traits to them: the agent "understood" the task, "got confused," "prefers" a certain style, or "knows" the codebase. This anthropomorphism produces incorrect expectations that cause real problems.
+Developers who work closely with AI agents often attribute human traits to them: the agent "understood" the task, "got confused," "prefers" a certain style, or "knows" the codebase. This anthropomorphism produces incorrect expectations that cause real problems.
 
-## Why It Happens
+## Why it happens
 
-Agents produce fluent, contextually appropriate language. That fluency activates the same social reasoning humans apply to other people — and compounds when an agent produces a good result: you attribute it to the agent "getting it," rather than to the prompt and context.
+Agents produce fluent, contextually appropriate language. That fluency activates the same social reasoning you apply to other people. It compounds when an agent produces a good result: you credit the agent for "getting it," rather than the prompt and context.
 
 ## Consequences
 
-**Misplaced trust.** "It understood last time" is not a basis for trust. The same prompt can produce different results across sessions. Agents are [stateless by default](https://www.letta.com/blog/stateful-agents) — each session starts from a blank context unless memory infrastructure is explicitly added. Trust built on rapport, not verified output, is fragile.
+Misplaced trust. "It understood last time" is not a basis for trust. The same prompt can produce different results across sessions. Agents are [stateless by default](https://www.letta.com/blog/stateful-agents) — each session starts from a blank context unless you add memory infrastructure. Trust built on rapport, not verified output, is fragile.
 
-**Inappropriate frustration.** "Why does it keep forgetting?" is the wrong question. The agent has no memory of previous sessions unless you add it deliberately through [agent memory patterns](../agent-design/agent-memory-patterns.md). Frustration directed at the agent is misdirected.
+Inappropriate frustration. "Why does it keep forgetting?" is the wrong question. The agent has no memory of previous sessions unless you add it deliberately through [agent memory patterns](../agent-design/agent-memory-patterns.md). Frustration directed at the agent is misplaced.
 
-**Degradation misattributed to fatigue.** Agents don't tire. They degrade with [context overload](context-poisoning.md) — long conversations accumulate noise that competes with signal ([NoLiMa benchmark, ICML 2025](https://arxiv.org/abs/2502.05167), found GPT-4o accuracy drops from 99.3% on short contexts to 69.7% at longer lengths). Reset context, don't take a break.
+Degradation misattributed to fatigue. Agents do not tire. They degrade with [context overload](context-poisoning.md) — long conversations accumulate noise that competes with signal ([NoLiMa benchmark, ICML 2025](https://arxiv.org/abs/2502.05167), found GPT-4o accuracy drops from 99.3% on short contexts to 69.7% at longer lengths). Reset context; do not take a break.
 
-**Confidence as a signal.** Agents produce confident-sounding output regardless of accuracy. [LLMs stay overconfident even when wrong and fail to recalibrate after the fact](https://www.cmu.edu/dietrich/news/news-stories/2025/july/trent-cash-ai-overconfidence.html) — an agent that confidently produces wrong output is more dangerous than one that hedges, because confident delivery suppresses the skepticism that catches errors.
+Confidence as a signal. Agents produce confident-sounding output regardless of accuracy. [LLMs stay overconfident even when wrong and fail to recalibrate after the fact](https://www.cmu.edu/dietrich/news/news-stories/2025/july/trent-cash-ai-overconfidence.html). An agent that confidently produces wrong output is more dangerous than one that hedges, because confident delivery suppresses the skepticism that catches errors.
 
-## The Correct Mental Model
+## The correct mental model
 
 Agents are tools with specific capabilities and limitations. Ask:
 
@@ -47,23 +47,23 @@ Not: Does it understand me? Does it remember our previous work?
 
 ## Fixes
 
-**Build trust through verification, not rapport.** Start with small, verifiable tasks and expand scope as verified quality warrants.
+Build trust through verification, not rapport. Start with small, verifiable tasks and expand scope as verified quality warrants.
 
-**Treat memory as infrastructure.** If you need cross-session memory, build it explicitly — a project file the agent reads at session start, an AGENTS.md with accumulated decisions. Assuming implicit knowledge exists without that infrastructure is a separate anti-pattern.
+Treat memory as infrastructure. If you need cross-session memory, build it explicitly — a project file the agent reads at session start, an AGENTS.md with accumulated decisions. Assuming implicit knowledge exists without that infrastructure is a separate anti-pattern.
 
-**Interpret confidence skeptically.** Calibrate review effort to the [blast radius](../security/blast-radius-containment.md) of the task, not to how certain the agent sounds.
+Interpret confidence skeptically. Calibrate review effort to the [blast radius](../security/blast-radius-containment.md) of the task, not to how certain the agent sounds.
 
 ## Example
 
-**Before — anthropomorphized:**
+Before — anthropomorphized:
 
-A developer spends an afternoon pairing with Claude on a payment integration. It handles edge cases well. The next morning they open a new session: *"Continue with the payment module — remember we decided to use idempotency keys."* Claude has no record of yesterday's session. Claude generates payment code that omits idempotency keys entirely, but does so fluently and confidently. The developer, trusting that the agent "knows their codebase," ships without reviewing that specific decision. The bug surfaces in production.
+A developer spends an afternoon pairing with Claude on a payment integration. It handles edge cases well. The next morning they open a new session: "Continue with the payment module — remember we decided to use idempotency keys." Claude has no record of yesterday's session. Claude generates payment code that omits idempotency keys entirely, but does so fluently and confidently. The developer trusts that the agent "knows their codebase" and ships without reviewing that specific decision. The bug surfaces in production.
 
-**After — correct mental model:**
+After — correct mental model:
 
-Same developer, next morning. They paste the relevant payment module into context and write: *"We're using idempotency keys on all charge calls (see line 42). Add a refund endpoint that follows the same pattern."* The agent works from explicit context. Output is diffed against the existing module before merging.
+Same developer, next morning. They paste the relevant payment module into context and write: "We're using idempotency keys on all charge calls (see line 42). Add a refund endpoint that follows the same pattern." The agent works from explicit context. They diff the output against the existing module before merging.
 
-The difference is not the agent — it is the developer's model of what the agent holds between sessions.
+The difference is not the agent. It is the developer's model of what the agent holds between sessions.
 
 ## Key Takeaways
 
@@ -72,9 +72,9 @@ The difference is not the agent — it is the developer's model of what the agen
 - Trust calibrated to verified output outperforms trust built on conversational feel
 - Context overload degrades output — unrelated to fatigue
 
-## When This Does Not Apply
+## When this does not apply
 
-Deliberate agent personas in end-user products — a customer support bot with a name and personality — are intentional UX design, not a mental model error. This anti-pattern targets developer reasoning about agent reliability: building trust on conversational feel rather than verified output. If you are designing an agent persona for end users, the failure modes described here still apply to the *developers* building and evaluating that system.
+Deliberate agent personas in end-user products — a customer support bot with a name and personality — are intentional UX design, not a mental model error. This anti-pattern targets developer reasoning about agent reliability: building trust on conversational feel rather than verified output. If you are designing an agent persona for end users, the failure modes described here still apply to the developers building and evaluating that system.
 
 ## Related
 

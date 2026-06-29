@@ -19,15 +19,15 @@ maturity: emerging
 
 > Goal-directed agentic architecture separates cognitive reasoning from execution, adds a multi-agent topology taxonomy, and layers an enterprise hardening checklist over the prompt-response baseline.
 
-## The Architectural Shift
+## The architectural shift
 
-Stateless prompt-response systems are the simplest LLM deployment pattern. Goal-directed systems extend this into autonomous multi-turn execution: the agent receives an objective, decomposes it into subtasks, executes tools, observes results, and iterates until the goal is met or a stopping condition triggers.
+Stateless prompt-response systems are the simplest way to deploy an LLM. Goal-directed systems add autonomous multi-turn execution. The agent takes an objective, breaks it into subtasks, runs tools, reads the results, and repeats until it meets the goal or hits a stopping condition.
 
-[arXiv:2602.10479](https://arxiv.org/abs/2602.10479) traces this evolution from foundational theory (BDI, reactive, deliberative) through contemporary LLM patterns. The transition is not incremental — it requires structural separation of concerns that prompt-response systems do not need.
+[arXiv:2602.10479](https://arxiv.org/abs/2602.10479) traces this evolution from foundational theory (BDI, reactive, deliberative) through current LLM patterns. The shift is not incremental. It needs a structural separation of concerns prompt-response systems do not.
 
-## Reference Architecture
+## Reference architecture
 
-The core structural principle: **separate cognitive reasoning from execution using typed tool interfaces**.
+The core principle is to separate cognitive reasoning from execution using typed tool interfaces.
 
 ```mermaid
 graph TD
@@ -47,82 +47,82 @@ graph TD
     F -->|typed result| D
 ```
 
-**Cognitive layer** — the LLM. Handles goal interpretation, planning, tool selection, and result synthesis. Never modifies external state directly; only emits typed tool calls (the [cognitive/execution split](cognitive-reasoning-execution-separation.md)).
+Cognitive layer — the LLM. It interprets the goal, plans, selects tools, and synthesises results. It never changes external state, only emits typed tool calls (the [cognitive/execution split](cognitive-reasoning-execution-separation.md)).
 
-**Typed tool interfaces** — the boundary. Calls and results are schema-validated, so the cognitive layer cannot issue a malformed command. This is the primary mechanism for predictable behavior — [typed schemas at the boundary](../multi-agent/typed-schemas-at-agent-boundaries.md).
+Typed tool interfaces — the boundary. Calls and results are schema-validated, so the cognitive layer cannot send a malformed command. This is the main thing making behavior predictable — [typed schemas at the boundary](../multi-agent/typed-schemas-at-agent-boundaries.md).
 
-**Execution layer** — deterministic infrastructure. Receives typed calls, executes them, returns typed results. Contains no reasoning — only execution logic, error handling, and result formatting.
+Execution layer — deterministic infrastructure. It receives typed calls, runs them, and returns typed results. It holds no reasoning — only execution, error handling, and formatting.
 
-This separation enables independent testing of each layer and explicit auditability at the boundary — the [separation of knowledge and execution](separation-of-knowledge-and-execution.md) applied to runtime.
+This separation lets you test each layer and audit every call at the boundary — the [separation of knowledge and execution](separation-of-knowledge-and-execution.md) at runtime.
 
-## Multi-Agent Topology Taxonomy
+## Multi-agent topology taxonomy
 
-Three coordination topologies, each with distinct failure patterns (see [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md) for a full breakdown; centralized vs. decentralized tradeoffs are also surveyed in [arXiv:2601.01743](https://arxiv.org/abs/2601.01743)):
+Three coordination topologies each carry their own failure patterns. [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md) breaks them down; [arXiv:2601.01743](https://arxiv.org/abs/2601.01743) surveys the centralized versus decentralized tradeoffs.
 
-**Centralised orchestration** — one orchestrator manages all workers, which execute assigned tasks and return results.
+Centralised orchestration — one orchestrator manages all workers, which run assigned tasks and return results.
 
-- *Advantage*: single point of coordination makes reasoning traceable
-- *Failure mode*: orchestrator becomes a bottleneck; its failure halts the system
+- Advantage: a single point of coordination keeps reasoning traceable
+- Failure mode: the orchestrator becomes a bottleneck, and its failure halts the system
 
-**Decentralised peer-to-peer** — agents communicate directly without a coordinator, making local decisions from shared state or messages.
+Decentralised peer-to-peer — agents talk directly without a coordinator, making local decisions from shared state or messages.
 
-- *Advantage*: no single point of failure; scales horizontally
-- *Failure mode*: emergent coordination failures, race conditions, and inconsistent shared state are harder to debug
+- Advantage: no single point of failure, and it scales horizontally
+- Failure mode: emergent coordination failures, race conditions, and inconsistent shared state are harder to debug
 
-**Hybrid** — a lightweight coordinator handles routing and synthesis; workers communicate directly for sub-task coordination.
+Hybrid — a lightweight coordinator handles routing and synthesis, while workers talk directly to coordinate sub-tasks.
 
-- *Advantage*: reduces coordinator bottleneck while keeping traceability at the routing level
-- *Failure mode*: the boundary between coordinator and peer-to-peer communication must be explicit; implicit crossing creates inconsistent behavior
+- Advantage: it eases the coordinator bottleneck while keeping traceability at the routing level
+- Failure mode: the boundary between coordinator and peer-to-peer communication must be explicit, because crossing it implicitly creates inconsistent behavior
 
-## Enterprise Hardening Checklist
+## Enterprise hardening checklist
 
-Production agent deployments require three categories of hardening beyond functional correctness:
+Production agent deployments need three kinds of hardening beyond functional correctness.
 
-**Governance**
+Governance
 
 - Audit trails: every agent action is logged with timestamp, agent identity, tool name, arguments, and result ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
 - Access control: agents operate with least-privilege permissions; no agent has broader access than its assigned task requires ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
 - Policy enforcement: organizational constraints (data residency, PII handling, approved models) are enforced at the harness level, not by agent prompt alone ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
 
-**Observability**
+Observability
 
 - [Trajectory logging](../observability/trajectory-logging-progress-files.md): full turn-by-turn execution logs for post-hoc analysis and debugging ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
 - Cost tracking: per-session and per-agent token consumption reported in real time ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
 - Anomaly detection: alerts on deviation from expected trajectory length, tool call patterns, or cost bounds ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
 
-**Reproducibility**
+Reproducibility
 
 - Deterministic seeding: where randomness affects agent behavior, seeds are captured in logs for replay ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
 - Idempotent operations: agent actions produce the same end state if executed more than once; no compounding side effects on retry ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
 - Snapshot-based rollback: system state is snapshotted before consequential actions; rollback is defined before execution begins ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)) — see [Rollback-First Design](rollback-first-design.md)
 
-## Industry Convergence Pattern
+## Industry convergence pattern
 
-The paper observes ecosystem convergence on shared infrastructure parallel to web-services maturation: standardized agent loops, tool registries, and auditable control mechanisms. Multiple frameworks now implement the cognitive/execution separation, typed tool interfaces, and governance checklists above ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)). Building on these patterns now avoids architectural retrofits later.
+The paper notes the industry converging on shared infrastructure, much as web services matured: standardized agent loops, tool registries, and auditable control mechanisms. Many frameworks now build in the cognitive/execution separation, typed tool interfaces, and governance checklists above ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)). Building on these patterns now saves you a retrofit later.
 
-## When This Backfires
+## When this backfires
 
-The cognitive/execution separation adds structural overhead. Three conditions where it costs more than it returns:
+The cognitive/execution separation adds structural overhead. It costs more than it returns in three cases.
 
-1. **Simple single-turn tasks.** If the agent calls one tool and terminates ([a single turn](agent-turn-model.md), not a loop), typed interfaces and a separate execution layer add engineering overhead with no reliability benefit. A direct function call is cheaper and easier to test.
-2. **Rapid prototyping.** Strict schema contracts slow iteration. Early-stage agents benefit from fluid coupling; formal separation is a refactoring target once the interface stabilizes.
-3. **Low-throughput, human-supervised workflows.** Auditability at the tool boundary ([trajectory logging](../observability/trajectory-logging-progress-files.md)) matters when agents run autonomously at volume. A reviewer inspecting every action replaces much of what formal audit logging provides — adding the full harness before volume justifies it is maintenance cost with no proportionate gain.
+1. Simple single-turn tasks. If the agent calls one tool and stops ([a single turn](agent-turn-model.md), not a loop), typed interfaces and a separate execution layer add overhead with no reliability gain. A direct function call is cheaper to test.
+2. Rapid prototyping. Strict schema contracts slow iteration. Early-stage agents do better with fluid coupling; formal separation is a refactoring target once the interface stabilizes.
+3. Low-throughput, human-supervised workflows. Auditability at the tool boundary ([trajectory logging](../observability/trajectory-logging-progress-files.md)) matters at volume. A reviewer who inspects every action replaces much of what audit logging gives you, so the full harness too early is just maintenance cost.
 
 ## Example
 
-A code review agent built on this architecture:
+A code review agent on this architecture:
 
-**Cognitive layer** — the LLM receives: `"Review PR #42 for security issues"`. It decomposes the goal: fetch PR diff, identify changed files, scan each file for known patterns, summarise findings. For each step it emits a typed tool call, e.g. `{ "tool": "github_get_pr_diff", "pr": 42 }`.
+Cognitive layer — the LLM receives `"Review PR #42 for security issues"`. It breaks the goal down: fetch the PR diff, identify changed files, scan each for known patterns, and summarise findings. For each step it emits a typed tool call, for example `{ "tool": "github_get_pr_diff", "pr": 42 }`.
 
-**Execution layer** — `github_get_pr_diff` fetches the diff and returns a typed result `{ "files": [...], "additions": 310, "deletions": 45 }`. The LLM never calls GitHub directly; it only receives the formatted result and decides the next tool call.
+Execution layer — `github_get_pr_diff` fetches the diff and returns a typed result `{ "files": [...], "additions": 310, "deletions": 45 }`. The LLM never calls GitHub directly. It only receives the formatted result and picks the next tool call.
 
-**Enterprise hardening applied**:
+Enterprise hardening applied:
 
 - Every tool call is logged: timestamp, agent ID, tool name, arguments, result.
 - The agent runs with a scoped GitHub token (read-only on the target repo).
-- A cost guard halts execution if the session exceeds 50k tokens before the agent self-terminates.
+- A cost guard halts the session if it exceeds 50k tokens before the agent self-terminates.
 
-This maps each component directly onto the reference architecture above: the LLM stays in the cognitive layer, the GitHub client lives in the execution layer, and the typed tool interface enforces the boundary.
+Each component maps onto the reference architecture: the LLM in the cognitive layer, the GitHub client in the execution layer, the typed tool interface at the boundary.
 
 ## Key Takeaways
 

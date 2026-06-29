@@ -16,24 +16,24 @@ maturity: emerging
 
 > Transformer models disproportionately attend to initial tokens regardless of their semantic content — position determines attention weight, not importance.
 
-**Related lesson:** [Lost in the Middle](https://learn.agentpatterns.ai/context-engineering/lost-in-the-middle/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Lost in the Middle](https://learn.agentpatterns.ai/context-engineering/lost-in-the-middle/) — this concept features in a hands-on lesson with quizzes.
 
 !!! info "Also known as"
     Lost in the Middle, Critical Instruction Repetition, Attention Bias and Instruction Placement
 
-## What Attention Sinks Are
+## What attention sinks are
 
-In autoregressive transformer models, attention mechanisms exhibit a structural bias toward early tokens in the sequence. Initial tokens act as attention sinks: they absorb a disproportionate share of attention across all subsequent tokens, regardless of their semantic relevance to the current generation step — a phenomenon confirmed empirically by Xiao et al. (2023), who found that preserving just the KV cache of early tokens largely recovers the performance of full-window attention ([StreamingLLM](https://arxiv.org/abs/2309.17453)).
+Attention in autoregressive transformer models is structurally biased toward early tokens. The first tokens act as attention sinks. They absorb a large share of attention from every later token, whatever their meaning at the current generation step. Xiao et al. (2023) confirmed this: keeping just the KV cache of the early tokens largely recovers the performance of full-window attention ([StreamingLLM](https://arxiv.org/abs/2309.17453)).
 
-This is not a quirk to mitigate — it is a structural property of how causal attention masking operates. Every token the model generates is influenced more by early tokens than by semantically equivalent tokens placed later in the context.
+This is not a quirk to fix. It is a structural property of how causal attention masking works. Every token the model generates is shaped more by early tokens than by equivalent tokens placed later in the context.
 
-A more precise account narrows the mechanism. Gu et al. (2024) found that the sink concentrates specifically on the *first* token rather than spreading smoothly across an early-position band, and that it is a *learned* behaviour that emerges during pre-training under softmax normalization — when softmax is replaced with sigmoid attention, the sink does not appear in models up to 1B parameters, so it is not strictly inherent to causal masking ([When Attention Sink Emerges in Language Models](https://arxiv.org/abs/2410.10781)). The practical takeaway holds — the strongest-attention position is the very start of the prompt — but treat "earlier is stronger" as a first-token-anchored, softmax-driven effect rather than a uniform positional gradient.
+A more precise account narrows the mechanism. Gu et al. (2024) found that the sink concentrates on the first token rather than spreading smoothly across an early-position band. It is a learned behavior that emerges during pre-training under softmax normalization. Replace softmax with sigmoid attention and the sink does not appear in models up to 1B parameters, so it is not strictly inherent to causal masking ([When Attention Sink Emerges in Language Models](https://arxiv.org/abs/2410.10781)). The practical takeaway holds: the strongest-attention position is the very start of the prompt. But treat "earlier is stronger" as a first-token-anchored, softmax-driven effect, not a uniform positional gradient.
 
-## Practical Implications
+## Practical implications
 
-**The role definition placed first shapes behaviour most.** Whatever role, persona, or constraint appears at the very beginning of a system prompt receives stronger model attention than the same constraint placed later. An instruction like "you are a security reviewer who never produces code without first identifying potential vulnerabilities" carries more weight at position 1 than at position 500.
+The role definition placed first shapes behavior most. Whatever role, persona, or constraint appears at the very start of a system prompt gets stronger attention than the same constraint placed later. An instruction like "you are a security reviewer who never produces code without first identifying potential vulnerabilities" carries more weight at position 1 than at position 500.
 
-**Boilerplate wastes the highest-attention real estate.** A system prompt that opens with:
+Boilerplate wastes the highest-attention positions. A system prompt that opens with:
 
 ```
 # System Prompt v2.3 — Agent: Code Reviewer
@@ -43,11 +43,11 @@ A more precise account narrows the mechanism. Gu et al. (2024) found that the si
 You are an AI assistant designed to help developers...
 ```
 
-has consumed the strongest-attention positions with metadata and generic preamble. The actual rules, constraints, and role definition follow in weaker-attention territory.
+has spent the strongest-attention positions on metadata and generic preamble. The actual rules, constraints, and role definition follow in weaker-attention territory.
 
-**What you ask first, the agent recalls best.** In a long conversation, restating a critical constraint at the point where you need it — rather than relying on an early-session statement — exploits the recency effect at the other end of the U-shaped attention curve.
+What you ask first, the agent recalls best. In a long conversation, restate a critical constraint at the point where you need it rather than relying on an early-session statement. This uses the recency effect at the other end of the U-shaped attention curve.
 
-## Applying the Pattern
+## Applying the pattern
 
 Start instruction files with the constraint or role that must be most reliably followed:
 
@@ -69,9 +69,9 @@ Never output code that modifies authentication or session state...
 
 The rule comes first; the context follows. The agent's strongest recall is on the rule.
 
-## Relationship to the U-Shaped Curve
+## Relationship to the U-shaped curve
 
-Attention sinks explain the strong-start portion of the U-shaped attention curve. The strong-end portion is explained by recency effects in autoregressive generation — Liu et al. (2023) demonstrated empirically that performance is highest when relevant information appears at the beginning or end of the context window, degrading significantly in the middle ([Lost in the Middle](https://arxiv.org/abs/2307.03172)). Together:
+Attention sinks explain the strong-start portion of the U-shaped attention curve. Recency effects in autoregressive generation explain the strong-end portion. Liu et al. (2023) showed that performance is highest when relevant information sits at the beginning or end of the context window, and drops sharply in the middle ([Lost in the Middle](https://arxiv.org/abs/2307.03172)). Together:
 
 - First tokens: attention sink bias (high recall)
 - Middle tokens: weakest attention (low recall)
@@ -86,12 +86,12 @@ Content that must be reliably followed belongs at either end. Content the agent 
 - The role and constraints placed first shape agent behaviour most strongly across the session.
 - Attention sinks and recency effects are the two mechanisms behind the [U-shaped attention distribution](lost-in-the-middle.md).
 
-## When This Backfires
+## When this backfires
 
-- **Context compression discards early tokens.** Techniques that compress or truncate context — including some KV-cache eviction strategies — may discard early tokens, neutralizing the primacy advantage. Placing critical constraints first is only reliable when the full prompt prefix is retained ([Context Compression Strategies](context-compression-strategies.md)).
-- **Fine-tuned models with instruction following training.** RLHF and instruction-tuning can shift how models weight positional bias versus semantic relevance. A model fine-tuned to follow instructions placed anywhere in the prompt may not exhibit the same sink strength as a base model.
-- **RAG pipelines with late-injected context.** In retrieval-augmented workflows, retrieved chunks are typically injected mid-prompt. If the critical constraint is buried in a static preamble before substantial retrieved content, positional advantage may be outweighed by semantic relevance of the retrieved material.
-- **Very short prompts.** Attention sink effects are most pronounced in long sequences. In short prompts (under a few hundred tokens), positional placement has less observable impact on model behavior.
+- Context compression discards early tokens. Techniques that compress or truncate context, including some KV-cache eviction strategies, may discard early tokens and neutralize the primacy advantage. Placing critical constraints first is only reliable when the full prompt prefix is kept ([Context Compression Strategies](context-compression-strategies.md)).
+- Fine-tuned models with instruction-following training. RLHF and instruction-tuning can shift how models weigh positional bias against semantic relevance. A model fine-tuned to follow instructions placed anywhere in the prompt may not show the same sink strength as a base model.
+- RAG pipelines with late-injected context. In retrieval-augmented workflows, retrieved chunks are usually injected mid-prompt. If the critical constraint is buried in a static preamble before a lot of retrieved content, the semantic relevance of that material may outweigh its positional advantage.
+- Very short prompts. Attention sink effects are strongest in long sequences. In short prompts (under a few hundred tokens), positional placement has less observable effect on model behavior.
 
 ## Related
 

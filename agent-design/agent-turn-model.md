@@ -18,15 +18,15 @@ maturity: established
 
 > An agent turn is an iterative sequence of model inference and tool-call steps, repeating until the model emits a response with no pending tool calls.
 
-## The Misconception
+## The misconception
 
-When building agent UX, you may assume a 1:1 mapping between user input and model response. This assumption shapes how you design timeouts, error handling, context management, and progress indicators — and it is wrong.
+When building agent UX, you may assume each user input maps to one model response. That assumption is wrong. It shapes how you design timeouts, error handling, context management, and progress indicators.
 
-A single turn can involve dozens or hundreds of inference-tool-call cycles before producing a final assistant message. The Codex CLI treats each full sequence — from user input through all intermediate tool calls to the final message — as one "turn," surfacing only the result. [Source: [Unrolling the Codex Agent Loop](https://openai.com/index/unrolling-the-codex-agent-loop/)]
+A single turn can involve dozens or hundreds of inference-tool-call cycles before it produces a final assistant message. The Codex CLI treats each full sequence — from user input through all intermediate tool calls to the final message — as one "turn," surfacing only the result. [Source: [Unrolling the Codex Agent Loop](https://openai.com/index/unrolling-the-codex-agent-loop/)]
 
-## How the Loop Terminates
+## How the loop ends
 
-The turn loop terminates when the model emits an assistant message without a pending tool call. Until that point:
+The turn loop ends when the model emits an assistant message with no pending tool call. Until that point:
 
 - The model produces a response
 - If the response contains a tool call, the [harness](agent-harness.md) executes the tool
@@ -34,11 +34,11 @@ The turn loop terminates when the model emits an assistant message without a pen
 - The model is re-queried with the updated prompt
 - Repeat
 
-This is not bounded to a fixed number of steps. The loop runs until the termination condition is met. [Source: [Unrolling the Codex Agent Loop](https://openai.com/index/unrolling-the-codex-agent-loop/)]
+The loop is not bound to a fixed number of steps. It runs until it meets the termination condition. [Source: [Unrolling the Codex Agent Loop](https://openai.com/index/unrolling-the-codex-agent-loop/)]
 
-## Context Window Growth Within a Turn
+## Context window growth within a turn
 
-Each tool call result is appended to the prompt for the next inference call, so the prompt grows within a single turn. For tasks involving many file reads, test runs, and iterative fixes, the context window can fill mid-turn.
+The harness appends each tool result to the prompt for the next inference call, so the prompt grows within a single turn. For tasks with many file reads, test runs, and iterative fixes, the context window can fill mid-turn.
 
 Track token usage across all intermediate steps, not just the final response. This requires:
 
@@ -46,26 +46,26 @@ Track token usage across all intermediate steps, not just the final response. Th
 - Applying compression or truncation before the budget is exceeded
 - Designing compact tool responses [Source: [Unrolling the Codex Agent Loop](https://openai.com/index/unrolling-the-codex-agent-loop/)]
 
-## Practical Design Implications
+## Practical design implications
 
-**Timeouts**: a turn may run for minutes, not seconds. Request-count-based timeout logic may cancel valid in-progress turns.
+Timeouts: a turn may run for minutes, not seconds. Timeout logic based on request count may cancel valid in-progress turns.
 
-**Progress indicators**: stream intermediate output via SSE or partial results rather than waiting silently through tool call cycles. [Source: [Unrolling the Codex Agent Loop](https://openai.com/index/unrolling-the-codex-agent-loop/)]
+Progress indicators: stream intermediate output through SSE or partial results, rather than waiting silently through tool call cycles. [Source: [Unrolling the Codex Agent Loop](https://openai.com/index/unrolling-the-codex-agent-loop/)]
 
-**Error recovery**: if a tool call fails mid-turn, the error is appended to the prompt as an observation and the model decides whether to retry or surface a failure. ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344))
+Error recovery: if a tool call fails mid-turn, the harness appends the error to the prompt as an observation. The model then decides whether to retry or surface a failure. ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344))
 
-**Context continuity**: intermediate tool call outputs must persist for subsequent inference calls within the same turn. Stripping tool call history within a turn breaks the model's access to its own working state. ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344))
+Context continuity: intermediate tool call outputs must persist for later inference calls within the same turn. Stripping tool call history within a turn cuts the model off from its own working state. ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344))
 
-## Extended ReAct Phases
+## Extended ReAct phases
 
-The standard ReAct loop can be augmented with additional phases at each iteration ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)):
+You can add more phases to the standard ReAct loop at each iteration ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)):
 
-- **Phase 0 — Staged context management**: inject memory, fire system reminders, run compaction before inference.
-- **Phase 1 — Thinking**: optional extended reasoning producing an internal chain-of-thought trace.
-- **Phase 2 — Action**: standard LLM call with tool schemas, producing tool calls.
-- **Phase 3 — Decision and dispatch**: validate tool calls against safety rules, enforce approval policies, detect doom loops.
+- Phase 0 — staged context management: inject memory, fire system reminders, run compaction before inference.
+- Phase 1 — thinking: optional extended reasoning that produces an internal chain-of-thought trace.
+- Phase 2 — action: standard LLM call with tool schemas, producing tool calls.
+- Phase 3 — decision and dispatch: validate tool calls against safety rules, enforce approval policies, detect doom loops.
 
-The loop terminates on a final text response, an iteration cap, or budget exhaustion ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)).
+The loop ends on a final text response, an iteration cap, or budget exhaustion ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)).
 
 ## Example
 
@@ -107,17 +107,17 @@ graph TD
     C -->|No| H[Surface Assistant Message to User]
 ```
 
-## When This Backfires
+## When this backfires
 
 Unbounded turn loops become liabilities in production under these conditions:
 
-1. **Runaway cost from stuck tool calls**: when a tool returns an error state that the model treats as recoverable, the loop can retry indefinitely — a single stuck turn has been observed consuming millions of tokens before hitting a wall ([The Agent Loop Problem, Modexa, 2026](https://medium.com/@Modexa/the-agent-loop-problem-when-smart-wont-stop-ccbf8489180f)). Always enforce a hard iteration cap.
+1. Runaway cost from stuck tool calls: when a tool returns an error state that the model treats as recoverable, the loop can retry without end. One stuck turn has consumed millions of tokens before hitting a wall ([The Agent Loop Problem, Modexa, 2026](https://medium.com/@Modexa/the-agent-loop-problem-when-smart-wont-stop-ccbf8489180f)). Always enforce a hard iteration cap.
 
-2. **Context window exhaustion mid-turn**: each tool result appends to the growing prompt. A turn involving many file reads or large API responses will silently approach the context limit. Without proactive [context compression](../context-engineering/context-compression-strategies.md), the next inference call is truncated or rejected — design for token budget exhaustion as a normal case, not an edge case.
+2. Context window exhaustion mid-turn: each tool result appends to the growing prompt. A turn with many file reads or large API responses will silently approach the context limit. Without proactive [context compression](../context-engineering/context-compression-strategies.md), the next inference call is truncated or rejected. Design for token budget exhaustion as a normal case, not an edge case.
 
-3. **Latency opacity**: a turn that takes 30 seconds of silent tool execution is indistinguishable from a hung process to the end user. Streaming intermediate tool results is the only signal available; omitting it produces a wall of silence that triggers retries or abandonment.
+3. Latency opacity: a turn that runs 30 seconds of silent tool execution looks like a hung process to the user. Streaming intermediate tool results is the only signal you have. Omit it and you produce a wall of silence that triggers retries or abandonment.
 
-4. **Doom loops in multi-agent systems**: when multiple agents share a loop, conflicting termination conditions cause tasks to bounce without resolution, burning turns without progress. Phase 3 of the Extended ReAct loop explicitly targets doom-loop detection as a separate concern ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)); see [Loop Detection](../observability/loop-detection.md) for the intra-session intervention patterns.
+4. Doom loops in multi-agent systems: when multiple agents share a loop, conflicting termination conditions cause tasks to bounce without resolution, burning turns without progress. Phase 3 of the extended ReAct loop targets doom-loop detection as a separate concern ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)). See [Loop Detection](../observability/loop-detection.md) for the intra-session intervention patterns.
 
 ## Key Takeaways
 
@@ -130,8 +130,8 @@ Unbounded turn loops become liabilities in production under these conditions:
 
 - [Agent Harness](agent-harness.md) — the runtime that executes tool calls and appends results within each turn iteration
 - [Harness Engineering](harness-engineering.md) — design decisions for the surrounding loop that drive inference and tool dispatch
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md) — alternatives and variations on the iterative inference-tool loop
-- [Agent Loop Middleware](agent-loop-middleware.md) — interception points that wrap inference and tool execution steps
+- [Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md) — alternatives and variations on the iterative inference-tool loop
+- [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md) — interception points that wrap inference and tool execution steps
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — strategies for mid-turn tool failures and error recovery
 - [The Think Tool](think-tool.md) — explicit thinking phase during Phase 1 of the Extended ReAct loop
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — how to keep the intra-turn prompt within budget

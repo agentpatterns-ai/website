@@ -15,11 +15,11 @@ maturity: emerging
 
 > An observation-to-update loop for maintaining and improving agent configurations over time.
 
-**Related lesson:** [Define "Done" First](https://learn.agentpatterns.ai/workflows/define-done-first/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Define "Done" First](https://learn.agentpatterns.ai/workflows/define-done-first/) — a hands-on lesson with quizzes that covers this concept.
 
-## Agent Configs Are Not Set-and-Forget
+## Agent configs are not set-and-forget
 
-Your initial AGENTS.md and first set of skills will have gaps. The project evolves. Tools update. Conventions shift. An agent that worked well at project start produces progressively worse output if its AGENTS.md and skills don't keep pace.
+Your first AGENTS.md and first set of skills will have gaps. The project evolves. Tools update. Conventions shift. An agent that worked well at the start produces worse output over time if its AGENTS.md and skills do not keep pace.
 
 The improvement cycle is:
 
@@ -32,24 +32,24 @@ graph TD
     E --> A
 ```
 
-## The Improvement Loop
+## The improvement loop
 
 ### Observe
 
-Review agent output regularly, not just when something breaks — [agent debugging](../observability/agent-debugging.md) tooling makes this review systematic rather than ad hoc. Issues worth tracking:
+Review agent output regularly, not just when something breaks. The [agent debugging](../observability/agent-debugging.md) tooling makes this review systematic rather than one-off. Issues worth tracking:
 
 - Recurring mistakes across multiple sessions (not one-off errors)
 - Output that requires consistent manual correction before use
 - Tasks the agent routes around by taking a longer path
 - Output that was correct six months ago and isn't now
 
-One-off errors are noise. Patterns are signal. Batch observations before acting on them — because a single failure has many plausible causes (ambiguous input, transient context, prompt format), and only recurrence across varied sessions isolates the true root cause from coincidence.
+One-off errors are noise. Patterns are signal. Batch observations before you act on them. A single failure has many plausible causes (ambiguous input, transient context, prompt format), and only recurrence across varied sessions separates the real root cause from coincidence.
 
 ### Categorize
 
 Map each recurring failure to the layer responsible:
 
-| Failure Type | Root Cause | Fix Layer |
+| Failure type | Root cause | Fix layer |
 |---|---|---|
 | Agent doesn't know the convention | Knowledge gap | Update or add a skill |
 | Agent knows but ignores the rule | Instruction gap or conflict | Update AGENTS.md or resolve conflict |
@@ -61,29 +61,29 @@ Matching failure to layer prevents churn. Updating the instruction file when the
 
 ### Update
 
-Make targeted, minimal changes to the specific layer causing the issue. Broad rewrites to instruction files introduce new conflicts and make it harder to attribute future behavior changes to a specific edit.
+Make targeted, minimal changes to the layer causing the issue. Broad rewrites to instruction files introduce new conflicts and make it harder to attribute future behavior changes to a specific edit.
 
-Apply changes in isolation where possible:
+Apply changes in isolation where you can:
 
 - Add one rule at a time when updating AGENTS.md
 - Add one skill before reorganizing the skill hierarchy
 - Add one hook before enabling a validation pipeline
 
-Document why each change was made. Agent configuration files like AGENTS.md and skill files benefit from changelogs — the same reasoning that applies to dependency updates applies here. A rule with no documented rationale gets removed incorrectly when someone can't determine whether it's still needed.
+Document why you made each change. Configuration files like AGENTS.md and skill files benefit from changelogs — the same reasoning that applies to dependency updates applies here. A rule with no documented rationale gets removed by mistake when someone cannot tell whether it is still needed.
 
 ### Verify
 
-After updating, re-run the same task that exhibited the failure. Confirm the output improved. If the failure recurs, the root cause categorization was wrong — return to the observe step rather than stacking additional changes, the same convergence check [skill library refinement loops](skill-library-refinement-loops.md) use before keeping a change.
+After updating, re-run the same task that exhibited the failure. Confirm the output improved. If the failure recurs, you categorized the root cause wrong — return to the observe step rather than stacking more changes. This is the same convergence check that [skill library refinement loops](skill-library-refinement-loops.md) use before keeping a change.
 
-Keep the verification input fixed. Testing against a different task after a change doesn't confirm the fix — it may just shift the failure to a new instance.
+Keep the verification input fixed. Testing against a different task after a change does not confirm the fix — it may just shift the failure to a new instance.
 
-### Progressive Trust
+### Progressive trust
 
-As agents demonstrate reliable output over time, reduce review overhead proportionally — but never eliminate it, the calibration [human-in-the-loop](human-in-the-loop.md) placement governs. No industry-standard thresholds exist for this progression; apply judgment based on task risk. A useful heuristic: start with human review of every output, move to sampling (review every nth output) once error rate drops, and move to hook-only validation only when sampling finds no issues over a sustained period.
+As agents prove reliable over time, reduce review overhead in proportion — but never drop it entirely. The [human-in-the-loop](human-in-the-loop.md) placement governs this calibration. No industry-standard thresholds exist for this progression, so apply judgment based on task risk. A useful heuristic: start with human review of every output, move to sampling (review every nth output) once the error rate drops, and move to hook-only validation only when sampling finds no issues over a sustained period.
 
-Reducing review prematurely reintroduces risk without detection.
+Reducing review too early reintroduces risk without detection.
 
-## Staleness: The Slow Drift Problem
+## Staleness: the slow drift problem
 
 Skills and instruction files become outdated as tools update, APIs change, and project conventions evolve. An AGENTS.md written for last year's toolchain silently misguides agents without throwing an error.
 
@@ -93,44 +93,44 @@ Signs of staleness:
 - Agent produces output that matches an old convention, not the current one
 - Skills include documentation for deprecated APIs or removed features
 
-Schedule periodic reviews of instruction files and skills — not in response to a specific failure, but as routine maintenance. Treat them as living documents on the same maintenance cadence as your project's README or API docs. Practitioner commentary on the ETH Zurich work reaches the same conclusion from a different angle: stale instructions referencing folders or conventions that no longer exist are [worse than no instructions at all](https://www.infoq.com/news/2026/03/agents-context-file-value-review/), because agents follow them faithfully and confidently do the wrong thing.
+Schedule periodic reviews of instruction files and skills — not in response to a specific failure, but as routine maintenance. Treat them as living documents on the same maintenance cadence as your project's README or API docs. Practitioner commentary on the ETH Zurich work reaches the same conclusion from a different angle: stale instructions that reference folders or conventions that no longer exist are [worse than no instructions at all](https://www.infoq.com/news/2026/03/agents-context-file-value-review/), because agents follow them faithfully and confidently do the wrong thing.
 
-## What to Track
+## What to track
 
 Useful signals for spotting improvement opportunities:
 
-- **Error rate** — frequency of agent output requiring correction before use
-- **Review rejection rate** — how often agent-generated PRs or tasks are sent back
-- **Correction time** — how long it takes to fix agent output to an acceptable state
-- **Context usage** — consistently high context usage may indicate instruction files are too verbose or skills are loading unnecessarily
+- Error rate — how often agent output needs correction before use
+- Review rejection rate — how often agent-generated PRs or tasks are sent back
+- Correction time — how long it takes to fix agent output to an acceptable state
+- Context usage — consistently high context usage may mean instruction files are too verbose or skills are loading when they should not
 
-You don't need formal tooling for this. A shared notes file or GitHub issue tracking patterns in agent output is sufficient for most teams.
+You do not need formal tooling for this. A shared notes file or a GitHub issue that tracks patterns in agent output is enough for most teams.
 
-## Anti-Patterns
+## Anti-patterns
 
-**Reactive single-error updates.** Changing the instruction file after every individual error is the [prompt tinkerer](../anti-patterns/prompt-tinkerer.md) failure applied to config — it adds noise and makes it hard to identify which changes actually helped. Batch observations across multiple sessions before acting.
+Reactive single-error updates. Changing the instruction file after every individual error is the [prompt tinkerer](../anti-patterns/prompt-tinkerer.md) failure applied to config — it adds noise and makes it hard to tell which changes actually helped. Batch observations across multiple sessions before acting.
 
-**Never updating after initial setup.** Agent configurations that aren't maintained diverge from the project's current state. The gap between "what the agent thinks the project is" and "what the project actually is" grows over time until output quality drops noticeably.
+Never updating after initial setup. Agent configurations that are not maintained diverge from the project's current state. The gap between what the agent thinks the project is and what the project actually is grows over time until output quality drops noticeably.
 
-## When This Backfires
+## When this backfires
 
 The improvement loop degrades under three conditions:
 
-**[Instruction bloat](../anti-patterns/prompt-tinkerer.md).** Each targeted fix adds words. Over dozens of iterations, instruction files become verbose enough to exceed context windows or dilute the signal of any single rule. An [ETH Zurich evaluation of repository-level context files](https://arxiv.org/abs/2602.11988) reported that LLM-generated `AGENTS.md` files reduced task success rates by roughly 3 percent on average and increased inference cost by over 20 percent — a concrete argument for pruning over append-only iteration. The fix is periodic pruning: review the full file and consolidate overlapping rules rather than appending indefinitely.
+[Instruction bloat](../anti-patterns/prompt-tinkerer.md). Each targeted fix adds words. Over dozens of iterations, instruction files become verbose enough to exceed context windows or dilute the signal of any single rule. An [ETH Zurich evaluation of repository-level context files](https://arxiv.org/abs/2602.11988) reported that LLM-generated `AGENTS.md` files reduced task success rates by roughly 3 percent on average and increased inference cost by over 20 percent — a concrete argument for pruning over append-only iteration. The fix is periodic pruning: review the full file and consolidate overlapping rules rather than appending indefinitely.
 
-**Over-fitting to recent sessions.** If observations are drawn from a narrow slice of work — a single sprint, one team member's tasks — the updates optimize for that slice and regress on other task types. Diversify the observation sample before acting, the same discipline [failure-driven iteration](failure-driven-iteration.md) applies to the failures it generalizes from.
+Over-fitting to recent sessions. If observations come from a narrow slice of work — a single sprint, one team member's tasks — the updates optimize for that slice and regress on other task types. Diversify the observation sample before acting, the same discipline [failure-driven iteration](failure-driven-iteration.md) applies to the failures it generalizes from.
 
-**Conflicting rule accumulation.** Two separately-correct updates can contradict each other when applied together. Adding "always use concise commit messages" and later "always include the ticket number in commit messages" produces two rules that conflict on short-ticket-number-heavy workflows. Audit for conflicts when adding to an existing instruction set.
+Conflicting rule accumulation. Two separately-correct updates can contradict each other when applied together. Adding "always use concise commit messages" and later "always include the ticket number in commit messages" produces two rules that conflict on short-ticket-number-heavy workflows. Audit for conflicts when adding to an existing instruction set.
 
 ## Example
 
 The following illustrates the observe-categorize-update-verify cycle applied to a concrete recurring failure.
 
-**Observation**: Over three sessions, an agent using a Python project's AGENTS.md consistently imports `pytest.raises` directly instead of using the project's custom `assert_raises` wrapper. Manual correction is needed every time.
+Observation: over three sessions, an agent using a Python project's AGENTS.md consistently imports `pytest.raises` directly instead of using the project's custom `assert_raises` wrapper. Manual correction is needed every time.
 
-**Categorization**: The agent knows pytest but doesn't know the local convention — this is a knowledge gap, not an instruction gap. Fix layer: add a skill.
+Categorization: the agent knows pytest but does not know the local convention — this is a knowledge gap, not an instruction gap. Fix layer: add a skill.
 
-**Update** — add a targeted skill file rather than editing AGENTS.md:
+Update — add a targeted skill file rather than editing AGENTS.md:
 
 ```markdown
 <!-- .claude/skills/testing-conventions.md -->
@@ -156,9 +156,9 @@ The wrapper adds structured logging and integrates with the test report pipeline
 Change rationale: added 2026-02-14 — agent consistently used raw pytest.raises across sessions #42, #47, #51.
 ```
 
-**Verify**: Re-run the same task from session #42 with the skill loaded. Confirm the agent now uses `assert_raises`. If it still uses `pytest.raises`, the root cause was misdiagnosed — return to the observe step rather than adding more instructions on top.
+Verify: re-run the same task from session #42 with the skill loaded. Confirm the agent now uses `assert_raises`. If it still uses `pytest.raises`, you misdiagnosed the root cause — return to the observe step rather than adding more instructions on top.
 
-The changelog comment ("added 2026-02-14 — sessions #42, #47, #51") documents why this rule exists. Without it, a future team member cannot determine whether it is still needed when testing conventions change.
+The changelog comment ("added 2026-02-14 — sessions #42, #47, #51") documents why this rule exists. Without it, a future team member cannot tell whether it is still needed when testing conventions change.
 
 ## Key Takeaways
 
@@ -177,3 +177,5 @@ The changelog comment ("added 2026-02-14 — sessions #42, #47, #51") documents 
 - [Skill Library Refinement Loops](skill-library-refinement-loops.md)
 - [Scheduled Instruction File Fact-Checker](instruction-file-fact-checker.md)
 - [Continuous AI: A Navigation Map of Always-On Agent Workflows](continuous-ai.md) — the parent map of the continuous-* and triage families this loop belongs to
+</content>
+</invoke>

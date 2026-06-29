@@ -13,24 +13,24 @@ maturity: adopted
 
 > Constrain agent output with templates and schemas to reduce the degrees of freedom available for error.
 
-**Related lesson:** [Guardrails Beat Guidance](https://learn.agentpatterns.ai/verification/guardrails-beat-guidance/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Guardrails Beat Guidance](https://learn.agentpatterns.ai/verification/guardrails-beat-guidance/) — this concept features in a hands-on lesson with quizzes.
 
-## The Problem with Blank Pages
+## The problem with blank pages
 
 A blank page is an invitation to hallucinate. When an agent has unlimited output freedom, it fills that freedom with confident-sounding prose, invented citations, and plausible-but-wrong details.
 
-Structured output constraints reduce hallucination surface by giving the agent a template to fill rather than a blank page.
+Structured output constraints reduce hallucination surface. They give the agent a template to fill rather than a blank page.
 
-## How Constraints Reduce Hallucination
+## How constraints reduce hallucination
 
 Each structural constraint removes a degree of freedom:
 
-- **Required sections** — the agent must address each section. Missing sections become visible.
-- **Required fields** — a `sources` field forces the agent to name sources. An empty sources field is detectable. A paragraph with invisible sourcing gaps is not.
-- **Type constraints** — if the output must be valid `JSON`, the agent cannot produce narrative padding around the answer.
-- **Enum values** — if a verdict field must be `PASS` or `FAIL`, the agent cannot hedge with "mostly pass" or produce a non-binary answer.
+- Required sections — the agent must address each section. Missing sections become visible.
+- Required fields — a `sources` field forces the agent to name sources. An empty sources field is detectable. A paragraph with invisible sourcing gaps is not.
+- Type constraints — if the output must be valid `JSON`, the agent cannot produce narrative padding around the answer.
+- Enum values — if a verdict field must be `PASS` or `FAIL`, the agent cannot hedge with "mostly pass" or produce a non-binary answer.
 
-## Structured Output for Code
+## Structured output for code
 
 [Claude's structured output support](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) allows constraining responses to a JSON schema. When the schema requires specific fields, the model cannot omit them or substitute narrative for structured data.
 
@@ -51,7 +51,7 @@ Example review output schema:
 
 This format is machine-readable, downstream-processable, and rejects hedging. The agent either produces a valid schema or fails.
 
-## Page Templates as Structural Constraints
+## Page templates as structural constraints
 
 Document templates impose the same constraints on prose output that `JSON` schemas impose on data output. A content page template with required sections — title, summary blockquote, content sections, Key Takeaways, Related — forces the agent to populate each section explicitly.
 
@@ -65,7 +65,7 @@ Without these sections, the agent decides what to include and what to skip. With
 
 [Claude Code skills](https://code.claude.com/docs/en/skills) use template files in skill directories to constrain agent output format.
 
-## Research Note Templates
+## Research note templates
 
 Research notes benefit from structure as much as output pages:
 
@@ -95,7 +95,7 @@ Too much structure produces compliant but hollow output: the agent fills every f
 
 Two caveats are worth naming explicitly. First, format restrictions can degrade reasoning: [Tam et al.](https://arxiv.org/abs/2408.02442) report that strict JSON-mode generation reduces accuracy on reasoning-heavy tasks compared to free-form generation followed by structured conversion. For reasoning-heavy tasks, the common mitigation is to let the model think in natural language first and convert to the target format in a second step. Second, schema constraints guarantee only syntactic validity, not semantic correctness — the values inside a schema-valid JSON may still be wrong or hallucinated. Structured output reduces hallucination surface; it does not replace content-level verification.
 
-## Anti-Pattern
+## Anti-pattern
 
 Asking an agent to "write about X" with no structural guidance. The agent will produce plausible prose with no verifiable properties. You cannot check whether all claims are sourced, whether the required sections are present, or whether the verdict is actionable, because none of these were required.
 

@@ -18,66 +18,66 @@ maturity: established
 
 > Train an LLM-based attacker using reinforcement learning to discover novel prompt injection attack vectors end-to-end — before human red teamers or external adversaries do.
 
-## The Limits of Manual Red Teaming
+## The limits of manual red teaming
 
-Manual red teaming against prompt injection is slow and misses long-horizon attacks that unfold across dozens of tool calls. Human testers probe obvious surface areas; they rarely discover the multi-step attack sequences that exploit interactions between tools, context accumulation, and deferred action.
+Manual red teaming against prompt injection is slow and misses long-horizon attacks that unfold across dozens of tool calls. Human testers probe the obvious surface areas. They rarely find the multi-step attack sequences that exploit interactions between tools, context accumulation, and deferred action.
 
 OpenAI's Atlas team found that an RL-trained automated attacker discovered novel, realistic attacks — including a malicious email triggering an agent to send a resignation letter — that never surfaced in human red teaming campaigns or external reports. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 
-## The Automated Attacker Setup
+## The automated attacker setup
 
 The attacker is itself a frontier LLM, trained with reinforcement learning to discover successful injections against a specific agent system.
 
 Key properties:
 
-- The attacker proposes an injection; a simulator runs a counterfactual rollout against the defender agent
-- The attacker receives the full defender reasoning trace as feedback — richer signal than a pass/fail result
-- RL rewards the attacker for successful attacks, causing it to learn from both successes and failures and improve attack strategy over time
-- As base models improve, the attacker naturally becomes more capable — the investment compounds [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
+- The attacker proposes an injection, and a simulator runs a counterfactual rollout against the defender agent
+- The attacker receives the full defender reasoning trace as feedback — a richer signal than a pass-or-fail result
+- RL rewards the attacker for successful attacks, so it learns from both successes and failures and improves its attack strategy over time
+- As base models improve, the attacker becomes more capable on its own, so the investment compounds [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 
-## Why RL Suits This Problem
+## Why RL suits this problem
 
-[Prompt injection](prompt-injection-threat-model.md) attacks against long-horizon agents have sparse, delayed rewards. A successful attack may require specific setup across multiple early turns before the exploitation turn. This structure is difficult for standard supervised learning (which needs labeled examples of successful attacks) but natural for RL (which can discover effective sequences through exploration and feedback).
+[Prompt injection](prompt-injection-threat-model.md) attacks against long-horizon agents have sparse, delayed rewards. A successful attack may need specific setup across several early turns before the exploitation turn. This structure is hard for standard supervised learning, which needs labeled examples of successful attacks. It is natural for RL, which can discover effective sequences through exploration and feedback.
 
-RL is particularly effective for multi-step workflows where the attack unfolds across email retrieval, context accumulation, and a deferred action like sending or deleting. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
+RL works well for multi-step workflows where the attack unfolds across email retrieval, context accumulation, and a deferred action like sending or deleting. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 
-## White-Box Advantage
+## White-box advantage
 
-An internal automated attacker has white-box access to the defender's reasoning traces, complementing black-box [indirect-injection discovery](indirect-injection-discovery.md). This is an asymmetric advantage over external adversaries who observe only the agent's outputs.
+An internal automated attacker has white-box access to the defender's reasoning traces, which complements black-box [indirect-injection discovery](indirect-injection-discovery.md). This is an asymmetric advantage over external adversaries, who see only the agent's outputs.
 
-The reasoning trace reveals how the defender interpreted the injection attempt, which parts of the instruction it prioritized, and where its defenses held or failed. The attacker learns to exploit these patterns directly. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
+The reasoning trace shows how the defender read the injection attempt, which parts of the instruction it prioritized, and where its defenses held or failed. The attacker learns to exploit these patterns directly. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 
-## Using Attack Discoveries
+## Using attack discoveries
 
-Newly discovered attack classes are immediately useful:
+Newly discovered attack classes are useful right away:
 
-1. **Adversarial training**: feed successful attack traces into fine-tuning of the defender agent to burn in robustness (see [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md))
-2. **Monitoring blind spots**: attack traces reveal where the agent's behavior is observable vs. invisible to monitoring systems
-3. **System-level gaps**: successful attacks often indicate missing confirmation gates or over-broad permissions — not just model-level weaknesses
+- Adversarial training: feed successful attack traces into fine-tuning of the defender agent to harden it against those attacks (see [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md))
+- Monitoring blind spots: attack traces show where the agent's behavior is observable and where it is invisible to monitoring systems
+- System-level gaps: successful attacks often point to missing confirmation gates or over-broad permissions, not just model-level weaknesses
 
-## Scope and Prerequisites
+## Scope and prerequisites
 
 This approach requires:
 
-- A simulator capable of running agent rollouts against injected content
+- A simulator that can run agent rollouts against injected content
 - Access to the defender agent's reasoning traces during evaluation
-- Infrastructure for RL training loops (compute, tooling)
+- Infrastructure for RL training loops, both compute and tooling
 
-It is a technique for teams with established agent security programs, not a first-line measure. The prerequisite is having working confirmation gates, least-privilege permissions, and narrow task instructions already in place.
+This is a technique for teams with an established agent security program, not a first-line measure. Use it only once you have working confirmation gates, least-privilege permissions, and narrow task instructions already in place.
 
-## When This Backfires
+## When this backfires
 
-**Attack diversity collapse**: RL optimizes for reward, which causes the attacker to converge on a narrow cluster of similar successful payloads rather than exploring the full attack surface. The diversity vs. success-rate tradeoff means a high-performing RL attacker may miss entire attack categories that lower-reward exploratory strategies would surface. [Source: [PISmith: RL-based Red Teaming for Prompt Injection Defenses](https://arxiv.org/abs/2603.13026)]
+Attack diversity collapse: RL optimizes for reward, so the attacker converges on a narrow cluster of similar successful payloads instead of exploring the full attack surface. The tradeoff between diversity and success rate means a high-performing RL attacker may miss whole attack categories that lower-reward exploratory strategies would surface. [Source: [PISmith: RL-based Red Teaming for Prompt Injection Defenses](https://arxiv.org/abs/2603.13026)]
 
-**White-box privilege gap**: The internal attacker's access to defender reasoning traces is not representative of real adversaries, who operate in a black-box setting. An agent hardened against a white-box attacker may still be vulnerable to adversaries who probe from the outside without trace access.
+White-box privilege gap: the internal attacker's access to defender reasoning traces does not represent real adversaries, who work in a black-box setting. An agent hardened against a white-box attacker may still be vulnerable to adversaries who probe from the outside without trace access.
 
-**Sparse reward instability**: Standard RL training against strong defenses fails under extreme reward sparsity — most injected prompts are blocked, causing policy entropy collapse before the attacker discovers effective strategies. Mitigation requires techniques like adaptive entropy regularization and dynamic advantage weighting, which add implementation complexity. [Source: [PISmith: RL-based Red Teaming for Prompt Injection Defenses](https://arxiv.org/abs/2603.13026)]
+Sparse reward instability: standard RL training against strong defenses fails under extreme reward sparsity. Most injected prompts are blocked, so policy entropy collapses before the attacker discovers effective strategies. To fix this you need techniques like adaptive entropy regularization and dynamic advantage weighting, which add implementation complexity. [Source: [PISmith: RL-based Red Teaming for Prompt Injection Defenses](https://arxiv.org/abs/2603.13026)]
 
-**Infrastructure floor**: The compute and tooling requirements for RL training loops make this impractical for teams that haven't already invested in agent simulation infrastructure. Attempting it without a stable simulator produces misleading coverage signals.
+Infrastructure floor: the compute and tooling needed for RL training loops make this impractical for teams that have not already invested in agent simulation infrastructure. Attempting it without a stable simulator produces misleading coverage signals.
 
 ## Example
 
-The following shows a minimal attacker-simulator evaluation loop in Python. The attacker LLM proposes injection payloads; the simulator runs them against the defender agent and returns the full reasoning trace as feedback signal.
+The following shows a minimal attacker-simulator evaluation loop in Python. The attacker LLM proposes injection payloads. The simulator runs them against the defender agent and returns the full reasoning trace as the feedback signal.
 
 ```python
 import anthropic

@@ -19,9 +19,9 @@ status: current
 
 Added in [v2.1.81 (March 20, 2026)](https://code.claude.com/docs/en/changelog), `--bare` is the recommended mode for all scripted and SDK uses of Claude Code. Anthropic has stated it will become the default for `-p` in a future release ([headless docs](https://code.claude.com/docs/en/headless)).
 
-## What `--bare` Skips
+## What `--bare` skips
 
-Without `--bare`, `claude -p` loads the same context as an interactive session: hooks from `~/.claude`, MCP servers from `.mcp.json`, CLAUDE.md files, skills, plugins, and auto-memory. On a developer's machine this is useful; in CI it is a liability — a teammate's local hook or an MCP server in the repo can change behavior between runs.
+Without `--bare`, `claude -p` loads the same context as an interactive session: hooks from `~/.claude`, MCP servers from `.mcp.json`, CLAUDE.md files, skills, plugins, and auto-memory. On a developer's machine this is useful. In CI it is a liability: a teammate's local hook or an MCP server in the repo can change behavior between runs.
 
 `--bare` skips all of that ([CLI reference](https://code.claude.com/docs/en/cli-reference)):
 
@@ -33,21 +33,21 @@ Without `--bare`, `claude -p` loads the same context as an interactive session: 
 | Auto-memory | No `~/.claude/memory` reads |
 | CLAUDE.md discovery | Project instructions don't load automatically |
 
-Claude retains access to Bash, file read, and file edit tools. Everything else must be passed explicitly.
+Claude keeps Bash, file read, and file edit tools. You must pass everything else explicitly.
 
 ## Authentication
 
-Bare mode skips OAuth and keychain reads. Authentication must come from one of ([headless docs](https://code.claude.com/docs/en/headless)):
+Bare mode skips OAuth and keychain reads. You must supply authentication from one of ([headless docs](https://code.claude.com/docs/en/headless)):
 
 - `ANTHROPIC_API_KEY` environment variable
 - An `apiKeyHelper` in the JSON passed to `--settings`
 - Provider credentials for Bedrock, Vertex, or Foundry (standard provider auth applies)
 
-This prevents accidental OAuth token usage in CI — a common failure mode when `--bare` is absent and a developer's keychain auth is silently used.
+This prevents accidental OAuth token use in CI. That is a common failure mode when `--bare` is absent and Claude silently uses a developer's keychain auth.
 
-## Adding Context Back Selectively
+## Adding context back selectively
 
-Because `--bare` skips everything, you load only what the task actually needs ([headless docs](https://code.claude.com/docs/en/headless)):
+Because `--bare` skips everything, you load only what the task needs ([headless docs](https://code.claude.com/docs/en/headless)):
 
 | To add | Flag |
 |--------|------|
@@ -59,15 +59,15 @@ Because `--bare` skips everything, you load only what the task actually needs ([
 
 ## Performance
 
-`--bare -p` is approximately 14% faster to the first API request compared to standard `-p` ([changelog](https://code.claude.com/docs/en/changelog)). For CI pipelines that run Claude on every push or PR, this compounds across many invocations. `--bare` also sets the `CLAUDE_CODE_SIMPLE` environment variable ([CLI reference](https://code.claude.com/docs/en/cli-reference)), which downstream scripts can read to detect bare-mode context.
+`--bare -p` is about 14% faster to the first API request than standard `-p` ([changelog](https://code.claude.com/docs/en/changelog)). For CI pipelines that run Claude on every push or PR, this adds up across many invocations. `--bare` also sets the `CLAUDE_CODE_SIMPLE` environment variable ([CLI reference](https://code.claude.com/docs/en/cli-reference)), which downstream scripts can read to detect bare-mode context.
 
-## When This Backfires
+## When this backfires
 
-`--bare` is deliberately blunt. It strips everything and asks you to add back what you need. That is the right default for reproducible scripts, but it is the wrong default in these cases:
+`--bare` is deliberately blunt. It strips everything and asks you to add back what you need. That is the right default for reproducible scripts, but the wrong default in these cases:
 
-- **CI is meant to mirror the repo's configured environment.** If your team relies on a checked-in `.mcp.json`, project hooks in `.claude/`, or repo-scoped skills for the CI task itself, `--bare` will silently skip them. You must re-add each one with `--mcp-config`, `--settings`, and `--plugin-dir`, and keep those flags in sync with the project config.
-- **The task depends on CLAUDE.md context.** Project CLAUDE.md files often encode repo conventions (naming, test commands, style rules). A bare run has none of that and will happily violate them. If you need that context, re-inject it via `--append-system-prompt-file`.
-- **You already use `ANTHROPIC_API_KEY` and a locked-down `settings.json`.** If your non-bare `-p` runs are already deterministic — no local hooks, no auto-memory, explicit API key — `--bare` mostly adds flag noise for the ~14% startup saving. Measure before adopting it.
+- CI is meant to mirror the repo's configured environment. If your team relies on a checked-in `.mcp.json`, project hooks in `.claude/`, or repo-scoped skills for the CI task itself, `--bare` will silently skip them. You must re-add each one with `--mcp-config`, `--settings`, and `--plugin-dir`, and keep those flags in sync with the project config.
+- The task depends on CLAUDE.md context. Project CLAUDE.md files often encode repo conventions such as naming, test commands, and style rules. A bare run has none of that and will happily violate them. If you need that context, re-inject it with `--append-system-prompt-file`.
+- You already use `ANTHROPIC_API_KEY` and a locked-down `settings.json`. If your non-bare `-p` runs are already deterministic — no local hooks, no auto-memory, explicit API key — `--bare` mostly adds flag noise for the 14% startup saving. Measure before adopting it.
 
 ## Example
 

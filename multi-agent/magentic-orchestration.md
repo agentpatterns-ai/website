@@ -18,11 +18,11 @@ maturity: established
 
 > Magentic orchestration uses a manager-maintained task ledger to dispatch specialists and re-plan on stall — fit only when the plan itself is unknown.
 
-Magentic orchestration applies when the plan cannot be drawn before execution: open-ended research, incident response, exploratory automation across web and filesystem. A manager agent maintains a *task ledger* (facts, guesses, plan) and a *progress ledger* (assignments, outcomes, stall counter), then iterates until the goal clears or the stall counter trips a re-plan ([Magentic-One paper, arxiv:2411.04468](https://arxiv.org/html/2411.04468v1)). It is **not** a general upgrade to static orchestration — for deterministic or cost-sensitive work, simpler topologies dominate.
+Magentic orchestration applies when the plan cannot be drawn before execution: open-ended research, incident response, exploratory automation across web and filesystem. A manager agent maintains a task ledger (facts, guesses, plan) and a progress ledger (assignments, outcomes, stall counter), then iterates until the goal clears or the stall counter trips a re-plan ([Magentic-One paper, arxiv:2411.04468](https://arxiv.org/html/2411.04468v1)). It is not a general upgrade to static orchestration. For deterministic or cost-sensitive work, simpler topologies dominate.
 
-## When This Pattern Fits
+## When this pattern fits
 
-Reach for Magentic only when **all four** conditions hold:
+Reach for Magentic only when all four conditions hold:
 
 1. The plan is the unknown — no fixed pipeline can be drawn before the run.
 2. A reviewable, audit-trailed plan is part of the product — the ledger doubles as the human-review surface.
@@ -35,12 +35,12 @@ If any condition fails, use [orchestrator-worker](orchestrator-worker.md) for st
 
 Two ledgers, two loops, fixed specialist roster.
 
-- **Task ledger** — given facts, facts to look up, facts to derive, educated guesses, and a step-by-step plan in natural language ([Magentic-One paper](https://arxiv.org/html/2411.04468v1)).
-- **Progress ledger** — per iteration: is the request satisfied, is the team looping, is progress being made, who speaks next, what to ask them.
-- **Outer loop** — initialises / updates the task ledger; resets agent context when the plan changes.
-- **Inner loop** — answers the five questions, dispatches the next specialist, increments the stall counter when no progress.
+- Task ledger — given facts, facts to look up, facts to derive, educated guesses, and a step-by-step plan in natural language ([Magentic-One paper](https://arxiv.org/html/2411.04468v1)).
+- Progress ledger — per iteration: is the request satisfied, is the team looping, is progress being made, who speaks next, what to ask them.
+- Outer loop — initializes or updates the task ledger, and resets agent context when the plan changes.
+- Inner loop — answers the five questions, dispatches the next specialist, increments the stall counter when no progress.
 
-When the stall counter exceeds its threshold (≤2 in the [Magentic-One paper](https://arxiv.org/html/2411.04468v1)), the inner loop breaks; the manager updates the ledger and revises the plan before re-entering.
+When the stall counter exceeds its threshold (≤2 in the [Magentic-One paper](https://arxiv.org/html/2411.04468v1)), the inner loop breaks. The manager then updates the ledger and revises the plan before re-entering.
 
 ```mermaid
 graph TD
@@ -53,11 +53,11 @@ graph TD
     C -->|goal satisfied| F[Result]
 ```
 
-## Why It Works
+## Why it works
 
-Separating *what we are trying to do* (task ledger) from *what we did* (progress ledger) makes the plan an explicit, revisable artefact rather than an implicit chain — somewhere to backtrack without losing earlier facts, the way open and closed lists serve classical planning-as-search. The five-question inner loop forces the manager to verify forward progress at every step instead of assuming — as group-chat does — that the next turn is productive ([arxiv:2411.04468](https://arxiv.org/html/2411.04468v1) §3.1–3.2). The stall counter converts replan-or-continue from a judgement call into a deterministic gate.
+Separating what we are trying to do (the task ledger) from what we did (the progress ledger) makes the plan an explicit, revisable artifact rather than an implicit chain. The team can backtrack without losing earlier facts, the way open and closed lists serve classical planning-as-search. The five-question inner loop forces the manager to verify forward progress at every step. It does not assume, as group-chat does, that the next turn is productive ([arxiv:2411.04468](https://arxiv.org/html/2411.04468v1) §3.1–3.2). The stall counter converts replan-or-continue from a judgment call into a deterministic gate.
 
-## How It Differs from Adjacent Patterns
+## How it differs from adjacent patterns
 
 | Pattern | Plan shape | When the plan can change |
 |---------|-----------|--------------------------|
@@ -67,28 +67,28 @@ Separating *what we are trying to do* (task ledger) from *what we did* (progress
 | [Evaluator-optimizer](../agent-design/evaluator-optimizer.md) | Fixed roles, fixed loop | Never — output revises, plan does not |
 | Magentic | Explicit task ledger | Only when the stall counter trips |
 
-Magentic adds an explicit plan to group-chat and plan-revision to orchestrator-worker — the right shape only when both additions earn their cost.
+Magentic adds an explicit plan to group-chat and plan-revision to orchestrator-worker. This is the right shape only when both additions earn their cost.
 
-## When This Backfires
+## When this backfires
 
 The pattern degrades or actively harms in six conditions, all observed in primary sources:
 
-- **Deterministic-path tasks** — every manager LLM call is pure overhead. The controlled study in [Do More Agents Help? (arxiv:2606.05670)](https://arxiv.org/abs/2606.05670) found most multi-agent workflows underperformed a single-agent baseline across ten benchmarks.
-- **Easy tasks** — the [Magentic-One paper](https://arxiv.org/html/2411.04468v1) authors note their system "appears to compete better on hard tasks vs. easy tasks"; the fixed overhead only amortises across long problems.
-- **Time-sensitive workflows** — "several US dollars and tens of minutes per task" ([arxiv:2411.04468](https://arxiv.org/html/2411.04468v1)) is a non-starter for user-facing automation.
-- **Write-access specialists without a sandbox** — Magentic-One agents have attempted account lockouts via repeated logins, unauthorised password resets, accepting ToS without review, and recruiting humans via social media and FOIA requests ([arxiv:2411.04468](https://arxiv.org/html/2411.04468v1) §Limitations); only network restrictions and missing tools blocked these.
-- **No completion gate** — the paper's error analysis identifies *insufficient-verification-steps* (orchestrator declares victory without validation) as a top failure mode. Pair with a [goal-contract-completion-evaluator](../agent-design/goal-contract-completion-evaluator.md) or a [pre-completion checklist](../verification/pre-completion-checklists.md).
-- **Persistent-inefficient-actions** — the same analysis flags agents repeating unproductive behaviours without adapting. The stall counter is the only structural defence; without a low threshold the manager keeps dispatching the same specialist into the same dead end.
+- Deterministic-path tasks — every manager LLM call is pure overhead. The controlled study in [Do More Agents Help? (arxiv:2606.05670)](https://arxiv.org/abs/2606.05670) found most multi-agent workflows underperformed a single-agent baseline across ten benchmarks.
+- Easy tasks — the [Magentic-One paper](https://arxiv.org/html/2411.04468v1) authors note their system "appears to compete better on hard tasks vs. easy tasks". The fixed overhead only amortizes across long problems.
+- Time-sensitive workflows — "several US dollars and tens of minutes per task" ([arxiv:2411.04468](https://arxiv.org/html/2411.04468v1)) is a non-starter for user-facing automation.
+- Write-access specialists without a sandbox — Magentic-One agents have attempted account lockouts via repeated logins, unauthorized password resets, accepting ToS without review, and recruiting humans via social media and FOIA requests ([arxiv:2411.04468](https://arxiv.org/html/2411.04468v1) §Limitations). Only network restrictions and missing tools blocked these.
+- No completion gate — the paper's error analysis identifies 'insufficient-verification-steps' (orchestrator declares victory without validation) as a top failure mode. Pair with a [goal-contract-completion-evaluator](../agent-design/goal-contract-completion-evaluator.md) or a [pre-completion checklist](../verification/pre-completion-checklists.md).
+- Persistent-inefficient-actions — the same analysis flags agents repeating unproductive behaviors without adapting. The stall counter is the only structural defense. Without a low threshold the manager keeps dispatching the same specialist into the same dead end.
 
 The [reliability-compounding](multi-agent-topology-taxonomy.md) trap also applies: at five agents and 95% per-agent reliability, end-to-end reliability is ~77%.
 
-## Implementation Notes
+## Implementation notes
 
-- **Cap the stall counter low.** The [Magentic-One paper](https://arxiv.org/html/2411.04468v1) uses ≤2. Higher thresholds let the team thrash longer before re-planning.
-- **Cap total iterations.** The outer loop has no native termination; add one, or the manager keeps re-planning until the budget burns out.
-- **Sandbox by default.** Microsoft's reference implementation advises running specialists "in isolated environments, such as Docker containers" ([microsoft/autogen-magentic-one](https://github.com/microsoft/autogen/tree/staging/python/packages/autogen-magentic-one)).
-- **Pause before irreversible actions.** Microsoft Research recommends a human gate before file deletion, external API writes, or any action with no rollback ([Microsoft Research](https://www.microsoft.com/en-us/research/articles/magentic-one-a-generalist-multi-agent-system-for-solving-complex-tasks/)).
-- **Fixed specialist roster.** The manager cannot create new agents; unused specialists distract it and missing expertise has no fallback ([arxiv:2411.04468](https://arxiv.org/html/2411.04468v1) §Limitations). Curate the roster before deployment.
+- Cap the stall counter low. The [Magentic-One paper](https://arxiv.org/html/2411.04468v1) uses ≤2. Higher thresholds let the team thrash longer before re-planning.
+- Cap total iterations. The outer loop has no native termination, so add one or the manager keeps re-planning until the budget burns out.
+- Sandbox by default. Microsoft's reference implementation advises running specialists "in isolated environments, such as Docker containers" ([microsoft/autogen-magentic-one](https://github.com/microsoft/autogen/tree/staging/python/packages/autogen-magentic-one)).
+- Pause before irreversible actions. Microsoft Research recommends a human gate before file deletion, external API writes, or any action with no rollback ([Microsoft Research](https://www.microsoft.com/en-us/research/articles/magentic-one-a-generalist-multi-agent-system-for-solving-complex-tasks/)).
+- Fixed specialist roster. The manager cannot create new agents. Unused specialists distract it, and missing expertise has no fallback ([arxiv:2411.04468](https://arxiv.org/html/2411.04468v1) §Limitations). Curate the roster before deployment.
 
 ## Example
 
@@ -115,7 +115,7 @@ Manager (task ledger after pager fires):
     5. DiagnosticsAgent: confirm error rate recovered post-rollback
 ```
 
-If step 1 returns "errors trace to a downstream dependency, not v4.7.1," the stall counter trips, the manager updates Facts, drops the rollback step, and re-plans to investigate the dependency. The ledger doubles as the human-review surface — an on-call engineer reads the plan before approving the gated steps. This earns its cost only because the plan was genuinely unknown at trigger time; for a known runbook, a static [orchestrator-worker](orchestrator-worker.md) is cheaper and faster.
+If step 1 returns "errors trace to a downstream dependency, not v4.7.1," the stall counter trips, the manager updates Facts, drops the rollback step, and re-plans to investigate the dependency. The ledger doubles as the human-review surface, so an on-call engineer reads the plan before approving the gated steps. This earns its cost only because the plan was genuinely unknown at trigger time. For a known runbook, a static [orchestrator-worker](orchestrator-worker.md) is cheaper and faster.
 
 ## Key Takeaways
 

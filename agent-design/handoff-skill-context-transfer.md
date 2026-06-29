@@ -20,58 +20,58 @@ maturity: adopted
 
 > A model-invocable skill that compacts the current session into a temp-file handoff document a fresh agent picks up at an explicit transfer point.
 
-## What the Skill Does
+## What the skill does
 
-The handoff skill is user-triggered, model-dispatched: you ask the agent to "hand off this work" and the model invokes the skill. The body directs it to compact the conversation into a temp file (`mktemp -t handoff-XXXXXX.md` in Matt Pocock's reference implementation), name the skills the next session should pre-load, and — critically — *not* re-state content already captured in PRDs, plans, ADRs, issues, or commits. Those are referenced by path or URL ([SKILL.md, mattpocock/skills](https://github.com/mattpocock/skills/blob/main/skills/productivity/handoff/SKILL.md)).
+The handoff skill is user-triggered and model-dispatched. You ask the agent to "hand off this work" and the model invokes the skill. The body directs it to compact the conversation into a temp file (`mktemp -t handoff-XXXXXX.md` in Matt Pocock's reference implementation), name the skills the next session should pre-load, and — critically — not re-state content already captured in PRDs, plans, ADRs, issues, or commits. Those are referenced by path or URL ([SKILL.md, mattpocock/skills](https://github.com/mattpocock/skills/blob/main/skills/productivity/handoff/SKILL.md)).
 
 It fires at an explicit transfer point with a no-duplication rule that prevents the most common failure: copying the whole transcript.
 
-## Two Invocation Patterns
+## Two invocation patterns
 
 Matt Pocock's [AI Hero changelog (May 11 2026)](https://www.aihero.dev/skills/skills-changelog-handoff-prototype-review-and-writing) names two patterns:
 
-- **Fire-and-forget**: mid-session at ~60k tokens you need a tangent (fix a bug, prototype an alternative). Hand off to a fresh agent rather than burning the remaining context budget. The original session continues unaware.
-- **DIY sub-agent**: hand off during planning, work in the fresh session, then hand back to the original with what you learned — a manual stand-in for [sub-agent fan-out](../multi-agent/sub-agents-fan-out.md). The handoff doc is the contract in both directions.
+- Fire-and-forget: mid-session at ~60k tokens you need a tangent, such as fixing a bug or prototyping an alternative. Hand off to a fresh agent rather than burning the remaining context budget. The original session continues unaware.
+- DIY sub-agent: hand off during planning, work in the fresh session, then hand back to the original with what you learned — a manual stand-in for [sub-agent fan-out](../multi-agent/sub-agents-fan-out.md). The handoff doc is the contract in both directions.
 
-Both substitute for a sub-agent primitive the harness doesn't surface.
+Both substitute for a sub-agent primitive the harness does not surface.
 
-## Distinction from Recap and from Pipeline Handoff
+## Distinction from recap and from pipeline handoff
 
 Three patterns produce structured cross-boundary artifacts. They differ in who triggers them.
 
 | Pattern | Who triggers | Boundary | Receiver |
 |---------|--------------|----------|----------|
-| **Handoff skill** | User → model invocation | Explicit, mid-work transfer | Fresh agent session you'll start next |
+| Handoff skill | User → model invocation | Explicit, mid-work transfer | Fresh agent session you'll start next |
 | [Session Recap](session-recap.md) | Harness (compaction / resume / fork) | Detected discontinuity | Same session's next turn, or returning human |
 | [Pipeline Handoff Protocol](../multi-agent/agent-handoff-protocols.md) | Pipeline contract | Pre-defined stage edge | The next agent in a fixed pipeline |
 
-The handoff skill fires when *you* decide to transfer — the model dispatches it from the skill description, not a hook or a graph edge.
+The handoff skill fires when you decide to transfer. The model dispatches it from the skill description, not a hook or a graph edge.
 
-## What the Handoff Document Carries
+## What the handoff document carries
 
-The doc captures only the parts that exist *only* in the conversation:
+The doc captures only the parts that exist solely in the conversation:
 
-- **Session intent** — why this work was started
-- **Decisions made in-conversation** — choices not yet written to a PRD or ADR, with reasoning
-- **Open questions** — what's genuinely unresolved; the next session shouldn't re-litigate them
-- **Next action** — single directive for the receiving agent
-- **References** — paths and URLs to durable artifacts; the receiver reads those directly
+- Session intent — why this work was started
+- Decisions made in-conversation — choices not yet written to a PRD or ADR, with reasoning
+- Open questions — what is genuinely unresolved; the next session should not re-litigate them
+- Next action — single directive for the receiving agent
+- References — paths and URLs to durable artifacts; the receiver reads those directly
 
 [LangChain's analysis of DeepAgents context management](https://blog.langchain.com/context-management-for-deepagents/) reports that adding `session_intent` and `next_steps` as dedicated fields improved their targeted compression evals — the same fields this skill prescribes.
 
-## Why It Works
+## Why it works
 
-The mechanism is **decision-density preservation across a transfer boundary**. A long session encodes single-instance constraints (the unique requirement from turn 12, the rejected alternative from turn 40) in prose that gets paraphrased away under compression. Anthropic's [effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) frames the problem: each new session "begins with no memory of what came before," so structured artifacts at boundaries let the next agent "quickly understand the state of work when starting with a fresh context window." A handoff doc written *before* the transfer captures those fragments verbatim.
+The mechanism is decision-density preservation across a transfer boundary. A long session encodes single-instance constraints (the unique requirement from turn 12, the rejected alternative from turn 40) in prose that gets paraphrased away under compression. Anthropic's [effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) frames the problem: each new session "begins with no memory of what came before," so structured artifacts at boundaries let the next agent "quickly understand the state of work when starting with a fresh context window." A handoff doc written before the transfer captures those fragments verbatim.
 
-## When This Backfires
+## When this backfires
 
-The pattern assumes the skill triggers when expected and adds information the receiver can't get cheaper from durable artifacts.
+The pattern assumes the skill triggers when expected and adds information the receiver cannot get cheaper from durable artifacts.
 
-- **Trigger reliability is probabilistic.** At startup the agent sees only each installed skill's `name` and `description` — not the body. A vague description, keyword collisions, or mismatched phrasing leaves the skill idle while you continue without it ([Skill authoring best practices — Claude docs](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)).
-- **A continuous progress file already owns the state.** If you maintain a `todo.md` updated every step or run [goal recitation](../context-engineering/goal-recitation.md), the handoff doc duplicates it — two seeds that may disagree.
-- **Author predicts the wrong salience.** The compacting agent decides what's disposable; when the receiver needs a detail classified as noise, the doc locks the omission in — the failure mode [session recap](session-recap.md) documents.
-- **Task shape mutates at the boundary.** A `session_intent / decisions / next_action` schema fits steady-state work and traps the agent in the old frame when scope widens or pivots. [Tessl's analysis of Amp retiring compaction](https://tessl.io/blog/amp-retires-compaction-for-a-cleaner-handoff-in-the-coding-agent-context-race/) argues for letting the user *respecify* the new goal rather than relying on static schema-based compression.
-- **The doc grows into a transcript.** Without enforcement of the no-duplication rule, the skill drifts toward copying the full conversation — exactly the [raw-transcript forwarding](../multi-agent/agent-handoff-protocols.md) anti-pattern it was meant to prevent.
+- Trigger reliability is probabilistic. At startup the agent sees only each installed skill's `name` and `description`, not the body. A vague description, keyword collisions, or mismatched phrasing leaves the skill idle while you continue without it ([Skill authoring best practices — Claude docs](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)).
+- A continuous progress file already owns the state. If you maintain a `todo.md` updated every step or run [goal recitation](../context-engineering/goal-recitation.md), the handoff doc duplicates it — two seeds that may disagree.
+- The author predicts the wrong salience. The compacting agent decides what is disposable; when the receiver needs a detail classified as noise, the doc locks the omission in — the failure mode [session recap](session-recap.md) documents.
+- Task shape mutates at the boundary. A `session_intent / decisions / next_action` schema fits steady-state work and traps the agent in the old frame when scope widens or pivots. [Tessl's analysis of Amp retiring compaction](https://tessl.io/blog/amp-retires-compaction-for-a-cleaner-handoff-in-the-coding-agent-context-race/) argues for letting the user respecify the new goal rather than relying on static schema-based compression.
+- The doc grows into a transcript. Without enforcement of the no-duplication rule, the skill drifts toward copying the full conversation — exactly the [raw-transcript forwarding](../multi-agent/agent-handoff-protocols.md) anti-pattern it was meant to prevent.
 
 ## Example
 

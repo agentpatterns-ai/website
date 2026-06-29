@@ -18,11 +18,11 @@ maturity: emerging
 
 > Agent Experience (AX), User Experience (UX), and Developer Experience (DX) are distinct design surfaces; optimizing one often degrades the others.
 
-## The Problem
+## The problem
 
 Agent systems have three audiences: the LLM, the end user, and the developer. Most scaffolds conflate at least two -- feeding human-facing logs to the model, or exposing raw traces to end users. The CCA framework formalized this separation after finding that optimizing for one audience routinely degraded another ([CCA paper](https://arxiv.org/abs/2512.10398)). The API design community recognizes the same distinction: agents need structured, machine-readable interfaces rather than human-readable affordances ([Nordic APIs](https://nordicapis.com/what-is-agent-experience-ax/)).
 
-## Three Layers
+## Three layers
 
 ```mermaid
 flowchart LR
@@ -52,18 +52,18 @@ flowchart LR
 
 What the model sees. Curate context for inference quality, not human readability. When the illegibility lives on a public surface the agent calls from outside, the outward-facing complement is [Designing for Agent Consumers](../tool-engineering/designing-for-agent-consumers.md):
 
-- **Structured tool output** -- JSON or typed returns, not prose descriptions
-- **Compressed summaries** -- preserving goals, decisions, TODOs, and error traces near context limits, improving Claude Sonnet 4 from 42.0% to 48.6% on SWE-Bench-Pro ([CCA ablation](https://arxiv.org/abs/2512.10398))
-- **Machine-readable error signals** -- stack traces and [RFC 9457 structured error fields](../tool-engineering/rfc9457-machine-readable-errors.md), not user-friendly messages
-- **Hindsight failure notes** -- recording failed approaches for cross-session learning, yielding 53.0% to 54.4% improvement on a 151-instance subset ([CCA paper §5.3](https://arxiv.org/abs/2512.10398))
+- Structured tool output: JSON or typed returns, not prose descriptions
+- Compressed summaries: preserving goals, decisions, TODOs, and error traces near context limits, improving Claude Sonnet 4 from 42.0% to 48.6% on SWE-Bench-Pro ([CCA ablation](https://arxiv.org/abs/2512.10398))
+- Machine-readable error signals: stack traces and [RFC 9457 structured error fields](../tool-engineering/rfc9457-machine-readable-errors.md), not user-friendly messages
+- Hindsight failure notes: recording failed approaches for cross-session learning, yielding 53.0% to 54.4% improvement on a 151-instance subset ([CCA paper §5.3](https://arxiv.org/abs/2512.10398))
 
 ### User Experience (UX)
 
 What the human sees. Clear status, predictable behavior, actionable feedback:
 
-- **Progress indicators** -- streaming status, not raw tool call logs
-- **Natural language summaries** -- what was done and why, not the internal reasoning chain
-- **Actionable error messages** -- what went wrong and what to try, not stack traces
+- Progress indicators: streaming status, not raw tool call logs
+- Natural language summaries: what was done and why, not the internal reasoning chain
+- Actionable error messages: what went wrong and what to try, not stack traces
 
 Feeding raw agent traces to users is the most common conflation -- iterative reasoning full of dead ends does not help users understand current state.
 
@@ -71,13 +71,13 @@ Feeding raw agent traces to users is the most common conflation -- iterative rea
 
 What the builder configures and debugs. Composable extension points and observable internals:
 
-- **Extension APIs** -- typed interfaces for adding tools and memory backends without modifying core scaffold code
-- **Debug traces** -- reasoning chains, tool call sequences, and token usage on demand
-- **Configuration surfaces** -- behavior tuning without code changes
+- Extension APIs: typed interfaces for adding tools and memory backends without modifying core scaffold code
+- Debug traces: reasoning chains, tool call sequences, and token usage on demand
+- Configuration surfaces: behavior tuning without code changes
 
 DX degrades when internals are opaque or when AX concerns leak into the extension API.
 
-## Why Conflation Fails
+## Why conflation fails
 
 | Conflation | What happens |
 |-----------|-------------|
@@ -87,28 +87,28 @@ DX degrades when internals are opaque or when AX concerns leak into the extensio
 
 CCA's explicit separation contributed to 52.7% on SWE-Bench-Pro with Claude Sonnet 4.5 -- outperforming stronger models on weaker scaffolds ([CCA paper](https://arxiv.org/abs/2512.10398)).
 
-## Why It Works
+## Why it works
 
-Each conflation introduces a specific failure mode at the information-channel level. AX suffers *context overflow and spurious anchors* when human-readable formatting (whitespace, decorative headings, verbose prose) fills the model's context budget without adding inference value. UX degrades when information is trimmed to fit context limits -- users lose observability. DX becomes harder when agent-facing and human-facing representations entangle, forcing extension authors to reason about both audiences at once ([CCA paper §3](https://arxiv.org/abs/2512.10398)).
+Each conflation introduces a specific failure mode at the information-channel level. AX suffers context overflow and spurious anchors when human-readable formatting (whitespace, decorative headings, verbose prose) fills the model's context budget without adding inference value. UX degrades when information is trimmed to fit context limits -- users lose observability. DX becomes harder when agent-facing and human-facing representations entangle, forcing extension authors to reason about both audiences at once ([CCA paper §3](https://arxiv.org/abs/2512.10398)).
 
 The triad works by routing the same data through separate transformation layers, each optimized for one consumer's constraints.
 
-## When This Backfires
+## When this backfires
 
 The AX/UX/DX separation adds engineering overhead. It is less valuable when:
 
-- **Simple single-user tools**: a CLI agent with one consumer doesn't need three output formats; one well-structured log serves all audiences.
-- **Prototype or exploratory work**: maintaining separate transformation layers slows iteration when requirements change frequently.
-- **Thin context budgets**: adding a transformation layer near context limits requires care; naive separation can introduce overhead of its own, the cost [context compression strategies](../context-engineering/context-compression-strategies.md) exist to manage.
-- **Scale constraints from CCA's own evaluation**: performance degrades substantially for multi-file edits (57.8% for 1--2 files to 44.1% for 5--6 files) and context management requires configurable scopes to be effective -- the triad doesn't remove complexity, it relocates it ([CCA paper §6](https://arxiv.org/abs/2512.10398)).
+- Simple single-user tools: a CLI agent with one consumer does not need three output formats; one well-structured log serves all audiences.
+- Prototype or exploratory work: maintaining separate transformation layers slows iteration when requirements change frequently.
+- Thin context budgets: adding a transformation layer near context limits requires care; naive separation can introduce overhead of its own, the cost [context compression strategies](../context-engineering/context-compression-strategies.md) exist to manage.
+- Scale constraints from CCA's own evaluation: performance degrades substantially for multi-file edits (57.8% for 1--2 files to 44.1% for 5--6 files) and context management requires configurable scopes to be effective -- the triad does not remove complexity, it relocates it ([CCA paper §6](https://arxiv.org/abs/2512.10398)).
 
-## Applying the Triad
+## Applying the triad
 
 Audit each information flow against three questions:
 
-1. **Who consumes this output?** If the answer is "both the model and the user," you need two formats.
-2. **What format serves that consumer?** Structured data for agents, natural language for users, typed APIs for developers.
-3. **Where does the boundary live?** An explicit transformation layer between AX and UX prevents one from drifting toward the other.
+1. Who consumes this output? If the answer is "both the model and the user," you need two formats.
+2. What format serves that consumer? Structured data for agents, natural language for users, typed APIs for developers.
+3. Where does the boundary live? An explicit transformation layer between AX and UX prevents one from drifting toward the other.
 
 ## Example
 

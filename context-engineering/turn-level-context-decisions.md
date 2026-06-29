@@ -17,21 +17,21 @@ maturity: adopted
 
 > Each completed turn is a context decision point with five moves: continue, rewind, clear, compact, or delegate to a subagent.
 
-**Learn it hands-on:** [The Five Moves](https://learn.agentpatterns.ai/context-engineering/the-five-moves/) — guided lesson with quizzes.
+Learn it hands-on with [The Five Moves](https://learn.agentpatterns.ai/context-engineering/the-five-moves/), a guided lesson with quizzes.
 
-## Why This Decision Matters
+## Why this decision matters
 
-With 1M-token windows, sessions can run longer — but longer is not better. [Context rot](context-window-dumb-zone.md) degrades output as context grows: attention spreads thin, and signal competes with noise from superseded reasoning, resolved errors, and stale tool output. [Anthropic describes this as a performance gradient](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) across all models — a steady decline, not a cliff.
+With 1M-token windows, sessions can run longer — but longer is not better. [Context rot](context-window-dumb-zone.md) degrades output as context grows. Attention spreads thin. Signal competes with noise from superseded reasoning, resolved errors, and stale tool output. [Anthropic describes this as a performance gradient](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) across all models — a steady decline, not a cliff.
 
 The five-option decision at each turn boundary is the core skill of context management. [Claude Code's best practices](https://code.claude.com/docs/en/best-practices) frame it directly: "Most best practices are based on one constraint: Claude's context window fills up fast, and performance degrades as it fills."
 
-## The Five Options
+## The five options
 
 ### Continue
 
 Keep the current session. Use when the next task shares the same working set — files, decisions, and context from previous turns remain relevant.
 
-Continue is the default when context is still productive. Do not compact or clear preemptively on short sessions; well under 100K tokens on a 1M-context model carries negligible rot risk.
+Continue is the default when context is still productive. Do not compact or clear too early on short sessions. Well under 100K tokens on a 1M-context model carries negligible rot risk.
 
 ### Rewind
 
@@ -63,17 +63,17 @@ Direct the compaction to preserve what matters:
 /compact Focus on the API changes and test failures. Discard CI log output.
 ```
 
-### Delegate to a Subagent
+### Delegate to a subagent
 
-Spawn a [subagent](../tools/claude/sub-agents.md) for work that generates intermediate output you will not need again. The subagent runs in its own window; only the final result returns.
+Spawn a [subagent](../tools/claude/sub-agents.md) for work that generates intermediate output you will not need again. The subagent runs in its own window, and only the final result returns.
 
-The mental test: "Will I need this output again, or just the conclusion?" If "just the conclusion," delegate. [Codebase exploration](../multi-agent/sub-agents-fan-out.md), security review, and test analysis generate large volumes of reads that pollute the parent context. A subagent absorbs that cost and returns a summary.
+Ask yourself one question: "Will I need this output again, or just the conclusion?" If you need just the conclusion, delegate. [Codebase exploration](../multi-agent/sub-agents-fan-out.md), security review, and test analysis generate large volumes of reads that pollute the parent context. A subagent absorbs that cost and returns a summary.
 
 ```
 Use a subagent to investigate how the auth system handles token refresh.
 ```
 
-## Decision Flowchart
+## Decision flowchart
 
 ```mermaid
 graph TD
@@ -93,13 +93,13 @@ graph TD
     L -->|Need output| D
 ```
 
-## When the Framework Backfires
+## When the framework backfires
 
-The framework assumes task boundaries are knowable in advance. Three conditions weaken it:
+The framework assumes you can know task boundaries in advance. Three conditions weaken it:
 
-- **Exploratory work with unpredictable direction**: Premature clearing or compacting discards context that turns out to be critical. When you cannot predict what will become relevant, err toward continue.
-- **Highly interconnected multi-file changes**: [Subagent delegation](../tools/claude/sub-agents.md) loses cross-file awareness the main session preserves. If the delegated task requires accumulated decisions across files, keep it in the parent session.
-- **Compaction at the worst time**: The model produces the poorest summaries precisely when context rot is worst — at high fill. [Manual compaction](manual-compaction-dumb-zone-mitigation.md) at task transitions beats auto-compaction at 95%.
+- Exploratory work with unpredictable direction: clearing or compacting too early discards context that turns out to be critical. When you cannot predict what will become relevant, err toward continue.
+- Highly interconnected multi-file changes: [subagent delegation](../tools/claude/sub-agents.md) loses the cross-file awareness the main session preserves. If the delegated task needs accumulated decisions across files, keep it in the parent session.
+- Compaction at the worst time: the model produces the poorest summaries precisely when context rot is worst, at high fill. [Manual compaction](manual-compaction-dumb-zone-mitigation.md) at task transitions beats auto-compaction at 95%.
 
 ## Key Takeaways
 

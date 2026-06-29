@@ -18,31 +18,31 @@ maturity: established
 
 > Tinkering endlessly with a prompt to prevent errors that structural controls would eliminate deterministically.
 
-## The Pattern
+## The pattern
 
 Each time an agent makes a recurring mistake, the prompt grows: another sentence, another rule, another "IMPORTANT:" prefix. The prompt becomes a long list of prohibitions, and the agent still violates some of them. This is the Prompt Tinkerer anti-pattern — using probabilistic tools (instructions) to enforce things that need deterministic tools (structure).
 
-## Why Prompts Fail at Enforcement
+## Why prompts fail at enforcement
 
 A prompt is not a contract. Instructions compete with each other, with context, and with the model's training distribution. [IFScale across 20 frontier models](https://arxiv.org/abs/2507.11538) found compliance drops to 68% at high instruction densities, with patterns ranging from threshold decay to exponential collapse. [ManyIFEval](https://arxiv.org/abs/2509.21051) calls this the "curse of instructions": all-rule compliance falls as per-rule accuracy raised to the rule count.
 
 Adding "IMPORTANT:" or "NEVER do X" applies social emphasis to a system with no concept of social emphasis. Each new prohibition dilutes attention for the existing ones. A hook blocks a write regardless of what the model attended to.
 
-Drew Breunig names this accrual "prompt debt" — a first-class maintenance liability that, like technical debt, compounds and must be paid down; he cites Datadog and Berkeley evidence that enterprises stay on older models because newer ones break brittle hand-tuned prompts, and prescribes eval-as-spec plus automated prompt optimization as the exit ([Drew Breunig — The problem is prompt debt](https://www.dbreunig.com/2026/06/22/the-problem-is-prompt-debt.html)).
+Drew Breunig names this accrual "prompt debt" — a maintenance liability that, like technical debt, compounds and must be paid down. He cites Datadog and Berkeley evidence that enterprises stay on older models because newer ones break brittle hand-tuned prompts. His fix is eval-as-spec plus automated prompt optimization ([Drew Breunig — The problem is prompt debt](https://www.dbreunig.com/2026/06/22/the-problem-is-prompt-debt.html)).
 
-## The Escalation Ladder
+## The escalation ladder
 
 When an agent repeats the same error, apply this sequence:
 
-1. **Prompt** — rephrase the instruction, place it closer to the relevant context
-2. **Skill** — encode the correct behavior as a reusable skill the agent invokes
-3. **Hook** — block the bad output at the boundary with a pre/post-commit hook or validation step
-4. **Tool restriction** — remove the agent's ability to perform the action entirely
-5. **Accept and verify** — if none of the above is cost-effective, add a human verification gate
+1. Prompt — rephrase the instruction and place it closer to the relevant context.
+2. Skill — encode the correct behavior as a reusable skill the agent invokes.
+3. Hook — block the bad output at the boundary with a pre/post-commit hook or validation step.
+4. Tool restriction — remove the agent's ability to perform the action entirely.
+5. Accept and verify — if none of the above is cost-effective, add a human verification gate.
 
 Stop at the step that eliminates the error.
 
-## When Prompts Are the Right Tool
+## When prompts are the right tool
 
 Prompts work for guidance, not enforcement:
 
@@ -62,13 +62,13 @@ If "correct" has a valid range of interpretations, prompts are appropriate. If t
 - You have added "IMPORTANT:" more than once
 - You are explaining context in the prompt that should be in project files or skills
 
-## When This Backfires
+## When this backfires
 
 Escalating to structure has real costs:
 
-- **No hook infrastructure**: Without CI/CD or tool-call interception, [deploying hooks](../instructions/hooks-vs-prompts.md) costs more than the error does. Prompt-only is the right call for throwaway scripts.
-- **Interpretive tasks**: Binary enforcement on soft constraints (tone, approach, style) introduces rigidity without safety benefit.
-- **Premature hardening**: Tool restrictions set too early block valid use cases that emerge during development.
+- No hook infrastructure: without CI/CD or tool-call interception, [deploying hooks](../instructions/hooks-vs-prompts.md) costs more than the error does. Prompt-only is the right call for throwaway scripts.
+- Interpretive tasks: binary enforcement on soft constraints (tone, approach, style) adds rigidity without a safety benefit.
+- Premature hardening: tool restrictions set too early block valid use cases that emerge during development.
 
 ## Example
 

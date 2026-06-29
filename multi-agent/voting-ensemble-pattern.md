@@ -20,7 +20,7 @@ maturity: established
 
 > Run the same task N times in parallel, then aggregate results through voting to trade compute for confidence.
 
-**Related lesson:** [Fan-Out and Synthesis](https://learn.agentpatterns.ai/multi-agent/fan-out-and-synthesis/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Fan-Out and Synthesis](https://learn.agentpatterns.ai/multi-agent/fan-out-and-synthesis/) — this concept features in a hands-on lesson with quizzes.
 
 !!! note "Also known as"
     Self-Consistency, Majority Voting, Multi-Model Consensus. For the complementary pattern that merges strengths rather than voting, see [Fan-Out Synthesis](fan-out-synthesis.md). For specialized multi-lens review, see [Committee Review](../code-review/committee-review-pattern.md).
@@ -39,9 +39,9 @@ graph TD
     E -->|No consensus| G[Escalate / Re-run]
 ```
 
-Unlike fan-out synthesis (which assembles the best parts from diverse outputs) or committee review (which applies different lenses), voting runs **identical tasks** and picks the answer the runs agree on.
+Unlike fan-out synthesis (which assembles the best parts from diverse outputs) or committee review (which applies different lenses), voting runs identical tasks and picks the answer the runs agree on.
 
-## Three Fan-Out Tactics
+## Three fan-out tactics
 
 | Tactic | Setup | Diversity source |
 |--------|-------|-----------------|
@@ -51,33 +51,33 @@ Unlike fan-out synthesis (which assembles the best parts from diverse outputs) o
 
 Multi-model consensus provides the strongest diversity: calling one model N times repeats its mistakes, while different models fail independently.
 
-## When Voting Helps
+## When voting helps
 
-Voting works best on tasks with **discrete, verifiable outputs** where the correct answer exists but a single run might miss it:
+Voting works best on tasks with discrete, verifiable outputs where the correct answer exists but a single run might miss it:
 
-- **Classification** — is this input malicious, compliant, or out-of-scope?
-- **Security flagging** — does this diff introduce a vulnerability? (the [adversarial multi-model](adversarial-multi-model-pipeline.md) use case)
-- **Content moderation** — does this output violate policy?
-- **Code correctness checks** — does this function handle the edge case?
+- Classification — is this input malicious, compliant, or out-of-scope?
+- Security flagging — does this diff introduce a vulnerability? (the [adversarial multi-model](adversarial-multi-model-pipeline.md) use case)
+- Content moderation — does this output violate policy?
+- Code correctness checks — does this function handle the edge case?
 
 Voting adds little value for creative synthesis, open-ended generation, or real-time responses where latency matters more than marginal accuracy.
 
 ## Choosing N
 
-The foundational self-consistency paper ([Wang et al. 2023](https://arxiv.org/abs/2203.11171)) showed +17.9% accuracy on GSM8K by majority-voting over sampled reasoning paths. But more is not always better.
+The original self-consistency paper ([Wang et al. 2023](https://arxiv.org/abs/2203.11171)) showed +17.9% accuracy on GSM8K by majority-voting over sampled reasoning paths. But more is not always better.
 
 | N | Effect |
 |---|--------|
 | 1 | Baseline — no voting benefit |
 | 3 | Strong gains for most classification and verification tasks |
 | 5 | Marginal improvement over 3; good ceiling for most use cases |
-| 7+ | Diminishing or **inverted** returns — more calls can hurt on hard queries |
+| 7+ | Diminishing or inverted returns — more calls can hurt on hard queries |
 
-Kore.ai's [scaling law research](https://blog.kore.ai/cobus-greyling/performing-multiple-llm-calls-voting-on-the-best-result-are-subject-to-scaling-laws) confirms that performance initially increases then **decreases** with N — more calls help on easy queries but hurt on hard ones. The optimal count is task-dependent; determine it empirically.
+Kore.ai's [scaling law research](https://blog.kore.ai/cobus-greyling/performing-multiple-llm-calls-voting-on-the-best-result-are-subject-to-scaling-laws) confirms that performance first increases then decreases with N — more calls help on easy queries but hurt on hard ones. The best count depends on the task, so measure it empirically.
 
-## Aggregation Strategies
+## Aggregation strategies
 
-Simple majority voting treats all runs equally but leaves accuracy on the table.
+Simple majority voting treats all runs equally, but misses easy accuracy gains.
 
 | Strategy | Mechanism | Trade-off |
 |----------|-----------|-----------|
@@ -89,19 +89,19 @@ Simple majority voting treats all runs equally but leaves accuracy on the table.
 
 Advanced methods like Optimal Weight and Inverse Surprisingly Popular algorithms consistently outperform standard majority voting by accounting for model heterogeneity and answer correlations ([Ai et al. 2025](https://arxiv.org/abs/2510.01499)).
 
-## Cost Trade-Off
+## Cost trade-off
 
 N runs costs N× tokens. Confidence-weighted voting cuts this nearly in half by early-stopping when confidence is high — start with N=3 and scale to 5 only if accuracy justifies it; if 3/3 agree confidently, skip the rest.
 
 For routine tasks with strong single-run baselines, voting is wasteful. Reserve it for decisions where a false positive or false negative carries real cost.
 
-## Why It Works
+## Why it works
 
-LLMs are stochastic: the same prompt samples from a distribution of reasoning paths. Wrong answers scatter — each error follows its own spurious chain of thought — while correct answers cluster, because independent paths converge on the same consistent logic. Majority voting selects the answer most paths agree on, drowning out idiosyncratic errors ([Wang et al. 2023](https://arxiv.org/abs/2203.11171)).
+LLMs are stochastic: the same prompt draws from a distribution of reasoning paths. Wrong answers scatter — each error follows its own spurious chain of thought — while correct answers cluster, because independent paths converge on the same consistent logic. Majority voting picks the answer most paths agree on, drowning out one-off errors ([Wang et al. 2023](https://arxiv.org/abs/2203.11171)).
 
 [Multi-model consensus](multi-model-plan-synthesis.md) strengthens this further. Different models have independent failure modes rooted in distinct training data and architectures, so an error that is systematic for one model is uncorrelated with errors in another — the correct answer remains the densest cluster even as ensemble size grows.
 
-This entire argument rests on errors being **independent**, and that assumption is fragile. When the runs share training lineage — same base model, or smaller models distilled from a common teacher — their mistakes correlate, and correlated wrong answers cluster just as tightly as correct ones, so the majority can confidently converge on the same error. Distillation makes nominally "different" models behave alike; tracking pairwise [agent-genealogical similarity](../verification/distillation-induced-similarity-metrics.md) surfaces when the ensemble's diversity is an illusion and the voting gain has collapsed.
+This whole argument rests on errors being independent, and that assumption is fragile. When the runs share training lineage — same base model, or smaller models distilled from a common teacher — their mistakes correlate, and correlated wrong answers cluster just as tightly as correct ones, so the majority can confidently converge on the same error. Distillation makes nominally "different" models behave alike; tracking pairwise [agent-genealogical similarity](../verification/distillation-induced-similarity-metrics.md) surfaces when the ensemble's diversity is an illusion and the voting gain has collapsed.
 
 ## Example
 
@@ -139,7 +139,7 @@ The three models have independent failure modes: a vulnerability one model misse
 - Voting trades compute for confidence — same task, multiple runs, aggregated verdict
 - Multi-model diversity beats same-model repetition for genuine independence
 - 3-5 runs covers most use cases; beyond that, returns diminish or invert
-- Confidence-weighted aggregation cuts compute by ~46% vs naive majority voting ([Taubenfeld et al. 2025](https://arxiv.org/abs/2502.06233))
+- Confidence-weighted aggregation cuts compute by ~46% versus naive majority voting ([Taubenfeld et al. 2025](https://arxiv.org/abs/2502.06233))
 - Reserve voting for discrete, verifiable tasks (classification, security, compliance) — not open-ended generation
 - Distinct from fan-out synthesis (which merges complementary strengths) and committee review (which applies specialized lenses)
 
@@ -152,4 +152,4 @@ The three models have independent failure modes: a vulnerability one model misse
 - [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md)
 - [Orchestrator-Worker](orchestrator-worker.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
-- [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)

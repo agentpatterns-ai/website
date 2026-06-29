@@ -15,17 +15,17 @@ maturity: established
 
 > Extract causal lessons from agent execution traces -- what worked, what failed, which approaches were abandoned and why -- so future runs improve.
 
-## Recording vs. Learning
+## Recording versus learning
 
-Most agents [save *what happened*](../observability/trajectory-logging-progress-files.md) without extracting *why* outcomes occurred. The gap: **configuration** ("this build command works") vs. **knowledge** ("approach X fails for file type Y because Z").
+Most agents [save what happened](../observability/trajectory-logging-progress-files.md) without extracting why outcomes occurred. The gap is between configuration ("this build command works") and knowledge ("approach X fails for file type Y because Z").
 
 | Level | Example | Improves future runs? |
 |-------|---------|----------------------|
-| **Passive recording** | `npm run build` is the build command | Marginally |
-| **Active reflection** | "Regex failed due to nested brackets" | Yes -- if retained and retrievable |
-| **Persistent synthesis** | "For nested delimiters, use recursive descent, not regex" | Yes -- compounds across tasks |
+| Passive recording | `npm run build` is the build command | Marginally |
+| Active reflection | "Regex failed due to nested brackets" | Yes -- if retained and retrievable |
+| Persistent synthesis | "For nested delimiters, use recursive descent, not regex" | Yes -- compounds across tasks |
 
-## The Synthesis Spectrum
+## The synthesis spectrum
 
 ```mermaid
 graph LR
@@ -41,45 +41,45 @@ graph LR
     style E fill:#777,stroke:#bbb
 ```
 
-**Passive recording**: Claude Code saves observations to `MEMORY.md` -- build commands, debugging insights, style preferences. Context window constraints mean only a portion of a large memory file influences any given session.
+Passive recording: Claude Code saves observations to `MEMORY.md` -- build commands, debugging insights, style preferences. Context window limits mean only part of a large memory file influences any given session.
 
-**Verbal reflection** (Reflexion): [Shinn et al., 2023](https://arxiv.org/abs/2303.11366) adds self-critique after failure, injected as context on retry. HumanEval pass@1 rose from 80% to 91%. Limitation: lessons are ephemeral and task-specific.
+Verbal reflection (Reflexion): [Shinn et al., 2023](https://arxiv.org/abs/2303.11366) adds self-critique after a failure, injected as context on retry. HumanEval pass@1 rose from 80% to 91%. The limitation is that lessons are ephemeral and task-specific.
 
-**Structured lessons**: Meta-Policy Reflexion ([2025](https://arxiv.org/abs/2509.03990)) consolidates reflections into transferable predicate-like rules that persist beyond the originating episode.
+Structured lessons: Meta-Policy Reflexion ([2025](https://arxiv.org/abs/2509.03990)) consolidates reflections into transferable, predicate-like rules that persist beyond the originating episode.
 
-**Verified skill libraries** (Voyager): [Wang et al., 2023](https://arxiv.org/abs/2305.16291) converts verified traces into executable code skills. Unverified attempts are refined or discarded.
+Verified skill libraries (Voyager): [Wang et al., 2023](https://arxiv.org/abs/2305.16291) converts verified traces into executable code skills. It refines or discards unverified attempts.
 
-## Anchoring Reflection to Signals
+## Anchoring reflection to signals
 
 Self-critique without objective checks fails because models rationalize ([nibzard agentic handbook](https://www.nibzard.com/agentic-handbook)). Anchor reflection to a verifiable signal: tests, lints, schema validation, or compilation.
 
 !!! warning "Error retention vs. error summarization"
     Manus retains failure traces in context rather than summarizing them away, so the model can "implicitly update its internal beliefs." Premature summarization strips the diagnostic signal that makes reflection useful. ([Manus: Context Engineering](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus))
 
-## Mining Failures for Training Signal
+## Mining failures for training signal
 
-- **SiriuS** ([Zhao et al., 2025](https://arxiv.org/abs/2502.04780)): Repairs failed trajectories into positive training examples that become fine-tuning signal -- turning execution failures into direct model improvements.
+- SiriuS ([Zhao et al., 2025](https://arxiv.org/abs/2502.04780)): repairs failed trajectories into positive training examples that become fine-tuning signal -- turning execution failures into direct model improvements.
 
-A success confirms a path worked; a failure reveals *why* alternatives did not.
+A success confirms a path worked. A failure reveals why the alternatives did not.
 
-## Storage Formats
+## Storage formats
 
 | Format | Strengths | Weaknesses | Example |
 |--------|-----------|------------|---------|
-| **Flat markdown** | Simple, human-editable, version-controllable | No semantic search; degrades at scale | Claude Code `MEMORY.md` |
-| **Structured predicates** | Transferable, enforceable | Harder to audit; requires synthesis step | Meta-Policy Memory |
-| **Executable code** | Composable, self-verifying | Brittle to environment changes | Voyager skill library |
-| **Hybrid vector + keyword** | Relevance ranking + precision via FTS | Requires vector DB infrastructure | [claude-mem](https://github.com/thedotmack/claude-mem) |
+| Flat markdown | Simple, human-editable, version-controllable | No semantic search; degrades at scale | Claude Code `MEMORY.md` |
+| Structured predicates | Transferable, enforceable | Harder to audit; requires synthesis step | Meta-Policy Memory |
+| Executable code | Composable, self-verifying | Brittle to environment changes | Voyager skill library |
+| Hybrid vector + keyword | Relevance ranking + precision via FTS | Requires vector DB infrastructure | [claude-mem](https://github.com/thedotmack/claude-mem) |
 
 Flat markdown suits most workflows; structured formats pay off at scale.
 
-## The Pruning Problem
+## The pruning problem
 
-Lessons expire: workarounds for old model limitations become wrong when models improve; tool-specific patterns become irrelevant when tools change. Strategies: usage-based expiry, version tagging (auto-deprecate on version change), manual audit via `/memory`.
+Lessons expire. Workarounds for old model limits become wrong when models improve. Tool-specific patterns become irrelevant when tools change. Three pruning strategies help: usage-based expiry, version tagging (auto-deprecate on a version change), and manual audit via `/memory`.
 
-## Bridging the Gap Today
+## Bridging the gap today
 
-### End-of-Session Synthesis Prompt
+### End-of-session synthesis prompt
 
 Prompt the agent at session end:
 
@@ -95,7 +95,7 @@ Only include lessons anchored to test results, build output, or
 observable behavior -- not speculation.
 ```
 
-### Structured Memory Template
+### Structured memory template
 
 In `MEMORY.md`, separate observations from lessons:
 
@@ -109,19 +109,19 @@ In `MEMORY.md`, separate observations from lessons:
 - WORKED: Running type-check before tests catches 40% of failures faster
 ```
 
-### Environmental Scaffolding as Alternative
+### Environmental scaffolding as alternative
 
-Anthropic's [harness engineering](harness-engineering.md) pattern -- [progress files, git-based state, feature checklists](goal-monitoring-progress-tracking.md) -- offers a complementary approach: artifacts are **verifiable and auditable** without requiring a synthesis step. Synthesis pays off when the same *class* of problem recurs across projects or sessions.
+Anthropic's [harness engineering](harness-engineering.md) pattern -- [progress files, git-based state, feature checklists](goal-monitoring-progress-tracking.md) -- offers a complementary approach. The artifacts are verifiable and auditable without a synthesis step. Synthesis pays off when the same class of problem recurs across projects or sessions.
 
-## When This Backfires
+## When this backfires
 
-Three conditions where skipping synthesis is the better call:
+Skipping synthesis is the better call under three conditions:
 
-- **N=1 generalization**: A single failure can produce a confidently-stated "lesson" ("never use library X") that reflects a one-off quirk, not a transferable rule. The form of the synthesized memory matters: distilled heuristics transfer across tasks better than replaying raw trajectories as few-shot examples ([Experiential Reflective Learning, 2026](https://arxiv.org/abs/2603.24639)).
-- **Tool/model churn**: A workaround for a 2024-era context limit becomes wrong advice once the limit lifts, but the lesson sits in `MEMORY.md` for months. The deeper cost is *trusting* aged advice without re-verification.
-- **Context budget pressure**: Retained lessons compete with task-relevant context; accumulated memory inflates cost and degrades selectivity ([SSGM Framework, 2026](https://arxiv.org/abs/2603.11768)). When the lesson library exceeds what retrieval can selectively surface, environmental scaffolding (progress files, git state) often pays off more reliably.
+- N=1 generalization: a single failure can produce a confidently stated "lesson" ("never use library X") that reflects a one-off quirk, not a transferable rule. The form of the synthesized memory matters. Distilled heuristics transfer across tasks better than replaying raw trajectories as few-shot examples ([Experiential Reflective Learning, 2026](https://arxiv.org/abs/2603.24639)).
+- Tool or model churn: a workaround for a 2024-era context limit becomes wrong advice once the limit lifts, but the lesson sits in `MEMORY.md` for months. The deeper cost is trusting aged advice without re-verification.
+- Context budget pressure: retained lessons compete with task-relevant context, and accumulated memory inflates cost and degrades selectivity ([SSGM Framework, 2026](https://arxiv.org/abs/2603.11768)). When the lesson library exceeds what retrieval can selectively surface, environmental scaffolding (progress files, git state) often pays off more reliably.
 
-If the same *class* of problem does not recur across projects, do not synthesize.
+If the same class of problem does not recur across projects, do not synthesize.
 
 ## Example
 
@@ -145,7 +145,7 @@ After applying the end-of-session synthesis prompt, the agent produces:
   12 seconds vs. 4 minutes for the full run -- anchored to CI timing logs.
 ```
 
-The raw observation records *what happened*; the synthesized lesson records *what to do differently* and *why*, anchored to a verifiable signal (CI timing, S3 API behavior).
+The raw observation records what happened. The synthesized lesson records what to do differently and why, anchored to a verifiable signal (CI timing, S3 API behavior).
 
 ## Key Takeaways
 

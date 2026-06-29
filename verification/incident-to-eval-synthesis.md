@@ -20,13 +20,13 @@ maturity: established
 !!! note "Also known as"
     Failure-to-Eval Pipeline, Production Regression Evals. This technique feeds into [Eval-Driven Development](../workflows/eval-driven-development.md) and complements [Golden Query Pairs](golden-query-pairs-regression.md) by providing a systematic source of new eval cases.
 
-## Why Incidents Are Your Best Eval Source
+## Why incidents are your best eval source
 
-Manually authored evals reflect what developers *think* will go wrong. Production incidents reveal what *actually* goes wrong — real users find edge cases no developer anticipates.
+Hand-written evals reflect what developers think will go wrong. Production incidents reveal what actually goes wrong. Real users find edge cases no developer anticipates.
 
-Developers anchor on happy paths and a known [failure taxonomy](completion-failure-taxonomy.md). Production traffic explores the full input distribution — rare phrasing, adversarial queries, and domain combinations no dev imagines. Each incident proves the failure class is real and reproducible, the minimum bar for a useful eval case.
+Developers anchor on happy paths and a known [failure taxonomy](completion-failure-taxonomy.md). Production traffic explores the full input distribution: rare phrasing, adversarial queries, and domain combinations no developer imagines. Each incident proves the failure class is real and reproducible, the minimum bar for a useful eval case.
 
-## The Pipeline
+## The pipeline
 
 ```mermaid
 flowchart LR
@@ -42,32 +42,32 @@ Each stage produces a specific output:
 
 | Stage | Input | Output |
 |---|---|---|
-| **Extract failure mode** | Incident report, logs, traces | Minimal reproducible input that triggers the failure |
-| **Define expected behavior** | Domain expert judgment | Concrete expected output or acceptance criteria |
-| **Create eval case** | Input + expected output | Executable test with a grader (assertion, LLM-as-judge, or both) |
-| **Add to suite** | Eval case + severity label | Entry in regression dataset with P0/P1/P2 priority |
-| **Gate deploys** | Suite run results | P0 failures block release; P1/P2 warn |
+| Extract failure mode | Incident report, logs, traces | Minimal reproducible input that triggers the failure |
+| Define expected behavior | Domain expert judgment | Concrete expected output or acceptance criteria |
+| Create eval case | Input + expected output | Executable test with a grader (assertion, LLM-as-judge, or both) |
+| Add to suite | Eval case + severity label | Entry in regression dataset with P0/P1/P2 priority |
+| Gate deploys | Suite run results | P0 failures block release; P1/P2 warn |
 
-## Error Analysis: From Traces to Failure Taxonomy
+## Error analysis: from traces to failure taxonomy
 
-Identifying the failure mode is harder than writing the eval. A structured methodology:
+Identifying the failure mode is harder than writing the eval. Use a structured method:
 
-1. **Gather traces** -- collect 100+ production traces covering failures and near-misses
-2. **Open coding** -- experts journal issues without predefined categories, focusing on the first upstream failure in each trace
-3. **Axial coding** -- group journal entries into a failure taxonomy with frequency counts
-4. **Iterate** -- repeat until new traces stop producing new categories (theoretical saturation)
+1. Gather traces -- collect 100+ production traces covering failures and near-misses.
+2. Open coding -- experts journal issues without predefined categories, focusing on the first upstream failure in each trace.
+3. Axial coding -- group journal entries into a failure taxonomy with frequency counts.
+4. Iterate -- repeat until new traces stop producing new categories (theoretical saturation).
 
-The taxonomy reveals which failure modes are most common, severe, and amenable to automated detection.
+The taxonomy reveals which failure modes are most common, most severe, and easiest to detect automatically.
 
-The axial-coding step can be partly tool-assisted: Braintrust's Topics auto-clusters production traces into failure-mode themes, operationalizing the pattern-discovery step rather than relying solely on manual journaling. [Source: [Braintrust -- Automate pattern discovery with Topics](https://www.braintrust.dev/blog/topics-ga)]
+You can partly automate the axial-coding step. Braintrust's Topics clusters production traces into failure-mode themes, which turns pattern discovery into a tool step rather than manual journaling alone. [Source: [Braintrust -- Automate pattern discovery with Topics](https://www.braintrust.dev/blog/topics-ga)]
 
 [Source: [Hamel Husain -- Your AI Product Needs Evals](https://hamel.dev/blog/posts/evals/), [LLM Evals FAQ](https://hamel.dev/blog/posts/evals-faq/)]
 
-## Not Every Incident Becomes an Eval
+## Not every incident becomes an eval
 
 Evals have a maintenance cost. Apply a cost-benefit filter:
 
-| Failure Type | Eval Strategy | Rationale |
+| Failure type | Eval strategy | Rationale |
 |---|---|---|
 | Deterministic format errors (wrong JSON, missing fields) | Assertion / regex check | Cheap to write, cheap to run, catches exact recurrence |
 | Semantic failures (wrong answer, hallucinated facts) | LLM-as-judge eval | More expensive but necessary for subjective correctness |
@@ -76,21 +76,21 @@ Evals have a maintenance cost. Apply a cost-benefit filter:
 
 [Source: [Hamel Husain -- LLM Evals FAQ](https://hamel.dev/blog/posts/evals-faq/)]
 
-## Tiered Blocking in CI/CD
+## Tiered blocking in CI/CD
 
 Assign severity when adding the eval case:
 
-- **P0** -- blocks release. Safety violations, data leaks, complete task failures.
-- **P1** -- warns in CI, requires explicit override. Quality regressions, accuracy drops.
-- **P2** -- logged and tracked. Minor formatting issues, style deviations.
+- P0 -- blocks release. Safety violations, data leaks, complete task failures.
+- P1 -- warns in CI, requires explicit override. Quality regressions, accuracy drops.
+- P2 -- logged and tracked. Minor formatting issues, style deviations.
 
-[Promptfoo](https://www.promptfoo.dev/docs/integrations/ci-cd/) supports configurable pass-rate thresholds across GitHub Actions, GitLab CI, and Jenkins. Use a hard threshold for P0 (100%) and a softer threshold for the full suite (e.g., 95%).
+[Promptfoo](https://www.promptfoo.dev/docs/integrations/ci-cd/) supports configurable pass-rate thresholds across GitHub Actions, GitLab CI, and Jenkins. Use a hard threshold for P0 (100%) and a softer threshold for the full suite (for example, 95%).
 
 ## Example
 
 A minimal incident-to-eval workflow. An LLM-powered customer service agent hallucinates a refund policy that does not exist.
 
-**Step 1: Extract the failure mode**
+### Step 1: extract the failure mode
 
 ```yaml
 # incident_report.yaml
@@ -101,7 +101,7 @@ actual_output: "Yes, our 120-day extended return policy covers laptops."
 root_cause: No such 120-day policy exists. Model confabulated.
 ```
 
-**Step 2: Define expected behavior and create eval case**
+### Step 2: define expected behavior and create the eval case
 
 ```python
 INCIDENT_EVALS = [
@@ -117,7 +117,7 @@ INCIDENT_EVALS = [
 ]
 ```
 
-**Step 3: Run in CI with a grader**
+### Step 3: run in CI with a grader
 
 ```python
 import anthropic, json
@@ -161,23 +161,23 @@ def run_incident_evals(agent_fn, evals):
 
 Each incident adds an entry to `INCIDENT_EVALS`. Cases are never removed, only updated when expected behavior changes.
 
-## Growing the Dataset
+## Growing the dataset
 
 Practitioner-reported maturity tiers:
 
-- **Minimum viable**: 50-100 cases covering critical failure modes
-- **Production-ready**: 200-500 cases with broad coverage
-- **Mature**: 1000+ cases with tiered severity and CI gating
+- Minimum viable: 50-100 cases covering critical failure modes.
+- Production-ready: 200-500 cases with broad coverage.
+- Mature: 1000+ cases with tiered severity and CI gating.
 
 Every postmortem should ask: "What eval would have caught this?"
 
 [Source: [Maxim AI -- Building a Golden Dataset](https://www.getmaxim.ai/articles/building-a-golden-dataset-for-ai-evaluation-a-step-by-step-guide/)]
 
-## When This Backfires
+## When this backfires
 
-- **Eval drift**: Expected behavior in each case is hardcoded at incident time. When the product's intended behavior changes (new policy, updated model, shifting requirements), old eval cases silently become wrong — they now test the *previous* correct behavior. Without a review cadence, the suite drifts and passing CI stops being meaningful.
-- **Grader decay for LLM-as-judge**: [LLM judges](../workflows/llm-as-judge-evaluation.md) require periodic calibration against human ratings. If the judge model is updated or the prompt drifts, scoring shifts without any test case changing — a passing suite may no longer reflect actual quality.
-- **Volume without triage**: High-traffic systems generate hundreds of incidents with overlapping failure modes. Without deduplication and priority labeling, the suite balloons with redundant cases that slow CI without improving coverage.
+- Eval drift: each case hardcodes the expected behavior at incident time. When the product's intended behavior changes (new policy, updated model, shifting requirements), old eval cases silently become wrong. They now test the previous correct behavior. Without a review cadence, the suite drifts and passing CI stops being meaningful.
+- Grader decay for LLM-as-judge: [LLM judges](../workflows/llm-as-judge-evaluation.md) require periodic calibration against human ratings. If the judge model is updated or the prompt drifts, scoring shifts without any test case changing. A passing suite may no longer reflect actual quality.
+- Volume without triage: high-traffic systems generate hundreds of incidents with overlapping failure modes. Without deduplication and priority labeling, the suite balloons with redundant cases that slow CI without improving coverage.
 
 ## Key Takeaways
 

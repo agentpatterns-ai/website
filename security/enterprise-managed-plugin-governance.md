@@ -23,18 +23,18 @@ maturity: established
 
 It is a small set of admin-only settings that decide which marketplaces a CLI may add, which plugins auto-install, which versions are pinned, and what happens to installed plugins when policy changes. GitHub Copilot CLI's variant entered public preview on 2026-05-06 ([GitHub Changelog](https://github.blog/changelog/2026-05-06-enterprise-managed-plugins-in-github-copilot-cli-are-now-in-public-preview/)); Claude Code's has been live longer; Cursor's enterprise surface added MCP and extension allowlists in May 2026. The shapes are converging, but the levers differ enough that "managed plugins" means three different things in production today.
 
-## The Four Levers
+## The four levers
 
-A managed plugin contract has four parts — the matrix is the enforcement scope:
+A managed plugin contract has four parts. The matrix below is the enforcement scope:
 
 | Lever | What it controls | Why it matters |
 |---|---|---|
-| **Catalogue allow/block** | Which plugin marketplaces a user may add | Pre-network gate — a blocked source never reaches the cache or postinstall hook |
-| **Plugin enable** | Which plugins auto-install at sign-in | Removes the "did the dev install the approved plugin?" question |
-| **Version pin** | Branch, tag, or commit SHA the plugin resolves to | Defence against force-push tag rug-pulls |
-| **Policy-change behaviour** | What happens to an installed plugin when policy tightens | Determines whether revocation is immediate or eventual |
+| Catalogue allow/block | Which plugin marketplaces a user may add | Pre-network gate — a blocked source never reaches the cache or postinstall hook |
+| Plugin enable | Which plugins auto-install at sign-in | Removes the "did the dev install the approved plugin?" question |
+| Version pin | Branch, tag, or commit SHA the plugin resolves to | Defence against force-push tag rug-pulls |
+| Policy-change behaviour | What happens to an installed plugin when policy tightens | Determines whether revocation is immediate or eventual |
 
-## How the Contracts Compare
+## How the contracts compare
 
 ### GitHub Copilot CLI
 
@@ -48,23 +48,23 @@ The managed file lives at `/etc/claude-code/managed-settings.json` (Linux), `/Li
 
 ### VS Code and Cursor
 
-VS Code added `extensions.allowed` with `AllowedExtensions` Group Policy enforcement from VS Code 1.96 ([Manage extensions in enterprise environments](https://code.visualstudio.com/docs/enterprise/extensions)); malformed policy is silently dropped. Cursor's May 2026 enterprise release added model/provider allowlists, MCP server allowlists with a new-tool onboarding flow, and hook-based command/secret enforcement deployable via MDM or Group Policy ([Cursor's New Enterprise Admin Controls](https://pondero.ai/coding/guides/cursor-enterprise-admin-controls-may-2026/)). Cursor does not fully honour VS Code's `extensions.allowed` — the schema is portable, the enforcement is not.
+VS Code added `extensions.allowed` with `AllowedExtensions` Group Policy enforcement from VS Code 1.96 ([Manage extensions in enterprise environments](https://code.visualstudio.com/docs/enterprise/extensions)); malformed policy is silently dropped. Cursor's May 2026 enterprise release added model/provider allowlists, MCP server allowlists with a new-tool onboarding flow, and hook-based command/secret enforcement deployable via MDM or Group Policy ([Cursor's New Enterprise Admin Controls](https://pondero.ai/coding/guides/cursor-enterprise-admin-controls-may-2026/)). Cursor does not fully honor VS Code's `extensions.allowed` — the schema is portable, the enforcement is not.
 
-## Why It Works
+## Why it works
 
-The contract works because it relocates the trust decision from the developer machine to a version-controlled config in a repo with org-level access controls, and gates the check "before any network or filesystem operation … on marketplace add and on plugin install, update, refresh, and auto-update" ([Plugin marketplaces docs](https://code.claude.com/docs/en/plugin-marketplaces)). That is the structural difference from runtime-only controls like `PreToolUse` hooks — a blocked marketplace never reaches the plugin cache, so postinstall scripts, bundled `mcpServers` declarations, and `${CLAUDE_PLUGIN_ROOT}`-rooted hook commands never run with the user's tokens. Pinning by content hash (`ref` plus `sha`) closes force-push tag-move attacks.
+The contract moves the trust decision off the developer machine. It lives in a version-controlled config in a repo with org-level access controls. The check runs "before any network or filesystem operation … on marketplace add and on plugin install, update, refresh, and auto-update" ([Plugin marketplaces docs](https://code.claude.com/docs/en/plugin-marketplaces)). That is the structural difference from runtime-only controls like `PreToolUse` hooks: a blocked marketplace never reaches the plugin cache, so postinstall scripts, bundled `mcpServers` declarations, and `${CLAUDE_PLUGIN_ROOT}`-rooted hook commands never run with the user's tokens. Pinning by content hash (`ref` plus `sha`) closes force-push tag-move attacks.
 
 In threat-model terms, the contract removes the egress leg of the [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) on the plugin code-load path: untrusted content cannot reach the agent's principal, so the trifecta doesn't form. The May 2026 Nx Console breach — which exfiltrated roughly 3,800 internal GitHub repositories after an employee installed a malicious extension ([VentureBeat](https://venturebeat.com/security/github-confirms-3800-repos-stolen-poisoned-vs-code-extension-supply-chain-worm-microsoft-python-sdk)) — is the attack class this contract is sized for, alongside the GlassWorm sleeper-extension campaign ([Dark Reading](https://www.darkreading.com/application-security/fresh-glassworm-vs-code-extensions-supply-chain)).
 
-## When This Backfires
+## When this backfires
 
-The contract is real but not symmetric; several failure modes follow from schema and check semantics:
+The contract is real but not symmetric. Several failure modes follow from schema and check semantics:
 
-- **Lockdown bricks the default catalogue**. On Claude Code, `strictKnownMarketplaces: []` blocks the official Anthropic marketplace alongside everything else ([issue #34873](https://github.com/anthropics/claude-code/issues/34873)) — small teams without an internal marketplace end up worse off.
-- **Pre-existing installs survive until next refresh**. Both Copilot's preview and Claude Code gate at marketplace-add and plugin install/update/refresh, not retroactively ([Plugin marketplaces docs](https://code.claude.com/docs/en/plugin-marketplaces)). A revoked plugin keeps running on cached code until refresh — the "freeze now" window is days, not minutes.
-- **Cross-tool parity is incomplete**. Copilot's preview has no allowlist-with-lockdown analogue and no in-schema version pin, so an org cannot enforce the same posture symmetrically across Copilot CLI, Claude Code, and Cursor today.
-- **The contract has historically been silently no-op'd**. Claude Code shipped versions where `extraKnownMarketplaces` was ignored ([issue #16870](https://github.com/anthropics/claude-code/issues/16870)). Treat it as enforce-and-verify, paired with [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md).
-- **`enabledPlugins` does not retract user-added MCP servers or hooks**. Without `strictPluginOnlyCustomization` set, servers and hooks declared in `.claude/settings.json` keep loading outside the contract.
+- Lockdown bricks the default catalog. On Claude Code, `strictKnownMarketplaces: []` blocks the official Anthropic marketplace alongside everything else ([issue #34873](https://github.com/anthropics/claude-code/issues/34873)) — small teams without an internal marketplace end up worse off.
+- Pre-existing installs survive until the next refresh. Both Copilot's preview and Claude Code gate at marketplace-add and plugin install/update/refresh, not retroactively ([Plugin marketplaces docs](https://code.claude.com/docs/en/plugin-marketplaces)). A revoked plugin keeps running on cached code until refresh — the "freeze now" window is days, not minutes.
+- Cross-tool parity is incomplete. Copilot's preview has no allowlist-with-lockdown analogue and no in-schema version pin, so an org cannot enforce the same posture symmetrically across Copilot CLI, Claude Code, and Cursor today.
+- The contract has sometimes been silently no-op'd. Claude Code shipped versions where `extraKnownMarketplaces` was ignored ([issue #16870](https://github.com/anthropics/claude-code/issues/16870)). Treat it as enforce-and-verify, paired with [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md).
+- `enabledPlugins` does not retract user-added MCP servers or hooks. Without `strictPluginOnlyCustomization` set, servers and hooks declared in `.claude/settings.json` keep loading outside the contract.
 
 The pattern fits orgs running multi-vendor agent CLIs with broad tool surfaces. For small teams authoring all plugins internally, a `CODEOWNERS`-gated single internal marketplace plus PR review may cover the same threat with less brittleness.
 
@@ -72,7 +72,7 @@ The pattern fits orgs running multi-vendor agent CLIs with broad tool surfaces. 
 
 A staged rollout for Claude Code that avoids bricking sessions and survives the "pre-existing install" gap:
 
-**Stage 1 — register the internal marketplace alongside existing user marketplaces (no lockdown):**
+Stage 1 — register the internal marketplace alongside existing user marketplaces, with no lockdown:
 
 ```json
 // /etc/claude-code/managed-settings.json
@@ -88,7 +88,7 @@ A staged rollout for Claude Code that avoids bricking sessions and survives the 
 }
 ```
 
-**Stage 2 — narrow the catalogue with `hostPattern`; pin every entry in the marketplace by `sha`:**
+Stage 2 — narrow the catalog with `hostPattern`, then pin every entry in the marketplace by `sha`:
 
 ```json
 // /etc/claude-code/managed-settings.json
@@ -122,7 +122,7 @@ A staged rollout for Claude Code that avoids bricking sessions and survives the 
 }
 ```
 
-**Stage 3 — close the user-customisation surface so the plugin contract is the only entry point:**
+Stage 3 — close the user-customization surface so the plugin contract is the only entry point:
 
 ```json
 // /etc/claude-code/managed-settings.json
@@ -132,7 +132,7 @@ A staged rollout for Claude Code that avoids bricking sessions and survives the 
 }
 ```
 
-The first stage adds a managed marketplace without breaking working sessions. The second tightens the allowlist, blocks the upstream marketplace explicitly (because empty-array lockdown also blocks it via [issue #34873](https://github.com/anthropics/claude-code/issues/34873)), and pins every plugin by content hash so a forced tag move points at the old commit. The third closes side channels — MCP servers and hooks declared outside the plugin contract — only after the catalogue is stable, so engineers don't lose working configs the day policy ships.
+The first stage adds a managed marketplace without breaking working sessions. The second tightens the allowlist, blocks the upstream marketplace explicitly (because empty-array lockdown also blocks it via [issue #34873](https://github.com/anthropics/claude-code/issues/34873)), and pins every plugin by content hash so a forced tag move points at the old commit. The third closes side channels — MCP servers and hooks declared outside the plugin contract — only after the catalog is stable, so engineers don't lose working configs the day policy ships.
 
 ## Key Takeaways
 

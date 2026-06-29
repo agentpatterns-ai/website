@@ -20,11 +20,11 @@ maturity: emerging
 
 > Mise en place front-loads grounding, specification, and task decomposition before agents touch code, giving concurrent agents a shared written ground-truth to align on.
 
-**Related lesson:** [Research, Plan, Implement](https://learn.agentpatterns.ai/workflows/research-plan-implement/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Research, Plan, Implement](https://learn.agentpatterns.ai/workflows/research-plan-implement/) — this concept features in a hands-on lesson with quizzes.
 
-Andrew Zigler proposes mise en place (MEP) as a three-phase preparation methodology for agentic coding, named after the culinary practice of arranging every ingredient before cooking starts ([Zigler, 2026 — arxiv 2605.05400](https://arxiv.org/abs/2605.05400)). The argument: code generation is rarely the bottleneck — alignment is. Agents working from thin context produce code that diverges from intent, conventions, or domain semantics, and the subsequent debugging cycle dominates total time. MEP shifts effort from reactive correction to proactive preparation.
+Andrew Zigler proposes mise en place (MEP) as a three-phase preparation methodology for agentic coding, named after the culinary practice of arranging every ingredient before cooking starts ([Zigler, 2026 — arxiv 2605.05400](https://arxiv.org/abs/2605.05400)). The argument: code generation is rarely the bottleneck — alignment is. Agents working from thin context produce code that diverges from intent, conventions, or domain semantics, and the debugging cycle that follows dominates total time. MEP shifts effort from reactive correction to proactive preparation.
 
-## The Three Phases
+## The three phases
 
 ```mermaid
 graph LR
@@ -33,40 +33,40 @@ graph LR
     T --> I[Parallel<br>Implementation]
 ```
 
-### 1. Contextual Grounding
+### 1. Contextual grounding
 
-Externalize tacit knowledge into structured documents that agents read. The hackathon case in Zigler's paper produced ten planning documents totalling 9,386 words — including API exploration notes, competitive analysis, and "an extended dictation on pedagogical design philosophy drawn from the practitioner's teaching experience" ([Zigler, 2026](https://arxiv.org/abs/2605.05400)). The artifacts here are CLAUDE.md/AGENTS.md-style instruction files plus domain-specific notes; the goal is converting expert judgment into something agents can act on. This is the same elicitation problem covered by [encoding tacit knowledge](encoding-tacit-knowledge.md) — MEP wires it to the front of a single project rather than to a long-running improvement loop.
+Externalize tacit knowledge into structured documents that agents read. The hackathon case in Zigler's paper produced ten planning documents totaling 9,386 words — including API exploration notes, competitive analysis, and "an extended dictation on pedagogical design philosophy drawn from the practitioner's teaching experience" ([Zigler, 2026](https://arxiv.org/abs/2605.05400)). The artifacts here are CLAUDE.md/AGENTS.md-style instruction files plus domain-specific notes. The goal is to convert expert judgment into something agents can act on. This is the same elicitation problem covered by [encoding tacit knowledge](encoding-tacit-knowledge.md) — MEP wires it to the front of a single project rather than to a long-running improvement loop.
 
-### 2. Collaborative Specification
+### 2. Collaborative specification
 
-Human-agent dialogue produces design artifacts capturing screens, interactions, data flows, quality standards, and — critically — the *why* behind each decision. The pattern: "the practitioner describes intent, the agent proposes details, the practitioner accepts, rejects, or modifies" ([Zigler, 2026](https://arxiv.org/abs/2605.05400)). This is the same loop formalized by [spec-driven development with Spec Kit](spec-driven-development.md), with one emphasis: the spec must capture rationale, not just behaviour, so concurrent agents can make aligned micro-decisions without supervision.
+Human-agent dialogue produces design artifacts capturing screens, interactions, data flows, quality standards, and — critically — the why behind each decision. The pattern: "the practitioner describes intent, the agent proposes details, the practitioner accepts, rejects, or modifies" ([Zigler, 2026](https://arxiv.org/abs/2605.05400)). This is the same loop formalized by [spec-driven development with Spec Kit](spec-driven-development.md), with one emphasis: the spec must capture rationale, not just behavior, so concurrent agents can make aligned micro-decisions without supervision.
 
-### 3. Task Decomposition
+### 3. Task decomposition
 
-Convert the specification into structured, dependency-aware task records. The paper uses [Beads](https://github.com/steveyegge/beads) — JSONL records committed to git carrying priorities, dependencies, and acceptance criteria — explicitly because Anthropic's harness research found models inappropriately modify Markdown more than JSON ([Anthropic, 2025](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Sixty-four task records covered the hackathon platform; four parallel subagents picked them up by dependency order. The decomposition turns specification into a parallelizable work queue with explicit boundaries.
+Convert the specification into structured, dependency-aware task records. The paper uses [Beads](https://github.com/steveyegge/beads) — JSONL records committed to git carrying priorities, dependencies, and acceptance criteria — because Anthropic's harness research found that models modify Markdown inappropriately more often than JSON ([Anthropic, 2025](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Sixty-four task records covered the hackathon platform, and four parallel subagents picked them up by dependency order. The decomposition turns the specification into a parallelizable work queue with explicit boundaries.
 
-## Context Fluency
+## Context fluency
 
-Zigler names the underlying skill *context fluency* — "the ability to create rich, structured context that AI agents can act on" — with four components: decomposition (parallelizable tasks), specification (what *and* why), constraint definition (what to exclude or defer), and domain encoding (externalising tacit knowledge) ([Zigler, 2026](https://arxiv.org/abs/2605.05400)). Anthropic's 2026 Agentic Coding Trends Report frames context engineering as the dominant skill shift for AI-assisted developers ([Anthropic, 2026](https://resources.anthropic.com/hubfs/2026%20Agentic%20Coding%20Trends%20Report.pdf)). MEP is one concrete operationalisation of that skill.
+Zigler names the underlying skill 'context fluency' — "the ability to create rich, structured context that AI agents can act on" — with four components: decomposition (parallelizable tasks), specification (what and why), constraint definition (what to exclude or defer), and domain encoding (externalizing tacit knowledge) ([Zigler, 2026](https://arxiv.org/abs/2605.05400)). Anthropic's 2026 Agentic Coding Trends Report frames context engineering as the dominant skill shift for AI-assisted developers ([Anthropic, 2026](https://resources.anthropic.com/hubfs/2026%20Agentic%20Coding%20Trends%20Report.pdf)). MEP is one concrete way to put that skill to work.
 
-## When MEP Pays Off
+## When MEP pays off
 
 MEP's preparation cost is real — two hours in the case study, before any code was written. The payoff conditions are narrow and specific:
 
-- **Parallel agent fan-out.** Concurrent agents have no shared session memory; the spec and task graph become their alignment substrate. The hackathon ran 4 parallel subagents; without externalised intent each would have re-derived the design independently.
-- **Unfamiliar or domain-heavy work.** When the agent cannot infer conventions from training data — pedagogical design, regulated domains, novel architectures — externalised tacit knowledge prevents confident-sounding hallucinated patterns.
-- **Irreversible or expensive implementation.** When an implement-fail-fix cycle burns a large context window or ships incorrect code that compounds, upfront alignment cost is cheaper than downstream rework. This is the same cost asymmetry covered by the [research-plan-implement pattern](research-plan-implement.md).
+- Parallel agent fan-out. Concurrent agents have no shared session memory, so the spec and task graph become their alignment substrate. The hackathon ran 4 parallel subagents; without externalized intent each would have re-derived the design independently.
+- Unfamiliar or domain-heavy work. When the agent cannot infer conventions from training data — pedagogical design, regulated domains, novel architectures — externalized tacit knowledge prevents confident-sounding hallucinated patterns.
+- Irreversible or expensive implementation. When an implement-fail-fix cycle burns a large context window or ships incorrect code that compounds, upfront alignment costs less than downstream rework. This is the same cost asymmetry covered by the [research-plan-implement pattern](research-plan-implement.md).
 
-## When MEP Backfires
+## When MEP backfires
 
-The paper's evidence is a single hackathon, a single practitioner, no control group, no other-team instrumentation, and a five-hour competitive timeframe — the authors explicitly classify the work as exploratory and call for empirical validation ([Zigler, 2026, §6.1](https://arxiv.org/abs/2605.05400)). The methodology breaks down under several conditions:
+The paper's evidence is a single hackathon, a single practitioner, no control group, no other-team instrumentation, and a five-hour competitive timeframe — the authors classify the work as exploratory and call for empirical validation ([Zigler, 2026, §6.1](https://arxiv.org/abs/2605.05400)). The methodology breaks down under several conditions:
 
-- **Tight feedback loops.** When tests run in seconds and errors are cheap to surface, two hours of preparation buys little — try-and-fix converges faster than plan-and-verify. AICE Labs' reading: "no matter how much work you put into the upfront design, there will be deviations during implementation" ([AICE Labs, 2025](https://www.aicelabs.com/articles/upfront-specification-vs-fast-feedback)).
-- **Exploratory or discovery work.** A spec written before the problem shape is known ossifies premature structure. Kent Beck's critique of pre-spec methodologies generalises here: encoding the assumption that nothing learned during implementation should change the plan contradicts how software actually evolves ([Kindred, 2026](https://brandonkindred.medium.com/same-patterns-new-hype-spec-driven-development-5183d8e8f704)).
-- **Evolving requirements.** Static specs drift from implementation; Augment Code argues a stale spec misleads agents more dangerously than a stale design doc misleads humans, because agents execute the plan confidently without flagging divergence ([Augment Code, 2026](https://www.augmentcode.com/blog/what-spec-driven-development-gets-wrong)). MEP needs an explicit replan gate, not a frozen spec.
-- **Single-agent sequential work.** The methodology's payoff scales with concurrent agents needing shared ground-truth. A solo agent doing one task at a time can use lighter patterns — the [plan-first loop](plan-first-loop.md) provides most of the alignment benefit at a fraction of the preparation tax.
+- Tight feedback loops. When tests run in seconds and errors are cheap to surface, two hours of preparation buys little — try-and-fix converges faster than plan-and-verify. AICE Labs' reading: "no matter how much work you put into the upfront design, there will be deviations during implementation" ([AICE Labs, 2025](https://www.aicelabs.com/articles/upfront-specification-vs-fast-feedback)).
+- Exploratory or discovery work. A spec written before the problem shape is known ossifies premature structure. Kent Beck's critique of pre-spec methodologies generalizes here: encoding the assumption that nothing learned during implementation should change the plan contradicts how software actually evolves ([Kindred, 2026](https://brandonkindred.medium.com/same-patterns-new-hype-spec-driven-development-5183d8e8f704)).
+- Evolving requirements. Static specs drift from implementation. Augment Code argues that a stale spec misleads agents more dangerously than a stale design doc misleads humans, because agents execute the plan confidently without flagging divergence ([Augment Code, 2026](https://www.augmentcode.com/blog/what-spec-driven-development-gets-wrong)). MEP needs an explicit replan gate, not a frozen spec.
+- Single-agent sequential work. The methodology's payoff scales with concurrent agents needing shared ground-truth. A solo agent doing one task at a time can use lighter patterns — the [plan-first loop](plan-first-loop.md) provides most of the alignment benefit at a fraction of the preparation tax.
 
-The operator-expertise confound is also acknowledged in the paper itself: "we cannot separate the methodology's contribution from operator expertise" ([Zigler, 2026, §6.1](https://arxiv.org/abs/2605.05400)). Treat MEP as a synthesis of established practices (instruction files, spec-driven dialogue, structured task graphs), not a validated multiplier in its own right.
+The paper also acknowledges the operator-expertise confound: "we cannot separate the methodology's contribution from operator expertise" ([Zigler, 2026, §6.1](https://arxiv.org/abs/2605.05400)). Treat MEP as a synthesis of established practices (instruction files, spec-driven dialogue, structured task graphs), not a validated multiplier in its own right.
 
 ## Example
 
@@ -88,7 +88,7 @@ preparation/
     socratic-tutor.jsonl
 ```
 
-Each subagent loads `CLAUDE.md` plus `spec.md`, queries Beads for ready tasks in its feature area, and implements against acceptance criteria. The spec carries the *why* (Socratic method, age-appropriate scaffolding, archive licensing constraints) so subagents make aligned micro-decisions without coordinating. Without the externalised pedagogy notes, agents would default to generic chatbot patterns; without Beads' JSON dependency graph, parallel implementation would step on shared interfaces.
+Each subagent loads `CLAUDE.md` plus `spec.md`, queries Beads for ready tasks in its feature area, and implements against acceptance criteria. The spec carries the why (Socratic method, age-appropriate scaffolding, archive licensing constraints) so subagents make aligned micro-decisions without coordinating. Without the externalized pedagogy notes, agents would default to generic chatbot patterns. Without Beads' JSON dependency graph, parallel implementation would step on shared interfaces.
 
 ## Key Takeaways
 

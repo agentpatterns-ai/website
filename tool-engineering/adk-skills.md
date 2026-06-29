@@ -21,9 +21,9 @@ maturity: adopted
 !!! note "Also known as"
     ADK SkillToolset, Google ADK agent skills. For the portable format, see [Agent Skills Standard](../standards/agent-skills-standard.md); for authoring rules, see [Skill Authoring Patterns](skill-authoring-patterns.md).
 
-ADK Skills is marked **Experimental** in ADK Python v1.25.0+ ([ADK Skills docs](https://google.github.io/adk-docs/skills/)).
+ADK Skills is marked Experimental in ADK Python v1.25.0+ ([ADK Skills docs](https://google.github.io/adk-docs/skills/)).
 
-## How ADK Maps the Spec
+## How ADK maps the spec
 
 ADK conforms to the [agentskills.io specification](https://agentskills.io/specification) directory format: a `SKILL.md` entrypoint with YAML frontmatter and body, plus optional `references/`, `assets/`, and `scripts/` subdirectories ([ADK Skills docs](https://google.github.io/adk-docs/skills/)). A directory authored for Claude Code, Cursor, or Gemini CLI loads in ADK unchanged via `load_skill_from_dir(...)` ([Google Developers Blog](https://developers.googleblog.com/developers-guide-to-building-adk-agents-with-skills/)).
 
@@ -37,21 +37,21 @@ The [`SkillToolset`](https://google.github.io/adk-docs/skills/) auto-generates t
 
 Google reports ~90% baseline context reduction for an agent with 10 skills: ~1k tokens of L1 metadata instead of ~10k tokens of monolithic instructions ([Google Developers Blog](https://developers.googleblog.com/developers-guide-to-building-adk-agents-with-skills/)).
 
-## Inline Skills — ADK-Specific
+## Inline skills (ADK-specific)
 
 ADK adds a second authoring mode beyond file-based `SKILL.md`: inline skills defined in Python via `models.Skill(frontmatter=..., instructions=..., resources=...)` ([ADK Skills docs](https://google.github.io/adk-docs/skills/)). Inline skills embed references as in-memory strings rather than files, enabling runtime skill mutation — including agents that generate new skills at runtime ([Google Developers Blog](https://developers.googleblog.com/developers-guide-to-building-adk-agents-with-skills/)). Portable `SKILL.md` directories remain the only format that travels to non-ADK tools.
 
-## Skills vs. A2A Multi-Agent Composition
+## Skills versus A2A multi-agent composition
 
 Skills scope to the agent that owns the `SkillToolset`. In an ADK multi-agent team using the [A2A protocol](https://adk.dev/a2a/intro/), each agent carries its own skill registry; A2A routes tasks between agents but does not share skills across them. Sharing happens at the filesystem layer — multiple agents can `load_skill_from_dir` the same directory independently.
 
-## When Skills Earn Their Cost
+## When skills earn their cost
 
 Skills add overhead: L1 metadata injects into every turn, and `load_skill` costs an extra LLM round-trip before the agent acts. For a single-purpose agent that activates the same skill every turn, a plain `instruction=` block on the agent is strictly faster — skills are designed for agents with many capabilities that activate one or two per conversation ([MindStudio: progressive disclosure tradeoffs](https://www.mindstudio.ai/blog/progressive-disclosure-ai-agents-context-management)).
 
 Counter-evidence on activation reliability: Vercel's agent evals reported the skill was never invoked in 56% of test cases with default configuration, producing zero improvement over baseline; a compressed docs index placed in `AGENTS.md` instead reached a higher pass rate than the equivalent skill ([Vercel: AGENTS.md outperforms skills in our agent evals](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals)). Skills only earn their cost when activation triggers are reliable — pair `SkillToolset` with explicit trigger phrases in the agent's base instructions, and treat invocation rate as a metric to evaluate, not assume.
 
-Cross-language status: skill support is documented for **ADK Python**; parity with [ADK Go](https://developers.googleblog.com/adk-go-10-arrives/) and ADK Java is not confirmed in the skills documentation — verify against the target SDK's release notes before authoring skills for a non-Python runtime.
+Cross-language status: skill support is documented for ADK Python; parity with [ADK Go](https://developers.googleblog.com/adk-go-10-arrives/) and ADK Java is not confirmed in the skills documentation — verify against the target SDK's release notes before authoring skills for a non-Python runtime.
 
 ## Example
 

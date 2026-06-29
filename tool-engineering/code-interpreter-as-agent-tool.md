@@ -15,20 +15,20 @@ maturity: established
 
 > Expose a sandboxed code interpreter as a first-class tool for shape-of-data tasks — bounded through capability bridges, output caps, and explicit threat modeling.
 
-A code interpreter is a small embedded runtime — typically Python or JavaScript — that the agent writes against to compose tool calls, transform structured data, and hold intermediate state outside the model context ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)). It is not a substitute for an OS-level sandbox and disqualifies several workload classes outright (see [When This Backfires](#when-this-backfires)).
+A code interpreter is a small embedded runtime — typically Python or JavaScript — that the agent writes against to compose tool calls, transform structured data, and hold intermediate state outside the model context ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)). It is not a substitute for an OS-level sandbox, and it rules out several workload classes outright (see [when this backfires](#when-this-backfires)).
 
-## When to Add an Interpreter
+## When to add an interpreter
 
-Reach for an interpreter when at least two hold:
+Reach for an interpreter when at least two of these hold:
 
 - The task issues three or more tool calls whose intermediate results feed the next call.
 - Returns are structured (JSON, lists, tables) and need filtering or aggregation before they are useful to the model.
 - Loading every intermediate result into context would exceed the attention budget or trigger [context rot](https://www.trychroma.com/research/context-rot).
-- The same operation runs across many items (e.g., budget checks across 20 employees, scoring 10,000 documents).
+- The same operation runs across many items, for example budget checks across 20 employees or scoring 10,000 documents.
 
-Stay with direct tool calls for single invocations, when intermediate values are needed for the model's reasoning, or when the toolset is dominated by [MCP-connector tools that cannot be called programmatically](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling).
+Stay with direct tool calls for single invocations, when the model needs intermediate values for its own reasoning, or when the toolset is dominated by [MCP-connector tools that cannot be called programmatically](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling).
 
-## How the Interpreter Sits in the Loop
+## How the interpreter sits in the loop
 
 The interpreter is middleware between the agent loop and a scoped runtime ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)): the model writes code against an `eval`-shaped tool, allowlisted tools cross back to the host through explicit bridges, and the final expression returns to model context.
 
@@ -43,7 +43,7 @@ graph LR
 
 This shape — narrow runtime, capabilities via explicit bridges, intermediate state off context — recurs in Anthropic's [Programmatic Tool Calling (PTC)](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling), [Cloudflare Code Mode](https://blog.cloudflare.com/code-mode/), and [LangChain Deep Agents interpreters](https://blog.langchain.com/give-your-agents-an-interpreter/).
 
-## Choosing the Sandbox Boundary
+## Choosing the sandbox boundary
 
 The boundary determines blast radius, state preservation, and cost:
 
@@ -55,34 +55,34 @@ The boundary determines blast radius, state preservation, and cost:
 
 Anthropic's managed PTC sits in the middle: containers persist for 4.5 minutes idle, 30-day hard maximum ([Claude API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)). LangChain's QuickJS interpreter keeps a live context across `eval` calls within a turn and snapshots between turns ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)).
 
-## Bounding Side Effects
+## Bounding side effects
 
 The interpreter starts narrow: language features only — no filesystem, network, shell, package installation, or wall-time access ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)). Add capabilities back through explicit bridges. At minimum, configure:
 
-- **Capability allowlist** — only needed tools cross the bridge; in PTC, `allowed_callers: ["code_execution_20260120"]` per tool ([Claude API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)).
-- **Memory limit and per-eval timeout**, **max programmatic tool calls** (prevents runaway loops), and **max result size** (caps the return crossing into context).
-- **Network policy** — default-deny outbound; allowlist specific registries or APIs.
-- **Filesystem policy** — if mounted, restrict writes to a working directory under [Dual-Boundary Sandboxing](../security/dual-boundary-sandboxing.md) rules.
+- Capability allowlist — only needed tools cross the bridge; in PTC, `allowed_callers: ["code_execution_20260120"]` per tool ([Claude API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)).
+- Memory limit and per-eval timeout, max programmatic tool calls (which prevents runaway loops), and max result size (which caps the return crossing into context).
+- Network policy — default-deny outbound; allowlist specific registries or APIs.
+- Filesystem policy — if mounted, restrict writes to a working directory under [dual-boundary sandboxing](../security/dual-boundary-sandboxing.md) rules.
 
-For tenant isolation or untrusted input, the interpreter must sit *inside* an OS-level sandbox, not replace one: "this does not replace sandboxing when your threat model requires process or VM isolation" ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)). For shared tenancy, [container isolation is weaker than Firecracker microVMs](https://northflank.com/blog/best-code-execution-sandbox-for-ai-agents).
+For tenant isolation or untrusted input, the interpreter must sit inside an OS-level sandbox, not replace one: "this does not replace sandboxing when your threat model requires process or VM isolation" ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)). For shared tenancy, [container isolation is weaker than Firecracker microVMs](https://northflank.com/blog/best-code-execution-sandbox-for-ai-agents).
 
-## Returning Results to Model Context
+## Returning results to model context
 
-Keep the return proportional to its information content: **structured JSON** for compact summaries (top-k, aggregate, verdict); **truncated stdout** with an explicit cap when the model needs a sample; a **referenced artifact** (path, container id, object key) when the value is large and downstream tools reload it on demand.
+Keep the return proportional to its information content. Use structured JSON for compact summaries (top-k, aggregate, verdict). Use truncated stdout with an explicit cap when the model needs a sample. Use a referenced artifact (path, container id, object key) when the value is large and downstream tools reload it on demand.
 
-## Why It Works
+## Why it works
 
-The interpreter relocates intermediate state and control flow off the model's attention budget. Calling 20 tools serially pulls every result into context and runs 20 inference passes; code calling the same 20 tools keeps intermediate results in the runtime and crosses only the filtered value back. Anthropic measures 37% token reduction (43,588 → 27,297) on multi-step research ([Anthropic, advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)); Cloudflare reports 99.9% input-token reduction on a large API and 81% on complex multi-event tasks ([WorkOS analysis](https://workos.com/blog/cloudflare-code-mode-cuts-token-usage-by-81)); LangChain's PTC-as-middleware tests show ~35% reduction on OOLONG `trec-coarse` ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)). Code is a denser representation of control flow than a serialized chain of model-mediated calls.
+The interpreter relocates intermediate state and control flow off the model's attention budget. Calling 20 tools serially pulls every result into context and runs 20 inference passes; code calling the same 20 tools keeps intermediate results in the runtime and crosses only the filtered value back. Anthropic measures 37% token reduction (43,588 to 27,297) on multi-step research ([Anthropic, advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)); Cloudflare reports 99.9% input-token reduction on a large API and 81% on complex multi-event tasks ([WorkOS analysis](https://workos.com/blog/cloudflare-code-mode-cuts-token-usage-by-81)); LangChain's PTC-as-middleware tests show about 35% reduction on OOLONG `trec-coarse` ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)). Code is a denser representation of control flow than a serialized chain of model-mediated calls.
 
-## When This Backfires
+## When this backfires
 
-- **Untrusted input domains**. The [CIBER benchmark](https://arxiv.org/abs/2602.19547) finds execution-first interpreters fail against natural-language-disguised attacks — NL input is +14.1% attack success rate over explicit code attacks, and *higher* model capability increases susceptibility because stronger instruction adherence is exploitable. Anthropic's Opus 4.7 system card notes Claude Code Security Review "is not hardened against prompt injection" ([VentureBeat, 2026](https://venturebeat.com/security/ai-agent-runtime-security-system-card-audit-comment-and-control-2026)). Agents that ingest web pages, emails, or user files must put the interpreter behind a separate [OS-level boundary](../security/dual-boundary-sandboxing.md).
-- **Single-step tasks**. For one tool call, code-gen latency and runtime overhead exceed the saved round trip.
-- **Regulated workloads requiring ZDR**. Managed PTC excludes Zero Data Retention ([Claude API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)); data-residency-bound workloads must self-host or skip it.
-- **MCP-connector-dominated toolsets**. PTC cannot call MCP-connector tools ([Claude API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)); if most of the toolset comes from connectors, the interpreter sits idle.
-- **Strict-schema flows**. PTC does not support `strict: true`, `tool_choice`-forced calls, or `disable_parallel_tool_use` ([Claude API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)); workflows depending on these cannot be wrapped.
-- **Interpreter as a `bash` proxy**. Without runtime controls, the agent routes everything through it, bypassing per-tool permission gates. Memory limits, per-eval timeouts, max programmatic tool calls, max result size, and snapshot policy are not optional ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)).
-- **Over-reliance**. Agents default to writing code when a direct answer would be cheaper; measure the round-trip count first.
+- Untrusted input domains. The [CIBER benchmark](https://arxiv.org/abs/2602.19547) finds execution-first interpreters fail against natural-language-disguised attacks — NL input is +14.1% attack success rate over explicit code attacks, and higher model capability increases susceptibility because stronger instruction adherence is exploitable. Anthropic's Opus 4.7 system card notes Claude Code Security Review "is not hardened against prompt injection" ([VentureBeat, 2026](https://venturebeat.com/security/ai-agent-runtime-security-system-card-audit-comment-and-control-2026)). Agents that ingest web pages, emails, or user files must put the interpreter behind a separate [OS-level boundary](../security/dual-boundary-sandboxing.md).
+- Single-step tasks. For one tool call, code-gen latency and runtime overhead exceed the saved round trip.
+- Regulated workloads requiring ZDR. Managed PTC excludes Zero Data Retention ([Claude API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)); data-residency-bound workloads must self-host or skip it.
+- MCP-connector-dominated toolsets. PTC cannot call MCP-connector tools ([Claude API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)); if most of the toolset comes from connectors, the interpreter sits idle.
+- Strict-schema flows. PTC does not support `strict: true`, `tool_choice`-forced calls, or `disable_parallel_tool_use` ([Claude API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)); workflows depending on these cannot be wrapped.
+- Interpreter as a `bash` proxy. Without runtime controls, the agent routes everything through it, bypassing per-tool permission gates. Memory limits, per-eval timeouts, max programmatic tool calls, max result size, and snapshot policy are not optional ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)).
+- Over-reliance. Agents default to writing code when a direct answer would be cheaper; measure the round-trip count first.
 
 ## Example
 
@@ -120,3 +120,5 @@ The traditional approach issues 20 round-trips and pulls thousands of line items
 - [Dual-Boundary Sandboxing](../security/dual-boundary-sandboxing.md) — the OS-level enclosure for untrusted-input workloads
 - [Selective Network Sandbox Mode](../security/selective-network-sandbox-mode.md) — fine-grained network policy that pairs with interpreter-level bridges
 - [OpenAI Agents SDK Sandboxes Harness and Memory](../tools/openai-agents-sdk.md) — vendor-specific framing of the same harness/compute split
+</content>
+</invoke>

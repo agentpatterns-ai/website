@@ -22,7 +22,7 @@ status: current
 
 It applies when the harness exposes a per-call routing seam, the workload is high-volume routine work, admin-enforced configuration is in place, and irreversible actions are pinned to a deterministic gate elsewhere. Outside those conditions, a static allowlist plus sandbox plus mandatory human approval is the lower-failure-surface posture.
 
-## What the Pattern Routes
+## What the pattern routes
 
 Cursor, Anthropic, and OpenAI ship the same shape: every side-effecting tool call (shell, MCP, fetch) passes a three-stage router before execution.
 
@@ -50,19 +50,19 @@ graph TD
     H --> I
 ```
 
-## The Three-Way Decision Space
+## The three-way decision space
 
 Cursor's 3.6 classifier is the first shipped implementation returning one of three verdicts rather than a binary allow/block:
 
-- **Allow** — call proceeds outside the sandbox.
-- **Suggest alternative** — call is rejected, a rationale returns to the doing agent, which retries differently. Codex's internal-traffic snapshot reports the agent recovered safely on 4 of 7 reviewer denials this way ([OpenAI alignment: auto-review](https://alignment.openai.com/auto-review/)).
-- **Escalate** — call is surfaced to the user as a synchronous approval prompt.
+- Allow — the call proceeds outside the sandbox.
+- Suggest alternative — the harness rejects the call and returns a rationale to the doing agent, which retries differently. Codex's internal-traffic snapshot reports the agent recovered safely on 4 of 7 reviewer denials this way ([OpenAI alignment: auto-review](https://alignment.openai.com/auto-review/)).
+- Escalate — the call surfaces to the user as a synchronous approval prompt.
 
-The third path is load-bearing. Binary classifiers collapse retryable mistakes into hard stops, reintroducing the rubber-stamp failure mode that [human-in-the-loop confirmation gates](../security/human-in-the-loop-confirmation-gates.md) — and the classifier — exist to defeat. The three-way space treats the classifier as a *router* between agent and human, not a final arbiter.
+The third path is load-bearing. Binary classifiers collapse retryable mistakes into hard stops, reintroducing the rubber-stamp failure mode that [human-in-the-loop confirmation gates](../security/human-in-the-loop-confirmation-gates.md) — and the classifier — exist to defeat. The three-way space treats the classifier as a router between agent and human, not a final arbiter.
 
 The classifier can issue verdicts the doing agent cannot because it sees a different context. OpenAI: "The main agent is optimized to complete the user's task. This creates pressure to treat an approval boundary as just another obstacle to overcome. Auto-review has a narrower job" ([alignment.openai.com/auto-review/](https://alignment.openai.com/auto-review/)). Anthropic calls the same property "reasoning-blind by design" — Claude Code strips the agent's own messages and tool outputs from the classifier's context "so the agent can't talk the classifier into making a bad call" ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
 
-## Custom-Instructions Steering
+## Custom-instructions steering
 
 The classifier is portable across very different repos only because its decision policy is project-configurable. Cursor exposes this through `permissions.json`'s `autoRun` block:
 
@@ -85,7 +85,7 @@ Both fields are arrays of free-form sentences; per-user and per-repo entries con
 
 The classifier's training distribution covers generic risk signals, but a Terraform-heavy infra repo and a React app have non-overlapping definitions of "boundary-crossing." Project-specific instructions adapt the classifier to each without retraining or forking the harness.
 
-## Why It Works
+## Why it works
 
 The pattern works because it factors the per-call decision into a deterministic outer layer (allowlist plus sandbox) and a probabilistic inner layer (classifier subagent) — and because the classifier sees a different context than the doing agent. Anthropic's auto-mode classifier is a two-stage pipeline: a single-token fast filter tuned for recall, then chain-of-thought reasoning only on flagged calls, so per-call cost stays bounded under high-volume traffic ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
 
@@ -93,28 +93,28 @@ The empirical effect is the rubber-stamp problem inverted. Anthropic reports Cla
 
 OpenAI names the boundary clearly: auto-review is "a reviewer swap, not a permission grant. It does not expand `writable_roots`, enable network access, or weaken protected paths" ([Codex auto-review docs](https://developers.openai.com/codex/concepts/sandboxing/auto-review)). The classifier decides who reviews the call; the sandbox and managed-settings boundaries decide what is reachable at all.
 
-## When This Backfires
+## When this backfires
 
-- **In-project ops state.** When production-affecting files (Terraform state, sealed-secrets, k8s manifests) live inside the project root, the Tier-2 sandbox lets the agent edit them without ever reaching the classifier — an independent stress test measured **36.8% of state-changing actions bypassing classification this way** ([Ji et al., 2026: Measuring the Permission Gate](https://arxiv.org/abs/2604.04978)). Move the state outside the root or pin the paths with deterministic deny rules.
-- **Out-of-distribution workload.** Anthropic's 17% false-negative rate is on a hand-curated calibration set. Ji et al. measured **81.0% FNR (95% CI 73.8%–87.4%)** on 128 ambiguous DevOps prompts and **92.9% FNR** on artifact-cleanup tasks ([arxiv:2604.04978](https://arxiv.org/abs/2604.04978)). Vendor numbers are workload-conditional, not universal.
-- **Untrusted configuration surface.** If an attacker can write `.cursor/permissions.json`, `.vscode/settings.json`, or local rule files, the scheme collapses to whichever layer the attacker reaches first ([Backslash: The Denylist Delusion](https://www.backslash.security/blog/cursor-ai-security-flaw-autorun-denylist)). Admin-enforced managed settings are not optional.
-- **Same model class for agent and classifier.** A same-class evaluator is a biased reviewer of its own work: LLM evaluators both *recognize* and *favor* their own generations, with self-recognition correlating linearly with self-preference bias ([Panickssery et al., 2024: LLM Evaluators Recognize and Favor Their Own Generations](https://arxiv.org/abs/2404.13076)). The shared training distribution also means a jailbreak that defeats the agent tends to defeat the classifier. Use a different model class, or at minimum reasoning-blind the classifier.
-- **Sandbox masks the allowlist.** Cursor users report that under "Auto-Run in Sandbox" the user-curated command allowlist is silently bypassed ([Cursor forum](https://forum.cursor.com/t/command-allowlist-is-silently-ignored-when-auto-run-in-sandbox-is-enabled/152136)). Verify precedence empirically before trusting the documented hierarchy.
-- **Irreversible actions on the classifier path.** Production deploys, money movement, IAM rotation, and credential exposure do not belong on a probabilistic auto-approval gate — they belong on deterministic deny rules with mandatory human approval. Cursor's own docs state the classifier "is non-deterministic and can make mistakes in both directions" ([Cursor terminal Run Mode docs](https://cursor.com/docs/agent/tools/terminal#run-mode)).
-- **The trifecta does not close.** The classifier narrows but does not close the egress decision. An agent with private-data access, untrusted content (a fetched page or MCP-returned document), and any allowlisted shell can still be steered into exfiltration the classifier permits because the call shape looks routine. The fix is removing one leg of the trifecta, not a smarter filter ([Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md); [Simon Willison: the lethal trifecta](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)).
+- In-project ops state. When production-affecting files (Terraform state, sealed-secrets, k8s manifests) live inside the project root, the Tier-2 sandbox lets the agent edit them without ever reaching the classifier — an independent stress test measured 36.8% of state-changing actions bypassing classification this way ([Ji et al., 2026: Measuring the Permission Gate](https://arxiv.org/abs/2604.04978)). Move the state outside the root or pin the paths with deterministic deny rules.
+- Out-of-distribution workload. Anthropic's 17% false-negative rate is on a hand-curated calibration set. Ji et al. measured 81.0% FNR (95% CI 73.8%–87.4%) on 128 ambiguous DevOps prompts and 92.9% FNR on artifact-cleanup tasks ([arxiv:2604.04978](https://arxiv.org/abs/2604.04978)). Vendor numbers are workload-conditional, not universal.
+- Untrusted configuration surface. If an attacker can write `.cursor/permissions.json`, `.vscode/settings.json`, or local rule files, the scheme collapses to whichever layer the attacker reaches first ([Backslash: The Denylist Delusion](https://www.backslash.security/blog/cursor-ai-security-flaw-autorun-denylist)). Admin-enforced managed settings are not optional.
+- Same model class for agent and classifier. A same-class evaluator is a biased reviewer of its own work: LLM evaluators both recognize and favor their own generations, with self-recognition correlating linearly with self-preference bias ([Panickssery et al., 2024: LLM Evaluators Recognize and Favor Their Own Generations](https://arxiv.org/abs/2404.13076)). The shared training distribution also means a jailbreak that defeats the agent tends to defeat the classifier. Use a different model class, or at minimum reasoning-blind the classifier.
+- Sandbox masks the allowlist. Cursor users report that under "Auto-Run in Sandbox" the user-curated command allowlist is silently bypassed ([Cursor forum](https://forum.cursor.com/t/command-allowlist-is-silently-ignored-when-auto-run-in-sandbox-is-enabled/152136)). Verify precedence empirically before trusting the documented hierarchy.
+- Irreversible actions on the classifier path. Production deploys, money movement, IAM rotation, and credential exposure do not belong on a probabilistic auto-approval gate — they belong on deterministic deny rules with mandatory human approval. Cursor's own docs state the classifier "is non-deterministic and can make mistakes in both directions" ([Cursor terminal Run Mode docs](https://cursor.com/docs/agent/tools/terminal#run-mode)).
+- The trifecta does not close. The classifier narrows but does not close the egress decision. An agent with private-data access, untrusted content (a fetched page or MCP-returned document), and any allowlisted shell can still be steered into exfiltration the classifier permits because the call shape looks routine. The fix is removing one leg of the trifecta, not a smarter filter ([Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md); [Simon Willison: the lethal trifecta](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)).
 
-## Cross-Tool Comparison
+## Cross-tool comparison
 
 The three shipped implementations differ in surface but share the three-tier shape:
 
 | | Cursor 3.6 Auto-review | Claude Code auto mode | Codex auto-review |
 |---|---|---|---|
-| **Default Run Mode** | Auto-review (3.6+) | Opt-in `--mode auto` | `approvals_reviewer = "auto_review"` in `config.toml` |
-| **Classifier verdict** | Allow / suggest alternative / escalate | Allow / block (retry via `PermissionDenied` hook) | Allow / deny (agent receives rationale and may retry) |
-| **Reasoning isolation** | Classifier prompt receives user input plus `autoRun` instructions | "Reasoning-blind by design" — agent reasoning stripped | "Compact transcript plus the exact approval request... Hidden assistant reasoning is not included" |
-| **Steering surface** | `permissions.json` `autoRun.allow_instructions` / `block_instructions` | Block rules in managed settings; [`hard_deny`](../tools/claude/hard-deny-classifier-rule.md) for org-wide | `[auto_review] policy = """..."""` in `config.toml`; `guardian_policy_config` for managed |
-| **Configuration precedence** | Per-user concatenates with per-repo | Admin-enforced managed settings override workspace | Individual policies take precedence over managed defaults |
-| **Empirical posture** | "Non-deterministic and can make mistakes in both directions" ([docs](https://cursor.com/docs/agent/tools/terminal#run-mode)) | 0.4% FPR / 17% FNR on calibration set ([Anthropic](https://www.anthropic.com/engineering/claude-code-auto-mode)) | 7 denials per 10,000 actions; 4 of 7 recovered ([OpenAI](https://alignment.openai.com/auto-review/)) |
+| Default run mode | Auto-review (3.6+) | Opt-in `--mode auto` | `approvals_reviewer = "auto_review"` in `config.toml` |
+| Classifier verdict | Allow / suggest alternative / escalate | Allow / block (retry via `PermissionDenied` hook) | Allow / deny (agent receives rationale and may retry) |
+| Reasoning isolation | Classifier prompt receives user input plus `autoRun` instructions | "Reasoning-blind by design" — agent reasoning stripped | "Compact transcript plus the exact approval request... Hidden assistant reasoning is not included" |
+| Steering surface | `permissions.json` `autoRun.allow_instructions` / `block_instructions` | Block rules in managed settings; [`hard_deny`](../tools/claude/hard-deny-classifier-rule.md) for org-wide | `[auto_review] policy = """..."""` in `config.toml`; `guardian_policy_config` for managed |
+| Configuration precedence | Per-user concatenates with per-repo | Admin-enforced managed settings override workspace | Individual policies take precedence over managed defaults |
+| Empirical posture | "Non-deterministic and can make mistakes in both directions" ([docs](https://cursor.com/docs/agent/tools/terminal#run-mode)) | 0.4% FPR / 17% FNR on calibration set ([Anthropic](https://www.anthropic.com/engineering/claude-code-auto-mode)) | 7 denials per 10,000 actions; 4 of 7 recovered ([OpenAI](https://alignment.openai.com/auto-review/)) |
 
 The setting names differ; the three-tier router and steering-by-custom-instructions are the load-bearing invariants.
 

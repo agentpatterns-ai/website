@@ -19,19 +19,19 @@ maturity: emerging
 
 > Dual-budget control lets a search agent under tool-call and token caps score each action by Value-of-Information per unit budget, spending next on the highest-ranking one.
 
-## The Two-Budget Problem
+## The two-budget problem
 
 Search agents operate under two hard limits at inference time: a cap on tool calls and a cap on generated tokens. Both bind. Better answers do not come from a stronger model alone — they come from explicit control over which action receives the next budget unit and when accumulated evidence is sufficient to commit ([Fang et al., 2026](https://arxiv.org/abs/2605.05701)).
 
 Three action classes compete for the same budget:
 
-- **Retrieval** — call a tool, spend a tool-call unit and the tokens for the result.
-- **Decomposition** — break the question into sub-queries, spend tokens but no tool call.
-- **Commit** — emit the final answer and stop.
+- Retrieval — call a tool, spend a tool-call unit and the tokens for the result.
+- Decomposition — break the question into sub-queries, spend tokens but no tool call.
+- Commit — emit the final answer and stop.
 
 A naive policy fires retrievals greedily until the tool-call cap or the token cap hits zero, the opposite of [heuristic-based effort scaling](heuristic-effort-scaling.md). A dual-budget controller picks differently: it ranks actions by expected marginal task value per unit budget consumed, then spends greedily on the highest-ranking option.
 
-## Value-of-Information Scoring
+## Value-of-information scoring
 
 Each candidate action gets a Value-of-Information (VOI) score: an operational estimate of marginal task value per unit budget under the current search state and remaining dual budget ([Fang et al., 2026](https://arxiv.org/abs/2605.05701)). The action with the highest VOI/cost ratio fires next.
 
@@ -49,9 +49,9 @@ graph TD
 
 The score depends on remaining budget, not just current state. A retrieval that looks valuable with 10 tool calls left may score below a commit when only 1 remains — because the marginal value of one more retrieval is bounded above by the probability it changes the answer, while the cost of running out of budget mid-trajectory is the whole task.
 
-[Snell et al. (2024)](https://arxiv.org/abs/2408.03314) report the same causal structure for test-time compute scaling more broadly: a compute-optimal allocation that adapts per prompt improves test-time-compute efficiency by more than 4x over a best-of-N baseline. The pattern in both cases is *difficulty-conditioned allocation beats uniform when budgets bind*.
+[Snell et al. (2024)](https://arxiv.org/abs/2408.03314) report the same causal structure for test-time compute scaling more broadly: a compute-optimal allocation that adapts per prompt improves test-time-compute efficiency by more than 4x over a best-of-N baseline. The pattern in both cases is the same: difficulty-conditioned allocation beats uniform allocation when budgets bind.
 
-## Selective Evidence-Grounded Finalizer
+## Selective evidence-grounded finalizer
 
 After the search trajectory ends, a finalizer compares the trajectory answer with a refined candidate. It rewrites only when the residual error appears to be a low-risk answer-form error — formatting, unit conversion, name disambiguation — not when retrieval was incomplete ([Fang et al., 2026](https://arxiv.org/abs/2605.05701)).
 
@@ -59,7 +59,7 @@ This guard matters because post-hoc rewriting can degrade near-ceiling outputs. 
 
 Ablations attribute the bulk of measured gains to the search-time controller (especially the budget-dependent penalty); the finalizer mainly helps when the retrieval path is already adequate ([Fang et al., 2026](https://arxiv.org/abs/2605.05701)).
 
-## What Belongs Where
+## What belongs where
 
 | Pattern | Allocates | Unit |
 |---------|-----------|------|
@@ -70,15 +70,15 @@ Ablations attribute the bulk of measured gains to the search-time controller (es
 
 These patterns are composable, not substitutes. A harness can run reasoning-budget allocation across phases, dual-budget control within the search phase, and a tool-call reviewer on each provisional dispatch — they operate at different slots in the loop.
 
-## When This Pattern Backfires
+## When this pattern backfires
 
 The pattern is valuable specifically when budgets bind. Skip it when:
 
-- **Slack budgets.** Agents that routinely complete tasks below the cap don't benefit — without binding constraints, VOI scoring is overhead. The optimisation surface only exists under tight budgets.
-- **Single-hop or single-tool tasks.** With one action class available, allocation collapses to early-stopping. Simpler heuristics already cover that.
-- **Strong base models on light search.** Answer-time control mainly helps when the retrieval path is already adequate ([Fang et al., 2026](https://arxiv.org/abs/2605.05701)) — when the base model rarely makes answer-form errors, the finalizer adds latency without revenue.
-- **Hidden cost variance.** VOI/cost ratios assume cost is observable. Retrieval calls with stochastic tail latency (rate limits, cold caches) make the score noisy and can mis-rank actions.
-- **Harnesses without budget accounting.** The controller needs `(remaining_tool_calls, remaining_tokens)` exposed every step. Harnesses that hide this state need instrumentation work before the pattern is implementable.
+- Slack budgets. Agents that routinely complete tasks below the cap do not benefit — without binding constraints, VOI scoring is overhead. The optimization surface only exists under tight budgets.
+- Single-hop or single-tool tasks. With one action class available, allocation collapses to early-stopping. Simpler heuristics already cover that.
+- Strong base models on light search. Answer-time control mainly helps when the retrieval path is already adequate ([Fang et al., 2026](https://arxiv.org/abs/2605.05701)) — when the base model rarely makes answer-form errors, the finalizer adds latency without revenue.
+- Hidden cost variance. VOI/cost ratios assume cost is observable. Retrieval calls with stochastic tail latency (rate limits, cold caches) make the score noisy and can mis-rank actions.
+- Harnesses without budget accounting. The controller needs `(remaining_tool_calls, remaining_tokens)` exposed every step. Harnesses that hide this state need instrumentation work before the pattern is implementable.
 
 ## Example
 
@@ -105,5 +105,5 @@ The controller fires `commit` because its VOI/cost ratio is highest given how li
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md)
 - [Context Budget Allocation](../context-engineering/context-budget-allocation.md)
 - [Inference-Time Tool-Call Reviewer](inference-time-tool-call-reviewer.md)
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
 - [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)

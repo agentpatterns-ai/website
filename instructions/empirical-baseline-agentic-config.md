@@ -14,33 +14,33 @@ maturity: emerging
 
 > A study of 2,923 GitHub repositories finds that context files dominate configuration while advanced mechanisms — Skills, Subagents, Hooks, MCP — remain shallowly adopted across every tool.
 
-## The Study
+## The study
 
-[Galster et al. (arXiv:2602.14690)](https://arxiv.org/abs/2602.14690) analysed 2,923 public GitHub repositories using Claude Code, GitHub Copilot, Cursor, Gemini, and OpenAI Codex. The study identifies eight configuration mechanisms — Context Files, Skills, Subagents/Agents, Hooks, MCP servers, Memory, Permissions, and Settings/Model config — and measures how frequently each appears in practice.
+[Galster et al. (arXiv:2602.14690)](https://arxiv.org/abs/2602.14690) analyzed 2,923 public GitHub repositories that use Claude Code, GitHub Copilot, Cursor, Gemini, and OpenAI Codex. The study names eight configuration mechanisms — context files, skills, subagents and agents, hooks, MCP servers, memory, permissions, and settings and model config — and measures how often each appears in practice.
 
-## What the Data Shows
+## What the data shows
 
-**Context Files dominate.** Most repos configure the agent via a single context file. AGENTS.md is emerging as the cross-tool interoperability standard — the [agents.md spec](https://agents.md) self-reports 60k+ projects and 25+ tools.
+Context files dominate. Most repos configure the agent through a single context file. AGENTS.md is emerging as the cross-tool interoperability standard — the [agents.md spec](https://agents.md) self-reports more than 60,000 projects and 25 or more tools.
 
-**Skills are shallowly adopted.** Most repositories define only 1–2 skill artifacts containing static instructions rather than executable workflows. The [Agent Skills open standard](../standards/agent-skills-standard.md) (self-reported 30+ supporting tools) and [Claude Code's SKILL.md format](https://code.claude.com/docs/en/skills) support file bundling, subagent execution, dynamic context injection, invocation control, and hooks — yet the Galster et al. data shows real-world adoption exploits almost none of this capability surface.
+Skills are shallowly adopted. Most repositories define only one or two skill artifacts, and these hold static instructions rather than executable workflows. The [Agent Skills open standard](../standards/agent-skills-standard.md) (self-reported 30 or more supporting tools) and [Claude Code's SKILL.md format](https://code.claude.com/docs/en/skills) support file bundling, subagent execution, dynamic context injection, invocation control, and hooks. Yet the Galster et al. data shows that real-world adoption uses almost none of this capability.
 
-**Subagents are rarely configured beyond defaults.** Claude Code's subagent system (`.claude/agents/`) supports per-agent model selection, tool restrictions, permission modes, hooks, and persistent memory ([code.claude.com/docs/en/sub-agents](https://code.claude.com/docs/en/sub-agents)). Repos rarely configure any of these.
+Subagents are rarely configured beyond defaults. Claude Code's subagent system (`.claude/agents/`) supports per-agent model selection, tool restrictions, permission modes, hooks, and persistent memory ([Claude Code sub-agents documentation](https://code.claude.com/docs/en/sub-agents)). Repos rarely configure any of these.
 
-**Hooks are underused.** Claude Code hooks fire at `PreToolUse`, `PostToolUse`, `SubagentStart`, `SubagentStop`, `Stop`, and `InstructionsLoaded` events and can block, transform, or log ([code.claude.com/docs/en/hooks](https://code.claude.com/docs/en/hooks)). Adoption is minimal.
+Hooks are underused. Claude Code hooks fire at `PreToolUse`, `PostToolUse`, `SubagentStart`, `SubagentStop`, `Stop`, and `InstructionsLoaded` events. They can block, transform, or log tool calls ([Claude Code hooks documentation](https://code.claude.com/docs/en/hooks)). Adoption is minimal.
 
-**MCP servers are underrepresented.** MCP extends agent capabilities to external systems — databases, issue trackers, design tools, monitoring — at local, project, user, and managed scopes ([code.claude.com/docs/en/mcp](https://code.claude.com/docs/en/mcp)). Deployment remains low despite broad availability.
+MCP servers are underrepresented. MCP connects agents to external systems — databases, issue trackers, design tools, and monitoring — at local, project, user, and managed scopes ([Claude Code MCP documentation](https://code.claude.com/docs/en/mcp)). Deployment stays low despite broad availability.
 
-**Claude Code users employ the broadest range of mechanisms.** Distinct configuration cultures form around each tool, with Claude Code leading in multi-mechanism adoption.
+Claude Code users draw on the broadest range of mechanisms. Distinct configuration cultures form around each tool, and Claude Code leads in multi-mechanism adoption.
 
-## The Gap This Creates
+## The gap this creates
 
-Under-configuration is a self-imposed capability gap: the mechanisms exist, are documented, and work.
+Under-configuration is a self-imposed capability gap. The mechanisms exist, are documented, and work.
 
-The CLAUDE.md hierarchy — managed policy, user, project, subdirectory, plus `.claude/rules/` for path-scoped rules ([code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory)) — is a rich surface that most repos collapse to a single flat file at the root.
+The CLAUDE.md hierarchy spans managed policy, user, project, and subdirectory layers, plus `.claude/rules/` for path-scoped rules ([Claude Code memory documentation](https://code.claude.com/docs/en/memory)). Most repos collapse that hierarchy to a single flat file at the root.
 
-## A Prioritised Adoption Ramp
+## A prioritized adoption ramp
 
-Unlock the configuration surface incrementally:
+Build up the configuration step by step:
 
 ```mermaid
 graph TD
@@ -51,25 +51,25 @@ graph TD
     E --> F[MCP Servers<br>external system integrations]
 ```
 
-**Step 1 — Layered context files.** Split the root context file into global, project, and subdirectory layers so each scope carries only the rules it needs. See [Layer Agent Instructions by Specificity](../instructions/layered-instruction-scopes.md).
+Step 1 — Layered context files. Split the root context file into global, project, and subdirectory layers, so each scope carries only the rules it needs. See [Layer Agent Instructions by Specificity](../instructions/layered-instruction-scopes.md).
 
-**Step 2 — Skills.** Extract repeated workflows into SKILL.md files specifying their subagent, required tools, and preloaded context. See [Skill Library Evolution](../tool-engineering/skill-library-evolution.md).
+Step 2 — Skills. Extract repeated workflows into SKILL.md files that name their subagent, required tools, and preloaded context. See [Skill Library Evolution](../tool-engineering/skill-library-evolution.md).
 
-**Step 3 — Hooks.** Replace prompt-based enforcement with hooks for constraints that must not vary — a `PreToolUse` hook cannot be overridden by injected instructions. See [Hooks for Enforcement vs Prompts for Guidance](hooks-vs-prompts.md).
+Step 3 — Hooks. Replace prompt-based enforcement with hooks for constraints that must not vary. A `PreToolUse` hook cannot be overridden by injected instructions. See [Hooks for Enforcement vs Prompts for Guidance](hooks-vs-prompts.md).
 
-**Step 4 — Subagent specialisation.** Assign distinct roles with scoped tool sets so that a reviewer subagent cannot modify files even if instructed to. See [Specialized Agent Roles](../agent-design/specialized-agent-roles.md).
+Step 4 — Subagent specialization. Assign distinct roles with scoped tool sets, so a reviewer subagent cannot modify files even if instructed to. See [Specialized Agent Roles](../agent-design/specialized-agent-roles.md).
 
-**Step 5 — MCP for external systems.** Connect agents to issue trackers, documentation, observability, and design tools via structured [MCP integrations](../tools/copilot/mcp-integration.md) instead of copy-paste context.
+Step 5 — MCP for external systems. Connect agents to issue trackers, documentation, observability, and design tools through structured [MCP integrations](../tools/copilot/mcp-integration.md) instead of copy-paste context.
 
-## When Not to Over-Configure
+## When not to over-configure
 
-The configuration ramp above is a capability unlock, not a mandate. Three conditions favour stopping at a simple context file:
+The ramp above is an option, not a mandate. Three conditions favor stopping at a simple context file:
 
-1. **Short-lived or exploratory projects.** The amortisation period for hooks, subagent roles, and MCP integrations only pays off when the same patterns repeat across many sessions. A two-day prototype rarely recurs enough to justify the setup cost.
-2. **Single-developer codebases.** Hooks and permission modes exist to enforce constraints across multiple contributors or across long time horizons. Solo work with tight review cycles already provides that enforcement through code review.
-3. **Stable, low-complexity domains.** If the agent's job is limited to a small, well-understood task — formatting, test generation for a single framework — a single CLAUDE.md rule often covers it. Subagent specialisation adds overhead without capability gain when there is only one role to play.
+1. Short-lived or exploratory projects. Hooks, subagent roles, and MCP integrations only pay off when the same patterns repeat across many sessions. A two-day prototype rarely recurs enough to justify the setup cost.
+2. Single-developer codebases. Hooks and permission modes exist to enforce constraints across many contributors or over long time horizons. Solo work with tight review cycles already provides that enforcement through code review.
+3. Stable, low-complexity domains. If the agent's job is a small, well-understood task — formatting, or test generation for a single framework — a single CLAUDE.md rule often covers it. Subagent specialization adds overhead without capability gain when there is only one role to play.
 
-The empirical data reflects this: shallow adoption may partly be rational scoping, not just ignorance of available features.
+The data reflects this. Shallow adoption may be partly rational scoping, not just ignorance of the available features.
 
 ## Key Takeaways
 

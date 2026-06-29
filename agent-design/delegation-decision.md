@@ -13,73 +13,73 @@ maturity: emerging
 
 > Agent delegation has overhead; match task characteristics to agent strengths rather than delegating everything or nothing.
 
-## The Overhead Reality
+## The overhead reality
 
-Delegating to an agent costs time: writing the prompt, waiting for output, reviewing the result, fixing mistakes. For some tasks this overhead is negligible relative to the value delivered. For others, it exceeds the task itself — modelling that trade-off is the subject of [cost-aware agent design](cost-aware-agent-design.md).
+Delegating to an agent costs time: writing the prompt, waiting for output, reviewing the result, fixing mistakes. For some tasks this overhead is small next to the value delivered. For others, it exceeds the task itself. To model that trade-off, see [cost-aware agent design](../token-engineering/cost-aware-agent-design.md).
 
 The delegation decision is not "can an agent do this?" but "does using an agent improve the outcome, accounting for the full cycle time?"
 
-## The Describe-It Test
+## The describe-it test
 
 If describing what you want takes longer than doing it, do it yourself. A one-line variable rename takes ten seconds to execute and thirty seconds to prompt and verify. A codebase-wide API migration takes hours manually and minutes with an agent.
 
 Anthropic's [Claude Code best practices](https://code.claude.com/docs/en/best-practices) applies the same test for planning overhead: "If you could describe the diff in one sentence, skip the plan." The same threshold applies to delegation itself.
 
-## When to Delegate
+## When to delegate
 
 Delegate tasks with these characteristics:
 
-- **Repetitive** — same operation applied across many instances
-- **Large scope** — requires reading or modifying many files
-- **Broad knowledge required** — depends on understanding patterns across the codebase, not deep knowledge of one subsystem
-- **Well-specified** — the desired outcome can be described precisely
-- **Verifiable** — the result can be checked against a clear criterion (tests pass, lint clean, format matches)
+- Repetitive — the same operation applied across many instances
+- Large scope — reading or changing many files
+- Broad knowledge required — depends on patterns across the codebase, not deep knowledge of one subsystem
+- Well-specified — you can describe the desired outcome precisely
+- Verifiable — you can check the result against a clear criterion (tests pass, lint clean, format matches)
 
-## When to Do It Yourself
+## When to do it yourself
 
 Keep tasks that have these characteristics:
 
-- **Small and fast** — faster to execute than to describe
-- **Novel architecture** — requires judgment calls an agent won't make correctly without extensive guidance
-- **Ambiguous requirements** — you don't yet know what you want; you're figuring it out by doing
-- **Taste-dependent** — the criterion for "good" is in your head, not in any specification
-- **Deep domain nuance** — the correct answer depends on knowledge the agent doesn't have and can't be given efficiently
+- Small and fast — quicker to execute than to describe
+- Novel architecture — needs judgment calls an agent will not make correctly without heavy guidance
+- Ambiguous requirements — you do not yet know what you want; you are working it out by doing
+- Taste-dependent — the test for "good" is in your head, not in any specification
+- Deep domain nuance — the correct answer depends on knowledge the agent does not have and cannot get efficiently
 
-## The Review Tax
+## The review tax
 
-Every agent output requires review, whether by a human or an [agent self-review loop](../code-review/agent-self-review-loop.md). This is not optional — it's the cost of delegation. Factor the review time into your decision: a task that takes five minutes manually may take two minutes with an agent but four minutes to review, for a net loss.
+Every agent output needs review, whether by a human or an [agent self-review loop](../code-review/agent-self-review-loop.md). Review is not optional — it is the cost of delegation. Factor the review time into your decision: a task that takes five minutes by hand may take two minutes with an agent but four minutes to review, for a net loss.
 
-The review tax decreases as:
+The review tax falls as:
 
 - Task specifications become more precise
 - Agent outputs become more predictable
 - Review becomes automated (tests, linting, CI)
 
-## Progressive Delegation
+## Progressive delegation
 
-If you're unsure where to draw the line, start conservatively. Use agents for review and research before using them for implementation. As trust builds with specific task types — informed by [task-feasibility awareness](task-feasibility-awareness.md) — expand delegation in those categories. This builds calibrated confidence rather than oscillating between over-delegation and under-delegation.
+If you are unsure where to draw the line, start conservatively. Use agents for review and research before you use them for implementation. As trust builds with specific task types — informed by [task-feasibility awareness](task-feasibility-awareness.md) — expand delegation in those categories. This builds calibrated confidence rather than swinging between over-delegation and under-delegation.
 
-## When This Backfires
+## When this backfires
 
-**[Skill atrophy](../human/skill-atrophy.md).** Developers who delegate codebase changes without reading the diffs lose familiarity with the code. The agent does the work; the developer loses the context — accumulating [comprehension debt](../anti-patterns/comprehension-debt.md). Reserve enough hands-on work to keep your mental model current.
+[Skill atrophy](../human/skill-atrophy.md). Developers who delegate codebase changes without reading the diffs lose familiarity with the code. The agent does the work; the developer loses the context, and accumulates [comprehension debt](../anti-patterns/comprehension-debt.md). Reserve enough hands-on work to keep your mental model current.
 
-**Specification overhead underestimated.** The describe-it test assumes you can articulate the task. When requirements are only partially formed, the cost of specification is higher than the estimate — and the agent produces output that requires rework because the spec was wrong, not the execution. [Interactive clarification for underspecified tasks](interactive-clarification-underspecified-tasks.md) recovers some of that cost up front.
+Specification overhead underestimated. The describe-it test assumes you can state the task. When requirements are only partly formed, specification costs more than the estimate. The agent then produces output that needs rework because the spec was wrong, not the execution. [Interactive clarification for underspecified tasks](interactive-clarification-underspecified-tasks.md) recovers some of that cost up front.
 
-**"Verifiable" in practice is harder than in theory.** A task seems verifiable ("tests pass") but the test suite doesn't cover the relevant behavior. Agent output can satisfy the stated criterion while introducing an unlisted failure mode that the [premature-completion](../anti-patterns/premature-completion.md) anti-pattern describes. The review tax is non-zero even for test-covered tasks.
+"Verifiable" in practice is harder than in theory. A task seems verifiable ("tests pass") but the test suite does not cover the relevant behavior. Agent output can satisfy the stated criterion while adding an unlisted failure mode that the [premature-completion](../anti-patterns/premature-completion.md) anti-pattern describes. The review tax is non-zero even for test-covered tasks.
 
-**Automation bias.** The tendency to trust agent output without sufficient scrutiny increases after repeated successful delegations. This creates a trust gap: the agent's actual error rate doesn't change, but the review depth decreases ([Cognitive Load Framework for Human–AI Symbiosis, Springer 2026](https://link.springer.com/article/10.1007/s10462-026-11510-z)).
+Automation bias. The tendency to trust agent output without enough scrutiny grows after repeated successful delegations. This creates a trust gap: the agent's actual error rate does not change, but the review depth drops ([Cognitive Load Framework for Human–AI Symbiosis, Springer 2026](https://link.springer.com/article/10.1007/s10462-026-11510-z)).
 
-## Anti-Patterns
+## Anti-patterns
 
-**Delegate everything because agents are available.** Some tasks genuinely don't benefit from delegation. Forcing them through an agent adds overhead without improving output quality — the [effortless-AI fallacy](../anti-patterns/effortless-ai-fallacy.md) in practice.
+Delegate everything because agents are available. Some tasks genuinely do not benefit from delegation. Forcing them through an agent adds overhead without improving output quality — the [effortless-AI fallacy](../anti-patterns/effortless-ai-fallacy.md) in practice.
 
-**Never delegate because of one bad experience.** A failed delegation in one task category doesn't invalidate delegation in others. Diagnose the specific failure — poor specification, wrong tool, ambiguous criteria — rather than generalizing.
+Never delegate because of one bad experience. A failed delegation in one task category does not invalidate delegation in others. Diagnose the specific failure — poor specification, wrong tool, ambiguous criteria — rather than generalizing.
 
 ## Example
 
 The following two tasks illustrate the delegation decision in practice using Claude Code.
 
-**Delegate** — codebase-wide API migration (repetitive, large scope, verifiable):
+Delegate — codebase-wide API migration (repetitive, large scope, verifiable):
 
 ```bash
 # The task touches 40+ files; describing it takes 30 seconds, doing it manually takes hours.
@@ -89,7 +89,7 @@ The wrapper lives in src/lib/apiClient.ts. After migrating, run: npm test -- --t
 
 The result is verifiable (tests pass or fail), the scope is too large for manual execution, and the operation is repetitive — all three delegation criteria are met.
 
-**Do it yourself** — a one-line rename (faster to execute than to describe):
+Do it yourself — a one-line rename (quicker to execute than to describe):
 
 ```bash
 # Renaming a single local variable takes 5 seconds in the editor.
@@ -108,7 +108,7 @@ Applying the describe-it test: the rename prompt would require explaining which 
 
 ## Related
 
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
 - [Execution-First Delegation](execution-first-delegation.md)
 - [The Yes-Man Agent](../anti-patterns/yes-man-agent.md)
 - [Agent Backpressure](agent-backpressure.md)

@@ -24,7 +24,7 @@ maturity: adopted
 !!! note "Also known as"
     Hook Examples & Recipes, Common Enforcement Patterns, Enforcing with Hooks, Hook Enforcement Patterns.
 
-## Why Hooks
+## Why hooks
 
 Models carry strong priors (`npm`, `git add -A`, `curl`) and revert under pressure. Hooks move enforcement out of the context window and into the shell.
 
@@ -32,11 +32,11 @@ Models carry strong priors (`npm`, `git add -A`, `curl`) and revert under pressu
 |----------|------------|---------------|
 | AGENTS.md instruction | Low | High — model may ignore under pressure |
 | System prompt rule | Medium | Medium — multi-step tasks cause drift |
-| `PreToolUse` hook | High | Low — bypass via tool-switching (see *When This Backfires*) |
+| `PreToolUse` hook | High | Low — bypass via tool-switching (see When this backfires) |
 
-## How Hooks Work
+## How hooks work
 
-[Claude Code hooks](https://code.claude.com/docs/en/hooks) run on agent lifecycle events. Claude Code passes JSON on stdin; use `jq` to extract fields.
+[Claude Code hooks](https://code.claude.com/docs/en/hooks) run on agent lifecycle events. Claude Code passes JSON on stdin. Use `jq` to extract fields.
 
 | Event | Fires when |
 |-------|-----------|
@@ -45,13 +45,13 @@ Models carry strong priors (`npm`, `git add -A`, `curl`) and revert under pressu
 | `UserPromptSubmit` | When the user sends a message |
 | `Stop` | When the agent finishes a turn |
 
-Returning a `permissionDecision` of `"deny"` blocks the tool call; the `permissionDecisionReason` is fed back into the agent's context.
+A `permissionDecision` of `"deny"` blocks the tool call. Claude Code feeds the `permissionDecisionReason` back into the agent's context.
 
-## CLI Tool Enforcement
+## CLI tool enforcement
 
 Force project-mandated tools over training defaults.
 
-**Block npm, require bun:**
+Block npm, require bun:
 
 ```bash
 #!/bin/bash
@@ -72,7 +72,7 @@ fi
 }
 ```
 
-**Block python, require uv:**
+Block python, require uv:
 
 ```bash
 #!/bin/bash
@@ -85,11 +85,11 @@ else
 fi
 ```
 
-## Destructive Operation Guardrails
+## Destructive operation guardrails
 
 Block hard-to-reverse commands.
 
-**Block `rm -rf`:**
+Block `rm -rf`:
 
 ```bash
 #!/bin/bash
@@ -102,7 +102,7 @@ else
 fi
 ```
 
-**Block `git reset --hard` and `git push --force`:**
+Block `git reset --hard` and `git push --force`:
 
 ```bash
 #!/bin/bash
@@ -115,7 +115,7 @@ else
 fi
 ```
 
-**Block direct push to main:**
+Block direct push to main:
 
 ```bash
 #!/bin/bash
@@ -128,11 +128,11 @@ else
 fi
 ```
 
-## Workflow Automation
+## Workflow automation
 
 Run side effects automatically.
 
-**Auto-lint after file writes:**
+Auto-lint after file writes:
 
 ```json
 {
@@ -142,7 +142,7 @@ Run side effects automatically.
 }
 ```
 
-**Log all prompts for audit:**
+Log all prompts for audit:
 
 ```bash
 #!/bin/bash
@@ -159,7 +159,7 @@ echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) $PROMPT" >> ~/.claude/prompt-audit.log
 }
 ```
 
-**Desktop notification on agent completion:**
+Desktop notification on agent completion:
 
 ```bash
 #!/bin/bash
@@ -180,7 +180,7 @@ osascript -e 'display notification "Claude Code finished" with title "Done"'
 
 Restrict reads or execs during sensitive operations.
 
-**Restrict Bash to a command allowlist:**
+Restrict Bash to a command allowlist:
 
 ```bash
 #!/bin/bash
@@ -194,7 +194,7 @@ else
 fi
 ```
 
-**Block outbound network calls during agent sessions:**
+Block outbound network calls during agent sessions:
 
 ```bash
 #!/bin/bash
@@ -207,11 +207,11 @@ else
 fi
 ```
 
-## Instruction Auditing
+## Instruction auditing
 
 Track which instruction files load — useful for config drift across teammates.
 
-**Log loaded instructions:**
+Log loaded instructions:
 
 ```bash
 #!/bin/bash
@@ -230,7 +230,7 @@ echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) Instructions loaded: $INSTRUCTIONS" >> ~/.c
 
 `InstructionsLoaded` fires when CLAUDE.md or `.claude/rules/*.md` load. The payload — `file_path`, `memory_type`, `load_reason`, `trigger_file_path` — is enough to audit per-session instruction loads ([docs](https://code.claude.com/docs/en/hooks)).
 
-## Hook Configuration and Combining
+## Hook configuration and combining
 
 Multiple handlers can fire per event/matcher. Hooks scope at three levels ([docs](https://code.claude.com/docs/en/hooks); [settings](https://code.claude.com/docs/en/settings)):
 
@@ -240,18 +240,18 @@ Multiple handlers can fire per event/matcher. Hooks scope at three levels ([docs
 | `.claude/settings.json` | Single project | Yes — commit to repo |
 | `.claude/settings.local.json` | Single project | No — gitignored |
 
-## When This Backfires
+## When this backfires
 
-- **False positive blocking**: Over-broad regex matchers (matching `rm` instead of `rm -rf`) block legitimate commands; the model then exhausts retries or hallucinates workarounds. Validate patterns against real command logs.
-- **Silent failures**: A hook that exits non-zero without a `permissionDecisionReason` gives the model no signal to adapt. Always emit a reason string.
-- **Exit code 1 fails open**: For most hook events Claude Code only treats exit code `2` as a block; `1` is logged as a non-blocking error and the call proceeds — developers reaching for the conventional Unix failure code ship guards that silently fail open ([hooks reference](https://code.claude.com/docs/en/hooks)).
-- **Tool-switching circumvention**: Hooks fire per tool match. Block `Edit`/`Write` and the model reaches for `Bash` + `sed`/`python -c`/heredoc; block `rm` and it falls back to `perl -e 'unlink(...)'`. Anchor outcome-layer harms in file permissions, network policy, or a sandbox, and pair tool hooks with a `Bash` matcher for the obvious bypasses ([issue #43189](https://github.com/anthropics/claude-code/issues/43189)).
-- **Exit-code-2 stop-instead-of-retry**: A `PreToolUse` block with exit `2` is meant to feed `stderr` back so the agent adapts, but in practice Claude often stops mid-turn and waits for user input — turning a fixable guardrail into a hard halt ([issue #24327](https://github.com/anthropics/claude-code/issues/24327)).
-- **Long sub-command chains bypass deny rules**: Claude Code has been shown to skip permission checks when a tool call carries a long chain of sub-commands, falling back to asking the user instead of enforcing the deny ([The Register, Apr 2026](https://www.theregister.com/software/2026/04/01/claude-code-bypasses-safety-rule-if-given-too-many-commands/)). Scope hook matchers to atomic commands.
-- **Fragile string matchers**: Exact-command matchers break when the model varies invocation style (`git push origin main` vs `git push --set-upstream origin main`).
-- **No emergency override**: A hook can block a legitimate time-sensitive operation; document an override (e.g., `settings.local.json` entry) so contributors are not stuck.
+- False positive blocking: over-broad regex matchers (matching `rm` instead of `rm -rf`) block legitimate commands. The model then exhausts retries or hallucinates workarounds. Validate patterns against real command logs.
+- Silent failures: a hook that exits non-zero without a `permissionDecisionReason` gives the model no signal to adapt. Always emit a reason string.
+- Exit code 1 fails open: for most hook events Claude Code treats only exit code `2` as a block. Exit code `1` is logged as a non-blocking error and the call proceeds. Developers who reach for the conventional Unix failure code ship guards that silently fail open ([hooks reference](https://code.claude.com/docs/en/hooks)).
+- Tool-switching circumvention: hooks fire per tool match. Block `Edit`/`Write` and the model reaches for `Bash` + `sed`/`python -c`/heredoc; block `rm` and it falls back to `perl -e 'unlink(...)'`. Anchor outcome-layer harms in file permissions, network policy, or a sandbox, and pair tool hooks with a `Bash` matcher for the obvious bypasses ([issue #43189](https://github.com/anthropics/claude-code/issues/43189)).
+- Exit-code-2 stop-instead-of-retry: a `PreToolUse` block with exit `2` is meant to feed `stderr` back so the agent adapts. In practice Claude often stops mid-turn and waits for user input, turning a fixable guardrail into a hard halt ([issue #24327](https://github.com/anthropics/claude-code/issues/24327)).
+- Long sub-command chains bypass deny rules: Claude Code has been shown to skip permission checks when a tool call carries a long chain of sub-commands, falling back to asking the user instead of enforcing the deny ([The Register, Apr 2026](https://www.theregister.com/software/2026/04/01/claude-code-bypasses-safety-rule-if-given-too-many-commands/)). Scope hook matchers to atomic commands.
+- Fragile string matchers: exact-command matchers break when the model varies invocation style (`git push origin main` versus `git push --set-upstream origin main`).
+- No emergency override: a hook can block a legitimate time-sensitive operation. Document an override (for example, a `settings.local.json` entry) so contributors are not stuck.
 
-## When to Use Hooks vs. Instructions
+## When to use hooks instead of instructions
 
 Hooks: rules that must hold without exception, strong opposing model priors (package managers, test runners), behavior that must survive multi-step sessions.
 

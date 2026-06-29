@@ -16,58 +16,58 @@ maturity: established
 
 > Static benchmarks become unreliable as models train on their data. Decontaminated pipelines use temporal filtering and continuous fresh task sourcing to measure real capability.
 
-## The Contamination Problem
+## The contamination problem
 
-Models trained on large internet corpora inevitably encounter benchmark data. When a model has seen the test set during training, its benchmark score reflects memorization, not generalization.
+Models trained on large internet corpora end up seeing benchmark data. When a model has seen the test set during training, its score reflects memorization, not generalization.
 
 SWE-rebench quantified this for coding agents: DeepSeek-V3 scores 39.7% on SWE-bench Verified but only 21.3% on decontaminated fresh tasks — an 18.4 percentage point gap attributable to contamination. GPT-4.1 shows a similar pattern: 31.1% on older tasks versus 26.7% on newer ones. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]
 
 The problem extends beyond SWE-bench. LessLeak-Bench audited 83 software engineering benchmarks and found leakage ratios ranging from under 1% to 100%. StarCoder-7b achieved Pass@1 4.9x higher on leaked samples than on non-leaked samples in the APPS benchmark. [Source: [LessLeak-Bench](https://arxiv.org/abs/2502.06215)]
 
-Teams that rely on published benchmark scores for model upgrade decisions risk selecting models that memorized the test set over models that generalize better to real-world tasks.
+Teams that rely on published benchmark scores for upgrade decisions risk picking a model that memorized the test set over one that generalizes better to real-world tasks.
 
-## Decontamination Mechanisms
+## Decontamination mechanisms
 
-Three mechanisms restore honest measurement:
+Three mechanisms restore honest measurement.
 
-### Temporal Filtering
+### Temporal filtering
 
-Track the creation date of every eval task (the issue, the PR, the test) against the model's training data cutoff. Tasks created after the cutoff cannot appear in training data. SWE-rebench explicitly flags evaluations where tasks predate a model's release date, marking them as potentially contaminated on the leaderboard. [Source: [SWE-rebench leaderboard methodology](https://swe-rebench.com/about)]
+Track the creation date of every eval task (the issue, the PR, the test) against the model's training data cutoff. Tasks created after the cutoff cannot appear in training data. SWE-rebench flags evaluations where tasks predate a model's release date, marking them as potentially contaminated on the leaderboard. [Source: [SWE-rebench leaderboard methodology](https://swe-rebench.com/about)]
 
-### Continuous Fresh Task Sourcing
+### Continuous fresh task sourcing
 
-Rather than curating a fixed benchmark once, extract tasks continuously from recent real-world activity. SWE-rebench mines merged PRs linked to resolved GitHub issues, yielding 21,336 tasks from 3,468 repositories. The pipeline runs four stages: repository filtering, LLM-driven environment setup, execution validation in isolated containers, and quality assessment. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]
+Rather than curate a fixed benchmark once, extract tasks continuously from recent real-world activity. SWE-rebench mines merged PRs linked to resolved GitHub issues, yielding 21,336 tasks from 3,468 repositories. The pipeline runs four stages: repository filtering, LLM-driven environment setup, execution validation in isolated containers, and quality assessment. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]
 
-The same principle applies at team scale: periodically add eval tasks sourced from recent internal work to keep your suite ahead of potential contamination.
+The same principle works at team scale. Periodically add eval tasks from recent internal work to keep your suite ahead of contamination.
 
-### Standardized Scaffolding
+### Standardized scaffolding
 
-Contamination is not the only confounding variable. Differences in prompts, tools, and test-time computation inflate or deflate scores independently of model capability. SWE-rebench isolates model quality by fixing the scaffolding: identical ReAct-style prompts, 128K context window, default hyperparameters, and five runs per model with standard error reported. [Source: [SWE-rebench leaderboard methodology](https://swe-rebench.com/about)]
+Contamination is not the only confounding variable. Differences in prompts, tools, and test-time computation inflate or deflate scores apart from model capability. SWE-rebench isolates model quality by fixing the scaffolding: identical ReAct-style prompts, 128K context window, default hyperparameters, and five runs per model with standard error reported. [Source: [SWE-rebench leaderboard methodology](https://swe-rebench.com/about)]
 
-## Team-Level Defenses
+## Team-level defenses
 
 You do not need to build a 21,000-task pipeline. Three practices protect against contamination at team scale:
 
-1. **Maintain a private eval suite.** Tasks drawn from your own codebase and real production incidents are unlikely to appear in any model's training data. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+1. Maintain a private eval suite. Tasks drawn from your own codebase and real production incidents are unlikely to appear in any model's training data. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-2. **Refresh continuously.** Add eval tasks from recent work — last month's merged PRs, last week's [production incidents](incident-to-eval-synthesis.md). Tasks that postdate the model's training cutoff are inherently decontaminated.
+2. Refresh continuously. Add eval tasks from recent work — last month's merged PRs, last week's [production incidents](incident-to-eval-synthesis.md). Tasks that postdate the model's training cutoff are inherently decontaminated.
 
-3. **Treat public benchmarks as upper bounds.** Use them for directional comparison, not absolute measurement. When two models score within a few points of each other on a public benchmark, the difference may be contamination rather than capability.
+3. Treat public benchmarks as upper bounds. Use them for directional comparison, not absolute measurement. When two models score within a few points of each other on a public benchmark, the difference may be contamination rather than capability.
 
-## When This Backfires
+## When this backfires
 
 Decontamination practices carry their own trade-offs:
 
-- **Loss of cross-team comparability.** A continuously refreshed private suite cannot be compared against other teams' or vendors' numbers. Standard [public benchmarks](benchmark-driven-tool-selection.md) remain the only shared yardstick for ecosystem-wide model ranking.
-- **Selection bias in sourced tasks.** Mining recent merged PRs or production incidents biases the suite toward whatever work your team happens to do. Capability regressions on task types outside that distribution go undetected.
-- **Pipeline maintenance cost.** Running a fresh-task pipeline with isolated execution, quality filtering, and repeated runs can cost more engineering time than the measurement precision gained — especially for small teams making infrequent model decisions, for whom a lighter [golden query pairs](golden-query-pairs-regression.md) suite may suffice.
-- **Apparent regressions from task drift.** When the eval set changes between runs, score movements conflate model changes with task-difficulty drift. Static benchmarks at least hold the measurement rod constant.
+- Loss of cross-team comparability: a continuously refreshed private suite cannot be compared against other teams' or vendors' numbers. Standard [public benchmarks](benchmark-driven-tool-selection.md) remain the only shared yardstick for ranking models across the field.
+- Selection bias in sourced tasks: mining recent merged PRs or production incidents biases the suite toward whatever work your team happens to do. Capability regressions on task types outside that distribution go undetected.
+- Pipeline maintenance cost: running a fresh-task pipeline with isolated execution, quality filtering, and repeated runs can cost more engineering time than the measurement precision gained — especially for small teams making infrequent model decisions, for whom a lighter [golden query pairs](golden-query-pairs-regression.md) suite may suffice.
+- Apparent regressions from task drift: when the eval set changes between runs, score movements conflate model changes with task-difficulty drift. Static benchmarks at least hold the measurement rod constant.
 
-For teams making single model-selection decisions per year, triangulating two or three public benchmarks may be cheaper and nearly as informative as building a decontaminated pipeline.
+For teams making one model-selection decision per year, triangulating two or three public benchmarks may be cheaper and nearly as informative as building a decontaminated pipeline.
 
 ## Example
 
-SWE-rebench's own leaderboard demonstrates the pattern. DeepSeek-V3 leads on SWE-bench Verified at 39.7%, but drops to 21.3% on decontaminated tasks — a gap nearly as large as its reported score. Meanwhile, models with lower Verified scores show smaller drops, suggesting their original scores were less inflated by contamination. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]
+SWE-rebench's own leaderboard shows the pattern. DeepSeek-V3 leads on SWE-bench Verified at 39.7%, but drops to 21.3% on decontaminated tasks — a gap nearly as large as its reported score. Models with lower Verified scores show smaller drops, suggesting their original scores were less inflated by contamination. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]
 
 A team using SWE-bench Verified scores alone to choose between models would rank DeepSeek-V3 highest. A team running the same models against fresh, post-cutoff tasks drawn from their own repositories would get a different ranking — one that reflects generalization to the work the team actually needs done.
 

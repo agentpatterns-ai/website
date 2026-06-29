@@ -15,41 +15,41 @@ maturity: emerging
 
 > Content exclusion rules that work for completions and chat can be silently ignored by agent-mode features.
 
-## The Gap
+## The gap
 
-GitHub Copilot's [content exclusion feature](https://docs.github.com/en/copilot/managing-copilot/managing-github-copilot-in-your-organization/configuring-content-exclusions-for-github-copilot) lets organizations specify files that Copilot should ignore. When exclusions are active, inline code suggestions are suppressed in excluded files and Copilot Chat cannot use those files to generate responses.
+GitHub Copilot's [content exclusion feature](https://docs.github.com/en/copilot/managing-copilot/managing-github-copilot-in-your-organization/configuring-content-exclusions-for-github-copilot) lets organizations name files that Copilot should ignore. When exclusions are active, Copilot suppresses inline code suggestions in excluded files, and Copilot Chat cannot use those files to generate responses.
 
-However, these exclusions [do not apply to](https://docs.github.com/en/copilot/managing-copilot/managing-github-copilot-in-your-organization/configuring-content-exclusions-for-github-copilot):
+These exclusions [do not apply to](https://docs.github.com/en/copilot/managing-copilot/managing-github-copilot-in-your-organization/configuring-content-exclusions-for-github-copilot):
 
-- **[Agent mode](../tools/copilot/agent-mode.md)** in Copilot Chat (IDEs)
-- **GitHub Copilot CLI**
-- **Copilot coding agent**
+- [Agent mode](../tools/copilot/agent-mode.md) in Copilot Chat (IDEs)
+- GitHub Copilot CLI
+- Copilot coding agent
 
-A file excluded from completions and chat — because it contains secrets, proprietary logic, or compliance-sensitive data — remains fully accessible when an agent reads the repository to plan and execute tasks.
+You exclude a file from completions and chat because it holds secrets, proprietary logic, or compliance-sensitive data. That file stays fully accessible when an agent reads the repository to plan and run tasks.
 
-## Security Implications
+## Security implications
 
-Organizations that rely on content exclusions as a security boundary may not realize that agent-mode access is unrestricted. The exclusion mechanism was designed for the completions and chat interaction model. In that model, Copilot passively responds to what the developer is working on. Agent-mode features operate differently: they actively traverse the repository, read files, and make decisions based on file contents. The exclusion rules do not intercept this access path — GitHub's documentation [explicitly states](https://docs.github.com/en/copilot/concepts/context/content-exclusion) that content exclusions do not apply to agent mode in IDEs, the GitHub Copilot CLI, or the Copilot coding agent.
+Organizations that treat content exclusions as a security boundary may not realize that agent-mode access is unrestricted. The exclusion mechanism was built for the completions and chat model. In that model, Copilot responds passively to what the developer is working on. Agent-mode features work differently. They traverse the repository, read files, and make decisions based on file contents. The exclusion rules do not intercept this access path. GitHub's documentation [states directly](https://docs.github.com/en/copilot/concepts/context/content-exclusion) that content exclusions do not apply to agent mode in IDEs, the GitHub Copilot CLI, or the Copilot coding agent.
 
-## The Transferable Lesson
+## The transferable lesson
 
 This pattern is not specific to GitHub Copilot. Any AI system with multiple interaction modes risks the same gap:
 
-- **Completion mode** — passive, responds to the current file
-- **Chat mode** — reactive, answers questions using file context
-- **Agent mode** — active, traverses the repository and reads files autonomously
+- Completion mode is passive and responds to the current file
+- Chat mode is reactive and answers questions using file context
+- Agent mode is active and traverses the repository, reading files on its own
 
-Security rules designed for passive modes do not automatically transfer to active modes. Each mode has different access patterns, and exclusion mechanisms must be verified independently per mode.
+Security rules built for passive modes do not automatically transfer to active modes. Each mode has different access patterns. Verify exclusion mechanisms independently for every mode.
 
-## Mitigation Strategies
+## Mitigation strategies
 
-Since content exclusions do not cover agent modes, organizations need additional controls:
+Content exclusions do not cover agent modes, so organizations need extra controls:
 
-- **Filesystem permissions** — restrict read access to sensitive files at the OS or container level so agents cannot access them regardless of mode
-- **Pre-commit hooks** — detect and block commits that reference excluded content
-- **Repository structure** — isolate sensitive files in separate repositories with restricted agent access
-- **Agent-specific instruction files** — use [AGENTS.md](../standards/agents-md.md) or [copilot-instructions.md](../tools/copilot/copilot-instructions-md-convention.md) to explicitly instruct agents to avoid specific paths (instruction-based, not enforcement-based)
-- **Review gates** — require human review of all agent-generated PRs that touch sensitive directories
+- Filesystem permissions: restrict read access to sensitive files at the OS or container level so agents cannot reach them in any mode
+- Pre-commit hooks: detect and block commits that reference excluded content
+- Repository structure: isolate sensitive files in separate repositories with restricted agent access
+- Agent-specific instruction files: use [AGENTS.md](../standards/agents-md.md) or [copilot-instructions.md](../tools/copilot/copilot-instructions-md-convention.md) to tell agents to avoid specific paths (guidance, not enforcement)
+- Review gates: require human review of every agent-generated PR that touches sensitive directories
 
 ## Example
 
@@ -63,11 +63,11 @@ excluded_paths:
 
 With this exclusion active:
 
-- **Inline completions**: Copilot does not suggest code when the developer has `src/pricing/engine.py` open — the exclusion works as intended.
-- **Copilot Chat (ask mode)**: Pasting content from `engine.py` and asking "explain this" is blocked — the file is excluded from chat context.
-- **Copilot agent mode**: A developer asks the agent "refactor the checkout flow to reduce latency." The agent traverses the repository, reads `src/pricing/engine.py` to understand pricing logic, and includes its contents in the plan it generates — the exclusion does not apply.
+- Inline completions: Copilot does not suggest code when the developer has `src/pricing/engine.py` open. The exclusion works as intended.
+- Copilot Chat (ask mode): pasting content from `engine.py` and asking "explain this" is blocked. The file is excluded from chat context.
+- Copilot agent mode: a developer asks the agent to refactor the checkout flow to reduce latency. The agent traverses the repository, reads `src/pricing/engine.py` to understand the pricing logic, and puts its contents in the plan it generates. The exclusion does not apply.
 
-The same file that the organization intended to protect is fully visible to the agent. The exclusion rule was designed for the completions and chat access model; the agent's active traversal path is outside its scope.
+The same file the organization meant to protect is fully visible to the agent. The exclusion rule was built for the completions and chat access model. The agent's active traversal path falls outside its scope.
 
 ## Key Takeaways
 
@@ -77,17 +77,17 @@ The same file that the organization intended to protect is fully visible to the 
 - Use filesystem-level controls or repository isolation when content exclusion rules are insufficient
 - Instruction-based exclusions (telling the agent to avoid files) are not enforcement — they are guidance
 
-## When This Backfires
+## When this backfires
 
 The mitigations above are not foolproof:
 
-- **Filesystem permissions** work only if agents run with restricted OS-level credentials. Many IDE-based agent features inherit the developer's full permissions, so OS restrictions require deliberate credential separation — not just configuration.
-- **Pre-commit hooks** detect after the fact, even when [enforcing agent behavior with hooks](enforcing-agent-behavior-with-hooks.md). An agent that reads a sensitive file but never commits anything leaves no trace in the hook output.
-- **Repository isolation** shifts risk rather than eliminates it. Sensitive repositories still need agent access controls reviewed independently, and cross-repo agent tasks can pull credentials or logic across boundaries.
-- **Instruction-based exclusions** (AGENTS.md, copilot-instructions.md) are guidance, not enforcement. A sufficiently broad task prompt can cause an agent to traverse paths the instructions intended to exclude — the [task scope security boundary](../security/task-scope-security-boundary.md) problem — especially if the agent reasons that reading the file is necessary to complete the task.
-- **Review gates** on agent PRs catch writes but not reads. If the agent reads sensitive data to construct a plan and then produces a PR that does not directly reference that data, the read goes undetected.
+- Filesystem permissions work only if agents run with restricted OS-level credentials. Many IDE-based agent features inherit the developer's full permissions, so OS restrictions need deliberate credential separation, not just configuration.
+- Pre-commit hooks detect after the fact, even when [enforcing agent behavior with hooks](enforcing-agent-behavior-with-hooks.md). An agent that reads a sensitive file but never commits anything leaves no trace in the hook output.
+- Repository isolation shifts risk rather than removing it. Sensitive repositories still need their agent access controls reviewed independently, and cross-repo agent tasks can pull credentials or logic across boundaries.
+- Instruction-based exclusions (AGENTS.md, copilot-instructions.md) are guidance, not enforcement. A broad enough task prompt can lead an agent to traverse paths the instructions meant to exclude, the [task scope security boundary](../security/task-scope-security-boundary.md) problem, especially if the agent reasons that reading the file is needed to finish the task.
+- Review gates on agent PRs catch writes but not reads. If the agent reads sensitive data to build a plan and then produces a PR that does not reference that data directly, the read goes undetected.
 
-The underlying issue — that exclusion policies designed for passive modes do not propagate to active modes — is architectural. Until GitHub (or other vendors) builds exclusion enforcement into the agent traversal layer itself, filesystem-level controls are the only reliable boundary.
+The underlying issue is architectural: exclusion policies built for passive modes do not propagate to active modes. Until GitHub or other vendors build exclusion enforcement into the agent traversal layer itself, filesystem-level controls are the only reliable boundary.
 
 ## Related
 

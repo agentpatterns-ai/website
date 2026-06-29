@@ -18,19 +18,19 @@ maturity: emerging
 
 > Launch parallel agents 30 seconds apart to break the thundering-herd dynamic — each agent claims work before the next one reads the queue.
 
-## The Thundering-Herd Problem
+## The thundering-herd problem
 
-When multiple agents start simultaneously, they all read the same queue snapshot and contend for the same high-priority items. The result:
+When multiple agents start at the same time, they all read the same queue snapshot and compete for the same high-priority items. The result:
 
 - Repeated reservation conflicts on the same tasks
 - Wasted compute re-reading and re-evaluating already-claimed work
 - Inconsistent throughput as agents pile onto a narrow frontier
 
-This is the agent-swarm analog of the [thundering-herd problem](https://en.wikipedia.org/wiki/Thundering_herd_problem) in distributed systems: many processes wake simultaneously and contend for a single resource, and only one succeeds — the rest burn cycles failing to claim it.
+This is the agent-swarm version of the [thundering-herd problem](https://en.wikipedia.org/wiki/Thundering_herd_problem) in distributed systems: many processes wake at once and compete for a single resource. Only one succeeds. The rest burn cycles failing to claim it.
 
-## The Staggered Launch Pattern
+## The staggered launch pattern
 
-The fix is de-synchronizing queue reads by launching agents with a delay between each start:
+To fix this, de-synchronize the queue reads. Launch agents with a delay between each start:
 
 ```
 launch agent-1
@@ -41,9 +41,9 @@ launch agent-3
 ...
 ```
 
-Each agent reads the queue in a different state: agent-2 sees a queue already partially claimed by agent-1. Contention on top-priority items drops because the items no longer appear available.
+Each agent reads the queue in a different state. Agent-2 sees a queue already partly claimed by agent-1. Competition for top-priority items drops because those items no longer appear available.
 
-A 30-second stagger is a common practitioner convention. Adding a short delay between agent launch and sending the first prompt gives [session initialization](../agent-design/session-initialization-ritual.md) time to settle before the agent reads the queue. Neither figure is empirically derived — the real principle is ensuring each agent has enough time to read-and-reserve before the next agent reads.
+A 30-second stagger is a common practitioner convention. A short delay between launching an agent and sending its first prompt gives [session initialization](../agent-design/session-initialization-ritual.md) time to settle before the agent reads the queue. Neither figure comes from measured data. The real principle is to give each agent enough time to read and reserve before the next agent reads.
 
 ```mermaid
 gantt
@@ -58,22 +58,22 @@ gantt
     Agent 3 reads + claims : a3, 60, 25s
 ```
 
-## When This Is Enough
+## When this is enough
 
 Staggered launch works well when:
 
 - No task-claiming infrastructure exists yet (bootstrap or prototype swarms)
 - Tasks are genuinely independent with no dependency ordering
-- Swarm size is small (≤5 agents) — a 10-agent swarm with 30s stagger takes 5 minutes to fully ramp
-- Queue read latency is consistent and short
+- Swarm size is small (≤5 agents) — a 10-agent swarm with a 30s stagger takes 5 minutes to fully ramp
+- Queue read latency is short and consistent
 
-It is a **zero-infrastructure change** — no agent logic, queue design, or coordination code requires modification.
+It needs no infrastructure. You change no agent logic, queue design, or coordination code.
 
-## When to Upgrade
+## When to upgrade
 
 Timing-based coordination is fragile. It breaks down under:
 
-| Condition | Why Stagger Fails | Better Alternative |
+| Condition | Why stagger fails | Better alternative |
 |-----------|------------------|-------------------|
 | Variable queue-read latency | Agent 2 may read before Agent 1 finishes reserving | File-locked task claims |
 | Slow agent initialization | 30s window may not be enough | Worktree isolation |
@@ -82,15 +82,15 @@ Timing-based coordination is fragile. It breaks down under:
 
 ### Structural alternatives
 
-**[Claude Code agent teams](../tools/claude/agent-teams.md)** use file locks on task claims: when a teammate writes a lock file and pushes it to the shared repo, git's push rejection prevents a second agent from claiming the same task — regardless of timing. This is more robust because it is enforced by the coordination mechanism, not by a timing assumption. See [File-Based Agent Coordination](file-based-agent-coordination.md).
+[Claude Code agent teams](../tools/claude/agent-teams.md) use file locks on task claims. When a teammate writes a lock file and pushes it to the shared repo, git's push rejection stops a second agent from claiming the same task, whatever the timing. This is more reliable because the coordination mechanism enforces it, not a timing assumption. See [File-Based Agent Coordination](file-based-agent-coordination.md).
 
-**[Worktree isolation](../workflows/worktree-isolation.md)** (`isolation: worktree` in Claude Code sub-agents) eliminates file-level contention entirely by giving each agent its own git worktree. Agents never compete for the same file paths. Orthogonal to launch timing, but removes a major contention source.
+[Worktree isolation](../workflows/worktree-isolation.md) (`isolation: worktree` in Claude Code sub-agents) removes file-level contention entirely by giving each agent its own git worktree. Agents never compete for the same file paths. It is separate from launch timing, but it removes a major source of contention.
 
-**[Block's agent-task-queue](https://github.com/block/agent-task-queue)** MCP server serializes expensive concurrent operations (builds, tests) via strict FIFO queuing, preventing agents from thrashing shared resources regardless of when they were launched.
+[Block's agent-task-queue](https://github.com/block/agent-task-queue) MCP server serializes expensive concurrent operations such as builds and tests through strict FIFO queuing. This stops agents from thrashing shared resources, whatever time they launched.
 
-## Relationship to Fungible Agent Architecture
+## Relationship to fungible agent architecture
 
-Staggered launch is most effective when combined with a **fungible agent design** — where any agent can pick up any available task. Agents that are specialized or stateful reduce the pool of claimable work, making timing-based de-synchronization less useful. The stagger works by ensuring agents see different queue frontiers; if each agent is only eligible for a small subset of tasks, those subsets may overlap regardless of timing.
+Staggered launch works best with a fungible agent design, where any agent can pick up any available task. Specialized or stateful agents shrink the pool of claimable work, which makes timing-based de-synchronization less useful. The stagger works by giving agents different queue frontiers to read. If each agent can only take a small subset of tasks, those subsets may overlap whatever the timing.
 
 ## Example
 
@@ -116,7 +116,7 @@ wait
 echo "All agents finished."
 ```
 
-Each agent starts 30 seconds after the previous one. By the time agent 2 reads the working directory, agent 1 has already begun modifying its target files, reducing the chance of overlapping edits.
+Each agent starts 30 seconds after the previous one. By the time agent 2 reads the working directory, agent 1 has already started changing its target files. This reduces the chance of overlapping edits.
 
 ## Key Takeaways
 

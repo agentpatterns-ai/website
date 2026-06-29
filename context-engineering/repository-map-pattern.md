@@ -18,15 +18,15 @@ maturity: established
 
 > Parse source files with tree-sitter to extract structural symbols, rank them by graph importance, then binary-search fit the most relevant entries into the agent's available token budget.
 
-## The Orientation Problem
+## The orientation problem
 
 In a large codebase, directory listings, file samples, and keyword greps waste tokens on low-signal content. The agent needs to know which functions exist, which classes matter, and how they connect — not implementation details.
 
 The repository map pattern builds a weighted structural overview fitted to a token budget.
 
-## Three-Layer Mechanism
+## Three-layer mechanism
 
-The pattern operates in three stages: **parse**, **rank**, **fit**.
+The pattern runs in three stages: parse, rank, then fit.
 
 ```mermaid
 graph LR
@@ -36,9 +36,9 @@ graph LR
     D --> E[Agent Context]
 ```
 
-### 1. Parse: Tree-Sitter AST Extraction
+### 1. Parse: tree-sitter AST extraction
 
-Tree-sitter parses source into ASTs and extracts structural elements: function signatures, class definitions, method names, and call signatures. Unlike full file reads, this captures *what exists* without loading implementation bodies.
+Tree-sitter parses source into ASTs and extracts structural elements: function signatures, class definitions, method names, and call signatures. Unlike full file reads, this captures what exists without loading implementation bodies.
 
 | Feature | ctags | tree-sitter |
 |---------|-------|-------------|
@@ -49,19 +49,19 @@ Tree-sitter parses source into ASTs and extracts structural elements: function s
 
 ([Aider blog: Building a better repository map with tree-sitter](https://aider.chat/2023/10/22/repomap.html))
 
-### 2. Rank: PageRank on the Reference Graph
+### 2. Rank: PageRank on the reference graph
 
-Source files become nodes in a directed graph; edges connect files sharing symbol references. PageRank with personalization scores each node: files being edited get higher weight, heavily-referenced symbols rank higher, and the result emphasizes task-relevance over sheer size.
+Source files become nodes in a directed graph. Edges connect files that share symbol references. PageRank with personalization scores each node: files being edited get higher weight, heavily-referenced symbols rank higher, and the result favours task-relevance over sheer size.
 
-PageRank works here because importance propagates through the call graph: a function referenced by 20 files outranks a helper called once, and symbols referenced *by* important symbols gain transitively elevated scores. BM25 and recency weighting lack this property — the top-ranked symbols surface the architectural spine without any query. ([Aider repo map docs](https://aider.chat/docs/repomap.html))
+PageRank works here because importance propagates through the call graph. A function referenced by 20 files outranks a helper called once, and symbols referenced by important symbols gain higher scores in turn. BM25 and recency weighting lack this property — the top-ranked symbols surface the architectural spine without any query. ([Aider repo map docs](https://aider.chat/docs/repomap.html))
 
-### 3. Fit: Binary Search to Token Budget
+### 3. Fit: binary search to token budget
 
-The `get_ranked_tags_map()` method binary-searches for the maximum ranked tags that fit within `max_map_tokens` (default: 1,024), targeting within 15% of budget. Fewer files in context expands the map; more files shrinks it — the agent always gets the most important symbols that fit.
+The `get_ranked_tags_map()` method binary-searches for the most ranked tags that fit within `max_map_tokens` (default: 1,024), targeting within 15% of budget. Fewer files in context expands the map; more files shrinks it. The agent always gets the most important symbols that fit.
 
 ([RepoMapper](https://github.com/pdavis68/RepoMapper))
 
-## What a Repository Map Looks Like
+## What a repository map looks like
 
 At different token budgets, the same codebase produces different levels of detail:
 
@@ -95,29 +95,29 @@ src/models/session.py
 
 Higher budget: more files with full type annotations. Lower budget: only the most-referenced symbols.
 
-## Benchmark Impact
+## Benchmark impact
 
-Aider's system achieved a then-SOTA 26.3% resolve rate on SWE-bench Lite, with 70.3% correct file identification. The map helps the agent locate *where* to change before deciding *what* to change. The SWE-bench post credits the repo map but does not isolate its contribution in an ablation; the figure reflects the full Aider stack. ([Aider SWE-bench blog post](https://aider.chat/2024/05/22/swe-bench-lite.html))
+Aider's system reached a then-SOTA 26.3% resolve rate on SWE-bench Lite, with 70.3% correct file identification. The map helps the agent locate where to change before deciding what to change. The SWE-bench post credits the repo map but does not isolate its contribution in an ablation; the figure reflects the full Aider stack. ([Aider SWE-bench blog post](https://aider.chat/2024/05/22/swe-bench-lite.html))
 
-## Alternative Approaches
+## Alternative approaches
 
 Codebase orientation strategies:
 
 | Approach | Mechanism | Best when |
 |----------|-----------|-----------|
-| **Repository map** (tree-sitter + PageRank) | Pre-computed structural index | Large, stable codebases; agent needs cross-file orientation |
-| **Agentic search** (Claude Code) | On-demand Glob, Grep, Read | Frequent changes; freshness matters more than structure |
-| **Vector embeddings** (Cursor, Windsurf) | Semantic similarity search | Natural-language queries against code |
+| Repository map (tree-sitter + PageRank) | Pre-computed structural index | Large, stable codebases; agent needs cross-file orientation |
+| Agentic search (Claude Code) | On-demand Glob, Grep, Read | Frequent changes; freshness matters more than structure |
+| Vector embeddings (Cursor, Windsurf) | Semantic similarity search | Natural-language queries against code |
 
 Claude Code skips indexing and uses agentic search — early RAG experiments showed agentic search performed better. ([Vadim's blog: Claude Code Doesn't Index Your Codebase](https://vadim.blog/claude-code-no-indexing)) Cursor and Windsurf use vector stores with re-ranking. ([Mike Mason: AI Coding Agents in 2026](https://mikemason.ca/writing/ai-coding-agents-jan-2026/))
 
-## MCP Server Availability
+## MCP server availability
 
-The pattern is available as standalone MCP servers, making it tool-agnostic:
+The pattern ships as standalone MCP servers, so any tool can use it:
 
-- **[RepoMapper](https://github.com/pdavis68/RepoMapper)** — Aider's repo map logic as an MCP server; any MCP-compatible agent can request a token-fitted map.
-- **[mcp-server-tree-sitter](https://github.com/wrale/mcp-server-tree-sitter)** — AST-based symbol extraction, dependency graphs, and complexity analysis as MCP tools.
-- **[Serena](https://github.com/oraios/serena)** — LSP-based approach for symbol-level navigation and editing.
+- [RepoMapper](https://github.com/pdavis68/RepoMapper) — Aider's repo map logic as an MCP server; any MCP-compatible agent can request a token-fitted map.
+- [mcp-server-tree-sitter](https://github.com/wrale/mcp-server-tree-sitter) — AST-based symbol extraction, dependency graphs, and complexity analysis as MCP tools.
+- [Serena](https://github.com/oraios/serena) — LSP-based approach for symbol-level navigation and editing.
 
 ## Example
 
@@ -162,12 +162,12 @@ are the most-referenced auth symbols. I'll read those files first.
 
 The map consumed 87 tokens instead of the ~12,000 tokens that reading all source files would require. The agent identified the right entry points without scanning the full codebase.
 
-## When This Backfires
+## When this backfires
 
-- **Rapidly-changing codebases**: The map is recomputed per session but not per edit. In a monorepo with thousands of commits per day, the parsed AST can be stale within minutes; Claude Code's on-demand agentic search is a better fit because it queries the live filesystem.
-- **Heavy metaprogramming**: Codebases that generate classes or functions at runtime (Rails `method_missing`, Python metaclasses, macro-heavy Rust) produce AST symbols that don't reflect runtime structure; PageRank over those symbols misleads rather than orients.
-- **Small or flat codebases**: A repo with fewer than ~20 files gains nothing from the ranking step — reading all source files fits inside a standard context window and provides richer implementation detail than signatures alone.
-- **Large repos with huge token budgets**: If the agent context window is already large enough to hold most of the codebase directly, the compression step introduces truncation risk for no gain.
+- Rapidly-changing codebases: the map is recomputed per session but not per edit. In a monorepo with thousands of commits per day, the parsed AST can be stale within minutes; Claude Code's on-demand agentic search is a better fit because it queries the live filesystem.
+- Heavy metaprogramming: codebases that generate classes or functions at runtime (Rails `method_missing`, Python metaclasses, macro-heavy Rust) produce AST symbols that do not reflect runtime structure; PageRank over those symbols misleads rather than orients.
+- Small or flat codebases: a repo with fewer than ~20 files gains nothing from the ranking step — reading all source files fits inside a standard context window and provides richer implementation detail than signatures alone.
+- Large repos with huge token budgets: if the agent context window is already large enough to hold most of the codebase directly, the compression step introduces truncation risk for no gain.
 
 ## Key Takeaways
 
@@ -182,7 +182,7 @@ The map consumed 87 tokens instead of the ~12,000 tokens that reading all source
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Pre-Execution Codebase Exploration](../workflows/pre-execution-codebase-exploration.md)
 - [Context Budget Allocation](context-budget-allocation.md)
-- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Context Priming](context-priming.md)
 - [Seeding Agent Context: Breadcrumbs in Code](seeding-agent-context.md)
 - [Layered Context Architecture](layered-context-architecture.md)

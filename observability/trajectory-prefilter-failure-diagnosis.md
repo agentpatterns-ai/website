@@ -22,17 +22,17 @@ maturity: emerging
 
 Two pre-filters wrap the investigator LLM after a coding agent has failed a repository-scale task: a pattern-matching noise filter that strips redundant program structure and verbose code context, and a preliminary diagnosis module that converts the test-failure report into prior hypotheses the investigator consults before traversing the trajectory ([TrajAudit, arxiv 2605.26563](https://arxiv.org/abs/2605.26563)).
 
-## When This Applies
+## When this applies
 
 Confirm all three conditions before adopting:
 
-- **Trajectory length exceeds the investigator's effective long-context budget.** TrajAudit targets repository-level runs whose trajectories are "very long, while long-context reasoning remains a known weakness of LLMs" ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Short trajectories that already fit the window do not benefit — the filter adds latency, not recall.
-- **A structured test-failure report exists.** The preliminary diagnosis is seeded from the test-failure artifact; without one, the investigator has no prior to anchor on ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)).
-- **Trajectory noise is dominated by predictable patterns.** Pattern matching only helps when "redundant program structure and verbose code context" compose the bulk of trajectory tokens ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Heterogeneous or context-dependent noise leaves the filter little to cut.
+- Trajectory length exceeds the investigator's effective long-context budget. TrajAudit targets repository-level runs whose trajectories are "very long, while long-context reasoning remains a known weakness of LLMs" ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Short trajectories that already fit the window do not benefit — the filter adds latency, not recall.
+- A structured test-failure report exists. The preliminary diagnosis is seeded from the test-failure artifact; without one, the investigator has no prior to anchor on ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)).
+- Trajectory noise is dominated by predictable patterns. Pattern matching only helps when "redundant program structure and verbose code context" compose the bulk of trajectory tokens ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Heterogeneous or context-dependent noise leaves the filter little to cut.
 
 If any condition is missing, fall back to [agent debugging](agent-debugging.md) for the four-mode taxonomy, or [trajectory decomposition](../verification/trajectory-decomposition-diagnosis.md) when the goal is per-stage grading rather than root-cause localization.
 
-## The Two Pre-Filters
+## The two pre-filters
 
 ```mermaid
 graph LR
@@ -55,7 +55,7 @@ The test-failure report (stack trace, assertion failure, error message) becomes 
 
 The investigator pulls filtered spans on demand rather than ingesting everything — retrieval-augmented investigation, with the filter and the prior deciding what to pull next ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)).
 
-## What the Evidence Shows
+## What the evidence shows
 
 TrajAudit reports the following on RootSE, a benchmark of 93 real-world software-maintenance failure instances ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)):
 
@@ -66,17 +66,17 @@ TrajAudit reports the following on RootSE, a benchmark of 93 real-world software
 
 These gains are RootSE-specific. Generalization to trajectories whose noise profile or test-report shape diverges from RootSE is not established.
 
-## Why It Works
+## Why it works
 
 Long-context degradation is the load-bearing mechanism: models retrieve content at the start and end of a long window but lose it in the middle ([Liu et al., "Lost in the Middle", arxiv 2307.03172](https://arxiv.org/abs/2307.03172)). Trajectory noise consumes attention budget without aiding localization. Pre-filtering shifts it out of the budget, and the preliminary diagnosis anchors the first hypothesis so the investigator converges in fewer traversals ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Both compound: a shorter, denser, prior-anchored window is the regime LLMs handle best.
 
-## When This Backfires
+## When this backfires
 
 The technique adds infrastructure overhead and introduces failure modes of its own. Three conditions where it harms more than it helps:
 
-1. **Bug lives in the filter's blind spot.** The noise filter is pattern-matching, not semantic. When the root cause sits in code the filter classifies as redundant — boilerplate that turned out to matter, a "scaffolding" file the bug routed through — the filter removes the evidence the investigator needs. Aggregate accuracy on a benchmark hides the false-negative rate on discarded spans.
-2. **[Symptom and cause are decoupled](../verification/trajectory-decomposition-diagnosis.md).** The preliminary diagnosis is seeded from the test-failure report, biasing the investigator toward the region consistent with the test's framing. When the symptom (assertion A fails) and root cause (state corrupted three calls earlier in module B) are decoupled, the prior anchors in the wrong place.
-3. **No test-failure artifact.** Runtime bugs that pass tests but produce wrong output, agent loops without test runs, and open-ended generation tasks all lack the structured report the diagnosis module consumes. Without that seed, the second pre-filter contributes nothing and the noise-filter overhead remains.
+1. Bug lives in the filter's blind spot. The noise filter is pattern-matching, not semantic. When the root cause sits in code the filter classifies as redundant — boilerplate that turned out to matter, a "scaffolding" file the bug routed through — the filter removes the evidence the investigator needs. Aggregate accuracy on a benchmark hides the false-negative rate on discarded spans.
+2. [Symptom and cause are decoupled](../verification/trajectory-decomposition-diagnosis.md). The preliminary diagnosis is seeded from the test-failure report, biasing the investigator toward the region consistent with the test's framing. When the symptom (assertion A fails) and root cause (state corrupted three calls earlier in module B) are decoupled, the prior anchors in the wrong place.
+3. No test-failure artifact. Runtime bugs that pass tests but produce wrong output, agent loops without test runs, and open-ended generation tasks all lack the structured report the diagnosis module consumes. Without that seed, the second pre-filter contributes nothing and the noise-filter overhead remains.
 
 A steelman of the opposite — feed the investigator the raw, unfiltered trajectory — is reasonable for small harnesses (<50k tokens), heterogeneous noise profiles, or workloads where dropping a critical line costs more than the latency saved. As long-context reasoning improves, the noise-filter layer's marginal value shrinks.
 
@@ -86,9 +86,9 @@ The TrajAudit evaluation runs on RootSE, 93 real-world failure instances drawn f
 
 A repository-level coding agent fails a maintenance task. The captured trajectory holds file dumps, tool-call results, repeated imports, and intermediate diffs. The test runner emits an assertion failure with a stack trace pointing into one module.
 
-**Without pre-filter** — the investigator LLM receives the [full trajectory](../context-engineering/lost-in-the-middle.md) plus the test report. Localization scans the long trajectory against a vague prior; content near the centre is reached late or not at all.
+Without pre-filter — the investigator LLM receives the [full trajectory](../context-engineering/lost-in-the-middle.md) plus the test report. Localization scans the long trajectory against a vague prior; content near the center is reached late or not at all.
 
-**With pre-filter** —
+With pre-filter —
 
 1. Noise filter strips repeated imports, full file dumps where a function would suffice, and scaffolding boilerplate.
 2. Preliminary diagnosis converts the stack trace into hypotheses anchored on the modules named in the trace and their direct callers.

@@ -2,7 +2,7 @@
 title: "Agent Loop Middleware — Safety Nets and Message Injection"
 description: "Wrap the agent loop with deterministic middleware nodes that guarantee reliability-critical steps and enable human-in-the-loop without breaking the loop."
 tags:
-  - agent-design
+  - loop-engineering
   - tool-agnostic
   - workflows
 aliases:
@@ -17,13 +17,13 @@ maturity: established
 
 > Wrap the agent loop from the outside: middleware nodes guarantee critical steps run regardless of agent behavior and inject queued input before each model call.
 
-## The Problem
+## The problem
 
-Agents are probabilistic. A critical step — committing changes, opening a PR, logging state — may be skipped depending on context, token pressure, or model attention. Prompt instructions reduce the failure rate; they do not eliminate it.
+Agents are probabilistic. The model may skip a critical step — committing changes, opening a PR, logging state — depending on context, token pressure, or model attention. Prompt instructions reduce the failure rate. They do not remove it.
 
-Middleware wraps the [agent turn model](agent-turn-model.md) so that it removes the dependence on agent compliance. The agent either does the critical step or the middleware does — the outcome is the same. This is distinct from per-tool-call enforcement ([hooks-vs-prompts](../instructions/hooks-vs-prompts.md)) and CI guardrails ([deterministic-guardrails](../verification/deterministic-guardrails.md)), which operate within the loop or after it. Middleware acts at loop boundaries.
+Middleware wraps the [agent turn model](../agent-design/agent-turn-model.md) to remove the dependence on agent compliance. Either the agent does the critical step or the middleware does, and the outcome is the same. This differs from the per-tool-call enforcement that [hooks rather than prompts](../instructions/hooks-vs-prompts.md) handle, and the CI checks that [deterministic guardrails](../verification/deterministic-guardrails.md) run. Those act within the loop or after it. Middleware acts at loop boundaries.
 
-## Two Middleware Patterns
+## Two middleware patterns
 
 ```mermaid
 flowchart TD
@@ -39,11 +39,11 @@ flowchart TD
     Q["Human message queue<br>(Slack, Linear, etc.)"] -.->|"inject before call"| PRE
 ```
 
-### Post-Loop Safety Nets
+### Post-loop safety nets
 
-A post-loop safety net runs after the agent loop terminates. If the agent performed the step, the safety net is a no-op; otherwise it performs the step deterministically.
+A post-loop safety net runs after the agent loop ends. If the agent did the step, the safety net does nothing. Otherwise it does the step deterministically.
 
-The canonical example comes from [Open SWE](https://github.com/langchain-ai/open-swe) — LangChain's open-source coding agent modeled on internal agents built independently by Stripe, Ramp, and Coinbase. Stripe's ["Minions" engineering post](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2) describes the same blueprint architecture, sequencing deterministic nodes around agentic loops:
+The clearest example comes from [Open SWE](https://github.com/langchain-ai/open-swe) — LangChain's open-source coding agent modeled on internal agents built independently by Stripe, Ramp, and Coinbase. Stripe's ["Minions" engineering post](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2) describes the same blueprint architecture, sequencing deterministic nodes around agentic loops:
 
 ```python
 # open_pr_if_needed — runs after the agent loop exits
@@ -62,11 +62,11 @@ Common safety-net targets:
 | Commit changes | Agent ran out of steps before cleanup |
 | Write to a log / update a ticket | Side effect, not rewarded by task completion |
 | Persist session state | Only matters for the next session |
-| Apply cost cap / abort over-budget | Token and tool-call budgets are easy to ignore mid-loop; the safety net halts deterministically. See [Per-Call Budget Hints for Tool Calls](per-call-budget-hints-tool-calls.md) and [Dual-Budget Control](dual-budget-control-search-agents.md). |
+| Apply cost cap / abort over-budget | Token and tool-call budgets are easy to ignore mid-loop; the safety net halts deterministically. See [Per-Call Budget Hints for Tool Calls](../agent-design/per-call-budget-hints-tool-calls.md) and [Dual-Budget Control](../agent-design/dual-budget-control-search-agents.md). |
 
-### Pre-Call Message Injection
+### Pre-call message injection
 
-A pre-call injection node runs before each model invocation and inserts queued messages — human feedback, follow-up instructions, external events — into the conversation without restarting the loop.
+A pre-call injection node runs before each model call. It inserts queued messages — human feedback, follow-up instructions, external events — without restarting the loop.
 
 The Open SWE equivalent:
 
@@ -79,7 +79,7 @@ def check_message_queue_before_model(state: AgentState) -> AgentState:
     return state
 ```
 
-## Relationship to Claude Code Hooks
+## Relationship to Claude Code hooks
 
 Claude Code's [hook system](../tools/claude/hooks-lifecycle.md) provides the equivalent of both patterns:
 
@@ -88,7 +88,7 @@ Claude Code's [hook system](../tools/claude/hooks-lifecycle.md) provides the equ
 | Post-loop safety net | `Stop` hook (fires when agent finishes responding; can force continuation); `SessionEnd` hook (fires on session termination) |
 | Pre-call injection | `UserPromptSubmit` hook or context prepended before the next invocation |
 
-The `Stop` hook fires when the agent would otherwise stop, enabling a check and optional continuation.
+A `Stop` hook fires when the agent would otherwise stop:
 
 ```json
 {
@@ -107,21 +107,21 @@ The `Stop` hook fires when the agent would otherwise stop, enabling a check and 
 }
 ```
 
-## Complementary, Not Redundant
+## Complementary, not redundant
 
 | Layer | Mechanism | Scope |
 |-------|-----------|-------|
 | Prompt | Instruction in system prompt | Requests compliance — probabilistic |
 | Per-call hook | `PreToolUse` / `PostToolUse` | Enforces per-tool-call rules |
 | CI guardrail | Linter, test suite, schema check | Validates output properties |
-| **Loop middleware** | Safety-net + injection nodes | Guarantees loop-level outcomes |
+| Loop middleware | Safety-net + injection nodes | Guarantees loop-level outcomes |
 
-## When to Use This Pattern
+## When to use this pattern
 
 Apply post-loop safety nets when:
 
 - A step is non-negotiable but the agent treats it as optional (PR creation, state persistence)
-- The agent loop may terminate early due to error handling or resource limits
+- The loop may end early from errors or resource limits
 - The correct outcome is verifiable and automatable independently of the agent
 
 Apply pre-call message injection when:
@@ -173,31 +173,31 @@ graph.add_conditional_edges("agent", should_continue,
 graph.add_edge("commit", END)
 ```
 
-The `inject` node drains external messages before every model call. The `commit` node guarantees changes are committed regardless of whether the agent remembered to do so.
+The `inject` node drains external messages before every model call. The `commit` node commits changes even if the agent forgot.
 
-## When This Backfires
+## When this backfires
 
-Post-loop safety nets rely on idempotency — if a net fires when the agent already completed the step, the result must be identical, not doubled. Three conditions produce failures:
+Post-loop safety nets rely on idempotency. If a net fires when the agent already did the step, the result must be identical, not doubled. Three conditions produce failures:
 
-- **Non-idempotent critical steps.** `open_pr_if_needed` is safe only if the `state.pr_opened` flag is reliably set. If the agent opens a PR but fails to persist the flag, the net opens a second PR. Design safety nets around verifiable state, not assumed state.
-- **Safety net masks systematic compliance failures.** If the agent never opens PRs and the net fires every run, the pattern hides a prompt or tool-call problem that should be fixed at the source. Monitor net fire-rate the way you would track [loop detection](../observability/loop-detection.md) signals; a rate that climbs over time signals an upstream issue worth addressing rather than masking.
-- **Message queue injection in high-latency channels.** Pre-call injection polls an external queue synchronously before each model call. If the queue endpoint has variable latency, injection adds per-iteration overhead. Rate-limit the poll or use a local buffer when the queue source is unreliable.
+- Non-idempotent critical steps. `open_pr_if_needed` is safe only when the `state.pr_opened` flag is set reliably. If the agent opens a PR but fails to persist the flag, the net opens a second PR. Design safety nets around verifiable state, not assumed state.
+- A safety net that masks systematic compliance failures. If the agent never opens PRs and the net fires every run, the pattern hides a prompt or tool-call problem you should fix at the source. Monitor the net fire-rate the way you track [loop detection](../observability/loop-detection.md) signals. A rate that climbs over time points to an upstream issue worth fixing rather than masking.
+- Message queue injection in high-latency channels. Pre-call injection polls an external queue synchronously before each model call. If the queue endpoint has variable latency, injection adds overhead on each iteration. Rate-limit the poll or use a local buffer when the queue source is unreliable.
 
 ## Key Takeaways
 
 - Treat the agent loop as a unit to wrap from the outside — middleware nodes guarantee critical steps regardless of model compliance.
 - Post-loop safety nets perform skipped critical steps deterministically; pre-call injection nodes drain external message queues before each model invocation.
-- Safety nets require [idempotent operations](idempotent-agent-operations.md) and verifiable state — if a flag can be wrong, the net can fire twice.
+- Safety nets require [idempotent operations](../agent-design/idempotent-agent-operations.md) and verifiable state — if a flag can be wrong, the net can fire twice.
 - Monitor net fire-rate; a rate that stays high or climbs hides an upstream prompt or tooling problem that should be fixed at the source.
 - Claude Code's `Stop` and `UserPromptSubmit` hooks provide host-side equivalents of the same two patterns.
 
 ## Related
 
-- [Harness Engineering](harness-engineering.md) — environment-level design that constrains what agents can do
+- [Harness Engineering](../training/copilot/harness-engineering.md) — environment-level design that constrains what agents can do
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — per-tool-call enforcement inside Claude Code
 - [PostToolUse Hooks: Auto-Formatting on Every File Edit](../tools/claude/posttooluse-auto-formatting.md) — automatic formatting via PostToolUse hooks
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — CI and commit-level output checks
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — verification gates before task completion
-- [Steering Running Agents](steering-running-agents.md) — human intervention patterns during agent execution
-- [Agent Turn Model](agent-turn-model.md) — the inference-tool-call loop that middleware intercepts at each iteration
-- [Idempotent Agent Operations](idempotent-agent-operations.md) — designing operations for safe retry, relevant when safety nets re-run critical steps
+- [Steering Running Agents](../agent-design/steering-running-agents.md) — human intervention patterns during agent execution
+- [Agent Turn Model](../agent-design/agent-turn-model.md) — the inference-tool-call loop that middleware intercepts at each iteration
+- [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md) — designing operations for safe retry, relevant when safety nets re-run critical steps

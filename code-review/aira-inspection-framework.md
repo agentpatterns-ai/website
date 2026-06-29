@@ -18,15 +18,15 @@ maturity: established
 
 > A deterministic 15-check inspection framework that targets the patterns where AI-generated code preserves the appearance of functionality while silently degrading guarantees.
 
-## The Failure Mode AIRA Targets
+## The failure mode AIRA targets
 
-The [AIRA paper (Parris, 2026)](https://arxiv.org/abs/2604.17587) defines **failure truthfulness** as "the property that a system's observable outputs accurately represent its internal success or failure state, without suppression, ambiguity, or degradation masking."
+The [AIRA paper (Parris, 2026)](https://arxiv.org/abs/2604.17587) defines failure truthfulness as "the property that a system's observable outputs accurately represent its internal success or failure state, without suppression, ambiguity, or degradation masking."
 
-A matched-control replication (955 AI-attributed files vs 955 human controls across JavaScript, Python, TypeScript) found **0.435 high-severity findings per AI file vs 0.242 for human controls — a 1.80x differential**, concentrated in exception-handling patterns ([AIRA paper §Study 3](https://arxiv.org/html/2604.17587v1)). Independent work converges: an empirical study of AI-generated build code across 387 PRs and 945 files identifies lack of error handling as a recurring maintainability smell ([Mudbhari et al., arxiv:2601.16839](https://arxiv.org/abs/2601.16839)), and a 304,362-commit longitudinal study finds AI-authored code accumulates technical debt faster than human-authored code ([arxiv:2603.28592](https://arxiv.org/abs/2603.28592)).
+A matched-control replication (955 AI-attributed files vs 955 human controls across JavaScript, Python, TypeScript) found 0.435 high-severity findings per AI file vs 0.242 for human controls, a 1.80x differential concentrated in exception-handling patterns ([AIRA paper §Study 3](https://arxiv.org/html/2604.17587v1)). Independent work converges. An empirical study of AI-generated build code across 387 PRs and 945 files identifies lack of error handling as a recurring maintainability smell ([Mudbhari et al., arxiv:2601.16839](https://arxiv.org/abs/2601.16839)), and a 304,362-commit longitudinal study finds AI-authored code accumulates technical debt faster than human-authored code ([arxiv:2603.28592](https://arxiv.org/abs/2603.28592)).
 
-## The Reward-Shaped Failure Hypothesis
+## The reward-shaped failure hypothesis
 
-AIRA proposes the pattern is an artifact of optimisation through human feedback rather than random bug distribution ([AIRA paper](https://arxiv.org/html/2604.17587v1)).
+AIRA proposes the pattern is an artifact of optimization through human feedback rather than random bug distribution ([AIRA paper](https://arxiv.org/html/2604.17587v1)).
 
 ```mermaid
 graph TD
@@ -38,13 +38,13 @@ graph TD
     E --> F[Generation biased toward<br/>surface correctness]
 ```
 
-Visible crashes receive stronger negative feedback than silent failures because the former are legible to raters and the latter are not. Optimising against this asymmetric signal biases the model toward code that *looks* correct under shallow inspection — broad `except:` blocks, fallback paths that always succeed, retry loops that mask contract violations.
+Visible crashes draw stronger negative feedback than silent failures, because raters can see a crash but not a silent degradation. Optimizing against this lopsided signal biases the model toward code that looks correct under shallow inspection: broad `except:` blocks, fallback paths that always succeed, retry loops that mask contract violations.
 
 An LLM-based reviewer inherits the same training bias and is blind to the same patterns. AIRA is deterministic by design — resistant to the failure mode it detects.
 
-## The 15 Checks
+## The 15 checks
 
-AIRA defines 15 deterministic checks, each mapped to a specific failure-truthfulness pattern ([AIRA paper §Framework](https://arxiv.org/html/2604.17587v1)). Thirteen are automatable; C07 and C12 require human review.
+AIRA defines 15 deterministic checks, each mapped to a specific failure-truthfulness pattern ([AIRA paper §Framework](https://arxiv.org/html/2604.17587v1)). Thirteen are automatable. C07 and C12 require human review.
 
 | Code | Check | What it catches |
 |------|-------|-----------------|
@@ -57,16 +57,16 @@ AIRA defines 15 deterministic checks, each mapped to a specific failure-truthful
 | C07 | Parallel Logic Drift | Duplicated branches that diverge silently (human review only) |
 | C08 | Unsupervised Background Tasks | Fire-and-forget work with no error propagation |
 | C09 | Environment-Dependent Safety | Checks that pass only because of a test-environment artifact |
-| C10 | Startup Integrity | Initialisation that proceeds past partial failure |
+| C10 | Startup Integrity | Initialization that proceeds past partial failure |
 | C11 | Deterministic Reasoning Drift | Logic that depends on non-deterministic ordering |
 | C12 | Source-to-Output Lineage | Unclear data provenance in derived outputs (human review only) |
 | C13 | Confidence Misrepresentation | Hard-coded or miscalibrated confidence values |
 | C14 | Test Coverage Asymmetry | Happy-path coverage with no adversarial cases |
 | C15 | Retry / Idempotency Drift | Retries that duplicate side effects or mask root cause |
 
-Each check resolves to **PASS**, **FAIL**, or **UNKNOWN**. PASS indicates pattern absence, not system safety.
+Each check resolves to PASS, FAIL, or UNKNOWN. PASS indicates pattern absence, not system safety.
 
-## Where AIRA Fits in a Review Stack
+## Where AIRA fits in a review stack
 
 AIRA is a deterministic inspection layer, not a replacement for LLM-based review:
 
@@ -74,23 +74,23 @@ AIRA is a deterministic inspection layer, not a replacement for LLM-based review
 - Combine with [deterministic guardrails around probabilistic agents](../verification/deterministic-guardrails.md) — AIRA is the rule layer; LLM review is the context layer.
 - Feed accepted findings into [learned review rules](learned-review-rules.md) to avoid re-flagging legitimate patterns.
 
-## Scope and Limits
+## Scope and limits
 
-The framework targets "governance, compliance, and safety-critical systems where fail-closed behavior is required" ([AIRA paper](https://arxiv.org/html/2604.17587v1)) — not general-purpose review. Limitations acknowledged in the paper:
+The framework targets "governance, compliance, and safety-critical systems where fail-closed behavior is required" ([AIRA paper](https://arxiv.org/html/2604.17587v1)), not general-purpose review. The paper acknowledges these limits:
 
-- **Cross-file semantic reasoning is limited** — checks work on single files or short spans.
-- **False positives are unavoidable** — broad exception handling is legitimate in resilience engineering and low-level systems code. False-positive rates are a [documented trade-off for rule-based static analysis](https://arxiv.org/abs/2310.08837).
-- **PASS is not safety** — measures pattern absence, not correctness.
-- **Measures patterns, not authorship** — the 1.80x figure describes a population difference, not an individual-file classifier.
-- **UNKNOWN on governance-critical paths requires manual verification**.
+- Cross-file semantic reasoning is limited — checks work on single files or short spans.
+- False positives are unavoidable — broad exception handling is legitimate in resilience engineering and low-level systems code. False-positive rates are a [documented trade-off for rule-based static analysis](https://arxiv.org/abs/2310.08837).
+- PASS is not safety — it measures pattern absence, not correctness.
+- The checks measure patterns, not authorship — the 1.80x figure describes a population difference, not an individual-file classifier.
+- UNKNOWN on governance-critical paths needs manual verification.
 
 Outside governance/safety-critical contexts (prototypes, research code, small teams with strong CI), process cost likely outweighs findings volume.
 
 ## Example
 
-The core pattern AIRA catches under **C03 (Broad Exception Suppression)** combined with **C01 (Success Integrity)**:
+Here is the core pattern AIRA catches under C03 (Broad Exception Suppression) combined with C01 (Success Integrity).
 
-**Before** — fails untruthfully:
+Before, the code fails untruthfully:
 
 ```python
 def save_user(user):
@@ -102,9 +102,9 @@ def save_user(user):
         return {"ok": True}
 ```
 
-AIRA flags C03 (broad exception) and C01 (returns success on failure). The caller sees `ok: True` regardless of what happened; search index divergence accumulates silently.
+AIRA flags C03 (broad exception) and C01 (returns success on failure). The caller sees `ok: True` no matter what happened, so search index divergence accumulates silently.
 
-**After** — failure-truthful:
+After, the code is failure-truthful:
 
 ```python
 def save_user(user):

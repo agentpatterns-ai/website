@@ -14,50 +14,50 @@ maturity: adopted
 
 > Cloud-local handoff moves an agent session between cloud and local surfaces while preserving the branch, session logs, and conversation context for continuous work.
 
-## The Problem
+## The problem
 
-Developers work across multiple surfaces: web-based GitHub interfaces, local IDEs, and terminal CLIs. Without explicit handoff mechanisms, switching between a [cloud agent](../tools/copilot/cloud-agent-org-controls.md) and a local environment means losing conversation history, restarting context, and manually checking out branches. Cloud-local handoff eliminates this friction by treating the agent session as portable state that moves between surfaces.
+You work across several surfaces: web-based GitHub interfaces, local IDEs, and terminal CLIs. Without a handoff mechanism, switching between a [cloud agent](../tools/copilot/cloud-agent-org-controls.md) and a local environment loses your conversation history, restarts your context, and forces you to check out branches by hand. Cloud-local handoff fixes this. It treats the agent session as portable state that moves between surfaces.
 
-## Cloud to Local
+## Cloud to local
 
-GitHub's [coding agent](../tools/copilot/coding-agent.md) runs in the cloud and produces work on a branch. To continue that work locally, developers can [copy a "Continue in Copilot CLI" command](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/) that loads the session into the terminal with the branch, session logs, and conversation context intact. The developer picks up exactly where the cloud agent left off, with full visibility into what the agent attempted, what failed, and what decisions it made.
+GitHub's [coding agent](../tools/copilot/coding-agent.md) runs in the cloud and produces work on a branch. To continue that work locally, you [copy a "Continue in Copilot CLI" command](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/). It loads the session into the terminal with the branch, session logs, and conversation context intact. You pick up exactly where the cloud agent left off, and you can see what the agent tried, what failed, and what it decided.
 
 This handoff preserves:
 
-- **The working branch** with all commits the cloud agent created
-- **Session logs** showing the agent's reasoning and actions
-- **Conversation context** so the local session understands prior work
+- the working branch, with every commit the cloud agent created
+- session logs that show the agent's reasoning and actions
+- conversation context, so the local session understands prior work
 
-Without this mechanism, [switching contexts means starting the conversation over](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/). The handoff makes agent sessions durable across surface transitions.
+Without this mechanism, [switching contexts means starting the conversation over](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/). The handoff keeps agent sessions durable as you move between surfaces.
 
-## Local to Cloud
+## Local to cloud
 
-The reverse direction uses the [`/delegate` command in Copilot CLI](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/), which dispatches work to the cloud coding agent for background execution:
+The reverse direction uses the [`/delegate` command in Copilot CLI](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/). It sends work to the cloud coding agent to run in the background:
 
 ```
 /delegate Finish fixing the issue outlined in #1 and use the playwright MCP server to ensure that it's fixed
 ```
 
-The delegated work follows the [standard coding agent workflow](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/) — the agent operates asynchronously and opens a pull request with its results. The developer continues working locally on other tasks while the cloud agent handles the delegated work in the background.
+The delegated work follows the [standard coding agent workflow](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/). The agent runs asynchronously and opens a pull request with its results. You keep working locally on other tasks while the cloud agent handles the delegated work in the background.
 
-The `&` shortcut in the CLI provides a [quick delegation mechanism](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/) to send the current task to the cloud and keep working locally.
+The `&` shortcut in the CLI gives you a [quick way to delegate](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/): it sends the current task to the cloud so you can keep working locally.
 
-## When to Hand Off
+## When to hand off
 
-| Direction | Use When |
+| Direction | Use when |
 |-----------|----------|
 | Cloud to local | The agent produced a draft that needs manual refinement, debugging, or testing against local infrastructure |
 | Local to cloud | A well-defined subtask can run autonomously while you focus on other work |
 | Bidirectional | Complex features where initial scaffolding runs in the cloud and iterative refinement happens locally |
 
-## The Transferable Pattern
+## The transferable pattern
 
-GitHub Copilot was an early example, but the handoff is no longer single-vendor: Cursor ships the same primitives, with `/in-cloud` cloud subagents that each run on their own VM and branch, a `/babysit` command that prepares a cloud PR for merge remotely, and reliable session pull-back to local for verification ([Cursor — cloud agents in the agents window](https://cursor.com/changelog/cloud-in-agents-window)). The underlying pattern applies broadly: agent sessions should be serializable and portable across execution surfaces. The key requirements are:
+GitHub Copilot was an early example, but the handoff is no longer single-vendor. Cursor ships the same building blocks: `/in-cloud` cloud subagents that each run on their own VM and branch, a `/babysit` command that prepares a cloud PR for merge remotely, and reliable session pull-back to local for verification ([Cursor — cloud agents in the agents window](https://cursor.com/changelog/cloud-in-agents-window)). The pattern applies broadly: agent sessions should be serializable and portable across execution surfaces. It needs four properties:
 
-- **Branch as shared state** — Git branches are the universal coordination mechanism between any cloud and local agent
-- **Session logs as context** — the receiving surface needs to see what the sending surface did
-- **Asynchronous execution** — the cloud agent works independently after delegation
-- **Reviewable artifacts** — delegated work produces pull requests that maintain human authority over the final result
+- branch as shared state: Git branches coordinate any cloud and local agent
+- session logs as context: the receiving surface needs to see what the sending surface did
+- asynchronous execution: the cloud agent works independently after delegation
+- reviewable artifacts: delegated work produces pull requests that keep human authority over the final result
 
 Any agent system that supports these four properties can implement cross-surface handoff, even without a single vendor's integrated toolchain.
 
@@ -65,7 +65,7 @@ Any agent system that supports these four properties can implement cross-surface
 
 A developer assigns an issue to the GitHub Copilot coding agent. The agent creates a branch `copilot/fix-auth-redirect`, adds three commits, and opens a draft PR — but the CI pipeline fails on an integration test that requires a local database connection.
 
-**Cloud to local** — the developer clicks "Continue in Copilot CLI" on the PR page and copies the generated command, which resumes the session in Copilot CLI:
+Cloud to local: the developer clicks "Continue in Copilot CLI" on the PR page and copies the generated command, which resumes the session in Copilot CLI:
 
 ```bash
 copilot --resume <session-id>
@@ -80,7 +80,7 @@ Copilot CLI checks out the branch, loads the session logs, and restores the conv
 
 After verifying the fix passes locally, the developer pushes the commit.
 
-**Local to cloud** — while reviewing the fix, the developer notices a related issue with session expiry handling. Rather than context-switching, they delegate it:
+Local to cloud: while reviewing the fix, the developer notices a related issue with session expiry handling. Rather than switch context, they delegate it:
 
 ```
 /delegate Fix the session expiry bug described in #247 — the refresh token rotation is not updating the stored token
@@ -88,14 +88,14 @@ After verifying the fix passes locally, the developer pushes the commit.
 
 The coding agent picks up the task on a new branch, works asynchronously, and opens a separate PR. The developer continues refining the auth redirect fix locally while the [cloud coding agent](../tools/copilot/coding-agent.md) handles session expiry in parallel.
 
-## When This Backfires
+## When this backfires
 
 Cloud-local handoff depends on session state being transferable, which breaks down in several conditions:
 
-- **Stale or truncated session logs** — cloud agents that run long tasks may produce logs exceeding the local context window. The receiving session loads partial context and may misunderstand prior decisions.
-- **Branch divergence** — if the local branch has commits not yet on the remote, or the remote has moved ahead, the handoff leaves the developer resolving merge conflicts before work can resume; a [single-branch strategy](../workflows/single-branch-git-agent-swarms.md) sidesteps this class of conflict.
-- **Environment mismatch** — cloud runners have different toolchains, credentials, and network access than local machines. A task that succeeded in the cloud (e.g., calling an internal API via runner credentials) may fail locally without equivalent configuration.
-- **Toolchain lock-in** — the integrated handoff is GitHub Copilot-specific. Teams using other agent stacks must implement session serialization manually via shared branch state and exported logs.
+- Stale or truncated session logs — cloud agents that run long tasks can produce logs that exceed the local context window. The receiving session then loads partial context and may misread prior decisions.
+- Branch divergence — if the local branch has commits not yet on the remote, or the remote has moved ahead, the handoff leaves the developer resolving merge conflicts before work can resume. A [single-branch strategy](../workflows/single-branch-git-agent-swarms.md) sidesteps this class of conflict.
+- Environment mismatch — cloud runners have different toolchains, credentials, and network access than local machines. A task that succeeded in the cloud (for example, calling an internal API with runner credentials) may fail locally without equivalent configuration.
+- Toolchain lock-in — the integrated handoff is GitHub Copilot-specific. Teams using other agent stacks must implement session serialization by hand, through shared branch state and exported logs.
 
 ## Key Takeaways
 

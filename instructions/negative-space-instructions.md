@@ -16,44 +16,44 @@ maturity: established
 
 > Negative space instructions — exclusions and banned patterns — eliminate entire classes of mistakes more efficiently than equivalent positive guidance.
 
-**Related lesson:** [Say What To Do](https://learn.agentpatterns.ai/prompt-engineering/say-what-to-do/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Say What To Do](https://learn.agentpatterns.ai/prompt-engineering/say-what-to-do/) — this concept features in a hands-on lesson with quizzes.
 
 !!! info "Also known as"
     Instruction Polarity, Positive Rules Over Negative, Instruction Framing
 
-## Why Negative Constraints Work
+## Why negative constraints work
 
-"Write concise content" is vague — concise to whom, in what context? "No filler phrases: no 'in this guide', no 'let's explore', no 'as you may know'" is precise and binary. The agent either produced the phrase or it didn't. There is no interpretation required — a `grep` for the banned string either matches or it doesn't.
+"Write concise content" is vague — concise to whom, in what context? "No filler phrases: no 'in this guide', no 'let's explore', no 'as you may know'" is precise and binary. The agent either produced the phrase or it did not. No interpretation is needed — a `grep` for the banned string either matches or it does not.
 
-Negative constraints are cheap in tokens, unambiguous in intent, and verifiable programmatically. A grep for banned phrases confirms compliance without human review. Equivalent positive guidance ("write in a direct, information-dense style") requires a human or second model to evaluate — there is no deterministic check.
+Negative constraints are cheap in tokens, clear in intent, and verifiable by a program. A grep for banned phrases confirms compliance without human review. Equivalent positive guidance ("write in a direct, information-dense style") needs a human or a second model to judge it — there is no deterministic check.
 
-## Types of Negative Constraints
+## Types of negative constraints
 
-**Banned phrases** eliminate verbal tics and filler that survive positive tone guidance:
+Banned phrases remove verbal tics and filler that survive positive tone guidance:
 ```
 No filler: "in this guide", "let's explore", "it's worth noting", "as you may know"
 ```
 
-**Scope exclusions** prevent agents from drifting into adjacent work:
+Scope exclusions stop agents from drifting into adjacent work:
 ```
 Do not modify files outside docs/
 Do not touch .github/, mkdocs.yml, or CI configuration
 ```
 
-**Tool restrictions** are simpler than explaining when each tool is appropriate:
+Tool restrictions are simpler than explaining when each tool is appropriate:
 ```
 Do not use the web search tool unless explicitly asked
 ```
 
-**Format exclusions** enforce structure without requiring explanation:
+Format exclusions enforce structure without needing an explanation:
 ```
 No paragraphs longer than 3 sentences
 No inline comments in production code unless the logic is non-obvious
 ```
 
-## Pairing with Positive Guidance
+## Pairing with positive guidance
 
-Negative constraints are most effective when paired with a positive directive that states the goal — the [instruction-polarity](instruction-polarity.md) trade-off. The positive rule gives the agent direction; the negative constraint closes off the most common wrong interpretations:
+Negative constraints work best when paired with a positive directive that states the goal — the [instruction-polarity](instruction-polarity.md) trade-off. The positive rule gives the agent direction; the negative constraint closes off the most common wrong interpretations:
 
 ```
 Be direct and information-dense. No filler phrases ("in this guide", "let's explore").
@@ -61,19 +61,19 @@ Be direct and information-dense. No filler phrases ("in this guide", "let's expl
 
 Relying entirely on positive guidance leaves edge cases open. Relying entirely on negative constraints produces agents that know what not to do but lack direction. Both together cover the space efficiently.
 
-## Greppability as a Design Criterion
+## Greppability as a design criterion
 
 A well-formed negative constraint is one you can verify automatically. If the constraint cannot be expressed as a grep pattern or a deterministic check, it may belong in positive guidance instead.
 
-## Why It Works
+## Why it works
 
-Mechanically, negative constraints eliminate entire token sequences from consideration during generation — a discrete, binary effect rather than a soft preference. Positive guidance ("be concise") only narrows the output distribution without hard-cutting regions, so it competes against other objectives. Negative constraints behave more like hard constraints in optimization: a feasibility boundary rather than a preference gradient.
+Mechanically, negative constraints remove entire token sequences from consideration during generation — a discrete, binary effect rather than a soft preference. Positive guidance ("be concise") only narrows the output distribution without hard-cutting regions, so it competes against other objectives. Negative constraints behave more like hard constraints in optimization: a feasibility boundary rather than a preference gradient.
 
 Palantir's prompt engineering guidance documents this directly: banning specific undesired outputs is more reliable than describing desired characteristics, because banned patterns can be verified while quality attributes require judgment ([Palantir AIP prompt engineering best practices](https://www.palantir.com/docs/foundry/aip/best-practices-prompt-engineering)).
 
-## What Negative Constraints Cannot Do
+## What negative constraints cannot do
 
-Negative constraints eliminate known failure modes. They do not handle unknown ones. If an agent finds a new way to violate the spirit of an instruction, a negative constraint won't catch it — this is where [guardrails beat guidance](guardrails-beat-guidance-coding-agents.md). Keep a list of negative constraints short and targeted; don't try to enumerate every possible mistake.
+Negative constraints remove known failure modes. They do not handle unknown ones. If an agent finds a new way to violate the spirit of an instruction, a negative constraint will not catch it — this is where [guardrails beat guidance](guardrails-beat-guidance-coding-agents.md). Keep a list of negative constraints short and targeted; do not try to enumerate every possible mistake.
 
 For constraints that must never fail, hooks are more reliable than instructions — negative or positive. A pre-commit hook blocking commits to main is more reliable than "never commit directly to main."
 
@@ -103,15 +103,15 @@ Complete the task in a single session. Be thorough.
 
 Each positive directive ("Write clear, self-documenting code") sets the goal. The negative constraints close off the most common violations — and every one is verifiable with a grep or a git diff.
 
-## When This Backfires
+## When this backfires
 
 Negative constraints fail in predictable ways:
 
-- **Negation comprehension**: Models do not always interpret negation reliably. A "Pink Elephant" or "white bear" effect occurs when the prohibited concept becomes a stronger prior in the model and the rate of prohibited output goes *up*, not down. [Negation: A Pink Elephant in the Large Language Models' Room? (Truhn et al., arxiv:2503.22395, 2025)](https://arxiv.org/abs/2503.22395) finds that negation handling varies substantially across model sizes and languages, and is not a solved capability. [Do not think about pink elephant! (Liu et al., arxiv:2404.15154, CVPR 2024 Responsible GenAI Workshop)](https://arxiv.org/abs/2404.15154) shows the same pattern in generative models and that prompt-based defenses can mitigate but not eliminate it. Reframing as a positive instruction often outperforms a literal "do not" — see [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) for the trade-off.
-- **Unknown failure modes**: A constraint list only covers mistakes the author anticipated, the same limit that makes [guardrails beat guidance](guardrails-beat-guidance-coding-agents.md). When an agent finds a new way to violate the spirit of an instruction, no existing negative constraint catches it — the list must be updated reactively.
-- **Superficial compliance**: An agent can satisfy the letter of a negative constraint while preserving the underlying problem. Banning "in this guide" doesn't prevent wordy preambles; it just changes the wording.
-- **Constraint explosion**: As edge cases accumulate, the constraint list grows until it dominates the prompt — the [mega-prompt anti-pattern](instruction-compliance-ceiling.md). Long constraint lists are harder to reason about and more likely to conflict internally.
-- **Missing context**: Scope exclusions ("do not modify files outside docs/") assume the agent correctly identifies what counts as "outside docs/" — the [content-exclusion gap](content-exclusion-gap.md). Ambiguous boundaries produce false compliance.
+- Negation comprehension: Models do not always interpret negation reliably. A "Pink Elephant" or "white bear" effect occurs when the prohibited concept becomes a stronger prior in the model and the rate of prohibited output goes up, not down. [Negation: A Pink Elephant in the Large Language Models' Room? (Truhn et al., arxiv:2503.22395, 2025)](https://arxiv.org/abs/2503.22395) finds that negation handling varies substantially across model sizes and languages, and is not a solved capability. [Do not think about pink elephant! (Liu et al., arxiv:2404.15154, CVPR 2024 Responsible GenAI Workshop)](https://arxiv.org/abs/2404.15154) shows the same pattern in generative models and that prompt-based defenses can mitigate but not eliminate it. Reframing as a positive instruction often outperforms a literal "do not" — see [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) for the trade-off.
+- Unknown failure modes: A constraint list only covers mistakes the author anticipated, the same limit that makes [guardrails beat guidance](guardrails-beat-guidance-coding-agents.md). When an agent finds a new way to violate the spirit of an instruction, no existing negative constraint catches it — the list must be updated reactively.
+- Superficial compliance: An agent can satisfy the letter of a negative constraint while preserving the underlying problem. Banning "in this guide" does not prevent wordy preambles; it just changes the wording.
+- Constraint explosion: As edge cases accumulate, the constraint list grows until it dominates the prompt — the [mega-prompt anti-pattern](instruction-compliance-ceiling.md). Long constraint lists are harder to reason about and more likely to conflict internally.
+- Missing context: Scope exclusions ("do not modify files outside docs/") assume the agent correctly identifies what counts as "outside docs/" — the [content-exclusion gap](content-exclusion-gap.md). Ambiguous boundaries produce false compliance.
 
 For must-never-fail constraints, rely on enforced mechanisms — hooks, CI checks, schema validation — rather than instruction text alone.
 

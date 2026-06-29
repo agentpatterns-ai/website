@@ -20,23 +20,23 @@ maturity: adopted
 
 > Register `PreToolUse` hooks through a skill invocation to arm strict guardrails for a single session — without imposing that friction on every workflow.
 
-## The Problem with Always-On Hooks
+## The problem with always-on hooks
 
-Always-on hooks in `.claude/settings.json` apply to every session, every developer, every task. For guardrails like blocking `rm -rf` or `DROP TABLE`, that universality is often appropriate. For stricter controls — blocking any write outside a specific directory, blocking all destructive git commands — always-on enforcement creates constant friction in the sessions that don't need it.
+Always-on hooks in `.claude/settings.json` apply to every session, every developer, and every task. For guardrails like blocking `rm -rf` or `DROP TABLE`, that universal reach is often the right call. Stricter controls are different. A rule that blocks any write outside one directory, or blocks all destructive git commands, creates constant friction in the sessions that do not need it.
 
-Skills registered through the `hooks` frontmatter field solve this. They activate when the skill is invoked and are automatically removed when the skill finishes or becomes inactive ([hooks reference](https://code.claude.com/docs/en/hooks)). The skill invocation is the signal: calling `/careful` communicates intent ("I'm touching prod") and arms the constraints simultaneously.
+Skills registered through the `hooks` frontmatter field solve this. They activate when you invoke the skill. Claude Code removes them automatically when the skill finishes or becomes inactive ([hooks reference](https://code.claude.com/docs/en/hooks)). The skill invocation is the signal: calling `/careful` states your intent ("I'm touching prod") and arms the constraints at the same time.
 
-## How Skill-Scoped Hooks Work
+## How skill-scoped hooks work
 
-Skills can declare a `hooks` field in their YAML frontmatter using the same configuration format as `settings.json` hooks ([skills docs](https://code.claude.com/docs/en/skills)). These hooks are registered in memory for the current session.
+Skills can declare a `hooks` field in their YAML frontmatter. It uses the same configuration format as `settings.json` hooks ([skills docs](https://code.claude.com/docs/en/skills)). Claude Code registers these hooks in memory for the current session.
 
-Per the [Claude Code documentation](https://code.claude.com/docs/en/hooks), skill hooks "use the same configuration format as settings-based hooks but are scoped to the component's lifetime and cleaned up when it finishes." The hooks are component-scoped — active while the skill is running — rather than persistent across the whole session. This makes skills an effective way to temporarily arm guardrails for the duration of a specific task.
+The [Claude Code documentation](https://code.claude.com/docs/en/hooks) says skill hooks "use the same configuration format as settings-based hooks but are scoped to the component's lifetime and cleaned up when it finishes." The hooks are component-scoped: they stay active while the skill runs, rather than persisting across the whole session. So skills let you arm guardrails for the length of one task and no longer.
 
-Skill hooks support all hook event types — including `PreToolUse`, `PostToolUse`, `PermissionRequest`, and `Stop` — plus one additional field not honored in `settings.json` or agent frontmatter: `once`. When `once: true`, the hook fires once per session and is then removed — useful for initialization checks ([hooks reference](https://code.claude.com/docs/en/hooks)).
+Skill hooks support all hook event types, including `PreToolUse`, `PostToolUse`, `PermissionRequest`, and `Stop`. They also support one field that `settings.json` and agent frontmatter do not honor: `once`. When `once: true`, the hook fires once per session and is then removed, which suits initialization checks ([hooks reference](https://code.claude.com/docs/en/hooks)).
 
-Hook source is shown in the `/hooks` menu with a `Session` label, distinguishing skill-registered hooks from project or user-level settings hooks ([changelog v2.1.75](https://code.claude.com/docs/en/changelog)).
+The `/hooks` menu shows skill-registered hooks with a `Session` label, which sets them apart from project and user-level settings hooks ([changelog v2.1.75](https://code.claude.com/docs/en/changelog)).
 
-## When to Use On-Demand vs. Always-On
+## When to use on-demand versus always-on
 
 | Scenario | On-demand (skill hook) | Always-on (`settings.json`) |
 |----------|----------------------|------------------------------|
@@ -47,11 +47,11 @@ Hook source is shown in the `/hooks` menu with a `Session` label, distinguishing
 | Debugging a fragile or high-stakes system | Yes | — |
 | Team-wide package manager enforcement | No | Yes |
 
-The cost of always-on hooks is friction in every session that doesn't need them. The cost of on-demand hooks is that the guardrail is absent unless explicitly invoked — the engineer must remember to call the skill.
+Always-on hooks cost friction in every session that does not need them. On-demand hooks cost coverage: the guardrail is absent unless you invoke it, so you have to remember to call the skill.
 
-## Contrast: Always-On vs. On-Demand
+## Contrast: always-on versus on-demand
 
-**Always-on** — applies to every session, whether touching prod or running a local demo:
+The always-on version applies to every session, whether you are touching prod or running a local demo:
 
 ```json
 // .claude/settings.json
@@ -65,7 +65,7 @@ The cost of always-on hooks is friction in every session that doesn't need them.
 }
 ```
 
-**On-demand via `/careful` skill** — arms the same hook only when the engineer invokes the skill:
+The on-demand version uses a `/careful` skill. It arms the same hook only when you invoke the skill:
 
 ```yaml
 # .claude/skills/careful/SKILL.md

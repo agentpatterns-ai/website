@@ -20,18 +20,18 @@ maturity: established
 
 > Multi-agent workflows follow four structural patterns — sequential chains, parallel fan-out, staged pipelines, and supervisor coordination — each suited to a different task structure.
 
-**Related lesson:** [Sub-Agents & Orchestration](https://learn.agentpatterns.ai/harness-engineering/sub-agents-and-orchestration/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Sub-Agents and Orchestration](https://learn.agentpatterns.ai/harness-engineering/sub-agents-and-orchestration/), a hands-on lesson with quizzes.
 
 !!! note "Also known as"
     Parallel Dispatch, Scatter-Gather, Orchestrator-Worker, Sub-Agents Fan-Out. For specific variants, see [Fan-Out Synthesis](../multi-agent/fan-out-synthesis.md), [Orchestrator-Worker](../multi-agent/orchestrator-worker.md), and [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md).
 
-## Why Composition
+## Why composition
 
-A single agent hits two limits: context exhaustion (too much work for one window) and scope confusion (too many concerns for one prompt). Composition distributes work across agents with focused scope and isolated context. The wrong pattern adds overhead.
+A single agent hits two limits: context runs out, and scope blurs across too many concerns. Composition splits the work across agents, each with a narrow scope and its own context. The wrong pattern adds overhead.
 
-## Sequential Chain
+## Sequential chain
 
-Each agent's output becomes the next agent's input. A → B → C.
+Each agent's output feeds the next. A → B → C.
 
 ```mermaid
 graph LR
@@ -40,28 +40,28 @@ graph LR
     C -->|approved| D[Publish Agent]
 ```
 
-**When to use:** Strict dependencies — B cannot start until A completes.
+When to use: strict dependencies, where B cannot start until A completes.
 
-**Trade-off:** No parallelism; latency accumulates across steps.
+Trade-off: no parallelism, so latency accumulates across steps.
 
-**Example:** a content pipeline (research → draft → review → publish), or the [evaluator-optimizer](evaluator-optimizer.md) loop as a two-stage chain.
+Example: a content pipeline (research → draft → review → publish), or the [evaluator-optimizer](evaluator-optimizer.md) loop as a two-stage chain.
 
-### Multi-Phase Chain Tactics
+### Multi-phase chain tactics
 
-Production chains span four phases ([Source: ClaudeLog](https://claudelog.com/mechanics/custom-agent-tactics)): research, analysis, implementation, and validation. Each handoff is an explicit artifact — findings document, patch set, or test report.
+Production chains span four phases ([Source: ClaudeLog](https://claudelog.com/mechanics/custom-agent-tactics)): research, analysis, implementation, and validation. Each handoff is an explicit artifact: a findings document, patch set, or test report.
 
-In Claude Code, chain subagents through the main conversation — each completes before the next dispatches ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)):
+In Claude Code, chain subagents through the main conversation, each completing before the next dispatches ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)):
 
 ```
 Use the code-reviewer subagent to find performance issues,
 then use the optimizer subagent to fix them
 ```
 
-Subagents cannot spawn other subagents — the main conversation coordinates chaining.
+Subagents cannot spawn others — the main conversation coordinates chaining.
 
-## Parallel Fan-Out
+## Parallel fan-out
 
-One agent spawns N sub-agents for independent work, then synthesizes results.
+One agent spawns N sub-agents for independent work, then synthesizes the results.
 
 ```mermaid
 graph TD
@@ -74,11 +74,11 @@ graph TD
     O --> R[Synthesized Output]
 ```
 
-**When to use:** N independent tasks — reviewing N files, fetching N URLs, analyzing N data sources.
+When to use: N independent tasks, such as reviewing N files, fetching N URLs, or analyzing N data sources.
 
-**Trade-off:** Fast (parallel execution). The orchestrator must synthesize results (see [Fan-Out Synthesis](../multi-agent/fan-out-synthesis.md)).
+Trade-off: fast, because the work runs in parallel. The orchestrator must then synthesize the results (see [Fan-Out Synthesis](../multi-agent/fan-out-synthesis.md)).
 
-**Example:** Parallel reviewers for code quality, type safety, and test coverage — each sub-agent gets its own context window. See [Sub-Agents for Fan-Out](../multi-agent/sub-agents-fan-out.md) and [Specialized Agent Roles](specialized-agent-roles.md).
+Example: parallel reviewers for code quality, type safety, and test coverage, each with its own context window. See [Sub-Agents for Fan-Out](../multi-agent/sub-agents-fan-out.md) and [Specialized Agent Roles](specialized-agent-roles.md).
 
 ## Pipeline
 
@@ -92,23 +92,23 @@ graph LR
     S2 -->|fail| S1
 ```
 
-**When to use:** Repeatable processes where output quality at each stage gates progress — the [command](agents-vs-commands.md) layer in agent-driven projects.
+When to use: repeatable processes where each stage's output quality gates progress, like the [command](agents-vs-commands.md) layer.
 
-**Trade-off:** Explicit pass/fail at each boundary, with feedback loops on failure.
+Trade-off: explicit pass or fail at each boundary, with feedback loops on failure.
 
-**Example:** CI/CD pipeline — build → test → security scan → deploy. Each gate blocks until criteria are met.
+Example: a CI/CD pipeline — build → test → security scan → deploy. Each gate blocks until criteria are met.
 
 ## Supervisor
 
 A coordinator agent decides what to delegate, to whom, and when.
 
-**When to use:** Tasks where the sequence and delegation targets are not known upfront.
+When to use: tasks where the sequence and delegation targets are not known upfront.
 
-**Trade-off:** More flexible but harder to debug. The supervisor needs sufficient context to delegate well (see [Delegation Decision](delegation-decision.md)).
+Trade-off: more flexible but harder to debug. The supervisor needs enough context to delegate well (see [Delegation Decision](delegation-decision.md)).
 
-**Example:** An agent receives "make this codebase production-ready" and decomposes into: security review, test coverage, documentation.
+Example: an agent receives "make this codebase production-ready" and decomposes it into security review, test coverage, and documentation.
 
-## Choosing the Right Pattern
+## Choosing the right pattern
 
 | Pattern | Task structure | Parallelism | Flexibility |
 |---------|---------------|-------------|-------------|
@@ -119,15 +119,15 @@ A coordinator agent decides what to delegate, to whom, and when.
 
 Start with the simplest pattern — chains and fan-out cover most cases.
 
-## Agent Portability
+## Agent portability
 
 In Claude Code, a subagent is a `.md` file in `.claude/agents/` (project-scoped) or `~/.claude/agents/` (user-scoped) ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)). Check agents into version control.
 
-Use tool discovery (Glob, Grep) instead of hardcoded paths so agents adapt to any repo.
+Use tool discovery (Glob, Grep) instead of hardcoded paths, so agents adapt to any repo.
 
-## Weak-Model Specialization
+## Weak-model specialization
 
-Route narrow tasks to cost-efficient models (Haiku), reserving capable models (Sonnet) for complex work ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents); see [Anthropic's Effective Agents Framework](anthropic-effective-agents-framework.md) for a full pattern map). Claude Code's Explore subagent defaults to Haiku for read-only search ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)):
+Route narrow tasks to cheaper models (Haiku) and keep capable models (Sonnet) for complex work ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents); see [Anthropic's Effective Agents Framework](anthropic-effective-agents-framework.md) for the full map). Claude Code's Explore subagent defaults to Haiku for read-only search ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)):
 
 ```yaml
 ---
@@ -138,9 +138,9 @@ model: haiku
 ---
 ```
 
-## Situational Agent Activation
+## Situational agent activation
 
-Activate agents via CLI flags instead of coordinator judgment. Claude Code's `--agents` flag defines session-scoped agents as JSON ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)):
+Activate agents through CLI flags instead of coordinator judgment. Claude Code's `--agents` flag defines session-scoped agents as JSON ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)):
 
 ```bash
 claude --agents '{
@@ -155,7 +155,7 @@ claude --agents '{
 
 ## Example
 
-A documentation site audit needs to lint every page, check links, and validate frontmatter. The tasks are independent per page — fan-out fits:
+A documentation site audit needs to lint every page, check links, and validate frontmatter. The tasks are independent per page, so fan-out fits:
 
 ```markdown
 <!-- .claude/agents/audit-orchestrator.md -->
@@ -182,22 +182,22 @@ tools: Bash, Read, Grep
 Return a JSON object with the page path and findings.
 ```
 
-Each worker runs a sequential chain internally (lint → links → frontmatter), while the orchestrator fans out across pages. This combines two patterns: fan-out at the top level, `lint → links → frontmatter` chains within each worker.
+Each worker runs a sequential chain internally (lint → links → frontmatter), while the orchestrator fans out across pages. This nests two patterns: fan-out at the top level, and a lint → links → frontmatter chain within each worker.
 
 If the audit later needs a gate — pages with critical findings block deployment — wrap the fan-out in a pipeline with a quality gate after synthesis.
 
-## Anti-Patterns
+## Anti-patterns
 
-**One mega-agent:** Context fills before work completes. Decompose when one prompt cannot hold all concerns.
+One mega-agent: context fills before work completes. Decompose when one prompt cannot hold all concerns.
 
-**Over-decomposition:** Coordination costs tokens — decompose only when context limits or parallelism require it.
+Over-decomposition: coordination costs tokens. Decompose only when context limits or parallelism require it.
 
-## Production Failure Modes
+## Production failure modes
 
-Composition does not eliminate context exhaustion — it relocates it. Two failure modes recur across the four patterns and warrant explicit mitigation:
+Composition does not remove context exhaustion — it relocates it. Two failure modes recur across the four patterns:
 
-- **Silent drift in chains and supervisors:** Each downstream agent treats the previous agent's output as ground truth without validating it against the original task spec. A subtly wrong artifact at step 1 compounds through step N before any human notices ([Glen Rhodes, March 2026](https://glenrhodes.com/agent-orchestration-failure-modes-silent-drift-reconciliation-and-the-supervision-mindset-shift/); [VentureBeat, April 2026](https://venturebeat.com/infrastructure/context-decay-orchestration-drift-and-the-rise-of-silent-failures-in-ai-systems)). Add a reconciliation step that validates each handoff against the original brief.
-- **Orchestrator context overflow in fan-out:** When N workers each return multi-thousand-token findings, the orchestrator's synthesis context fills before it can reason over all results ([Qubytes, May 2026](https://qubytes.substack.com/p/fan-out-agent-pipeline-production-failure-modes)). Compress worker outputs to summaries, or use external state with reference pointers, before the orchestrator synthesises.
+- Silent drift in chains and supervisors: each downstream agent trusts the previous output as ground truth without checking it against the original task spec. A subtly wrong artifact at step 1 compounds through step N before anyone notices ([Glen Rhodes, March 2026](https://glenrhodes.com/agent-orchestration-failure-modes-silent-drift-reconciliation-and-the-supervision-mindset-shift/); [VentureBeat, April 2026](https://venturebeat.com/infrastructure/context-decay-orchestration-drift-and-the-rise-of-silent-failures-in-ai-systems)). Add a reconciliation step that checks each handoff against the brief.
+- Orchestrator context overflow in fan-out: when N workers each return multi-thousand-token findings, the orchestrator's context fills before it can reason over all results ([Qubytes, May 2026](https://qubytes.substack.com/p/fan-out-agent-pipeline-production-failure-modes)). Compress worker outputs to summaries, or use external state with reference pointers, before the orchestrator synthesizes.
 
 ## Key Takeaways
 

@@ -17,17 +17,17 @@ maturity: adopted
 
 > A 16-domain failure taxonomy that turns ad-hoc prompt tweaking into systematic incident classification for RAG and agent systems.
 
-## The Problem with Ad-Hoc Debugging
+## The problem with ad-hoc debugging
 
-The WFGY reliability problem map is a 16-domain failure taxonomy for RAG and agent systems, organized across four layers — input/retrieval, reasoning/planning, state/context, and infrastructure/deployment. Each domain names a failure mode with targeted repair actions, giving teams a shared vocabulary to classify incidents instead of guessing. [Source: [onestardao/WFGY — ProblemMap/README.md](https://github.com/onestardao/WFGY/blob/main/ProblemMap/README.md); mirror: [nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/wfgy-reliability-problem-map.md)]
+The WFGY reliability problem map is a 16-domain failure taxonomy for RAG and agent systems. It sorts failures across four layers: input/retrieval, reasoning/planning, state/context, and infrastructure/deployment. Each domain names a failure mode and its targeted repair actions. This gives teams a shared vocabulary to classify incidents instead of guessing. [Source: [onestardao/WFGY — ProblemMap/README.md](https://github.com/onestardao/WFGY/blob/main/ProblemMap/README.md); mirror: [nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/wfgy-reliability-problem-map.md)]
 
-Without that vocabulary, the default response to wrong output is a prompt tweak, then another — patches accumulate without identifying the underlying failure class, so the same failures recur under different symptoms. Classifying first turns one-off fixes into a reusable incident memory bank.
+Without that vocabulary, the default response to wrong output is a prompt tweak, then another. Patches pile up without naming the underlying failure class, so the same failures recur under different symptoms. Classifying first turns one-off fixes into a reusable incident memory bank.
 
-## The 16 Failure Domains
+## The 16 failure domains
 
-Domains organize across four layers: [IN] Input/Retrieval, [RE] Reasoning/Planning, [ST] State/Context, [OP] Infrastructure/Deployment.
+The domains sort across four layers: [IN] input/retrieval, [RE] reasoning/planning, [ST] state/context, and [OP] infrastructure/deployment.
 
-| # | Domain | Layer | Failure Pattern |
+| # | Domain | Layer | Failure pattern |
 |---|--------|-------|-----------------|
 | 1 | Hallucination & Chunk Drift | [IN] | Retrieval returns wrong or irrelevant chunks |
 | 2 | Semantic ≠ Embedding | [IN] | Cosine similarity misses true meaning |
@@ -72,40 +72,42 @@ graph TD
     IN --> RE --> ST --> OP
 ```
 
-## Diagnostic Workflow
+## Diagnostic workflow
 
-Run the checklist against one failing incident — mixing failures produces ambiguous diagnoses.
+Run the checklist against one failing incident. Mixing failures produces ambiguous diagnoses.
 
-1. **Capture** — isolate one failing trace, query, or conversation
-2. **Classify** — run the 16-question checklist; mark active failure modes
-3. **Repair** — apply targeted actions per domain (chunking, embeddings, prompt/tool contracts, ingestion order)
-4. **Verify** — re-run the identical case; document which checks resolved
+1. Capture one failing trace, query, or conversation.
+2. Classify it: run the 16-question checklist and mark the active failure modes.
+3. Repair it with targeted actions per domain, such as chunking, embeddings, prompt and tool contracts, or ingestion order.
+4. Verify by re-running the identical case, and record which checks resolved it.
 
-Skipping verify creates false confidence.
+Skipping the verify step creates false confidence.
 
-## Delta S (ΔS) as a Pre-Generation Signal
+## Delta S (ΔS) as a pre-generation signal
 
-ΔS is a semantic tension metric that validates retrieval stability *before* generation — a firewall, not a post-hoc patch. WFGY lists ΔS ≤ 0.45 alongside `coverage ≥ 0.70` and `λ convergent` as fix-acceptance criteria, describing the gates as "risk-reducing heuristics, not a mathematical guarantee" with "setup-dependent" stability. [Source: [onestardao/WFGY — ProblemMap/README.md](https://github.com/onestardao/WFGY/blob/main/ProblemMap/README.md)]
+ΔS is a semantic tension metric. It checks retrieval stability before generation, so it acts as a firewall rather than an after-the-fact patch. WFGY lists ΔS ≤ 0.45 alongside `coverage ≥ 0.70` and `λ convergent` as fix-acceptance criteria. It describes these gates as "risk-reducing heuristics, not a mathematical guarantee" with "setup-dependent" stability. [Source: [onestardao/WFGY — ProblemMap/README.md](https://github.com/onestardao/WFGY/blob/main/ProblemMap/README.md)]
 
-- ΔS ≤ 0.45: within WFGY's acceptable range; proceed to generation
-- ΔS > 0.60: diverged from query intent; intervene before generating
+- ΔS ≤ 0.45: within WFGY's acceptable range, so proceed to generation
+- ΔS > 0.60: diverged from query intent, so intervene before generating
 
-Supporting instruments: `lambda_observe` tracks logic directionality (convergent/divergent/chaotic); `BBMC` minimizes semantic residue; `BBCR` handles rollback and branching on dead-ends. [Source: [WFGY Global Debug Card](https://github.com/onestardao/WFGY/blob/main/ProblemMap/wfgy-rag-16-problem-map-global-debug-card.md)]
+Three instruments support this check. `lambda_observe` tracks logic directionality (convergent, divergent, or chaotic). `BBMC` minimizes semantic residue. `BBCR` handles rollback and branching on dead-ends. [Source: [WFGY Global Debug Card](https://github.com/onestardao/WFGY/blob/main/ProblemMap/wfgy-rag-16-problem-map-global-debug-card.md)]
 
-## Operational Requirements
+## Operational requirements
 
-- **Log and classify every incident** — without consistent logging the framework has no value
-- **Keep repair actions stack-specific** — generic repairs don't transfer across embedding models or frameworks
-- **Complement, don't replace, automated evals** — this is a diagnostic vocabulary, not an eval pipeline substitute
+The framework rests on three practices:
 
-## When This Backfires
+- log and classify every incident, because without consistent logging the framework has no value
+- keep repair actions stack-specific, because generic repairs do not transfer across embedding models or frameworks
+- treat this as a complement to automated evals, not a replacement, because it is a diagnostic vocabulary rather than an eval pipeline
 
-Prefer a team-local taxonomy — or a smaller published framework like the MAST paper's 14 categories [Source: [Why Do Multi-Agent LLM Systems Fail?, arXiv:2503.13657](https://arxiv.org/pdf/2503.13657)] — when:
+## When this backfires
 
-- **Incidents don't cluster into WFGY's domains.** Forcing an ill-fit (e.g., labeling a prompt-injection failure as "Interpretation Collapse") obscures root cause and produces wrong repairs.
-- **Your stack is narrow.** Single-agent single-turn RAG has no "Multi-Agent Chaos" or "Memory Breaks Across Sessions" surface; a smaller retrieval-plus-reasoning taxonomy is faster to apply.
-- **You need validated thresholds, not heuristics.** SLA-grade reliability requires thresholds validated on your own evals, not catalog defaults.
-- **Vocabulary overhead exceeds debugging time saved.** Training on 16 named domains is a real cost; low-volume teams may prefer free-form postmortems feeding a minimal local taxonomy.
+Prefer a team-local taxonomy, or a smaller published framework like the MAST paper's 14 categories [Source: [Why Do Multi-Agent LLM Systems Fail?, arXiv:2503.13657](https://arxiv.org/pdf/2503.13657)], when one of these holds:
+
+- Incidents do not cluster into WFGY's domains. Forcing an ill-fit, for example labeling a prompt-injection failure as "Interpretation Collapse", hides the root cause and produces wrong repairs.
+- Your stack is narrow. Single-agent single-turn RAG has no "Multi-Agent Chaos" or "Memory Breaks Across Sessions" surface, so a smaller retrieval-plus-reasoning taxonomy is faster to apply.
+- You need validated thresholds, not heuristics. SLA-grade reliability needs thresholds validated on your own evals, not catalog defaults.
+- Vocabulary overhead exceeds the debugging time saved. Training on 16 named domains is a real cost, so low-volume teams may prefer free-form postmortems that feed a minimal local taxonomy.
 
 ## Key Takeaways
 

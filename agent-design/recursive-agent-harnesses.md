@@ -18,19 +18,19 @@ last_reviewed: 2026-06-12
 
 > A parent agent runs a script that spawns subagent harnesses in parallel, making the recursive unit a full harness rather than a model call.
 
-## When to Use It
+## When to use it
 
-Recursive Agent Harness (RAH) is conditional, not a default. Use it only when all three hold ([Lumer et al., 2026](https://arxiv.org/abs/2606.13643); [Anthropic multi-agent retrospective](https://www.anthropic.com/engineering/built-multi-agent-research-system)):
+A Recursive Agent Harness (RAH) is conditional, not a default. Use it only when all three hold ([Lumer et al., 2026](https://arxiv.org/abs/2606.13643); [Anthropic multi-agent retrospective](https://www.anthropic.com/engineering/built-multi-agent-research-system)):
 
-1. The work decomposes into **genuinely independent** subtasks — no shared naming, types, or call sites that need reconciliation (see [Cohesion-Aware Task Partitioning](../multi-agent/cohesion-aware-task-partitioning.md) for the partition-cost formalism).
-2. Each subtask has a **cheap verification signal** the parent can use to accept or reject the subagent's result (passing tests, lint, schema check).
-3. The task value justifies a **~15× token multiplier** over a single-agent run ([Anthropic, 2025](https://www.anthropic.com/engineering/built-multi-agent-research-system)).
+1. The work splits into genuinely independent subtasks — no shared naming, types, or call sites that need reconciliation (see [Cohesion-Aware Task Partitioning](../multi-agent/cohesion-aware-task-partitioning.md) for the partition-cost formalism).
+2. Each subtask has a cheap verification signal the parent can use to accept or reject the subagent's result, such as passing tests, lint, or a schema check.
+3. The task value justifies a roughly 15x token multiplier over a single-agent run ([Anthropic, 2025](https://www.anthropic.com/engineering/built-multi-agent-research-system)).
 
 If any of the three fails, prefer a single-threaded linear agent with a compression sub-LLM ([Cognition, 2025](https://cognition.ai/blog/dont-build-multi-agents)).
 
-## What Recurses
+## What recurses
 
-The pattern names what the recursive unit *is*. In Recursive Language Models (RLMs), it's a bare model call — the LLM examines a long prompt and calls itself programmatically on segments inside a Python REPL ([Zhang, Kraska, Khattab, 2025](https://arxiv.org/abs/2512.24601)). In a Recursive Agent Harness, it's a full harness: filesystem tools, code execution, planning, and its own context. The parent agent writes and runs a script that spawns subagent harnesses in parallel for fine-grained workloads, and falls back to structured function calls for minor subtasks ([Lumer et al., 2026](https://arxiv.org/abs/2606.13643)).
+The pattern names what the recursive unit is. In Recursive Language Models (RLMs), it is a bare model call — the LLM examines a long prompt and calls itself programmatically on segments inside a Python REPL ([Zhang, Kraska, Khattab, 2025](https://arxiv.org/abs/2512.24601)). In a Recursive Agent Harness, it is a full harness: filesystem tools, code execution, planning, and its own context. The parent agent writes and runs a script that spawns subagent harnesses in parallel for fine-grained workloads, and falls back to structured function calls for minor subtasks ([Lumer et al., 2026](https://arxiv.org/abs/2606.13643)).
 
 | | RLM | RAH |
 |---|---|---|
@@ -39,30 +39,30 @@ The pattern names what the recursive unit *is*. In Recursive Language Models (RL
 | Where intermediate state lives | Outer model's variables | Subagent's context + filesystem |
 | Failure mode | Long-context degradation | Conflicting parallel decisions |
 
-## Production Instance: Dynamic Workflows
+## Production instance: Dynamic Workflows
 
-[Claude Code Dynamic Workflows](../tools/claude/dynamic-workflows.md) ship a working instance ([Claude Code docs](https://code.claude.com/docs/en/workflows)): the parent agent writes a JavaScript orchestration script that a background runtime executes, coordinating up to 1,000 subagents per run (16 in-flight) with results held in script variables instead of the orchestrator's context. The parent generates code rather than control flow, each subagent inherits its own harness, and the concurrency cap bounds coordination overhead.
+[Claude Code Dynamic Workflows](../tools/claude/dynamic-workflows.md) ship a working instance ([Claude Code docs](https://code.claude.com/docs/en/workflows)): the parent agent writes a JavaScript orchestration script that a background runtime executes. It coordinates up to 1,000 subagents per run, with 16 in-flight, and holds results in script variables instead of the orchestrator's context. The parent generates code rather than control flow, each subagent inherits its own harness, and the concurrency cap bounds coordination overhead.
 
-## Why It Works
+## Why it works
 
-When the three preconditions hold, RAH wins for one reason: each subagent inherits a **fresh context window plus its own tools**, moving work that would have crowded the parent's window into (a) a per-subagent window and (b) executable actions a runtime can verify, instead of prompt tokens the parent must read ([Lumer et al., 2026](https://arxiv.org/abs/2606.13643)).
+When the three preconditions hold, RAH wins for one reason: each subagent inherits a fresh context window plus its own tools. This moves work that would have crowded the parent's window into a per-subagent window and into executable actions a runtime can verify, instead of prompt tokens the parent must read ([Lumer et al., 2026](https://arxiv.org/abs/2606.13643)).
 
-The mechanism's strength is bounded by how independent the subtasks really are. When subagents' work conflicts, the recursive structure cannot reconcile it — the parent only sees the returned artefacts and must choose between them without visibility into the reasoning that produced each one ([Cognition, 2025](https://cognition.ai/blog/dont-build-multi-agents)).
+How well the mechanism works depends on how independent the subtasks really are. When subagents' work conflicts, the recursive structure cannot reconcile it. The parent only sees the returned artifacts and must choose between them without visibility into the reasoning that produced each one ([Cognition, 2025](https://cognition.ai/blog/dont-build-multi-agents)).
 
-## When This Backfires
+## When this backfires
 
 RAH fails under specific, common conditions.
 
-- **Coupled coding work.** Anthropic's multi-agent retrospective: "most coding tasks involve fewer truly parallelizable tasks than research" ([Anthropic, 2025](https://www.anthropic.com/engineering/built-multi-agent-research-system)). Parallel subagents working on shared naming, types, or call sites make implicit decisions that conflict on return, and the parent must reconcile them — eating the speedup ([Cognition, 2025](https://cognition.ai/blog/dont-build-multi-agents)). See [Cohesion-Aware Task Partitioning](../multi-agent/cohesion-aware-task-partitioning.md) for the partition-cost mechanism.
-- **Low-value tasks.** Multi-agent runs use roughly 15× the tokens of a single chat. A small refactor, doc edit, or simple bug fix cannot justify the multiplier; the recursive structure pays the cost without earning it back. The [Agent-Headcount Vanity Metric](../anti-patterns/agent-headcount-vanity-metric.md) is the corresponding anti-pattern when the token cost is not paid back.
-- **No leaf-level verification signal.** RAH assumes the parent can judge each subagent's output cheaply. Without an objective check per subtask, the parent rationalises weak results rather than rejecting them — the recurring multi-agent failure cluster identified across 1,642 traces ([Cemri et al., 2025](https://arxiv.org/abs/2503.13657); see also [Multi-Agent SE Design Patterns](../multi-agent/multi-agent-se-design-patterns.md)).
-- **Single-paper provenance.** The RAH numbers — 71.75% to 81.36% on Oolong-Synthetic with a Codex baseline, 89.77% with Claude Sonnet 4.5 — come from one paper, one benchmark, 199 samples ([Lumer et al., 2026](https://arxiv.org/abs/2606.13643)). No independent replication yet.
+- Coupled coding work. Anthropic's multi-agent retrospective notes that "most coding tasks involve fewer truly parallelizable tasks than research" ([Anthropic, 2025](https://www.anthropic.com/engineering/built-multi-agent-research-system)). Parallel subagents working on shared naming, types, or call sites make implicit decisions that conflict on return, and the parent must reconcile them, eating the speedup ([Cognition, 2025](https://cognition.ai/blog/dont-build-multi-agents)). See [Cohesion-Aware Task Partitioning](../multi-agent/cohesion-aware-task-partitioning.md) for the partition-cost mechanism.
+- Low-value tasks. Multi-agent runs use roughly 15 times the tokens of a single chat. A small refactor, doc edit, or simple bug fix cannot justify the multiplier, so the recursive structure pays the cost without earning it back. The [Agent-Headcount Vanity Metric](../anti-patterns/agent-headcount-vanity-metric.md) is the matching anti-pattern when the token cost is not paid back.
+- No leaf-level verification signal. RAH assumes the parent can judge each subagent's output cheaply. Without an objective check per subtask, the parent rationalizes weak results rather than rejecting them. This is the recurring multi-agent failure cluster identified across 1,642 traces ([Cemri et al., 2025](https://arxiv.org/abs/2503.13657); see also [Multi-Agent SE Design Patterns](../multi-agent/multi-agent-se-design-patterns.md)).
+- Single-paper provenance. The RAH numbers — 71.75% to 81.36% on Oolong-Synthetic with a Codex baseline, 89.77% with Claude Sonnet 4.5 — come from one paper, one benchmark, 199 samples ([Lumer et al., 2026](https://arxiv.org/abs/2606.13643)). No independent replication yet.
 
-Cognition's argument is that a single-threaded linear agent with a compression sub-LLM preserves the context-window benefit without the conflicting-decisions risk ([Cognition, 2025](https://cognition.ai/blog/dont-build-multi-agents)).
+Cognition argues that a single-threaded linear agent with a compression sub-LLM keeps the context-window benefit without the conflicting-decisions risk ([Cognition, 2025](https://cognition.ai/blog/dont-build-multi-agents)).
 
 ## Example
 
-The Lumer et al. paper does not publish its parent-agent script. The closest production realisation is Claude Code's Dynamic Workflows runtime — a parent agent writes a JavaScript script the runtime executes:
+The Lumer et al. paper does not publish its parent-agent script. The closest production version is Claude Code's Dynamic Workflows runtime, where a parent agent writes a JavaScript script the runtime executes:
 
 ```text
 Run a workflow to audit every API endpoint under src/routes/ for missing auth checks

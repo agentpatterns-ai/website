@@ -91,10 +91,10 @@ Position within the instruction set affects compliance independent of importance
 
 The architectural response is structural, not editorial:
 
-- **Modularize.** Move task-specific rules into skills or on-demand files loaded only when relevant.
-- **Layer by scope.** Project-wide instructions contain only conventions that apply to every task ([layered instruction scopes](../../instructions/layered-instruction-scopes.md)).
-- **Move enforcement to hooks.** Rules that must never fail belong in linters, pre-commit hooks, or CI gates.
-- **Audit total rule count.** If all loaded instructions total hundreds of rules, cut.
+- Modularize. Move task-specific rules into skills or on-demand files loaded only when relevant.
+- Layer by scope. Project-wide instructions contain only conventions that apply to every task ([layered instruction scopes](../../instructions/layered-instruction-scopes.md)).
+- Move enforcement to hooks. Rules that must never fail belong in linters, pre-commit hooks, or CI gates.
+- Audit total rule count. If all loaded instructions total hundreds of rules, cut.
 
 For critical constraints that must remain as instructions, [repeating them at both the start and end](../../instructions/critical-instruction-repetition.md) of the prompt exploits both primacy and recency bias. Reserve this for hard constraints only — repeating everything negates the priority signal.
 
@@ -116,14 +116,14 @@ Layering interacts directly with the compliance ceiling. Each layer should be sm
 
 These concepts are not independent techniques to apply in isolation. They form an interacting system:
 
-- **Altitude** determines what kind of instruction you write: principle, heuristic, or precise constraint.
-- **Polarity** determines how you frame it: as a target behavior or a prohibition.
-- **Rules vs examples** determines the [vehicle](../../instructions/example-driven-vs-rule-driven-instructions.md): abstract constraint or concrete anchor.
-- **Negative space** closes off known failure modes that survive positive guidance.
-- **Domain specificity** grounds the instructions in real reasoning patterns from your context.
-- **The compliance ceiling** limits the total volume — every instruction added displaces attention from existing ones.
-- **Layered scopes** distribute instructions across the right [granularity](../../instructions/layered-instruction-scopes.md) so each layer stays small.
-- **Repetition and position** determine which instructions survive attention pressure.
+- Altitude determines what kind of instruction you write: principle, heuristic, or precise constraint.
+- Polarity determines how you frame it: as a target behavior or a prohibition.
+- Rules vs examples determines the [vehicle](../../instructions/example-driven-vs-rule-driven-instructions.md): abstract constraint or concrete anchor.
+- Negative space closes off known failure modes that survive positive guidance.
+- Domain specificity grounds the instructions in real reasoning patterns from your context.
+- The compliance ceiling limits the total volume — every instruction added displaces attention from existing ones.
+- Layered scopes distribute instructions across the right [granularity](../../instructions/layered-instruction-scopes.md) so each layer stays small.
+- Repetition and position determine which instructions survive attention pressure.
 
 An instruction set designed with all these constraints in mind is small, layered, positively framed where possible, at the right altitude for each section, anchored by examples where format precision matters, and backed by hooks for anything that must never fail.
 
@@ -141,7 +141,7 @@ An instruction set designed with all these constraints in mind is small, layered
 
 ## Related
 
-**Source patterns**
+Source patterns
 
 - [System Prompt Altitude](../../instructions/system-prompt-altitude.md)
 - [Instruction Polarity](../../instructions/instruction-polarity.md)
@@ -152,7 +152,7 @@ An instruction set designed with all these constraints in mind is small, layered
 - [Critical Instruction Repetition](../../instructions/critical-instruction-repetition.md)
 - [Layered Instruction Scopes](../../instructions/layered-instruction-scopes.md)
 
-**Training modules**
+Training modules
 
 - [Context Engineering](context-engineering.md)
 - [Harness Engineering](harness-engineering.md)

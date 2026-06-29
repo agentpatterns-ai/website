@@ -20,14 +20,14 @@ maturity: adopted
 
 ## Roles
 
-The pipeline separates two antagonistic roles across different model instances — ideally different providers:
+The pipeline splits two opposing roles across different model instances, ideally different providers:
 
-- **Builder** — owns specs, tests, and implementation. Accumulates context across phases and can develop confirmation bias toward its own decisions.
-- **Adversary** — gets a [fresh context window](../agent-design/loop-strategy-spectrum.md) each review pass and attacks specs, tests, and code with no prior investment. The context reset is the mechanism: the adversary cannot rationalize decisions it did not make.
+- Builder — owns specs, tests, and implementation. It accumulates context across phases and can develop confirmation bias toward its own decisions.
+- Adversary — gets a [fresh context window](../loop-engineering/loop-strategy-spectrum.md) each review pass and attacks specs, tests, and code with no prior investment. The context reset is the mechanism: the adversary cannot rationalize decisions it did not make.
 
-Using a different model family for each role (e.g., Claude as Builder, Gemini as Adversary) reduces correlated failure modes — multi-model ensembles suppress shared error patterns that same-family models exhibit even with a fresh context ([LLM-TOPLA, EMNLP 2024](https://aclanthology.org/2024.findings-emnlp.698.pdf)). See [Loop Strategy Spectrum](../agent-design/loop-strategy-spectrum.md) for when fresh-context resets are appropriate.
+Use a different model family for each role, for example Claude as Builder and Gemini as Adversary. This reduces correlated failure modes. Multi-model ensembles suppress shared error patterns that same-family models show even with a fresh context ([LLM-TOPLA, EMNLP 2024](https://aclanthology.org/2024.findings-emnlp.698.pdf)). See [when fresh-context resets are appropriate](../loop-engineering/loop-strategy-spectrum.md) for more.
 
-## The Six Phases
+## The six phases
 
 ```mermaid
 graph TD
@@ -40,17 +40,17 @@ graph TD
     P5 --> P6[Phase 6: Convergence]
 ```
 
-**Phase 1 — Spec Crystallization.** Establish behavioral contracts, interface definitions, and an edge-case catalog using [spec-driven development](../workflows/spec-driven-development.md). Define the Purity Boundary Map (see below) before any implementation, since it shapes module decomposition.
+Phase 1 — Spec crystallization. Establish behavioral contracts, interface definitions, and an edge-case catalog using [spec-driven development](../workflows/spec-driven-development.md). Define the Purity Boundary Map (see below) before any implementation, because it shapes how you split the code into modules.
 
-**Phase 2 — Test-First Implementation.** Translate specs into failing tests, then implement only what tests demand. Red → Green → Refactor.
+Phase 2 — Test-first implementation. Translate specs into failing tests, then implement only what the tests demand. Red, green, refactor.
 
-**Phase 3 — Adversarial Refinement.** The Adversary reviews specs, tests, and code with a clean context window, tagging each finding by dimension: spec fidelity, test coverage, or implementation flaw.
+Phase 3 — Adversarial refinement. The Adversary reviews specs, tests, and code with a clean context window. It tags each finding by dimension: spec fidelity, test coverage, or implementation flaw.
 
-**Phase 4 — Feedback Integration.** Route findings back to the phase they belong to. Phases 3 and 4 repeat until convergence.
+Phase 4 — Feedback integration. Route findings back to the phase they belong to. Phases 3 and 4 repeat until convergence.
 
-**Phase 5 — Formal Hardening.** Execute formal proofs, fuzzing, and [mutation testing](../verification/mutation-testing-quality-gate.md) against the battle-tested implementation. The Purity Boundary Map identifies the formally verifiable subset. Cross-examination at phase boundaries is a documented robustness mechanism in LLM multi-agent SE systems ([ACM TOSEM, 2024](https://dl.acm.org/doi/10.1145/3712003)).
+Phase 5 — Formal hardening. Run formal proofs, fuzzing, and [mutation testing](../verification/mutation-testing-quality-gate.md) against the tested implementation. The Purity Boundary Map identifies the formally verifiable subset. Cross-examination at phase boundaries is a documented robustness mechanism in LLM multi-agent SE systems ([ACM TOSEM, 2024](https://dl.acm.org/doi/10.1145/3712003)).
 
-**Phase 6 — Convergence.** Exit the loop. See convergence criterion below.
+Phase 6 — Convergence. Exit the loop. See the convergence criterion below.
 
 ## Purity Boundary Map
 
@@ -61,9 +61,9 @@ The Purity Boundary Map separates the codebase into two zones before implementat
 | Pure core | Deterministic, no side effects | Formal proofs, property-based testing |
 | Effectful shell | I/O, network, database, time | Integration tests, contract tests, fuzzing |
 
-Designing this boundary in Phase 1 is not optional — it determines module structure, and retrofitting it later is expensive. The pure core is the formal-verification target in Phase 5; the effectful shell is not formally verifiable by definition.
+Design this boundary in Phase 1. It determines module structure, and retrofitting it later is expensive. The pure core is the formal-verification target in Phase 5. The effectful shell cannot be formally verified, by definition.
 
-## Convergence Criterion
+## Convergence criterion
 
 The loop exits when the Adversary's findings shift from genuine to invented:
 
@@ -72,24 +72,24 @@ The loop exits when the Adversary's findings shift from genuine to invented:
 - Implementation findings require the Adversary to invent implausible inputs, not observe actual flaws
 - All formal properties pass proof; fuzzing finds nothing new
 
-This is a qualitative signal, not a counter. Tag each finding on intake as "substantive" or "hypothetical" and track the ratio across rounds — when the Adversary can only raise hypothetical issues, the loop has converged.
+This is a qualitative signal, not a counter. Tag each finding on intake as "substantive" or "hypothetical", then track the ratio across rounds. When the Adversary can only raise hypothetical issues, the loop has converged.
 
-## When This Backfires
+## When this backfires
 
-VSDD's cost is proportional to [convergence](../agent-design/convergence-detection.md) cycles. Skip it or expect degraded results when:
+VSDD's cost is proportional to [convergence](../loop-engineering/convergence-detection.md) cycles. Skip it or expect degraded results when:
 
-- **Low-stakes or small tasks.** Refactors, single-line patches, throwaway scripts, and prototypes produce low-signal critiques and stall on style. Orchestration cost — multiple model calls per phase, context management, finding triage — exceeds defect-prevention value when failure is cheap to fix post-deployment.
-- **Thin specs or weak Adversary prompts.** Both push the Adversary toward inventing gaps or surface-level stylistic feedback rather than finding real flaws. Phases 3 and 4 then cycle without meaningful signal — illusion of convergence rather than the reality. Multi-agent systems are specifically susceptible to premature consensus when reviewer incentives are not explicitly orthogonal ([Failure Modes in LLM Systems, 2025](https://arxiv.org/abs/2511.19933)).
-- **Narrow specialist domains.** General-purpose adversary models hallucinate plausible but incorrect findings in embedded systems, cryptography, or other deep-context domains. Domain-specific tests must validate Adversary output before acting on it.
-- **Purity boundary retrofitting.** If Phase 1 skips the map, the effectful shell typically entangles with the pure core during Phase 2. Separating them later often requires near-full rewrites.
+- Low-stakes or small tasks. Refactors, single-line patches, throwaway scripts, and prototypes produce low-signal critiques and stall on style. Orchestration cost — multiple model calls per phase, context management, finding triage — exceeds defect-prevention value when failure is cheap to fix after deployment.
+- Thin specs or weak Adversary prompts. Both push the Adversary toward inventing gaps or surface-level stylistic feedback rather than finding real flaws. Phases 3 and 4 then cycle without meaningful signal — an illusion of convergence rather than the reality. Multi-agent systems are especially prone to premature consensus when reviewer incentives are not explicitly orthogonal ([Failure Modes in LLM Systems, 2025](https://arxiv.org/abs/2511.19933)).
+- Narrow specialist domains. General-purpose adversary models hallucinate plausible but incorrect findings in embedded systems, cryptography, or other deep-context domains. Domain-specific tests must validate Adversary output before you act on it.
+- Purity boundary retrofitting. If Phase 1 skips the map, the effectful shell typically entangles with the pure core during Phase 2. Separating them later often requires near-full rewrites.
 
-## The Waterfall Trap
+## The waterfall trap
 
-Treating Phase 1 specs as a fixed gate repeats waterfall's failure mode. Implementation is discovery — edge cases emerge during building, not beforehand. When Phase 3 finds a genuine behavioral gap, update the spec. Route minor edge case additions directly to Phase 2; reserve Phase 1 revision for findings that change the behavioral contract.
+Treating Phase 1 specs as a fixed gate repeats waterfall's failure mode. Implementation is discovery: edge cases emerge during building, not beforehand. When Phase 3 finds a genuine behavioral gap, update the spec. Route minor edge case additions directly to Phase 2; reserve Phase 1 revision for findings that change the behavioral contract.
 
 ## Example
 
-The following shows a minimal two-role pipeline using Claude as Builder and Gemini as Adversary. The Builder accumulates context across phases; the Adversary is initialised fresh for each review pass.
+This example shows a minimal two-role pipeline. The Builder uses Claude and the Adversary uses Gemini. The Builder accumulates context across phases. The Adversary starts fresh for each review pass.
 
 ```python
 import anthropic
@@ -132,7 +132,7 @@ findings = adversary_review(spec, tests, code)
 print(findings)
 ```
 
-The Adversary call passes only the artifacts under review — no prior conversation history. If `findings` contains substantive behavioral gaps, route them back into `builder_turn` with the appropriate phase prompt; repeat until the Adversary can only raise stylistic issues.
+The Adversary call passes only the artifacts under review, with no prior conversation history. If `findings` contains substantive behavioral gaps, route them back into `builder_turn` with the right phase prompt. Repeat until the Adversary can only raise stylistic issues.
 
 ## Key Takeaways
 
@@ -144,10 +144,10 @@ The Adversary call passes only the artifacts under review — no prior conversat
 
 ## Related
 
-- [Convergence Detection in Iterative Refinement](../agent-design/convergence-detection.md) — the signal-based model behind the Phase 6 convergence criterion
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md) — the two-role evaluator/generator scaffold VSDD specialises
+- [Convergence Detection in Iterative Refinement](../loop-engineering/convergence-detection.md) — the signal-based model behind the Phase 6 convergence criterion
+- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md) — the two-role evaluator/generator scaffold VSDD specializes
 - [Committee Review Pattern](../code-review/committee-review-pattern.md) — alternative when you want multiple adversaries instead of one
-- [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md) — generalised Builder/Adversary loop without the spec-first phases
+- [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md) — generalized Builder/Adversary loop without the spec-first phases
 - [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md) — uses cross-model diversity at the planning stage rather than the review stage
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md) — the Phase 2 mechanism applied across agents
 - [Red-Green-Refactor for Agent Development](../verification/red-green-refactor-agents.md) — the TDD substrate Phase 2 builds on

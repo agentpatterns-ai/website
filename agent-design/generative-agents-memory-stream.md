@@ -14,13 +14,13 @@ maturity: emerging
 
 > A memory stream stores agent observations, scores retrieval by recency, relevance, and importance, and synthesizes reflections to keep long sessions coherent.
 
-## The Problem
+## The problem
 
 Long-running coding agents face a three-way failure mode: dumping full conversation history hits context limits; aggressive summarization loses diagnostic detail; simple recency-based context retrieves current but topically irrelevant observations. The [generative agents architecture (Park et al. 2023)](https://arxiv.org/abs/2304.03442) addresses all three simultaneously through an integrated memory stream.
 
-## Architecture Overview
+## Architecture overview
 
-The architecture has three integrated layers that work as a unit:
+The architecture has three layers that work as one unit:
 
 ```mermaid
 graph TD
@@ -36,15 +36,15 @@ graph TD
     style D fill:#3a1e5f,stroke:#4a4a4a,color:#e0e0e0
 ```
 
-## Layer 1: Observation Stream
+## Layer 1: observation stream
 
-Every event the agent perceives is stored as a `ConceptNode` with: timestamp, subject-predicate-object triple, natural-language description, embedding vector, and a **poignancy score** — an LLM-assigned importance rating for the observation ([perceive.py](https://github.com/joonspk-research/generative_agents/blob/main/reverie/backend_server/persona/cognitive_modules/perceive.py)).
+The agent stores every event it perceives as a `ConceptNode` holding a timestamp, a subject-predicate-object triple, a natural-language description, an embedding vector, and a poignancy score. The score is an LLM-assigned importance rating for the observation ([perceive.py](https://github.com/joonspk-research/generative_agents/blob/main/reverie/backend_server/persona/cognitive_modules/perceive.py)).
 
-Poignancy is scored per event: idle events receive 1; substantive events are scored via LLM prompt. The running sum of poignancy scores drives the reflection trigger. For coding agents, the observation unit maps directly to tool outputs: a file read, a failing test result, a linter error, a git diff, a decision to skip a file. Observations must be natural-language descriptions — raw JSON tool output provides weak embedding signal; a sentence describing what the output means retrieves better.
+Poignancy is scored per event. Idle events receive 1. Substantive events are scored by an LLM prompt. The running sum of poignancy scores drives the reflection trigger. For coding agents, the observation unit maps directly to tool outputs: a file read, a failing test result, a linter error, a git diff, a decision to skip a file. Observations must be natural-language descriptions. Raw JSON tool output gives a weak embedding signal, so a sentence describing what the output means retrieves better.
 
-## Layer 2: Retrieval Scoring
+## Layer 2: retrieval scoring
 
-When planning requires context, the agent identifies **focal points** — the current task or question — and retrieves memory nodes scored on three normalized dimensions ([retrieve.py](https://github.com/joonspk-research/generative_agents/blob/main/reverie/backend_server/persona/cognitive_modules/retrieve.py)):
+When planning needs context, the agent identifies focal points — the current task or question — and retrieves memory nodes scored on three normalized dimensions ([retrieve.py](https://github.com/joonspk-research/generative_agents/blob/main/reverie/backend_server/persona/cognitive_modules/retrieve.py)):
 
 | Dimension | Signal | Weight |
 |-----------|--------|--------|
@@ -52,37 +52,37 @@ When planning requires context, the agent identifies **focal points** — the cu
 | Relevance | Cosine similarity to focal point embedding | 3.0 |
 | Importance | Stored poignancy score | 2.0 |
 
-The composite score is: `recency×0.5 + relevance×3 + importance×2` (all dimensions normalized to [0, 1]). The top 30 nodes by composite score enter the planning context.
+The composite score is `recency×0.5 + relevance×3 + importance×2`, with all dimensions normalized to [0, 1]. The top 30 nodes by composite score enter the planning context.
 
-This scoring solves the three-way failure mode directly: recency prevents stale context dominating, relevance ensures topical match, importance ensures high-signal observations outcompete noise. The weights are hand-tuned in the reference implementation — the authors note they 'should potentially be learned through RL' for production use.
+This scoring solves the three-way failure mode directly. Recency stops stale context dominating. Relevance ensures a topical match. Importance lets high-signal observations outcompete noise. The weights are hand-tuned in the reference implementation. The authors note they 'should potentially be learned through RL' for production use.
 
-## Layer 3: Reflection Synthesis
+## Layer 3: reflection synthesis
 
-Reflection fires when the cumulative importance of recent observations crosses a threshold — not on a fixed schedule. The process ([reflect.py](https://github.com/joonspk-research/generative_agents/blob/main/reverie/backend_server/persona/cognitive_modules/reflect.py)):
+Reflection fires when the cumulative importance of recent observations crosses a threshold, not on a fixed schedule. The process ([reflect.py](https://github.com/joonspk-research/generative_agents/blob/main/reverie/backend_server/persona/cognitive_modules/reflect.py)):
 
-1. Select 3 focal points from recent non-idle observations
-2. Retrieve associated memory nodes for each focal point
-3. Generate 5 higher-level insights with evidence links
+1. Select 3 focal points from recent non-idle observations.
+2. Retrieve the associated memory nodes for each focal point.
+3. Generate 5 higher-level insights with evidence links.
 
-Reflection outputs are stored back into the observation stream as thought nodes — they become retrievable alongside raw observations. This compresses many low-level events into fewer high-level insights, reducing future retrieval surface while preserving reasoning lineage.
+Reflection outputs are stored back into the observation stream as thought nodes, so they become retrievable alongside raw observations. This compresses many low-level events into fewer high-level insights. It reduces the future retrieval surface while preserving the reasoning lineage.
 
 For coding agents, reflection synthesis converts sequences of tool-call observations ("read file A", "read file B", "ran test — failed", "located error in module C") into higher-level insights ("the auth module has a dependency inversion problem that causes cascading test failures").
 
-## When This Pattern Applies
+## When this pattern applies
 
-This architecture pays off for **long, observation-dense, coherence-critical** sessions: multi-hour CI pipelines, multi-PR workflows where later decisions depend on earlier findings, debug sessions tracking many dead ends.
+This architecture pays off for long, observation-dense, coherence-critical sessions: multi-hour CI pipelines, multi-PR workflows where later decisions depend on earlier findings, and debug sessions tracking many dead ends.
 
-It adds overhead without benefit for bounded tasks. Poignancy scoring requires one LLM call per substantive observation (idle events are scored `1` without a call) — at high observation frequency this cost compounds. Cold-start applies: retrieval returns low-quality results until sufficient observations accumulate. The pattern also requires a persistent memory store across invocations — agents starting fresh each run never build the density that makes retrieval valuable.
+It adds overhead without benefit for bounded tasks. Poignancy scoring needs one LLM call per substantive observation, and idle events are scored `1` without a call. At high observation frequency this cost compounds. Cold-start applies, so retrieval returns low-quality results until enough observations accumulate. The pattern also needs a persistent memory store across invocations. Agents starting fresh each run never build the density that makes retrieval valuable.
 
-A deeper limitation is architectural: the memory stream is *retrieval-based*, not weight-based. Critics argue this makes it a lookup mechanism rather than true memory — it generalizes by similarity to stored cases but cannot consolidate experience into abstract rules, leaving a ceiling on compositionally novel tasks that more context cannot raise ([Contextual Agentic Memory is a Memo, Not True Memory (2026)](https://arxiv.org/abs/2604.27707)). For coding agents this means the stream sharpens recall of prior observations but does not, on its own, teach the agent new general competence; novel synthesis still falls back on the frozen base model.
+A deeper limitation is architectural: the memory stream is retrieval-based, not weight-based. Critics argue this makes it a lookup mechanism rather than true memory. It generalizes by similarity to stored cases but cannot consolidate experience into abstract rules, leaving a ceiling on compositionally novel tasks that more context cannot raise ([Contextual Agentic Memory is a Memo, Not True Memory (2026)](https://arxiv.org/abs/2604.27707)). For coding agents this means the stream sharpens recall of prior observations but does not, on its own, teach the agent new general competence. Novel synthesis still falls back on the frozen base model.
 
-## Relation to Existing Memory Patterns
+## Relation to existing memory patterns
 
 The architecture is an integrated system, not a single technique:
 
-- **[Episodic memory retrieval](episodic-memory-retrieval.md)** — stores complete problem-solving episodes; the memory stream stores atomic observations that compose into episodes over time, and can serve as the storage substrate for episodic memory.
-- **[Memory synthesis from execution logs](memory-synthesis-execution-logs.md)** — extracts lessons post-session; memory stream reflection triggers automatically mid-session on importance accumulation.
-- **[Subtask-level memory](subtask-level-memory.md)** — aligns retrieval granularity to reasoning stage; memory stream retrieval anchors to the current focal point regardless of stage.
+- [Episodic memory retrieval](episodic-memory-retrieval.md) stores complete problem-solving episodes. The memory stream stores atomic observations that compose into episodes over time, and it can serve as the storage substrate for episodic memory.
+- [Memory synthesis from execution logs](memory-synthesis-execution-logs.md) extracts lessons after a session. Memory stream reflection triggers automatically mid-session on importance accumulation.
+- [Subtask-level memory](subtask-level-memory.md) aligns retrieval granularity to the reasoning stage. Memory stream retrieval anchors to the current focal point regardless of stage.
 
 ## Key Takeaways
 

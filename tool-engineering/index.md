@@ -20,7 +20,6 @@ Core principles for designing agent tools that are discoverable, unambiguous, an
 - [Tool Description Quality](tool-description-quality.md) — Tool descriptions -- not just implementations -- determine whether agents select the right tool; treat them as prompt engineering surfaces
 - [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md) — Write tool descriptions assuming the agent has never seen the system -- include implicit context, query syntax, domain terms, and resource relationships
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md) — Three API-level features for managing hundreds of tools without drowning in context or losing selection accuracy
-- [Token-Efficient Tool Design](token-efficient-tool-design.md) — Design tools so that each call injects the minimum tokens needed for the next agent decision
 
 ## Tool Design
 

@@ -16,15 +16,15 @@ maturity: established
 
 > On a cross-generation migration, discard the inherited prompt stack, rebuild the smallest prompt that holds the product contract, then re-tune four axes against representative examples.
 
-## When the Discipline Applies
+## When the discipline applies
 
 Both OpenAI and Anthropic now make this an explicit, in-product recommendation, bounded to cross-generation hops. OpenAI's "Using GPT-5.5" guide states it verbatim:
 
 > To get the most out of GPT-5.5, treat it as a new model family to tune for, not a drop-in replacement for `gpt-5.2` or `gpt-5.4`. Begin migration with a fresh baseline instead of carrying over every instruction from an older prompt stack. Start with the smallest prompt that preserves the product contract, then tune reasoning effort, verbosity, tool descriptions, and output format against representative examples ([OpenAI: Using GPT-5.5](https://developers.openai.com/api/docs/guides/latest-model)).
 
-Anthropic reaches the same conclusion: "Claude Opus 4.7 interprets prompts more literally and explicitly than Claude Opus 4.6... A prompt and harness review may be especially helpful" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)). The discipline applies when the successor changes *how* it reads prompts — not for every model-ID swap.
+Anthropic reaches the same conclusion: "Claude Opus 4.7 interprets prompts more literally and explicitly than Claude Opus 4.6... A prompt and harness review may be especially helpful" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)). The discipline applies when the successor changes how it reads prompts — not for every model-ID swap.
 
-## Rewrite vs. Patch-Forward
+## Rewrite versus patch-forward
 
 OpenAI's `openai-docs` skill classifies upgrades into three buckets ([OpenAI skills upgrade-guide.md](https://raw.githubusercontent.com/openai/skills/724cd511c96593f642bddf13187217aa155d2554/skills/.curated/openai-docs/references/upgrade-guide.md)):
 
@@ -36,15 +36,15 @@ OpenAI's `openai-docs` skill classifies upgrades into three buckets ([OpenAI ski
 
 Cross-generation hops sit in the middle bucket by default; minor-version successors sit in the first. Anthropic aligns: "Claude Opus 4.7 should have strong out-of-the-box performance on existing Claude Opus 4.6 prompts and evals" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)) — the rewrite is conditional on observed drift, not assumed.
 
-## The Smallest Prompt That Preserves the Product Contract
+## The smallest prompt that preserves the product contract
 
 The product contract is the externally observable behavior the agent owes the user: input domain, output shape, tool-call discipline, refusal posture, latency envelope. The smallest prompt produces it without inherited compensation layers.
 
 Old prompts encode workarounds for prior-generation defaults — verbosity controls, status-message scaffolding, redundant examples to force generalization. Claude Opus 4.7 "will not silently generalize an instruction from one item to another, and it will not infer requests you didn't make" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)), so those workarounds become noise or misfire. Strip first: "Re-baseline response length with existing length-control prompts removed, then tune explicitly."
 
-## The Four-Axis Tuning Order
+## The four-axis tuning order
 
-OpenAI names the order: **reasoning effort → verbosity → tool descriptions → output format** ([OpenAI: Using GPT-5.5](https://developers.openai.com/api/docs/guides/latest-model)). The order is not arbitrary.
+OpenAI names the order: reasoning effort, then verbosity, then tool descriptions, then output format ([OpenAI: Using GPT-5.5](https://developers.openai.com/api/docs/guides/latest-model)). The order is not arbitrary.
 
 ```mermaid
 graph TD
@@ -56,21 +56,21 @@ graph TD
     R -->|Regression| E
 ```
 
-1. **Reasoning effort** sets computation depth before anything downstream is observable; tuning later axes first reads signal off the wrong substrate. Anthropic: "start with the new `xhigh` effort level for coding and agentic use cases, and use a minimum of `high` effort for most intelligence-sensitive use cases" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)). See [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md).
-2. **Verbosity** shapes length and density. Higher effort lengthens output, so verbosity prompts written before effort is fixed over-correct ("to decrease verbosity, add: 'Provide concise, focused responses...'" — [Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)).
-3. **Tool descriptions** calibrate against the literal-interpretation profile, since cross-generation models shift tool-call frequency and subagent defaults: "Claude Opus 4.7 tends to spawn fewer subagents by default... give Claude Opus 4.7 explicit guidance around when subagents are desirable" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)).
-4. **Output format** is fixed last: constraints surface most clearly once the stack below is stable, and re-tuning against an unstable lower stack locks in transient artifacts.
+1. Reasoning effort sets computation depth before anything downstream is observable. Tuning later axes first reads signal off the wrong substrate. Anthropic: "start with the new `xhigh` effort level for coding and agentic use cases, and use a minimum of `high` effort for most intelligence-sensitive use cases" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)). See [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md).
+2. Verbosity shapes length and density. Higher effort lengthens output, so verbosity prompts written before effort is fixed over-correct ("to decrease verbosity, add: 'Provide concise, focused responses...'" — [Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)).
+3. Tool descriptions calibrate against the literal-interpretation profile, since cross-generation models shift tool-call frequency and subagent defaults: "Claude Opus 4.7 tends to spawn fewer subagents by default... give Claude Opus 4.7 explicit guidance around when subagents are desirable" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)).
+4. Output format is fixed last. Constraints surface most clearly once the stack below is stable, and re-tuning against an unstable lower stack locks in transient artifacts.
 
-## The Representative-Example Coupling
+## The representative-example coupling
 
 A rewrite without an eval set degenerates into vibes. Both vendors require representative examples as the tuning surface — Anthropic: "Review prompts for the behavior changes above (response length, literalism, tone, progress updates, subagents, effort calibration, tool triggering...)" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)). The eval set must predate the rewrite, or a team cannot tell whether drift came from the new model, the rewrite, or their interaction. Pair it with [Golden Query Pairs Regression](../verification/golden-query-pairs-regression.md) and the operational wrapper in [Model Deprecation Lifecycle](../workflows/model-deprecation-lifecycle.md).
 
-## When This Backfires
+## When this backfires
 
-- **Minor-version successor with no eval drift.** Where the regression eval shows no behavioral change, rewriting from a fresh baseline discards working prompt-eval coupling for no measured gain. OpenAI's upgrade-guide recommends `model string only` here ([OpenAI skills upgrade-guide](https://raw.githubusercontent.com/openai/skills/724cd511c96593f642bddf13187217aa155d2554/skills/.curated/openai-docs/references/upgrade-guide.md)).
-- **No representative example set.** Without evals, the four-axis tuning has no signal to optimise against and the rewrite produces unmeasured prompt churn.
-- **Provider-managed harness.** For Claude Managed Agents, "no changes beyond updating model name are required" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)). Copilot consumer tiers route users to successors automatically.
-- **Audited or change-controlled prompts.** Prompts pinned by a regulatory regime, security review, or external sign-off cannot be rewritten on every cross-generation hop without re-running the audit. The certification cost dominates the tuning gain.
+- Minor-version successor with no eval drift: where the regression eval shows no behavioral change, rewriting from a fresh baseline discards working prompt-eval coupling for no measured gain. OpenAI's upgrade-guide recommends `model string only` here ([OpenAI skills upgrade-guide](https://raw.githubusercontent.com/openai/skills/724cd511c96593f642bddf13187217aa155d2554/skills/.curated/openai-docs/references/upgrade-guide.md)).
+- No representative example set: without evals, the four-axis tuning has no signal to optimize against and the rewrite produces unmeasured prompt churn.
+- Provider-managed harness: for Claude Managed Agents, "no changes beyond updating model name are required" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)). Copilot consumer tiers route users to successors automatically.
+- Audited or change-controlled prompts: prompts pinned by a regulatory regime, security review, or external sign-off cannot be rewritten on every cross-generation hop without re-running the audit. The certification cost dominates the tuning gain.
 
 ## Example
 

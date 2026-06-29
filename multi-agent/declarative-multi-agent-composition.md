@@ -17,23 +17,23 @@ maturity: adopted
 
 > Declarative composition defines agents and their coordination as structured data, then wires them into workflows explicitly rather than through imperative code.
 
-## Why Declarative
+## Why declarative
 
-Imperative multi-agent code tangles agent capabilities, coordination logic, and runtime behavior. When a workflow fails, the developer must trace through code to distinguish a misconfigured agent from a wrong [handoff](agent-handoff-protocols.md) or a runtime error. Declarative specs separate these layers.
+Imperative multi-agent code tangles three things together: agent capabilities, coordination logic, and runtime behavior. When a workflow fails, you have to trace through code to tell a misconfigured agent from a wrong [handoff](agent-handoff-protocols.md) or a runtime error. Declarative specs separate these layers.
 
-A declarative definition captures the **what** (model, tools, memory) without encoding the **how** (framework internals, API call sequences, retry logic). This makes agent configurations:
+A declarative definition captures what an agent is (model, tools, memory) without encoding how it runs (framework internals, API call sequences, retry logic). This makes agent configurations:
 
-- **Inspectable** — the full agent spec is readable without running anything
-- **Diffable** — changes between workflow versions show up as structured data changes, not code refactors
-- **Portable** — the same spec can drive a visual builder, a CLI, or a CI pipeline
+- inspectable — you can read the full agent spec without running anything
+- diffable — changes between workflow versions show up as structured data changes, not code refactors
+- portable — the same spec can drive a visual builder, a CLI, or a CI pipeline
 
-## The Define-and-Compose Pattern
+## The define-and-compose pattern
 
-The [AutoGen Studio research](https://arxiv.org/abs/2408.15247) (EMNLP 2024), drawing on 200,000+ installations and 135+ user-reported issues, identified **define-and-compose** as the dominant workflow authoring pattern across multi-agent developer tooling.
+The [AutoGen Studio research](https://arxiv.org/abs/2408.15247) (EMNLP 2024) drew on more than 200,000 installations and 135 user-reported issues. It identified define-and-compose as the most common way developers author workflows across multi-agent tooling.
 
-The pattern has two phases:
+The pattern has two phases.
 
-**Define** — create each component independently with explicit parameters:
+Define each component on its own, with explicit parameters:
 
 ```json
 {
@@ -47,7 +47,7 @@ The pattern has two phases:
 }
 ```
 
-**Compose** — wire agents into a workflow by specifying coordination, not implementation:
+Compose the agents into a workflow by stating coordination, not implementation:
 
 ```json
 {
@@ -62,36 +62,36 @@ The pattern has two phases:
 
 This mirrors how production teams already think — roles first, then coordination — but makes the structure machine-readable.
 
-## Built-In Profiling Changes the Debugging Model
+## Built-in profiling changes the debugging model
 
-Multi-agent workflows fail in ways single-agent systems do not: coordination failures, context loss at handoffs, and cascading errors across agents. The AutoGen Studio research identified **debugging and sensemaking tools** as a critical, frequently requested capability — multi-agent systems need observability built into the composition layer, not bolted on after.
+Multi-agent workflows fail in ways single-agent systems do not: coordination failures, context loss at handoffs, and cascading errors across agents. The AutoGen Studio research found that debugging and sensemaking tools were a critical, frequently requested capability. Multi-agent systems need observability built into the composition layer, not bolted on after.
 
-Effective multi-agent profiling surfaces:
+Good multi-agent profiling shows you:
 
-- **Token cost per agent** — identifies which agents consume disproportionate context
-- **Tool invocation frequency and success rate** — reveals agents that call tools repeatedly without progress (see [Loop Detection](../observability/loop-detection.md))
-- **Message flow between agents** — traces the actual coordination path versus the intended one
-- **Per-agent timing** — exposes bottleneck agents in sequential workflows
+- token cost per agent — which agents consume far more context than the rest
+- tool invocation frequency and success rate — agents that call tools repeatedly without progress (see [loop detection](../observability/loop-detection.md))
+- message flow between agents — the actual coordination path against the one you intended
+- per-agent timing — the bottleneck agents in sequential workflows
 
-These per-agent attributes map directly to the [OpenTelemetry GenAI agent span conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/), which standardize `invoke_agent` spans with token-usage, tool-call, and timing attributes for each agent invocation. When agent definitions are declarative, the runtime can emit those spans at every agent boundary automatically. Imperative code requires manual instrumentation at each handoff point.
+These per-agent attributes map directly to the [OpenTelemetry GenAI agent span conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/), which standardize `invoke_agent` spans with token-usage, tool-call, and timing attributes for each agent invocation. When agent definitions are declarative, the runtime can emit those spans at every agent boundary automatically. Imperative code makes you instrument each handoff point by hand.
 
-## The Export-to-Code Path
+## The export-to-code path
 
-Visual/declarative tools work for prototyping, but production deployments need code. The pattern that works is **declarative-first, code-second**:
+Visual and declarative tools work for prototyping, but production deployments need code. The pattern that works is declarative first, code second:
 
-1. **Prototype** in declarative format — fast iteration, visual feedback
-2. **Validate** with built-in profiling — catch coordination issues early
-3. **Export** to code when the workflow is stable — full control, version-controlled, testable
+1. Prototype in declarative format. You get fast iteration and visual feedback.
+2. Validate with built-in profiling. You catch coordination issues early.
+3. Export to code once the workflow is stable. You get full control, version control, and testable artifacts.
 
-This avoids the [Framework-First anti-pattern](../anti-patterns/framework-first.md) by starting with explicit specifications rather than opaque abstractions.
+This avoids the [framework-first anti-pattern](../anti-patterns/framework-first.md): you start with explicit specifications rather than opaque abstractions.
 
-## When Declarative Composition Breaks Down
+## When declarative composition breaks down
 
-Declarative specs work well for **static workflows** — fixed agent sets with known coordination patterns. They struggle with:
+Declarative specs work well for static workflows — fixed agent sets with known coordination patterns. They struggle with:
 
-- **Dynamic agent creation** — workflows that spawn agents based on runtime conditions need imperative escape hatches
-- **Complex conditional routing** — "if the reviewer finds security issues, spawn a security specialist" is awkward in pure JSON
-- **Shared mutable state** — agents that read and write shared context during execution require runtime coordination beyond what a static spec captures
+- dynamic agent creation — workflows that spawn agents based on runtime conditions need imperative escape hatches
+- complex conditional routing — "if the reviewer finds security issues, spawn a security specialist" is awkward in pure JSON
+- shared mutable state — agents that read and write shared context during a run need runtime coordination beyond what a static spec captures
 
 The practical boundary: use declarative composition for the workflow skeleton, imperative code for runtime adaptation.
 

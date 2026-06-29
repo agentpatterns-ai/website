@@ -15,11 +15,11 @@ maturity: established
 
 > Planning tells the agent what to do. Monitoring tells you whether it actually did it — and whether it wandered off.
 
-**Related lesson:** [Steering Running Agents](https://learn.agentpatterns.ai/harness-engineering/steering-running-agents/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Steering Running Agents](https://learn.agentpatterns.ai/harness-engineering/steering-running-agents/) — this concept features in a hands-on lesson with quizzes.
 
 Long-running coding agents declare tasks complete prematurely, drift from objectives after [context compression](../context-engineering/context-compression-strategies.md), and enter doom loops. The root cause: no durable, machine-readable record of what "done" looks like and how far the agent has gotten.
 
-## Planning vs. Monitoring
+## Planning versus monitoring
 
 ```mermaid
 flowchart LR
@@ -37,15 +37,15 @@ flowchart LR
 
 Planning is pre-execution: decompose the problem, define success criteria, set up the environment. Monitoring is during-execution: track progress, detect drift, and verify completion against the spec.
 
-## Core Artifacts
+## Core artifacts
 
-### Progress Files
+### Progress files
 
 A progress file (`claude-progress.txt` or equivalent) is a plain-text summary written at the end of each session: what was accomplished, what remains, any blockers. The next session reads it to resume without reconstructing state. Without it, agents misinterpret partial progress and either redo work or declare the task complete. ([Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
 
-### Feature List Specs
+### Feature list specs
 
-A JSON [feature list](../instructions/feature-list-files.md) defines every granular feature as a testable unit, each initially marked `failing`. As the agent implements features, it marks them `passing`. The feature list is a **goal contract** — an objective measure of completeness that prevents declaring victory based on vibes. ([Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
+A JSON [feature list](../instructions/feature-list-files.md) defines every granular feature as a testable unit, each initially marked `failing`. As the agent implements features, it marks them `passing`. The feature list is a goal contract — an objective measure of completeness that stops the agent declaring victory on a hunch. ([Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
 
 ```json
 {
@@ -57,27 +57,27 @@ A JSON [feature list](../instructions/feature-list-files.md) defines every granu
 }
 ```
 
-### Incremental Commits
+### Incremental commits
 
 Descriptive git commits act as a secondary progress log ([Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)) — each records what changed, enabling review and rollback via `git diff` or `git revert`.
 
-## Failure Modes
+## Failure modes
 
-### Premature Completion
+### Premature completion
 
 Without progress files and feature lists, agents see partial progress and declare the job done. The feature list provides an objective counter: if 40 of 200 features are still `failing`, the agent cannot credibly claim completion.
 
-### [Objective Drift](../anti-patterns/objective-drift.md)
+### [Objective drift](../anti-patterns/objective-drift.md)
 
 After context summarization, an agent may lose track of original intent — asking unnecessary clarification or pursuing tangential subtasks while appearing functional. ([LangChain: Context management for deep agents](https://blog.langchain.com/context-management-for-deepagents/)) Test for drift by triggering summarization mid-task and verifying the agent continues on the original objective.
 
-### Doom Loops
+### Doom loops
 
 An agent edits the same file repeatedly without converging. Detection: track per-file edit counts via hooks. After N edits, inject context like "you've edited this file 8 times — try a different approach." ([LangChain: Improving deep agents with harness engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/))
 
-## Harness Patterns
+## Harness patterns
 
-### The Initializer Agent
+### The initializer agent
 
 A dedicated first-session agent handles environment setup: creates `init.sh`, `claude-progress.txt`, `feature_list.json`, and an initial git commit. ([Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)) This separates bootstrapping from coding — the coding agent never decides what "done" looks like.
 
@@ -96,33 +96,33 @@ sequenceDiagram
     end
 ```
 
-### Pre-Completion Checklist
+### Pre-completion checklist
 
 Middleware intercepts the agent before exit and forces a verification pass against the task spec. Each requirement must confirm before the harness allows completion — a mechanical safeguard against premature exit. ([LangChain: Improving deep agents with harness engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/))
 
-### [Loop Detection](../observability/loop-detection.md) Middleware
+### [Loop detection](../observability/loop-detection.md) middleware
 
 Tool call hooks can track repetitive behavior by monitoring consecutive failed tests or repeated identical tool calls. When thresholds are exceeded, the harness injects corrective context or forces a strategy change.
 
-### Environmental Feedback
+### Environmental feedback
 
 Agents need continuous ground truth — test results, linter output, build status — to confirm changes actually work. ([Anthropic: Building effective agents](https://www.anthropic.com/engineering/building-effective-agents))
 
-## Why It Works
+## Why it works
 
-Progress files and feature lists externalize state that would otherwise live only in the model's context window. [Context compression](../context-engineering/context-compression-strategies.md) partially replaces in-context memory with a summary — which can omit detail. A progress file written to disk is immune to that loss. A JSON feature list makes completion criteria explicit and binary: the model cannot interpret "passing" as "partially passing." The separation between volatile in-context reasoning and durable external state closes the gap between what the agent *thinks* it has done and what it has actually done.
+Progress files and feature lists externalize state that would otherwise live only in the model's context window. [Context compression](../context-engineering/context-compression-strategies.md) partially replaces in-context memory with a summary — which can omit detail. A progress file written to disk is immune to that loss. A JSON feature list makes completion criteria explicit and binary: the model cannot interpret "passing" as "partially passing." The separation between volatile in-context reasoning and durable external state closes the gap between what the agent thinks it has done and what it has actually done.
 
-## When This Backfires
+## When this backfires
 
-1. **Short-lived tasks**: For tasks completing in a single session, progress files and an initializer agent add overhead that exceeds their benefit. ROI requires context window boundaries to become real.
-2. **Emergent requirements**: [Feature lists](../instructions/feature-list-files.md) require upfront enumeration. When success criteria are discovered through exploration, a rigid contract creates friction — the agent spends time updating the list rather than building.
-3. **Broken scaffolding**: A misspecified `feature_list.json` from the initializer is worse than none — downstream sessions inherit a false map and gain false confidence about completion.
+1. Short-lived tasks: for a task that finishes in a single session, progress files and an initializer agent add overhead that exceeds their benefit. The payback only arrives once the context window boundaries become real.
+2. Emergent requirements: [feature lists](../instructions/feature-list-files.md) require upfront enumeration. When you discover success criteria through exploration, a rigid contract creates friction — the agent spends time updating the list rather than building.
+3. Broken scaffolding: a misspecified `feature_list.json` from the initializer is worse than none — downstream sessions inherit a false map and gain false confidence about completion.
 
-## Production Monitoring
+## Production monitoring
 
-**[Rainbow deployments](../multi-agent/rainbow-deployments-agents.md)**: Shift traffic between agent versions without disrupting in-progress tasks. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
+[Rainbow deployments](../multi-agent/rainbow-deployments-agents.md): shift traffic between agent versions without disrupting in-progress tasks. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
 
-**Decision path tracing**: Monitor decision patterns and interaction structures (not content) to diagnose failures — non-deterministic failures require full tracing. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
+Decision path tracing: monitor decision patterns and interaction structures (not content) to diagnose failures — non-deterministic failures require full tracing. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
 
 ## Example
 
@@ -164,18 +164,18 @@ fi
 
 ## Key Takeaways
 
-- **Progress files bridge sessions** — without them, agents misread partial state and declare premature completion
-- **JSON feature lists are goal contracts** — structured definitions of "done" that resist model corruption
-- **Drift is invisible** — test by triggering context summarization mid-task and checking continuity
-- **Separate bootstrapping from execution** — an initializer agent defines success criteria; the coding agent works toward them
-- **Mechanical verification beats self-assessment** — pre-completion checklists and loop detection catch failures agents miss
+- Progress files bridge sessions — without them, agents misread partial state and declare premature completion
+- JSON feature lists are goal contracts — structured definitions of "done" that resist model corruption
+- Drift is invisible — test by triggering context summarization mid-task and checking continuity
+- Separate bootstrapping from execution — an initializer agent defines success criteria; the coding agent works toward them
+- Mechanical verification beats self-assessment — pre-completion checklists and loop detection catch failures agents miss
 
 ## Related
 
 - [The Plan-First Loop](../workflows/plan-first-loop.md)
 - [Harness Engineering](harness-engineering.md)
 - [Session Initialization Ritual](session-initialization-ritual.md)
-- [Convergence Detection](convergence-detection.md)
+- [Convergence Detection](../loop-engineering/convergence-detection.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
 - [Agent Harness](agent-harness.md)
 - [Goal Recitation](../context-engineering/goal-recitation.md)

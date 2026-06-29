@@ -17,11 +17,11 @@ maturity: adopted
 
 > Scale verification effort to match task risk — trivial changes get quick checks, high-risk changes get multi-model adversarial review and human approval gates.
 
-## The Problem
+## The problem
 
-Most agent workflows apply uniform verification: every change runs the same checks regardless of whether it touches a comment or an auth module. Low-risk changes waste cycles; high-risk changes pass with insufficient scrutiny because the bar is set for average tasks.
+Most agent workflows apply uniform verification: every change runs the same checks, whether it touches a comment or an auth module. Low-risk changes waste cycles. High-risk changes pass with too little scrutiny, because the bar is set for average tasks.
 
-## File Risk Classification
+## File risk classification
 
 The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) classifies files into three risk tiers based on what they control:
 
@@ -31,9 +31,9 @@ The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.a
 | Medium | Existing behavior modified | Business logic, function signatures, database queries, UI state |
 | High | Security or data integrity surface | Auth, crypto, payments, data deletion, schema migrations, public API |
 
-Classification is static per file — determined by what the file controls, not the current change. A one-line edit to an authentication module stays high-risk because the [blast radius](../security/blast-radius-containment.md) of a mistake there is large.
+Classification is static per file. What the file controls sets the tier, not the current change. A one-line edit to an authentication module stays high-risk, because the [blast radius](../security/blast-radius-containment.md) of a mistake there is large.
 
-## Task Sizing
+## Task sizing
 
 Task size combines scope and file risk:
 
@@ -47,35 +47,35 @@ The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.a
 
 The default heuristic is "if unsure, treat as Medium" — err toward more verification, not less.
 
-## Verification Cascade
+## Verification cascade
 
-Verification is tiered with fallback layers:
+The cascade runs in tiers, with fallback layers:
 
-1. **IDE diagnostics** — always run on changed files and their importers
-2. **Syntax/parse check** — the file must parse without errors
-3. **Build/compile** — run if build tooling exists
-4. **Type checker** — run on changed files
-5. **Linter** — run on changed files only
-6. **Test suite** — full suite or relevant subset
-7. **Import/load test** — verify the module loads without crashing (fallback when tiers 3-6 produce no runtime signal)
-8. **Smoke execution** — a throwaway script exercising the changed code path (fallback when no other runtime verification exists)
+1. IDE diagnostics — always run on changed files and their importers
+2. Syntax or parse check — the file must parse without errors
+3. Build or compile — run if build tooling exists
+4. Type checker — run on changed files
+5. Linter — run on changed files only
+6. Test suite — full suite or relevant subset
+7. Import or load test — check that the module loads without crashing (fallback when tiers 3 to 6 produce no runtime signal)
+8. Smoke execution — a throwaway script that exercises the changed code path (fallback when no other runtime verification exists)
 
-The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) requires at least one tier 7-8 check when tiers 1-6 yield only static signals. Empty runtime verification is never acceptable.
+The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) requires at least one tier 7 or 8 check when tiers 1 to 6 yield only static signals. Empty runtime verification is never acceptable.
 
-## Structured Verification Ledger
+## Structured verification ledger
 
 Every verification step is recorded as structured data — an INSERT, not prose. The evidence bundle shown to the developer is a SELECT, not a self-reported summary. This prevents hallucinated verification: if the INSERT did not happen, the check did not happen. See [Verification Ledger](verification-ledger.md) for the full pattern.
 
-The ledger captures baseline and post-change state, enabling regression detection by comparing the two phases programmatically.
+The ledger captures baseline and post-change state. Comparing the two phases programmatically detects regressions.
 
-## When This Backfires
+## When this backfires
 
-Risk-tier systems inherit the weaknesses of [risk-based testing](https://en.wikipedia.org/wiki/Risk-based_testing): subjective assignment, classification drift, and under-testing of low-risk areas. Specific conditions where the pattern underperforms uniform verification:
+Risk-tier systems inherit the weaknesses of [risk-based testing](https://en.wikipedia.org/wiki/Risk-based_testing): subjective assignment, classification drift, and under-testing of low-risk areas. The pattern underperforms uniform verification under specific conditions:
 
-- **Tier drift after refactors.** Static per-file tiers assume file purpose is stable. A test helper that accretes production code over six months may still be tagged Low. Teams routinely stop updating risk matrices once maintenance cost exceeds perceived benefit ([TestRail, "Pros and Cons of Risk-Based Testing"](https://www.testrail.com/blog/risk-based-testing/)).
-- **Subjective classification.** Two engineers can reasonably disagree whether a billing calculator is "business logic" (Medium) or "data integrity surface" (High). Without a rubric enforced in review, tier assignments drift and create a false sense of rigor ([Technology.org, "Benefits and disadvantages of risk-based testing"](https://www.technology.org/2024/05/22/benefits-and-disadvantages-of-risk-based-testing/)).
-- **High-risk-file fatigue.** Auto-escalating every touch of an auth file discourages defensible small improvements — typo fixes, comment updates, dead-code removal. Teams route around the policy by avoiding the file.
-- **Low-tier blind spots.** Concentrating effort on High-tier files under-weights defects from interactions between Low-tier modules — the same cross-cutting-interaction risk [risk-based shipping](risk-based-shipping.md) flags. A documentation change that invalidates a runbook can cause an incident the tiered cascade never catches.
+- Tier drift after refactors. Static per-file tiers assume file purpose is stable. A test helper that accretes production code over six months may still be tagged Low. Teams routinely stop updating risk matrices once maintenance cost exceeds perceived benefit ([TestRail, "Pros and Cons of Risk-Based Testing"](https://www.testrail.com/blog/risk-based-testing/)).
+- Subjective classification. Two engineers can reasonably disagree whether a billing calculator is "business logic" (Medium) or "data integrity surface" (High). Without a rubric enforced in review, tier assignments drift and create a false sense of rigor ([Technology.org, "Benefits and disadvantages of risk-based testing"](https://www.technology.org/2024/05/22/benefits-and-disadvantages-of-risk-based-testing/)).
+- High-risk-file fatigue. Auto-escalating every touch of an auth file discourages defensible small improvements — typo fixes, comment updates, dead-code removal. Teams route around the policy by avoiding the file.
+- Low-tier blind spots. Concentrating effort on High-tier files under-weights defects from interactions between Low-tier modules — the same cross-cutting-interaction risk [risk-based shipping](risk-based-shipping.md) flags. A documentation change that invalidates a runbook can cause an incident the tiered cascade never catches.
 
 If the risk map is not reviewed regularly, or the team lacks a shared rubric, uniform verification may be more honest than a stale tier map masquerading as risk awareness.
 
@@ -91,7 +91,7 @@ If the risk map is not reviewed regularly, or the team lacks a shared rubric, un
 
 A coding agent receives a task: "Add a `--dry-run` flag to the deploy CLI command." The agent identifies the changed files and classifies each:
 
-| File | Risk Tier | Reason |
+| File | Risk tier | Reason |
 |------|-----------|--------|
 | `cli/deploy.py` | High | Controls production deployment — data integrity surface |
 | `cli/flags.py` | Medium | Modifies existing CLI argument parsing |

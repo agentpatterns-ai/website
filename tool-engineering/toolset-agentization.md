@@ -19,13 +19,13 @@ maturity: adopted
 
 > Group frequently co-used tools into specialized sub-agents so the top-level planner chooses among fewer, coarser actions at each routing step.
 
-## The Action-Space Problem
+## The action-space problem
 
 A flat tool catalog forces the planner to select 1-of-N at every turn. Selection accuracy degrades as N grows: [LongFuncEval (2025)](https://arxiv.org/abs/2505.10570) reports 7–85% accuracy drops as tool catalogs expand, driven by the [lost-in-the-middle](../context-engineering/lost-in-the-middle.md) effect ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)) — correct tools become harder to locate among distractors. At hundreds of tools, a single planner cannot reliably reason about which combination achieves the goal.
 
-## The Pattern
+## The pattern
 
-Identify tools that are *frequently co-used* in production trajectories. Encapsulate each group behind a single **agent tool** — a sub-agent exposing one high-level interface to the planner, and orchestrating its owned leaf tools internally, the same nesting the [orchestrator-worker pattern](../multi-agent/orchestrator-worker.md) uses.
+Identify tools that are frequently co-used in production trajectories. Wrap each group behind a single agent tool — a sub-agent that exposes one high-level interface to the planner and orchestrates its owned leaf tools internally. This is the same nesting the [orchestrator-worker pattern](../multi-agent/orchestrator-worker.md) uses.
 
 ```mermaid
 graph TD
@@ -41,11 +41,11 @@ graph TD
     A3 --> T7[create_event]
 ```
 
-The planner's action space shrinks from N leaf tools to K agent tools (K ≪ N). Each sub-agent then faces a small local catalog where selection accuracy is high. This is the core proposal of [HTAA (Huang et al., 2026)](https://arxiv.org/abs/2604.10917), which pairs the agentization step with **Asymmetric Planner Adaptation** — a trajectory-based fine-tuning method that aligns the planner's expected invocation signature with the new agent tools via backward reconstruction and forward refinement.
+The planner's action space shrinks from N leaf tools to K agent tools (K ≪ N). Each sub-agent then faces a small local catalog where selection accuracy is high. This is the core proposal of [HTAA (Huang et al., 2026)](https://arxiv.org/abs/2604.10917), which pairs the agentization step with Asymmetric Planner Adaptation — a trajectory-based fine-tuning method that aligns the planner's expected invocation signature with the new agent tools through backward reconstruction and forward refinement.
 
 The authors report — against flat baselines — "higher task success rates, shorter tool calling trajectories, and significantly reduced context overhead" on public benchmarks, plus production deployment at a ride-hailing platform that "substantially reduces manual validation effort and operational cost" ([source](https://arxiv.org/abs/2604.10917)).
 
-## Positioning Versus Adjacent Patterns
+## Positioning versus adjacent patterns
 
 Three existing patterns address the same scaling problem with different mechanisms:
 
@@ -54,29 +54,29 @@ Three existing patterns address the same scaling problem with different mechanis
 | [Tool Search](advanced-tool-use.md) | Dynamic, stateless lazy discovery — planner queries a search tool on demand | Any library size; no pre-grouping; works without fine-tuning |
 | [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md) | Filesystem-organised lazy loading from a directory tree | Large MCP tool collections; directory structure mirrors domains |
 | [Consolidate Agent Tools](consolidate-agent-tools.md) | Merge always-co-called leaves into one tool | Tools always called together with no independent use |
-| **Toolset Agentization** | Wrap co-used groups behind a sub-agent interface | Hundreds of tools clustered into reusable sub-capabilities; you can fine-tune the planner |
+| Toolset Agentization | Wrap co-used groups behind a sub-agent interface | Hundreds of tools clustered into reusable sub-capabilities; you can fine-tune the planner |
 
 Agentization is intermediate between consolidation (collapses the leaves) and full multi-agent orchestration (independent agents negotiating): the sub-agent is still called as one tool, but internally it retains a full sub-catalog and its own reasoning step.
 
-## Why It Works
+## Why it works
 
-Agentization reduces the **effective action space** visible to the top-level planner at each decision. [Anthropic's advanced tool use benchmarks](https://www.anthropic.com/engineering/advanced-tool-use) show the same mechanism at work in a different form: deferring tools until search lifts Opus 4.5 from 79.5% to 88.1% selection accuracy — the model chooses among 3–5 surfaced tools rather than the full catalog. Agentization achieves the smaller-surface effect statically, at design time, instead of dynamically per request. The asymmetric adaptation training step closes the gap that static grouping alone leaves open: without it, the planner invokes the agent tool with the signature it learned on flat catalogs ([HTAA, 2026](https://arxiv.org/abs/2604.10917)).
+Agentization reduces the effective action space visible to the top-level planner at each decision. [Anthropic's advanced tool use benchmarks](https://www.anthropic.com/engineering/advanced-tool-use) show the same mechanism at work in a different form: deferring tools until search lifts Opus 4.5 from 79.5% to 88.1% selection accuracy — the model chooses among 3–5 surfaced tools rather than the full catalog. Agentization achieves the smaller-surface effect statically, at design time, instead of dynamically per request. The asymmetric adaptation training step closes the gap that static grouping alone leaves open: without it, the planner invokes the agent tool with the signature it learned on flat catalogs ([HTAA, 2026](https://arxiv.org/abs/2604.10917)).
 
-## When This Backfires
+## When this backfires
 
 Agentization commits to a static partition. Specific conditions invert its benefits:
 
-- **Usage patterns drift** — "frequently co-used" today need not hold in six months, which is why dynamic [Tool Search](advanced-tool-use.md) suits shifting libraries better than a fixed partition. A stale partition forces the planner to route around wrappers or invoke multiple agent tools where one flat call would have sufficed.
-- **Sub-agent opacity on failure** — the planner sees an aggregate error, not which leaf failed. Debugging regresses versus a flat catalog, mirroring the opacity trap flagged in [Consolidate Agent Tools](consolidate-agent-tools.md).
-- **Training dependency** — Asymmetric Planner Adaptation requires fine-tuning access. Teams on frontier proprietary models (Claude, GPT-4) inherit only the structural change.
-- **Cross-agent coordination** — when two agent tools share a leaf (calendar, auth), the hierarchy forces either leaf duplication or inter-agent coupling the planner must resolve. [Multi-agent system failures research](https://arxiv.org/html/2503.13657v1) shows agents frequently disobey role specifications; sub-agent tools inherit this risk.
-- **Small-to-moderate libraries** — HTAA targets "hundreds of tools." Below ~30–50 tools, sub-agent overhead exceeds the gains [Tool Search](advanced-tool-use.md) or [Consolidate Agent Tools](consolidate-agent-tools.md) deliver with less infrastructure.
+- Usage patterns drift — "frequently co-used" today need not hold in six months, which is why dynamic [Tool Search](advanced-tool-use.md) suits shifting libraries better than a fixed partition. A stale partition forces the planner to route around wrappers or invoke multiple agent tools where one flat call would have sufficed.
+- Sub-agent opacity on failure — the planner sees an aggregate error, not which leaf failed. Debugging regresses versus a flat catalog, mirroring the opacity trap flagged in [Consolidate Agent Tools](consolidate-agent-tools.md).
+- Training dependency — Asymmetric Planner Adaptation requires fine-tuning access. Teams on frontier proprietary models (Claude, GPT-4) inherit only the structural change.
+- Cross-agent coordination — when two agent tools share a leaf (calendar, auth), the hierarchy forces either leaf duplication or inter-agent coupling the planner must resolve. [Multi-agent system failures research](https://arxiv.org/html/2503.13657v1) shows agents frequently disobey role specifications; sub-agent tools inherit this risk.
+- Small-to-moderate libraries — HTAA targets "hundreds of tools." Below ~30–50 tools, sub-agent overhead exceeds the gains [Tool Search](advanced-tool-use.md) or [Consolidate Agent Tools](consolidate-agent-tools.md) deliver with less infrastructure.
 
 ## Example
 
-A customer-service agent starts with 120 leaf tools spanning billing, shipping, returns, and account management. The flat catalog consumes roughly 40K tokens in definitions and produces frequent wrong-tool selections on boundary cases (e.g., `update_shipping_address` invoked for a billing change).
+A customer-service agent starts with 120 leaf tools spanning billing, shipping, returns, and account management. The flat catalog consumes roughly 40K tokens in definitions and produces frequent wrong-tool selections on boundary cases (for example, `update_shipping_address` invoked for a billing change).
 
-**Before — flat catalog:**
+Before — flat catalog:
 
 ```yaml
 tools:
@@ -91,7 +91,7 @@ tools:
   # ... 112 more
 ```
 
-**After — agentized:**
+After — agentized:
 
 ```yaml
 tools:
@@ -123,5 +123,5 @@ The planner now chooses among four agent tools per turn. Each sub-agent internal
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md)
 - [Specialized Agent Roles](../agent-design/specialized-agent-roles.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Self-Healing Tool Routing](self-healing-tool-routing.md)

@@ -17,13 +17,13 @@ maturity: adopted
 
 > Skill libraries that grow without lifecycle governance degrade agent performance through choice overload, context bloat, and unreliable tool selection. Treat your skill library as a living system with explicit stages, quality gates, and pruning.
 
-## Why Persist Skills
+## Why persist skills
 
 Agent sessions are stateless by default — each session rediscovers solutions already found in prior runs. Persisting agent-written code as named skill files makes prior solutions available for later sessions rather than regenerating them. [Source: [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp)]
 
-A minimal skill record contains: **Name**, **Description** (what problem it solves and when to use it), **Inputs/Outputs**, and a **Usage example**. Early sessions produce general-purpose skills; later sessions build on those for higher-complexity tasks. [Source: [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp)]
+A minimal skill record holds a name, a description (what problem it solves and when to use it), inputs/outputs, and a usage example. Early sessions produce general-purpose skills. Later sessions build on those for higher-complexity tasks. [Source: [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp)]
 
-## Example Skill Index Entry
+## Example skill index entry
 
 ```markdown
 ## paginate_api_results
@@ -34,13 +34,13 @@ Fetches all pages from a paginated REST API endpoint.
 - File: skills/paginate_api_results.py
 ```
 
-## Why Libraries Degrade
+## Why libraries degrade
 
-Skills accumulate without pruning: redundant entries create nondeterministic selection, outdated entries cause silent failures, and poor descriptions make skills undiscoverable. Progressive disclosure manages runtime context loading — agents load only the definitions needed for the current task rather than all definitions upfront — but does not solve upstream bloat. [Source: [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp)]
+Skills accumulate without pruning. Redundant entries create nondeterministic selection, outdated entries cause silent failures, and poor descriptions make skills undiscoverable. Progressive disclosure manages runtime context loading — agents load only the definitions needed for the current task rather than all definitions upfront — but does not solve upstream bloat. [Source: [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp)]
 
-The mechanism: tool selection matches the agent's intent against skill descriptions. When two descriptions are semantically similar, the model cannot reliably distinguish them and may pick arbitrarily — the same root cause as nondeterministic behavior in any softmax distribution over near-equal scores. Pruning and scoping keep descriptions orthogonal.
+The mechanism: tool selection matches the agent's intent against skill descriptions. When two descriptions are semantically similar, the model cannot reliably tell them apart and may pick at random — the same root cause as nondeterministic behavior in any softmax distribution over near-equal scores. Pruning and scoping keep descriptions distinct.
 
-## The Maturation Path
+## The maturation path
 
 Skills follow a lifecycle from ad-hoc code to production capability:
 
@@ -66,23 +66,20 @@ graph LR
 | Documented skill | Description, examples, constraints | Agent can discover and select it |
 | Agent capability | Tests, error handling, versioning | Passes quality review |
 
-Most libraries stall between "saved solution" and "reusable function" — teams save code but skip parameterization and documentation needed for reliable selection.
+Most libraries stall between "saved solution" and "reusable function". Teams save code but skip the parameterization and documentation reliable selection needs.
 
-## Quality Gates
+## Quality gates
 
 Skills entering a shared library need more than correctness:
 
-**Discoverability** — Use verb-noun naming (e.g., `paginate_api_results`). The description determines selection; overlapping descriptions cause arbitrary picks.
+- Discoverability — verb-noun naming like `paginate_api_results`. The description determines selection. Overlapping descriptions cause arbitrary picks.
+- Composability — self-contained skills only. Dependencies on other skills create ordering requirements agents may not follow.
+- Context cost — under 5,000 tokens, the Agent Skills standard. Larger skills need decomposition.
+- Unambiguous scope — one clear, non-overlapping purpose per skill.
 
-**Composability** — Self-contained skills only. Dependencies on other skills create ordering requirements agents may not follow.
+## Two registry models
 
-**Context cost** — Under 5,000 tokens (Agent Skills standard). Larger skills need decomposition.
-
-**Unambiguous scope** — Clear, non-overlapping purpose per skill.
-
-## Two Registry Models
-
-Two registry approaches with distinct trade-offs:
+Two registry approaches carry distinct trade-offs:
 
 | Dimension | Audited registry | Curated-not-audited |
 |-----------|-----------------|---------------------|
@@ -94,15 +91,15 @@ Two registry approaches with distinct trade-offs:
 
 Specification quality is the primary gate. Research into automated skill library construction shows iterative refinement — validating and revising skills on execution feedback — improves task success over static repositories. [Source: [SkillX: Automatically Constructing Skill Knowledge Bases for Agents](https://arxiv.org/abs/2604.04804)]
 
-## Versioning and Deprecation
+## Versioning and deprecation
 
 Skills need the same lifecycle signals as APIs: semantic versioning in metadata, deprecation notices in the description (agents read descriptions, not changelogs), and brownout periods before removal. The [Copilot Extensions](../tools/copilot/copilot-extensions.md) deprecation (Sep–Nov 2025) illustrates the cost of proprietary systems — migration led to MCP.
 
-## Pruning Strategies
+## Pruning strategies
 
 Retire skills showing: zero invocations over a defined period; supersession by a broader skill; redundancy (overlapping descriptions cause nondeterministic selection); or specification drift against changed APIs.
 
-## Anti-Patterns
+## Anti-patterns
 
 | Anti-pattern | Effect |
 |-------------|--------|
@@ -112,13 +109,13 @@ Retire skills showing: zero invocations over a defined period; supersession by a
 | Absent testing | Kills reliability — silent failures propagate |
 | No deprecation path | Kills evolution — outdated skills persist |
 
-## When This Backfires
+## When this backfires
 
-Lifecycle governance adds overhead that may exceed its value in certain contexts:
+Lifecycle governance adds overhead that may exceed its value in some contexts:
 
-- **Small libraries** — fewer than ~20 skills rarely suffer from selection ambiguity; governance rituals (versioning, deprecation notices, quality gates) create more friction than they prevent.
-- **Short-lived projects** — skills go stale faster than they accumulate reuse value; the return on investment requires stable, repeated task patterns across multiple sessions.
-- **Dynamic prompting suffices** — when agent tasks are diverse and unpredictable, a curated prompt-based approach can achieve equivalent reuse without the file-management and routing overhead of a persisted library.
+- Small libraries — fewer than 20 skills rarely suffer from selection ambiguity. Governance rituals (versioning, deprecation notices, quality gates) create more friction than they prevent.
+- Short-lived projects — skills go stale faster than they earn reuse value. The payoff needs stable, repeated task patterns across sessions.
+- Dynamic prompting suffices — when tasks are diverse and unpredictable, a curated prompt-based approach can match that reuse without the file-management and routing overhead of a persisted library.
 
 ## Key Takeaways
 

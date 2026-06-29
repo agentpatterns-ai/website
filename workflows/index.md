@@ -13,7 +13,7 @@ last_reviewed: 2026-05-27
 
 > End-to-end workflows for agent-assisted development — from bootstrapping to team onboarding.
 
-**Learn it hands-on:** [Capstone — The Workflow Decision Table](https://learn.agentpatterns.ai/workflows/the-workflow-decision-table/) — guided lesson with quizzes.
+Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agentpatterns.ai/workflows/the-workflow-decision-table/) — guided lesson with quizzes.
 
 ## Pages
 
@@ -62,7 +62,6 @@ last_reviewed: 2026-05-27
 - [Vibe Coding: Outcome-Oriented Agent-Assisted Development](../anti-patterns/vibe-coding.md) — Delegate implementation entirely to the agent and focus on evaluating outcomes for low-risk, throwaway work
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md) — Wire up OpenTelemetry on Claude Code and LangChain agents for cost dashboards, compliance audit trails, and trajectory debugging
 - [Prototype Before Optimizing: Establish Quality Baselines Before Token Constraints](prototype-before-optimizing.md) — Defer production efficiency constraints until after establishing quality baselines to avoid locking in suboptimal architectures
-- [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — Instrument-attribute-fix-verify loop that treats per-PR and per-CI workflows as a measurable cost surface, with named levers (MCP pruning, pre-agentic CLI, relevance gating, cheaper-model routing, cache reuse) and frequency-weighted preconditions
 - [Background-to-Foreground Handoff](background-foreground-handoff.md) — Transfer work from a background agent to a human at the ~90% completion mark using distilled summaries and artifact-based handoff points
 - [In-Thread Side-Channel](in-thread-side-channel.md) — Ask a mid-task clarifying question inside one session using a tagged sub-conversation that returns the agent to its prior goal
 - [Canary Rollout for Agent Policy Changes](canary-rollout-agent-policy.md) — Gate agent policy updates behind a traffic-split rollout so regressions surface on a small blast radius before full deployment
@@ -73,6 +72,8 @@ last_reviewed: 2026-05-27
 - [Public-Channel Agent Work as Lehrwerkstatt](public-channel-agent-work.md) — Force agent conversations into public channels so the team learns from every transcript — a high-yield organizational practice with hard psychological-safety and data-scope preconditions
 - [Stakeholder Trust Through Evals and Observability](stakeholder-trust-evals-observability.md) — Three-artefact stakeholder review cycle — dashboards, custom trace views, ad-hoc query — that transfers eval and observability data to non-engineers when paired with narrated error analysis, plural headline metrics, and an in-workflow surface
 - [Parallel Polyglot Ports as a Spec-Ambiguity Oracle](parallel-polyglot-ports-spec-oracle.md) — Generate multiple AI-paired ports from one executable spec and treat divergence as a signal that the spec under-specifies behaviour — not as a fault-tolerance vote
+- [Spec-Anchored Drift-Gated Architecture (Spec Growth Engine)](spec-growth-engine.md) — Make spec-code divergence a blocking merge gate and scope each agent's context to an ownership path in a machine-readable spec graph — only under stable contracts
 - [Staged Literal Porting with a Per-Stage Numeric Oracle](staged-literal-port-with-numeric-oracle.md) — Split an LLM-assisted port into a numerics stage and a parallelism stage, forbid the assistant from improving the source, and gate each stage on output drawn from the prior version
 - [Building Custom Agents from Substrate to Production (Agents All the Way Down)](agents-all-the-way-down-methodology.md) — Framework-free methodology with two substrate preconditions and three iterative practices (prototype, harvest as CLI via the Turtle pattern, agent-tests-agent) for one-developer custom-agent builds
 - [Knowledge-Based Pull Requests for Cross-Trust-Boundary Contributions](knowledge-based-pull-requests.md) — Distil an external contribution into a confirmed knowledge package, then have a project-owned trusted agent regenerate the code in-house — for the high-context contributions where reconstructing intent from the diff is expensive
+- [Whole-Codebase Visibility as a Migration Prerequisite](whole-codebase-visibility-migration-prerequisite.md) — Three-condition scoping check (codebase size, multi-repo or cross-VCS scope, discovery-bound shape) that decides whether a large-scale agent-driven migration needs whole-codebase visibility infrastructure or whether agentic search will do

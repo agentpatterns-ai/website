@@ -17,30 +17,30 @@ maturity: established
 
 > A reproduce-before-report verification gate drops any reviewer finding the verifier cannot reproduce against actual code behavior.
 
-The reproduce-before-report gate is a structural step in a multi-agent code review pipeline: a reviewer raises a candidate finding, then a fresh-context verifier attempts to construct a concrete reproduction against the diff before the finding ships. Non-reproducing findings are silently dropped. The gate sits at the *reporter* boundary — the reviewer flags freely; the verifier converts soft suspicion into hard evidence or discards it.
+The reproduce-before-report gate is a structural step in a multi-agent code review pipeline. A reviewer raises a candidate finding. A fresh-context verifier then tries to build a concrete reproduction against the diff before the finding ships. Findings it cannot reproduce are dropped without a trace. The gate sits at the reporter boundary: the reviewer flags freely, and the verifier turns soft suspicion into hard evidence or discards it.
 
-## What "Reproduce" Means at the Gate
+## What "reproduce" means at the gate
 
-The verifier is not a second opinion. It takes the diff plus the reviewer's claim ("function `X` will crash on empty input on line 42") and tries to construct evidence: an input that triggers the failure, a code path that demonstrates the contradiction, or a citation to the specific behavior in the source. Anthropic's managed Code Review exposes this artifact — each finding "includes a collapsible extended reasoning section you can expand to understand why Claude flagged the issue and how it verified the problem" ([Code Review docs](https://code.claude.com/docs/en/code-review)). `REVIEW.md` makes the reproduction bar a per-repo dial; the canonical example is "behavior claims need a `file:line` citation in the source, not an inference from naming" ([Code Review docs](https://code.claude.com/docs/en/code-review)).
+The verifier is not a second opinion. It takes the diff plus the reviewer's claim ("function `X` will crash on empty input on line 42") and tries to build evidence: an input that triggers the failure, a code path that shows the contradiction, or a citation to the specific behavior in the source. Anthropic's managed Code Review exposes this artifact — each finding "includes a collapsible extended reasoning section you can expand to understand why Claude flagged the issue and how it verified the problem" ([Code Review docs](https://code.claude.com/docs/en/code-review)). `REVIEW.md` makes the reproduction bar a per-repo dial; the canonical example is "behavior claims need a `file:line` citation in the source, not an inference from naming" ([Code Review docs](https://code.claude.com/docs/en/code-review)).
 
-## Why the Verifier Must Be Independent
+## Why the verifier must be independent
 
-Independence is the load-bearing property. A verifier that shares context with the reviewer inherits its reasoning errors and confirms its own false positives. Two dimensions:
+Independence is the property that does the work. A verifier that shares context with the reviewer inherits its reasoning errors and confirms its own false positives. Two dimensions matter:
 
-- **Context freshness**: the verifier starts with the diff and the claim, not the reviewer's chain of thought.
-- **Model diversity**: LLM judges exhibit documented same-family bias — systematically scoring outputs from related model families higher ([Zheng et al. 2023](https://arxiv.org/abs/2306.05685)); same-family verifiers reproduce same-family confabulations.
+- Context freshness: the verifier starts with the diff and the claim, not the reviewer's chain of thought.
+- Model diversity: LLM judges show documented same-family bias, scoring outputs from related model families higher ([Zheng et al. 2023](https://arxiv.org/abs/2306.05685)). Same-family verifiers reproduce same-family confabulations.
 
 Claude Code's `/code-review ultra` (aliased from `/ultrareview`) names this in its comparison against single-pass `/review`: ultrareview is "multi-agent fleet with independent verification" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)).
 
-## Why It Works
+## Why it works
 
-Construction is harder to fake than judgment. A reviewer can hallucinate a defect with no external grounding; a verifier that must produce a reproduction cannot — it either runs or it does not. Multi-agent verification with conditionally independent agents in [CodeX-Verify](https://arxiv.org/abs/2511.16708) improved accuracy from 32.8% to 72.4%, with measured reviewer-pair correlations of 0.05 to 0.25 confirming non-overlapping error populations. The pattern generalises: Agent-as-a-Judge frames tool-augmented verification against real-world observations as the structural fix for LLM-as-a-Judge's "shallow single-pass reasoning, and the inability to verify assessments against real-world observations" ([Agent-as-a-Judge survey, arXiv:2601.05111](https://arxiv.org/abs/2601.05111)).
+A reproduction is harder to fake than a judgment. A reviewer can hallucinate a defect with no external grounding. A verifier that must produce a reproduction cannot: it either runs or it does not. Multi-agent verification with conditionally independent agents in [CodeX-Verify](https://arxiv.org/abs/2511.16708) improved accuracy from 32.8% to 72.4%, and measured reviewer-pair correlations of 0.05 to 0.25 confirm non-overlapping error populations. The pattern generalizes. Agent-as-a-Judge frames tool-augmented verification against real-world observations as the structural fix for LLM-as-a-Judge's "shallow single-pass reasoning, and the inability to verify assessments against real-world observations" ([Agent-as-a-Judge survey, arXiv:2601.05111](https://arxiv.org/abs/2601.05111)).
 
-## Silent Drop Is the Default
+## Silent drop is the default
 
 Non-reproducing findings are dropped, not appended with a low-confidence flag. The `/code-review ultra` docs state the purpose: "every reported finding is independently reproduced and verified, so the results focus on real bugs rather than style suggestions" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). Surfacing unverified findings re-creates the noise problem the gate exists to solve.
 
-## Implementing the Gate
+## Implementing the gate
 
 | Part | Job | Anthropic implementation |
 |------|-----|--------------------------|
@@ -51,13 +51,13 @@ Non-reproducing findings are dropped, not appended with a low-confidence flag. T
 
 A pipeline that fans out reviewers but reports every candidate is not running this gate — it is fan-out, which amplifies false positives.
 
-## When This Backfires
+## When this backfires
 
-- **Small or trivial diffs.** `/code-review ultra` runs "typically cost $5 to $20" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)); managed Code Review averages "$15-25 in cost, scaling with PR size, codebase complexity, and how many issues require verification" ([Code Review docs](https://code.claude.com/docs/en/code-review)). On a typo fix, gate cost dominates false-positive cost — use a single-pass [diff-based review](diff-based-review.md).
-- **Same-family verifier with no context reset.** Without independence, the verifier reproduces reviewer confabulations — the same [overcorrection bias](../anti-patterns/llm-review-overcorrection.md) the gate exists to filter. Same model + same session = verification gate in name only.
-- **Reproduction-incapable defect classes.** Race conditions, distributed-system failures, and intermittent flakes cannot be reproduced on demand against a static diff. Silent-drop becomes silent-drop of the highest-stakes findings — route those classes to a separate "suspected-but-not-reproduced" channel or accept the recall loss.
-- **Air-gapped or ZDR environments.** Cloud fleet implementations are "not available when using Claude Code with Amazon Bedrock, Google Cloud Vertex AI, or Microsoft Foundry, and it is not available to organizations that have enabled Zero Data Retention" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)).
-- **High-iteration PRs with push triggers.** 30 pushes × $15-25 compounds linearly. Use `@claude review once` to suppress push-triggered re-verification ([Code Review docs](https://code.claude.com/docs/en/code-review)).
+- Small or trivial diffs. `/code-review ultra` runs "typically cost $5 to $20" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)); managed Code Review averages "$15-25 in cost, scaling with PR size, codebase complexity, and how many issues require verification" ([Code Review docs](https://code.claude.com/docs/en/code-review)). On a typo fix, gate cost dominates false-positive cost, so use a single-pass [diff-based review](diff-based-review.md).
+- Same-family verifier with no context reset. Without independence, the verifier reproduces reviewer confabulations, the same [overcorrection bias](../anti-patterns/llm-review-overcorrection.md) the gate exists to filter. Same model plus same session is a verification gate in name only.
+- Reproduction-incapable defect classes. Race conditions, distributed-system failures, and intermittent flakes cannot be reproduced on demand against a static diff. Silent-drop then becomes silent-drop of the highest-stakes findings. Route those classes to a separate "suspected-but-not-reproduced" channel, or accept the recall loss.
+- Air-gapped or ZDR environments. Cloud fleet implementations are "not available when using Claude Code with Amazon Bedrock, Google Cloud Vertex AI, or Microsoft Foundry, and it is not available to organizations that have enabled Zero Data Retention" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)).
+- High-iteration PRs with push triggers. 30 pushes at $15-25 compounds linearly. Use `@claude review once` to suppress push-triggered re-verification ([Code Review docs](https://code.claude.com/docs/en/code-review)).
 
 ## Example
 

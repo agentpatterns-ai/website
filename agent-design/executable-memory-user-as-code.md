@@ -19,21 +19,21 @@ maturity: emerging
 
 > Compile a user's memory log into typed code and call functions instead of retrieving passages — beats retrieval on aggregates, loses on plain recall.
 
-Executable memory stores a personalized agent's view of the *user* — trips, contacts, medical visits, transactions — as **typed Python objects with rule functions**, not as a corpus of retrievable text. The codebase analogue (commits, ASTs, task graphs as code) is [code-native memory substrates](code-native-memory-substrates.md); this page covers the user-state instance. Two phases keep it honest: an append-only log preserves every observation, and a periodic checkpoint compiles the log into dataclasses ([Li 2026 — arXiv:2606.16707](https://arxiv.org/abs/2606.16707)). The agent answers queries by calling functions over those objects — `sum(t.cost for t in trips if t.year == 2024)` — instead of asking the model to aggregate from retrieved passages.
+Executable memory stores a personalized agent's view of the user — trips, contacts, medical visits, transactions — as typed Python objects with rule functions, not as a corpus of retrievable text. The codebase analogue (commits, ASTs, task graphs as code) is [code-native memory substrates](code-native-memory-substrates.md); this page covers the user-state instance. Two phases keep it honest: an append-only log preserves every observation, and a periodic checkpoint compiles the log into dataclasses ([Li 2026 — arXiv:2606.16707](https://arxiv.org/abs/2606.16707)). The agent answers queries by calling functions over those objects — `sum(t.cost for t in trips if t.year == 2024)` — not by aggregating retrieved passages.
 
-## When the Pattern Pays
+## When the pattern pays
 
 Use executable memory only when at least one row applies:
 
 | Workload signal | Why code beats retrieval |
 |---|---|
-| **Aggregate queries** — count, sum, group-by, top-k, time-window filter | Retrieval forces the LLM to reduce across passages; a Python function does it deterministically. UaC reports 99% accuracy across 100 aggregate cases vs. 43% for MemMachine and 6% for Mem0 ([Li 2026, Table 3](https://arxiv.org/abs/2606.16707)). |
-| **Rule enforcement** — drug-allergy conflicts, dietary constraints, scheduling rules | Rules become predicates that fire at decision time, not optional context the model may ignore. |
-| **Contradiction-sensitive history** — preferences that change, conflicting facts across sessions | The append-only log preserves every prior fact; checkpoint generation can encode contradictions as explicit `if`/`elif` arbitration rather than the retrieval lottery of which version surfaces. |
+| Aggregate queries — count, sum, group-by, top-k, time-window filter | Retrieval forces the LLM to reduce across passages; a Python function does it deterministically. UaC reports 99% accuracy across 100 aggregate cases against 43% for MemMachine and 6% for Mem0 ([Li 2026, Table 3](https://arxiv.org/abs/2606.16707)). |
+| Rule enforcement — drug-allergy conflicts, dietary constraints, scheduling rules | Rules become predicates that fire at decision time, not optional context the model may ignore. |
+| Contradiction-sensitive history — preferences that change, conflicting facts across sessions | The append-only log preserves every prior fact. Checkpoint generation can encode contradictions as explicit `if`/`elif` arbitration rather than leaving which version surfaces to chance. |
 
 On the LOCOMO conversation-recall benchmark — pure "what did the user say" retrieval — text-based systems beat code-as-memory: MemMachine reaches 91.69% ([Yang et al. 2026 — arXiv:2604.04853](https://arxiv.org/abs/2604.04853)), Memobase 75.78% ([Memobase LOCOMO benchmark](https://github.com/memodb-io/memobase/blob/main/docs/experiments/locomo-benchmark/README.md)), against UaC's 78.8% ([Li 2026](https://arxiv.org/abs/2606.16707)). The pattern complements retrieval-based memory ([Agent Memory Patterns](agent-memory-patterns.md)), not replaces it.
 
-## How the Two Phases Work
+## How the two phases work
 
 ```mermaid
 graph LR
@@ -44,30 +44,30 @@ graph LR
     D -->|plain recall| F[Search the log]
 ```
 
-**The append-only log is the safety property.** Every observation is preserved verbatim — contradictions remain visible so the checkpoint pass has the material to encode arbitration rules rather than discarding history.
+The append-only log is the safety property. It keeps every observation verbatim. Contradictions stay visible, so the checkpoint pass has the material to encode arbitration rules rather than discarding history.
 
-**The checkpoint is the performance property.** A model rewrites the log as typed Python — dataclasses for entities (`Trip`, `Contact`, `MedicalVisit`), typed lists for collections, rule functions for invariants. Once compiled, the agent invokes those objects through a Python REPL rather than reasoning over retrieved text. Ning et al. catalogue this broader shift — code as operational substrate for agent reasoning, memory, and tool use — across an established design space ([arXiv:2605.18747](https://arxiv.org/abs/2605.18747)).
+The checkpoint is the performance property. A model rewrites the log as typed Python — dataclasses for entities (`Trip`, `Contact`, `MedicalVisit`), typed lists for collections, rule functions for invariants. Once compiled, the agent invokes those objects through a Python REPL rather than reasoning over retrieved text. Ning et al. catalog this broader shift — code as an operational substrate for agent reasoning, memory, and tool use — across an established design space ([arXiv:2605.18747](https://arxiv.org/abs/2605.18747)).
 
-## Why It Works
+## Why it works
 
 UaC's structured retrieval matches its full-context upper bound at 100% across all record sizes ([Li 2026, Table 3](https://arxiv.org/abs/2606.16707)) — the lift is not "better retrieval." It comes from converting an aggregation that the LLM does unreliably (multi-step arithmetic across retrieved passages) into a function call the model executes reliably. The log preserves the temporal ordering aggregates need; a retrieval system that compresses the past loses it.
 
-## When This Backfires
+## When this backfires
 
-- **Recall-dominated workloads.** When the agent's job is "find the relevant past message" rather than "compute X across history," text retrieval beats UaC on LOCOMO (numbers above) and the code-generation cost does not earn itself back.
-- **Fast-evolving user state without a clear schema.** When the checkpoint cadence is shorter than the median time-between-schema-changes — early-stage product onboarding, evolving permissions models — each checkpoint over-fits the moment or rewrites the schema, breaking rule functions downstream agent calls assume exist.
-- **Weak code-generation models.** Checkpoint passes running on small open-weights chat models produce dataclasses with silent type errors that surface only at agent-query time. A broken checkpoint emits zero facts; a noisy embedding still returns plausibly-relevant material.
-- **Regulated decision support (HIPAA-covered clinical, SOC 2 / SOX financial calc, FDA Software-as-a-Medical-Device).** The checkpoint is *code that runs against user data*. Compliance has seen retrieval indexes; it has not seen model-authored Python deciding what counts as a drug-allergy conflict. The log is auditable; the checkpoint introduces a new artefact class.
-- **Contradiction-heavy domains without explicit resolution rules.** The paper acknowledges checkpoints can encode conflicting rules with no automatic arbitration — execution order (first-match wins) is the default tie-break ([Li 2026](https://arxiv.org/abs/2606.16707)). The model silently picks a winner the user did not approve.
-- **Workloads that fit in one context window.** "Full Context + Python REPL" matches UaC at 100% on aggregates ([Li 2026, Table 3](https://arxiv.org/abs/2606.16707)) — if history fits in context the checkpoint earns nothing.
+- Recall-dominated workloads. When the agent's job is to find the relevant past message rather than compute a value across history, text retrieval beats UaC on LOCOMO (numbers above) and the code-generation cost does not earn itself back.
+- Fast-evolving user state without a clear schema. When the checkpoint cadence is shorter than the median time between schema changes — early-stage product onboarding, evolving permissions models — each checkpoint over-fits the moment or rewrites the schema, breaking rule functions that downstream agent calls assume exist.
+- Weak code-generation models. Checkpoint passes running on small open-weights chat models produce dataclasses with silent type errors that surface only at agent-query time. A broken checkpoint emits zero facts; a noisy embedding still returns plausibly-relevant material.
+- Regulated decision support (HIPAA-covered clinical, SOC 2 / SOX financial calc, FDA Software-as-a-Medical-Device). The checkpoint is code that runs against user data. Compliance has seen retrieval indexes; it has not seen model-authored Python deciding what counts as a drug-allergy conflict. The log is auditable; the checkpoint introduces a new artifact class.
+- Contradiction-heavy domains without explicit resolution rules. The paper acknowledges that checkpoints can encode conflicting rules with no automatic arbitration — execution order (first-match wins) is the default tie-break ([Li 2026](https://arxiv.org/abs/2606.16707)). The model silently picks a winner the user did not approve.
+- Workloads that fit in one context window. Full Context + Python REPL matches UaC at 100% on aggregates ([Li 2026, Table 3](https://arxiv.org/abs/2606.16707)) — if history fits in context the checkpoint earns nothing.
 
 ## Example
 
 A personal-health agent tracks medications, allergies, and recent meals. The user asks: "Is it safe to take ibuprofen with what I had for lunch?"
 
-**Retrieval memory** searches for "ibuprofen", "allergy", and "lunch" passages, returns top-k snippets, and asks the model to reconcile them. Top-k may surface a six-month-old "no allergies" note alongside last week's "developed NSAID sensitivity" — the model adjudicates from text similarity scores.
+Retrieval memory searches for "ibuprofen", "allergy", and "lunch" passages, returns top-k snippets, and asks the model to reconcile them. Top-k may surface a six-month-old "no allergies" note alongside last week's "developed NSAID sensitivity" — the model adjudicates from text similarity scores.
 
-**Executable memory** holds the user as typed objects with rule functions ([Li 2026, Listing 6](https://arxiv.org/abs/2606.16707) shows the dataclass shape):
+Executable memory holds the user as typed objects with rule functions ([Li 2026, Listing 6](https://arxiv.org/abs/2606.16707) shows the dataclass shape):
 
 ```python
 @dataclass

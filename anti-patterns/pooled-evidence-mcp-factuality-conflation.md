@@ -20,23 +20,23 @@ maturity: emerging
 
 > When an MCP agent draws on multiple sources, a pooled-evidence factuality verifier passes claims supported *somewhere* but attributed to the *wrong* source.
 
-## When This Matters Most
+## When this matters most
 
-The failure mode only appears under three concurrent conditions ([Alvarez et al., 2026 — arxiv:2606.18037](https://arxiv.org/abs/2606.18037)):
+The failure mode only appears under three conditions at once ([Alvarez et al., 2026 — arxiv:2606.18037](https://arxiv.org/abs/2606.18037)):
 
-- **Multi-source MCP traces.** The agent routes a single answer through two or more tools or sources — search plus an API, a database plus a formulary, two clinical guidelines. A single-source agent has nothing to conflate.
-- **Stable tool and source IDs in the trace.** Captured MCP traces expose tool IDs, source IDs, and raw outputs. Free-text tool returns that mash several URLs into one snippet cannot be routed deterministically and the technique does not apply.
-- **High-stakes domain.** The original evaluation is medical ([arxiv:2606.18037](https://arxiv.org/abs/2606.18037)); analogous risk lives in clinical decision support, legal research, regulated finance — anywhere a wrong attribution is itself the safety failure, not just a citation polish issue.
+- Multi-source MCP traces. The agent routes a single answer through two or more tools or sources: search plus an API, a database plus a formulary, two clinical guidelines. A single-source agent has nothing to conflate.
+- Stable tool and source IDs in the trace. Captured MCP traces expose tool IDs, source IDs, and raw outputs. Free-text tool returns that mash several URLs into one snippet cannot be routed deterministically, so the technique does not apply.
+- A high-stakes domain. The original evaluation is medical ([arxiv:2606.18037](https://arxiv.org/abs/2606.18037)). The same risk shows up in clinical decision support, legal research, and regulated finance: anywhere a wrong attribution is itself the safety failure, not just a citation polish issue.
 
 For low-stakes, single-source agents, the cost of per-source claim routing is not worth paying.
 
-## The Pattern
+## The pattern
 
-Most factuality verifiers — including lightweight NLI-based RAG checkers in production today — ask one question: *is this claim supported anywhere in the pooled evidence?* ([Sansford et al., 2024 — arxiv:2411.01022](https://arxiv.org/abs/2411.01022)) An MCP agent that emits a citation is making two claims, not one: the factual claim *and* "source X supports this claim." Pooled-evidence verifiers conflate the two checks. A claim with a wrong source ID but accurate content passes.
+Most factuality verifiers ask one question: is this claim supported anywhere in the pooled evidence? That includes the lightweight NLI-based RAG checkers in production today ([Sansford et al., 2024 — arxiv:2411.01022](https://arxiv.org/abs/2411.01022)). An MCP agent that emits a citation is making two claims, not one: the factual claim, and "source X supports this claim." Pooled-evidence verifiers conflate the two checks. A claim with a wrong source ID but accurate content passes.
 
-Alvarez et al. name this *cross-source conflation*: a claim "may be supported somewhere while being attributed to the wrong source" ([arxiv:2606.18037](https://arxiv.org/abs/2606.18037)). On 50 controlled clinical conflation probes against source-blind baselines, every injected attribution swap was retained — the verifier could not distinguish the swap from a correct answer.
+Alvarez et al. name this cross-source conflation: a claim "may be supported somewhere while being attributed to the wrong source" ([arxiv:2606.18037](https://arxiv.org/abs/2606.18037)). On 50 controlled clinical conflation probes against source-blind baselines, every injected attribution swap was retained. The verifier could not tell the swap apart from a correct answer.
 
-## Why It Fails
+## Why it fails
 
 Source attribution is "an independent axis for factuality verification" ([arxiv:2606.18037](https://arxiv.org/abs/2606.18037)). Two distinct failures live on the axis a pooled-evidence verifier cannot see:
 
@@ -45,11 +45,11 @@ Source attribution is "an independent axis for factuality verification" ([arxiv:
 | Unsupported claim | Fails | Fabricated content with no source backing |
 | Cross-source conflation | Passes | Real content; cited the wrong source |
 
-A `serverName`-style allowlist of sources buys nothing here — the source IDs in the trace are correct; the *mapping from claim to source* is wrong. Independent corroboration: across 14 LLMs, inline citations from deep-research agents fail link-accessibility, topical-relevance, and factual-accuracy checks at high rates ([Onweller et al., 2026 — arxiv:2605.06635](https://arxiv.org/abs/2605.06635)), and citation accuracy in popular generative search engines sits near 74% ([VeriCite, arxiv:2510.11394](https://arxiv.org/abs/2510.11394)).
+A `serverName`-style allowlist of sources buys nothing here. The source IDs in the trace are correct; the mapping from claim to source is wrong. Other work corroborates this. Across 14 LLMs, inline citations from deep-research agents fail link-accessibility, topical-relevance, and factual-accuracy checks at high rates ([Onweller et al., 2026 — arxiv:2605.06635](https://arxiv.org/abs/2605.06635)), and citation accuracy in popular generative search engines sits near 74% ([VeriCite, arxiv:2510.11394](https://arxiv.org/abs/2510.11394)).
 
-## Why Source-Aware Verification Works
+## Why source-aware verification works
 
-The corrected approach routes each atomic claim to its declared source's evidence — not the pooled set — and runs NLI against that source alone. The stated attribution must match the routed source, or the claim is blocked regardless of what other sources would have supported. Per-source routing decouples *support* (does this source contain evidence for the claim?) from *attribution* (is the cited source the one that contains the evidence?) — two distinct failures, two distinct checks. On a 40-trace held-out split of medical MCP-agent traces, this reaches block F1 0.802 and source accuracy 0.858 over 260 source-eligible claims, outperforming source-blind baselines ([Alvarez et al., 2026 — arxiv:2606.18037](https://arxiv.org/abs/2606.18037)).
+The corrected approach routes each atomic claim to its declared source's evidence, not the pooled set, and runs NLI against that source alone. The stated attribution must match the routed source, or the claim is blocked, regardless of what other sources would have supported. Per-source routing separates two checks: support (does this source contain evidence for the claim?) and attribution (is the cited source the one that contains the evidence?). On a 40-trace held-out split of medical MCP-agent traces, this reaches block F1 0.802 and source accuracy 0.858 over 260 source-eligible claims, and outperforms source-blind baselines ([Alvarez et al., 2026 — arxiv:2606.18037](https://arxiv.org/abs/2606.18037)).
 
 ```mermaid
 graph TD
@@ -65,18 +65,18 @@ graph TD
     style H fill:#b60205,color:#fff
 ```
 
-## When This Backfires
+## When this backfires
 
-Source-aware verification is overhead-justified only inside the conditions named above. Outside them the trade-offs flip:
+Source-aware verification only earns its overhead inside the conditions named above. Outside them the trade-offs flip:
 
-- **Semantically close sources defeat exact ownership.** On a harder multi-source benchmark, source-plus-relation accuracy drops to 0.229 ([arxiv:2606.18037](https://arxiv.org/abs/2606.18037)) — two near-overlapping oncology guidelines look interchangeable to NLI, inheriting NLI's threshold sensitivity.
-- **Repair-and-reverify can mask the upstream problem.** Repair "resolves all blocked answers, often via conservative fallback" ([arxiv:2606.18037](https://arxiv.org/abs/2606.18037)). A verifier that always blocks-then-fallbacks reduces answer rate without fixing why the agent keeps misattributing.
-- **Free-text tool returns break routing.** Web-search snippets that combine multiple URLs into one block have no stable source ID to route to; the technique reduces to standard pooled NLI.
-- **Single-source agents waste the overhead.** No conflation surface means per-source NLI buys nothing over a pooled fact-checker.
+- Semantically close sources defeat exact ownership. On a harder multi-source benchmark, source-plus-relation accuracy drops to 0.229 ([arxiv:2606.18037](https://arxiv.org/abs/2606.18037)). Two near-overlapping oncology guidelines look interchangeable to NLI, which inherits NLI's threshold sensitivity.
+- Repair-and-reverify can hide the upstream problem. Repair "resolves all blocked answers, often via conservative fallback" ([arxiv:2606.18037](https://arxiv.org/abs/2606.18037)). A verifier that always blocks then falls back lowers the answer rate without fixing why the agent keeps misattributing.
+- Free-text tool returns break routing. Web-search snippets that combine multiple URLs into one block have no stable source ID to route to, so the technique reduces to standard pooled NLI.
+- Single-source agents waste the overhead. With no conflation surface, per-source NLI buys nothing over a pooled fact-checker.
 
 ## Example
 
-**Before — pooled-evidence NLI passes a cross-source conflation:**
+Before: pooled-evidence NLI passes a cross-source conflation.
 
 ```text
 Agent answer:
@@ -89,9 +89,9 @@ Pooled evidence:
 Pooled NLI verdict: SUPPORTED  ← passes; 10 mg appears somewhere
 ```
 
-The claim content is true (10 mg shows up in pooled evidence) but the cited source is wrong (formulary says start at 5 mg). A source-blind verifier cannot see the swap.
+The claim content is true (10 mg shows up in pooled evidence) but the cited source is wrong (the formulary says start at 5 mg). A source-blind verifier cannot see the swap.
 
-**After — source-aware verifier routes per claim:**
+After: the source-aware verifier routes each claim to its source.
 
 ```text
 Claim: "starting dose is 10 mg daily"

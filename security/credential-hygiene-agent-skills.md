@@ -17,21 +17,21 @@ maturity: adopted
 
 > Credentials embedded in skill definitions leak when skills are shared, committed, or reproduced verbatim by agents — a risk runtime secrets management does not cover.
 
-## Why Skills Are a Different Surface
+## Why skills are a different surface
 
-Runtime secrets management — env var injection, wrapper scripts, proxy isolation — addresses how credentials enter a running session, not credentials baked into the skill files.
+Runtime secrets management — env var injection, wrapper scripts, proxy isolation — covers how credentials enter a running session. It does not cover credentials baked into the skill files.
 
-Skills are reusable Markdown artifacts encoding API usage and workflow steps. A skill demonstrating an authenticated call often ships a working example from the author's environment — which may carry a live token, key, or credential-bearing endpoint.
+Skills are reusable Markdown artifacts that encode API usage and workflow steps. A skill demonstrating an authenticated call often ships a working example from the author's environment. That example may carry a live token, key, or credential-bearing endpoint.
 
 Three propagation paths expose them:
 
-1. **Sharing and publication** — Skills are published to community corpora ([awesome-copilot](https://github.com/github/awesome-copilot), agent registries) or committed to repos. The credential travels with the file.
-2. **Version control history** — A credential removed in a later commit remains in git history. Shallow mitigation (`git filter-repo`) is rarely applied to skill directories.
-3. **Verbatim LLM reproduction** — Agents may echo credential-containing examples into generated code, CI configs, or conversation history, treating the skill text as authoritative.
+1. Sharing and publication — you publish skills to community corpora ([awesome-copilot](https://github.com/github/awesome-copilot), agent registries) or commit them to repos. The credential travels with the file.
+2. Version control history — a credential removed in a later commit remains in git history. Teams rarely apply a fix such as `git filter-repo` to skill directories.
+3. Verbatim LLM reproduction — agents may echo credential-containing examples into generated code, CI configs, or conversation history, treating the skill text as authoritative.
 
 Empirical research documents credential leakage in publicly available skills at scale. ([Source: arxiv:2604.03070](https://arxiv.org/abs/2604.03070))
 
-## Leakage Forms
+## Leakage forms
 
 | Form | Example | Risk |
 |------|---------|------|
@@ -42,7 +42,7 @@ Empirical research documents credential leakage in publicly available skills at 
 
 ## Mitigations
 
-### Use Placeholder Syntax in All Examples
+### Use placeholder syntax in all examples
 
 Replace live credentials with unambiguous placeholders in every skill example:
 
@@ -52,11 +52,11 @@ curl -H "Authorization: Bearer $MY_SERVICE_API_KEY" \
   https://api.example.com/v1/endpoint
 ```
 
-Use shell variable syntax (`$VAR_NAME`) or angle-bracket placeholders (`<token>`) — both signal that substitution is required and stop the model reproducing a working credential.
+Use shell variable syntax (`$VAR_NAME`) or angle-bracket placeholders (`<token>`). Both signal that substitution is required and stop the model reproducing a working credential.
 
 Never use a real credential as an example, even temporarily. Pre-commit hooks miss credentials that existed only in a draft; git history does not.
 
-### Scan Skill Files at Pre-commit Time
+### Scan skill files at pre-commit time
 
 Extend secret-scanning to cover skill directories. `gitleaks`, `trufflehog`, and `detect-secrets` support custom path patterns:
 
@@ -70,9 +70,9 @@ paths = [".claude/skills/**", "skills/**", ".github/copilot-skills/**"]
 
 Run the same scanner in CI to catch leaks from contributors who bypass local hooks.
 
-### Decouple Skill Invocation from Credential Holding
+### Decouple skill invocation from credential holding
 
-Structure skills to invoke wrapper scripts rather than calling authenticated endpoints directly. The skill encodes *what* to call; the credential stays outside the skill file:
+Structure skills to invoke wrapper scripts rather than calling authenticated endpoints directly. The skill encodes what to call; the credential stays outside the skill file:
 
 ```markdown
 <!-- skill: query-analytics -->
@@ -86,7 +86,7 @@ The wrapper reads `$ANALYTICS_API_KEY` from the environment. The skill text hold
 
 This is the authoring-time complement to [Secrets Management for Agent Workflows](secrets-management-for-agents.md) (runtime injection) and [Scoped Credentials via Proxy](scoped-credentials-proxy.md) (runtime isolation).
 
-### Audit Before Publishing
+### Audit before publishing
 
 Before publishing or sharing a skill, run a credential audit:
 
@@ -96,11 +96,11 @@ trufflehog filesystem .claude/skills/ --only-verified
 detect-secrets scan .claude/skills/ --all-files
 ```
 
-Community corpora rely on contributor inspection — registry-level scanning is not universal. The [awesome-copilot](https://github.com/github/awesome-copilot) notice — "inspect any agent and its documentation before installing" — puts this burden on consumers; scanning before publishing shifts it to the authoring stage.
+Community corpora rely on contributor inspection — registry-level scanning is not universal. The [awesome-copilot](https://github.com/github/awesome-copilot) notice — "inspect any agent and its documentation before installing" — puts this burden on consumers. Scanning before publishing shifts it to the authoring stage.
 
-### Structural Successors: Treat Hygiene as a Holding Pattern
+### Structural successors: treat hygiene as a holding pattern
 
-Placeholder syntax and wrapper-script indirection reduce *embedded* leakage but not the deeper problem: any reusable bearer secret inside the model-steerable boundary is exposed by definition. The [Secret-Use Delegation Protocol (SUDP)](../standards/sudp-secret-use-delegation-protocol.md) frames this as the *Agent Secret Use* problem — an untrusted requester causing an authorized operation must never hold reusable authority ([Yu, Geng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)). On the runtime side, [workload identity federation](workload-identity-federation-for-agents.md) replaces long-lived API keys with short-lived OIDC tokens minted on demand — removing the bearer secret rather than hiding it.
+Placeholder syntax and wrapper-script indirection reduce embedded leakage but not the deeper problem: any reusable bearer secret inside the model-steerable boundary is exposed by definition. The [Secret-Use Delegation Protocol (SUDP)](../standards/sudp-secret-use-delegation-protocol.md) frames this as the 'Agent Secret Use' problem — an untrusted requester causing an authorized operation must never hold reusable authority ([Yu, Geng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)). On the runtime side, [workload identity federation](workload-identity-federation-for-agents.md) replaces long-lived API keys with short-lived OIDC tokens minted on demand — removing the bearer secret rather than hiding it.
 
 Apply authoring-time hygiene today, but treat it as a holding pattern: long-term, the credentials skill examples protect should not exist in their current form.
 
@@ -108,7 +108,7 @@ Apply authoring-time hygiene today, but treat it as a holding pattern: long-term
 
 A skill that demonstrates Stripe API access before and after applying hygiene:
 
-**Before — live credential embedded in skill:**
+Before — live credential embedded in skill:
 
 ```markdown
 <!-- skill: check-stripe-balance -->
@@ -117,7 +117,7 @@ To check the account balance, run:
     https://api.stripe.com/v1/balance | jq '.available[0].amount'
 ```
 
-**After — placeholder and wrapper script:**
+After — placeholder and wrapper script:
 
 ```markdown
 <!-- skill: check-stripe-balance -->
@@ -139,14 +139,14 @@ The skill now encodes the intent and interface; no credential is present.
 - Audit skill files before publishing to any shared corpus or registry
 - Treat hygiene as a holding pattern; SUDP and workload identity federation remove the reusable secret entirely
 
-## When This Backfires
+## When this backfires
 
 Placeholder syntax and wrapper scripts reduce leakage at authoring time but do not eliminate every vector:
 
-- **Private corpora without scanning** — Teams that never publish externally may skip scanner setup. Leaked credentials remain exploitable if the repo is later open-sourced or an insider extracts the history.
-- **Agents that resolve placeholders** — An agent with both the skill file and environment secrets may substitute real values into placeholder slots such as `$STRIPE_API_KEY`, producing credential-containing outputs. Wrapper-script indirection mitigates this; placeholder-only syntax does not.
-- **Coverage gaps in CI** — Gitleaks path rules for `.claude/skills/` only work if CI runs on all branches and PRs. Skills committed before the rule was added remain unscanned.
-- **Registry-level credential reuse** — Credentials rotated after publication remain exposed in any consumer that cached the older skill version. Pre-commit scanning prevents new leaks but does not revoke already-distributed credentials — only removing the reusable secret via [workload identity federation](workload-identity-federation-for-agents.md) closes that path.
+- Private corpora without scanning — teams that never publish externally may skip scanner setup. Leaked credentials remain exploitable if the repo is later open-sourced or an insider extracts the history.
+- Agents that resolve placeholders — an agent with both the skill file and environment secrets may substitute real values into placeholder slots such as `$STRIPE_API_KEY`, producing credential-containing outputs. Wrapper-script indirection mitigates this; placeholder-only syntax does not.
+- Coverage gaps in CI — Gitleaks path rules for `.claude/skills/` only work if CI runs on all branches and PRs. Skills committed before the rule was added remain unscanned.
+- Registry-level credential reuse — credentials rotated after publication remain exposed in any consumer that cached the older skill version. Pre-commit scanning prevents new leaks but does not revoke already-distributed credentials — only removing the reusable secret via [workload identity federation](workload-identity-federation-for-agents.md) closes that path.
 
 Apply wrapper-script isolation and pre-commit scanning together; neither alone closes all paths.
 

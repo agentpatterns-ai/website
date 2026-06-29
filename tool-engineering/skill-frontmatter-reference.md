@@ -18,14 +18,14 @@ maturity: established
 
 > SKILL.md frontmatter controls how a skill is discovered, invoked, and executed — each field governs one aspect of that lifecycle: invocation control, subagent delegation, tool restriction, lifecycle hooks, and argument handling.
 
-**Related lesson:** [Skills as a Tool-Engineering Surface](https://learn.agentpatterns.ai/tool-engineering/skills-as-a-tool-surface/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Skills as a Tool-Engineering Surface](https://learn.agentpatterns.ai/tool-engineering/skills-as-a-tool-surface/) — this concept features in a hands-on lesson with quizzes.
 
 !!! note "Also known as"
     Skill configuration, SKILL.md headers. See [Skill Authoring Patterns](skill-authoring-patterns.md) for authoring guidance; [Agent Skills Standard](../standards/agent-skills-standard.md) for the portable format.
 
 Most fields are optional. The [Agent Skills standard](https://agentskills.io) defines only `name`, `description`, `license`, `compatibility`, `metadata`, and `allowed-tools`; all other fields are Claude Code extensions.
 
-## Field Reference
+## Field reference
 
 | Field | Required | Default | Description |
 |-------|----------|---------|-------------|
@@ -40,7 +40,7 @@ Most fields are optional. The [Agent Skills standard](https://agentskills.io) de
 | `agent` | No | `general-purpose` | Subagent type when `context: fork`. |
 | `hooks` | No | — | Lifecycle hooks scoped to this skill. |
 
-## Invocation Control
+## Invocation control
 
 | Configuration | User can invoke `/name` | Claude can invoke | In context |
 |---|---|---|---|
@@ -125,7 +125,7 @@ Built-in `agent` values:
 
 ## hooks
 
-Lifecycle hooks scoped to this skill. Same format as `.claude/settings.json` hooks; all four types supported: `command`, `http`, `prompt`, `agent`.
+Lifecycle hooks scoped to this skill. They use the same format as `.claude/settings.json` hooks and support all four types: `command`, `http`, `prompt`, and `agent`.
 
 Hooks are scoped to the skill's execution and cleaned up on exit ([Claude Code hooks docs](https://code.claude.com/docs/en/hooks#hooks-in-skills-and-agents)).
 
@@ -161,7 +161,7 @@ Fix GitHub issue $ARGUMENTS following our coding standards.
 
 The value must be a string. YAML arrays or non-string types are coerced to strings ([Claude Code changelog, 2.1.51](https://code.claude.com/docs/en/changelog)).
 
-## Arguments in Skill Body
+## Arguments in skill body
 
 Substitution variables in the skill body:
 
@@ -177,13 +177,13 @@ If `$ARGUMENTS` is not present in the skill body, arguments are appended as `ARG
 
 ## Caveats
 
-**`context: fork` + reference-only content**: The subagent receives the knowledge but no task — produces no output. Use `context: fork` only for skills with explicit step-by-step instructions.
+`context: fork` with reference-only content produces no output. The subagent receives the knowledge but no task. Use `context: fork` only for skills with explicit step-by-step instructions.
 
-**`allowed-tools` does not restrict**: It grants pre-approval for listed tools but does not block others. Use project permission deny rules to block specific tools.
+`allowed-tools` does not restrict tools. It grants pre-approval for the listed tools but does not block others. Use project permission deny rules to block specific tools.
 
-**`user-invocable: false` + `disable-model-invocation: true`**: Setting both leaves the skill unreachable — hidden from `/` and from Claude's automatic loading. Use one or the other.
+Setting both `user-invocable: false` and `disable-model-invocation: true` leaves the skill unreachable. The skill is then hidden from `/` and from Claude's automatic loading. Use one or the other.
 
-**`model` overrides are skill-scoped**: The session model resumes after the skill completes.
+`model` overrides are skill-scoped. The session model resumes after the skill completes.
 
 ## Key Takeaways
 

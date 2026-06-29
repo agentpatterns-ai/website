@@ -16,17 +16,17 @@ maturity: adopted
 
 > Agentic code review replaces static diff analysis with a tool-calling architecture where the reviewer explores the repository to judge how changes fit the larger codebase.
 
-## The Shift
+## The shift
 
-Traditional AI code review operates on the diff alone — the reviewer sees changed lines without surrounding architectural context. Agentic code review replaces this with a tool-calling architecture where the reviewer actively explores the repository, reads linked issues, traces dependencies, and examines directory structure before generating feedback.
+Traditional AI code review works on the diff alone. The reviewer sees the changed lines without the surrounding architectural context. Agentic code review replaces this with a tool-calling architecture. The reviewer explores the repository, reads linked issues, traces dependencies, and examines the directory structure before it writes feedback.
 
-GitHub Copilot code review made this shift in [October 2025 (public preview)](https://github.blog/changelog/2025-10-28-new-public-preview-features-in-copilot-code-review-ai-reviews-that-see-the-full-picture/) and [March 2026 (GA)](https://github.blog/changelog/2026-03-05-copilot-code-review-now-runs-on-an-agentic-architecture/), enabling reviews that comment on architectural impact, pattern violations, and cross-cutting concerns — not just line-level syntax.
+GitHub Copilot code review made this shift in [October 2025 (public preview)](https://github.blog/changelog/2025-10-28-new-public-preview-features-in-copilot-code-review-ai-reviews-that-see-the-full-picture/) and [March 2026 (GA)](https://github.blog/changelog/2026-03-05-copilot-code-review-now-runs-on-an-agentic-architecture/). The reviews now comment on architectural effects, pattern violations, and cross-cutting concerns, not just line-level syntax.
 
-## How Agentic Review Works
+## How agentic review works
 
-### Tool-Calling for Context Gathering
+### Tool-calling for context gathering
 
-The reviewer uses [agentic tool-calling to gather full project context, including code, directory structure, and references](https://github.blog/changelog/2025-10-28-new-public-preview-features-in-copilot-code-review-ai-reviews-that-see-the-full-picture/). The agent dynamically retrieves whatever it needs to understand how changes fit within the broader architecture.
+The reviewer uses [agentic tool-calling to gather full project context, including code, directory structure, and references](https://github.blog/changelog/2025-10-28-new-public-preview-features-in-copilot-code-review-ai-reviews-that-see-the-full-picture/). The agent retrieves whatever it needs to understand how the changes fit the wider architecture.
 
 This means the reviewer can:
 
@@ -34,59 +34,59 @@ This means the reviewer can:
 - Examine directory structure to verify new files follow project conventions
 - Read linked issues and PRs to identify [subtle gaps where code appears sound in isolation but misaligns with project requirements](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/)
 
-### Hybrid LLM and Deterministic Analysis
+### Hybrid LLM and deterministic analysis
 
-The system [blends LLM detections and tool-calling with deterministic tools like ESLint and CodeQL](https://github.blog/changelog/2025-10-28-new-public-preview-features-in-copilot-code-review-ai-reviews-that-see-the-full-picture/). This hybrid approach combines:
+The system [blends LLM detections and tool-calling with deterministic tools like ESLint and CodeQL](https://github.blog/changelog/2025-10-28-new-public-preview-features-in-copilot-code-review-ai-reviews-that-see-the-full-picture/). This hybrid approach combines two methods:
 
-- **LLM analysis** — semantic understanding, pattern recognition, architectural judgment
-- **Deterministic tools** — CodeQL for security analysis, ESLint for style and rule enforcement
+- LLM analysis for semantic understanding, pattern recognition, and architectural judgment
+- Deterministic tools: CodeQL for security analysis, ESLint for style and rule enforcement
 
-Together they deliver high-signal findings across security and quality.
+Together they produce high-signal findings across security and quality.
 
-### Strategic Review Planning
+### Strategic review planning
 
-For complex PRs, the agent [maps out its review strategy ahead of time](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/), improving performance on long pull requests where context is easily lost. This prevents the failure mode of the previous architecture, which would [finalize results at the end of a review, often "forgetting" early discoveries](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/), catching problems as it reads rather than at completion.
+For complex PRs, the agent [maps out its review strategy ahead of time](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/). This helps on long pull requests where context is easily lost. The previous architecture would [finalize results at the end of a review, often "forgetting" early discoveries](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/). Planning ahead avoids that failure mode, so the agent catches problems as it reads rather than at the end.
 
-## Measured Impact
+## Measured impact
 
-The agentic architecture produced an [8.1% increase in positive developer feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) despite increased review latency — [a deliberate trade-off the team describes as worthwhile because meaningful analysis requires computation time](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/).
+The agentic architecture produced an [8.1% increase in positive developer feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) despite slower reviews. The team describes this as [a deliberate trade-off worth making, because meaningful analysis needs computation time](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/).
 
-The system maintains [cross-review memory](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/), enabling pattern recognition across pull requests rather than treating each as isolated — so flagging a pattern in one section can inform future reviews of the same codebase.
+The system keeps [cross-review memory](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/), so it recognizes patterns across pull requests rather than treating each one as isolated. Flagging a pattern in one section can inform future reviews of the same codebase.
 
-## Architectural Implications
+## Architectural implications
 
-Any AI code review system benefits from the same structural shift:
+Any AI code review system gains from the same structural shift:
 
-1. **Give the reviewer tools, not just data.** A reviewer with access to file reading, search, and dependency tracing produces more accurate findings than one that only sees the diff.
-2. **Blend analysis methods.** Use LLMs for judgment-requiring issues (architectural fit, naming quality, design patterns) and deterministic tools for rule-based issues (security patterns, style violations, type errors).
-3. **Plan before reviewing.** For large PRs, have the agent scan the overall change scope and create a review strategy before examining individual files — preventing early findings from being forgotten.
-4. **Read beyond the diff.** The most valuable comments come from understanding how changed code interacts with unchanged code — call sites, shared interfaces, and test coverage of affected paths; this is the cross-file blind spot [diff-based review](diff-based-review.md) cannot cover on its own.
+1. Give the reviewer tools, not just data. A reviewer that can read files, search, and trace dependencies produces more accurate findings than one that only sees the diff.
+2. Blend analysis methods. Use LLMs for judgment calls (architectural fit, naming quality, design patterns) and deterministic tools for rule-based issues (security patterns, style violations, type errors).
+3. Plan before reviewing. For large PRs, have the agent scan the overall change scope and create a review strategy before it examines individual files. This stops early findings from being forgotten.
+4. Read beyond the diff. The most useful comments come from understanding how changed code interacts with unchanged code: call sites, shared interfaces, and test coverage of affected paths. This is the cross-file blind spot [diff-based review](diff-based-review.md) cannot cover on its own.
 
-## Operational Considerations
+## Operational considerations
 
-Agentic code review requires compute infrastructure for tool-calling loops. GitHub's implementation requires [self-hosted runners for organizations that opted out of GitHub-hosted runners](https://github.blog/changelog/2026-03-05-copilot-code-review-now-runs-on-an-agentic-architecture/). Custom implementations must account for added latency and cost from multiple tool calls per review.
+Agentic code review needs compute infrastructure for tool-calling loops. GitHub's implementation needs [self-hosted runners for organizations that opted out of GitHub-hosted runners](https://github.blog/changelog/2026-03-05-copilot-code-review-now-runs-on-an-agentic-architecture/). Custom implementations must account for the added latency and cost from multiple tool calls per review.
 
-As of March 2026, reviews can be [triggered from the GitHub CLI](https://github.blog/changelog/2026-03-11-request-copilot-code-review-from-github-cli/) via `gh pr edit --add-reviewer @copilot` or by selecting Copilot during `gh pr create` (requires CLI 2.88.0+). See [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md) for details.
+As of March 2026, you can [trigger reviews from the GitHub CLI](https://github.blog/changelog/2026-03-11-request-copilot-code-review-from-github-cli/) with `gh pr edit --add-reviewer @copilot`, or by selecting Copilot during `gh pr create` (requires CLI 2.88.0+). See [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md) for details.
 
-## When This Backfires
+## When this backfires
 
-Agentic code review adds overhead that can outweigh its benefits in several conditions:
+Agentic code review adds overhead that can outweigh its benefits in several cases:
 
-- **Small or trivial PRs** — a tool-calling review loop has fixed startup latency that exceeds the value added on single-file or typo-fix PRs. Static diff review is faster and sufficient.
-- **Latency-sensitive pipelines** — teams running sub-minute CI gates will find agentic review's multi-tool round-trips incompatible with their merge velocity targets; the 8.1% quality gain does not compensate for a blocked pipeline.
-- **Self-hosted runner constraints** — GitHub's implementation requires self-hosted runners for organizations that have opted out of GitHub-hosted runners; teams without that infrastructure cannot adopt the feature without operational changes.
-- **Over-reaching architectural comments** — the agent's broader context access can produce low-signal comments on code that is intentionally isolated or handled by conventions the agent does not know; without a custom review persona tuned to project norms, false positives increase reviewer fatigue.
+- Small or trivial PRs: a tool-calling review loop has fixed startup latency that exceeds the value added on single-file or typo-fix PRs. Static diff review is faster and enough.
+- Latency-sensitive pipelines: teams running sub-minute CI gates will find that agentic review's multi-tool round-trips clash with their merge velocity targets. The 8.1% quality gain does not make up for a blocked pipeline.
+- Self-hosted runner constraints: GitHub's implementation needs self-hosted runners for organizations that have opted out of GitHub-hosted runners. Teams without that infrastructure cannot adopt the feature without operational changes.
+- Over-reaching architectural comments: the agent's wider context access can produce low-signal comments on code that is intentionally isolated or handled by conventions the agent does not know. Without a custom review persona tuned to project norms, false positives increase reviewer fatigue.
 
 ## Example
 
-A pull request modifies a shared authentication helper used by six services. With static diff review, the AI sees only the changed lines in the helper and comments on syntax and naming. With agentic review, the workflow looks like:
+A pull request modifies a shared authentication helper used by six services. With static diff review, the AI sees only the changed lines in the helper and comments on syntax and naming. With agentic review, the workflow runs like this:
 
-1. **Context gathering** — the agent reads the helper file, then calls file-read tools on each of the 6 services that import it, examining how each consumes the interface being changed.
-2. **Issue linkage** — the agent reads the linked issue to understand the intended behavior change versus what the diff actually implements.
-3. **Review strategy** — before commenting, the agent maps the full change scope: modified interface, affected call sites, related tests, and existing documentation.
-4. **Findings** — the agent surfaces that three of the six services rely on the old return shape; it flags this as a breaking change the diff-only view would miss, and references the specific call sites by file and line.
+1. Context gathering: the agent reads the helper file, then calls file-read tools on each of the six services that import it. It examines how each one uses the interface being changed.
+2. Issue linkage: the agent reads the linked issue to understand the intended behavior change against what the diff implements.
+3. Review strategy: before it comments, the agent maps the full change scope: the modified interface, affected call sites, related tests, and existing documentation.
+4. Findings: the agent surfaces that three of the six services rely on the old return shape. It flags this as a breaking change the diff-only view would miss, and references the specific call sites by file and line.
 
-The same PR with GitHub Copilot's agentic review can be triggered from the CLI: `gh pr edit --add-reviewer @copilot`. The agent runs in a loop, calling tools to gather context before posting inline comments.
+You can trigger the same review with GitHub Copilot from the CLI: `gh pr edit --add-reviewer @copilot`. The agent runs in a loop, calling tools to gather context before it posts inline comments.
 
 ## Key Takeaways
 

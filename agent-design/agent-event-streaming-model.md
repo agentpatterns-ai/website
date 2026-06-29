@@ -20,44 +20,44 @@ maturity: established
 
 An agent event stream is the typed, ordered sequence of events the harness emits at decision points: tool dispatched, tool returned, sub-agent spawned, state updated, run finished. It sits above the LLM's token-level SSE ([Claude API streaming](https://docs.claude.com/en/build-with-claude/streaming)) and below the app's domain model — the contract lives where the agent decides, not where the model emits letters.
 
-## Token Stream vs Agent Stream
+## Token stream versus agent stream
 
 | Stream | Producer | Granularity | Vocabulary | Stability across model/harness swap |
 |--------|----------|-------------|-----------|-------------------------------------|
 | Token | LLM SDK | One token chunk per delta | Provider-specific (`content_block_delta`, `delta.text`) | Breaks on model swap ([Claude API streaming](https://docs.claude.com/en/build-with-claude/streaming)) |
 | Agent | Harness | One event per decision | Semantic verbs (`RunStarted`, `ToolCallStart`, `StateDelta`) | Survives model swap ([AG-UI events](https://docs.ag-ui.com/concepts/events)) |
 
-LangGraph names both modes: `stream_mode="messages"` yields token chunks; `stream_mode="updates"` "emits an event after every agent step" ([LangChain streaming docs](https://docs.langchain.com/oss/python/langchain/streaming)). Production deployments subscribe to both — tokens drive the typing animation, updates drive tool indicators, sub-agent tabs, and approval prompts. LangChain frames this as going from token streams to agent streams: higher-level events for steps, tool calls, and state transitions, distinct from the raw token deltas underneath ([LangChain, from token streams to agent streams](https://blog.langchain.com/from-token-streams-to-agent-streams)).
+LangGraph names both modes: `stream_mode="messages"` yields token chunks; `stream_mode="updates"` "emits an event after every agent step" ([LangChain streaming docs](https://docs.langchain.com/oss/python/langchain/streaming)). Production deployments subscribe to both. Tokens feed the typing animation; updates feed tool indicators, sub-agent tabs, and approval prompts. LangChain describes the shift from token streams to agent streams: higher-level events for steps, tool calls, and state transitions, separate from the raw token deltas underneath ([LangChain, from token streams to agent streams](https://blog.langchain.com/from-token-streams-to-agent-streams)).
 
-## The Event Vocabulary
+## The event vocabulary
 
 The AG-UI Protocol — an open standard with integrations across LangGraph, CrewAI, Google ADK, Pydantic AI, and others — groups events into seven categories ([AG-UI events](https://docs.ag-ui.com/concepts/events)):
 
-- **Lifecycle**: `RunStarted`, `StepStarted`, `StepFinished`, `RunFinished`, `RunError` — bounds and progress markers carrying `threadId`, `runId`, and an optional `parentRunId`.
-- **Tool Call**: `ToolCallStart`, `ToolCallArgs`, `ToolCallEnd`, `ToolCallResult`. The Vercel AI SDK Data Stream Protocol uses the same shape with different names — `tool-input-start`, `tool-input-delta`, `tool-input-available`, `tool-output-available` ([Vercel AI SDK](https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol)).
-- **Text Message**: `TextMessageStart`, `TextMessageContent`, `TextMessageEnd` — message-level streaming above tokens.
-- **State**: `StateSnapshot`, `StateDelta` — typed shared store between agent and frontend, event-sourced.
-- **Reasoning**: `ReasoningStart`, `ReasoningMessageContent`, `ReasoningMessageEnd` — LangChain normalises Anthropic `thinking` and OpenAI `reasoning` blocks into one `reasoning` content-block type ([LangChain streaming docs](https://docs.langchain.com/oss/python/langchain/streaming)).
-- **Activity**, **Special** (Custom, Raw) — escape hatches for harness-specific work.
+- Lifecycle: `RunStarted`, `StepStarted`, `StepFinished`, `RunFinished`, `RunError` — bounds and progress markers carrying `threadId`, `runId`, and an optional `parentRunId`.
+- Tool call: `ToolCallStart`, `ToolCallArgs`, `ToolCallEnd`, `ToolCallResult`. The Vercel AI SDK Data Stream Protocol uses the same shape with different names — `tool-input-start`, `tool-input-delta`, `tool-input-available`, `tool-output-available` ([Vercel AI SDK](https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol)).
+- Text message: `TextMessageStart`, `TextMessageContent`, `TextMessageEnd` — message-level streaming above tokens.
+- State: `StateSnapshot`, `StateDelta` — typed shared store between agent and frontend, event-sourced.
+- Reasoning: `ReasoningStart`, `ReasoningMessageContent`, `ReasoningMessageEnd` — LangChain normalizes Anthropic `thinking` and OpenAI `reasoning` blocks into one `reasoning` content-block type ([LangChain streaming docs](https://docs.langchain.com/oss/python/langchain/streaming)).
+- Activity and Special (Custom, Raw) — escape hatches for harness-specific work.
 
-The categories are the load-bearing design choice. Subscribe by category — "render all Tool Call events" — and the consumer survives new event types within it; hardcode names and it does not.
+The categories are the load-bearing design choice. Subscribe by category — "render all tool-call events" — and the consumer survives new event types within it. Hardcode names and it does not.
 
-## Why It Works
+## Why it works
 
-The agent stream inverts consumer stability. A token-stream consumer commits to LLM-output deltas — a sub-agent spawn, guardrail, or tool retry never appears in the token stream, so the consumer infers them by parsing the assembled message. An agent-stream consumer commits to harness-decision verbs and renders affordances — approval modals, sub-agent tabs, retry indicators — directly ([AG-UI events](https://docs.ag-ui.com/concepts/events)). Swapping the LLM (Anthropic → Gemini → OpenAI) replaces the token stream but leaves the verbs intact — the abstraction inversion event-sourcing applies to databases ([Fowler, EventSourcing](https://martinfowler.com/eaaDev/EventSourcing.html)), at the harness/LLM boundary.
+The agent stream inverts consumer stability. A token-stream consumer commits to LLM-output deltas. A sub-agent spawn, guardrail, or tool retry never appears there, so the consumer infers them from the assembled message. An agent-stream consumer commits to harness-decision verbs and renders affordances — approval modals, sub-agent tabs, retry indicators — directly ([AG-UI events](https://docs.ag-ui.com/concepts/events)). Swapping the LLM (Anthropic → Gemini → OpenAI) replaces the token stream but leaves the verbs intact — the abstraction inversion event-sourcing applies to databases ([Fowler, EventSourcing](https://martinfowler.com/eaaDev/EventSourcing.html)), at the harness/LLM boundary.
 
-## Versioning the Event Schema
+## Versioning the event schema
 
-Event-driven consumers outlive the producer code, so the vocabulary needs additive-only evolution ([theburningmonk, event versioning strategies](https://theburningmonk.com/2025/04/event-versioning-strategies-for-event-driven-architectures/)). The Confluent compatibility taxonomy applies directly: new event types and optional fields are safe (consumers ignore unknowns); renames and removals break every consumer at once ([Confluent schema compatibility](https://developer.confluent.io/patterns/event-stream/schema-compatibility/)). When a shape must change, ship an upcaster at the consumer boundary. The discipline matters more than in a Kafka pipeline because each event renders in a user-facing UI.
+Event-driven consumers outlive the producer code, so the vocabulary needs additive-only evolution ([theburningmonk, event versioning strategies](https://theburningmonk.com/2025/04/event-versioning-strategies-for-event-driven-architectures/)). The Confluent compatibility taxonomy applies directly: new event types and optional fields are safe, because consumers ignore unknowns; renames and removals break every consumer at once ([Confluent schema compatibility](https://developer.confluent.io/patterns/event-stream/schema-compatibility/)). When a shape must change, ship an upcaster at the consumer boundary. This discipline matters more than in a Kafka pipeline because each event renders in a user-facing UI.
 
-## When This Backfires
+## When this backfires
 
 The pattern adds a vocabulary-design and versioning obligation that does not pay off everywhere. Stay with raw token streams when:
 
-- **Pure conversational chat UIs** — step events at the bubble layer hide the time-to-first-token signal users expect. Reported TTFT with token streaming is typically 200–500 ms versus a 5–30 s wait for the full response without it ([thefrontkit, streaming UI guide](https://thefrontkit.com/blogs/what-is-streaming-ui-in-ai-applications)); dropping that channel makes the interface feel broken.
-- **Single-harness, single-vendor stacks** — the portability benefit disappears; raw SDK events (Anthropic SSE, OpenAI deltas) are cheaper.
-- **Ad-hoc payloads that mirror harness internals** — if `tool_call_started` carries the harness's node name, retry count, or framework-specific tool ID, the UI couples to the harness; the vocabulary must be designed semantically, not echoed from the runtime.
-- **Renames are tolerated** — without additive-only discipline, event-stream consumers degrade *worse* than token-stream ones because each event carries semantic weight ([theburningmonk](https://theburningmonk.com/2025/04/event-versioning-strategies-for-event-driven-architectures/)).
+- Pure conversational chat UIs — step events at the bubble layer hide the time-to-first-token signal users expect. Reported TTFT with token streaming is typically 200–500 ms versus a 5–30 s wait for the full response without it ([thefrontkit, streaming UI guide](https://thefrontkit.com/blogs/what-is-streaming-ui-in-ai-applications)); dropping that channel makes the interface feel broken.
+- Single-harness, single-vendor stacks — the portability benefit disappears, and raw SDK events (Anthropic SSE, OpenAI deltas) are cheaper.
+- Ad-hoc payloads that mirror harness internals — if `tool_call_started` carries the harness's node name, retry count, or framework-specific tool ID, the UI couples to the harness; the vocabulary must be designed semantically, not echoed from the runtime.
+- Renames are tolerated — without additive-only discipline, event-stream consumers degrade more than token-stream ones because each event carries semantic weight ([theburningmonk](https://theburningmonk.com/2025/04/event-versioning-strategies-for-event-driven-architectures/)).
 
 The dominant production shape runs both streams in parallel ([LangChain streaming docs](https://docs.langchain.com/oss/python/langchain/streaming)). The agent stream replaces tokens only when the product is agent-as-coworker — IDE pair, research dashboard, ops console — not agent-as-chatbot.
 
@@ -105,4 +105,4 @@ A frontend subscribing only to `tool-*` parts renders a tool-call indicator; a f
 - [Delta Channels: Bounded Checkpoint Storage for Append-Only Agent State](delta-channels-checkpoint-storage.md) — runtime-side delta primitive; the agent stream is the consumer-side counterpart
 - [Event Sourcing for Agents](../observability/event-sourcing-for-agents.md) — server-side append-only event log; the agent stream is its consumer-facing projection
 - [Agent Debug Log Panel: Chronological Event Inspection](../observability/agent-debug-log-panel.md) — operator UI built on the same event stream, separate from the user-facing transcript
-- [Agent Loop Middleware](agent-loop-middleware.md) — where harness-decision events are emitted from in practice — middleware nodes at loop boundaries
+- [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md) — where harness-decision events are emitted from in practice — middleware nodes at loop boundaries

@@ -17,9 +17,9 @@ maturity: established
 
 > Profile training samples by score variance before committing to RL fine-tuning — only the subset where the model sometimes succeeds and sometimes fails offers a real learning signal.
 
-## Why Most Training Data Contributes Nothing
+## Why most training data contributes nothing
 
-Reinforcement learning fine-tuning requires gradient signal. A sample produces no gradient when the model always gets it right (reward is constant at the maximum) or always gets it wrong (reward is constant at zero). In practice, this zero-variance majority is large. In a FinQA benchmark case study, approximately 85% of samples showed zero variance — meaning only 15% could contribute to learning. Running RL on the full dataset wastes roughly 6× the compute that the productive slice alone would require.
+Reinforcement learning fine-tuning needs a gradient signal. A sample produces no gradient when the model always gets it right (reward stays at the maximum) or always gets it wrong (reward stays at zero). This zero-variance majority is usually large. In a FinQA benchmark case study, about 85% of samples showed zero variance, so only 15% could contribute to learning. Running RL on the full dataset wastes roughly 6 times the compute that the productive slice alone needs.
 
 The three categories:
 
@@ -29,16 +29,16 @@ The three categories:
 | Always wrong | 0 | None — task out-of-distribution or too hard |
 | Variable | > 0 | Present — prime RL candidate |
 
-"Always wrong" samples deserve the same exclusion as "always correct" ones. A model that consistently scores zero on a sample is not close to learning it — it signals a capability gap or a mismatched task, not a training opportunity.
+Exclude "always wrong" samples for the same reason you exclude "always correct" ones. A model that consistently scores zero on a sample is not close to learning it. That score signals a capability gap or a mismatched task, not a training opportunity.
 
-## The Profiling Workflow
+## The profiling workflow
 
-Run the baseline model on each training sample 3–5 times before any RL training. Compute four metrics per sample:
+Run the baseline model on each training sample 3 to 5 times before any RL training. Compute four metrics per sample:
 
-- **Mean score** — average reward across runs
-- **Best score** — maximum reward achieved across runs
-- **Standard deviation** — spread across runs
-- **Variance** — square of standard deviation; threshold above zero to identify variable samples
+- Mean score: average reward across runs
+- Best score: highest reward across runs
+- Standard deviation: spread across runs
+- Variance: the square of the standard deviation; a value above zero marks a variable sample
 
 ```python
 from statistics import mean, stdev
@@ -61,9 +61,9 @@ profile = profile_sample(scores)
 
 Filter to variable samples (variance > 0) before constructing the RL training dataset.
 
-## Improvement Ceiling Estimation
+## Improvement ceiling estimation
 
-Before starting RL training, the gap between mean score and best-of-N score gives an upper bound on what RL can plausibly recover. In the FinQA case study, the baseline mean was 0.59 and the best-of-3 potential was 0.73 — a +24% relative ceiling. After 10 steps of RL fine-tuning on the high-variance subset, validation reward improved from 0.59 to 0.63 (+7%), with tool calls per rollout dropping from 6.9 to 4.2 (−39%). Actual gains land well below the ceiling; the ceiling is useful as a go/no-go filter before committing to a training run.
+The gap between mean score and best-of-N score gives an upper bound on what RL can plausibly recover, so measure it before you start training. In the FinQA case study, the baseline mean was 0.59 and the best-of-3 potential was 0.73, a +24% relative ceiling. After 10 steps of RL fine-tuning on the high-variance subset, validation reward rose from 0.59 to 0.63 (+7%), and tool calls per rollout dropped from 6.9 to 4.2 (−39%). Actual gains land well below the ceiling. The ceiling still helps as a go/no-go filter before you commit to a training run.
 
 Additional validated results from the same methodology:
 
@@ -72,21 +72,21 @@ Additional validated results from the same methodology:
 
 [Source: OpenAI Build Hours — [Agent Reinforcement Fine-Tuning, November 2025](https://github.com/openai/build-hours/tree/main/20-agent-rft)]
 
-## Cost Trade-off
+## Cost trade-off
 
-Profiling costs 3–5× a single inference pass per sample. This is paid once before training and is typically small relative to the GPU cost of a full RL training run on a dataset that is 85% unproductive. When the variable subset is 15% of the original dataset, the saving on training compute is approximately 6×.
+Profiling costs 3 to 5 times a single inference pass per sample. You pay it once before training. That cost is usually small next to the GPU cost of a full RL training run on a dataset that is 85% unproductive. When the variable subset is 15% of the original dataset, you save about 6 times the training compute.
 
 The approach extends Prioritized Experience Replay ([Schaul et al., ICLR 2016](https://arxiv.org/abs/1511.05952)) from value-based RL to LLM fine-tuning — replacing TD-error as the priority signal with empirical score variance across repeated rollouts.
 
-## When This Backfires
+## When this backfires
 
-Variance-based exclusion is not a universal win. Three conditions where it underperforms alternatives:
+Variance-based exclusion is not always the right call. It underperforms alternatives in three conditions:
 
-- **Always-wrong samples can still carry signal.** [RL-ZVP (No Prompt Left Behind, ICLR 2026)](https://arxiv.org/abs/2509.21880) extracts learning from zero-variance prompts via entropy-guided advantage shaping, beating GRPO baselines that filter them out by up to 8.61 points on math benchmarks.
-- **Low rollout counts misclassify borderline samples.** With 3–5 runs, samples near the learnability boundary frequently get tagged zero-variance by chance — the same boundary that curriculum approaches like [VCRL](https://arxiv.org/abs/2509.19803) target deliberately. Raise the rollout count or pair filtering with a difficulty schedule.
-- **Paired sampling beats variance heuristics.** [Beyond Variance (Feb 2026)](https://arxiv.org/abs/2602.03452) shows that pairing a hard-but-solvable prompt with an easy-but-brittle one — without any variance filter — improves AIME 2025 Pass@8 from 16.8 to 22.2 over variance-selected GRPO.
+- Always-wrong samples can still carry signal: [RL-ZVP (No Prompt Left Behind, ICLR 2026)](https://arxiv.org/abs/2509.21880) extracts learning from zero-variance prompts through entropy-guided advantage shaping, beating GRPO baselines that filter them out by up to 8.61 points on math benchmarks.
+- Low rollout counts misclassify borderline samples: with 3 to 5 runs, samples near the learnability boundary often get tagged zero-variance by chance, the same boundary that curriculum approaches like [VCRL](https://arxiv.org/abs/2509.19803) target on purpose. Raise the rollout count or pair filtering with a difficulty schedule.
+- Paired sampling beats variance heuristics: [Beyond Variance (Feb 2026)](https://arxiv.org/abs/2602.03452) shows that pairing a hard-but-solvable prompt with an easy-but-brittle one, without any variance filter, improves AIME 2025 Pass@8 from 16.8 to 22.2 over variance-selected GRPO.
 
-The case study still holds when rollout cost dominates GPU budget and the training stack cannot exploit zero-variance signal. Outside those conditions, treat variance filtering as one option, not the default.
+The case study still holds when rollout cost dominates the GPU budget and the training stack cannot use zero-variance signal. Outside those conditions, treat variance filtering as one option, not the default.
 
 ## Example
 
@@ -102,7 +102,7 @@ Ceiling estimate: mean 0.61, best-of-3 0.74 → +21% relative headroom
 Training cost:    300 samples × RL steps (vs. 2,000 without profiling)
 ```
 
-The team trains on 300 samples instead of 2,000 — a 6.7× compute reduction — and uses the ceiling estimate to set expectations before committing the GPU budget.
+The team trains on 300 samples instead of 2,000, a 6.7 times compute reduction, and uses the ceiling estimate to set expectations before committing the GPU budget.
 
 ## Key Takeaways
 

@@ -15,18 +15,18 @@ maturity: emerging
 
 > Claude Code supports `@path/to/file` imports in CLAUDE.md, enabling modular instruction authoring. Other major agent tools do not — they rely on hierarchical discovery instead.
 
-**Related lesson:** [The Layer Stack](https://learn.agentpatterns.ai/context-engineering/prompt-layering/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [The Layer Stack](https://learn.agentpatterns.ai/context-engineering/prompt-layering/) covers this concept in a hands-on lesson with quizzes.
 
-## How Claude Code Imports Work
+## How Claude Code imports work
 
-CLAUDE.md files can reference other files with `@path/to/file` syntax. At session start, Claude Code expands all imports and loads them into context ([docs](https://code.claude.com/docs/en/memory#import-additional-files)).
+CLAUDE.md files can reference other files with `@path/to/file` syntax. At session start, Claude Code expands every import and loads it into context ([Claude Code memory docs](https://code.claude.com/docs/en/memory#import-additional-files)).
 
 Rules:
 
-- Both relative and absolute paths are supported
+- Imports accept both relative and absolute paths
 - Relative paths resolve from the importing file, not the working directory
 - Imports nest up to five levels deep
-- First encounter triggers an approval dialog; declined imports stay disabled and the dialog does not reappear ([docs](https://code.claude.com/docs/en/memory#import-additional-files))
+- The first import triggers an approval dialog. Decline it and the import stays disabled, with no repeat prompt ([Claude Code memory docs](https://code.claude.com/docs/en/memory#import-additional-files))
 
 ```text
 # CLAUDE.md
@@ -41,11 +41,11 @@ See @README for project overview and @package.json for available npm scripts.
 - @~/.claude/my-project-preferences.md
 ```
 
-Each referenced file is pulled in verbatim — semantically equivalent to concatenation at session start.
+Claude Code pulls in each referenced file verbatim — the same as concatenating them at session start.
 
-## Known Limitation: Tilde Expansion
+## Known limitation: tilde expansion
 
-As of late 2025, `@~/.claude/file.md` references (tilde home-directory expansion) are silently not loaded in some configurations ([Issue #8765](https://github.com/anthropics/claude-code/issues/8765)). Use absolute paths as a workaround:
+As of late 2025, Claude Code silently skips `@~/.claude/file.md` references (tilde home-directory expansion) in some configurations ([Issue #8765](https://github.com/anthropics/claude-code/issues/8765)). Use an absolute path instead:
 
 ```text
 # Works
@@ -55,21 +55,21 @@ As of late 2025, `@~/.claude/file.md` references (tilde home-directory expansion
 @~/.claude/my-preferences.md
 ```
 
-## When to Use Imports vs `.claude/rules/`
+## When to use imports vs `.claude/rules/`
 
-Imports and `.claude/rules/` both modularise instructions. The distinction is load timing:
+Imports and `.claude/rules/` both modularize instructions. They differ in when they load:
 
 | Mechanism | When it loads | Best for |
 |-----------|--------------|---------|
 | `@path` imports | At session start, always | Core project context shared across all files |
-| `.claude/rules/*.md` without `paths` | At session start (same as CLAUDE.md) | Topically organised rules that always apply |
+| `.claude/rules/*.md` without `paths` | At session start (same as CLAUDE.md) | Topically organized rules that always apply |
 | `.claude/rules/*.md` with `paths` frontmatter | On demand, when matching files are opened | Language- or directory-specific conventions |
 
-Use imports when you want to pull external content (README, package.json, a canonical AGENTS.md) into CLAUDE.md without duplicating it. Use `.claude/rules/` when you want path-scoped rules that activate only when the agent works in a specific area.
+Use imports to pull external content (README, package.json, a canonical AGENTS.md) into CLAUDE.md without duplicating it. Use `.claude/rules/` for path-scoped rules that activate only when the agent works in a specific area.
 
-## DRY Instruction Authoring
+## DRY instruction authoring
 
-The main use case for imports is a single-source-of-truth for project conventions shared across tools or across team members:
+Imports work best as a single source of truth for project conventions shared across tools or team members:
 
 ```
 project-root/
@@ -91,28 +91,28 @@ Check subdirectory CLAUDE.md files — auth code has additional constraints.
 
 [`.github/copilot-instructions.md`](../tools/copilot/copilot-instructions-md-convention.md) must duplicate the shared content because Copilot has no equivalent syntax. The drift surface is small and explicit.
 
-User-specific preferences stay out of version control by importing from `~/.claude/`:
+Importing from `~/.claude/` keeps user-specific preferences out of version control:
 
 ```text
 # CLAUDE.md (checked in)
 @~/.claude/my-project-preferences.md
 ```
 
-The import reference is checked in; the file it points to stays local. Teammates who lack the file see the import silently skipped.
+You check in the import reference, but the file it points to stays local. Teammates who lack the file see the import skipped silently.
 
-## Cross-Tool Comparison
+## Cross-tool comparison
 
 | Tool | File inclusion syntax | Mechanism for modularity |
 |------|----------------------|--------------------------|
-| Claude Code | `@path/to/file` in CLAUDE.md ([docs](https://code.claude.com/docs/en/memory)) | Import expansion at load time |
+| Claude Code | `@path/to/file` in CLAUDE.md ([memory docs](https://code.claude.com/docs/en/memory)) | Import expansion at load time |
 | Claude Code (alternative) | `.claude/rules/*.md` with `paths` frontmatter | Path-scoped rules, demand-loaded |
 | GitHub Copilot | None | Hierarchical discovery: nested AGENTS.md, `applyTo` globs in `.github/instructions/` |
 | OpenAI Codex | None | Directory traversal + concatenation root-down |
 | Cursor | `@file` within `.cursor/rules/*.mdc` | Context attachment (referenced file appended as context at rule evaluation, not expanded inline into the rule body) |
 
-**Failure mode for unsupported tools**: `@AGENTS.md` in a Copilot instructions file is not a supported directive — it passes through as literal Markdown text. The model may attempt to interpret it as a file path or ignore it — there is no error.
+Failure mode for unsupported tools: `@AGENTS.md` in a Copilot instructions file is not a supported directive — it passes through as literal Markdown text. The model may try to interpret it as a file path or ignore it, with no error.
 
-## Example: Shared Base with Tool-Specific Extends
+## Example: shared base with tool-specific extends
 
 A team maintains a shared `shared/base-instructions.md` that both a project CLAUDE.md and a user CLAUDE.md import:
 
@@ -152,12 +152,12 @@ Run `pnpm test` before committing. All tests must pass.
 
 Both CLAUDE.md files stay short; shared content lives once.
 
-## When This Backfires
+## When this backfires
 
-- **Silent broken imports**: renaming or moving an imported file breaks the reference without any error. Claude silently loads fewer instructions than expected — the failure is invisible.
-- **Approval-dialog friction**: the first-use approval dialog blocks imports in headless or CI contexts where there is no interactive session to click through.
-- **Nesting limit**: import chains are capped at five levels. A deeply composed instruction set that exceeds this limit is truncated at load time with no warning.
-- **Tilde expansion is unreliable**: `@~/.claude/file.md` silently fails in some configurations (closed as NOT_PLANNED: [Issue #8765](https://github.com/anthropics/claude-code/issues/8765)); absolute paths are the only reliable workaround.
+- Silent broken imports: renaming or moving an imported file breaks the reference with no error. Claude loads fewer instructions than expected, and the failure stays invisible.
+- Approval-dialog friction: the first-use approval dialog blocks imports in headless or CI runs, where no interactive session can click through.
+- Nesting limit: import chains stop at five levels. Claude Code truncates a deeply composed set that exceeds the limit at load time, with no warning.
+- Tilde expansion is unreliable: `@~/.claude/file.md` fails silently in some configurations (closed as NOT_PLANNED: [Issue #8765](https://github.com/anthropics/claude-code/issues/8765)). Absolute paths are the only reliable workaround.
 
 ## Key Takeaways
 

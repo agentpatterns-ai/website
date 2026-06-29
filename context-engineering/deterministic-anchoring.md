@@ -18,19 +18,19 @@ maturity: emerging
 
 > Inject call-graph, inheritance, and config-dependency facts as plain-text comments so a code agent's navigation converges across runs.
 
-Deterministic anchoring is a context-engineering technique for stabilising code-agent behaviour. Lightweight static analysis (call graphs, inheritance hierarchies, configuration dependencies) is rendered as plain-text annotations inline with the source the agent reads, giving every run the same structural reference frame. The pattern reduces run-to-run variance roughly by half on the medium-scale repositories the originating study measured, at the cost of about 10% additional input tokens per turn ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)).
+Deterministic anchoring is a context-engineering technique for stabilizing code-agent behavior. You render lightweight static analysis — call graphs, inheritance hierarchies, configuration dependencies — as plain-text annotations inline with the source the agent reads. Every run then gets the same structural reference frame. The pattern roughly halves run-to-run variance on the medium-scale repositories the originating study measured, at the cost of about 10% more input tokens per turn ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)).
 
-## When to Reach for It
+## When to reach for it
 
-The pattern earns its token cost only when all three conditions hold. Lead with the conditions, not the recommendation.
+The pattern earns its token cost only when all three conditions hold.
 
-- **Reproducibility is a requirement, not a nice-to-have.** Audit replay, trajectory diffing, regression-style evaluation of agent changes — these workflows depend on the agent landing in the same files for the same task. If you only run once and ship, the determinism benefit buys you nothing you can measure.
-- **The codebase is medium-sized and structurally stable.** The reported gains (+2.2 pp Func@5, +3.4 pp Pass@1, link-following rate 0.15–0.18 → 0.21–0.24) are on medium-scale repositories ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)). Below ~20 files the agent can read the source directly; above a certain size the anchor itself does not fit or goes stale within a session.
-- **Static facts match runtime facts.** The anchor is a call graph extracted from source. In codebases that resolve dispatch at runtime — Rails `method_missing`, Python metaclasses, JS proxies, macro-heavy Rust — the anchor diverges from what actually runs, so anchored navigation misleads ([repository-map-pattern](repository-map-pattern.md)).
+- Reproducibility is a requirement, not a nice-to-have. Audit replay, trajectory diffing, and regression-style evaluation of agent changes all depend on the agent landing in the same files for the same task. If you run once and ship, the determinism benefit buys you nothing you can measure.
+- The codebase is medium-sized and structurally stable. The reported gains (+2.2 pp Func@5, +3.4 pp Pass@1, link-following rate 0.15–0.18 → 0.21–0.24) are on medium-scale repositories ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)). Below ~20 files the agent can read the source directly. Above a certain size the anchor itself does not fit, or it goes stale within a session.
+- Static facts match runtime facts. The anchor is a call graph extracted from source. In codebases that resolve dispatch at runtime — Rails `method_missing`, Python metaclasses, JS proxies, macro-heavy Rust — the anchor diverges from what actually runs, so anchored navigation misleads ([repository map pattern](repository-map-pattern.md)).
 
 Outside these conditions, a strong agent loop with on-demand search recovers the same structural facts cheaply, and the ~10% input-token premium does not pay back.
 
-## How the Mechanism Works
+## How the mechanism works
 
 Code agents navigate repositories through keyword search ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)). The first grep result biases the next tool call, which biases the next, and stochastic decoding compounds across the trajectory — even at temperature 0, multi-step agent runs diverge in code modifications and reasoning paths because numerical non-determinism and decoding randomness accumulate ([Yao et al., 2026 — How Consistent Are LLM Agents?](https://arxiv.org/abs/2605.28840), [Saghir et al., 2025 — Numerical Sources of Nondeterminism in LLM Inference](https://arxiv.org/abs/2506.09501)).
 
@@ -47,7 +47,7 @@ graph TD
 
 The mechanism is not "more information helps the model." It is "the same information surfaced the same way pins down stochastic exploration." That distinction is why the headline metric is variance, not accuracy.
 
-## What to Anchor
+## What to anchor
 
 Three classes of fact carry most of the reported benefit ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)):
 
@@ -57,28 +57,28 @@ Three classes of fact carry most of the reported benefit ([Lin et al., 2026](htt
 | Inheritance hierarchy | Class → superclass edges, interface implementations | Surfaces polymorphic dispatch the source line alone does not show |
 | Configuration dependency | Config keys → consumers; env-var → reader | Connects runtime knobs to the code they govern |
 
-The point is that these facts are cheap, accurate, and stable. They are not the only structural facts available — the technique generalises to anything a static analyser can derive deterministically — but call/inheritance/config covers the dependency edges most code-agent tasks traverse.
+The point is that these facts are cheap, accurate, and stable. They are not the only structural facts available — the technique generalizes to anything a static analyzer can derive deterministically — but call/inheritance/config covers the dependency edges most code-agent tasks traverse.
 
-## Why It Works
+## Why it works
 
-The causal reason is **navigational discipline under decoding noise**. A code agent's per-turn decision (which file to open next) is a function of the prompt; when the prompt contains the same structural assertions on every run, the per-turn decision distribution narrows. Variance halves not because the agent reasons better but because its inputs no longer drift between runs ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)).
+The causal reason is navigational discipline under decoding noise. A code agent's per-turn decision — which file to open next — is a function of the prompt. When the prompt contains the same structural assertions on every run, the per-turn decision distribution narrows. Variance halves not because the agent reasons better but because its inputs no longer drift between runs ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)).
 
-This matches the broader retrieval finding that **graph-based retrieval outperforms semantic and lexical retrieval on cross-file code tasks**, with the largest gains on tasks whose required dependencies share no vocabulary with the task description ([survey of retrieval-augmented code generation](https://arxiv.org/abs/2510.04905)). Deterministic anchoring is the cheapest realisation of that finding — graph facts rendered as prompt-time text — but the contribution is *stability*, not localization accuracy. The accuracy gains (+2–3 pp) are within the noise band the same technique is suppressing; the variance reduction is what is doing real work.
+This matches the broader retrieval finding that graph-based retrieval outperforms semantic and lexical retrieval on cross-file code tasks, with the largest gains on tasks whose required dependencies share no vocabulary with the task description ([survey of retrieval-augmented code generation](https://arxiv.org/abs/2510.04905)). Deterministic anchoring is the cheapest realization of that finding — graph facts rendered as prompt-time text — but the contribution is stability, not localization accuracy. The accuracy gains (+2–3 pp) are within the noise band the same technique is suppressing. The variance reduction is what does the real work.
 
-## When This Backfires
+## When this backfires
 
-- **Heavy metaprogramming codebases.** Rails `method_missing`, Python metaclasses, JavaScript proxies, macro-heavy Rust — the static call graph diverges from runtime dispatch. The anchor becomes a confident-looking lie ([repository-map-pattern](repository-map-pattern.md)).
-- **Small codebases.** Under ~20 files the agent can read source directly. The anchor adds tokens without surfacing anything the agent could not see in raw form.
-- **Very large monorepos with high churn.** The anchor either does not fit the budget or goes stale before the session completes. Either way the determinism benefit collapses, and the failure mode is silent.
-- **Single-shot tasks where reproducibility is irrelevant.** The headline benefit is run-to-run stability. If you run once and ship, the 10% token premium is dead weight.
-- **Strong agent with a good search tool.** Claude Code deliberately skips indexing because early RAG experiments showed agentic search outperformed pre-built indexes for its harness ([Vadim, 2026 — Claude Code Doesn't Index Your Codebase](https://vadim.blog/claude-code-no-indexing)). When the agent loop can recover the same call graph at need, pre-injecting it is dead weight.
-- **The anchor is treated as more authoritative than the source.** Adjacent work on graph-augmented localization warns that static-analysis output, surfaced unfiltered, "can introduce excessive and often irrelevant context, increasing the risk of LLM hallucination" ([Liu et al., 2025 — Issue Localization via LLM-Driven Iterative Code Graph Searching](https://arxiv.org/abs/2503.22424)). Keep anchors small and relevance-ranked, not exhaustive dumps.
+- Heavy metaprogramming codebases. Rails `method_missing`, Python metaclasses, JavaScript proxies, macro-heavy Rust — the static call graph diverges from runtime dispatch. The anchor becomes a confident-looking lie ([repository map pattern](repository-map-pattern.md)).
+- Small codebases. Under ~20 files the agent can read source directly. The anchor adds tokens without surfacing anything the agent could not see in raw form.
+- Very large monorepos with high churn. The anchor either does not fit the budget or goes stale before the session completes. Either way the determinism benefit collapses, and the failure mode is silent.
+- Single-shot tasks where reproducibility is irrelevant. The headline benefit is run-to-run stability. If you run once and ship, the 10% token premium is dead weight.
+- Strong agent with a good search tool. Claude Code deliberately skips indexing because early RAG experiments showed agentic search outperformed pre-built indexes for its harness ([Vadim, 2026 — Claude Code Doesn't Index Your Codebase](https://vadim.blog/claude-code-no-indexing)). When the agent loop can recover the same call graph at need, pre-injecting it is dead weight.
+- The anchor is treated as more authoritative than the source. Adjacent work on graph-augmented localization warns that static-analysis output, surfaced unfiltered, "can introduce excessive and often irrelevant context, increasing the risk of LLM hallucination" ([Liu et al., 2025 — Issue Localization via LLM-Driven Iterative Code Graph Searching](https://arxiv.org/abs/2503.22424)). Keep anchors small and relevance-ranked, not exhaustive dumps.
 
 ## Example
 
 A medium-sized Python service has a router (`routes/upload.py`) that delegates through middleware and into a domain service. Without anchoring, the agent grep-walks: it finds `upload_handler`, reads the file, greps for `auth`, finds three candidates, opens the wrong one half the time across runs.
 
-With anchoring, the source is rendered with a comment header derived from a tree-sitter call-graph pass:
+With anchoring, the build renders the source with a comment header derived from a tree-sitter call-graph pass:
 
 ```python
 # CALL-GRAPH
@@ -97,7 +97,7 @@ def upload_handler(request: Request) -> Response:
 
 Across ten reruns of the task "add a rate limit to the upload endpoint," the anchored agent opens the same files in the same order on every run; the unanchored agent picks two different middleware files about half the time. The accuracy gain on the resulting patch is small (+2–3 pp on benchmark proxies), but the trajectory diff between runs collapses to near zero — which is what an audit, an eval, or a replay-based regression check actually needs ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)).
 
-The comment header is regenerated by the build, not hand-maintained. Stale anchors are the silent failure mode; treat the anchor like generated code — never hand-edit, always regenerate from current source.
+The build regenerates the comment header. You do not hand-maintain it. Stale anchors are the silent failure mode, so treat the anchor like generated code: never hand-edit, always regenerate from current source.
 
 ## Key Takeaways
 

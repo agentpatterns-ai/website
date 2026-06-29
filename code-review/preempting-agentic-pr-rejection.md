@@ -17,9 +17,9 @@ maturity: emerging
 
 > A 14-reason rejection taxonomy explains why 46% of agentic fix PRs fail, and only implementation and CI categories respond to preemption prompts.
 
-## The Rejection Taxonomy
+## The rejection taxonomy
 
-Across 3,225 fix pull requests from Copilot, Devin, Cursor, and Claude in the AIDev dataset, **46.41% were rejected**; a qualitative two-rater study of a representative 306-PR sample (95% CI, Cohen's κ = 0.605) organizes the reasons into four categories and 14 specific causes ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)).
+Across 3,225 fix pull requests from Copilot, Devin, Cursor, and Claude in the AIDev dataset, 46.41% were rejected. A qualitative two-rater study of a representative 306-PR sample (95% CI, Cohen's κ = 0.605) sorts the reasons into four categories and 14 specific causes ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)).
 
 | Category | Share of sample | Specific reasons (share of sample) |
 |----------|-----------------|------------------------------------|
@@ -29,40 +29,40 @@ Across 3,225 fix pull requests from Copilot, Devin, Cursor, and Claude in the AI
 | Technical Issues | 7.2% | CI failure 6.9%, Breaking change 0.3% |
 | Unclassified | 49.3% | No explicit reviewer rationale in the PR thread |
 
-The unclassified bucket is large because rejected agent-authored PRs frequently lack reviewer feedback — a companion study of 654 rejected PRs across five agents finds **67.9% of rejections carry no explicit reviewer comment** ([arXiv:2602.04226](https://arxiv.org/abs/2602.04226)).
+The unclassified bucket is large because rejected agent-authored PRs often lack reviewer feedback. A companion study of 654 rejected PRs across five agents finds that 67.9% of rejections carry no explicit reviewer comment ([arXiv:2602.04226](https://arxiv.org/abs/2602.04226)).
 
-## What the Categories Mean for Preemption
+## What the categories mean for preemption
 
-The four categories have different causal roots, so preemption prompts only move some of them. The paper recommends three concrete practices, each targeting a specific bucket ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)):
+The four categories have different causal roots, so preemption prompts only move some of them. The paper recommends three practices, each targeting a specific bucket ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)):
 
-1. **Approach hints and do-not constraints in the agent instruction file** (e.g., `.github/copilot-instructions.md`, `AGENTS.md`) — encode the team's implicit conventions reviewers would otherwise enforce. Targets **Implementation Issues**.
-2. **CI validation instructions** — tell the agent how to run tests and confirm the fix without introducing breaking changes. Targets **Technical Issues**.
-3. **Task prioritization before dispatch** — filter out low-priority, superseded, or stale-on-arrival issues. Targets Low-priority and Superseded sub-reasons under **Relevance of Fix**.
+1. Approach hints and do-not constraints in the agent instruction file (for example, `.github/copilot-instructions.md`, `AGENTS.md`) encode the team's implicit conventions that reviewers would otherwise enforce. This targets Implementation Issues.
+2. CI validation instructions tell the agent how to run tests and confirm the fix without introducing breaking changes. This targets Technical Issues.
+3. Task prioritization before dispatch filters out low-priority, superseded, or stale-on-arrival issues. This targets the Low-priority and Superseded sub-reasons under Relevance of Fix.
 
-Inactivity (17.3% of the sample, the single largest cause) is a workflow-attention failure, not a fix-content failure — no prompt change reduces it. Provider-Related rejections (agent failure 7.5%, rate limit 1.0%) are infrastructure failures and prompt-immune.
+Inactivity (17.3% of the sample, the single largest cause) is a workflow-attention failure, not a fix-content failure, so no prompt change reduces it. Provider-Related rejections (agent failure 7.5%, rate limit 1.0%) are infrastructure failures, and no prompt addresses them.
 
-## Why It Works
+## Why it works
 
-Reviewers reject implementation-bucket fixes because the agent ignored unwritten team conventions — style rules, architectural choices, "we don't use library X here," test expectations — that the agent could not infer from issue text alone. Encoding those conventions in the instruction file gives the agent the same implicit knowledge a new human contributor would learn from a senior engineer's pre-PR review. The paper explicitly identifies this mechanism in its Implications section: developers should "provide guidance on how to perform the fix or provide guidance on what approaches are not acceptable in the agent instruction file" ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)). The mechanism aligns with the [Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md) anti-pattern — agents fail when the team's conventions are nowhere in the artifacts the agent reads.
+Reviewers reject implementation-bucket fixes because the agent ignored unwritten team conventions that it could not infer from the issue text alone: style rules, architectural choices, "we don't use library X here," and test expectations. Encoding those conventions in the instruction file gives the agent the same implicit knowledge a new human contributor would learn from a senior engineer's pre-PR review. The paper names this mechanism in its Implications section: developers should "provide guidance on how to perform the fix or provide guidance on what approaches are not acceptable in the agent instruction file" ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)). The mechanism matches the [Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md) anti-pattern: agents fail when the team's conventions are nowhere in the artifacts the agent reads.
 
-## When This Backfires
+## When this backfires
 
-Preemption prompts target only the Implementation and Technical-Issue buckets — roughly **17 percentage points** of the rejection rate. The remaining ~30 points either resist prompt intervention or require workflow-side changes:
+Preemption prompts target only the Implementation and Technical-Issue buckets, roughly 17 percentage points of the rejection rate. The remaining 30 or so points either resist prompt intervention or need workflow-side changes:
 
-- **Greenfield or single-purpose repos** without an established convention set — the instruction file has nothing to encode beyond generic advice, and the overhead of authoring it exceeds the rejection cost.
-- **Silent-reject reviewers**: 67.9% of rejected PRs carry no reviewer feedback ([arXiv:2602.04226](https://arxiv.org/abs/2602.04226)) — instructions cannot address rejection reasons the reviewer never states.
-- **Inactivity rejections** (17.3% of the sample): driven by reviewer attention and triage cadence, not by PR content; preemption shifts only the workflow side.
-- **Provider-side rejections** (agent failure 7.5%, rate limit 1.0%): no prompt can prevent the agent from going down or running out of quota.
-- **Low-priority and Superseded fixes**: a task-routing problem, not a fix-quality problem. The agent producing a better fix does not change the outcome — the issue should not have been dispatched to an agent at all. See [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) for the productivity-paradox framing.
-- **Different sampling, different headline**: a separate empirical study of fix-related PRs measures a **65% merge rate** (Codex 81.6%, Copilot 42.4%, Devin 42.9%) on a different sample ([arXiv:2602.00164](https://arxiv.org/pdf/2602.00164)). The 46.41% rejection figure is sample-specific to AIDev's fix-PR slice; treat the headline as a calibration target, not a universal constant.
+- Greenfield or single-purpose repos without an established convention set: the instruction file has nothing to encode beyond generic advice, and authoring it costs more than the rejections it prevents.
+- Silent-reject reviewers: 67.9% of rejected PRs carry no reviewer feedback ([arXiv:2602.04226](https://arxiv.org/abs/2602.04226)), so instructions cannot address rejection reasons the reviewer never states.
+- Inactivity rejections (17.3% of the sample): reviewer attention and triage cadence drive these, not PR content, so preemption shifts only the workflow side.
+- Provider-side rejections (agent failure 7.5%, rate limit 1.0%): no prompt can stop the agent from going down or running out of quota.
+- Low-priority and Superseded fixes: a task-routing problem, not a fix-quality problem. A better fix does not change the outcome, because the issue should not have gone to an agent at all. See [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) for the productivity-paradox framing.
+- Different sampling, different headline: a separate empirical study of fix-related PRs measures a 65% merge rate (Codex 81.6%, Copilot 42.4%, Devin 42.9%) on a different sample ([arXiv:2602.00164](https://arxiv.org/pdf/2602.00164)). The 46.41% rejection figure is specific to AIDev's fix-PR slice, so treat the headline as a calibration target, not a universal constant.
 
-The paper measures rejection *causes*, not the *causal effect* of any preemption intervention. There is no empirical measurement that adding `.github/copilot-instructions.md` reduces rejection rate by a quantified amount — the practice is well-motivated by the taxonomy but not yet validated by an A/B comparison.
+The paper measures rejection causes, not the causal effect of any preemption intervention. No study yet measures how much adding `.github/copilot-instructions.md` reduces the rejection rate. The taxonomy motivates the practice well, but an A/B comparison has not validated it.
 
 ## Example
 
 The paper's three preemption practices translate to a concrete artifact layout. GitHub Copilot's [repository custom instructions](https://docs.github.com/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot) file (`.github/copilot-instructions.md`) is the documented surface for the first practice, and the paper recommends it by name ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)).
 
-A preemption-shaped instruction file carries three load-bearing sections:
+A preemption-shaped instruction file carries three load-bearing sections.
 
 ```markdown
 ## Approach hints

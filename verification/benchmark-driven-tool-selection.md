@@ -18,17 +18,17 @@ maturity: established
 
 > Academic coding benchmarks overstate real-world capability. Benchmark-driven tool selection uses telemetry-derived suites like DevBench, where performance varies sharply by language and task type.
 
-## The Gap Between Benchmarks and Reality
+## The gap between benchmarks and reality
 
-Most code-generation benchmarks (HumanEval, MBPP, SWE-bench) use self-contained puzzles or curated repository tasks. [Source: [Evaluating Large Language Models Trained on Code](https://arxiv.org/abs/2107.03374)] Developers work differently: they complete partial functions mid-file, call unfamiliar APIs, and navigate multi-file dependencies. DevBench addresses this by deriving 1,800 evaluation instances from real developer telemetry across six languages and six task categories.
+Most code-generation benchmarks (HumanEval, MBPP, SWE-bench) use self-contained puzzles or curated repository tasks. [Source: [Evaluating Large Language Models Trained on Code](https://arxiv.org/abs/2107.03374)] Developers work differently. They complete partial functions mid-file, call unfamiliar APIs, and navigate multi-file dependencies. DevBench addresses this by deriving 1,800 evaluation instances from real developer telemetry across six languages and six task categories.
 
-The key finding: **models that rank similarly on synthetic benchmarks diverge significantly on realistic tasks.** A model that excels at Python API usage may underperform on C++ multi-file completions. A model that tops leaderboards on isolated function generation may struggle with contextual code that depends on surrounding scope. [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
+The main finding: models that rank similarly on synthetic benchmarks diverge sharply on realistic tasks. A model that excels at Python API usage may underperform on C++ multi-file completions. A model that tops leaderboards on isolated function generation may struggle with code that depends on surrounding scope. [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
 
-## What Realistic Benchmarks Reveal
+## What realistic benchmarks reveal
 
 ### Performance is language-specific
 
-Leading models (GPT-4o, Claude 4 Sonnet) outperform smaller alternatives on aggregate scores. But per-language breakdowns show the gap narrows or reverses on specific languages — TypeScript is consistently the hardest language, with most models scoring 20–30% lower than on other languages due to strict type-consistency requirements. Strong aggregate performance does not guarantee strength in every language: DeepSeek-V3, competitive overall, ranks near the bottom on C++. [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
+Leading models (GPT-4o, Claude 4 Sonnet) outperform smaller alternatives on aggregate scores. But per-language breakdowns show the gap narrows or reverses on specific languages. TypeScript is consistently the hardest language, with most models scoring 20 to 30% lower than on other languages because of strict type-consistency requirements. Strong aggregate performance does not guarantee strength in every language: DeepSeek-V3, competitive overall, ranks near the bottom on C++. [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
 
 ### Task type matters more than overall score
 
@@ -38,7 +38,7 @@ DevBench evaluates six task categories derived from what developers actually do:
 
 Models diverge most on tasks requiring understanding of large surrounding context — multi-file dependencies, project-wide conventions, imported types. This is where developers most need AI assistance and where [synthetic benchmarks](benchmark-contamination-eval-risk.md) provide the least signal.
 
-## Evaluation Strategy
+## Evaluation strategy
 
 ```mermaid
 flowchart LR
@@ -64,28 +64,28 @@ Never rely on aggregate cross-language scores. If your codebase is 80% TypeScrip
 
 Public benchmarks identify candidates; internal evaluation confirms them. Run 2-3 models against your actual codebase to catch training-data contamination and surface project-specific context gaps.
 
-## What DevBench Gets Right
+## What DevBench gets right
 
 DevBench's design choices map directly to evaluation best practices:
 
-| Design Choice | Why It Matters |
+| Design choice | Why it matters |
 |---|---|
 | Tasks from telemetry, not invention | Ecological validity — measures what developers actually need |
 | Six languages, six task types | Exposes language-specific and task-specific variation that aggregates hide |
 | Multi-metric evaluation (correctness + similarity + LLM-judge) | No single metric captures "useful" — functional correctness misses style, similarity misses logic |
 | Contamination resistance | Tasks derived from telemetry are harder to memorize than static benchmark suites |
 
-## When This Backfires
+## When this backfires
 
 Benchmark-driven selection fails or loses value under three conditions:
 
-- **Team lacks internal eval capacity**: Running models against real codebase PRs requires instrumented tooling, reviewer time, and repeatable test cases. Teams without this infrastructure treat public benchmark scores as final answers — restoring the original problem.
-- **Workload profile shifts post-selection**: If the dominant task type changes (e.g., completions to large-scale refactors), the chosen model may no longer fit. Revisit selection through the [eval-driven loop](../workflows/eval-driven-development.md) when language or task mix shifts.
-- **Benchmark data becomes contaminated**: Published benchmark suites become training targets once released. DevBench's contamination-resistant design mitigates this, but no public benchmark stays uncontaminated indefinitely. See [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md). [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
+- No internal eval capacity: running models against real codebase PRs needs instrumented tooling, reviewer time, and repeatable test cases. Teams without this infrastructure treat public benchmark scores as final answers, which restores the original problem.
+- Workload profile shifts after selection: if the dominant task type changes (for example, completions to large-scale refactors), the chosen model may no longer fit. Revisit selection through the [eval-driven loop](../workflows/eval-driven-development.md) when language or task mix shifts.
+- Benchmark data becomes contaminated: published benchmark suites become training targets once released. DevBench's contamination-resistant design reduces this, but no public benchmark stays uncontaminated indefinitely. See [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md). [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
 
-## Why It Works
+## Why it works
 
-Task-language slicing beats aggregate scoring because aggregate metrics obscure two orthogonal sources of variance: language-specific training coverage and task-specific capability. A model trained on more Python open-source code performs better on Python API usage regardless of general reasoning ability. Multi-file editing requires maintaining cross-file context across long token windows — architecturally distinct from single-function generation. Synthetic benchmarks collapse these dimensions into one score; realistic benchmarks expose each independently, letting teams weight the variance matching their workload.
+Task-language slicing beats aggregate scoring. Aggregate metrics hide two independent sources of variance: language-specific training coverage and task-specific capability. A model trained on more Python open-source code performs better on Python API usage, regardless of general reasoning ability. Multi-file editing needs cross-file context held across long token windows, which is architecturally distinct from single-function generation. Synthetic benchmarks collapse these dimensions into one score. Realistic benchmarks expose each one independently, so teams can weight the variance that matches their workload.
 
 ## Key Takeaways
 
@@ -99,15 +99,15 @@ Task-language slicing beats aggregate scoring because aggregate metrics obscure 
 
 A backend team writing 80% TypeScript with frequent multi-file refactors evaluates three models for their IDE copilot.
 
-**Step 1 — Profile workload**: Git history shows 45% of AI-assisted edits are multi-file refactors, 30% are API usage completions, and 25% are test generation.
+Step 1, profile workload: Git history shows 45% of AI-assisted edits are multi-file refactors, 30% are API usage completions, and 25% are test generation.
 
-**Step 2 — Select benchmark**: The team filters DevBench results to the "multi-file completion" and "API usage" task categories, ignoring "code purpose understanding" and single-function generation scores.
+Step 2, select benchmark: The team filters DevBench results to the "multi-file completion" and "API usage" task categories, ignoring "code purpose understanding" and single-function generation scores.
 
-**Step 3 — Filter by language**: They extract TypeScript-only results. Model A leads aggregate scores but ranks third on TypeScript multi-file tasks. Model B, mid-pack overall, ranks first on that slice.
+Step 3, filter by language: They extract TypeScript-only results. Model A leads aggregate scores but ranks third on TypeScript multi-file tasks. Model B, mid-pack overall, ranks first on that slice.
 
-**Step 4 — Internal eval**: The team runs Models A and B against 20 recent PRs from their codebase, measuring functional correctness and style match. Model B produces fewer cross-module import errors and follows the project's barrel-export convention more consistently.
+Step 4, internal eval: The team runs Models A and B against 20 recent PRs from their codebase, measuring functional correctness and style match. Model B produces fewer cross-module import errors and follows the project's barrel-export convention more consistently.
 
-**Result**: The team selects Model B despite its lower aggregate ranking — the task-language slice that matches their workload is the only score that matters.
+Result: The team selects Model B despite its lower aggregate ranking — the task-language slice that matches their workload is the only score that matters.
 
 ## Related
 

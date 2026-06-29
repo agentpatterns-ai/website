@@ -15,26 +15,26 @@ status: current
 
 > The April 2026 OpenAI Agents SDK update ships three primitives — controlled sandboxes, an inspectable harness, and configurable memory — in one Python library.
 
-## What Shipped
+## What shipped
 
-OpenAI [released](https://openai.com/index/the-next-evolution-of-the-agents-sdk/) the Agents SDK update on 2026-04-15, consolidating three primitives teams previously assembled themselves:
+OpenAI [released the Agents SDK update](https://openai.com/index/the-next-evolution-of-the-agents-sdk/) on 2026-04-15. It consolidates three primitives that teams previously assembled themselves:
 
-1. A **model-native harness** — the control plane around the model
-2. **Native sandbox execution** — a compute plane for model-directed work
-3. **Configurable memory** — two systems (session and sandbox)
+1. A model-native harness — the control plane around the model
+2. Native sandbox execution — a compute plane for model-directed work
+3. Configurable memory — two systems, session and sandbox
 
 Python-first; TypeScript is planned.
 
-## Harness / Compute Separation
+## Harness and compute separation
 
-The SDK separates a persistent, trusted **harness** from an ephemeral, untrusted **compute** environment ([concepts guide](https://openai.github.io/openai-agents-python/sandbox/guide/)):
+The SDK separates a persistent, trusted harness from an ephemeral, untrusted compute environment ([concepts guide](https://openai.github.io/openai-agents-python/sandbox/guide/)):
 
 | Plane | Owns |
 |-------|------|
 | Harness | Agent loop, model calls, tool routing, handoffs, approvals, tracing, recovery, run state |
 | Compute | File reads/writes, command execution, dependency installs, mounted storage, exposed ports, state snapshots |
 
-Colocation would let model-generated shell commands read loop credentials. Separation contains blast radius and enables snapshot/rehydrate: when a sandbox fails or expires, the SDK [restores state in a fresh container from the last checkpoint](https://openai.com/index/the-next-evolution-of-the-agents-sdk/).
+Colocation would let model-generated shell commands read loop credentials. Separation contains the blast radius and enables snapshot and rehydrate. When a sandbox fails or expires, the SDK [restores state in a fresh container from the last checkpoint](https://openai.com/index/the-next-evolution-of-the-agents-sdk/).
 
 ```mermaid
 graph LR
@@ -44,9 +44,9 @@ graph LR
     Sandbox -.->|Untrusted execution:<br/>model-generated code| Sandbox
 ```
 
-## Sandbox Primitives
+## Sandbox primitives
 
-Sandbox execution is authored through [`SandboxAgent`, `Runner.run`, and `RunConfig`](https://developers.openai.com/api/docs/guides/agents/sandboxes). `SandboxAgent` keeps the standard agent surface (instructions, tools, handoffs, `mcp_servers`, guardrails, hooks) and adds a `Manifest` plus `LocalDir` mounts declaring workspace file access.
+You author sandbox execution through [`SandboxAgent`, `Runner.run`, and `RunConfig`](https://developers.openai.com/api/docs/guides/agents/sandboxes). `SandboxAgent` keeps the standard agent surface (instructions, tools, handoffs, `mcp_servers`, guardrails, hooks) and adds a `Manifest` plus `LocalDir` mounts that declare workspace file access.
 
 Sandbox clients are pluggable ([reference](https://openai.github.io/openai-agents-python/sandbox/clients/)):
 
@@ -56,11 +56,11 @@ Sandbox clients are pluggable ([reference](https://openai.github.io/openai-agent
 
 The provider lives in `RunConfig`, not the agent — [swap clients per environment](https://developers.openai.com/api/docs/guides/agents/sandboxes) while the agent, manifest, and capabilities stay stable.
 
-**Isolation caveat**: partners ship containers (Modal uses gVisor). For cross-tenant threat models, [container isolation is weaker than Firecracker microVMs](https://northflank.com/blog/best-code-execution-sandbox-for-ai-agents) — see [Subprocess and PID-namespace sandboxing](../security/subprocess-pid-namespace-sandboxing.md).
+Isolation caveat: partners ship containers, and Modal uses gVisor. For cross-tenant threat models, [container isolation is weaker than Firecracker microVMs](https://northflank.com/blog/best-code-execution-sandbox-for-ai-agents) — see [Subprocess and PID-namespace sandboxing](../security/subprocess-pid-namespace-sandboxing.md).
 
-## Harness Primitives
+## Harness primitives
 
-The harness standardises primitives previously bespoke per-agent ([Help Net Security](https://www.helpnetsecurity.com/2026/04/16/openai-agents-sdk-harness-and-sandbox-update/)):
+The harness standardizes primitives that were previously bespoke per agent ([Help Net Security](https://www.helpnetsecurity.com/2026/04/16/openai-agents-sdk-harness-and-sandbox-update/)):
 
 - Tool use via [MCP](../standards/mcp-protocol.md)
 - Progressive disclosure via [skills](../standards/agent-skills-standard.md)
@@ -69,13 +69,13 @@ The harness standardises primitives previously bespoke per-agent ([Help Net Secu
 - File edits via an `apply_patch` tool
 - Compaction for long-running runs
 
-Loop customisation is coarse. `Runner` manages turns, tools, guardrails, handoffs, and sessions — teams that [want full loop control](https://ai-sdk.dev/docs/agents/loop-control) call the Responses API directly.
+Loop customization is coarse. `Runner` manages turns, tools, guardrails, handoffs, and sessions. Teams that [want full loop control](https://ai-sdk.dev/docs/agents/loop-control) call the Responses API directly.
 
-## Memory: Two Systems
+## Memory: two systems
 
-The SDK exposes **two memory systems** with distinct lifecycles. Confusing them is the most common mistake.
+The SDK exposes two memory systems with distinct lifecycles. Confusing them is the most common mistake.
 
-### Session Memory
+### Session memory
 
 Conversation history with an explicit API ([sessions guide](https://openai.github.io/openai-agents-python/sessions/)):
 
@@ -94,7 +94,7 @@ After a non-streaming run, `add_items()` persists user input plus model outputs 
 | `AdvancedSQLiteSession` | Branching, analytics, structured queries |
 | [`EncryptedSession`](https://openai.github.io/openai-agents-python/sessions/encrypted_session/) | At-rest encryption wrapper |
 
-### Sandbox Memory
+### Sandbox memory
 
 Filesystem artifacts distilled from prior runs ([agent memory guide](https://openai.github.io/openai-agents-python/sandbox/memory/)). The workspace stores:
 
@@ -107,7 +107,7 @@ The agent searches `MEMORY.md` for keywords and opens deeper rollout summaries o
 
 Neither system replaces a dedicated long-term vector or graph store for cross-agent knowledge — pair with [agent memory patterns](../agent-design/agent-memory-patterns.md) for scope beyond a workspace.
 
-## When to Pick the SDK
+## When to pick the SDK
 
 Pick the SDK when:
 

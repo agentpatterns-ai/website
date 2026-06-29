@@ -17,9 +17,9 @@ maturity: emerging
 
 > AI-generated files get about half the commit frequency of human-authored ones, and their changes skew toward features over bug fixes — a distinct maintenance footprint.
 
-## The Evidence
+## The evidence
 
-An empirical study of 508 AI-generated files and 1,543 modifying commits across 100 GitHub repositories in the AIDev dataset measured how AI-generated and human-authored files diverge after merge ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)). Three asymmetries appear in a file's first six months.
+An empirical study measured how AI-generated and human-authored files diverge after merge. It tracked 508 AI-generated files and 1,543 modifying commits across 100 GitHub repositories in the AIDev dataset ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)). Three asymmetries appear in a file's first six months.
 
 ### Frequency
 
@@ -44,25 +44,25 @@ For AI-generated files, feature additions lead. For human-authored files, bug fi
 
 Humans perform 83.21% of maintenance commits on AI-generated files. On human-authored files the share is 92.98%. The agent that wrote the file rarely returns to maintain it ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)).
 
-## Two Readings of the Same Data
+## Two readings of the same data
 
-The authors flag the interpretive ambiguity directly: lower modification rates "might suggest superior code quality, yet developers may avoid modifying AI-generated code due to difficulty in comprehending it" ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)).
+The authors flag the ambiguity directly: lower modification rates "might suggest superior code quality, yet developers may avoid modifying AI-generated code due to difficulty in comprehending it" ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)).
 
 The second reading has separate support. A study of 302,600 AI-authored commits across 6,299 repositories found 22.7% of AI-introduced issues survive to the repository's latest version, with code smells accounting for 89.3% ([arXiv:2603.28592](https://arxiv.org/abs/2603.28592)). Lower commit volume is not the same as fewer defects.
 
-## Why the Mix Shifts to Features
+## Why the mix shifts to features
 
-The Sawada et al. paper offers one interpretation: "generated files may lack sufficient coverage of requirements" — agents under-deliver on scope, leaving humans to add the missing capability after merge ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)). This fits the broader pattern that agents skew simpler — Codex-assisted PRs change cyclomatic complexity 9.1% of the time versus 23.3% for human PRs ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
+The Sawada et al. paper offers one reading: "generated files may lack sufficient coverage of requirements" — agents under-deliver on scope, leaving humans to add the missing capability after merge ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)). This fits the wider pattern that agents skew simpler. Codex-assisted PRs change cyclomatic complexity 9.1% of the time, against 23.3% for human PRs ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
 
-## Practical Implications
+## Practical implications
 
-**Treat AI-authored regions as a distinct maintenance category.** The 83/17 split means the team that ships an AI-authored file maintains it, rarely with help from the agent that wrote it.
+Treat AI-authored regions as a distinct maintenance category. The 83/17 split means the team that ships an AI-authored file maintains it, rarely with help from the agent that wrote it.
 
-**Do not read low commit frequency as a quality signal.** Two mechanisms produce the same observation; pair the metric with defect-survival or comprehension-test scores before treating stability as cleanliness.
+Do not read low commit frequency as a quality signal. Two mechanisms produce the same observation. Pair the metric with defect-survival or comprehension-test scores before you treat stability as cleanliness.
 
-**Audit for missing scope, not just bugs.** Feature additions dominate post-merge maintenance, so ask "what did the agent leave out?" rather than "what did it get wrong?"
+Audit for missing scope, not just bugs. Feature additions dominate post-merge maintenance, so ask "what did the agent leave out?" rather than "what did it get wrong?"
 
-**Modification timing tracks organizational factors.** Predicting *when* AI-authored code gets touched scores Macro F1 = 0.285 on textual features alone — review depth, ownership, and comprehension drive timing more than code shape ([arXiv:2601.16809](https://arxiv.org/abs/2601.16809)).
+Modification timing tracks organizational factors. Predicting when AI-authored code gets touched scores Macro F1 = 0.285 on textual features alone. Review depth, ownership, and comprehension shape timing more than code structure does ([arXiv:2601.16809](https://arxiv.org/abs/2601.16809)).
 
 ## Key Takeaways
 
@@ -72,15 +72,15 @@ The Sawada et al. paper offers one interpretation: "generated files may lack suf
 - Lower modification rates have two competing explanations — better quality or comprehension-driven avoidance — and the data does not distinguish them
 - Feature-addition dominance suggests AI-generated files under-cover requirements at merge time
 
-## When This Pattern Doesn't Apply
+## When this pattern does not apply
 
-The 6-month observation window and the 100-repository AIDev sample bound generalizability. The asymmetries are unlikely to hold in three contexts:
+The 6-month observation window and the 100-repository AIDev sample limit how far these findings generalize. The asymmetries are unlikely to hold in three contexts:
 
-- **Throwaway scaffolding**: prototypes, spike branches, and generated boilerplate that no one was going to maintain regardless of authorship
-- **Highly specified ticket workflows**: narrow, fully specified tasks (e.g. "implement this DTO") where low post-merge modification reflects spec stability, not avoidance or quality
-- **Closed-loop AI authoring and maintenance**: pipelines where an agent both writes and maintains code (e.g. agentic refactor jobs on cron) collapse the human-vs-agent maintenance split and invalidate the 83/17 ratio
+- Throwaway scaffolding: prototypes, spike branches, and generated boilerplate that no one was going to maintain regardless of authorship
+- Highly specified ticket workflows: narrow, fully specified tasks (for example, "implement this DTO") where low post-merge modification reflects spec stability, not avoidance or quality
+- Closed-loop AI authoring and maintenance: pipelines where an agent both writes and maintains code (for example, agentic refactor jobs on cron) collapse the human-versus-agent maintenance split and invalidate the 83/17 ratio
 
-One caveat on that last context: routing maintenance back to agents does not make the lower-volume reading safe. Agents introduce *fewer* breaking changes when generating new code (3.45% vs 7.40% for humans) but more during maintenance — 6.72% on refactoring, 9.35% on chore changes — a "Confidence Trap" where highly confident agentic PRs still break callers ([arXiv:2603.27524](https://arxiv.org/abs/2603.27524)).
+One caveat on that last context: routing maintenance back to agents does not make the lower-volume reading safe. Agents introduce fewer breaking changes when generating new code (3.45% against 7.40% for humans) but more during maintenance — 6.72% on refactoring, 9.35% on chore changes — a "Confidence Trap" where highly confident agentic PRs still break callers ([arXiv:2603.27524](https://arxiv.org/abs/2603.27524)).
 
 ## Related
 

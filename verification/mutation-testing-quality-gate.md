@@ -17,21 +17,21 @@ maturity: established
 
 > Coverage proves a line ran; mutation testing proves the suite would notice a regression. On LLM-generated tests, surviving mutants expose assertions that catch nothing.
 
-Coding agents now produce more tests per feature than humans, often with high coverage and zero failures on first generation. The [Test Homogenization Trap](../anti-patterns/test-homogenization-trap.md) shows why that signal is misleading: LLM-generated tests cluster around the same blind spots as the model's code, so green suites overstate correctness. Mutation testing forces each test to prove it would catch a regression — a behavioural claim coverage cannot make.
+Coding agents now produce more tests per feature than humans, often with high coverage and zero failures on first generation. The [Test Homogenization Trap](../anti-patterns/test-homogenization-trap.md) shows why that signal is misleading: LLM-generated tests cluster around the same blind spots as the model's code, so green suites overstate correctness. Mutation testing forces each test to prove it would catch a regression — a behavioral claim coverage cannot make.
 
-## Mutation Testing Primer
+## Mutation testing primer
 
-A **mutant** is a small syntactic change to the source — a flipped relational operator, an inverted boundary, a removed call. A test **kills** the mutant when it fails against the mutated code. The **mutation score** is `killed / (total − equivalent)`. **Equivalent mutants** change syntax but preserve behaviour (`i <= n − 1` vs `i < n`); they cannot be killed and bias the score downward.
+A mutant is a small syntactic change to the source — a flipped relational operator, an inverted boundary, a removed call. A test kills the mutant when it fails against the mutated code. The mutation score is `killed / (total − equivalent)`. Equivalent mutants change syntax but preserve behavior (`i <= n − 1` versus `i < n`); they cannot be killed and they bias the score downward.
 
 Coverage records that a line was executed. Mutation testing records whether the suite would notice a defect on that line. A test that touches a line without an assertion strong enough to fail when the line changes leaves the mutant alive.
 
-## Two Applications With Agent-Written Tests
+## Two applications with agent-written tests
 
-**Discriminate.** Surviving mutants identify which tests are ceremonial. A test that runs against a mutated code path but does not fail is asserting nothing the mutation invalidates — a candidate for removal or strengthening. Without this signal, high coverage hides weak assertions indefinitely, the kind of surface-metric gaming [anti-reward-hacking](anti-reward-hacking.md) rubrics are built to resist.
+Discriminate. Surviving mutants identify which tests are ceremonial. A test that runs against a mutated code path but does not fail is asserting nothing the mutation invalidates — a candidate for removal or strengthening. Without this signal, high coverage hides weak assertions indefinitely, the kind of surface-metric gaming [anti-reward-hacking](anti-reward-hacking.md) rubrics are built to resist.
 
-**Generate.** Surviving mutants name the failure modes the suite misses. Feeding them back into the LLM as prompt context produces tests that target those gaps. [Mutation-feedback prompting in MUTGEN reaches 89.5% mutation score on HumanEval-Java, significantly outperforming EvoSuite and vanilla prompt-based generation — the gain comes from prompt augmentation alone](https://arxiv.org/abs/2506.02954). The broader literature on LLM-based test generation is catalogued in the [LLM4SoftwareTesting survey](https://github.com/LLM-Testing/LLM4SoftwareTesting), which indexes the unit-test-generation and mutation-testing work this loop draws on.
+Generate. Surviving mutants name the failure modes the suite misses. Feeding them back into the LLM as prompt context produces tests that target those gaps. [Mutation-feedback prompting in MUTGEN reaches 89.5% mutation score on HumanEval-Java, significantly outperforming EvoSuite and vanilla prompt-based generation — the gain comes from prompt augmentation alone](https://arxiv.org/abs/2506.02954). The broader literature on LLM-based test generation is catalogued in the [LLM4SoftwareTesting survey](https://github.com/LLM-Testing/LLM4SoftwareTesting), which indexes the unit-test-generation and mutation-testing work this loop draws on.
 
-## The Loop
+## The loop
 
 ```mermaid
 graph TD
@@ -46,19 +46,19 @@ graph TD
 
 [MUTGEN reports the kill rate plateaus around four iterations](https://arxiv.org/abs/2506.02954); further loops produce diminishing returns and start exercising equivalent mutants the filter missed.
 
-## Production Existence Proof — Meta ACH
+## Production existence proof: Meta ACH
 
 Meta's Automated Compliance Hardening applied this loop across 7 platforms and [10,795 Android Kotlin classes, generating 9,095 mutants and 571 hardening tests; engineers accepted 73% of the generated tests, with 36% judged privacy-relevant](https://arxiv.org/abs/2501.12862). Equivalent-mutant detection is the central practical bottleneck: ACH uses a separate LLM agent for the classification, [boosting mutant precision from 0.79 to 0.95 with preprocessing](https://arxiv.org/abs/2501.12862). The abstract notes ACH can harden code "against any type of regression" — privacy was the first deployment, not the constraint.
 
-## When This Backfires
+## When this backfires
 
 The technique is most valuable on production code with rigorous suites and selective or LLM-filtered mutation generation. The conditions where the cost outruns the signal:
 
-- **Throwaway scripts and prototypes** — code with no production SLA. Mutation tooling cost (CI minutes, equivalent-mutant triage, prompt iteration) exceeds the regression risk. The same condition is called out in the [Test Homogenization Trap](../anti-patterns/test-homogenization-trap.md#when-this-backfires).
-- **Pure functions over small input domains** — a comparator, a unit converter. Example-based tests can essentially exhaust the input space; mutation operators add little signal because human-discoverable bugs map directly onto the example assertions.
-- **Per-PR gating without selective mutation** — full mutation runs on medium codebases take hours, incompatible with PR-blocking gates; an industrial case study at Zenseact found mutation testing best applied at commit level only with selective tooling and trend visualisation, not raw scoring. [Source: [Mutation Testing in CI: An Exploratory Industrial Case Study (IEEE 2023)](https://ieeexplore.ieee.org/document/10132170/)] Without learned operator selection or incremental analysis, mutation testing belongs nightly or post-merge — not on the merge path.
-- **No equivalent-mutant filter** — raw mutation output runs at >50% survival rate on rigorous test suites, including at Facebook scale. [In a Facebook industrial study, only ~50% of surveyed developers said they would act on the surfaced mutants](https://arxiv.org/abs/2010.13464); without a classifier filtering equivalents, surfaced "gaps" are dominated by noise and developers stop acting on them.
-- **One model generates tests *and* judges equivalence** — error clustering re-enters by the back door. The same blind spots described in the homogenization trap propagate to mutant triage; prefer a different model, a learned classifier, or human review for equivalence.
+- Throwaway scripts and prototypes — code with no production SLA. Mutation tooling cost (CI minutes, equivalent-mutant triage, prompt iteration) exceeds the regression risk. The same condition is called out in the [Test Homogenization Trap](../anti-patterns/test-homogenization-trap.md#when-this-backfires).
+- Pure functions over small input domains — a comparator, a unit converter. Example-based tests can essentially exhaust the input space; mutation operators add little signal because human-discoverable bugs map directly onto the example assertions.
+- Per-PR gating without selective mutation — full mutation runs on medium codebases take hours, incompatible with PR-blocking gates; an industrial case study at Zenseact found mutation testing best applied at commit level only with selective tooling and trend visualization, not raw scoring. [Source: [Mutation Testing in CI: An Exploratory Industrial Case Study (IEEE 2023)](https://ieeexplore.ieee.org/document/10132170/)] Without learned operator selection or incremental analysis, mutation testing belongs nightly or post-merge — not on the merge path.
+- No equivalent-mutant filter — raw mutation output runs at >50% survival rate on rigorous test suites, including at Facebook scale. [In a Facebook industrial study, only ~50% of surveyed developers said they would act on the surfaced mutants](https://arxiv.org/abs/2010.13464); without a classifier filtering equivalents, surfaced "gaps" are dominated by noise and developers stop acting on them.
+- One model generates tests and judges equivalence — error clustering re-enters by the back door. The same blind spots described in the homogenization trap propagate to mutant triage; prefer a different model, a learned classifier, or human review for equivalence.
 
 ## Example
 

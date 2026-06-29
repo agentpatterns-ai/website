@@ -17,23 +17,23 @@ maturity: established
 
 > A convenience loop forms when AI produces better code in typed codebases, driving adoption that improves training data and reshapes technology selection.
 
-## The Convenience Loop
+## The convenience loop
 
-Convenience loops form when ease-of-use creates preference that, at scale, reshapes ecosystems. In AI-assisted development ([GitHub blog](https://github.blog/ai-and-ml/generative-ai/how-ai-is-reshaping-developer-choice-and-octoverse-data-proves-it/)):
+Convenience loops form when ease of use creates a preference that, at scale, reshapes whole markets. In AI-assisted development ([GitHub blog](https://github.blog/ai-and-ml/generative-ai/how-ai-is-reshaping-developer-choice-and-octoverse-data-proves-it/)):
 
 1. AI tools generate more reliable code in typed languages
 2. You experience fewer corrections in typed codebases
 3. You prefer (and adopt) typed languages
-4. Typed language ecosystems grow, producing more training data
+4. Typed languages grow, producing more training data
 5. AI tools improve further on typed code
 
 TypeScript overtook Python and JavaScript as GitHub's most-used language in August 2025, with 66% year-over-year growth ([GitHub blog](https://github.blog/ai-and-ml/generative-ai/how-ai-is-reshaping-developer-choice-and-octoverse-data-proves-it/)). Eighty percent of new GitHub developers use Copilot within their first week ([GitHub blog](https://github.blog/ai-and-ml/generative-ai/how-ai-is-reshaping-developer-choice-and-octoverse-data-proves-it/)). AI-assisted development is the default workflow for new GitHub contributors, not an opt-in.
 
-## Why Types Reduce AI Error Surfaces
+## Why types reduce AI error surfaces
 
 A 2025 study found that 94% of LLM-generated compilation errors were type-check failures ([GitHub blog, citing arxiv.org/pdf/2504.09246](https://github.blog/ai-and-ml/llms/why-ai-is-pushing-developers-toward-typed-languages/)). Types catch the exact error class AI introduces most often.
 
-Types function as implicit constraints on generation. Declaring `x: string` eliminates an entire class of invalid operations. Type definitions, interfaces, and schemas act as precise agent instructions — a contract the agent must satisfy rather than a description it might misinterpret.
+Types act as implicit constraints on generation. Declaring `x: string` rules out an entire class of invalid operations. Type definitions, interfaces, and schemas act as precise agent instructions — a contract the agent must satisfy rather than a description it might misinterpret.
 
 Type errors become [agent backpressure](../agent-design/agent-backpressure.md) — immediate, machine-readable feedback the agent can self-correct against without human intervention. The agent runs the compiler, reads the error, fixes the code, and re-runs. Untyped codebases surface equivalent errors only at runtime or during human review.
 
@@ -47,23 +47,23 @@ The pattern is "type systems reduce AI error surfaces," not "use TypeScript." Ot
 
 Python type hints, PHP typed properties, and Ruby's RBS signatures provide the same constraints. Adding annotations to function signatures and data structures captures most of the benefit without a language switch ([GitHub blog](https://github.blog/ai-and-ml/llms/why-ai-is-pushing-developers-toward-typed-languages/)).
 
-## The Economics Changed
+## The economics changed
 
 For decades, type annotations traded iteration speed for correctness guarantees — a worthwhile exchange for large teams but friction for solo or early-stage work. AI agents invert this: agents absorb the annotation cost while types still provide verification benefits.
 
 Simon Willison reversed his long-held position in February 2026: "If a coding agent is doing all that typing for me, the benefits of explicitly defining all of those types are suddenly much more attractive" ([simonwillison.net](https://simonwillison.net/2026/Feb/18/typing/)).
 
-## Technology Selection Implications
+## Technology selection implications
 
 The convenience loop is a technology strategy concern. When evaluating your stack:
 
-- **AI-friendliness as a criterion.** When two technologies are otherwise equivalent, prefer the one with stronger type support.
-- **Gradual adoption.** Start with function signatures, data transfer objects, and API boundaries.
-- **Architecture before generation.** AI "is fantastic at following established patterns, but struggles to invent them cleanly" ([GitHub blog](https://github.blog/ai-and-ml/generative-ai/how-ai-is-reshaping-developer-choice-and-octoverse-data-proves-it/)). Establish typed interfaces first, then let agents generate conforming implementations.
+- AI-friendliness as a criterion: when two technologies are otherwise equivalent, prefer the one with stronger type support.
+- Gradual adoption: start with function signatures, data transfer objects, and API boundaries.
+- Architecture before generation: AI "is fantastic at following established patterns, but struggles to invent them cleanly" ([GitHub blog](https://github.blog/ai-and-ml/generative-ai/how-ai-is-reshaping-developer-choice-and-octoverse-data-proves-it/)). Establish typed interfaces first, then let agents generate conforming implementations.
 
 ## Example
 
-**Before — untyped Python function:**
+Before — untyped Python function:
 
 ```python
 def process_order(order, discount):
@@ -73,7 +73,7 @@ def process_order(order, discount):
 
 An AI agent generating callers may pass a string where a float is expected. Errors surface only at runtime.
 
-**After — typed Python function:**
+After — typed Python function:
 
 ```python
 from dataclasses import dataclass
@@ -90,14 +90,14 @@ def process_order(order: Order, discount: float) -> dict[str, float | str]:
 
 Now `mypy` or Pyright flags invalid calls immediately. The agent reads the error (`Argument of type "str" cannot be assigned to parameter "discount" of type "float"`) and self-corrects — no human review required. This is type-check backpressure in practice.
 
-## When This Backfires
+## When this backfires
 
 The convenience loop does not apply uniformly:
 
-- **Early-stage prototypes.** Adding types upfront in a fast-changing domain locks in unstable abstractions. The annotation cost returns before the codebase stabilizes.
-- **Dynamic-typing-native ecosystems.** Python data-science workflows (NumPy, pandas, matplotlib) often rely on duck typing. Strict type annotations fight the library conventions and generate noisy mypy errors on legitimate usage.
-- **Legacy codebases without CI.** Retrofitting types onto an untyped codebase is a large batch change. If type errors can't gate merges (no CI type-check step), they provide [no backpressure](../agent-design/agent-backpressure.md) — just maintenance overhead.
-- **Agents that don't self-correct.** The backpressure loop requires the agent to run the type checker, read the error, and re-attempt. Agents used in single-shot mode without tool access don't benefit from the feedback cycle.
+- Early-stage prototypes: adding types upfront in a fast-changing domain locks in unstable abstractions. The annotation cost returns before the codebase stabilizes.
+- Dynamic-typing-native stacks: Python data-science workflows (NumPy, pandas, matplotlib) often rely on duck typing. Strict type annotations fight the library conventions and generate noisy mypy errors on legitimate usage.
+- Legacy codebases without CI: retrofitting types onto an untyped codebase is a large batch change. If type errors cannot gate merges (no CI type-check step), they provide [no backpressure](../agent-design/agent-backpressure.md) — just maintenance overhead.
+- Agents that do not self-correct: the backpressure loop requires the agent to run the type checker, read the error, and re-attempt. Agents used in single-shot mode without tool access do not benefit from the feedback cycle.
 
 Types are also not the whole story. They catch a specific error class — they do not close the semantic gap between an LLM's statistical output and a program's intended behavior, which needs formal verification and structured representations beyond type annotations ([Position Paper: Programming Language Techniques for Bridging LLM Code Generation Semantic Gaps, arxiv 2507.09135](https://arxiv.org/abs/2507.09135)). Simpler-syntax dynamic languages can also yield fewer raw generation errors, since verbose type declarations offer more surface for small mistakes. Treat type support as one signal among several, not a guarantee of correctness.
 

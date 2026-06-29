@@ -13,17 +13,17 @@ maturity: established
 
 > Matching the agent's response format to what you actually need reduces noise and preserves context budget.
 
-## The Default Problem
+## The default problem
 
-Agents default to verbose, explanatory output. Ask for a function and receive the function plus several paragraphs of context, rationale, and caveats. For experienced developers, this is friction: you already know the context. The explanation consumes tokens that could be used for more work — a direct draw on the [context budget](../context-engineering/context-budget-allocation.md).
+Agents default to verbose, explanatory output. Ask for a function and you get the function plus several paragraphs of context, rationale, and caveats. For experienced developers, this is friction: you already know the context. The explanation spends tokens you could put toward more work — a direct draw on the [context budget](../context-engineering/context-budget-allocation.md).
 
-Output control is not about suppressing capability — it's about directing the response format to match the task.
+Output control does not suppress capability. It directs the response format to match the task.
 
-## Output Modes
+## Output modes
 
 Different tasks call for different formats:
 
-| Mode | When to Use |
+| Mode | When to use |
 |---|---|
 | Code only | Implementation tasks where you'll review the diff |
 | Concise | Quick questions, status checks, short answers |
@@ -31,20 +31,20 @@ Different tasks call for different formats:
 | Diff only | Refactoring where context is already loaded |
 | Verbose | Debugging, architecture decisions, unfamiliar domains |
 
-## System-Level Instructions
+## System-level instructions
 
-Output mode preferences belong in system instructions, not per-prompt requests. Setting them once removes the need to repeat them:
+Output mode preferences belong in system instructions, not per-prompt requests. Set them once and you do not have to repeat them:
 
 ```
 Be concise. Provide code without explanation unless asked.
 For review tasks, return structured JSON: {verdict, issues, notes}.
 ```
 
-The instruction "just do it" — implementing without narrating — is effective for experienced developers who treat the agent as a capable peer rather than a teaching assistant.
+The instruction "just do it" — implement without narrating — works well for experienced developers who treat the agent as a capable peer rather than a teaching assistant.
 
-## Structured Output
+## Structured output
 
-For tasks requiring human review, structured output outperforms prose. A review result as JSON:
+For tasks that need human review, structured output beats prose. A review result as JSON:
 
 ```json
 {
@@ -55,19 +55,19 @@ For tasks requiring human review, structured output outperforms prose. A review 
 }
 ```
 
-...is faster to parse and easier to feed to downstream steps than free-form paragraphs. Defining the schema in a skill or system instruction ensures consistent structure across invocations.
+...is faster to parse and easier to feed to downstream steps than free-form paragraphs. A schema defined in a skill or system instruction keeps the structure consistent across invocations.
 
-## Context Cost
+## Context cost
 
-Verbose output is not free. Each paragraph of explanation the agent writes is context that cannot be used for analysis, tool calls, or follow-up reasoning. The cost mechanism is multiplicative: LLM APIs bill for the entire conversation history on every call, so in a multi-step agent loop, context accumulates at O(N²) — a 20-step loop where each step generates 1,000 tokens produces roughly 210,000 cumulative input tokens rather than the 20,000 a per-step estimate would suggest ([Augment Code, 2025](https://www.augmentcode.com/guides/ai-agent-loop-token-cost-context-constraints)). In multi-agent pipelines, output verbosity compounds further: one agent's lengthy response becomes every downstream agent's bloated input.
+Verbose output is not free. Each paragraph of explanation the agent writes is context you cannot use for analysis, tool calls, or follow-up reasoning. The cost is multiplicative: LLM APIs bill for the entire conversation history on every call, so in a multi-step agent loop, context accumulates at O(N²) — a 20-step loop where each step generates 1,000 tokens produces roughly 210,000 cumulative input tokens rather than the 20,000 a per-step estimate would suggest ([Augment Code, 2025](https://www.augmentcode.com/guides/ai-agent-loop-token-cost-context-constraints)). In multi-agent pipelines, verbosity compounds further: one agent's long response becomes every downstream agent's bloated input.
 
-## Templates in Skills
+## Templates in skills
 
-Placing output format templates in skills constrains verbosity structurally. An agent loading a skill that defines a fixed output schema will produce output in that shape without needing a per-prompt instruction. Provider-level structured output support (available in Anthropic, OpenAI, and Gemini APIs) enforces schema compliance at the API level — production experience shows natural language format instructions break when models update and silently rename fields like `status` to `current_state`, while schema-enforced outputs maintain consistency across invocations ([agenta.ai, 2025](https://agenta.ai/blog/the-guide-to-structured-outputs-and-function-calling-with-llms)).
+Output format templates in skills constrain verbosity structurally. An agent that loads a skill defining a fixed output schema produces output in that shape without a per-prompt instruction. Provider-level structured output support (available in Anthropic, OpenAI, and Gemini APIs) enforces schema compliance at the API level — production experience shows natural language format instructions break when models update and silently rename fields like `status` to `current_state`, while schema-enforced outputs stay consistent across invocations ([agenta.ai, 2025](https://agenta.ai/blog/the-guide-to-structured-outputs-and-function-calling-with-llms)).
 
-## The Anti-Pattern
+## The anti-pattern
 
-The anti-pattern is the three-act response: the agent explains what it's about to do, does it, then explains what it did. This triples the token cost of any action. A system instruction like "act without announcing your actions" eliminates it.
+The anti-pattern is the three-act response: the agent explains what it is about to do, does it, then explains what it did. This triples the token cost of any action. A system instruction like "act without announcing your actions" removes it.
 
 ## Example
 
@@ -94,13 +94,13 @@ I've implemented the function above. It handles the edge cases by...
 
 The concise version cuts token cost by roughly two-thirds for the same deliverable.
 
-## When This Backfires
+## When this backfires
 
 Concise-output mode is wrong in three situations:
 
-- **Debugging unfamiliar failures**: verbose chain-of-thought traces are the primary diagnostic surface. Suppressing them means the agent silently makes wrong decisions without leaving reasoning evidence.
-- **Architecture and design decisions**: when the problem is underspecified, the agent's narrative explanation surfaces hidden assumptions — the same signal [interactive clarification](../agent-design/interactive-clarification-underspecified-tasks.md) elicits by asking. Asking for code-only output removes the only signal that the agent misunderstood the requirement.
-- **First pass in new domains**: a practitioner expert in Python but new to Rust needs the caveats. Concise mode assumes shared context that doesn't yet exist.
+- Debugging unfamiliar failures: verbose chain-of-thought traces are the main diagnostic surface. Suppress them and the agent silently makes wrong decisions without leaving reasoning evidence.
+- Architecture and design decisions: when the problem is underspecified, the agent's narrative explanation surfaces hidden assumptions — the same signal [interactive clarification](../agent-design/interactive-clarification-underspecified-tasks.md) elicits by asking. Asking for code-only output removes the only signal that the agent misunderstood the requirement.
+- First pass in new domains: a practitioner expert in Python but new to Rust needs the caveats. Concise mode assumes shared context that does not yet exist.
 
 Set output mode per task category in system instructions, not as a global default.
 
@@ -116,8 +116,8 @@ Set output mode per task category in system instructions, not as a global defaul
 - [Example-Driven vs Rule-Driven Instructions](../instructions/example-driven-vs-rule-driven-instructions.md)
 - [Negative Space Instructions: What NOT to Do](../instructions/negative-space-instructions.md)
 - [The Instruction Compliance Ceiling: Why More Rules Mean More Ignored Rules](../instructions/instruction-compliance-ceiling.md)
-- [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
 - [Agent Turn Model](../agent-design/agent-turn-model.md)
 - [Think Tool](../agent-design/think-tool.md)
 - [Progressive Disclosure for Layered Agent Definitions](../agent-design/progressive-disclosure-agents.md)
-- [Agent Loop Middleware](../agent-design/agent-loop-middleware.md)
+- [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md)

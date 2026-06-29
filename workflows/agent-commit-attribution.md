@@ -18,26 +18,26 @@ maturity: adopted
 
 > Agents that commit to shared repositories should carry verifiable identity so audit trails distinguish agent-generated changes from human-authored ones.
 
-## Why Attribution Matters
+## Why attribution matters
 
-When an agent commits code, the git history records an author name and email — but without additional verification, nothing prevents any commit from claiming any identity. As agents become regular contributors, three governance needs emerge:
+When an agent commits code, git records an author name and email. But without extra verification, any commit can claim any identity. As agents become regular contributors, three governance needs emerge:
 
-- **Audit trails** — compliance requirements for regulated code (finance, healthcare, government) may mandate tracking which changes originated from automated systems vs. human engineers
-- **Regression traceability** — when a bug is introduced, knowing the commit came from a specific agent session (with model version, task reference, and session ID) accelerates root-cause analysis
-- **Policy enforcement** — branch protection rules can block pushes from agents that lack verified identity, giving teams an explicit gate on agent contributions
+- Audit trails — regulated code (finance, healthcare, government) may require tracking which changes came from automated systems rather than human engineers
+- Regression traceability — when a bug appears, knowing the commit came from a specific agent session (with model version, task reference, and session ID) speeds up root-cause analysis
+- Policy enforcement — branch protection rules can block pushes from agents that lack verified identity, giving teams an explicit gate on agent contributions
 
-## Two Attribution Mechanisms
+## Two attribution mechanisms
 
-### 1. Cryptographic Commit Signing
+### 1. Cryptographic commit signing
 
 Git supports GPG and SSH signing. A signed commit includes a signature over the commit object, verifiable against the signer's public key. GitHub displays signed commits from known keys as `Verified`.
 
 For agents that push commits directly:
 
-- **Dedicated bot accounts with enforced signing** — create a GitHub user or GitHub App for the agent; configure the signing key in the agent's git environment; require all commits from that account to be signed via branch protection or repository rulesets
-- **Platform-native signing** — GitHub's Copilot cloud agent signs all its commits automatically as of April 3, 2026 ([GitHub Changelog](https://github.blog/changelog/2026-04-03-copilot-cloud-agent-signs-its-commits/)), enabling it to push to repositories with the "Require signed commits" rule enabled — previously a blocker
+- Dedicated bot accounts with enforced signing — create a GitHub user or GitHub App for the agent, configure the signing key in the agent's git environment, and require all commits from that account to be signed via branch protection or repository rulesets
+- Platform-native signing — GitHub's Copilot cloud agent signs all its commits automatically as of April 3, 2026 ([GitHub Changelog](https://github.blog/changelog/2026-04-03-copilot-cloud-agent-signs-its-commits/)). This lets it push to repositories with the "Require signed commits" rule enabled, which previously blocked it
 
-The branch protection approach enforces signing at the policy layer: enable "Require signed commits" on `main` (or via a ruleset scoped to the branch pattern). Any agent that cannot present a valid signature is rejected at push time, not at review time.
+Branch protection enforces signing at the policy layer. Enable "Require signed commits" on `main`, or use a ruleset scoped to the branch pattern. GitHub then rejects any agent that cannot present a valid signature at push time, not at review time.
 
 ```mermaid
 sequenceDiagram
@@ -51,9 +51,9 @@ sequenceDiagram
     Note over GitHub: Branch protection: "Require signed commits" enforced
 ```
 
-### 2. Commit Metadata Annotation
+### 2. Commit metadata annotation
 
-Cryptographic signing establishes *who* signed; metadata annotation establishes *what session and task* produced the commit. These are complementary.
+Cryptographic signing establishes who signed. Metadata annotation establishes which session and task produced the commit. The two are complementary.
 
 Standard git trailers (appended after the commit message body) carry structured metadata:
 
@@ -68,44 +68,44 @@ Model: claude-sonnet-4-6
 Task-Reference: #673
 ```
 
-- `Co-authored-by` — standard GitHub convention; GitHub renders co-authors in the commit UI and PR timeline
+- `Co-authored-by` — standard GitHub convention that renders co-authors in the commit UI and PR timeline
 - `Agent-Session` — links the commit to a specific agent session log for replay and debugging
-- `Model` — records the model version at time of commit; relevant when a model upgrade changes agent behavior
+- `Model` — records the model version at commit time, which matters when a model upgrade changes agent behavior
 - `Task-Reference` — ties the commit to the originating issue or ticket
 
-`Agent-Session`, `Model`, and `Task-Reference` are team-defined conventions — no cross-tool standard exists; adopt whichever trailer names fit your toolchain.
+`Agent-Session`, `Model`, and `Task-Reference` are team-defined conventions. No cross-tool standard exists, so adopt whichever trailer names fit your toolchain.
 
-## Branch Protection Configuration
+## Branch protection configuration
 
-GitHub offers two mechanisms to enforce signing at the policy layer — see [GitHub's branch protection documentation](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches) for current UI steps, as menu paths change across GitHub plans.
+GitHub offers two ways to enforce signing at the policy layer. See the [GitHub branch protection documentation](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches) for current UI steps, since menu paths change across GitHub plans.
 
-**Option A — Branch protection rule** (classic): enable "Require signed commits" for the target branch pattern. Any push without a valid signature is rejected.
+Option A — branch protection rule (classic): enable "Require signed commits" for the target branch pattern. GitHub rejects any push without a valid signature.
 
-**Option B — Repository ruleset** (recommended for organizations): create a ruleset targeting the branch pattern and add the "Require a signature" rule. Rulesets support actor-scoped conditions — a policy lever for [agent governance](agent-governance-policies.md) that requires signing only for bot accounts while allowing human contributors to push unsigned commits during a migration period.
+Option B — repository ruleset (recommended for organizations): create a ruleset targeting the branch pattern and add the "Require a signature" rule. Rulesets support actor-scoped conditions, so you can require signing only for bot accounts while letting human contributors push unsigned commits during a migration period. This is a useful control for [agent governance](agent-governance-policies.md).
 
 ## Trade-offs
 
 | Factor | Signed commits | Metadata annotation only |
 |--------|---------------|--------------------------|
-| **Verification** | Cryptographic — tamper-evident | None — any actor can write any trailer |
-| **Operational overhead** | Key generation, rotation, distribution to agent environment | None — add trailers in commit message |
-| **Branch protection compatibility** | Required for "Require signed commits" rules | Not compatible — rule checks signature, not trailers |
-| **Reviewer experience** | `Verified` badge in GitHub UI | Requires reading commit message |
-| **Blast radius of key compromise** | Agent's signing key must be revoked and rotated | No key to compromise |
+| Verification | Cryptographic — tamper-evident | None — any actor can write any trailer |
+| Operational overhead | Key generation, rotation, distribution to agent environment | None — add trailers in commit message |
+| Branch protection compatibility | Required for "Require signed commits" rules | Not compatible — rule checks signature, not trailers |
+| Reviewer experience | `Verified` badge in GitHub UI | Requires reading commit message |
+| Blast radius of key compromise | Agent's signing key must be revoked and rotated | No key to compromise |
 
 Cryptographic signing is the right choice when:
 - Your repository enforces "Require signed commits"
 - Compliance requires tamper-evident agent authorship records
 - You are running an agent with broad write access to production branches
 
-Metadata annotation alone is sufficient when:
+Metadata annotation alone is enough when:
 - You need session traceability for debugging but not compliance
 - Signing infrastructure is not yet in place
 - The agent works in a staging or feature branch environment with a human review gate before merge
 
 ## Example
 
-**Before** — agent commits without attribution:
+Before — agent commits without attribution:
 
 ```bash
 git commit -m "fix: update retry logic"
@@ -113,7 +113,7 @@ git commit -m "fix: update retry logic"
 # No signature. No session metadata. Indistinguishable from any other bot commit.
 ```
 
-**After** — agent commits with signing and metadata:
+After — agent commits with signing and metadata:
 
 ```bash
 git -c user.signingkey=~/.ssh/agent_ed25519 \
@@ -127,7 +127,7 @@ Task-Reference: #412"
 # Blame graph shows: agent identity + session link
 ```
 
-For the [Copilot cloud agent](../tools/copilot/cloud-agent-org-controls.md), signing is automatic — no configuration required. Verify your repository has "Require signed commits" enabled to take advantage of it.
+For the [Copilot cloud agent](../tools/copilot/cloud-agent-org-controls.md), signing is automatic with no configuration required. Check that your repository has "Require signed commits" enabled to use it.
 
 ## Key Takeaways
 

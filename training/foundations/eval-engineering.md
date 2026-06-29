@@ -24,7 +24,7 @@ A harness (type checker, test suite, linter) tells the agent whether *this run* 
 
 Traditional tests assert that a specific input produces a specific output. Agent evals measure a distribution. The same prompt, same task, same environment can produce different results on successive runs because agents are non-deterministic — the reason [behavioral testing](../../verification/behavioral-testing-agents.md) replaces single-input assertions. This distinction has structural consequences. A test suite that passes today passes tomorrow (assuming no code changes). An eval suite that scores 85% today may score 72% tomorrow after a model update, a prompt edit, or a context change — and you need to know that happened before users do.
 
-Evals serve two roles that tests do not: they act as **development guards** that catch regressions before deployment, and as **production canaries** that detect drift caused by model updates or context accumulation. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
+Evals serve two roles that tests do not: they act as development guards that catch regressions before deployment, and as production canaries that detect drift caused by model updates or context accumulation. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
 ---
 
@@ -32,7 +32,7 @@ Evals serve two roles that tests do not: they act as **development guards** that
 
 A single pass/fail result from one trial is a sample of size one. An agent that solves a benchmark 60% of the time on one run might score anywhere from 40% to 80% depending on sampling variation.
 
-Two metrics separate capability from consistency. **pass@k** measures whether the agent produces at least one correct solution across *k* attempts — the [capability ceiling](../../verification/pass-at-k-metrics.md). **pass^k** measures whether *all k* attempts succeed — the consistency floor. High pass@k with low pass^k means the agent can solve the problem but cannot be trusted to do so reliably. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+Two metrics separate capability from consistency. pass@k measures whether the agent produces at least one correct solution across *k* attempts — the [capability ceiling](../../verification/pass-at-k-metrics.md). pass^k measures whether *all k* attempts succeed — the consistency floor. High pass@k with low pass^k means the agent can solve the problem but cannot be trusted to do so reliably. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 The choice of primary metric depends on the deployment context. For human-in-the-loop workflows where a developer reviews every output, pass@k matters — a single correct answer in three attempts is sufficient. For automated pipelines where outputs are consumed directly, pass^k is critical — a 90% pass rate means roughly 1-in-10 automated runs fails.
 
@@ -56,9 +56,9 @@ Use the lightest method that covers each case:
 
 | Method | Best for | Trade-off |
 |--------|----------|-----------|
-| **Code-based** | Deterministic outputs: test pass/fail, schema validation, regex | Fastest and most reliable, but limited to verifiable outputs |
-| **LLM-as-judge** | Open-ended outputs: style, completeness, factual accuracy | Scalable, but requires calibration against human judgment |
-| **Human** | Ambiguous edge cases, novel failure modes | Most flexible, but slowest and most expensive |
+| Code-based | Deterministic outputs: test pass/fail, schema validation, regex | Fastest and most reliable, but limited to verifiable outputs |
+| LLM-as-judge | Open-ended outputs: style, completeness, factual accuracy | Scalable, but requires calibration against human judgment |
+| Human | Ambiguous edge cases, novel failure modes | Most flexible, but slowest and most expensive |
 
 Code-based grading first, LLM-as-judge for what code cannot assess, human grading as a last resort. See [Behavioral Testing for Agents](../../verification/behavioral-testing-agents.md) for the full grading taxonomy.
 
@@ -70,9 +70,9 @@ Using a model to grade another model's output enables evaluation at scale for fr
 
 Key design decisions:
 
-- **Single call outperforms multiple specialized judges.** A single comprehensive prompt with all rubric dimensions produces more consistent scores than routing each dimension to a separate evaluator. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
-- **Calibrate against human reviewers.** Score a sample set with both the judge and human reviewers using the same rubric, then resolve disagreements by refining the rubric or the judge prompt. This is not a one-time step — recalibrate when new query types enter the distribution.
-- **Start with ~20 queries.** Small-sample evaluation catches large effect sizes (e.g., a 30% to 80% improvement from a prompt change) without a large dataset upfront. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+- Single call outperforms multiple specialized judges. A single comprehensive prompt with all rubric dimensions produces more consistent scores than routing each dimension to a separate evaluator. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
+- Calibrate against human reviewers. Score a sample set with both the judge and human reviewers using the same rubric, then resolve disagreements by refining the rubric or the judge prompt. This is not a one-time step — recalibrate when new query types enter the distribution.
+- Start with ~20 queries. Small-sample evaluation catches large effect sizes (e.g., a 30% to 80% improvement from a prompt change) without a large dataset upfront. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 See [LLM-as-Judge Evaluation with Human Spot-Checking](../../workflows/llm-as-judge-evaluation.md) for the full pipeline including human review integration.
 
@@ -116,11 +116,11 @@ Agents optimize for the literal metric, not the intent behind it. An agent grade
 
 Five defenses compound:
 
-1. **Combine orthogonal grader types** — code-based, model-based, and human graders measure different dimensions that no single exploit can collapse. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
-2. **Test bidirectionally** — add a negative case for every positive one. Class-imbalanced evals let agents exploit the dominant class. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
-3. **Use structured acceptance criteria** — JSON [feature lists](../../instructions/feature-list-files.md) with explicit `passes` boolean fields are harder for agents to silently rewrite than Markdown checklists. [Source: [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)]
-4. **Enforce pre-completion verification** — intercept the agent before it declares "done" and run checks independently of the agent. [Source: [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)]
-5. **Validate graders before trusting them** — CORE-Bench penalized correct answers due to grader bugs; fixing the graders pushed scores from 42% to 95%. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+1. Combine orthogonal grader types — code-based, model-based, and human graders measure different dimensions that no single exploit can collapse. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+2. Test bidirectionally — add a negative case for every positive one. Class-imbalanced evals let agents exploit the dominant class. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+3. Use structured acceptance criteria — JSON [feature lists](../../instructions/feature-list-files.md) with explicit `passes` boolean fields are harder for agents to silently rewrite than Markdown checklists. [Source: [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)]
+4. Enforce pre-completion verification — intercept the agent before it declares "done" and run checks independently of the agent. [Source: [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)]
+5. Validate graders before trusting them — CORE-Bench penalized correct answers due to grader bugs; fixing the graders pushed scores from 42% to 95%. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 See [Anti-Reward-Hacking: Rubrics That Resist Gaming](../../verification/anti-reward-hacking.md) for the full checklist.
 
@@ -140,7 +140,7 @@ See [Layered Accuracy Defense](../../verification/layered-accuracy-defense.md) f
 
 A team maintains a coding agent that converts natural-language tickets to pull requests. They build an eval suite with 30 golden tasks drawn from closed tickets with known-good PRs.
 
-**Eval definition** (YAML config consumed by the runner):
+Eval definition (YAML config consumed by the runner):
 
 ```yaml
 suite: ticket-to-pr
@@ -158,14 +158,14 @@ tasks:
       - "No unrelated sections changed"
 ```
 
-**Running the suite:**
+Running the suite:
 
 ```bash
 # Run 3 attempts per task to measure both pass@k and pass^k
 eval-runner run --suite ticket-to-pr --attempts 3 --output results.json
 ```
 
-**Reading the results:**
+Reading the results:
 
 | Task | Attempt 1 | Attempt 2 | Attempt 3 | pass@3 | pass^3 |
 |------|-----------|-----------|-----------|--------|--------|
@@ -191,7 +191,7 @@ The team runs this suite before every prompt change. When a new model version dr
 
 ## Related
 
-**Source pages**
+Source pages
 
 - [pass@k and pass^k Metrics](../../verification/pass-at-k-metrics.md)
 - [Grade Agent Outcomes, Not Execution Paths](../../verification/grade-agent-outcomes.md)
@@ -203,7 +203,7 @@ The team runs this suite before every prompt change. When a new model version dr
 - [Eval-Driven Development](../../workflows/eval-driven-development.md)
 - [Layered Accuracy Defense](../../verification/layered-accuracy-defense.md)
 
-**Training modules**
+Training modules
 
 - [Harness Engineering](harness-engineering.md)
 - [How the Four Disciplines Compound](prompt-context-harness-capstone.md)

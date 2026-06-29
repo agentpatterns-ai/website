@@ -10,7 +10,7 @@ tags:
 aliases:
   - prompt injection defense
   - injection-resistant agents
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-28
 maturity: emerging
 ---
 
@@ -18,26 +18,26 @@ maturity: emerging
 
 > Prompt injection is unlikely to ever be fully solved. Treat it as permanent and design architectures where a successful injection cannot cause harm.
 
-## The Unsolvable Problem
+## The unsolvable problem
 
-Prompt injection has no parameterized-query equivalent -- the instruction/data boundary in LLMs is implicit. Meta-analysis of 78 studies (2021--2026) shows attack success rates above 85% against state-of-the-art defenses. [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)] No single defense works; only defense-in-depth is viable.
+Prompt injection has no parameterized-query equivalent -- the instruction and data boundary in LLMs is implicit. A meta-analysis of 78 studies (2021--2026) shows attack success rates above 85% against the strongest known defenses. [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)] No single defense works. Only defense-in-depth is viable.
 
-## The Core Principle
+## The core principle
 
-Once an LLM ingests untrusted input, constrain it so **no consequential action can trigger**. [Source: [Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)] Do not rely on instructing the model to behave.
+Once an LLM ingests untrusted input, constrain it so no consequential action can trigger. [Source: [Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)] Do not rely on instructing the model to behave.
 
-## Six Provable Design Patterns
+## Six provable design patterns
 
 Six patterns offer formally verifiable resistance. [Source: [Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837); [Willison](https://simonwillison.net/2025/Jun/13/prompt-injection-design-patterns/)]
 
 | Pattern | Mechanism | When to use |
 |---------|-----------|-------------|
-| **[Action-Selector](action-selector-pattern.md)** | LLM picks from a fixed set of actions | Routing, triage agents |
-| **[Plan-Then-Execute](plan-then-execute-web-agents.md)** | Plan generated before untrusted content is seen | Multi-step workflows |
-| **[LLM Map-Reduce](../multi-agent/llm-map-reduce.md)** | Each LLM sees only a data partition | Batch document processing |
-| **Dual LLM** | Privileged LLM decides; quarantined LLM reads untrusted content | Reasoning over untrusted input |
-| **Code-Then-Execute** | LLM generates code; sandbox executes without re-evaluation | Data transformation |
-| **Context-Minimization** | Minimum necessary untrusted content enters context | Any external data consumer |
+| [Action-Selector](action-selector-pattern.md) | LLM picks from a fixed set of actions | Routing, triage agents |
+| [Plan-Then-Execute](plan-then-execute-web-agents.md) | Plan generated before untrusted content is seen | Multi-step workflows |
+| [LLM Map-Reduce](../multi-agent/llm-map-reduce.md) | Each LLM sees only a data partition | Batch document processing |
+| Dual LLM | Privileged LLM decides; quarantined LLM reads untrusted content | Reasoning over untrusted input |
+| Code-Then-Execute | LLM generates code; sandbox executes without re-evaluation | Data transformation |
+| Context-Minimization | Minimum necessary untrusted content enters context | Any external data consumer |
 
 ```mermaid
 graph LR
@@ -62,19 +62,19 @@ graph LR
     style SE fill:#0e8a16,color:#fff
 ```
 
-## The Rule of Two
+## The rule of two
 
 Never combine untrusted input, sensitive data access, and external communication in one agent -- the [Lethal Trifecta](../security/lethal-trifecta-threat-model.md). [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)] Remove at least one:
 
-- **Remove egress** -- default-deny outbound network
-- **Remove private data** -- strip secrets before context entry
-- **Remove untrusted input** -- operator-controlled content only
+- Remove egress: default-deny outbound network
+- Remove private data: strip secrets before context entry
+- Remove untrusted input: allow operator-controlled content only
 
-## How Vendors Defend Their Agents
+## How vendors defend their agents
 
-OpenAI's Atlas layers [adversarial training](close-attack-to-fix-loop.md), an instruction hierarchy, SafeUrl exfiltration detection, and confirmation gates. [Source: [OpenAI](https://openai.com/index/designing-agents-to-resist-prompt-injection/)] Anthropic reports ~1% attack success on Claude's browser agent via RL training, classifiers, and red teaming. [Source: [Anthropic](https://www.anthropic.com/research/prompt-injection-defenses)]
+OpenAI's Atlas layers [adversarial training](close-attack-to-fix-loop.md), an instruction hierarchy, SafeUrl exfiltration detection, and confirmation gates. [Source: [OpenAI](https://openai.com/index/designing-agents-to-resist-prompt-injection/)] Anthropic reports about 1% attack success on Claude's browser agent through RL training, classifiers, and red teaming. [Source: [Anthropic](https://www.anthropic.com/research/prompt-injection-defenses)] A community red-team exercise found a minimal four-line anti-injection system prompt held up: roughly 6,000 crafted-email attempts produced zero secret leaks, though passive exfiltration remained possible. [Source: [Simon Willison](https://simonwillison.net/2026/Jun/26/hack-my-ai-assistant/)]
 
-## Coding Assistant Attack Surfaces
+## Coding assistant attack surfaces
 
 Coding assistants face these injection vectors. [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)]
 
@@ -85,27 +85,27 @@ Coding assistants face these injection vectors. [Source: [Maloyan and Namiot, 20
 | Compromised MCP servers | Tool description poisoning, response injection | Varies |
 | Malicious dependencies | Post-install scripts on agent-initiated installs | Varies |
 
-Platform ratings: Claude Code **Low**, Copilot **High**, Cursor **Critical**. [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)]
+Platform ratings: Claude Code Low, Copilot High, Cursor Critical. [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)]
 
-## Practical Defenses for Coding Workflows
+## Practical defenses for coding workflows
 
-- **Scope permissions aggressively** -- [schema-level filtering](../multi-agent/subagent-schema-level-tool-filtering.md) beats runtime rejection; the model cannot invoke tools it cannot see.
-- **Audit rules files** -- treat `.cursorrules`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.windsurfrules` as untrusted input.
-- **Gate consequential actions** -- require approval before file deletion, shell execution, git push, and dependency install.
-- **Isolate execution** -- run agents in containers with default-deny egress.
-- **Plan before execute** -- fix the plan before ingesting untrusted content, then execute deterministically.
+- Scope permissions tightly: [schema-level filtering](../multi-agent/subagent-schema-level-tool-filtering.md) beats runtime rejection, because the model cannot invoke tools it cannot see.
+- Audit rules files: treat `.cursorrules`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.windsurfrules` as untrusted input.
+- Gate consequential actions: require approval before file deletion, shell execution, git push, and dependency install.
+- Isolate execution: run agents in containers with default-deny egress.
+- Plan before execute: fix the plan before ingesting untrusted content, then execute deterministically.
 
-## Why It Works
+## Why it works
 
-Each pattern severs the path from untrusted content to consequential action before the LLM processes it. Action-Selector restricts output to a fixed enumeration — injected instructions cannot name actions outside it. [Plan-Then-Execute](plan-then-execute-web-agents.md) fixes intent before untrusted data is seen. Dual LLM quarantines the reader of untrusted content with no write path to privileged state. The guarantee is architectural, not behavioral. [Source: [Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)]
+Each pattern cuts the path from untrusted content to consequential action before the LLM processes it. Action-Selector restricts output to a fixed enumeration, so injected instructions cannot name actions outside it. [Plan-Then-Execute](plan-then-execute-web-agents.md) fixes intent before the agent sees untrusted data. Dual LLM quarantines the reader of untrusted content with no write path to privileged state. The guarantee is architectural, not behavioral. [Source: [Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)]
 
-## When This Backfires
+## When this backfires
 
-- **Utility loss**: the [Action-Selector](action-selector-pattern.md) and Plan-Then-Execute patterns only fit workflows with a fixed action set or stable plan. Open-ended agents that reason over what they just read cannot be constrained this way.
-- **Architectural cost**: Dual LLM doubles inference cost; most frameworks don't provide the privileged/quarantined split.
-- **Steep utility cost**: "Provable" here means resistance by construction, not an empirically validated guarantee -- the originating patterns paper runs no quantitative experiments. Follow-up work measured the Dual LLM pattern driving attack success to 0% while task utility collapsed from 49.7% to 14.6% in a bug-fixing scenario. [Source: [Jacob et al., 2025](https://arxiv.org/abs/2509.25926)]
-- **False confidence**: One pattern alone, without removing another leg of the [Lethal Trifecta](../security/lethal-trifecta-threat-model.md), creates an illusion of safety — an agent that asks before acting can still exfiltrate data if egress is open.
-- **Schema drift**: Tools added post-deployment may silently reintroduce capabilities excluded by schema-level filtering.
+- Utility loss: the [Action-Selector](action-selector-pattern.md) and Plan-Then-Execute patterns only fit workflows with a fixed action set or stable plan. Open-ended agents that reason over what they just read cannot be constrained this way.
+- Architectural cost: Dual LLM doubles inference cost, and most frameworks do not provide the privileged and quarantined split.
+- Steep utility cost: "Provable" here means resistance by construction, not an empirically validated guarantee -- the originating patterns paper runs no quantitative experiments. Follow-up work measured the Dual LLM pattern driving attack success to 0% while task utility collapsed from 49.7% to 14.6% in a bug-fixing scenario. [Source: [Jacob et al., 2025](https://arxiv.org/abs/2509.25926)]
+- False confidence: one pattern alone, without removing another leg of the [Lethal Trifecta](../security/lethal-trifecta-threat-model.md), creates an illusion of safety. An agent that asks before acting can still exfiltrate data if egress is open.
+- Schema drift: tools added after deployment may silently reintroduce capabilities that schema-level filtering excluded.
 
 ## Example
 

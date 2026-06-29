@@ -18,23 +18,23 @@ maturity: emerging
 
 > An async trajectory-observer system that classifies misbehaviors into three categories and injects targeted course-corrections.
 
-## Misbehavior Rate in Production Trajectories
+## Misbehavior rate in production trajectories
 
-Production coding agent trajectories misbehave at a rate that makes manual intervention unscalable. Analysis of 10,000+ real trajectories ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037)) shows ~30% contain at least one misbehavior — normal production behavior, not a tail event.
+Production coding agent trajectories misbehave often enough that manual intervention does not scale. Analysis of 10,000+ real trajectories ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037)) shows ~30% contain at least one misbehavior — normal production behavior, not a tail event.
 
-## Three Misbehavior Categories
+## Three misbehavior categories
 
 Wink classifies misbehaviors into three mutually exclusive categories:
 
-**Specification Drift** — the trajectory diverges from the stated goal. Common causes: ambiguous instructions, long-horizon context dilution, or the agent reprioritizing based on intermediate findings.
+Specification Drift — the trajectory diverges from the stated goal. Common causes are ambiguous instructions, long-horizon context dilution, or the agent reprioritizing based on intermediate findings.
 
-**Reasoning Problems** — internal logic fails; the correction supplies the missing inference step via [injected context](../context-engineering/context-injected-error-recovery.md). Examples: circular reasoning loops, incorrect inferences from tool outputs, and wrong assumptions about codebase state. The agent applies instructions incorrectly rather than ignoring them.
+Reasoning Problems — internal logic fails, so the correction supplies the missing inference step via [injected error-recovery context](../context-engineering/context-injected-error-recovery.md). Examples are circular reasoning loops, incorrect inferences from tool outputs, and wrong assumptions about codebase state. The agent applies instructions incorrectly rather than ignoring them.
 
-**Tool Call Failures** — incorrect tool invocations: wrong arguments, non-existent file paths, malformed API calls, or tool sequences that violate execution preconditions, including the repeated no-progress calls that [loop detection](../observability/loop-detection.md) catches.
+Tool Call Failures — incorrect tool invocations: wrong arguments, non-existent file paths, malformed API calls, or tool sequences that violate execution preconditions, including the repeated no-progress calls that [loop detection](../observability/loop-detection.md) catches.
 
-Each category requires a distinct correction strategy. A generic nudge applied to all three degrades performance; classification enables category-specific corrections.
+Each category needs a distinct correction strategy. A generic nudge applied to all three degrades performance. Classification lets you apply category-specific corrections.
 
-## Async Intervention Architecture
+## Async intervention architecture
 
 ```mermaid
 graph TD
@@ -59,60 +59,60 @@ Unlike synchronous guardrails such as [Skill Program Functions](skill-program-fu
 
 From the Wink A/B test on production traffic ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037)):
 
-- **90% resolution rate** for misbehaviors that require a single intervention
-- **5.3% reduction in tokens per session** — the agent reaches correct behavior faster without wasted execution
-- **4.2% reduction in engineer interventions per session** — most misbehaviors resolve without human involvement
+- 90% resolution rate for misbehaviors that need a single intervention
+- 5.3% fewer tokens per session — the agent reaches correct behavior faster without wasted execution
+- 4.2% fewer engineer interventions per session — most misbehaviors resolve without human involvement
 
-The 10% requiring multiple interventions or human escalation are typically novel failure modes outside the classifier's training distribution.
+The 10% that need multiple interventions or human escalation are typically novel failure modes outside the classifier's training distribution.
 
-## Implementation Signals
+## Implementation signals
 
 Three observable signals trigger the observer:
 
-1. **Repetition patterns** — the agent calls the same tool with identical or near-identical arguments three or more consecutive times without progress ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037))
-2. **Contradiction signals** — the agent's stated reasoning contradicts a tool output it received in the same session
-3. **Precondition violations** — a tool call references a resource (file path, API endpoint, variable) that does not exist or has not yet been created
+1. Repetition patterns — the agent calls the same tool with identical or near-identical arguments three or more consecutive times without progress ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037)).
+2. Contradiction signals — the agent's stated reasoning contradicts a tool output it received in the same session.
+3. Precondition violations — a tool call references a resource (file path, API endpoint, variable) that does not exist or has not yet been created.
 
-These signals are detectable from the tool call log and conversation history without access to model internals. Training-time approaches such as Agent-R ([arXiv:2501.11425](https://arxiv.org/abs/2501.11425)) teach agents to self-reflect and recover internally; trajectory observation is the runtime complement when the model will not self-correct.
+You can detect these signals from the tool call log and conversation history without access to model internals. Training-time approaches such as Agent-R ([arXiv:2501.11425](https://arxiv.org/abs/2501.11425)) teach agents to self-reflect and recover internally. Trajectory observation is the runtime complement when the model will not self-correct.
 
-## Deployment Implication
+## Deployment implication
 
-At a 30% baseline misbehavior rate, a production agent without an observer silently degrades on roughly a third of runs. The minimum viable observer:
+At a 30% baseline misbehavior rate, a production agent without an observer silently degrades on roughly a third of runs. A minimum viable observer:
 
 - Records each tool call and its arguments
 - Detects repetition patterns (same tool + args appearing 3+ times without a successful result)
-- Detects precondition violations (e.g., file read before file creation in the same session)
-- Injects a single corrective message when triggered; escalates to human on repeated failure
+- Detects precondition violations (for example, a file read before file creation in the same session)
+- Injects a single corrective message when triggered, then escalates to a human on repeated failure
 
-## Why It Works
+## Why it works
 
-Category-specific corrections target the actual failure mode rather than issuing a generic nudge. The Wink taxonomy was constructed bottom-up from 10,000+ production trajectories and developer feedback — each category maps to a distinct correction strategy. A Specification Drift correction re-anchors the agent to the original task; a Tool Call Failure correction changes the retrieval or invocation strategy; a Reasoning Problem correction supplies the missing inference step. Applying the wrong correction type (e.g., re-anchoring an agent with a tool invocation error) adds context noise without addressing the root cause.
+Category-specific corrections target the actual failure mode rather than issuing a generic nudge. The Wink taxonomy was built bottom-up from 10,000+ production trajectories and developer feedback, and each category maps to a distinct correction strategy. A Specification Drift correction re-anchors the agent to the original task. A Tool Call Failure correction changes the retrieval or invocation strategy. A Reasoning Problem correction supplies the missing inference step. Applying the wrong correction type — for example, re-anchoring an agent that has a tool invocation error — adds context noise without addressing the root cause.
 
-## When This Backfires
+## When this backfires
 
 Async injection does not guarantee recovery. The Wink A/B test ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037)) documents these non-recovery patterns:
 
-- **Agent ignores the correction** (37% of non-recovered sessions) — the injected message is processed but the trajectory continues unchanged, often because the correction arrives too late or conflicts with strong prior context.
-- **Premature termination** (22%) — the agent exits early, treating the correction as a signal that the task is unresolvable.
-- **Mechanical failures** (19%) — IDE, tool, or environment errors prevent the correction from taking effect.
-- **Novel failure modes** — out-of-distribution events get misclassified and receive the wrong correction type.
-- **Classification latency** — the observer adds an inference step; for short-running agents this overhead can exceed the recovery benefit.
+- Agent ignores the correction (37% of non-recovered sessions) — the agent processes the injected message but the trajectory continues unchanged, often because the correction arrives too late or conflicts with strong prior context.
+- Premature termination (22%) — the agent exits early, treating the correction as a signal that the task is unresolvable.
+- Mechanical failures (19%) — IDE, tool, or environment errors prevent the correction from taking effect.
+- Novel failure modes — out-of-distribution events get misclassified and receive the wrong correction type.
+- Classification latency — the observer adds an inference step, and for short-running agents this overhead can exceed the recovery benefit.
 
 The figures above come from Meta's internal VSCode agent traffic and may not transfer to other platforms or models without re-calibration.
 
 ## Example
 
-**Trigger**: Repetition pattern — the agent calls `read_file` on `src/utils.py` three consecutive turns with no write, move, or delete in between. The observer detects the repeated call with identical arguments and no intervening progress signal.
+Trigger: Repetition pattern — the agent calls `read_file` on `src/utils.py` three consecutive turns with no write, move, or delete in between. The observer detects the repeated call with identical arguments and no intervening progress signal.
 
-**Classification**: Tool Call Failure — the agent is stuck in a retrieval loop, not drifting from its goal or reasoning incorrectly.
+Classification: Tool Call Failure — the agent is stuck in a retrieval loop, not drifting from its goal or reasoning incorrectly.
 
-**Injected correction message** (inserted into the next inference call as a system turn):
+Injected correction message (inserted into the next inference call as a system turn):
 
 > You have read `src/utils.py` three times without acting on its contents. If the file does not contain what you need, state what is missing and proceed to a different approach. Do not read the same file again until you have taken an intermediate action.
 
-**Outcome**: On the next turn, the agent identifies that the function it is looking for is in `src/helpers.py` (which it has not yet read) and proceeds there. No human intervention required.
+Outcome: On the next turn, the agent identifies that the function it is looking for is in `src/helpers.py` (which it has not yet read) and proceeds there. No human intervention required.
 
-This illustrates the category-specific correction value: a generic "you seem stuck" nudge would not prompt the agent to look elsewhere; the tool-call-specific correction directs it to change its retrieval strategy.
+This shows the value of a category-specific correction. A generic "you seem stuck" nudge would not prompt the agent to look elsewhere, but the tool-call-specific correction directs it to change its retrieval strategy.
 
 ## Key Takeaways
 
@@ -129,6 +129,6 @@ This illustrates the category-specific correction value: a generic "you seem stu
 - [Context-Injected Error Recovery](../context-engineering/context-injected-error-recovery.md)
 - [Steering Running Agents](steering-running-agents.md)
 - [Skill Program Functions](skill-program-functions.md) — the synchronous, compiled-predicate counterpart; Wink observes asynchronously while PFs fire mid-loop on deterministic triggers
-- [Agent Loop Middleware](agent-loop-middleware.md)
+- [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md)
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
-- [The Ralph Wiggum Loop](ralph-wiggum-loop.md)
+- [The Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md)

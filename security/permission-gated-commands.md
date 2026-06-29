@@ -18,15 +18,15 @@ maturity: established
 
 > Custom commands pre-approve specific tools through an `allowed-tools` frontmatter list, so listed tools run without prompting — signaling the expected surface, not blocking unlisted tools.
 
-**Related lesson:** [Permissions & Safety Boundaries](https://learn.agentpatterns.ai/harness-engineering/permissions-and-safety-boundaries/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Permissions and Safety Boundaries](https://learn.agentpatterns.ai/harness-engineering/permissions-and-safety-boundaries/) — this concept features in a hands-on lesson with quizzes.
 
-## The Default Exposure Problem
+## The default exposure problem
 
-Custom commands in Claude Code inherit the session's full tool permissions. A `/review-pr` command that only reads files and runs `git diff` still has implicit access to `Write`, delete, and arbitrary shell. Fine when you authored it; a problem when sharing with a team or running it in an unfamiliar context.
+Custom commands in Claude Code inherit the session's full tool permissions. A `/review-pr` command that only reads files and runs `git diff` still has implicit access to `Write`, delete, and arbitrary shell. That is fine when you wrote it. It becomes a problem when you share it with a team or run it in an unfamiliar context.
 
-[Claude Code skills documentation](https://code.claude.com/docs/en/skills) describes the `allowed-tools` frontmatter field as the mechanism for pre-approving specific tools — reducing silent invocations of unintended ones.
+The [Claude Code skills documentation](https://code.claude.com/docs/en/skills) describes the `allowed-tools` frontmatter field as the way to pre-approve specific tools, which cuts silent calls to unintended ones.
 
-## Declaring Allowed Tools
+## Declaring allowed tools
 
 Skills (including commands in `.claude/commands/`) accept YAML frontmatter between `---` markers. The `allowed-tools` field takes a list of tool names Claude may use when the skill is active:
 
@@ -40,13 +40,13 @@ allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *)
 Review the current pull request...
 ```
 
-When this command runs, Claude can read files, search with Grep and Glob, and run `git diff` and `git log` variants without prompting. Unlisted tools — `Write`, `Edit`, arbitrary `Bash` — are not blocked: they still require explicit user approval, the same as any tool in a session without an allowlist. The field narrows the set of tools that run silently, not the set that can run at all.
+When this command runs, Claude can read files, search with Grep and Glob, and run `git diff` and `git log` variants without prompting. Unlisted tools — `Write`, `Edit`, arbitrary `Bash` — are not blocked. They still need explicit user approval, the same as any tool in a session without an allowlist. The field narrows the set of tools that run silently, not the set that can run at all.
 
-The `Bash(git diff *)` syntax scopes `Bash` access to commands starting with that prefix. [Claude Code's permissions model](https://code.claude.com/docs/en/permissions) supports both full tool names (`Read`) and prefix-scoped tool access using wildcards (`Bash(git diff *)`).
+The `Bash(git diff *)` syntax scopes `Bash` access to commands that start with that prefix. The [Claude Code permissions model](https://code.claude.com/docs/en/permissions) supports both full tool names (`Read`) and prefix-scoped tool access through wildcards (`Bash(git diff *)`).
 
-## What to Include in the Allowlist
+## What to include in the allowlist
 
-Design the allowlist around the minimum set of tools the command legitimately needs — this reduces approval prompts for routine tool use and communicates intent to teammates reading the command file:
+Design the allowlist around the smallest set of tools the command needs. This cuts approval prompts for routine tool use and shows your intent to teammates reading the command file:
 
 | Command type | Typical allowlist |
 |---|---|
@@ -57,9 +57,9 @@ Design the allowlist around the minimum set of tools the command legitimately ne
 
 The read-only pattern (`Read, Grep, Glob`) is a useful baseline for any command that only needs to inspect code. Add `Bash` access only for specific, named subcommands.
 
-## Preventing Automatic Invocation of Sensitive Commands
+## Preventing automatic invocation of sensitive commands
 
-By default, Claude can invoke any skill automatically when it judges the skill relevant. For commands with side effects — even if their allowed-tools list is conservative — you may want Claude to require explicit invocation. Set `disable-model-invocation: true`:
+By default, Claude can invoke any skill automatically when it judges the skill relevant. For commands with side effects — even when their allowed-tools list is small — you may want to require explicit invocation. Set `disable-model-invocation: true`:
 
 ```yaml
 ---
@@ -70,23 +70,23 @@ allowed-tools: Read, Bash(git log *), Bash(git tag *)
 ---
 ```
 
-This removes the command from Claude's automatic context. It only runs when you type `/generate-release-notes`. [Claude Code documentation](https://code.claude.com/docs/en/skills) notes this also removes the skill description from Claude's active context, so the combination of `disable-model-invocation` and `allowed-tools` produces the most constrained command mode.
+This removes the command from Claude's automatic context. It runs only when you type `/generate-release-notes`. The [Claude Code documentation](https://code.claude.com/docs/en/skills) notes this also removes the skill description from Claude's active context, so pairing `disable-model-invocation` with `allowed-tools` produces the most constrained command mode.
 
-## Sharing Commands with a Team
+## Sharing commands with a team
 
-Commands checked into `.claude/commands/` (or `.claude/skills/<name>/SKILL.md`) ship to everyone who clones the repo. The `allowed-tools` declaration travels with the file, so the team gets safe defaults without per-invocation review — author intent is machine-readable, not just a comment.
+Commands checked into `.claude/commands/` (or `.claude/skills/<name>/SKILL.md`) ship to everyone who clones the repo. The `allowed-tools` declaration travels with the file, so the team gets safe defaults without per-invocation review. Author intent is machine-readable, not just a comment.
 
-## Layering with Session-Level Permissions
+## Layering with session-level permissions
 
-Command-level `allowed-tools` operates on top of session-level permissions, not instead of them. Claude Code evaluates permission rules in [deny, then ask, then allow order](https://code.claude.com/docs/en/permissions) — if a tool is denied at any level, no other level can allow it. The field narrows the set of tools that run without prompting during the command; it cannot grant access to tools blocked by session-level deny rules.
+Command-level `allowed-tools` works on top of session-level permissions, not instead of them. Claude Code evaluates permission rules in [deny, then ask, then allow order](https://code.claude.com/docs/en/permissions). If a tool is denied at any level, no other level can allow it. The field narrows the set of tools that run without prompting during the command. It cannot grant access to tools blocked by session-level deny rules.
 
-## When This Backfires
+## When this backfires
 
-`allowed-tools` is a pre-approval mechanism, not a hard restriction. Three failure conditions to account for:
+`allowed-tools` is a pre-approval mechanism, not a hard restriction. Account for three failure conditions:
 
-- **Unlisted tools still run with one approval.** If a prompt injection or rogue model call attempts `Write`, the user sees a single approval prompt — the same guard that exists without any `allowed-tools` declaration. The allowlist does not add a deny layer; it only removes the prompt for listed tools.
-- **Allowlists go stale.** A command that gains new capabilities (e.g., a `/deploy` skill that now needs `WebFetch` to post status) will silently prompt for unlisted tools until the allowlist is updated. Teams relying on "no prompt = expected behavior" will be surprised.
-- **False sense of hard enforcement.** Operators who assume `allowed-tools` blocks tools are wrong. For genuine tool blocking, use session-level deny rules in `settings.json` or a PreToolUse hook — both operate at a lower level than the skill allowlist and cannot be overridden by frontmatter.
+- Unlisted tools still run with one approval. If a prompt injection or rogue model call attempts `Write`, the user sees a single approval prompt — the same guard that exists without any `allowed-tools` declaration. The allowlist does not add a deny layer; it only removes the prompt for listed tools.
+- Allowlists go stale. A command that gains new abilities (for example, a `/deploy` skill that now needs `WebFetch` to post status) will prompt for unlisted tools until you update the allowlist. Teams that rely on "no prompt means expected behavior" will be surprised.
+- A false sense of hard enforcement. Operators who assume `allowed-tools` blocks tools are wrong. To block a tool for real, use session-level deny rules in `settings.json` or a PreToolUse hook. Both work at a lower level than the skill allowlist and frontmatter cannot override them.
 
 ## Key Takeaways
 

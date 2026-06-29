@@ -17,9 +17,9 @@ maturity: adopted
 
 > Runbooks written for humans fail for agents through implicit context, ambiguous decision points, and assumed knowledge — and each failure mode needs a different fix.
 
-Runbooks-as-agent-instructions are operational procedures rewritten so an agent can execute them end-to-end: every implicit action becomes an explicit tool call, every ambiguous condition becomes a measurable threshold, and every assumed context is declared in the runbook itself. The rewriting is driven by a three-question audit, not a template. A concrete adoption target — all operational runbooks followable by the agent within a fixed time window — surfaces the core problem: most runbooks are written as memory aids for experienced operators, not as executable instructions.
+Runbooks-as-agent-instructions are operational procedures rewritten so an agent can run them end-to-end: every implicit action becomes an explicit tool call, every ambiguous condition becomes a measurable threshold, and the runbook declares every assumed context itself. A three-question audit drives the rewriting, not a template. A concrete adoption target — all operational runbooks followable by the agent within a fixed time window — surfaces the core problem. Most runbooks are written as memory aids for experienced operators, not as executable instructions.
 
-## Why Human Runbooks Fail for Agents
+## Why human runbooks fail for agents
 
 Human runbooks fail for agents in three distinct ways:
 
@@ -31,19 +31,19 @@ Human runbooks fail for agents in three distinct ways:
 
 Each failure mode requires a different fix. An audit step before rewriting identifies which failure applies to each step.
 
-## The Audit Workflow
+## The audit workflow
 
 Before rewriting anything, audit each runbook step against three questions:
 
-1. **Can the agent invoke this?** If the step requires clicking a UI, calling a named API, or running a shell command, the agent needs the exact invocation — endpoint, flags, expected output format.
-2. **Can the agent evaluate this condition?** Decision points ("if this looks wrong") must become explicit conditionals with a measurable signal and a threshold.
-3. **Does the step depend on knowledge the agent doesn't have?** Service topology, escalation contacts, system quirks — these must be declared explicitly or loaded via a references directory.
+1. Can the agent invoke this? If the step requires clicking a UI, calling a named API, or running a shell command, the agent needs the exact invocation — endpoint, flags, expected output format.
+2. Can the agent evaluate this condition? Decision points ("if this looks wrong") must become explicit conditionals with a measurable signal and a threshold.
+3. Does the step depend on knowledge the agent does not have? Service topology, escalation contacts, system quirks — these must be declared explicitly or loaded via a references directory.
 
 Steps that fail question 1 need tool-call replacements. Steps that fail question 2 need explicit conditionals. Steps that fail question 3 need supporting context injected. Anthropic's guidance on building effective agents notes that tool definitions require the same deliberate engineering attention as system prompts — "example usage, edge cases, input format requirements, and clear boundaries from other tools" ([Anthropic: Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)).
 
-## Before and After: Step Transformations
+## Before and after: step transformations
 
-**Implicit action → explicit tool call**
+### Implicit action becomes explicit tool call
 
 Before:
 ```
@@ -57,7 +57,7 @@ datadog-query.sh service=api metric=error_rate window=5m
 # If above threshold: proceed to step 4
 ```
 
-**Ambiguous condition → explicit conditional**
+### Ambiguous condition becomes explicit conditional
 
 Before:
 ```
@@ -70,7 +70,7 @@ If CPU utilization > 80% for 3 consecutive minutes:
   kubectl scale deployment/api --replicas=$(current_replicas + 2)
 ```
 
-**Assumed context → declared reference**
+### Assumed context becomes declared reference
 
 Before:
 ```
@@ -84,9 +84,9 @@ If unresolved after 15 minutes:
   Include: incident start time, steps attempted, current metric values
 ```
 
-## Packaging as a Skill
+## Packaging as a skill
 
-The correct container for an agent-executable runbook is a SKILL.md file with `disable-model-invocation: true`. This setting means the agent knows the runbook exists but only executes it when explicitly invoked — the human on-call triggers the runbook, the agent does not decide to run it autonomously.
+The correct container for an agent-executable runbook is a SKILL.md file with `disable-model-invocation: true`. This setting means the agent knows the runbook exists but only runs it when explicitly invoked — the human on-call triggers the runbook, the agent does not decide to run it autonomously.
 
 ```
 .claude/skills/
@@ -117,7 +117,7 @@ Read only the runbook that matches the current incident type.
 
 The `scripts/` directory holds the executable shell commands referenced in runbook steps, replacing "run the query" with an actual script the agent can invoke.
 
-## Routing Architecture
+## Routing architecture
 
 ```mermaid
 graph TD
@@ -131,9 +131,9 @@ graph TD
     D --> I[scripts/scale-deployment.sh]
 ```
 
-The routing runbook loads only ~100 tokens at session start. The specific runbook body (~2000–5000 tokens) loads only when the relevant incident type is identified. Supporting scripts load only when invoked.
+The routing runbook loads only ~100 tokens at session start. The specific runbook body (~2000–5000 tokens) loads only when the agent identifies the incident type. Supporting scripts load only when invoked.
 
-## Multi-Step State Tracking
+## Multi-step state tracking
 
 For incidents spanning multiple sessions or requiring human handoffs, the runbook should include a progress file pattern. The agent writes a structured state file after completing each step:
 
@@ -150,19 +150,19 @@ This file is the handoff artifact if the session ends or a different operator co
 
 This is equivalent to the feature list and progress file pattern described in [harness engineering](../agent-design/harness-engineering.md) for long-running agents ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). See [Goal Monitoring and Progress Tracking](../agent-design/goal-monitoring-progress-tracking.md) for the full pattern.
 
-## Adoption Driver: Measurable Goals
+## Adoption driver: measurable goals
 
 A binary adoption target — "all runbooks followable by the agent" — works because it is auditable. A runbook either passes or fails the [agent-followable test](../verification/skill-evals.md). Vague goals ("improve our runbooks") produce inconsistent effort. A binary test with a deadline produces a complete audit.
 
-Operationally: assign 1 engineer to run each runbook against an agent in a test environment. Any step the agent fails to execute or evaluate becomes a tracked rewrite item. This surfaces the actual failure distribution across the runbook library before any rewriting begins.
+Operationally: assign one engineer to run each runbook against an agent in a test environment. Any step the agent fails to execute or evaluate becomes a tracked rewrite item. This surfaces the actual failure distribution across the runbook library before any rewriting begins.
 
-## When This Backfires
+## When this backfires
 
 Agent-executable runbooks work when each step has a deterministic, tool-invokable form. The pattern breaks down in three conditions:
 
-- **Human-judgment steps that cannot be made explicit.** Some decisions depend on live context that no metric captures — a degraded-but-not-alerting system that an experienced operator would deprioritize. Converting these to thresholds produces either false positives or missed escalations. These steps are better handled with a [human-in-the-loop gate](human-in-the-loop.md) than a scripted conditional.
-- **Cross-system state coordination.** Runbooks that span multiple teams, change-freeze windows, or external vendor actions assume the agent can verify state it cannot observe. If the agent cannot confirm the dependency is met, it proceeds on false assumptions.
-- **High blast-radius actions.** Failover triggers, database writes, and traffic reroutes carry irreversible consequences. The `disable-model-invocation: true` packaging mitigates this by requiring human initiation, but it does not prevent the agent from executing a step sequence in the wrong incident context if routing is misconfigured.
+- Human-judgment steps that cannot be made explicit. Some decisions depend on live context that no metric captures — a degraded-but-not-alerting system that an experienced operator would deprioritize. Converting these to thresholds produces either false positives or missed escalations. A [human-in-the-loop gate](human-in-the-loop.md) handles these steps better than a scripted conditional.
+- Cross-system state coordination. Runbooks that span multiple teams, change-freeze windows, or external vendor actions assume the agent can verify state it cannot observe. If the agent cannot confirm the dependency is met, it proceeds on false assumptions.
+- High blast-radius actions. Failover triggers, database writes, and traffic reroutes carry irreversible consequences. The `disable-model-invocation: true` packaging mitigates this by requiring human initiation, but it does not prevent the agent from running a step sequence in the wrong incident context if routing is misconfigured.
 
 The audit-before-rewriting step is the safeguard: steps that cannot be made unambiguous should be flagged as human checkpoints, not converted.
 

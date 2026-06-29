@@ -21,9 +21,9 @@ The most common mistake is waiting until you have a comprehensive suite. Start w
 
 Where to source tasks:
 
-- **Real failure cases**: scenarios where the agent actually failed in testing or production — these are the highest-signal tasks because they represent proven failure modes
-- **Anticipated edge cases**: inputs that are likely to expose weaknesses based on the feature's design
-- **Manual checks you already run**: any scenario you test by hand during development is a candidate eval task — formalizing it prevents the check from being forgotten
+- Real failure cases: scenarios where the agent actually failed in testing or production — these are the highest-signal tasks because they represent proven failure modes
+- Anticipated edge cases: inputs that are likely to expose weaknesses based on the feature's design
+- Manual checks you already run: any scenario you test by hand during development is a candidate eval task — formalizing it prevents the check from being forgotten
 
 Avoid inventing synthetic tasks that do not correspond to real usage patterns. Synthetic tasks produce pass rates that do not predict production reliability.
 
@@ -33,11 +33,11 @@ Avoid inventing synthetic tasks that do not correspond to real usage patterns. S
 
 For each task, define what a correct output looks like. This is the hardest step and the one most teams rush through.
 
-**Binary outcomes** (the output is either right or wrong): test pass/fail, schema validation, state comparison — the code-based graders in [Grading Strategies](grading-strategies.md). A coding agent either produces code that passes the test suite or it does not.
+Binary outcomes (the output is either right or wrong): test pass/fail, schema validation, state comparison — the code-based graders in [Grading Strategies](grading-strategies.md). A coding agent either produces code that passes the test suite or it does not.
 
-**Subjective outcomes** (correctness requires judgment): completeness, factual accuracy, style compliance, source quality. A summarization agent's output requires a rubric to evaluate — still graded on the [outcome, not the path](../../verification/grade-agent-outcomes.md).
+Subjective outcomes (correctness requires judgment): completeness, factual accuracy, style compliance, source quality. A summarization agent's output requires a rubric to evaluate — still graded on the [outcome, not the path](../../verification/grade-agent-outcomes.md).
 
-**The agreement test**: two domain experts should independently agree on the pass/fail verdict for every task before the task is committed to the suite. If they disagree, the task specification is ambiguous — and ambiguous task specifications are a leading source of misleading eval results. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)] See [Human-Review Golden Dataset Curation](../../verification/human-review-golden-dataset-curation.md) for running this agreement process as a repeatable curation loop.
+The agreement test: two domain experts should independently agree on the pass/fail verdict for every task before the task is committed to the suite. If they disagree, the task specification is ambiguous — and ambiguous task specifications are a leading source of misleading eval results. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)] See [Human-Review Golden Dataset Curation](../../verification/human-review-golden-dataset-curation.md) for running this agreement process as a repeatable curation loop.
 
 ---
 
@@ -47,9 +47,9 @@ Use the lightest grader that covers each task:
 
 | Method | Best for | Trade-off |
 |--------|----------|-----------|
-| **Code-based** | Deterministic outputs: test pass/fail, schema validation, regex, state comparison | Fastest, most reliable, but limited to verifiable outputs |
-| **LLM-as-judge** | Open-ended outputs: style, completeness, factual accuracy, source quality | Scalable, but requires calibration against human judgment |
-| **Human** | Ambiguous edge cases, novel failure modes, calibrating LLM judges | Most flexible, but slowest and most expensive |
+| Code-based | Deterministic outputs: test pass/fail, schema validation, regex, state comparison | Fastest, most reliable, but limited to verifiable outputs |
+| LLM-as-judge | Open-ended outputs: style, completeness, factual accuracy, source quality | Scalable, but requires calibration against human judgment |
+| Human | Ambiguous edge cases, novel failure modes, calibrating LLM judges | Most flexible, but slowest and most expensive |
 
 Code-based grading first, LLM-as-judge for what code cannot assess, human grading as a last resort. Cost scales with grader complexity: code-based grading is essentially free, while LLM-as-judge incurs API costs per task per run — with 50 tasks at 3 runs each, costs compound quickly. For a deep dive on each method, see [Grading Strategies](grading-strategies.md).
 
@@ -61,7 +61,7 @@ For your first suite, start with code-based grading wherever possible. It elimin
 
 A minimal eval suite has three components:
 
-**1. Task definitions** — the inputs and expected outputs:
+1. Task definitions — the inputs and expected outputs:
 
 ```yaml
 # evals/feature-name/tasks.yaml
@@ -81,7 +81,7 @@ A minimal eval suite has three components:
     error_type: "validation_error"
 ```
 
-**2. Runner** — executes the agent against each task:
+2. Runner — executes the agent against each task:
 
 ```python
 # evals/feature-name/run.py
@@ -99,7 +99,7 @@ for task in tasks:
     }))
 ```
 
-**3. Grader** — compares agent output against expected:
+3. Grader — compares agent output against expected:
 
 ```python
 def grade(result, expected):
@@ -121,9 +121,9 @@ Keep the structure simple. You will iterate on it. Premature abstraction in eval
 
 Before writing any feature code, run the suite against the current agent state. This baseline tells you:
 
-- **Current pass rate**: how much the feature actually needs to change agent behavior
-- **Which tasks already pass**: surprising passes reveal that the agent already handles some cases — you may not need to build what you thought
-- **Which tasks fail**: the improvement surface your implementation must address
+- Current pass rate: how much the feature actually needs to change agent behavior
+- Which tasks already pass: surprising passes reveal that the agent already handles some cases — you may not need to build what you thought
+- Which tasks fail: the improvement surface your implementation must address
 
 A low initial pass rate on a new capability eval is a feature, not a problem — it defines the gap and makes progress visible as implementation proceeds. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
@@ -135,9 +135,9 @@ Record the baseline results. Every subsequent run compares against this anchor.
 
 After the initial 20 tasks, grow the suite from two sources:
 
-**Production incidents**: every failure report is a candidate eval task. See [Incident-to-Eval Synthesis](../../verification/incident-to-eval-synthesis.md) for the systematic pipeline from incident to eval case.
+Production incidents: every failure report is a candidate eval task. See [Incident-to-Eval Synthesis](../../verification/incident-to-eval-synthesis.md) for the systematic pipeline from incident to eval case.
 
-**Edge cases discovered during development**: as you build the feature, you will encounter inputs that expose unexpected behavior. Add these immediately, the "Monitor and Grow" step of [The Eval-First Development Loop](eval-first-loop.md) — they are the cases you will forget to test manually later.
+Edge cases discovered during development: as you build the feature, you will encounter inputs that expose unexpected behavior. Add these immediately, the "Monitor and Grow" step of [The Eval-First Development Loop](eval-first-loop.md) — they are the cases you will forget to test manually later.
 
 Do not add tasks to pad the count. Every task should represent a genuinely distinct scenario. Duplicate tasks inflate the pass rate without improving coverage.
 
@@ -145,15 +145,15 @@ Do not add tasks to pad the count. Every task should represent a genuinely disti
 
 ## Common First-Suite Mistakes
 
-**Writing tasks after implementation**: this embeds the agent's current behavior into the definition of correct. Write tasks based on what the agent *should* do, not what it *currently* does.
+Writing tasks after implementation: this embeds the agent's current behavior into the definition of correct. Write tasks based on what the agent *should* do, not what it *currently* does.
 
-**Graders that are too strict**: exact-match verifiers reject valid alternative solutions, the failure mode that [outcome grading](../../verification/grade-agent-outcomes.md) avoids. Use outcome-based graders (state checks, test suites) or semantic equivalence rather than string matching.
+Graders that are too strict: exact-match verifiers reject valid alternative solutions, the failure mode that [outcome grading](../../verification/grade-agent-outcomes.md) avoids. Use outcome-based graders (state checks, test suites) or semantic equivalence rather than string matching.
 
-**No baseline run**: skipping the baseline means you cannot measure progress. A pass rate of 85% is meaningless without knowing the starting point.
+No baseline run: skipping the baseline means you cannot measure progress. A pass rate of 85% is meaningless without knowing the starting point.
 
-**Single-run evaluation**: running each task once gives a misleading confidence level. Run at least 3 times per task to detect variance — the [pass@k and pass^k metrics](../../verification/pass-at-k-metrics.md) formalise capability-versus-consistency across runs. If variance is high (pass rate swings more than 20% between runs), you need more runs or tighter task specifications.
+Single-run evaluation: running each task once gives a misleading confidence level. Run at least 3 times per task to detect variance — the [pass@k and pass^k metrics](../../verification/pass-at-k-metrics.md) formalise capability-versus-consistency across runs. If variance is high (pass rate swings more than 20% between runs), you need more runs or tighter task specifications.
 
-**Too few runs for small effects**: a suite of 20–50 tasks at 3 runs each can detect large improvements (30% → 80%) but not small ones (85% → 90%). As changes become incremental, increase task count or run count to maintain the ability to distinguish real improvements from noise.
+Too few runs for small effects: a suite of 20–50 tasks at 3 runs each can detect large improvements (30% → 80%) but not small ones (85% → 90%). As changes become incremental, increase task count or run count to maintain the ability to distinguish real improvements from noise.
 
 ---
 

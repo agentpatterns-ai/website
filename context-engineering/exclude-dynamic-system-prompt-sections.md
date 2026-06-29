@@ -14,24 +14,24 @@ maturity: established
 
 > Strip per-machine context from the Claude Code system prompt so SDK fleets and CI runners share one cached prefix across users and machines.
 
-**Related lesson:** [The Immutable Prefix](https://learn.agentpatterns.ai/context-engineering/caching-static-first/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [The Immutable Prefix](https://learn.agentpatterns.ai/context-engineering/caching-static-first/) covers this concept in a hands-on lesson with quizzes.
 
 The Claude Code `claude_code` preset embeds per-session context — working directory, git-repo flag, platform, active shell, OS version, and auto-memory paths — directly in the system prompt ahead of your `append` text. That makes the byte sequence different on every machine and directory, and Anthropic's prompt cache requires a 100% identical prefix to hit ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). Setting `excludeDynamicSections: true` (TypeScript) or `"exclude_dynamic_sections": True` (Python) moves the dynamic block into the first user message, leaving only the static preset and your `append` text in the system prompt so "identical configurations share a cache entry across users and machines" ([Anthropic SDK docs](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts#improve-prompt-caching-across-users-and-machines)).
 
-## When to Enable It
+## When to enable it
 
 The option pays back when several conditions hold together:
 
 | Condition | Why it matters |
 |---|---|
 | Multiple SDK or CLI instances run the same `preset` + `append` configuration | Cross-machine cache sharing has nothing to amortize across when there is only one machine |
-| The fleet runs in **one workspace** | Prompt caches are workspace-isolated since Feb 2026 ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)) |
+| The fleet runs in one workspace | Prompt caches are workspace-isolated since Feb 2026 ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)) |
 | Total system + tool prefix exceeds the per-model cache minimum | 1,024 tokens on Sonnet 4/4.5 and Opus 4/4.1; 2,048 on Sonnet 4.6 and Haiku 3.5; 4,096 on Opus 4.5/4.6 and Haiku 4.5 ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)) |
 | Per-machine context (cwd, OS, memory paths) is not central to the agent's task | The documented authority trade-off bites hardest on exactly that context |
 
 The CLI documentation gives a concise rule: "Use with `-p` for scripted, multi-user workloads" ([Claude Code CLI reference](https://code.claude.com/docs/en/cli-reference)). CI runners, scheduled-batch jobs, and multi-tenant agent apps fit; an interactive laptop developer does not.
 
-## How to Enable It
+## How to enable it
 
 The option lives on the preset object form and is silently ignored when `systemPrompt` is a custom string ([Anthropic SDK docs](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts#improve-prompt-caching-across-users-and-machines)).
 
@@ -80,28 +80,28 @@ The option lives on the preset object form and is silently ignored when `systemP
     claude -p --exclude-dynamic-system-prompt-sections "triage open issues"
     ```
 
-**Version floor**: `@anthropic-ai/claude-agent-sdk` v0.2.98+ (TypeScript) or `claude-agent-sdk` v0.1.58+ (Python) ([Anthropic SDK docs](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts#improve-prompt-caching-across-users-and-machines)).
+Version floor: `@anthropic-ai/claude-agent-sdk` v0.2.98+ (TypeScript) or `claude-agent-sdk` v0.1.58+ (Python) ([Anthropic SDK docs](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts#improve-prompt-caching-across-users-and-machines)).
 
-## Why It Works
+## Why it works
 
 Anthropic prompt caching is keyed on byte-exact prefix match: "Cache hits require 100% identical prompt segments, including all text and images up to and including the block marked with cache control" ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). Because the preset inlines per-machine context, two sessions that share the same preset and `append` text still produce two different system-prompt hashes and two cache misses. Moving the dynamic block into the first user message leaves the system prompt as `<preset> + <append>` only — byte-identical across the fleet — so the workspace-shared cache covers every machine running that configuration ([Anthropic SDK docs](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts#improve-prompt-caching-across-users-and-machines)). The dynamic context still reaches Claude; it now sits one level lower in the message hierarchy.
 
 CLAUDE.md content is unaffected — the SDK injects it as project context, not into the system prompt, so its caching is independent of this flag ([Anthropic SDK docs](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts#improve-prompt-caching-across-users-and-machines)).
 
-## When This Backfires
+## When this backfires
 
-- **Single-machine interactive use.** One developer on one laptop has no fleet effect to capture, and per-machine context is most useful in the system prompt where it carries full authority. The option is engineering for engineering's sake.
-- **Custom `systemPrompt` string.** The option is silently ignored when `systemPrompt` is a custom string rather than the preset object form ([Anthropic SDK docs](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts#improve-prompt-caching-across-users-and-machines)); the CLI flag has the same restriction — "ignored when `--system-prompt` or `--system-prompt-file` is set" ([Claude Code CLI reference](https://code.claude.com/docs/en/cli-reference)).
-- **Heterogeneous fleet.** Per-tenant `append` text, tool definitions, or model IDs each fork the prefix and refragment the cache. The flag moves only the documented dynamic sections; everything else must already be identical.
-- **Cross-workspace deployments.** Prompt caches are workspace-isolated since Feb 2026 ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). A multi-tenant product that gives each customer its own workspace cannot share caches between tenants regardless of this flag.
-- **Environment-sensitive agents.** Anthropic documents the trade-off directly: "Instructions in the user message carry marginally less weight than the same text in the system prompt, so Claude may rely on them less strongly when reasoning about the current directory or auto-memory paths" ([Anthropic SDK docs](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts#improve-prompt-caching-across-users-and-machines)). The trade-off may have widened on Claude Opus 4.5/4.6, which Anthropic describes as "more responsive to the system prompt than previous models" ([Anthropic prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/system-prompts)).
-- **Sub-minimum prefixes.** If the system prompt sits below the per-model cache floor, no cache writes occur and `excludeDynamicSections` cannot conjure savings that pricing arithmetic forbids ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).
+- Single-machine interactive use. One developer on one laptop has no fleet effect to capture, and per-machine context is most useful in the system prompt where it carries full authority. The option is engineering for engineering's sake.
+- Custom `systemPrompt` string. The option is silently ignored when `systemPrompt` is a custom string rather than the preset object form ([Anthropic SDK docs](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts#improve-prompt-caching-across-users-and-machines)); the CLI flag has the same restriction — "ignored when `--system-prompt` or `--system-prompt-file` is set" ([Claude Code CLI reference](https://code.claude.com/docs/en/cli-reference)).
+- Heterogeneous fleet. Per-tenant `append` text, tool definitions, or model IDs each fork the prefix and refragment the cache. The flag moves only the documented dynamic sections; everything else must already be identical.
+- Cross-workspace deployments. Prompt caches are workspace-isolated since Feb 2026 ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). A multi-tenant product that gives each customer its own workspace cannot share caches between tenants regardless of this flag.
+- Environment-sensitive agents. Anthropic documents the trade-off directly: "Instructions in the user message carry marginally less weight than the same text in the system prompt, so Claude may rely on them less strongly when reasoning about the current directory or auto-memory paths" ([Anthropic SDK docs](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts#improve-prompt-caching-across-users-and-machines)). The trade-off may have widened on Claude Opus 4.5/4.6, which Anthropic describes as "more responsive to the system prompt than previous models" ([Anthropic prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/system-prompts)).
+- Sub-minimum prefixes. If the system prompt sits below the per-model cache floor, no cache writes occur and `excludeDynamicSections` cannot conjure savings that pricing arithmetic forbids ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).
 
 ## Example
 
 A scheduled GitHub Actions job that runs Claude Code across 50 self-hosted runners, each in a different working directory, to triage open issues every hour.
 
-**Before** — default preset, per-runner cwd in the system prompt:
+Before — default preset, per-runner cwd in the system prompt:
 
 ```yaml
 # .github/workflows/triage.yml
@@ -112,7 +112,7 @@ A scheduled GitHub Actions job that runs Claude Code across 50 self-hosted runne
 
 Every runner produces a different system-prompt byte sequence (different `cwd`, sometimes different OS or memory paths), so the workspace cache holds 50 distinct entries. Each turn pays a cache write on a cold runner.
 
-**After** — dynamic sections moved into the first user message:
+After — dynamic sections moved into the first user message:
 
 ```yaml
 # .github/workflows/triage.yml

@@ -19,9 +19,9 @@ maturity: emerging
 
 > Partition tool-use perturbations by which POMDP component they hit — observation, action, reward, or transition — to predict where a deployed agent's robustness collapses.
 
-## The Sim-to-Real Gap for Tool-Use Agents
+## The sim-to-real gap for tool-use agents
 
-Agents benchmarked on clean inputs rank high; deployed against real queries, dozens of MCP tools, and flaky APIs they degrade sharply and unevenly. [Zhou et al. (2026), *When Simulation Lies*](https://arxiv.org/abs/2605.11928) frames this as a sim-to-real gap in the tool-use POMDP and partitions deployment noise by which component it perturbs.
+Agents benchmarked on clean inputs rank high. Deployed against real queries, dozens of MCP tools, and flaky APIs, they degrade sharply and unevenly. [Zhou et al. (2026), 'When Simulation Lies'](https://arxiv.org/abs/2605.11928) frames this as a sim-to-real gap in the tool-use POMDP and partitions deployment noise by which component it perturbs.
 
 Across 21 models from 1.5B to 32B (including o4-mini), headline drops on their RobustBench-TC suite:
 
@@ -34,7 +34,7 @@ Across 21 models from 1.5B to 32B (including o4-mini), headline drops on their R
 
 Scale alone does not close these gaps — a 32B model has the same profile shape as a 1.5B model, only translated [Source: [Zhou et al., 2026](https://arxiv.org/abs/2605.11928)].
 
-## The Four POMDP Components
+## The four POMDP components
 
 Each axis maps to a class of real-world failure documented in framework GitHub issues.
 
@@ -48,27 +48,27 @@ The failure bites when noise propagates into a generated tool call. A query `wha
 
 Perturbations to the tool registry: duplicate tool names across sources, and functionally similar redundant tools.
 
-Two MCP servers with the same tool name freeze the OpenAI Agents SDK — it raises `Duplicate tool names found across MCP servers` ([openai-agents-python #464](https://github.com/openai/openai-agents-python/issues/464), April 2025). In the variant where listing hangs rather than erroring, the agent loop never returns ([#1167](https://github.com/openai/openai-agents-python/issues/1167), July 2025). The SDK's remediation is per-server prefixing, but until opted-in the failure is silent.
+Two MCP servers with the same tool name freeze the OpenAI Agents SDK — it raises `Duplicate tool names found across MCP servers` ([openai-agents-python #464](https://github.com/openai/openai-agents-python/issues/464), April 2025). In the variant where listing hangs rather than erroring, the agent loop never returns ([#1167](https://github.com/openai/openai-agents-python/issues/1167), July 2025). The SDK fixes this with per-server prefixing, but until you opt in the failure is silent.
 
 ### Reward — misleading metadata
 
-Perturbations to the metadata that drives tool selection: misleading descriptions, response-time annotations nudging toward worse options, adversarial suffixes or abbreviated names.
+Perturbations to the metadata that guides tool selection: misleading descriptions, response-time annotations nudging toward worse options, adversarial suffixes or abbreviated names.
 
 This is the largest drop (~40%) [Source: [Zhou et al., 2026](https://arxiv.org/abs/2605.11928)]. Tool descriptions are part of the prompt, so a misleading description is an injected instruction steering selection.
 
 ### Transition — runtime failures after the call
 
-Perturbations after the agent decides: HTTP timeout, 429, 401/403, 5xx, malformed JSON, schema validation failure. The choice was correct; the environment broke.
+Perturbations after the agent decides: HTTP timeout, 429, 401/403, 5xx, malformed JSON, schema validation failure. The choice was correct. The environment broke.
 
-LangChain's `BaseChatOpenAI.request_timeout` defaults to `None` ([source](https://github.com/langchain-ai/langchain/blob/master/libs/partners/openai/langchain_openai/chat_models/base.py)) — the OpenAI SDK reads this as "disable all HTTP timeouts". An autonomous agent on a hung call blocks forever.
+LangChain's `BaseChatOpenAI.request_timeout` defaults to `None` ([LangChain source](https://github.com/langchain-ai/langchain/blob/master/libs/partners/openai/langchain_openai/chat_models/base.py)) — the OpenAI SDK reads this as "disable all HTTP timeouts". An autonomous agent on a hung call blocks forever.
 
-## Why the Partition Predicts Where You'll Fail
+## Why the partition predicts where you'll fail
 
-**Observation robustness is mostly free.** Language modelling makes agents tolerant to typos and rephrasing — eval budget here yields a low-information signal.
+Observation robustness is mostly free. Language modeling makes agents tolerant to typos and rephrasing, so eval budget here yields a low-information signal.
 
-**Reward and transition robustness must be designed.** A 40% drop on reward-relevant perturbations means tool descriptions are not documentation, they are part of the selection prompt. A 30% drop on transition perturbations means runtime failure policy determines tail behaviour more than model choice does.
+Reward and transition robustness must be designed. A 40% drop on reward-relevant perturbations means tool descriptions are not documentation. They are part of the selection prompt. A 30% drop on transition perturbations means runtime failure policy determines tail behavior more than model choice does.
 
-## What Domain Randomization Buys You
+## What domain randomization buys you
 
 Domain randomization — training on perturbed inputs so the real distribution falls inside the trained envelope — is the standard sim-to-real recipe from robotics ([Tobin et al., 2017](https://arxiv.org/abs/1703.06907)). [Zhou et al. (2026)](https://arxiv.org/abs/2605.11928) adapt it as ToolRL-DR: a 3B Qwen2.5 backbone trained with GRPO on 3,984 trajectories across the 16 statically-augmentable perturbation types. Transition perturbations are excluded — they only happen at runtime.
 
@@ -76,7 +76,7 @@ ToolRL-DR-Full retains ~75% of clean accuracy under perturbation and closes ~27%
 
 Caveats: one backbone, one recipe; the ~25% clean-accuracy regression is the price. For teams without RL infrastructure, the taxonomy alone is the load-bearing contribution — SDK-layer fixes (pinning timeouts, namespacing MCP tools, validating model-emitted tool names) address most documented failures without retraining.
 
-## When the Taxonomy Changes a Decision
+## When the taxonomy changes a decision
 
 Use it before designing an eval suite for a tool-using agent:
 
@@ -137,17 +137,17 @@ Transition suite (6 axes):
 
 The shape of the resulting accuracy table tells them which production hardening to fund:
 
-- High drops on the **Reward** axis → audit tool descriptions, treat them as part of the system prompt.
-- High drops on the **Transition** axis → write a retry/timeout/fallback policy, pin HTTP timeouts.
-- High drops on the **Action** axis → namespace MCP tools per server.
-- Low drops on **Observation** → no further work, the language prior absorbs surface noise.
+- High drops on the Reward axis → audit tool descriptions and treat them as part of the system prompt.
+- High drops on the Transition axis → write a retry, timeout, and fallback policy, then pin HTTP timeouts.
+- High drops on the Action axis → namespace MCP tools per server.
+- Low drops on Observation → no further work, the language prior absorbs surface noise.
 
 The team ships with a robustness profile instead of a single number, and they know which axis a regression came from.
 
 ## Key Takeaways
 
 - Tool-use robustness is not one quantity — it is a profile across four POMDP components, and the components fail unevenly.
-- Observation robustness is largely free from language modelling; reward and transition robustness must be explicitly designed.
+- Observation robustness is largely free from language modeling; reward and transition robustness must be explicitly designed.
 - Each perturbation class is grounded in framework-level GitHub issues (LlamaIndex hallucinated tool names, OpenAI Agents SDK duplicate-name hangs, LangChain `request_timeout=None`) — these are deterministic SDK failures before they are model failures.
 - Scale alone does not close the gaps. A 32B model has the same robustness shape as a 1.5B model.
 - Domain-randomization RL (ToolRL-DR) closes some of the gap and transfers ~27% to unseen transition failures, but costs ~25% of clean accuracy and is one recipe on one backbone — try, don't rely on.

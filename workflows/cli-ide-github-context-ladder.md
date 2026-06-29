@@ -15,9 +15,9 @@ maturity: established
 
 > A three-surface workflow that matches the right AI environment to each development phase — CLI for exploration, IDE for refinement, GitHub for durable collaboration — with context preservation across transitions.
 
-## The Three-Surface Model
+## The three-surface model
 
-Development with AI assistants spans three distinct surfaces, each optimized for a different phase of work. GitHub's Copilot CLI guide frames this explicitly: "CLI proves value quickly, IDE refines precision, GitHub ships durably" ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/from-idea-to-pull-request-a-practical-guide-to-building-with-github-copilot-cli/)).
+Development with AI assistants spans three surfaces. Each suits a different phase of work. GitHub's Copilot CLI guide states it plainly: "CLI proves value quickly, IDE refines precision, GitHub ships durably" ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/from-idea-to-pull-request-a-practical-guide-to-building-with-github-copilot-cli/)).
 
 ```mermaid
 graph LR
@@ -27,45 +27,45 @@ graph LR
     B -->|Terminal tab| A
 ```
 
-The ladder is not strictly linear. You move between surfaces based on what the current task demands, carrying context through structured artifacts at each transition.
+The ladder is not strictly linear. You move between surfaces based on what the task demands, carrying context through structured artifacts at each transition.
 
-## CLI Surface: Exploration and Scaffolding
+## CLI surface: exploration and scaffolding
 
-The CLI excels at low-ceremony, high-speed exploration. Nothing runs automatically — you inspect everything before deciding what to execute ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/from-idea-to-pull-request-a-practical-guide-to-building-with-github-copilot-cli/)).
+The CLI is fast and low-ceremony, so it suits exploration. Nothing runs automatically — you inspect everything before you decide what to run ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/from-idea-to-pull-request-a-practical-guide-to-building-with-github-copilot-cli/)).
 
-**Best suited for:**
+Best suited for:
 
 - Scaffolding minimal projects from natural-language intent
 - Running tests at point of failure and diagnosing errors
 - Mechanical repo-wide changes (renames, migrations)
 - Exploring problem spaces before committing to a design
 
-**Copilot CLI** provides a `/diff` command for syntax-highlighted inline review and automatically delegates to four built-in specialized agents — Explore, Task, Code Review, and Plan — based on the nature of the request ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)).
+Copilot CLI provides a `/diff` command for syntax-highlighted inline review. It also delegates to four built-in agents — Explore, Task, Code Review, and Plan — based on the request ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)).
 
-**Claude Code CLI** follows Unix philosophy — pipeable, scriptable, composable with other tools. [Plan mode](../tools/claude/plan-mode.md) (`--permission-mode plan`) restricts to read-only operations, useful for exploration before implementation ([Claude Code docs](https://code.claude.com/docs/en/common-workflows)).
+Claude Code CLI follows the Unix philosophy — pipeable, scriptable, and composable with other tools. [Plan mode](../tools/claude/plan-mode.md) (`--permission-mode plan`) restricts the CLI to read-only operations, which helps you explore before you implement ([Claude Code docs](https://code.claude.com/docs/en/common-workflows)).
 
 The CLI produces diffs and plans as intermediate artifacts — concrete outputs that bridge exploration to the next surface.
 
-## IDE Surface: Refinement and Implementation
+## IDE surface: refinement and implementation
 
-The IDE is where precision matters more than speed. This is where you "make decisions you'll defend in review" ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/from-idea-to-pull-request-a-practical-guide-to-building-with-github-copilot-cli/)).
+In the IDE, precision matters more than speed. This is where you "make decisions you'll defend in review" ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/from-idea-to-pull-request-a-practical-guide-to-building-with-github-copilot-cli/)).
 
-**Best suited for:**
+Best suited for:
 
 - Multi-file reasoning and semantic understanding
 - Visual diff review before committing
 - Edge case handling and API refinement
 - Inline suggestions and targeted code generation
 
-**VS Code Copilot agent mode** provides autonomous multi-step execution — it breaks work into steps, edits files, runs commands, and self-corrects on errors ([VS Code docs](https://code.visualstudio.com/docs/copilot/overview)).
+VS Code Copilot agent mode runs multiple steps on its own — it breaks work into steps, edits files, runs commands, and corrects its own errors ([VS Code docs](https://code.visualstudio.com/docs/copilot/overview)).
 
-**Claude Code** is available across VS Code, JetBrains, and Desktop — the same engine, CLAUDE.md files, and MCP servers work across all surfaces ([Claude Code docs](https://code.claude.com/docs)).
+Claude Code runs across VS Code, JetBrains, and Desktop. The same engine, CLAUDE.md files, and MCP servers work on every surface ([Claude Code docs](https://code.claude.com/docs)).
 
-## GitHub Surface: Durable Collaboration
+## GitHub surface: durable collaboration
 
-GitHub is where individual work becomes durable through PRs, CI pipelines, and async review.
+GitHub is where individual work becomes durable, through PRs, CI pipelines, and async review.
 
-**Best suited for:**
+Best suited for:
 
 - Opening PRs that trigger CI validation
 - Asynchronous code review with teammates
@@ -74,32 +74,32 @@ GitHub is where individual work becomes durable through PRs, CI pipelines, and a
 
 The Copilot coding agent works asynchronously via GitHub Actions: it plans work, writes code, runs tests, self-reviews, runs security scanning, and opens a PR ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent)).
 
-## Context Preservation Across Surfaces
+## Context preservation across surfaces
 
-The ladder works only if context survives transitions. Several mechanisms serve as connective tissue:
+The ladder works only if context survives transitions. Several mechanisms keep it intact:
 
-### Instruction Files
+### Instruction files
 
-CLAUDE.md files work across all Claude Code surfaces (terminal, VS Code, JetBrains, Desktop). Project instructions in `./CLAUDE.md` persist across transitions without manual effort. Auto memory accumulates learnings (build commands, debug insights, preferences) across sessions independently ([Claude Code docs: Memory](https://code.claude.com/docs/en/memory)).
+CLAUDE.md files work across all Claude Code surfaces (terminal, VS Code, JetBrains, Desktop). Project instructions in `./CLAUDE.md` persist across transitions without manual effort. Auto memory records learnings (build commands, debug insights, preferences) across sessions on its own ([Claude Code docs: Memory](https://code.claude.com/docs/en/memory)).
 
-Copilot reads `.github/copilot-instructions.md` and custom agent files across IDE and GitHub surfaces, providing similar cross-surface instruction persistence.
+Copilot reads `.github/copilot-instructions.md` and custom agent files across the IDE and GitHub surfaces, which gives you similar cross-surface persistence.
 
-### Session Handoff Commands
+### Session handoff commands
 
 Claude Code provides explicit handoff commands for surface transitions ([Claude Code docs](https://code.claude.com/docs/en/remote-control)):
 
 - `--teleport` — resumes a cloud session in the local terminal ([Claude Code CLI reference](https://code.claude.com/docs/en/cli-reference))
 - `--from-pr` — resumes a session linked to a specific PR, creating a GitHub-to-CLI handoff ([Claude Code CLI reference](https://code.claude.com/docs/en/cli-reference))
 
-### Structured Artifacts
+### Structured artifacts
 
-Diffs, commit messages, progress files, and PR descriptions serve as handoff artifacts between sessions. Progress files and [feature list specs](../instructions/feature-list-files.md) provide structured continuity for multi-session work ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+Diffs, commit messages, progress files, and PR descriptions serve as handoff artifacts between sessions. Progress files and [feature list specs](../instructions/feature-list-files.md) give multi-session work structured continuity ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
-### Lightweight Identifiers
+### Lightweight identifiers
 
-Rather than pre-loading full objects, maintain file paths, queries, and links that can be dynamically loaded at each surface. This "lightweight identifier" approach keeps context portable without bloating token budgets ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+Rather than pre-load full objects, keep file paths, queries, and links that each surface can load on demand. This "lightweight identifier" approach keeps context portable without bloating token budgets ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
-## Choosing the Right Surface
+## Choosing the right surface
 
 | Signal | Surface | Reason |
 |--------|---------|--------|
@@ -109,13 +109,13 @@ Rather than pre-loading full objects, maintain file paths, queries, and links th
 | "This is mechanical and well-scoped" | GitHub (agent) | Autonomous execution, no human typing needed |
 | "I started remotely, need local tools" | CLI via `--teleport` | Resume with full filesystem access |
 
-## When This Backfires
+## When this backfires
 
-The three-surface model assumes context transfer is low-friction. In practice, three conditions undermine it:
+The three-surface model assumes context transfers with little friction. In practice, three conditions undermine it:
 
-1. **Context doesn't survive the transition.** If a CLI exploration session produces no structured artifact — no diff, no notes, no commit — the IDE session starts cold. The ladder degrades to sequential isolated sessions.
-2. **Async GitHub iteration stalls the local loop.** Delegating to `@copilot` or a GitHub Actions agent on a tight feedback loop adds latency that local iteration would avoid. Reserve the GitHub surface for work where async is an advantage, not a workaround.
-3. **Tool lock-in within a surface.** The model assumes Claude Code and Copilot CLI are interchangeable at the CLI layer. In practice, they differ on file access scope, memory mechanisms, and available tools. Switching mid-task without re-establishing context has the same cost as switching surfaces.
+1. Context does not survive the transition. If a CLI exploration session produces no structured artifact — no diff, no notes, no commit — the IDE session starts cold. The ladder degrades to a series of isolated sessions.
+2. Async GitHub iteration stalls the local loop. Handing tight feedback to `@copilot` or a GitHub Actions agent adds latency that local iteration would avoid. Reserve the GitHub surface for work where async is an advantage, not a workaround.
+3. Tool lock-in within a surface. The model assumes Claude Code and Copilot CLI are interchangeable at the CLI layer. In practice, they differ on file access scope, memory mechanisms, and available tools. Switching mid-task without re-establishing context costs as much as switching surfaces.
 
 ## Key Takeaways
 
@@ -129,7 +129,7 @@ The three-surface model assumes context transfer is low-friction. In practice, t
 
 A developer is asked to add a rate-limiting middleware to an existing API service.
 
-**CLI — Exploration and Scaffolding**
+### CLI step: exploration and scaffolding
 
 ```bash
 # Explore the codebase before touching anything
@@ -143,13 +143,13 @@ $ gh copilot diff | less
 
 The CLI produces a diff and a short plan. Nothing is committed yet — these artifacts are the handoff to the IDE.
 
-**IDE — Refinement and Implementation**
+### IDE step: refinement and implementation
 
-Open the scaffolded file in VS Code. Copilot agent mode or Claude Code fills in the edge cases (per-user vs per-IP limits, configurable window, test coverage). The developer reviews inline suggestions, adjusts the API surface, and runs the test suite from the integrated terminal. `CLAUDE.md` carries the project conventions (import style, error patterns) into this session automatically.
+Open the scaffolded file in VS Code. Copilot agent mode or Claude Code fills in the edge cases (per-user and per-IP limits, configurable window, test coverage). The developer reviews inline suggestions, adjusts the API surface, and runs the test suite from the integrated terminal. `CLAUDE.md` carries the project conventions (import style, error patterns) into this session automatically.
 
 When the implementation is solid, the developer commits and pushes.
 
-**GitHub — Durable Collaboration**
+### GitHub step: durable collaboration
 
 The push opens a PR. CI runs lint and tests. A teammate leaves a review comment: "the window should be configurable per-route." The developer adds an `@copilot` comment on the PR asking it to apply the per-route config change. Copilot iterates in a GitHub Actions worker, pushes a fixup commit, and re-runs CI. The reviewer approves and merges.
 

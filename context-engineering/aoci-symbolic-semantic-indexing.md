@@ -20,22 +20,22 @@ maturity: emerging
 
 > A persistent repository blueprint pairing each entry's symbolic architectural coordinates with semantic content — read whole before any task to give the agent global structure.
 
-## The Orientation Problem AOCI Targets
+## The orientation problem AOCI targets
 
-Retrieval, summarization, and agent exploration each construct a *different view at query time*. The view varies between runs, and what persists is typically ad-hoc. Without global repository structure, agents tend to focus narrowly on specific files and settle into local optimums. ([Liu et al., 2026](https://arxiv.org/abs/2605.02421); [Preprints 202510.0924](https://www.preprints.org/manuscript/202510.0924))
+Retrieval, summarization, and agent exploration each build a different view at query time. The view varies between runs, and what persists is usually ad-hoc. Without global repository structure, agents focus narrowly on specific files and settle into local optimums. ([Liu et al., 2026](https://arxiv.org/abs/2605.02421); [Preprints 202510.0924](https://www.preprints.org/manuscript/202510.0924))
 
-AOCI (AI-Oriented Code Indexing) inverts this. The index is built once, persists across runs, is independent of any particular query, and is read whole before the task begins. ([Liu et al., 2026](https://arxiv.org/abs/2605.02421))
+AOCI (AI-Oriented Code Indexing) inverts this. You build the index once. It persists across runs, stays query-independent, and the agent reads it whole before the task begins. ([Liu et al., 2026](https://arxiv.org/abs/2605.02421))
 
-## The Symbolic-Semantic Split
+## The symbolic-semantic split
 
 Each AOCI entry has two components:
 
 | Component | Purpose | Example content |
 |-----------|---------|-----------------|
-| **Symbolic** | Architectural coordinates — where this thing sits in the system | Module path, layer, dependencies, public surface |
-| **Semantic** | What it does and why — function, constraints, key design decisions | Role, invariants, error model, intended consumers |
+| Symbolic | Architectural coordinates — where this thing sits in the system | Module path, layer, dependencies, public surface |
+| Semantic | What it does and why — function, constraints, key design decisions | Role, invariants, error model, intended consumers |
 
-The symbolic component is what an AST or call-graph extractor would produce. The semantic component is what an architect would write in an ADR. AOCI's contribution is treating them as a single artifact the LLM consumes together. ([Liu et al., 2026](https://arxiv.org/abs/2605.02421))
+An AST or call-graph extractor produces the symbolic component. An architect writes the semantic component in an ADR. AOCI's contribution is to treat them as a single artifact the LLM reads together. ([Liu et al., 2026](https://arxiv.org/abs/2605.02421))
 
 ```mermaid
 graph TD
@@ -49,34 +49,34 @@ graph TD
     style Q stroke-dasharray: 5 5
 ```
 
-## How It Differs From Adjacent Approaches
+## How it differs from adjacent approaches
 
 AOCI sits alongside two patterns already on this site:
 
 | Approach | When the index is built | What enters context | Best when |
 |----------|------------------------|---------------------|-----------|
-| **AOCI blueprint** | Once, offline; persistent | The whole index, read in a single pass before any task | Stable architecture; agent needs global frame before local edits |
-| **[Repository Map](repository-map-pattern.md)** (tree-sitter + PageRank) | Per session, token-fitted | Top-ranked symbols sized to a budget; ranking is task-personalised | Large stable codebases; need cross-file orientation under tight token budgets |
-| **[Repository-Level Retrieval](repository-level-retrieval-code-generation.md)** | Per query | Top-k chunks scored against the current task | The relevant slice is small and the task is well-specified |
-| **Agentic search** (Claude Code's choice) | Never — no index | Whatever the agent fetches via Glob, Grep, Read | Living repos where freshness matters more than structure ([Vadim, 2025](https://vadim.blog/claude-code-no-indexing)) |
+| AOCI blueprint | Once, offline; persistent | The whole index, read in a single pass before any task | Stable architecture; agent needs global frame before local edits |
+| [Repository Map](repository-map-pattern.md) (tree-sitter + PageRank) | Per session, token-fitted | Top-ranked symbols sized to a budget; ranking is task-personalised | Large stable codebases; need cross-file orientation under tight token budgets |
+| [Repository-Level Retrieval](repository-level-retrieval-code-generation.md) | Per query | Top-k chunks scored against the current task | The relevant slice is small and the task is well-specified |
+| Agentic search (Claude Code's choice) | Never — no index | Whatever the agent fetches via Glob, Grep, Read | Living repos where freshness matters more than structure ([Vadim, 2025](https://vadim.blog/claude-code-no-indexing)) |
 
-The repo map is still query-shaped (PageRank personalization weights files being edited). RAG is fully query-shaped. AOCI is *query-independent* — the same index serves every task, which is the point.
+The repo map is still query-shaped (PageRank personalization weights files being edited). RAG is fully query-shaped. AOCI is query-independent — the same index serves every task, which is the point.
 
-## Reported Results
+## Reported results
 
-In the AOCI paper's evaluation across 4 projects, 3 LLMs, and 6 context conditions (2,160 evaluations), AOCI ranked second only to a theoretical upper-bound oracle. On 19 industrial tasks across 5 systems, AOCI produced zero final-state defects, while mainstream agent-based tools introduced defects in 12 tasks and consumed 4–130x more tokens (p < 0.001). The performance gap widens with task complexity. ([Liu et al., 2026](https://arxiv.org/abs/2605.02421))
+In the AOCI paper's evaluation across 4 projects, 3 LLMs, and 6 context conditions (2,160 evaluations), AOCI ranked second only to a theoretical upper-bound oracle. On 19 industrial tasks across 5 systems, AOCI produced zero final-state defects, while mainstream agent-based tools introduced defects in 12 tasks and consumed 4 to 130x more tokens (p < 0.001). The performance gap widens with task complexity. ([Liu et al., 2026](https://arxiv.org/abs/2605.02421))
 
 These figures come from one team's evaluation and are not yet independently replicated. Treat them as a directional signal, not a settled benchmark.
 
-**Independent counter-evidence points the other way.** The strongest independent benchmark of this category reaches the opposite conclusion: Gloaguen et al. evaluated AGENTS.md-style files — persistent context read before the task, the family AOCI belongs to — across SWE-bench Lite and AGENTbench and found they *tend to reduce* task success versus no repository context, while raising inference cost over 20% as agents over-explore. Auto-generated files fared worst (−3% success); even human-written ones gained only ~4% at ~19% cost ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988); covered in [Evaluating AGENTS.md](../instructions/evaluating-agents-md-context-files.md)). AOCI was not tested directly but sits squarely in that read-whole category — weigh its favorable single-source numbers against this signal before adopting.
+Independent counter-evidence points the other way. The strongest independent benchmark of this category reaches the opposite conclusion. Gloaguen et al. evaluated AGENTS.md-style files — persistent context read before the task, the family AOCI belongs to — across SWE-bench Lite and AGENTbench. They found these files tend to reduce task success versus no repository context, while raising inference cost over 20% as agents over-explore. Auto-generated files fared worst (−3% success); even human-written ones gained only about 4% at about 19% cost ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988); covered in [Evaluating AGENTS.md](../instructions/evaluating-agents-md-context-files.md)). AOCI was not tested directly but sits squarely in that read-whole category — weigh its favorable single-source numbers against this signal before adopting.
 
-## When This Backfires
+## When this backfires
 
-- **Rapidly-changing monorepos** — index decay outpaces rebuild cadence; the blueprint misleads more than it orients. The same failure mode flagged for [tree-sitter repo maps](repository-map-pattern.md#when-this-backfires) applies and is worse here because the AOCI artifact is heavier to rebuild.
-- **Heavy metaprogramming or runtime code generation** — symbolic extraction misses methods generated by Rails `method_missing`, Python metaclasses, or macro-heavy Rust; the symbolic half of every entry lies.
-- **Small or flat codebases** — under ~20 files the agent can read the whole repo directly; building a separate blueprint adds cost without orientation gain.
-- **Large-context models on medium repos** — when the model can hold the codebase plus task in context, AOCI's compression introduces truncation risk for no benefit.
-- **Single-source evidence** — the strong reported numbers come from one paper; teams adopting on those numbers alone are extrapolating from one team's setup.
+- Rapidly-changing monorepos — index decay outpaces rebuild cadence, so the blueprint misleads more than it orients. The same failure mode flagged for [tree-sitter repo maps](repository-map-pattern.md#when-this-backfires) applies, and is worse here because the AOCI artifact is heavier to rebuild.
+- Heavy metaprogramming or runtime code generation — symbolic extraction misses methods generated by Rails `method_missing`, Python metaclasses, or macro-heavy Rust, so the symbolic half of every entry lies.
+- Small or flat codebases — under about 20 files the agent can read the whole repo directly, so a separate blueprint adds cost without orientation gain.
+- Large-context models on medium repos — when the model can hold the codebase plus task in context, AOCI's compression adds truncation risk for no benefit.
+- Single-source evidence — the strong reported numbers come from one paper, so teams adopting on those numbers alone are extrapolating from one team's setup.
 
 ## Example
 
@@ -103,7 +103,7 @@ design_decisions:
   - "Sessions are server-side; tokens are opaque references, not JWT claims"
 ```
 
-An agent reading this before any task knows the architectural role, the invariants it must preserve, and the consumers whose contract it must not break — without having retrieved a single line of implementation. The implementation itself is fetched on demand once the agent decides which file to edit.
+An agent reading this before any task knows the architectural role, the invariants it must preserve, and the consumers whose contract it must not break — without retrieving a line of implementation. The agent fetches the implementation on demand once it decides which file to edit.
 
 ## Key Takeaways
 

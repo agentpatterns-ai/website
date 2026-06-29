@@ -18,25 +18,25 @@ maturity: emerging
 
 > Reformatting constraints — more structured, more compact, more formal — does not improve how reliably models follow them. Compliance is determined by what constraints say, not how they are laid out.
 
-**Related lesson:** [The Ceiling](https://learn.agentpatterns.ai/prompt-engineering/the-ceiling/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [The Ceiling](https://learn.agentpatterns.ai/prompt-engineering/the-ceiling/) — this concept features in a hands-on lesson with quizzes.
 
-## The Experiment
+## The experiment
 
 A study across 11 models, 16 benchmark tasks, and 830+ LLM invocations tested three encoding forms — including a compact header form — and four propagation modes against a constraint satisfaction rate (CSR) metric ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).
 
-**Token reduction**: compact headers cut constraint-portion tokens by ~71% and full-prompt tokens by 25–30%. This result replicated across three independent rounds.
+Compact headers cut constraint-portion tokens by about 71% and full-prompt tokens by 25 to 30%. This result replicated across three independent rounds.
 
-**Compliance effect**: no statistically significant difference in CSR across encoding forms or propagation modes. Effect sizes were negligible (Cliff's δ < 0.01) ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).
+Compliance did not move. There was no statistically significant difference in CSR across encoding forms or propagation modes. Effect sizes were negligible (Cliff's δ < 0.01) ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).
 
 Compact headers are a free token saving. They are not a compliance fix.
 
-## What Actually Drives Compliance
+## What actually drives compliance
 
-The study found constraint *type* — not encoding — produced the largest compliance variation: a 9 percentage point gap between conventional and counter-intuitive constraints. Counter-intuitive constraints failed at 10–100% rates regardless of encoding. Conventional constraints achieved 99%+ compliance regardless of encoding ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).
+The study found that constraint type — not encoding — produced the largest compliance variation: a 9 percentage point gap between conventional and counter-intuitive constraints. Counter-intuitive constraints failed at 10 to 100% rates regardless of encoding. Conventional constraints achieved 99%+ compliance regardless of encoding ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).
 
-The gap between understanding and execution is also measurement-dependent: model self-assessment systematically overestimates compliance relative to rule-based scoring ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)). A model that reports following a constraint may not be.
+The gap between understanding and execution also depends on how you measure it. Model self-assessment systematically overestimates compliance relative to rule-based scoring ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)). A model that reports following a constraint may not be.
 
-## Why This Matters for Practitioners
+## Why this matters for practitioners
 
 Engineers debugging compliance failures often reach for formatting as the fix — restructuring bullets, adding headers, switching to YAML-style constraint blocks. The evidence does not support this approach.
 
@@ -50,9 +50,9 @@ When a model misses a constraint:
 | Constraint competes with too many others | Move to schema validation, type checker, or pre-commit hook |
 | Reformatted constraint (encoding change) | Has no measurable effect — do not invest here |
 
-## Using Compact Encoding for Its Actual Benefit
+## Using compact encoding for its actual benefit
 
-Compact headers *are* worth adopting — for token budget reasons. A 71% reduction in constraint token consumption is meaningful across long sessions or high-volume agent loops. This compounds with [prompt compression](../context-engineering/prompt-compression.md) applied to the rest of the system prompt.
+Compact headers are worth adopting — for token budget reasons. A 71% reduction in constraint token consumption is meaningful across long sessions or busy agent loops. This adds to the saving from [prompt compression](../context-engineering/prompt-compression.md) applied to the rest of the system prompt.
 
 ```text
 # Compact header form — token-efficient, compliance-neutral
@@ -72,15 +72,15 @@ implementation under 50 lines.
 
 Both forms produce the same constraint satisfaction rate. Use the compact form to reduce token consumption, not to improve compliance.
 
-## When This Backfires
+## When this backfires
 
 Compact headers are token-efficient and compliance-neutral, but the trade-off is not zero:
 
-- **Human readability drops**: dense key-value constraint blocks are harder to audit and debug than prose when a constraint silently fails and you need to trace why
-- **Token savings are irrelevant at low volume**: for single-use or infrequent prompts, optimising for constraint-token count adds complexity with no practical benefit
-- **Ambiguity at the edges**: extreme compression can introduce parsing ambiguity on unusual inputs where the model must infer the intent behind a terse rule — prose constraints leave less room for misinterpretation in edge cases
-- **Counter-intuitive constraints remain unsolved**: neither compact nor verbose encoding improves compliance for constraints that conflict with model training priors; encoding form is the wrong lever regardless of format
-- **Scope caveat on encoding neutrality**: the null result applies to constraint blocks inside a coding prompt. Broader prompt-format work has found format can move task performance by up to 40% on smaller models, with larger models more robust ([He et al., 2024](https://arxiv.org/abs/2411.10541)) — so encoding neutrality should not be generalised beyond the constraint-satisfaction setting
+- Human readability drops. Dense key-value constraint blocks are harder to audit and debug than prose when a constraint silently fails and you need to trace why.
+- Token savings do not matter at low volume. For single-use or infrequent prompts, optimizing for constraint-token count adds work with no practical benefit.
+- Ambiguity grows at the edges. Heavy compression can make parsing ambiguous on unusual inputs, where the model must infer the intent behind a terse rule. Prose constraints leave less room for misreading in edge cases.
+- Counter-intuitive constraints stay unsolved. Neither compact nor verbose encoding improves compliance for constraints that conflict with model training priors. Encoding form is the wrong lever whatever the format.
+- The neutrality result has a narrow scope. It applies to constraint blocks inside a coding prompt. Broader prompt-format work found that format can move task performance by up to 40% on smaller models, while larger models hold steadier ([He et al., 2024](https://arxiv.org/abs/2411.10541)). Do not extend encoding neutrality beyond the constraint-satisfaction setting.
 
 ## Key Takeaways
 

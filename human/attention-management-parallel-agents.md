@@ -18,55 +18,55 @@ maturity: established
 
 > With multiple AI agents running simultaneously, your scarce resource is not coding ability but attention — and managing it resembles CPU scheduling more than engineering.
 
-## The Scheduling Metaphor
+## The scheduling metaphor
 
-When you run parallel agent sessions, your role shifts from executing work to dispatching and reviewing it. The [ClaudeLog "You Are the Main Thread"](https://claudelog.com/mechanics/you-are-the-main-thread) framing captures this: treat your attention as the main thread, agent sessions as worker threads, and apply the principle "do not block the main thread."
+When you run parallel agent sessions, your role shifts from doing the work to dispatching and reviewing it. The [ClaudeLog "You Are the Main Thread"](https://claudelog.com/mechanics/you-are-the-main-thread) framing captures this: treat your attention as the main thread, agent sessions as worker threads, and apply the principle "do not block the main thread."
 
-With N agents running, a single idle minute represents N units of forgone progress — each unspawned agent is an idle core. [Source: [ClaudeLog](https://claudelog.com/mechanics/you-are-the-main-thread)]
+With N agents running, a single idle minute costs N units of forgone progress — each unspawned agent is an idle core. [Source: [ClaudeLog](https://claudelog.com/mechanics/you-are-the-main-thread)]
 
-## Attention as the Bottleneck
+## Attention as the bottleneck
 
 The natural bottleneck in parallel agent workflows is not code generation — it is your review capacity. As Addy Osmani observes, "the highest-leverage developers will look like async-first managers running a small fleet of parallel AI coding agents," and the constraint shifts from producing code to evaluating it. [Source: [Addy Osmani — Your AI Coding Agents Need a Manager](https://addyosmani.com/blog/coding-agents-manager/)]
 
 The Sora for Android team found simultaneous Codex sessions felt "uncannily similar to being a tech lead with several new engineers, all making progress, all needing guidance." [Source: [OpenAI — Shipping Sora for Android with Codex](https://openai.com/index/shipping-sora-for-android-with-codex/)]
 
-Agents work in parallel without attention cost to each other; the human switches serially, each switch carrying cognitive overhead.
+Agents work in parallel without costing each other attention. You switch between them one at a time, and each switch carries cognitive overhead.
 
-## Scheduling Strategies
+## Scheduling strategies
 
-### Idle Core Detection
+### Idle core detection
 
-The reflexive question: "What asynchronous process could I have running in the background that could be delivering value?" [Source: [ClaudeLog](https://claudelog.com/mechanics/you-are-the-main-thread)] Recognizing idle agent slots and filling them with delegatable tasks is a distinct skill from writing code.
+The reflexive question is: "What asynchronous process could I have running in the background that could be delivering value?" [Source: [ClaudeLog](https://claudelog.com/mechanics/you-are-the-main-thread)] Spotting idle agent slots and filling them with delegatable tasks is a distinct skill from writing code.
 
-### WIP Limits
+### WIP limits
 
-Osmani describes pairing background agents (4-5 low-touch sessions handling mechanical tasks) with human-in-the-loop sessions (3-5 high-touch sessions requiring architectural judgment). [Source: [Addy Osmani — Your AI Coding Agents Need a Manager](https://addyosmani.com/blog/coding-agents-manager/)] This mirrors WIP limits in lean manufacturing — unbounded parallelism degrades review quality faster than it accelerates output.
+Osmani describes pairing background agents (4-5 low-touch sessions handling mechanical tasks) with human-in-the-loop sessions (3-5 high-touch sessions needing architectural judgment). [Source: [Addy Osmani — Your AI Coding Agents Need a Manager](https://addyosmani.com/blog/coding-agents-manager/)] This mirrors WIP limits in lean manufacturing — unbounded parallelism degrades review quality faster than it speeds up output.
 
-### Task Classification for Delegation
+### Task classification for delegation
 
 Not all work benefits equally from parallel dispatch. Osmani distinguishes [three tiers](../agent-design/delegation-decision.md):
 
-- **Fully delegated** — mechanical implementation, boilerplate, migrations. Fire and review later.
-- **Checkpoint-based** — shared interfaces, integration points. Agent works autonomously between [human review gates](bottleneck-migration.md).
-- **Human-only** — architecture decisions, product intent, security-critical judgment. Never delegated.
+- Fully delegated — mechanical implementation, boilerplate, migrations. Fire and review later.
+- Checkpoint-based — shared interfaces, integration points. The agent works on its own between [human review gates](bottleneck-migration.md).
+- Human-only — architecture decisions, product intent, security-critical judgment. Never delegated.
 
 [Source: [Addy Osmani — Your AI Coding Agents Need a Manager](https://addyosmani.com/blog/coding-agents-manager/)]
 
-### Context-Switch Efficiency
+### Context-switch efficiency
 
-Parallel agent work inverts the focus-time ideal: you context-switch frequently, reviewing outputs and unblocking agents. [Source: [The Pragmatic Engineer](https://blog.pragmaticengineer.com/new-trend-programming-by-kicking-off-parallel-ai-agents/)]
+Parallel agent work inverts the focus-time ideal: you context-switch often, reviewing outputs and unblocking agents. [Source: [The Pragmatic Engineer](https://blog.pragmaticengineer.com/new-trend-programming-by-kicking-off-parallel-ai-agents/)]
 
 Armin Ronacher: "it's only so much my mind can review." Context-switch throughput varies, but everyone has a ceiling. [Source: [The Pragmatic Engineer](https://blog.pragmaticengineer.com/new-trend-programming-by-kicking-off-parallel-ai-agents/)]
 
-## When the Metaphor Breaks
+## When the metaphor breaks
 
-CPU schedulers are deterministic; human attention is not. Key differences:
+CPU schedulers are deterministic; human attention is not. The differences:
 
-- **[Fatigue degrades throughput.](cognitive-load-ai-fatigue.md)** Review quality drops over extended sessions, compounding error risk across active agents.
-- **Not all switches are equal.** Switching between two boilerplate agents costs less than switching between an architecture decision and a debugging session.
-- **Coordination overhead grows non-linearly.** Brooks's Law applies — each additional agent session increases the total coordination surface, and linear speedup is not guaranteed.
+- [Fatigue degrades throughput.](cognitive-load-ai-fatigue.md) Review quality drops over long sessions, which compounds error risk across active agents.
+- Not all switches are equal. Switching between two boilerplate agents costs less than switching between an architecture decision and a debugging session.
+- Coordination overhead grows non-linearly. Brooks's Law applies — each added agent session widens the total coordination surface, and linear speedup is not guaranteed.
 
-The metaphor helps recognize idle capacity and structure dispatch; it misleads if applied without accounting for human limits.
+The metaphor helps you spot idle capacity and structure dispatch. It misleads if you apply it without accounting for human limits.
 
 ## Example
 
@@ -89,7 +89,7 @@ Each session gets a task classified before dispatch:
 | `../feature-migrate` | Write Alembic migration for new `user_roles` table | Checkpoint-based — review schema before applying |
 | `../feature-auth` | Refactor auth to support OAuth2 + PKCE | Human-in-the-loop — architectural judgment required |
 
-The developer monitors the fully-delegated sessions only when they emit completion signals, keeps one terminal pane open for the auth refactor, and uses the idle minutes (waiting for agents to complete) to classify the next batch of tasks. WIP is kept to four sessions — adding a fifth would push review load past the point where output quality can be validated.
+The developer monitors the fully-delegated sessions only when they emit completion signals, keeps one terminal pane open for the auth refactor, and uses the idle minutes (waiting for agents to finish) to classify the next batch of tasks. WIP stays at four sessions — adding a fifth would push review load past the point where output quality can be validated.
 
 ## Key Takeaways
 
@@ -107,3 +107,5 @@ The developer monitors the fully-delegated sessions only when they emit completi
 - [Distributed Computing Parallels in Agent Architecture](../multi-agent/distributed-computing-parallels.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
 - [The Bottleneck Migration](bottleneck-migration.md)
+</content>
+</invoke>

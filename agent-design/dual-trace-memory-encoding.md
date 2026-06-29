@@ -17,18 +17,18 @@ maturity: emerging
 
 > Dual-trace memory encoding pairs each fact with a narrative scene of when it was learned, improving cross-session and temporal recall at no retrieval cost.
 
-## The Encoding Gap
+## The encoding gap
 
-Most [agent memory systems](agent-memory-patterns.md) store facts as flat records: a sentence, an embedding, optionally a timestamp. The record answers *what* but erases *when and where* the fact was learned. Queries that depend on that context — "has the rate limit changed since last quarter?", "what was true before the refactor?" — fail because the signal was discarded at write time.
+Most [agent memory systems](agent-memory-patterns.md) store facts as flat records: a sentence, an embedding, optionally a timestamp. The record answers what the fact is but erases when and where it was learned. Queries that depend on that context fail, because the signal was discarded at write time. Two examples: "has the rate limit changed since last quarter?" and "what was true before the refactor?"
 
 Dual-trace encoding stores two traces per entry:
 
-- a **factual trace** — the extractable claim, as in a conventional memory system
-- a **scene trace** — a short narrative reconstruction of the moment the fact was learned: session, surrounding topic, prompting decision, temporal position
+- a factual trace — the extractable claim, as in a conventional memory system
+- a scene trace — a short narrative reconstruction of the moment the fact was learned: session, surrounding topic, prompting decision, temporal position
 
 The agent commits to contextual detail at encoding time, not retrieval. Retrieval over both traces lets temporal and cross-session queries condition on the scene ([Stern & Nadel, 2026](https://arxiv.org/abs/2604.12948)).
 
-## What the Benchmark Shows
+## What the benchmark shows
 
 On LongMemEval-S (4,575 sessions, 500 recall questions), dual-trace encoding reached 73.7% accuracy against a fact-only baseline of 53.5% — a +20.2 percentage-point gain, 95% CI [+12.1, +29.3], p < 0.0001 ([Stern & Nadel, 2026](https://arxiv.org/abs/2604.12948)). The gain concentrates in cross-session categories:
 
@@ -39,13 +39,13 @@ On LongMemEval-S (4,575 sessions, 500 recall questions), dual-trace encoding rea
 | Knowledge-update tracking | +25pp |
 | Single-session retrieval | No benefit |
 
-The null result on single-session retrieval confirms the mechanism: scene context helps only when retrieval must disambiguate *when* a fact was learned. When encoding and retrieval share a session, the extra trace adds no signal.
+The null result on single-session retrieval confirms the mechanism: scene context helps only when retrieval must disambiguate when a fact was learned. When encoding and retrieval share a session, the extra trace adds no signal.
 
 LongMemEval covers five long-term memory abilities: information extraction, multi-session reasoning, temporal reasoning, knowledge updates, and abstention. Commercial assistants drop ~30% in accuracy on long histories on this benchmark ([Wu et al., 2024](https://arxiv.org/abs/2410.10813)) — the regime dual-trace targets.
 
-## Where This Sits in the Memory Cluster
+## Where this sits in the memory cluster
 
-Dual-trace is an *encoding-time* technique. It composes with retrieval-time and post-hoc strategies:
+Dual-trace is an encoding-time technique. It composes with retrieval-time and post-hoc strategies:
 
 ```mermaid
 graph TD
@@ -67,25 +67,25 @@ graph TD
 | [Episodic memory retrieval](episodic-memory-retrieval.md) | Retrieval-time | Problem-solving arc (attempts, outcomes, lesson) |
 | [Generative agents memory stream](generative-agents-memory-stream.md) | Retrieval + reflection | Scored observation nodes with importance |
 | [Memory synthesis from execution logs](memory-synthesis-execution-logs.md) | Post-hoc | Structured lessons extracted from traces |
-| **Dual-trace encoding** | **Encoding-time** | **Fact + scene trace pair** |
+| Dual-trace encoding | Encoding-time | Fact + scene trace pair |
 
 Episodic retrieval stores whole problem-solving episodes; dual-trace pairs individual facts with their learning moment. The two are orthogonal — an episode record can itself be dual-trace encoded at the fact level.
 
-## When This Pays Off
+## When this pays off
 
-The pattern targets workloads where retrieval depends on *when* or *in what context* a fact was learned:
+The pattern targets workloads where retrieval depends on when or in what context a fact was learned:
 
-- **Cross-session aggregation.** "Summarize every decision the team made about auth across the last five planning sessions."
-- **Knowledge updates.** "Has the deployment target changed since the Q2 review?"
-- **Temporal reasoning.** "What was our rate-limit policy before the January incident?"
-- **Per-user context retention.** Long-running assistants accumulating facts about a user across sessions.
+- Cross-session aggregation. "Summarize every decision the team made about auth across the last five planning sessions."
+- Knowledge updates. "Has the deployment target changed since the Q2 review?"
+- Temporal reasoning. "What was our rate-limit policy before the January incident?"
+- Per-user context retention. Long-running assistants accumulating facts about a user across sessions.
 
 The pattern does not pay off for:
 
-- **Single-session bounded tasks** — the benchmark null result is decisive; scene trace is wasted overhead.
-- **Context-independent facts** — stable infrastructure (`build uses pnpm`, `rate limit is 100/min`) gains nothing because retrieval never conditions on learning-moment.
-- **High-frequency observation streams** — scene-trace generation is an extra LLM call per write; at full tool-output density this compounds. Reserve it for facts worth persisting.
-- **Fast-moving codebases** — scene traces embed detail that decays as the codebase evolves; without invalidation on refactor, stale traces mislead retrieval like stale facts do.
+- Single-session bounded tasks. The benchmark null result is decisive, so the scene trace is wasted overhead.
+- Context-independent facts. Stable infrastructure (`build uses pnpm`, `rate limit is 100/min`) gains nothing, because retrieval never conditions on the learning moment.
+- High-frequency observation streams. Scene-trace generation is an extra LLM call per write, and at full tool-output density this compounds. Reserve it for facts worth persisting.
+- Fast-moving codebases. Scene traces embed detail that decays as the codebase evolves. Without invalidation on refactor, stale traces mislead retrieval like stale facts do.
 
 ## Caveats
 

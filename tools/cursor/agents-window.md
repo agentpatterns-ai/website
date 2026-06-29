@@ -17,9 +17,9 @@ status: current
 
 > Run multiple agents simultaneously across isolated environments from a single control surface.
 
-Cursor 3, released April 2, 2026, introduced the Agents Window as the central multi-agent interface. The window runs agents in parallel across local workspaces, cloud environments, git worktrees, and remote SSH, and is accessed via `Cmd+Shift+P → Agents Window` ([Cursor changelog 3.0](https://cursor.com/changelog/3-0); [Cursor 3 announcement](https://cursor.com/blog/cursor-3)). Agent Tabs inside the window let you view multiple chats side-by-side or in a grid.
+Cursor 3, released April 2, 2026, introduced the Agents Window as the central multi-agent interface. The window runs agents in parallel across local workspaces, cloud environments, git worktrees, and remote SSH. You open it with `Cmd+Shift+P → Agents Window` ([Cursor changelog 3.0](https://cursor.com/changelog/3-0); [Cursor 3 announcement](https://cursor.com/blog/cursor-3)). Agent Tabs inside the window let you view multiple chats side-by-side or in a grid.
 
-## /worktree Command
+## /worktree command
 
 The `/worktree` command creates a separate git worktree so changes happen in isolation ([Cursor changelog 3.0](https://cursor.com/changelog/3-0)). Each worktree is a distinct checkout of the repository at its own filesystem path, so multiple agents can edit different parts of the codebase simultaneously without conflicts.
 
@@ -31,7 +31,7 @@ Use `/worktree` when:
 
 This is the same isolation mechanism Claude Code exposes through the [`--worktree` flag and `EnterWorktree`/`ExitWorktree` tools](../claude/batch-worktrees.md). Cursor surfaces it as a slash command in the Editor, available alongside the Agents Window.
 
-## /best-of-n Command
+## /best-of-n command
 
 The `/best-of-n` command runs the same task in parallel across multiple models, each in its own isolated worktree, then presents outputs side-by-side for selection ([Cursor changelog 3.0](https://cursor.com/changelog/3-0)). It targets prompt tuning and model benchmarking workflows.
 
@@ -53,15 +53,15 @@ Both tools use git worktree isolation for parallel agents, but the interaction m
 
 The Agents Window consolidates task assignment, status monitoring, and result review into one surface. Claude Code's `/batch` command achieves similar parallelism but outputs to the terminal and relies on branch/PR conventions for result collection.
 
-## When This Backfires
+## When this backfires
 
 Parallel-agent workflows degrade under specific conditions:
 
-- **Sequential dependencies dominate.** When Agent B depends on Agent A's output, you cannot parallelize. For short tasks, orchestration overhead can exceed any speedup from fan-out.
-- **Error cascades compound across chained agents.** Minor per-agent inaccuracies propagate and can solidify into system-level false consensus. The "From Spark to Fire" study identifies three vulnerability classes in LLM multi-agent systems — cascade amplification, topological sensitivity, and consensus inertia — and demonstrates that injecting a single atomic error seed can lead to widespread failure ([Xie et al., 2026, arxiv:2603.04474](https://arxiv.org/abs/2603.04474)).
-- **Tightly coupled refactors.** If two agents must touch overlapping code semantics (not just overlapping files), a single agent with one worktree usually beats fan-out — decomposition overhead outweighs isolation gains.
-- **Large legacy monorepos.** Parallel agents in [separate worktrees](../../workflows/worktree-isolation.md) still share the context-window ceiling per agent. If each worktree's relevant surface area does not fit in context, any gains are offset by missed dependencies.
-- **Cloud runtime costs.** Cloud agents consume metered VM time while running; long-lived parallel sessions can accumulate cost quickly. Budget and rate-limit cloud agents before fanning out.
+- Sequential dependencies dominate. When Agent B depends on Agent A's output, you cannot parallelize. For short tasks, orchestration overhead can exceed any speedup from fan-out.
+- Error cascades compound across chained agents. Minor per-agent inaccuracies propagate and can solidify into system-level false consensus. The "From Spark to Fire" study identifies three vulnerability classes in LLM multi-agent systems — cascade amplification, topological sensitivity, and consensus inertia — and shows that injecting a single atomic error seed can lead to widespread failure ([Xie et al., 2026, arxiv:2603.04474](https://arxiv.org/abs/2603.04474)).
+- Tightly coupled refactors. If two agents must touch overlapping code semantics (not just overlapping files), a single agent with one worktree usually beats fan-out — decomposition overhead outweighs isolation gains.
+- Large legacy monorepos. Parallel agents in [separate worktrees](../../workflows/worktree-isolation.md) still share the context-window ceiling per agent. If each worktree's relevant surface area does not fit in context, missed dependencies offset any gains.
+- Cloud runtime costs. Cloud agents consume metered VM time while running, and long-lived parallel sessions can accumulate cost quickly. Budget and rate-limit cloud agents before fanning out.
 
 If the workflow is a single tightly-coupled refactor, or if the codebase is a legacy monorepo where scoping context is hard, a single isolated worktree (Cursor or Claude Code) is usually a better fit than fan-out.
 

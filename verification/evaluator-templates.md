@@ -17,20 +17,20 @@ maturity: established
 
 > Treat judge prompts as parameterised templates for the narrow set of evaluation questions whose shape is portable across domains. Use custom evaluators for everything else.
 
-## What Templates Actually Solve
+## What templates actually solve
 
 Every agent project re-authors the same judge prompts: prompt-injection detection, PII leakage, format adherence, tool-choice correctness, trajectory accuracy. LangSmith shipped 30+ evaluator templates on April 16, 2026, across six categories — Security, Safety, Quality, Conversation, Trajectory, Image & Voice — as LLM-as-judge prompts and rule-based evaluators with tuned defaults. [Source: [Reusable Evaluators and Evaluator Templates in LangSmith](https://blog.langchain.com/reusable-langsmith-evaluator-templates/)]
 
 The [openevals](https://github.com/langchain-ai/openevals) library exposes them as parameterised f-string constants — `PROMPT_INJECTION_PROMPT`, `PII_LEAKAGE_PROMPT`, `TRAJECTORY_ACCURACY_PROMPT`, `TOOL_SELECTION_PROMPT`, `HALLUCINATION_PROMPT` — fed into `create_llm_as_judge(prompt=...)` with `{inputs}`, `{outputs}`, `{reference_outputs}` placeholders. A workspace-level Evaluators tab attaches one definition to many tracing projects. [Source: [Manage evaluators — LangSmith docs](https://docs.langchain.com/langsmith/evaluators)]
 
-## The Portable Subset
+## The portable subset
 
 Templates work when the evaluation question's shape does not depend on application semantics.
 
 | Portable question | Why shape is portable |
 |-------------------|-----------------------|
 | Prompt injection | Structural pattern (injection markers, role confusion) |
-| PII / secret leakage | Regex-matchable artefacts (SSNs, API keys, emails) |
+| PII / secret leakage | Regex-matchable artifacts (SSNs, API keys, emails) |
 | Toxicity, bias | Public benchmarks supply corpora and definitions |
 | Format / schema adherence | Output matched against a JSON schema |
 | Tool-choice correctness | Compared against a fixed tool schema |
@@ -40,7 +40,7 @@ Templates work when the evaluation question's shape does not depend on applicati
 
 A PII template on a medical-records agent uses the same judging logic as one on customer support — the judge needs nothing application-specific.
 
-## What Templates Do Not Solve
+## What templates do not solve
 
 Generic correctness, helpfulness, and tone templates fail as primary quality signals because "good" is domain-specific. A leasing agent's real failures — unavailable showing times, ignored budget constraints — are invisible to a generic helpfulness judge.
 
@@ -50,9 +50,9 @@ Generic correctness, helpfulness, and tone templates fail as primary quality sig
 
 Successful teams spend most effort on application-specific metrics derived from error analysis on real failures. [Source: [Hamel Husain — Custom Evaluators Over Generic Metrics](https://hamel.dev/blog/posts/evals-faq/#3-custom-evaluators-over-generic-metrics)]
 
-**Portability belongs to the question, not the template object.** "Did the agent leak an API key?" carries; "address the user's actual need?" cannot.
+Portability belongs to the question, not the template object. "Did the agent leak an API key?" carries; "address the user's actual need?" cannot.
 
-## Calibration Is Not Optional
+## Calibration is not optional
 
 A template without calibration against a human-graded golden set is a score generator of unknown alignment. LangSmith ships Align Evals separately because template scores drift from human judgment unless calibrated. [Source: [Introducing Align Evals](https://blog.langchain.com/introducing-align-evals/)]
 
@@ -69,7 +69,7 @@ graph TD
 
 Calibration recurs on: judge-model upgrades (scores shift on a fixed prompt), distribution shift (new query types are miscalibrated), and class imbalance (99% benign traffic rewards always-pass — add negative cases proportional to risk). [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-## Template Anatomy
+## Template anatomy
 
 A reusable template is more than a prompt string. It bundles:
 
@@ -83,7 +83,7 @@ A reusable template is more than a prompt string. It bundles:
 
 A template missing the calibration dataset or version identifier is a prompt string, not a reusable primitive — score drift becomes untraceable.
 
-## Where Templates Compose With Custom Evaluators
+## Where templates compose with custom evaluators
 
 A practical eval suite layers them:
 
@@ -99,16 +99,16 @@ graph LR
     E --> F
 ```
 
-Templates cover the portable floor; custom evaluators cover what matters. Not substitutes.
+Templates cover the portable floor; custom evaluators cover what matters. They are not substitutes.
 
-## When This Backfires
+## When this backfires
 
 The steelman against templates: skip the library, write every judge from scratch. Reasonable failure conditions:
 
-- **Calibration debt outweighs saved draft cost**. Template prompts are only "free" until you grade 20–50 examples per template and re-grade on every judge-model upgrade. For a small suite (≤3 judges), calibration overhead can exceed bespoke authoring time.
-- **Workspace-level lock-in**. Centralising definitions in one vendor's tab re-creates the migration tax LangSmith identifies for duplicated copies — the unit of duplication moves from per-project to per-vendor.
-- **Shortcut bias inherited silently**. Recent work documents systematic [shortcut bias in LLM judges](anti-reward-hacking.md) — recency, provenance hierarchy, verbosity inflation — that templates inherit unacknowledged. A safety template scoring "expert-tagged" outputs higher independent of content is portable only on the surface. [Source: [The Silent Judge: Unacknowledged Shortcut Bias in LLM-as-a-Judge (arXiv 2509.26072)](https://arxiv.org/abs/2509.26072)]
-- **False ceiling on coverage**. Six template categories can read as "evals done" while domain-specific failures remain unmeasured.
+- Calibration debt outweighs saved draft cost. Template prompts are only "free" until you grade 20–50 examples per template and re-grade on every judge-model upgrade. For a small suite (≤3 judges), calibration overhead can exceed bespoke authoring time.
+- Workspace-level lock-in. Centralising definitions in one vendor's tab re-creates the migration tax LangSmith identifies for duplicated copies — the unit of duplication moves from per-project to per-vendor.
+- Shortcut bias inherited silently. Recent work documents systematic [shortcut bias in LLM judges](anti-reward-hacking.md) — recency, provenance hierarchy, verbosity inflation — that templates inherit unacknowledged. A safety template scoring "expert-tagged" outputs higher independent of content is portable only on the surface. [Source: [The Silent Judge: Unacknowledged Shortcut Bias in LLM-as-a-Judge (arXiv 2509.26072)](https://arxiv.org/abs/2509.26072)]
+- False ceiling on coverage. Six template categories can read as "evals done" while domain-specific failures remain unmeasured.
 
 ## Example
 
@@ -152,7 +152,7 @@ def evaluate(output, tool_log, available_slots):
     }
 ```
 
-The template carries the portable question; the custom judge carries the domain-specific failure modes that were surfaced by error analysis on production traces, not by a template library.
+The template carries the portable question. The custom judge carries the domain-specific failure modes that error analysis on production traces surfaced, not a template library.
 
 ## Key Takeaways
 
@@ -171,3 +171,5 @@ The template carries the portable question; the custom judge carries the domain-
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
 - [Incident to Eval Synthesis](incident-to-eval-synthesis.md)
+</content>
+</invoke>

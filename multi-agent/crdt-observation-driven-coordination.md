@@ -19,35 +19,35 @@ maturity: adopted
 
 > CRDT-based shared state enables lock-free concurrent code generation with zero structural merge conflicts, but parallel speedup depends entirely on task structure — tightly-coupled tasks are slower in parallel than in serial.
 
-## The Coordination Overhead Problem
+## The coordination overhead problem
 
-Multi-agent code generation systems often fail to realize expected parallel speedups because coordination overhead consumes the gains. When agents must explicitly communicate to share state — passing messages, acquiring locks, resolving conflicts — the coordination cost can exceed the time saved by parallelism. [arXiv:2510.18893](https://arxiv.org/abs/2510.18893) (CodeCRDT) evaluates this across 600 trials.
+Multi-agent code generation systems often miss the parallel speedups they expect, because coordination overhead eats the gains. Agents have to share state by passing messages, acquiring locks, and resolving conflicts. That coordination cost can exceed the time parallelism saves. [arXiv:2510.18893](https://arxiv.org/abs/2510.18893) (CodeCRDT) tests this across 600 trials.
 
-## CRDT-Based Shared State
+## CRDT-based shared state
 
-**Conflict-free Replicated Data Types (CRDTs)** are data structures that support concurrent updates with deterministic convergence — no locks, no conflict resolution steps, no coordination messages required ([Preguiça et al., 2018](https://arxiv.org/abs/1805.06358)). Agents observe the shared CRDT state and make local updates; the CRDT guarantees all replicas converge to the same final state regardless of update order.
+Conflict-free Replicated Data Types (CRDTs) are data structures that take concurrent updates and converge deterministically. They need no locks, no conflict resolution steps, and no coordination messages ([Preguiça et al., 2018](https://arxiv.org/abs/1805.06358)). Agents observe the shared CRDT state and make local updates. The CRDT guarantees every replica converges to the same final state, whatever order the updates arrive in.
 
 In the coding context:
 
-- The shared workspace (files, AST fragments, symbol tables) is represented as a CRDT
-- Agents observe updates as they arrive — no polling, no explicit synchronization
-- When two agents modify non-overlapping parts of the codebase, both updates apply cleanly
-- When they modify overlapping parts, the CRDT's convergence rules produce a deterministic result
+- The shared workspace (files, AST fragments, symbol tables) is one CRDT
+- Agents observe updates as they arrive, with no polling and no explicit synchronization
+- When two agents change non-overlapping parts of the codebase, both updates apply cleanly
+- When they change overlapping parts, the CRDT's convergence rules produce a deterministic result
 
-## Key Results from 600 Trials
+## Key results from 600 trials
 
-**Zero merge failures** — CRDT convergence guarantees concurrent agent updates produce a structurally consistent combined state. Message-passing systems accumulate merge failures as concurrency rises.
+Zero merge failures. CRDT convergence guarantees that concurrent agent updates produce a structurally consistent combined state. Message-passing systems pile up merge failures as concurrency rises.
 
-**Semantic conflict rate: 5–10%** — structural conflicts (two agents edit the same line) are rare and resolved by the CRDT. Semantic conflicts (two agents make structurally compatible but functionally incompatible changes) occur in 5–10% of parallel sessions and require resolution that the CRDT cannot automate.
+A semantic conflict rate of 5 to 10%. Structural conflicts (two agents edit the same line) are rare, and the CRDT resolves them. Semantic conflicts (two agents make structurally compatible but functionally incompatible changes) occur in 5 to 10% of parallel sessions, and the CRDT cannot resolve them automatically.
 
-**Speedup is task-dependent:**
+Speedup depends on the task:
 
-- Up to **21.1% speedup** on tasks with parallelizable subtasks
-- Up to **39.4% slowdown** on tightly-coupled tasks
+- Up to 21.1% faster on tasks with parallelizable subtasks
+- Up to 39.4% slower on tightly-coupled tasks
 
-Parallel agents on interdependent code generate more semantic conflicts and rework than a serial agent processing dependencies in order.
+Parallel agents on interdependent code produce more semantic conflicts and rework than one serial agent that handles dependencies in order.
 
-## The Task Structure Decision
+## The task structure decision
 
 ```mermaid
 graph TD
@@ -58,21 +58,21 @@ graph TD
     D --> F[No coordination overhead]
 ```
 
-Parallelizing tasks with tight internal dependencies produces worse outcomes than serial execution — more semantic conflicts, more rework.
+Parallelizing tasks with tight internal dependencies is worse than running them serially. You get more semantic conflicts and more rework.
 
 Signals of parallelizable structure:
 
 - Subtasks operate on separate files or modules
-- Subtask outputs are independently testable
+- You can test each subtask's output on its own
 - Subtask A does not create symbols that subtask B consumes
 
 Signals of tightly-coupled structure:
 
 - Subtasks share mutable data structures
 - One subtask's output is another's input
-- The task requires consistent cross-module naming or interface design
+- The task needs consistent cross-module naming or interface design
 
-## Explicit Message Passing vs Observation
+## Explicit message passing vs observation
 
 The study compares CRDT-based observation with explicit message passing between agents:
 
@@ -81,27 +81,27 @@ The study compares CRDT-based observation with explicit message passing between 
 | Explicit message passing | High | Yes | Eliminated by overhead |
 | CRDT observation | Near-zero | None (structural) | Up to 21.1% |
 
-Message passing requires each agent to serialize state, send it to peers, wait for acknowledgment, and process replies — overhead that grows with agent count. CRDT updates propagate as a side effect of normal execution.
+Message passing makes each agent serialize state, send it to peers, wait for acknowledgment, and process replies. That overhead grows with agent count. CRDT updates spread as a side effect of normal execution.
 
-## When This Backfires
+## When this backfires
 
 The 21.1% speedup is a ceiling, not an average. Several conditions flip the trade-off:
 
-- **Implementation cost outweighs the gain** — integrating a CRDT runtime (state representation, observation hooks, AST/file convergence rules) is non-trivial. If most tasks in a codebase have implicit coupling (shared types, config, naming), the parallelizable share may not amortize the build cost.
-- **Semantic conflict resolution is still bespoke** — the 5–10% semantic conflict rate forces a separate resolution layer; CRDTs eliminate structural merges, not the merge problem.
-- **Scaling beyond small fleets is unverified** — the [CodeCRDT paper](https://arxiv.org/abs/2510.18893) measures 5-agent stress tests; behavior at 10+ agents is not characterized.
-- **Generalization beyond the evaluated stack is open** — the study used TypeScript/React; transfer to typed compilers, generated code, or schema migrations is not established.
+- Implementation cost outweighs the gain. A CRDT runtime (state representation, observation hooks, AST and file convergence rules) takes real work to build. If most tasks in a codebase have implicit coupling (shared types, config, naming), the parallelizable share may not pay back the build cost.
+- Semantic conflict resolution is still bespoke. The 5 to 10% semantic conflict rate forces a separate resolution layer. CRDTs remove structural merges, not the merge problem.
+- Scaling beyond small fleets is unverified. The [CodeCRDT paper](https://arxiv.org/abs/2510.18893) measures 5-agent stress tests, and does not characterize behavior at 10 or more agents.
+- Generalization beyond the evaluated stack is open. The study used TypeScript and React. Whether the result transfers to typed compilers, generated code, or schema migrations is not established.
 
-Where the parallelizable task share is small, simpler patterns — orchestrator-worker on isolated worktrees, or serial execution — may produce more value than a CRDT-backed workspace.
+Where the parallelizable task share is small, simpler patterns may give you more than a CRDT-backed workspace. Orchestrator-worker on isolated worktrees, or plain serial execution, often wins.
 
-## Implication for Architecture
+## Implication for architecture
 
-Parallel agent architectures should:
+Parallel agent architectures should do four things:
 
-1. **Classify task coupling before routing** — measure subtask dependency; do not default to parallel execution
-2. **Use observation-driven coordination rather than message passing** for parallel subtasks — the coordination overhead difference is decisive
-3. **Route to serial execution for tightly-coupled tasks** — 39.4% slowdown is not a marginal penalty; it makes parallel architectures counterproductive for the wrong task types
-4. **Accept semantic conflicts as unavoidable** — 5–10% semantic conflict rate at this level of parallelism requires a resolution step, either automated or human review
+1. Classify task coupling before routing. Measure subtask dependency, and do not default to parallel execution.
+2. Use observation-driven coordination rather than message passing for parallel subtasks. The coordination overhead difference is decisive.
+3. Route tightly-coupled tasks to serial execution. A 39.4% slowdown is not a marginal penalty; it makes parallel architectures counterproductive for the wrong task types.
+4. Accept that semantic conflicts will happen. The 5 to 10% semantic conflict rate at this level of parallelism needs a resolution step, whether automated or human review.
 
 ## Key Takeaways
 
@@ -144,10 +144,10 @@ class CodeAgent:
         self.workspace.apply(changes)
 ```
 
-**When to parallelize:**
+When to parallelize:
 
-- `subtask_a` writes `utils/parser.py`; `subtask_b` writes `utils/formatter.py` — no shared symbols → parallel
-- `subtask_a` defines `class Config`; `subtask_b` imports `Config` — shared symbol → serial
+- `subtask_a` writes `utils/parser.py`; `subtask_b` writes `utils/formatter.py` — no shared symbols, so parallel
+- `subtask_a` defines `class Config`; `subtask_b` imports `Config` — shared symbol, so serial
 
 ## Related
 

@@ -23,9 +23,9 @@ Two tools shipped this capability within 48 hours in April 2026: Copilot CLI's [
 
 | Pattern | Agent runs | Control surface |
 |---------|-----------|-----------------|
-| **Cloud agent dispatch** ([Mission Control](../tools/copilot/agent-mission-control.md), [Agent HQ](../tools/copilot/agent-hq.md), Claude Code on the web) | Vendor cloud | Dashboard-native |
-| **Permission relay** ([channels](../tools/claude/channels-permission-relay.md)) | Local workstation | Approve/deny tool calls only |
-| **Remote session control** (this pattern) | Local workstation | Messages, modes, plans, prompts, permissions |
+| Cloud agent dispatch ([Mission Control](../tools/copilot/agent-mission-control.md), [Agent HQ](../tools/copilot/agent-hq.md), Claude Code on the web) | Vendor cloud | Dashboard-native |
+| Permission relay ([channels](../tools/claude/channels-permission-relay.md)) | Local workstation | Approve or deny tool calls only |
+| Remote session control (this pattern) | Local workstation | Messages, modes, plans, prompts, permissions |
 
 It inverts the SSH model: the workstation polls outbound HTTPS instead of accepting inbound connections, so any authenticated client can attach.
 
@@ -68,22 +68,22 @@ The workstation never opens an inbound port. All traffic is outbound HTTPS over 
 
 Both tools print a session URL and QR code. Copilot CLI uses `copilot --remote` or `/remote` in-session, `Ctrl+E` toggles the QR, and the working directory must be a GitHub repo ([docs](https://docs.github.com/copilot/how-tos/copilot-cli/steer-remotely)). Claude Code uses `claude remote-control` (server mode, spacebar toggles QR) or `/remote-control` in-session ([docs](https://code.claude.com/docs/en/remote-control#start-a-remote-control-session)). Visibility is single-user in both tools.
 
-Remote access is **off by default on paid plans**. Copilot: the "Remote Control" policy must be enabled at org or enterprise level ([docs](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-remote-access#administering-remote-access)). Claude Code: an admin flips the Remote Control toggle at `claude.ai/admin-settings/claude-code`; data-retention or compliance configurations can grey it out. Claude Code also requires `claude.ai` OAuth — API keys, `setup-token`, Bedrock, Vertex, and Foundry are rejected.
+Remote access is off by default on paid plans. Copilot: the "Remote Control" policy must be enabled at org or enterprise level ([docs](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-remote-access#administering-remote-access)). Claude Code: an admin flips the Remote Control toggle at `claude.ai/admin-settings/claude-code`; data-retention or compliance configurations can grey it out. Claude Code also requires `claude.ai` OAuth — API keys, `setup-token`, Bedrock, Vertex, and Foundry are rejected.
 
 ## When remote control helps
 
-- **Long-running jobs.** Overnight refactors, slow test loops, or autopilot runs where intervention is rare.
-- **Leaving the desk mid-task.** Picking up a session from a second device without restarting — [mid-run steering preserves accumulated tool-call history](steering-running-agents.md), which a restart discards.
-- **Mode handoff.** Plan mode at the terminal, plan approval on mobile, autopilot during a meeting.
+- Long-running jobs. Overnight refactors, slow test loops, or autopilot runs where intervention is rare.
+- Leaving the desk mid-task. Pick up a session from a second device without restarting — [mid-run steering preserves accumulated tool-call history](steering-running-agents.md), which a restart discards.
+- Mode handoff. Plan mode at the terminal, plan approval on mobile, autopilot during a meeting.
 
 ## When this backfires
 
-- **Inner-loop work.** Terminal keystrokes beat a mobile round-trip through the vendor API. For tight edit-test-steer loops, the remote surface adds latency without leverage.
-- **Wider credential surface.** The remote client can submit arbitrary prompts, switch to autopilot, and approve tool calls on the same filesystem the local agent reaches. A stolen, shared, or unlocked phone becomes an attack path the locked workstation would not expose — the [permission-relay concerns](../tools/claude/channels-permission-relay.md#when-this-backfires) apply with more force because the surface is broader.
-- **Session-output ceilings.** Copilot specifies a "60 MB limit on size of session output that is passed to the remote interface", degrading the UI on very long runs ([docs](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-remote-access#monitoring-a-long-running-task)).
-- **Intermittent connectivity.** Claude Code exits the session after roughly 10 minutes of network outage ([docs](https://code.claude.com/docs/en/remote-control#limitations)) — unreliable at the moments the pattern promises to help.
-- **Headless and CI.** Copilot CLI excludes `--prompt` non-interactive runs; Claude Code targets interactive steering. For unattended flows, use cloud agents or [channels permission relay](../tools/claude/channels-permission-relay.md).
-- **Cloud agent is the better fit.** If work does not need local filesystem or local MCP servers, a [cloud agent](../tools/copilot/coding-agent.md) runs in infrastructure that does not sleep and scales to parallel tasks.
+- Inner-loop work. Terminal keystrokes beat a mobile round-trip through the vendor API. For tight edit-test-steer loops, the remote surface adds latency for no gain.
+- Wider credential surface. The remote client can submit arbitrary prompts, switch to autopilot, and approve tool calls on the same filesystem the local agent reaches. A stolen, shared, or unlocked phone becomes an attack path the locked workstation would not expose — the [permission-relay concerns](../tools/claude/channels-permission-relay.md#when-this-backfires) apply with more force because the surface is broader.
+- Session-output ceilings. Copilot specifies a "60 MB limit on size of session output that is passed to the remote interface", degrading the UI on very long runs ([docs](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-remote-access#monitoring-a-long-running-task)).
+- Intermittent connectivity. Claude Code exits the session after roughly 10 minutes of network outage ([docs](https://code.claude.com/docs/en/remote-control#limitations)) — unreliable at the moments the pattern promises to help.
+- Headless and CI. Copilot CLI excludes `--prompt` non-interactive runs; Claude Code targets interactive steering. For unattended flows, use cloud agents or [channels permission relay](../tools/claude/channels-permission-relay.md).
+- Cloud agent is the better fit. If work does not need local filesystem or local MCP servers, a [cloud agent](../tools/copilot/coding-agent.md) runs in infrastructure that does not sleep and scales to parallel tasks.
 
 ## Keep-alive
 

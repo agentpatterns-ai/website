@@ -31,9 +31,9 @@ Every eval task needs a grader: the mechanism that compares agent output against
 
 Code-based graders are deterministic: same input, same verdict, every time. This eliminates the grader itself as a source of noise in your eval results.
 
-**When to use**: outputs are objectively verifiable — test pass/fail, schema validation, state comparison, regex matching, numeric thresholds.
+When to use: outputs are objectively verifiable — test pass/fail, schema validation, state comparison, regex matching, numeric thresholds.
 
-**Implementation patterns**:
+Implementation patterns:
 
 ```python
 def grade_code_based(output, expected):
@@ -59,13 +59,13 @@ def grade_code_based(output, expected):
     return "PASS", None
 ```
 
-**Strengths**: fast, deterministic, no external dependencies, easy to debug — the qualities that make a test suite the strongest [outcome grader](../../verification/grade-agent-outcomes.md). When a code-based grader fails, you know exactly why.
+Strengths: fast, deterministic, no external dependencies, easy to debug — the qualities that make a test suite the strongest [outcome grader](../../verification/grade-agent-outcomes.md). When a code-based grader fails, you know exactly why.
 
-**Weakness**: limited to what can be verified programmatically. Cannot assess style, coherence, factual accuracy of free-form text, or whether an explanation is helpful.
+Weakness: limited to what can be verified programmatically. Cannot assess style, coherence, factual accuracy of free-form text, or whether an explanation is helpful.
 
 For coding agents, test suites are the most reliable [outcome grader](../../verification/grade-agent-outcomes.md) — they are objective, fast, and path-agnostic. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-**Assessing test suite quality.** Not all test suites are equally effective graders. SAGA research identifies four metrics for evaluating whether a test suite actually catches bugs: [Source: [Rethinking Verification for LLM Code Generation](https://arxiv.org/abs/2507.06920)]
+Assessing test suite quality. Not all test suites are equally effective graders. SAGA research identifies four metrics for evaluating whether a test suite actually catches bugs: [Source: [Rethinking Verification for LLM Code Generation](https://arxiv.org/abs/2507.06920)]
 
 | Metric | What it measures |
 |--------|-----------------|
@@ -82,11 +82,11 @@ A suite scoring high on verifier accuracy but low on error pattern coverage will
 
 Using a model to grade another model's output enables evaluation at scale for free-form outputs that resist programmatic checks.
 
-**When to use**: outputs require subjective judgment — factual accuracy, completeness, style compliance, source quality, helpfulness.
+When to use: outputs require subjective judgment — factual accuracy, completeness, style compliance, source quality, helpfulness.
 
-**Key design decisions**:
+Key design decisions:
 
-**Score dimensions independently.** Track individual scores for each quality dimension rather than relying solely on a single aggregate, as the [LLM-as-judge pipeline](../../workflows/llm-as-judge-evaluation.md) does. An output can be factually accurate but incomplete, or complete but citing low-quality sources. A single pass/fail hides which dimension failed. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
+Score dimensions independently. Track individual scores for each quality dimension rather than relying solely on a single aggregate, as the [LLM-as-judge pipeline](../../workflows/llm-as-judge-evaluation.md) does. An output can be factually accurate but incomplete, or complete but citing low-quality sources. A single pass/fail hides which dimension failed. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
 
 ```python
 RUBRIC = """
@@ -102,9 +102,9 @@ Output as JSON: {"factual_accuracy": {"score": N, "reason": "..."}, ...}
 """
 ```
 
-**Single call outperforms multiple specialized judges.** A single comprehensive prompt with all rubric dimensions produces more consistent scores than routing each dimension to a separate evaluator. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
+Single call outperforms multiple specialized judges. A single comprehensive prompt with all rubric dimensions produces more consistent scores than routing each dimension to a separate evaluator. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
 
-**Calibrate against human reviewers.** Score a sample set with both the judge and human reviewers using the same rubric, then resolve disagreements by refining the rubric or the judge prompt. This is not a one-time step — recalibrate when new query types enter the distribution. The reference workflow for building and maintaining that human-graded sample is [Human-Review Golden Dataset Curation](../../verification/human-review-golden-dataset-curation.md).
+Calibrate against human reviewers. Score a sample set with both the judge and human reviewers using the same rubric, then resolve disagreements by refining the rubric or the judge prompt. This is not a one-time step — recalibrate when new query types enter the distribution. The reference workflow for building and maintaining that human-graded sample is [Human-Review Golden Dataset Curation](../../verification/human-review-golden-dataset-curation.md).
 
 See [LLM-as-Judge Evaluation with Human Spot-Checking](../../workflows/llm-as-judge-evaluation.md) for the full pipeline.
 
@@ -117,14 +117,14 @@ See [LLM-as-Judge Evaluation with Human Spot-Checking](../../workflows/llm-as-ju
 
 Human grading is the gold standard — it can assess anything. It is also the slowest, most expensive, and least scalable method.
 
-**When to use**:
+When to use:
 
 - Calibrating LLM judges (the bootstrapping step)
 - Ambiguous edge cases where neither code nor LLM judges produce reliable verdicts
 - Novel failure modes not yet covered by the rubric
 - Safety-critical evaluations where automated grading errors are unacceptable
 
-**In practice**: human grading is the calibration layer, not the production layer — the [golden-dataset curation](../../verification/human-review-golden-dataset-curation.md) step. Grade a sample with humans, use those grades to calibrate an LLM judge, then use the LLM judge for scale. Periodically re-sample with humans to detect judge drift.
+In practice: human grading is the calibration layer, not the production layer — the [golden-dataset curation](../../verification/human-review-golden-dataset-curation.md) step. Grade a sample with humans, use those grades to calibrate an LLM judge, then use the LLM judge for scale. Periodically re-sample with humans to detect judge drift.
 
 ---
 
@@ -142,7 +142,7 @@ Human spot-check    →  catches judge failures (rubric gaps, novel cases)
 
 This layering is analogous to [layered accuracy defense](../../verification/layered-accuracy-defense.md) — each layer catches what the previous one misses, and the compounded miss rate is lower than any single layer's.
 
-**Routing logic**: use code-based grading for everything it can assess. Only escalate to LLM-as-judge for dimensions that require subjective judgment. Reserve human grading for calibration and edge cases.
+Routing logic: use code-based grading for everything it can assess. Only escalate to LLM-as-judge for dimensions that require subjective judgment. Reserve human grading for calibration and edge cases.
 
 ---
 
@@ -152,10 +152,10 @@ Graders can have bugs. CORE-Bench penalized correct answers due to grader bugs; 
 
 Before trusting a grader:
 
-1. **Test with known-good outputs**: feed outputs you know are correct and verify the grader passes them
-2. **Test with known-bad outputs**: feed outputs you know are incorrect and verify the grader fails them
-3. **Check for false negatives**: when a task fails, manually inspect whether the output was actually correct but the grader was too strict
-4. **Check for false positives**: sample passing tasks and verify the output genuinely meets the criteria
+1. Test with known-good outputs: feed outputs you know are correct and verify the grader passes them
+2. Test with known-bad outputs: feed outputs you know are incorrect and verify the grader fails them
+3. Check for false negatives: when a task fails, manually inspect whether the output was actually correct but the grader was too strict
+4. Check for false positives: sample passing tasks and verify the output genuinely meets the criteria
 
 A grader that produces false confidence is worse than no grader at all — it creates a misleading baseline that makes regressions invisible.
 

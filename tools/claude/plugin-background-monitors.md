@@ -18,7 +18,7 @@ status: current
 
 Plugin-declared background monitors landed in Claude Code v2.1.105: "Added background monitor support for plugins via a top-level `monitors` manifest key that auto-arms at session start or on skill invoke" ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The plugin author ships the watcher; the harness arms it. Consumers do not write boilerplate to register supervision.
 
-## The Manifest Contract
+## The manifest contract
 
 A plugin declares monitors at the top level of `plugin.json`, or in `monitors/monitors.json` at the plugin root. Each entry is one persistent background process whose stdout becomes notifications to Claude.
 
@@ -39,7 +39,7 @@ A plugin declares monitors at the top level of `plugin.json`, or in `monitors/mo
 
 Required fields are `name` (unique within the plugin), `command` (shell command run as a persistent background process in the session working directory), and `description` (shown in the task panel and notification summaries) ([Plugins reference — Monitors](https://code.claude.com/docs/en/plugins-reference#monitors)).
 
-The optional `when` field controls trigger:
+The optional `when` field controls when a monitor starts:
 
 | Value | When the monitor starts |
 |---|---|
@@ -48,13 +48,13 @@ The optional `when` field controls trigger:
 
 `command` accepts `${CLAUDE_PLUGIN_ROOT}`, `${CLAUDE_PLUGIN_DATA}`, `${user_config.*}`, and any `${ENV_VAR}` from the environment ([Plugins reference — Monitors](https://code.claude.com/docs/en/plugins-reference#monitors)).
 
-## How It Differs From Hooks and the Monitor Tool
+## How it differs from hooks and the Monitor tool
 
-Three Claude Code primitives observe sessions; they fire at different points and carry different guarantees.
+Three Claude Code primitives observe sessions. They fire at different points and carry different guarantees.
 
 | Primitive | Trigger | Lifetime | Can block |
 |---|---|---|---|
-| [Hooks](hooks-lifecycle.md) | Tool-call boundaries (`PreToolUse`, `PostToolUse`, `Stop`, etc.) | Per event, synchronous | Yes (`PreToolUse`) |
+| [Hooks](hooks-lifecycle.md) | Tool-call boundaries (`PreToolUse`, `PostToolUse`, `Stop`, and so on) | Per event, synchronous | Yes (`PreToolUse`) |
 | [Monitor tool](monitor-tool.md) | Claude calls it imperatively in-session | Until cancelled or session end | No |
 | Plugin background monitor | Auto-armed at session start or on skill invoke | Whole session | No |
 
@@ -71,31 +71,31 @@ graph TD
 
 Hooks enforce at the tool-call boundary and can deny. Monitor tool calls require Claude to think to start the watch. Plugin monitors remove the "did the agent remember to arm the watcher?" failure mode by moving the trigger out of model reasoning into the harness ([Create plugins — Add background monitors](https://code.claude.com/docs/en/plugins#add-background-monitors-to-your-plugin)).
 
-## Lifetime and Trust
+## Lifetime and trust
 
-- **Session-scoped.** Monitors stop only when the session ends. "Disabling a plugin mid-session does not stop monitors that are already running. They stop when the session ends." ([Plugins reference — Monitors](https://code.claude.com/docs/en/plugins-reference#monitors)).
-- **Unsandboxed.** They "run unsandboxed at the same trust level as hooks" ([Plugins reference — Monitors](https://code.claude.com/docs/en/plugins-reference#monitors)). Treat marketplace-supplied monitors with the same scrutiny as installing arbitrary shell scripts — the [PromptArmor](https://www.promptarmor.com/resources/hijacking-claude-code-via-injected-marketplace-plugins) and [SentinelOne](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/) marketplace-injection disclosures apply directly.
-- **Interactive CLI only.** Monitors run only in interactive sessions and reuse the [Monitor tool's](https://code.claude.com/docs/en/tools-reference#monitor-tool) availability constraints. They are skipped on Amazon Bedrock, Google Vertex AI, Microsoft Foundry, and when `DISABLE_TELEMETRY` or `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set ([Tools reference — Monitor tool](https://code.claude.com/docs/en/tools-reference#monitor-tool)).
+- Session-scoped. Monitors stop only when the session ends. "Disabling a plugin mid-session does not stop monitors that are already running. They stop when the session ends." ([Plugins reference — Monitors](https://code.claude.com/docs/en/plugins-reference#monitors)).
+- Unsandboxed. They "run unsandboxed at the same trust level as hooks" ([Plugins reference — Monitors](https://code.claude.com/docs/en/plugins-reference#monitors)). Treat marketplace-supplied monitors with the same scrutiny as installing arbitrary shell scripts — the [PromptArmor](https://www.promptarmor.com/resources/hijacking-claude-code-via-injected-marketplace-plugins) and [SentinelOne](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/) marketplace-injection disclosures apply directly.
+- Interactive CLI only. Monitors run only in interactive sessions and reuse the [Monitor tool's](https://code.claude.com/docs/en/tools-reference#monitor-tool) availability constraints. They are skipped on Amazon Bedrock, Google Vertex AI, Microsoft Foundry, and when `DISABLE_TELEMETRY` or `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set ([Tools reference — Monitor tool](https://code.claude.com/docs/en/tools-reference#monitor-tool)).
 
-## What This Primitive Replaces
+## What this primitive replaces
 
-Before plugin monitors, cross-cutting supervision required per-project ceremony: a `SessionStart` hook spawning a background script, a [`/loop`](session-scheduling.md) the user remembered to run, or CLAUDE.md asking Claude to invoke the [Monitor tool](monitor-tool.md). The manifest key collapses the contract — a plugin embeds the watcher once, every consumer auto-arms it at session start.
+Before plugin monitors, cross-cutting supervision needed per-project setup: a `SessionStart` hook spawning a background script, a [`/loop`](session-scheduling.md) the user remembered to run, or CLAUDE.md asking Claude to invoke the [Monitor tool](monitor-tool.md). The manifest key removes that work. A plugin embeds the watcher once, and every consumer auto-arms it at session start.
 
-## When This Backfires
+## When this backfires
 
-- **Cross-session enforcement is impossible.** Persistent cost accounting, compliance audit logs, and reboot-surviving guardrails need systemd, cron, or an external supervisor, not a session-scoped monitor.
-- **Silent auto-arm failures already shipped.** Issue [anthropics/claude-code#52245](https://github.com/anthropics/claude-code/issues/52245) reports that on 2.1.118 (macOS), `monitors/monitors.json` spawns zero child processes at session start with no error logged; manual `Monitor` calls still work. Plugin authors relying on auto-arm get no coverage without realizing it.
-- **Chatty processes are auto-killed.** Plugin monitors share the [Monitor tool's](monitor-tool.md) behavior — monitors that produce too many events are stopped automatically. A verbose test runner or webpack rebuild leaves a silent gap until restart with a tighter filter.
-- **Stderr and exit codes are invisible.** Monitor forwards stdout only. A watcher that errors to stderr or exits non-zero looks healthy.
-- **Pipe buffering delays events.** When piping through `grep` or similar, use `--line-buffered` — block buffering can hold output for minutes on low-traffic streams.
-- **Three hosting providers are a no-op.** Bedrock, Vertex AI, and Foundry skip monitors entirely — a plugin shipping monitors as a primary feature ships dead code there.
-- **Mid-session disable does not stop running monitors.** Disabling the plugin leaves the process running until session end ([Plugins reference — Monitors](https://code.claude.com/docs/en/plugins-reference#monitors)).
+- Cross-session enforcement is impossible. Persistent cost accounting, compliance audit logs, and reboot-surviving guardrails need systemd, cron, or an external supervisor, not a session-scoped monitor.
+- Silent auto-arm failures already shipped. Issue [anthropics/claude-code#52245](https://github.com/anthropics/claude-code/issues/52245) reports that on 2.1.118 (macOS), `monitors/monitors.json` spawns zero child processes at session start with no error logged; manual `Monitor` calls still work. Plugin authors who rely on auto-arm get no coverage without realizing it.
+- Chatty processes are auto-killed. Plugin monitors share the [Monitor tool's](monitor-tool.md) behavior — monitors that produce too many events are stopped automatically. A verbose test runner or webpack rebuild leaves a silent gap until you restart with a tighter filter.
+- Stderr and exit codes are invisible. Monitor forwards stdout only. A watcher that errors to stderr or exits non-zero looks healthy.
+- Pipe buffering delays events. When piping through `grep` or similar, use `--line-buffered` — block buffering can hold output for minutes on low-traffic streams.
+- Three hosting providers are a no-op. Bedrock, Vertex AI, and Foundry skip monitors entirely — a plugin shipping monitors as a primary feature ships dead code there.
+- Mid-session disable does not stop running monitors. Disabling the plugin leaves the process running until session end ([Plugins reference — Monitors](https://code.claude.com/docs/en/plugins-reference#monitors)).
 
 ## Example
 
 A plugin that ships a protected-path tripwire — file writes under `/etc/` or to anything matching `*.pem` are flagged in real time without the consumer wiring up anything beyond installing the plugin.
 
-**`my-tripwire-plugin/.claude-plugin/plugin.json`**:
+`my-tripwire-plugin/.claude-plugin/plugin.json`:
 
 ```json
 {
@@ -106,7 +106,7 @@ A plugin that ships a protected-path tripwire — file writes under `/etc/` or t
 }
 ```
 
-**`my-tripwire-plugin/monitors/monitors.json`**:
+`my-tripwire-plugin/monitors/monitors.json`:
 
 ```json
 [
@@ -118,7 +118,7 @@ A plugin that ships a protected-path tripwire — file writes under `/etc/` or t
 ]
 ```
 
-**`my-tripwire-plugin/bin/watch-protected.sh`** (uses `fswatch` or `inotifywait`, line-buffered):
+`my-tripwire-plugin/bin/watch-protected.sh` (uses `fswatch` or `inotifywait`, line-buffered):
 
 ```bash
 #!/usr/bin/env bash

@@ -57,6 +57,7 @@ How agents hand off work, share state, and refine each other's output without a 
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md) — Decompose the self-improving agent loop into discrete, specialized roles with persistent knowledge layers, staged validation, and gated persistence
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md) — Separate code and test generation into independent agents so the test writer never sees the code, preventing bias that cuts test accuracy by 30%
 - [Persistent Shared Search Sub-Agent for Output-Token Reuse](persistent-search-subagent.md) — Route repository lookups through one persistent searcher so a region is explored once, cutting the redundant output tokens that dominate multi-agent cost
+- [Context-Graph Shared Memory for Multi-Agent Systems](context-graph-shared-memory.md) — Store cross-agent shared state as typed triples and traverse edges for join queries — beats vector RAG only when queries chain facts and entities are clean
 
 ## Multi-Model
 

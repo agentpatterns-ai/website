@@ -17,33 +17,33 @@ maturity: established
 
 > When code generation is cheap, engineering leverage moves from authorship to specifying intent and governing humans, agents, tools, and evidence gates.
 
-Intent-centric engineering is the operating model where the engineer's primary work is specifying what the system should do, designing the evidence gates that prove it does, and governing the socio-technical system — humans plus agents plus tools — that produces and verifies the code. Authorship is delegated; intent and oversight are not. The framing comes from De La Cruz's thematic analysis of GenAI software engineering: GenAI's paradoxical effect is to *raise* the value of intent specification, context curation, architectural judgment, and verification as it lowers the cost of code production ([De La Cruz, arXiv:2605.11027](https://arxiv.org/abs/2605.11027)).
+Intent-centric engineering is the operating model where the engineer's primary work is specifying what the system should do, designing the evidence gates that prove it does, and governing the socio-technical system — humans plus agents plus tools — that produces and verifies the code. Authorship is delegated; intent and oversight are not. The framing comes from De La Cruz's thematic analysis of GenAI software engineering: GenAI's paradoxical effect is to raise the value of intent specification, context curation, architectural judgment, and verification as it lowers the cost of code production ([De La Cruz, arXiv:2605.11027](https://arxiv.org/abs/2605.11027)).
 
-It is a destination, not a default. Read [When This Backfires](#when-this-backfires) before adopting it as a generic prescription.
+It is a destination, not a default. Read [when this backfires](#when-this-backfires) before adopting it as a generic prescription.
 
-## When the Posture Pays Back
+## When the posture pays back
 
 Three conditions make the intent-centric posture economically defensible:
 
-- **Repeated or fanned-out generation.** A one-shot task does not recoup the cost of an intent specification plus an evidence-gate harness; the investment pays off when agents iterate or fan out — the boundary [Spec Complexity Displacement](../anti-patterns/spec-complexity-displacement.md) identifies for spec-driven development.
-- **Verification capacity exists.** The team must have, or build, mechanical evidence gates — tests, schemas, linters, security scans, automated review — that catch bug classes rather than rely on review judgment. Without that scaffold, "oversight" is ceremonial.
-- **Reviewers can evaluate output.** Junior teams that cannot assess agent output against a spec produce a rubber-stamp checkpoint — the failure mode already named for the merge button ([Empowerment Over Automation](empowerment-over-automation.md)).
+- Repeated or fanned-out generation. A one-shot task does not recoup the cost of an intent specification plus an evidence-gate harness. The investment pays off when agents iterate or fan out — the boundary [Spec Complexity Displacement](../anti-patterns/spec-complexity-displacement.md) identifies for spec-driven development.
+- Verification capacity exists. The team must have, or build, mechanical evidence gates — tests, schemas, linters, security scans, automated review — that catch bug classes rather than rely on review judgment. Without that scaffold, "oversight" is ceremonial.
+- Reviewers can evaluate output. Junior teams that cannot assess agent output against a spec produce a rubber-stamp checkpoint — the failure mode already named for the merge button ([Empowerment Over Automation](empowerment-over-automation.md)).
 
 When any condition fails, build deterministic harnesses and verification capacity first.
 
-## The Mechanism
+## The mechanism
 
-Code generation accelerates production faster than human review scales. Faros AI data from high-adoption teams shows 98% more PRs merged but 91% longer review times — generation roughly doubled, review capacity did not ([Osmani: The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)). Because the engineer cannot match generation throughput line-by-line, leverage migrates upstream to the gates that compress decision volume: an **intent specification** compresses many implementations into one acceptable region, a constraint-bearing **harness** compresses many code states into a verifiable subset, and **evidence gates** make verification mechanical rather than judgment-bound.
+Code generation accelerates production faster than human review scales. Faros AI data from high-adoption teams shows 98% more PRs merged but 91% longer review times — generation roughly doubled, review capacity did not ([Osmani: The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)). Because the engineer cannot match generation throughput line-by-line, the advantage moves upstream to the gates that compress decision volume: an intent specification compresses many implementations into one acceptable region, a constraint-bearing harness compresses many code states into a verifiable subset, and evidence gates make verification mechanical rather than judgment-bound.
 
-This is the mechanism Martin Fowler named "rigor relocation" — discipline does not vanish, it moves to constraint design, verification systems, and intent specification ([Rigor Relocation](rigor-relocation.md)). Intent-centric engineering names *where* the rigor relocates: the layer above authorship.
+This is the mechanism Martin Fowler named "rigor relocation" — discipline does not vanish, it moves to constraint design, verification systems, and intent specification ([Rigor Relocation](rigor-relocation.md)). Intent-centric engineering names where the rigor relocates: the layer above authorship.
 
-## Why It Works
+## Why it works
 
 The shift is more than relabeling because of enforcement locality. An intent specification fixes the acceptance region at the point an agent generates output; an evidence gate fires at the moment of decision, not after output has propagated through review. LangChain showed the effect empirically — a coding agent improved from Terminal Bench 2.0 rank 30 to rank 5 with no model change, only harness investment in pre-completion checklists, loop detection, and structured verification ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
 GitHub's data ratifies the framing operationally. The merge button "still needs (and, in our view, _always_ will need) a developer fingerprint" because three categories remain "stubbornly human": architecture trade-offs, mentorship and culture, and ethical decisions about whether to build something ([GitHub: Why Developers Will Always Own the Merge Button](https://github.blog/ai-and-ml/generative-ai/code-review-in-the-age-of-ai-why-developers-will-always-own-the-merge-button/)). Intent and oversight are precisely the work the merge button represents.
 
-## What Relocates
+## What relocates
 
 The skills that gain weight relative to authorship are the ones that compress decisions or make verification mechanical:
 
@@ -59,16 +59,16 @@ The skills that gain weight relative to authorship are the ones that compress de
 
 These are not new disciplines — it is the redistribution of weight away from authorship toward practices that were secondary when code-writing was the bottleneck.
 
-## When This Backfires
+## When this backfires
 
 Adopting the posture as a generic prescription without the conditions above produces worse outcomes than continuing to write code.
 
-- **Spec-as-code displacement.** Specs precise enough to drive reliable generation accumulate schemas and constraints until they become code-adjacent. Scott Logic found Spec Kit produced 2,000+ lines of Markdown per feature and still introduced bugs, while iterative prompting produced working code ~10× faster ([Scott Logic](https://blog.scottlogic.com/2025/11/26/putting-spec-kit-through-its-paces-radical-idea-or-reinvented-waterfall.html)). Addy Osmani names this the "curse of instructions": as a spec accumulates detail, model adherence degrades ([Osmani, O'Reilly](https://www.oreilly.com/radar/how-to-write-a-good-spec-for-ai-agents/)). See [Spec Complexity Displacement](../anti-patterns/spec-complexity-displacement.md).
-- **Skill atrophy compounds.** Engineers who only specify and supervise lose the capability to evaluate what they supervise. The METR study found developers using AI estimated they were 20% faster while actually running 19% slower — a 39-point perception gap ([METR](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Atrophy is self-concealing. See [Skill Atrophy](skill-atrophy.md).
-- **Vendor ToS undercut accountability.** Treude's analysis of AI development-tool Terms of Service finds "a consistent tendency to shift responsibility for correctness, safety, and legal compliance onto users" ([Treude, arXiv:2605.04532](https://arxiv.org/abs/2605.04532)). Without contractual accountability the posture becomes a unilateral burden.
-- **Bottleneck migration without capacity investment.** The Faros AI 98%/91% asymmetry is the warning, not the prescription ([Osmani: The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)). Teams that adopt the posture without mechanical evidence gates find their accountability surface outgrows their oversight capacity.
+- Spec-as-code displacement. Specs precise enough to drive reliable generation accumulate schemas and constraints until they become code-adjacent. Scott Logic found Spec Kit produced 2,000+ lines of Markdown per feature and still introduced bugs, while iterative prompting produced working code ~10× faster ([Scott Logic](https://blog.scottlogic.com/2025/11/26/putting-spec-kit-through-its-paces-radical-idea-or-reinvented-waterfall.html)). Addy Osmani names this the "curse of instructions": as a spec accumulates detail, model adherence degrades ([Osmani, O'Reilly](https://www.oreilly.com/radar/how-to-write-a-good-spec-for-ai-agents/)). See [Spec Complexity Displacement](../anti-patterns/spec-complexity-displacement.md).
+- Skill atrophy compounds. Engineers who only specify and supervise lose the capability to evaluate what they supervise. The METR study found developers using AI estimated they were 20% faster while actually running 19% slower — a 39-point perception gap ([METR](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Atrophy is self-concealing. See [Skill Atrophy](skill-atrophy.md).
+- Vendor ToS undercut accountability. Treude's analysis of AI development-tool Terms of Service finds "a consistent tendency to shift responsibility for correctness, safety, and legal compliance onto users" ([Treude, arXiv:2605.04532](https://arxiv.org/abs/2605.04532)). Without contractual accountability the posture becomes a unilateral burden.
+- Bottleneck migration without capacity investment. The Faros AI 98%/91% asymmetry is the warning, not the prescription ([Osmani: The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)). Teams that adopt the posture without mechanical evidence gates find their accountability surface outgrows their oversight capacity.
 
-Do not relocate rigor upward as a posture. Invest in mechanical evidence gates and harness constraints first, then treat the intent-centric model as the operating mode that investment unlocks.
+Do not relocate rigor upward as a posture. Invest in mechanical evidence gates and harness constraints first, then treat the intent-centric model as the operating mode that investment makes possible.
 
 ## Example
 

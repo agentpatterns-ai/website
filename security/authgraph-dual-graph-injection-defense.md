@@ -19,22 +19,22 @@ maturity: emerging
 
 > A dual-graph defense compares a clean authorization graph from user intent against an execution-trace provenance graph; structural divergence flags injection-driven tool calls.
 
-The defense applies when an agent calls tools on attacker-controllable observations and the deployment can absorb a 4.23× token and 1.87× latency overhead for a 1–2% residual attack success rate ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)). It does **not** cover same-observation pollution, multi-agent handoffs, or adaptive attacks on the LLM-judged layers — all below.
+Use this defense when an agent calls tools on attacker-controllable observations and the deployment can absorb a 4.23× token and 1.87× latency overhead for a 1–2% residual attack success rate ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)). It does not cover same-observation pollution, multi-agent handoffs, or adaptive attacks on the LLM-judged layers — all covered below.
 
-## How It Works
+## How it works
 
-Two graphs are constructed per agent run ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)):
+The system builds two graphs per agent run ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)):
 
-- **Authorization graph** — produced by a Planner LLM (the paper uses GPT-4o-mini) from `{user_prompt, tool_catalog}` only. It emits an `expected_tool` sequence and a `ParamPolicy` per security-critical parameter (`send_*`, `book_*`, `transfer_*`), plus `replan` flags with `replan_allowed_tools` whitelists when intent permits runtime extension.
-- **Injected reasoning graph** — built from the execution trace by a Graph Builder, attributing each parameter value to its source observation.
+- Authorization graph — a Planner LLM (the paper uses GPT-4o-mini) builds it from `{user_prompt, tool_catalog}` only. It emits an `expected_tool` sequence and a `ParamPolicy` per security-critical parameter (`send_*`, `book_*`, `transfer_*`), plus `replan` flags with `replan_allowed_tools` whitelists when intent permits runtime extension.
+- Injected reasoning graph — a Graph Builder builds it from the execution trace, attributing each parameter value to its source observation.
 
 A three-layer Checker compares them ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)):
 
 | Layer | Mechanism | What it catches |
 |-------|-----------|-----------------|
-| **L1 Hard block** | Programmatic allowlist — calls outside the authorized set `𝒮` are rejected, no LLM in the loop | Out-of-spec tool invocations |
-| **L2 Tool-name check** | LLM judges ambiguous calls as `extra_step_ok`, `skipped_step_ok`, or `suspicious` | Plausible-looking injected calls |
-| **L3 Parameter source** | Per `ParamPolicy`, verify the value comes from the declared `source_tools` observation via string match on the original observation text (not the Graph Builder summary — itself an attack surface), with LLM fallback | Argument-substitution (`EVIL-123` from `search_hotels` into a `search_flights`-only field) |
+| L1 Hard block | Programmatic allowlist — calls outside the authorized set `𝒮` are rejected, no LLM in the loop | Out-of-spec tool invocations |
+| L2 Tool-name check | LLM judges ambiguous calls as `extra_step_ok`, `skipped_step_ok`, or `suspicious` | Plausible-looking injected calls |
+| L3 Parameter source | Per `ParamPolicy`, verify the value comes from the declared `source_tools` observation via string match on the original observation text (not the Graph Builder summary — itself an attack surface), with LLM fallback | Argument-substitution (`EVIL-123` from `search_hotels` into a `search_flights`-only field) |
 
 Ablations show every layer is load-bearing: removing L2 raises ASR from 0.01 to 0.21, L3 to 0.18, L1 to 0.12 ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)).
 
@@ -55,32 +55,32 @@ graph LR
     style EX fill:#1a7f37,color:#fff
 ```
 
-## Why It Works
+## Why it works
 
-The authorization graph carries **zero channel capacity from untrusted input**: the Planner LLM sees only the user prompt and tool catalog, never a tool return, document, or inter-agent message — the paper's Property 1, "information-theoretic independence of any injected content" ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)). That gives the Checker a contamination-free reference, so divergence is attributable to the only side that sees attacker content. Single-graph defenses like [ARGUS influence auditing](provenance-aware-decision-auditing.md) lack this baseline and must trace per-span trust through the graph the attacker can perturb ([Weng et al., 2026](https://arxiv.org/abs/2605.03378)).
+The authorization graph carries no channel capacity from untrusted input. The Planner LLM sees only the user prompt and tool catalog, never a tool return, document, or inter-agent message — the paper's Property 1, "information-theoretic independence of any injected content" ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)). That gives the Checker a contamination-free reference, so divergence points to the only side that sees attacker content. Single-graph defenses like [ARGUS influence auditing](provenance-aware-decision-auditing.md) lack this baseline. They must trace per-span trust through the graph the attacker can perturb ([Weng et al., 2026](https://arxiv.org/abs/2605.03378)).
 
-## Where It Sits on the Security-Utility Frontier
+## Where it sits on the security-utility frontier
 
 On AgentDojo (GPT-4o-mini) ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)):
 
 | Defense | Attack success rate | Utility rate |
 |---------|---------------------|--------------|
 | Baseline (no defense) | 0.40 | 0.79 |
-| **AuthGraph** | **0.01** | **0.69** |
+| AuthGraph | 0.01 | 0.69 |
 | [CaMeL](camel-control-data-flow-injection.md) | 0.00 | 0.48 |
 | Progent | 0.02 | 0.64 |
 | DRIFT | 0.03 | 0.52 |
 
 On AgentDyn (dynamic tasks), AuthGraph holds 0.02 ASR / 0.37 UR while CaMeL collapses to 0.00 UR — strict control/data separation cannot accommodate runtime tool extension ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)). Overhead: 4.61 s latency (1.87×) and 47.4 K tokens/task (4.23× the 11.2 K baseline) — cheaper than CaMeL's 9.21×, above Progent's 1.61×.
 
-## When This Backfires
+## When this backfires
 
-The authors enumerate four boundary conditions ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)):
+The authors list four boundary conditions ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)):
 
-- **Same-observation pollution.** When the attacker controls the authoritative source — a compromised flight-search backend, a [poisoned RAG corpus](rag-architecture-poisoning-robustness.md), or a [poisoned knowledge graph](oracle-poisoning-knowledge-graph.md) — the `source_tools` check passes: the value really does come from the declared tool. AuthGraph cannot tell a clean tool from a corrupted one; pair it with carrier authenticity controls.
-- **Multi-agent scenarios.** The design targets single-agent execution; cross-agent flow is untracked and the Checker cannot see an upstream trace — out of scope per the paper. Propagation needs orthogonal coverage — see [foresight-guided multi-agent jailbreak defense](foresight-guided-multi-agent-jailbreak-defense.md) and [constraint drift](constraint-drift-multi-agent-safety.md).
-- **Liberal replan whitelists.** `replan_allowed_tools` opens a controlled trust boundary; an attacker can compose harmful sequences entirely inside the whitelist — the Checker sees nothing "extra," but the attack completes. Keep whitelists narrow.
-- **Cost-bounded workloads.** The 4.23× token and 1.87× latency cost rules out high-throughput or low-cost agents. For fixed-action flows the [action-selector pattern](action-selector-pattern.md) covers the same risk at near-zero overhead.
+- Same-observation pollution. When the attacker controls the authoritative source — a compromised flight-search backend, a [poisoned RAG corpus](rag-architecture-poisoning-robustness.md), or a [poisoned knowledge graph](oracle-poisoning-knowledge-graph.md) — the `source_tools` check passes: the value really does come from the declared tool. AuthGraph cannot tell a clean tool from a corrupted one, so pair it with carrier authenticity controls.
+- Multi-agent scenarios. The design targets single-agent execution. Cross-agent flow is untracked and the Checker cannot see an upstream trace — out of scope per the paper. Propagation needs separate coverage — see [foresight-guided multi-agent jailbreak defense](foresight-guided-multi-agent-jailbreak-defense.md) and [constraint drift](constraint-drift-multi-agent-safety.md).
+- Liberal replan whitelists. `replan_allowed_tools` opens a controlled trust boundary. An attacker can compose harmful sequences entirely inside the whitelist — the Checker sees nothing extra, but the attack completes. Keep whitelists narrow.
+- Cost-bounded workloads. The 4.23× token and 1.87× latency cost rules out high-throughput or low-cost agents. For fixed-action flows, the [action-selector pattern](action-selector-pattern.md) covers the same risk at near-zero overhead.
 
 Two further caveats: defenses scored on fixed attack suites degrade under adaptive pressure ([Nasr et al., 2025](https://arxiv.org/abs/2510.09023)), and L2/L3 are LLM-judged — themselves an adaptive attack surface — so treat the 0.01–0.02 ASR as a ceiling. And Plan-Then-Execute "does not prevent prompt injections contained in the user prompt itself" ([Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)); an attacker-influenced user prompt (relayed instructions, public-channel voice transcription) makes the authorization graph unclean and collapses the design to single-graph auditing.
 
@@ -95,7 +95,7 @@ ParamPolicy(book_flight.flight_id):
   source_tools: [search_flights]
 ```
 
-A prompt injection in a `search_hotels` observation tries to substitute `flight_id = "EVIL-123"`. The Graph Builder attributes `EVIL-123` to `search_hotels`. L3 fires: the policy requires `flight_id` to come from `search_flights`; `search_hotels` is not in `source_tools`; block. The search runs against the **original** observation text, not the Graph Builder's summary, because the Graph Builder itself is part of the attack surface ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)).
+A prompt injection in a `search_hotels` observation tries to substitute `flight_id = "EVIL-123"`. The Graph Builder attributes `EVIL-123` to `search_hotels`. L3 fires: the policy requires `flight_id` to come from `search_flights`; `search_hotels` is not in `source_tools`; block. The search runs against the original observation text, not the Graph Builder's summary, because the Graph Builder itself is part of the attack surface ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)).
 
 ## Key Takeaways
 

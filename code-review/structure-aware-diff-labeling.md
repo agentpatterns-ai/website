@@ -18,42 +18,42 @@ Structure-aware diff labeling assigns a change type to each hunk in a patch, the
 
 The approach is qualified: the paper's own evaluation shows performance varies across label types and recommends a hybrid with static analysis for the categories that matter most.
 
-## When This Applies
+## When this applies
 
 Use a two-stage LLM labeler when:
 
 - The codebase spans multiple languages and per-language refactor detectors (RefactoringMiner for Java, ts-morph for TypeScript, libcst for Python) would require maintaining separate pipelines.
 - The label taxonomy needs to evolve over time — few-shot prompting lets you add categories without retraining or rewriting AST rules ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
-- The downstream consumer (reviewer prioritisation, PR routing, automated comment suppression) tolerates non-deterministic output and ~80% precision/recall rather than requiring 100% reproducible labels.
+- The downstream consumer (reviewer prioritization, PR routing, automated comment suppression) tolerates non-deterministic output and ~80% precision/recall rather than requiring 100% reproducible labels.
 
 Skip it when a single-language project has mature static-analysis tooling, when CI demands deterministic outputs for audit purposes, or when per-PR token cost dominates the budget.
 
-## The Two Stages
+## The two stages
 
-**Stage 1 — Labeler.** Per-hunk classification using few-shot prompting against a fixed label set. The paper uses 12 types: documentation, testing, output handling, retype, code move, style change, logging, rename, error handling, logic change, internal interface change, external interface change ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)). Each hunk gets a label set with 5 lines of local context. Three modes — per-hunk, per-file, per-patch — trade context length for token cost.
+Stage 1 is the Labeler. It runs per-hunk classification using few-shot prompting against a fixed label set. The paper uses 12 types: documentation, testing, output handling, retype, code move, style change, logging, rename, error handling, logic change, internal interface change, external interface change ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)). Each hunk gets a label set with 5 lines of local context. Three modes — per-hunk, per-file, per-patch — trade context length for token cost.
 
-**Stage 2 — Refiner.** Whole-patch inference that captures cross-hunk relationships. A rename labelled in isolation does not record which hunk holds the declaration and which hold the consequences; the Refiner assigns a parent field (parent=0 for declaration, parent=N for usage) and extracts attributes like old/new names and types. It also corrects misclassifications visible only in whole-patch view ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
+Stage 2 is the Refiner. It runs whole-patch inference to capture cross-hunk relationships. A rename labeled in isolation does not record which hunk holds the declaration and which hold the consequences. So the Refiner assigns a parent field (parent=0 for declaration, parent=N for usage) and extracts attributes like old/new names and types. It also corrects misclassifications visible only in whole-patch view ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
 
-The single-shot Refiner pass is the load-bearing innovation. Without it, a hunk-only labeller can name change types but cannot link them into the structural patterns that drive review prioritisation — knowing four hunks are renames is less useful than knowing they all consume one declaration.
+The single-shot Refiner pass is the central idea. Without it, a hunk-only labeler can name change types but cannot link them into the structural patterns that shape review prioritization — knowing four hunks are renames is less useful than knowing they all consume one declaration.
 
-## Why It Works
+## Why it works
 
-Decomposing classification into per-hunk labelling plus a whole-patch refinement makes each LLM call work within its strengths: short-context few-shot inference for the labelling step and large-context relational reasoning for the refinement step. Few-shot prompting transfers across programming languages without per-language training, so one prompt handles Java and Python diffs with comparable accuracy in the paper's benchmark ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)). The Refiner's whole-patch view supplies the global context that per-hunk inference structurally cannot represent — declaration-to-usage parenting and move source-target pairing emerge from seeing the entire patch in one pass.
+Decomposing classification into per-hunk labeling plus a whole-patch refinement makes each LLM call work within its strengths: short-context few-shot inference for the labeling step and large-context relational reasoning for the refinement step. Few-shot prompting transfers across programming languages without per-language training, so one prompt handles Java and Python diffs with comparable accuracy in the paper's benchmark ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)). The Refiner's whole-patch view supplies the global context that per-hunk inference structurally cannot represent — declaration-to-usage parenting and move source-target pairing emerge from seeing the entire patch in one pass.
 
-## When This Backfires
+## When this backfires
 
-- **Mature single-language tooling exists.** RefactoringMiner-class static analyzers produce deterministic, reproducible labels for Java refactors at near-zero marginal cost. Trading that for non-deterministic LLM output is a net loss when language coverage isn't a requirement.
-- **Cost-sensitive PR-level CI.** The paper's best-performing model (Gemini-3-Pro-Preview) consumed up to 7.5× more output tokens than the second-best model (Claude Sonnet 4.5) ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)). Running this on every PR at scale is expensive; cheaper models lose meaningful accuracy.
-- **Under-represented label types matter most.** Performance varies substantially across label types in the paper's evaluation, with external interface, error handling, and log labels suffering more than rename or logic-change labels ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)). A workflow that prioritises one of those categories is precisely the case where a hybrid with static analysis is required.
-- **Deterministic audit trails.** Compliance contexts that require reproducible classification cannot tolerate LLM non-determinism. Static analysis — a `RefactoringMiner`-class tool — stays the only viable option.
-- **Very large patches.** The Refiner runs whole-patch inference; long diffs blow out the context window and force chunking, which breaks the cross-hunk structural relationship signal the Refiner exists to capture.
-- **Headline metrics hide category-level failures.** LLM-as-classifier prompts optimised for catching true positives misclassify more false positives, and chain-of-thought reasoning amplifies misjudgement on certain inputs ([arxiv:2601.18844](https://arxiv.org/abs/2601.18844), [arxiv:2508.12358](https://arxiv.org/abs/2508.12358)). The 84/81 paper result is one calibration point, not a Pareto frontier.
+- Mature single-language tooling exists. RefactoringMiner-class static analyzers produce deterministic, reproducible labels for Java refactors at near-zero marginal cost. Trading that for non-deterministic LLM output is a net loss when language coverage is not a requirement.
+- Cost-sensitive PR-level CI. The paper's best-performing model (Gemini-3-Pro-Preview) consumed up to 7.5× more output tokens than the second-best model (Claude Sonnet 4.5) ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)). Running this on every PR at scale is expensive, and cheaper models lose meaningful accuracy.
+- Under-represented label types matter most. Performance varies substantially across label types in the paper's evaluation, with external interface, error handling, and log labels suffering more than rename or logic-change labels ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)). A workflow that prioritizes one of those categories is precisely the case where a hybrid with static analysis is required.
+- Deterministic audit trails. Compliance contexts that require reproducible classification cannot tolerate LLM non-determinism. Static analysis — a `RefactoringMiner`-class tool — stays the only viable option.
+- Very large patches. The Refiner runs whole-patch inference, so long diffs blow out the context window and force chunking, which breaks the cross-hunk structural relationship signal the Refiner exists to capture.
+- Headline metrics hide category-level failures. LLM-as-classifier prompts optimized for catching true positives misclassify more false positives, and chain-of-thought reasoning amplifies misjudgement on certain inputs ([arxiv:2601.18844](https://arxiv.org/abs/2601.18844), [arxiv:2508.12358](https://arxiv.org/abs/2508.12358)). The 84/81 paper result is one calibration point, not a Pareto frontier.
 
 The paper's own recommendation: "a hybrid strategy can be adopted — using LLM-based labeling for most types while relying on static analysis for a small set of critical label types" ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
 
 ## Example
 
-The paper's benchmark uses patches drawn from SWE-bench Multilingual and SWE-PolyBench supplemented with fabricated patches for label-type coverage — 95 hunks across 13 PRs, mostly Java with Python included to demonstrate language-agnostic behaviour ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
+The paper's benchmark uses patches drawn from SWE-bench Multilingual and SWE-PolyBench supplemented with fabricated patches for label-type coverage — 95 hunks across 13 PRs, mostly Java with Python included to demonstrate language-agnostic behavior ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
 
 A representative pipeline shape, per the paper:
 
@@ -70,7 +70,7 @@ Patch (Java + Python files, 12 hunks)
      hunk[3]: Logic Change
 ```
 
-Best result on this benchmark: **84% recall, 81% precision** with Gemini-3-Pro-Preview; relative model rankings shift by label type, so the headline number is not the only signal to plan against ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
+Best result on this benchmark: 84% recall, 81% precision with Gemini-3-Pro-Preview. Relative model rankings shift by label type, so the headline number is not the only signal to plan against ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
 
 ## Key Takeaways
 

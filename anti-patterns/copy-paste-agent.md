@@ -17,23 +17,23 @@ maturity: adopted
 
 > Duplicating agent definitions across projects instead of composing from shared skills causes independent drift and prevents improvements from propagating.
 
-## What It Looks Like
+## What it looks like
 
-A useful agent is built for one project. It gets copied to a second project. After a few projects, 5 slightly different versions exist. Each has been tuned locally. When the original is improved, the copies don't benefit.
+You build a useful agent for one project, then copy it to a second. After a few projects, 5 slightly different versions exist. Each one has been tuned locally. When you improve the original, the copies do not benefit.
 
 The symptom is the same agent definition — same core instructions, same tool list, same behavior — appearing in multiple repositories with small variations (the [pattern replication risk](pattern-replication-risk.md) made concrete). The variations are rarely intentional. They accumulate through local fixes that never make it back to a shared source.
 
-## Why It Happens
+## Why it happens
 
-The immediate cause is the absence of a sharing mechanism. When copying a file is faster than setting up a skill or plugin, copying wins. The second cause is unawareness: many teams don't realize that [Claude Code supports user-level agents](https://code.claude.com/docs/en/sub-agents) at `~/.claude/agents/` and [project-level skills](https://code.claude.com/docs/en/skills) that can be composed rather than duplicated.
+The immediate cause is the absence of a sharing mechanism. When copying a file is faster than setting up a skill or plugin, copying wins. The second cause is awareness: many teams do not realize that [Claude Code supports user-level agents](https://code.claude.com/docs/en/sub-agents) at `~/.claude/agents/` and [project-level skills](https://code.claude.com/docs/en/skills) that they can compose rather than duplicate.
 
-## The Fix
+## The fix
 
 Extract the shared parts of an agent definition into a skill — the [separation of knowledge and execution](../agent-design/separation-of-knowledge-and-execution.md) applied to agents. Skills are the reusable unit — they live in one place, and agents compose them. When the skill changes, all agents that reference it get the update automatically.
 
 For cross-project sharing, package skills and agents as plugins and install them across projects. For personal reuse across all projects, place agents and skills in `~/.claude/agents/` and `~/.claude/skills/` — they are available to any project session ([Skills documentation](https://code.claude.com/docs/en/skills#where-skills-live)).
 
-## The Anti-Pattern Within the Anti-Pattern
+## The anti-pattern within the anti-pattern
 
 Copying a skill file instead of referencing it recreates the original problem at a lower level. The skill becomes duplicated across agents, and the duplication still drifts.
 
@@ -55,15 +55,15 @@ Six months later:
 
 When a new security rule is discovered and added to the backend copy, the frontend and mobile copies never receive it.
 
-**Fixed with skills**: Extract the shared rules into `~/.claude/skills/security-review/SKILL.md`. Each repository's agent references it via the `skills:` frontmatter field (e.g., `skills: [security-review]`). When the skill is updated, all three agents benefit automatically. Repository-specific rules remain in each agent definition without duplicating the shared core.
+Fixed with skills: extract the shared rules into `~/.claude/skills/security-review/SKILL.md`. Each repository's agent references it via the `skills:` frontmatter field (for example, `skills: [security-review]`). When the skill is updated, all three agents benefit automatically. Repository-specific rules remain in each agent definition without duplicating the shared core.
 
-## When This Backfires
+## When this backfires
 
-Extracting shared skills only helps when agents are maintained over time. 3 conditions where the anti-pattern is less harmful than it appears:
+Extracting shared skills only helps when you maintain agents over time. Three conditions make the anti-pattern less harmful than it appears:
 
-- **True one-off agents**: an agent built for a single short project that will never be reused or updated doesn't accumulate drift — copies never diverge because changes never happen.
-- **Premature abstraction cost**: extracting a skill before the shared core stabilizes forces every downstream agent to absorb every experimental change. Waiting until the shared behavior is settled reduces churn.
-- **Transient fork intentionality**: occasionally a copy is an intentional fork — one project needs behavior that diverges fundamentally. In this case the copies are meant to diverge, and a shared skill adds [coupling without benefit](abstraction-bloat.md).
+- True one-off agents: an agent built for a single short project that will never be reused or updated does not accumulate drift — copies never diverge because changes never happen.
+- Premature abstraction cost: extracting a skill before the shared core stabilizes forces every downstream agent to absorb every experimental change. Waiting until the shared behavior is settled reduces churn.
+- Transient fork intentionality: occasionally a copy is an intentional fork — one project needs behavior that diverges fundamentally. In this case the copies are meant to diverge, and a shared skill adds [coupling without benefit](abstraction-bloat.md).
 
 The pattern is harmful specifically when agents are expected to receive updates and improvements. If neither condition holds, audit whether the shared skill is pulling its weight.
 

@@ -17,31 +17,31 @@ maturity: established
 
 GitHub introduced WRAP in a [blog post about the Copilot coding agent](https://github.blog/ai-and-ml/github-copilot/wrap-up-your-backlog-with-github-copilot-coding-agent/). The framework targets issue descriptions for autonomous agents, but the principles apply wherever humans delegate tasks to AI.
 
-## The Framework
+## The framework
 
-### W — Write Effective Issues
+### W — Write effective issues
 
 Treat every issue as onboarding material for someone who has never seen your codebase. The agent cannot infer project conventions, architectural decisions, or unstated requirements.
 
-**Descriptive titles** scope the work spatially, the same bounding move as treating the issue as a [specification](specification-as-prompt.md). "Update authentication middleware to use async/await" tells the agent *where* to work. "Update the entire repository" does not.
+A descriptive title scopes the work spatially, the same bounding move as treating the issue as a [specification](specification-as-prompt.md). "Update authentication middleware to use async/await" tells the agent where to work. "Update the entire repository" does not.
 
-**Concrete examples** outperform verbose prose. A before/after code snippet communicates the expected transformation faster than a paragraph of requirements ([Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+Concrete examples outperform long prose. A before-and-after code snippet communicates the expected transformation faster than a paragraph of requirements ([Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
-### R — Refine Your Instructions
+### R — Refine your instructions
 
 WRAP identifies three instruction layers for Copilot: repository-level, organization-level, and [custom agents](../tools/copilot/custom-agents-skills.md) for repetitive patterns — the broader [layered instruction scopes](layered-instruction-scopes.md) pattern. Repository instructions set conventions (naming, testing, style); the issue body adds task-specific context on top, improving responses across all subsequent interactions ([WRAP framework](https://github.blog/ai-and-ml/github-copilot/wrap-up-your-backlog-with-github-copilot-coding-agent/)).
 
 Anthropic's [prompt altitude](system-prompt-altitude.md) principle applies: effective instructions sit in a "Goldilocks zone" — specific enough to guide behavior, flexible enough to provide strong heuristics rather than brittle logic ([Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
-### A — Atomic Tasks
+### A — Atomic tasks
 
-Break large problems into small, independent issues — one module, one concern per issue. Agents on broad tasks exhaust their context mid-implementation, producing half-finished work. Constrain each session to one feature, keeping clean mergeable state between sessions ([Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Atomic scoping also enables [parallel execution](../workflows/parallel-agent-sessions.md): five narrow issues run concurrently; one monolithic issue cannot.
+Break large problems into small, independent issues — one module, one concern per issue. Agents on broad tasks exhaust their context mid-implementation and produce half-finished work. Constrain each session to one feature, so the state stays clean and mergeable between sessions ([Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Atomic scoping also enables [parallel execution](../workflows/parallel-agent-sessions.md): five narrow issues run at once; one monolithic issue cannot.
 
-### P — Pair with the Coding Agent
+### P — Pair with the coding agent
 
-Humans provide the *why*, cross-system implications, and domain judgment; agents provide tireless execution. This maps to [human-in-the-loop](../workflows/human-in-the-loop.md) — review at meaningful checkpoints rather than after full completion. Session-opening checklists (read progress files, select highest-priority work, run tests before starting) reduce wasted cycles across sessions ([Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+Humans provide the reasoning, cross-system implications, and domain judgment; agents provide tireless execution. This maps to [human-in-the-loop](../workflows/human-in-the-loop.md) — review at meaningful checkpoints rather than after full completion. Session-opening checklists (read progress files, select highest-priority work, run tests before starting) reduce wasted cycles across sessions ([Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
-## What WRAP Misses
+## What WRAP misses
 
 WRAP omits several techniques that improve agent task execution:
 
@@ -53,22 +53,22 @@ WRAP omits several techniques that improve agent task execution:
 | Example-vs-rule guidance | Diverse canonical examples beat exhaustive rule lists | [Anthropic context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) |
 | Cross-session continuity | Progress files bridge disconnected context windows | [Anthropic harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) |
 
-## When This Backfires
+## When this backfires
 
 WRAP assumes a backlog-driven workflow with well-defined task boundaries and pays an upfront specification cost. Several conditions undermine it:
 
-- **Exploratory or research tasks** resist atomization — domain knowledge emerges during exploration, so a conversational prompt beats a WRAP-compliant issue.
-- **Solo or fast-moving projects** pay the spec overhead without the payoff. If the developer is also the reviewer, the [human-in-the-loop](../workflows/human-in-the-loop.md) collapses and prose instructions add process without reducing ambiguity.
-- **Tightly coupled work**: forcing atomicity on cross-module changes creates artificial boundaries, forcing agents to rediscover implicit context.
-- **Instruction conflicts**: repository instructions (CLAUDE.md, copilot-instructions.md) and issue-body instructions can contradict each other; agents then hallucinate a resolution or stall.
-- **Modern context windows reduce the atomicity payoff**. 200k+ token windows handle moderate task breadth, so aggressive decomposition fragments related changes and produces harder-to-review PRs.
-- **Frequent scope changes**: acceptance criteria written for a moving target are wasted; human-paired iteration outperforms WRAP here.
+- Exploratory or research tasks resist atomization — domain knowledge emerges during exploration, so a conversational prompt beats a WRAP-compliant issue.
+- Solo or fast-moving projects pay the spec overhead without the payoff. If the developer is also the reviewer, the [human-in-the-loop](../workflows/human-in-the-loop.md) collapses and prose instructions add process without reducing ambiguity.
+- Tightly coupled work: forcing atomicity on cross-module changes creates artificial boundaries and makes agents rediscover implicit context.
+- Instruction conflicts: repository instructions (CLAUDE.md, copilot-instructions.md) and issue-body instructions can contradict each other, and agents then hallucinate a resolution or stall.
+- Modern context windows reduce the atomicity payoff. Windows of 200k or more tokens handle moderate task breadth, so aggressive decomposition fragments related changes and produces harder-to-review PRs.
+- Frequent scope changes waste acceptance criteria written for a moving target. Human-paired iteration outperforms WRAP here.
 
 ## Example
 
 The following contrasts a vague GitHub issue with one that applies all four WRAP principles, showing the concrete changes each letter requires.
 
-**Before: vague issue, violates W and A**
+Before — a vague issue that violates W and A:
 
 ```markdown
 Title: Fix the auth stuff
@@ -76,7 +76,7 @@ Title: Fix the auth stuff
 We need to update authentication. Make sure it works correctly and add tests.
 ```
 
-**After: WRAP-compliant issue**
+After — a WRAP-compliant issue:
 
 ```markdown
 Title: Update authentication middleware to use async/await (src/middleware/auth.ts)
@@ -107,15 +107,15 @@ If you hit a type error on `promisify`, check `@types/node` — it may need
 bumping to 20+.
 ```
 
-The rewritten issue applies **W** (descriptive title with file path, concrete before/after snippet), **R** (references CLAUDE.md repository instructions), **A** (scoped to one file with an explicit "do not touch other files" boundary), and **P** (provides the *why* and flags a likely ambiguity for the human reviewer). The acceptance criteria block fills the gap WRAP leaves open: each item is verifiable without human judgement.
+The rewritten issue applies W (descriptive title with file path, concrete before-and-after snippet), R (references CLAUDE.md repository instructions), A (scoped to one file with an explicit "do not touch other files" boundary), and P (provides the reasoning and flags a likely ambiguity for the human reviewer). The acceptance criteria block fills the gap WRAP leaves open: each item is verifiable without human judgment.
 
-## Why It Works
+## Why it works
 
-Agents have no persistent state between sessions; every decision must be derivable from the current context window. Transformer models operate under a finite attention budget — every additional token competes for pairwise attention, so precision degrades as context grows ([Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). WRAP front-loads what the agent would otherwise infer or hallucinate, concentrating high-signal tokens where they matter.
+Agents have no persistent state between sessions, so every decision must be derivable from the current context window. Transformer models operate under a finite attention budget — every added token competes for pairwise attention, so precision degrades as context grows ([Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). WRAP front-loads what the agent would otherwise infer or hallucinate, concentrating high-signal tokens where they matter.
 
-**W** (concrete examples): LLMs treat few-shot examples as the strongest signal for expected behavior — a before/after snippet conveys a transformation more precisely than prose.
+W (concrete examples): LLMs treat few-shot examples as the strongest signal for expected behavior — a before-and-after snippet conveys a transformation more precisely than prose.
 
-**A** (atomicity): context exhaustion is the primary failure mode in long-horizon tasks. A narrow task fits the full spec, prior code, and verification steps in one window; a broad task forces the agent to truncate earlier context as the implementation grows ([Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+A (atomicity): context exhaustion is the main failure mode in long-horizon tasks. A narrow task fits the full spec, prior code, and verification steps in one window. A broad task forces the agent to truncate earlier context as the implementation grows ([Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
 ## Key Takeaways
 

@@ -14,48 +14,48 @@ maturity: established
 
 > Classify agent knowledge into three tiers — sourced, unverified, and hallucinated — to preserve useful training knowledge while maintaining accuracy standards.
 
-## The Problem with Binary Accuracy Rules
+## The problem with binary accuracy rules
 
-Most anti-hallucination guidelines operate on a binary: a claim either has a citation or it is rejected. This conflates two different categories of unsourced knowledge:
+Most anti-hallucination guidelines work on a binary: a claim either has a citation or it is rejected. This blurs two different kinds of unsourced knowledge:
 
 - Knowledge from training that is likely accurate but cannot be traced to a specific URL
 - Knowledge the model fabricated — plausible-sounding but incorrect
 
-Treating both as "hallucination" and discarding them loses real signal. Treating both as acceptable loses accuracy.
+Treat both as "hallucination" and discard them, and you lose real signal. Treat both as acceptable, and you lose accuracy.
 
-## The Three Tiers
+## The three tiers
 
-**Tier 1 — Sourced**: The claim links to a primary source — documentation, a repository, a published blog post. Include as fact.
+Tier 1 — Sourced: the claim links to a primary source such as documentation, a repository, or a published blog post. Include it as fact.
 
-**Tier 2 — Unverified**: The agent has this knowledge from training and believes it is correct but cannot produce a source URL. Mark inline with `[unverified]` and collect in a dedicated section at the end of the document.
+Tier 2 — Unverified: the agent has this knowledge from training and believes it is correct, but cannot produce a source URL. Mark it inline with `[unverified]` and collect it in a section at the end of the document.
 
-**Tier 3 — Hallucinated**: The claim is fabricated — plausible-sounding but the agent has reason to doubt it. Reject silently or flag explicitly depending on context.
+Tier 3 — Hallucinated: the claim is fabricated. It sounds plausible, but the agent has reason to doubt it. Reject it silently or flag it, depending on context.
 
-The `[unverified]` marker creates a human decision point for the grey zone. The agent flags; the human decides.
+The `[unverified]` marker creates a human decision point for the gray zone. The agent flags; the human decides.
 
-## How to Apply the Tiers
+## How to apply the tiers
 
 Agents follow three rules:
 
 1. If you can cite it, cite it.
-2. If you believe it but cannot cite it, write it with `[unverified]` inline and add the claim to an **Unverified Claims** section at the bottom of the document.
+2. If you believe it but cannot cite it, write it with `[unverified]` inline and add the claim to an Unverified Claims section at the bottom of the document.
 3. If you fabricated it or have strong reason to doubt it, omit it.
 
-Collecting unverified claims into a dedicated section makes the audit surface visible — an editor scans one section to decide what needs research instead of hunting through prose.
+Collecting unverified claims into one section makes the audit surface visible. An editor scans one section to decide what needs research, rather than hunting through the prose.
 
-## Anti-Patterns
+## Anti-patterns
 
-**Silent inclusion**: The agent uses training knowledge as fact without sourcing it. Readers cannot distinguish sourced from unsourced claims. [Hallucination surveys](https://arxiv.org/html/2509.18970v1) consistently categorize this extrinsic hallucination type — outputs unverifiable against any source — as a primary failure mode in agent-generated content.
+Silent inclusion: the agent uses training knowledge as fact without sourcing it. Readers cannot tell sourced claims from unsourced ones. [Hallucination surveys](https://arxiv.org/html/2509.18970v1) consistently categorize this extrinsic hallucination type — outputs that cannot be checked against any source — as a primary failure mode in agent-generated content.
 
-**Silent omission**: The agent discards all unsourced knowledge. Correct-but-uncitable information — conventions, tradeoffs, operational patterns — disappears from the output. The document is accurate but thinner than it should be.
+Silent omission: the agent discards all unsourced knowledge. Correct but uncitable information — conventions, tradeoffs, operational patterns — disappears from the output. The document is accurate but thinner than it should be.
 
-**Hedging instead of marking**: The agent writes "the model might prefer..." or "this could possibly..." instead of `[unverified]`. Hedges are invisible to editors and do not surface the claim for review.
+Hedging instead of marking: the agent writes "the model might prefer..." or "this could possibly..." instead of `[unverified]`. Hedges are invisible to editors and do not surface the claim for review.
 
-## Why It Works
+## Why it works
 
-Binary sourced/rejected rules fail because model training knowledge is not uniform — it spans claims the model has seen confirmed across many sources, claims encountered once, and fabrications. Collapsing them into a single "unsourced = rejected" rule discards the first category unnecessarily. Research on [LLM knowledge awareness](https://arxiv.org/html/2411.14257v2) shows models often hold accurate information they cannot trace to a specific document; silent omission throws that signal away.
+Binary sourced/rejected rules fail because model training knowledge is not uniform. It spans claims the model has seen confirmed across many sources, claims it met once, and fabrications. Collapsing them into a single "unsourced = rejected" rule discards the first category for no reason. Research on [LLM knowledge awareness](https://arxiv.org/html/2411.14257v2) shows models often hold accurate information they cannot trace to a specific document. Silent omission throws that signal away.
 
-The second mechanism is audit-surface concentration. Inline hedges like "the model might prefer..." scatter uncertainty throughout the document, forcing an editor to re-read the entire output to find everything requiring verification. The `[unverified]` tag plus a dedicated collection section converts that scattered uncertainty into a single bounded list — the editor processes one section, not the full document. This mirrors established code-review practice, where linting violations are aggregated into a report rather than surfaced one-by-one during reading.
+The second mechanism is audit-surface concentration. Inline hedges like "the model might prefer..." scatter uncertainty through the document. They force an editor to re-read the whole output to find everything that needs checking. The `[unverified]` tag plus a collection section turns that scattered uncertainty into one bounded list. The editor processes one section, not the full document. This mirrors code-review practice, where linting violations are gathered into a report rather than surfaced one by one during reading.
 
 ## Example
 
@@ -86,16 +86,16 @@ compared to RLHF-only baselines [unverified].
 
 The editor can process the Unverified Claims section in one pass — verifying, citing, or removing each claim — rather than re-reading the full document to find unsourced statements.
 
-## When This Backfires
+## When this backfires
 
-The three-tier pattern adds value only when the unverified claims section is actually reviewed:
+The three-tier pattern adds value only when someone actually reviews the unverified claims section:
 
-- **Unactioned review backlog**: If the section is never processed before publication, it ships with the document and exposes unvalidated assertions to readers. The pattern requires an active triage step — it does not self-enforce.
-- **Tagging discipline erodes under pressure**: Agents operating under token or time constraints skip `[unverified]` tagging, collapsing back to silent inclusion.
-- **Tag volume overwhelms the reviewer**: Agents that lack calibration mark everything uncertain. A document with 15 unverified claims becomes noise rather than signal; the human stops reading the section.
-- **Tier 2 and Tier 3 are hard to distinguish**: An agent that cannot accurately introspect on its own confidence classifies hallucinated claims as unverified rather than rejected, producing a review list that is systematically optimistic.
-- **False confidence from the process itself**: Stakeholders may treat the existence of an "Unverified Claims" section as evidence of rigor even when individual entries are never researched.
-- **Low-stakes contexts invert the cost/benefit**: For internal drafts or brainstorming outputs, the overhead of tagging and reviewing exceeds the benefit. The pattern is most valuable where accuracy matters more than throughput.
+- Unactioned review backlog: if no one processes the section before publication, it ships with the document and exposes unvalidated claims to readers. The pattern needs an active triage step. It does not self-enforce.
+- Tagging discipline erodes under pressure: agents working under token or time limits skip `[unverified]` tagging and fall back to silent inclusion.
+- Tag volume overwhelms the reviewer: agents that lack calibration mark everything uncertain. A document with 15 unverified claims becomes noise rather than signal, and the human stops reading the section.
+- Tier 2 and Tier 3 are hard to tell apart: an agent that cannot accurately judge its own confidence labels hallucinated claims as unverified rather than rejected. The review list then runs systematically optimistic.
+- False confidence from the process itself: people may treat an "Unverified Claims" section as evidence of rigor even when no one researches the individual entries.
+- Low-stakes contexts invert the cost and benefit: for internal drafts or brainstorming, the work of tagging and reviewing costs more than it returns. The pattern is most valuable where accuracy matters more than throughput.
 
 ## Key Takeaways
 

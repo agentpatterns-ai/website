@@ -21,7 +21,7 @@ maturity: adopted
     - [CLAUDE.md Convention](claude-md-convention.md) — Claude Code's project-level instruction file
     - [copilot-instructions.md Convention](../tools/copilot/copilot-instructions-md-convention.md) — GitHub Copilot's repository-level instruction file
 
-## The Same Problem, Different Files
+## The same problem, different files
 
 Each AI coding assistant needs project context. Multiple tools means multiple instruction files:
 
@@ -35,31 +35,31 @@ GitHub Copilot also reads `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` as "agent-sp
 
 [AGENTS.md](https://agents.md), stewarded by the Linux Foundation, is supported by 20+ tools including OpenAI Codex, Google Jules, Copilot, Cursor, Devin, Aider, Zed, and Windsurf.
 
-## Discovery Differences
+## Discovery differences
 
-**Claude Code** walks up the directory tree, loading every `CLAUDE.md` it finds. Subdirectory files load on demand. `.claude/rules/*.md` files with `paths` frontmatter add glob-scoped instructions that trigger only when matching files are read ([docs](https://code.claude.com/docs/en/memory)).
+Claude Code walks up the directory tree, loading every `CLAUDE.md` it finds. Subdirectory files load on demand. `.claude/rules/*.md` files with `paths` frontmatter add glob-scoped instructions that trigger only when matching files are read ([docs](https://code.claude.com/docs/en/memory)).
 
-**GitHub Copilot** uses a multi-tier model. `.github/copilot-instructions.md` applies repository-wide; `*.instructions.md` files in `.github/instructions/` use `applyTo` globs to target specific paths ([docs](https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot)). All tiers are provided simultaneously. Code review reads only the first 4,000 characters; chat and coding agents have no limit ([docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)).
+GitHub Copilot uses a multi-tier model. `.github/copilot-instructions.md` applies repository-wide. `*.instructions.md` files in `.github/instructions/` use `applyTo` globs to target specific paths ([docs](https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot)). All tiers load at the same time. Code review reads only the first 4,000 characters; chat and coding agents have no limit ([docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)).
 
-**AGENTS.md** uses proximity-based discovery: the closest file to the edited file wins. Monorepos nest files in subdirectories to scope instructions per package ([agents.md](https://agents.md)).
+AGENTS.md uses proximity-based discovery: the closest file to the edited file wins. Monorepos nest files in subdirectories to scope instructions per package ([agents.md](https://agents.md)).
 
-## Content Overlap and Drift
+## Content overlap and drift
 
-All three files contain the same categories — project context, conventions, constraints, workflow notes. Each tool reads only its own file, so updates to one file don't propagate. Without a convergence strategy, the files diverge independently: one file says "use pnpm", another says "use npm", and agents follow their own source.
+All three files hold the same categories — project context, conventions, constraints, workflow notes. Each tool reads only its own file, so updates to one file do not propagate. Without a convergence strategy, the files diverge on their own: one file says "use pnpm", another says "use npm", and agents follow their own source.
 
-## Convergence Strategies
+## Convergence strategies
 
-**Single canonical file with symlinks.** Symlink all instruction files to one source of truth. Tradeoff: tool-specific syntax (e.g., Claude Code's [`@path/to/import`](https://code.claude.com/docs/en/memory)) may not work in other tools. Symlinks also require developer setup on Windows, where git does not create them by default.
+Single canonical file with symlinks. Symlink all instruction files to one source of truth. The tradeoff: tool-specific syntax (for example, Claude Code's [`@path/to/import`](https://code.claude.com/docs/en/memory)) may not work in other tools. Symlinks also need developer setup on Windows, where git does not create them by default.
 
-**Shared base with tool-specific extends.** Claude Code supports this via `@AGENTS.md` import in `CLAUDE.md` ([docs](https://code.claude.com/docs/en/memory)). Copilot lacks cross-file imports, requiring duplication or generation.
+Shared base with tool-specific extends. Claude Code supports this via the `@AGENTS.md` import in `CLAUDE.md` ([docs](https://code.claude.com/docs/en/memory)). Copilot has no cross-file imports, so it needs duplication or generation.
 
-**AGENTS.md as canonical standard.** With 20+ compatible tools and Linux Foundation governance, [AGENTS.md](https://agents.md) gives the widest reach.
+AGENTS.md as the canonical standard. With 20+ compatible tools and Linux Foundation governance, [AGENTS.md](https://agents.md) gives the widest reach.
 
-## Hierarchy as a Feature
+## Hierarchy as a feature
 
-All three ecosystems support scoped instruction files — Claude Code via directory-level files and `.claude/rules/` globs, Copilot via `applyTo` patterns, AGENTS.md via proximity. High-sensitivity areas carry additional constraints while root files stay short.
+All three tools support scoped instruction files — Claude Code via directory-level files and `.claude/rules/` globs, Copilot via `applyTo` patterns, AGENTS.md via proximity. High-sensitivity areas carry extra constraints while root files stay short.
 
-## Size Limits and Practical Constraints
+## Size limits and practical constraints
 
 | Tool | Limit | Effect |
 |------|-------|--------|
@@ -69,7 +69,7 @@ All three ecosystems support scoped instruction files — Claude Code via direct
 
 Claude Code mitigates this with `.claude/rules/` and `@path/to/import`, both loading content conditionally ([docs](https://code.claude.com/docs/en/memory)).
 
-## What to Include
+## What to include
 
 Include: project identity, conventions, constraints, and navigation pointers. Exclude: full documentation (link instead), architecture diagrams, and single-task content (use a skill).
 

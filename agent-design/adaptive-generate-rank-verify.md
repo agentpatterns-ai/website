@@ -19,19 +19,19 @@ maturity: emerging
 
 > Generate candidates cheaply, rank with a cheap signal, then spend the expensive verifier only on top-ranked candidates — used when verification dominates per-sample cost.
 
-Adaptive Generate-Rank-Verify is a cost-sensitive inference-time search policy: a generator emits N candidates, a cheap reward model scores each, and an expensive verifier — hidden-test execution, an LLM judge, an external API check — is invoked only on the top-ranked tail according to a progressive schedule. The pattern applies when a single verifier call costs an order of magnitude more than a single generation, and when the cheap score is monotonically related to verifier-pass probability ([Dughmi et al., 2026](https://arxiv.org/abs/2605.17609)).
+Adaptive Generate-Rank-Verify is a cost-sensitive search policy that runs at inference time. A generator emits N candidates. A cheap reward model scores each one. An expensive verifier then runs only on the top-ranked tail, following a progressive schedule. The verifier might be hidden-test execution, an LLM judge, or an external API check. The pattern applies when a single verifier call costs an order of magnitude more than a single generation, and when the cheap score is monotonically related to verifier-pass probability ([Dughmi et al., 2026](https://arxiv.org/abs/2605.17609)).
 
-## When It Applies
+## When it applies
 
 Three conditions must hold together. If any one fails, fixed-budget best-of-N is the right tool.
 
-- **Verifier ≫ generator cost.** Hidden-test execution for code candidates runs roughly 300 ms per sample, versus negligible cost for exact-match rank scoring — a 300× ratio in code agents ([Aletheia, 2026](https://arxiv.org/pdf/2601.12186)). Below ~10× the orchestration overhead exceeds the saved verifier calls.
-- **Ranker is calibrated.** Higher rank must correspond to higher verifier-pass probability. The formal assumption is monotonicity of the score-label relationship ([Dughmi et al., 2026](https://arxiv.org/abs/2605.17609)); without it the algorithm's optimality bound vanishes.
-- **N is large enough for the tail to matter.** Below ~16 candidates with parallel verification, fixed-budget best-of-N wins on wall-clock latency because the head of the rank distribution is sparse.
+- Verifier cost far exceeds generator cost. Hidden-test execution for code candidates runs roughly 300 ms per sample, against negligible cost for exact-match rank scoring — a 300× ratio in code agents ([Aletheia, 2026](https://arxiv.org/pdf/2601.12186)). Below about 10×, orchestration overhead exceeds the saved verifier calls.
+- Ranker is calibrated. Higher rank must mean higher verifier-pass probability. The formal assumption is monotonicity of the score-label relationship ([Dughmi et al., 2026](https://arxiv.org/abs/2605.17609)). Without it, the algorithm's optimality bound vanishes.
+- N is large enough for the tail to matter. Below about 16 candidates with parallel verification, fixed-budget best-of-N wins on wall-clock latency, because the head of the rank distribution is sparse.
 
-## The Doubling Schedule
+## The doubling schedule
 
-ADAP — the algorithm proposed in [Dughmi et al. (2026)](https://arxiv.org/abs/2605.17609) — progressively grows both the candidate pool and the count of top-ranked items verified, doubling at each shell until a pass appears or budget runs out.
+ADAP is the algorithm proposed in [Dughmi et al. (2026)](https://arxiv.org/abs/2605.17609). It grows both the candidate pool and the number of top-ranked items verified, doubling at each shell until a pass appears or the budget runs out.
 
 ```mermaid
 graph TD
@@ -42,13 +42,13 @@ graph TD
     E --> A
 ```
 
-The expected cost is within a constant factor of the distribution-aware optimum — the schedule that an oracle who knew the score distribution and the success function would have chosen ([Dughmi et al., 2026](https://arxiv.org/abs/2605.17609)). The lower bound is established using centered star numbers; without structural assumptions on the score-label relationship, no algorithm achieves better than constant-factor competitiveness.
+The expected cost stays within a constant factor of the distribution-aware optimum — the schedule an oracle would choose if it knew the score distribution and the success function ([Dughmi et al., 2026](https://arxiv.org/abs/2605.17609)). A lower bound, proved with centered star numbers, shows that no algorithm does better than constant-factor competitiveness without structural assumptions on the score-label relationship.
 
-## Why It Works
+## Why it works
 
-Under monotonicity, the **information value per verifier call** concentrates at the top of the rank distribution — the marginal probability that the next verification yields the first success is highest among top-ranked items and decays down the list ([Dughmi et al., 2026](https://arxiv.org/abs/2605.17609)). Meanwhile, the **marginal cost** of an extra generation is orders of magnitude below the marginal cost of an extra verification when verification involves test execution or judge calls ([Aletheia, 2026](https://arxiv.org/pdf/2601.12186)). Generating freely until the rank distribution's head is dense, then spending verifier dollars only on that head, is provably within a constant of optimal — the same broad principle [Snell et al. (2024)](https://arxiv.org/abs/2408.03314) measured at the test-time compute level, where prompt-conditional adaptive allocation beat uniform scaling by over 4× under matched FLOPs on MATH. The doubling schedule produces the constant-factor guarantee: each shell either finds a passing candidate or rules out the previous regime.
+Under monotonicity, the information value per verifier call concentrates at the top of the rank distribution. The marginal probability that the next verification yields the first success is highest among top-ranked items, and it decays down the list ([Dughmi et al., 2026](https://arxiv.org/abs/2605.17609)). Meanwhile, an extra generation costs orders of magnitude less than an extra verification when verification runs tests or judge calls ([Aletheia, 2026](https://arxiv.org/pdf/2601.12186)). So you generate freely until the head of the rank distribution is dense, then spend verifier dollars only on that head. This is provably within a constant of optimal. [Snell et al. (2024)](https://arxiv.org/abs/2408.03314) measured the same broad principle at the test-time compute level: prompt-conditional adaptive allocation beat uniform scaling by over 4× under matched FLOPs on MATH. The doubling schedule produces the constant-factor guarantee, because each shell either finds a passing candidate or rules out the previous regime.
 
-## When This Backfires
+## When this backfires
 
 The optimality result is conditional. The pattern degrades or inverts under common deployment regimes.
 
@@ -60,11 +60,11 @@ The optimality result is conditional. The pattern degrades or inverts under comm
 | Outcome-only verifier with false positives | Verifier passes on right-answer-wrong-reasoning ([Right Is Not Enough, 2026](https://arxiv.org/pdf/2506.06877)) | Pair with stricter verifiers; use this pattern only when verifier ≈ ground truth |
 | Heterogeneous query mix | Score distribution drifts across queries — easy lookups, hard math, ambiguous code share one pipeline | Bucket by query difficulty; apply ADAP within buckets, not across them |
 
-A practitioner running an LLM-judge that has not been calibrated against the production distribution should treat the monotonicity assumption as untested — and therefore the optimality claim as unsupported.
+If you run an LLM-judge that you have not calibrated against the production distribution, treat the monotonicity assumption as untested — and the optimality claim as unsupported.
 
 ## Example
 
-A code-generation agent with an LLM-judge verifier costing ~$0.03 per call and an embedding-based reranker costing ~$0.00003 per candidate (~1000× ratio):
+A code-generation agent uses an LLM-judge verifier at about $0.03 per call and an embedding-based reranker at about $0.00003 per candidate — about a 1000× ratio:
 
 ```python
 def adap_search(prompt, max_shells=4, initial_n=4):
@@ -99,5 +99,5 @@ The order matters. Generating the full final-shell N up front is fine — genera
 - [Dual-Budget Control for Search Agents](dual-budget-control-search-agents.md) — VOI-per-unit-budget allocation across retrieve/decompose/commit when both tool calls and tokens bind; ADAP allocates across generate/verify when verification dominates
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — Allocate reasoning depth across planning/execution/verification phases; ADAP allocates verifier calls across rank positions within a single phase
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — Generator-evaluator refinement loop without cost asymmetry; ADAP is its cost-sensitive variant for the regime where the evaluator is the expensive step
-- [Cost-Aware Agent Design](cost-aware-agent-design.md) — Match model capability to task complexity; ADAP is the sample-level analogue for matching verifier spend to candidate rank
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — Match model capability to task complexity; ADAP is the sample-level analogue for matching verifier spend to candidate rank
 - [Anti-Reward-Hacking](../verification/anti-reward-hacking.md) — Counter-measures for when the cheap ranker can be gamed — required reading before relying on rank-top verification

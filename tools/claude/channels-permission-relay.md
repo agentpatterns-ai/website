@@ -28,7 +28,7 @@ When Claude requests a tool-use approval and the channel has declared the [`clau
 | Field | Content |
 |---|---|
 | `request_id` | Five lowercase letters from `a`–`z` excluding `l`, unique to this prompt |
-| `tool_name` | Tool Claude wants to use (`Bash`, `Write`, etc.) |
+| `tool_name` | Tool Claude wants to use, such as `Bash` or `Write` |
 | `description` | Human-readable summary of the specific call |
 | `input_preview` | Tool arguments as JSON, truncated to 200 characters |
 
@@ -77,10 +77,10 @@ Pro and Max users without an org skip these checks.
 
 Relay widens the approval surface and narrows the information the approver sees:
 
-- **Weaker credential than the terminal.** A stolen phone, SIM-swap, or shared iMessage device becomes a tool-approval path — defeating a locked workstation requires more.
-- **Narrow remote view.** The relay forwards only `tool_name`, a short `description`, and the first 200 characters of arguments — blast radius that depends on working directory or session state cannot be assessed from a phone.
-- **Approval fatigue.** Prompts glanced at on a phone get approved by reflex — the failure mode [safe command allowlisting](../../security/safe-command-allowlisting.md) and [auto-mode](auto-mode.md) exist to avoid.
-- **Sandboxable risk.** For throwaway worktrees or ephemeral containers with no credentials in scope, `--dangerously-skip-permissions` inside a sandbox removes prompts entirely — relay adds latency without adding safety.
+- Weaker credential than the terminal. A stolen phone, SIM-swap, or shared iMessage device becomes a tool-approval path — defeating a locked workstation takes more effort.
+- Narrow remote view. The relay forwards only `tool_name`, a short `description`, and the first 200 characters of arguments. You cannot judge a blast radius that depends on working directory or session state from a phone.
+- Approval fatigue. Prompts glanced at on a phone get approved by reflex — the failure mode that [safe command allowlisting](../../security/safe-command-allowlisting.md) and [auto-mode](auto-mode.md) exist to avoid.
+- Sandboxable risk. For throwaway worktrees or ephemeral containers with no credentials in scope, `--dangerously-skip-permissions` inside a sandbox removes prompts entirely. Relay adds latency without adding safety.
 
 ## Example
 

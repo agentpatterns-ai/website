@@ -16,13 +16,13 @@ maturity: emerging
 
 > A pass@k number misreads RL's effect on a tool-use agent. Vary sampling budget *k* and interaction depth *T* jointly to separate capability expansion from efficiency.
 
-## Why One-Dimensional pass@k Misleads for Agents
+## Why one-dimensional pass@k misleads for agents
 
-For static reasoning — math, code, visual reasoning — base and RL pass@k curves converge at large *k*: RL raises pass@1 but does not expand what the model can ever solve [Source: [Yue et al., *Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model?*](https://arxiv.org/abs/2504.13837)]. That result has been read as a general ceiling on RL post-training.
+For static reasoning — math, code, visual reasoning — base and RL pass@k curves converge at large *k*: RL raises pass@1 but does not expand what the model can ever solve [Source: [Yue et al., *Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model?*](https://arxiv.org/abs/2504.13837)]. Many read that result as a general ceiling on RL post-training.
 
-Agentic tool use breaks the assumption. Agents interleave reasoning with tool calls over *T* rounds. Compositional strategies — plan, retrieve, re-plan on retrieved content, retrieve again, the loop [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md) formalise — depend on *T*, not on resampling. A metric that only varies *k* conflates "cannot do this at any k" with "cannot do this at this T."
+Agentic tool use breaks that assumption. Agents interleave reasoning with tool calls over *T* rounds. Compositional strategies depend on *T*, not on resampling: plan, retrieve, re-plan on retrieved content, retrieve again — the loop [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md) formalize. A metric that only varies *k* conflates "cannot do this at any k" with "cannot do this at this T."
 
-## The Two-Dimensional Metric
+## The two-dimensional metric
 
 PASS@(k,T) jointly varies sampling budget *k* and interaction depth *T* [Source: [Zhai et al., *Does RL Expand the Capability Boundary of LLM Agents? A PASS@(k,T) Analysis*](https://arxiv.org/abs/2604.14877)]. For each (k, T) cell: sample *k* trajectories with at most *T* interaction rounds each, count success as ≥1 trajectory correct.
 
@@ -40,31 +40,31 @@ The output is a surface, not a number. Reading the shape separates distinct effe
 | Pattern | Interpretation |
 |---|---|
 | RL curve pulls above base at all T, gap closes at large k | Efficiency gain — RL samples winning trajectories more densely |
-| RL curve pulls above base and gap **widens** at large k | Capability expansion — base model cannot reach the strategy at any k under this T |
+| RL curve pulls above base and gap widens at large k | Capability expansion — base model cannot reach the strategy at any k under this T |
 | Gap appears only above some T threshold | Compositional gain — the strategy requires interaction depth the base model cannot use |
 | Curves converge at all (k, T) | No RL effect on this task class |
 
-## What the Paper Finds
+## What the paper finds
 
-On compositional, sequential information-gathering tasks the RL agent's pass-curve pulls above the base model and **the gap widens at large k rather than converging** — the opposite of the static-reasoning result [Source: [Zhai et al.](https://arxiv.org/abs/2604.14877)]. The effect is task-specific: on simpler tasks RL converges with the base model as prior work predicts.
+On compositional, sequential information-gathering tasks the RL agent's pass-curve pulls above the base model, and the gap widens at large k rather than converging — the opposite of the static-reasoning result [Source: [Zhai et al.](https://arxiv.org/abs/2604.14877)]. The effect is task-specific: on simpler tasks RL converges with the base model as prior work predicts.
 
 Under matched training data, supervised fine-tuning regresses the boundary on the same compositional tasks, isolating self-directed exploration as the causal factor — not supervision quality [Source: [Zhai et al.](https://arxiv.org/abs/2604.14877)]. Mechanism analysis shows RL reweights the base strategy distribution toward strategies whose downstream reasoning more reliably produces a correct answer, concentrated on how the agent integrates retrieved information [Source: [Zhai et al.](https://arxiv.org/abs/2604.14877)].
 
 Optimistic and pessimistic readings of RL for LLMs are both correct, on different task types.
 
-## When PASS@(k,T) Changes a Decision
+## When PASS@(k,T) changes a decision
 
-Use the 2D surface when deciding whether to invest in RL post-training for an agentic workload. A team that only measures pass@1 sees an RL lift and concludes RL is working; a team that measures pass@k at fixed *T* may see convergence and conclude RL is purely efficiency. Only the joint surface reveals whether the RL agent is reaching strategies the base model cannot reach under the same interaction budget.
+Use the 2D surface when deciding whether to invest in RL post-training for an agentic workload. A team that only measures pass@1 sees an RL lift and concludes RL is working. A team that measures pass@k at fixed *T* may see convergence and conclude RL is purely efficiency. Only the joint surface reveals whether the RL agent reaches strategies the base model cannot reach under the same interaction budget.
 
 Single-turn benchmarks — HumanEval, MBPP, math word problems — do not require this metric. PASS@(k,T) collapses to pass@k when *T*=1.
 
-## Limits and Measurement Traps
+## Limits and measurement traps
 
-- **T must span the compositional budget.** If the harness caps *T* below what a compositional plan requires, both base and RL agents fail and the metric reports no expansion. Size *T* from observed successful-trajectory lengths before fixing the grid.
-- **Early-training checkpoints understate the effect.** RL can narrow capability during an exploitation phase before an exploration phase recovers it [Source: [Yao et al., *The Debate on RLVR Reasoning Capability Boundary: Shrinkage, Expansion, or Both?*](https://arxiv.org/abs/2510.04028)].
-- **pass@k at large k is exponentially forgiving** — any non-zero-capability agent eventually hits the right answer. Interpret widening gaps at large *k* as capability expansion only when the base model's pass-curve has plateaued [Source: [Brooker, *Pass@k is Mostly Bunk*](https://brooker.co.za/blog/2026/01/21/pass-k.html)].
-- **Reward-hackable environments inflate the surface.** If the outcome check can be satisfied by surface patterns, RL exploits the reward; the widening gap reflects hacking, not reasoning. Audit with [trajectory-opaque evaluation](eval-blind-spots.md) before trusting outcome-only scores.
-- **Small suites give wide confidence intervals.** The 2D grid multiplies sample requirements; report intervals rather than point estimates per cell [Source: [Hariri et al., *Don't Pass@k: A Bayesian Framework for LLM Evaluation*](https://arxiv.org/abs/2510.04265)].
+- T must span the compositional budget. If the harness caps *T* below what a compositional plan requires, both base and RL agents fail and the metric reports no expansion. Size *T* from observed successful-trajectory lengths before fixing the grid.
+- Early-training checkpoints understate the effect. RL can narrow capability during an exploitation phase before an exploration phase recovers it [Source: [Yao et al., *The Debate on RLVR Reasoning Capability Boundary: Shrinkage, Expansion, or Both?*](https://arxiv.org/abs/2510.04028)].
+- pass@k at large k is exponentially forgiving — any non-zero-capability agent eventually hits the right answer. Interpret widening gaps at large *k* as capability expansion only when the base model's pass-curve has plateaued [Source: [Brooker, *Pass@k is Mostly Bunk*](https://brooker.co.za/blog/2026/01/21/pass-k.html)].
+- Reward-hackable environments inflate the surface. If the outcome check can be satisfied by surface patterns, RL exploits the reward, so the widening gap reflects hacking, not reasoning. Audit with [trajectory-opaque evaluation](eval-blind-spots.md) before trusting outcome-only scores.
+- Small suites give wide confidence intervals. The 2D grid multiplies sample requirements, so report intervals rather than point estimates per cell [Source: [Hariri et al., *Don't Pass@k: A Bayesian Framework for LLM Evaluation*](https://arxiv.org/abs/2510.04265)].
 
 ## Example
 
@@ -88,9 +88,9 @@ T=32     0.52    0.71    0.83    0.89    <- gap widens at large k
 
 Reading the surface:
 
-- At **T=2** the gap is small and closes at large *k* — efficiency only; base model reaches similar ceiling with more samples
-- At **T=8 and T=32** the gap **widens** at large *k* — RL reaches strategies the base model does not find under matched interaction budget
-- The **compositional expansion is real** for this workload; RL post-training is worth shipping
+- At *T*=2 the gap is small and closes at large *k* — efficiency only, since the base model reaches a similar ceiling with more samples
+- At *T*=8 and *T*=32 the gap widens at large *k* — RL reaches strategies the base model does not find under a matched interaction budget
+- The compositional expansion is real for this workload, so RL post-training is worth shipping
 
 If the team had only measured pass@1 (+0.21 at T=32), they would call RL "better." If they had only measured pass@64 at T=2 (+0.06), they would call RL "barely different." Neither reading is correct.
 

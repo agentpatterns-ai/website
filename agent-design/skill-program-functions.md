@@ -19,7 +19,7 @@ maturity: emerging
 
 > Compiling a skill into an executable guardrail moves the *trigger* out of the model into code — worthwhile only when baseline failure is high.
 
-## When the Conditions Hold
+## When the conditions hold
 
 Skill Program Functions (PFs) replace advisory skill text with runtime predicates: a Python function checks the agent's state each step and, on a failure-prone match, modifies the next action or injects corrective context ([Liu et al., 2026](https://arxiv.org/abs/2605.17734)). They earn the engineering cost only under four conditions; outside them, advisory skills plus hooks dominate.
 
@@ -32,46 +32,46 @@ Skill Program Functions (PFs) replace advisory skill text with runtime predicate
 
 Under these conditions, HASP reports up to 25% gain on web-search and 30.4% on math reasoning over baselines including ReAct and Search-R1 ([Liu et al., 2026](https://arxiv.org/abs/2605.17734)).
 
-## What a Program Function Is
+## What a program function is
 
 A PF wraps a skill's guidance in three parts:
 
-1. **Trigger predicate** — a deterministic check against agent state, such as `result_count == 0`. The model is not consulted.
-2. **Intervention type** — *action modification* (rewrite the agent's next tool call) or *context injection* (append a corrective user-role message).
-3. **Termination condition** — when the PF stops firing, so the fix-loop terminates.
+1. Trigger predicate — a deterministic check against agent state, such as `result_count == 0`. The model is not consulted.
+2. Intervention type — action modification (rewrite the agent's next tool call) or context injection (append a corrective user-role message).
+3. Termination condition — when the PF stops firing, so the fix-loop terminates.
 
 The same library applies at inference time, during post-training as structured supervision, or in a self-improvement loop that evolves teacher-reviewed PFs ([Liu et al., 2026](https://arxiv.org/abs/2605.17734)).
 
-## Why It Works
+## Why it works
 
 Moving the trigger from instruction-following to a runtime predicate removes two error sources: instruction fade-out over long contexts ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)) and the compliance ceiling — frontier models reach only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). Neither applies to a Python predicate.
 
-The gain comes from removing model judgment from the *trigger*, not the corrective content — so the disruption-recovery framework still bounds it: a perfect trigger firing on a path the agent would have rescued anyway degrades performance ([Vasudev et al., 2026](https://arxiv.org/abs/2602.03338)).
+The gain comes from removing model judgment from the trigger, not the corrective content — so the disruption-recovery framework still bounds it: a perfect trigger firing on a path the agent would have rescued anyway degrades performance ([Vasudev et al., 2026](https://arxiv.org/abs/2602.03338)).
 
-## Relationship to Adjacent Patterns
+## Relationship to adjacent patterns
 
 | Pattern | What it provides | What PFs add |
 |---------|-----------------|-------------|
 | [Skill as Knowledge](../tool-engineering/skill-as-knowledge.md) | Portable markdown skills the model reads and interprets | Compiled trigger logic — the decision to apply is no longer the model's |
 | [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md) | Static reminder templates triggered by event detectors | Skill-derived templates whose triggers and bodies evolve from observed failures |
-| [Agent Loop Middleware](agent-loop-middleware.md) | Deterministic loop-boundary nodes for non-negotiable steps | Mid-loop intervention driven by a compiled skill library |
+| [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md) | Deterministic loop-boundary nodes for non-negotiable steps | Mid-loop intervention driven by a compiled skill library |
 
-PFs are the third leg of the skill–loop–intervention stack. Skill as Knowledge warns against skills that embed execution sequences; PFs accept that, with the executable layer kept *separate* from the skill text and regenerated when the skill changes.
+PFs are the third leg of the skill–loop–intervention stack. Skill as Knowledge warns against skills that embed execution sequences; PFs accept that, with the executable layer kept separate from the skill text and regenerated when the skill changes.
 
-## When This Backfires
+## When this backfires
 
-- **Baseline success is already high.** Vasudev et al. measured 0 to −26pp degradation on high-success tasks even with a 0.94-AUROC failure detector; +2.8pp gains were limited to high-failure benchmarks like ALFWorld ([arxiv 2602.03338](https://arxiv.org/abs/2602.03338)).
-- **No eval harness for per-PF rollout.** Each PF needs its own ~50-task pilot. "The primary value of our framework is identifying when not to intervene" ([Vasudev et al., 2026](https://arxiv.org/abs/2602.03338)).
-- **Skill domain drifts.** A PF binds the trigger to a snapshot of failure conditions. Tool, model, or task-type shifts make the predicate fire on states that are no longer failures.
-- **Non-idempotent corrective actions.** PFs fire mid-loop, not at loop boundaries — action-modification PFs must be safe under retry.
-- **Below the compliance-ceiling threshold.** When the skill library fits in a static system prompt without saturating the [instruction compliance ceiling](../instructions/instruction-compliance-ceiling.md), advisory text plus deterministic hooks captures the value at lower cost.
-- **Context-priming dominates rule content.** [Zhang et al. (2026)](https://arxiv.org/abs/2604.11088) found random rules match expert-curated ones on SWE-bench. Compiling skills into PFs removes that priming — the runtime gain must exceed both the lost priming and the disruption-recovery cost.
+- Baseline success is already high. Vasudev et al. measured 0 to −26pp degradation on high-success tasks even with a 0.94-AUROC failure detector; +2.8pp gains were limited to high-failure benchmarks like ALFWorld ([arxiv 2602.03338](https://arxiv.org/abs/2602.03338)).
+- No eval harness for per-PF rollout. Each PF needs its own ~50-task pilot. "The primary value of our framework is identifying when not to intervene" ([Vasudev et al., 2026](https://arxiv.org/abs/2602.03338)).
+- Skill domain drifts. A PF binds the trigger to a snapshot of failure conditions. Tool, model, or task-type shifts make the predicate fire on states that are no longer failures.
+- Non-idempotent corrective actions. PFs fire mid-loop, not at loop boundaries — action-modification PFs must be safe under retry.
+- Below the compliance-ceiling threshold. When the skill library fits in a static system prompt without saturating the [instruction compliance ceiling](../instructions/instruction-compliance-ceiling.md), advisory text plus deterministic hooks captures the value at lower cost.
+- Context-priming dominates rule content. [Zhang et al. (2026)](https://arxiv.org/abs/2604.11088) found random rules match expert-curated ones on SWE-bench. Compiling skills into PFs removes that priming — the runtime gain must exceed both the lost priming and the disruption-recovery cost.
 
 ## Example
 
 A common failure across web-search agents: after a tool returns zero results, the model issues a near-identical query rather than reformulating. The advisory skill text says "if search returns zero results, try a broader query" — but the instruction fades across multi-turn trajectories.
 
-**Before** — advisory skill text loaded into the system prompt:
+Before — advisory skill text loaded into the system prompt:
 
 ```markdown
 # Skill: Search Recovery
@@ -81,7 +81,7 @@ Reformulate with broader keywords, remove site filters, or try a different
 date range before retrying.
 ```
 
-**After** — the same guidance compiled to a Program Function:
+After — the same guidance compiled to a Program Function:
 
 ```python
 def search_recovery_pf(state: AgentState) -> Intervention | None:
@@ -127,10 +127,10 @@ The PF should still pass a per-function pilot eval — a sample of 50 trajectori
 
 ## Related
 
-- [Agent Loop Middleware](agent-loop-middleware.md) — deterministic loop-boundary nodes; PFs extend this to mid-loop intervention with compiled triggers
+- [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md) — deterministic loop-boundary nodes; PFs extend this to mid-loop intervention with compiled triggers
 - [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md) — the static-template predecessor pattern; PFs replace the hand-authored templates with skill-derived ones
 - [Skill as Knowledge](../tool-engineering/skill-as-knowledge.md) — the source-of-truth layer that PFs compile from, not against
 - [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — the canonical home for the skill guidance PFs compile into runtime predicates
 - [Steering Running Agents](steering-running-agents.md) — human-in-the-loop intervention; PFs are the automated counterpart on detected failure states
 - [Guardrails Beat Guidance for Coding Agents](../instructions/guardrails-beat-guidance-coding-agents.md) — counter-evidence that much of skill-text value is context priming rather than instruction content
-- [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md) — an async observer that classifies misbehaviours and injects course-corrections, complementary to the synchronous PF model
+- [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md) — an async observer that classifies misbehaviors and injects course-corrections, complementary to the synchronous PF model

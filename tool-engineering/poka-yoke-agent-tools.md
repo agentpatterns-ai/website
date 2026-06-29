@@ -18,16 +18,16 @@ maturity: adopted
 
 > Redesign agent tool interfaces so the wrong call cannot compile — prevention over documentation.
 
-**Learn it hands-on:** [Idempotent, Safe-to-Retry Tools](https://learn.agentpatterns.ai/tool-engineering/idempotent-tools/) — guided lesson with quizzes.
+Learn it hands-on: [Idempotent, Safe-to-Retry Tools](https://learn.agentpatterns.ai/tool-engineering/idempotent-tools/) — guided lesson with quizzes.
 
 !!! info "Also known as"
     Mistake-Proofing, Error-Proof Tool Design, Structural Constraints
 
-## From Manufacturing to Tool Design
+## From manufacturing to tool design
 
 Poka-yoke (mistake-proofing) originated in Toyota's production system: redesign the process so the defective outcome is structurally impossible. Anthropic applies it to agent tools — "Change the arguments so that it is harder to make mistakes" ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)) — and reports spending more time optimizing tools than the overall prompt ([SWE-bench Sonnet](https://www.anthropic.com/engineering/swe-bench-sonnet)).
 
-## The Core Shift
+## The core shift
 
 Documentation tells the agent how to use a tool correctly. Poka-yoke makes incorrect use fail fast or become impossible.
 
@@ -41,34 +41,34 @@ Manufacturing taxonomy:
 
 | Manufacturing function | Tool design equivalent | Example |
 |------------------------|------------------------|---------|
-| **Contact method** — shape prevents misuse | Parameter type prevents invalid calls | Enum `["python", "typescript", "all"]` vs free-text |
-| **Fixed-value method** — counters enforce limits | Bounds and defaults prevent out-of-range values | `max_results` clamped 1–100, default 20 |
-| **Motion-step method** — enforced sequence | Prerequisite gates block out-of-order operations | Read-before-write: Edit rejects if file not yet read |
+| Contact method — shape prevents misuse | Parameter type prevents invalid calls | Enum `["python", "typescript", "all"]` vs free-text |
+| Fixed-value method — counters enforce limits | Bounds and defaults prevent out-of-range values | `max_results` clamped 1–100, default 20 |
+| Motion-step method — enforced sequence | Prerequisite gates block out-of-order operations | Read-before-write: Edit rejects if file not yet read |
 
-## Production Patterns
+## Production patterns
 
-### Absolute Paths Over Relative
+### Absolute paths over relative
 
 Relative filepaths failed after directory changes. Mandatory absolute paths eliminated the failure mode:
 
 > "Sometimes models could mess up relative file paths after the agent had moved out of the root directory. To prevent this, we simply made the tool always require an absolute path."
 > — [SWE-bench Sonnet](https://www.anthropic.com/engineering/swe-bench-sonnet)
 
-### Uniqueness Constraints on Edits
+### Uniqueness constraints on edits
 
 String replacement (`old_str`/`new_str`) fails if `old_str` matches zero or multiple locations — the uniqueness constraint is itself a poka-yoke. Zero matches means stale context; multiple means insufficient context. Both force the agent to add specificity.
 
-### Read-Before-Write Gates
+### Read-before-write gates
 
 Claude Code's Edit and Write tools reject calls if the file has not been read in the current session — a structural prerequisite, not just an instruction.
 
-### Output Truncation Boundaries
+### Output truncation boundaries
 
 Read-tool line caps and [Bash-tool command timeouts](https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool) prevent unbounded context consumption even when the agent asks for everything.
 
-### Training-Aligned Formats
+### Training-aligned formats
 
-Tool formats should be close to "naturally-occurring internet text" to leverage model training priors. Formats requiring line counting, string escaping, or unusual reasoning increase error rates ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
+Tool formats should be close to "naturally-occurring internet text" to use model training priors. Formats requiring line counting, string escaping, or unusual reasoning increase error rates ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
 
 ```mermaid
 graph LR
@@ -79,11 +79,11 @@ graph LR
     D --> F[Frequent misuse]
 ```
 
-### Tool Use Examples in Definitions
+### Tool use examples in definitions
 
 Concrete sample calls in tool definitions improved accuracy from 72% to 90% on complex parameter handling in Anthropic's testing ([Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use)).
 
-## Beyond Tool Parameters
+## Beyond tool parameters
 
 | Technique | What it prevents | Source |
 |-----------|-----------------|--------|
@@ -92,25 +92,25 @@ Concrete sample calls in tool definitions improved accuracy from 72% to 90% on c
 | [Loop detection](../observability/loop-detection.md) middleware — intervenes after N iterations | Infinite retry loops | [LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) |
 | Minimal non-overlapping toolsets — reduce ambiguity in tool selection | Wrong-tool selection | [Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) |
 
-## When This Backfires
+## When this backfires
 
 Over-constraining tool interfaces introduces its own failure modes:
 
-- **Enum exhaustion** — a fixed enum valid at design time excludes production edge cases; update or the agent cannot proceed.
-- **Prerequisite deadlock** — read-before-write gates block optimistic-write and content-from-scratch pipelines.
-- **Designer blind spots** — constraints encode the designer's model of valid usage; legitimate emergent strategies get rejected.
-- **Over-normalized toolsets** — too-narrow toolsets push agents toward multi-step workarounds with higher cumulative error probability, the failure mode [Tool Minimalism](tool-minimalism.md) warns against in the opposite direction.
+- Enum exhaustion — a fixed enum valid at design time excludes production edge cases; update it or the agent cannot proceed.
+- Prerequisite deadlock — read-before-write gates block optimistic-write and content-from-scratch pipelines.
+- Designer blind spots — constraints encode the designer's model of valid usage, so the tool rejects legitimate emergent strategies.
+- Over-normalized toolsets — too-narrow toolsets push agents toward multi-step workarounds with higher cumulative error probability, the failure mode [Tool Minimalism](tool-minimalism.md) warns against in the opposite direction.
 
 Apply poka-yoke where failure modes are well-understood and the constraint space is stable. Prefer validation when use cases are still evolving.
 
-## Designing Your Own Poka-Yoke
+## Designing your own poka-yoke
 
-1. **Can any parameter accept values that are never valid?** Constrain to an enum or validated range.
-2. **Does the tool depend on prior state?** Add a prerequisite gate (read-before-write, auth-before-access).
-3. **Can the output overwhelm the context window?** Add truncation with recovery hints, as in [Graceful Tool-Output Truncation](graceful-tool-output-truncation.md).
-4. **Does the format require precise mechanical reasoning?** Switch to a format with strong training priors.
-5. **Can the tool silently apply the wrong change?** Add a uniqueness or [idempotency](../agent-design/idempotent-agent-operations.md) constraint.
-6. **Test like a junior developer API** — pass many inputs and observe where the model fails. Fix the interface, not the prompt.
+1. Can any parameter accept values that are never valid? Constrain to an enum or validated range.
+2. Does the tool depend on prior state? Add a prerequisite gate (read-before-write, auth-before-access).
+3. Can the output overwhelm the context window? Add truncation with recovery hints, as in [Graceful Tool-Output Truncation](graceful-tool-output-truncation.md).
+4. Does the format require precise mechanical reasoning? Switch to a format with strong training priors.
+5. Can the tool silently apply the wrong change? Add a uniqueness or [idempotency](../agent-design/idempotent-agent-operations.md) constraint.
+6. Test like a junior developer API — pass many inputs and observe where the model fails. Fix the interface, not the prompt.
 
 ## Key Takeaways
 

@@ -14,15 +14,15 @@ maturity: established
 
 > Review what changed, not the full output — mistakes live in the delta, and diffs compress review effort to the right scope.
 
-## Why Diffs Are Easier to Review Than Complete Outputs
+## Why diffs are easier to review than complete outputs
 
-Reading a 500-word page and spotting one wrong claim is hard. Reading a 20-line diff and spotting it is easy. Review effort scales with what you read; error density is highest in what is new.
+Reading a 500-word page and spotting one wrong claim is hard. Reading a 20-line diff and spotting it is easy. Review effort scales with what you read. Error density is highest in what is new.
 
 Design agent workflows so review happens at diff boundaries — pull requests, staged changes, comment threads — not on complete artifacts.
 
-Tooling increasingly bakes this in. Cursor's Bugbot added incremental review that only re-examines what is new since the last review, plus a pre-push `/review` that recognises and skips a matching open-PR diff rather than re-reviewing it ([Cursor, "Bugbot updates"](https://cursor.com/changelog/bugbot-updates-june-2026)). Both move the review surface to the delta instead of the whole output.
+Tooling increasingly builds this in. Cursor's Bugbot added incremental review that only re-examines what is new since the last review, plus a pre-push `/review` that recognizes and skips a matching open-PR diff rather than re-reviewing it ([Cursor, "Bugbot updates"](https://cursor.com/changelog/bugbot-updates-june-2026)). Both move the review surface to the delta instead of the whole output.
 
-## The PR Model as Review Boundary
+## The PR model as review boundary
 
 [GitHub Copilot's coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent) produces output as pull requests. This is not incidental — PRs are the natural diff boundary for code review. The same structure applies to content pipelines:
 
@@ -32,7 +32,7 @@ Tooling increasingly bakes this in. Cursor's Bugbot added incremental review tha
 
 The PR model enforces that review happens on changes, not on totals.
 
-## Checkpoints and Known-Good States
+## Checkpoints and known-good states
 
 [Claude Code's checkpointing](https://code.claude.com/docs/en/checkpointing) captures file state before each prompt. When agent work goes wrong, restore to a prior checkpoint, then use `git diff` against the working tree. The documented rewind options are "restore code", "restore conversation", or both — there is no built-in side-by-side diff view, and the docs note that checkpoints "complement but don't replace proper version control". Pair them with git to get reviewable diffs.
 
@@ -41,7 +41,7 @@ Structuring work around checkpoints keeps the diff scope predictable:
 - One logical unit of work → one checkpoint interval → one `git diff` to review
 - Multiple checkpoint intervals → multiple restore points → easier to bisect failures
 
-## Review Fatigue and Output Size
+## Review fatigue and output size
 
 Review fatigue grows with output size. An agent producing 2,000 lines across ten files gets reviewed less carefully than one producing 20 lines in a single file.
 
@@ -53,31 +53,31 @@ Designing for diff-based review means:
 
 The SmartBear/Cisco study of 2,500 reviews found defect detection peaks at 200–400 lines and drops off sharply beyond that ([SmartBear, "Code Review at Cisco Systems"](https://static0.smartbear.co/support/media/resources/cc/book/code-review-cisco-case-study.pdf)).
 
-## Staged Review
+## Staged review
 
 Multi-stage pipelines have multiple natural diff boundaries:
 
-1. **Research stage** — diff the research notes against the issue description. Verify the researcher captured the right sources.
-2. **Draft stage** — diff the draft against the research notes. Verify the writer only used sourced material; unsourced additions show up in the `git diff`.
-3. **Revision stage** — diff the revised draft against the original draft. Verify reviewer feedback was applied correctly.
+1. Research stage — diff the research notes against the issue description. Verify the researcher captured the right sources.
+2. Draft stage — diff the draft against the research notes. Verify the writer only used sourced material. Unsourced additions show up in the `git diff`.
+3. Revision stage — diff the revised draft against the original draft. Verify the reviewer feedback was applied correctly.
 
 Each diff is small and reviewable in isolation. Reviewing a 10-line diff against a known state is far easier than reviewing the final artifact against nothing.
 
-## When This Backfires
+## When this backfires
 
 Diff-only review has blind spots. Graphite notes that diff-only reviewers "may miss violations of global invariants, API misuse, or architectural consistency problems", and that larger context is needed to catch cross-file issues like "a change in one module that breaks usage elsewhere" ([Graphite, "How much context do AI code reviews need?"](https://graphite.com/guides/ai-code-review-context-full-repo-vs-diff)). Pair diff-based review with codebase-aware checks when:
 
-- **Cross-file invariants are at stake.** A one-line schema change looks trivial but can silently break downstream consumers — run a repo-wide search, type check, or contract test alongside the diff.
-- **The PR spans many files from one AI session.** Reviewers who read only the diff must reassemble intent from disconnected fragments; require a clear PR description or split the change before reviewing.
-- **The change touches architectural seams.** Refactors, interface migrations, and dependency upgrades change behavior that is not visible in the diff — supplement with full-file review of the seam and integration tests.
+- Cross-file invariants are at stake. A one-line schema change looks trivial but can silently break downstream consumers. Run a repo-wide search, type check, or contract test alongside the diff.
+- The PR spans many files from one AI session. Reviewers who read only the diff must reassemble intent from disconnected fragments. Require a clear PR description or split the change before reviewing.
+- The change touches architectural seams. Refactors, interface migrations, and dependency upgrades change behavior that is not visible in the diff. Supplement with full-file review of the seam and integration tests.
 
-## Anti-Patterns
+## Anti-patterns
 
-**Full output review** — asking a reviewer to read the complete artifact rather than the diff. The reviewer re-reads everything the previous stage already validated.
+Full output review — asking a reviewer to read the complete artifact rather than the diff. The reviewer re-reads everything the previous stage already validated.
 
-**Single large PR** — bundling an entire agent session's work into one PR. The diff is large, contains multiple concerns, and is harder to bisect when something is wrong — the case [agent-driven PR slicing](agent-driven-pr-slicing.md) decomposes into reviewable units.
+Single large PR — bundling an entire agent session's work into one PR. The diff is large, contains multiple concerns, and is harder to bisect when something is wrong. The case [agent-driven PR slicing](agent-driven-pr-slicing.md) decomposes into reviewable units.
 
-**No checkpoints** — relying on human review as the only diff boundary. Without intermediate checkpoints, the first reviewable diff is the complete output.
+No checkpoints — relying on human review as the only diff boundary. Without intermediate checkpoints, the first reviewable diff is the complete output.
 
 ## Example
 

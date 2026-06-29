@@ -48,7 +48,7 @@ Prompt injection is the primary attack vector for agents that consume untrusted 
 - [RL-Trained Automated Red Teamers for Prompt Injection Discovery](rl-automated-red-teamers.md) — Train an LLM-based attacker with reinforcement learning to discover novel injection vectors before adversaries do
 - [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md) — Narrow task scope limits both the attack surface and the blast radius of a successful injection
 
-**Anti-pattern:** [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md) — Relying on one safeguard leaves agents vulnerable to attack vectors that layer does not address
+Anti-pattern: [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md) — Relying on one safeguard leaves agents vulnerable to attack vectors that layer does not address
 
 ## Sandboxing
 
@@ -62,8 +62,9 @@ Isolation limits what a compromised or misbehaving agent can affect.
 - [Subprocess PID Namespace Sandboxing in Claude Code](subprocess-pid-namespace-sandboxing.md) — A third isolation layer that prevents Bash subprocesses from persisting daemons across sessions and leaking secrets through inherited environment variables
 - [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md) — Cross-reference URLs against an independent crawl index before allowing automatic fetching
 - [In-Process WebAssembly Sandboxes for Agent-Generated Code](wasm-sandbox-agent-code-execution.md) — Embed a WebAssembly runtime inside your Python or JavaScript application to execute agent- or LLM-generated code with CPU and memory caps, no filesystem or network by default, and explicit host-function interop
+- [Workload-Keyed Sandbox Selection for Agent-Generated Code](workload-keyed-sandbox-selection.md) — Match sandbox features to workload shape (ephemeral one-shot, stateful long-session, untrusted-code execution) before picking a runtime family, because workload type pins isolation strength and persistence; latency and network policy are configured later
 
-**Anti-pattern:** [Hostname-Allowlist Proxy: The TLS-Inspection Blind Spot](hostname-allowlist-tls-blind-spot.md) — A hostname-allowlist proxy without TLS termination enforces the client-supplied destination, not the actual destination; broad shared-CDN entries open domain-fronting and similar exfil paths
+Anti-pattern: [Hostname-Allowlist Proxy: The TLS-Inspection Blind Spot](hostname-allowlist-tls-blind-spot.md) — A hostname-allowlist proxy without TLS termination enforces the client-supplied destination, not the actual destination; broad shared-CDN entries open domain-fronting and similar exfil paths
 
 ## Data Protection
 
@@ -135,6 +136,7 @@ Tool invocation exposes attack surfaces distinct from prompt injection. Maliciou
 Agents dynamically load tools from MCP servers, plugins, and registries at runtime. A tampered tool inherits the agent's full permissions.
 
 - [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — Agents default to caret and tilde ranges because `npm install` does; for an application with a bump-bot, replace the range with an exact pin plus a lockfile-enforced install — the floating range is the leg that admits a future-compromised release
+- [Content-Addressed Agent Configurations (Deterministic Control Plane)](deterministic-control-plane-llm-coding-agents.md) — Treat coding-agent configs as an installed supply chain with SHA-256 content addressing, a per-project lockfile, and five declared permission tiers; the 10.1% cross-repo duplicate rate and the <1% configs declaring any permission scope (vs 33% of GitHub Actions workflows) make this a governance gap, not a hypothetical one
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — Across 10 models on 1,000 Python tasks, 36.7%-55.7% of LLM-specified versions contain known CVEs and all models converge on the same risky releases — pin against an external vulnerability source, not the model's training prior
 - [Skill Composition Risk in Agent Ecosystems](skill-composition-risk.md) — Skills benign in isolation become harmful when one skill's output flows into the next; three failure modes (CapFlow, TrustLift, AuthBlur) reach 33.6%, 96.5%+, and 71.8% relative attack success across ten production backends, and per-skill vetting misses them by construction
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — Malicious skills injected into public registries exploit in-context learning to execute payloads hidden in documentation examples, bypassing alignment that blocks explicit instruction injection

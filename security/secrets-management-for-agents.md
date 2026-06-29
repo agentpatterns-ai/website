@@ -18,18 +18,18 @@ maturity: established
 
 > Inject credentials as environment variables or wrapper scripts so agents can do authenticated work without secrets appearing in context, prompts, or generated code.
 
-**Learn it hands-on:** [Keep the Keys Out](https://learn.agentpatterns.ai/security/keep-the-keys-out/) — guided lesson with quizzes.
+Learn it hands-on with [Keep the Keys Out](https://learn.agentpatterns.ai/security/keep-the-keys-out/), a guided lesson with quizzes.
 
 !!! note "Also known as"
     Secrets & Credentials, Credential Injection Patterns. For the proxy-based approach to credential scoping, see [Scoped Credentials via Proxy](scoped-credentials-proxy.md).
 
-## The Anti-Pattern
+## The anti-pattern
 
-Pasting an API key into a prompt sends it to the model API, writes it into session logs, and risks the agent echoing it back in comments or generated files. Once a secret enters the context window, you lose control of where it goes.
+Pasting an API key into a prompt sends it to the model API and writes it into session logs. The agent can also echo it back in comments or generated files. Once a secret enters the context window, you lose control of where it goes.
 
-## Environment Variable Injection
+## Environment variable injection
 
-Inject secrets at the shell level before the agent process starts. Agents consume environment variables without reading them as text:
+Inject secrets at the shell level before the agent process starts. Agents use environment variables without reading them as text:
 
 ```bash
 # Start the agent with credentials pre-loaded in the environment
@@ -40,9 +40,9 @@ Tools call scripts that consume `$DATABASE_URL` internally — the value never a
 
 For persistent configuration, use `direnv` to evaluate `.envrc` on `cd` into the project ([direnv.net](https://direnv.net/)).
 
-## Wrapper Scripts
+## Wrapper scripts
 
-Agents need results, not credentials. A wrapper script consumes a secret internally and returns only the output:
+Agents need results, not credentials. A wrapper script uses a secret internally and returns only the output:
 
 ```bash
 #!/bin/bash
@@ -52,9 +52,9 @@ RESULT=$(psql "$DATABASE_URL" -t -c "$1")
 echo "$RESULT"
 ```
 
-The agent invokes `scripts/query-db.sh "SELECT count(*) FROM users"` — `DATABASE_URL` never appears in the tool call or context. Design wrappers to accept intent and return results.
+The agent runs `scripts/query-db.sh "SELECT count(*) FROM users"`, and `DATABASE_URL` never appears in the tool call or context. Design wrappers to accept intent and return results.
 
-## Never Store Secrets in Agent-Readable Files
+## Never store secrets in agent-readable files
 
 Agent-readable files include:
 
@@ -68,9 +68,9 @@ Do not store secrets in:
 - AGENTS.md, system prompts, or instruction files
 - Comments in code files
 
-Use a secrets manager (AWS Secrets Manager, HashiCorp Vault, 1Password CLI) to retrieve secrets in a parent shell before launching the agent — the retrieval command stays in the parent context; the session inherits only the exported value.
+Use a secrets manager (AWS Secrets Manager, HashiCorp Vault, 1Password CLI) to retrieve secrets in a parent shell before you launch the agent. The retrieval command stays in the parent context, and the session inherits only the exported value.
 
-## Auditing Agent Environment Access
+## Auditing agent environment access
 
 Before starting an agent session, audit available credentials:
 
@@ -79,18 +79,18 @@ Before starting an agent session, audit available credentials:
 env | grep -iE 'key|secret|token|password|url|dsn' | sort
 ```
 
-Remove any credential not required for the task. A minimal permission set reduces blast radius if the agent misbehaves or a [prompt injection](prompt-injection-threat-model.md) occurs.
+Remove any credential the task does not need. A minimal permission set limits the damage if the agent misbehaves or a [prompt injection](prompt-injection-threat-model.md) occurs.
 
-## CI and Agentic Pipelines
+## CI and agentic pipelines
 
-In CI/CD pipelines where agents run autonomously:
+When agents run autonomously in CI/CD pipelines:
 
-- Use short-lived tokens scoped to the minimum required permissions — most CI providers and cloud platforms support OIDC-based federated identities that eliminate long-lived secrets entirely
-- Rotate tokens between pipeline runs rather than using long-lived credentials
+- Use short-lived tokens scoped to the minimum permissions needed. Most CI providers and cloud platforms support OIDC-based federated identities that remove long-lived secrets entirely
+- Rotate tokens between pipeline runs rather than reuse long-lived credentials
 - Store secrets in the CI platform's native secret store (GitHub Actions secrets, GitLab CI variables), not in repo files
-- Mask secret values in CI logs — GitHub Actions automatically redacts all registered secret values that appear in stdout or stderr ([GitHub Docs](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions))
+- Mask secret values in CI logs. GitHub Actions redacts every registered secret value that appears in stdout or stderr ([GitHub Docs](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions))
 
-GitHub Actions example — secrets injected as environment variables, never written to disk:
+This GitHub Actions example injects secrets as environment variables and never writes them to disk:
 
 ```yaml
 - name: Run agent task
@@ -100,19 +100,19 @@ GitHub Actions example — secrets injected as environment variables, never writ
   run: claude --print "run the migration"
 ```
 
-## Why It Works
+## Why it works
 
 Environment variables are inherited by child processes but are not transmitted as text through tool calls. The agent sends a command string; the shell executing it inherits the env, but the context window only records the command name and arguments. Wrapper scripts extend this boundary: the script consumes the credential internally, and the agent receives only stdout — the credential traverses no channel the agent can read or log.
 
-## When This Backfires
+## When this backfires
 
 Env var injection has specific failure modes:
 
-- **Shared container environments**: In multi-tenant or sidecar-based deployments, sibling processes may be able to read `/proc/<pid>/environ` on Linux unless the container is hardened with user namespaces or seccomp restrictions.
-- **Sub-process env stripping**: Some agent frameworks spawn sandboxed sub-processes with a cleaned environment. If the agent runs tools in an isolated subprocess, env vars set in the parent shell may not be inherited — verify the tool execution model before relying on this pattern.
-- **Env var logging by the agent itself**: Some agents log their startup environment for debugging. Confirm the agent's own log output is not captured in session context or written to files the agent can read (see [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)).
-- **Secrets manager retrieval inside the session**: Fetching a secret with a CLI tool *during* an agent task (rather than before session start) risks the retrieval command and its output appearing in the context window. Retrieve all required secrets before the agent session begins.
-- **Env sprawl**: Injecting all available credentials rather than just the ones needed for the current task expands blast radius unnecessarily — see [Blast Radius Containment](blast-radius-containment.md).
+- Shared container environments: in multi-tenant or sidecar-based deployments, sibling processes may be able to read `/proc/<pid>/environ` on Linux unless the container is hardened with user namespaces or seccomp restrictions.
+- Sub-process env stripping: some agent frameworks spawn sandboxed sub-processes with a cleaned environment. If the agent runs tools in an isolated subprocess, env vars set in the parent shell may not be inherited. Verify the tool execution model before you rely on this pattern.
+- Env var logging by the agent itself: some agents log their startup environment for debugging. Confirm the agent's own log output is not captured in session context or written to files the agent can read (see [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)).
+- Secrets manager retrieval inside the session: fetching a secret with a CLI tool during an agent task, rather than before session start, risks the retrieval command and its output appearing in the context window. Retrieve all required secrets before the agent session begins.
+- Env sprawl: injecting all available credentials rather than just the ones needed for the current task expands the blast radius. See [Blast Radius Containment](blast-radius-containment.md).
 
 ## Example
 

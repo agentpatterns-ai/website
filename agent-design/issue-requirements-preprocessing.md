@@ -18,21 +18,21 @@ maturity: emerging
 
 > Transforming raw issue descriptions into structured requirements before code generation improves patch resolution rates — issue quality is a variable to optimize, not a constraint.
 
-## The Problem: Agents Take Issues at Face Value
+## The problem: agents take issues at face value
 
-Most coding agents treat the issue description as the task specification and proceed directly to codebase exploration and patch generation — the REAgent paper characterizes this as default behavior across the five agent systems it benchmarks ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861)). Real issues routinely contain:
+Most coding agents treat the issue description as the task specification. They go straight to codebase exploration and patch generation. The REAgent paper describes this as default behavior across the five agent systems it benchmarks ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861)). Real issues routinely contain:
 
-- **Omissions** — missing reproduction steps, expected behavior, or environment details
-- **Ambiguities** — descriptions with multiple valid interpretations that lead to different patches
-- **Conflicts** — requirements that contradict each other or the actual codebase state
+- Omissions — missing reproduction steps, expected behavior, or environment details
+- Ambiguities — descriptions with multiple valid interpretations that lead to different patches
+- Conflicts — requirements that contradict each other or the actual codebase state
 
 Across SWE-Lite, SWE-Verified, and SWE-Pro benchmarks ([Jimenez et al., 2024](https://arxiv.org/abs/2310.06770)) using two LLMs, REAgent's preprocessing improved average resolution rates by 17.40% over five baselines using raw issue text.
 
-## The Preprocessing Approach
+## The preprocessing approach
 
 REAgent inserts a requirement construction phase before patch generation. The agent explores the codebase and synthesizes findings into nine attribute categories:
 
-| Attribute | What It Captures |
+| Attribute | What it captures |
 |-----------|-----------------|
 | Background | Affected modules, main functionality |
 | Problem Overview | Core description, impacted areas |
@@ -46,7 +46,7 @@ REAgent inserts a requirement construction phase before patch generation. The ag
 
 This converts user-written prose into a structured specification the agent can reason about precisely.
 
-## Quality Classification and Refinement Loop
+## Quality classification and refinement loop
 
 A separate assessment phase classifies deficiencies into three categories:
 
@@ -64,56 +64,56 @@ graph TD
     D --> J[Submit]
 ```
 
-**Conflict** — requirements contradict the issue description or codebase state.  
-**Omission** — requirements underspecify intended behavior or constraints.  
-**Ambiguity** — vague descriptions that generate multiple valid interpretations.
+Conflict — requirements contradict the issue description or codebase state.  
+Omission — requirements underspecify intended behavior or constraints.  
+Ambiguity — vague descriptions that generate multiple valid interpretations.
 
-The Requirement Assessment Score (RAS = tests passed / total tests) drives iteration, the same [evaluator-optimizer](evaluator-optimizer.md) loop applied to inputs rather than outputs. High-temperature sampling generates ten test scripts per issue. If RAS < 1.0, the classified deficiency triggers a targeted refinement and the requirements regenerate. Non-improving feedback is logged as a counterexample so the agent avoids repeating failed refinements. After at most four iterations, the highest-RAS set is selected.
+The Requirement Assessment Score (RAS = tests passed / total tests) controls each iteration, the same [evaluator-optimizer](evaluator-optimizer.md) loop applied to inputs rather than outputs. High-temperature sampling generates ten test scripts per issue. If RAS < 1.0, the classified deficiency triggers a targeted refinement and the requirements regenerate. The agent logs non-improving feedback as a counterexample, so it avoids repeating failed refinements. After at most four iterations, REAgent selects the highest-RAS set.
 
-## What the Ablation Study Shows
+## What the ablation study shows
 
 Four ablation variants isolate which components matter most ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861)):
 
-| Removed Component | Avg Resolved Rate Drop | Avg Applied Rate Drop |
+| Removed component | Avg resolved rate drop | Avg applied rate drop |
 |-------------------|----------------------|-----------------------|
 | Structured attributes (use unstructured generation) | 3.33% | 6.17% |
 | Requirement analysis (use test-based feedback only) | 2.33% | 3.33% |
 | Codebase retrieval (use BM25 only) | 9.50% | — |
-| Requirement assessment (use LLM-as-judge) | **7.67%** | **24.67%** |
+| Requirement assessment (use LLM-as-judge) | 7.67% | 24.67% |
 
 Replacing test-based assessment with LLM-as-judge caused the largest drop, particularly in applied rate (syntactically correct patches). Generated tests, despite imperfect correctness (23%–46%), outperformed model-based scoring as quality signals.
 
-## Practical Implications
+## Practical implications
 
-**For teams writing issues**: The attribute list is a concrete checklist — the per-issue counterpart to [spec-driven development](../workflows/spec-driven-development.md). Issues that specify reproduction steps, environment, expected vs. actual behavior, and root cause give agents the same advantage REAgent constructs automatically.
+For teams writing issues: the attribute list is a concrete checklist — the per-issue counterpart to [spec-driven development](../workflows/spec-driven-development.md). Issues that specify reproduction steps, environment, expected versus actual behavior, and root cause give agents the same advantage REAgent constructs automatically.
 
-**For teams building agent pipelines**: A preprocessing agent before the coding agent adds one model call but recovers a meaningful share of failed patches. The benchmark cost was $1.47 per resolved issue with DeepSeek-V3.2.
+For teams building agent pipelines: a preprocessing agent before the coding agent adds one model call but recovers a meaningful share of failed patches. The benchmark cost was $1.47 per resolved issue with DeepSeek-V3.2.
 
-**Test generation as validation**: Imperfect tests (23%–46% correctness) still beat asking a model to evaluate requirements directly — pass rate is a more reliable quality proxy.
+Test generation also works as validation. Imperfect tests (23%–46% correctness) still beat asking a model to evaluate requirements directly — pass rate is a more reliable quality proxy.
 
 ## Example
 
 A developer files: "The user profile page crashes when the avatar is missing."
 
-**Without preprocessing**, the agent searches for avatar-related code, finds a null reference, and patches it. The fix passes manual inspection but misses edge cases because the expected behavior was never specified.
+Without preprocessing, the agent searches for avatar-related code, finds a null reference, and patches it. The fix passes manual inspection but misses edge cases, because no one specified the expected behavior.
 
-**With preprocessing**, the requirement construction agent explores the profile and avatar modules along with related test files. It synthesizes:
+With preprocessing, the requirement construction agent explores the profile and avatar modules along with related test files. It synthesizes:
 
-- **Steps to Reproduce**: Load profile where `user.avatar_url` is `null` or empty string
-- **Expected Behavior**: Show placeholder image, no exception
-- **Actual Behavior**: `AttributeError` on string formatting with `None`
-- **Solution Location**: Profile renderer, guard clause before string interpolation
+- Steps to reproduce: load profile where `user.avatar_url` is `null` or empty string
+- Expected behavior: show placeholder image, no exception
+- Actual behavior: `AttributeError` on string formatting with `None`
+- Solution location: profile renderer, guard clause before string interpolation
 
 The coding agent receives a specification, not a report. The resulting patch handles both `null` and empty string, adds a regression test, and resolves the issue on the first attempt.
 
-## When This Backfires
+## When this backfires
 
 Preprocessing adds latency and an extra model call. The cost-benefit inverts in several conditions:
 
-- **Well-specified issues**: If the issue already contains reproduction steps, environment, and expected behavior, preprocessing adds overhead without improving input quality.
-- **Simple single-file fixes**: Typo corrections, off-by-one errors, and single-symbol renames don't benefit from a nine-attribute schema.
-- **Low test-generation fidelity**: At the low end of the 23–46% correctness range, RAS may mislead the refinement loop into worse requirements than the original.
-- **Non-Python / non-SWE-bench codebases**: The 17.40% improvement is measured on SWE-bench Python repositories. Generalization to other languages and issue structures remains unstudied.
+- Well-specified issues: if the issue already contains reproduction steps, environment, and expected behavior, preprocessing adds overhead without improving input quality.
+- Simple single-file fixes: typo corrections, off-by-one errors, and single-symbol renames do not benefit from a nine-attribute schema.
+- Low test-generation fidelity: at the low end of the 23–46% correctness range, RAS may mislead the refinement loop into worse requirements than the original.
+- Non-Python or non-SWE-bench codebases: the 17.40% improvement is measured on SWE-bench Python repositories. Generalization to other languages and issue structures remains unstudied.
 
 ## Key Takeaways
 

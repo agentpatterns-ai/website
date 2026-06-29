@@ -14,7 +14,7 @@ last_reviewed: 2026-05-27
 
 Harness engineering is the practice of shaping the development environment -- type systems, test suites, linters, CI pipelines, repo structure, and session scaffolding -- so that agents self-correct rather than requiring manual inspection. Where [Prompt Engineering](prompt-engineering.md) covers how to instruct agents and [Context Engineering](context-engineering.md) covers how to feed them information, harness engineering covers the layer underneath both: the environment itself.
 
-The core thesis: **environment design beats prompt tuning**. LangChain improved Terminal Bench 2.0 scores from 52.8% to 66.5% through pure harness changes -- no model change ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). OpenAI shipped roughly one million lines of production code without manually written source in a five-month experiment; the enabler was environment design, not prompt sophistication ([InfoQ](https://www.infoq.com/news/2026/02/openai-harness-engineering-codex/)).
+The core thesis: environment design beats prompt tuning. LangChain improved Terminal Bench 2.0 scores from 52.8% to 66.5% through pure harness changes -- no model change ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). OpenAI shipped roughly one million lines of production code without manually written source in a five-month experiment; the enabler was environment design, not prompt sophistication ([InfoQ](https://www.infoq.com/news/2026/02/openai-harness-engineering-codex/)).
 
 ---
 
@@ -24,9 +24,9 @@ Every harness engineering investment falls into one of three categories.
 
 | Pillar | What it means | How the agent experiences it |
 |--------|--------------|------------------------------|
-| **Legibility** | The repo is its own documentation. The agent orients by reading the codebase, not by being told about it. | Clear directory naming, consistent file patterns, dependency layers visible in the [import graph](../../agent-design/codebase-readiness.md) |
-| **Mechanical enforcement** | Constraints are enforced by tools, not by instructions. Certain categories of mistake are impossible. | Linters that block cross-layer imports, pre-commit hooks that run formatters, CI gates that require test passage |
-| **Constrained solution spaces** | The architecture limits the number of valid approaches. The agent does not need to choose the right pattern -- there is only one valid pattern. | A single ORM (no raw SQL allowed), a single test framework, a standard component template |
+| Legibility | The repo is its own documentation. The agent orients by reading the codebase, not by being told about it. | Clear directory naming, consistent file patterns, dependency layers visible in the [import graph](../../agent-design/codebase-readiness.md) |
+| Mechanical enforcement | Constraints are enforced by tools, not by instructions. Certain categories of mistake are impossible. | Linters that block cross-layer imports, pre-commit hooks that run formatters, CI gates that require test passage |
+| Constrained solution spaces | The architecture limits the number of valid approaches. The agent does not need to choose the right pattern -- there is only one valid pattern. | A single ORM (no raw SQL allowed), a single test framework, a standard component template |
 
 All three pillars contributed in OpenAI's approach: legibility told agents what to do, mechanical enforcement told them when they were wrong, and constrained solution spaces made the correct path the only available path ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)).
 
@@ -44,11 +44,11 @@ Agent autonomy scales directly with backpressure quality in the codebase -- not 
 
 | Feedback source | Speed | Precision | Remediation quality |
 |----------------|-------|-----------|-------------------|
-| **Type system** | Immediate | Exact location + expected type | High -- the error message usually contains the fix |
-| **Linter** | Immediate | Exact location + rule name | Variable -- depends on whether the rule includes remediation guidance |
-| **Unit tests** | Fast (seconds) | Assertion-level (expected vs actual) | High -- the diff between expected and actual is the diagnosis |
-| **Integration tests** | Moderate | System-level | Moderate -- shows what failed, but root cause may be indirect |
-| **CI pipeline** | Slow (minutes) | Build/deploy level | Low -- "build failed" requires investigation |
+| Type system | Immediate | Exact location + expected type | High -- the error message usually contains the fix |
+| Linter | Immediate | Exact location + rule name | Variable -- depends on whether the rule includes remediation guidance |
+| Unit tests | Fast (seconds) | Assertion-level (expected vs actual) | High -- the diff between expected and actual is the diagnosis |
+| Integration tests | Moderate | System-level | Moderate -- shows what failed, but root cause may be indirect |
+| CI pipeline | Slow (minutes) | Build/deploy level | Low -- "build failed" requires investigation |
 
 A codebase with strict types, comprehensive tests, and enforced linting enables agents to iterate autonomously through a write-check-fix loop. A codebase with no types, no tests, and no linting means every agent output requires manual review -- you become the feedback loop.
 
@@ -64,8 +64,8 @@ Hooks and linters are deterministic. A pre-commit hook runs outside the agent's 
 
 The decision rule from [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md):
 
-- **Use hooks** when compliance is non-negotiable, the rule is binary, and the behavior has a strong opposing prior in training data.
-- **Use prompts** when the guidance is contextual, requires model judgment, or depends on factors a hook cannot inspect.
+- Use hooks when compliance is non-negotiable, the rule is binary, and the behavior has a strong opposing prior in training data.
+- Use prompts when the guidance is contextual, requires model judgment, or depends on factors a hook cannot inspect.
 
 Instructions tell the agent what to do. The harness ensures it cannot do otherwise.
 
@@ -73,12 +73,12 @@ Instructions tell the agent what to do. The harness ensures it cannot do otherwi
 
 From softest to hardest:
 
-1. **Instructions** -- guidance the agent interprets and may ignore
-2. **Linter rules** -- flags violations with error messages the agent reads and self-corrects
-3. **Type system** -- blocks invalid types; the agent must satisfy the compiler
-4. **Pre-commit hooks** -- gates commits; code must pass checks to be committed
-5. **CI pipeline** -- gates merge; PR must pass all checks
-6. **Branch protection** -- gates deployment; requires approvals
+1. Instructions -- guidance the agent interprets and may ignore
+2. Linter rules -- flags violations with error messages the agent reads and self-corrects
+3. Type system -- blocks invalid types; the agent must satisfy the compiler
+4. Pre-commit hooks -- gates commits; code must pass checks to be committed
+5. CI pipeline -- gates merge; PR must pass all checks
+6. Branch protection -- gates deployment; requires approvals
 
 Each layer catches what the layer above missed. Written conventions rely on agent compliance. Mechanical enforcement makes violation impossible -- or immediately visible ([Fowler/Bockeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 
@@ -113,10 +113,10 @@ Agents optimize for task completion, not task correctness. They stop as soon as 
 
 A [pre-completion checklist](../../verification/pre-completion-checklists.md) intercepts the completion signal and forces the agent through a verification sequence before it is allowed to finish. The verification sequence covers four phases:
 
-1. **Planning** -- did you understand the requirement before starting?
-2. **Building** -- did you implement what was specified, not a simpler substitute?
-3. **Verification** -- did you run end-to-end tests, check for regressions, confirm the output satisfies the stated requirement?
-4. **Fixing** -- did you address every issue found in [verification](../../verification/pre-completion-checklists.md) before declaring done?
+1. Planning -- did you understand the requirement before starting?
+2. Building -- did you implement what was specified, not a simpler substitute?
+3. Verification -- did you run end-to-end tests, check for regressions, confirm the output satisfies the stated requirement?
+4. Fixing -- did you address every issue found in [verification](../../verification/pre-completion-checklists.md) before declaring done?
 
 Checklist items must be specific and verifiable. "Run the test suite and confirm all tests pass" works. "Check your work" does not.
 
@@ -128,17 +128,17 @@ Implementation options range from a mandatory final step in the system prompt to
 
 For code tasks, the stopping criterion is clear: tests pass. For prose, specifications, and design documents, no such machine-checkable gate exists.
 
-[Convergence detection](../../agent-design/convergence-detection.md) fills that gap with three observable signals:
+[Convergence detection](../../loop-engineering/convergence-detection.md) fills that gap with three observable signals:
 
 | Signal | Converging | Diverging |
 |--------|-----------|-----------|
-| **Change velocity** | Rate of modifications slows across passes | Rate stays high or accelerates |
-| **Output size** | Size stabilizes or shrinks | Size grows (scope creep, not refinement) |
-| **Content similarity** | Diff between consecutive passes shrinks toward zero | Diff stays large |
+| Change velocity | Rate of modifications slows across passes | Rate stays high or accelerates |
+| Output size | Size stabilizes or shrinks | Size grows (scope creep, not refinement) |
+| Content similarity | Diff between consecutive passes shrinks toward zero | Diff stays large |
 
 When all three signals converge simultaneously, further passes yield diminishing returns. When any signal diverges, issues remain unresolved.
 
-Three failure patterns indicate a restart is needed rather than continued iteration: **oscillation** (output alternates between two versions), **expansion** (output grows each pass), and **low-quality plateau** (all signals converge but quality remains poor).
+Three failure patterns indicate a restart is needed rather than continued iteration: oscillation (output alternates between two versions), expansion (output grows each pass), and low-quality plateau (all signals converge but quality remains poor).
 
 Always pair convergence detection with a hard max-round limit as a cost fallback.
 
@@ -184,25 +184,25 @@ Codebases drift -- documentation goes stale, boundaries erode, conventions accum
 
 Harness investment has a break-even point. The steelman for the opposite recommendation: for short-lived prototypes, solo experiments, or throwaway code, the time spent wiring up types, test harnesses, custom linters, and pre-commit hooks can exceed the time the agent would spend producing plausibly-correct output that a human quickly reviews. Three concrete conditions where heavy harness engineering is the wrong call:
 
-- **Exploratory prototypes with no second session.** If the codebase will be discarded after one or two runs, a brittle linter rule that blocks a one-off pattern is pure friction. [Backpressure](../../agent-design/agent-backpressure.md) only compounds when the same harness catches the same bug class across many sessions.
-- **Thin codebases with weak conventions.** Mechanical enforcement codifies rules. When the rules themselves are still being discovered, premature linting freezes the wrong constraints in place and creates churn as rules are rewritten. Establish the convention first, then encode it.
-- **Low-signal or noisy checks.** A linter that emits false positives the agent has to "work around" burns context every iteration, degrading [feedback loop quality](../../agent-design/feedback-capability-equalizer.md). If the error messages are vague ("build failed", "lint error") rather than actionable, the feedback loop degrades into noise and the agent learns to ignore or suppress it.
+- Exploratory prototypes with no second session. If the codebase will be discarded after one or two runs, a brittle linter rule that blocks a one-off pattern is pure friction. [Backpressure](../../agent-design/agent-backpressure.md) only compounds when the same harness catches the same bug class across many sessions.
+- Thin codebases with weak conventions. Mechanical enforcement codifies rules. When the rules themselves are still being discovered, premature linting freezes the wrong constraints in place and creates churn as rules are rewritten. Establish the convention first, then encode it.
+- Low-signal or noisy checks. A linter that emits false positives the agent has to "work around" burns context every iteration, degrading [feedback loop quality](../../agent-design/feedback-capability-equalizer.md). If the error messages are vague ("build failed", "lint error") rather than actionable, the feedback loop degrades into noise and the agent learns to ignore or suppress it.
 
 The threshold: invest in harness once the cost of manual review across repeated sessions exceeds the cost of building and maintaining the check. Below that threshold, ad-hoc review is cheaper.
 
 ## Key Takeaways
 
-- **Environment design beats prompt tuning.** Investing in types, tests, and linters improves agent output quality more durably than tweaking instructions. Every harness improvement compounds across all future sessions.
-- **Agent autonomy scales with backpressure quality**, not with model capability. A codebase with strict types and comprehensive tests enables autonomous [agent iteration](../../agent-design/agent-backpressure.md). A codebase without them requires manual review of every output.
-- **Linter messages are just-in-time agent context.** They appear at the exact moment and location of a violation with a specific remediation. Write custom rules with actionable error messages, not violation flags.
-- **Instructions provide context; the harness provides enforcement.** Use both, but do not rely on instructions for rules that must be followed [mechanically](../../instructions/hooks-vs-prompts.md). If the consequence of violation is real, enforce it with tooling, not text.
-- **Engineering rigor relocates, it does not disappear.** The discipline shifts from writing clean code to designing clean environments. The leverage point is infrastructure, not intelligence.
-- **Design for short, focused sessions** with clean [handoff artifacts](../../observability/trajectory-logging-progress-files.md). Progress files, structured commits, and one-feature-per-session discipline prevent context degradation and make multi-session work reliable.
-- **Know when to stop iterating.** Convergence detection (change velocity, output similarity, content similarity) prevents wasted cycles. Hard iteration limits prevent runaway sessions.
+- Environment design beats prompt tuning. Investing in types, tests, and linters improves agent output quality more durably than tweaking instructions. Every harness improvement compounds across all future sessions.
+- Agent autonomy scales with backpressure quality, not with model capability. A codebase with strict types and comprehensive tests enables autonomous [agent iteration](../../agent-design/agent-backpressure.md). A codebase without them requires manual review of every output.
+- Linter messages are just-in-time agent context. They appear at the exact moment and location of a violation with a specific remediation. Write custom rules with actionable error messages, not violation flags.
+- Instructions provide context; the harness provides enforcement. Use both, but do not rely on instructions for rules that must be followed [mechanically](../../instructions/hooks-vs-prompts.md). If the consequence of violation is real, enforce it with tooling, not text.
+- Engineering rigor relocates, it does not disappear. The discipline shifts from writing clean code to designing clean environments. The leverage point is infrastructure, not intelligence.
+- Design for short, focused sessions with clean [handoff artifacts](../../observability/trajectory-logging-progress-files.md). Progress files, structured commits, and one-feature-per-session discipline prevent context degradation and make multi-session work reliable.
+- Know when to stop iterating. Convergence detection (change velocity, output similarity, content similarity) prevents wasted cycles. Hard iteration limits prevent runaway sessions.
 
 ## Related
 
-**Training**
+Training
 
 - [Prompt Engineering](prompt-engineering.md) -- instructing agents effectively
 - [Context Engineering](context-engineering.md) -- feeding agents the right information
@@ -212,11 +212,11 @@ The threshold: invest in harness once the cost of manual review across repeated 
 - [How the Four Disciplines Compound](prompt-context-harness-capstone.md) -- how prompt, context, harness, and tool engineering reinforce each other
 - [GitHub Copilot: Harness Engineering](../copilot/harness-engineering.md) -- Copilot-specific application of these principles
 
-**Source Pages**
+Source Pages
 
 - [Harness Engineering](../../agent-design/harness-engineering.md) -- the full pattern page with three pillars, worked example, and evidence
 - [Agent Backpressure](../../agent-design/agent-backpressure.md) -- automated feedback loops and the autonomy spectrum
-- [Convergence Detection](../../agent-design/convergence-detection.md) -- three-signal model for knowing when to stop
+- [Convergence Detection](../../loop-engineering/convergence-detection.md) -- three-signal model for knowing when to stop
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) -- verification gates before task completion
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md) -- deterministic enforcement over advisory instructions
 - [Codebase Readiness](../../agent-design/codebase-readiness.md) -- code-level qualities that make a codebase agent-friendly

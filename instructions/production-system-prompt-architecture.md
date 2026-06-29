@@ -13,11 +13,11 @@ maturity: adopted
 
 > Production system prompts are not paragraphs of instructions — they are structured documents with named sections, explicit concern boundaries, and cache-aware layering. Studying what ships reveals techniques that generic guidance omits.
 
-**Learn it hands-on:** [The Production Stack](https://learn.agentpatterns.ai/prompt-engineering/the-production-stack/) — guided lesson with quizzes.
+Learn it hands-on with [The Production Stack](https://learn.agentpatterns.ai/prompt-engineering/the-production-stack/), a guided lesson with quizzes.
 
 Anthropic recommends "XML tagging or Markdown headers to delineate sections" ([Anthropic, context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). A leaked 102K-character system prompt from a Claude.ai computer-use session shows what that looks like at scale ([CL4R1T4S capture, Feb 2026](https://github.com/elder-plinius/CL4R1T4S/blob/main/ANTHROPIC/Claude_Opus_4.6.txt)). The techniques below are visible in that prompt and corroborated by Anthropic's engineering publications.
 
-## Architectural Overview
+## Architectural overview
 
 ```mermaid
 graph TD
@@ -35,7 +35,7 @@ graph TD
     F -.- F1["Prompt tail"]
 ```
 
-## XML-Sectioned Concern Isolation
+## XML-sectioned concern isolation
 
 The prompt uses ~25 top-level XML tags as a structural scaffold:
 
@@ -50,15 +50,15 @@ The prompt uses ~25 top-level XML tags as a structural scaffold:
 
 XML tags serve three functions:
 
-1. **Scope rules** — `<harmful_content_safety>` applies only to harmful content decisions, preventing bleed into unrelated behavior
-2. **Selective attention** — the model locates the relevant section without scanning the full prompt
-3. **Cache stability** — sections update independently without invalidating the prefix cache
+1. Scope rules — `<harmful_content_safety>` applies only to harmful content decisions, preventing bleed into unrelated behavior
+2. Selective attention — the model locates the relevant section without scanning the full prompt
+3. Cache stability — sections update independently without invalidating the prefix cache
 
-## Temporal Grounding at Prompt Head
+## Temporal grounding at the prompt head
 
 The prompt opens with hardcoded contextual facts — current date, deployment environment, user location — before any behavioral rules. Placing these at the prompt head means they are always in the cache prefix and never invalidated by changes to sections below.
 
-## Skills Registry Pattern
+## Skills registry pattern
 
 Skills are defined declaratively in an `<available_skills>` block rather than inlined as full instructions:
 
@@ -74,7 +74,7 @@ Skills are defined declaratively in an `<available_skills>` block rather than in
 
 Each entry contains a name, trigger conditions, and a filesystem path. Skill content loads on demand — not on every conversation. This is [progressive disclosure](../agent-design/progressive-disclosure-agents.md) applied to [prompt engineering](../training/foundations/prompt-engineering.md): a lean registry of 20 pointers consumes fewer tokens than 20 inlined definitions.
 
-## Deferred Tool Loading
+## Deferred tool loading
 
 Anthropic's [advanced tool use documentation](https://www.anthropic.com/engineering/advanced-tool-use) describes a `defer_loading: true` flag that keeps tool definitions unavailable until explicitly searched, reducing context from ~77K to ~8.7K tokens. The production prompt applies the same principle: tool definitions are declared statically but masked at runtime, avoiding the [dynamic tool fetching anti-pattern](../anti-patterns/dynamic-tool-fetching-cache-break.md).
 
@@ -86,7 +86,7 @@ graph LR
     B -.- B1["Context efficient ✓"]
 ```
 
-## Discrete Safety and Compliance Blocks
+## Discrete safety and compliance blocks
 
 Safety and compliance concerns each occupy their own named XML section:
 
@@ -99,17 +99,17 @@ Safety and compliance concerns each occupy their own named XML section:
 
 Discrete blocks prevent rule conflicts — a compliance reviewer inspects the copyright section without reading computer-use instructions. The uppercase convention (`CRITICAL_COPYRIGHT_COMPLIANCE`) signals absolute priority, similar to [instruction polarity](instruction-polarity.md).
 
-## Reasoning Meta-Instructions at Prompt Tail
+## Reasoning meta-instructions at the prompt tail
 
 The prompt tail carries runtime-injected parameters — reasoning effort level and thinking mode configuration. Placing these at the tail is cache-optimal: the static prefix remains unchanged across sessions with different reasoning configurations.
 
-## Cache Stability as Architectural Constraint
+## Cache stability as an architectural constraint
 
 Every choice above serves prompt prefix stability — Anthropic notes that prompt caching matches on an exact prefix, so any change to an earlier token invalidates all cached content from that point onward ([Anthropic, prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)):
 
-- **Static tool definitions with runtime masking** — changing tool lists breaks the cache
-- **Skills as pointers** — adding a new skill does not change the prompt prefix
-- **Temporal grounding at head, runtime params at tail** — stable content occupies the most cache-sensitive position
+- Static tool definitions with runtime masking — changing tool lists breaks the cache
+- Skills as pointers — adding a new skill does not change the prompt prefix
+- Temporal grounding at head, runtime params at tail — stable content occupies the most cache-sensitive position
 
 See [prompt cache economics](../context-engineering/prompt-caching-architectural-discipline.md) and [static content first](../context-engineering/static-content-first-caching.md) for the cost model.
 
@@ -151,21 +151,21 @@ A minimal production system prompt skeleton applying the patterns above:
 <reasoning_config effort="high" thinking="enabled" max_tokens="8192" />
 ```
 
-## When This Backfires
+## When this backfires
 
-**Single deployment context.** The evidence base is one computer-use session capture. A mobile or API deployment may use fewer sections and different naming conventions — applying ~25 XML tags in a simpler deployment adds authoring overhead without benefit.
+Single deployment context. The evidence base is one computer-use session capture. A mobile or API deployment may use fewer sections and different naming conventions — applying ~25 XML tags in a simpler deployment adds authoring overhead without benefit.
 
-**Source instability.** The leaked prompt is not a versioned API contract. Anthropic can change internal structure without notice; patterns reverse-engineered from captures may become stale or misleading as the product evolves.
+Source instability. The leaked prompt is not a versioned API contract. Anthropic can change internal structure without notice; patterns reverse-engineered from captures may become stale or misleading as the product evolves.
 
-**Verbosity amplifies, not compresses.** XML tags add token overhead. For short prompts (under ~500 tokens), concern isolation via XML sections costs more tokens than it saves in cache hits. The economics flip only when sections are individually stable and the prompt is large enough that cache savings offset tag overhead.
+Verbosity amplifies, not compresses. XML tags add token overhead. For short prompts (under ~500 tokens), concern isolation via XML sections costs more tokens than it saves in cache hits. The economics flip only when sections are individually stable and the prompt is large enough that cache savings offset tag overhead.
 
-**Section sprawl.** Prompts with 25+ named sections become hard to audit; rules buried in obscure sections get ignored by operators and missed in code reviews.
+Section sprawl. Prompts with 25+ named sections become hard to audit; rules buried in obscure sections get ignored by operators and missed in code reviews.
 
-**Cache invalidation from reordering.** Renaming or repositioning a section invalidates everything below it in the prefix cache, making refactoring expensive once the prompt reaches production scale.
+Cache invalidation from reordering. Renaming or repositioning a section invalidates everything below it in the prefix cache, making refactoring expensive once the prompt reaches production scale.
 
-**Over-isolation.** Separating concerns too finely can cause contradictions between sections that the model resolves inconsistently; a `<safety>` section that overrides `<code_generation>` without a defined precedence rule is a latent conflict.
+Over-isolation. Separating concerns too finely can cause contradictions between sections that the model resolves inconsistently; a `<safety>` section that overrides `<code_generation>` without a defined precedence rule is a latent conflict.
 
-## Scope Notes
+## Scope notes
 
 The CL4R1T4S capture is a computer-use session prompt. The exact parameter names for reasoning effort and thinking mode at the prompt tail are visible in that capture but not publicly documented by Anthropic. The ~25-section count and XML tag naming conventions may be specific to the computer-use configuration rather than consistent across API, mobile, or enterprise deployments.
 

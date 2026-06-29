@@ -17,17 +17,17 @@ maturity: established
 
 > Place static content (instructions, tool definitions) at the prompt's start and variable content last to maximize cache hits and keep inference cost linear.
 
-**Related lesson:** [The Immutable Prefix](https://learn.agentpatterns.ai/context-engineering/caching-static-first/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [The Immutable Prefix](https://learn.agentpatterns.ai/context-engineering/caching-static-first/) — this concept features in a hands-on lesson with quizzes.
 
-## Why Prompt Structure Affects Cost
+## Why prompt structure affects cost
 
-Without prompt caching, the cost of running an agent loop is quadratic: each new inference call re-sends the entire accumulated context. An agent that makes 50 tool calls in a session sends the entire history 50 times — each call includes all preceding content.
+Without prompt caching, an agent loop costs quadratic. Each new inference call re-sends the whole accumulated context. An agent that makes 50 tool calls in a session sends the whole history 50 times, because each call includes all the content before it.
 
-Prompt caching addresses this by reusing cached prefixes from previous calls. [OpenAI's Codex CLI](https://openai.com/index/unrolling-the-codex-agent-loop/) structures its prompt explicitly to exploit this: static content (model instructions, sandbox configuration, tool definitions) forms an exact prefix that never changes during a conversation. Only the dynamic suffix (user messages, tool results) changes per call.
+Prompt caching fixes this by reusing cached prefixes from earlier calls. [OpenAI's Codex CLI](https://openai.com/index/unrolling-the-codex-agent-loop/) structures its prompt to do this. Static content (model instructions, sandbox configuration, tool definitions) forms an exact prefix that never changes during a conversation. Only the dynamic suffix (user messages, tool results) changes per call.
 
-When the static prefix is an exact match to a cached prefix, the provider recomputes only the dynamic suffix — reducing sampling cost to linear in the number of new tokens per call, not linear in total context size.
+When the static prefix exactly matches a cached prefix, the provider recomputes only the dynamic suffix. This makes sampling cost linear in the number of new tokens per call, not linear in total context size.
 
-## What Goes Where
+## What goes where
 
 | Content Type | Position | Why |
 |--------------|----------|-----|
@@ -38,31 +38,31 @@ When the static prefix is an exact match to a cached prefix, the provider recomp
 | Tool results | After user messages | Variable per call |
 | New agent turn | End of prompt | Variable per call |
 
-## What Breaks Cache Hits
+## What breaks cache hits
 
-Prompt caching requires exact prefix matches. Common cache-busting mistakes include:
+Prompt caching needs exact prefix matches. Common cache-busting mistakes include:
 
-**Non-deterministic tool enumeration**: [OpenAI identified a bug in Codex](https://openai.com/index/unrolling-the-codex-agent-loop/) where [MCP](../standards/mcp-protocol.md) tools were listed in non-deterministic order, causing a cache miss on every call because the tool list prefix was never the same twice. Tool definitions must be enumerated in a consistent, deterministic order.
+Non-deterministic tool enumeration: [OpenAI found a bug in Codex](https://openai.com/index/unrolling-the-codex-agent-loop/) where [MCP](../standards/mcp-protocol.md) tools were listed in non-deterministic order. This caused a cache miss on every call, because the tool list prefix was never the same twice. Enumerate tool definitions in a consistent, deterministic order.
 
-**Model switching**: Codex injects model-specific instructions early in the prompt. Changing the target model mid-conversation busts the cache because the injected instructions are different. If you need to switch models, treat it as a context boundary.
+Model switching: Codex injects model-specific instructions early in the prompt. Changing the target model mid-conversation busts the cache, because the injected instructions differ. If you need to switch models, treat it as a context boundary.
 
-**Prefix mutation**: Any change to content earlier in the prompt than the current turn [invalidates the cache](kv-cache-invalidation-local-inference.md) for everything after it. Even reordering two static sections that produce identical content will bust the cache if the character sequences differ.
+Prefix mutation: any change to content earlier in the prompt than the current turn [invalidates the cache](kv-cache-invalidation-local-inference.md) for everything after it. Even reordering two static sections that produce identical content busts the cache if the character sequences differ.
 
-**Stateless vs stateful**: Some implementations send the full conversation history on every call rather than referencing a conversation ID. Full resend keeps all content available for caching but incurs quadratic network traffic. Referencing a `previous_response_id` reduces network traffic but loses the caching opportunity for historical content.
+Stateless against stateful: some implementations send the full conversation history on every call rather than referencing a conversation ID. A full resend keeps all content available for caching but incurs quadratic network traffic. Referencing a `previous_response_id` cuts network traffic but loses the caching opportunity for historical content.
 
 ## Tradeoffs
 
-Optimizing for cache hits requires discipline in prompt construction:
+Optimizing for cache hits takes discipline in how you build the prompt:
 
-- Tool definitions must be locked into a deterministic order and not mutated during a session
-- System instructions cannot be personalized per-call (any change busts the prefix cache)
-- The split between static and dynamic sections must be maintained as the harness evolves
+- Tool definitions must hold a deterministic order and stay unchanged during a session
+- System instructions cannot be personalized per call, because any change busts the prefix cache
+- You must keep the split between static and dynamic sections as the harness evolves
 
-For short agent sessions (5–10 tool calls), the cache optimization may not be worth the engineering overhead. For long-running sessions or high-volume production loops, [cache reads cost 10% of base input token price](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), and empirical studies on agentic workloads report 41–80% total cost reductions across providers ([Don't Break the Cache, 2026](https://arxiv.org/abs/2601.06007)).
+For short agent sessions (5 to 10 tool calls), the cache optimization may not be worth the engineering overhead. For long-running sessions or high-volume production loops, [cache reads cost 10% of base input token price](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), and studies on agentic workloads report 41 to 80% total cost reductions across providers ([Don't Break the Cache, 2026](https://arxiv.org/abs/2601.06007)).
 
-Static-first ordering is necessary but not sufficient. The same study finds that naive full-context caching — caching everything, including volatile tool results — can *paradoxically increase latency*; strategic cache-block control that excludes dynamic tool results and places variable content deliberately delivers more consistent gains ([Don't Break the Cache, 2026](https://arxiv.org/abs/2601.06007)). Order the prefix static-first, then be selective about which dynamic blocks you cache at all.
+Static-first ordering is necessary but not sufficient. The same study finds that naive full-context caching — caching everything, including volatile tool results — can increase latency. Strategic cache-block control that excludes dynamic tool results and places variable content deliberately gives more consistent gains ([Don't Break the Cache, 2026](https://arxiv.org/abs/2601.06007)). Order the prefix static-first, then be selective about which dynamic blocks you cache at all.
 
-## Implementation Checklist
+## Implementation checklist
 
 - [ ] System instructions and tool schemas are assembled before any user or agent content
 - [ ] Tool definitions are enumerated in a deterministic, consistent order
@@ -72,9 +72,9 @@ Static-first ordering is necessary but not sufficient. The same study finds that
 
 ## Example
 
-A minimal [agent harness](../agent-design/agent-harness.md) in Python illustrating static-first prompt assembly. The system prompt and tool definitions are built once and reused across every turn; only the conversation history grows.
+A minimal [agent harness](../agent-design/agent-harness.md) in Python shows static-first prompt assembly. The system prompt and tool definitions are built once and reused across every turn. Only the conversation history grows.
 
-**Before** — tool list rebuilt on every call (cache miss every turn):
+Before — the tool list is rebuilt on every call, so the cache misses every turn:
 
 ```python
 def call_model(conversation_history, user_message):
@@ -89,7 +89,7 @@ def call_model(conversation_history, user_message):
     )
 ```
 
-**After** — static prefix fixed at session start, variable suffix appended:
+After — the static prefix is fixed at session start, and the variable suffix is appended:
 
 ```python
 # Built once per session — stable cache prefix
@@ -105,7 +105,7 @@ def call_model(conversation_history, user_message):
     )
 ```
 
-The key changes: tools sorted by name (deterministic order), system prompt built without per-call personalization, and both constructed once outside the call loop so the prefix bytes are identical across turns.
+The key changes: tools are sorted by name (deterministic order), the system prompt is built without per-call personalization, and both are constructed once outside the call loop so the prefix bytes are identical across turns.
 
 ## Key Takeaways
 
@@ -123,5 +123,5 @@ The key changes: tools sorted by name (deterministic order), system prompt built
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Stateful Iteration State-Carry](stateful-iteration-state-carry.md) — the application-tier complement: when loops are long and observations large, lifting state out of the transcript beats caching on its own
-- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
-- [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)

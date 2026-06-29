@@ -21,13 +21,13 @@ maturity: established
 !!! note "Also known as"
     Golden Query Pairs, Eval Regression Tests. A specific technique within [Eval-Driven Development](../workflows/eval-driven-development.md); see also [applying the loop to tool building](../workflows/eval-driven-development.md#applying-the-loop-to-tool-building).
 
-## Evals as Regression Tests
+## Evals as regression tests
 
-Agent capability degrades silently as prompts, tools, context, or models change; without continuous evaluation, regressions surface through user complaints.
+Agent capability degrades silently as prompts, tools, context, or models change. Without continuous evaluation, you find out about regressions through user complaints.
 
 OpenAI's data agent team treats evals as "unit tests that run continuously during development" and "canaries in production" — golden question-answer pairs run on every agent configuration change. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
-## What Makes a Good Golden Pair
+## What makes a good golden pair
 
 A golden pair consists of:
 
@@ -38,47 +38,47 @@ Good pairs target patterns the agent is most likely to get wrong, cover edge cas
 
 Avoid pairs where the expected output has an obvious format that tempts over-rigid grading — "what is the total revenue for Q3?" has many correct phrasings. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
-## Semantic Grading, Not String Matching
+## Semantic grading, not string matching
 
-Generated output can differ in form while being functionally correct; string matching marks correct-but-reworded answers as failures.
+Generated output can differ in form while still being correct. String matching marks correct-but-reworded answers as failures.
 
 Use an LLM-based grader that produces a score plus explanation for each pair:
 
-1. Present the question, the golden answer, and the generated output
-2. Ask the grader whether they are semantically equivalent
-3. Use the grader's explanation to surface partial or dimension-shifted answers
+1. Present the question, the golden answer, and the generated output.
+2. Ask the grader whether they are semantically equivalent.
+3. Use the grader's explanation to surface partial or dimension-shifted answers.
 
 For coding agents, grade the execution result alongside the artifact — different code producing the same wrong output still fails. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
-## Dual Role: Development Guard and Production Canary
+## Dual role: development guard and production canary
 
-- **Development guard**: run on every change to prompts, tools, or configuration; a degraded score blocks the change.
-- **Production canary**: run periodically against the live agent to detect drift from model, provider, or context changes.
+- Development guard: run it on every change to prompts, tools, or configuration. A degraded score blocks the change.
+- Production canary: run it periodically against the live agent to detect drift from model, provider, or context changes.
 
 [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
-## Building the Suite
+## Building the suite
 
-Start with 20-50 manually authored pairs covering failures, edge cases, and high-volume scenarios. Grow continuously — every production failure is a candidate pair (see [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md)). Periodically review goldens for drift; a stale suite hides regressions behind [benchmark-contamination](benchmark-contamination-eval-risk.md) and [reward-hacking](anti-reward-hacking.md) dynamics.
+Start with 20 to 50 manually authored pairs covering failures, edge cases, and high-volume scenarios. Grow the suite continuously — every production failure is a candidate pair (see [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md)). Review goldens for drift periodically. A stale suite hides regressions behind [benchmark-contamination](benchmark-contamination-eval-risk.md) and [reward-hacking](anti-reward-hacking.md) dynamics.
 
-## For Coding Agents
+## For coding agents
 
 For code-generating agents:
 
-- **Question**: a coding task description (refactor, fix, implement)
-- **Golden answer**: the expected behavior or outcome, not exact code
-- **Grading**: does the generated code pass tests or meet acceptance criteria?
+- Question: a coding task description (refactor, fix, implement)
+- Golden answer: the expected behavior or outcome, not exact code
+- Grading: does the generated code pass tests or meet acceptance criteria?
 
 The grader judges functional equivalence, not textual identity.
 
-## When This Backfires
+## When this backfires
 
 The approach assumes the suite represents the target distribution and that the grader's judgments are stable. Both break under specific conditions:
 
-- **Overfitting to the eval set.** If the suite is small and authored by the same team tuning prompts, scores improve without improving real-user behavior — benchmarks lose discriminative power once they become the optimization target. [Source: [Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena](https://arxiv.org/abs/2306.05685)]
-- **Grader bias contaminates the signal.** LLM judges exhibit position, verbosity, and self-enhancement biases; a "regression" may be grader drift rather than agent drift, especially when the judge model is updated. [Source: [Justice or Prejudice? Quantifying Biases in LLM-as-a-Judge](https://arxiv.org/abs/2410.02736)]
-- **Stale goldens mark correct answers wrong.** Golden answers erode as the agent's tools, data, or scope legitimately change; without periodic re-review, passing the suite stops meaning the agent is correct. [Source: [Golden Datasets for GenAI Testing](https://www.techment.com/blogs/golden-datasets-for-genai-testing/)]
-- **Cost and latency break continuity.** A large suite graded by a strong judge adds minutes and dollars per CI run, pushing teams to sample or skip the check.
+- Overfitting to the eval set. If the suite is small and authored by the same team tuning prompts, scores improve without improving real-user behavior — benchmarks lose discriminative power once they become the optimization target. [Source: [Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena](https://arxiv.org/abs/2306.05685)]
+- Grader bias contaminates the signal. LLM judges show position, verbosity, and self-enhancement biases. A "regression" may be grader drift rather than agent drift, especially when the judge model is updated. [Source: [Justice or Prejudice? Quantifying Biases in LLM-as-a-Judge](https://arxiv.org/abs/2410.02736)]
+- Stale goldens mark correct answers wrong. Golden answers erode as the agent's tools, data, or scope legitimately change. Without periodic re-review, passing the suite stops meaning the agent is correct. [Source: [Golden Datasets for GenAI Testing](https://www.techment.com/blogs/golden-datasets-for-genai-testing/)]
+- Cost and latency break continuity. A large suite graded by a strong judge adds minutes and dollars per CI run, pushing teams to sample or skip the check.
 
 A smaller bank of deterministic assertions (schema checks, known-answer lookups, tool-call shape) plus periodic human spot-review complements the suite when these conditions dominate.
 

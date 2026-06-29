@@ -14,9 +14,9 @@ maturity: established
 
 > MCP elicitation lets servers pause a tool call to request structured input; Claude Code hooks intercept, auto-fill, validate, or suppress those requests.
 
-## Elicitation vs. Upfront Parameters
+## Elicitation versus upfront parameters
 
-Tool schemas specify inputs statically at registration time. Some inputs are only knowable mid-task — after the server has inspected state, resolved dependencies, or reached a decision point. Elicitation covers that gap: the MCP server requests structured input at the moment it needs it, not before.
+Tool schemas set inputs statically at registration time. Some inputs are only known mid-task, after the server inspects state, resolves dependencies, or reaches a decision point. Elicitation covers that gap: the MCP server requests structured input when it needs it, not before.
 
 | Approach | When inputs are known | Trade-off |
 |----------|----------------------|-----------|
@@ -25,16 +25,16 @@ Tool schemas specify inputs statically at registration time. Some inputs are onl
 
 Use elicitation when the valid values or required fields depend on server-side state that cannot be known when the tool is called.
 
-## Why It Works
+## Why it works
 
-When a required field depends on state the server discovers at runtime — the set of existing entities, the result of a lookup, the branch of a decision tree — encoding it as a static parameter forces the server to accept a wider input than it supports or to reject calls after the fact. Elicitation resolves the mismatch by pausing the in-flight call, describing the missing fields as a form, and letting the client supply values. The `Elicitation` and `ElicitationResult` hooks sit at the two boundaries of that pause — before the user sees the form, and after the user responds — giving automation a point to substitute, validate, or suppress input without changing the server or the tool schema.
+Sometimes a required field depends on state the server only discovers at runtime: the set of existing entities, the result of a lookup, the branch of a decision tree. Encoding that field as a static parameter forces the server to accept a wider input than it supports, or to reject calls after the fact. Elicitation resolves the mismatch. It pauses the in-flight call, describes the missing fields as a form, and lets the client supply values. The `Elicitation` and `ElicitationResult` hooks sit at the two boundaries of that pause: before the user sees the form, and after the user responds. They give automation a place to substitute, validate, or suppress input without changing the server or the tool schema.
 
-## How Elicitation Works
+## How elicitation works
 
 When an MCP server triggers elicitation, Claude Code [fires two hook events](https://code.claude.com/docs/en/hooks.md):
 
-1. **`Elicitation`** — fires when the server requests input; receives the form definition
-2. **`ElicitationResult`** — fires after the user fills the form, before the response is sent to the server
+1. `Elicitation` fires when the server requests input, and receives the form definition.
+2. `ElicitationResult` fires after the user fills the form, before the response goes to the server.
 
 The `Elicitation` hook payload includes the MCP server name, the tool name, and an `elicitation_form` object with field definitions:
 
@@ -54,9 +54,9 @@ The `Elicitation` hook payload includes the MCP server name, the tool name, and 
 
 Both hooks match on MCP server name, so you can apply different behavior per server.
 
-## Hook Actions
+## Hook actions
 
-An `Elicitation` hook can return three actions via `hookSpecificOutput`:
+An `Elicitation` hook can return three actions through `hookSpecificOutput`:
 
 ```json
 { "hookSpecificOutput": { "hookEventName": "Elicitation", "action": "accept",
@@ -69,13 +69,13 @@ An `Elicitation` hook can return three actions via `hookSpecificOutput`:
 | `decline` | Rejects the elicitation; the server receives a declined response |
 | `cancel` | Cancels the entire operation |
 
-`ElicitationResult` fires after user input and can modify, validate, or reject values before they reach the server — using the same action/content structure.
+`ElicitationResult` fires after user input. It can modify, validate, or reject values before they reach the server, using the same action and content structure.
 
-## Headless Automation Pattern
+## Headless automation pattern
 
-In CI pipelines or non-interactive agents, any elicitation dialog would block indefinitely. Configure an `Elicitation` hook to auto-accept with known values for the relevant MCP server — this prevents the dialog from appearing entirely.
+In CI pipelines or non-interactive agents, any elicitation dialog would block indefinitely. Configure an `Elicitation` hook to auto-accept with known values for the relevant MCP server, which stops the dialog from appearing at all.
 
-**`.claude/settings.json`** — auto-fill elicitation for a known server:
+`.claude/settings.json`, to auto-fill elicitation for a known server:
 
 ```json
 {
@@ -95,7 +95,7 @@ In CI pipelines or non-interactive agents, any elicitation dialog would block in
 }
 ```
 
-**`auto-fill-memory-elicitation.sh`**:
+`auto-fill-memory-elicitation.sh`:
 
 ```bash
 #!/usr/bin/env bash
@@ -110,9 +110,9 @@ else
 fi
 ```
 
-## Validation Pattern
+## Validation pattern
 
-`ElicitationResult` is the insertion point for sanitizing or enforcing policy on user-provided values before they reach an external MCP server:
+`ElicitationResult` is the place to sanitize user-provided values, or enforce policy on them, before they reach an external MCP server:
 
 ```bash
 #!/usr/bin/env bash
@@ -132,15 +132,15 @@ jq -n --arg name "$CLEAN" \
     content: {entity_name: $name}}}'
 ```
 
-## When This Backfires
+## When this backfires
 
-**Client support is not universal.** Elicitation was added to the MCP spec in June 2025. Not all clients implement it — clients that don't will either block silently, return a "Method not found" error, or crash during the capability handshake. Verify client support before designing a tool that depends on elicitation. [GitHub Copilot in VS Code supports it](https://github.blog/ai-and-ml/github-copilot/building-smarter-interactions-with-mcp-elicitation-from-clunky-tool-calls-to-seamless-user-experiences/); other hosts vary.
+Client support is not universal. Elicitation was added to the MCP spec in June 2025. Not all clients implement it. A client that does not will either block silently, return a "Method not found" error, or crash during the capability handshake. Verify client support before you design a tool that depends on elicitation. [GitHub Copilot in VS Code supports elicitation](https://github.blog/ai-and-ml/github-copilot/building-smarter-interactions-with-mcp-elicitation-from-clunky-tool-calls-to-seamless-user-experiences/); other hosts vary.
 
-**Headless pipelines stall without a hook.** Any elicitation request in a CI or non-interactive context blocks indefinitely unless an `Elicitation` hook is pre-configured to auto-accept or decline. The call hangs — it does not time out. The fix is an explicit hook (see Headless Automation Pattern above), but that requires anticipating every server that might elicit.
+Headless pipelines stall without a hook. Any elicitation request in a CI or non-interactive context blocks indefinitely, unless an `Elicitation` hook is set in advance to auto-accept or decline. The call hangs and does not time out. The fix is an explicit hook (see the headless automation pattern above), but it means anticipating every server that might elicit.
 
-**Schema complexity is deliberately limited.** Elicitation only supports flat primitive fields (`text`, `number`, `boolean`, `select`). Conditional fields, nested objects, and array inputs are not expressible in the elicitation form schema. If the required input is structurally complex, model it as a tool parameter or use a multi-step tool sequence instead.
+Schema complexity is limited by design. Elicitation supports only flat primitive fields: `text`, `number`, `boolean`, and `select`. The elicitation form schema cannot express conditional fields, nested objects, or array inputs. If the required input is structurally complex, model it as a tool parameter or use a multi-step tool sequence instead.
 
-**Gateways and proxies silently break elicitation.** Many MCP gateways relay only client→server traffic, so server→client messages like `elicitation/create` have no path back and are dropped. A LiteLLM bug report in March 2026 documents this: servers that work standalone stop eliciting once fronted by a gateway for centralized auth ([BerriAI/litellm#23761](https://github.com/BerriAI/litellm/issues/23761)). Verify your gateway proxies bidirectional JSON-RPC and maintains stateful sessions before fronting an eliciting server.
+Gateways and proxies can break elicitation without warning. Many MCP gateways relay only client-to-server traffic, so server-to-client messages like `elicitation/create` have no path back and are dropped. A LiteLLM bug report in March 2026 documents this: servers that work standalone stop eliciting once a gateway fronts them for centralized auth ([BerriAI/litellm#23761](https://github.com/BerriAI/litellm/issues/23761)). Check that your gateway proxies bidirectional JSON-RPC and keeps stateful sessions before you front an eliciting server.
 
 ## Key Takeaways
 

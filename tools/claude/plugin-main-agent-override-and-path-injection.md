@@ -19,7 +19,7 @@ status: current
 
 A plugin's root `settings.json` activates one of its bundled agents as the main thread; the same plugin's `bin/` directory adds executables to the Bash tool's `PATH` for the plugin's enabled lifetime. Enabling the plugin reshapes the agent without editing global settings; disabling reverses both legs. The contract requires Claude Code v2.1.157 or later — earlier versions silently ignored the `agent` field.
 
-## The Two Contracts
+## The two contracts
 
 ### `settings.json.agent` swaps the main thread
 
@@ -37,12 +37,12 @@ A plugin places `settings.json` at its root. "Plugins can include a `settings.js
 
 A `bin/` directory at the plugin root publishes executables to the Bash tool's environment: "`bin/` — Executables added to the Bash tool's `PATH`. Files here are invokable as bare commands in any Bash tool call while the plugin is enabled" ([Plugins reference — File locations](https://code.claude.com/docs/en/plugins-reference#file-locations-reference)). Executables are exposed under their filename — there is no `plugin-name:` namespace.
 
-## Precedence and Per-Session Override
+## Precedence and per-session override
 
-- **Plugin-internal**: "Settings from `settings.json` take priority over `settings` declared in `plugin.json`. Unknown keys are silently ignored." ([Create plugins](https://code.claude.com/docs/en/plugins#ship-default-settings-with-your-plugin))
-- **Per-session**: "the `agent` field in `settings.json` is now honored for dispatched sessions, with `--agent <name>` to override it" ([Claude Code changelog](https://code.claude.com/docs/en/changelog), v2.1.157).
+- Plugin-internal: "Settings from `settings.json` take priority over `settings` declared in `plugin.json`. Unknown keys are silently ignored." ([Create plugins](https://code.claude.com/docs/en/plugins#ship-default-settings-with-your-plugin))
+- Per-session: "the `agent` field in `settings.json` is now honored for dispatched sessions, with `--agent <name>` to override it" ([Claude Code changelog](https://code.claude.com/docs/en/changelog), v2.1.157).
 
-## How It Differs From Related Primitives
+## How it differs from related primitives
 
 | Primitive | Activation | Lifetime | What it changes |
 |---|---|---|---|
@@ -54,30 +54,30 @@ A `bin/` directory at the plugin root publishes executables to the Bash tool's e
 
 Distinct from sub-agents because it replaces (not augments) the default personality, and from managed settings because scope is plugin enable/disable, not policy lifetime.
 
-## Why It Works
+## Why it works
 
-The pattern collapses two operations — swap the agent personality and make a set of binaries available — into one declarative file structure that activates atomically when the plugin is enabled and reverses when it is disabled. Atomicity is load-bearing: agent override and binaries appear together, not in two install steps that could partially fail. The plugin-scoped `bin/` lives inside `${CLAUDE_PLUGIN_ROOT}` and is added to PATH only while the plugin is enabled ([Plugins reference](https://code.claude.com/docs/en/plugins-reference#file-locations-reference)), so `/plugin disable` removes both the agent and the PATH entry without per-developer cleanup.
+The pattern collapses two operations — swap the agent personality and make a set of binaries available — into one declarative file structure. It activates atomically when the plugin is enabled and reverses when it is disabled. Atomicity matters: the agent override and the binaries appear together, not in two install steps that could partially fail. The plugin-scoped `bin/` lives inside `${CLAUDE_PLUGIN_ROOT}` and is added to PATH only while the plugin is enabled ([Plugins reference](https://code.claude.com/docs/en/plugins-reference#file-locations-reference)), so `/plugin disable` removes both the agent and the PATH entry without per-developer cleanup.
 
-## When This Backfires
+## When this backfires
 
-- **Pre-v2.1.157 the `agent` field is silently dead.** Dispatched sessions did not honour it until that release ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). On older clients the plugin loads, the binaries land on PATH, and the main thread stays the default — half the contract ships with no error.
-- **A managed-enabled bundle is a silent permission expansion.** An admin force-installing a plugin via `enabledPlugins` ([Plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)) where the plugin ships `settings.json: { "agent": "permissive-helper" }` swaps every developer's main thread without per-developer consent. Review the plugin's `agents/<name>.md` tool allowlist and model before org-wide enablement — see [Enterprise-Managed Plugin Governance for Agent CLIs](../../security/enterprise-managed-plugin-governance.md).
-- **Bin names collide silently.** `bin/` entries are bare command names with no namespace. Two enabled plugins shipping `bin/deploy` resolve to whichever appears first on PATH; the developer thinks they're running one tool and they're running the other.
-- **Only two keys are recognised.** Treating `settings.json` as a general per-plugin config file produces no error and no effect ([Create plugins](https://code.claude.com/docs/en/plugins#ship-default-settings-with-your-plugin)).
-- **Composability is reduced.** A consumer who wants the activated agent but a different binary set has to fork the plugin — the bundle locks the two together.
-- **Marketplace injection threatens both legs at once.** [PromptArmor](https://www.promptarmor.com/resources/hijacking-claude-code-via-injected-marketplace-plugins) and [SentinelOne](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/) marketplace-injection disclosures target plugin-supplied code; a tampered bundle swaps the agent personality and adds attacker-controlled binaries to PATH in one install.
+- Pre-v2.1.157, the `agent` field is silently dead. Dispatched sessions did not honor it until that release ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). On older clients the plugin loads, the binaries land on PATH, and the main thread stays the default. Half the contract ships with no error.
+- A managed-enabled bundle is a silent permission expansion. An admin force-installs a plugin via `enabledPlugins` ([Plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)). If the plugin ships `settings.json: { "agent": "permissive-helper" }`, it swaps every developer's main thread without per-developer consent. Review the plugin's `agents/<name>.md` tool allowlist and model before org-wide enablement — see [Enterprise-Managed Plugin Governance for Agent CLIs](../../security/enterprise-managed-plugin-governance.md).
+- Bin names collide silently. `bin/` entries are bare command names with no namespace. Two enabled plugins shipping `bin/deploy` resolve to whichever appears first on PATH. The developer thinks they are running one tool, and they are running the other.
+- Only two keys are recognized. Treating `settings.json` as a general per-plugin config file produces no error and no effect ([Create plugins](https://code.claude.com/docs/en/plugins#ship-default-settings-with-your-plugin)).
+- Composability drops. A consumer who wants the activated agent but a different binary set has to fork the plugin — the bundle locks the two together.
+- Marketplace injection threatens both legs at once. [PromptArmor](https://www.promptarmor.com/resources/hijacking-claude-code-via-injected-marketplace-plugins) and [SentinelOne](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/) marketplace-injection disclosures target plugin-supplied code. A tampered bundle swaps the agent personality and adds attacker-controlled binaries to PATH in one install.
 
 ## Example
 
 A `security-reviewer` plugin that activates a hardened review agent and ships the binaries the review workflow shells out to.
 
-**`security-reviewer-plugin/settings.json`**:
+`security-reviewer-plugin/settings.json`:
 
 ```json
 { "agent": "security-reviewer" }
 ```
 
-**`security-reviewer-plugin/agents/security-reviewer.md`** (restricted tool allowlist, pinned model):
+`security-reviewer-plugin/agents/security-reviewer.md` (restricted tool allowlist, pinned model):
 
 ```markdown
 ---
@@ -92,7 +92,7 @@ Run only `semgrep-scan`, `gitleaks-scan`, and `trivy-scan` via Bash.
 Refuse other shell commands. Report findings with severity.
 ```
 
-**Plugin layout** — agent + binaries in one bundle:
+Plugin layout — agent and binaries in one bundle:
 
 ```text
 security-reviewer-plugin/

@@ -14,23 +14,23 @@ maturity: adopted
 
 > Attach economic signals to inter-agent messages so agents self-sort by task priority without a central scheduler.
 
-## The Problem
+## The problem
 
 Standard message queues treat all requests equally. In a large multi-agent network running many concurrent tasks, this causes priority inversion: low-value work blocks high-value work, and agents have no signal for where to focus capacity. A central scheduler (the [orchestrator-worker](orchestrator-worker.md) model) solves this but adds infrastructure complexity and a coordination bottleneck.
 
-Economic value signaling addresses the problem by encoding priority directly in the message.
+Economic value signaling fixes this by encoding priority directly in the message.
 
 ## Mechanism
 
-Each inter-agent request carries an optional token value alongside its payload. Receiving agents sort incoming work by value level; application logic can implement a minimum value threshold below which work is queued or declined. Higher-value requests float to the top of each agent's work queue without any coordinator managing the ordering.
+Each inter-agent request carries an optional token value alongside its payload. Receiving agents sort incoming work by value. Each agent can set a minimum threshold, below which it queues or declines the work. Higher-value requests rise to the top of each agent's work queue, with no coordinator managing the order.
 
 The pattern has three components:
 
-**Value-bearing messages** — The sender attaches a token amount to the request, as defined by the [Beacon framework](https://github.com/Scottcjn/beacon-skill). The value signals urgency or importance, functioning as a scheduling hint. Agents receiving multiple concurrent requests process higher-value ones first. Threshold-based filtering (accepting only work above a floor value) is implemented at the application layer by each receiving agent.
+Value-bearing messages carry a token amount that the sender attaches to the request, as defined by the [Beacon framework](https://github.com/Scottcjn/beacon-skill). The value signals urgency or importance and works as a scheduling hint. An agent that receives several requests at once processes the higher-value ones first. Each receiving agent filters at the application layer, accepting only work above a floor value.
 
-**Peer registry (Atlas)** — A self-hostable discovery service where agents register their capabilities at startup and refresh every 10 minutes. Agents query it to find peers with the capabilities they need. Liveness is tracked: agents silent for 15+ minutes are flagged as concerning; 1+ hour silence marks them presumed dead. The registry handles discovery, not message routing.
+The peer registry (Atlas) is a self-hostable discovery service. Agents register their capabilities at startup and refresh every 10 minutes. They query the registry to find peers with the capabilities they need. The registry tracks liveness: an agent silent for 15 or more minutes is flagged as concerning, and an hour or more of silence marks it presumed dead. The registry handles discovery, not message routing.
 
-**External ledger settlement** — Actual value transfer occurs on a shared external ledger, as provided by the [Beacon framework](https://github.com/Scottcjn/beacon-skill). This eliminates bilateral trust: agents do not need prior relationships or shared accounts. Only task completion triggers settlement.
+An external ledger settles the actual value transfer, as provided by the [Beacon framework](https://github.com/Scottcjn/beacon-skill). This removes the need for bilateral trust: agents need no prior relationship or shared account. Settlement happens only when a task completes.
 
 ```mermaid
 sequenceDiagram
@@ -47,9 +47,9 @@ sequenceDiagram
     R->>L: claim settlement
 ```
 
-## Priority Thresholds
+## Priority thresholds
 
-Each agent can be configured with a minimum value threshold. Requests below the threshold are either queued at low priority or declined outright. This gives agents market-based [backpressure](../agent-design/agent-backpressure.md): when overloaded, raising the threshold sheds low-value work automatically. Threshold logic is implemented by the receiving agent; the Beacon protocol transmits the value but does not enforce a floor.
+You can give each agent a minimum value threshold. The agent queues requests below the threshold at low priority, or declines them outright. This gives agents market-based [backpressure](../agent-design/agent-backpressure.md): when an agent is overloaded, raising the threshold sheds low-value work automatically. The receiving agent implements the threshold logic. The Beacon protocol transmits the value but does not enforce a floor.
 
 The threshold doubles as a routing mechanism. A sender can target only high-capability agents by offering a value above general thresholds, knowing lower-capability peers will pass on the request. This mirrors reserve-price mechanisms in multi-agent auction literature, where agents reject bids below a configurable floor — a well-studied pattern in market-based task allocation (Quinton et al., [2023](https://link.springer.com/article/10.1007/s10846-022-01803-0)).
 
@@ -60,13 +60,13 @@ The threshold doubles as a routing mechanism. A sender can target only high-capa
 | No central scheduler | Priority emerges from values; no coordinator process required |
 | Cross-org capable | External ledger settlement works between agents from different organizations |
 | Incentive-compatible | Agents are economically motivated to complete high-value work |
-| Pricing calibration required | If values don't reflect actual task priority, the signal degrades into noise |
+| Pricing calibration required | If values do not reflect actual task priority, the signal degrades into noise |
 | Registry dependency | Atlas is a soft dependency — agents still function if registry is stale, but peer discovery degrades |
 | Early-stage maturity | The [Beacon framework](https://github.com/Scottcjn/beacon-skill) is the primary reference implementation; production adoption is limited |
 
-## Contrast with Orchestrator-Worker
+## Contrast with orchestrator-worker
 
-The [orchestrator-worker pattern](orchestrator-worker.md) assigns work through hierarchical control: a lead agent decomposes tasks and dispatches them to workers it manages directly. Economic value signaling is fully decentralized — no agent has authority over another. Agents advertise capabilities, senders choose peers based on registry data, and values determine execution priority. There is no decomposition step and no [synthesis step](fan-out-synthesis.md); each value-bearing request is a complete unit of work.
+The [orchestrator-worker pattern](orchestrator-worker.md) assigns work through hierarchical control: a lead agent decomposes tasks and dispatches them to workers it manages directly. Economic value signaling is fully decentralized — no agent has authority over another. Agents advertise capabilities, senders choose peers based on registry data, and values determine execution priority. There is no decomposition step and no [synthesis step](fan-out-synthesis.md). Each value-bearing request is a complete unit of work.
 
 Use orchestrator-worker when you control all agents in the system and need structured task decomposition. Use economic value signaling when agents are autonomous, potentially from different organizations, and priority ordering needs to emerge from business value rather than developer-assigned queue positions.
 
@@ -74,14 +74,14 @@ Use orchestrator-worker when you control all agents in the system and need struc
 
 The signal is only useful when values reflect real priority. Two failure modes:
 
-- **Inflation** — senders attach high values to all requests to guarantee fast service, collapsing the priority signal
-- **Underpricing** — senders undervalue work to conserve tokens, causing genuinely important tasks to queue behind low-priority work
+- Inflation: senders attach high values to every request to guarantee fast service, which collapses the priority signal
+- Underpricing: senders undervalue work to conserve tokens, so genuinely important tasks queue behind low-priority work
 
 Effective deployments establish shared pricing conventions: a pricing table or organizational standard that maps task categories to value ranges. Without this, agents in the same network will use incompatible value scales.
 
 ## Example
 
-A platform runs agents for data ingestion, analysis, and reporting. Ingestion tasks are cheap and frequent; report generation is rare but time-sensitive. Without value signaling, ingestion tasks fill agent queues and delay reports.
+A platform runs agents for data ingestion, analysis, and reporting. Ingestion tasks are cheap and frequent. Report generation is rare but time-sensitive. Without value signaling, ingestion tasks fill agent queues and delay reports.
 
 With value signaling:
 
@@ -101,7 +101,7 @@ With value signaling:
 }
 ```
 
-Analysis agents set a threshold of 5 RTC. Ingestion tasks (2 RTC) are queued or declined; report generation (20 RTC) is accepted immediately. No coordinator assigns priorities — the values do it.
+Analysis agents set a threshold of 5 RTC. Ingestion tasks (2 RTC) are queued or declined. Report generation (20 RTC) is accepted immediately. No coordinator assigns priorities — the values do it.
 
 ## Key Takeaways
 

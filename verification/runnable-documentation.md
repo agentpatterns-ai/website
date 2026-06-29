@@ -13,32 +13,32 @@ maturity: established
 
 > Convert inline code examples into standalone files that CI executes on every build — catching doc rot with the same signals that catch broken code, and cutting stale-context failures in agents that retrieve docs via RAG.
 
-**Related lesson:** [Golden Journeys](https://learn.agentpatterns.ai/verification/golden-journeys/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Golden Journeys, a hands-on lesson with quizzes](https://learn.agentpatterns.ai/verification/golden-journeys/) covers this concept.
 
-## The Mechanism
+## The mechanism
 
-Every inline code example is a hidden assertion that the API works as shown — checked only when a reader copies the snippet and finds it broken. Runnable documentation promotes that assertion to a test.
+Every inline code example is a hidden assertion that the API works as shown. A reader checks that assertion only when they copy the snippet and find it broken. Runnable documentation promotes the assertion to a test.
 
 The pipeline has four steps ([LangChain: How We Made Our Docs Test Themselves](https://blog.langchain.com/our-docs-test-themselves/)):
 
-1. **Extract** inline snippets into standalone source files with setup and teardown that make them executable
-2. **Mark** the documentation-visible region with snippet delineators (for example, Bluehawk's `:snippet-start:` / `:snippet-end:` with `:remove-start:` / `:remove-end:` for test-only code)
-3. **Inject** the extracted snippet back into the published doc via an include mechanism (Mintlify snippets, MDX partials, reStructuredText includes)
-4. **Run** the source files in CI and file a ticket when a run fails
+1. Extract inline snippets into standalone source files. Add the setup and teardown that make them executable.
+2. Mark the documentation-visible region with snippet delineators. Bluehawk uses `:snippet-start:` / `:snippet-end:` with `:remove-start:` / `:remove-end:` for test-only code.
+3. Inject the extracted snippet back into the published doc through an include mechanism. Options include Mintlify snippets, MDX partials, and reStructuredText includes.
+4. Run the source files in CI and file a ticket when a run fails.
 
-The principle is the same one that fences application code: treat samples as code that must pass tests ([LangChain](https://blog.langchain.com/our-docs-test-themselves/)).
+This is the same principle that fences application code: treat samples as code that must pass tests ([LangChain](https://blog.langchain.com/our-docs-test-themselves/)).
 
-## Prior Art
+## Prior art
 
-The pattern predates agents. Python's `doctest` executes interactive sessions embedded in docstrings to verify they work as shown ([Python docs](https://docs.python.org/3/library/doctest.html)). `sphinx.ext.doctest` runs code blocks embedded in reStructuredText ([Sphinx docs](https://www.sphinx-doc.org/en/master/usage/extensions/doctest.html)); `pytest --doctest-glob` applies the same mechanism to arbitrary text files ([pytest docs](https://docs.pytest.org/en/stable/how-to/doctest.html)).
+The pattern predates agents. Python's `doctest` runs interactive sessions embedded in docstrings to verify they work as shown ([Python docs](https://docs.python.org/3/library/doctest.html)). `sphinx.ext.doctest` runs code blocks embedded in reStructuredText ([Sphinx docs](https://www.sphinx-doc.org/en/master/usage/extensions/doctest.html)). `pytest --doctest-glob` applies the same mechanism to arbitrary text files ([pytest docs](https://docs.pytest.org/en/stable/how-to/doctest.html)).
 
-Doctest-style tools cover single-expression examples and short REPL transcripts, not multi-step flows that spin up clients, call tools, and assert on structured output. The agent-era shift makes the extract-and-test pipeline worth the setup cost for those longer examples — because agents that retrieve docs as context inherit every stale snippet.
+Doctest-style tools cover single-expression examples and short REPL transcripts. They do not cover multi-step flows that spin up clients, call tools, and assert on structured output. For those longer examples, the agent-era shift makes the extract-and-test pipeline worth the setup cost, because agents that retrieve docs as context inherit every stale snippet.
 
-## Why This Matters for Agents
+## Why this matters for agents
 
-Agents that retrieve docs over RAG pull whatever the retriever scores highest. A stale doc that semantically matches the query still scores near the top — relevance grading does not detect staleness ([kapa.ai: RAG Gone Wrong](https://www.kapa.ai/blog/rag-gone-wrong-the-7-most-common-mistakes-and-how-to-avoid-them)). The agent then generates code from the stale snippet.
+Agents that retrieve docs over RAG pull whatever the retriever scores highest. A stale doc that semantically matches the query still scores near the top, because relevance grading does not detect staleness ([kapa.ai: RAG Gone Wrong](https://www.kapa.ai/blog/rag-gone-wrong-the-7-most-common-mistakes-and-how-to-avoid-them)). The agent then generates code from the stale snippet.
 
-Runnable documentation is the upstream fix: the stale snippet never ships, because CI fails the build when its source file stops running. It complements [continuous documentation](../workflows/continuous-documentation.md) by preventing drift between audit runs.
+Runnable documentation is the upstream fix. The stale snippet never ships, because CI fails the build when its source file stops running. The pattern complements [continuous documentation](../workflows/continuous-documentation.md) by preventing drift between audit runs.
 
 ## Pipeline
 
@@ -54,16 +54,16 @@ graph LR
     F -->|no| I[File ticket / block merge]
 ```
 
-Extraction is the expensive step. LangChain offloaded it to a `docs-code-samples` Deep Agents skill that moves inline code, adds setup and teardown, inserts delineators, runs the tests, and wires up the include ([SKILL.md](https://github.com/langchain-ai/docs/blob/main/.deepagents/skills/docs-code-samples/SKILL.md)). That upfront cost is the reason most teams never start ([LangChain](https://blog.langchain.com/our-docs-test-themselves/)); agent-assisted migration is how teams adopt the pattern across an existing doc set.
+Extraction is the expensive step. LangChain handed it to a `docs-code-samples` Deep Agents skill that moves inline code, adds setup and teardown, inserts delineators, runs the tests, and wires up the include ([SKILL.md](https://github.com/langchain-ai/docs/blob/main/.deepagents/skills/docs-code-samples/SKILL.md)). That upfront cost is the reason most teams never start ([LangChain](https://blog.langchain.com/our-docs-test-themselves/)). Agent-assisted migration is how teams adopt the pattern across an existing doc set.
 
-## CI Integration
+## CI integration
 
 Two triggers cover the update cadence:
 
-- **Push trigger on source or doc change** — run the affected sample immediately so broken snippets cannot reach `main`
-- **Scheduled trigger (daily or weekly)** — run the full suite to catch breakage from upstream dependency updates, model-API deprecations, or third-party endpoint changes that do not correspond to a commit in this repo
+- Push trigger on source or doc change: run the affected sample at once so broken snippets cannot reach `main`
+- Scheduled trigger, daily or weekly: run the full suite to catch breakage from upstream dependency updates, model-API deprecations, or third-party endpoint changes that match no commit in this repo
 
-A failed scheduled run should open an issue tagged for the docs team, not silently fail a CI badge — keeps drift cost visible.
+A failed scheduled run should open an issue tagged for the docs team, not silently fail a CI badge. This keeps the drift cost visible.
 
 ## Example
 
@@ -88,19 +88,19 @@ if __name__ == "__main__":
 # :remove-end:
 ```
 
-The file runs as a real Python script in CI via `make test-code-samples`. Bluehawk strips the `:remove-start:` / `:remove-end:` block when extracting the snippet, so the published doc shows only the tool definition. The assertion guarantees the snippet's visible behaviour matches what the docs claim.
+The file runs as a real Python script in CI through `make test-code-samples`. Bluehawk strips the `:remove-start:` / `:remove-end:` block when it extracts the snippet, so the published doc shows only the tool definition. The assertion guarantees the snippet's visible behavior matches what the docs claim.
 
-## When This Backfires
+## When this backfires
 
 The pattern degrades or inverts in several conditions:
 
-- **Small doc surface with rare API changes** — extraction, delineator, and CI cost exceeds the drift it catches; direct edits plus a manual pre-release smoke test win on total cost
-- **Non-executable content** — style guides, architectural narratives, and decision records have no code to assert against; forcing every page through the pipeline produces zero test signal and real maintenance cost
-- **Environment-dependent examples** — snippets needing real API keys, paid services, or production data either fail in CI without mocks (constant noise) or use mocks that themselves drift (the stale-docs problem relocated one layer out)
-- **Long-running or streaming flows** — multi-minute agent runs, streaming responses, and human-in-the-loop examples are expensive on every push; test cadence falls behind change cadence and the signal decays
-- **Prose that paraphrases output** — when text describes behaviour rather than quoting exact output, equality assertions are brittle; assertion churn fatigues reviewers, who start rubber-stamping and recreate the failure the pattern was meant to prevent
+- Small doc surface with rare API changes: extraction, delineator, and CI cost exceeds the drift it catches, so direct edits plus a manual pre-release smoke test win on total cost
+- Non-executable content: style guides, architectural narratives, and decision records have no code to assert against, so forcing every page through the pipeline produces no test signal and real maintenance cost
+- Environment-dependent examples: snippets that need real API keys, paid services, or production data either fail in CI without mocks (constant noise) or use mocks that themselves drift (the stale-docs problem moved one layer out)
+- Long-running or streaming flows: multi-minute agent runs, streaming responses, and human-in-the-loop examples are expensive on every push, so test cadence falls behind change cadence and the signal decays
+- Prose that paraphrases output: when text describes behavior rather than quoting exact output, equality assertions are brittle, and the assertion churn fatigues reviewers, who start rubber-stamping and recreate the failure the pattern was meant to prevent
 
-Tested docs do not guarantee freshness at the retrieval layer — a RAG system indexing last week's version still returns last week's example. Runnable documentation fixes the upstream source; cache invalidation and embedding refresh are separate problems ([kapa.ai: RAG Gone Wrong](https://www.kapa.ai/blog/rag-gone-wrong-the-7-most-common-mistakes-and-how-to-avoid-them)).
+Tested docs do not guarantee freshness at the retrieval layer. A RAG system indexing last week's version still returns last week's example. Runnable documentation fixes the upstream source; cache invalidation and embedding refresh are separate problems ([kapa.ai: RAG Gone Wrong](https://www.kapa.ai/blog/rag-gone-wrong-the-7-most-common-mistakes-and-how-to-avoid-them)).
 
 ## Key Takeaways
 

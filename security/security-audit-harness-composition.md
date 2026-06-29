@@ -18,7 +18,7 @@ maturity: established
 
 > Compose three primitives — steering, scaling, and stacking — so an audit harness produces actionable findings at maintainer-tolerable triage cost rather than slop.
 
-## The Asymmetric-Cost Problem
+## The asymmetric-cost problem
 
 AI-generated security bug reports through 2025 were mostly slop. Mozilla frames the economics: "it's cheap and easy to prompt an LLM to find a 'problem' in code, but slow and expensive to respond to it" ([Mozilla Hacks, May 2026](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). The curl project received 20 AI-generated submissions in early 2026 with zero confirmed vulnerabilities ([IT Pro](https://www.itpro.com/software/open-source/ai-slop-security-reports-are-driving-open-source-maintainers-mad)). Any system whose validation cost stays human while generation cost falls to inference loses on volume ([Bugcrowd](https://www.bugcrowd.com/blog/sloptimism-is-breaking-any-system-built-on-human-validation/)).
 
@@ -26,7 +26,7 @@ Mozilla's Firefox security team inverted this gradient. Through 2025 they shippe
 
 This pattern is distinct from prompt-decomposition in [AI-Powered Vulnerability Triage](../workflows/ai-powered-vulnerability-triage.md). Decomposition splits one audit into sequential stages with fresh contexts; composition runs many audits in parallel and stacks filtering passes against their output.
 
-## Three Composition Primitives
+## Three composition primitives
 
 ```mermaid
 graph TD
@@ -37,23 +37,23 @@ graph TD
     D -->|No| F[Discard or merge with known issue]
 ```
 
-### Steering — shape one pass before scaling
+### Steering: shape one pass before scaling
 
 Steering is the iteration loop on a single job. Mozilla supervised early runs in a terminal "to observe the process in real-time and tune the prompts and logic" before scaling out ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). Steering also fixes which interfaces the model can call — for an audit harness, dynamic test execution, not static analysis alone. Earlier audits on GPT-4 and Claude Sonnet 3.5 against static code "showed some promise, but the high rate of false positives made them impractical to scale" ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)).
 
-### Scaling — partition the target, run in parallel
+### Scaling: partition the target, run in parallel
 
 Once a single pass produces tractable output, scaling fans it out. Mozilla "parallelized the jobs across multiple ephemeral VMs, each tasked to hunt for bugs within a specific target file and write its findings back to a bucket" ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). The partition unit — file, module, syscall surface — sets the corpus size. See [Sub-Agents and Fan-Out](../multi-agent/sub-agents-fan-out.md) and [Bounded Batch Dispatch](../multi-agent/bounded-batch-dispatch.md) for fan-out mechanics.
 
-### Stacking — filter in inference, not maintainer hours
+### Stacking: filter in inference, not maintainer hours
 
 Stacking is the lifecycle wrapper around discovery: "deduplicating against known issues, tracking bugs, triaging them, and getting fixes shipped" ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). Each pass discards non-actionable findings at machine cost rather than letting them reach humans. A finding must survive [reproducibility](../code-review/reproduce-before-report-verification-gate.md), deduplication, and severity triage before a Firefox engineer sees it.
 
 This is the load-bearing primitive. Steering and scaling without stacking produce slop at higher throughput.
 
-## Why It Works
+## Why it works
 
-The mechanism is signal-to-noise inversion against an asymmetric cost gradient. A model run against a large codebase produces O(N) findings of which a small fraction are real; without composition, maintainers face O(N) [triage cost](../code-review/signal-over-volume-in-ai-review.md) regardless of yield. Composition reverses the math: scaling produces *more* raw findings, but each stacking pass discards non-actionable candidates at machine cost, so the maintainer queue holds only the residual. Mozilla makes the mechanism concrete: "given the right interfaces and instructions, [the harness] can create and run reproducible test cases to dynamically test hypotheses about bugs in code... we built our own harness atop our existing fuzzing infrastructure" ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). The reproducibility check is what discriminates — a finding the harness cannot turn into an executable test case never reaches a reviewer.
+The mechanism is signal-to-noise inversion against an asymmetric cost gradient. A model run against a large codebase produces O(N) findings of which a small fraction are real; without composition, maintainers face O(N) [triage cost](../code-review/signal-over-volume-in-ai-review.md) regardless of yield. Composition reverses the math: scaling produces more raw findings, but each stacking pass discards non-actionable candidates at machine cost, so the maintainer queue holds only the residual. Mozilla makes the mechanism concrete: "given the right interfaces and instructions, [the harness] can create and run reproducible test cases to dynamically test hypotheses about bugs in code... we built our own harness atop our existing fuzzing infrastructure" ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). The reproducibility check is what discriminates — a finding the harness cannot turn into an executable test case never reaches a reviewer.
 
 The pipeline is durable across model swaps: "Once the end-to-end pipeline is in place, it's trivial to swap in different models... model upgrades increase the effectiveness of the entire pipeline" ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). The wrapper is project-specific; the three primitives are reusable.
 
@@ -89,12 +89,12 @@ stack:
 
 The April spike reflects the full stack working end-to-end; over 100 contributors handled the resulting fix load ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)).
 
-## When This Backfires
+## When this backfires
 
-- **No dynamic execution layer.** Stacking can only filter findings the harness can reproduce; static-analysis-only output reproduces the GPT-4-era false-positive ceiling.
-- **Stacking step is human review.** If maintainers sit inside the filter chain rather than at the end, scaling pushes more work toward them, not less.
-- **Small targets.** Scaling adds no value when the audit surface fits in one context window.
-- **No fuzzing or test substrate.** Mozilla layered on existing fuzzing; greenfield projects pay a higher integration cost before signal appears.
+- No dynamic execution layer. Stacking can only filter findings the harness can reproduce; static-analysis-only output reproduces the GPT-4-era false-positive ceiling.
+- Stacking step is human review. If maintainers sit inside the filter chain rather than at the end, scaling pushes more work toward them, not less.
+- Small targets. Scaling adds no value when the audit surface fits in one context window.
+- No fuzzing or test substrate. Mozilla layered on existing fuzzing; greenfield projects pay a higher integration cost before signal appears.
 
 Replications published after Mozilla's report found cheaper open-weight models reproduce most of the showcased analyses given comparable scale ([The Decoder, May 2026](https://the-decoder.com/the-myth-of-claude-mythos-crumbles-as-small-open-models-hunt-the-same-cybersecurity-bugs-anthropic-showcased/)) — the composition, not the headline model, carries the result. Frontier-inference spend is not justified by headline counts alone.
 

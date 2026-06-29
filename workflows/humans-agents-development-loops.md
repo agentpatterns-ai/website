@@ -14,15 +14,15 @@ maturity: established
 
 > Position humans to manage the loop, not inspect every artefact — throughput and quality compound when humans engineer the harness rather than gate outputs.
 
-**Learn it hands-on:** [Where You Stand](https://learn.agentpatterns.ai/workflows/where-you-stand/) — guided lesson with quizzes.
+Learn it hands-on: [Where You Stand](https://learn.agentpatterns.ai/workflows/where-you-stand/) — guided lesson with quizzes.
 
-## The Loop Hierarchy
+## The loop hierarchy
 
 Software delivery runs as two nested feedback loops, as described by Kief Morris in [Humans and Agents in Software Engineering Loops](https://martinfowler.com/articles/exploring-gen-ai/humans-and-agents.html):
 
-**The why loop** iterates over ideas and working software. A human has an idea, the software gets built, the human evaluates it, and the cycle continues. Humans always own this loop — they set the goals and evaluate whether outcomes match them.
+The why loop iterates over ideas and working software. A human has an idea, the software gets built, the human evaluates it, and the cycle continues. Humans always own this loop — they set the goals and evaluate whether outcomes match them.
 
-**The how loop** iterates over intermediate artefacts: [specs](spec-driven-development.md), code, tests, infrastructure. It is a means to an end. The how loop itself nests further:
+The how loop iterates over intermediate artifacts: [specs](spec-driven-development.md), code, tests, infrastructure. It is a means to an end. The how loop itself nests further:
 
 - Outer how loop: feature-level delivery (spec → implementation → validation)
 - Middle how loop: story-level breakdown (decompose → implement → integrate)
@@ -39,17 +39,17 @@ graph TD
 
 Where humans sit within this hierarchy determines throughput, quality, and the long-term compounding of agent capability.
 
-## Three Positioning Modes
+## Three positioning modes
 
-### Humans Outside the Loop
+### Humans outside the loop
 
 Humans run the why loop only. Agents run the entire how loop without human direction of intermediate steps. This is the pattern Kief Morris associates with vibe coding and some interpretations of [spec-driven development](spec-driven-development.md) — humans invest in describing the desired outcome, but not in steering the path to it.
 
 The appeal is real: the how loop is where software development accumulates the most friction (over-engineering, technical debt, approval queues). Delegating it entirely removes that friction.
 
-The risk: agents working in messy or poorly-structured codebases spiral more, take longer, and cost more. Internal code quality still matters, not for its own sake, but because a clean codebase improves agent velocity and reduces inference cost — [code cleanliness is an agent cost lever](code-cleanliness-agent-cost-lever.md). External quality — correctness, performance, compliance — remains the measure, but it is harder to achieve without internal structure.
+The risk: agents working in messy or poorly-structured codebases spiral more, take longer, and cost more. Internal code quality still matters, not for its own sake, but because a clean codebase improves agent velocity and reduces inference cost — [code cleanliness is an agent cost lever](../token-engineering/code-cleanliness-agent-cost-lever.md). External quality — correctness, performance, compliance — remains the measure, but it is harder to achieve without internal structure.
 
-### Humans in the Loop
+### Humans in the loop
 
 Humans gate specific steps of the how loop, typically the innermost coding loop. The common form: a developer inspects every diff the agent produces before accepting it.
 
@@ -59,11 +59,11 @@ The cost: it creates a throughput bottleneck. Agents generate code faster than h
 
 Classic shift-left thinking applies here: rather than inspecting outputs, embed quality signals so agents can gauge their own output. Agents produce better results when they can verify their own work through tests and automated checks, rather than relying on human inspection after the fact.
 
-### Humans on the Loop
+### Humans on the loop
 
 Humans define and continuously improve the harness — the collection of specs, quality checks, workflow guidance, and automated verification that governs each level of the how loop — rather than reviewing what the harness produces.
 
-The key distinction: when unsatisfied with an output, "in the loop" means fixing the artefact; "on the loop" means fixing the harness that produced it ([source](https://martinfowler.com/articles/exploring-gen-ai/humans-and-agents.html)).
+The main distinction: when unsatisfied with an output, "in the loop" means fixing the artifact; "on the loop" means fixing the harness that produced it ([source](https://martinfowler.com/articles/exploring-gen-ai/humans-and-agents.html)).
 
 The same concept surfaced independently as the "middle loop" at [The Future of Software Development Retreat](https://martinfowler.com/bliki/FutureOfSoftwareDevelopment.html): move human attention to a higher-level loop than the coding loop.
 
@@ -78,42 +78,42 @@ Operationally, the shift looks like this:
 
 [Harness engineering](../agent-design/harness-engineering.md) is the practice of building these environments. The harness is the primary artifact of on-the-loop work.
 
-## Making the Transition
+## Making the transition
 
 Teams shifting from in-loop to on-loop typically pass through a recognition: the bottleneck is not agent capability, it is the harness. The transition involves three moves:
 
-1. **Instrument the loop** — add tests, automated quality checks, and verification stages so agents can self-evaluate without human review of each artefact
-2. **Capture patterns as harness rules** — when a human would have caught a recurring class of error, convert that judgment into an automated check that catches it upstream
-3. **Review harness performance, not artefact quality** — shift the human review cadence from per-PR diff review to periodic harness evaluation: are the checks catching what they should? Are new failure modes emerging?
+1. Instrument the loop — add tests, automated quality checks, and verification stages so agents can self-evaluate without human review of each artifact.
+2. Capture patterns as harness rules — when a human would have caught a recurring class of error, convert that judgment into an automated check that catches it upstream.
+3. Review harness performance, not artifact quality — shift the human review cadence from per-PR diff review to periodic harness evaluation: are the checks catching what they should? Are new failure modes emerging?
 
 This is not a one-time migration. The [harness](../agent-design/harness-engineering.md) is continuously maintained. New workload types, model changes, and scope expansions each require harness updates.
 
-## The Agentic Flywheel
+## The agentic flywheel
 
 The on-the-loop mode opens a further evolution: directing agents to analyze their own traces and propose harness improvements. This is the [agentic flywheel](../agent-design/agentic-flywheel.md) — a closed loop where agents evaluate the performance of the loop they run and recommend changes to it.
 
 The graduation path for flywheel recommendations mirrors the in/on/out spectrum:
 
-- **Interactive**: human reviews each recommendation before applying
-- **Backlog**: agent adds suggestions to the queue for later triage
-- **Autonomous**: high-confidence, narrow-scope changes auto-apply with monitoring
+- Interactive: human reviews each recommendation before applying
+- Backlog: agent adds suggestions to the queue for later triage
+- Autonomous: high-confidence, narrow-scope changes auto-apply with monitoring
 
 Moving to autonomous requires a track record. Start interactive. Promote specific categories to autonomous only after they prove safe, the same graduated-trust path the [human-in-the-loop placement pattern](human-in-the-loop.md) lays out.
 
 At scale, this starts to resemble humans-outside-the-loop again — but the difference is that the harness was engineered deliberately, not abandoned. The system is not just "good enough"; it is capable of catching and correcting its own failure modes.
 
-## When This Backfires
+## When this backfires
 
-On-the-loop is not a universal remedy. The Microsoft Azure SRE Agent team reported that heavy harness scaffolding — pre-written queries, curated tools, hand-built sub-agents for known failure modes — produced high-performing benchmarks but a low ceiling: "every prewritten query was a place we told the model not to think, every curated tool was a decision made on its behalf." Their breakthrough came from *removing* scaffolding and giving the agent a structured filesystem plus context hooks instead ([source](https://techcommunity.microsoft.com/blog/appsonazureblog/the-agent-that-investigates-itself/4500073)). Harness investment is most productive when it encodes verifiable constraints (tests, linters, architectural rules) and least productive when it pre-computes the agent's answer space.
+On-the-loop is not a universal remedy. The Microsoft Azure SRE Agent team reported that heavy harness scaffolding — pre-written queries, curated tools, hand-built sub-agents for known failure modes — produced high-performing benchmarks but a low ceiling: "every prewritten query was a place we told the model not to think, every curated tool was a decision made on its behalf." Their breakthrough came from removing scaffolding and giving the agent a structured filesystem plus context hooks instead ([source](https://techcommunity.microsoft.com/blog/appsonazureblog/the-agent-that-investigates-itself/4500073)). Harness investment is most productive when it encodes verifiable constraints (tests, linters, architectural rules) and least productive when it pre-computes the agent's answer space.
 
 Conditions under which on-the-loop is worse than the alternative:
 
-- **Novel problem classes**: if failure modes are not yet recognized, any rule encoded in the harness is a guess — agents with general tools and freedom to explore outperform agents steered by premature guardrails
-- **Rapidly shifting model capability**: a harness tuned for last quarter's model may under-use this quarter's model; the maintenance cost of re-tuning can exceed the cost of direct review
-- **Small teams or short-lived projects**: harness investment amortizes over many agent runs; one-off work or exploratory spikes rarely recoup the upfront cost
-- **Opaque or bespoke integrations**: when harness tooling hides the underlying system from the agent (custom wrappers around APIs, pre-digested context), the agent loses the ability to reason about edge cases the wrapper did not anticipate
+- Novel problem classes: if failure modes are not yet recognized, any rule encoded in the harness is a guess — agents with general tools and freedom to explore outperform agents steered by premature guardrails
+- Rapidly shifting model capability: a harness tuned for last quarter's model may under-use this quarter's model; the maintenance cost of re-tuning can exceed the cost of direct review
+- Small teams or short-lived projects: harness investment amortizes over many agent runs; one-off work or exploratory spikes rarely recoup the upfront cost
+- Opaque or bespoke integrations: when harness tooling hides the underlying system from the agent (custom wrappers around APIs, pre-digested context), the agent loses the ability to reason about edge cases the wrapper did not anticipate
 
-The signal to watch: if harness maintenance is consuming more human attention than the artefact review it replaced, the investment has inverted.
+The signal to watch: if harness maintenance is consuming more human attention than the artifact review it replaced, the investment has inverted.
 
 ## Key Takeaways
 

@@ -21,13 +21,13 @@ maturity: established
 !!! note "Also known as"
     Providing Context to Agents, Context Priming, Breadcrumbs in Code. Seeding embeds contextual hints directly in the codebase for agents to discover during exploration. For the general technique of loading relevant context before a task, see [Context Priming](context-priming.md).
 
-## Why Seeding Works
+## Why seeding works
 
 Agents explore codebases by reading files — what they find shapes what they do. Seeded context is persistent: it influences every session that touches that codebase region, shifting [context management](context-engineering.md) from a per-session concern to codebase hygiene.
 
-## The Durability Spectrum
+## The durability spectrum
 
-Breadcrumbs vary in how reliably they influence agent behaviour.
+Breadcrumbs vary in how reliably they influence agent behavior.
 
 ```mermaid
 graph TD
@@ -42,42 +42,42 @@ Mechanical enforcement outperforms written guidelines: the agent encounters the 
 
 ## Techniques
 
-### Directory-Scoped Context Files
+### Directory-scoped context files
 
 The [AGENTS.md open standard](../standards/agents-md.md) defines a dedicated file for agent context, adopted by 60k+ projects and 25+ platforms ([agents.md](https://agents.md)). Agents read the nearest AGENTS.md in the directory tree; subdirectory files override project-level instructions.
 
-Claude Code uses [CLAUDE.md files](https://code.claude.com/docs/en/memory) with the same scoping. The `.claude/rules/` directory adds path-scoped rules for matching files (e.g., `src/api/**/*.ts`).
+Claude Code uses [CLAUDE.md files](https://code.claude.com/docs/en/memory) with the same scoping. The `.claude/rules/` directory adds path-scoped rules for matching files (for example, `src/api/**/*.ts`).
 
-### Progressive Disclosure Over Monoliths
+### Progressive disclosure over monoliths
 
 A lean entry-point file (~100 lines) pointing to structured subdirectories outperforms a monolithic instruction file — the repository functions as agent memory, and anything not in context does not exist ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings); see also [progressive disclosure for agent definitions](../agent-design/progressive-disclosure-agents.md)).
 
-### Inline Decision Comments
+### Inline decision comments
 
-Comments explaining *why* a decision was made prevent agents from reverting it. Without such a comment, a refactoring agent has no signal the choice is intentional:
+Comments explaining why a decision was made prevent agents from reverting it. Without such a comment, a refactoring agent has no signal the choice is intentional:
 
 ```typescript
 // We use optimistic updates here rather than waiting for the server response.
 // Reverting to pessimistic updates caused noticeable UI lag in user testing.
 ```
 
-### TODO and FIXME Markers
+### TODO and FIXME markers
 
 Placing a `TODO` or `FIXME` at the exact location ensures the agent encounters it when editing nearby code — though whether agents treat these as actionable items varies by tool.
 
-### Type Annotations
+### Type annotations
 
 Complete type signatures eliminate agent guesswork about return types, parameter shapes, and nullability.
 
-### Example Files and Pattern Replication
+### Example files and pattern replication
 
-Agents pattern-match against existing code — a well-written reference implementation communicates conventions more precisely than prose. However, agents replicate good and bad patterns alike; poor examples compound drift, a dynamic known as [pattern replication risk](../anti-patterns/pattern-replication-risk.md) ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
+Agents pattern-match against existing code — a well-written reference implementation communicates conventions more precisely than prose. But agents replicate good and bad patterns alike; poor examples compound drift, a dynamic known as [pattern replication risk](../anti-patterns/pattern-replication-risk.md) ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
 
-### Progress Files as Breadcrumbs
+### Progress files as breadcrumbs
 
-Long-running agents maintain [progress files](../observability/trajectory-logging-progress-files.md) (e.g., `todo.md`) that subsequent sessions read to get oriented, eliminating repeated discovery ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Manus uses a continuously updated `todo.md` as a [goal recitation](goal-recitation.md) mechanism ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
+Long-running agents maintain [progress files](../observability/trajectory-logging-progress-files.md) (for example, `todo.md`) that subsequent sessions read to get oriented, eliminating repeated discovery ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Manus uses a continuously updated `todo.md` as a [goal recitation](goal-recitation.md) mechanism ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
 
-## What to Seed vs. What to Prompt
+## What to seed versus what to prompt
 
 | Seed in the codebase | Prompt interactively |
 |---------------------|---------------------|
@@ -91,15 +91,15 @@ Seed durable information; prompt session-specific intent. See [Discoverable vs N
 
 Some tools expose a deliberate interactive channel for injecting context mid-session. Claude Code's `!` shell escape runs a bash command inline; as of v2.1.186 its output is fed back to the model for a response by default, with a `respondToBashCommands: false` toggle to inject the output as context-only instead — a human-in-the-loop way to prime a session with live command output rather than codebase breadcrumbs ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 
-## When This Backfires
+## When this backfires
 
-- **Stale breadcrumbs**: An AGENTS.md that no longer reflects the codebase misleads the agent — it acts on false premises with high confidence. Stale seeding is worse than no seeding.
-- **Pattern replication**: Agents replicate existing code indiscriminately ([pattern replication risk](../anti-patterns/pattern-replication-risk.md)). A single poor reference implementation propagates the anti-pattern across every new file; mechanical enforcement is the only reliable safeguard.
-- **Conflicting scopes**: Nested context files with contradictory instructions cause agents to apply the [wrong scope](prompt-layering.md) — unpredictable and difficult to debug.
+- Stale breadcrumbs: an AGENTS.md that no longer reflects the codebase misleads the agent — it acts on false premises with high confidence. Stale seeding is worse than no seeding.
+- Pattern replication: agents replicate existing code indiscriminately ([pattern replication risk](../anti-patterns/pattern-replication-risk.md)). A single poor reference implementation propagates the anti-pattern across every new file; mechanical enforcement is the only reliable safeguard.
+- Conflicting scopes: nested context files with contradictory instructions cause agents to apply the [wrong scope](prompt-layering.md) — unpredictable and difficult to debug.
 
 Seeding suits stable, long-lived codebases. For short-lived projects, the maintenance overhead may exceed the benefit.
 
-Even accurate seeding is not free. A controlled study found that repository-level context files often *reduce* coding-agent task success versus no context while raising inference cost by over 20% — broad architectural overviews can pull agents into unbounded exploration, and LLM-generated files fare worst, with human-curated ones giving only modest gains ([Gloaguen et al., "Evaluating AGENTS.md"](https://arxiv.org/abs/2602.11988)). Seed lean, specific, hand-written context — not generated bulk.
+Even accurate seeding is not free. A controlled study found that repository-level context files often reduce coding-agent task success versus no context while raising inference cost by over 20% — broad architectural overviews can pull agents into unbounded exploration, and LLM-generated files fare worst, with human-curated ones giving only modest gains ([Gloaguen et al., "Evaluating AGENTS.md"](https://arxiv.org/abs/2602.11988)). Seed lean, specific, hand-written context — not generated bulk.
 
 ## Key Takeaways
 
@@ -113,7 +113,7 @@ Even accurate seeding is not free. A controlled study found that repository-leve
 
 A Python monorepo with a data-pipeline package uses multiple techniques together:
 
-**Project-level `AGENTS.md`** (repo root) lists the packages and where conventions live:
+The project-level `AGENTS.md` (repo root) lists the packages and where conventions live:
 
 ```markdown
 # Project: data-platform
@@ -128,7 +128,7 @@ A Python monorepo with a data-pipeline package uses multiple techniques together
 - Do not modify `shared/schema.py` without updating `docs/schema-changelog.md`.
 ```
 
-**Package-level `pipelines/AGENTS.md`** scopes the package conventions:
+The package-level `pipelines/AGENTS.md` scopes the package conventions:
 
 ```markdown
 # Pipelines package
@@ -143,7 +143,7 @@ A Python monorepo with a data-pipeline package uses multiple techniques together
   throttling issues with the bucket policy. Do not convert to async.
 ```
 
-**Inline decision comment** in `pipelines/ingest_raw.py`:
+An inline decision comment in `pipelines/ingest_raw.py`:
 
 ```python
 # Synchronous S3 client is intentional. Async caused throttling errors
@@ -152,7 +152,7 @@ A Python monorepo with a data-pipeline package uses multiple techniques together
 s3 = boto3.client("s3")
 ```
 
-**Typed function signature** leaves no ambiguity for the agent:
+A typed function signature leaves no ambiguity for the agent:
 
 ```python
 def fetch_records(

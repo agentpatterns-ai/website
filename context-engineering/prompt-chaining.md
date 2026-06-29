@@ -19,7 +19,7 @@ maturity: established
 
 > Decompose a complex task into a sequence of LLM calls where each step processes the previous output, enabling verification and gate-checking between stages.
 
-**Related lesson:** [Assembling the Prompt](https://learn.agentpatterns.ai/context-engineering/assembling-the-prompt/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Assembling the Prompt](https://learn.agentpatterns.ai/context-engineering/assembling-the-prompt/) covers this concept in a hands-on lesson with quizzes.
 
 ## Structure
 
@@ -41,9 +41,9 @@ graph LR
     E -->|Fail| H
 ```
 
-Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), prompt chaining is the foundational sequential pattern — appropriate when a task has discrete phases that benefit from focused attention and intermediate verification. The [Anthropic cookbook](https://platform.claude.com/cookbook/patterns-agents-basic-workflows) characterises it as decomposing a task into sequential subtasks where each step builds on previous results.
+Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), prompt chaining is the foundational sequential pattern — appropriate when a task has discrete phases that benefit from focused attention and intermediate verification. The [Anthropic cookbook](https://platform.claude.com/cookbook/patterns-agents-basic-workflows) describes it as decomposing a task into sequential subtasks where each step builds on previous results.
 
-## When to Use
+## When to use
 
 Chaining is the right choice when:
 
@@ -54,7 +54,7 @@ Chaining is the right choice when:
 
 Do not chain when steps have no interdependency — parallel execution is more efficient and chaining adds unnecessary latency.
 
-## Gate Checks
+## Gate checks
 
 The defining feature of a well-designed chain is the gate between steps. A gate is a programmatic check on the intermediate output:
 
@@ -64,13 +64,13 @@ The defining feature of a well-designed chain is the gate between steps. A gate 
 
 Gates intercept errors at the point they occur rather than at final output. A failed gate can trigger a retry of that step, escalate to human review, or terminate the chain with a structured error — all without polluting the next step with bad input.
 
-## Single Responsibility per Step
+## Single responsibility per step
 
 Each call in the chain should do one thing. A call that plans and implements simultaneously defeats the purpose of the chain: errors in either phase contaminate the other, and the gate between planning and implementation cannot fire.
 
 If a call is producing output that requires significantly different evaluation criteria in two parts, split it into two calls.
 
-## Latency Trade-Off
+## Latency trade-off
 
 Chaining adds latency proportional to the number of steps. This is the primary cost: sequential execution cannot be [parallelized](../multi-agent/fan-out-synthesis.md). The trade-off is worthwhile when:
 
@@ -82,13 +82,13 @@ For tasks where speed dominates and single-prompt performance is acceptable, cha
 
 A second cost is compounding failure. Each call is a new, stochastic point of failure, so the probability that a long chain completes cleanly falls with every step — a well-documented [cascading-failure](https://dev.to/experilearning/avoiding-cascading-failure-in-llm-prompt-chains-9bf) risk in chained LLM systems ([Practical Considerations for Agentic LLM Systems](https://arxiv.org/abs/2412.04093)). Gates mitigate this only for failures a program can check; a plausible-but-wrong output that passes its gate still propagates downstream. Keep chains as short as the task allows, and reserve chaining for steps whose outputs are programmatically verifiable.
 
-## Relationship to Other Patterns
+## Relationship to other patterns
 
-Prompt chaining is the simplest multi-step agent architecture. More complex patterns build on it:
+Prompt chaining is the simplest multi-step agent architecture. More involved patterns build on it:
 
-- **Orchestrator-worker** — the orchestrator uses a chain to decompose the task, then spawns parallel workers
-- **Evaluator-optimizer** — a two-node chain where the second call evaluates and feeds back to the first
-- **Fan-out synthesis** — multiple chains run in parallel, converging to a synthesis step
+- Orchestrator-worker — the orchestrator uses a chain to decompose the task, then spawns parallel workers
+- Evaluator-optimizer — a two-node chain where the second call evaluates and feeds back to the first
+- Fan-out synthesis — multiple chains run in parallel, converging to a synthesis step
 
 Understanding chaining is a prerequisite for these patterns because they all rely on the same gate-check mechanics.
 
@@ -102,7 +102,7 @@ Understanding chaining is a prerequisite for these patterns because they all rel
 
 ## Example
 
-A three-step chain that drafts, reviews, and finalises a technical specification:
+A three-step chain that drafts, reviews, and finalizes a technical specification:
 
 ```python
 import anthropic
@@ -149,7 +149,7 @@ Draft:
     return final
 ```
 
-Each step has a single responsibility. Gate 1 prevents incomplete drafts from reaching the reviewer. Gate 2 prevents unapproved drafts from reaching the finaliser.
+Each step has a single responsibility. Gate 1 prevents incomplete drafts from reaching the reviewer. Gate 2 prevents unapproved drafts from reaching the finalizer.
 
 ## Related
 

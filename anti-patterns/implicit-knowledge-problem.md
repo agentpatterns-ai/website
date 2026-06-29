@@ -17,15 +17,15 @@ maturity: established
 
 > Knowledge living only in Slack threads, meetings, or team memory is invisible to agents -- producing repeating errors that no prompting can fix.
 
-## The Pattern
+## The pattern
 
-Team conventions, architectural decisions, and domain rules live in Slack threads, meeting recordings, and institutional memory. An agent violates a rule, the developer corrects it, and the next session repeats the mistake. This is a **[knowledge externalization](../agent-design/externalization-in-llm-agents.md)** problem: each session is a recurring first day with no access to accumulated decisions ([Hodgson](https://blog.thepete.net/blog/2025/05/22/why-your-ai-coding-assistant-keeps-doing-it-wrong-and-how-to-fix-it/)).
+Team conventions, architectural decisions, and domain rules live in Slack threads, meeting recordings, and institutional memory. An agent violates a rule, the developer corrects it, and the next session repeats the mistake. This is a [knowledge externalization](../agent-design/externalization-in-llm-agents.md) problem: each session is a recurring first day with no access to accumulated decisions ([Hodgson](https://blog.thepete.net/blog/2025/05/22/why-your-ai-coding-assistant-keeps-doing-it-wrong-and-how-to-fix-it/)).
 
-## Why It Fails Silently
+## Why it fails silently
 
 Each session starts fresh: no persistent memory of prior sessions, established conventions, or past mistakes ([Vasilopoulos](https://arxiv.org/html/2602.20478v1)). Without explicit conventions, agents default to training-data patterns — broad programming knowledge that may contradict project requirements. The output compiles, passes review, and ships. Across 283 sessions on a 108k-line system, missing specs caused silent failures — wrong decisions that looked correct, never surfaced as errors.
 
-## What Knowledge Is Invisible
+## What knowledge is invisible
 
 | Knowledge type | Example | Where it actually lives |
 |---|---|---|
@@ -60,20 +60,20 @@ Use AGENTS.md, CLAUDE.md, or equivalent files to capture conventions not inferab
 
 Encode conventions as lint rules and CI checks. Agents respond to pass/fail signals, not rationale ([Wadia](https://dev.to/monarchwadia/convention-as-code-enforcing-architecture-with-scripts-ci-and-ai-agents-hgd), [Sng](https://factory.ai/news/using-linters-to-direct-agents)).
 
-## When This Backfires
+## When this backfires
 
-Knowledge externalization adds overhead proportional to churn. Conditions where the cure is worse than the disease:
+Knowledge externalization adds overhead proportional to churn. Here are the conditions where the cure is worse than the disease:
 
-- **Rapidly-changing conventions** — in early-stage projects where naming, structure, and patterns shift weekly, an AGENTS.md capturing yesterday's convention actively misleads agents. Stale documentation causes more silent errors than no documentation.
-- **One-person projects** — the problem is social: conventions exist only in one mind because there is no institutional memory to externalize. An instruction file in a solo codebase adds write cost with minimal agent benefit; [discoverable context](../context-engineering/discoverable-vs-nondiscoverable-context.md) in the code structure does more.
-- **The convention is already discoverable** — agents read code. Naming patterns evident from 50+ files don't need an AGENTS.md entry; adding them creates redundancy with no enforcement benefit.
-- **Overly large instruction files** — monolithic AGENTS.md that capture everything become noisy enough that agents hallucinate compliance. Keep files thin and point to reference directories; prefer mechanical enforcement over documentation for stable rules.
+- Rapidly-changing conventions — in early-stage projects where naming, structure, and patterns shift weekly, an AGENTS.md capturing yesterday's convention actively misleads agents. Stale documentation causes more silent errors than no documentation.
+- One-person projects — the problem is social: conventions exist only in one mind because there is no institutional memory to externalize. An instruction file in a solo codebase adds write cost with minimal agent benefit. [Discoverable context](../context-engineering/discoverable-vs-nondiscoverable-context.md) in the code structure does more.
+- The convention is already discoverable — agents read code. Naming patterns evident from 50 or more files do not need an AGENTS.md entry, and adding them creates redundancy with no enforcement benefit.
+- Overly large instruction files — a monolithic AGENTS.md that captures everything becomes noisy enough that agents hallucinate compliance. Keep files thin and point to reference directories. Prefer mechanical enforcement over documentation for stable rules.
 
 ## Example
 
 A team's convention is that HTTP handler files use a `-handler` suffix. The convention exists only as tribal knowledge.
 
-**Without externalized knowledge** -- the agent infers from the one file it happens to see:
+Without externalized knowledge, the agent infers from the one file it happens to see:
 
 ```text
 # Agent creates a new endpoint
@@ -83,7 +83,7 @@ src/
 
 The file compiles, tests pass, and the naming violation ships undetected.
 
-**With externalized knowledge** -- an `AGENTS.md` entry and a lint rule make the convention discoverable and enforceable:
+With externalized knowledge, an `AGENTS.md` entry and a lint rule make the convention discoverable and enforceable:
 
 ```markdown
 # AGENTS.md

@@ -17,18 +17,18 @@ maturity: adopted
 
 ---
 
-## What L2 Looks Like
+## What L2 looks like
 
-At L2, the agent iterates through a feedback loop: write code, fail lint/tests, read errors, fix, repeat. This works well for mechanical errors — type mismatches, wrong imports, failing tests. But it does not prevent:
+At L2, the agent runs a feedback loop: write code, fail lint or tests, read errors, fix, repeat. This works well for mechanical errors — type mismatches, wrong imports, failing tests. But it does not prevent:
 
-- File writes to restricted paths (e.g., directly editing migration files)
-- Commands that have irreversible side effects (e.g., deleting data)
+- File writes to restricted paths, for example directly editing migration files
+- Commands with irreversible side effects, for example deleting data
 - Sessions that accumulate context rot and produce lower-quality output as they run long
-- Architecture violations that pass lint and tests but violate documented constraints
+- Architecture violations that pass lint and tests but break documented constraints
 
 L2 relies on the agent finding and fixing errors. L3 prevents categories of error before they occur.
 
-## What L3 Looks Like
+## What L3 looks like
 
 At L3, the agent operates within a constrained solution space:
 
@@ -37,15 +37,15 @@ At L3, the agent operates within a constrained solution space:
 - Session scaffolding maintains quality across multi-session work
 - The agent completes well-specified tasks without per-action supervision
 
-**Exit criterion**: The agent can execute a scoped, well-defined task end-to-end — writing code, running verification, committing — without requiring human review or intervention for tasks within its defined scope.
+Exit criterion: the agent can run a scoped, well-defined task end-to-end — writing code, running verification, committing — without human review or intervention, for tasks within its defined scope.
 
 ---
 
-## The L2 → L3 Transformation
+## The L2 → L3 transformation
 
-### Step 1: Add PreToolUse Hooks for Hard Constraints
+### Step 1: Add PreToolUse hooks for hard constraints
 
-[Hooks](../../tool-engineering/hook-catalog.md) run outside the agent's context and cannot be overridden by instructions. They enforce constraints that must hold regardless of what the agent is told to do.
+[Hooks](../../tool-engineering/hook-catalog.md) run outside the agent's context, and instructions cannot override them. They enforce constraints that must hold whatever the agent is told to do.
 
 The enforcement stack, from advisory to mandatory:
 
@@ -92,7 +92,7 @@ if echo "$COMMAND" | grep -q 'db:reset'; then
 fi
 ```
 
-**High-value hook targets:**
+High-value hook targets:
 
 | Constraint | Hook type | Why not just an instruction |
 |-----------|-----------|---------------------------|
@@ -101,13 +101,13 @@ fi
 | Block writes to production config | `PreToolUse: Write` | Security boundary |
 | Require branch name pattern | `PreToolUse: Bash` (git commit) | Governance; enforced uniformly |
 
-**The rule for choosing between hook and instruction**: If the consequence of violation is irreversible or security-critical, use a hook. If the consequence is correctible (wrong import, wrong pattern), use a linter rule with remediation. Instructions are for context and intent, not enforcement.
+How to choose between a hook and an instruction: if a violation is irreversible or security-critical, use a hook. If the consequence is correctable (wrong import, wrong pattern), use a linter rule with a remediation. Instructions are for context and intent, not enforcement.
 
-### Step 2: Define Structured Task Definitions
+### Step 2: Define structured task definitions
 
-At L2, the agent receives tasks in natural language. Structured task definitions make workflows replayable, auditable, and executable by any agent session without re-explaining the context.
+At L2, the agent receives tasks in natural language. Structured task definitions make workflows replayable and auditable, and let any agent session run them without re-explaining the context.
 
-Anthropic's harness engineering research demonstrates that structured task artifacts significantly improve multi-session agent reliability — the initializer/coding-agent architecture uses JSON feature lists rather than markdown so the agent cannot inadvertently delete or reinterpret requirements ([Anthropic Engineering](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+Anthropic's harness engineering research shows that structured task artifacts improve multi-session agent reliability. The initializer/coding-agent architecture uses JSON feature lists rather than markdown, so the agent cannot delete or reinterpret requirements by accident ([Anthropic Engineering](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
 A practical task definition in a skill file (`.claude/skills/add-endpoint/`):
 
@@ -136,15 +136,15 @@ description: Add a new REST API endpoint following project conventions
 - New types are defined in `src/types/api.ts`
 ```
 
-The agent invokes this with `/add-endpoint route=/users/:id/preferences method=GET description="Get user preferences"`. The structured format eliminates the ambiguity of natural language task requests and encodes your architectural rules directly into the workflow.
+The agent invokes this with `/add-endpoint route=/users/:id/preferences method=GET description="Get user preferences"`. The structured format removes the ambiguity of natural-language requests and encodes your architectural rules into the workflow.
 
-### Step 3: Add Session Scaffolding
+### Step 3: Add session scaffolding
 
 Long agent sessions accumulate context and degrade quality ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); see [Context Engineering](../../context-engineering/context-engineering.md)). L3 repos design for short, focused sessions with clean handoff artifacts.
 
-**Progress files for multi-session work:**
+Progress files for multi-session work:
 
-For work spanning multiple sessions (large features, extended refactors), maintain a progress file the agent reads at the start of each session:
+For work spanning multiple sessions, such as large features or extended refactors, keep a progress file the agent reads at the start of each session:
 
 ```markdown
 <!-- .progress/feature-rate-limiting.md -->
@@ -170,7 +170,7 @@ At session start: "Read `.progress/feature-rate-limiting.md` and the git log for
 
 This replaces accumulated conversation context (which degrades) with a persistent, editable artifact (which stays accurate). Anthropic's multi-session harness architecture uses this pattern — `claude-progress.txt` bridges context between sessions ([Anthropic Engineering](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
-**Structured commit messages as handoff notes:**
+Structured commit messages as handoff notes:
 
 When the agent completes a task, the commit message should serve as a handoff artifact:
 
@@ -186,38 +186,38 @@ Tests passing: 12 unit (window boundary, reset, overflow)
 Next: Apply RateLimiter to /api/upload endpoint (see .progress/rate-limiting.md)
 ```
 
-**One task per session:**
+One task per session:
 
 Decompose large features into single-session units with verifiable outcomes. A session should end when a specific test passes or a specific file is in a correct state — not "I finished as much as I could." Clean sessions prevent context rot from compounding across a long task.
 
-### Step 4: Verify the Transition
+### Step 4: Verify the transition
 
 Run this exit check:
 
-1. Ask the agent to write to a restricted path (e.g., directly edit a migration file). The hook should block it with a clear message.
+1. Ask the agent to write to a restricted path, for example directly editing a migration file. The hook should block it with a clear message.
 2. Ask the agent to execute a standard task using a skill definition (the runtime contract described in [Skill-Tool Runtime Enforcement](../../tool-engineering/skill-tool-runtime-enforcement.md)). It should follow the steps without requiring clarification about conventions.
 3. Pause a multi-session task mid-way. Start a new session, point it to the progress file, and verify it resumes correctly without losing context.
 
 ---
 
-## When This Backfires
+## When this backfires
 
 Hook-based enforcement trades flexibility for safety. Three conditions where it degrades agent utility:
 
-**Over-constrained scope.** Hooks written too broadly block legitimate operations. A hook that denies any `Write` to a `migrations/` directory also blocks the agent from reading migration files to understand schema context. Audit hooks regularly against real session transcripts — if agents work around a hook more than twice, the constraint is mis-scoped.
+Over-constrained scope. Hooks written too broadly block legitimate operations. A hook that denies any `Write` to a `migrations/` directory also blocks the agent from reading migration files to understand schema context. Audit hooks regularly against real session transcripts — if agents work around a hook more than twice, the constraint is mis-scoped.
 
-**False positives in hook logic.** Shell-based hooks that match on substrings (e.g., `grep -q 'db:reset'`) will trigger on commands like `db:reset-cache` that are safe. False positives that produce terminal `deny` responses leave the agent in an unrecoverable state mid-task. Prefer exact-match conditions and test hooks against a suite of representative tool calls before deploying.
+False positives in hook logic. Shell-based hooks that match on substrings, for example `grep -q 'db:reset'`, trigger on safe commands like `db:reset-cache`. False positives that produce terminal `deny` responses leave the agent in an unrecoverable state mid-task. Prefer exact-match conditions and test hooks against a suite of representative tool calls before deploying.
 
-**Hook proliferation without a removal process.** Teams add hooks reactively after incidents. Without a sunset process, hooks accumulate and the constrained solution space shrinks until agents can no longer complete tasks without human intervention. Maintain a hook registry — the same inventory the [Hook Catalog](../../tool-engineering/hook-catalog.md) organises — with an owner and last-reviewed date; review annually.
+Hook proliferation without a removal process. Teams add hooks reactively after incidents. Without a sunset process, hooks accumulate and the constrained solution space shrinks until agents can no longer complete tasks without human intervention. Maintain a hook registry — the same inventory the [Hook Catalog](../../tool-engineering/hook-catalog.md) organizes — with an owner and last-reviewed date; review annually.
 
 ---
 
 ## Key Takeaways
 
-- **Instructions provide context; hooks provide enforcement.** Use instructions for things the agent should understand; use hooks for things the agent must not do regardless of instruction.
-- **Structured task definitions eliminate ambiguity** and encode architectural rules into replayable workflows — the structured-artifact half of the [Agent Harness](../../agent-design/agent-harness.md) pattern. They are the difference between "the agent knows the pattern" and "the agent always follows the pattern."
-- **Session scaffolding preserves quality across multi-session work.** Progress files and structured commit messages replace degrading conversation history with the durable artifacts that [Context Engineering](../../context-engineering/context-engineering.md) calls for.
-- **One task per session** with a verifiable exit condition. Decompose large features before giving them to an agent.
+- Instructions provide context; hooks provide enforcement. Use instructions for things the agent should understand; use hooks for things the agent must not do regardless of instruction.
+- Structured task definitions eliminate ambiguity and encode architectural rules into replayable workflows — the structured-artifact half of the [Agent Harness](../../agent-design/agent-harness.md) pattern. They are the difference between "the agent knows the pattern" and "the agent always follows the pattern."
+- Session scaffolding preserves quality across multi-session work. Progress files and structured commit messages replace degrading conversation history with the durable artifacts that [Context Engineering](../../context-engineering/context-engineering.md) calls for.
+- One task per session with a verifiable exit condition. Decompose large features before giving them to an agent.
 
 ## Related
 

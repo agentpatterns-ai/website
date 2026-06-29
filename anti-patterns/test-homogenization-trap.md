@@ -19,46 +19,46 @@ maturity: emerging
 
 > LLM-generated test suites share the generating model's blind spots: they pass by missing the same edge cases the code misses, not by proving correctness.
 
-## The Pattern
+## The pattern
 
-When you use an LLM to generate both code and its tests, the tests cluster around the same solution strategies the model favors. Edge cases the model overlooks in code are the same edge cases it omits from tests — the [happy-path bias](happy-path-bias.md) carried from code into the test suite. The result: a green test suite that provides false confidence.
+When you use an LLM to generate both code and its tests, the tests cluster around the same solution strategies the model favors. The edge cases the model overlooks in code are the same ones it leaves out of tests — the [happy-path bias](happy-path-bias.md) carried from code into the test suite. You get a green test suite that gives false confidence.
 
-SAGA research quantifies the damage. In leading code benchmarks, [50% of problems had tests that failed to detect known errors and 84% of verifiers were flawed](https://arxiv.org/abs/2507.06920). Models showed average Pass@1 drops of 9.56% when evaluated against higher-quality test suites — meaning existing benchmarks systematically overstate model performance.
+SAGA research measures the damage. In leading code benchmarks, [50% of problems had tests that failed to detect known errors and 84% of verifiers were flawed](https://arxiv.org/abs/2507.06920). Models showed average Pass@1 drops of 9.56% when tested against higher-quality test suites. So existing benchmarks systematically overstate how well models perform.
 
-The root cause is error clustering. [LLM-induced errors are highly clustered around systematic weaknesses, whereas human errors are diverse and dispersed](https://arxiv.org/abs/2507.06920). A model-generated test suite catches model-like errors effectively but misses the diverse failure modes that matter in production.
+The root cause is error clustering. [LLM-induced errors are highly clustered around systematic weaknesses, whereas human errors are diverse and dispersed](https://arxiv.org/abs/2507.06920). A model-generated test suite catches model-like errors well but misses the varied failure modes that matter in production.
 
 ## Symptoms
 
-- Test suites that always pass on first generation — no iteration needed
+- Test suites that always pass on first generation, with no iteration needed
 - Edge cases missing from both code and tests (integer overflow, empty inputs, concurrent access)
 - High coverage metrics but bugs found in production
-- Tests that validate the same logical path the implementation takes
+- Tests that check the same logical path the implementation takes
 
 ## Mitigations
 
-**Combine human-authored edge cases with LLM-generated structural tests.** Human testers identify failure modes the model systematically misses. [SAGA's human-LLM collaborative approach achieved 90.62% detection rate](https://arxiv.org/abs/2507.06920) — a 9.55% improvement over pure LLM generation.
+Combine human-authored edge cases with LLM-generated structural tests. Human testers spot failure modes the model systematically misses. [SAGA's human-LLM collaborative approach achieved 90.62% detection rate](https://arxiv.org/abs/2507.06920) — a 9.55% improvement over pure LLM generation.
 
-**Use differential analysis.** Compare failed submissions against corrected ones to surface specific error patterns, then target tests at them — [SAGA's dual strategy of analyzing correct solutions alongside failures](https://arxiv.org/abs/2507.06920).
+Use differential analysis. Compare failed submissions against corrected ones to surface specific error patterns, then aim tests at them — [SAGA's dual strategy of analyzing correct solutions alongside failures](https://arxiv.org/abs/2507.06920).
 
-**Apply mutation-guided test generation.** [Meta's ACH system uses mutation testing to guide LLMs toward generating tests that catch currently undetected faults](https://arxiv.org/abs/2501.12862) rather than re-covering known paths. Engineers accepted 73% of the generated tests. See [Mutation Testing as a Quality Gate](../verification/mutation-testing-quality-gate.md) for the full loop and failure conditions.
+Apply mutation-guided test generation. [Meta's ACH system uses mutation testing to guide LLMs toward generating tests that catch currently undetected faults](https://arxiv.org/abs/2501.12862) rather than re-covering known paths. Engineers accepted 73% of the generated tests. See [Mutation Testing as a Quality Gate](../verification/mutation-testing-quality-gate.md) for the full loop and failure conditions.
 
-**Combine testing methodologies.** [Property-based testing and example-based testing each achieved 68.75% bug detection independently; combining both improved detection to 81.25%](https://arxiv.org/abs/2510.25297). Different methods expose different blind spots.
+Combine testing methods. [Property-based testing and example-based testing each achieved 68.75% bug detection independently; combining both improved detection to 81.25%](https://arxiv.org/abs/2510.25297). Different methods expose different blind spots.
 
-**Measure test quality, not just coverage.** Four metrics distinguish effective suites from homogenized ones: Detection Rate, Verifier Accuracy, Distinct Error Pattern Coverage, and normalized AUC. [High verifier accuracy with low error-pattern coverage catches common bugs while missing rare-but-critical failure modes.](https://arxiv.org/abs/2507.06920)
+Measure test quality, not just coverage. Four metrics separate effective suites from homogenized ones: Detection Rate, Verifier Accuracy, Distinct Error Pattern Coverage, and normalized AUC. [High verifier accuracy with low error-pattern coverage catches common bugs while missing rare-but-critical failure modes.](https://arxiv.org/abs/2507.06920)
 
-## When This Backfires
+## When this backfires
 
 Three conditions make the mitigation overhead unjustified:
 
-1. **Throwaway scripts and prototypes.** A one-off proof-of-concept with no production SLA does not warrant mutation-guided generation. Cost exceeds risk.
-2. **Pure-function, well-bounded algorithms.** No side effects, no I/O, small input domain — model blind spots approximate human blind spots.
-3. **Different model for tests than for code.** Error clustering diverges when the test-generating model has different training data or architecture — the [separate-reviewer principle](yes-man-agent.md) applied to test generation. Tests from Model B are not blind to Model A's gaps.
+1. Throwaway scripts and prototypes. A one-off proof-of-concept with no production SLA does not warrant mutation-guided generation. The cost exceeds the risk.
+2. Pure-function, well-bounded algorithms. With no side effects, no I/O, and a small input domain, model blind spots approximate human blind spots.
+3. A different model for tests than for code. Error clustering diverges when the test-generating model has different training data or architecture — the [separate-reviewer principle](yes-man-agent.md) applied to test generation. Tests from Model B are not blind to Model A's gaps.
 
-The trap is most damaging when one model generates both code and tests in a single pass and the green suite is treated as proof of correctness.
+The trap is most damaging when one model generates both code and tests in a single pass and you treat the green suite as proof of correctness.
 
 ## Example
 
-**Before — LLM generates code and tests together:**
+Before — the LLM generates code and tests together:
 
 ```python
 # Agent-generated implementation
@@ -78,7 +78,7 @@ def test_median():
 
 All tests pass. The implementation mutates the input list via `sort()`, but no test checks for that side effect. Both the code and the tests share the same blind spot.
 
-**After — human-authored edge case exposes the bug:**
+After — a human-authored edge case exposes the bug:
 
 ```python
 def test_median_no_mutation():
@@ -87,7 +87,7 @@ def test_median_no_mutation():
     assert original == [3, 1, 2]  # FAILS — input was mutated
 ```
 
-The fix: use `sorted()` instead of `.sort()`. A human tester thinks about side effects; the model does not.
+The fix is to use `sorted()` instead of `.sort()`. A human tester thinks about side effects. The model does not.
 
 ## Key Takeaways
 

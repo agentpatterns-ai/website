@@ -19,9 +19,9 @@ last_reviewed: 2026-05-27
 
 ## The Feature
 
-**Goal**: build an agent that takes a git diff as input and produces a well-structured PR description.
+Goal: build an agent that takes a git diff as input and produces a well-structured PR description.
 
-**Requirements**:
+Requirements:
 
 - Include a summary section (1–3 bullet points describing what changed and why)
 - Include a test plan section (what should be tested before merging)
@@ -29,7 +29,7 @@ last_reviewed: 2026-05-27
 - Flag any files that might need special review attention (config changes, migrations, security-sensitive files)
 - Keep total length under 500 words
 
-This is a good teaching example because it has both **deterministic** aspects (structure, length, required sections) and **subjective** aspects (quality of summary, helpfulness of test plan).
+This is a good teaching example because it has both deterministic aspects (structure, length, required sections) and subjective aspects (quality of summary, helpfulness of test plan).
 
 ---
 
@@ -200,7 +200,7 @@ Seven representative tasks across four categories. Build out to 20–50 by addin
 
 Start with code-based grading for structural checks. Add LLM-as-judge only for dimensions code cannot assess.
 
-**Code-based grader** — deterministic, fast, handles structure and content checks:
+Code-based grader — deterministic, fast, handles structure and content checks:
 
 ```python
 # evals/pr-description/grader.py
@@ -262,7 +262,7 @@ def grade(output: str, expected: dict) -> dict:
     return {"verdict": "FAIL" if failures else "PASS", "failures": failures}
 ```
 
-**LLM-as-judge** — for the `test_plan_quality` dimension that code cannot assess:
+LLM-as-judge — for the `test_plan_quality` dimension that code cannot assess:
 
 ```python
 # evals/pr-description/judge.py
@@ -500,9 +500,9 @@ Tasks: 7
 
 Progress: 15% to 71%. Three tasks still fail intermittently. The suite tells you exactly where to focus:
 
-1. **config-change-env-vars** — the agent misses flagging "secret" in some runs. Fix: strengthen the system prompt to explicitly list patterns like `secret`, `key`, `token`, `credential`
-2. **massive-diff** — output slightly over 500 words in some runs. Fix: add emphasis on the word limit or add post-processing truncation
-3. **quality-test-plan-actionable** — test plan quality inconsistent. Fix: add few-shot examples of good vs. bad test plan items to the prompt (the few-shot judge pattern in [Grading Strategies](grading-strategies.md))
+1. config-change-env-vars — the agent misses flagging "secret" in some runs. Fix: strengthen the system prompt to explicitly list patterns like `secret`, `key`, `token`, `credential`
+2. massive-diff — output slightly over 500 words in some runs. Fix: add emphasis on the word limit or add post-processing truncation
+3. quality-test-plan-actionable — test plan quality inconsistent. Fix: add few-shot examples of good vs. bad test plan items to the prompt (the few-shot judge pattern in [Grading Strategies](grading-strategies.md))
 
 After each change, run the suite again. The cycle repeats until you hit your bar.
 
@@ -510,7 +510,7 @@ After each change, run the suite again. The cycle repeats until you hit your bar
 
 ## Step 7: Set the Bar and Ship
 
-Define the bar before you start iterating — for this feature: **90% overall pass rate across 3 runs per task, with no individual task below 67%**.
+Define the bar before you start iterating — for this feature: 90% overall pass rate across 3 runs per task, with no individual task below 67%.
 
 ```
 # After prompt iteration round 2:
@@ -537,9 +537,9 @@ The remaining inconsistency on `quality-test-plan-actionable` is a known limitat
 
 After launch, add tasks from real usage:
 
-- **User complaints**: "the PR description didn't mention the migration" — new task with a migration diff
-- **Incidents**: "the agent flagged every file as needing review" — new task with a normal diff that should not flag anything
-- **Edge cases discovered**: binary file diffs, diffs with non-English comments, squash commits bundling multiple features
+- User complaints: "the PR description didn't mention the migration" — new task with a migration diff
+- Incidents: "the agent flagged every file as needing review" — new task with a normal diff that should not flag anything
+- Edge cases discovered: binary file diffs, diffs with non-English comments, squash commits bundling multiple features
 
 Each new task strengthens the regression net. See [Incident-to-Eval Synthesis](../../verification/incident-to-eval-synthesis.md) for the systematic pipeline from a production incident to a regression case, and [Hardening Evals for Production](hardening-evals.md) for the full hardening workflow.
 

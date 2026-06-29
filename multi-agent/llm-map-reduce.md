@@ -22,15 +22,15 @@ maturity: established
 !!! note "Also known as"
     Chunk-Process-Merge, Parallel Summarization, Input-Partitioned Fan-Out. For the task-level delegation variant, see [Orchestrator-Worker](orchestrator-worker.md). For same-task parallel diversity, see [Fan-Out Synthesis](fan-out-synthesis.md). For implementation, see [Sub-Agents Fan-Out](sub-agents-fan-out.md).
 
-## How It Differs from Adjacent Patterns
+## How it differs from adjacent patterns
 
 | Pattern | Splits by | Map phase | Reduce phase |
 |---------|-----------|-----------|--------------|
-| **Map-Reduce** | Input partition (pages, files, modules) | Same operation on each chunk | Merge chunk results into unified output |
+| Map-Reduce | Input partition (pages, files, modules) | Same operation on each chunk | Merge chunk results into unified output |
 | [Orchestrator-Worker](orchestrator-worker.md) | Subtask type (research, test, implement) | Different operation per worker | Synthesize heterogeneous outputs |
 | [Fan-Out Synthesis](fan-out-synthesis.md) | Nothing — same input N times | Same task, independent attempts | Select/merge best-of-N |
 
-Map-reduce is **data-parallel**: the same operation applied to different slices of input.
+Map-reduce is data-parallel: it applies the same operation to different slices of input.
 
 ## Structure
 
@@ -49,11 +49,11 @@ graph TD
     R --> O[Final Output]
 ```
 
-1. **Decompose** — split input into chunks sized for individual context windows
-2. **Map** — process each chunk independently with the same instructions
-3. **Reduce** — combine chunk-level results into a single output
+1. Decompose — split input into chunks sized for individual context windows.
+2. Map — process each chunk independently with the same instructions.
+3. Reduce — combine chunk-level results into a single output.
 
-## Context Window Arithmetic
+## Context window arithmetic
 
 Each map agent's context must hold:
 
@@ -67,24 +67,24 @@ instructions + input_chunk + output_budget <= context_window_limit
 | Input chunk | 60–75% of remaining budget |
 | Output headroom | 25–40% of remaining budget |
 
-Err toward smaller chunks. Anthropic frames context degradation ("context rot") as "a performance gradient rather than a hard cliff" ([Anthropic: effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)), and its onset tracks an [absolute token threshold (~32K–100K), not a fixed percentage of the window](../context-engineering/context-window-dumb-zone.md) — so size chunks below that onset for the task type, not to a fill ratio.
+Err toward smaller chunks. Anthropic frames context degradation ("context rot") as "a performance gradient rather than a hard cliff" ([Anthropic: effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Its onset tracks an [absolute token threshold (~32K–100K), not a fixed percentage of the window](../context-engineering/context-window-dumb-zone.md), so size chunks below that onset for the task type, not to a fill ratio.
 
-## Decomposition Strategies
+## Decomposition strategies
 
 | Strategy | Works for | Risk |
 |----------|-----------|------|
-| **Fixed-size** (every N tokens/lines) | Logs, homogeneous data | Splits semantic units mid-thought |
-| **Boundary-aware** (by file, section, chapter) | Codebases, documents | Uneven chunk sizes |
-| **Overlap** (sliding window with N-token overlap) | Narrative text | Duplicate findings in reduce |
+| Fixed-size (every N tokens/lines) | Logs, homogeneous data | Splits semantic units mid-thought |
+| Boundary-aware (by file, section, chapter) | Codebases, documents | Uneven chunk sizes |
+| Overlap (sliding window with N-token overlap) | Narrative text | Duplicate findings in reduce |
 
-## Reduce Strategies
+## Reduce strategies
 
 | Reduce strategy | When to use | Method |
 |-----------------|-------------|--------|
-| **Single-pass** | Few chunks (3–8) | All map results fit in one reduce context |
-| **Hierarchical** | Many chunks (10+) | Reduce in groups, then reduce the reductions |
-| **Merge** | Structured outputs (lists, tables) | Deterministic concatenation + deduplication |
-| **Vote/filter** | Classification tasks | Majority vote or threshold across chunks |
+| Single-pass | Few chunks (3–8) | All map results fit in one reduce context |
+| Hierarchical | Many chunks (10+) | Reduce in groups, then reduce the reductions |
+| Merge | Structured outputs (lists, tables) | Deterministic concatenation + deduplication |
+| Vote/filter | Classification tasks | Majority vote or threshold across chunks |
 
 Hierarchical reduce groups map results into intermediate reduce nodes, compressing outputs at each level until a single final reduce agent synthesizes the tree.
 
@@ -101,7 +101,7 @@ graph TD
     RF --> O[Output]
 ```
 
-## Implementation with Sub-Agents
+## Implementation with sub-agents
 
 Claude Code sub-agents are a native map-reduce primitive. Each sub-agent runs in its own context window, explores independently, and returns condensed results — [tens of thousands of tokens internally compressed to 1,000–2,000 tokens returned to the lead](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents).
 
@@ -128,45 +128,45 @@ Do not return source code. Return only the structured summary.
 
 The lead agent decomposes by module, fans out a chunk-analyzer per module, and reduces summaries into a unified review.
 
-For file-system isolation during map phases that write files, use `isolation: worktree` to give each sub-agent its own [git worktree](../workflows/worktree-isolation.md).
+To isolate the file system during map phases that write files, use `isolation: worktree` to give each sub-agent its own [git worktree](../workflows/worktree-isolation.md).
 
-## When to Use Map-Reduce vs. Alternatives
+## When to use map-reduce instead of alternatives
 
-**Use map-reduce when:** input exceeds a single context window; the same operation applies to every partition; chunk-level results are independently meaningful.
+Use map-reduce when: input exceeds a single context window; the same operation applies to every partition; chunk-level results are independently meaningful.
 
-**Use orchestrator-worker instead when:** subtasks require different operations or tool sets; decomposition is by task type, not input partition.
+Use orchestrator-worker instead when: subtasks require different operations or tool sets; decomposition is by task type, not input partition.
 
-**Use sequential processing when:** chunks depend on prior results; total input fits one context window; or [Anthropic’s long-running agent guide](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) applies.
+Use sequential processing when: chunks depend on prior results; total input fits one context window; or [Anthropic’s long-running agent guide](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) applies.
 
-## When This Backfires
+## When this backfires
 
 Map-reduce underperforms or fails in several conditions:
 
-- **Cross-chunk dependencies** — when answering requires evidence spread across chunks (e.g., a refactor changing an interface used in 10 files), each map agent sees only its slice and cannot surface the cross-chunk pattern. Outputs look clean individually but miss the systemic issue.
-- **Boundary mismatch** — fixed-size chunking splits semantic units mid-sentence or mid-function, causing map agents to misinterpret [partial context](../context-engineering/context-window-dumb-zone.md). The reduce agent reconciles contradictory findings without knowing they are artifacts of the split.
-- **Hierarchical reduce error propagation** — each reduce level loses information. A two-level hierarchy reducing 50 map outputs to 5 summaries to 1 final output compounds extraction errors at every stage — coherent but wrong in ways invisible without the raw inputs.
-- **Thin map outputs** — when chunks are small or homogeneous, each map result adds marginal information. The reduce agent processes N near-identical outputs; cost scales linearly while output quality plateaus.
+- Cross-chunk dependencies — when answering requires evidence spread across chunks (for example, a refactor changing an interface used in 10 files), each map agent sees only its slice and cannot surface the cross-chunk pattern. Outputs look clean individually but miss the systemic issue.
+- Boundary mismatch — fixed-size chunking splits semantic units mid-sentence or mid-function, causing map agents to misinterpret [partial context](../context-engineering/context-window-dumb-zone.md). The reduce agent reconciles contradictory findings without knowing they are artifacts of the split.
+- Hierarchical reduce error propagation — each reduce level loses information. A two-level hierarchy reducing 50 map outputs to 5 summaries to 1 final output compounds extraction errors at every stage — coherent but wrong in ways invisible without the raw inputs.
+- Thin map outputs — when chunks are small or homogeneous, each map result adds marginal information. The reduce agent processes N near-identical outputs; cost scales linearly while output quality plateaus.
 
-## Failure Handling
+## Failure handling
 
 Partial map failures are the norm at scale:
 
-- **Retry failed chunks** independently without re-running successful ones
-- **Degrade gracefully** — 8/10 successful map results beats no result
-- **Cap parallelism** to rate limits; [Anthropic’s research system](https://www.anthropic.com/engineering/multi-agent-research-system) uses 3–5 subagents, not 50
+- Retry failed chunks independently, without re-running successful ones.
+- Degrade gracefully — 8/10 successful map results beats no result.
+- Cap parallelism to rate limits; [Anthropic’s research system](https://www.anthropic.com/engineering/multi-agent-research-system) uses 3–5 subagents, not 50.
 
-## Example: Codebase Architecture Review
+## Example: codebase architecture review
 
 A 200-file codebase with 15 modules, each too large for casual review in a single context:
 
-1. **Decompose** — split by module boundary (15 chunks)
-2. **Map** — each sub-agent reads one module, returns purpose + API surface + issues (15 parallel calls)
-3. **Reduce** — lead agent receives 15 summaries (~20,000 tokens total), identifies cross-module patterns, dependency issues, and architectural concerns
-4. **Output** — unified architecture review covering the full codebase, based on summaries no single context window could have held raw
+1. Decompose — split by module boundary (15 chunks).
+2. Map — each sub-agent reads one module, returns purpose + API surface + issues (15 parallel calls).
+3. Reduce — lead agent receives 15 summaries (~20,000 tokens total), identifies cross-module patterns, dependency issues, and architectural concerns.
+4. Output — unified architecture review covering the full codebase, based on summaries no single context window could have held raw.
 
 ## Key Takeaways
 
-- Map-reduce splits by **input partition** — same operation on different data slices
+- Map-reduce splits by input partition — same operation on different data slices
 - Size chunks conservatively: keep each below the task's degradation onset (an absolute token threshold, not a fixed fill ratio) rather than near the window limit
 - Choose reduce strategy (single-pass, hierarchical, merge, vote) by chunk count and output type
 - Design for partial failure — retry individual chunks, degrade gracefully on incomplete results

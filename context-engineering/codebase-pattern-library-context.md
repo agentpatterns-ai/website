@@ -18,23 +18,23 @@ status: current
 
 > A library of proven implementations mined from your own repositories, indexed by intent and served to an agent as retrievable context rather than generic examples.
 
-## The Idea
+## The idea
 
-A codebase-derived pattern library extracts reusable implementations already proven in your own repositories, indexes them, and lets an agent retrieve them by intent during a task. Without one, an agent writing code in your repository defaults to general training-data patterns rather than your team's reviewed ones. Instead of "how does anyone paginate an API," the agent asks "how do *we* paginate an API" and gets your team's actual, reviewed implementation.
+A codebase-derived pattern library extracts reusable implementations already proven in your own repositories, indexes them, and lets an agent retrieve them by intent during a task. Without one, an agent writing code in your repository defaults to general training-data patterns rather than your team's reviewed ones. Instead of "how does anyone paginate an API," the agent asks "how do we paginate an API" and gets your team's actual, reviewed implementation.
 
-This is a [retrieval problem](retrieval-augmented-agent-workflows.md) with a sharper corpus. Where [logical retrieval over an inverted index](llm-driven-logical-retrieval.md) and [RAG component prioritization for software engineering](rag-component-prioritization-software-engineering.md) tune *how* relevant context is selected, a pattern library tunes *what* is in the corpus — narrowing it to vetted, in-house code rather than the open web.
+This is a [retrieval problem](retrieval-augmented-agent-workflows.md) with a sharper corpus. The [logical retrieval over an inverted index](llm-driven-logical-retrieval.md) and [RAG component prioritization for software engineering](rag-component-prioritization-software-engineering.md) approaches tune how relevant context is selected. A pattern library instead tunes what is in the corpus, narrowing it to vetted, in-house code rather than the open web.
 
-## Why a Private Corpus Wins
+## Why a private corpus helps
 
-- **Higher signal.** Your merged code already encodes your conventions, error handling, and domain constraints. A retrieved in-house example needs less correction than a generic one synthesized from training data.
-- **Consistency.** Reusing an existing implementation keeps new code aligned with established patterns instead of introducing a third way to do the same thing.
-- **Privacy.** A library built and stored locally — and served over a local MCP server — keeps proprietary code out of third-party retrieval services.
+- Higher signal: your merged code already encodes your conventions, error handling, and domain constraints. A retrieved in-house example needs less correction than a generic one synthesized from training data.
+- Consistency: reusing an existing implementation keeps new code aligned with established patterns instead of introducing a third way to do the same thing.
+- Privacy: a library built and stored locally, and served over a local MCP server, keeps proprietary code out of third-party retrieval services.
 
-## How the Library Gets Built
+## How the library gets built
 
-Turning a repository into a searchable pattern library is an extraction pipeline, not a manual catalogue. [Pattern Vault](https://arunksingh16.github.io/pattern-vault/) is one concrete implementation: it parses source with tree-sitter to walk the AST, uses an LLM to classify and label the extracted snippets, and stores them in a local SQLite database with full-text search. The AST step bounds extraction to real syntactic units (functions, classes, blocks) rather than arbitrary text spans; the LLM step attaches the intent labels that make later intent-based search possible. The same AST-then-store-then-serve shape underpins published work on agent code retrieval — [*Codebase-Memory*](https://arxiv.org/abs/2603.27277) builds a tree-sitter knowledge graph persisted to SQLite and exposed over MCP, the route this pattern generalizes.
+Turning a repository into a searchable pattern library is an extraction pipeline, not a manual catalogue. [Pattern Vault](https://arunksingh16.github.io/pattern-vault/) is one concrete implementation: it parses source with tree-sitter to walk the AST, uses an LLM to classify and label the extracted snippets, and stores them in a local SQLite database with full-text search. The AST step bounds extraction to real syntactic units such as functions, classes, and blocks rather than arbitrary text spans. The LLM step attaches the intent labels that make later intent-based search possible. The same AST-then-store-then-serve shape underpins published work on agent code retrieval. [Codebase-Memory](https://arxiv.org/abs/2603.27277) builds a tree-sitter knowledge graph persisted to SQLite and exposed over MCP, the route this pattern generalizes.
 
-## Serving Patterns to the Agent
+## Serving patterns to the agent
 
 A library only changes agent behavior if the agent can reach it mid-task. The [Model Context Protocol](../tool-engineering/production-mcp-agent-stack.md) is the natural transport: expose the library as an MCP server, and an agent in Claude Code or Cursor queries it by intent the same way it calls any other tool. Pattern Vault ships [an MCP server](https://arunksingh16.github.io/pattern-vault/) for exactly this, alongside a CLI and a web dashboard for browsing the index directly.
 
@@ -50,9 +50,9 @@ The MCP server returns the team's actual pagination helper and its call sites. T
 
 ## Trade-offs
 
-- **Staleness.** The index reflects the codebase at extraction time. A library that is not re-built [drifts from the current code](repository-level-retrieval-code-generation.md) and can surface deprecated patterns.
-- **Pattern lock-in.** Retrieving an existing implementation propagates whatever is already there — including suboptimal patterns. The library amplifies the codebase's habits, good and bad.
-- **Maintenance cost.** Extraction, classification, and re-indexing are recurring work; the library earns its keep only when reuse is frequent enough to offset that cost.
+- Staleness: the index reflects the codebase at extraction time. A library that is not re-built [drifts from the current code](repository-level-retrieval-code-generation.md) and can surface deprecated patterns.
+- Pattern lock-in: retrieving an existing implementation propagates whatever is already there, including suboptimal patterns. The library amplifies the codebase's habits, good and bad.
+- Maintenance cost: extraction, classification, and re-indexing are recurring work. The library earns its keep only when reuse is frequent enough to offset that cost.
 
 ## Key Takeaways
 

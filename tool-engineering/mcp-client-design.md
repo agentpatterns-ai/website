@@ -19,17 +19,17 @@ maturity: adopted
 
 > MCP client design is the host-side logic that connects to MCP servers, negotiates capabilities, routes tool calls, caches descriptions, and degrades gracefully on failure.
 
-## Host, Client, Server
+## Host, client, server
 
 MCP separates three participants. Each client handles one server connection with its own session state, capabilities, and transport:
 
 | Role | Responsibility |
 |------|---------------|
-| **Host** | The AI application; creates and manages client instances |
-| **Client** | One instance per server connection; handles protocol lifecycle |
-| **Server** | Exposes tools, resources, and prompts over MCP |
+| Host | The AI application; creates and manages client instances |
+| Client | One instance per server connection; handles protocol lifecycle |
+| Server | Exposes tools, resources, and prompts over MCP |
 
-## Connection Lifecycle
+## Connection lifecycle
 
 Initialization is three steps ([MCP spec](https://modelcontextprotocol.io/specification/2025-03-26/basic/lifecycle)):
 
@@ -51,48 +51,48 @@ Shutdown differs by transport:
 
 | Transport | Shutdown sequence |
 |-----------|------------------|
-| **stdio** | Close stdin, wait for server exit, send SIGTERM, then SIGKILL |
-| **Streamable HTTP** | Send HTTP DELETE with session ID; closing the connection also signals termination |
+| stdio | Close stdin, wait for server exit, send SIGTERM, then SIGKILL |
+| Streamable HTTP | Send HTTP DELETE with session ID; closing the connection also signals termination |
 
-## Multi-Server Tool Routing
+## Multi-server tool routing
 
-MCP defines no collision resolution. When servers share a tool name, the host picks:
+MCP defines no collision resolution. When servers share a tool name, the host picks one of three strategies:
 
-- **Namespace by server ID.** Maintain a `serverId -> tools[]` map; route `tools/call` to the owning client.
-- **Priority ordering.** Assign precedence; higher-priority server wins on collision.
-- **User disambiguation.** Ask the user. Interactive sessions only.
+- Namespace by server ID. Maintain a `serverId -> tools[]` map, then route `tools/call` to the owning client.
+- Priority ordering. Assign precedence so the higher-priority server wins on collision.
+- User disambiguation. Ask the user, in interactive sessions only.
 
-## Tool Description Caching
+## Tool description caching
 
 Two approaches cut `tools/list` latency and tokens:
 
-- **Static caching.** Cache `tools/list` locally; re-fetch on `notifications/tools/list_changed`, TTL expiry, or explicit refresh.
-- **Dynamic discovery.** Expose a search interface; the agent fetches schemas only for matched tools at call time — Anthropic's Tool Search Tool reports ~85% token reduction versus loading all definitions upfront ([advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)).
+- Static caching. Cache `tools/list` locally, then re-fetch on `notifications/tools/list_changed`, TTL expiry, or explicit refresh.
+- Dynamic discovery. Expose a search interface so the agent fetches schemas only for matched tools at call time. Anthropic's Tool Search Tool reports about 85% token reduction against loading all definitions upfront ([advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)).
 
-## Timeout and Cancellation
+## Timeout and cancellation
 
-On timeout: send `notifications/cancelled` with the request ID, stop waiting, log. Progress notifications MAY reset the clock; enforce a hard maximum to prevent stalling.
+On timeout, send `notifications/cancelled` with the request ID, stop waiting, and log it. Progress notifications may reset the clock, so enforce a hard maximum to prevent stalling.
 
 ### Health checks
 
-Either side can send `ping` to verify liveness. Multiple failures trigger reconnection or session reset. Keep ping frequency configurable — aggressive pinging wastes resources.
+Either side can send `ping` to verify liveness. Multiple failures trigger reconnection or session reset. Keep ping frequency configurable, because aggressive pinging wastes resources.
 
-## Streamable HTTP Session Management
+## Streamable HTTP session management
 
 For remote servers using Streamable HTTP:
 
-- Servers MAY assign `Mcp-Session-Id` at init; clients MUST include it on later requests
-- On 404 for a known session, the client MUST reinitialize — the session expired or was invalidated
-- SSE event IDs and `Last-Event-ID` enable resumability after disconnects, preventing message loss
+- Servers may assign `Mcp-Session-Id` at init, and clients must include it on later requests
+- On a 404 for a known session, the client must reinitialize, because the session expired or was invalidated
+- SSE event IDs and `Last-Event-ID` enable resumability after disconnects, which prevents message loss
 
 ## Security
 
 ### Tool description integrity
 
-A server can change descriptions post-approval without re-consent — a "rug pull" attack. Defenses:
+A server can change descriptions after approval without re-consent — a "rug pull" attack. Two defenses help:
 
-- **Version-pin descriptions.** Hash the manifest at approval; flag post-approval changes.
-- **Treat descriptions as untrusted.** Poisoned descriptions can manipulate reasoning to exfiltrate data or trigger unintended actions.
+- Version-pin descriptions. Hash the manifest at approval, then flag any post-approval change.
+- Treat descriptions as untrusted. Poisoned descriptions can steer the model to exfiltrate data or trigger unintended actions.
 
 ### Authorization
 
@@ -102,14 +102,14 @@ OAuth 2.1 for remote servers: PKCE with S256, [Dynamic Client Registration (RFC 
 
 | Layer | What it protects | Implementation |
 |-------|-----------------|----------------|
-| **Sandboxing** | Host system | Container/VM isolation, network egress default-deny |
-| **Authorization** | Server identity | OAuth 2.1, per-client consent, resource indicators |
-| **Tool integrity** | Model reasoning | Description hashing, version pinning, change detection |
-| **Monitoring** | Operational safety | Audit trails, behavioral baselines, anomaly detection |
+| Sandboxing | Host system | Container/VM isolation, network egress default-deny |
+| Authorization | Server identity | OAuth 2.1, per-client consent, resource indicators |
+| Tool integrity | Model reasoning | Description hashing, version pinning, change detection |
+| Monitoring | Operational safety | Audit trails, behavioral baselines, anomaly detection |
 
 ### Local server hardening
 
-Local Streamable HTTP servers must validate `Origin`, bind to localhost, and require auth — preventing DNS rebinding.
+Local Streamable HTTP servers must validate `Origin`, bind to localhost, and require auth. This prevents DNS rebinding.
 
 ## Observability
 
@@ -121,15 +121,15 @@ Local Streamable HTTP servers must validate `Origin`, bind to localhost, and req
 | Error rate per tool and server | Surfaces reliability issues per integration |
 | Tool registry size (token count) | Tracks context window cost of tool descriptions |
 
-## When This Backfires
+## When this backfires
 
-**Caching stales tool schemas.** Static TTL caching fails against servers pushing frequent updates. If a required parameter changes between refreshes, the agent issues malformed calls. Short TTLs or `notifications/tools/list_changed` cut risk but raise `tools/list` traffic.
+Caching stales tool schemas. Static TTL caching fails against servers that push frequent updates. If a required parameter changes between refreshes, the agent issues malformed calls. Short TTLs or `notifications/tools/list_changed` cut the risk but raise `tools/list` traffic.
 
-**Tool list churn invalidates provider prompt caches.** Providers key prompt caching on the tool list; mid-session changes raise per-turn costs. Avoid designs that shift the visible tool set between turns.
+Tool list churn invalidates provider prompt caches. Providers key prompt caching on the tool list, so mid-session changes raise per-turn costs. Avoid designs that shift the visible tool set between turns.
 
-**Full routing stack overhead on single-server agents.** Namespace maps (the `serverId -> tools[]` table), priority ordering, and per-server lifecycle yield no benefit with one server. Apply multi-server routing only when collision risk is real.
+The full routing stack adds overhead on single-server agents. Namespace maps (the `serverId -> tools[]` table), priority ordering, and per-server lifecycle yield no benefit with one server. Apply multi-server routing only when collision risk is real.
 
-**OAuth 2.1 PKCE assumes a capable HTTP client.** CLI or embedded agents may lack the browser or system capabilities the flow expects.
+OAuth 2.1 PKCE assumes a capable HTTP client. CLI or embedded agents may lack the browser or system capabilities the flow expects.
 
 ## Key Takeaways
 

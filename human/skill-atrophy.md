@@ -16,30 +16,30 @@ maturity: established
 
 > Skill atrophy is the cumulative loss of a developer's ability to review, debug, and architect code independently, driven by prolonged delegation to AI agents.
 
-## The Mechanism: Cognitive Offloading
+## The mechanism: cognitive offloading
 
-Delegating code generation to an AI agent bypasses the effortful practice that builds durable skill. Psychology researchers call this **cognitive offloading** — externalizing a task to a tool, reducing mental engagement. The effect is well-documented for calculators and GPS navigation; AI assistants introduce the same dynamic at higher abstraction ([Psychology Today](https://www.psychologytoday.com/us/blog/the-asymmetric-brain/202602/cognitive-offloading-using-ai-reduces-new-skill-formation)).
+Delegating code generation to an AI agent bypasses the effortful practice that builds durable skill. Psychology researchers call this cognitive offloading: handing a task to a tool reduces your mental engagement. Researchers have documented the effect for calculators and GPS navigation, and AI assistants repeat the same pattern at a higher level of abstraction ([Psychology Today on cognitive offloading and skill formation](https://www.psychologytoday.com/us/blog/the-asymmetric-brain/202602/cognitive-offloading-using-ai-reduces-new-skill-formation)).
 
-The critical difference: AI output is **non-deterministic**. Code can compile, pass tests, and still violate requirements in ways invisible without independent reasoning skills ([Red-Green-Code](https://www.redgreencode.com/will-ai-coding-assistants-deskill-us/)).
+AI output differs in one critical way: it is non-deterministic. Code can compile, pass tests, and still break requirements in ways you cannot see without independent reasoning skills ([Red-Green-Code on whether AI assistants deskill us](https://www.redgreencode.com/will-ai-coding-assistants-deskill-us/)).
 
-## The Evidence
+## The evidence
 
-| Study | Design | Key Finding |
+| Study | Design | Key finding |
 |-------|--------|-------------|
 | [Anthropic (Shen & Tamkin, 2026)](https://www.anthropic.com/research/AI-assistance-coding-skills) | RCT, 52 junior engineers | AI-assisted group scored ~17 pp lower on comprehension quizzes (50% vs 67%). Debugging showed steepest decline. Speed gain negligible. |
 | [METR (Becker et al., 2025)](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | RCT, 16 experienced OSS developers | AI made developers 19% slower, yet they estimated they were 20% faster — a ~39-point perception gap. |
 
 The METR perception gap compounds the problem: developers cannot self-diagnose capability loss.
 
-## Who Is Affected
+## Who is affected
 
-**Junior developers** are most acutely affected. The Anthropic study measured this directly — participants who fully delegated code generation showed the steepest learning deficits.
+Junior developers are most acutely affected. The Anthropic study measured this directly: participants who fully delegated code generation showed the steepest learning deficits.
 
-**Senior developers** are not immune. The same cognitive offloading mechanism applies when experienced engineers consistently delegate specific domains (e.g., CSS, database migrations, build configuration) — reduced practice in those areas reduces depth over time. The loss erodes the reviewer's ability to catch subtle errors in delegated areas ([Addy Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
+Senior developers are not immune. The same cognitive offloading mechanism applies when experienced engineers consistently delegate specific domains, for example CSS, database migrations, or build configuration. Less practice in those areas reduces depth over time, so the reviewer slowly loses the ability to catch subtle errors there ([Addy Osmani on the 80% problem in agentic coding](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
 
-## Interaction Patterns That Preserve vs. Erode Skill
+## Interaction patterns that preserve or erode skill
 
-**How** developers used AI mattered more than **whether** they used it:
+How developers used AI mattered more than whether they used it:
 
 ```mermaid
 graph LR
@@ -63,17 +63,17 @@ graph LR
     style H fill:#5a2d2d,stroke:#4a4a4a,color:#e0e0e0
 ```
 
-High-scoring developers used AI as a **thinking partner** — asking "why does this approach work?" before writing code themselves. Low-scoring developers used it as a **code dispenser** — accepting output and moving on.
+High-scoring developers used AI as a thinking partner: they asked "why does this approach work?" before writing the code themselves. Low-scoring developers used it as a code dispenser: they accepted the output and moved on.
 
 ## Mitigations
 
-### Dual-Mode Competency
+### Dual-mode competency
 
-Periodically code without AI assistance — the same principle behind pilots flying manual approaches — to maintain the capability to supervise AI output independently.
+Code without AI assistance from time to time, the same principle behind pilots flying manual approaches. This keeps you able to supervise AI output independently.
 
-### Explain-Then-Code
+### Explain-then-code
 
-When using an agent, ask for an explanation of the approach *before* requesting implementation — one of the [deliberate AI-assisted learning](deliberate-ai-learning.md) interaction styles that build skill instead of eroding it. This forces engagement with the reasoning, not just the output.
+When you use an agent, ask it to explain the approach before you request the implementation. This is one of the [deliberate AI-assisted learning](deliberate-ai-learning.md) interaction styles that build skill instead of eroding it. Asking first forces you to engage with the reasoning, not just the output.
 
 ```text
 Instead of:
@@ -85,23 +85,23 @@ Try:
   Then implement yourself or request implementation after understanding
 ```
 
-### Deliberate Practice Blocks
+### Deliberate practice blocks
 
-Reserve time to write code from scratch in domains you've been delegating. These blocks serve dual purpose: skill maintenance and cognitive recovery from AI-assisted work (see [Cognitive Load & AI Fatigue](cognitive-load-ai-fatigue.md)).
+Reserve time to write code from scratch in the domains you have been delegating. These blocks do two things: they maintain your skill and they give you cognitive recovery from AI-assisted work (see [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md)).
 
-### Review as Skill Exercise
+### Review as skill exercise
 
-Treat AI-generated code review as a skill exercise, not a rubber-stamp. Before accepting, predict what the code does and verify edge cases. Persistent difficulty signals atrophy.
+Treat reviewing AI-generated code as a skill exercise, not a rubber stamp. Before you accept it, predict what the code does and verify the edge cases. Persistent difficulty signals atrophy.
 
-## Distinguishing Skill Atrophy from Related Problems
+## Distinguishing skill atrophy from related problems
 
 | Concept | What it is | Mechanism | Reversible? |
 |---------|-----------|-----------|-------------|
-| **Skill atrophy** | Loss of ability to perform independently | Reduced practice over time | Yes, with deliberate practice |
-| [Cognitive load / AI fatigue](cognitive-load-ai-fatigue.md) | Mental exhaustion during AI use | Sustained oversight and review | Yes, with rest |
+| Skill atrophy | Loss of ability to perform independently | Reduced practice over time | Yes, with deliberate practice |
+| [Cognitive load and AI fatigue](cognitive-load-ai-fatigue.md) | Mental exhaustion during AI use | Sustained oversight and review | Yes, with rest |
 | [Comprehension debt](../anti-patterns/comprehension-debt.md) | Not understanding your own codebase | Accepting code without reading it | Yes, with code study |
 
-Fatigue makes you tired *during* work; atrophy makes you less capable *between* sessions; comprehension debt makes you a stranger to your own codebase.
+Fatigue makes you tired during work. Atrophy makes you less capable between sessions. Comprehension debt makes you a stranger to your own codebase.
 
 ## Key Takeaways
 

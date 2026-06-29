@@ -15,26 +15,26 @@ maturity: emerging
 
 > Agents that explore the codebase first, then ask targeted questions, lift resolution on underspecified tasks by up to 74% over non-interactive runs.
 
-## The Problem: Agents Assume Instead of Asking
+## The problem: agents assume instead of asking
 
-When given incomplete instructions, agents fill gaps with assumptions and produce output that looks correct but solves the wrong problem. This is [assumption propagation](../anti-patterns/assumption-propagation.md) — the default behavior across models. Knowing *when* to ask is itself an open research problem: estimating the utility of a clarifying question requires reasoning over the space of possible user intents, not just the immediate input ([Zhang & Choi, NAACL 2025](https://arxiv.org/abs/2311.09469)).
+Given incomplete instructions, agents fill the gaps with assumptions. They produce output that looks correct but solves the wrong problem. This is [assumption propagation](../anti-patterns/assumption-propagation.md), the default behavior across models. Knowing when to ask is itself an open research problem. Estimating the value of a clarifying question means reasoning over the space of possible user intents, not just the immediate input ([Zhang and Choi, NAACL 2025](https://arxiv.org/abs/2311.09469)).
 
-The Ambig-SWE benchmark tested this by creating underspecified variants of real GitHub issues. Interactivity improved resolution rates by up to 74% on underspecified tasks, but models consistently struggled to detect underspecification without explicit prompting ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069)).
+The Ambig-SWE benchmark tested this by creating underspecified variants of real GitHub issues. Interactivity improved resolution rates by up to 74% on underspecified tasks. But models consistently struggled to detect underspecification without explicit prompting ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069)).
 
-## Two Types of Missing Information
+## Two types of missing information
 
-The research identified two categories requiring different strategies:
+The research identified two categories, each needing a different strategy:
 
 | Type | What's Missing | Example |
 |------|---------------|---------|
-| **Informational** | Expected behavior, error nature, acceptance criteria | "Fix the auth bug" — which bug? What should correct behavior look like? |
-| **Navigational** | File locations, module boundaries, where to change | "Update the config" — which config file, in which service? |
+| Informational | Expected behavior, error nature, acceptance criteria | "Fix the auth bug" — which bug? What should correct behavior look like? |
+| Navigational | File locations, module boundaries, where to change | "Update the config" — which config file, in which service? |
 
-Navigational gaps resolve through codebase exploration, including [domain-scoped parallel localization](domain-scoped-parallel-localization.md) when the change spans subsystems. Informational gaps require the user — no amount of code reading reveals expected behavior.
+Codebase exploration resolves navigational gaps, including [domain-scoped parallel localization](domain-scoped-parallel-localization.md) when the change spans subsystems. Informational gaps need the user — no amount of code reading reveals expected behavior.
 
-## Exploration-First, Questions Second
+## Exploration first, questions second
 
-The effective strategy is not more questions — it is fewer, better ones.
+The effective strategy is not more questions. It is fewer, better ones.
 
 Claude Sonnet 4 asked 50% fewer questions than Qwen 3 Coder but achieved comparable extraction. Sonnet explored the codebase first, resolving navigational ambiguity independently, then asked only about informational gaps requiring human knowledge ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069)).
 
@@ -51,33 +51,33 @@ flowchart LR
 
 The anti-pattern is asking questions the agent could answer by reading code. Reserve questions for information only the user holds: expected behavior, business rules, design intent.
 
-## Designing for Detection
+## Designing for detection
 
 Detecting underspecification before committing to an approach is the hardest part. Three interventions help:
 
-**Explicit detection prompt**: Add to system instructions: "Before implementing, identify ambiguous or missing requirements. List what you know, what you're assuming, and what you need confirmed." This improved detection accuracy in benchmark evaluation ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069)).
+Explicit detection prompt: add to system instructions: "Before implementing, identify ambiguous or missing requirements. List what you know, what you're assuming, and what you need confirmed." This improved detection accuracy in benchmark evaluation ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069)).
 
-**Assumption surfacing**: Require the agent to state assumptions before proceeding: "I'm assuming the error should return a 404 rather than a 500. Correct me if wrong."
+Assumption surfacing: require the agent to state assumptions before proceeding: "I'm assuming the error should return a 404 rather than a 500. Correct me if wrong."
 
-**Plan-phase review**: The [plan-first loop](../workflows/plan-first-loop.md) surfaces underspecification — reviewing a plan reveals gaps that reviewing code would miss.
+Plan-phase review: the [plan-first loop](../workflows/plan-first-loop.md) surfaces underspecification — reviewing a plan reveals gaps that reviewing code would miss.
 
-## When to Block vs. When to Surface
+## When to block versus when to surface
 
-Not every gap warrants a blocking question. Decide based on cost of being wrong:
+Not every gap needs a blocking question. Decide on the cost of being wrong:
 
 | Reversibility | Action |
 |--------------|--------|
-| **Easily reversible** (formatting, variable naming) | State the assumption, proceed |
-| **Costly to reverse** (API contract, data migration) | Ask before proceeding |
-| **Irreversible** (destructive operations, published interfaces) | Block until confirmed |
+| Easily reversible (formatting, variable naming) | State the assumption, proceed |
+| Costly to reverse (API contract, data migration) | Ask before proceeding |
+| Irreversible (destructive operations, published interfaces) | Block until confirmed |
 
 This maps to the [agent pushback protocol](agent-pushback-protocol.md) — pushback gates on request quality, clarification gates on information completeness. When [steering a running agent](steering-running-agents.md) mid-task with underspecified follow-ups, the same heuristic applies.
 
-## Performance Reality
+## Performance reality
 
 The 74% improvement is the peak result (Claude Sonnet 3.5, synthetic underspecification). Caveats:
 
-- Stronger models show **compounding gains** — Sonnet 4 recovered 89% of fully-specified performance vs. Sonnet 3.5's 80%, suggesting capability shifts the bottleneck from detection to integration ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069))
+- Stronger models show compounding gains — Sonnet 4 recovered 89% of fully-specified performance versus Sonnet 3.5's 80%, suggesting capability shifts the bottleneck from detection to integration ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069))
 - Some models showed "complete non-responsiveness to interaction prompts" — following rigid protocols regardless of input ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069))
 - High extraction does not guarantee success — integrating answers matters more than asking the right questions
 
@@ -85,11 +85,11 @@ The 74% improvement is the peak result (Claude Sonnet 3.5, synthetic underspecif
 
 A user submits: "Fix the authentication bug in the API." The agent applies exploration-first clarification:
 
-1. **Explore**: Searches for auth-related files, recent error logs, and failing tests. Finds `auth/token_validator.py` has a recent regression where expired tokens bypass validation.
-2. **Resolve navigational gap**: Identifies the relevant file and test without asking the user.
-3. **Detect informational gap**: The fix could either reject expired tokens with a 401 or silently refresh them. This is a business rule the code does not reveal.
-4. **Ask one targeted question**: "The token validator currently accepts expired tokens. Should expired tokens return a 401 requiring re-login, or should the API attempt a silent refresh?"
-5. **Integrate and execute**: User confirms 401 behavior. Agent implements the fix with a test covering the expired-token path.
+1. Explore: search for auth-related files, recent error logs, and failing tests. The agent finds that `auth/token_validator.py` has a recent regression where expired tokens bypass validation.
+2. Resolve the navigational gap: identify the relevant file and test without asking the user.
+3. Detect the informational gap: the fix could either reject expired tokens with a 401 or silently refresh them. This is a business rule the code does not reveal.
+4. Ask one targeted question: "The token validator currently accepts expired tokens. Should expired tokens return a 401 requiring re-login, or should the API attempt a silent refresh?"
+5. Integrate and execute: the user confirms 401 behavior, and the agent implements the fix with a test covering the expired-token path.
 
 The agent resolved the navigational ambiguity (which file, which bug) independently and asked only the informational question that required human judgment.
 

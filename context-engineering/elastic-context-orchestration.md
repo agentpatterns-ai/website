@@ -19,25 +19,25 @@ maturity: emerging
 
 > Elastic context orchestration picks one of five retention operations per turn instead of accumulating raw trajectory or compacting on a fixed schedule.
 
-## Why Uniform Retention Fails on Long-Horizon Search
+## Why uniform retention fails on long-horizon search
 
-Long-horizon search visits many irrelevant pages before finding the answer. A ReAct agent that logs every observation accumulates noisy raw history; quality degrades as context fills, attention spreads thin, and signal competes with resolved sub-tasks. AgentFold's authors describe this as "context saturation" and frame it as the dominant failure mode for ReAct on web-search tasks ([AgentFold, Ye et al., 2025](https://arxiv.org/abs/2510.24699)). Anthropic frames the same effect as a [context performance gradient](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) across all models — a steady decline as context grows, not a cliff.
+Long-horizon search visits many irrelevant pages before it finds the answer. A ReAct agent that logs every observation builds up noisy raw history. Quality drops as context fills: attention spreads thin, and signal competes with resolved sub-tasks. AgentFold's authors call this "context saturation" and treat it as the main failure mode for ReAct on web-search tasks ([AgentFold, Ye et al., 2025](https://arxiv.org/abs/2510.24699)). Anthropic describes the same effect as a [context performance gradient](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) across all models: a steady decline as context grows, not a cliff.
 
-A single periodic summariser is not enough either: summarising the full history at fixed intervals risks irreversible loss of fine-grained evidence the agent needed for the current step ([AgentFold §1](https://arxiv.org/abs/2510.24699)).
+A single periodic summarizer is not enough either. Summarizing the full history at fixed intervals risks losing fine-grained evidence the agent still needs for the current step ([AgentFold §1](https://arxiv.org/abs/2510.24699)).
 
-Elastic context orchestration responds by giving the agent's policy a vocabulary of context operations and letting it pick one per step. LongSeeker formalises this as **Context-ReAct** — a ReAct extension where each turn emits a thought, an action, and a context operation drawn from five atomic primitives ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)).
+Elastic context orchestration responds by giving the agent's policy a vocabulary of context operations, then letting it pick one per step. LongSeeker formalizes this as Context-ReAct, a ReAct extension where each turn emits a thought, an action, and a context operation drawn from five atomic primitives ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)).
 
-## The Five-Operation Vocabulary
+## The five-operation vocabulary
 
 | Operation | What it does | When to pick it |
 |-----------|--------------|-----------------|
-| **Skip** | Do not add the current observation to working context | Low-value page, captcha, navigational filler |
-| **Compress** | Summarise a span of prior turns into a shorter form | Resolved sub-task; evidence already extracted |
-| **Snippet** | Keep a small extracted span verbatim; drop the surrounding observation | A page contained one critical fact among long boilerplate |
-| **Rollback** | Discard a recent reasoning branch | Dead end identified; resume from the last productive state |
-| **Delete** | Remove a specific entry from working context | Superseded result, contradicted claim |
+| Skip | Do not add the current observation to working context | Low-value page, captcha, navigational filler |
+| Compress | Summarize a span of prior turns into a shorter form | Resolved sub-task; evidence already extracted |
+| Snippet | Keep a small extracted span verbatim; drop the surrounding observation | A page contained one critical fact among long boilerplate |
+| Rollback | Discard a recent reasoning branch | Dead end identified; resume from the last productive state |
+| Delete | Remove a specific entry from working context | Superseded result, contradicted claim |
 
-LongSeeker's authors note that **Compress alone is expressively complete** — any retention strategy can be built from repeated compression. The other four operations exist for efficiency and fidelity guarantees: they reduce generation cost (no LLM call to "summarise" a span you can just Skip) and reduce hallucination risk (Snippet preserves verbatim evidence; Compress can paraphrase it away) ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)).
+LongSeeker's authors note that Compress alone is expressively complete: you can build any retention strategy from repeated compression. The other four operations exist for efficiency and fidelity. They cut generation cost (Skip drops a span with no LLM call, unlike Compress) and cut hallucination risk (Snippet keeps verbatim evidence; Compress can paraphrase it away) ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)).
 
 ```mermaid
 graph TD
@@ -54,25 +54,25 @@ graph TD
     D --> A
 ```
 
-## Evidence the Mechanism Works
+## Evidence the mechanism works
 
 Two reported signals support adaptive multi-fidelity retention over uniform accumulation:
 
-- **Sub-linear context growth.** AgentFold-30B reports context length growing from ~3.5k to ~7k tokens across 100 turns — less than doubling — against a 128k window, while raw ReAct accumulates linearly ([AgentFold, Ye et al., 2025](https://arxiv.org/abs/2510.24699)).
-- **BrowseComp deltas at fixed parameter class.** LongSeeker (Qwen3-30B-A3B base, 10,000 synthesised trajectories) reports 61.5% on BrowseComp and 62.5% on BrowseComp-ZH, against AgentFold's 36.2 / 47.3 and Tongyi DeepResearch's 43.2 / 46.7 at comparable scale ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)). All numbers come from the proposing labs; no third-party replication exists yet.
+- Sub-linear context growth. AgentFold-30B reports context length growing from about 3.5k to 7k tokens across 100 turns, less than doubling, against a 128k window, while raw ReAct grows linearly ([AgentFold, Ye et al., 2025](https://arxiv.org/abs/2510.24699)).
+- BrowseComp results at a fixed parameter class. LongSeeker (Qwen3-30B-A3B base, 10,000 synthesized trajectories) reports 61.5% on BrowseComp and 62.5% on BrowseComp-ZH, against AgentFold's 36.2 / 47.3 and Tongyi DeepResearch's 43.2 / 46.7 at comparable scale ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)). All numbers come from the proposing labs; no third-party replication exists yet.
 
-Adjacent results in the same literature cluster point in the same direction: ReSum's external summariser yields +4.5% over ReAct training-free and +8.2% with GRPO on BrowseComp ([ReSum, Wu et al., 2025](https://arxiv.org/abs/2509.13313)).
+Adjacent results in the same literature point the same way: ReSum's external summarizer yields +4.5% over ReAct training-free and +8.2% with GRPO on BrowseComp ([ReSum, Wu et al., 2025](https://arxiv.org/abs/2509.13313)).
 
-## Where the Pattern Does Not Apply
+## Where the pattern does not apply
 
-Elastic orchestration is search-agent territory, not a default for short coding sessions.
+Elastic orchestration suits search agents, not short coding sessions.
 
-- **Short-horizon tasks (≲ 20 turns).** The five-op vocabulary adds policy complexity and SFT cost without payoff; raw ReAct or [tiered compression](context-compression-strategies.md) is cheaper.
-- **Code agents with persistent file state.** Evidence lives in files, not trajectory. Aggressive Skip or Delete on tool observations breaks debug loops where the agent needs to [re-read prior outputs](observation-masking.md).
-- **Off-the-shelf models with no SFT on the vocabulary.** Skip, Snippet, and Rollback are not natural ReAct actions. Models invoke them inconsistently and can regress below the ReAct baseline. LongSeeker reports 10,000-trajectory SFT specifically to teach the operation policy ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)).
-- **Side-effecting tools.** Rollback removes context but cannot undo bookings, payments, or writes. See [Rollback-First Design](../agent-design/rollback-first-design.md) for the orthogonal mechanism that handles world state.
+- Short-horizon tasks (about 20 turns or fewer). The five-operation vocabulary adds policy complexity and SFT cost without payoff. Raw ReAct or [tiered compression](context-compression-strategies.md) is cheaper.
+- Code agents with persistent file state. Evidence lives in files, not the trajectory. Aggressive Skip or Delete on tool observations breaks debug loops where the agent needs to [re-read prior outputs](observation-masking.md).
+- Off-the-shelf models with no SFT on the vocabulary. Skip, Snippet, and Rollback are not natural ReAct actions. Models invoke them inconsistently and can regress below the ReAct baseline. LongSeeker reports 10,000-trajectory SFT specifically to teach the operation policy ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)).
+- Side-effecting tools. Rollback removes context but cannot undo bookings, payments, or writes. See [Rollback-First Design](../agent-design/rollback-first-design.md) for the separate mechanism that handles world state.
 
-## Relation to Adjacent Patterns
+## Relation to adjacent patterns
 
 - [Context Compression Strategies](context-compression-strategies.md) — periodic tiered compaction. Elastic orchestration is per-step with multiple operations.
 - [Turn-Level Context Decisions](turn-level-context-decisions.md) — five-option decision framework for human-driven coding sessions (continue, rewind, clear, compact, delegate). Elastic orchestration is the autonomous-agent analogue.

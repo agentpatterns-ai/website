@@ -19,11 +19,11 @@ maturity: established
 ??? note "Also known as: Instruction File Convention, Project Instruction Files"
     See [Project Instruction File Ecosystem](instruction-file-ecosystem.md) and [copilot-instructions.md Convention](../tools/copilot/copilot-instructions-md-convention.md).
 
-## What It Does
+## What it does
 
 Claude Code loads CLAUDE.md at session start into the context window ([docs](https://code.claude.com/docs/en/memory)). Instructions are context, not enforced configuration -- specificity yields compliance.
 
-## File Locations and Scopes
+## File locations and scopes
 
 Four scopes with different persistence models ([docs](https://code.claude.com/docs/en/memory)):
 
@@ -34,41 +34,41 @@ Four scopes with different persistence models ([docs](https://code.claude.com/do
 | User | `~/.claude/CLAUDE.md` | Just you (all projects) | Personal preferences across projects |
 | Local | `./CLAUDE.local.md` | Just you (current project) | Personal project-specific settings, not checked in |
 
-## Load Order and Precedence
+## Load order and precedence
 
 Claude Code walks up the directory tree loading every CLAUDE.md and CLAUDE.local.md it finds ([docs](https://code.claude.com/docs/en/memory)). Subdirectory files load on demand. More specific scopes win: directory overrides project root, project overrides user, user overrides policy.
 
-## Writing Effective Instructions
+## Writing effective instructions
 
-Key properties ([docs](https://code.claude.com/docs/en/memory)):
+Effective instructions share these properties ([docs](https://code.claude.com/docs/en/memory)):
 
 | Property | Guidance |
 |----------|----------|
-| **Size** | Under 200 lines -- longer files reduce adherence |
-| **Structure** | Headers and bullets for scanning |
-| **Specificity** | Verifiable: "Use 2-space indentation" not "Format code properly" |
-| **Consistency** | Contradictions cause unpredictable behavior; audit regularly |
+| Size | Under 200 lines -- longer files reduce adherence |
+| Structure | Headers and bullets for scanning |
+| Specificity | Verifiable: "Use 2-space indentation" not "Format code properly" |
+| Consistency | Contradictions cause unpredictable behavior; audit regularly |
 
-## What to Include
+## What to include
 
 A project CLAUDE.md should cover ([docs](https://code.claude.com/docs/en/memory)):
 
-- **Build and test commands** -- build, test, lint, deploy commands
-- **Coding standards** -- naming conventions, formatting rules
-- **Architecture** -- where code lives, module interactions
-- **Workflows** -- deployment steps, PR process
-- **Navigation pointers** -- link to deeper docs rather than embedding
+- Build and test commands -- build, test, lint, deploy commands
+- Coding standards -- naming conventions, formatting rules
+- Architecture -- where code lives, how modules interact
+- Workflows -- deployment steps, PR process
+- Navigation pointers -- link to deeper docs rather than embedding
 
 Run `/init` to generate a CLAUDE.md from discovered conventions.
 
-## What Not to Include
+## What not to include
 
-- **Task-specific instructions** -- belong in the prompt
-- **Discoverable knowledge** -- directory structure, types, test output available via tools (see [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md))
-- **Full documentation** -- link instead; tokens reduce task budget
-- **Generic advice** -- "write clean code" is noise
+- Task-specific instructions -- these belong in the prompt
+- Discoverable knowledge -- directory structure, types, and test output that tools surface on demand (see [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md))
+- Full documentation -- link to it instead, because tokens spent here reduce the task budget
+- Generic advice -- "write clean code" is noise
 
-## Importing Additional Files
+## Importing additional files
 
 CLAUDE.md supports `@path/to/file` import syntax ([docs](https://code.claude.com/docs/en/memory)). Relative and absolute paths work; imports nest five levels deep. See [@import Composition Pattern](import-composition-pattern.md) for modular authoring patterns.
 
@@ -81,7 +81,7 @@ See @README for project overview and @package.json for available npm commands.
 
 Claude Code shows an approval dialog on first encounter; declined imports remain disabled ([docs](https://code.claude.com/docs/en/memory)).
 
-## Path-Scoped Rules with `.claude/rules/`
+## Path-scoped rules with `.claude/rules/`
 
 Place topic-specific Markdown files in `.claude/rules/` ([docs](https://code.claude.com/docs/en/memory)). Files without `paths` frontmatter load unconditionally; files with `paths` load when matching files are in scope.
 
@@ -99,7 +99,7 @@ paths:
 
 Rules files support symlinks for cross-repo sharing ([docs](https://code.claude.com/docs/en/memory)).
 
-## CLAUDE.md vs. AGENTS.md
+## CLAUDE.md compared with AGENTS.md
 
 Both offer repo-level context but differ in audience and discovery:
 
@@ -113,7 +113,7 @@ Both offer repo-level context but differ in audience and discovery:
 
 Teams using multiple AI tools should maintain both or consolidate into AGENTS.md.
 
-## Auto Memory: The Companion System
+## Auto memory: the companion system
 
 Auto memory is what Claude writes back -- build commands, debugging insights, preferences ([docs](https://code.claude.com/docs/en/memory)). Stored in `~/.claude/projects/<project>/memory/`; first 200 lines load at session start. Toggle via `/memory`.
 

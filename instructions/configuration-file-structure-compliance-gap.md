@@ -20,7 +20,7 @@ maturity: emerging
 !!! info "Also known as"
     Configuration File Structure Compliance Gap, CLAUDE.md Structure Null
 
-## The Experiment
+## The experiment
 
 A factorial study manipulated four structural variables of coding-agent configuration files and measured compliance with a trivial target annotation across 1,650 Claude Code CLI sessions and 16,050 function-level observations — two TypeScript codebases, three frontier models (Sonnet 4.6 primary, Opus 4.6 cross-check, Opus 4.7 descriptive), and five coding tasks — using mixed-effects models with a Bayesian companion ([McMillan, 2026](https://arxiv.org/abs/2605.10039)).
 
@@ -33,7 +33,7 @@ A factorial study manipulated four structural variables of coding-agent configur
 
 None of the four variables, and none of three two-way interactions, produced a detectable contrast after multiple-testing correction ([McMillan, 2026](https://arxiv.org/abs/2605.10039)).
 
-## Evidence Strength
+## Evidence strength
 
 The nulls are not all equal:
 
@@ -46,9 +46,9 @@ The nulls are not all equal:
 
 Size and conflict are affirmatively ruled out within the tested envelope. Position and architecture are merely not detected — a smaller real effect could exist below the study's resolution ([McMillan, 2026](https://arxiv.org/abs/2605.10039)).
 
-## What Did Move Compliance
+## What did move compliance
 
-The largest measured effect was **within-session**: each additional function the agent generated was associated with roughly 5.6% lower odds of compliance per step (OR = 0.944), non-monotonic across the range. It reproduced on a second TypeScript codebase and on Opus 4.6 at matched CLI configuration, but was identified during analysis rather than pre-specified. Compliance also varied systematically across the five coding tasks ([McMillan, 2026](https://arxiv.org/abs/2605.10039)).
+The largest measured effect was within-session: each additional function the agent generated lowered the odds of compliance by roughly 5.6% per step (OR = 0.944), non-monotonic across the range. It reproduced on a second TypeScript codebase and on Opus 4.6 at matched CLI configuration, but it surfaced during analysis rather than being pre-specified. Compliance also varied systematically across the five coding tasks ([McMillan, 2026](https://arxiv.org/abs/2605.10039)).
 
 ```mermaid
 graph TD
@@ -60,7 +60,7 @@ graph TD
     C -.->|No measurable effect| G[Don't invest here]
 ```
 
-## Why This Matters for Practitioners
+## Why this matters for practitioners
 
 Engineers debugging compliance failures reach for structural fixes — split CLAUDE.md, move the rule to line 1, deduplicate adjacent files — that the evidence does not support within realistic file sizes. When a model misses a rule:
 
@@ -73,21 +73,21 @@ Engineers debugging compliance failures reach for structural fixes — split CLA
 | Session has generated many functions | The real lever — segment work into shorter sessions |
 | Total rule count above ceiling | Cut content; do not rearrange it |
 
-## Reconciling With the Compliance Ceiling
+## Reconciling with the compliance ceiling
 
 This finding does not contradict the [instruction compliance ceiling](instruction-compliance-ceiling.md) or [primacy bias](critical-instruction-repetition.md). Those measure stress regimes — hundreds of rules, position varied across very long contexts. McMillan tested realistic file sizes and found that moving the same rule around inside that envelope does not change compliance.
 
 Both can hold: ceiling effects exist at extreme rule counts, but the structural choices practitioners argue about within bounded files do not move the needle. The same pattern holds for [constraint encoding](constraint-encoding-compliance-gap.md) — reformatting how a rule is written has no measurable effect; what it says does.
 
-## When This Backfires
+## When this backfires
 
 The null is conditional on the tested envelope. The recommendation to stop rearranging files breaks down when:
 
-- **Total content already exceeds the compliance ceiling.** Cutting content (which incidentally changes file size) does help — but the mechanism is rule-count reduction, not file structure ([IFScale, 2025](https://arxiv.org/abs/2507.11538)).
-- **Sessions run long.** The within-session ~5.6%-per-function compliance decay means a 30-function session degrades regardless of file structure. Mitigation is session segmentation ([McMillan, 2026](https://arxiv.org/abs/2605.10039)).
-- **Stack is not TypeScript.** Results replicated on two TypeScript codebases; generalisation to Python, Go, or polyglot codebases is unconfirmed.
-- **Model is newer than Opus 4.7.** Sonnet 4.6 and Opus 4.6 anchor the result; Opus 4.7 was reported descriptively under a CLI-version confound.
-- **"Restructure" actually means "delete".** Many practitioner success stories describe restructuring that incidentally cut hundreds of lines. That intervention works — through the rule-count mechanism, not the structural one.
+- Total content already exceeds the compliance ceiling. Cutting content (which incidentally changes file size) does help — but the mechanism is rule-count reduction, not file structure ([IFScale, 2025](https://arxiv.org/abs/2507.11538)).
+- Sessions run long. The within-session ~5.6%-per-function compliance decay means a 30-function session degrades regardless of file structure. Mitigation is session segmentation ([McMillan, 2026](https://arxiv.org/abs/2605.10039)).
+- The stack is not TypeScript. Results replicated on two TypeScript codebases; whether they generalize to Python, Go, or polyglot codebases is unconfirmed.
+- The model is newer than Opus 4.7. Sonnet 4.6 and Opus 4.6 anchor the result; Opus 4.7 was reported descriptively under a CLI-version confound.
+- "Restructure" actually means "delete". Many practitioner success stories describe restructuring that incidentally cut hundreds of lines. That intervention works — through the rule-count mechanism, not the structural one.
 
 ## Key Takeaways
 
@@ -95,7 +95,7 @@ The null is conditional on the tested envelope. The recommendation to stop rearr
 - File-size and contradiction nulls are affirmatively supported by Bayes factors; position and architecture nulls are failures to reject
 - The dominant measured effect was within-session: ~5.6% lower compliance odds per additional generated function
 - The compliance levers are total rule count and session length, not file structure — within realistic file sizes, rearranging CLAUDE.md or AGENTS.md is not a fix
-- The result is bounded by TypeScript codebases, Sonnet/Opus 4.6, and realistic file sizes; do not over-generalise
+- The result is bounded by TypeScript codebases, Sonnet/Opus 4.6, and realistic file sizes; do not over-generalize
 
 ## Related
 
@@ -108,3 +108,5 @@ The null is conditional on the tested envelope. The recommendation to stop rearr
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — keeping files short is a content-budget argument, not a compliance-tuning argument
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — what context-file content does and does not change in agent behaviour
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — when compliance must not fail, move enforcement out of the instruction file entirely
+</content>
+</invoke>

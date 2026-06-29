@@ -18,23 +18,23 @@ maturity: established
 
 > Structured data lifts AI citation rates by pre-packaging content in the Q&A and step formats engines reuse — studies report 2.7x–3.2x FAQPage gains.
 
-**Related lesson:** [Machine-Readable Corpora](https://learn.agentpatterns.ai/geo/machine-readable-corpora/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Machine-Readable Corpora](https://learn.agentpatterns.ai/geo/machine-readable-corpora/) — this concept features in a hands-on lesson with quizzes.
 
 Independent studies report FAQPage citation improvements of 2.7x to 3.2x ([Frase.io](https://www.frase.io/blog/faq-schema-ai-search-geo-aeo); [DEV Community](https://dev.to/wilow445/schemaorg-is-your-secret-weapon-for-ai-citations-heres-the-data-1if3)) because structured data reduces extraction effort during indexing. Schema's primary value has shifted from SEO to AI citation — ChatGPT, Perplexity, Gemini, and Claude process it at indexing time. This site auto-injects Article, FAQPage, HowTo, DefinedTerm, and BreadcrumbList schemas via `hooks/structured_data.py`, plus a site-wide `DefinedTermSet` on the [concepts glossary](../concepts.md).
 
-## What Changed: Google vs. AI Search
+## What changed: Google vs AI search
 
-| Channel | FAQPage / HowTo Rich Results | Schema Citation Value |
+| Channel | FAQPage / HowTo rich results | Schema citation value |
 |---------|------------------------------|-----------------------|
 | Google Search (classic) | Restricted to government/health sites since Aug 2023 | Low for most dev docs |
 | Google AI Overviews | Processed at index time | High — 3.2x appearance lift (Frase.io) |
-| ChatGPT | Not rendered live; indexed content used | High — favours Q&A format |
+| ChatGPT | Not rendered live; indexed content used | High — favors Q&A format |
 | Perplexity | Indexed schema aids entity disambiguation | High — citation footnotes |
 | Gemini | Renders JavaScript; processes schema | High |
 
-**Key nuance**: chatbots don't read JSON-LD on live fetch — benefit accrues at indexing and training.
+Chatbots do not read JSON-LD on live fetch. The benefit accrues at indexing and training.
 
-## The Three Schema Types
+## The three schema types
 
 ### FAQPage
 
@@ -102,7 +102,7 @@ The hook maps frontmatter to schema fields automatically:
 
 Gated to coined-concept sections (`_DEFINED_TERM_PATHS`) plus `_DEFINED_TERM_ALLOW` exceptions; `articles/`, `tools/`, and `training/` are excluded — they describe terms rather than coin them.
 
-## How This Site Generates Schema
+## How this site generates schema
 
 The hook runs at `on_post_page` and injects JSON-LD into every page's `<head>`:
 
@@ -125,24 +125,24 @@ graph LR
 
 No per-page config — add an FAQ section and schema appears; a coined-concept page emits a `DefinedTerm` with no config at all (and a cleaner one if you set `term:`).
 
-## Writing for Schema Auto-Detection
+## Writing for schema auto-detection
 
 To trigger each schema type, write in the shape the hook detects:
 
-- **FAQPage** — a `## FAQ` (or `## Frequently Asked Questions`) heading with `**Question?**` lines followed by paragraph answers. Keep answers 40–80 words and standalone.
-- **HowTo** — an ordered list of 3+ steps under `patterns/` or `techniques/`; write each step as a self-contained sentence, since it is extracted as a standalone `HowToStep.text`.
-- **DefinedTerm** — nothing in the body; set `term:` to the bare moniker when `title:` is a headline (else `name` falls back to the SEO title), keep `description:` a one-line definition, and list every searchable alternate name under `aliases:`.
+- FAQPage — a `## FAQ` (or `## Frequently Asked Questions`) heading with `**Question?**` lines followed by paragraph answers. Keep answers 40–80 words and standalone.
+- HowTo — an ordered list of 3+ steps under `patterns/` or `techniques/`. Write each step as a self-contained sentence, since the hook extracts it as a standalone `HowToStep.text`.
+- DefinedTerm — nothing in the body. Set `term:` to the bare moniker when `title:` is a headline (otherwise `name` falls back to the SEO title), keep `description:` a one-line definition, and list every searchable alternate name under `aliases:`.
 
-## When This Backfires
+## When this backfires
 
 Schema lifts citation rates in aggregate, but fails under specific conditions:
 
-- **Stale schema after edits** — if body text drifts from the auto-generated schema (e.g., FAQ answers edited outside the `**Question**` / answer format), engines see contradictory signals and may deprioritize the page.
-- **Thin or low-authority domains** — lift is relative to baseline authority. Schema accelerates the [existing topical-authority signal](topical-authority.md); it doesn't manufacture credibility.
-- **Wrong type for content shape** — HowTo on conceptual explanations, or FAQPage on unrelated Q&A, causes schema–content mismatch that validators flag and engines may penalise.
-- **Indexing pipeline changes** — benefit accrues at indexing time; if a provider downweights structured data, pages relying on the lift lose it with no on-page change.
+- Stale schema after edits — if body text drifts from the auto-generated schema (for example, FAQ answers edited outside the `**Question**` / answer format), engines see contradictory signals and may deprioritize the page.
+- Thin or low-authority domains — lift is relative to baseline authority. Schema accelerates the [existing topical-authority signal](topical-authority.md). It does not manufacture credibility.
+- Wrong type for content shape — HowTo on conceptual explanations, or FAQPage on unrelated Q&A, causes schema–content mismatch that validators flag and engines may penalize.
+- Indexing pipeline changes — benefit accrues at indexing time. If a provider downweights structured data, pages relying on the lift lose it with no on-page change.
 
-## Testing Schema
+## Testing schema
 
 | Tool | Purpose | URL |
 |------|---------|-----|

@@ -14,11 +14,11 @@ maturity: established
 
 > Auto-compaction fires at ~95% context fill — long after reasoning quality has degraded. Manual compaction reframes context management from memory cleanup to reasoning quality preservation.
 
-**Learn it hands-on:** [Compaction](https://learn.agentpatterns.ai/harness-engineering/compaction/) — guided lesson with quizzes.
+Learn it hands-on: [Compaction](https://learn.agentpatterns.ai/harness-engineering/compaction/) — guided lesson with quizzes.
 
-## The Gap
+## The gap
 
-Claude Code's auto-compaction triggers at [approximately 95% of the context window](https://code.claude.com/docs/en/sub-agents). Benchmark research shows [LLMs effectively leverage only 10-20% of a long context window](https://arxiv.org/abs/2406.10149) for multi-step reasoning tasks, and code bug fixing collapses from 29% accuracy at 32K to 3% at 256K per [LongCodeBench](https://arxiv.org/abs/2505.07897). By the time auto-compaction fires, the agent has been in the [dumb zone](context-window-dumb-zone.md) for most of the session.
+Claude Code's auto-compaction triggers at [approximately 95% of the context window](https://code.claude.com/docs/en/sub-agents). Benchmark research shows [LLMs effectively use only 10-20% of a long context window](https://arxiv.org/abs/2406.10149) for multi-step reasoning tasks. Code bug fixing collapses from 29% accuracy at 32K to 3% at 256K per [LongCodeBench](https://arxiv.org/abs/2505.07897). By the time auto-compaction fires, the agent has been in the [dumb zone](context-window-dumb-zone.md) for most of the session.
 
 ```mermaid
 graph LR
@@ -34,7 +34,7 @@ graph LR
 
 The gap between degradation onset and auto-compaction is where quality silently erodes.
 
-## When to Compact Manually
+## When to compact manually
 
 Use `/compact` at these transition points:
 
@@ -46,7 +46,7 @@ Use `/compact` at these transition points:
 | When you notice quality degradation | Agent starts repeating itself, missing obvious patterns |
 | After completing a subtask | Finished implementing feature A, moving to feature B |
 
-## When Not to Compact
+## When not to compact
 
 Compaction is lossy. [Anthropic acknowledges](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) that "overly aggressive compaction can result in the loss of subtle but critical context whose importance only becomes apparent later."
 
@@ -58,17 +58,17 @@ Avoid compacting when:
 
 In these cases, prefer `/clear` between unrelated tasks or use [observation masking](observation-masking.md) for selective cleanup.
 
-## Directing Compaction
+## Directing compaction
 
-Claude Code supports focused compaction:
+Claude Code supports focused compaction.
 
-**Inline focus:**
+Inline focus:
 
 ```
 /compact Focus on the API changes and the test failures
 ```
 
-**Persistent focus via CLAUDE.md:**
+Persistent focus via CLAUDE.md:
 
 ```markdown
 # Compact instructions
@@ -82,11 +82,11 @@ When compacting, always preserve:
 
 Custom compaction instructions are a [first-class feature](https://code.claude.com/docs/en/best-practices).
 
-## Why It Works
+## Why it works
 
-Transformer attention is computed across all tokens in the context window, creating n² pairwise relationships for n tokens. As the context grows, [this attention budget spreads thin](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — the model's capacity to attend to any specific piece of information decreases while irrelevant tokens compete for the same fixed attention capacity. Compaction works by replacing the accumulated token mass with a dense summary, giving the model a focused context where relevant information receives proportionally more attention. Compacting early, before the window is saturated, avoids the window ever reaching the state where useful signal is crowded out by accumulated noise.
+Transformer attention spans all tokens in the context window, creating n² pairwise relationships for n tokens. As the context grows, [the attention budget spreads thin](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents). The model attends less to any specific piece of information, while irrelevant tokens compete for the same fixed capacity. Compaction replaces the accumulated token mass with a dense summary. That gives the model a focused context, where relevant information receives proportionally more attention. Compacting early, before the window saturates, stops useful signal from being crowded out by accumulated noise.
 
-## Lowering the Auto-Compaction Threshold
+## Lowering the auto-compaction threshold
 
 The `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` environment variable accepts values 1-100 and [overrides the default trigger point](https://code.claude.com/docs/en/settings):
 
@@ -101,7 +101,7 @@ CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=60 claude
 | Mixed retrieval and reasoning | 70-80% | Balances context availability with quality |
 | Retrieval-heavy (search, lookup) | 95% (default) | Retrieval tolerates larger context loads |
 
-## Monitoring Context Usage
+## Monitoring context usage
 
 Claude Code exposes `context_window.used_percentage` as a [status line field](https://code.claude.com/docs/en/statusline):
 
@@ -111,11 +111,11 @@ Claude Code exposes `context_window.used_percentage` as a [status line field](ht
 }
 ```
 
-## Partial Summarization
+## Partial summarization
 
-Claude Code supports partial summarization via the message selector ("Summarize from here"). This preserves recent context at full fidelity while compressing older turns — useful when exploration history can be discarded but recent implementation work cannot.
+Claude Code supports partial summarization through the message selector ("Summarize from here"). This preserves recent context at full fidelity while compressing older turns. It helps when you can discard exploration history but must keep recent implementation work.
 
-## How Other Systems Handle This
+## How other systems handle this
 
 | System | Trigger | Approach |
 |--------|---------|----------|

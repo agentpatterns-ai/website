@@ -17,52 +17,52 @@ maturity: established
 
 > A yes-man agent lacks explicit verification and [pushback instructions](../agent-design/agent-pushback-protocol.md), executing every request without flagging problems — shipping errors at machine speed.
 
-**Learn it hands-on:** [The Yes-Man Agent](https://learn.agentpatterns.ai/anti-patterns/the-yes-man-agent/) — guided lesson with quizzes.
+Learn it hands-on: [The Yes-Man Agent](https://learn.agentpatterns.ai/anti-patterns/the-yes-man-agent/) — guided lesson with quizzes.
 
-## What It Looks Like
+## What it looks like
 
-The agent does exactly what it's told. Each response looks correct at a glance, but subtle problems accumulate: broken conventions, violated constraints, introduced vulnerabilities. The agent never flags them because it was never instructed to look.
+The agent does exactly what it is told. Each response looks correct at a glance, but small problems build up: broken conventions, violated constraints and new vulnerabilities. The agent never flags them because no one told it to look.
 
-## Why It Happens
+## Why it happens
 
-Agents are trained to be helpful, and helpfulness correlates with compliance — human raters favor responses that agree with them, which RLHF amplifies into a structural bias toward compliance over correction ([Towards Understanding Sycophancy in Language Models](https://arxiv.org/abs/2310.13548)). Task-oriented instructions ("research this topic, write a page, open a PR") focus on the happy path, specifying nothing about what to check, when to pause, or what warrants stopping.
+Agents are trained to be helpful, and helpfulness tracks compliance. Human raters favor responses that agree with them, and RLHF turns that into a built-in bias toward compliance over correction ([Towards Understanding Sycophancy in Language Models](https://arxiv.org/abs/2310.13548)). Task instructions like "research this topic, write a page, open a PR" describe the happy path. They say nothing about what to check, when to pause, or what should stop the work.
 
-## The Fix
+## The fix
 
-Add three categories of instruction to any agent definition:
+Add three kinds of instruction to any agent definition.
 
-**Pre-task checks** — what to verify before starting:
+Pre-task checks set out what to verify before starting:
 > If the target file already exists and is substantially complete, comment on the issue explaining why and skip to the next.
 
-**In-task validation** — what to check during execution:
+In-task validation sets out what to check during the work:
 > Before committing, verify: correct file path, valid markdown structure, all sourced claims linked.
 
-**Stop conditions** — when to halt and surface a problem:
+Stop conditions set out when to halt and surface a problem:
 > If critical or high severity issues remain after two review rounds, stop and report the issue number and problem.
 
-## Separation of Reviewer and Implementer
+## Separation of reviewer and implementer
 
-A single agent cannot effectively review its own work — it shares its own blind spots. Spawn a separate reviewer agent with instructions focused on finding problems, not producing work ([Claude Code sub-agent architecture](https://code.claude.com/docs/en/sub-agents)).
+A single agent cannot review its own work well, because it shares its own blind spots. Spawn a separate reviewer agent with instructions aimed at finding problems, not producing work ([Claude Code sub-agent architecture](https://code.claude.com/docs/en/sub-agents)).
 
-## Structured Output with Required Concerns
+## Structured output with required concerns
 
-A mandatory `concerns`, `issues`, or `risks` field in structured output forces critical evaluation. An agent that must populate such a field will consider risks; one without the field will not.
+A required `concerns`, `issues` or `risks` field in structured output forces the agent to evaluate critically. An agent that must fill in such a field will weigh up the risks. One without the field will not.
 
-## When This Backfires
+## When this backfires
 
-Adding verification gates to every agent definition can fail in four ways:
+Adding verification gates to every agent definition can fail in four ways.
 
-**Over-specified stop conditions.** Halting on non-blockers produces agents that escalate constantly; reviewers dismiss every flag and the conditions become noise.
+Over-specified stop conditions. Halting on non-blockers makes agents escalate constantly. Reviewers then dismiss every flag and the conditions become noise.
 
-**False-positive pre-task checks.** A loose duplicate check blocks legitimate work — an agent told to skip if "a page on this topic exists" stops on tangential matches. Scope checks precisely.
+False-positive pre-task checks. A loose duplicate check blocks real work. An agent told to skip if "a page on this topic exists" stops on tangential matches, so scope the checks precisely.
 
-**Validator blindness.** In-task validation catches structural errors, not semantic ones — semantic errors need a [separate reviewer](../agent-design/separation-of-knowledge-and-execution.md). An agent cannot reliably catch its own reasoning errors — separate reviewer agents close this gap but add latency and cost.
+Validator blindness. In-task validation catches structural errors, not meaning. Semantic errors need a [separate reviewer](../agent-design/separation-of-knowledge-and-execution.md), because an agent cannot reliably catch its own reasoning errors. A separate reviewer closes this gap but adds latency and cost.
 
-**Prompt-level ceiling.** Verification instructions reduce sycophantic compliance but do not eliminate it. The bias is rooted in RLHF training, not prompt scaffolding; mitigation requires combined fine-tuning, decoding strategies, and post-deployment controls alongside instructions ([Sycophancy in Large Language Models: Causes and Mitigations](https://arxiv.org/html/2411.15287v1)). Treat prompts as a floor-raiser, not a fix.
+Prompt-level ceiling. Verification instructions reduce sycophantic compliance but do not remove it. The bias comes from RLHF training, not prompt scaffolding. To mitigate it you need fine-tuning, decoding strategies and post-deployment controls alongside instructions ([Sycophancy in Large Language Models: Causes and Mitigations](https://arxiv.org/html/2411.15287v1)). Treat prompts as a floor-raiser, not a fix.
 
-## The Counter-Anti-Pattern: The Cry-Wolf Agent
+## The counter-anti-pattern: the cry-wolf agent
 
-An agent that flags every minor issue, edge case, and theoretical risk produces output that gets ignored. Yes-man and cry-wolf are opposite failure modes; calibrate stop conditions to genuine blockers, not every deviation.
+An agent that flags every minor issue, edge case and theoretical risk produces output people ignore. Yes-man and cry-wolf are opposite failure modes. Calibrate stop conditions to genuine blockers, not every deviation.
 
 ## Example
 
@@ -73,9 +73,9 @@ You are a documentation writer. When given a topic and an issue number,
 research the topic, write a markdown page, and open a pull request.
 ```
 
-Given the task "write a page on rate limiting," the agent produces a page, commits it, and opens a PR — even though a page on rate limiting already exists at `docs/techniques/rate-limiting.md`. No pre-task check was specified, so the agent never looked.
+Given the task "write a page on rate limiting", the agent produces a page, commits it and opens a PR — even though a page on rate limiting already exists at `docs/techniques/rate-limiting.md`. No pre-task check was specified, so the agent never looked.
 
-With yes-man instructions corrected:
+With the yes-man instructions corrected:
 
 ```
 You are a documentation writer. When given a topic and an issue number:
@@ -93,14 +93,14 @@ Stop condition: If you cannot determine whether a duplicate exists,
 stop and report the ambiguity on the issue rather than guessing.
 ```
 
-The corrected prompt adds three gate points: a pre-task duplicate check, in-task structural validation, and an explicit stop condition for ambiguity. Each prevents a category of silent error the original prompt could not catch.
+The corrected prompt adds three gate points: a pre-task duplicate check, in-task structural validation and an explicit stop condition for ambiguity. Each one prevents a category of silent error the original prompt could not catch.
 
-## Key Takeaways
+## Key takeaways
 
 - Agents without verification instructions comply with every request, including bad ones.
-- Add pre-task checks, in-task validation, and explicit stop conditions to every agent definition.
-- Use [separate reviewer agents](../agent-design/separation-of-knowledge-and-execution.md) — an agent cannot reliably review its own work.
-- Mandatory structured output fields force the agent to perform the evaluation you need.
+- Add pre-task checks, in-task validation and explicit stop conditions to every agent definition.
+- Use [separate reviewer agents](../agent-design/separation-of-knowledge-and-execution.md), because an agent cannot reliably review its own work.
+- Required structured output fields force the agent to do the evaluation you need.
 
 ## Related
 

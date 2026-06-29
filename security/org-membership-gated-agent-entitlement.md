@@ -17,9 +17,9 @@ maturity: established
 
 > Gate AI chat on directory-managed GitHub org membership, not seat licences — a fail-closed device policy tying entitlement to identity, not installation.
 
-Seat licences answer "who paid" but not "who is currently allowed to send code to a model." A user offboarded from the company keeps the installed VS Code on their device and may keep a personal GitHub account that still resolves a Copilot Pro seat. Org-membership-gated entitlement closes that gap by deciding chat activation on the device against directory-managed group membership.
+Seat licenses answer "who paid" but not "who is currently allowed to send code to a model." A user offboarded from the company keeps the installed VS Code on their device. They may also keep a personal GitHub account that still resolves a Copilot Pro seat. Org-membership-gated entitlement closes that gap by deciding chat activation on the device against directory-managed group membership.
 
-## The `ChatApprovedAccountOrganizations` Policy
+## The `ChatApprovedAccountOrganizations` policy
 
 VS Code 1.118 (April 29, 2026) introduced the `ChatApprovedAccountOrganizations` device policy ([VS Code 1.118 release notes](https://code.visualstudio.com/updates/v1_118)). Setting it to a non-empty list activates the Approved Account gate: "all AI features are disabled until the user signs into a GitHub account whose organizations intersect this list" ([VS Code Enterprise Policies](https://code.visualstudio.com/docs/enterprise/policies)).
 
@@ -42,18 +42,18 @@ The policy value is a JSON list of org slugs deployed as a device-level managed 
 
 The wildcard `'*'` accepts any signed-in GitHub or GitHub Enterprise account — a relaxation suited to GHE-only deployments where the identity provider already constrains who can authenticate ([VS Code Enterprise Policies](https://code.visualstudio.com/docs/enterprise/policies)).
 
-## Why This Is Not Redundant With Seat Licences
+## Why this is not redundant with seat licenses
 
-Seat-based controls answer entitlement at GitHub.com — they govern licence assignment but do not enforce who currently signs in on a device. Server-side org policies likewise only bind users holding [licences granted by that organization](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/manage-policies); a personal Copilot Pro account on the same device sidesteps them. A device policy moves the decision into the client, where the chat code path itself refuses to start.
+Seat-based controls answer entitlement at GitHub.com. They govern license assignment but do not enforce who currently signs in on a device. Server-side org policies likewise only bind users holding [licenses granted by that organization](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/manage-policies); a personal Copilot Pro account on the same device sidesteps them. A device policy moves the decision into the client, where the chat code path itself refuses to start.
 
 The structural pattern is conditional access from identity products: entitlement = identity assertion + group membership + device posture. Org membership becomes the directory-managed group; the device policy is the local check that enforces it.
 
-## Failure Modes
+## Failure modes
 
-- **Surface coverage gap.** The policy applies only to VS Code chat. Copilot CLI, Claude Code, JetBrains Copilot, and browser-based chat surfaces are not bound — the gate is one client among many. Treat it as a layer, not a perimeter.
-- **Account ≠ person.** The check authenticates a *GitHub account*, not the human at the keyboard. Shared machines, kiosks, or any user with a personal account in an approved org can satisfy the policy.
-- **Offboarding lag.** Removing a user from the GitHub org is a separate runbook step from HR/IdP deprovisioning. If the runbook does not enumerate org-membership revocation, the gate stays open after corporate access ends.
-- **Contractor and personal-account expansion.** Including contractors who use personal GitHub accounts requires adding them to the approved org — widening membership beyond the employees the policy was written for.
+- Surface coverage gap: the policy applies only to VS Code chat. Copilot CLI, Claude Code, JetBrains Copilot, and browser-based chat surfaces are not bound — the gate is one client among many. Treat it as a layer, not a perimeter.
+- Account is not the person: the check authenticates a GitHub account, not the human at the keyboard. Shared machines, kiosks, or any user with a personal account in an approved org can satisfy the policy.
+- Offboarding lag: removing a user from the GitHub org is a separate runbook step from HR or IdP deprovisioning. If the runbook does not list org-membership revocation, the gate stays open after corporate access ends.
+- Contractor and personal-account expansion: including contractors who use personal GitHub accounts means adding them to the approved org — widening membership beyond the employees the policy was written for.
 
 ## Example
 
@@ -72,7 +72,7 @@ The same policy on Linux:
 }
 ```
 
-Pair the offboarding runbook with org-membership revocation as the first irreversible step; the next VS Code launch on the user's device fails the gate and chat refuses to activate.
+Pair the offboarding runbook with org-membership revocation as the first irreversible step. The next VS Code launch on the user's device then fails the gate, and chat refuses to activate.
 
 ## Key Takeaways
 

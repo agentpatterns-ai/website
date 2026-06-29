@@ -17,13 +17,13 @@ maturity: established
 
 > Keeping filesystem isolation while lifting network restrictions trades away the egress half of [dual-boundary sandboxing](dual-boundary-sandboxing.md) — safe only when egress is enforced below the harness.
 
-**Related lesson:** [The URL Is the Leak](https://learn.agentpatterns.ai/security/the-url-is-the-leak/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [The URL Is the Leak](https://learn.agentpatterns.ai/security/the-url-is-the-leak/) — this concept features in a hands-on lesson with quizzes.
 
-## The Two-Axis Model
+## The two-axis model
 
 Agent sandboxes enforce two independent boundaries. Most discussions collapse them into one toggle — "sandboxed" or "unsandboxed" — but the underlying OS primitives keep them separate. bubblewrap's `--unshare-net` controls only network namespaces; `--bind` and `--ro-bind` control filesystem visibility. Apple Seatbelt's `(allow file-read*)` and `(deny network*)` are independent rule classes. The collapse happens at the harness.
 
-VS Code 1.119 productionised the split with a third value for `chat.agent.sandbox.enabled`:
+VS Code 1.119 productionized the split with a third value for `chat.agent.sandbox.enabled`:
 
 | Mode | Filesystem | Network |
 |------|-----------|---------|
@@ -43,44 +43,44 @@ graph TD
     style B fill:#f8d7da,stroke:#b60205
 ```
 
-## Why It Exists
+## Why it exists
 
 Maintaining an outbound allowlist for a coding agent is expensive. Legitimate destinations — package registries, vendor APIs, documentation hosts, MCP services — shift between branches, so a static allowlist either lags real use (stalling the inner loop on approval prompts) or sprawls until it loses meaning.
 
-`allowNetwork` resolves that pressure by **keeping the boundary that costs least to enforce against agent error** — write confinement to the workspace — and shifting network risk below the harness: the host firewall, the container's egress policy, or an org-level proxy. Write-confinement still blocks the agent from modifying `~/.bashrc`, dropping startup scripts, or writing to `/etc`.
+`allowNetwork` resolves that pressure by keeping the boundary that costs least to enforce against agent error — write confinement to the workspace — and shifting network risk below the harness: the host firewall, the container's egress policy, or an org-level proxy. Write-confinement still blocks the agent from modifying `~/.bashrc`, dropping startup scripts, or writing to `/etc`.
 
 A graduated escalation ladder is the other answer to the same interruption pressure: rather than flipping the whole mode, escalate per command. VS Code 1.123 added exactly this — when a network-dependent command (such as `git fetch`) fails inside the sandbox, it is auto-retried with unrestricted network, then falls back to unsandboxed execution if that still fails, while filesystem protections stay in place throughout (the `chat.agent.sandbox.retryWithAllowNetworkRequests` setting) ([VS Code 1.123 release notes](https://code.visualstudio.com/updates/v1_123)). The ladder narrows the blast radius of lifting the network leg from the whole session to a single retried command.
 
-## What This Is Not
+## What this is not
 
-Claude Code takes the opposite default position: "Effective sandboxing requires **both** filesystem and network isolation. Without network isolation, a compromised agent could exfiltrate sensitive files like SSH keys" ([Claude Code Sandboxing](https://code.claude.com/docs/en/sandboxing)). The open-source `sandbox-runtime` echoes this — its weaker modes degrade overall guarantees rather than splitting axes cleanly ([anthropic-experimental/sandbox-runtime](https://github.com/anthropic-experimental/sandbox-runtime)).
+Claude Code takes the opposite default position: "Effective sandboxing requires both filesystem and network isolation. Without network isolation, a compromised agent could exfiltrate sensitive files like SSH keys" ([Claude Code Sandboxing](https://code.claude.com/docs/en/sandboxing)). The open-source `sandbox-runtime` echoes this — its weaker modes degrade overall guarantees rather than splitting axes cleanly ([anthropic-experimental/sandbox-runtime](https://github.com/anthropic-experimental/sandbox-runtime)).
 
 `allowNetwork` is a capability-scoping convenience, not a security improvement over `on`. Treating it otherwise is a category error.
 
-## Where It Is Safe
+## Where it is safe
 
-`allowNetwork` is defensible only when **the network boundary lives at a layer below the harness**. Three deployment shapes qualify:
+`allowNetwork` is defensible only when the network boundary lives at a layer below the harness. Three deployment shapes qualify:
 
-- **Container egress policy.** The agent runs in a container whose network namespace routes through a forward proxy or iptables allowlist.
-- **Host firewall or VPN tunnel.** macOS PF rules, Linux nftables, or a VPN that drops non-tunnelled traffic restricts outbound traffic regardless of what the sandboxed process attempts.
-- **Org-level outbound proxy.** Cloud agent runners route all traffic through an org proxy with logging and policy — for example, the [admin-controlled domain allow/deny model](agent-network-egress-policy.md) that GitHub's Copilot cloud agent applies at the organization firewall layer ([GitHub changelog](https://github.blog/changelog/2026-04-03-organization-firewall-settings-for-copilot-cloud-agent)).
+- Container egress policy: the agent runs in a container whose network namespace routes through a forward proxy or iptables allowlist.
+- Host firewall or VPN tunnel: macOS PF rules, Linux nftables, or a VPN that drops non-tunneled traffic restricts outbound traffic regardless of what the sandboxed process attempts.
+- Org-level outbound proxy: cloud agent runners route all traffic through an org proxy with logging and policy — for example, the [admin-controlled domain allow/deny model](agent-network-egress-policy.md) that GitHub's Copilot cloud agent applies at the organization firewall layer ([GitHub changelog](https://github.blog/changelog/2026-04-03-organization-firewall-settings-for-copilot-cloud-agent)).
 
 Network policy lives somewhere — it has just moved out of the harness.
 
-## Where It Is Not Safe
+## Where it is not safe
 
 The mode closes the egress leg of the [lethal trifecta](lethal-trifecta-threat-model.md). Four conditions make it dangerous:
 
-- **Broad filesystem reads.** Most implementations restrict only **writes**; read access to `~/.aws/credentials`, `~/.ssh/`, or environment variables is preserved. With open egress, each is a one-step exfiltration target.
-- **Untrusted input in the same agent.** When the agent fetches issues, third-party diffs, or web docs, prompt injection can drive an outbound POST to an attacker host. `allowNetwork` plus `WebFetch` plus repository read is the canonical trifecta closure ([Willison, 2025](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)).
-- **Regulated workloads.** FedRAMP and data-residency regimes require outbound audit trails — which must come from the layer below, and that layer must exist.
-- **Multi-tenant or shared runners.** `allowNetwork` defeats the org-firewall layer if no lower one exists.
+- Broad filesystem reads: most implementations restrict only writes; read access to `~/.aws/credentials`, `~/.ssh/`, or environment variables is preserved. With open egress, each is a one-step exfiltration target.
+- Untrusted input in the same agent: when the agent fetches issues, third-party diffs, or web docs, prompt injection can drive an outbound POST to an attacker host. `allowNetwork` plus `WebFetch` plus repository read is the canonical trifecta closure ([Willison, 2025](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)).
+- Regulated workloads: FedRAMP and data-residency regimes require outbound audit trails — which must come from the layer below, and that layer must exist.
+- Multi-tenant or shared runners: `allowNetwork` defeats the org-firewall layer if no lower one exists.
 
-The [NVIDIA sandboxing guidance](https://developer.nvidia.com/blog/practical-security-guidance-for-sandboxing-agentic-workflows-and-managing-execution-risk/) treats network egress and filesystem boundaries as **mandatory complementary** layers.
+The [NVIDIA sandboxing guidance](https://developer.nvidia.com/blog/practical-security-guidance-for-sandboxing-agentic-workflows-and-managing-execution-risk/) treats network egress and filesystem boundaries as mandatory complementary layers.
 
 The retained filesystem boundary may itself be porous: VS Code marks agent sandboxing "currently in preview" and warns that "detection of file writes is currently minimal, so it might be possible to write to files with the terminal that would not be possible by using the file editing agent tools" ([VS Code agent-tools docs](https://code.visualstudio.com/docs/copilot/agents/agent-tools)). Once `allowNetwork` drops the network leg, that filesystem leg is the only one left — a further reason to enforce below the harness.
 
-## OS-Level Generalisation
+## OS-level generalization
 
 The two-axis model is fully expressible below the harness. On Linux, bubblewrap permits filesystem isolation without network isolation by simply omitting `--unshare-net`:
 
@@ -127,7 +127,7 @@ The same team running on a developer laptop with no container and no proxy must 
 
 ## Key Takeaways
 
-- Sandboxes enforce two independent boundaries — filesystem and network — and OS primitives have always supported splitting them; `allowNetwork` productionises the split at the harness layer
+- Sandboxes enforce two independent boundaries — filesystem and network — and OS primitives have always supported splitting them; `allowNetwork` productionizes the split at the harness layer
 - The mode keeps filesystem isolation and drops network isolation; in VS Code it also disables the allow/deny domain settings
 - It is a capability-scoping convenience, not a security improvement — Claude Code's documentation explicitly recommends dual-boundary enforcement
 - Safe only when egress is enforced at a layer below the harness: container network policy, host firewall, or org-level outbound proxy

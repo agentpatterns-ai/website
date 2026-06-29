@@ -12,27 +12,27 @@ maturity: emerging
 
 > Write goals, non-goals, constraints, and completion criteria into an immutable file the agent reads but cannot modify — preventing drift even across context compaction.
 
-## The Problem
+## The problem
 
 Agents build impressive things that are wrong. Over long sessions, the original objective blurs: context compaction drops nuance, the agent reinterprets constraints it finds inconvenient, and scope creeps in directions nobody asked for. The result is coherent, high-quality code that solves a subtly different problem than assigned.
 
-[Spec-driven development](../workflows/spec-driven-development.md) solves the *writing* problem — how to capture intent. The frozen spec solves the *preservation* problem — how to keep that intent unmodifiable throughout execution.
+[Spec-driven development](../workflows/spec-driven-development.md) solves the writing problem: how to capture intent. The frozen spec solves the preservation problem: how to keep that intent unmodifiable throughout execution.
 
-## Anatomy of a Frozen Spec
+## Anatomy of a frozen spec
 
 A frozen spec contains five sections. Everything else belongs in mutable plan or progress files.
 
 | Section | Purpose | Example |
 |---------|---------|---------|
-| **Goals** | What the agent must deliver | "Add OAuth2 login via Google" |
-| **Non-goals** | What the agent must not build | "Do not add email/password auth" |
-| **Hard constraints** | Non-negotiable boundaries | "No new runtime dependencies" |
-| **Deliverables** | Concrete output artifacts | `src/auth/oauth.ts`, migration file, tests |
-| **Done-when criteria** | Objective, testable completion conditions | "All existing tests pass; `/auth/google` returns 302 to Google consent screen" |
+| Goals | What the agent must deliver | "Add OAuth2 login via Google" |
+| Non-goals | What the agent must not build | "Do not add email/password auth" |
+| Hard constraints | Non-negotiable boundaries | "No new runtime dependencies" |
+| Deliverables | Concrete output artifacts | `src/auth/oauth.ts`, migration file, tests |
+| Done-when criteria | Objective, testable completion conditions | "All existing tests pass; `/auth/google` returns 302 to Google consent screen" |
 
 Non-goals are first-class. Without them, agents expand scope toward whatever seems useful — adding email auth "while we're at it" or refactoring adjacent code that looks messy.
 
-## Why Immutability Matters
+## Why immutability matters
 
 The spec must be structurally protected from the agent, not just instructionally protected.
 
@@ -49,11 +49,11 @@ graph LR
     F -->|Yes| G[Complete]
 ```
 
-The re-read loop is the core mechanism. After every compaction event, the agent re-reads the frozen spec from disk — the discipline formalised in the [post-compaction re-read protocol](post-compaction-reread-protocol.md). The spec survives because it lives in a file, not in conversation history.
+The re-read loop is the core mechanism. After every compaction event, the agent re-reads the frozen spec from disk — the discipline formalized in the [post-compaction re-read protocol](post-compaction-reread-protocol.md). The spec survives because it lives in a file, not in conversation history.
 
 Without structural protection, agents rewrite specs they find inconvenient. Anthropic's harness research found that agents are less likely to modify JSON files than Markdown files — format choice is itself a defense against mutation ([Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Strongly-worded prohibition language ("it is unacceptable to remove or edit tests") is necessary but not sufficient.
 
-## Immutability Mechanisms
+## Immutability mechanisms
 
 No single mechanism guarantees immutability. Layer them.
 
@@ -128,7 +128,7 @@ A Claude Code hook provides hard enforcement:
 }
 ```
 
-## Frozen vs. Mutable Artifacts
+## Frozen vs. mutable artifacts
 
 The frozen spec works alongside mutable files — plan, progress, and status. The distinction is the core insight.
 
@@ -141,13 +141,13 @@ The frozen spec works alongside mutable files — plan, progress, and status. Th
 
 OpenAI's Codex long-horizon guide uses this exact split: Prompt.md is frozen (goals and constraints), while Plan.md and Implement.md are mutable working documents ([Run Long-Horizon Tasks with Codex](https://developers.openai.com/blog/run-long-horizon-tasks-with-codex)).
 
-## When This Backfires
+## When this backfires
 
 A frozen spec adds overhead that only pays off under specific conditions. Skip it or treat it as mutable when:
 
-- **Requirements are genuinely exploratory.** If the goal is discovery — figuring out what to build, not building a known thing — locking constraints early causes thrash. Spec-first — the [spec-driven development](../workflows/spec-driven-development.md) workflow — only works when you know what done looks like.
-- **Sessions are short enough that context doesn't compact.** The re-read loop is the core benefit. For tasks that complete in a single context window, the spec provides no protection that a well-written system prompt doesn't already provide.
-- **Scope changes are legitimate and frequent.** A frozen spec becomes adversarial when stakeholders update requirements mid-session — without that churn, the spec is instead a guard against [objective drift](../anti-patterns/objective-drift.md). Agents blocked by an outdated constraint will either stall or find workarounds. Treat the spec as mutable — and accept the drift risk — when requirements aren't stable enough to freeze.
+- Requirements are genuinely exploratory. If the goal is discovery — figuring out what to build, not building a known thing — locking constraints early causes thrash. The [spec-driven development](../workflows/spec-driven-development.md) workflow only works when you know what done looks like.
+- Sessions are short enough that context does not compact. The re-read loop is the core benefit. For tasks that complete in a single context window, the spec provides no protection that a well-written system prompt does not already provide.
+- Scope changes are legitimate and frequent. A frozen spec becomes adversarial when stakeholders update requirements mid-session — without that churn, the spec is instead a guard against [objective drift](../anti-patterns/objective-drift.md). Agents blocked by an outdated constraint will either stall or find workarounds. Treat the spec as mutable — and accept the drift risk — when requirements are not stable enough to freeze.
 
 ## Key Takeaways
 

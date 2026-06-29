@@ -19,38 +19,38 @@ maturity: emerging
 
 Use this technique when the agent runs against a closed model API, the action space is not a typed tool schema, and a human is available to answer mid-task — and only then. Outside those conditions the prompted scalars are unreliable enough that the question becomes "did the agent ask because it was uncertain, or because it was overconfident in being uncertain?"
 
-## The Routing Problem the Decomposition Solves
+## The routing problem the decomposition solves
 
-Clarification seeking is not a confidence problem; it is a routing problem. The agent must decide between *act on what I have* and *ask the user*, and a single uncertainty number cannot distinguish the two failure modes that drive each branch: uncertainty about the model's own next action — fixable by tools, reflection, or a stronger model — and uncertainty about user intent, fixable only by asking. Collapsing them gives a router that fires the wrong branch on a routine basis ([Matsnev, arXiv:2606.19559](https://arxiv.org/abs/2606.19559)).
+Clarification seeking is not a confidence problem; it is a routing problem. The agent must decide between 'act on what I have' and 'ask the user'. A single uncertainty number cannot distinguish the two failure modes that drive each branch: uncertainty about the model's own next action — fixable by tools, reflection, or a stronger model — and uncertainty about user intent, fixable only by asking. Collapsing them gives a router that fires the wrong branch on a routine basis ([Matsnev, arXiv:2606.19559](https://arxiv.org/abs/2606.19559)).
 
 The decomposition replaces one scalar with two prompted scalars per step:
 
 | Scalar | Question to the model | Routes to |
 |---|---|---|
-| **Action confidence** | "How confident are you that this is the correct next action and arguments?" | Continue, reflect, or escalate to a stronger model — *not* the user |
-| **Request uncertainty** | "How confident are you that the user's request is unambiguous enough to act on?" | Ask the user when this drops below threshold |
+| Action confidence | "How confident are you that this is the correct next action and arguments?" | Continue, reflect, or escalate to a stronger model — not the user |
+| Request uncertainty | "How confident are you that the user's request is unambiguous enough to act on?" | Ask the user when this drops below threshold |
 
 Asking gates on the second scalar alone. Low action confidence with high request clarity means the agent is the bottleneck; asking the user buys nothing. High action confidence with low request clarity means the spec is the bottleneck; asking is the only fix.
 
-## Why It Works
+## Why it works
 
-The mechanism is causal: asking the user is only useful when the missing information is in the user. The decomposition is the cheapest available test for that condition on a black-box API. The same split shows up in interactive coding benchmarks where effective agents separate navigational gaps (resolvable by reading code) from informational gaps (resolvable only by the user), and the gain comes from routing each gap to the right channel ([Vijayvargiya et al., arXiv:2502.13069](https://arxiv.org/abs/2502.13069)). Matsnev formalises that split into two prompt-elicited scalars and reports a 73% clarification-F1 improvement over single-signal ReAct+UE on ALFWorld-Clarification across five backbones ([Matsnev, arXiv:2606.19559](https://arxiv.org/abs/2606.19559)).
+The mechanism is causal: asking the user is only useful when the missing information is in the user. The decomposition is the cheapest available test for that condition on a black-box API. The same split shows up in interactive coding benchmarks where effective agents separate navigational gaps (resolvable by reading code) from informational gaps (resolvable only by the user), and the gain comes from routing each gap to the right channel ([Vijayvargiya et al., arXiv:2502.13069](https://arxiv.org/abs/2502.13069)). Matsnev formalizes that split into two prompt-elicited scalars and reports a 73% clarification-F1 improvement over single-signal ReAct+UE on ALFWorld-Clarification across five backbones ([Matsnev, arXiv:2606.19559](https://arxiv.org/abs/2606.19559)).
 
-The deployment shape unlocks production use: no logprobs, no multi-sampling, no fine-tuning, no extra inference call. That keeps it compatible with closed chat APIs and inside the per-turn latency budget — the constraint set under which most prior uncertainty-estimation work is unusable ([Matsnev, arXiv:2606.19559](https://arxiv.org/abs/2606.19559)).
+The deployment shape makes production use practical: no logprobs, no multi-sampling, no fine-tuning, no extra inference call. That keeps it compatible with closed chat APIs and inside the per-turn latency budget — the constraint set under which most prior uncertainty-estimation work is unusable ([Matsnev, arXiv:2606.19559](https://arxiv.org/abs/2606.19559)).
 
-## When This Backfires
+## When this backfires
 
 The signal is only as trustworthy as the prompt-elicited scalar underneath it, and verbalized confidence has well-documented calibration problems that bound where the decomposition can pay back.
 
-**RLHF-tuned production models.** Verbalized confidence elicited from instruction-tuned LLMs is systematically overconfident across model families ([Xiong et al., arXiv:2306.13063](https://arxiv.org/abs/2306.13063)), and post-RL miscalibration is severe enough that recovery requires a dedicated calibration restoration step ([survey of black-box calibration, arXiv:2412.12767](https://arxiv.org/pdf/2412.12767)). In that regime both scalars are noise: the agent will either over-ask or under-ask regardless of true ambiguity. Re-calibrate against held-out ambiguous prompts before trusting the threshold.
+RLHF-tuned production models. Verbalized confidence elicited from instruction-tuned LLMs is systematically overconfident across model families ([Xiong et al., arXiv:2306.13063](https://arxiv.org/abs/2306.13063)), and post-RL miscalibration is severe enough that recovery requires a dedicated calibration restoration step ([survey of black-box calibration, arXiv:2412.12767](https://arxiv.org/pdf/2412.12767)). In that regime both scalars are noise: the agent will either over-ask or under-ask regardless of true ambiguity. Re-calibrate against held-out ambiguous prompts before trusting the threshold.
 
-**Typed tool schemas.** When the action space is a fixed tool manifest, the structured-uncertainty alternative operates directly over tool parameters using Expected Value of Perfect Information and reports 7-39% higher coverage with 1.5-2.7× fewer clarifications than prompting baselines ([Suri et al., arXiv:2511.08798](https://arxiv.org/abs/2511.08798)).
+Typed tool schemas. When the action space is a fixed tool manifest, the structured-uncertainty alternative operates directly over tool parameters using Expected Value of Perfect Information and reports 7-39% higher coverage with 1.5-2.7× fewer clarifications than prompting baselines ([Suri et al., arXiv:2511.08798](https://arxiv.org/abs/2511.08798)).
 
-**Headless or autonomous runs.** The decomposition's value is the act of asking. In CI or scheduled sessions there is no human at the other end, so the low-request-clarity branch routes to assumption or halt anyway. A [task-feasibility-awareness](task-feasibility-awareness.md) check on the action-confidence branch is closer to the actual control the run needs.
+Headless or autonomous runs. The decomposition's value is the act of asking. In CI or scheduled sessions there is no human at the other end, so the low-request-clarity branch routes to assumption or halt anyway. A [task-feasibility-awareness](task-feasibility-awareness.md) check on the action-confidence branch is closer to the actual control the run needs.
 
-**High question-cost domains.** Threshold-based gating has no cost model. When each clarification round is expensive — slow user, paid support agent, batched async loop — pair the threshold with a per-ask budget cap or fold it into a value-of-information gate before deploying.
+High question-cost domains. Threshold-based gating has no cost model. When each clarification round is expensive — slow user, paid support agent, batched async loop — pair the threshold with a per-ask budget cap or fold it into a value-of-information gate before deploying.
 
-**Irreversible actions.** When every action is high-blast-radius, the right control is not uncertainty estimation — it is gating each action behind explicit human confirmation ([deferred permission pattern](deferred-permission-pattern.md)). Spending tokens on a scalar that could itself be wrong adds risk without reducing it.
+Irreversible actions. When every action is high-blast-radius, the right control is not uncertainty estimation — it is gating each action behind explicit human confirmation ([deferred permission pattern](deferred-permission-pattern.md)). Spending tokens on a scalar that could itself be wrong adds risk without reducing it.
 
 ## Example
 
@@ -77,7 +77,7 @@ The router consumes the JSON and dispatches:
 | `action_confidence` | `request_uncertainty` | Route |
 |---|---|---|
 | ≥ 7 | ≤ 3 | Execute |
-| < 7 | ≤ 3 | Reflect, re-plan, or escalate model — *do not ask* |
+| < 7 | ≤ 3 | Reflect, re-plan, or escalate model — do not ask |
 | ≥ 7 | > 3 | Ask the user a targeted question about the ambiguous field |
 | < 7 | > 3 | Explore first (resolve navigational gap), then re-evaluate |
 

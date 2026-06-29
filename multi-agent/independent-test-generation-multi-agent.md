@@ -22,13 +22,13 @@ maturity: established
 !!! note "Also known as"
     Blind Test Generation, Code-Test Separation Pattern. For the general evaluator-generator loop, see [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md). For human-written tests as agent spec, see [TDD Agent Development](../verification/tdd-agent-development.md). For role specialization in parallel agents, see [Specialized Agent Roles](../agent-design/specialized-agent-roles.md).
 
-## The Problem: Shared-Context Bias
+## The problem: shared-context bias
 
 When a single agent generates code and then writes tests for it, the tests confirm the code's logic rather than challenge it — following the same reasoning path and missing the same edge cases.
 
 [AgentCoder](https://arxiv.org/abs/2312.13010) (Huang et al., 2023) quantified this: separating test generation into an independent agent raised test accuracy from 61.0% to 87.8% on HumanEval benchmarks.
 
-## Three-Agent Architecture
+## Three-agent architecture
 
 The pattern uses three agents with no shared context between code and test paths:
 
@@ -44,13 +44,13 @@ graph TD
 
 | Agent | Input | Output | Key constraint |
 |-------|-------|--------|---------------|
-| **Programmer** | Requirements + error feedback | Code implementation | Chain-of-thought: clarify → algorithm → pseudocode → implement |
-| **Test Designer** | Requirements only | Test cases (basic + edge + stress) | Never sees the generated code |
-| **Test Executor** | Code + tests | Pass/fail + error messages | Deterministic execution, routes failures back to Programmer |
+| Programmer | Requirements + error feedback | Code implementation | Chain-of-thought: clarify → algorithm → pseudocode → implement |
+| Test Designer | Requirements only | Test cases (basic + edge + stress) | Never sees the generated code |
+| Test Executor | Code + tests | Pass/fail + error messages | Deterministic execution, routes failures back to Programmer |
 
-The test designer operates on the **specification**, not the implementation — preventing the test writer from accommodating implementation quirks.
+The test designer works from the specification, not the implementation. This stops the test writer from accommodating implementation quirks.
 
-## Fewer Specialized Agents Beat More Generalist Agents
+## Fewer specialized agents beat more generalist agents
 
 | Framework | Agents | HumanEval pass@1 (GPT-4) | Token overhead |
 |-----------|--------|--------------------------|----------------|
@@ -61,7 +61,7 @@ The test designer operates on the **specification**, not the implementation — 
 
 Three tightly-scoped agents with clear contracts outperform larger teams with diffuse responsibilities at 59% lower token cost.
 
-## Ablation: Each Agent Pulls Its Weight
+## Ablation: each agent pulls its weight
 
 Removing any component degrades the system (GPT-3.5 on HumanEval):
 
@@ -72,30 +72,30 @@ Removing any component degrades the system (GPT-3.5 on HumanEval):
 | + Test Executor | 64.6% | +3.6 |
 | Full system (all three) | 79.9% | +18.9 |
 
-The non-linear jump when all three collaborate shows that closing the loop with execution and error routing — not role separation alone — drives the gains.
+The non-linear jump when all three work together shows what produces the gains: closing the loop with execution and error routing, not role separation alone.
 
-## Iteration Budget
+## Iteration budget
 
 [AgentCoder](https://arxiv.org/abs/2312.13010) evaluated up to five refinement rounds on HumanEval and MBPP; accuracy rises fastest in the first two iterations and flattens afterward. A 3–5 round cap is a reasonable starting point — beyond that, continued failures indicate a spec or approach problem rather than something iteration will fix. See also [agent self-review loops](../code-review/agent-self-review-loop.md).
 
-## When This Backfires
+## When this backfires
 
-- **Test designer inherits spec errors**: both agents receive the same requirements document, so ambiguities, underspecifications, or outright errors propagate to both. The pattern eliminates code-context bias but cannot compensate for a flawed or incomplete specification.
-- **Generated tests can be wrong themselves**: independent generation does not guarantee test correctness. [BACE (arXiv:2603.28653)](https://arxiv.org/abs/2603.28653) documents how "incorrect code frequently passes faulty or trivial tests, while valid solutions are often degraded to satisfy incorrect assertions" — treating agent-generated tests as ground truth is fragile. Use public reference tests or a human-reviewed test suite as an anchor when correctness guarantees matter.
-- **Benchmark gap**: AgentCoder's results were measured on single-function HumanEval tasks. Multi-file codebases introduce cross-module dependencies and integration constraints that a spec-only test designer cannot fully anticipate — test accuracy improvements may be smaller in practice.
-- **Token overhead is real**: running three agents uses ~57K tokens per task versus a single-agent approach, roughly doubling cost. For high-volume, low-complexity tasks (e.g., boilerplate generation), the accuracy gain may not justify the overhead.
+- Test designer inherits spec errors: both agents receive the same requirements document, so ambiguities, underspecifications, or outright errors reach both. The pattern removes code-context bias but cannot make up for a flawed or incomplete specification.
+- Generated tests can be wrong themselves: independent generation does not guarantee test correctness. [BACE (arXiv:2603.28653)](https://arxiv.org/abs/2603.28653) documents how "incorrect code frequently passes faulty or trivial tests, while valid solutions are often degraded to satisfy incorrect assertions". So treating agent-generated tests as ground truth is fragile. Use public reference tests or a human-reviewed test suite as an anchor when correctness guarantees matter.
+- Benchmark gap: AgentCoder measured its results on single-function HumanEval tasks. Multi-file codebases add cross-module dependencies and integration constraints that a spec-only test designer cannot fully anticipate, so test accuracy improvements may be smaller in practice.
+- Token overhead is real: running three agents uses about 57K tokens per task versus a single-agent approach, roughly doubling cost. For high-volume, low-complexity tasks such as boilerplate generation, the accuracy gain may not justify the overhead.
 
-## Applying the Pattern
+## Applying the pattern
 
-- **Multi-agent frameworks**: Assign distinct system prompts. The test designer's prompt excludes code context, applying [specialized agent roles](../agent-design/specialized-agent-roles.md); the programmer receives only execution errors, not test source.
-- **CI/CD pipelines**: Run code and test generation as separate agent invocations with isolated contexts. Route failures back with error context only.
-- **Single-agent tools**: Approximate by running test generation in a separate session with fresh context, using only requirements as input.
+- Multi-agent frameworks: assign distinct system prompts. The test designer's prompt excludes code context, applying [specialized agent roles](../agent-design/specialized-agent-roles.md). The programmer receives only execution errors, not test source.
+- CI/CD pipelines: run code and test generation as separate agent invocations with isolated contexts. Route failures back with error context only.
+- Single-agent tools: approximate the pattern by running test generation in a separate session with fresh context, using only requirements as input.
 
 ## Example
 
 A team building a Python utility library applies the three-agent pattern to generate and validate a `merge_sorted_lists` function.
 
-**Programmer agent system prompt:**
+Programmer agent system prompt:
 
 ```
 You are a Python programmer. Given a function specification,
@@ -104,7 +104,7 @@ output, fix the code based on the error messages only.
 Do not request or reference any test code.
 ```
 
-**Test designer agent system prompt:**
+Test designer agent system prompt:
 
 ```
 You are a test engineer. Given a function specification,
@@ -114,7 +114,7 @@ produce pytest test cases covering: basic behavior, edge cases
 Write tests based solely on the specification.
 ```
 
-**Specification (shared input):**
+Specification (shared input):
 
 ```
 merge_sorted_lists(a: list[int], b: list[int]) -> list[int]

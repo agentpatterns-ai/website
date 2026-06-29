@@ -20,13 +20,13 @@ maturity: emerging
 !!! info "Also known as"
     Multi-Agent Performance Optimization, System-Wide Optimization Pipeline
 
-## Why Local Optimization Misses System Bottlenecks
+## Why local optimization misses system bottlenecks
 
-The system-level optimization pipeline is a [sequential multi-agent workflow](multi-agent-topology-taxonomy.md) that splits performance engineering across four specialized agents — summarizer, analyst, optimizer, and verifier — each reasoning within a bounded scope while collectively surfacing bottlenecks that span multiple services.
+The system-level optimization pipeline is a [sequential multi-agent workflow](multi-agent-topology-taxonomy.md). It splits performance engineering across four specialized agents: summarizer, analyst, optimizer, and verifier. Each agent reasons within a bounded scope, and together they surface bottlenecks that span multiple services.
 
-Most AI coding agents optimize at the function level: point at a function, ask for it to be faster, and the agent restructures the algorithm. This misses the bottlenecks that matter most in distributed systems — connection pool exhaustion, lock contention on shared request paths, redundant allocation in serialization layers. These emerge from **cross-component interactions** that no single-file pass can find, because the evidence is spread across services and configuration layers.
+Most AI coding agents optimize at the function level: point at a function, ask for it to be faster, and the agent restructures the algorithm. This misses the bottlenecks that matter most in distributed systems — connection pool exhaustion, lock contention on shared request paths, redundant allocation in serialization layers. These bottlenecks emerge from cross-component interactions that no single-file pass can find, because the evidence is spread across services and configuration layers.
 
-## The Four-Stage Pipeline
+## The four-stage pipeline
 
 The pipeline assigns each phase of performance engineering to a specialized agent role, following the [orchestrator-worker pattern](orchestrator-worker.md) with sequential handoff.
 
@@ -44,53 +44,53 @@ graph LR
     D -.- D1[Test + benchmark]
 ```
 
-### Stage 1: Summarization
+### Stage 1: summarization
 
-The summarization agent extracts architectural context that downstream agents need, decomposed into three sub-tasks:
+The summarization agent extracts architectural context that downstream agents need, split into three sub-tasks:
 
 | Sub-Agent | Extracts |
 |-----------|----------|
-| **Component Summary** | Service boundaries, dependency maps, exported interfaces |
-| **Behavior Summary** | Call graphs, control-flow complexity, database interactions, concurrency patterns |
-| **Environment Summary** | Build config, runtime settings, deployment topology |
+| Component Summary | Service boundaries, dependency maps, exported interfaces |
+| Behavior Summary | Call graphs, control-flow complexity, database interactions, concurrency patterns |
+| Environment Summary | Build config, runtime settings, deployment topology |
 
 Without this architectural context, agents default to function-level reasoning.
 
-### Stage 2: Analysis
+### Stage 2: analysis
 
-The analysis agent receives the summarization output, identifies optimization opportunities, and ranks them by estimated impact and confidence.
+The analysis agent receives the summarization output, identifies optimization opportunities, and ranks them by estimated effect and confidence.
 
-### Stage 3: Optimization
+### Stage 3: optimization
 
-The optimization agent translates each bottleneck into concrete code changes under a non-breaking constraint, a responsibility scoped to its [specialized role](../agent-design/specialized-agent-roles.md): public APIs and service interfaces remain stable. Changes target internal implementation only.
+The optimization agent translates each bottleneck into concrete code changes under a non-breaking constraint, a responsibility scoped to its [specialized role](../agent-design/specialized-agent-roles.md). Public APIs and service interfaces stay stable. Changes target internal implementation only.
 
-### Stage 4: Verification
+### Stage 4: verification
 
-The verification agent validates functional correctness (existing tests pass) and measures performance impact through benchmarking. Only verified improvements are retained.
+The verification agent checks functional correctness (existing tests pass) and measures the performance effect through benchmarking. The pipeline keeps only verified improvements.
 
-## Early Evidence
+## Early evidence
 
 [Peng et al. (2026)](https://arxiv.org/abs/2603.14703) evaluated this pipeline on TeaStore, a Java microservices benchmark with five interacting services plus a registry:
 
 | Metric | Before | After | Change |
 |--------|--------|-------|--------|
-| Throughput (req/s) | 1,198 | 1,636 | **+36.6%** |
-| Avg response time (ms) | 12.84 | 9.27 | **-27.8%** |
-| p50 latency (ms) | 13.0 | 9.0 | **-30.8%** |
-| p99 latency (ms) | 26.0 | 23.0 | **-11.5%** |
+| Throughput (req/s) | 1,198 | 1,636 | +36.6% |
+| Avg response time (ms) | 12.84 | 9.27 | -27.8% |
+| p50 latency (ms) | 13.0 | 9.0 | -30.8% |
+| p99 latency (ms) | 26.0 | 23.0 | -11.5% |
 
-The three optimizations were well-known patterns: singleton HTTP client reuse, replacing synchronized methods with volatile flags, and sharing static ObjectMapper instances. The value was **automated discovery** across service boundaries, not novelty. [TeaStore](https://github.com/DescartesResearch/TeaStore) is maintained by the Descartes Research Group.
+The three optimizations were well-known patterns: singleton HTTP client reuse, replacing synchronized methods with volatile flags, and sharing static ObjectMapper instances. The value was automated discovery across service boundaries, not novelty. [TeaStore](https://github.com/DescartesResearch/TeaStore) is maintained by the Descartes Research Group.
 
 !!! warning "Early-stage research"
     Results come from a single benchmark. Comparisons against existing tools (OpenCode, CodeX, SysLLMatic) are planned but not yet conducted, and the framework assumes comprehensive existing test suites.
 
-## Context Shapes Optimization Scope
+## Context shapes optimization scope
 
 The context you provide determines the scope of optimization the agent can perform:
 
-- **File-level** → local algorithm improvements
-- **Repository-level** → cross-file refactoring
-- **System-level** (dependency maps, call graphs, deployment config) → cross-service bottlenecks
+- File-level context yields local algorithm improvements
+- Repository-level context yields cross-file refactoring
+- System-level context (dependency maps, call graphs, deployment config) yields cross-service bottleneck fixes
 
 To surface system-level issues, provide dependency maps, call graphs, runtime configuration (connection pools, thread counts, cache settings), and deployment topology. Without them, agents default to the optimization scope their context window supports — usually a single file.
 
@@ -98,7 +98,7 @@ To surface system-level issues, provide dependency maps, call graphs, runtime co
 
 A team runs the four-stage pipeline against a Java microservices application with three services: `api-gateway`, `order-service`, and `inventory-service`.
 
-**Stage 1 — Summarization** produces structured context:
+Stage 1, summarization, produces structured context:
 
 ```yaml
 components:
@@ -112,26 +112,26 @@ components:
     serialization: new ObjectMapper() per call
 ```
 
-**Stage 2 — Analysis** identifies three ranked bottlenecks:
+Stage 2, analysis, identifies three ranked bottlenecks:
 
 1. `api-gateway` creates a new HTTP client per request — connection pool exhaustion under load
 2. `order-service.updateStock()` uses `synchronized` — thread contention on every order
 3. `inventory-service` allocates a new `ObjectMapper` per serialization call — GC pressure
 
-**Stage 3 — Optimization** generates patches: singleton `HttpClient`, `volatile` flag replacing `synchronized`, static shared `ObjectMapper`.
+Stage 3, optimization, generates patches: singleton `HttpClient`, `volatile` flag replacing `synchronized`, static shared `ObjectMapper`.
 
-**Stage 4 — Verification** runs the existing test suite (all pass) and benchmarks throughput before and after, confirming a 36% improvement.
+Stage 4, verification, runs the existing test suite (all pass) and benchmarks throughput before and after, confirming a 36% improvement.
 
 None of these fixes are novel. The value is that the pipeline found cross-service bottlenecks no single-file agent pass would detect.
 
-## When This Backfires
+## When this backfires
 
 The pipeline requires conditions that not all codebases meet:
 
-1. **No existing test suite** — Stage 4 (verification) depends on passing tests to validate correctness. Without them, the pipeline cannot distinguish a valid optimization from a regression. A single failing assumption in the optimization stage silently ships broken code.
-2. **Simple or monolithic codebases** — Cross-component bottlenecks don't emerge in single-service or small-monolith systems. The four-agent [coordination overhead](multi-agent-se-design-patterns.md) (summarization, analysis, optimization, verification) adds latency and cost that outweighs the benefit vs. a direct single-agent pass.
-3. **Poorly documented service boundaries** — The summarization stage extracts dependency maps and call graphs from code and config. If service contracts are implicit or undocumented, summaries will be incomplete and the analysis stage will miss bottlenecks that cross those boundaries.
-4. **Single-benchmark evidence** — Current results come from one Java microservices benchmark ([TeaStore](https://github.com/DescartesResearch/TeaStore)). Applying the pattern to heterogeneous stacks, stateful services, or event-driven architectures may produce different outcomes.
+1. No existing test suite. Stage 4 (verification) depends on passing tests to validate correctness. Without them, the pipeline cannot distinguish a valid optimization from a regression. A single failing assumption in the optimization stage silently ships broken code.
+2. Simple or monolithic codebases. Cross-component bottlenecks do not emerge in single-service or small-monolith systems. The four-agent [coordination overhead](multi-agent-se-design-patterns.md) (summarization, analysis, optimization, verification) adds latency and cost that outweigh the benefit of a direct single-agent pass.
+3. Poorly documented service boundaries. The summarization stage extracts dependency maps and call graphs from code and config. If service contracts are implicit or undocumented, summaries will be incomplete and the analysis stage will miss bottlenecks that cross those boundaries.
+4. Single-benchmark evidence. Current results come from one Java microservices benchmark ([TeaStore](https://github.com/DescartesResearch/TeaStore)). Applying the pattern to heterogeneous stacks, stateful services, or event-driven architectures may produce different outcomes.
 
 ## Key Takeaways
 

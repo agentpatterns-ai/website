@@ -24,7 +24,7 @@ A skill library shared across a team degrades in a different way than a single s
 
 Will Larson's [Iterative prompt and skill refinement](https://lethain.com/agents-iterative-refinement/) describes four feedback loops that together close the gap. Each catches a different failure class; running only one leaves blind spots.
 
-## The Four Loops
+## The four loops
 
 ```mermaid
 graph TD
@@ -38,47 +38,47 @@ graph TD
     E --> F
 ```
 
-### Loop 1 — Responsive Feedback
+### Loop 1 — Responsive feedback
 
-A dedicated channel (e.g., `#ai` on Slack) where anyone can report issues with skills in real-time. The skill owner skims it daily.
+A dedicated channel (for example, `#ai` on Slack) where anyone can report problems with skills in real time. The skill owner skims it daily.
 
-**What it catches**: edge cases, [real-world failures](continuous-agent-improvement.md), and confusion the author never anticipated — the widest possible input from people using skills in production workflows.
+What it catches: edge cases, [real-world failures](continuous-agent-improvement.md), and confusion the author never anticipated. This is the widest input you can get from people using skills in production workflows.
 
-**What it misses**: low-visibility failures where users silently work around a broken skill rather than reporting it; structural problems that accumulate slowly; quantitative signal on which skills matter most.
+What it misses: low-visibility failures where users silently work around a broken skill rather than report it. It also misses structural problems that build up slowly, and it gives no quantitative signal on which skills matter most.
 
-**When to use**: always — this is the baseline loop for any team with a shared skill library.
+When to use: always. This is the baseline loop for any team with a shared skill library.
 
-### Loop 2 — Owner-Led Editing
+### Loop 2 — Owner-led editing
 
-Store skill prompts in editable documents (Notion, Google Docs, or any wiki accessible to the whole team) rather than burying them in a private repo. Embed links to the prompt directly in workflow outputs so users can propose edits in-context.
+Store skill prompts in editable documents (Notion, Google Docs, or any wiki the whole team can reach) rather than burying them in a private repo. Embed links to the prompt directly in workflow outputs so users can propose edits in context.
 
-**What it catches**: incremental improvements from users who know what the skill should do but lack repo access; wording issues and missing cases that users notice during a workflow session.
+What it catches: small improvements from users who know what the skill should do but lack repo access. It also catches wording problems and missing cases that users notice during a workflow session.
 
-**What it misses**: systemic failures; failures invisible to casual users; problems requiring deep technical investigation.
+What it misses: systemic failures, failures invisible to casual users, and problems that need deep technical investigation.
 
-**When to use**: always, combined with Loop 1 — the two lowest-cost loops that together cover the majority of organic improvement opportunities.
+When to use: always, paired with Loop 1. These are the two lowest-cost loops, and together they cover most organic improvement opportunities.
 
-### Loop 3 — Log-Driven Refinement
+### Loop 3 — Log-driven refinement
 
-Route production logs (e.g., via a [Datadog MCP integration](https://docs.datadoghq.com/bits_ai/mcp_server/)) into the skill repository. A central AI team applies this to platform-level skills — those used across many workflows by many teams.
+Route production logs (for example, through a [Datadog MCP integration](https://docs.datadoghq.com/bits_ai/mcp_server/)) into the skill repository. A central AI team applies this to platform-level skills, the ones used across many workflows by many teams.
 
-**What it catches**: failure patterns not reported through Slack; systematic errors that emerge at volume; cross-workflow inconsistencies only visible in aggregate.
+What it catches: failure patterns not reported through Slack, systematic errors that emerge at volume, and cross-workflow inconsistencies you can only see in aggregate.
 
-**What it misses**: failures that don't produce loggable errors (e.g., subtly wrong output the model accepts silently); anything a dashboard metric can't represent.
+What it misses: failures that produce no loggable error, for example subtly wrong output the model accepts silently. It also misses anything a dashboard metric cannot represent.
 
-**When to use**: when a central team maintains platform-level skills used across multiple workflows. The infrastructure investment (observability stack with MCP integration) is not justified for a 5-person team with a handful of skills.
+When to use: when a central team maintains platform-level skills used across many workflows. The infrastructure cost, an observability stack with MCP integration, is not worth it for a 5-person team with a handful of skills.
 
-### Loop 4 — Dashboard Tracking
+### Loop 4 — Dashboard tracking
 
-Monitor per-skill invocation counts, error rates, and workflow run frequency. Use the data to prioritise which skills to review and improve first. The [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/) define standard attributes (operation name, model, token counts, error types) that make this instrumentation portable across observability vendors.
+Monitor per-skill invocation counts, error rates, and workflow run frequency. Use the data to decide which skills to review and improve first. The [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/) define standard attributes (operation name, model, token counts, error types) that make this instrumentation portable across observability vendors.
 
-**What it catches**: dead skills with zero invocations; high-error skills hiding in the long tail; usage patterns that contradict assumptions about which skills matter.
+What it catches: dead skills with zero invocations, high-error skills hiding in the long tail, and usage patterns that contradict your assumptions about which skills matter.
 
-**What it misses**: output quality problems — a skill invoked 500 times per week may be producing wrong results on a large fraction of those runs. See [Enterprise Skill Marketplace](enterprise-skill-marketplace.md) for the telemetry gap between usage frequency and output quality.
+What it misses: output quality problems. A skill invoked 500 times a week may be producing wrong results on a large share of those runs. See [Enterprise Skill Marketplace](enterprise-skill-marketplace.md) for the telemetry gap between usage frequency and output quality.
 
-**When to use**: when the skill library is large enough that intuition about which skills need attention is unreliable — typically 20+ skills or multiple workflow teams.
+When to use: when the library is large enough that intuition about which skills need attention is unreliable, typically 20 or more skills or several workflow teams.
 
-## Failure Classes by Loop
+## Failure classes by loop
 
 | Failure class | Responsive | Owner-led | Log-driven | Dashboard |
 |---|---|---|---|---|
@@ -87,13 +87,13 @@ Monitor per-skill invocation counts, error rates, and workflow run frequency. Us
 | Systematic errors at volume | — | — | ✓ | — |
 | Dead or neglected skills | — | — | — | ✓ |
 | High-error-rate skills | — | — | ✓ | ✓ |
-| Prioritisation signal | — | — | — | ✓ |
+| Prioritization signal | — | — | — | ✓ |
 
-The anti-pattern is treating any single row as sufficient coverage.
+The anti-pattern is treating any single row as full coverage.
 
-## Scaling the Loop Set
+## Scaling the loop set
 
-Not every team needs all four loops. Cost grows from left to right: Loops 1–2 require only a channel and a wiki; Loops 3–4 require observability infrastructure.
+Not every team needs all four loops. Cost grows from left to right. Loops 1 and 2 need only a channel and a wiki. Loops 3 and 4 need observability infrastructure.
 
 | Team size / context | Recommended loops |
 |---|---|
@@ -101,14 +101,14 @@ Not every team needs all four loops. Cost grows from left to right: Loops 1–2 
 | Mid-size team, 20+ skills | 1 + 2 + 4 |
 | Central AI team, platform-level skills | All four |
 
-Start with Loops 1 and 2. Add Loop 4 when the library grows large enough that prioritisation by intuition fails. Add Loop 3 only when the infrastructure is already in place and the failure patterns it catches are actually occurring.
+Start with Loops 1 and 2. Add Loop 4 when the library grows large enough that prioritization by intuition fails. Add Loop 3 only when the infrastructure is already in place and the failure patterns it catches actually occur.
 
-## Relationship to Other Patterns
+## Relationship to other patterns
 
-- **Skill eval loop** — evaluates output quality for a single skill in isolation. Loops 1–4 operate at the organisational level, not the per-skill level.
-- **Content & skills audit** — detects URL staleness and navigation drift. Orthogonal: staleness audits don't capture user-reported failures or usage data.
-- **Enterprise skill marketplace** — covers distribution and OTel usage telemetry. Dashboard tracking (Loop 4) overlaps; the marketplace page focuses on the telemetry gap between invocation count and output quality.
-- **Continuous agent improvement** — observe-categorise-update-verify loop for individual agent configurations. The refinement loops pattern applies the same principle at the team/library scale.
+- Skill eval loop — evaluates output quality for a single skill in isolation. Loops 1 to 4 operate at the organizational level, not the per-skill level.
+- Content and skills audit — detects URL staleness and navigation drift. It is orthogonal: staleness audits do not capture user-reported failures or usage data.
+- Enterprise skill marketplace — covers distribution and OTel usage telemetry. Dashboard tracking (Loop 4) overlaps. The marketplace page focuses on the telemetry gap between invocation count and output quality.
+- Continuous agent improvement — observe-categorize-update-verify loop for individual agent configurations. The refinement loops pattern applies the same principle at the team and library scale.
 
 ## Key Takeaways
 
@@ -122,7 +122,7 @@ Start with Loops 1 and 2. Add Loop 4 when the library grows large enough that pr
 
 - [Skill Eval Loop](../tools/claude/skill-eval-loop.md) — per-skill output quality and trigger precision evals
 - [Enterprise Skill Marketplace](enterprise-skill-marketplace.md) — distribution, OTel telemetry, and quality maintenance at scale
-- [Continuous Agent Improvement](continuous-agent-improvement.md) — observe-categorise-update-verify loop for individual agent configs
+- [Continuous Agent Improvement](continuous-agent-improvement.md) — observe-categorize-update-verify loop for individual agent configs
 - [Daily-Use Skill Library](daily-use-skill-library.md) — building a personal skill library
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md) — lifecycle governance, versioning, and pruning
 - [Introspective Skill Generation](introspective-skill-generation.md) — mining recurring corrections to generate new skills; complements Loops 1 and 3

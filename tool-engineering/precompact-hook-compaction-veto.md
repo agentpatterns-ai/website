@@ -17,13 +17,13 @@ maturity: established
 
 > `PreCompact` can block compaction — exiting with code 2 or returning `{"decision": "block"}` defers context compression until the agent reaches a safer checkpoint.
 
-## What Changed
+## What changed
 
-Claude Code v2.1.105 ([2026-04-13](https://code.claude.com/docs/en/changelog)) added `PreCompact` block support: exit code 2 or `{"decision": "block"}` now vetoes compaction, making the hook a control point — not just an observability one ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)).
+Claude Code v2.1.105 ([2026-04-13](https://code.claude.com/docs/en/changelog)) added `PreCompact` block support. Exit code 2 or `{"decision": "block"}` now vetoes compaction, making the hook a control point — not just an observability one ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)).
 
-Compaction summarises older turns to free context space, paraphrasing structured artefacts (specs, plans, tool outputs) the agent may still need verbatim ([Context Compression Strategies](../context-engineering/context-compression-strategies.md); [Anthropic: effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). The veto turns that loss from an unconditional event into one the hook controls.
+Compaction summarizes older turns to free context space. It paraphrases structured artifacts (specs, plans, tool outputs) the agent may still need verbatim ([Context Compression Strategies](../context-engineering/context-compression-strategies.md); [Anthropic: effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). The veto turns that loss from an unconditional event into one the hook controls.
 
-## Input and Decision Schema
+## Input and decision schema
 
 `PreCompact` receives the usual hook envelope plus a `trigger` field ([hooks reference](https://code.claude.com/docs/en/hooks)):
 
@@ -50,13 +50,13 @@ The hook signals block via either channel ([hooks reference](https://code.claude
 
 With JSON output, `reason` surfaces to Claude as an explanation of why compaction was deferred. Exit code 2 instead feeds stderr to Claude.
 
-## When to Block
+## When to block
 
 Block when compaction would force the agent to redo in-flight work:
 
-- **Mid-edit** — a file edit has been planned from tool output the summary would paraphrase
-- **Mid-test** — a failing test's stack trace still needs to be read verbatim
-- **Mid-plan** — a structured plan hasn't been written to disk yet
+- Mid-edit — a file edit has been planned from tool output the summary would paraphrase
+- Mid-test — a failing test's stack trace still needs to be read verbatim
+- Mid-plan — a structured plan has not been written to disk yet
 
 Allow at natural checkpoints:
 
@@ -64,9 +64,9 @@ Allow at natural checkpoints:
 - Sub-task complete, plan updated on disk
 - User turn boundary with no pending tool calls
 
-## Matcher: Separate Auto from Manual
+## Matcher: separate auto from manual
 
-Restrict blocks to `trigger: "auto"`. `/compact` is a deliberate user instruction; vetoing it fights the user. The [hooks reference](https://code.claude.com/docs/en/hooks) documents `manual` and `auto` as the `PreCompact` matcher values.
+Restrict blocks to `trigger: "auto"`. `/compact` is a deliberate user instruction, so vetoing it fights the user. The [hooks reference](https://code.claude.com/docs/en/hooks) documents `manual` and `auto` as the `PreCompact` matcher values.
 
 ```json
 {
@@ -86,20 +86,20 @@ Restrict blocks to `trigger: "auto"`. `/compact` is a deliberate user instructio
 }
 ```
 
-## The Release Condition
+## The release condition
 
 An indefinite block exhausts the context window. Every veto hook needs an explicit release — a sentinel the harness has crossed before the next compaction is allowed. Without it, the window fills and the session terminates harder than a summary would have.
 
 Two practical forms:
 
-- **Sentinel file** — the agent touches `.claude/compaction-safe` at a checkpoint; the hook allows compaction when the file exists and is recent
-- **Counter-based timeout** — the hook tracks consecutive block attempts and forces an allow after N retries, accepting the summary over the crash
+- Sentinel file — the agent touches `.claude/compaction-safe` at a checkpoint, and the hook allows compaction when the file exists and is recent
+- Counter-based timeout — the hook tracks consecutive block attempts and forces an allow after N retries, accepting the summary over the crash
 
 ## Example
 
 The hook below blocks automatic compaction until a sentinel file (`.claude/compaction-safe`) has been touched within the last 30 seconds. The agent's CLAUDE.md instructs it to touch the sentinel at each sub-task checkpoint. After three consecutive blocks, the hook allows compaction regardless to prevent exhaustion.
 
-**`.claude/hooks/defer-auto-compaction.sh`**:
+`.claude/hooks/defer-auto-compaction.sh`:
 
 ```bash
 #!/usr/bin/env bash
@@ -172,15 +172,15 @@ sequenceDiagram
     end
 ```
 
-## When This Backfires
+## When this backfires
 
-- **No release condition** — a veto without an unblock path blocks every subsequent compaction until the window exhausts and the session crashes. Always define a sentinel, counter, or timeout.
-- **Vetoing manual compaction** — `/compact` is a deliberate user action. Scope the matcher to `trigger: "auto"` unless there is a specific reason to intercept manual runs.
-- **High-velocity tool output** — sessions with large tool payloads (repo-wide greps, large file reads) cross the 99% threshold quickly; blocking past that point forces arbitrary truncation, worse than a summary ([Context Compression Strategies](../context-engineering/context-compression-strategies.md)).
-- **Low compaction frequency** — for short sessions where compaction rarely fires, the wiring and sentinel tracking are pure overhead. Prefer the [Post-Compaction Re-read Protocol](../instructions/post-compaction-reread-protocol.md) when recovery is cheaper than prevention.
-- **Stale sentinel logic** — a sentinel the agent forgets to touch (or a race condition leaves stale) blocks compaction at safe points. Pair the sentinel with the retry counter so a bug in one doesn't strand the session.
+- No release condition — a veto without an unblock path blocks every later compaction until the window exhausts and the session crashes. Always define a sentinel, counter, or timeout.
+- Vetoing manual compaction — `/compact` is a deliberate user action. Scope the matcher to `trigger: "auto"` unless there is a specific reason to intercept manual runs.
+- High-volume tool output — sessions with large tool payloads (repo-wide greps, large file reads) cross the 99% threshold quickly, so blocking past that point forces arbitrary truncation, worse than a summary ([Context Compression Strategies](../context-engineering/context-compression-strategies.md)).
+- Low compaction frequency — for short sessions where compaction rarely fires, the wiring and sentinel tracking are pure overhead. Prefer the [Post-Compaction Re-read Protocol](../instructions/post-compaction-reread-protocol.md) when recovery is cheaper than prevention.
+- Stale sentinel logic — a sentinel the agent forgets to touch (or a race condition leaves stale) blocks compaction at safe points. Pair the sentinel with the retry counter so a bug in one does not strand the session.
 
-> **"Block" cancels; it does not defer.** `{"decision": "block"}` cancels the current compaction — the harness does not auto-retry the same trigger. A retry only happens when the next trigger fires (pressure re-crosses the threshold, or the user reissues `/compact`), which is why the sentinel-plus-counter pattern above is mandatory: the hook's own bookkeeping is what re-evaluates on the next trigger. Edge case: if auto-compaction fired to *recover* from an API context-limit error, blocking surfaces that error and fails the in-flight request ([practitioner report: block cancels instead of deferring](https://github.com/MemPalace/mempalace/issues/856); [block prevents compaction at context limit](https://github.com/MemPalace/mempalace/issues/906)). Near window exhaustion, prefer allowing compaction or using `systemMessage` for advisory instructions rather than `decision: "block"`.
+> "Block" cancels; it does not defer. `{"decision": "block"}` cancels the current compaction — the harness does not auto-retry the same trigger. A retry only happens when the next trigger fires (pressure re-crosses the threshold, or the user reissues `/compact`), which is why the sentinel-plus-counter pattern above is mandatory: the hook's own bookkeeping is what re-evaluates on the next trigger. One edge case: if auto-compaction fired to recover from an API context-limit error, blocking surfaces that error and fails the in-flight request ([practitioner report: block cancels instead of deferring](https://github.com/MemPalace/mempalace/issues/856); [block prevents compaction at context limit](https://github.com/MemPalace/mempalace/issues/906)). Near window exhaustion, prefer allowing compaction or using `systemMessage` for advisory instructions rather than `decision: "block"`.
 
 ## Key Takeaways
 

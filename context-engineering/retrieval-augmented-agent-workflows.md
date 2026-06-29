@@ -21,20 +21,20 @@ maturity: established
 
 > Pull context into the agent at the moment it is needed rather than preloading it at session start.
 
-**Learn it hands-on:** [Just-in-Time Retrieval](https://learn.agentpatterns.ai/context-engineering/just-in-time-retrieval/) — guided lesson with quizzes.
+Learn it hands-on with the [Just-in-Time Retrieval guided lesson](https://learn.agentpatterns.ai/context-engineering/just-in-time-retrieval/), which includes quizzes.
 
 !!! info "Also known as"
     Context Hub, Semantic Context Loading, JIT Context, RAG
 
 Retrieval-augmented agent workflows structure context in two layers: a small startup set of instructions and tool descriptions, and an on-demand layer where the agent fetches documentation, file contents, and search results via tool calls only when the current task step requires them. This keeps the context window lean at session start and preserves budget for reasoning.
 
-## The Problem with Preloading
+## The problem with preloading
 
 Every token loaded at startup consumes budget that cannot be used for reasoning, intermediate outputs, or tool results. An agent researching five documentation sites does not need all five loaded before the first message — it needs to know they exist and how to access them.
 
 Loading context speculatively "just in case" produces two failure modes: the agent runs out of context mid-task, or the [U-shaped attention curve](lost-in-the-middle.md) leaves the preloaded material in the middle of the window, where [models attend less reliably than they do to content near the start or end](https://arxiv.org/abs/2307.03172).
 
-## On-Demand Retrieval Pattern
+## On-demand retrieval pattern
 
 Structure agent context in two layers:
 
@@ -49,13 +49,13 @@ Anthropic notes that teams increasingly augment retrieval systems with ["just in
 
 ## Mechanisms
 
-**MCP servers** expose external data sources as tools. The agent receives tool descriptions at startup and fetches content on demand. Nothing enters the prompt until the agent asks for it.
+MCP servers expose external data sources as tools. The agent receives tool descriptions at startup and fetches content on demand. Nothing enters the prompt until the agent asks for it.
 
-**Web fetch** lets an agent pull a documentation page when researching a specific question rather than pre-embedding pages in the system prompt.
+Web fetch lets an agent pull a documentation page when researching a specific question rather than pre-embedding pages in the system prompt.
 
-**File search** lets an agent [locate relevant code](repository-level-retrieval-code-generation.md) at the point of implementation rather than loading every module upfront.
+File search lets an agent [locate relevant code](repository-level-retrieval-code-generation.md) at the point of implementation rather than loading every module upfront.
 
-**Sub-agents** provide isolated context windows for retrieval-heavy tasks. A coordinator delegates a retrieval step to a sub-agent, which fetches, processes, and returns a condensed summary. [LangChain's Deep Agents framework](https://blog.langchain.com/context-management-for-deepagents/) uses a filesystem abstraction that lets agents offload large results and re-read them selectively, rather than keeping everything in active context.
+Sub-agents provide isolated context windows for retrieval-heavy tasks. A coordinator delegates a retrieval step to a sub-agent, which fetches, processes, and returns a condensed summary. [LangChain's Deep Agents framework](https://blog.langchain.com/context-management-for-deepagents/) uses a filesystem abstraction that lets agents offload large results and re-read them selectively, rather than keeping everything in active context.
 
 ## Trade-offs
 
@@ -65,9 +65,9 @@ Latency is not the only downside. Retrieval quality is a second failure mode: wh
 
 The right balance depends on task structure:
 
-- **Repetitive access** to the same document: preload it.
-- **Exploratory tasks** where the relevant subset is unknown upfront: retrieve on-demand.
-- **Long-horizon tasks**: combine both — keep instructions preloaded, retrieve reference material as needed, and use compaction or [sub-agents](../multi-agent/sub-agents-fan-out.md) when context fills.
+- Repetitive access to the same document: preload it.
+- Exploratory tasks where the relevant subset is unknown upfront: retrieve on demand.
+- Long-horizon tasks: combine both — keep instructions preloaded, retrieve reference material as needed, and use compaction or [sub-agents](../multi-agent/sub-agents-fan-out.md) when context fills.
 
 Anthropic notes that treating context as ["a precious, finite resource"](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) and assembling "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome" produces better results than broad preloading.
 

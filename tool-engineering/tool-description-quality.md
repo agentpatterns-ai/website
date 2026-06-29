@@ -18,42 +18,42 @@ maturity: established
 
 > Tool descriptions — not just tool implementations — determine whether agents select the right tool for a task. Treating descriptions as prompt engineering surfaces is a direct multiplier on task success rate.
 
-**Learn it hands-on:** [The Right Call, Obvious](https://learn.agentpatterns.ai/mcp-server-design/the-right-call-obvious/) — guided lesson with quizzes.
+Learn it hands-on with [The Right Call, Obvious](https://learn.agentpatterns.ai/mcp-server-design/the-right-call-obvious/), a guided lesson with quizzes.
 
 !!! info "Also known as"
     Tool Selection Guidance, Selection Signals
 
-## Selection as a Reasoning Step
+## Selection as a reasoning step
 
-Agents do not browse a tool catalog before acting. They select tools by reasoning about which available tool best matches their current intent. A poorly described tool is invisible for use cases its description fails to communicate — even if the implementation would handle them correctly.
+Agents do not browse a tool catalog before acting. They select a tool by reasoning about which one best matches their current intent. A poorly described tool is invisible for the use cases its description fails to communicate, even when the implementation would handle them correctly.
 
-Per [Anthropic's multi-agent research system post](https://www.anthropic.com/engineering/multi-agent-research-system), improving tool ergonomics — including descriptions — reduced task completion time by 40% for agents using the updated tools.
+[Anthropic's multi-agent research system post](https://www.anthropic.com/engineering/multi-agent-research-system) reports that improving tool ergonomics, including descriptions, cut task completion time by 40% for agents using the updated tools.
 
-The mechanism: tool descriptions are embedded into the agent's context at the reasoning step. Richer, distinctive descriptions create stronger semantic signals that align agent intent with the correct tool. Research on [tool-level retrieval for multi-agent systems](https://arxiv.org/abs/2511.01854) confirms this: coarse descriptions cluster functionally different tools together in embedding space, making correct selection unreliable.
+Here is the mechanism. Tool descriptions sit in the agent's context at the reasoning step. Richer, more distinctive descriptions create stronger semantic signals that match agent intent to the correct tool. Research on [tool-level retrieval for multi-agent systems](https://arxiv.org/abs/2511.01854) confirms this: coarse descriptions cluster functionally different tools together in embedding space, which makes correct selection unreliable.
 
-## Instruct Agents to Examine Tools First
+## Instruct agents to examine tools first
 
-When a tool set includes both generic and specialized tools, agents tend to match on the first plausible tool — often a generic one. Making the preference explicit in the system prompt counters this: "Before acting, review your available tools and select the one that best matches the task. Prefer specialized over generic tools." An agent that defaults to a generic search tool when a specialized domain-specific tool is available produces lower-quality results.
+When a tool set includes both generic and specialized tools, agents tend to match on the first plausible tool, often a generic one. Make the preference explicit in the system prompt to counter this: "Before acting, review your available tools and select the one that best matches the task. Prefer specialized over generic tools." An agent that defaults to a generic search tool when a specialized one is available produces lower-quality results.
 
-## MCP Server Tool Descriptions
+## MCP server tool descriptions
 
-MCP servers expose many tools at once. Unclear descriptions at this scale cause systematic misuse: every agent makes the same wrong selection decision, compounding across all invocations. For MCP tools:
+MCP servers expose many tools at once. Unclear descriptions at this scale cause systematic misuse: every agent makes the same wrong selection, and the error compounds across all invocations. For MCP tools:
 
-- Each tool description must be independently self-contained — agents may not have context from adjacent tools
+- Write each description so it stands on its own, because agents may not have context from adjacent tools
 - Do not assume agents read related tools before selecting the current one
 - Include domain context in each description, not just in a top-level server description
 
-## Testing Tool Selection
+## Testing tool selection
 
-Tool selection failures are often invisible during development — an agent calling the wrong tool with a plausible-looking result won't surface the error until compared against ground truth. To test selection:
+Tool selection failures are often invisible during development. An agent that calls the wrong tool and returns a plausible-looking result hides the error until you compare it against ground truth. To test selection:
 
 - Instrument agent traces and log which tool was selected for each task type
-- Compare selected tools against ground truth for a representative set of test cases
-- Refine descriptions based on observed misselection patterns, not intuition about what descriptions should say
+- Compare the selected tools against ground truth for a representative set of test cases
+- Refine descriptions from the misselection patterns you observe, not from intuition about what descriptions should say
 
-## Iterating on Descriptions
+## Iterating on descriptions
 
-Description iteration follows the pattern of prompt iteration: observe, identify failures, change, measure. The most common failure mode: a description accurate enough to describe what the tool does but not specific enough to tell the agent when to prefer it over alternatives.
+Description iteration follows the same pattern as prompt iteration: observe, identify failures, change, measure. The most common failure mode is a description accurate enough to say what the tool does but not specific enough to tell the agent when to prefer it over alternatives.
 
 The fix is positive selection signals: "Use this tool when X" and "Prefer this over [other tool] when Y." These are instructions to the agent, not documentation of the interface.
 
@@ -101,15 +101,15 @@ The following pair shows the same MCP tool with a weak description and an improv
 }
 ```
 
-The improved description answers all three questions the page identifies: what the tool does, what it returns, and when to use it instead of `list_issues`. The query syntax example eliminates trial-and-error on filter format.
+The improved description answers all three questions the page identifies: what the tool does, what it returns, and when to use it instead of `list_issues`. The query syntax example removes trial-and-error on filter format.
 
-## When This Backfires
+## When this backfires
 
-Each description adds tokens on every invocation. Three conditions where this matters:
+Each description adds tokens on every invocation. This matters in three cases:
 
-- **Large MCP servers** (50+ tools): verbose descriptions push tool context above 10k tokens. Use retrieval-based selection (embedding search to select a subset) over in-context enumeration.
-- **High-frequency loops**: verbose descriptions add cost with diminishing returns after selection stabilizes.
-- **Genuinely similar tools**: description quality cannot resolve near-identical tools — consolidate or differentiate at the implementation level. See [Consolidate Agent Tools](consolidate-agent-tools.md).
+- Large MCP servers (50+ tools): verbose descriptions push tool context above 10k tokens. Use retrieval-based selection (embedding search to pick a subset) instead of in-context enumeration.
+- High-frequency loops: verbose descriptions add cost with diminishing returns once selection stabilizes.
+- Genuinely similar tools: description quality cannot resolve near-identical tools. Consolidate or differentiate them at the implementation level. See [Consolidate Agent Tools](consolidate-agent-tools.md).
 
 ## Key Takeaways
 
@@ -128,5 +128,6 @@ Each description adds tokens on every invocation. Three conditions where this ma
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
 - [Poka-Yoke Agent Tools](poka-yoke-agent-tools.md)
 - [MCP Server Design](mcp-server-design.md)
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Self-Healing Tool Routing](self-healing-tool-routing.md)
+</content>

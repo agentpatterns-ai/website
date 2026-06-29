@@ -18,13 +18,13 @@ maturity: established
 
 > Split a long-running agent into three replaceable primitives — Session log, stateless Harness, provisioned Sandbox — so each scales and crash-recovers independently.
 
-## The Three Primitives
+## The three primitives
 
-A monolithic agent process couples model inference, session state, and execution environment. When any one churns — models shift, execution targets multiply, or a crash forces recovery — the others pay the cost. The pattern splits the process along layers whose churn rates differ by orders of magnitude ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)):
+A monolithic agent process couples model inference, session state, and execution environment. When any one of them churns — models shift, execution targets multiply, or a crash forces recovery — the others pay the cost. This pattern splits the process along layers whose churn rates differ by orders of magnitude ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)):
 
-- **Session** — an append-only event log of everything that happened. The authoritative state; not any in-memory harness object.
-- **Harness** — a stateless loop that calls the model and routes tool calls. Any harness instance can resume any session via `wake(sessionId)`.
-- **Sandbox** — a provisioned execution environment where the agent runs code and edits files. Uniform tool interface regardless of target.
+- Session — an append-only event log of everything that happened. This is the authoritative state, not any in-memory harness object.
+- Harness — a stateless loop that calls the model and routes tool calls. Any harness instance can resume any session through `wake(sessionId)`.
+- Sandbox — a provisioned environment where the agent runs code and edits files. It presents a uniform tool interface whatever the target.
 
 ```mermaid
 graph TD
@@ -35,7 +35,7 @@ graph TD
     H2[Another harness instance] -.->|wake, resume| S
 ```
 
-## Stable APIs as the Seams
+## Stable APIs as the seams
 
 The split works because the interfaces between primitives are narrow and stable. Anthropic documents the reference shape ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)):
 
@@ -49,53 +49,53 @@ The split works because the interfaces between primitives are narrow and stable.
 
 LangChain's Deep Agents Deploy (April 2026) ships the same three-layer architecture on open models and sandboxes: "The high level architecture (harness, agent server, sandboxes) is the same" ([LangChain, 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)).
 
-## Why Statelessness Pays
+## Why statelessness pays
 
-Because the Session — not the Harness — is the source of truth, two properties fall out:
+Because the Session, not the Harness, is the source of truth, two properties fall out.
 
-**Crash recovery is free.** A failed harness is replaced by any other harness that calls `wake(sessionId)` and replays events. "Any Harness instance can pick up any Session and continue from where it left off. This is what makes horizontal scaling trivial" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)).
+Crash recovery is free. Any other harness can replace a failed one: it calls `wake(sessionId)` and replays the events. "Any Harness instance can pick up any Session and continue from where it left off. This is what makes horizontal scaling trivial" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)).
 
-**Inference starts before provisioning finishes.** The harness can call the model against the event log while the sandbox is still spinning up. Anthropic reports ~60% p50 and >90% p95 reduction in time-to-first-token attributed to this decoupling ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)).
+Inference starts before provisioning finishes. The harness can call the model against the event log while the sandbox is still starting up. Anthropic reports about a 60% p50 and over 90% p95 reduction in time-to-first-token from this decoupling ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)).
 
-Models change on months-to-year cadence; harness code evolves session-to-session; sandboxes provision per session. Narrow APIs let each layer churn independently — Anthropic's OS analogy: "the abstractions outlasted the hardware" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)).
+Each layer changes on its own cadence: models over months to a year, harness code session to session, sandboxes per session. Narrow APIs let each layer churn independently — Anthropic draws an operating-system analogy, "the abstractions outlasted the hardware" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)).
 
-## Security Follows the Split
+## Security follows the split
 
-Credentials never reach the sandbox. Two patterns hold the invariant ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)):
+Credentials never reach the sandbox. Two patterns hold this invariant ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)):
 
-- **Resource-bundled auth** — git tokens wired into local remotes during `provision`, then discarded from the sandbox environment
-- **Vault-proxied auth** — OAuth tokens kept in a credential store the harness reaches via an MCP proxy; the sandbox sees only tool responses
+- Resource-bundled auth — git tokens wired into local remotes during `provision`, then discarded from the sandbox environment
+- Vault-proxied auth — OAuth tokens kept in a credential store the harness reaches through an MCP proxy, so the sandbox sees only tool responses
 
-"The tokens are never reachable from the sandbox where Claude's generated code runs" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)). The separation is enforced by the shape of the APIs, not by convention.
+"The tokens are never reachable from the sandbox where Claude's generated code runs" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)). The API shape enforces this separation, not convention.
 
-## Many Brains, Many Hands
+## Many brains, many hands
 
-A stateless harness and uniform sandbox interface compose into a fan-out: multiple harnesses attach to overlapping sessions, and one harness dispatches to heterogeneous sandboxes. "The harness doesn't know whether the sandbox is a container, a phone, or a Pokémon emulator" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)). This enables A/B model rollouts, migrations without rewriting session logs, and work distribution across specialized targets.
+A stateless harness and a uniform sandbox interface compose into a fan-out. Multiple harnesses attach to overlapping sessions, and one harness dispatches to many kinds of sandbox. "The harness doesn't know whether the sandbox is a container, a phone, or a Pokémon emulator" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)). This supports A/B model rollouts, migrations that do not rewrite session logs, and work spread across specialized targets.
 
-## When This Is Overbuilt
+## When this is overbuilt
 
-Three conditions where the cost exceeds the benefit:
+The cost exceeds the benefit under three conditions:
 
-- **Short, single-sandbox sessions.** Crash recovery is never exercised; provisioning is short; no model migration is planned. A coupled harness is simpler to build and debug.
-- **Unbounded log growth without retention.** The Session is append-only and grows linearly with session length. Long sessions force compaction, and "the standard ways to address this all involve irreversible decisions about what to keep" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)).
-- **Event-schema evolution.** Replay correctness requires a stable event shape. When the schema changes across harness versions, old logs stop replaying under new code; migration is expensive and error-prone.
+- Short, single-sandbox sessions. You never exercise crash recovery, provisioning is short, and no model migration is planned. A coupled harness is simpler to build and debug.
+- Unbounded log growth without retention. The Session is append-only and grows in step with session length. Long sessions force compaction, and "the standard ways to address this all involve irreversible decisions about what to keep" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)).
+- Event-schema evolution. Replay correctness needs a stable event shape. When the schema changes across harness versions, old logs stop replaying under new code, and migration is expensive and error-prone.
 
-For complex multi-agent coordination, "a flat log is fundamentally insufficient" ([Yan, Medium, April 2026](https://medium.com/data-science-collective/anthropic-just-shipped-three-of-the-five-harness-layers-for-managed-agent-and-the-other-two-are-on-14979cb4cf00)) — additional memory layers must sit on top of the Session.
+For complex multi-agent coordination, "a flat log is fundamentally insufficient" ([Yan, Medium, April 2026](https://medium.com/data-science-collective/anthropic-just-shipped-three-of-the-five-harness-layers-for-managed-agent-and-the-other-two-are-on-14979cb4cf00)) — extra memory layers must sit on top of the Session.
 
 ## Example
 
 A coding agent is asked to migrate a repository from Python 3.10 to 3.12 over a multi-hour run. Midway through, the harness process crashes.
 
-**Without virtualized primitives**: the in-memory conversation and partial tool results are lost. A new process cannot distinguish a `git clone` that was attempted and failed from one that completed successfully. The task restarts from scratch, rerunning destructive operations or producing inconsistent state.
+Without virtualized primitives, the in-memory conversation and partial tool results are lost. A new process cannot tell a `git clone` that was attempted and failed from one that finished. The task restarts from scratch, rerunning destructive operations or producing inconsistent state.
 
-**With Session / Harness / Sandbox split**:
+With the Session, Harness, and Sandbox split, recovery follows the log:
 
-- The Session log contains every event up to the crash: `provision` call, each `execute("bash", ...)` with its return, every model turn and tool result
-- A replacement harness calls `wake(sessionId)` and receives the log via `getEvents()`
-- The sandbox still holds the on-disk state from before the crash (same container, same filesystem); the harness reconciles by reading the last few events and resuming at the next tool call
-- Git credentials that initialized the remote during `provision` are not re-exposed to the sandbox — no credential leak across the crash boundary
+- The Session log holds every event up to the crash: the `provision` call, each `execute("bash", ...)` with its return, and every model turn and tool result
+- A replacement harness calls `wake(sessionId)` and receives the log through `getEvents()`
+- The sandbox still holds the on-disk state from before the crash, in the same container and filesystem, so the harness reconciles by reading the last few events and resuming at the next tool call
+- Git credentials that set up the remote during `provision` are not re-exposed to the sandbox, so no credentials leak across the crash boundary
 
-The user sees a brief pause, not a restart. Time-to-first-token on resume is dominated by the model call, not by reprovisioning the sandbox ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)).
+The user sees a brief pause, not a restart. On resume, the model call dominates time-to-first-token, not reprovisioning the sandbox ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)).
 
 ## Key Takeaways
 

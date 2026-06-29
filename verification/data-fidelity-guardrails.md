@@ -15,15 +15,15 @@ maturity: established
 
 > Ensure agents faithfully relay data from APIs, MCP servers, and databases rather than silently summarizing, altering, or fabricating values.
 
-## The Data Relay Problem
+## The data relay problem
 
-Agents sit between users and live data sources -- APIs, MCP servers, and databases. The failure mode is not hallucination from nothing -- it is mutation of real data. The model receives correct data from a tool and presents an altered version: financial figures get rounded, query results get summarized, status fields get paraphrased. The user cannot distinguish faithful relay from subtle fabrication.
+Agents sit between users and live data sources: APIs, MCP servers, and databases. The failure mode is not hallucination from nothing. It is mutation of real data. The model gets correct data from a tool, then presents an altered version. Financial figures get rounded, query results get summarized, status fields get paraphrased. The user cannot tell faithful relay from subtle fabrication.
 
-[CyberArk's ATPA research](https://www.cyberark.com/resources/threat-research-blog/poison-everywhere-no-output-from-your-mcp-server-is-safe) demonstrates that malicious tool outputs can instruct the model to alter data deliberately -- tool poisoning extends beyond descriptions into return values.
+[CyberArk's ATPA research](https://www.cyberark.com/resources/threat-research-blog/poison-everywhere-no-output-from-your-mcp-server-is-safe) shows that malicious tool outputs can instruct the model to alter data on purpose. Tool poisoning reaches beyond descriptions into return values.
 
-## Architecture Patterns
+## Architecture patterns
 
-### Passthrough Architecture
+### Passthrough architecture
 
 Route raw tool responses to the UI alongside the model's summary:
 
@@ -35,11 +35,11 @@ graph LR
     D -->|summary| E[UI: Agent Commentary]
 ```
 
-The user sees both the raw data and the agent's interpretation; discrepancies are immediately visible. The raw panel is populated by deterministic code, never by the LLM. The trade-off is UI complexity -- not every interface can display raw data alongside commentary.
+The user sees both the raw data and the agent's interpretation, so discrepancies are visible at once. Deterministic code fills the raw panel, never the LLM. The trade-off is UI complexity, because not every interface can show raw data alongside commentary.
 
-### Structural Separation of Data and Commentary
+### Structural separation of data and commentary
 
-Separate factual fields (populated by deterministic code) from the LLM's generated commentary:
+Separate factual fields, filled by deterministic code, from the LLM's generated commentary:
 
 ```json
 {
@@ -52,11 +52,11 @@ Separate factual fields (populated by deterministic code) from the LLM's generat
 }
 ```
 
-The `data` object is copied directly from the API response by application code; `commentary` is the only LLM-generated field. Downstream consumers know which fields to trust unconditionally.
+Application code copies the `data` object straight from the API response, and `commentary` is the only LLM-generated field. Downstream consumers know which fields to trust without question.
 
-### Typed Schema Validation
+### Typed schema validation
 
-[Structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) enforce schema shape through constrained decoding — see [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md) for the full pattern of applying typed contracts at every agent-to-agent interface. But schema compliance does not equal value accuracy -- a correctly-typed `"balance": 14500.00` still differs from the true value of `14523.87`.
+[Structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) enforce schema shape through constrained decoding. See [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md) for the full pattern of applying typed contracts at every agent-to-agent interface. But schema compliance does not equal value accuracy. A correctly typed `"balance": 14500.00` still differs from the true value of `14523.87`.
 
 Layer schema validation with other defenses:
 
@@ -67,9 +67,9 @@ Layer schema validation with other defenses:
 | Diff-based auditing | Any discrepancy, automatically | Mutations the model applies before logging |
 | Checksum verification | Any payload alteration | Requires infrastructure support |
 
-### Diff-Based Auditing
+### Diff-based auditing
 
-Log raw tool responses and the model's presented version; flag discrepancies automatically:
+Log raw tool responses and the model's presented version, then flag any discrepancy automatically:
 
 ```mermaid
 graph TD
@@ -82,43 +82,43 @@ graph TD
     E -->|mismatch| G[Alert / block]
 ```
 
-Observability platforms like LangSmith and Langfuse log tool inputs and outputs, enabling this comparison in production. The key constraint: logging must happen before the LLM sees the data.
+Observability platforms like LangSmith and Langfuse log tool inputs and outputs, which makes this comparison possible in production. The key constraint is that logging must happen before the LLM sees the data.
 
-## Tool Output Integrity
+## Tool output integrity
 
-### Tool Poisoning as a Data Fidelity Threat
+### Tool poisoning as a data fidelity threat
 
-Tool poisoning attacks embed hidden instructions in tool return values, not just descriptions. A compromised MCP server can include directives telling the model to alter, exfiltrate, or suppress data. [Invariant Labs](https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks) documented cross-server data exfiltration via this vector.
+Tool poisoning attacks embed hidden instructions in tool return values, not just descriptions. A compromised MCP server can include directives that tell the model to alter, exfiltrate, or suppress data. [Invariant Labs](https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks) documented cross-server data exfiltration through this vector.
 
-Mitigations:
+You can mitigate it in four ways:
 
-- **Version pinning with checksums** -- detect unauthorized tool modifications ([ETDI](https://arxiv.org/html/2506.01333v1) proposes cryptographic signing of tool definitions)
-- **Cross-server dataflow boundaries** -- prevent data from one MCP server reaching tools on another
-- **Spotlighting / datamarking** -- [Microsoft's MCP security guidance](https://developer.microsoft.com/blog/protecting-against-indirect-injection-attacks-mcp) recommends marking boundaries between trusted instructions and untrusted tool content
-- **Dual LLM separation** -- the [Dual LLM pattern](https://agentic-patterns.com/patterns/dual-llm-pattern/) routes untrusted data through a quarantined model with no tool access
+- Pin tool versions with checksums to detect unauthorized tool modifications. [ETDI](https://arxiv.org/html/2506.01333v1) proposes cryptographic signing of tool definitions.
+- Set cross-server dataflow boundaries to stop data from one MCP server reaching tools on another.
+- Apply spotlighting or datamarking. [Microsoft's MCP security guidance](https://developer.microsoft.com/blog/protecting-against-indirect-injection-attacks-mcp) recommends marking boundaries between trusted instructions and untrusted tool content.
+- Separate trust with the [Dual LLM pattern](https://agentic-patterns.com/patterns/dual-llm-pattern/), which routes untrusted data through a quarantined model with no tool access.
 
-### Design Tools for Fidelity
+### Design tools for fidelity
 
-[Anthropic's tool output guidance](https://www.anthropic.com/engineering/writing-tools-for-agents) recommends:
+[Anthropic's tool output guidance](https://www.anthropic.com/engineering/writing-tools-for-agents) recommends three habits:
 
-- Return only relevant fields -- every extra field is a mutation opportunity
-- Use semantic values instead of opaque identifiers -- the model is less likely to fabricate a name than a UUID
-- Paginate at the tool layer -- unbounded result sets force the model to compress output, introducing mutation risk
+- Return only relevant fields, because every extra field is a mutation opportunity.
+- Use semantic values instead of opaque identifiers, since the model is less likely to fabricate a name than a UUID.
+- Paginate at the tool layer, because unbounded result sets force the model to compress output and add mutation risk.
 
 See [Semantic Tool Output](../tool-engineering/semantic-tool-output.md) for the full pattern.
 
-## Anti-Pattern
+## Anti-pattern
 
-Trusting the model to faithfully transcribe data because the prompt says "report exact values." Prompt instructions are probabilistic; a passthrough panel or diff-based audit is deterministic. Use both -- prompt for guidance, architecture for enforcement.
+Do not trust the model to transcribe data faithfully just because the prompt says "report exact values." Prompt instructions are probabilistic, but a passthrough panel or diff-based audit is deterministic. Use both: prompt for guidance, architecture for enforcement.
 
-## When This Backfires
+## When this backfires
 
-These guardrails impose real costs. Skip the full stack when:
+These guardrails impose real costs. Skip the full stack when one of these holds:
 
-- **The surface cannot show structured data** -- voice, SMS, and narrow chat surfaces have no room for a raw panel; passthrough becomes noise users ignore.
-- **Stakes are low and reads are casual** -- status lookups and document summaries have small mutation blast radius; the engineering cost outweighs the [protection](layered-accuracy-defense.md).
-- **Data is high-cardinality or streaming** -- large result sets make raw panels unreadable and diff engines a latency bottleneck.
-- **Token or latency budgets are tight** -- logging raw responses and returning both raw fields and commentary inflates context and response time.
+- The surface cannot show structured data. Voice, SMS, and narrow chat surfaces have no room for a raw panel, so passthrough becomes noise users ignore.
+- Stakes are low and reads are casual. Status lookups and document summaries have a small mutation blast radius, so the engineering cost outweighs the [protection it buys](layered-accuracy-defense.md).
+- Data is high-cardinality or streaming. Large result sets make raw panels unreadable and turn diff engines into a latency bottleneck.
+- Token or latency budgets are tight. Logging raw responses and returning both raw fields and commentary inflates context and response time.
 
 Under these conditions, prefer [typed schemas at the boundary](structured-output-constraints.md) and spot-check evals on exact values instead of the full passthrough-plus-diff stack.
 

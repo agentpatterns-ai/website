@@ -19,7 +19,7 @@ maturity: established
 
 > Dispatching coding agents from REST, webhooks, or cron is safe only when the caller adds dedupe, payload sanitisation, budget caps, and principal logging itself.
 
-Programmatic cloud-agent dispatch is the third invocation principal after the IDE and chat surfaces: any system that can issue an authenticated POST can hand work to a coding agent. GitHub's May 2026 Agent tasks REST API exposes the same control plane the IDE and chat paths use internally, opening the door to cron-triggered release notes, webhook-driven refactors, and internal-portal automation. The plumbing is shipped; the discipline is the caller's problem.
+Programmatic cloud-agent dispatch is the third invocation principal, after the IDE and chat surfaces. Any system that can issue an authenticated POST can hand work to a coding agent. GitHub's May 2026 Agent tasks REST API exposes the same control plane the IDE and chat paths use internally. It supports cron-triggered release notes, webhook-driven refactors, and internal-portal automation. The plumbing has shipped, but the discipline is the caller's problem.
 
 ## Preconditions
 
@@ -28,11 +28,11 @@ Adopt this pattern only when all four conditions hold. If any one is missing, st
 | Condition | Why it is load-bearing |
 |-----------|----------------------|
 | Caller-side dedupe store keyed by event ID | The API ships no idempotency parameter. Webhook retries and overlapping cron runs each create a new task. ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-via-the-api), [Svix](https://www.svix.com/resources/webhook-university/reliability/idempotency-and-deduplication/)) |
-| Payload-to-prompt sanitisation | Untrusted fields (issue title, commit message, comment body) flow into the prompt; OWASP LLM01 treats agents without humans as widened injection surface. ([OWASP](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)) |
+| Payload-to-prompt sanitization | Untrusted fields (issue title, commit message, comment body) flow into the prompt; OWASP LLM01 treats agents without humans as widened injection surface. ([OWASP](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)) |
 | Per-trigger token budget cap | From 2026-06-01 each task burns AI Credits at published API token rates; a fast-failing loop drains the team allotment. ([GitHub Blog](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/)) |
 | Out-of-band principal log | The API requires user-to-server tokens; GitHub's audit log attributes every task to the PAT owner regardless of which cron or workflow actually triggered it. ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-via-the-api)) |
 
-## The Surface
+## The surface
 
 The dispatch endpoint is `POST /agents/repos/{owner}/{repo}/tasks`. The only required body parameter is `prompt`; optional fields are `base_ref`, `model`, and `create_pull_request`. Listing uses `GET /agents/repos/{owner}/{repo}/tasks` (per repo) or `GET /agents/tasks` (across all repos the caller can see). Status is `GET /agents/repos/{owner}/{repo}/tasks/{task-id}`, returning a `state` of `queued`, `in_progress`, `completed`, `failed`, `idle`, `waiting_for_user`, `timed_out`, or `cancelled`. ([GitHub Docs: Using Copilot cloud agent via the API](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-via-the-api))
 
@@ -54,20 +54,20 @@ graph TD
     H --> I[PR / status]
 ```
 
-## Why It Works
+## Why it works
 
-The mechanism is plumbing. The IDE, chat, and issue-assignment paths each terminated in an internal call equivalent to `POST /agents/repos/.../tasks`; exposing that endpoint to direct callers removes the human-typing step from the dispatch path. That cuts coordination latency for cases the changelog cites — "automatically prepare a new release each week, including release notes" — because no human has to sit in front of the IDE on Friday afternoon. ([GitHub Changelog](https://github.blog/changelog/2026-05-13-start-copilot-cloud-agent-tasks-via-the-rest-api/))
+The mechanism is plumbing. The IDE, chat, and issue-assignment paths each terminated in an internal call equivalent to `POST /agents/repos/.../tasks`. Exposing that endpoint to direct callers removes the human-typing step from the dispatch path. That cuts coordination latency for the cases the changelog cites — "automatically prepare a new release each week, including release notes" — because no human has to sit in front of the IDE on Friday afternoon. ([GitHub Changelog](https://github.blog/changelog/2026-05-13-start-copilot-cloud-agent-tasks-via-the-rest-api/))
 
-The cost of removing the human is that the human was doing four jobs implicitly: deduplicating (a human does not click "run" twice by accident), validating input (a human notices when an issue title contains adversarial text), bounding cost (typing speed caps requests per minute), and providing audit attribution (the human's name in the action log matches the human who triggered the action). Each of those four jobs must now be done by the caller. The OWASP LLM01:2025 guidance is explicit: "The LLM Top 10 assumes a human in the loop … In contrast, agents often operate with no human checking each step. The attack surface becomes every tool call, every memory read or write, every agent handoff." ([OWASP Gen AI Security: LLM01:2025](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)) The pattern is the discipline of replacing those four implicit jobs with explicit ones.
+The cost of removing the human is that the human was doing four jobs implicitly: deduplicating (a human does not click "run" twice by accident), validating input (a human notices when an issue title contains adversarial text), bounding cost (typing speed caps requests per minute), and providing audit attribution (the human's name in the action log matches the human who triggered the action). The caller must now do each of those four jobs. The OWASP LLM01:2025 guidance is explicit: "The LLM Top 10 assumes a human in the loop … In contrast, agents often operate with no human checking each step. The attack surface becomes every tool call, every memory read or write, every agent handoff." ([OWASP Gen AI Security: LLM01:2025](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)) The pattern is the discipline of replacing those four implicit jobs with explicit ones.
 
-## When This Backfires
+## When this backfires
 
 | Failure | Concrete shape |
 |---------|--------------|
 | Webhook retry storm | Provider retries on missing 2xx; without a dedupe store keyed by event ID, one push event delivered three times spawns three identical refactor tasks. Industry-standard fix is a SETNX/unique-insert keyed by event ID with TTL exceeding the provider's retry window. ([Svix](https://www.svix.com/resources/webhook-university/reliability/idempotency-and-deduplication/), [Hookdeck](https://hookdeck.com/webhooks/guides/implement-webhook-idempotency)) |
 | Untrusted payload reaches the prompt | An attacker who can edit an issue title or commit message plants instructions that flow into the agent when the trigger reads `payload.issue.title` directly. The classic indirect-injection case OWASP covers. ([OWASP](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)) |
 | Token-shaped runaway cost | Post-2026-06-01, AI Credits are "consumed based on token usage, including input, output, and cached tokens." A cron job that retriggers on failure can burn the team's monthly allotment in hours without a per-trigger cap. ([GitHub Blog: usage-based billing](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/)) |
-| PAT rotation breaks the pipeline silently | User-to-server only. The dispatcher must hold a long-lived PAT; rotation or expiry stops every scheduled job until someone notices. Storing the PAT in plaintext leaks every task the dispatcher was authorised to start. |
+| PAT rotation breaks the pipeline silently | User-to-server only. The dispatcher must hold a long-lived PAT; rotation or expiry stops every scheduled job until someone notices. Storing the PAT in plaintext leaks every task the dispatcher was authorized to start. |
 | Wrong audit attribution | GitHub records the PAT owner as initiator regardless of which cron or workflow triggered the call. Compliance teams cannot distinguish "Alice clicked merge" from "Alice's PAT was used by release-cron at 03:00." Solvable only by logging the originating principal in the dispatcher's own store. |
 | Fan-out without concurrency limit | "An autonomous agent completing one task might chain 10 to 50 API calls in seconds … a fixed-window limit either blocks the burst and breaks the workflow, or sets the ceiling high enough to allow it and leaves the API exposed during sustained abuse." Token-shaped budgets and explicit concurrency caps are required. ([Zuplo](https://zuplo.com/blog/rate-limit-ai-agents-beyond-request-counts)) |
 
@@ -107,7 +107,7 @@ principal_log.write({"trigger": "release-notes-cron",
 
 The fixed prompt and explicit `event_id` close two failure modes at once: no payload field can reach the prompt, and a duplicate cron firing within seven days is dropped at the dedupe boundary. The principal log keeps the answer to "what triggered this task" outside GitHub's audit trail, which records only the PAT owner.
 
-## Comparison to Other Invocation Principals
+## Comparison to other invocation principals
 
 | Principal | Entry point | Implicit safeguards | Loses when bypassed |
 |-----------|-------------|--------------------|--------------------|

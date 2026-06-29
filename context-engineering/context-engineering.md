@@ -17,15 +17,15 @@ maturity: established
 
 > Context engineering designs what enters a model's context window, how it is structured, and what is excluded — to maximise output quality.
 
-## What Context Engineering Is
+## What context engineering is
 
 [Latent Patterns](https://latentpatterns.com/glossary) defines context engineering as "the discipline of designing, managing, and optimizing the information placed into a language model's context window to maximize the quality and reliability of its output."
 
-The context window is the agent's entire world. Every output is a function of what is in that window — not what exists in the codebase or the developer's intent, but what was explicitly placed in context.
+The context window is the agent's entire world. Every output is a function of what sits in that window. It depends on what you place in context, not on what exists in the codebase or what you intended.
 
-[Anthropic frames this](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) as finding "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome." Signal density over volume.
+[Anthropic frames this](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) as finding "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome." Signal density beats volume.
 
-## The Layers of Agent Context
+## The layers of agent context
 
 Agent context is a stack of layers, each with different persistence:
 
@@ -40,25 +40,25 @@ graph TD
 
 | Layer | Content | Loaded when |
 |-------|---------|-------------|
-| System prompt | Role, constraints, core behaviour | Always |
+| System prompt | Role, constraints, core behavior | Always |
 | Project instructions | Conventions, repo structure, standards | Session start |
 | Skill definitions | Tool descriptions and invocation metadata | Session start |
 | Skill content | Full skill instructions | On invocation |
 | Conversation history | Prior turns, compressed as needed | Accumulated |
 | Tool outputs | Results from tool calls | Per tool call |
 
-Each layer has an opportunity cost: every token displaces reasoning, instructions, or task-relevant content. This is not merely a capacity constraint — [attention is non-uniform](https://arxiv.org/abs/2307.03172). Models attend strongly to content near the start and end of the context window and poorly to content in the middle. Loading irrelevant tokens does not produce neutral noise; it actively dilutes attention on relevant tokens, causing measurable output degradation.
+Each layer has an opportunity cost: every token displaces reasoning, instructions, or task-relevant content. This is not just a capacity constraint, because [attention is non-uniform](https://arxiv.org/abs/2307.03172). Models attend strongly to content near the start and end of the context window, and poorly to content in the middle. Irrelevant tokens do not produce neutral noise. They dilute attention on relevant tokens, which degrades the output measurably.
 
-## Token Economics
+## Token economics
 
 Context space is finite. Every inclusion is an exclusion:
 
-- **System prompt tokens** carry high-leverage, durable instructions — not examples that could load on-demand
-- **Skill content** loaded lazily avoids consuming budget until needed ([Agent Skills Standard](../standards/agent-skills-standard.md))
-- **Tool outputs** return concise, structured results — verbose responses displace reasoning capacity
-- **Conversation history** accumulates and degrades quality — [compaction](https://latentpatterns.com/glossary) (lossy summarisation of older turns) frees space but requires preserving task-critical facts
+- System prompt tokens carry durable, high-value instructions, not examples that could load on demand
+- Skill content loaded lazily avoids spending budget until needed ([Agent Skills Standard](../standards/agent-skills-standard.md))
+- Tool outputs return concise, structured results, because verbose responses displace reasoning capacity
+- Conversation history accumulates and degrades quality, so [compaction](https://latentpatterns.com/glossary) (lossy summarization of older turns) frees space but has to preserve task-critical facts
 
-## Context Pollution
+## Context pollution
 
 [Context pollution](../anti-patterns/session-partitioning.md) — irrelevant context accumulated across unrelated tasks — competes with relevant content for attention. An agent loaded with 50 potentially-relevant files produces worse output on the 2 actually-relevant files than one loaded with only those 2 — a pattern confirmed by [Liu et al. (2023)](https://arxiv.org/abs/2307.03172), who found multi-document QA accuracy drops 30%+ as distractors increase. Semantically related but inapplicable instructions are a specific form of this: see [Distractor Interference](../anti-patterns/distractor-interference.md).
 
@@ -71,26 +71,26 @@ Common sources:
 - Accumulated history with superseded instructions
 - Project-level instructions duplicating the system prompt
 
-## The Scope of the Discipline
+## The scope of the discipline
 
-Context engineering subsumes several concerns treated separately:
+Context engineering covers several concerns usually treated separately:
 
-- **[Prompt engineering](../training/foundations/prompt-engineering.md)** — designing individual instructions within the context
-- **Skill design** — what tool descriptions expose vs. load on-demand
-- **Agent architecture** — sub-agents handling retrieval to isolate pollution from the coordinator
-- **Memory management** — what persists across sessions, what is summarised, what is discarded
+- [Prompt engineering](../training/foundations/prompt-engineering.md) designs individual instructions within the context
+- Skill design decides what tool descriptions expose, versus what loads on demand
+- Agent architecture uses sub-agents to handle retrieval and isolate pollution from the coordinator
+- Memory management decides what persists across sessions, what is summarized, and what is discarded
 
-[Anthropic identifies](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) three complementary approaches: compaction (lossy summarisation), structured note-taking (persistent external memory), and sub-agent architectures (condensed summaries returned to a coordinator).
+[Anthropic identifies](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) three complementary approaches: compaction (lossy summarization), structured note-taking (persistent external memory), and sub-agent architectures (condensed summaries returned to a coordinator).
 
-## When This Backfires
+## When this backfires
 
 Context engineering introduces its own failure modes:
 
-- **Retrieval errors propagate**: if the retrieval layer selects wrong files, the agent has no fallback — selective loading without reliable retrieval produces worse results than loading everything.
-- **Compaction loses critical state**: lossy summarisation discards information that turns out to be needed later. Compaction requires knowing in advance what is task-critical, which is not always possible at summarisation time.
-- **Coordination overhead**: [sub-agent architectures](context-budget-allocation.md) require well-designed handoff contracts. A coordinator that receives a poor summary from a sub-agent cannot recover missing context.
+- Retrieval errors propagate: if the retrieval layer selects the wrong files, the agent has no fallback. Selective loading without reliable retrieval produces worse results than loading everything.
+- Compaction loses critical state: lossy summarization discards information that turns out to be needed later. Compaction requires knowing in advance what is task-critical, which you cannot always tell at summarization time.
+- Coordination adds overhead: [sub-agent architectures](context-budget-allocation.md) need well-designed handoff contracts. A coordinator that receives a poor summary from a sub-agent cannot recover the missing context.
 
-The pattern assumes retrieval quality and compaction fidelity. When those assumptions fail, an unfiltered context is more robust than a poorly filtered one.
+The pattern assumes retrieval quality and compaction fidelity. When those assumptions fail, an unfiltered context is more reliable than a poorly filtered one.
 
 ## Key Takeaways
 
@@ -105,15 +105,15 @@ A coding agent is tasked with refactoring a large repository. Naively, it loads 
 
 Applying context engineering:
 
-1. **System prompt** carries only role and constraints (500 tokens). No examples, no reference docs.
-2. **Skill content** for the refactor pattern loads on invocation — not at session start.
-3. **Retrieval** fetches a repository map (file names + signatures, ~2,000 tokens) rather than file bodies.
-4. **Tool calls** return only the 3 relevant files on demand (6,000 tokens total) — not the full repo.
-5. **Conversation history** is compacted after each major step, preserving decisions and discarding superseded instructions.
+1. The system prompt carries only role and constraints (500 tokens). No examples, no reference docs.
+2. Skill content for the refactor pattern loads on invocation, not at session start.
+3. Retrieval fetches a repository map (file names plus signatures, about 2,000 tokens) rather than file bodies.
+4. Tool calls return only the 3 relevant files on demand (6,000 tokens total), not the full repo.
+5. Conversation history is compacted after each major step, which preserves decisions and discards superseded instructions.
 
 Total context used at any point: ~9,000 tokens. The agent produces a correct, targeted diff on the first attempt.
 
-The key decisions were about exclusion: what not to load, when not to load it, and what to summarise rather than retain verbatim.
+The key decisions were about exclusion: what not to load, when not to load it, and what to condense rather than retain verbatim.
 
 ## Related
 

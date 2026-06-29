@@ -18,14 +18,14 @@ maturity: established
 
 > Run a skill in a forked subagent context so its auxiliary tokens — search hits, plans, tool output — stay out of the main chat.
 
-**Related lesson:** [Skills as a Tool-Engineering Surface](https://learn.agentpatterns.ai/tool-engineering/skills-as-a-tool-surface/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Skills as a Tool-Engineering Surface](https://learn.agentpatterns.ai/tool-engineering/skills-as-a-tool-surface/) covers this concept in a hands-on lesson with quizzes.
 
 !!! note "Also known as"
     Dedicated context for skills, skill fork context. For the broader sub-agent isolation pattern, see [Sub-Agents for Fan-Out](../multi-agent/sub-agents-fan-out.md). For the SKILL.md syntax, see [Skill Frontmatter Reference](skill-frontmatter-reference.md).
 
 Skill context isolation is a per-invocation context-engineering choice: the skill executes inside a forked subagent window, and only its final output crosses back. The selection unit is the skill call, not the task or the turn — same model, isolated context.
 
-## What Forks and What Returns
+## What forks and what returns
 
 ```mermaid
 graph LR
@@ -37,11 +37,11 @@ graph LR
 
 The auxiliary work — file reads, search results, intermediate scratch, multi-step tool chains — stays inside the fork. The main thread sees a single skill call with a compact result, not the trace that produced it.
 
-## Two Tools, One Mechanism
+## Two tools, one mechanism
 
 Both Claude Code and VS Code expose this as a frontmatter opt-in.
 
-**Claude Code** sets `context: fork` plus an `agent:` type in the SKILL.md frontmatter. The skill body becomes the subagent's task prompt; the agent type supplies tools and permissions. Built-in agents include `Explore` (Haiku, read-only — fast codebase search), `Plan` (read-only — pre-planning research), and `general-purpose` (full tools) ([SKILL.md Frontmatter Reference](skill-frontmatter-reference.md)).
+Claude Code sets `context: fork` plus an `agent:` type in the SKILL.md frontmatter. The skill body becomes the subagent's task prompt; the agent type supplies tools and permissions. Built-in agents include `Explore` (Haiku, read-only — fast codebase search), `Plan` (read-only — pre-planning research), and `general-purpose` (full tools) ([SKILL.md Frontmatter Reference](skill-frontmatter-reference.md)).
 
 ```yaml
 ---
@@ -52,9 +52,9 @@ agent: Explore
 ---
 ```
 
-**VS Code 1.118** (2026-04-29) shipped "Dedicated Context for Skills" with the same `context: fork` opt-in. The release notes name the failure it solves: "When you use a skill that performs multi-step tool calls or pulls in large reference material, that auxiliary content can crowd your main chat context and degrade the quality of follow-up responses" ([VS Code 1.118 release notes](https://code.visualstudio.com/updates/v1_118)).
+VS Code 1.118 (2026-04-29) shipped "Dedicated Context for Skills" with the same `context: fork` opt-in. The release notes name the failure it solves: "When you use a skill that performs multi-step tool calls or pulls in large reference material, that auxiliary content can crowd your main chat context and degrade the quality of follow-up responses" ([VS Code 1.118 release notes](https://code.visualstudio.com/updates/v1_118)).
 
-## When to Fork
+## When to fork
 
 Fork when all three conditions hold:
 
@@ -64,27 +64,27 @@ Fork when all three conditions hold:
 
 If any condition fails, leaving the skill in the main context is the right default.
 
-## When It Backfires
+## When it backfires
 
-- **Reference-only skills** — `context: fork` plus a body that is taxonomy, template, or knowledge produces empty output. The subagent receives the body as its task; with no instructions, there is nothing to do ([Skill Frontmatter Reference](skill-frontmatter-reference.md)).
-- **Follow-up sensitivity** — when the user routinely acts on intermediate findings ("now refactor the third caller"), forking discards exactly the state the next turn needs.
-- **Small auxiliary footprint** — the [subagent](../multi-agent/sub-agents-fan-out.md) framing overhead (system prompt, tool definitions, result wrapping) can exceed what the fork saves on short-output skills.
-- **Determinism-required outputs** — security audits, diff review, and other workflows where the user must see the raw work cannot tolerate a summarised return.
-- **Debug iteration** — while the skill itself is being authored, the inner trace needs to be visible. Fork after the skill is stable.
-- **Self-dispatch recursion** — a known harness bug: a `context: fork` body shaped like a skill spec (a `# Name: tagline` header, third-person prose, an `ARGUMENTS:` block) can be pattern-matched by the forked subagent as a dispatch request, re-invoking itself instead of running. With no re-entry guard it loops until killed ([anthropics/claude-code#55592](https://github.com/anthropics/claude-code/issues/55592)). Write forked bodies as direct imperative steps.
+- Reference-only skills — `context: fork` plus a body that is taxonomy, template, or knowledge produces empty output. The subagent receives the body as its task; with no instructions, there is nothing to do ([Skill Frontmatter Reference](skill-frontmatter-reference.md)).
+- Follow-up sensitivity — when the user routinely acts on intermediate findings ("now refactor the third caller"), forking discards exactly the state the next turn needs.
+- Small auxiliary footprint — the [subagent](../multi-agent/sub-agents-fan-out.md) framing overhead (system prompt, tool definitions, result wrapping) can exceed what the fork saves on short-output skills.
+- Determinism-required outputs — security audits, diff review, and other workflows where the user must see the raw work cannot tolerate a summarized return.
+- Debug iteration — while you are authoring the skill, the inner trace needs to be visible. Fork after the skill is stable.
+- Self-dispatch recursion — a known harness bug. A `context: fork` body shaped like a skill spec (a `# Name: tagline` header, third-person prose, an `ARGUMENTS:` block) can be pattern-matched by the forked subagent as a dispatch request, re-invoking itself instead of running. With no re-entry guard it loops until killed ([anthropics/claude-code#55592](https://github.com/anthropics/claude-code/issues/55592)). Write forked bodies as direct imperative steps.
 
-## Why It Works
+## Why it works
 
 Transformer attention is allocated across all tokens in context; auxiliary tokens compete with primary task tokens for both attention and absolute window capacity. Anthropic frames sub-agent isolation as a context management strategy: "the detailed search context remains isolated within sub-agents, while the lead agent focuses on synthesizing and analyzing the results," with sub-agents typically returning condensed summaries of 1,000–2,000 tokens ([Anthropic — Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). When the raw exploration substantially exceeds that summary size, the fork keeps the main context lean for follow-up turns.
 
-## Distinct From Related Patterns
+## Distinct from related patterns
 
 | Pattern | Selection unit | What is held constant |
 |---------|---------------|----------------------|
-| **Skill context isolation** | Per skill call | Same model, isolated context window |
+| Skill context isolation | Per skill call | Same model, isolated context window |
 | [Specialized SLM as agent tool](../agent-design/specialized-slm-as-agent-tool.md) | Per tool call | Different (smaller) model behind a tool boundary |
 | [Sub-agents for fan-out](../multi-agent/sub-agents-fan-out.md) | Per parallel branch | Same model, isolated contexts, primary goal is parallelism |
-| [Cost-aware tier routing](../agent-design/cost-aware-agent-design.md) | Per turn or role | Different model selected for cost |
+| [Cost-aware tier routing](../token-engineering/cost-aware-agent-design.md) | Per turn or role | Different model selected for cost |
 
 The differentiator: skill context isolation is a context-window decision, not a model decision and not a parallelism decision.
 

@@ -18,13 +18,13 @@ maturity: adopted
 
 > Organize a skill library around SDLC phases so phase-entry commands activate only the relevant skills — keeping selection deterministic as the library grows past the five-skill personal scale.
 
-## The Selection Problem at Project Scale
+## The selection problem at project scale
 
-A personal skill library of five focused skills works because descriptions stay orthogonal. As the library grows, overlapping descriptions cause unreliable selection: the model cannot reliably distinguish `code-review-and-quality` from `debugging-and-error-recovery` when both apply to a broken build. Anthropic's tool-authoring guidance notes that "when tools overlap in function or have a vague purpose, agents can get confused about which ones to use," and that "too many tools or overlapping tools can also distract agents from pursuing efficient strategies" ([source](https://www.anthropic.com/engineering/writing-tools-for-agents)). The fix is structural, not editorial — partition skills by lifecycle phase so the active set at any point is small and orthogonal.
+A personal skill library of five focused skills works because the descriptions stay distinct. As the library grows, overlapping descriptions make selection unreliable: the model cannot tell `code-review-and-quality` from `debugging-and-error-recovery` when both apply to a broken build. Anthropic's tool-authoring guidance notes that "when tools overlap in function or have a vague purpose, agents can get confused about which ones to use," and that "too many tools or overlapping tools can also distract agents from pursuing efficient strategies" ([Anthropic guidance on writing tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents)). The fix is structural, not editorial: partition skills by lifecycle phase so the active set stays small and distinct.
 
 SDLC-phase taxonomy is the organizing principle: skills group into six phases, and slash commands act as phase entry points that narrow the active context to that phase's skills. [`addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) (MIT-licensed, distributed via the Claude Code plugin marketplace) is a worked example of this approach.
 
-## Phase Taxonomy
+## Phase taxonomy
 
 Six phases, 20 skills, 7 commands:
 
@@ -48,20 +48,20 @@ graph TD
 
 Build has the highest skill density (six) but the skills are auto-activated by task type: designing an API triggers `api-and-interface-design`; building UI triggers `frontend-ui-engineering`. The phase command narrows the candidate set; task context narrows it further.
 
-## SKILL.md Structural Elements
+## SKILL.md structural elements
 
-Each skill in a production SDLC library shares a consistent anatomy that enforces process rather than providing reference material:
+Each skill in a production SDLC library shares the same anatomy. It enforces a process rather than supplying reference material:
 
-- **Trigger conditions** — explicit "When to Use" criteria so auto-activation fires correctly
-- **Step-by-step process** — the workflow the agent must follow, not just what it should know
-- **Rationalizations table** — common shortcuts paired with documented rebuttals (e.g., "We can add tests later" → "Tests written after implementation verify the implementation, not the requirement")
-- **Verification requirements** — non-negotiable proof gates before proceeding (tests passing, build output, runtime data)
+- Trigger conditions — explicit "When to Use" criteria so auto-activation fires correctly
+- Step-by-step process — the workflow the agent must follow, not just what it should know
+- Rationalizations table — common shortcuts paired with documented rebuttals (for example, "We can add tests later" maps to "Tests written after implementation verify the implementation, not the requirement")
+- Verification requirements — proof gates the agent must clear before proceeding (tests passing, build output, runtime data)
 
-The rationalizations table is the highest-signal element: it converts process guidelines into enforcement. Without it, agents follow the described workflow unless the task context suggests a shortcut is acceptable.
+The rationalizations table is the highest-signal element: it turns process guidelines into enforcement. Without it, agents follow the described workflow only until the task context suggests a shortcut is acceptable.
 
 Agent personas (code-reviewer, test-engineer, security-auditor) complement the skill library as reusable reviewer perspectives, loaded on demand independent of the phase taxonomy.
 
-## Multi-Tool Portability
+## Multi-tool portability
 
 The same SKILL.md assets work across eight agent surfaces:
 
@@ -76,17 +76,17 @@ The same SKILL.md assets work across eight agent surfaces:
 | Kiro IDE | `.kiro/skills/` |
 | Generic agents | Plain Markdown in system prompt |
 
-Portability varies by tool: Cursor requires `.cursor/rules/` placement (not native SKILL.md loading); Copilot uses personas rather than skill files. The [Agent Skills standard](https://agentskills.io) provides a common format across compatible tools, but test portability per tool — don't assume it.
+Portability varies by tool: Cursor needs `.cursor/rules/` placement rather than native SKILL.md loading, and Copilot uses personas rather than skill files. The [Agent Skills standard](https://agentskills.io) gives compatible tools a common format, but test portability per tool rather than assuming it.
 
-## When This Works and When It Doesn't
+## When this works and when it does not
 
-**Where SDLC taxonomy adds value:**
+Where SDLC taxonomy adds value:
 
 - Teams with a recognizable lifecycle cadence (spec → implementation → review → deploy) at project scale (roughly 5–20 developers)
 - Libraries at or above 15–20 skills where selection ambiguity is already a problem
 - Public or open-source libraries distributed for cross-team or community use
 
-**Where it adds cost without value:**
+Where it adds cost without value:
 
 - Solo developers or small projects — five skills covering observed failure modes outperform a pre-built taxonomy
 - Continuous delivery without distinct phase ceremonies — commands map to phases that don't exist in the actual workflow
@@ -103,7 +103,7 @@ Installing `addyosmani/agent-skills` in Claude Code:
 
 After installation, running `/spec` activates the Define phase skills (`idea-refine`, `spec-driven-development`). The agent structures requirements as a PRD before any code is written. Running `/build` later activates six Build-phase skills; if the task involves API contract design, `api-and-interface-design` fires automatically.
 
-A team forking this library for a specialized domain replaces inapplicable skills (e.g., `frontend-ui-engineering` → a domain-specific skill), preserving the phase taxonomy and command set while narrowing the skill pool to their actual stack.
+A team forking this library for a specialized domain replaces inapplicable skills (for example, swapping `frontend-ui-engineering` for a domain-specific skill). The phase taxonomy and command set stay in place while the skill pool narrows to their actual stack.
 
 ## Key Takeaways
 

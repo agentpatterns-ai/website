@@ -14,38 +14,38 @@ maturity: adopted
 
 > An agent handoff protocol is an explicit contract — what the upstream stage produces and the downstream stage expects — preventing information loss between agents.
 
-**Learn it hands-on:** [Handoffs and Coordination Contracts](https://learn.agentpatterns.ai/multi-agent/handoffs-and-contracts/) — guided lesson with quizzes.
+Learn it hands-on with the [Handoffs and Coordination Contracts](https://learn.agentpatterns.ai/multi-agent/handoffs-and-contracts/) guided lesson, which includes quizzes.
 
-## The Handoff Problem
+## The handoff problem
 
-Each agent in a pipeline operates in its own context window. The research agent's findings don't automatically transfer to the draft agent. Each handoff is an information loss point: too little context and the next agent makes wrong assumptions; too much and it's burdened with noise. The [Multi-Agent System Failure Taxonomy](https://arxiv.org/abs/2503.13657) (MAST) annotates over 1,600 production traces and identifies inter-agent misalignment as one of three primary failure categories.
+Each agent in a pipeline works in its own context window. The research agent's findings do not transfer to the draft agent on their own. Each handoff is a point where information can be lost. Too little context and the next agent makes wrong assumptions. Too much and the noise weighs it down. The [Multi-Agent System Failure Taxonomy](https://arxiv.org/abs/2503.13657) (MAST) annotates over 1,600 production traces. It names inter-agent misalignment as one of three primary failure categories.
 
-The handoff protocol is the contract between agents: a defined structure the upstream agent writes and the downstream agent reads.
+The handoff protocol is the contract between agents. The upstream agent writes a defined structure, and the downstream agent reads it.
 
-## Structured Handoff Formats
+## Structured handoff formats
 
-Define what each pipeline stage produces. Common fields across handoff formats:
+Define what each pipeline stage produces. Handoff formats tend to share these fields:
 
-- **What was done** — the scope of work completed
-- **What was found** — conclusions, not raw exploration
-- **What needs attention** — items the next agent must address
-- **What is unresolved** — open questions or blockers
+- what was done: the scope of work completed
+- what was found: conclusions, not raw exploration
+- what needs attention: items the next agent must address
+- what is unresolved: open questions or blockers
 
-A research agent producing structured JSON or a defined markdown schema is more reliable than prose notes: field extraction is deterministic and does not depend on the receiving agent's ability to parse unstructured natural language.
+A research agent that produces structured JSON or a defined markdown schema is more reliable than one that writes prose notes. Field extraction is deterministic. It does not depend on whether the receiving agent can parse unstructured natural language.
 
-## Summarize, Don't Forward
+## Summarize, don't forward
 
-The receiving agent needs conclusions, not transcripts. Passing raw exploration logs to the next agent inflates its context with noise the agent didn't produce and can't efficiently parse. Summarize at the boundary:
+The receiving agent needs conclusions, not transcripts. Passing raw exploration logs to the next agent fills its context with noise. The agent did not produce that noise and cannot parse it efficiently. So summarize at the boundary:
 
-- Retain decisions made and why
-- Retain unresolved items that the next stage must handle
-- Drop intermediate reasoning, failed attempts, and tool call details
+- keep the decisions made and the reasons for them
+- keep unresolved items that the next stage must handle
+- drop intermediate reasoning, failed attempts, and tool call details
 
-## Persistent Handoff Media
+## Persistent handoff media
 
-GitHub issues and PRs function as durable handoff artifacts: they're persistent, reviewable, and linkable. A research agent commenting findings on an issue creates a handoff that survives context resets and is auditable by humans. A draft agent reading that comment gets clean, structured input without access to the predecessor's full session.
+GitHub issues and PRs work as durable handoff artifacts. They persist, and you can review and link to them. A research agent that comments findings on an issue creates a handoff that survives context resets and that humans can audit. A draft agent reading that comment gets clean, structured input without access to the predecessor's full session.
 
-Labels encode pipeline state — they tell the next agent what stage the work is in and what format to expect.
+Labels encode pipeline state. They tell the next agent what stage the work is in and what format to expect.
 
 ```mermaid
 sequenceDiagram
@@ -61,26 +61,26 @@ sequenceDiagram
     Rev->>PR: Reviews, posts structured feedback
 ```
 
-## Context Isolation is a Feature
+## Context isolation is a feature
 
-Each agent starting with a fresh context — informed by the handoff, not burdened by the predecessor's full session — is a design goal, not a limitation. It prevents context bleed between pipeline stages and forces each handoff to be explicit about what information matters.
+Each agent starts with a fresh context, informed by the handoff rather than weighed down by the predecessor's full session. This is a design goal, not a limitation. It prevents context bleed between pipeline stages. It also forces each handoff to be explicit about what information matters.
 
-## Anti-Pattern: Raw Transcript Forwarding
+## Anti-pattern: raw transcript forwarding
 
-Passing a previous agent's full output or conversation transcript to the next agent as its prompt causes context bloat: the receiving agent's context fills with the sender's reasoning process rather than its conclusions. Extract and summarize at each boundary.
+Passing a previous agent's full output or conversation transcript to the next agent as its prompt bloats the context. The receiving agent's context fills with the sender's reasoning process rather than its conclusions. Extract and summarize at each boundary instead.
 
-## When This Backfires
+## When this backfires
 
 Structured handoff protocols add overhead that is not always justified:
 
-- **Short-lived or single-stage pipelines** — when one agent can complete the task end-to-end, a schema adds friction without benefit. Protocols pay off only when work genuinely crosses agent boundaries.
-- **Rapidly evolving schemas** — if the upstream agent's outputs change frequently, maintaining a schema contract creates synchronization overhead. Loose prose may be more adaptive than [typed schemas at agent boundaries](typed-schemas-at-agent-boundaries.md) during early prototyping when the pipeline shape is not yet stable.
-- **Over-summarization** — aggressive summarization at handoff boundaries can discard context the downstream agent actually needs. When the upstream agent cannot reliably distinguish essential from incidental detail, the summary may omit critical caveats or edge-case findings, causing the downstream agent to proceed on an incomplete picture.
-- **Rigid schemas hiding uncertainty** — structured fields suggest certainty. An agent filling `findings` with a well-formatted JSON array may obscure that its conclusions were tentative; the downstream agent reads the structure as authoritative. Prose notes with hedging language sometimes preserve epistemic uncertainty better than named fields with string values.
+- short-lived or single-stage pipelines: when one agent can complete the task end to end, a schema adds friction without benefit. Protocols pay off only when work crosses agent boundaries.
+- rapidly evolving schemas: if the upstream agent's outputs change often, keeping a schema contract in sync costs effort. Loose prose may adapt better than [typed schemas at agent boundaries](typed-schemas-at-agent-boundaries.md) during early prototyping, when the pipeline shape is not yet stable.
+- over-summarization: aggressive summarization at handoff boundaries can discard context the downstream agent needs. When the upstream agent cannot tell essential detail from incidental detail, the summary may omit critical caveats or edge-case findings. The downstream agent then proceeds on an incomplete picture.
+- rigid schemas hiding uncertainty: structured fields suggest certainty. An agent that fills `findings` with a well-formatted JSON array may hide that its conclusions were tentative, and the downstream agent reads the structure as authoritative. Prose notes with hedging language sometimes preserve that uncertainty better than named fields with string values.
 
 ## Example
 
-The following shows a research agent producing a structured JSON handoff that a writer agent can consume directly. The upstream agent writes conclusions and open items — not its reasoning trace — into a file that becomes the writer agent's sole input.
+The following shows a research agent producing a structured JSON handoff that a writer agent can consume directly. The upstream agent writes conclusions and open items, not its reasoning trace, into a file that becomes the writer agent's sole input.
 
 ```json
 {
@@ -101,11 +101,11 @@ The following shows a research agent producing a structured JSON handoff that a 
 }
 ```
 
-The writer agent's system prompt references this schema explicitly: it reads `findings` for content, `needs_attention` for required coverage, and `unresolved` for items to flag as open questions rather than assert as facts. This prevents the writer from inventing answers for gaps the research agent deliberately left open.
+The writer agent's system prompt references this schema directly. It reads `findings` for content, `needs_attention` for required coverage, and `unresolved` for items to flag as open questions rather than assert as facts. This stops the writer from inventing answers for gaps the research agent left open on purpose.
 
-## Why It Works
+## Why it works
 
-[Structured schemas](typed-schemas-at-agent-boundaries.md) eliminate ambiguity at parse time. A downstream agent consuming a prose summary must determine — through language understanding — where the "findings" end and the "open questions" begin. With a schema, field boundaries are explicit and token-for-token predictable. This reduces the probability that the receiving agent misinterprets scope or acts on information the upstream agent intended as provisional. The effect is amplified in longer pipelines: each stage of ambiguity compounds, so early-stage structure prevents error propagation across multiple handoffs — a pattern GitHub Engineering describes in its analysis of [why multi-agent workflows often fail](https://github.blog/ai-and-ml/generative-ai/multi-agent-workflows-often-fail-heres-how-to-engineer-ones-that-dont/), where ambiguity in early handoffs surfaces as wrong actions several agents downstream.
+[Structured schemas](typed-schemas-at-agent-boundaries.md) remove ambiguity at parse time. A downstream agent that reads a prose summary must work out, through language understanding, where the "findings" end and the "open questions" begin. With a schema, field boundaries are explicit and predictable token for token. This makes the receiving agent less likely to misread the scope or act on information the upstream agent meant as provisional. The effect grows in longer pipelines. Each stage of ambiguity compounds, so structure early on prevents errors from spreading across many handoffs. GitHub Engineering describes the same pattern in its analysis of [why multi-agent workflows often fail](https://github.blog/ai-and-ml/generative-ai/multi-agent-workflows-often-fail-heres-how-to-engineer-ones-that-dont/), where ambiguity in early handoffs surfaces as wrong actions several agents downstream.
 
 ## Key Takeaways
 

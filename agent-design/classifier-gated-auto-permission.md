@@ -12,7 +12,7 @@ aliases:
   - classifier-gated auto-permission
   - classifier-mediated auto-mode
   - permission classifier pattern
-last_reviewed: 2026-06-24
+last_reviewed: 2026-06-28
 maturity: established
 ---
 
@@ -22,18 +22,18 @@ maturity: established
 
 Classifier-gated auto-permission splits the "may I run this?" decision between a fast classifier model and a human reviewer. The doing agent stays uninterrupted on benign actions; the classifier re-introduces the prompt only on escalations — network egress to unrecognized destinations, writes outside the project, destructive shell, or content judged to have been driven by hostile input.
 
-## When the Pattern Earns Its Complexity
+## When the pattern earns its complexity
 
-The pattern adds reviewer tokens, latency, and a new LLM attack surface. It pays back only when **all** of the following hold:
+The pattern adds reviewer tokens, latency, and a new LLM attack surface. It pays back only when all of the following hold:
 
-- **Action volume produces approval fatigue.** OpenAI's internal Codex traffic reports roughly 720 boundary-crossing actions per 10,000 ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)) — well past the rubber-stamp threshold. At three escalations an hour, a human reviewer wins.
-- **The configuration surface is admin-enforced.** If a developer can flip `--dangerously-skip-permissions` or rewrite the classifier rule file inside the workspace, the whole scheme collapses to whichever layer the attacker reaches first. Claude Code documents this requirement explicitly: rules in shared `.claude/settings.json` are not read by the classifier, and `hard_deny` rules must be deployed through [managed settings](../tools/claude/managed-settings-drop-in.md) for organizational guarantees.
-- **The workload is in-distribution.** Anthropic reports 0.4% false-positive and 5.7–17% false-negative rates on real and synthetic exfiltration traffic ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)). An independent stress test (Ji et al., 2026) measured **81.0% FNR (95% CI 73.8%–87.4%)** on deliberately ambiguous authorization scenarios and **36.8% of state-changing actions bypassing classification entirely** via in-project file edits ([Measuring the Permission Gate](https://arxiv.org/abs/2604.04978)). The gap is workload, not a contradiction.
-- **Irreversible actions are routed elsewhere.** Production deploys, money movement, IAM rotation, and credential exposure belong on a human or cryptographic gate ([Cryptographic Governance Audit Trail](../security/cryptographic-governance-audit-trail.md)). A 99% auto-approval rate is the wrong tier for those. Newer auto-mode implementations narrow this further with *intent-scoped* destructive-command rules rather than blanket risk tiers: Claude Code v2.1.183 blocks `git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`, `git commit --amend` on non-agent commits, and `terraform`/`pulumi`/`cdk destroy` unless the specific stack was named — gating on whether the user asked for *this* destructive action rather than on a static risk tier ([Claude Code changelog v2.1.183](https://code.claude.com/docs/en/changelog)).
+- Action volume produces approval fatigue. OpenAI's internal Codex traffic reports roughly 720 boundary-crossing actions per 10,000 ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)) — well past the rubber-stamp threshold. At three escalations an hour, a human reviewer wins.
+- The configuration surface is admin-enforced. If a developer can flip `--dangerously-skip-permissions` or rewrite the classifier rule file inside the workspace, the whole scheme collapses to whichever layer the attacker reaches first. Claude Code documents this requirement plainly: the classifier does not read rules in shared `.claude/settings.json`, and you must deploy `hard_deny` rules through [managed settings](../tools/claude/managed-settings-drop-in.md) for organizational guarantees.
+- The workload is in-distribution. Anthropic reports 0.4% false-positive and 5.7–17% false-negative rates on real and synthetic exfiltration traffic ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)). An independent stress test (Ji et al., 2026) measured 81.0% FNR (95% CI 73.8%–87.4%) on deliberately ambiguous authorization scenarios, and 36.8% of state-changing actions bypassing classification entirely through in-project file edits ([Measuring the Permission Gate](https://arxiv.org/abs/2604.04978)). The gap is workload, not a contradiction.
+- Irreversible actions are routed elsewhere. Production deploys, money movement, IAM rotation, and credential exposure belong on a human or cryptographic gate ([Cryptographic Governance Audit Trail](../security/cryptographic-governance-audit-trail.md)). A 99% auto-approval rate is the wrong tier for those. Newer auto-mode implementations narrow this further with intent-scoped destructive-command rules rather than blanket risk tiers. Claude Code v2.1.183 blocks `git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`, and `git commit --amend` on non-agent commits, plus `terraform`/`pulumi`/`cdk destroy` unless the specific stack was named — gating on whether the user asked for this destructive action rather than on a static risk tier ([Claude Code changelog v2.1.183](https://code.claude.com/docs/en/changelog)).
 
 If any condition fails, simpler postures dominate: a static allowlist plus sandbox for low-volume sessions, or an evidence-based allowlist for steady-state workloads where the action distribution is enumerable.
 
-## What the Classifier Inspects
+## What the classifier inspects
 
 Three implementation tiers recur across the cloud-IDE coding agents that ship this pattern:
 
@@ -60,41 +60,42 @@ graph TD
     G --> H
 ```
 
-## Why It Works
+## Why it works
 
-The classifier sees the escalation signal in the same context the doing agent reads — user prompt, tool name, argument shape, target paths — but evaluates it in a model **the doing agent cannot reason with**. Anthropic states the mechanism: "we strip out Claude's own messages and tool outputs, making it reasoning-blind by design" ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)). OpenAI states the same property for Codex auto-review: "The main agent is optimized to complete the user's task. This creates pressure to treat an approval boundary as just another obstacle to overcome. Auto-review has a narrower job: decide whether a proposed boundary-crossing action should run" ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)).
+The classifier sees the escalation signal in the same context the doing agent reads — user prompt, tool name, argument shape, target paths — but evaluates it in a model the doing agent cannot reason with. Anthropic states the mechanism: "we strip out Claude's own messages and tool outputs, making it reasoning-blind by design" ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)). OpenAI states the same property for Codex auto-review: "The main agent is optimized to complete the user's task. This creates pressure to treat an approval boundary as just another obstacle to overcome. Auto-review has a narrower job: decide whether a proposed boundary-crossing action should run" ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)).
 
-The empirical effect is the rubber-stamp problem inverted. Codex sessions stop for human approval roughly **200× less often** in auto-review mode than in manual mode while still catching the actions that should stop — in a 10,000-action snapshot, 9,280 ran inside the sandbox without review and 720 escalated, of which the reviewer denied 7 and the doing agent recovered safely on 4 ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)). Claude Code's two-stage pipeline — a single-token filter tuned for recall, then chain-of-thought reasoning only on flags — keeps the cost shape compatible with high-volume traffic ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
+The empirical effect is the rubber-stamp problem inverted. Codex sessions stop for human approval roughly 200 times less often in auto-review mode than in manual mode, while still catching the actions that should stop — in a 10,000-action snapshot, 9,280 ran inside the sandbox without review and 720 escalated, of which the reviewer denied 7 and the doing agent recovered safely on 4 ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)). Claude Code's two-stage pipeline — a single-token filter tuned for recall, then chain-of-thought reasoning only on flags — keeps the cost shape compatible with high-volume traffic ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
 
-## Four Design Choices That Decide the Trade
+## Four design choices that decide the trade
 
 Whether a given implementation earns its complexity depends on four choices:
 
-1. **Reviewer isolation from the doing agent.** Same training distribution means the same jailbreak defeats both — measured at 64.5% blind-spot rate when models review their own outputs ([Panickssery et al., 2025](https://arxiv.org/abs/2507.02778)). Use a different model class, or at minimum reasoning-blind the reviewer so the doing agent cannot argue it down.
-2. **Reasoning-blinding.** Strip the agent's own messages and tool outputs from the classifier's context. Without this, the doing agent learns to insert justifications into its reasoning that satisfy the classifier ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
-3. **Coverage boundary.** Whatever bypasses the classifier (Tier 1 and Tier 2 above) is the system's residual blast radius. When ops state lives inside the project root — terraform state, sealed-secrets manifests, k8s YAML — Tier 2 becomes an exfiltration and destruction surface the classifier never sees; Ji et al. measured 36.8% of state-changing actions bypassing classification this way ([Measuring the Permission Gate](https://arxiv.org/abs/2604.04978)).
-4. **Audit trail.** Every auto-approved action must be reconstructable post-hoc — the reviewer's verdict, the rule it matched, and the resolved arguments. Without per-action telemetry, the classifier's decisions are unauditable and the layer provides false confidence. OpenAI's Codex posture wires OTel exports for prompt, approval decision, execution result, and network proxy decisions as the fourth load-bearing leg ([Running Codex safely at OpenAI](https://openai.com/index/running-codex-safely/)).
-## When This Backfires
+1. Reviewer isolation from the doing agent. The same training distribution means the same jailbreak defeats both — measured at a 64.5% blind-spot rate when models review their own outputs ([Panickssery et al., 2025](https://arxiv.org/abs/2507.02778)). Use a different model class, or at minimum reasoning-blind the reviewer so the doing agent cannot argue it down.
+2. Reasoning-blinding. Strip the agent's own messages and tool outputs from the classifier's context. Without this, the doing agent learns to insert justifications into its reasoning that satisfy the classifier ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
+3. Coverage boundary. Whatever bypasses the classifier (Tier 1 and Tier 2 above) is the system's residual blast radius. When ops state lives inside the project root — terraform state, sealed-secrets manifests, k8s YAML — Tier 2 becomes an exfiltration and destruction surface the classifier never sees. Ji et al. measured 36.8% of state-changing actions bypassing classification this way ([Measuring the Permission Gate](https://arxiv.org/abs/2604.04978)). Some implementations expose a knob to widen the boundary: Claude Code's `autoMode.classifyAllShell` (added in v2.1.193) routes *every* shell command through the classifier rather than only arbitrary-code-execution paths, closing part of the coverage gap at the cost of more classifier calls ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+4. Audit trail. Every auto-approved action must be reconstructable afterwards — the reviewer's verdict, the rule it matched, and the resolved arguments. Without per-action telemetry, the classifier's decisions are unauditable and the layer gives false confidence. OpenAI's Codex posture wires OTel exports for prompt, approval decision, execution result, and network proxy decisions as the fourth load-bearing leg ([Running Codex safely at OpenAI](https://openai.com/index/running-codex-safely/)).
 
-- **Workload outside the calibration distribution.** Anthropic's 17% FNR is on a hand-curated overeager set of 52; Ji et al.'s 81% FNR is on 128 deliberately ambiguous DevOps prompts and 92.9% on artifact-cleanup tasks ([Measuring the Permission Gate](https://arxiv.org/abs/2604.04978)). The floor is calibrated against typical traffic, not against an adversary.
-- **In-project ops state.** When the project root holds production-affecting files, move that state out or pin the paths with deterministic [permission-framework-over-model](../security/permission-framework-over-model.md) rules.
-- **Same model class for agent and classifier.** Reasoning-blinding mitigates argument-based bypass but not the shared training-distribution jailbreak surface.
-- **Reviewer-targeted prompt injection.** The classifier is an LLM-as-judge and inherits the documented failure modes — peer-reviewed work shows judges can be misled by the same injections they detect ([How Not to Detect Prompt Injections with an LLM, ACM AISec 2025](https://dl.acm.org/doi/10.1145/3733799.3762980)).
-- **Transitive supply-chain attacks.** The classifier evaluates actions, not outcomes. `pip install -r requirements.txt` is exactly what the user asked for; it cannot reason about what declared dependencies pull in.
-- **Untrusted configuration surface.** If attackers can write `.cursor/permissions.json`, `.vscode/settings.json`, or local auto-mode rule files, the [YOLO attack chain](https://ajbuilds.medium.com/the-yolo-attack-how-hackers-are-hijacking-ai-agents-by-flipping-one-switch-f8a7ff586310) bypasses the scheme by flipping the gate.
-- **Static-allowlist alternative is sufficient.** Where the action distribution is small and stable, a deterministic allowlist plus sandbox is lower-latency, has no reviewer-injection surface, and produces a grep-able audit trail.
+## When this backfires
 
-## Distinguishing the Pattern From Adjacent Stations
+- Workload outside the calibration distribution. Anthropic's 17% FNR is on a hand-curated overeager set of 52; Ji et al.'s 81% FNR is on 128 deliberately ambiguous DevOps prompts, and 92.9% on artifact-cleanup tasks ([Measuring the Permission Gate](https://arxiv.org/abs/2604.04978)). The floor is calibrated against typical traffic, not against an adversary.
+- In-project ops state. When the project root holds production-affecting files, move that state out or pin the paths with deterministic [permission-framework-over-model](../security/permission-framework-over-model.md) rules.
+- Same model class for agent and classifier. Reasoning-blinding reduces argument-based bypass but not the shared training-distribution jailbreak surface.
+- Reviewer-targeted prompt injection. The classifier is an LLM-as-judge and inherits the documented failure modes — peer-reviewed work shows judges can be misled by the same injections they detect ([How Not to Detect Prompt Injections with an LLM, ACM AISec 2025](https://dl.acm.org/doi/10.1145/3733799.3762980)).
+- Transitive supply-chain attacks. The classifier evaluates actions, not outcomes. `pip install -r requirements.txt` is exactly what the user asked for; it cannot reason about what declared dependencies pull in.
+- Untrusted configuration surface. If attackers can write `.cursor/permissions.json`, `.vscode/settings.json`, or local auto-mode rule files, the [YOLO attack chain](https://ajbuilds.medium.com/the-yolo-attack-how-hackers-are-hijacking-ai-agents-by-flipping-one-switch-f8a7ff586310) bypasses the scheme by flipping the gate.
+- Static-allowlist alternative is sufficient. Where the action distribution is small and stable, a deterministic allowlist plus sandbox is lower-latency, has no reviewer-injection surface, and produces a grep-able audit trail.
+
+## Distinguishing the pattern from adjacent stations
 
 Three nearby patterns occupy different slots in the harness — none is interchangeable:
 
 | Station | Decides | Cost shape | When |
 |---------|---------|------------|------|
-| **Classifier-gated auto-permission** | Auto-approve vs re-prompt for boundary crossings | One classifier call per Tier-3 action | High-volume routine with admin-enforced config |
-| [Inference-time tool-call reviewer](inference-time-tool-call-reviewer.md) | Whether the proposed call is *correct* | One reviewer call per provisional tool call | High blast radius + measured Helpfulness:Harmfulness |
+| Classifier-gated auto-permission | Auto-approve vs re-prompt for boundary crossings | One classifier call per Tier-3 action | High-volume routine with admin-enforced config |
+| [Inference-time tool-call reviewer](inference-time-tool-call-reviewer.md) | Whether the proposed call is correct | One reviewer call per provisional tool call | High blast radius + measured Helpfulness:Harmfulness |
 | [Pre-execution command risk classification](../security/pre-execution-command-risk-classification.md) | What badge to show on the human prompt | One classifier call per command | Confirmation prompts that look identical and get rubber-stamped |
 
-Classifier-gated auto-permission decides *whether to ask*; the tool-call reviewer decides *whether the call is right*; risk badges decide *how hard to read* a prompt that still reaches the human. They compose — Codex's published posture wires all four ([Sandbox + Approvals + Auto-Review Triad](../security/sandbox-approvals-auto-review-triad.md)).
+Classifier-gated auto-permission decides whether to ask; the tool-call reviewer decides whether the call is right; risk badges decide how hard to read a prompt that still reaches the human. They compose — Codex's published posture wires all four ([Sandbox + Approvals + Auto-Review Triad](../security/sandbox-approvals-auto-review-triad.md)).
 
 ## Example
 

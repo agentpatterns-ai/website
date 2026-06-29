@@ -17,9 +17,9 @@ maturity: established
 
 > Pattern replication is an agent absorbing codebase conventions and reproducing them at scale: deprecated APIs, legacy error handling, and hand-rolled utilities you meant to retire.
 
-## The Mechanism
+## The mechanism
 
-Agents learn from what they find. When an agent scans your codebase, it treats golden-path implementations and legacy workarounds equally. Suboptimal patterns propagate faster than any team can review them — faithful reproduction, not a prompting failure.
+Agents learn from what they find. When an agent scans your codebase, it treats golden-path implementations and legacy workarounds the same. Poor patterns spread faster than any team can review them. This is faithful reproduction, not a prompting failure.
 
 ```mermaid
 graph LR
@@ -31,7 +31,7 @@ graph LR
     style D fill:#c62828,color:#fff
 ```
 
-## The Evidence
+## The evidence
 
 | Finding | Source |
 |---------|--------|
@@ -41,41 +41,41 @@ graph LR
 | 67.3% of AI-generated PRs rejected vs 15.6% for manual code | [LinearB via Mike Mason](https://mikemason.ca/writing/ai-coding-agents-jan-2026/) |
 | AI magnifies strengths of high-performing orgs and dysfunctions of struggling ones | [DORA Report 2025](https://dora.dev/research/2025/dora-report/) |
 
-## Specific Manifestations
+## Specific manifestations
 
-Three failure modes (via [Mike Mason](https://mikemason.ca/writing/ai-coding-agents-jan-2026/)):
+Three failure modes, drawn from [Mike Mason on AI coding agents](https://mikemason.ca/writing/ai-coding-agents-jan-2026/):
 
-**Brute force fixes.** Raising Docker memory limits instead of finding the leak; adding retry loops instead of fixing the root error.
+Brute-force fixes. The agent raises Docker memory limits instead of finding the leak. It adds retry loops instead of fixing the root error.
 
-**Backward compatibility shortcuts.** Thin wrappers around deprecated APIs. The deprecated code persists under an extra layer.
+Backward-compatibility shortcuts. The agent wraps deprecated APIs in thin layers. The deprecated code then lives on under that extra layer.
 
-**Excessive mocking.** Test suites that validate the mocks rather than the code.
+Excessive mocking. Test suites end up checking the mocks rather than the code.
 
-## Why It Happens
+## Why it happens
 
-Agents retrieve context by syntactic and semantic similarity, not quality. The retriever surfaces the nearest matching implementation — a `# TODO: remove` comment is not a weighting feature.
+Agents retrieve context by syntactic and semantic similarity, not by quality. The retriever surfaces the nearest matching implementation. A `# TODO: remove` comment does not lower its rank.
 
-Generation amplifies the match: few-shot conditioning on in-repo examples dominates prose instructions. The model treats surrounding code as higher-fidelity evidence of "what this codebase does" than any guidance, and every new usage becomes retrieval context for the next run.
+Generation then amplifies the match. Few-shot conditioning on in-repo examples outweighs prose instructions. The model treats surrounding code as stronger evidence of what this codebase does than any guidance. Every new usage then becomes retrieval context for the next run.
 
-Mechanical enforcement beats guidance, the case made in [hooks for enforcement vs prompts for guidance](../instructions/hooks-vs-prompts.md). A linter rejecting the deprecated pattern removes it from the retrieval surface; a prompt to "prefer the new API" competes with N existing calls and loses.
+Mechanical enforcement beats guidance, the case made in [hooks for enforcement over prompts for guidance](../instructions/hooks-vs-prompts.md). A linter that rejects the deprecated pattern removes it from the retrieval surface. A prompt to "prefer the new API" competes with the existing calls and loses.
 
-## The Fix: Clean the House Before Inviting the Agent
+## The fix: clean the codebase before scaling agents
 
 OpenAI's Harness team spent [20% of sprint time cleaning up "AI slop"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/) before arriving at this approach:
 
-1. **Encode golden patterns as mechanical rules.** Linters and CI checks that reject known anti-patterns — prose guidance is routinely overridden by contradicting examples.
-2. **Auto-generate refactoring PRs.** Replace deprecated patterns with approved alternatives before scaling agent usage — part of getting to [codebase readiness](../agent-design/codebase-readiness.md).
-3. **Track quality metrics.** Monitor duplication rates, lint violations, and complexity scores. Degradation signals replication is outpacing remediation.
+1. Encode golden patterns as mechanical rules. Add linters and CI checks that reject known anti-patterns. Contradicting examples routinely override prose guidance.
+2. Auto-generate refactoring PRs. Replace deprecated patterns with approved alternatives before you scale agent usage. This is part of reaching [codebase readiness](../agent-design/codebase-readiness.md).
+3. Track quality metrics. Monitor duplication rates, lint violations, and complexity scores. Rising numbers signal that replication is outpacing remediation.
 
-## When This Backfires
+## When this backfires
 
-Conditions where clean-first is worse than proceeding directly:
+In some conditions, cleaning first is worse than proceeding directly:
 
-**Mid-migration codebases.** Blanket lint rules fire on valid compatibility shims when two patterns intentionally coexist. Lint rules require pattern stability to act as [deterministic guardrails](../verification/deterministic-guardrails.md).
+Mid-migration codebases. Blanket lint rules fire on valid compatibility shims when two patterns intentionally coexist. Lint rules need pattern stability to work as [deterministic guardrails](../verification/deterministic-guardrails.md).
 
-**Load-bearing deprecated APIs.** When the replacement isn't available in all deploy targets, encoding a rejection rule creates CI failures with no resolution path.
+Load-bearing deprecated APIs. When the replacement is not available in all deploy targets, a rejection rule creates CI failures with no way to resolve them.
 
-**Large legacy codebases.** Pre-remediation spanning months may erase the productivity gain before agents are enabled; narrow rules scoped to new files reduce blast radius.
+Large legacy codebases. Remediation that runs for months may erase the productivity gain before you enable agents. Narrow rules scoped to new files reduce the blast radius.
 
 ## Key Takeaways
 

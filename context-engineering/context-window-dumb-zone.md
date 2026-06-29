@@ -16,22 +16,22 @@ maturity: established
 
 > Output quality degrades as context fills, but the onset depends on task type — retrieval, reasoning, and code generation hit different thresholds.
 
-**Learn it hands-on:** [The Dumb Zone](https://learn.agentpatterns.ai/context-engineering/the-dumb-zone/) — guided lesson with quizzes.
+Work through the [hands-on Dumb Zone lesson](https://learn.agentpatterns.ai/context-engineering/the-dumb-zone/), a guided walkthrough with quizzes.
 
 !!! info "Also known as"
-    **Context Rot**, **Context Window Dumb Zone**. For prescriptive allocation strategies, see [Context Budget Allocation](context-budget-allocation.md).
+    Context Rot, Context Window Dumb Zone. For prescriptive allocation strategies, see [Context Budget Allocation](context-budget-allocation.md).
 
-## What the Dumb Zone Is
+## What the dumb zone is
 
 As an agent's context fills, output quality drops. [Anthropic calls this "context rot"](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): pairwise token relationships stretch thin and reasoning degrades — "a performance gradient rather than a hard cliff" that appears "across all models."
 
-## Why the 50% Rule Is Too Simple
+## Why the 50% rule is too simple
 
-The original heuristic — complete tasks within 50% of the context window — assumed degradation scales proportionally with window size. It does not. Degradation onset is closer to an **absolute token threshold** (roughly 32K-100K) than a fixed percentage, and varies by task type.
+The original heuristic — complete tasks within 50% of the context window — assumed degradation scales with window size. It does not. Degradation onset sits closer to an absolute token threshold (roughly 32K to 100K) than a fixed percentage, and it varies by task type.
 
 [RULER](https://arxiv.org/abs/2404.06654) tested 17 models and found larger claimed windows do not yield proportionally later degradation. Yi-34B (200K claimed) has only 32K effective context — 16%. GPT-4 (128K claimed) reaches 64K effective — 50%. Only half the tested models maintained satisfactory performance at 32K tokens.
 
-## Task-Type Degradation Spectrum
+## Task-type degradation spectrum
 
 | Task Type | Benchmark | Effective Context | Finding |
 |-----------|-----------|-------------------|---------|
@@ -47,17 +47,17 @@ The [Chroma context rot study](https://research.trychroma.com/context-rot) confi
 !!! warning "NIAH benchmarks are misleadingly optimistic"
     Standard needle-in-a-haystack tests use high lexical overlap between needle and question. [NoLiMa](https://arxiv.org/abs/2502.05167) removes this cue and finds 11 of 13 models drop below 50% accuracy at 32K tokens. Do not use NIAH results to justify large context loads.
 
-## Practical Guidance
+## Practical guidance
 
 Size context budgets by task type, not a single percentage rule:
 
-- **Retrieval-heavy tasks** (lookups, code search): Tolerate larger context but prefer semantic similarity over stuffing.
-- **Reasoning-heavy tasks** (multi-step planning, architecture): Keep total context under 32K tokens where possible. Effective window can be 10-20% of the advertised limit.
-- **Code generation and bug fixing**: Highly model-dependent. Test at your target context length before committing to a budget.
+- Retrieval-heavy tasks (lookups, code search): tolerate larger context, but prefer semantic similarity over stuffing.
+- Reasoning-heavy tasks (multi-step planning, architecture): keep total context under 32K tokens where possible. The effective window can be 10-20% of the advertised limit.
+- Code generation and bug fixing: highly model-dependent. Test at your target context length before you commit to a budget.
 
-Claude Code's [auto-compaction triggers at ~95% of the window](https://code.claude.com/docs/en/sub-agents#auto-compaction). Compact well before that — especially for reasoning tasks.
+Claude Code's [auto-compaction triggers at ~95% of the window](https://code.claude.com/docs/en/sub-agents#auto-compaction). Compact well before that, especially for reasoning tasks.
 
-## Context Load Is Half the Problem
+## Context load is half the problem
 
 The dumb zone applies to total context, not just task instructions. System prompts, skill definitions, reference files, and conversation history all count.
 
@@ -86,20 +86,20 @@ graph TD
 
 A Claude 3.5 Sonnet deployment uses a 200K-token context window. The team loads a 60K-token system prompt (role definition, tool specs, skill definitions), 20K tokens of project instructions, and 15K of recent conversation history — 95K preloaded before the first task token.
 
-The agent then takes a multi-step reasoning task (architectural review): 5K task instructions + 30K of file reads = 35K task tokens. Total context: **130K tokens**.
+The agent then takes a multi-step reasoning task (architectural review): 5K task instructions + 30K of file reads = 35K task tokens. Total context: 130K tokens.
 
 According to BABILong benchmarks, reasoning tasks degrade to 10-20% effective utilization on most models. At 130K out of 200K (65% fill), the agent is operating well past the practical reasoning threshold. With Claude 3.5 Sonnet, code bug-fixing accuracy dropped from 29% at 32K to 3% at 256K — a similar degradation curve applies here.
 
-**Revised budget**: Trim system prompt to 20K (remove rarely-used skills), limit history to 5K (rolling window), load only directly-relevant project files at 10K. Preloaded context drops to 35K, leaving 165K for the task — well inside the effective reasoning range.
+Revised budget: trim the system prompt to 20K (remove rarely-used skills), limit history to 5K (rolling window), and load only directly relevant project files at 10K. Preloaded context drops to 35K, leaving 165K for the task — well inside the effective reasoning range.
 
-## When This Backfires
+## When this backfires
 
-The guidance to keep reasoning-task context under 32K tokens is conservative and may be unnecessarily restrictive:
+The guidance to keep reasoning-task context under 32K tokens is conservative, and it may be too restrictive:
 
-- **Current-generation frontier models improve on this curve.** Research benchmarks like RULER and BABILong reflect model generations from 2023–2024. Models released since then show measurable improvements at longer context lengths; apply the 32K ceiling to the model version you're actually deploying, not the benchmark generation.
-- **The 32K ceiling applies to reasoning tasks only.** Applying it to retrieval-heavy or code-comprehension tasks discards legitimate context capacity — simple retrieval benchmarks show >99% recall well past 32K. Over-compacting these tasks introduces unnecessary summarization loss.
-- **Compaction has its own failure mode.** [Compressing a long context into a shorter summary](context-compression-strategies.md) discards detail. For multi-step tasks with hard dependencies on specific prior outputs, aggressive compaction can drop critical intermediate state. Test compaction fidelity before applying a blanket early-compact policy.
-- **Auto-compaction threshold is configurable.** Claude Code's auto-compaction triggers at ~95%; `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` lets teams lower this. Setting it to 50% is common advice but introduces a fixed overhead cost on every session regardless of task type or actual degradation onset.
+- Current-generation frontier models improve on this curve. Research benchmarks like RULER and BABILong reflect model generations from 2023 to 2024. Models released since then show measurable improvements at longer context lengths. Apply the 32K ceiling to the model version you actually deploy, not the benchmark generation.
+- The 32K ceiling applies to reasoning tasks only. Applying it to retrieval-heavy or code-comprehension tasks discards legitimate context capacity — simple retrieval benchmarks show >99% recall well past 32K. Over-compacting these tasks adds needless summarization loss.
+- Compaction has its own failure mode. [Compressing a long context into a shorter summary](context-compression-strategies.md) discards detail. For multi-step tasks that depend on specific prior outputs, aggressive compaction can drop critical intermediate state. Test compaction fidelity before you apply a blanket early-compact policy.
+- The auto-compaction threshold is configurable. Claude Code's auto-compaction triggers at ~95%, and `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` lets teams lower it. Setting it to 50% is common advice, but it adds a fixed overhead cost on every session regardless of task type or actual degradation onset.
 
 ## Related
 

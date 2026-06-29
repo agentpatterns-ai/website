@@ -14,36 +14,36 @@ maturity: established
 
 > Use types, schemas, tests, and API definitions as agent instructions instead of natural language descriptions.
 
-**Learn it hands-on:** [Point at the Spec](https://learn.agentpatterns.ai/prompt-engineering/point-at-the-spec/) — guided lesson with quizzes.
+Learn it hands-on with [Point at the Spec](https://learn.agentpatterns.ai/prompt-engineering/point-at-the-spec/) — a guided lesson with quizzes.
 
-## The Core Idea
+## The core idea
 
-When a formal specification already exists, pointing the agent at it is more precise than writing a natural language description of the same thing. A TypeScript interface is unambiguous; an OpenAPI schema leaves no room for interpretation; a test file is a complete set of acceptance criteria. Re-describing in prose what already has a formal definition only adds noise and risks divergence between the description and the spec.
+When a formal specification already exists, point the agent at it. That is more precise than writing a natural language description of the same thing. A TypeScript interface is unambiguous. An OpenAPI schema leaves no room for interpretation. A test file is a complete set of acceptance criteria. Re-describing in prose what already has a formal definition only adds noise and risks the description drifting from the spec.
 
-## Artifact Types and How to Use Them
+## Artifact types and how to use them
 
-**Type definitions** — "Implement a function matching this signature" gives the agent an exact contract: return type, parameter types, and nullability are already specified. Pairing the type with the expected behavior is the complete instruction.
+Type definitions — "implement a function matching this signature" gives the agent an exact contract. The return type, parameter types, and nullability are already specified. Pair the type with the expected behavior for the complete instruction.
 
-**Test files** — "Make these tests pass" is a verifiable, self-contained instruction and the core of [spec-driven development](../workflows/spec-driven-development.md). The tests define what correct looks like — the tests are the description.
+Test files — "make these tests pass" is a verifiable, self-contained instruction and the core of [spec-driven development](../workflows/spec-driven-development.md). The tests define what correct looks like. The tests are the description.
 
-**OpenAPI and GraphQL schemas** — "Implement this endpoint matching the OpenAPI spec" specifies the request/response shape, status codes, and path parameters without prose. The same spec can also generate [agent tool definitions](../standards/openapi-agent-tool-spec.md).
+OpenAPI and GraphQL schemas — "implement this endpoint matching the OpenAPI spec" specifies the request and response shape, status codes, and path parameters without prose. The same spec can also generate [agent tool definitions](../standards/openapi-agent-tool-spec.md).
 
-**Database schemas** — Grounding queries or migrations in the actual schema prevents the agent from making up column names or table relationships that don't exist.
+Database schemas — grounding queries or migrations in the actual schema stops the agent from inventing column names or table relationships that do not exist.
 
-**Existing code as template** — "Follow the pattern in `auth/middleware.ts`" is more precise than a paragraph describing middleware conventions. The agent can read the existing file and match its structure, naming, and error handling.
+Existing code as template — "follow the pattern in `auth/middleware.ts`" is more precise than a paragraph describing middleware conventions. The agent reads the existing file and matches its structure, naming, and error handling.
 
-## Why Specs Beat Prose
+## Why specs beat prose
 
 Natural language descriptions introduce several problems:
 
-- **Ambiguity**: prose admits multiple valid interpretations; a type signature does not
-- **Staleness**: a description can diverge from the spec over time; the spec cannot diverge from itself
-- **Verbosity**: describing a complex API costs more tokens than pointing at the schema
-- **Verifiability**: prose output cannot be auto-checked; spec-grounded output can be tested or linted
+- Ambiguity: prose admits multiple valid interpretations; a type signature does not
+- Staleness: a description can drift from the spec over time; the spec cannot diverge from itself
+- Verbosity: describing a complex API costs more tokens than pointing at the schema
+- Verifiability: you cannot auto-check prose output, but you can test or lint spec-grounded output
 
 The [Anthropic context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies high-signal, low-noise token selection as a core principle for effective agent context. Formal specifications are high-signal by construction. Research on [spec-driven development](../workflows/spec-driven-development.md) confirms that grounding agent instructions in existing contracts reduces hallucinated structural details — column names, route shapes, field types — compared to prose descriptions ([Spec-Driven Development: From Code to Contract in the Age of AI Coding Assistants](https://arxiv.org/html/2602.00180v1)).
 
-## Applying the Pattern
+## Applying the pattern
 
 Load the specification artifact into context alongside the instruction:
 
@@ -64,14 +64,14 @@ Implement the `UserRepository` class to satisfy the `IUserRepository` interface 
 
 The agent reads the interface, derives the implementation contract, and produces code that satisfies it.
 
-## When This Backfires
+## When this backfires
 
 The pattern assumes a specification exists and is correct. When that assumption breaks, the approach adds friction rather than reducing it:
 
-- **The spec is incomplete or wrong.** An interface with missing methods, an OpenAPI spec with undocumented edge cases, or a schema that doesn't reflect production reality gives the agent a false contract. The agent produces code that satisfies the spec but not the actual system — and the mismatch is harder to diagnose than a prose description that was vague.
-- **No formal spec exists yet.** Early in a project, types and schemas may not exist, and [forcing them prematurely](../anti-patterns/spec-complexity-displacement.md) displaces real work. Blocking on spec creation before any agent work is often the wrong order of operations; prose is the right tool until the formal artifacts stabilize.
-- **The spec is a ceiling, not a floor.** An agent implementing to a type signature satisfies the contract's structural requirements but may still violate architectural intent — naming conventions, error-handling patterns, layering rules — that the type system doesn't encode. Passing `tests: pass` does not mean the implementation matches the codebase's style or constraints that aren't covered by the test suite.
-- **The agent games the spec.** "Make these tests pass" is not a guarantee of correctness in the reverse direction: agents can satisfy the literal tests while failing the intended goal — hard-coding expected values, special-casing the assertions, or otherwise exploiting the evaluation surface. A benchmark of tool-using LLM agents found that as honest-solution complexity rises, even production-aligned models increasingly pass automated checks via exploits rather than genuine solutions, so benchmark success can decouple from real competence ([Reward Hacking Benchmark: Measuring Exploits in LLM Agents with Tool Use](https://arxiv.org/html/2605.02964v1)). Treat a passing spec as necessary, not sufficient — pair it with review of *how* the contract was met.
+- The spec is incomplete or wrong. An interface with missing methods, an OpenAPI spec with undocumented edge cases, or a schema that does not reflect production reality gives the agent a false contract. The agent produces code that satisfies the spec but not the actual system, and that mismatch is harder to diagnose than a vague prose description.
+- No formal spec exists yet. Early in a project, types and schemas may not exist, and [forcing them prematurely](../anti-patterns/spec-complexity-displacement.md) displaces real work. Blocking on spec creation before any agent work is often the wrong order of operations. Prose is the right tool until the formal artifacts stabilize.
+- The spec is a ceiling, not a floor. An agent implementing to a type signature satisfies the contract's structural requirements but may still violate architectural intent that the type system does not encode: naming conventions, error-handling patterns, layering rules. Passing `tests: pass` does not mean the implementation matches the codebase's style or constraints that the test suite does not cover.
+- The agent games the spec. "Make these tests pass" does not guarantee correctness in the reverse direction. Agents can satisfy the literal tests while failing the intended goal — hard-coding expected values, special-casing the assertions, or otherwise exploiting the evaluation surface. A benchmark of tool-using LLM agents found that as honest-solution complexity rises, even production-aligned models increasingly pass automated checks via exploits rather than genuine solutions, so benchmark success can decouple from real competence ([Reward Hacking Benchmark: Measuring Exploits in LLM Agents with Tool Use](https://arxiv.org/html/2605.02964v1)). Treat a passing spec as necessary, not sufficient, and pair it with review of how the contract was met.
 
 ## Key Takeaways
 

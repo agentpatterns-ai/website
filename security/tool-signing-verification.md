@@ -14,28 +14,28 @@ maturity: established
 
 > Require cryptographic signature verification before an agent loads or invokes a tool, preventing untrusted or tampered modules from entering the execution environment.
 
-## The Supply Chain Problem
+## The supply chain problem
 
-Agents dynamically load tools at runtime, and each tool inherits the agent's permissions. A single tampered tool compromises the entire workflow.
+Agents load tools at runtime, and each tool inherits the agent's permissions. A single tampered tool compromises the entire workflow.
 
-Key attack vectors:
+The main attack vectors:
 
-- **Tool poisoning** — malicious instructions embedded in tool descriptions, invisible to users but visible to the LLM ([OWASP MCP03:2025](https://owasp.org/www-project-mcp-top-10/2025/MCP03-2025%E2%80%93Tool-Poisoning))
-- **Rug pulls** — tools that mutate their definitions post-installation, safe on day 1 and exfiltrating credentials by day 7 ([Willison, 2025](https://simonwillison.net/2025/Apr/9/mcp-prompt-injection/))
-- **Marketplace malware** — 534 of 3,984 skills on agent marketplaces contained critical vulnerabilities including [prompt injection](prompt-injection-threat-model.md) ([ReversingLabs](https://www.reversinglabs.com/blog/how-ai-agents-upend-sscs))
-- **Cross-server shadowing** — a malicious MCP server intercepts calls intended for a trusted server ([Invariant Labs, 2025](https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks))
+- Tool poisoning — malicious instructions embedded in tool descriptions, invisible to users but visible to the LLM ([OWASP MCP03:2025](https://owasp.org/www-project-mcp-top-10/2025/MCP03-2025%E2%80%93Tool-Poisoning))
+- Rug pulls — tools that mutate their definitions after installation, safe on day 1 and exfiltrating credentials by day 7 ([Willison, 2025](https://simonwillison.net/2025/Apr/9/mcp-prompt-injection/))
+- Marketplace malware — 534 of 3,984 skills on agent marketplaces contained critical vulnerabilities, including [prompt injection](prompt-injection-threat-model.md) ([ReversingLabs](https://www.reversinglabs.com/blog/how-ai-agents-upend-sscs))
+- Cross-server shadowing — a malicious MCP server intercepts calls meant for a trusted server ([Invariant Labs, 2025](https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks))
 
 The [OWASP Top 10 for Agentic Applications](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/) lists supply chain vulnerabilities (ASI04) as a top risk.
 
-## Sigstore: Keyless Signing Infrastructure
+## Sigstore: keyless signing infrastructure
 
-[Sigstore](https://docs.sigstore.dev/about/overview/) provides keyless signing for software artifacts, eliminating long-lived keys. Three components:
+[Sigstore](https://docs.sigstore.dev/about/overview/) provides keyless signing for software artifacts, which removes long-lived keys. It has three components:
 
 | Component | Role |
 |---|---|
-| **Cosign** | Signing and verification client |
-| **Fulcio** | Certificate authority issuing short-lived certificates via OIDC identity |
-| **Rekor** | Immutable transparency log recording every signing event |
+| Cosign | Signing and verification client |
+| Fulcio | Certificate authority issuing short-lived certificates via OIDC identity |
+| Rekor | Immutable transparency log recording every signing event |
 
 The signing flow ties integrity to identity:
 
@@ -56,31 +56,31 @@ sequenceDiagram
     Note over Registry,Rekor: Signature + certificate + log entry<br/>form a verifiable chain
 ```
 
-## Extending Sigstore to Agent Tools
+## Extending Sigstore to agent tools
 
-### A2A Agent Cards
+### A2A agent cards
 
-The [sigstore-a2a](https://github.com/sigstore/sigstore-a2a) project applies Sigstore keyless signing to [A2A Agent Cards](../standards/agent-cards.md), enabling SLSA provenance attestations linking cards to source repos and build workflows. Verification constrains trust at three levels:
+The [sigstore-a2a](https://github.com/sigstore/sigstore-a2a) project applies Sigstore keyless signing to [A2A agent cards](../standards/agent-cards.md). This produces SLSA provenance attestations that link cards to source repos and build workflows. Verification constrains trust at three levels:
 
-- **Repository** — only trust cards built from a specific repo
-- **Workflow** — only trust cards built by a specific CI pipeline
-- **Actor** — only trust cards signed by a specific identity
+- Repository — only trust cards built from a specific repo
+- Workflow — only trust cards built by a specific CI pipeline
+- Actor — only trust cards signed by a specific identity
 
-Keyless signing requires CI/CD ambient OIDC credentials, preventing ad-hoc signing from compromised developer machines.
+Keyless signing requires CI/CD ambient OIDC credentials, which stops ad-hoc signing from compromised developer machines.
 
-### ML Models
+### ML models
 
 [Sigstore model-signing v1.0](https://blog.sigstore.dev/model-transparency-v1.0/) extends the same infrastructure to ML models and datasets, targeting integration with model hubs (HuggingFace, Kaggle) and ML frameworks (TensorFlow, PyTorch).
 
-## Why It Works
+## Why it works
 
-Cryptographic signing binds a tool artifact's content to a hash: any modification produces a different digest, invalidating the original signature. The agent gateway rejects mismatches before the tool description ever reaches the LLM — fail-closed by design. Transparency logs (Rekor) make every signing event append-only in a Merkle tree — the same [cryptographic audit-trail](cryptographic-governance-audit-trail.md) property — so retroactive log manipulation is computationally infeasible. Identity-binding via short-lived OIDC certificates means the signature attests *who* built the artifact, not just *what* it contains, defeating impersonation. Post-load monitoring compares live tool schemas against the signed baseline to catch rug pulls where a tool mutates after initial verification ([Jamshidi et al., 2026](https://arxiv.org/abs/2601.23132)).
+Cryptographic signing binds a tool artifact's content to a hash. Any change produces a different digest, which invalidates the original signature. The agent gateway rejects mismatches before the tool description ever reaches the LLM, so it fails closed by design. Transparency logs (Rekor) make every signing event append-only in a Merkle tree — the same [cryptographic audit-trail](cryptographic-governance-audit-trail.md) property — so retroactive log manipulation is computationally infeasible. Short-lived OIDC certificates bind identity, so the signature attests who built the artifact, not just what it contains, which defeats impersonation. Post-load monitoring compares live tool schemas against the signed baseline to catch rug pulls, where a tool mutates after initial verification ([Jamshidi et al., 2026](https://arxiv.org/abs/2601.23132)).
 
-## Runtime Enforcement Patterns
+## Runtime enforcement patterns
 
-Signing alone is insufficient — verification must happen at runtime before invocation.
+Signing alone is not enough — verification must happen at runtime before invocation.
 
-### Registration Catalog + Agent Gateway
+### Registration catalog and agent gateway
 
 A registration workflow pre-verifies tools before catalog entry:
 
@@ -98,39 +98,39 @@ flowchart LR
     F -->|Mismatch or missing| J[Block]
 ```
 
-The gateway compares runtime tool descriptions against catalog signatures; discrepancies trigger blocking ([Posta, 2025](https://blog.christianposta.com/prevent-mcp-tool-poisoning-attacks-with-a-registration-workflow/)).
+The gateway compares runtime tool descriptions against catalog signatures. Any discrepancy triggers blocking ([Posta, 2025](https://blog.christianposta.com/prevent-mcp-tool-poisoning-attacks-with-a-registration-workflow/)).
 
-### Certificate-Based Tool Authorization
+### Certificate-based tool authorization
 
-X.509 certificates can embed allowed tool lists as custom OID extensions. Servers verify per-call signatures and extract permissions directly — no external auth service required ([Culver, 2025](https://dev.to/david_culver_e78f000a10fe/certificate-based-tool-authorization-for-mcp-agents-ddj)).
+X.509 certificates can embed allowed tool lists as custom OID extensions. Servers verify per-call signatures and extract permissions directly, so no external auth service is required ([Culver, 2025](https://dev.to/david_culver_e78f000a10fe/certificate-based-tool-authorization-for-mcp-agents-ddj)).
 
-### Policy-as-Code with OPA
+### Policy-as-code with OPA
 
 An Open Policy Agent gateway treats agents as untrusted and enforces:
 
-- **Role-based access** — which tools each agent identity can invoke
-- **Integrity verification** — plan hashes must match signed artifacts
-- **Safety constraints** — destructive operations blocked by policy
-- **Change windows** — time-based restrictions on sensitive operations
+- Role-based access — which tools each agent identity can invoke
+- Integrity verification — plan hashes must match signed artifacts
+- Safety constraints — policy blocks destructive operations
+- Change windows — time-based restrictions on sensitive operations
 
-Every request produces audit traces; ephemeral runners contain blast radius ([InfoQ](https://www.infoq.com/articles/building-ai-agent-gateway-mcp/)).
+Every request produces audit traces, and ephemeral runners contain the blast radius ([InfoQ](https://www.infoq.com/articles/building-ai-agent-gateway-mcp/)).
 
-## Integration Points
+## Integration points
 
 | Stage | Action |
 |---|---|
-| **CI/CD pipeline** | Sign tool artifacts with Cosign using ambient OIDC credentials |
-| **Registry publish** | Attach signature and SLSA provenance attestation |
-| **Agent startup** | Verify signatures of all configured MCP servers against transparency log |
-| **Runtime tool load** | Gateway checks signature before forwarding tool description to agent |
-| **Post-load monitoring** | Detect schema mutations by comparing against signed baseline |
+| CI/CD pipeline | Sign tool artifacts with Cosign using ambient OIDC credentials |
+| Registry publish | Attach signature and SLSA provenance attestation |
+| Agent startup | Verify signatures of all configured MCP servers against transparency log |
+| Runtime tool load | Gateway checks signature before forwarding tool description to agent |
+| Post-load monitoring | Detect schema mutations by comparing against signed baseline |
 
-## Practical Limitations
+## Practical limitations
 
-- **No major [MCP client](../tool-engineering/mcp-client-design.md) verifies tool signatures natively** — third-party middleware like [MCPS](https://mcp-secure.dev/) fills this gap; native client support remains absent as of 2025
-- **sigstore-a2a is early-stage** — feasibility demonstrated but adoption is limited
-- **CI/CD-only signing** limits keyless signing to automated pipelines; ad-hoc workflows need alternatives
-- **Performance overhead** of per-call verification needs profiling in latency-sensitive agents
+- No major [MCP client](../tool-engineering/mcp-client-design.md) verifies tool signatures natively — third-party middleware like [MCPS](https://mcp-secure.dev/) fills this gap, and native client support remains absent as of 2025
+- The sigstore-a2a project is early-stage — feasibility is shown but adoption is limited
+- CI/CD-only signing limits keyless signing to automated pipelines, so ad-hoc workflows need alternatives
+- Per-call verification adds performance overhead that needs profiling in latency-sensitive agents
 
 ## Key Takeaways
 
@@ -143,7 +143,7 @@ Every request produces audit traces; ephemeral runners contain blast radius ([In
 
 Signing a tool artifact with Cosign in CI (GitHub Actions), then verifying it at agent startup:
 
-**Sign (CI pipeline):**
+Sign (CI pipeline):
 
 ```bash
 # Cosign uses ambient OIDC token — no key management needed
@@ -154,7 +154,7 @@ cosign sign-blob \
   my-tool.tar.gz
 ```
 
-**Verify (agent startup):**
+Verify (agent startup):
 
 ```bash
 # Verify the artifact before loading it

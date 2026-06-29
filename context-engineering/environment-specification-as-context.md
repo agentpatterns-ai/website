@@ -19,9 +19,9 @@ maturity: emerging
 
 > Specify your software environment — dependency versions, runtime constraints, OS — as explicit agent context to prevent generated code from targeting the wrong API surface.
 
-**Learn it hands-on:** [Mind the Version Gap](https://learn.agentpatterns.ai/context-engineering/mind-the-version-gap/) — guided lesson with quizzes.
+Learn it hands-on with [the Mind the Version Gap lesson](https://learn.agentpatterns.ai/context-engineering/mind-the-version-gap/), a guided walkthrough with quizzes.
 
-## The Version Gap
+## The version gap
 
 Standard code-generation benchmarks (HumanEval+, MBPP) test isolated functions with no version constraints. Models score 80%+ on these tasks. When the same models must generate code that runs under specific library versions, accuracy drops to 13–28% Pass@1 ([Liu et al., "Environment-Aware Code Generation," ICSE 2026](https://arxiv.org/abs/2601.12262)).
 
@@ -34,7 +34,7 @@ graph TD
     style B fill:#f96,stroke:#333
 ```
 
-## Why Models Default to Deprecated APIs
+## Why models default to deprecated APIs
 
 Models trained on web-scale code corpora see more examples of older API surfaces than current ones. The result: a systematic preference for deprecated patterns, with 3–30% gaps between strict and lenient evaluation ([Liu et al., 2026](https://arxiv.org/abs/2601.12262)).
 
@@ -44,11 +44,11 @@ This compounds in fast-evolving domains. ML libraries — `torch`, `transformers
 
 ## Techniques
 
-### Feed Lock Files as Context
+### Feed lock files as context
 
-Include `requirements.txt`, `pyproject.toml`, `package-lock.json`, or equivalent lock files in the agent's context. This gives the model an explicit version manifest to target. Tools that index workspace files (Claude Code, Cursor, Copilot Workspace) can surface these automatically; for tools that don't, paste the relevant lock file contents directly into the prompt or system message.
+Include `requirements.txt`, `pyproject.toml`, `package-lock.json`, or equivalent lock files in the agent's context. This gives the model an explicit version manifest to target. Tools that index workspace files (Claude Code, Cursor, Copilot Workspace) can surface these automatically. For tools that cannot, paste the relevant lock file contents directly into the prompt or system message.
 
-### State Versions in Instructions
+### State versions in instructions
 
 When requesting code that depends on specific libraries, name the version:
 
@@ -56,33 +56,33 @@ When requesting code that depends on specific libraries, name the version:
 
 This shifts the model toward the correct API surface — strongest for libraries with breaking changes between versions.
 
-### Prefer Migration over Generation
+### Prefer migration over generation
 
 The three adaptation strategies tested — RAG, LoRA MoE, and prefix-KV caching — show models are 2–3x better at adapting existing code to a target environment than generating version-correct code from scratch. MoE improves partial correctness; memory-based approaches (prefix-KV) excel at migration tasks; RAG tends to overfit retrieved examples ([Liu et al., 2026](https://arxiv.org/abs/2601.12262)).
 
 When possible, give the agent working code to migrate rather than generating from scratch.
 
-### Use Execution Feedback Loops
+### Use execution feedback loops
 
-Error traces from failed execution contain version-specific signals (e.g., `AttributeError: module 'torch' has no attribute 'compile'`). Feeding these back into context acts as a corrective signal. This is a specific application of [error preservation in context](error-preservation-in-context.md) tuned for version mismatches.
+Error traces from failed execution contain version-specific signals (for example `AttributeError: module 'torch' has no attribute 'compile'`). Feeding these back into context acts as a corrective signal. This is a specific application of [error preservation in context](error-preservation-in-context.md) tuned for version mismatches.
 
-### Scope Caution to High-Churn Libraries
+### Scope caution to high-churn libraries
 
 ML frameworks (`torch`, `transformers`, `tensorflow`) and web frameworks with rapid release cycles show the steepest accuracy drops. Stable standard-library modules rarely trigger version mismatches. Focus verification effort where churn is highest.
 
-## When This Backfires
+## When this backfires
 
-Environment specification has real costs. Three conditions where the overhead exceeds the benefit:
+Environment specification has real costs. Three conditions make the overhead exceed the benefit:
 
-- **Stable, low-churn deps**: Standard library modules, mature packages with frozen APIs (e.g., `os`, `json`, `requests` ≥2.x), or projects pinned to an LTS release rarely produce version mismatches. Adding lock file context for these bloats the prompt with noise.
-- **Token-budget pressure**: A full `package-lock.json` or `poetry.lock` can run thousands of tokens. In agents with long task context, feeding the entire lock file may crowd out instructions, retrieved code, or error history that matters more. Prefer excerpting only the relevant dep declarations (`[tool.poetry.dependencies]` or filtered `requirements.txt` lines) rather than the full resolved tree.
-- **Version not in training data**: For very new library releases (released after the model's training cutoff), the model has no examples of the correct API surface. Specifying the version signals the correct target but cannot conjure knowledge of it. In this case, supplement with retrieved docs or changelogs rather than relying on version-conditioned generation alone.
+- Stable, low-churn deps: standard library modules, mature packages with frozen APIs (for example `os`, `json`, `requests` ≥2.x), or projects pinned to an LTS release rarely produce version mismatches. Adding lock file context for these fills the prompt with noise.
+- Token-budget pressure: a full `package-lock.json` or `poetry.lock` can run to thousands of tokens. In agents with long task context, feeding the entire lock file may crowd out instructions, retrieved code, or error history that matters more. Excerpt only the relevant dep declarations (`[tool.poetry.dependencies]` or filtered `requirements.txt` lines) rather than the full resolved tree.
+- Version not in training data: for very new library releases (after the model's training cutoff), the model has no examples of the correct API surface. Specifying the version signals the correct target but cannot conjure knowledge of it. Here, supplement with retrieved docs or changelogs rather than relying on version-conditioned generation alone.
 
 ## Example
 
 A developer asks an agent to write a training script using HuggingFace Transformers:
 
-**Without environment context** — the agent generates code using `TrainingArguments` with parameters available in an older version:
+Without environment context, the agent generates code using `TrainingArguments` with parameters available in an older version:
 
 ```python
 from transformers import TrainingArguments
@@ -94,7 +94,7 @@ args = TrainingArguments(
 )
 ```
 
-**With environment context** — the developer includes `pyproject.toml` showing `transformers==4.47.0` and states the version in the prompt:
+With environment context, the developer includes `pyproject.toml` showing `transformers==4.47.0` and states the version in the prompt:
 
 ```python
 from transformers import TrainingArguments

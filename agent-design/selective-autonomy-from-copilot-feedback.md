@@ -17,12 +17,12 @@ maturity: emerging
 
 > A policy proposes the next action; a critic learned from operator accept/correct feedback decides whether to act autonomously or defer to a human.
 
-## The Pattern
+## The pattern
 
 A staged pipeline runs two models against every step:
 
-1. **Action policy** — proposes the next move (a UI action, a tool call, an edit).
-2. **Critic** — scores confidence using operator feedback collected during normal work; abstains below a threshold. It is the same role as [critic agent plan review](critic-agent-plan-review.md), applied at action time rather than plan time.
+1. Action policy — proposes the next move: a UI action, a tool call, an edit.
+2. Critic — scores confidence from operator feedback collected during normal work, then abstains below a threshold. It plays the same role as [critic agent plan review](critic-agent-plan-review.md), applied at action time rather than plan time.
 
 Confident steps execute autonomously and the agent resumes from the updated state. Uncertain steps surface to an operator who either accepts the suggestion or supplies a correction. Both responses become new training labels for the critic.
 
@@ -40,16 +40,16 @@ graph LR
     F --> P
 ```
 
-## Why It Works
+## Why it works
 
-The pattern is a direct application of **selective classification with a reject option**, formalised by [Geifman and El-Yaniv (2017)](https://arxiv.org/abs/1705.08500): a model that may abstain trades coverage for guaranteed risk on the cases it does accept. Two consequences for agents:
+The pattern applies selective classification with a reject option, formalized by [Geifman and El-Yaniv (2017)](https://arxiv.org/abs/1705.08500): a model that may abstain trades coverage for guaranteed risk on the cases it accepts. This has two consequences for agents:
 
-- **Cheaper supervision.** A policy required to be correct everywhere needs exhaustive labelled traces. A policy that may abstain only needs enough confidence on a high-coverage subset; the critic absorbs residual uncertainty.
-- **Already-paid labels.** Operator accept/correct decisions are produced by routine work, not a separate annotation pipeline — the same outcome signal that [grading agent outcomes](../verification/grade-agent-outcomes.md) captures. The critic trains on supervision the system was already generating.
+- Cheaper supervision. A policy that must be correct everywhere needs exhaustive labeled traces. A policy that may abstain needs enough confidence only on a high-coverage subset, and the critic absorbs the residual uncertainty.
+- Already-paid labels. Routine work produces the operator accept/correct decisions, not a separate annotation pipeline — the same outcome signal that [grading agent outcomes](../verification/grade-agent-outcomes.md) captures. The critic trains on supervision the system was already generating.
 
-This is structurally a more granular form of [on-the-loop placement](../workflows/human-in-the-loop.md): the agent is supervised continuously, but the gate fires only on uncertainty rather than on every action.
+This is a more granular form of [on-the-loop placement](../workflows/human-in-the-loop.md): the agent is supervised continuously, but the gate fires only on uncertainty, not on every action.
 
-## How It Differs From Adjacent Patterns
+## How it differs from adjacent patterns
 
 | Pattern | What is gated | Signal |
 |---------|--------------|--------|
@@ -57,16 +57,16 @@ This is structurally a more granular form of [on-the-loop placement](../workflow
 | [Human-in-the-loop](../workflows/human-in-the-loop.md) | Whether to *advance past* a checkpoint | Reversibility, blast radius |
 | Selective autonomy | Whether to *execute* a proposed action | Learned critic on accept/correct feedback |
 
-The defining move is the learned critic: confidence comes from a model that was trained on the operator's own past decisions, not from a static rule about action class.
+The defining move is the learned critic: confidence comes from a model trained on the operator's own past decisions, not from a static rule about action class.
 
-## When This Backfires
+## When this backfires
 
-The deferral budget is finite — once it is exhausted, the pattern's economics flip:
+The deferral budget is finite. Once it is exhausted, the pattern's economics flip:
 
-- **Reversible actions, low blast radius.** When undo is cheap, abstention is overhead. Execute and roll back instead — see [rollback-first design](rollback-first-design.md).
-- **Sparse or skewed feedback.** A critic trained on a handful of operators or processes cannot calibrate; it over-abstains on novel states or over-acts in the operator's blind spots. The same generalisation gap shows up in code-completion classifiers, where per-language thresholds outperform a uniform setting ([JetBrains, 2025](https://blog.jetbrains.com/ai/2025/03/ai-code-completion-less-is-more/)).
-- **Distribution shift.** A threshold set at deployment decays as the underlying process or UI evolves; production needs continuous recalibration the same way [risk-based shipping](../verification/risk-based-shipping.md) needs its risk matrix re-derived.
-- **Operator throughput cap.** If deferrals exceed what the operator pool can absorb, queues form and the "one operator, many sessions" benefit reverses into a bottleneck — a worked example of [bottleneck migration](../human/bottleneck-migration.md).
+- Reversible actions, low blast radius. When undo is cheap, abstention is overhead. Execute and roll back instead — see [rollback-first design](rollback-first-design.md).
+- Sparse or skewed feedback. A critic trained on a handful of operators or processes cannot calibrate. It over-abstains on novel states, or over-acts in the operator's blind spots. The same generalization gap shows up in code-completion classifiers, where per-language thresholds outperform a uniform setting ([JetBrains, 2025](https://blog.jetbrains.com/ai/2025/03/ai-code-completion-less-is-more/)).
+- Distribution shift. A threshold set at deployment decays as the process or UI evolves. Production needs continuous recalibration, the same way [risk-based shipping](../verification/risk-based-shipping.md) needs its risk matrix re-derived.
+- Operator throughput cap. If deferrals exceed what the operator pool can absorb, queues form. The "one operator, many sessions" benefit then reverses into a bottleneck — a worked example of [bottleneck migration](../human/bottleneck-migration.md).
 
 The pattern earns its keep when actions are partially irreversible, feedback is dense, and the operator pool is large enough to absorb the abstention rate.
 
@@ -74,9 +74,9 @@ The pattern earns its keep when actions are partially irreversible, feedback is 
 
 The deployed system in [Borovkov et al. (2026)](https://arxiv.org/abs/2604.23855) operates over a schema-driven view of a BPM customer-support interface — each workflow step is a UI action the policy proposes from the current schema state.
 
-**Without selective autonomy** — every proposed action is either fully automated (and the rare wrong action reaches the customer) or fully manual (the operator handles every step of every session).
+Without selective autonomy, every proposed action is either fully automated (and the rare wrong action reaches the customer) or fully manual (the operator handles every step of every session).
 
-**With selective autonomy** — the critic, trained on operators' prior accept and correct decisions over UI traces, scores each proposed action. Confident steps run in the background; the agent resumes from the updated UI state, falling back to undo rather than abstention only where [rollback-first design](rollback-first-design.md) makes a step cheap to reverse. Uncertain steps surface to an operator, whose accept-or-correct response feeds back as a fresh training label. The reported result: 45% of sessions automated end-to-end and average handling time reduced 39%, with one operator supervising multiple concurrent sessions and interrupted only on uncertain steps.
+With selective autonomy, the critic scores each proposed action. It was trained on operators' prior accept and correct decisions over UI traces. Confident steps run in the background, and the agent resumes from the updated UI state. It falls back to undo rather than abstention only where [rollback-first design](rollback-first-design.md) makes a step cheap to reverse. Uncertain steps surface to an operator, whose accept-or-correct response feeds back as a fresh training label. The reported result: 45% of sessions automated end-to-end and average handling time reduced 39%, with one operator supervising multiple concurrent sessions and interrupted only on uncertain steps.
 
 ## Key Takeaways
 

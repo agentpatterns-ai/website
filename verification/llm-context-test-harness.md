@@ -15,7 +15,7 @@ maturity: established
 
 > Design test harnesses as LLM-first interfaces: terse stdout, verbose log files, and grep-friendly error lines that keep agent context clean and actionable.
 
-## The Context Window Is the Interface
+## The context window is the interface
 
 Every byte a test suite emits enters the agent's context window. A harness tuned for human readability — stack traces, progress bars, timing breakdowns — becomes noise that consumes tokens, obscures root causes, and degrades reasoning.
 
@@ -23,13 +23,13 @@ Anthropic's [C compiler project](https://www.anthropic.com/engineering/building-
 
 ## Principles
 
-### Terse Stdout, Verbose Log Files
+### Terse stdout, verbose log files
 
 Default stdout to summary-level output. Write verbose output — stack traces, per-test results, timing data — to log files. The agent reads the summary; if it needs detail, it greps the log.
 
 The agent cannot choose to ignore parts of stdout — everything printed enters [the context window](../context-engineering/context-window-dumb-zone.md). Log files give selective access without forcing consumption.
 
-### Place ERROR and Its Reason on the Same Line
+### Place ERROR and its reason on the same line
 
 On failure, emit the keyword and cause on one line:
 
@@ -48,7 +48,7 @@ test_auth_flow
 
 Agents grep for `ERROR` to locate failures. If the cause sits on a separate line, a single grep misses it and the agent spends an extra tool call. One line, one grep, actionable result.
 
-### Provide Pre-Computed Summary Statistics
+### Provide pre-computed summary statistics
 
 Agents are time-blind and cannot infer duration from timestamps or pass rates from a list of results. A harness that prints:
 
@@ -58,11 +58,11 @@ Tests: 142 passed, 3 failed, 0 skipped — 8.2s
 
 beats 145 individual result lines — the signal arrives without consuming 145 lines of context.
 
-### Throttle Incremental Progress Output
+### Throttle incremental progress output
 
 Progress indicators that print per test file, compilation unit, or API call flood context with liveness signals rather than information. Print progress only at milestones or on failure — the agent does not need to know that test 37 of 142 is running.
 
-### Emit Machine-Readable Summaries for Structured Access
+### Emit machine-readable summaries for structured access
 
 For agent loops that parse results programmatically, emit a JSON summary alongside the human output:
 
@@ -72,34 +72,34 @@ For agent loops that parse results programmatically, emit a JSON summary alongsi
 
 The summary stays out of stdout and consumes context only when the agent requests it. Anthropic's [long-running agent harness](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) uses JSON rather than Markdown for feature/test tracking because models are less likely to inappropriately modify JSON.
 
-### Provide a Fast Sampling Mode
+### Provide a fast sampling mode
 
-For large suites, implement a `--fast` flag that runs a 1-10% random sample, deterministic per invocation but varied across parallel instances. Reserve the full suite for final verification.
+For large suites, implement a `--fast` flag that runs a 1% to 10% random sample, deterministic per invocation but varied across parallel instances. Reserve the full suite for final verification.
 
-### Preserve Errors in Context
+### Preserve errors in context
 
 A counterintuitive finding from [Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus): leaving failed actions and error messages in context helps models avoid repeating mistakes. Be terse about success but preserve failure output — error traces are the signal agents use to course-correct.
 
-## Caveat: Terseness vs. Ambition
+## Caveat: terseness versus ambition
 
 Cursor [found](https://cursor.com/blog/codex-model-harness) that when system prompts emphasized token efficiency, models became reluctant to tackle ambitious tasks. Make the harness output terse by engineering — log files, summaries, structured output — rather than by instructing the model to be brief.
 
-## Anti-Pattern: The Human-Optimized Harness
+## Anti-pattern: the human-optimized harness
 
 A human-optimized harness typically includes per-test progress lines (`✓ test_login 42ms`), full stack traces on failure, ASCII progress bars, and timing histograms. Each is context overhead when the agent runs the suite: a 500-test run emits 500 `✓` lines before the failure summary, burying the signal 500 lines deep.
 
-## When This Backfires
+## When this backfires
 
 An LLM-first harness is the wrong default when:
 
-- **Humans are the primary consumers.** In shared CI, engineers triage failures from the full log; stripping stdout forces them to open a secondary file per failure.
-- **The agent will load the full log anyway.** Intermittent failures need surrounding output for [agent debugging](../observability/agent-debugging.md); one extra tool call per failure beats verbose stdout only at scale.
-- **Tests carry diagnostic data in the body.** Property-based suites and snapshot diffs print the offending input; a one-line reason drops the payload needed to diagnose.
-- **The suite is small.** Under a few dozen tests, per-test progress is cheap to scan and a custom reporter is not worth the effort.
+- Humans are the primary consumers. In shared CI, engineers triage failures from the full log, and stripping stdout forces them to open a secondary file per failure.
+- The agent will load the full log anyway. Intermittent failures need surrounding output for [agent debugging](../observability/agent-debugging.md), and one extra tool call per failure beats verbose stdout only at scale.
+- Tests carry diagnostic data in the body. Property-based suites and snapshot diffs print the offending input, so a one-line reason drops the payload needed to diagnose.
+- The suite is small. Under a few dozen tests, per-test progress is cheap to scan and a custom reporter is not worth the effort.
 
 Reserve the LLM-first harness for suites the agent runs unattended at scale.
 
-## Implementation Checklist
+## Implementation checklist
 
 | Property | Good | Bad |
 |----------|------|-----|
@@ -185,7 +185,7 @@ The full stack trace lives in `test-verbose.log`, and `test-results.json` provid
 ## Related
 
 - [Context Window Management: The Dumb Zone](../context-engineering/context-window-dumb-zone.md)
-- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md)
 - [Agent Debugging](../observability/agent-debugging.md)
 - [Test-Driven Agent Development](tdd-agent-development.md)

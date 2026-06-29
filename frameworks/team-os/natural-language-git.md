@@ -14,13 +14,13 @@ maturity: adopted
 
 > A coding agent fronting the `gh` CLI or GitHub MCP server lets non-engineers author pull requests in plain English — an adoption unlock that holds only when the team already has a PR-review norm, a git-fluent escalation path, and strict attribution policy.
 
-## Why Git's Barrier Is Syntactic, Not Purely Conceptual
+## Why Git's barrier is syntactic, not purely conceptual
 
-Non-engineers are blocked at the verb layer — remembering that "propose a change" means `git checkout -b && git commit && git push && gh pr create --reviewer` — not at the idea of review-before-merge. The NLI4DB systematic review surveys natural-language interfaces as a way to translate intent into operations against a structured backend, narrowing the novice–expert gap in domain-specific tooling without requiring users to learn the command vocabulary ([arxiv 2503.02435](https://arxiv.org/html/2503.02435v1)). GitLab's own engineering blog locates the curve in "the number of Git commands and arguments … [which] complicate the beginner's task" rather than in the idea of branching ([GitLab](https://about.gitlab.com/blog/learning-curve-is-the-biggest-challenge-developers-face-with-git/)). Remove the vocabulary and novice throughput rises; the PR/review mental model remains untouched.
+Non-engineers are blocked at the verb layer, not at the idea of review-before-merge. They struggle to remember that "propose a change" means `git checkout -b && git commit && git push && gh pr create --reviewer`. The NLI4DB systematic review surveys natural-language interfaces as a way to translate intent into operations against a structured backend, narrowing the novice–expert gap in domain-specific tooling without making users learn the command vocabulary ([arxiv 2503.02435](https://arxiv.org/html/2503.02435v1)). GitLab's engineering blog locates the curve in "the number of Git commands and arguments … [which] complicate the beginner's task" rather than in the idea of branching ([GitLab](https://about.gitlab.com/blog/learning-curve-is-the-biggest-challenge-developers-face-with-git/)). Remove the vocabulary and novice throughput rises, while the PR-and-review mental model stays untouched.
 
-## What the Agent Mediates
+## What the agent mediates
 
-The agent translates intent into verbs over two equivalent tool surfaces. Both expose the same GitHub operations; the choice is local-versus-hosted.
+The agent translates intent into verbs over two equivalent tool surfaces. Both expose the same GitHub operations, so the choice is local versus hosted.
 
 | Surface | Shape | Typical verbs |
 |---------|-------|---------------|
@@ -29,27 +29,27 @@ The agent translates intent into verbs over two equivalent tool surfaces. Both e
 
 "Put up a PR for Morgan to review this PRD" resolves into a `gh pr create --assignee` chain the user never sees ([transcript](https://www.aakashg.com/hannah-stulberg-podcast/)). For tool-agnostic tooling the same surface is reachable via [MCP](../../standards/mcp-protocol.md).
 
-## Conditions Under Which It Works
+## Conditions under which it works
 
-The thesis is **qualified**. Treat the following as prerequisites, not nice-to-haves:
+The thesis is qualified. Treat the following as prerequisites, not nice-to-haves:
 
-- **A git-fluent champion on the team.** Non-happy-path errors — expired `gh auth` tokens, branch-protection rejections, failed CI — surface as terminal output the non-engineer cannot parse. Someone has to unstick them.
-- **PR-as-review-norm already established.** The agent removes syntax; it does not install the collaboration shape. Teams with no review cadence inherit the same bottleneck with worse ergonomics.
-- **Explicit attribution policy.** Agent-mediated commits must carry `Co-Authored-By` and, for Copilot coding agent work, the `Agent-Logs-Url` trailer that links the commit back to its session log ([GitHub changelog 2026-03-20](https://github.blog/changelog/2026-03-20-trace-any-copilot-coding-agent-commit-to-its-session-logs/)). Without it, audit collapses to "the human typed it" when the human merely approved a generated diff.
-- **Out-of-scope domains excluded.** Legal, HR, finance, or PII content does not belong in GitHub's access-control model. See the [Team OS adoption gradient](index.md#adoption-gradient).
+- A git-fluent champion on the team. Non-happy-path errors — expired `gh auth` tokens, branch-protection rejections, failed CI — surface as terminal output the non-engineer cannot parse. Someone has to unstick them.
+- A PR-review norm already established. The agent removes syntax, but it does not install the collaboration shape. Teams with no review cadence inherit the same bottleneck with worse ergonomics.
+- An explicit attribution policy. Agent-mediated commits must carry `Co-Authored-By` and, for Copilot coding agent work, the `Agent-Logs-Url` trailer that links the commit back to its session log ([GitHub changelog 2026-03-20](https://github.blog/changelog/2026-03-20-trace-any-copilot-coding-agent-commit-to-its-session-logs/)). Without it, audit collapses to "the human typed it" when the human merely approved a generated diff.
+- Out-of-scope domains excluded. Legal, HR, finance, or PII content does not belong in GitHub's access-control model. See the [Team OS adoption gradient](index.md#adoption-gradient).
 
-## Failure Modes
+## Failure modes
 
 Where the happy path breaks:
 
-- **Merge conflicts at scale.** The AgenticFlict dataset reports a **27.67% conflict rate across 107,000+ agent-generated PRs** in 59,000+ repositories; "merge conflicts are both frequent and often substantial in AI-generated contributions" ([arxiv 2604.03551](https://arxiv.org/html/2604.03551v1)). Copilot coding agent does not auto-rebase, and community-documented resolution attempts "rewrite the changes instead of performing a real merge, losing Git history" ([GitHub discussion #185521](https://github.com/orgs/community/discussions/185521)). A non-engineer has no reflog mental model to recover.
-- **The mental-model push, not removal.** The docs-as-code critique argues the real barrier is conceptual: users "must master Git concepts (branches, merges, conflicts) designed for code workflows" ([thisisimportant.net](https://thisisimportant.net/posts/docs-as-code-broken-promise/)). Natural-language mediation relocates the model from CLI to PR review — the non-engineer now thinks in reviewers, mergeability, and CI state. The ceiling is lower, not absent.
-- **Review theatre.** When the agent also opens the review ("put up a PR for Morgan"), the reviewer is the only quality gate. N=1 case evidence does not measure rubber-stamp rates.
-- **Auth and CI cliffs.** Token expiry, org SSO walls, failed Actions runs, and force-push recovery all exit the agent's happy path.
+- Merge conflicts at scale. The AgenticFlict dataset reports a 27.67% conflict rate across 107,000-plus agent-generated PRs in 59,000-plus repositories, and notes that "merge conflicts are both frequent and often substantial in AI-generated contributions" ([arxiv 2604.03551](https://arxiv.org/html/2604.03551v1)). Copilot coding agent does not auto-rebase, and community-documented resolution attempts "rewrite the changes instead of performing a real merge, losing Git history" ([GitHub discussion #185521](https://github.com/orgs/community/discussions/185521)). A non-engineer has no reflog mental model to recover.
+- The mental model moves, it does not disappear. The docs-as-code critique argues the real barrier is conceptual: users "must master Git concepts (branches, merges, conflicts) designed for code workflows" ([thisisimportant.net](https://thisisimportant.net/posts/docs-as-code-broken-promise/)). Natural-language mediation relocates the model from CLI to PR review, so the non-engineer now thinks in reviewers, mergeability, and CI state. The ceiling is lower, not absent.
+- Review theatre. When the agent also opens the review ("put up a PR for Morgan"), the reviewer is the only quality gate. Single-case evidence does not measure rubber-stamp rates.
+- Auth and CI cliffs. Token expiry, org SSO walls, failed Actions runs, and force-push recovery all exit the agent's happy path.
 
-## Example — Stulberg's Adoption Pattern
+## Example — Stulberg's adoption pattern
 
-A Product Manager at DoorDash onboarded a non-technical strategy partner who "had never opened GitHub in her life two months ago, and now she is putting up PRs every single day." The interaction shape is verb-level: *"I would literally write 'put up a PR for Morgan to review this PRD' and everything would just work. Never leaving Claude at all."* ([transcript](https://www.aakashg.com/hannah-stulberg-podcast/)). The conditions held — small team, git-fluent champion, PR-review norm established, PRDs as the primary artifact.
+A product manager at DoorDash onboarded a non-technical strategy partner who "had never opened GitHub in her life two months ago, and now she is putting up PRs every single day." The interaction shape is verb-level: "I would literally write 'put up a PR for Morgan to review this PRD' and everything would just work. Never leaving Claude at all." ([transcript](https://www.aakashg.com/hannah-stulberg-podcast/)). The conditions held — a small team, a git-fluent champion, an established PR-review norm, and PRDs as the primary artifact.
 
 ## Key Takeaways
 

@@ -18,15 +18,15 @@ maturity: established
 
 > Agent-first software design architects systems where AI agents are primary consumers — machine-readable APIs and structured outputs replace visual UIs as the default interaction surface.
 
-## The Agent-First Inversion
+## The agent-first inversion
 
-Traditional software design optimizes for human comprehension: dashboards, forms, visual hierarchies. Agent-first design inverts this. The primary consumer is a program that reads structured data, calls APIs, and acts on machine-readable state exposed through interfaces like MCP. Human interfaces become a layer on top, not the foundation.
+Traditional software design optimizes for human comprehension: dashboards, forms, and visual hierarchies. Agent-first design inverts this. The main consumer is a program that reads structured data, calls APIs, and acts on machine-readable state exposed through interfaces like MCP. Human interfaces become a layer on top, not the foundation.
 
-This does not remove humans from the loop. It designs the data and control plane for machines first, then renders human-friendly views from the same substrate — the [agent-computer interface](../tool-engineering/agent-computer-interface.md) approach. Anthropic frames this as the [agent-computer interface (ACI)](../tool-engineering/agent-computer-interface.md) — investing the same design effort into machine-facing interfaces as into human-computer interfaces (HCI).
+This does not remove humans from the loop. You design the data and control plane for machines first, then render human-friendly views from the same source — the [agent-computer interface](../tool-engineering/agent-computer-interface.md) approach. Anthropic frames this as the [agent-computer interface (ACI)](../tool-engineering/agent-computer-interface.md), and puts the same design effort into machine-facing interfaces as into human-computer interfaces (HCI).
 
-## Design Principles
+## Design principles
 
-### Structured Over Visual
+### Structured over visual
 
 Replace dashboards with queryable APIs. Where a human reads a status page, an agent reads a JSON endpoint. The structured format is the primary artifact.
 
@@ -37,29 +37,29 @@ Replace dashboards with queryable APIs. Where a human reads a status page, an ag
 | Visual diff viewer | Structured diff API |
 | Notification emails | Webhook events with typed payloads |
 
-### Self-Describing Interfaces
+### Self-describing interfaces
 
-Agent-consumable APIs require richer metadata than human-facing ones. Anthropic recommends investing the same engineering effort in tool documentation as in the agent prompt itself — every endpoint, parameter, and response field benefits from a description an LLM can interpret without external documentation. OpenAPI 3.0+ specifications with complete `description` fields on all components serve as both documentation and agent instruction.
+Agent-consumable APIs need richer metadata than human-facing ones. Anthropic recommends putting the same engineering effort into tool documentation as into the agent prompt itself. Every endpoint, parameter, and response field benefits from a description an LLM can read without external documentation. OpenAPI 3.0+ specifications with complete `description` fields on all components serve as both documentation and agent instruction.
 
-### Poka-Yoke Tool Design
+### Poka-yoke tool design
 
-Anthropic's SWE-bench work demonstrated that [tool interfaces should make mistakes structurally impossible](https://www.anthropic.com/research/building-effective-agents). When their agent used relative filepaths, it made errors after changing directories. Switching to mandatory absolute filepaths eliminated the error class entirely. Design inputs so wrong usage fails at the interface level, not at runtime — the [poka-yoke](../tool-engineering/poka-yoke-agent-tools.md) principle.
+Anthropic's SWE-bench work showed that [tool interfaces should make mistakes structurally impossible](https://www.anthropic.com/research/building-effective-agents). When their agent used relative filepaths, it made errors after changing directories. Switching to mandatory absolute filepaths removed the error class entirely. Design inputs so wrong usage fails at the interface level, not at runtime — the [poka-yoke](../tool-engineering/poka-yoke-agent-tools.md) principle.
 
-### Deterministic Over Probabilistic
+### Deterministic over probabilistic
 
-Agents perform best against APIs with predictable behavior. [Idempotent operations](idempotent-agent-operations.md), consistent error formats, and stable response schemas reduce the reasoning an agent must do per call. Every ambiguity in an API response is a potential failure point.
+Agents perform best against APIs with predictable behavior. [Idempotent operations](idempotent-agent-operations.md), consistent error formats, and stable response schemas cut the reasoning an agent must do per call. Every ambiguity in an API response is a potential failure point.
 
-## Early Examples
+## Early examples
 
-**llms.txt** — A [standardized file](https://llmstxt.org) providing LLM-friendly site metadata, enabling agents to navigate a project without crawling every page.
+[llms.txt](https://llmstxt.org) is a standard file that gives LLM-friendly site metadata, so agents can navigate a project without crawling every page.
 
-**Model Context Protocol (MCP)** — An [open standard](https://modelcontextprotocol.io) for connecting agents to external tools and data sources. MCP servers expose capabilities in a structured, discoverable format agents consume programmatically.
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io) is an open standard that connects agents to external tools and data sources. MCP servers expose capabilities in a structured, discoverable format that agents consume programmatically.
 
-**[Agent Cards](../standards/agent-cards.md)** — Machine-readable capability declarations that let agents discover what other agents can do — the [A2A protocol](../standards/a2a-protocol.md) formalised agent cards as its discovery mechanism for multi-agent composition.
+[Agent Cards](../standards/agent-cards.md) are machine-readable capability declarations that let agents discover what other agents can do. The [A2A protocol](../standards/a2a-protocol.md) made agent cards its discovery mechanism for multi-agent composition.
 
-**[OpenAPI as tool spec](../standards/openapi-agent-tool-spec.md)** — API specifications designed for human developers double as agent tool definitions when enriched with descriptive metadata and clear parameter constraints — an OpenAPI operation maps directly to tool schema fields consumed by agents.
+[OpenAPI as tool spec](../standards/openapi-agent-tool-spec.md): API specifications written for human developers double as agent tool definitions once you enrich them with descriptive metadata and clear parameter constraints. An OpenAPI operation maps directly to the tool schema fields agents consume.
 
-## The Layering Pattern
+## The layering pattern
 
 Agent-first does not mean agent-only. The pattern layers interfaces:
 
@@ -74,13 +74,13 @@ graph TD
 
 The structured data layer is the single source of truth. Both agent and human interfaces derive from it, preventing divergence between what the API and UI report.
 
-## Trade-Offs
+## Trade-offs
 
-**Reduced human observability.** When the primary interface is machine-readable, visibility into system state requires explicitly maintaining a human UI layer.
+Reduced human observability. When the main interface is machine-readable, you need an explicit human UI layer to see system state.
 
-**Higher upfront metadata cost.** Self-describing APIs require a `description`, examples, and constraints for every field — more work than a minimal API with separate docs. The payoff: agents consume the API without custom integration code.
+Higher upfront metadata cost. Self-describing APIs need a `description`, examples, and constraints for every field — more work than a minimal API with separate docs. The payoff: agents consume the API without custom integration code.
 
-**Premature optimization risk.** Most valuable for platforms consumed by multiple agents, not internal tools with a single human user.
+Premature optimization risk. This pattern pays off most for platforms that many agents consume, not for internal tools with a single human user.
 
 ## Example
 
@@ -154,7 +154,7 @@ The `enum` constraint on `env` and the SHA-1 `pattern` on `ref` make wrong usage
 
 - [AX/UX/DX Triad](ax-ux-dx-triad.md) — treats agent experience, user experience, and developer experience as separate design surfaces in agent systems
 - [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md) — separating the agent layer that decides from the layer that acts, with typed tool interfaces enforcing the boundary
-- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md) — shaping tool surfaces for agent consumption
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md) — shaping tool surfaces for agent consumption
 - [llms.txt: Spec, Adoption, and Honest Limitations](../geo/llms-txt.md) — an early agent-first standard for site metadata
 - [MCP: The Plumbing Behind Agent Tool Access](../standards/mcp-protocol.md) — protocol that exposes capabilities in agent-consumable form
 - [Codebase Readiness for Agents](codebase-readiness.md) — preparing a repository as an agent-first system

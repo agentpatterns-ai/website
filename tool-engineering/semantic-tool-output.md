@@ -19,18 +19,18 @@ maturity: established
 
 > Return human-readable, contextually filtered output from agent tools to reduce hallucination and improve downstream call accuracy.
 
-**Learn it hands-on:** [Result Shaping](https://learn.agentpatterns.ai/tool-engineering/result-shaping/) — guided lesson with quizzes.
+Learn it hands-on with the [Result Shaping guided lesson](https://learn.agentpatterns.ai/tool-engineering/result-shaping/), which includes quizzes.
 
 !!! note "Also known as"
-    Tool Output Design, Token-Efficient Tool Design, Agent-Friendly Output. For the cost angle — designing tool outputs to minimize token consumption — see [Token-Efficient Tool Design](token-efficient-tool-design.md).
+    Tool Output Design, Token-Efficient Tool Design, Agent-Friendly Output. For the cost angle — designing tool outputs to minimize token consumption — see [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md).
 
-## Why Output Design Matters
+## Why output design matters
 
 Agents reason over tool output as natural language. When tools return opaque identifiers, machine-oriented fields, or oversized payloads, they waste context and make it harder for the model to extract what matters ([Anthropic, *Writing effective tools for agents*](https://www.anthropic.com/engineering/writing-tools-for-agents)). Output format is a reliability lever independent of model capability.
 
 ## Principles
 
-### Replace Identifiers with Semantic Equivalents
+### Replace identifiers with semantic equivalents
 
 UUIDs, MIME types, and internal codes are opaque to agents:
 
@@ -46,11 +46,11 @@ Replace them with the natural-language fields the agent will reason about:
 
 Resolving alphanumeric UUIDs to semantic language (or even a 0-indexed scheme) "significantly improves Claude's precision in retrieval tasks by reducing hallucinations" ([Anthropic](https://www.anthropic.com/engineering/writing-tools-for-agents)). The agent can then reference the object by name without miscopying an identifier.
 
-### Return Only Contextually Relevant Fields
+### Return only contextually relevant fields
 
 Omit data the agent will never use. A tool returning 40 fields when the agent needs `name` and `email` wastes context on 38 irrelevant fields, and every extra field is a hallucination opportunity — the agent may reference, invent, or misinterpret fields it was not asked to act on. Anthropic's tool-use guidance is to return only high-signal information and include only the fields Claude needs for its next step ([Claude API docs, *Tool use*](https://docs.anthropic.com/en/docs/build-with-claude/tool-use)). Design schemas around decision-relevant fields, and expose expanded output as an optional mode.
 
-### Implement Pagination and Filtering at the Tool Layer
+### Implement pagination and filtering at the tool layer
 
 Tools that return full datasets shift filtering to the agent, which either hallucinates the filter or loads the entire dataset into context. Anthropic recommends "some combination of pagination, range selection, filtering, and/or truncation with sensible default parameter values" for any response that can grow large ([Anthropic](https://www.anthropic.com/engineering/writing-tools-for-agents)). In practice:
 
@@ -58,7 +58,7 @@ Tools that return full datasets shift filtering to the agent, which either hallu
 - Return a page of results with a cursor, not an unbounded list.
 - Provide sensible defaults (`limit=20`) that prevent accidental context flooding.
 
-### Use Enums for Response Granularity
+### Use enums for response granularity
 
 When an agent needs different levels of detail at different points, expose a `response_format` enum ([Anthropic](https://www.anthropic.com/engineering/writing-tools-for-agents)) rather than always returning full or minimal output:
 
@@ -69,7 +69,7 @@ When an agent needs different levels of detail at different points, expose a `re
 
 The agent selects the appropriate format based on its current context budget and task requirements.
 
-### Make Errors Actionable
+### Make errors actionable
 
 Error responses should tell the agent what went wrong and how to fix it:
 
@@ -85,21 +85,21 @@ Not:
 
 Errors should "clearly communicate specific and actionable improvements, rather than opaque error codes or tracebacks" ([Anthropic](https://www.anthropic.com/engineering/writing-tools-for-agents)), letting the agent self-correct on the next call without human intervention.
 
-## Why It Works
+## Why it works
 
 LLMs are trained on next-token prediction and perform better with formats that match their training data ([Anthropic](https://www.anthropic.com/engineering/writing-tools-for-agents)). UUIDs and MIME strings are arbitrary byte sequences — agents grapple with natural-language identifiers significantly more successfully than with cryptic ones, reducing hallucinations in retrieval tasks. Returning only decision-relevant fields removes irrelevant signals the model might reference or misattribute, keeping the tool result tightly scoped to what the next action actually requires.
 
-## When This Backfires
+## When this backfires
 
 Semantic filtering at the tool layer has failure modes:
 
-- **Under-specification**: a task-specific schema omits a field the agent unexpectedly needs. The agent either hallucinates the value or makes an extra round-trip — sometimes more expensive than returning the full record once.
-- **Concise/detailed mismatch**: when `response_format` is exposed but the agent picks the wrong mode, it operates on incomplete data without knowing it. Prompting the agent to reason about its data needs before calling the tool reduces this risk.
-- **Schema drift**: a "clean default" shaped by the first use case becomes misaligned as new tasks arrive, unless you version the schema or gate expansion behind opt-in.
+- Under-specification: a task-specific schema omits a field the agent unexpectedly needs. The agent either hallucinates the value or makes an extra round-trip — sometimes more expensive than returning the full record once.
+- Concise/detailed mismatch: when `response_format` is exposed but the agent picks the wrong mode, it operates on incomplete data without knowing it. Prompting the agent to reason about its data needs before calling the tool reduces this risk.
+- Schema drift: a "clean default" shaped by the first use case becomes misaligned as new tasks arrive, unless you version the schema or gate expansion behind opt-in.
 
 When output scope is genuinely unpredictable across callers, a richer default with well-named fields is safer than a narrow schema that forces multiple calls.
 
-## Anti-Pattern: Developer-Convenience Output
+## Anti-pattern: developer-convenience output
 
 Tools built for developer debugging often return everything — raw database records, full object graphs, internal identifiers, debug fields. That is fine for a developer reading a terminal. It is the wrong default for an agent consuming output in a context window. The fix is not to strip developer-useful data, but to separate concerns: a `debug` mode for developer use, a clean default for agent use.
 
@@ -147,7 +147,7 @@ The agent now has exactly what it needs — a human-readable name, the contact a
 ## Related
 
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — semantic output is one of four ACI design principles; affordances, constraints, and error prevention are the other three
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Graceful Tool-Output Truncation: The PARTIAL Signal](graceful-tool-output-truncation.md) — what to return when filtered output still overflows
 - [Terminal Tool Output Compression](terminal-output-compression.md) — harness-side filtering when the tool itself cannot be redesigned
 - [CLI Scripts as Agent Tools: Return Only What Matters](cli-scripts-as-agent-tools.md)

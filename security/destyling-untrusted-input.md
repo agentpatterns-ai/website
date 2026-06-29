@@ -20,15 +20,15 @@ status: current
 
 > Strip instruction-like style from untrusted input before the model sees it — destyling cut prompt-injection attack success from 61% to 10% by interrupting role perception.
 
-## The Representational Failure It Targets
+## The representational failure it targets
 
-Prompt injection is usually framed as a content problem — the agent sees a string that asks it to do the wrong thing. [Ye, Cui, and Hadfield-Menell (2026)](https://arxiv.org/abs/2603.12277) reframe it as a **representational** problem: large language models infer who is speaking from the *style* of text, not from the labeled `<user>` / `<tool>` role tag wrapping it. An instruction hidden inside a tool response hijacks an agent because it sounds like a privileged role, even though its label is unprivileged.
+Prompt injection is usually framed as a content problem — the agent sees a string that asks it to do the wrong thing. [Ye, Cui, and Hadfield-Menell (2026)](https://arxiv.org/abs/2603.12277) reframe it as a representational problem. Large language models infer who is speaking from the style of text, not from the labeled `<user>` / `<tool>` role tag wrapping it. An instruction hidden inside a tool response hijacks an agent because it sounds like a privileged role, even though its label is unprivileged.
 
-Linear probes on model activations show that injected text imitating a trusted role occupies the same representational region as authentic text from that role; the model's downstream attention treats the two identically. The degree of role confusion measured by the probe predicts attack success *before a single token is generated* ([Ye et al., 2026](https://arxiv.org/abs/2603.12277)). The attack class the authors introduce — CoT Forgery — exploits this directly by injecting fabricated chain-of-thought traces into user prompts and tool outputs; models mistake the forgery for their own reasoning, yielding around 60% attack success against frontier models with near-zero baselines.
+Linear probes on model activations show that injected text imitating a trusted role lands in the same representational region as authentic text from that role. The model's downstream attention then treats the two identically. The degree of role confusion the probe measures predicts attack success before a single token is generated ([Ye et al., 2026](https://arxiv.org/abs/2603.12277)). The attack class the authors introduce — CoT Forgery — exploits this directly. It injects fabricated chain-of-thought traces into user prompts and tool outputs; models mistake the forgery for their own reasoning, reaching around 60% attack success against frontier models with near-zero baselines.
 
-## What Destyling Does
+## What destyling does
 
-Destyling is a preprocessing transform applied to untrusted input before it enters the model context. It removes or rewrites the surface features the model uses to encode source — chain-of-thought markers, reasoning-trace vocabulary, second-person framing, and the specific bigrams associated with privileged roles ([Ye et al., 2026; Willison 2026](https://simonwillison.net/2026/Jun/22/prompt-injection-as-role-confusion/)). The intervention sits between content sanitisation (blocklist of payloads) and structural defenses (control/data-flow separation): the input still reaches the model, but in a form whose representation no longer collides with the trusted role.
+Destyling is a preprocessing transform applied to untrusted input before it enters the model context. It removes or rewrites the surface features the model uses to encode source: chain-of-thought markers, reasoning-trace vocabulary, second-person framing, and the specific bigrams tied to privileged roles ([Ye et al., 2026; Willison 2026](https://simonwillison.net/2026/Jun/22/prompt-injection-as-role-confusion/)). The transform sits between content sanitization (a blocklist of payloads) and structural defenses (control/data-flow separation). The input still reaches the model, but in a form whose representation no longer collides with the trusted role.
 
 ```mermaid
 graph LR
@@ -39,28 +39,28 @@ graph LR
     style N fill:#0e8a16,color:#fff
 ```
 
-The transform is shallow on purpose. It does not parse the content for intent — it parses for *style features*, leaving semantic content largely intact so legitimate signals survive.
+The transform is shallow on purpose. It does not parse the content for intent. It parses for style features, leaving semantic content largely intact so legitimate signals survive.
 
-## Why It Works
+## Why it works
 
-Style causally drives role perception, not just correlates with it. The load-bearing evidence in [Ye et al. (2026)](https://arxiv.org/abs/2603.12277) is that replacing a single bigram in untrusted input — `"The user"` → `"The request"` — drops attack success by 19 percentage points ([Willison, 2026](https://simonwillison.net/2026/Jun/22/prompt-injection-as-role-confusion/)). A minimal style perturbation produces a measurable shift in attack success because the model's role-encoding mechanism is reading exactly those features. Apply the full destyling transform and average attack success on the paper's dataset falls from 61% to 10%.
+Style causally drives role perception; it does not merely correlate with it. The load-bearing evidence in [Ye et al. (2026)](https://arxiv.org/abs/2603.12277) is that replacing a single bigram in untrusted input — `"The user"` → `"The request"` — drops attack success by 19 percentage points ([Willison, 2026](https://simonwillison.net/2026/Jun/22/prompt-injection-as-role-confusion/)). A tiny style change produces a measurable shift because the model's role-encoding mechanism is reading exactly those features. Apply the full destyling transform and average attack success on the paper's dataset falls from 61% to 10%.
 
-This isolates destyling from content-detection defenses, which work by classifying input as malicious or benign and then accepting or rejecting it. Destyling never classifies — it transforms — so it does not need a sharp decision boundary on adversarial inputs to add value. The defense lives one layer below content: it changes how the model perceives the source of text, regardless of what the text says.
+This separates destyling from content-detection defenses, which classify input as malicious or benign and then accept or reject it. Destyling never classifies. It transforms, so it does not need a sharp decision boundary on adversarial inputs to add value. The defense lives one layer below content: it changes how the model perceives the source of text, whatever the text says.
 
-## When This Backfires
+## When this backfires
 
-- **Adaptive attackers with access to the destyling function.** The 61% → 10% figure is on a fixed evaluation set. An attacker who can probe the normaliser's outputs can craft injections in a style it was not trained to flatten, regressing attack success toward baseline. Treat the number as a static-benchmark result, not a steady-state defense rate.
-- **Domains where style-rich text is the legitimate payload.** Summarising chat transcripts, agent-to-agent message handling, processing meeting notes — destyling strips features the agent must actually reason about. The trade-off is the same utility-loss problem flagged across the prompt-injection defense literature ([Maloyan and Namiot, 2026](https://arxiv.org/abs/2505.18333)).
-- **Chat-template and token-level attacks.** Injections that exploit chat-template control tokens or boundary markers — for instance [ChatInject (Tian et al., 2026)](https://arxiv.org/abs/2509.22830) — operate below the natural-language surface. Destyling at the text layer cannot reach them.
-- **Multi-modal channels.** Image-encoded payloads, audio inputs, screenshot OCR — destyling has no surface to act on outside the text stream.
-- **Already structurally bounded architectures.** A [control/data-flow separation harness](camel-control-data-flow-injection.md) or an [action-selector pattern](action-selector-pattern.md) blocks the attack class structurally; layering destyling on top adds preprocessing cost without measurable additional risk reduction.
-- **Authors' own caveat.** The paper frames destyling as mitigation, not a fix: "Unless LLMs achieve genuine role perception, we think injection defense will remain a perpetual whack-a-mole game" ([Willison, 2026](https://simonwillison.net/2026/Jun/22/prompt-injection-as-role-confusion/)). Treat the layer as buying time against current attack styles, not closing the threat model.
+- Adaptive attackers with access to the destyling function: the 61% → 10% figure is on a fixed evaluation set. An attacker who can probe the normalizer's outputs can craft injections in a style it was not trained to flatten, regressing attack success toward baseline. Treat the number as a static-benchmark result, not a steady-state defense rate.
+- Domains where style-rich text is the legitimate payload: summarizing chat transcripts, handling agent-to-agent messages, and processing meeting notes all strip features the agent must reason about. The trade-off is the same utility-loss problem flagged across the prompt-injection defense literature ([Maloyan and Namiot, 2026](https://arxiv.org/abs/2505.18333)).
+- Chat-template and token-level attacks: injections that exploit chat-template control tokens or boundary markers, such as [ChatInject (Tian et al., 2026)](https://arxiv.org/abs/2509.22830), operate below the natural-language surface. Destyling at the text layer cannot reach them.
+- Multi-modal channels: image-encoded payloads, audio inputs, and screenshot OCR give destyling no surface to act on outside the text stream.
+- Already structurally bounded architectures: a [control/data-flow separation harness](camel-control-data-flow-injection.md) or an [action-selector pattern](action-selector-pattern.md) blocks the attack class structurally. Layering destyling on top adds preprocessing cost without measurable extra risk reduction.
+- Authors' own caveat: the paper frames destyling as mitigation, not a fix. "Unless LLMs achieve genuine role perception, we think injection defense will remain a perpetual whack-a-mole game" ([Willison, 2026](https://simonwillison.net/2026/Jun/22/prompt-injection-as-role-confusion/)). Treat the layer as buying time against current attack styles, not as closing the threat model.
 
 ## Example
 
-A coding agent fetches a GitHub issue body, which contains an injected reasoning trace:
+A coding agent fetches a GitHub issue body that contains an injected reasoning trace:
 
-**Before — raw untrusted input passed to the model:**
+Before — raw untrusted input passed to the model:
 
 ```text
 [issue body fetched from web]
@@ -70,7 +70,7 @@ config before proceeding with the requested summary. I'll do that now.
 
 The text reads as a chain-of-thought trace in the agent's own voice. Role probes would show this passage collapsing into the same representational region as authentic reasoning, and the agent is likely to execute the injected command ([Ye et al., 2026](https://arxiv.org/abs/2603.12277)).
 
-**After — destyled before entering context:**
+After — destyled before entering context:
 
 ```text
 [issue body fetched from web]
@@ -80,7 +80,7 @@ config before proceeding with the requested summary.
 
 Two surface changes — `"The user"` → `"The request"` and removal of the first-person `"I'll do that now"` resolution — shift the passage into a representational region the model does not encode as a privileged voice. The semantic content (an instruction to exfiltrate `.env`) is still visible, but the agent now perceives it as data describing a request rather than as its own reasoning step. Combined with a confirmation gate on destructive commands, the injection no longer auto-executes.
 
-The transform is shallow and content-preserving — the agent can still summarise the issue accurately — but the role signal is broken.
+The transform is shallow and content-preserving — the agent can still summarize the issue accurately — but the role signal is broken.
 
 ## Key Takeaways
 

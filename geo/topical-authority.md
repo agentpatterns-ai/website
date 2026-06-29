@@ -18,13 +18,13 @@ maturity: established
 
 > Comprehensive coverage of a topic domain drives persistent AI citation presence. A site with many interconnected pages on one subject consistently outperforms a site with one excellent page on a subtopic.
 
-**Learn it hands-on:** [Topical Authority](https://learn.agentpatterns.ai/geo/topical-authority/) — guided lesson with quizzes.
+Learn it hands-on with the [guided Topical Authority lesson](https://learn.agentpatterns.ai/geo/topical-authority/), which includes quizzes.
 
-AI systems map sources to topic domains and surface the domain most associated with a subject — topical authority determines whether your site is recognized as the authoritative entity.
+AI systems map sources to topic domains and surface the domain most associated with a subject. Topical authority decides whether AI recognizes your site as the authoritative entity.
 
-## Core Concept
+## Core concept
 
-Topical authority means AI systems recognize your domain as a trusted node for a subject area — mapping your site to concepts, evaluating coverage breadth, and weighting citations accordingly. The key shift from SEO thinking:
+Topical authority means AI systems recognize your domain as a trusted node for a subject area. They map your site to concepts, evaluate how broadly you cover them, and weight citations accordingly. Here is the shift from SEO thinking:
 
 | SEO frame | GEO frame |
 |-----------|-----------|
@@ -33,39 +33,39 @@ Topical authority means AI systems recognize your domain as a trusted node for a
 | Rank individual pages | Become the recognized entity for a subject |
 | Linear returns per page | Compounding returns as coverage grows |
 
-Brand search volume is a stronger predictor of AI citation rates than backlinks ([Digital Bloom 2025 AI Citation Report](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/)). Topical authority drives brand recall, which drives citations.
+Brand search volume predicts AI citation rates better than backlinks ([Digital Bloom 2025 AI Citation Report](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/)). Topical authority drives brand recall, and brand recall drives citations.
 
-## How It Works
+## How it works
 
-### Entity Recognition
+### Entity recognition
 
 AI systems identify your site as an authority by mapping it to known entities. Consistent terminology across many pages creates stable entity entries AI can reliably retrieve. Content with many interconnected entities is [selected more frequently](how-ai-engines-cite.md) than entity-sparse content.
 
-### Coverage Breadth vs. Depth
+### Coverage breadth versus depth
 
-Deep coverage of one subtopic is not equivalent to broad coverage of a domain. AI systems reward consistent publishing within a topic area — a niche-relevant source outperforms a generic high-authority site lacking topic alignment once the citation threshold is met.
+Deep coverage of one subtopic is not the same as broad coverage of a domain. AI systems reward consistent publishing within a topic area. Once a source passes the citation threshold, a niche-relevant source outperforms a generic high-authority site that lacks topic alignment.
 
-### Internal Linking as Semantic Graph Construction
+### Internal linking as semantic graph construction
 
-Internal links are [semantic relationships](atomic-pages-and-chunking.md) between entities and topics — not navigational cues. The authority formula:
+Internal links are [semantic relationships](atomic-pages-and-chunking.md) between entities and topics, not navigational cues. The authority formula:
 
 ```
 Topical Authority = Content Engineering + Information Architecture + Internal Linking
 ```
 
-All three must be present. Strong content without link structure leaves the entity graph incomplete; link structure around thin content degrades authority signals. Body links outweigh navigation or footer links ([iPullRank: How Does Internal Linking Impact Topical Authority?](https://ipullrank.com/internal-linking-topical-authority)).
+You need all three. Strong content without link structure leaves the entity graph incomplete. Link structure around thin content degrades authority signals. Body links outweigh navigation or footer links ([iPullRank: How Does Internal Linking Impact Topical Authority?](https://ipullrank.com/internal-linking-topical-authority)).
 
-### Knowledge Graph Participation
+### Knowledge graph participation
 
 External knowledge infrastructure amplifies entity recognition:
 
-- **Wikidata**: Underlies Google's Knowledge Graph. An entry with Label, Description, Aliases, and Website registers your site as a distinct entity that AI systems can merge into a single authoritative node.
-- **Schema markup**: An About page, a README, and an API spec pointing to the same `Organization` schema entry give generative systems confidence to treat them as one source.
-- **Multi-platform consistency**: Consistent presence across multiple platforms reinforces entity mapping. Signals across GitHub, Stack Overflow, and relevant communities increase the probability of AI system recognition.
+- Wikidata underlies Google's Knowledge Graph. An entry with Label, Description, Aliases, and Website registers your site as a distinct entity that AI systems can merge into a single authoritative node.
+- Schema markup ties sources together. An About page, a README, and an API spec that point to the same `Organization` schema entry give generative systems confidence to treat them as one source.
+- Multi-platform consistency reinforces entity mapping. Signals across GitHub, Stack Overflow, and relevant communities increase the chance an AI system recognizes you.
 
-## Why It Works
+## Why it works
 
-AI systems are trained on large corpora where authoritative sources appear repeatedly across many documents on the same subject. When a domain publishes many interconnected pages on one topic, its content appears more frequently in training data and retrieval indexes for that subject area — making it more likely to be selected when a query touches the domain. RAG systems weight sources by topical relevance signals built from co-occurrence patterns: a source cited alongside a concept many times accumulates stronger association weights than a source cited once with high authority but lacking topic depth. Internal linking reinforces this by creating a navigable semantic graph that retrieval systems can traverse, surfacing related entities and strengthening the association between domain and topic.
+AI systems are trained on large corpora where authoritative sources appear repeatedly across many documents on the same subject. When a domain publishes many interconnected pages on one topic, its content appears more often in training data and retrieval indexes for that subject area, so a query that touches the domain is more likely to select it. RAG systems weight sources by topical relevance signals built from co-occurrence patterns: a source cited alongside a concept many times accumulates stronger association weights than a source cited once with high authority but little topic depth. Internal linking reinforces this by creating a navigable semantic graph that retrieval systems can traverse, surfacing related entities and strengthening the association between domain and topic.
 
 ## Diagram
 
@@ -90,9 +90,9 @@ graph TD
 
 These three inputs combine into a single authoritative node AI systems draw from across varied queries.
 
-## The Compounding Effect
+## The compounding effect
 
-Topical authority grows non-linearly. Each new page adds query surface, strengthens the link graph, and increases the probability a novel query hits the domain.
+Topical authority grows non-linearly. Each new page adds query surface, strengthens the link graph, and increases the chance a new query hits the domain.
 
 The Authority Flywheel:
 
@@ -119,7 +119,7 @@ This site's GEO section is a live application of topical authority strategy. Rat
 - Technical: [crawler policy](ai-crawler-policy.md), structured data, [llms.txt](llms-txt.md)
 - Measurement and strategy: performance metrics, topical authority (this page), technical docs application
 
-Each page is a distinct entity (a named concept AI can retrieve independently). Internal links between them construct the semantic graph. The combination signals to AI systems that this domain covers GEO comprehensively — not just mentions it.
+Each page is a distinct entity, a named concept AI can retrieve on its own. Internal links between them construct the semantic graph. The combination signals to AI systems that this domain covers GEO comprehensively, rather than just mentioning it.
 
 A single "GEO Overview" page covering all of the above would not achieve the same citation distribution across the varied queries developers ask.
 
@@ -140,3 +140,5 @@ A single "GEO Overview" page covering all of the above would not achieve the sam
 - [Awisee: How to Earn LLM Citations](https://awisee.com/blog/earn-llm-citations/)
 - [iPullRank: How Does Internal Linking Impact Topical Authority?](https://ipullrank.com/internal-linking-topical-authority)
 - [Search Engine Land: What is Generative Engine Optimization?](https://searchengineland.com/what-is-generative-engine-optimization-geo-444418)
+</content>
+</invoke>

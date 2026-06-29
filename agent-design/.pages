@@ -23,6 +23,7 @@ nav:
       - fastcontext-trained-repository-explorer.md
       - continual-learning-layers.md
       - delegation-decision.md
+      - delegation-threshold-calibration.md
       - eval-strategy-by-agent-generation.md
       - execution-first-delegation.md
       - execution-lineage-dag.md
@@ -70,11 +71,9 @@ nav:
       - subtask-level-memory.md
       - tiered-memory-architecture.md
   - "Control & Orchestration":
-      - agent-loop-go-no-go-gate.md
       - background-todo-agent.md
       - in-agent-task-prioritization.md
       - interactive-clarification-underspecified-tasks.md
-      - convergence-detection.md
       - critic-agent-plan-review.md
       - deterministic-orchestration-structured-modernization.md
       - llm-as-code-agentic-programming.md
@@ -84,11 +83,9 @@ nav:
       - gepa-reflective-prompt-evolution.md
       - event-driven-agent-routing.md
       - evaluator-optimizer.md
-      - goal-driven-autonomous-loop.md
       - goal-monitoring-progress-tracking.md
       - grill-me-technique.md
       - inference-time-tool-call-reviewer.md
-      - loop-strategy-spectrum.md
       - minimum-sufficient-control-ladder.md
       - plan-compliance-in-agents.md
       - proactive-idle-time-anticipation.md
@@ -100,15 +97,14 @@ nav:
       - specialized-agent-roles.md
       - sprint-contracts.md
       - steering-running-agents.md
-      - three-loops-agentic-coding.md
       - tool-preamble-status-update.md
+      - verification-gated-agent-autonomy.md
   - "Reliability":
       - agent-circuit-breaker.md
       - self-healing-production-agent.md
       - advisor-strategy.md
       - agent-backpressure.md
       - behavioral-drivers-agent-success.md
-      - cost-aware-agent-design.md
       - cross-vendor-competitive-routing.md
       - decoupled-search-grounding.md
       - dual-budget-control-search-agents.md
@@ -127,12 +123,12 @@ nav:
       - per-call-budget-hints-tool-calls.md
       - per-tool-extended-reasoning-opt-in.md
       - progressive-spend-threshold-alerting.md
-      - ralph-wiggum-loop.md
       - reasoning-budget-allocation.md
       - rollback-first-design.md
       - rubric-refine-pre-execution-tool-use.md
       - selective-checkpoint-restore.md
       - specialized-slm-as-agent-tool.md
+      - tail-control-for-agent-workflows.md
       - task-feasibility-awareness.md
       - tenant-model-policy.md
       - wink-agent-misbehavior-correction.md
@@ -142,7 +138,6 @@ nav:
       - agent-sdk-hosting-topology.md
       - cloud-agent-state-layer-decoupling.md
       - agent-harness.md
-      - agent-loop-middleware.md
       - agent-runtime-middleware.md
       - agent-pushback-protocol.md
       - agent-turn-model.md
@@ -154,6 +149,7 @@ nav:
       - tool-confirmation-carousel.md
       - approval-response-taxonomy.md
       - harness-design-dimensions.md
+      - fleet-harness-attribution.md
       - harness-engineering.md
       - harness-hill-climbing.md
       - harness-impermanence.md
@@ -166,6 +162,7 @@ nav:
       - persistent-connection-agent-transport.md
       - quality-score-rubric.md
       - recursive-agent-harnesses.md
+      - scoped-devtools-access-runtime-diagnosis.md
       - session-harness-sandbox-separation.md
       - temporary-compensatory-mechanisms.md
       - think-tool.md

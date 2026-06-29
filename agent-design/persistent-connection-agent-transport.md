@@ -17,13 +17,13 @@ maturity: established
 
 > Hold one bidirectional channel to the model API across an agent rollout, sending only incremental input each turn so per-request overhead amortises over the full session.
 
-## The Per-Turn Overhead Problem
+## The per-turn overhead problem
 
-A typical agent loop issues many sequential model calls — read a file, edit it, run a test, inspect output, repeat. Each turn over stateless HTTP pays the same fixed costs: TLS handshake, request validation, conversation rendering, safety classifier passes, tokenization, and model routing. As model inference itself gets faster, this fixed overhead becomes the dominant share of latency. OpenAI reports that for GPT-5.3-Codex-Spark — running at ~1,000 tokens per second versus 65 TPS on prior flagship models — Responses API overhead grew larger than the inference time it surrounded ([OpenAI: Speeding up agentic workflows with WebSockets](https://openai.com/index/speeding-up-agentic-workflows-with-websockets/)).
+A typical agent loop issues many sequential model calls — read a file, edit it, run a test, inspect output, repeat. Each turn over stateless HTTP pays the same fixed costs: TLS handshake, request validation, conversation rendering, safety classifier passes, tokenization, and model routing. As model inference itself gets faster, this fixed overhead becomes the largest share of latency. OpenAI reports that for GPT-5.3-Codex-Spark — running at about 1,000 tokens per second versus 65 TPS on prior flagship models — Responses API overhead grew larger than the inference time it surrounded ([OpenAI: Speeding up agentic workflows with WebSockets](https://openai.com/index/speeding-up-agentic-workflows-with-websockets/)).
 
-## The Pattern
+## The pattern
 
-Open one persistent socket for the lifetime of the agent rollout. Each turn sends a message containing only the new input — the most recent tool output and any new user message — and a reference to the prior turn's response. The server keeps a connection-local in-memory cache of previous-response state and reuses it instead of rebuilding the conversation from scratch ([OpenAI WebSocket Mode docs](https://developers.openai.com/api/docs/guides/websocket-mode)).
+Open one persistent socket for the lifetime of the agent rollout. Each turn sends only the new input — the most recent tool output and any new user message — plus a reference to the prior turn's response. The server keeps a connection-local in-memory cache of previous-response state. It reuses that cache instead of rebuilding the conversation from scratch ([OpenAI WebSocket Mode docs](https://developers.openai.com/api/docs/guides/websocket-mode)).
 
 Cached state typically includes:
 
@@ -48,38 +48,38 @@ sequenceDiagram
 
 ## Mechanism
 
-The latency win comes from amortising fixed per-request work across the connection lifetime. With cached previous-response state in memory, the server can:
+The latency win comes from amortizing fixed per-request work across the connection lifetime. With cached previous-response state in memory, the server can:
 
 - Run safety classifiers and validators on new input only, not the full transcript
-- Skip retokenisation by appending to a kept token cache
+- Skip retokenization by appending to a kept token cache
 - Reuse model resolution and routing from the prior turn
-- Overlap non-blocking postinference work like billing with the next request
+- Overlap non-blocking post-inference work like billing with the next request
 
-OpenAI reports up to 40% end-to-end latency reduction on rollouts with 20 or more sequential tool calls. Vercel integrated the transport into the AI SDK and reports up to 40% lower latency; Cline reports 39% faster multi-file workflows; Cursor reports up to 30% faster OpenAI model responses ([OpenAI: Speeding up agentic workflows with WebSockets](https://openai.com/index/speeding-up-agentic-workflows-with-websockets/)).
+OpenAI reports up to 40% lower end-to-end latency on rollouts with 20 or more sequential tool calls. Vercel built the transport into the AI SDK and reports up to 40% lower latency. Cline reports 39% faster multi-file workflows. Cursor reports up to 30% faster OpenAI model responses ([OpenAI: Speeding up agentic workflows with WebSockets](https://openai.com/index/speeding-up-agentic-workflows-with-websockets/)).
 
-## Provider Availability
+## Provider availability
 
-- **OpenAI Responses API** — WebSocket mode launched April 22, 2026, compatible with `store=false` and Zero Data Retention ([WebSocket Mode docs](https://developers.openai.com/api/docs/guides/websocket-mode)).
-- **Anthropic Claude API** — streaming uses Server-Sent Events, which is server-to-client only; the API is stateless and each turn re-sends full conversation history ([Claude streaming](https://platform.claude.com/docs/en/build-with-claude/streaming), [Claude tool use](https://docs.anthropic.com/en/docs/build-with-claude/tool-use)).
+- OpenAI Responses API — WebSocket mode launched April 22, 2026, compatible with `store=false` and Zero Data Retention ([WebSocket Mode docs](https://developers.openai.com/api/docs/guides/websocket-mode)).
+- Anthropic Claude API — streaming uses Server-Sent Events, which is server-to-client only. The API is stateless and each turn re-sends the full conversation history ([Claude streaming](https://platform.claude.com/docs/en/build-with-claude/streaming), [Claude tool use](https://docs.anthropic.com/en/docs/build-with-claude/tool-use)).
 
-## Constraints to Design Around
+## Constraints to design around
 
-OpenAI's implementation defines the constraints to plan for; equivalents on other providers will likely have similar shape.
+OpenAI's implementation defines the constraints to plan for. Equivalents on other providers will likely have a similar shape.
 
-- **Single in-flight response per socket** — no multiplexing. Open multiple connections for parallel runs ([WebSocket Mode docs](https://developers.openai.com/api/docs/guides/websocket-mode)).
-- **60-minute connection cap** — `websocket_connection_limit_reached` forces a reconnect; long rollouts must continue on a fresh socket using either persisted response IDs (`store=true`) or a freshly compacted input window ([WebSocket Mode docs](https://developers.openai.com/api/docs/guides/websocket-mode)).
-- **Cache eviction on error** — a 4xx or 5xx evicts the referenced `previous_response_id` from the connection-local cache, preventing stale-state reuse but requiring the client to handle continuation from a clean base ([WebSocket Mode docs](https://developers.openai.com/api/docs/guides/websocket-mode)).
-- **Sticky sessions required** — persistent connections consume server memory and pin a session to one backend; horizontal scaling needs sticky load-balancing or specialised infrastructure ([Ably: WebSockets vs HTTP](https://ably.com/topic/websockets-vs-http)).
-- **No built-in message acknowledgement** — clients must handle their own retry, dedup, and ordering logic on top of the socket ([DigitalSamba: HTTP vs WebSocket](https://www.digitalsamba.com/blog/websocket-vs-http)).
+- Single in-flight response per socket — no multiplexing. Open multiple connections for parallel runs ([WebSocket Mode docs](https://developers.openai.com/api/docs/guides/websocket-mode)).
+- 60-minute connection cap — `websocket_connection_limit_reached` forces a reconnect. Long rollouts must continue on a fresh socket using either persisted response IDs (`store=true`) or a freshly compacted input window ([WebSocket Mode docs](https://developers.openai.com/api/docs/guides/websocket-mode)).
+- Cache eviction on error — a 4xx or 5xx evicts the referenced `previous_response_id` from the connection-local cache. This prevents stale-state reuse, but the client must then continue from a clean base ([WebSocket Mode docs](https://developers.openai.com/api/docs/guides/websocket-mode)).
+- Sticky sessions required — persistent connections consume server memory and pin a session to one backend. Horizontal scaling needs sticky load-balancing or specialized infrastructure ([Ably: WebSockets vs HTTP](https://ably.com/topic/websockets-vs-http)).
+- No built-in message acknowledgement — clients must handle their own retry, dedup, and ordering logic on top of the socket ([DigitalSamba: HTTP vs WebSocket](https://www.digitalsamba.com/blog/websocket-vs-http)).
 
-## When This Backfires
+## When this backfires
 
 The transport adds lifecycle complexity. Stay on stateless HTTP when:
 
-- **Short rollouts** — fewer than ~10 tool calls per turn, where per-request overhead is small relative to inference time. The reported 40% figure is for rollouts of 20 or more tool calls ([OpenAI: Speeding up agentic workflows with WebSockets](https://openai.com/index/speeding-up-agentic-workflows-with-websockets/)).
-- **Stateless serverless harnesses** — agent processes that restart between turns or run on different instances (Lambda, Cloudflare Workers) can never hit the connection-local cache; the in-memory benefit is structurally unavailable.
-- **Multi-replica deployments without sticky sessions** — load balancers must pin sessions for the full connection window, complicating horizontal scaling ([Ably: WebSockets vs HTTP](https://ably.com/topic/websockets-vs-http)).
-- **Provider-portable harnesses** — only OpenAI offers this transport today. A harness that depends on persistent-socket optimisation cannot be portable across Anthropic and Google APIs without per-provider transport branches.
+- Short rollouts — fewer than about 10 tool calls per turn, where per-request overhead is small next to inference time. The reported 40% figure is for rollouts of 20 or more tool calls ([OpenAI: Speeding up agentic workflows with WebSockets](https://openai.com/index/speeding-up-agentic-workflows-with-websockets/)).
+- Stateless serverless harnesses — agent processes that restart between turns or run on different instances (Lambda, Cloudflare Workers) can never hit the connection-local cache. The in-memory benefit is structurally unavailable.
+- Multi-replica deployments without sticky sessions — load balancers must pin sessions for the full connection window, which complicates horizontal scaling ([Ably: WebSockets vs HTTP](https://ably.com/topic/websockets-vs-http)).
+- Provider-portable harnesses — only OpenAI offers this transport today. A harness that depends on persistent-socket tuning cannot stay portable across Anthropic and Google APIs without per-provider transport branches.
 
 ## Example
 
@@ -130,6 +130,6 @@ The server reuses the cached tool definitions, prior tokens, and routing decisio
 
 - [Agent Harness: Initializer and Coding Agent Pattern](agent-harness.md)
 - [Agent Turn Model](agent-turn-model.md)
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
 - [Harness Design Dimensions](harness-design-dimensions.md)
 - [Managed vs Self-Hosted Harness](managed-vs-self-hosted-harness.md)

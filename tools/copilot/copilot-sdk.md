@@ -13,19 +13,19 @@ status: current
 
 > A programmable layer that embeds Copilot agent capabilities — planning, tool invocation, file editing, and command execution — into any application.
 
-## What the SDK Provides
+## What the SDK provides
 
-The [Copilot SDK](https://github.blog/news-insights/company-news/build-an-agent-into-any-app-with-the-github-copilot-sdk/) exposes the same execution loop that powers GitHub Copilot CLI as a library you can embed in your own applications. Instead of interacting with Copilot through an IDE or web interface, you programmatically create agent sessions, send prompts, and handle streaming responses. GitHub announced the SDK as [generally available on 2026-06-02](https://github.blog/changelog/2026-06-02-copilot-sdk-is-now-generally-available), graduating it from public preview.
+The [Copilot SDK](https://github.blog/news-insights/company-news/build-an-agent-into-any-app-with-the-github-copilot-sdk/) gives you the same execution loop that runs GitHub Copilot CLI, packaged as a library you embed in your own applications. Instead of reaching Copilot through an IDE or web interface, you create agent sessions, send prompts, and handle streaming responses in code. GitHub announced the SDK as [generally available on 2026-06-02](https://github.blog/changelog/2026-06-02-copilot-sdk-is-now-generally-available), graduating it from public preview.
 
 Core capabilities:
 
-- **Planning and execution** — the agent plans multi-step tasks, invokes tools, edits files, and runs commands
-- **Multi-turn context management** — persistent memory across turns with intelligent session compaction
-- **Model flexibility** — support for multiple AI models with user selection at different workflow steps
-- **Tool integration** — custom tool definitions and MCP server support
-- **Real-time streaming** — async task delegation with streaming responses
+- Planning and execution: the agent plans multi-step tasks, invokes tools, edits files, and runs commands
+- Multi-turn context: persistent memory across turns, with session compaction
+- Model choice: support for several AI models, with user selection at different workflow steps
+- Tool integration: custom tool definitions and MCP server support
+- Real-time streaming: async task delegation with streaming responses
 
-## Language Support
+## Language support
 
 The SDK provides bindings for [Node.js, Python, Go, .NET, and Java](https://github.blog/changelog/2026-04-02-copilot-sdk-in-public-preview/).
 
@@ -39,29 +39,29 @@ The SDK abstracts the infrastructure that the Copilot CLI uses in production:
 - GitHub authentication flows
 - Chat session persistence
 
-This means applications built on the SDK inherit the same [production-tested execution loop](https://github.blog/news-insights/company-news/build-an-agent-into-any-app-with-the-github-copilot-sdk/) without reimplementing agent orchestration. Authentication flows through existing GitHub Copilot subscriptions or custom API keys (BYOK for enterprises).
+Applications built on the SDK inherit the same [production-tested execution loop](https://github.blog/news-insights/company-news/build-an-agent-into-any-app-with-the-github-copilot-sdk/) without reimplementing agent orchestration. Authentication runs through existing GitHub Copilot subscriptions or custom API keys (BYOK for enterprises).
 
-## Why It Works
+## Why it works
 
-Embedding a shared execution loop rather than building agent orchestration from scratch eliminates a class of maintenance burden. Context compaction, tool invocation sequencing, and model routing are problems every agent implementation must solve; the SDK centralises those solutions so application code handles only domain-specific logic. The same runtime also benefits from fixes and model updates applied to Copilot CLI without requiring changes in the embedding application.
+Embedding a shared execution loop, rather than building agent orchestration from scratch, removes a class of maintenance work. Context compaction, tool invocation order, and model routing are problems every agent must solve. The SDK keeps those solutions in one place, so your application code handles only domain-specific logic. The same runtime also gets the fixes and model updates applied to Copilot CLI, with no changes needed in the embedding application.
 
-## Agent-in-App Pattern
+## Agent-in-app pattern
 
-The SDK enables an "agent-in-app" architecture where AI coding capabilities are embedded directly in domain-specific tools rather than accessed through general-purpose interfaces. [GitHub's announcement](https://github.blog/news-insights/company-news/build-an-agent-into-any-app-with-the-github-copilot-sdk/) lists use cases including custom agent GUIs, speech-to-command workflows, content summarization tools, and purpose-built developer platforms.
+The SDK supports an "agent-in-app" architecture, where you embed AI coding capabilities directly in domain-specific tools rather than reach them through general-purpose interfaces. [GitHub's announcement](https://github.blog/news-insights/company-news/build-an-agent-into-any-app-with-the-github-copilot-sdk/) lists use cases such as custom agent GUIs, speech-to-command workflows, content summarization tools, and purpose-built developer platforms.
 
-This pattern lets you move agent capabilities from a fixed surface (IDE, CLI) to any application context where code generation, editing, or reasoning is valuable.
+This pattern lets you move agent capabilities from a fixed surface (IDE, CLI) to any application context where code generation, editing, or reasoning helps.
 
-## When This Backfires
+## When this backfires
 
-Embedding the Copilot SDK couples your application to GitHub's subscription model, rate limits, and runtime decisions. Specific conditions where this is worse than the alternative:
+Embedding the Copilot SDK ties your application to GitHub's subscription model, rate limits, and runtime decisions. Conditions where this is worse than the alternative:
 
-- **Subscription dependency** — users need an active Copilot subscription (or you supply BYOK keys); applications that need to serve users without Copilot access cannot use the SDK as-is.
-- **Rate limit exposure** — SDK requests count against premium request quotas; high-volume workflows can exhaust limits faster than interactive use does.
-- **Runtime lock-in** — the execution loop, tool surface, and session management are GitHub's; if the runtime changes behaviour (model swap, tool API change), embedding applications absorb the regression without direct control over the upgrade path.
+- Subscription dependency: users need an active Copilot subscription, or you supply BYOK keys. Applications that must serve users without Copilot access cannot use the SDK as-is.
+- Rate limit exposure: SDK requests count against premium request quotas, so high-volume workflows can exhaust limits faster than interactive use does.
+- Runtime lock-in: the execution loop, tool surface, and session management are GitHub's. If the runtime changes behavior (model swap, tool API change), embedding applications absorb the regression without direct control over the upgrade path.
 
 The rate-limit risk is not theoretical: in April 2026 GitHub [paused new Copilot sign-ups](https://thenewstack.io/github-copilot-signups-paused/) after agentic usage broke flat-rate economics, [fixed a token-counting bug](https://www.theregister.com/2026/04/15/github_copilot_rate_limiting_bug/) that had been under-counting newer models, and [announced a shift to token-based billing with tighter rate limits for individual plans](https://github.blog/changelog/2026-04-20-changes-to-github-copilot-plans-for-individuals/). Applications embedding the SDK inherit whatever quota regime GitHub sets for their users' plans.
 
-Runtime lock-in is similarly concrete. In May 2026 a cross-binding bug ([github/copilot-sdk#251](https://github.com/github/copilot-sdk/issues/251)) prevented custom agents initialised through the SDK from being exposed to the assistant in either Node or .NET — a defect in the shared `copilot-agent-runtime` that no embedding application could patch. A practitioner ship report covering six SDK upgrades documents runtime changes breaking the embedding harness mid-iteration ([SDK upgrade-path regression](https://dev.to/moonrunnerkc/i-shipped-6-upgrades-to-my-copilot-cli-orchestrator-the-sdk-had-other-plans-2jpa)). The SDK gives you GitHub's execution loop — and GitHub's bugs.
+Runtime lock-in is similarly concrete. In May 2026 a cross-binding bug ([github/copilot-sdk#251](https://github.com/github/copilot-sdk/issues/251)) stopped custom agents initialized through the SDK from reaching the assistant in either Node or .NET — a defect in the shared `copilot-agent-runtime` that no embedding application could patch. A practitioner ship report covering six SDK upgrades documents runtime changes breaking the embedding harness mid-iteration ([SDK upgrade-path regression](https://dev.to/moonrunnerkc/i-shipped-6-upgrades-to-my-copilot-cli-orchestrator-the-sdk-had-other-plans-2jpa)). The SDK gives you GitHub's execution loop — and GitHub's bugs.
 
 ## Example
 
@@ -95,7 +95,7 @@ await session.disconnect();
 await client.stop();
 ```
 
-Streaming is event-based rather than async-iterable: `assistant.message_delta` fires for each incremental chunk and `session.idle` signals completion. `onPermissionRequest` controls how tool invocations are authorised — `approveAll` is appropriate only for trusted environments. Register additional MCP servers through the client configuration to extend the agent with domain-specific tools.
+Streaming is event-based rather than async-iterable: `assistant.message_delta` fires for each incremental chunk, and `session.idle` signals completion. `onPermissionRequest` controls how tool invocations are authorized; `approveAll` suits trusted environments only. Register more MCP servers through the client configuration to extend the agent with domain-specific tools.
 
 ## Key Takeaways
 
@@ -113,4 +113,4 @@ Streaming is event-based rather than async-iterable: `assistant.message_delta` f
 - [Agent HQ (Multi-Agent Platform)](agent-hq.md)
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md)
-- [Cost-Aware Agent Design: Route by Complexity, Not Habit](../../agent-design/cost-aware-agent-design.md)
+- [Cost-Aware Agent Design: Route by Complexity, Not Habit](../../token-engineering/cost-aware-agent-design.md)

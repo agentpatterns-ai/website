@@ -19,7 +19,7 @@ maturity: established
 
 > Skill authoring patterns are repeatable structures that make agent skills reliable — covering description craft, the right implementation shape per task, and failure diagnosis.
 
-**Related lesson:** [Skills as a Tool-Engineering Surface](https://learn.agentpatterns.ai/tool-engineering/skills-as-a-tool-surface/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Skills as a Tool-Engineering Surface](https://learn.agentpatterns.ai/tool-engineering/skills-as-a-tool-surface/) — a hands-on lesson with quizzes.
 
 !!! note "Also known as"
     Skill design patterns, SKILL.md authoring. For the portable skill format itself, see [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md). For the progressive disclosure architecture, see [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md).
@@ -29,29 +29,29 @@ maturity: established
 
 Sources: [Anthropic's Complete Guide to Building Skills for Claude](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf) (January 2026) and Anthropic's internal practice ([source](https://x.com/trq212/status/2033949937936085378)).
 
-## Skill Categories
+## Skill categories
 
 Anthropic's internal skill library clusters into nine categories ([source](https://x.com/trq212/status/2033949937936085378)):
 
 | Category | What it covers | Example |
 |----------|---------------|---------|
-| **Library & API Reference** | Embed documentation for APIs or libraries the agent frequently misuses | Internal SDK usage patterns, authentication flows |
-| **Product Verification** | Validate product state against expected criteria before shipping | Feature flag checks, release readiness checklists |
-| **Data Fetching & Analysis** | Query internal data sources and summarise results | Metrics dashboards, database queries, report generation |
-| **Business Process & Team Automation** | Automate recurring cross-team workflows | Incident triage, onboarding sequences, sprint ceremonies |
-| **Code Scaffolding & Templates** | Generate consistent boilerplate for new services or modules | Service stubs, test file structure, PR templates |
-| **Code Quality & Review** | Apply team conventions during review or before commit | Style enforcement, security pattern checks, complexity limits |
-| **CI/CD & Deployment** | Drive pipeline steps and release operations | Build triggering, environment promotion, rollback procedures |
-| **Runbooks** | Encode on-call and operational procedures as executable steps | Database failover, cache flush, alert response |
-| **Infrastructure Operations** | Manage cloud resources and configuration | Scaling operations, secret rotation, environment setup |
+| Library and API reference | Embed documentation for APIs or libraries the agent often misuses | Internal SDK usage patterns, authentication flows |
+| Product verification | Check product state against expected criteria before shipping | Feature flag checks, release readiness checklists |
+| Data fetching and analysis | Query internal data sources and summarize results | Metrics dashboards, database queries, report generation |
+| Business process and team automation | Run recurring cross-team workflows | Incident triage, onboarding sequences, sprint ceremonies |
+| Code scaffolding and templates | Generate consistent boilerplate for new services or modules | Service stubs, test file structure, PR templates |
+| Code quality and review | Apply team conventions during review or before commit | Style enforcement, security pattern checks, complexity limits |
+| CI/CD and deployment | Run pipeline steps and release operations | Build triggering, environment promotion, rollback procedures |
+| Runbooks | Encode on-call and operational procedures as executable steps | Database failover, cache flush, alert response |
+| Infrastructure operations | Manage cloud resources and configuration | Scaling operations, secret rotation, environment setup |
 
-## Description Craft
+## Description craft
 
-**Problem-first** skills define steps for an outcome ("set up a project workspace"). **Tool-first** skills embed expertise for a given tool ("I have Linear MCP connected"). This distinction drives which implementation pattern fits.
+Problem-first skills define steps for an outcome ("set up a project workspace"). Tool-first skills hold expertise for a given tool ("I have Linear MCP connected"). This split decides which implementation pattern fits.
 
-The `description` field determines whether the agent loads a skill — it is always present in the system prompt ([progressive disclosure](../agent-design/progressive-disclosure-agents.md)), so it must earn its tokens.
+The `description` field decides whether the agent loads a skill. It is always present in the system prompt ([progressive disclosure](../agent-design/progressive-disclosure-agents.md)), so it must earn its tokens.
 
-Structure: `[What it does] + [When to use it] + [Key capabilities]`. Include trigger phrases users would actually say; missing triggers cause under-triggering. For over-triggering, add negative triggers:
+Structure: `[What it does] + [When to use it] + [Key capabilities]`. Include trigger phrases users would actually say; missing triggers cause under-triggering. To stop over-triggering, add negative triggers:
 
 ```yaml
 description: Advanced data analysis for CSV files. Use for statistical
@@ -59,13 +59,13 @@ description: Advanced data analysis for CSV files. Use for statistical
   exploration (use data-viz skill instead).
 ```
 
-Debugging approach: ask the agent "When would you use the [skill name] skill?" — it quotes the description back, revealing what's missing.
+To debug a description, ask the agent "When would you use the [skill name] skill?" — it quotes the description back and shows what is missing.
 
-## Don't State the Obvious
+## Do not state the obvious
 
-Write skill instructions as a delta from baseline model behavior: only the team conventions, domain-specific rules, and edge cases that the model would otherwise get wrong ([source](https://x.com/trq212/status/2033949937936085378)). Instructions Claude would follow correctly anyway waste tokens and dilute the rules that matter.
+Write skill instructions as a delta from baseline model behavior: only the team conventions, domain-specific rules, and edge cases the model would otherwise get wrong ([source](https://x.com/trq212/status/2033949937936085378)). Instructions Claude would follow correctly anyway waste tokens and dilute the rules that matter.
 
-## Built-In Variables
+## Built-in variables
 
 `${CLAUDE_SKILL_DIR}` — directory of the current skill file. Use it to reference sibling assets (templates, config snippets) without hardcoding paths.
 
@@ -81,7 +81,7 @@ instructions:
   - Apply the config defaults from ${CLAUDE_SKILL_DIR}/config/defaults.json
 ```
 
-## Setup Config Pattern
+## Setup config pattern
 
 Store initial setup in `config.json` under `${CLAUDE_PLUGIN_DATA}`. If absent on first run, prompt via `AskUserQuestion` before proceeding ([source](https://x.com/trq212/status/2033949937936085378)) — this avoids hard-coding team-specific values. For pipeline contexts where `AskUserQuestion` is unusable, see the [Override Pattern](override-interactive-commands.md) for suppressing interactive prompts while reusing the same skill definition.
 
@@ -93,7 +93,7 @@ On first use, check for `${CLAUDE_PLUGIN_DATA}/config.json`.
 - If absent: ask the user for these values via AskUserQuestion, then write them to `${CLAUDE_PLUGIN_DATA}/config.json` for future sessions.
 ```
 
-## Gotchas Section
+## Gotchas section
 
 A `## Gotchas` section is the highest-signal content in any skill ([source](https://x.com/trq212/status/2033949937936085378)) — the cases where Claude would do something plausible but wrong. Build it incrementally from real failures. Each entry names the mistake and the correct alternative:
 
@@ -104,7 +104,7 @@ A `## Gotchas` section is the highest-signal content in any skill ([source](http
 - **Sprint assignment requires the cycle to be active** — calling `linear_add_to_cycle` on a closed cycle silently succeeds but the issue does not appear in the sprint view.
 ```
 
-## Skill Composition
+## Skill composition
 
 Skills can reference other skills by name ([source](https://x.com/trq212/status/2033949937936085378)). There is no native dependency management — if a required skill is absent, the agent must handle that gracefully.
 
@@ -120,7 +120,7 @@ Reference skills by their exact `name` field, not by filename.
 
 Decomposing a monolithic skill into smaller composed units has a research-backed rationale beyond reuse: a microservices-inspired "microskill" decomposition has been proposed as a remedy for mid-context information loss, token-cost spiral, and architecture drift, explicitly tying skill granularity to context-window degradation ([Microskill Architecture, 2026](https://arxiv.org/abs/2606.05720)).
 
-## CLI-First Design (Recommended for Executable Skills)
+## CLI-first design (recommended for executable skills)
 
 Skills with non-trivial executable logic should ship a dedicated CLI entry point under `<skill-name>/scripts/<skill-name>.{sh,py}` rather than embedding bash or Python inline in `SKILL.md` ([nibzard catalogue: CLI-First Skill Design](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/cli-first-skill-design.md)). A single CLI interface serves humans (debugging, testing, composition with Unix tools) and agents (deterministic invocation, meaningful exit codes) at the same time.
 
@@ -132,9 +132,9 @@ Three skill shapes, chosen by whether the skill has executable logic:
 
 | Shape | Use when | SKILL.md body | Logic lives in |
 |-------|----------|---------------|----------------|
-| **Script-backed (CLI-first)** | Skill has non-trivial executable logic | description, when to invoke, how to call the CLI, Gotchas, Related | `<skill-name>/scripts/<skill-name>.{sh,py}` |
-| **Inline-shell** | One- or two-line commands with no branching | fine to embed directly | SKILL.md itself |
-| **Pure reference** | Templates, taxonomies, decision tables | the reference content itself | SKILL.md itself |
+| Script-backed (CLI-first) | Skill has non-trivial executable logic | description, when to invoke, how to call the CLI, Gotchas, Related | `<skill-name>/scripts/<skill-name>.{sh,py}` |
+| Inline-shell | One- or two-line commands with no branching | fine to embed directly | SKILL.md itself |
+| Pure reference | Templates, taxonomies, decision tables | the reference content itself | SKILL.md itself |
 
 CLI-backed scripts should follow Unix philosophy: one script per skill, subcommands for operations, JSON on stdout, errors on stderr, meaningful exit codes, and `--dry-run` where side effects are involved.
 
@@ -156,29 +156,29 @@ When writing a new skill, answer:
 
 Existing inline-shell skills migrate opportunistically when next touched. No forced refactor — but new skills default to CLI-first.
 
-## Five Implementation Patterns
+## Five implementation patterns
 
 | Pattern | Use when | Key structure |
 |---------|----------|---------------|
-| **1. Sequential Workflow Orchestration** | Multi-step process in fixed order | Step → tool call → expected output; include rollback instructions |
-| **2. Multi-MCP Coordination** | Workflow spans multiple services | Organise by phase; validate before proceeding; pass data explicitly |
-| **3. Iterative Refinement** | Output improves with iteration | Draft → quality check → refinement loop; explicit exit condition — see [Loop Detection](../observability/loop-detection.md) |
-| **4. Context-Aware Tool Selection** | Same outcome, different tools by context | Decision tree: inspect context → select tool → explain choice; include fallback |
-| **5. Domain-Specific Intelligence** | Specialised knowledge beyond tool access | Pre-check (domain rules) → execution → documentation; see [Domain-Specific System Prompts](../instructions/domain-specific-system-prompts.md) |
+| 1. Sequential workflow orchestration | Multi-step process in fixed order | Step → tool call → expected output; include rollback instructions |
+| 2. Multi-MCP coordination | Workflow spans multiple services | Organize by phase; validate before proceeding; pass data explicitly |
+| 3. Iterative refinement | Output improves with iteration | Draft → quality check → refinement loop; explicit exit condition — see [Loop Detection](../observability/loop-detection.md) |
+| 4. Context-aware tool selection | Same outcome, different tools by context | Decision tree: inspect context → select tool → explain choice; include fallback |
+| 5. Domain-specific intelligence | Specialized knowledge beyond tool access | Pre-check (domain rules) → execution → documentation; see [Domain-Specific System Prompts](../instructions/domain-specific-system-prompts.md) |
 
-## Measuring Skill Effectiveness
+## Measuring skill effectiveness
 
 Track invocation frequency with a `PreToolUse` hook ([source](https://x.com/trq212/status/2033949937936085378)) logging skill name and timestamp. Use the log to find under-triggering skills (description needs work), over-triggering skills (description too broad), and popular skills (expand these). See [Hook Catalog](hook-catalog.md) and [Hooks and Lifecycle Events](hooks-lifecycle-events.md).
 
-## Testing Methodology
+## Testing methodology
 
-Test across three dimensions: **triggering** (loads on relevant queries, not on unrelated ones), **functional** (produces correct outputs consistently across 3-5 runs), and **performance** (compare tool calls, messages, and tokens with vs. without the skill — an effective skill reduces all three).
+Test across three dimensions: triggering (loads on relevant queries, not on unrelated ones), functional correctness (produces correct outputs consistently across 3-5 runs), and performance (compare tool calls, messages, and tokens with and without the skill — an effective skill reduces all three).
 
 Iterate on a single challenging task until the agent succeeds, then extract the winning approach into the skill.
 
 ## Troubleshooting
 
-| Symptom | Common Cause | Fix |
+| Symptom | Common cause | Fix |
 |---------|-------------|-----|
 | Skill never triggers | Description too vague or missing trigger phrases | Add specific phrases users would say; mention relevant file types |
 | Skill triggers on unrelated queries | Description too broad | Add negative triggers; narrow scope |
@@ -189,24 +189,24 @@ Iterate on a single challenging task until the agent succeeds, then extract the 
 
 For critical validations, bundle a script — code is deterministic; language interpretation is not.
 
-## Why It Works
+## Why it works
 
 Skill patterns work because agents are context-constrained token predictors — they produce output proportional to the quality and specificity of their input context. A description field acts as a learned retrieval key: the agent matches incoming user intent against description tokens to decide what to load, the [progressive-disclosure](../agent-design/progressive-disclosure-agents.md) gate that keeps the rest of the skill out of the prompt until needed. Concise, trigger-rich descriptions raise that match probability. Gotchas sections work because they shift the prior toward correct behavior in the narrow set of cases where the base model would otherwise guess wrong; they do not teach the model general knowledge, they override its statistical default for a specific edge case. The delta principle (only write what the base model gets wrong) is efficient because it keeps context small — every token saved in skill instructions is a token available for task reasoning ([source](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)).
 
 The free-form prose used here is not the only candidate representation: a structured graph/protocol form (the AIP representation) has been proposed as an alternative to free-form prose for agent skills, argued to improve reliability and editability ([AIP: A Graph Representation for Learning and Governing Agent Skills, 2026](https://arxiv.org/abs/2606.04781)).
 
-## When This Backfires
+## When this backfires
 
 Apply skill authoring patterns selectively — over-engineering is a real cost:
 
-1. **Simple one-off tasks** — a skill with YAML frontmatter, a Gotchas section, and a CLI entry point for a two-command workflow adds setup overhead with no reliability gain. Inline shell or a single README block is sufficient.
-2. **Rapidly changing APIs** — skills encode domain knowledge that becomes wrong when the underlying API changes, the staleness pressure [Skill Library Evolution](skill-library-evolution.md) tracks. A skill with stale Gotchas is worse than no skill: it actively misdirects the agent. Skills for fast-moving surfaces need an explicit owner and update cadence.
-3. **Skill proliferation** — with many skills loaded, descriptions are shortened to fit a character budget, which strips the trigger keywords that drive selection ([source](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)). A library of 40+ skills degrades all skills' triggering reliability; consolidating rarely-used skills reduces this pressure.
-4. **Security surface expansion** — each skill loaded from an external registry is a potential prompt-injection vector. Malicious skills can direct the agent to invoke tools in ways that don't match their stated purpose. Review all third-party skills before installation, especially those bundling shell scripts.
+1. Simple one-off tasks — a skill with YAML frontmatter, a Gotchas section, and a CLI entry point for a two-command workflow adds setup overhead with no reliability gain. Inline shell or a single README block is sufficient.
+2. Rapidly changing APIs — skills encode domain knowledge that becomes wrong when the underlying API changes, the staleness pressure [Skill Library Evolution](skill-library-evolution.md) tracks. A skill with stale Gotchas is worse than no skill: it actively misdirects the agent. Skills for fast-moving surfaces need an explicit owner and update cadence.
+3. Skill proliferation — with many skills loaded, descriptions are shortened to fit a character budget, which strips the trigger keywords that drive selection ([source](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)). A library of 40+ skills degrades all skills' triggering reliability; consolidating rarely-used skills reduces this pressure.
+4. Security surface expansion — each skill loaded from an external registry is a potential prompt-injection vector. Malicious skills can direct the agent to invoke tools in ways that do not match their stated purpose. Review all third-party skills before installation, especially those bundling shell scripts.
 
 ## Example
 
-The following YAML frontmatter shows the Description Craft pattern in practice. A Linear MCP skill uses the `[What it does] + [When to use it] + [Key capabilities]` structure with explicit trigger phrases and a negative trigger to prevent over-firing.
+This YAML frontmatter shows the description craft pattern in practice. A Linear MCP skill uses the `[What it does] + [When to use it] + [Key capabilities]` structure with explicit trigger phrases and a negative trigger to prevent over-firing.
 
 ```yaml
 name: linear-issue-manager

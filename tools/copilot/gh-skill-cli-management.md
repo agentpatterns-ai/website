@@ -13,13 +13,14 @@ applies_to: "copilot@1.x"
 last_reviewed: 2026-05-27
 status: current
 ---
+
 # Managing Agent Skills from the GitHub CLI
 
 > `gh skill` turns skill install, search, update, and publish into scriptable GitHub CLI operations — usable in repo bootstrap scripts, CI, and enterprise provisioning.
 
 Released 2026-04-16 in GitHub CLI v2.90.0, `gh skill` is a new top-level command group that discovers, installs, manages, and publishes [agent skills](../../standards/agent-skills-standard.md) from GitHub repositories ([GitHub Changelog](https://github.blog/changelog/2026-04-16-manage-agent-skills-with-github-cli)). The feature shipped as public preview.
 
-## Command Surface
+## Command surface
 
 | Command | Purpose |
 |---|---|
@@ -37,9 +38,9 @@ gh skill install github/awesome-copilot documentation-writer@v1.2.0        # tag
 gh skill install github/awesome-copilot documentation-writer@abc123def     # commit SHA
 ```
 
-## Scope and Agent Targeting
+## Scope and agent targeting
 
-Two flags control *where* a skill lands and *which agent* reads it ([GitHub Changelog](https://github.blog/changelog/2026-04-16-manage-agent-skills-with-github-cli)):
+Two flags control where a skill lands and which agent reads it ([GitHub Changelog](https://github.blog/changelog/2026-04-16-manage-agent-skills-with-github-cli)):
 
 | Flag | Values | Effect |
 |---|---|---|
@@ -49,11 +50,11 @@ Two flags control *where* a skill lands and *which agent* reads it ([GitHub Chan
 
 Repository scope commits skill files into the working copy so teammates pick them up via normal `git pull`. User scope keeps the skill in the per-user config directory for the target agent, keeping individual setups off the project tree.
 
-## Version Pinning
+## Version pinning
 
 Skills store a git tree SHA in frontmatter for content-addressed change detection ([GitHub Changelog](https://github.blog/changelog/2026-04-16-manage-agent-skills-with-github-cli)). `gh skill update` only applies an update when the upstream tree SHA differs — avoiding no-op churn and making updates explicit. `--pin` freezes a skill to a tag or SHA so CI runs and provisioning scripts stay deterministic across upstream changes.
 
-## Where It Fits
+## Where it fits
 
 ```mermaid
 graph TD
@@ -65,17 +66,17 @@ graph TD
     F --> H[agentskills.io validated]
 ```
 
-- **Repo bootstrap** — a `setup.sh` run once per clone installs the project's required skills with `--scope repository` so the whole team operates on the same set.
-- **CI pinning** — version-pin skills in CI runners with `--pin` to prevent skill drift from changing pipeline behaviour between runs.
-- **Enterprise rollout** — provisioning scripts install organisation-approved skills at `--scope user` on new developer machines without manual VS Code or web-UI steps.
-- **Cross-agent distribution** — `--agent` targets other spec-compliant agents (Claude Code, Cursor, Codex, Gemini, Antigravity) from the same CLI, so one provisioning script handles mixed agent fleets.
+- Repo bootstrap — a `setup.sh` run once per clone installs the project's required skills with `--scope repository` so the whole team operates on the same set.
+- CI pinning — version-pin skills in CI runners with `--pin` to prevent skill drift from changing pipeline behavior between runs.
+- Enterprise rollout — provisioning scripts install organization-approved skills at `--scope user` on new developer machines without manual VS Code or web-UI steps.
+- Cross-agent distribution — `--agent` targets other spec-compliant agents (Claude Code, Cursor, Codex, Gemini, Antigravity) from the same CLI, so one provisioning script handles mixed agent fleets.
 
-## Relationship to Other Copilot Surfaces
+## Relationship to other Copilot surfaces
 
 `gh skill` is a subcommand of the GitHub CLI (`gh`), not the [Copilot CLI](copilot-cli-agentic-workflows.md) (`copilot`). The two are separate binaries:
 
-- `gh skill` — install and manage skills *as files* in the right directory for a target agent.
-- `copilot` — interactive and programmatic agent sessions that *use* those skills at runtime.
+- `gh skill` — install and manage skills as files in the right directory for a target agent.
+- `copilot` — interactive and programmatic agent sessions that use those skills at runtime.
 
 For the skill file format itself (SKILL.md structure, progressive disclosure, and how agents load skills), see [Custom Agents and Skills](custom-agents-skills.md). For the cross-tool spec that `gh skill publish` validates against, see [Agent Skills Standard](../../standards/agent-skills-standard.md).
 
@@ -103,14 +104,14 @@ gh skill install github/awesome-copilot code-reviewer@v2.0.1 \
   --agent claude-code --scope user
 ```
 
-The pinned tags make the install reproducible; `--scope repository` commits the skill files so teammates get the same set on pull; and the `--agent claude-code` call reuses the same CLI for a second agent host without a separate tool.
+The pinned tags make the install reproducible. `--scope repository` commits the skill files so teammates get the same set on pull. The `--agent claude-code` call reuses the same CLI for a second agent host without a separate tool.
 
-## When This Backfires
+## When this backfires
 
-- **Pre-v2.90 CLI in the fleet** — shared provisioning scripts fail silently or with cryptic errors on machines pinned to older `gh` versions; add an explicit version check before calling `gh skill`.
-- **Offline or air-gapped provisioning** — `gh skill install` requires network to GitHub; offline images need a pre-bundled skills tree rather than a live install.
-- **Non-GitHub skill sources** — the CLI is built around `owner/repo` GitHub addressing; skills hosted on self-hosted GitLab or private registries need mirroring to GitHub or manual file copy.
-- **Public preview churn** — the command surface is subject to change ([GitHub Changelog](https://github.blog/changelog/2026-04-16-manage-agent-skills-with-github-cli)); lock CI jobs to a specific `gh` version to avoid breakage when the preview evolves.
+- Pre-v2.90 CLI in the fleet — shared provisioning scripts fail silently or with cryptic errors on machines pinned to older `gh` versions; add an explicit version check before calling `gh skill`.
+- Offline or air-gapped provisioning — `gh skill install` requires network to GitHub; offline images need a pre-bundled skills tree rather than a live install.
+- Non-GitHub skill sources — the CLI is built around `owner/repo` GitHub addressing; skills hosted on self-hosted GitLab or private registries need mirroring to GitHub or manual file copy.
+- Public preview churn — the command surface is subject to change ([GitHub Changelog](https://github.blog/changelog/2026-04-16-manage-agent-skills-with-github-cli)); lock CI jobs to a specific `gh` version to avoid breakage when the preview evolves.
 
 ## Key Takeaways
 

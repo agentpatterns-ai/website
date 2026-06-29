@@ -17,27 +17,27 @@ maturity: adopted
 
 Persona-as-Code is a design practice where each agent's role is expressed as a structured Markdown file — domain, responsibilities, output artifacts, constraints, and scope exclusions — rather than buried inside a monolithic system prompt. The file is both the agent's operating specification and the contract governing handoffs to other agents.
 
-## The Problem with Implicit Roles
+## The problem with implicit roles
 
-When an agent's role is embedded in a single [monolithic system prompt](progressive-disclosure-agents.md) alongside tool definitions, workflow steps, and project context, the role boundary becomes invisible. Two things happen:
+When you bury an agent's role inside a single [monolithic system prompt](progressive-disclosure-agents.md) alongside tool definitions, workflow steps, and project context, the role boundary disappears. Two things happen:
 
 - Agents overstep — the "Developer" agent quietly makes architectural decisions that belong to the Architect
 - Agents conflict — two agents legitimately claim the same change from different angles, and the merge step has no principle to resolve it
 
 Role confusion is not a model failure. It is a specification failure. The role was never made explicit.
 
-## What Persona-as-Code Means
+## What persona-as-code means
 
 A persona is a self-contained Markdown file that encodes one agent's identity. Each file answers four questions:
 
-1. **Domain** — what area of expertise does this agent hold?
-2. **Responsibilities** — what outputs does this agent produce?
-3. **Constraints** — what is this agent not allowed to do?
-4. **Scope exclusions** — [which roles own adjacent decisions](specialized-agent-roles.md)?
+1. Domain — what area of expertise does this agent hold?
+2. Responsibilities — what outputs does this agent produce?
+3. Constraints — what is this agent not allowed to do?
+4. Scope exclusions — [which roles own adjacent decisions](specialized-agent-roles.md)?
 
 The file is the agent's system prompt. It is also the contract between agents. When a handoff happens, the receiving agent knows its scope from the file; the sending agent knows what it should not have touched.
 
-## Anatomy of a Persona File
+## Anatomy of a persona file
 
 ```markdown
 # Product Manager
@@ -66,21 +66,21 @@ Product definition and requirements. You own the problem statement, not the solu
 
 The scope exclusions are as important as the responsibilities. They prevent the PM from drifting into architecture decisions during a long session where context degrades and role boundaries blur.
 
-## Artifact-Driven Handoffs
+## Artifact-driven handoffs
 
-Persona-as-code works because agents hand off **artifacts**, not context. Each persona produces versioned Markdown files — PRDs, architecture briefs, user stories — that travel to the next agent in the pipeline. The receiving agent reads the file, not the chat history.
+Persona-as-code works because agents hand off artifacts, not context. Each persona produces versioned Markdown files — PRDs, architecture briefs, user stories — that travel to the next agent in the pipeline. The receiving agent reads the file, not the chat history.
 
-Context evaporates between sessions in multi-agent systems; [artifact-based handoffs prevent this](https://github.com/bmad-code-org/BMAD-METHOD). A chat-based handoff loses fidelity. A file-based handoff is exact.
+Context evaporates between sessions in multi-agent systems, so [artifact-based handoffs preserve it](https://github.com/bmad-code-org/BMAD-METHOD). A chat-based handoff loses fidelity. A file-based handoff is exact.
 
-Git-versioning the artifacts adds auditability: every human and AI contribution is tracked, and pull requests become the review mechanism for AI-generated specs before implementation.
+Git-versioning the artifacts adds auditability. The system tracks every human and AI contribution, and pull requests become the way you review AI-generated specs before implementation.
 
-## Role Boundaries and Conflict Resolution
+## Role boundaries and conflict resolution
 
-When two personas could legitimately touch the same artifact, the persona files define priority. Without explicit rules that overlap is a merge conflict with no principled resolution; with priority, the spec resolves it. A survey of multi-agent collaboration mechanisms notes that interdependencies between agent jobs are intrinsically linked to system performance, and that efficacy can be severely impacted by blocked interactions between agents in different roles — explicit scope exclusions reduce that interaction surface ([Tran et al., 2025](https://arxiv.org/abs/2501.06322)).
+When two personas could legitimately touch the same artifact, the persona files set priority. Without explicit rules, that overlap is a merge conflict with no principled resolution. With priority, the spec resolves it. A survey of multi-agent collaboration mechanisms notes that interdependencies between agent jobs are tied to system performance, and that blocked interactions between agents in different roles can severely degrade how well the system works — explicit scope exclusions reduce that interaction surface ([Tran et al., 2025](https://arxiv.org/abs/2501.06322)).
 
 This mirrors the principle behind [Specialized Agent Roles](specialized-agent-roles.md): mutually exclusive scopes prevent redundant overlap. Persona-as-code makes that exclusivity durable across sessions.
 
-## Relationship to Task-Specific Design
+## Relationship to task-specific design
 
 Persona-as-code and [task-specific agents](task-specific-vs-role-based-agents.md) address different problems:
 
@@ -137,13 +137,13 @@ Content drafting from research. You translate findings into publishable pages.
 
 Each persona operates within its file — the boundary is enforced by the spec, not the model.
 
-## When This Backfires
+## When this backfires
 
-Persona-as-code adds coordination surface area. Three conditions where it is worse than a unified prompt:
+Persona-as-code adds coordination surface area. Three conditions make it worse than a unified prompt:
 
-1. **Scope boundaries are ambiguous.** If the line between two personas is unclear — both can reasonably claim a decision — explicit exclusions do not resolve the conflict; they just relocate it to a boundary dispute. Role-based systems can show rigidity when task requirements deviate from predefined scope, resulting in disputes or functional deficiencies ([Tran et al., arXiv 2501.06322](https://arxiv.org/abs/2501.06322)).
-2. **Single-agent or short-session workflows.** Maintaining separate persona files and [artifact handoff conventions](handoff-skill-context-transfer.md) adds overhead with no benefit when a single agent handles a bounded task end-to-end. A well-structured system prompt is simpler.
-3. **Rapidly changing requirements.** Persona files encode stable role definitions. When the domain or team structure is still evolving, keeping multiple files consistent costs more than the clarity they provide.
+1. Scope boundaries are ambiguous. If the line between two personas is unclear — both can reasonably claim a decision — explicit exclusions do not resolve the conflict. They just relocate it to a boundary dispute. Role-based systems can show rigidity when task requirements deviate from predefined scope, resulting in disputes or functional deficiencies ([Tran et al., arXiv 2501.06322](https://arxiv.org/abs/2501.06322)).
+2. Single-agent or short-session workflows. Maintaining separate persona files and [artifact handoff conventions](handoff-skill-context-transfer.md) adds overhead with no benefit when a single agent handles a bounded task end-to-end. A well-structured system prompt is simpler.
+3. Rapidly changing requirements. Persona files encode stable role definitions. When the domain or team structure is still evolving, keeping multiple files consistent costs more than the clarity they provide.
 
 ## Key Takeaways
 

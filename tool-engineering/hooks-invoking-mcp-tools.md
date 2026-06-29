@@ -17,7 +17,7 @@ maturity: adopted
 
 > A Claude Code hook can return `type: "mcp_tool"` to call a tool on an already-connected MCP server directly, collapsing the hook-decides-then-harness-invokes step into a single declarative action — useful for in-harness policy consult and audit, with fail-open semantics that constrain where it fits.
 
-## What the Primitive Is
+## What the primitive is
 
 Claude Code v2.1.118 (2026-04-23) added `mcp_tool` as a hook handler kind alongside the existing `command` handler. A hook record names a connected MCP server, a tool on it, and a substituted `input` map ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 
@@ -27,13 +27,13 @@ Claude Code v2.1.118 (2026-04-23) added `mcp_tool` as a hook handler kind alongs
 | `tool` | yes | Name of the tool to call on that server |
 | `input` | no | Arguments passed to the tool. String values support `${path}` substitution from the hook's JSON input, e.g. `"${tool_input.file_path}"` |
 
-The MCP tool's text output is processed exactly like a command hook's stdout — if it parses as a `hookSpecificOutput` decision document, the harness applies the decision; otherwise it surfaces as plain text ([hooks reference](https://code.claude.com/docs/en/hooks)).
+The harness processes the MCP tool's text output exactly like a command hook's stdout. If the output parses as a `hookSpecificOutput` decision document, the harness applies the decision. Otherwise it surfaces as plain text ([hooks reference](https://code.claude.com/docs/en/hooks)).
 
-## Why It Exists
+## Why it exists
 
-Before this primitive, a hook that wanted to consult an MCP server had to spawn a subprocess and run an MCP client of its own. `mcp_tool` removes the second client: the harness already owns the MCP transport for the agent's own tool calls and reuses it for the hook. This is the wire-level mechanism for the [MCP Runtime Control Plane](../security/mcp-runtime-control-plane.md) pattern, run *inside* the harness rather than in front of it as a gateway.
+Before this primitive, a hook that wanted to consult an MCP server had to spawn a subprocess and run its own MCP client. `mcp_tool` removes that second client. The harness already owns the MCP transport for the agent's own tool calls, and it reuses that transport for the hook. This is the wire-level mechanism for the [MCP Runtime Control Plane](../security/mcp-runtime-control-plane.md) pattern, run inside the harness rather than in front of it as a gateway.
 
-## Two Canonical Uses
+## Two canonical uses
 
 ### `PreToolUse` policy consult
 
@@ -61,7 +61,7 @@ A `PreToolUse` hook on `Bash` calls a policy MCP server, which inspects the comm
 }
 ```
 
-The policy server's response is a JSON document with `permissionDecision: "deny"` and a `permissionDecisionReason` — exactly the shape a command hook would have produced ([hooks reference](https://code.claude.com/docs/en/hooks)). One server, one connection, one schema.
+The policy server's response is a JSON document with `permissionDecision: "deny"` and a `permissionDecisionReason` — exactly the shape a command hook produces ([hooks reference](https://code.claude.com/docs/en/hooks)). One server, one connection, one schema.
 
 ### `PostToolUse` audit
 
@@ -89,9 +89,9 @@ A `PostToolUse` hook calls an audit MCP server, recording the edited file path w
 }
 ```
 
-This matches Claude Code's own security-scan example ([hooks reference](https://code.claude.com/docs/en/hooks)). `PostToolUse` input also exposes `duration_ms` (added in v2.1.119), giving the audit server the underlying tool's latency ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+This matches Claude Code's own security-scan example ([hooks reference](https://code.claude.com/docs/en/hooks)). `PostToolUse` input also exposes `duration_ms` (added in v2.1.119), which gives the audit server the underlying tool's latency ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 
-## Decision Loop
+## Decision loop
 
 ```mermaid
 sequenceDiagram
@@ -111,19 +111,19 @@ sequenceDiagram
     end
 ```
 
-## Failure Mode: Fail-Open
+## Failure mode: fail-open
 
-**This primitive fails open.** If the MCP server is not connected or the tool returns `isError: true`, the hook produces a non-blocking error and execution continues ([hooks reference](https://code.claude.com/docs/en/hooks)). A `PreToolUse` policy hook routed to a downed server therefore *allows* the original call by default — load-bearing for security use cases.
+This primitive fails open. If the MCP server is not connected, or the tool returns `isError: true`, the hook produces a non-blocking error and execution continues ([hooks reference](https://code.claude.com/docs/en/hooks)). So a `PreToolUse` policy hook routed to a downed server allows the original call by default — load-bearing for security use cases.
 
 For fail-closed denial when policy is unreachable, use an out-of-process gateway in front of the harness, not the hook layer ([MCP Runtime Control Plane](../security/mcp-runtime-control-plane.md)).
 
-## When This Backfires
+## When this backfires
 
-- **Critical-deny use cases.** `PreToolUse` `mcp_tool` hooks fail open on connection loss or tool error. Anything that must be denied on policy-server outage needs a fail-closed control somewhere else.
-- **Latency on every matched call.** Each call now waits on a synchronous MCP round-trip plus the server's own work. A slow `PreToolUse` `mcp_tool` hook delays every matched invocation, the same way a slow shell hook would ([hooks-lifecycle-events.md](hooks-lifecycle-events.md)).
-- **Setup events.** `SessionStart` and `Setup` fire before MCP servers finish connecting; `mcp_tool` hooks at those points error and pass through ([hooks reference](https://code.claude.com/docs/en/hooks)).
-- **Coverage gaps.** Hooks already do not always carry into sub-agents, MCP server calls, or pipe mode; `mcp_tool` actions inherit those gaps. Use OS-level controls when the boundary must hold everywhere ([Boucle, *What Claude Code Hooks Can and Cannot Enforce*, 2026](https://dev.to/boucle2026/what-claude-code-hooks-can-and-cannot-enforce-148o)).
-- **Output schema mismatch.** If the MCP tool's text output looks like JSON but does not match `hookSpecificOutput`, the harness surfaces it as plain text — silently dropping any decision the server intended.
+- Critical-deny use cases: `PreToolUse` `mcp_tool` hooks fail open on connection loss or tool error. Anything that must be denied on a policy-server outage needs a fail-closed control somewhere else.
+- Latency on every matched call: each call now waits on a synchronous MCP round-trip plus the server's own work. A slow `PreToolUse` `mcp_tool` hook delays every matched call, the same way a slow shell hook would ([hooks-lifecycle-events.md](hooks-lifecycle-events.md)).
+- Setup events: `SessionStart` and `Setup` fire before MCP servers finish connecting. `mcp_tool` hooks at those points error and pass through ([hooks reference](https://code.claude.com/docs/en/hooks)).
+- Coverage gaps: hooks already do not always carry into sub-agents, MCP server calls, or pipe mode, and `mcp_tool` actions inherit those gaps. Use OS-level controls when the boundary must hold everywhere ([Boucle, *What Claude Code Hooks Can and Cannot Enforce*, 2026](https://dev.to/boucle2026/what-claude-code-hooks-can-and-cannot-enforce-148o)).
+- Output schema mismatch: if the MCP tool's text output looks like JSON but does not match `hookSpecificOutput`, the harness surfaces it as plain text and silently drops any decision the server intended.
 
 ## Key Takeaways
 

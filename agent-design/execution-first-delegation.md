@@ -17,11 +17,11 @@ maturity: adopted
 
 > Execution-first delegation hands the agent an outcome and a set of boundaries instead of a step list, then lets it determine how.
 
-## The Shift
+## The shift
 
-In prompt-response AI, you describe each step: "read this file, extract these fields, format as JSON." You remain the orchestrator; the model executes individual instructions.
+In prompt-response AI, you describe each step: "read this file, extract these fields, format as JSON." You stay the orchestrator. The model executes individual instructions.
 
-In execution-first delegation, you hand over an intent: "prepare this repository for release." The agent explores the codebase, plans, runs commands, modifies files, and adapts on failure — without you specifying the sequence, the move from prompt-response to goal-directed systems traced in [agentic AI architecture evolution](agentic-ai-architecture-evolution.md). The developer's job shifts from writing instructions to writing contracts.
+In execution-first delegation, you hand over an intent: "prepare this repository for release." The agent explores the codebase, plans, runs commands, changes files, and adapts on failure. You do not specify the sequence. This is the move from prompt-response to goal-directed systems traced in [agentic AI architecture evolution](agentic-ai-architecture-evolution.md). Your job shifts from writing instructions to writing contracts.
 
 | Prompt-Response | Execution-First |
 |-----------------|-----------------|
@@ -31,9 +31,9 @@ In execution-first delegation, you hand over an intent: "prepare this repository
 | Prompt quality determines output | Boundary quality determines safety |
 | Appropriate for predictable, fixed workflows | Appropriate when steps can't be predicted upfront |
 
-## The Delegation Contract
+## The delegation contract
 
-When you delegate execution, you are writing a contract with four parts:
+When you delegate execution, you write a contract with four parts:
 
 ```
 Goal        — what the agent must accomplish
@@ -42,57 +42,57 @@ Success     — how to know when it's done
 Recovery    — what to do if something goes wrong
 ```
 
-Skipping any part produces predictable failures:
+Skip any part and you get predictable failures:
 
-- **No constraints** → agent interprets intent broadly, exceeds scope, makes irreversible changes
-- **No success condition** → agent runs indefinitely or stops at an arbitrary point
-- **No recovery path** → agent stalls on a blocker with no fallback
+- No constraints: the agent reads the intent broadly, exceeds scope, and makes irreversible changes
+- No success condition: the agent runs forever or stops at an arbitrary point
+- No recovery path: the agent stalls on a blocker with no fallback
 
-## Why Boundaries Matter More Than Phrasing
+## Why boundaries matter more than phrasing
 
-In prompt-response workflows, the primary skill is phrasing — write clearly, use examples, format well. In execution-first workflows, it is bounding — what can the agent touch, how far can it go, when must it stop?
+In prompt-response workflows, the main skill is phrasing. You write clearly, use examples, and format well. In execution-first workflows, the main skill is bounding. What can the agent touch, how far can it go, and when must it stop?
 
-[Anthropic's research on autonomous agents](https://www.anthropic.com/engineering/building-effective-agents) identifies stopping conditions and human-in-the-loop checkpoints as required structural elements, not optional add-ons. [nibzard's production-agent pattern library](https://www.nibzard.com/agentic-handbook) concludes most agent failures are loop design failures, not model failures — the model executed correctly within an under-specified contract.
+[Anthropic's research on autonomous agents](https://www.anthropic.com/engineering/building-effective-agents) names stopping conditions and human-in-the-loop checkpoints as required structural elements, not optional add-ons. [nibzard's production-agent pattern library](https://www.nibzard.com/agentic-handbook) concludes that most agent failures are loop design failures, not model failures. The model ran correctly within an under-specified contract.
 
-## MCP as the Grounding Layer
+## MCP as the grounding layer
 
-Agents operating on intent need structured access to real tools and data. Without it, context gets stuffed into prompts as stale text. Model Context Protocol (MCP) replaces that with structured runtime access — the agent queries what it needs during execution, under defined permissions:
+Agents that work on intent need structured access to real tools and data. Without it, context gets stuffed into prompts as stale text. Model Context Protocol (MCP) replaces that with structured runtime access. The agent queries what it needs during execution, under defined permissions:
 
 - "Here is the current state of the deployment system (as text)" — prompt-embedded, stale, untestable
 - "You have access to the deployment API via MCP" — structured, permissioned, live
 
-## When to Use Execution-First Delegation
+## When to use execution-first delegation
 
-Execution-first is appropriate when the task has these characteristics:
+Execution-first fits a task with these traits:
 
-- **Unpredictable steps** — you cannot enumerate what needs to happen before starting
-- **Adaptive execution required** — the right next step depends on what the previous step found
-- **Large scope** — the work spans many files, systems, or decisions
-- **Clear stopping condition** — you can define done precisely enough that the agent can recognize it
+- Unpredictable steps: you cannot list what needs to happen before starting
+- Adaptive execution: the right next step depends on what the previous step found
+- Large scope: the work spans many files, systems, or decisions
+- Clear stopping condition: you can define done precisely enough that the agent recognizes it
 
-Avoid it when every step can be defined in advance — a fixed, predictable workflow is better served by a [prompt chain](../context-engineering/prompt-chaining.md), since an autonomous loop adds cost and non-determinism without benefit.
+Avoid it when you can define every step in advance. A fixed, predictable workflow is better served by a [prompt chain](../context-engineering/prompt-chaining.md), because an autonomous loop adds cost and non-determinism for no gain.
 
 [Addy Osmani notes](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) this fits greenfield or self-contained projects more cleanly than large, tightly coupled codebases, where the contract is harder to specify.
 
-## Design Checklist
+## Design checklist
 
-Before delegating execution to an agent, verify:
+Before you delegate execution to an agent, check that:
 
-- [ ] **Goal is outcome-defined** — "prepare the repo for release" not "run these five commands"
-- [ ] **Constraints are explicit** — which files, systems, or operations are off-limits
-- [ ] **Success condition is testable** — the agent can verify completion without asking
-- [ ] **Recovery path exists** — what the agent should do when it hits a blocker
-- [ ] **Scope is bounded** — no permission escalation or scope expansion without a checkpoint (see [Blast Radius Containment](../security/blast-radius-containment.md))
-- [ ] **Irreversible operations are gated** — deploys, deletes, and external writes require explicit authorization
+- [ ] Goal is outcome-defined: "prepare the repo for release", not "run these five commands"
+- [ ] Constraints are explicit: which files, systems, or operations are off-limits
+- [ ] Success condition is testable: the agent can verify completion without asking
+- [ ] Recovery path exists: what the agent should do when it hits a blocker
+- [ ] Scope is bounded: no permission escalation or scope expansion without a checkpoint (see [blast radius containment](../security/blast-radius-containment.md))
+- [ ] Irreversible operations are gated: deploys, deletes, and external writes need explicit authorization
 
-## When This Backfires
+## When this backfires
 
-- **Auditable workflows** — regulated domains require step-by-step execution records. An autonomous loop produces a goal-oriented trace, not a procedure audit trail.
-- **Tightly coupled codebases** — when system boundaries are unclear, specifying safe constraints (such as [blast radius containment](../security/blast-radius-containment.md)) is harder than listing the steps. The contract grows more complex than the scripted alternative.
-- **High-volume predictable operations** — autonomous loops cost more tokens and produce non-deterministic paths. [Prompt chains](../context-engineering/prompt-chaining.md) are cheaper and easier to test.
-- **Contract specification failure** — the pattern shifts complexity from steps to boundaries. Under-specified contracts produce the same loop-failure modes the pattern is meant to prevent.
+- Auditable workflows: regulated domains need step-by-step execution records. An autonomous loop produces a goal-oriented trace, not a procedure audit trail.
+- Tightly coupled codebases: when system boundaries are unclear, setting safe constraints (such as [blast radius containment](../security/blast-radius-containment.md)) is harder than listing the steps. The contract grows more complex than the scripted alternative.
+- High-volume predictable operations: autonomous loops cost more tokens and produce non-deterministic paths. [Prompt chains](../context-engineering/prompt-chaining.md) are cheaper and easier to test.
+- Contract specification failure: the pattern shifts complexity from steps to boundaries. Under-specified contracts produce the same loop-failure modes the pattern is meant to prevent.
 
-[Anthropic's measurement of agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy) reports full auto-approve runs in roughly 20% of new-user Claude Code sessions and 40% of experienced-user sessions; 32% of human interruptions supply missing technical context the agent could not infer. Treat execution-first delegation as the right tool when steps are unpredictable *and* the boundary is specifiable — not as the default mode.
+[Anthropic's measurement of agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy) reports full auto-approve runs in roughly 20% of new-user Claude Code sessions and 40% of experienced-user sessions. It also finds that 32% of human interruptions supply missing technical context the agent could not infer. Treat execution-first delegation as the right tool when steps are unpredictable and the boundary is specifiable, not as the default mode.
 
 ## Example
 
@@ -113,7 +113,7 @@ Recovery: If a link is broken and cannot be fixed by editing docs/,
           add it to broken-links.md and continue.
 ```
 
-Compare this to an under-specified version: "Update the docs for the release." The latter gives the agent no constraints, no boundary on scope, and no way to know when it's done.
+Compare this to an under-specified version: "Update the docs for the release." That version gives the agent no constraints, no boundary on scope, and no way to know when it is done.
 
 ## Key Takeaways
 

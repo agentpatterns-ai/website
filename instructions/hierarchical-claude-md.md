@@ -20,13 +20,13 @@ maturity: emerging
 > Layer CLAUDE.md files at multiple scopes so each agent session receives only the context relevant to its working location.
 
 !!! info "Also known as"
-    **Hierarchical CLAUDE.md** · **Layered Instruction Scopes** · **Directory-Level Instruction Hierarchy**
+    Hierarchical CLAUDE.md · Layered Instruction Scopes · Directory-Level Instruction Hierarchy
 
     Claude Code–specific implementation. For the tool-agnostic pattern, see [Layer Agent Instructions by Specificity](layered-instruction-scopes.md).
 
-## Four Scopes
+## Four scopes
 
-[Claude Code's memory system](https://code.claude.com/docs/en/memory) supports CLAUDE.md files at four scopes, each with a different audience and lifetime:
+[Claude Code's memory system](https://code.claude.com/docs/en/memory) supports CLAUDE.md files at four scopes. Each scope has a different audience and lifetime:
 
 | Scope | Location | Shared? | Covers |
 |-------|----------|---------|--------|
@@ -35,21 +35,21 @@ maturity: emerging
 | User | `~/.claude/CLAUDE.md` | Just you (all projects) | User preferences across all projects |
 | Local | `./CLAUDE.local.md` | Just you (current project, gitignored) | Personal project-specific preferences |
 
-Claude Code loads all four in order of increasing specificity. More specific instructions appear later in the assembled context, giving them higher effective priority.
+Claude Code loads all four by increasing specificity. More specific instructions appear later in the assembled context and take priority.
 
-## What Belongs at Each Scope
+## What belongs at each scope
 
-**Managed policy**: Organization-wide policies set by enterprise admins — approved tools, security requirements, and similar constraints.
+Managed policy: organization-wide policies set by enterprise admins — approved tools, security requirements, and similar constraints.
 
-**Project root (`./CLAUDE.md`)**: The project's "operating manual" for agents — architecture overview, naming conventions, testing framework, required CI commands, and pointers to deeper docs. Version-controlled and team-shared.
+Project root (`./CLAUDE.md`): the project's operating manual for agents — architecture overview, naming conventions, testing framework, required CI commands, and pointers to deeper docs. Version-controlled and team-shared.
 
-**User (`~/.claude/CLAUDE.md`)**: Personal workflow preferences that apply regardless of project — response format, editor conventions, tool access. Not version-controlled; does not affect teammates.
+User (`~/.claude/CLAUDE.md`): personal workflow preferences for any project — response format, editor conventions, tool access. Not version-controlled; does not affect teammates.
 
-**Local (`./CLAUDE.local.md`)**: Personal project-specific preferences, not checked into version control. Add `CLAUDE.local.md` to `.gitignore` manually, or run `/init` and choose the personal option to have Claude Code add it for you ([docs](https://code.claude.com/docs/en/memory#set-up-a-project-claude-md)). Use it for sandbox URLs, personal test data, or per-machine settings.
+Local (`./CLAUDE.local.md`): personal project-specific preferences, not checked into version control. Add `CLAUDE.local.md` to `.gitignore` manually, or run `/init` and choose the personal option to have Claude Code add it for you ([memory setup docs](https://code.claude.com/docs/en/memory#set-up-a-project-claude-md)). Use it for sandbox URLs, personal test data, or per-machine settings.
 
-**Subdirectory CLAUDE.md files (`./api/CLAUDE.md`, `./frontend/CLAUDE.md`, etc.)**: Part of the Project scope, not a separate scope. Claude Code walks the directory tree and loads them on demand when working in those directories, letting subprojects define their own conventions without duplicating the root file.
+Subdirectory CLAUDE.md files (`./api/CLAUDE.md`, `./frontend/CLAUDE.md`, and so on): part of the Project scope, not a separate scope. Claude Code walks the directory tree and loads them on demand when you work there, letting subprojects define their own conventions without duplicating the root file.
 
-## What Not to Put in CLAUDE.md
+## What not to put in CLAUDE.md
 
 CLAUDE.md files should be pointers to knowledge, not knowledge dumps. Per [Claude Code memory docs](https://code.claude.com/docs/en/memory):
 
@@ -58,11 +58,11 @@ CLAUDE.md files should be pointers to knowledge, not knowledge dumps. Per [Claud
 - Exclude task-specific instructions — those belong in the prompt
 - Exclude knowledge the agent can discover from the codebase (types, structure, tests)
 
-CLAUDE.md files are loaded in full at the start of every session, consuming tokens alongside the conversation ([docs](https://code.claude.com/docs/en/memory#write-effective-instructions)). Bloated files consume context budget the agent needs for the actual task.
+Claude Code loads CLAUDE.md files in full at the start of every session, consuming tokens alongside the conversation ([writing effective instructions](https://code.claude.com/docs/en/memory#write-effective-instructions)). Bloated files use context budget the agent needs for its task.
 
-## Directory-Level Files for Monorepos
+## Directory-level files for monorepos
 
-A monorepo with distinct services typically has different lint rules, test commands, and conventions per service. Without directory-level files, the root must either enumerate all variants (growing the instruction count until compliance degrades) or omit service-specific rules (forcing the agent to guess). Directory-level files solve this: each service documents its own conventions, and Claude Code [loads them on demand](https://code.claude.com/docs/en/memory#how-claude-md-files-load) when working in those directories.
+A monorepo with distinct services usually has different lint rules, test commands, and conventions per service. Without directory-level files, the root must list every variant (growing the instruction count until compliance degrades) or omit service-specific rules (forcing the agent to guess). Directory-level files solve this: each service documents its conventions, and Claude Code [loads them on demand](https://code.claude.com/docs/en/memory#how-claude-md-files-load) for that directory.
 
 ## Maintenance
 
@@ -133,18 +133,18 @@ When Claude Code works inside `frontend/`, it loads the root file plus `frontend
 - More specific instructions load later and take priority.
 - Keep files short; link to documentation rather than embedding it.
 
-## Why It Works
+## Why it works
 
-Hierarchical loading reduces context noise through structural separation. Fewer loaded instructions mean less risk of conflicting rules, lower token overhead before the first task token, and faster orientation. This applies the principle of least authority to context: each session receives only the knowledge its working location requires.
+Hierarchical loading cuts context noise by separating instructions structurally. Fewer loaded instructions mean less risk of conflicting rules, lower token overhead before the first task token, and faster orientation. This applies the principle of least authority to context: each session receives only the knowledge its working location requires.
 
-## When This Backfires
+## When this backfires
 
-Hierarchical scoping adds value only when each file stays concise and consistent. Conditions where a single root file is better:
+Hierarchical scoping helps only when each file stays concise and consistent. A single root file is better in these conditions:
 
-- **Conflicting instructions across files**: All loaded CLAUDE.md files are concatenated; the [official docs](https://code.claude.com/docs/en/memory#write-effective-instructions) note that "if two rules contradict each other, Claude may pick one arbitrarily." A stale subdirectory file that contradicts updated root conventions silently wins for agent sessions in that directory.
-- **Compliance degradation at scale**: Splitting instructions across files does not lower the aggregate instruction load — see [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md). Prefer trimming rules over adding more files.
-- **Maintenance fragmentation**: When a shared convention changes, every directory-level file that documents it needs a manual update. File renames leave CLAUDE.md behind while the root references the old path.
-- **Small, uniform projects**: A single team working on one codebase gains nothing from extra files and pays the cost of keeping them in sync.
+- Conflicting instructions across files: Claude Code concatenates all loaded CLAUDE.md files, and the [Claude Code memory docs](https://code.claude.com/docs/en/memory#write-effective-instructions) note that "if two rules contradict each other, Claude may pick one arbitrarily." A stale subdirectory file that contradicts updated root conventions silently wins for agent sessions in that directory.
+- Compliance degradation at scale: splitting instructions across files does not lower the total instruction load — see [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md). Trim rules rather than add more files.
+- Maintenance fragmentation: when a shared convention changes, you must update every directory-level file that documents it. File renames leave CLAUDE.md behind while the root references the old path.
+- Small, uniform projects: a single team working on one codebase gains nothing from extra files and pays the cost of keeping them in sync.
 
 ## Related
 
