@@ -167,6 +167,7 @@ The template carries the portable question. The custom judge carries the domain-
 
 - [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md)
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md)
+- [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — measure a template judge's reliability against human labels before trusting its rubric verdicts at scale
 - [Eval-Driven Development](../workflows/eval-driven-development.md)
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)

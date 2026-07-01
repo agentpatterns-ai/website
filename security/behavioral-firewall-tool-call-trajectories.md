@@ -104,6 +104,7 @@ The pDFA firewall layers cleanly with the rest of the security stack:
 ## Related
 
 - [Mid-Trajectory Guardrail Selection](mid-trajectory-guardrail-selection.md) — model-based complement when trajectory shapes drift beyond a finite automaton
+- [Detecting Memory-Poisoning Exfiltration by Tool-Call Order (Recall-Before-Send Signature)](recall-before-send-memory-poisoning-detection.md) — a detection counterpart over the same tool-call trajectories, keyed to one attack-forced ordering rather than a whole benign automaton
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — the argument-generation and return-processing vectors a behavioral firewall constrains
 - [MCP Runtime Control Plane](mcp-runtime-control-plane.md) — single policy evaluation point at which a pDFA check can be wired
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — ensures the tools whose calls form transitions are themselves trusted

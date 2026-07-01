@@ -32,3 +32,4 @@ status: current
 - [MCP Integration](mcp-integration.md) — Connect Copilot to external tools via Model Context Protocol
 - [Monorepo Skill and Agent Discovery](monorepo-hierarchical-discovery.md) — Hierarchical configuration discovery from working directory to git root, enabling per-package skills and MCP servers
 - [Unified Sessions View and CLI Agent in JetBrains](unified-sessions-view.md) — Chat-window registry aggregating CLI agent, agent mode, custom agent, and sub-agent sessions with worktree or workspace isolation
+- [Agent Host Review Comments: Server-Side Feedback Transport](agent-host-review-comments.md) — Server-side review comment storage via three agent tools, enabling async resolution after client disconnect

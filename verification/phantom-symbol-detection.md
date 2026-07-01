@@ -81,5 +81,6 @@ The check is only as strong as the knowledge base and the AST. It degrades or fa
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md)
 - [Structured Output Constraints](structured-output-constraints.md)
 - [Dependency Gap Validation for AI-Generated Code](dependency-gap-validation.md)
+- [Per-Line Requirement Citations for Hallucination Detection](per-line-requirement-citations.md) — The sibling check for fabricated requirements: resolve each cited requirement ID against the spec by set difference, the same claim-as-set-membership move.
 - [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md)
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md)

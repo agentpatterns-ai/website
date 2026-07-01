@@ -8,7 +8,7 @@ tags:
   - source:opendev-paper
   - long-form
   - tool-agnostic
-last_reviewed: 2026-06-24
+last_reviewed: 2026-06-30
 maturity: established
 ---
 
@@ -45,6 +45,8 @@ Treat initialization cost as a performance budget. Lightweight agents get compos
 ## big.LITTLE multi-model orchestration
 
 This pattern comes from [CPU architecture](https://en.wikipedia.org/wiki/Big.LITTLE): powerful cores for demanding work, efficient cores for background tasks. [Claude Code's Explore subagent](https://code.claude.com/docs/en/sub-agents) applies it — Haiku handles read-only exploration while the main model reasons. A [community analysis](https://claudelog.com/mechanics/agent-engineering) reports 2 to 2.5x cost reduction at 85 to 95% quality on mixed workloads.
+
+Cognition applies this pattern in production through Devin Fusion — a hybrid harness pairing a frontier model as the reasoning core with cheaper sidekick agents for delegated subtasks and dynamic routing between them, claiming frontier-level performance at roughly 35% lower cost ([Cognition — Devin Fusion](https://cognition.ai/blog/devin-fusion)).
 
 Model rotation starts with the cheaper model and escalates only on validation failure. This works when validation is cheap and deterministic — test suites, linters, type checkers.
 

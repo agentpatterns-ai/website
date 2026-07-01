@@ -125,4 +125,5 @@ When the agent proposes the refactored version, the AST diff against stored memo
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md) — episode-level retrieval, closer to raw observation streams, less structured than typed units
 - [Session Initialization Ritual](session-initialization-ritual.md) — the startup sequence that pairs with `bd ready` for full session orientation
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — structural compression for context management
+- [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — the general, prose-and-files counterpart to these code-rooted substrates
   - long-form

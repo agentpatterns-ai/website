@@ -120,5 +120,6 @@ AgentCore's gateway evaluates this Cedar document on every `deploy_service` call
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md)
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md)
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md)
+- [Execution-Layer Security Invariants for MCP Runtimes](mcp-execution-security-invariants.md)
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
 - [MCP Client/Server Architecture](../tool-engineering/mcp-client-server-architecture.md)

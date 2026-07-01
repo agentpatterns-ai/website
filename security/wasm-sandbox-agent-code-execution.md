@@ -103,3 +103,4 @@ The host sees a clean error; the host process is unaffected. The same pattern ap
 - [Docker sbx Adoption for Coding Agents](docker-sbx-adoption.md)
 - [Subprocess PID Namespace Sandboxing in Claude Code](subprocess-pid-namespace-sandboxing.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
+- [Capability-Additive Code Interpreters for Untrusted Agent Code](capability-additive-interpreter.md) — the additive-capability design philosophy layered on this WASM substrate

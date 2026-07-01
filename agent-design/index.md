@@ -81,6 +81,7 @@ How agents persist, retrieve, and synthesize information across turns and sessio
 - [Memory Transfer Learning: Cross-Domain Memory Reuse](memory-transfer-learning.md) — How coding agents transfer learned memories across different task domains, why abstraction level determines transferability, and when cross-domain memory causes negative transfer
 - [Subtask-Level Memory for Software Engineering Agents](subtask-level-memory.md) — Store and retrieve memory at individual reasoning stages, not whole sessions, to prevent misguided retrieval when tasks share surface similarity
 - [Tiered Memory Architecture: Episodic-to-Semantic Consolidation](tiered-memory-architecture.md) — Separate raw episode storage from a curated semantic tier and promote facts between them only on observed re-use — pays off for long operation windows, adds cost without benefit elsewhere
+- [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — Run an agent over raw sources to build and maintain a compact, file-based knowledge layer future agents read instead of re-deriving structure via query-time RAG — for durable domain knowledge with enough query volume to amortize
 
 ## Control & Orchestration
 

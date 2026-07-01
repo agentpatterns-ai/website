@@ -70,6 +70,7 @@ nav:
       - session-recap.md
       - subtask-level-memory.md
       - tiered-memory-architecture.md
+      - wiki-memory-agent-maintained-knowledge-base.md
   - "Control & Orchestration":
       - background-todo-agent.md
       - in-agent-task-prioritization.md

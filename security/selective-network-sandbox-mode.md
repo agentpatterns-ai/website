@@ -9,7 +9,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-06-09
+last_reviewed: 2026-07-01
 maturity: established
 ---
 
@@ -71,7 +71,7 @@ Network policy lives somewhere — it has just moved out of the harness.
 
 The mode closes the egress leg of the [lethal trifecta](lethal-trifecta-threat-model.md). Four conditions make it dangerous:
 
-- Broad filesystem reads: most implementations restrict only writes; read access to `~/.aws/credentials`, `~/.ssh/`, or environment variables is preserved. With open egress, each is a one-step exfiltration target.
+- Broad filesystem reads: most implementations restrict only writes; read access to `~/.aws/credentials`, `~/.ssh/`, or environment variables is preserved. With open egress, each is a one-step exfiltration target. Claude Code's `sandbox.credentials` setting closes this read gap directly — it blocks sandboxed commands from reading credential files and secret environment variables ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 - Untrusted input in the same agent: when the agent fetches issues, third-party diffs, or web docs, prompt injection can drive an outbound POST to an attacker host. `allowNetwork` plus `WebFetch` plus repository read is the canonical trifecta closure ([Willison, 2025](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)).
 - Regulated workloads: FedRAMP and data-residency regimes require outbound audit trails — which must come from the layer below, and that layer must exist.
 - Multi-tenant or shared runners: `allowNetwork` defeats the org-firewall layer if no lower one exists.

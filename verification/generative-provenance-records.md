@@ -136,3 +136,4 @@ The verifier confirms `OCR_2` and `Calculator_1` are in the trajectory, the span
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md)
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md)
 - [RAG/Agent Reliability Problem Map](rag-agent-reliability-problem-map.md)
+- [Per-Line Requirement Citations for Hallucination Detection](per-line-requirement-citations.md) — Attach a machine-checkable requirement ID to each generated line so a set-difference check catches hallucinated requirements deterministically.

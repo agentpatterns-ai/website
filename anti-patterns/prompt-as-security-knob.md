@@ -103,3 +103,4 @@ jobs:
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — Adjacent failure: relying on prompt rules to enforce tool boundaries instead of harness-level deny rules.
 - [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md) — Same single-control-surface mistake applied to injection defence.
 - [Tool-Use Sim-to-Real Perturbation Taxonomy](../verification/tool-use-sim-to-real-perturbation-taxonomy.md) — Perturbation framing for tool-use agents; the prompt-perturbation result is the code-generation analogue.
+- [Model Confidence as Security Verification](model-confidence-as-security-verification.md) — The output-side twin: the model's own confidence in its code is no more a security guarantee than the prompt was.

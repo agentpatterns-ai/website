@@ -107,5 +107,6 @@ Workload typing narrowed six platforms to four. The team's operational constrain
 - [Sandboxed Coding Environments: Containers vs MicroVMs vs OS-Level Isolators](sandbox-runtime-comparison.md) — the runtime-family selection that follows once workload shape narrows the feature set
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md) — the filesystem + network threat model every workload-keyed feature set composes with
 - [In-Process WebAssembly Sandboxes for Agent-Generated Code](wasm-sandbox-agent-code-execution.md) — the in-process slot in the trade-space for trusted-host, untrusted-code workloads
+- [Capability-Additive Code Interpreters for Untrusted Agent Code](capability-additive-interpreter.md) — the lighter in-process interpreter to reach for when the workload is orchestration code rather than general code execution
 - [Session Harness Sandbox Separation](../agent-design/session-harness-sandbox-separation.md) — the architectural pattern that makes the stateful-session feature set structural rather than configurational
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the threat model the untrusted-code workload shape inherits
