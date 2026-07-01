@@ -9,7 +9,7 @@ tags:
 aliases:
   - credential leakage in agent skills
   - secrets in skill files
-last_reviewed: 2026-07-02
+last_reviewed: 2026-06-12
 maturity: adopted
 ---
 
@@ -58,13 +58,9 @@ Never use a real credential as an example, even temporarily. Pre-commit hooks mi
 
 ### Scan skill files at pre-commit time
 
-Extend secret-scanning to cover skill directories. Best practice pairs a *fast* regex/entropy scanner at the commit and CI edge with a *validation* scanner over full history on a schedule — they are complementary, not either-or.
+Extend secret-scanning to cover skill directories. `gitleaks`, `trufflehog`, and `detect-secrets` support custom path patterns:
 
-For the edge scan, prefer [`betterleaks`](https://github.com/betterleaks/betterleaks) — the MIT-licensed, actively-developed successor to `gitleaks`, written by gitleaks' original author. As of 2026 `gitleaks` is feature-complete and ships security patches only; feature and detector work moved to `betterleaks`, which also lifts detection recall substantially. Existing `gitleaks` config files, ignore files, and CLI flags carry over, so migration is a drop-in. ([Source: BleepingComputer, 2026](https://www.bleepingcomputer.com/news/security/betterleaks-a-new-open-source-secrets-scanner-to-replace-gitleaks/); [betterleaks](https://github.com/betterleaks/betterleaks))
-
-Scope scanning to skill paths so the rule travels with the repo (a `gitleaks`-format config, read by both tools):
-
-```toml
+```yaml
 # .gitleaks.toml — extend scanning to skill directories
 [[rules]]
 description = "API key in skill file"
@@ -95,9 +91,9 @@ This is the authoring-time complement to [Secrets Management for Agent Workflows
 Before publishing or sharing a skill, run a credential audit:
 
 ```bash
-# Quick scan before publishing a skill — fast edge scan + verified deep scan
-betterleaks dir .claude/skills/ -v
+# Quick scan before publishing a skill
 trufflehog filesystem .claude/skills/ --only-verified
+detect-secrets scan .claude/skills/ --all-files
 ```
 
 Community corpora rely on contributor inspection — registry-level scanning is not universal. The [awesome-copilot](https://github.com/github/awesome-copilot) notice — "inspect any agent and its documentation before installing" — puts this burden on consumers. Scanning before publishing shifts it to the authoring stage.
@@ -149,7 +145,7 @@ Placeholder syntax and wrapper scripts reduce leakage at authoring time but do n
 
 - Private corpora without scanning — teams that never publish externally may skip scanner setup. Leaked credentials remain exploitable if the repo is later open-sourced or an insider extracts the history.
 - Agents that resolve placeholders — an agent with both the skill file and environment secrets may substitute real values into placeholder slots such as `$STRIPE_API_KEY`, producing credential-containing outputs. Wrapper-script indirection mitigates this; placeholder-only syntax does not.
-- Coverage gaps in CI — scanner path rules for `.claude/skills/` only work if CI runs on all branches and PRs, and an edge scan only covers the working tree. Skills committed before the rule was added remain unscanned unless you also scan full history on a schedule (`betterleaks git` / `trufflehog git`).
+- Coverage gaps in CI — Gitleaks path rules for `.claude/skills/` only work if CI runs on all branches and PRs. Skills committed before the rule was added remain unscanned.
 - Registry-level credential reuse — credentials rotated after publication remain exposed in any consumer that cached the older skill version. Pre-commit scanning prevents new leaks but does not revoke already-distributed credentials — only removing the reusable secret via [workload identity federation](workload-identity-federation-for-agents.md) closes that path.
 
 Apply wrapper-script isolation and pre-commit scanning together; neither alone closes all paths.
