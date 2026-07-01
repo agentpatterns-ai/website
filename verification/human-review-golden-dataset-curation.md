@@ -108,4 +108,5 @@ This pattern sits one layer above [golden query pairs](golden-query-pairs-regres
 - [Incident-to-Eval Synthesis: Production Failures as Evals](incident-to-eval-synthesis.md)
 - [Measuring Synthetic Eval Data Quality (SynAE)](synae-synthetic-eval-quality.md)
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md)
+- [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — the one-time reliability check that qualifies a judge before this ongoing curation loop keeps it aligned
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md)

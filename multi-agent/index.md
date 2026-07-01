@@ -25,6 +25,7 @@ Choosing the right structure for agent collaboration determines failure modes, l
 - [Reverse-Engineered Executable Specifications for Agentic Program Repair](reverse-engineered-executable-specifications.md) — Decompose automated program repair into specification inference then constrained patching, making the intended behaviour an inspectable intermediate artefact before any code is changed
 - [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md) — Define agents and workflows as structured data, then compose them through explicit wiring rather than imperative code
 - [Declarative Multi-Agent Topology: Topology-as-Code](declarative-multi-agent-topology.md) — Encode an entire agent graph in a single declarative file that compiles to any target runtime, making topology auditable and portable
+- [Static Roster vs Runtime Subagent Definition](static-roster-vs-runtime-subagent-definition.md) — Decide who defines each subagent's identity and when — static file rosters are the safer default; programmatic definition is justified only for open-ended tasks with unknown sub-task shape
 
 ## Fan-Out & Parallelism
 
@@ -58,6 +59,7 @@ How agents hand off work, share state, and refine each other's output without a 
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md) — Separate code and test generation into independent agents so the test writer never sees the code, preventing bias that cuts test accuracy by 30%
 - [Persistent Shared Search Sub-Agent for Output-Token Reuse](persistent-search-subagent.md) — Route repository lookups through one persistent searcher so a region is explored once, cutting the redundant output tokens that dominate multi-agent cost
 - [Context-Graph Shared Memory for Multi-Agent Systems](context-graph-shared-memory.md) — Store cross-agent shared state as typed triples and traverse edges for join queries — beats vector RAG only when queries chain facts and entities are clean
+- [Verifier-Driven Parallel Coding Agents (Glite ARF)](verifier-driven-parallel-coding-agents.md) — Move the multi-agent coordination contract — task isolation, immutability of completed work, corrections overlay, materialised project overview — out of prose and into deterministic Python verifier scripts that fail loudly, adding ~1% wall-clock to keep per-agent lapses from compounding
 
 ## Multi-Model
 

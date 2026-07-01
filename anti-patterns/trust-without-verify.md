@@ -102,3 +102,4 @@ The test catches the missing `+` in the character class. The developer asks the 
 - [Context Poisoning](context-poisoning.md) — unchecked hallucinations propagate as trusted premises
 - [Comprehension Debt](comprehension-debt.md) — merging agent output without understanding it compounds into unverifiable code
 - [The Yes-Man Agent](yes-man-agent.md) — agents that execute without pushback ship the same unverified errors at machine speed
+- [Model Confidence as Security Verification](model-confidence-as-security-verification.md) — the security-specific case: a model's own confidence does not track whether its code is secure

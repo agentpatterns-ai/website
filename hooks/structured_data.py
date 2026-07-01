@@ -14,12 +14,19 @@ Schemas emitted:
 
 import html
 import json
+import logging
 import re
 import subprocess
 from datetime import date
 from pathlib import Path
 from typing import Optional
 from urllib.parse import urljoin
+
+log = logging.getLogger("mkdocs.hooks.structured_data")
+
+# GEO-M2 answer band: FAQ answers should land in 40–80 words for citation lift.
+FAQ_ANSWER_MIN_WORDS = 40
+FAQ_ANSWER_MAX_WORDS = 80
 
 # ---------------------------------------------------------------------------
 # Module-level singletons built once at on_config
@@ -91,15 +98,30 @@ def _build_article(page, config) -> dict:
             "name": site_name,
             "url": _site_url,
         },
+        # Always emit a publisher Organization — E-E-A-T/attribution signal that
+        # isPartOf (a WebSite) does not satisfy. Mirrors the on_config logo URL.
+        "publisher": {
+            "@type": "Organization",
+            "name": site_name,
+            "url": _site_url,
+            "logo": f"{_site_url}/assets/logo.png",
+        },
     }
 
     description = meta.get("description") or ""
     if description:
         article["description"] = _safe(description)
 
+    # datePublished: explicit `date:` frontmatter wins; otherwise derive from
+    # the first git commit (mirroring dateModified) so freshness/recency signals
+    # are present without per-page frontmatter (0 of 1082 pages set `date:`).
     pub_date = meta.get("date") or ""
     if pub_date:
         article["datePublished"] = str(pub_date)
+    else:
+        created = _git_created(src_path)
+        if created:
+            article["datePublished"] = created
 
     # dateModified from git history — critical for freshness signals
     lastmod = _git_lastmod(src_path)
@@ -172,14 +194,22 @@ def _detect_faq(rendered_html: str) -> Optional[dict]:
     pairs = _QA_PAIR_RE.findall(block)
     if len(pairs) < 2:
         return None
-    entities = [
-        {
+    entities = []
+    for q, a in pairs:
+        answer = a.strip()
+        # GEO-M2: warn (don't drop) when an answer falls outside the 40–80-word
+        # band that carries FAQPage citation lift, so authors can tighten it.
+        word_count = len(answer.split())
+        if not FAQ_ANSWER_MIN_WORDS <= word_count <= FAQ_ANSWER_MAX_WORDS:
+            log.warning(
+                "FAQ answer is %d words (outside the %d–%d-word band): %r",
+                word_count, FAQ_ANSWER_MIN_WORDS, FAQ_ANSWER_MAX_WORDS, q.strip(),
+            )
+        entities.append({
             "@type": "Question",
             "name": _safe(q.strip()),
-            "acceptedAnswer": {"@type": "Answer", "text": _safe(a.strip())},
-        }
-        for q, a in pairs
-    ]
+            "acceptedAnswer": {"@type": "Answer", "text": _safe(answer)},
+        })
     return {
         "@context": "https://schema.org",
         "@type": "FAQPage",
@@ -335,6 +365,32 @@ def _git_lastmod(src_path: str) -> str:
     except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError):
         pass
     return date.today().isoformat()
+
+
+def _git_created(src_path: str) -> Optional[str]:
+    """Return YYYY-MM-DD of the first git commit that added src_path.
+
+    Mirrors _git_lastmod but walks history in reverse so Article schema can
+    carry a datePublished without per-page `date:` frontmatter. Returns None
+    (rather than today) when history is unavailable, so the caller omits the
+    field instead of asserting a misleading publish date.
+    """
+    if not _docs_dir or not src_path:
+        return None
+
+    abs_path = _docs_dir / src_path
+    try:
+        result = subprocess.run(
+            ["git", "log", "--reverse", "--format=%cI", "--", str(abs_path)],
+            capture_output=True, text=True, check=True, timeout=5,
+        )
+        for iso_ts in result.stdout.splitlines():
+            iso_ts = iso_ts.strip()
+            if iso_ts:
+                return iso_ts[:10]
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError):
+        pass
+    return None
 
 
 def _safe(value: str) -> str:

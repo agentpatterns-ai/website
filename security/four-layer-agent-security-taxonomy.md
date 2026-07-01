@@ -90,3 +90,4 @@ The taxonomy is a map, not a defense. Three failure modes:
 - [OWASP LLM Top 10 (2025): Agent Security Crosswalk](owasp-llm-top-10-2025-agent-crosswalk.md) — maps named threats onto controls; pairs with the four-layer grid for coverage mapping
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — complementary taxonomy focused on the runtime audit boundary
 - [Three-Vector Evasion Taxonomy for Agent Security Tests](temporal-spatial-semantic-evasion-taxonomy.md) — orthogonal taxonomy organising how attacks evade per-layer checkpoints
+- [Computer-Systems Lens for Always-On Agent Security](computer-systems-lens-agent-security.md) — an alternate framing that maps the same threats onto OS components rather than execution layers

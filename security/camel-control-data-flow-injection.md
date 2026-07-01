@@ -117,4 +117,5 @@ For lower-risk contexts, the [defense-in-depth](defense-in-depth-agent-safety.md
 - [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
+- [Adaptive Evaluation of Out-of-Band Prompt-Injection Defenses](adaptive-evaluation-out-of-band-defenses.md) — CaMeL is one of the five out-of-band defenses; this evaluation page explains why even structurally sound defenses need defense-aware adaptive testing.
 - [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md)

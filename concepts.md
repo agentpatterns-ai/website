@@ -226,6 +226,8 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Prompt Caching: Architectural Discipline for Agents](context-engineering/prompt-caching-architectural-discipline.md)
 - [Stateful Iteration State-Carry: Typed Persistent State for Long Agent Loops](context-engineering/stateful-iteration-state-carry.md)
 - [Compositional Skill Routing for Large Skill Libraries](context-engineering/compositional-skill-routing.md)
+- [Deterministic Anchoring: Static Facts as Stable Context](context-engineering/deterministic-anchoring.md)
+- [Grounding Agents in Code the Model Has Never Seen](context-engineering/grounding-zero-prior-code.md)
 
 ## Instructions & Prompts
 
@@ -294,6 +296,9 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Probe-and-Refine Tuning of Repository Guidance for Coding Agents](instructions/probe-and-refine-guidance-tuning.md)
 - [Security Knowledge Priming for Code Generation (SPARK)](instructions/security-knowledge-priming.md)
 - [Stage-Targeted Prompt Structure for Pull Request Outcomes](instructions/stage-targeted-prompt-structure-pr-outcomes.md)
+- [Agent Config as a Managed Supply Chain: Hashing and Pinning](instructions/agent-config-as-managed-supply-chain.md)
+- [Agent Context File Evolution: Treating ACFs as Configuration Code](instructions/agent-context-file-evolution.md)
+- [Encoding Product-Design Taste into Agent Context](instructions/encoding-product-design-taste.md)
 
 ## Agent Architecture
 
@@ -525,6 +530,15 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Prompted Uncertainty Decomposition for Clarification Routing](agent-design/prompted-uncertainty-decomposition-clarification.md)
 - [Structured Task-State Ledger for Tool-Calling Agents (LedgerAgent)](agent-design/ledger-agent-structured-task-state.md)
 - [Trained Repository Explorer Sub-Agent (FastContext)](agent-design/fastcontext-trained-repository-explorer.md)
+- [Context-Graph Shared Memory for Multi-Agent Systems](multi-agent/context-graph-shared-memory.md)
+- [Delegation Threshold Calibration for Orchestrator Agents](agent-design/delegation-threshold-calibration.md)
+- [Fleet Harness Attribution: Pinning the Model to Compare Whole Harnesses](agent-design/fleet-harness-attribution.md)
+- [Scoped Browser DevTools Access for Runtime Diagnosis](agent-design/scoped-devtools-access-runtime-diagnosis.md)
+- [Tail Control for Agent Workflows: Engineering for the Failure Tail, Not the Average](agent-design/tail-control-for-agent-workflows.md)
+- [Verification-Gated Agent Autonomy via Automated Review](agent-design/verification-gated-agent-autonomy.md)
+- [Verifier-Driven Parallel Coding Agents (Glite ARF)](multi-agent/verifier-driven-parallel-coding-agents.md)
+- [Static Roster vs Runtime Subagent Definition](multi-agent/static-roster-vs-runtime-subagent-definition.md)
+- [Wiki Memory: Agent-Maintained Compressed Knowledge Base](agent-design/wiki-memory-agent-maintained-knowledge-base.md)
 
 ## Loop Engineering
 
@@ -539,6 +553,9 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Agent Loop Middleware — Safety Nets and Message Injection](loop-engineering/agent-loop-middleware.md)
 - [Convergence Detection in Iterative Agent Refinement](loop-engineering/convergence-detection.md)
 - [Agent Loop Go/No-Go: When Looping Earns Its Cost](loop-engineering/agent-loop-go-no-go-gate.md)
+- [Human-in-the-Loop Checkpoints as Loop Control](loop-engineering/human-in-the-loop-checkpoints.md)
+- [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](loop-engineering/loop-budgeting.md)
+- [Stuck-Loop Recovery: Detecting and Escaping Non-Converging Agent Loops](loop-engineering/stuck-loop-recovery.md)
 
 ## Tool Design
 
@@ -633,6 +650,9 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Tokenizer Swap Tax: Budgeting for Model Migrations That Change Token Counts](token-engineering/tokenizer-swap-tax.md)
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-engineering/token-cost-profiling-always-on-workflows.md)
 - [Code Cleanliness as an Agent Cost Lever](token-engineering/code-cleanliness-agent-cost-lever.md)
+- [Cost-Quality Pareto Measurement for Agent Configurations](token-engineering/cost-quality-pareto-measurement.md)
+- [Routing Decision Framework: Which Routing Pattern Fits Which Signal](token-engineering/routing-decision-framework.md)
+- [Temporal Token Routing: Batch and Flex Tiers for Non-Urgent Work](token-engineering/temporal-token-routing.md)
 
 ## Security & Safety
 
@@ -748,6 +768,14 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Browser Sandbox for Agent-Generated HTML (Sandboxed Iframe + Immutable CSP)](security/browser-sandbox-agent-generated-html.md)
 - [Destyling Untrusted Input as a Prompt Injection Defense](security/destyling-untrusted-input.md)
 - [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](security/revocable-resource-effect-capabilities.md)
+- [Adaptive Evaluation of Out-of-Band Prompt-Injection Defenses](security/adaptive-evaluation-out-of-band-defenses.md)
+- [Content-Addressed Agent Configurations (Deterministic Control Plane)](security/deterministic-control-plane-llm-coding-agents.md)
+- [Intent-Governed Tool Authorization for AI Agents (IGAC)](security/intent-governed-tool-authorization.md)
+- [Workload-Keyed Sandbox Selection for Agent-Generated Code](security/workload-keyed-sandbox-selection.md)
+- [Execution-Layer Security Invariants for MCP Runtimes](security/mcp-execution-security-invariants.md)
+- [Detecting Memory-Poisoning Exfiltration by Tool-Call Order (Recall-Before-Send Signature)](security/recall-before-send-memory-poisoning-detection.md)
+- [Computer-Systems Lens for Always-On Agent Security](security/computer-systems-lens-agent-security.md)
+- [Capability-Additive Code Interpreters for Untrusted Agent Code](security/capability-additive-interpreter.md)
 
 ## Testing & Evaluation
 
@@ -863,6 +891,16 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Agent Self-Review Loop for Iterative Self-Improvement](code-review/agent-self-review-loop.md)
 - [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](verification/baseline-aware-test-evaluation-issue-resolution.md)
 - [Reviewer Habituation in Agent PR Review](code-review/reviewer-habituation-decay.md)
+- [AI Label as Reviewer Attention Redistribution](code-review/ai-label-attention-redistribution.md)
+- [Ecosystem-Level Integration Friction Governance](code-review/ecosystem-level-integration-friction-governance.md)
+- [Execution Budgeting in Agentic Program Repair](verification/execution-budgeting-program-repair.md)
+- [Instruction-Aware Automated Code Review](code-review/instruction-aware-automated-review.md)
+- [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](verification/layered-oracle-iac-security-repair.md)
+- [Re-Run the Original Test Suite After Every Refinement Turn](verification/test-suite-after-refinement-turn.md)
+- [Stateful Agent Evals via State Snapshots and Transition Assertions](verification/stateful-agent-state-and-transition-evals.md)
+- [Eval Difficulty as a Product Smell](verification/eval-difficulty-product-smell.md)
+- [Per-Line Requirement Citations for Hallucination Detection](verification/per-line-requirement-citations.md)
+- [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](verification/meta-evaluate-llm-judge-rubric-verification.md)
 
 ## Hooks & Guardrails
 
@@ -917,6 +955,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Traces Need Feedback to Power Learning](observability/traces-need-feedback-to-power-learning.md)
 - [Trajectory Logging via Progress Files and Git History](observability/trajectory-logging-progress-files.md)
 - [Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)](observability/trajectory-prefilter-failure-diagnosis.md)
+- [Centralized LLM Gateway for Per-Dimension Agent Budgets](observability/llm-gateway-per-dimension-budgets.md)
 
 ## Standards & Protocols
 
@@ -1041,6 +1080,10 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Verification-Centric Development for AI-Generated Code](workflows/verification-centric-development.md)
 - [Continuous AI: A Navigation Map of Always-On Agent Workflows](workflows/continuous-ai.md)
 - [Dev Containers for AI Coding Agents: Claude Code vs Copilot CLI](workflows/devcontainers-for-ai-coding-agents.md)
+- [Cursor Automations: Event-Triggered Agents and /automate](workflows/cursor-automate-event-triggered-automations.md)
+- [Knowledge-Based Pull Requests for Cross-Trust-Boundary Contributions](workflows/knowledge-based-pull-requests.md)
+- [Spec-Anchored Drift-Gated Architecture (Spec Growth Engine)](workflows/spec-growth-engine.md)
+- [Whole-Codebase Visibility as a Migration Prerequisite](workflows/whole-codebase-visibility-migration-prerequisite.md)
 
 ## Human Factors
 
@@ -1173,6 +1216,12 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [The Model Preference Fallacy in Comparison Content](fallacies/model-preference-fallacy.md)
 - [Training-Data Gravity: Agents Default to Deprecated APIs](anti-patterns/training-data-gravity.md)
 - [Trusting Model-Level Privilege Restraint at Tool Selection](anti-patterns/over-privileged-tool-selection.md)
+- [Constraint Tax: Tool Suppression Under JSON Schema Decoding](anti-patterns/constraint-tax-tool-suppression.md)
+- [Cost-Driven Model Routing Without Quality Monitoring](anti-patterns/cost-routing-without-quality-monitoring.md)
+- [Multi-Tool Threshold Poisoning Against MCP (ShareLock)](anti-patterns/multi-tool-threshold-poisoning-mcp.md)
+- [Over-Orchestrated Agent Architecture (Prefer the Simplest That Works)](anti-patterns/prefer-simplest-agent-architecture.md)
+- [Tab-Accept Rate as a Proxy for Critical Engagement](anti-patterns/tab-accept-critical-engagement-gap.md)
+- [Model Confidence as Security Verification (Security Calibration Gap)](anti-patterns/model-confidence-as-security-verification.md)
 
 ## Emerging Concepts
 
@@ -1308,5 +1357,8 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Sparse-Checkout Worktrees for Monorepo Agent Isolation](tools/claude/sparse-paths-monorepo-isolation.md)
 - [Video Transcript Skill: Meeting Recording to Markdown](tools/claude/video-transcript-skill.md)
 - [Visual-Prompt Agent Steering (Cursor Design Mode)](tools/cursor/visual-prompt-agent-steering.md)
+- [Cursor Customize Page: Unified Surface for Agent Primitives](tools/cursor/customize-page.md)
+- [Parameter-Level Permission Rules (Tool(param:value) Syntax)](tools/claude/tool-param-value-permission-rules.md)
+- [Agent Host Review Comments: Server-Side Feedback Transport](tools/copilot/agent-host-review-comments.md)
 
 </div>

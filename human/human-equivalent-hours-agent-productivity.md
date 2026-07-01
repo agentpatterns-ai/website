@@ -8,7 +8,7 @@ tags:
   - human-factors
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-06-13
+last_reviewed: 2026-06-30
 maturity: adopted
 status: current
 ---
@@ -53,6 +53,8 @@ Regressing lines changed against human-time estimates produces R²_log = 0.27 �
 ## Why it works
 
 Engineering value is already denominated in human time — salaries, contractor rates, and estimates all use hours. Converting agent output back into hours makes ROI directly comparable to the instruments finance and headcount planning already run ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)). The mechanism is denominator alignment, not ground-truth measurement: it speaks the language of the decisions it informs (renew the seat, raise the cap, hire instead).
+
+Google frames the same measurement challenge for Jules, its agentic coding tool: as agents shift from reactive assistants to proactive contributors, tracking their impact requires rethinking the unit of value — a second vendor perspective that the denominator-alignment approach scales across tool boundaries ([Google Developers Blog — Measuring what matters with Jules](https://developers.googleblog.com/en/measuring-what-matters-with-jules/)).
 
 The denominator is urgent now. Agentic workloads carry 58.9% of token volume on Vercel's AI Gateway, up from 31.6% six months earlier — tool-using requests are ~2.6× more token-heavy than the rest ([Vercel AI Gateway production index, 2026-05-12](https://vercel.com/blog/ai-gateway-production-index)). Uber capped employees at $1,500/month per agentic coding tool after burning the annual AI budget in four months ([TechCrunch, 2026-06-02](https://techcrunch.com/2026/06/02/uber-caps-employee-ai-spending-after-blowing-through-budget-in-four-months/)). Token spend has a denominator; agent output, until now, did not.
 
