@@ -8,6 +8,7 @@ aliases:
 tags:
   - claude
   - agent-design
+  - observability
 applies_to: "claude-code@2.x"
 last_reviewed: 2026-06-03
 status: current

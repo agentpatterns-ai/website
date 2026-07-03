@@ -10,7 +10,7 @@ tags:
   - testing-verification
   - evals
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-07-02
 maturity: established
 ---
 
@@ -23,7 +23,7 @@ maturity: established
 
 ## Evals as regression tests
 
-Agent capability degrades silently as prompts, tools, context, or models change. Without continuous evaluation, you find out about regressions through user complaints.
+Agent capability degrades silently as prompts, tools, context, or models change. Without continuous evaluation, you find out about regressions through user complaints. This class of failure has a name — *prompt regression*, where small prompt or instruction edits quietly break behavior with no error raised ([Towards Data Science — Prompt Engineering Fails Quietly](https://towardsdatascience.com/prompt-engineering-fails-quietly-prompt-regression-is-why/)).
 
 OpenAI's data agent team treats evals as "unit tests that run continuously during development" and "canaries in production" — golden question-answer pairs run on every agent configuration change. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 

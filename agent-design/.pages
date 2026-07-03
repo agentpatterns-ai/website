@@ -132,6 +132,7 @@ nav:
       - tail-control-for-agent-workflows.md
       - task-feasibility-awareness.md
       - tenant-model-policy.md
+      - trajectory-conditioned-model-escalation.md
       - wink-agent-misbehavior-correction.md
       - wip-1-littles-law-agent-throughput.md
   - "Harness & Tools":

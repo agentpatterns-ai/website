@@ -8,6 +8,8 @@ tags:
   - workflows
   - tool-agnostic
   - arxiv
+  - multi-agent
+  - rag
 last_reviewed: 2026-06-12
 maturity: emerging
 ---

@@ -11,6 +11,8 @@ last_reviewed: 2026-05-27
 
 This map cuts across the directory tree to reflect the practitioner-resource spine — patterns, anti-patterns, paper summaries, and tool features sit together when they're about the same problem. See the [Tags index](tags.md) for topic-tag entry points or [STANDARDS.md](https://github.com/agentpatterns-ai/content/blob/main/STANDARDS.md#what-this-site-is) for what makes the cut.
 
+Prefer a section-by-section entry point instead? [Foundations](foundations.md) lands you in context engineering and instructions, [Patterns](patterns/index.md) in agent design, multi-agent, and anti-patterns, and [Reference](reference.md) in standards, human factors, emerging, and fallacies.
+
 <div class="grid cards" markdown>
 
 -   **Context Engineering**
@@ -539,6 +541,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Verifier-Driven Parallel Coding Agents (Glite ARF)](multi-agent/verifier-driven-parallel-coding-agents.md)
 - [Static Roster vs Runtime Subagent Definition](multi-agent/static-roster-vs-runtime-subagent-definition.md)
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](agent-design/wiki-memory-agent-maintained-knowledge-base.md)
+- [Trajectory-Conditioned Model Escalation (SWE-Router)](agent-design/trajectory-conditioned-model-escalation.md)
 
 ## Loop Engineering
 
@@ -546,7 +549,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 
 - [Loop Engineering (hub + crosswalk)](loop-engineering/index.md)
 - [The Three Loops of Agentic Coding: A Diagnostic Vocabulary](loop-engineering/three-loops-agentic-coding.md)
-- [Loop Engineering: Stacking Outer Loops Around the Agent](loop-engineering/loop-engineering.md)
+- [Stacking Outer Loops Around the Agent](loop-engineering/loop-engineering.md)
 - [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-engineering/loop-strategy-spectrum.md)
 - [The Ralph Wiggum Loop: Fresh-Context Iteration Pattern](loop-engineering/ralph-wiggum-loop.md)
 - [Goal-Driven Autonomous Loop with Budget Cap](loop-engineering/goal-driven-autonomous-loop.md)
@@ -573,7 +576,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Subagent Schema-Level Tool Filtering](multi-agent/subagent-schema-level-tool-filtering.md)
 - [Tool Description Quality](tool-engineering/tool-description-quality.md)
 - [Write Tool Descriptions Like Onboarding Docs](tool-engineering/tool-descriptions-as-onboarding.md)
-- [Tool Engineering](tool-engineering/tool-engineering.md)
+- [Designing Agent Tools Like APIs](tool-engineering/tool-engineering.md)
 - [Agent-Aware CLI Behaviour via Environment Variable](tool-engineering/agent-aware-cli-via-env-var.md)
 - [Agent-Computer Interface (ACI): Tool Design as UX Discipline](tool-engineering/agent-computer-interface.md)
 - [Chance-Corrected Shortlist Depth Sizing for Tool Retrieval (Bits-over-Random)](tool-engineering/chance-corrected-shortlist-depth-sizing.md)
@@ -598,7 +601,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Machine-Readable Error Responses for AI Agents (RFC 9457)](tool-engineering/rfc9457-machine-readable-errors.md)
 - [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](tool-engineering/mcp-eager-vs-jit-loading.md)
 - [MCP Client Design: Building Robust Host-Side Logic](tool-engineering/mcp-client-design.md)
-- [MCP Client/Server Architecture Best Practices Guide](tool-engineering/mcp-client-server-architecture.md)
+- [Five Design Decisions for MCP Servers and Clients](tool-engineering/mcp-client-server-architecture.md)
 - [MCP Elicitation: Servers Requesting Structured Input Mid-Task](tool-engineering/mcp-elicitation.md)
 - [MCP LLM Sampling: Servers Requesting AI Inference Mid-Tool](tool-engineering/mcp-llm-sampling.md)
 - [MCP Server Design: Building Agent-Friendly Servers](tool-engineering/mcp-server-design.md)
@@ -901,6 +904,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Eval Difficulty as a Product Smell](verification/eval-difficulty-product-smell.md)
 - [Per-Line Requirement Citations for Hallucination Detection](verification/per-line-requirement-citations.md)
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](verification/meta-evaluate-llm-judge-rubric-verification.md)
+- [Agent-Recorded Video Demos as a Verification Artifact](verification/agent-recorded-video-demos.md)
 
 ## Hooks & Guardrails
 
@@ -1015,7 +1019,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Architecting a Central Repo for Shared Agent Standards](workflows/central-repo-shared-agent-standards.md)
 - [Auto-Triage Workflow: Bug-Monitoring Agent that Connects Related Reports and Opens Fix PRs](workflows/auto-triage-workflow.md)
 - [Backlog Triage as a Named Agent Skill](workflows/backlog-triage-skill.md)
-- [Bootstrapping an Agent-Driven Project from Scratch](workflows/bootstrapping-agent-driven-project.md)
 - [Building Custom Agents from Substrate to Production (Agents All the Way Down)](workflows/agents-all-the-way-down-methodology.md)
 - [Burn the Boats — Commitment-Forcing Deprecation](workflows/burn-the-boats.md)
 - [Canary Rollout for Agent Policy Changes](workflows/canary-rollout-agent-policy.md)
@@ -1318,7 +1321,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Copilot CLI BYOK and Local Model Support](tools/copilot/copilot-cli-byok-local-models.md)
 - [Copilot Cloud Agent Organization Controls](tools/copilot/cloud-agent-org-controls.md)
 - [Copilot Cloud Agent Three-Phase Execution Model](tools/copilot/cloud-agent-research-plan-code.md)
-- [Copilot Inline Agent Mode in JetBrains IDEs](tools/copilot/inline-agent-mode.md)
 - [Copilot Memory and Cross-Agent Persistence](tools/copilot/copilot-memory.md)
 - [Copilot Spaces: Curated Context Collections for Grounding](tools/copilot/copilot-spaces.md)
 - [Copilot Unified Sessions View and CLI Agent in JetBrains IDEs](tools/copilot/unified-sessions-view.md)

@@ -6,6 +6,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - skills
 aliases:
   - semantic skill validation
   - intent-based skill scanning

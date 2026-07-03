@@ -6,6 +6,7 @@ tags:
   - agent-design
   - claude
   - tool-engineering
+  - observability
 aliases:
   - StopFailure event
   - API error hook

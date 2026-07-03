@@ -5,6 +5,7 @@ description: "A pre-coding agreement between planner, generator, and evaluator a
 tags:
   - agent-design
   - tool-agnostic
+  - multi-agent
 aliases:
   - sprint contract
   - pre-coding success agreement

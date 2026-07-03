@@ -5,6 +5,7 @@ description: "Use PreToolUse hook defer decisions to pause headless Claude Code 
 tags:
   - agent-design
   - claude
+  - security
 aliases:
   - deferred hook permission
   - headless session pause-resume

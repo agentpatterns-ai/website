@@ -8,6 +8,7 @@ aliases:
 tags:
   - context-engineering
   - copilot
+  - code-generation
 last_reviewed: 2026-06-13
 ---
 

@@ -7,6 +7,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - arxiv
 aliases:
   - probe and prefill
   - tool necessity classifier

@@ -6,6 +6,7 @@ tags:
   - agent-design
   - copilot
   - github-actions
+  - security
 applies_to: "copilot@1.x"
 last_reviewed: 2026-06-18
 status: current

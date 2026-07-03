@@ -6,6 +6,7 @@ tags:
   - context-engineering
   - cost-performance
   - claude
+  - human-factors
 last_reviewed: 2026-05-27
 ---
 

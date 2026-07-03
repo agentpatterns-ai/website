@@ -4,6 +4,7 @@ description: "Isolate concurrent agent tasks into named queues with per-lane con
 tags:
   - agent-design
   - tool-agnostic
+  - multi-agent
 aliases:
   - execution lane isolation
   - named queue concurrency

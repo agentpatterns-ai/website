@@ -2,7 +2,6 @@
 title: "llms.txt: Making Your Project Discoverable to AI Agents"
 description: "Publish a standardized /llms.txt file so AI agents can navigate your project or site efficiently without crawling every page."
 tags:
-  - workflows
   - context-engineering
   - tool-agnostic
   - standards

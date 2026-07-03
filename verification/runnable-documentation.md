@@ -116,3 +116,4 @@ Tested docs do not guarantee freshness at the retrieval layer. A RAG system inde
 - [Pre-Completion Checklists](pre-completion-checklists.md) — another pattern that promotes implicit assertions to explicit verification gates
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — hard CI checks as the enforcement layer for agent output
 - [Test Harness Design for LLM Context Windows](llm-context-test-harness.md) — keeping test output useful when agents consume it as context
+- [Agent-Recorded Video Demos as a Verification Artifact](agent-recorded-video-demos.md) — the visual modality of executable proof-of-work, for changes with a rendered UI

@@ -1,6 +1,9 @@
 ---
 title: "Agent-Driven Greenfield Product Development from Scratch"
 description: "Build a new product agent-first: define agent roles and skills, decompose work to context-window-safe tasks, and execute with human review at PR boundaries."
+aliases:
+  - Greenfield Agent Bootstrap
+  - Bootstrapping an Agent-Driven Project
 tags:
   - workflows
   - agent-design
@@ -119,7 +122,7 @@ Issue templates that are human-friendly but agent-hostile force a translation st
 
 Use the pipeline you just built to build the project itself. This is the most effective validation step. If agents cannot use the pipeline to produce project content, the pipeline has problems you should fix before adding complexity — the [repository bootstrap checklist](repository-bootstrap-checklist.md) is the minimum that has to work first.
 
-For a code project, use the pipeline to generate the initial scaffold. For a documentation project, generate the first content pages using the content agents. Issues that surface during dog-fooding reveal gaps in standards, missing skills, or unclear pipeline stage definitions — the same gaps [bootstrapping an agent-driven project](bootstrapping-agent-driven-project.md) closes one at a time. Dog-fooding also produces the pipeline's first real history: commit logs that show agent behavior under the actual conventions.
+For a code project, use the pipeline to generate the initial scaffold. For a documentation project, generate the first content pages using the content agents. Issues that surface during dog-fooding reveal gaps in standards, missing skills, or unclear pipeline stage definitions. Dog-fooding also produces the pipeline's first real history: commit logs that show agent behavior under the actual conventions.
 
 ## Minimum viable agent project
 
@@ -152,8 +155,9 @@ The agent-first greenfield approach is worse than conventional development in se
 - The team is still learning the codebase patterns. Agent-first workflows shift humans toward reviewing PRs rather than writing code. On a greenfield project with no existing conventions, that review loop becomes the primary source of architectural learning — and newcomers lose the manual coding experience that traditionally builds foundational skills and intuition ([Rao, 2026](https://www.cio.com/article/4120168/is-ai-eradicating-the-junior-developer.html)).
 - Decomposition cost exceeds implementation cost. For very small projects (a single service, a CLI with fewer than ~10 commands), the overhead of defining agents, writing standards, and authoring issue templates outweighs the benefit. A solo developer writing the code directly often ships faster.
 - Acceptance criteria cannot be mechanically verified. [Agent loops](../loop-engineering/ralph-wiggum-loop.md) depend on verifiable success signals. Research prototypes, UX-heavy frontends, and code whose quality is judged subjectively produce weak feedback and push quality work back onto human review at every iteration.
+- Model or tool capabilities are in flux. The topology you pick encodes today's context windows, tool budgets, and reliability; if any of those shift substantially, an elaborate agent layout must be reworked, while a thin codebase with minimal agent scaffolding absorbs the change more easily.
 
-If several of these conditions apply, start with a thin agent stack — one agent, one standards file, one command — and grow it only when the minimum proves insufficient.
+If several of these conditions apply, start with a thin agent stack — one agent, one standards file, one command — and grow it only when the minimum proves insufficient, or retrofit agent support into a code-first repo in dependency order via the [Repository Bootstrap Checklist](repository-bootstrap-checklist.md).
 
 ## Example
 
@@ -190,7 +194,6 @@ Step 5 — iterate on infrastructure. The first round of PRs reveals that the `i
 
 ## Related
 
-- [Bootstrapping an Agent-Driven Project](bootstrapping-agent-driven-project.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
 - [Lay the Architectural Foundation by Hand Before Delegating to Agents](architectural-foundation-first.md)
 - [Agent-First Software Design](../agent-design/agent-first-software-design.md)

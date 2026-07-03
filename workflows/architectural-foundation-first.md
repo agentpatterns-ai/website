@@ -116,4 +116,3 @@ This file is the boundary between the foundation you built by hand and every age
 - [Codebase Readiness for Agents](../agent-design/codebase-readiness.md)
 - [Skeleton Projects as Scaffolding](skeleton-projects-as-scaffolding.md)
 - [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
-- [Bootstrapping an Agent-Driven Project from Scratch](bootstrapping-agent-driven-project.md)

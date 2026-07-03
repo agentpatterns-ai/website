@@ -6,6 +6,7 @@ tags:
   - anti-pattern
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - external artifact trust
   - unvetted artifact ingestion

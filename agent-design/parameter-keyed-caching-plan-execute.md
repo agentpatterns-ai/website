@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - long-form
 aliases:
   - temporal semantic caching
   - MCP workflow optimisation

@@ -9,6 +9,7 @@ aliases:
 tags:
   - tool-engineering
   - claude
+  - skills
 last_reviewed: 2026-05-27
 ---
 

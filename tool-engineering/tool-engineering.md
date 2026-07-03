@@ -1,8 +1,9 @@
 ---
-title: "Tool Engineering Principles for AI Agent Development"
+title: "Designing Agent Tools Like APIs"
 term: "Tool Engineering Principles"
 description: "Design agent tools like APIs — with documentation, examples, edge-case handling, and mistake-proofing — not as boilerplate wrappers around existing functions."
 aliases:
+  - Tool Engineering Principles
   - Tool Descriptions as Onboarding
   - Mistake-Proofing for Agent Tools
   - Poka-Yoke for Tool Design
@@ -17,7 +18,7 @@ last_reviewed: 2026-06-13
 maturity: established
 ---
 
-# Tool Engineering Principles for AI Agent Development
+# Designing Agent Tools Like APIs
 
 > Design agent tools like APIs — with documentation, examples, edge-case handling, and mistake-proofing — not as boilerplate wrappers around existing functions.
 

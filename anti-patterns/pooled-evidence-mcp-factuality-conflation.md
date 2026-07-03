@@ -8,6 +8,7 @@ tags:
   - security
   - tool-agnostic
   - arxiv
+  - mcp
 aliases:
   - cross-source conflation
   - source attribution conflation

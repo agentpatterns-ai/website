@@ -13,6 +13,7 @@ tags:
   - tool-agnostic
   - arxiv
   - rag
+  - skills
 last_reviewed: 2026-06-20
 maturity: emerging
 ---

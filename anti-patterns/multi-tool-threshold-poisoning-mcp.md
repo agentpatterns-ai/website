@@ -7,6 +7,7 @@ tags:
   - security
   - tool-agnostic
   - arxiv
+  - mcp
 aliases:
   - multi-tool threshold poisoning attack
   - ShareLock attack

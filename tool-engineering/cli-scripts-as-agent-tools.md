@@ -8,7 +8,6 @@ aliases:
 tags:
   - context-engineering
   - cost-performance
-  - workflows
   - tool-agnostic
   - tool-engineering
 last_reviewed: 2026-06-13

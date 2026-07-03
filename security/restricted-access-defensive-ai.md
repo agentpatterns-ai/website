@@ -8,7 +8,7 @@ aliases:
   - dual-use AI deployment gating
 tags:
   - security
-  - tool-agnostic
+  - claude
 last_reviewed: 2026-06-12
 maturity: established
 ---

@@ -5,6 +5,7 @@ description: "Calibrate the orchestrator's delegate-or-handle-inline threshold b
 tags:
   - agent-design
   - tool-agnostic
+  - multi-agent
 aliases:
   - orchestrator delegation threshold
   - sub-agent delegation calibration

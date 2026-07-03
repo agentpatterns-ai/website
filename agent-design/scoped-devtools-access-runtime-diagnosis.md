@@ -10,6 +10,7 @@ tags:
   - agent-design
   - testing-verification
   - tool-agnostic
+  - security
 last_reviewed: 2026-06-28
 maturity: emerging
 ---

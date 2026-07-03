@@ -107,7 +107,7 @@ This is the cost-aware version of the [Ralph Wiggum Loop](../../loop-engineering
 
 When cascade works: Tasks with verifiable outcomes — tests pass, types check, linter clean. The feedback loop — the same [backpressure](harness-engineering.md) that gates the cascade — tells you whether the cheaper model was sufficient.
 
-When cascade doesn't work: Tasks without binary feedback — architecture design, documentation quality, code review. There's no automated signal to trigger escalation. Use the powerful model directly for these.
+When cascade doesn't work: Tasks without binary feedback — architecture design, documentation quality, code review. There's no automated signal to trigger escalation. Use the powerful model directly for these, or read the cheap model's partial trajectory to decide when to escalate — see [Trajectory-Conditioned Model Escalation](../../agent-design/trajectory-conditioned-model-escalation.md).
 
 ---
 

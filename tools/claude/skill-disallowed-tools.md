@@ -4,6 +4,7 @@ description: "A Claude Code skill lists disallowed-tools in frontmatter to remov
 tags:
   - claude
   - security
+  - skills
 aliases:
   - skill tool denial
   - disallowed-tools frontmatter

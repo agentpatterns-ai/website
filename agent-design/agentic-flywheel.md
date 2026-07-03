@@ -1,18 +1,18 @@
 ---
-title: "Agentic Flywheel: Building Self-Improving Agent Systems"
+title: "Agentic Flywheel: Self-Improving Agent Systems"
 term: "Agentic Flywheel"
 description: "A closed loop where agents analyze their own traces and metrics to generate harness improvements that make all future agent work better."
 tags:
   - agent-design
   - workflows
   - tool-agnostic
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-02
 maturity: established
 ---
 
 # Agentic Flywheel: Self-Improving Agent Systems
 
-> A closed loop where agents analyze their own operational data -- traces, test results, pipeline metrics -- and generate harness improvements that make all future agent work better, not just the current task.
+> A closed loop where agents analyze their own traces and metrics to generate harness improvements that make all future agent work better.
 
 ## Why a flywheel
 
@@ -95,24 +95,18 @@ LangChain's Terminal Bench 2.0 run shows the flywheel stages ([Improving Deep Ag
 3. Generate modifications: targeted harness changes followed -- self-verification loops, loop-detection middleware tracking per-file edit counts, and the xhigh-high-xhigh reasoning sandwich.
 4. Escalate: each modification was tested on the held-out Terminal Bench task set before promotion. The combined harness changes lifted scores from 52.8% to 66.5% with no model change.
 
+Google describes a vendor instantiation of the same loop driven from the coding agent itself: a five-stage eval flywheel -- prepare data, run inference, score with adaptive AutoRaters, cluster failures, then target optimization -- backed by an independent evaluation service that counts only real improvements ([Driving the agent quality flywheel from your coding agent](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)).
+
+## Key Takeaways
+
+- The flywheel improves the harness itself -- prompts, tools, middleware, verification checks -- so gains compound across all future agent work, not just the current task.
+- Boosting concentrates analysis on prior failures; LangChain lifted Terminal Bench 2.0 from 52.8% to 66.5% with harness-only changes and no model swap.
+- Match a modification's autonomy tier to its confidence and rollback path: interactive, then backlog, then autonomous only for narrow, well-tested changes.
+- Self-evolving agents predict what they fix far better than what they break, so verify every proposed change against a held-out rollout before promoting it.
+
 ## Related
 
-- [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md)
-- [Evaluator-Optimizer](evaluator-optimizer.md)
-- [Agent Harness](agent-harness.md)
-- [Context Compression Strategies: Offloading and Summarisation](../context-engineering/context-compression-strategies.md) — tiered compression that can cause objective drift when summaries lose task specifics
-- [Introspective Skill Generation](../workflows/introspective-skill-generation.md)
-- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Progressive Autonomy with Model Evolution](../human/progressive-autonomy-model-evolution.md)
-- [Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md)
-- [Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md)
-- [Loop Detection](../observability/loop-detection.md)
-- [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
-- [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md)
 - [Harness Engineering](harness-engineering.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
-- [Convergence Detection](../loop-engineering/convergence-detection.md)
-- [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
 - [Self-Healing Production Agent](self-healing-production-agent.md) — online incident-driven loop that patches production regressions between offline flywheel cycles
 - [Harness Hill-Climbing](harness-hill-climbing.md) — eval-driven local-search loop for systematically tuning harness configuration
 - [Self-Rewriting Meta-Prompt Loop](self-rewriting-meta-prompt-loop.md) — agents that autonomously improve their own system prompts

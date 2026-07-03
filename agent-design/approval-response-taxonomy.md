@@ -4,7 +4,7 @@ term: "Six-Shape Approval Response Taxonomy"
 description: "The Claude Agent SDK exposes six distinct responses to a tool-approval prompt — approve, approve with changes, approve and remember, reject, suggest alternative, redirect entirely — composed from three callback knobs."
 tags:
   - agent-design
-  - tool-agnostic
+  - claude
   - long-form
 aliases:
   - approval response taxonomy

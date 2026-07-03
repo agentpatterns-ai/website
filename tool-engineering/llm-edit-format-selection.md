@@ -9,6 +9,7 @@ tags:
   - tool-engineering
   - cost-performance
   - tool-agnostic
+  - code-generation
 last_reviewed: 2026-06-03
 maturity: established
 ---

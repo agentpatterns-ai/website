@@ -8,6 +8,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - loop-engineering
 aliases:
   - one-shot recording deterministic replay
   - loop skill engine pattern

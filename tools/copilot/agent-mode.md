@@ -11,6 +11,7 @@ applies_to: "copilot@1.x"
 last_reviewed: 2026-06-18
 status: current
 ---
+
 # GitHub Copilot Agent Mode
 
 > Local, synchronous agentic execution that reads files, runs code, checks output, and iterates to fix errors.
@@ -32,6 +33,19 @@ For complex tasks, Copilot generates a [plan that lists all steps](https://code.
 ## Vision
 
 [Feed Copilot a screenshot, mockup, or image](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/provide-visual-inputs) and it generates the UI code and implementation details.
+
+## Inline agent mode (JetBrains)
+
+Inline agent mode hosts the same agent toolkit — workspace search, multi-file edits, terminal commands, and editor lint and compile error reads ([GitHub Changelog 2025-05-19](https://github.blog/changelog/2025-05-19-agent-mode-and-mcp-support-for-copilot-in-jetbrains-eclipse-and-xcode-now-in-public-preview/)) — in the JetBrains inline chat popover instead of the chat tool window, in public preview since April 24, 2026 ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)). Open inline chat with `Shift+Ctrl+I` (Windows) or `Shift+Cmd+I` (Mac), right-click and select **Open Inline Chat**, or click the gutter icon, then switch the popover to agent mode. On Copilot Business and Enterprise, an admin must enable the **Editor preview features** policy before the surface appears.
+
+| Dimension | Inline agent mode | Chat-panel agent mode |
+|-----------|------------------|----------------------|
+| Invocation | `Shift+Ctrl/Cmd+I` from the editor | Tool window |
+| Anchoring | Active selection / cursor / file | Workspace, last-active file |
+| Plan and diff render area | Inline popover | Full chat tool window |
+| Best fit | Selection-scoped edits, quick fixes against editor errors | Multi-file changes, long plans, terminal output review |
+
+The trade is invocation cost against legibility: inline shortens the path from looking at code to having an agent act on it, while the chat panel keeps plans, file lists, and terminal output readable as a run grows — switch surfaces once a run outgrows the popover. The same release shipped **Global Auto Approve** settings (`Settings > GitHub Copilot > Chat > Auto Approve`) that approve every tool call across all workspaces, including destructive ones; combined with low-friction inline invocation this removes the [confirmation gate](../../security/human-in-the-loop-confirmation-gates.md) for agent-initiated changes, so keep it off outside sandboxed workspaces ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)).
 
 ## Why it works
 

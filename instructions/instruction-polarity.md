@@ -18,7 +18,7 @@ maturity: adopted
 Learn it hands-on with the [Say What To Do guided lesson](https://learn.agentpatterns.ai/prompt-engineering/say-what-to-do/), which includes quizzes.
 
 !!! info "Also known as"
-    Negative Space Instructions, Instruction Framing
+    Instruction Framing. Distinct from [Negative Space Instructions](negative-space-instructions.md) — that page covers the complementary case where a named exclusion (banned phrase, scope limit, tool restriction) beats positive guidance because compliance is binary and greppable; this page covers the default polarity choice when either framing could express the rule.
 
 ## The compliance asymmetry
 

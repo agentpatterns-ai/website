@@ -5,6 +5,7 @@ description: "The deny > defer > ask > allow merge function that fuses parallel 
 tags:
   - agent-design
   - tool-agnostic
+  - security
 aliases:
   - most-restrictive-wins
   - deny-overrides hook merge

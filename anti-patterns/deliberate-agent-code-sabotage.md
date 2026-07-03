@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - anti-pattern
+  - code-review
 aliases:
   - deliberate agent code sabotage
   - AI agent insider threat

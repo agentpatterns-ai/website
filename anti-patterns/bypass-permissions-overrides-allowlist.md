@@ -5,7 +5,7 @@ description: "Pairing allowedTools with permissionMode bypassPermissions does no
 tags:
   - anti-pattern
   - security
-  - tool-agnostic
+  - claude
 aliases:
   - restricted bypass trap
   - bypassPermissions plus allowedTools

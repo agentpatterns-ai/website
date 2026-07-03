@@ -5,6 +5,7 @@ tags:
   - agent-design
   - tool-agnostic
   - standards
+  - skills
 aliases:
   - SKILL.md standard
   - agent skills spec

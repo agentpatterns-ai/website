@@ -6,7 +6,7 @@ tags:
   - code-review
   - workflows
   - tool-agnostic
-last_reviewed: 2026-06-02
+last_reviewed: 2026-07-02
 maturity: established
 ---
 
@@ -78,6 +78,8 @@ Request a smaller PR rather than approving as-is when ([GitHub Blog](https://git
 - CI is failing with only test-file changes
 
 These are the conditions under which the 10-minute framework cannot complete — restructuring is cheaper than rushing the review.
+
+The human-factors reading of the same limit comes from Jon Udell, who names the "unreviewable PR" as an anti-pattern and reframes "human in the loop" as "agent in the loop" — the fix is to size agent PRs to stay reviewable rather than to expand review effort to match them ([Simon Willison](https://simonwillison.net/2026/Jun/28/jon-udell/)).
 
 ## When this backfires
 

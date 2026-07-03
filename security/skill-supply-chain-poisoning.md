@@ -5,6 +5,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - skills
 aliases:
   - agent skill supply chain attack
   - skill ecosystem poisoning

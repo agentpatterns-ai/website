@@ -7,6 +7,7 @@ tags:
   - agent-design
   - automation
   - cursor
+  - security
 aliases:
   - cursor automate skill
   - cursor event triggered automations

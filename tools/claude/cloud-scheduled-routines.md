@@ -3,6 +3,7 @@ title: "Cloud-Scheduled Routines vs Local Session Scheduling"
 description: "Move scheduled agent work to Anthropic-managed cloud infrastructure when the laptop being asleep or the local env drifting breaks the schedule — trade local-file fidelity and human-in-the-loop for continuity."
 tags:
   - claude
+  - workflows
 applies_to: "claude-code@2.x"
 last_reviewed: 2026-06-03
 status: current

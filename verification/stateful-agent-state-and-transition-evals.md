@@ -8,6 +8,7 @@ tags:
   - agent-design
   - observability
   - tool-agnostic
+  - arxiv
 aliases:
   - state-based agent evaluation
   - state assertion evals for agents

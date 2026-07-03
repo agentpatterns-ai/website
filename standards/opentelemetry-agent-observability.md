@@ -3,7 +3,6 @@ title: "OpenTelemetry for AI Agent Observability and Tracing"
 description: "Vendor-neutral standard for tracing LLM calls, tool invocations, and sub-agent handoffs using OpenTelemetry GenAI semantic conventions."
 tags:
   - agent-design
-  - testing-verification
   - observability
   - tool-agnostic
   - standards

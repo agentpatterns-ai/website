@@ -7,6 +7,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - anti-pattern
+  - evals
 aliases:
   - "vibes vs evals"
   - "LLM drift perception"

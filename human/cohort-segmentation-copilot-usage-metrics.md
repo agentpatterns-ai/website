@@ -8,6 +8,7 @@ aliases:
 tags:
   - copilot
   - human-factors
+  - observability
 last_reviewed: 2026-05-30
 maturity: adopted
 status: current
