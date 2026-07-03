@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
   - tool-engineering
+  - skills
 aliases:
   - "skill configuration"
   - "SKILL.md headers"

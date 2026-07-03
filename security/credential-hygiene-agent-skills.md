@@ -6,6 +6,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - skills
 aliases:
   - credential leakage in agent skills
   - secrets in skill files

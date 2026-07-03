@@ -6,6 +6,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
+  - human-factors
 aliases:
   - editor manager surface
   - two-surface agent UX
@@ -18,7 +19,7 @@ maturity: established
 
 > A two-surface UX pattern: an Editor for tactical edits and a Manager for dispatching and monitoring parallel agents. The pattern matters once concurrency exceeds one.
 
-The editor-and-manager pattern splits an agent IDE into two surfaces — an Editor View coupled to cursor and buffer for inline edits, and a Manager Surface (dashboard, agents window, or mission control) for dispatching and monitoring autonomous agents running in parallel. Four major dev tools converged on this shape between October 2025 and May 2026: Google Antigravity ([Google I/O 2026](https://blog.google/innovation-and-ai/technology/developers-tools/google-io-2026-developer-highlights/)), Cursor 3 (Agents Window replaced Composer, [Cursor 3 Agents Window](../tools/cursor/agents-window.md)), GitHub Copilot ([inline agent mode](../tools/copilot/inline-agent-mode.md) + [Mission Control](../tools/copilot/agent-mission-control.md)), and Claude Code (`claude agents`, [Claude Code agent view](https://code.claude.com/docs/en/agent-view)).
+The editor-and-manager pattern splits an agent IDE into two surfaces — an Editor View coupled to cursor and buffer for inline edits, and a Manager Surface (dashboard, agents window, or mission control) for dispatching and monitoring autonomous agents running in parallel. Four major dev tools converged on this shape between October 2025 and May 2026: Google Antigravity ([Google I/O 2026](https://blog.google/innovation-and-ai/technology/developers-tools/google-io-2026-developer-highlights/)), Cursor 3 (Agents Window replaced Composer, [Cursor 3 Agents Window](../tools/cursor/agents-window.md)), GitHub Copilot ([inline agent mode](../tools/copilot/agent-mode.md#inline-agent-mode-jetbrains) + [Mission Control](../tools/copilot/agent-mission-control.md)), and Claude Code (`claude agents`, [Claude Code agent view](https://code.claude.com/docs/en/agent-view)).
 
 ## When this pattern applies
 
@@ -45,7 +46,7 @@ Claude Code's agent view illustrates Manager mode: each row's one-line summary i
 |------|----------------|-----------------|
 | Google Antigravity | Editor View | Manager Surface ([Google I/O 2026](https://blog.google/innovation-and-ai/technology/developers-tools/google-io-2026-developer-highlights/)) |
 | Cursor 3 | Inline editor and chat (`Cmd+I`) | Agents Window across local, cloud, worktree, SSH ([Cursor 3 Agents Window](../tools/cursor/agents-window.md)) |
-| GitHub Copilot | [Inline agent mode](../tools/copilot/inline-agent-mode.md) ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)) | Mission Control ([GitHub Changelog 2025-10-28](https://github.blog/changelog/2025-10-28-a-mission-control-to-assign-steer-and-track-copilot-coding-agent-tasks/)) |
+| GitHub Copilot | [Inline agent mode](../tools/copilot/agent-mode.md#inline-agent-mode-jetbrains) ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)) | Mission Control ([GitHub Changelog 2025-10-28](https://github.blog/changelog/2025-10-28-a-mission-control-to-assign-steer-and-track-copilot-coding-agent-tasks/)) |
 | Claude Code | Interactive `claude` session | `claude agents` view ([Claude Code agent view](https://code.claude.com/docs/en/agent-view)) |
 
 Detail varies — Cursor's window "resembl[es] a Kubernetes dashboard rather than a chat window," Claude Code's is a terminal list grouped by status — but the structural choice is the same: aggregated per-agent state lives outside the editor.

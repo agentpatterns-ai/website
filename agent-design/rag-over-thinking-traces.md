@@ -7,6 +7,7 @@ tags:
   - memory
   - context-engineering
   - tool-agnostic
+  - rag
 aliases:
   - thinking trace retrieval
   - reasoning trace corpus

@@ -21,7 +21,7 @@ maturity: established
 
 Learn it hands-on with the [Evals at Scale guided lesson](https://learn.agentpatterns.ai/verification/evals-at-scale/), which includes quizzes.
 
-Macro evaluation is the population-level layer above per-call and per-trace evals: it asks which problems repeat, where they concentrate, and which part of the workflow to inspect first — questions a single trace cannot answer because the signal is statistical, not local ([OpenAI Cookbook, 2026](https://developers.openai.com/cookbook/examples/partners/macro_evals_for_agentic_systems/macro_evals_for_agentic_systems)). Below the conditions where it earns its keep, it substitutes a heavy unsupervised pipeline for what a sorted frequency table would surface.
+Macro evaluation is the population-level layer above per-call and per-trace evals: it asks which problems repeat, where they concentrate, and which part of the workflow to inspect first — questions a single trace cannot answer because the signal is statistical, not local ([OpenAI Cookbook, 2026](https://developers.openai.com/cookbook/examples/partners/macro_evals_for_agentic_systems/macro_evals_for_agentic_systems)). Below the conditions where it earns its keep, it substitutes a heavy unsupervised pipeline for what a sorted frequency table would surface. For the agent-driven route to the same population-level question — scout agents proposing failure hypotheses that an investigator verifies against the corpus — see [Corpus-Level Trace Diagnostics](corpus-level-trace-diagnostics.md).
 
 ## When this layer applies
 
@@ -110,3 +110,4 @@ Macro evaluation pairs with per-call rubrics, trajectory-aware safety auditing, 
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — Per-trace outcome grading; macro evals aggregate outcomes plus findings across runs.
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — Per-trace stage-level diagnosis; macro evals look at recurring stage failures across the corpus.
 - [Structural Coverage Criteria for Agent Workflows](structural-coverage-agent-workflows.md) — Adequacy floor for declared workflow edges; macro evals score behavior across runs against declared structure.
+- [Corpus-Level Trace Diagnostics](corpus-level-trace-diagnostics.md) — The agent-driven route to the same population-level question: scout-proposed failure hypotheses verified against the corpus, viable from ~100 traces where this page's clustering needs ~1,000.

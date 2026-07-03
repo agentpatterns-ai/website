@@ -8,6 +8,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - skills
 aliases:
   - SCR threat model
   - compositional skill risk

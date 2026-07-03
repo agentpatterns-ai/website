@@ -6,6 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - rag
 aliases:
   - DSG vendor-agnostic grounding boundary
   - search-induced verbosity boundary

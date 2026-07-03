@@ -14,6 +14,8 @@ last_reviewed: 2026-05-27
 
 Context engineering and instructions form the foundation of productive work with AI coding agents. Getting either wrong undermines every pattern and technique built on top.
 
+This page is the entry point for two sections. For content grouped by cross-cutting theme rather than section, use the [Concept Map](concepts.md); for design, coordination, and failure-mode patterns, start at [Patterns](patterns/index.md); for standards and surrounding context, start at [Reference](reference.md).
+
 ## [Context Engineering](context-engineering/index.md)
 
 The practice of designing what information enters a model's context window, how it is structured, and what is excluded — to maximise the quality and reliability of agent output. Covers attention mechanics, compression strategies, caching economics, and retrieval patterns.

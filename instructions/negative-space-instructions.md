@@ -6,8 +6,7 @@ tags:
   - instructions
   - tool-agnostic
 aliases:
-  - Positive Rules Over Negative
-  - Instruction Framing
+  - Negative Constraints
 last_reviewed: 2026-06-13
 maturity: established
 ---
@@ -19,7 +18,7 @@ maturity: established
 Related lesson: [Say What To Do](https://learn.agentpatterns.ai/prompt-engineering/say-what-to-do/) — this concept features in a hands-on lesson with quizzes.
 
 !!! info "Also known as"
-    Instruction Polarity, Positive Rules Over Negative, Instruction Framing
+    Negative Constraints. Distinct from [Instruction Polarity](instruction-polarity.md) — that page argues for positive framing as the default when either polarity could express a rule; this page covers the narrower case where a named exclusion is the right tool because the failure mode is known and compliance is binary.
 
 ## Why negative constraints work
 

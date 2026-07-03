@@ -6,6 +6,7 @@ tags:
   - tool-engineering
   - context-engineering
   - tool-agnostic
+  - cost-performance
 last_reviewed: 2026-06-13
 maturity: established
 ---

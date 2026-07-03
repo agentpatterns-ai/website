@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - skills
 aliases:
   - operational anchor preservation
   - cost-aware skill compression

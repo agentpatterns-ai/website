@@ -16,6 +16,8 @@ last_reviewed: 2026-05-27
 
 Architecture, coordination, and failure-mode patterns organized into three areas: single-agent design, multi-agent collaboration, and common anti-patterns to recognize early.
 
+This page is the entry point for those three sections plus two selection aids below. For content grouped by cross-cutting theme, use the [Concept Map](../concepts.md); for the core disciplines, start at [Foundations](../foundations.md); for standards and surrounding context, start at [Reference](../reference.md).
+
 ## [Agent Design](../agent-design/index.md)
 
 Architecture, delegation, memory, control, reliability, and harness patterns for building effective agents. Organized into core design, memory and state, control and orchestration, reliability, and harness engineering.

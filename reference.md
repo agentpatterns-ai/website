@@ -13,6 +13,8 @@ last_reviewed: 2026-05-27
 
 > Standards, human factors, emerging trends, and reasoning fallacies that provide broader context for AI-assisted development.
 
+This page is the entry point for four sections. For content grouped by cross-cutting theme, use the [Concept Map](concepts.md); for the core disciplines, start at [Foundations](foundations.md); for design and failure-mode patterns, start at [Patterns](patterns/index.md).
+
 ## [Standards](standards/index.md)
 
 Protocol specifications and interoperability standards — MCP, A2A, AGENTS.md, llms.txt, OpenAPI tool specs, and agent definition formats.

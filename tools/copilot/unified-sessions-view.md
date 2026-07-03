@@ -25,7 +25,7 @@ The unified sessions view is the JetBrains chat window's per-agent-type registry
 Three conditions gate the value:
 
 - Concurrency above one. A registry listing one row is overhead. The pattern pays when two or more agents are in flight — typical when a CLI agent runs in the background while inline agent mode handles tactical edits.
-- Multiple invocation surfaces in use. JetBrains exposes at least three Copilot surfaces — chat-panel [agent mode](agent-mode.md), [inline agent mode](inline-agent-mode.md), and the CLI agent. One row per session removes the "which surface did I start that run on?" problem.
+- Multiple invocation surfaces in use. JetBrains exposes at least three Copilot surfaces — chat-panel [agent mode](agent-mode.md), [inline agent mode](agent-mode.md#inline-agent-mode-jetbrains), and the CLI agent. One row per session removes the "which surface did I start that run on?" problem.
 - Backed by an isolation primitive. The CLI agent offers worktree isolation (separate git worktree, review before apply) or workspace isolation (changes apply to the current workspace) ([GitHub Changelog 2026-05-13](https://github.blog/changelog/2026-05-13-introducing-copilot-cli-agent-and-unified-sessions-view-in-github-copilot-for-jetbrains-ides)). A list without isolation behind it is decoration — parallel rows that step on each other's files cannot run in parallel.
 
 ## What the view aggregates
@@ -101,6 +101,6 @@ When the CLI agent moves to `Needs input`, the developer attaches to that row, a
 
 - [Editor and Manager Surface Separation in Agent IDEs](../../agent-design/editor-manager-surface-separation.md) — the broader two-surface pattern the unified sessions view is one instance of
 - [Agent Mission Control](agent-mission-control.md) — the cloud-coding-agent counterpart of the JetBrains local view
-- [Copilot Inline Agent Mode in JetBrains](inline-agent-mode.md) — one of the invocation surfaces the view aggregates
+- [Copilot Agent Mode — inline surface (JetBrains)](agent-mode.md#inline-agent-mode-jetbrains) — one of the invocation surfaces the view aggregates
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md) — the standalone CLI behaviour that the IDE-hosted CLI agent wraps
 - [Remote Session Control for Local CLI Agents](../../agent-design/remote-session-control.md) — cross-surface session control that pairs with the registry

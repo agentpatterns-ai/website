@@ -6,6 +6,7 @@ tags:
   - geo
   - workflows
   - tool-agnostic
+  - technique
 aliases:
   - Schema Markup
   - Structured Data for GEO

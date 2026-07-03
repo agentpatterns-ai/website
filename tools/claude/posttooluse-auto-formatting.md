@@ -4,6 +4,7 @@ title: "PostToolUse Hooks: Automatic Formatting and Linting"
 description: "Configure a PostToolUse hook to run formatters automatically after every file Claude writes, removing the round-trip cost of prompting Claude to fix style."
 tags:
   - claude
+  - tool-engineering
 last_reviewed: 2026-06-13
 ---
 

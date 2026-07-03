@@ -6,6 +6,7 @@ tags:
   - anti-pattern
   - security
   - tool-agnostic
+  - mcp
 aliases:
   - serverName allowlist trap
   - MCP label-based allowlist

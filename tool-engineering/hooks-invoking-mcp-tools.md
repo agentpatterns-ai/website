@@ -9,6 +9,7 @@ tags:
   - tool-engineering
   - security
   - claude
+  - mcp
 last_reviewed: 2026-05-27
 maturity: adopted
 ---

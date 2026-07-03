@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - mcp
 last_reviewed: 2026-05-27
 maturity: emerging
 ---

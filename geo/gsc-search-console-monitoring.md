@@ -4,6 +4,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - geo
+  - automation
 description: "Automate Google Search Console monitoring: weekly API reports covering index coverage, Core Web Vitals, and top queries to replace manual dashboard checks."
 aliases:
   - "GSC monitoring"

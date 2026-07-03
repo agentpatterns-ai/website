@@ -5,6 +5,7 @@ tags:
   - anti-pattern
   - agent-design
   - tool-agnostic
+  - arxiv
 last_reviewed: 2026-06-25
 maturity: emerging
 ---

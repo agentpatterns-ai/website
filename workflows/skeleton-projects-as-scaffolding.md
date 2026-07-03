@@ -151,6 +151,5 @@ Use a hand-built foundation instead when your team's conventions are well-establ
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
 - [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md)
 - [Repository Bootstrap Checklist](../workflows/repository-bootstrap-checklist.md)
-- [Bootstrapping an Agent-Driven Project](bootstrapping-agent-driven-project.md)
 - [Codebase Readiness for Agents](../agent-design/codebase-readiness.md)
 - [Sub-Agents for Fan-Out Research](../multi-agent/sub-agents-fan-out.md)

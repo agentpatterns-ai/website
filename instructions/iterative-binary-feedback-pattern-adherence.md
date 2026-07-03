@@ -6,6 +6,7 @@ tags:
   - instructions
   - tool-agnostic
   - arxiv
+  - code-generation
 last_reviewed: 2026-06-02
 maturity: emerging
 ---

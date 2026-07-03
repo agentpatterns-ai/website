@@ -7,6 +7,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - cold start safety gap
   - cold-start safety gap in agents

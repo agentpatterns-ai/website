@@ -1,5 +1,5 @@
 ---
-title: "Loop Engineering: Stacking Outer Loops Around the Agent"
+title: "Stacking Outer Loops Around the Agent"
 term: "Loop Engineering"
 description: "Loop engineering names the discipline of stacking outer loops — verification, scheduling, hill-climbing — around the agent loop so the human stops being the throughput ceiling."
 tags:
@@ -8,6 +8,7 @@ tags:
   - long-form
   - tool-agnostic
 aliases:
+  - Loop Engineering
   - loopcraft
   - stacking loops
   - designing loops that prompt agents
@@ -15,7 +16,7 @@ last_reviewed: 2026-06-28
 maturity: emerging
 ---
 
-# Loop Engineering: Stacking Outer Loops Around the Agent
+# Stacking Outer Loops Around the Agent
 
 > Loop engineering stacks outer loops — verification, scheduling, hill-climbing — around the inner agent loop so the human stops being the throughput ceiling.
 

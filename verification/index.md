@@ -73,6 +73,7 @@ last_reviewed: 2026-05-27
 - [Golden Journeys: Restartability as a First-Class Verification Primitive](golden-journeys.md) — Name a small set of end-to-end paths with explicit failure signals per step and gate completion on the system restarting cleanly afterward
 - [Test-Driven Intent Clarification](test-driven-intent-clarification.md) — Use AI-generated tests to surface specification ambiguity before code review — validate tests instead of code to clarify intent with lower cognitive cost
 - [Source-Grounded Test Plan with Pre-Action Assertion Annotation](pre-test-grounded-plan-assertion-annotation.md) — Before a UI-driving agent verifies its change, have it write a source-read test plan and annotate each step's expected behavior upfront so it cannot rationalize an unexpected result as a pass
+- [Agent-Recorded Video Demos as a Verification Artifact](agent-recorded-video-demos.md) — The agent drives the running app and records a screencast as proof-of-work for human PR reviewers — a visual modality that complements tests where they are weakest, under stated conditions
 - [Spec-Derived Execution as a Correctness Oracle](spec-derived-execution-correctness-judging.md) — Judge candidate code against a natural-language spec by deriving inputs from the spec, executing them, and grading the I/O pairs — ground the LLM judge in real execution traces instead of asking it to reason over the code
 
 ## Rubric Design

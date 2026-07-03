@@ -5,7 +5,7 @@ description: "Harness-side post-processing collapses predictable shell-output no
 tags:
   - tool-engineering
   - context-engineering
-  - copilot
+  - tool-agnostic
 last_reviewed: 2026-06-13
 maturity: established
 ---

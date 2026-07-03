@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
   - tool-engineering
+  - skills
 aliases:
   - writing skill for agents
 last_reviewed: 2026-06-03

@@ -5,6 +5,7 @@ description: "Run the test suite against the unmodified baseline before an agent
 tags:
   - testing-verification
   - tool-agnostic
+  - arxiv
 aliases:
   - "pre-change baseline test gate"
   - "differential testing for agent patches"

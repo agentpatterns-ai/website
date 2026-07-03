@@ -5,6 +5,7 @@ description: "Structure agent systems in three layers — skills (knowledge), ag
 tags:
   - agent-design
   - tool-agnostic
+  - harness-engineering
 aliases:
   - three-layer agent architecture
   - skills-agents-commands pattern

@@ -7,6 +7,7 @@ tags:
   - workflows
   - copilot
   - tool-engineering
+  - mcp
 aliases:
   - Copilot Extensions to MCP Migration
 last_reviewed: 2026-05-27

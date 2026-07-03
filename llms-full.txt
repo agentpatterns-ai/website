@@ -92,6 +92,8 @@ Source: https://agentpatterns.ai/concepts/
 
 This map cuts across the directory tree to reflect the practitioner-resource spine — patterns, anti-patterns, paper summaries, and tool features sit together when they're about the same problem. See the [Tags index](tags.md) for topic-tag entry points or [STANDARDS.md](https://github.com/agentpatterns-ai/content/blob/main/STANDARDS.md#what-this-site-is) for what makes the cut.
 
+Prefer a section-by-section entry point instead? [Foundations](foundations.md) lands you in context engineering and instructions, [Patterns](patterns/index.md) in agent design, multi-agent, and anti-patterns, and [Reference](reference.md) in standards, human factors, emerging, and fallacies.
+
 <div class="grid cards" markdown>
 
 -   **Context Engineering**
@@ -620,6 +622,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Verifier-Driven Parallel Coding Agents (Glite ARF)](multi-agent/verifier-driven-parallel-coding-agents.md)
 - [Static Roster vs Runtime Subagent Definition](multi-agent/static-roster-vs-runtime-subagent-definition.md)
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](agent-design/wiki-memory-agent-maintained-knowledge-base.md)
+- [Trajectory-Conditioned Model Escalation (SWE-Router)](agent-design/trajectory-conditioned-model-escalation.md)
 
 ## Loop Engineering
 
@@ -627,7 +630,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 
 - [Loop Engineering (hub + crosswalk)](loop-engineering/index.md)
 - [The Three Loops of Agentic Coding: A Diagnostic Vocabulary](loop-engineering/three-loops-agentic-coding.md)
-- [Loop Engineering: Stacking Outer Loops Around the Agent](loop-engineering/loop-engineering.md)
+- [Stacking Outer Loops Around the Agent](loop-engineering/loop-engineering.md)
 - [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-engineering/loop-strategy-spectrum.md)
 - [The Ralph Wiggum Loop: Fresh-Context Iteration Pattern](loop-engineering/ralph-wiggum-loop.md)
 - [Goal-Driven Autonomous Loop with Budget Cap](loop-engineering/goal-driven-autonomous-loop.md)
@@ -654,7 +657,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Subagent Schema-Level Tool Filtering](multi-agent/subagent-schema-level-tool-filtering.md)
 - [Tool Description Quality](tool-engineering/tool-description-quality.md)
 - [Write Tool Descriptions Like Onboarding Docs](tool-engineering/tool-descriptions-as-onboarding.md)
-- [Tool Engineering](tool-engineering/tool-engineering.md)
+- [Designing Agent Tools Like APIs](tool-engineering/tool-engineering.md)
 - [Agent-Aware CLI Behaviour via Environment Variable](tool-engineering/agent-aware-cli-via-env-var.md)
 - [Agent-Computer Interface (ACI): Tool Design as UX Discipline](tool-engineering/agent-computer-interface.md)
 - [Chance-Corrected Shortlist Depth Sizing for Tool Retrieval (Bits-over-Random)](tool-engineering/chance-corrected-shortlist-depth-sizing.md)
@@ -679,7 +682,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Machine-Readable Error Responses for AI Agents (RFC 9457)](tool-engineering/rfc9457-machine-readable-errors.md)
 - [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](tool-engineering/mcp-eager-vs-jit-loading.md)
 - [MCP Client Design: Building Robust Host-Side Logic](tool-engineering/mcp-client-design.md)
-- [MCP Client/Server Architecture Best Practices Guide](tool-engineering/mcp-client-server-architecture.md)
+- [Five Design Decisions for MCP Servers and Clients](tool-engineering/mcp-client-server-architecture.md)
 - [MCP Elicitation: Servers Requesting Structured Input Mid-Task](tool-engineering/mcp-elicitation.md)
 - [MCP LLM Sampling: Servers Requesting AI Inference Mid-Tool](tool-engineering/mcp-llm-sampling.md)
 - [MCP Server Design: Building Agent-Friendly Servers](tool-engineering/mcp-server-design.md)
@@ -982,6 +985,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Eval Difficulty as a Product Smell](verification/eval-difficulty-product-smell.md)
 - [Per-Line Requirement Citations for Hallucination Detection](verification/per-line-requirement-citations.md)
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](verification/meta-evaluate-llm-judge-rubric-verification.md)
+- [Agent-Recorded Video Demos as a Verification Artifact](verification/agent-recorded-video-demos.md)
 
 ## Hooks & Guardrails
 
@@ -1096,7 +1100,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Architecting a Central Repo for Shared Agent Standards](workflows/central-repo-shared-agent-standards.md)
 - [Auto-Triage Workflow: Bug-Monitoring Agent that Connects Related Reports and Opens Fix PRs](workflows/auto-triage-workflow.md)
 - [Backlog Triage as a Named Agent Skill](workflows/backlog-triage-skill.md)
-- [Bootstrapping an Agent-Driven Project from Scratch](workflows/bootstrapping-agent-driven-project.md)
 - [Building Custom Agents from Substrate to Production (Agents All the Way Down)](workflows/agents-all-the-way-down-methodology.md)
 - [Burn the Boats — Commitment-Forcing Deprecation](workflows/burn-the-boats.md)
 - [Canary Rollout for Agent Policy Changes](workflows/canary-rollout-agent-policy.md)
@@ -1399,7 +1402,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Copilot CLI BYOK and Local Model Support](tools/copilot/copilot-cli-byok-local-models.md)
 - [Copilot Cloud Agent Organization Controls](tools/copilot/cloud-agent-org-controls.md)
 - [Copilot Cloud Agent Three-Phase Execution Model](tools/copilot/cloud-agent-research-plan-code.md)
-- [Copilot Inline Agent Mode in JetBrains IDEs](tools/copilot/inline-agent-mode.md)
 - [Copilot Memory and Cross-Agent Persistence](tools/copilot/copilot-memory.md)
 - [Copilot Spaces: Curated Context Collections for Grounding](tools/copilot/copilot-spaces.md)
 - [Copilot Unified Sessions View and CLI Agent in JetBrains IDEs](tools/copilot/unified-sessions-view.md)
@@ -1486,6 +1488,8 @@ Source: https://agentpatterns.ai/foundations/
 
 Context engineering and instructions form the foundation of productive work with AI coding agents. Getting either wrong undermines every pattern and technique built on top.
 
+This page is the entry point for two sections. For content grouped by cross-cutting theme rather than section, use the [Concept Map](concepts.md); for design, coordination, and failure-mode patterns, start at [Patterns](patterns/index.md); for standards and surrounding context, start at [Reference](reference.md).
+
 ## [Context Engineering](context-engineering/index.md)
 
 The practice of designing what information enters a model's context window, how it is structured, and what is excluded — to maximise the quality and reliability of agent output. Covers attention mechanics, compression strategies, caching economics, and retrieval patterns.
@@ -1502,6 +1506,8 @@ Source: https://agentpatterns.ai/reference/
 # Reference: Standards, Human Factors, Emerging, and Fallacies
 
 > Standards, human factors, emerging trends, and reasoning fallacies that provide broader context for AI-assisted development.
+
+This page is the entry point for four sections. For content grouped by cross-cutting theme, use the [Concept Map](concepts.md); for the core disciplines, start at [Foundations](foundations.md); for design and failure-mode patterns, start at [Patterns](patterns/index.md).
 
 ## [Standards](standards/index.md)
 
@@ -13121,7 +13127,7 @@ Source: https://agentpatterns.ai/instructions/instruction-polarity/
 Learn it hands-on with the [Say What To Do guided lesson](https://learn.agentpatterns.ai/prompt-engineering/say-what-to-do/), which includes quizzes.
 
 !!! info "Also known as"
-    Negative Space Instructions, Instruction Framing
+    Instruction Framing. Distinct from [Negative Space Instructions](negative-space-instructions.md) — that page covers the complementary case where a named exclusion (banned phrase, scope limit, tool restriction) beats positive guidance because compliance is binary and greppable; this page covers the default polarity choice when either framing could express the rule.
 
 ## The compliance asymmetry
 
@@ -13981,7 +13987,7 @@ Source: https://agentpatterns.ai/instructions/negative-space-instructions/
 Related lesson: [Say What To Do](https://learn.agentpatterns.ai/prompt-engineering/say-what-to-do/) — this concept features in a hands-on lesson with quizzes.
 
 !!! info "Also known as"
-    Instruction Polarity, Positive Rules Over Negative, Instruction Framing
+    Negative Constraints. Distinct from [Instruction Polarity](instruction-polarity.md) — that page argues for positive framing as the default when either polarity could express a rule; this page covers the narrower case where a named exclusion is the right tool because the failure mode is known and compliance is binary.
 
 ## Why negative constraints work
 
@@ -16634,6 +16640,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Tail Control for Agent Workflows: Engineering for the Failure Tail, Not the Average](tail-control-for-agent-workflows.md) — Engineer non-deterministic agent workflows for worst-case usability — per-step p95 timeouts, hedged re-draws, graceful degradation — because the failure tail sets the reliability behind an API, not the median run
 - [Task Feasibility Awareness: Stop Before You Start](task-feasibility-awareness.md) — An up-front check that the current tools can satisfy a task at all, halting the infeasible before the agent burns a long chain — the inverse of premature completion
 - [Tenant Model Policy: Organization-Scoped Rules for AI Model Selection](tenant-model-policy.md) — An admin-tier policy plane that decides which AI models an org or tenant can invoke — only safe when policy is strict-priority, denials are explicit, and rules age with model deprecations
+- [Trajectory-Conditioned Model Escalation (SWE-Router)](trajectory-conditioned-model-escalation.md) — Run a cheap model for a few exploratory turns, then read its partial trajectory to decide whether to escalate to a stronger model — the routing signal for agentic tasks that lack binary test feedback
 - [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md) — An async trajectory-observer system that classifies misbehaviors into three categories and injects targeted course-corrections
 - [WIP=1 and Little's Law: Kanban Throughput Theory for Agent Task Design](wip-1-littles-law-agent-throughput.md) — Cap an agent's active task count at one until verification passes; Little's Law makes the cycle-time consequence quantitative
 
@@ -18671,7 +18678,7 @@ Source: https://agentpatterns.ai/agent-design/agentic-flywheel/
 
 # Agentic Flywheel: Self-Improving Agent Systems
 
-> A closed loop where agents analyze their own operational data -- traces, test results, pipeline metrics -- and generate harness improvements that make all future agent work better, not just the current task.
+> A closed loop where agents analyze their own traces and metrics to generate harness improvements that make all future agent work better.
 
 ## Why a flywheel
 
@@ -18754,24 +18761,18 @@ LangChain's Terminal Bench 2.0 run shows the flywheel stages ([Improving Deep Ag
 3. Generate modifications: targeted harness changes followed -- self-verification loops, loop-detection middleware tracking per-file edit counts, and the xhigh-high-xhigh reasoning sandwich.
 4. Escalate: each modification was tested on the held-out Terminal Bench task set before promotion. The combined harness changes lifted scores from 52.8% to 66.5% with no model change.
 
+Google describes a vendor instantiation of the same loop driven from the coding agent itself: a five-stage eval flywheel -- prepare data, run inference, score with adaptive AutoRaters, cluster failures, then target optimization -- backed by an independent evaluation service that counts only real improvements ([Driving the agent quality flywheel from your coding agent](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)).
+
+## Key Takeaways
+
+- The flywheel improves the harness itself -- prompts, tools, middleware, verification checks -- so gains compound across all future agent work, not just the current task.
+- Boosting concentrates analysis on prior failures; LangChain lifted Terminal Bench 2.0 from 52.8% to 66.5% with harness-only changes and no model swap.
+- Match a modification's autonomy tier to its confidence and rollback path: interactive, then backlog, then autonomous only for narrow, well-tested changes.
+- Self-evolving agents predict what they fix far better than what they break, so verify every proposed change against a held-out rollout before promoting it.
+
 ## Related
 
-- [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md)
-- [Evaluator-Optimizer](evaluator-optimizer.md)
-- [Agent Harness](agent-harness.md)
-- [Context Compression Strategies: Offloading and Summarisation](../context-engineering/context-compression-strategies.md) — tiered compression that can cause objective drift when summaries lose task specifics
-- [Introspective Skill Generation](../workflows/introspective-skill-generation.md)
-- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Progressive Autonomy with Model Evolution](../human/progressive-autonomy-model-evolution.md)
-- [Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md)
-- [Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md)
-- [Loop Detection](../observability/loop-detection.md)
-- [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
-- [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md)
 - [Harness Engineering](harness-engineering.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
-- [Convergence Detection](../loop-engineering/convergence-detection.md)
-- [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
 - [Self-Healing Production Agent](self-healing-production-agent.md) — online incident-driven loop that patches production regressions between offline flywheel cycles
 - [Harness Hill-Climbing](harness-hill-climbing.md) — eval-driven local-search loop for systematically tuning harness configuration
 - [Self-Rewriting Meta-Prompt Loop](self-rewriting-meta-prompt-loop.md) — agents that autonomously improve their own system prompts
@@ -23717,7 +23718,7 @@ Source: https://agentpatterns.ai/agent-design/editor-manager-surface-separation/
 
 > A two-surface UX pattern: an Editor for tactical edits and a Manager for dispatching and monitoring parallel agents. The pattern matters once concurrency exceeds one.
 
-The editor-and-manager pattern splits an agent IDE into two surfaces — an Editor View coupled to cursor and buffer for inline edits, and a Manager Surface (dashboard, agents window, or mission control) for dispatching and monitoring autonomous agents running in parallel. Four major dev tools converged on this shape between October 2025 and May 2026: Google Antigravity ([Google I/O 2026](https://blog.google/innovation-and-ai/technology/developers-tools/google-io-2026-developer-highlights/)), Cursor 3 (Agents Window replaced Composer, [Cursor 3 Agents Window](../tools/cursor/agents-window.md)), GitHub Copilot ([inline agent mode](../tools/copilot/inline-agent-mode.md) + [Mission Control](../tools/copilot/agent-mission-control.md)), and Claude Code (`claude agents`, [Claude Code agent view](https://code.claude.com/docs/en/agent-view)).
+The editor-and-manager pattern splits an agent IDE into two surfaces — an Editor View coupled to cursor and buffer for inline edits, and a Manager Surface (dashboard, agents window, or mission control) for dispatching and monitoring autonomous agents running in parallel. Four major dev tools converged on this shape between October 2025 and May 2026: Google Antigravity ([Google I/O 2026](https://blog.google/innovation-and-ai/technology/developers-tools/google-io-2026-developer-highlights/)), Cursor 3 (Agents Window replaced Composer, [Cursor 3 Agents Window](../tools/cursor/agents-window.md)), GitHub Copilot ([inline agent mode](../tools/copilot/agent-mode.md#inline-agent-mode-jetbrains) + [Mission Control](../tools/copilot/agent-mission-control.md)), and Claude Code (`claude agents`, [Claude Code agent view](https://code.claude.com/docs/en/agent-view)).
 
 ## When this pattern applies
 
@@ -23744,7 +23745,7 @@ Claude Code's agent view illustrates Manager mode: each row's one-line summary i
 |------|----------------|-----------------|
 | Google Antigravity | Editor View | Manager Surface ([Google I/O 2026](https://blog.google/innovation-and-ai/technology/developers-tools/google-io-2026-developer-highlights/)) |
 | Cursor 3 | Inline editor and chat (`Cmd+I`) | Agents Window across local, cloud, worktree, SSH ([Cursor 3 Agents Window](../tools/cursor/agents-window.md)) |
-| GitHub Copilot | [Inline agent mode](../tools/copilot/inline-agent-mode.md) ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)) | Mission Control ([GitHub Changelog 2025-10-28](https://github.blog/changelog/2025-10-28-a-mission-control-to-assign-steer-and-track-copilot-coding-agent-tasks/)) |
+| GitHub Copilot | [Inline agent mode](../tools/copilot/agent-mode.md#inline-agent-mode-jetbrains) ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)) | Mission Control ([GitHub Changelog 2025-10-28](https://github.blog/changelog/2025-10-28-a-mission-control-to-assign-steer-and-track-copilot-coding-agent-tasks/)) |
 | Claude Code | Interactive `claude` session | `claude agents` view ([Claude Code agent view](https://code.claude.com/docs/en/agent-view)) |
 
 Detail varies — Cursor's window "resembl[es] a Kubernetes dashboard rather than a chat window," Claude Code's is a terminal list grouped by status — but the structural choice is the same: aggregated per-agent state lives outside the editor.
@@ -37529,6 +37530,61 @@ The integration becomes a liability in the hugo-12448 case study: the explorer r
 
 ---
 
+### Trajectory-Conditioned Model Escalation (SWE-Router)
+Source: https://agentpatterns.ai/agent-design/trajectory-conditioned-model-escalation/
+
+# Trajectory-Conditioned Model Escalation (SWE-Router)
+
+> Run a cheap model for a few turns, then read its partial trajectory to decide whether to escalate to a stronger model.
+
+Pick the model from how a cheap model behaves on the task, not from the task description alone. A weak model runs for a small fixed number of turns, and a learned value head reads the resulting partial trajectory — the thoughts, actions, and observations so far — before deciding to keep going cheap or hand the task to an expensive model. SWE-Router names and formalizes this approach ([SWE-Router, arxiv 2607.00053](https://arxiv.org/abs/2607.00053)).
+
+## The routing gap it closes
+
+Most LLM routers decide from the task description alone. That works when the prompt separates easy from hard, but agentic software tasks routinely defeat it: a near-identical issue can hide a one-line typo fix or a multi-module refactor, and the description does not tell them apart ([SWE-Router](https://arxiv.org/abs/2607.00053)).
+
+[Cascade routing](../training/copilot/model-selection.md) answers this by starting cheap and escalating when tests fail — but that needs a binary pass/fail signal. Many agentic tasks have no such signal: no test to run, no type check, no linter verdict at the routing moment. Trajectory-conditioned escalation substitutes a learned read of the partial trajectory for the missing test result, so the escalation decision survives on tasks where cascade routing has nothing to key on.
+
+## How it runs
+
+1. A weak model `m₁` executes the task for `K` exploratory turns. The paper tests `K ∈ {1, 2, 3, 4}`; `K=3` and `K=4` route best ([SWE-Router](https://arxiv.org/abs/2607.00053)).
+2. The system collects the partial trajectory after turn `K` — problem description, thoughts, actions, and observations such as retrieved files, failed tests, and stack traces.
+3. A learned value head predicts a cost-adjusted success probability for continuing cheap (`y₁`) versus escalating (`y₂`).
+4. Decision rule: continue with `m₁` if `y₁ ≥ y₂`; otherwise switch to the strong model `m₂` from turn `K` onward ([SWE-Router](https://arxiv.org/abs/2607.00053)).
+
+## Why it works
+
+Description-only routing is capped by an information-theoretic Bayes-error floor. Two tasks with near-identical prompts can demand wildly different effort, and no function of the prompt alone can separate them ([SWE-Router](https://arxiv.org/abs/2607.00053)). Letting the cheap model act for a few turns surfaces execution evidence — which files it opened, whether its edits passed tests, what the stack trace showed — that is structural signal about difficulty no prompt-only router can access. SWE-Router's Bayes-optimality theorem proves that conditioning on this partial trajectory never harms routing and is strictly better whenever the exploration is informative ([SWE-Router](https://arxiv.org/abs/2607.00053)). Independent work reaches the same conclusion from the POMDP framing: difficulty in multi-turn agentic tasks is trajectory-dependent, so the routing decision belongs mid-trajectory rather than at the prompt ([Agent-as-a-Router, arxiv 2606.22902](https://arxiv.org/abs/2606.22902)).
+
+## When this backfires
+
+- High-signal task descriptions. When the prompt already separates easy from hard — uniform issue templates, tight repro steps — the trajectory adds nothing and the `K` exploratory turns are wasted overhead. The paper is explicit that the gain "vanishes when the prompt already determines the optimal choice" ([SWE-Router](https://arxiv.org/abs/2607.00053)).
+- Correlated failure modes. When the weak and strong models fail on the same tasks, no routing decision recovers the strong model's wins; combining models hits a co-failure ceiling ([When Combining Language Models Help, arxiv 2606.27288](https://arxiv.org/abs/2606.27288)).
+- Rework that outruns the saving. A weak model's "almost right" output can trigger retries and debugging that cost more than one clean frontier call, so per-call price drops while total token yield collapses ([Model Routing for Coding Agents](https://getunblocked.com/blog/model-routing-coding-agents/)).
+- Latency-sensitive loops. Paying `K` weak-model turns plus value-head inference before every escalation adds serial latency an interactive user feels.
+- Distribution shift. A value head trained on one task distribution degrades on another — SWE-Router did not consistently beat baselines on its SWE-Smith split ([SWE-Router](https://arxiv.org/abs/2607.00053)).
+
+## Example
+
+SWE-Router pairs a weak model with a strong one and lets the weak model explore before routing. With `deepseek-v3.2` as the weak model exploring for a few turns and `gemini` as the escalation target, reading the partial trajectory lifts Route-AUC on SWE-Bench Verified to 0.780, versus 0.627 for a non-temporal router that decides from the description alone — a 15.3-point gain at matched resolution ([SWE-Router](https://arxiv.org/abs/2607.00053)). The signal driving that gain is concrete: after three turns, a task where the weak model has already retrieved the right file and passed a smoke test looks very different from one where it is thrashing on failing tests, and the value head routes accordingly.
+
+## Key Takeaways
+
+- Route on behavior, not description: a cheap model runs a few turns, and a learned value head reads its partial trajectory to decide whether to escalate.
+- It closes the gap cascade routing leaves — escalation without a binary test signal — by treating execution observations as the difficulty signal.
+- The mechanism is proven: conditioning on the partial trajectory is never worse than prompt-only routing and strictly better when exploration is informative.
+- It backfires when prompts are already high-signal, when weak and strong models share failure modes, when latency matters, or under distribution shift — the exploratory turns are pure overhead in those cases.
+
+## Related
+
+- [GitHub Copilot: Model Selection & Routing](../training/copilot/model-selection.md) — cascade routing that escalates on binary test pass/fail; this technique fills the gap it leaves on feedback-less tasks.
+- [Gateway Model Routing](gateway-model-routing.md) — the infrastructure layer that exposes the weak and strong models a router escalates between.
+- [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — a prompt-time complement that allocates effort from task cues rather than trajectory evidence.
+- [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — the weak-model side of the pairing, used as a bounded sub-tool.
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — the broader cost-routing frame this escalation policy sits inside.
+
+---
+
 ### Utility-Model Split: Background Tasks on a Cheaper Model
 Source: https://agentpatterns.ai/agent-design/utility-model-split/
 
@@ -40822,7 +40878,7 @@ Source: https://agentpatterns.ai/multi-agent/multi-agent-se-design-patterns/
 Related lesson: [Why Multi-Agent Systems Fail](https://learn.agentpatterns.ai/multi-agent/why-multi-agent-fails/) — this concept features in a hands-on lesson with quizzes.
 
 !!! info "Also known as"
-    Multi-Agent Topology Taxonomy, Multi-Agent Architecture Patterns
+    Multi-Agent Architecture Patterns. Related but distinct: the [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) classifies systems at a coarser granularity — three coordination topologies (centralised, decentralised, hybrid) — while this page catalogs 16 finer-grained design patterns drawn from a 94-paper literature review.
 
 ## Background
 
@@ -40954,7 +41010,7 @@ Source: https://agentpatterns.ai/multi-agent/multi-agent-topology-taxonomy/
 Learn it hands-on: [When Many Agents Beat One](https://learn.agentpatterns.ai/multi-agent/when-many-agents/) — guided lesson with quizzes.
 
 !!! info "Also known as"
-    Multi-Agent SE Design Patterns, Multi-Agent Architecture Patterns
+    Coordination Topology. Related but distinct: [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md) catalogs 16 finer-grained design patterns from a 94-paper literature review, while this page classifies systems at the coarser level of coordination topology — centralised, decentralised, or hybrid.
 
 ## The three topologies
 
@@ -53331,6 +53387,157 @@ Step 2 is the single API turn that turns "we don't know who calls this" into a b
 
 ---
 
+### Designing Agent Tools Like APIs
+Source: https://agentpatterns.ai/tool-engineering/tool-engineering/
+
+# Designing Agent Tools Like APIs
+
+> Design agent tools like APIs — with documentation, examples, edge-case handling, and mistake-proofing — not as boilerplate wrappers around existing functions.
+
+Learn it hands-on: [What Makes a Tool Agent-Friendly](https://learn.agentpatterns.ai/tool-engineering/agent-friendly-tools/) — guided lesson with quizzes.
+
+!!! info "Also known as"
+    Tool Descriptions as Onboarding, Mistake-Proofing / Poka-Yoke
+
+## Tools as the agent's interface to the world
+
+Tool quality bounds agent quality. No prompt compensates for a tool interface the model cannot use reliably. Tool interface defects — wrong selection, incorrect parameters, misinterpreted output — recur as a failure mode in agent loops.
+
+Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), tool design deserves the same investment as prompt engineering.
+
+## Minimize formatting overhead
+
+Inputs requiring precise formatting — exact line counts, complex escaping, specific delimiters — create failure surface. Design inputs to accept formats with strong model priors from training data (JSON, markdown, plain prose). Anthropic's guidance is explicit: avoid formatting "overhead such as having to keep an accurate count of thousands of lines of code, or string-escaping any code it writes" ([Building Effective Agents, Appendix 2](https://www.anthropic.com/engineering/building-effective-agents)).
+
+The same applies to outputs: return formats the model can parse without counting characters or matching offsets.
+
+## Comprehensive documentation
+
+Tool docstrings should include:
+
+- What the tool does, stated plainly
+- What each parameter accepts, including types and valid ranges
+- At least one concrete example with real inputs and expected output
+- Known edge cases and what happens when they occur
+
+A model with no prior knowledge of your system forms its understanding entirely from the docstring. Write accordingly.
+
+This works because LLMs reason over tool descriptions via in-context learning — the docstring is the model's only ground truth about what a tool does and how to call it correctly, which is why [tool descriptions read like onboarding docs](tool-descriptions-as-onboarding.md). A well-written docstring is a compact, always-present reference that shapes every tool invocation.
+
+## Poka-yoke: mistake-proofing
+
+Poka-yoke is the engineering practice of making errors structurally impossible or structurally obvious. Applied to tool design:
+
+- Use parameter names that cannot be misread (`user_id` not `user`, `start_date` not `date`)
+- Enumerate valid values rather than accepting free text where only specific values are valid
+- Return structured errors that tell the model what went wrong and what to try instead — not generic failure messages
+- Validate inputs and return early with a clear message rather than failing deep in execution
+
+The goal is to make the correct call easier than the incorrect call.
+
+## Independent testing
+
+Test tools independently before full agent integration. Observe how the model calls each tool in isolation: correct selection, correct parameters, correct output handling — the junior-developer test [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) recommends. Errors in full agent loops are ambiguous — prompt, tool, or interaction. Isolated testing surfaces tool-specific misuse and eliminates one variable from loop-level failures.
+
+## Tool result optimization
+
+The preceding sections address tool inputs; this section addresses tool outputs. The OPENDEV paper reports a roughly 54% reduction in peak context consumption through per-tool-type summarization and large output offloading ([Bui, 2026 §2.3.2](https://arxiv.org/abs/2603.05344)):
+
+- Per-type summarization: file reads replaced with metadata (line count, character count), search results collapsed to match counts, directory listings reduced to item counts, command outputs truncated to line counts for longer outputs
+- Large output offloading: results exceeding 8,000 characters written to session-specific scratch files with a 500-character preview — the agent can retrieve full output on demand without default context cost
+- Agent-aware truncation hints: when output is offloaded, the truncation message includes a recovery hint tailored to the agent's capabilities (for example, suggesting subagent delegation or incremental search)
+
+Pre-computed summaries are reused during context compaction, avoiding redundant re-processing and improving both speed and quality of emergency compaction ([Bui, 2026 §2.3.2](https://arxiv.org/abs/2603.05344)). See also [Semantic Tool Output](semantic-tool-output.md) for complementary output formatting patterns.
+
+## Example
+
+The following shows a poorly designed tool definition contrasted with one that applies tool engineering principles — comprehensive documentation, poka-yoke parameter names, structured errors, and summarized output.
+
+Before: minimal wrapper with vague parameters
+
+```python
+def search(query, type, limit):
+    """Search the codebase."""
+    results = _run_search(query, type, limit)
+    return results  # returns raw list, potentially thousands of items
+```
+
+After: engineered tool with documentation, validated inputs, and summarized output
+
+```python
+def search_codebase(
+    search_query: str,
+    file_type: Literal["python", "typescript", "markdown", "all"],
+    max_results: int = 20,
+) -> dict:
+    """
+    Search source files by content pattern.
+
+    Args:
+        search_query: The literal string or regex pattern to find.
+            Example: "class AuthMiddleware" or r"def \\w+_handler"
+        file_type: Restrict matches to one file type, or "all" for every type.
+        max_results: Maximum number of results to return (1–100). Defaults to 20.
+
+    Returns:
+        {
+          "match_count": <int>,        # total matches found before truncation
+          "returned": <int>,           # matches included in this response
+          "results": [                 # list of up to max_results items
+            {"file": <str>, "line": <int>, "snippet": <str>}
+          ],
+          "truncated": <bool>          # true when match_count > max_results
+        }
+
+    Edge cases:
+        - Regex syntax errors return {"error": "invalid_regex", "detail": <str>}
+        - Zero matches returns {"match_count": 0, "returned": 0, "results": [], "truncated": false}
+        - Outputs exceeding 8 000 characters are written to .scratch/<session_id>/search_<n>.json;
+          this response includes a "scratch_path" key and a 500-character preview.
+    """
+    if not 1 <= max_results <= 100:
+        return {"error": "invalid_range", "detail": "max_results must be between 1 and 100"}
+    try:
+        raw = _run_search(search_query, file_type, max_results)
+    except re.error as exc:
+        return {"error": "invalid_regex", "detail": str(exc)}
+    return _summarise(raw, max_results)
+```
+
+The docstring gives the model a concrete call example, documents every return key, and explains what happens on error — so the model can handle failure without guessing. The `file_type` enumeration eliminates free-text guessing. The structured error response tells the model exactly what to fix.
+
+## When this backfires
+
+Tool engineering investment pays off when tools are reused across many agent sessions and workflows. It adds friction without payoff in these conditions:
+
+- Rapidly-changing interfaces: when the tool's API contract is still unstable, heavyweight docstrings become maintenance debt — the description drifts from actual behavior, misleading the model more than a terse stub would.
+- One-off or exploratory scripts: a tool called once in a single session does not need edge-case documentation or enumerated parameter values; the cost of engineering it outweighs the benefit.
+- Upstream documentation already exists: if the tool wraps a well-documented external API the model has strong training priors for, a thin wrapper that exposes the native interface may outperform a custom docstring that introduces inconsistencies — the rationale behind a [Unix CLI-native tool interface](unix-cli-native-tool-interface.md).
+
+Apply the full pattern to stable, shared tools that are called repeatedly across agent runs. Apply minimal-viable documentation to throwaway or prototype tooling.
+
+## Key Takeaways
+
+- Tool quality bounds agent quality — no prompt compensates for a bad tool interface
+- Minimize formatting overhead; prefer formats the model has strong priors for from training data
+- Write comprehensive docstrings with examples and edge cases, not terse API references
+- Apply poka-yoke: unambiguous parameter names, enumerated valid values, structured error messages
+- Test tools independently before integration to surface model misuse patterns early
+- Optimize tool results: summarize by type, offload large outputs, include agent-aware truncation hints for ~54% peak context reduction
+
+## Related
+
+- [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) — deep dive on structural constraint patterns
+- [Tool Description Quality](tool-description-quality.md)
+- [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
+- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
+- [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
+- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md)
+- [Agent-Computer Interface (ACI)](agent-computer-interface.md) — tool design as a UX discipline
+- [MCP Server Design: Building Agent-Friendly Servers](mcp-server-design.md) — naming, schema design, and error handling for MCP-exposed tools
+
+---
+
 ### Designing for Agent Consumers (Agent Experience)
 Source: https://agentpatterns.ai/tool-engineering/designing-for-agent-consumers/
 
@@ -53815,6 +54022,169 @@ Total tokens loaded: ~400 (2 tool definitions). Upfront registration of all 120 
 - [MCP Server Design](mcp-server-design.md)
 - [On-Demand Skill Hooks](on-demand-skill-hooks.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
+
+---
+
+### Five Design Decisions for MCP Servers and Clients
+Source: https://agentpatterns.ai/tool-engineering/mcp-client-server-architecture/
+
+# Five Design Decisions for MCP Servers and Clients
+
+> A well-designed MCP server is invisible to the agent — a poor one fails systematically: wrong tool selection, bloated context, silent errors, security gaps.
+
+Learn it hands-on with the [MCP Tool Exposure lesson](https://learn.agentpatterns.ai/tool-engineering/mcp-tool-exposure/) — a guided lesson with quizzes.
+
+Five decisions determine whether an MCP integration works: transport, tool surface, error handling, capability negotiation, security. See [MCP protocol](../standards/mcp-protocol.md) for background.
+
+## Transport selection
+
+Transport is a deployment topology decision, not a latency choice.
+
+| Factor | stdio | Streamable HTTP |
+|--------|-------|-----------------|
+| Deployment | Subprocess of the client | Independent process |
+| Clients | Single per instance | Multiple concurrent |
+| Infrastructure | None | HTTP server, session management |
+| Security surface | Process isolation | Network exposure, requires auth |
+| Use case | Local dev tools | Shared team servers, cloud services |
+
+Use stdio unless you need multiple clients or remote hosting. Streamable HTTP adds [required security measures](https://modelcontextprotocol.io/docs/concepts/transports): validate `Origin` (DNS rebinding), bind local servers to localhost, authenticate callers.
+
+## Tool surface design
+
+Tool count directly affects agent performance — [Anthropic names bloated tool sets as a top failure mode](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents).
+
+### Keep tools focused and few
+
+One tool, one clear purpose. Overlapping tools force selection reasoning that costs tokens and compounds errors.
+
+### Use tool search for large surfaces
+
+Use client-side deferral for big tool sets. [Claude Code defers MCP tool definitions by default](https://code.claude.com/docs/en/mcp); `ENABLE_TOOL_SEARCH=auto` loads schemas upfront when they fit in 10% of context, deferring the overflow. Anthropic's benchmark on 50+ MCP tools reports an [85% token reduction](https://www.anthropic.com/engineering/advanced-tool-use) (77K → 8.7K). Servers supporting `listChanged` emit `notifications/tools/list_changed` for dynamic refresh.
+
+### Apply poka-yoke to parameters
+
+Make misuse structurally impossible — see [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md). Prefer enums to free-text; absolute paths [eliminated path errors entirely](https://www.anthropic.com/engineering/building-effective-agents).
+
+### Write self-contained descriptions
+
+Each description stands alone — domain context, return shape, selection signals. Better descriptions [cut task completion time by 40%](https://www.anthropic.com/engineering/multi-agent-research-system). See [Tool Description Quality](tool-description-quality.md).
+
+### Annotate behavioral hints
+
+`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint` signal properties clients use for confirmation. Per the [MCP spec schema](https://raw.githubusercontent.com/modelcontextprotocol/specification/main/schema/2025-03-26/schema.ts), defaults are `destructiveHint: true`, `openWorldHint: true`, `readOnlyHint: false`, `idempotentHint: false` — servers must explicitly override destructive/open-world defaults. Clients MUST treat annotations as untrusted unless the server is trusted. `idempotentHint` maps to the [idempotent operations pattern](../agent-design/idempotent-agent-operations.md).
+
+## Error handling
+
+MCP has two error mechanisms — conflating them causes silent failures.
+
+```mermaid
+flowchart LR
+    A[Client calls tool] --> B{Request valid?}
+    B -->|No| C["JSON-RPC error
+    (protocol level)"]
+    B -->|Yes| D{Execution succeeds?}
+    D -->|No| E["Tool result with
+    isError: true"]
+    D -->|Yes| F[Tool result with
+    content]
+```
+
+Protocol-level errors (JSON-RPC): unknown tool, malformed arguments, server unavailable — the call never reached tool logic.
+
+Tool execution errors (`isError: true`): the tool ran but failed — invalid input, API down, permission denied. Agents can reason about these.
+
+Servers MUST implement both. A generic JSON-RPC error for a database timeout hides recovery info; `isError: true` with `"Database timed out — retry in 5s"` is actionable.
+
+### Output schemas
+
+Tools can declare an `outputSchema` for [structured results](../multi-agent/typed-schemas-at-agent-boundaries.md) — servers MUST conform, clients SHOULD validate.
+
+## Capability negotiation
+
+Capability negotiation is a mandatory MCP initialization handshake.
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant S as Server
+    C->>S: initialize (protocol version, client capabilities)
+    S->>C: response (server capabilities, protocol version)
+    C->>S: initialized (notification)
+    Note over C,S: Session active — both parties<br/>MUST respect negotiated capabilities
+```
+
+Client sends its latest version; the server matches or replies with its own. If the client cannot support that, it SHOULD disconnect — no silent degradation. Both parties MUST respect negotiated capabilities for the whole session.
+
+## Security boundaries
+
+MCP isolates servers by design: each connection is isolated, servers see only necessary context, conversation history stays with the host, cross-server interactions are host-controlled.
+
+Server MUSTs: validate inputs, enforce access controls, rate-limit, sanitize outputs.
+
+Client SHOULDs: timeout calls, log for audit, show inputs before calling ([confirmation gates](../security/human-in-the-loop-confirmation-gates.md)).
+
+Team deployments: centralized `managed-mcp.json`, allowlist/denylist policies, project-scoped `.mcp.json`, OAuth 2.0 over PATs.
+
+## Example
+
+A deployment-tool MCP server applying the principles above — focused tools, poka-yoke parameters, both error types, behavioral annotations.
+
+```json
+{
+  "tools": [
+    {
+      "name": "deploy_service",
+      "description": "Deploy a service to the specified environment. Use this for production and staging deployments. For rollbacks, use rollback_service instead.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "service": { "type": "string", "description": "Service name from the service registry" },
+          "environment": { "type": "string", "enum": ["staging", "production"] },
+          "version": { "type": "string", "pattern": "^v\\d+\\.\\d+\\.\\d+$" }
+        },
+        "required": ["service", "environment", "version"]
+      },
+      "annotations": {
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ]
+}
+```
+
+`environment` is an enum, `version` enforces semver via regex, and the description routes rollbacks to a separate tool. `destructiveHint` triggers confirmation. On failure, the server returns `isError: true` with a domain-specific message — not a generic JSON-RPC error.
+
+## When this backfires
+
+stdio couples server lifecycle to client. Client restart drops in-flight operations — prefer Streamable HTTP for long-running tools or shared state.
+
+Annotations are advisory. `destructiveHint: true` prompts confirmation but does not block execution. Servers that rely on annotations for access control break when clients ignore hints.
+
+Capability negotiation is silent on gaps. A client expecting sampling or elicitation sees method-not-found, not a structured error. Build explicit fallbacks for optional capabilities.
+
+Lazy loading does not fix selection accuracy. An agent searching 200 tools still chooses worse than one with 10 focused tools — deferral mitigates but does not substitute for curation.
+
+## Key Takeaways
+
+- Transport choice is a deployment-topology decision: stdio for single-client local tools, Streamable HTTP for shared or remote servers with auth and `Origin` validation.
+- Tool surface drives agent accuracy — keep tools focused, defer schemas with tool search for large surfaces, and apply poka-yoke to parameters.
+- Implement both error mechanisms: JSON-RPC errors for protocol failures, `isError: true` results for execution failures the agent can reason about.
+- Capability negotiation is mandatory and silent on gaps — build explicit fallbacks for optional capabilities like sampling and elicitation.
+- Annotations (`destructiveHint`, `readOnlyHint`, `idempotentHint`, `openWorldHint`) are advisory hints to clients, not access controls — enforce security on the server.
+
+## Related
+
+- [MCP Server Design](mcp-server-design.md)
+- [MCP Client Design](mcp-client-design.md)
+- [MCP: The Plumbing Behind Agent Tool Access](../standards/mcp-protocol.md)
+- [Tool Description Quality](tool-description-quality.md)
+- [MCP alwaysLoad: Eager vs Just-in-Time Server Classification](mcp-eager-vs-jit-loading.md)
+- [MCP LLM Sampling](mcp-llm-sampling.md)
+- [MCP Elicitation](mcp-elicitation.md)
+- [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md)
 
 ---
 
@@ -55796,169 +56166,6 @@ One `ServerSession` per MCP server; tool calls route through the namespace map; 
 - [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
-
----
-
-### MCP Client/Server Architecture
-Source: https://agentpatterns.ai/tool-engineering/mcp-client-server-architecture/
-
-# MCP Client/Server Architecture
-
-> A well-designed MCP server is invisible to the agent — a poor one fails systematically: wrong tool selection, bloated context, silent errors, security gaps.
-
-Learn it hands-on with the [MCP Tool Exposure lesson](https://learn.agentpatterns.ai/tool-engineering/mcp-tool-exposure/) — a guided lesson with quizzes.
-
-Five decisions determine whether an MCP integration works: transport, tool surface, error handling, capability negotiation, security. See [MCP protocol](../standards/mcp-protocol.md) for background.
-
-## Transport selection
-
-Transport is a deployment topology decision, not a latency choice.
-
-| Factor | stdio | Streamable HTTP |
-|--------|-------|-----------------|
-| Deployment | Subprocess of the client | Independent process |
-| Clients | Single per instance | Multiple concurrent |
-| Infrastructure | None | HTTP server, session management |
-| Security surface | Process isolation | Network exposure, requires auth |
-| Use case | Local dev tools | Shared team servers, cloud services |
-
-Use stdio unless you need multiple clients or remote hosting. Streamable HTTP adds [required security measures](https://modelcontextprotocol.io/docs/concepts/transports): validate `Origin` (DNS rebinding), bind local servers to localhost, authenticate callers.
-
-## Tool surface design
-
-Tool count directly affects agent performance — [Anthropic names bloated tool sets as a top failure mode](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents).
-
-### Keep tools focused and few
-
-One tool, one clear purpose. Overlapping tools force selection reasoning that costs tokens and compounds errors.
-
-### Use tool search for large surfaces
-
-Use client-side deferral for big tool sets. [Claude Code defers MCP tool definitions by default](https://code.claude.com/docs/en/mcp); `ENABLE_TOOL_SEARCH=auto` loads schemas upfront when they fit in 10% of context, deferring the overflow. Anthropic's benchmark on 50+ MCP tools reports an [85% token reduction](https://www.anthropic.com/engineering/advanced-tool-use) (77K → 8.7K). Servers supporting `listChanged` emit `notifications/tools/list_changed` for dynamic refresh.
-
-### Apply poka-yoke to parameters
-
-Make misuse structurally impossible — see [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md). Prefer enums to free-text; absolute paths [eliminated path errors entirely](https://www.anthropic.com/engineering/building-effective-agents).
-
-### Write self-contained descriptions
-
-Each description stands alone — domain context, return shape, selection signals. Better descriptions [cut task completion time by 40%](https://www.anthropic.com/engineering/multi-agent-research-system). See [Tool Description Quality](tool-description-quality.md).
-
-### Annotate behavioral hints
-
-`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint` signal properties clients use for confirmation. Per the [MCP spec schema](https://raw.githubusercontent.com/modelcontextprotocol/specification/main/schema/2025-03-26/schema.ts), defaults are `destructiveHint: true`, `openWorldHint: true`, `readOnlyHint: false`, `idempotentHint: false` — servers must explicitly override destructive/open-world defaults. Clients MUST treat annotations as untrusted unless the server is trusted. `idempotentHint` maps to the [idempotent operations pattern](../agent-design/idempotent-agent-operations.md).
-
-## Error handling
-
-MCP has two error mechanisms — conflating them causes silent failures.
-
-```mermaid
-flowchart LR
-    A[Client calls tool] --> B{Request valid?}
-    B -->|No| C["JSON-RPC error
-    (protocol level)"]
-    B -->|Yes| D{Execution succeeds?}
-    D -->|No| E["Tool result with
-    isError: true"]
-    D -->|Yes| F[Tool result with
-    content]
-```
-
-Protocol-level errors (JSON-RPC): unknown tool, malformed arguments, server unavailable — the call never reached tool logic.
-
-Tool execution errors (`isError: true`): the tool ran but failed — invalid input, API down, permission denied. Agents can reason about these.
-
-Servers MUST implement both. A generic JSON-RPC error for a database timeout hides recovery info; `isError: true` with `"Database timed out — retry in 5s"` is actionable.
-
-### Output schemas
-
-Tools can declare an `outputSchema` for [structured results](../multi-agent/typed-schemas-at-agent-boundaries.md) — servers MUST conform, clients SHOULD validate.
-
-## Capability negotiation
-
-Capability negotiation is a mandatory MCP initialization handshake.
-
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant S as Server
-    C->>S: initialize (protocol version, client capabilities)
-    S->>C: response (server capabilities, protocol version)
-    C->>S: initialized (notification)
-    Note over C,S: Session active — both parties<br/>MUST respect negotiated capabilities
-```
-
-Client sends its latest version; the server matches or replies with its own. If the client cannot support that, it SHOULD disconnect — no silent degradation. Both parties MUST respect negotiated capabilities for the whole session.
-
-## Security boundaries
-
-MCP isolates servers by design: each connection is isolated, servers see only necessary context, conversation history stays with the host, cross-server interactions are host-controlled.
-
-Server MUSTs: validate inputs, enforce access controls, rate-limit, sanitize outputs.
-
-Client SHOULDs: timeout calls, log for audit, show inputs before calling ([confirmation gates](../security/human-in-the-loop-confirmation-gates.md)).
-
-Team deployments: centralized `managed-mcp.json`, allowlist/denylist policies, project-scoped `.mcp.json`, OAuth 2.0 over PATs.
-
-## Example
-
-A deployment-tool MCP server applying the principles above — focused tools, poka-yoke parameters, both error types, behavioral annotations.
-
-```json
-{
-  "tools": [
-    {
-      "name": "deploy_service",
-      "description": "Deploy a service to the specified environment. Use this for production and staging deployments. For rollbacks, use rollback_service instead.",
-      "inputSchema": {
-        "type": "object",
-        "properties": {
-          "service": { "type": "string", "description": "Service name from the service registry" },
-          "environment": { "type": "string", "enum": ["staging", "production"] },
-          "version": { "type": "string", "pattern": "^v\\d+\\.\\d+\\.\\d+$" }
-        },
-        "required": ["service", "environment", "version"]
-      },
-      "annotations": {
-        "destructiveHint": true,
-        "idempotentHint": true,
-        "openWorldHint": false
-      }
-    }
-  ]
-}
-```
-
-`environment` is an enum, `version` enforces semver via regex, and the description routes rollbacks to a separate tool. `destructiveHint` triggers confirmation. On failure, the server returns `isError: true` with a domain-specific message — not a generic JSON-RPC error.
-
-## When this backfires
-
-stdio couples server lifecycle to client. Client restart drops in-flight operations — prefer Streamable HTTP for long-running tools or shared state.
-
-Annotations are advisory. `destructiveHint: true` prompts confirmation but does not block execution. Servers that rely on annotations for access control break when clients ignore hints.
-
-Capability negotiation is silent on gaps. A client expecting sampling or elicitation sees method-not-found, not a structured error. Build explicit fallbacks for optional capabilities.
-
-Lazy loading does not fix selection accuracy. An agent searching 200 tools still chooses worse than one with 10 focused tools — deferral mitigates but does not substitute for curation.
-
-## Key Takeaways
-
-- Transport choice is a deployment-topology decision: stdio for single-client local tools, Streamable HTTP for shared or remote servers with auth and `Origin` validation.
-- Tool surface drives agent accuracy — keep tools focused, defer schemas with tool search for large surfaces, and apply poka-yoke to parameters.
-- Implement both error mechanisms: JSON-RPC errors for protocol failures, `isError: true` results for execution failures the agent can reason about.
-- Capability negotiation is mandatory and silent on gaps — build explicit fallbacks for optional capabilities like sampling and elicitation.
-- Annotations (`destructiveHint`, `readOnlyHint`, `idempotentHint`, `openWorldHint`) are advisory hints to clients, not access controls — enforce security on the server.
-
-## Related
-
-- [MCP Server Design](mcp-server-design.md)
-- [MCP Client Design](mcp-client-design.md)
-- [MCP: The Plumbing Behind Agent Tool Access](../standards/mcp-protocol.md)
-- [Tool Description Quality](tool-description-quality.md)
-- [MCP alwaysLoad: Eager vs Just-in-Time Server Classification](mcp-eager-vs-jit-loading.md)
-- [MCP LLM Sampling](mcp-llm-sampling.md)
-- [MCP Elicitation](mcp-elicitation.md)
-- [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md)
 
 ---
 
@@ -61137,157 +61344,6 @@ Each description adds tokens on every invocation. This matters in three cases:
 
 ---
 
-### Tool Engineering Principles for AI Agent Development
-Source: https://agentpatterns.ai/tool-engineering/tool-engineering/
-
-# Tool Engineering Principles for AI Agent Development
-
-> Design agent tools like APIs — with documentation, examples, edge-case handling, and mistake-proofing — not as boilerplate wrappers around existing functions.
-
-Learn it hands-on: [What Makes a Tool Agent-Friendly](https://learn.agentpatterns.ai/tool-engineering/agent-friendly-tools/) — guided lesson with quizzes.
-
-!!! info "Also known as"
-    Tool Descriptions as Onboarding, Mistake-Proofing / Poka-Yoke
-
-## Tools as the agent's interface to the world
-
-Tool quality bounds agent quality. No prompt compensates for a tool interface the model cannot use reliably. Tool interface defects — wrong selection, incorrect parameters, misinterpreted output — recur as a failure mode in agent loops.
-
-Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), tool design deserves the same investment as prompt engineering.
-
-## Minimize formatting overhead
-
-Inputs requiring precise formatting — exact line counts, complex escaping, specific delimiters — create failure surface. Design inputs to accept formats with strong model priors from training data (JSON, markdown, plain prose). Anthropic's guidance is explicit: avoid formatting "overhead such as having to keep an accurate count of thousands of lines of code, or string-escaping any code it writes" ([Building Effective Agents, Appendix 2](https://www.anthropic.com/engineering/building-effective-agents)).
-
-The same applies to outputs: return formats the model can parse without counting characters or matching offsets.
-
-## Comprehensive documentation
-
-Tool docstrings should include:
-
-- What the tool does, stated plainly
-- What each parameter accepts, including types and valid ranges
-- At least one concrete example with real inputs and expected output
-- Known edge cases and what happens when they occur
-
-A model with no prior knowledge of your system forms its understanding entirely from the docstring. Write accordingly.
-
-This works because LLMs reason over tool descriptions via in-context learning — the docstring is the model's only ground truth about what a tool does and how to call it correctly, which is why [tool descriptions read like onboarding docs](tool-descriptions-as-onboarding.md). A well-written docstring is a compact, always-present reference that shapes every tool invocation.
-
-## Poka-yoke: mistake-proofing
-
-Poka-yoke is the engineering practice of making errors structurally impossible or structurally obvious. Applied to tool design:
-
-- Use parameter names that cannot be misread (`user_id` not `user`, `start_date` not `date`)
-- Enumerate valid values rather than accepting free text where only specific values are valid
-- Return structured errors that tell the model what went wrong and what to try instead — not generic failure messages
-- Validate inputs and return early with a clear message rather than failing deep in execution
-
-The goal is to make the correct call easier than the incorrect call.
-
-## Independent testing
-
-Test tools independently before full agent integration. Observe how the model calls each tool in isolation: correct selection, correct parameters, correct output handling — the junior-developer test [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) recommends. Errors in full agent loops are ambiguous — prompt, tool, or interaction. Isolated testing surfaces tool-specific misuse and eliminates one variable from loop-level failures.
-
-## Tool result optimization
-
-The preceding sections address tool inputs; this section addresses tool outputs. The OPENDEV paper reports a roughly 54% reduction in peak context consumption through per-tool-type summarization and large output offloading ([Bui, 2026 §2.3.2](https://arxiv.org/abs/2603.05344)):
-
-- Per-type summarization: file reads replaced with metadata (line count, character count), search results collapsed to match counts, directory listings reduced to item counts, command outputs truncated to line counts for longer outputs
-- Large output offloading: results exceeding 8,000 characters written to session-specific scratch files with a 500-character preview — the agent can retrieve full output on demand without default context cost
-- Agent-aware truncation hints: when output is offloaded, the truncation message includes a recovery hint tailored to the agent's capabilities (for example, suggesting subagent delegation or incremental search)
-
-Pre-computed summaries are reused during context compaction, avoiding redundant re-processing and improving both speed and quality of emergency compaction ([Bui, 2026 §2.3.2](https://arxiv.org/abs/2603.05344)). See also [Semantic Tool Output](semantic-tool-output.md) for complementary output formatting patterns.
-
-## Example
-
-The following shows a poorly designed tool definition contrasted with one that applies tool engineering principles — comprehensive documentation, poka-yoke parameter names, structured errors, and summarized output.
-
-Before: minimal wrapper with vague parameters
-
-```python
-def search(query, type, limit):
-    """Search the codebase."""
-    results = _run_search(query, type, limit)
-    return results  # returns raw list, potentially thousands of items
-```
-
-After: engineered tool with documentation, validated inputs, and summarized output
-
-```python
-def search_codebase(
-    search_query: str,
-    file_type: Literal["python", "typescript", "markdown", "all"],
-    max_results: int = 20,
-) -> dict:
-    """
-    Search source files by content pattern.
-
-    Args:
-        search_query: The literal string or regex pattern to find.
-            Example: "class AuthMiddleware" or r"def \\w+_handler"
-        file_type: Restrict matches to one file type, or "all" for every type.
-        max_results: Maximum number of results to return (1–100). Defaults to 20.
-
-    Returns:
-        {
-          "match_count": <int>,        # total matches found before truncation
-          "returned": <int>,           # matches included in this response
-          "results": [                 # list of up to max_results items
-            {"file": <str>, "line": <int>, "snippet": <str>}
-          ],
-          "truncated": <bool>          # true when match_count > max_results
-        }
-
-    Edge cases:
-        - Regex syntax errors return {"error": "invalid_regex", "detail": <str>}
-        - Zero matches returns {"match_count": 0, "returned": 0, "results": [], "truncated": false}
-        - Outputs exceeding 8 000 characters are written to .scratch/<session_id>/search_<n>.json;
-          this response includes a "scratch_path" key and a 500-character preview.
-    """
-    if not 1 <= max_results <= 100:
-        return {"error": "invalid_range", "detail": "max_results must be between 1 and 100"}
-    try:
-        raw = _run_search(search_query, file_type, max_results)
-    except re.error as exc:
-        return {"error": "invalid_regex", "detail": str(exc)}
-    return _summarise(raw, max_results)
-```
-
-The docstring gives the model a concrete call example, documents every return key, and explains what happens on error — so the model can handle failure without guessing. The `file_type` enumeration eliminates free-text guessing. The structured error response tells the model exactly what to fix.
-
-## When this backfires
-
-Tool engineering investment pays off when tools are reused across many agent sessions and workflows. It adds friction without payoff in these conditions:
-
-- Rapidly-changing interfaces: when the tool's API contract is still unstable, heavyweight docstrings become maintenance debt — the description drifts from actual behavior, misleading the model more than a terse stub would.
-- One-off or exploratory scripts: a tool called once in a single session does not need edge-case documentation or enumerated parameter values; the cost of engineering it outweighs the benefit.
-- Upstream documentation already exists: if the tool wraps a well-documented external API the model has strong training priors for, a thin wrapper that exposes the native interface may outperform a custom docstring that introduces inconsistencies — the rationale behind a [Unix CLI-native tool interface](unix-cli-native-tool-interface.md).
-
-Apply the full pattern to stable, shared tools that are called repeatedly across agent runs. Apply minimal-viable documentation to throwaway or prototype tooling.
-
-## Key Takeaways
-
-- Tool quality bounds agent quality — no prompt compensates for a bad tool interface
-- Minimize formatting overhead; prefer formats the model has strong priors for from training data
-- Write comprehensive docstrings with examples and edge cases, not terse API references
-- Apply poka-yoke: unambiguous parameter names, enumerated valid values, structured error messages
-- Test tools independently before integration to surface model misuse patterns early
-- Optimize tool results: summarize by type, offload large outputs, include agent-aware truncation hints for ~54% peak context reduction
-
-## Related
-
-- [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) — deep dive on structural constraint patterns
-- [Tool Description Quality](tool-description-quality.md)
-- [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
-- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
-- [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
-- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md)
-- [Agent-Computer Interface (ACI)](agent-computer-interface.md) — tool design as a UX discipline
-- [MCP Server Design: Building Agent-Friendly Servers](mcp-server-design.md) — naming, schema design, and error handling for MCP-exposed tools
-
----
-
 ### Tool Minimalism and High-Level Prompting
 Source: https://agentpatterns.ai/tool-engineering/tool-minimalism/
 
@@ -64037,84 +64093,6 @@ If the harness exposes `(remaining_turns, remaining_tokens)`, a [dual-budget con
 
 ---
 
-### Loop Engineering: Stacking Outer Loops Around the Agent
-Source: https://agentpatterns.ai/loop-engineering/loop-engineering/
-
-# Loop Engineering: Stacking Outer Loops Around the Agent
-
-> Loop engineering stacks outer loops — verification, scheduling, hill-climbing — around the inner agent loop so the human stops being the throughput ceiling.
-
-## The discipline
-
-Loop engineering is the practice of replacing the human as the agent's prompter with a system of stacked outer loops. The inner-most loop is the familiar [agent loop](../agent-design/anthropic-effective-agents-framework.md) — a model calling tools until a task is complete. The outer loops add automated grading, automated initiation, and automated harness improvement. Each layer removes one place where a human used to sit between the agent and its next action.
-
-Three primary-source descriptions of the discipline converged inside an eight-day window in June 2026. Addy Osmani's ["Loop Engineering"](https://addyo.substack.com/p/loop-engineering) names the term on 2026-06-08, framing it as "replacing yourself as the person who prompts the agent." swyx's ["Loopcraft: The Art of Stacking Loops"](https://www.latent.space/p/ainews-loopcraft-the-art-of-stacking) follows on 2026-06-12, framing it as a stacked-loops design space where reliability comes from going *down* a loop and leverage from going *up*. LangChain's Sydney Runkle publishes ["The Art of Loop Engineering"](https://blog.langchain.com/the-art-of-loop-engineering/) on 2026-06-16, structuring the stack as four named loops. Three independent practitioners arriving at the same term inside one week marks loop engineering as a recognised discipline, not one author's coinage.
-
-## When loop engineering pays off
-
-Loop engineering carries real setup cost — a verifier sub-agent, a scheduler, a state file, project-knowledge skills, and at least one connector to an issue tracker or notification channel. The stack pays back only when all four conditions from the [Agent Loop Go/No-Go gate](agent-loop-go-no-go-gate.md) hold simultaneously: task cadence at least weekly, objective verification that grades "done" without an LLM's opinion, absorbable token budget for retries, and real tooling that lets the verifier see ground truth. Fail any one and a single prompt-driven session is cheaper than a four-loop stack forever.
-
-Go/No-Go decides whether to loop at all; loop engineering decides which outer layers to stack once you commit. Read the gate first.
-
-## The four-loop stack
-
-LangChain's framing gives the cleanest decomposition. Each layer is named below with the existing site pages that go deep on its mechanics.
-
-| Loop | What it does | Where to go deep |
-|---|---|---|
-| 1. Agent loop | Model calls tools until a task is complete | [Anthropic's Effective Agents framework](../agent-design/anthropic-effective-agents-framework.md), [ReAct pattern](../agent-design/react-pattern.md) |
-| 2. Verification loop | A grader scores output against a rubric; failing output is fed back with feedback | [Evaluator-Optimizer](../agent-design/evaluator-optimizer.md), [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md) |
-| 3. Event-driven loop | An event — schedule, webhook, repo push — triggers the agent | [Event-Driven Agent Routing](../agent-design/event-driven-agent-routing.md), [Goal-Driven Autonomous Loop](goal-driven-autonomous-loop.md) |
-| 4. Hill-climbing loop | An analysis agent reads production traces and rewrites the harness | [Harness Hill-Climbing](../agent-design/harness-hill-climbing.md), [Agentic Flywheel](../agent-design/agentic-flywheel.md) |
-
-LangChain's article ([Runkle, 2026](https://blog.langchain.com/the-art-of-loop-engineering/)) calls Loop 4 "arguably most important": "the return arrow doesn't just loop back to the top — it reaches inside and updates the agent loop directly. Each cycle of the outer loop makes the inner loops more effective."
-
-Osmani's parallel framing lists five building blocks rather than loops — automations, worktrees, skills, plugins and connectors, sub-agents — plus disk-resident memory as the sixth element that sits outside the five ([Osmani, 2026](https://addyo.substack.com/p/loop-engineering)). The block list and the loop list overlap heavily: automations supply Loop 3's trigger; sub-agents supply Loop 2's verifier; memory survives Loop 1's context resets. The two framings agree on the underlying mechanism even when their carving differs.
-
-## Why it works
-
-The causal mechanism is bottleneck migration. The inner agent loop produces output faster than a human can prompt the next task, so the human becomes the throughput ceiling. Each outer loop removes one place the human used to sit. Loop 2 replaces human grading with an automated rubric. Loop 3 replaces human initiation with an event trigger. Loop 4 replaces human harness-tweaking with trace-driven analysis.
-
-Karpathy states the underlying claim directly in his [autoresearch talk](https://www.latent.space/p/ainews-loopcraft-the-art-of-stacking): "the goal is to maximise your token throughput and not be in the loop." Boris Cherny, head of Claude Code at Anthropic, [reports the same shift](https://www.latent.space/p/ainews-loopcraft-the-art-of-stacking): "I don't prompt Claude anymore. I write loops, the loops do the work."
-
-The empirical anchor for the broader "environment dominates the model" claim comes from LangChain's [harness engineering work](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/): Terminal Bench 2.0 moved from 52.8% to 66.5% through harness changes alone, no model swap. Loop engineering extends that result outward — if the environment around a single agent run dominates the model, then the environment around many agent runs dominates the run.
-
-## When this backfires
-
-The four conditions from the [Go/No-Go gate](agent-loop-go-no-go-gate.md) name the upstream cost gate. Past it, four failure modes specific to loop engineering remain.
-
-Low-cadence tasks: the four-loop stack carries fixed setup cost — a verifier, a scheduler, a state schema, the skill files that hold project conventions. For tasks that run weekly or less, the setup never amortises. A single prompt-driven session ships faster and cheaper.
-
-Subjective verification: Loop 2 demands a rubric that grades output without a human. Tasks where "done" is taste — design review, writing quality, naming conventions — cannot be wrapped in a verification loop. The loop stops on vibes, the maker grades its own homework, and quality drifts down across iterations. The [Evaluator-Optimizer pattern](../agent-design/evaluator-optimizer.md) covers when an LLM judge can stand in; outside that envelope, Loop 2 silently fails.
-
-Reviewer-bottlenecked teams: Osmani is explicit on this in ["Loop Engineering"](https://addyo.substack.com/p/loop-engineering) — "the worktrees take away the mechanical collision but YOU are still the ceiling, your review bandwidth decides how many you can actually run, not the tool." When the human reviewer is already saturated, a loop multiplies output by N but effective throughput is capped at reviewer capacity. The queue gets longer, not the team faster. The parent throughput argument runs through Osmani's earlier [Orchestration Tax](https://addyosmani.com/blog/orchestration-tax/) piece; the [WIP=1 and Little's Law page](../agent-design/wip-1-littles-law-agent-throughput.md) makes the consequence quantitative.
-
-Drifting harness assumptions: Loop 4 optimises the harness against historical traces. If the underlying task distribution shifts — new framework, new team, new feature — the optimised harness encodes stale assumptions and silently degrades. Bui et al. (2025) measured the symptom across 567 Claude Code PRs: 83.8% merged but only 54.9% merged without modification ([arxiv:2509.14745](https://arxiv.org/abs/2509.14745)). About 45% of "automated" output still consumed reviewer time. A hill-climbing loop trained on yesterday's traces will not catch tomorrow's distribution shift.
-
-## Loop engineering vs context engineering
-
-Loop engineering does not name per-turn loop mechanics — that is a separate discipline. The choice of how much context survives between iterations of the inner agent loop — accumulated, compressed, or fresh — is covered at the [Loop Strategy Spectrum](loop-strategy-spectrum.md). Within-session compaction is covered at [Context Compression Strategies](../context-engineering/context-compression-strategies.md). Loop engineering operates one layer up: it composes the outer loops around whichever inner-loop strategy you chose. The two disciplines stack; they do not replace one another.
-
-The same disambiguation applies to harness engineering. [Harness engineering](../agent-design/harness-engineering.md) is the discipline of designing the environment a single agent runs inside — the legibility, the constraints, the mechanical enforcement. Loop engineering is the discipline of stacking control loops around many agent runs. Osmani positions loop engineering as "one floor above the harness" in his ["Loop Engineering" piece](https://addyo.substack.com/p/loop-engineering); LangChain's hill-climbing loop is what closes the feedback between the two layers.
-
-## Key Takeaways
-
-- Loop engineering names the discipline of stacking outer loops — verification, scheduling, hill-climbing — around the inner agent loop.
-- The published framings (LangChain four-loop stack, Osmani five building blocks, swyx loopcraft) agree the discipline replaces the human as the agent's prompter, not the agent's per-turn context strategy.
-- The stack pays back only when the [Go/No-Go gate's](agent-loop-go-no-go-gate.md) four conditions hold; below that bar a single prompt session is cheaper.
-- Subjective verification, reviewer bottlenecks, and harness drift each break one specific loop in the stack — diagnose by which layer's invariants fail.
-
-## Related
-
-- [Agent Loop Go/No-Go: When Looping Earns Its Cost](agent-loop-go-no-go-gate.md)
-- [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-strategy-spectrum.md)
-- [Harness Engineering](../agent-design/harness-engineering.md)
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
-- [Harness Hill-Climbing](../agent-design/harness-hill-climbing.md)
-- [The Three Loops of Agentic Coding](three-loops-agentic-coding.md)
-
----
-
 ### Loop Strategy Spectrum: Accumulated vs Fresh Context
 Source: https://agentpatterns.ai/loop-engineering/loop-strategy-spectrum/
 
@@ -64224,6 +64202,84 @@ If this were a single accumulated-context run, the agent would degrade after doz
 - [Agent Harness](../agent-design/agent-harness.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../agent-design/cognitive-reasoning-execution-separation.md)
+
+---
+
+### Stacking Outer Loops Around the Agent
+Source: https://agentpatterns.ai/loop-engineering/loop-engineering/
+
+# Stacking Outer Loops Around the Agent
+
+> Loop engineering stacks outer loops — verification, scheduling, hill-climbing — around the inner agent loop so the human stops being the throughput ceiling.
+
+## The discipline
+
+Loop engineering is the practice of replacing the human as the agent's prompter with a system of stacked outer loops. The inner-most loop is the familiar [agent loop](../agent-design/anthropic-effective-agents-framework.md) — a model calling tools until a task is complete. The outer loops add automated grading, automated initiation, and automated harness improvement. Each layer removes one place where a human used to sit between the agent and its next action.
+
+Three primary-source descriptions of the discipline converged inside an eight-day window in June 2026. Addy Osmani's ["Loop Engineering"](https://addyo.substack.com/p/loop-engineering) names the term on 2026-06-08, framing it as "replacing yourself as the person who prompts the agent." swyx's ["Loopcraft: The Art of Stacking Loops"](https://www.latent.space/p/ainews-loopcraft-the-art-of-stacking) follows on 2026-06-12, framing it as a stacked-loops design space where reliability comes from going *down* a loop and leverage from going *up*. LangChain's Sydney Runkle publishes ["The Art of Loop Engineering"](https://blog.langchain.com/the-art-of-loop-engineering/) on 2026-06-16, structuring the stack as four named loops. Three independent practitioners arriving at the same term inside one week marks loop engineering as a recognised discipline, not one author's coinage.
+
+## When loop engineering pays off
+
+Loop engineering carries real setup cost — a verifier sub-agent, a scheduler, a state file, project-knowledge skills, and at least one connector to an issue tracker or notification channel. The stack pays back only when all four conditions from the [Agent Loop Go/No-Go gate](agent-loop-go-no-go-gate.md) hold simultaneously: task cadence at least weekly, objective verification that grades "done" without an LLM's opinion, absorbable token budget for retries, and real tooling that lets the verifier see ground truth. Fail any one and a single prompt-driven session is cheaper than a four-loop stack forever.
+
+Go/No-Go decides whether to loop at all; loop engineering decides which outer layers to stack once you commit. Read the gate first.
+
+## The four-loop stack
+
+LangChain's framing gives the cleanest decomposition. Each layer is named below with the existing site pages that go deep on its mechanics.
+
+| Loop | What it does | Where to go deep |
+|---|---|---|
+| 1. Agent loop | Model calls tools until a task is complete | [Anthropic's Effective Agents framework](../agent-design/anthropic-effective-agents-framework.md), [ReAct pattern](../agent-design/react-pattern.md) |
+| 2. Verification loop | A grader scores output against a rubric; failing output is fed back with feedback | [Evaluator-Optimizer](../agent-design/evaluator-optimizer.md), [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md) |
+| 3. Event-driven loop | An event — schedule, webhook, repo push — triggers the agent | [Event-Driven Agent Routing](../agent-design/event-driven-agent-routing.md), [Goal-Driven Autonomous Loop](goal-driven-autonomous-loop.md) |
+| 4. Hill-climbing loop | An analysis agent reads production traces and rewrites the harness | [Harness Hill-Climbing](../agent-design/harness-hill-climbing.md), [Agentic Flywheel](../agent-design/agentic-flywheel.md) |
+
+LangChain's article ([Runkle, 2026](https://blog.langchain.com/the-art-of-loop-engineering/)) calls Loop 4 "arguably most important": "the return arrow doesn't just loop back to the top — it reaches inside and updates the agent loop directly. Each cycle of the outer loop makes the inner loops more effective."
+
+Osmani's parallel framing lists five building blocks rather than loops — automations, worktrees, skills, plugins and connectors, sub-agents — plus disk-resident memory as the sixth element that sits outside the five ([Osmani, 2026](https://addyo.substack.com/p/loop-engineering)). The block list and the loop list overlap heavily: automations supply Loop 3's trigger; sub-agents supply Loop 2's verifier; memory survives Loop 1's context resets. The two framings agree on the underlying mechanism even when their carving differs.
+
+## Why it works
+
+The causal mechanism is bottleneck migration. The inner agent loop produces output faster than a human can prompt the next task, so the human becomes the throughput ceiling. Each outer loop removes one place the human used to sit. Loop 2 replaces human grading with an automated rubric. Loop 3 replaces human initiation with an event trigger. Loop 4 replaces human harness-tweaking with trace-driven analysis.
+
+Karpathy states the underlying claim directly in his [autoresearch talk](https://www.latent.space/p/ainews-loopcraft-the-art-of-stacking): "the goal is to maximise your token throughput and not be in the loop." Boris Cherny, head of Claude Code at Anthropic, [reports the same shift](https://www.latent.space/p/ainews-loopcraft-the-art-of-stacking): "I don't prompt Claude anymore. I write loops, the loops do the work."
+
+The empirical anchor for the broader "environment dominates the model" claim comes from LangChain's [harness engineering work](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/): Terminal Bench 2.0 moved from 52.8% to 66.5% through harness changes alone, no model swap. Loop engineering extends that result outward — if the environment around a single agent run dominates the model, then the environment around many agent runs dominates the run.
+
+## When this backfires
+
+The four conditions from the [Go/No-Go gate](agent-loop-go-no-go-gate.md) name the upstream cost gate. Past it, four failure modes specific to loop engineering remain.
+
+Low-cadence tasks: the four-loop stack carries fixed setup cost — a verifier, a scheduler, a state schema, the skill files that hold project conventions. For tasks that run weekly or less, the setup never amortises. A single prompt-driven session ships faster and cheaper.
+
+Subjective verification: Loop 2 demands a rubric that grades output without a human. Tasks where "done" is taste — design review, writing quality, naming conventions — cannot be wrapped in a verification loop. The loop stops on vibes, the maker grades its own homework, and quality drifts down across iterations. The [Evaluator-Optimizer pattern](../agent-design/evaluator-optimizer.md) covers when an LLM judge can stand in; outside that envelope, Loop 2 silently fails.
+
+Reviewer-bottlenecked teams: Osmani is explicit on this in ["Loop Engineering"](https://addyo.substack.com/p/loop-engineering) — "the worktrees take away the mechanical collision but YOU are still the ceiling, your review bandwidth decides how many you can actually run, not the tool." When the human reviewer is already saturated, a loop multiplies output by N but effective throughput is capped at reviewer capacity. The queue gets longer, not the team faster. The parent throughput argument runs through Osmani's earlier [Orchestration Tax](https://addyosmani.com/blog/orchestration-tax/) piece; the [WIP=1 and Little's Law page](../agent-design/wip-1-littles-law-agent-throughput.md) makes the consequence quantitative.
+
+Drifting harness assumptions: Loop 4 optimises the harness against historical traces. If the underlying task distribution shifts — new framework, new team, new feature — the optimised harness encodes stale assumptions and silently degrades. Bui et al. (2025) measured the symptom across 567 Claude Code PRs: 83.8% merged but only 54.9% merged without modification ([arxiv:2509.14745](https://arxiv.org/abs/2509.14745)). About 45% of "automated" output still consumed reviewer time. A hill-climbing loop trained on yesterday's traces will not catch tomorrow's distribution shift.
+
+## Loop engineering vs context engineering
+
+Loop engineering does not name per-turn loop mechanics — that is a separate discipline. The choice of how much context survives between iterations of the inner agent loop — accumulated, compressed, or fresh — is covered at the [Loop Strategy Spectrum](loop-strategy-spectrum.md). Within-session compaction is covered at [Context Compression Strategies](../context-engineering/context-compression-strategies.md). Loop engineering operates one layer up: it composes the outer loops around whichever inner-loop strategy you chose. The two disciplines stack; they do not replace one another.
+
+The same disambiguation applies to harness engineering. [Harness engineering](../agent-design/harness-engineering.md) is the discipline of designing the environment a single agent runs inside — the legibility, the constraints, the mechanical enforcement. Loop engineering is the discipline of stacking control loops around many agent runs. Osmani positions loop engineering as "one floor above the harness" in his ["Loop Engineering" piece](https://addyo.substack.com/p/loop-engineering); LangChain's hill-climbing loop is what closes the feedback between the two layers.
+
+## Key Takeaways
+
+- Loop engineering names the discipline of stacking outer loops — verification, scheduling, hill-climbing — around the inner agent loop.
+- The published framings (LangChain four-loop stack, Osmani five building blocks, swyx loopcraft) agree the discipline replaces the human as the agent's prompter, not the agent's per-turn context strategy.
+- The stack pays back only when the [Go/No-Go gate's](agent-loop-go-no-go-gate.md) four conditions hold; below that bar a single prompt session is cheaper.
+- Subjective verification, reviewer bottlenecks, and harness drift each break one specific loop in the stack — diagnose by which layer's invariants fail.
+
+## Related
+
+- [Agent Loop Go/No-Go: When Looping Earns Its Cost](agent-loop-go-no-go-gate.md)
+- [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-strategy-spectrum.md)
+- [Harness Engineering](../agent-design/harness-engineering.md)
+- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
+- [Harness Hill-Climbing](../agent-design/harness-hill-climbing.md)
+- [The Three Loops of Agentic Coding](three-loops-agentic-coding.md)
 
 ---
 
@@ -67614,6 +67670,8 @@ Request a smaller PR rather than approving as-is when ([GitHub Blog](https://git
 
 These are the conditions under which the 10-minute framework cannot complete — restructuring is cheaper than rushing the review.
 
+The human-factors reading of the same limit comes from Jon Udell, who names the "unreviewable PR" as an anti-pattern and reframes "human in the loop" as "agent in the loop" — the fix is to size agent PRs to stay reviewable rather than to expand review effort to match them ([Simon Willison](https://simonwillison.net/2026/Jun/28/jon-udell/)).
+
 ## When this backfires
 
 The playbook describes the target review, not the achievable one. Five conditions degrade it:
@@ -68544,6 +68602,7 @@ Source: https://agentpatterns.ai/verification/
 - [Golden Journeys: Restartability as a First-Class Verification Primitive](golden-journeys.md) — Name a small set of end-to-end paths with explicit failure signals per step and gate completion on the system restarting cleanly afterward
 - [Test-Driven Intent Clarification](test-driven-intent-clarification.md) — Use AI-generated tests to surface specification ambiguity before code review — validate tests instead of code to clarify intent with lower cognitive cost
 - [Source-Grounded Test Plan with Pre-Action Assertion Annotation](pre-test-grounded-plan-assertion-annotation.md) — Before a UI-driving agent verifies its change, have it write a source-read test plan and annotate each step's expected behavior upfront so it cannot rationalize an unexpected result as a pass
+- [Agent-Recorded Video Demos as a Verification Artifact](agent-recorded-video-demos.md) — The agent drives the running app and records a screencast as proof-of-work for human PR reviewers — a visual modality that complements tests where they are weakest, under stated conditions
 - [Spec-Derived Execution as a Correctness Oracle](spec-derived-execution-correctness-judging.md) — Judge candidate code against a natural-language spec by deriving inputs from the spec, executing them, and grading the I/O pairs — ground the LLM judge in real execution traces instead of asking it to reason over the code
 
 ## Rubric Design
@@ -68570,6 +68629,92 @@ Source: https://agentpatterns.ai/verification/
 
 - [Test Harness Design for LLM Context Windows](llm-context-test-harness.md) — Terse stdout, verbose log files, and grep-friendly error lines that keep agent context clean and actionable during evaluation runs
 - [Runnable Documentation as Agent Verification](runnable-documentation.md) — Extract inline code examples into standalone files that CI executes on every build so doc rot fails the build the same way broken code does
+
+---
+
+### Agent-Recorded Video Demos as a Verification Artifact
+Source: https://agentpatterns.ai/verification/agent-recorded-video-demos/
+
+# Agent-Recorded Video Demos as a Verification Artifact
+
+> A coding agent drives the running app and records a video demo, giving reviewers visual proof-of-work instead of a textual claim it works.
+
+A coding agent can prove a change works by driving the running application and recording a screencast, then attaching the video to its pull request. The reviewer watches the feature run rather than trusting the agent's written "it works". Simon Willison's `shot-scraper video` command, added in shot-scraper 1.10, records a WebM or MP4 from a YAML storyboard for exactly this ([Willison](https://simonwillison.net/2026/Jun/30/shot-scraper-video/)). It is a distinct verification modality: evidence handed to a human, not context the agent consumes to check itself.
+
+## When a video adds signal a passing test does not
+
+Reach for a recorded demo only when all three conditions hold:
+
+- The change has a visual or interactive surface — a rendered UI, a multi-step flow — that a passing unit or API test never exercises.
+- A human reviews the pull request and reads the demo as evidence the feature is present and looks right, not as proof that edge cases and regressions are absent.
+- The reviewer would otherwise re-run the change by hand. A short video is cheaper to check than a manual walkthrough.
+
+Outside those conditions, tests and evals carry the load, because they are machine-checkable and gate CI without human attention. A video complements them; it never replaces them.
+
+## How the agent records one
+
+The agent writes a storyboard: a YAML file naming the app URL, a viewport, and a list of scenes, each a sequence of `do` steps such as `click`, `fill`, `wait_for`, and `pause` ([shot-scraper docs](https://shot-scraper.datasette.io/en/stable/video.html)). Running `shot-scraper video storyboard.yml` starts the app, drives it with Playwright, and records the session to a video file. In Willison's example, GPT-5.5 built the entire storyboard from one prompt: review the branch, run `shot-scraper video --help`, start a dev server, and record the new feature ([Willison](https://simonwillison.net/2026/Jun/30/shot-scraper-video/)).
+
+The `--help` output does the heavy lifting. Willison notes it "works kind of like bundling a `SKILL.md` file directly inside the tool" — a CLI whose help text is complete enough for an agent to drive it unaided needs no separate skill file ([Willison](https://simonwillison.net/2026/Jun/30/shot-scraper-video/)). That is the same [CLI-first skill design](../tool-engineering/cli-first-skill-design.md) that lets an agent learn a tool from the tool.
+
+## Example
+
+A trimmed storyboard that records a form-submission flow ([Willison](https://simonwillison.net/2026/Jun/30/shot-scraper-video/)):
+
+```yaml
+output: /tmp/demo.webm
+url: http://127.0.0.1:6419/demo/tasks
+viewport:
+  width: 1280
+  height: 720
+cursor: true
+wait_for: 'button[data-table-action="insert-row"]'
+scenes:
+  - name: Bulk insert rows
+    do:
+      - click: 'button[data-table-action="insert-row"]'
+      - wait_for: "#row-edit-dialog[open]"
+      - fill:
+          into: ".row-edit-bulk-textarea"
+          text: |
+            title,owner,status,priority
+            Prepare release video,Ana,doing,1
+            Check pasted CSV import,Ben,review,3
+            Share the branch demo,Chen,queued,2
+      - click: ".row-edit-save"
+      - wait_for: "text=Previewing 3 rows."
+      - pause: 1.0
+```
+
+Each scene is a scripted assertion in disguise: a `wait_for` that never matches fails the recording, so the video only completes when the flow reaches the stated end state.
+
+## Why it works
+
+The artifact is generated by executing the change against the running application — Playwright drives the real UI and records what actually happens — so it is grounded in observed behavior rather than the agent's unfalsifiable textual claim ([Willison](https://simonwillison.net/2026/Jun/30/shot-scraper-video/)). It covers the gap automated tests leave: visual rendering and multi-step interaction that a passing unit test does not touch. And it shifts cost off the reviewer, because watching a short screencast beats re-running the change by hand — the manual-QA bottleneck that agents worsen by producing more code faster ([Willison, Showboat](https://simonwillison.net/2026/Feb/10/showboat-and-rodney/)).
+
+## When this backfires
+
+- No visual surface. CLI tools, libraries, and backend jobs have nothing to screencast; reach for text-based executable proof-of-work such as [runnable documentation](runnable-documentation.md) instead.
+- Read as proof that bugs are absent. A demo shows the happy path renders; it says nothing about error states or regressions. Treated as "it works", it manufactures false confidence.
+- Self-scripted by the change author. The same agent that wrote the code chooses the scenes, so it can script around the defect. Willison saw agents fake proof-of-work by editing the demo artifact directly rather than running the tool ([Willison, Showboat](https://simonwillison.net/2026/Feb/10/showboat-and-rodney/)). Pair the demo with test assertions or an independently written storyboard, as in [source-grounded pre-action assertion annotation](pre-test-grounded-plan-assertion-annotation.md).
+- High pull-request volume. A video is not diffable or CI-gated, so one per PR adds reviewer time rather than saving it at scale.
+- Trivial or flaky changes. For a one-line fix the storyboard setup costs more than it returns; for a flaky UI the recording is nondeterministic and re-litigates the flake instead of proving the fix.
+
+## Key Takeaways
+
+- An agent-recorded video is a verification modality distinct from tests and evals: proof-of-work an agent hands to a human reviewer, not context it consumes to self-check.
+- It adds signal precisely where automated tests are weak — visual rendering and multi-step interaction — and only when a human reads it as evidence of presence, not absence of bugs.
+- `shot-scraper video` drives the app with Playwright from a YAML storyboard, and its `--help` doubles as an embedded skill the agent reads to drive the tool unaided.
+- The demo is self-scripted by the change author, so pair it with assertions or an independent storyboard; agents have been observed faking proof-of-work artifacts.
+- Skip it when the change has no visual surface, PR volume is high, or the change is trivial — text-based executable proof-of-work or plain tests win there.
+
+## Related
+
+- [Making Application Observability Legible to Agents](../observability/observability-legible-to-agents.md) — wiring browser, log, and metric signals into agent context so the agent can self-verify; the inverse audience of a demo handed to a human
+- [Runnable Documentation as Agent Verification](runnable-documentation.md) — the text modality of executable proof-of-work, for changes with no visual surface
+- [Source-Grounded Test Plan with Pre-Action Assertion Annotation](pre-test-grounded-plan-assertion-annotation.md) — pre-committing expected behavior so a UI-driving agent cannot rationalize a bad result as a pass
+- [Chain-of-Verification for Coding Agents](chain-of-verification-coding-agents.md) — a self-check verification modality that a human-watched demo complements rather than replaces
+- [CLI-First Skill Design](../tool-engineering/cli-first-skill-design.md) — building a CLI whose `--help` output is complete enough for an agent to use it like a bundled skill
 
 ---
 
@@ -69916,7 +70061,7 @@ Source: https://agentpatterns.ai/verification/corpus-level-trace-diagnostics/
 
 > A trace corpus past a few hundred runs needs population-level analysis: a scout-investigator pipeline proposes recurring failure hypotheses, then verifies each against corpus evidence.
 
-Corpus-level trace diagnostics runs a structured multi-agent pipeline over a large set of agent execution traces to surface systematic failure patterns — recurring tool misuse, silent [reward hacking](anti-reward-hacking.md), drift after long context — invisible when a human inspects one failing trace at a time. It sits above per-trace error analysis, not in place of it.
+Corpus-level trace diagnostics runs a structured multi-agent pipeline over a large set of agent execution traces to surface systematic failure patterns — recurring tool misuse, silent [reward hacking](anti-reward-hacking.md), drift after long context — invisible when a human inspects one failing trace at a time. It sits above per-trace error analysis, not in place of it. For the statistical route to the same corpus-level question — clustering judge-labeled traces instead of agent-proposed hypotheses — see [Macro Evals for Agentic Systems](macro-evals-agentic-systems.md).
 
 ## When it applies
 
@@ -69992,6 +70137,7 @@ The layers compose; they do not replace each other.
 - [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md) — convert each confirmed failure pattern into a regression eval case
 - [LLM Agent Bug Fix Taxonomy](agent-bug-fix-taxonomy.md) — empirical failure-mode taxonomy from 930 real agent bugs
 - [Learned Prefix Monitors for Agent Traces](learned-prefix-monitors-agent-traces.md) — online failure detection at the trace level; complements offline corpus-level analysis
+- [Macro Evals for Agentic Systems](macro-evals-agentic-systems.md) — the statistical route to the same population-level question: clustering judge-labeled traces (UMAP/HDBSCAN at ~1,000+ traces) where this page runs hypothesis-driven agents from ~100 traces up
 
 ---
 
@@ -72462,7 +72608,7 @@ Source: https://agentpatterns.ai/verification/golden-query-pairs-regression/
 
 ## Evals as regression tests
 
-Agent capability degrades silently as prompts, tools, context, or models change. Without continuous evaluation, you find out about regressions through user complaints.
+Agent capability degrades silently as prompts, tools, context, or models change. Without continuous evaluation, you find out about regressions through user complaints. This class of failure has a name — *prompt regression*, where small prompt or instruction edits quietly break behavior with no error raised ([Towards Data Science — Prompt Engineering Fails Quietly](https://towardsdatascience.com/prompt-engineering-fails-quietly-prompt-regression-is-why/)).
 
 OpenAI's data agent team treats evals as "unit tests that run continuously during development" and "canaries in production" — golden question-answer pairs run on every agent configuration change. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
@@ -73784,7 +73930,7 @@ Source: https://agentpatterns.ai/verification/macro-evals-agentic-systems/
 
 Learn it hands-on with the [Evals at Scale guided lesson](https://learn.agentpatterns.ai/verification/evals-at-scale/), which includes quizzes.
 
-Macro evaluation is the population-level layer above per-call and per-trace evals: it asks which problems repeat, where they concentrate, and which part of the workflow to inspect first — questions a single trace cannot answer because the signal is statistical, not local ([OpenAI Cookbook, 2026](https://developers.openai.com/cookbook/examples/partners/macro_evals_for_agentic_systems/macro_evals_for_agentic_systems)). Below the conditions where it earns its keep, it substitutes a heavy unsupervised pipeline for what a sorted frequency table would surface.
+Macro evaluation is the population-level layer above per-call and per-trace evals: it asks which problems repeat, where they concentrate, and which part of the workflow to inspect first — questions a single trace cannot answer because the signal is statistical, not local ([OpenAI Cookbook, 2026](https://developers.openai.com/cookbook/examples/partners/macro_evals_for_agentic_systems/macro_evals_for_agentic_systems)). Below the conditions where it earns its keep, it substitutes a heavy unsupervised pipeline for what a sorted frequency table would surface. For the agent-driven route to the same population-level question — scout agents proposing failure hypotheses that an investigator verifies against the corpus — see [Corpus-Level Trace Diagnostics](corpus-level-trace-diagnostics.md).
 
 ## When this layer applies
 
@@ -73873,6 +74019,7 @@ Macro evaluation pairs with per-call rubrics, trajectory-aware safety auditing, 
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — Per-trace outcome grading; macro evals aggregate outcomes plus findings across runs.
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — Per-trace stage-level diagnosis; macro evals look at recurring stage failures across the corpus.
 - [Structural Coverage Criteria for Agent Workflows](structural-coverage-agent-workflows.md) — Adequacy floor for declared workflow edges; macro evals score behavior across runs against declared structure.
+- [Corpus-Level Trace Diagnostics](corpus-level-trace-diagnostics.md) — The agent-driven route to the same population-level question: scout-proposed failure hypotheses verified against the corpus, viable from ~100 traces where this page's clustering needs ~1,000.
 
 ---
 
@@ -76504,6 +76651,7 @@ Tested docs do not guarantee freshness at the retrieval layer. A RAG system inde
 - [Pre-Completion Checklists](pre-completion-checklists.md) — another pattern that promotes implicit assertions to explicit verification gates
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — hard CI checks as the enforcement layer for agent output
 - [Test Harness Design for LLM Context Windows](llm-context-test-harness.md) — keeping test output useful when agents consume it as context
+- [Agent-Recorded Video Demos as a Verification Artifact](agent-recorded-video-demos.md) — the visual modality of executable proof-of-work, for changes with a rendered UI
 
 ---
 
@@ -94236,6 +94384,7 @@ Wiring observability into agent context adds complexity that can degrade reliabi
 - [Trajectory Logging via Progress Files](trajectory-logging-progress-files.md) -- agent-written audit trails
 - [Event Sourcing for Agents](event-sourcing-for-agents.md) -- immutable event logs as an observability substrate
 - [Context Engineering](../context-engineering/context-engineering.md) -- JIT loading and observation masking patterns that keep observability payloads from saturating the window
+- [Agent-Recorded Video Demos as a Verification Artifact](../verification/agent-recorded-video-demos.md) -- the agent records a screencast as proof-of-work for a human reviewer, rather than wiring signals in to self-verify
 
 ---
 
@@ -105858,7 +106007,7 @@ This is the cost-aware version of the [Ralph Wiggum Loop](../../loop-engineering
 
 When cascade works: Tasks with verifiable outcomes — tests pass, types check, linter clean. The feedback loop — the same [backpressure](harness-engineering.md) that gates the cascade — tells you whether the cheaper model was sufficient.
 
-When cascade doesn't work: Tasks without binary feedback — architecture design, documentation quality, code review. There's no automated signal to trigger escalation. Use the powerful model directly for these.
+When cascade doesn't work: Tasks without binary feedback — architecture design, documentation quality, code review. There's no automated signal to trigger escalation. Use the powerful model directly for these, or read the cheap model's partial trajectory to decide when to escalate — see [Trajectory-Conditioned Model Escalation](../../agent-design/trajectory-conditioned-model-escalation.md).
 
 ---
 
@@ -117703,7 +117852,6 @@ Source: https://agentpatterns.ai/tools/copilot/
 - [Agent Mission Control](agent-mission-control.md) — Centralized dashboard for assigning, steering, and tracking coding agent tasks across repositories
 - [Copilot CLI BYOK and Local Model Support](copilot-cli-byok-local-models.md) — Connect Copilot CLI to any OpenAI-compatible provider or run fully local models for cost control, data residency, and offline workflows
 - [Agent Mode](agent-mode.md) — Local, synchronous agentic execution in VS Code, JetBrains, Eclipse, and Xcode
-- [Inline Agent Mode in JetBrains](inline-agent-mode.md) — Public-preview surface that runs agent capabilities inside the JetBrains inline chat popover instead of the chat panel
 - [Cloud Agent Organization Controls](cloud-agent-org-controls.md) — Three-tier governance model for runner configuration, firewall policy, and commit traceability
 - [Cloud Agent: Research, Plan, and Code Phases](cloud-agent-research-plan-code.md) — Three-phase execution model with explicit developer checkpoints between Research, Plan, and Code
 - [Coding Agent](coding-agent.md) — Asynchronous agent that works via GitHub Actions to plan, implement, and open PRs
@@ -118478,96 +118626,6 @@ Copilot returns a plan. Review it — check that it identified the right middlew
 
 ---
 
-### Copilot Inline Agent Mode in JetBrains
-Source: https://agentpatterns.ai/tools/copilot/inline-agent-mode/
-
-# Copilot Inline Agent Mode in JetBrains
-
-> Public-preview surface that runs Copilot agent capabilities inside the JetBrains inline chat popover instead of the dedicated chat panel.
-
-## What it is
-
-Inline agent mode puts agent capabilities in the JetBrains inline chat. You can run them from the editor without switching to the chat panel ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)). It uses the inline chat popover anchored to the active selection and file. It offers the same agent toolkit as chat-panel agent mode: workspace search, multi-file edits, terminal commands, and editor lint and compile error reads ([GitHub Changelog 2025-05-19](https://github.blog/changelog/2025-05-19-agent-mode-and-mcp-support-for-copilot-in-jetbrains-eclipse-and-xcode-now-in-public-preview/)).
-
-It shipped in public preview on April 24, 2026. Chat-panel [agent mode](agent-mode.md) has been generally available in JetBrains since [July 16, 2025](https://github.blog/changelog/2025-07-16-agent-mode-for-jetbrains-eclipse-and-xcode-is-now-generally-available/). Inline agent mode adds a surface; it does not replace the chat panel.
-
-## Invocation
-
-Open inline chat in one of three ways: press `Shift+Ctrl+I` (Windows) or `Shift+Cmd+I` (Mac), right-click and select **Open Inline Chat**, or click the gutter icon. Then switch to agent mode in the inline chat panel ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)).
-
-On Copilot Business and Copilot Enterprise, an admin must enable the **Editor preview features** policy before the surface appears for users ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)).
-
-## Inline surface vs chat panel
-
-Both surfaces run the same four-phase loop: semantic understanding, plan proposal, plan execution, and task completion ([GitHub Changelog 2025-05-19](https://github.blog/changelog/2025-05-19-agent-mode-and-mcp-support-for-copilot-in-jetbrains-eclipse-and-xcode-now-in-public-preview/)). They differ in where the conversation, plan, and diffs appear.
-
-| Dimension | Inline agent mode | Chat-panel agent mode |
-|-----------|------------------|----------------------|
-| Invocation | `Shift+Ctrl/Cmd+I` from the editor | Tool window |
-| Anchoring | Active selection / cursor / file | Workspace, last-active file |
-| Plan and diff render area | Inline popover | Full chat tool window |
-| Best fit | Edits scoped to a single file or selection | Multi-file changes, long plans, terminal output review |
-
-You are trading invocation cost against legibility. Inline mode shortens the path from looking at code to having an agent act on it. The chat panel keeps multi-step plans, file lists, and terminal output readable as a run grows.
-
-## Same-release controls that affect this surface
-
-The April 24, 2026 release also shipped two settings under `Settings > GitHub Copilot > Chat > Auto Approve` that govern any agent run, including inline ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)):
-
-- **Global Auto Approve** approves every tool call across all workspaces. It overrides per-category auto-approve settings, even for destructive actions like file edits, terminal commands, and external tool calls.
-- **Auto-approve commands not covered by rules** and **Auto-approve file edits not covered by rules** are narrower variants that apply only to tool calls with no explicit rule.
-
-GitHub advises that you enable these only if you understand and accept the security risks ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)). Inline invocation is low-friction and global auto-approve asks for no confirmation. Together they remove the [confirmation gate](../../security/human-in-the-loop-confirmation-gates.md) for agent-initiated changes. Keep them off unless the workspace is sandboxed.
-
-The same release also adds inline edit previews for [Next Edit Suggestions](next-edit-suggestions.md) and a gutter indicator that points to far-away edits. You can review proposed changes inside the editor too ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)).
-
-## When to use inline over chat panel
-
-Prefer the inline surface for:
-
-- selection-scoped refactors where the prompt and the target are the same code under the cursor
-- quick fixes against editor lint or compile errors the agent can read directly ([GitHub Changelog 2025-05-19](https://github.blog/changelog/2025-05-19-agent-mode-and-mcp-support-for-copilot-in-jetbrains-eclipse-and-xcode-now-in-public-preview/))
-- tight feedback loops where invocation cost dominates, since staying on the same shortcut and surface as inline chat removes a context switch
-
-Prefer the chat panel when the task spans many files, needs a long plan reviewed before approval, or needs the larger terminal-output area. The chat panel also keeps the broader [plan-first loop](../../workflows/plan-first-loop.md) more legible when the plan agent is involved ([GitHub Changelog 2026-03-11](https://github.blog/changelog/2026-03-11-major-agentic-capabilities-improvements-in-github-copilot-for-jetbrains-ides/)).
-
-## When this backfires
-
-- Long agent runs from a popover. Plans, terminal output, and diff stacks all crowd the inline panel. Switch to the chat panel once the run outgrows what the popover can show.
-- Global auto-approve on a non-sandboxed checkout. Low-cost inline invocation plus global auto-approve removes the per-step confirmation that would catch destructive tool calls. Keep [blast radius](../../security/blast-radius-containment.md) contained.
-- Habits carried over from edit mode. Edit mode was deprecated from the chat mode dropdown in March 2026 ([GitHub Changelog 2026-03-11](https://github.blog/changelog/2026-03-11-major-agentic-capabilities-improvements-in-github-copilot-for-jetbrains-ides/)). Inline agent mode runs the full agent loop, not a single edit.
-- Business or Enterprise tenants without the policy enabled. The surface stays invisible until the **Editor preview features** policy is on ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)).
-
-## Example
-
-You are in IntelliJ IDEA looking at a failing test method. Select the test body, press `Shift+Cmd+I` (Mac) to open inline chat, switch the inline chat panel to agent mode, and submit:
-
-```
-Fix this test. Read the failing assertion, the function under test, and any related fixtures. Re-run the test until it passes.
-```
-
-The agent runs the four-phase loop in place: it gathers context from the selection plus the workspace, proposes a plan, edits the test and any supporting files, and runs the test through the terminal until it converges ([GitHub Changelog 2025-05-19](https://github.blog/changelog/2025-05-19-agent-mode-and-mcp-support-for-copilot-in-jetbrains-eclipse-and-xcode-now-in-public-preview/)). When the diff or terminal output outgrows the popover, fall back to the chat panel.
-
-## Key Takeaways
-
-- Inline agent mode is the same Copilot agent capability hosted in the JetBrains inline chat popover, available in public preview from April 24, 2026
-- Invocation is `Shift+Ctrl/Cmd+I` then switch the inline panel to agent mode; Business/Enterprise tenants need the Editor preview features policy enabled
-- Prefer the inline surface for selection-scoped tasks and the chat panel for runs whose plan, diff, or terminal output need more space
-- Same-release global auto-approve combined with inline invocation removes confirmation gates — only enable in sandboxed workspaces
-
-## Related
-
-- [Copilot Agent Mode](agent-mode.md)
-- [Custom Agents, Skills & Plugins](custom-agents-skills.md)
-- [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
-- [MCP Integration](mcp-integration.md)
-- [Next Edit Suggestions](next-edit-suggestions.md)
-- [Human-in-the-Loop Confirmation Gates](../../security/human-in-the-loop-confirmation-gates.md)
-- [Blast Radius Containment](../../security/blast-radius-containment.md)
-- [Plan-First Loop](../../workflows/plan-first-loop.md)
-
----
-
 ### Copilot Memory and Cross-Agent Persistence
 Source: https://agentpatterns.ai/tools/copilot/copilot-memory/
 
@@ -118832,7 +118890,7 @@ The unified sessions view is the JetBrains chat window's per-agent-type registry
 Three conditions gate the value:
 
 - Concurrency above one. A registry listing one row is overhead. The pattern pays when two or more agents are in flight — typical when a CLI agent runs in the background while inline agent mode handles tactical edits.
-- Multiple invocation surfaces in use. JetBrains exposes at least three Copilot surfaces — chat-panel [agent mode](agent-mode.md), [inline agent mode](inline-agent-mode.md), and the CLI agent. One row per session removes the "which surface did I start that run on?" problem.
+- Multiple invocation surfaces in use. JetBrains exposes at least three Copilot surfaces — chat-panel [agent mode](agent-mode.md), [inline agent mode](agent-mode.md#inline-agent-mode-jetbrains), and the CLI agent. One row per session removes the "which surface did I start that run on?" problem.
 - Backed by an isolation primitive. The CLI agent offers worktree isolation (separate git worktree, review before apply) or workspace isolation (changes apply to the current workspace) ([GitHub Changelog 2026-05-13](https://github.blog/changelog/2026-05-13-introducing-copilot-cli-agent-and-unified-sessions-view-in-github-copilot-for-jetbrains-ides)). A list without isolation behind it is decoration — parallel rows that step on each other's files cannot run in parallel.
 
 ## What the view aggregates
@@ -118908,7 +118966,7 @@ When the CLI agent moves to `Needs input`, the developer attaches to that row, a
 
 - [Editor and Manager Surface Separation in Agent IDEs](../../agent-design/editor-manager-surface-separation.md) — the broader two-surface pattern the unified sessions view is one instance of
 - [Agent Mission Control](agent-mission-control.md) — the cloud-coding-agent counterpart of the JetBrains local view
-- [Copilot Inline Agent Mode in JetBrains](inline-agent-mode.md) — one of the invocation surfaces the view aggregates
+- [Copilot Agent Mode — inline surface (JetBrains)](agent-mode.md#inline-agent-mode-jetbrains) — one of the invocation surfaces the view aggregates
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md) — the standalone CLI behaviour that the IDE-hosted CLI agent wraps
 - [Remote Session Control for Local CLI Agents](../../agent-design/remote-session-control.md) — cross-surface session control that pairs with the registry
 
@@ -119342,6 +119400,19 @@ For complex tasks, Copilot generates a [plan that lists all steps](https://code.
 ## Vision
 
 [Feed Copilot a screenshot, mockup, or image](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/provide-visual-inputs) and it generates the UI code and implementation details.
+
+## Inline agent mode (JetBrains)
+
+Inline agent mode hosts the same agent toolkit — workspace search, multi-file edits, terminal commands, and editor lint and compile error reads ([GitHub Changelog 2025-05-19](https://github.blog/changelog/2025-05-19-agent-mode-and-mcp-support-for-copilot-in-jetbrains-eclipse-and-xcode-now-in-public-preview/)) — in the JetBrains inline chat popover instead of the chat tool window, in public preview since April 24, 2026 ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)). Open inline chat with `Shift+Ctrl+I` (Windows) or `Shift+Cmd+I` (Mac), right-click and select **Open Inline Chat**, or click the gutter icon, then switch the popover to agent mode. On Copilot Business and Enterprise, an admin must enable the **Editor preview features** policy before the surface appears.
+
+| Dimension | Inline agent mode | Chat-panel agent mode |
+|-----------|------------------|----------------------|
+| Invocation | `Shift+Ctrl/Cmd+I` from the editor | Tool window |
+| Anchoring | Active selection / cursor / file | Workspace, last-active file |
+| Plan and diff render area | Inline popover | Full chat tool window |
+| Best fit | Selection-scoped edits, quick fixes against editor errors | Multi-file changes, long plans, terminal output review |
+
+The trade is invocation cost against legibility: inline shortens the path from looking at code to having an agent act on it, while the chat panel keeps plans, file lists, and terminal output readable as a run grows — switch surfaces once a run outgrows the popover. The same release shipped **Global Auto Approve** settings (`Settings > GitHub Copilot > Chat > Auto Approve`) that approve every tool call across all workspaces, including destructive ones; combined with low-friction inline invocation this removes the [confirmation gate](../../security/human-in-the-loop-confirmation-gates.md) for agent-initiated changes, so keep it off outside sandboxed workspaces ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)).
 
 ## Why it works
 
@@ -121549,7 +121620,7 @@ A declarative setup spec makes failure binary. The job either succeeds in full o
 - [Session Initialization Ritual](../agent-design/session-initialization-ritual.md)
 - [Repository Bootstrap Checklist](../workflows/repository-bootstrap-checklist.md)
 - [Skeleton Projects as Scaffolding](skeleton-projects-as-scaffolding.md)
-- [Bootstrapping an Agent-Driven Project](bootstrapping-agent-driven-project.md)
+- [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
 - [Agent-Led Dev-Environment Iteration](agent-led-dev-environment.md)
 - [Distilled Bootstrap Contract](distilled-bootstrap-contract.md)
 - [Dependency Gap Validation](../verification/dependency-gap-validation.md)
@@ -121814,7 +121885,7 @@ Issue templates that are human-friendly but agent-hostile force a translation st
 
 Use the pipeline you just built to build the project itself. This is the most effective validation step. If agents cannot use the pipeline to produce project content, the pipeline has problems you should fix before adding complexity — the [repository bootstrap checklist](repository-bootstrap-checklist.md) is the minimum that has to work first.
 
-For a code project, use the pipeline to generate the initial scaffold. For a documentation project, generate the first content pages using the content agents. Issues that surface during dog-fooding reveal gaps in standards, missing skills, or unclear pipeline stage definitions — the same gaps [bootstrapping an agent-driven project](bootstrapping-agent-driven-project.md) closes one at a time. Dog-fooding also produces the pipeline's first real history: commit logs that show agent behavior under the actual conventions.
+For a code project, use the pipeline to generate the initial scaffold. For a documentation project, generate the first content pages using the content agents. Issues that surface during dog-fooding reveal gaps in standards, missing skills, or unclear pipeline stage definitions. Dog-fooding also produces the pipeline's first real history: commit logs that show agent behavior under the actual conventions.
 
 ## Minimum viable agent project
 
@@ -121847,8 +121918,9 @@ The agent-first greenfield approach is worse than conventional development in se
 - The team is still learning the codebase patterns. Agent-first workflows shift humans toward reviewing PRs rather than writing code. On a greenfield project with no existing conventions, that review loop becomes the primary source of architectural learning — and newcomers lose the manual coding experience that traditionally builds foundational skills and intuition ([Rao, 2026](https://www.cio.com/article/4120168/is-ai-eradicating-the-junior-developer.html)).
 - Decomposition cost exceeds implementation cost. For very small projects (a single service, a CLI with fewer than ~10 commands), the overhead of defining agents, writing standards, and authoring issue templates outweighs the benefit. A solo developer writing the code directly often ships faster.
 - Acceptance criteria cannot be mechanically verified. [Agent loops](../loop-engineering/ralph-wiggum-loop.md) depend on verifiable success signals. Research prototypes, UX-heavy frontends, and code whose quality is judged subjectively produce weak feedback and push quality work back onto human review at every iteration.
+- Model or tool capabilities are in flux. The topology you pick encodes today's context windows, tool budgets, and reliability; if any of those shift substantially, an elaborate agent layout must be reworked, while a thin codebase with minimal agent scaffolding absorbs the change more easily.
 
-If several of these conditions apply, start with a thin agent stack — one agent, one standards file, one command — and grow it only when the minimum proves insufficient.
+If several of these conditions apply, start with a thin agent stack — one agent, one standards file, one command — and grow it only when the minimum proves insufficient, or retrofit agent support into a code-first repo in dependency order via the [Repository Bootstrap Checklist](repository-bootstrap-checklist.md).
 
 ## Example
 
@@ -121885,7 +121957,6 @@ Step 5 — iterate on infrastructure. The first round of PRs reveals that the `i
 
 ## Related
 
-- [Bootstrapping an Agent-Driven Project](bootstrapping-agent-driven-project.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
 - [Lay the Architectural Foundation by Hand Before Delegating to Agents](architectural-foundation-first.md)
 - [Agent-First Software Design](../agent-design/agent-first-software-design.md)
@@ -123353,48 +123424,6 @@ The agent traces task-ID variables, locates the literal-vs-placeholder mismatch,
 - [Semantic Issue Search from Chat vs Query Syntax](semantic-issue-search-natural-language.md) — paraphrase-tolerant duplicate detection that complements `.out-of-scope/` concept matching
 - [AI-Powered Vulnerability Triage](ai-powered-vulnerability-triage.md) — analogous classification pipeline in a security context
 - [Continuous AI: A Navigation Map of Always-On Agent Workflows](continuous-ai.md) — the parent map placing this in the triage family alongside the continuous-* workflows
-
----
-
-### Bootstrapping an Agent-Driven Project from Scratch
-Source: https://agentpatterns.ai/workflows/bootstrapping-agent-driven-project/
-
-# Bootstrapping an Agent-Driven Project from Scratch
-
-> Bootstrapping an agent-driven project defines agent roles, skills, and instruction files as a new codebase's architectural foundation, so agents contribute from the first commit.
-
-Agent-driven bootstrapping treats the agent topology — roles, skills, and instruction files — as the project's initial architecture. Before you write the first feature, you decide which agents own which boundaries, what lives in `AGENTS.md` or `CLAUDE.md` ([an open format adopted across the industry](https://agents.md/)), and how to split tasks to fit context windows. This follows the same structure-shapes-output logic as [Conway's Law](https://en.wikipedia.org/wiki/Conway%27s_law): the agent layout you choose on day one shapes the codebase you end up with.
-
-The detailed workflow — role definition, epic shaping, context-safe task decomposition, and review at PR boundaries — is in [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md).
-
-## When this backfires
-
-Agent-first bootstrapping assumes you can pick a useful topology with no product signal. That assumption fails in specific conditions:
-
-- Unknown domain shape. If you do not yet know the product's core workloads, role boundaries are guesses. A topology chosen before any feature exists tends to lock in the wrong splits, and moving an agent's responsibilities later costs more than moving a module.
-- Single-developer or short-lived project. The cost of maintaining `AGENTS.md`, skill libraries, and agent definitions dominates when only one person and one or two agents touch the code. Adding agent support once the project proves itself is cheaper than building it up front.
-- Rapidly changing model or tool capabilities. Today's topology assumes today's context windows, tool budgets, and reliability. If any of those shift a lot, you must rework an elaborate [agent-driven greenfield layout](agent-driven-greenfield.md); a thin codebase with minimal agent scaffolding absorbs that change more easily.
-- Team unfamiliar with agent workflows. If contributors cannot yet tell a good agent definition from a bad one, the initial topology encodes that inexperience. Build the code first, then add agent support once the team has run agents in the small — that produces more durable decisions.
-
-If any of these hold, the [Repository Bootstrap Checklist](repository-bootstrap-checklist.md) approach — adding agent support to an existing repo in dependency order — is the safer path.
-
-## Key Takeaways
-
-- Agent-first bootstrapping frontloads decisions about roles, skills, and instruction files that an established codebase would retrofit.
-- The agent topology acts as the initial architecture; downstream code organization tends to mirror it.
-- The approach backfires when the domain is unknown, the project is single-developer or short-lived, tool capabilities are in flux, or the team is new to agents — prefer retrofitting in those cases.
-- For the concrete step-by-step workflow, see [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md).
-
-## Related
-
-- [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
-- [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
-- [Architectural Foundation First](architectural-foundation-first.md)
-- [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
-- [Getting Started with Instruction Files](../instructions/getting-started-instruction-files.md)
-- [Distilled Bootstrap Contract](distilled-bootstrap-contract.md)
-- [Skeleton Projects as Agent Scaffolding](skeleton-projects-as-scaffolding.md)
-- [Codebase Readiness for Agents](../agent-design/codebase-readiness.md)
 
 ---
 
@@ -129190,7 +129219,6 @@ This file is the boundary between the foundation you built by hand and every age
 - [Codebase Readiness for Agents](../agent-design/codebase-readiness.md)
 - [Skeleton Projects as Scaffolding](skeleton-projects-as-scaffolding.md)
 - [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
-- [Bootstrapping an Agent-Driven Project from Scratch](bootstrapping-agent-driven-project.md)
 
 ---
 
@@ -132564,7 +132592,6 @@ Use a hand-built foundation instead when your team's conventions are well-establ
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
 - [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md)
 - [Repository Bootstrap Checklist](../workflows/repository-bootstrap-checklist.md)
-- [Bootstrapping an Agent-Driven Project](bootstrapping-agent-driven-project.md)
 - [Codebase Readiness for Agents](../agent-design/codebase-readiness.md)
 - [Sub-Agents for Fan-Out Research](../multi-agent/sub-agents-fan-out.md)
 
@@ -134827,6 +134854,8 @@ Source: https://agentpatterns.ai/patterns/
 > Recurring architectural patterns for building, coordinating, and debugging AI coding agents — plus the anti-patterns that derail them.
 
 Architecture, coordination, and failure-mode patterns organized into three areas: single-agent design, multi-agent collaboration, and common anti-patterns to recognize early.
+
+This page is the entry point for those three sections plus two selection aids below. For content grouped by cross-cutting theme, use the [Concept Map](../concepts.md); for the core disciplines, start at [Foundations](../foundations.md); for standards and surrounding context, start at [Reference](../reference.md).
 
 ## [Agent Design](../agent-design/index.md)
 

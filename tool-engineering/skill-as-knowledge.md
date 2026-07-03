@@ -7,6 +7,7 @@ tags:
   - instructions
   - tool-agnostic
   - tool-engineering
+  - skills
 aliases:
   - skill as knowledge container
   - knowledge-only skills

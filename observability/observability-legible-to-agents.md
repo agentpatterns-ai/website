@@ -157,3 +157,4 @@ Wiring observability into agent context adds complexity that can degrade reliabi
 - [Trajectory Logging via Progress Files](trajectory-logging-progress-files.md) -- agent-written audit trails
 - [Event Sourcing for Agents](event-sourcing-for-agents.md) -- immutable event logs as an observability substrate
 - [Context Engineering](../context-engineering/context-engineering.md) -- JIT loading and observation masking patterns that keep observability payloads from saturating the window
+- [Agent-Recorded Video Demos as a Verification Artifact](../verification/agent-recorded-video-demos.md) -- the agent records a screencast as proof-of-work for a human reviewer, rather than wiring signals in to self-verify

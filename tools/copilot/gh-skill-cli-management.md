@@ -5,6 +5,7 @@ tags:
   - tool-engineering
   - workflows
   - copilot
+  - skills
 aliases:
   - gh skill command
   - GitHub CLI agent skills

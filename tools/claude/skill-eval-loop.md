@@ -5,6 +5,7 @@ tags:
   - claude
   - testing-verification
   - evals
+  - skills
 aliases:
   - skill eval loop
   - skill-creator evals

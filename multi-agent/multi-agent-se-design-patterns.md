@@ -19,7 +19,7 @@ maturity: established
 Related lesson: [Why Multi-Agent Systems Fail](https://learn.agentpatterns.ai/multi-agent/why-multi-agent-fails/) — this concept features in a hands-on lesson with quizzes.
 
 !!! info "Also known as"
-    Multi-Agent Topology Taxonomy, Multi-Agent Architecture Patterns
+    Multi-Agent Architecture Patterns. Related but distinct: the [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) classifies systems at a coarser granularity — three coordination topologies (centralised, decentralised, hybrid) — while this page catalogs 16 finer-grained design patterns drawn from a 94-paper literature review.
 
 ## Background
 

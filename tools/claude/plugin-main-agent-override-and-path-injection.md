@@ -4,6 +4,7 @@ description: "A plugin's settings.json swaps the main thread agent and its bin/ 
 tags:
   - claude
   - tool-engineering
+  - security
 aliases:
   - plugin settings.json agent field
   - plugin bin directory PATH injection

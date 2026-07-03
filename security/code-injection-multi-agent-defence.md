@@ -6,6 +6,7 @@ tags:
   - agent-design
   - security
   - tool-agnostic
+  - multi-agent
 aliases:
   - "code injection attack defence"
   - "multi-agent code injection resilience"

@@ -6,6 +6,7 @@ tags:
   - instructions
   - security
   - tool-agnostic
+  - code-generation
 aliases:
   - SPARK Priming
   - Security Cue Prompting

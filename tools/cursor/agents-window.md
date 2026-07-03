@@ -5,6 +5,7 @@ tags:
   - agent-design
   - workflows
   - cursor
+  - multi-agent
 aliases:
   - cursor parallel agents
   - cursor worktree isolation

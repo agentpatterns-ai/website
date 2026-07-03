@@ -4,6 +4,7 @@ description: "Deprecated. GitHub App-based Copilot Extensions were sunset on Nov
 tags:
   - agent-design
   - copilot
+  - mcp
 applies_to: "copilot@1.x"
 last_reviewed: 2026-06-13
 status: archived

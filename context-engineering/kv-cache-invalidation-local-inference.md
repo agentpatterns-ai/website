@@ -4,7 +4,7 @@ term: "Disable Attribution Headers to Preserve KV Cache"
 description: "When Claude Code prepends an attribution header to prompts sent to local models, it invalidates the KV cache on every request and causes ~90% slower inference"
 tags:
   - cost-performance
-  - tool-agnostic
+  - claude
   - context-engineering
 aliases:
   - KV cache invalidation

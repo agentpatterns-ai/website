@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - human-factors
   - tool-agnostic
+  - arxiv
 aliases:
   - smell density denominator artifact
   - lines-of-code normalized quality metric

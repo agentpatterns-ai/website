@@ -8,7 +8,7 @@ aliases:
 tags:
   - security
   - agent-design
-  - tool-agnostic
+  - copilot
 last_reviewed: 2026-07-01
 maturity: established
 ---

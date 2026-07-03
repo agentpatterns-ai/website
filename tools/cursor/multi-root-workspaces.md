@@ -3,7 +3,6 @@ title: "Cursor Multi-Root Workspaces for Cross-Repo Agent Edits"
 description: "When and how to use Cursor 3.2 multi-root workspaces — one agent session that edits across multiple repository folders without per-repo handoffs."
 tags:
   - cursor
-  - multi-agent
   - workflows
 aliases:
   - cursor multi-root workspaces
@@ -12,6 +11,7 @@ applies_to: "cursor@3.x"
 last_reviewed: 2026-05-27
 status: current
 ---
+
 # Cursor Multi-Root Workspaces
 
 > One agent session, multiple repository folders — for edits whose intent crosses repo boundaries.

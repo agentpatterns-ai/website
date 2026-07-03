@@ -7,7 +7,6 @@ aliases:
   - "Credential Injection Patterns"
 tags:
   - agent-design
-  - workflows
   - tool-agnostic
   - security
 last_reviewed: 2026-06-12

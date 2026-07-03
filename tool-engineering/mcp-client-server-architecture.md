@@ -1,7 +1,8 @@
 ---
-title: "MCP Client/Server Architecture Best Practices Guide"
+title: "Five Design Decisions for MCP Servers and Clients"
 description: "Architectural best practices for MCP servers and clients covering transport selection, tool granularity, error handling, capability negotiation, and security."
 aliases:
+  - "MCP Client/Server Architecture"
   - "MCP architecture best practices"
   - "MCP server client design"
 tags:
@@ -14,7 +15,7 @@ last_reviewed: 2026-06-13
 maturity: adopted
 ---
 
-# MCP Client/Server Architecture
+# Five Design Decisions for MCP Servers and Clients
 
 > A well-designed MCP server is invisible to the agent — a poor one fails systematically: wrong tool selection, bloated context, silent errors, security gaps.
 

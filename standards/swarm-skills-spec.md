@@ -5,6 +5,7 @@ tags:
   - standards
   - multi-agent
   - tool-agnostic
+  - skills
 aliases:
   - Swarm Skills spec
   - swarm-skill kind

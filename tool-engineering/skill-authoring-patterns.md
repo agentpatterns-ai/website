@@ -8,6 +8,7 @@ tags:
   - long-form
   - tool-agnostic
   - tool-engineering
+  - skills
 aliases:
   - Skill design patterns
   - SKILL.md authoring

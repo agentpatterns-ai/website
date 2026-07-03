@@ -6,6 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
   - rag
+  - arxiv
 aliases:
   - schema-guided GraphRAG
   - typed graph retrieval

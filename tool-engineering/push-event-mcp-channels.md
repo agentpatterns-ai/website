@@ -5,6 +5,7 @@ description: "MCP channels invert the standard pull-tool polarity by pushing eve
 tags:
   - tool-engineering
   - tool-agnostic
+  - mcp
 aliases:
   - push-event MCP server
   - MCP channel server

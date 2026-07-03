@@ -3,7 +3,7 @@ title: "Selective Checkpoint Restore Across Code and Conversation State"
 description: "When the harness stores code state and conversation state independently, restore becomes a three-way decision — keep the mental model and re-edit, keep the edits and re-plan, or full reset."
 tags:
   - agent-design
-  - tool-agnostic
+  - claude
 aliases:
   - three-way checkpoint restore
   - code-only and conversation-only rewind

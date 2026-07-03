@@ -5,6 +5,7 @@ description: "Hard-to-write evals usually signal a product that was not designed
 tags:
   - testing-verification
   - tool-agnostic
+  - evals
 aliases:
   - hard-to-eval product smell
   - verifiability-first product design

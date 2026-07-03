@@ -6,6 +6,7 @@ tags:
   - security
   - tool-engineering
   - claude
+  - skills
 aliases:
   - disableSkillShellExecution
   - inline shell gate for skills

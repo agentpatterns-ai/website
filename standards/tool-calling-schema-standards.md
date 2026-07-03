@@ -6,6 +6,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - standards
+  - tool-engineering
 aliases:
   - Tool Schema Design
   - Subagent Schema-Level Tool Filtering

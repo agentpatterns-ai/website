@@ -6,6 +6,7 @@ tags:
   - context-engineering
   - tool-engineering
   - tool-agnostic
+  - skills
 aliases:
   - skill subagent context
   - dedicated context for skills

@@ -6,7 +6,7 @@ tags:
   - testing-verification
   - agent-design
   - code-review
-  - copilot
+  - tool-agnostic
   - long-form
 aliases:
   - "Agent Self-Review Loop"

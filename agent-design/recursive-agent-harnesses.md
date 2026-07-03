@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - pattern
   - arxiv
+  - multi-agent
 aliases:
   - harness recursion
   - RAH pattern

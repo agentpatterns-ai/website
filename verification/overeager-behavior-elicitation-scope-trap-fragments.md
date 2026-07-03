@@ -8,6 +8,7 @@ tags:
   - agent-design
   - security
   - tool-agnostic
+  - arxiv
 aliases:
   - SNARE benchmark
   - scope and trap fragments

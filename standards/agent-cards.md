@@ -5,6 +5,7 @@ tags:
   - agent-design
   - tool-agnostic
   - standards
+  - multi-agent
 last_reviewed: 2026-06-13
 maturity: adopted
 ---

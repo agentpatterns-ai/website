@@ -10,6 +10,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - anti-pattern
+  - code-review
 last_reviewed: 2026-06-12
 maturity: established
 ---

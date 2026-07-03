@@ -102,7 +102,7 @@ A declarative setup spec makes failure binary. The job either succeeds in full o
 - [Session Initialization Ritual](../agent-design/session-initialization-ritual.md)
 - [Repository Bootstrap Checklist](../workflows/repository-bootstrap-checklist.md)
 - [Skeleton Projects as Scaffolding](skeleton-projects-as-scaffolding.md)
-- [Bootstrapping an Agent-Driven Project](bootstrapping-agent-driven-project.md)
+- [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
 - [Agent-Led Dev-Environment Iteration](agent-led-dev-environment.md)
 - [Distilled Bootstrap Contract](distilled-bootstrap-contract.md)
 - [Dependency Gap Validation](../verification/dependency-gap-validation.md)

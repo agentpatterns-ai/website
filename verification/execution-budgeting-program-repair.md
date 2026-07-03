@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - cost-performance
   - tool-agnostic
+  - arxiv
 aliases:
   - "test-execution budget for repair agents"
   - "execution-frequency cost trade-off"

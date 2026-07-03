@@ -5,6 +5,7 @@ description: "A PostToolUse hook can replace what the model sees from any tool c
 tags:
   - tool-engineering
   - claude
+  - security
 last_reviewed: 2026-06-13
 maturity: adopted
 ---
