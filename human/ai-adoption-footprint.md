@@ -98,3 +98,4 @@ METR found a 39-point perception gap — developers estimated they were 20% fast
 - [Bottleneck Migration](bottleneck-migration.md) — why the 20% power users hit a different bottleneck than the 60%
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — sustainability constraints that cap how long even power users operate at Level 5+
 - [AI Development Maturity Model](../workflows/ai-development-maturity-model.md) — granular seven-phase practitioner model that refines the three-segment footprint
+- [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — how the segmented footprint plays out during a rollout: seed where peer visibility is highest, then measure retention separately from seat count

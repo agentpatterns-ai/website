@@ -84,3 +84,4 @@ Contrast Bytecode Alliance's three-week Wasmtime sprint: 11 security issues surf
 - [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md)
 - [Unbounded Consumption: Bounding Agent Resource Use Against DoS and Denial-of-Wallet](unbounded-consumption-resource-bounds.md) — the runtime-bounds complement; this page sizes pre-release spend, the bounds page caps in-flight spend
+- [Constraints as a Substrate for Scalable Agent Oversight](constraint-substrate-scalable-oversight.md) — constraints make a small, cheap reviewer effective, cutting the token cost of oversight

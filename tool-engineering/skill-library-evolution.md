@@ -134,6 +134,7 @@ Lifecycle governance adds overhead that may exceed its value in some contexts:
 - [Tool Minimalism](tool-minimalism.md)
 - [Skill Authoring Patterns](skill-authoring-patterns.md)
 - [Skill Library Technical Debt](skill-library-technical-debt.md) — the mechanical-repair counterpart to this page's governance-lifecycle view
+- [Skill Reuse as Vendored Forking](skill-reuse-as-vendored-forking.md) — the empirical account of how reused skills actually behave: one-time near-verbatim copies that rarely re-sync
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md)
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md)
 - [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)

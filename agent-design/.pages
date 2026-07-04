@@ -125,6 +125,7 @@ nav:
       - per-tool-extended-reasoning-opt-in.md
       - progressive-spend-threshold-alerting.md
       - reasoning-budget-allocation.md
+      - reasoning-effort-over-tool-scaffolding.md
       - rollback-first-design.md
       - rubric-refine-pre-execution-tool-use.md
       - selective-checkpoint-restore.md

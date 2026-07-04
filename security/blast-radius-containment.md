@@ -150,3 +150,4 @@ Each agent's worst-case injection outcome is bounded to its operation. A prompt 
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — layered safety controls beyond permission scoping
 - [Lethal Trifecta Threat Model for AI Agent Development](lethal-trifecta-threat-model.md) — why bounded permissions matter under prompt injection
 - [Rollback-First Design: Every Agent Action Should Be Reversible](../agent-design/rollback-first-design.md) — reversibility as a complement to bounded permissions
+- [Constraints as a Substrate for Scalable Agent Oversight](constraint-substrate-scalable-oversight.md) — least privilege as one leg of a broader constraint substrate that makes review scale

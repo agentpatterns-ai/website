@@ -114,3 +114,4 @@ Google describes a vendor instantiation of the same loop driven from the coding 
 - [Observability-Driven Harness Evolution](observability-driven-harness-evolution.md) — instrumented variant that uses trace pillars to direct each flywheel cycle's edits
 - [Harness Impermanence](harness-impermanence.md) — the rationale for cheap, repeatable harness rewrites that the flywheel depends on
 - [Self-Reporting Loops: Autonomous Routines That File Their Own Backlog](self-reporting-loops.md) — the upstream pattern that surfaces the observations the flywheel then consumes as improvement candidates
+- [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](../verification/agent-driven-eval-flywheel.md) — the eval-generation loop that supplies the measurement substrate this harness flywheel optimizes against

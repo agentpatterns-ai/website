@@ -147,5 +147,6 @@ In Claude Code skills, add `ultrathink` to the skill content for planning and ve
 - [Code-Health-Gated LLM Tier Routing](auto-model-selection.md) — pre-generation model tier selection via code health metrics
 - [Know When Not to Add Structured Reasoning](../anti-patterns/reasoning-overuse.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md)
+- [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](reasoning-effort-over-tool-scaffolding.md) — the prior decision: spend a fixed budget on reasoning effort before adding tools
 - [Think Tool](think-tool.md)
 - [Harness Engineering](harness-engineering.md)

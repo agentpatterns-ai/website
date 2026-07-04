@@ -128,6 +128,7 @@ A query like "What does `validateSession` return?" triggers Tier 1: the agent ru
 - [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md) — the parallel-subagent mechanism the higher tiers spend on
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — the cost discipline that effort scaling operationalizes
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md) — allocating thinking budget alongside tool-call budgets
+- [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](reasoning-effort-over-tool-scaffolding.md) — evidence that effort, not extra tools, moves first-try reliability
 - [Code-Health-Gated LLM Tier Routing](auto-model-selection.md) — route by file-level code health as a pre-generation signal
 - [Specialized Agent Roles](specialized-agent-roles.md) — assigning distinct roles to the subagents each tier spawns
 - [Loop Strategy Spectrum: Accumulated, Compressed, and Fresh Context](../loop-engineering/loop-strategy-spectrum.md) — context strategies that pair with effort tiers
