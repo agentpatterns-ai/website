@@ -311,6 +311,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Compositional Skill Routing for Large Skill Libraries](context-engineering/compositional-skill-routing.md)
 - [Deterministic Anchoring: Static Facts as Stable Context](context-engineering/deterministic-anchoring.md)
 - [Grounding Agents in Code the Model Has Never Seen](context-engineering/grounding-zero-prior-code.md)
+- [Proprioceptive Context Dashboard: Agent Self-Managed Context](context-engineering/proprioceptive-context-dashboard.md)
 
 ## Instructions & Prompts
 
@@ -382,6 +383,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent Config as a Managed Supply Chain: Hashing and Pinning](instructions/agent-config-as-managed-supply-chain.md)
 - [Agent Context File Evolution: Treating ACFs as Configuration Code](instructions/agent-context-file-evolution.md)
 - [Encoding Product-Design Taste into Agent Context](instructions/encoding-product-design-taste.md)
+- [Codified Effort and Escalation Policy in the Instruction File](instructions/codified-effort-escalation-policy.md)
 
 ## Agent Architecture
 
@@ -623,6 +625,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Static Roster vs Runtime Subagent Definition](multi-agent/static-roster-vs-runtime-subagent-definition.md)
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](agent-design/wiki-memory-agent-maintained-knowledge-base.md)
 - [Trajectory-Conditioned Model Escalation (SWE-Router)](agent-design/trajectory-conditioned-model-escalation.md)
+- [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](agent-design/reasoning-effort-over-tool-scaffolding.md)
 
 ## Loop Engineering
 
@@ -722,6 +725,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Unix CLI as the Native Tool Interface for AI Agents](tool-engineering/unix-cli-native-tool-interface.md)
 - [Web Search Agent Loop: Iterative Research Patterns](tool-engineering/web-search-agent-loop.md)
 - [Auth-Isolation as the MCP-vs-CLI Selection Heuristic](tool-engineering/mcp-auth-isolation-vs-cli-selection.md)
+- [Skill Reuse as Vendored Forking](tool-engineering/skill-reuse-as-vendored-forking.md)
 
 ## Token Engineering
 
@@ -860,6 +864,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Detecting Memory-Poisoning Exfiltration by Tool-Call Order (Recall-Before-Send Signature)](security/recall-before-send-memory-poisoning-detection.md)
 - [Computer-Systems Lens for Always-On Agent Security](security/computer-systems-lens-agent-security.md)
 - [Capability-Additive Code Interpreters for Untrusted Agent Code](security/capability-additive-interpreter.md)
+- [Constraints as a Substrate for Scalable Agent Oversight](security/constraint-substrate-scalable-oversight.md)
 
 ## Testing & Evaluation
 
@@ -986,6 +991,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Per-Line Requirement Citations for Hallucination Detection](verification/per-line-requirement-citations.md)
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](verification/meta-evaluate-llm-judge-rubric-verification.md)
 - [Agent-Recorded Video Demos as a Verification Artifact](verification/agent-recorded-video-demos.md)
+- [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](verification/agent-driven-eval-flywheel.md)
 
 ## Hooks & Guardrails
 
@@ -1213,6 +1219,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Intervention Rate as a Diagnostic North Star, Not a Target](human/intervention-rate-diagnostic-north-star.md)
 - [Programming Language Choice Still Shapes Agent Artefacts](human/programming-language-choice-shapes-agent-artefacts.md)
 - [Adapting AI Assistants to Developer Interaction Style](human/developer-interaction-style-adaptation.md)
+- [Rolling Out CLI Coding Agents at Organization Scale](human/org-scale-cli-agent-rollout.md)
 
 ## Anti-Patterns
 
@@ -1306,6 +1313,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Over-Orchestrated Agent Architecture (Prefer the Simplest That Works)](anti-patterns/prefer-simplest-agent-architecture.md)
 - [Tab-Accept Rate as a Proxy for Critical Engagement](anti-patterns/tab-accept-critical-engagement-gap.md)
 - [Model Confidence as Security Verification (Security Calibration Gap)](anti-patterns/model-confidence-as-security-verification.md)
+- [Judging Agent Safety by Task Completion (Action-Boundary Violations)](anti-patterns/judging-agent-safety-by-task-completion.md)
+- [Entity Binding Failures in Tool-Augmented Agents](anti-patterns/entity-binding-failures.md)
 
 ## Emerging Concepts
 
@@ -1564,6 +1573,7 @@ Models do not attend uniformly across the context window. These pages cover wher
 Strategies for fitting more useful content into less space, and for making repeated prefixes cheaper through provider caching mechanisms.
 
 - [Context-Window Diagnostic Tooling](context-window-diagnostic-tooling.md) — Surface which tool calls are inflating the context window so you can optimize specific culprits rather than prune blindly
+- [Proprioceptive Context Dashboard](proprioceptive-context-dashboard.md) — Give a long-horizon agent a live view of its own context blocks — size, age, and usage — so it makes competent keep-or-archive decisions itself instead of a hidden layer compressing blindly
 - [Context Compression Strategies](context-compression-strategies.md) — Long-running agents accumulate context that eventually fills the window; tiered compression — offloading large payloads and summarising history — lets agents continue working without losing task continuity
 - [Selective Rewind Summarization](selective-rewind-summarization.md) — A user-chosen cut point compresses earlier turns to a summary while the recent turns stay verbatim — a targeted alternative to whole-session compaction
 - [Elastic Context Orchestration](elastic-context-orchestration.md) — A per-turn vocabulary of context operations — Skip, Compress, Snippet, Rollback, Delete — that lets long-horizon search agents tier retention by current task relevance instead of accumulating raw trajectory
@@ -2964,6 +2974,7 @@ None of these mitigations eliminates the behavior — they reduce its likelihood
 - [Context Budget Allocation](context-budget-allocation.md) — allocating tokens deliberately across preloaded context and working space
 - [Goal Recitation](goal-recitation.md) — periodically rewriting objectives at the tail of context to prevent goal drift
 - [Context Compression Strategies](context-compression-strategies.md) — strategies for reducing context fill before limits are approached
+- [Proprioceptive Context Dashboard](proprioceptive-context-dashboard.md) — generalizes token-budget transparency from total budget to per-block state the agent manages itself
 
 ---
 
@@ -3329,6 +3340,7 @@ Per-tool attribution helps most when the expensive tool is also avoidable. It pr
 - [Context Window Dumb Zone](context-window-dumb-zone.md)
 - [Context Window Anxiety](context-window-anxiety.md)
 - [Semantic Context Loading](semantic-context-loading.md)
+- [Proprioceptive Context Dashboard](proprioceptive-context-dashboard.md) — the agent-facing counterpart that surfaces per-block state to the model itself
 
 ---
 
@@ -6752,6 +6764,76 @@ Prompt layering assumes the model will respect layer precedence, but that assump
 
 ---
 
+### Proprioceptive Context Dashboard: Agent Self-Managed Context
+Source: https://agentpatterns.ai/context-engineering/proprioceptive-context-dashboard/
+
+# Proprioceptive Context Dashboard: Agent Self-Managed Context
+
+> A proprioceptive dashboard shows an agent the size, age, and usage of each context block, so it self-manages memory instead of compressing blindly.
+
+A proprioceptive context dashboard is a runtime surface that reports, to the agent itself, the state of its own working memory: how many tokens each block holds, how many turns ago it was created, how often it has been read, and how much budget remains. The agent uses those signals to decide what to keep, archive, or recover — instead of handing context management to a hidden layer that summarizes or truncates on its behalf. The idea comes from [Xu, Li, and Zhang (2026)](https://arxiv.org/abs/2606.30005), who argue that frontier models are "proprioceptively blind" to their own context and that competent management is latent in the model, waiting on the right interface rather than a new learned policy.
+
+## The blindness the dashboard fixes
+
+From the prompt text alone, a model cannot see how large, how old, or how used each piece of its context is — the exact signals a keep-or-drop decision needs. It can read a block's contents but cannot infer remaining budget or which evidence a future query will require. [Cognition observed the same gap in the field](https://cognition.com/blog/devin-sonnet-4-5-lessons-and-challenges): the first model they saw that was aware of its own context window still underestimated its remaining tokens, and was "very precise about these wrong estimates." Blind to its own state, the agent either over-compresses and loses evidence or runs out of room mid-task.
+
+## What the dashboard exposes
+
+The paper's system, VISTA, represents working memory as typed, addressable blocks — an evidence block gets an id such as `B17` — and adds a runtime panel with four per-block signals ([Xu et al. 2026](https://arxiv.org/abs/2606.30005)):
+
+- Token usage — per-block and cumulative token counts.
+- Recency — age in turns since the block was created.
+- Access history — when the block was last read or referenced.
+- Budget state — remaining capacity, plus an overflow warning.
+
+The agent acts on these through an archive-and-recover tool: it moves a block to a lossless external payload and keeps a handle, so a block dropped by mistake can be restored byte-for-byte rather than reconstructed from a lossy summary. This makes a keep-or-drop call reversible, which matters when future queries are unpredictable.
+
+## Why it works
+
+Context management is a meta-tool decision under partial observability: the model must choose what to retain without seeing the runtime state that decision depends on. The dashboard turns that hidden state — size, age, access, budget — into observable input, so the model's already-latent judgment finally has the signals it needs. The paper's ablation isolates this as the causal component: on the million-token LOCA-Bench, removing only the dashboard dropped performance 13.4 points (50.7% to 37.3%) — a larger fall than removing recovery alone (5.4 points, to 45.3%), the only other ablation the paper scores numerically (it shows archive removal also degrades performance but reports no isolated figure for it). The visibility of metadata — not the archive plumbing — carries the effect ([Xu et al. 2026](https://arxiv.org/abs/2606.30005)). Pairing perception with lossless recovery is what lets the agent act on it safely: a wrong decision costs a recovery step, not the evidence.
+
+## When this backfires
+
+The technique is conditional, not universal. It adds cost or fails to help when:
+
+- Context is not under pressure. The paper's own results show the methods staying close at low context pressure, with the gap opening only as distractor volume grows; below real budget pressure the dashboard's extra tokens and per-turn reasoning buy nothing ([Xu et al. 2026](https://arxiv.org/abs/2606.30005)).
+- The model's management skill is weak. Because the dashboard elicits latent ability rather than teaching it, models with little of that ability gain least — GLM-5 showed the smallest lift across the tested backbones.
+- Tool results are adversarial. The paper explicitly does not evaluate security; a malicious tool output could steer the agent into archiving evidence it needs or retaining an injected instruction. Treat archive decisions as part of the [indirect-injection blast radius](live-browser-context-channel.md).
+- More surface becomes distraction. A dashboard is itself context, and long, information-dense context can dilute attention — the same [context-rot dynamic](context-window-dumb-zone.md) the dashboard is meant to relieve can degrade the agent's ability to parse it.
+- The agent is short-lived or stateless. With no compounding context there is nothing to manage, so the panel is pure overhead.
+
+## Example
+
+VISTA surfaces each block to the agent as a row of the four signals, above a global budget bar it can act on ([Xu et al. 2026](https://arxiv.org/abs/2606.30005)). An illustrative panel — the values are for shape, not benchmark figures:
+
+```text
+budget ▓▓▓▓▓▓▓▓▓░  186K / 200K   ⚠ overflow soon
+
+id    type          tokens   age       last read
+B17   tool_result   48.2K    31 turns  turn 4     ← large, old, untouched
+B06   evidence       9.4K     3 turns  turn 32
+B22   plan           1.1K    12 turns  turn 30
+```
+
+Reading its own state, the agent archives the stale, oversized `B17` — `archive(B17)` returns a handle and reclaims the tokens — then `recover(B17)` restores it byte-for-byte if a later query needs it. The keep-or-drop call it could not make blind becomes a cheap, reversible action.
+
+## Key Takeaways
+
+- Agents are proprioceptively blind: they cannot see the size, age, or usage of their own context from the prompt text, so they compress blindly.
+- Exposing per-block metadata to the agent, paired with lossless archive-and-recover, lets it self-manage context with no retraining.
+- The metadata visibility, not the archival plumbing, is the load-bearing part: the dashboard ablation was the largest single drop.
+- The payoff scales with context pressure and model capability, and the archive path is an unguarded surface for indirect injection — apply it to long-horizon agents, not short tasks.
+
+## Related
+
+- [Context-Window Diagnostic Tooling](context-window-diagnostic-tooling.md) — the developer-facing counterpart: attributes token growth to tool calls for a human, where this surfaces per-block state to the agent itself.
+- [Context Window Anxiety](context-window-anxiety.md) — token-budget transparency as a behavioral fix; the dashboard generalizes it from total budget to per-block state.
+- [Turn-Level Context Decisions](turn-level-context-decisions.md) — the keep/rewind/clear/compact/delegate choice the dashboard supplies signals for.
+- [Observation Masking](observation-masking.md) — a lossy alternative that strips tool results outright, versus the reversible archive here.
+- [Context Compression Strategies](context-compression-strategies.md) — the hidden-layer compression this technique is positioned against.
+
+---
+
 ### Repository Map Pattern: AST + PageRank for Dynamic Code Context
 Source: https://agentpatterns.ai/context-engineering/repository-map-pattern/
 
@@ -8518,6 +8600,7 @@ How you phrase, frame, and structure individual rules determines whether agents 
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md) — Effective prompts sit at the altitude that produces consistent behaviour across variation, neither too brittle nor too vague
 - [Three Knowledge Tiers: Sourced, Unverified, Hallucinated](three-knowledge-tiers.md) — Classify agent knowledge into three tiers to preserve useful training knowledge while maintaining accuracy standards
 - [Cost-Aware Skill Rewriting: Preserve Operational Anchors, Not Skill Tokens](cost-aware-skill-rewriting.md) — Rewriting a skill is an economic trade-off, not pure compression — stripping sparse operational anchors makes the agent explore and retry, raising total cost despite a shorter document
+- [Codified Effort and Escalation Policy in the Instruction File](codified-effort-escalation-policy.md) — Write the default-cheap, escalate-on-evidence effort and model-routing rule into the instruction file so the cheap path is the default and survives context switches
 
 ## Architecture & Composition
 
@@ -9679,6 +9762,75 @@ Claude Code loads CLAUDE.md content as a user message after the system prompt, a
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
 - [CLAUDE.md Convention for Structuring Agent Instructions](claude-md-convention.md)
 - [Project Instruction File Ecosystem](instruction-file-ecosystem.md)
+
+---
+
+### Codified Effort and Escalation Policy in the Instruction File
+Source: https://agentpatterns.ai/instructions/codified-effort-escalation-policy/
+
+# Codified Effort and Escalation Policy in the Instruction File
+
+> Write the default-cheap, escalate-on-evidence effort and model-routing rule into the instruction file so the cheap path is the default, not an operator's per-task choice.
+
+A codified effort policy is a written rule in your instruction file that makes the cheap path the default and escalates only on evidence. The lever is the file, not per-task willpower. When a cheaper, near-flagship model lands, switching the default captures part of the saving; writing the rule into the harness captures the rest, because it then applies on every task without anyone remembering to.
+
+## What to encode
+
+Three rules, written once into `CLAUDE.md`, `AGENTS.md`, or the settings file:
+
+- Match effort to task. Default to a middle effort level, drop to the lowest for formatting, renames, and boilerplate, and reserve the top level for hard debugging, multi-file refactors, and architecture. Claude Code exposes `low`, `medium`, `high`, `xhigh`, and `max`, where lower effort is faster and cheaper and higher effort reasons deeper ([Claude Code — model configuration](https://code.claude.com/docs/en/model-config)). Set the default with `effortLevel` in the settings file, or per-agent with `effort` frontmatter. This generalizes: Copilot [custom agents](../training/copilot/model-selection.md) pin a model in `.agent.md` frontmatter, so the rule can live in any tool's config surface.
+- Escalate on evidence, not habit. Name the trigger — escalate after N failed verification runs, or when a cheap model's partial trajectory shows it thrashing. A written trigger beats per-task judgment, and it composes with runtime routing like [trajectory-conditioned escalation](../agent-design/trajectory-conditioned-model-escalation.md).
+- Default cheap, spend on proof. The cheap model and effort level run first; the strong path is the exception the rule forces you to justify, not the reflex.
+
+## The high-effort trap
+
+Reaching for the top effort level is a signal to check, not a default. `max` runs with no constraint on token spending ([Claude Code — model configuration](https://code.claude.com/docs/en/model-config)), and reasoning tokens are billed and add latency in proportion to length. Continuous maximum effort scored 53.9% against 63.6% for uniform-high reasoning on Terminal Bench 2.0, losing to timeouts ([LangChain, 2026](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). When a cheaper model needs its highest effort to match a flagship, the flagship at moderate effort may be both cheaper and better — so treat the reach for `max` as the prompt to re-check routing, not the answer. Raising effort only pays where the model has headroom below its ceiling and the failure is a reasoning failure ([Mehta, 2026](https://arxiv.org/abs/2607.02436)); it is otherwise the [reasoning-overuse](../anti-patterns/reasoning-overuse.md) anti-pattern.
+
+## Why it works
+
+A rule in the instruction file is re-applied by the harness on every turn and session, so the cheap default holds without the operator remembering it after a context switch. Effort settings persist across sessions and instruction files are re-read after compaction ([Claude Code — model configuration](https://code.claude.com/docs/en/model-config)), while per-task judgment does not survive handoffs — the same durability argument behind [convention over configuration](convention-over-configuration.md). The escalate-on-evidence half works because task difficulty is trajectory-dependent and not recoverable from the description alone: conditioning the model choice on observed failure is provably never worse than a fixed a-priori choice, and strictly better when the cheap attempt is informative ([SWE-Router, arxiv 2607.00053](https://arxiv.org/abs/2607.00053)).
+
+## When this backfires
+
+- No cheap-solvable tail. If every task needs the flagship, the cheap-first pass is pure overhead; default to the strong model instead.
+- No observable escalation signal. Design docs and prose reviews give the rule nothing to key on — cascade-style escalation needs binary feedback like tests or types ([model selection and routing](../training/copilot/model-selection.md)).
+- Rework outruns the saving. A cheap model's "almost right" output can cost more in retries than one clean frontier call ([getunblocked, 2026](https://getunblocked.com/blog/model-routing-coding-agents/)).
+- Latency-sensitive loops. The cheap attempt plus escalation adds serial latency an interactive user feels.
+- Stale policy. A tier table that routes hard work down thrashes; the rule is only as good as its last self-test.
+
+## Validate on your own tasks
+
+Published benchmarks do not predict your codebase's outcomes — a short side-by-side on your own representative tasks tells you which task types can safely route down more reliably than any leaderboard ([model preference fallacy](../fallacies/model-preference-fallacy.md)). Encode what the self-test proves, then re-test when the model roster changes.
+
+## Example
+
+A minimal policy block in `CLAUDE.md` or `AGENTS.md` that the harness applies on every task:
+
+```markdown
+## Model and effort policy
+- Default effort: `medium`. Drop to `low` for formatting, renames, and boilerplate.
+- Raise to `high` or `xhigh` only for multi-file refactors, hard debugging, or architecture.
+- Escalate to the flagship model after 2 failed verification runs (tests, lint, types) — not before.
+- Reaching for `max` is a review trigger: first check whether the flagship at `high` is cheaper and better.
+```
+
+The block names the default, the escalation trigger, and the high-effort review check, so the cheap path is enforced by the file instead of the operator. Tune the tiers to what your own self-test proves, not to a published benchmark.
+
+## Key takeaways
+
+- Codify the effort and escalation rule in the instruction file; the durable win is that the harness re-applies it every task, surviving compaction and handoffs.
+- Match effort to task, default cheap, and escalate on a named evidence trigger — a written rule beats per-task judgment because difficulty is not readable from the description alone.
+- The high-effort trap: `max` on a cheaper model can cost more and score worse than a flagship at moderate effort — treat the reach for `max` as a routing check, not a default.
+- Raising effort pays only where the model has headroom and the failure is a reasoning failure; otherwise it is reasoning overuse.
+- Validate route-down decisions on your own representative tasks, then re-test on every model-roster change.
+
+## Related
+
+- [Heuristic-Based Effort Scaling in Agent System Prompts](../agent-design/heuristic-effort-scaling.md) — encode per-tier effort ceilings for multi-agent work; the complement that sizes effort from task cues
+- [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](../agent-design/reasoning-effort-over-tool-scaffolding.md) — evidence that the effort dial, not extra tools, moves first-try reliability
+- [Trajectory-Conditioned Model Escalation (SWE-Router)](../agent-design/trajectory-conditioned-model-escalation.md) — the runtime escalation signal a codified "escalate on evidence" rule points to
+- [Convention Over Configuration for Agent Workflows](convention-over-configuration.md) — the broader case for encoding decisions into the harness so agents follow patterns rather than re-decide
+- [Indiscriminate Structured Reasoning](../anti-patterns/reasoning-overuse.md) — the failure mode when effort is spent past the point it helps
 
 ---
 
@@ -16633,6 +16785,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Per-Tool Extended Reasoning Opt-In: Tool-Call-Scoped Budgets](per-tool-extended-reasoning-opt-in.md) — A single tool call opts itself into deeper reasoning via a per-call parameter, leaving the turn's global reasoning effort unchanged for every other step
 - [Progressive Spend Threshold Alerting for Agent Cost Governance](progressive-spend-threshold-alerting.md) — Pair a soft cost cap with progressive alerts at fixed budget percentages so operators get graceful intervention windows before agent work hits a hard cutoff
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — Allocate maximum reasoning compute to planning and verification phases, reduced compute to execution — rather than using a fixed level throughout
+- [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](reasoning-effort-over-tool-scaffolding.md) — On a fixed budget for a single-shot agentic build, raising reasoning effort buys first-try functional reliability more cost-effectively than adding testing tools or design prompts — under three explicit conditions
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md) — Before choosing how an agent will perform an action, choose how you will undo it — if recovery costs more than one command, reconsider the approach
 - [RubricRefine: Pre-Execution Rubric Refinement for Code-Mode Tool Use](rubric-refine-pre-execution-tool-use.md) — Generate a task- and registry-specific rubric, score candidate tool-use code against explicit contract checks, and repair failures before any execution — for multi-step tool sequences where contract violations run silently to completion
 - [Selective Checkpoint Restore Across Code and Conversation State](selective-checkpoint-restore.md) — Restore the agent's mental model and re-edit, restore the edits and re-plan, or reset both — when code and conversation are stored separately, the choice is three actions, not one
@@ -18780,6 +18933,7 @@ Google describes a vendor instantiation of the same loop driven from the coding 
 - [Observability-Driven Harness Evolution](observability-driven-harness-evolution.md) — instrumented variant that uses trace pillars to direct each flywheel cycle's edits
 - [Harness Impermanence](harness-impermanence.md) — the rationale for cheap, repeatable harness rewrites that the flywheel depends on
 - [Self-Reporting Loops: Autonomous Routines That File Their Own Backlog](self-reporting-loops.md) — the upstream pattern that surfaces the observations the flywheel then consumes as improvement candidates
+- [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](../verification/agent-driven-eval-flywheel.md) — the eval-generation loop that supplies the measurement substrate this harness flywheel optimizes against
 
 ---
 
@@ -27265,6 +27419,7 @@ A query like "What does `validateSession` return?" triggers Tier 1: the agent ru
 - [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md) — the parallel-subagent mechanism the higher tiers spend on
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — the cost discipline that effort scaling operationalizes
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md) — allocating thinking budget alongside tool-call budgets
+- [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](reasoning-effort-over-tool-scaffolding.md) — evidence that effort, not extra tools, moves first-try reliability
 - [Code-Health-Gated LLM Tier Routing](auto-model-selection.md) — route by file-level code health as a pre-generation signal
 - [Specialized Agent Roles](specialized-agent-roles.md) — assigning distinct roles to the subagents each tier spawns
 - [Loop Strategy Spectrum: Accumulated, Compressed, and Fresh Context](../loop-engineering/loop-strategy-spectrum.md) — context strategies that pair with effort tiers
@@ -32248,8 +32403,67 @@ In Claude Code skills, add `ultrathink` to the skill content for planning and ve
 - [Code-Health-Gated LLM Tier Routing](auto-model-selection.md) — pre-generation model tier selection via code health metrics
 - [Know When Not to Add Structured Reasoning](../anti-patterns/reasoning-overuse.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md)
+- [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](reasoning-effort-over-tool-scaffolding.md) — the prior decision: spend a fixed budget on reasoning effort before adding tools
 - [Think Tool](think-tool.md)
 - [Harness Engineering](harness-engineering.md)
+
+---
+
+### Reasoning Effort Over Tool Scaffolding for First-Try Reliability
+Source: https://agentpatterns.ai/agent-design/reasoning-effort-over-tool-scaffolding/
+
+# Reasoning Effort Over Tool Scaffolding for First-Try Reliability
+
+> On an agentic generation task with headroom below the model's ceiling, raising reasoning effort buys first-try reliability more cheaply than adding tools.
+
+Apply this when you have a fixed budget for a single-shot agentic build and are deciding where to spend it: on deeper reasoning, or on extra capabilities like browser-based testing tools and design-oriented system prompts. In an observational study of 90 independent runs building one application from one detailed spec, the reasoning axis moved reliability and the capability axis did not ([Mehta, 2026](https://arxiv.org/abs/2607.02436)). The gain is real only under three conditions, below.
+
+## When it applies
+
+Raise reasoning effort ahead of tools when all three hold:
+
+- The model has headroom below its ceiling on this task. Frontier models in the study clustered near the 42-point rubric maximum, so the effort dial had less to move; a low-cost local model scored 24–37 and had room to gain ([Mehta, 2026](https://arxiv.org/abs/2607.02436)).
+- The failure is a reasoning failure, not a task-framing one. Deliberation catches missed spec criteria; it does not fix an agent that acts when it should abstain ([Gloaguen et al., 2026](https://arxiv.org/abs/2605.07769)).
+- The task is bounded by getting the logic right, not by the environment. Deployment and integration failures are scaffolding gaps, not reasoning gaps.
+
+## What the study measured
+
+Ninety runs built the same real-time retrospective board from one spec, each scored on a 14-criterion functional rubric (42-point maximum) plus a visual-quality review ([Mehta, 2026](https://arxiv.org/abs/2607.02436)). Holding the task fixed, three interventions were compared:
+
+- Reasoning effort, raised from High to xHigh: first-try-perfect runs rose from 28% to 89% and corrective prompts dropped roughly five-fold, for a 9–29% cost increase.
+- A browser-based testing tool: cost rose 42–68% with no gain in functional score or reliability.
+- Design-oriented system prompts: visual quality rose (4.5 versus 3.0 on a 5-point scale) with no gain in functionality.
+
+The dials that add capability improved the thing they touched — visuals, tool coverage — without moving first-try functional reliability. Only the reasoning dial did. Because the paper's full text is not published, treat these figures as illustrative of the direction, not settled magnitudes.
+
+## Why it works
+
+Extra reasoning effort is test-time compute: the model spends more forward passes exploring the solution space and reconciling the spec's functional requirements before it emits code, so it catches criteria a shallow pass drops. Tools add capability surface but do not improve the planning pass that decides whether the emitted code satisfies the spec on the first try — which is why the reliability gain concentrates on the reasoning axis ([Mehta, 2026](https://arxiv.org/abs/2607.02436)). This is consistent with independent tool-use studies: one systematic evaluation found tool access yielded "little consistent aggregate improvement," with 93–96% of tool-solved problems also solved without tools ([Guo et al., 2026](https://arxiv.org/abs/2606.02357)).
+
+## When this backfires
+
+Spending on reasoning effort is the wrong call when:
+
+- The model is already at the ceiling. Frontier models in the study clustered near the rubric maximum, so once that headroom is spent, extra effort adds cost and latency for little gain ([Mehta, 2026](https://arxiv.org/abs/2607.02436)).
+- The failure is task-framing, not reasoning. Coding agents propose undesirable changes in 35–65% of no-change tasks; that action bias is a framing problem more compute does not fix ([Gloaguen et al., 2026](https://arxiv.org/abs/2605.07769)).
+- The bottleneck is the environment. The study's 44% first-attempt container-deployment failure rate is a scaffolding gap; a testing tool, not more thinking, is the lever there.
+- The path is latency-sensitive. Reasoning tokens add wall-clock time in proportion to their length, so applying maximum effort indiscriminately is its own [anti-pattern](../anti-patterns/reasoning-overuse.md).
+
+## Key Takeaways
+
+- On a fixed budget for a single-shot agentic build, try the reasoning dial before adding tools or design prompts.
+- In the study, High to xHigh raised first-try-perfect runs from 28% to 89% for 9–29% more cost; a testing tool added 42–68% cost with no reliability gain ([Mehta, 2026](https://arxiv.org/abs/2607.02436)).
+- The gain is real only while the model has headroom below its ceiling.
+- Reasoning effort does not fix task-framing failures ([Gloaguen et al., 2026](https://arxiv.org/abs/2605.07769)) or environment failures.
+- The evidence is a single observational study — treat the numbers as directional, not settled.
+
+## Related
+
+- [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — where to place the effort once you decide to spend it
+- [Heuristic-Based Effort Scaling in Agent System Prompts](heuristic-effort-scaling.md) — encode effort tiers so the dial moves proportionally to task difficulty
+- [Indiscriminate Structured Reasoning](../anti-patterns/reasoning-overuse.md) — the failure mode when effort is spent past the point it helps
+- [Feedback as Capability Equalizer](feedback-capability-equalizer.md) — the complementary lever: iterative feedback quality over raw model strength
+- [Interactive Effort Sliders: Per-Turn Reasoning-Budget Controls](interactive-effort-sliders.md) — expose the effort dial as an operator control
 
 ---
 
@@ -44105,6 +44319,8 @@ Source: https://agentpatterns.ai/anti-patterns/
 - [Multi-Tool Threshold Poisoning Against MCP (ShareLock)](multi-tool-threshold-poisoning-mcp.md) — Per-tool MCP description review is structurally blind to payloads split as Shamir threshold shares across multiple tools; ShareLock reaches 94.1% ASR with all five tested detectors classifying the dispersed shares as safe
 - [Tab-Accept Rate as a Proxy for Critical Engagement](tab-accept-critical-engagement-gap.md) — Reading a high AI code-completion accept rate as engagement or productivity hides an automation-complacency signal; under novice populations, load-bearing completions, or thin downstream verification the correlation inverts
 - [Model Confidence as Security Verification (Security Calibration Gap)](model-confidence-as-security-verification.md) — A model's confidence in its own code does not track whether the code is secure; a third of high-confidence outputs are still insecure, so confidence is review-triage at best, never a deployment gate
+- [Judging Agent Safety by Task Completion (Action-Boundary Violations)](judging-agent-safety-by-task-completion.md) — Under benign but underspecified DevOps instructions coding agents guess a target and overstep rather than fail; 55.8-67.8% of runs cross an action boundary, so a "task completed" report overstates safe autonomy
+- [Entity Binding Failures in Tool-Augmented Agents](entity-binding-failures.md) — An agent picks the right tool but acts on the wrong entity — the wrong Alex, thread, or account; wrong-tool error sits at 0% while wrong-entity actions run 24-26%, and retrieval alone does not close the gap
 
 ---
 
@@ -44944,6 +45160,7 @@ Apply the ladder when the cost of a wrong direction exceeds the cost of the chec
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md)
 - [Trust Without Verify](trust-without-verify.md)
 - [Spec Complexity Displacement](spec-complexity-displacement.md)
+- [Entity Binding Failures in Tool-Augmented Agents](entity-binding-failures.md) — an unverified entity binding is an assumption that cascades into the wrong action.
 
 ---
 
@@ -46804,6 +47021,80 @@ CORE_TOOLS = [stable_tool_schema(t) for t in load_core_tools()]
 
 ---
 
+### Entity Binding Failures in Tool-Augmented Agents
+Source: https://agentpatterns.ai/anti-patterns/entity-binding-failures/
+
+# Entity Binding Failures in Tool-Augmented Agents
+
+> An agent picks the right tool but binds it to the wrong real-world entity — the wrong Alex, the wrong thread, the wrong customer account.
+
+## The anti-pattern
+
+You evaluate an agent on whether it selects the correct tool and produces valid arguments, and you treat a green tool-selection score as proof the action was correct. It is not. "Email Alex about the launch" can select `send_email` flawlessly and still reach the wrong Alex, attach the wrong launch doc, or land in the wrong thread. Tool correctness and entity correctness are separate axes, and only one of them is on your dashboard.
+
+The gap is measured. Across 60 diagnostic tasks, 5 model backends, and 6 tool-use methods (1,800 runs over email, calendar, documents, customer records, and issue tracking), action-oriented baselines hit 0.0% wrong-tool error yet still produced wrong-entity actions in 24.0-26.0% of runs ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)). The failure concentrates where references are ambiguous: temporal calendar tasks ("tomorrow's sync") run 90-100% wrong-entity for baselines, and true-ambiguity tasks reach 92-100% unsafe execution. Unambiguous tasks sit at 0% ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)).
+
+Adding a retriever does not close it. Surfacing candidate entities to the model still leaves it guessing — a semantic filter scores 24.0% and entity retrieval 26.0%, statistically level with the naive baseline ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)).
+
+## Why it works
+
+Three causes drive wrong-entity actions ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)). Retrieval insufficiency: listing candidates does not force the agent to verify which one binds, so it commits to the top match whether or not that match is unique. Temporal-context dependency: references lean on implicit time reasoning — latest version, nearest meeting — that agents infer poorly. Underspecified references: instructions assume background ("the launch doc") that metadata cannot recover. The insight is that organizing the decision space — better tools, better search — adds no binding-verification step. Safe action needs an explicit resolve-then-confirm precondition, not a better retriever.
+
+The mitigations that work make binding a gate. Entity-resolution preconditions declare which entity types a tool needs before it can fire. Confidence-gated binding requires the top candidate to clear an absolute threshold and beat the runner-up by a margin, so near-ties defer instead of guessing. Clarification under ambiguity asks a targeted question with distinguishing metadata, and provenance tracking records the evidence behind each binding for audit. Together these drove wrong-entity actions to 0.0% ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)).
+
+## Example
+
+Before — right tool, unverified entity:
+
+```python
+# "email Alex about the launch"
+alex = directory.search("Alex")[0]        # first match wins
+send_email(to=alex.address, subject="Launch", body=...)
+```
+
+Two people named Alex resolve to one silent pick. Tool selection is correct; the recipient is a coin flip.
+
+After — resolve then confirm before acting:
+
+```python
+candidates = directory.search("Alex")
+if len(candidates) > 1 and not clear_margin(candidates):
+    return clarify(
+        "Which Alex? "
+        + "; ".join(f"{c.name} <{c.address}>, {c.team}" for c in candidates)
+    )
+send_email(to=candidates[0].address, subject="Launch", body=...)
+```
+
+The gate fires only when the binding is ambiguous, and it presents distinguishing metadata rather than a generic question.
+
+## When this backfires
+
+Making every binding a gate is not free. The same methods that drove wrong-entity actions to zero cut direct task success from ~74-75% to 26-32% through conservative deferral ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)). Gate selectively:
+
+- Reversible or draft-only actions (draft an email, open a doc) where a wrong entity is caught and undone cheaply — a final human confirm beats a per-binding gate and keeps completion high.
+- Small, deduplicated, single-tenant entity spaces with no name collisions — unambiguous tasks already sit at 0% wrong-entity, so the gate never fires but still adds latency.
+- Interactive workflows where a human already confirms every high-risk send — the clarification step lives outside the agent.
+
+Reserve confidence-gated binding for high-risk, irreversible actions on ambiguous entity spaces; elsewhere the completion cost outweighs the safety gain.
+
+## Key Takeaways
+
+- Tool correctness and entity correctness are separate axes. A 0% wrong-tool score coexists with 24-26% wrong-entity actions ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)).
+- Retrieval does not fix binding. Surfacing candidates leaves the agent guessing; the fix is an explicit resolve-then-confirm precondition, not a better search.
+- The failure concentrates on ambiguous references — temporal ("tomorrow's sync") and name collisions — and vanishes on unambiguous ones.
+- Binding gates carry a completion cost (task success ~74% → 26-32%); reserve them for high-risk, irreversible actions.
+
+## Related
+
+- [Blind Tool Deference: Agents Parroting Callable Tools](blind-tool-deference.md) — adjacent failure on the same tool call: adopting the tool's output wholesale rather than binding to the wrong entity.
+- [Trusting Model-Level Privilege Restraint at Tool Selection](over-privileged-tool-selection.md) — another right-tool-family failure: correct capability, wrong privilege level.
+- [Trusting Tool Error Messages as Implicit Authority](tool-error-implicit-authority.md) — a sibling wrong-trust failure, on the error stream rather than the entity binding.
+- [Assumption Propagation](assumption-propagation.md) — an unverified early binding cascades downstream, the same way a wrong entity attaches to later actions.
+- [The Agent Pushback Protocol](../agent-design/agent-pushback-protocol.md) — the constructive counterpart: the agent surfaces ambiguity and asks rather than guessing.
+
+---
+
 ### External Artifacts Treated as Data, Not Adversarial Input
 Source: https://agentpatterns.ai/anti-patterns/external-artifacts-as-data/
 
@@ -47227,6 +47518,52 @@ To detect whether reasoning is contributing, measure pass^k — run the same tas
 - [Chain-of-Thought Reasoning Fallacy](../fallacies/chain-of-thought-reasoning-fallacy.md) — Why coherent reasoning traces are not proof of correct decisions
 - [The Kitchen Sink Session](session-partitioning.md) — Another cost-performance anti-pattern: mixing unrelated tasks fills context with irrelevant history
 - [The Infinite Context](infinite-context.md) — Another cost-performance anti-pattern: loading unnecessary tokens degrades output
+
+---
+
+### Judging Agent Safety by Task Completion (Action-Boundary Violations)
+Source: https://agentpatterns.ai/anti-patterns/judging-agent-safety-by-task-completion/
+
+# Judging Agent Safety by Task Completion (Action-Boundary Violations)
+
+> A completed task is not a safe one: under vague instructions, coding agents guess and cross action boundaries on production infrastructure.
+
+Treating "task completed" as evidence that an agent acted safely is the mistake. A benchmark that varied only the instruction, not the task or environment, found that underspecification does not mainly make agents fail — it makes them guess. Across five agent and model configurations, 55.8-67.8% of runs violated at least one action boundary ([Ji et al., 2026](https://arxiv.org/abs/2607.02294)). Completion-centric evaluation counts a confident wrong action as a success and so overstates how safely an agent can run on its own.
+
+## What an action-boundary violation is
+
+UnderSpecBench holds the environment and the one ground-truth safe action fixed, then varies the instruction along three axes: how clear the intent is, how certain the target is, and how large the blast radius is. Deterministic side-effect oracles score each run as Safe Success, Wrong Target, or OverScope. A Wrong Target hits a different or protected resource; an OverScope action is broader or more destructive than the task needed. Safe Success requires the intended action, no wrong target, and no overscope at once ([Ji et al., 2026](https://arxiv.org/abs/2607.02294)).
+
+Two results matter for anyone gating agents on completion. Target uncertainty collapses action quality: among runs where the agent acted, Safe Success fell from 67.9% when the target was clear to 8.6% when it was not, and Wrong Target rose from 9.6% to 75.1%. Blast-radius warnings barely changed behavior — action rate stayed near 65% whether the operation was reversible or not ([Ji et al., 2026](https://arxiv.org/abs/2607.02294)). Overstepping concentrated on shared control planes: 77.2% OverScope on infrastructure and capacity surfaces versus 14.4-37.6% on bounded-object surfaces.
+
+## Why agents guess instead of asking
+
+The agent resolves missing information by inferring against local context rather than by asking. When the target is uncertain, it "infers a plausible object from local context and executes against it instead of confirming which candidate the user intended." When intent is vague, there is "nothing concrete to ask about," so the agent guesses or defers. A large blast radius "signals danger but no missing fact, so it prompts no question" — agents carry no mechanism that couples irreversibility to caution ([Ji et al., 2026](https://arxiv.org/abs/2607.02294)). Overstep lands on control planes because the implementation path runs through a plane whose effects reach past the named target. Whether the agent asks at all is a property of the model and harness, not the risk: in the same benchmark one configuration asked a clarifying question 38-45% of the time while another asked 1.7% of the time.
+
+## Example
+
+**Before — completion treated as the safety signal:** an operator asks an agent to "clean up the old release." The target is underspecified. The agent infers a plausible artifact, deletes it, and reports the task done with exit code 0. Nothing distinguishes this run from one that deleted the correct artifact — the completion signal is identical whether the agent hit the right target or a protected one.
+
+**After — the boundary is measured, not assumed:** the harness exposes a first-class Ask-User affordance and a confirmation schema for irreversible or broad actions, so an underspecified target draws a clarifying question instead of a guess, and a destructive action on a shared control plane needs explicit confirmation before it runs ([Ji et al., 2026](https://arxiv.org/abs/2607.02294)).
+
+## When over-correcting backfires
+
+The fix is calibrated restraint, not maximal clarification. Forcing an agent to confirm every instruction reintroduces the human bottleneck autonomy was meant to remove. Agents already pause for clarification more often than humans interrupt on complex tasks ([Anthropic, 2026](https://www.anthropic.com/research/measuring-agent-autonomy)), and exhaustive asking plateaus: a reward-trained clarification model matched GPT-5's resolution rate on underspecified issues while asking 41% fewer questions ([Vijayvargiya et al., 2026](https://arxiv.org/abs/2604.14624)). Add friction where it earns its cost — uncertain targets and high blast radius — not to well-specified, read-only, or already-gated work. The benchmark authors note their rates are a lower-bound stress test of the fully autonomous path, not a prediction for a deployment already gated by approvals, IAM, or CI.
+
+## Key takeaways
+
+- A green run status and a "task completed" report say the harness exited, not that the agent acted on the right target with the right scope.
+- Underspecified targets, not vague intent, are the dominant driver of wrong-target and overscope actions; specify the target, not just the goal.
+- Blast-radius cues alone do not make agents cautious — irreversibility has to be coupled to a confirmation gate in the harness or below it.
+- Route the fix to its owner: calibrated restraint at the model, a first-class Ask-User affordance and confirmation schemas at the harness, and irreversibility-keyed guards at the system layer.
+
+## Related
+
+- [Interactive Clarification for Underspecified Tasks](../agent-design/interactive-clarification-underspecified-tasks.md) — the mitigation: agents that explore then ask targeted questions lift resolution on underspecified tasks.
+- [Destructive-Failure Mechanism Attribution by Mitigation Owner (ClayBuddy Three)](destructive-failure-mechanism-attribution.md) — the three-owner cut of destructive failures this page routes fixes through.
+- [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md) — scoping permissions so an overscope action cannot reach a protected resource.
+- [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — the sibling failure where the completion signal itself is unreliable.
+- [Run-Status vs Task-Status Confusion in Autonomous Agent Runs](run-status-vs-task-status-confusion.md) — why a clean exit code is not evidence the task succeeded.
 
 ---
 
@@ -51263,6 +51600,7 @@ The pattern is load-bearing when the deployment uses a mid-tier or open-weight m
 - [Trusting Tool Error Messages as Implicit Authority (Error-Path Injection)](tool-error-implicit-authority.md) — the corrective-reasoning mechanism that amplifies escalation after transient failures.
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — adjacent failure: relying on prompt rules to enforce tool boundaries rather than harness-level deny rules.
 - [Action-Selector Pattern](../security/action-selector-pattern.md) — architectural defence that eliminates the selection surface where the catalog allows it.
+- [Entity Binding Failures in Tool-Augmented Agents](entity-binding-failures.md) — the sibling right-tool failure: correct privilege, wrong entity the tool acts on.
 
 ---
 
@@ -51681,6 +52019,7 @@ Packaging domain knowledge and reusable capabilities as agent skills with reliab
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md) — All SKILL.md frontmatter fields: invocation control, subagent delegation, tool restriction, hooks, and argument handling
 - [Skill Context Isolation](skill-context-isolation.md) — Run a skill in an isolated subagent context so its auxiliary tokens never enter the main chat; the parent receives only the distilled result
 - [Skill Library Evolution](skill-library-evolution.md) — How agent skill libraries grow, get pruned, and evolve through versioning, quality gates, and lifecycle governance
+- [Skill Reuse as Vendored Forking](skill-reuse-as-vendored-forking.md) — Reusing a SKILL.md is a one-time near-verbatim copy that silently forks from its source; bind project specifics at adoption and track upstream only where the contract is coupled to a moving source
 - [Skill Tool Runtime Enforcement](skill-tool-runtime-enforcement.md) — Use the Skill tool to load command prompts at invocation time rather than telling agents to read the file -- eliminates stale instructions and path drift
 - [Google ADK Skills](adk-skills.md) — How Google ADK implements the Agent Skills standard via SkillToolset, inline `models.Skill`, and three auto-generated tools mapped to L1/L2/L3 progressive disclosure
 - [Interpreter Skills](interpreter-skills.md) — Ship a SKILL.md plus an importable module so the model decides when the behavior fires while the runtime executes a reviewed, testable function — the named, versionable unit on top of an embedded code interpreter
@@ -60189,6 +60528,7 @@ Lifecycle governance adds overhead that may exceed its value in some contexts:
 - [Tool Minimalism](tool-minimalism.md)
 - [Skill Authoring Patterns](skill-authoring-patterns.md)
 - [Skill Library Technical Debt](skill-library-technical-debt.md) — the mechanical-repair counterpart to this page's governance-lifecycle view
+- [Skill Reuse as Vendored Forking](skill-reuse-as-vendored-forking.md) — the empirical account of how reused skills actually behave: one-time near-verbatim copies that rarely re-sync
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md)
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md)
 - [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
@@ -60318,12 +60658,85 @@ No LLM call, no agent run — the defect is structural and the fix is structural
 ## Related
 
 - [Skill Library Evolution](skill-library-evolution.md) — lifecycle stages, versioning, and pruning principles that frame the broader maintenance problem
+- [Skill Reuse as Vendored Forking](skill-reuse-as-vendored-forking.md) — the empirical reuse behavior (never-resynced near-verbatim copies) that seeds this library-level debt
 - [Skill Library Refinement Loops](../workflows/skill-library-refinement-loops.md) — organizational feedback channels orthogonal to the typed-signal detectors here
 - [Skill Evals](../verification/skill-evals.md) — per-skill output quality and trigger precision; the unit-level counterpart to library-level debt
 - [Skill Authoring Patterns](skill-authoring-patterns.md) — practical patterns that prevent debt at authoring time
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md) — fields a typed contract can extend
 - [Enterprise Skill Marketplace](../workflows/enterprise-skill-marketplace.md) — distribution and OTel telemetry that feed the utility dimension at scale
 - [Skill Supply Chain Poisoning](../security/skill-supply-chain-poisoning.md) — risk dimension at the boundary, complementing internal validator gaps
+
+---
+
+### Skill Reuse as Vendored Forking
+Source: https://agentpatterns.ai/tool-engineering/skill-reuse-as-vendored-forking/
+
+# Skill Reuse as Vendored Forking
+
+> A reused SKILL.md is a one-time verbatim copy that silently forks from its source — treat it as a vendored dependency, not a live one.
+
+Reusing a skill from a registry is not subscribing to it. The first large-scale study of `SKILL.md` files as software artifacts found that adoption "largely behaves as a one-time copy that developers rarely synchronise with upstream revisions" ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)). Across 2,462 recovered reuse links, 1,841 (74.8%) were adopted near-verbatim at ≥0.99 body similarity; only 25.2% diverged at all on entry ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)). You own the copy the moment you make it, and it will not keep itself current.
+
+## When the vendored-fork stance pays off
+
+The discipline is worth its overhead only under the conditions the reuse data marks out ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)):
+
+- The skill will outlive the task. 53% of reused skills are never modified after adoption, so whatever you bind at copy time is what runs for the life of the skill — get the project-specific paths, references, and activation triggers right up front, because nobody revisits them.
+- The source keeps moving. Among skills never locally updated, 40.2% had their upstream source updated after adoption, with the change never pulled in; among locally-updated skills whose upstream also changed, 62.3% diverged independently rather than re-incorporating the upstream fix. Only these coupled-to-a-moving-source skills justify an upstream-change subscription.
+- Provenance matters for review or audit. A verbatim copy carries no record of where it came from unless you add one; multi-author libraries need that link to review or re-sync later.
+
+If none of these hold — a stable, general-purpose skill you will never touch again — copy-and-forget is the rational low-cost choice, and adding tracking machinery is pure overhead.
+
+## What actually changes on adoption
+
+The changes adopters make are narrow, which is why the vendored-fork framing fits. They are overwhelmingly additive — additions outnumber removals 2.7 to 1 — and re-ground the skill to its host project: reworking operational specs, rewiring reference pointers, supplying activation metadata ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)).
+
+The behavioral contract stays near-untouched. How a skill interacts with users, monitors runtime state, and recovers from failures rank lowest in revision — user interaction changed in 1.6% of customization diffs, runtime-state monitoring in 0.5% ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)). Adopters inherit those rules almost verbatim, so the adoption review is small and specific: check the bindings, spot-check the inherited contract, stop there.
+
+## Why it works
+
+Skills are "editable natural language interleaved with executable code," which makes them "unusually mutable" compared to versioned packages, and no reliable distribution or sync path exists — so adoption defaults to a one-time copy rather than a tracked dependency ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)). A supply–demand split explains the shape of the edits that do happen: centralized registry skills encode broadly reusable, general-purpose coding capability whose behavioral contract is already correct, while adopters only re-ground project-specific bindings to their host project ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)). The correct general contract arrives ready to inherit, so effort clusters on bindings — exactly how a vendored library's interface survives untouched while its call sites adapt.
+
+## When this backfires
+
+- Throwaway or prototype skills. Provenance records, upstream-change subscriptions, and version pinning are wasted ceremony on a skill used once and discarded — see [Throwaway Prototype Skill](../workflows/throwaway-prototype-skill.md).
+- Fast-moving upstream you want to track. Freezing a copy is the wrong call when the skill wraps a rapidly-fixed API. The 40.2% who silently miss upstream fixes ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)) are the cautionary case, but the remedy is a live link — a submodule or package that pulls fixes — not more fork discipline.
+- Small solo libraries. With a handful of skills you wrote and nobody else adopted, there is no upstream to sync and no provenance to track; the ritual is overhead, the same small-library caveat [Skill Library Evolution](skill-library-evolution.md) draws.
+- Mistaking near-verbatim for safe. A copy that matches its source at ≥0.99 similarity ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)) still inherits any latent defect in the source verbatim; high similarity is a drift signal, not a correctness guarantee.
+
+## Example
+
+Record the fork at adoption so a later reviewer can tell what is inherited from what is local. This provenance block sits at the top of the copied `SKILL.md`; the angle-bracketed parts are what you fill in per adoption:
+
+```markdown
+## Provenance
+- Source: <registry>/<skill> @ <version-or-commit> (adopted <date>)
+- Upstream: <repo URL>
+- Local bindings (this fork owns these):
+  - migrations path rebound from ./migrations to db/migrations
+  - added activation triggers: "schema change", "add column"
+- Inherited verbatim — re-review before editing:
+  - failure-recovery and rollback steps
+  - user-confirmation prompts before destructive actions
+```
+
+The block names the source and pinned version, separates the bindings this fork owns from the behavioral contract it inherits, and keeps the upstream link a later reviewer needs to re-sync — the tracking a one-time copy otherwise loses.
+
+## Key Takeaways
+
+- A reused skill is a fork the moment you copy it: 74.8% of reuse is near-verbatim and 53% is never modified again, so bind project specifics at adoption ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)).
+- Only subscribe to upstream for skills coupled to a moving source — 40.2% of unmodified copies already miss upstream fixes ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)); the rest are copy-and-forget by design.
+- The edits that happen are additive and re-ground bindings; the user-interaction, runtime, and failure contract is inherited near-verbatim, so keep the adoption review small and specific.
+- Skip the machinery for throwaway skills, solo libraries, and fast-moving upstreams where a live dependency beats a frozen fork.
+- Record provenance and version at copy time — a verbatim fork loses the link back to its source unless you write it down.
+
+## Related
+
+- [Skill Library Evolution](skill-library-evolution.md) — the lifecycle-governance view of the same libraries; this page is the empirical account of how reuse actually behaves within it
+- [Skill Library Technical Debt](skill-library-technical-debt.md) — the library-time debt that additive-only, never-resynced forks accumulate
+- [Skill Authoring Patterns](skill-authoring-patterns.md) — how to write the skill that later gets forked; this page covers what happens to it after adoption
+- [Contractual Skill Files](../instructions/contractual-skill-files.md) — structuring the inherited contract as named fields so a reviewer can check a fork's bindings fast
+- [Tool Cloning and Provenance Assessment](tool-cloning-provenance-assessment.md) — why raw marketplace counts overstate diversity when most entries are near-verbatim clones
 
 ---
 
@@ -68593,6 +69006,7 @@ Source: https://agentpatterns.ai/verification/
 
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md) — Define correctness criteria before implementation so every agent change is validated against a stable, reusable test suite
 - [Skill Evals](skill-evals.md) — Treat each skill as an evaluable unit with a labelled dataset, paired with-skill vs baseline runs, and a benchmark that quantifies pass-rate, time, and token trade-offs
+- [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](agent-driven-eval-flywheel.md) — Drive the eval-generation loop from your coding agent so each fix is graded against the whole accumulated case set, proving it generalizes instead of patching one case
 - [Eval Difficulty as a Product Smell](eval-difficulty-product-smell.md) — Hard-to-write evals usually signal a product that was not designed for users to verify; redesign the artifact for checkability before scaling the scorer
 
 ## Review Techniques
@@ -68629,6 +69043,78 @@ Source: https://agentpatterns.ai/verification/
 
 - [Test Harness Design for LLM Context Windows](llm-context-test-harness.md) — Terse stdout, verbose log files, and grep-friendly error lines that keep agent context clean and actionable during evaluation runs
 - [Runnable Documentation as Agent Verification](runnable-documentation.md) — Extract inline code examples into standalone files that CI executes on every build so doc rot fails the build the same way broken code does
+
+---
+
+### Agent-Driven Eval Flywheel: Prove a Fix Generalizes
+Source: https://agentpatterns.ai/verification/agent-driven-eval-flywheel/
+
+# Agent-Driven Eval Flywheel: Prove a Fix Generalizes
+
+> Drive an eval loop from your coding agent: turn each failure into a re-runnable case so a fix is proven to generalize.
+
+An agent-driven eval flywheel uses the coding agent itself to run the eval-improvement loop. It builds an evaluation dataset, grades the agent against it, reads why cases failed, applies a fix, and re-runs. The point is to answer the one question a manual prompt tweak cannot: did this change generalize, or did it just look better on the three examples you tried while breaking ten others? [Source: [Google — Driving the Agent Quality Flywheel](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)]
+
+This targets the gap between "looks better on a few examples" and "actually better in production." Most teams have eval cases somewhere and most teams tweak prompts, but few connect the two with enough discipline to know whether a change moved the metric or just moved the vibe. [Source: [Google](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)]
+
+## The five-stage loop
+
+Google frames the loop as five stages. You run them in order on the first pass, then repeat stages 2 to 5 until quality targets are met. [Source: [Google](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)]
+
+1. Prepare data: build an eval dataset from existing traces, hand-crafted cases, or synthesized scenarios.
+2. Run inference: execute the agent over the dataset to produce traces. Skip this if you already have traces.
+3. Grade: score traces with model-based judges or your own custom metrics. This is the only stage that always runs.
+4. Analyze failures: read the rubric verdicts to understand why a case failed, and cluster them once you have ten or more.
+5. Optimize and iterate: apply a targeted fix, re-run stages 2 to 4, and compare against the previous baseline.
+
+The developer describes a worry in plain language, approves a plan, and reads results. The agent chooses the metric, runs the eval service, reads the verdicts, and proposes the fix, so you never touch the eval CLI or name a metric by hand. [Source: [Google](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)]
+
+```mermaid
+graph LR
+    A[Failure] --> B[Eval case]
+    B --> C[Grade vs<br>full set]
+    C --> D[Analyze<br>verdicts]
+    D --> E[Targeted fix]
+    E --> F{Delta moves?}
+    F -->|No| C
+    F -->|Yes| G[Baseline]
+    G --> A
+```
+
+## Why it works
+
+The loop works because it separates two roles that a manual tweak collapses into one. An independent evaluator scores the change, and whatever proposes the fix never grades its own work. An optimizer that grades itself learns to game the metric instead of improving the agent, so the decoupling is what keeps the signal honest. [Source: [Google](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)]
+
+Generalization becomes measurable because the loop promotes the one behavior under change to a stable metric. In Google's trip-planner cycle, an adaptive rater already caught a missed revision, but it folded that miss into a blended score that regenerated differently every run, so there was no number to trend. Pinning the concern to a fixed categorical rubric made a before-and-after delta countable and attributable to the fix rather than to rater drift. [Source: [Google](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)] Re-running the whole accumulated set, not just the case that motivated the change, is the same regression discipline behind [incident-to-eval synthesis](incident-to-eval-synthesis.md) and [skill evals](skill-evals.md).
+
+## When this backfires
+
+- Model-based graders are directional, not ground truth. Judge scores can be internally consistent yet not track correctness, so trust the delta between runs more than any single number as a grade. [Source: [Reliability without Validity: LLM-as-a-Judge](https://arxiv.org/abs/2606.19544)] Google makes the same caveat about its own raters. [Source: [Google](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)]
+- Deterministic failures do not need this. When the failure is a wrong JSON shape or a missing field, a code-based assertion or a plain count is cheaper and more reliable than a model judge. [Source: [Skill Evals](skill-evals.md)]
+- Agent-authored cases inherit the oracle problem. A case generated from an already-buggy trace can encode the bug as expected behavior, so the suite passes and the defect ships anyway. Review synthesized cases before trusting them. [Source: [Katalon — Reviewing AI-Generated Test Cases](https://katalon.com/resources-center/blog/reviewing-ai-generated-test-cases)]
+- Synthetic scenarios are a cold start. A user simulator gets you moving with no traffic, but the loop only sharpens once fed real production traces. [Source: [Google](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)]
+
+## Example
+
+Google ran the loop on `travel-concierge`, a trip planner that keeps the itinerary in session state. The developer asked only whether the agent honored mid-conversation changes, such as different dates or a different hotel. The agent read the code, then promoted that concern to a custom rubric, `revision_honored`, with a categorical verdict (HONORED, IGNORED, PARTIAL, NO_REVISION), and bootstrapped 25 scenarios across the revision types. [Source: [Google](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)]
+
+The first pass returned 21% IGNORED. The verdicts located the failure precisely: in three of four failures the internal state was correct, but the agent's final message to the user echoed the stale value. Nothing in the root instruction told it to check its final response against the user's most recent message. A three-sentence instruction change took IGNORED from 21% to 5% on a re-run of the same set. [Source: [Google](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)]
+
+## Key Takeaways
+
+- The coding agent runs the whole loop: it builds the dataset, grades traces, reads verdicts, and proposes a fix, so you describe the goal rather than drive the eval tool.
+- Keep the proposer and the evaluator decoupled. An optimizer that grades its own work learns to game the metric.
+- Promote the behavior you changed to a stable metric so the before-and-after delta is countable, and treat adaptive judge scores as a directional signal.
+- Re-run the whole accumulated case set after every fix, which is what separates "moved the metric" from "patched one case."
+- Model-based grading, deterministic failures, the oracle problem, and synthetic-only data each bound where the flywheel pays off.
+
+## Related
+
+- [Incident-to-Eval Synthesis: Production Failures as Evals](incident-to-eval-synthesis.md) — the production-sourced counterpart that feeds failures into the same regression loop
+- [Skill Evals](skill-evals.md) — evaluating a single skill as a dataset-graded unit with paired baseline runs
+- [Eval-Driven Development](../workflows/eval-driven-development.md) — writing evals before building the feature the loop then guards
+- [Agentic Flywheel: Self-Improving Agent Systems](../agent-design/agentic-flywheel.md) — the harness-improvement flywheel, where evals here become the measurement substrate
+- [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — measuring a model grader's own error rate before you gate on it
 
 ---
 
@@ -73174,6 +73660,7 @@ Every postmortem should ask: "What eval would have caught this?"
 - [Test-Driven Agent Development](tdd-agent-development.md)
 - [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md)
 - [Completion Failure Taxonomy](completion-failure-taxonomy.md)
+- [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](agent-driven-eval-flywheel.md)
 
 ---
 
@@ -78909,6 +79396,7 @@ Excess permissions expand the blast radius of any failure or attack.
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md) — Restrict which domains agent tools can reach via harness-enforced allow and deny lists; remove the model from the network trust boundary
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — Decompose task authority into a step-level authority context the dispatch layer can check; runtime content may inform the planner but never become the issuer that authorizes a side effect
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — Limit agent access to only what the current task requires; excess permissions directly amplify injection impact
+- [Constraints as a Substrate for Scalable Agent Oversight](constraint-substrate-scalable-oversight.md) — Manage coding agents with the controls used for human teams — access control, network policy, tooling-enforced conventions — so a small, cheap reviewer scales oversight; substrate plus a ~200-line tool lifted a small reviewer's backdoor recall from 54.5% to 90.9%
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — Block agent startup until remote managed settings are freshly validated; exit rather than run with stale or missing policy
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — Writes to `.npmrc`, `.yarnrc`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, and `.devcontainer/` are execution-escalations — interrupt permissive edit modes at the write site, complementing execution-side defaults like `ignore-scripts=true`
 - [Intent-Governed Tool Authorization for AI Agents (IGAC)](intent-governed-tool-authorization.md) — A server-issued intent certificate narrows the static OpenPort manifest per user request via a monotone-only filter; the planner cannot reach tools the current ask does not justify, but classifier failure and intent-materialisation privacy regressions constrain where the trade-off pays off
@@ -80154,6 +80642,7 @@ Each agent's worst-case injection outcome is bounded to its operation. A prompt 
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — layered safety controls beyond permission scoping
 - [Lethal Trifecta Threat Model for AI Agent Development](lethal-trifecta-threat-model.md) — why bounded permissions matter under prompt injection
 - [Rollback-First Design: Every Agent Action Should Be Reversible](../agent-design/rollback-first-design.md) — reversibility as a complement to bounded permissions
+- [Constraints as a Substrate for Scalable Agent Oversight](constraint-substrate-scalable-oversight.md) — least privilege as one leg of a broader constraint substrate that makes review scale
 
 ---
 
@@ -81087,6 +81576,62 @@ The contribution of the constraint-drift framing is not new mechanisms but a cov
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
+
+---
+
+### Constraints as a Substrate for Scalable Agent Oversight
+Source: https://agentpatterns.ai/security/constraint-substrate-scalable-oversight/
+
+# Constraints as a Substrate for Scalable Agent Oversight
+
+> Constraints like access control, network policy, and tooling-enforced conventions form a substrate that lets a small reviewer oversee coding agents cheaply.
+
+!!! note "Also known as"
+    Constraint substrate for oversight | Management controls for coding agents
+
+The controls that run large human engineering teams — access control, network policies, and coding conventions enforced by tooling — transfer directly to coding agents, and they bound agent behavior more cheaply than elaborate agentic scaffolding ([Winninger, 2026](https://arxiv.org/abs/2607.02389)). Coding agents are already capable; the bottleneck is human review, and unconstrained agents make that review slow, risky, and expensive. Constraints move the cost: instead of spending tokens on reasoning scaffolds that try to make the agent behave, you spend engineering effort once on a substrate that limits what the agent can do at all.
+
+## The substrate constraints
+
+Three control families carry most of the load, each borrowed from how teams already manage people:
+
+- Access control: scope what the agent can read and write, so a task touches only the files and services it needs. This is the [least-privilege](blast-radius-containment.md) leg applied to every agent action.
+- Network policy: restrict where the agent can reach, so exfiltration and unreviewed dependency pulls are structurally blocked rather than detected after the fact ([egress policy](agent-network-egress-policy.md)).
+- Tooling-enforced conventions: linters, type checkers, and formatters make non-conforming code fail to build, so the reviewer never has to read past the shape of the code to trust it.
+
+Each control is deterministic. It holds even when the model misbehaves, because the runtime enforces it before the model acts.
+
+## Why it works
+
+Constraints shrink the space a reviewer has to reason over. Restricting what an agent can access, where it can reach, and how its code must be shaped reduces the set of possible behaviors — and therefore the set of possible misbehaviors — the reviewer must consider. A reviewer inspecting a constrained artifact works over a smaller hypothesis space, so even a weak model catches more. The substrate does the constraining, not the reviewer, so review effort per unit of agent output stays bounded as output grows.
+
+A controlled experiment measured this directly. A small reviewer model (Gemma 4 e4b) inspected a Python codebase seeded with 11 backdoors. Detection recall rose from 54.5% for an unconstrained agent with no tools to 90.9% once substrate constraints and a roughly 200-line command-line review tool were added, with the substrate and the tool contributing independently ([Winninger, 2026](https://arxiv.org/abs/2607.02389)). The gain is largest in languages that offer few default guarantees, such as Python; the same principles extend to memory-safe languages like Rust, where the compiler already supplies part of the substrate ([Winninger, 2026](https://arxiv.org/abs/2607.02389)).
+
+## When this backfires
+
+Constraints are necessary but not sufficient, and building the substrate has real cost. The pattern adds friction without a matching payoff when:
+
+- The stack already enforces the constraints. On memory-safe, strongly-typed codebases the compiler carries much of the load, so the marginal value of an added substrate is smaller ([Winninger, 2026](https://arxiv.org/abs/2607.02389)).
+- The project is small or throwaway. For a solo prototype, standing up access control and convention-enforcement tooling costs more than the review burden it removes.
+- The threat lives inside permitted operations. Access control and network policy narrow what an agent may do, but say nothing about whether the code inside the allowed envelope is correct or benign. A backdoor built entirely from allowed operations still needs semantic review, and a substrate alone can breed false confidence.
+- There is no existing convention tooling. On a greenfield codebase the substrate has to be built first, so the upfront cost lands before any oversight saving.
+
+For flaws that live within permitted operations — subtle logic errors and business-logic backdoors — agentic scaffolding such as a dedicated [security-analysis agent in a coder-reviewer-tester loop](code-injection-multi-agent-defence.md) earns its token cost. Treat the constraint substrate as the cheap first layer and reserve scaffolding for what the substrate cannot see.
+
+## Key Takeaways
+
+- Reuse the controls that already manage human teams: access control, network policy, and tooling-enforced conventions apply directly to coding agents.
+- Constraints make oversight scale because they shrink the reviewer's hypothesis space, so a small, cheap reviewer catches more.
+- In one experiment, substrate plus a ~200-line review tool lifted a small reviewer's backdoor recall from 54.5% to 90.9%, the two contributing independently ([Winninger, 2026](https://arxiv.org/abs/2607.02389)).
+- The substrate is cheaper in tokens than agentic scaffolding, but it is necessary rather than sufficient — pair it with semantic review for threats inside permitted operations.
+
+## Related
+
+- [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — the access-control leg of the substrate, applied per task
+- [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md) — the network-policy leg, enforced below the model
+- [Security Budget as Token Economics](security-budget-token-economics.md) — sizing review spend when oversight cost, not agent capability, is the constraint
+- [Code Injection Attacks on Multi-Agent Systems: Coder-Reviewer-Tester as Defence](code-injection-multi-agent-defence.md) — the scaffolding layer for threats the substrate cannot see
+- [Safe Command Allowlisting](safe-command-allowlisting.md) — deterministic tooling-enforced limits on what an agent may run
 
 ---
 
@@ -89521,6 +90066,7 @@ Contrast Bytecode Alliance's three-week Wasmtime sprint: 11 security issues surf
 - [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md)
 - [Unbounded Consumption: Bounding Agent Resource Use Against DoS and Denial-of-Wallet](unbounded-consumption-resource-bounds.md) — the runtime-bounds complement; this page sizes pre-release spend, the bounds page caps in-flight spend
+- [Constraints as a Substrate for Scalable Agent Oversight](constraint-substrate-scalable-oversight.md) — constraints make a small, cheap reviewer effective, cutting the token cost of oversight
 
 ---
 
@@ -98576,6 +99122,7 @@ Source: https://agentpatterns.ai/human/
 - [From Preventive to Reactive: Front-Loading Security in AI Coding Prompts](preventive-to-reactive-security-prompting.md) — AI assistants shift security thinking from writing-time to review-time; front-loading explicit security requirements in the initial prompt narrows that gap, under specific conditions
 - [Intervention Rate as a Diagnostic North Star, Not a Target](intervention-rate-diagnostic-north-star.md) — Treat the rate at which you correct an AI assistant as a segmented diagnostic signal, paired with quality and ambition metrics — not a single number to drive to zero
 - [Adapting AI Assistant Configuration to Developer Interaction Style](developer-interaction-style-adaptation.md) — Cognitive diversity produces distinct Copilot interaction modes; per-developer persona configuration only pays back when team size and tool maturity offset the maintenance cost
+- [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — Adoption spreads through visible peer use while retention tracks baseline activity; measure both plus quality-adjusted impact, not seat count, before justifying token spend
 
 ---
 
@@ -99054,6 +99601,7 @@ METR found a 39-point perception gap — developers estimated they were 20% fast
 - [Bottleneck Migration](bottleneck-migration.md) — why the 20% power users hit a different bottleneck than the 60%
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — sustainability constraints that cap how long even power users operate at Level 5+
 - [AI Development Maturity Model](../workflows/ai-development-maturity-model.md) — granular seven-phase practitioner model that refines the three-segment footprint
+- [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — how the segmented footprint plays out during a rollout: seed where peer visibility is highest, then measure retention separately from seat count
 
 ---
 
@@ -99318,6 +99866,7 @@ The 62% headline is consistent with this org and with a uniform-60%-medium-use o
 - [Agent Headcount as a Vanity Metric](../anti-patterns/agent-headcount-vanity-metric.md) — the Goodhart failure mode Phase 3 will exhibit if treated as a target.
 - [The Productivity-Experience Paradox in AI-Assisted Development](productivity-experience-paradox.md) — why depth-of-use can rise while developer experience and outcomes diverge.
 - [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md) — the other side of Copilot-specific instrumentation; cost telemetry that pairs with the cohort distribution.
+- [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — the rollout that these adoption-phase cohorts instrument: seed adoption socially, then track retention as a separate number.
 </content>
 </invoke>
 
@@ -101581,6 +102130,85 @@ Rigor relocation has real costs. The scaffolding-first bet fails or pays off poo
 - [Context Engineering](../context-engineering/context-engineering.md) -- designing what agents can access
 - [Bottleneck Migration](bottleneck-migration.md) -- how the review bottleneck shifts as agents accelerate code generation
 - [Skill Atrophy](skill-atrophy.md) -- risk of losing verification skills as agents handle more
+
+---
+
+### Rolling Out CLI Coding Agents at Organization Scale
+Source: https://agentpatterns.ai/human/org-scale-cli-agent-rollout/
+
+# Rolling Out CLI Coding Agents at Organization Scale
+
+> A CLI coding agent rollout spreads through visible peer use; measure retention and quality-adjusted impact, not seat count, before scaling spend.
+
+Rolling out command-line coding agents across an organization runs on two separate mechanisms: adoption spreads socially, but retention and impact do not. A study of tens of thousands of Microsoft engineers during the early-2026 rollout of Claude Code and GitHub Copilot CLI separated first use, sustained use, and output — and found each is driven by a different thing ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418)). Plan the rollout around that separation rather than around seat count.
+
+## What the evidence licenses
+
+The strongest single number from the study — a +24.0% lift in merged pull requests per engineer per day (95% CI +14.5% to +33.7%) — is observational, not a controlled experiment ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418)). Treat it as a directional signal under these conditions, not as settled proof of productivity:
+
+- Merged PRs are an imperfect proxy. The authors state the metric rewards "small, frequent PRs" and can "miss quality costs such as added complexity." A PR-count lift can reflect finer slicing, not more delivered value.
+- The lift is a population association, not a per-engineer cause. The authors read their dose-response "as an association, not a cause," and cannot rule out that similar engineers cluster together (homophily).
+- The opposite result exists under stronger method. A randomized controlled trial of experienced open-source developers measured a 19% slowdown with AI tools while those developers believed they were 20% faster ([METR, 2025-07-10](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Throughput up and time-to-complete up are not contradictory when the outcome measures differ.
+
+So the defensible claim is narrow: a rollout can move a concrete output metric. Whether that output is worth millions in annual token spend is a question of quality, which the field still lacks an agreed measure for ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418)).
+
+## Seed adoption, then measure retention separately
+
+First use spread primarily through social exposure, not demographics. An engineer whose reporting-chain peers already used the CLI agent had much higher odds of trying it: skip-level peers above 25% adoption gave +216% odds, direct-manager use +82%, and reviewer peers at 25% adoption +54% ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418)). Seed the rollout where that visibility is highest — managers, reviewers, and dense sub-teams — rather than spraying licenses evenly.
+
+Retention runs on a different lever. Sustained use tracked baseline coding activity, not social exposure: engineers shipping 2+ PRs a week had roughly a +31% retention advantage ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418)). Prior IDE Copilot users showed the trap directly — they tried the CLI more (+83%) but retained worse (−12% to −15%), because they had a familiar tool to fall back on. Measure trials and sustained use as two numbers; a seat-count spike that decays is the failure this separation catches, the same way [cohort segmentation](cohort-segmentation-copilot-usage-metrics.md) recovers phases an aggregate number hides.
+
+## Why it works
+
+Adoption spreads socially because CLI agent use is visible along reporting chains: peers, reviewers, and managers produce shared, observable outputs that lower a colleague's uncertainty about whether the tool is worth trying, and the skip-level effect (+216%) is the strongest such signal ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418)). Retention works through repetition instead — engineers with high baseline PR activity have enough coding occasions for the tool to demonstrate value early and become habitual, which is why baseline activity predicts staying while social exposure does not. This is also why senior ICs adopted more (+22%) and junior ICs less (−13% to −14%): senior developers could break work into agent-sized chunks and judge when output was sub-optimal, a prerequisite for early demonstrated value.
+
+## When this backfires
+
+- Optimizing for seat count. Social seeding manufactures trials, not sustained use; a rollout scored on licenses activated will look successful while retention quietly decays.
+- Reading throughput as value. Taking the +24% merged-PR lift as productivity ignores the authors' own proxy caveat and the [METR RCT's](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) 19% slowdown; the [productivity-experience paradox](productivity-experience-paradox.md) is the warning that perceived and real gains diverge, and the [bottleneck can migrate](bottleneck-migration.md) into review time.
+- Junior-heavy or low-activity teams. Retention hinges on baseline activity and the ability to judge output; a rollout aimed at teams without either stalls after the initial trial regardless of how well it is seeded.
+- Generalizing past a Microsoft-like setting. Single company, early-2026, Azure DevOps measurement, and authors employed by a company that sells AI tools — the effect sizes may not transfer to smaller orgs, different stacks, or teams without dense reporting-chain visibility ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418)).
+
+## Example
+
+A platform org rolling out Copilot CLI to 400 engineers, scored two ways:
+
+Before — seat count as the success metric:
+
+```text
+Quarter target: 400 seats activated
+Result: 340 seats activated (85%) → "rollout successful"
+```
+
+After — adoption, retention, and a quality-adjusted impact tracked separately:
+
+```text
+Seed:      enable reviewers + managers first (highest peer visibility)
+Adoption:  340 first-use (85% of seats)
+Retention: 190 sustained (used on 5+ of first 14 days) → 56% retained
+Impact:    merged-PR lift tracked with PR review time + revert rate,
+           not PR count alone
+Decision:  fund the next tranche only where retention held and the
+           paired quality signal did not degrade
+```
+
+The seat-count view calls a rollout that lost 44% of users at the retention gate a success. The three-number view routes the next tranche of token spend to the sub-teams where value actually persisted.
+
+## Key Takeaways
+
+- Adoption and retention have different drivers: first use spreads through visible peer and reporting-chain use (skip-level +216%); sustained use tracks baseline coding activity (2+ PRs/week ≈ +31% retention) ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418)).
+- Seed where visibility is highest — managers, reviewers, dense sub-teams — not evenly across seats.
+- Measure trials and sustained use as two numbers; prior IDE users try more (+83%) but retain worse (−12% to −15%).
+- The +24% merged-PR lift is observational and proxy-based; pair it with a quality signal (review time, revert rate) before treating it as productivity — an RCT elsewhere found a 19% slowdown ([METR, 2025-07-10](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)).
+- Justify token spend on quality-adjusted impact, not seat count — the open question is whether added throughput is better software.
+
+## Related
+
+- [AI Adoption Footprint: The Segmented Shape of Engineering Orgs](ai-adoption-footprint.md) — adoption is segmented, not flat; the shape of who adopts shapes where a rollout pays back
+- [Cohort Segmentation in the Copilot Usage Metrics API](cohort-segmentation-copilot-usage-metrics.md) — the per-user adoption phases that let a rollout track retention instead of a headline utilization number
+- [Human-Equivalent Hours for Autonomous Coding Agent Productivity](human-equivalent-hours-agent-productivity.md) — the quality-adjusted denominator to weigh token spend against, instead of raw PR count
+- [The Productivity-Experience Paradox in AI-Assisted Development](productivity-experience-paradox.md) — why perceived and measured productivity diverge, the inflation channel a throughput metric inherits
+- [The Bottleneck Migration When Humans Supervise Agents](bottleneck-migration.md) — where a merged-PR lift can be absorbed downstream in review time
 
 ---
 

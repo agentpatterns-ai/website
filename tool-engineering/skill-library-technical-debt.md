@@ -130,6 +130,7 @@ No LLM call, no agent run — the defect is structural and the fix is structural
 ## Related
 
 - [Skill Library Evolution](skill-library-evolution.md) — lifecycle stages, versioning, and pruning principles that frame the broader maintenance problem
+- [Skill Reuse as Vendored Forking](skill-reuse-as-vendored-forking.md) — the empirical reuse behavior (never-resynced near-verbatim copies) that seeds this library-level debt
 - [Skill Library Refinement Loops](../workflows/skill-library-refinement-loops.md) — organizational feedback channels orthogonal to the typed-signal detectors here
 - [Skill Evals](../verification/skill-evals.md) — per-skill output quality and trigger precision; the unit-level counterpart to library-level debt
 - [Skill Authoring Patterns](skill-authoring-patterns.md) — practical patterns that prevent debt at authoring time

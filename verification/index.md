@@ -64,6 +64,7 @@ last_reviewed: 2026-05-27
 
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md) — Define correctness criteria before implementation so every agent change is validated against a stable, reusable test suite
 - [Skill Evals](skill-evals.md) — Treat each skill as an evaluable unit with a labelled dataset, paired with-skill vs baseline runs, and a benchmark that quantifies pass-rate, time, and token trade-offs
+- [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](agent-driven-eval-flywheel.md) — Drive the eval-generation loop from your coding agent so each fix is graded against the whole accumulated case set, proving it generalizes instead of patching one case
 - [Eval Difficulty as a Product Smell](eval-difficulty-product-smell.md) — Hard-to-write evals usually signal a product that was not designed for users to verify; redesign the artifact for checkability before scaling the scorer
 
 ## Review Techniques

@@ -195,3 +195,4 @@ Every postmortem should ask: "What eval would have caught this?"
 - [Test-Driven Agent Development](tdd-agent-development.md)
 - [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md)
 - [Completion Failure Taxonomy](completion-failure-taxonomy.md)
+- [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](agent-driven-eval-flywheel.md)

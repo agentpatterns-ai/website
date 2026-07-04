@@ -100,3 +100,4 @@ Per-tool attribution helps most when the expensive tool is also avoidable. It pr
 - [Context Window Dumb Zone](context-window-dumb-zone.md)
 - [Context Window Anxiety](context-window-anxiety.md)
 - [Semantic Context Loading](semantic-context-loading.md)
+- [Proprioceptive Context Dashboard](proprioceptive-context-dashboard.md) — the agent-facing counterpart that surfaces per-block state to the model itself

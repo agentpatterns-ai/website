@@ -230,6 +230,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Compositional Skill Routing for Large Skill Libraries](context-engineering/compositional-skill-routing.md)
 - [Deterministic Anchoring: Static Facts as Stable Context](context-engineering/deterministic-anchoring.md)
 - [Grounding Agents in Code the Model Has Never Seen](context-engineering/grounding-zero-prior-code.md)
+- [Proprioceptive Context Dashboard: Agent Self-Managed Context](context-engineering/proprioceptive-context-dashboard.md)
 
 ## Instructions & Prompts
 
@@ -301,6 +302,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent Config as a Managed Supply Chain: Hashing and Pinning](instructions/agent-config-as-managed-supply-chain.md)
 - [Agent Context File Evolution: Treating ACFs as Configuration Code](instructions/agent-context-file-evolution.md)
 - [Encoding Product-Design Taste into Agent Context](instructions/encoding-product-design-taste.md)
+- [Codified Effort and Escalation Policy in the Instruction File](instructions/codified-effort-escalation-policy.md)
 
 ## Agent Architecture
 
@@ -542,6 +544,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Static Roster vs Runtime Subagent Definition](multi-agent/static-roster-vs-runtime-subagent-definition.md)
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](agent-design/wiki-memory-agent-maintained-knowledge-base.md)
 - [Trajectory-Conditioned Model Escalation (SWE-Router)](agent-design/trajectory-conditioned-model-escalation.md)
+- [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](agent-design/reasoning-effort-over-tool-scaffolding.md)
 
 ## Loop Engineering
 
@@ -641,6 +644,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Unix CLI as the Native Tool Interface for AI Agents](tool-engineering/unix-cli-native-tool-interface.md)
 - [Web Search Agent Loop: Iterative Research Patterns](tool-engineering/web-search-agent-loop.md)
 - [Auth-Isolation as the MCP-vs-CLI Selection Heuristic](tool-engineering/mcp-auth-isolation-vs-cli-selection.md)
+- [Skill Reuse as Vendored Forking](tool-engineering/skill-reuse-as-vendored-forking.md)
 
 ## Token Engineering
 
@@ -779,6 +783,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Detecting Memory-Poisoning Exfiltration by Tool-Call Order (Recall-Before-Send Signature)](security/recall-before-send-memory-poisoning-detection.md)
 - [Computer-Systems Lens for Always-On Agent Security](security/computer-systems-lens-agent-security.md)
 - [Capability-Additive Code Interpreters for Untrusted Agent Code](security/capability-additive-interpreter.md)
+- [Constraints as a Substrate for Scalable Agent Oversight](security/constraint-substrate-scalable-oversight.md)
 
 ## Testing & Evaluation
 
@@ -905,6 +910,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Per-Line Requirement Citations for Hallucination Detection](verification/per-line-requirement-citations.md)
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](verification/meta-evaluate-llm-judge-rubric-verification.md)
 - [Agent-Recorded Video Demos as a Verification Artifact](verification/agent-recorded-video-demos.md)
+- [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](verification/agent-driven-eval-flywheel.md)
 
 ## Hooks & Guardrails
 
@@ -1132,6 +1138,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Intervention Rate as a Diagnostic North Star, Not a Target](human/intervention-rate-diagnostic-north-star.md)
 - [Programming Language Choice Still Shapes Agent Artefacts](human/programming-language-choice-shapes-agent-artefacts.md)
 - [Adapting AI Assistants to Developer Interaction Style](human/developer-interaction-style-adaptation.md)
+- [Rolling Out CLI Coding Agents at Organization Scale](human/org-scale-cli-agent-rollout.md)
 
 ## Anti-Patterns
 
@@ -1225,6 +1232,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Over-Orchestrated Agent Architecture (Prefer the Simplest That Works)](anti-patterns/prefer-simplest-agent-architecture.md)
 - [Tab-Accept Rate as a Proxy for Critical Engagement](anti-patterns/tab-accept-critical-engagement-gap.md)
 - [Model Confidence as Security Verification (Security Calibration Gap)](anti-patterns/model-confidence-as-security-verification.md)
+- [Judging Agent Safety by Task Completion (Action-Boundary Violations)](anti-patterns/judging-agent-safety-by-task-completion.md)
+- [Entity Binding Failures in Tool-Augmented Agents](anti-patterns/entity-binding-failures.md)
 
 ## Emerging Concepts
 
