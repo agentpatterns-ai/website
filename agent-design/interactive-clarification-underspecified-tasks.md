@@ -110,3 +110,4 @@ The agent resolved the navigational ambiguity (which file, which bug) independen
 - [Spec-Driven Development](../workflows/spec-driven-development.md) — upstream approach to eliminating ambiguity before agent execution
 - [TDD for Agent Development](../verification/tdd-agent-development.md) — tests as unambiguous executable specification
 - [Issue Requirements Preprocessing](issue-requirements-preprocessing.md) — automated clarification of issue text before execution begins
+- [Semantic Collapse Under Underspecified Prompts](../anti-patterns/semantic-collapse.md) — why you cannot detect underspecification by sampling for output variance: the model collapses onto one confident, wrong reading

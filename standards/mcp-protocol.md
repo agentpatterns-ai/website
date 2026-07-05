@@ -107,6 +107,7 @@ Use MCP when building reusable tool servers shared across hosts or developers. F
 - [Agent Cards: Capability Discovery Standard for AI Agents](agent-cards.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
 - [OpenAPI as the Source of Truth for Agent Tool Definitions](openapi-agent-tool-spec.md)
+- [Governance Layer for Agent Interoperability Protocols](protocol-governance-layer.md)
 - [Tool Calling Schema Standards for AI Agent Development](tool-calling-schema-standards.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
 - [Portable Agent Definitions: Full-Stack Identity as Code](portable-agent-definitions.md)

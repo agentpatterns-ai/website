@@ -121,3 +121,4 @@ Apply the ladder when the cost of a wrong direction exceeds the cost of the chec
 - [Trust Without Verify](trust-without-verify.md)
 - [Spec Complexity Displacement](spec-complexity-displacement.md)
 - [Entity Binding Failures in Tool-Augmented Agents](entity-binding-failures.md) — an unverified entity binding is an assumption that cascades into the wrong action.
+- [Semantic Collapse Under Underspecified Prompts](semantic-collapse.md) — the upstream cause: an underspecified prompt collapses onto one confident, wrong interpretation that seeds the assumption.

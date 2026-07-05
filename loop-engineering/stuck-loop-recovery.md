@@ -122,3 +122,4 @@ Progress metric (failing-test count) drops from 4 to 0. The recovery counter res
 - [Trajectory Logging and Progress Files](../observability/trajectory-logging-progress-files.md) — the durable state that makes context reset safe
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md) — the harder stopping mechanisms that flank recovery
 - [Ralph Wiggum Loop](ralph-wiggum-loop.md) — the abort-and-restart pattern recovery can fall back on
+- [Unbounded Agent Feedback Paths (Infinite Agentic Loops)](../anti-patterns/unbounded-agent-feedback-paths.md) — the failure taxonomy this recovery playbook picks up from when a feedback path was left unbounded

@@ -21,6 +21,7 @@ last_reviewed: 2026-05-27
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md) — The Agent Skills open standard packages task-specific knowledge into portable SKILL.md folders that AI coding tools can discover and load on demand
 - [Agentic Resource Discovery: Federated Pre-Invocation Search](agentic-resource-discovery.md) — A v0.9 draft open spec defining ai-catalog.json manifests and federated registries so agents find MCP, A2A, and skills before invocation
 - [AGENTS.md: A README for AI Coding Agents](agents-md.md) — AGENTS.md is an open standard for a project-level instruction file that gives AI coding agents the context they need to work effectively in a codebase
+- [Governance Layer for Agent Interoperability Protocols](protocol-governance-layer.md) — Interoperability protocols coordinate agent tasks but cannot express governance, so teams add membership, voting, dissent, escalation, and audit as a separate layer
 - [Directory-Aware Plugin Suggestions via `pluginSuggestionMarketplaces`](directory-aware-plugin-suggestions.md) — A three-lever managed-settings pattern that pins only directory-relevant plugins from admin-allowlisted marketplaces in the Claude Code `/plugin` Discover tab
 - [llms.txt: Making Your Project Discoverable to AI Agents](llms-txt.md) — Publish a standardized /llms.txt so agents can navigate your site without crawling every page
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md) — The Model Context Protocol is an open standard for connecting AI agents to external tools and data sources

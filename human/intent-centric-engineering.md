@@ -92,3 +92,4 @@ The same team rejects a proposal to apply the model to a one-off prototype. The 
 - [Spec Complexity Displacement](../anti-patterns/spec-complexity-displacement.md) — the upper bound on intent specifications becoming code-adjacent.
 - [Bottleneck Migration](bottleneck-migration.md) — the empirical mechanism that forces leverage upstream from authorship.
 - [Harness Engineering](../agent-design/harness-engineering.md) — the verification scaffold that makes the intent-centric posture tractable.
+- [Risk Architecture for AI-Native Engineering Teams](risk-architecture-ai-native-teams.md) — the risk-structure companion: how to reassign ownership, escalation, and assurance once agents act autonomously.
