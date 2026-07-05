@@ -102,3 +102,4 @@ If the harness exposes `(remaining_turns, remaining_tokens)`, a [dual-budget con
 - [Dual-Budget Control for Search Agents](../agent-design/dual-budget-control-search-agents.md) — when the harness exposes `(remaining_tool_calls, remaining_tokens)`, score actions by VOI per unit budget
 - [Convergence Detection in Iterative Agent Refinement](convergence-detection.md) — early-stopping that complements a hard budget cap with a progress-based exit
 - [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-strategy-spectrum.md) — accumulated-context loops are where the per-turn-cost-growth mechanic bites hardest
+- [Unbounded Agent Feedback Paths (Infinite Agentic Loops)](../anti-patterns/unbounded-agent-feedback-paths.md) — the failure class that results when the bound this page sizes is missing or placed off the actual feedback path

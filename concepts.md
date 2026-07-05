@@ -998,6 +998,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Symphony: Open Spec for Issue-Tracker-Driven Coding Agent Orchestration](standards/symphony-orchestration-spec.md)
 - [WebMCP: Browser-Hosted Tool Contracts for In-Page AI Agents](standards/webmcp.md)
 - [Agentic Resource Discovery: Federated Pre-Invocation Search](standards/agentic-resource-discovery.md)
+- [Governance Layer for Agent Interoperability Protocols](standards/protocol-governance-layer.md)
 
 ## Development Workflows
 
@@ -1139,6 +1140,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Programming Language Choice Still Shapes Agent Artefacts](human/programming-language-choice-shapes-agent-artefacts.md)
 - [Adapting AI Assistants to Developer Interaction Style](human/developer-interaction-style-adaptation.md)
 - [Rolling Out CLI Coding Agents at Organization Scale](human/org-scale-cli-agent-rollout.md)
+- [Risk Architecture for AI-Native Engineering Teams](human/risk-architecture-ai-native-teams.md)
 
 ## Anti-Patterns
 
@@ -1234,6 +1236,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Model Confidence as Security Verification (Security Calibration Gap)](anti-patterns/model-confidence-as-security-verification.md)
 - [Judging Agent Safety by Task Completion (Action-Boundary Violations)](anti-patterns/judging-agent-safety-by-task-completion.md)
 - [Entity Binding Failures in Tool-Augmented Agents](anti-patterns/entity-binding-failures.md)
+- [Unbounded Agent Feedback Paths (Infinite Agentic Loops)](anti-patterns/unbounded-agent-feedback-paths.md)
+- [Semantic Collapse Under Underspecified Prompts](anti-patterns/semantic-collapse.md)
 
 ## Emerging Concepts
 

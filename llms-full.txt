@@ -1079,6 +1079,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Symphony: Open Spec for Issue-Tracker-Driven Coding Agent Orchestration](standards/symphony-orchestration-spec.md)
 - [WebMCP: Browser-Hosted Tool Contracts for In-Page AI Agents](standards/webmcp.md)
 - [Agentic Resource Discovery: Federated Pre-Invocation Search](standards/agentic-resource-discovery.md)
+- [Governance Layer for Agent Interoperability Protocols](standards/protocol-governance-layer.md)
 
 ## Development Workflows
 
@@ -1220,6 +1221,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Programming Language Choice Still Shapes Agent Artefacts](human/programming-language-choice-shapes-agent-artefacts.md)
 - [Adapting AI Assistants to Developer Interaction Style](human/developer-interaction-style-adaptation.md)
 - [Rolling Out CLI Coding Agents at Organization Scale](human/org-scale-cli-agent-rollout.md)
+- [Risk Architecture for AI-Native Engineering Teams](human/risk-architecture-ai-native-teams.md)
 
 ## Anti-Patterns
 
@@ -1315,6 +1317,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Model Confidence as Security Verification (Security Calibration Gap)](anti-patterns/model-confidence-as-security-verification.md)
 - [Judging Agent Safety by Task Completion (Action-Boundary Violations)](anti-patterns/judging-agent-safety-by-task-completion.md)
 - [Entity Binding Failures in Tool-Augmented Agents](anti-patterns/entity-binding-failures.md)
+- [Unbounded Agent Feedback Paths (Infinite Agentic Loops)](anti-patterns/unbounded-agent-feedback-paths.md)
+- [Semantic Collapse Under Underspecified Prompts](anti-patterns/semantic-collapse.md)
 
 ## Emerging Concepts
 
@@ -28054,6 +28058,7 @@ The agent resolved the navigational ambiguity (which file, which bug) independen
 - [Spec-Driven Development](../workflows/spec-driven-development.md) — upstream approach to eliminating ambiguity before agent execution
 - [TDD for Agent Development](../verification/tdd-agent-development.md) — tests as unambiguous executable specification
 - [Issue Requirements Preprocessing](issue-requirements-preprocessing.md) — automated clarification of issue text before execution begins
+- [Semantic Collapse Under Underspecified Prompts](../anti-patterns/semantic-collapse.md) — why you cannot detect underspecification by sampling for output variance: the model collapses onto one confident, wrong reading
 
 ---
 
@@ -44321,6 +44326,8 @@ Source: https://agentpatterns.ai/anti-patterns/
 - [Model Confidence as Security Verification (Security Calibration Gap)](model-confidence-as-security-verification.md) — A model's confidence in its own code does not track whether the code is secure; a third of high-confidence outputs are still insecure, so confidence is review-triage at best, never a deployment gate
 - [Judging Agent Safety by Task Completion (Action-Boundary Violations)](judging-agent-safety-by-task-completion.md) — Under benign but underspecified DevOps instructions coding agents guess a target and overstep rather than fail; 55.8-67.8% of runs cross an action boundary, so a "task completed" report overstates safe autonomy
 - [Entity Binding Failures in Tool-Augmented Agents](entity-binding-failures.md) — An agent picks the right tool but acts on the wrong entity — the wrong Alex, thread, or account; wrong-tool error sits at 0% while wrong-entity actions run 24-26%, and retrieval alone does not close the gap
+- [Unbounded Agent Feedback Paths (Infinite Agentic Loops)](unbounded-agent-feedback-paths.md) — A feedback path with no effective stopping bound repeatedly fires costly or state-growing actions; 68 confirmed cases across 47 projects, with 95.6% causing API cost exhaustion and model denial of service
+- [Semantic Collapse Under Underspecified Prompts](semantic-collapse.md) — An underspecified prompt collapses a coding model onto one confident, wrong interpretation instead of diverging, so sampling for output variance cannot surface the ambiguity
 
 ---
 
@@ -45161,6 +45168,7 @@ Apply the ladder when the cost of a wrong direction exceeds the cost of the chec
 - [Trust Without Verify](trust-without-verify.md)
 - [Spec Complexity Displacement](spec-complexity-displacement.md)
 - [Entity Binding Failures in Tool-Augmented Agents](entity-binding-failures.md) — an unverified entity binding is an assumption that cascades into the wrong action.
+- [Semantic Collapse Under Underspecified Prompts](semantic-collapse.md) — the upstream cause: an underspecified prompt collapses onto one confident, wrong interpretation that seeds the assumption.
 
 ---
 
@@ -49644,6 +49652,64 @@ The two-axis split routes the silent failure to a human without making the opera
 
 ---
 
+### Semantic Collapse Under Underspecified Prompts
+Source: https://agentpatterns.ai/anti-patterns/semantic-collapse/
+
+# Semantic Collapse Under Underspecified Prompts
+
+> An underspecified prompt does not make a coding model guess diversely — it collapses onto one confident, wrong interpretation that resampling cannot expose.
+
+## What it looks like
+
+You hand a coding model an ambiguous or incomplete task. To check whether the spec was clear, you sample the model a few times and inspect the spread. The outputs agree, so you conclude the task was well specified and ship. In fact the model resolved the ambiguity the wrong way, and every sample repeated the same wrong choice. You read low variance as clarity; it was collapse.
+
+The failure has a name: detrimental semantic collapse ([Richter & Papadakis, 2026](https://arxiv.org/abs/2607.01953)). A model collapses when repeated samples fall into a single semantic equivalence class. Collapse is benign when that class is correct and detrimental when it is wrong — and a detrimental collapse "provides no signal of incorrectness or underspecification." Before any ambiguity is injected, roughly 3% of HumanEval tasks, 10–16% of MBPP tasks, and 18–32% of LiveCodeBench tasks already collapse detrimentally ([Richter & Papadakis, 2026](https://arxiv.org/abs/2607.01953)).
+
+## Why collapse hides the ambiguity
+
+The model does not treat an ambiguous spec as a branch point. It resolves the ambiguity deterministically toward one interpretation, then generates against it. Sampling perturbs surface tokens but lands in the same meaning class, so the output variance that disambiguation methods depend on never appears ([Richter & Papadakis, 2026](https://arxiv.org/abs/2607.01953)). More sampling does not rescue you: even at 25 samples per task, 23.8% to 61.6% of tasks stayed collapsed, and reaching 95% confidence in collapse detection would need about 300 samples — over $391 per MBPP run.
+
+Because the wrong interpretation is internally consistent, it compiles, passes the tests the model wrote for it, and reads as confident. This is the upstream cause of [assumption propagation](assumption-propagation.md): the collapse sets the wrong premise, and later work builds on it.
+
+## When this backfires
+
+Reading variance as a signal is not always wrong; the trap is specific to underspecified coding tasks where priors dominate. Sampling-based checks stay useful when:
+
+- The model genuinely branches. In free-form question answering, entropy over meaning-clustered samples (semantic entropy) does detect uncertainty ([Kuhn et al., 2023](https://arxiv.org/abs/2302.09664)). Variance is informative where the model actually spreads probability.
+- Any interpretation is acceptable. When the ambiguity is a true "don't-care," collapse is harmless — only about 3% of HumanEval tasks collapse detrimentally, so specifying every prompt to the letter wastes effort.
+- The code is low-stakes or throwaway. A wrong interpretation you can discard in seconds is cheaper than a specify-and-validate loop on every task.
+
+The recommendation — specify intent explicitly and validate behavior against it — earns its cost when a wrong direction is expensive to unwind, not on every keystroke.
+
+## Example
+
+**Before — sample agreement read as a clear spec:**
+
+Task: "Return the top results, sorted." A developer samples the model five times. All five return results sorted descending by score and truncated to ten. The agreement is read as confidence that the spec was unambiguous, and the code ships.
+
+The spec never said ten, never said descending, never said by score. The model collapsed onto one reading of "top" and "sorted" and repeated it across every sample. The consumer expected the top three by recency. No amount of resampling would have surfaced the gap.
+
+**After — specify intent, then validate behavior:**
+
+Pin the intent in the prompt ("top 3 by recency; ascending is fine") and assert the expected behavior with a spec-derived test, rather than inferring clarity from sample agreement.
+
+## Key Takeaways
+
+- Low output variance is not evidence of a clear spec — an underspecified coding prompt usually collapses onto one confident, wrong interpretation instead of diverging.
+- Detrimental semantic collapse leaves no signal: the wrong reading compiles, passes model-written tests, and survives heavy resampling (23.8% to 61.6% of tasks still collapsed at 25 samples).
+- Sampling for variance still detects uncertainty where the model genuinely branches, such as free-form question answering with semantic entropy — the blind spot is underspecified code.
+- Specify intent explicitly and validate behavior against a spec-derived check; do not trust self-consistency to expose ambiguity.
+
+## Related
+
+- [Assumption Propagation](assumption-propagation.md) — the downstream cost once a collapse sets the wrong premise
+- [Interactive Clarification for Underspecified Tasks](../agent-design/interactive-clarification-underspecified-tasks.md) — asking targeted questions instead of relying on the model to surface the gap
+- [LLM Comprehension Fallacy](../fallacies/llm-comprehension-fallacy.md) — coherent, correct-looking output is not evidence the model understood the task
+- [Voting / Ensemble Pattern](../multi-agent/voting-ensemble-pattern.md) — self-consistency exploits variance to pick an answer; absence of variance is not clarity
+- [Destructive-Failure Mechanism Attribution by Mitigation Owner](destructive-failure-mechanism-attribution.md) — underspecification is one of its three failure buckets, routed to the spec author
+
+---
+
 ### Shadow Tech Debt
 Source: https://agentpatterns.ai/anti-patterns/shadow-tech-debt/
 
@@ -51702,6 +51768,85 @@ The anti-pattern label is over-broad in five cases:
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](../security/authority-confusion-untrusted-context.md) — dispatch-layer primitive that makes error-stream content informational only, never authorising.
 - [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md) — the broader anti-pattern that "filter tool output but not tool errors" exemplifies.
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — developer mental-model failure that error streams inherit when treated as system diagnostics rather than artifacts.
+
+---
+
+### Unbounded Agent Feedback Paths (Infinite Agentic Loops)
+Source: https://agentpatterns.ai/anti-patterns/unbounded-agent-feedback-paths/
+
+# Unbounded Agent Feedback Paths (Infinite Agentic Loops)
+
+> An agent feedback path with no effective stopping bound repeatedly fires costly or state-growing actions until cost, context, or a rate limit runs out.
+
+An Infinite Agentic Loop (IAL) is an execution failure in which an agentic feedback path repeatedly triggers costly or state-growing actions without an effective stopping bound ([When Agents Do Not Stop, arXiv 2607.01641](https://arxiv.org/abs/2607.01641)). It is not an ordinary program loop. A `for` loop terminates on a deterministic predicate you can read in the source; an agentic loop continues on non-deterministic runtime outputs — model decisions, tool results, external state, exceptions — and its feedback path spans wrappers, configuration, and runtime dispatch rather than one syntactic block. So a visible exit condition can sit outside the actual feedback path and never gate it, while messages and workflow state grow every iteration.
+
+The failure amplifies a single request into long-running model and tool execution. Across 6,549 real-world agent repositories, one detector confirmed 68 IALs in 47 distinct projects at 91.9% precision; 95.6% caused API cost exhaustion and model denial of service, and 27.9% exhausted the context window ([arXiv 2607.01641](https://arxiv.org/abs/2607.01641)).
+
+## The six shapes
+
+The same study cut confirmed IALs into six patterns by observed share ([arXiv 2607.01641](https://arxiv.org/abs/2607.01641)):
+
+| Pattern | Share | What loops |
+|---|---|---|
+| Retry feedback without bounds | 25.0% | A repair or retry path re-fires with no attempt cap |
+| Tool-call iteration without bounds | 23.5% | A tool loop re-invokes without a step limit |
+| Multi-agent chat without turn bounds | 20.6% | Agents exchange messages with no turn cap |
+| Workflow loops without effective bounds | 13.2% | A workflow cycle has a bound placed outside its feedback path |
+| Message reentry without bounds | 10.3% | Messages re-enter the queue and re-trigger processing |
+| Runner/delegation/evaluator cycles | 7.4% | A delegation or evaluator hands work back indefinitely |
+
+Every confirmed failure shared one root cause — a missing strong bound. The common near-misses were tool-controlled retry logic (41.2%), model-dependent termination (38.2%), and bounds placed outside the actual feedback path (30.9%) ([arXiv 2607.01641](https://arxiv.org/abs/2607.01641)).
+
+## Why it works
+
+The failure works because the loop's continuation predicate is not in your code — it is in the model's next decision, the tool's next result, or the framework's dispatch. Relying on the model to eventually stop makes termination a probabilistic event, which is why the paper names model-dependent termination a root cause and concludes that agent iteration should carry explicit stopping rules rather than trust the model to halt ([arXiv 2607.01641](https://arxiv.org/abs/2607.01641)). The fix is the mirror: a bound enforced at the runtime scope where the feedback path is created guarantees termination regardless of what the model or tools decide, which is why the paper recommends bounds be enforced there rather than exposed only as optional local parameters ([arXiv 2607.01641](https://arxiv.org/abs/2607.01641)). A `max_iterations` argument on the wrong wrapper looks safe and never fires.
+
+## When this backfires
+
+Bounding every feedback path is the fix, but a bound applied without judgment creates its own failure:
+
+- An iteration or turn cap set below the real work envelope, with no grader, fires mid-deliverable — the agent halts before finishing rather than running away. Anthropic's managed-agent outcomes cap iterations (`max_iterations` defaults to 3, maximum 20) and, on `max_iterations_reached`, let the agent run one final revision before the session goes idle — a built-in wind-down ([Anthropic — Define outcomes](https://platform.claude.com/docs/en/managed-agents/define-outcomes)). Pair a cap with that kind of wind-down, not a blindly higher number. See [loop budgeting](../loop-engineering/loop-budgeting.md).
+- A bound exposed only as an optional local parameter, placed outside the runtime scope where the feedback is created, reads as bounded in code but never gates the loop ([arXiv 2607.01641](https://arxiv.org/abs/2607.01641)). Verify the bound sits on the path that actually repeats.
+- Legitimate long-running loops — mechanical bulk refactors, batch jobs — starve when an arbitrarily low cap is chosen in isolation. Size bounds against the workload; a hard cap is a runaway guard, not a progress target.
+
+## Example
+
+Before — a tool-call iteration without a bound. A LangGraph agent routes between a tool node and the model until the model stops requesting tools. A flaky search tool keeps returning an empty result, the model keeps retrying it expecting different output, and the graph cycles until the API budget is exhausted. The `recursion_limit` was left at its framework default and the retry happens inside the tool wrapper, off the graph's counted path.
+
+After — the bound sits on the feedback path itself. Cap the retry at the runtime scope where it is created:
+
+```python
+# retry is bounded where the feedback actually happens, not on an outer wrapper
+for attempt in range(MAX_RETRIES):          # hard cap on the tool-retry path
+    result = search(query)
+    if result:
+        break
+else:
+    result = escalate("search returned empty after retries")  # terminal state
+```
+
+The counted path is now the one that loops, and an empty-result run ends in an explicit terminal state instead of a cost-exhausting cycle.
+
+## Key Takeaways
+
+- An Infinite Agentic Loop is a feedback path that fires costly or state-growing actions with no effective bound — distinct from a program loop because its continuation is controlled by model, tool, and framework outputs, not a code predicate.
+- The failure is common and expensive: 68 confirmed IALs across 47 projects, with 95.6% causing API cost exhaustion and model denial of service ([arXiv 2607.01641](https://arxiv.org/abs/2607.01641)).
+- Six shapes cover the field — retry, tool-call, multi-agent chat, workflow, message reentry, and delegation cycles — and every confirmed case shared one root cause: a missing strong bound.
+- Place the bound on the actual feedback path at the runtime scope where it is created; a cap on the wrong wrapper looks safe and never fires.
+- Bounds sized below the real work envelope backfire as premature termination — pair a cap with a wind-down step and size it against the workload.
+
+## Sources
+
+- Anonymous, [When Agents Do Not Stop: Uncovering Infinite Agentic Loops in LLM Agents](https://arxiv.org/abs/2607.01641) (2026) — defines IALs, the six-pattern taxonomy, and the IAL-Scan detector; 6,549-repo study with 68 confirmed failures across 47 projects at 91.9% precision.
+- Anthropic, [Define Outcomes — Managed Agents](https://platform.claude.com/docs/en/managed-agents/define-outcomes) (2026) — the outcome iteration cap (`max_iterations` default 3, maximum 20) and the `max_iterations_reached` one-final-revision wind-down.
+
+## Related
+
+- [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](../loop-engineering/loop-budgeting.md) — the bound primitives (iteration, token, wall-clock) and how to size them so a cap does not fire mid-deliverable
+- [Convergence Detection in Iterative Agent Refinement](../loop-engineering/convergence-detection.md) — progress-based early stopping for loops with no test harness, complementing a hard bound
+- [Stuck-Loop Recovery](../loop-engineering/stuck-loop-recovery.md) — the recovery ladder once detection flags a non-converging loop; this page owns the failure taxonomy, that page owns recovery
+- [Agent Loop Go/No-Go Gate](../loop-engineering/agent-loop-go-no-go-gate.md) — the upstream decision of whether a feedback loop earns its cost at all
+- [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md) — the harder runtime stop that trips when a bound is breached
 
 ---
 
@@ -64503,6 +64648,7 @@ If the harness exposes `(remaining_turns, remaining_tokens)`, a [dual-budget con
 - [Dual-Budget Control for Search Agents](../agent-design/dual-budget-control-search-agents.md) — when the harness exposes `(remaining_tool_calls, remaining_tokens)`, score actions by VOI per unit budget
 - [Convergence Detection in Iterative Agent Refinement](convergence-detection.md) — early-stopping that complements a hard budget cap with a progress-based exit
 - [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-strategy-spectrum.md) — accumulated-context loops are where the per-turn-cost-growth mechanic bites hardest
+- [Unbounded Agent Feedback Paths (Infinite Agentic Loops)](../anti-patterns/unbounded-agent-feedback-paths.md) — the failure class that results when the bound this page sizes is missing or placed off the actual feedback path
 
 ---
 
@@ -64806,6 +64952,7 @@ Progress metric (failing-test count) drops from 4 to 0. The recovery counter res
 - [Trajectory Logging and Progress Files](../observability/trajectory-logging-progress-files.md) — the durable state that makes context reset safe
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md) — the harder stopping mechanisms that flank recovery
 - [Ralph Wiggum Loop](ralph-wiggum-loop.md) — the abort-and-restart pattern recovery can fall back on
+- [Unbounded Agent Feedback Paths (Infinite Agentic Loops)](../anti-patterns/unbounded-agent-feedback-paths.md) — the failure taxonomy this recovery playbook picks up from when a feedback path was left unbounded
 
 ---
 
@@ -83797,6 +83944,7 @@ This setup satisfies all three gates: denied operations and hook rejections are 
 - [Worktree Isolation](../workflows/worktree-isolation.md)
 - [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
+- [Risk Architecture for AI-Native Engineering Teams](../human/risk-architecture-ai-native-teams.md)
 
 ---
 
@@ -96046,6 +96194,7 @@ Source: https://agentpatterns.ai/standards/
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md) — The Agent Skills open standard packages task-specific knowledge into portable SKILL.md folders that AI coding tools can discover and load on demand
 - [Agentic Resource Discovery: Federated Pre-Invocation Search](agentic-resource-discovery.md) — A v0.9 draft open spec defining ai-catalog.json manifests and federated registries so agents find MCP, A2A, and skills before invocation
 - [AGENTS.md: A README for AI Coding Agents](agents-md.md) — AGENTS.md is an open standard for a project-level instruction file that gives AI coding agents the context they need to work effectively in a codebase
+- [Governance Layer for Agent Interoperability Protocols](protocol-governance-layer.md) — Interoperability protocols coordinate agent tasks but cannot express governance, so teams add membership, voting, dissent, escalation, and audit as a separate layer
 - [Directory-Aware Plugin Suggestions via `pluginSuggestionMarketplaces`](directory-aware-plugin-suggestions.md) — A three-lever managed-settings pattern that pins only directory-relevant plugins from admin-allowlisted marketplaces in the Claude Code `/plugin` Discover tab
 - [llms.txt: Making Your Project Discoverable to AI Agents](llms-txt.md) — Publish a standardized /llms.txt so agents can navigate your site without crawling every page
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md) — The Model Context Protocol is an open standard for connecting AI agents to external tools and data sources
@@ -96888,6 +97037,7 @@ Practitioners have flagged a further constraint at scale. Because A2A uses direc
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)
 - [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
+- [Governance Layer for Agent Interoperability Protocols](protocol-governance-layer.md)
 
 ---
 
@@ -97328,6 +97478,87 @@ The `relevance` payload shape above is illustrative — the public schema is not
 
 ---
 
+### Governance Layer for Agent Interoperability Protocols
+Source: https://agentpatterns.ai/standards/protocol-governance-layer/
+
+# Governance Layer for Agent Interoperability Protocols
+
+> Interoperability protocols like MCP and A2A coordinate agent tasks but cannot express governance — voting, escalation, or audit — so build that separately.
+
+Agent interoperability protocols standardize task-oriented coordination — identity, capability discovery, tool access, and message exchange — but they do not encode governance. If you are building a multi-agent fleet that must make collective decisions under governance constraints, you implement membership, voting, dissent preservation, human escalation, and audit out-of-band, on a layer above the protocol. A 2026 gap analysis scored five protocols (MCP, A2A, ACP, ANP, ERC-8004) against a six-dimension governance taxonomy and found every one scored at most 2 of 12 possible points ([Governance Gaps in Agent Interoperability Protocols](https://arxiv.org/abs/2606.31498)).
+
+## The six governance dimensions
+
+Use these as a requirements checklist when you assess whether your stack governs its agents or merely connects them ([arxiv 2606.31498](https://arxiv.org/abs/2606.31498)):
+
+| Dimension | What it covers |
+|-----------|----------------|
+| Membership | Admission, invitation, removal, and role assignment for participants |
+| Deliberation | Structured argument exchange with turn-taking and challenge or response |
+| Voting | Preference aggregation with quorum and position resolution |
+| Dissent preservation | Retaining minority positions in a decision's output |
+| Human escalation | Routing a decision to human authority when conditions are met |
+| Audit and replay | Tamper-evident event logs that let you reconstruct the process |
+
+In the paper's scoring, voting, dissent preservation, and human escalation were absent from all five protocols, and deliberation was missing or only partial ([arxiv 2606.31498](https://arxiv.org/abs/2606.31498)). The protocols treat an agent as a task worker, not a community participant.
+
+## Applying the pattern
+
+Put governance in its own layer and let the protocol stay a thin transport. The protocol can carry governance messages — an admission grant, a vote, a recorded dissent, an escalation trigger — but it moves them as opaque payloads and cannot interpret, validate, or enforce their meaning ([arxiv 2606.31498](https://arxiv.org/abs/2606.31498)). Your governance layer holds the membership roster, tallies votes, preserves dissent, decides when to escalate to a human, and writes the tamper-evident log. Vendor-neutral practitioners reach the same split: MCP and A2A are stateless standards that "do not track what an agent did, what data it accessed, or how its outputs were used," so audit trails, policy enforcement, and lineage live above the protocol ([Atlan](https://atlan.com/know/agent-interoperability-protocols/)).
+
+```mermaid
+graph TD
+    G[Governance layer<br>membership, voting, audit] --> P[Interoperability protocol<br>MCP / A2A]
+    P --> A[Agent A]
+    P --> B[Agent B]
+```
+
+## Why it works
+
+The protocols coordinate well because they standardized the primitives of a single request between two parties — discover a capability, delegate a task, track its lifecycle, collect a result ([A2A specification](https://a2a-protocol.org/latest/specification/); [Model Context Protocol](https://modelcontextprotocol.io)). Governance is a property of a group deciding over time, not of one exchange: a quorum, a preserved minority view, a replayable history. That is a different unit of analysis the protocols never modeled, which is why the paper calls governance "a missing architectural layer above current interoperability standards, not a missing feature within them" ([arxiv 2606.31498](https://arxiv.org/abs/2606.31498)). Separating the layers is the same move as putting routing above the link layer: a distinct concern over a distinct object.
+
+## When this backfires
+
+The pattern adds cost without value in several cases, so scope it to fleets that actually make governed collective decisions:
+
+- Single-orchestrator fleets. When every agent runs in one runtime, the orchestrator already enforces membership, voting, and audit natively, so a cross-protocol governance layer duplicates what you have.
+- Plain task-delegation pipelines. When agent A calls agent B for a result, there is no vote, dissent, or membership to preserve, and the six-dimension layer is over-engineering.
+- Low-stakes or unregulated work. Without a compliance, audit, or human-escalation requirement, building the layer is effort spent on a control no one needs.
+- Early prototypes. Standing up governance infrastructure before the product settles slows iteration for no gain.
+
+There is also a framing caveat. The absence of governance primitives can be read as correct separation of concerns rather than a defect — governance is org-specific, and baking contested design choices into a wire protocol would ossify and fragment it. Either reading yields the same advice: implement governance out-of-band and do not expect the protocol to provide it.
+
+## Example
+
+The paper lists the governance messages current protocols cannot natively express — a concrete checklist for what your out-of-band layer owns ([arxiv 2606.31498](https://arxiv.org/abs/2606.31498)):
+
+- `ADMIT` — admit an agent with endorsements and a role (membership)
+- `CHALLENGE` — raise an evidence-backed claim against another claim (deliberation)
+- `VOTE_BLIND` — cast a sealed preference on a continuous scale (voting)
+- `DISSENT_RECORD` — preserve a minority position with its rationale (dissent preservation)
+- `ESCALATE` — trigger human review at a confidence threshold (human escalation)
+- `EVENT` — append a tamper-evident governance action to the log (audit and replay)
+
+A protocol like A2A can transport each of these inside a task or message payload, but the receiving agent, not the protocol, must enforce the roster check, tally, quorum, and log — so that logic belongs in your governance layer.
+
+## Key Takeaways
+
+- Interoperability protocols standardize task coordination, not governance; every protocol measured scored at most 2 of 12 on a six-dimension governance taxonomy.
+- Voting, dissent preservation, and human escalation are absent across MCP, A2A, ACP, ANP, and ERC-8004.
+- Treat the six dimensions — membership, deliberation, voting, dissent preservation, human escalation, audit and replay — as a requirements checklist.
+- Implement governance as a separate layer above the protocol; the protocol can carry governance messages but cannot enforce their meaning.
+- Skip the layer for single-orchestrator fleets, plain delegation pipelines, and low-stakes work.
+
+## Related
+
+- [MCP: The Open Protocol Connecting Agents to External Tools](mcp-protocol.md)
+- [Agent-to-Agent (A2A) Protocol for AI Agent Development](a2a-protocol.md)
+- [OpenTelemetry for Agent Observability](opentelemetry-agent-observability.md)
+- [SUDP: Secret-Use Delegation Protocol for Agentic Systems](sudp-secret-use-delegation-protocol.md)
+- [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
+
+---
+
 ### llms.txt: Making Your Project Discoverable to AI Agents
 Source: https://agentpatterns.ai/standards/llms-txt/
 
@@ -97482,6 +97713,7 @@ Use MCP when building reusable tool servers shared across hosts or developers. F
 - [Agent Cards: Capability Discovery Standard for AI Agents](agent-cards.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
 - [OpenAPI as the Source of Truth for Agent Tool Definitions](openapi-agent-tool-spec.md)
+- [Governance Layer for Agent Interoperability Protocols](protocol-governance-layer.md)
 - [Tool Calling Schema Standards for AI Agent Development](tool-calling-schema-standards.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
 - [Portable Agent Definitions: Full-Stack Identity as Code](portable-agent-definitions.md)
@@ -99123,6 +99355,7 @@ Source: https://agentpatterns.ai/human/
 - [Intervention Rate as a Diagnostic North Star, Not a Target](intervention-rate-diagnostic-north-star.md) — Treat the rate at which you correct an AI assistant as a segmented diagnostic signal, paired with quality and ambition metrics — not a single number to drive to zero
 - [Adapting AI Assistant Configuration to Developer Interaction Style](developer-interaction-style-adaptation.md) — Cognitive diversity produces distinct Copilot interaction modes; per-developer persona configuration only pays back when team size and tool maturity offset the maintenance cost
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — Adoption spreads through visible peer use while retention tracks baseline activity; measure both plus quality-adjusted impact, not seat count, before justifying token spend
+- [Risk Architecture for AI-Native Engineering Teams](risk-architecture-ai-native-teams.md) — Rework ownership, escalation, and assurance for agentic teams; the least-covered failures sit at the boundary where probabilistic outputs meet determinism-assuming dependencies
 
 ---
 
@@ -101205,6 +101438,7 @@ The same team rejects a proposal to apply the model to a one-off prototype. The 
 - [Spec Complexity Displacement](../anti-patterns/spec-complexity-displacement.md) — the upper bound on intent specifications becoming code-adjacent.
 - [Bottleneck Migration](bottleneck-migration.md) — the empirical mechanism that forces leverage upstream from authorship.
 - [Harness Engineering](../agent-design/harness-engineering.md) — the verification scaffold that makes the intent-centric posture tractable.
+- [Risk Architecture for AI-Native Engineering Teams](risk-architecture-ai-native-teams.md) — the risk-structure companion: how to reassign ownership, escalation, and assurance once agents act autonomously.
 
 ---
 
@@ -102130,6 +102364,68 @@ Rigor relocation has real costs. The scaffolding-first bet fails or pays off poo
 - [Context Engineering](../context-engineering/context-engineering.md) -- designing what agents can access
 - [Bottleneck Migration](bottleneck-migration.md) -- how the review bottleneck shifts as agents accelerate code generation
 - [Skill Atrophy](skill-atrophy.md) -- risk of losing verification skills as agents handle more
+
+---
+
+### Risk Architecture for AI-Native Engineering Teams
+Source: https://agentpatterns.ai/human/risk-architecture-ai-native-teams/
+
+# Risk Architecture for AI-Native Engineering Teams
+
+> Reassign risk ownership, escalation, and assurance for AI-native teams, because the least-covered failures sit at the boundary with determinism-assuming dependencies.
+
+Risk architecture is the set of roles, decision rights, and escalation structures an engineering manager uses to keep a system's failures owned, detected, and contained. The classic levers — ownership by feature, escalation by severity, assurance by test coverage — assume deterministic behavior, discrete change events, and a clean component-to-owner map. AI-native teams break all three assumptions at once: outputs are probabilistic, agents take autonomous multi-step actions, and the risk surface mutates silently between deployments. This framework reworks each lever for that setting and names the failure the classic levers miss ([Iyer, arXiv:2607.01421](https://arxiv.org/abs/2607.01421)).
+
+## Three levers, reworked
+
+The framework maps each classic risk primitive to its AI-native form ([Iyer, arXiv:2607.01421](https://arxiv.org/abs/2607.01421)):
+
+| Classic lever | Traditional form | AI-native form |
+|---|---|---|
+| Ownership by feature | The feature team owns the component and its defects | Ownership by surface: the tool-contract layer, the causal-action chain, and the dependency-boundary channel each get a named owner |
+| Escalation by severity | Fire on exceptions, error-rate thresholds, SLA breaches | Escalation by semantic signal: observe what the agent did and what crossed a boundary, not just whether it errored |
+| Assurance by test coverage | Enumerate states and test them for a deterministic pass or fail | Adversarial probing, runtime contract verification, and confidence-bound assertions, plus boundary-variance monitoring |
+
+The shift is from owning code to owning surfaces, and from measuring whether something errored to tracing what an agent actually did.
+
+## The failure at the boundary
+
+The framework's central finding is that the highest-consequence, least-covered failures are not inside AI-native teams. They sit at the organizational boundary where an AI-native producer's probabilistic outputs are consumed by a determinism-assuming dependency ([Iyer, arXiv:2607.01421](https://arxiv.org/abs/2607.01421)). The paper names this cluster the dependency-boundary determinism mismatch and anchors its five modes — including silent contract drift and rollback asymmetry — to documented public incidents such as the Air Canada chatbot ruling and the Replit database deletion.
+
+A worked mode: a producer emits a confidence score of 0.73; a downstream consumer treats it as a binary label. Nothing errors, so no severity trigger fires, and no owner exists for what the output means once it crosses the boundary.
+
+## Why it works
+
+The framework scores each failure on detection, containment, and escalation, and shows that assigning owners to the three surfaces removes every uncovered scenario in its derivation ([Iyer, arXiv:2607.01421](https://arxiv.org/abs/2607.01421)). Boundary failures score lowest because they are structurally invisible to either team in isolation. The channel's API signature stays fixed — a `float` is still a `float` — while its semantic type shifts from a deterministic label to a probabilistic distribution. No change event fires, because from the API layer nothing changed. The consumer's monitoring sees only API-typed values and cannot observe variance drift that stays within bounds the producer declared unilaterally and never communicated. When the producer rolls back its model, it restores only its own state, while the consumer has already acted on the faulty outputs. A named boundary owner with a variance monitor and cross-boundary reconciliation authority closes the gap that neither team's framework could see alone.
+
+## When this backfires
+
+The framework adds coordination cost, and that cost only pays back under specific conditions.
+
+- Non-AI-native teams. Coverage degrades as a team moves toward AI-native operation ([Iyer, arXiv:2607.01421](https://arxiv.org/abs/2607.01421)). For teams whose outputs stay deterministic and whose agents only recommend, the classic levers still hold and the extra surface owners are overhead.
+- Teams too small to staff the roles. Naming distinct owners for the contract layer, the causal-action chain, and the boundary channel needs people to fill those roles. On a small team the ownership map becomes aspirational rather than operational.
+- Ownership without detection or authority. The framework removes uncovered failures only when ownership is paired with a semantic detection trigger and containment authority. Naming an owner who still has no way to detect the failure is accountability theater, not coverage.
+
+Adopt the surface-ownership map once agents act autonomously and their outputs cross into systems that assume determinism. Before that point, keep a human in the loop on irreversible actions and pin model versions.
+
+## Example
+
+Consider the silent boundary-drift mode the framework describes, made concrete. A fraud-scoring team ships an agent that returns a calibrated probability, and the billing service that consumes it hard-codes a 0.5 cutoff to auto-suspend accounts. The model provider retrains: the mean score is unchanged, but variance widens. No API signature changed, so no alert fires, and legitimate accounts start getting suspended intermittently. Under this framework the boundary channel has a named owner running a variance monitor at the seam, which catches the shape change the billing team's error-rate dashboard cannot see, and holds the authority to coordinate a rollback across both services ([Iyer, arXiv:2607.01421](https://arxiv.org/abs/2607.01421)).
+
+## Key Takeaways
+
+- Rework the three classic risk levers for AI-native teams: ownership moves from features to surfaces, escalation from severity to semantic signals, and assurance from coverage to adversarial probing plus boundary-variance monitoring.
+- The least-covered failures sit at the boundary where probabilistic outputs meet determinism-assuming consumers, not inside the agent.
+- The mechanism is a fixed API signature hiding a shifted semantic type, so the failure is invisible to either team's risk framework in isolation.
+- The framework pays back only for genuinely AI-native teams that can staff surface owners and pair each owner with a detection trigger and containment authority.
+
+## Related
+
+- [Intent-Centric Engineering: Oversight Over Authorship](intent-centric-engineering.md) — the operating model that allocates accountability across humans, agents, and tools; this page is the risk-structure companion.
+- [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md) — the security-control counterpart to organizational ownership: bound what an agent can touch.
+- [Enterprise Agent Hardening: Three Production Gates](../security/enterprise-agent-hardening.md) — governance, observability, and reproducibility gates that operationalize the monitoring surface this framework needs.
+- [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](../security/action-audit-divergence-taxonomy.md) — the runtime-safety analogue of semantic escalation: guaranteeing the audit record matches what the agent did.
+- [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) — the identity-side framing of the same shift in where engineering leverage sits.
 
 ---
 

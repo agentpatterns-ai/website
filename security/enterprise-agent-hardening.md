@@ -147,3 +147,4 @@ This setup satisfies all three gates: denied operations and hook rejections are 
 - [Worktree Isolation](../workflows/worktree-isolation.md)
 - [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
+- [Risk Architecture for AI-Native Engineering Teams](../human/risk-architecture-ai-native-teams.md)
