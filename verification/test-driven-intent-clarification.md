@@ -135,5 +135,5 @@ The developer reviews each test in seconds — the validation path that scored 8
 - [Multi-Agent RAG for Spec-to-Test Automation](multi-agent-rag-spec-to-test.md)
 - [LLM Static Verification Against Natural-Language Requirements](llm-static-verification-natural-language-requirements.md)
 - [Test Evolution Blind Spot in Coding Agents](eval-blind-spots.md)
-- [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md)
 - [Pre-Completion Checklists](pre-completion-checklists.md)
+- [Natural-Language Documentation as a Code-Review Intermediate (Verifiable Literate Programming)](verifiable-literate-programming.md) — The mirror artifact: validate a documentation layer derived from code after generation, rather than tests validated before it.

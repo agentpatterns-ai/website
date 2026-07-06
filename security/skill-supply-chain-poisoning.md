@@ -10,7 +10,7 @@ aliases:
   - agent skill supply chain attack
   - skill ecosystem poisoning
   - DDIPE attack
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-06
 maturity: established
 ---
 
@@ -77,7 +77,7 @@ Agents load only from an internal mirror of vetted skills — public registries 
 Before a skill enters the mirror, run layered intake checks:
 
 - Static analysis — pattern matching for shell escapes, credential access, exfiltration calls
-- Semantic scanning — LLM analysis of code examples for disguised payloads; [Cisco AI Defense skill-scanner](https://github.com/cisco-ai-defense/skill-scanner) combines static, behavioral dataflow, and LLM checks (`--use-behavioral --use-llm`). See [Semantic Intent Validation for Agent Skills](semantic-intent-validation-skills.md) for the detection-paradigm shift this layer represents
+- Semantic scanning — LLM analysis of code examples for disguised payloads; [Cisco AI Defense skill-scanner](https://github.com/cisco-ai-defense/skill-scanner) combines static, behavioral dataflow, and LLM checks (`--use-behavioral --use-llm`). See [Semantic Intent Validation for Agent Skills](semantic-intent-validation-skills.md) for the detection-paradigm shift this layer represents. Neither layer is a guarantee: payload-preserving transformations — structural obfuscation and self-extracting packing — evade both static detection and model alignment, which is why sandbox execution stays mandatory rather than optional ([arxiv 2607.02357](https://arxiv.org/abs/2607.02357))
 - Sandbox execution — render the skill in a sandbox and observe tool calls
 - Human review — for broadly used skills
 
@@ -136,6 +136,7 @@ The config blocks runtime pulls from public registries; `skill-scanner` catches 
 The full stack carries operational cost, and partial adoption leaves residual exposure:
 
 - Scanner false positives: LLM-based semantic scanners misclassify legitimate security tooling, pen-test utilities, and obfuscated-but-valid config as malicious. Fail-on-high without review capacity blocks productive skills; lowering the threshold loses real payloads.
+- Scanner evasion, not just false positives: payload-preserving transformation — structural obfuscation and self-extracting packing that preserves attack semantics while changing the visible form — evades both static detection and model alignment ([arxiv 2607.02357](https://arxiv.org/abs/2607.02357), "Cloak and Detonate"). Treat scanning as a filter, not a guarantee; detonation-based dynamic detection — executing the skill and observing behavior — is the compensating countermeasure.
 - Pinning versus patch velocity: Hash pinning prevents the rug-pull mutations that [tool signing](tool-signing-verification.md) also targets, but it blocks legitimate patches too. Without a re-vetting workflow, it creates a backlog.
 - Multi-model latency: Consensus roughly doubles per-invocation inference time. Restrict it to first-use or high-privilege calls rather than every invocation.
 - Mirror governance drift: Without a clear owner, the internal mirror becomes a rubber stamp and skills bypass the [intake-time intent gate](semantic-intent-validation-skills.md) informally.

@@ -784,6 +784,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Computer-Systems Lens for Always-On Agent Security](security/computer-systems-lens-agent-security.md)
 - [Capability-Additive Code Interpreters for Untrusted Agent Code](security/capability-additive-interpreter.md)
 - [Constraints as a Substrate for Scalable Agent Oversight](security/constraint-substrate-scalable-oversight.md)
+- [Distributed Cross-PR Attacks in Persistent-State AI Control](security/distributed-cross-pr-attacks.md)
 
 ## Testing & Evaluation
 
@@ -911,6 +912,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](verification/meta-evaluate-llm-judge-rubric-verification.md)
 - [Agent-Recorded Video Demos as a Verification Artifact](verification/agent-recorded-video-demos.md)
 - [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](verification/agent-driven-eval-flywheel.md)
+- [Natural-Language Documentation as a Code-Review Intermediate (Verifiable Literate Programming)](verification/verifiable-literate-programming.md)
 
 ## Hooks & Guardrails
 
@@ -1141,6 +1143,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Adapting AI Assistants to Developer Interaction Style](human/developer-interaction-style-adaptation.md)
 - [Rolling Out CLI Coding Agents at Organization Scale](human/org-scale-cli-agent-rollout.md)
 - [Risk Architecture for AI-Native Engineering Teams](human/risk-architecture-ai-native-teams.md)
+- [Author-to-Reviewer Role Inversion in AI-Assisted Teams](human/author-to-reviewer-role-inversion.md)
 
 ## Anti-Patterns
 
@@ -1238,6 +1241,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Entity Binding Failures in Tool-Augmented Agents](anti-patterns/entity-binding-failures.md)
 - [Unbounded Agent Feedback Paths (Infinite Agentic Loops)](anti-patterns/unbounded-agent-feedback-paths.md)
 - [Semantic Collapse Under Underspecified Prompts](anti-patterns/semantic-collapse.md)
+- [Dependency Inlining Erodes SBOM and License Provenance](anti-patterns/dependency-inlining-provenance-loss.md)
 
 ## Emerging Concepts
 

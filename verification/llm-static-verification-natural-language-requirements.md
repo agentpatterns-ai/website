@@ -115,3 +115,4 @@ The verdict goes to a reviewer, who decides whether the race window is acceptabl
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Wrap LLM verifiers with deterministic checks that enforce correctness regardless of what the LLM produces.
 - [Spec-Driven Development with Spec Kit](../workflows/spec-driven-development.md) — The reverse direction: compile a Markdown spec into code, rather than checking written code against an existing spec.
 - [Multi-Agent RAG Spec-to-Test](multi-agent-rag-spec-to-test.md) — Convert specifications into executable tests through a multi-agent pipeline so the spec becomes a runtime oracle.
+- [Natural-Language Documentation as a Code-Review Intermediate (Verifiable Literate Programming)](verifiable-literate-programming.md) — Produces the readable spec *from* the code, then derives checks — the inverse of auditing code against an existing spec.
