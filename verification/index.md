@@ -76,6 +76,7 @@ last_reviewed: 2026-05-27
 - [Source-Grounded Test Plan with Pre-Action Assertion Annotation](pre-test-grounded-plan-assertion-annotation.md) — Before a UI-driving agent verifies its change, have it write a source-read test plan and annotate each step's expected behavior upfront so it cannot rationalize an unexpected result as a pass
 - [Agent-Recorded Video Demos as a Verification Artifact](agent-recorded-video-demos.md) — The agent drives the running app and records a screencast as proof-of-work for human PR reviewers — a visual modality that complements tests where they are weakest, under stated conditions
 - [Spec-Derived Execution as a Correctness Oracle](spec-derived-execution-correctness-judging.md) — Judge candidate code against a natural-language spec by deriving inputs from the spec, executing them, and grading the I/O pairs — ground the LLM judge in real execution traces instead of asking it to reason over the code
+- [Natural-Language Documentation as a Code-Review Intermediate (Verifiable Literate Programming)](verifiable-literate-programming.md) — Translate LLM code into a deterministic natural-language documentation layer and review that prose, so intent-code mismatches surface where a human can judge them
 
 ## Rubric Design
 

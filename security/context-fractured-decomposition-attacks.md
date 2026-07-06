@@ -76,4 +76,5 @@ A "no" on (2) plus a "no" on (4) is the high-risk configuration — turn-local d
 - [Dual-Graph Alignment for Indirect Prompt Injection Defense (AuthGraph)](authgraph-dual-graph-injection-defense.md) — pairs a clean authorization graph built from user intent with the execution-trace provenance graph; structural divergence flags injection-driven calls.
 - [Three-Vector Evasion Taxonomy for Agent Security Tests](temporal-spatial-semantic-evasion-taxonomy.md) — temporal, spatial, semantic evasion axes; CFD is one realization of the temporal+spatial combination.
 - [Compositional Vulnerability Induction in Coding Agents](compositional-vulnerability-induction.md) — sibling decomposition-style attack against coding agents, where benign tickets compose into a vulnerable diff.
+- [Distributed Cross-PR Attacks in Persistent-State AI Control](distributed-cross-pr-attacks.md) — the same decomposition logic distributed across pull requests in a persistent codebase; stateful cross-PR monitoring is the mitigation.
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the capability-sandboxing control that bounds CFD's blast radius even when detection fails.

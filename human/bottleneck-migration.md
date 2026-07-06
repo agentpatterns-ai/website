@@ -141,5 +141,5 @@ After 60 days: review cycle time returns to 5 hours, defect rate drops 30%, and 
 - [Tiered Code Review](../code-review/tiered-code-review.md) -- AI-first review with human escalation
 - [Agentic Code Review Architecture](../code-review/agentic-code-review-architecture.md) -- tiered review system design
 - [Comprehension Debt](../anti-patterns/comprehension-debt.md) -- understanding gaps that erode review competence
-- [Agent Harness](../agent-design/agent-harness.md) -- structural enforcement via harness engineering
 - [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md) -- review burden on senior engineers
+- [Author-to-Reviewer Role Inversion](author-to-reviewer-role-inversion.md) -- the team-level staffing and measurement shift this economic migration produces
