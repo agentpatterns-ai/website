@@ -59,13 +59,13 @@ Fixed with skills: extract the shared rules into `~/.claude/skills/security-revi
 
 ## When this backfires
 
-Extracting shared skills only helps when you maintain agents over time. Three conditions make the anti-pattern less harmful than it appears:
+Extracting shared skills only helps when you maintain agents over time. 3 conditions make the anti-pattern less harmful than it appears:
 
 - True one-off agents: an agent built for a single short project that will never be reused or updated does not accumulate drift — copies never diverge because changes never happen.
 - Premature abstraction cost: extracting a skill before the shared core stabilizes forces every downstream agent to absorb every experimental change. Waiting until the shared behavior is settled reduces churn.
 - Transient fork intentionality: occasionally a copy is an intentional fork — one project needs behavior that diverges fundamentally. In this case the copies are meant to diverge, and a shared skill adds [coupling without benefit](abstraction-bloat.md).
 
-The pattern is harmful specifically when agents are expected to receive updates and improvements. If neither condition holds, audit whether the shared skill is pulling its weight.
+The pattern is harmful specifically when agents are expected to receive updates and improvements. If none of these 3 conditions hold, audit whether the shared skill is pulling its weight.
 
 ## Related
 

@@ -33,6 +33,7 @@ Models do not attend uniformly across the context window. These pages cover wher
 - [Observation Masking](observation-masking.md) — Strip intermediate tool results from conversation history once they have served their purpose to keep active context lean without losing the work product
 - [Context Window Anxiety](context-window-anxiety.md) — Advanced models exhibit behavioral shortcuts as context limits approach; strategic buffers, counter-prompting, and token budget transparency counteract premature task closure
 - [Turn-Level Context Decisions](turn-level-context-decisions.md) — Every completed turn is a branching point with five options: continue, rewind, clear, compact, or delegate to a subagent; choosing well is the core skill of context management
+- [Conversation Registers for AI Coding Sessions](conversation-registers.md) — Name which of four interaction modes you are in with an LLM — exploring, brainstorming, deciding, implementing — and start a fresh context when the register changes
 
 ## Compression & Caching
 

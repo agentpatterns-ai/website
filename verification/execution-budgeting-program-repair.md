@@ -116,6 +116,7 @@ The shape is the load-bearing part: a hard cap with an explicit "submit your bes
 ## Related
 
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — staging orders which gates run; this page argues how often to run any of them.
+- [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — caps how many repair rounds run; this page caps how many test executions run inside a round.
 - [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md) — strengthens what one test run tells you, so the budget can stretch further.
 - [Cost-Aware Skill Rewriting](../instructions/cost-aware-skill-rewriting.md) — the broader practice of making cost explicit in instructions and tool descriptions agents read.
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md) — adjacent tool-level cost lever; reduces the cost per execution rather than the count of executions.

@@ -10,7 +10,7 @@ aliases:
   - orchestrator delegation threshold
   - sub-agent delegation calibration
   - delegate-or-inline threshold
-last_reviewed: 2026-06-28
+last_reviewed: 2026-07-07
 maturity: adopted
 ---
 
@@ -19,6 +19,8 @@ maturity: adopted
 > Calibrate when an orchestrator hands work to a sub-agent versus finishes it inline — handoff cost and review tax can swamp the parallelism gain.
 
 The delegation threshold is the orchestrator's standing rule for when a sub-task is worth handing off. Raise it and the orchestrator finishes more work directly; lower it and it fans out earlier. The lever is not a free knob — every handoff carries fixed coordination cost, an [Anthropic-measured 15× token multiplier on true multi-agent topologies](https://www.anthropic.com/engineering/multi-agent-research-system), and a review tax on whatever the sub-agent returns. Delegation pays back only when the parallelism or context-isolation gain exceeds those costs. Calibrating the threshold is a separate concern from dispatch mechanics (see [async non-blocking sub-agent dispatch](../multi-agent/async-non-blocking-subagent-dispatch.md)) and from the prior human-to-agent decision (see [the delegation decision](delegation-decision.md)).
+
+At least one vendor has turned this threshold into a literal product setting rather than leaving it implicit in agent design: OpenAI's Codex CLI 0.142.0 exposes delegation aggressiveness as a `disabled` / `explicit-request-only` / `proactive` config at both thread and turn level ([Codex CLI changelog](https://developers.openai.com/codex/changelog)) — an operator-tunable mode for exactly the delegate-or-inline decision this page covers.
 
 ## The cost side of delegation
 
@@ -54,13 +56,13 @@ The threshold is the wrong primitive until two structural conditions hold, both 
 
 Without these, lowering the threshold amplifies error rather than throughput. DeepMind's 180-configuration sweep across five architectures and three model families found ["unstructured multi-agent networks amplify errors up to 17.2×"](https://towardsdatascience.com/why-your-multi-agent-system-is-failing-escaping-the-17x-error-trap-of-the-bag-of-agents/) compared with a single-agent baseline. Threshold tuning operates above this floor; it does not substitute for it.
 
-## Why It Works
+## Why it works
 
 The mechanism behind the cost is information-theoretic. Tran and Kiela attribute it to the Data Processing Inequality: under fixed reasoning-token budgets, partitioning a task across context-isolated sub-agents is ["strictly lossy"](https://arxiv.org/abs/2604.02460), so single-agent systems are more information-efficient when budgets are normalised. Calibrating the threshold is how the orchestrator stays on the right side of that trade — delegate only when parallelism gain or context-isolation gain visibly exceeds the lossy partition.
 
 The production evidence is GitHub's A/B test on Copilot CLI after raising the delegation threshold and tightening handoff criteria: ["a 23% reduction in tool failures per session, a 27% reduction in search tool failures, an 18% reduction in edit tool failures, a 5% improvement in P95 wait time", with "no quality regression"](https://github.blog/ai-and-ml/how-we-made-github-copilot-cli-more-selective-about-delegation/). The trajectory analysis adds ["15% reduction in failed subagent search calls" and "12% lower average subagent LLM duration per user"](https://github.blog/ai-and-ml/how-we-made-github-copilot-cli-more-selective-about-delegation/). The win came from removing low-benefit handoffs, not from removing delegation.
 
-## When This Backfires
+## When this backfires
 
 - Stateful coupling between sibling sub-tasks. If delegated work shares hidden state — open files, environment, intermediate decisions — the orchestrator pays handoff cost twice and still produces conflicting intermediate decisions. Cognition's ["context gets lost between handoffs"](https://cognition.com/blog/dont-build-multi-agents) critique applies in full.
 - Small total task budget. When total work is sub-minute, the fixed handoff overhead per [GitHub's tuning post](https://github.blog/ai-and-ml/how-we-made-github-copilot-cli-more-selective-about-delegation/) dominates the parallel-speedup. The orchestrator is faster doing the work inline.

@@ -149,6 +149,7 @@ nav:
       - dual-write-append-mirror-transcript.md
       - deferred-permission-pattern.md
       - most-restrictive-wins-fusion.md
+      - natural-language-tool-selection.md
       - tool-confirmation-carousel.md
       - approval-response-taxonomy.md
       - harness-design-dimensions.md

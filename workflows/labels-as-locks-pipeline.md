@@ -142,3 +142,4 @@ A separate sweep (cron or the same worker on idle) reclaims expired leases: find
 - [Issue-Tracker as Agent Dispatch Surface](issue-tracker-agent-dispatch-surface.md) — the broader convention of treating the issue tracker as the agent control plane
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — the five-phase delegation pipeline this locking discipline lets you parallelize safely
 - [Continuous Triage](continuous-triage.md) — the upstream classification workflow that produces the labeled items this pattern then dispatches
+- [Concurrent Agent Pull Requests and Merge-Conflict Cost](concurrent-agent-pr-merge-conflicts.md) — the empirical merge-conflict cost that claim-label leasing serializes away for contended work

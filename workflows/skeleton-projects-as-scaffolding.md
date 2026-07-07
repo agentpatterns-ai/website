@@ -43,7 +43,7 @@ includes CI configuration, has test examples.
 Return the top 5 with links and a one-line summary of each.
 ```
 
-Running several research agents in parallel across different sources produces a broader candidate set than searching one channel at a time.
+Running several research agents in parallel across different sources produces a broader candidate set than searching one channel at a time — a [fan-out then synthesize](../multi-agent/fan-out-synthesis.md) pattern applied to template discovery.
 
 ### Step 2: Evaluate against criteria
 

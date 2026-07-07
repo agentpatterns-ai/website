@@ -10,7 +10,7 @@ aliases:
   - loop budget allocation
   - per-turn budget allocation
   - agent loop budgeting
-last_reviewed: 2026-06-29
+last_reviewed: 2026-07-07
 maturity: adopted
 ---
 
@@ -52,7 +52,7 @@ Even split is the right default for loops without clean phases — bulk refactor
 
 ## Budget telemetry inside the loop
 
-Loops that hit the cap silently usually emit a final tool-less summary call, which downstream consumers may misread as completion. The [goal-driven autonomous loop](goal-driven-autonomous-loop.md) documents both production patterns that prevent this: per-turn telemetry that injects `Tokens used / Token budget / Tokens remaining` into the continuation prompt, and a wind-down template (`budget_limit.md`) that fires at the cap and forbids the goal-complete tool call. The Claude Agent SDK's `error_max_turns` / `error_max_budget_usd` result subtypes are the harness-side signal, but they fire after the cap, not before it — the hermes-agent project tracks tiered budget-pressure warnings as a missing primitive ([hermes-agent #414](https://github.com/NousResearch/hermes-agent/issues/414)).
+Loops that hit the cap silently usually emit a final tool-less summary call, which downstream consumers may misread as completion. The [goal-driven autonomous loop](goal-driven-autonomous-loop.md) documents both production patterns that prevent this: per-turn telemetry that injects `Tokens used / Token budget / Tokens remaining` into the continuation prompt, and a wind-down template (`budget_limit.md`) that fires at the cap and forbids the goal-complete tool call. The Claude Agent SDK's `error_max_turns` / `error_max_budget_usd` result subtypes are the harness-side signal, but they fire after the cap, not before it — the hermes-agent project tracks tiered budget-pressure warnings as a missing primitive ([hermes-agent #414](https://github.com/NousResearch/hermes-agent/issues/414)). OpenAI's Codex CLI ships a concrete vendor instance of the same primitive: version 0.142.0 added configurable rollout token budgets that track usage across threads, surface remaining-budget reminders before the cap, and abort the turn outright once the budget is exhausted ([OpenAI — Codex changelog](https://developers.openai.com/codex/changelog)).
 
 ## Why it works
 

@@ -119,3 +119,4 @@ The framework assumes you can know task boundaries in advance. Three conditions 
 - [Session Recap](../agent-design/session-recap.md) — structured handoff artifacts at session boundaries
 - [Goal Recitation](goal-recitation.md) — continuous drift prevention within a session
 - [Context Budget Allocation](context-budget-allocation.md) — the finite budget that drives turn-level decisions
+- [Conversation Registers](conversation-registers.md) — the human-facing axis: switching interaction mode on the same task as a reset signal

@@ -10,7 +10,7 @@ aliases:
   - output review fatigue
   - verification anxiety
   - decision fatigue from oversight
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-07
 maturity: adopted
 ---
 
@@ -24,7 +24,7 @@ AI assistants cut mechanical effort but add new cognitive demands. You review ge
 
 Research from BCG and UC Riverside [found that 14% of workers experience mental fatigue from excessive AI tool use](https://www.bcg.com/news/5march2026-when-using-ai-leads-brain-fry), with high performers most affected. The intensive users who get the most value are also the most exposed to the costs.
 
-The underlying mechanism is working-memory saturation. Human working memory is sharply bounded. AI-assisted work does not remove that limit — it shifts what fills it. Instead of holding implementation details, your attention moves to checking output correctness, tracking context across AI and human thinking modes, and making constant accept/reject micro-decisions. [MIT Media Lab research](https://arxiv.org/abs/2506.08872) found that sustained AI assistance reduced neural connectivity in brain networks tied to deep engagement. The researchers termed this pattern "cognitive debt" — the accumulated cost of offloading reasoning rather than performing it.
+The underlying mechanism is working-memory saturation. Human working memory is sharply bounded. AI-assisted work does not remove that limit — it shifts what fills it. Instead of holding implementation details, your attention moves to checking output correctness, tracking context across AI and human thinking modes, and making constant accept/reject micro-decisions. [MIT Media Lab research](https://arxiv.org/abs/2506.08872) found that sustained AI assistance reduced neural connectivity in brain networks tied to deep engagement. The researchers termed this pattern "cognitive debt" — the accumulated cost of offloading reasoning rather than performing it. Geoffrey Litt's ["understand to participate" framing](https://simonwillison.net/2026/Jul/2/understand-to-participate/) (via Simon Willison) names the practical stake of that debt: you must understand agent-authored code deeply enough to keep participating in the creative process, a participation-capability threshold that offloaded reasoning erodes.
 
 ## Forms of AI cognitive load
 
@@ -107,5 +107,3 @@ After the non-AI block, the developer resumes with Claude Code but caps each new
 - [The Context Ceiling](context-ceiling.md) — the cognitive overhead experts bear when AI output requires more correction than generation saves
 - [Process Amplification](process-amplification.md) — how AI use intensity scales workload and how to manage the amplification
 - [Safe Command Allowlisting: Reducing Approval Fatigue](../security/safe-command-allowlisting.md) — pre-authorizing low-risk operations to preserve attention for high-stakes decisions
-</content>
-</invoke>

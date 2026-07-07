@@ -9,7 +9,7 @@ tags:
   - security
   - agent-design
   - copilot
-last_reviewed: 2026-07-01
+last_reviewed: 2026-07-07
 maturity: established
 ---
 
@@ -50,6 +50,8 @@ Maintaining an outbound allowlist for a coding agent is expensive. Legitimate de
 `allowNetwork` resolves that pressure by keeping the boundary that costs least to enforce against agent error — write confinement to the workspace — and shifting network risk below the harness: the host firewall, the container's egress policy, or an org-level proxy. Write-confinement still blocks the agent from modifying `~/.bashrc`, dropping startup scripts, or writing to `/etc`.
 
 A graduated escalation ladder is the other answer to the same interruption pressure: rather than flipping the whole mode, escalate per command. VS Code 1.123 added exactly this — when a network-dependent command (such as `git fetch`) fails inside the sandbox, it is auto-retried with unrestricted network, then falls back to unsandboxed execution if that still fails, while filesystem protections stay in place throughout (the `chat.agent.sandbox.retryWithAllowNetworkRequests` setting) ([VS Code 1.123 release notes](https://code.visualstudio.com/updates/v1_123)). The ladder narrows the blast radius of lifting the network leg from the whole session to a single retried command.
+
+VS Code 1.127 moved the default itself: terminal-command sandboxing now rolls out on by default on macOS and Linux, enforcing both boundaries at once — network blocked, filesystem restricted — with elevation available only by explicitly stepping outside the sandbox ([VS Code 1.127 release notes](https://code.visualstudio.com/updates/v1_127)). Past 1.119's opt-in three-way toggle, this is the dual-axis, default-on milestone the two-axis model was building toward.
 
 ## What this is not
 
