@@ -125,3 +125,4 @@ Removing four components — Planning, Memory, Self-Reflection, Retrieval — li
 - [The Infinite Context](infinite-context.md) — same mechanism (attention dilution) at the context-window layer
 - [Progressive Disclosure for Agents](../agent-design/progressive-disclosure-agents.md) — the attention-dilution mechanism behind CCI, applied to instruction surfaces
 - [Framework-First Agent Development](framework-first.md) — related anti-pattern: adopting abstractions that bundle scaffold components before measuring whether you need them
+- [Blaming the Model for Scaffolding-Driven Quality Regressions](blaming-the-model-for-scaffolding-regressions.md) — what over-stacked scaffolds cost over time, and why the regression gets misattributed to the model

@@ -146,3 +146,4 @@ The agent created the tool in response to friction (noisy grep results), used it
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md) — human-driven observation-to-update loop
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — runtime tools as removable scaffolding
 - [Tool Minimalism](../tool-engineering/tool-minimalism.md) — counterpoint: fewer tools can outperform more
+- [Task Completion as Tool Certification (Silent Tool Rot)](../anti-patterns/task-completion-as-tool-certification.md) — the reliability caveat: a synthesized tool that passes its task can still be wrong on every unseen input, so reused tools need held-out conformance checks

@@ -9,13 +9,13 @@ tags:
 aliases:
   - per-model harness profile
   - model-specific harness deltas
-last_reviewed: 2026-06-02
+last_reviewed: 2026-07-07
 maturity: established
 ---
 
 # Per-Model Harness Tuning
 
-> The same harness produces different behaviour on different backing models. Treat the model as a first-class harness variable — tune prompt structure, tool descriptions, and middleware per model — instead of forcing one generic configuration to work everywhere.
+> The same harness behaves differently on different backing models — treat the model as a first-class harness variable, not one generic configuration for all.
 
 ## The pattern
 
@@ -45,6 +45,7 @@ The override surface covers the components that vendor prompting guides prescrib
 | Tool descriptions | Calibrate against each model's literal-interpretation profile | [Anthropic migration](https://platform.claude.com/docs/en/about-claude/models/migration-guide) |
 | Middleware selection | Summarization middleware tuned for one model's verbosity over-corrects on another | [Cursor](https://cursor.com/blog/codex-model-harness) |
 | Subagent configuration | Spawn-frequency defaults differ across models | [Anthropic migration](https://platform.claude.com/docs/en/about-claude/models/migration-guide) |
+| Custom tool-schema strictness | Newer same-vendor releases reject off-schema fields on a custom edit tool that older releases tolerated | [Simon Willison: Armin Ronacher](https://simonwillison.net/2026/Jul/4/better-models-worse-tools/) |
 
 Structural mechanisms — sandboxing, permission gates, file-persistent context, observability hooks — depend on the harness contract, not the model, and port cleanly. See [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) for the structural-vs-compensatory split.
 
@@ -70,6 +71,8 @@ memory about what it probably contains.
 ```
 
 Cursor reports the same shape independently: shell-style tool names for Codex, explicit `read_lints` triggers, removed mid-turn user-talk language because Codex models cannot "talk" until the end of a turn ([Cursor](https://cursor.com/blog/codex-model-harness)).
+
+Armin Ronacher reports a within-vendor version of the same problem: newer Claude models (Opus 4.8, Sonnet 5) call a custom edit tool with off-schema fields and get rejected, a regression older Claude releases on the same harness didn't show. His theory is that RL training on Claude Code's built-in edit tool degrades a model's compliance with third-party custom edit-tool schemas as the model improves — the implication is to ship multiple edit-tool implementations and select the one the backing model was trained against, rather than assuming one custom schema keeps working across releases ([Simon Willison: Better models, worse tools](https://simonwillison.net/2026/Jul/4/better-models-worse-tools/)).
 
 ## Expressing the deltas
 
@@ -177,3 +180,4 @@ The `create_deep_agent(model=...)` call site is unchanged. Switching `model="ope
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — running multiple vendor agents on the same task; per-model profiles are how each side gets a fair shot
 - [Harness Design Dimensions and Archetypes](harness-design-dimensions.md) — the population-level dimensions per-model deltas vary along
 - [Managed vs Self-Hosted Harness](managed-vs-self-hosted-harness.md) — managed harnesses remove the surface this pattern operates on
+- [Natural Language Tool Selection (NLT)](natural-language-tool-selection.md) — a per-model delta in its own right: prose tool selection helps weak models and hurts structured-optimized ones

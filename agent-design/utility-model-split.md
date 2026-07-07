@@ -9,7 +9,7 @@ tags:
 aliases:
   - background-vs-foreground model routing
   - utility model configuration
-last_reviewed: 2026-06-02
+last_reviewed: 2026-07-07
 maturity: established
 ---
 
@@ -59,6 +59,8 @@ Four conditions make the split a net loss:
 
 The small-tier capability evidence is also conditional. In the commit-message study, the 8B model required diff augmentation and method summaries to beat the 70B variant; "without these enhancements" automated scores were "considerably lower" ([arXiv:2408.02502](https://arxiv.org/html/2408.02502v1)). Plain routing without harness work on the input does not match the headline number.
 
+Cognition's Devin Fusion packages the same split into a shipped product: sidekick agents handle background work while dynamic routing keeps foreground reasoning on the frontier model, a combination the company reports holds frontier-level quality at roughly 35% lower cost ([Cognition: Devin Fusion](https://cognition.ai/blog/devin-fusion)).
+
 ## Example
 
 VS Code 1.121 exposes the split in `settings.json`:
@@ -71,6 +73,10 @@ VS Code 1.121 exposes the split in `settings.json`:
 ```
 
 Both keys take a model ID from any configured provider — the IDs above are illustrative. Leave either unset to keep the Copilot default. Per-workspace `.vscode/settings.json` lets a high-stakes repo pin both to a stronger model while everyday repos take the cheaper override ([VS Code: AI language models](https://code.visualstudio.com/docs/copilot/customization/language-models)).
+
+## Agent-directed variant
+
+Every split above is harness-configured: a human sets `chat.utilityModel` (or the equivalent) ahead of time. Simon Willison describes a runtime variant instead — instructing the primary agent to judge which of its subtasks warrant a cheaper model and to delegate implementation to a subagent running that lower-power model, with the choice persisted as a memory file the agent reuses on later turns ([Simon Willison: judgement](https://simonwillison.net/2026/Jul/3/judgement/)). The split still separates foreground reasoning from cheaper delegated work, but the model choice moves from static configuration to a decision the agent makes and remembers.
 
 ## Key Takeaways
 

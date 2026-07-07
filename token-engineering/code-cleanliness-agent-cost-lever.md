@@ -7,7 +7,7 @@ tags:
   - code-review
   - arxiv
   - tool-agnostic
-last_reviewed: 2026-06-03
+last_reviewed: 2026-07-07
 maturity: emerging
 ---
 
@@ -34,6 +34,8 @@ The pass-rate finding matters as much as the cost finding. Agents do not fail mo
 Lower cognitive complexity and fewer rule violations let the agent find the relevant code from file and function names on the first try. So it spends fewer turns working out where logic lives ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049)). Token budget spent on irrelevant files is token budget not spent on reasoning — the same mechanism Anthropic's context-engineering work identifies for harness design and just-in-time loading ([Anthropic — Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). The 34% file-revisitation drop measures this navigation efficiency directly; the 7-8% token saving follows from it.
 
 The study measures cleanliness as SonarQube Cloud rule violations plus cognitive complexity scores ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049)) — both measurable in CI, neither subjective. The page does not extend to claims about naming, comments, or architectural coherence, which the study did not isolate.
+
+The inference also runs the other way. At the Future of Software Development Retreat, Martin Fowler proposed the inverse framing: use the token cost of making a given change as a proxy metric for architecture and design quality — if the same change requires fewer tokens, that indicates a better architecture ([Martin Fowler — Future of Software Development Retreat](https://martinfowler.com/fragments/2026-07-06.html)). Where the empirical result above uses cleanliness to predict token cost, Fowler's framing uses token cost to diagnose cleanliness — the same mechanism read in reverse.
 
 ## When this backfires
 

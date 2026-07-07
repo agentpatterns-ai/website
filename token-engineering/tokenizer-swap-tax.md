@@ -9,7 +9,7 @@ tags:
 aliases:
   - tokenizer migration cost
   - tokenizer inflation tax
-last_reviewed: 2026-05-27
+last_reviewed: 2026-07-07
 maturity: established
 ---
 
@@ -35,6 +35,8 @@ Simon Willison measured the real-world multiplier against the [`/v1/messages/cou
 | 3456x2234 high-res PNG | 1,578 | 4,744 | 3.01x |
 
 The high-resolution image figure reflects Opus 4.7's new [2,576 px / 3.75 MP image ceiling](https://platform.claude.com/docs/en/about-claude/models/migration-guide) — up from ~1,600 tokens max per image to ~4,784. At matched lower resolutions, images tokenize nearly identically. The tokenizer multiplier and the vision multiplier are separate forces.
+
+The pattern repeats across model families, not just Opus point releases. Simon Willison measured Claude Sonnet 5 keeping Sonnet 4.6's per-token pricing while shipping a new tokenizer that produces roughly 30% more tokens overall — with the multiplier again varying by content type: ~1.42x for English text, ~1.33x for Spanish, ~1.27x for Python, and just ~1.01x for Mandarin ([Claude Sonnet 5](https://simonwillison.net/2026/Jun/30/claude-sonnet-5/)). Sonnet 5 also drops support for `temperature`, `top_p`, and `top_k`, keeps a 1M-token context window, and enables adaptive thinking by default — non-tokenizer migration variables worth checking alongside the multiplier on any upgrade.
 
 ## Three axes of impact
 

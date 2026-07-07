@@ -122,3 +122,4 @@ When the team suspects degradation, they run the eval suite against the pinned v
 - [Trust Without Verify](trust-without-verify.md)
 - [Demo-to-Production Gap](demo-to-production-gap.md)
 - [The Anthropomorphized Agent](anthropomorphized-agent.md) — misattributing context overload to agent fatigue rather than session state
+- [Blaming the Model for Scaffolding-Driven Quality Regressions](blaming-the-model-for-scaffolding-regressions.md) — the scaffolding-evolution counterpart: the other layer that changed when quality dropped

@@ -82,3 +82,4 @@ A reasonable practitioner could argue the gains attributed to "evidence-driven g
 - [Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate](precise-debugging-benchmark.md) — Why pass rate is not enough — even gated patches can be over-edits.
 - [Multi-Agent RAG for Spec-to-Test Automation](multi-agent-rag-spec-to-test.md) — The retrieval-grounded analogue in the spec-to-test direction.
 - [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — The cost-ascending gate ordering applied to IaC security repair instead of bug repair.
+- [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — Caps how many repair rounds run; staged gates order what happens inside each round.

@@ -231,6 +231,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Deterministic Anchoring: Static Facts as Stable Context](context-engineering/deterministic-anchoring.md)
 - [Grounding Agents in Code the Model Has Never Seen](context-engineering/grounding-zero-prior-code.md)
 - [Proprioceptive Context Dashboard: Agent Self-Managed Context](context-engineering/proprioceptive-context-dashboard.md)
+- [Conversation Registers for AI Coding Sessions](context-engineering/conversation-registers.md)
 
 ## Instructions & Prompts
 
@@ -545,6 +546,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](agent-design/wiki-memory-agent-maintained-knowledge-base.md)
 - [Trajectory-Conditioned Model Escalation (SWE-Router)](agent-design/trajectory-conditioned-model-escalation.md)
 - [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](agent-design/reasoning-effort-over-tool-scaffolding.md)
+- [Natural Language Tool Selection (NLT)](agent-design/natural-language-tool-selection.md)
 
 ## Loop Engineering
 
@@ -913,6 +915,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent-Recorded Video Demos as a Verification Artifact](verification/agent-recorded-video-demos.md)
 - [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](verification/agent-driven-eval-flywheel.md)
 - [Natural-Language Documentation as a Code-Review Intermediate (Verifiable Literate Programming)](verification/verifiable-literate-programming.md)
+- [Bounded Repair-Loop Iterations](verification/bounded-repair-loop-iterations.md)
 
 ## Hooks & Guardrails
 
@@ -1096,6 +1099,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Knowledge-Based Pull Requests for Cross-Trust-Boundary Contributions](workflows/knowledge-based-pull-requests.md)
 - [Spec-Anchored Drift-Gated Architecture (Spec Growth Engine)](workflows/spec-growth-engine.md)
 - [Whole-Codebase Visibility as a Migration Prerequisite](workflows/whole-codebase-visibility-migration-prerequisite.md)
+- [Concurrent Agent Pull Requests and Merge-Conflict Cost](workflows/concurrent-agent-pr-merge-conflicts.md)
 
 ## Human Factors
 
@@ -1242,6 +1246,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Unbounded Agent Feedback Paths (Infinite Agentic Loops)](anti-patterns/unbounded-agent-feedback-paths.md)
 - [Semantic Collapse Under Underspecified Prompts](anti-patterns/semantic-collapse.md)
 - [Dependency Inlining Erodes SBOM and License Provenance](anti-patterns/dependency-inlining-provenance-loss.md)
+- [Blaming the Model for Scaffolding-Driven Quality Regressions](anti-patterns/blaming-the-model-for-scaffolding-regressions.md)
+- [Task Completion as Tool Certification (Silent Tool Rot)](anti-patterns/task-completion-as-tool-certification.md)
 
 ## Emerging Concepts
 
