@@ -138,3 +138,4 @@ print(f"pass^3: {pass_pow_k:.2f}")  # pass^3: 0.40
 - [Decomposing Agent Output Variability by Layer (Sampling vs Orchestration State)](sampling-state-agent-variability-layers.md) — Pass@k/pass^k summarises the aggregate spread; this technique attributes the spread to the layer that should be mitigated
 - [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md)
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md)
+- [Comparative Judging for Agent Configuration Ranking](comparative-judging-config-ranking.md) — the ranking method for picking a bake-off winner, where pass@k/pass^k stays the metric for an absolute pass/fail bar

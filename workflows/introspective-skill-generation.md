@@ -40,7 +40,7 @@ graph TD
     D -->|Rejected| F[Log as non-automatable]
 ```
 
-### Collect
+## Collect: gathering raw material from agent sessions
 
 Gather raw material from agent sessions:
 
@@ -50,7 +50,7 @@ Gather raw material from agent sessions:
 
 The collection step needs no new tooling. Transcripts already exist. The gap is that no one reads them systematically.
 
-### Analyze
+## Analyze: mining sessions for recurring patterns
 
 Feed the collected material to an analysis agent — a read-only subagent with access to transcript files and memory directories. The agent finds:
 
@@ -66,7 +66,7 @@ A second variant skips autonomous transcript-mining and captures a demonstrated 
 
 Rank candidates by frequency and effect. A correction that appears in 80% of sessions is a stronger automation candidate than one that appears in 10%.
 
-### Generate
+## Generate: producing a concrete artifact
 
 For each high-ranking pattern, the agent produces one of three artifacts:
 
@@ -80,7 +80,7 @@ Claude Code supports creating custom subagents as markdown files with YAML front
 
 The `/agents` command in Claude Code can also generate subagent configurations from natural language descriptions, so the analysis agent can describe the needed agent and let Claude Code's built-in generation do the scaffolding. [Source: [Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)]
 
-### Validate
+## Validate: human review before deployment
 
 Generated artifacts need human review before deployment. This is the critical gate that prevents over-automation.
 

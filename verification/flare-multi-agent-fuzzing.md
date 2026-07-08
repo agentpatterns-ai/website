@@ -7,6 +7,7 @@ tags:
   - multi-agent
   - evals
   - tool-agnostic
+  - arxiv
 aliases:
   - "multi-agent fuzzing"
   - "interaction path coverage"

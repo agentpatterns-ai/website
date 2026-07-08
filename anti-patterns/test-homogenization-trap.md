@@ -104,3 +104,4 @@ The fix is to use `sorted()` instead of `.sort()`. A human tester thinks about s
 - [TDD Agent Development](../verification/tdd-agent-development.md) — write tests first so the agent implements against human-defined expectations
 - [Behavioral Testing for Agents](../verification/behavioral-testing-agents.md) — testing what agents do, not how they do it
 - [The Yes-Man Agent](yes-man-agent.md) — a single agent shares its own blind spots; separate reviewer agents expose what the implementer misses
+- [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](code-first-test-oracle-bias.md) — the temporal-ordering sibling of this trap: code-first test generation propagates the code's own faults into the tests

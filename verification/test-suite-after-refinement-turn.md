@@ -108,3 +108,4 @@ Without the per-turn re-run, the regression survives until end-of-session CI or 
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md)
 - [Trust Without Verify](../anti-patterns/trust-without-verify.md)
 - [Pre-Change Impact Analysis](pre-change-impact-analysis.md)
+- [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](../anti-patterns/code-first-test-oracle-bias.md) — a code-first test suite is not an independent oracle; the sibling ordering trap on the code-vs-spec axis

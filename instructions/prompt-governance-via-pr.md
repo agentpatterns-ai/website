@@ -15,7 +15,7 @@ maturity: established
 
 > Govern agent prompt files like code: store them as markdown in git and review behaviour changes through pull requests, no retraining required.
 
-## Overview
+## Instruction files are already version-controlled
 
 Instruction files (`CLAUDE.md`, `.github/copilot-instructions.md`, `AGENTS.md`) are already plain text in version control. So they fall under the same change-management tools the team already uses for code: branches, diffs, reviews, merge approvals, and revert.
 

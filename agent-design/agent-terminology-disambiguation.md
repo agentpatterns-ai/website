@@ -27,7 +27,7 @@ The disambiguation here is vendor-aware and time-bound:
 - Categories are spectrum points, not boxes. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) treats workflow-versus-agent as a continuum.
 - Definitions shift each quarter. Use this page to recognize which patterns to reach for today, not as a permanent taxonomy. Simon Willison crowdsourced 211 "agent" definitions, and convergence is still in progress ([agent-definitions tag](https://simonwillison.net/tags/agent-definitions/)).
 
-## The eight terms
+## Terms distinguishing control flow and duration
 
 ### LLM workflow
 
@@ -56,6 +56,8 @@ A system that operates across multiple sessions, accumulating state and context 
 
 - Example: a coding agent harness with an initializer phase and incremental session-by-session work, surviving across compaction boundaries.
 - Most-likely conflation is the autonomous agent. "Long-running" describes a temporal property. "Autonomous" describes a control-flow property. See [Long-Running Agents](long-running-agents.md).
+
+## Terms distinguishing reactivity, retrieval, and runtime
 
 ### AI assistant
 

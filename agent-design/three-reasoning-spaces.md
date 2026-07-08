@@ -18,7 +18,7 @@ maturity: adopted
 
 > Treat plan space, bead space, and code space as explicit gates — transitioning between them deliberately prevents architecture drift during implementation.
 
-## Overview
+## Why separate plan, bead, and code
 
 Agent development spans three reasoning spaces, each with its own artifacts and decisions. Mixing them degrades quality in all three — for example, debating architecture while writing code, or redesigning task boundaries during implementation. The [Agent Flywheel methodology](https://agent-flywheel.com/complete-guide) formalizes this separation. The same principle appears on its own in Osmani's 80% problem, LangChain's reasoning sandwich, and nibzard's agentic handbook.
 

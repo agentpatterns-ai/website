@@ -1,6 +1,6 @@
 ---
 title: "Frameworks"
-description: "Multi-page sections that synthesize atomic patterns into named, coherent ways of operating with AI coding assistants."
+description: "Multi-page sections that synthesize atomic patterns into named, coherent ways of operating with AI coding assistants — a pattern language, not a single pattern."
 tags:
   - agent-design
   - tool-agnostic

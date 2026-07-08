@@ -5,6 +5,7 @@ description: "Give a long-horizon agent a live view of its own context blocks â€
 tags:
   - context-engineering
   - tool-agnostic
+  - arxiv
 aliases:
   - agent proprioception
   - self-managed context

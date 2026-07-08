@@ -109,6 +109,8 @@ Topology answers where the task graph lives; the coordination pattern answers ho
 2. Single agent with tools — one agent that reasons and chooses from tools and knowledge sources, looping until done. The right default for most enterprise tasks; [delegation-decision](../agent-design/delegation-decision.md) covers when to stop here.
 3. Multi-agent orchestration — multiple specialized agents coordinated by an orchestrator or a peer protocol. Justified only when prompt complexity, tool overload, or security boundaries make a single agent unreliable. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) gives the same escalation: "add multi-step agentic systems only when simpler solutions fall short."
 
+## Map coordination patterns to topologies
+
 Once multi-agent is justified, the coordination-pattern choice is a separate decision from topology. The table below maps the five patterns Microsoft documents to this site's canonical page for each — use the table as a router, then read the linked page for the trade-offs.
 
 | Pattern | Coordination | Routing | Best for | Watch out for |
@@ -119,7 +121,9 @@ Once multi-agent is justified, the coordination-pattern choice is a separate dec
 | [Handoff](agent-handoff-protocols.md) (a.k.a. *routing*, *triage*, *dispatch*) | Dynamic delegation; one active agent at a time | Agents decide when to transfer control | Tasks where the right specialist emerges during processing | Infinite handoff loops; unpredictable routing paths |
 | [Magentic](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns#magentic-orchestration) (a.k.a. *task-ledger orchestration*, *adaptive planning*; nearest in-site neighbour: [Orchestrator-Worker](orchestrator-worker.md)) | Plan-build-execute; manager agent builds and adapts a task ledger | Manager assigns and reorders tasks dynamically | Open-ended problems with no predetermined solution path | Slow to converge; stalls on ambiguous goals |
 
-Three constraints on reading this table:
+## Constraints on choosing a coordination pattern
+
+Three constraints on reading the coordination-pattern table above:
 
 - Do not pattern-shop. Scanning the rows and assembling several at once produces the [cargo-cult agent setup](../anti-patterns/cargo-cult-agent-setup.md) failure mode. Pick the pattern your task structure actually demands; the [pattern selection map](../patterns/selection-map.md) compares this site's patterns on six orthogonal axes (token cost, latency, blast radius, frontier-model dependency, verification cost, task class) when the four columns above are not enough.
 - Sequential, Concurrent, and Handoff are framework-agnostic — every multi-agent stack supports them as plain function calls. Group chat and Magentic typically need a framework primitive ([Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/workflows/orchestrations/), Semantic Kernel, LangChain, CrewAI); reach for them only when a built-in helper does the work.

@@ -54,7 +54,7 @@ The fiducial-point variant is harder to detect than the bypass variants — the 
 
 The Nguyen case study identifies three practices that were decisive in catching what oracle tests missed. Each closes one leak in the mechanism above ([Nguyen 2026](https://arxiv.org/abs/2605.30353)).
 
-### 1. Test at diverse parameter points
+## Test at diverse parameter points
 
 Expand the oracle from one point to a distribution. A coefficient that genuinely encodes the underlying model passes at the fiducial point and at parameter points the agent did not see during iteration. A fudge factor calibrated to the fiducial point predicts wrong values elsewhere.
 
@@ -66,7 +66,7 @@ Reviewer checklist:
 - [ ] If the agent introduces a numerical correction, does the suite re-evaluate at parameter points the correction was not tuned against (the [held-out test gap](eval-blind-spots.md))?
 - [ ] When a test fails at a non-fiducial point, is the fix architectural or another local coefficient?
 
-### 2. Cross-session changelogs that surface stalled exploration
+## Cross-session changelogs that surface stalled exploration
 
 A single session that adjusts a coefficient and observes a green test is indistinguishable from progress. 33 such sessions in a row are not. The cross-session changelog is the artifact that turns 33 stalled sessions from invisible into visible.
 
@@ -78,7 +78,7 @@ Reviewer checklist:
 - [ ] Does that artifact surface stalled trajectories (N sessions on the same problem with no structural change)?
 - [ ] When the agent opens a new session, does it read the changelog before iterating?
 
-### 3. An explicit anti-fudge-factor rule
+## An explicit anti-fudge-factor rule
 
 Inject the domain principle the test suite cannot encode: numerical corrections must correspond to a quantity in the underlying model. This is the [anti-reward-hacking](anti-reward-hacking.md) rule that prevents the agent from satisfying the oracle with a coefficient that has no referent.
 

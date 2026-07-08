@@ -547,6 +547,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Trajectory-Conditioned Model Escalation (SWE-Router)](agent-design/trajectory-conditioned-model-escalation.md)
 - [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](agent-design/reasoning-effort-over-tool-scaffolding.md)
 - [Natural Language Tool Selection (NLT)](agent-design/natural-language-tool-selection.md)
+- [Local Model Viability Factors for Coding](agent-design/local-model-viability-for-coding.md)
 
 ## Loop Engineering
 
@@ -787,6 +788,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Capability-Additive Code Interpreters for Untrusted Agent Code](security/capability-additive-interpreter.md)
 - [Constraints as a Substrate for Scalable Agent Oversight](security/constraint-substrate-scalable-oversight.md)
 - [Distributed Cross-PR Attacks in Persistent-State AI Control](security/distributed-cross-pr-attacks.md)
+- [MCP Approval-View Fidelity Gap and Unicode Concealment](security/mcp-metadata-approval-view-gap.md)
+- [Forged Reasoning Trace Attacks on Agent Memory (FARMA)](security/forged-reasoning-trace-memory-attack.md)
 
 ## Testing & Evaluation
 
@@ -915,6 +918,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent-Recorded Video Demos as a Verification Artifact](verification/agent-recorded-video-demos.md)
 - [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](verification/agent-driven-eval-flywheel.md)
 - [Natural-Language Documentation as a Code-Review Intermediate (Verifiable Literate Programming)](verification/verifiable-literate-programming.md)
+- [Comparative Judging for Agent Configuration Ranking](verification/comparative-judging-config-ranking.md)
 - [Bounded Repair-Loop Iterations](verification/bounded-repair-loop-iterations.md)
 
 ## Hooks & Guardrails
@@ -1246,6 +1250,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Unbounded Agent Feedback Paths (Infinite Agentic Loops)](anti-patterns/unbounded-agent-feedback-paths.md)
 - [Semantic Collapse Under Underspecified Prompts](anti-patterns/semantic-collapse.md)
 - [Dependency Inlining Erodes SBOM and License Provenance](anti-patterns/dependency-inlining-provenance-loss.md)
+- [Cheaper-Per-Token Model Upgrades That Cost More Per Task](anti-patterns/cheaper-per-token-costlier-per-task.md)
+- [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](anti-patterns/code-first-test-oracle-bias.md)
 - [Blaming the Model for Scaffolding-Driven Quality Regressions](anti-patterns/blaming-the-model-for-scaffolding-regressions.md)
 - [Task Completion as Tool Certification (Silent Tool Rot)](anti-patterns/task-completion-as-tool-certification.md)
 

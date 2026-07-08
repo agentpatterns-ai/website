@@ -5,6 +5,7 @@ tags:
   - security
   - tool-agnostic
   - arxiv
+  - supply-chain
 aliases:
   - LLM library version vulnerabilities
   - vulnerable LLM-pinned dependencies

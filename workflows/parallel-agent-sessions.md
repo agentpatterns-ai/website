@@ -127,3 +127,4 @@ The same isolation can move off the laptop. Vercel describes Conductor [moving p
 - [Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
 - [Single-Branch Git for Agent Swarms](single-branch-git-agent-swarms.md)
 - [Compound Engineering](compound-engineering.md)
+- [Tiled Agent Layout: Supervising Parallel Agents Through Dedicated Panes](tiled-agent-layout.md) — the pane-per-agent screen layout for supervising the concurrent sessions this pattern creates

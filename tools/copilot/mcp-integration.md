@@ -14,7 +14,7 @@ status: current
 
 > Connect Copilot to external tools and data sources via the Model Context Protocol.
 
-## Overview
+## Where Copilot supports MCP servers
 
 GitHub Copilot supports [MCP servers](https://docs.github.com/en/copilot/tutorials/enhance-agent-mode-with-mcp) across agent mode, the [coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-agent/mcp-and-coding-agent), and the CLI. MCP is a standard way to connect agents to external tools, databases, APIs, and services.
 

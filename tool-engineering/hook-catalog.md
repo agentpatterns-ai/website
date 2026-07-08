@@ -275,3 +275,4 @@ Instructions: contextual "prefer X when Y" guidance, or suggestions rather than 
 - [On-Demand Skill Hooks: Session-Scoped Hook Guardrails](on-demand-skill-hooks.md)
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
+- [Hook Exec Form vs Shell Form: Shell-Injection-Safe Hook Commands](hook-exec-form-vs-shell.md) — choosing the args-array exec form so substituted tool input cannot inject shell metacharacters into a hook command

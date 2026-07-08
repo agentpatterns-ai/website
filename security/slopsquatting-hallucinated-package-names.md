@@ -6,6 +6,7 @@ tags:
   - security
   - tool-agnostic
   - anti-pattern
+  - supply-chain
 aliases:
   - hallucinated package supply chain attack
   - LLM package name hallucination

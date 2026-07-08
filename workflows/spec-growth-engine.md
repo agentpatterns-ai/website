@@ -37,7 +37,7 @@ flowchart TD
     GATE -->|clean| MERGE[Merge]
 ```
 
-## Four implementation layers
+## Spec graph and context assembly (layers 1-2)
 
 ### Layer 1: Spec graph with contract/design separation
 
@@ -50,6 +50,8 @@ The graph format is implementation-defined — a node might be a YAML file with 
 For any task, the assembler walks the spec graph from the touched node up to the spine and back down only along the ownership path — the sequence of nodes the change is authorised to modify. The agent loads that slice into context, not the whole graph. This is the same posture that nested AGENTS.md takes in monorepos: Codex builds an instruction chain "from your global ~/.codex/AGENTS.md plus every AGENTS.md along the path from your git root to your current directory" ([Codegateway, 2026](https://www.codegateway.dev/en/blog/agents-md-playbook-2026)). The shift it codifies is "from repo-wide defaults to path-aware defaults" ([d4b, 2026](https://www.d4b.dev/blog/2026-04-03-ai-agents-in-monorepos-what-to-configure-differently-from-a-single-product-repo)).
 
 The spec graph generalises that file-system convention into a structured graph the assembler can traverse mechanically — ownership is declared in the graph, not inferred from CODEOWNERS.
+
+## Growth protocol and drift gate (layers 3-4)
 
 ### Layer 3: Vertical-slice growth protocol — hardest first
 

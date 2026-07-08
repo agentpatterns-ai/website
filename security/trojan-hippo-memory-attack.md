@@ -159,10 +159,10 @@ Compose it with an [egress allow-list](agent-network-egress-policy.md) restricti
 ## Related
 
 - [Detecting Memory-Poisoning Exfiltration by Tool-Call Order (Recall-Before-Send Signature)](recall-before-send-memory-poisoning-detection.md) — a log-only detector for this attack: the exfiltration must recall the stored address before sending
+- [Forged Reasoning Trace Attacks on Agent Memory (FARMA)](forged-reasoning-trace-memory-attack.md) — the sibling memory attack that poisons stored reasoning to sabotage decisions rather than poisoning facts to exfiltrate data
 - [Oracle Poisoning of Knowledge Graphs](oracle-poisoning-knowledge-graph.md) — structurally identical pivot via persistent KG/RAG store instead of agent memory
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md)
 - [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)
 - [PII Tokenization in Agent Context](pii-tokenization-in-agent-context.md)
-- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)

@@ -137,3 +137,4 @@ Layered defenses reduce attack surface but do not eliminate it:
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — prevents loading tampered tools, complementary to runtime defenses
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — malicious tool registration via poisoned public registries, an upstream variant of the MCP attack vector
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — architectural patterns that limit blast radius when injection succeeds
+- [MCP Approval-View Fidelity Gap and Unicode Concealment](mcp-metadata-approval-view-gap.md) — a concealment attack on the same tool metadata, hiding the payload from the reviewer rather than the argument or return channel

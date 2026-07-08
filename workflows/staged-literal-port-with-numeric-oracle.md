@@ -44,7 +44,7 @@ Holding the source as the verified specification converts every behavioral ambig
 
 The same shape appears in [SACTOR](https://arxiv.org/abs/2503.12511) (C → unidiomatic Rust → idiomatic Rust, with FFI-based end-to-end testing at each stage), confirming the mechanism is not FESOM2-specific. What FESOM2 adds is the strict numeric oracle drawn from production reference output rather than from a test suite, which is what makes the discipline workable for systems whose tests cannot fully pin down behavior.
 
-## Three implementation layers
+## Stage boundaries and literal translation (layers 1-2)
 
 ### Layer 1: stage boundaries that isolate one axis
 
@@ -57,6 +57,8 @@ Carry the same shape to other ports — Fortran→C++ might be staged as Fortran
 Forbid the assistant from "improving" the source. FESOM2's secondary rule made this enforceable: any constant statement in the port must quote the source `file:line` and the literal value, never a paraphrased or commented-out form ([arXiv:2606.11356](https://arxiv.org/abs/2606.11356)). The paper notes the LLM's "standing tendency to 'simplify' or 'improve' unless repeatedly constrained" — without the constant-granularity rule, the assistant rewrites a lookup table as a polynomial, picks a "more readable" coefficient, or rearranges floating-point arithmetic into a form that breaks bitwise reproducibility.
 
 The rule does not forbid all judgment. The FESOM2 team explicitly authorized deliberate departures — mainly the I/O subsystem, where literal port of Fortran NetCDF idioms produced unmaintainable C. Those exceptions were the domain expert's call, not the assistant's.
+
+## Per-stage oracle and validation ladder (layer 3)
 
 ### Layer 3: per-stage oracle with a validation ladder
 

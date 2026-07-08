@@ -39,9 +39,7 @@ graph TD
 
 Where humans sit within this hierarchy determines throughput, quality, and the long-term compounding of agent capability.
 
-## Three positioning modes
-
-### Humans outside the loop
+## Humans outside the loop
 
 Humans run the why loop only. Agents run the entire how loop without human direction of intermediate steps. This is the pattern Kief Morris associates with vibe coding and some interpretations of [spec-driven development](spec-driven-development.md) — humans invest in describing the desired outcome, but not in steering the path to it.
 
@@ -49,7 +47,7 @@ The appeal is real: the how loop is where software development accumulates the m
 
 The risk: agents working in messy or poorly-structured codebases spiral more, take longer, and cost more. Internal code quality still matters, not for its own sake, but because a clean codebase improves agent velocity and reduces inference cost — [code cleanliness is an agent cost lever](../token-engineering/code-cleanliness-agent-cost-lever.md). External quality — correctness, performance, compliance — remains the measure, but it is harder to achieve without internal structure.
 
-### Humans in the loop
+## Humans in the loop
 
 Humans gate specific steps of the how loop, typically the innermost coding loop. The common form: a developer inspects every diff the agent produces before accepting it.
 
@@ -59,7 +57,7 @@ The cost: it creates a throughput bottleneck. Agents generate code faster than h
 
 Classic shift-left thinking applies here: rather than inspecting outputs, embed quality signals so agents can gauge their own output. Agents produce better results when they can verify their own work through tests and automated checks, rather than relying on human inspection after the fact.
 
-### Humans on the loop
+## Humans on the loop
 
 Humans define and continuously improve the harness — the collection of specs, quality checks, workflow guidance, and automated verification that governs each level of the how loop — rather than reviewing what the harness produces.
 

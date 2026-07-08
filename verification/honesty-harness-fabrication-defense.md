@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - fabrication harness
   - layered defense against agent hallucination

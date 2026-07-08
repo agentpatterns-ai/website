@@ -32,9 +32,7 @@ The pattern is not the default answer for repository setup. Three preconditions 
 
 Setup is independently documented as a weak point for general agents. [SetupBench](https://arxiv.org/abs/2507.09063) — 93 tasks across seven language ecosystems and five databases — found OpenHands hit only 38.9–57.4% on repo-setup tasks and 20.0–53.3% on local database configuration, with 38–89% of agent actions unnecessary compared to optimal human behavior. That gap is the failure surface this pattern targets.
 
-## Steps
-
-### 1. Capture experience as a dual-modality record (XPU)
+## Capture experience as a dual-modality record (XPU)
 
 Each verified fix is stored as a record that pairs textual guidance (the symptom and reason) with the executable action (the exact command sequence that resolved it). The executable half makes the experience portable across repos; the textual half makes it retrievable.
 
@@ -42,13 +40,13 @@ The dual-modality format matters. Prior cross-task transfer work shows that low-
 
 This is a domain specialization of the general experiential-learning agent pattern that [ExpeL (Zhao et al., 2023)](https://arxiv.org/abs/2308.10144) introduced. See also [Experience Graphs as Structured Memory for Self-Evolving Agents](../agent-design/experience-graphs-self-evolving-agents.md) for the broader memory architecture this composition sits inside.
 
-### 2. Retrieve candidate fixes from the experience store
+## Retrieve candidate fixes from the experience store
 
 When the agent meets a setup failure in a new repo, it queries the experience store by symptom (build output, error message, missing-tool signature) and produces candidate actions to trial. The textual-guidance half of each XPU record makes this retrieval possible — executable actions alone cannot be searched by failure signature.
 
 This step is where the cross-repo amortization pays off — without it, every setup is solved from scratch.
 
-### 3. Trial each candidate under snapshot rollback
+## Trial each candidate under snapshot rollback
 
 Before each state-modifying command, the agent issues `docker commit` to capture the current container state. If the command exits non-zero — or if subsequent verification fails — the agent reverts to the snapshot. This converts irreversible system mutations into reversible ones.
 
@@ -58,7 +56,7 @@ Only state-modifying commands trigger snapshots; read-only commands (`ls`, `cat`
 
 This step is an applied instance of [Rollback-First Design](../agent-design/rollback-first-design.md) — reversibility is chosen before the action, not bolted on after failure.
 
-### 4. Verify with a prosecutor-judge protocol
+## Verify with a prosecutor-judge protocol
 
 After a candidate sequence appears to succeed, a two-role verification protocol decides whether setup is actually complete:
 
@@ -67,11 +65,11 @@ After a candidate sequence appears to succeed, a two-role verification protocol 
 
 The split exists because surface exit-code success and "the documented feature actually runs" are not the same property. [SetupBench](https://arxiv.org/abs/2507.09063) names this gap explicitly as "verification-strategy mismatches" — agents declaring setup done when only the install ran, not the feature.
 
-When verification rejects, the agent reverts to the most recent successful snapshot and pulls the next candidate from step 2.
+When verification rejects, the agent reverts to the most recent successful snapshot and pulls the next candidate from the experience store.
 
-### 5. Promote the successful sequence back to the store
+## Promote the successful sequence back to the store
 
-The verified action sequence — together with the symptom it resolved and the verification evidence — is written back to the experience store as a new XPU record. The next repo that hits the same symptom retrieves this fix in step 2 instead of re-deriving it.
+The verified action sequence — together with the symptom it resolved and the verification evidence — is written back to the experience store as a new XPU record. The next repo that hits the same symptom retrieves this fix from the experience store instead of re-deriving it.
 
 This closes the loop. Without it, the agent learns nothing across repos and the speculative-execution machinery serves only the current run.
 

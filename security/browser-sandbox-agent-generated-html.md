@@ -5,6 +5,7 @@ description: "Run untrusted agent- or LLM-generated HTML in the browser by compo
 tags:
   - security
   - tool-agnostic
+  - sandboxing
 aliases:
   - sandboxed iframe plus immutable CSP pattern
   - browser-native artifact sandbox

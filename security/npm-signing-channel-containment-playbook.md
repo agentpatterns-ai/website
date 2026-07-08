@@ -6,6 +6,7 @@ tags:
   - security
   - workflows
   - tool-agnostic
+  - supply-chain
 aliases:
   - dev-machine supply chain incident response
   - npm install signing certificate rotation playbook

@@ -23,7 +23,7 @@ Managed agent services — [Claude Managed Agents](https://claude.com/blog/build
 
 The choice mirrors the classic SaaS vs on-prem decision but with a compounding factor: agents accumulate memory over time. Locking memory behind a proprietary API raises migration cost with every session.
 
-## The five signals
+## Compliance and memory-ownership signals
 
 ### 1. Compliance and data residency
 
@@ -36,6 +36,8 @@ Managed services run workloads on vendor infrastructure by default. If your thre
 Harnesses are coupled to memory management. An agent harness "is intimately tied to memory — a key role of the harness is to manage context" ([LangChain, April 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)). When an agent learns from interactions — adapting to user preferences, accumulating domain knowledge, building an internal model of your codebase — that memory accumulates inside the harness.
 
 With a managed service, that memory sits behind the provider's API; migration means resetting learned state — a cost that grows with every session. With a self-hosted harness, memory lives in your own databases and persists through vendor changes. This is the strongest argument for self-hosting when agents are long-lived or customer-facing, not just for batch tasks — memory is a [property of the harness, not a pluggable module](harness-memory-coupling.md).
+
+## Observability, routing, and ops signals
 
 ### 3. Observability ownership
 
@@ -92,6 +94,7 @@ The hybrid is not Cursor-specific. Managed providers increasingly offer self-hos
 - [Cursor Self-Hosted Cloud Agents](../tools/cursor/self-hosted-cloud-agents.md) — hybrid deployment: managed orchestration, self-hosted execution
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — routing by complexity, relevant when multi-provider routing is in scope
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — assigning competing agents to the same task, a self-hosted-only pattern
+- [Local Model Viability Factors for Coding](local-model-viability-for-coding.md) — when self-hosting extends to a local model, the factors that decide whether it is good enough
 - [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) — the three-primitive architecture inside either deployment mode
 - [Agent Observability with OpenTelemetry](../observability/agent-observability-otel.md) — the OTel instrumentation contract that determines whether a managed surface can plug into your existing observability stack
 - [Sandbox Runtime Comparison](../security/sandbox-runtime-comparison.md) — sandbox primitive comparison, the same in either deployment mode but with different ownership of the boundary

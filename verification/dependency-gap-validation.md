@@ -5,6 +5,7 @@ description: "AI coding agents declare a fraction of the dependencies their code
 tags:
   - testing-verification
   - tool-agnostic
+  - arxiv
 last_reviewed: 2026-06-12
 maturity: adopted
 ---

@@ -204,3 +204,4 @@ The ritual adds overhead at session start — when that cost outweighs the benef
 - [Agent Memory Patterns](agent-memory-patterns.md)
 - [Cross-Cycle Consensus Relay](cross-cycle-consensus-relay.md) — the relay document the ritual reads before acting on a new cycle
 - [Worktree Isolation](../workflows/worktree-isolation.md)
+- [Agent Project State Purge: Clean-Slate Session Reset](agent-project-state-purge.md) — the teardown path when the state the ritual reads is contaminated rather than merely stale

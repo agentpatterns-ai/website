@@ -33,7 +33,7 @@ The [Open Agent School (OAS) patterns library](https://www.openagentschool.org/p
 | Schema-Aware Decomposition | Decompose NL tasks into validated plan graphs referencing real schema entities | Grounding plans in types, APIs, and file layout rather than abstract goals | [Layered Context Architecture](../context-engineering/layered-context-architecture.md), [Context Priming](../context-engineering/context-priming.md) |
 | Perception Normalization | Clean structured context input, anomaly detection, quality feedback loops | Signal density optimization, [context pollution](../anti-patterns/session-partitioning.md) prevention, tiered compression | [Context Engineering](../context-engineering/context-engineering.md), [Context Compression Strategies](../context-engineering/context-compression-strategies.md) |
 
-## Pattern details
+## Execution and policy pattern details
 
 ### Budget-Constrained Execution Loop
 
@@ -65,6 +65,8 @@ The mapping:
 | Signed execution | Sandboxed execution environments, filesystem isolation |
 
 The [Enterprise Agent Hardening](../security/enterprise-agent-hardening.md) page covers the Policy Enforcement Gateway pattern with `PreToolUse` hooks. The [Dual-Boundary Sandboxing](../security/dual-boundary-sandboxing.md) page covers filesystem and network isolation. OAS's contribution is naming the full pipeline. Published policy-gateway reference architectures (Microsoft's [Agent Governance Toolkit](https://opensource.microsoft.com/blog/2026/04/02/introducing-the-agent-governance-toolkit-open-source-runtime-security-for-ai-agents/), [AWS Bedrock AgentCore policies](https://aws.github.io/bedrock-agentcore-starter-toolkit/user-guide/policy/overview.html)) usually ship three of the five stages — capability mapping, policy evaluation, and sandboxed execution. They leave intent analysis and risk scoring to per-deployment extensions.
+
+## Memory, schema, and perception pattern details
 
 ### Strategy Memory Replay
 

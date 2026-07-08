@@ -4,6 +4,7 @@ description: "AI assistants default to caret and tilde ranges in manifests becau
 tags:
   - security
   - tool-agnostic
+  - supply-chain
 aliases:
   - agent-written caret ranges
   - LLM dependency prefix risk

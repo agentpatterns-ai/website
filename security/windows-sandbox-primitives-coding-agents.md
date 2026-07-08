@@ -6,6 +6,7 @@ tags:
   - security
   - tool-agnostic
   - agent-design
+  - sandboxing
 last_reviewed: 2026-06-12
 maturity: established
 ---

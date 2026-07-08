@@ -5,6 +5,7 @@ tags:
   - human-factors
   - workflows
   - tool-agnostic
+  - arxiv
 aliases:
   - reversible platform decisions
   - platform lock-in calculus

@@ -8,6 +8,7 @@ tags:
   - copilot
   - claude
   - cursor
+  - supply-chain
 tool_scope_exempt: true
 aliases:
   - enterprise-managed plugin standards

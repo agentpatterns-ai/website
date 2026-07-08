@@ -20,7 +20,7 @@ maturity: emerging
 
 > Cursor 3.8's expanded trigger surface and natural-language authoring make event-driven automations cheap to ship — and cheap to ship with the lethal trifecta closed.
 
-Cursor 3.8 (2026-06-18) ships four changes that together convert Cursor Automations from a scheduled-job surface into an event-driven dispatch system: a `/automate` skill that authors automations from plain language, five new GitHub event triggers, a Slack emoji-reaction trigger, and computer-use enabled by default for the cloud agent that runs each automation ([Cursor changelog 06-18-26](https://cursor.com/changelog/06-18-26)). The trigger surface is the Cursor-specific worked example of the event-driven dispatch family already documented across [Continuous AI](continuous-ai.md), [Chat-Platform Agent Delegation](chat-platform-agent-delegation.md), and [Programmatic Cloud-Agent Dispatch](programmatic-cloud-agent-dispatch.md) — this page covers what is new in 3.8, the conditions under which the new surfaces are safe, and where the defaults concentrate the [lethal trifecta](../security/lethal-trifecta-threat-model.md).
+Cursor 3.8 (2026-06-18) turns Cursor Automations from a scheduled-job surface into an event-driven dispatch system through four changes: a `/automate` skill that authors automations from plain language, five new GitHub event triggers, a Slack emoji-reaction trigger, and computer-use enabled by default for the cloud agent that runs each automation ([Cursor changelog 06-18-26](https://cursor.com/changelog/06-18-26)). That makes it the Cursor-specific instance of the event-driven dispatch family already documented across [Continuous AI](continuous-ai.md), [Chat-Platform Agent Delegation](chat-platform-agent-delegation.md), and [Programmatic Cloud-Agent Dispatch](programmatic-cloud-agent-dispatch.md) — safe to adopt only once the new surfaces are bounded and the defaults that concentrate the [lethal trifecta](../security/lethal-trifecta-threat-model.md) are closed first.
 
 ## When to use this trigger surface
 
@@ -37,6 +37,8 @@ Adopt the 3.8 trigger surface only when all four conditions hold. If any one is 
 
 The 3.8 release adds three trigger families and a default-on tool. Each maps to a failure condition that the dispatch-family pages on this site already document.
 
+## New trigger channels: Slack emoji and GitHub events
+
 ### Slack emoji reaction
 
 Reacting to any Slack message with a designated emoji fires the automation ([Cursor changelog 06-18-26](https://cursor.com/changelog/06-18-26)). The trigger fires only on public channels — private channels are not visible to automations ([Cursor docs](https://cursor.com/docs/cloud-agent/automations)). That restriction blocks one principal class but leaves a more common one open: any member of a public channel — including a Slack Connect external participant — is a valid dispatcher.
@@ -50,6 +52,8 @@ The release adds: issue comment, PR review comment, PR review submitted, review 
 PR triggers from forks are blocked at the trigger level — Cursor cites the risk of executing external code with repo permissions ([Cursor docs](https://cursor.com/docs/cloud-agent/automations)). The remaining triggers fire on principals that are repo-internal but not necessarily author-internal. The issue-comment trigger feeding an auto-fix template is the OWASP LLM01:2025 indirect-injection case verbatim: an attacker who can comment on an issue can plant instructions that flow into the agent prompt ([OWASP](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)).
 
 The workflow-run-completed trigger paired with an auto-fix template on a flaky build is the webhook-retry-storm shape from [Programmatic Cloud-Agent Dispatch](programmatic-cloud-agent-dispatch.md) — every failed run dispatches a new agent. Without a per-trigger budget cap, a flaky workflow drains the team's AI Credit allotment.
+
+## Default-on tooling changes: computer-use and /automate authoring
 
 ### Computer-use default-on
 

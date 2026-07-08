@@ -30,7 +30,7 @@ A framework speeds up your work when its primitives match your task and fights y
 
 A feature-by-feature matrix flatters whichever framework runs the comparison. The axes above decide whether you spend the next quarter shipping the agent or rewriting around the wrong primitive.
 
-## Per-framework fit
+## Runtime and browser-automation framework fit
 
 ### ADK (Google)
 
@@ -55,6 +55,8 @@ Python (3.11+) agent that limits the action space to a Playwright-controlled bro
 Fits when: the task is genuinely web-shaped — scraping behind logins, form filling, or multi-step flows that need DOM reasoning.
 
 Skip when: the same task is reachable via an API (always cheaper), the work spans the desktop OS, or per-step LLM costs at scale outweigh a hybrid Playwright-plus-AI approach ([Scrapfly: Stagehand vs Browser Use](https://scrapfly.io/blog/posts/stagehand-vs-browser-use)).
+
+## Desktop, stateful, and memory-layer framework fit
 
 ### Eigent
 

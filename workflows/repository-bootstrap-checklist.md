@@ -23,7 +23,7 @@ Each layer in the checklist is a dependency for the next. Instructions define wh
 
 Skipping ahead breaks this chain. Adding CI gates before instructions creates enforcement rules with no defined standard to enforce against. Adding hooks before skills means hooks may reject output that would have been correct with domain context in place.
 
-## The checklist
+## Instructions, standards, and skills (steps 1-3)
 
 ### Step 1: Project instructions file
 
@@ -62,6 +62,8 @@ Place skills under `.github/skills/` (Copilot convention) or `.claude/skills/` (
 - `release.md` — release process, versioning rules
 
 Skills reduce `AGENTS.md` size and improve targeting. An agent working on tests loads only the testing skill, not the full project context.
+
+## Agent definitions, commands, hooks, and CI gates (steps 4-7)
 
 ### Step 4: Agent definitions
 

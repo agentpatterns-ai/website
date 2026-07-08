@@ -255,3 +255,4 @@ Asking the agent "When would you use the linear-issue-manager skill?" after savi
 - [Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit](../verification/skill-evals.md) — evaluating an authored skill as a unit
 - [SDLC-Phase Skill Taxonomy](../workflows/sdlc-skill-taxonomy.md) — organizing an authored library by lifecycle phase at scale
 - [Daily-Use Skill Library](../workflows/daily-use-skill-library.md) — encoding a personal engineering process as a small skill set
+- [Project Writing Skill: House Style as Model-Invocable Skill](project-writing-skill.md) — a concrete authored skill packaging house-style writing conventions, loaded only when the agent writes prose

@@ -174,3 +174,4 @@ Combining both: the cache lookup uses filtered context as part of the prompt, so
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [LLM Map-Reduce Pattern for Parallel Input Processing](llm-map-reduce.md)
+- [Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines](../agent-design/parameter-keyed-caching-plan-execute.md) — extends semantic cache keys with parsed parameters for parameter-rich, multi-MCP pipelines

@@ -8,6 +8,7 @@ tags:
   - observability
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - "trajectory decomposition"
   - "TRAJEVAL"

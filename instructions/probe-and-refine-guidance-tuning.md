@@ -5,6 +5,7 @@ description: "An iterative method to produce a repo-guidance file that beats the
 tags:
   - instructions
   - tool-agnostic
+  - arxiv
 aliases:
   - Probe-and-Refine Tuning
   - Synthetic-Probe Guidance Tuning
