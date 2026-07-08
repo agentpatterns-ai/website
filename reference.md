@@ -1,6 +1,6 @@
 ---
 title: "Reference: Standards, Human Factors, Emerging, and Fallacies"
-description: "Reference material for AI-assisted development — standards, human factors, emerging trends, and common fallacies."
+description: "Reference material for AI-assisted development — protocol standards, human factors, emerging trends, and reasoning fallacies for broader context."
 tags:
   - standards
   - human-factors

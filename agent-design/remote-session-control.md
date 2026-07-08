@@ -9,15 +9,17 @@ tags:
 aliases:
   - remote CLI session control
   - mobile steering for coding agents
-last_reviewed: 2026-05-27
+last_reviewed: 2026-07-07
 maturity: established
 ---
 
 # Remote Session Control for Local CLI Agents
 
-> A locally-running CLI agent session exposes a bidirectional bridge to a web or mobile client so the developer can monitor, send steering messages, switch modes, and approve prompts from another device — while the agent keeps running on the original workstation.
+> A locally-running CLI agent session bridges to a web or mobile client so the developer can monitor, steer, and approve prompts remotely.
 
 Two tools shipped this capability within 48 hours in April 2026: Copilot CLI's [`copilot --remote`](https://github.blog/changelog/2026-04-13-remote-control-cli-sessions-on-web-and-mobile-in-public-preview/) (public preview, 2026-04-13) and Claude Code v2.1.110's [push notification tool](https://code.claude.com/docs/en/changelog) (2026-04-15) layered on [`claude remote-control`](https://code.claude.com/docs/en/remote-control). The convergence names a distinct pattern: the developer is no longer pinned to the workstation where the agent runs.
+
+OpenAI's Codex CLI reached general availability with the same pattern on 2026-06-25: Codex Remote lets a developer control a locally-running Codex session on a Mac or Windows host from the ChatGPT mobile app — approving actions, handing off threads, and pairing with a 1:1 QR code ([Codex changelog](https://developers.openai.com/codex/changelog)). It is a third vendor converging on remote session control, alongside Copilot CLI's `--remote` and Claude Code's remote control.
 
 ## What the pattern is not
 

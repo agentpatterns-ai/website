@@ -140,6 +140,7 @@ cat /tmp/gsc_report.md
 
 - [Continuous Triage](../workflows/continuous-triage.md) — label-based routing for automated issue handling
 - [Agent Observability in Practice](../observability/agent-observability-otel.md) — structured monitoring patterns applicable beyond GSC
+- [Measuring GEO Performance for AI Search Visibility](measuring-geo-performance.md) — the broader GEO measurement framework the GSC index-coverage and query signals feed into
 
 ## Sources
 

@@ -41,9 +41,7 @@ Exit criterion: the agent completes a scoped task (add a function with tests) an
 
 ---
 
-## The L1 → L2 transformation
-
-### Step 1: Enable a strong type system
+## Step 1: Enable a strong type system
 
 Type errors fire at write time, at the exact location of the violation, with a specific message about what the type should be — the most actionable form of backpressure.
 
@@ -77,7 +75,7 @@ disallow_untyped_defs = true
 
 Why agents benefit more: a human reasons from experience; an agent reads the message literally. Error specificity and location determine whether the agent self-corrects ([Anthropic](https://code.claude.com/docs/en/best-practices)).
 
-### Step 2: Build test coverage on critical paths
+## Step 2: Build test coverage on critical paths
 
 A test suite gives a binary answer to "did I break anything?" Agents run tests, read failures, and fix — only if the suite exists.
 
@@ -111,7 +109,7 @@ The more structured the assertion, the more specific the agent's fix.
 
 Use integration tests over unit tests for agent-critical paths: they catch ORM misuse, transaction errors, and layer violations that mocked unit tests miss. LangChain's Terminal Bench gains came from structural verification, not mock-based unit tests ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
-### Step 3: Write linter rules with remediation messages
+## Step 3: Write linter rules with remediation messages
 
 Standard linter rules flag violations; agent-useful rules explain the fix. The message enters context at the exact moment of the wrong decision — just-in-time delivery.
 
@@ -160,7 +158,7 @@ High-value rule targets:
 | No console.log in src/ | Debug output in production | "Use the logger from src/utils/logger.ts" |
 | Import boundaries by directory | Architecture violations | "This layer cannot import from X; put shared code in Y" |
 
-### Step 4: Add a pre-commit hook
+## Step 4: Add a pre-commit hook
 
 A pre-commit hook gates agent output before it enters version history.
 
@@ -200,7 +198,7 @@ npm run lint && npm run type-check
 
 Commit → hook runs → on failure the commit is rejected with the error → agent reads, fixes, commits again. This is the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md) at the commit boundary.
 
-### Step 5: Verify the transition
+## Step 5: Verify the transition
 
 Exit check:
 

@@ -11,7 +11,7 @@ tags:
 aliases:
   - operational anchor preservation
   - cost-aware skill compression
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-07
 maturity: emerging
 ---
 
@@ -25,6 +25,8 @@ Apply the anchor-preservation framing only when both conditions hold:
 
 - The skill contains sparse operational anchors: single-line items the base model cannot reconstruct from training. An API constructor, a CLI flag, a validation threshold, a file-format convention, a formula, or a recovery rule ([Xing et al., 2026](https://arxiv.org/abs/2606.09421)).
 - The agent can recover when those anchors are missing — a validator, a retry, or an exploration loop runs when the first attempt fails.
+
+Practitioner guidance outside the academic literature reaches the same conclusion from the other direction: a skill that re-states knowledge the base model already holds wastes tokens for no accuracy or behavior lift, which is the anchor-preservation thesis restated as a warning — keep only what the model cannot reconstruct on its own ([Microsoft: Stop overloading your skills](https://developer.microsoft.com/blog/stop-overloading-your-skills)).
 
 For pure-prose skills (style guides, taxonomies) or fire-and-forget workflows, generic [Prompt Compression](../context-engineering/prompt-compression.md) is the right strategy.
 

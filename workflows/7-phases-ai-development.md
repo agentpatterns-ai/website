@@ -37,7 +37,7 @@ graph TD
 
 Phases alternate between human-led (judgment, decisions, commitments) and agent-led (execution, generation, verification). The pattern is not sequential automation — it is deliberate alternation.
 
-## The phases
+## Defining the feature: research, prototype, and PRD
 
 ### 1. Research
 
@@ -62,6 +62,8 @@ Human-led. Formalize the feature requirements based on what the Research and Pro
 Exit criterion: the PRD is specific enough that a developer who has not seen the prototype could implement the feature from it.
 
 The PRD is the most expensive phase to skip: issues decomposed from vague requirements produce vague implementations. GitHub's [Spec Kit](https://github.com/github/spec-kit) formalizes this step under the name "Specify" ([Spec-Driven Development with AI](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)).
+
+## Delivering the feature: issues, implementation, QA, and ship
 
 ### 4. Issues
 

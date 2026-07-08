@@ -21,7 +21,7 @@ Related lesson: [Why Multi-Agent Systems Fail](https://learn.agentpatterns.ai/mu
 !!! info "Also known as"
     Multi-Agent Architecture Patterns. Related but distinct: the [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) classifies systems at a coarser granularity — three coordination topologies (centralised, decentralised, hybrid) — while this page catalogs 16 finer-grained design patterns drawn from a 94-paper literature review.
 
-## Background
+## The 94-paper literature review
 
 [arXiv:2511.08475](https://arxiv.org/abs/2511.08475) is a systematic literature review of 94 papers that builds an empirical taxonomy of multi-agent SE design patterns. The taxonomy gives developers a vocabulary for design decisions, not ad-hoc choices.
 

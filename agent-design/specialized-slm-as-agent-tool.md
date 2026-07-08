@@ -98,6 +98,7 @@ In the same release, prompt caching reuses "more than 93% of each request" once 
 
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — selects one vendor per task; no nesting
 - [Role Orchestration on a Single Model](role-orchestration-single-model.md) — same weights, different conditioning per role
+- [Local Model Viability Factors for Coding](local-model-viability-for-coding.md) — the hardware and model factors that decide whether a small local model is good enough to run at all
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — heterogeneous models per role with fallback chains
 - [Code-Health-Gated Tier Routing](auto-model-selection.md) — pre-call tier selection on file health
 - [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md) — two-layer split, typically across different models

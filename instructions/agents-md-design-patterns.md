@@ -17,7 +17,7 @@ maturity: established
 
 > Effective AGENTS.md files give agents a specific job description — not a vague identity — using four patterns drawn from 2,500+ real repositories.
 
-## Overview
+## Vagueness is the primary failure mode
 
 GitHub's analysis of over 2,500 `AGENTS.md` files identified a single primary failure mode: vagueness. Files that say "you are a helpful coding assistant" produce inconsistent results. Files that specify runnable commands, show style via code examples, define explicit permission tiers, and name specialist agents produce consistent behavior without ongoing [prompt engineering](../training/foundations/prompt-engineering.md).
 

@@ -5,6 +5,7 @@ description: "Embed a WebAssembly runtime inside your Python or JavaScript appli
 tags:
   - security
   - tool-agnostic
+  - sandboxing
 aliases:
   - WASM sandbox for agent code
   - WebAssembly code execution sandbox

@@ -10,7 +10,7 @@ aliases:
   - advisor strategy
   - frontier model advisor
   - opus advisor pattern
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-08
 maturity: adopted
 ---
 
@@ -48,14 +48,14 @@ Add the advisor to `tools` alongside your existing tools. The beta header `advis
 
 ```python
 response = client.beta.messages.create(
-    model="claude-sonnet-4-6",          # executor
+    model="claude-sonnet-5",            # executor
     max_tokens=4096,
     betas=["advisor-tool-2026-03-01"],
     tools=[
         {
             "type": "advisor_20260301",
             "name": "advisor",
-            "model": "claude-opus-4-7",  # advisor
+            "model": "claude-opus-4-8",  # advisor
             "max_uses": 3,               # per-request cap
         },
         # ... your other tools
@@ -71,7 +71,7 @@ response = client.beta.messages.create(
 | `max_uses` | integer | unlimited | Per-request cap on advisor calls |
 | `caching`  | object  | off       | Advisor-side prompt caching; breaks even at ~3 calls per conversation |
 
-The advisor must be at least as capable as the executor. Check the [supported advisor and executor pairs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) for the current list.
+The advisor must be Sonnet 4.6+ and at least as capable as the executor (equal-capability models can advise each other). It's beta on Claude API and AWS Claude Platform — not Bedrock, Google Cloud, or Foundry — and ZDR-eligible ([docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool)).
 
 ## Benchmark results
 

@@ -20,6 +20,8 @@ maturity: established
 !!! note "Also known as"
     Mid-Run Correction, Steering Running Agents. This page covers reactive, pre-built recovery mechanisms for stuck agents. For proactive human intervention — redirecting agents mid-task before they go off course — see [Steering Running Agents](../agent-design/steering-running-agents.md).
 
+An escape hatch is a recovery path planned in advance so a looping, stalling, or degrading agent can be unstuck without discarding the whole session. Which one to reach for depends on the failure mode: interrupt and redirect when the goal is still reachable, then escalate through manual override, compaction, scope reduction, or a full context reset as the damage deepens.
+
 ## What "stuck" looks like
 
 An agent is stuck when it repeats the same failing approach, produces output that degrades across attempts, fills context without forward progress, or hits an error it cannot resolve and keeps retrying. The failure mode matters: the right escape hatch depends on what is actually wrong.

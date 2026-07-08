@@ -17,7 +17,7 @@ maturity: emerging
 
 > Assign competing vendor agents to the same task, collect independent results, and let a human (or automated gate) select the winner.
 
-## Overview
+## What cross-vendor routing exposes
 
 Single-vendor routing optimizes within a known capability profile. Cross-vendor routing exposes the differences between capability profiles — visible only when you run both agents on the same task and compare.
 

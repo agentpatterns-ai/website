@@ -6,6 +6,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - sandboxing
 aliases:
   - Docker Sandboxes for agents
   - sbx adoption checklist

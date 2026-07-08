@@ -137,3 +137,4 @@ The redesign adds: absolute-path constraint (eliminates relative-path errors), w
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Tool Engineering Principles](tool-engineering.md)
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md)
+- [Edit Format Selection: Diff vs. Search-Replace vs. Full Rewrite](llm-edit-format-selection.md) — an ACI decision for code edits: which output format the model should emit for reliable, token-efficient patches

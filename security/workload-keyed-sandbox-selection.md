@@ -6,6 +6,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - sandboxing
 aliases:
   - workload-keyed sandbox rubric
   - agent sandbox selection by workload

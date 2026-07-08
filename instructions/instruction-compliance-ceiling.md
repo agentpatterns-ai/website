@@ -131,3 +131,4 @@ Layered (below the ceiling): `AGENTS.md` holds 10 project-wide conventions. A `c
 - [Critical Instruction Repetition](critical-instruction-repetition.md)
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) — complementary lever on rule polarity within the same compliance budget this ceiling bounds
+- [Method Map: Failure-Mode to Smallest-Artifact Triage](method-map-failure-mode-triage.md) — routes each failure to the smallest artifact instead of enlarging the instruction file this ceiling bounds

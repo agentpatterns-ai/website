@@ -7,6 +7,7 @@ tags:
   - evals
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - "agent variability decomposition"
   - "sampling vs orchestration state variance"

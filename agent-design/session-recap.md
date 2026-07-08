@@ -139,3 +139,4 @@ After compaction the agent's first read is the recap. The `hard_constraints` blo
 - [Agent Memory Patterns](agent-memory-patterns.md) — cross-session persistence, the layer above per-session recap
 - [Session Initialization Ritual](session-initialization-ritual.md) — the ritual a recap feeds into on resume
 - [Cross-Cycle Consensus Relay](cross-cycle-consensus-relay.md) — structured handoff artifacts for long-running loops across sessions
+- [Clock-In / Clock-Out Protocol: Bracketed Session Continuity](clock-in-clock-out-protocol.md) — the bracketing protocol that authors a recap on clock-out and reads it back on clock-in

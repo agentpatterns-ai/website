@@ -181,3 +181,4 @@ The `create_deep_agent(model=...)` call site is unchanged. Switching `model="ope
 - [Harness Design Dimensions and Archetypes](harness-design-dimensions.md) — the population-level dimensions per-model deltas vary along
 - [Managed vs Self-Hosted Harness](managed-vs-self-hosted-harness.md) — managed harnesses remove the surface this pattern operates on
 - [Natural Language Tool Selection (NLT)](natural-language-tool-selection.md) — a per-model delta in its own right: prose tool selection helps weak models and hurts structured-optimized ones
+- [Cross-Framework Signal Semantics: Re-Measure Borrowed Trajectory Rules](../verification/cross-framework-signal-semantics.md) — the same re-measure-in-your-own-harness discipline for behavioural signals borrowed across agent frameworks

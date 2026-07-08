@@ -8,7 +8,7 @@ tags:
 aliases:
   - "Graduated Autonomy"
   - "Trust Escalation"
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-07
 maturity: established
 ---
 
@@ -31,6 +31,8 @@ Major AI coding tools implement graduated autonomy levels:
 | Execute with gates | Monitor (approve risky actions) | Acts autonomously, escalates on risk | [Copilot Agent Mode](../tools/copilot/agent-mode.md), Claude Code with permissions |
 | Execute in sandbox | Auditor (post-hoc review) | Full autonomy within boundaries | Claude Code sandboxed, Cursor Agent Mode |
 | Fully autonomous | Reviewer (PR-level only) | End-to-end from issue to PR | Copilot Coding Agent, [headless Claude Code](../workflows/headless-claude-ci.md) |
+
+This staged framing is not just a vendor convention: developer Addy Osmani independently proposed a comparable named taxonomy, "Agentic Autonomy Levels" ([Addy Osmani](https://addyo.substack.com/p/agentic-autonomy-levels)), reinforcing that graduated, evidence-gated autonomy is an industry-wide pattern rather than one tool's rollout scheme.
 
 ## How trust actually builds
 

@@ -32,7 +32,7 @@ The taxonomy is unbounded by codebase size and complements the discovery-bound [
 - The session is interactive enough that pushback episodes surface. Fully autonomous CI pipelines that merge without review hide the signals this taxonomy was built from.
 - The agent is current-generation. The dataset spans September 2024 — April 2026 and reflects mid-2026 model and harness mix. Older or specialized agents may distribute differently across the forms.
 
-## The seven forms
+## Diagnosis and intent misalignment forms
 
 Counts below are the paper's per-symptom shares of 16,118 validated episodes; episodes can carry multiple labels, so totals exceed 100% ([Tang et al., 2026](https://arxiv.org/abs/2605.29442)).
 
@@ -52,6 +52,10 @@ Transcript signature. The agent reports completing something that does not match
 
 Closest remediation. Spec the deliverable concretely before the agent acts. The pattern overlaps with [Spec-Complexity Displacement](spec-complexity-displacement.md), where work moves from the spec into the agent's guesswork, and with [Assumption Propagation](assumption-propagation.md).
 
+## Constraint violation and overreach forms
+
+The percentages below are per-symptom shares of 16,118 validated episodes; because episodes can carry multiple labels, form shares sum past 100% ([Tang et al., 2026](https://arxiv.org/abs/2605.29442)).
+
 ### S3. Developer Constraint Violation (38.33%)
 
 Definition. The agent violates an explicit developer constraint — a stated prohibition, scope boundary, or hard rule.
@@ -67,6 +71,10 @@ Definition. The agent takes actions beyond the stated scope without being asked.
 Transcript signature. A narrow question or task expands into a broader change. The paper records a developer asking why "slide 2 [is] showing landscape" — the agent interpreted the question as permission to force the entire deck to portrait orientation; the developer corrected "i want the whole presentation 16:9 landscape" ([Tang et al., 2026](https://arxiv.org/abs/2605.29442)).
 
 Closest remediation. Same mechanism as [Refactoring Runaway](refactoring-runaway.md) at the session level and [PR Scope Creep as a Human Review Bottleneck](pr-scope-creep-review-bottleneck.md) at the merge level. S3 and S4 overlap definitionally — S3 breaches a stated rule, S4 invents new scope where no rule existed.
+
+## Implementation, execution, and reporting forms
+
+The percentages below are per-symptom shares of 16,118 validated episodes; because episodes can carry multiple labels, form shares sum past 100% ([Tang et al., 2026](https://arxiv.org/abs/2605.29442)).
 
 ### S5. Faulty Implementation (17.82%)
 

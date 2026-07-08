@@ -41,9 +41,7 @@ Exit criterion: the agent can run a scoped, well-defined task end-to-end — wri
 
 ---
 
-## The L2 → L3 transformation
-
-### Step 1: Add PreToolUse hooks for hard constraints
+## Step 1: Add PreToolUse hooks for hard constraints
 
 [Hooks](../../tool-engineering/hook-catalog.md) run outside the agent's context, and instructions cannot override them. They enforce constraints that must hold whatever the agent is told to do.
 
@@ -103,7 +101,7 @@ High-value hook targets:
 
 How to choose between a hook and an instruction: if a violation is irreversible or security-critical, use a hook. If the consequence is correctable (wrong import, wrong pattern), use a linter rule with a remediation. Instructions are for context and intent, not enforcement.
 
-### Step 2: Define structured task definitions
+## Step 2: Define structured task definitions
 
 At L2, the agent receives tasks in natural language. Structured task definitions make workflows replayable and auditable, and let any agent session run them without re-explaining the context.
 
@@ -138,7 +136,7 @@ description: Add a new REST API endpoint following project conventions
 
 The agent invokes this with `/add-endpoint route=/users/:id/preferences method=GET description="Get user preferences"`. The structured format removes the ambiguity of natural-language requests and encodes your architectural rules into the workflow.
 
-### Step 3: Add session scaffolding
+## Step 3: Add session scaffolding
 
 Long agent sessions accumulate context and degrade quality ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); see [Context Engineering](../../context-engineering/context-engineering.md)). L3 repos design for short, focused sessions with clean handoff artifacts.
 
@@ -190,7 +188,7 @@ One task per session:
 
 Decompose large features into single-session units with verifiable outcomes. A session should end when a specific test passes or a specific file is in a correct state — not "I finished as much as I could." Clean sessions prevent context rot from compounding across a long task.
 
-### Step 4: Verify the transition
+## Step 4: Verify the transition
 
 Run this exit check:
 

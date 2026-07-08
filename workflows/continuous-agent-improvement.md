@@ -32,7 +32,7 @@ graph TD
     E --> A
 ```
 
-## The improvement loop
+## Diagnosing agent failures: observe and categorize
 
 ### Observe
 
@@ -58,6 +58,8 @@ Map each recurring failure to the layer responsible:
 | Same agent, different output across sessions | Instruction inconsistency | Audit for conflicting directives |
 
 Matching failure to layer prevents churn. Updating the instruction file when the problem is a missing hook adds words without changing behavior.
+
+## Applying fixes: update, verify, and calibrate trust
 
 ### Update
 

@@ -72,6 +72,8 @@ Prototype tool → Write evaluation tasks → Run evaluations
 
 Each cycle produces a concrete change hypothesis grounded in observed failures — not guesswork.
 
+## Writing tasks and tracking metrics for tool evaluations
+
 Write real-world tasks. Effective tool-evaluation tasks require multiple tool calls and reflect the complexity of actual use; simplified sandbox scenarios mask problems that only appear when tools must coordinate. Source them from real user requests, known failure modes from prior sessions, and edge cases identified during design (pagination boundaries, empty results, permission errors). Pair each task with a verifiable expected outcome, but avoid verifiers so strict they reject valid alternative approaches, and hold out a test set — running the same tasks during development and final evaluation overfits the tool design to that task set. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
 Track multiple metrics per run to triangulate problems:
@@ -86,11 +88,13 @@ Track multiple metrics per run to triangulate problems:
 
 Redundant tool calls often indicate pagination or filtering issues — the agent is compensating for tools that return incomplete data. Parameter errors indicate unclear descriptions. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
+## Analyzing transcripts and iterating on tool changes
+
 Analyze transcripts to explain the metrics. Raw metrics identify that a problem exists; transcripts explain why. Watch for what the agent says it cannot do (capability gaps), what it omits (silence about a capability can mean it doesn't know the tool exists), its tool-selection reasoning, and where it backtracks (repeated attempts at one step signal tool-response confusion). Agents can be used to analyze their own evaluation transcripts at scale, surface patterns, and propose specific improvements to tool descriptions. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
 Iterate on targeted changes. Common changes triggered by analysis: rewrite an unclear tool description with explicit usage criteria and what the tool is NOT for; consolidate overlapping tools (redundancy inflates tool-call count — the example below averaged 9.4 calls per task); strip fields the agent never uses from response formats; add pagination/filtering parameters so the agent narrows results rather than fetching everything. After each change, re-run the suite to confirm the targeted failure is resolved and no regressions were introduced. Diminishing returns set in when further transcript analysis produces no new change hypotheses — at that point run the held-out [golden query pairs](../verification/golden-query-pairs-regression.md) to measure generalization. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
-### Tool-building worked example
+## Tool-building worked example
 
 One iteration of the loop applied to a `search_issues` tool. The initial definition has a broad description and no filtering parameters:
 

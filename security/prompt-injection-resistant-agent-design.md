@@ -154,3 +154,4 @@ Even if a malicious PR contains injected instructions, the agent lacks the tools
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Safe Outputs Pattern](safe-outputs-pattern.md)
+- [Task Alignment: The Selective-Compliance Gap Benchmarks Miss](../verification/task-alignment-benchmark.md) — the benchmark showing these architectural defences carry a cue-suppression cost that finish-the-task metrics miss

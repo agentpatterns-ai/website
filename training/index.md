@@ -1,6 +1,6 @@
 ---
 title: "Training Modules"
-description: "Practitioner training modules covering foundational AI disciplines and tool-specific workflows."
+description: "Practitioner training modules for senior developers covering foundational AI disciplines and tool-specific workflows, with capability maps and real config."
 tags:
   - training
   - agent-design

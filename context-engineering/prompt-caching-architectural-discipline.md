@@ -102,7 +102,7 @@ Prefix-first discipline loses to the alternative in three conditions:
 
 Audit the hit-rate trace first; if reads do not dominate writes after a few turns, the cost is not paid back.
 
-## Cache economics across providers
+## Provider caching mechanics and terms
 
 The architectural discipline above decides whether caching activates at all; the economics decide whether it pays. Prompt caching skips recomputation for repeated token prefixes — you pay more on the first request (cache write) to pay less on subsequent ones (cache read). Net savings depend on session length, request frequency, and provider pricing.
 
@@ -121,6 +121,8 @@ Sources: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/
 OpenAI's cache TTL was undocumented until the [2026-05-29 API changelog](https://developers.openai.com/api/docs/changelog), which documents a 24-hour default retention (`prompt_cache_retention=24h`) for non-ZDR organizations — caches survive far longer than the eviction-on-idle behavior previously assumed.
 
 Anthropic's per-model minimum tokens before a breakpoint activates: 1,024 (Sonnet 4/4.5, Opus 4/4.1), 2,048 (Sonnet 4.6, Haiku 3.5), 4,096 (Opus 4.5/4.6, Haiku 3, Haiku 4.5). [Source: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)]
+
+## Break-even economics and monitoring
 
 Break-even turns matter more than the headline discount. Take a coding agent with a 4,000-token stable prefix, 200 new tokens per turn, over 50 turns:
 
@@ -148,7 +150,7 @@ Per-session cache savings = `prefix_tokens` × `turns` × `base_price` × `disco
 
 Monitor per provider: Anthropic `cache_read_input_tokens` against `cache_creation_input_tokens` (high reads, near-zero creation after turn 1); OpenAI `usage.prompt_tokens_details.cached_tokens` (non-zero on turns 2+); Google explicit caching hit metadata. A creation-token spike mid-session signals prefix mutation, not a pricing question.
 
-## Extended cache TTL for long sessions
+## Choosing a cache TTL by session shape
 
 Anthropic's prompt cache defaults to a 5-minute TTL: a cached prefix is evicted 5 minutes after its last read, and the next request pays the full cache-write cost. The 1-hour TTL is an opt-in alternative — writes cost 2x base input (against 1.25x for 5-minute) but the entry stays warm for an hour. In Claude Code, opt in via `ENABLE_PROMPT_CACHING_1H=1` (added in v2.1.108, April 14, 2026); at the raw API level, set `cache_control: {"type": "ephemeral", "ttl": "1h"}` on the breakpoint. [Source: [Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), [Claude Code changelog](https://code.claude.com/docs/en/changelog)]
 
@@ -160,6 +162,8 @@ The decision reduces to session shape:
 | Interactive code review | Mixed: most < 5 min, some 5–30 min | 1-hour |
 | Agent waiting on side-agents or human review | Mostly 5–60 min idle | 1-hour |
 | Walk-away workflows (return next day) | > 60 min idle | Neither — cache will expire |
+
+## TTL cost model and troubleshooting
 
 The break-even is the multiplier ratio, not the prefix size. A 1-hour cache write costs 2x base input; two consecutive 5-minute writes cost 2 × 1.25x = 2.5x. When a session idles longer than 5 minutes but resumes within the hour, the 1-hour write is strictly cheaper than rewriting the 5-minute cache on resume. Skidmore (2026) derives the closed form for the related *refresh against let-expire* decision: `T = 5 × (W / R) = 5 × (1.25 / 0.10) = 62.5 min`, with token count and per-token price cancelling out — the crossover is identical for a 5K Sonnet prefix and a 500K Opus prefix. [Source: [Skidmore: 62.5-minute rule](https://skids.dev/blog/anthropic-cache-tokenomics/)]
 

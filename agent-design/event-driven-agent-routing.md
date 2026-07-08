@@ -17,7 +17,7 @@ maturity: adopted
 
 > Event-driven agent routing reacts to status-change events — label additions, board transitions, PR changes — to advance work between handlers, with no central coordinator.
 
-## Overview
+## Stateless handlers instead of a coordinator
 
 In an [orchestrator-worker pipeline](../multi-agent/orchestrator-worker.md), a parent agent holds the full plan and dispatches each step. Event-driven routing works the other way. Each step is a stateless handler that a state transition triggers. The handler fires, does its work, and emits the next state. No agent owns the full sequence.
 
@@ -41,7 +41,7 @@ Handler design: each workflow is stateless. It reads the current issue or PR sta
 
 Human-agent handoffs: humans and agents are interchangeable at each stage. A human reviewer marks an issue as `reviewed` by applying a label, and an agent responds the same way. Neither side needs to know what comes next. Sequencing lives in the trigger configuration.
 
-## Diagram
+## The routing pipeline, stage by stage
 
 ```mermaid
 graph LR

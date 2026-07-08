@@ -5,6 +5,7 @@ description: "When code generation is cheap and verification scales, the enginee
 tags:
   - human-factors
   - tool-agnostic
+  - arxiv
 aliases:
   - intent-driven engineering
   - intent-first software engineering

@@ -17,7 +17,7 @@ maturity: established
 
 > Anthropic's *Building Effective Agents* framework names three building blocks — augmented LLM, five workflow patterns, autonomous agent loop — each conditional on its own assumptions.
 
-## Overview
+## Anthropic's three-layer taxonomy
 
 Anthropic's December 2024 engineering post and the expanded 'Building Effective AI Agents' eBook define the most-cited taxonomy in agent-pattern literature ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents); [eBook landing](https://resources.anthropic.com/building-effective-ai-agents)). This page maps that taxonomy to site pages and the conditions under which each layer holds.
 

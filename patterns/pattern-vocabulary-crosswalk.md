@@ -55,6 +55,8 @@ For the autonomous-agent layer above these five workflows, see [Goal-Driven Auto
 
 Antonio Gulli's 'Agentic Design Patterns' book organizes 21 patterns across Core (8), Advanced (6), and Specialized (7) categories. A reference implementation in LangChain + Gemini covers all 21 ([`josephsenior/Agentic-Design-Patterns`](https://github.com/josephsenior/Agentic-Design-Patterns)). Coverage flags below: covered = at least one direct canonical page, partial = adjacent pages but no first-class treatment, gap = no direct coverage as of `last_reviewed`.
 
+### Gulli's 8 Core patterns
+
 | Gulli's pattern | Scope difference | This site's canonical page | Status |
 |---|---|---|---|
 | Prompt Chaining | | [Prompt Chaining](../context-engineering/prompt-chaining.md) | covered |
@@ -65,12 +67,22 @@ Antonio Gulli's 'Agentic Design Patterns' book organizes 21 patterns across Core
 | Planning | | [Plan-First Loop](../workflows/plan-first-loop.md) | covered |
 | Multi-Agent | | [Multi-Agent (section index)](../multi-agent/index.md) | covered |
 | Memory Management | Gulli treats memory as one pattern; the site decomposes it into scope/temporal patterns and a CoALA-aligned taxonomy. | [Agent Memory Patterns](../agent-design/agent-memory-patterns.md), [CoALA Memory Taxonomy Classifier](../agent-design/coala-memory-taxonomy-classifier.md) | covered |
+
+### Gulli's 6 Advanced patterns
+
+| Gulli's pattern | Scope difference | This site's canonical page | Status |
+|---|---|---|---|
 | Learning and Adaptation | Gulli covers cross-task adaptation; the site's page focuses on layered continual learning across model and harness. | [Continual Learning Layers](../agent-design/continual-learning-layers.md) | covered |
 | Model Context Protocol (MCP) | | [MCP Protocol](../standards/mcp-protocol.md) | covered |
 | Goal Setting and Monitoring | | [Goal Monitoring and Progress Tracking](../agent-design/goal-monitoring-progress-tracking.md) | covered |
 | Exception Handling and Recovery | | [Exception Handling and Recovery Patterns](../agent-design/exception-handling-recovery-patterns.md) | covered |
 | Human-in-the-Loop | Gulli covers human-in-the-loop broadly; the site has a workflow page and a security-side confirmation-gates page. | [Human-in-the-Loop](../workflows/human-in-the-loop.md), [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md) | covered |
 | Knowledge Retrieval (RAG) | Gulli treats RAG as a single pattern; the site's canonical RAG page frames it as on-demand / JIT context retrieval (and declares "RAG" an explicit alias). | [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md) | covered |
+
+### Gulli's 7 Specialized patterns
+
+| Gulli's pattern | Scope difference | This site's canonical page | Status |
+|---|---|---|---|
 | Inter-Agent Communication (A2A) | | [A2A Protocol](../standards/a2a-protocol.md) | covered |
 | Resource-Aware Optimization | Gulli covers cost/latency optimisation generally; the site's coverage is the cost-aware-design page plus the routing page above. | [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) | covered |
 | Reasoning Techniques | Gulli covers chain-of-thought, ReAct, and tree-of-thoughts as reasoning patterns. The site treats reasoning as a cognitive-execution split plus a three-spaces decomposition. | [Cognitive Reasoning vs Execution Separation](../agent-design/cognitive-reasoning-execution-separation.md), [Three Reasoning Spaces](../agent-design/three-reasoning-spaces.md) | covered |

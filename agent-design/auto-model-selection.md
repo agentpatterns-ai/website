@@ -94,7 +94,7 @@ All four must hold, or the cheap default is a net loss:
 - Bounded rework cost. A cheap session that escalates costs 0.297 + 0.9 = 1.197 requests vs 0.9 for pinning Sonnet; above ~25% cheap-tier failure, the cheap default is the pricier one.
 - Picker exposed at the entrypoint. Model selection is supported only when assigning an issue to Copilot on GitHub.com, mentioning `@copilot` in a pull-request comment, or starting from the agents tab/panel, GitHub Mobile, or Raycast; "where a model picker is not available, Auto will be used automatically" ([GitHub Docs: Changing the AI model](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/changing-the-ai-model)).
 
-### Tiers and multiplier math
+## Tiers and multiplier math
 
 The cloud agent currently exposes Auto, Sonnet 4.5, Opus 4.7, Haiku 4.5, GPT-5.2-Codex, and GPT-5.4 mini.
 

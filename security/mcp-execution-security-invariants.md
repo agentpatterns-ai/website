@@ -84,3 +84,4 @@ Consider a confused-deputy attempt: a poisoned tool description asks the runtime
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — capability budgets intersected through composition, a data-flow control adjacent to source-and-target authorization
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — the coverage view of deny-path audit and gate-bypass failure modes
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — the principle behind metadata non-authority: runtime content informs but never authorizes
+- [MCP Approval-View Fidelity Gap and Unicode Concealment](mcp-metadata-approval-view-gap.md) — the upstream question these invariants assume away: whether the reviewer even sees the metadata the model reads

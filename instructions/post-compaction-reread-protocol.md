@@ -17,7 +17,7 @@ maturity: adopted
 
 Learn it hands-on with [The Re-read Protocol](https://learn.agentpatterns.ai/prompt-engineering/the-reread-protocol/), a guided lesson with quizzes.
 
-## Overview
+## Why compaction degrades rule fidelity
 
 When Claude Code [compacts](../context-engineering/context-compression-strategies.md) a long session, it summarizes older turns to free context space. The summary preserves task state — what was done, what remains — but paraphrases instruction file references, losing precision. The agent continues working with degraded rule fidelity rather than any visible error signal.
 
@@ -93,7 +93,7 @@ Note: `PostCompact` (added in [v2.1.76](https://github.com/anthropics/claude-cod
 | SessionStart hook (`compact` matcher) | Deterministic; stdout injected into context | Claude Code only; fires on session resume, not mid-session auto-compact |
 | Marker-based (PreCompact + UserPromptSubmit) | Fires mid-session for auto-compact; more granular control | More complex wiring; two hooks instead of one |
 
-## Diagram
+## The re-read sequence after compaction
 
 ```mermaid
 sequenceDiagram

@@ -8,6 +8,7 @@ tags:
   - human-factors
   - cost-performance
   - tool-agnostic
+  - arxiv
 last_reviewed: 2026-07-03
 maturity: emerging
 status: current

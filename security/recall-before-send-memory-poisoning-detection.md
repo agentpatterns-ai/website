@@ -82,6 +82,7 @@ An incident responder reads the ordering, not the payload, to tell a memory-pois
 ## Related
 
 - [Trojan Hippo: Dormant Memory Payloads Triggered by Sensitive Topics](trojan-hippo-memory-attack.md) — the memory-poisoning attack this signature detects
+- [Forged Reasoning Trace Attacks on Agent Memory (FARMA)](forged-reasoning-trace-memory-attack.md) — a memory attack this detector misses: forged reasoning traces sabotage a decision without any anomalous send to catch
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — adjacent trajectory-based control that enforces permitted sequences at runtime rather than detecting one attack
 - [Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls](mid-trajectory-guardrail-selection.md) — model-based complement when trajectory shapes drift beyond a fixed rule
 - [Oracle Poisoning: Knowledge Graph Corruption Against Tool-Using Agents](oracle-poisoning-knowledge-graph.md) — structurally similar data-path poisoning with the same provenance-blindness root cause

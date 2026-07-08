@@ -32,7 +32,7 @@ The refactor assumes your prototype's sub-tasks are loosely coupled and independ
 
 Unstructured decomposition is also worse than a monolith. Splitting into sub-agents without a defined topology — sequential, orchestrator-worker, or evaluator — amplifies errors because each agent's hallucinations feed the next. One analysis measured up to a 17.2× error multiplier in "bag of agents" systems ([Why Your Multi-Agent System Is Failing](https://towardsdatascience.com/why-your-multi-agent-system-is-failing-escaping-the-17x-error-trap-of-the-bag-of-agents/)).
 
-## The five-step checklist
+## Sequencing and schema-first outputs (steps 1-2)
 
 ```mermaid
 graph TD
@@ -59,6 +59,8 @@ Monolithic prototypes encode output shape in the prompt string: "Give me the ans
 Move the contract from natural language into a typed object the runtime validates. In the ADK refactor, Pydantic `BaseModel` classes were injected directly as schema definitions; [Vertex AI Structured Outputs](https://cloud.google.com/vertex-ai/docs/generative-ai/multimodal/configure-model-outputs) enforced adherence at runtime ([Google](https://developers.googleblog.com/production-ready-ai-agents-5-lessons-from-refactoring-a-monolith/)). The equivalent primitive exists across major providers — Anthropic's [structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs), OpenAI's JSON schema mode, and framework-level Pydantic support.
 
 The monolith's prompt-as-schema approach is the exact anti-pattern [Structured Output Constraints](../verification/structured-output-constraints.md) documents: without a machine-validatable contract, the agent can hedge, omit fields, or produce plausible-but-wrong shapes undetectably.
+
+## Dynamic context, observability, and circuit breakers (steps 3-5)
 
 ### 3. Replace hardcoded context with a dynamic retrieval pipeline
 

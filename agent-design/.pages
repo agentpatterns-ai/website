@@ -160,6 +160,7 @@ nav:
       - isometric-harness-ablation.md
       - lane-based-execution-queueing.md
       - managed-vs-self-hosted-harness.md
+      - local-model-viability-for-coding.md
       - multi-shape-byok-provider.md
       - observability-driven-harness-evolution.md
       - per-model-harness-tuning.md

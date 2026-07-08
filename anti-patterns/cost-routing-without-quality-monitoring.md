@@ -127,3 +127,4 @@ The cheap model surfaces its own uncertainty; the tier label propagates through 
 - [Density-Normalized Quality Metrics Mask AI-Driven Code Growth](density-normalized-quality-metric.md) — sibling measurement-architecture anti-pattern where a denominator masks the real signal
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](../token-engineering/cost-aware-agent-design.md) — the legitimate form of the same idea, with the eval-gated escalation pattern this page complements
 - [Gateway Model Routing](../agent-design/gateway-model-routing.md) — the infrastructure layer underneath; useful when paired with the per-tier observability this page argues for
+- [Cheaper-Per-Token Model Upgrades That Cost More Per Task](cheaper-per-token-costlier-per-task.md) — the sibling cost-signal trap: a leaderboard-and-price model swap that inflates effective per-task cost

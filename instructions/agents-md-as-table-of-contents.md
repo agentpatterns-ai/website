@@ -64,17 +64,19 @@ Practical approaches:
 
 The pointer map controls AGENTS.md size structurally. [Lifecycle metadata](rule-lifecycle-metadata.md) controls it over time — without it, the same one-way ratchet refills the file. The walkinglabs harness-engineering lecture names the failure mode directly: "agent makes a mistake, you say 'add a rule to prevent this,' add it to AGENTS.md, it works temporarily, agent makes a different mistake, add another rule, repeat, file bloats out of control" ([walkinglabs lecture 04](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md)). Each addition is one-way because no one can tell what is safe to delete.
 
-The discipline that closes the loop is per-rule metadata. The same lecture prescribes three fields for every rule:
+The discipline that closes the loop is per-rule metadata. The walkinglabs lecture prescribes three fields for every rule:
 
 - Source — "why was this rule added?" The failure mode, PR comment, or incident that produced it. Auditable provenance: `git blame` answers who and when, but not why.
 - Applicability — "when is this rule needed?" The condition under which it fires: file pattern, task type, branch — the same scoping axes covered in [layered instruction scopes](layered-instruction-scopes.md). Rules that "always apply" are usually misformed, because the failure mode being prevented has a scope.
 - Expiry — "under what circumstances can this rule be removed?" The observable that retires it: model capability rises, feature removed, never fires for N weeks.
 
-The framing the lecture uses: "Manage your instructions like you manage code dependencies — unused dependencies should be deleted, otherwise they just slow the system down." The metadata converts deletion from an open-ended judgment call into a closed-form predicate — has the expiry observable fired? With the predicate, the default flips from "keep when uncertain" to "delete when expired."
+## Expiry as a closed-form deletion predicate
+
+The framing the walkinglabs lecture uses: "Manage your instructions like you manage code dependencies — unused dependencies should be deleted, otherwise they just slow the system down." The metadata converts deletion from an open-ended judgment call into a closed-form predicate — has the expiry observable fired? With the predicate, the default flips from "keep when uncertain" to "delete when expired."
 
 Anthropic's own Claude Code best-practices teaches a compatible discipline without naming the triple: "Treat CLAUDE.md like code: review it when things go wrong, prune it regularly, and test changes by observing whether Claude's behavior actually shifts." and "If Claude already does something correctly without the instruction, delete it or convert it to a hook." ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). "Already does it correctly" is one expiry observable; "feature removed" and "never fired in N weeks" are others.
 
-### Compact format
+## Compact format for lifecycle metadata
 
 The metadata cannot itself bloat the file — that defeats the purpose. Keep it inline as a one-line YAML or HTML-comment annotation on terminal rules (rules that prescribe behavior). Pointers and structural sections do not need metadata; following the [separation of knowledge and execution](../agent-design/separation-of-knowledge-and-execution.md), the linked doc carries its own.
 
@@ -94,7 +96,7 @@ The metadata cannot itself bloat the file — that defeats the purpose. Keep it 
 
 The annotations are HTML comments so they render invisibly in GitHub previews but remain visible to agents reading the file. A quarterly audit script can grep for `expiry:` lines, evaluate the observable (was the migration flag added? did TypeDoc land?), and open a PR removing rules whose expiry has fired.
 
-### When to skip the metadata
+## When to skip the metadata
 
 The discipline pays off when ownership rotates and the rule set is large enough that no one carries the full provenance in their head. Skip the annotation overhead when:
 

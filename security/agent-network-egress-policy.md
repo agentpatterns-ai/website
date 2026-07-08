@@ -105,3 +105,4 @@ Denies override the `*.internal.corp.example` wildcard for two known-bad subdoma
 - [Selective Network Sandbox Mode](selective-network-sandbox-mode.md)
 - [MCP Runtime Control Plane](mcp-runtime-control-plane.md)
 - [Docker Sandbox Adoption for Agent Workloads](docker-sbx-adoption.md)
+- [Customer-Hosted MCP Tunnel: Outbound-Only Connectivity to Private MCP Servers](customer-hosted-mcp-tunnel.md) — outbound-only tunnelling that reaches private MCP servers without inbound ports, the same egress-constrained posture
