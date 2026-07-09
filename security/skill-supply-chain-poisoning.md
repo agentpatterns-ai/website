@@ -1,6 +1,7 @@
 ---
 title: "Skill Supply-Chain Poisoning"
 description: "Malicious skills injected into public registries exploit agent in-context learning to execute payloads hidden inside documentation examples — bypassing alignment that blocks explicit instruction injection."
+term: "Skill Supply-Chain Poisoning"
 tags:
   - security
   - agent-design

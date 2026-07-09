@@ -1,6 +1,7 @@
 ---
 title: "L3 → L5: Reaching Agent-First from a Brownfield Repo"
 description: "Transform an Agent-Operable codebase (L3) through Agent-Safe (L4) to Agent-First (L5) by adding evals, output validation gates, goal specifications, and agentic CI integration."
+term: "L3 to L5 Transition"
 tags:
   - training
   - agent-design

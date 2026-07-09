@@ -1,6 +1,7 @@
 ---
 title: "L2 → L3: Building Mechanical Enforcement for Agents"
 description: "Transform an Agent-Assisted codebase (L2) into an Agent-Operable one (L3) by adding mechanical enforcement: PreToolUse hooks, structured task definitions, and session scaffolding."
+term: "L2 to L3 Transition"
 tags:
   - training
   - agent-design

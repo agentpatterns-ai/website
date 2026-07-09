@@ -1,6 +1,7 @@
 ---
 title: "Agent-Powered Codebase Q&A and Onboarding Workflow"
 description: "A structured workflow for using agents to explore unfamiliar codebases through progressive Q&A, generate architecture docs, and compress onboarding."
+term: "Agent-Powered Codebase Q&A and Onboarding"
 tags:
   - workflows
   - context-engineering
@@ -68,17 +69,17 @@ Each answer builds your mental model. The agent cites specific files and functio
 
 ### Step 3: Progressive Q&A
 
-Move from architecture-level questions to implementation-level ones as your understanding deepens:
+Move from architecture-level questions to implementation-level ones, running commands like `git log --stat` alongside the agent as your understanding deepens:
 
 | Scope | Example questions |
 |-------|------------------|
 | Architecture | What are the main services? How do they communicate? |
 | Data model | What are the core domain entities? Where are they defined? |
 | Conventions | What test framework is used? Where do tests live? |
-| Build & deploy | How is the project built? What does the CI pipeline do? |
+| Build & deploy | What does the build script run? Which CI workflow, e.g. GitHub Actions, deploys it? |
 | Specific flows | What happens when a user submits an order? Trace the code path. |
 
-This mirrors how experienced developers onboard. They start with the big picture, then drill into the areas relevant to their first tasks.
+This mirrors how experienced developers onboard: start with the big picture, then drill into the areas relevant to the first task.
 
 ### Step 4: Generate architecture documentation
 
@@ -91,7 +92,7 @@ between services, and external dependencies.
 Format as a Markdown document with Mermaid diagrams.
 ```
 
-This produces a first draft that captures the agent's analysis of the codebase structure. Review and correct it -- the agent may miss business context or misinterpret naming conventions. The corrected version becomes a living document.
+This produces a first draft — say `docs/architecture.md` — that captures the agent's analysis of the codebase structure. Review and correct it -- the agent may miss business context or misinterpret naming conventions. The corrected version becomes a living document.
 
 ### Step 5: Feed back into instruction files
 

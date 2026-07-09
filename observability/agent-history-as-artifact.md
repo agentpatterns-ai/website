@@ -1,6 +1,7 @@
 ---
 title: "Agent Chat History as a First-Class Artifact"
 description: "Treat the chat database as queryable trace data, not chat archive — the same record that supports debugging also serves standup summaries, history-derived tips, and audit answers, with explicit privacy boundaries."
+term: "Agent Chat History"
 tags:
   - observability
   - workflows

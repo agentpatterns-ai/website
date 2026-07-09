@@ -1,6 +1,7 @@
 ---
 title: "Benchmark Contamination as Eval Risk"
 description: "Static benchmarks inflate model scores as training data overlaps with test sets — decontaminated evaluation pipelines use temporal filtering and continuous fresh task sourcing to restore honest measurement."
+term: "Benchmark Contamination"
 tags:
   - testing-verification
   - evals

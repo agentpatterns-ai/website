@@ -59,13 +59,15 @@ A companion setting, `worktree.symlinkDirectories`, symlinks large directories s
 | Write outside cone | Succeeds | File not present; write fails |
 | Startup time | Full checkout | Only listed paths written |
 
+Scoping reads this way mirrors the gains Microsoft measured when it moved the Windows repository onto a virtualized checkout: a clone that took almost 25 minutes dropped to about 70 seconds, a roughly 95% reduction, once redundant file reads were eliminated ([source](https://devblogs.microsoft.com/bharry/the-largest-git-repo-on-the-planet/)).
+
 The filesystem enforces the scope constraint, not the agent. The agent cannot widen its own view. It would need a new worktree with updated `sparsePaths`.
 
 ## When to use
 
 Use `worktree.sparsePaths` when:
 
-- The monorepo has more than a few thousand files, and agents show slow startup or noisy search results
+- The monorepo has more than a few thousand files, and agents show slow startup or noisy search results — Microsoft's Windows OS repository, for example, held about 3.5 million files across roughly 300GB, a scale documented in [Microsoft's account of moving it to Git](https://devblogs.microsoft.com/bharry/the-largest-git-repo-on-the-planet/)
 - Agent tasks stay within a known service or package
 - You want hard isolation, so agents physically cannot touch sibling services
 

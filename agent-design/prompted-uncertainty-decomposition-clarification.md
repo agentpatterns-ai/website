@@ -27,8 +27,8 @@ The decomposition replaces one scalar with two prompted scalars per step:
 
 | Scalar | Question to the model | Routes to |
 |---|---|---|
-| Action confidence | "How confident are you that this is the correct next action and arguments?" | Continue, reflect, or escalate to a stronger model — not the user |
-| Request uncertainty | "How confident are you that the user's request is unambiguous enough to act on?" | Ask the user when this drops below threshold |
+| `action_confidence` | "How confident are you that this is the correct next action and arguments?" | Continue, reflect, or escalate to a stronger model — not the user |
+| `request_uncertainty` | "How confident are you that the user's request is unambiguous enough to act on?" | Ask the user when this drops below threshold |
 
 Asking gates on the second scalar alone. Low action confidence with high request clarity means the agent is the bottleneck; asking the user buys nothing. High action confidence with low request clarity means the spec is the bottleneck; asking is the only fix.
 

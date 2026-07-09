@@ -1,5 +1,6 @@
 ---
 title: "Write Tool Descriptions as Agent Onboarding Documents"
+term: "Tool Descriptions as Onboarding Documents"
 description: "Write tool descriptions assuming the agent has never seen the system — include implicit context, query syntax, domain terms, and resource relationships."
 tags:
   - agent-design

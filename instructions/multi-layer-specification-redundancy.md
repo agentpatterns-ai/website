@@ -1,6 +1,7 @@
 ---
 title: "Multi-Layer Specification Redundancy as a Robustness Budget"
 description: "Independent specification layers — description, constraints, examples, format — absorb prompt noise that would otherwise degrade code-generation correctness; prose repetition does not."
+term: "Multi-Layer Specification Redundancy"
 tags:
   - instructions
   - testing-verification

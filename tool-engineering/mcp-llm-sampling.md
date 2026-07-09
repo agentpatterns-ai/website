@@ -43,14 +43,14 @@ Two constraints apply regardless of server preferences:
 
 ## When to use sampling
 
-Sampling is appropriate when a tool encounters output that requires reasoning to interpret or act on:
+Sampling suits tools that need judgment, not just deterministic logic, to interpret their own output:
 
-- Unstructured output interpretation — a fetch tool retrieves a web page, and sampling classifies its content before deciding what to return
-- Decision points in multi-step execution — a build tool reads compiler errors, and sampling decides which are actionable and summarizes them
-- Summary generation — a research tool collects raw results, and sampling produces a structured synthesis before returning to the agent
-- Conditional branching — a monitoring tool reads log output, and sampling decides which alert category applies
+- Unstructured output interpretation — a fetch tool classifies a web page before returning it
+- Decision points in multi-step execution — a build tool decides which compiler errors are actionable
+- Summary generation — a research tool synthesizes raw results before returning them
+- Conditional branching — a monitoring tool decides which alert category a log line falls into
 
-The difference from plain tool logic is this: these decisions benefit from language model reasoning rather than rules-based code. Sampling routes that reasoning through the host model, so the server does not need to embed its own LLM client.
+These are judgment calls, not rules-based branches, so sampling routes them through the host model rather than requiring the server to embed its own LLM client (see the `sampling/createMessage` example below).
 
 ## Trade-offs
 

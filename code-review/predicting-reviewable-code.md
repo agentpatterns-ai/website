@@ -1,6 +1,7 @@
 ---
 title: "Predicting Reviewable Code: Pre-Flagging Functions Reviewers Will Delete"
 description: "Identify AI-generated functions likely to be deleted before PR review using structural analysis of call graphs and spec coverage."
+term: "Predicting Reviewable Code"
 tags:
   - testing-verification
   - human-factors

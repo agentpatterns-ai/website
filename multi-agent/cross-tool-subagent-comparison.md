@@ -1,6 +1,7 @@
 ---
 title: "Cross-Tool Subagent Comparison"
 description: "Three terminal agents now ship subagents as a first-class primitive — side-by-side on definition format, context isolation, tool scoping, and composition."
+term: "Cross-Tool Subagent Comparison"
 tags:
   - multi-agent
   - agent-design

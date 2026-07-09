@@ -1,6 +1,7 @@
 ---
 title: "Enforcing Agent Behavior with Hooks"
 description: "Move critical behavioral rules out of prompts and into deterministic shell hooks that the model cannot override — blocking forbidden actions, rewriting inputs, and gating task completion."
+term: "Enforcing Agent Behavior with Hooks"
 tags:
   - instructions
   - agent-design

@@ -1,6 +1,7 @@
 ---
 title: "Codebase-Derived Pattern Libraries as Agent Context"
 description: "Mine your own repositories for proven implementations and serve them to an agent as intent-searchable context instead of generic public examples."
+term: "Codebase-Derived Pattern Libraries"
 aliases:
   - "personal pattern library"
   - "codebase pattern retrieval"

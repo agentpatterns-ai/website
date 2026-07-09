@@ -1,6 +1,7 @@
 ---
 title: "Production System Prompt Architecture and Techniques"
 description: "Structural patterns from a 102K-char production system prompt: XML-sectioned concern isolation, skills registries, and deferred tool loading."
+term: "Production System Prompt Architecture"
 tags:
   - instructions
   - context-engineering

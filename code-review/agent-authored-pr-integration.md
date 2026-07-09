@@ -1,6 +1,7 @@
 ---
 title: "Agent-Authored PR Integration: Collaboration Signals That Determine Merge Success"
 description: "Reviewer engagement — not code correctness or iteration count — is the strongest predictor of whether an agent-authored PR gets merged."
+term: "Agent-Authored PR Integration"
 tags:
   - human-factors
   - agent-design

@@ -1,6 +1,7 @@
 ---
 title: "Per-Call Budget Hints on Tool Invocations"
 description: "Let the caller lift the reasoning or returned-token cap on individual tool calls — narrowly, when the call is infrequent and information-dense — rather than re-tuning the global default."
+term: "Per-Call Budget Hints on Tool Invocations"
 tags:
   - agent-design
   - cost-performance

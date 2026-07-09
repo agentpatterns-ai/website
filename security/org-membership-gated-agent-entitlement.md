@@ -1,6 +1,7 @@
 ---
 title: "Org-Membership-Gated Agent Entitlement"
 description: "Gate AI chat activation on directory-managed GitHub organization membership, not seat licences alone — a fail-closed device policy that ties entitlement to identity rather than installation."
+term: "Org-Membership-Gated Agent Entitlement"
 aliases:
   - org-gated agent entitlement
   - approved account organizations policy

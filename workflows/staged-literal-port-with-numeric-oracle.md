@@ -1,6 +1,7 @@
 ---
 title: "Staged Literal Porting with a Per-Stage Numeric Oracle"
 description: "Split an LLM-assisted port into a numerics stage and a parallelism stage, forbid the assistant from improving the source, and gate each stage on a numeric oracle drawn from the prior version's output."
+term: "Staged Literal Port with Numeric Oracle"
 tags:
   - workflows
   - agent-design

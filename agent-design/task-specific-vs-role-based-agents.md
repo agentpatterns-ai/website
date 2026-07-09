@@ -1,6 +1,7 @@
 ---
 title: "Task-Specific Agents vs Role-Based Agents"
 description: "Build agents for specific tasks rather than generic roles — narrow scope produces more precise output and reduces context confusion."
+term: "Task-Specific Agents"
 tags:
   - agent-design
   - tool-agnostic

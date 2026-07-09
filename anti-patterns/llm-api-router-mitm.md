@@ -1,5 +1,6 @@
 ---
 title: "LLM API Routers as Application-Layer Man-in-the-Middle"
+term: "LLM API Router MITM"
 description: "An LLM API router terminates client TLS and holds every prompt and tool call in plaintext — treat it as a privileged tier in your threat model, not as benign infrastructure."
 tags:
   - anti-pattern

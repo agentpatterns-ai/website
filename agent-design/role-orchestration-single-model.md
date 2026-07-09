@@ -1,6 +1,7 @@
 ---
 title: "Role Orchestration on a Single Model"
 description: "Invoke the same frozen small model in three distinct roles — summariser, agent, corrector — to roughly double task-goal completion on constrained hardware without additional training."
+term: "Role Orchestration on a Single Model"
 tags:
   - agent-design
   - context-engineering

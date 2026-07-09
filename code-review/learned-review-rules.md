@@ -1,6 +1,7 @@
 ---
 title: "Self-Improving Code Review Agents — Learned Rules"
 description: "Code review agents that extract rules from accepted and rejected PR feedback, applying them to future reviews automatically — demonstrated by Cursor's Bugbot."
+term: "Learned Review Rules"
 tags:
   - code-review
   - cursor

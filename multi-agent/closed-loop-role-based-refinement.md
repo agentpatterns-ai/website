@@ -28,7 +28,7 @@ Single-loop patterns like the [agentic flywheel](../agent-design/agentic-flywhee
 
 ## Five-role decomposition
 
-Each role maps to a stage in the improvement loop, but with explicit contracts that prevent scope bleed:
+Each role maps to a stage in the improvement loop, mirroring [AutoContext](https://github.com/greyhaven-ai/autocontext)'s implementation, but with explicit contracts that prevent scope bleed:
 
 ```mermaid
 graph LR

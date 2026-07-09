@@ -1,6 +1,7 @@
 ---
 title: "Model Confidence as Security Verification (Security Calibration Gap)"
 description: "Treating a model's own confidence in its generated code as evidence the code is secure — confidence does not track security, so use it for review triage, never as a deployment gate."
+term: "Model Confidence as Security Verification"
 tags:
   - anti-pattern
   - security

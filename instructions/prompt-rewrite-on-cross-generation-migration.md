@@ -1,6 +1,7 @@
 ---
 title: "Prompt-Rewrite Discipline on Cross-Generation Model Migration"
 description: "On cross-generation model hops, discard the inherited prompt stack, start from the smallest prompt that preserves the product contract, and re-tune reasoning effort, verbosity, tool descriptions, and output format against representative examples."
+term: "Prompt-Rewrite Discipline on Cross-Generation Model Migration"
 tags:
   - instructions
   - workflows

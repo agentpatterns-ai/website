@@ -1,6 +1,7 @@
 ---
 title: "Protecting Sensitive Files from Agent Context Access"
 description: "Use permission rules and hooks to prevent agents from reading credentials and secrets, even when those files are present in the working directory."
+term: "Protecting Sensitive Files"
 tags:
   - agent-design
   - instructions

@@ -1,6 +1,7 @@
 ---
 title: "Always-On Agentic PR Security Review"
 description: "A two-agent operational pattern that pairs a PR-time security reviewer with a scheduled vulnerability scanner — covering both new and resident risk on different cadences."
+term: "Always-On Agentic PR Security Review"
 tags:
   - security
   - code-review

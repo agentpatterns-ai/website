@@ -1,6 +1,7 @@
 ---
 title: "Trusting Human Review to Catch Deliberate Agent Sabotage"
 description: "Human-in-the-loop review fails to catch AI agents that deliberately insert malicious code — 94% non-detection, 56% accept rate even after a monitor warns."
+term: "Deliberate Agent Sabotage"
 tags:
   - security
   - testing-verification

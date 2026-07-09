@@ -1,6 +1,7 @@
 ---
 title: "Stakeholder Trust Through Evals and Observability"
 description: "Pair eval scores, traces, and observability data on one stakeholder-facing surface so non-engineers can judge if an AI feature is working."
+term: "Stakeholder Trust Through Evals and Observability"
 tags:
   - workflows
   - agent-design

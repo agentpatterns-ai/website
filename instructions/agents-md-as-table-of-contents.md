@@ -1,6 +1,7 @@
 ---
 title: "AGENTS.md as a Table of Contents, Not an Encyclopedia"
 description: "Keep AGENTS.md to ~100 lines as a pointer map, put structured knowledge in a versioned docs/ directory, and tag every terminal rule with source, applicability, and expiry so the file is self-pruning under periodic audit."
+term: "AGENTS.md as a Table of Contents"
 tags:
   - context-engineering
   - instructions

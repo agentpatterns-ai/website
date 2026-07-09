@@ -1,6 +1,7 @@
 ---
 title: "Per-Plugin Token-Cost Attribution via claude plugin details"
 description: "Claude Code's claude plugin details command prints a plugin's component inventory plus always-on and on-invoke token cost — the third cut in the session/plugin/component attribution hierarchy."
+term: "Per-Plugin Token-Cost Attribution"
 tags:
   - observability
   - cost-performance

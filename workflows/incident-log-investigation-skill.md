@@ -104,22 +104,22 @@ Precision is the core quality metric. An eval suite that tests whether the skill
 
 ### Building the test set
 
-Hold out a set of known incidents with verified root causes. For each:
+Hold out a set of known incidents with verified root causes, each recorded against the same `service`/`window` fields the queries use:
 
-- Record the incident description, affected service, and time window used as input
-- Record the ground-truth root-cause signal (the log line, trace ID, or metric spike that explains the incident)
-- Optionally record known red herrings — correlated-but-unrelated signals that should not be surfaced
+- Incident description, affected `service`, and time `window` used as input
+- Ground-truth root-cause signal: the log line, trace ID, or metric spike that explains the incident
+- Optional known red herrings — correlated-but-unrelated signals that should not be surfaced
 
 ### Metrics
 
 | Metric | What it measures |
 |--------|-----------------|
-| Precision | Fraction of surfaced signals that are correct root-cause evidence |
-| Recall | Fraction of ground-truth signals actually surfaced |
+| `precision` | Fraction of surfaced signals that are correct root-cause evidence |
+| `recall` | Fraction of ground-truth signals actually surfaced |
 | Tool call count | Efficiency; high count signals the skill is fetching broadly and discarding |
 | Token consumption | Context cost per investigation |
 
-High tool call counts are the clearest sign that the skill is not filtering effectively — it is fetching everything and relying on the model to discard irrelevant results. [Source: [Eval-Driven Development for tool building](eval-driven-development.md#applying-the-loop-to-tool-building)]
+A high tool call count is the clearest sign the skill isn't filtering: it's fetching everything and relying on the model to discard irrelevant results. [Source: [Eval-Driven Development for tool building](eval-driven-development.md#applying-the-loop-to-tool-building)]
 
 ### Anti-reward-hacking grader
 

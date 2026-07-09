@@ -1,6 +1,7 @@
 ---
 title: "Behavioral Drivers of Coding Agent Success and Failure"
 description: "Four observable failure clusters and three behavioral patterns that predict coding agent success — derived from analysis of 9,374 trajectories across 19 agents and 14 LLMs."
+term: "Behavioral Drivers of Coding Agent Success and Failure"
 tags:
   - agent-design
   - observability
@@ -36,7 +37,7 @@ Trajectories group into four failure modes:
 | Patch generation | Identifies the correct location but produces an incorrect fix | Correct file targeted; implementation breaks adjacent tests |
 | Verification | Applies a plausible patch without confirming it resolves the issue | No test run after patch; PR opened with untested changes |
 
-Framework-level failures concentrate in reproduction and verification — the first and last steps. Model capability matters most for localization and patch generation.
+Framework-level failures concentrate in reproduction and verification — the first and last steps ([arXiv:2604.02547](https://arxiv.org/abs/2604.02547)). Model capability matters most for localization and patch generation.
 
 ## Three behavioral predictors of success
 

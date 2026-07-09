@@ -1,6 +1,7 @@
 ---
 title: "Code Interpreter as a Primary Agent Tool"
 description: "Expose a sandboxed interpreter as a default tool for multi-step structured-data work — bounded through capability bridges, output caps, and explicit threat modeling."
+term: "Code Interpreter"
 tags:
   - agent-design
   - tool-engineering

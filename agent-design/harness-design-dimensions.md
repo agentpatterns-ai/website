@@ -1,6 +1,7 @@
 ---
 title: "Harness Design Dimensions and Archetypes"
 description: "Five design dimensions and five archetypes derived from 70 agent-system projects — a population-level lens for characterising harness choices."
+term: "Harness Design Dimensions"
 tags:
   - agent-design
   - tool-agnostic

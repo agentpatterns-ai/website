@@ -8,7 +8,7 @@ aliases:
 tags:
   - instructions
   - tool-agnostic
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-09
 maturity: adopted
 ---
 
@@ -34,6 +34,8 @@ Replacement targets the agent's identity layer — its assumptions about domain,
 Replaced: persona framing, domain assumptions, task prioritization, interaction patterns, response formatting, coding-specific verification instructions.
 
 Preserved: file system operations, script execution, sub-agent delegation, [MCP integrations](../tools/copilot/mcp-integration.md), context management ([Source: Claude Code output styles docs](https://code.claude.com/docs/en/output-styles)).
+
+Claude Code ships three built-in output styles beyond Default — Proactive, Explanatory, and Learning — and each one demonstrates the same swap: only the persona layer changes, while every preserved capability above stays available ([Source: Claude Code output styles docs](https://code.claude.com/docs/en/output-styles)).
 
 This separation works because tools are registered independently of the system prompt. The system prompt shapes how the agent reasons about tasks; the tools determine what actions it can take. A content strategist persona still reads files, runs scripts, and delegates to sub-agents — it just reasons about brand voice instead of code quality.
 
@@ -95,7 +97,7 @@ The technique generalizes beyond Claude Code. Any agent platform with a configur
 
 - Lost safety guardrails. The default prompt includes security and safety instructions. Full replacement in the SDK means you re-add these by hand — the [Agent SDK docs](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts) confirm that custom `systemPrompt` strings lose both default tools and built-in safety, while output styles and `systemPrompt` with `append` preserve both. [Claude Code output styles](https://code.claude.com/docs/en/output-styles) replace coding-specific instructions while keeping the underlying tool set and safety guardrails.
 - Tool misuse without domain framing. An agent with file system access but no coding heuristics may use tools in unexpected ways. Domain-specific tool guidance in the replacement prompt reduces this.
-- Maintenance burden. A custom system prompt does not gain from upstream improvements to the default prompt, and each model generation can shift its behavior — see [prompt rewrite on cross-generation migration](prompt-rewrite-on-cross-generation-migration.md). Each platform update means you review and may update the replacement prompts.
+- Maintenance burden. A custom system prompt does not gain from upstream improvements to the default prompt, and each model generation can shift its behavior — see [prompt rewrite on cross-generation migration](prompt-rewrite-on-cross-generation-migration.md). Each platform update means you review and may update the replacement prompts: Claude Code's own output-style tooling changed within a single release cycle, deprecating the standalone `/output-style` command in v2.1.73 and removing it by v2.1.91 in favor of `/config` ([Source: Claude Code output styles docs](https://code.claude.com/docs/en/output-styles)).
 
 ## Key Takeaways
 

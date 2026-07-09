@@ -69,7 +69,7 @@ Layer schema validation with other defenses:
 
 ### Diff-based auditing
 
-Log raw tool responses and the model's presented version, then flag any discrepancy automatically:
+Log raw MCP tool responses and the model's presented version, then flag any discrepancy automatically:
 
 ```mermaid
 graph TD

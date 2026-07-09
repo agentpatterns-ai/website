@@ -1,6 +1,7 @@
 ---
 title: "Agent-Proposed Merge Resolution"
 description: "A merge conflict interaction contract where an agent resolves the conflict in a sandbox and the human confirms the result in a small number of clicks."
+term: "Agent-Proposed Merge Resolution"
 tags:
   - code-review
   - workflows

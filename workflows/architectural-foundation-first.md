@@ -1,6 +1,7 @@
 ---
 title: "Lay the Architectural Foundation by Hand Before Delegating"
 description: "Build the structural skeleton and a few representative features yourself before handing a project to an agent — the foundation is the primary investment that makes large-scale delegation safe."
+term: "Architectural Foundation First"
 tags:
   - context-engineering
   - agent-design

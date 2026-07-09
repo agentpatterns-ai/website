@@ -1,12 +1,15 @@
 ---
 title: "LLM-as-Judge Evaluation with Human Spot-Checking"
 description: "Combine automated LLM rubric scoring with targeted human review to evaluate multi-agent output at scale without sacrificing quality on edge cases."
+term: "LLM-as-Judge Evaluation"
 tags:
   - testing-verification
   - tool-agnostic
   - workflows
   - agent-design
   - evals
+aliases:
+  - model-graded evaluation
 last_reviewed: 2026-06-12
 maturity: established
 ---

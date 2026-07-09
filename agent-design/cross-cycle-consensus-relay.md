@@ -1,6 +1,7 @@
 ---
 title: "Cross-Cycle Consensus Relay"
 description: "A structured relay document that agents read at cycle start and write at cycle end, preserving decisions and forward momentum across multi-session autonomous loops."
+term: "Cross-Cycle Consensus Relay"
 tags:
   - agent-design
   - memory

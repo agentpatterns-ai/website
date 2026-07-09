@@ -1,6 +1,7 @@
 ---
 title: "Selective Autonomy from Copilot Feedback"
 description: "Train a critic on operator accept/correct signals to decide when an agent acts and when it defers — selective classification applied to action policies."
+term: "Selective Autonomy from Copilot Feedback"
 tags:
   - agent-design
   - human-factors

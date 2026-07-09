@@ -1,6 +1,7 @@
 ---
 title: "Harness Bug Detection Patterns"
 description: "Three harness-layer detection gaps — idle-state evals, internal-versus-public build parity, and per-model ablation — drawn from Anthropic's April 2026 Claude Code postmortem."
+term: "Harness Bug Detection Patterns"
 tags:
   - observability
   - testing-verification

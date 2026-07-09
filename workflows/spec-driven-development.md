@@ -1,6 +1,7 @@
 ---
 title: "Spec-Driven Development with Spec Kit"
 description: "Externalize project intent as a Markdown specification that agents compile into code, making the spec — not chat history — the persistent source of truth."
+term: "Spec-Driven Development"
 aliases:
   - specification-driven development
 tags:

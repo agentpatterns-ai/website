@@ -28,7 +28,7 @@ Expert architects carry hundreds of interconnected constraints simultaneously --
 
 AI capability maps inversely to the [complexity of context required](../context-engineering/context-engineering.md). Standard engineering tasks -- well-documented, pattern-matchable, bounded in scope -- succeed reliably. Expert architecture tasks -- requiring simultaneous awareness of organizational, regulatory, and technical context -- fail systematically.
 
-This is not theoretical. A METR RCT (2025) measured 16 experienced developers across 246 tasks -- they were 19% slower with AI assistance yet predicted a 24% speedup and believed they had achieved a 20% speedup ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Noy and Zhang (2023) found AI raised overall productivity 40%, but lower-performing workers benefited disproportionately while top performers saw diminishing returns. <!-- Noy, S. and Zhang, W. (2023). Experimental evidence on the productivity effects of generative artificial intelligence. Science, 381(6654). -->
+This is not theoretical. A METR RCT (2025) measured 16 experienced developers across 246 tasks -- they were 19% slower with AI assistance yet predicted a 24% speedup and believed they had achieved a 20% speedup ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Noy and Zhang (2023) found AI raised overall productivity 40%, but lower-performing workers benefited disproportionately while top performers saw diminishing returns.
 
 ```mermaid
 graph LR
@@ -42,7 +42,7 @@ graph LR
 
 | Task type | Context required | AI capability |
 |---|---|---|
-| Boilerplate generation | Language docs, common patterns | High -- well within context limits |
+| Boilerplate generation | Language docs (e.g., `Python`, `TypeScript` conventions), common patterns | High -- well within context limits |
 | Module-level design | Codebase conventions, team standards | Moderate -- fits with good instruction files |
 | System integration | Cross-service dependencies, deployment constraints | Low -- context starts exceeding effective window |
 | Enterprise architecture | Regulations, politics, legacy systems, vendor constraints, organizational history | Fails -- context volume exceeds any window |

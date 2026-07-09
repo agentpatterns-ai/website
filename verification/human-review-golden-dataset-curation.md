@@ -1,6 +1,7 @@
 ---
 title: "Human-Review-Driven Curation of Golden Eval Datasets"
 description: "Run a structured human-review loop over sampled production traces so LLM-judge drift, scorer rubric errors, and silent failure modes get caught before the golden eval set rots against a moving production distribution."
+term: "Human-Review-Driven Curation of Golden Eval Datasets"
 tags:
   - testing-verification
   - evals
@@ -59,7 +60,7 @@ This distinction separates this pattern from generic "human-in-the-loop." When a
 | The scorer was wrong | The agent was wrong |
 |---|---|
 | Judge rubric missed an edge case, applied a bias, or scored an acceptable rephrasing as a failure | Agent produced a hallucinated, mis-formatted, or off-policy output |
-| Fix: rewrite the judge prompt or rubric; do not add to the golden set | Fix: add as a labeled failure case in the golden set; do not modify the judge rubric |
+| Fix: rewrite the judge prompt or rubric; do not add to the `golden set` | Fix: add as a labeled failure case in the golden set; do not modify the judge rubric |
 | Re-run the updated judge against the held-out slice; verify the rewrite did not regress other cases | Tracks as a regression case in CI; gates future deploys against the same failure mode |
 
 Skipping the split poisons the suite. The same trace ends up both grading the agent and tuning the judge — benchmark contamination at the data-prep stage ([benchmark contamination](benchmark-contamination-eval-risk.md)). Scores improve while real users churn — Goodhart's Law applied to evals ([Future AGI](https://futureagi.com/blog/llm-as-judge-best-practices-2026)).

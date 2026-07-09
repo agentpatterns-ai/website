@@ -1,6 +1,7 @@
 ---
 title: "Adaptive Generate-Rank-Verify Under Costly Verification"
 description: "Generate cheaply, rank with a cheap signal, spend the expensive verifier only on the top of the ranking under a doubling schedule when verification dominates cost."
+term: "Adaptive Generate-Rank-Verify"
 tags:
   - agent-design
   - cost-performance

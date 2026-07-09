@@ -1,6 +1,7 @@
 ---
 title: "L0 → L1: Making the Repo Readable"
 description: "Transform a Human-Only codebase (L0) into an Agent-Readable one (L1) by externalizing implicit knowledge: project instructions, documented architecture, and a CI baseline."
+term: "L0 → L1"
 tags:
   - training
   - agent-design

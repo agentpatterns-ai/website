@@ -1,6 +1,7 @@
 ---
 title: "Project Instruction File Ecosystem"
 description: "CLAUDE.md, copilot-instructions.md, and AGENTS.md all carry project context for AI tools but differ in discovery and scope. Convergence strategy prevents drift."
+term: "Project Instruction File Ecosystem"
 aliases:
   - Instruction File Convention
   - Project Instruction Files

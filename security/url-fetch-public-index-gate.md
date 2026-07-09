@@ -1,6 +1,7 @@
 ---
 title: "Use a Public-Web Index to Gate Automatic URL Fetching"
 description: "Cross-reference URLs against a public-web crawl index before fetching — URLs absent from the index may encode user-specific data and require manual approval."
+term: "Public-Web Index Gate"
 tags:
   - agent-design
   - instructions

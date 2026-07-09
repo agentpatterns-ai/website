@@ -27,10 +27,10 @@ Each persona defines the support level the learner receives from the instructor 
 
 | Persona | Support level | Learner role |
 |---------|---------------|--------------|
-| Guide | Direct instruction and worked examples | Follows the path; questions for clarification |
-| Collaborator | Joint problem-solving; shared authorship | Proposes moves; instructor refines |
-| Peer | Suggestions on request; learner leads | Makes the decisions; instructor reviews |
-| Launcher | Minimal intervention; available on exception | Operates independently; asks only when stuck |
+| `Guide` | Direct instruction and worked examples | Follows the path; questions for clarification |
+| `Collaborator` | Joint problem-solving; shared authorship | Proposes moves; instructor refines |
+| `Peer` | Suggestions on request; learner leads | Makes the decisions; instructor reviews |
+| `Launcher` | Minimal intervention; available on exception | Operates independently; asks only when stuck |
 
 The sequence is an explicit instantiation of Vygotsky's Zone of Proximal Development — scaffolding operates at the edge of current ability and fades as competence builds ([Tool, tutor, or crutch? 2025](https://link.springer.com/article/10.1186/s40594-025-00592-w)). The same mechanism underpins [deliberate AI-assisted learning](deliberate-ai-learning.md).
 

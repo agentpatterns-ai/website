@@ -1,6 +1,7 @@
 ---
 title: "Domain-Specific Agent Challenges"
 description: "Agent effectiveness varies by domain. Each domain imposes distinct constraints that require different configurations, verification, and autonomy levels."
+term: "Domain-Specific Agent Challenges"
 tags:
   - agent-design
   - tool-agnostic

@@ -1,6 +1,7 @@
 ---
 title: "Usability Pressure as a Silent Security-Regression Vector"
 description: "Explicit usability requirements in a coding prompt — performance, simplicity, new features — cause LLMs to silently drop implicit security constraints in a single generation, at attack success rates up to 98.1%."
+term: "Usability Pressure"
 tags:
   - security
   - instructions

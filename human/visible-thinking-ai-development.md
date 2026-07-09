@@ -5,7 +5,7 @@ tags:
   - human-factors
   - workflows
   - tool-agnostic
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-09
 maturity: adopted
 ---
 
@@ -15,7 +15,7 @@ maturity: adopted
 
 ## The shift
 
-AI coding tools compress the time between idea and implementation. Code production is no longer the bottleneck. What stays scarce is the reasoning trail — why you made a decision, what alternatives you considered, what constraints shaped the solution. This is the same replayable record that [trajectory logging](../observability/trajectory-logging-progress-files.md) captures from agent runs.
+AI coding tools compress the time between idea and implementation: in a controlled GitHub study, developers using Copilot finished the same task in an average of 1 hour 11 minutes, against 2 hours 41 minutes without it — 55% faster ([GitHub: Quantifying GitHub Copilot's Impact on Developer Productivity and Happiness](https://github.blog/news-insights/research/research-quantifying-github-copilots-impact-on-developer-productivity-and-happiness/)). Code production is no longer the bottleneck. What stays scarce is the reasoning trail — why you made a decision, what alternatives you considered, what constraints shaped the solution. This is the same replayable record that [trajectory logging](../observability/trajectory-logging-progress-files.md) captures from agent runs.
 
 Visible thinking means documenting intent and rationale across the development lifecycle. It makes work reviewable, maintainable, and trustworthy. GitHub puts it directly: "Speed and control aren't trade-offs. They reinforce each other" ([GitHub Blog: Speed Is Nothing Without Control](https://github.blog/ai-and-ml/generative-ai/speed-is-nothing-without-control-how-to-keep-quality-high-in-the-ai-era/)).
 
@@ -59,7 +59,7 @@ Save prompts alongside code — in commit messages, PR descriptions, or instruct
 ## Anti-patterns
 
 - Accepting defaults: merging AI-generated commits and PRs without editing their messages throws away the chance to document reasoning.
-- Reasoning-free velocity: shipping code faster without documenting why you built it that way creates a codebase that is fast to produce and slow to maintain.
+- Reasoning-free velocity: shipping code faster without documenting why you built it that way creates a codebase that is fast to produce and slow to maintain. The same GitHub study found task completion rates rose from 70% to 78% with Copilot ([GitHub: Quantifying GitHub Copilot's Impact on Developer Productivity and Happiness](https://github.blog/news-insights/research/research-quantifying-github-copilots-impact-on-developer-productivity-and-happiness/)) — a gain in whether the code shipped, not in whether anyone could later explain why it was built that way.
 - Opaque agent sessions: running agents without recording the prompts, constraints, or goals that shaped the output makes the work unreviewable after the fact.
 
 ## Example

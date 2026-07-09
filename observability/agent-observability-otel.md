@@ -1,6 +1,7 @@
 ---
 title: "Agent Observability with OpenTelemetry and Trajectory Logging"
 description: "Wire up OpenTelemetry on Claude Code, add LangSmith trajectory tracing, and build audit trails that survive context resets — for cost visibility and compliance."
+term: "Agent Observability"
 tags:
   - agent-design
   - workflows

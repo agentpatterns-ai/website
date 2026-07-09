@@ -1,6 +1,7 @@
 ---
 title: "Live Browser as Agent Context Channel"
 description: "Subscribe an agent to the developer's running browser tabs as live context — lower friction than copy-paste, but the developer's logged-in session enters the indirect-injection blast radius."
+term: "Live Browser Context Channel"
 aliases:
   - shared browser tab context
   - live browser tab sharing

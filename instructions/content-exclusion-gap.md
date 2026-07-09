@@ -7,7 +7,7 @@ tags:
   - instructions
   - copilot
   - security
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-09
 maturity: emerging
 ---
 
@@ -17,13 +17,13 @@ maturity: emerging
 
 ## The gap
 
-GitHub Copilot's [content exclusion feature](https://docs.github.com/en/copilot/managing-copilot/managing-github-copilot-in-your-organization/configuring-content-exclusions-for-github-copilot) lets organizations name files that Copilot should ignore. When exclusions are active, Copilot suppresses inline code suggestions in excluded files, and Copilot Chat cannot use those files to generate responses.
+GitHub Copilot's [content exclusion feature](https://docs.github.com/en/copilot/managing-copilot/managing-github-copilot-in-your-organization/configuring-content-exclusions-for-github-copilot) lets organizations name files that Copilot should ignore. When exclusions are active, Copilot suppresses inline code suggestions in excluded files, and Copilot Chat cannot use those files to generate responses. Even then, a change to an exclusion rule can take up to 30 minutes to reach an IDE that already has settings loaded ([GitHub Docs: Configuring content exclusions for GitHub Copilot](https://docs.github.com/en/copilot/managing-copilot/managing-github-copilot-in-your-organization/configuring-content-exclusions-for-github-copilot)), so a newly excluded file stays reachable for a window after the rule changes.
 
 These exclusions [do not apply to](https://docs.github.com/en/copilot/managing-copilot/managing-github-copilot-in-your-organization/configuring-content-exclusions-for-github-copilot):
 
 - [Agent mode](../tools/copilot/agent-mode.md) in Copilot Chat (IDEs)
 - GitHub Copilot CLI
-- Copilot coding agent
+- Copilot coding agent, which entered public preview on May 19, 2025 ([GitHub Changelog: GitHub Copilot coding agent in public preview](https://github.blog/changelog/2025-05-19-github-copilot-coding-agent-in-public-preview/))
 
 You exclude a file from completions and chat because it holds secrets, proprietary logic, or compliance-sensitive data. That file stays fully accessible when an agent reads the repository to plan and run tasks.
 

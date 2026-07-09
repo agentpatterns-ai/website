@@ -1,6 +1,7 @@
 ---
 title: "How AI Engines Cite — ChatGPT, Perplexity, Claude, Gemini"
 description: "Platform-by-platform breakdown of how the major AI answer engines retrieve, evaluate, and select their sources for citation."
+term: "How AI Engines Cite"
 tags:
   - geo
   - technique

@@ -1,6 +1,7 @@
 ---
 title: "LLM Static Verification Against Natural-Language Requirements"
 description: "A two-stage rule-miner + code-auditor LLM workflow for checking code against a natural-language spec — only with structured extraction and a human gate."
+term: "LLM Static Verification Against Natural-Language Requirements"
 tags:
   - testing-verification
   - workflows

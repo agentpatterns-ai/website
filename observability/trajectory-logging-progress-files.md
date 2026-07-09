@@ -1,6 +1,7 @@
 ---
 title: "Trajectory Logging via Progress Files and Git History"
 description: "Capture a replayable audit trail of agent decisions across sessions using progress files, git commits, and feature-state JSON — no observability backend required."
+term: "Trajectory Logging"
 tags:
   - agent-design
   - workflows

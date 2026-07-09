@@ -1,6 +1,7 @@
 ---
 title: "Sensitive Terminal Prompt Interception"
 description: "Intercept password and verification-code prompts inside the terminal so an agent never sees the secret — confirm in default mode, cancel in auto-approve mode."
+term: "Sensitive Terminal Prompt Interception"
 tags:
   - security
   - tool-agnostic

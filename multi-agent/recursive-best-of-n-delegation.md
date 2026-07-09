@@ -1,6 +1,7 @@
 ---
 title: "Recursive Best-of-N Delegation"
 description: "Run K parallel candidate workers at each recursion node and select the best result via a judge before the parent consumes it — preventing error compounding in recursive agent trees."
+term: "Recursive Best-of-N Delegation"
 tags:
   - multi-agent
   - agent-design

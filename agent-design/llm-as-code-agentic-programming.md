@@ -46,7 +46,7 @@ graph TD
     B --> B1[LLM call B1<br>sees: M, B]
 ```
 
-Under LLM-as-orchestrator, the equivalent diagram would carry M, A, B, and every prior call's tool outputs into every node — context grows with the sequence, not the depth. This asymmetry removes the "context bloat scales with steps" failure mode that the paper names as architectural rather than tunable. Two long-running siblings do not pollute each other's window, and a single call carries only the ancestors it logically depends on. The [discrete phase separation](discrete-phase-separation.md) pattern applies the same idea at the conversation level — only distilled artifacts cross a phase boundary — and here it runs inside one harness.
+Under LLM-as-orchestrator, the equivalent diagram would carry `M`, `A`, and `B` context, plus every prior call's tool outputs, into every node — context grows with the sequence, not the depth. This asymmetry removes the "context bloat scales with steps" failure mode that the paper names as architectural rather than tunable. Two long-running siblings do not pollute each other's window, and a single call carries only the ancestors it logically depends on. The [discrete phase separation](discrete-phase-separation.md) pattern applies the same idea at the conversation level — only distilled artifacts cross a phase boundary — and here it runs inside one harness.
 
 ## Why it works
 

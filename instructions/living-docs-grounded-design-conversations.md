@@ -1,6 +1,7 @@
 ---
 title: "Living-Docs-Grounded Agent Design Conversations"
 description: "Point the agent at current domain docs during the design Q&A — the interview anchors in shared vocabulary and surfaces doc drift in the same loop."
+term: "Living-Docs-Grounded Agent Design Conversations"
 tags:
   - instructions
   - context-engineering

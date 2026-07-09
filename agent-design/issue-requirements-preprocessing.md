@@ -44,7 +44,7 @@ REAgent inserts a requirement construction phase before patch generation. The ag
 | Solution | Modification locations, change scope |
 | Additional Notes | Edge cases, related issues |
 
-This converts user-written prose into a structured specification the agent can reason about precisely.
+This converts user-written prose into a structured specification the agent can reason about precisely ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861)).
 
 ## Quality classification and refinement loop
 

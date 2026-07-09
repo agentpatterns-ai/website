@@ -1,6 +1,7 @@
 ---
 title: "Concurrent Agent Pull Requests and Merge-Conflict Cost"
 description: "When multiple coding agents work one repo, co-active overlapping pull requests are the norm — budget for the merge-conflict cost and coordinate dispatch instead of assuming it away."
+term: "Concurrent Agent Pull Requests"
 tags:
   - workflows
   - agent-design
@@ -17,11 +18,11 @@ maturity: emerging
 
 ## When the cost is real
 
-The merge-conflict cost of parallel agents is not universal. It scales with three conditions, and the response should scale with it rather than defaulting to blanket serialization:
+The merge-conflict cost of parallel agents is not universal. It scales with three conditions:
 
-- Agent volume: repos with two or more agents active at once. Below that, co-activity is rare and any coordination machinery is overhead.
-- File overlap: agents scoped to the same directories or modules. Agents partitioned onto disjoint file ownership rarely collide even when they run at the same time.
-- Vendor mix: more than one agent product on the same repo. Cross-vendor pairs conflict at roughly double the rate of same-agent pairs (see below).
+- Agent volume: repos running 2+ agents at once. Below that, coordination machinery is overhead.
+- File overlap: agents scoped to the same directories or modules collide; agents partitioned onto disjoint file ownership rarely do, even running concurrently.
+- Vendor mix: 2+ agent products in the same repo. Cross-vendor pairs conflict at roughly 2x the rate of same-agent pairs (see the [measured conflict cost](#the-measured-conflict-cost) below).
 
 If your setup meets none of these, run agents in parallel and resolve the occasional conflict at merge. If it meets one or more, the coordination ladder below pays for itself.
 

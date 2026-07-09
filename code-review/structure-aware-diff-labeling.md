@@ -1,6 +1,7 @@
 ---
 title: "Structure-Aware Diff Labeling with Two-Stage LLM Pipelines"
 description: "A two-stage LLM pipeline that labels diff hunks against a 12-type change taxonomy then refines whole-patch relationships — useful where polyglot coverage matters more than deterministic per-language analysis."
+term: "Structure-Aware Diff Labeling"
 tags:
   - code-review
   - testing-verification

@@ -1,6 +1,7 @@
 ---
 title: "CoALA Decision-Making Loop as an Orchestration Lens"
 description: "The propose -> evaluate -> select -> act loop from CoALA, used as a vocabulary for locating where each orchestration tactic improves an agent — not a prescription for runtime structure."
+term: "CoALA Decision-Making Loop"
 tags:
   - agent-design
   - tool-agnostic

@@ -1,6 +1,7 @@
 ---
 title: "Acknowledged-Debt Ledger with Next-Trigger Conditions"
 description: "Replace ambient TODO comments with a single versioned ledger where every deferred item carries an observable Next Trigger — the event that forces re-evaluation."
+term: "Acknowledged-Debt Ledger"
 tags:
   - instructions
   - workflows

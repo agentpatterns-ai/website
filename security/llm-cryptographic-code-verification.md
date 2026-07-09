@@ -1,6 +1,7 @@
 ---
 title: "Verifying LLM-Generated Cryptographic Code"
 description: "LLMs hallucinate cryptographic APIs and violate non-syntactic invariants invisible to general SAST. Treat agent-written crypto as untrusted until checked by a crypto-specific analyzer, prefer zero-shot over chain-of-thought for these prompts, and constrain output to vetted high-level APIs."
+term: "LLM Cryptographic Code Verification"
 tags:
   - security
   - testing-verification

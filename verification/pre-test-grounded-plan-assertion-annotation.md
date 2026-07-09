@@ -1,6 +1,7 @@
 ---
 title: "Source-Grounded Test Plan with Pre-Action Assertion Annotation"
 description: "Before an agent drives a UI to verify its own change, have it write a source-read test plan and annotate each step's expected behavior in advance — committing to expectations upfront makes it harder to rationalize an unexpected result as a pass."
+term: "Source-Grounded Test Plan with Pre-Action Assertion Annotation"
 tags:
   - testing-verification
   - agent-design

@@ -61,7 +61,7 @@ Adaptive evaluation is not free, and it is not always the highest-leverage inves
 ## Key Takeaways
 
 - Out-of-band defenses report near-elimination of attacks on AgentDojo, but the same static-benchmark methodology hid a 90%+ adaptive-attack collapse in in-band defenses — treat current numbers as upper bounds until adaptive evaluation closes the gap.
-- A defense-aware evaluation must cover the policy-LLM component (Progent's weak link), in-the-loop tasks that require acting on untrusted content, side channels and implicit flows, text-to-text harms the action layer cannot reach, and provenance assignment at the trusted-computing-base boundary.
+- A defense-aware evaluation must cover the policy-LLM component (Progent's weak link), in-the-loop tasks that require acting on untrusted content, side channels and implicit flows, text-to-text harms the action layer cannot reach, and provenance assignment at the trusted-computing-base boundary (Buchwald et al., 2026).
 - The structural reason out-of-band is more promising is the same structural reason adaptive evaluation is necessary: the security guarantee is mechanical, so its scope has to be precisely characterized.
 - Skip adaptive evaluation when the enforcement path is fully deterministic with no model component, when the agent has no untrusted-content surface, or when the policy and tool catalog are still in flux — invest the budget in provenance, side channels, and text-to-text harms instead.
 - Weak-model, small-sample adaptive results do not extrapolate; treating them as class verdicts repeats the false-confidence trap static benchmarks created.

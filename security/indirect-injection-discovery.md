@@ -54,7 +54,7 @@ List every tool that brings external text into context: web fetch, web search, c
 
 ### Step 2: Capability audit against the Lethal Trifecta
 
-For each retrieval path, check which legs are present simultaneously:
+For each retrieval path — web fetch, cloned repo, MCP responses — check which legs are present simultaneously:
 
 | Execution path | Private data? | Untrusted input? | Egress? | Risk |
 |----------------|:---:|:---:|:---:|:---:|

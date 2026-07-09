@@ -1,6 +1,7 @@
 ---
 title: "Cross-Functional Knowledge Artifacts"
 description: "A per-discipline artifact matrix pinned to a feature-index routing file lets one coding agent answer cross-functional questions across PM, analytics, engineering, and operations."
+term: "Cross-Functional Knowledge Artifacts"
 tags:
   - context-engineering
   - workflows

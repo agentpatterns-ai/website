@@ -1,6 +1,7 @@
 ---
 title: "AI Bot CI/CD Workflow Reliability by Agent"
 description: "Per-agent GitHub Actions success rates from 61,837 workflow runs range from 65% to 94% — CI reliability is agent-dependent, with sample-size and selection caveats that constrain how the numbers should be used."
+term: "AI Bot CI/CD Workflow Reliability"
 tags:
   - workflows
   - github-actions

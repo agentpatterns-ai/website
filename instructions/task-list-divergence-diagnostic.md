@@ -1,6 +1,7 @@
 ---
 title: "Task List Divergence as Instruction Quality Diagnostic"
 description: "Use the gap between an agent's generated task list and your intended steps as a systematic signal for instruction weaknesses in your prompts."
+term: "Task List Divergence"
 tags:
   - instructions
   - tool-agnostic
@@ -27,7 +28,7 @@ Each pattern signals a different instruction problem:
 | Sequencing | Agent orders steps B then A when you intended A then B | Dependencies between steps are not explicit in your instructions |
 | Omissions | Agent skips a step you consider essential (e.g., testing) | The step relies on implicit knowledge you did not state |
 | Additions | Agent includes steps you did not request (e.g., backup, validation) | Scope boundaries are ambiguous — the agent inferred extra work |
-| Granularity mismatch | "Update documentation" becomes twelve sub-tasks, or three complex steps collapse into one | Your instructions operate at a different abstraction level than the agent expects |
+| Granularity mismatch | "Update documentation" becomes 12 sub-tasks, or 3 complex steps collapse into one | Your instructions operate at a different abstraction level than the agent expects |
 | Misinterpretation | A step describes a different action than you intended | Ambiguous language — the instruction has multiple valid readings |
 
 Sequencing and omission errors indicate structural gaps. Additions and granularity mismatches indicate scope ambiguity. Misinterpretations indicate semantic ambiguity in the text itself.
@@ -90,7 +91,7 @@ Suppose the agent returns this plan:
 You intended the sequence to be: update the database schema first, then update application code, then run the full test suite. Comparing the lists reveals two divergence patterns:
 
 - Sequencing — the database migration step is missing entirely, so the agent would write application code against the old schema
-- Omission — "run linter" replaces "run the test suite"; testing was implicit knowledge not stated in the instructions
+- Omission — `Run linter` (step 4 above) replaces the `pytest tests/auth/` run added in the fix below; testing was implicit knowledge not stated in the instructions
 
 Targeted fixes for each pattern:
 

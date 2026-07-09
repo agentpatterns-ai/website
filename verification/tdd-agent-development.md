@@ -9,7 +9,7 @@ aliases:
   - "TDD with Agents"
   - "Tests as the Spec"
   - "Red-Green-Refactor for Agents"
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-09
 maturity: adopted
 ---
 
@@ -46,7 +46,7 @@ graph TD
     D -->|Changes needed| B
 ```
 
-You write the tests, the agent writes the implementation, and the suite is the contract between them. Claude Code's [common workflows documentation](https://code.claude.com/docs/en/common-workflows) recommends asking Claude to "run tests and fix any failures". The agent reads the test output and iterates without a human in each cycle.
+You write the tests, the agent writes the implementation, and the suite is the contract between them. Claude Code's [common workflows documentation](https://code.claude.com/docs/en/common-workflows) recommends asking Claude to "run tests and fix any failures". The agent reads the test output and iterates without a human in each cycle. Anthropic's own benchmark methodology relies on the same loop: prompted to "implement your own tests first before attempting the problem," Claude Sonnet 4.5 scored 77.2% on the 500-task SWE-bench Verified set ([Anthropic](https://www.anthropic.com/news/claude-sonnet-4-5)). That iteration isn't unbounded — when a [Stop hook](https://code.claude.com/docs/en/best-practices) gates the turn on the test suite, Claude Code overrides it and ends the turn after 8 consecutive blocks, so a persistently red suite still surfaces to a human instead of looping forever.
 
 ## Test types and their roles
 

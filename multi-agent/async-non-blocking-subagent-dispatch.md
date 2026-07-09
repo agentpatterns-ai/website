@@ -1,6 +1,7 @@
 ---
 title: "Async Non-Blocking Subagent Dispatch"
 description: "Decouple the orchestrator's processing loop from subagent lifecycle so it continues planning, processing partial results, and managing state while delegates execute concurrently."
+term: "Async Non-Blocking Subagent Dispatch"
 tags:
   - agent-design
   - multi-agent

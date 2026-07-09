@@ -1,6 +1,7 @@
 ---
 title: "Issue-Tracker as Agent Dispatch Surface"
 description: "Assigning a coding agent from Jira, Linear, or GitHub Issues works only with WRAP ticket discipline, assignment-vs-mention conventions, and status-echo gating."
+term: "Issue-Tracker as Agent Dispatch Surface"
 tags:
   - workflows
   - agent-design

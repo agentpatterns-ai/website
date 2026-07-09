@@ -1,6 +1,7 @@
 ---
 title: "Programmatic Cloud-Agent Dispatch via REST API and Webhooks"
 description: "Dispatching coding agents from REST, webhooks, and cron is safe only with caller-side dedupe, payload sanitisation, budget caps, and principal logging."
+term: "Programmatic Cloud-Agent Dispatch"
 tags:
   - workflows
   - agent-design

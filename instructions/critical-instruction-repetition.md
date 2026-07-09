@@ -1,6 +1,7 @@
 ---
 title: "Critical Instruction Repetition via Primacy and Recency"
 description: "Repeating a critical instruction at prompt start and end exploits primacy and recency bias for higher compliance than placing it once."
+term: "Critical Instruction Repetition"
 tags:
   - context-engineering
   - instructions

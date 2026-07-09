@@ -1,6 +1,7 @@
 ---
 title: "Agent-Recorded Video Demos as a Verification Artifact"
 description: "Have a coding agent drive the running app and record a screencast as proof-of-work for human PR reviewers — a visual verification modality that complements tests and evals where they are weakest."
+term: "Agent-Recorded Video Demos"
 tags:
   - testing-verification
   - human-factors

@@ -77,7 +77,7 @@ The two approaches attack the same cost curve from different layers:
 | | Prompt caching | Stateful state-carry |
 |---|---|---|
 | Where the fix lives | Provider infra | Application code |
-| Engineering cost | Order static content first; lock tool schemas | Design typed state, write state-read tools, operate a checkpointer |
+| Engineering cost | Order static content first; lock tool schemas | Design typed state, write state-read tools, operate a `checkpointer` |
 | What gets cheaper | Static prefix (system prompt, tool defs) | Growing observation history |
 | Best for | Stable prefix, short to medium loops | Long loops, large observations |
 | Failure mode | Cache misses on prefix mutation | State schema churn, concurrent corruption |

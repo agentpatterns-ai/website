@@ -1,6 +1,7 @@
 ---
 title: "Whole-Codebase Visibility as a Migration Prerequisite"
 description: "Before dispatching agents on a large-scale migration, check whether the change set fits in agentic-search budget or needs whole-codebase visibility infrastructure — a scoping rule, not a tool recommendation."
+term: "Whole-Codebase Visibility as a Migration Prerequisite"
 tags:
   - workflows
   - agent-design

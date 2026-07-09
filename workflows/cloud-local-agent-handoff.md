@@ -6,7 +6,7 @@ tags:
   - agent-design
   - workflows
   - copilot
-last_reviewed: 2026-06-19
+last_reviewed: 2026-07-09
 maturity: adopted
 ---
 
@@ -20,7 +20,7 @@ You work across several surfaces: web-based GitHub interfaces, local IDEs, and t
 
 ## Cloud to local
 
-GitHub's [coding agent](../tools/copilot/coding-agent.md) runs in the cloud and produces work on a branch. To continue that work locally, you [copy a "Continue in Copilot CLI" command](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/). It loads the session into the terminal with the branch, session logs, and conversation context intact. You pick up exactly where the cloud agent left off, and you can see what the agent tried, what failed, and what it decided.
+GitHub's [coding agent](../tools/copilot/coding-agent.md) runs in the cloud and produces work on a branch. Each cloud agent session has a hard execution cap of 59 minutes ([GitHub documentation](https://docs.github.com/en/copilot/using-github-copilot/coding-agent/about-assigning-tasks-to-copilot)), so a task that outgrows that window needs a local session to finish it. To continue that work locally, you [copy a "Continue in Copilot CLI" command](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/). It loads the session into the terminal with the branch, session logs, and conversation context intact. You pick up exactly where the cloud agent left off, and you can see what the agent tried, what failed, and what it decided.
 
 This handoff preserves:
 
@@ -52,7 +52,7 @@ The `&` shortcut in the CLI gives you a [quick way to delegate](https://github.b
 
 ## The transferable pattern
 
-GitHub Copilot was an early example, but the handoff is no longer single-vendor. Cursor ships the same building blocks: `/in-cloud` cloud subagents that each run on their own VM and branch, a `/babysit` command that prepares a cloud PR for merge remotely, and reliable session pull-back to local for verification ([Cursor — cloud agents in the agents window](https://cursor.com/changelog/cloud-in-agents-window)). The pattern applies broadly: agent sessions should be serializable and portable across execution surfaces. It needs four properties:
+GitHub Copilot was an early example, but the handoff is no longer single-vendor. Cursor ships the same building blocks: `/in-cloud` cloud subagents that each run on their own VM and branch — Cursor provisions that cloud dev environment in under 10 minutes ([Cursor — cloud agents in the agents window](https://cursor.com/changelog/cloud-in-agents-window)) — plus a `/babysit` command that prepares a cloud PR for merge remotely, and reliable session pull-back to local for verification. The pattern applies broadly: agent sessions should be serializable and portable across execution surfaces. It needs four properties:
 
 - branch as shared state: Git branches coordinate any cloud and local agent
 - session logs as context: the receiving surface needs to see what the sending surface did

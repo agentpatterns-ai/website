@@ -31,10 +31,10 @@ When any of these fails, the simpler architecture (one capable agent plus a CI g
 
 ## The mechanism
 
-A regression is a test that changes from passing to failing. Run the suite once against the patched tree and you learn which tests pass after the patch. Run it twice — baseline, then patched — and you learn which tests changed between the two runs. The gate filters out pre-existing failures before it judges the patch, which removes two false signals:
+A regression is a test that changes from passing to failing ([Koech et al., 2026](https://arxiv.org/abs/2606.20243)). Running the suite once against the patched tree only shows which tests pass after the patch; running it twice — baseline, then patched — shows which tests *changed* between the two runs. That comparison filters out pre-existing failures before judging the patch, removing two false signals:
 
-- The "I broke something I didn't" false positive: an agent sees a red test in CI, blames its own patch, and either reverts or opens a doomed remediation loop. The baseline run shows the test was already red.
-- The "all green, ship it" false-green: the suite was green only because the test exercising the new behavior did not exist yet. The reproducer step requires the failing test to be present in the baseline before the patch is judged ([Koech et al., 2026](https://arxiv.org/abs/2606.20243)).
+- The "I broke something I didn't" false positive: an agent sees a red test, blames its own patch, and reverts or opens a doomed remediation loop, when the baseline run would show the test was already red.
+- The "all green, ship it" false-green: the suite reads green only because the test exercising the new behavior did not exist yet. The reproducer step requires the failing test to be present in the baseline before the patch is judged ([Koech et al., 2026](https://arxiv.org/abs/2606.20243)).
 
 This is differential testing applied to the agent's own changes. It is the same primitive PatchDiff uses adversarially to expose semantic divergence between agent and developer patches ([Aleithan et al., 2025](https://arxiv.org/abs/2503.15223)). The multi-agent layering complements it by separating concerns: the Reproducer confirms the bug exists in baseline, and the Tester confirms the patch lands without regression. A failure then traces to one role rather than tangling into a single prompt.
 
@@ -67,11 +67,11 @@ Weak test suites yield false confidence. Phoenix's "no pass-to-pass regressions"
 
 Planner-localization failures slip through. When the planner places a patch at the wrong path, the patched run may pass baseline tests for reasons unrelated to the bug. The Phoenix authors report this on roughly half of generated PRs ([Koech et al., 2026](https://arxiv.org/abs/2606.20243)). The baseline-aware gate cannot detect "the patch passes because it does not touch the broken code." The [precise debugging benchmark](precise-debugging-benchmark.md) shows frontier LLMs often pass tests by regenerating large chunks of unrelated code, the same failure pattern.
 
-Coordination overhead exceeds the verification dividend. The MAST taxonomy identifies 14 failure modes for multi-agent systems across system design, inter-agent misalignment, and task verification ([Cemri et al., 2025](https://arxiv.org/abs/2503.13657)). For small teams with low PR volume, the six-role decomposition adds operational surface (state machine, webhooks, role-specific prompts) whose maintenance cost dwarfs the throughput gain. A single capable agent plus a CI gate captures the differential-testing signal without the orchestration tax.
+Coordination overhead exceeds the verification dividend. The MAST taxonomy identifies 14 failure modes for multi-agent systems across system design, inter-agent misalignment, and task verification ([Cemri et al., 2025](https://arxiv.org/abs/2503.13657)). For a small team with low PR volume, a single capable agent plus a CI gate captures the same differential-testing signal without that orchestration tax.
 
-Flaky baselines corrupt the diff. If the baseline run is non-deterministic — flaky integration tests, container-ordering effects, network races — the diff becomes noise. Pre-existing flake either masks real regressions (the test was sometimes red anyway) or blocks valid patches (the test flipped for reasons unrelated to the diff). The gate is only as deterministic as the suite underneath it.
+Flaky baselines corrupt the diff too: non-deterministic tests, container-ordering effects, and network races turn the baseline into noise, either masking a real regression or blocking a valid patch for reasons unrelated to the diff.
 
-Cross-cutting fixes break the model. Baseline-aware tests assume the patch is localized. When the correct fix touches several files or needs repository-wide reasoning, the planner's wrong localization (above) combines with diffuse test signal to produce green pipelines that ship wrong code.
+Cross-cutting fixes break the model the same way. Baseline-aware tests assume the patch is localized; when a fix needs several files or repository-wide reasoning, the planner's wrong localization (precondition 2 above) combines with diffuse test signal to ship wrong code behind a green pipeline.
 
 ## Example
 

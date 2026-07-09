@@ -1,5 +1,6 @@
 ---
 title: "Out-of-Band Hook Notifications via terminalSequence"
+term: "Out-of-Band Hook Notifications"
 description: "Claude Code's terminalSequence hook field emits allowlisted terminal escape sequences — window titles, bells, OSC 9/99/777 desktop notifications — through the harness's own write path, signaling the human without spending agent context."
 tags:
   - tool-engineering

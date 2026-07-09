@@ -1,6 +1,7 @@
 ---
 title: "Validating Token-Optimized Formats Inside Agentic Loops"
 description: "Switching tool schemas from JSON to TOON or TRON saves tokens in isolation but loses up to 14 percentage points of accuracy inside end-to-end agentic loops — measure before you swap."
+term: "Token-Optimized Format Validation"
 tags:
   - context-engineering
   - cost-performance

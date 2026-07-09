@@ -1,6 +1,7 @@
 ---
 title: "Asynchronous Agent I/O and Speculative Tool Calling"
 description: "Decouple tool execution from the agent's turn loop with an event-driven FSM and optional speculative dispatch — the architecture sub-second voice and real-time agents need when synchronous turns blow the latency budget."
+term: "Asynchronous Agent I/O and Speculative Tool Calling"
 tags:
   - agent-design
   - cost-performance

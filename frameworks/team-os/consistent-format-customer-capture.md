@@ -1,6 +1,7 @@
 ---
 title: "Consistent-Format Customer Capture"
 description: "Freeze a six-section schema for customer-call summaries so agents can grep section headings across hundreds of files and synthesize findings without parsing prose."
+term: "Consistent-Format Customer Capture"
 tags:
   - agent-design
   - context-engineering

@@ -6,6 +6,8 @@ tags:
   - security
   - tool-agnostic
   - instructions
+aliases:
+  - System Prompt Leakage
 last_reviewed: 2026-06-02
 maturity: established
 ---

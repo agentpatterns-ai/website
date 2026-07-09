@@ -54,7 +54,7 @@ Subdirectory CLAUDE.md files (`./api/CLAUDE.md`, `./frontend/CLAUDE.md`, and so 
 CLAUDE.md files should be pointers to knowledge, not knowledge dumps. Per [Claude Code memory docs](https://code.claude.com/docs/en/memory):
 
 - Keep each file short — target under 200 lines per CLAUDE.md file
-- Link to documentation files rather than embedding content
+- Link to documentation files rather than embedding content — `@path` imports still load their target in full at launch and can recurse up to four hops deep, so linking only cuts duplication, not token count ([Claude Code memory docs](https://code.claude.com/docs/en/memory#import-additional-files))
 - Exclude task-specific instructions — those belong in the prompt
 - Exclude knowledge the agent can discover from the codebase (types, structure, tests)
 
@@ -142,7 +142,7 @@ Hierarchical loading cuts context noise by separating instructions structurally.
 Hierarchical scoping helps only when each file stays concise and consistent. A single root file is better in these conditions:
 
 - Conflicting instructions across files: Claude Code concatenates all loaded CLAUDE.md files, and the [Claude Code memory docs](https://code.claude.com/docs/en/memory#write-effective-instructions) note that "if two rules contradict each other, Claude may pick one arbitrarily." A stale subdirectory file that contradicts updated root conventions silently wins for agent sessions in that directory.
-- Compliance degradation at scale: splitting instructions across files does not lower the total instruction load — see [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md). Trim rules rather than add more files.
+- Compliance degradation at scale: splitting instructions across files does not lower the total instruction load — even frontier models hold only 68% accuracy at the highest instruction density tested, 500 simultaneous instructions, regardless of how many files that count is spread across ([IFScale, 2025](https://arxiv.org/abs/2507.11538); see also [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)). Trim rules rather than add more files.
 - Maintenance fragmentation: when a shared convention changes, you must update every directory-level file that documents it. File renames leave CLAUDE.md behind while the root references the old path.
 - Small, uniform projects: a single team working on one codebase gains nothing from extra files and pays the cost of keeping them in sync.
 

@@ -5,7 +5,7 @@ description: "A four-step checklist for agent-ready task descriptions: Write eff
 tags:
   - instructions
   - tool-agnostic
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-09
 maturity: established
 ---
 
@@ -35,7 +35,7 @@ Anthropic's [prompt altitude](system-prompt-altitude.md) principle applies: effe
 
 ### A — Atomic tasks
 
-Break large problems into small, independent issues — one module, one concern per issue. Agents on broad tasks exhaust their context mid-implementation and produce half-finished work. Constrain each session to one feature, so the state stays clean and mergeable between sessions ([Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Atomic scoping also enables [parallel execution](../workflows/parallel-agent-sessions.md): five narrow issues run at once; one monolithic issue cannot.
+Break large problems into small, independent issues — one module, one concern per issue. Agents on broad tasks exhaust their context mid-implementation and produce half-finished work. Constrain each session to one feature, so the state stays clean and mergeable between sessions ([Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Anthropic's own test case for this approach, a claude.ai clone built to study long-running agents, broke the work into more than 200 discrete features tracked individually — the same atomicity WRAP asks for at issue-description scale ([Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Atomic scoping also enables [parallel execution](../workflows/parallel-agent-sessions.md): five narrow issues run at once; one monolithic issue cannot.
 
 ### P — Pair with the coding agent
 
@@ -61,7 +61,7 @@ WRAP assumes a backlog-driven workflow with well-defined task boundaries and pay
 - Solo or fast-moving projects pay the spec overhead without the payoff. If the developer is also the reviewer, the [human-in-the-loop](../workflows/human-in-the-loop.md) collapses and prose instructions add process without reducing ambiguity.
 - Tightly coupled work: forcing atomicity on cross-module changes creates artificial boundaries and makes agents rediscover implicit context.
 - Instruction conflicts: repository instructions (CLAUDE.md, copilot-instructions.md) and issue-body instructions can contradict each other, and agents then hallucinate a resolution or stall.
-- Modern context windows reduce the atomicity payoff. Windows of 200k or more tokens handle moderate task breadth, so aggressive decomposition fragments related changes and produces harder-to-review PRs.
+- Modern context windows reduce the atomicity payoff. Claude Haiku 4.5 offers a 200k-token window, and Claude Sonnet 5 and Claude Opus 4.8 offer 1M tokens ([Source: Claude models overview](https://platform.claude.com/docs/en/about-claude/models/overview)) — enough for moderate task breadth, so aggressive decomposition fragments related changes and produces harder-to-review PRs.
 - Frequent scope changes waste acceptance criteria written for a moving target. Human-paired iteration outperforms WRAP here.
 
 ## Example

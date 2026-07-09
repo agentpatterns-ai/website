@@ -1,6 +1,7 @@
 ---
 title: "Agent-Authored Messages as a Deferred Exfiltration Channel"
 description: "An auto-fetching renderer downstream of an agent's message-authoring tool acts as deferred egress, closing the lethal trifecta without any direct network grant."
+term: "Deferred Exfiltration Channel"
 aliases:
   - rendered image exfiltration
   - agent-authored message exfiltration

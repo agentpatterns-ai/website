@@ -548,6 +548,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](agent-design/reasoning-effort-over-tool-scaffolding.md)
 - [Natural Language Tool Selection (NLT)](agent-design/natural-language-tool-selection.md)
 - [Local Model Viability Factors for Coding](agent-design/local-model-viability-for-coding.md)
+- [Deterministic Precondition Gates for Tool-Using Agents](agent-design/deterministic-precondition-gates.md)
 
 ## Loop Engineering
 

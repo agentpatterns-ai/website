@@ -1,6 +1,7 @@
 ---
 title: "Multi-Repo and No-Repo Coding Agent Automation Templates"
 description: "Decoupling the trigger from a single repo adds cross-repo lock contention, signal spoofing, and a default-on lethal trifecta on the no-repo path."
+term: "Multi-Repo and No-Repo Automation Templates"
 tags:
   - workflows
   - agent-design

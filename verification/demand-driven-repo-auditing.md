@@ -1,6 +1,7 @@
 ---
 title: "Demand-Driven Repository Auditing"
 description: "Trace specific data flows across function boundaries on-demand instead of ingesting entire codebases — an agent architecture for repository-level bug detection at manageable cost."
+term: "Demand-Driven Repository Auditing"
 tags:
   - testing-verification
   - agent-design

@@ -1,6 +1,7 @@
 ---
 title: "Lane-Based Execution Queueing"
 description: "Isolate concurrent agent tasks into named queues with per-lane concurrency limits to prevent output interleaving, race conditions, and deadlocks."
+term: "Lane-Based Execution Queueing"
 tags:
   - agent-design
   - tool-agnostic

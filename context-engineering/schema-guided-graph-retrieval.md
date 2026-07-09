@@ -1,6 +1,7 @@
 ---
 title: "Schema-Guided Graph Retrieval"
 description: "Use one shared domain schema across graph construction, query decomposition, and typed retrieval to improve multi-hop reasoning precision over private knowledge bases."
+term: "Schema-Guided Graph Retrieval"
 tags:
   - context-engineering
   - agent-design

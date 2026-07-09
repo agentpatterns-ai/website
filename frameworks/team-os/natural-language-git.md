@@ -1,6 +1,7 @@
 ---
 title: "Natural-Language Git as Adoption Unlock"
 description: "Agent-mediated gh CLI and GitHub MCP collapse git syntax for non-engineers — a qualified adoption unlock that works on the happy path and fails at merge conflicts, auth errors, and review discipline."
+term: "Natural-Language Git"
 tags:
   - human-factors
   - workflows

@@ -1,6 +1,7 @@
 ---
 title: "Sandbox + Approvals + Auto-Review Governance Triad"
 description: "Compose sandbox, tiered approvals, auto-review of boundary crossings, and agent-native telemetry into one coding-agent governance posture, and when to skip it."
+term: "Sandbox + Approvals + Auto-Review Governance Triad"
 tags:
   - security
   - agent-design

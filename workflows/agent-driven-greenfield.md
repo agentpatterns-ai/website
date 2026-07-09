@@ -1,6 +1,7 @@
 ---
 title: "Agent-Driven Greenfield Product Development from Scratch"
 description: "Build a new product agent-first: define agent roles and skills, decompose work to context-window-safe tasks, and execute with human review at PR boundaries."
+term: "Agent-Driven Greenfield Product Development"
 aliases:
   - Greenfield Agent Bootstrap
   - Bootstrapping an Agent-Driven Project

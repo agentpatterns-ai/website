@@ -62,7 +62,7 @@ What the model sees. Curate context for inference quality, not human readability
 What the human sees. Clear status, predictable behavior, actionable feedback:
 
 - Progress indicators: streaming status, not raw tool call logs
-- Natural language summaries: what was done and why, not the internal reasoning chain
+- Natural language summaries: what was done and why, not the internal reasoning chain, per [Controlling Agent Output](../instructions/controlling-agent-output.md)
 - Actionable error messages: what went wrong and what to try, not stack traces
 
 Feeding raw agent traces to users is the most common conflation -- iterative reasoning full of dead ends does not help users understand current state.
@@ -72,7 +72,7 @@ Feeding raw agent traces to users is the most common conflation -- iterative rea
 What the builder configures and debugs. Composable extension points and observable internals:
 
 - Extension APIs: typed interfaces for adding tools and memory backends without modifying core scaffold code
-- Debug traces: reasoning chains, tool call sequences, and token usage on demand
+- Debug traces: reasoning chains, tool call sequences, and token usage on demand, per [Agent Debugging](../observability/agent-debugging.md)
 - Configuration surfaces: behavior tuning without code changes
 
 DX degrades when internals are opaque or when AX concerns leak into the extension API.

@@ -72,7 +72,7 @@ Consider a confused-deputy attempt: a poisoned tool description asks the runtime
 ## Key Takeaways
 
 - Execution-layer security invariants are testable runtime properties, not guidance — a runtime enforces the check in code or fails the case it covers.
-- The benchmark's core finding: any single connection-layer boundary blocks only four of ten modeled attacks, while all eight invariants together block ten and keep a complete audit.
+- The benchmark's core finding: any single connection-layer boundary blocks only 4 of 10 modeled attacks (B1 in the table above), while all 8 invariants together (B2) block 10 and keep a complete audit.
 - The mechanism is multiple, non-substitutable boundaries — ablation shows removing any one re-exposes exactly the cases it covered, so coverage is additive.
 - Reach for the full runtime in multi-server, higher-risk deployments where providers expose canonical resources; a single-server low-risk setup pays complexity it may never use.
 - Known limits: off-protocol actions bypass it, the guarantee needs provider cooperation, argument semantics still escape it, and the evidence is a single-author synthetic benchmark with local-only overhead numbers.

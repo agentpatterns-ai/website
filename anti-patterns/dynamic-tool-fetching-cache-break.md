@@ -1,5 +1,6 @@
 ---
 title: "Dynamic Tool Fetching Destroys KV Cache Performance"
+term: "Dynamic Tool Fetching"
 description: "Loading tool definitions dynamically per step seems like good context management but destroys the most impactful cost optimization available: prompt caching."
 tags:
   - cost-performance

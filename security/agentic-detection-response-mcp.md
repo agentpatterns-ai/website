@@ -1,6 +1,7 @@
 ---
 title: "Agentic Detection and Response at the MCP Boundary"
 description: "Instrument the MCP transport so agent reasoning, prompts, and tool calls become a runtime detection signal — Uber's ADR system reports 97.2% precision at enterprise scale."
+term: "Agentic Detection and Response"
 tags:
   - security
   - observability

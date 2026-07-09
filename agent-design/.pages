@@ -100,6 +100,7 @@ nav:
       - steering-running-agents.md
       - tool-preamble-status-update.md
       - verification-gated-agent-autonomy.md
+      - deterministic-precondition-gates.md
   - "Reliability":
       - agent-circuit-breaker.md
       - self-healing-production-agent.md

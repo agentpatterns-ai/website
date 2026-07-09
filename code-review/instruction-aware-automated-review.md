@@ -1,6 +1,7 @@
 ---
 title: "Instruction-Aware Automated Code Review"
 description: "Wire AGENTS.md or REVIEW.md into the automated reviewer so its findings enforce documented team conventions — works only for rules the reviewer can mechanically verify."
+term: "Instruction-Aware Code Review"
 tags:
   - code-review
   - instructions

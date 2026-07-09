@@ -1,6 +1,7 @@
 ---
 title: "Domain-Scoped Parallel Exploration for Multi-File Change Localization"
 description: "Partition a coding agent's repository exploration along domain seams when the change spans subsystems — the win is context isolation, not parallelism itself."
+term: "Domain-Scoped Parallel Exploration"
 tags:
   - agent-design
   - tool-agnostic

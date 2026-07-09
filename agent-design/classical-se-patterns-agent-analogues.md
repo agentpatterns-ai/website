@@ -1,6 +1,7 @@
 ---
 title: "Classical SE Patterns as Agent Design Analogues"
 description: "Strategy, Observer, Circuit Breaker, Composite, and Saga map to agent system design — with a concern shift from reuse to control and safety."
+term: "Classical SE Patterns as Agent Design Analogues"
 aliases:
   - "GoF patterns for agents"
   - "SOLID principles for agents"
@@ -56,7 +57,7 @@ Classical patterns are a starting point, not a blueprint. They solve code organi
 
 ## Structural patterns (weakest transfer)
 
-- Composite — Hierarchical agent frameworks mirror Composite: the orchestrator treats a single sub-agent or a whole subtree identically. The [Anthropic multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) implements this with a lead agent coordinating specialized subagents in parallel.
+- Composite — Hierarchical agent frameworks mirror Composite: the orchestrator treats a single sub-agent or a whole subtree identically. The [Anthropic multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) implements this with a lead agent coordinating specialized subagents in parallel — in Anthropic's internal research eval, a Claude Opus 4 lead agent with Claude Sonnet 4 subagents outperformed a single Claude Opus 4 agent by 90.2% ([Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system)).
 - Facade — `CLAUDE.md` and `AGENTS.md` act as Facades: a stable interface hiding internal complexity.
 
 ## Why it works
@@ -67,7 +68,7 @@ Classical patterns capture stable structural relationships — how components co
 
 Pattern vocabulary imports assumptions alongside structure. Apply each one with caution:
 
-- Composite assumes a uniform interface: sub-agents return unstructured natural language by default. The uniform interface holds only if you enforce a strict output schema on every sub-agent, which hides real engineering overhead.
+- Composite assumes a uniform interface: sub-agents return unstructured natural language by default. The uniform interface holds only if you enforce a strict output schema on every sub-agent, which hides real engineering overhead. That overhead compounds with cost: Anthropic found multi-agent systems use about 15 times more tokens than a single chat interaction ([Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system)).
 - [Circuit Breaker](exception-handling-recovery-patterns.md) assumes retriable failures: LLM failures are often prompt failures, so retrying the same call after a timeout fails again. The agent analogue needs a different retry strategy (reformulate, reduce scope), not just a wait.
 - Factory conflates instantiation with configuration: spawning a sub-agent also requires context, tools, and a system prompt. That state has no analogue in classical Factory, which makes the metaphor leaky.
 

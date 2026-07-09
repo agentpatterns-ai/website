@@ -1,6 +1,7 @@
 ---
 title: "App-Window Snapshot as Agent Context"
 description: "Bind one hotkey to capture the active app window — screenshot plus accessibility-tree text — as agent context. The richer payload pays off only under specific conditions."
+term: "App-Window Snapshot"
 tags:
   - context-engineering
   - tool-agnostic

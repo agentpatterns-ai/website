@@ -1,6 +1,7 @@
 ---
 title: Designing Agents to Resist Prompt Injection
 description: Architectural patterns and defense-in-depth strategies for building AI coding agents that are resilient to prompt injection attacks from untrusted inputs.
+term: "Prompt Injection-Resistant Agent Design"
 tags:
   - agent-design
   - security

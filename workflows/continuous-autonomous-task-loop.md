@@ -5,6 +5,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+term: "Continuous Autonomous Task Loop"
 aliases:
   - continuous task loop
   - autonomous task loop

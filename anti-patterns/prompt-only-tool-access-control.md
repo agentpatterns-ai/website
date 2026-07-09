@@ -1,6 +1,7 @@
 ---
 title: "Prompt-Only Tool Access Control"
 description: "Telling an agent in the system prompt not to call a tool reduces unauthorized invocation by only 11–18 pp. Architectural enforcement at the proxy drives it to zero."
+term: "Prompt-Only Tool Access Control"
 tags:
   - security
   - instructions

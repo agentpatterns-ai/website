@@ -1,6 +1,7 @@
 ---
 title: "When Developers Understand Less of Their Own Codebase"
 description: "Comprehension debt is the growing gap between agent-produced code and developer understanding. Unlike technical debt, it lives in people, not the codebase."
+term: "Comprehension Debt"
 tags:
   - anti-pattern
   - human-factors

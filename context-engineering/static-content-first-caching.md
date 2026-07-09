@@ -1,6 +1,7 @@
 ---
 title: "Structure Prompts with Static Content First to Maximize Cache Hits"
 description: "Place static prompt content first and variable content last to maximize prompt cache hits and reduce inference costs in agent loops."
+term: "Static Content First Caching"
 aliases:
   - "prompt prefix caching"
   - "cache-friendly prompt ordering"

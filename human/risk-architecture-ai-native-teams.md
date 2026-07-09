@@ -47,10 +47,10 @@ The framework scores each failure on detection, containment, and escalation, and
 The framework adds coordination cost, and that cost only pays back under specific conditions.
 
 - Non-AI-native teams. Coverage degrades as a team moves toward AI-native operation ([Iyer, arXiv:2607.01421](https://arxiv.org/abs/2607.01421)). For teams whose outputs stay deterministic and whose agents only recommend, the classic levers still hold and the extra surface owners are overhead.
-- Teams too small to staff the roles. Naming distinct owners for the contract layer, the causal-action chain, and the boundary channel needs people to fill those roles. On a small team the ownership map becomes aspirational rather than operational.
-- Ownership without detection or authority. The framework removes uncovered failures only when ownership is paired with a semantic detection trigger and containment authority. Naming an owner who still has no way to detect the failure is accountability theater, not coverage.
+- Teams too small to staff the three roles — contract layer, causal-action chain, and boundary channel — each need a distinct owner; on a small team the ownership map stays aspirational rather than operational.
+- Ownership without a detection trigger and containment authority is accountability theater, not coverage.
 
-Adopt the surface-ownership map once agents act autonomously and their outputs cross into systems that assume determinism. Before that point, keep a human in the loop on irreversible actions and pin model versions.
+Adopt the surface-ownership map once agents act autonomously into determinism-assuming systems. Until then, keep a human in the loop on irreversible actions and pin model versions.
 
 ## Example
 

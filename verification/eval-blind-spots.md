@@ -1,6 +1,7 @@
 ---
 title: "Eval Blind Spots: Structural Gaps in Measurement Methodology"
 description: "Four eval blind spots — held-out, trajectory-opaque, skill-retrieval, and test-evolution gaps — arise from how you measure, not from model capability, and each needs a methodology fix."
+term: "Eval Blind Spots"
 tags:
   - testing-verification
   - evals
@@ -25,7 +26,7 @@ This page is the umbrella for four documented gaps. Each is a distinct mechanism
 
 | Blind spot | What the harness misses | Methodology fix |
 |---|---|---|
-| Held-out test gap | Reward hacking against the visible suite | Score against hidden compositional tests |
+| Held-out test gap | Reward hacking against the visible suite | Score against a hidden `T_test` suite |
 | Trajectory-opaque gap | Unsafe intermediate steps behind a correct result | Audit execution traces, logs, environment snapshots |
 | Skill-retrieval realism gap | Idealized retrieval inflates benchmark gains | Re-eval under realistic retrieval; refine retrieved skills |
 | Test-evolution blind spot | Stale and missing tests the run never triggers | Decouple termination from "all tests pass" |

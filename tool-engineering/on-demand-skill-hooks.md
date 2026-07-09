@@ -107,6 +107,8 @@ else
 fi
 ```
 
+Claude Code gives a command hook like this up to 600 seconds to respond before timing it out — the shared default for `command`, `http`, and `mcp_tool` hook types — and caps the `permissionDecisionReason` string above, like all hook output, at 10,000 characters; longer output is saved to a file and replaced with a preview and path ([hooks reference](https://code.claude.com/docs/en/hooks)).
+
 A `/freeze` variant uses the same mechanism but blocks any `Edit` or `Write` call outside a specific directory:
 
 ```bash

@@ -1,6 +1,7 @@
 ---
 title: "Prompt as Security Knob"
 description: "Treating prompt phrasing as a security guarantee — single-word changes flip generated code from secure to vulnerable, so independent security review is non-negotiable on deployed paths."
+term: "Prompt as Security Knob"
 tags:
   - anti-pattern
   - security

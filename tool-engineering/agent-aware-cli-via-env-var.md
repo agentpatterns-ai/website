@@ -1,6 +1,7 @@
 ---
 title: "Agent-Aware CLI Behaviour via Environment Variable"
 description: "Harness-set environment variables let CLIs detect agent execution and switch to machine-readable output without per-CLI flag knowledge in the system prompt — the pattern earns its keep when you control both the harness and the CLI."
+term: "Agent-Aware CLI Behaviour"
 tags:
   - tool-engineering
   - agent-design

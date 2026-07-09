@@ -115,6 +115,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Steering Running Agents: Mid-Run Redirection and Follow-Ups](steering-running-agents.md) — Send a mid-execution message that redirects tool calls without discarding the context already built
 - [Tool Preamble: User-Visible Status Updates Before Tool Calls](tool-preamble-status-update.md) — A short visible message before tool execution in multi-step agent runs reduces perceived latency without altering behaviour; apply at phase boundaries, not per call
 - [Verification-Gated Agent Autonomy via Automated Review](verification-gated-agent-autonomy.md) — Pair broader agent autonomy with an automated review gate that screens output — trust scales through verification rather than per-action human approval, under specific conditions
+- [Deterministic Precondition Gates for Tool-Using Agents](deterministic-precondition-gates.md) — A read-only deterministic predicate checks a proposed tool call against current state and blocks a forbidden write before it silently corrupts state — the deterministic counterpart to a probabilistic reviewer
 
 ## Reliability
 

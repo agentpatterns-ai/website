@@ -1,6 +1,7 @@
 ---
 title: "Deterministic Guardrails Around Probabilistic Agents"
 description: "Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces."
+term: "Deterministic Guardrails"
 tags:
   - testing-verification
   - tool-agnostic
@@ -31,11 +32,11 @@ Common pre-commit guardrails:
 - URL validation: follow every link and check it resolves, which catches hallucinated citations
 - Secret detection: scan for API keys, tokens, and credentials before they reach the repository
 - Formatting: enforce consistent code style without relying on the agent to apply it correctly
-- Linting: static analysis catches syntax errors and undefined variables the agent introduced
+- Linting: static analysis catches syntax errors and undefined variables the agent introduced — [Ruff's official docs](https://docs.astral.sh/ruff/) report it running 10 to 100 times faster than legacy tools such as Flake8 and Black, so this check adds negligible time to the loop
 
 ### CI gates
 
-CI checks run after a commit is pushed, providing a second layer independent of the local environment. [GitHub Copilot coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent) executes automated tests and linters within its development environment before opening a PR; CI workflows run only after a human approves them.
+CI checks run after a commit is pushed, providing a second layer independent of the local environment. [GitHub Copilot coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent) executes automated tests and linters within its development environment — inside a hard 59-minute session limit — before opening a PR; CI workflows run only after a human approves them.
 
 Common CI guardrails:
 

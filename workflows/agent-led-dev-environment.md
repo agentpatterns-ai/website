@@ -1,6 +1,7 @@
 ---
 title: "Agent-Led Dev-Environment Iteration with Validation and Rollback"
 description: "An agent authors and iterates on its own Dockerfile, gated by a smoke test, with snapshot rollback per attempt and an audit log per change — the next shape after operator-authored environment bootstrapping."
+term: "Agent-Led Dev-Environment Iteration"
 tags:
   - workflows
   - agent-design

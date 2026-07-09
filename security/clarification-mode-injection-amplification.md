@@ -1,6 +1,7 @@
 ---
 title: "Clarification Mode Amplifies Prompt Injection"
 description: "Asking the agent to clarify ambiguity before acting raises prompt-injection success rates 10–30x; treat clarification as an attack surface, not a safety control."
+term: "Clarification Mode Injection Amplification"
 tags:
   - security
   - agent-design

@@ -1,6 +1,7 @@
 ---
 title: "Model a Single Agent Turn as Many Inference and Tool-Call"
 description: "A single user-facing turn is many inference and tool-call steps in sequence, repeating until the model emits a response with no pending tool calls."
+term: "Agent Turn Model"
 aliases:
   - agent loop
   - inference-tool-call loop

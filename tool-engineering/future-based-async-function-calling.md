@@ -1,6 +1,7 @@
 ---
 title: "Future-Based Asynchronous Function Calling"
 description: "Wrap function calls in a futures protocol so a stock LLM keeps decoding while tools execute in the background — pipelining model and execution latency without retraining or breaking the synchronous call schema."
+term: "Future-Based Asynchronous Function Calling"
 aliases:
   - async function calling for LLMs
   - symbolic future function calling

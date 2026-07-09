@@ -1,6 +1,7 @@
 ---
 title: "Labels as Locks: Pipelined Backlog Processing with Stage Gates"
 description: "Coordinate concurrent agents on an issue backlog using stage labels as pipeline gates and a claim label plus timestamped comment as a lease-based lock."
+term: "Labels as Locks"
 tags:
   - workflows
   - agent-design

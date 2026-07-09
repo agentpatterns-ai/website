@@ -53,14 +53,14 @@ The protocols coordinate well because they standardized the primitives of a sing
 
 ## When this backfires
 
-The pattern adds cost without value in several cases, so scope it to fleets that actually make governed collective decisions:
+The pattern adds cost without value in several cases:
 
-- Single-orchestrator fleets. When every agent runs in one runtime, the orchestrator already enforces membership, voting, and audit natively, so a cross-protocol governance layer duplicates what you have.
-- Plain task-delegation pipelines. When agent A calls agent B for a result, there is no vote, dissent, or membership to preserve, and the six-dimension layer is over-engineering.
-- Low-stakes or unregulated work. Without a compliance, audit, or human-escalation requirement, building the layer is effort spent on a control no one needs.
-- Early prototypes. Standing up governance infrastructure before the product settles slows iteration for no gain.
+- Single-orchestrator fleets: the orchestrator already enforces membership, voting, and audit natively, so a cross-protocol layer duplicates existing enforcement.
+- Plain task-delegation pipelines: agent A calls agent B for a result, with no vote, dissent, or membership to preserve.
+- Low-stakes or unregulated work: no compliance or human-escalation requirement to satisfy.
+- Early prototypes: governance infrastructure slows iteration before the product settles.
 
-There is also a framing caveat. The absence of governance primitives can be read as correct separation of concerns rather than a defect — governance is org-specific, and baking contested design choices into a wire protocol would ossify and fragment it. Either reading yields the same advice: implement governance out-of-band and do not expect the protocol to provide it.
+The absence of governance primitives can also read as correct separation of concerns rather than a defect — governance is org-specific, and baking contested design choices into a wire protocol would ossify it. Either way: implement governance out-of-band, as the `ADMIT`/`VOTE_BLIND` message set in the Example below does.
 
 ## Example
 

@@ -1,6 +1,7 @@
 ---
 title: "Backlog Triage as a Named Agent Skill"
 description: "A single skill that converts messy inbound issues into agent-actionable tasks by encoding a state machine into labels, with a durable agent brief as the hand-off contract."
+term: "Backlog Triage Skill"
 tags:
   - workflows
   - agent-design

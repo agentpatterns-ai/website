@@ -1,5 +1,6 @@
 ---
 title: "Tool Minimalism and High-Level Prompting"
+term: "Tool Minimalism"
 description: "Expose fewer, non-overlapping tools and use goal-oriented instructions — counter-intuitive decisions that production data shows improve reliability."
 aliases:
   - Tool Schema Design

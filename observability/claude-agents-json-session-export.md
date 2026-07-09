@@ -1,6 +1,7 @@
 ---
 title: "Programmatic Agent Session Export via `claude agents --json`"
 description: "Claude Code's `claude agents --json` prints live background sessions as a JSON array — the inventory primitive that pairs with OTEL `agent_id` for fleet ops."
+term: "Programmatic Agent Session Export"
 tags:
   - observability
   - claude

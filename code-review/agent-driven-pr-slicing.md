@@ -1,6 +1,7 @@
 ---
 title: "Agent-Driven PR Slicing"
 description: "The agent that produced an in-flight branch proposes a logical decomposition into multiple smaller PRs at review time, using its own intent context rather than diff-only signals."
+term: "Agent-Driven PR Slicing"
 tags:
   - code-review
   - workflows
