@@ -1,6 +1,7 @@
 ---
 title: "Reasoning Effort Over Tool Scaffolding for First-Try Reliability"
 description: "When headroom exists below the model's ceiling, raising reasoning effort buys first-try functional reliability more cost-effectively than adding testing tools or design prompts."
+term: "Reasoning Effort Over Tool Scaffolding"
 tags:
   - agent-design
   - cost-performance

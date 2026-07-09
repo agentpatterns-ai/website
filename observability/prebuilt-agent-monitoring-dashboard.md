@@ -1,6 +1,7 @@
 ---
 title: "Prebuilt Agent Monitoring Dashboard"
 description: "Ship a default Grafana view with the agent stack to close the OTel-emitter-to-consumer gap — but only when backend, model class, and emitter conditions hold."
+term: "Prebuilt Agent Monitoring Dashboard"
 tags:
   - observability
   - tool-agnostic

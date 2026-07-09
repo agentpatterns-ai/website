@@ -1,6 +1,7 @@
 ---
 title: "Indiscriminate Structured Reasoning on Every Agent Task"
 description: "Indiscriminate use of structured mid-stream reasoning on every task, regardless of need — adds token cost and latency without improving outcomes."
+term: "Indiscriminate Structured Reasoning"
 tags:
   - agent-design
   - cost-performance

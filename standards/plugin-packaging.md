@@ -37,7 +37,7 @@ A plugin bundles any combination of:
 - Hooks — lifecycle event handlers
 - Commands — workflow definitions
 
-Claude Code plugins are git repositories with a manifest ([Claude Code plugins documentation](https://code.claude.com/docs/en/plugins)). Installing by URL adds the plugin's agents, skills, MCP servers, and hooks.
+Claude Code plugins are git repositories with a manifest ([Claude Code plugins documentation](https://code.claude.com/docs/en/plugins)). Installing by URL adds the plugin's agents, skills, MCP servers, and hooks. Current docs list 10 root-level plugin directories and files in total, including newer additions such as LSP servers (`.lsp.json`) and background monitors (`monitors/`) alongside the five component types above.
 
 ## Distribution levels
 
@@ -65,7 +65,7 @@ Plugins run code on your machine. MCP servers execute as processes; hooks execut
 - Apply least privilege — tool restrictions in frontmatter limit blast radius
 - Have your security review vet organization-managed plugins
 
-Recent disclosures sharpen the threat model: PromptArmor demonstrated [marketplace-plugin injection attacks](https://www.promptarmor.com/resources/hijacking-claude-code-via-injected-marketplace-plugins) that hijack Claude Code sessions, and SentinelOne documented [marketplace skills that redirect dependency installs to attacker-controlled sources](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/). Treat community plugins as third-party tooling — pin versions and prefer private or organization-managed marketplaces for anything with access to secrets.
+Recent disclosures sharpen the threat model: PromptArmor demonstrated [marketplace-plugin injection attacks](https://www.promptarmor.com/resources/hijacking-claude-code-via-injected-marketplace-plugins) that hijack Claude Code sessions — the third-party registry PromptArmor targeted rescans GitHub for new marketplaces every hour, so a malicious listing can become installable within about 60 minutes of being pushed — and SentinelOne documented [marketplace skills that redirect dependency installs to attacker-controlled sources](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/). Treat community plugins as third-party tooling — pin versions and prefer private or organization-managed marketplaces for anything with access to secrets.
 
 ## Versioning and lifecycle
 

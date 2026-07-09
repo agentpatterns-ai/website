@@ -1,6 +1,7 @@
 ---
 title: "Reproduce-Before-Report Verification Gate"
 description: "Place an independent verifier between reviewer findings and the user so only candidates that can be reproduced against actual code behavior are reported."
+term: "Reproduce-Before-Report Verification Gate"
 tags:
   - code-review
   - testing-verification

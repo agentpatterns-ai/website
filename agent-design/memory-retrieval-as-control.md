@@ -1,6 +1,7 @@
 ---
 title: "Memory Retrieval as a Control Decision"
 description: "Treat whether and how to inject retrieved memory as a control decision — abstain, gate, or utility-rank before the agent acts, rather than always returning top-k."
+term: "Memory Retrieval as a Control Decision"
 tags:
   - agent-design
   - memory
@@ -22,7 +23,7 @@ maturity: emerging
 
 Standard agent memory returns the top `k` most similar entries by embedding distance and injects them into context. That treats memory as a search problem. It is not: retrieved memory helps only when the current situation is genuinely compatible with a stored one, and superficial similarity can drag a multi-turn loop down the wrong path before recovery.
 
-Three control disciplines reframe the question from which memory is most similar to whether and how any retrieved memory should influence the trajectory. They attack the same point — the moment between retrieval and action — from different angles: a risk-sensitive controller that can decline (abstention), a deterministic harness check that fires before a tool call (pre-action gate), and an effectiveness re-ranking that demotes historically-failed approaches (utility scoring). All three are control layers in front of a memory store, not retrieval mechanics themselves.
+Three control disciplines reframe the question from which memory is most similar to whether and how any retrieved memory should influence the trajectory. Each attacks the same point — the moment between retrieval and action — from a different angle: [RSCB-MC's abstention](#abstention-aware-retrieval) lets a risk-sensitive controller decline to inject, [PROJECTMEM's pre-action gate](#memory-as-governance-pre-action-gate) is a deterministic harness check that fires before a tool call, and [MemRL's utility scoring](#utility-scored-retrieval-memrl) re-ranks candidates by historical effectiveness. All three are control layers in front of a memory store, not retrieval mechanics themselves.
 
 ## Abstention-aware retrieval
 

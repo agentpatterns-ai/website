@@ -1,6 +1,7 @@
 ---
 title: "Cloud-Agent Three-Layer State Decoupling"
 description: "Split a cloud agent's state across agent loop, machine state, and conversation state so pods, sessions, and threads migrate, hibernate, and recover independently."
+term: "Cloud-Agent Three-Layer State Decoupling"
 tags:
   - agent-design
   - workflows

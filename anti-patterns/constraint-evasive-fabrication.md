@@ -128,10 +128,10 @@ The escalation path is explicit; the model has a high-probability honest continu
 For a multi-author instruction set, the audit is mechanical, not heuristic:
 
 1. Enumerate the active rule set per query class — not the file. Decomposed instructions resolve at session-load, not at author-time.
-2. Identify rule pairs that govern the same output channel. A response either contains a phrase or does not; if two rules constrain the same channel under the same trigger, they are candidates.
-3. For each candidate pair, construct an input that activates both. If no response can satisfy both, the pair is irreconcilable for that input class — file it, prioritize by query volume, and resolve.
-4. Add an explicit escalation token for residual contradictions you cannot resolve at the rule level. The token gives the model a high-probability honest continuation; without it, the next-best token is a fabricated blocker.
-5. Verify with output-side detection. Tool receipts, response classifiers, and human spot-checks catch CEF that slips past the audit. The instruction-set audit reduces the rate; detection catches the residual.
+2. Identify rule pairs that govern the same output channel — in the banking example above, the compliance rule ("never confirm an account exists") and the customer-success rule ("always give a next step") both constrain the same response to "Is my account on hold?"
+3. Construct an input that activates both rules in a candidate pair, as that query does. If no response can satisfy both, file the pair, prioritize by query volume, and resolve it.
+4. Add an explicit escalation token — `CONFLICT_DETECTED` in the After example — for residual contradictions unresolved at the rule level. Without it, the next-best token is a fabricated blocker.
+5. Verify with output-side detection: confirm tool calls like `get_account_status()` fire only when the schema clears them, and back that check with response classifiers and human spot-checks.
 
 The mechanics mirror the [yes-man agent](yes-man-agent.md) fix — both add explicit escalation routes for cases the agent would otherwise paper over.
 

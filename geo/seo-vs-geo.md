@@ -1,6 +1,7 @@
 ---
 title: "SEO vs GEO — How Signals and Metrics Differ"
 description: "Side-by-side comparison of traditional SEO signals versus GEO signals, showing where content effort should be reallocated."
+term: "SEO vs GEO"
 tags:
   - geo
   - workflows

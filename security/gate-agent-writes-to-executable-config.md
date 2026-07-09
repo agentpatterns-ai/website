@@ -1,6 +1,7 @@
 ---
 title: "Gate Agent Writes to Executable Config Files as Privileged Actions"
 description: "Writes to build-tool config files like .npmrc, .yarnrc, bunfig.toml, .bazelrc, .pre-commit-config.yaml, and .devcontainer/ are execution-escalations — gate them at the write site even under permissive edit modes."
+term: "Gate Agent Writes to Executable Config"
 tags:
   - security
   - tool-agnostic

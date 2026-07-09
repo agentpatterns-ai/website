@@ -1,6 +1,7 @@
 ---
 title: "Tool-Use Sim-to-Real Perturbation Taxonomy"
 description: "Partition tool-use agent perturbations by which POMDP component they target — observation, action, reward, or transition — to predict where robustness will collapse before you ship."
+term: "Tool-Use Sim-to-Real Perturbation Taxonomy"
 tags:
   - testing-verification
   - evals

@@ -1,6 +1,7 @@
 ---
 title: "LLM-Driven Benchmark Auditing"
 description: "Frontier LLMs can audit agent benchmark artefacts — specs, fixtures, grading scripts — and surface defects that inflate or deflate measured agent performance, provided every flag is confirmed by a human or the benchmark authors."
+term: "LLM-Driven Benchmark Auditing"
 tags:
   - testing-verification
   - evals

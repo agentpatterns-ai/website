@@ -1,6 +1,7 @@
 ---
 title: "Constraint Tax: Tool Suppression Under JSON Schema Decoding"
 description: "Co-enabling JSON-schema constrained decoding and tool calling silently suppresses tool invocation in open-weight models — schemas stay valid, tools never fire."
+term: "Constraint Tax"
 tags:
   - anti-pattern
   - agent-design

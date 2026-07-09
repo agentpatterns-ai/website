@@ -1,6 +1,7 @@
 ---
 title: "Functional Folder Taxonomy"
 description: "Name top-level folders after business functions so Claude Code's lazy CLAUDE.md discovery turns the repo path into a selector for function-scoped instructions, conventions, and glossaries."
+term: "Functional Folder Taxonomy"
 tags:
   - agent-design
   - context-engineering

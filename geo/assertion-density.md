@@ -1,6 +1,7 @@
 ---
 title: "Assertion Density — Stats and Quotes Over Vague Claims"
 description: "How replacing qualitative claims with specific statistics, attributed quotes, and cited sources increases AI citation rates by 30–41%."
+term: "Assertion Density"
 tags:
   - geo
   - technique

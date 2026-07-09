@@ -68,15 +68,11 @@ Stack Overflow's 2025 Developer Survey found that 66% of developers report spend
 
 ## Industry parallels
 
-Software engineering is not the first profession to face the commoditization of its core production activity. The historical parallels show clear patterns of displacement and adaptation.
+Software engineering is not the first profession to face commoditization of its core production activity. Manufacturing craftsmen faced it during industrialization: factory output displaced artisanal skill, and survivors moved into design, quality control, and process engineering — the [judgment layer above production](rigor-relocation.md).
 
-Manufacturing craftsmen faced this fracture during industrialization. Factory production steadily displaced artisanal skill across nineteenth- and early-twentieth-century England as machine outputs became cost-competitive. The craftsmen who survived moved into design, quality control, and process engineering — the judgment layer above production.
+Journalism faced a similar shift when AI began intervening directly in writing rather than just automating distribution. Journalists who redefined their value around investigation and editorial judgment adapted; those whose identity was tied to prose production did not.
 
-Journalism is a more uncomfortable parallel. AI is not merely automating distribution or layout, as earlier waves did. It intervenes directly in the core creative process — writing. Journalists who redefined their value around investigation, source relationships, and editorial judgment have adapted. Those whose identity was tied to prose production face the same displacement.
-
-Graphic design offers the closest analogy. Tools like Canva opened execution to everyone — anyone can produce competent layouts — and the premium shifted to taste, brand thinking, and creative direction. The designers who thrived were never really selling pixel-pushing. They were selling judgment.
-
-In each case the pattern is the same: production skill gets commoditized, and value migrates to the judgment layer above it.
+Graphic design faced it too: tools like Canva opened execution to everyone, and the premium shifted from pixel-pushing to taste and creative direction. In each case the pattern repeats — production skill gets commoditized, and value migrates to the judgment layer above it.
 
 ## The skill atrophy trap
 
@@ -99,14 +95,9 @@ This is the central paradox of the transition. Moving from coder to builder requ
 
 Martin Fowler, drawing on Chad Fowler's framing, offers what may be the most useful mental model for navigating this transition: rigor relocation. Engineering discipline does not vanish in an AI-augmented workflow. It moves ([Fowler: Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 
-Where rigor previously lived in careful implementation — choosing the right algorithm, handling edge cases, writing defensive code — it now lives in:
+Where rigor previously lived in careful implementation — choosing the right algorithm, handling edge cases, writing defensive code — it now lives in four places: constraint design (the rules, schemas, and guardrails that bound AI output), verification systems (automated checks that catch what review misses at scale), architectural judgment (the structural decisions AI cannot yet reason about reliably), and intent specification (stating requirements precisely enough for agents to produce correct output). See [harness engineering](../agent-design/harness-engineering.md) for how this constraint layer is built in practice.
 
-- constraint design — defining the rules, schemas, and guardrails that keep AI output within acceptable bounds
-- verification systems — building automated checks that catch what human review will miss at scale
-- architectural judgment — making the structural decisions that AI agents cannot yet reason about reliably
-- intent specification — learning to state requirements with enough precision that agents produce correct output
-
-The engineer who thrives is not the one who stops caring about code quality. It is the one who applies that same obsessive care to the harness around the AI rather than to the code the AI produces. Osmani draws the line sharply: agentic engineering is a professional discipline; vibe coding is not — and conflating the two accelerates the identity confusion ([Osmani: Agentic Engineering](https://addyosmani.com/blog/agentic-engineering/)).
+The engineer who thrives has not stopped caring about code quality — that same obsessive care now applies to the harness around the AI, not just the code it produces. Osmani draws the line sharply: agentic engineering is a professional discipline; vibe coding is not — and conflating the two accelerates the identity confusion ([Osmani: Agentic Engineering](https://addyosmani.com/blog/agentic-engineering/)).
 
 This maps directly to the maturity model GitHub identified in their Octoverse data. Developers progress through four stages: Skeptic (refuses AI tools), Explorer (experiments cautiously), Collaborator (folds AI into daily work), and Strategist (orchestrates AI agents as "creative director of code"). At the Strategist level, the practitioner focuses on defining intent, guiding agents, resolving ambiguity, and validating correctness — not on writing implementations ([GitHub: the new identity of a developer](https://github.blog/news-insights/octoverse/the-new-identity-of-a-developer-what-changes-and-what-doesnt-in-the-ai-era/)). A more granular seven-phase practitioner model — including the trust trough at Phase 4 — is set out in [the AI development maturity model](../workflows/ai-development-maturity-model.md).
 
@@ -130,18 +121,16 @@ The profession has not yet figured out how to replace it. Apprenticeship models,
 
 ## What this means for practitioners
 
-The honest assessment: this transition is a genuine loss for some and a genuine opportunity for others. The deciding factor is whether practitioners consciously develop the skills that AI cannot replicate.
+The honest assessment: this transition is a genuine loss for some and a genuine opportunity for others, and the deciding factor is whether practitioners consciously develop the skills that AI cannot replicate — see the [skill atrophy](skill-atrophy.md) mechanism above for what happens when they don't.
 
-If your identity is anchored in code-writing craft, the path forward requires grief and adaptation. The craft is not worthless — deep implementation skill remains essential for reviewing AI output, debugging complex systems, and understanding performance characteristics. But on its own it is no longer enough to protect a career.
-
-If your identity is anchored in building, you are entering a period where you can do far more than before. The gap between what you can envision and what you can ship has never been smaller. The constraint is no longer "can I implement this?" but "should I build this, and can I verify that it works?"
+If your identity is anchored in code-writing craft, the path forward requires grief and adaptation: deep implementation skill remains essential for reviewing AI output and debugging complex systems, but on its own it no longer protects a career. If your identity is anchored in building, the gap between what you can envision and what you can ship has never been smaller — the constraint is no longer "can I implement this?" but "should I build this, and can I verify that it works?"
 
 Whatever your orientation, the following investments compound:
 
 | Investment | Why it matters |
 |-----------|---------------|
 | Architectural judgment | AI cannot yet reason reliably about system-level tradeoffs |
-| Review discipline | The bottleneck has migrated here; this is where quality lives |
+| Review discipline | The bottleneck has [migrated here](bottleneck-migration.md); this is where quality lives |
 | Constraint design | Guardrails, schemas, and verification harnesses are the new implementation |
 | Deliberate manual practice | Maintains the capability required to supervise AI output |
 | Taste and product sense | With execution commoditized, knowing what to build becomes the differentiator |
@@ -150,11 +139,9 @@ Huntley's summary is blunt: "Execution is now cheap. All that matters now is bra
 
 ## The choice
 
-The split between coder and builder is not something that happens to you. It is a choice you make, repeatedly, in how you engage with these tools.
+The split between coder and builder is not something that happens to you — it is a choice you make repeatedly in how you engage with these tools. Reading generated code before accepting it, designing a constraint system instead of skipping one, and forming a hypothesis before asking the AI to debug are the daily habits that separate supervision from atrophy; reflexively generating more code instead of questioning whether it is needed feeds the abundance problem this page opened with (GitClear's 26% churn increase, cited above).
 
-Every time you accept generated code without reading it, you move toward atrophy. Every time you design a constraint system that prevents an entire class of errors, you move toward engineering. Every time you form a hypothesis before asking the AI to debug, you maintain the skill to supervise it. Every time you reflexively generate more code instead of questioning whether the code is needed, you contribute to the abundance problem rather than solving it.
-
-The profession is not dying. It is differentiating. And the practitioners who navigate the transition successfully will be the ones who understand that the most important engineering decision in the AI era is not which model to use or which agent framework to adopt. It is deciding what kind of engineer you want to be — and then doing the deliberate work to become that person.
+The profession is not dying — it is differentiating. The deciding question is no longer which model or agent framework to adopt. It is what kind of engineer you want to be, and the deliberate work required to become that person.
 
 ## Key Takeaways
 

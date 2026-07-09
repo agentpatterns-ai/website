@@ -1,6 +1,7 @@
 ---
 title: "Agent Circuit Breaker"
 description: "Wrap external tools with per-tool failure-tracking state machines that block calls during degraded states, preventing token waste on retry loops."
+term: "Agent Circuit Breaker"
 tags:
   - agent-design
   - tool-agnostic

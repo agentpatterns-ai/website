@@ -27,6 +27,8 @@ Tool permissions, PreToolUse hooks, and the Bash allow and deny list all gate mo
 
 The [skill content lifecycle](https://code.claude.com/docs/en/skills) makes this persist. The rendered SKILL.md "enters the conversation as a single message and stays there for the rest of the session." The interpolation runs once, and its substituted output becomes durable context for every later turn.
 
+That durability has a real ceiling, not an unbounded one: when auto-compaction summarizes a long session, Claude Code re-attaches each previously invoked skill but keeps only its first 5,000 tokens, and every re-attached skill shares one combined 25,000-token budget ([Claude Code skills documentation](https://code.claude.com/docs/en/skills)). An unaudited shell substitution can eventually drop out of context that way, but nothing removes it before that point, and it can influence every turn in between.
+
 ## The gate
 
 Claude Code's `disableSkillShellExecution` setting closes that surface ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)):
@@ -42,6 +44,8 @@ When enabled, "each command is replaced with `[shell command execution disabled 
 The scope is the set of sources users author or distribute: skills and custom commands from user, project, plugin, and additional-directory sources. Bundled skills and managed-settings-deployed skills keep their interpolation ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)).
 
 The setting is "most useful in [managed settings](https://code.claude.com/docs/en/permissions#managed-settings), where users cannot override it" ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)). Settings precedence places managed first. Managed settings "cannot be overridden by any other level, including command line arguments" ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)).
+
+That is the top of a five-level precedence chain — managed settings, command-line arguments, local project settings, shared project settings, then user settings ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)) — so a fleet-wide `disableSkillShellExecution` rollout in managed settings survives every layer beneath it.
 
 ## Where the gate fits
 

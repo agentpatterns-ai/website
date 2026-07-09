@@ -1,6 +1,7 @@
 ---
 title: "Agent Headcount as a Vanity Metric"
 description: "Counting AI agents predicts no operational outcome — compute-equalised benchmarks show the same architecture swings from +80% to -70% based on task fit, not count."
+term: "Agent Headcount Vanity Metric"
 tags:
   - anti-pattern
   - human-factors

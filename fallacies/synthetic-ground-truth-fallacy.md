@@ -75,10 +75,10 @@ The fallacy is over-applying the rule. Synthetic and AI-generated artifacts are 
 
 - Bootstrapping test coverage: AI-generated test stubs seeded from real code paths help — the risk is trusting pass/fail rates before humans verify the stubs reflect correct behavior
 - Data augmentation: synthetic examples improve coverage of rare cases when added to a dataset with real-world grounding — the fallacy fires only when synthetic data replaces real data
-- Eval templating: LLM-generated rubrics reduce scaffolding work; calibrating them against human judgment converts them from synthetic ground truth into validated artifacts
-- Short feedback loops: an agent checking its output against a compiler or test runner uses environmental ground truth — the fallacy is AI-on-AI assessment, not AI-plus-deterministic-signal loops
+- Eval templating: LLM-generated rubrics reduce scaffolding work; see [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md) for calibrating them against human judgment before treating them as validated artifacts
+- Short feedback loops: an agent checking its output against a compiler or test runner uses environmental ground truth — the fallacy is AI-on-AI assessment, not a deterministic-signal loop
 
-The pattern to avoid is circular: AI generates artifact → AI judges artifact → scores accepted without external grounding. Any external validation signal — human review, test execution, real user behavior — breaks the circularity.
+The pattern to avoid: AI generates an artifact, AI judges it, and the score is accepted without external grounding. Human review, test execution, or real user behavior each breaks that circularity.
 
 ## Key Takeaways
 

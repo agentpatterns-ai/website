@@ -1,6 +1,7 @@
 ---
 title: "System-Level Optimization Pipeline"
 description: "A four-stage multi-agent pipeline — summarize, analyze, optimize, verify — that reasons about performance across component boundaries instead of optimizing functions in isolation."
+term: "System-Level Optimization Pipeline"
 tags:
   - multi-agent
   - agent-design

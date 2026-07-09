@@ -71,10 +71,10 @@ The security guarantee is architectural, not behavioral. Routing every write thr
 
 ## When this backfires
 
-- Write operation not in the declared list. If a legitimate task needs a write type the workflow author did not list, the operation fails silently at the filtering stage. The blast-radius guarantee turns into an accidental availability denial for valid use cases.
-- Volume caps too tight. A refactoring agent that creates many small PRs may hit caps designed to stop spam. Tuning the limits means you first need to understand how the workload spreads.
-- Content moderation false positives. Pattern-based URL removal or content filtering can strip legitimate technical content, for example documentation links in PR descriptions, without telling the agent it failed.
-- No protection for the read surface. The pattern bounds the write blast radius, but a compromised agent still reads all repository state. Exfiltration risks need separate controls such as scoped credentials or network isolation.
+- Write operation not in the declared list. A task needing a write type absent from the workflow's declared list fails silently at the filtering stage — an accidental denial for legitimate work, not just spam.
+- Volume caps too tight. A refactoring agent that opens many small PRs can exceed a cap like the "three pull requests" limit set to stop spam; raising it means first measuring how the actual workload spreads across PRs.
+- Content moderation false positives. The same URL removal that blocks [exfiltration attempts](./url-exfiltration-guard.md) can strip a legitimate documentation link from a PR description without telling the agent why.
+- No protection for the read surface. The pattern bounds only the write blast radius; a compromised agent still reads all repository state, so exfiltration risk needs its own controls, such as [scoped credentials](./scoped-credentials-proxy.md) or network isolation.
 
 ## Example
 

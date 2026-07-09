@@ -9,7 +9,7 @@ aliases:
   - safety nets
   - deterministic nodes
   - post-loop hooks
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-09
 maturity: established
 ---
 
@@ -43,7 +43,7 @@ flowchart TD
 
 A post-loop safety net runs after the agent loop ends. If the agent did the step, the safety net does nothing. Otherwise it does the step deterministically.
 
-The clearest example comes from [Open SWE](https://github.com/langchain-ai/open-swe) — LangChain's open-source coding agent modeled on internal agents built independently by Stripe, Ramp, and Coinbase. Stripe's ["Minions" engineering post](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2) describes the same blueprint architecture, sequencing deterministic nodes around agentic loops:
+The clearest example comes from [Open SWE](https://github.com/langchain-ai/open-swe) — LangChain's open-source coding agent modeled on internal agents built independently by Stripe, Ramp, and Coinbase. Open SWE keeps a narrow toolset of about 15 curated tools per agent, versus roughly 500 in Stripe's internal Toolshed ([Source: Open SWE README](https://github.com/langchain-ai/open-swe)). Stripe's ["Minions" engineering post](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2) describes the same blueprint architecture, sequencing deterministic nodes around agentic loops. More than 1,300 Stripe pull requests a week are now fully minion-produced, up from 1,000 a week when the architecture launched ([Source: Stripe Minions engineering blog](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2)) — evidence the safety-net pattern holds at production scale:
 
 ```python
 # open_pr_if_needed — runs after the agent loop exits

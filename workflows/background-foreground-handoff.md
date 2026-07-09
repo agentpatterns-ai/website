@@ -1,6 +1,7 @@
 ---
 title: "Seamless Background-to-Foreground Handoff"
 description: "Transfer work from a background agent to a human at the ~90% completion mark using distilled context summaries and artifact-based handoff points."
+term: "Background-to-Foreground Handoff"
 tags:
   - workflows
   - tool-agnostic

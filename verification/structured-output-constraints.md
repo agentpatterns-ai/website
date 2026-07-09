@@ -5,7 +5,7 @@ description: "Constrain agent output with templates and schemas to reduce halluc
 tags:
   - testing-verification
   - tool-agnostic
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-09
 maturity: adopted
 ---
 
@@ -32,7 +32,7 @@ Each structural constraint removes a degree of freedom:
 
 ## Structured output for code
 
-[Claude's structured output support](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) allows constraining responses to a JSON schema. When the schema requires specific fields, the model cannot omit them or substitute narrative for structured data.
+[Claude's structured output support](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) allows constraining responses to a JSON schema. When the schema requires specific fields, the model cannot omit them or substitute narrative for structured data. The constraint has documented limits too: a request can define at most 20 strict tools, and strict tool and JSON output schemas together may carry at most 24 total optional parameters ([Source](https://platform.claude.com/docs/en/build-with-claude/structured-outputs)).
 
 Example review output schema:
 ```json
@@ -93,7 +93,7 @@ Structure reduces hallucination surface but constrains legitimate flexibility. T
 
 Too much structure produces compliant but hollow output: the agent fills every field with something rather than nothing, but the content is low-quality filler. Too little structure produces unverifiable output.
 
-Two caveats are worth naming explicitly. First, format restrictions can degrade reasoning: [Tam et al.](https://arxiv.org/abs/2408.02442) report that strict JSON-mode generation reduces accuracy on reasoning-heavy tasks compared to free-form generation followed by structured conversion. For reasoning-heavy tasks, the common mitigation is to let the model think in natural language first and convert to the target format in a second step. Second, schema constraints guarantee only syntactic validity, not semantic correctness — the values inside a schema-valid JSON may still be wrong or hallucinated. Structured output reduces hallucination surface; it does not replace content-level verification.
+Two caveats are worth naming explicitly. First, format restrictions can degrade reasoning: on the GSM8K math benchmark, [Tam et al.](https://arxiv.org/abs/2408.02442) find Claude 3 Haiku's accuracy fell from 86.51% under free-form generation to 23.44% under strict JSON-mode formatting, a 63-point drop. For reasoning-heavy tasks, the common mitigation is to let the model think in natural language first and convert to the target format in a second step. Second, schema constraints guarantee only syntactic validity, not semantic correctness — the values inside a schema-valid JSON may still be wrong or hallucinated. Structured output reduces hallucination surface; it does not replace content-level verification.
 
 ## Anti-pattern
 

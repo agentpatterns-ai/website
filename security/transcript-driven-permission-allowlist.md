@@ -1,6 +1,7 @@
 ---
 title: "Transcript-Driven Permission Allowlist"
 description: "Mine prior agent transcripts for repeated read-only tool calls, then propose a prioritized allowlist for the permission layer — narrower than bypass, tighter than manual curation."
+term: "Transcript-Driven Permission Allowlist"
 tags:
   - security
   - observability

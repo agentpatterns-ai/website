@@ -5,6 +5,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+term: "Dev Containers for AI Coding Agents"
 aliases:
   - devcontainer for coding agent
   - dev container for AI agent

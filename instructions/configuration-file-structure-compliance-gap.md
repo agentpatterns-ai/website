@@ -1,8 +1,8 @@
 ---
 title: "Configuration File Structure Does Not Drive Compliance"
 description: "A factorial study of file size, instruction position, file architecture, and contradictions found none of the four variables produced detectable compliance contrasts — rearranging CLAUDE.md or AGENTS.md is not a compliance fix."
+term: "Configuration File Structure Compliance Gap"
 aliases:
-  - Configuration File Structure Compliance Gap
   - CLAUDE.md Structure Null
 tags:
   - instructions

@@ -1,6 +1,7 @@
 ---
 title: "Task-Based Access Control with Hybrid Inspection"
 description: "Authorize each agent tool call against the user's current task using a deterministic axis (signed task-bound credentials) and a semantic axis (intent extracted from the conversation) — load-bearing on the deterministic half, detective on the semantic half."
+term: "Task-Based Access Control"
 tags:
   - security
   - agent-design

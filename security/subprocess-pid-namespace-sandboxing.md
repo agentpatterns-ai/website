@@ -5,6 +5,7 @@ tags:
   - claude
   - sandboxing
 description: "Add PID namespace isolation and env var scrubbing to Bash subprocesses in Claude Code, preventing daemon persistence and secret leakage beyond the session."
+term: "Subprocess PID Namespace Sandboxing"
 last_reviewed: 2026-06-12
 maturity: adopted
 ---

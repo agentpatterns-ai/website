@@ -36,7 +36,7 @@ The retention decision turns on whether the agent will need to reference the too
 | File content (read once, then edited) | Mask after edit |
 | Search results (synthesized into plan) | Mask after synthesis |
 | Test output (failure mode identified) | Mask after fix is applied |
-| Schema definition (queried throughout task) | Retain |
+| Schema definition (e.g. `openapi.yaml`, queried throughout task) | Retain |
 | API response (used in one step) | Mask after use |
 | Reference documentation (checked repeatedly) | Retain |
 
@@ -65,7 +65,7 @@ Observation masking reduces context growth from intermediate tool results. It do
 - Conversation history from prior reasoning turns
 - Tool outputs the agent needs to retain for repeated reference
 
-For those cases, combine masking with context compression (tiered summarization and offloading) and on-demand retrieval for content the agent needs to consult several times.
+For those cases, combine masking with [context compression](context-compression-strategies.md) (tiered summarization and offloading) and [on-demand retrieval](retrieval-augmented-agent-workflows.md) for content the agent needs to consult several times.
 
 ## When this backfires
 

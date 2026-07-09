@@ -1,6 +1,7 @@
 ---
 title: "Closed-Loop Agent Training from Tool Schemas"
 description: "Generate synthetic training data directly from MCP tool definitions, fine-tune small models to match frontier performance, and iterate as schemas evolve."
+term: "Closed-Loop Agent Training"
 aliases:
   - schema-driven agent training
   - synthetic tool-use training

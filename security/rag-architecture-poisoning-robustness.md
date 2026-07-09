@@ -1,6 +1,7 @@
 ---
 title: "RAG Architecture as a Poisoning Robustness Decision"
 description: "Under controlled knowledge-base poisoning, attack success rates span 24.4% to 81.9% across four RAG architectures with comparable clean accuracy; architecture choice is a threat-model decision, not just a cost-latency tradeoff."
+term: "RAG Architecture Poisoning Robustness"
 tags:
   - security
   - agent-design

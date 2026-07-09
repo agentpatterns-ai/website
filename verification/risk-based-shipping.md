@@ -29,14 +29,14 @@ Risk-based shipping assigns each change type a tier, the same tiering logic [ris
 
 | Change Type | Risk Tier | Action |
 |------------|-----------|--------|
-| Content/copy edits | Low | Auto-ship |
-| UI layout changes | Low | Auto-ship |
-| Application logic (non-auth) | Medium | Auto-ship with monitoring |
-| API endpoint changes | Medium | Auto-ship with monitoring |
-| Database schema migrations | High | Halt for manual review |
-| Authentication/authorization changes | High | Halt for manual review |
-| Dependency updates (major version) | High | Halt for manual review |
-| Infrastructure/deployment config | Critical | Halt for manual review |
+| Content/copy edits | `low` | Auto-ship |
+| UI layout changes | `low` | Auto-ship |
+| Application logic (non-auth) | `medium` | Auto-ship with monitoring |
+| API endpoint changes | `medium` | Auto-ship with monitoring |
+| Database schema migrations | `high` | Halt for manual review |
+| Authentication/authorization changes | `high` | Halt for manual review |
+| Dependency updates (major version) | `high` | Halt for manual review |
+| Infrastructure/deployment config | `critical` | Halt for manual review |
 
 The matrix is project-specific. A content site might auto-ship everything except deployment config; a payments platform might halt on any logic change. Stripe's "Minions" agents apply a related tier philosophy — local lint, selective CI on only tests relevant to the diff, and a hard cap of two self-healing CI rounds before surfacing to a human — to merge 1,000+ PRs per week unattended ([Stripe Engineering, 2026](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents)).
 

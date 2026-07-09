@@ -89,7 +89,7 @@ Use the orchestration framework's built-in primitives: exponential backoff, time
 | Iteration speed at prototype stage | Fast — one file, one prompt | Slower — schema, framework, traces up front |
 | Failure visibility | Silent; generic errors | Per-step; typed failures at seams |
 | Context window pressure | High — all logic shares one prompt | Low — each node sees only its inputs |
-| Cost on sustained runs | Unbounded on retry loops | Bounded by framework primitives |
+| Cost on sustained runs | Unbounded on retry loops | Bounded by framework primitives (LangChain retries, ADK backoff) |
 | Best fit | Loosely coupled experiments | Loosely coupled production workloads |
 | Worst fit | Long-running production workloads | Tightly-coupled stateful workflows |
 

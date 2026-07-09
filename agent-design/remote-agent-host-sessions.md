@@ -1,6 +1,7 @@
 ---
 title: "Remote Agent Host Sessions over SSH and Dev Tunnels"
 description: "Run the agent loop on a remote host whose lifecycle is decoupled from the client editor — SSH attach, dev tunnel reverse, or cloud worker — so the session survives laptop sleep, network drops, and editor restarts."
+term: "Remote Agent Host Sessions"
 tags:
   - agent-design
   - workflows

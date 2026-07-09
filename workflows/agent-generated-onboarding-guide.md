@@ -1,6 +1,7 @@
 ---
 title: "Agent-Generated Onboarding Guide as a Durable Artefact"
 description: "Use an agent to synthesise a teammate ramp-up guide from the repository, then version-control the artefact and regenerate on architectural change rather than writing onboarding docs by hand."
+term: "Agent-Generated Onboarding Guide"
 tags:
   - workflows
   - agent-design

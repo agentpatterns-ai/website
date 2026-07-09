@@ -6,6 +6,7 @@ tags:
   - human-factors
   - tool-agnostic
   - agent-design
+term: "Encoding Tacit Knowledge"
 last_reviewed: 2026-06-12
 maturity: established
 ---

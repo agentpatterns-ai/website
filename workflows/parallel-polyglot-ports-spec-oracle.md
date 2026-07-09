@@ -1,6 +1,7 @@
 ---
 title: "Parallel Polyglot Ports as a Spec-Ambiguity Oracle"
 description: "Generate multiple AI-paired ports from one executable spec and treat divergence as a signal that the spec under-specifies behaviour — not as a fault-tolerance vote."
+term: "Parallel Polyglot Ports"
 tags:
   - workflows
   - agent-design

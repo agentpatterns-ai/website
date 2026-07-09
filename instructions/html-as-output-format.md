@@ -29,7 +29,7 @@ The pattern works when the artifact will be opened in a browser as an end state 
 | Use case | Why HTML wins |
 |----------|---------------|
 | PR review artifact | Diff with severity-coded margin annotations, jump links, file-by-file tour |
-| Code explainer | Tabbed code samples, hover-linked glossary, inline SVG control flow |
+| Code explainer | Tabbed code samples, hover-linked glossary, inline `<svg>` control flow |
 | Implementation plan | Timeline with milestones, data-flow diagram, inline mockups, risk table |
 | Research summary | TL;DR box, collapsible request-path steps, FAQ, search |
 | Comparison or triage | Filterable cards, sortable status columns, side-by-side options |

@@ -1,6 +1,7 @@
 ---
 title: "Opponent Processor / Multi-Agent Debate Pattern"
 description: "Deploy two agents with structurally opposed incentives to independently critique each other's reasoning, then synthesize into a higher-quality decision."
+term: "Opponent Processor"
 tags:
   - multi-agent
   - agent-design
@@ -20,7 +21,7 @@ maturity: adopted
 
 ## How it differs from related patterns
 
-People often confuse this pattern with three others. Each solves a different problem:
+Each solves a different problem:
 
 | Pattern | Structure | Critique phase |
 |---------|-----------|---------------|

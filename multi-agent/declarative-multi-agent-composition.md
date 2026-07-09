@@ -1,6 +1,7 @@
 ---
 title: "Declarative Multi-Agent Composition"
 description: "Define agents and workflows as data, not code — declarative composition surfaces design decisions, enables tooling, and makes multi-agent systems debuggable."
+term: "Declarative Multi-Agent Composition"
 tags:
   - agent-design
   - multi-agent

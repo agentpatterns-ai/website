@@ -1,6 +1,7 @@
 ---
 title: "Security Budget as Token Economics"
 description: "Size pre-release security audits as a budget allocation: when vulnerability discovery scales with inference spend, hardening becomes an attacker-defender outspend duel bounded by diminishing returns."
+term: "Security Budget as Token Economics"
 aliases:
   - proof-of-work cybersecurity
   - token budget security review

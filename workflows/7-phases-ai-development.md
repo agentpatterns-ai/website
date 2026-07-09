@@ -1,6 +1,7 @@
 ---
 title: "The 7 Phases of AI-Assisted Feature Development"
 description: "A feature-level workflow model — Research, Prototype, PRD, Issues, Implement, QA, Ship — with entry and exit criteria for each phase and a clear map of where human judgment versus agent execution dominate."
+term: "7 Phases of AI-Assisted Feature Development"
 tags:
   - workflows
   - tool-agnostic

@@ -1,9 +1,9 @@
 ---
 title: "Constraint Encoding Does Not Fix Constraint Compliance"
 description: "Restructuring how constraints are formatted in prompts does not improve model compliance — the compliance lever is constraint design, not encoding form."
+term: "Constraint Encoding Compliance Gap"
 aliases:
   - Compact Constraint Headers
-  - Constraint Encoding Compliance Gap
 tags:
   - instructions
   - code-generation
@@ -76,11 +76,11 @@ Both forms produce the same constraint satisfaction rate. Use the compact form t
 
 Compact headers are token-efficient and compliance-neutral, but the trade-off is not zero:
 
-- Human readability drops. Dense key-value constraint blocks are harder to audit and debug than prose when a constraint silently fails and you need to trace why.
-- Token savings do not matter at low volume. For single-use or infrequent prompts, optimizing for constraint-token count adds work with no practical benefit.
-- Ambiguity grows at the edges. Heavy compression can make parsing ambiguous on unusual inputs, where the model must infer the intent behind a terse rule. Prose constraints leave less room for misreading in edge cases.
-- Counter-intuitive constraints stay unsolved. Neither compact nor verbose encoding improves compliance for constraints that conflict with model training priors. Encoding form is the wrong lever whatever the format.
-- The neutrality result has a narrow scope. It applies to constraint blocks inside a coding prompt. Broader prompt-format work found that format can move task performance by up to 40% on smaller models, while larger models hold steadier ([He et al., 2024](https://arxiv.org/abs/2411.10541)). Do not extend encoding neutrality beyond the constraint-satisfaction setting.
+- Human readability drops: the `[CONSTRAINTS]` block shown above is harder to audit than the prose form when a constraint silently fails and you need to trace why.
+- Token savings do not matter at low volume — a single-use prompt has no busy agent loop to amortize the saved tokens across.
+- Ambiguity grows at the edges: compressing a rule like `max-lines: 50` into a bare key-value pair forces the model to infer intent on unusual inputs, while the prose form ("Keep the implementation under 50 lines") leaves less room for misreading.
+- Counter-intuitive constraints stay unsolved either way — see [Constraint Degradation](constraint-degradation-code-generation.md) for the lever that actually moves them.
+- The neutrality result is scoped to constraint blocks inside a coding prompt. Broader prompt-format work found that format can move task performance by up to 40% on smaller models, while larger models hold steadier ([He et al., 2024](https://arxiv.org/abs/2411.10541)). Do not extend encoding neutrality beyond the constraint-satisfaction setting.
 
 ## Key Takeaways
 

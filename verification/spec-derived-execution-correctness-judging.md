@@ -1,6 +1,7 @@
 ---
 title: "Spec-Derived Execution as a Correctness Oracle"
 description: "Judge already-written candidate code against a natural-language spec by deriving inputs from the spec, executing them, and grading the I/O pairs — not by asking the model to reason over the code."
+term: "Spec-Derived Execution Judging"
 tags:
   - testing-verification
   - tool-agnostic

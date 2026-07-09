@@ -1,6 +1,7 @@
 ---
 title: "Subagent OTel Trace Correlation via agent_id Attribute"
 description: "Propagate a stable agent identifier as both an HTTP header on outgoing API requests and an attribute on every OTEL span so multi-agent traces become queryable by agent identity."
+term: "Subagent OTel Trace Correlation"
 tags:
   - observability
   - multi-agent

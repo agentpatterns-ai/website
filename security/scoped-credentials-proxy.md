@@ -1,6 +1,7 @@
 ---
 title: "Scoped Credentials via Proxy Outside the Agent Sandbox"
 description: "Keep broad credentials entirely outside the agent's sandbox and use an external proxy that attaches scoped tokens only to validated, allowlisted requests."
+term: "Scoped Credentials Proxy"
 tags:
   - agent-design
   - instructions

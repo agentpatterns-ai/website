@@ -1,6 +1,7 @@
 ---
 title: "Dynamic System Prompt Composition"
 description: "Assemble system prompts at runtime from priority-ordered sections — toggle by mode and provider, separate cacheable and dynamic regions."
+term: "Dynamic System Prompt Composition"
 tags:
   - context-engineering
   - instructions

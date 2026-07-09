@@ -1,6 +1,7 @@
 ---
 title: "LLM-Pinned Library Versions Carry Systemic CVE Exposure"
 description: "Across 10 models on 1,000 Python tasks, 36.7%-55.7% of LLM-specified library versions contain known CVEs and all models converge on the same risky releases — pin against an external vulnerability source, not the model's training prior."
+term: "LLM-Pinned Library Versions"
 tags:
   - security
   - tool-agnostic

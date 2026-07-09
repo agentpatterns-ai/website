@@ -59,17 +59,17 @@ This separation lets you test each layer and audit every call at the boundary �
 
 Three coordination topologies each carry their own failure patterns. [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md) breaks them down; [arXiv:2601.01743](https://arxiv.org/abs/2601.01743) surveys the centralized versus decentralized tradeoffs.
 
-Centralised orchestration — one orchestrator manages all workers, which run assigned tasks and return results.
+Centralised orchestration — one orchestrator manages all workers, which run assigned tasks and return results, the shape covered in [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md).
 
 - Advantage: a single point of coordination keeps reasoning traceable
 - Failure mode: the orchestrator becomes a bottleneck, and its failure halts the system
 
-Decentralised peer-to-peer — agents talk directly without a coordinator, making local decisions from shared state or messages.
+Decentralised peer-to-peer — agents talk directly without a coordinator, making local decisions from shared state or messages, as in [decentralized memory for self-evolving multi-agent systems](../multi-agent/decentralized-memory-multi-agent.md).
 
 - Advantage: no single point of failure, and it scales horizontally
 - Failure mode: emergent coordination failures, race conditions, and inconsistent shared state are harder to debug
 
-Hybrid — a lightweight coordinator handles routing and synthesis, while workers talk directly to coordinate sub-tasks.
+Hybrid — a lightweight coordinator handles routing and synthesis while workers talk directly to coordinate sub-tasks, the pattern [Magentic Orchestration](../multi-agent/magentic-orchestration.md) implements with a task ledger.
 
 - Advantage: it eases the coordinator bottleneck while keeping traceability at the routing level
 - Failure mode: the boundary between coordinator and peer-to-peer communication must be explicit, because crossing it implicitly creates inconsistent behavior

@@ -1,6 +1,7 @@
 ---
 title: "Three-Depth In-Session Security Review"
 description: "Layer in-session security review at three depths — a deterministic per-edit pattern match, a fresh-context end-of-turn diff review, and an agentic commit-time review — so each layer earns its cost and false-positive budget."
+term: "Three-Depth In-Session Security Review"
 tags:
   - security
   - code-review

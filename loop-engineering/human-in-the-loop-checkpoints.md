@@ -43,13 +43,11 @@ Per-iteration checkpoints are almost always the wrong default — they saturate 
 
 ### On low confidence
 
-Trip the interrupt only when an in-loop confidence score falls below a configured threshold — a classifier score, a self-reported planning-step uncertainty, or a divergence between two verifier models. The loop handles most turns autonomously; the human only sees the ones the loop itself flagged as uncertain.
-
-This fits when confidence is meaningfully measurable. It does not fit when "confidence" reduces to vibes; in that case the checkpoint fires on every turn and you have rebuilt per-iteration HITL.
+Trip the interrupt only when an in-loop confidence score — a classifier score, a self-reported planning-step uncertainty, or a divergence between two verifier models — falls below a configured threshold. The loop handles most turns autonomously; the human sees only the ones flagged as uncertain. This fails when "confidence" reduces to vibes: the checkpoint then fires on every turn and you have rebuilt per-iteration HITL.
 
 ### On budget threshold
 
-Trip the interrupt when the loop has spent a configurable fraction of its token, dollar, or tool-call budget without producing the stop signal. The checkpoint asks the human whether to extend the budget, change strategy, or abort. This is the dual of the [Goal-Driven Autonomous Loop](goal-driven-autonomous-loop.md) budget-limit template — the loop's `budget_limit.md` injection wakes the human instead of winding the agent down.
+Trip the interrupt when the loop has spent a configurable fraction of its token, dollar, or tool-call budget without converging — the [example](#example) below trips at 80% of budget. This is the dual of the [Goal-Driven Autonomous Loop](goal-driven-autonomous-loop.md) budget-limit template — the loop's `budget_limit.md` injection wakes the human instead of winding the agent down.
 
 Budget-threshold checkpoints earn their cost on long-running autonomous loops where the failure mode is silent overspend. They fail on short loops where the budget is per-task — the interrupt fires too often.
 

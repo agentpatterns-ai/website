@@ -1,6 +1,7 @@
 ---
 title: "Cloud Parallel Review Pattern"
 description: "Fan out code review across multiple agents in a remote sandbox, verify each candidate finding against actual code behavior, then aggregate into a single severity-ranked review posted back to the PR."
+term: "Cloud Parallel Review Pattern"
 tags:
   - code-review
   - multi-agent

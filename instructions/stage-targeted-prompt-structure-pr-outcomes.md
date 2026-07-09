@@ -67,7 +67,7 @@ The framework was measured on single-shot, human-driven ChatGPT-PR interactions.
 
 ## Example
 
-The same change request, evolved by raising one dimension at each stage of failure. The diagnostic is the stage the previous version failed at. The final prompt below is what survives all three raises — what you would actually paste.
+The same `SignupForm` change request, evolved by raising one dimension at each stage of failure. The diagnostic is the stage the previous version failed at. The final prompt below is what survives all three raises — what you would actually paste.
 
 Generation fails (the model produces the wrong shape of refactor):
 

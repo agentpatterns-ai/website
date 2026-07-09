@@ -1,6 +1,7 @@
 ---
 title: "Skill Specification Violation Fuzzing"
 description: "Skill guardrails written in natural language can fail under benign user inputs — semantic fuzzing turns each guardrail into a reachability goal over an execution trace and surfaces violations that static review misses."
+term: "Skill Specification Violation Fuzzing"
 tags:
   - testing-verification
   - evals

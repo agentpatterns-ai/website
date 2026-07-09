@@ -1,6 +1,7 @@
 ---
 title: "Using the Agent to Analyze Its Own Evaluation Transcripts"
 description: "Feed evaluation transcripts back to the agent and have it identify tool design issues, propose description improvements, and surface failure patterns that manual review misses at scale."
+term: "Agent Transcript Analysis"
 tags:
   - agent-design
   - testing-verification

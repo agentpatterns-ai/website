@@ -1,6 +1,7 @@
 ---
 title: "Observability-Driven Harness Evolution"
 description: "Pair every harness edit with a self-declared prediction verified against the next round's outcome — turning trial-and-error into a falsifiable contract that lets autonomous evolution converge."
+term: "Observability-Driven Harness Evolution"
 tags:
   - agent-design
   - observability

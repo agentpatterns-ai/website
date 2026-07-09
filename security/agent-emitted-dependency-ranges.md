@@ -1,6 +1,7 @@
 ---
 title: "Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface"
 description: "AI assistants default to caret and tilde ranges in manifests because `npm install` and equivalents do; for an application with a bump-bot, replacing the range with an exact pin plus a lockfile-enforced install narrows the window in which a freshly-compromised release lands in a build."
+term: "Agent-Emitted Dependency Version Ranges"
 tags:
   - security
   - tool-agnostic

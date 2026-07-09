@@ -1,6 +1,7 @@
 ---
 title: "The Research-Plan-Implement Pattern"
 description: "Structure agent work in three explicit phases — research the problem space, plan the approach, then implement — to avoid context-wasteful rework from premature coding."
+term: "Research-Plan-Implement Pattern"
 tags:
   - workflows
   - context-engineering

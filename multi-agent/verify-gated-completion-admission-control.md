@@ -1,6 +1,7 @@
 ---
 title: "Verify-Gated Completion as Admission Control"
 description: "A read-only verifier decides whether an agent's completion claim is admitted; ambiguous cases fail closed and every decision is recorded."
+term: "Verify-Gated Completion"
 tags:
   - multi-agent
   - testing-verification

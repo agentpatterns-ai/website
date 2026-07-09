@@ -1,6 +1,7 @@
 ---
 title: "Stochastic-Deterministic Boundary as First-Class Contract"
 description: "Treat the LLM-to-action transition as a typed four-part contract — proposer, verifier, commit, reject — once a system has multiple action sites or non-trivial commit side effects."
+term: "Stochastic-Deterministic Boundary"
 tags:
   - agent-design
   - tool-agnostic

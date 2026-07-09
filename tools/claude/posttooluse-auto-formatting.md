@@ -107,7 +107,7 @@ Use `$CLAUDE_PROJECT_DIR` to reference hook scripts by absolute path, regardless
 
 ## Async formatting for long-running formatters
 
-By default, `PostToolUse` hooks [block the agent loop until the command completes](https://code.claude.com/docs/en/hooks#run-hooks-in-the-background). For formatters that take more than a few seconds, set `"async": true` to run the formatter in the background without blocking Claude's next step:
+By default, `PostToolUse` hooks [block the agent loop until the command completes](https://code.claude.com/docs/en/hooks#run-hooks-in-the-background) — up to a default timeout of 600 seconds for `command` hooks, [per the hooks reference](https://code.claude.com/docs/en/hooks). For formatters that take more than a few seconds, set `"async": true` to run the formatter in the background without blocking Claude's next step:
 
 ```json
 {
@@ -152,7 +152,7 @@ Project-level hooks make formatting automatic for all team members without any p
 
 Auto-formatting on every write is not universally correct. Prefer manual invocation, a pre-commit hook, or CI-side formatting when any of the following holds:
 
-- Formatter and linter disagree. Running a formatter and a fix-on-save linter (for example, `prettier` and an `eslint` config with stylistic rules) in the same hook can produce oscillating edits where each tool reverses the other's output. Community implementations of Claude Code auto-format hooks sequence or fall back between formatters for this reason — for example, [`claude-format-hook`](https://github.com/ryanlewis/claude-format-hook) tries Biome first and falls back to Prettier rather than running both.
+- Formatter and linter disagree. Running a formatter and a fix-on-save linter (for example, `prettier` and an `eslint` config with stylistic rules) in the same hook can produce oscillating edits where each tool reverses the other's output. Community implementations of Claude Code auto-format hooks sequence or fall back between formatters for this reason — for example, [`claude-format-hook`](https://github.com/ryanlewis/claude-format-hook) tries Biome first and falls back to Prettier rather than running both. [Biome's own benchmark](https://biomejs.dev/) reports formatting 171,127 lines across 2,104 files about 35 times faster than Prettier, at 97% output compatibility — close enough that the fallback rarely produces a visibly different result.
 - The formatter is slow or network-bound. A multi-second formatter run synchronously on every `Edit` turns small iterative changes into slow operations. Setting `"async": true` avoids blocking but loses in-loop formatter errors.
 - Generated or intentionally non-standard files. Vendored code, fixtures, or diff-style snapshots may be checked in unformatted on purpose. A blanket `Edit|Write` matcher rewrites them and adds noise. Scope the matcher narrowly or guard the command with a path allow-list.
 - Partial edits where the surrounding file is broken. Formatters that need syntactically valid input (for example, `gofmt`, `rustfmt`) fail loudly after every mid-refactor edit, polluting the transcript and triggering Claude to "fix" errors that are not real.

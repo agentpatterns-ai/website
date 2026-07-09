@@ -1,6 +1,7 @@
 ---
 title: "Self-Rewriting Meta-Prompt Loop"
 description: "Agents that improve their own system prompts through a reflect-draft-validate-persist cycle, without weight updates or human intervention between runs."
+term: "Self-Rewriting Meta-Prompt Loop"
 tags:
   - agent-design
   - tool-agnostic

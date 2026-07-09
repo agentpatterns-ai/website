@@ -1,6 +1,7 @@
 ---
 title: "Adaptive Sandbox Fan-Out Controller"
 description: "Start with a small parallel batch, monitor four quality signals, then scale up, stop early, refine the prompt, or decompose — rather than committing to a fixed N upfront."
+term: "Adaptive Sandbox Fan-Out Controller"
 tags:
   - multi-agent
   - agent-design

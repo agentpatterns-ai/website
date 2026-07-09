@@ -6,6 +6,8 @@ tags:
   - instructions
   - tool-agnostic
   - context-engineering
+aliases:
+  - instruction hierarchy
 last_reviewed: 2026-06-13
 maturity: established
 ---

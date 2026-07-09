@@ -79,3 +79,4 @@ Take Class D1 above as the case. Two responses:
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — Wu's Class C/D ground state when the agent's own stop token is the silence source
 - [Coding-Agent Misalignment Forms (Seven-Symptom Taxonomy)](coding-agent-misalignment-forms.md) — a 20,574-session counterpart taxonomy on a different axis (developer-pushback episodes), useful as a methodology contrast
 - [Five-Failure-Layers Diagnostic: Attribute Before Swapping the Model](../agent-design/five-failure-layers-diagnostic.md) — the same mechanism-axis discipline applied to *agent failure* generally; this page is the silent-failure-specific cut
+- [Deterministic Precondition Gates for Tool-Using Agents](../agent-design/deterministic-precondition-gates.md) — a targeted defense for the silent wrong-state write: a read-only predicate blocks a forbidden policy-violating transition before it lands

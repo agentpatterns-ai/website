@@ -1,6 +1,7 @@
 ---
 title: "CRA-Only Review and the Merge Rate Gap"
 description: "Empirical data from 3,109 PRs shows CRA-only review achieves a 45% merge rate versus 68% for human-only review — reviewer composition determines merge outcomes, not just comment quality."
+term: "CRA Merge Rate Gap"
 tags:
   - code-review
   - arxiv

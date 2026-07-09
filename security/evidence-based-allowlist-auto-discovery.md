@@ -49,6 +49,8 @@ A `PostToolUse` hook tracks outcomes after execution. The rule lands only after 
 
 `PermissionRequest` is the only hook with an `updatedPermissions` write-back path, per the [Claude Code hooks reference](https://code.claude.com/docs/en/hooks). `PostToolUse` cannot write settings via its return value; it writes to the counter log.
 
+Both hooks run as `command` hooks, which default to a 600-second timeout before Claude Code cancels them ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)) — far more than a `jq` lookup against a local log file needs, so neither the count check nor the increment should ever hit the ceiling.
+
 | Hook | Role | Can write to settings.json via API? |
 |------|------|-------------------------------------|
 | `PermissionRequest` | Checks count; writes allow rule when threshold met | Yes — via `updatedPermissions` |
@@ -121,7 +123,7 @@ jq --arg k "$KEY" --argjson v "$NEW" '.[$k] = $v' "$LOG_FILE" > "$TMP" && mv "$T
 
 Counter-based auto-promotion assumes past approvals predict future safety. That assumption breaks under several conditions:
 
-- Broad key matching: first-token normalization (`git` from `git status`) counts safe reads toward the same key as destructive variants. The [v2.1.77 Claude Code changelog](https://code.claude.com/docs/en/changelog) noted the related bug of compound bash commands saving a single rule for the full string rather than per-subcommand.
+- Broad key matching: first-token normalization (`git` from `git status`) counts safe reads toward the same key as destructive variants. The [v2.1.77 Claude Code changelog](https://code.claude.com/docs/en/changelog) noted the related bug of compound bash commands saving a single rule for the full string rather than per-subcommand. Claude Code's own current rule-generation now caps this the other way: approving a compound command saves up to 5 separate subcommand rules rather than one collapsed key ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)) — the platform itself treats per-subcommand fidelity as correct, which is the standard a first-token counter falls short of.
 - Scripted or CI runs: automated pipelines can build up approval counts for commands no human ever consciously reviewed, then promote them silently.
 - Accidental approvals: five rushed approvals promote a command permanently, and threshold counts do not filter careless clicks.
 

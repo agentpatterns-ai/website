@@ -1,6 +1,7 @@
 ---
 title: "Traces Need Feedback to Power Learning"
 description: "Production traces only become a learning corpus when each one carries a verdict — couple feedback to the trace at write time, generate it from four sources, and store it on the run, not in a separate analytics tool."
+term: "Trace-Feedback Coupling"
 tags:
   - observability
   - evals

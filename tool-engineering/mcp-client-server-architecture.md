@@ -1,8 +1,8 @@
 ---
 title: "Five Design Decisions for MCP Servers and Clients"
 description: "Architectural best practices for MCP servers and clients covering transport selection, tool granularity, error handling, capability negotiation, and security."
+term: "MCP Client/Server Architecture"
 aliases:
-  - "MCP Client/Server Architecture"
   - "MCP architecture best practices"
   - "MCP server client design"
 tags:

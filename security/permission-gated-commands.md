@@ -44,6 +44,8 @@ When this command runs, Claude can read files, search with Grep and Glob, and ru
 
 The `Bash(git diff *)` syntax scopes `Bash` access to commands that start with that prefix. The [Claude Code permissions model](https://code.claude.com/docs/en/permissions) supports both full tool names (`Read`) and prefix-scoped tool access through wildcards (`Bash(git diff *)`).
 
+Claude Code applies the same subcommand-level granularity to its own auto-generated rules: approving a compound command with "Yes, don't ask again" saves a separate rule per subcommand — up to 5 rules for one compound command — rather than a single rule for the whole string ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)).
+
 ## What to include in the allowlist
 
 Design the allowlist around the smallest set of tools the command needs. This cuts approval prompts for routine tool use and shows your intent to teammates reading the command file:
@@ -79,6 +81,8 @@ Commands checked into `.claude/commands/` (or `.claude/skills/<name>/SKILL.md`) 
 ## Layering with session-level permissions
 
 Command-level `allowed-tools` works on top of session-level permissions, not instead of them. Claude Code evaluates permission rules in [deny, then ask, then allow order](https://code.claude.com/docs/en/permissions). If a tool is denied at any level, no other level can allow it. The field narrows the set of tools that run without prompting during the command. It cannot grant access to tools blocked by session-level deny rules.
+
+A PreToolUse hook enforces this even more strictly: a hook that exits with status code 2 blocks the tool call before permission rules are evaluated at all, so the block holds even when the command's `allowed-tools` list would otherwise let the call proceed without a prompt ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)).
 
 ## When this backfires
 

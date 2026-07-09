@@ -1,6 +1,7 @@
 ---
 title: "Shadow Tech Debt Created by Autonomous AI Agent Commits"
 description: "AI agents complete tasks without architectural context. Each agentic PR looks correct in isolation, but cumulative drift erodes codebase coherence silently."
+term: "Shadow Tech Debt"
 tags:
   - agent-design
   - workflows

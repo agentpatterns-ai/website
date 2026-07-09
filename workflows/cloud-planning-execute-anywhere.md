@@ -1,6 +1,7 @@
 ---
 title: "Cloud Planning with Inline-Comment Review and Execute-Anywhere Choice"
 description: "Draft plans in a cloud session, review them inline in the browser, then defer the cloud-versus-local execution choice to approval time."
+term: "Cloud Planning"
 tags:
   - workflows
   - agent-design

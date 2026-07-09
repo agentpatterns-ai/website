@@ -1,6 +1,7 @@
 ---
 title: "Grade Agent Outcomes, Not Execution Paths"
 description: "Evaluate agents by the final state they produce, not the sequence of steps they took to get there. Path-based evals penalize valid alternative solutions."
+term: "Outcome Grading"
 tags:
   - agent-design
   - testing-verification

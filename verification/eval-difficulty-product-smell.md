@@ -52,7 +52,7 @@ The smell is a heuristic, not a theorem. Four conditions where pushing for verif
 
 - The artifact's value is inseparable from its holistic form. A legal opinion, a creative narrative, or a research synthesis loses what makes it useful when broken into accept/reject diffs. Hamel acknowledges this on the workers-comp report: "You might object that a fifty-page opinion is hard to verify. That is true, and the product should not pretend otherwise" ([Hamel Husain — eval-smell](https://hamel.dev/blog/posts/eval-smell/)). The fix there was a workflow refactor (research-assistant pattern) rather than slicing the report.
 - The product is mid-life and users trust the existing surface. Adding provenance everywhere can read as "the system is suddenly unsure of itself" and erode trust. Stage the rollout against a clear failure-mode story.
-- Verification labour is asymmetric. When verification itself is expert-bound (medical, legal, regulated finance), exposing every claim with provenance can make review more expensive — the reviewer must now check every cited source. Expose only a small, high-leverage subset of checks.
+- Verification labour is asymmetric. When verification itself is expert-bound (medical, legal, regulated finance), exposing every claim with provenance can make review more expensive — the reviewer must now check every cited source. Expose only a small, high-leverage subset of `accept/reject diff` checks.
 - The domain has no trusted reference points. Hamel's pattern leans on "compare against a vetted source." Greenfield domains, novel research, or first-of-kind synthesis have nothing to anchor against; invest in scoring expertise instead, accepting that some artifacts are intrinsically hard to verify.
 
 ## Example

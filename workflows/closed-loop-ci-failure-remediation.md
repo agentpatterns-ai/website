@@ -1,6 +1,7 @@
 ---
 title: "Closed-Loop CI Failure Remediation with Cloud Coding Agents"
 description: "Dispatching a cloud coding agent on a CI failure event and surfacing a fix PR works only when the dispatcher classifies the failure, sanitises the log payload, scopes the fix, caps retries, and keeps PR review load-bearing."
+term: "Closed-Loop CI Failure Remediation"
 tags:
   - workflows
   - agent-design

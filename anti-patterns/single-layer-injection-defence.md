@@ -1,6 +1,7 @@
 ---
 title: "Single-Layer Prompt Injection Defence Anti-Pattern"
 description: "Relying on one safeguard leaves agents vulnerable to injection attacks. Defence-in-depth with multiple independent layers is required for agent security."
+term: "Single-Layer Prompt Injection Defence"
 tags:
   - context-engineering
   - agent-design

@@ -1,6 +1,7 @@
 ---
 title: "Discrete Phase Separation"
 description: "Prevent context contamination by running research, planning, and execution in separate conversations — only distilled artifacts cross phase boundaries."
+term: "Discrete Phase Separation"
 tags:
   - agent-design
   - tool-agnostic

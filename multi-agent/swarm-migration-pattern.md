@@ -1,6 +1,7 @@
 ---
 title: "Swarm Migration Pattern"
 description: "Coordinate 10–20 parallel subagents to migrate large codebases atomically — each agent handles an independent file chunk, achieving 6–10x speedup over sequential approaches."
+term: "Swarm Migration Pattern"
 tags:
   - multi-agent
   - workflows

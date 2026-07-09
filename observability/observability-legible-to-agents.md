@@ -1,6 +1,7 @@
 ---
 title: "Making Application Observability Legible to Agents"
 description: "Wire browser automation, metrics, and structured logs into agent context so agents can reproduce bugs, verify fixes visually, and reason about system behavior."
+term: "Application Observability Legible to Agents"
 tags:
   - agent-design
   - observability

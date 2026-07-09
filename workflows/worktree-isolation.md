@@ -28,7 +28,7 @@ Learn it hands-on with the [Sandboxes for Swarms guided lesson](https://learn.ag
 
 For agent workflows, this gives each agent a private sandbox. Claude Code sets this up for each sub-agent through `isolation: worktree`. The agent reads and writes files without touching any other agent's environment. If its output is wrong, you delete the worktree. If its output is correct, you submit its branch for merge.
 
-The [Claude Code worktrees workflow documentation](https://code.claude.com/docs/en/common-workflows) covers the mechanics. The underlying primitive is standard [git worktree](https://git-scm.com/docs/git-worktree), so nothing about the isolation guarantee is Claude-specific.
+The [Claude Code worktrees workflow documentation](https://code.claude.com/docs/en/common-workflows) covers the mechanics. The underlying primitive is standard [git worktree](https://git-scm.com/docs/git-worktree), a core Git feature since [Git 2.5, released in July 2015](https://github.blog/2015-07-29-git-2-5-including-multiple-worktrees-and-triangular-workflows/) — so nothing about the isolation guarantee is Claude-specific.
 
 ## Isolation guarantees
 
@@ -41,7 +41,7 @@ The [Claude Code worktrees workflow documentation](https://code.claude.com/docs/
 
 Worktrees let agents work at the same time without coordination overhead. An agent refactoring authentication and an agent adding a new feature can run in parallel, because they work in separate directories.
 
-The [batch pattern](../tools/claude/batch-worktrees.md) works like this: split work into N units, spawn N agents each in its own worktree, and have each agent open a PR. CI validates each branch on its own.
+The [batch pattern](../tools/claude/batch-worktrees.md) works like this: split work into N units, spawn N agents each in its own worktree, and have each agent open a PR. CI validates each branch on its own. In production this scales past a handful: Superset [runs up to 10 coding agents in parallel this way, each in its own isolated workspace](https://vercel.com/blog/how-superset-built-the-ide-for-ai-agents-on-vercel), with a separate PR and CI run per worktree.
 
 ```mermaid
 graph TD

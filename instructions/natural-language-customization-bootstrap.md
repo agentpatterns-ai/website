@@ -1,6 +1,7 @@
 ---
 title: "Natural-Language Customization Bootstrap"
 description: "Let the agent draft its own customization files — instructions, skills, subagents, hooks — from a plain-language description, then review and commit the scaffolding before it ships."
+term: "Natural-Language Customization Bootstrap"
 tags:
   - instructions
   - tool-engineering

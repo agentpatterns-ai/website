@@ -1,6 +1,7 @@
 ---
 title: "Agent-Laundered Bug Reports"
 description: "Running a bug report through an LLM before filing strips the load-bearing observation and replaces it with speculation that misleads downstream triage."
+term: "Agent-Laundered Bug Reports"
 aliases:
   - slop issues
   - agent-reworded bug reports

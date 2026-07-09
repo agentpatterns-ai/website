@@ -1,6 +1,7 @@
 ---
 title: "Agentic Code Review Architecture With Tool-Calling"
 description: "Move code review from static diff analysis to an agentic architecture that uses tool-calling to gather repository context for deeper reviews."
+term: "Agentic Code Review Architecture"
 tags:
   - testing-verification
   - code-review

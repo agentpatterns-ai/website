@@ -1,6 +1,7 @@
 ---
 title: "Semantic Issue Search from Chat vs Query Syntax"
 description: "Natural-language issue search resolves chat-described symptoms to existing issues — wins for paraphrased intent, loses for exact identifiers and audit queries."
+term: "Semantic Issue Search"
 tags:
   - workflows
   - copilot

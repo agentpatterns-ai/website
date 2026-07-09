@@ -31,11 +31,11 @@ Elastic context orchestration responds by giving the agent's policy a vocabulary
 
 | Operation | What it does | When to pick it |
 |-----------|--------------|-----------------|
-| Skip | Do not add the current observation to working context | Low-value page, captcha, navigational filler |
-| Compress | Summarize a span of prior turns into a shorter form | Resolved sub-task; evidence already extracted |
-| Snippet | Keep a small extracted span verbatim; drop the surrounding observation | A page contained one critical fact among long boilerplate |
-| Rollback | Discard a recent reasoning branch | Dead end identified; resume from the last productive state |
-| Delete | Remove a specific entry from working context | Superseded result, contradicted claim |
+| `Skip` | Do not add the current observation to working context | Low-value page, captcha, navigational filler |
+| `Compress` | Summarize a span of prior turns into a shorter form | Resolved sub-task; evidence already extracted |
+| `Snippet` | Keep a small extracted span verbatim; drop the surrounding observation | A page contained one critical fact among long boilerplate |
+| `Rollback` | Discard a recent reasoning branch | Dead end identified; resume from the last productive state |
+| `Delete` | Remove a specific entry from working context | Superseded result, contradicted claim |
 
 LongSeeker's authors note that Compress alone is expressively complete: you can build any retention strategy from repeated compression. The other four operations exist for efficiency and fidelity. They cut generation cost (Skip drops a span with no LLM call, unlike Compress) and cut hallucination risk (Snippet keeps verbatim evidence; Compress can paraphrase it away) ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)).
 

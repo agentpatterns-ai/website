@@ -1,6 +1,7 @@
 ---
 title: "Four-Layer Taxonomy of Agent Security Risks"
 description: "Organise autonomous agent threats into context/instruction, tool/action, state/persistence, and ecosystem/automation layers — a navigation aid that surfaces coverage gaps when threats propagate across boundaries."
+term: "Four-Layer Agent Security Taxonomy"
 tags:
   - security
   - agent-design

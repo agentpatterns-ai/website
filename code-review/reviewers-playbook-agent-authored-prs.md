@@ -56,15 +56,15 @@ Steps 3–5 target this surface explicitly: scan for duplicated utilities across
 
 ## Distinguishing unidiomatic-but-valid from fabricated
 
-The single most useful heuristic is to demand a test that fails on the pre-change behavior. "If the agent can't write a test that would have caught the bug it claims to fix, the fix is incomplete or the understanding is wrong" ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)). The test serves two purposes: it proves the agent understood the actual defect (not just a plausible-sounding one), and it pins the contract for future agent edits to the same area.
+The single most useful heuristic is to demand a test that fails on the pre-change behavior. "If the agent can't write a test that would have caught the bug it claims to fix, the fix is incomplete or the understanding is wrong" ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)). The test proves the agent understood the actual defect, not a plausible-sounding one, and it pins the contract for future edits to the same area.
 
-Three diff-level tells separate "agent picked a reasonable unidiomatic approach" from "agent fabricated a contract that does not exist":
+Three diff-level tells separate a reasonable unidiomatic approach from a fabricated one:
 
-- Unidiomatic but valid — symbols resolve, imports are real, the approach differs from house style but works; comment to align with conventions, do not block
-- Fabricated contract — the agent calls a method that does not exist on the imported type, references a config key the schema does not define, or relies on a return shape the function never produces
-- Phantom dependency — the agent imports a package that was never declared in the manifest, or references an API version the installed library no longer exposes
+- Unidiomatic but valid — symbols resolve, imports are real, the approach differs from house style but works; comment to align with conventions, do not block.
+- Fabricated contract — the agent calls `response.paginate(cursor)` on a type whose class never defines that method, or reads a `retry_after_ms` config key the schema does not declare.
+- Phantom dependency — the diff adds `import lodash-es` with no matching `package.json` entry, or calls a `v3` endpoint method the installed SDK only exposes through `v2`.
 
-When in doubt, run the code path locally before approving. Agents fabricate confidently, and the surface markers are weak.
+Run the flagged code path locally before approving — agents fabricate confidently, and the surface markers alone are too weak to trust.
 
 ## Effort budget: AI versus human PRs
 

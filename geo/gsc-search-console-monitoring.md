@@ -1,5 +1,6 @@
 ---
 title: "Google Search Console Monitoring Workflow"
+term: "Google Search Console Monitoring"
 tags:
   - cost-performance
   - tool-agnostic

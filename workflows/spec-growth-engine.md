@@ -1,6 +1,9 @@
 ---
 title: "Spec-Anchored Drift-Gated Architecture (Spec Growth Engine)"
 description: "Make spec-code divergence a blocking merge gate and scope each agent's context to an ownership path in a machine-readable spec graph — only under stable contracts."
+term: "Spec Growth Engine"
+aliases:
+  - Spec-Anchored Drift-Gated Architecture
 tags:
   - workflows
   - agent-design

@@ -1,6 +1,7 @@
 ---
 title: "Variance-Based RL Sample Selection"
 description: "Profile training data by score variance before RL fine-tuning to identify the high-value subset where the model sometimes succeeds and sometimes fails."
+term: "Variance-Based RL Sample Selection"
 tags:
   - testing-verification
   - evals

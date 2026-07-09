@@ -1,6 +1,7 @@
 ---
 title: "The Reasoning-Complexity Trade-off"
 description: "Stronger LLMs produce more bloated and coupled code. Functional correctness and detailed prompting do not mitigate the architectural decay — capability gains buy maintainability losses."
+term: "Reasoning-Complexity Trade-off"
 tags:
   - anti-pattern
   - agent-design

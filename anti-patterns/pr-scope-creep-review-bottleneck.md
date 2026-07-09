@@ -1,6 +1,7 @@
 ---
 title: "PR Scope Creep as a Human Review Bottleneck"
 description: "When a stalled PR blocks dependent work, you add that work to the same PR — making it larger, slower to review, and harder to merge, compounding the bottleneck"
+term: "PR Scope Creep as a Human Review Bottleneck"
 aliases:
   - review bottleneck
   - PR scope creep

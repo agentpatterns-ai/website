@@ -1,6 +1,7 @@
 ---
 title: "Mid-Session Config Changes as Invisible Cache Invalidators"
 description: "Switching model, effort, or MCP servers mid-session silently invalidates the prompt cache and re-bills the entire prefix at ~10x the cached rate."
+term: "Mid-Session Config Changes as Invisible Cache Invalidators"
 tags:
   - cost-performance
   - context-engineering

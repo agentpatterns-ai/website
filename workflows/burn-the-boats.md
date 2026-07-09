@@ -1,6 +1,7 @@
 ---
 title: "Burn the Boats — Commitment-Forcing Deprecation"
 description: "Remove a working feature entirely — with a hard deadline and migration path — to force full commitment to a new paradigm and prevent the team from anchoring to the old approach."
+term: "Burn the Boats"
 tags:
   - workflows
   - tool-agnostic

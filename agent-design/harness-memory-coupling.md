@@ -1,6 +1,7 @@
 ---
 title: "Harness-Memory Coupling as a Design Axis"
 description: "Treat memory as a property of the harness, not a pluggable module — identify the load-bearing seams where the two meet, and use ownership of those seams as the axis for choosing or building an agent system."
+term: "Harness-Memory Coupling"
 tags:
   - agent-design
   - memory
@@ -56,7 +57,7 @@ graph TD
 
 Stateful provider APIs (OpenAI Responses API, Anthropic server-side compaction) hold conversation state on the provider. You cannot resume a thread against a different model, because the memory is keyed to the provider's server.
 
-Closed client harnesses (Chase's example: Claude Agent SDK over closed-source Claude Code) write client-side memory artifacts in an unknown shape. The files sit on your disk, but another harness cannot read them.
+Closed client harnesses (Chase's example: Claude Agent SDK over closed-source Claude Code) write client-side memory artifacts in an unknown shape. The files sit on your disk, but another harness cannot read them. The harness behind them is not small: when Claude Code's source leaked, it measured 512,000 lines of code ([LangChain](https://blog.langchain.com/your-harness-your-memory/)) — memory logic written against an interface of that size is not a weekend port to a different harness.
 
 Fully managed harnesses with memory behind the API are the highest-lock-in tier. [Anthropic's Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) is Chase's example: harness, session log, and long-term memory all behind one API, with no user-side inspection or migration path.
 
@@ -66,7 +67,7 @@ Individual coupling points also leak lock-in. OpenAI's Codex is open source yet 
 
 Stateless model APIs are nearly interchangeable: prompts differ, protocols are similar, migration is tractable. State changes that calculus. Memory accumulates a proprietary dataset of interactions and preferences that makes the agent more useful per user — and more expensive to replace ([LangChain](https://blog.langchain.com/your-harness-your-memory/)). The harness decides what enters that dataset and in what form, so owning the harness is how you own the memory.
 
-Industry architectures corroborate the coupling. Anthropic's Managed Agents and LangChain's Deep Agents Deploy both document the Session — the event log that is memory — as authoritative state owned and replayed by the harness loop ([Anthropic](https://www.anthropic.com/engineering/managed-agents)). See [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) for the three-primitive architecture.
+Industry architectures corroborate the coupling. Anthropic's Managed Agents and LangChain's Deep Agents Deploy both document the Session — the event log that is memory — as authoritative state owned and replayed by the harness loop. Anthropic reports that starting inference by pulling pending events straight from that session log, rather than waiting on sandbox provisioning, cut median time-to-first-token by roughly 60% and the 95th-percentile figure by over 90% ([Anthropic](https://www.anthropic.com/engineering/managed-agents)). See [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) for the three-primitive architecture.
 
 ## When the coupling framing does not apply
 

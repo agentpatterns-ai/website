@@ -1,5 +1,6 @@
 ---
 title: "Density-Normalized Quality Metrics Mask AI-Driven Code Growth"
+term: "Density-Normalized Quality Metric"
 description: "A density-normalized quality drop after AI adoption can be a code-growth artifact — a moving denominator turns the ratio into the wrong signal."
 tags:
   - anti-pattern

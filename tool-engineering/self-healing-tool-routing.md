@@ -1,5 +1,6 @@
 ---
 title: "Self-Healing Tool Routing"
+term: "Self-Healing Tool Routing"
 description: "Route agent tool calls through a cost-weighted graph; recompute paths on failure and escalate to the LLM only when no feasible path exists."
 tags:
   - cost-performance

@@ -1,6 +1,7 @@
 ---
 title: "Agent-Discoverable Slash Commands"
 description: "Slash commands promoted to model-callable primitives — the agent's planner can discover and invoke user-authored workflows mid-loop, collapsing the wall between human-invoked and agent-invoked capabilities."
+term: "Agent-Discoverable Slash Commands"
 tags:
   - agent-design
   - tool-engineering

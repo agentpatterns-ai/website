@@ -1,9 +1,9 @@
 ---
 title: "Domain-Specific System Prompts with Concrete Examples"
 description: "How domain-specific system prompts with worked examples improve agent reasoning quality, where to place them, and when the technique has no effect."
+term: "Domain-Specific System Prompts"
 aliases:
   - Domain-Specific Personas
-  - Domain-Specific System Prompts
 tags:
   - agent-design
   - instructions

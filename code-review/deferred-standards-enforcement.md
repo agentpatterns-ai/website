@@ -1,6 +1,7 @@
 ---
 title: "Deferred Standards Enforcement via Review Agents"
 description: "Move post-hoc-checkable standards out of CLAUDE.md into a reviewer agent that runs at PR time — saving implementation context for code understanding, spending it at review where compliance checking is the entire job."
+term: "Deferred Standards Enforcement"
 tags:
   - code-review
   - instructions
@@ -9,7 +10,7 @@ tags:
 aliases:
   - "CLAUDE.md standards split"
   - "review-time standards enforcement"
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-09
 maturity: adopted
 ---
 
@@ -19,7 +20,7 @@ maturity: adopted
 
 ## The problem with standards in CLAUDE.md
 
-CLAUDE.md loads into every Claude Code session. Every line it contains costs tokens on every task, whether or not those tokens matter to the work in that session ([Claude Code memory docs](https://code.claude.com/docs/en/memory)). Anthropic frames this as an attention budget: in a fully packed context, preloaded content competes with task instructions, tool results, and code for the model's attention ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); see also [Context Engineering](../context-engineering/context-engineering.md)).
+CLAUDE.md loads into every Claude Code session. Every line it contains costs tokens on every task, whether or not those tokens matter to the work in that session; Anthropic's own guidance recommends keeping a project CLAUDE.md under 200 lines, since longer files consume more context and reduce adherence ([Claude Code memory docs](https://code.claude.com/docs/en/memory)). Anthropic frames this as an attention budget: in a fully packed context, preloaded content competes with task instructions, tool results, and code for the model's attention — on Claude Sonnet 4.5, for example, that budget is a 200,000-token context window shared by CLAUDE.md, every tool result, and every file the agent reads ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); [Anthropic: Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows); see also [Context Engineering](../context-engineering/context-engineering.md)).
 
 Standards documents can be large. Style guides, compliance checklists, naming conventions, and API requirements all add up. Load all of them into every implementation session and the agent writing code carries the same context as the agent that should be reviewing it — a phase mismatch.
 

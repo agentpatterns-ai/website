@@ -1,6 +1,7 @@
 ---
 title: "L1 → L2: Adding Feedback Loops to a Brownfield Repo"
 description: "Transform an Agent-Readable codebase (L1) into an Agent-Assisted one (L2) by adding automated feedback loops: strong types, comprehensive tests, and linter rules with remediation messages."
+term: "L1 to L2 Transition"
 tags:
   - training
   - agent-design

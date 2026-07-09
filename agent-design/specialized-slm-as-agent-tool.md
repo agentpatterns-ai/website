@@ -1,6 +1,7 @@
 ---
 title: "Specialized Small Language Models as Agent Sub-Tools"
 description: "Hide a small fine-tuned model behind a tool-call interface so a large orchestrator can offload high-volume narrow operations — search, exploration, terminal output filtering — without spending its own context budget."
+term: "Specialized SLM as Agent Tool"
 tags:
   - agent-design
   - cost-performance

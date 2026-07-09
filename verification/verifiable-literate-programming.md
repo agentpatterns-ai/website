@@ -58,12 +58,12 @@ Humans catch intent mismatches far more reliably in readable prose than in code,
 
 No mainstream assistant ships a VLP loop, so approximate it manually:
 
-1. Generate the code, then ask the assistant to "describe what this code actually does, line group by line group, in plain English — do not restate my prompt." This is the code-to-doc translation.
+1. Generate the code, then ask the assistant to `describe what this code actually does, line group by line group, in plain English — do not restate my prompt`. This is the code-to-doc translation.
 2. Read the description against your intent. You are judging prose, not tracing control flow.
 3. Where the description names behavior you did not ask for, flag that line and correct the code — the mismatch is now explicit.
-4. For each behavior you confirmed, ask for an assertion or type that pins it, and run it in CI. This is the derived-check step, and unlike the review it holds deterministically.
+4. For each behavior you confirmed, ask for an assertion that pins it, e.g. `assert result == sorted(items)[len(items) // 2]`, and run it in CI. This is the derived-check step, and unlike the review it holds deterministically.
 
-A prompt for "return the median of a list" yields code whose plain-English description reads "sorts the list and returns the middle element; for an even-length list returns the lower of the two middle elements." The prose exposes the even-length tie-break the prompt never specified — a mismatch you would likely miss reading the sort-and-index code directly.
+A prompt for `return the median of a list` yields code whose plain-English description reads: it sorts the list and returns the middle element, and for an even-length list it returns the lower of the two middle elements. The prose exposes the even-length tie-break the prompt never specified — a mismatch you would likely miss reading the sort-and-index code directly.
 
 ## Key Takeaways
 

@@ -50,14 +50,14 @@ Build has the highest skill density (six) but the skills are auto-activated by t
 
 ## SKILL.md structural elements
 
-Each skill in a production SDLC library shares the same anatomy. It enforces a process rather than supplying reference material:
+Each skill in a production SDLC library shares four structural elements, enforcing a process rather than supplying reference material:
 
-- Trigger conditions — explicit "When to Use" criteria so auto-activation fires correctly
+- Trigger conditions — explicit `When to Use` criteria so auto-activation fires correctly
 - Step-by-step process — the workflow the agent must follow, not just what it should know
 - Rationalizations table — common shortcuts paired with documented rebuttals (for example, "We can add tests later" maps to "Tests written after implementation verify the implementation, not the requirement")
 - Verification requirements — proof gates the agent must clear before proceeding (tests passing, build output, runtime data)
 
-The rationalizations table is the highest-signal element: it turns process guidelines into enforcement. Without it, agents follow the described workflow only until the task context suggests a shortcut is acceptable.
+Without the rationalizations table, agents follow the described workflow only until the task context suggests a shortcut is acceptable — the table is what turns a process guideline into enforcement.
 
 Agent personas (code-reviewer, test-engineer, security-auditor) complement the skill library as reusable reviewer perspectives, loaded on demand independent of the phase taxonomy.
 

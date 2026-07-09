@@ -1,6 +1,7 @@
 ---
 title: "Code-Native Memory Substrates for Coding Agents"
 description: "Root agent memory in codebase artifacts — typed units from VCS history, AST diffs, and git-backed task graphs — so structure replaces lossy natural-language summaries."
+term: "Code-Native Memory Substrates"
 tags:
   - agent-design
   - memory

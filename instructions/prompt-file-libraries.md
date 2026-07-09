@@ -87,7 +87,7 @@ Copilot uses three instruction layers, each with different scoping and activatio
 | Path-specific | `.github/instructions/*.instructions.md` | Automatic when file path matches glob | Domain-specific rules |
 | Task-specific | `.github/prompts/*.prompt.md` | Manual invocation via `/` command | On-demand workflows |
 
-Applicable layers combine rather than replace each other. When you invoke a prompt file, it receives repository-wide instructions, matching path-specific instructions, and the prompt file content together.
+Applicable layers combine rather than replace each other. When you invoke a prompt file, it receives repository-wide instructions, matching path-specific instructions, and the prompt file content together. Because the repository-wide file loads on every request regardless of task, GitHub's own generation guidance caps it at two pages of instructions ([GitHub Docs: Custom Instructions](https://docs.github.com/en/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot)) — the same discipline prompt files avoid needing, since they only load when invoked.
 
 ### Tool priority resolution
 
@@ -103,7 +103,7 @@ When a prompt file specifies `tools` in frontmatter, the resolution order is: pr
 
 Claude Code Skills follow the [Agent Skills open standard](https://agentskills.io) — see [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md). They support `$ARGUMENTS` substitution, subagent execution via `context: fork`, and dynamic shell injection.
 
-Cursor Rules activate based on context via glob-pattern scoping ([Cursor: Rules](https://cursor.com/docs/context/rules)). Unlike prompt files, you do not invoke them by hand.
+Cursor Rules activate based on context via glob-pattern scoping, offering 4 rule types (Always Apply, Apply Intelligently, Apply to Specific Files, Apply Manually) and a documented ceiling of 500 lines per rule file ([Cursor: Rules](https://cursor.com/docs/context/rules)). Unlike prompt files, you do not invoke them by hand.
 
 ## Library organization
 

@@ -1,6 +1,7 @@
 ---
 title: "Runnable Documentation as Agent Verification"
 description: "Convert inline code examples into standalone files that CI executes on every build — catching doc rot with the same signals that catch broken code, and cutting stale-context failures in agents that retrieve docs via RAG."
+term: "Runnable Documentation"
 tags:
   - testing-verification
   - workflows
@@ -92,13 +93,13 @@ The file runs as a real Python script in CI through `make test-code-samples`. Bl
 
 ## When this backfires
 
-The pattern degrades or inverts in several conditions:
+The pattern degrades or inverts under several conditions:
 
-- Small doc surface with rare API changes: extraction, delineator, and CI cost exceeds the drift it catches, so direct edits plus a manual pre-release smoke test win on total cost
-- Non-executable content: style guides, architectural narratives, and decision records have no code to assert against, so forcing every page through the pipeline produces no test signal and real maintenance cost
-- Environment-dependent examples: snippets that need real API keys, paid services, or production data either fail in CI without mocks (constant noise) or use mocks that themselves drift (the stale-docs problem moved one layer out)
-- Long-running or streaming flows: multi-minute agent runs, streaming responses, and human-in-the-loop examples are expensive on every push, so test cadence falls behind change cadence and the signal decays
-- Prose that paraphrases output: when text describes behavior rather than quoting exact output, equality assertions are brittle, and the assertion churn fatigues reviewers, who start rubber-stamping and recreate the failure the pattern was meant to prevent
+- Small doc surface, rare API changes: extraction and CI overhead cost more than the drift caught, so a manual smoke test wins.
+- Non-executable content: style guides and decision records have no code to assert against, so the pipeline adds no signal.
+- Environment-dependent examples: snippets needing API keys or production data fail in CI without mocks, or use mocks that drift too.
+- Long-running or streaming flows: multi-minute runs and human-in-the-loop examples cost too much to test on every push.
+- Prose that paraphrases output: brittle equality assertions against paraphrased text fatigue reviewers into rubber-stamping.
 
 Tested docs do not guarantee freshness at the retrieval layer. A RAG system indexing last week's version still returns last week's example. Runnable documentation fixes the upstream source; cache invalidation and embedding refresh are separate problems ([kapa.ai: RAG Gone Wrong](https://www.kapa.ai/blog/rag-gone-wrong-the-7-most-common-mistakes-and-how-to-avoid-them)).
 

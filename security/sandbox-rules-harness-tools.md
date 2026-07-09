@@ -1,6 +1,7 @@
 ---
 title: "Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party"
 description: "Define sandbox rules only for tools your harness controls; document explicitly that external MCP and user-provided tools must enforce their own guardrails."
+term: "Harness-Owned Sandbox Scoping"
 aliases:
   - sandbox scoping
   - tool-boundary sandboxing

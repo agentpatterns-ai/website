@@ -1,6 +1,7 @@
 ---
 title: "Persistent-Connection Agent Transport"
 description: "Hold one bidirectional channel to the model API across an agent rollout, sending only incremental input each turn so per-request overhead amortises over the full session."
+term: "Persistent-Connection Agent Transport"
 tags:
   - agent-design
   - cost-performance

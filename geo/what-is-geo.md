@@ -1,6 +1,7 @@
 ---
 title: "What is GEO — Generative Engine Optimization Defined"
 description: "Defines GEO and AEO, explains the shift from keyword ranking to a citation economy, and contextualizes the discipline for developer audiences."
+term: "Generative Engine Optimization"
 tags:
   - geo
   - workflows

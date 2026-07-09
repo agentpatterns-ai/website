@@ -1,6 +1,7 @@
 ---
 title: "Consolidate Agent Tools to Reduce Cognitive Overhead"
 description: "Fewer, higher-level tools reduce selection ambiguity and context cost compared to many narrow tools that mirror API endpoint boundaries."
+term: "Consolidate Agent Tools"
 tags:
   - agent-design
   - cost-performance

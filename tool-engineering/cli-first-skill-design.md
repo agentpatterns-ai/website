@@ -1,6 +1,7 @@
 ---
 title: "CLI-First Skill Design"
 description: "Design agent skills as CLI tools so the same interface serves both humans debugging locally and agents automating through shell tool calls."
+term: "CLI-First Skill Design"
 tags:
   - agent-design
   - tool-engineering

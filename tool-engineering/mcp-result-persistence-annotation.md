@@ -1,6 +1,7 @@
 ---
 title: "MCP Tool Result Persistence via _meta Annotation"
 description: "How MCP servers mark individual tool outputs as durable in the Claude Code context window using the _meta['anthropic/maxResultSizeChars'] annotation."
+term: "MCP Tool Result Persistence via _meta Annotation"
 tags:
   - tool-engineering
   - context-engineering

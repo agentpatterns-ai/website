@@ -57,11 +57,11 @@ A summarizer produces a structured artifact the reviewer can judge in one pass. 
 
 ### Stage 3: human confirmation
 
-A maintainer reviews the package and decides whether the knowledge is worth incorporating. This decision stays separate from any judgment about the contributor's specific implementation. Rejection at this stage is cheap: the project never spends regeneration effort on a contribution it would not have accepted anyway. Approval moves the package, not the code, into the project.
+A maintainer judges whether the knowledge is worth incorporating — the same separation of concerns the [reviewer's playbook for agent-authored PRs](../code-review/reviewers-playbook-agent-authored-prs.md) applies to code review, but here applied to the package instead of the diff. Rejection here is cheap: the project spends no regeneration effort on a contribution it would not have accepted anyway. Approval moves the package, not the code, into the project.
 
 ### Stage 4: project agent regenerates
 
-A project-owned coding agent reads the confirmed package and writes the implementation against the receiving project's environment: its conventions, its tests, its security policy, its repository context. The external diff is reference material the agent may consult, but the executed output is something the project would have written for itself. This is the operational meaning of "trusted environment" — even if the external trace was poisoned, the regenerated code lives inside the project's existing guardrails. The execution-provenance literature frames the same primitive (typed traces, retained taint, replayable provenance) as the substrate downstream trust assessments can be built on ([arXiv:2606.04990](https://arxiv.org/abs/2606.04990), Wang et al., 2026).
+A project-owned coding agent reads the confirmed package and reimplements it under the receiving project's own conventions, tests, security policy, and repository context, treating the external diff as reference material only. That is what "trusted environment" means operationally: even a poisoned external trace cannot survive contact with output the project would have written for itself. The execution-provenance literature frames the same primitive (typed traces, retained taint, replayable provenance) as the substrate downstream trust assessments can be built on ([arXiv:2606.04990](https://arxiv.org/abs/2606.04990), Wang et al., 2026).
 
 ## Cost comparison
 

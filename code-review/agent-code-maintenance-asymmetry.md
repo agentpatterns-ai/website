@@ -1,6 +1,7 @@
 ---
 title: "Agent-Generated Code Maintenance Asymmetry"
 description: "AI-generated files receive about half the commit frequency of human-authored files, and the modification mix shifts toward feature additions instead of bug fixes — a maintenance footprint that requires its own ownership and review policy."
+term: "Agent-Generated Code Maintenance Asymmetry"
 tags:
   - code-review
   - human-factors

@@ -1,6 +1,7 @@
 ---
 title: "Frozen Spec File: Preserving Intent in AI Agent Sessions"
 description: "Write goals, non-goals, constraints, and completion criteria into a file the agent reads but cannot modify — preventing drift across context compaction."
+term: "Frozen Spec File"
 tags:
   - instructions
   - tool-agnostic

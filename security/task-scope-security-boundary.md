@@ -1,6 +1,7 @@
 ---
 title: "Treat Task Scope as a Security Boundary"
 description: "Narrow task scope limits attack surface and blast radius. Tight instructions force injections to contradict directives rather than plausibly extend vague ones."
+term: "Task Scope Security Boundary"
 tags:
   - agent-design
   - security
@@ -60,7 +61,7 @@ An agent reading public documentation needs no write access, no file system acce
 
 ## Scope as a defense layer, not a substitute
 
-Narrow scope reduces attack surface but does not eliminate it. Combine with:
+Narrow scope reduces attack surface but does not eliminate it. AgentDojo, a framework built to measure this empirically, tests agents against 97 realistic tasks and 629 security test cases and finds that existing prompt injection attacks "break some security properties but not all" — evidence that scope reduction narrows what an attacker can reach without closing every attack path. [Source: AgentDojo (arXiv:2406.13352)](https://arxiv.org/abs/2406.13352) Combine with:
 
 - [Human-in-the-loop confirmation gates](human-in-the-loop-confirmation-gates.md) for irreversible actions
 - [Minimal permissions](blast-radius-containment.md) — scope the toolset to match task scope

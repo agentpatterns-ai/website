@@ -1,6 +1,7 @@
 ---
 title: "Skeleton Projects as Agent Scaffolding"
 description: "Use community repository templates as architectural scaffolding for agent-driven development instead of having agents build project structure from scratch."
+term: "Skeleton Projects"
 tags:
   - workflows
   - agent-design
