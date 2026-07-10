@@ -115,3 +115,4 @@ With this template in `CLAUDE.md`, the agent's PR descriptions consistently incl
 - [Tiered Code Review: AI-First with Human Escalation](tiered-code-review.md)
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md)
+- [Delegating Change Descriptions to the Agent](../anti-patterns/delegating-change-descriptions.md) — the complementary limit: structure is agent-fillable, but the intent behind a change is not

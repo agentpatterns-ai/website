@@ -73,3 +73,4 @@ An agent's only contact with your product is the literal bytes of your surface �
 - [AX/UX/DX Triad](../agent-design/ax-ux-dx-triad.md) — separating the agent, user, and developer audiences inside the harness; AX-as-discipline is its outward-facing complement.
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — applying HCI principles to the interface an agent calls.
 - [Human-Facing Docs in the Agent Era: Mental Models Over Reference](../human/human-docs-mental-models-agent-era.md) — the human-facing counterpart; what prose docs retain once agents absorb the machine-readable reference load.
+- [Rewriting a CLI Into a JSON Payload for Agents](../anti-patterns/cli-json-payload-rewrite.md) — the measured limit on AX enthusiasm: a JSON-input rewrite is cost without a correctness gain, so the real levers stay discoverability, help text, and structured output.

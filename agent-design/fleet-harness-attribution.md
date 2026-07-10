@@ -110,3 +110,4 @@ graph LR
 - [Per-Model Harness Tuning](per-model-harness-tuning.md) — what to do when fleet attribution exposes per-model interaction
 - [Eval Strategy by Agent Generation](eval-strategy-by-agent-generation.md) — locates the eval surface from current architecture; this is one Gen-6 method
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — token efficiency as a routing axis; complements the cost-side metric here
+- [Harness-Controlled Token Economics (The Harness Effect)](../token-engineering/harness-token-economics.md) — why the harness, not the model, sets the token bill this method attributes

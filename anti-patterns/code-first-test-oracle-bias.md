@@ -89,3 +89,4 @@ The only change is what the test-generation prompt is allowed to see. The spec-g
 - [Re-Run the Original Test Suite After Every Refinement Turn](../verification/test-suite-after-refinement-turn.md) — the pinned original suite is the invariant multi-turn refinement is not optimizing against
 - [Assertion-Free Test Theater in Agent-Authored Patches](assertion-free-test-theater.md) — agent-written tests that run green while carrying no real oracle signal
 - [Happy Path Bias](happy-path-bias.md) — agents skip error handling and edge cases systematically, in code and in tests
+- [Specification-Grounded Test Writing](../verification/specification-grounded-test-generation.md) — the complementary move: withhold the implementation, then supply the specification as enumerated rules so the tester knows the intended edge behavior

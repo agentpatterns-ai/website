@@ -173,3 +173,4 @@ The `explorer` description combines "Use PROACTIVELY" with "Use immediately afte
 - [Claude Code Sub-Agents](../tools/claude/sub-agents.md) — per-agent model selection mechanic
 - [Token-Efficient Tool Design](token-efficient-tool-design.md) — pair tier routing with lean tool surfaces
 - [Minimum-Sufficient Control Ladder](../agent-design/minimum-sufficient-control-ladder.md) — orthogonal axis: this page escalates *model tier* by task complexity; the ladder escalates *control mechanism* by named failure mode
+- [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — the complementary lever: the orchestration layer sets token volume and effective price, model routing sets the tier
