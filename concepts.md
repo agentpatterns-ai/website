@@ -664,6 +664,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Cost-Quality Pareto Measurement for Agent Configurations](token-engineering/cost-quality-pareto-measurement.md)
 - [Routing Decision Framework: Which Routing Pattern Fits Which Signal](token-engineering/routing-decision-framework.md)
 - [Temporal Token Routing: Batch and Flex Tiers for Non-Urgent Work](token-engineering/temporal-token-routing.md)
+- [Harness-Controlled Token Economics (The Harness Effect)](token-engineering/harness-token-economics.md)
 
 ## Security & Safety
 
@@ -921,6 +922,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Natural-Language Documentation as a Code-Review Intermediate (Verifiable Literate Programming)](verification/verifiable-literate-programming.md)
 - [Comparative Judging for Agent Configuration Ranking](verification/comparative-judging-config-ranking.md)
 - [Bounded Repair-Loop Iterations](verification/bounded-repair-loop-iterations.md)
+- [Specification-Grounded Test Writing](verification/specification-grounded-test-generation.md)
+- [Verify Observability in Agent-Generated Code](verification/verify-generated-code-observability.md)
 
 ## Hooks & Guardrails
 
@@ -1255,6 +1258,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](anti-patterns/code-first-test-oracle-bias.md)
 - [Blaming the Model for Scaffolding-Driven Quality Regressions](anti-patterns/blaming-the-model-for-scaffolding-regressions.md)
 - [Task Completion as Tool Certification (Silent Tool Rot)](anti-patterns/task-completion-as-tool-certification.md)
+- [Delegating Change Descriptions to the Agent](anti-patterns/delegating-change-descriptions.md)
+- [Rewriting a CLI Into a JSON Payload for Agents](anti-patterns/cli-json-payload-rewrite.md)
 
 ## Emerging Concepts
 

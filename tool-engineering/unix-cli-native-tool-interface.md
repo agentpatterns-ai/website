@@ -147,6 +147,7 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
 - [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md)
 - [Agent-Aware CLI via Environment Variable](agent-aware-cli-via-env-var.md) — orthogonal angle: a CLI adapting its output when an agent is detected, vs the output-filtering interface here
+- [Rewriting a CLI Into a JSON Payload for Agents](../anti-patterns/cli-json-payload-rewrite.md) — the counter-case: measured evidence that replacing conventional args with a JSON input payload does not improve agent reliability and costs more
 - [Agent-Computer Interface](agent-computer-interface.md)
 - [Semantic Tool Output](semantic-tool-output.md)
 - [Override Interactive Commands](override-interactive-commands.md)

@@ -101,6 +101,17 @@
   flex: 1;
 }
 
+.wwa-footer__rss {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: inherit;
+}
+
+.wwa-footer__rss:hover {
+  color: var(--md-accent-fg-color);
+}
+
 /* ── Concept map: multi-column link lists ── */
 
 .concept-map > ul {

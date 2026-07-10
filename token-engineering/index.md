@@ -91,6 +91,7 @@ Push verbose intermediate work to a cheaper model and return a compact result.
 
 You cannot reduce what you do not measure — instrument spend before cutting it.
 
+- [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — swapping only the orchestration layer cut cost per task 41% at parity quality; the harness sets both token volume and effective price
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — the instrument-attribute-fix-verify loop
 - [Cost-Quality Pareto Measurement for Agent Configurations](cost-quality-pareto-measurement.md) — plot each configuration on the (cost, quality) frontier so quality-trading downgrades are visible
 - [Code Cleanliness as an Agent Cost Lever](code-cleanliness-agent-cost-lever.md) — cleaner code cut token use 7-8% with no pass-rate change

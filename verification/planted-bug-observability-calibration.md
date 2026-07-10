@@ -112,3 +112,4 @@ If the captured logs include only `INFO request received` and `INFO request comp
 - [Agent Debugging](../observability/agent-debugging.md) — diagnosing agent failures using logs, traces, and tool call inspection
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md) — the instrumentation substrate planted bugs calibrate against
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — guardrails as another verification layer that planted bugs can probe
+- [Verify Observability in Agent-Generated Code](verify-generated-code-observability.md) — the upstream problem: agent-written code under-instruments in the first place, so its logs may fail calibration before any bug is planted

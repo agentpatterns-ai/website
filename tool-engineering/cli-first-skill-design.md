@@ -145,3 +145,4 @@ An agent calling `github.sh issues` receives a JSON array it can filter with `jq
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Skill as Knowledge Pattern](skill-as-knowledge.md)
 - [Batch File Operations via Bash Scripts](batch-file-operations.md)
+- [Rewriting a CLI Into a JSON Payload for Agents](../anti-patterns/cli-json-payload-rewrite.md) — why JSON stays adaptive output and a programmatic-caller option here, not a replacement for the flag interface agents already know

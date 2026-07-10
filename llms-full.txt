@@ -745,6 +745,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Cost-Quality Pareto Measurement for Agent Configurations](token-engineering/cost-quality-pareto-measurement.md)
 - [Routing Decision Framework: Which Routing Pattern Fits Which Signal](token-engineering/routing-decision-framework.md)
 - [Temporal Token Routing: Batch and Flex Tiers for Non-Urgent Work](token-engineering/temporal-token-routing.md)
+- [Harness-Controlled Token Economics (The Harness Effect)](token-engineering/harness-token-economics.md)
 
 ## Security & Safety
 
@@ -1002,6 +1003,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Natural-Language Documentation as a Code-Review Intermediate (Verifiable Literate Programming)](verification/verifiable-literate-programming.md)
 - [Comparative Judging for Agent Configuration Ranking](verification/comparative-judging-config-ranking.md)
 - [Bounded Repair-Loop Iterations](verification/bounded-repair-loop-iterations.md)
+- [Specification-Grounded Test Writing](verification/specification-grounded-test-generation.md)
+- [Verify Observability in Agent-Generated Code](verification/verify-generated-code-observability.md)
 
 ## Hooks & Guardrails
 
@@ -1336,6 +1339,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](anti-patterns/code-first-test-oracle-bias.md)
 - [Blaming the Model for Scaffolding-Driven Quality Regressions](anti-patterns/blaming-the-model-for-scaffolding-regressions.md)
 - [Task Completion as Tool Certification (Silent Tool Rot)](anti-patterns/task-completion-as-tool-certification.md)
+- [Delegating Change Descriptions to the Agent](anti-patterns/delegating-change-descriptions.md)
+- [Rewriting a CLI Into a JSON Payload for Agents](anti-patterns/cli-json-payload-rewrite.md)
 
 ## Emerging Concepts
 
@@ -25787,6 +25792,7 @@ graph LR
 - [Per-Model Harness Tuning](per-model-harness-tuning.md) — what to do when fleet attribution exposes per-model interaction
 - [Eval Strategy by Agent Generation](eval-strategy-by-agent-generation.md) — locates the eval surface from current architecture; this is one Gen-6 method
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — token efficiency as a routing axis; complements the cost-side metric here
+- [Harness-Controlled Token Economics (The Harness Effect)](../token-engineering/harness-token-economics.md) — why the harness, not the model, sets the token bill this method attributes
 
 ---
 
@@ -44647,12 +44653,14 @@ Source: https://agentpatterns.ai/anti-patterns/
 - [Agent Headcount as a Vanity Metric](agent-headcount-vanity-metric.md) — Counting AI agents predicts no operational outcome; compute-equalised benchmarks show the same architecture swings from +80% to -70% based on task fit, not count
 - [Happy Path Bias](happy-path-bias.md) — AI agents systematically neglect error handling, edge cases, and type boundaries, producing code that passes the happy path but breaks in production
 - [Law of Triviality in AI PRs](law-of-triviality-ai-prs.md) — Reviewers bikeshed small changes and rubber-stamp large ones; AI agents produce large diffs by default, so the code that needs the most scrutiny gets the least
+- [Delegating Change Descriptions to the Agent](delegating-change-descriptions.md) — A description written from the diff restates what the diff already shows and drops the intent a reviewer needs; keep the why human-authored while the agent may draft the what
 - [Perceived Model Degradation](perceived-model-degradation.md) — Why teams report LLM quality declining over time, five competing explanations, and how to replace gut feel with version pinning and eval suites
 - [Prior Dominance Over Feedback](prior-dominance-over-feedback.md) — LLMs in propose-evaluate-revise loops act as greedy optimizers anchored to pretrained priors; feedback amplifies the prior rather than replacing it
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — Telling an agent in the system prompt not to call a tool reduces unauthorized invocation by only 11–18 pp; architectural enforcement at the proxy drives it to zero
 - [Refactoring Runaway](refactoring-runaway.md) — Coding agents bundle unrequested refactorings into bug-fix patches, breaking compilability without improving functional correctness
 - [LLM Self-Review Failure](self-review-modernization-failure.md) — Asking an LLM to verify behaviour preservation of its own migration output misses 31.7% of semantic drift cases, independent of model capability
 - [Token Preservation Backfire](token-preservation-backfire.md) — Token-preservation instructions create a competing objective: the agent resolves the conflict by doing less work, not completing the task better
+- [Rewriting a CLI Into a JSON Payload for Agents](cli-json-payload-rewrite.md) — Replacing a conventional CLI's flags with a JSON input payload so agents call it more reliably measures as cost without payoff: args match or beat JSON on correctness and cost 4-11x less
 
 ---
 
@@ -46963,6 +46971,77 @@ Removing four components — Planning, Memory, Self-Reflection, Retrieval — li
 
 ---
 
+### Delegating Change Descriptions to the Agent
+Source: https://agentpatterns.ai/anti-patterns/delegating-change-descriptions/
+
+# Delegating Change Descriptions to the Agent
+
+> Letting the agent write the whole PR or commit description restates the diff and drops the intent a reviewer needs — keep the why human-authored.
+
+Handing the agent the entire change description is a false economy. A model that writes a PR or commit message from the diff can only restate what the diff already shows. It has no channel to the intent behind the change, which is the context a reviewer relies on most. So keep the description human-authored even when the code is agent-written: the agent may draft what changed, but why it changed has to come from you.
+
+Kenton Varda put a moratorium on AI-written change descriptions across his team after finding them "worse than useless" for review — "outlining details of the code that could easily be seen by looking at the code, but omitting the higher-level framing needed to understand broadly what the code is doing" ([Simon Willison, quoting Kenton Varda](https://simonwillison.net/2026/Jul/8/kenton-varda/)). The output looks thorough, which is why teams reach for it, but thorough diff-restatement adds length without adding intent.
+
+This differs from [PR description style as a lever](../code-review/pr-description-style-lever.md), which tunes description structure to raise merge rates. That is about how the description is shaped; this is about what you must not delegate. As agents author more code, the change description becomes one of the few places human intent survives the handoff to a reviewer ([zknill](https://zknill.io/posts/commit-message-intent/)).
+
+## Why the diff can't carry intent
+
+Rationale is private information. It lives in your head, or once in the originating issue or prompt, and it never enters the diff. A model conditioned only on the diff can restate the diff and nothing more, so it fills the description with fluent summary that reads as complete but tells a reviewer nothing new. The split works because the two halves have different sources: what changed is recoverable from the diff and safe to draft, while why it changed must be supplied by the human.
+
+The cost is measurable, not cosmetic. In a study of 23,247 agent-authored pull requests, those whose descriptions diverged from the code were accepted 28.3% of the time against 80.0% for aligned descriptions, and took 55.8 hours to review against 16.0 — a 3.5-times increase — after controlling for code complexity ([arXiv:2601.04886](https://arxiv.org/abs/2601.04886)). Reviewers lean on the description to judge a change, so one that carries no intent slows the judgment and erodes trust.
+
+## When this backfires
+
+The rule to keep descriptions human-authored is not absolute. Full AI drafting is fine, and insisting on a human-written why is ceremony, in these cases:
+
+- Mechanical, low-intent changes — dependency bumps, lockfile updates, formatting-only diffs — where the reason is self-evident and there is no why to convey.
+- Solo or inner-source repos with no external reviewer, where the only reader of the description already holds the intent.
+- High-throughput autonomous pipelines, where a per-PR human-authored mandate reinstates the human bottleneck the automation removed; capture intent once at the originating issue instead.
+
+The structure of an AI-drafted description still helps: structured, agent-produced descriptions correlate with higher reviewer engagement and merge rates ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)). The fix is not to ban the agent from the description, but to source the why from the human and let the agent draft the what.
+
+## Example
+
+**Before — description restates the diff, drops the why:**
+
+```markdown
+## Summary
+- Added a `retries` parameter to `fetch_config()`
+- Wrapped the request in a `for` loop with exponential backoff
+- Updated three call sites to pass `retries=3`
+```
+
+A reviewer can read all of this from the diff. Nothing explains why retries were needed.
+
+**After — human supplies intent, agent may draft the change list:**
+
+```markdown
+## Why
+Config fetches were failing intermittently during deploys when the
+config service restarts, taking down unrelated jobs. This adds bounded
+retries so a transient restart no longer fails the whole run.
+
+## What changed
+- `retries` parameter on `fetch_config()`, default 3, exponential backoff
+- Call sites updated to opt in
+```
+
+## Key Takeaways
+
+- A description written from the diff can only restate the diff; intent is off-diff information the model never receives.
+- Keep the why human-authored even when the code is agent-written — the agent may draft what changed.
+- Unfaithful descriptions drop PR acceptance from 80.0% to 28.3% and triple review time in a 23,247-PR study ([arXiv:2601.04886](https://arxiv.org/abs/2601.04886)).
+- Full AI drafting is fine for mechanical changes, solo repos, and high-volume pipelines where intent is self-evident or captured upstream.
+
+## Related
+
+- [PR Description Style as a Lever for Agent PR Merge Rates](../code-review/pr-description-style-lever.md) — tuning description structure for merge rate, distinct from what not to delegate
+- [Author-to-Reviewer Role Inversion in AI-Assisted Teams](../human/author-to-reviewer-role-inversion.md) — why the description is where intent crosses the human-to-reviewer boundary
+- [Comprehension Debt](comprehension-debt.md) — the understanding gap that widens when intent is not written down
+- [Agent-Laundered Bug Reports](agent-laundered-bug-reports.md) — a sibling failure where an LLM pass strips the load-bearing human observation
+
+---
+
 ### Demo-to-Production Gap: When Demos Hide Real Costs
 Source: https://agentpatterns.ai/anti-patterns/demo-to-production-gap/
 
@@ -47928,6 +48007,7 @@ The only change is what the test-generation prompt is allowed to see. The spec-g
 - [Re-Run the Original Test Suite After Every Refinement Turn](../verification/test-suite-after-refinement-turn.md) — the pinned original suite is the invariant multi-turn refinement is not optimizing against
 - [Assertion-Free Test Theater in Agent-Authored Patches](assertion-free-test-theater.md) — agent-written tests that run green while carrying no real oracle signal
 - [Happy Path Bias](happy-path-bias.md) — agents skip error handling and edge cases systematically, in code and in tests
+- [Specification-Grounded Test Writing](../verification/specification-grounded-test-generation.md) — the complementary move: withhold the implementation, then supply the specification as enumerated rules so the tester knows the intended edge behavior
 
 ---
 
@@ -50181,6 +50261,78 @@ A refactoring-aware refinement step inspects the patch, classifies the parameter
 - [Premature Completion](premature-completion.md) — inverse failure mode (agent stops too early); refactoring runaway is doing too much
 - [LLM Refactoring Adoption Patterns](../human/llm-refactoring-adoption-patterns.md) — how developers modify ChatGPT-suggested refactorings when refactoring *is* the request
 - [Pattern Replication Risk](pattern-replication-risk.md) — adjacent training-distribution-inheritance pathology
+
+---
+
+### Rewriting a CLI Into a JSON Payload for Agents
+Source: https://agentpatterns.ai/anti-patterns/cli-json-payload-rewrite/
+
+# Rewriting a CLI Into a JSON Payload for Agents
+
+> Replacing a conventional CLI's flags with a single JSON payload does not make agents more reliable — it measures as cost with no correctness gain.
+
+The anti-pattern is not offering JSON at all. It is replacing a working flag-and-argument interface with a JSON-input payload on the theory that agents call structured interfaces more reliably, then shipping the rewrite without running the one experiment that settles it: does a JSON-input CLI actually beat the conventional one on your own agent workload?
+
+## The trap
+
+The advice sounds right. Agents already think in an API's JSON schema, so a JSON-input CLI seems to remove a translation step and a class of wrong-flag-name errors ([Poehnelt, *You Need to Rewrite Your CLI for AI Agents*](https://justin.poehnelt.com/posts/rewrite-your-cli-for-ai-agents/)). A team re-plumbs the interface for agent consumers and expects higher success. Measured head to head, the rewrite buys nothing and costs a lot.
+
+Microsoft's Agent Experience team built a synthetic CLI, `podctl`, that creates multi-service deployments from 30-plus values across three nesting levels, arrays, mixed types, and cross-references. They shipped it as [two separate binaries — one args-only, one JSON-only — so an agent could not prefer one on sight, then ran five runs per model per input mode through GitHub Copilot Chat across Claude Haiku 4.5, Sonnet 4.6, Sonnet 5, GPT-5.3-Codex, and MAI-Code-1-Flash](https://developer.microsoft.com/blog/dont-rewrite-your-cli-for-agents).
+
+The result was one-sided. [Every args profile hit perfect correctness across all five runs for every model; JSON matched only on the three strongest models, and Haiku 4.5 produced just 2 of 5 correct deployments in JSON mode](https://developer.microsoft.com/blog/dont-rewrite-your-cli-for-agents). On cost, [JSON ran 4x to 11x more per task — GPT-5.3-Codex at $0.05 for args against $0.54 for JSON, Haiku 4.5 at $0.03 against $0.23](https://developer.microsoft.com/blog/dont-rewrite-your-cli-for-agents). Their summary: JSON never improved correctness and always increased cost.
+
+## Why it works
+
+Conventional flags match or beat a JSON input payload for two compounding reasons. First is pretraining alignment: models have seen far more flag-and-argument CLI usage, man pages, and `--help` text than any one project's bespoke JSON-input interface, so args are a higher-alignment action space — the same mechanism behind treating the [Unix CLI as the native tool interface](../tool-engineering/unix-cli-native-tool-interface.md). Second is the shell-escaping tax: emitting a valid JSON string inside a shell command means nested quoting and escaping, which is error-prone and token-heavy. Microsoft isolated that cost by holding model, payload, and correctness fixed and varying only the shell — for Sonnet 4.6 the args-versus-JSON gap was [9x on PowerShell but collapsed to 1.5x on Bash, "same model, same payload, same correctness"](https://developer.microsoft.com/blog/dont-rewrite-your-cli-for-agents). The escaping, not the structure, is the cost driver; the extra tokens and reasoning to assemble the payload produce the 4-11x per-task price with no correctness return.
+
+One distinction bounds the finding: input versus output. This measures JSON the agent must hand-construct as input. Machine-readable JSON output the tool emits stays worth shipping — a separate lever ([Designing for Agent Consumers](../tool-engineering/designing-for-agent-consumers.md)) that carries no escaping tax because the agent reads it rather than writes it.
+
+## When this backfires
+
+The advice here — keep the conventional interface — is itself wrong when the caller or the environment removes the cost that makes the rewrite lose. A first-class JSON input path earns its place when:
+
+- The caller is a program, not an agent. A pipeline or batch job that generates payloads deterministically never pays the agent-construction tax, so Microsoft keeps JSON acceptable for [programmatic use or batch operations](https://developer.microsoft.com/blog/dont-rewrite-your-cli-for-agents) — just not as a replacement for args.
+- The target shell is Bash, not PowerShell. Escaping is cheap enough there that the cost multiple falls to roughly 1.5x; the penalty is small, though there is still no correctness upside to chase.
+- A frontier model is guaranteed. The correctness gap appeared only on the weakest model tested; the three strongest matched args, so pinning a capable model removes the accuracy risk while leaving the 4-11x cost.
+- The spec genuinely exceeds flag ergonomics. Very large nested configuration is conventionally passed as a config file, not an inline JSON string argument — the file sidesteps the shell-escaping tax that drives the measured cost.
+
+Outside those conditions the real levers are cheaper than a rewrite: better discoverability, clearer help text, and [machine-readable error responses](../tool-engineering/rfc9457-machine-readable-errors.md) that let an agent recover from a bad conventional call.
+
+## Example
+
+The study's `podctl` had the shape `services[].resources.cpu.request`. In JSON-only form the agent must build and escape that whole tree as one string argument (the anti-pattern):
+
+```bash
+podctl deploy --spec '{"services":[{"name":"api","resources":{"cpu":{"request":"500m"}}},
+{"name":"web","resources":{"cpu":{"request":"250m"}}}]}'
+# Measured: matches args on correctness only on the strongest models; 4-11x the cost per task
+```
+
+The args-only form maps each value to a flag, with no payload to escape:
+
+```bash
+podctl deploy --service api --cpu-request 500m \
+              --service web --cpu-request 250m
+# Measured: 5/5 correctness on every model tested, 4-11x cheaper per task
+# Keep --spec available for batch/programmatic callers — just don't remove the flags.
+```
+
+Only a head-to-head run on the real workload catches that the rewrite adds cost without buying correctness ([Microsoft AX](https://developer.microsoft.com/blog/dont-rewrite-your-cli-for-agents)).
+
+## Key Takeaways
+
+- Replacing a flag-and-argument CLI with a JSON input payload for agents measured as pure cost: args hit 5/5 correctness on every model tested and cost 4-11x less per task, while JSON matched only on the strongest models.
+- The mechanism is pretraining alignment plus a shell-escaping tax — the args-versus-JSON cost gap fell from 9x on PowerShell to 1.5x on Bash at identical correctness, so the escaping, not the structure, drives the cost.
+- JSON output the tool emits still earns its place; the finding is about JSON input the agent must hand-construct and escape.
+- Keep a JSON path only for batch or programmatic callers, Bash-only targets, or specs beyond flag ergonomics — and run the experiment before re-plumbing the interface.
+
+## Related
+
+- [Cheaper-Per-Token Model Upgrades That Cost More Per Task](cheaper-per-token-costlier-per-task.md) — the sibling anti-pattern from the same Microsoft AX measurement series; both turn on running the experiment before trusting an intuitive change.
+- [Unix CLI as Native Tool Interface](../tool-engineering/unix-cli-native-tool-interface.md) — the pretraining-alignment argument for conventional CLI as the agent's action space, which this page shows JSON input does not improve on.
+- [Designing for Agent Consumers (Agent Experience)](../tool-engineering/designing-for-agent-consumers.md) — the discipline whose real levers (discoverability, help text, structured errors and output) beat an input-format rewrite.
+- [CLI-First Skill Design](../tool-engineering/cli-first-skill-design.md) — where JSON belongs on a CLI: as adaptive output and an option for programmatic callers, not a replacement for args.
+- [Token Preservation Backfire](token-preservation-backfire.md) — another case where an intuitively helpful instruction to an agent produced measured cost without the intended benefit.
 
 ---
 
@@ -54029,6 +54181,7 @@ An agent calling `github.sh issues` receives a JSON array it can filter with `jq
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Skill as Knowledge Pattern](skill-as-knowledge.md)
 - [Batch File Operations via Bash Scripts](batch-file-operations.md)
+- [Rewriting a CLI Into a JSON Payload for Agents](../anti-patterns/cli-json-payload-rewrite.md) — why JSON stays adaptive output and a programmatic-caller option here, not a replacement for the flag interface agents already know
 
 ---
 
@@ -54763,6 +54916,7 @@ An agent's only contact with your product is the literal bytes of your surface �
 - [AX/UX/DX Triad](../agent-design/ax-ux-dx-triad.md) — separating the agent, user, and developer audiences inside the harness; AX-as-discipline is its outward-facing complement.
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — applying HCI principles to the interface an agent calls.
 - [Human-Facing Docs in the Agent Era: Mental Models Over Reference](../human/human-docs-mental-models-agent-era.md) — the human-facing counterpart; what prose docs retain once agents absorb the machine-readable reference load.
+- [Rewriting a CLI Into a JSON Payload for Agents](../anti-patterns/cli-json-payload-rewrite.md) — the measured limit on AX enthusiasm: a JSON-input rewrite is cost without a correctness gain, so the real levers stay discoverability, help text, and structured output.
 
 ---
 
@@ -63067,6 +63221,7 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
 - [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md)
 - [Agent-Aware CLI via Environment Variable](agent-aware-cli-via-env-var.md) — orthogonal angle: a CLI adapting its output when an agent is detected, vs the output-filtering interface here
+- [Rewriting a CLI Into a JSON Payload for Agents](../anti-patterns/cli-json-payload-rewrite.md) — the counter-case: measured evidence that replacing conventional args with a JSON input payload does not improve agent reliability and costs more
 - [Agent-Computer Interface](agent-computer-interface.md)
 - [Semantic Tool Output](semantic-tool-output.md)
 - [Override Interactive Commands](override-interactive-commands.md)
@@ -63470,6 +63625,7 @@ Push verbose intermediate work to a cheaper model and return a compact result.
 
 You cannot reduce what you do not measure — instrument spend before cutting it.
 
+- [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — swapping only the orchestration layer cut cost per task 41% at parity quality; the harness sets both token volume and effective price
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — the instrument-attribute-fix-verify loop
 - [Cost-Quality Pareto Measurement for Agent Configurations](cost-quality-pareto-measurement.md) — plot each configuration on the (cost, quality) frontier so quality-trading downgrades are visible
 - [Code Cleanliness as an Agent Cost Lever](code-cleanliness-agent-cost-lever.md) — cleaner code cut token use 7-8% with no pass-rate change
@@ -63732,6 +63888,7 @@ The `explorer` description combines "Use PROACTIVELY" with "Use immediately afte
 - [Claude Code Sub-Agents](../tools/claude/sub-agents.md) — per-agent model selection mechanic
 - [Token-Efficient Tool Design](token-efficient-tool-design.md) — pair tier routing with lean tool surfaces
 - [Minimum-Sufficient Control Ladder](../agent-design/minimum-sufficient-control-ladder.md) — orthogonal axis: this page escalates *model tier* by task complexity; the ladder escalates *control mechanism* by named failure mode
+- [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — the complementary lever: the orchestration layer sets token volume and effective price, model routing sets the tier
 
 ---
 
@@ -63836,6 +63993,92 @@ Two findings the bill alone would have hidden: Opus-medium-effort is dominated �
 - [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — the guardrail this frame keeps honest: cuts that ignore the quality axis backfire
 - [Comparative Judging for Agent Configuration Ranking](../verification/comparative-judging-config-ranking.md) — a more reliable way to rank configs on the noisy quality axis this plot builds, when the quality signal is a judge score
 - [Cheaper-Per-Token Model Upgrades That Cost More Per Task](../anti-patterns/cheaper-per-token-costlier-per-task.md) — the anti-pattern this measurement frame catches: a model swap chosen on price and benchmark instead of effective per-task cost
+
+---
+
+### Harness-Controlled Token Economics (The Harness Effect)
+Source: https://agentpatterns.ai/token-engineering/harness-token-economics/
+
+# Harness-Controlled Token Economics (The Harness Effect)
+
+> The orchestration layer, not the model, sets an agent's token bill — it controls both token volume and the effective price paid per token.
+
+The harness effect is the finding that swapping only the orchestration layer around a fixed model changes an agent's cost per task by tens of percent, at roughly unchanged quality. In a controlled study that held the tasks, judges, price tables, and model IDs constant and varied only the loop, a redesigned harness cut blended cost per task 41% ($0.21 to $0.12) and tokens per task 38% (14.2k to 8.8k) across six foundation models from five vendors, while quality-per-dollar rose 82% ([Sayed Ali et al., 2026, "The Harness Effect"](https://arxiv.org/abs/2607.06906)). Every model improved, by 33% to 61%. The lever against runaway spend is the harness you can change, not the model you buy.
+
+## When the harness effect applies
+
+The effect is large and consistent, but three conditions decide whether it holds for your workload:
+
+- The model clears a capability floor. The harness extracts gains a strong baseline model already has — the study measured a near-perfect correlation (r=0.99, n=6) between a model's baseline strength and the gain the harness pulled out of it ([Sayed Ali et al., 2026, §8](https://arxiv.org/abs/2607.06906)). On weaker models, orchestration-heavy features regress instead of helping (see [When this backfires](#when-this-backfires)).
+- The workload is input-dominated and cache-friendly. Agent calls typically run about 100 input tokens per output token, so the input term dominates the bill ([Sayed Ali et al., 2026, §3.1](https://arxiv.org/abs/2607.06906)). The harness only moves that term when a stable, cacheable prefix exists to exploit.
+- You control the harness. Managed and consumer-tier agents route orchestration you cannot vary, so the lever is unavailable — see [Managed vs Self-Hosted Harness](../agent-design/managed-vs-self-hosted-harness.md).
+
+Outside these conditions, model routing and context engineering remain the primary cost levers — [route by complexity](cost-aware-agent-design.md) first.
+
+## The two levers the harness controls
+
+An agent's input bill is token quantity multiplied by an effective input price. The harness sets both.
+
+Effective input price falls when input tokens are served from cache. If a fraction `h` of input tokens are cache reads billed at multiplier `κ` (about 0.1 of list price), the effective price is `p_in × (1 − h(1−κ))` ([Sayed Ali et al., 2026, §3.1](https://arxiv.org/abs/2607.06906)). Drive `h` toward 1 and the dominant term of the bill collapses to roughly a tenth of list price. The study measured 99.9% of prompt tokens served as cache reads under a cache-disciplined harness. Token quantity falls independently when the harness compacts history, offloads bulky context, and refuses to pay for doomed retries.
+
+This is the counter to token maxing: a development trajectory where tokens per task keep rising while each release buys quality at a worse token exchange rate than the running average ([Sayed Ali et al., 2026, §3.2](https://arxiv.org/abs/2607.06906)). Falling per-token prices hide it; total spend climbs anyway.
+
+## Six mechanisms behind the effect
+
+The study attributes the gain to six orchestration behaviors ([Sayed Ali et al., 2026, §4.3](https://arxiv.org/abs/2607.06906)):
+
+| Mechanism | What it does |
+|-----------|--------------|
+| Cache-shape discipline | Split the prompt into a byte-stable prefix and a volatile tail so almost all input tokens hit the cache |
+| Incremental compaction | Fold old history into a typed checkpoint at a budget threshold, turning quadratic history growth into linear |
+| Context offload | Return capped sub-agent summaries, disclose tools progressively, spill bulky output to files |
+| Zero-token waiting | Suspend at zero token cost during human approvals or background jobs, resume on an event |
+| Failure-spend governance | Classify failures before retrying, discard partial drafts, break the loop after repeated identical failures |
+| Model-agnostic floor | Supply the route as data and normalize provider streams so the same harness holds across models |
+
+## Why it works
+
+Agent bills are input-dominated, and the input term factors cleanly into quantity times effective price — both of which the harness owns. Cache-shape discipline raises the cache-hit rate `h`, which collapses the price factor; compaction, offload, and failure governance cut the quantity factor. The model fixes baseline capability, but the harness decides how many tokens at what price that capability is billed at ([Sayed Ali et al., 2026, §3–4](https://arxiv.org/abs/2607.06906)). Independent work supports the direction: GitHub reports that its Copilot harness — one harness spanning 20+ models — reaches task resolution on par with vendor-native harnesses while consuming fewer tokens across most configurations ([GitHub, 2026](https://github.blog/ai-and-ml/github-copilot/evaluating-performance-and-efficiency-of-the-github-copilot-agentic-harness-across-models-and-tasks/)).
+
+## When this backfires
+
+- Below the capability floor. All seven quality regressions in the study landed on the three weakest models and clustered in orchestration-heavy features (MCP tools, playbooks); sub-agent delegation was reliable only on the two strongest models, and unreliable below roughly 0.7 task-completion ([Sayed Ali et al., 2026, §6.5](https://arxiv.org/abs/2607.06906)). A weak model with a sophisticated harness can do worse than a strong model with a plain loop.
+- Output-heavy or one-shot workloads. The effective-input-price lever assumes a stable cacheable prefix and a high input-to-output ratio. Short or output-dominated jobs give cache-shape discipline little to bite on.
+- Workload-shape mismatch. The 22-task set mirrors an enterprise assistant, not a long-horizon coding benchmark; the magnitudes may not transfer ([Sayed Ali et al., 2026, §8](https://arxiv.org/abs/2607.06906)).
+- Over-reading the numbers. The result rests on a single vendor pair, one frozen baseline run, n=22 (so quality parity is directional, not proven), and a six-point correlation. Treat the exact percentages as this-pair-specific, and confirm the effect on your own eval before banking it — [pin the model and measure the harness](../agent-design/fleet-harness-attribution.md).
+
+## Example
+
+The cache-shape mechanism is the highest-leverage one because it moves the price factor, not just the quantity. The harness splits every prompt into two zones:
+
+```text
+[ STABLE PREFIX — cached, billed at ~0.1x ]
+  system prompt
+  tool schemas
+  append-only transcript (never edited in place)
+
+[ VOLATILE TAIL — rebuilt each turn, not cached ]
+  current retrieved context
+  this turn's user message
+```
+
+Because the prefix bytes never change, the provider serves them as cache reads. The study measured 7,876 of 7,886 prompt tokens (99.9%) as cache reads under this layout, pricing the dominant input term at about a tenth of list ([Sayed Ali et al., 2026, §4.3.1](https://arxiv.org/abs/2607.06906)). Editing the transcript in place — reordering, or summarizing mid-history — invalidates the prefix and forfeits the discount.
+
+## Key Takeaways
+
+- Swapping only the orchestration layer cut cost per task 41% and tokens 38% at directional quality parity across six models — the harness, not the model, is the decisive cost lever.
+- The harness controls both factors of the input bill: token quantity and the effective input price set by the cache-hit rate.
+- The effect holds above a model-capability floor, on input-dominated cache-friendly workloads, and only when you can vary the harness.
+- On weaker models, orchestration-heavy features like delegation and MCP regress rather than help.
+- The evidence is a single vendor pair at n=22 — treat the magnitudes as directional and confirm on your own eval.
+
+## Related
+
+- [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — the complementary lever: match model tier to task complexity before engineering the harness
+- [Fleet Harness Attribution](../agent-design/fleet-harness-attribution.md) — how to measure whether the harness, not the model, caused a cost delta
+- [Isometric Harness Ablation](../agent-design/isometric-harness-ablation.md) — rank which harness subsystem earns its token cost
+- [Prompt Caching: Architectural Discipline for Agents](../context-engineering/prompt-caching-architectural-discipline.md) — the caching mechanism that drives the effective-input-price lever
+- [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — the quality guardrail that cutting tokens must respect
 
 ---
 
@@ -68169,6 +68412,7 @@ With this template in `CLAUDE.md`, the agent's PR descriptions consistently incl
 - [Tiered Code Review: AI-First with Human Escalation](tiered-code-review.md)
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md)
+- [Delegating Change Descriptions to the Agent](../anti-patterns/delegating-change-descriptions.md) — the complementary limit: structure is agent-fillable, but the intent behind a change is not
 
 ---
 
@@ -69852,6 +70096,7 @@ Source: https://agentpatterns.ai/verification/
 - [Source-Grounded Test Plan with Pre-Action Assertion Annotation](pre-test-grounded-plan-assertion-annotation.md) — Before a UI-driving agent verifies its change, have it write a source-read test plan and annotate each step's expected behavior upfront so it cannot rationalize an unexpected result as a pass
 - [Agent-Recorded Video Demos as a Verification Artifact](agent-recorded-video-demos.md) — The agent drives the running app and records a screencast as proof-of-work for human PR reviewers — a visual modality that complements tests where they are weakest, under stated conditions
 - [Spec-Derived Execution as a Correctness Oracle](spec-derived-execution-correctness-judging.md) — Judge candidate code against a natural-language spec by deriving inputs from the spec, executing them, and grading the I/O pairs — ground the LLM judge in real execution traces instead of asking it to reason over the code
+- [Specification-Grounded Test Writing](specification-grounded-test-generation.md) — Give an agent's test writer the specification as enumerated rules so it catches the missing-validation and boundary bugs its own tests otherwise pass — grounding in intent, not test count, drives a +38pp correct-code gain on spec-completeness defects
 - [Natural-Language Documentation as a Code-Review Intermediate (Verifiable Literate Programming)](verifiable-literate-programming.md) — Translate LLM code into a deterministic natural-language documentation layer and review that prose, so intent-code mismatches surface where a human can judge them
 
 ## Rubric Design
@@ -69869,6 +70114,7 @@ Source: https://agentpatterns.ai/verification/
 - [Execution Budgeting in Agentic Program Repair](execution-budgeting-program-repair.md) — Cap test executions in generate-run-revise loops on frontier commercial agents; prohibiting execution drops resolve rate ~1.25 pp on SWE-bench Verified — applies only under specific preconditions on model strength, codebase familiarity, and execution cost
 - [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — Cap generate-validate-repair loops near three to four rounds; most gains land early and later rounds mostly burn tokens — prefer stop-on-plateau, and watch strong-model late gains, thin-oracle overfitting, and self-critique loops
 - [Dependency Gap Validation for AI-Generated Code](dependency-gap-validation.md) — AI coding agents declare a fraction of the dependencies their code actually needs at runtime — validate in clean environments before trusting the manifest
+- [Verify Observability in Agent-Generated Code](verify-generated-code-observability.md) — Agent-generated systems pass functional tests but expose fault signals for under 14% of failures despite having logging — verify runtime fault-signal coverage with fault injection, not the mere presence of logging
 - [Phantom Symbol Detection for LLM API Migration](phantom-symbol-detection.md) — Verify symbols in LLM-generated migration code against a documentation-derived knowledge base — a deterministic check that catches fabricated imports, constructors, and methods that probabilistic judges miss
 - [Generative Provenance Records for Tool-Using Agents](generative-provenance-records.md) — Emit a structured record (tool turn, evidence span, relation) alongside each output sentence so a mechanical verifier can check claim-level grounding before the answer leaves the loop
 - [Per-Line Requirement Citations for Hallucination Detection](per-line-requirement-citations.md) — Cite a requirement ID on every generated line so a set-difference check flags any citation to a requirement absent from the spec as a hallucination — detection at a determinism cost
@@ -72623,6 +72869,7 @@ Weigh the gate cost against failure cost. For production deployments and externa
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — the principle behind making dependency validation a CI gate rather than an agent instruction
 - [Agent Environment Bootstrapping](../workflows/agent-environment-bootstrapping.md) — broader workflow for setting up reproducible agent execution environments
 - [Verification-Centric Development](../workflows/verification-centric-development.md) — development workflow that prioritizes verification at every stage
+- [Verify Observability in Agent-Generated Code](verify-generated-code-observability.md) — the same shape aimed at a different under-delivered property: fault-signal coverage rather than declared dependencies
 
 ---
 
@@ -76965,6 +77212,7 @@ If the captured logs include only `INFO request received` and `INFO request comp
 - [Agent Debugging](../observability/agent-debugging.md) — diagnosing agent failures using logs, traces, and tool call inspection
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md) — the instrumentation substrate planted bugs calibrate against
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — guardrails as another verification layer that planted bugs can probe
+- [Verify Observability in Agent-Generated Code](verify-generated-code-observability.md) — the upstream problem: agent-written code under-instruments in the first place, so its logs may fail calibration before any bug is planted
 
 ---
 
@@ -78581,6 +78829,83 @@ Phase 1 amortizes across all 500 candidates. Phase 3 is per-pair, but each call 
 - [Test-Driven Agent Development](tdd-agent-development.md) — when you can author a durable test suite, it dominates this oracle.
 - [Multi-Agent RAG for Spec-to-Test Automation](multi-agent-rag-spec-to-test.md) — when the desired output is a reusable test suite rather than a one-shot verdict.
 - [Mutation Testing as a Quality Gate](mutation-testing-quality-gate.md) — assesses whether a derived test set would actually catch regressions, addressing this oracle's aggregation blind spot.
+
+---
+
+### Specification-Grounded Test Writing
+Source: https://agentpatterns.ai/verification/specification-grounded-test-generation/
+
+# Specification-Grounded Test Writing
+
+> Give a test writer the specification as explicit rules, not just a prose ticket, and it catches missing-validation bugs plain tests miss.
+
+When an agent writes its own tests, a test only catches a bug if the writer knows what the code should do at each edge. Handing the writer the specification as a list of rules — one test per rule — supplies that intent directly. In a controlled study this lifted final correct-code rate from 62% to 100% across three Claude tiers, a +38 percentage-point gain over a strong baseline that was already told to probe invalid inputs and edge cases ([Haeri & Ghelichi, 2026](https://arxiv.org/abs/2607.06636)).
+
+## When to use it
+
+The gain is real but bounded. Reach for it when all three conditions hold:
+
+- The bugs you worry about are specification-completeness defects: missing input validation, unhandled boundaries, unstated error conditions. On well-specified algorithmic problems the study found no natural bugs to catch, so grounding buys nothing there.
+- You can state the correct edge behavior up front. The lever is supplying intent, so the rule list has to encode the right answer, not just restate the happy path.
+- The test writer is capable enough to turn a rule into an input that triggers the bug and to predict the expected value. The study used a strong medium-tier model at near-perfect tester accuracy.
+
+## How to apply it
+
+Enumerate the specification into discrete rules and have the tester write one test per rule. For a `paginate` function the rules might be: pages are 1-indexed, `page` below 1 raises, `page_size` below 1 raises. Run the tests, then feed any failures back to the code model for a repair round.
+
+The lever is grounding in intent, not the checklist format or the number of tests. The same specification given as a single prose paragraph caught 27 of 30 planted bugs; given as an enumerated checklist it caught 30 of 30, so the content does most of the work and enumeration adds a small margin ([Haeri & Ghelichi, 2026](https://arxiv.org/abs/2607.06636)). Adding tests without the spec does not substitute: a run of twice as many ungrounded tests reached 42% final correctness against 100% for the spec arm. The result replicated across vendors, with GPT-5.3-codex at +28 points and Gemini 3.5 Flash at +19 points (task-level sign test p = 0.002).
+
+## Why it works
+
+To write a test, the author has to know what the code should do at each edge, and when the ticket leaves an edge unstated an ungrounded tester has to guess. That guess fails in one of two ways: it never probes the edge, so the bug is missed, or it probes the edge but invents the wrong expected value, so correct code is rejected. The enumerated spec is an outside signal that states intended behavior one rule at a time, so the author stops guessing ([Haeri & Ghelichi, 2026](https://arxiv.org/abs/2607.06636)). Both failures share one root cause — missing access to intent — which is why the same signal raised bug detection from 18 of 30 to 30 of 30 and cut the false-alarm rate on correct code from 33% to 0% at once. More ungrounded tests cannot supply that missing intent, so a larger budget does not close the gap. This is the mirror image of the [code-first oracle bias](../anti-patterns/code-first-test-oracle-bias.md): withhold the implementation from the tester, but do supply the specification.
+
+## When this backfires
+
+- Algorithmic logic bugs. Where the defect is a wrong algorithm rather than a missing validation rule, grounding does not help — the study found zero natural bugs among 45 valid submissions on its logic tasks.
+- Incomplete specification. Dropping validation rules degrades detection in proportion, falling from 30 of 30 to 6 of 30 when rules were omitted.
+- Noisy specification. A rule that endorses the bug keeps detection high but drops tester precision to about 83%, so a wrong spec can certify a wrong implementation.
+- Automatically derived specs. Models asked to write the spec restate the happy path and miss the unstated edge semantics, recovering only part of the benefit — the hard part is knowing the correct edge behavior, not formatting it.
+- No agreed specification, or low-stakes code where false alarms are cheap. The study covers small single-function tasks only, not repository-level, stateful, or multi-step systems.
+
+## Example
+
+The only change is what the test-writing prompt is allowed to see.
+
+**Before** — prose ticket, edge behavior left to the tester to guess:
+
+```text
+Ticket: "Implement paginate(items, page, page_size). Test invalid
+         inputs and edge cases."
+  -> tester probes page=0 but guesses it should return []
+  -> code that silently returns [] on page=0 passes; the missing
+     "raise on page < 1" rule is never enforced
+```
+
+**After** — specification supplied as enumerated rules, one test per rule:
+
+```text
+Rules: pages are 1-indexed; page < 1 raises ValueError;
+       page_size < 1 raises ValueError.
+  -> tester writes assert-raises tests for page=0 and page_size=0
+  -> code that returns [] on page=0 fails test_page_below_one
+```
+
+The spec-grounded oracle enforces the rule the prose-grounded one guessed wrong.
+
+## Key Takeaways
+
+- Grounding an agent's test writer in the specification as enumerated rules lifted final correct-code rate from 62% to 100% across three Claude tiers, a +38-point gain over a baseline already told to probe edge cases.
+- The lever is grounding in intent, not test count or checklist format: a prose spec caught 27 of 30 bugs and a checklist 30 of 30, while doubling ungrounded tests reached only 42% correctness.
+- The same signal cuts both error types — it raised detection to 30 of 30 and dropped the false-alarm rate from 33% to 0% — because both come from the tester lacking access to intended behavior.
+- The effect is bounded to specification-completeness defects with a correct, complete spec and a capable tester; it vanishes on algorithmic logic bugs and degrades with incomplete or noisy specs.
+
+## Related
+
+- [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](../anti-patterns/code-first-test-oracle-bias.md) — the complementary rule: withhold the implementation from the tester, while this page supplies the specification to it
+- [The Specification as Prompt](../instructions/specification-as-prompt.md) — using specs as instructions to the code writer; here the same spec grounds the test writer's oracle instead
+- [Test-Driven Intent Clarification](test-driven-intent-clarification.md) — validating agent-written tests to surface specification ambiguity before writing code
+- [Spec-Derived Execution as a Correctness Oracle](spec-derived-execution-correctness-judging.md) — grounding an LLM judge in a natural-language spec by executing spec-derived inputs
+- [Per-Line Requirement Citations for Hallucination Detection](per-line-requirement-citations.md) — tying generated code back to specific requirement IDs so a mechanical check flags anything unsupported
 
 ---
 
@@ -80354,6 +80679,72 @@ If the agent skips a check, the missing `after` row makes the gap visible and th
 - [Pre-Completion Checklists](pre-completion-checklists.md)
 - [Structured Output Constraints](structured-output-constraints.md)
 - [Grade Agent Outcomes](grade-agent-outcomes.md)
+
+---
+
+### Verify Observability in Agent-Generated Code
+Source: https://agentpatterns.ai/verification/verify-generated-code-observability/
+
+# Verify Observability in Agent-Generated Code
+
+> Agent-generated code passes functional tests but under-instruments — verify runtime fault-signal coverage, not the presence of logging.
+
+Coding agents optimize for functional correctness. A generated service can pass every test and still be undiagnosable in production, because the model instruments code the way it saw code written, not the way failures need to be exposed. Across 200 agent-generated microservice systems deployed on Kubernetes and hit with 13 injected fault types, generated systems surfaced an explicit fault signal for at most 13.99% of failures despite having logging present ([arxiv 2607.05785](https://arxiv.org/abs/2607.05785)). Treat observability as an explicit requirement and verify it separately from behavior.
+
+## The gap is semantic, not volumetric
+
+The problem is not missing logs. It is logs that "execute correctly but rarely expose informative fault signals" — abundant output that lacks the failure-specific semantics a diagnosing engineer needs ([arxiv 2607.05785](https://arxiv.org/abs/2607.05785)). When the study removed observability statements from 1,223 code instances and asked models to restore them, they placed instrumentation in roughly the right regions but captured the wrong details: best-configuration position scores (F1 around 0.59 to 0.63) consistently beat the token-level scores for what to capture (F1 around 0.38 to 0.40) ([arxiv 2607.05785](https://arxiv.org/abs/2607.05785)). Agents know where to log better than they know what a failure needs recorded.
+
+## Verify fault-signal coverage, not logging presence
+
+A test suite confirms the happy path works. It says nothing about whether a production failure would leave a diagnosable trace. Add a separate check that injects faults and asks whether the captured signals name the cause.
+
+The measurable target is fault-signal rate: inject a known failure, then check that a log entry explicitly encodes the failure-related semantics for it. A log counts only when it names the fault, not when it merely fired ([arxiv 2607.05785](https://arxiv.org/abs/2607.05785)). Run this across the fault classes you care about — dependency down, dependency slow, queue saturation, clock skew — because coverage varies sharply by fault: upstream failures were exposed 27.45% of the time, clock skew only 1.26% ([arxiv 2607.05785](https://arxiv.org/abs/2607.05785)). Gate the change on the fault-signal check the same way you gate on tests.
+
+## Why it works
+
+Generated code under-instruments because agents "primarily learn from static source code rather than runtime system behavior," and observability is "rarely represented as an independent objective in the training data" ([arxiv 2607.05785](https://arxiv.org/abs/2607.05785)). Without execution feedback, the model cannot reason about how a failure propagates, so it emits syntactically valid logging with no diagnostic payload. Functional tests pass because the behavior is correct; diagnosability fails because that correct behavior was never made observable. A verification step that exercises real failures is the feedback the training signal lacked.
+
+## When this backfires
+
+- Throwaway prototypes and spikes with no production diagnosis need — a fault-signal gate adds ceremony with no payoff.
+- Systems already covered by platform-level auto-instrumentation (service mesh, OpenTelemetry sidecars) where request-boundary signals come for free; hand-authored logs are then duplicative and add cost.
+- Chasing log volume instead of fault-specific semantics. Over-instrumentation is its own anti-pattern: high-volume, low-value logs raise cost and bury the entries that matter ([observability anti-patterns](https://dev.to/indika_wimalasuriya/observability-anti-patterns-and-how-aws-can-help-overcome-them-4566)). The target is signal coverage, never line count.
+- Trusting a prompt to close the gap. An observability-oriented skill improved fault-signal rate but left a large gap — for one frontier model, only +0.99 percentage points ([arxiv 2607.05785](https://arxiv.org/abs/2607.05785)). Prompting alone gives false confidence unless you measure the runtime result.
+
+## Example
+
+A generated order service depends on a database. Functional tests pass. Before trusting it in production, inject a dependency failure and check the logs for an entry that names the cause.
+
+```bash
+# Fault injection: take the DB dependency down, drive one request, capture logs.
+kubectl -n staging scale deploy/orders-db --replicas=0
+curl -s localhost:8080/orders/42 || true
+kubectl -n staging logs deploy/orders --since=30s > captured.log
+
+# Pass only if a log entry explicitly names the failure, not just that a request ran.
+grep -Eiq 'database.*(unavailable|connection refused|timeout)' captured.log \
+  && echo "PASS: fault signal present" \
+  || echo "FAIL: DB outage left no diagnosable log"
+```
+
+A generic `500 Internal Server Error` line fails this check: the request was logged, but the cause was not. The remediation is a log that records the dependency and failure mode — not another passing functional test.
+
+## Key Takeaways
+
+- Functional tests passing does not mean an agent-generated system is diagnosable; observability is a separate requirement.
+- The failure mode is semantic, not volumetric — logs are present but lack failure-specific detail.
+- Verify runtime fault-signal coverage with fault injection: a log counts only when it explicitly names the injected fault.
+- Coverage varies by fault class, so probe the failures you care about rather than trusting an aggregate.
+- Prompting an agent to "add observability" closes only part of the gap; measure the runtime result.
+
+## Related
+
+- [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — the same fault-injection shape aimed at calibrating an existing observability stack rather than newly generated code
+- [Dependency Gap Validation for AI-Generated Code](dependency-gap-validation.md) — another non-functional property agents under-deliver; verify it in a clean run instead of trusting the output
+- [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — wrapping agent output in hard checks that hold regardless of what the model produces
+- [Making Observability Legible to Agents](../observability/observability-legible-to-agents.md) — wiring real log, metric, and browser signals into agent context so a diagnosing agent has data to reason over
+- [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md) — the instrumentation substrate a fault-signal check verifies against
 
 ---
 
@@ -101132,6 +101523,7 @@ The team re-baselines on the actual constraint. It adds a review-debt metric bes
 - [PR Scope Creep as a Human Review Bottleneck](../anti-patterns/pr-scope-creep-review-bottleneck.md) — how a stalled queue compounds into larger, less reviewable PRs
 - [Comprehension Debt](../anti-patterns/comprehension-debt.md) — the understanding gap that erodes review competence as authoring drops
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — the review burden concentrated on senior reviewers
+- [Delegating Change Descriptions to the Agent](../anti-patterns/delegating-change-descriptions.md) — the change description is where human intent must cross the author-to-reviewer boundary
 
 ---
 

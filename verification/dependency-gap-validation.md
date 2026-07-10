@@ -143,3 +143,4 @@ Weigh the gate cost against failure cost. For production deployments and externa
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — the principle behind making dependency validation a CI gate rather than an agent instruction
 - [Agent Environment Bootstrapping](../workflows/agent-environment-bootstrapping.md) — broader workflow for setting up reproducible agent execution environments
 - [Verification-Centric Development](../workflows/verification-centric-development.md) — development workflow that prioritizes verification at every stage
+- [Verify Observability in Agent-Generated Code](verify-generated-code-observability.md) — the same shape aimed at a different under-delivered property: fault-signal coverage rather than declared dependencies

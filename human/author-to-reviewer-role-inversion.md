@@ -68,3 +68,4 @@ The team re-baselines on the actual constraint. It adds a review-debt metric bes
 - [PR Scope Creep as a Human Review Bottleneck](../anti-patterns/pr-scope-creep-review-bottleneck.md) — how a stalled queue compounds into larger, less reviewable PRs
 - [Comprehension Debt](../anti-patterns/comprehension-debt.md) — the understanding gap that erodes review competence as authoring drops
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — the review burden concentrated on senior reviewers
+- [Delegating Change Descriptions to the Agent](../anti-patterns/delegating-change-descriptions.md) — the change description is where human intent must cross the author-to-reviewer boundary
