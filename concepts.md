@@ -792,6 +792,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Distributed Cross-PR Attacks in Persistent-State AI Control](security/distributed-cross-pr-attacks.md)
 - [MCP Approval-View Fidelity Gap and Unicode Concealment](security/mcp-metadata-approval-view-gap.md)
 - [Forged Reasoning Trace Attacks on Agent Memory (FARMA)](security/forged-reasoning-trace-memory-attack.md)
+- [Security-Aware Tool Descriptions for MCP Servers (SpellSmith)](security/security-aware-tool-descriptions-mcp.md)
 
 ## Testing & Evaluation
 
