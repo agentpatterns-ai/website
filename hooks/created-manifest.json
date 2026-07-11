@@ -725,6 +725,7 @@
   "security/scoped-credentials-proxy.md": "2026-03-28",
   "security/secrets-management-for-agents.md": "2026-03-28",
   "security/security-audit-harness-composition.md": "2026-05-14",
+  "security/security-aware-tool-descriptions-mcp.md": "2026-07-11",
   "security/security-budget-token-economics.md": "2026-04-22",
   "security/security-constitution-ai-code-gen.md": "2026-03-29",
   "security/security-drift-iterative-refinement.md": "2026-03-28",
