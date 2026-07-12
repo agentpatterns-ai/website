@@ -143,3 +143,4 @@ Both draw from a shared usage pool and a shared suppression-rule store. [Source:
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
 - [Action-Selector Pattern](action-selector-pattern.md)
 - [Scoped Credentials via Proxy](scoped-credentials-proxy.md)
+- [Cross-Repository Security Posture for Agent-Introduced Vulnerabilities](cross-repository-security-posture.md) — the organization-wide layer that enumerates a finding across every repository

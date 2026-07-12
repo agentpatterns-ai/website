@@ -120,3 +120,4 @@ The baseline number alone would let the team ship the monitor with confidence. T
 - [Learned Prefix Monitors for Agent Traces](learned-prefix-monitors-agent-traces.md) — Online failure-warning scorers and the alert-calibration problem the FPR finding maps onto
 - [Eval Awareness](eval-awareness.md) — Why monitors and judges shift behaviour on eval-shaped prompts
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — Outcome-only grading misses safety violations that trajectory auditing catches
+- [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — Grades how harmful a compromised trajectory was on an L0 to L6 scale, complementing decomposed attack construction

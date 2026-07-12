@@ -76,6 +76,7 @@ Anti-pattern: [Hostname-Allowlist Proxy: The TLS-Inspection Blind Spot](hostname
 Preventing sensitive data from entering agent context is cheaper than scrubbing it after the fact.
 
 - [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md) — Keep credentials out of skill definitions at authoring time; placeholder syntax, pre-commit scanning, and wrapper scripts prevent leakage when skills are shared or reproduced
+- [Internal Hostname Disclosure in Agent-Readable Context](internal-hostname-disclosure-agent-context.md) — Internal hostnames and staging URLs left in CLAUDE.md, AGENTS.md, or MCP configs are reconnaissance data, mapped by mainstream wordlists even without a credential attached
 - [PII Tokenization in Agent Context](pii-tokenization-in-agent-context.md) — Replace sensitive fields with deterministic tokens before data reaches the model
 - [Privacy-Preserving LLM Requests](privacy-preserving-llm-requests.md) — Eight techniques exist for keeping sensitive content out of cloud LLM APIs; only four are practical today, and composing local routing with redact-and-rephrase cuts PII leakage to 0.6%
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md) — Use permission rules and hooks to prevent agents from reading credentials and secrets
@@ -126,6 +127,7 @@ Operational patterns that apply security agents to incoming changes and to resid
 
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — Pair a PR-time security reviewer with a scheduled whole-codebase scanner so new and resident risk both have continuous coverage; treat the reviewer agent itself as an injection target
 - [Scanner-as-MCP-Server: Secret and Dependency Scans as Typed Agent Tools](scanner-as-mcp-server.md) — Ship the security scanner as an MCP server so the agent invokes typed scans pre-commit and reasons over structured findings; qualified by five failure modes including agent-skips-scan and lethal-trifecta closure on the scanner principal
+- [Cross-Repository Security Posture for Agent-Introduced Vulnerabilities](cross-repository-security-posture.md) — Treat one agent-introduced finding as a class to enumerate and remediate across every repository via variant analysis, not a per-repo point-in-time event; the organization-wide layer above per-agent scoping and per-PR review
 
 ## Tool Invocation
 
@@ -140,6 +142,7 @@ Tool invocation exposes attack surfaces distinct from prompt injection. Maliciou
 - [Security-Aware Tool Descriptions for MCP Servers (SpellSmith)](security-aware-tool-descriptions-mcp.md) — Taint-style flaws are 81% of MCP-server vulnerabilities and slow to patch; rewriting a risky tool's description with its tainted parameters, capability, CWE, and an invocation policy is a same-day mitigation layered over code-level input validation, not a replacement for it
 - [Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls](mid-trajectory-guardrail-selection.md) — Guardrail efficacy in multi-step tool-calling workflows correlates with structural data competence more than safety alignment; select guard models accordingly
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — Malicious MCP tools exploit argument generation to leak system prompts and chain description-plus-return injection to achieve remote code execution
+- [Vetting Tool Definitions for Exfiltration Signatures](vetting-tool-definitions-before-install.md) — A tool description or inputSchema asking for the system prompt, conversation history, secrets, or API keys is a leak signature; refuse the tool at install, do not reword it
 
 ## Supply Chain
 

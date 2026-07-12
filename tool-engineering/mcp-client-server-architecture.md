@@ -11,7 +11,7 @@ tags:
   - tool-agnostic
   - tool-engineering
   - mcp
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-13
 maturity: adopted
 ---
 
@@ -35,7 +35,7 @@ Transport is a deployment topology decision, not a latency choice.
 | Security surface | Process isolation | Network exposure, requires auth |
 | Use case | Local dev tools | Shared team servers, cloud services |
 
-Use stdio unless you need multiple clients or remote hosting. Streamable HTTP adds [required security measures](https://modelcontextprotocol.io/docs/concepts/transports): validate `Origin` (DNS rebinding), bind local servers to localhost, authenticate callers.
+Use stdio unless you need multiple clients or remote hosting. Streamable HTTP adds [required security measures](https://modelcontextprotocol.io/docs/concepts/transports). The [MCP spec's security warning](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports) makes `Origin` validation a **MUST for every Streamable HTTP server, local or remote** — it's the DNS-rebinding defense, not a local-only concern. A locally-running server should additionally bind to localhost; all Streamable HTTP servers should authenticate callers.
 
 ## Tool surface design
 
@@ -156,7 +156,7 @@ Lazy loading does not fix selection accuracy. An agent searching 200 tools still
 
 ## Key Takeaways
 
-- Transport choice is a deployment-topology decision: stdio for single-client local tools, Streamable HTTP for shared or remote servers with auth and `Origin` validation.
+- Transport choice is a deployment-topology decision: stdio for single-client local tools, Streamable HTTP for shared or remote servers. `Origin` validation is a spec MUST on every Streamable HTTP server regardless of topology, plus auth (and localhost binding when locally-running).
 - Tool surface drives agent accuracy — keep tools focused, defer schemas with tool search for large surfaces, and apply poka-yoke to parameters.
 - Implement both error mechanisms: JSON-RPC errors for protocol failures, `isError: true` results for execution failures the agent can reason about.
 - Capability negotiation is mandatory and silent on gaps — build explicit fallbacks for optional capabilities like sampling and elicitation.

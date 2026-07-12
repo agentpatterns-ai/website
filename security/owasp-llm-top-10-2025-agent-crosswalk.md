@@ -72,3 +72,4 @@ A crosswalk is a discovery aid, not a threat model — five conditions make it a
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — independent-mechanism layering across all ten risk categories
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — primary LLM01 entry for coding agents
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — LLM05 (improper output handling) and LLM07 (system-prompt leakage) adjacencies for tool-using agents
+- [Vetting Tool Definitions for Exfiltration Signatures](vetting-tool-definitions-before-install.md) — LLM06 (excessive agency) install-time complement: refusing a leak-signature tool definition before it is ever granted

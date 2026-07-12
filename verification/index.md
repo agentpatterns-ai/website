@@ -44,6 +44,7 @@ last_reviewed: 2026-05-27
 - [Distillation-Induced Similarity Metrics for Tool-Use Agents](distillation-induced-similarity-metrics.md) — Quantify how much two models share non-mandatory tool-use behaviour with Response Pattern Similarity and Action Graph Similarity to surface correlated failure modes before routing or ensembling treats them as independent
 - [Learned Prefix Monitors for Agent Traces](learned-prefix-monitors-agent-traces.md) — Online failure-warning monitors learn an event abstraction and a prefix-risk score from terminal outcomes; useful complement to deterministic guardrails, but high AUPRC does not imply usable alerts
 - [ComplexMCP: Three Bottlenecks in Large Interdependent Tool Sandboxes](complexmcp-tool-sandbox-bottlenecks.md) — 300+ MCP tools across stateful sandboxes expose tool retrieval saturation, over-confidence skipping verification, and strategic defeatism — each maps to a deployment choice
+- [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — Grade red-team outcomes on an L0 to L6 harm scale over reversibility, scope, and privilege so evals surface how harmful a compromise was, not just whether one occurred — a defense can report 0% attack success while still leaking cross-scope
 
 ## Behavioral Testing
 
