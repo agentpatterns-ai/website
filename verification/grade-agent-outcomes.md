@@ -140,3 +140,4 @@ Industry practice as of 2025–2026 increasingly adopts hybrid evaluation that u
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md)
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md)
 - [Stateful Agent Evals via State Snapshots and Transition Assertions](stateful-agent-state-and-transition-evals.md)
+- [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — Extends outcome grading to harm severity, scoring red-team trajectories on an L0 to L6 scale

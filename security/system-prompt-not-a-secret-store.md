@@ -93,6 +93,7 @@ The transaction limit, loan cap, cross-user authorization check, and database cr
 ## Related
 
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — the affirmative pattern for credentials: inject as environment variables, never as prompt text
+- [Internal Hostname Disclosure in Agent-Readable Context](internal-hostname-disclosure-agent-context.md) — the non-credential sibling risk: internal hostnames left in the same instruction files carry reconnaissance value even with no secret attached
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — second channel for prompt extraction via malicious MCP tool argument generation
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — why prompt-text instructions cannot be relied on as behaviour controls
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — extracted credentials in a prompt close the trifecta when the agent has untrusted input and egress

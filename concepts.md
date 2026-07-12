@@ -793,6 +793,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [MCP Approval-View Fidelity Gap and Unicode Concealment](security/mcp-metadata-approval-view-gap.md)
 - [Forged Reasoning Trace Attacks on Agent Memory (FARMA)](security/forged-reasoning-trace-memory-attack.md)
 - [Security-Aware Tool Descriptions for MCP Servers (SpellSmith)](security/security-aware-tool-descriptions-mcp.md)
+- [Cross-Repository Security Posture for Agent-Introduced Vulnerabilities](security/cross-repository-security-posture.md)
 
 ## Testing & Evaluation
 
@@ -925,6 +926,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Bounded Repair-Loop Iterations](verification/bounded-repair-loop-iterations.md)
 - [Specification-Grounded Test Writing](verification/specification-grounded-test-generation.md)
 - [Verify Observability in Agent-Generated Code](verification/verify-generated-code-observability.md)
+- [Action-Graded Severity for Agent Red-Team Outcomes](verification/action-graded-severity-red-team-outcomes.md)
 
 ## Hooks & Guardrails
 
