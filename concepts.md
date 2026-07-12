@@ -794,6 +794,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Forged Reasoning Trace Attacks on Agent Memory (FARMA)](security/forged-reasoning-trace-memory-attack.md)
 - [Security-Aware Tool Descriptions for MCP Servers (SpellSmith)](security/security-aware-tool-descriptions-mcp.md)
 - [Cross-Repository Security Posture for Agent-Introduced Vulnerabilities](security/cross-repository-security-posture.md)
+- [Internal Hostname Disclosure in Agent-Readable Context](security/internal-hostname-disclosure-agent-context.md)
+- [Vetting Tool Definitions for Exfiltration Signatures](security/vetting-tool-definitions-before-install.md)
 
 ## Testing & Evaluation
 
