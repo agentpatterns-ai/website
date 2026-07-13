@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - reliability
 aliases:
   - dual budget control
   - inference-time budget control for search agents

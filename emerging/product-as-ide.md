@@ -7,7 +7,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # Product-as-IDE: When the Application Becomes the Development Environment

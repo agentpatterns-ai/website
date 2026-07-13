@@ -142,6 +142,24 @@ If the agent skips a check, the missing `after` row makes the gap visible and th
 - Evidence bundles generated from queries eliminate hallucinated results
 - Confidence levels should derive from verification data, not agent judgment
 
+## FAQ
+
+**When does a verification ledger backfire?**
+
+It costs more than it returns on throwaway or exploratory work, where baseline/after bookkeeping outweighs the regression-detection value. It also backfires when the underlying checks are unreliable — flaky tests or false-positive linters mean the ledger faithfully records noise — or when complete rows cover the wrong surface, producing a clean bundle for a change that actually broke something else.
+
+**Can the same agent that runs the checks also write its own ledger rows?**
+
+No. If the agent that executes a check also writes its row, it can fake exit codes or skip the INSERT when a check fails. The ledger only holds when execution and recording are separated, such as through CI, a harness, or a hook, so the recording step cannot be gamed by the agent it is meant to verify.
+
+**What's a lightweight alternative to a full SQL-backed ledger?**
+
+Not every setup supports persistent databases across agent turns. Lighter versions keep the same principle: write verification results to a JSON or YAML file after each check and read it back to generate the bundle, or have the agent emit a fixed schema (tool, command, exit_code, passed) so downstream gates can parse it instead of parsing prose.
+
+**How did Spotify's Honk team put this pattern into production?**
+
+The Honk team wired deterministic verifiers — format, build, and test — directly into the agent loop and blocked PR creation whenever any verifier failed, replacing trust in the agent's own claims with a hard gate on real check results ([Spotify Engineering, "Background Coding Agents: Predictable Results Through Strong Feedback Loops"](https://engineering.atspotify.com/2025/12/feedback-loops-background-coding-agents-part-3)).
+
 ## Related
 
 - [Trust Without Verify](../anti-patterns/trust-without-verify.md)

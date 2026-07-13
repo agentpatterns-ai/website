@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - reliability
 aliases:
   - graduated cost circuit breaker
   - soft spend limit alerts

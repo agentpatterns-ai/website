@@ -8,6 +8,7 @@ tags:
   - evals
   - tool-agnostic
   - arxiv
+  - reliability
 aliases:
   - behavioral trajectory analysis
   - agent failure clusters
@@ -122,3 +123,4 @@ Behavioral-pattern auditing and ensembling have diminishing returns in several c
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — two-role loop for iterative quality improvement
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — routing tasks across competing agents to select the best result
 - [Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md) — choosing accumulated vs fresh context for iteration cycles
+- [Agent Failure Trajectories and the Recovery Window](failure-trajectory-recovery-window.md) — the temporal companion: when in a run the decisive error lands and how narrow the window to correct it is

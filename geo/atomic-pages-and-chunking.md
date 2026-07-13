@@ -120,6 +120,20 @@ docs/auth/auth-errors.md       (~300 words) — diagnosing and fixing auth failu
 
 Each page produces a tight, focused embedding. A query for "how to rotate API keys" now matches `rotate-api-keys.md` with high cosine similarity, and the retrieved passage contains exactly the steps needed for an accurate citation.
 
+## FAQ
+
+**How does RAG chunking actually work?**
+
+RAG systems process documents in three steps: chunking into passages of roughly 200-400 words, embedding each passage into a vector, and scoring passages by cosine similarity against the query at retrieval time. AI answer engines cite whichever passage that scoring step returns, not the full page, which is why passage-level structure decides what gets retrieved and cited, per [NVIDIA research (2024)](https://developer.nvidia.com/blog/finding-the-best-chunking-strategy-for-accurate-ai-responses/).
+
+**Why do multi-concept pages underperform in AI retrieval?**
+
+A page covering several techniques produces one blended embedding averaged across all of them, so it scores lower similarity to any single query than a dedicated page would. Chunk boundaries can also split an explanation mid-argument, stripping context an answer engine needs to cite it accurately, and off-topic surrounding content dilutes a passage's embedding the same way it dilutes a whole page's.
+
+**When can splitting content into more pages hurt retrieval?**
+
+Over-atomization has real costs. Breaking a multi-step workflow across separate pages can mean retrieval surfaces only one step, leaving the LLM without the setup context needed for a complete answer. Pages under roughly 200 words fall below the token range that performs best, and concepts that only make sense in contrast, like authentication versus authorization, lose that distinction when split apart, forcing the LLM to guess at the relationship.
+
 ## Related
 
 - [Answer-First Writing](answer-first-writing.md)

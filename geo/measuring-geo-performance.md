@@ -140,6 +140,24 @@ if __name__ == "__main__":
 
 Run on a daily cron (`0 9 * * *`). Diff `mentioned` counts week-over-week to detect visibility drops.
 
+## FAQ
+
+**Can you build your own GEO monitoring setup instead of paying for a tracking tool?**
+
+Yes — a minimal script using the Anthropic SDK can sample target prompts, check whether a brand name appears in the response, and log the result. Running it on a daily cron and diffing mention counts week-over-week surfaces the same visibility drops that paid tools detect, though it lacks their multi-platform coverage and dashboards.
+
+**Why can restructuring content for AI extraction hurt SEO rankings?**
+
+GEO and SEO pull in different directions. Content reshaped to be easily extracted and cited by AI systems can raise citation rates on platforms like ChatGPT or Perplexity while simultaneously reducing organic search rankings, since the structural changes that help machine extraction don't always align with what search engines reward. Teams should weigh both before restructuring.
+
+**Does having strong organic search visibility improve AI citation frequency?**
+
+There's a correlation: brand web mention volume tends to track with AI Overview visibility, meaning a stronger organic presence generally coincides with more frequent AI citation. That's not a guarantee, though — GEO measurement stays probabilistic and platform-specific, so a strong SEO footprint doesn't automatically translate into citations on every AI platform.
+
+**Why do broad prompts like "best tools for X" produce unreliable GEO data?**
+
+Broad, generic prompts vary so widely in AI-generated responses from session to session that sampled results reflect random noise rather than genuine visibility changes. Narrow, brand-specific prompts produce far more stable results. Combined with too few daily samples, high-drift queries can generate false positives and hide real visibility drops.
+
 ## Key Takeaways
 
 - GEO measurement is probabilistic, not deterministic — there are no fixed ranks, no platform APIs, and citations vary session-to-session, so all data comes from repeated sampling.

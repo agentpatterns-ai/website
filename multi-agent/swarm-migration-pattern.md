@@ -9,7 +9,7 @@ tags:
 aliases:
   - swarm code migration
   - parallel file migration
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-13
 maturity: established
 ---
 
@@ -40,6 +40,8 @@ graph TD
 ```
 
 Boris Cherny (Anthropic): "The main agent makes a big to-do list for everything and then map reduces over a bunch of subagents. You start 10 agents and migrate all the stuff over." ([nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/swarm-migration-pattern.md))
+
+The same shape now ships in production at cross-repository scale: Sourcegraph's agentic Batch Changes (public beta) runs an agent that scopes, executes, and ships large-scale code migrations across hundreds of repositories, iterating until every pull request is mergeable ([Sourcegraph — Agentic Batch Changes public beta](https://sourcegraph.com/blog/agentic-batch-changes-public-beta)).
 
 ## Eligible migrations
 

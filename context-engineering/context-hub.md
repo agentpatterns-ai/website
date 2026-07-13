@@ -79,6 +79,20 @@ If the agent finds that `stream=True` needs explicit iterator handling the docs 
 
 On-demand doc retrieval adds a network round-trip before every code-generation step. In latency-sensitive pipelines or offline environments, that is a non-starter. The pattern also needs the agent to have shell tool-calling, so agents confined to pure text completion cannot invoke `chub get`. The public registry [covers roughly 68 providers as of March 2026](https://dev.to/aws/context-hub-has-68-apis-add-yours-33ma); for APIs outside the registry, the agent falls back to training data anyway and gains nothing over the baseline. Finally, teams already running a well-tuned local embeddings-based retrieval system may see only marginal gains, because chub helps most when no other retrieval layer exists.
 
+## FAQ
+
+**How is Context Hub different from llms.txt?**
+
+llms.txt is a passive, site-level index that tells agents where documentation lives; Context Hub does active, provider-specific retrieval that delivers the documentation content itself. The two are complementary rather than competing: agents use llms.txt for discovery, then run `chub get <provider>/<endpoint>` to inject the actual current spec into context in place of a stale training-data snapshot.
+
+**When does Context Hub not help?**
+
+On-demand retrieval adds a network round-trip before every code-generation step, which rules it out for latency-sensitive or offline pipelines, and it requires shell tool-calling, so agents confined to pure text completion cannot invoke `chub get`. The public registry [covers roughly 68 providers as of March 2026](https://dev.to/aws/context-hub-has-68-apis-add-yours-33ma); outside that set, agents fall back to training data and gain nothing over the baseline.
+
+**How does Context Hub keep token cost down when fetching docs?**
+
+Docs are stored as markdown split into multiple reference files per provider, so the `--file` flag pulls a single reference selectively instead of the whole set, while `--full` remains available when the complete doc set is actually needed. This keeps token cost proportional to what the agent actually needs rather than injecting an entire provider's documentation for every call.
+
 ## Key Takeaways
 
 - Agents hallucinate API calls when training data predates library changes — on-demand doc retrieval solves this at generation time rather than retraining

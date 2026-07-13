@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - reliability
 aliases:
   - infeasible task detection
   - feasibility-aware agents

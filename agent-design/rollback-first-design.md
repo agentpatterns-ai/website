@@ -5,6 +5,7 @@ description: "Treat recovery cost as a first-class design constraint. For every 
 tags:
   - agent-design
   - tool-agnostic
+  - reliability
 aliases:
   - reversible agent design
   - undo-first design

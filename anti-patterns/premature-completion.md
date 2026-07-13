@@ -95,3 +95,4 @@ Same surface symptom, different cause, different fix:
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — post-patch verification pattern
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — verification steps before declaring done
 - [Red-Green-Refactor for Agents](../verification/red-green-refactor-agents.md) — test-state as externally observable stopping criterion
+- [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](lazy-generation.md) — the same premature-stop failure narrowed to test generation, where the shortfall skews onto complex branches

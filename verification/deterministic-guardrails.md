@@ -150,6 +150,20 @@ PostToolUse hook (`.claude/settings.json`):
 
 Each layer is independent: the PostToolUse hook catches issues file-by-file as the agent writes; the pre-commit hook catches anything missed before the commit lands; CI catches integration failures the local environment did not surface.
 
+## FAQ
+
+**Why might a guardrail pass even though something is still wrong?**
+
+Guardrails check properties, not intent. A URL validator confirms a link resolves, not that it points to the claimed content. A linter confirms syntax, not logic. A schema validator confirms structure, not correctness — the same syntactic-vs-semantic limit described in [structured output constraints](structured-output-constraints.md). Specific guardrails narrow this gap; vague ones widen it.
+
+**When do guardrails do more harm than good?**
+
+Guardrails impose fixed costs that don't scale with value, so they backfire in specific situations: coverage that looks thorough but misses what actually ships, CI latency so high that agents batch fixes into large diffs, hook noise that pushes people toward `--no-verify`, and rules that drift from the property they were meant to protect as the codebase changes.
+
+**How much faster is Ruff than older linters like Flake8?**
+
+[Ruff's official docs](https://docs.astral.sh/ruff/) report it running 10 to 100 times faster than legacy tools such as Flake8 and Black. That speed is why a pre-commit linting guardrail — catching syntax errors and undefined variables the agent introduced — adds negligible time to the commit loop, even though it runs on every commit.
+
 ## Related
 
 - [Layered Accuracy Defense](layered-accuracy-defense.md)

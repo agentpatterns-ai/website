@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - reliability
 aliases:
   - SLM as agent tool
   - nested model tool

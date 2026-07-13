@@ -6,6 +6,7 @@ aliases: [idempotency, safe-retry-design]
 tags:
   - agent-design
   - tool-agnostic
+  - reliability
 last_reviewed: 2026-06-12
 maturity: established
 ---

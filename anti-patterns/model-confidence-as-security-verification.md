@@ -94,3 +94,4 @@ The confidence still orders the review queue, but the deserialization finding �
 - [The Test Homogenization Trap](test-homogenization-trap.md) — Model-generated tests share the model's blind spots, so self-generated checks give the same false security assurance.
 - [Blind Tool Deference: Agents Parroting Callable Tools](blind-tool-deference.md) — Adopting a tool's output wholesale instead of judging it; the same uncritical trust applied to tool results.
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — Declaring done on the first signal of progress, the temporal cousin of declaring code secure on the first confident answer.
+- [Overtrusting Human Sign-Off on Generated Assertions](generated-assertion-signoff.md) — The reviewer-side twin: a human's confidence in a generated assertion does not track whether it is correct either.

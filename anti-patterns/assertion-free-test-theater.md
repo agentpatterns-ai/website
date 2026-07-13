@@ -76,3 +76,5 @@ The trap is sharpest when (a) the merge gate is automated, (b) the file's claime
 - [Premature Completion](premature-completion.md) — declaring done on a weak signal; assertion-free tests are exactly that signal.
 - [Trust Without Verify](trust-without-verify.md) — polished output ≠ verified output; the same logic applied to test files instead of prose.
 - [Happy Path Bias](happy-path-bias.md) — the upstream tendency: skipping error paths in code; this page is the downstream form in test code.
+- [Overtrusting Human Sign-Off on Generated Assertions](generated-assertion-signoff.md) — reviewers wave through the generated checks this page is about; they catch wrong assertions at near chance.
+- [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](lazy-generation.md) — the failure a naive coverage gate causes when an agent games coverage with assertion-light tests.

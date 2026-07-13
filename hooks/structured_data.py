@@ -176,14 +176,25 @@ def _build_breadcrumbs(page) -> Optional[dict]:
 # ---------------------------------------------------------------------------
 # FAQ detection
 # ---------------------------------------------------------------------------
+# Material's permalink plugin injects a headerlink anchor before every heading's
+# closing tag (`<h2 id="faq">FAQ<a class="headerlink" ...>&para;</a></h2>`), so
+# the heading never closes immediately after the text. The lazy tag-skipping
+# group tolerates that anchor; it was previously matched by an exact
+# `>FAQ</h2>` pattern that could never match real rendered output, which is why
+# FAQPage had never once fired on this site (#9712).
 _FAQ_HEADING_RE = re.compile(
-    r'<h2[^>]*>(?:FAQ|Frequently Asked Questions)</h2>(.*?)(?=<h2|$)',
+    r'<h2[^>]*>\s*(?:FAQ|Frequently Asked Questions)\s*(?:<[^>]+>[^<]*)*?</h2>(.*?)(?=<h2|$)',
     re.IGNORECASE | re.DOTALL,
 )
+# `(.*?)` (not `[^<]+`) in both groups — a sourced answer routinely contains
+# inline markup (a citation `<a>`, a `<code>` span, `<strong>`), and matching
+# only up to the first `<` silently truncated the answer there, undercounting
+# words and dropping everything after the first inline tag from the JSON-LD.
 _QA_PAIR_RE = re.compile(
-    r'<strong>([^<]+)</strong>\s*</p>\s*<p[^>]*>([^<]+)',
+    r'<strong>(.*?)</strong>\s*</p>\s*<p[^>]*>(.*?)</p>',
     re.DOTALL,
 )
+_STRIP_TAGS_RE = re.compile(r'<[^>]+>')
 
 
 def _detect_faq(rendered_html: str) -> Optional[dict]:
@@ -196,18 +207,19 @@ def _detect_faq(rendered_html: str) -> Optional[dict]:
         return None
     entities = []
     for q, a in pairs:
-        answer = a.strip()
+        question = _STRIP_TAGS_RE.sub('', q).strip()
+        answer = _STRIP_TAGS_RE.sub('', a).strip()
         # GEO-M2: warn (don't drop) when an answer falls outside the 40–80-word
         # band that carries FAQPage citation lift, so authors can tighten it.
         word_count = len(answer.split())
         if not FAQ_ANSWER_MIN_WORDS <= word_count <= FAQ_ANSWER_MAX_WORDS:
             log.warning(
                 "FAQ answer is %d words (outside the %d–%d-word band): %r",
-                word_count, FAQ_ANSWER_MIN_WORDS, FAQ_ANSWER_MAX_WORDS, q.strip(),
+                word_count, FAQ_ANSWER_MIN_WORDS, FAQ_ANSWER_MAX_WORDS, question,
             )
         entities.append({
             "@type": "Question",
-            "name": _safe(q.strip()),
+            "name": _safe(question),
             "acceptedAnswer": {"@type": "Answer", "text": _safe(answer)},
         })
     return {

@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - reliability
 aliases:
   - cross-vendor routing
   - competitive model routing

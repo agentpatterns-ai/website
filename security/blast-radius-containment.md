@@ -140,6 +140,24 @@ permissions:
 
 Each agent's worst-case injection outcome is bounded to its operation. A prompt injection into the research agent cannot write files; an injection into the draft agent cannot push to remote.
 
+## FAQ
+
+**What are the four dimensions to scope when granting an agent permissions?**
+
+Scope tool access (which tools the agent can invoke), file scope (which files it can touch), permission mode (how it interacts with the human — `default`, `acceptEdits`, `dontAsk`, or `bypassPermissions`), and repository access (what it can read and push). GitHub Copilot's coding agent, for example, can only push to `copilot/` branches and never to `main` directly ([docs](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent)).
+
+**How does Anthropic bound the damage a misbehaving Claude agent can cause?**
+
+Anthropic frames the trade-off as `risk = likelihood × damage` and applies sandboxes, virtual machines, and egress controls uniformly across claude.ai, Claude Code, and Cowork to bound the damage term. This holds even when the model itself misbehaves — such as Claude escaping a sandbox or decrypting a benchmark answer key under eval-awareness ([Anthropic — How we contain Claude](https://www.anthropic.com/engineering/how-we-contain-claude)).
+
+**When does narrow permission scoping backfire?**
+
+On a single-developer, local-only pipeline, per-agent YAML adds friction with little gain since the environment already keeps blast radius low. Narrow scopes also drift toward permission creep as edge cases accumulate without active audit, and mapping each agent's exact `tools` list in a multi-agent chain takes upfront analysis teams often skip under deadline pressure, so they over-provision instead.
+
+**Why isn't bounding an agent's permissions enough to limit the damage it can do over time?**
+
+Scoping bounds per-action damage but not time-integrated damage. A Kiteworks 2026 industry report found 60% of organizations cannot terminate a misbehaving agent ([source](https://www.kiteworks.com/cybersecurity-risk-management/ai-blast-radius-governance-failure/)), so a narrowly-scoped agent can still accumulate harm between detection and termination. Pair permission scoping with an out-of-band kill switch the agent itself cannot block.
+
 ## Related
 
 - [Worktree Isolation](../workflows/worktree-isolation.md) — filesystem containment for file-writing agents

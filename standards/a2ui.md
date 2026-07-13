@@ -128,5 +128,5 @@ The host receives the blueprint over A2A, AG-UI, or MCP transport. It looks each
 - [AGENTS.md: A README for AI Coding Agents](agents-md.md)
 - [llms.txt: Making Your Project Discoverable to AI Agents](llms-txt.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
-- [Interactive Canvases: Agent-Generated Visual Artifacts as Outputs](../emerging/interactive-canvas-outputs.md)
+- [Interactive Canvases: Agent-Generated Visual Artifacts as Outputs](../agent-design/interactive-canvas-outputs.md)
 - [Tool Calling Schema Standards](tool-calling-schema-standards.md)

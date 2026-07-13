@@ -385,6 +385,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent Context File Evolution: Treating ACFs as Configuration Code](instructions/agent-context-file-evolution.md)
 - [Encoding Product-Design Taste into Agent Context](instructions/encoding-product-design-taste.md)
 - [Codified Effort and Escalation Policy in the Instruction File](instructions/codified-effort-escalation-policy.md)
+- [Agent-Ready Bug Reports for Software Repair Agents](instructions/agent-ready-bug-reports.md)
 
 ## Agent Architecture
 
@@ -514,6 +515,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Idle-Time Speculative Planning for ReAct Agents](agent-design/idle-time-speculative-planning.md)
 - [Independent Test Generation in Multi-Agent Code Systems](multi-agent/independent-test-generation-multi-agent.md)
 - [Inference-Time Tool-Call Reviewer: Pre-Execution Feedback for Tool-Calling Agents](agent-design/inference-time-tool-call-reviewer.md)
+- [Interactive Canvases: Agent-Generated Visual Artifacts as Outputs](agent-design/interactive-canvas-outputs.md)
 - [Interactive Clarification for Underspecified Tasks](agent-design/interactive-clarification-underspecified-tasks.md)
 - [Interactive Effort Sliders: Per-Turn Reasoning-Budget Controls](agent-design/interactive-effort-sliders.md)
 - [Inversion Analysis: Surface Capabilities Competitors Cannot Replicate](agent-design/inversion-analysis.md)
@@ -630,6 +632,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Natural Language Tool Selection (NLT)](agent-design/natural-language-tool-selection.md)
 - [Local Model Viability Factors for Coding](agent-design/local-model-viability-for-coding.md)
 - [Deterministic Precondition Gates for Tool-Using Agents](agent-design/deterministic-precondition-gates.md)
+- [Agent Failure Trajectories and the Recovery Window](agent-design/failure-trajectory-recovery-window.md)
 
 ## Loop Engineering
 
@@ -1346,6 +1349,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Task Completion as Tool Certification (Silent Tool Rot)](anti-patterns/task-completion-as-tool-certification.md)
 - [Delegating Change Descriptions to the Agent](anti-patterns/delegating-change-descriptions.md)
 - [Rewriting a CLI Into a JSON Payload for Agents](anti-patterns/cli-json-payload-rewrite.md)
+- [The Patchwork Problem in LLM-Generated Code](anti-patterns/patchwork-problem.md)
+- [Overtrusting Human Sign-Off on Generated Assertions](anti-patterns/generated-assertion-signoff.md)
+- [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](anti-patterns/lazy-generation.md)
 
 ## Emerging Concepts
 
@@ -1355,7 +1361,6 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Hyper-Personalized Software](emerging/hyper-personalized-software.md)
 - [Product-as-IDE](emerging/product-as-ide.md)
 - [Bootstrapping Coding Agents: The Specification Is the Program](emerging/bootstrapping-coding-agents.md)
-- [Interactive Canvases: Agent-Generated Visual Artifacts as Outputs](emerging/interactive-canvas-outputs.md)
 
 ## Discoverability & GEO
 
@@ -2775,6 +2780,20 @@ If the agent finds that `stream=True` needs explicit iterator handling the docs 
 ## When this backfires
 
 On-demand doc retrieval adds a network round-trip before every code-generation step. In latency-sensitive pipelines or offline environments, that is a non-starter. The pattern also needs the agent to have shell tool-calling, so agents confined to pure text completion cannot invoke `chub get`. The public registry [covers roughly 68 providers as of March 2026](https://dev.to/aws/context-hub-has-68-apis-add-yours-33ma); for APIs outside the registry, the agent falls back to training data anyway and gains nothing over the baseline. Finally, teams already running a well-tuned local embeddings-based retrieval system may see only marginal gains, because chub helps most when no other retrieval layer exists.
+
+## FAQ
+
+**How is Context Hub different from llms.txt?**
+
+llms.txt is a passive, site-level index that tells agents where documentation lives; Context Hub does active, provider-specific retrieval that delivers the documentation content itself. The two are complementary rather than competing: agents use llms.txt for discovery, then run `chub get <provider>/<endpoint>` to inject the actual current spec into context in place of a stale training-data snapshot.
+
+**When does Context Hub not help?**
+
+On-demand retrieval adds a network round-trip before every code-generation step, which rules it out for latency-sensitive or offline pipelines, and it requires shell tool-calling, so agents confined to pure text completion cannot invoke `chub get`. The public registry [covers roughly 68 providers as of March 2026](https://dev.to/aws/context-hub-has-68-apis-add-yours-33ma); outside that set, agents fall back to training data and gain nothing over the baseline.
+
+**How does Context Hub keep token cost down when fetching docs?**
+
+Docs are stored as markdown split into multiple reference files per provider, so the `--file` flag pulls a single reference selectively instead of the whole set, while `--full` remains available when the complete doc set is actually needed. This keeps token cost proportional to what the agent actually needs rather than injecting an entire provider's documentation for every call.
 
 ## Key Takeaways
 
@@ -7339,6 +7358,24 @@ Tool call: brave_search("stripe webhook signature verification 2024")
 
 A task requiring only one of five documentation sections consumes context for that section alone. A task requiring none consumes zero documentation tokens. The startup prompt stays under 2 KB regardless of how large the documentation corpus grows.
 
+## FAQ
+
+**When should you preload context instead of retrieving it on demand?**
+
+Preload when a document is accessed repeatedly throughout a task, since re-fetching it on demand at every step adds redundant latency. Retrieve on demand for exploratory tasks where the relevant subset of documents is unknown upfront. For long-horizon tasks, combine both: keep instructions preloaded, retrieve reference material as needed, and lean on compaction or sub-agents once context fills.
+
+**Why can on-demand retrieval hurt accuracy instead of improving it?**
+
+Retrieval quality is a separate failure mode from latency: when a retriever surfaces irrelevant chunks, accuracy drops rather than improves. One study found accuracy fell [from 75% to below 40% as a corpus grew from 54 to 1,128 documents](https://arxiv.org/abs/2606.11350), because dense similarity search returned semantically similar but contextually wrong results. On-demand retrieval only helps when what it returns is actually correct.
+
+**Why does preloading large amounts of context hurt reasoning quality?**
+
+Preloaded material often lands in the middle of the context window, where the [U-shaped attention curve](lost-in-the-middle.md) means [models attend less reliably than to content near the start or end](https://arxiv.org/abs/2307.03172). That, combined with running out of context mid-task, is one of two failure modes that speculative just-in-case loading produces, which is why lean startup context plus on-demand retrieval is preferred.
+
+**How does MCP support on-demand retrieval?**
+
+MCP servers expose external data sources, such as documentation, files, and search, as tools the agent receives descriptions for at startup. Nothing enters the prompt until the agent calls the tool; a `docs` server, for example, returns file contents only when the agent issues a `read_file` call for a specific page it currently needs, keeping the startup prompt near 2 KB.
+
 ## Key Takeaways
 
 - Start lean: preload instructions and tool descriptions, not reference content.
@@ -8736,6 +8773,7 @@ Leveraging existing artifacts — specs, schemas, standards files — as agent i
 - [Standards as Agent Instructions](standards-as-agent-instructions.md) — A standards file actionable for humans is, verbatim, an instruction file for agents — the same document does both jobs when written precisely
 - [Convention Over Configuration for Agent Workflows](convention-over-configuration.md) — Reduce agent errors by encoding decisions into naming conventions, directory structure, and label schemes so agents follow patterns rather than invent them
 - [WRAP Framework for Agent Instructions](wrap-framework-agent-instructions.md) — A four-step checklist for writing agent-ready task descriptions that maximize autonomous execution quality
+- [Agent-Ready Bug Reports for Software Repair Agents](agent-ready-bug-reports.md) — Rank bug report fields by measured effect on an AI repair agent's correct-fix rate; localization and suggested fixes beat human-style reproduction steps
 - [Multi-Layer Specification Redundancy as a Robustness Budget](multi-layer-specification-redundancy.md) — Independent specification layers absorb prompt noise that would otherwise degrade code-generation correctness; prose repetition and brittle terminology do not
 - [Stage-Targeted Prompt Structure for Pull Request Outcomes](stage-targeted-prompt-structure-pr-outcomes.md) — Specificity, Context, and Verification each move a different stage of the LLM-assisted PR pipeline — diagnose which stage is failing, then raise that dimension
 - [Ubiquitous Language for AI Plans](ubiquitous-language-for-ai-plans.md) — A maintained domain glossary plus ADRs anchors agent plans in existing code so plans, source, and prompt share one vocabulary
@@ -9245,6 +9283,100 @@ The discipline is not free, and several conditions invert its sign:
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — the destination for rules the compact pass moves out of prose
 - [Harness Impermanence](../agent-design/harness-impermanence.md) — the analogous discipline applied to scaffolding code rather than instruction files
 </content>
+
+---
+
+### Agent-Ready Bug Reports for Software Repair Agents
+Source: https://agentpatterns.ai/instructions/agent-ready-bug-reports/
+
+# Agent-Ready Bug Reports for Software Repair Agents
+
+> For an AI repair agent, a bug report is the task specification — the fields that steer the fix matter more than those humans need.
+
+When an AI repair agent picks up an issue, the report stops being documentation for a maintainer and becomes the agent's task specification. Two independent studies of SWE-bench Verified — a set of 500 real GitHub issues with gold patches — measured which report contents raise an agent's correct-fix rate. The result is consistent: information that points at a repair direction helps most, and information that only helps a human read the report does little.
+
+## What raises the correct-fix rate
+
+Rank report content by its measured effect on whether the agent's patch passes, not by what a human triager would value. Across 433 SWE-bench Verified issues and 87 repair agents, the fields with the strongest positive association were ([What Makes a Good Bug Report for an AI Agent?](https://arxiv.org/abs/2607.07593)):
+
+| Report content | Odds of a resolved issue |
+|----------------|--------------------------|
+| Suggested fix (code or prose) | 3.61× |
+| Repository source code | 2.82× |
+| Executable reproduction script | 2.52× |
+| File localization (names the files to change) | 2.33× |
+| Written reproduction steps | no significant effect |
+
+The companion sentence-level study reaches the same conclusion: sentences that expose a repair direction, through bug localization or a suggested fix, carry the strongest association with a passing patch, while procedural reproduction prose — the field human maintainers rank first — adds little ([Writing Bug Reports for Software Repair Agents](https://arxiv.org/abs/2607.09553)).
+
+So write the report to narrow the agent's search. Name the file or function you suspect. Paste the relevant code. Propose a fix, even a rough one. Give an executable script rather than a numbered list of manual steps.
+
+## Shorter is better
+
+Length works against the agent. A one-standard-deviation rise in report length was associated with 51% lower odds of resolution ([What Makes a Good Bug Report for an AI Agent?](https://arxiv.org/abs/2607.07593)). Padding a report with every possible detail buries the high-signal cues. Cut background that does not point at the fix.
+
+## Why it works
+
+A repair agent resolves an issue in two phases: it searches the repository to localize the fault, then edits. Localization cues and suggested fixes act on the first phase — they shrink the search and repair space, so the agent reaches the right code in fewer steps and has fewer branch points where it can go wrong ([Writing Bug Reports for Software Repair Agents](https://arxiv.org/abs/2607.09553)). This is the same high-signal-over-noise principle behind [pointing an agent at an existing specification](specification-as-prompt.md): a precise pointer beats prose the agent has to interpret. Written reproduction steps fail the agent for a related reason — it has to translate prose into an executable check, an error-prone step, whereas a reproduction script skips the translation and runs directly.
+
+## When this backfires
+
+The narrowing that helps a correct cue hurts when the cue is wrong:
+
+- Wrong localization or a wrong suggested fix anchors the agent to the wrong region and wastes its search budget on a false lead. A confident but incorrect pointer is worse than none.
+- Reporter-expertise asymmetry: localization and suggested fixes need the reporter to already know roughly where the fix lives. A triage bot or a non-maintainer often cannot supply the most valuable fields, and a guess risks the anchoring failure above. When you cannot localize, an [interactive clarification step](../agent-design/interactive-clarification-underspecified-tasks.md) or a [reproduce-before-report gate](../code-review/reproduce-before-report-verification-gate.md) beats a fabricated pointer.
+- Evidence scope: both studies use SWE-bench Verified — curated Python library bugs with gold patches. The field rankings may not transfer to other languages, UI or configuration bugs, or proprietary codebases.
+- Over-reporting: adding fields to be safe raises length, and length lowers resolution odds. More content is not strictly better.
+
+## Example
+
+Two reports for the same behavior. The second is an illustrative rewrite that leads with the repair direction.
+
+A human-optimized report reads well but steers the agent poorly:
+
+```markdown
+Sorting a queryset by a related model's property throws an error.
+
+Steps to reproduce:
+1. Create two models with a foreign key relationship.
+2. Add a Python property on the related model.
+3. Call .order_by() on that property name.
+4. Observe the exception.
+```
+
+The agent-ready rewrite of the same behavior points at the repair:
+
+```markdown
+`QuerySet.order_by()` raises FieldError when ordering by a related model's
+Python property (a name that is not a database field).
+
+Likely location (reporter's hypothesis): the ordering-name resolution in the
+ORM query builder — it does not distinguish a property from a concrete field
+before building the SQL ordering.
+
+Suggested fix: validate that each order_by name maps to a concrete field and
+raise a clear, specific error before SQL generation.
+
+Reproduction: an executable test is attached, not manual steps.
+```
+
+The second report names the suspect area, proposes a fix, and supplies a runnable test — the three field types with the strongest measured effect on a correct patch. It marks the location as a hypothesis, so a wrong guess reads as one, not as fact.
+
+## Key Takeaways
+
+- For an AI repair agent, the bug report is the task specification; rank its contents by effect on the correct-fix rate, not by what a human maintainer values.
+- Repair-direction fields help most: suggested fix (3.61×), source code (2.82×), executable reproduction script (2.52×), file localization (2.33×).
+- Written reproduction steps — the top human field — show no significant effect; give a script instead.
+- Keep it short: a one-standard-deviation rise in length correlates with 51% lower resolution odds.
+- A wrong localization or fix anchors the agent to the wrong code; when you cannot localize with confidence, do not guess.
+
+## Related
+
+- [WRAP Framework for Writing Agent-Ready Issue Descriptions](wrap-framework-agent-instructions.md) — a checklist for packaging the task description; this page ranks which report fields to put in it
+- [The Specification as Prompt](specification-as-prompt.md) — the high-signal-pointer principle applied to types, schemas, and tests
+- [Issue Requirements Preprocessing](../agent-design/issue-requirements-preprocessing.md) — restructure a raw issue into structured input before the agent generates code
+- [Issue-to-PR Delegation Pipeline](../workflows/issue-to-pr-delegation-pipeline.md) — the delegation pipeline whose first phase is issue design
+- [Agent-Laundered Bug Reports](../anti-patterns/agent-laundered-bug-reports.md) — the failure mode when agent-written reports lose the reporter's real signal
 
 ---
 
@@ -16290,6 +16422,20 @@ Monolithic (over the ceiling): A single `AGENTS.md` with 200+ rules covering com
 
 Layered (below the ceiling): `AGENTS.md` holds 10 project-wide conventions. A `commit` skill loads commit rules on demand. A `test` skill loads testing requirements. Pre-commit hooks enforce formatting deterministically. Each context stays within reliable range.
 
+## FAQ
+
+**What's the difference between a modification error and an omission error?**
+
+Modification errors happen first: the agent follows a rule's intent but not its exact letter — wrong formatting, a constraint missed by a small margin. Omission errors happen later, once instruction count exceeds reliable capacity: the agent skips a rule entirely, such as ignoring a banned phrase or a scoped restriction. More rules past that point make compliance worse, not better.
+
+**Does the compliance ceiling apply the same way to every model?**
+
+No. IFScale benchmarking across 20 frontier models found three distinct degradation patterns: reasoning models hold compliance until a threshold then drop sharply, standard models degrade roughly linearly as rule count grows, and smaller models show steeper curves with earlier failure onset ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). An instruction set that works reliably on one model can fail on another.
+
+**Can splitting instructions into skills and hooks make things worse?**
+
+Yes. Modularizing introduces its own failure modes: on-demand skills stay invisible to anyone who doesn't know they exist, loading the wrong skill silently removes rules rather than degrading them, tightly coupled rules split across files create boundary conflicts, and hooks moved out of prompts stay reliable only as long as they're kept current. For a solo developer already below the ceiling, decomposition can cost more than it saves.
+
 ## Key Takeaways
 
 - Compliance degrades predictably as instruction count grows: imprecision first, omission later
@@ -16752,6 +16898,7 @@ A (atomicity): context exhaustion is the main failure mode in long-horizon tasks
 - [System Prompt Altitude](system-prompt-altitude.md)
 - [Context Engineering](../context-engineering/context-engineering.md)
 - [Harness Engineering](../agent-design/harness-engineering.md) — environment design as the primary lever for agent reliability
+- [Agent-Ready Bug Reports for Software Repair Agents](agent-ready-bug-reports.md) — which report fields most raise a repair agent's correct-fix rate when the issue is a bug
 
 ---
 
@@ -16822,6 +16969,7 @@ How agents persist, retrieve, and synthesize information across turns and sessio
 - [AX/UX/DX Triad: Three Experience Layers in Agent Systems](ax-ux-dx-triad.md) — Treat Agent Experience, User Experience, and Developer Experience as separate design surfaces — conflating them degrades all three
 - [CoALA Memory Taxonomy as a Classifier for Harness Artifacts](coala-memory-taxonomy-classifier.md) — Apply CoALA's four memory types as a classifier over the artifacts an agent harness already has; the value is diagnostic, not prescriptive
 - [Durable Interactive Artifacts: Agent Output Outside the Transcript](durable-interactive-artifacts.md) — Treat agent outputs as persistent, re-openable, re-runnable workspace objects separate from the chat transcript — the transcript holds reasoning, the artifact holds state
+- [Interactive Canvases: Agent-Generated Visual Artifacts as Outputs](interactive-canvas-outputs.md) — Canvases are an output-shape choice, not a new pattern: they earn their overhead only on irreducibly multi-dimensional output, and they change what review means
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md) — Retrieve relevant past interaction episodes — not isolated facts — so agents recall what was tried, what failed, and what worked when facing similar problems
 - [Generative Agents Memory Stream](generative-agents-memory-stream.md) — Three-layer architecture (observation stream, scored retrieval, reflection synthesis) for maintaining coherent behavior across long-running, high-observation-density agent sessions
 - [Handoff Skill: Structured Context Transfer Between Agent Sessions](handoff-skill-context-transfer.md) — A model-invocable skill that compacts the current session into a temp-file handoff document a fresh agent can pick up — invoked at an explicit transfer point, distinct from harness-detected recap and from raw-transcript forwarding
@@ -16885,6 +17033,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Effective Feedback Compute (EFC) for Harness Comparison](effective-feedback-compute.md) — A trace-level scaling coordinate that credits feedback only when it is informative, valid, non-redundant, and retained — replacing raw tokens or tool calls when comparing two harnesses on the same multi-turn task
 - [Gateway Model Routing](gateway-model-routing.md) — Treat an Anthropic-compatible gateway as both inference target and model catalogue, so a single config knob controls what the harness can call and what it shows in the picker
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — Agents fail; the question is whether they fail forward (recover and continue) or fail catastrophically (corrupt state, lose progress, repeat work)
+- [Agent Failure Trajectories and the Recovery Window](failure-trajectory-recovery-window.md) — Failure has an onset, an evolution, and a narrow recovery window — a decisive error at median step 7 and a one-step window before lock-in mean validation must move earlier than final-outcome checks
 - [Feedback as Capability Equalizer](feedback-capability-equalizer.md) — Weaker models with high-quality iterative feedback outperform stronger models without it — invest in feedback loop quality before upgrading the model
 - [Five-Failure-Layers Diagnostic](five-failure-layers-diagnostic.md) — Before swapping models, force every observed agent failure through a fixed harness-layer attribution — task spec, context, execution environment, verification, state — so "the model is dumb" resolves to a specific gap
 - [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — Encode resource allocation rules in system prompts so agents spend proportional effort — few tool calls for simple lookups, many subagents for complex research
@@ -17518,6 +17667,24 @@ Composition does not remove context exhaustion — it relocates it. Two failure 
 - Silent drift in chains and supervisors: each downstream agent trusts the previous output as ground truth without checking it against the original task spec. A subtly wrong artifact at step 1 compounds through step N before anyone notices ([Glen Rhodes, March 2026](https://glenrhodes.com/agent-orchestration-failure-modes-silent-drift-reconciliation-and-the-supervision-mindset-shift/); [VentureBeat, April 2026](https://venturebeat.com/infrastructure/context-decay-orchestration-drift-and-the-rise-of-silent-failures-in-ai-systems)). Add a reconciliation step that checks each handoff against the brief.
 - Orchestrator context overflow in fan-out: when N workers each return multi-thousand-token findings, the orchestrator's context fills before it can reason over all results ([Qubytes, May 2026](https://qubytes.substack.com/p/fan-out-agent-pipeline-production-failure-modes)). Compress worker outputs to summaries, or use external state with reference pointers, before the orchestrator synthesizes.
 
+## FAQ
+
+**Can subagents spawn their own subagents?**
+
+No. In Claude Code, a subagent cannot dispatch further subagents — only the main conversation can chain agents together, dispatching each in turn as prior steps complete ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)). This caps composition to one level of delegation: an orchestrator can fan out to workers, but those workers cannot recursively spawn their own sub-workers.
+
+**What separates a pipeline from a plain sequential chain?**
+
+A chain passes output from one agent to the next with no validation in between; a pipeline adds an explicit quality gate at each stage boundary, so a stage's output must meet criteria before the next stage starts, and a failing gate can loop back to an earlier stage. Use a pipeline when repeatable stages need enforced pass/fail checks, like a CI/CD flow of build → test → security scan → deploy.
+
+**When does a supervisor pattern beat a fixed pipeline?**
+
+Use a supervisor when the sequence of steps and which agents to delegate to aren't known upfront — a coordinator agent decides what to delegate, to whom, and when, rather than following a preset stage order. This trades a fixed, predictable flow for flexibility: for example, an agent given "make this codebase production-ready" decomposing that into security review, test coverage, and documentation work.
+
+**How do I control cost when composing multiple agents?**
+
+Route narrow, well-defined subtasks to cheaper models like Haiku and reserve capable models like Sonnet for complex reasoning ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)). Claude Code's built-in Explore subagent already defaults to Haiku for read-only search ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)), a pattern worth mirroring when defining custom subagents for narrow, repetitive work.
+
 ## Key Takeaways
 
 - Four patterns cover most multi-agent work: chains for strict dependencies, fan-out for independent parallel tasks, pipelines for staged work with quality gates, and supervisors for dynamic delegation.
@@ -17738,6 +17905,63 @@ A frontend subscribing only to `tool-*` parts renders a tool-call indicator; a f
 - [Event Sourcing for Agents](../observability/event-sourcing-for-agents.md) — server-side append-only event log; the agent stream is its consumer-facing projection
 - [Agent Debug Log Panel: Chronological Event Inspection](../observability/agent-debug-log-panel.md) — operator UI built on the same event stream, separate from the user-facing transcript
 - [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md) — where harness-decision events are emitted from in practice — middleware nodes at loop boundaries
+
+---
+
+### Agent Failure Trajectories and the Recovery Window
+Source: https://agentpatterns.ai/agent-design/failure-trajectory-recovery-window/
+
+# Agent Failure Trajectories and the Recovery Window
+
+> A coding agent's failure unfolds as a trajectory — onset, evolution, a narrow recovery window — so intervene before lock-in, not at the final error.
+
+A coding agent's failure is a process, not a single end-state error. It runs through three phases: an onset (the decisive wrong step), an evolution (later steps that build on that step), and a recovery window (the short span in which a correction is still possible before the run locks in). Final-outcome evaluation only sees the wreckage; the value is upstream, in the window before every action extends rather than corrects the error ([Zhao et al., 2026](https://arxiv.org/abs/2607.09510)).
+
+The condition that governs this technique: the recovery window is narrow and failure signals lag the decisive error, so the payoff comes from validating early — checking the agent's premises before it acts — and from giving any monitor the task specification, not from naive late-stage detection.
+
+## The three phases
+
+A study of 1,794 valid CLI coding-agent trajectories (filtered from 3,843 runs across seven frontier models, with over 63,000 annotated steps) measured the shape of failure directly ([Zhao et al., 2026](https://arxiv.org/abs/2607.09510)):
+
+- Onset is early. The decisive error has a median onset of 7 execution steps, inside the first quarter of a failed run (median length 27 steps).
+- Signals lag. Observable failure symptoms emerge a median of about 10 steps after the decisive error — the first visible failure lands near step 16. The run looks healthy while it is already diverging.
+- The recovery window is short. The median gap between the decisive error and lock-in is one step. Still, 60.9% of failed runs leave at least one recovery step and 43.9% leave three or more.
+
+After lock-in, agents rarely stop: only 18% terminate, while 82% continue unproductively, and repairing the wrong problem accounts for 39% of wasted execution.
+
+## Why it works
+
+Failures become unrecoverable through error propagation. The dominant failure class is epistemic: the agent misuses information it already has (57.9% of errors), and the single largest type is a false premise (30.7%). The agent adopts an unverified assumption — reading `sudo: not found` as a permissions problem rather than a missing program — then reasons consistently on top of it ([Zhao et al., 2026](https://arxiv.org/abs/2607.09510)). Because each later step is taken to be coherent with that premise, every subsequent action extends rather than corrects the error. The wrong foundation is laid early and symptoms surface late, so validation has to move earlier than final-outcome checks to catch it in time. Responding to a signal is what separates outcomes: 92% of successful trajectories act on at least one error signal, against only 37% of failed ones.
+
+Independent trajectory analysis corroborates the early-signal finding — a coding agent's opening strategy, reading first versus patching first, is observable within the first 10 steps and correlates with the final outcome across agents ([behavioral drivers of coding-agent success](behavioral-drivers-agent-success.md)).
+
+## When this backfires
+
+- No specification at monitoring time. The dominant spec-relative failures (false premise, specification neglect) are only 12 to 15% detectable without the task requirements, rising to 22 to 32% when they are supplied ([Zhao et al., 2026](https://arxiv.org/abs/2607.09510)). A monitor without the spec mostly cannot catch them, so the process framing buys little.
+- Irreversible external side effects. Where actions hit external services — deploys, pushes, API writes — checkpoint-restore cannot undo them. Intervening before lock-in then degrades to aborting, not recovering; pair it with [rollback-first design](rollback-first-design.md).
+- Naive real-time detection. The paper's own monitors reach 82% precision on locked-in runs but only 3.7 to 8.7% lead time before lock-in, so a detector reacting to symptoms fires too late. Front-load premise validation instead of trusting live symptom-watching.
+- Short or trivial tasks. When failure is immediate and obvious from the final output, the onset-evolution-recovery apparatus adds annotation and monitoring overhead with no gain over a simple completion check.
+
+## Example
+
+A CLI agent runs a build step and sees `sudo: not found`. It adopts the false premise that it lacks permissions and spends the next several steps rewriting commands to avoid `sudo` — an internally consistent but wrong path. The real cause is that `sudo` is not installed in the container. The decisive error was the first step of that detour; the recovery window was the very next step, before the agent committed to the permissions theory. A premise check — confirm this is a permissions error before working around it — would have caught it inside the window. Ten steps later, when the build still fails for unrelated reasons, the run has already locked in ([Zhao et al., 2026](https://arxiv.org/abs/2607.09510)).
+
+## Key Takeaways
+
+- Failure is a trajectory: a decisive error at a median step 7, symptoms about 10 steps later, and a median recovery window of one step before lock-in.
+- The dominant cause is epistemic — a false premise the agent then reasons consistently on top of, so the error compounds rather than surfaces.
+- Move validation earlier than final-outcome evaluation: verify the agent's premises before it acts, since 92% of successful runs act on an early signal versus 37% of failed ones.
+- Give any monitor the task specification, or it catches only 12 to 15% of the failures that matter; without it, prefer prevention and fail-fast termination over late symptom-watching.
+
+## Related
+
+- [Behavioral Drivers of Coding Agent Success and Failure](behavioral-drivers-agent-success.md) — independent trajectory analysis showing early opening-strategy signals predict the outcome
+- [Trajectory-Conditioned Model Escalation (SWE-Router)](trajectory-conditioned-model-escalation.md) — reads a partial trajectory to decide when to escalate, an intervention inside the recovery window
+- [Exception Handling and Recovery Patterns for AI Coding Agents](exception-handling-recovery-patterns.md) — failing forward versus catastrophically once an error occurs
+- [Rollback-First Design](rollback-first-design.md) — making actions reversible so intervention can undo, not just abort
+- [Five-Failure-Layers Diagnostic](five-failure-layers-diagnostic.md) — attributing a failure to a harness layer once you have caught it
+- [Strained Coherence as a Pre-Failure Signal in Agent Trajectories](../observability/strained-coherence-pre-failure-signal.md) — a complementary early signal for detecting divergence before lock-in
+- [Completion Failure Taxonomy](../verification/completion-failure-taxonomy.md) — a categorisation of why agent output misses, at the completion level
 
 ---
 
@@ -20306,6 +20530,7 @@ Behavioral-pattern auditing and ensembling have diminishing returns in several c
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — two-role loop for iterative quality improvement
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — routing tasks across competing agents to select the best result
 - [Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md) — choosing accumulated vs fresh context for iteration cycles
+- [Agent Failure Trajectories and the Recovery Window](failure-trajectory-recovery-window.md) — the temporal companion: when in a run the decisive error lands and how narrow the window to correct it is
 
 ---
 
@@ -24962,6 +25187,7 @@ Throughout, the agent commits after each successful file change (`git commit -m 
 - [Loop Detection](../observability/loop-detection.md)
 - [Trajectory Logging and Progress Files](../observability/trajectory-logging-progress-files.md)
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
+- [Agent Failure Trajectories and the Recovery Window](failure-trajectory-recovery-window.md) — the recovery window this failing-forward hierarchy has to act inside, with measured onset and lock-in timings
 
 ---
 
@@ -28126,6 +28352,106 @@ The same reviewer wired into a read-heavy lookup workflow would inflate harmfuln
 
 ---
 
+### Interactive Canvases: Agent-Generated Visual Artifacts as Outputs
+Source: https://agentpatterns.ai/agent-design/interactive-canvas-outputs/
+
+# Interactive Canvases: Agent-Generated Visual Artifacts as Outputs
+
+> Canvases are an output-shape choice, not a new pattern: they earn their overhead only on irreducibly multi-dimensional output, and they change what review means.
+
+Claude Artifacts (Claude 3.5 Sonnet, June 2024) introduced a dedicated window for generated content "alongside their conversation" for code snippets, text documents, and website designs ([Anthropic](https://www.anthropic.com/news/claude-3-5-sonnet)). Cursor 3.1 extended the primitive to agent-built visualizations: "Cursor can now respond by creating interactive canvases" with first-party components — tables, boxes, diagrams, charts — plus diffs and to-do lists ([Cursor changelog](https://cursor.com/changelog)). The shape is now available across mainstream tools; the question is when to produce one.
+
+This page covers the output-shape decision: when a canvas beats text or a Git-tracked file, and what changes about review once one exists.
+
+## When a canvas earns its overhead
+
+A canvas costs render time, an extra surface the reader must interact with, and a verification gap (see below). It pays that cost back only when the output has structure a sentence cannot carry. The Cursor blog describes canvases as combining "data from multiple sources into single visualizations" with "logic and interactivity tailored to user requests" ([Cursor](https://cursor.com/blog/canvas)) — which is the real criterion: irreducible multi-dimensionality.
+
+Use a canvas when:
+
+- The answer is a comparison across rows, columns, or time
+- The reader will filter, sort, or drill in rather than read top-to-bottom
+- Multiple data sources merge into one view
+- A diagram or chart communicates faster than the equivalent prose
+
+Do not use a canvas when:
+
+- The answer is a scalar, a short list, or a single file path
+- The output already lives in Git (a diff, a config file) — review belongs in the PR, not an ephemeral side panel
+- The reader will copy the result elsewhere — plain text travels better than a rendered component
+
+## The source-traceability gap
+
+A rendered dashboard looks authoritative. The query behind it may be wrong. A canvas presents the synthesis — the chart, the aggregation, the filter — without automatically surfacing the inputs. This is the same failure mode as any LLM output that [hides its intermediate reasoning](../human/visible-thinking-ai-development.md), amplified by the visual confidence the rendering provides.
+
+Mitigations belong in the canvas itself:
+
+- A visible "source" affordance that shows the query, tool call, or data slice that produced each panel
+- A way to expand any aggregate into its constituent rows
+- Timestamps and data versioning so a stale canvas is recognizable as stale
+
+Without these, reviewing a canvas means trusting the render. With them, the canvas becomes auditable — which is the condition under which it is worth producing at all.
+
+## Review and handoff implications
+
+Canvases live in the agent window, not the Git tree. For a pull-request-centric team, this splits the review surface: the code diff is in GitHub, the canvas that motivated it is in the agent. Reviewers cannot inspect the canvas unless they re-run the prompt, and re-runs may produce a different canvas.
+
+Two practical consequences:
+
+1. Canvas outputs are not review artifacts on their own. If a decision hinges on what the canvas showed, export the canvas (or its underlying data and query) into the PR description, an issue comment, or a committed file. The canvas is a working surface; the PR is the record.
+2. Canvases do not replace written answers in async review. A reviewer reading the PR at 2 a.m. cannot interact with a live Cursor canvas. Any claim the canvas was meant to communicate needs a prose or screenshot version in the durable channel.
+
+## Why this is an output-shape pattern, not an architectural one
+
+Anthropic's canonical list of agent patterns — prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer — does not include artifacts or canvases ([Anthropic](https://www.anthropic.com/engineering/building-effective-agents)). That is deliberate. The underlying agent architecture is unchanged whether the output ships as Markdown, JSON, a chart, or a dashboard. Canvases are a UI affordance that changes [what the human does with the result](durable-interactive-artifacts.md); they do not change what the agent did to produce it.
+
+Treating canvases as an architectural pattern conflates tooling with design. Treating them as an output-shape decision — one of several ways to package the same underlying work — keeps the focus on the real question: does this output have enough structure that rendering it beats describing it, and is the verification gap small enough to accept?
+
+This framing is contested. One line of research treats agent-generated interfaces as a distinct architectural layer — the human-agent interaction surface — rather than packaging atop unchanged architecture: "Software as Content" positions dynamically generated software as the primary medium of human-agent interaction, not one output format among many ([arxiv](https://arxiv.org/abs/2603.21334)). That holds where the surface carries persistent state and affordances the agent reasons over across turns. The output-shape framing here fits the narrower case this page addresses — a one-shot rendered artifact that packages a result — and weakens once the canvas becomes a stateful surface the agent and human co-drive.
+
+## Example
+
+An agent is asked to audit dependency versions across five services in a monorepo and recommend upgrades.
+
+Without a canvas, prose output:
+
+```
+service-a: express 4.18.2 (latest 4.21.1, 3 minor versions behind, 2 CVEs)
+service-b: express 4.19.0 (latest 4.21.1, 2 minor versions behind, 1 CVE)
+... (5 services x 6 dependencies = 30 lines of text)
+```
+
+A reviewer scans 30 lines, trying to remember which services had CVEs.
+
+With a canvas, table output in Cursor 3.1:
+
+| Service | Package | Current | Latest | Severity |
+|---------|---------|---------|--------|----------|
+| service-a | express | 4.18.2 | 4.21.1 | 2 CVEs |
+| service-b | express | 4.19.0 | 4.21.1 | 1 CVE |
+
+The canvas pays off: the reviewer sorts by severity, filters to CVEs only, decides which services to upgrade this sprint. The multi-dimensional comparison across services and packages is exactly the shape a canvas handles better than prose.
+
+The source-traceability requirement still applies. A "Show query" affordance on each row — revealing the `npm outdated` call, the advisory database query, and the timestamp — is what makes the canvas auditable rather than just pretty. Without it, the reviewer is trusting that the advisory list is current and the version parsing was correct, on faith.
+
+## Key Takeaways
+
+- Canvases earn their overhead only when output has irreducible multi-dimensionality — comparisons, drill-ins, merged data
+- For scalars, short lists, and Git-tracked outputs, a canvas adds cost without value
+- Rendered canvases carry source-traceability risk: the visual confidence exceeds the audit trail unless sources are explicitly surfaced
+- Canvases are a working surface, not a review artifact; exporting key state into the PR is what makes them reviewable
+- The pattern is an output-shape decision, not a change in agent architecture
+
+## Related
+
+- [Controlling Agent Output](../instructions/controlling-agent-output.md)
+- [Diff-Based Review](../code-review/diff-based-review.md)
+- [Visible Thinking in AI Development](../human/visible-thinking-ai-development.md)
+- [Durable Interactive Artifacts](durable-interactive-artifacts.md)
+- [Product-as-IDE](../emerging/product-as-ide.md)
+
+---
+
 ### Interactive Clarification for Underspecified Tasks
 Source: https://agentpatterns.ai/agent-design/interactive-clarification-underspecified-tasks/
 
@@ -29926,6 +30252,24 @@ Unbounded turn loops become liabilities in production under these conditions:
 3. Latency opacity: a turn that runs 30 seconds of silent tool execution looks like a hung process to the user. Streaming intermediate tool results is the only signal you have. Omit it and you produce a wall of silence that triggers retries or abandonment.
 
 4. Doom loops in multi-agent systems: when multiple agents share a loop, conflicting termination conditions cause tasks to bounce without resolution, burning turns without progress. Phase 3 of the extended ReAct loop targets doom-loop detection as a separate concern ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)). See [Loop Detection](../observability/loop-detection.md) for the intra-session intervention patterns.
+
+## FAQ
+
+**What counts as a single "turn" in an agent harness?**
+
+A turn is not one model response — it's the full sequence from user input through every intermediate inference and tool call to the final assistant message with no pending tool call. The Codex CLI treats this entire sequence as one turn, surfacing only the result to the user. [Source: [Unrolling the Codex Agent Loop](https://openai.com/index/unrolling-the-codex-agent-loop/)]
+
+**What happens if a tool call fails partway through a turn?**
+
+The harness appends the error to the prompt as an observation rather than terminating the turn. The model then sees the failure in context and decides whether to retry the call, try an alternative approach, or surface the failure to the user. ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344))
+
+**Why can an agent turn suddenly consume enormous amounts of tokens?**
+
+When a tool returns an error state the model treats as recoverable, the loop can retry without end, since the turn loop isn't bound to a fixed step count. One stuck turn has consumed millions of tokens before hitting a wall, which is why a hard iteration cap is necessary. ([The Agent Loop Problem, Modexa, 2026](https://medium.com/@Modexa/the-agent-loop-problem-when-smart-wont-stop-ccbf8489180f))
+
+**Why do multi-agent systems get stuck in doom loops instead of finishing?**
+
+When several agents share a loop, conflicting termination conditions can cause tasks to bounce between agents without resolution, burning turns without progress. This is a separate failure mode from single-turn runaway cost, and dedicated doom-loop detection is proposed as Phase 3 of the extended ReAct loop. ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344))
 
 ## Key Takeaways
 
@@ -42394,6 +42738,20 @@ Worker prompt (per repo):
 
 The orchestrator dispatches 50 workers simultaneously, each scoped to one repository with read-only file tools. Workers return structured JSON findings. The orchestrator then evaluates conflicts (for example, a dependency flagged critical in one repo but patched in another) and produces a consolidated report -- rather than concatenating 50 raw outputs.
 
+## FAQ
+
+**When does splitting a task across parallel workers actually help?**
+
+Parallelization pays off when subtasks require "multiple independent directions simultaneously" ([Anthropic's multi-agent research system post](https://www.anthropic.com/engineering/multi-agent-research-system)) -- research spanning independent sources, analysis needing different methodologies on one dataset, or code review across modules with no shared state. It fails when subtasks are sequentially dependent, since dependencies require chaining rather than parallel dispatch.
+
+**Does adding more worker agents always improve results?**
+
+No. A controlled, protocol-aligned evaluation across ten benchmarks found most multi-agent configurations underperformed a single-agent baseline, with only one of six tested workflows beating it ([Do More Agents Help? Controlled and Protocol-Aligned Evaluation of LLM Agent Workflows](https://arxiv.org/abs/2606.05670)). Parallel dispatch pays off only when subtasks are genuinely independent; adding workers to a task that doesn't decompose cleanly adds coordination cost without a quality return.
+
+**What causes an orchestrator to become a single point of failure?**
+
+Because the orchestrator makes every decomposition decision, a misclassified decomposition routes every worker to the wrong subtask, and the orchestrator's own LLM call caps overall throughput ([Cogent, *Multi-Agent Orchestration Failure Playbook for 2026*](https://cogentinfo.com/resources/when-ai-agents-collide-multi-agent-orchestration-failure-playbook-for-2026)). This is a structural bottleneck in how the pattern routes work, not a tuning problem like over-spawning or premature termination.
+
 ## Key Takeaways
 
 - Workers run independently on bounded subtasks with separate tool sets; no inter-worker coordination
@@ -43888,6 +44246,8 @@ graph TD
 
 Boris Cherny (Anthropic): "The main agent makes a big to-do list for everything and then map reduces over a bunch of subagents. You start 10 agents and migrate all the stuff over." ([nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/swarm-migration-pattern.md))
 
+The same shape now ships in production at cross-repository scale: Sourcegraph's agentic Batch Changes (public beta) runs an agent that scopes, executes, and ships large-scale code migrations across hundreds of repositories, iterating until every pull request is mergeable ([Sourcegraph — Agentic Batch Changes public beta](https://sourcegraph.com/blog/agentic-batch-changes-public-beta)).
+
 ## Eligible migrations
 
 Atomicity is the critical constraint: you must migrate each file without reading or depending on other files migrating at the same time. If a worker's output on file A changes how file B transforms, the migration is not swarm-eligible.
@@ -44597,6 +44957,7 @@ Source: https://agentpatterns.ai/anti-patterns/
 - [Mid-Session Config Changes as Invisible Cache Invalidators](mid-session-config-cache-invalidators.md) — Switching model, effort, or MCP servers mid-session silently invalidates the prompt cache and re-bills the entire prefix at ~10x the cached rate
 - [Objective Drift: When Agents Lose the Thread](objective-drift.md) — After [context compression](../context-engineering/context-compression-strategies.md) events, agents can continue working on a subtly different objective than the one they started with
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — Coding agents stop after the first visible signal of progress and declare the task complete while failing tests remain; named by four independent research teams within a year
+- [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](lazy-generation.md) — Agents generating tests quit early and systematically skip complex branches, so coverage stays shallow exactly where the hard-to-test logic lives; supervise coverage signals rather than trusting the self-report
 - [Run-Status vs Task-Status Confusion in Autonomous Agent Runs](run-status-vs-task-status-confusion.md) — A green status on a scheduled or cloud-triggered agent means the harness exited cleanly, not that the task succeeded; single-axis dashboards hide every silent agent failure as default success
 - [Pattern Replication Risk](pattern-replication-risk.md) — Agents absorb existing codebase patterns and reproduce them at scale, including deprecated APIs and legacy workarounds
 - [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md) — Relying on one safeguard leaves agents vulnerable to injection attacks that the single layer does not address
@@ -44666,6 +45027,8 @@ Source: https://agentpatterns.ai/anti-patterns/
 - [LLM Self-Review Failure](self-review-modernization-failure.md) — Asking an LLM to verify behaviour preservation of its own migration output misses 31.7% of semantic drift cases, independent of model capability
 - [Token Preservation Backfire](token-preservation-backfire.md) — Token-preservation instructions create a competing objective: the agent resolves the conflict by doing less work, not completing the task better
 - [Rewriting a CLI Into a JSON Payload for Agents](cli-json-payload-rewrite.md) — Replacing a conventional CLI's flags with a JSON input payload so agents call it more reliably measures as cost without payoff: args match or beat JSON on correctness and cost 4-11x less
+- [The Patchwork Problem in LLM-Generated Code](patchwork-problem.md) — LLM code is locally valid but globally incoherent — undeclared config keys, phantom imports, missing auth guards — and standard type-checking, tests, and SAST are nearly blind to it
+- [Overtrusting Human Sign-Off on Generated Assertions](generated-assertion-signoff.md) — Developers judge correct LLM-generated assertions at ~74% but incorrect ones at near chance (49%) while staying equally confident, so reviewer sign-off is a weak correctness gate — and low-quality explanations lower accuracy while raising confidence
 
 ---
 
@@ -45391,6 +45754,8 @@ The trap is sharpest when (a) the merge gate is automated, (b) the file's claime
 - [Premature Completion](premature-completion.md) — declaring done on a weak signal; assertion-free tests are exactly that signal.
 - [Trust Without Verify](trust-without-verify.md) — polished output ≠ verified output; the same logic applied to test files instead of prose.
 - [Happy Path Bias](happy-path-bias.md) — the upstream tendency: skipping error paths in code; this page is the downstream form in test code.
+- [Overtrusting Human Sign-Off on Generated Assertions](generated-assertion-signoff.md) — reviewers wave through the generated checks this page is about; they catch wrong assertions at near chance.
+- [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](lazy-generation.md) — the failure a naive coverage gate causes when an agent games coverage with assertion-light tests.
 
 ---
 
@@ -45507,6 +45872,7 @@ Apply the ladder when the cost of a wrong direction exceeds the cost of the chec
 - [Spec Complexity Displacement](spec-complexity-displacement.md)
 - [Entity Binding Failures in Tool-Augmented Agents](entity-binding-failures.md) — an unverified entity binding is an assumption that cascades into the wrong action.
 - [Semantic Collapse Under Underspecified Prompts](semantic-collapse.md) — the upstream cause: an underspecified prompt collapses onto one confident, wrong interpretation that seeds the assumption.
+- [The Patchwork Problem in LLM-Generated Code](patchwork-problem.md) — a sibling single-artifact failure: structurally incoherent code rather than a wrong interpretation.
 
 ---
 
@@ -49088,6 +49454,7 @@ The confidence still orders the review queue, but the deserialization finding �
 - [The Test Homogenization Trap](test-homogenization-trap.md) — Model-generated tests share the model's blind spots, so self-generated checks give the same false security assurance.
 - [Blind Tool Deference: Agents Parroting Callable Tools](blind-tool-deference.md) — Adopting a tool's output wholesale instead of judging it; the same uncritical trust applied to tool results.
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — Declaring done on the first signal of progress, the temporal cousin of declaring code secure on the first confident answer.
+- [Overtrusting Human Sign-Off on Generated Assertions](generated-assertion-signoff.md) — The reviewer-side twin: a human's confidence in a generated assertion does not track whether it is correct either.
 
 ---
 
@@ -49457,6 +49824,71 @@ Sierra runs this architecture across Fortune-20 customer agents and frames it ex
 - [Agent Sprawl](agent-sprawl.md) — the fleet-management failure that follows over-orchestration over time
 - [Framework-First Agent Development](framework-first.md) — reaching for LangChain or CrewAI before the raw API; the framework-altitude companion to this topology-altitude error
 - [Abstraction Bloat in AI Agent-Generated Code Output](abstraction-bloat.md) — agents optimise for comprehensive-looking output rather than minimal implementation; same instinct, applied to code instead of architecture
+
+---
+
+### Overtrusting Human Sign-Off on Generated Assertions
+Source: https://agentpatterns.ai/anti-patterns/generated-assertion-signoff/
+
+# Overtrusting Human Sign-Off on Generated Assertions
+
+> Developers confirm correct LLM-generated assertions well but catch incorrect ones at near chance, while staying equally confident, so sign-off is a weak gate.
+
+## The anti-pattern
+
+An agent augments code with generated assertions or postconditions, often with a natural-language comment explaining each one. A developer reads them, they look right, and the reviewer signs off. The team now treats that sign-off as verification that the checks are correct. It is not. Human review of generated assertions catches correct ones far better than it catches wrong ones, and reviewers cannot tell the two situations apart from their own confidence.
+
+## The measured gap
+
+A controlled experiment with 86 Python programmers judging 260 generated postcondition assertions found the asymmetry: developers judged correct assertions at 73.9% accuracy but incorrect ones at only 49.0% — near chance ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885)). The odds of correctly judging a correct assertion were nearly three times the odds for an incorrect one (OR=2.94, p<0.001). Confidence stayed uniformly high across both cases (about 3.98–4.14 out of 5, no significant difference), so the reviewer's own certainty carries no signal about which judgments are wrong ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885)).
+
+Natural-language explanations do not rescue the gate. They gave no overall accuracy benefit, and under-specified explanations actively reduced accuracy versus exact ones (OR=0.58, p=0.037) while raising confidence versus no comment (4.25 vs 3.99, p=0.005) — more perceived understanding without real comprehension ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885)).
+
+## Why it works
+
+The failure has three cited causes: an acceptance bias toward AI-generated specifications, a cognitive-demand asymmetry in which confirming correct logic is easier than detecting incorrect logic, and a clause-comparison heuristic where reviewers match assertion clauses against the docstring — which breaks for implications (OR=0.69) and element-property assertions (OR=0.66) ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885)). The confidence inflation from a plausible-but-weak explanation is automation-induced complacency: a confident-looking rationale shifts attention away from independent cross-checking, an effect present in novices and experts alike ([Parasuraman and Manzey 2010](https://journals.sagepub.com/doi/10.1177/0018720810376055)). Warning reviewers does not close it — in a separate study, people failed to catch critical flaws in AI output even when told the AI errs and paid to find mistakes ([Kabir et al. 2025](https://arxiv.org/abs/2508.06484)).
+
+## When this backfires
+
+Treating sign-off as a weak gate is not the same as treating it as worthless — and the finding has boundaries.
+
+- Reviewers were right 73.9% of the time on correct assertions. Where generated checks are usually correct and the cost of a rare false accept is low, light sign-off can be cheaper than the failure it prevents.
+- The study used single-function HumanEval stimuli, US-recruited participants, and short review windows of about 95–115 seconds ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885)). Multi-function code, longer review, richer IDE context, and other populations were not tested — do not over-generalize the exact numbers.
+- Where the assertions are actually executed — run against a reference implementation, mutation-tested, or gated by CI — verification no longer rests on reviewer judgment, so the miscalibration matters less.
+
+## Example
+
+**Before — sign-off treated as verification:**
+
+```python
+def median(l: list):
+    """Return the median of elements in the list l."""
+    ...
+# generated postcondition + explanation:
+assert result == sorted(l)[len(l) // 2]
+# "Checks the result equals the middle element of the sorted list."
+```
+
+The explanation reads plausibly, so the reviewer approves. The assertion is wrong for even-length lists — the median averages the two middle elements — an error class reviewers catch at near chance ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885)).
+
+**After — sign-off backed by execution:**
+
+Keep the human read for intent, but make correctness the machine's job: run the assertion against a trusted reference implementation and a mutation-tested input set before it can gate a merge. Reviewer approval becomes one input, not the barrier.
+
+## Key Takeaways
+
+- Human sign-off on generated assertions is asymmetric: about 74% accurate on correct assertions, near chance (49%) on incorrect ones ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885)).
+- Reviewer confidence is flat across right and wrong judgments, so certainty is no signal — the gate cannot self-diagnose.
+- Natural-language explanations do not help and, when under-specified, lower accuracy while raising confidence.
+- Do not treat reviewer approval as verification; back it with executable checks — reference comparison, mutation testing, or CI — for the cases that matter.
+
+## Related
+
+- [Trust Without Verify](trust-without-verify.md) — accepting polished output without independent checks; this page is the reviewer-calibration evidence behind it.
+- [Assertion-Free Test Theater in Agent-Authored Patches](assertion-free-test-theater.md) — generated tests with no oracle; the upstream failure to the one reviewers then wave through.
+- [Tab-Accept Rate as a Proxy for Critical Engagement](tab-accept-critical-engagement-gap.md) — the same automation-complacency mechanism measured at the completion-acceptance level.
+- [Model Confidence as Security Verification](model-confidence-as-security-verification.md) — confidence not tracking correctness, on the model side rather than the reviewer side.
+- [LLM Comprehension Fallacy](../fallacies/llm-comprehension-fallacy.md) — correct-looking output read as understanding; the belief this anti-pattern operationalizes.
 
 ---
 
@@ -49954,6 +50386,7 @@ Same surface symptom, different cause, different fix:
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — post-patch verification pattern
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — verification steps before declaring done
 - [Red-Green-Refactor for Agents](../verification/red-green-refactor-agents.md) — test-state as externally observable stopping criterion
+- [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](lazy-generation.md) — the same premature-stop failure narrowed to test generation, where the shortfall skews onto complex branches
 
 ---
 
@@ -50608,6 +51041,85 @@ Same bug fix. No architectural drift.
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md)
 - [CLAUDE.md Convention](../instructions/claude-md-convention.md)
 - [Trust Without Verify](trust-without-verify.md)
+- [The Patchwork Problem in LLM-Generated Code](patchwork-problem.md)
+
+---
+
+### Shallow Agent Test Coverage from Premature Termination (Lazy Generation)
+Source: https://agentpatterns.ai/anti-patterns/lazy-generation/
+
+# Shallow Agent Test Coverage from Premature Termination (Lazy Generation)
+
+> Coding agents generating tests quit early and skip complex branches, so coverage stays shallow exactly where the hard-to-test logic lives.
+
+Lazy generation is when a coding agent tasked with writing tests "prematurely terminate[s] tasks and systematically avoid[s] complex programmatic logic, resulting in inadequate code coverage" ([SCATE, arxiv 2607.08983](https://arxiv.org/abs/2607.08983)). The agent reports the job done; the branches it skipped are the ones that most needed a test.
+
+## What it looks like
+
+The agent announces tests are "generated and verified," but execution "prematurely terminates," leaving branch coverage "stalled at a mere 31%" in the SCATE authors' Gemini-cli run ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983)). Agents "naturally gravitate toward simple methods and straight-line execution paths," so the untested remainder is not random — it concentrates on the deeply nested, dependency-heavy code where bugs hide. The tell is a self-report of completion that a coverage tool contradicts: the transcript says done, the branch-coverage number says half the decision points never ran.
+
+## Why it happens
+
+The agent must "understand source code, including complex control flows and extensive external dependencies, within a limited context window" ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983)). High internal complexity raises "the reasoning burden on the LLM," and external coupling "complicates environment setup and dependency mocking." Under a bounded context window the path of least resistance is to cover the simple, dependency-free methods and stop. The shortfall therefore lands systematically on the complex branches, not evenly across the file.
+
+## Distinguish from adjacent failures
+
+Same neighborhood, different failure:
+
+| Failure | What the agent does | Fix |
+|---------|--------------------|-----|
+| Lazy generation | Stops test generation early; skips complex branches | Supervise coverage of complex branches, not self-report |
+| [Premature completion](premature-completion.md) | Declares the whole task done while any test fails | Externalize the stopping criterion to test-suite state |
+| [Abstraction bloat](abstraction-bloat.md) | Produces too much code — unrequested abstractions | Explicit simplicity directives |
+| [Assertion-free test theater](assertion-free-test-theater.md) | Emits tests that run but assert nothing | Gate on oracle strength, not test presence |
+
+Lazy generation is the inverse of abstraction bloat — too little test coverage, not too much code — and narrower than premature completion, which terminates the whole task rather than skewing the shortfall onto hard branches.
+
+## What to do instead
+
+Treat coverage of complex branches as a supervised gate rather than the agent's word. SCATE watches three signals during generation — line coverage, branch coverage, and `missed_complexity` (uncovered method entries and decision points) — and re-prompts the agent on the specific gaps ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983)). That supervision lifted Gemini-cli branch coverage by 30.9% over the unsupervised baseline, to 74.7%, at $0.693 per class ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983)). Budget for the loop instead of assuming the agent finishes the hard cases on its own.
+
+## Example
+
+The SCATE authors' Gemini-cli run shows both sides of the failure on the Defects4J benchmark ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983)).
+
+Lazy generation, where the self-report is trusted:
+
+```text
+Agent report: "tests generated and verified"
+Branch coverage: 31%   <- execution prematurely terminated; complex branches uncovered
+```
+
+Corrected, where the coverage signal is supervised:
+
+```text
+missed_complexity flags the uncovered method entries and decision points
+-> agent re-prompted on exactly those branches
+Branch coverage: 74.7%
+```
+
+The stop decision comes from the live coverage and `missed_complexity` signals, not from the agent's summary.
+
+## When this backfires
+
+- Simple code. SCATE's gains are shown only on structurally complex classes (WMC >=35 or RFC >=55) ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983)). On straight-line code the agent already reaches coverage, so a supervision loop adds cost without value.
+- A bare coverage number is gameable. Pushed to hit a line or branch target, an agent can emit shallow tests that execute a branch without checking behavior — 100% line coverage can sit next to a 30% mutation score ([Autonoma](https://getautonoma.com/blog/mutation-testing-vs-code-coverage)). Mutation score, not coverage, correlates with real fault detection ([Petrović et al., ICSE 2021](https://homes.cs.washington.edu/~rjust/publ/mutation_testing_practices_icse_2021.pdf)), so pair the coverage gate with mutation or assertion checks or you buy [test theater](assertion-free-test-theater.md).
+- Single-language evidence. SCATE's results are Java and Defects4J only; the authors flag this as a "threat to external validity" ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983)). The per-class cost and signal calibration are unverified on other stacks.
+
+## Key Takeaways
+
+- Lazy generation is premature termination inside test generation: the agent stops early and systematically skips the complex branches, so coverage is shallow where it matters most.
+- The mechanism is a bounded context window — complex control flow and dependency mocking raise the reasoning burden, so the agent takes the easy paths and quits.
+- The fix is automated supervision on live coverage and uncovered-complexity signals, not the agent's self-reported completion.
+- Gate on mutation or assertion strength alongside coverage — a bare coverage target is gameable and evidence so far is Java-only.
+
+## Related
+
+- [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — the broader stopping-criterion failure this narrows
+- [Abstraction Bloat](abstraction-bloat.md) — the inverse: agents producing too much code, not too little coverage
+- [Assertion-Free Test Theater in Agent-Authored Patches](assertion-free-test-theater.md) — the failure a naive coverage gate causes
+- [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](code-first-test-oracle-bias.md) — a related test-generation blind spot
+- [The Test Homogenization Trap](test-homogenization-trap.md) — LLM test suites sharing the model's blind spots
 
 ---
 
@@ -51536,6 +52048,72 @@ Split sessions remain the right call when: tasks are unrelated enough that share
 - [Perceived Model Degradation](perceived-model-degradation.md) — bloated sessions can mimic apparent model quality loss
 - [Reasoning Overuse](reasoning-overuse.md) — excess reasoning compounds token cost in long sessions
 - [Distractor Interference](distractor-interference.md) — how semantically related but irrelevant instructions degrade compliance
+
+---
+
+### The Patchwork Problem in LLM-Generated Code
+Source: https://agentpatterns.ai/anti-patterns/patchwork-problem/
+
+# The Patchwork Problem in LLM-Generated Code
+
+> LLM-generated code can compile, pass tests, and clear SAST yet be structurally incoherent — each patch locally valid, the whole globally broken.
+
+The patchwork problem is single-artifact structural incoherence: an LLM emits a change that is locally correct but violates a consistency invariant the rest of the repository already holds. A generated endpoint reads a config key nobody declared. An import targets a package that exists in no registry. A new route drops the authentication guard every sibling endpoint carries. Each patch is plausible on its own, so it passes review that reads it in isolation ([Mothukuri & Parizi, arXiv:2607.08981](https://arxiv.org/abs/2607.08981)).
+
+## What it looks like
+
+The paper formalizes structural coherence as consistency invariants over eight graph views of a repository — import, call, dependency, configuration, schema, resource, control-flow, and routing — and names eight failure categories ([arXiv:2607.08981](https://arxiv.org/abs/2607.08981)):
+
+| Category | The incoherence |
+|---|---|
+| Symbol resolution (SRF) | A referenced name resolves nowhere in the module graph |
+| Phantom internal API (PIA) | A call uses a signature the real declaration does not have |
+| Dependency hallucination (DHI) | An import names a package absent from registries and the manifest |
+| Build/config incoherence (BCI) | Code assumes environment variables or config never declared |
+| Resource coherence (RCF) | A required file, return, or schema is missing |
+| Control-flow coherence (CFC) | Unreachable blocks or contradictory conditions |
+| Cross-file contract (CCV) | Producer and consumer disagree on a field name or shape |
+| Security structural regression (SSR) | A route omits a guard its sibling routes enforce |
+
+## Why standard CI misses it
+
+Type checkers, tests, and SAST reason about local correctness, not repository-scale consistency. In the paper's evaluation, type checking and linting caught 2 of 67 structural findings, test execution caught none, and SAST caught none — the vast majority evaded every baseline ([arXiv:2607.08981](https://arxiv.org/abs/2607.08981)). The risk concentrates in exactly the changes agents are asked to make: cross-cutting tasks failed at about 44.6% versus 13–16% for single-file work.
+
+## Why it works
+
+The mechanism is convention over ground truth. An LLM generates token by token from training-data patterns, not from a symbolic model of the target repository. When wiring a change requires consistency across configuration, middleware, and schema boundaries the model cannot see in context, it emits the plausible continuation — a config key, field name, or method signature that matches naming conventions — instead of one grounded in the repo's actual declarations ([arXiv:2607.08981](https://arxiv.org/abs/2607.08981)). Each token is locally probable, so each patch is locally valid; incoherence only appears at the scale tests and per-file linters never check. The same mechanism produces hallucinated dependencies: one 576,000-sample study found commercial models invent packages in about 5.2% of outputs and open-source models in 21.7% ([Spracklen et al., arXiv:2406.10279](https://arxiv.org/abs/2406.10279)) — names an attacker can register to poison the supply chain ([Socket](https://socket.dev/blog/slopsquatting-how-ai-hallucinations-are-fueling-a-new-class-of-supply-chain-attacks)).
+
+This is distinct from its neighbours. [Shadow tech debt](shadow-tech-debt.md) is cumulative drift across many merged PRs; [assumption propagation](assumption-propagation.md) is a wrong interpretation that solves the wrong problem. The patchwork problem is one artifact's structural break, detectable at generation time by static graph analysis.
+
+## Mitigation
+
+Add repository-scale structural checks that standard CI lacks. The paper's hybrid framework delegates symbol and signature checks to mature static analysis where it already excels, then adds purpose-built detectors for the cross-cutting invariants existing tools underserve — configuration coherence, dependency validation, and cross-file contracts ([arXiv:2607.08981](https://arxiv.org/abs/2607.08981)). Practically: resolve every import against the manifest and registry before merge, diff a new route's guards against its siblings, and validate config keys against the declared schema.
+
+## When this backfires
+
+Repository-graph checking is not free, and the failure it targets is uneven. Skip or scope it down when:
+
+- the codebase is greenfield or throwaway — there is no established structure to be incoherent with;
+- the stack is strongly typed and well tooled — a strict TypeScript, Rust, or Java build already surfaces most SRF, PIA, and DHI as compile errors;
+- the change is a small single-file diff a reviewer sees whole — the paper's own data puts simple-task failure at 13–16%, so a detector mostly adds triage cost;
+- the code is dynamic or loosely typed — graph checks over-approximate on Python and JavaScript and can flood reviewers with false positives, the classic weakness of static analysis, where detectors fail through near-zero recall or overwhelming false positives ([Du et al., arXiv:2601.18844](https://arxiv.org/abs/2601.18844)).
+
+Failure patterns also diverge between models, so a detector tuned on one model's profile under-covers another's ([arXiv:2607.08981](https://arxiv.org/abs/2607.08981)).
+
+## Key Takeaways
+
+- The patchwork problem is code that is locally valid but globally incoherent — undeclared config keys, phantom imports, missing auth guards — and standard CI is nearly blind to it.
+- The cause is convention over ground truth: LLMs emit plausible continuations, not repository-grounded ones, so incoherence appears only at repository scale.
+- Catch it with repository-scale structural checks: resolve imports against the manifest, diff route guards against siblings, validate config against schema.
+- The value is highest on cross-cutting changes in large, dynamically typed repos and lowest on small diffs in strongly-typed, well-tooled stacks.
+
+## Related
+
+- [Shadow Tech Debt](shadow-tech-debt.md)
+- [Assumption Propagation: Compounding Agent Misunderstandings](assumption-propagation.md)
+- [Happy Path Bias](happy-path-bias.md)
+- [Dependency Inlining Erodes SBOM and License Provenance](dependency-inlining-provenance-loss.md)
+- [Pattern Replication Risk](pattern-replication-risk.md)
 
 ---
 
@@ -63874,6 +64452,20 @@ The following Claude Code sub-agent configuration routes file exploration to a f
 
 The `explorer` description combines "Use PROACTIVELY" with "Use immediately after receiving a new task" — activation keywords that push the orchestrator to delegate exploration automatically, keeping Haiku on high-volume read-only work while Sonnet and Opus stay reserved for tasks that justify their cost.
 
+## FAQ
+
+**How much cost reduction does big.LITTLE multi-model orchestration deliver in practice?**
+
+A community analysis of Claude Code's Explore subagent pattern found 2 to 2.5x cost reduction at 85 to 95% quality on mixed workloads ([community analysis](https://claudelog.com/mechanics/agent-engineering)). Cognition's Devin Fusion pairs a frontier reasoning core with cheaper sidekick agents, claiming frontier-level performance at roughly 35% lower cost ([Cognition — Devin Fusion](https://cognition.ai/blog/devin-fusion)). Both results come from pairing a capable model with cheaper delegates rather than routing by task type alone.
+
+**When does cascade routing make agents slower or more expensive instead of cheaper?**
+
+Cascade routing only saves money when the validation gate (tests, linters, type checkers) is cheap and deterministic. If validation takes longer than the cost difference between tiers, the cascade adds latency without saving money ([Braintrust — testing agent cost-efficiency](https://braintrust.dev/blog/test-agent-cost-efficiency)). Measure gate cost before committing to escalation-based routing, and treat cost-per-task as an eval metric alongside correctness.
+
+**How is role-based routing different from complexity-based routing?**
+
+Complexity routing decides which model tier handles a task (fast, balanced, powerful); role routing decides which capability handles it, regardless of tier. The OPENDEV paper defines five independently configurable roles — action, thinking, critique, vision, and compact — each with its own fallback chain for graceful degradation ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)). The two axes compose: a role can still be assigned a lightweight or powerful model.
+
 ## Key Takeaways
 
 - Route tasks to models by complexity — exploration to fast, implementation to balanced, architecture to powerful.
@@ -73092,6 +73684,20 @@ PostToolUse hook (`.claude/settings.json`):
 
 Each layer is independent: the PostToolUse hook catches issues file-by-file as the agent writes; the pre-commit hook catches anything missed before the commit lands; CI catches integration failures the local environment did not surface.
 
+## FAQ
+
+**Why might a guardrail pass even though something is still wrong?**
+
+Guardrails check properties, not intent. A URL validator confirms a link resolves, not that it points to the claimed content. A linter confirms syntax, not logic. A schema validator confirms structure, not correctness — the same syntactic-vs-semantic limit described in [structured output constraints](structured-output-constraints.md). Specific guardrails narrow this gap; vague ones widen it.
+
+**When do guardrails do more harm than good?**
+
+Guardrails impose fixed costs that don't scale with value, so they backfire in specific situations: coverage that looks thorough but misses what actually ships, CI latency so high that agents batch fixes into large diffs, hook noise that pushes people toward `--no-verify`, and rules that drift from the property they were meant to protect as the codebase changes.
+
+**How much faster is Ruff than older linters like Flake8?**
+
+[Ruff's official docs](https://docs.astral.sh/ruff/) report it running 10 to 100 times faster than legacy tools such as Flake8 and Black. That speed is why a pre-commit linting guardrail — catching syntax errors and undefined variables the agent introduced — adds negligible time to the commit loop, even though it runs on every commit.
+
 ## Related
 
 - [Layered Accuracy Defense](layered-accuracy-defense.md)
@@ -73411,6 +74017,8 @@ Source: https://agentpatterns.ai/verification/eval-blind-spots/
 > Eval blind spots are gaps in measurement methodology — what the harness cannot observe — not model-capability gaps, so a stronger model never closes them.
 
 An eval blind spot is a place where your measurement setup is structurally unable to see a failure. The agent may be failing — gaming a visible suite, taking an unsafe path, using a stale retrieval, or leaving a test stale — but the harness reports success because the relevant evidence sits outside what it scores. These gaps share one property: a stronger model does not close them. Only a change to the measurement methodology does.
+
+Run-to-run variance is itself a measurement-methodology problem that sits upstream of the four structural gaps: OpenAI documents an approach for separating real signal from run-to-run noise in coding-agent evaluations, so a single scored pass is not mistaken for a genuine capability difference ([OpenAI: Separating signal from noise in coding evaluations](https://openai.com/index/separating-signal-from-noise-coding-evaluations/)).
 
 This page is the umbrella for four documented gaps. Each is a distinct mechanism with its own diagnostic and its own fix:
 
@@ -80745,6 +81353,24 @@ If the agent skips a check, the missing `after` row makes the gap visible and th
 - Evidence bundles generated from queries eliminate hallucinated results
 - Confidence levels should derive from verification data, not agent judgment
 
+## FAQ
+
+**When does a verification ledger backfire?**
+
+It costs more than it returns on throwaway or exploratory work, where baseline/after bookkeeping outweighs the regression-detection value. It also backfires when the underlying checks are unreliable — flaky tests or false-positive linters mean the ledger faithfully records noise — or when complete rows cover the wrong surface, producing a clean bundle for a change that actually broke something else.
+
+**Can the same agent that runs the checks also write its own ledger rows?**
+
+No. If the agent that executes a check also writes its row, it can fake exit codes or skip the INSERT when a check fails. The ledger only holds when execution and recording are separated, such as through CI, a harness, or a hook, so the recording step cannot be gamed by the agent it is meant to verify.
+
+**What's a lightweight alternative to a full SQL-backed ledger?**
+
+Not every setup supports persistent databases across agent turns. Lighter versions keep the same principle: write verification results to a JSON or YAML file after each check and read it back to generate the bundle, or have the agent emit a fixed schema (tool, command, exit_code, passed) so downstream gates can parse it instead of parsing prose.
+
+**How did Spotify's Honk team put this pattern into production?**
+
+The Honk team wired deterministic verifiers — format, build, and test — directly into the agent loop and blocked PR creation whenever any verifier failed, replacing trust in the agent's own claims with a hard gate on real check results ([Spotify Engineering, "Background Coding Agents: Predictable Results Through Strong Feedback Loops"](https://engineering.atspotify.com/2025/12/feedback-loops-background-coding-agents-part-3)).
+
 ## Related
 
 - [Trust Without Verify](../anti-patterns/trust-without-verify.md)
@@ -82160,6 +82786,24 @@ permissions:
 ```
 
 Each agent's worst-case injection outcome is bounded to its operation. A prompt injection into the research agent cannot write files; an injection into the draft agent cannot push to remote.
+
+## FAQ
+
+**What are the four dimensions to scope when granting an agent permissions?**
+
+Scope tool access (which tools the agent can invoke), file scope (which files it can touch), permission mode (how it interacts with the human — `default`, `acceptEdits`, `dontAsk`, or `bypassPermissions`), and repository access (what it can read and push). GitHub Copilot's coding agent, for example, can only push to `copilot/` branches and never to `main` directly ([docs](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent)).
+
+**How does Anthropic bound the damage a misbehaving Claude agent can cause?**
+
+Anthropic frames the trade-off as `risk = likelihood × damage` and applies sandboxes, virtual machines, and egress controls uniformly across claude.ai, Claude Code, and Cowork to bound the damage term. This holds even when the model itself misbehaves — such as Claude escaping a sandbox or decrypting a benchmark answer key under eval-awareness ([Anthropic — How we contain Claude](https://www.anthropic.com/engineering/how-we-contain-claude)).
+
+**When does narrow permission scoping backfire?**
+
+On a single-developer, local-only pipeline, per-agent YAML adds friction with little gain since the environment already keeps blast radius low. Narrow scopes also drift toward permission creep as edge cases accumulate without active audit, and mapping each agent's exact `tools` list in a multi-agent chain takes upfront analysis teams often skip under deadline pressure, so they over-provision instead.
+
+**Why isn't bounding an agent's permissions enough to limit the damage it can do over time?**
+
+Scoping bounds per-action damage but not time-integrated damage. A Kiteworks 2026 industry report found 60% of organizations cannot terminate a misbehaving agent ([source](https://www.kiteworks.com/cybersecurity-risk-management/ai-blast-radius-governance-failure/)), so a narrowly-scoped agent can still accumulate harm between detection and termination. Pair permission scoping with an out-of-band kill switch the agent itself cannot block.
 
 ## Related
 
@@ -87918,6 +88562,20 @@ The trifecta model is a structural heuristic, not a guarantee:
 2. Partial-leg states are underspecified. "Read-only egress" and "[tokenized private data](pii-tokenization-in-agent-context.md)" sit between leg-present and leg-absent. Binary Yes/No columns produce false confidence when a leg is partially present.
 
 3. Leg removal migrates risk. Tokenizing PII shifts the attack to the token resolver, and sandboxing egress shifts it to sandbox-escape. Each removal creates a new high-value target that you must harden in turn.
+
+## FAQ
+
+**Why isn't it enough to just tell the agent not to trust injected content?**
+
+LLMs cannot reliably separate trusted instructions from injected ones — once untrusted input enters context, it influences tool calls no matter how firmly a system prompt warns against it. That's why the trifecta model treats defense as an architecture problem: remove one of the three legs so no single execution path can act on an injected instruction, instead of relying on the model to police itself.
+
+**What if a task genuinely needs all three legs, like a research agent that fetches the web and posts results externally?**
+
+Leg removal isn't always feasible — a research agent that fetches live web content, holds API keys, and posts to external endpoints has all three legs by design. For unavoidable trifectas, add compensating controls such as output scanning, rate-limiting, and egress anomaly detection. These narrow how much damage an injected instruction can do; they don't eliminate the exploitable surface, so they're a second-best option, not a substitute for removing a leg.
+
+**Does read-only egress or tokenized data count as fully removing a leg?**
+
+Not necessarily. States like read-only egress or [tokenized private data](pii-tokenization-in-agent-context.md) sit between leg-present and leg-absent, so a binary Yes/No audit column can produce false confidence when a leg is only partially removed. Treat a partial mitigation as reducing risk, not eliminating a leg, and re-check whether the remaining exposure still completes an exploitable path before calling the risk closed.
 
 ## Key Takeaways
 
@@ -95566,6 +96224,24 @@ OTel's push-based model fits agent workloads: agents emit bursts of activity acr
 - Context loss across agent boundaries: `TRACEPARENT` propagates only to direct subprocesses. Agents communicating via queues, webhooks, or separate processes produce data islands, not end-to-end traces.
 - Cost approximations as billing data: `claude_code.cost.usage` values are estimates — chargebacks built on them drift from actual invoices.
 
+## FAQ
+
+**Why is `claude_code.cost.usage` unreliable for billing?**
+
+`claude_code.cost.usage` is a per-request USD estimate tagged by model, account, and organization — useful for dashboards, but the [official monitoring docs](https://code.claude.com/docs/en/monitoring-usage#backend-considerations) flag it as an approximation. Chargebacks or invoices built directly on it will drift from what you're actually billed, so reconcile the values against the billing console before using them for anything financial.
+
+**Why does OTel use a push model instead of pull-based scraping for agent traffic?**
+
+Agents emit bursts of activity across many tool calls in short-lived sessions, and pull-based scraping can miss those bursts between scrape intervals. OTel's push-based model sends metrics and events as they happen, so a session that starts and finishes between polls still gets captured — which is why Claude Code exports via OTLP push rather than waiting to be scraped.
+
+**Why do traces go missing when agents communicate through queues or webhooks?**
+
+`TRACEPARENT` propagates automatically only to direct subprocesses, so a trace stays intact as long as one process calls another directly. Once agents hand work off through a queue, webhook, or separate process instead, that propagation breaks — you get disconnected data islands rather than one end-to-end trace, and correlating them back together requires custom instrumentation.
+
+**Can OTel tool-result events leak secrets?**
+
+Yes. `tool_result` events carry `tool_parameters`, which can include credentials or other sensitive values passed to a tool. Enabling `OTEL_LOG_TOOL_DETAILS=1` without backend redaction in your logging pipeline (Elasticsearch, Loki, ClickHouse) means those secrets flow straight into your observability backend — configure redaction before turning this on in production.
+
 ## Key Takeaways
 
 - `CLAUDE_CODE_ENABLE_TELEMETRY=1` + an exporter (`prometheus`, `otlp`, or `console`) — no code changes required.
@@ -98210,7 +98886,7 @@ The host receives the blueprint over A2A, AG-UI, or MCP transport. It looks each
 - [AGENTS.md: A README for AI Coding Agents](agents-md.md)
 - [llms.txt: Making Your Project Discoverable to AI Agents](llms-txt.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
-- [Interactive Canvases: Agent-Generated Visual Artifacts as Outputs](../emerging/interactive-canvas-outputs.md)
+- [Interactive Canvases: Agent-Generated Visual Artifacts as Outputs](../agent-design/interactive-canvas-outputs.md)
 - [Tool Calling Schema Standards](tool-calling-schema-standards.md)
 
 ---
@@ -105329,7 +106005,6 @@ Each page links to its primary sources and notes the maturity level. This sectio
 - [Hyper-Personalized Software](hyper-personalized-software.md) — AI-driven RAD makes custom-built software economically viable again
 - [First-Party Agent Composition](first-party-agent-composition.md) — replace SaaS stitching with agent-built native features
 - [Bootstrapping Coding Agents](bootstrapping-coding-agents.md) — a coding agent re-implements itself from its specification, making the spec the stable artifact
-- [Interactive Canvas Outputs](interactive-canvas-outputs.md) — when a canvas earns its overhead and what it does to code review
 
 ---
 
@@ -105677,106 +106352,6 @@ This illustrates the economics argument: there is no conformity cost (adapting b
 - [First-Party Agent Composition](first-party-agent-composition.md)
 - [Product-as-IDE](product-as-ide.md)
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
-
----
-
-### Interactive Canvases: Agent-Generated Visual Artifacts as Outputs
-Source: https://agentpatterns.ai/emerging/interactive-canvas-outputs/
-
-# Interactive Canvases: Agent-Generated Visual Artifacts as Outputs
-
-> Canvases are an output-shape choice, not a new pattern: they earn their overhead only on irreducibly multi-dimensional output, and they change what review means.
-
-Claude Artifacts (Claude 3.5 Sonnet, June 2024) introduced a dedicated window for generated content "alongside their conversation" for code snippets, text documents, and website designs ([Anthropic](https://www.anthropic.com/news/claude-3-5-sonnet)). Cursor 3.1 extended the primitive to agent-built visualizations: "Cursor can now respond by creating interactive canvases" with first-party components — tables, boxes, diagrams, charts — plus diffs and to-do lists ([Cursor changelog](https://cursor.com/changelog)). The shape is now available across mainstream tools; the question is when to produce one.
-
-This page covers the output-shape decision: when a canvas beats text or a Git-tracked file, and what changes about review once one exists.
-
-## When a canvas earns its overhead
-
-A canvas costs render time, an extra surface the reader must interact with, and a verification gap (see below). It pays that cost back only when the output has structure a sentence cannot carry. The Cursor blog describes canvases as combining "data from multiple sources into single visualizations" with "logic and interactivity tailored to user requests" ([Cursor](https://cursor.com/blog/canvas)) — which is the real criterion: irreducible multi-dimensionality.
-
-Use a canvas when:
-
-- The answer is a comparison across rows, columns, or time
-- The reader will filter, sort, or drill in rather than read top-to-bottom
-- Multiple data sources merge into one view
-- A diagram or chart communicates faster than the equivalent prose
-
-Do not use a canvas when:
-
-- The answer is a scalar, a short list, or a single file path
-- The output already lives in Git (a diff, a config file) — review belongs in the PR, not an ephemeral side panel
-- The reader will copy the result elsewhere — plain text travels better than a rendered component
-
-## The source-traceability gap
-
-A rendered dashboard looks authoritative. The query behind it may be wrong. A canvas presents the synthesis — the chart, the aggregation, the filter — without automatically surfacing the inputs. This is the same failure mode as any LLM output that [hides its intermediate reasoning](../human/visible-thinking-ai-development.md), amplified by the visual confidence the rendering provides.
-
-Mitigations belong in the canvas itself:
-
-- A visible "source" affordance that shows the query, tool call, or data slice that produced each panel
-- A way to expand any aggregate into its constituent rows
-- Timestamps and data versioning so a stale canvas is recognizable as stale
-
-Without these, reviewing a canvas means trusting the render. With them, the canvas becomes auditable — which is the condition under which it is worth producing at all.
-
-## Review and handoff implications
-
-Canvases live in the agent window, not the Git tree. For a pull-request-centric team, this splits the review surface: the code diff is in GitHub, the canvas that motivated it is in the agent. Reviewers cannot inspect the canvas unless they re-run the prompt, and re-runs may produce a different canvas.
-
-Two practical consequences:
-
-1. Canvas outputs are not review artifacts on their own. If a decision hinges on what the canvas showed, export the canvas (or its underlying data and query) into the PR description, an issue comment, or a committed file. The canvas is a working surface; the PR is the record.
-2. Canvases do not replace written answers in async review. A reviewer reading the PR at 2 a.m. cannot interact with a live Cursor canvas. Any claim the canvas was meant to communicate needs a prose or screenshot version in the durable channel.
-
-## Why this is an output-shape pattern, not an architectural one
-
-Anthropic's canonical list of agent patterns — prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer — does not include artifacts or canvases ([Anthropic](https://www.anthropic.com/engineering/building-effective-agents)). That is deliberate. The underlying agent architecture is unchanged whether the output ships as Markdown, JSON, a chart, or a dashboard. Canvases are a UI affordance that changes [what the human does with the result](../agent-design/durable-interactive-artifacts.md); they do not change what the agent did to produce it.
-
-Treating canvases as an architectural pattern conflates tooling with design. Treating them as an output-shape decision — one of several ways to package the same underlying work — keeps the focus on the real question: does this output have enough structure that rendering it beats describing it, and is the verification gap small enough to accept?
-
-This framing is contested. One line of research treats agent-generated interfaces as a distinct architectural layer — the human-agent interaction surface — rather than packaging atop unchanged architecture: "Software as Content" positions dynamically generated software as the primary medium of human-agent interaction, not one output format among many ([arxiv](https://arxiv.org/abs/2603.21334)). That holds where the surface carries persistent state and affordances the agent reasons over across turns. The output-shape framing here fits the narrower case this page addresses — a one-shot rendered artifact that packages a result — and weakens once the canvas becomes a stateful surface the agent and human co-drive.
-
-## Example
-
-An agent is asked to audit dependency versions across five services in a monorepo and recommend upgrades.
-
-Without a canvas, prose output:
-
-```
-service-a: express 4.18.2 (latest 4.21.1, 3 minor versions behind, 2 CVEs)
-service-b: express 4.19.0 (latest 4.21.1, 2 minor versions behind, 1 CVE)
-... (5 services x 6 dependencies = 30 lines of text)
-```
-
-A reviewer scans 30 lines, trying to remember which services had CVEs.
-
-With a canvas, table output in Cursor 3.1:
-
-| Service | Package | Current | Latest | Severity |
-|---------|---------|---------|--------|----------|
-| service-a | express | 4.18.2 | 4.21.1 | 2 CVEs |
-| service-b | express | 4.19.0 | 4.21.1 | 1 CVE |
-
-The canvas pays off: the reviewer sorts by severity, filters to CVEs only, decides which services to upgrade this sprint. The multi-dimensional comparison across services and packages is exactly the shape a canvas handles better than prose.
-
-The source-traceability requirement still applies. A "Show query" affordance on each row — revealing the `npm outdated` call, the advisory database query, and the timestamp — is what makes the canvas auditable rather than just pretty. Without it, the reviewer is trusting that the advisory list is current and the version parsing was correct, on faith.
-
-## Key Takeaways
-
-- Canvases earn their overhead only when output has irreducible multi-dimensionality — comparisons, drill-ins, merged data
-- For scalars, short lists, and Git-tracked outputs, a canvas adds cost without value
-- Rendered canvases carry source-traceability risk: the visual confidence exceeds the audit trail unless sources are explicitly surfaced
-- Canvases are a working surface, not a review artifact; exporting key state into the PR is what makes them reviewable
-- The pattern is an output-shape decision, not a change in agent architecture
-
-## Related
-
-- [Controlling Agent Output](../instructions/controlling-agent-output.md)
-- [Diff-Based Review](../code-review/diff-based-review.md)
-- [Visible Thinking in AI Development](../human/visible-thinking-ai-development.md)
-- [Durable Interactive Artifacts](../agent-design/durable-interactive-artifacts.md)
-- [Product-as-IDE](product-as-ide.md)
 
 ---
 
@@ -115180,6 +115755,24 @@ Blocking all AI crawlers has a compounding cost:
 - AI-referred sessions grew substantially year over year through 2025, so blocking Tier 1 opts out of this traffic source entirely
 - [Cloudflare data](https://blog.cloudflare.com/control-content-use-for-ai-training/) shows the crawl-to-referral ratio for OpenAI is ~1,700:1 and Anthropic ~73,000:1 — training crawlers give no referral return; retrieval bots give direct search traffic
 
+## FAQ
+
+**Why not just block all AI crawlers instead of picking tiers?**
+
+Blocking everything cuts off Tier 1 retrieval bots too, which power citation-eligible AI answers — absence there just lets competitors fill the space. AI-referred traffic grew substantially through 2025, and [Cloudflare data](https://blog.cloudflare.com/control-content-use-for-ai-training/) shows Anthropic's crawl-to-referral ratio near 73,000:1, meaning training crawlers give no referral return while retrieval bots drive direct search traffic. Blanket blocking forfeits that entirely.
+
+**Does robots.txt actually stop Bytespider from crawling my site?**
+
+No. Bytespider (ByteDance) is documented to ignore robots.txt directives entirely, so a Disallow rule has no effect on it. The only effective control is a CDN or WAF custom rule that blocks requests where the User-Agent contains "Bytespider" — see [Cloudflare WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) for setup. robots.txt covers Tier 1 and Tier 2 bots; Tier 3 requires enforcement at the network layer.
+
+**Is a robots.txt disallow for training crawlers legally enforceable?**
+
+No — robots.txt is advisory, not a legal mechanism; it signals intent but doesn't prevent crawling on its own. Legal protection instead requires ToS terms, CFAA claims, or contractual agreements. The EU AI Act encourages GPAI providers to honor publisher opt-out signals like a robots.txt disallow, but site owners should verify specific commitments against the published Code of Practice text as obligations evolve.
+
+**Does disallowing Google-Extended hurt my site's ranking in Google Search?**
+
+No. Google-Extended is a separate, training-only user-agent from standard Googlebot, which handles search indexing and ranking — the reference table lists them separately. Disallowing Google-Extended in robots.txt opts your content out of AI training use without touching Googlebot's crawl for search results; the two directives are independent, so blocking one has no effect on the other.
+
 ## Key Takeaways
 
 - The three-tier taxonomy (retrieval / training / non-compliant) maps directly to three distinct robots.txt strategies: allow / disallow / CDN block
@@ -115296,6 +115889,24 @@ developer documentation, section-aligned chunking — splitting at H2 boundaries
 
 The "before" opens with meta-framing that contributes no semantic signal. The "after" opens with a direct 50-word answer — a self-contained, citable passage that dominates the chunk embedding.
 
+## FAQ
+
+**Why does opening a section with context instead of the answer hurt AI retrieval?**
+
+RAG systems score chunks by cosine similarity to a query embedding, so a section that opens with context or caveats produces an averaged, diluted embedding rather than one dominated by the answer — [Weaviate's chunking research](https://weaviate.io/blog/chunking-strategies-for-rag) calls this "noisy, averaged embeddings." [Anthropic's Contextual Retrieval study](https://www.anthropic.com/news/contextual-retrieval) found prepending short context to a chunk cut retrieval failure by up to 49%, evidence that opening content dominates retrieval quality.
+
+**How is answer-first writing different from the journalistic inverted pyramid?**
+
+The inverted pyramid targets a skimming human reader and rewards a dramatic, newsworthy lead. Answer-first writing targets a semantic embedding model: the goal is high cosine similarity to queries, the unit of meaning is an independent section rather than the whole article, and metaphors or scene-setting belong after the direct answer, not before it.
+
+**When does answer-first structure fail to help?**
+
+Answer-first structure optimizes chunk-based vector retrieval, so it offers little benefit in three cases: full-document scoring, where positional ordering has no effect on a whole-document embedding; BM25 and keyword retrieval, which ranks by term frequency rather than where the answer sits; and conversational AI that pastes an entire page into context, where the model reads everything regardless of order. Apply the pattern selectively, only when content will be consumed through chunk-based RAG.
+
+**How do I retrofit an existing page to be answer-first?**
+
+Read each H2 heading as an implied question, then write a 40–60 word answer to it as the section's first paragraph, moving any context or caveats after that answer. Validate the rewrite by pasting the heading and opening paragraph into an AI assistant — if it can't answer the implied question from that passage alone, the opening isn't self-contained yet.
+
 ## When this backfires
 
 Answer-first structure optimizes for chunk-based vector retrieval. It provides limited benefit in three situations:
@@ -115400,6 +116011,24 @@ If a claim cannot be backed by a real source, rewrite it in a weaker factually-s
 ## Recency and assertion density
 
 Content freshness and assertion density are independent citation signals — improving one does not substitute for the other. See [Measuring GEO Performance](measuring-geo-performance.md) for tracking both.
+
+## FAQ
+
+**Why do specific stats and attributed quotes get cited more often than vague claims?**
+
+AI answer engines retrieve passages by matching queries against indexed content, so specificity helps in two ways: token-level matching favors numeric passages over words like "significantly," and attribution confidence makes named, dated, sourced claims easier to cite verbatim than generalities. Vague qualifiers such as "many" or "often" give retrieval systems nothing precise to match.
+
+**How much do quotations and statistics improve AI citation rates, according to the Princeton GEO study?**
+
+The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.09735)) found Quotation Addition improved source visibility by 41%, and Statistics Addition and Cite Sources each improved it by 30%, measured via Position-Adjusted Word Count across a 10,000-query benchmark. Because the study permitted fabricated statistics and rewards added length, treat these percentages as an upper bound.
+
+**What should I do if I can't find a real source for a claim?**
+
+Weaken the claim to a form you can factually support, or remove it entirely — do not invent statistics or add a hedge tag. Hedge tags create a false-confidence signal without adding retrieval value: the GEO study found PAWC rewards length and attributed specificity, not vague generalities dressed up with a disclaimer.
+
+**Does adding more citations always make a page more citable?**
+
+No — assertion density has diminishing returns and a structural prerequisite. Past a certain threshold, additional citations add length without improving citability, and if a page buries its answers rather than leading with them, added specificity cannot compensate for a retrieval miss at the section level. Fix structure first, then increase density.
 
 ## Related
 
@@ -115523,6 +116152,20 @@ docs/auth/auth-errors.md       (~300 words) — diagnosing and fixing auth failu
 ```
 
 Each page produces a tight, focused embedding. A query for "how to rotate API keys" now matches `rotate-api-keys.md` with high cosine similarity, and the retrieved passage contains exactly the steps needed for an accurate citation.
+
+## FAQ
+
+**How does RAG chunking actually work?**
+
+RAG systems process documents in three steps: chunking into passages of roughly 200-400 words, embedding each passage into a vector, and scoring passages by cosine similarity against the query at retrieval time. AI answer engines cite whichever passage that scoring step returns, not the full page, which is why passage-level structure decides what gets retrieved and cited, per [NVIDIA research (2024)](https://developer.nvidia.com/blog/finding-the-best-chunking-strategy-for-accurate-ai-responses/).
+
+**Why do multi-concept pages underperform in AI retrieval?**
+
+A page covering several techniques produces one blended embedding averaged across all of them, so it scores lower similarity to any single query than a dedicated page would. Chunk boundaries can also split an explanation mid-argument, stripping context an answer engine needs to cite it accurately, and off-topic surrounding content dilutes a passage's embedding the same way it dilutes a whole page's.
+
+**When can splitting content into more pages hurt retrieval?**
+
+Over-atomization has real costs. Breaking a multi-step workflow across separate pages can mean retrieval surfaces only one step, leaving the LLM without the setup context needed for a complete answer. Pages under roughly 200 words fall below the token range that performs best, and concepts that only make sense in contrast, like authentication versus authorization, lose that distinction when split apart, forcing the LLM to guess at the relationship.
 
 ## Related
 
@@ -115698,6 +116341,20 @@ GEO techniques developed for general web content do not transfer uniformly to al
 - Statistics requirement on thin pages: the GEO paper ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)) measured visibility gains for statistics on general web content. For narrow technical reference pages (a single API parameter, one error code), forcing a statistic into a section that does not call for one degrades readability without confirmed citation benefit.
 - Internal-only documentation: GEO techniques apply to content indexed by AI crawlers. Private or intranet documentation is not in scope — applying GEO structure there wastes editorial effort.
 
+## FAQ
+
+**Why does the same GEO technique produce different results across content formats?**
+
+Because the arxiv GEO paper (KDD 2024) measured gains for quotation addition, statistics, and citing sources at 30–40% overall, but that average hides format-specific mechanics: tutorials gain most from HowTo schema and sequential steps, pattern pages gain from TechArticle schema and quotable assertions, and anti-pattern or reference pages gain from FAQPage Q&A structure. Applying the wrong technique to the wrong format produces neutral or negative results ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)).
+
+**When does HowTo schema hurt a tutorial page instead of helping?**
+
+HowTo schema works well for a tutorial that covers one self-contained task, where numbered steps and a totalTime estimate map cleanly onto the page. Multi-page tutorials or modular guides don't compress into a single HowTo block — forcing the schema onto them produces malformed structured data instead of a clean win, so skip it for those formats.
+
+**Do narrow API reference pages need a statistic to satisfy GEO?**
+
+No. The GEO paper's statistics gains were measured on general web content ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)), not narrow technical references. For a page documenting a single API parameter or one error code, forcing in a quantitative claim that doesn't fit the section degrades readability without a confirmed citation benefit — skip the statistic requirement there.
+
 ## Sources
 
 - [GEO: Generative Engine Optimization (arxiv.org/abs/2311.09735)](https://arxiv.org/abs/2311.09735) — KDD 2024; 9 techniques benchmarked; quotation addition +41%, statistics +30–40%, keyword stuffing counterproductive
@@ -115840,6 +116497,24 @@ cat /tmp/gsc_report.md
 | Bing WMT | No bulk CSV export — API exists but bulk analytics require dashboard |
 | CrUX origin eligibility | Insufficient real-user traffic returns 404 from CrUX API |
 
+## FAQ
+
+**Why can't you monitor Bing the same way as Google Search Console?**
+
+Bing Webmaster Tools has a public API but no bulk CSV export equivalent to GSC's Search Analytics API, so trend monitoring across queries still relies on the dashboard rather than an automated pull. Bing WMT still covers ownership verification, sitemap submission, and IndexNow auto-submit, and it provides visibility into Bing and Microsoft Copilot Search that GSC does not.
+
+**Why does the Core Web Vitals section sometimes stay empty?**
+
+The CrUX API requires a minimum volume of real user data per origin; sites below that threshold get a 404 response instead of metrics. That's a real risk for low-traffic sites — the automation adds a GCP service account, stored credentials, and a scheduled workflow, and the Core Web Vitals section can stay empty for most of the property's life if traffic never clears CrUX's eligibility bar.
+
+**What's the rate limit on the URL Inspection API?**
+
+GSC's URL Inspection API caps at 2,000 requests per day, so it works for spot-checks rather than bulk crawl-status checks — confirming a specific page indexed correctly after a fix, for example. The weekly report's index-coverage numbers come from the Sitemaps API instead, which reports submitted-versus-indexed counts per sitemap without that per-request cap.
+
+**What credentials does the automated report need?**
+
+A GCP service account with the Search Console and Chrome UX Report APIs enabled, added to GSC as a restricted user under Settings → Users and permissions. The workflow reads three GitHub Actions secrets: `GSC_SERVICE_ACCOUNT_JSON` (the service account key), `GSC_SITE_URL` (the `sc-domain:` property), and `CRUX_API_KEY` (a GCP API key restricted to the Chrome UX Report API).
+
 ## Key Takeaways
 
 - A weekly GitHub Actions workflow pulls Search Console and Bing WMT data via API, replacing manual dashboard checks with a structured report.
@@ -115952,6 +116627,24 @@ Citation profiles follow retrieval architecture. ChatGPT inherits Bing ranking s
 1. Backend changes invalidate the tactic. Claude's shift to Brave Search changed its citation profile overnight. Any optimization tied to a specific backend can become stale without warning.
 2. Freshness optimization conflicts with depth. Perplexity rewards short-cycle publishing, while ChatGPT and Gemini weight authority. Publishing shallow content frequently to win Perplexity citations can suppress performance elsewhere.
 3. Over-specialization reduces cross-platform citation. The 11% domain overlap between ChatGPT and Perplexity means winning both requires different content architecture, not the same page with minor tweaks.
+
+## FAQ
+
+**Why don't ChatGPT and Perplexity cite the same sources for the same query?**
+
+Only 11% of cited domains appear on both ChatGPT and Perplexity for identical queries ([Whitehat SEO, 2025](https://whitehat-seo.co.uk/blog/ai-engines-comparison-citations)), because each platform runs its own retrieval backend — ChatGPT inherits Bing's rankings while Perplexity crawls its own index. Winning both requires different content architecture, not the same page with minor tweaks.
+
+**Why does blocking an AI crawler sometimes have no effect on citation?**
+
+Every major platform runs separate crawlers for training and real-time citation — for example Anthropic uses `anthropic-ai`/`ClaudeBot` for training but `Claude-SearchBot` for retrieval ([Momentic AI Crawlers Guide](https://momenticmarketing.com/blog/ai-search-crawlers-bots)). Blocking the training bot in `robots.txt` while leaving the retrieval bot open doesn't remove a page from citation results — it only stops that page from feeding future model training data.
+
+**Which AI platform cites the most sources per response?**
+
+Perplexity averages 21.87 citations per response — 2.8x more than ChatGPT's 7.92 ([Qwairy Q3 2025](https://www.qwairy.co/blog/provider-citation-behavior-q3-2025)) — because its retrieval-first architecture fires real-time search on every query without exception, unlike ChatGPT, which only triggers live retrieval on 31% of prompts ([Whitehat SEO](https://whitehat-seo.co.uk/blog/ai-engines-comparison-citations)).
+
+**What happens to a page's citation performance when a platform switches search backends?**
+
+The tactic that worked can silently stop working. Claude's shift to using Brave Search changed its citation profile overnight, so any optimization tied to a specific backend can become stale without warning ([TechCrunch, 2025](https://techcrunch.com/2025/03/21/anthropic-appears-to-be-using-brave-to-power-web-searches-for-its-claude-chatbot/)). Because citation profiles follow retrieval architecture, a backend change resets which ranking signals matter for that platform.
 
 ## Key Takeaways
 
@@ -116097,6 +116790,20 @@ For a simpler approach, a static `docs/llms.txt` with 5 to 10 hand-curated entri
 | VitePress / Docusaurus plugins | Framework-native generation |
 | MkDocs | Manual curation or custom generation script |
 | Yoast SEO (WordPress) | Weekly auto-generation prioritizing cornerstone content |
+
+## FAQ
+
+**What's the difference between llms.txt and robots.txt or a sitemap?**
+
+llms.txt is not a robots.txt replacement or a sitemap alternative. robots.txt controls whether crawlers can access pages; llms.txt guides an AI agent's navigation once it's already fetching content at inference time. Sitemaps list every crawlable URL, too many to fit in a context window, while llms.txt gives a human-curated, topic-organized index sized for a single agent request.
+
+**How does an AI agent actually use an llms.txt file when researching a site?**
+
+Per the spec's intended usage model ([llmstxt.org](https://llmstxt.org)), an agent researching a site fetches `/llms.txt` first, scans the H2-delimited sections to find the topic that matches its task, then fetches only the specific linked pages it needs. This replaces undirected crawling — where an agent guesses at URLs and discards irrelevant pages — with one fetch and a curated shortlist.
+
+**Why does a curated llms.txt index help agents if it isn't a citation or ranking signal?**
+
+A curated llms.txt index moves the selection step outside the inference call — a human editor picks relevant pages once, so every agent invocation starts from a pre-filtered list instead of wasting context on irrelevant fetches. The `## Optional` convention extends this: agents can drop entire sections under context pressure while keeping the core index intact ([llmstxt.org](https://llmstxt.org)).
 
 ## Key Takeaways
 
@@ -116249,6 +116956,24 @@ if __name__ == "__main__":
 ```
 
 Run on a daily cron (`0 9 * * *`). Diff `mentioned` counts week-over-week to detect visibility drops.
+
+## FAQ
+
+**Can you build your own GEO monitoring setup instead of paying for a tracking tool?**
+
+Yes — a minimal script using the Anthropic SDK can sample target prompts, check whether a brand name appears in the response, and log the result. Running it on a daily cron and diffing mention counts week-over-week surfaces the same visibility drops that paid tools detect, though it lacks their multi-platform coverage and dashboards.
+
+**Why can restructuring content for AI extraction hurt SEO rankings?**
+
+GEO and SEO pull in different directions. Content reshaped to be easily extracted and cited by AI systems can raise citation rates on platforms like ChatGPT or Perplexity while simultaneously reducing organic search rankings, since the structural changes that help machine extraction don't always align with what search engines reward. Teams should weigh both before restructuring.
+
+**Does having strong organic search visibility improve AI citation frequency?**
+
+There's a correlation: brand web mention volume tends to track with AI Overview visibility, meaning a stronger organic presence generally coincides with more frequent AI citation. That's not a guarantee, though — GEO measurement stays probabilistic and platform-specific, so a strong SEO footprint doesn't automatically translate into citations on every AI platform.
+
+**Why do broad prompts like "best tools for X" produce unreliable GEO data?**
+
+Broad, generic prompts vary so widely in AI-generated responses from session to session that sampled results reflect random noise rather than genuine visibility changes. Narrow, brand-specific prompts produce far more stable results. Combined with too few daily samples, high-drift queries can generate false positives and hide real visibility drops.
 
 ## Key Takeaways
 
@@ -116436,6 +117161,24 @@ mkdocs build --strict
 - [Structured Data in MkDocs](https://v-schipka.github.io/posts/schema-in-mkdocs/) — MkDocs Material approach
 - [Structured Data for SEO and GEO — Digidop](https://www.digidop.com/blog/structured-data-secret-weapon-seo) — GPT-4 accuracy 16% → 54%
 
+## FAQ
+
+**How much do independent studies say FAQPage schema improves AI citation rates?**
+
+Independent studies report FAQPage schema lifting AI citation appearances by 2.7x to 3.2x compared to unstructured pages ([Frase.io](https://www.frase.io/blog/faq-schema-ai-search-geo-aeo); [DEV Community](https://dev.to/wilow445/schemaorg-is-your-secret-weapon-for-ai-citations-heres-the-data-1if3)), because structured data reduces extraction effort during indexing. Schema's primary value has shifted from Google rich results to this AI-citation effect — cited by ChatGPT, Perplexity, Gemini, and Claude at indexing time, not on live fetch.
+
+**Does ChatGPT or Perplexity read a page's JSON-LD when they visit it live?**
+
+No. ChatGPT, Perplexity, and most AI engines don't parse a page's JSON-LD during a live fetch — the hook-injected schema is processed at indexing and training time instead, not the moment they visit the page. Gemini is the exception: it renders JavaScript and processes schema in real time, unlike the others.
+
+**What exact heading and format triggers automatic FAQPage schema on this site?**
+
+Write a `## FAQ` (or `## Frequently Asked Questions`) heading followed by bold-paragraph questions and plain-text answer paragraphs — the same `**Question**` / answer pattern this page uses. The `hooks/structured_data.py` hook scans for that exact shape at build time and emits a `FAQPage` JSON-LD block automatically; no frontmatter flag or manual schema authoring is required.
+
+**Why doesn't adding schema markup fix citation problems on a low-authority page?**
+
+Schema markup amplifies an existing signal rather than creating one — its citation lift is relative to a page's baseline authority. On a thin or low-authority page, adding FAQPage or HowTo JSON-LD accelerates whatever [topical authority](topical-authority.md) the page already has, but it does not manufacture credibility the page lacks.
+
 ## Key Takeaways
 
 - Schema's payoff is now AI citation, not Google rich results — benefit accrues at indexing time, not on live fetch.
@@ -116534,6 +117277,24 @@ Keyword density is a token cost: repetition consumes budget without adding seman
 - Model-specific variability: citation signals do not transfer uniformly across engines — a source prominent in ChatGPT may not appear in Gemini or Perplexity. Track per model.
 - Attribution bleed: brand-mention campaigns may also lift organic rankings, making the GEO contribution hard to isolate without prompt-based measurement.
 - Backlinks are not worthless: "weak predictor" is relative, not zero. Correlation analyses still find [link authority](topical-authority.md) carries a positive — if secondary — signal, well behind brand mentions but above it. Read the Direction column's "deprioritize" as reallocate away from, not abandon.
+
+## FAQ
+
+**Do lower-ranked sites benefit more from GEO than top-ranked sites?**
+
+Yes. The [Princeton GEO study](https://arxiv.org/html/2311.09735v3) found citation-oriented techniques produced a 115% visibility increase for lower-ranked sites, while top-ranked sites saw a 30% decrease. Rank position and AI citation are only weakly correlated, so a page that never cracks page one of search results can still be heavily cited inside AI-generated answers — and pages already dominating SERPs have less room, or even downside, to gain.
+
+**Why is it hard to measure whether GEO efforts are working?**
+
+AI citation share has no tracking standard equivalent to [Google Search Console](gsc-search-console-monitoring.md) — there's no unified dashboard reporting which prompts surfaced your brand. Campaigns can run for months before any lift becomes detectable, and attribution gets murkier still: a brand-mention push often lifts organic rankings at the same time, making it hard to isolate how much of the gain came from GEO work specifically.
+
+**Do citation signals carry over the same way across ChatGPT, Gemini, and Perplexity?**
+
+No. Citation signals don't transfer uniformly across engines — a source that ChatGPT cites prominently may not appear at all in Gemini or Perplexity's answers, since each model draws on different training data and retrieval sources. Track citation performance per model rather than assuming a single GEO campaign produces the same lift everywhere; treat each engine as a separate channel to measure.
+
+**Should new brands expect quick GEO results?**
+
+Not immediately. Citation pools favor established earned media — Wikipedia, major press, and G2-tier reviews — that new brands haven't accumulated yet. A brand with no forum presence, no press coverage, and no review inventory has little for AI engines to cite, regardless of how well its own pages are structured. Expect a cold-start period spent building that off-site inventory before GEO techniques show traction.
 
 ## Key Takeaways
 
@@ -116667,6 +117428,24 @@ Each page is a distinct entity, a named concept AI can retrieve on its own. Inte
 
 A single "GEO Overview" page covering all of the above would not achieve the same citation distribution across the varied queries developers ask.
 
+## FAQ
+
+**Why does broad topical coverage outperform a single high-quality page?**
+
+AI systems weight sources by how consistently they appear across a topic domain, not by individual page quality alone. Once a source clears the citation quality threshold, a niche-relevant site that publishes broadly across a subject outperforms a generic high-authority site that only touches the topic once, because coverage breadth signals a stronger domain-to-concept association than depth on one page does.
+
+**Does internal linking actually affect topical authority, or is content quality enough on its own?**
+
+Yes — internal links function as a semantic graph connecting entities and topics, not just navigation. Topical authority requires content, information architecture, and internal linking together; strong content without link structure leaves the entity graph incomplete. Body links carry more weight than navigation or footer links ([iPullRank: How Does Internal Linking Impact Topical Authority?](https://ipullrank.com/internal-linking-topical-authority)).
+
+**What role does brand search volume play in AI citation?**
+
+Brand search volume — how often people search for your brand by name — predicts AI citation rates better than backlink counts do ([Digital Bloom 2025 AI Citation Report](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/)). Building topical authority raises brand recall by making your domain the recognized entity for a subject, and that recall is what drives citations, not link volume.
+
+**Does topical authority require external signals like Wikidata or schema markup, or is internal content enough?**
+
+External infrastructure amplifies but doesn't replace internal coverage. A Wikidata entry with Label, Description, Aliases, and Website registers your site as a distinct entity, and schema markup that ties an About page, README, and API spec to the same Organization entry gives AI systems confidence to treat them as one source. Multi-platform consistency across GitHub and Stack Overflow further reinforces that entity mapping.
+
 ## Related
 
 - [How AI Engines Cite](how-ai-engines-cite.md) — how citation selection operates at the platform level
@@ -116769,6 +117548,24 @@ GEO-optimized equivalent — specific, cited, structured for extraction:
 > "AI referral traffic grew 357–632% year-over-year ([Superlines, 2026](https://www.superlines.io/articles/ai-search-statistics/)). Google AI Overviews appear in 50%+ of searches ([Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/)). Replacing vague claims with cited statistics increases AI citation rates by up to 30% ([Princeton GEO paper, 2024](https://arxiv.org/abs/2311.09735))."
 
 The second version gives an AI engine three discrete, attributable facts — each independently citable.
+
+## FAQ
+
+**What is the difference between GEO and AEO?**
+
+Answer Engine Optimization (AEO) is the older practitioner label for the same discipline as GEO. Both target the same outcome: getting content selected as an attributable source when an AI engine answers a user's question. The industry uses the terms interchangeably, and this page uses GEO as the primary term for the shared set of techniques and citation goals.
+
+**Why do backlinks matter less for AI citation than they did for SEO?**
+
+Backlinks were SEO's core currency, but they show only weak or neutral correlation with AI citation rates. Domain traffic volume is now the strongest single predictor of whether a page gets cited by a generative engine ([SHAP value 0.63](https://www.superlines.io/articles/ai-search-statistics/), 2026), which is why GEO shifts focus from link-building toward content structured for extraction and attribution.
+
+**Why do AI engines cite specific statistics over vague claims?**
+
+Generative engines retrieve content chunks, score them for relevance and quality, then synthesize a response. A specific, cited statistic gives the retrieval model a discrete, attributable fact it can extract without paraphrasing risk, while vague prose offers no extractable fact or attribution target. Citations also signal external validation, reducing the engine's uncertainty about including a claim.
+
+**When does GEO investment not pay off?**
+
+GEO's costs — structured data, freshness cycles, per-platform tracking — outweigh its benefits for niche audiences too small to generate meaningful citation volume, fast-moving technical domains where techniques go stale quickly, low-query topics that rarely trigger AI answers, and credential-dependent verticals like legal or medical content, which depend on institutional trust signals that structural optimization cannot replicate.
 
 ## Sources
 
@@ -124103,7 +124900,7 @@ Three interaction shapes have shipped against AI coding harnesses, easy to confl
 |---|---|---|---|
 | Visual-prompt steering (this page) | Human → agent | Click / multi-select on running UI | Cursor Design Mode |
 | App-window snapshot | Human → agent (passive) | Hotkey capture of any window | Codex Appshots ([page](../../context-engineering/app-window-snapshot-context.md)) |
-| Interactive canvas output | Agent → human | Agent renders a chart or diagram | Cursor canvases, Claude Artifacts ([page](../../emerging/interactive-canvas-outputs.md)) |
+| Interactive canvas output | Agent → human | Agent renders a chart or diagram | Cursor canvases, Claude Artifacts ([page](../../agent-design/interactive-canvas-outputs.md)) |
 
 They share a substrate but differ in direction and cost.
 
@@ -124123,7 +124920,7 @@ Spatial intent is a multi-dimensional referent that text encodes lossily. The du
 ## When this backfires
 
 - Non-spatial tasks. The visual surface has no referent for renaming a function, restructuring a query, or changing an algorithm — clicking is overhead.
-- Async or PR-bound review. The sketch does not travel into the pull request. Reviewers reconstruct intent from the diff, not the prompt, so the most expressive form of the instruction is lost — the same review-surface split the [Interactive Canvas Outputs page](../../emerging/interactive-canvas-outputs.md) documents for outputs.
+- Async or PR-bound review. The sketch does not travel into the pull request. Reviewers reconstruct intent from the diff, not the prompt, so the most expressive form of the instruction is lost — the same review-surface split the [Interactive Canvas Outputs page](../../agent-design/interactive-canvas-outputs.md) documents for outputs.
 - Multimodal-reasoning failure regimes. For precise spatial reasoning — alignment, perspective, depth ordering — multimodal LLMs misread layout via the projection bottleneck, answering by semantic co-occurrence rather than the scene. Failures include instance merging and perspective-taking errors ([Spatial Reasoning in MLLMs, arxiv 2511.15722](https://arxiv.org/abs/2511.15722)).
 - Indirect prompt injection via the captured visual. Third-party content in the page (an ad, comments, a webview) can carry hidden adversarial text the MLLM treats as instructions. Image-based injection reaches up to 64% attack success under stealth constraints, and no tested defense fully eliminates it ([Image-based Prompt Injection, arxiv 2603.03637](https://arxiv.org/abs/2603.03637); [Multimodal prompt injection, arxiv 2509.05883](https://arxiv.org/html/2509.05883v1)).
 - Image-token budget pressure. Voice-narrated sequential edits stack viewport screenshots into one thread. Image tokens can dominate context before the agent reads its first instruction ([app-window snapshot — image-token cost](../../context-engineering/app-window-snapshot-context.md)).
@@ -124163,7 +124960,7 @@ The agent receives both elements' identity (component, computed styles, fiber-tr
 
 - [Cursor 3 Agents Window](agents-window.md) — the surface Design Mode lives inside; the original overlay shipped here in Cursor 3.0
 - [App-Window Snapshot as Agent Context](../../context-engineering/app-window-snapshot-context.md) — the passive-capture sibling: hotkey-bound window snapshot rather than intentional annotation
-- [Interactive Canvas Outputs](../../emerging/interactive-canvas-outputs.md) — the agent-as-author variant of canvas interaction; same substrate, opposite direction
+- [Interactive Canvas Outputs](../../agent-design/interactive-canvas-outputs.md) — the agent-as-author variant of canvas interaction; same substrate, opposite direction
 - [Live Browser as Agent Context Channel](../../context-engineering/live-browser-context-channel.md) — the channel Design Mode uses to read the running app
 - [Prompt Injection Threat Model](../../security/prompt-injection-threat-model.md) — the indirect-injection surface multimodal capture opens
 

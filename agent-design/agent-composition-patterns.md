@@ -199,6 +199,24 @@ Composition does not remove context exhaustion — it relocates it. Two failure 
 - Silent drift in chains and supervisors: each downstream agent trusts the previous output as ground truth without checking it against the original task spec. A subtly wrong artifact at step 1 compounds through step N before anyone notices ([Glen Rhodes, March 2026](https://glenrhodes.com/agent-orchestration-failure-modes-silent-drift-reconciliation-and-the-supervision-mindset-shift/); [VentureBeat, April 2026](https://venturebeat.com/infrastructure/context-decay-orchestration-drift-and-the-rise-of-silent-failures-in-ai-systems)). Add a reconciliation step that checks each handoff against the brief.
 - Orchestrator context overflow in fan-out: when N workers each return multi-thousand-token findings, the orchestrator's context fills before it can reason over all results ([Qubytes, May 2026](https://qubytes.substack.com/p/fan-out-agent-pipeline-production-failure-modes)). Compress worker outputs to summaries, or use external state with reference pointers, before the orchestrator synthesizes.
 
+## FAQ
+
+**Can subagents spawn their own subagents?**
+
+No. In Claude Code, a subagent cannot dispatch further subagents — only the main conversation can chain agents together, dispatching each in turn as prior steps complete ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)). This caps composition to one level of delegation: an orchestrator can fan out to workers, but those workers cannot recursively spawn their own sub-workers.
+
+**What separates a pipeline from a plain sequential chain?**
+
+A chain passes output from one agent to the next with no validation in between; a pipeline adds an explicit quality gate at each stage boundary, so a stage's output must meet criteria before the next stage starts, and a failing gate can loop back to an earlier stage. Use a pipeline when repeatable stages need enforced pass/fail checks, like a CI/CD flow of build → test → security scan → deploy.
+
+**When does a supervisor pattern beat a fixed pipeline?**
+
+Use a supervisor when the sequence of steps and which agents to delegate to aren't known upfront — a coordinator agent decides what to delegate, to whom, and when, rather than following a preset stage order. This trades a fixed, predictable flow for flexibility: for example, an agent given "make this codebase production-ready" decomposing that into security review, test coverage, and documentation work.
+
+**How do I control cost when composing multiple agents?**
+
+Route narrow, well-defined subtasks to cheaper models like Haiku and reserve capable models like Sonnet for complex reasoning ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)). Claude Code's built-in Explore subagent already defaults to Haiku for read-only search ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)), a pattern worth mirroring when defining custom subagents for narrow, repetitive work.
+
 ## Key Takeaways
 
 - Four patterns cover most multi-agent work: chains for strict dependencies, fan-out for independent parallel tasks, pipelines for staged work with quality gates, and supervisors for dynamic delegation.

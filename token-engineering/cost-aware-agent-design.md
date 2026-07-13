@@ -154,6 +154,20 @@ The following Claude Code sub-agent configuration routes file exploration to a f
 
 The `explorer` description combines "Use PROACTIVELY" with "Use immediately after receiving a new task" — activation keywords that push the orchestrator to delegate exploration automatically, keeping Haiku on high-volume read-only work while Sonnet and Opus stay reserved for tasks that justify their cost.
 
+## FAQ
+
+**How much cost reduction does big.LITTLE multi-model orchestration deliver in practice?**
+
+A community analysis of Claude Code's Explore subagent pattern found 2 to 2.5x cost reduction at 85 to 95% quality on mixed workloads ([community analysis](https://claudelog.com/mechanics/agent-engineering)). Cognition's Devin Fusion pairs a frontier reasoning core with cheaper sidekick agents, claiming frontier-level performance at roughly 35% lower cost ([Cognition — Devin Fusion](https://cognition.ai/blog/devin-fusion)). Both results come from pairing a capable model with cheaper delegates rather than routing by task type alone.
+
+**When does cascade routing make agents slower or more expensive instead of cheaper?**
+
+Cascade routing only saves money when the validation gate (tests, linters, type checkers) is cheap and deterministic. If validation takes longer than the cost difference between tiers, the cascade adds latency without saving money ([Braintrust — testing agent cost-efficiency](https://braintrust.dev/blog/test-agent-cost-efficiency)). Measure gate cost before committing to escalation-based routing, and treat cost-per-task as an eval metric alongside correctness.
+
+**How is role-based routing different from complexity-based routing?**
+
+Complexity routing decides which model tier handles a task (fast, balanced, powerful); role routing decides which capability handles it, regardless of tier. The OPENDEV paper defines five independently configurable roles — action, thinking, critique, vision, and compact — each with its own fallback chain for graceful degradation ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)). The two axes compose: a role can still be assigned a lightweight or powerful model.
+
 ## Key Takeaways
 
 - Route tasks to models by complexity — exploration to fast, implementation to balanced, architecture to powerful.

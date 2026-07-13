@@ -80,6 +80,24 @@ If a claim cannot be backed by a real source, rewrite it in a weaker factually-s
 
 Content freshness and assertion density are independent citation signals — improving one does not substitute for the other. See [Measuring GEO Performance](measuring-geo-performance.md) for tracking both.
 
+## FAQ
+
+**Why do specific stats and attributed quotes get cited more often than vague claims?**
+
+AI answer engines retrieve passages by matching queries against indexed content, so specificity helps in two ways: token-level matching favors numeric passages over words like "significantly," and attribution confidence makes named, dated, sourced claims easier to cite verbatim than generalities. Vague qualifiers such as "many" or "often" give retrieval systems nothing precise to match.
+
+**How much do quotations and statistics improve AI citation rates, according to the Princeton GEO study?**
+
+The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.09735)) found Quotation Addition improved source visibility by 41%, and Statistics Addition and Cite Sources each improved it by 30%, measured via Position-Adjusted Word Count across a 10,000-query benchmark. Because the study permitted fabricated statistics and rewards added length, treat these percentages as an upper bound.
+
+**What should I do if I can't find a real source for a claim?**
+
+Weaken the claim to a form you can factually support, or remove it entirely — do not invent statistics or add a hedge tag. Hedge tags create a false-confidence signal without adding retrieval value: the GEO study found PAWC rewards length and attributed specificity, not vague generalities dressed up with a disclaimer.
+
+**Does adding more citations always make a page more citable?**
+
+No — assertion density has diminishing returns and a structural prerequisite. Past a certain threshold, additional citations add length without improving citability, and if a page buries its answers rather than leading with them, added specificity cannot compensate for a retrieval miss at the section level. Fix structure first, then increase density.
+
 ## Related
 
 - [Answer-First Writing](answer-first-writing.md)

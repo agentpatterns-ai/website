@@ -5,6 +5,7 @@ term: "Agent Circuit Breaker"
 tags:
   - agent-design
   - tool-agnostic
+  - reliability
 aliases:
   - tool-level circuit breaker
   - circuit breaker pattern agents

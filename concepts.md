@@ -304,6 +304,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent Context File Evolution: Treating ACFs as Configuration Code](instructions/agent-context-file-evolution.md)
 - [Encoding Product-Design Taste into Agent Context](instructions/encoding-product-design-taste.md)
 - [Codified Effort and Escalation Policy in the Instruction File](instructions/codified-effort-escalation-policy.md)
+- [Agent-Ready Bug Reports for Software Repair Agents](instructions/agent-ready-bug-reports.md)
 
 ## Agent Architecture
 
@@ -433,6 +434,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Idle-Time Speculative Planning for ReAct Agents](agent-design/idle-time-speculative-planning.md)
 - [Independent Test Generation in Multi-Agent Code Systems](multi-agent/independent-test-generation-multi-agent.md)
 - [Inference-Time Tool-Call Reviewer: Pre-Execution Feedback for Tool-Calling Agents](agent-design/inference-time-tool-call-reviewer.md)
+- [Interactive Canvases: Agent-Generated Visual Artifacts as Outputs](agent-design/interactive-canvas-outputs.md)
 - [Interactive Clarification for Underspecified Tasks](agent-design/interactive-clarification-underspecified-tasks.md)
 - [Interactive Effort Sliders: Per-Turn Reasoning-Budget Controls](agent-design/interactive-effort-sliders.md)
 - [Inversion Analysis: Surface Capabilities Competitors Cannot Replicate](agent-design/inversion-analysis.md)
@@ -549,6 +551,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Natural Language Tool Selection (NLT)](agent-design/natural-language-tool-selection.md)
 - [Local Model Viability Factors for Coding](agent-design/local-model-viability-for-coding.md)
 - [Deterministic Precondition Gates for Tool-Using Agents](agent-design/deterministic-precondition-gates.md)
+- [Agent Failure Trajectories and the Recovery Window](agent-design/failure-trajectory-recovery-window.md)
 
 ## Loop Engineering
 
@@ -1265,6 +1268,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Task Completion as Tool Certification (Silent Tool Rot)](anti-patterns/task-completion-as-tool-certification.md)
 - [Delegating Change Descriptions to the Agent](anti-patterns/delegating-change-descriptions.md)
 - [Rewriting a CLI Into a JSON Payload for Agents](anti-patterns/cli-json-payload-rewrite.md)
+- [The Patchwork Problem in LLM-Generated Code](anti-patterns/patchwork-problem.md)
+- [Overtrusting Human Sign-Off on Generated Assertions](anti-patterns/generated-assertion-signoff.md)
+- [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](anti-patterns/lazy-generation.md)
 
 ## Emerging Concepts
 
@@ -1274,7 +1280,6 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Hyper-Personalized Software](emerging/hyper-personalized-software.md)
 - [Product-as-IDE](emerging/product-as-ide.md)
 - [Bootstrapping Coding Agents: The Specification Is the Program](emerging/bootstrapping-coding-agents.md)
-- [Interactive Canvases: Agent-Generated Visual Artifacts as Outputs](emerging/interactive-canvas-outputs.md)
 
 ## Discoverability & GEO
 

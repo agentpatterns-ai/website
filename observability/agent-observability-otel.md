@@ -131,6 +131,24 @@ OTel's push-based model fits agent workloads: agents emit bursts of activity acr
 - Context loss across agent boundaries: `TRACEPARENT` propagates only to direct subprocesses. Agents communicating via queues, webhooks, or separate processes produce data islands, not end-to-end traces.
 - Cost approximations as billing data: `claude_code.cost.usage` values are estimates — chargebacks built on them drift from actual invoices.
 
+## FAQ
+
+**Why is `claude_code.cost.usage` unreliable for billing?**
+
+`claude_code.cost.usage` is a per-request USD estimate tagged by model, account, and organization — useful for dashboards, but the [official monitoring docs](https://code.claude.com/docs/en/monitoring-usage#backend-considerations) flag it as an approximation. Chargebacks or invoices built directly on it will drift from what you're actually billed, so reconcile the values against the billing console before using them for anything financial.
+
+**Why does OTel use a push model instead of pull-based scraping for agent traffic?**
+
+Agents emit bursts of activity across many tool calls in short-lived sessions, and pull-based scraping can miss those bursts between scrape intervals. OTel's push-based model sends metrics and events as they happen, so a session that starts and finishes between polls still gets captured — which is why Claude Code exports via OTLP push rather than waiting to be scraped.
+
+**Why do traces go missing when agents communicate through queues or webhooks?**
+
+`TRACEPARENT` propagates automatically only to direct subprocesses, so a trace stays intact as long as one process calls another directly. Once agents hand work off through a queue, webhook, or separate process instead, that propagation breaks — you get disconnected data islands rather than one end-to-end trace, and correlating them back together requires custom instrumentation.
+
+**Can OTel tool-result events leak secrets?**
+
+Yes. `tool_result` events carry `tool_parameters`, which can include credentials or other sensitive values passed to a tool. Enabling `OTEL_LOG_TOOL_DETAILS=1` without backend redaction in your logging pipeline (Elasticsearch, Loki, ClickHouse) means those secrets flow straight into your observability backend — configure redaction before turning this on in production.
+
 ## Key Takeaways
 
 - `CLAUDE_CODE_ENABLE_TELEMETRY=1` + an exporter (`prometheus`, `otlp`, or `console`) — no code changes required.

@@ -123,6 +123,20 @@ Worker prompt (per repo):
 
 The orchestrator dispatches 50 workers simultaneously, each scoped to one repository with read-only file tools. Workers return structured JSON findings. The orchestrator then evaluates conflicts (for example, a dependency flagged critical in one repo but patched in another) and produces a consolidated report -- rather than concatenating 50 raw outputs.
 
+## FAQ
+
+**When does splitting a task across parallel workers actually help?**
+
+Parallelization pays off when subtasks require "multiple independent directions simultaneously" ([Anthropic's multi-agent research system post](https://www.anthropic.com/engineering/multi-agent-research-system)) -- research spanning independent sources, analysis needing different methodologies on one dataset, or code review across modules with no shared state. It fails when subtasks are sequentially dependent, since dependencies require chaining rather than parallel dispatch.
+
+**Does adding more worker agents always improve results?**
+
+No. A controlled, protocol-aligned evaluation across ten benchmarks found most multi-agent configurations underperformed a single-agent baseline, with only one of six tested workflows beating it ([Do More Agents Help? Controlled and Protocol-Aligned Evaluation of LLM Agent Workflows](https://arxiv.org/abs/2606.05670)). Parallel dispatch pays off only when subtasks are genuinely independent; adding workers to a task that doesn't decompose cleanly adds coordination cost without a quality return.
+
+**What causes an orchestrator to become a single point of failure?**
+
+Because the orchestrator makes every decomposition decision, a misclassified decomposition routes every worker to the wrong subtask, and the orchestrator's own LLM call caps overall throughput ([Cogent, *Multi-Agent Orchestration Failure Playbook for 2026*](https://cogentinfo.com/resources/when-ai-agents-collide-multi-agent-orchestration-failure-playbook-for-2026)). This is a structural bottleneck in how the pattern routes work, not a tuning problem like over-spawning or premature termination.
+
 ## Key Takeaways
 
 - Workers run independently on bounded subtasks with separate tool sets; no inter-worker coordination

@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - testing-verification
   - observability
+  - reliability
 aliases:
   - five failure layers
   - harness failure attribution

@@ -130,6 +130,20 @@ For a simpler approach, a static `docs/llms.txt` with 5 to 10 hand-curated entri
 | MkDocs | Manual curation or custom generation script |
 | Yoast SEO (WordPress) | Weekly auto-generation prioritizing cornerstone content |
 
+## FAQ
+
+**What's the difference between llms.txt and robots.txt or a sitemap?**
+
+llms.txt is not a robots.txt replacement or a sitemap alternative. robots.txt controls whether crawlers can access pages; llms.txt guides an AI agent's navigation once it's already fetching content at inference time. Sitemaps list every crawlable URL, too many to fit in a context window, while llms.txt gives a human-curated, topic-organized index sized for a single agent request.
+
+**How does an AI agent actually use an llms.txt file when researching a site?**
+
+Per the spec's intended usage model ([llmstxt.org](https://llmstxt.org)), an agent researching a site fetches `/llms.txt` first, scans the H2-delimited sections to find the topic that matches its task, then fetches only the specific linked pages it needs. This replaces undirected crawling — where an agent guesses at URLs and discards irrelevant pages — with one fetch and a curated shortlist.
+
+**Why does a curated llms.txt index help agents if it isn't a citation or ranking signal?**
+
+A curated llms.txt index moves the selection step outside the inference call — a human editor picks relevant pages once, so every agent invocation starts from a pre-filtered list instead of wasting context on irrelevant fetches. The `## Optional` convention extends this: agents can drop entire sections under context pressure while keeping the core index intact ([llmstxt.org](https://llmstxt.org)).
+
 ## Key Takeaways
 
 - The spec requires only an H1 — everything else is optional

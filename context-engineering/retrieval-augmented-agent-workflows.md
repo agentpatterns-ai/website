@@ -110,6 +110,24 @@ Tool call: brave_search("stripe webhook signature verification 2024")
 
 A task requiring only one of five documentation sections consumes context for that section alone. A task requiring none consumes zero documentation tokens. The startup prompt stays under 2 KB regardless of how large the documentation corpus grows.
 
+## FAQ
+
+**When should you preload context instead of retrieving it on demand?**
+
+Preload when a document is accessed repeatedly throughout a task, since re-fetching it on demand at every step adds redundant latency. Retrieve on demand for exploratory tasks where the relevant subset of documents is unknown upfront. For long-horizon tasks, combine both: keep instructions preloaded, retrieve reference material as needed, and lean on compaction or sub-agents once context fills.
+
+**Why can on-demand retrieval hurt accuracy instead of improving it?**
+
+Retrieval quality is a separate failure mode from latency: when a retriever surfaces irrelevant chunks, accuracy drops rather than improves. One study found accuracy fell [from 75% to below 40% as a corpus grew from 54 to 1,128 documents](https://arxiv.org/abs/2606.11350), because dense similarity search returned semantically similar but contextually wrong results. On-demand retrieval only helps when what it returns is actually correct.
+
+**Why does preloading large amounts of context hurt reasoning quality?**
+
+Preloaded material often lands in the middle of the context window, where the [U-shaped attention curve](lost-in-the-middle.md) means [models attend less reliably than to content near the start or end](https://arxiv.org/abs/2307.03172). That, combined with running out of context mid-task, is one of two failure modes that speculative just-in-case loading produces, which is why lean startup context plus on-demand retrieval is preferred.
+
+**How does MCP support on-demand retrieval?**
+
+MCP servers expose external data sources, such as documentation, files, and search, as tools the agent receives descriptions for at startup. Nothing enters the prompt until the agent calls the tool; a `docs` server, for example, returns file contents only when the agent issues a `read_file` call for a specific page it currently needs, keeping the startup prompt near 2 KB.
+
 ## Key Takeaways
 
 - Start lean: preload instructions and tool descriptions, not reference content.

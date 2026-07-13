@@ -6,6 +6,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
+  - reliability
 aliases:
   - long-horizon agent operations
   - long-running agent pattern

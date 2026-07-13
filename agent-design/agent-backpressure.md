@@ -5,6 +5,7 @@ description: "Automated tooling — type systems, test suites, linters, CI pipel
 tags:
   - agent-design
   - tool-agnostic
+  - reliability
 last_reviewed: 2026-06-12
 maturity: adopted
 ---

@@ -169,6 +169,24 @@ mkdocs build --strict
 - [Structured Data in MkDocs](https://v-schipka.github.io/posts/schema-in-mkdocs/) — MkDocs Material approach
 - [Structured Data for SEO and GEO — Digidop](https://www.digidop.com/blog/structured-data-secret-weapon-seo) — GPT-4 accuracy 16% → 54%
 
+## FAQ
+
+**How much do independent studies say FAQPage schema improves AI citation rates?**
+
+Independent studies report FAQPage schema lifting AI citation appearances by 2.7x to 3.2x compared to unstructured pages ([Frase.io](https://www.frase.io/blog/faq-schema-ai-search-geo-aeo); [DEV Community](https://dev.to/wilow445/schemaorg-is-your-secret-weapon-for-ai-citations-heres-the-data-1if3)), because structured data reduces extraction effort during indexing. Schema's primary value has shifted from Google rich results to this AI-citation effect — cited by ChatGPT, Perplexity, Gemini, and Claude at indexing time, not on live fetch.
+
+**Does ChatGPT or Perplexity read a page's JSON-LD when they visit it live?**
+
+No. ChatGPT, Perplexity, and most AI engines don't parse a page's JSON-LD during a live fetch — the hook-injected schema is processed at indexing and training time instead, not the moment they visit the page. Gemini is the exception: it renders JavaScript and processes schema in real time, unlike the others.
+
+**What exact heading and format triggers automatic FAQPage schema on this site?**
+
+Write a `## FAQ` (or `## Frequently Asked Questions`) heading followed by bold-paragraph questions and plain-text answer paragraphs — the same `**Question**` / answer pattern this page uses. The `hooks/structured_data.py` hook scans for that exact shape at build time and emits a `FAQPage` JSON-LD block automatically; no frontmatter flag or manual schema authoring is required.
+
+**Why doesn't adding schema markup fix citation problems on a low-authority page?**
+
+Schema markup amplifies an existing signal rather than creating one — its citation lift is relative to a page's baseline authority. On a thin or low-authority page, adding FAQPage or HowTo JSON-LD accelerates whatever [topical authority](topical-authority.md) the page already has, but it does not manufacture credibility the page lacks.
+
 ## Key Takeaways
 
 - Schema's payoff is now AI citation, not Google rich results — benefit accrues at indexing time, not on live fetch.

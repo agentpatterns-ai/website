@@ -133,3 +133,4 @@ Same bug fix. No architectural drift.
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md)
 - [CLAUDE.md Convention](../instructions/claude-md-convention.md)
 - [Trust Without Verify](trust-without-verify.md)
+- [The Patchwork Problem in LLM-Generated Code](patchwork-problem.md)

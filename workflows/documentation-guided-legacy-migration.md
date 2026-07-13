@@ -5,7 +5,6 @@ description: "Convert a legacy C repository into architecture-aware documentatio
 tags:
   - workflows
   - agent-design
-  - code-review
   - tool-agnostic
   - arxiv
 aliases:

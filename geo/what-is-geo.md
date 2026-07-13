@@ -92,6 +92,24 @@ GEO-optimized equivalent — specific, cited, structured for extraction:
 
 The second version gives an AI engine three discrete, attributable facts — each independently citable.
 
+## FAQ
+
+**What is the difference between GEO and AEO?**
+
+Answer Engine Optimization (AEO) is the older practitioner label for the same discipline as GEO. Both target the same outcome: getting content selected as an attributable source when an AI engine answers a user's question. The industry uses the terms interchangeably, and this page uses GEO as the primary term for the shared set of techniques and citation goals.
+
+**Why do backlinks matter less for AI citation than they did for SEO?**
+
+Backlinks were SEO's core currency, but they show only weak or neutral correlation with AI citation rates. Domain traffic volume is now the strongest single predictor of whether a page gets cited by a generative engine ([SHAP value 0.63](https://www.superlines.io/articles/ai-search-statistics/), 2026), which is why GEO shifts focus from link-building toward content structured for extraction and attribution.
+
+**Why do AI engines cite specific statistics over vague claims?**
+
+Generative engines retrieve content chunks, score them for relevance and quality, then synthesize a response. A specific, cited statistic gives the retrieval model a discrete, attributable fact it can extract without paraphrasing risk, while vague prose offers no extractable fact or attribution target. Citations also signal external validation, reducing the engine's uncertainty about including a claim.
+
+**When does GEO investment not pay off?**
+
+GEO's costs — structured data, freshness cycles, per-platform tracking — outweigh its benefits for niche audiences too small to generate meaningful citation volume, fast-moving technical domains where techniques go stale quickly, low-query topics that rarely trigger AI answers, and credential-dependent verticals like legal or medical content, which depend on institutional trust signals that structural optimization cannot replicate.
+
 ## Sources
 
 - [GEO: Generative Engine Optimization — Princeton / ACM KDD 2024](https://arxiv.org/abs/2311.09735) — original GEO paper; benchmark techniques and visibility lifts
