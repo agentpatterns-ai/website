@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - claude
+  - reliability
 aliases:
   - gateway model discovery
   - anthropic-compatible gateway routing

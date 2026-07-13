@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - reliability
 aliases:
   - per-tool reasoning budget
   - tool-call-scoped reasoning

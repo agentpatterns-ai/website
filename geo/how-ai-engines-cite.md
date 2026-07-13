@@ -93,6 +93,24 @@ Citation profiles follow retrieval architecture. ChatGPT inherits Bing ranking s
 2. Freshness optimization conflicts with depth. Perplexity rewards short-cycle publishing, while ChatGPT and Gemini weight authority. Publishing shallow content frequently to win Perplexity citations can suppress performance elsewhere.
 3. Over-specialization reduces cross-platform citation. The 11% domain overlap between ChatGPT and Perplexity means winning both requires different content architecture, not the same page with minor tweaks.
 
+## FAQ
+
+**Why don't ChatGPT and Perplexity cite the same sources for the same query?**
+
+Only 11% of cited domains appear on both ChatGPT and Perplexity for identical queries ([Whitehat SEO, 2025](https://whitehat-seo.co.uk/blog/ai-engines-comparison-citations)), because each platform runs its own retrieval backend — ChatGPT inherits Bing's rankings while Perplexity crawls its own index. Winning both requires different content architecture, not the same page with minor tweaks.
+
+**Why does blocking an AI crawler sometimes have no effect on citation?**
+
+Every major platform runs separate crawlers for training and real-time citation — for example Anthropic uses `anthropic-ai`/`ClaudeBot` for training but `Claude-SearchBot` for retrieval ([Momentic AI Crawlers Guide](https://momenticmarketing.com/blog/ai-search-crawlers-bots)). Blocking the training bot in `robots.txt` while leaving the retrieval bot open doesn't remove a page from citation results — it only stops that page from feeding future model training data.
+
+**Which AI platform cites the most sources per response?**
+
+Perplexity averages 21.87 citations per response — 2.8x more than ChatGPT's 7.92 ([Qwairy Q3 2025](https://www.qwairy.co/blog/provider-citation-behavior-q3-2025)) — because its retrieval-first architecture fires real-time search on every query without exception, unlike ChatGPT, which only triggers live retrieval on 31% of prompts ([Whitehat SEO](https://whitehat-seo.co.uk/blog/ai-engines-comparison-citations)).
+
+**What happens to a page's citation performance when a platform switches search backends?**
+
+The tactic that worked can silently stop working. Claude's shift to using Brave Search changed its citation profile overnight, so any optimization tied to a specific backend can become stale without warning ([TechCrunch, 2025](https://techcrunch.com/2025/03/21/anthropic-appears-to-be-using-brave-to-power-web-searches-for-its-claude-chatbot/)). Because citation profiles follow retrieval architecture, a backend change resets which ranking signals matter for that platform.
+
 ## Key Takeaways
 
 - Allow retrieval bots, block training bots in `robots.txt` — each platform uses separate user-agent strings

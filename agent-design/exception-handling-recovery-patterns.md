@@ -142,3 +142,4 @@ Throughout, the agent commits after each successful file change (`git commit -m 
 - [Loop Detection](../observability/loop-detection.md)
 - [Trajectory Logging and Progress Files](../observability/trajectory-logging-progress-files.md)
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
+- [Agent Failure Trajectories and the Recovery Window](failure-trajectory-recovery-window.md) — the recovery window this failing-forward hierarchy has to act inside, with measured onset and lock-in timings

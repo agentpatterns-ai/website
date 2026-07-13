@@ -5,6 +5,7 @@ description: "A managed-daemon model where a per-user supervisor spawns each bac
 tags:
   - agent-design
   - tool-agnostic
+  - reliability
 aliases:
   - per-user agent daemon
   - background agent supervisor

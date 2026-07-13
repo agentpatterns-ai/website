@@ -61,7 +61,7 @@ Two practical consequences:
 
 ## Why this is an output-shape pattern, not an architectural one
 
-Anthropic's canonical list of agent patterns — prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer — does not include artifacts or canvases ([Anthropic](https://www.anthropic.com/engineering/building-effective-agents)). That is deliberate. The underlying agent architecture is unchanged whether the output ships as Markdown, JSON, a chart, or a dashboard. Canvases are a UI affordance that changes [what the human does with the result](../agent-design/durable-interactive-artifacts.md); they do not change what the agent did to produce it.
+Anthropic's canonical list of agent patterns — prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer — does not include artifacts or canvases ([Anthropic](https://www.anthropic.com/engineering/building-effective-agents)). That is deliberate. The underlying agent architecture is unchanged whether the output ships as Markdown, JSON, a chart, or a dashboard. Canvases are a UI affordance that changes [what the human does with the result](durable-interactive-artifacts.md); they do not change what the agent did to produce it.
 
 Treating canvases as an architectural pattern conflates tooling with design. Treating them as an output-shape decision — one of several ways to package the same underlying work — keeps the focus on the real question: does this output have enough structure that rendering it beats describing it, and is the verification gap small enough to accept?
 
@@ -105,5 +105,5 @@ The source-traceability requirement still applies. A "Show query" affordance on 
 - [Controlling Agent Output](../instructions/controlling-agent-output.md)
 - [Diff-Based Review](../code-review/diff-based-review.md)
 - [Visible Thinking in AI Development](../human/visible-thinking-ai-development.md)
-- [Durable Interactive Artifacts](../agent-design/durable-interactive-artifacts.md)
-- [Product-as-IDE](product-as-ide.md)
+- [Durable Interactive Artifacts](durable-interactive-artifacts.md)
+- [Product-as-IDE](../emerging/product-as-ide.md)

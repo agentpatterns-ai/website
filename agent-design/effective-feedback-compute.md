@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - reliability
 aliases:
   - effective feedback compute
   - trace-level scaling coordinate

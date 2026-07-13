@@ -5,7 +5,6 @@ description: "The agent misunderstands a requirement early and builds on the fau
 tags:
   - agent-design
   - testing-verification
-  - source:osmani-80-percent
   - tool-agnostic
   - anti-pattern
 last_reviewed: 2026-06-12
@@ -122,3 +121,4 @@ Apply the ladder when the cost of a wrong direction exceeds the cost of the chec
 - [Spec Complexity Displacement](spec-complexity-displacement.md)
 - [Entity Binding Failures in Tool-Augmented Agents](entity-binding-failures.md) — an unverified entity binding is an assumption that cascades into the wrong action.
 - [Semantic Collapse Under Underspecified Prompts](semantic-collapse.md) — the upstream cause: an underspecified prompt collapses onto one confident, wrong interpretation that seeds the assumption.
+- [The Patchwork Problem in LLM-Generated Code](patchwork-problem.md) — a sibling single-artifact failure: structurally incoherent code rather than a wrong interpretation.

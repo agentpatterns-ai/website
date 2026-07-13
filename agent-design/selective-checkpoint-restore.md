@@ -5,6 +5,7 @@ term: "Selective Checkpoint Restore"
 tags:
   - agent-design
   - claude
+  - reliability
 aliases:
   - three-way checkpoint restore
   - code-only and conversation-only rewind

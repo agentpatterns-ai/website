@@ -12,7 +12,7 @@ tags:
 aliases:
   - evaluation blind spots
   - measurement methodology gaps
-last_reviewed: 2026-06-15
+last_reviewed: 2026-07-13
 maturity: emerging
 ---
 
@@ -21,6 +21,8 @@ maturity: emerging
 > Eval blind spots are gaps in measurement methodology — what the harness cannot observe — not model-capability gaps, so a stronger model never closes them.
 
 An eval blind spot is a place where your measurement setup is structurally unable to see a failure. The agent may be failing — gaming a visible suite, taking an unsafe path, using a stale retrieval, or leaving a test stale — but the harness reports success because the relevant evidence sits outside what it scores. These gaps share one property: a stronger model does not close them. Only a change to the measurement methodology does.
+
+Run-to-run variance is itself a measurement-methodology problem that sits upstream of the four structural gaps: OpenAI documents an approach for separating real signal from run-to-run noise in coding-agent evaluations, so a single scored pass is not mistaken for a genuine capability difference ([OpenAI: Separating signal from noise in coding evaluations](https://openai.com/index/separating-signal-from-noise-coding-evaluations/)).
 
 This page is the umbrella for four documented gaps. Each is a distinct mechanism with its own diagnostic and its own fix:
 

@@ -6,6 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
   - testing-verification
+  - reliability
 aliases:
   - tail control for agentic workflows
   - reliability engineering for agent workflows

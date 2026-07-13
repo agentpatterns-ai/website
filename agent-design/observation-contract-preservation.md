@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - testing-verification
   - arxiv
+  - reliability
 aliases:
   - observation contracts
   - contract-bound tool outputs

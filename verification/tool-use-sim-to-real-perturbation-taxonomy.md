@@ -8,6 +8,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - mcp
 aliases:
   - tool-use robustness benchmark
   - RobustBench-TC

@@ -5,7 +5,6 @@ description: "Formalize security constraints as a versioned, machine-readable co
 tags:
   - security
   - instructions
-  - source:marri-constitutional-spec
   - tool-agnostic
 aliases:
   - security constitution

@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - arxiv
   - tool-agnostic
+  - reliability
 aliases:
   - reasoning effort over tool access
   - spend budget on reasoning not scaffolding

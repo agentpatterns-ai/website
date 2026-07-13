@@ -56,6 +56,7 @@ nav:
       - cross-cycle-consensus-relay.md
       - dual-trace-memory-encoding.md
       - durable-interactive-artifacts.md
+      - interactive-canvas-outputs.md
       - episodic-memory-retrieval.md
       - executable-memory-user-as-code.md
       - generative-agents-memory-stream.md
@@ -113,6 +114,7 @@ nav:
       - effective-feedback-compute.md
       - gateway-model-routing.md
       - exception-handling-recovery-patterns.md
+      - failure-trajectory-recovery-window.md
       - feedback-capability-equalizer.md
       - five-failure-layers-diagnostic.md
       - heuristic-effort-scaling.md

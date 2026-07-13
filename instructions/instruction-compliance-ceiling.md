@@ -112,6 +112,20 @@ Monolithic (over the ceiling): A single `AGENTS.md` with 200+ rules covering com
 
 Layered (below the ceiling): `AGENTS.md` holds 10 project-wide conventions. A `commit` skill loads commit rules on demand. A `test` skill loads testing requirements. Pre-commit hooks enforce formatting deterministically. Each context stays within reliable range.
 
+## FAQ
+
+**What's the difference between a modification error and an omission error?**
+
+Modification errors happen first: the agent follows a rule's intent but not its exact letter — wrong formatting, a constraint missed by a small margin. Omission errors happen later, once instruction count exceeds reliable capacity: the agent skips a rule entirely, such as ignoring a banned phrase or a scoped restriction. More rules past that point make compliance worse, not better.
+
+**Does the compliance ceiling apply the same way to every model?**
+
+No. IFScale benchmarking across 20 frontier models found three distinct degradation patterns: reasoning models hold compliance until a threshold then drop sharply, standard models degrade roughly linearly as rule count grows, and smaller models show steeper curves with earlier failure onset ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). An instruction set that works reliably on one model can fail on another.
+
+**Can splitting instructions into skills and hooks make things worse?**
+
+Yes. Modularizing introduces its own failure modes: on-demand skills stay invisible to anyone who doesn't know they exist, loading the wrong skill silently removes rules rather than degrading them, tightly coupled rules split across files create boundary conflicts, and hooks moved out of prompts stay reliable only as long as they're kept current. For a solo developer already below the ceiling, decomposition can cost more than it saves.
+
 ## Key Takeaways
 
 - Compliance degrades predictably as instruction count grows: imprecision first, omission later

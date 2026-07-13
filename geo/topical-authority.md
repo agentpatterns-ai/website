@@ -123,6 +123,24 @@ Each page is a distinct entity, a named concept AI can retrieve on its own. Inte
 
 A single "GEO Overview" page covering all of the above would not achieve the same citation distribution across the varied queries developers ask.
 
+## FAQ
+
+**Why does broad topical coverage outperform a single high-quality page?**
+
+AI systems weight sources by how consistently they appear across a topic domain, not by individual page quality alone. Once a source clears the citation quality threshold, a niche-relevant site that publishes broadly across a subject outperforms a generic high-authority site that only touches the topic once, because coverage breadth signals a stronger domain-to-concept association than depth on one page does.
+
+**Does internal linking actually affect topical authority, or is content quality enough on its own?**
+
+Yes — internal links function as a semantic graph connecting entities and topics, not just navigation. Topical authority requires content, information architecture, and internal linking together; strong content without link structure leaves the entity graph incomplete. Body links carry more weight than navigation or footer links ([iPullRank: How Does Internal Linking Impact Topical Authority?](https://ipullrank.com/internal-linking-topical-authority)).
+
+**What role does brand search volume play in AI citation?**
+
+Brand search volume — how often people search for your brand by name — predicts AI citation rates better than backlink counts do ([Digital Bloom 2025 AI Citation Report](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/)). Building topical authority raises brand recall by making your domain the recognized entity for a subject, and that recall is what drives citations, not link volume.
+
+**Does topical authority require external signals like Wikidata or schema markup, or is internal content enough?**
+
+External infrastructure amplifies but doesn't replace internal coverage. A Wikidata entry with Label, Description, Aliases, and Website registers your site as a distinct entity, and schema markup that ties an About page, README, and API spec to the same Organization entry gives AI systems confidence to treat them as one source. Multi-platform consistency across GitHub and Stack Overflow further reinforces that entity mapping.
+
 ## Related
 
 - [How AI Engines Cite](how-ai-engines-cite.md) — how citation selection operates at the platform level

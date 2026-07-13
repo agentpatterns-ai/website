@@ -120,6 +120,24 @@ Unbounded turn loops become liabilities in production under these conditions:
 
 4. Doom loops in multi-agent systems: when multiple agents share a loop, conflicting termination conditions cause tasks to bounce without resolution, burning turns without progress. Phase 3 of the extended ReAct loop targets doom-loop detection as a separate concern ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)). See [Loop Detection](../observability/loop-detection.md) for the intra-session intervention patterns.
 
+## FAQ
+
+**What counts as a single "turn" in an agent harness?**
+
+A turn is not one model response — it's the full sequence from user input through every intermediate inference and tool call to the final assistant message with no pending tool call. The Codex CLI treats this entire sequence as one turn, surfacing only the result to the user. [Source: [Unrolling the Codex Agent Loop](https://openai.com/index/unrolling-the-codex-agent-loop/)]
+
+**What happens if a tool call fails partway through a turn?**
+
+The harness appends the error to the prompt as an observation rather than terminating the turn. The model then sees the failure in context and decides whether to retry the call, try an alternative approach, or surface the failure to the user. ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344))
+
+**Why can an agent turn suddenly consume enormous amounts of tokens?**
+
+When a tool returns an error state the model treats as recoverable, the loop can retry without end, since the turn loop isn't bound to a fixed step count. One stuck turn has consumed millions of tokens before hitting a wall, which is why a hard iteration cap is necessary. ([The Agent Loop Problem, Modexa, 2026](https://medium.com/@Modexa/the-agent-loop-problem-when-smart-wont-stop-ccbf8489180f))
+
+**Why do multi-agent systems get stuck in doom loops instead of finishing?**
+
+When several agents share a loop, conflicting termination conditions can cause tasks to bounce between agents without resolution, burning turns without progress. This is a separate failure mode from single-turn runaway cost, and dedicated doom-loop detection is proposed as Phase 3 of the extended ReAct loop. ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344))
+
 ## Key Takeaways
 
 - A single agent turn loops until the model emits a final message without a tool call

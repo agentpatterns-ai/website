@@ -129,6 +129,24 @@ cat /tmp/gsc_report.md
 | Bing WMT | No bulk CSV export — API exists but bulk analytics require dashboard |
 | CrUX origin eligibility | Insufficient real-user traffic returns 404 from CrUX API |
 
+## FAQ
+
+**Why can't you monitor Bing the same way as Google Search Console?**
+
+Bing Webmaster Tools has a public API but no bulk CSV export equivalent to GSC's Search Analytics API, so trend monitoring across queries still relies on the dashboard rather than an automated pull. Bing WMT still covers ownership verification, sitemap submission, and IndexNow auto-submit, and it provides visibility into Bing and Microsoft Copilot Search that GSC does not.
+
+**Why does the Core Web Vitals section sometimes stay empty?**
+
+The CrUX API requires a minimum volume of real user data per origin; sites below that threshold get a 404 response instead of metrics. That's a real risk for low-traffic sites — the automation adds a GCP service account, stored credentials, and a scheduled workflow, and the Core Web Vitals section can stay empty for most of the property's life if traffic never clears CrUX's eligibility bar.
+
+**What's the rate limit on the URL Inspection API?**
+
+GSC's URL Inspection API caps at 2,000 requests per day, so it works for spot-checks rather than bulk crawl-status checks — confirming a specific page indexed correctly after a fix, for example. The weekly report's index-coverage numbers come from the Sitemaps API instead, which reports submitted-versus-indexed counts per sitemap without that per-request cap.
+
+**What credentials does the automated report need?**
+
+A GCP service account with the Search Console and Chrome UX Report APIs enabled, added to GSC as a restricted user under Settings → Users and permissions. The workflow reads three GitHub Actions secrets: `GSC_SERVICE_ACCOUNT_JSON` (the service account key), `GSC_SITE_URL` (the `sc-domain:` property), and `CRUX_API_KEY` (a GCP API key restricted to the Chrome UX Report API).
+
 ## Key Takeaways
 
 - A weekly GitHub Actions workflow pulls Search Console and Bing WMT data via API, replacing manual dashboard checks with a structured report.

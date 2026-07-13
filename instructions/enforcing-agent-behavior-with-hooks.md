@@ -6,7 +6,6 @@ tags:
   - instructions
   - agent-design
   - claude
-  - source:docs
 aliases:
   - Rigor Relocation
   - Deterministic Behavioral Enforcement

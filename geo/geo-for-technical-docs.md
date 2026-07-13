@@ -171,6 +171,20 @@ GEO techniques developed for general web content do not transfer uniformly to al
 - Statistics requirement on thin pages: the GEO paper ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)) measured visibility gains for statistics on general web content. For narrow technical reference pages (a single API parameter, one error code), forcing a statistic into a section that does not call for one degrades readability without confirmed citation benefit.
 - Internal-only documentation: GEO techniques apply to content indexed by AI crawlers. Private or intranet documentation is not in scope — applying GEO structure there wastes editorial effort.
 
+## FAQ
+
+**Why does the same GEO technique produce different results across content formats?**
+
+Because the arxiv GEO paper (KDD 2024) measured gains for quotation addition, statistics, and citing sources at 30–40% overall, but that average hides format-specific mechanics: tutorials gain most from HowTo schema and sequential steps, pattern pages gain from TechArticle schema and quotable assertions, and anti-pattern or reference pages gain from FAQPage Q&A structure. Applying the wrong technique to the wrong format produces neutral or negative results ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)).
+
+**When does HowTo schema hurt a tutorial page instead of helping?**
+
+HowTo schema works well for a tutorial that covers one self-contained task, where numbered steps and a totalTime estimate map cleanly onto the page. Multi-page tutorials or modular guides don't compress into a single HowTo block — forcing the schema onto them produces malformed structured data instead of a clean win, so skip it for those formats.
+
+**Do narrow API reference pages need a statistic to satisfy GEO?**
+
+No. The GEO paper's statistics gains were measured on general web content ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)), not narrow technical references. For a page documenting a single API parameter or one error code, forcing in a quantitative claim that doesn't fit the section degrades readability without a confirmed citation benefit — skip the statistic requirement there.
+
 ## Sources
 
 - [GEO: Generative Engine Optimization (arxiv.org/abs/2311.09735)](https://arxiv.org/abs/2311.09735) — KDD 2024; 9 techniques benchmarked; quotation addition +41%, statistics +30–40%, keyword stuffing counterproductive

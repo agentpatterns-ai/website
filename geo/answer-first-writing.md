@@ -107,6 +107,24 @@ developer documentation, section-aligned chunking — splitting at H2 boundaries
 
 The "before" opens with meta-framing that contributes no semantic signal. The "after" opens with a direct 50-word answer — a self-contained, citable passage that dominates the chunk embedding.
 
+## FAQ
+
+**Why does opening a section with context instead of the answer hurt AI retrieval?**
+
+RAG systems score chunks by cosine similarity to a query embedding, so a section that opens with context or caveats produces an averaged, diluted embedding rather than one dominated by the answer — [Weaviate's chunking research](https://weaviate.io/blog/chunking-strategies-for-rag) calls this "noisy, averaged embeddings." [Anthropic's Contextual Retrieval study](https://www.anthropic.com/news/contextual-retrieval) found prepending short context to a chunk cut retrieval failure by up to 49%, evidence that opening content dominates retrieval quality.
+
+**How is answer-first writing different from the journalistic inverted pyramid?**
+
+The inverted pyramid targets a skimming human reader and rewards a dramatic, newsworthy lead. Answer-first writing targets a semantic embedding model: the goal is high cosine similarity to queries, the unit of meaning is an independent section rather than the whole article, and metaphors or scene-setting belong after the direct answer, not before it.
+
+**When does answer-first structure fail to help?**
+
+Answer-first structure optimizes chunk-based vector retrieval, so it offers little benefit in three cases: full-document scoring, where positional ordering has no effect on a whole-document embedding; BM25 and keyword retrieval, which ranks by term frequency rather than where the answer sits; and conversational AI that pastes an entire page into context, where the model reads everything regardless of order. Apply the pattern selectively, only when content will be consumed through chunk-based RAG.
+
+**How do I retrofit an existing page to be answer-first?**
+
+Read each H2 heading as an implied question, then write a 40–60 word answer to it as the section's first paragraph, moving any context or caveats after that answer. Validate the rewrite by pasting the heading and opening paragraph into an AI assistant — if it can't answer the implied question from that passage alone, the opening isn't self-contained yet.
+
 ## When this backfires
 
 Answer-first structure optimizes for chunk-based vector retrieval. It provides limited benefit in three situations:

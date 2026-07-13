@@ -127,6 +127,24 @@ Blocking all AI crawlers has a compounding cost:
 - AI-referred sessions grew substantially year over year through 2025, so blocking Tier 1 opts out of this traffic source entirely
 - [Cloudflare data](https://blog.cloudflare.com/control-content-use-for-ai-training/) shows the crawl-to-referral ratio for OpenAI is ~1,700:1 and Anthropic ~73,000:1 — training crawlers give no referral return; retrieval bots give direct search traffic
 
+## FAQ
+
+**Why not just block all AI crawlers instead of picking tiers?**
+
+Blocking everything cuts off Tier 1 retrieval bots too, which power citation-eligible AI answers — absence there just lets competitors fill the space. AI-referred traffic grew substantially through 2025, and [Cloudflare data](https://blog.cloudflare.com/control-content-use-for-ai-training/) shows Anthropic's crawl-to-referral ratio near 73,000:1, meaning training crawlers give no referral return while retrieval bots drive direct search traffic. Blanket blocking forfeits that entirely.
+
+**Does robots.txt actually stop Bytespider from crawling my site?**
+
+No. Bytespider (ByteDance) is documented to ignore robots.txt directives entirely, so a Disallow rule has no effect on it. The only effective control is a CDN or WAF custom rule that blocks requests where the User-Agent contains "Bytespider" — see [Cloudflare WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) for setup. robots.txt covers Tier 1 and Tier 2 bots; Tier 3 requires enforcement at the network layer.
+
+**Is a robots.txt disallow for training crawlers legally enforceable?**
+
+No — robots.txt is advisory, not a legal mechanism; it signals intent but doesn't prevent crawling on its own. Legal protection instead requires ToS terms, CFAA claims, or contractual agreements. The EU AI Act encourages GPAI providers to honor publisher opt-out signals like a robots.txt disallow, but site owners should verify specific commitments against the published Code of Practice text as obligations evolve.
+
+**Does disallowing Google-Extended hurt my site's ranking in Google Search?**
+
+No. Google-Extended is a separate, training-only user-agent from standard Googlebot, which handles search indexing and ranking — the reference table lists them separately. Disallowing Google-Extended in robots.txt opts your content out of AI training use without touching Googlebot's crawl for search results; the two directives are independent, so blocking one has no effect on the other.
+
 ## Key Takeaways
 
 - The three-tier taxonomy (retrieval / training / non-compliant) maps directly to three distinct robots.txt strategies: allow / disallow / CDN block

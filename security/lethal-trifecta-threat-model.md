@@ -121,6 +121,20 @@ The trifecta model is a structural heuristic, not a guarantee:
 
 3. Leg removal migrates risk. Tokenizing PII shifts the attack to the token resolver, and sandboxing egress shifts it to sandbox-escape. Each removal creates a new high-value target that you must harden in turn.
 
+## FAQ
+
+**Why isn't it enough to just tell the agent not to trust injected content?**
+
+LLMs cannot reliably separate trusted instructions from injected ones — once untrusted input enters context, it influences tool calls no matter how firmly a system prompt warns against it. That's why the trifecta model treats defense as an architecture problem: remove one of the three legs so no single execution path can act on an injected instruction, instead of relying on the model to police itself.
+
+**What if a task genuinely needs all three legs, like a research agent that fetches the web and posts results externally?**
+
+Leg removal isn't always feasible — a research agent that fetches live web content, holds API keys, and posts to external endpoints has all three legs by design. For unavoidable trifectas, add compensating controls such as output scanning, rate-limiting, and egress anomaly detection. These narrow how much damage an injected instruction can do; they don't eliminate the exploitable surface, so they're a second-best option, not a substitute for removing a leg.
+
+**Does read-only egress or tokenized data count as fully removing a leg?**
+
+Not necessarily. States like read-only egress or [tokenized private data](pii-tokenization-in-agent-context.md) sit between leg-present and leg-absent, so a binary Yes/No audit column can produce false confidence when a leg is only partially removed. Treat a partial mitigation as reducing risk, not eliminating a leg, and re-check whether the remaining exposure still completes an exploitable path before calling the risk closed.
+
 ## Key Takeaways
 
 - Risk requires all three legs at once: private data, untrusted input, and external egress. Removing any one closes the exfiltration path.

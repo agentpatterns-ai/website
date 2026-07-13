@@ -7,6 +7,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - reliability
 aliases:
   - effort scaling
   - effort-based resource allocation
