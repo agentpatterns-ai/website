@@ -158,6 +158,7 @@ nav:
       - harness-design-dimensions.md
       - fleet-harness-attribution.md
       - harness-engineering.md
+      - dsl-constraining-harness.md
       - harness-hill-climbing.md
       - harness-impermanence.md
       - isometric-harness-ablation.md

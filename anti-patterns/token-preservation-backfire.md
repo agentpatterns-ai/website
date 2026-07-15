@@ -99,3 +99,4 @@ Make constraints mechanical. Anthropic recommends requiring absolute filepaths r
 - [Objective Drift](objective-drift.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [Harness Engineering](../agent-design/harness-engineering.md) — environment design that mechanically enforces constraints agents fail to self-impose
+- [Token Reduction Mistaken for Cost Reduction](token-reduction-not-cost-reduction.md) — the tooling-level cousin: a context-reduction layer judged on tokens removed instead of billed cost
