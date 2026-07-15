@@ -90,3 +90,4 @@ If the developer had run `/compact` instead, the recent reasoning chain — incl
 - [Turn-Level Context Decisions](turn-level-context-decisions.md) — the five-option decision framework (continue, rewind, clear, compact, delegate) that this pattern lives inside.
 - [Observation Masking](observation-masking.md) — a complementary primitive: strip intermediate tool results without touching the conversation shape.
 - [Goal Recitation](goal-recitation.md) — what to preserve in the summary so the agent does not drift after the cut.
+- [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md) — moves the cut decision from the user to the model, gated by a firing rubric instead of a chosen turn.

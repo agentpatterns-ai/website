@@ -232,6 +232,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Grounding Agents in Code the Model Has Never Seen](context-engineering/grounding-zero-prior-code.md)
 - [Proprioceptive Context Dashboard: Agent Self-Managed Context](context-engineering/proprioceptive-context-dashboard.md)
 - [Conversation Registers for AI Coding Sessions](context-engineering/conversation-registers.md)
+- [Agent-Initiated Rubric-Gated Self-Compaction (SelfCompact)](context-engineering/agent-initiated-self-compaction.md)
 
 ## Instructions & Prompts
 
@@ -799,6 +800,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Cross-Repository Security Posture for Agent-Introduced Vulnerabilities](security/cross-repository-security-posture.md)
 - [Internal Hostname Disclosure in Agent-Readable Context](security/internal-hostname-disclosure-agent-context.md)
 - [Vetting Tool Definitions for Exfiltration Signatures](security/vetting-tool-definitions-before-install.md)
+- [Non-Human Event Provenance Markers to Block Fabricated Approvals](security/non-human-event-provenance-markers.md)
 
 ## Testing & Evaluation
 
