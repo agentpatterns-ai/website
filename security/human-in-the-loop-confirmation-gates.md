@@ -140,4 +140,4 @@ Because the recipient is shown verbatim, the reviewer sees `attacker@external.co
 - [Action Selector Pattern](action-selector-pattern.md)
 - [Indirect Injection Discovery](indirect-injection-discovery.md)
 - [Permission-Gated Custom Commands](permission-gated-commands.md)
-- [Guarding Against URL-Based Data Exfiltration](url-exfiltration-guard.md)
+- [Non-Human Event Provenance Markers to Block Fabricated Approvals](non-human-event-provenance-markers.md)

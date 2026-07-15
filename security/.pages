@@ -94,6 +94,7 @@ nav:
   - multi-tenant-isolation-knobs-agent-sdk.md
   - multitenant-rag-authorization-gap.md
   - network-less-container-unix-socket-egress.md
+  - non-human-event-provenance-markers.md
   - org-membership-gated-agent-entitlement.md
   - permission-framework-over-model.md
   - permission-gated-commands.md

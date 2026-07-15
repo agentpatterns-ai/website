@@ -166,3 +166,4 @@ CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=55 claude
 - [Lost in the Middle](lost-in-the-middle.md)
 - [Prompt Compression](prompt-compression.md)
 - [Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md)
+- [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md)
