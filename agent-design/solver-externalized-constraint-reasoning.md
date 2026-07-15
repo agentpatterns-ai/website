@@ -125,3 +125,4 @@ The solver returns an assignment; a verification pass checks each hard constrain
 - [RubricRefine: Pre-Execution Rubric Refinement for Code-Mode Tool Use](rubric-refine-pre-execution-tool-use.md) — Pre-execution check on agent-emitted tool-use code; the verification step in this pattern plays the same role for solver code.
 - [Critic Agent Pattern](critic-agent-plan-review.md) — A second model reviewing the encoding before solver invocation is the practical form of this pattern's verification step.
 - [Deterministic Guardrails Around Probabilistic Agents](../verification/deterministic-guardrails.md) — The exact solver and the verification pass are deterministic guardrails wrapped around the probabilistic encoding step.
+- [DSLs as a Constraining Harness for LLM Code Generation](dsl-constraining-harness.md) — Generalises the constrain-then-check move: a domain language plus its validator narrows the space of programs the model can emit.

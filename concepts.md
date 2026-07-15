@@ -553,6 +553,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Local Model Viability Factors for Coding](agent-design/local-model-viability-for-coding.md)
 - [Deterministic Precondition Gates for Tool-Using Agents](agent-design/deterministic-precondition-gates.md)
 - [Agent Failure Trajectories and the Recovery Window](agent-design/failure-trajectory-recovery-window.md)
+- [DSLs as a Constraining Harness for LLM Code Generation](agent-design/dsl-constraining-harness.md)
 
 ## Loop Engineering
 
@@ -1273,6 +1274,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The Patchwork Problem in LLM-Generated Code](anti-patterns/patchwork-problem.md)
 - [Overtrusting Human Sign-Off on Generated Assertions](anti-patterns/generated-assertion-signoff.md)
 - [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](anti-patterns/lazy-generation.md)
+- [Token Reduction Mistaken for Cost Reduction](anti-patterns/token-reduction-not-cost-reduction.md)
 
 ## Emerging Concepts
 

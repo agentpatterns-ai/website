@@ -634,6 +634,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Local Model Viability Factors for Coding](agent-design/local-model-viability-for-coding.md)
 - [Deterministic Precondition Gates for Tool-Using Agents](agent-design/deterministic-precondition-gates.md)
 - [Agent Failure Trajectories and the Recovery Window](agent-design/failure-trajectory-recovery-window.md)
+- [DSLs as a Constraining Harness for LLM Code Generation](agent-design/dsl-constraining-harness.md)
 
 ## Loop Engineering
 
@@ -1354,6 +1355,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The Patchwork Problem in LLM-Generated Code](anti-patterns/patchwork-problem.md)
 - [Overtrusting Human Sign-Off on Generated Assertions](anti-patterns/generated-assertion-signoff.md)
 - [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](anti-patterns/lazy-generation.md)
+- [Token Reduction Mistaken for Cost Reduction](anti-patterns/token-reduction-not-cost-reduction.md)
 
 ## Emerging Concepts
 
@@ -6802,6 +6804,10 @@ The instruction delivers the same constraint at one-third the length.
 
 Show the pattern instead of describing it. An example collapses a pattern and its application into a single piece of text the agent can copy directly.
 
+### Name concepts instead of defining them
+
+A canonical name carries its full definition. The model already knows what semantic versioning, Conventional Commits, or exponential backoff mean — `Version bumps follow semver` delivers the whole constraint in four words, where a paragraph re-deriving the major/minor/patch rules adds tokens without adding meaning. The [Claude Code best practices guide](https://code.claude.com/docs/en/best-practices) draws exactly this boundary in its include/exclude table — exclude "standard conventions Claude already knows" — and [Microsoft's skill-authoring guidance](https://developer.microsoft.com/blog/stop-overloading-your-skills) states the sizing rule directly: include only the delta of knowledge the model lacks; omit standard SDK and API patterns. This cuts only when local usage matches the standard meaning — see [When this backfires](#when-this-backfires).
+
 ### Put the most important rules first
 
 Attention degrades across a long context. The [Claude Code documentation](https://code.claude.com/docs/en/best-practices) confirms this: important rules in a bloated CLAUDE.md get lost. Front-load the rules that, if broken, cause the most damage.
@@ -6852,6 +6858,7 @@ Same constraints. 60% fewer tokens.
 Compression removes words, not meaning — but the two are not always separable.
 
 - Edge-case context removed: a rule like "Write tests before submitting" compresses cleanly, but `Write integration tests when the function touches the database, unit tests otherwise` cannot be compressed further without losing the conditional. Cutting context that disambiguates applies the rule uniformly where it should apply selectively.
+- Local redefinitions cut as "known concepts": naming a concept replaces its definition only when the standard meaning is exactly the rule. A project that redefines a term — "a *release* here means the gate passed **and** the tag pushed **and** the shelf mirrored" — is stating a constraint, not ceremony; cutting the local definition silently substitutes the standard behavior for the intended one. The same applies to genuinely ambiguous or obscure names the model may not resolve reliably.
 - Implicit reasoning stripped: rules stripped of [their rationale](semantic-density-optimization.md) rely on the agent inferring intent correctly. When the agent meets a case the rule author did not anticipate, the missing rationale leaves no basis for generalization. Add rationale only when compliance on unforeseen inputs depends on it.
 - Compression as premature optimization: trimming a CLAUDE.md that is already under 20 rules produces marginal gains. The [Claude Code documentation](https://code.claude.com/docs/en/best-practices) identifies long, bloated files as the failure mode — not files that are merely imperfect. Compress to remove noise; stop before removing signal.
 - The compliance U-curve: shorter is not always better. A benchmark study of instruction-following under compression — [Separating Constraint Compliance from Semantic Accuracy (arXiv:2512.17920)](https://arxiv.org/abs/2512.17920) — found constraint violations peak at medium compression, with compliance recovering at both the verbose and the extreme-compression ends. Half-compressing a rule (paraphrasing it tighter without committing to a terse, unambiguous form) can hurt compliance more than leaving it verbose. Compress decisively to a crisp rule; a partially-trimmed instruction is the worst of both worlds.
@@ -6861,6 +6868,7 @@ Compression removes words, not meaning — but the two are not always separable.
 - Verbose instructions do not improve accuracy — they increase the chance that important rules are skipped.
 - Tables, bullets, and direct rules compress more information per token than prose.
 - Apply a compression test: remove any word or sentence that does not change agent behavior.
+- Name known concepts (semver, Conventional Commits) instead of re-defining them; keep local definitions that differ from the standard meaning.
 - Front-load the highest-priority rules; [attention degrades across long instruction sets](lost-in-the-middle.md).
 - Move workflow-specific instructions from always-loaded files (CLAUDE.md) to on-demand skills.
 
@@ -17169,6 +17177,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Six-Shape Approval Response Taxonomy](approval-response-taxonomy.md) — The Claude Agent SDK exposes six distinct responses to a tool-approval prompt (approve, approve with changes, approve and remember, reject, suggest alternative, redirect entirely) composed from three callback knobs over a binary protocol
 - [Harness Design Dimensions and Archetypes](harness-design-dimensions.md) — Five dimensions and five archetypes from a 70-project empirical study — a population-level lens for reading harness choices and predicting where effort is missing
 - [Harness Engineering](harness-engineering.md) — The discipline of designing agent environments — layered architecture, mechanical enforcement, legibility — so agents reliably produce correct results
+- [DSLs as a Constraining Harness for LLM Code Generation](dsl-constraining-harness.md) — Co-build a DSL or domain model with the LLM, constrain generation by it, and keep the DSL as the durable source of truth — narrowing the solution space with a validator-backed grammar
 - [Harness Impermanence](harness-impermanence.md) — Author agent scaffolding as depreciating capital — design for low cost of removal so native model capability can replace it cleanly
 - [Fleet Harness Attribution](fleet-harness-attribution.md) — Pin model and task, swap whole harnesses, and measure pass rate alongside input-token consumption across a model fleet to attribute outcomes to the harness layer rather than the model
 - [Isometric Harness Ablation](isometric-harness-ablation.md) — Pin the model, remove one harness subsystem at a time, measure the score drop — the resulting per-subsystem table ranks investment priorities
@@ -23811,6 +23820,58 @@ Constraining component choice converts visual judgment into a structural check: 
 
 ---
 
+### DSLs as a Constraining Harness for LLM Code Generation
+Source: https://agentpatterns.ai/agent-design/dsl-constraining-harness/
+
+# DSLs as a Constraining Harness for LLM Code Generation
+
+> Co-build a domain-specific language with the LLM, then constrain generation by it — the DSL narrows the solution space and becomes the source of truth.
+
+Encode the domain as a small domain-specific language or a clean set of named abstractions, then make the model generate against it instead of raw general-purpose code. A DSL deliberately strips away the many valid-but-wrong ways to express one intent, so a few in-context examples reliably produce correct output ([Joshi/Fowler, 2026](https://martinfowler.com/articles/llm-and-dsls.html)). The same DSL then doubles as a natural-language interface: an English request maps almost directly onto its vocabulary.
+
+## Two phases: co-design, then drive
+
+The pattern splits the model's job in two. In the first phase the LLM helps design the abstraction itself — a brainstorming partner that sketches alternatives and ports ideas, while you own the design decisions, because a semantic model's constraints and trade-offs are discovered by iterating against real cases, not specified upfront ([Joshi/Fowler, 2026](https://martinfowler.com/articles/llm-and-dsls.html)). Once the DSL exists, the model's role changes: it becomes a dependable generator that turns plain-English requests into valid programs in the constrained vocabulary.
+
+You do not always need a full grammar. A clean set of named types and methods is a lighter version of the same idea — a library's vocabulary the model can be grounded in. In the Tickloom distributed-systems framework, four seams (`Replica`, `Network`, `Storage`, and a logical `Clock`) do most of the work with no new syntax, so a prompt stays at the level of protocol logic instead of re-deciding threading and networking every time ([Joshi/Fowler, 2026](https://martinfowler.com/articles/llm-and-dsls.html)).
+
+## Why it works
+
+A DSL improves reliability by removing decision points where the model can err. Each syntactic choice in a flexible language is an error opportunity; constraining the grammar collapses the space of programs — in one measured five-step pipeline, from 3^5 = 243 candidates toward a single valid form — while making intermediate state explicit rather than implicitly tracked, and giving generation a structural scaffold ([Al Mazrouei, 2025 — arXiv:2512.23214](https://arxiv.org/abs/2512.23214)). That constraint shows up empirically: the Anka DSL gave Claude 3.5 Haiku a +40 percentage-point accuracy advantage over Python on multi-step pipeline tasks (100% versus 60%) despite zero prior training exposure, with GPT-4o-mini confirming the effect at +26.7 points ([Al Mazrouei, 2025](https://arxiv.org/abs/2512.23214)).
+
+The second half of the mechanism is the validator. A DSL almost always ships a deterministic checker — a parser, JSON schema, type checker, or host compiler — so an agent in a generate-and-check loop can validate a candidate and repair it from domain-level errors ("you cannot select an action before choosing a client") without a human in the loop ([Joshi/Fowler, 2026](https://martinfowler.com/articles/llm-and-dsls.html)). This is a concrete instantiation of the constrained-solution-spaces pillar of [harness engineering](harness-engineering.md).
+
+## The DSL as source of truth
+
+Rather than treating the prompt as the primary artifact, keep the generated DSL program. Because it is dense, boilerplate-free, and expressed in the vocabulary of the domain, it stays readable long after generation, and a change next month edits the DSL artifact directly — there is no need to recover the original prompt and regenerate everything ([Joshi/Fowler, 2026](https://martinfowler.com/articles/llm-and-dsls.html)). The enduring asset is the DSL and its semantic model, not the prompt that produced a run.
+
+## When this backfires
+
+The advantage is narrow and the authoring cost is real.
+
+- Simple or one-shot tasks: on 1–2 operation tasks the DSL adds authoring overhead with no accuracy gain, and it slightly hurts on complex nested conditional logic and edge-case handling; the win concentrates on structured pipelines with three or more sequential operations ([Al Mazrouei, 2025](https://arxiv.org/abs/2512.23214)).
+- A large or under-exemplified novel DSL: the benefit holds only while the language stays small enough that a few in-context examples convey its use, and how smaller models handle a genuinely novel DSL is an open question ([Joshi/Fowler, 2026](https://martinfowler.com/articles/llm-and-dsls.html)).
+- Unstable or exploratory domains: designing and maintaining the language and its semantic model is a standing cost repaid only on well-factored, recurring domains backed by a validator ([Joshi/Fowler, 2026](https://martinfowler.com/articles/llm-and-dsls.html)).
+- No deterministic validator: without a parser, type checker, or compiler to enforce the grammar, the generate-check-repair loop collapses back to unconstrained generation.
+
+## Key Takeaways
+
+- Constrain the model with a DSL or clean domain abstractions so a few examples reliably produce correct code — general-purpose languages leave too many valid-but-wrong paths.
+- The mechanism is fewer decision points plus a deterministic validator that lets an agent repair its own output against domain-level errors.
+- Use the LLM in two phases: co-design the abstraction, then drive it as a natural-language interface.
+- Keep the DSL program, not the prompt, as the source of truth — it stays readable and editable long after generation.
+- Skip the DSL for simple or one-shot tasks, unstable domains, or where no validator exists — the authoring cost outweighs the reliability gain.
+
+## Related
+
+- [Harness Engineering](harness-engineering.md) — the parent discipline; this pattern is a concrete instantiation of its constrained-solution-spaces pillar.
+- [Layered Domain Architecture](layered-domain-architecture.md) — a linter-enforced layer order that constrains agent-built code the same way a DSL grammar does.
+- [Solver-Externalized Constraint Reasoning](solver-externalized-constraint-reasoning.md) — emit constrained solver code instead of prose reasoning, then verify the output — a sibling constrain-then-check tactic.
+- [Structured Output Constraints](../verification/structured-output-constraints.md) — schema-constrained output as the narrower, format-level cousin of a domain language.
+- [Constraint Degradation in AI Code Generation](../instructions/constraint-degradation-code-generation.md) — why reducing the number of simultaneous decision points raises code-generation accuracy.
+
+---
+
 ### DSPy: Programmatic Prompt Optimization
 Source: https://agentpatterns.ai/agent-design/dspy-programmatic-prompt-optimization/
 
@@ -27464,6 +27525,7 @@ The calibration loop is the part that earns the "meta" prefix; without it, the a
 - [Specialized Agent Roles](specialized-agent-roles.md) -- the role-specialization mechanism the meta-engineering composite extends with handoff schemas
 - [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) -- the calibration discipline that converts production failures into structural improvements
 - [Codebase Readiness](codebase-readiness.md) -- code-level qualities that make a codebase agent-friendly
+- [DSLs as a Constraining Harness for LLM Code Generation](dsl-constraining-harness.md) -- a concrete, buildable instantiation of the constrained-solution-spaces pillar: encode the domain as a DSL and generate against it
 - [Rigor Relocation](../human/rigor-relocation.md) -- the broader thesis that engineering discipline relocates from code to scaffolding
 
 ---
@@ -35908,6 +35970,7 @@ The solver returns an assignment; a verification pass checks each hard constrain
 - [RubricRefine: Pre-Execution Rubric Refinement for Code-Mode Tool Use](rubric-refine-pre-execution-tool-use.md) — Pre-execution check on agent-emitted tool-use code; the verification step in this pattern plays the same role for solver code.
 - [Critic Agent Pattern](critic-agent-plan-review.md) — A second model reviewing the encoding before solver invocation is the practical form of this pattern's verification step.
 - [Deterministic Guardrails Around Probabilistic Agents](../verification/deterministic-guardrails.md) — The exact solver and the verification pass are deterministic guardrails wrapped around the probabilistic encoding step.
+- [DSLs as a Constraining Harness for LLM Code Generation](dsl-constraining-harness.md) — Generalises the constrain-then-check move: a domain language plus its validator narrows the space of programs the model can emit.
 
 ---
 
@@ -45104,6 +45167,7 @@ Source: https://agentpatterns.ai/anti-patterns/
 - [Semantic Collapse Under Underspecified Prompts](semantic-collapse.md) — An underspecified prompt collapses a coding model onto one confident, wrong interpretation instead of diverging, so sampling for output variance cannot surface the ambiguity
 - [Dependency Inlining Erodes SBOM and License Provenance](dependency-inlining-provenance-loss.md) — Reimplementing a library inline drops the manifest entry that SBOM, license, and CVE tooling key on, so provenance, license obligations, and vulnerability alerts silently vanish from a clean-looking diff
 - [Cheaper-Per-Token Model Upgrades That Cost More Per Task](cheaper-per-token-costlier-per-task.md) — A model upgrade with a lower per-token price and better benchmarks can still cost more per agentic task because a newer model can burn an order of magnitude more tokens per run
+- [Token Reduction Mistaken for Cost Reduction](token-reduction-not-cost-reduction.md) — Judging a bolt-on context-reduction tool by tokens removed rather than billed cost, where prompt-cache economics can leave the bill flat or higher despite a large token cut
 - [Blaming the Model for Scaffolding-Driven Quality Regressions](blaming-the-model-for-scaffolding-regressions.md) — Quality regressions get blamed on the model by default; a controlled study holding the model fixed across 35 scaffold releases found flat resolve rates and ~70% higher token cost, isolating scaffolding evolution as a real, unchecked driver
 - [Task Completion as Tool Certification (Silent Tool Rot)](task-completion-as-tool-certification.md) — In-session task success does not certify a reusable agent-built tool; 96.8% of preserved synthesized tools scored zero on held-out conformance while executing cleanly, so pass-rate dashboards never show the rot
 - [Abstraction Bloat](abstraction-bloat.md) — Agents optimize for comprehensive output, not minimal implementation; over-engineered code with unnecessary hierarchies and unrequested features
@@ -46500,6 +46564,7 @@ The numbers are the measured Microsoft AX figures; the point is that only the se
 - [Cost-Quality Pareto Measurement for Agent Configurations](../token-engineering/cost-quality-pareto-measurement.md) — the standing measurement frame that surfaces this inversion
 - [Tokenizer Swap Tax](../token-engineering/tokenizer-swap-tax.md) — the distinct token-count mechanism this page must not be conflated with
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — routing by task complexity once the per-task numbers are known
+- [Token Reduction Mistaken for Cost Reduction](token-reduction-not-cost-reduction.md) — the same unit-price-versus-billed-cost gap, on a bolt-on context-reduction layer instead of a model swap
 
 ---
 
@@ -52724,6 +52789,76 @@ Make constraints mechanical. Anthropic recommends requiring absolute filepaths r
 - [Objective Drift](objective-drift.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [Harness Engineering](../agent-design/harness-engineering.md) — environment design that mechanically enforces constraints agents fail to self-impose
+- [Token Reduction Mistaken for Cost Reduction](token-reduction-not-cost-reduction.md) — the tooling-level cousin: a context-reduction layer judged on tokens removed instead of billed cost
+
+---
+
+### Token Reduction Mistaken for Cost Reduction
+Source: https://agentpatterns.ai/anti-patterns/token-reduction-not-cost-reduction/
+
+# Token Reduction Mistaken for Cost Reduction
+
+> A bolt-on context-reduction tool that removes tokens can leave the billed cost flat or higher — judge it by cost, not tokens removed.
+
+The anti-pattern is adopting or tuning a context-reduction layer — a command-output compressor, a retrieval ranker, a payload-optimizing proxy — on a "percent of tokens removed" number and booking that number as the saving. On a cached agent, tokens removed and dollars billed can move in opposite directions.
+
+## The trap
+
+You install a compressor in front of your coding agent. Its dashboard reports it stripped 38% of tool-output tokens, so you record a 38% saving and roll it out. The provider bill does not fall. In a pre-registered paired campaign of 2,848 billed Claude Code runs across 103 tasks and three models, one compressor removed 38.4% of estimated raw tool-output tokens yet raised paired billed cost by 6.8% (95% CI +2.8% to +11.3%), and per-task token reduction barely tracked cost change (Pearson r = 0.15) ([Weinberger & Hozez, "Token Reduction Is Not Cost Reduction", arXiv:2607.12161](https://arxiv.org/abs/2607.12161)).
+
+## Why it works
+
+Agent bills are dominated by prompt-cache operations — about 87% of reconstructed cost in the campaign, roughly 80% of the actual bill — and cache reads are billed at about a tenth of the input-token price ([arXiv:2607.12161](https://arxiv.org/abs/2607.12161); [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing)). A reduction layer trims a single tool output, but that output is a small slice of a prompt-cache-plus-trajectory cost stack, so a large local token cut moves only a small share of the bill. When the removed context turns out to be needed, the agent re-searches and re-reads, and each recovery turn re-transmits the whole cached prefix. Token count and billed cost are decoupled, which is why removed tokens do not reliably become dollars saved ([arXiv:2607.12161](https://arxiv.org/abs/2607.12161)). Breaking cache continuity, not raw token volume, is what drives long-horizon agent cost ([Don't Break the Cache: An Evaluation of Prompt Caching for Long-Horizon Agentic Tasks, arXiv:2601.06007](https://arxiv.org/abs/2601.06007)).
+
+Measure the layer the way the campaign recommends: success-adjusted billed cost — total billed cost across runs divided by successful executions — compared paired against a base arm with no reduction. Only that figure is decision-grade; component compression ratios and even billed-token reduction are routinely conflated with it ([arXiv:2607.12161](https://arxiv.org/abs/2607.12161)).
+
+## When this backfires
+
+Trimming the volatile tool-output tail is the one lever caching cannot touch, so context reduction does earn its place under specific conditions. Judge the tool by billed cost rather than dismiss it when:
+
+- The reducer is deterministic and byte-safe. A minimal, byte-exact hook in the campaign reached −2.7% paired cost (CI −5.6% to −0.1%) with no success penalty; preservation-gated and byte-exact-grounded variants cost less per solved task than aggressive compression ([arXiv:2607.12161](https://arxiv.org/abs/2607.12161)).
+- Caching is off in your pricing regime. With every input token billed at full price, tokens removed track cost far more closely and this decoupling weakens.
+- The removed output is genuinely dead weight the agent never revisits, so no recovery turns are added to re-transmit the prefix.
+
+The failure mode is judging on tokens removed, not the act of reducing context. A reducer that rewrites SEARCH/REPLACE edit anchors is a separate hazard: compression dropped single-shot patch application from 27/40 to 15/40 by corrupting byte-exact spans, so it can cost success as well as money ([arXiv:2607.12161](https://arxiv.org/abs/2607.12161)).
+
+## Example
+
+Before — reducer judged on tokens removed:
+
+```python
+# Compressor dashboard: "38% of tool-output tokens removed"
+tokens_saved_pct = 0.38
+decision = "roll out"   # recorded as a 38% cost saving, never billed-cost tested
+```
+
+After — reducer judged on paired success-adjusted billed cost:
+
+```python
+# Paired A/B against a no-reduction base arm, same tasks and models:
+base_cost_per_solve    = 0.248   # USD per resolved task, no reducer
+reduced_cost_per_solve = 0.265   # +6.8% despite 38% fewer tool tokens
+decision = "do not ship this config; the token cut did not reach the bill"
+```
+
+The figures illustrate the paper's measured shape — a ~38% token cut landing as a +6.8% cost rise; only the second block, paired billed cost, catches the inversion, because the token-reduction number pointed the wrong way ([arXiv:2607.12161](https://arxiv.org/abs/2607.12161)).
+
+## Key Takeaways
+
+- Tokens removed is a component metric, not a saving; on a cached agent a large token cut can leave the bill flat or higher.
+- Prompt-cache operations dominate the bill (~80%) and cache reads cost ~10% of input price, so trimming one tool output moves only a small slice of the cost stack.
+- Removing context the agent later needs adds recovery turns that re-transmit the cached prefix, repaying early savings.
+- Judge a reduction layer by success-adjusted billed cost — total billed cost divided by successful executions — paired against a no-reduction base arm.
+- Context reduction still pays when it is deterministic, byte-safe, and removes output the agent never revisits.
+
+## Related
+
+- [Cheaper-Per-Token Model Upgrades That Cost More Per Task](cheaper-per-token-costlier-per-task.md) — the sibling per-task-versus-unit-price inversion, on a model swap instead of a reduction layer
+- [Dynamic Tool Fetching Breaks KV Cache](dynamic-tool-fetching-cache-break.md) — another case where a token-level change erases savings by breaking the cache
+- [Mid-Session Config Changes as Invisible Cache Invalidators](mid-session-config-cache-invalidators.md) — cache invalidation re-billing the whole prefix, the same cost mechanism
+- [Token Preservation Backfire](token-preservation-backfire.md) — the instruction-level cousin: "preserve tokens" makes the agent do less work
+- [Cost-Quality Pareto Measurement for Agent Configurations](../token-engineering/cost-quality-pareto-measurement.md) — the standing measurement frame that denominates in USD per successful task
+- [Harness-Controlled Token Economics (The Harness Effect)](../token-engineering/harness-token-economics.md) — why the cache-hit rate, not token count, sets the effective price
 
 ---
 

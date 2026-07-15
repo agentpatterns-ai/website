@@ -6,7 +6,7 @@ tags:
   - cost-performance
   - context-engineering
   - tool-agnostic
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-15
 maturity: established
 ---
 
@@ -58,6 +58,10 @@ The instruction delivers the same constraint at one-third the length.
 
 Show the pattern instead of describing it. An example collapses a pattern and its application into a single piece of text the agent can copy directly.
 
+### Name concepts instead of defining them
+
+A canonical name carries its full definition. The model already knows what semantic versioning, Conventional Commits, or exponential backoff mean — `Version bumps follow semver` delivers the whole constraint in four words, where a paragraph re-deriving the major/minor/patch rules adds tokens without adding meaning. The [Claude Code best practices guide](https://code.claude.com/docs/en/best-practices) draws exactly this boundary in its include/exclude table — exclude "standard conventions Claude already knows" — and [Microsoft's skill-authoring guidance](https://developer.microsoft.com/blog/stop-overloading-your-skills) states the sizing rule directly: include only the delta of knowledge the model lacks; omit standard SDK and API patterns. This cuts only when local usage matches the standard meaning — see [When this backfires](#when-this-backfires).
+
 ### Put the most important rules first
 
 Attention degrades across a long context. The [Claude Code documentation](https://code.claude.com/docs/en/best-practices) confirms this: important rules in a bloated CLAUDE.md get lost. Front-load the rules that, if broken, cause the most damage.
@@ -108,6 +112,7 @@ Same constraints. 60% fewer tokens.
 Compression removes words, not meaning — but the two are not always separable.
 
 - Edge-case context removed: a rule like "Write tests before submitting" compresses cleanly, but `Write integration tests when the function touches the database, unit tests otherwise` cannot be compressed further without losing the conditional. Cutting context that disambiguates applies the rule uniformly where it should apply selectively.
+- Local redefinitions cut as "known concepts": naming a concept replaces its definition only when the standard meaning is exactly the rule. A project that redefines a term — "a *release* here means the gate passed **and** the tag pushed **and** the shelf mirrored" — is stating a constraint, not ceremony; cutting the local definition silently substitutes the standard behavior for the intended one. The same applies to genuinely ambiguous or obscure names the model may not resolve reliably.
 - Implicit reasoning stripped: rules stripped of [their rationale](semantic-density-optimization.md) rely on the agent inferring intent correctly. When the agent meets a case the rule author did not anticipate, the missing rationale leaves no basis for generalization. Add rationale only when compliance on unforeseen inputs depends on it.
 - Compression as premature optimization: trimming a CLAUDE.md that is already under 20 rules produces marginal gains. The [Claude Code documentation](https://code.claude.com/docs/en/best-practices) identifies long, bloated files as the failure mode — not files that are merely imperfect. Compress to remove noise; stop before removing signal.
 - The compliance U-curve: shorter is not always better. A benchmark study of instruction-following under compression — [Separating Constraint Compliance from Semantic Accuracy (arXiv:2512.17920)](https://arxiv.org/abs/2512.17920) — found constraint violations peak at medium compression, with compliance recovering at both the verbose and the extreme-compression ends. Half-compressing a rule (paraphrasing it tighter without committing to a terse, unambiguous form) can hurt compliance more than leaving it verbose. Compress decisively to a crisp rule; a partially-trimmed instruction is the worst of both worlds.
@@ -117,6 +122,7 @@ Compression removes words, not meaning — but the two are not always separable.
 - Verbose instructions do not improve accuracy — they increase the chance that important rules are skipped.
 - Tables, bullets, and direct rules compress more information per token than prose.
 - Apply a compression test: remove any word or sentence that does not change agent behavior.
+- Name known concepts (semver, Conventional Commits) instead of re-defining them; keep local definitions that differ from the standard meaning.
 - Front-load the highest-priority rules; [attention degrades across long instruction sets](lost-in-the-middle.md).
 - Move workflow-specific instructions from always-loaded files (CLAUDE.md) to on-demand skills.
 

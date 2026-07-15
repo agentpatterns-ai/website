@@ -243,4 +243,5 @@ The calibration loop is the part that earns the "meta" prefix; without it, the a
 - [Specialized Agent Roles](specialized-agent-roles.md) -- the role-specialization mechanism the meta-engineering composite extends with handoff schemas
 - [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) -- the calibration discipline that converts production failures into structural improvements
 - [Codebase Readiness](codebase-readiness.md) -- code-level qualities that make a codebase agent-friendly
+- [DSLs as a Constraining Harness for LLM Code Generation](dsl-constraining-harness.md) -- a concrete, buildable instantiation of the constrained-solution-spaces pillar: encode the domain as a DSL and generate against it
 - [Rigor Relocation](../human/rigor-relocation.md) -- the broader thesis that engineering discipline relocates from code to scaffolding
