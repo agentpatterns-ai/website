@@ -25,6 +25,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Closed-Loop Agent Training from Tool Schemas](closed-loop-agent-training.md) — Generate synthetic training data from MCP tool definitions, fine-tune small models to match frontier performance, and re-train incrementally as schemas evolve
 - [Skill Library Refinement Loops](skill-library-refinement-loops.md) — Four complementary feedback mechanisms that together keep a shared skill library accurate and useful
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — Iterating on agent quality over time
+- [Accumulated Behavioral Rules from Review Feedback](accumulated-behavioral-rules.md) — Codify each accepted review comment as a persistent behavioral rule the agent loads and self-checks, so it stops repeating the same class of mistake
 - [Escape Hatches](escape-hatches.md) — Unsticking stuck agents
 - [Daily-Use Skill Library: Encoding Your Process as Agent Skills](daily-use-skill-library.md) — Build a small library of purpose-built skills that encode your engineering process from ideation through architecture
 - [SDLC-Phase Skill Taxonomy: Full-Lifecycle Skill Libraries](sdlc-skill-taxonomy.md) — Organize a skill library around SDLC phases so phase-entry commands activate only the relevant skills at each stage

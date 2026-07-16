@@ -306,6 +306,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Encoding Product-Design Taste into Agent Context](instructions/encoding-product-design-taste.md)
 - [Codified Effort and Escalation Policy in the Instruction File](instructions/codified-effort-escalation-policy.md)
 - [Agent-Ready Bug Reports for Software Repair Agents](instructions/agent-ready-bug-reports.md)
+- [Match Tool Instructions to the Agent Workflow](instructions/match-tool-instructions-to-workflow.md)
 
 ## Agent Architecture
 
@@ -554,6 +555,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Deterministic Precondition Gates for Tool-Using Agents](agent-design/deterministic-precondition-gates.md)
 - [Agent Failure Trajectories and the Recovery Window](agent-design/failure-trajectory-recovery-window.md)
 - [DSLs as a Constraining Harness for LLM Code Generation](agent-design/dsl-constraining-harness.md)
+- [Minimum-Sufficient Execution: Estimate Scope Before Spending Budget](agent-design/minimum-sufficient-execution.md)
 
 ## Loop Engineering
 
@@ -654,6 +656,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Web Search Agent Loop: Iterative Research Patterns](tool-engineering/web-search-agent-loop.md)
 - [Auth-Isolation as the MCP-vs-CLI Selection Heuristic](tool-engineering/mcp-auth-isolation-vs-cli-selection.md)
 - [Skill Reuse as Vendored Forking](tool-engineering/skill-reuse-as-vendored-forking.md)
+- [Restricting a Coding Agent to a Single execute_code Tool](tool-engineering/restrict-coding-agent-to-execute-code.md)
 
 ## Token Engineering
 
@@ -670,6 +673,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Routing Decision Framework: Which Routing Pattern Fits Which Signal](token-engineering/routing-decision-framework.md)
 - [Temporal Token Routing: Batch and Flex Tiers for Non-Urgent Work](token-engineering/temporal-token-routing.md)
 - [Harness-Controlled Token Economics (The Harness Effect)](token-engineering/harness-token-economics.md)
+- [Line-Anchored Feedback: Deliver Change Requests as Inline Comments](token-engineering/line-anchored-feedback.md)
 
 ## Security & Safety
 
@@ -1119,6 +1123,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Spec-Anchored Drift-Gated Architecture (Spec Growth Engine)](workflows/spec-growth-engine.md)
 - [Whole-Codebase Visibility as a Migration Prerequisite](workflows/whole-codebase-visibility-migration-prerequisite.md)
 - [Concurrent Agent Pull Requests and Merge-Conflict Cost](workflows/concurrent-agent-pr-merge-conflicts.md)
+- [Accumulated Behavioral Rules from Review Feedback](workflows/accumulated-behavioral-rules.md)
 
 ## Human Factors
 
@@ -1275,6 +1280,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Overtrusting Human Sign-Off on Generated Assertions](anti-patterns/generated-assertion-signoff.md)
 - [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](anti-patterns/lazy-generation.md)
 - [Token Reduction Mistaken for Cost Reduction](anti-patterns/token-reduction-not-cost-reduction.md)
+- [The Compliance Trap: Consuming Conflicting Agent Memory](anti-patterns/compliance-trap-conflicting-memory.md)
 
 ## Emerging Concepts
 

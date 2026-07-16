@@ -152,3 +152,4 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - [Semantic Tool Output](semantic-tool-output.md)
 - [Override Interactive Commands](override-interactive-commands.md)
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
+- [Restricting a Coding Agent to a Single execute_code Tool](restrict-coding-agent-to-execute-code.md) — measures the cost of this single-bash surface against an interpreter-only surface, by task regime and agent

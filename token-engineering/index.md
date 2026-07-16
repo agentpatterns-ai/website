@@ -46,6 +46,7 @@ Shrink what each call has to carry, on both the input and output sides.
 
 - [Token-Efficient Tool Design](token-efficient-tool-design.md) — each tool call injects the minimum tokens for the next decision
 - [Token-Efficient Code Generation](token-efficient-code-generation.md) — idiomatic structure beats "be concise" prompting
+- [Line-Anchored Feedback](line-anchored-feedback.md) — deliver change requests as line-anchored inline comments to cut edit tokens on large files
 - [Tokenizer Swap Tax](tokenizer-swap-tax.md) — budgeting for migrations that change token counts under flat per-token pricing
 - [Prompt Compression](../context-engineering/prompt-compression.md) — maximise signal per token in instructions
 - [Semantic Density Optimization](../context-engineering/semantic-density-optimization.md) — raise task-relevant tokens per byte in the codebase

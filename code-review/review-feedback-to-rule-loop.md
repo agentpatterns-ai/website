@@ -81,7 +81,7 @@ Anthropic separates the modes explicitly: "Unlike CLAUDE.md instructions which a
 
 This differs from [learned review rules](learned-review-rules.md): the Cursor Bugbot pattern adjusts the reviewer's behavior by extracting rules from accept and reject signals. This loop promotes the invariant out of the reviewer entirely — into the lint stack, checklist, or evaluator rubric. The two compose. Bugbot tunes reviewer defaults; this loop drains high-frequency comments before they reach review.
 
-It also differs from [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md), which converts production failures into regression tests. The trigger and the enforcement layer differ.
+It also differs from [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md), which converts production failures into regression tests. The trigger and the enforcement layer differ. And where a comment is semantic rather than mechanically checkable — a design-judgment call no lint rule can express — the counterpart move is [accumulated behavioral rules](../workflows/accumulated-behavioral-rules.md): keep the correction as a loaded instruction the agent self-checks, rather than promoting it to a deterministic check.
 
 ## Example
 

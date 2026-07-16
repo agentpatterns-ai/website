@@ -61,3 +61,4 @@ A feasibility gate works because feasibility is a cheap, up-front, observable pr
 - [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — handles missing *information* (ask the user), where feasibility awareness handles missing *capability* (asking won't help).
 - [Goal Contract: Separating the Doer from the Done-Checker](goal-contract-completion-evaluator.md) — the same externalized-judgment split, applied to completion rather than feasibility.
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — the cost lever after this gate: route tier by complexity once a task is known to be feasible.
+- [Minimum-Sufficient Execution](minimum-sufficient-execution.md) — the next question after feasibility: for a task known to be possible, how much scope to gather before committing budget.
