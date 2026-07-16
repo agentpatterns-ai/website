@@ -107,3 +107,4 @@ You can trigger the same review with GitHub Copilot from the CLI: `gh pr edit --
 - [Diff-Based Review Over Output Review](diff-based-review.md)
 - [Tiered Code Review](tiered-code-review.md)
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — merge rate evidence for CRA-only versus mixed reviewer compositions
+- [Match Tool Instructions to the Agent Workflow](../instructions/match-tool-instructions-to-workflow.md) — why upgrading this architecture's toolset regressed cost and detection until the review instructions were rewritten

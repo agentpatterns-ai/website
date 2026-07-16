@@ -10,7 +10,7 @@ tags:
   - agent-design
   - tool-agnostic
   - tool-engineering
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-16
 maturity: established
 ---
 
@@ -45,7 +45,7 @@ Agent runtimes expose hooks at these points:
 
 `PreToolUse` enforces. It receives the tool name and inputs, can block the call, and returns a reason the model must adapt to. `PostToolUse` automates. It only observes, but it can trigger side effects like logging or linting.
 
-See [Claude Code hooks](https://code.claude.com/docs/en/hooks) and [Copilot hooks](https://code.visualstudio.com/docs/copilot/customization/hooks).
+See [Claude Code hooks](https://code.claude.com/docs/en/hooks) and [Copilot hooks](https://code.visualstudio.com/docs/copilot/customization/hooks). Cursor exposes the same turn-lifecycle surface for its cloud agents — `beforeSubmitPrompt`, `afterAgentResponse`, `afterAgentThought`, `subagentStart`, `stop`, and compaction events — so agents can build self-correcting loops around these points ([Cursor changelog](https://cursor.com/changelog/side-chat)).
 
 ## Hook input and output
 

@@ -124,3 +124,4 @@ Three tools, no overlapping functionality. `read_file` absorbed `read_lines` via
 - [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
 - [Chance-Corrected Shortlist Depth Sizing](chance-corrected-shortlist-depth-sizing.md)
+- [Match Tool Instructions to the Agent Workflow](../instructions/match-tool-instructions-to-workflow.md) — the same instructions-over-tools lever from the opposite direction: the tools were better, and the fix was still the instructions

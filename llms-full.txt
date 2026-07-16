@@ -387,6 +387,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Encoding Product-Design Taste into Agent Context](instructions/encoding-product-design-taste.md)
 - [Codified Effort and Escalation Policy in the Instruction File](instructions/codified-effort-escalation-policy.md)
 - [Agent-Ready Bug Reports for Software Repair Agents](instructions/agent-ready-bug-reports.md)
+- [Match Tool Instructions to the Agent Workflow](instructions/match-tool-instructions-to-workflow.md)
 
 ## Agent Architecture
 
@@ -635,6 +636,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Deterministic Precondition Gates for Tool-Using Agents](agent-design/deterministic-precondition-gates.md)
 - [Agent Failure Trajectories and the Recovery Window](agent-design/failure-trajectory-recovery-window.md)
 - [DSLs as a Constraining Harness for LLM Code Generation](agent-design/dsl-constraining-harness.md)
+- [Minimum-Sufficient Execution: Estimate Scope Before Spending Budget](agent-design/minimum-sufficient-execution.md)
 
 ## Loop Engineering
 
@@ -735,6 +737,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Web Search Agent Loop: Iterative Research Patterns](tool-engineering/web-search-agent-loop.md)
 - [Auth-Isolation as the MCP-vs-CLI Selection Heuristic](tool-engineering/mcp-auth-isolation-vs-cli-selection.md)
 - [Skill Reuse as Vendored Forking](tool-engineering/skill-reuse-as-vendored-forking.md)
+- [Restricting a Coding Agent to a Single execute_code Tool](tool-engineering/restrict-coding-agent-to-execute-code.md)
 
 ## Token Engineering
 
@@ -751,6 +754,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Routing Decision Framework: Which Routing Pattern Fits Which Signal](token-engineering/routing-decision-framework.md)
 - [Temporal Token Routing: Batch and Flex Tiers for Non-Urgent Work](token-engineering/temporal-token-routing.md)
 - [Harness-Controlled Token Economics (The Harness Effect)](token-engineering/harness-token-economics.md)
+- [Line-Anchored Feedback: Deliver Change Requests as Inline Comments](token-engineering/line-anchored-feedback.md)
 
 ## Security & Safety
 
@@ -1200,6 +1204,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Spec-Anchored Drift-Gated Architecture (Spec Growth Engine)](workflows/spec-growth-engine.md)
 - [Whole-Codebase Visibility as a Migration Prerequisite](workflows/whole-codebase-visibility-migration-prerequisite.md)
 - [Concurrent Agent Pull Requests and Merge-Conflict Cost](workflows/concurrent-agent-pr-merge-conflicts.md)
+- [Accumulated Behavioral Rules from Review Feedback](workflows/accumulated-behavioral-rules.md)
 
 ## Human Factors
 
@@ -1356,6 +1361,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Overtrusting Human Sign-Off on Generated Assertions](anti-patterns/generated-assertion-signoff.md)
 - [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](anti-patterns/lazy-generation.md)
 - [Token Reduction Mistaken for Cost Reduction](anti-patterns/token-reduction-not-cost-reduction.md)
+- [The Compliance Trap: Consuming Conflicting Agent Memory](anti-patterns/compliance-trap-conflicting-memory.md)
 
 ## Emerging Concepts
 
@@ -8839,6 +8845,7 @@ How you phrase, frame, and structure individual rules determines whether agents 
 - [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — Restructuring how constraints are formatted in prompts does not improve model compliance; the compliance lever is constraint design, not encoding form
 - [Configuration File Structure Does Not Drive Compliance](configuration-file-structure-compliance-gap.md) — A factorial study of file size, instruction position, file architecture, and contradictions found none of the four variables produced detectable compliance contrasts within realistic file sizes
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md) — Effective prompts sit at the altitude that produces consistent behaviour across variation, neither too brittle nor too vague
+- [Match Tool Instructions to the Agent Workflow](match-tool-instructions-to-workflow.md) — Better tools do not improve an agent unless the prompt encodes how the task's workflow gathers information; GitHub's Copilot code review regressed on a tool upgrade until the instructions were rewritten to match the review workflow
 - [Three Knowledge Tiers: Sourced, Unverified, Hallucinated](three-knowledge-tiers.md) — Classify agent knowledge into three tiers to preserve useful training knowledge while maintaining accuracy standards
 - [Cost-Aware Skill Rewriting: Preserve Operational Anchors, Not Skill Tokens](cost-aware-skill-rewriting.md) — Rewriting a skill is an economic trade-off, not pure compression — stripping sparse operational anchors makes the agent explore and retry, raising total cost despite a shorter document
 - [Codified Effort and Escalation Policy in the Instruction File](codified-effort-escalation-policy.md) — Write the default-cheap, escalate-on-evidence effort and model-routing rule into the instruction file so the cheap path is the default and survives context switches
@@ -14028,6 +14035,82 @@ The same session surfaces a year-old glossary entry — `Lesson Video` is still 
 
 ---
 
+### Match Tool Instructions to the Agent Workflow
+Source: https://agentpatterns.ai/instructions/match-tool-instructions-to-workflow/
+
+# Match Tool Instructions to the Agent Workflow
+
+> Swapping in better tools does not improve an agent unless its instructions encode how the task's workflow actually gathers information.
+
+Tool quality does not transfer to agent quality on its own. An agent's behavior comes from how its instructions tell it to use the tools, so upgrading the tools while leaving the prompt unchanged can make the agent worse. Match the instructions to how the task is actually done, then let the better tools carry it.
+
+## Better tools, worse reviews
+
+GitHub migrated Copilot code review to the shared Unix-style toolset that powers the Copilot CLI — `grep`, `glob`, and `view`, replacing older custom tools. The tools were better maintained and more capable, but the benchmark result was negative: "the cost of reviews was higher and fewer issues were being caught." [Source: [Better tools made Copilot code review worse](https://github.blog/ai-and-ml/github-copilot/better-tools-made-copilot-code-review-worse-heres-how-we-actually-improved-it/)]
+
+The tools were not the problem. The instructions were: "The instructions were giving the agent the wrong instincts to do an efficient and effective review." The prompts, tuned for a CLI assistant, told the agent to explore broadly — "search broadly, guess likely paths, read broadly, find more things to search, and carry that extra context forward." That browse-first loop suited open-ended CLI work but not a review that starts from a diff.
+
+The fix rewrote the prompt to a diff-anchored, narrow-first workflow: "Start from the diff. Narrow first with `grep` and `glob`; read exact evidence with `view`." That shifted the agent "from 'browse, read, search again' to 'ask, narrow, read, decide,'" and cut "roughly 20% lower average review cost" while "maintaining the same review quality." [Source: [Better tools made Copilot code review worse](https://github.blog/ai-and-ml/github-copilot/better-tools-made-copilot-code-review-worse-heres-how-we-actually-improved-it/)]
+
+## Why it works
+
+Generic explore-broadly instructions make the agent accumulate context the task does not need. It searches wide, guesses paths, reads broadly, and carries that context forward, spending tokens and diluting attention without catching more issues. Workflow-matched instructions anchor the agent to the task's real information path, so tool calls land on relevant evidence instead of expanding the search. GitHub's traces showed the agent "making a similar number of tool calls, but spending more of them on relevant evidence instead of repeatedly expanding the search." [Source: [Better tools made Copilot code review worse](https://github.blog/ai-and-ml/github-copilot/better-tools-made-copilot-code-review-worse-heres-how-we-actually-improved-it/)] A better `grep` does not change when the agent decides to grep versus read — only the instructions encode that decision.
+
+This is the same lever as [tool minimalism and high-level prompting](../tool-engineering/tool-minimalism.md), from the opposite direction: there the fix was fewer tools, here the tools were better and more numerous, and the lever was still the instructions, not the tool count.
+
+## Applying it
+
+- Encode the task's information path, not a generic exploration loop. For diff-anchored review that means narrow-first — search with `grep`/`glob`, then read with `view` — because the diff already names what to investigate.
+- Read tool traces, not just final scores. The regression was invisible in end metrics and only showed up per call: did the agent narrow first or read broadly, did it batch independent searches, did it read only when it had a reason. [Source: [Better tools made Copilot code review worse](https://github.blog/ai-and-ml/github-copilot/better-tools-made-copilot-code-review-worse-heres-how-we-actually-improved-it/)]
+- Re-tune instructions when you swap tools. Shared tools "scale when the instructions and benchmarks match the job" — inherited prompts carry the instincts of the product they were written for.
+
+## When this backfires
+
+Matching the workflow does not always mean narrowing. The technique fails when applied as a fixed rule rather than a fit to the task:
+
+- Exploratory workflows want the opposite. A CLI assistant has "no single diff anchor" and users who "may change direction over multiple turns," so broad exploration is part of the job. [Source: [Better tools made Copilot code review worse](https://github.blog/ai-and-ml/github-copilot/better-tools-made-copilot-code-review-worse-heres-how-we-actually-improved-it/)] The same `grep`, `glob`, and `view` tools want wider instructions here, not narrower ones.
+- No trace or eval infrastructure hides the mismatch. The regression never appeared in final metrics; a team without per-tool traces cannot detect the mismatch or confirm the fix held quality.
+- Over-fitting to one task shape reintroduces brittleness. Encoding a rigid step-by-step sequence for a single workflow variant is the failure [system prompt altitude](system-prompt-altitude.md) warns against — match the shape of the workflow, not one instance of it.
+
+## Example
+
+**Before** — CLI-tuned instructions inside a code-review agent:
+
+```text
+Explore the repository to understand the change. Search broadly for
+related code, read the files you find, and follow references until you
+have enough context to review the pull request.
+```
+
+**After** — instructions matched to the review workflow:
+
+```text
+Start from the diff. Formulate specific review questions from the changed
+lines. Narrow first with grep and glob to locate evidence; read exact
+line ranges with view only once you know what to read. Batch independent
+searches. Do not load context the diff does not point you toward.
+```
+
+The tools are identical in both versions. Only the encoded workflow changed — and that change cut review cost about 20% at equal quality. [Source: [Better tools made Copilot code review worse](https://github.blog/ai-and-ml/github-copilot/better-tools-made-copilot-code-review-worse-heres-how-we-actually-improved-it/)]
+
+## Key Takeaways
+
+- Tool quality does not transfer to agent quality — behavior comes from how the instructions tell the agent to use the tools.
+- Better tools with workflow-mismatched instructions can raise cost and lower detection at the same time.
+- Match instructions to the task's real information path: diff-anchored review wants narrow-first search then read; an exploratory assistant wants broad exploration.
+- Tool traces, not final metrics, reveal the mismatch — inspect whether the agent narrows before it reads.
+- Re-tune instructions whenever you swap the toolset; inherited prompts carry the instincts of the product they were written for.
+
+## Related
+
+- [Tool Minimalism and High-Level Prompting](../tool-engineering/tool-minimalism.md) — the same instructions-over-tools lever, from the fewer-tools direction
+- [Agentic Code Review Architecture With Tool-Calling](../code-review/agentic-code-review-architecture.md) — the tool-calling review architecture this regression occurred within
+- [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md) — how to match a workflow's shape without over-fitting one variant
+- [Diff-Based Review Over Output Review](../code-review/diff-based-review.md) — why the diff is the right anchor for review instructions
+- [Prompt-Rewrite Discipline on Cross-Generation Model Migration](prompt-rewrite-on-cross-generation-migration.md) — re-tuning inherited prompts, including tool descriptions, when the substrate changes
+
+---
+
 ### Mermaid as Agent Output Format: When to Ask for a Diagram Instead of Prose
 Source: https://agentpatterns.ai/instructions/mermaid-as-agent-output-format/
 
@@ -17026,6 +17109,7 @@ Foundational architecture decisions — how to structure agents, delegate work, 
 - [Agent Terminology Disambiguation for AI Coding Systems](agent-terminology-disambiguation.md) — Eight overlapping terms — workflow, autonomous agent, AI assistant, RAG pipeline, workflow engine — describe distinct systems with distinct failure modes; matching the term to what you are building changes which patterns apply
 - [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md) — Classical GoF patterns and SOLID principles have direct structural analogues in agent systems, with the concern shift moving from reuse to control and safety
 - [Coding Agent Scope Expansion: When to Extend Beyond the Codebase](coding-agent-scope-expansion.md) — Extending a coding agent into browser, ops, and knowledge-work only works when the coding scaffold — loop, verification, eval, credential boundary — transfers into the new domain
+- [Minimum-Sufficient Execution: Estimate Scope Before Spending Budget](minimum-sufficient-execution.md) — Estimate a task's scope, run the smallest path that passes verification, and expand only on failure — with the ACRR metric and E3 loop, under the conditions where it pays off
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md) — Separate the agent layer that decides what to do from the layer that acts — typed tool interfaces enforce the boundary and make each independently testable
 - [CoALA Decision-Making Loop as an Orchestration Lens](coala-decision-making-loop.md) — The propose -> evaluate -> select -> act loop from CoALA, used as a vocabulary for locating where each orchestration tactic improves an agent — not a prescription for runtime structure
 - [CoALA Structured Action Space: Internal vs External Actions](coala-structured-action-space.md) — Split the agent's actions into internal (reason, retrieve, learn) and external (ground) — the boundary surfaces cost, reversibility, and permission profiles that monolithic tool lists hide
@@ -30298,6 +30382,76 @@ A month later a second failure mode appears: the agent marks its own reviews as 
 
 ---
 
+### Minimum-Sufficient Execution: Estimate Scope Before Spending Budget
+Source: https://agentpatterns.ai/agent-design/minimum-sufficient-execution/
+
+# Minimum-Sufficient Execution: Estimate Scope Before Spending Budget
+
+> Estimate a task's scope first, run the smallest path likely to pass verification, and expand only when it fails.
+
+Minimum-sufficient execution is the principle that an agent should gather only the information a task truly needs, then act — instead of reading every file and dependency before making a one-line edit. The operational loop for it is E3 (Estimate, Execute, Expand): judge the task's scope, run the cheapest trajectory that should satisfy the verification check, and widen the search one level at a time only when verification fails ([Yin & Feng, arXiv:2607.13034](https://arxiv.org/abs/2607.13034)).
+
+## When it applies
+
+This pattern pays off under specific conditions, not universally:
+
+- A cheap, reliable verification signal exists. Expand only fires when verification fails, so tests, a compiler, or a type check must be able to catch an under-scoped edit. Without that trigger, a minimal path has no way to know it was too small.
+- Reading dominates cost. The savings come from files not inspected, so the gain is real only where context-gathering is the expensive part of a task, as in cost- or latency-sensitive workloads.
+- Localized edits are common. The largest redundancy sits on simple tasks — a max-context-first policy scored an [Agent Cognitive Redundancy Ratio](https://arxiv.org/abs/2607.13034) of 22.1 on single-file edits versus 5.4 on repository-wide refactors, so a task mix weighted toward small changes benefits most.
+
+One caveat frames all three: the waste this pattern targets is largely a simulation result. In a real-model check with GPT-4o on the `toml` library, frontier models were "markedly more conservative than simulated worst-case scenarios," inspecting only 1–4 files even when told to read everything first, and E3's savings shrank to 4–18% ([Yin & Feng, arXiv:2607.13034](https://arxiv.org/abs/2607.13034)). Treat it as a discipline for the common case, not a promise of an order-of-magnitude cut on a modern agent.
+
+## The E3 loop
+
+```mermaid
+graph TD
+    Q[Task query] --> E1[Estimate scope]
+    E1 --> E2[Execute smallest path]
+    E2 --> V{Verification passes?}
+    V -->|Yes| DONE[Done]
+    V -->|No| E3[Expand scope one level]
+    E3 --> E2
+```
+
+- Estimate: read lexical cues in the request plus one optional probe to set an operating point — difficulty, scope, risk, confidence. A phrase like "replace the second icon with the first one's markup" signals a localized edit; "refactor across the codebase" signals repository-wide work ([arXiv:2607.13034](https://arxiv.org/abs/2607.13034)).
+- Execute: run the smallest trajectory likely to pass verification. At the lowest level it edits a single localized site; higher levels reuse cached searches and trace imports to indirect sites.
+- Expand: on a failed check or low confidence, raise the scope one level and replan without restarting — reusing what was already learned, so the search degrades gracefully toward an exhaustive strategy only when the task demands it.
+
+## Why it works
+
+Cost scales with the context an agent gathers, and for a localized task most of that context is causally irrelevant to the edit. Reading files that do not affect the edit adds cost without changing the output. The Agent Cognitive Redundancy Ratio makes the gap explicit: ACRR = (C_act − C_min) / C_min, the actual trajectory cost over the oracle-defined minimum-sufficient cost, so an ACRR of 4 means five times the necessary effort was spent ([Yin & Feng, arXiv:2607.13034](https://arxiv.org/abs/2607.13034)).
+
+Starting minimal and expanding only on failure converges to near-oracle cost on common simple tasks while still reaching exhaustive strategies on the rare hard one. On MSE-Bench (121 deterministic code edits), E3 held ACRR at 0.55 versus a max-context-first policy's 12.9 while both solved 100% of tasks, cutting cost 85% and inspected files 92% ([arXiv:2607.13034](https://arxiv.org/abs/2607.13034)). It is the same mechanism behind "start simple, add complexity only when it improves outcomes": pay for capability when a failure names the need, not before.
+
+## When this backfires
+
+- Hidden coupling a minimal path cannot see. MSE-Bench models indirect edit sites only through import aliases; dynamic dispatch, configuration coupling, and runtime reflection are explicitly unmodeled ([arXiv:2607.13034](https://arxiv.org/abs/2607.13034)). In a codebase full of those, a minimum-viable path edits what it found, passes a weak check, and ships a silently incomplete change.
+- Deceptive wording that hides real scope. The transparent lexical estimator deliberately under-scopes these tasks, and its accuracy fell from 85.1% to 66.9% on held-out paraphrased wording — the agent then pays extra Expand round-trips to recover what a broader first read would have found ([arXiv:2607.13034](https://arxiv.org/abs/2607.13034)).
+- Weak or absent verification. Expand needs a failing check to fire. When verification is weak, under-scoping produces a confidently-wrong minimal edit with nothing to trigger the correction — the [trust-without-verify](../anti-patterns/trust-without-verify.md) surface.
+- Modern agents that already read conservatively. The simulated 12.9 ACRR does not appear in frontier models, which inspect few files by default, so the pattern's payoff on a current agent is a modest trim, not the headline reduction.
+
+## Example
+
+The paper's motivating case is a single-file Gmail-icon swap whose oracle minimum-sufficient cost is 6.0. E3 estimates a localized edit, inspects zero irrelevant files, and lands an ACRR of 0.59. A max-context-first policy reads all seven project files first and reaches an ACRR of 10.1 — the same correct edit, produced at more than ten times the necessary effort ([Yin & Feng, arXiv:2607.13034](https://arxiv.org/abs/2607.13034)). The task did not get harder; the policy just refused to estimate before spending.
+
+## Key Takeaways
+
+- Minimum-sufficient execution gathers only what a task needs: estimate scope, run the smallest path that passes verification, expand only on failure.
+- It requires a cheap, reliable verification signal — Expand fires only when a check fails, so weak verification lets an under-scoped edit ship silently.
+- The Agent Cognitive Redundancy Ratio, ACRR = (C_act − C_min) / C_min, measures wasted effort against an oracle minimum and is the metric the pattern optimizes.
+- The dramatic savings are a simulator result; on real frontier models, already-conservative reading shrinks the gain to 4–18%.
+- It under-scopes tasks with hidden coupling (dynamic dispatch, config, reflection) or deceptive wording — read broadly when a wrong edit is expensive and verification is weak.
+
+## Related
+
+- [Task Feasibility Awareness: Stop Before You Start](task-feasibility-awareness.md) — the up-front sibling: judges whether a task is possible at all, where this page judges how much scope a possible task needs.
+- [Heuristic-Based Effort Scaling in Agent System Prompts](heuristic-effort-scaling.md) — sets agent and tool-call budgets by complexity tier across tasks; this page governs context gathering within one task.
+- [Reasoning Budget Allocation](reasoning-budget-allocation.md) — allocates thinking budget by task difficulty, the reasoning-side counterpart to sizing execution scope.
+- [Coding Agent Scope Expansion: When to Extend Beyond the Codebase](coding-agent-scope-expansion.md) — scope across domains, where this page is scope within a single edit.
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — the broader cost discipline that minimum-sufficient execution operationalizes for context gathering.
+
+---
+
 ### Model a Single Agent Turn as Many Inference and Tool-Call Iterations
 Source: https://agentpatterns.ai/agent-design/agent-turn-model/
 
@@ -37105,6 +37259,7 @@ A feasibility gate works because feasibility is a cheap, up-front, observable pr
 - [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — handles missing *information* (ask the user), where feasibility awareness handles missing *capability* (asking won't help).
 - [Goal Contract: Separating the Doer from the Done-Checker](goal-contract-completion-evaluator.md) — the same externalized-judgment split, applied to completion rather than feasibility.
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — the cost lever after this gate: route tier by complexity once a task is known to be feasible.
+- [Minimum-Sufficient Execution](minimum-sufficient-execution.md) — the next question after feasibility: for a task known to be possible, how much scope to gather before committing budget.
 
 ---
 
@@ -45140,6 +45295,7 @@ Source: https://agentpatterns.ai/anti-patterns/
 - [Density-Normalized Quality Metrics Mask AI-Driven Code Growth](density-normalized-quality-metric.md) — A 6.7% smell-density drop after AI adoption can be a 13% LOC inflation, not improvement; divide by a moving denominator and the ratio reports the wrong story
 - [Agent-Laundered Bug Reports](agent-laundered-bug-reports.md) — Running a bug report through an LLM before filing strips the load-bearing observation and replaces it with confident speculation that misleads downstream triage
 - [Memory-Induced Tool-Drift](memory-induced-tool-drift.md) — Personality biases stored in long-term memory act as implicit steering vectors on tool-call parameters in unrelated contexts; prompt-based defenses reduce but do not eliminate the drift
+- [The Compliance Trap: Consuming Conflicting Agent Memory](compliance-trap-conflicting-memory.md) — Agents comply with retrieved memory that conflicts with the current situation, adopting it at the first step and rarely recovering; the failure is in consumption, not supply, and the fix is a retry-on-fail consumption policy
 - [Large-Codebase Coding-Agent Failure Patterns (Sourcegraph Five)](large-codebase-agent-failure-patterns.md) — Five named failure shapes — lost in the codebase, wrong symbol, partial completion, tool thrashing, context overflow — that surface in 400K+ LOC repos, sourced from 1,281 agent runs across 40+ codebases
 - [Coding-Agent Misalignment Forms (Seven-Symptom Taxonomy)](coding-agent-misalignment-forms.md) — Seven session-level forms (S1–S7) of developer-agent misalignment named in a 20,574-session field study; constraint violations and inaccurate self-reporting grow in share while capability gains close the other forms
 - [Trusting Human Review to Catch Deliberate Agent Sabotage](deliberate-agent-code-sabotage.md) — Human-in-the-loop review fails to catch AI agents that insert malicious code with a plausible cover story — 94% non-detection, 56% accept rate even after a safety monitor warns
@@ -51793,6 +51949,77 @@ Deliberate agent personas in end-user products — a customer support bot with a
 
 ---
 
+### The Compliance Trap: Consuming Conflicting Agent Memory
+Source: https://agentpatterns.ai/anti-patterns/compliance-trap-conflicting-memory/
+
+# The Compliance Trap: Consuming Conflicting Agent Memory
+
+> Agents tend to comply with retrieved memory that conflicts with the current situation, adopting the stale memory at the first step and rarely recovering.
+
+Agent memory is usually treated as a supply problem: what to write, how to store it, which entry to retrieve. The failure that actually costs you is in consumption. When a retrieved memory conflicts with what the agent is seeing now, the agent tends to follow the memory rather than the current observation. Success rates fall, and stronger models lose the most in absolute terms ([Chen et al., 2026](https://arxiv.org/abs/2607.10608)).
+
+## The pattern
+
+A retrieved memory suggests an action that no longer fits the task in front of the agent. The agent complies at the first decision point, then reasons forward on top of that choice. The Entry–Propagation–Recovery (E-P-R) lens names the three places the damage shows up ([Chen et al., 2026](https://arxiv.org/abs/2607.10608)):
+
+- Entry: the conflicting memory changes the first action. First divergence is early, with cumulative probability 0.86 to 0.94 by step 7.
+- Propagation: later steps build on the wrong first step. Persistent exposure to the bad memory does more harm than a single early injection.
+- Recovery: the agent rarely course-corrects. Conflicting-memory trajectories realign only 7 to 15% of the time, against 27 to 42% for helpful memory.
+
+Compliance stays high and roughly constant across models (63 to 72%), but success after complying collapses to 17 to 31%. On the WebArena memory-sensitive subset, persistent conflicting memory cut success by up to 20.8 points; on MemTrapBench the strongest model tested dropped 26.0 points ([Chen et al., 2026](https://arxiv.org/abs/2607.10608)).
+
+## Why it works
+
+The agent consumes retrieved memory as an authoritative prior instead of checking it against the current observation. Placement does not matter: the trap holds whether the memory sits in the system prompt or an observation footer, so this is a general consumption behavior, not a prompt-injection artifact ([Chen et al., 2026](https://arxiv.org/abs/2607.10608)). Because the bad memory changes the very first action, and each later step is taken to be coherent with it, the error propagates rather than surfaces. This is the same false-premise dynamic that locks in a coding agent when a decisive early error goes unchecked ([recovery window](../agent-design/failure-trajectory-recovery-window.md)) and the mechanism behind [context poisoning](context-poisoning.md), where an adopted premise is reasoned forward as fact.
+
+## When this backfires
+
+The anti-pattern framing does not apply, and defending against it only adds cost, when any of these hold:
+
+- Stateless or no-memory agents: with no retrieved memory there is no conflict to consume.
+- Short single-step tasks: the trap needs a multi-step trajectory for the entry error to propagate.
+- Well-curated, task-scoped memory with strong retrieval: conflict rarely surfaces, so a retry policy spends compute defending against a rare event.
+- Cheap-recovery environments: read-only or trivially reversible tasks weaken the "recovery is narrow" premise, since a wrong early step costs little to undo.
+
+## Example
+
+The paper's tested fix is a change to the consumption policy, not the store. Injecting the top retrieved memory on every task is what exposes the agent to conflict at entry; running clean first and reaching for memory only on failure removes that exposure.
+
+The failure mode, memory injected on every task:
+
+```text
+policy: always-inject
+  step 1: retrieve top memory, add to context
+  step 2..n: act with memory present
+# a conflicting entry changes the first action; the run locks in
+```
+
+The corrected form, retry only on failure:
+
+```text
+policy: retry-on-fail
+  attempt 1: run with no memory
+  attempt 2: retry with helpful memory only if attempt 1 failed
+```
+
+Retry-on-fail closed 96 to 101% of the schedule-oracle gap on MemTrapBench, beating always-inject. A softer fix — prefixing memory with a "verify before acting" warning — cut conflicting damage by 17.2 points but also cut the gains from helpful memory by 11.0 points, making the agent uniformly less compliant rather than more discerning ([Chen et al., 2026](https://arxiv.org/abs/2607.10608)).
+
+## Key Takeaways
+
+- The failure is in consumption, not supply: agents comply with conflicting retrieved memory at the first step and rarely recover, so evaluating retrieval quality and final success alone misses it.
+- Use the Entry–Propagation–Recovery lens to locate the damage — most of it originates at entry, so premise checks belong before the first action, not at the end.
+- Prefer a consumption policy that limits exposure, such as running clean and retrying with memory only on failure, over blanket memory injection or a generic "verify first" instruction.
+
+## Related
+
+- [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — the supply-side framing (write, store, retrieve) that this consumption failure sits underneath
+- [Memory Retrieval as a Control Decision](../agent-design/memory-retrieval-as-control.md) — treating whether to inject a memory as a gated decision, the direction the retry-on-fail fix points
+- [Agent Failure Trajectories and the Recovery Window](../agent-design/failure-trajectory-recovery-window.md) — the same early-entry, false-premise, narrow-recovery shape in coding-agent runs
+- [Context Poisoning: When Hallucinations Become Premises](context-poisoning.md) — an adopted premise reasoned forward as fact, the consumption mechanism without the memory store
+- [Memory-Induced Tool-Drift](memory-induced-tool-drift.md) — a sibling memory failure where stored preferences silently steer tool calls in unrelated contexts
+
+---
+
 ### The Copy-Paste Agent
 Source: https://agentpatterns.ai/anti-patterns/copy-paste-agent/
 
@@ -53837,6 +54064,7 @@ Purpose-built tool patterns for file operations, web research, CLI integration, 
 - [Self-Healing Tool Routing](self-healing-tool-routing.md) — Route agent tool calls through a cost-weighted graph; recompute paths on failure and escalate to the LLM only when no feasible path exists
 - [Terminal Tools for Agents: send_to_terminal and Background Interaction](send-to-terminal-background-interaction.md) — Use VS Code's send_to_terminal tool and backgroundNotifications setting to give agents bidirectional control over background terminal processes
 - [Unix CLI as Native Tool Interface](unix-cli-native-tool-interface.md) — A single run(command) tool backed by Unix CLI can replace large function catalogs, leveraging pretraining on shell usage and built-in discovery primitives
+- [Restricting a Coding Agent to a Single execute_code Tool](restrict-coding-agent-to-execute-code.md) — When narrowing an agent to one execute_code tool is cheaper than bash or native edit, and when edit-heavy modification work makes it costlier — a regime-by-agent decision
 - [Web Search Agent Loop](web-search-agent-loop.md) — Instead of firing a single query, wrap retrieval in a cycle of search, evaluate, refine, and synthesize -- giving the agent autonomy to decide when evidence is sufficient
 - [Lexical-First Retrieval for Agentic Search](lexical-first-retrieval-for-agentic-search.md) — A tuned BM25 index paired with a frontier LLM and deep retrieval can match or beat dense retrieval on deep-research benchmarks -- when the agent loop is strong enough to filter the ranking noise
 
@@ -55106,6 +55334,7 @@ The traditional approach issues 20 round-trips and pulls thousands of line items
 - [Dual-Boundary Sandboxing](../security/dual-boundary-sandboxing.md) — the OS-level enclosure for untrusted-input workloads
 - [Selective Network Sandbox Mode](../security/selective-network-sandbox-mode.md) — fine-grained network policy that pairs with interpreter-level bridges
 - [OpenAI Agents SDK Sandboxes Harness and Memory](../tools/openai-agents-sdk.md) — vendor-specific framing of the same harness/compute split
+- [Restricting a Coding Agent to a Single execute_code Tool](restrict-coding-agent-to-execute-code.md) — the head-to-head cost ablation of an interpreter-only surface against bash and native edit, by task regime
 </content>
 </invoke>
 
@@ -57377,7 +57606,7 @@ Agent runtimes expose hooks at these points:
 
 `PreToolUse` enforces. It receives the tool name and inputs, can block the call, and returns a reason the model must adapt to. `PostToolUse` automates. It only observes, but it can trigger side effects like logging or linting.
 
-See [Claude Code hooks](https://code.claude.com/docs/en/hooks) and [Copilot hooks](https://code.visualstudio.com/docs/copilot/customization/hooks).
+See [Claude Code hooks](https://code.claude.com/docs/en/hooks) and [Copilot hooks](https://code.visualstudio.com/docs/copilot/customization/hooks). Cursor exposes the same turn-lifecycle surface for its cloud agents — `beforeSubmitPrompt`, `afterAgentResponse`, `afterAgentThought`, `subagentStart`, `stop`, and compaction events — so agents can build self-correcting loops around these points ([Cursor changelog](https://cursor.com/changelog/side-chat)).
 
 ## Hook input and output
 
@@ -61226,6 +61455,67 @@ For `FileChanged`, use the same `CLAUDE_ENV_FILE` pattern, but scope the hook to
 
 ---
 
+### Restricting a Coding Agent to a Single execute_code Tool
+Source: https://agentpatterns.ai/tool-engineering/restrict-coding-agent-to-execute-code/
+
+# Restricting a Coding Agent to a Single execute_code Tool
+
+> Restricting a coding agent to one execute_code tool matches a bash surface on solve rate and often costs less — except for edit-heavy modification work.
+
+Modern coding agents expose several tool surfaces at once: native file primitives (Read, Edit, Write), a bash shell, and an MCP `execute_code` sandbox. A crossed ablation across two regimes and two agents found that the surface you pick changes the path and the cost of a run, not whether it succeeds — pass rates differ by under three percentage points across every configuration, none significantly ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)). So the decision is a cost and regime question, not a capability sacrifice.
+
+## When narrowing to execute_code pays off
+
+Reach for a single `execute_code` tool — a persistent Python-plus-Bash REPL keyed by working directory, with the native built-ins disallowed — when the work is computation-shaped:
+
+- Data engineering, ML, and algorithmic tasks that compute over a workspace rather than editing many source files. On the Artifact computation suite, `code_only` cut cost 24.6% for Claude Code (p=7.37e-14) and trended 6.7% cheaper for Codex CLI ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)).
+- Agents whose native edit surface is not a strong advantage. On SWE-bench Mini, `code_only` cut Codex CLI cost 19.9% (p=2.02e-9) — restricting the surface was significantly cheaper there ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)).
+
+Across the four regime-by-agent cells, the single-tool surface was cheaper than, or statistically tied with, the cheaper of its tool-rich rivals in three of four — significantly in two ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)). Because solve rate holds constant, narrowing is a defensible default for computation work rather than a bet against capability.
+
+## Why it works
+
+A single REPL keyed by the working directory lets the agent batch several operations into one tool call and cap its own output in code, which cuts both the number of inference round-trips and the tokens each returns. On Codex CLI the restricted agent issued 17.1 tool calls per run against 22.9 for the baseline, and its 99th-percentile per-call output fell from 40,154 to 16,736 characters ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)). The same batching-and-filtering mechanism drives the token savings reported for interpreter surfaces generally: keeping intermediate state inside the runtime instead of in message history cuts multi-step token counts by roughly a third ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)). Code is a denser representation of control flow than a serialized chain of model-mediated tool calls.
+
+## When this backfires
+
+Keep the native Edit and Write tools when the work is modification-shaped and the agent already has a strong editor:
+
+- Diff-style modification tasks on a strong native editor. On SWE-bench Mini with Claude Code, `code_only` ran 14.4% costlier (p=0.120, not significant) because every file change had to be written as a Python script instead of a native edit — a fixed verbosity of about 3,992 tokens plus an output-token penalty that scaled with edit volume (Spearman ρ=0.488) ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)). Purpose-built agent-computer interfaces exist precisely because they "significantly enhance an agent's ability to create and edit code files" ([Yang et al., 2024](https://arxiv.org/abs/2405.15793)); discarding that surface has a cost.
+- Low-solve-rate task pools. The Claude Code cost gap localized to failed and split instances; on unanimous-pass runs it collapsed from 14.4% to 4.1%. Edit-friction compounds with the cost of long doomed trajectories on instances no surface can solve ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)).
+- Restriction that is only prompt-enforced. The Codex savings held under soft, prompt-level restriction with under 1% audited leakage back to the native patch tool — behavioral compliance, not a hard harness flag. Both the cost result and any isolation assumption stay conditional on that compliance ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)).
+
+## Example
+
+The paper's four regime-by-agent cells show why the decision splits by task shape rather than by a single rule. Each figure is the cost change from switching to `code_only`, against the cheaper tool-rich rival ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)):
+
+| Regime × agent | Cost change | Significance |
+|----------------|-------------|--------------|
+| Computation (Artifact) / Claude Code | −24.6% | significant (p=7.37e-14) |
+| Computation (Artifact) / Codex CLI | −6.7% | directional (p=0.254) |
+| Modification (SWE-bench Mini) / Codex CLI | −19.9% | significant (p=2.02e-9) |
+| Modification (SWE-bench Mini) / Claude Code | +14.4% | not significant (p=0.120) |
+
+The single cell where narrowing costs more is the one that pairs modification work with a strong native editor. That is the signal to keep Edit and Write, not to narrow.
+
+## Key Takeaways
+
+- Tool surface changes a run's cost and path, not its answer — pass rates were statistically tied across every configuration tested ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)).
+- Narrowing to a single `execute_code` tool is a defensible default for computation-heavy work: cheaper or tied in three of four cells.
+- The saving comes from batching tool calls and capping output in code, which cuts round-trips and returned tokens.
+- Keep native Edit and Write for diff-style modification on a strong editor and for low-solve-rate pools, where edit-friction and failed-run cost compound.
+- Confirm the restriction is enforced at the harness, not just in the prompt, before relying on its cost or isolation.
+
+## Related
+
+- [Code Interpreter as a Primary Agent Tool](code-interpreter-as-agent-tool.md) — the case for exposing an interpreter surface; this page supplies the head-to-head cost comparison it does not report.
+- [Unix CLI as the Native Tool Interface for AI Agents](unix-cli-native-tool-interface.md) — the case for a single `run(command)` bash surface; the ablation here measures its cost against `execute_code`.
+- [Tool Minimalism and High-Level Prompting](tool-minimalism.md) — the broader argument for exposing fewer, non-overlapping tools that this cost result sharpens.
+- [Consolidate Agent Tools](consolidate-agent-tools.md) — related consolidation pattern for when narrowing helps versus when it costs.
+- [Agent-Computer Interface (ACI)](agent-computer-interface.md) — why a well-designed native edit surface carries capability that a single execute_code tool can forfeit.
+
+---
+
 ### Scoped MCP Server Discovery: Most-Specific-Wins Resolution
 Source: https://agentpatterns.ai/tool-engineering/scoped-mcp-server-discovery/
 
@@ -63660,6 +63950,7 @@ Three tools, no overlapping functionality. `read_file` absorbed `read_lines` via
 - [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
 - [Chance-Corrected Shortlist Depth Sizing](chance-corrected-shortlist-depth-sizing.md)
+- [Match Tool Instructions to the Agent Workflow](../instructions/match-tool-instructions-to-workflow.md) — the same instructions-over-tools lever from the opposite direction: the tools were better, and the fix was still the instructions
 
 ---
 
@@ -64035,6 +64326,7 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - [Semantic Tool Output](semantic-tool-output.md)
 - [Override Interactive Commands](override-interactive-commands.md)
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
+- [Restricting a Coding Agent to a Single execute_code Tool](restrict-coding-agent-to-execute-code.md) — measures the cost of this single-bash surface against an interpreter-only surface, by task regime and agent
 
 ---
 
@@ -64389,6 +64681,7 @@ Shrink what each call has to carry, on both the input and output sides.
 
 - [Token-Efficient Tool Design](token-efficient-tool-design.md) — each tool call injects the minimum tokens for the next decision
 - [Token-Efficient Code Generation](token-efficient-code-generation.md) — idiomatic structure beats "be concise" prompting
+- [Line-Anchored Feedback](line-anchored-feedback.md) — deliver change requests as line-anchored inline comments to cut edit tokens on large files
 - [Tokenizer Swap Tax](tokenizer-swap-tax.md) — budgeting for migrations that change token counts under flat per-token pricing
 - [Prompt Compression](../context-engineering/prompt-compression.md) — maximise signal per token in instructions
 - [Semantic Density Optimization](../context-engineering/semantic-density-optimization.md) — raise task-relevant tokens per byte in the codebase
@@ -64902,6 +65195,74 @@ Because the prefix bytes never change, the provider serves them as cache reads. 
 - [Isometric Harness Ablation](../agent-design/isometric-harness-ablation.md) — rank which harness subsystem earns its token cost
 - [Prompt Caching: Architectural Discipline for Agents](../context-engineering/prompt-caching-architectural-discipline.md) — the caching mechanism that drives the effective-input-price lever
 - [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — the quality guardrail that cutting tokens must respect
+
+---
+
+### Line-Anchored Feedback: Deliver Change Requests as Inline Comments
+Source: https://agentpatterns.ai/token-engineering/line-anchored-feedback/
+
+# Line-Anchored Feedback: Deliver Change Requests as Inline Comments
+
+> Delivering change requests as line-anchored inline comments, not one holistic prompt, cuts edit tokens on large files — where the model emits valid edit blocks.
+
+The format you use to request a code change is itself a cost lever. Delivering the same set of edits as structured, line-anchored inline comments rather than one holistic prompt cut generated tokens 22% on Claude Opus and 58% on Claude Sonnet in a paired experiment, and raised correctness for models that had headroom to improve ([Line-Anchored Feedback, arxiv 2607.12713](https://arxiv.org/abs/2607.12713)). The model and the task are held fixed — only the feedback format changes.
+
+## When it pays off
+
+The win is real but conditional. Reach for line-anchored feedback when all three hold:
+
+- The file is large. On files of 100 lines or more, Sonnet saved 75-80% of tokens per size tier and Opus 24-38%; the median across all seven tested models on 100-500 line files was roughly 60% ([arxiv 2607.12713](https://arxiv.org/abs/2607.12713)). On small files both formats saturate and the benefit disappears.
+- The model can emit valid edit blocks. Line anchoring rides on a targeted-edit output contract (SEARCH/REPLACE-style blocks). A model that cannot produce them reliably pays a penalty instead: two of the seven models generated significantly more tokens under anchoring ([arxiv 2607.12713](https://arxiv.org/abs/2607.12713)).
+- You know which axis has headroom. The gain lands wherever the model has room: frontier models near the correctness ceiling become cheaper, weaker models become more correct.
+
+## How to apply it
+
+Deliver each requested change as an inline comment anchored to the specific line, quoting the source text it refers to, and export the whole set as structured markdown — the shape a code reviewer leaves on a pull request. In the study this was FileMark, a VSCodium extension that exports inline comments on any file; both arms drew from an identical change set, so the content was constant and only the anchoring differed ([arxiv 2607.12713](https://arxiv.org/abs/2607.12713)). Any harness that lets you attach comments to line ranges and hand the model that structured export gets the same effect.
+
+## Why it works
+
+Line anchors shrink the model's search space. On a large file, finding which lines to change is genuinely hard, so a model handed only a holistic prompt hedges by regenerating large spans — often the whole file — to be safe. Telling it exactly where to edit licenses a small, targeted edit instead, which is where the token saving comes from ([arxiv 2607.12713](https://arxiv.org/abs/2607.12713)). The same localization removes silent "runs but produces the wrong result" failures in weaker models by pointing them at the right region — for one model that failure rate dropped from 7.3% to zero. So the benefit follows whichever dimension has slack.
+
+## When this backfires
+
+- Small files. Locating the change is trivial and both formats already saturate, so anchoring adds structure the model does not need without a token or correctness payoff.
+- Models weak at the edit-block contract. Line anchoring is strictly worse when the model cannot emit valid blocks — the study saw regressions of +6% and +30.9% tokens on two local models, and three local models essentially never produced valid blocks on the largest files ([arxiv 2607.12713](https://arxiv.org/abs/2607.12713)). The contract is a capability gate, not free.
+- Correctness-critical work on a near-ceiling model. Terse anchored edits can apply cleanly yet fail validation: Claude Sonnet traded 4.5 points of correctness for its 75-80% token saving. When accuracy outranks cost, the holistic delivery can be the right call.
+- Real, evolved codebases. The evidence is synthetic, single-shot base-R tasks; diff-match accuracy on real evolved code sits nearer 70-80% ([Morph — diff format](https://www.morphllm.com/edit-formats/diff-format-explained)), and a fixed localized format is not always optimal — adaptive selection between targeted edits and whole-file rewrites can beat either fixed choice ([arxiv 2604.27296](https://arxiv.org/html/2604.27296)).
+
+## Example
+
+The same request, delivered two ways. A holistic prompt (control) hands the model the whole task at once:
+
+```
+Fix the bugs in utils.R: the running total starts at 1 instead of 0,
+the filter keeps inactive users, and the date parser assumes US format.
+```
+
+Line-anchored comments (treatment) carry the same three changes, each tied to the line it touches:
+
+```
+L12  total <- 1    — should start at 0
+L27  keep(users)   — drops the is_active check; keep only active users
+L44  as.Date(x)    — assumes US MDY, but the input is ISO YYYY-MM-DD
+```
+
+The content is identical; only the second tells the model where each edit lands, so it patches those lines instead of scanning the file to locate them — the localization the token saving comes from.
+
+## Key Takeaways
+
+- Feedback format is a token lever independent of the model: line-anchored comments cut edits 22-58% on frontier models.
+- The win concentrates on files of 100+ lines; small files show no benefit.
+- The gain follows headroom — capable models get cheaper, weaker ones get more correct.
+- It rides on a valid edit-block contract; models that cannot emit one get more expensive, and terse edits can trade away correctness.
+
+## Related
+
+- [Token-Efficient Code Generation: Structural Beats Prompting](token-efficient-code-generation.md) — the sibling output-token lever, on the code the model writes rather than the feedback you give
+- [Cost-Aware Agent Design](cost-aware-agent-design.md) — route by complexity and headroom, the same "spend where it pays" logic
+- [Cost-Quality Pareto Measurement](cost-quality-pareto-measurement.md) — plot the cost-versus-correctness trade-off so a Sonnet-style accuracy loss is visible
+- [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — the guardrail: cutting tokens can degrade output, so measure the correctness side
+- [Harness-Controlled Token Economics](harness-token-economics.md) — how the surrounding harness, not just the model, sets token volume
 
 ---
 
@@ -67876,6 +68237,7 @@ You can trigger the same review with GitHub Copilot from the CLI: `gh pr edit --
 - [Diff-Based Review Over Output Review](diff-based-review.md)
 - [Tiered Code Review](tiered-code-review.md)
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — merge rate evidence for CRA-only versus mixed reviewer compositions
+- [Match Tool Instructions to the Agent Workflow](../instructions/match-tool-instructions-to-workflow.md) — why upgrading this architecture's toolset regressed cost and detection until the review instructions were rewritten
 
 ---
 
@@ -69638,7 +70000,7 @@ Anthropic separates the modes explicitly: "Unlike CLAUDE.md instructions which a
 
 This differs from [learned review rules](learned-review-rules.md): the Cursor Bugbot pattern adjusts the reviewer's behavior by extracting rules from accept and reject signals. This loop promotes the invariant out of the reviewer entirely — into the lint stack, checklist, or evaluator rubric. The two compose. Bugbot tunes reviewer defaults; this loop drains high-frequency comments before they reach review.
 
-It also differs from [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md), which converts production failures into regression tests. The trigger and the enforcement layer differ.
+It also differs from [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md), which converts production failures into regression tests. The trigger and the enforcement layer differ. And where a comment is semantic rather than mechanically checkable — a design-judgment call no lint rule can express — the counterpart move is [accumulated behavioral rules](../workflows/accumulated-behavioral-rules.md): keep the correction as a loaded instruction the agent self-checks, rather than promoting it to a deterministic check.
 
 ## Example
 
@@ -90866,7 +91228,7 @@ VS Code 1.126 ships a concrete instance of this sequencing: new folders open in 
 
 ## Relationship to the lethal trifecta
 
-Pre-trust execution adds a time-domain dimension to the [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md). That model's three capabilities — private data, untrusted content, egress — together create an exploitable principal. Pre-trust execution lets all three converge before the principal has consented to act: egress can land before the user has seen the trust prompt.
+Pre-trust execution adds a time-domain dimension to the [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md). That model's three capabilities — private data, untrusted content, egress — together create an exploitable principal. Pre-trust execution lets all three converge before the principal has consented to act: egress can land before the user has seen the trust prompt. A real-world illustration of that egress blast radius comes from outside this project's Claude/Copilot/Cursor focus: the xAI grok CLI was reported to upload its entire working directory — including SSH keys, a password-manager database, and personal documents — to cloud storage buckets when run, a concrete instance of over-broad file access combining with egress to exfiltrate secrets ([Simon Willison, 2026](https://simonwillison.net/2026/Jul/15/grok-build/)).
 
 ## When this backfires
 
@@ -125287,6 +125649,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Closed-Loop Agent Training from Tool Schemas](closed-loop-agent-training.md) — Generate synthetic training data from MCP tool definitions, fine-tune small models to match frontier performance, and re-train incrementally as schemas evolve
 - [Skill Library Refinement Loops](skill-library-refinement-loops.md) — Four complementary feedback mechanisms that together keep a shared skill library accurate and useful
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — Iterating on agent quality over time
+- [Accumulated Behavioral Rules from Review Feedback](accumulated-behavioral-rules.md) — Codify each accepted review comment as a persistent behavioral rule the agent loads and self-checks, so it stops repeating the same class of mistake
 - [Escape Hatches](escape-hatches.md) — Unsticking stuck agents
 - [Daily-Use Skill Library: Encoding Your Process as Agent Skills](daily-use-skill-library.md) — Build a small library of purpose-built skills that encode your engineering process from ideation through architecture
 - [SDLC-Phase Skill Taxonomy: Full-Lifecycle Skill Libraries](sdlc-skill-taxonomy.md) — Organize a skill library around SDLC phases so phase-entry commands activate only the relevant skills at each stage
@@ -125341,6 +125704,116 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Building Custom Agents from Substrate to Production (Agents All the Way Down)](agents-all-the-way-down-methodology.md) — Framework-free methodology with two substrate preconditions and three iterative practices (prototype, harvest as CLI via the Turtle pattern, agent-tests-agent) for one-developer custom-agent builds
 - [Knowledge-Based Pull Requests for Cross-Trust-Boundary Contributions](knowledge-based-pull-requests.md) — Distil an external contribution into a confirmed knowledge package, then have a project-owned trusted agent regenerate the code in-house — for the high-context contributions where reconstructing intent from the diff is expensive
 - [Whole-Codebase Visibility as a Migration Prerequisite](whole-codebase-visibility-migration-prerequisite.md) — Three-condition scoping check (codebase size, multi-repo or cross-VCS scope, discovery-bound shape) that decides whether a large-scale agent-driven migration needs whole-codebase visibility infrastructure or whether agentic search will do
+
+---
+
+### Accumulated Behavioral Rules from Review Feedback
+Source: https://agentpatterns.ai/workflows/accumulated-behavioral-rules/
+
+# Accumulated Behavioral Rules from Review Feedback
+
+> Turn every accepted review comment into a persistent rule the agent loads and self-checks, so it stops repeating the same class of mistake.
+
+This workflow converts each accepted code-review comment into a declarative behavioral rule in a version-controlled instruction file, has the agent load that file as context every session, and runs a self-review checklist derived from the rules before the agent submits ([Aggarwal and Farhady Ghalaty, arXiv 2607.13091](https://arxiv.org/abs/2607.13091)). The result is a ratchet: each error class the loop captures is one the agent can detect itself next time, with no change to model weights. It pays off only under specific conditions, so start there.
+
+## Why agents repeat the same mistakes
+
+A coding agent flags the same class of error across sessions because nothing retains the correction — once a pull request merges, the review feedback is discarded and the next session starts from the same defaults ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)). Human teams close this gap with conventions and onboarding; an agent with no persistent memory of accepted feedback re-derives, or re-fails, the same judgment every time.
+
+## When this pays off
+
+Adopt the loop only when all of these hold:
+
+- Your team already produces written review comments. The loop's only input is accepted feedback, so a team that reviews verbally or rubber-stamps PRs has nothing to codify.
+- Your agent surface loads an instruction file as context — a `CLAUDE.md`, `AGENTS.md`, or `copilot-instructions.md`. If the agent never reads the file, the rules never reach it.
+- Someone owns codification. A rule appears only when an engineer spends the few minutes to write it after accepting the comment; without that step the feedback still evaporates.
+- Your reviewers are trustworthy. Incorrect rules amplify errors, and a noisy review culture can poison the rule set faster than validation catches it ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)).
+
+The reported deployment ran on a typed language with strong framework conventions ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)). On a weakly-typed codebase with loose conventions, more corrections are context-specific judgment calls that resist a general rule, so expect a lower hit rate.
+
+## The loop
+
+Each cycle turns one merged correction into a durable constraint the next session inherits.
+
+```mermaid
+flowchart LR
+    A[Task execution] --> B[Pre-submission<br/>self-review]
+    B --> C[Human review]
+    C --> D[Accepted comment]
+    D --> E[Codify as rule]
+    E --> F[Validate rule set]
+    F --> G[Loaded next session]
+    G --> A
+```
+
+1. The agent runs a self-review against the current checklist before it opens the PR.
+2. A human reviews and leaves comments.
+3. When the team accepts a comment, an engineer codifies it as a rule in the instruction file.
+4. Automated validation checks that the rule set stays internally consistent as it grows.
+5. The next session loads the file, so the agent now self-detects that error class.
+
+The accumulation curve is logarithmic, not linear: the frequent error classes get covered early, and new rules arrive more slowly as coverage saturates ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)). In the reported deployment the rule set grew from 5 to 18 behavioral rules over four weeks, alongside language standards and a 15-item self-review checklist, reaching roughly 4,809 words — under 5% of a 128K-token context window ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)).
+
+## The rule schema
+
+A behavioral rule is more than a one-line instruction. Each carries enough structure to stay auditable and to feed the self-review checklist ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)):
+
+- An identifier and a category, so rules can be grouped and referenced.
+- The trigger origin — the review comment, bot finding, or production incident that produced it — for traceability back to why it exists.
+- Scope and the constraint itself: what the rule requires or forbids, and where it applies.
+- A rationale, so a future reader can judge whether the rule still holds.
+- A mapping to the self-review checklist item that enforces it before submission.
+
+Traceability is what lets you retire a rule later: when you can see which comment produced a rule, you can tell when the underlying problem no longer occurs.
+
+## Why it works
+
+The mechanism is retention, not intelligence. Codifying each accepted correction as a rule the agent loads every session gives it a persistent, growing set of error classes it can check itself against before submitting, with no model-weight change ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)). Because the rules live in a shared version-controlled file rather than one session's memory, a correction learned in one repository transfers to others: in the reported deployment, 60% of knowledge-transfer events crossed a repository, tool, or task-type boundary ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)). The self-review checklist is the enforcement surface — it turns a passive rule into an active pre-submission gate, the same move as an [agent self-review loop](../code-review/agent-self-review-loop.md) running checks on its own output before a human sees it.
+
+## When this backfires
+
+- Unbounded growth saturates the context budget. A monotonically growing rule file is the instruction-bloat anti-pattern: each rule is useful alone, but the aggregate dilutes attention and buried guidance gets missed as context fills ([Thoughtworks Technology Radar — agent instruction bloat](https://www.thoughtworks.com/radar/techniques/agent-instruction-bloat); [Anthropic — effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Pair every addition with retirement, the way [agent context file evolution](../instructions/agent-context-file-evolution.md) pairs each drift update with a compaction pass.
+- Multiple teams share one flat rule set. The model works for a single team; several teams need hierarchical or namespaced rules the base framework does not provide ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)).
+- Rules conflict. As the set grows, two rules can contradict — the deployment hit one genuine conflict over resource-disposal guidance that needed manual resolution ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)).
+- The evidence base is thin. The results come from a single four-week observational deployment with no control group and no ablation against static prompt engineering or a no-rule baseline, and the counts are small enough that the authors report no p-values ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)). Treat the zero-recurrence figure as a promising signal, not a proven effect size.
+
+## How this differs from promoting comments to mechanical checks
+
+For a high-frequency invariant a machine can verify — an import boundary, a formatting rule — the stronger move is to promote the comment into a deterministic check rather than an advisory rule, which is the [Review-Feedback-to-Rule Loop](../code-review/review-feedback-to-rule-loop.md). A lint rule or checklist fires every time and costs no context budget; a behavioral rule is probabilistic and adds to the file the agent must read. The two compose: promote mechanically-checkable invariants into the lint stack and hooks, and reserve accumulated behavioral rules for the semantic corrections that resist a deterministic check — design judgment, API-shape preferences, context-dependent trade-offs.
+
+## Example
+
+A reviewer repeatedly flags that new HTTP clients are constructed per-request instead of reused. The team accepts the comment and codifies it:
+
+```markdown
+### Rule R14 — reuse pooled HTTP clients
+- Category: performance
+- Origin: PR #482 review comment (accepted 2026-03-04)
+- Scope: any service issuing outbound HTTP
+- Constraint: obtain the shared client from the DI container; do not
+  construct a new client per request or per handler invocation.
+- Rationale: per-request construction exhausts sockets under load.
+- Checklist: SR-07 "no HTTP client constructed inside a request path"
+```
+
+The next session loads this rule, and the self-review step checks item SR-07 before opening the PR — so the agent catches the pattern itself instead of waiting for the same comment a second time. Months later, if the codebase moves to a framework that injects the client automatically, rule R14 is a retirement candidate: the origin trace names the problem it solved and lets you confirm the problem is gone.
+
+## Key Takeaways
+
+- The loop retains corrections that would otherwise vanish at merge: accepted comment, then behavioral rule, then self-review checklist, then loaded next session.
+- It pays off only with a written-review culture, an agent that loads instruction files, an owner for codification, and reviewers you trust.
+- Give each rule a schema — id, category, origin, scope, constraint, rationale, checklist mapping — so it stays auditable and retirable.
+- Pair accumulation with retirement, or the growing file becomes the instruction-bloat problem it was meant to prevent.
+- Promote mechanically-checkable invariants into deterministic checks instead; reserve behavioral rules for semantic corrections that resist a machine check.
+- The evidence is a single observational deployment with no control group — a promising signal, not a proven effect.
+
+## Related
+
+- [Review-Feedback-to-Rule Loop](../code-review/review-feedback-to-rule-loop.md) — the complementary move: promote recurring comments into deterministic mechanical checks instead of loaded rules.
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — the pre-submission checklist that enforces the accumulated rules.
+- [Agent Context File Evolution](../instructions/agent-context-file-evolution.md) — the retirement and compaction discipline that keeps the rule file from bloating.
+- [Continuous Agent Improvement](continuous-agent-improvement.md) — the broader observe-categorize-update-verify loop this is one instance of.
+- [Learned Review Rules](../code-review/learned-review-rules.md) — the reviewer-side analogue that tunes an agent from accept and reject signals.
 
 ---
 

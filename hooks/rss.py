@@ -8,6 +8,14 @@ The feed keys off page creation dates, not last-modified dates (#9755): a
 content update, link fix, or refresh on an existing page must not resurface
 it as a feed item — only genuinely new pages appear.
 
+Item pubDates are creation dates, but the channel's lastBuildDate is the build
+timestamp — the two are deliberately different clocks. lastBuildDate means "the
+last time the content of the channel changed" (RSS 2.0), so it must advance on
+every build that ships new items. Deriving it from the newest item's creation
+date instead froze it whenever a release added pages sharing a creation date
+already present in the previous build, and readers that poll lastBuildDate to
+decide whether to re-parse then skipped the new items entirely.
+
 Why a hook and not mkdocs-rss-plugin: on the configured index,
 `mkdocs-rss-plugin==1.19.0` declares a dependency on `properdocs` — the
 malicious mkdocs shadow from the 2026-05 mkdocs-redirects hijack (see
@@ -102,7 +110,7 @@ def on_post_build(config):
     ET.SubElement(channel, "link").text = _site_url + "/"
     ET.SubElement(channel, "description").text = _site_description
     ET.SubElement(channel, "language").text = "en"
-    ET.SubElement(channel, "lastBuildDate").text = _rfc822(newest[0][0])
+    ET.SubElement(channel, "lastBuildDate").text = format_datetime(_now())
     atom_link = ET.SubElement(channel, "atom:link")
     atom_link.set("href", _site_url + "/feed.xml")
     atom_link.set("rel", "self")
@@ -158,6 +166,11 @@ def _git_created(src_path: str) -> str:
 
 def _today() -> str:
     return date.today().isoformat()
+
+
+def _now() -> datetime:
+    """Build time, as its own seam so tests can pin it."""
+    return datetime.now(timezone.utc)
 
 
 def _rfc822(yyyy_mm_dd: str) -> str:
