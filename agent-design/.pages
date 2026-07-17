@@ -60,6 +60,7 @@ nav:
       - interactive-canvas-outputs.md
       - episodic-memory-retrieval.md
       - executable-memory-user-as-code.md
+      - git-bound-memory.md
       - generative-agents-memory-stream.md
       - handoff-skill-context-transfer.md
       - layered-mutability.md

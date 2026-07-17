@@ -114,6 +114,7 @@ The next `npm install <pkg>` an agent runs writes `1.12.0`, not `^1.12.0`. CI in
 ## Related
 
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — the orthogonal axis: exact-but-CVE-bearing pins from the training prior
+- [Setup Documentation as an Install-Time Attack Vector](setup-documentation-install-time-attacks.md) — the attacker-authored manifest: an edited README or Makefile redirects the install, closed by the same lockfile-enforced control
 - [Dependency Gap Validation for AI-Generated Code](../verification/dependency-gap-validation.md) — the missing-dependency complement; the same lock-then-resolve workflow covers transitive pulls
 - [Scanner-as-MCP-Server: Secret and Dependency Scans as Typed Agent Tools](scanner-as-mcp-server.md) — the agent-side scanning surface that complements lockfile enforcement
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the broader frame; a permissive range plus untrusted-content tool plus egress is one shape of the trifecta

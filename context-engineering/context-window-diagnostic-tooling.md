@@ -101,3 +101,4 @@ Per-tool attribution helps most when the expensive tool is also avoidable. It pr
 - [Context Window Anxiety](context-window-anxiety.md)
 - [Semantic Context Loading](semantic-context-loading.md)
 - [Proprioceptive Context Dashboard](proprioceptive-context-dashboard.md) — the agent-facing counterpart that surfaces per-block state to the model itself
+- [Reducing System-Prompt Token Bloat in Coding Agents](system-prompt-bloat-reduction.md) — the action after diagnosis: trim the tools and features the measurement flags as unused

@@ -30,6 +30,7 @@ nav:
       - wasm-sandbox-agent-code-execution.md
       - workload-keyed-sandbox-selection.md
   - "Supply Chain":
+      - setup-documentation-install-time-attacks.md
       - slopsquatting-hallucinated-package-names.md
       - npm-signing-channel-containment-playbook.md
       - enterprise-managed-plugin-governance.md

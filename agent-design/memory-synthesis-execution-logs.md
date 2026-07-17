@@ -166,3 +166,4 @@ The raw observation records what happened. The synthesized lesson records what t
 - [Agent Transcript Analysis](../verification/agent-transcript-analysis.md)
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — the general form that synthesizes arbitrary domain sources, where this page mines lessons from execution traces
+- [Git-Bound Memory for the Agentic Development Lifecycle](git-bound-memory.md) — binds synthesized rationale to commits so the merge gate verifies it; depends on the capture this page describes
