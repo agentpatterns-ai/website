@@ -127,4 +127,5 @@ When the agent proposes the refactored version, the AST diff against stored memo
 - [Session Initialization Ritual](session-initialization-ritual.md) — the startup sequence that pairs with `bd ready` for full session orientation
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — structural compression for context management
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — the general, prose-and-files counterpart to these code-rooted substrates
+- [Git-Bound Memory for the Agentic Development Lifecycle](git-bound-memory.md) — binds memory to version-control primitives (merge review, append-only ledger) rather than typed extractions from history
   - long-form

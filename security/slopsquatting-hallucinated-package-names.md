@@ -151,6 +151,7 @@ Same shape as the LLM-pinned-CVE finding: a measurement-grounded threat that ord
 
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — the version analogue: real package, vulnerable release; same training-distribution mechanism, different exploit shape
 - [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — the third leg of the agent-authored-manifest threat surface; caret ranges admit future-compromised releases of names that already exist
+- [Setup Documentation as an Install-Time Attack Vector](setup-documentation-install-time-attacks.md) — the attacker-authored counterpart: the same unverified install authority, but the bad name or source arrives in an edited README or Makefile rather than the model's output
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — adjacent supply-chain attack via the skill registry rather than the package registry
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — the principle that gates agent install authority in the first place
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — the CI surface where manifest changes get reviewed before install

@@ -40,6 +40,7 @@ Models do not attend uniformly across the context window. These pages cover wher
 Strategies for fitting more useful content into less space, and for making repeated prefixes cheaper through provider caching mechanisms.
 
 - [Context-Window Diagnostic Tooling](context-window-diagnostic-tooling.md) — Surface which tool calls are inflating the context window so you can optimize specific culprits rather than prune blindly
+- [Reducing System-Prompt Token Bloat in Coding Agents](system-prompt-bloat-reduction.md) — Measure the shipped system prompt with `/context`, then switch off unused tools, skills, and features so the fixed prefix stops crowding out task context
 - [Proprioceptive Context Dashboard](proprioceptive-context-dashboard.md) — Give a long-horizon agent a live view of its own context blocks — size, age, and usage — so it makes competent keep-or-archive decisions itself instead of a hidden layer compressing blindly
 - [PEEK: Orientation Cache for Recurring-Context Agents](peek-orientation-cache.md) — A constant-sized prompt artifact that caches reusable orientation knowledge — what is in a recurring context, how it is organised, which entities matter — distinct from trajectory replay and playbook strategy memory
 - [Context Compression Strategies](context-compression-strategies.md) — Long-running agents accumulate context that eventually fills the window; tiered compression — offloading large payloads and summarising history — lets agents continue working without losing task continuity

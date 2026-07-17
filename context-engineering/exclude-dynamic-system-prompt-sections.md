@@ -137,3 +137,4 @@ All 50 runners produce one system-prompt prefix. The first runner pays the cache
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md)
 - [Static Content First for Cache Hits](static-content-first-caching.md)
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
+- [Reducing System-Prompt Token Bloat in Coding Agents](system-prompt-bloat-reduction.md) — a sibling Claude Code saving: remove unused tool and feature definitions rather than share the cache across machines

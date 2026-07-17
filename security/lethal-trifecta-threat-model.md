@@ -6,7 +6,7 @@ tags:
   - agent-design
   - security
   - tool-agnostic
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-17
 maturity: established
 ---
 
@@ -90,6 +90,8 @@ Poisoned dependency ([Lynch / NVIDIA, 2025](https://developer.nvidia.com/blog/fr
 Cross-agent privilege escalation ([Embrace The Red, 2025](https://embracethered.com/blog/posts/2025/cross-agent-privilege-escalation-agents-that-free-each-other/)): one agent rewrites another's config to drop sandbox constraints, granting all three legs. Fix: protect config from writes.
 
 MCP tool exfiltration ([Invariant Labs, 2025](https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks)): a malicious MCP server shadows trusted tools, reads private context, and forwards it externally. Fix: restrict MCP server egress.
+
+WebFetch exfiltration ([Willison, 2026](https://simonwillison.net/2026/Jul/15/claude-web-fetch-exfiltration/)): a worked demonstration against Claude's WebFetch tool, manipulated into leaking prior conversation context (private data) through a crafted request URL once untrusted input enters context — private data, untrusted input, and egress converging on a single tool call in a first-class coding-agent tool. Fix: remove egress or constrain the fetch destination.
 
 ## Trifecta audit checklist
 
