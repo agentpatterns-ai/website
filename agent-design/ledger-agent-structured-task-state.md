@@ -112,3 +112,4 @@ The same model on the same transcript can no longer issue the policy-violating c
 - [Behavioral Firewall for Tool-Call Trajectories](../security/behavioral-firewall-tool-call-trajectories.md) — the security-side counterpart: pre-action gating over tool-call sequences, not over ledger state.
 - [CoALA Structured Action Space: Internal vs External Actions](coala-structured-action-space.md) — the internal/external action boundary that surfaces where a policy gate belongs.
 - [ACID for Agent Repository State](acid-for-agent-repository-state.md) — the consistency-and-durability framing for *repository* state that this pattern parallels for *domain* state.
+- [Epistemic Working Memory for Multi-Hop Reasoning (SLEUTH)](epistemic-working-memory-multi-hop-reasoning.md) — sibling ledger for investigative retrieval; tracks facts, hypotheses, and open questions instead of gating writes.

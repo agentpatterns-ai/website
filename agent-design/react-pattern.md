@@ -94,3 +94,4 @@ When ReAct is the right shape, two failure modes still recur:
 - [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md) — Generalises the inference-tool-call loop that every modern coding agent unrolls per user turn
 - [Anthropic's Effective Agents Framework: A Pattern Map](anthropic-effective-agents-framework.md) — Workflows-vs-agents distinction; the "start simple" gate for adopting any agentic loop
 - [Eval Strategy by Agent Generation: A Structure-to-Eval Locator](eval-strategy-by-agent-generation.md) — The ReAct loop is generation 3 in the structure-to-eval taxonomy; eval surface needed is trace-level
+- [Epistemic Working Memory for Multi-Hop Reasoning (SLEUTH)](epistemic-working-memory-multi-hop-reasoning.md) — Externalizes the investigative state that plain ReAct leaves implicit in the transcript, countering context dilution on long chains

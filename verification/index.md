@@ -92,6 +92,7 @@ last_reviewed: 2026-05-27
 ## Guardrails
 
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces
+- [Evidence-Gated Lifecycle Control for Coding Agents (Proof-or-Stop)](evidence-gated-lifecycle-control.md) — Advance an agent's lifecycle states (reviewed, tested, done, ready-to-merge) only when fresh, source-bound, mechanically verifiable evidence clears the gate — the agent's own assertion never advances the state
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — Order cheap evidence gates ahead of expensive ones in agentic repair loops — retrieval-grounded context, compile gate, target-test gate, then full regression — to filter invalid candidates before paying full-suite cost
 - [Execution Budgeting in Agentic Program Repair](execution-budgeting-program-repair.md) — Cap test executions in generate-run-revise loops on frontier commercial agents; prohibiting execution drops resolve rate ~1.25 pp on SWE-bench Verified — applies only under specific preconditions on model strength, codebase familiarity, and execution cost
 - [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — Cap generate-validate-repair loops near three to four rounds; most gains land early and later rounds mostly burn tokens — prefer stop-on-plateau, and watch strong-model late gains, thin-oracle overfitting, and self-critique loops

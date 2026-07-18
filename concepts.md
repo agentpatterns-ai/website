@@ -558,6 +558,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [DSLs as a Constraining Harness for LLM Code Generation](agent-design/dsl-constraining-harness.md)
 - [Minimum-Sufficient Execution: Estimate Scope Before Spending Budget](agent-design/minimum-sufficient-execution.md)
 - [Git-Bound Memory for the Agentic Development Lifecycle](agent-design/git-bound-memory.md)
+- [Epistemic Working Memory for Multi-Hop Reasoning (SLEUTH)](agent-design/epistemic-working-memory-multi-hop-reasoning.md)
 
 ## Loop Engineering
 
@@ -942,6 +943,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Specification-Grounded Test Writing](verification/specification-grounded-test-generation.md)
 - [Verify Observability in Agent-Generated Code](verification/verify-generated-code-observability.md)
 - [Action-Graded Severity for Agent Red-Team Outcomes](verification/action-graded-severity-red-team-outcomes.md)
+- [Evidence-Gated Lifecycle Control for Coding Agents (Proof-or-Stop)](verification/evidence-gated-lifecycle-control.md)
 
 ## Hooks & Guardrails
 
@@ -1127,6 +1129,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Whole-Codebase Visibility as a Migration Prerequisite](workflows/whole-codebase-visibility-migration-prerequisite.md)
 - [Concurrent Agent Pull Requests and Merge-Conflict Cost](workflows/concurrent-agent-pr-merge-conflicts.md)
 - [Accumulated Behavioral Rules from Review Feedback](workflows/accumulated-behavioral-rules.md)
+- [Legacy Code Archaeology: Reconstruct Intent Before Migrating](workflows/legacy-code-archaeology.md)
 
 ## Human Factors
 

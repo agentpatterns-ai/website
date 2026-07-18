@@ -6,7 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
 term: "Continuous Documentation"
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-17
 maturity: established
 ---
 
@@ -40,6 +40,8 @@ Agentic workflows run as standard GitHub Actions with triggers and constrained o
 Schedule triggers (the DailyOps pattern) run documentation audits on a cron schedule. Each run scans the full documentation surface and proposes corrections for all detected drift.
 
 Push triggers run as GitHub Actions when code changes on specific paths. The scope is narrower but detection is immediate: the agent checks only the documentation relevant to the changed code.
+
+Orchestration also spans repositories, not just the one holding the code. GitHub's Aspire team runs this cross-repo: GitHub Agentic Workflows turn merged product changes into SME-reviewed documentation PRs across separate repositories, closing the release-to-docs gap ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/automating-cross-repo-documentation-with-github-agentic-workflows/)).
 
 Safe outputs constrain what the agent can do:
 

@@ -65,6 +65,7 @@ nav:
       - handoff-skill-context-transfer.md
       - layered-mutability.md
       - ledger-agent-structured-task-state.md
+      - epistemic-working-memory-multi-hop-reasoning.md
       - memory-retrieval-as-control.md
       - memory-synthesis-execution-logs.md
       - memory-transfer-learning.md
