@@ -10,7 +10,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-06-02
+last_reviewed: 2026-07-18
 maturity: adopted
 ---
 
@@ -80,7 +80,7 @@ cursor.execute(f"SELECT * FROM docs WHERE {filter_clause}")
 
 A user prompt like `delete all` rephrased by the LLM into `1=1; DROP TABLE docs --` executes against the database. This is the [CVE-2025-1793](https://nvd.nist.gov/vuln/detail/CVE-2025-1793) class.
 
-After — LLM emits a schema-constrained filter object; the executor builds parameterized SQL:
+After — LLM emits a schema-constrained filter object; the executor builds parameterized SQL. Placeholders can bind only values — not column names or operators — so identifiers and operators go through an explicit allowlist mapping instead:
 
 ```python
 from pydantic import BaseModel
@@ -91,14 +91,19 @@ class Filter(BaseModel):
     op: Literal["=", ">", "<"]
     value: str
 
+# Identifiers and operators cannot be bound by placeholders;
+# map each validated enum member to a fixed SQL fragment.
+COLUMNS = {"author": "author", "year": "year", "tag": "tag"}
+OPERATORS = {"=": "=", ">": ">", "<": "<"}
+
 f = Filter.model_validate(llm.structured_output(user_question, schema=Filter))
 cursor.execute(
-    "SELECT * FROM docs WHERE %s %s %s",
-    (f.field, f.op, f.value),
+    f"SELECT * FROM docs WHERE {COLUMNS[f.field]} {OPERATORS[f.op]} %s",
+    (f.value,),
 )
 ```
 
-The LLM never writes SQL; the deterministic executor builds the parameterised query from validated fields.
+The LLM never writes SQL; the deterministic executor assembles the query from allowlisted fragments — the column and operator come from fixed mappings keyed by the validated enum, and only the value is parameterised.
 
 ## Key Takeaways
 

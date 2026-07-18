@@ -11,7 +11,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - long-form
-last_reviewed: 2026-06-28
+last_reviewed: 2026-07-18
 maturity: established
 ---
 
@@ -86,7 +86,9 @@ Fork the conversation: keep the identical prefix, append a summary of prior hist
 
 Anthropic's API returns `cache_creation_input_tokens` (tokens written), `cache_read_input_tokens` (tokens served from cache), and `input_tokens` (uncached). [Source: [Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)]
 
-Track `cache_read_input_tokens` / total as a session metric. A healthy session shows near-zero `cache_creation_input_tokens` after the first turn; a mid-session spike signals a prefix change.
+Track `cache_read_input_tokens` / total as a session metric. The healthy baseline for `cache_creation_input_tokens` depends on where the breakpoints sit. With prefix-only breakpoints (`cache_control` on the system prompt and tools, conversation uncached), a healthy session shows near-zero creation after the first turn. With incremental conversation caching — a breakpoint placed on the latest message each turn, so earlier breakpoints keep serving reads while each turn writes only the new content — every healthy turn reports creation roughly equal to the previous turn's delta (new user message plus tool results). [Source: [Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)]
+
+The alarm signal is magnitude, not presence: creation tracking the per-turn delta is healthy; a mid-session creation spike approaching the full prefix size signals a prefix change.
 
 ## SDK cache invalidation: a case study
 
@@ -148,7 +150,7 @@ Break-even turns matter more than the headline discount. Take a coding agent wit
 
 Per-session cache savings = `prefix_tokens` × `turns` × `base_price` × `discount_rate` − `cache_write_cost`. Caching can lose money in three economic conditions even when the prefix is stable: short sessions (1--2 turns), where Anthropic's 1.25x or 2x write premium needs 2--3 reads to recoup; high parallelism, where simultaneous requests each miss the cache and pay the write because the entry only becomes available after the first response begins (sequence the first request before fanning out); and Google explicit caching, where storage fees ($1.00--$4.50/MTok/hour) exceed read savings unless the cache is hit several times per hour. [Source: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)]
 
-Monitor per provider: Anthropic `cache_read_input_tokens` against `cache_creation_input_tokens` (high reads, near-zero creation after turn 1); OpenAI `usage.prompt_tokens_details.cached_tokens` (non-zero on turns 2+); Google explicit caching hit metadata. A creation-token spike mid-session signals prefix mutation, not a pricing question.
+Monitor per provider: Anthropic `cache_read_input_tokens` against `cache_creation_input_tokens` (high reads; creation near-zero after turn 1 with prefix-only breakpoints, or tracking the per-turn delta under incremental conversation caching — alert when creation approaches the full prefix size, not merely on nonzero creation); OpenAI `usage.prompt_tokens_details.cached_tokens` (non-zero on turns 2+); Google explicit caching hit metadata. A creation-token spike mid-session signals prefix mutation, not a pricing question.
 
 ## Choosing a cache TTL by session shape
 

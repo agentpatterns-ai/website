@@ -6,7 +6,7 @@ tags:
   - agent-design
   - security
   - tool-agnostic
-last_reviewed: 2026-07-17
+last_reviewed: 2026-07-18
 maturity: established
 ---
 
@@ -70,7 +70,7 @@ Restrict the agent to operator-controlled content — viable for internal automa
 
 ## Design patterns for trifecta mitigation
 
-Six patterns ([Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)) map to leg removal:
+Six patterns ([Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)) harden agents against injection — five remove the untrusted-input leg outright; LLM Map-Reduce instead isolates untrusted input, bounding blast radius without removing a leg:
 
 | Pattern | Leg removed | Mechanism |
 |---------|-------------|-----------|
@@ -79,7 +79,7 @@ Six patterns ([Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)) m
 | [Plan-Then-Execute](plan-then-execute-web-agents.md) | Untrusted input | Plan formed before untrusted content is seen; execution is deterministic |
 | Context-Minimization | Untrusted input | Only minimum necessary untrusted content enters context |
 | Code-Then-Execute | Untrusted input | LLM generates code; sandboxed runtime executes without LLM re-evaluation |
-| [LLM Map-Reduce](../multi-agent/llm-map-reduce.md) | Private data | Each instance sees only a partition; no single instance has full data access |
+| [LLM Map-Reduce](../multi-agent/llm-map-reduce.md) | None — isolates untrusted input | Each isolated instance processes one untrusted partition; only constrained, format-checked map outputs reach the reducer, so an injection in one partition cannot steer the whole run |
 
 [CaMeL](camel-control-data-flow-injection.md) ([Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)) enforces separation via control- and data-flow primitives — 77% task completion with provable security.
 

@@ -8,13 +8,21 @@ The feed keys off page creation dates, not last-modified dates (#9755): a
 content update, link fix, or refresh on an existing page must not resurface
 it as a feed item — only genuinely new pages appear.
 
-Item pubDates are creation dates, but the channel's lastBuildDate is the build
-timestamp — the two are deliberately different clocks. lastBuildDate means "the
-last time the content of the channel changed" (RSS 2.0), so it must advance on
-every build that ships new items. Deriving it from the newest item's creation
-date instead froze it whenever a release added pages sharing a creation date
-already present in the previous build, and readers that poll lastBuildDate to
-decide whether to re-parse then skipped the new items entirely.
+Item pubDates are creation *timestamps* (the first commit's UTC time), but the
+channel's lastBuildDate is the build timestamp — the two are deliberately
+different clocks. lastBuildDate means "the last time the content of the channel
+changed" (RSS 2.0), so it must advance on every build that ships new items.
+Deriving it from the newest item's creation date instead froze it whenever a
+release added pages sharing a creation date already present in the previous
+build, and readers that poll lastBuildDate to decide whether to re-parse then
+skipped the new items entirely.
+
+pubDates carry full time-of-day, not just the date (#9837): when several pages
+are created the same day, a midnight-for-everyone pubDate leaves readers unable
+to order them, and readers that suppress items at-or-older-than the last seen
+timestamp drop the same-day siblings entirely. Distinct commit times keep each
+new page orderable and visible. A bare YYYY-MM-DD (legacy manifest or the
+git-log fallback) is still accepted and treated as midnight UTC.
 
 Why a hook and not mkdocs-rss-plugin: on the configured index,
 `mkdocs-rss-plugin==1.19.0` declares a dependency on `properdocs` — the
@@ -24,14 +32,14 @@ dependency; the supply-chain gate (scripts/check-dependencies.py) blocked the
 install. Same decision as hooks/redirects.py: zero third-party dependency,
 full control.
 
-Dates come from hooks/created-manifest.json (regenerated on main by
-release-cut.yaml, like lastmod-manifest.json), with a git-log fallback —
+Creation timestamps come from hooks/created-manifest.json (regenerated on main
+by release-cut.yaml, like lastmod-manifest.json), with a git-log fallback —
 shallow clones can't see history, so the manifest is the primary source.
 """
 
 import json
 import subprocess
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 from email.utils import format_datetime
 from pathlib import Path
 from urllib.parse import urljoin
@@ -136,14 +144,16 @@ def on_post_build(config):
 
 
 def _git_created(src_path: str) -> str:
-    """Date of the first commit touching src_path, following renames.
+    """UTC timestamp of the first commit touching src_path, following renames.
 
     Fallback only — shallow clones (Cloudflare, --depth 1) see truncated
     history, so hooks/created-manifest.json is the primary source. A brand-new
-    uncommitted page falls through to today, which is its creation date.
+    uncommitted page falls through to now, which is its creation moment.
+    Returns a full ISO 8601 UTC timestamp; `%cI` carries the committer's local
+    offset, so we convert to UTC rather than truncating to a local date (#9837).
     """
     if _docs_dir is None:
-        return _today()
+        return _now().isoformat()
 
     abs_path = _docs_dir / src_path
 
@@ -157,15 +167,11 @@ def _git_created(src_path: str) -> str:
         )
         lines = result.stdout.split()
         if lines:
-            return lines[-1][:10]
-    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError):
+            return datetime.fromisoformat(lines[-1]).astimezone(timezone.utc).isoformat()
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError, ValueError):
         pass
 
-    return _today()
-
-
-def _today() -> str:
-    return date.today().isoformat()
+    return _now().isoformat()
 
 
 def _now() -> datetime:
@@ -173,9 +179,16 @@ def _now() -> datetime:
     return datetime.now(timezone.utc)
 
 
-def _rfc822(yyyy_mm_dd: str) -> str:
+def _rfc822(stamp: str) -> str:
+    """Format a creation stamp as an RFC 822 pubDate, normalised to UTC.
+
+    Accepts a full ISO 8601 timestamp (the created-manifest format) or a bare
+    YYYY-MM-DD (legacy manifest / git fallback), the latter treated as midnight
+    UTC. An unparseable value falls back to build time (#9837).
+    """
     try:
-        dt = datetime.strptime(yyyy_mm_dd, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        dt = datetime.fromisoformat(stamp)
     except ValueError:
-        dt = datetime.now(timezone.utc)
+        return format_datetime(_now())
+    dt = dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None else dt.astimezone(timezone.utc)
     return format_datetime(dt)
