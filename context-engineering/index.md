@@ -16,6 +16,7 @@ last_reviewed: 2026-05-27
 Core concepts that define context engineering as a practice and establish the structural patterns every other technique builds on.
 
 - [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md) — Context engineering is the practice of designing what information enters a model's context window, how it is structured, and what is excluded
+- [Context Quality as a Leading Indicator of Agent Reliability](context-quality-audit.md) — Audit an agent's context across seven dimensions to predict where it will drift, hallucinate, misuse tools, or fall to injection before blaming the model
 - [Context Priming](context-priming.md) — Load relevant context before asking an agent to act; the order information enters the context window shapes the quality of everything that follows
 - [Layered Context Architecture](layered-context-architecture.md) — Ground agents in multiple distinct context sources — schema, code, institutional knowledge, and persistent memory — rather than relying on any single signal
 - [Context Budget Allocation](context-budget-allocation.md) — Context is a finite budget; every token preloaded into the context window displaces a token available for reasoning, tool results, and implementation

@@ -145,3 +145,4 @@ The CI gate runs the team's portable eval suite against both providers on every 
 - [Multi-Shape BYOK Provider](multi-shape-byok-provider.md) — the per-endpoint envelope declaration that preserves capability across three concurrent shapes, closing the LCD trap.
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — fan-out across vendors when capability differentiation is the signal; a downstream pattern that a neutral harness makes addressable.
 - [Harness Impermanence](harness-impermanence.md) — the temporal counterpart for handling model-version upgrades; both disciplines invert on pinned deployments.
+- [Prompt Debt](../anti-patterns/prompt-debt.md) — the anti-pattern that motivates this bet: hand-tuned prompts lock a system to one model, and measurement-defined behavior is the exit.

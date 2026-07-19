@@ -117,3 +117,4 @@ The hook eliminates the error deterministically. The prompt can drop all five pr
 - [The Infinite Context](infinite-context.md)
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md)
 - [Spec Complexity Displacement](spec-complexity-displacement.md)
+- [Prompt Debt: Hand-Tuning Natural-Language Prompts as Technical Debt](prompt-debt.md) — the whole-system accrual this per-error tinkering leaves behind

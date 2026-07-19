@@ -234,6 +234,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Conversation Registers for AI Coding Sessions](context-engineering/conversation-registers.md)
 - [Agent-Initiated Rubric-Gated Self-Compaction (SelfCompact)](context-engineering/agent-initiated-self-compaction.md)
 - [Reducing System-Prompt Token Bloat in Coding Agents](context-engineering/system-prompt-bloat-reduction.md)
+- [Context Quality as a Leading Indicator of Agent Reliability](context-engineering/context-quality-audit.md)
 
 ## Instructions & Prompts
 
@@ -1287,6 +1288,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](anti-patterns/lazy-generation.md)
 - [Token Reduction Mistaken for Cost Reduction](anti-patterns/token-reduction-not-cost-reduction.md)
 - [The Compliance Trap: Consuming Conflicting Agent Memory](anti-patterns/compliance-trap-conflicting-memory.md)
+- [Prompt Debt: Hand-Tuning Natural-Language Prompts as Technical Debt](anti-patterns/prompt-debt.md)
 
 ## Emerging Concepts
 

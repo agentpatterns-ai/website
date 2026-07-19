@@ -49,6 +49,7 @@ last_reviewed: 2026-05-27
 - [The Kitchen Sink Session](session-partitioning.md) — Mixing unrelated tasks in a single session fills the context window with irrelevant history and degrades output quality
 - [The Mega-Prompt](../instructions/instruction-compliance-ceiling.md) — A single instruction file containing every rule, convention, and example degrades agent compliance rather than improving it
 - [The Prompt Tinkerer](prompt-tinkerer.md) — Endlessly refining prompts to prevent errors that structural controls would eliminate deterministically
+- [Prompt Debt: Hand-Tuning Natural-Language Prompts as Technical Debt](prompt-debt.md) — Patching each new error by hand-tuning a natural-language prompt accrues brittle, repetition-laden instructions that slow iteration, lose the team, and lock the system to one aging model
 - [The Test Homogenization Trap](test-homogenization-trap.md) — LLM-generated test suites share the generating model's blind spots, providing false confidence because tests miss the same edge cases the code misses
 - [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](code-first-test-oracle-bias.md) — Tests generated from the code an agent just wrote inherit that code's faults and pass instead of catching them; generate tests from the specification independently
 - [The Yes-Man Agent](yes-man-agent.md) — Agents without verification instructions execute every request without flagging problems
