@@ -125,3 +125,4 @@ The key decisions were about exclusion: what not to load, when not to load it, a
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Seeding Agent Context](seeding-agent-context.md)
 - [Turn-Level Context Decisions: Continue, Rewind, Clear, Compact, or Delegate](turn-level-context-decisions.md)
+- [Context Quality as a Leading Indicator of Agent Reliability](context-quality-audit.md)
