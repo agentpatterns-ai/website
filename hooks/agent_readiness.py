@@ -155,7 +155,17 @@ def on_post_build(config):
             json.dump(catalog, fh, indent=2, ensure_ascii=False)
             fh.write("\n")
 
+    # /auth.md (WorkOS auth.md convention, honest no-auth variant — #9917
+    # follow-up): plain markdown, copied verbatim when committed. It cannot
+    # live under docs/ because MkDocs would render it to /auth/ HTML; the
+    # convention requires raw markdown at exactly /auth.md.
+    auth_src = Path(__file__).resolve().parent / "auth.md"
+    auth_published = auth_src.exists()
+    if auth_published:
+        shutil.copyfile(auth_src, site_dir / "auth.md")
+
     print(f"agent_readiness.py: wrote {len(_twins)} markdown twin(s)"
           + ("" if index is None else f" + agent-skills index ({len(index.get('skills', []))} skills)")
           + ("" if card is None else " + mcp server card")
-          + ("" if catalog is None else " + api catalog"))
+          + ("" if catalog is None else " + api catalog")
+          + ("" if not auth_published else " + auth.md"))
