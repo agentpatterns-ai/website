@@ -272,8 +272,10 @@
 .wwa-fab {
   position: fixed;
   bottom: 1.5rem;
-  /* bottom-LEFT: bottom-right belongs to the AI Search chat bubble (#9917) */
-  left: 1.5rem;
+  /* bottom-RIGHT: the AI Search chat bubble renders bottom-LEFT (its
+     undocumented default — no position attribute exists on the component),
+     so Feedback keeps its original right corner (#9917 overlap fix). */
+  right: 1.5rem;
   z-index: 10;
   display: flex;
   align-items: center;
