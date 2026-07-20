@@ -1,0 +1,182 @@
+---
+title: "Goal Monitoring and Progress Tracking for Long-Running Agents"
+term: "Goal Monitoring and Progress Tracking"
+description: "Runtime patterns for tracking agent progress, detecting drift, and preventing premature completion across multi-session coding workflows."
+tags:
+  - agent-design
+  - workflows
+  - harness-engineering
+  - tool-agnostic
+last_reviewed: 2026-06-12
+maturity: established
+---
+
+# Goal Monitoring and Progress Tracking
+
+> Planning tells the agent what to do. Monitoring tells you whether it actually did it — and whether it wandered off.
+
+Related lesson: [Steering Running Agents](https://learn.agentpatterns.ai/harness-engineering/steering-running-agents/) — this concept features in a hands-on lesson with quizzes.
+
+Long-running coding agents declare tasks complete prematurely, drift from objectives after [context compression](../../context-engineering/context-compression-strategies.md), and enter doom loops. The root cause: no durable, machine-readable record of what "done" looks like and how far the agent has gotten.
+
+## Planning versus monitoring
+
+```mermaid
+flowchart LR
+    subgraph Pre-Execution
+        A[Task decomposition] --> B[Feature list / spec]
+        B --> C[Environment setup]
+    end
+    subgraph During Execution
+        D[Progress files] --> E[Incremental commits]
+        E --> F[Drift detection]
+        F --> G[Completion verification]
+    end
+    C --> D
+```
+
+Planning is pre-execution: decompose the problem, define success criteria, set up the environment. Monitoring is during-execution: track progress, detect drift, and verify completion against the spec.
+
+## Core artifacts
+
+### Progress files
+
+A progress file (`claude-progress.txt` or equivalent) is a plain-text summary written at the end of each session: what was accomplished, what remains, any blockers. The next session reads it to resume without reconstructing state. Without it, agents misinterpret partial progress and either redo work or declare the task complete. ([Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
+
+### Feature list specs
+
+A JSON [feature list](../../instructions/feature-list-files.md) defines every granular feature as a testable unit, each initially marked `failing`. As the agent implements features, it marks them `passing`. The feature list is a goal contract — an objective measure of completeness that stops the agent declaring victory on a hunch. ([Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
+
+```json
+{
+  "features": [
+    { "name": "user-login", "status": "passing" },
+    { "name": "session-timeout", "status": "failing" },
+    { "name": "password-reset", "status": "failing" }
+  ]
+}
+```
+
+### Incremental commits
+
+Descriptive git commits act as a secondary progress log ([Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)) — each records what changed, enabling review and rollback via `git diff` or `git revert`.
+
+## Failure modes
+
+### Premature completion
+
+Without progress files and feature lists, agents see partial progress and declare the job done. The feature list provides an objective counter: if 40 of 200 features are still `failing`, the agent cannot credibly claim completion.
+
+### [Objective drift](../anti-patterns/objective-drift.md)
+
+After context summarization, an agent may lose track of original intent — asking unnecessary clarification or pursuing tangential subtasks while appearing functional. ([LangChain: Context management for deep agents](https://blog.langchain.com/context-management-for-deepagents/)) Test for drift by triggering summarization mid-task and verifying the agent continues on the original objective.
+
+### Doom loops
+
+An agent edits the same file repeatedly without converging. Detection: track per-file edit counts via hooks. After N edits, inject context like "you've edited this file 8 times — try a different approach." ([LangChain: Improving deep agents with harness engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/))
+
+## Harness patterns
+
+### The initializer agent
+
+A dedicated first-session agent handles environment setup: creates `init.sh`, `claude-progress.txt`, `feature_list.json`, and an initial git commit. ([Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)) This separates bootstrapping from coding — the coding agent never decides what "done" looks like.
+
+```mermaid
+sequenceDiagram
+    participant H as Harness
+    participant I as Initializer Agent
+    participant C as Coding Agent
+    H->>I: Session 0: bootstrap
+    I->>I: Create progress file, feature list, init script
+    I->>H: Initial commit
+    loop Sessions 1..N
+        H->>C: Resume from progress file
+        C->>C: Pick features, implement, test
+        C->>H: Update progress file, commit
+    end
+```
+
+### Pre-completion checklist
+
+Middleware intercepts the agent before exit and forces a verification pass against the task spec. Each requirement must confirm before the harness allows completion — a mechanical safeguard against premature exit. ([LangChain: Improving deep agents with harness engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/))
+
+### [Loop detection](../../observability/loop-detection.md) middleware
+
+Tool call hooks can track repetitive behavior by monitoring consecutive failed tests or repeated identical tool calls. When thresholds are exceeded, the harness injects corrective context or forces a strategy change.
+
+### Environmental feedback
+
+Agents need continuous ground truth — test results, linter output, build status — to confirm changes actually work. ([Anthropic: Building effective agents](https://www.anthropic.com/engineering/building-effective-agents))
+
+## Why it works
+
+Progress files and feature lists externalize state that would otherwise live only in the model's context window. [Context compression](../../context-engineering/context-compression-strategies.md) partially replaces in-context memory with a summary — which can omit detail. A progress file written to disk is immune to that loss. A JSON feature list makes completion criteria explicit and binary: the model cannot interpret "passing" as "partially passing." The separation between volatile in-context reasoning and durable external state closes the gap between what the agent thinks it has done and what it has actually done.
+
+## When this backfires
+
+1. Short-lived tasks: for a task that finishes in a single session, progress files and an initializer agent add overhead that exceeds their benefit. The payback only arrives once the context window boundaries become real.
+2. Emergent requirements: [feature lists](../../instructions/feature-list-files.md) require upfront enumeration. When you discover success criteria through exploration, a rigid contract creates friction — the agent spends time updating the list rather than building.
+3. Broken scaffolding: a misspecified `feature_list.json` from the initializer is worse than none — downstream sessions inherit a false map and gain false confidence about completion.
+
+## Production monitoring
+
+[Rainbow deployments](../multi-agent/rainbow-deployments-agents.md): shift traffic between agent versions without disrupting in-progress tasks. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
+
+Decision path tracing: monitor decision patterns and interaction structures (not content) to diagnose failures — non-deterministic failures require full tracing. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
+
+## Example
+
+A harness bootstraps a multi-session coding task with monitoring artifacts, then uses them to prevent premature completion:
+
+```bash
+# Session 0: Initializer agent creates monitoring artifacts
+cat > claude-progress.txt << 'EOF'
+## Status: IN PROGRESS
+## Completed: 0/5 features
+## Current: Setting up project scaffolding
+## Blockers: None
+EOF
+
+cat > feature_list.json << 'EOF'
+{
+  "features": [
+    { "name": "auth-middleware", "status": "failing" },
+    { "name": "rate-limiter", "status": "failing" },
+    { "name": "health-endpoint", "status": "failing" },
+    { "name": "request-logging", "status": "failing" },
+    { "name": "graceful-shutdown", "status": "failing" }
+  ]
+}
+EOF
+
+git add claude-progress.txt feature_list.json
+git commit -m "init: monitoring artifacts for API server task"
+```
+
+```bash
+# Pre-completion hook — blocks exit until all features pass
+FAILING=$(jq '[.features[] | select(.status == "failing")] | length' feature_list.json)
+if [ "$FAILING" -gt 0 ]; then
+  echo "ERROR: $FAILING features still failing. Cannot complete."
+  exit 1
+fi
+```
+
+## Key Takeaways
+
+- Progress files bridge sessions — without them, agents misread partial state and declare premature completion
+- JSON feature lists are goal contracts — structured definitions of "done" that resist model corruption
+- Drift is invisible — test by triggering context summarization mid-task and checking continuity
+- Separate bootstrapping from execution — an initializer agent defines success criteria; the coding agent works toward them
+- Mechanical verification beats self-assessment — pre-completion checklists and loop detection catch failures agents miss
+
+## Related
+
+- [The Plan-First Loop](../../workflows/plan-first-loop.md)
+- [Harness Engineering](harness-engineering.md)
+- [Session Initialization Ritual](session-initialization-ritual.md)
+- [Convergence Detection](../../loop-engineering/convergence-detection.md)
+- [Trajectory Logging via Progress Files and Git History](../../observability/trajectory-logging-progress-files.md)
+- [Agent Harness](agent-harness.md)
+- [Goal Recitation](../../context-engineering/goal-recitation.md)
+- [Frozen Spec File](../../instructions/frozen-spec-file.md)

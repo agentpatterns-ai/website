@@ -29,7 +29,7 @@ Structural patterns for tool interfaces, schemas, error handling, and output for
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — Tools are the agent's UI; the same principles that make human interfaces usable make agent tools effective
 - [Function-Level Debugger Interfaces for Coding Agents](function-level-debugger-interfaces.md) — Re-expose interactive debuggers at the function frame instead of the source line so LLM agents pay one turn per call, not one turn per step
 - [Semantic Tool Output](semantic-tool-output.md) — Return human-readable, contextually filtered output from agent tools to reduce hallucination and improve downstream call accuracy
-- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md) — Formal schemas at every agent-to-agent interface establish explicit contracts that prevent state mismanagement and silent failures
+- [Typed Schemas at Agent Boundaries](../patterns/multi-agent/typed-schemas-at-agent-boundaries.md) — Formal schemas at every agent-to-agent interface establish explicit contracts that prevent state mismanagement and silent failures
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) — Redesign tool interfaces so the wrong call cannot compile -- prevention over documentation
 - [Consolidate Agent Tools](consolidate-agent-tools.md) — Prefer fewer, higher-level tools that match how agents reason about tasks over many narrow tools that mirror API endpoint boundaries
 - [Toolset Agentization](toolset-agentization.md) — Group frequently co-used tools into specialized sub-agents so the top-level planner chooses among fewer, coarser actions at each routing step

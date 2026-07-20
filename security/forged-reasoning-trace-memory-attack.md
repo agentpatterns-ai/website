@@ -47,7 +47,7 @@ Agents retrieve top-k memory entries by vector similarity and fold them into pla
 The attack needs specific preconditions, and defenders who remove one contain it:
 
 - No persistent reasoning-trace memory. A session-scoped agent has no store for the forged traces to persist into, so retrieval never surfaces them.
-- Controlled memory writes. The attack needs write access or induced writes; a human-curated, [PR-reviewed memory](../agent-design/agent-memory-patterns.md) that never auto-ingests tool returns or self-summaries blocks both injection and amplification.
+- Controlled memory writes. The attack needs write access or induced writes; a human-curated, [PR-reviewed memory](../patterns/agent-design/agent-memory-patterns.md) that never auto-ingests tool returns or self-summaries blocks both injection and amplification.
 - Open-ended tasks. On a binary safety-gate agent the attack success rate reaches 100%, because one forged "already validated" claim flips the decision. On open-ended question-answering and shopping agents it falls to 48 to 52%, where no single retrieved precedent settles the outcome ([Karamchandani et al., 2026, §V-E](https://arxiv.org/abs/2607.05029)).
 - A structural reasoning guard. The paper's SENTINEL pipeline adds a reasoning-guard layer that scores each candidate entry on provenance anomaly, self-reference count mismatch, and implausible-consistency claims; it cuts attack success to 0 to 6% with zero false positives across 326 benign traces ([Karamchandani et al., 2026, §IV-E](https://arxiv.org/abs/2607.05029)). An adaptive attacker who avoids over-claiming counts evades the count-mismatch signal, so treat it as one layer, not a complete control.
 
@@ -82,5 +82,5 @@ The second entry contains no imperative and no trigger word. Retrieved during a 
 - [Detecting Memory-Poisoning Exfiltration by Tool-Call Order (Recall-Before-Send Signature)](recall-before-send-memory-poisoning-detection.md) — a log-only detector for exfiltration-style memory poisoning; blind to reasoning-trace forgery that emits no anomalous send
 - [Oracle Poisoning: Knowledge Graph Corruption Against Tool-Using Agents](oracle-poisoning-knowledge-graph.md) — the same provenance-blindness root cause via a poisoned data path rather than stored reasoning
 - [Provenance-Aware Decision Auditing for LLM Agents](provenance-aware-decision-auditing.md) — the provenance-tracking direction that a reasoning guard formalizes
-- [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — the persistent-memory designs that create the write surface this attack needs
+- [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md) — the persistent-memory designs that create the write surface this attack needs
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the conditions memory poisoning composes across sessions

@@ -130,6 +130,6 @@ The 429 belongs to `fanout-3`, spawned by `orch`. A cost-by-`agent.name` panel i
 ## Related
 
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](agent-observability-otel.md)
-- [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
-- [Bounded Batch Dispatch](../multi-agent/bounded-batch-dispatch.md)
-- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
+- [Sub-Agents for Fan-Out Research and Context Isolation](../patterns/multi-agent/sub-agents-fan-out.md)
+- [Bounded Batch Dispatch](../patterns/multi-agent/bounded-batch-dispatch.md)
+- [Agent Handoff Protocols](../patterns/multi-agent/agent-handoff-protocols.md)

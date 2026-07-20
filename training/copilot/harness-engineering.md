@@ -508,16 +508,16 @@ Training
 
 - [GitHub Copilot: Platform Surface Map](surface-map.md) — all surfaces and when to use each
 - [GitHub Copilot: Customization Primitives](customization-primitives.md) — configuring instructions, agents, skills, hooks, MCP, Spaces, memory
-- [GitHub Copilot: Context Engineering & Agent Workflows](context-and-workflows.md) — context engineering, [progressive disclosure](../../agent-design/progressive-disclosure-agents.md), delegation, steering
+- [GitHub Copilot: Context Engineering & Agent Workflows](context-and-workflows.md) — context engineering, [progressive disclosure](../../patterns/agent-design/progressive-disclosure-agents.md), delegation, steering
 
 Harness Engineering
 
-- [Harness Engineering](../../agent-design/harness-engineering.md) — the discipline of designing agent environments for success by default
-- [Agent Harness](../../agent-design/agent-harness.md) — initialiser + coding agent pattern for long-running work
-- [Agent Backpressure](../../agent-design/agent-backpressure.md) — automated feedback loops and the autonomy spectrum
+- [Harness Engineering](../../patterns/agent-design/harness-engineering.md) — the discipline of designing agent environments for success by default
+- [Agent Harness](../../patterns/agent-design/agent-harness.md) — initialiser + coding agent pattern for long-running work
+- [Agent Backpressure](../../patterns/agent-design/agent-backpressure.md) — automated feedback loops and the autonomy spectrum
 - [Agent Loop Middleware](../../loop-engineering/agent-loop-middleware.md) — post-loop safety nets and pre-call message injection
-- [Rollback-First Design](../../agent-design/rollback-first-design.md) — making agent operations reversible by default
-- [Idempotent Agent Operations](../../agent-design/idempotent-agent-operations.md) — designing operations safe to retry
+- [Rollback-First Design](../../patterns/agent-design/rollback-first-design.md) — making agent operations reversible by default
+- [Idempotent Agent Operations](../../patterns/agent-design/idempotent-agent-operations.md) — designing operations safe to retry
 - [Convergence Detection](../../loop-engineering/convergence-detection.md) — knowing when to stop iterating
 
 Enforcement & Verification

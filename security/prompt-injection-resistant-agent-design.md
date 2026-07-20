@@ -35,7 +35,7 @@ Six patterns offer formally verifiable resistance. [Source: [Beurer-Kellner et a
 |---------|-----------|-------------|
 | [Action-Selector](action-selector-pattern.md) | LLM picks from a fixed set of actions | Routing, triage agents |
 | [Plan-Then-Execute](plan-then-execute-web-agents.md) | Plan generated before untrusted content is seen | Multi-step workflows |
-| [LLM Map-Reduce](../multi-agent/llm-map-reduce.md) | Each LLM sees only a data partition | Batch document processing |
+| [LLM Map-Reduce](../patterns/multi-agent/llm-map-reduce.md) | Each LLM sees only a data partition | Batch document processing |
 | Dual LLM | Privileged LLM decides; quarantined LLM reads untrusted content | Reasoning over untrusted input |
 | Code-Then-Execute | LLM generates code; sandbox executes without re-evaluation | Data transformation |
 | Context-Minimization | Minimum necessary untrusted content enters context | Any external data consumer |
@@ -65,7 +65,7 @@ graph LR
 
 ## The rule of two
 
-Never combine untrusted input, sensitive data access, and external communication in one agent -- the [Lethal Trifecta](../security/lethal-trifecta-threat-model.md). [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)] Remove at least one:
+Never combine untrusted input, sensitive data access, and external communication in one agent -- the [Lethal Trifecta](lethal-trifecta-threat-model.md). [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)] Remove at least one:
 
 - Remove egress: default-deny outbound network
 - Remove private data: strip secrets before context entry
@@ -90,7 +90,7 @@ Platform ratings: Claude Code Low, Copilot High, Cursor Critical. [Source: [Malo
 
 ## Practical defenses for coding workflows
 
-- Scope permissions tightly: [schema-level filtering](../multi-agent/subagent-schema-level-tool-filtering.md) beats runtime rejection, because the model cannot invoke tools it cannot see.
+- Scope permissions tightly: [schema-level filtering](../patterns/multi-agent/subagent-schema-level-tool-filtering.md) beats runtime rejection, because the model cannot invoke tools it cannot see.
 - Audit rules files: treat `.cursorrules`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.windsurfrules` as untrusted input.
 - Gate consequential actions: require approval before file deletion, shell execution, git push, and dependency install.
 - Isolate execution: run agents in containers with default-deny egress.
@@ -105,7 +105,7 @@ Each pattern cuts the path from untrusted content to consequential action before
 - Utility loss: the [Action-Selector](action-selector-pattern.md) and Plan-Then-Execute patterns only fit workflows with a fixed action set or stable plan. Open-ended agents that reason over what they just read cannot be constrained this way.
 - Architectural cost: Dual LLM doubles inference cost, and most frameworks do not provide the privileged and quarantined split.
 - Steep utility cost: "Provable" here means resistance by construction, not an empirically validated guarantee -- the originating patterns paper runs no quantitative experiments. Follow-up work measured the Dual LLM pattern driving attack success to 0% while task utility collapsed from 49.7% to 14.6% in a bug-fixing scenario. [Source: [Jacob et al., 2025](https://arxiv.org/abs/2509.25926)]
-- False confidence: one pattern alone, without removing another leg of the [Lethal Trifecta](../security/lethal-trifecta-threat-model.md), creates an illusion of safety. An agent that asks before acting can still exfiltrate data if egress is open.
+- False confidence: one pattern alone, without removing another leg of the [Lethal Trifecta](lethal-trifecta-threat-model.md), creates an illusion of safety. An agent that asks before acting can still exfiltrate data if egress is open.
 - Schema drift: tools added after deployment may silently reintroduce capabilities that schema-level filtering excluded.
 
 ## Example
@@ -147,9 +147,9 @@ Even if a malicious PR contains injected instructions, the agent lacks the tools
 
 ## Related
 
-- [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md)
+- [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
-- [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md)
+- [Single-Layer Prompt Injection Defence](../patterns/anti-patterns/single-layer-injection-defence.md)
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)

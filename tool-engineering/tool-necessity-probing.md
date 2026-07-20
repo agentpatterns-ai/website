@@ -90,9 +90,9 @@ Probe-based tool-call control sits next to, not in place of, three existing patt
 
 | Pattern | Slot | Composes with probing how |
 |---|---|---|
-| [Inference-time tool-call reviewer](../agent-design/inference-time-tool-call-reviewer.md) | Reviews each *provisional* call after the model emits it | Probing decides whether to emit; the reviewer decides whether to execute |
-| [Heuristic effort scaling](../agent-design/heuristic-effort-scaling.md) | Encodes per-tier tool-call ceilings in the system prompt | Static budget upstream; probing is the dynamic per-query selector |
-| [Cognitive reasoning-execution separation](../agent-design/cognitive-reasoning-execution-separation.md) | Routes reasoning to one model, execution to another | Probing supplies the reasoning model with a calibrated tool-necessity signal at no extra forward pass |
+| [Inference-time tool-call reviewer](../patterns/agent-design/inference-time-tool-call-reviewer.md) | Reviews each *provisional* call after the model emits it | Probing decides whether to emit; the reviewer decides whether to execute |
+| [Heuristic effort scaling](../patterns/agent-design/heuristic-effort-scaling.md) | Encodes per-tier tool-call ceilings in the system prompt | Static budget upstream; probing is the dynamic per-query selector |
+| [Cognitive reasoning-execution separation](../patterns/agent-design/cognitive-reasoning-execution-separation.md) | Routes reasoning to one model, execution to another | Probing supplies the reasoning model with a calibrated tool-necessity signal at no extra forward pass |
 
 ## Example
 
@@ -118,10 +118,10 @@ The same harness without the probe routinely fires `schema_lookup` on Query A â€
 
 ## Related
 
-- [Inference-Time Tool-Call Reviewer](../agent-design/inference-time-tool-call-reviewer.md)
-- [Heuristic Effort Scaling](../agent-design/heuristic-effort-scaling.md)
-- [Cognitive Reasoning-Execution Separation](../agent-design/cognitive-reasoning-execution-separation.md)
+- [Inference-Time Tool-Call Reviewer](../patterns/agent-design/inference-time-tool-call-reviewer.md)
+- [Heuristic Effort Scaling](../patterns/agent-design/heuristic-effort-scaling.md)
+- [Cognitive Reasoning-Execution Separation](../patterns/agent-design/cognitive-reasoning-execution-separation.md)
 - [Tool Minimalism](tool-minimalism.md)
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
-- [Memory Retrieval as a Control Decision](../agent-design/memory-retrieval-as-control.md)
+- [Memory Retrieval as a Control Decision](../patterns/agent-design/memory-retrieval-as-control.md)
 - [Chance-Corrected Shortlist Depth Sizing](chance-corrected-shortlist-depth-sizing.md)

@@ -116,8 +116,8 @@ When gating hurts DX, the fix is exposure controls: loosen the filter, let it ga
 - [Signal Over Volume in AI Review](../code-review/signal-over-volume-in-ai-review.md) — the same principle applied to code review: silence when confidence is low
 - [Next Edit Suggestions Paradigm](../tools/copilot/next-edit-suggestions.md) — GitHub's NES model independently validates the "fewer but better" approach
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — every dismissed suggestion adds to judgment fatigue
-- [Selective Autonomy from Copilot Feedback](../agent-design/selective-autonomy-from-copilot-feedback.md) — the same selective-classification idea applied to executing actions rather than displaying completions
-- [Agent Backpressure](../agent-design/agent-backpressure.md) — rate-limiting agent output to match developer processing capacity
+- [Selective Autonomy from Copilot Feedback](../patterns/agent-design/selective-autonomy-from-copilot-feedback.md) — the same selective-classification idea applied to executing actions rather than displaying completions
+- [Agent Backpressure](../patterns/agent-design/agent-backpressure.md) — rate-limiting agent output to match developer processing capacity
 - [Attention Management with Parallel Agents](attention-management-parallel-agents.md) — managing completion fatigue when multiple agents compete for developer focus
 - [Progressive Autonomy Model Evolution](progressive-autonomy-model-evolution.md) — acceptance rate as a signal for shifting autonomy levels
 - [Bottleneck Migration](bottleneck-migration.md) — how gating shifts the bottleneck from suggestion overload to suggestion quality

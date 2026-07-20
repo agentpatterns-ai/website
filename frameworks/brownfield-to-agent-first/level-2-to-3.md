@@ -214,7 +214,7 @@ Hook proliferation without a removal process. Teams add hooks reactively after i
 ## Key Takeaways
 
 - Instructions provide context; hooks provide enforcement. Use instructions for things the agent should understand; use hooks for things the agent must not do regardless of instruction.
-- Structured task definitions eliminate ambiguity and encode architectural rules into replayable workflows — the structured-artifact half of the [Agent Harness](../../agent-design/agent-harness.md) pattern. They are the difference between "the agent knows the pattern" and "the agent always follows the pattern."
+- Structured task definitions eliminate ambiguity and encode architectural rules into replayable workflows — the structured-artifact half of the [Agent Harness](../../patterns/agent-design/agent-harness.md) pattern. They are the difference between "the agent knows the pattern" and "the agent always follows the pattern."
 - Session scaffolding preserves quality across multi-session work. Progress files and structured commit messages replace degrading conversation history with the durable artifacts that [Context Engineering](../../context-engineering/context-engineering.md) calls for.
 - One task per session with a verifiable exit condition. Decompose large features before giving them to an agent.
 
@@ -222,8 +222,8 @@ Hook proliferation without a removal process. Teams add hooks reactively after i
 
 - [Hook Catalog](../../tool-engineering/hook-catalog.md) — practical reference for PreToolUse and PostToolUse hooks
 - [Skill-Tool Runtime Enforcement](../../tool-engineering/skill-tool-runtime-enforcement.md) — combining hooks with skills for layered enforcement
-- [Agent Harness](../../agent-design/agent-harness.md) — initializer + coding agent pattern for long-running work
-- [Rollback-First Design](../../agent-design/rollback-first-design.md) — making agent operations reversible by default
+- [Agent Harness](../../patterns/agent-design/agent-harness.md) — initializer + coding agent pattern for long-running work
+- [Rollback-First Design](../../patterns/agent-design/rollback-first-design.md) — making agent operations reversible by default
 - [Brownfield to Agent-First: Repo Maturity Framework](index.md) — full L0–L5 framework overview
 - [L0 → L1: Making the Repo Readable](level-0-to-1.md) — first module
 - [L1 → L2: Adding Feedback Loops](level-1-to-2.md) — previous module

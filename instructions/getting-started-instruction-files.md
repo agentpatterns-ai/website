@@ -28,7 +28,7 @@ Each tool reads a different file. Pick the one that matches your tool, or keep s
 | GitHub Copilot | `copilot-instructions.md` | `.github/copilot-instructions.md` |
 | Any AGENTS.md-compatible tool | `AGENTS.md` | Repo root |
 
-Using more than one tool? See [how to converge multiple instruction files](../instructions/instruction-file-ecosystem.md). The rest of this page is tool-agnostic -- the principles apply whatever the file name.
+Using more than one tool? See [how to converge multiple instruction files](instruction-file-ecosystem.md). The rest of this page is tool-agnostic -- the principles apply whatever the file name.
 
 ## Bootstrap or start from scratch
 
@@ -104,13 +104,13 @@ Target under 200 lines per file. Every line consumes context budget before the a
 
 When you outgrow 200 lines:
 
-- Claude Code: split into [`@path` imports](../instructions/import-composition-pattern.md) or `.claude/rules/` files with path-scoped frontmatter
+- Claude Code: split into [`@path` imports](import-composition-pattern.md) or `.claude/rules/` files with path-scoped frontmatter
 - Copilot: use `.github/instructions/*.instructions.md` files with `applyTo` globs
 - AGENTS.md: break into multiple `AGENTS.md` files in subdirectories
 
 ## Instructions are context, not enforcement
 
-Agents read instruction files on a best-effort basis. They are not configuration. Specificity and conciseness improve compliance, but they cannot guarantee it — adherence is bounded by the [instruction compliance ceiling](../instructions/instruction-compliance-ceiling.md).
+Agents read instruction files on a best-effort basis. They are not configuration. Specificity and conciseness improve compliance, but they cannot guarantee it — adherence is bounded by the [instruction compliance ceiling](instruction-compliance-ceiling.md).
 
 For rules that must never be violated, use deterministic mechanisms:
 
@@ -208,7 +208,7 @@ Each version adds only what the agent needed and did not have. Nothing is added 
 Instruction files create value when they are maintained. They create liability when they are not:
 
 - Stale structural references mislead. Directory paths, file names, and module boundaries change. An instruction file that documents `src/api/handlers/` after a refactor actively directs the agent to the wrong place. Update the file or remove the reference when the codebase changes.
-- Auto-generated files underperform. Asking the agent to draft its own instruction file is a useful bootstrapping technique, but LLM-generated context files tend to be generic and verbose. The output works as a first draft — not a finished file; shipping it unread is the [cargo-cult agent setup](../anti-patterns/cargo-cult-agent-setup.md) failure. Review and trim hard before committing.
+- Auto-generated files underperform. Asking the agent to draft its own instruction file is a useful bootstrapping technique, but LLM-generated context files tend to be generic and verbose. The output works as a first draft — not a finished file; shipping it unread is the [cargo-cult agent setup](../patterns/anti-patterns/cargo-cult-agent-setup.md) failure. Review and trim hard before committing.
 - Over-specification reduces adherence. Adding more rules does not guarantee more compliance. Instruction-following accuracy degrades as instruction density increases. A file with 30 specific, high-signal rules outperforms one with 150 that includes noise.
 
 ## Key Takeaways
@@ -222,11 +222,11 @@ Instruction files create value when they are maintained. They create liability w
 
 ## Related
 
-- [CLAUDE.md Convention](../instructions/claude-md-convention.md)
+- [CLAUDE.md Convention](claude-md-convention.md)
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
-- [Project Instruction File Ecosystem](../instructions/instruction-file-ecosystem.md)
-- [Hierarchical CLAUDE.md](../instructions/hierarchical-claude-md.md)
-- [Cargo-Cult Agent Setup](../anti-patterns/cargo-cult-agent-setup.md)
+- [Project Instruction File Ecosystem](instruction-file-ecosystem.md)
+- [Hierarchical CLAUDE.md](hierarchical-claude-md.md)
+- [Cargo-Cult Agent Setup](../patterns/anti-patterns/cargo-cult-agent-setup.md)
 - [Repository Bootstrap Checklist](../workflows/repository-bootstrap-checklist.md)
 - [Agent Environment Bootstrapping](../workflows/agent-environment-bootstrapping.md)
 - [Instruction File Fact Checker](../workflows/instruction-file-fact-checker.md)

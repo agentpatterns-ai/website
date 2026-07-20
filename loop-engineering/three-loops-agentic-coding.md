@@ -44,7 +44,7 @@ The signals are distinct in the trace. A spinning inner tool loop shows up as re
 
 ### Loop 1: Tool loop (inside a turn)
 
-A user-facing turn is itself a loop. The model emits a response, the harness runs any tool call, the result is appended to the prompt, and the model is queried again. The loop stops at "no pending tool calls" ([Unrolling the Codex Agent Loop, OpenAI](https://openai.com/index/unrolling-the-codex-agent-loop/)). Context grows inside the turn because each tool result is appended. For the full treatment, see [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](../agent-design/agent-turn-model.md). The boundary that matters for diagnosis: this loop sits entirely inside one turn, and a stuck tool loop appears as repeated tool calls with no final assistant message.
+A user-facing turn is itself a loop. The model emits a response, the harness runs any tool call, the result is appended to the prompt, and the model is queried again. The loop stops at "no pending tool calls" ([Unrolling the Codex Agent Loop, OpenAI](https://openai.com/index/unrolling-the-codex-agent-loop/)). Context grows inside the turn because each tool result is appended. For the full treatment, see [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](../patterns/agent-design/agent-turn-model.md). The boundary that matters for diagnosis: this loop sits entirely inside one turn, and a stuck tool loop appears as repeated tool calls with no final assistant message.
 
 ### Loop 2: Verification loop (across turns, tests as boundary)
 
@@ -96,7 +96,7 @@ The frame adds cognitive overhead — three loops to remember — worth paying o
 - Single-shot tasks. A typo fix or version bump runs entirely inside one tool loop. No verification or convergence loop exists to diagnose.
 - Code tasks with a sharp test gate. When `pytest -x` is the entire stopping criterion, the convergence loop collapses into the verification loop, and two loops suffice. This is the case Philipp Schmid argues from ([philschmid.de](https://www.philschmid.de/inner-loop-vs-outer-loop)), and it holds for most CRUD-shaped code work.
 - A team already uses Kim and Yegge's or Morris's framing. Introducing competing tri-loop vocabulary produces terminology drift, not better diagnosis. Adopt the local framing, or accept the rename cost up front.
-- Pure exploration or debugging. When the goal is to find out what is wrong, "which loop am I in" is the wrong question. The move is to read more, then [hypothesize](../agent-design/hypothesis-driven-debugging.md), not to pick a loop.
+- Pure exploration or debugging. When the goal is to find out what is wrong, "which loop am I in" is the wrong question. The move is to read more, then [hypothesize](../patterns/agent-design/hypothesis-driven-debugging.md), not to pick a loop.
 
 The signal: if you can name the failing loop in under five seconds, the frame is doing its job. If you find yourself debating which loop a symptom belongs to, the underlying issue is something else (spec ambiguity, missing context) and the label is a distraction.
 
@@ -134,7 +134,7 @@ The same session showed three failures across three different loops, each with a
 
 ## Related
 
-- [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](../agent-design/agent-turn-model.md) — the inner tool loop in full
+- [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](../patterns/agent-design/agent-turn-model.md) — the inner tool loop in full
 - [Failure-Driven Iteration for Improving Agent Workflows](../workflows/failure-driven-iteration.md) — the verification loop in full
 - [Convergence Detection in Iterative Agent Refinement](convergence-detection.md) — the stopping signal for the outer convergence loop
 - [Humans and Agents in Software Engineering Loops](../workflows/humans-agents-development-loops.md) — the why / how loop framing on the human-positioning axis

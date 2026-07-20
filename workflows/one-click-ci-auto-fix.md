@@ -21,7 +21,7 @@ One-click CI auto-fix is a bounded-autonomy variant of automated CI remediation:
 
 - The failure class is in scope — linter violations, broken test skeletons, and simple test edits. GitHub markets the feature around "fixing tests or correcting linter failures" and frames it as "simple but time-consuming work" ([GitHub Changelog, May 18 2026](https://github.blog/changelog/2026-05-18-one-click-fixes-for-failing-actions-with-copilot-cloud-agent/)). Integration, flaky-network, and infrastructure failures need context outside the diff and are out of scope.
 - Each remaining confirmation gate is treated as a real gate. The click-to-trigger gate, the "Approve and run workflows" gate, and the PR review gate each remove a distinct failure surface; rubber-stamping any of them collapses the design into autonomous auto-fix.
-- The team has a retry budget of 2-3 attempts per failure. Stacking "Fix with Copilot" clicks on a regression the agent cannot resolve produces unbounded fix attempts without convergence — the same circuit-breaker problem documented for the autonomous case in [self-healing-production-agent.md](../agent-design/self-healing-production-agent.md).
+- The team has a retry budget of 2-3 attempts per failure. Stacking "Fix with Copilot" clicks on a regression the agent cannot resolve produces unbounded fix attempts without convergence — the same circuit-breaker problem documented for the autonomous case in [self-healing-production-agent.md](../patterns/agent-design/self-healing-production-agent.md).
 
 Outside these conditions, the pattern transfers diagnosis work from the operator to the reviewer rather than removing it.
 
@@ -96,6 +96,6 @@ Eligibility started with Copilot Business and Copilot Enterprise subscribers ([G
 
 - [Continuous AI (Agentic CI/CD)](continuous-ai-agentic-cicd.md) — the broader pattern of running agents inside CI infrastructure with read-only defaults and reviewable artifacts
 - [AI Bot CI/CD Workflow Reliability by Agent](ai-bot-ci-workflow-reliability.md) — per-agent CI success rates that quantify the failure backlog this pattern is competing with
-- [Self-Healing Production Agent](../agent-design/self-healing-production-agent.md) — the autonomous variant of the same loop, with circuit-breaker design for unfixable regressions
+- [Self-Healing Production Agent](../patterns/agent-design/self-healing-production-agent.md) — the autonomous variant of the same loop, with circuit-breaker design for unfixable regressions
 - [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — convert accepted fixes into regression eval cases that gate future deploys
 - [Agent-Authored PR Integration and Merge Predictors](../code-review/agent-authored-pr-integration.md) — empirical baselines on reviewer engagement, force pushes, and comment-volume effects that the one-click loop must respect

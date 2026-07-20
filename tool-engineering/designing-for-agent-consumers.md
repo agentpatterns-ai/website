@@ -33,8 +33,8 @@ It does not apply to internal-only apps with no third-party agent traffic, to si
 
 AX shapes the surface the agent calls from outside. It is distinct from the two adjacent concerns this site already covers:
 
-- [Harness Engineering](../agent-design/harness-engineering.md) shapes the agent's own scaffold — context window, tools, loop — which the library author does not own.
-- The [AX Stack](../agent-design/ax-stack-layered-model.md) and [AX/UX/DX Triad](../agent-design/ax-ux-dx-triad.md) are internal diagnostics: where a failure lives, and how to route data to the model versus the user. They sit inside the harness, not on your public surface.
+- [Harness Engineering](../patterns/agent-design/harness-engineering.md) shapes the agent's own scaffold — context window, tools, loop — which the library author does not own.
+- The [AX Stack](../patterns/agent-design/ax-stack-layered-model.md) and [AX/UX/DX Triad](../patterns/agent-design/ax-ux-dx-triad.md) are internal diagnostics: where a failure lives, and how to route data to the model versus the user. They sit inside the harness, not on your public surface.
 
 AX is the surface-design discipline that those diagnostics point at when the failure is "the SDK itself is not legible to an agent."
 
@@ -60,7 +60,7 @@ An agent's only contact with your product is the literal bytes of your surface �
 
 ## Key Takeaways
 
-- AX is the discipline of designing your external SDK/CLI/API/docs surface for an agent consumer — distinct from [harness engineering](../agent-design/harness-engineering.md), which shapes the agent's own scaffold.
+- AX is the discipline of designing your external SDK/CLI/API/docs surface for an agent consumer — distinct from [harness engineering](../patterns/agent-design/harness-engineering.md), which shapes the agent's own scaffold.
 - The agent reads your surface literally and has no intuition to repair ambiguity, so errors, response size, naming, and signatures are the design surface.
 - It applies only when you own a stable surface agents consume; otherwise the rules are overhead.
 - The page names the discipline and routes to tactic pages — apply the linked rules, do not stop at the umbrella.
@@ -69,8 +69,8 @@ An agent's only contact with your product is the literal bytes of your surface �
 
 - [Headless-First Services: APIs for Agent Consumers](headless-first-services.md) — exposing the full surface so an agent can reach every flow without a browser.
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md) — the structured-error tactic behind rule 1.
-- [AX Stack: Layered Model](../agent-design/ax-stack-layered-model.md) — the internal diagnostic that names the technology-surface layer this discipline designs.
-- [AX/UX/DX Triad](../agent-design/ax-ux-dx-triad.md) — separating the agent, user, and developer audiences inside the harness; AX-as-discipline is its outward-facing complement.
+- [AX Stack: Layered Model](../patterns/agent-design/ax-stack-layered-model.md) — the internal diagnostic that names the technology-surface layer this discipline designs.
+- [AX/UX/DX Triad](../patterns/agent-design/ax-ux-dx-triad.md) — separating the agent, user, and developer audiences inside the harness; AX-as-discipline is its outward-facing complement.
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — applying HCI principles to the interface an agent calls.
 - [Human-Facing Docs in the Agent Era: Mental Models Over Reference](../human/human-docs-mental-models-agent-era.md) — the human-facing counterpart; what prose docs retain once agents absorb the machine-readable reference load.
-- [Rewriting a CLI Into a JSON Payload for Agents](../anti-patterns/cli-json-payload-rewrite.md) — the measured limit on AX enthusiasm: a JSON-input rewrite is cost without a correctness gain, so the real levers stay discoverability, help text, and structured output.
+- [Rewriting a CLI Into a JSON Payload for Agents](../patterns/anti-patterns/cli-json-payload-rewrite.md) — the measured limit on AX enthusiasm: a JSON-input rewrite is cost without a correctness gain, so the real levers stay discoverability, help text, and structured output.

@@ -102,4 +102,4 @@ Once resolved, the skill updates `CONTEXT.md` inline with the new sub-terms and 
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md)
 - [Three Knowledge Tiers: Sourced, Unverified, Hallucinated](three-knowledge-tiers.md)
 - [The Specification as Prompt](specification-as-prompt.md)
-- [Emergent Architecture in AI-Driven Codebases](../agent-design/agent-driven-codebase-fingerprint.md)
+- [Emergent Architecture in AI-Driven Codebases](../patterns/agent-design/agent-driven-codebase-fingerprint.md)

@@ -117,4 +117,4 @@ The pricing page shows $5/MTok either way. The spend forecast shifts by 34%.
 - [Manual Compaction as Dumb Zone Mitigation](../context-engineering/manual-compaction-dumb-zone-mitigation.md)
 - [Token-Efficient Code Generation](token-efficient-code-generation.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
-- [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md)
+- [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md)

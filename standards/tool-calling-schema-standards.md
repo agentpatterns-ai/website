@@ -185,4 +185,4 @@ The logic is identical across all four; only the wrapper structure and the param
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Tool Minimalism and High-Level Prompting](../tool-engineering/tool-minimalism.md)
 - [Tool Descriptions as Onboarding](../tool-engineering/tool-descriptions-as-onboarding.md) — writing tool descriptions with implicit context agents need
-- [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md)
+- [Subagent Schema-Level Tool Filtering](../patterns/multi-agent/subagent-schema-level-tool-filtering.md)

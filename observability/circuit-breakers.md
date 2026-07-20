@@ -114,12 +114,12 @@ The steelman: if your agents already fail gracefully on their own — return par
 
 ## Related
 
-- [Agent Circuit Breaker](../agent-design/agent-circuit-breaker.md) — tool-level state machine that blocks calls to degraded external tools; complementary to loop-level breakers here
+- [Agent Circuit Breaker](../patterns/agent-design/agent-circuit-breaker.md) — tool-level state machine that blocks calls to degraded external tools; complementary to loop-level breakers here
 - [Loop Detection](loop-detection.md)
 - [Centralized LLM Gateway for Per-Dimension Agent Budgets](llm-gateway-per-dimension-budgets.md) — the fleet-wide budget control that complements this per-loop cost breaker
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md)
 - [Human-in-the-Loop Placement: Where to Gate Agent Pipelines](../workflows/human-in-the-loop.md)
-- [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
+- [Idempotent Agent Operations: Safe to Retry](../patterns/agent-design/idempotent-agent-operations.md)
 - [Context Window Management: The Dumb Zone](../context-engineering/context-window-dumb-zone.md)
 - [Agent Debugging: Diagnosing Bad Agent Output](agent-debugging.md)
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)

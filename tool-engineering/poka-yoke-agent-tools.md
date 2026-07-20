@@ -109,7 +109,7 @@ Apply poka-yoke where failure modes are well-understood and the constraint space
 2. Does the tool depend on prior state? Add a prerequisite gate (read-before-write, auth-before-access).
 3. Can the output overwhelm the context window? Add truncation with recovery hints, as in [Graceful Tool-Output Truncation](graceful-tool-output-truncation.md).
 4. Does the format require precise mechanical reasoning? Switch to a format with strong training priors.
-5. Can the tool silently apply the wrong change? Add a uniqueness or [idempotency](../agent-design/idempotent-agent-operations.md) constraint.
+5. Can the tool silently apply the wrong change? Add a uniqueness or [idempotency](../patterns/agent-design/idempotent-agent-operations.md) constraint.
 6. Test like a junior developer API — pass many inputs and observe where the model fails. Fix the interface, not the prompt.
 
 ## Key Takeaways
@@ -127,5 +127,5 @@ Apply poka-yoke where failure modes are well-understood and the constraint space
 - [Tool Description Quality](tool-description-quality.md) — selection signals and description iteration
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — defense-layer perspective on structural constraints
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — enforcement through hooks rather than instructions
-- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md) — formal schemas as structural contracts preventing invalid agent-to-agent calls
+- [Typed Schemas at Agent Boundaries](../patterns/multi-agent/typed-schemas-at-agent-boundaries.md) — formal schemas as structural contracts preventing invalid agent-to-agent calls
 - [Tool Minimalism](tool-minimalism.md) — fewer, non-overlapping tools reduce selection ambiguity

@@ -23,7 +23,7 @@ Learn it hands-on with the [Where Prompting Ends](https://learn.agentpatterns.ai
 
 ## The core distinction
 
-Prompt instructions are probabilistic. Under task pressure — context filling, attention diverted — compliance degrades toward the [instruction compliance ceiling](../instructions/instruction-compliance-ceiling.md) and the agent reverts to training defaults.
+Prompt instructions are probabilistic. Under task pressure — context filling, attention diverted — compliance degrades toward the [instruction compliance ceiling](instruction-compliance-ceiling.md) and the agent reverts to training defaults.
 
 Hooks are deterministic. A pre-command hook runs outside the agent's context; the model cannot overrule it.
 
@@ -84,7 +84,7 @@ Without a hook, injected instructions and `CLAUDE.md` compete in the reasoning l
 
 ## Context cost
 
-Prompt instructions occupy context and compete for attention — see the [instruction compliance ceiling](../instructions/instruction-compliance-ceiling.md). Hooks have zero context cost. Moving absolute rules to hooks improves reliability and frees context.
+Prompt instructions occupy context and compete for attention — see the [instruction compliance ceiling](instruction-compliance-ceiling.md). Hooks have zero context cost. Moving absolute rules to hooks improves reliability and frees context.
 
 ## Cross-tool applicability
 
@@ -152,7 +152,7 @@ These instructions require evaluating context a hook cannot inspect mechanically
 ## Key Takeaways
 
 - Prompts are probabilistic — compliance degrades under task pressure; hooks are deterministic at the tool-call boundary and run outside the agent's context.
-- Reach for a hook only when the rule is non-negotiable, binary, and opposed by a training prior. Anything else stays in the prompt, where [instruction polarity](../instructions/instruction-polarity.md) governs phrasing.
+- Reach for a hook only when the rule is non-negotiable, binary, and opposed by a training prior. Anything else stays in the prompt, where [instruction polarity](instruction-polarity.md) governs phrasing.
 - Hooks see parameters, not intent. Use prompts for architectural guidance, quality standards, and situational judgment.
 - Hooks are injection-resistant — injected instructions from a [prompt-injection](../security/prompt-injection-threat-model.md) payload can influence what the agent *tries*, not what a hook *allows*.
 - Hooks fail at four boundaries: substitution, intent-blindness, execution-path gaps, and hook-source trust. Pair them with CI and git-level gates for rules that must hold everywhere.
@@ -160,8 +160,8 @@ These instructions require evaluating context a hook cannot inspect mechanically
 ## Related
 
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
-- [The Instruction Compliance Ceiling](../instructions/instruction-compliance-ceiling.md)
-- [Instruction Polarity: Positive Rules Over Negative](../instructions/instruction-polarity.md)
+- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
+- [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
 - [Prompt Injection: A First-Class Threat](../security/prompt-injection-threat-model.md)
 - [Blast Radius Containment](../security/blast-radius-containment.md)
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md)

@@ -80,7 +80,7 @@ If your harness does not enforce a size limit, apply the same discipline by hand
 
 ## Applying this pattern without Codex
 
-Any [agent harness](../agent-design/agent-harness.md) that reads instruction files from the filesystem can implement this pattern:
+Any [agent harness](../patterns/agent-design/agent-harness.md) that reads instruction files from the filesystem can implement this pattern:
 
 1. Collect all AGENTS.md files from global config through the git root to the current working directory
 2. Concatenate them in order of increasing specificity

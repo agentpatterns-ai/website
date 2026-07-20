@@ -120,4 +120,4 @@ Visible thinking assumes the documentation overhead is recoverable — that the 
 - [Trajectory Logging and Progress Files](../observability/trajectory-logging-progress-files.md)
 - [Agent Debugging: Diagnosing Bad Agent Output](../observability/agent-debugging.md)
 - [Making Observability Legible to Agents](../observability/observability-legible-to-agents.md)
-- [Progressive Autonomy with Model Evolution](../human/progressive-autonomy-model-evolution.md)
+- [Progressive Autonomy with Model Evolution](progressive-autonomy-model-evolution.md)

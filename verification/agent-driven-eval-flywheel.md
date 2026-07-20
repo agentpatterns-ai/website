@@ -77,5 +77,5 @@ The first pass returned 21% IGNORED. The verdicts located the failure precisely:
 - [Incident-to-Eval Synthesis: Production Failures as Evals](incident-to-eval-synthesis.md) — the production-sourced counterpart that feeds failures into the same regression loop
 - [Skill Evals](skill-evals.md) — evaluating a single skill as a dataset-graded unit with paired baseline runs
 - [Eval-Driven Development](../workflows/eval-driven-development.md) — writing evals before building the feature the loop then guards
-- [Agentic Flywheel: Self-Improving Agent Systems](../agent-design/agentic-flywheel.md) — the harness-improvement flywheel, where evals here become the measurement substrate
+- [Agentic Flywheel: Self-Improving Agent Systems](../patterns/agent-design/agentic-flywheel.md) — the harness-improvement flywheel, where evals here become the measurement substrate
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — measuring a model grader's own error rate before you gate on it

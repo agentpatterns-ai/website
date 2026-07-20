@@ -106,5 +106,5 @@ The threshold scales upward with tier (more thinking → more legitimate explora
 - [Hooks and Lifecycle Events: Intercepting Agent Behavior](hooks-lifecycle-events.md)
 - [Conditional Hook Execution: Filter Hooks by Tool Pattern](conditional-hook-execution.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
-- [Heuristic-Based Effort Scaling in Agent Prompts](../agent-design/heuristic-effort-scaling.md)
+- [Heuristic-Based Effort Scaling in Agent Prompts](../patterns/agent-design/heuristic-effort-scaling.md)
 - [Agent Observability with OpenTelemetry](../observability/agent-observability-otel.md)

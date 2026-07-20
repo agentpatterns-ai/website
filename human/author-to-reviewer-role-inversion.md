@@ -33,7 +33,7 @@ The inversion is a queueing constraint shift. Delivery throughput is capped by i
 
 Treat review capacity as an explicit, managed constraint:
 
-- Cap review work in progress. Limit the pull requests any reviewer holds open so the queue stays inside the range where [defect detection holds up](../anti-patterns/law-of-triviality-ai-prs.md).
+- Cap review work in progress. Limit the pull requests any reviewer holds open so the queue stays inside the range where [defect detection holds up](../patterns/anti-patterns/law-of-triviality-ai-prs.md).
 - Rotate reviewers by risk. Spread load off a small senior group and match reviewers to the areas where their judgment pays back.
 - Track review debt. Surface the backlog of unreviewed or under-reviewed merges as a first-class metric, next to authoring velocity.
 - Reward review judgment. Make reviewing a named, promotable skill on the career ladder, not invisible glue work.
@@ -64,8 +64,8 @@ The team re-baselines on the actual constraint. It adds a review-debt metric bes
 ## Related
 
 - [The Bottleneck Migration](bottleneck-migration.md) — the economics of why review becomes the binding constraint, and the per-PR response strategies
-- [Law of Triviality in AI PRs](../anti-patterns/law-of-triviality-ai-prs.md) — the reviewer-psychology symptom of large agent diffs
-- [PR Scope Creep as a Human Review Bottleneck](../anti-patterns/pr-scope-creep-review-bottleneck.md) — how a stalled queue compounds into larger, less reviewable PRs
-- [Comprehension Debt](../anti-patterns/comprehension-debt.md) — the understanding gap that erodes review competence as authoring drops
+- [Law of Triviality in AI PRs](../patterns/anti-patterns/law-of-triviality-ai-prs.md) — the reviewer-psychology symptom of large agent diffs
+- [PR Scope Creep as a Human Review Bottleneck](../patterns/anti-patterns/pr-scope-creep-review-bottleneck.md) — how a stalled queue compounds into larger, less reviewable PRs
+- [Comprehension Debt](../patterns/anti-patterns/comprehension-debt.md) — the understanding gap that erodes review competence as authoring drops
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — the review burden concentrated on senior reviewers
-- [Delegating Change Descriptions to the Agent](../anti-patterns/delegating-change-descriptions.md) — the change description is where human intent must cross the author-to-reviewer boundary
+- [Delegating Change Descriptions to the Agent](../patterns/anti-patterns/delegating-change-descriptions.md) — the change description is where human intent must cross the author-to-reviewer boundary

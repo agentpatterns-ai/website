@@ -26,10 +26,10 @@ Four agent-facing patterns touch design conversations and domain language. They 
 
 | Pattern | Docs role | When |
 |---------|-----------|------|
-| [Grill Me](../agent-design/grill-me-technique.md) | None | Pre-implementation interview, no domain anchor |
+| [Grill Me](../patterns/agent-design/grill-me-technique.md) | None | Pre-implementation interview, no domain anchor |
 | Living-docs-grounded Q&A (this page) | Read live; updated inline | During the interview, before any plan exists |
 | [Ubiquitous Language for AI Plans](ubiquitous-language-for-ai-plans.md) | Read at planning time | After Q&A, when the plan is being authored |
-| [Interactive Clarification](../agent-design/interactive-clarification-underspecified-tasks.md) | None | When the agent detects an information gap during execution |
+| [Interactive Clarification](../patterns/agent-design/interactive-clarification-underspecified-tasks.md) | None | When the agent detects an information gap during execution |
 
 Matt Pocock's `/grill-with-docs` skill puts the second row into practice ([Pocock, *grill-with-docs SKILL.md*](https://github.com/mattpocock/skills/blob/main/skills/engineering/grill-with-docs/SKILL.md)). Pocock made docs-anchored interrogation his default ideation entry point in April 2026 — `/domain-model` "replaces /grill-me, integrates some DDD concepts and adds docs & ADR's during discussions" ([@mattpocockuk](https://x.com/mattpocockuk/status/2045110469426323900)).
 
@@ -95,7 +95,7 @@ The same session surfaces a year-old glossary entry — `Lesson Video` is still 
 ## Related
 
 - [Ubiquitous Language for AI Plans](ubiquitous-language-for-ai-plans.md)
-- [Grill Me: Developer-Initiated Plan Interrogation](../agent-design/grill-me-technique.md)
-- [Interactive Clarification for Underspecified Tasks](../agent-design/interactive-clarification-underspecified-tasks.md)
+- [Grill Me: Developer-Initiated Plan Interrogation](../patterns/agent-design/grill-me-technique.md)
+- [Interactive Clarification for Underspecified Tasks](../patterns/agent-design/interactive-clarification-underspecified-tasks.md)
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md)
 - [Scheduled Instruction File Fact-Checker](../workflows/instruction-file-fact-checker.md)

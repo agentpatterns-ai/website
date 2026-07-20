@@ -65,7 +65,7 @@ graph TD
 
 The failure modes that matter in production only appear when patterns combine.
 
-Dynamic fetching breaks the prompt cache, unless it is tool search. Rebuilding the tool list per step invalidates the cache prefix, because tool definitions sit atop the hierarchy (`tools` → `system` → `messages`). See the [dynamic tool fetching anti-pattern](../anti-patterns/dynamic-tool-fetching-cache-break.md). Tool search with `defer_loading: true` sidesteps this, because deferred tools are excluded from the cacheable prefix ([Anthropic advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)).
+Dynamic fetching breaks the prompt cache, unless it is tool search. Rebuilding the tool list per step invalidates the cache prefix, because tool definitions sit atop the hierarchy (`tools` → `system` → `messages`). See the [dynamic tool fetching anti-pattern](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md). Tool search with `defer_loading: true` sidesteps this, because deferred tools are excluded from the cacheable prefix ([Anthropic advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)).
 
 Tool search and `input_examples` are mutually exclusive per catalog. Server-side tool search cannot surface tools that carry `input_examples` ([error handling](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool#error-handling)). Catalogs that rely on examples need standard calling or client-side search.
 
@@ -106,5 +106,5 @@ The stack earns its complexity at cloud-hosted multi-user scale. It is overkill 
 - [MCP Client Design](mcp-client-design.md) — host-side lifecycle, caching, and multi-server routing.
 - [Toolset Agentization](toolset-agentization.md) — intent-grouping as a sub-agent pattern with trajectory-based adaptation.
 - [Advanced Tool Use](advanced-tool-use.md) — tool search (`defer_loading`), programmatic calling, and input examples in depth.
-- [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md) — the load-bearing gotcha that tool search sidesteps.
+- [Dynamic Tool Fetching Breaks KV Cache](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md) — the load-bearing gotcha that tool search sidesteps.
 - [MCP Protocol](../standards/mcp-protocol.md) — the open standard these patterns build on.

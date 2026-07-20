@@ -92,4 +92,4 @@ The reverse case sharpens the limit: two security plugins showing 150 and 200 to
 - [Per-Plugin Token-Cost Attribution via `claude plugin details`](../observability/plugin-token-cost-attribution.md) — the post-install, per-plugin cut of the same telemetry
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](plugin-packaging.md) — what a plugin is and why it sits at this attribution layer
 - [Cross-IDE Plugin Discovery: One Install Surface, Many Consuming Agents](cross-ide-plugin-discovery.md) — the install-surface contract this pattern decorates with cost metadata
-- [The Infinite Context anti-pattern](../anti-patterns/infinite-context.md) — the failure mode the per-turn column makes visible
+- [The Infinite Context anti-pattern](../patterns/anti-patterns/infinite-context.md) — the failure mode the per-turn column makes visible

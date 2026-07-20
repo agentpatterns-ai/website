@@ -139,9 +139,9 @@ Mitigations: rotate reviewers to prevent complacency, include negative-sample in
 ## Related
 
 - [Risk-Based Shipping: Review by Risk Matrix, Not by Default](../verification/risk-based-shipping.md)
-- [Rollback-First Design: Every Agent Action Should Be Reversible](../agent-design/rollback-first-design.md)
+- [Rollback-First Design: Every Agent Action Should Be Reversible](../patterns/agent-design/rollback-first-design.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
-- [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
+- [Idempotent Agent Operations: Safe to Retry](../patterns/agent-design/idempotent-agent-operations.md)
 - [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md)
 - [Humans and Agents in Software Engineering Loops](humans-agents-development-loops.md)
 - [The AI Development Maturity Model: From Skeptic to Agentic](ai-development-maturity-model.md)

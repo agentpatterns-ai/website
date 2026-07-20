@@ -121,5 +121,5 @@ The inference (planning which commands to run) happens in Cursor's cloud. The `n
 ## Related
 
 - [Agents Window](agents-window.md)
-- [Agent Harness](../../agent-design/agent-harness.md)
+- [Agent Harness](../../patterns/agent-design/agent-harness.md)
 - [Security](../../security/index.md)

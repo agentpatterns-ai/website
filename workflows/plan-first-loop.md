@@ -235,10 +235,10 @@ In these cases, use direct prompting, or apply Plan Mode only to the specific st
 
 ## Related
 
-- [Session Initialization Ritual](../agent-design/session-initialization-ritual.md)
+- [Session Initialization Ritual](../patterns/agent-design/session-initialization-ritual.md)
 - [Lay the Architectural Foundation First](architectural-foundation-first.md)
-- [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md)
+- [Reasoning Budget Allocation](../patterns/agent-design/reasoning-budget-allocation.md)
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md)
-- [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
+- [Sub-Agents for Fan-Out Research and Context Isolation](../patterns/multi-agent/sub-agents-fan-out.md)
 - [Context Priming](../context-engineering/context-priming.md)
 - [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md)

@@ -111,7 +111,7 @@ The file is small, scoped, and has a clear removal condition: when premature-com
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the mechanism that makes "just add a rule" fail
 - [Feature List Files](feature-list-files.md) — canonical page for the scope-sprawl row's `feature_list.json` artifact
 - [Frozen Spec File](frozen-spec-file.md) — a Method Map artifact for scope drift across compaction
-- [Agent Harness: Initializer and Coding Agent Pattern](../agent-design/agent-harness.md) — canonical page for the `init.sh` and `claude-progress.txt` artifacts
+- [Agent Harness: Initializer and Coding Agent Pattern](../patterns/agent-design/agent-harness.md) — canonical page for the `init.sh` and `claude-progress.txt` artifacts
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md) — handoff and progress artifacts in depth
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — empirical counterweight: artifacts only help when curated
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — the same anti-bloat discipline at the file level

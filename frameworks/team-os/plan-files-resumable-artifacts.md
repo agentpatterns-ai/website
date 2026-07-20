@@ -24,7 +24,7 @@ A persisted plan lives in the repo at a stable path, tracked in git. It is the m
 
 The pattern is qualified. Treat these as prerequisites:
 
-- Multi-session work. The plan [externalizes state](../../agent-design/externalization-in-llm-agents.md) the context window cannot retain ([Anthropic harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+- Multi-session work. The plan [externalizes state](../../patterns/agent-design/externalization-in-llm-agents.md) the context window cannot retain ([Anthropic harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 - Recurring workflows with template value. Stulberg reports that reusing plan files lets the next run "start at 80% done" ([Aakash x Stulberg](https://www.news.aakashg.com/p/claude-code-team-os)).
 - Cross-functional review. When a PM, designer, or domain expert must approve the approach, the plan PR is the review surface ([Stulberg podcast transcript](https://www.aakashg.com/hannah-stulberg-podcast/)).
 

@@ -131,5 +131,5 @@ The database failure now propagates. The degraded search index is explicit in th
 - [Tiered Code Review](tiered-code-review.md) — route AIRA findings to the appropriate review tier
 - [Deterministic Guardrails Around Probabilistic Agents](../verification/deterministic-guardrails.md) — the rule layer AIRA fits into
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](../verification/anti-reward-hacking.md) — the same reward-shaping concern from the eval-design side
-- [Exception Handling and Recovery Patterns](../agent-design/exception-handling-recovery-patterns.md) — legitimate patterns AIRA must distinguish from suppression
+- [Exception Handling and Recovery Patterns](../patterns/agent-design/exception-handling-recovery-patterns.md) — legitimate patterns AIRA must distinguish from suppression
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md) — where LLM-based review complements rule-based inspection

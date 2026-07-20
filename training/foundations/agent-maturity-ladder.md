@@ -14,7 +14,7 @@ last_reviewed: 2026-05-27
 
 > Build agents in this order — single tool call before retries, retries before retrieval, retrieval before planning. Each rung exposes the failure modes the next pretends to solve.
 
-The earned-complexity ladder is a diagnostic map of nine layers from a single LLM tool call to multi-agent delegation. Read the blockquote above as a default heuristic, not a forced sequence: the rungs are prerequisite layers, and the default for greenfield work is to build them in order — the start-simple posture of the [Anthropic effective-agents framework](../../agent-design/anthropic-effective-agents-framework.md). Skip a rung when you can articulate which failure mode at the lower rung you have already solved. Skip without that articulation and you are cargo-culting: copying the architecture of a production system without inheriting the failures that shaped it.
+The earned-complexity ladder is a diagnostic map of nine layers from a single LLM tool call to multi-agent delegation. Read the blockquote above as a default heuristic, not a forced sequence: the rungs are prerequisite layers, and the default for greenfield work is to build them in order — the start-simple posture of the [Anthropic effective-agents framework](../../patterns/agent-design/anthropic-effective-agents-framework.md). Skip a rung when you can articulate which failure mode at the lower rung you have already solved. Skip without that articulation and you are cargo-culting: copying the architecture of a production system without inheriting the failures that shaped it.
 
 The cargo-cult symptom is consistent. A team reads about Anthropic's multi-agent research system or watches a Devin demo, then builds a planner agent, a critic agent, a memory layer, and a delegation graph — before they have shipped a reliable single-step tool loop. The result is a system that fails in ways the team cannot diagnose, because they never built the layer below the failure. Anthropic's own guidance is to start simple: "we recommend finding the simplest solution possible, and only increasing complexity when needed" and "optimizing single LLM calls with retrieval and in-context examples is usually enough" ([Anthropic Engineering: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
 
@@ -68,7 +68,7 @@ Exposes: state-drift bugs, schema-evolution problems, recovery-from-partial-fail
 
 Cargo-cult symptom: spawning a multi-agent topology (rung 9) to "split the work" when the real problem is that a single-agent stateful workflow has no checkpoint and can't resume after a failure.
 
-Anchor: [Agent Development Lifecycle](../../agent-design/agent-development-lifecycle.md) and the [Workflows section](../../workflows/index.md).
+Anchor: [Agent Development Lifecycle](../../patterns/agent-design/agent-development-lifecycle.md) and the [Workflows section](../../workflows/index.md).
 
 ## Rung 6 — Human Approval Checkpoints
 
@@ -88,7 +88,7 @@ Exposes: race conditions across tool calls, deadlock and starvation patterns, ob
 
 Cargo-cult symptom: defaulting to async sub-agents to "speed things up" when the work is short-lived enough that synchronous tool calls would finish before the async setup overhead amortizes.
 
-Anchor: [Async Non-Blocking Subagent Dispatch](../../multi-agent/async-non-blocking-subagent-dispatch.md) and [Background/Foreground Handoff](../../workflows/background-foreground-handoff.md).
+Anchor: [Async Non-Blocking Subagent Dispatch](../../patterns/multi-agent/async-non-blocking-subagent-dispatch.md) and [Background/Foreground Handoff](../../workflows/background-foreground-handoff.md).
 
 ## Rung 8 — Multi-Step Planning
 
@@ -98,7 +98,7 @@ Exposes: plan-quality versus execution-quality trade-offs, plan-compliance enfor
 
 Cargo-cult symptom: jumping to multi-agent delegation (rung 9) "because each agent specializes in a step" before testing whether a single agent with a written plan and a critic loop already handles the task.
 
-Anchor: [Cognitive Reasoning vs Execution Separation](../../agent-design/cognitive-reasoning-execution-separation.md) and [Plan Compliance in Agents](../../agent-design/plan-compliance-in-agents.md).
+Anchor: [Cognitive Reasoning vs Execution Separation](../../patterns/agent-design/cognitive-reasoning-execution-separation.md) and [Plan Compliance in Agents](../../patterns/agent-design/plan-compliance-in-agents.md).
 
 ## Rung 9 — Multi-Agent Delegation
 
@@ -108,7 +108,7 @@ Exposes: the failure modes Walden Yan (Cognition) catalogued — "fragile system
 
 Cargo-cult symptom: building a multi-agent system for a task Anthropic explicitly flags as unsuitable: "domains that require all agents to share the same context or involve many dependencies between agents" and "most coding tasks [which] involve fewer truly parallelizable tasks than research" ([Anthropic multi-agent](https://www.anthropic.com/engineering/multi-agent-research-system)).
 
-Anchor: [Multi-Agent section](../../multi-agent/index.md), [Anthropic Effective Agents Framework](../../agent-design/anthropic-effective-agents-framework.md), [Agent Handoff Protocols](../../multi-agent/agent-handoff-protocols.md).
+Anchor: [Multi-Agent section](../../patterns/multi-agent/index.md), [Anthropic Effective Agents Framework](../../patterns/agent-design/anthropic-effective-agents-framework.md), [Agent Handoff Protocols](../../patterns/multi-agent/agent-handoff-protocols.md).
 
 ## Why It Works
 
@@ -135,7 +135,7 @@ The ladder also does not address the dominant failure mode in agent-building, wh
 ## Related
 
 - [How the Four Disciplines Compound](prompt-context-harness-capstone.md) — the capstone module on prompt/context/harness/tool engineering as multiplicative factors.
-- [Agentless vs Autonomous: When Simple Beats Complex](../../agent-design/agentless-vs-autonomous.md) — empirical case for starting at a lower rung than the trend suggests.
-- [Anthropic Effective Agents Framework](../../agent-design/anthropic-effective-agents-framework.md) — the canonical seven-level progression this ladder elaborates.
-- [Delegation Decision](../../agent-design/delegation-decision.md) — when delegating to an agent (rung 8-9 territory) pays off.
-- [Agentic AI Architecture Evolution](../../agent-design/agentic-ai-architecture-evolution.md) — reference architecture spanning the upper rungs.
+- [Agentless vs Autonomous: When Simple Beats Complex](../../patterns/agent-design/agentless-vs-autonomous.md) — empirical case for starting at a lower rung than the trend suggests.
+- [Anthropic Effective Agents Framework](../../patterns/agent-design/anthropic-effective-agents-framework.md) — the canonical seven-level progression this ladder elaborates.
+- [Delegation Decision](../../patterns/agent-design/delegation-decision.md) — when delegating to an agent (rung 8-9 territory) pays off.
+- [Agentic AI Architecture Evolution](../../patterns/agent-design/agentic-ai-architecture-evolution.md) — reference architecture spanning the upper rungs.

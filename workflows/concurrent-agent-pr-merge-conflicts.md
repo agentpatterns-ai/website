@@ -58,7 +58,7 @@ Match the response to how many of the three conditions your repo meets. Each run
 3. Isolate and reserve. When agents must touch shared areas, run each on its own [worktree or branch](worktree-isolation.md) and add advisory reservations so agents avoid regions another agent has claimed, as in [single-branch git for agent swarms](single-branch-git-agent-swarms.md) and [labels as locks](labels-as-locks-pipeline.md).
 4. Serialize the high-overlap cases. Reserve strict serialization — dispatch one agent, wait for merge, then dispatch the next — for the cases the cheaper rungs cannot separate: cross-vendor runs on the same files, or refactors that touch broad swaths of the codebase.
 
-Serialization is the last rung, not the first, because it trades away the wall-clock throughput that made fan-out worth doing. It is the same delegation judgment covered in [the delegation decision](../agent-design/delegation-decision.md) — how much independent authority each agent should hold.
+Serialization is the last rung, not the first, because it trades away the wall-clock throughput that made fan-out worth doing. It is the same delegation judgment covered in [the delegation decision](../patterns/agent-design/delegation-decision.md) — how much independent authority each agent should hold.
 
 ## When this backfires
 

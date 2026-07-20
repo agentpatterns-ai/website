@@ -110,7 +110,7 @@ The definition-plus-skills split also carries a coherence risk. The body and the
 
 ## Related
 
-- [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
+- [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)
 - [Agent Cards: Capability Discovery Standard](agent-cards.md)

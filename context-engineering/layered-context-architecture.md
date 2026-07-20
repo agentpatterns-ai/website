@@ -138,7 +138,7 @@ A two-layer approach (schema + [live queries](retrieval-augmented-agent-workflow
 
 - [Context Engineering: The Practice of Shaping Agent Context](context-engineering.md)
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
-- [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md)
+- [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md)
 - [Seeding Agent Context: Breadcrumbs in Code](seeding-agent-context.md)
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)

@@ -123,7 +123,7 @@ Coverage increases to 34%. The agent continues iterating until coverage plateaus
 
 - [Red-Green-Refactor with Agents](red-green-refactor-agents.md)
 - [Test-Driven Agent Development](tdd-agent-development.md)
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
+- [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md)
 - [Incremental Verification](incremental-verification.md)
 - [FLARE: Multi-Agent Fuzzing](flare-multi-agent-fuzzing.md)
 - [Skill Specification Violation Fuzzing](skill-specification-violation-fuzzing.md)

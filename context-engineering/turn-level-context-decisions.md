@@ -45,7 +45,7 @@ Rewind is stronger than correction. A failed approach leaves the full failed rea
 
 Reset context entirely with `/clear`. Use when switching to an unrelated task where prior context would be noise rather than signal.
 
-The [kitchen sink session anti-pattern](../anti-patterns/session-partitioning.md) shows the cost: mixing unrelated tasks fills the window with residue — file contents, command output, off-topic reasoning — that competes for attention.
+The [kitchen sink session anti-pattern](../patterns/anti-patterns/session-partitioning.md) shows the cost: mixing unrelated tasks fills the window with residue — file contents, command output, off-topic reasoning — that competes for attention.
 
 `/clear` resets within the same session; `claude --resume` or a fresh `claude` starts a new one. Use `/clear` between loosely related tasks where shared environment still applies; start a new session when tasks share nothing.
 
@@ -67,7 +67,7 @@ Direct the compaction to preserve what matters:
 
 Spawn a [subagent](../tools/claude/sub-agents.md) for work that generates intermediate output you will not need again. The subagent runs in its own window, and only the final result returns.
 
-Ask yourself one question: "Will I need this output again, or just the conclusion?" If you need just the conclusion, delegate. [Codebase exploration](../multi-agent/sub-agents-fan-out.md), security review, and test analysis generate large volumes of reads that pollute the parent context. A subagent absorbs that cost and returns a summary.
+Ask yourself one question: "Will I need this output again, or just the conclusion?" If you need just the conclusion, delegate. [Codebase exploration](../patterns/multi-agent/sub-agents-fan-out.md), security review, and test analysis generate large volumes of reads that pollute the parent context. A subagent absorbs that cost and returns a summary.
 
 ```
 Use a subagent to investigate how the auth system handles token refresh.
@@ -106,7 +106,7 @@ The framework assumes you can know task boundaries in advance. Three conditions 
 - Rewind beats correction: drop failed attempts from context rather than stacking error-correction messages on top of polluted reasoning.
 - Compact early, not late: auto-compaction at 95% fires after reasoning has degraded. Compact manually at task-type transitions.
 - Delegate for exploration: use subagents when intermediate output is disposable and only the conclusion matters.
-- Clear between unrelated tasks: the [kitchen sink session anti-pattern](../anti-patterns/session-partitioning.md) shows that mixed-task context degrades every subsequent task.
+- Clear between unrelated tasks: the [kitchen sink session anti-pattern](../patterns/anti-patterns/session-partitioning.md) shows that mixed-task context degrades every subsequent task.
 - Continue is the right default: for short sessions and related follow-up work, aggressive context management adds overhead without benefit.
 
 ## Related
@@ -114,9 +114,9 @@ The framework assumes you can know task boundaries in advance. Three conditions 
 - [Context Window Dumb Zone](context-window-dumb-zone.md) — degradation thresholds by task type
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md) — when and how to compact before auto-compaction fires
 - [Context Compression Strategies](context-compression-strategies.md) — tiered compression mechanics for long-running agents
-- [The Kitchen Sink Session](../anti-patterns/session-partitioning.md) — the anti-pattern that `/clear` addresses
+- [The Kitchen Sink Session](../patterns/anti-patterns/session-partitioning.md) — the anti-pattern that `/clear` addresses
 - [Claude Code Sub-Agents](../tools/claude/sub-agents.md) — mechanics of subagent delegation
-- [Session Recap](../agent-design/session-recap.md) — structured handoff artifacts at session boundaries
+- [Session Recap](../patterns/agent-design/session-recap.md) — structured handoff artifacts at session boundaries
 - [Goal Recitation](goal-recitation.md) — continuous drift prevention within a session
 - [Context Budget Allocation](context-budget-allocation.md) — the finite budget that drives turn-level decisions
 - [Conversation Registers](conversation-registers.md) — the human-facing axis: switching interaction mode on the same task as a reset signal

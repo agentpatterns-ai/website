@@ -75,14 +75,14 @@ Keep file content minimal. Each tool file should contain the function signature,
 |---------------------|---------------------|
 | All tools available immediately | Agent must search before calling |
 | O(all tools) context cost per session | O(used tools) context cost per session |
-| Simpler [agent harness](../agent-design/agent-harness.md) | Requires directory + search infrastructure |
+| Simpler [agent harness](../patterns/agent-design/agent-harness.md) | Requires directory + search infrastructure |
 | Breaks at large tool counts | Scales with tool count |
 
 Filesystem discovery adds a navigation step before each new tool type is used — a one-time cost for repeated tool sets, per-tool-type for exploratory workflows.
 
 ## Keyword-scored MCP discovery
 
-The OPENDEV paper describes a complementary approach: a `search_tools` tool that uses keyword matching to discover MCP tools, loading them lazily on first invocation rather than registering all definitions at startup ([Bui, 2025 §2.4.7](https://arxiv.org/abs/2603.05344)). The initial approach loaded all MCP tools into the schema upfront, which caused [prompt bloat](../anti-patterns/prompt-tinkerer.md) and exhausted the context budget. Lazy loading trades a one-time lookup cost for a large reduction in initial prompt size ([Bui, 2025 §2.4.7](https://arxiv.org/abs/2603.05344)).
+The OPENDEV paper describes a complementary approach: a `search_tools` tool that uses keyword matching to discover MCP tools, loading them lazily on first invocation rather than registering all definitions at startup ([Bui, 2025 §2.4.7](https://arxiv.org/abs/2603.05344)). The initial approach loaded all MCP tools into the schema upfront, which caused [prompt bloat](../patterns/anti-patterns/prompt-tinkerer.md) and exhausted the context budget. Lazy loading trades a one-time lookup cost for a large reduction in initial prompt size ([Bui, 2025 §2.4.7](https://arxiv.org/abs/2603.05344)).
 
 The principle is identical — on-demand loading — but the mechanism differs. Filesystem discovery uses directory navigation (98.7% reduction); keyword-scored discovery uses search queries against a tool index. The approaches complement each other: filesystem structure for category browsing, keyword scoring for cross-category lookup.
 
@@ -125,7 +125,7 @@ Total tokens loaded: ~400 (2 tool definitions). Upfront registration of all 120 
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](mcp-eager-vs-jit-loading.md)
 - [Filter and Aggregate in the Execution Environment](../context-engineering/filter-aggregate-execution-env.md)
-- [Progressive Disclosure Agents](../agent-design/progressive-disclosure-agents.md)
+- [Progressive Disclosure Agents](../patterns/agent-design/progressive-disclosure-agents.md)
 - [MCP Client Design](mcp-client-design.md)
 - [MCP Server Design](mcp-server-design.md)
 - [On-Demand Skill Hooks](on-demand-skill-hooks.md)

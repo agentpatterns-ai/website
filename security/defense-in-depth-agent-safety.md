@@ -39,7 +39,7 @@ Each layer is independent. If one fails, the others still hold ([Bui, 2026 §2.1
 
 The strongest form of tool restriction stops the model from even knowing a tool exists. When a subagent's schema excludes write operations, the model cannot hallucinate calls to tools it has never seen ([Bui, 2026 §3.3](https://arxiv.org/abs/2603.05344)).
 
-This is stronger than runtime rejection. A runtime check denies a forbidden call after the fact. Schema filtering stops the model from ever forming the intent. The attack surface shrinks before inference. See [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md) for implementation details.
+This is stronger than runtime rejection. A runtime check denies a forbidden call after the fact. Schema filtering stops the model from ever forming the intent. The attack surface shrinks before inference. See [Subagent Schema-Level Tool Filtering](../patterns/multi-agent/subagent-schema-level-tool-filtering.md) for implementation details.
 
 ## Three-level approval system
 
@@ -116,7 +116,7 @@ Even if the prompt guardrail is bypassed by injection, the hook still blocks pro
 Each layer adds configuration, testing, and maintenance cost. Misconfigured layers can block legitimate work, or create false confidence while staying ineffective.
 
 - Approval fatigue compounds across layers. If every layer raises its own prompts, users approve everything to keep moving, which turns the stack into security theater. The three-level system helps only when you classify safe patterns correctly upfront.
-- [Schema filtering](../multi-agent/subagent-schema-level-tool-filtering.md) limits legitimate capability. Narrow subagent schemas cannot adapt outside their defined scope. In exploratory or general-purpose work, strict schema restrictions force constant operator intervention, or fan-out into specialized agents where one broader agent would do.
+- [Schema filtering](../patterns/multi-agent/subagent-schema-level-tool-filtering.md) limits legitimate capability. Narrow subagent schemas cannot adapt outside their defined scope. In exploratory or general-purpose work, strict schema restrictions force constant operator intervention, or fan-out into specialized agents where one broader agent would do.
 - Hooks and validation add latency. In streaming, high-frequency, or real-time pipelines, per-call lifecycle hooks add up. A single well-tuned [approval gate](human-in-the-loop-confirmation-gates.md) may beat five independent layers that each add inspection overhead.
 
 Apply the full five-layer stack to production agents with write access, external integrations, or multi-agent pipelines. For short-lived, read-only, or sandboxed internal tools, one or two targeted layers (schema restrictions plus lifecycle hooks) often give enough protection at lower cost.
@@ -131,8 +131,8 @@ Apply the full five-layer stack to production agents with write access, external
 
 ## Related
 
-- [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md) — the anti-pattern this addresses
-- [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md) — schema layer in depth
+- [Single-Layer Prompt Injection Defence](../patterns/anti-patterns/single-layer-injection-defence.md) — the anti-pattern this addresses
+- [Subagent Schema-Level Tool Filtering](../patterns/multi-agent/subagent-schema-level-tool-filtering.md) — schema layer in depth
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md) — approval layer in depth
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — lifecycle-hook layer vs prompt layer
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — runtime validation layer

@@ -61,7 +61,7 @@ A developer's running-agent inventory is the bottleneck on parallel agent work, 
 ## When this backfires
 
 - At-most-one-concurrent-agent workflows. A list with one row is pure overhead. Inline-edit-heavy developers who never run two agents at once get a registry that never filters anything.
-- No real isolation behind the rows. Workspace isolation mode applies changes directly to the current workspace; two parallel workspace-isolation rows touching the same files race and clobber. Worktree isolation is required for genuine parallelism — the same condition the [editor-manager surface separation](../../agent-design/editor-manager-surface-separation.md) pattern depends on.
+- No real isolation behind the rows. Workspace isolation mode applies changes directly to the current workspace; two parallel workspace-isolation rows touching the same files race and clobber. Worktree isolation is required for genuine parallelism — the same condition the [editor-manager surface separation](../../patterns/agent-design/editor-manager-surface-separation.md) pattern depends on.
 - Business and Enterprise tenants without the policy on. Admins must enable the Editor preview features policy before users see the surface ([GitHub Changelog 2026-05-13](https://github.blog/changelog/2026-05-13-introducing-copilot-cli-agent-and-unified-sessions-view-in-github-copilot-for-jetbrains-ides)). Teams that do not get the announce-without-availability worst case.
 - Terminal-fluent developers on multi-IDE workflows. `tmux` panes per task already give scannable per-agent state cross-IDE. The CLI was the cross-tool primitive; embedding it in one IDE breaks that — what runs in JetBrains today does not run identically in Eclipse or Xcode.
 - Session amnesia masking. A scannable list of one-off sessions can make the symptom — agents that forget everything between sessions — feel manageable when the deeper problem is memory across sessions ([RedMonk 2025-12-22](https://redmonk.com/kholterhoff/2025/12/22/10-things-developers-want-from-their-agentic-ides-in-2025/)). The registry organizes sessions; it does not give them shared memory.
@@ -99,8 +99,8 @@ When the CLI agent moves to `Needs input`, the developer attaches to that row, a
 
 ## Related
 
-- [Editor and Manager Surface Separation in Agent IDEs](../../agent-design/editor-manager-surface-separation.md) — the broader two-surface pattern the unified sessions view is one instance of
+- [Editor and Manager Surface Separation in Agent IDEs](../../patterns/agent-design/editor-manager-surface-separation.md) — the broader two-surface pattern the unified sessions view is one instance of
 - [Agent Mission Control](agent-mission-control.md) — the cloud-coding-agent counterpart of the JetBrains local view
 - [Copilot Agent Mode — inline surface (JetBrains)](agent-mode.md#inline-agent-mode-jetbrains) — one of the invocation surfaces the view aggregates
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md) — the standalone CLI behaviour that the IDE-hosted CLI agent wraps
-- [Remote Session Control for Local CLI Agents](../../agent-design/remote-session-control.md) — cross-surface session control that pairs with the registry
+- [Remote Session Control for Local CLI Agents](../../patterns/agent-design/remote-session-control.md) — cross-surface session control that pairs with the registry

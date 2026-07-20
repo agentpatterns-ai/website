@@ -106,7 +106,7 @@ Audit in priority order — highest citation impact first.
 Pattern pages document a repeatable design — a mechanism, a structure, or an approach that applies across multiple contexts. GEO priority: quotable assertions and statistics, because AI tools retrieve concept definitions using short declarative matches — a direct one-sentence definition gives the retrieval model a high-confidence anchor.
 
 - Lead with a one-sentence definition the reader can quote verbatim
-- Include a quantitative outcome where available ("reduces [context pollution](../anti-patterns/session-partitioning.md) by eliminating N token categories")
+- Include a quantitative outcome where available ("reduces [context pollution](../patterns/anti-patterns/session-partitioning.md) by eliminating N token categories")
 - Use `TechArticle` schema with `author`, `dateModified`, and `description` fields
 - Add a `## Key Takeaways` section — terminal summaries give a self-contained chunk that can be retrieved independently from the body.
 

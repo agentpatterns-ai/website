@@ -143,7 +143,7 @@ Pre-completion checklists introduce risk in several conditions:
 ## Related
 
 - [Feature List Files](../instructions/feature-list-files.md)
-- [Agent Harness](../agent-design/agent-harness.md)
+- [Agent Harness](../patterns/agent-design/agent-harness.md)
 - [Loop Detection](../observability/loop-detection.md)
 - [Incremental Verification](incremental-verification.md)
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)

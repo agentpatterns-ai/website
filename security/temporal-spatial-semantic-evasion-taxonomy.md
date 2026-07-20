@@ -126,4 +126,4 @@ If the standard suite passes but the three-vector additions succeed, the conclus
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — pDFA enforcement that forecloses the temporal axis in structured workflows
 - [Cognitive Poisoning: Untrusted Tool Feedback as a Trajectory Attack](cognitive-poisoning-tool-feedback.md) — joint-state attack that defeats per-message defenses
 - [History Anchors: Consistency-Cued Continuation of Unsafe Prior Actions](history-anchor-consistency-injection.md) — semantic-axis cue that flips frontier agents to 91–98% unsafe-selection rate
-- [External Artifacts Treated as Data, Not Adversarial Input](../anti-patterns/external-artifacts-as-data.md) — the spatial-axis mental-model failure: why agents process artifact-concealed payloads as instructions
+- [External Artifacts Treated as Data, Not Adversarial Input](../patterns/anti-patterns/external-artifacts-as-data.md) — the spatial-axis mental-model failure: why agents process artifact-concealed payloads as instructions

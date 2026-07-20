@@ -24,7 +24,7 @@ Agent mode runs in [VS Code](https://code.visualstudio.com/blogs/2025/02/24/intr
 
 ## Planning mode
 
-For complex tasks, Copilot generates a [plan that lists all steps](https://code.visualstudio.com/docs/copilot/agents/planning) before it makes changes. The plan supports structured reasoning and [progress tracking](../../agent-design/goal-monitoring-progress-tracking.md).
+For complex tasks, Copilot generates a [plan that lists all steps](https://code.visualstudio.com/docs/copilot/agents/planning) before it makes changes. The plan supports structured reasoning and [progress tracking](../../patterns/agent-design/goal-monitoring-progress-tracking.md).
 
 ## Multi-file editing
 
@@ -98,7 +98,7 @@ Review the plan, approve, and then Copilot executes all steps.
 
 - [Coding Agent](coding-agent.md)
 - [Custom Agents & Skills](custom-agents-skills.md)
-- [Agent Composition Patterns](../../agent-design/agent-composition-patterns.md)
+- [Agent Composition Patterns](../../patterns/agent-design/agent-composition-patterns.md)
 - [MCP Integration](mcp-integration.md)
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [Copilot Instructions Convention](copilot-instructions-md-convention.md)

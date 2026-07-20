@@ -110,4 +110,4 @@ What this does not catch: an Agent call that omits `model` entirely, which would
 - [Skill disallowed-tools Frontmatter](skill-disallowed-tools.md) — Skill-layer tool denial: removes tools from the model's pool while a skill is active
 - [Sub-Agents](sub-agents.md) — How Agent tool calls dispatch, inherit model and isolation, and which parameters parameter-level rules see
 - [Managed Settings Drop-In Directory](managed-settings-drop-in.md) — Deploying organization-wide permission rules that user and project settings cannot override
-- [Classifier-Gated Auto-Permission](../../agent-design/classifier-gated-auto-permission.md) — Permission-relay pattern at the classifier layer, distinct from the deterministic rule layer
+- [Classifier-Gated Auto-Permission](../../patterns/agent-design/classifier-gated-auto-permission.md) — Permission-relay pattern at the classifier layer, distinct from the deterministic rule layer

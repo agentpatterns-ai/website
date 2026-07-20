@@ -74,7 +74,7 @@ Measure before adopting. Run an A/B on the target model and task distribution co
 
 ## Relationship to adjacent techniques
 
-Narrative reformulation is an input-layer transform. Other scaffolding patterns operate at different layers: [Self-Discover Reasoning](../agent-design/self-discover-reasoning.md) transforms the reasoning layer; [CoT Robustness in Code Generation](../verification/cot-robustness-code-generation.md) covers the reasoning-trace layer with failure modes (lengthening, branching, simplification) that also apply when reformulation destabilizes smaller models; [Prompt Chaining](prompt-chaining.md) treats reformulation and generation as two gated chain steps. The research reports single-layer gains; it does not establish that stacking with SCoT or self-planning multiplies.
+Narrative reformulation is an input-layer transform. Other scaffolding patterns operate at different layers: [Self-Discover Reasoning](../patterns/agent-design/self-discover-reasoning.md) transforms the reasoning layer; [CoT Robustness in Code Generation](../verification/cot-robustness-code-generation.md) covers the reasoning-trace layer with failure modes (lengthening, branching, simplification) that also apply when reformulation destabilizes smaller models; [Prompt Chaining](prompt-chaining.md) treats reformulation and generation as two gated chain steps. The research reports single-layer gains; it does not establish that stacking with SCoT or self-planning multiplies.
 
 ## Example
 
@@ -116,13 +116,13 @@ The reformulated version is not more information — it is the same information 
 - Gains concentrate on harder competitive-programming benchmarks (CodeForces +9.62pp) and shrink on simpler ones (HumanEval +8.45pp).
 - Genre alignment matters — incongruent genres drop measured performance, so the mechanism is structural coherence, not added verbosity.
 - Pass@1 deltas, smaller code LLMs, strict-schema tool calling, and latency-sensitive loops are failure conditions not covered by the reported gains — measure before adopting.
-- Treat reformulation as an input-layer scaffold alongside [Self-Discover Reasoning](../agent-design/self-discover-reasoning.md) and [Structured CoT](../verification/cot-robustness-code-generation.md), not as a replacement or automatic stack.
+- Treat reformulation as an input-layer scaffold alongside [Self-Discover Reasoning](../patterns/agent-design/self-discover-reasoning.md) and [Structured CoT](../verification/cot-robustness-code-generation.md), not as a replacement or automatic stack.
 
 ## Related
 
 - [Task Framing Irrelevance Fallacy](../fallacies/task-framing-irrelevance-fallacy.md) — Surface framing measurably changes LLM output; narrative reformulation is one response to this sensitivity
 - [CoT Robustness in Code Generation](../verification/cot-robustness-code-generation.md) — Chain-of-thought is not uniformly beneficial; the same caution applies to narrative reformulation
-- [Self-Discover Reasoning](../agent-design/self-discover-reasoning.md) — Reasoning-layer scaffolding as a complementary transform
+- [Self-Discover Reasoning](../patterns/agent-design/self-discover-reasoning.md) — Reasoning-layer scaffolding as a complementary transform
 - [pass@k and pass^k Metrics](../verification/pass-at-k-metrics.md) — Measuring capability versus consistency before enabling any prompt-layer change
 - [Prompt Chaining](prompt-chaining.md) — Model reformulation and generation as two explicit chain steps rather than an implicit pass
 - [Prompt Layering](prompt-layering.md) — How instructions from multiple sources compose in the final prompt surface

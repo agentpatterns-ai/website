@@ -51,13 +51,13 @@ graph TD
     E --> F[MCP Servers<br>external system integrations]
 ```
 
-Step 1 — Layered context files. Split the root context file into global, project, and subdirectory layers, so each scope carries only the rules it needs. See [Layer Agent Instructions by Specificity](../instructions/layered-instruction-scopes.md).
+Step 1 — Layered context files. Split the root context file into global, project, and subdirectory layers, so each scope carries only the rules it needs. See [Layer Agent Instructions by Specificity](layered-instruction-scopes.md).
 
 Step 2 — Skills. Extract repeated workflows into SKILL.md files that name their subagent, required tools, and preloaded context. See [Skill Library Evolution](../tool-engineering/skill-library-evolution.md).
 
 Step 3 — Hooks. Replace prompt-based enforcement with hooks for constraints that must not vary. A `PreToolUse` hook cannot be overridden by injected instructions. See [Hooks for Enforcement vs Prompts for Guidance](hooks-vs-prompts.md).
 
-Step 4 — Subagent specialization. Assign distinct roles with scoped tool sets, so a reviewer subagent cannot modify files even if instructed to. See [Specialized Agent Roles](../agent-design/specialized-agent-roles.md).
+Step 4 — Subagent specialization. Assign distinct roles with scoped tool sets, so a reviewer subagent cannot modify files even if instructed to. See [Specialized Agent Roles](../patterns/agent-design/specialized-agent-roles.md).
 
 Step 5 — MCP for external systems. Connect agents to issue trackers, documentation, observability, and design tools through structured [MCP integrations](../tools/copilot/mcp-integration.md) instead of copy-paste context.
 
@@ -83,11 +83,11 @@ The data reflects this. Shallow adoption may be partly rational scoping, not jus
 - [Hooks for Enforcement vs Prompts for Guidance](hooks-vs-prompts.md)
 - [Hooks and Lifecycle Events: Intercepting Agent Behavior](../tool-engineering/hooks-lifecycle-events.md)
 - [PostToolUse Hooks: Auto-Formatting on Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
-- [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](../instructions/hierarchical-claude-md.md)
-- [Specialized Agent Roles](../agent-design/specialized-agent-roles.md)
+- [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](hierarchical-claude-md.md)
+- [Specialized Agent Roles](../patterns/agent-design/specialized-agent-roles.md)
 - [GitHub Copilot: Model Selection & Routing](../training/copilot/model-selection.md) — per-agent model selection and routing strategies
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md)
-- [Encode Project Conventions in Distributed AGENTS.md Files](../instructions/agents-md-distributed-conventions.md)
+- [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md)
 - [Cross-Tool Translation](../human/cross-tool-translation.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](../standards/mcp-protocol.md)
 - [Progressive Autonomy: Scaling Trust with Model Evolution](../human/progressive-autonomy-model-evolution.md)

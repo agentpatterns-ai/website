@@ -114,7 +114,7 @@ The eval implication shows up in the test corpus. Instead of grading whether the
 
 - [Code Interpreter as a Primary Agent Tool](code-interpreter-as-agent-tool.md) — the runtime layer interpreter skills sit on top of; sets the interpreter's bridges, capability allowlist, and threat-model boundaries.
 - [Skill as Knowledge Pattern](skill-as-knowledge.md) — the portable, instruction-only counterpart; the right answer when the procedure should adapt or the harness has no interpreter.
-- [Skill Program Functions](../agent-design/skill-program-functions.md) — the orthogonal runtime-invoked skill direction (runtime predicates fire on detected state); interpreter skills are the model-invoked direction.
+- [Skill Program Functions](../patterns/agent-design/skill-program-functions.md) — the orthogonal runtime-invoked skill direction (runtime predicates fire on detected state); interpreter skills are the model-invoked direction.
 - [Filter and Aggregate in the Execution Environment](../context-engineering/filter-aggregate-execution-env.md) — the broader pattern of keeping intermediate state out of model context that the interpreter implements at the platform level.
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md) — full inventory of standard and vendor-specific frontmatter fields.
 - [Dual-Boundary Sandboxing](../security/dual-boundary-sandboxing.md) — the OS-level enclosure interpreter skills need for untrusted-input workloads.

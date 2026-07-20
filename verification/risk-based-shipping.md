@@ -19,7 +19,7 @@ maturity: established
 Agent-driven pipelines tend to fall into one of two defaults:
 
 - Review everything — every agent change gets manual review. Safe, but slow. Review quality is tied to coverage and reviewer participation ([McIntosh et al. 2016](https://link.springer.com/article/10.1007/s10664-015-9381-9)). As changeset volume grows, both decline.
-- Trust everything — agent changes ship without review ([trust without verify](../anti-patterns/trust-without-verify.md)). Fast, but one bad change reaches production unchecked.
+- Trust everything — agent changes ship without review ([trust without verify](../patterns/anti-patterns/trust-without-verify.md)). Fast, but one bad change reaches production unchecked.
 
 Neither default scales. Review-everything teams drop the workflow when volume exceeds capacity. Trust-everything teams learn the hard way when an agent ships a breaking change.
 

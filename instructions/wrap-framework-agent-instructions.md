@@ -132,5 +132,5 @@ A (atomicity): context exhaustion is the main failure mode in long-horizon tasks
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [System Prompt Altitude](system-prompt-altitude.md)
 - [Context Engineering](../context-engineering/context-engineering.md)
-- [Harness Engineering](../agent-design/harness-engineering.md) — environment design as the primary lever for agent reliability
+- [Harness Engineering](../patterns/agent-design/harness-engineering.md) — environment design as the primary lever for agent reliability
 - [Agent-Ready Bug Reports for Software Repair Agents](agent-ready-bug-reports.md) — which report fields most raise a repair agent's correct-fix rate when the issue is a bug

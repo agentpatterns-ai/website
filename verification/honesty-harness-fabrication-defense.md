@@ -22,7 +22,7 @@ maturity: established
 
 The harness adds setup, latency, and operational surface. It earns that cost only under specific conditions:
 
-- The model sits in the fabrication-vulnerable mid-band. Code LLMs hallucinate packages in roughly 5.2% of commercial generations and 21.7% of open-source generations across 576,000 prompts ([Spracklen et al., 2024 — arXiv:2406.10279](https://arxiv.org/abs/2406.10279)). Frontier models verify internally, so the harness adds cost without benefit there, just as [premature completion mitigations do](../anti-patterns/premature-completion.md).
+- The model sits in the fabrication-vulnerable mid-band. Code LLMs hallucinate packages in roughly 5.2% of commercial generations and 21.7% of open-source generations across 576,000 prompts ([Spracklen et al., 2024 — arXiv:2406.10279](https://arxiv.org/abs/2406.10279)). Frontier models verify internally, so the harness adds cost without benefit there, just as [premature completion mitigations do](../patterns/anti-patterns/premature-completion.md).
 - The codebase is large enough that a full CI run is slower than per-edit checks. Layer 3 only beats "trust the model, verify in CI" when each verification round is cheap relative to the round-trip cost.
 - Both training and human reaction support honest abstention. Standard binary scoring "rewards answering over honestly expressing uncertainty" ([Wen et al., 2024 — arXiv:2407.18418](https://arxiv.org/html/2407.18418v2)), and punitive responses to "I don't know" re-train confident guessing within the session.
 - A fact-checker subagent can hold at least one external oracle: an LSP, a type checker, a doc lookup, or test execution. Without one, intrinsic self-correction degrades performance ([Huang et al., 2023 — arXiv:2310.01798](https://arxiv.org/abs/2310.01798)).
@@ -68,7 +68,7 @@ The harness is risk reduction, not elimination. LangChain reported moving Termin
 
 ## When this backfires
 
-- Strong-model deployments: frontier models (Claude Opus 4.6, GPT-5) show near-zero premature termination and lower hallucination rates, so Layer 3 and Layer 4 add cost without measurable benefit ([Premature Completion](../anti-patterns/premature-completion.md)).
+- Strong-model deployments: frontier models (Claude Opus 4.6, GPT-5) show near-zero premature termination and lower hallucination rates, so Layer 3 and Layer 4 add cost without measurable benefit ([Premature Completion](../patterns/anti-patterns/premature-completion.md)).
 - Overloaded Layer 1: a CLAUDE.md past the ~150 instruction ceiling drops compliance across all rules, including the honesty ones. Honest abstention has to compete with style, workflow, and project conventions for attention.
 - Silent Layer 3: hook output that writes to a log file instead of stderr never enters the session. The agent never sees the failure and never self-corrects.
 - Pure-reasoning Layer 4: a fact-checker without LSP, type checker, doc lookup, or test execution re-reasons against the draft and overturns correct code 22–28% of the time ([Liu et al., 2024](https://arxiv.org/abs/2412.14959)).
@@ -107,8 +107,8 @@ The reviewer holds external tools: WebFetch for source verification, and Bash pl
 
 ## Related
 
-- [Premature Completion](../anti-patterns/premature-completion.md) — the failure mode this harness remediates
-- [Context Poisoning](../anti-patterns/context-poisoning.md) — when an early hallucination becomes a downstream premise the harness must intercept
+- [Premature Completion](../patterns/anti-patterns/premature-completion.md) — the failure mode this harness remediates
+- [Context Poisoning](../patterns/anti-patterns/context-poisoning.md) — when an early hallucination becomes a downstream premise the harness must intercept
 - [Pre-Completion Checklists](pre-completion-checklists.md) — the Layer 3 mechanism in detail, including over-verification spiral conditions
 - [Phantom Symbol Detection](phantom-symbol-detection.md) — the deterministic-lookup form of Layer 2 for API migration
 - [Layered Accuracy Defense](layered-accuracy-defense.md) — the same defense-in-depth idea applied to content pipelines instead of coding agents

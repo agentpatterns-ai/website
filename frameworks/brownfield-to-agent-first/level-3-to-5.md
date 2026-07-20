@@ -114,7 +114,7 @@ This gives an in-band audit trail. Reviewers understand agent decisions without 
 
 ### Step 3: define rollback triggers
 
-Define the conditions under which agent work is automatically rejected or flagged before granting broader autonomy — [rollback-first design](../../agent-design/rollback-first-design.md) applied to agent PRs:
+Define the conditions under which agent work is automatically rejected or flagged before granting broader autonomy — [rollback-first design](../../patterns/agent-design/rollback-first-design.md) applied to agent PRs:
 
 | Trigger | Response |
 |---------|----------|
@@ -274,8 +274,8 @@ Stop at L4 if:
 
 - [Eval-Driven Development](../../workflows/eval-driven-development.md) — the workflow pattern for writing evals before building agent features
 - [Progressive Autonomy Model](../../human/progressive-autonomy-model-evolution.md) — how to scale agent trust incrementally with metrics
-- [Structured Agentic Software Engineering](../../agent-design/structured-agentic-software-engineering.md) — the SE 0–5 maturity model and structured artifact types ([arXiv:2509.06216](https://arxiv.org/abs/2509.06216))
+- [Structured Agentic Software Engineering](../../patterns/agent-design/structured-agentic-software-engineering.md) — the SE 0–5 maturity model and structured artifact types ([arXiv:2509.06216](https://arxiv.org/abs/2509.06216))
 - [Headless Claude in CI](../../workflows/headless-claude-ci.md) — running Claude Code non-interactively in CI pipelines
-- [Agent Harness](../../agent-design/agent-harness.md) — the initializer/coding-agent architecture for long-running work
+- [Agent Harness](../../patterns/agent-design/agent-harness.md) — the initializer/coding-agent architecture for long-running work
 - [L2 → L3: Building Mechanical Enforcement](level-2-to-3.md) — previous module
 - [Brownfield to Agent-First: Repo Maturity Framework](index.md) — full L0–L5 framework overview

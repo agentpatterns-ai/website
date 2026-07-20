@@ -27,7 +27,7 @@ The effect is large and consistent, but three conditions decide whether it holds
 
 - The model clears a capability floor. The harness extracts gains a strong baseline model already has — the study measured a near-perfect correlation (r=0.99, n=6) between a model's baseline strength and the gain the harness pulled out of it ([Sayed Ali et al., 2026, §8](https://arxiv.org/abs/2607.06906)). On weaker models, orchestration-heavy features regress instead of helping (see [When this backfires](#when-this-backfires)).
 - The workload is input-dominated and cache-friendly. Agent calls typically run about 100 input tokens per output token, so the input term dominates the bill ([Sayed Ali et al., 2026, §3.1](https://arxiv.org/abs/2607.06906)). The harness only moves that term when a stable, cacheable prefix exists to exploit.
-- You control the harness. Managed and consumer-tier agents route orchestration you cannot vary, so the lever is unavailable — see [Managed vs Self-Hosted Harness](../agent-design/managed-vs-self-hosted-harness.md).
+- You control the harness. Managed and consumer-tier agents route orchestration you cannot vary, so the lever is unavailable — see [Managed vs Self-Hosted Harness](../patterns/agent-design/managed-vs-self-hosted-harness.md).
 
 Outside these conditions, model routing and context engineering remain the primary cost levers — [route by complexity](cost-aware-agent-design.md) first.
 
@@ -61,7 +61,7 @@ Agent bills are input-dominated, and the input term factors cleanly into quantit
 - Below the capability floor. All seven quality regressions in the study landed on the three weakest models and clustered in orchestration-heavy features (MCP tools, playbooks); sub-agent delegation was reliable only on the two strongest models, and unreliable below roughly 0.7 task-completion ([Sayed Ali et al., 2026, §6.5](https://arxiv.org/abs/2607.06906)). A weak model with a sophisticated harness can do worse than a strong model with a plain loop.
 - Output-heavy or one-shot workloads. The effective-input-price lever assumes a stable cacheable prefix and a high input-to-output ratio. Short or output-dominated jobs give cache-shape discipline little to bite on.
 - Workload-shape mismatch. The 22-task set mirrors an enterprise assistant, not a long-horizon coding benchmark; the magnitudes may not transfer ([Sayed Ali et al., 2026, §8](https://arxiv.org/abs/2607.06906)).
-- Over-reading the numbers. The result rests on a single vendor pair, one frozen baseline run, n=22 (so quality parity is directional, not proven), and a six-point correlation. Treat the exact percentages as this-pair-specific, and confirm the effect on your own eval before banking it — [pin the model and measure the harness](../agent-design/fleet-harness-attribution.md).
+- Over-reading the numbers. The result rests on a single vendor pair, one frozen baseline run, n=22 (so quality parity is directional, not proven), and a six-point correlation. Treat the exact percentages as this-pair-specific, and confirm the effect on your own eval before banking it — [pin the model and measure the harness](../patterns/agent-design/fleet-harness-attribution.md).
 
 ## Example
 
@@ -91,7 +91,7 @@ Because the prefix bytes never change, the provider serves them as cache reads. 
 ## Related
 
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — the complementary lever: match model tier to task complexity before engineering the harness
-- [Fleet Harness Attribution](../agent-design/fleet-harness-attribution.md) — how to measure whether the harness, not the model, caused a cost delta
-- [Isometric Harness Ablation](../agent-design/isometric-harness-ablation.md) — rank which harness subsystem earns its token cost
+- [Fleet Harness Attribution](../patterns/agent-design/fleet-harness-attribution.md) — how to measure whether the harness, not the model, caused a cost delta
+- [Isometric Harness Ablation](../patterns/agent-design/isometric-harness-ablation.md) — rank which harness subsystem earns its token cost
 - [Prompt Caching: Architectural Discipline for Agents](../context-engineering/prompt-caching-architectural-discipline.md) — the caching mechanism that drives the effective-input-price lever
-- [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — the quality guardrail that cutting tokens must respect
+- [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — the quality guardrail that cutting tokens must respect

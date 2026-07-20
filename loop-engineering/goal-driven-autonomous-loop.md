@@ -43,14 +43,14 @@ Anthropic's [Claude Managed Agents `outcomes`](https://platform.claude.com/docs/
 
 ## Why it works
 
-The continuation prompt converts an open-ended turn-pump into a bounded controller. Objective re-statement defends against [objective drift](../anti-patterns/objective-drift.md) after long context. Budget telemetry signals the remaining capacity. The completion audit demands evidence-mapped requirements before the agent can declare done — the same anti-rationalization mechanism that [sprint contracts](../agent-design/sprint-contracts.md) impose, applied through an injected prompt rather than a session split.
+The continuation prompt converts an open-ended turn-pump into a bounded controller. Objective re-statement defends against [objective drift](../patterns/anti-patterns/objective-drift.md) after long context. Budget telemetry signals the remaining capacity. The completion audit demands evidence-mapped requirements before the agent can declare done — the same anti-rationalization mechanism that [sprint contracts](../patterns/agent-design/sprint-contracts.md) impose, applied through an injected prompt rather than a session split.
 
 | Pattern | Context model | Stop condition | Auditor |
 |---------|--------------|---------------|---------|
 | Goal-driven loop | Single session, accumulating | Goal-complete tool call OR token budget | Same agent (Codex) or separate grader (Anthropic) |
 | [Ralph Wiggum loop](ralph-wiggum-loop.md) | Fresh per cycle, state on disk | External: empty task list or iteration cap | External script |
 | [Continuous autonomous task loop](../workflows/continuous-autonomous-task-loop.md) | Fresh per task, backlog file | External: backlog empty or `MAX_ITERATIONS` | External script |
-| [Sprint contracts](../agent-design/sprint-contracts.md) | Three isolated sessions | Evaluator score above threshold | Separate evaluator session |
+| [Sprint contracts](../patterns/agent-design/sprint-contracts.md) | Three isolated sessions | Evaluator score above threshold | Separate evaluator session |
 
 ## Failure modes
 
@@ -118,9 +118,9 @@ The agent reads this each continuation turn, sees 58K tokens remaining, and pick
 
 - [The Ralph Wiggum Loop](ralph-wiggum-loop.md) — fresh-context contrast: state on disk, no mid-session injection
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md) — accumulated vs compressed vs fresh-context loops
-- [Sprint Contracts](../agent-design/sprint-contracts.md) — separate-evaluator alternative; pre-commits a rubric across isolated sessions
-- [Goal Monitoring and Progress Tracking](../agent-design/goal-monitoring-progress-tracking.md) — durable progress files complement turn-end injection
+- [Sprint Contracts](../patterns/agent-design/sprint-contracts.md) — separate-evaluator alternative; pre-commits a rubric across isolated sessions
+- [Goal Monitoring and Progress Tracking](../patterns/agent-design/goal-monitoring-progress-tracking.md) — durable progress files complement turn-end injection
 - [Agent Loop Middleware](agent-loop-middleware.md) — harness-level injection points where continuation prompts attach
 - [Continuous Autonomous Task Loop](../workflows/continuous-autonomous-task-loop.md) — backlog-driven outer loop alternative
-- [Objective Drift](../anti-patterns/objective-drift.md) — the failure mode the continuation prompt is designed to defend against
+- [Objective Drift](../patterns/anti-patterns/objective-drift.md) — the failure mode the continuation prompt is designed to defend against
 - [Convergence Detection](convergence-detection.md) — non-convergence detection that complements a hard budget cap

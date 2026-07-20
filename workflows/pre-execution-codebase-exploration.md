@@ -47,7 +47,7 @@ Phase 3: synthesis. The layer produces an enhanced problem statement that adds r
 
 Automated wrapper (pipeline mode). CodeScout runs as a pre-execution wrapper on top of existing agent scaffolds without modifying them. The same pattern applies to any multi-agent system: add a lightweight pre-execution agent that analyzes the task and rewrites the problem statement before passing it to the main agent. ([arXiv:2603.05744](https://arxiv.org/abs/2603.05744))
 
-[Harness engineering](../agent-design/harness-engineering.md) describes an equivalent pattern: an initializer agent creates a progress file and expands the original directive into granular, testable feature specs before any coding agents execute. ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
+[Harness engineering](../patterns/agent-design/harness-engineering.md) describes an equivalent pattern: an initializer agent creates a progress file and expands the original directive into granular, testable feature specs before any coding agents execute. ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
 
 Initializer agent for multi-session work. For long-running tasks, the initializer agent writes an expanded feature spec to a persistent progress file. Each downstream agent reads this file rather than re-expanding the original directive. You pay the expansion cost once. ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
 
@@ -132,6 +132,6 @@ The enhanced version lets the agent go directly to `apply_coupon` and `Coupon.am
 - [Mise en Place for Agentic Coding](mise-en-place-agentic-coding.md)
 - [Discovery-Only Refactor Pass: Surface Candidates Before Touching Code](discovery-only-refactor-pass.md)
 - [Context Priming](../context-engineering/context-priming.md)
-- [Session Initialization Ritual](../agent-design/session-initialization-ritual.md)
+- [Session Initialization Ritual](../patterns/agent-design/session-initialization-ritual.md)
 </content>
 </invoke>

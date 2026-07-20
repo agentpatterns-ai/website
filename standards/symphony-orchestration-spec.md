@@ -157,5 +157,5 @@ Symphony's design assumptions break in three conditions:
 - [Agent-to-Agent (A2A) Protocol](a2a-protocol.md)
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)
 - [AGENTS.md: A README for AI Coding Agents](agents-md.md)
-- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
+- [Orchestrator-Worker Pattern](../patterns/multi-agent/orchestrator-worker.md)
 - [Plugin and Extension Packaging](plugin-packaging.md)

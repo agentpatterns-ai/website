@@ -154,4 +154,4 @@ The empirical backing is the DORA finding that AI adoption simultaneously inflat
 - [Entropy Reduction Agents](entropy-reduction-agents.md) — the scheduled-scan counterpart that catches drift between PRs
 - [Velocity-Quality Asymmetry](velocity-quality-asymmetry.md) — empirical case for why AI throughput demands process-level QA scaling
 - [Verification-Centric Development](verification-centric-development.md) — the layered-gate vocabulary this workflow plugs into
-- [Agent-Laundered Bug Reports](../anti-patterns/agent-laundered-bug-reports.md) — adjacent anti-pattern where LLM rewriting bypasses observation discipline upstream of the gate
+- [Agent-Laundered Bug Reports](../patterns/anti-patterns/agent-laundered-bug-reports.md) — adjacent anti-pattern where LLM rewriting bypasses observation discipline upstream of the gate

@@ -67,7 +67,7 @@ When this pattern applies: optimization problems with a clear, computable metric
 
 ---
 
-## The [Orchestrator-Worker](../../multi-agent/orchestrator-worker.md) Research Loop
+## The [Orchestrator-Worker](../../patterns/multi-agent/orchestrator-worker.md) Research Loop
 
 For information research — where there is no single metric and the artifact is knowledge rather than code — a different architecture is needed.
 
@@ -118,7 +118,7 @@ Concrete mitigations:
 
 - Per-file edit counters — track how many times each file has been modified; after N edits, force the agent to reconsider its approach ([loop detection](../../observability/loop-detection.md) middleware)
 - Change velocity monitoring — if the rate of meaningful changes drops below a threshold, trigger a strategy reset
-- [Reasoning sandwich](../../agent-design/reasoning-budget-allocation.md) — allocate maximum reasoning tokens to planning and verification phases, moderate tokens to implementation. Front-load thinking, do not let it accumulate at the end
+- [Reasoning sandwich](../../patterns/agent-design/reasoning-budget-allocation.md) — allocate maximum reasoning tokens to planning and verification phases, moderate tokens to implementation. Front-load thinking, do not let it accumulate at the end
 
 ---
 
@@ -205,7 +205,7 @@ The principle: the human defines *what* and *why*; the agent determines *how* an
 
 Training
 
-- [Harness Engineering](harness-engineering.md) — [backpressure](../../agent-design/agent-backpressure.md), convergence detection, and pre-completion checklists apply directly to autonomous loops
+- [Harness Engineering](harness-engineering.md) — [backpressure](../../patterns/agent-design/agent-backpressure.md), convergence detection, and pre-completion checklists apply directly to autonomous loops
 - [Context Engineering](context-engineering.md) — context rot, compression strategies, and attention mechanics
 - [Eval Engineering](eval-engineering.md) — designing the metrics that autonomous experimentation loops optimize against
 - [Tool Engineering](tool-engineering.md) — designing tools agents can use reliably in unsupervised loops

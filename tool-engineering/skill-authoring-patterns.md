@@ -23,7 +23,7 @@ maturity: established
 Related lesson: [Skills as a Tool-Engineering Surface](https://learn.agentpatterns.ai/tool-engineering/skills-as-a-tool-surface/) — a hands-on lesson with quizzes.
 
 !!! note "Also known as"
-    Skill design patterns, SKILL.md authoring. For the portable skill format itself, see [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md). For the progressive disclosure architecture, see [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md).
+    Skill design patterns, SKILL.md authoring. For the portable skill format itself, see [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md). For the progressive disclosure architecture, see [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md).
 
 !!! info "Canonical home for skill content"
     This page is the canonical entry point for "skill" content across the site. Skill-related pages in other sections — `workflows/` (library taxonomy and refinement), `verification/` (skill evals), `agent-design/`, `human/`, and `standards/` — link here for authoring rules rather than restate them. The [Related](#related) cluster below maps the satellites.
@@ -50,7 +50,7 @@ Anthropic's internal skill library clusters into nine categories ([source](https
 
 Problem-first skills define steps for an outcome ("set up a project workspace"). Tool-first skills hold expertise for a given tool ("I have Linear MCP connected"). This split decides which implementation pattern fits.
 
-The `description` field decides whether the agent loads a skill. It is always present in the system prompt ([progressive disclosure](../agent-design/progressive-disclosure-agents.md)), so it must earn its tokens.
+The `description` field decides whether the agent loads a skill. It is always present in the system prompt ([progressive disclosure](../patterns/agent-design/progressive-disclosure-agents.md)), so it must earn its tokens.
 
 Structure: `[What it does] + [When to use it] + [Key capabilities]`. Include trigger phrases users would actually say; missing triggers cause under-triggering. To stop over-triggering, add negative triggers:
 
@@ -192,7 +192,7 @@ For critical validations, bundle a script — code is deterministic; language in
 
 ## Why it works
 
-Skill patterns work because agents are context-constrained token predictors — they produce output proportional to the quality and specificity of their input context. A description field acts as a learned retrieval key: the agent matches incoming user intent against description tokens to decide what to load, the [progressive-disclosure](../agent-design/progressive-disclosure-agents.md) gate that keeps the rest of the skill out of the prompt until needed. Concise, trigger-rich descriptions raise that match probability. Gotchas sections work because they shift the prior toward correct behavior in the narrow set of cases where the base model would otherwise guess wrong; they do not teach the model general knowledge, they override its statistical default for a specific edge case. The delta principle (only write what the base model gets wrong) is efficient because it keeps context small — every token saved in skill instructions is a token available for task reasoning ([source](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)).
+Skill patterns work because agents are context-constrained token predictors — they produce output proportional to the quality and specificity of their input context. A description field acts as a learned retrieval key: the agent matches incoming user intent against description tokens to decide what to load, the [progressive-disclosure](../patterns/agent-design/progressive-disclosure-agents.md) gate that keeps the rest of the skill out of the prompt until needed. Concise, trigger-rich descriptions raise that match probability. Gotchas sections work because they shift the prior toward correct behavior in the narrow set of cases where the base model would otherwise guess wrong; they do not teach the model general knowledge, they override its statistical default for a specific edge case. The delta principle (only write what the base model gets wrong) is efficient because it keeps context small — every token saved in skill instructions is a token available for task reasoning ([source](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)).
 
 The free-form prose used here is not the only candidate representation: a structured graph/protocol form (the AIP representation) has been proposed as an alternative to free-form prose for agent skills, argued to improve reliability and editability ([AIP: A Graph Representation for Learning and Governing Agent Skills, 2026](https://arxiv.org/abs/2606.04781)).
 
@@ -251,7 +251,7 @@ Asking the agent "When would you use the linear-issue-manager skill?" after savi
 - [CLI-First Skill Design](cli-first-skill-design.md) — the dual-use script shape for executable skills
 - [Skill Frontmatter Reference](skill-frontmatter-reference.md)
 - [Skill Library Evolution](skill-library-evolution.md) — lifecycle governance for authored skills
-- [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
+- [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md)
 - [Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit](../verification/skill-evals.md) — evaluating an authored skill as a unit
 - [SDLC-Phase Skill Taxonomy](../workflows/sdlc-skill-taxonomy.md) — organizing an authored library by lifecycle phase at scale
 - [Daily-Use Skill Library](../workflows/daily-use-skill-library.md) — encoding a personal engineering process as a small skill set

@@ -19,7 +19,7 @@ maturity: established
 
 > This selection map compares patterns by what they cost, where they break, and what they assume — so you pick the cheapest one that works.
 
-Adopting agent patterns without comparing their costs produces two documented failure modes: stacking sophisticated patterns ([cargo-cult agent setup](../anti-patterns/cargo-cult-agent-setup.md)) and stacking frontier-model roles until economics collapse ([compound engineering's 80/20 inversion](../workflows/compound-engineering.md)). The matrix below surfaces the trade-offs from each pattern's canonical page so you can compare without re-reading every one.
+Adopting agent patterns without comparing their costs produces two documented failure modes: stacking sophisticated patterns ([cargo-cult agent setup](anti-patterns/cargo-cult-agent-setup.md)) and stacking frontier-model roles until economics collapse ([compound engineering's 80/20 inversion](../workflows/compound-engineering.md)). The matrix below surfaces the trade-offs from each pattern's canonical page so you can compare without re-reading every one.
 
 It is scoped to this site's 14 patterns that share a common set of axes. Patterns where these axes are not the dominant trade-off live on their own pages.
 
@@ -27,15 +27,15 @@ It is scoped to this site's 14 patterns that share a common set of axes. Pattern
 
 | Pattern | Token cost | Latency overhead | Frontier-model dependency | Blast radius | Verification cost | Task class |
 |---------|------------|------------------|---------------------------|--------------|-------------------|------------|
-| [Harness Engineering](../agent-design/harness-engineering.md) | low | none | none | contained writes | linter-able | open-ended |
+| [Harness Engineering](agent-design/harness-engineering.md) | low | none | none | contained writes | linter-able | open-ended |
 | [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) | high | +N turns | one role | contained writes | eval-able | iterative |
-| [Cognitive Reasoning vs Execution](../agent-design/cognitive-reasoning-execution-separation.md) | medium | +1 turn | one role | contained writes | linter-able | iterative |
-| [Episodic Memory Retrieval](../agent-design/episodic-memory-retrieval.md) | low | +1 turn | none | read-only | eval-able | iterative |
-| [Agent Circuit Breaker](../agent-design/agent-circuit-breaker.md) | low | none | none | read-only | linter-able | iterative |
-| [Agent Backpressure](../agent-design/agent-backpressure.md) | low | none | none | contained writes | linter-able | iterative |
-| [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md) | medium | +N turns | one role | contained writes | human-only | open-ended |
-| [Declarative Multi-Agent Topology](../multi-agent/declarative-multi-agent-topology.md) | medium | +N turns | one role | contained writes | linter-able | open-ended |
-| [Economic Value Signaling](../multi-agent/economic-value-signaling.md) | medium | +N turns | none | production effects | human-only | open-ended |
+| [Cognitive Reasoning vs Execution](agent-design/cognitive-reasoning-execution-separation.md) | medium | +1 turn | one role | contained writes | linter-able | iterative |
+| [Episodic Memory Retrieval](agent-design/episodic-memory-retrieval.md) | low | +1 turn | none | read-only | eval-able | iterative |
+| [Agent Circuit Breaker](agent-design/agent-circuit-breaker.md) | low | none | none | read-only | linter-able | iterative |
+| [Agent Backpressure](agent-design/agent-backpressure.md) | low | none | none | contained writes | linter-able | iterative |
+| [Multi-Agent Topology Taxonomy](multi-agent/multi-agent-topology-taxonomy.md) | medium | +N turns | one role | contained writes | human-only | open-ended |
+| [Declarative Multi-Agent Topology](multi-agent/declarative-multi-agent-topology.md) | medium | +N turns | one role | contained writes | linter-able | open-ended |
+| [Economic Value Signaling](multi-agent/economic-value-signaling.md) | medium | +N turns | none | production effects | human-only | open-ended |
 | [Review-Then-Implement Loop](../code-review/review-then-implement-loop.md) | high | +N turns | one role | contained writes | eval-able | iterative |
 | [Agentic Code Review Architecture](../code-review/agentic-code-review-architecture.md) | high | +N turns | one role | read-only | eval-able | iterative |
 | [Incremental Verification](../verification/incremental-verification.md) | low | +1 turn | none | contained writes | linter-able | iterative |
@@ -90,24 +90,24 @@ The matrix compresses information already sourced on each pattern's canonical pa
 
 The matrix is a comparison aid, not a recommendation engine. Three failure modes to watch:
 
-- Pattern shopping — scanning the table and assembling several patterns at once produces the exact stack-everything failure mode the page exists to defuse, the [cargo-cult agent setup](../anti-patterns/cargo-cult-agent-setup.md) anti-pattern. The TL;DR and the closing rule are deliberate counterweights.
+- Pattern shopping — scanning the table and assembling several patterns at once produces the exact stack-everything failure mode the page exists to defuse, the [cargo-cult agent setup](anti-patterns/cargo-cult-agent-setup.md) anti-pattern. The TL;DR and the closing rule are deliberate counterweights.
 - Stale rows — pattern pages evolve over time. If a pattern page changes its cost or blast-radius characterization, the matrix row diverges silently until the next periodic audit catches it. The `last_reviewed` frontmatter dates the synthesis.
 - Axis flattening — a single ordinal value per axis hides distributions. A pattern marked `medium` token cost in steady state may spike to `high` during cold start or on certain task shapes. The canonical page carries the nuance; the matrix row does not.
 
 ## Key Takeaways
 
 - Compare across patterns on costs you already care about — token spend, latency, blast radius — before composing them.
-- `low`-cost patterns ([harness engineering](../agent-design/harness-engineering.md), [agent backpressure](../agent-design/agent-backpressure.md), [incremental verification](../verification/incremental-verification.md)) are the unsexy foundation; sophisticated patterns assume these are already in place.
+- `low`-cost patterns ([harness engineering](agent-design/harness-engineering.md), [agent backpressure](agent-design/agent-backpressure.md), [incremental verification](../verification/incremental-verification.md)) are the unsexy foundation; sophisticated patterns assume these are already in place.
 - `very high` cost patterns ([compound engineering](../workflows/compound-engineering.md)) deliver on long horizons but collapse economics on short tasks — match cost class to task class.
-- `production effects` blast radius ([economic value signaling](../multi-agent/economic-value-signaling.md), [compound engineering](../workflows/compound-engineering.md)) requires human-only verification — these are not patterns to stack speculatively.
+- `production effects` blast radius ([economic value signaling](multi-agent/economic-value-signaling.md), [compound engineering](../workflows/compound-engineering.md)) requires human-only verification — these are not patterns to stack speculatively.
 - If two patterns score similarly across all axes, pick the one your team can debug at 3am.
 
 ## Related
 
 - [Patterns](index.md) — the parent index this map sits under
-- [Cargo Cult Agent Setup](../anti-patterns/cargo-cult-agent-setup.md) — copying patterns without understanding the trade-offs is the failure mode this map exists to defuse
+- [Cargo Cult Agent Setup](anti-patterns/cargo-cult-agent-setup.md) — copying patterns without understanding the trade-offs is the failure mode this map exists to defuse
 - [AI Development Maturity Model](../workflows/ai-development-maturity-model.md) — adoption phases for AI coding tools; complements the per-pattern trade-off view with a developmental view
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — the broader treatment of cost as a first-class design constraint
 - [Compound Engineering](../workflows/compound-engineering.md) — the highest-cost pattern on the matrix; the planning/review investment that makes it economic
-- [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md) — coordination-pattern comparison (Sequential / Concurrent / Group chat / Handoff / Magentic) for the topologies above; orthogonal axes to this map's six
+- [Multi-Agent Topology Taxonomy](multi-agent/multi-agent-topology-taxonomy.md) — coordination-pattern comparison (Sequential / Concurrent / Group chat / Handoff / Magentic) for the topologies above; orthogonal axes to this map's six
 - [Routing Decision Framework](../token-engineering/routing-decision-framework.md) — applies this map's model to routing patterns specifically: one matrix over the eight token-engineering routing pages

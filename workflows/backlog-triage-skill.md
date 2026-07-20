@@ -68,17 +68,17 @@ The maintainer can override transitions at any time. "Move #42 to ready-for-agen
 Four rules govern brief writing:
 
 - Durability over precision — describe interfaces, types, and behavioral contracts. Never reference file paths or line numbers; the issue may sit for days while the codebase moves.
-- Behavioral, not procedural — describe what the system should do, not how to implement it. The downstream executor explores the codebase fresh, reconstructing structure at run time ([issue requirements preprocessing](../agent-design/issue-requirements-preprocessing.md)).
+- Behavioral, not procedural — describe what the system should do, not how to implement it. The downstream executor explores the codebase fresh, reconstructing structure at run time ([issue requirements preprocessing](../patterns/agent-design/issue-requirements-preprocessing.md)).
 - Complete acceptance criteria — every brief lists concrete, testable criteria. Each criterion is independently verifiable.
 - Explicit scope boundaries — state what is out of scope to prevent gold-plating.
 
-This is the upstream complement to [issue requirements preprocessing](../agent-design/issue-requirements-preprocessing.md): the brief is the structured input the executor receives, written before the executor opens its first context window. The REAgent paper measures a 17.40% lift in resolution rate when the executor reconstructs structured requirements at run time ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861)) — a triage-skill brief moves that work upstream and out of the executor's context budget.
+This is the upstream complement to [issue requirements preprocessing](../patterns/agent-design/issue-requirements-preprocessing.md): the brief is the structured input the executor receives, written before the executor opens its first context window. The REAgent paper measures a 17.40% lift in resolution rate when the executor reconstructs structured requirements at run time ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861)) — a triage-skill brief moves that work upstream and out of the executor's context budget.
 
 ## Out-of-scope as institutional memory
 
 Rejected enhancements are written to `.out-of-scope/<concept>.md` — one file per concept, not per issue. The file captures the decision, the reasoning, and a "Prior requests" list of every issue that asked for the feature ([OUT-OF-SCOPE.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/OUT-OF-SCOPE.md)). During context gathering on every new issue, the skill reads this directory and surfaces matches by concept similarity ("night theme" matches `dark-mode.md`).
 
-The mechanism is durable institutional memory: the skill cannot re-litigate decided questions on each invocation, similar to how [agent memory patterns](../agent-design/agent-memory-patterns.md) preserve state across sessions.
+The mechanism is durable institutional memory: the skill cannot re-litigate decided questions on each invocation, similar to how [agent memory patterns](../patterns/agent-design/agent-memory-patterns.md) preserve state across sessions.
 
 ## When the pattern earns its cost
 
@@ -133,7 +133,7 @@ The agent traces task-ID variables, locates the literal-vs-placeholder mismatch,
 
 - [Continuous Triage](continuous-triage.md) — automated event-time triage on GitHub Actions; complementary lights-out variant
 - [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md) — multi-stage batch pipeline for intake from a single artifact
-- [Issue Requirements Preprocessing](../agent-design/issue-requirements-preprocessing.md) — downstream complement: structured requirement reconstruction at executor invocation time
+- [Issue Requirements Preprocessing](../patterns/agent-design/issue-requirements-preprocessing.md) — downstream complement: structured requirement reconstruction at executor invocation time
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — what runs on issues marked `ready-for-agent`
 - [Issue-Tracker as Agent Dispatch Surface](issue-tracker-agent-dispatch-surface.md) — the downstream dispatch contract that the agent brief feeds into
 - [Semantic Issue Search from Chat vs Query Syntax](semantic-issue-search-natural-language.md) — paraphrase-tolerant duplicate detection that complements `.out-of-scope/` concept matching

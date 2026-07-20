@@ -55,7 +55,7 @@ This maps directly to what teams experience with AI agents. Rigorous review proc
 
 The study measures ML projects broadly, not AI coding agents specifically. But the structural relationships apply:
 
-Strategy failure looks like this: you use an agent to generate code before you define what the code should achieve. You [vibe code](../anti-patterns/vibe-coding.md) an entire feature without requirements. You automate the wrong workflow.
+Strategy failure looks like this: you use an agent to generate code before you define what the code should achieve. You [vibe code](../patterns/anti-patterns/vibe-coding.md) an entire feature without requirements. You automate the wrong workflow.
 
 Process without ecosystem looks like this: you require code review for every agent PR but have no automated linting, no test suite, and no CI pipeline. The review burden grows with agent output volume — the [bottleneck migration](bottleneck-migration.md) from generation to verification.
 
@@ -109,7 +109,7 @@ The second team ships in six weeks. The agent writes the same volume of code, bu
 - [Process Amplification](process-amplification.md) — Agents amplify existing practices; this page adds the upstream cause (strategy clarity) that determines what gets amplified
 - [The Bottleneck Migration](bottleneck-migration.md) — Code generation becomes cheap but review becomes expensive; strategy failure is the earlier bottleneck this page addresses
 - [Empowerment Over Automation](empowerment-over-automation.md) — AI should preserve human judgment; this page provides empirical evidence for why that judgment (strategy) matters most
-- [Effortless AI Fallacy](../anti-patterns/effortless-ai-fallacy.md) — Expecting AI tools to work without effort; the ML Canvas shows effort must be directed at strategy, not just prompting
+- [Effortless AI Fallacy](../patterns/anti-patterns/effortless-ai-fallacy.md) — Expecting AI tools to work without effort; the ML Canvas shows effort must be directed at strategy, not just prompting
 - [Rigor Relocation](rigor-relocation.md) — Effort shifts from writing to verification; the cascade model shows where that relocated effort should be directed
 - [PM on the AI Exponential](pm-on-the-ai-exponential.md) — How product managers adapt to AI-driven development velocity; the cascade model shows which strategic decisions remain human-owned
 - [Deliberate AI-Assisted Learning](deliberate-ai-learning.md) — Structured practice with AI tools; strategy clarity determines which skills to build vs. delegate

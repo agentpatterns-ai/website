@@ -77,7 +77,7 @@ Per-source attribution is the right axis when configuration sources are substant
 - The harness cannot act on the cut. Without per-skill or per-MCP unload commands, knowing skills consume 22% offers no fix beyond restarting the session.
 - The headline counts only a subset of token types. A breakdown is trustworthy only when it sums input, output, and cache tokens. Counting input alone undercounts the budget — Claude Code's percentage showed about 20% while the session was at its limit ([claude-code#28167](https://github.com/anthropics/claude-code/issues/28167), [#17959](https://github.com/anthropics/claude-code/issues/17959)). Confirm the denominator covers every `type` before trusting a slice.
 
-The two cuts are complementary — exposing both lets operators pick the axis matching the suspected cause. [The Infinite Context anti-pattern](../anti-patterns/infinite-context.md) is the failure both work against. Per-source attribution is the cheaper always-on signal, pointing at slow-growing static sources before an emergency compaction.
+The two cuts are complementary — exposing both lets operators pick the axis matching the suspected cause. [The Infinite Context anti-pattern](../patterns/anti-patterns/infinite-context.md) is the failure both work against. Per-source attribution is the cheaper always-on signal, pointing at slow-growing static sources before an emergency compaction.
 
 ## Example
 
@@ -99,7 +99,7 @@ The breakdown made the difference between "prune skills" (the right answer) and 
 
 - [Context-Window Diagnostic Tooling: Identifying Context-Heavy Tools](../context-engineering/context-window-diagnostic-tooling.md) — per-tool attribution, the complementary cut
 - [Context Budget Allocation: Every Token Has a Cost](../context-engineering/context-budget-allocation.md) — the budget the breakdown serves
-- [The Infinite Context anti-pattern](../anti-patterns/infinite-context.md) — the failure mode attribution prevents
+- [The Infinite Context anti-pattern](../patterns/anti-patterns/infinite-context.md) — the failure mode attribution prevents
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](agent-observability-otel.md) — the export path for attribution telemetry
 - [Agent Debug Log Panel](agent-debug-log-panel.md) — the adjacent always-on surface for events rather than tokens
 - [Per-Plugin Token-Cost Attribution via `claude plugin details`](plugin-token-cost-attribution.md) — the same attribution axis at plugin granularity

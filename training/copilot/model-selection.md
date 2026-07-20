@@ -32,7 +32,7 @@ As of March 2026, the general shape:
 | Powerful | Claude Opus 4.5/4.6, Gemini 2.5 Pro | 3x+ | Complex reasoning, architecture, large codebase analysis |
 | Ultra (our label) | Claude Opus 4.6 fast (preview, Pro+/Enterprise) | 30x | Maximum capability, maximum cost |
 
-[Auto mode](../../agent-design/auto-model-selection.md) provides a 10% multiplier discount on Copilot Chat (in VS Code, GitHub.com, and JetBrains on paid plans) and routes to the model Copilot judges best for the task. Unless you have a specific reason to override, Auto is the default recommendation.
+[Auto mode](../../patterns/agent-design/auto-model-selection.md) provides a 10% multiplier discount on Copilot Chat (in VS Code, GitHub.com, and JetBrains on paid plans) and routes to the model Copilot judges best for the task. Unless you have a specific reason to override, Auto is the default recommendation.
 
 ### Where models are selected
 
@@ -103,11 +103,11 @@ Task arrives
   → If fail after 2 attempts → escalate to powerful model (Opus, 3x cost)
 ```
 
-This is the cost-aware version of the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md) (Module D). The key insight: if the [backpressure](../../agent-design/agent-backpressure.md) system (tests, linter, types) provides binary pass/fail feedback, you can start cheap and escalate on failure. The test suite is the routing signal.
+This is the cost-aware version of the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md) (Module D). The key insight: if the [backpressure](../../patterns/agent-design/agent-backpressure.md) system (tests, linter, types) provides binary pass/fail feedback, you can start cheap and escalate on failure. The test suite is the routing signal.
 
 When cascade works: Tasks with verifiable outcomes — tests pass, types check, linter clean. The feedback loop — the same [backpressure](harness-engineering.md) that gates the cascade — tells you whether the cheaper model was sufficient.
 
-When cascade doesn't work: Tasks without binary feedback — architecture design, documentation quality, code review. There's no automated signal to trigger escalation. Use the powerful model directly for these, or read the cheap model's partial trajectory to decide when to escalate — see [Trajectory-Conditioned Model Escalation](../../agent-design/trajectory-conditioned-model-escalation.md).
+When cascade doesn't work: Tasks without binary feedback — architecture design, documentation quality, code review. There's no automated signal to trigger escalation. Use the powerful model directly for these, or read the cheap model's partial trajectory to decide when to escalate — see [Trajectory-Conditioned Model Escalation](../../patterns/agent-design/trajectory-conditioned-model-escalation.md).
 
 ---
 
@@ -125,7 +125,7 @@ Verification phase → high reasoning (review the implementation critically)
 
 ### Why it works
 
-Concentrating reasoning at decision points — the [reasoning budget allocation](../../agent-design/reasoning-budget-allocation.md) pattern — outperforms both maximum reasoning throughout and uniform reduced reasoning. Maximum reasoning throughout is counterproductive — the model spends so long reasoning about each step that it risks exhausting token budgets before completing the task. Reasoning is most valuable where decisions are made, not where they're executed.
+Concentrating reasoning at decision points — the [reasoning budget allocation](../../patterns/agent-design/reasoning-budget-allocation.md) pattern — outperforms both maximum reasoning throughout and uniform reduced reasoning. Maximum reasoning throughout is counterproductive — the model spends so long reasoning about each step that it risks exhausting token budgets before completing the task. Reasoning is most valuable where decisions are made, not where they're executed.
 
 ### How to apply it in Copilot
 
@@ -245,7 +245,7 @@ Cost: ~20 premium requests total (3 Haiku + 8 Sonnet + 9 Opus equivalent). Runni
 - Auto mode is the default. Override only when you have a specific reason — exploration (go cheaper), architecture (go more powerful), security (go more powerful).
 - Use display names, not pinned IDs in custom agent definitions. Models retire; display names (`claude-opus-4-5`) map to the current version automatically.
 - Cascade routing starts cheap and escalates on failure. It works when backpressure (tests, types, linters) provides binary feedback. For tasks without automated feedback, use the powerful model directly.
-- The [reasoning sandwich](../../agent-design/reasoning-budget-allocation.md) (high planning → standard execution → high verification) outperforms uniform reasoning. Use Plan mode for planning, Agent mode for execution, Ask mode for review.
+- The [reasoning sandwich](../../patterns/agent-design/reasoning-budget-allocation.md) (high planning → standard execution → high verification) outperforms uniform reasoning. Use Plan mode for planning, Agent mode for execution, Ask mode for review.
 - The coding agent's cost multiplier compounds across many actions per task. A 3x multiplier on 50 actions is significant. Reserve expensive models for tasks where reasoning quality matters.
 - Spot-check competitive evaluation before standardising. Run representative tasks through different models to discover which fits your codebase best.
 
@@ -256,6 +256,6 @@ Cost: ~20 premium requests total (3 Haiku + 8 Sonnet + 9 Opus equivalent). Runni
 - [GitHub Copilot: Harness Engineering](harness-engineering.md) — backpressure as the cascade routing signal
 - [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — premium request vs token billing comparison
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — big.LITTLE routing, cascade patterns, token economics
-- [Reasoning Budget Allocation](../../agent-design/reasoning-budget-allocation.md) — the reasoning sandwich, dual-mode operation
-- [Heuristic Effort Scaling](../../agent-design/heuristic-effort-scaling.md) — self-classifying complexity tiers
-- [Cross-Vendor Competitive Routing](../../agent-design/cross-vendor-competitive-routing.md) — spot-check vs always-on evaluation
+- [Reasoning Budget Allocation](../../patterns/agent-design/reasoning-budget-allocation.md) — the reasoning sandwich, dual-mode operation
+- [Heuristic Effort Scaling](../../patterns/agent-design/heuristic-effort-scaling.md) — self-classifying complexity tiers
+- [Cross-Vendor Competitive Routing](../../patterns/agent-design/cross-vendor-competitive-routing.md) — spot-check vs always-on evaluation

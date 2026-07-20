@@ -161,7 +161,7 @@ Claude Code's default auto-approval list has itself grown over releases to inclu
 ## Related
 
 - [Safe Command Allowlisting: Reducing Approval Fatigue](safe-command-allowlisting.md)
-- [Permission-Gated Custom Commands](../security/permission-gated-commands.md)
+- [Permission-Gated Custom Commands](permission-gated-commands.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
 - [Hooks and Lifecycle Events](../tool-engineering/hooks-lifecycle-events.md)
 - [PostToolUse Hook for BSD/GNU Tool Miss Detection](../tool-engineering/posttooluse-bsd-gnu-detection.md)

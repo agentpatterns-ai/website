@@ -25,7 +25,7 @@ The pattern is documented in Aakash Gupta's interview with Hannah Stulberg, a Pr
 
 The repo is the team's brain. The coding agent is the shared interface over it. Two problems collapse into one artifact:
 
-- Context delivery to the agent. Nested `CLAUDE.md` and a functional folder taxonomy implement [progressive disclosure](../../agent-design/progressive-disclosure-agents.md) — the agent pulls only the tokens relevant to the current query instead of traversing the whole repo.
+- Context delivery to the agent. Nested `CLAUDE.md` and a functional folder taxonomy implement [progressive disclosure](../../patterns/agent-design/progressive-disclosure-agents.md) — the agent pulls only the tokens relevant to the current query instead of traversing the whole repo.
 - Self-service retrieval for humans. The same markdown the agent reads is the canonical source the team reads, removing the PM-as-router bottleneck Stulberg names directly: *"every question goes through you. Every answer lives in your head or in a doc no one can find. That does not scale."* ([source](https://www.news.aakashg.com/p/claude-code-team-os))
 
 The causal lever is [natural-language git](natural-language-git.md). Once a non-engineer can author and merge through the agent, the marginal contributor cost stops being "learn git" and becomes "know what to write" — which matches the [strategy-over-code-generation](../../human/strategy-over-code-generation.md) shift already observed in agent-driven teams.
@@ -57,7 +57,7 @@ Each node above is a page in this framework. The context-routing mechanism — n
 | 6 | [Plan files as resumable artifacts](plan-files-resumable-artifacts.md) | Committed plan files — qualified pattern: survive context compaction and enable ~80% reuse on recurring workflows, require supersession discipline to avoid retrieval hazards |
 | 7 | [Self-explanation loop](self-explanation-loop.md) | "Why is this structured this way?" as an active learning prompt |
 
-Atomic patterns Team OS composes (cross-links): [hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md), [CLAUDE.md convention](../../instructions/claude-md-convention.md), [AGENTS.md as table of contents](../../instructions/agents-md-as-table-of-contents.md), [progressive disclosure for agents](../../agent-design/progressive-disclosure-agents.md), [strategy over code generation](../../human/strategy-over-code-generation.md), [plan mode](../../tools/claude/plan-mode.md).
+Atomic patterns Team OS composes (cross-links): [hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md), [CLAUDE.md convention](../../instructions/claude-md-convention.md), [AGENTS.md as table of contents](../../instructions/agents-md-as-table-of-contents.md), [progressive disclosure for agents](../../patterns/agent-design/progressive-disclosure-agents.md), [strategy over code generation](../../human/strategy-over-code-generation.md), [plan mode](../../tools/claude/plan-mode.md).
 
 ## Adoption Gradient
 
@@ -106,7 +106,7 @@ The workflow above is a single-practitioner case study (N=1). The underlying mec
 - [CLAUDE.md convention](../../instructions/claude-md-convention.md) — root instruction file shape
 - [AGENTS.md as table of contents](../../instructions/agents-md-as-table-of-contents.md) — tool-agnostic equivalent for mixed-tool teams
 - [AGENTS.md standard](../../standards/agents-md.md) — the underlying open standard for project-level agent instructions
-- [Progressive disclosure for agents](../../agent-design/progressive-disclosure-agents.md) — why functional folder depth saves tokens
+- [Progressive disclosure for agents](../../patterns/agent-design/progressive-disclosure-agents.md) — why functional folder depth saves tokens
 - [Strategy over code generation](../../human/strategy-over-code-generation.md) — why PM-as-router stops scaling
 - [Plan mode](../../tools/claude/plan-mode.md) — the gate Team OS uses for high-stakes artifacts
 - [Brownfield to Agent-First](../brownfield-to-agent-first/index.md) — the companion framework for *codebase* readiness

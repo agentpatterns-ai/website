@@ -70,7 +70,7 @@ If the agent writes both the tests and the implementation, the tests verify noth
 
 Agent writes tests and implementation: the agent writes tests to match the implementation, not to specify correct behavior. The suite passes but verifies the wrong thing.
 
-No tests: verification is manual review only. Review quality is inconsistent, review fatigue accumulates, and subtle errors pass undetected. This is the [trust-without-verify](../anti-patterns/trust-without-verify.md) failure mode.
+No tests: verification is manual review only. Review quality is inconsistent, review fatigue accumulates, and subtle errors pass undetected. This is the [trust-without-verify](../patterns/anti-patterns/trust-without-verify.md) failure mode.
 
 Tests written after implementation: the agent writes tests to match what it already built. Edge cases it did not handle are not tested.
 
@@ -140,7 +140,7 @@ The agent cannot pass the tie-ordering test by sorting carelessly. The test enco
 - [Test-Driven Intent Clarification: Tests as Intermediate Alignment Artifacts](test-driven-intent-clarification.md)
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md)
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md)
-- [Trust Without Verify](../anti-patterns/trust-without-verify.md)
+- [Trust Without Verify](../patterns/anti-patterns/trust-without-verify.md)
 - [Agent-Assisted Code Review: Agents as PR First Pass](../code-review/agent-assisted-code-review.md)
 - [Golden Query Pairs as Continuous Regression Tests for Agents](golden-query-pairs-regression.md)
 - [Multi-Agent RAG for Spec-to-Test Automation](multi-agent-rag-spec-to-test.md)

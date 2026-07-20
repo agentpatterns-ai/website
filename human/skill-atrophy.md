@@ -99,7 +99,7 @@ Treat reviewing AI-generated code as a skill exercise, not a rubber stamp. Befor
 |---------|-----------|-----------|-------------|
 | Skill atrophy | Loss of ability to perform independently | Reduced practice over time | Yes, with deliberate practice |
 | [Cognitive load and AI fatigue](cognitive-load-ai-fatigue.md) | Mental exhaustion during AI use | Sustained oversight and review | Yes, with rest |
-| [Comprehension debt](../anti-patterns/comprehension-debt.md) | Not understanding your own codebase | Accepting code without reading it | Yes, with code study |
+| [Comprehension debt](../patterns/anti-patterns/comprehension-debt.md) | Not understanding your own codebase | Accepting code without reading it | Yes, with code study |
 
 Fatigue makes you tired during work. Atrophy makes you less capable between sessions. Comprehension debt makes you a stranger to your own codebase.
 
@@ -116,7 +116,7 @@ Fatigue makes you tired during work. Atrophy makes you less capable between sess
 - [Deliberate AI-Assisted Learning](deliberate-ai-learning.md) — the inverse pattern: interaction styles that build skill rather than erode it, grounded in the same Anthropic study
 - [Cognitive Load & AI Fatigue](cognitive-load-ai-fatigue.md) — temporary exhaustion, distinct from cumulative capability loss
 - [The Addictive Flow State of Agent-Assisted Development](addictive-flow-agent-development.md) — compulsion mechanism that accelerates atrophy by increasing delegation frequency
-- [Vibe Coding](../anti-patterns/vibe-coding.md) — the workflow pattern where atrophy risk is highest
+- [Vibe Coding](../patterns/anti-patterns/vibe-coding.md) — the workflow pattern where atrophy risk is highest
 - [Rigor Relocation](rigor-relocation.md) — engineering discipline shifts rather than disappears when agents write code
 - [The Bottleneck Migration](bottleneck-migration.md) — review and verification become the scarce resource when code generation is cheap
 - [Developer Control Strategies for AI Agents](developer-control-strategies-ai-agents.md) — structuring delegation boundaries and autonomy levels to preserve oversight

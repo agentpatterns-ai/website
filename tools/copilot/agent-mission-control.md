@@ -54,7 +54,7 @@ You can steer a session mid-run from two surfaces:
 
 Session logs show Copilot's reasoning alongside the Overview and Files Changed tabs. Check the logs before reviewing code. A reasoning error caught in the log is cheaper to correct than one traced through a diff.
 
-For the general steering framework — when to intervene, how to phrase corrections, and what early intervention costs versus late — see [Steering Running Agents](../../agent-design/steering-running-agents.md).
+For the general steering framework — when to intervene, how to phrase corrections, and what early intervention costs versus late — see [Steering Running Agents](../../patterns/agent-design/steering-running-agents.md).
 
 ## Drift detection
 
@@ -136,5 +136,5 @@ A team uses Mission Control to parallelize a feature rollout across three concer
 - [Copilot Cloud Agent Three-Phase Execution Model](cloud-agent-research-plan-code.md)
 - [Copilot Cloud Agent Organization Controls](cloud-agent-org-controls.md)
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md)
-- [Steering Running Agents](../../agent-design/steering-running-agents.md)
+- [Steering Running Agents](../../patterns/agent-design/steering-running-agents.md)
 - [Parallel Agent Sessions](../../workflows/parallel-agent-sessions.md)

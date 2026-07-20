@@ -141,4 +141,4 @@ The token saving from masking `read_file` and `edit_file` in this example is rou
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
 - [Filter, Aggregate, and Execution Environment](filter-aggregate-execution-env.md)
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
-- [The Infinite Context](../anti-patterns/infinite-context.md)
+- [The Infinite Context](../patterns/anti-patterns/infinite-context.md)

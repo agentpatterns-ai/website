@@ -18,7 +18,7 @@ maturity: established
 > Pre-planned recovery paths for agents that loop, stall, or produce degrading output.
 
 !!! note "Also known as"
-    Mid-Run Correction, Steering Running Agents. This page covers reactive, pre-built recovery mechanisms for stuck agents. For proactive human intervention — redirecting agents mid-task before they go off course — see [Steering Running Agents](../agent-design/steering-running-agents.md).
+    Mid-Run Correction, Steering Running Agents. This page covers reactive, pre-built recovery mechanisms for stuck agents. For proactive human intervention — redirecting agents mid-task before they go off course — see [Steering Running Agents](../patterns/agent-design/steering-running-agents.md).
 
 An escape hatch is a recovery path planned in advance so a looping, stalling, or degrading agent can be unstuck without discarding the whole session. Which one to reach for depends on the failure mode: interrupt and redirect when the goal is still reachable, then escalate through manual override, compaction, scope reduction, or a full context reset as the damage deepens.
 
@@ -43,7 +43,7 @@ This is the lowest-cost hatch — no context reset, no information loss. Use it 
 
 ### 2. Manual override for a specific step
 
-[Take over](../agent-design/steering-running-agents.md) the single step the agent cannot handle, then hand control back. If an agent cannot write a particular function correctly after two attempts, write it yourself and tell the agent to continue from there.
+[Take over](../patterns/agent-design/steering-running-agents.md) the single step the agent cannot handle, then hand control back. If an agent cannot write a particular function correctly after two attempts, write it yourself and tell the agent to continue from there.
 
 This keeps the session productive without abandoning work already done. It works well when the stuck point is isolated — one step in a longer task.
 
@@ -63,11 +63,11 @@ After compaction, the agent has a cleaner working context and fresh instructions
 
 Break the stuck task into smaller pieces. An agent that cannot complete "refactor the auth module" may complete "extract token validation into a separate function" without issue.
 
-Scope reduction is useful when the stuck agent has a real [capability gap](../agent-design/task-feasibility-awareness.md) on the full task but can handle components of it. It also generates checkpoints — each smaller completion is a testable unit you can verify before proceeding.
+Scope reduction is useful when the stuck agent has a real [capability gap](../patterns/agent-design/task-feasibility-awareness.md) on the full task but can handle components of it. It also generates checkpoints — each smaller completion is a testable unit you can verify before proceeding.
 
 ### 5. Context reset (new session)
 
-Start a fresh session when [context pollution](../anti-patterns/session-partitioning.md) is severe — many bad attempts have contaminated the conversation, or the accumulated context is large enough to affect reliability. Each Claude Code session starts with a fresh context window; [CLAUDE.md and project instructions reload automatically](https://code.claude.com/docs/en/memory).
+Start a fresh session when [context pollution](../patterns/anti-patterns/session-partitioning.md) is severe — many bad attempts have contaminated the conversation, or the accumulated context is large enough to affect reliability. Each Claude Code session starts with a fresh context window; [CLAUDE.md and project instructions reload automatically](https://code.claude.com/docs/en/memory).
 
 Before resetting, note:
 
@@ -194,7 +194,7 @@ Then start a new attempt with the corrected approach.
 
 ## Related
 
-- [Steering Running Agents](../agent-design/steering-running-agents.md) — proactive mid-run redirection techniques
+- [Steering Running Agents](../patterns/agent-design/steering-running-agents.md) — proactive mid-run redirection techniques
 - [Human in the Loop](human-in-the-loop.md) — human intervention patterns and manual override workflows
 - [Agent Debugging](../observability/agent-debugging.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)

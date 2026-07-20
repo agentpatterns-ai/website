@@ -39,7 +39,7 @@ Specify — Describe requirements as user journeys and success criteria. Focus o
 
 Plan — Provide architecture constraints, stack preferences, and non-functional requirements. The agent creates a technical plan that respects legacy systems, compliance rules, or performance targets.
 
-Tasks — The agent [decomposes the plan into small, reviewable units](../multi-agent/oracle-task-decomposition.md). Each task is concrete and testable — "create a user registration endpoint that validates email format" rather than "build the auth system."
+Tasks — The agent [decomposes the plan into small, reviewable units](../patterns/multi-agent/oracle-task-decomposition.md). Each task is concrete and testable — "create a user registration endpoint that validates email format" rather than "build the auth system."
 
 Implement — The agent runs the tasks one at a time. You review focused changes rather than large code dumps.
 
@@ -148,8 +148,8 @@ Each task is concrete and independently verifiable, matching the Tasks phase of 
 - [Specification as Prompt](../instructions/specification-as-prompt.md)
 - [Feature List Files](../instructions/feature-list-files.md)
 - [WRAP Framework for Agent Instructions](../instructions/wrap-framework-agent-instructions.md)
-- [Plan-First Loop](../workflows/plan-first-loop.md)
+- [Plan-First Loop](plan-first-loop.md)
 - [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
 - [Multi-Agent RAG Spec-to-Test](../verification/multi-agent-rag-spec-to-test.md)
-- [Spec Complexity Displacement](../anti-patterns/spec-complexity-displacement.md) — the failure mode when specs become code-adjacent
+- [Spec Complexity Displacement](../patterns/anti-patterns/spec-complexity-displacement.md) — the failure mode when specs become code-adjacent
 - [Bootstrapping Coding Agents](../emerging/bootstrapping-coding-agents.md) — the theoretical extension where the spec alone is sufficient to regenerate the implementation

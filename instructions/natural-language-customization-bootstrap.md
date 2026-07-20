@@ -84,7 +84,7 @@ Bootstrap fits when intent varies or you do not know which template to pick. Tem
 
 Skipping the review gate is the first failure. A drafted file committed without reading it becomes an auto-generated context file. Auto-generated context files reduce task success rates where human-written ones improve them ([Evaluating AGENTS.md](evaluating-agents-md-context-files.md)). The bootstrap is a scaffold, not an output. Skipping review turns a productivity pattern into a compliance hazard.
 
-Conformance-heavy organizations are the second risk. Where every file must carry specific headers, [tool allowlists](../multi-agent/subagent-schema-level-tool-filtering.md), or compliance tags, free-form draft output drifts from the required form. Wrap the bootstrap in a validator, or prefer per-surface slash commands that tooling can constrain.
+Conformance-heavy organizations are the second risk. Where every file must carry specific headers, [tool allowlists](../patterns/multi-agent/subagent-schema-level-tool-filtering.md), or compliance tags, free-form draft output drifts from the required form. Wrap the bootstrap in a validator, or prefer per-surface slash commands that tooling can constrain.
 
 Schema drift across versions is the third. The agent drafts against the schema version it was trained on. If the target tool changes frontmatter keys, renames directories, or tightens validation, a bootstrap relying on stale knowledge produces files that parse but misbehave. Gate the draft through the tool's own validator — both the Chat Customizations editor and `/agents` validate before writing.
 

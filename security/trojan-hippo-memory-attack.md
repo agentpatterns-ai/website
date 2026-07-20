@@ -163,6 +163,6 @@ Compose it with an [egress allow-list](agent-network-egress-policy.md) restricti
 - [Oracle Poisoning of Knowledge Graphs](oracle-poisoning-knowledge-graph.md) — structurally identical pivot via persistent KG/RAG store instead of agent memory
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
-- [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md)
+- [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md)
 - [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)
 - [PII Tokenization in Agent Context](pii-tokenization-in-agent-context.md)

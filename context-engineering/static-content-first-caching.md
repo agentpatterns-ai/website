@@ -73,7 +73,7 @@ Static-first ordering is necessary but not sufficient. The same study finds that
 
 ## Example
 
-A minimal [agent harness](../agent-design/agent-harness.md) in Python shows static-first prompt assembly. The system prompt and tool definitions are built once and reused across every turn. Only the conversation history grows.
+A minimal [agent harness](../patterns/agent-design/agent-harness.md) in Python shows static-first prompt assembly. The system prompt and tool definitions are built once and reused across every turn. Only the conversation history grows.
 
 Before — the tool list is rebuilt on every call, so the cache misses every turn:
 
@@ -120,7 +120,7 @@ The key changes: tools are sorted by name (deterministic order), the system prom
 
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md)
 - [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md)
-- [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
+- [Dynamic Tool Fetching Breaks KV Cache](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Stateful Iteration State-Carry](stateful-iteration-state-carry.md) — the application-tier complement: when loops are long and observations large, lifting state out of the transcript beats caching on its own

@@ -121,6 +121,6 @@ The 66 / 24 / 9 split is a useful prior, not a fixed budget:
 
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — Why synthetic benchmarks hide language-specific and task-specific weaknesses
 - [Instruction-Guided Code Completion](../context-engineering/instruction-guided-code-completion.md) — When models complete code correctly but ignore structural constraints
-- [Demo-to-Production Gap](../anti-patterns/demo-to-production-gap.md) — The systematic gap between curated demos and production reality
+- [Demo-to-Production Gap](../patterns/anti-patterns/demo-to-production-gap.md) — The systematic gap between curated demos and production reality
 - [pass@k and pass^k Metrics](pass-at-k-metrics.md) — Separating capability from consistency in agent evaluation
 - [RAG Agent Reliability Problem Map](rag-agent-reliability-problem-map.md) — Retrieval-specific failure taxonomy that extends completion-failure categories

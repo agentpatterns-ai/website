@@ -18,7 +18,7 @@ maturity: established
 
 ## The tension
 
-Restricting autonomy limits productivity. Granting too much risks costly mistakes. Progressive autonomy expands the boundary one stage at a time. Each stage produces evidence that justifies the next. Autonomy is one dial. [Ambition scaling](../human/ambition-scaling.md) (task scope) is the other.
+Restricting autonomy limits productivity. Granting too much risks costly mistakes. Progressive autonomy expands the boundary one stage at a time. Each stage produces evidence that justifies the next. Autonomy is one dial. [Ambition scaling](ambition-scaling.md) (task scope) is the other.
 
 ## Autonomy levels
 
@@ -99,7 +99,7 @@ Define these before expanding autonomy.
 Progressive autonomy assumes measurable signals. When those signals do not exist, the model breaks down:
 
 - Metrics do not exist yet. Approval rate and defect escape rate need an instrumented workflow. Teams without CI or code review tooling have no signal to justify escalation, so advancing by calendar creates phantom trust.
-- Task distribution shifts. Autonomy earned on scoped feature work does not transfer to greenfield architecture or [security-sensitive domains](../agent-design/domain-specific-agent-challenges.md). Treating it as a global setting rather than a per-task-class one causes regressions on unfamiliar work.
+- Task distribution shifts. Autonomy earned on scoped feature work does not transfer to greenfield architecture or [security-sensitive domains](../patterns/agent-design/domain-specific-agent-challenges.md). Treating it as a global setting rather than a per-task-class one causes regressions on unfamiliar work.
 - Trust resets asymmetrically. A single production incident erases accumulated trust and forces a full restart of the escalation sequence, so teams that advanced quickly are most exposed.
 - Thresholds need calibration before incidents, not after. Rollback thresholds set reactively are often too permissive to prevent recurrence, or too strict to allow useful work.
 
@@ -129,9 +129,9 @@ This trajectory is not guaranteed. A production incident in week 5 would have tr
 
 - [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md)
 - [Human-in-the-Loop Placement: Where and How to Supervise](../workflows/human-in-the-loop.md)
-- [Delegation Decision](../agent-design/delegation-decision.md)
+- [Delegation Decision](../patterns/agent-design/delegation-decision.md)
 - [Risk-Based Task Sizing](../verification/risk-based-task-sizing.md)
 - [AI Development Maturity Model](../workflows/ai-development-maturity-model.md)
-- [Developer Control Strategies for AI Coding Agents](../human/developer-control-strategies-ai-agents.md)
-- [Domain-Specific Agent Challenges](../agent-design/domain-specific-agent-challenges.md)
-- [Suggestion Gating](../human/suggestion-gating.md)
+- [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md)
+- [Domain-Specific Agent Challenges](../patterns/agent-design/domain-specific-agent-challenges.md)
+- [Suggestion Gating](suggestion-gating.md)

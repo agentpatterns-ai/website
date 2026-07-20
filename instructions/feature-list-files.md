@@ -168,7 +168,7 @@ After the agent completes feat-1, the file updates in place — `feat-1` moves t
 
 ## Related
 
-- [Agent Harness](../agent-design/agent-harness.md)
+- [Agent Harness](../patterns/agent-design/agent-harness.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [Specification as Prompt](specification-as-prompt.md)
 - [Incremental Verification](../verification/incremental-verification.md)

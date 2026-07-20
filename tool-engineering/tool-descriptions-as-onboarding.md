@@ -148,6 +148,6 @@ Description maintenance is ongoing cost. As the underlying API evolves, descript
 - [Consolidate Agent Tools](consolidate-agent-tools.md) — folding overlapping tools into single, well-described entry points
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md) — structured errors that guide agents to the correct next action
 - [Semantic Tool Output](semantic-tool-output.md) — designing tool output for agent readability
-- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md) — enforcing correct tool inputs through schema design
+- [Typed Schemas at Agent Boundaries](../patterns/multi-agent/typed-schemas-at-agent-boundaries.md) — enforcing correct tool inputs through schema design
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md) — designing tools that minimize context consumption
-- [The Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md) — why implicit context that agents cannot find causes silent failures
+- [The Implicit Knowledge Problem](../patterns/anti-patterns/implicit-knowledge-problem.md) — why implicit context that agents cannot find causes silent failures

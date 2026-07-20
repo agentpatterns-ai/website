@@ -64,7 +64,7 @@ Under-trust is [refusing to delegate anything meaningful](ai-development-maturit
 
 Inconsistent usage is when [some team members use agents heavily and others not at all](agent-governance-policies.md). This creates knowledge gaps and makes the shared infrastructure look unimportant. A minimum baseline of adoption helps.
 
-Vocabulary mismatch is when [terms like agent, skill, command, and prompt](../agent-design/agent-terminology-disambiguation.md) mean different things in different tools. Agree on shared definitions early: what your team means by these terms in your specific setup.
+Vocabulary mismatch is when [terms like agent, skill, command, and prompt](../patterns/agent-design/agent-terminology-disambiguation.md) mean different things in different tools. Agree on shared definitions early: what your team means by these terms in your specific setup.
 
 ## Shared vocabulary
 

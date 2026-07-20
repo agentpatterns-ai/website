@@ -94,8 +94,8 @@ The authors flag three explicitly ([Kjellberg et al., 2026](https://arxiv.org/ab
 
 ## Related
 
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md) — generalisation: two-role generator/evaluator loop where the evaluator returns structured feedback. Binary feedback is the minimal-signal variant
-- [Critic Agent Plan Review](../agent-design/critic-agent-plan-review.md) — adjacent pattern using a critic role; useful when the critic must give richer feedback than yes/no
+- [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md) — generalisation: two-role generator/evaluator loop where the evaluator returns structured feedback. Binary feedback is the minimal-signal variant
+- [Critic Agent Plan Review](../patterns/agent-design/critic-agent-plan-review.md) — adjacent pattern using a critic role; useful when the critic must give richer feedback than yes/no
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md) — failure mode the binary loop sidesteps: detailed multi-constraint prompts degrade as constraint count grows
-- [Prior Dominance over Feedback](../anti-patterns/prior-dominance-over-feedback.md) — anti-pattern where the model ignores feedback in favour of its prior; relevant when binary loops fail to converge
+- [Prior Dominance over Feedback](../patterns/anti-patterns/prior-dominance-over-feedback.md) — anti-pattern where the model ignores feedback in favour of its prior; relevant when binary loops fail to converge
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — choosing the right signal type when designing the retry prompt

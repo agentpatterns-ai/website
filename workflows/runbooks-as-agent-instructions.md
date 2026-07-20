@@ -27,7 +27,7 @@ Human runbooks fail for agents in three distinct ways:
 |---|---|---|
 | Implicit action | "Check the dashboard" | No tool to call, no success criterion |
 | Ambiguous condition | "If load looks high..." | Cannot evaluate a vague threshold |
-| Assumed context | "Restart the usual way" | No access to [tribal knowledge](../anti-patterns/implicit-knowledge-problem.md) |
+| Assumed context | "Restart the usual way" | No access to [tribal knowledge](../patterns/anti-patterns/implicit-knowledge-problem.md) |
 
 Each failure mode requires a different fix. An audit step before rewriting identifies which failure applies to each step.
 
@@ -100,7 +100,7 @@ The correct container for an agent-executable runbook is a SKILL.md file with `d
       kubectl-scale.sh
 ```
 
-A routing runbook at the top level directs the agent to the relevant sub-skill based on incident type — this is the [progressive disclosure pattern](../agent-design/progressive-disclosure-agents.md) applied to incident response:
+A routing runbook at the top level directs the agent to the relevant sub-skill based on incident type — this is the [progressive disclosure pattern](../patterns/agent-design/progressive-disclosure-agents.md) applied to incident response:
 
 ```markdown
 # Skill: Incident Response
@@ -148,7 +148,7 @@ After each step, append to /tmp/incident-{timestamp}.md:
 This file is the handoff artifact if the session ends or a different operator continues.
 ```
 
-This is equivalent to the feature list and progress file pattern described in [harness engineering](../agent-design/harness-engineering.md) for long-running agents ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). See [Goal Monitoring and Progress Tracking](../agent-design/goal-monitoring-progress-tracking.md) for the full pattern.
+This is equivalent to the feature list and progress file pattern described in [harness engineering](../patterns/agent-design/harness-engineering.md) for long-running agents ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). See [Goal Monitoring and Progress Tracking](../patterns/agent-design/goal-monitoring-progress-tracking.md) for the full pattern.
 
 ## Adoption driver: measurable goals
 
@@ -177,8 +177,8 @@ The audit-before-rewriting step is the safeguard: steps that cannot be made unam
 
 ## Related
 
-- [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
-- [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
+- [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md)
+- [Separation of Knowledge and Execution](../patterns/agent-design/separation-of-knowledge-and-execution.md)
 - [Human-in-the-Loop Placement](human-in-the-loop.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)

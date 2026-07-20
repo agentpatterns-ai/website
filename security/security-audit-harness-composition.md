@@ -43,7 +43,7 @@ Steering is the iteration loop on a single job. Mozilla supervised early runs in
 
 ### Scaling: partition the target, run in parallel
 
-Once a single pass produces tractable output, scaling fans it out. Mozilla "parallelized the jobs across multiple ephemeral VMs, each tasked to hunt for bugs within a specific target file and write its findings back to a bucket" ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). The partition unit — file, module, syscall surface — sets the corpus size. See [Sub-Agents and Fan-Out](../multi-agent/sub-agents-fan-out.md) and [Bounded Batch Dispatch](../multi-agent/bounded-batch-dispatch.md) for fan-out mechanics.
+Once a single pass produces tractable output, scaling fans it out. Mozilla "parallelized the jobs across multiple ephemeral VMs, each tasked to hunt for bugs within a specific target file and write its findings back to a bucket" ([Mozilla Hacks](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)). The partition unit — file, module, syscall surface — sets the corpus size. See [Sub-Agents and Fan-Out](../patterns/multi-agent/sub-agents-fan-out.md) and [Bounded Batch Dispatch](../patterns/multi-agent/bounded-batch-dispatch.md) for fan-out mechanics.
 
 ### Stacking: filter in inference, not maintainer hours
 
@@ -114,4 +114,4 @@ Replications published after Mozilla's report found cheaper open-weight models r
 - [Decomposed Red-Teaming Agent Monitors](../verification/decomposed-red-teaming-agent-monitors.md)
 - [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
-- [Sub-Agents and Fan-Out](../multi-agent/sub-agents-fan-out.md)
+- [Sub-Agents and Fan-Out](../patterns/multi-agent/sub-agents-fan-out.md)

@@ -24,7 +24,7 @@ Incident investigation is one of the strongest uses for agents. A slow investiga
 
 ## Architecture
 
-The skill sits at the end of a delegation chain. A generalist incident agent accepts the initial report, determines that log evidence is needed, and forks to this specialist skill — the [orchestrator-worker](../multi-agent/orchestrator-worker.md) shape applied to incident response.
+The skill sits at the end of a delegation chain. A generalist incident agent accepts the initial report, determines that log evidence is needed, and forks to this specialist skill — the [orchestrator-worker](../patterns/multi-agent/orchestrator-worker.md) shape applied to incident response.
 
 ```mermaid
 graph TD
@@ -65,7 +65,7 @@ Step 3 — correlate and return
 
 Align results on the shared time window and service identifier. Discard signals that appear in only one system and are not corroborated. Return a ranked summary with the most actionable signal first.
 
-The model never sees the raw telemetry — it sees the post-aggregation summary. This is what prevents [context pollution](../anti-patterns/session-partitioning.md) from large log volumes.
+The model never sees the raw telemetry — it sees the post-aggregation summary. This is what prevents [context pollution](../patterns/anti-patterns/session-partitioning.md) from large log volumes.
 
 ## Context budget discipline
 
@@ -234,7 +234,7 @@ The specific Intercom implementation (Snowflake + Honeycomb + Datadog combinatio
 
 - [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md)
 - [Runbooks as Agent Instructions](runbooks-as-agent-instructions.md)
-- [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
+- [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md)
 - [Advanced Tool Use](../tool-engineering/advanced-tool-use.md)
-- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
+- [Orchestrator-Worker Pattern](../patterns/multi-agent/orchestrator-worker.md)
 - [LLM-as-Judge Evaluation](llm-as-judge-evaluation.md)

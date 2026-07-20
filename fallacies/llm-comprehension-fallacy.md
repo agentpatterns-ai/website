@@ -47,7 +47,7 @@ Skipping verification: only [48% of developers consistently review AI-generated 
 
 Before, with the comprehension fallacy applied:
 
-A developer asks the model to "update the auth flow to match the new spec" without providing the spec, the existing auth code, or the team's convention for error handling. The model produces a plausible-looking implementation. The developer [reviews it briefly because it looks correct](../anti-patterns/trust-without-verify.md) and merges it. The implementation silently breaks a session-invalidation edge case that exists only in the codebase's internal documentation.
+A developer asks the model to "update the auth flow to match the new spec" without providing the spec, the existing auth code, or the team's convention for error handling. The model produces a plausible-looking implementation. The developer [reviews it briefly because it looks correct](../patterns/anti-patterns/trust-without-verify.md) and merges it. The implementation silently breaks a session-invalidation edge case that exists only in the codebase's internal documentation.
 
 After, treating the model as a pattern matcher:
 
@@ -76,7 +76,7 @@ The boundary: apply comprehension-skeptic discipline where silent failures are e
 
 - [Context Engineering](../context-engineering/context-engineering.md)
 - [Context Priming](../context-engineering/context-priming.md)
-- [Effortless AI Fallacy](../anti-patterns/effortless-ai-fallacy.md)
+- [Effortless AI Fallacy](../patterns/anti-patterns/effortless-ai-fallacy.md)
 - [Chain-of-Thought Reasoning Fallacy](chain-of-thought-reasoning-fallacy.md)
 - [Consistent Capability Fallacy](consistent-capability-fallacy.md)
 - [Task Framing Irrelevance Fallacy](task-framing-irrelevance-fallacy.md)

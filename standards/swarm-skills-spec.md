@@ -110,7 +110,7 @@ For projects already invested in framework-native multi-agent code, the portabil
 
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
 - [Symphony: Open Spec for Issue-Tracker-Driven Coding Agent Orchestration](symphony-orchestration-spec.md)
-- [Declarative Multi-Agent Topology: Topology-as-Code](../multi-agent/declarative-multi-agent-topology.md)
-- [Declarative Multi-Agent Composition](../multi-agent/declarative-multi-agent-composition.md)
+- [Declarative Multi-Agent Topology: Topology-as-Code](../patterns/multi-agent/declarative-multi-agent-topology.md)
+- [Declarative Multi-Agent Composition](../patterns/multi-agent/declarative-multi-agent-composition.md)
 - [Portable Agent Definitions: Full-Stack Identity as Code](portable-agent-definitions.md)
 - [Skill Library Refinement Loops](../workflows/skill-library-refinement-loops.md)

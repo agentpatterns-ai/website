@@ -69,7 +69,7 @@ graph LR
 
 The four-property invariant scales overhead with system complexity. It is warranted when three conditions combine:
 
-1. Deep delegation chains. Orchestrator-worker fan-out where subordinate agents make consequential decisions ([agent handoff protocols](../multi-agent/agent-handoff-protocols.md)).
+1. Deep delegation chains. Orchestrator-worker fan-out where subordinate agents make consequential decisions ([agent handoff protocols](../patterns/multi-agent/agent-handoff-protocols.md)).
 2. Persistent memory across sessions. State that carries between runs creates a [trojan-hippo](trojan-hippo-memory-attack.md) drift surface.
 3. Wide tool surface with consequential actions. Any tool that writes, sends, pays, or shares is a drift target.
 
@@ -100,5 +100,5 @@ The contribution of the constraint-drift framing is not new mechanisms but a cov
 - [Audit-Record Divergence as an Agent Runtime Invariant](action-audit-divergence-taxonomy.md)
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
-- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
+- [Agent Handoff Protocols](../patterns/multi-agent/agent-handoff-protocols.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)

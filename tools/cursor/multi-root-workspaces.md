@@ -69,7 +69,7 @@ So composition is partial. `/multitask` fans steps across the roots in one sessi
 - Sensitive credential boundaries: a session reading both a credential-bearing repo and an open-source repo widens the blast radius, and VS Code's per-folder settings cover only resource settings ([VS Code multi-root workspaces](https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces)), so per-folder credential isolation is not a built-in guarantee
 - Mixed VCS or read-only mounts: multi-root assumes each folder is a usable checkout, so mixed Git or Hg checkouts and read-only mounts break the symmetry the workspace presents
 
-If most apply, prefer per-repo agent sessions coordinated through PRs, or a single root with [orchestrator-worker](../../multi-agent/orchestrator-worker.md) handoffs.
+If most apply, prefer per-repo agent sessions coordinated through PRs, or a single root with [orchestrator-worker](../../patterns/multi-agent/orchestrator-worker.md) handoffs.
 
 ## Multi-root vs adjacent patterns
 
@@ -77,7 +77,7 @@ If most apply, prefer per-repo agent sessions coordinated through PRs, or a sing
 |---|---|
 | Multi-root workspace | Cross-repo edits sharing one semantic intent |
 | [Sparse-paths worktree](../claude/sparse-paths-monorepo-isolation.md) | One service inside a monorepo — restrict, don't expand |
-| [Orchestrator-worker](../../multi-agent/orchestrator-worker.md) | Per-repo agents with a coordinator; narrow per-PR diffs |
+| [Orchestrator-worker](../../patterns/multi-agent/orchestrator-worker.md) | Per-repo agents with a coordinator; narrow per-PR diffs |
 | Monorepo migration | Repos are constantly co-edited and deployment absorbs the merge |
 | [Central repo for shared standards](../../workflows/central-repo-shared-agent-standards.md) | Cross-repo concern is *standards drift*, not co-editing |
 
@@ -117,4 +117,4 @@ Folder roots are explicit (`frontend`, `backend`, `schema`), so the agent can ad
 - [Sparse-Checkout Worktrees for Monorepo Agent Isolation](../claude/sparse-paths-monorepo-isolation.md)
 - [Architecting a Central Repo for Shared Agent Standards](../../workflows/central-repo-shared-agent-standards.md)
 - [Encode Project Conventions in Distributed AGENTS.md Files](../../instructions/agents-md-distributed-conventions.md)
-- [Orchestrator-Worker](../../multi-agent/orchestrator-worker.md)
+- [Orchestrator-Worker](../../patterns/multi-agent/orchestrator-worker.md)

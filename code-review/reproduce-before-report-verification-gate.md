@@ -55,7 +55,7 @@ A pipeline that fans out reviewers but reports every candidate is not running th
 ## When this backfires
 
 - Small or trivial diffs. `/code-review ultra` runs "typically cost $5 to $20" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)); managed Code Review averages "$15-25 in cost, scaling with PR size, codebase complexity, and how many issues require verification" ([Code Review docs](https://code.claude.com/docs/en/code-review)). On a typo fix, gate cost dominates false-positive cost, so use a single-pass [diff-based review](diff-based-review.md).
-- Same-family verifier with no context reset. Without independence, the verifier reproduces reviewer confabulations, the same [overcorrection bias](../anti-patterns/llm-review-overcorrection.md) the gate exists to filter. Same model plus same session is a verification gate in name only.
+- Same-family verifier with no context reset. Without independence, the verifier reproduces reviewer confabulations, the same [overcorrection bias](../patterns/anti-patterns/llm-review-overcorrection.md) the gate exists to filter. Same model plus same session is a verification gate in name only.
 - Reproduction-incapable defect classes. Race conditions, distributed-system failures, and intermittent flakes cannot be reproduced on demand against a static diff. Silent-drop then becomes silent-drop of the highest-stakes findings. Route those classes to a separate "suspected-but-not-reproduced" channel, or accept the recall loss.
 - Air-gapped or ZDR environments. Cloud fleet implementations are "not available when using Claude Code with Amazon Bedrock, Google Cloud Vertex AI, or Microsoft Foundry, and it is not available to organizations that have enabled Zero Data Retention" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)).
 - High-iteration PRs with push triggers. 30 pushes at $15-25 compounds linearly. Use `@claude review once` to suppress push-triggered re-verification ([Code Review docs](https://code.claude.com/docs/en/code-review)).
@@ -96,10 +96,10 @@ This configuration makes the verifier's reproduction artifact explicit per defec
 ## Related
 
 - [Cloud Parallel Review Pattern](cloud-parallel-review-pattern.md) — the full fan-out + verify + aggregate architecture in which this gate is the verify step
-- [LLM Code Review Overcorrection](../anti-patterns/llm-review-overcorrection.md) — the false-positive bias that motivates the gate
+- [LLM Code Review Overcorrection](../patterns/anti-patterns/llm-review-overcorrection.md) — the false-positive bias that motivates the gate
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — the precision principle the gate enforces at the reporter boundary
-- [Adversarial Multi-Model Development Pipeline (VSDD)](../multi-agent/adversarial-multi-model-pipeline.md) — the broader fresh-context independent-adversary pattern this gate instantiates for code review
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md) — the two-role generator/evaluator loop the gate inherits and constrains
+- [Adversarial Multi-Model Development Pipeline (VSDD)](../patterns/multi-agent/adversarial-multi-model-pipeline.md) — the broader fresh-context independent-adversary pattern this gate instantiates for code review
+- [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md) — the two-role generator/evaluator loop the gate inherits and constrains
 - [Tiered Code Review](tiered-code-review.md) — risk-class routing that decides which depths apply the gate
 - [Committee Review Pattern](committee-review-pattern.md) — a voting-style contrast that does not gate at the reporter boundary
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md) — the tool-calling reviewer shape the verifier composes with

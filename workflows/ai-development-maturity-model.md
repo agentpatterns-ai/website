@@ -20,7 +20,7 @@ maturity: established
 
 ## Why phases matter
 
-Adoption of AI coding tools is not linear, and each phase brings different mistakes. If you over-trust the tools, you make different errors than if you under-trust them. If you are stuck in [prompt tinkering](../anti-patterns/prompt-tinkerer.md), you face different problems than if you are building multi-agent pipelines. The phases give you a map: where you are now, where the traps are, and what the next phase looks like.
+Adoption of AI coding tools is not linear, and each phase brings different mistakes. If you over-trust the tools, you make different errors than if you under-trust them. If you are stuck in [prompt tinkering](../patterns/anti-patterns/prompt-tinkerer.md), you face different problems than if you are building multi-agent pipelines. The phases give you a map: where you are now, where the traps are, and what the next phase looks like.
 
 Practitioners who have systematically observed developer AI adoption describe a recognizable phase progression. The model below synthesizes that framing with observed patterns in team adoption and trust calibration.
 
@@ -40,9 +40,9 @@ The trap: concluding that inconsistency reflects the tool's ceiling rather than 
 
 ### Phase 3: Over-enthusiasm
 
-The tool seems to work. You delegate broadly, [review output superficially, and may ship agent-generated code with minimal verification](../anti-patterns/trust-without-verify.md). Errors begin to appear in production or reviews.
+The tool seems to work. You delegate broadly, [review output superficially, and may ship agent-generated code with minimal verification](../patterns/anti-patterns/trust-without-verify.md). Errors begin to appear in production or reviews.
 
-The trap: [trust without verify](../anti-patterns/trust-without-verify.md). Agent output can be plausible and wrong. This phase produces the war stories that create skeptics.
+The trap: [trust without verify](../patterns/anti-patterns/trust-without-verify.md). Agent output can be plausible and wrong. This phase produces the war stories that create skeptics.
 
 ### Phase 4: Calibrated disappointment
 
@@ -90,7 +90,7 @@ Surfacing the model helps teams find gaps and set baseline expectations. Not eve
 
 ## Common traps across phases
 
-[The prompt tinkerer](../anti-patterns/prompt-tinkerer.md) (stuck between Phase 2 and 5) adjusts prompt wording endlessly without addressing the underlying context or task specification problem. More prompt iteration rarely solves what better context or task decomposition would fix in one step.
+[The prompt tinkerer](../patterns/anti-patterns/prompt-tinkerer.md) (stuck between Phase 2 and 5) adjusts prompt wording endlessly without addressing the underlying context or task specification problem. More prompt iteration rarely solves what better context or task decomposition would fix in one step.
 
 The permanent skeptic (stuck at Phase 1) dismisses the tool based on early failures or others' war stories without fresh evaluation. Tool capabilities change a lot between model generations, so a dismissal formed during early adoption may not reflect current behavior.
 

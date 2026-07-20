@@ -65,13 +65,13 @@ ERROR: Service layer cannot import from UI layer.
   See docs/architecture/layer-rules.md for the dependency diagram.
 ```
 
-What is wrong, what to do instead, where the rationale lives — see [Feedback as Capability Equalizer](../agent-design/feedback-capability-equalizer.md).
+What is wrong, what to do instead, where the rationale lives — see [Feedback as Capability Equalizer](../patterns/agent-design/feedback-capability-equalizer.md).
 
 ### 4. Track hit count and retire
 
 Every rule has a finite shelf life. Refactors obviate boundaries, model upgrades eliminate failure modes, conventions solidify until no one would write the violation. Without retirement, the rule library accumulates dead weight and the priority-saturation failure mode of [standards as agent instructions](../instructions/standards-as-agent-instructions.md) kicks in: when every rule has equal weight, nothing signals priority and adherence degrades.
 
-Periodic decay pairs this loop with [harness impermanence](../agent-design/harness-impermanence.md): rules whose hits trend toward zero are deletion candidates. Annotate each rule with its obsolescence condition — the observable signal that it has done its job.
+Periodic decay pairs this loop with [harness impermanence](../patterns/agent-design/harness-impermanence.md): rules whose hits trend toward zero are deletion candidates. Annotate each rule with its obsolescence condition — the observable signal that it has done its job.
 
 ## Why mechanical enforcement beats repeated comments
 
@@ -106,7 +106,7 @@ Six weeks later, the on-call dashboard shows no silent-handler-failure incidents
 
 - Premature promotion: encoding after one or two occurrences freezes a hypothesis as a rule. Suppression comments proliferate and the rule's signal degrades.
 - Wrong enforcement layer: a semantic check forced into a regex linter fires on every legitimate exception — get the layer wrong and the rule becomes the new recurring noise source.
-- Remediation text omitted or stale: a rule without "what to do instead" is a finger-wag, not the [structured remediation](../agent-design/feedback-capability-equalizer.md) that closes the loop. Developers and agents both stall, suppress, or copy-paste workarounds.
+- Remediation text omitted or stale: a rule without "what to do instead" is a finger-wag, not the [structured remediation](../patterns/agent-design/feedback-capability-equalizer.md) that closes the loop. Developers and agents both stall, suppress, or copy-paste workarounds.
 - No retirement discipline: the lint stack accumulates. Adherence degrades as instruction volume grows — context rot means models recall earlier rules less accurately as context fills ([Anthropic context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Priority saturation makes individual rules unreliable.
 
 ## Key Takeaways
@@ -121,9 +121,9 @@ Six weeks later, the on-call dashboard shows no silent-handler-failure incidents
 
 - [Learned Review Rules](learned-review-rules.md) — adjacent automation: the reviewer agent extracts rules from accept/reject signals
 - [Deferred Standards Enforcement via Review Agents](deferred-standards-enforcement.md) — where post-hoc-checkable standards live once promoted out of CLAUDE.md
-- [Feedback as Capability Equalizer](../agent-design/feedback-capability-equalizer.md) — why structured remediation text outperforms raw error output
+- [Feedback as Capability Equalizer](../patterns/agent-design/feedback-capability-equalizer.md) — why structured remediation text outperforms raw error output
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — one of the encoding layers for promoted rules
 - [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — the production-failure analogue of this review-time loop
-- [Harness Impermanence](../agent-design/harness-impermanence.md) — the retirement discipline that keeps promoted rules from accumulating
+- [Harness Impermanence](../patterns/agent-design/harness-impermanence.md) — the retirement discipline that keeps promoted rules from accumulating
 - [Standards as Agent Instructions](../instructions/standards-as-agent-instructions.md) — the priority-saturation failure mode that retirement prevents
 - [Enforcing Agent Behavior with Hooks](../instructions/enforcing-agent-behavior-with-hooks.md) — deterministic enforcement layer for promoted rules

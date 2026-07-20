@@ -158,7 +158,7 @@ The result: the null-check fix appears in a separate PR targeting the same branc
 
 - [Agent Self-Review Loop](agent-self-review-loop.md)
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
+- [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md)
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Tiered Code Review](tiered-code-review.md)

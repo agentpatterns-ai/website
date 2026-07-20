@@ -31,7 +31,7 @@ GitHub's agentic workflow architecture does not specify a drift detection mechan
 - Behavioral description validation — check that documented workflows match the current implementation flow
 - Changelog-to-docs cross-reference — check that recent changelog entries have matching documentation updates
 
-JIT context loading applies directly: maintain lightweight identifiers (file paths to code files and corresponding doc sections) rather than pre-loading everything. Separate tools for code retrieval versus documentation lookup prevent [context pollution](../anti-patterns/session-partitioning.md) ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); see [Context Engineering](../context-engineering/context-engineering.md)).
+JIT context loading applies directly: maintain lightweight identifiers (file paths to code files and corresponding doc sections) rather than pre-loading everything. Separate tools for code retrieval versus documentation lookup prevent [context pollution](../patterns/anti-patterns/session-partitioning.md) ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); see [Context Engineering](../context-engineering/context-engineering.md)).
 
 ### Layer 2: orchestration
 
@@ -63,7 +63,7 @@ Claude Code GitHub Actions supports this same pattern via scheduled workflows wi
 
 The output must be a reviewable PR rather than an autonomous update. Two mechanisms improve PR quality before human review:
 
-The [evaluator-optimizer loop](../agent-design/evaluator-optimizer.md) runs one LLM to generate documentation updates while another checks them against the source code. This dual-agent approach stops the single-agent problem of marking its own work correct ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
+The [evaluator-optimizer loop](../patterns/agent-design/evaluator-optimizer.md) runs one LLM to generate documentation updates while another checks them against the source code. This dual-agent approach stops the single-agent problem of marking its own work correct ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
 
 [Pre-completion checklists](../verification/pre-completion-checklists.md) force the agent to verify each documentation update against the code before treating the task as done. This prevents premature completion and catches cases where the agent summarized intent rather than actual behavior ([LangChain: Harness Engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
@@ -126,7 +126,7 @@ This workflow uses push triggers for immediate detection on code changes and a w
 
 ## Preventing objective drift
 
-Long-running documentation agents face [objective drift](../anti-patterns/objective-drift.md) — they lose track of documentation standards after context compression. LangChain names this the most insidious failure mode for long-running agents ([LangChain: Context Management](https://blog.langchain.com/context-management-for-deepagents/)).
+Long-running documentation agents face [objective drift](../patterns/anti-patterns/objective-drift.md) — they lose track of documentation standards after context compression. LangChain names this the most insidious failure mode for long-running agents ([LangChain: Context Management](https://blog.langchain.com/context-management-for-deepagents/)).
 
 To mitigate it:
 

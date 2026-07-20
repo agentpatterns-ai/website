@@ -73,7 +73,7 @@ graph TD
 | 4. Prompt architecture and tool implementation | Implementable prompt with grounding injection, tool schemas, routing logic | Generates a prompt aligned to upstream artifacts; implementation is structured translation |
 | 5. Benchmarking and verification | Benchmark queries, scoring rubrics, pass/fail thresholds | Elicits responses from SMEs and generates candidate benchmark items for SME validation |
 
-The structure matches the externalizing-intent mechanism behind [spec-driven development](spec-driven-development.md) and the phase-isolation principle behind [discrete phase separation](../agent-design/discrete-phase-separation.md), but adds two things both of those omit: explicit non-developer SMEs in the loop, and a verification phase with versioned benchmarks.
+The structure matches the externalizing-intent mechanism behind [spec-driven development](spec-driven-development.md) and the phase-isolation principle behind [discrete phase separation](../patterns/agent-design/discrete-phase-separation.md), but adds two things both of those omit: explicit non-developer SMEs in the loop, and a verification phase with versioned benchmarks.
 
 ## Evidence
 
@@ -125,7 +125,7 @@ The contrast with ad-hoc construction: every compliance rule is a named artifact
 
 - [Spec-Driven Development with Spec Kit](spec-driven-development.md)
 - [The Research-Plan-Implement Pattern](research-plan-implement.md)
-- [Discrete Phase Separation](../agent-design/discrete-phase-separation.md)
+- [Discrete Phase Separation](../patterns/agent-design/discrete-phase-separation.md)
 - [Eval-Driven Development](eval-driven-development.md)
 - [Specification as Prompt](../instructions/specification-as-prompt.md)
 - [7 Phases of AI Development](7-phases-ai-development.md)

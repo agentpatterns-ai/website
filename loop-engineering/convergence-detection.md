@@ -25,7 +25,7 @@ Related lesson: [Evaluator-Optimizer](https://learn.agentpatterns.ai/harness-eng
 
 Iterative refinement loops — plan polishing, critique passes, bead polishing, documentation drafts — have no natural stopping point. Agents and developers either stop too early (leaving unresolved issues) or over-refine (wasting compute on passes that change nothing). "It looks good enough" is not a stopping criterion.
 
-For tasks with a test harness, this is solved: tests pass → stop — the PASS/FAIL gate an [evaluator-optimizer loop](../agent-design/evaluator-optimizer.md) leans on. For prose, specs, and design documents, no such machine-checkable gate exists. Convergence detection fills that gap.
+For tasks with a test harness, this is solved: tests pass → stop — the PASS/FAIL gate an [evaluator-optimizer loop](../patterns/agent-design/evaluator-optimizer.md) leans on. For prose, specs, and design documents, no such machine-checkable gate exists. Convergence detection fills that gap.
 
 ## The three signals
 
@@ -62,7 +62,7 @@ This technique applies the convergence signals: if pass 4 and pass 5 produce nea
 | Max round limit | Fallback for all loops — prevents runaway iteration |
 | Model self-declaration | Low-cost tasks where precision matters less |
 
-Convergence detection complements the [evaluator-optimizer pattern](../agent-design/evaluator-optimizer.md)'s max-round fallback: the evaluator-optimizer terminates on PASS or round limit; convergence detection tells you when to set that round limit or when to stop early without a formal evaluator.
+Convergence detection complements the [evaluator-optimizer pattern](../patterns/agent-design/evaluator-optimizer.md)'s max-round fallback: the evaluator-optimizer terminates on PASS or round limit; convergence detection tells you when to set that round limit or when to stop early without a formal evaluator.
 
 Production tools increasingly pair an evaluator with a hard round cap rather than relying on either alone. Microsoft's VS Code ships an Advanced Autopilot mode whose utility-model judge decides loop completion by reading the run transcript, bounded by a maximum of three loops ([VS Code 1.124 release notes](https://code.visualstudio.com/updates/v1_124)). This couples a transcript-aware, evaluator-style stopping decision with the max-round fallback.
 
@@ -98,11 +98,11 @@ Convergence signals measure whether the output is stabilizing, not whether it is
 
 ## Related
 
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md) — external evaluator that complements convergence signals
+- [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md) — external evaluator that complements convergence signals
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — self-review as a convergence signal source
 - [Five-Pass Blunder Hunt](../verification/five-pass-blunder-hunt.md) — applied convergence on critique loops
 - [Ralph Wiggum Loop](ralph-wiggum-loop.md) — fixed-prompt iteration that benefits from convergence stopping
 - [Failure-Driven Iteration](../workflows/failure-driven-iteration.md) — failure signals that override convergence
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md) — accumulated vs fresh context across iteration loops
-- [Agentic Flywheel](../agent-design/agentic-flywheel.md) — convergence signals applied to self-improvement cycles
+- [Agentic Flywheel](../patterns/agent-design/agentic-flywheel.md) — convergence signals applied to self-improvement cycles
 - [Agent Loop Middleware](agent-loop-middleware.md) — middleware hooks for instrumenting stopping logic

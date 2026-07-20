@@ -150,9 +150,9 @@ Each reviewer receives only the diff, not prior verdicts, so opinions are indepe
 
 ## Related
 
-- [Task-Specific vs Role-Based Agents](../agent-design/task-specific-vs-role-based-agents.md)
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
-- [Adversarial Multi-Model Development Pipeline](../multi-agent/adversarial-multi-model-pipeline.md) — extends cross-model review into a full six-phase pipeline with a dedicated adversary role
+- [Task-Specific vs Role-Based Agents](../patterns/agent-design/task-specific-vs-role-based-agents.md)
+- [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md)
+- [Adversarial Multi-Model Development Pipeline](../patterns/multi-agent/adversarial-multi-model-pipeline.md) — extends cross-model review into a full six-phase pipeline with a dedicated adversary role
 - [Tiered Code Review](tiered-code-review.md)
 - [Diff-Based Review Over Output Review](diff-based-review.md)
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)

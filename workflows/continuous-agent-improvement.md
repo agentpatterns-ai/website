@@ -110,7 +110,7 @@ You do not need formal tooling for this. A shared notes file or a GitHub issue t
 
 ## Anti-patterns
 
-Reactive single-error updates. Changing the instruction file after every individual error is the [prompt tinkerer](../anti-patterns/prompt-tinkerer.md) failure applied to config — it adds noise and makes it hard to tell which changes actually helped. Batch observations across multiple sessions before acting.
+Reactive single-error updates. Changing the instruction file after every individual error is the [prompt tinkerer](../patterns/anti-patterns/prompt-tinkerer.md) failure applied to config — it adds noise and makes it hard to tell which changes actually helped. Batch observations across multiple sessions before acting.
 
 Never updating after initial setup. Agent configurations that are not maintained diverge from the project's current state. The gap between what the agent thinks the project is and what the project actually is grows over time until output quality drops noticeably.
 
@@ -118,7 +118,7 @@ Never updating after initial setup. Agent configurations that are not maintained
 
 The improvement loop degrades under three conditions:
 
-[Instruction bloat](../anti-patterns/prompt-tinkerer.md). Each targeted fix adds words. Over dozens of iterations, instruction files become verbose enough to exceed context windows or dilute the signal of any single rule. An [ETH Zurich evaluation of repository-level context files](https://arxiv.org/abs/2602.11988) reported that LLM-generated `AGENTS.md` files reduced task success rates by roughly 3 percent on average and increased inference cost by over 20 percent — a concrete argument for pruning over append-only iteration. The fix is periodic pruning: review the full file and consolidate overlapping rules rather than appending indefinitely.
+[Instruction bloat](../patterns/anti-patterns/prompt-tinkerer.md). Each targeted fix adds words. Over dozens of iterations, instruction files become verbose enough to exceed context windows or dilute the signal of any single rule. An [ETH Zurich evaluation of repository-level context files](https://arxiv.org/abs/2602.11988) reported that LLM-generated `AGENTS.md` files reduced task success rates by roughly 3 percent on average and increased inference cost by over 20 percent — a concrete argument for pruning over append-only iteration. The fix is periodic pruning: review the full file and consolidate overlapping rules rather than appending indefinitely.
 
 Over-fitting to recent sessions. If observations come from a narrow slice of work — a single sprint, one team member's tasks — the updates optimize for that slice and regress on other task types. Diversify the observation sample before acting, the same discipline [failure-driven iteration](failure-driven-iteration.md) applies to the failures it generalizes from.
 

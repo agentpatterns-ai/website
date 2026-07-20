@@ -49,7 +49,7 @@ graph TD
 
 Ephemeral one-shot. A tool call runs in seconds: code interpreter execution, a CI unit test, a data transform. Containers fit if the code is trusted; microVMs if not. Vercel Sandbox and Daytona's sub-90 ms cold start target this shape ([Northflank comparison](https://northflank.com/blog/best-code-execution-sandbox-for-ai-agents)).
 
-Stateful long-session. An agent works on a repository for hours against a persistent filesystem. Modal (Volumes + memory snapshots), Northflank (unlimited), Blaxel (resume from standby), and Fly Sprites (checkpoint/restore) target this shape ([Modal — Stateful Sandboxes](https://modal.com/resources/best-stateful-sandboxes-long-running-agent-sessions)). Anthropic's managed-agents primitive makes the property structural by splitting Session from Sandbox ([Session Harness Sandbox Separation](../agent-design/session-harness-sandbox-separation.md)).
+Stateful long-session. An agent works on a repository for hours against a persistent filesystem. Modal (Volumes + memory snapshots), Northflank (unlimited), Blaxel (resume from standby), and Fly Sprites (checkpoint/restore) target this shape ([Modal — Stateful Sandboxes](https://modal.com/resources/best-stateful-sandboxes-long-running-agent-sessions)). Anthropic's managed-agents primitive makes the property structural by splitting Session from Sandbox ([Session Harness Sandbox Separation](../patterns/agent-design/session-harness-sandbox-separation.md)).
 
 Untrusted-code execution. The code originates outside the team's control. The feature set adds an auth proxy that holds credentials outside the sandbox: "We also include an authorization proxy that injects secure credentials into outbound traffic after it leaves the sandbox" ([LangChain post](https://www.langchain.com/blog/how-to-choose-the-right-sandbox-for-your-agent)). The underlying threat is the [lethal trifecta](lethal-trifecta-threat-model.md) at the sandbox layer.
 
@@ -109,5 +109,5 @@ Workload typing narrowed six platforms to four. The team's operational constrain
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md) — the filesystem + network threat model every workload-keyed feature set composes with
 - [In-Process WebAssembly Sandboxes for Agent-Generated Code](wasm-sandbox-agent-code-execution.md) — the in-process slot in the trade-space for trusted-host, untrusted-code workloads
 - [Capability-Additive Code Interpreters for Untrusted Agent Code](capability-additive-interpreter.md) — the lighter in-process interpreter to reach for when the workload is orchestration code rather than general code execution
-- [Session Harness Sandbox Separation](../agent-design/session-harness-sandbox-separation.md) — the architectural pattern that makes the stateful-session feature set structural rather than configurational
+- [Session Harness Sandbox Separation](../patterns/agent-design/session-harness-sandbox-separation.md) — the architectural pattern that makes the stateful-session feature set structural rather than configurational
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the threat model the untrusted-code workload shape inherits

@@ -105,7 +105,7 @@ Filesystem artifacts distilled from prior runs ([agent memory guide](https://ope
 
 The agent searches `MEMORY.md` for keywords and opens deeper rollout summaries only when needed — progressive disclosure inside the workspace.
 
-Neither system replaces a dedicated long-term vector or graph store for cross-agent knowledge — pair with [agent memory patterns](../agent-design/agent-memory-patterns.md) for scope beyond a workspace.
+Neither system replaces a dedicated long-term vector or graph store for cross-agent knowledge — pair with [agent memory patterns](../patterns/agent-design/agent-memory-patterns.md) for scope beyond a workspace.
 
 ## When to pick the SDK
 
@@ -121,7 +121,7 @@ Skip the SDK when:
 - You need TypeScript today
 - You require microVM isolation for cross-tenant blast radius
 - You need custom turn scheduling, non-standard handoffs, or heterogeneous model routing — call the Responses API directly
-- You already run a [self-hosted harness](../agent-design/managed-vs-self-hosted-harness.md) with verification or replay
+- You already run a [self-hosted harness](../patterns/agent-design/managed-vs-self-hosted-harness.md) with verification or replay
 
 ## Example
 
@@ -167,9 +167,9 @@ Swap `sandbox_client="docker"` for `"unix_local"` in dev or a hosted provider in
 
 - [Sandbox Runtime Comparison](../security/sandbox-runtime-comparison.md) — selection rubric across the OpenAI sandbox clients, `docker sbx`, bubblewrap, and Seatbelt
 - [Sandbox rules and harness tools](../security/sandbox-rules-harness-tools.md)
-- [Harness engineering](../agent-design/harness-engineering.md)
-- [Managed vs self-hosted harness](../agent-design/managed-vs-self-hosted-harness.md)
-- [Agent memory patterns](../agent-design/agent-memory-patterns.md)
-- [Session harness sandbox separation](../agent-design/session-harness-sandbox-separation.md)
+- [Harness engineering](../patterns/agent-design/harness-engineering.md)
+- [Managed vs self-hosted harness](../patterns/agent-design/managed-vs-self-hosted-harness.md)
+- [Agent memory patterns](../patterns/agent-design/agent-memory-patterns.md)
+- [Session harness sandbox separation](../patterns/agent-design/session-harness-sandbox-separation.md)
 - [Claude Agent SDK](claude/agent-sdk.md)
 - [Copilot SDK](copilot/copilot-sdk.md)

@@ -76,7 +76,7 @@ The methodology runs on a developer-paced manual loop, not a schedule. Each pass
 
 ## Why it works
 
-Each precondition closes one degree of freedom, and each practice substitutes a known-cheap discipline for an expensive one. P1 (substrate) collapses the model into three controllable surfaces, so prompt caching can pay off — repeated tool definitions and system prompts hit cache rather than burn tokens, a substrate-level optimization impossible without the framing ([Alier et al., 2026](https://arxiv.org/abs/2606.11869)). P2 (building blocks) makes the assembly vocabulary explicit, so the engineer composes named primitives rather than inventing them — the same gain a project takes from running on top of [structured agentic software engineering](../agent-design/structured-agentic-software-engineering.md) primitives.
+Each precondition closes one degree of freedom, and each practice substitutes a known-cheap discipline for an expensive one. P1 (substrate) collapses the model into three controllable surfaces, so prompt caching can pay off — repeated tool definitions and system prompts hit cache rather than burn tokens, a substrate-level optimization impossible without the framing ([Alier et al., 2026](https://arxiv.org/abs/2606.11869)). P2 (building blocks) makes the assembly vocabulary explicit, so the engineer composes named primitives rather than inventing them — the same gain a project takes from running on top of [structured agentic software engineering](../patterns/agent-design/structured-agentic-software-engineering.md) primitives.
 
 P3 (prototype-with-general-purpose-agent) uses an off-the-shelf agent as a discovery harness, deferring scaffolding decisions until the requirements clarify — the same baseline-first logic as [Prototype Before Optimizing](prototype-before-optimizing.md). P4 (Turtle pattern) substitutes CLI composition for framework orchestration: the shell is already a tested composition runtime, and a CLI is what other agents expect ([Single-CLI Agent Platform](single-cli-agent-platform.md)). P5 (agent-tests-agent) substitutes scenario-driving general-purpose agents for hand-authored behavioral corpora — labor-saving where scenarios outnumber hands — while leaving classical tests on invariants ([Alier et al., 2026](https://arxiv.org/abs/2606.11869)).
 
@@ -137,8 +137,8 @@ The harvested CLI is the unit other agents call; the scenario-driving agent is t
 - [Prototype Before Optimizing](prototype-before-optimizing.md) — the baseline-first logic P3 inherits.
 - [Throwaway-Prototype Skill](throwaway-prototype-skill.md) — sibling prototyping discipline that discards instead of harvesting.
 - [Single-CLI Agent Platform](single-cli-agent-platform.md) — adjacent CLI-as-interface idea at the lifecycle level, not the agent-behaviour level.
-- [Agent Development Lifecycle](../agent-design/agent-development-lifecycle.md) — the four-phase product loop this methodology slots inside.
+- [Agent Development Lifecycle](../patterns/agent-design/agent-development-lifecycle.md) — the four-phase product loop this methodology slots inside.
 - [Claude Agent SDK](../tools/claude/agent-sdk.md) — SDK-specific contrast: one vendor's substrate carrier.
-- [Agent Composition Patterns](../agent-design/agent-composition-patterns.md) — composition vocabulary the Turtle pattern reduces to CLI composition.
+- [Agent Composition Patterns](../patterns/agent-design/agent-composition-patterns.md) — composition vocabulary the Turtle pattern reduces to CLI composition.
 
 The workflows-pages contract asks for at least one outbound link to a `docs/patterns/` or `docs/techniques/` page. The named building blocks in P2 (function calling, MCP, the agent loop, hooks, scaffolding) do not yet have dedicated patterns/techniques pages on this site; the rule directs surfacing the gap rather than inventing a destination — recorded here as a follow-up for the next coverage pass.

@@ -150,7 +150,7 @@ The open question: can a single portable format survive framework evolution, or 
 - [Agent Cards: Capability Discovery Standard for AI Agents](agent-cards.md) -- capability advertisement for agent-to-agent discovery
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md) -- portable skill definitions across runtimes
 - [Tool Calling Schema Standards](tool-calling-schema-standards.md) -- schema standards governing agent tool calls
-- [Persona-as-Code: Defining Agent Roles as Structured Docs](../agent-design/persona-as-code.md) -- encoding roles as Markdown files
+- [Persona-as-Code: Defining Agent Roles as Structured Docs](../patterns/agent-design/persona-as-code.md) -- encoding roles as Markdown files
 - [Prompt Governance via PR](../instructions/prompt-governance-via-pr.md) -- PR-based review of agent instructions
 - [Central Repo for Shared Agent Standards](../workflows/central-repo-shared-agent-standards.md) -- distributing standards across repos
 - [Plugin and Extension Packaging](plugin-packaging.md) -- distributing agent capabilities as installable bundles

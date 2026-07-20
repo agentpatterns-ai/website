@@ -57,7 +57,7 @@ graph TD
     R -->|Regression| E
 ```
 
-1. Reasoning effort sets computation depth before anything downstream is observable. Tuning later axes first reads signal off the wrong substrate. Anthropic: "start with the new `xhigh` effort level for coding and agentic use cases, and use a minimum of `high` effort for most intelligence-sensitive use cases" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)). See [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md).
+1. Reasoning effort sets computation depth before anything downstream is observable. Tuning later axes first reads signal off the wrong substrate. Anthropic: "start with the new `xhigh` effort level for coding and agentic use cases, and use a minimum of `high` effort for most intelligence-sensitive use cases" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)). See [Reasoning Budget Allocation](../patterns/agent-design/reasoning-budget-allocation.md).
 2. Verbosity shapes length and density. Higher effort lengthens output, so verbosity prompts written before effort is fixed over-correct ("to decrease verbosity, add: 'Provide concise, focused responses...'" — [Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)).
 3. Tool descriptions calibrate against the literal-interpretation profile, since cross-generation models shift tool-call frequency and subagent defaults: "Claude Opus 4.7 tends to spawn fewer subagents by default... give Claude Opus 4.7 explicit guidance around when subagents are desirable" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)).
 4. Output format is fixed last. Constraints surface most clearly once the stack below is stable, and re-tuning against an unstable lower stack locks in transient artifacts.
@@ -92,7 +92,7 @@ Anthropic's `/claude-api migrate` skill and the `openai-docs migrate this projec
 
 - Cross-generation hops are not drop-in replacements; minor-version successors usually are. Classify the upgrade before deciding to rewrite.
 - The smallest prompt that preserves the product contract is the rewrite target — strip inherited compensation layers first, re-tune second.
-- The four-axis order is [reasoning effort](../agent-design/reasoning-budget-allocation.md) → verbosity → tool descriptions → output format. Tuning out of order locks in transient artifacts from unstable lower stages.
+- The four-axis order is [reasoning effort](../patterns/agent-design/reasoning-budget-allocation.md) → verbosity → tool descriptions → output format. Tuning out of order locks in transient artifacts from unstable lower stages.
 - A representative example set must predate the rewrite. Without it, the team cannot tell whether output drift is from the model, the rewrite, or their interaction.
 - Both OpenAI and Anthropic ship in-product migration tooling that automates the mechanical edits and explicitly defers the prompt review to a human pass.
 - Provider-managed harnesses, change-controlled prompts, and stable-eval minor-version successors are the conditions under which patch-forward beats rewrite.
@@ -101,7 +101,7 @@ Anthropic's `/claude-api migrate` skill and the `openai-docs migrate this projec
 
 - [Model Deprecation Lifecycle for Agent Workloads](../workflows/model-deprecation-lifecycle.md) — operational wrapper around the migration; the prompt rewrite slots into the regression-eval and canary stages
 - [Golden Query Pairs Regression](../verification/golden-query-pairs-regression.md) — representative-example structure required to make the four-axis tuning measurable
-- [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md) — effort-level mechanics underlying axis 1 of the tuning order
-- [Harness Engineering](../agent-design/harness-engineering.md) — the harness review that pairs with the prompt review per Anthropic's migration guide
+- [Reasoning Budget Allocation](../patterns/agent-design/reasoning-budget-allocation.md) — effort-level mechanics underlying axis 1 of the tuning order
+- [Harness Engineering](../patterns/agent-design/harness-engineering.md) — the harness review that pairs with the prompt review per Anthropic's migration guide
 - [Production System Prompt Architecture](production-system-prompt-architecture.md) — XML-sectioned prompt structure that makes axis-by-axis re-tuning tractable
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md) — altitude calibration interacts with literal-interpretation shifts on the successor model

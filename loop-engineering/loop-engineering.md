@@ -22,7 +22,7 @@ maturity: emerging
 
 ## The discipline
 
-Loop engineering is the practice of replacing the human as the agent's prompter with a system of stacked outer loops. The inner-most loop is the familiar [agent loop](../agent-design/anthropic-effective-agents-framework.md) — a model calling tools until a task is complete. The outer loops add automated grading, automated initiation, and automated harness improvement. Each layer removes one place where a human used to sit between the agent and its next action.
+Loop engineering is the practice of replacing the human as the agent's prompter with a system of stacked outer loops. The inner-most loop is the familiar [agent loop](../patterns/agent-design/anthropic-effective-agents-framework.md) — a model calling tools until a task is complete. The outer loops add automated grading, automated initiation, and automated harness improvement. Each layer removes one place where a human used to sit between the agent and its next action.
 
 Three primary-source descriptions of the discipline converged inside an eight-day window in June 2026. Addy Osmani's ["Loop Engineering"](https://addyo.substack.com/p/loop-engineering) names the term on 2026-06-08, framing it as "replacing yourself as the person who prompts the agent." swyx's ["Loopcraft: The Art of Stacking Loops"](https://www.latent.space/p/ainews-loopcraft-the-art-of-stacking) follows on 2026-06-12, framing it as a stacked-loops design space where reliability comes from going *down* a loop and leverage from going *up*. LangChain's Sydney Runkle publishes ["The Art of Loop Engineering"](https://blog.langchain.com/the-art-of-loop-engineering/) on 2026-06-16, structuring the stack as four named loops. Three independent practitioners arriving at the same term inside one week marks loop engineering as a recognised discipline, not one author's coinage.
 
@@ -38,10 +38,10 @@ LangChain's framing gives the cleanest decomposition. Each layer is named below 
 
 | Loop | What it does | Where to go deep |
 |---|---|---|
-| 1. Agent loop | Model calls tools until a task is complete | [Anthropic's Effective Agents framework](../agent-design/anthropic-effective-agents-framework.md), [ReAct pattern](../agent-design/react-pattern.md) |
-| 2. Verification loop | A grader scores output against a rubric; failing output is fed back with feedback | [Evaluator-Optimizer](../agent-design/evaluator-optimizer.md), [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md) |
-| 3. Event-driven loop | An event — schedule, webhook, repo push — triggers the agent | [Event-Driven Agent Routing](../agent-design/event-driven-agent-routing.md), [Goal-Driven Autonomous Loop](goal-driven-autonomous-loop.md) |
-| 4. Hill-climbing loop | An analysis agent reads production traces and rewrites the harness | [Harness Hill-Climbing](../agent-design/harness-hill-climbing.md), [Agentic Flywheel](../agent-design/agentic-flywheel.md) |
+| 1. Agent loop | Model calls tools until a task is complete | [Anthropic's Effective Agents framework](../patterns/agent-design/anthropic-effective-agents-framework.md), [ReAct pattern](../patterns/agent-design/react-pattern.md) |
+| 2. Verification loop | A grader scores output against a rubric; failing output is fed back with feedback | [Evaluator-Optimizer](../patterns/agent-design/evaluator-optimizer.md), [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md) |
+| 3. Event-driven loop | An event — schedule, webhook, repo push — triggers the agent | [Event-Driven Agent Routing](../patterns/agent-design/event-driven-agent-routing.md), [Goal-Driven Autonomous Loop](goal-driven-autonomous-loop.md) |
+| 4. Hill-climbing loop | An analysis agent reads production traces and rewrites the harness | [Harness Hill-Climbing](../patterns/agent-design/harness-hill-climbing.md), [Agentic Flywheel](../patterns/agent-design/agentic-flywheel.md) |
 
 LangChain's article ([Runkle, 2026](https://blog.langchain.com/the-art-of-loop-engineering/)) calls Loop 4 "arguably most important": "the return arrow doesn't just loop back to the top — it reaches inside and updates the agent loop directly. Each cycle of the outer loop makes the inner loops more effective."
 
@@ -61,9 +61,9 @@ The four conditions from the [Go/No-Go gate](agent-loop-go-no-go-gate.md) name t
 
 Low-cadence tasks: the four-loop stack carries fixed setup cost — a verifier, a scheduler, a state schema, the skill files that hold project conventions. For tasks that run weekly or less, the setup never amortises. A single prompt-driven session ships faster and cheaper.
 
-Subjective verification: Loop 2 demands a rubric that grades output without a human. Tasks where "done" is taste — design review, writing quality, naming conventions — cannot be wrapped in a verification loop. The loop stops on vibes, the maker grades its own homework, and quality drifts down across iterations. The [Evaluator-Optimizer pattern](../agent-design/evaluator-optimizer.md) covers when an LLM judge can stand in; outside that envelope, Loop 2 silently fails.
+Subjective verification: Loop 2 demands a rubric that grades output without a human. Tasks where "done" is taste — design review, writing quality, naming conventions — cannot be wrapped in a verification loop. The loop stops on vibes, the maker grades its own homework, and quality drifts down across iterations. The [Evaluator-Optimizer pattern](../patterns/agent-design/evaluator-optimizer.md) covers when an LLM judge can stand in; outside that envelope, Loop 2 silently fails.
 
-Reviewer-bottlenecked teams: Osmani is explicit on this in ["Loop Engineering"](https://addyo.substack.com/p/loop-engineering) — "the worktrees take away the mechanical collision but YOU are still the ceiling, your review bandwidth decides how many you can actually run, not the tool." When the human reviewer is already saturated, a loop multiplies output by N but effective throughput is capped at reviewer capacity. The queue gets longer, not the team faster. The parent throughput argument runs through Osmani's earlier [Orchestration Tax](https://addyosmani.com/blog/orchestration-tax/) piece; the [WIP=1 and Little's Law page](../agent-design/wip-1-littles-law-agent-throughput.md) makes the consequence quantitative.
+Reviewer-bottlenecked teams: Osmani is explicit on this in ["Loop Engineering"](https://addyo.substack.com/p/loop-engineering) — "the worktrees take away the mechanical collision but YOU are still the ceiling, your review bandwidth decides how many you can actually run, not the tool." When the human reviewer is already saturated, a loop multiplies output by N but effective throughput is capped at reviewer capacity. The queue gets longer, not the team faster. The parent throughput argument runs through Osmani's earlier [Orchestration Tax](https://addyosmani.com/blog/orchestration-tax/) piece; the [WIP=1 and Little's Law page](../patterns/agent-design/wip-1-littles-law-agent-throughput.md) makes the consequence quantitative.
 
 Drifting harness assumptions: Loop 4 optimises the harness against historical traces. If the underlying task distribution shifts — new framework, new team, new feature — the optimised harness encodes stale assumptions and silently degrades. Bui et al. (2025) measured the symptom across 567 Claude Code PRs: 83.8% merged but only 54.9% merged without modification ([arxiv:2509.14745](https://arxiv.org/abs/2509.14745)). About 45% of "automated" output still consumed reviewer time. A hill-climbing loop trained on yesterday's traces will not catch tomorrow's distribution shift.
 
@@ -71,7 +71,7 @@ Drifting harness assumptions: Loop 4 optimises the harness against historical tr
 
 Loop engineering does not name per-turn loop mechanics — that is a separate discipline. The choice of how much context survives between iterations of the inner agent loop — accumulated, compressed, or fresh — is covered at the [Loop Strategy Spectrum](loop-strategy-spectrum.md). Within-session compaction is covered at [Context Compression Strategies](../context-engineering/context-compression-strategies.md). Loop engineering operates one layer up: it composes the outer loops around whichever inner-loop strategy you chose. The two disciplines stack; they do not replace one another.
 
-The same disambiguation applies to harness engineering. [Harness engineering](../agent-design/harness-engineering.md) is the discipline of designing the environment a single agent runs inside — the legibility, the constraints, the mechanical enforcement. Loop engineering is the discipline of stacking control loops around many agent runs. Osmani positions loop engineering as "one floor above the harness" in his ["Loop Engineering" piece](https://addyo.substack.com/p/loop-engineering); LangChain's hill-climbing loop is what closes the feedback between the two layers.
+The same disambiguation applies to harness engineering. [Harness engineering](../patterns/agent-design/harness-engineering.md) is the discipline of designing the environment a single agent runs inside — the legibility, the constraints, the mechanical enforcement. Loop engineering is the discipline of stacking control loops around many agent runs. Osmani positions loop engineering as "one floor above the harness" in his ["Loop Engineering" piece](https://addyo.substack.com/p/loop-engineering); LangChain's hill-climbing loop is what closes the feedback between the two layers.
 
 ## Key Takeaways
 
@@ -84,7 +84,7 @@ The same disambiguation applies to harness engineering. [Harness engineering](..
 
 - [Agent Loop Go/No-Go: When Looping Earns Its Cost](agent-loop-go-no-go-gate.md)
 - [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-strategy-spectrum.md)
-- [Harness Engineering](../agent-design/harness-engineering.md)
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
-- [Harness Hill-Climbing](../agent-design/harness-hill-climbing.md)
+- [Harness Engineering](../patterns/agent-design/harness-engineering.md)
+- [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md)
+- [Harness Hill-Climbing](../patterns/agent-design/harness-hill-climbing.md)
 - [The Three Loops of Agentic Coding](three-loops-agentic-coding.md)

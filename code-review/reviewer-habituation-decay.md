@@ -51,12 +51,12 @@ The three signals are stable enough to design against, but no individual reviewe
 
 - Rotate the reviewer-of-record on agent PRs. Fresh reviewers carry unaged priors. The same agent PR pool reviewed by a rotating panel breaks the within-reviewer anchoring the paper measures.
 - Route by risk, not by queue order. A learned diff-risk threshold and mandatory human review on high-risk diffs ([Risk-Score Threshold Calibration](risk-score-threshold-calibration.md)) keeps the highest-stakes PRs out of the habituated channel.
-- Shrink the scope per PR. Smaller diffs cost less to inspect properly, so the cost-of-scrutiny side of the trade-off falls before the reviewer adapts away from it ([Law of Triviality in AI PRs](../anti-patterns/law-of-triviality-ai-prs.md)).
+- Shrink the scope per PR. Smaller diffs cost less to inspect properly, so the cost-of-scrutiny side of the trade-off falls before the reviewer adapts away from it ([Law of Triviality in AI PRs](../patterns/anti-patterns/law-of-triviality-ai-prs.md)).
 - Make reverts visible per approver. Revert and incident telemetry attached to specific approvals creates the consequence loop whose absence the paper identifies as the conditions under which habituation grows ([arXiv:2606.22721](https://arxiv.org/abs/2606.22721)).
 
 ## When this backfires
 
-The longitudinal-decay finding rests on a single workshop preprint ([arXiv:2606.22721](https://arxiv.org/abs/2606.22721)) with no independent replication, and the proposed structural guards each carry their own load. Mandatory rotation across reviewers who lack repo context produces the credibility gap that pushes CRA-only review to a 45% merge rate against 68% for human-only ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). Hard size gates split atomic refactors into incoherent fragments ([Law of Triviality in AI PRs](../anti-patterns/law-of-triviality-ai-prs.md)). Adversaries calibrated to a learned risk-score threshold can structure malicious diffs into the auto-approved tier ([Risk-Score Threshold Calibration](risk-score-threshold-calibration.md)). And in regulated domains where human sign-off is itself the compliance act, "habituation" is the wrong frame: the approval is structurally mandatory regardless of cognitive state.
+The longitudinal-decay finding rests on a single workshop preprint ([arXiv:2606.22721](https://arxiv.org/abs/2606.22721)) with no independent replication, and the proposed structural guards each carry their own load. Mandatory rotation across reviewers who lack repo context produces the credibility gap that pushes CRA-only review to a 45% merge rate against 68% for human-only ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). Hard size gates split atomic refactors into incoherent fragments ([Law of Triviality in AI PRs](../patterns/anti-patterns/law-of-triviality-ai-prs.md)). Adversaries calibrated to a learned risk-score threshold can structure malicious diffs into the auto-approved tier ([Risk-Score Threshold Calibration](risk-score-threshold-calibration.md)). And in regulated domains where human sign-off is itself the compliance act, "habituation" is the wrong frame: the approval is structurally mandatory regardless of cognitive state.
 
 ## Key Takeaways
 
@@ -71,7 +71,7 @@ The longitudinal-decay finding rests on a single workshop preprint ([arXiv:2606.
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — composition-level evidence that complements the within-reviewer measurement here
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — adoption-rate baseline (16.6% vs 56.5%) that habituation pulls in the opposite direction
 - [Risk-Score Threshold Calibration for Auto-Approval](risk-score-threshold-calibration.md) — the route-by-risk guard against habituated channels
-- [Law of Triviality in AI PRs](../anti-patterns/law-of-triviality-ai-prs.md) — the static rubber-stamp anti-pattern; this page is its within-reviewer longitudinal counterpart
+- [Law of Triviality in AI PRs](../patterns/anti-patterns/law-of-triviality-ai-prs.md) — the static rubber-stamp anti-pattern; this page is its within-reviewer longitudinal counterpart
 
 ## Sources
 

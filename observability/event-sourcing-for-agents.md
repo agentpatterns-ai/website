@@ -150,12 +150,12 @@ If the derived state diverges from the filesystem, `verify` reports which events
 
 ## Related
 
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../agent-design/cognitive-reasoning-execution-separation.md)
+- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../patterns/agent-design/cognitive-reasoning-execution-separation.md)
 - [Verification Ledger](../verification/verification-ledger.md)
-- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
-- [File-Based Agent Coordination](../multi-agent/file-based-agent-coordination.md)
-- [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
-- [Rollback-First Design](../agent-design/rollback-first-design.md)
+- [Orchestrator-Worker Pattern](../patterns/multi-agent/orchestrator-worker.md)
+- [File-Based Agent Coordination](../patterns/multi-agent/file-based-agent-coordination.md)
+- [Idempotent Agent Operations: Safe to Retry](../patterns/agent-design/idempotent-agent-operations.md)
+- [Rollback-First Design](../patterns/agent-design/rollback-first-design.md)
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md)
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
 </content>

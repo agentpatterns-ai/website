@@ -25,7 +25,7 @@ A flat tool catalog forces the planner to select 1-of-N at every turn. Selection
 
 ## The pattern
 
-Identify tools that are frequently co-used in production trajectories. Wrap each group behind a single agent tool — a sub-agent that exposes one high-level interface to the planner and orchestrates its owned leaf tools internally. This is the same nesting the [orchestrator-worker pattern](../multi-agent/orchestrator-worker.md) uses.
+Identify tools that are frequently co-used in production trajectories. Wrap each group behind a single agent tool — a sub-agent that exposes one high-level interface to the planner and orchestrates its owned leaf tools internally. This is the same nesting the [orchestrator-worker pattern](../patterns/multi-agent/orchestrator-worker.md) uses.
 
 ```mermaid
 graph TD
@@ -121,7 +121,7 @@ The planner now chooses among four agent tools per turn. Each sub-agent internal
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
 - [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md)
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md)
-- [Specialized Agent Roles](../agent-design/specialized-agent-roles.md)
-- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
+- [Specialized Agent Roles](../patterns/agent-design/specialized-agent-roles.md)
+- [Orchestrator-Worker Pattern](../patterns/multi-agent/orchestrator-worker.md)
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Self-Healing Tool Routing](self-healing-tool-routing.md)

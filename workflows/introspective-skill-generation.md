@@ -141,7 +141,7 @@ This workflow connects to established patterns:
 - Input: [Agent Transcript Analysis](../verification/agent-transcript-analysis.md) provides the method for feeding transcripts back to agents
 - Loop: [Continuous Agent Improvement](continuous-agent-improvement.md) defines the observe-categorize-update-verify cycle that this workflow accelerates
 - Output: [Skill Library Evolution](../tool-engineering/skill-library-evolution.md) is where generated skills land
-- Memory: [Agent Memory Patterns](../agent-design/agent-memory-patterns.md) accumulates the non-obvious corrections that serve as analysis input
+- Memory: [Agent Memory Patterns](../patterns/agent-design/agent-memory-patterns.md) accumulates the non-obvious corrections that serve as analysis input
 
 ## Example
 
@@ -190,7 +190,7 @@ After deploying the hook, the team re-runs the pattern-miner on 20 new sessions 
 - [Agent Transcript Analysis](../verification/agent-transcript-analysis.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md)
-- [Agent Memory Patterns](../agent-design/agent-memory-patterns.md)
+- [Agent Memory Patterns](../patterns/agent-design/agent-memory-patterns.md)
 - [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md)
 - [Skill Library Refinement Loops](skill-library-refinement-loops.md) — complementary feedback mechanisms that keep generated skills accurate once deployed
 - [Daily-Use Skill Library](daily-use-skill-library.md) — the target library where approved generated skills accumulate

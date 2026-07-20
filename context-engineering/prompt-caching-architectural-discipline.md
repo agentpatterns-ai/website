@@ -241,7 +241,7 @@ After the first turn, `cache_read_input_tokens` should cover the system prompt a
 - [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md) — disabling attribution headers to preserve the local KV cache
 - [Peek-Orientation Cache](peek-orientation-cache.md) — caching orientation reads so re-priming does not bust the prefix
 - [Observation Masking: Filter Tool Outputs from Context](observation-masking.md)
-- [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
+- [Dynamic Tool Fetching Breaks KV Cache](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
   - long-form

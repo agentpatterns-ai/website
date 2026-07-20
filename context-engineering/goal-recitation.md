@@ -117,7 +117,7 @@ Goal recitation handles within-session attention decay, but it does not handle t
 - [Context Window Dumb Zone](context-window-dumb-zone.md) — the degradation gradient that makes goal recitation necessary
 - [Manual Compaction Strategy for Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md) — managing context compression to prevent post-compaction drift
 - [Context Compression Strategies: Offloading and Summarisation](context-compression-strategies.md) — tiered offloading for long-running agents
-- [Objective Drift: When Agents Lose the Thread](../anti-patterns/objective-drift.md) — the failure mode this technique mitigates
+- [Objective Drift: When Agents Lose the Thread](../patterns/anti-patterns/objective-drift.md) — the failure mode this technique mitigates
 - [Critical Instruction Repetition](../instructions/critical-instruction-repetition.md) — static, author-placed counterpart
 - [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md) — harness-injected, reactive counterpart
 - [Trajectory Logging via Progress Files](../observability/trajectory-logging-progress-files.md) — cross-session audit trail

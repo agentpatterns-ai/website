@@ -112,7 +112,7 @@ The diff harness operates on observable artifacts (rendered SVG, exported file b
 
 - [Spec-Driven Development with Spec Kit](spec-driven-development.md) — the spec-as-source-of-truth half of this workflow as a standalone practice
 - [Verification-Centric Development for AI-Generated Code](verification-centric-development.md) — layered verification gates for AI-generated code where parallel ports are one possible layer
-- [Reverse-Engineered Executable Specifications for Agentic Program Repair](../multi-agent/reverse-engineered-executable-specifications.md) — specification inference as a separate stage in a multi-agent pipeline
+- [Reverse-Engineered Executable Specifications for Agentic Program Repair](../patterns/multi-agent/reverse-engineered-executable-specifications.md) — specification inference as a separate stage in a multi-agent pipeline
 - [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md) — defining success criteria before code, complementary to executable specs
 - [Simulation and Replay Testing for Agent Verification](simulation-replay-testing.md) — single-implementation alternative when cross-platform reach is not a requirement
 - [Staged Literal Porting with a Per-Stage Numeric Oracle](staged-literal-port-with-numeric-oracle.md) — Adjacent workflow where the oracle is the prior canonical version's output rather than sibling ports' divergence

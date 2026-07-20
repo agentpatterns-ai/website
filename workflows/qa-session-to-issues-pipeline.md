@@ -94,7 +94,7 @@ Fresh context per stage. Each stage receives only the output of the prior stage,
 
 Separate investigator and filter. The agent that performs codebase investigation should not be the same prompt that makes the keep or drop decision. A fresh context evaluating the annotated candidates works as triage, not self-validation — directly analogous to the audit stage in the [vulnerability triage pipeline](ai-powered-vulnerability-triage.md).
 
-Parallel investigation. Codebase investigation is embarrassingly parallel: each candidate is independent. Use the [orchestrator-worker pattern](../multi-agent/orchestrator-worker.md) to fan out Stage 3 across candidates, then gather results before Stage 4 ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
+Parallel investigation. Codebase investigation is embarrassingly parallel: each candidate is independent. Use the [orchestrator-worker pattern](../patterns/multi-agent/orchestrator-worker.md) to fan out Stage 3 across candidates, then gather results before Stage 4 ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
 
 Start simple. Google ADK's recommendation applies directly: "Do not build a nested loop system on day one. Start with a sequential chain, debug it, and then add complexity." ([Google: ADK Multi-Agent Patterns](https://developers.googleblog.com/developers-guide-to-multi-agent-patterns-in-adk/)). A 3-stage collapse (extract → investigate → create) is a valid starting point before you add deduplication and quality filter stages.
 
@@ -187,6 +187,6 @@ Human review covers 6 issues instead of 18 raw notes. Each issue includes the fi
 - [Semantic Issue Search from Chat vs Query Syntax](semantic-issue-search-natural-language.md) — the find-before-create dedup step that keeps this pipeline from filing duplicate issues
 - [AI-Powered Vulnerability Triage](ai-powered-vulnerability-triage.md) — analogous 3-stage pipeline for security analysis; the fresh-context-per-stage and separate-audit principles apply directly
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — what happens after issues are created
-- [Oracle Task Decomposition](../multi-agent/oracle-task-decomposition.md)
+- [Oracle Task Decomposition](../patterns/multi-agent/oracle-task-decomposition.md)
 - [LLM-as-Judge Evaluation](llm-as-judge-evaluation.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)

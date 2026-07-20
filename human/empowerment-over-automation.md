@@ -61,7 +61,7 @@ Layer the work in this order:
 
 1. Development stage: AI runs the mechanical scan for style, patterns, and common bugs.
 2. CI stage: automated gates enforce tests, security scans, and linters.
-3. Review stage: [humans focus on architectural decisions](../agent-design/delegation-decision.md), organizational context, and cultural standards.
+3. Review stage: [humans focus on architectural decisions](../patterns/agent-design/delegation-decision.md), organizational context, and cultural standards.
 
 This keeps AI to its strengths, pattern matching and consistency, and saves human attention for decisions AI cannot make.
 
@@ -88,10 +88,10 @@ The same team rejects a proposal to let the agent [auto-approve PRs that pass CI
 ## Related
 
 - [Human-in-the-Loop](../workflows/human-in-the-loop.md)
-- [Progressive Autonomy with Model Evolution](../human/progressive-autonomy-model-evolution.md)
+- [Progressive Autonomy with Model Evolution](progressive-autonomy-model-evolution.md)
 - [Visible Thinking in AI-Assisted Development](visible-thinking-ai-development.md)
 - [Agent-Assisted Code Review](../code-review/agent-assisted-code-review.md)
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
-- [Agent-First Software Design](../agent-design/agent-first-software-design.md)
+- [Agent-First Software Design](../patterns/agent-design/agent-first-software-design.md)
 - [Harness Engineering](../training/foundations/harness-engineering.md)
-- [The Delegation Decision](../agent-design/delegation-decision.md)
+- [The Delegation Decision](../patterns/agent-design/delegation-decision.md)

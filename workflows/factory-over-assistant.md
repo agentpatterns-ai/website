@@ -115,7 +115,7 @@ The human's constraint is now PR review throughput across all 12 PRs, not agent 
 - [Worktree Isolation](worktree-isolation.md)
 - [Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
 - [The Bottleneck Migration](../human/bottleneck-migration.md)
-- [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
-- [Fan-Out and Synthesis](../multi-agent/fan-out-synthesis.md)
-- [Swarm Migration Pattern](../multi-agent/swarm-migration-pattern.md)
+- [Sub-Agents for Fan-Out Research and Context Isolation](../patterns/multi-agent/sub-agents-fan-out.md)
+- [Fan-Out and Synthesis](../patterns/multi-agent/fan-out-synthesis.md)
+- [Swarm Migration Pattern](../patterns/multi-agent/swarm-migration-pattern.md)
 - [Burn the Boats](burn-the-boats.md) — Commitment-forcing deprecation that enables the factory paradigm

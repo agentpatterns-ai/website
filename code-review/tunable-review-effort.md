@@ -32,7 +32,7 @@ Cursor's Bugbot externalized this dial on [2026-05-11](https://cursor.com/change
 
 High finds [35% more bugs at constant 80% resolution rate](https://cursor.com/blog/may-2026-bugbot-changes). Developers address the extra flags at merge time rather than silently dismissing them.
 
-The per-PR analogue of [heuristic effort scaling](../agent-design/heuristic-effort-scaling.md) (agent-tiered per query) and [interactive effort sliders](../agent-design/interactive-effort-sliders.md) (operator-tiered per turn) — here the unit is one PR and the decision sits with a reviewer or routing policy.
+The per-PR analogue of [heuristic effort scaling](../patterns/agent-design/heuristic-effort-scaling.md) (agent-tiered per query) and [interactive effort sliders](../patterns/agent-design/interactive-effort-sliders.md) (operator-tiered per turn) — here the unit is one PR and the decision sits with a reviewer or routing policy.
 
 ## Why a dial, not a constant
 
@@ -108,7 +108,7 @@ Pinning Default at the team level and letting Custom escalate inverts biasing-up
 
 ## Key Takeaways
 
-- Effort levels in code review agents are the per-PR analogue of [heuristic effort scaling](../agent-design/heuristic-effort-scaling.md) and [interactive effort sliders](../agent-design/interactive-effort-sliders.md), but with the unit of work bound to one PR and the decision delegated to a reviewer or routing policy.
+- Effort levels in code review agents are the per-PR analogue of [heuristic effort scaling](../patterns/agent-design/heuristic-effort-scaling.md) and [interactive effort sliders](../patterns/agent-design/interactive-effort-sliders.md), but with the unit of work bound to one PR and the decision delegated to a reviewer or routing policy.
 - The dial is meaningful only with a published bug-discovery curve. Effort labels without numbers are hedge words.
 - Resolution rate gates whether the higher-effort flags are useful; published rates are not the same as precision, and teams that need a precision floor measure it themselves.
 - Routing policies concentrate High on the axes that pay for it — file-path criticality, change size, author trust, historical defect rate — the heuristic siblings of [risk-score threshold calibration](risk-score-threshold-calibration.md). Pinning High globally collapses the pattern back to a fixed-pipeline calibration.
@@ -119,6 +119,6 @@ Pinning Default at the team level and letting Custom escalate inverts biasing-up
 - [Tiered Code Review](tiered-code-review.md) — path-based effort routing as the human-review counterpart
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — why silence is a valid output and why High-by-default backfires
 - [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md) — Bugbot's other published lever, complementary to per-PR effort
-- [Heuristic Effort Scaling](../agent-design/heuristic-effort-scaling.md) — agent-decided effort tiers, the alternative to operator-set per-PR levels
-- [Interactive Effort Sliders](../agent-design/interactive-effort-sliders.md) — per-turn reasoning budget control in Claude Code `/effort`
+- [Heuristic Effort Scaling](../patterns/agent-design/heuristic-effort-scaling.md) — agent-decided effort tiers, the alternative to operator-set per-PR levels
+- [Interactive Effort Sliders](../patterns/agent-design/interactive-effort-sliders.md) — per-turn reasoning budget control in Claude Code `/effort`
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — broader cost-routing context

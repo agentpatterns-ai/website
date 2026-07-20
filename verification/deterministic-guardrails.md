@@ -19,7 +19,7 @@ Learn it hands-on with the [Guardrails Beat Guidance guided lesson](https://lear
 
 Telling an agent "don't break any links" is a prompt — probabilistic, sometimes ignored. Running a link checker on every URL in a pre-commit hook is a guardrail — deterministic, always runs, cannot be reasoned around.
 
-Agents are probabilistic and will sometimes produce bad output — the premise behind [trust without verify](../anti-patterns/trust-without-verify.md). Guardrails pass or fail, every time, for every output. Use both: prompts guide agent behavior, guardrails enforce properties of the output.
+Agents are probabilistic and will sometimes produce bad output — the premise behind [trust without verify](../patterns/anti-patterns/trust-without-verify.md). Guardrails pass or fail, every time, for every output. Use both: prompts guide agent behavior, guardrails enforce properties of the output.
 
 ## Guardrail categories
 

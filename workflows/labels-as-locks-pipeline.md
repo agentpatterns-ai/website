@@ -132,13 +132,13 @@ A separate sweep (cron or the same worker on idle) reclaims expired leases: find
 
 - Labels are not a compare-and-swap primitive — pair them with a server-timestamped claim comment so the tiebreaker total-orders concurrent claims.
 - TTL on the claim is for crash recovery, not for mutual exclusion. Crashed workers self-heal because the claim ages past its lease.
-- The work item must be [idempotent](../agent-design/idempotent-agent-operations.md). The pattern degrades to "no work done" or "work done twice with the same result," never "incorrect work done."
+- The work item must be [idempotent](../patterns/agent-design/idempotent-agent-operations.md). The pattern degrades to "no work done" or "work done twice with the same result," never "incorrect work done."
 - Suitable for minutes-scale, best-effort coordination on a single tracker. For correctness-critical or sub-second contention, graduate to an external atomic store with fencing tokens.
 - The benefit over Redis or a database lock is observability — the tracker is already the team's Kanban board, so coordination state is human-readable for free.
 
 ## Related
 
-- [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md) — the upstream correctness property the work item must satisfy for label-based locks to be safe
+- [Idempotent Agent Operations: Safe to Retry](../patterns/agent-design/idempotent-agent-operations.md) — the upstream correctness property the work item must satisfy for label-based locks to be safe
 - [Continuous Autonomous Task Loop](continuous-autonomous-task-loop.md) — the single-worker version of this pattern, where label-based locking is unnecessary
 - [Issue-Tracker as Agent Dispatch Surface](issue-tracker-agent-dispatch-surface.md) — the broader convention of treating the issue tracker as the agent control plane
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — the five-phase delegation pipeline this locking discipline lets you parallelize safely

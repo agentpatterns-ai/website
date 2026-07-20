@@ -50,7 +50,7 @@ Two cost figures per component ([Plugins reference — plugin details](https://c
 
 Claude Code computes the always-on total via `count_tokens` for the active model, then scales the per-component numbers proportionally. If the API is unreachable, the command falls back to a character-based estimate.
 
-A single total confuses two budget regimes — a plugin can carry 50 tokens always-on and 8000 on-invoke, or the reverse. Always-on compounds across every session before any work happens ([Infinite Context anti-pattern](../anti-patterns/infinite-context.md) territory); on-invoke scales with invocation frequency. Sort each column separately, then cross-reference on-invoke with `/usage` for expensive-per-call components.
+A single total confuses two budget regimes — a plugin can carry 50 tokens always-on and 8000 on-invoke, or the reverse. Always-on compounds across every session before any work happens ([Infinite Context anti-pattern](../patterns/anti-patterns/infinite-context.md) territory); on-invoke scales with invocation frequency. Sort each column separately, then cross-reference on-invoke with `/usage` for expensive-per-call components.
 
 The always-on column argues for curating installed skills rather than maximizing them. Microsoft notes that the count of installed skills imposes an upfront session-start metadata-injection tax: you pay for each skill's name, description, and trigger whether or not the skill ever fires ([Microsoft Developer Blog — Stop skillmaxxing, save your tokens](https://developer.microsoft.com/blog/stop-skillmaxxing-save-your-tokens)). That tax is distinct from the per-invocation on-invoke cost above. It scales with how many skills are installed, not how many fire.
 
@@ -125,5 +125,5 @@ The opposite finding from the same command: `claude plugin details` against a pl
 
 - [Context-Usage Attribution: Per-Source Breakdown of Agent Context](context-usage-attribution.md) — the orthogonal per-source cut (rules / skills / MCP / subagent)
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](../standards/plugin-packaging.md) — what a plugin is and why it sits at this attribution layer
-- [The Infinite Context anti-pattern](../anti-patterns/infinite-context.md) — the failure mode the always-on column makes visible
+- [The Infinite Context anti-pattern](../patterns/anti-patterns/infinite-context.md) — the failure mode the always-on column makes visible
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](agent-observability-otel.md) — the export path for the same telemetry

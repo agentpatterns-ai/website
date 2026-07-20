@@ -118,7 +118,7 @@ Pair these with `tool_result` events, which carry `tool_parameters`, and store t
 
 ## Progress files as human-readable audit trails
 
-OTel traces are machine-readable. For human-readable trails that survive context resets, use the [trajectory logging pattern](trajectory-logging-progress-files.md): `claude-progress.txt` read at session start and written at end, with git commits providing a diff-linked trail. Watch for [goal drift](../anti-patterns/objective-drift.md) via diffs. The [post-compaction re-read protocol](../instructions/post-compaction-reread-protocol.md) restores compliance.
+OTel traces are machine-readable. For human-readable trails that survive context resets, use the [trajectory logging pattern](trajectory-logging-progress-files.md): `claude-progress.txt` read at session start and written at end, with git commits providing a diff-linked trail. Watch for [goal drift](../patterns/anti-patterns/objective-drift.md) via diffs. The [post-compaction re-read protocol](../instructions/post-compaction-reread-protocol.md) restores compliance.
 
 ## Why it works
 
@@ -160,7 +160,7 @@ Yes. `tool_result` events carry `tool_parameters`, which can include credentials
 ## Related
 
 - [OpenTelemetry for Agent Observability](../standards/opentelemetry-agent-observability.md)
-- [Agent Harness](../agent-design/agent-harness.md)
+- [Agent Harness](../patterns/agent-design/agent-harness.md)
 - [Agent Debugging](agent-debugging.md)
 - [Agent Debug Log Panel](agent-debug-log-panel.md)
 - [Loop Detection](loop-detection.md)

@@ -100,7 +100,7 @@ The contrast shows why a single "CoT helps code" benchmark result cannot general
 - [pass@k and pass^k Metrics](pass-at-k-metrics.md) — Capability versus consistency measurement for non-deterministic agents
 - [Tool-Use Sim-to-Real Perturbation Taxonomy](tool-use-sim-to-real-perturbation-taxonomy.md) — Partition perturbations by POMDP component to predict where robustness collapses
 - [Chain-of-Verification for Coding Agents](chain-of-verification-coding-agents.md) — Factored verification of model outputs when no external oracle is available
-- [Indiscriminate Structured Reasoning](../anti-patterns/reasoning-overuse.md) — Why applying mid-stream reasoning to every task wastes tokens without gain
+- [Indiscriminate Structured Reasoning](../patterns/anti-patterns/reasoning-overuse.md) — Why applying mid-stream reasoning to every task wastes tokens without gain
 - [Chain-of-Thought Reasoning Fallacy](../fallacies/chain-of-thought-reasoning-fallacy.md) — Why visible reasoning traces are not evidence of causal reasoning
 - [The Task Framing Irrelevance Fallacy](../fallacies/task-framing-irrelevance-fallacy.md) — Surface prompt changes produce measurably different outputs
 - [Behavioral Testing for Agents](behavioral-testing-agents.md) — Testing decision quality for non-deterministic systems

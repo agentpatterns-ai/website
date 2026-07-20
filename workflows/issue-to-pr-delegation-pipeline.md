@@ -119,7 +119,7 @@ Delegation degrades or fails under several conditions:
 - Underspecified issues: vague acceptance criteria push the agent to fill gaps with assumptions. The plan phase hides these behind a plausible checklist, and the divergence only surfaces at review, after you have paid the full execution cost.
 - Missing test infrastructure: the [self-review loop](../code-review/agent-self-review-loop.md) cannot verify correctness without runnable tests. Without them, the agent ships changes that pass its own pattern-matching but fail actual behavior requirements.
 - Cross-cutting changes: tasks that need simultaneous edits to interfaces, callers, and tests across a large codebase can exceed the agent's working-context window. The agent completes one side of the change and misses others, producing a partially applied patch.
-- Novel architecture: [delegation](../agent-design/delegation-decision.md) assumes the agent can infer correct patterns from the existing codebase. Greenfield code with no established precedents produces inconsistent output that is harder to review than a human draft.
+- Novel architecture: [delegation](../patterns/agent-design/delegation-decision.md) assumes the agent can infer correct patterns from the existing codebase. Greenfield code with no established precedents produces inconsistent output that is harder to review than a human draft.
 - High-security contexts: the agent operates with the permissions of the triggering account. In repositories with broad write access or sensitive data, a misunderstood requirement can cause damage before human review happens.
 - Context-window overflow: practitioners report the Copilot Cloud Agent hitting its ~64K-token prompt limit when diffs, file snippets, and tool outputs accumulate during multi-file reasoning, crashing the task rather than degrading gracefully ([GitHub community #184952](https://github.com/orgs/community/discussions/184952), [#180198](https://github.com/orgs/community/discussions/180198)). The failure is a hard crash, not a partial patch — a retry only succeeds after you narrow or split the issue.
 - Review-burden shift: delegation removes the authoring bottleneck and creates a review bottleneck in its place. Empirical analysis of agentic PRs on GitHub finds their acceptance rate is much lower than human-authored PRs ([Liu et al., "Let's Make Every Pull Request Meaningful," arxiv 2601.18749](https://arxiv.org/html/2601.18749)), and the [AgenticFlict dataset](https://arxiv.org/html/2604.03551v1) shows agent PRs raise merge-conflict rates at scale. Throughput gains evaporate unless reviewer capacity and discipline scale alongside agent output — and reviewers tend to approve agent code more readily than the defect rate justifies, importing technical debt that surfaces later. Treat any per-week increase in delegated PRs as a forcing function for stricter review protocols, not a free productivity multiplier.
@@ -194,7 +194,7 @@ When assigned, Copilot opens a draft PR tagged `[WIP]` with a task checklist der
 ## Related
 
 - [Copilot Coding Agent](../tools/copilot/coding-agent.md)
-- [Delegation Decision](../agent-design/delegation-decision.md)
+- [Delegation Decision](../patterns/agent-design/delegation-decision.md)
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
 - [Agent Governance Policies](agent-governance-policies.md)

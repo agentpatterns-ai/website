@@ -21,7 +21,7 @@ maturity: established
 
 ## The decision
 
-The loop strategy spectrum gives you three ways to choose how context carries between iterations of a long-running agent workflow: accumulated context, within-session compression, or fresh context per iteration. The right choice depends on whether the workload is [synthesis-heavy or execution-heavy](../agent-design/cognitive-reasoning-execution-separation.md), or mixed.
+The loop strategy spectrum gives you three ways to choose how context carries between iterations of a long-running agent workflow: accumulated context, within-session compression, or fresh context per iteration. The right choice depends on whether the workload is [synthesis-heavy or execution-heavy](../patterns/agent-design/cognitive-reasoning-execution-separation.md), or mixed.
 
 This choice is itself an emerging named discipline. LangChain calls the deliberate design of an agent's iterate, observe, and act loop "loop engineering" — a distinct engineering practice rather than an incidental implementation detail ([LangChain on the art of loop engineering](https://blog.langchain.com/the-art-of-loop-engineering)). Addy Osmani arrives at the same framing, positioning loop engineering as a core practice for agentic coding ([Addy Osmani on loop engineering](https://addyo.substack.com/p/loop-engineering)). Two sources converging on the same term mark it as a recognized discipline, not one author's coinage.
 
@@ -49,7 +49,7 @@ Rather than reset context, compress it. Offload large tool responses to disk, su
 
 [LangChain's Deep Agents](https://blog.langchain.com/context-management-for-deepagents/) implements three tiers: it offloads responses above 20K tokens, offloads large inputs at 85% capacity, and summarizes history. [Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus) takes a different approach. It recites objectives via `todo.md` at the end of context to hold focus, treating the filesystem as "the ultimate context."
 
-This is a middle ground. The session continues without the hard reset of a Ralph loop, but accumulated noise gets pruned. The risk is lossy compression: summaries that drop decision rationale cause [objective drift](../anti-patterns/objective-drift.md).
+This is a middle ground. The session continues without the hard reset of a Ralph loop, but accumulated noise gets pruned. The risk is lossy compression: summaries that drop decision rationale cause [objective drift](../patterns/anti-patterns/objective-drift.md).
 
 For more detail, see [Context Compression Strategies](../context-engineering/context-compression-strategies.md).
 
@@ -116,8 +116,8 @@ If this were a single accumulated-context run, the agent would degrade after doz
 - [The Ralph Wiggum Loop](ralph-wiggum-loop.md)
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md)
 - [Context Window Dumb Zone](../context-engineering/context-window-dumb-zone.md)
-- [Objective Drift](../anti-patterns/objective-drift.md)
+- [Objective Drift](../patterns/anti-patterns/objective-drift.md)
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
-- [Agent Harness](../agent-design/agent-harness.md)
-- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../agent-design/cognitive-reasoning-execution-separation.md)
+- [Agent Harness](../patterns/agent-design/agent-harness.md)
+- [Orchestrator-Worker Pattern](../patterns/multi-agent/orchestrator-worker.md)
+- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../patterns/agent-design/cognitive-reasoning-execution-separation.md)

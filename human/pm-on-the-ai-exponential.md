@@ -60,13 +60,13 @@ Kai Xin Tai (Senior PM, Datadog) recommends studying "strengths and failure mode
 
 ## Simplicity-first implementation
 
-Avoid building clever workarounds for current model limits. Those workarounds become needless complexity -- and possibly [shadow tech debt](../anti-patterns/shadow-tech-debt.md) -- when the next model removes the limit.
+Avoid building clever workarounds for current model limits. Those workarounds become needless complexity -- and possibly [shadow tech debt](../patterns/anti-patterns/shadow-tech-debt.md) -- when the next model removes the limit.
 
 Anthropic's early todo list needed system-prompt reminders to check task completion. Newer models removed this hack entirely ([Wu, product management on the AI exponential](https://claude.com/blog/product-management-on-the-ai-exponential)).
 
 When you build agent workflows, prompt chains, or context strategies, prefer the simplest approach that works. Simpler implementations adapt more easily when capabilities leap. Optimize for capability first, using more tokens than you think you need, then optimize for cost once validated.
 
-This intersects with [comprehension debt](../anti-patterns/comprehension-debt.md). Simpler implementations are easier to debug and replace. Complex workarounds compound both technical and comprehension debt.
+This intersects with [comprehension debt](../patterns/anti-patterns/comprehension-debt.md). Simpler implementations are easier to debug and replace. Complex workarounds compound both technical and comprehension debt.
 
 ## When this backfires
 
@@ -75,7 +75,7 @@ These shifts assume the organization tolerates rapid reprioritization. Some cond
 - Coordination overhead: short sprints work for small teams. Multi-team orgs with shared roadmaps cannot drop quarterly commitments because a model shipped, and the realignment cost may exceed the benefit.
 - Prototypes promoted to production: [prototype-first](../workflows/prototype-before-optimizing.md) breaks when time pressure turns a proof-of-concept into production without architectural review.
 - Revisit fatigue: re-evaluating features each release creates prioritization instability. Teams with large legacy surfaces cannot afford to audit them each cycle.
-- Simplicity misapplied: "simplest thing that works" [defers necessary complexity](../anti-patterns/shadow-tech-debt.md) rather than removing it. Some edge cases need complex handling whatever the model can do.
+- Simplicity misapplied: "simplest thing that works" [defers necessary complexity](../patterns/anti-patterns/shadow-tech-debt.md) rather than removing it. Some edge cases need complex handling whatever the model can do.
 
 These shifts are most reliable for small, fast-moving teams building AI-native products.
 
@@ -89,8 +89,8 @@ These shifts are most reliable for small, fast-moving teams building AI-native p
 
 ## Related
 
-- [Shadow Tech Debt](../anti-patterns/shadow-tech-debt.md) -- over-engineered workarounds becoming invisible debt
-- [Comprehension Debt](../anti-patterns/comprehension-debt.md) -- complexity costs as capabilities shift
+- [Shadow Tech Debt](../patterns/anti-patterns/shadow-tech-debt.md) -- over-engineered workarounds becoming invisible debt
+- [Comprehension Debt](../patterns/anti-patterns/comprehension-debt.md) -- complexity costs as capabilities shift
 - [Product-as-IDE](../emerging/product-as-ide.md) -- the logical endpoint of prototype-first development
 - [Progressive Autonomy](progressive-autonomy-model-evolution.md) -- scaling trust as models improve
 - [The Bottleneck Migration](bottleneck-migration.md) -- where effort goes when code generation becomes cheap

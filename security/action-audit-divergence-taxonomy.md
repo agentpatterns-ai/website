@@ -74,7 +74,7 @@ A control may cover multiple modes (a hash-chained log with policy receipts cove
 
 The decomposition assumes there is an audit worth defending. In three conditions it adds cost without value:
 
-- Single-user local runtimes with no compliance obligation. F1-F4 each motivate non-trivial architecture, so capability minimization and [rollback-first design](../agent-design/rollback-first-design.md) deliver more safety per unit of complexity.
+- Single-user local runtimes with no compliance obligation. F1-F4 each motivate non-trivial architecture, so capability minimization and [rollback-first design](../patterns/agent-design/rollback-first-design.md) deliver more safety per unit of complexity.
 - Pure-text agents. Without tool calls, there is no action to diverge from an audit.
 - Reversible-state systems. When every action is rolled back once badness is detected, post-hoc tamper-evidence is less load-bearing than detection latency.
 

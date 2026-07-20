@@ -41,7 +41,7 @@ The diagnostics must run even when the harness itself will not start. Claude Cod
 
 Preflight diagnostics work because they move failure detection earlier. They replace a confusing failure deep inside a long, expensive run with a cheap, deterministic, up-front check that names the problem. A misconfigured environment that surfaces mid-run appears as a confusing tool error many steps in. By then context and tokens are spent, and the fault is tangled up in the agent's reasoning. A doctor command collapses the whole environment-validity question into one pass. Its output names the broken precondition and how to fix it. Codex pairs a grouped report with a Notes block that surfaces anomalies first ([openai/codex PR #22336](https://github.com/openai/codex/pull/22336)). The same idea powers `brew doctor` and `flutter doctor`, where deterministic precondition validation is cheaper and clearer than diagnosing the fault from its downstream symptom ([Flutter troubleshoot install](https://docs.flutter.dev/install/troubleshoot)).
 
-This is the proactive complement to reactive failure attribution. The [five-failure-layers diagnostic](../agent-design/five-failure-layers-diagnostic.md) and [agent debugging](agent-debugging.md) classify a failure after it happens. A doctor command tests the execution-environment preconditions before the run, so the most mechanical class of failure never reaches the agent.
+This is the proactive complement to reactive failure attribution. The [five-failure-layers diagnostic](../patterns/agent-design/five-failure-layers-diagnostic.md) and [agent debugging](agent-debugging.md) classify a failure after it happens. A doctor command tests the execution-environment preconditions before the run, so the most mechanical class of failure never reaches the agent.
 
 ## When this backfires
 
@@ -60,8 +60,8 @@ This is the proactive complement to reactive failure attribution. The [five-fail
 
 ## Related
 
-- [Five-Failure-Layers Diagnostic](../agent-design/five-failure-layers-diagnostic.md) — reactive post-failure attribution; the doctor command is its proactive complement at the execution-environment layer
+- [Five-Failure-Layers Diagnostic](../patterns/agent-design/five-failure-layers-diagnostic.md) — reactive post-failure attribution; the doctor command is its proactive complement at the execution-environment layer
 - [Agent Debugging](agent-debugging.md) — diagnosing bad agent output after the fact, which a preflight check reduces the surface for
-- [Session Initialization Ritual](../agent-design/session-initialization-ritual.md) — startup orientation over project state; the doctor command validates harness-environment validity instead
-- [Cloud-Agent Session Bootstrap](../agent-design/cloud-agent-session-bootstrap.md) — the install/start lifecycle whose preconditions a doctor command verifies
+- [Session Initialization Ritual](../patterns/agent-design/session-initialization-ritual.md) — startup orientation over project state; the doctor command validates harness-environment validity instead
+- [Cloud-Agent Session Bootstrap](../patterns/agent-design/cloud-agent-session-bootstrap.md) — the install/start lifecycle whose preconditions a doctor command verifies
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) — runtime observability for failures the preflight check cannot anticipate

@@ -25,9 +25,9 @@ The value for a practitioner shipping with Claude Code, Copilot, or Cursor is ex
 
 CoALA earns its keep under three conditions. Outside them, it adds vocabulary without changing behavior:
 
-- The harness has grown beyond a single while-loop. [Multi-session agents](../agent-design/long-running-agents.md) with persistent state, memory writes, or scheduled work have enough structural surface that naming axes prevents ad-hoc design drift.
+- The harness has grown beyond a single while-loop. [Multi-session agents](../patterns/agent-design/long-running-agents.md) with persistent state, memory writes, or scheduled work have enough structural surface that naming axes prevents ad-hoc design drift.
 - A team needs a shared term for a recurring debate. "Is this an episodic or a procedural memory?" forces a decision the prose alternative ("the transcript file thing") never surfaces.
-- An audit needs to detect what is missing, not what is wrong. A taxonomy makes absence visible — the [missing-slot classifier](../agent-design/coala-memory-taxonomy-classifier.md) is the diagnostic use. A team with no "episodic memory" artifact only notices the gap once the slot has a name.
+- An audit needs to detect what is missing, not what is wrong. A taxonomy makes absence visible — the [missing-slot classifier](../patterns/agent-design/coala-memory-taxonomy-classifier.md) is the diagnostic use. A team with no "episodic memory" artifact only notices the gap once the slot has a name.
 
 For single-turn agents — a one-shot code completion, a one-call shell command — CoALA's loop and four memory types describe phases that do not exist. Anthropic's [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) names this directly: "find the simplest solution possible, and only increase complexity when needed." Apply CoALA only after the agent is already complex enough to confuse you.
 
@@ -59,20 +59,20 @@ The split matters because the external leg is where permission gating, reversibi
 
 ### Decision-making loop
 
-CoALA frames every agent's control flow as a [four-phase cycle](../agent-design/coala-decision-making-loop.md) that repeats until termination ([arXiv:2309.02427 v3](https://arxiv.org/html/2309.02427v3)):
+CoALA frames every agent's control flow as a [four-phase cycle](../patterns/agent-design/coala-decision-making-loop.md) that repeats until termination ([arXiv:2309.02427 v3](https://arxiv.org/html/2309.02427v3)):
 
 1. Propose — generate candidate actions through reasoning or retrieval.
 2. Evaluate — score candidates (heuristic, LLM judge, learned value).
 3. Select — choose one via argmax, softmax, or voting.
-4. Execute — apply the action (an [external, environment-grounding action](../agent-design/coala-structured-action-space.md)), observe the result, restart.
+4. Execute — apply the action (an [external, environment-grounding action](../patterns/agent-design/coala-structured-action-space.md)), observe the result, restart.
 
-Used as a lens, the loop locates every orchestration pattern the site already documents. Generate-rank-verify lives in propose-plus-evaluate-plus-select. A [critic-agent gate](../agent-design/critic-agent-plan-review.md) guards execute. Plan mode front-loads propose.
+Used as a lens, the loop locates every orchestration pattern the site already documents. Generate-rank-verify lives in propose-plus-evaluate-plus-select. A [critic-agent gate](../patterns/agent-design/critic-agent-plan-review.md) guards execute. Plan mode front-loads propose.
 
 ## Why it works
 
 A closed vocabulary surfaces gaps that prose hides. Naming the four memory types forces a yes/no audit for each one — does this harness have an episodic store, or not? The mechanism is the same one any taxonomy uses to organize messy domains: making categories explicit makes absence visible ([arXiv:2309.02427](https://arxiv.org/abs/2309.02427)). The paper frames this as the framework's primary contribution — "retrospectively organising" existing work so practitioners can locate their design on a common map.
 
-The mechanism breaks the moment readers mistake the taxonomy for a checklist. The paper supplies no evidence that an agent [missing a memory type](../agent-design/coala-memory-taxonomy-classifier.md) performs worse on any task. It only supplies the language to name the gap. The classifier is necessary infrastructure for the conversation, not the answer the conversation produces.
+The mechanism breaks the moment readers mistake the taxonomy for a checklist. The paper supplies no evidence that an agent [missing a memory type](../patterns/agent-design/coala-memory-taxonomy-classifier.md) performs worse on any task. It only supplies the language to name the gap. The classifier is necessary infrastructure for the conversation, not the answer the conversation produces.
 
 ## When this backfires
 
@@ -93,7 +93,7 @@ A team operating a Claude Code harness for a regulated codebase audits its memor
 | Semantic | None — no project-level RAG | Gap |
 | Procedural | `CLAUDE.md`, `.claude/skills/`, `.claude/hooks/` | Present |
 
-The audit surfaces two missing slots. Acting on them is a separate decision. Episodic memory only earns its cost when the agent re-encounters similar problems across sessions. Semantic memory only pays when the project has authoritative reference material the LLM cannot infer. CoALA names the gap. The [delegation decision](../agent-design/delegation-decision.md) and [tiered memory architecture](../agent-design/tiered-memory-architecture.md) pages cover whether to fill it.
+The audit surfaces two missing slots. Acting on them is a separate decision. Episodic memory only earns its cost when the agent re-encounters similar problems across sessions. Semantic memory only pays when the project has authoritative reference material the LLM cannot infer. CoALA names the gap. The [delegation decision](../patterns/agent-design/delegation-decision.md) and [tiered memory architecture](../patterns/agent-design/tiered-memory-architecture.md) pages cover whether to fill it.
 
 ## Key Takeaways
 
@@ -105,8 +105,8 @@ The audit surfaces two missing slots. Acting on them is a separate decision. Epi
 
 ## Related
 
-- [Anthropic's Effective Agents Framework: A Pattern Map](../agent-design/anthropic-effective-agents-framework.md) — the workflow-first counterpoint to CoALA's taxonomic depth
-- [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — atomic memory patterns CoALA's taxonomy organises
-- [Tiered Memory Architecture: Episodic-to-Semantic Consolidation](../agent-design/tiered-memory-architecture.md) — the consolidation pattern between two CoALA memory types
-- [Agent Harness](../agent-design/agent-harness.md) — the scaffolding layer that hosts the CoALA decision loop
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../agent-design/cognitive-reasoning-execution-separation.md) — a related boundary cut: reasoning versus action, parallel to CoALA's internal/external split
+- [Anthropic's Effective Agents Framework: A Pattern Map](../patterns/agent-design/anthropic-effective-agents-framework.md) — the workflow-first counterpoint to CoALA's taxonomic depth
+- [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md) — atomic memory patterns CoALA's taxonomy organises
+- [Tiered Memory Architecture: Episodic-to-Semantic Consolidation](../patterns/agent-design/tiered-memory-architecture.md) — the consolidation pattern between two CoALA memory types
+- [Agent Harness](../patterns/agent-design/agent-harness.md) — the scaffolding layer that hosts the CoALA decision loop
+- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../patterns/agent-design/cognitive-reasoning-execution-separation.md) — a related boundary cut: reasoning versus action, parallel to CoALA's internal/external split

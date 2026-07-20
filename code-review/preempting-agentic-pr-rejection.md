@@ -43,7 +43,7 @@ Inactivity (17.3% of the sample, the single largest cause) is a workflow-attenti
 
 ## Why it works
 
-Reviewers reject implementation-bucket fixes because the agent ignored unwritten team conventions that it could not infer from the issue text alone: style rules, architectural choices, "we don't use library X here," and test expectations. Encoding those conventions in the instruction file gives the agent the same implicit knowledge a new human contributor would learn from a senior engineer's pre-PR review. The paper names this mechanism in its Implications section: developers should "provide guidance on how to perform the fix or provide guidance on what approaches are not acceptable in the agent instruction file" ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)). The mechanism matches the [Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md) anti-pattern: agents fail when the team's conventions are nowhere in the artifacts the agent reads.
+Reviewers reject implementation-bucket fixes because the agent ignored unwritten team conventions that it could not infer from the issue text alone: style rules, architectural choices, "we don't use library X here," and test expectations. Encoding those conventions in the instruction file gives the agent the same implicit knowledge a new human contributor would learn from a senior engineer's pre-PR review. The paper names this mechanism in its Implications section: developers should "provide guidance on how to perform the fix or provide guidance on what approaches are not acceptable in the agent instruction file" ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)). The mechanism matches the [Implicit Knowledge Problem](../patterns/anti-patterns/implicit-knowledge-problem.md) anti-pattern: agents fail when the team's conventions are nowhere in the artifacts the agent reads.
 
 ## When this backfires
 
@@ -97,7 +97,7 @@ The Approach-hints and Approaches-to-avoid blocks target Implementation Issues; 
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — reviewer-composition effect on merge outcomes, the complementary axis to the rejection-reason taxonomy
 - [PR Description Style as a Lever](pr-description-style-lever.md) — how PR description structure affects merge outcomes, an adjacent preemption lever
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md) — reviewer engagement as the strongest merge predictor, the back-end counterpart to preemption
-- [Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md) — the underlying anti-pattern preemption prompts target
+- [Implicit Knowledge Problem](../patterns/anti-patterns/implicit-knowledge-problem.md) — the underlying anti-pattern preemption prompts target
 
 ## Sources
 

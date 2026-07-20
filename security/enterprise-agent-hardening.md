@@ -62,9 +62,9 @@ See [Pre-Completion Checklists](../verification/pre-completion-checklists.md) fo
 
 ## Reproducibility gate
 
-`claude-progress.txt` combined with git history creates a session-portable audit trail. Sessions read progress state rather than rely on [agent memory](../agent-design/agent-memory-patterns.md), so any session can resume where a prior one left off. Feature-state JSON holds pass/fail flags per feature. Agents toggle `passes` while scope and acceptance criteria stay read-only ([Anthropic harness engineering blog](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+`claude-progress.txt` combined with git history creates a session-portable audit trail. Sessions read progress state rather than rely on [agent memory](../patterns/agent-design/agent-memory-patterns.md), so any session can resume where a prior one left off. Feature-state JSON holds pass/fail flags per feature. Agents toggle `passes` while scope and acceptance criteria stay read-only ([Anthropic harness engineering blog](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
-Git snapshots log each session's work. Sessions verify before new work to prevent compounding failures (see [Worktree Isolation](../workflows/worktree-isolation.md) and [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md)).
+Git snapshots log each session's work. Sessions verify before new work to prevent compounding failures (see [Worktree Isolation](../workflows/worktree-isolation.md) and [Idempotent Agent Operations](../patterns/agent-design/idempotent-agent-operations.md)).
 
 Claude Code's persistent memory scopes (`user`, `project`, `local`) carry institutional knowledge across sessions ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)). ZenML and TrueFoundry add reproducibility through artifact versioning ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)).
 
@@ -145,6 +145,6 @@ This setup satisfies all three gates: denied operations and hook rejections are 
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)
-- [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
+- [Idempotent Agent Operations: Safe to Retry](../patterns/agent-design/idempotent-agent-operations.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [Risk Architecture for AI-Native Engineering Teams](../human/risk-architecture-ai-native-teams.md)

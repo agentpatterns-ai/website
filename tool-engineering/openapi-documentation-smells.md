@@ -77,7 +77,7 @@ Audit only the endpoints your scenarios need; the rest can wait.
 
 ## Mechanizing the audit
 
-Hermes dispatches nine specialized smell-detector agents from one orchestrator, each analyzing the same endpoint from one category's perspective — a textbook [orchestrator-worker fan-out](../multi-agent/orchestrator-worker.md). Model selection matters less than expected: [`gpt-oss:120b` reached 0.85 Jaccard similarity with expert annotations](https://arxiv.org/abs/2605.14312). Frontier pricing is not required.
+Hermes dispatches nine specialized smell-detector agents from one orchestrator, each analyzing the same endpoint from one category's perspective — a textbook [orchestrator-worker fan-out](../patterns/multi-agent/orchestrator-worker.md). Model selection matters less than expected: [`gpt-oss:120b` reached 0.85 Jaccard similarity with expert annotations](https://arxiv.org/abs/2605.14312). Frontier pricing is not required.
 
 Static linters ([Spectral](https://stoplight.io/open-source/spectral), [Redocly CLI](https://redocly.com/docs/cli)) catch PATH, METHOD, and structural INPUT/RESPONSE issues at design time. Reach for LLM-based detection on the prose-shaped smells — LAZY, BLOATED, TANGLED, FRAGMENTED — where static rules cannot judge information density.
 
@@ -183,4 +183,4 @@ The PATH smell (`/users/{id}/transfer` with `doTransfer`) collapsed into a resou
 - [MCP Server Design](mcp-server-design.md)
 - [Tool Description Quality](tool-description-quality.md)
 - [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
-- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
+- [Orchestrator-Worker Pattern](../patterns/multi-agent/orchestrator-worker.md)

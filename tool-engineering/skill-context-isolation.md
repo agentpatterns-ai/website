@@ -22,7 +22,7 @@ maturity: established
 Related lesson: [Skills as a Tool-Engineering Surface](https://learn.agentpatterns.ai/tool-engineering/skills-as-a-tool-surface/) covers this concept in a hands-on lesson with quizzes.
 
 !!! note "Also known as"
-    Dedicated context for skills, skill fork context. For the broader sub-agent isolation pattern, see [Sub-Agents for Fan-Out](../multi-agent/sub-agents-fan-out.md). For the SKILL.md syntax, see [Skill Frontmatter Reference](skill-frontmatter-reference.md).
+    Dedicated context for skills, skill fork context. For the broader sub-agent isolation pattern, see [Sub-Agents for Fan-Out](../patterns/multi-agent/sub-agents-fan-out.md). For the SKILL.md syntax, see [Skill Frontmatter Reference](skill-frontmatter-reference.md).
 
 Skill context isolation is a per-invocation context-engineering choice: the skill executes inside a forked subagent window, and only its final output crosses back. The selection unit is the skill call, not the task or the turn — same model, isolated context.
 
@@ -69,7 +69,7 @@ If any condition fails, leaving the skill in the main context is the right defau
 
 - Reference-only skills — `context: fork` plus a body that is taxonomy, template, or knowledge produces empty output. The subagent receives the body as its task; with no instructions, there is nothing to do ([Skill Frontmatter Reference](skill-frontmatter-reference.md)).
 - Follow-up sensitivity — when the user routinely acts on intermediate findings ("now refactor the third caller"), forking discards exactly the state the next turn needs.
-- Small auxiliary footprint — the [subagent](../multi-agent/sub-agents-fan-out.md) framing overhead (system prompt, tool definitions, result wrapping) can exceed what the fork saves on short-output skills.
+- Small auxiliary footprint — the [subagent](../patterns/multi-agent/sub-agents-fan-out.md) framing overhead (system prompt, tool definitions, result wrapping) can exceed what the fork saves on short-output skills.
 - Determinism-required outputs — security audits, diff review, and other workflows where the user must see the raw work cannot tolerate a summarized return.
 - Debug iteration — while you are authoring the skill, the inner trace needs to be visible. Fork after the skill is stable.
 - Self-dispatch recursion — a known harness bug. A `context: fork` body shaped like a skill spec (a `# Name: tagline` header, third-person prose, an `ARGUMENTS:` block) can be pattern-matched by the forked subagent as a dispatch request, re-invoking itself instead of running. With no re-entry guard it loops until killed ([anthropics/claude-code#55592](https://github.com/anthropics/claude-code/issues/55592)). Write forked bodies as direct imperative steps.
@@ -83,8 +83,8 @@ Transformer attention is allocated across all tokens in context; auxiliary token
 | Pattern | Selection unit | What is held constant |
 |---------|---------------|----------------------|
 | Skill context isolation | Per skill call | Same model, isolated context window |
-| [Specialized SLM as agent tool](../agent-design/specialized-slm-as-agent-tool.md) | Per tool call | Different (smaller) model behind a tool boundary |
-| [Sub-agents for fan-out](../multi-agent/sub-agents-fan-out.md) | Per parallel branch | Same model, isolated contexts, primary goal is parallelism |
+| [Specialized SLM as agent tool](../patterns/agent-design/specialized-slm-as-agent-tool.md) | Per tool call | Different (smaller) model behind a tool boundary |
+| [Sub-agents for fan-out](../patterns/multi-agent/sub-agents-fan-out.md) | Per parallel branch | Same model, isolated contexts, primary goal is parallelism |
 | [Cost-aware tier routing](../token-engineering/cost-aware-agent-design.md) | Per turn or role | Different model selected for cost |
 
 The differentiator: skill context isolation is a context-window decision, not a model decision and not a parallelism decision.
@@ -121,8 +121,8 @@ Without forking, the parent context absorbs every Glob hit, every file read, and
 
 - [Skill Frontmatter Reference](skill-frontmatter-reference.md) — `context:` and `agent:` fields, built-in agent types, fork caveats
 - [Skill Authoring Patterns](skill-authoring-patterns.md) — when a skill warrants the overhead of structured authoring
-- [Sub-Agents for Fan-Out](../multi-agent/sub-agents-fan-out.md) — same isolation primitive applied to parallel research
-- [Cross-Tool Subagent Comparison](../multi-agent/cross-tool-subagent-comparison.md) — how Claude Code, Gemini CLI, and Copilot CLI differ on subagent isolation
-- [Specialized SLM as Agent Tool](../agent-design/specialized-slm-as-agent-tool.md) — model-level analogue: smaller model behind a tool boundary
+- [Sub-Agents for Fan-Out](../patterns/multi-agent/sub-agents-fan-out.md) — same isolation primitive applied to parallel research
+- [Cross-Tool Subagent Comparison](../patterns/multi-agent/cross-tool-subagent-comparison.md) — how Claude Code, Gemini CLI, and Copilot CLI differ on subagent isolation
+- [Specialized SLM as Agent Tool](../patterns/agent-design/specialized-slm-as-agent-tool.md) — model-level analogue: smaller model behind a tool boundary
 - [Effective Context Engineering](../context-engineering/context-engineering.md) — the broader framing that makes isolation a context strategy
-- [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md) — the loading-side counterpart to context scoping
+- [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md) — the loading-side counterpart to context scoping

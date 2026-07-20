@@ -95,5 +95,5 @@ Agent-authored — a `.bootstrap` contract produced by the BootstrapAgent pipeli
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md) — Operator-authored `copilot-setup-steps.yml` and the deterministic alternative to agent-discovered setup.
 - [Agent-Led Dev-Environment Iteration with Validation and Rollback](agent-led-dev-environment.md) — Adjacent agent-authored bootstrap pattern that synthesises a Dockerfile with rollback per attempt.
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md) — Dependency-ordered sequence for adding agent support to an existing repo, the operator-authored counterpart to this workflow.
-- [Memory Synthesis from Execution Logs](../agent-design/memory-synthesis-execution-logs.md) — General mechanism for extracting durable lessons from agent execution traces; bootstrap distillation is one applied instance.
+- [Memory Synthesis from Execution Logs](../patterns/agent-design/memory-synthesis-execution-logs.md) — General mechanism for extracting durable lessons from agent execution traces; bootstrap distillation is one applied instance.
 - [Agent-Generated Onboarding Guide as a Durable Artefact](agent-generated-onboarding-guide.md) — Companion pattern that produces a human-consumable ramp-up guide; the bootstrap contract is the agent-consumable equivalent.

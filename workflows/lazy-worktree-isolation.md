@@ -68,7 +68,7 @@ Claude-Code-specific. The lazy latch, `worktree.bgIsolation`, and `WorktreeCreat
 
 ## Why it works
 
-Lazy isolation works because file-system isolation is only needed for writes. Reads against the parent checkout are race-free as long as no other session is editing the same inode, and worktrees share the git object database so a worktree of the same SHA is logically indistinguishable from the parent for read purposes ([git worktree docs](https://git-scm.com/docs/git-worktree)). The fixed cost of `git worktree add` plus per-worktree env init only buys you something when a session actually writes. Deferring the cost until that demonstration of intent is the same defer-until-needed reasoning that justifies JIT compilation in [agent runtimes](../agent-design/agent-jit-compilation.md): pay for the heavyweight setup only when the lighter-weight path can no longer satisfy the request.
+Lazy isolation works because file-system isolation is only needed for writes. Reads against the parent checkout are race-free as long as no other session is editing the same inode, and worktrees share the git object database so a worktree of the same SHA is logically indistinguishable from the parent for read purposes ([git worktree docs](https://git-scm.com/docs/git-worktree)). The fixed cost of `git worktree add` plus per-worktree env init only buys you something when a session actually writes. Deferring the cost until that demonstration of intent is the same defer-until-needed reasoning that justifies JIT compilation in [agent runtimes](../patterns/agent-design/agent-jit-compilation.md): pay for the heavyweight setup only when the lighter-weight path can no longer satisfy the request.
 
 ## When this backfires
 

@@ -46,7 +46,7 @@ Plan: the agent picks one bounded unit of work from the state. Bounded means the
 
 Execute: the agent completes the task using its tools.
 
-Write: the agent writes results — output files, updated task lists, [progress markers](../agent-design/goal-monitoring-progress-tracking.md) — back to disk before the session ends.
+Write: the agent writes results — output files, updated task lists, [progress markers](../patterns/agent-design/goal-monitoring-progress-tracking.md) — back to disk before the session ends.
 
 Restart: the next iteration opens a fresh context and reads the updated state.
 
@@ -85,7 +85,7 @@ The pattern assumes you can bound and verify each iteration. Several conditions 
 - Unbounded tasks: if a single unit of work does not fit in one context window, the loop stalls or produces partial output every cycle. Decompose further before looping.
 - No progress signal: without a [reliable completion check](convergence-detection.md) such as a test suite, task-list marker, or CI result, the loop can cycle forever on a task it cannot solve, burning tokens without converging.
 - Shared mutable state: if multiple concurrent loop iterations write to the same files, later iterations may overwrite earlier progress. Use per-iteration output paths or explicit locking.
-- Context-sensitive tasks: tasks that need [deep continuity](../agent-design/cross-cycle-consensus-relay.md) — extended negotiation, multi-turn clarification, stateful debugging sessions — do not benefit from fresh context. The lost context is load-bearing.
+- Context-sensitive tasks: tasks that need [deep continuity](../patterns/agent-design/cross-cycle-consensus-relay.md) — extended negotiation, multi-turn clarification, stateful debugging sessions — do not benefit from fresh context. The lost context is load-bearing.
 
 Practitioner reports add three caveats. Architectural coherence suffers — generated code reflects the agent's path to a working state, not an intentional structure ([Wiggum breakdown of the Ralph loop](https://wiggum.app/blog/what-is-the-ralph-loop/)). Cost scales fast: a fifty-iteration loop on a medium codebase typically runs $50 to $100 or more in API credits ([Leanware analysis of Ralph Wiggum coding costs](https://www.leanware.co/insights/ralph-wiggum-ai-coding)). Worst, an agent facing an impossible task can overbake — iterate destructively, chasing a spurious error for hours. So Sondera's ["Supervising Ralph"](https://blog.sondera.ai/p/ralph-wiggum-principal-skinner-agent-reliability) argues every loop needs a supervisor that detects non-convergence and halts. An iteration cap alone is a financial circuit breaker, not a quality gate.
 
@@ -129,10 +129,10 @@ The prompt tells the agent to read state, complete one bounded task, and write r
 ## Related
 
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) — project instruction file that agents read at session start for conventions and context
-- [Session Initialization Ritual](../agent-design/session-initialization-ritual.md) — the disk-state read that opens each fresh-context cycle
+- [Session Initialization Ritual](../patterns/agent-design/session-initialization-ritual.md) — the disk-state read that opens each fresh-context cycle
 - [Worktree Isolation](../workflows/worktree-isolation.md) — sandboxes each iteration so failures don't contaminate the working directory
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md) — where fresh-context looping sits among other agent loop strategies
 - [Convergence Detection](convergence-detection.md) — the progress signal that stops a loop cycling on an unsolvable task
-- [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md) — design operations for safe retry across iterations
-- [Goal Monitoring and Progress Tracking](../agent-design/goal-monitoring-progress-tracking.md) — tracking progress across the multi-session iterations this pattern creates
-- [Cross-Cycle Consensus Relay](../agent-design/cross-cycle-consensus-relay.md) — structured relay document that preserves decisions and forward momentum across fresh-context cycles
+- [Idempotent Agent Operations](../patterns/agent-design/idempotent-agent-operations.md) — design operations for safe retry across iterations
+- [Goal Monitoring and Progress Tracking](../patterns/agent-design/goal-monitoring-progress-tracking.md) — tracking progress across the multi-session iterations this pattern creates
+- [Cross-Cycle Consensus Relay](../patterns/agent-design/cross-cycle-consensus-relay.md) — structured relay document that preserves decisions and forward momentum across fresh-context cycles

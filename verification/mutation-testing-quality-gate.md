@@ -18,7 +18,7 @@ maturity: established
 
 > Coverage proves a line ran; mutation testing proves the suite would notice a regression. On LLM-generated tests, surviving mutants expose assertions that catch nothing.
 
-Coding agents now produce more tests per feature than humans, often with high coverage and zero failures on first generation. The [Test Homogenization Trap](../anti-patterns/test-homogenization-trap.md) shows why that signal is misleading: LLM-generated tests cluster around the same blind spots as the model's code, so green suites overstate correctness. Mutation testing forces each test to prove it would catch a regression — a behavioral claim coverage cannot make.
+Coding agents now produce more tests per feature than humans, often with high coverage and zero failures on first generation. The [Test Homogenization Trap](../patterns/anti-patterns/test-homogenization-trap.md) shows why that signal is misleading: LLM-generated tests cluster around the same blind spots as the model's code, so green suites overstate correctness. Mutation testing forces each test to prove it would catch a regression — a behavioral claim coverage cannot make.
 
 ## Mutation testing primer
 
@@ -55,7 +55,7 @@ Meta's Automated Compliance Hardening applied this loop across 7 platforms and [
 
 The technique is most valuable on production code with rigorous suites and selective or LLM-filtered mutation generation. The conditions where the cost outruns the signal:
 
-- Throwaway scripts and prototypes — code with no production SLA. Mutation tooling cost (CI minutes, equivalent-mutant triage, prompt iteration) exceeds the regression risk. The same condition is called out in the [Test Homogenization Trap](../anti-patterns/test-homogenization-trap.md#when-this-backfires).
+- Throwaway scripts and prototypes — code with no production SLA. Mutation tooling cost (CI minutes, equivalent-mutant triage, prompt iteration) exceeds the regression risk. The same condition is called out in the [Test Homogenization Trap](../patterns/anti-patterns/test-homogenization-trap.md#when-this-backfires).
 - Pure functions over small input domains — a comparator, a unit converter. Example-based tests can essentially exhaust the input space; mutation operators add little signal because human-discoverable bugs map directly onto the example assertions.
 - Per-PR gating without selective mutation — full mutation runs on medium codebases take hours, incompatible with PR-blocking gates; an industrial case study at Zenseact found mutation testing best applied at commit level only with selective tooling and trend visualization, not raw scoring. [Source: [Mutation Testing in CI: An Exploratory Industrial Case Study (IEEE 2023)](https://ieeexplore.ieee.org/document/10132170/)] Without learned operator selection or incremental analysis, mutation testing belongs nightly or post-merge — not on the merge path.
 - No equivalent-mutant filter — raw mutation output runs at >50% survival rate on rigorous test suites, including at Facebook scale. [In a Facebook industrial study, only ~50% of surveyed developers said they would act on the surfaced mutants](https://arxiv.org/abs/2010.13464); without a classifier filtering equivalents, surfaced "gaps" are dominated by noise and developers stop acting on them.
@@ -111,7 +111,7 @@ The agent adds three targeted tests; the mutation tool reruns and confirms all 1
 
 ## Related
 
-- [The Test Homogenization Trap](../anti-patterns/test-homogenization-trap.md) — why LLM-generated tests share the model's blind spots; this page is the dedicated mitigation
+- [The Test Homogenization Trap](../patterns/anti-patterns/test-homogenization-trap.md) — why LLM-generated tests share the model's blind spots; this page is the dedicated mitigation
 - [Skill Evals](skill-evals.md) — evaluable-unit framing for any agent capability, with discriminating-assertion guidance
 - [Behavioral Testing for Agents](behavioral-testing-agents.md) — testing what agents do, not how they do it
 - [Coverage-Guided Agents for Fuzz Harness Generation](coverage-guided-fuzz-harness-generation.md) — the same generate-measure-refine loop applied to fuzzing

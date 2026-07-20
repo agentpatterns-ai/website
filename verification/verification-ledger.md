@@ -23,7 +23,7 @@ Learn it hands-on with [The Verification Ledger guided lesson](https://learn.age
 
 ## The problem with self-reported verification
 
-Agent workflows usually rely on the agent's own prose claims about verification: "Build passed. Tests green. No issues found." You cannot falsify these claims within the conversation. The agent may hallucinate that checks passed, skip steps silently, or assert results without running the tool — the [trust without verify](../anti-patterns/trust-without-verify.md) anti-pattern. Spotify's Honk team saw the same problem. They wired deterministic verifiers (format, build, test) into the agent loop and blocked PR creation when any verifier fails ([Spotify Engineering, "Background Coding Agents: Predictable Results Through Strong Feedback Loops"](https://engineering.atspotify.com/2025/12/feedback-loops-background-coding-agents-part-3)). See [Trust Without Verify](../anti-patterns/trust-without-verify.md) for the full anti-pattern.
+Agent workflows usually rely on the agent's own prose claims about verification: "Build passed. Tests green. No issues found." You cannot falsify these claims within the conversation. The agent may hallucinate that checks passed, skip steps silently, or assert results without running the tool — the [trust without verify](../patterns/anti-patterns/trust-without-verify.md) anti-pattern. Spotify's Honk team saw the same problem. They wired deterministic verifiers (format, build, test) into the agent loop and blocked PR creation when any verifier fails ([Spotify Engineering, "Background Coding Agents: Predictable Results Through Strong Feedback Loops"](https://engineering.atspotify.com/2025/12/feedback-loops-background-coding-agents-part-3)). See [Trust Without Verify](../patterns/anti-patterns/trust-without-verify.md) for the full anti-pattern.
 
 ## Structured proof
 
@@ -162,7 +162,7 @@ The Honk team wired deterministic verifiers — format, build, and test — dire
 
 ## Related
 
-- [Trust Without Verify](../anti-patterns/trust-without-verify.md)
+- [Trust Without Verify](../patterns/anti-patterns/trust-without-verify.md)
 - [Incremental Verification](incremental-verification.md)
 - [Deterministic Guardrails](deterministic-guardrails.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)

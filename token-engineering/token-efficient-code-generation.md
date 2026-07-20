@@ -139,7 +139,7 @@ Both functions produce identical output. The idiomatic version consumes fewer to
 
 ## Related
 
-- [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — Prompt-level "be efficient" degrades output
+- [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — Prompt-level "be efficient" degrades output
 - [Token-Efficient Tool Design](token-efficient-tool-design.md) — Minimizing tokens on the tool output side
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — Routing by complexity and model tier
 - [Prompt Compression](../context-engineering/prompt-compression.md) — Fewer words in instructions to cut token cost

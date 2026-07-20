@@ -94,7 +94,7 @@ It is less appropriate when:
 
 ## Example
 
-A solo operator running a B2B SaaS product needs basic CRM and support-ticket tracking. Instead of subscribing to HubSpot and Zendesk, they use a coding agent (Claude with an [agent harness](../agent-design/agent-harness.md)).
+A solo operator running a B2B SaaS product needs basic CRM and support-ticket tracking. Instead of subscribing to HubSpot and Zendesk, they use a coding agent (Claude with an [agent harness](../patterns/agent-design/agent-harness.md)).
 
 Prompt to the coding agent:
 
@@ -142,4 +142,4 @@ No webhook setup, no API key management, no data export. The scoring agent reads
 - [Hyper-Personalized Software](hyper-personalized-software.md)
 - [Product-as-IDE](product-as-ide.md)
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
-- [Agent Harness](../agent-design/agent-harness.md)
+- [Agent Harness](../patterns/agent-design/agent-harness.md)

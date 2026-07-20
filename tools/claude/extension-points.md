@@ -63,7 +63,7 @@ All three deliver instructions, but differ in scope and context cost.
 | Context cost | High — always present | Medium — path-targeted | Low — progressive |
 | Typical content | Architecture, test commands, conventions | Lint rules for `frontend/`, API rules for `api/` | Procedures, checklists, templates |
 
-Keep CLAUDE.md lean: path-specific rules go in `.claude/rules/`, detailed procedures go in skills. See [Hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md) and [Progressive Disclosure](../../agent-design/progressive-disclosure-agents.md).
+Keep CLAUDE.md lean: path-specific rules go in `.claude/rules/`, detailed procedures go in skills. See [Hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md) and [Progressive Disclosure](../../patterns/agent-design/progressive-disclosure-agents.md).
 
 ## Deterministic vs probabilistic
 
@@ -140,6 +140,6 @@ The hook script (`hooks/check-down-migration.sh`) runs deterministically. The sk
 - [Agent Teams](agent-teams.md)
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md)
 - [Hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md)
-- [Progressive Disclosure for Agent Definitions](../../agent-design/progressive-disclosure-agents.md)
+- [Progressive Disclosure for Agent Definitions](../../patterns/agent-design/progressive-disclosure-agents.md)
 - [Plugin Packaging](../../standards/plugin-packaging.md)
 - [Claude Agent SDK](agent-sdk.md)

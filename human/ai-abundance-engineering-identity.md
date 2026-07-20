@@ -95,7 +95,7 @@ This is the central paradox of the transition. Moving from coder to builder requ
 
 Martin Fowler, drawing on Chad Fowler's framing, offers what may be the most useful mental model for navigating this transition: rigor relocation. Engineering discipline does not vanish in an AI-augmented workflow. It moves ([Fowler: Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 
-Where rigor previously lived in careful implementation — choosing the right algorithm, handling edge cases, writing defensive code — it now lives in four places: constraint design (the rules, schemas, and guardrails that bound AI output), verification systems (automated checks that catch what review misses at scale), architectural judgment (the structural decisions AI cannot yet reason about reliably), and intent specification (stating requirements precisely enough for agents to produce correct output). See [harness engineering](../agent-design/harness-engineering.md) for how this constraint layer is built in practice.
+Where rigor previously lived in careful implementation — choosing the right algorithm, handling edge cases, writing defensive code — it now lives in four places: constraint design (the rules, schemas, and guardrails that bound AI output), verification systems (automated checks that catch what review misses at scale), architectural judgment (the structural decisions AI cannot yet reason about reliably), and intent specification (stating requirements precisely enough for agents to produce correct output). See [harness engineering](../patterns/agent-design/harness-engineering.md) for how this constraint layer is built in practice.
 
 The engineer who thrives has not stopped caring about code quality — that same obsessive care now applies to the harness around the AI, not just the code it produces. Osmani draws the line sharply: agentic engineering is a professional discipline; vibe coding is not — and conflating the two accelerates the identity confusion ([Osmani: Agentic Engineering](https://addyosmani.com/blog/agentic-engineering/)).
 
@@ -173,6 +173,6 @@ The profession is not dying — it is differentiating. The deciding question is 
 - [Skill Atrophy](skill-atrophy.md) — detailed treatment of the cognitive offloading mechanism
 - [Rigor Relocation](rigor-relocation.md) — the pattern of discipline migrating from implementation to constraint design
 - [Bottleneck Migration](bottleneck-migration.md) — how AI shifts constraints rather than removing them
-- [Harness Engineering](../agent-design/harness-engineering.md) — building the verification layer around AI agents
-- [Vibe Coding](../anti-patterns/vibe-coding.md) — the workflow pattern where identity risks are highest
+- [Harness Engineering](../patterns/agent-design/harness-engineering.md) — building the verification layer around AI agents
+- [Vibe Coding](../patterns/anti-patterns/vibe-coding.md) — the workflow pattern where identity risks are highest
 - [Addictive Flow State of Agent-Assisted Development](addictive-flow-agent-development.md) — the psychological mechanisms driving compulsive engagement with AI tools

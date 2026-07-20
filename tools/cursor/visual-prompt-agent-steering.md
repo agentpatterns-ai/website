@@ -37,7 +37,7 @@ Three interaction shapes have shipped against AI coding harnesses, easy to confl
 |---|---|---|---|
 | Visual-prompt steering (this page) | Human → agent | Click / multi-select on running UI | Cursor Design Mode |
 | App-window snapshot | Human → agent (passive) | Hotkey capture of any window | Codex Appshots ([page](../../context-engineering/app-window-snapshot-context.md)) |
-| Interactive canvas output | Agent → human | Agent renders a chart or diagram | Cursor canvases, Claude Artifacts ([page](../../agent-design/interactive-canvas-outputs.md)) |
+| Interactive canvas output | Agent → human | Agent renders a chart or diagram | Cursor canvases, Claude Artifacts ([page](../../patterns/agent-design/interactive-canvas-outputs.md)) |
 
 They share a substrate but differ in direction and cost.
 
@@ -57,7 +57,7 @@ Spatial intent is a multi-dimensional referent that text encodes lossily. The du
 ## When this backfires
 
 - Non-spatial tasks. The visual surface has no referent for renaming a function, restructuring a query, or changing an algorithm — clicking is overhead.
-- Async or PR-bound review. The sketch does not travel into the pull request. Reviewers reconstruct intent from the diff, not the prompt, so the most expressive form of the instruction is lost — the same review-surface split the [Interactive Canvas Outputs page](../../agent-design/interactive-canvas-outputs.md) documents for outputs.
+- Async or PR-bound review. The sketch does not travel into the pull request. Reviewers reconstruct intent from the diff, not the prompt, so the most expressive form of the instruction is lost — the same review-surface split the [Interactive Canvas Outputs page](../../patterns/agent-design/interactive-canvas-outputs.md) documents for outputs.
 - Multimodal-reasoning failure regimes. For precise spatial reasoning — alignment, perspective, depth ordering — multimodal LLMs misread layout via the projection bottleneck, answering by semantic co-occurrence rather than the scene. Failures include instance merging and perspective-taking errors ([Spatial Reasoning in MLLMs, arxiv 2511.15722](https://arxiv.org/abs/2511.15722)).
 - Indirect prompt injection via the captured visual. Third-party content in the page (an ad, comments, a webview) can carry hidden adversarial text the MLLM treats as instructions. Image-based injection reaches up to 64% attack success under stealth constraints, and no tested defense fully eliminates it ([Image-based Prompt Injection, arxiv 2603.03637](https://arxiv.org/abs/2603.03637); [Multimodal prompt injection, arxiv 2509.05883](https://arxiv.org/html/2509.05883v1)).
 - Image-token budget pressure. Voice-narrated sequential edits stack viewport screenshots into one thread. Image tokens can dominate context before the agent reads its first instruction ([app-window snapshot — image-token cost](../../context-engineering/app-window-snapshot-context.md)).
@@ -97,6 +97,6 @@ The agent receives both elements' identity (component, computed styles, fiber-tr
 
 - [Cursor 3 Agents Window](agents-window.md) — the surface Design Mode lives inside; the original overlay shipped here in Cursor 3.0
 - [App-Window Snapshot as Agent Context](../../context-engineering/app-window-snapshot-context.md) — the passive-capture sibling: hotkey-bound window snapshot rather than intentional annotation
-- [Interactive Canvas Outputs](../../agent-design/interactive-canvas-outputs.md) — the agent-as-author variant of canvas interaction; same substrate, opposite direction
+- [Interactive Canvas Outputs](../../patterns/agent-design/interactive-canvas-outputs.md) — the agent-as-author variant of canvas interaction; same substrate, opposite direction
 - [Live Browser as Agent Context Channel](../../context-engineering/live-browser-context-channel.md) — the channel Design Mode uses to read the running app
 - [Prompt Injection Threat Model](../../security/prompt-injection-threat-model.md) — the indirect-injection surface multimodal capture opens

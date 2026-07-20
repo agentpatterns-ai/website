@@ -85,8 +85,8 @@ One caveat on that last context: routing maintenance back to agents does not mak
 
 ## Related
 
-- [Shadow Tech Debt](../anti-patterns/shadow-tech-debt.md) — the architectural-incoherence mechanism that produces issues agents do not return to fix
-- [Comprehension Debt](../anti-patterns/comprehension-debt.md) — the human-side mechanism for why developers avoid modifying code they did not author
+- [Shadow Tech Debt](../patterns/anti-patterns/shadow-tech-debt.md) — the architectural-incoherence mechanism that produces issues agents do not return to fix
+- [Comprehension Debt](../patterns/anti-patterns/comprehension-debt.md) — the human-side mechanism for why developers avoid modifying code they did not author
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — pre-merge counterpart: agents author at high volume but lower acceptance, and skew structurally simpler
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — review-side mechanism by which AI-authored work makes it through merge despite missing scope
 - [Predicting Reviewable Code](predicting-reviewable-code.md) — predictive signals for AI-generated functions likely to be deleted, complementary to maintenance-survival data

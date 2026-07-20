@@ -39,9 +39,9 @@ The right column is the same engineering instinct applied to a different surface
 
 ## Why environment beats prompts
 
-LangChain improved their coding agent from rank 30 to rank 5 on Terminal Bench 2.0 without changing the model. The changes were all [harness engineering](../agent-design/harness-engineering.md): [pre-completion checklists](../verification/pre-completion-checklists.md), [loop detection middleware](../observability/loop-detection.md), and structured verification ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
+LangChain improved their coding agent from rank 30 to rank 5 on Terminal Bench 2.0 without changing the model. The changes were all [harness engineering](../patterns/agent-design/harness-engineering.md): [pre-completion checklists](../verification/pre-completion-checklists.md), [loop detection middleware](../observability/loop-detection.md), and structured verification ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
-OpenAI shipped roughly one million lines of agent-written production code over five months using machine-readable documentation, mechanical architectural boundaries, and telemetry-driven iteration ([InfoQ](https://www.infoq.com/news/2026/02/openai-harness-engineering-codex/)) -- [agent-first software design](../agent-design/agent-first-software-design.md) at scale.
+OpenAI shipped roughly one million lines of agent-written production code over five months using machine-readable documentation, mechanical architectural boundaries, and telemetry-driven iteration ([InfoQ](https://www.infoq.com/news/2026/02/openai-harness-engineering-codex/)) -- [agent-first software design](../patterns/agent-design/agent-first-software-design.md) at scale.
 
 Better models increase infrastructure demands -- more autonomy needs better guardrails ([Lavaee](https://alexlavaee.me/blog/harness-engineering-why-coding-agents-need-infrastructure/)).
 
@@ -104,7 +104,7 @@ A linter rule catches a dependency violation every time, in every session, for e
 Rigor relocation has real costs. The scaffolding-first bet fails or pays off poorly in several conditions:
 
 - Scope too narrow: a single-task agent that runs once or twice does not recoup the investment in linters, CI guardrails, and verification pipelines. The overhead only pays off when agents run repeatedly across sessions.
-- Premature infrastructure lock-in: teams that build elaborate [harnesses](../agent-design/harness-engineering.md) before they understand the task topology often optimize for the wrong constraints. Changing prompts is faster than rewriting pipelines at early stages.
+- Premature infrastructure lock-in: teams that build elaborate [harnesses](../patterns/agent-design/harness-engineering.md) before they understand the task topology often optimize for the wrong constraints. Changing prompts is faster than rewriting pipelines at early stages.
 - Harness correctness burden: the harness itself can encode wrong invariants. A passing test suite that validates incorrect behavior is harder to debug than a failed prompt, because the failures become invisible rather than explicit.
 - Skill atrophy accelerates: mechanical enforcement reduces the need for engineers to reason about correctness directly, which compounds over time (see [Skill Atrophy](skill-atrophy.md)).
 
@@ -118,7 +118,7 @@ Rigor relocation has real costs. The scaffolding-first bet fails or pays off poo
 
 ## Related
 
-- [Harness Engineering](../agent-design/harness-engineering.md) -- the discipline of designing agent environments for reliable results
+- [Harness Engineering](../patterns/agent-design/harness-engineering.md) -- the discipline of designing agent environments for reliable results
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) -- deterministic enforcement over advisory instructions
 - [Enforcing Agent Behavior with Hooks](../instructions/enforcing-agent-behavior-with-hooks.md) -- implementing rigor relocation via deterministic shell hooks
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) -- verification gates before task completion

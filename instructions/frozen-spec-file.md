@@ -148,7 +148,7 @@ A frozen spec adds overhead that only pays off under specific conditions. Skip i
 
 - Requirements are genuinely exploratory. If the goal is discovery — figuring out what to build, not building a known thing — locking constraints early causes thrash. The [spec-driven development](../workflows/spec-driven-development.md) workflow only works when you know what done looks like.
 - Sessions are short enough that context does not compact. The re-read loop is the core benefit. For tasks that complete in a single context window, the spec provides no protection that a well-written system prompt does not already provide.
-- Scope changes are legitimate and frequent. A frozen spec becomes adversarial when stakeholders update requirements mid-session — without that churn, the spec is instead a guard against [objective drift](../anti-patterns/objective-drift.md). Agents blocked by an outdated constraint will either stall or find workarounds. Treat the spec as mutable — and accept the drift risk — when requirements are not stable enough to freeze.
+- Scope changes are legitimate and frequent. A frozen spec becomes adversarial when stakeholders update requirements mid-session — without that churn, the spec is instead a guard against [objective drift](../patterns/anti-patterns/objective-drift.md). Agents blocked by an outdated constraint will either stall or find workarounds. Treat the spec as mutable — and accept the drift risk — when requirements are not stable enough to freeze.
 
 ## Key Takeaways
 
@@ -161,7 +161,7 @@ A frozen spec adds overhead that only pays off under specific conditions. Skip i
 ## Related
 
 - [Spec-Driven Development](../workflows/spec-driven-development.md) — the writing workflow that produces the spec
-- [Objective Drift](../anti-patterns/objective-drift.md) — the failure mode a frozen spec prevents
+- [Objective Drift](../patterns/anti-patterns/objective-drift.md) — the failure mode a frozen spec prevents
 - [Trajectory Logging via Progress Files](../observability/trajectory-logging-progress-files.md) — mutable companion artifacts
 - [Feature List Files](feature-list-files.md) — structured feature tracking alongside specs
 - [Hooks Beat Prompts](hooks-vs-prompts.md) — why structural enforcement outperforms prompt instructions

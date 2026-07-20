@@ -77,4 +77,4 @@ Take Stulberg's PRD workflow. Press Shift+Tab twice to enter plan mode. The agen
 - [Plan mode](../../tools/claude/plan-mode.md) — the atomic workflow page
 - [Plan-first loop](../../workflows/plan-first-loop.md) — the iteration shape and its backfire conditions
 - [Strategy over code generation](../../human/strategy-over-code-generation.md) — why the author's leverage has shifted to the plan
-- [Critic agent plan review](../../agent-design/critic-agent-plan-review.md) — a different mechanism (dual-model review) for the same goal
+- [Critic agent plan review](../../patterns/agent-design/critic-agent-plan-review.md) — a different mechanism (dual-model review) for the same goal

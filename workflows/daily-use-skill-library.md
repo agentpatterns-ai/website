@@ -18,7 +18,7 @@ maturity: established
 
 ## The core problem: engineers with no memory
 
-AI agents have no persistent memory across sessions. Absent an explicit [agent-memory layer](../agent-design/agent-memory-patterns.md), they do not remember decisions made last week, patterns established last sprint, or the reasoning behind architectural choices. Each session starts cold.
+AI agents have no persistent memory across sessions. Absent an explicit [agent-memory layer](../patterns/agent-design/agent-memory-patterns.md), they do not remember decisions made last week, patterns established last sprint, or the reasoning behind architectural choices. Each session starts cold.
 
 So you must embed process in the tooling, not assume it from context. A general instruction file such as `CLAUDE.md` helps, but it does not force an agent through a specific sequence of decisions at the right moment. Purpose-built skills do.
 
@@ -38,7 +38,7 @@ graph LR
 
 ### /grill-me — reach shared understanding first
 
-A three-sentence skill that directs the agent to interview you relentlessly about a plan or design until every branch of the decision tree is resolved. One question at a time, with a recommended answer for each. The agent explores the codebase rather than asking questions the codebase can answer. See the [Grill Me technique](../agent-design/grill-me-technique.md) for the pattern in depth.
+A three-sentence skill that directs the agent to interview you relentlessly about a plan or design until every branch of the decision tree is resolved. One question at a time, with a recommended answer for each. The agent explores the codebase rather than asking questions the codebase can answer. See the [Grill Me technique](../patterns/agent-design/grill-me-technique.md) for the pattern in depth.
 
 The design-tree framing — walking every branch before implementation — prevents the most expensive failure mode: building the wrong thing because an important assumption went unexamined. Pocock's [grill-me SKILL.md](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) is only three sentences long.
 
@@ -68,7 +68,7 @@ This skill closes the feedback loop: better architecture reduces the context bur
 
 The grill-me skill is three sentences. It works because it fires at the right moment (before implementation begins) and enforces the right constraint (resolve every decision branch). Longer is not better.
 
-Skill design questions (the [grill-me skill](../agent-design/grill-me-technique.md) passes all three):
+Skill design questions (the [grill-me skill](../patterns/agent-design/grill-me-technique.md) passes all three):
 
 - What decision point does this skill address?
 - What would the agent do without it that it should not?

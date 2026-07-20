@@ -158,10 +158,10 @@ The context handoff chain: CLI diff → IDE commit → GitHub PR → `@copilot` 
 ## Related
 
 - [The Plan-First Loop: Design Before Code](plan-first-loop.md)
-- [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md)
-- [Agent-Driven Greenfield](../workflows/agent-driven-greenfield.md)
-- [Agent Environment Bootstrapping](../workflows/agent-environment-bootstrapping.md)
-- [Agent Harness](../agent-design/agent-harness.md)
+- [Parallel Agent Sessions](parallel-agent-sessions.md)
+- [Agent-Driven Greenfield](agent-driven-greenfield.md)
+- [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
+- [Agent Harness](../patterns/agent-design/agent-harness.md)
 - [Context Priming](../context-engineering/context-priming.md)
-- [Cloud-Local Agent Handoff](../workflows/cloud-local-agent-handoff.md)
+- [Cloud-Local Agent Handoff](cloud-local-agent-handoff.md)
 - [Cross-Tool Translation](../human/cross-tool-translation.md)

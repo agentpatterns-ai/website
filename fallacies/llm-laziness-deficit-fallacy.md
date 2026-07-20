@@ -29,7 +29,7 @@ The fallacy is the response: add "be concise" or "write minimum code" to the sys
 
 ## Why instruction alone fails
 
-Attitude instructions have a documented backfire mode. Cursor found that telling a Codex agent to "preserve tokens" made it refuse substantive work rather than work more cheaply ([Cursor](https://cursor.com/blog/codex-model-harness)). See [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md).
+Attitude instructions have a documented backfire mode. Cursor found that telling a Codex agent to "preserve tokens" made it refuse substantive work rather than work more cheaply ([Cursor](https://cursor.com/blog/codex-model-harness)). See [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md).
 
 Empirical signal without restraint gates:
 
@@ -79,15 +79,15 @@ The same agent hits the 400-line cap on the first attempt, splits the change, an
 
 - Human laziness is produced by time scarcity; LLMs have no equivalent cost function, so instruction alone cannot reproduce it.
 - Attitude prompts like "be concise" either do nothing or backfire by changing *whether* the agent works, not *how*.
-- Restraint that binds is objective and external — [harness-engineered](../agent-design/harness-engineering.md) diff-size caps, complexity budgets, deletion targets, review gates.
+- Restraint that binds is objective and external — [harness-engineered](../patterns/agent-design/harness-engineering.md) diff-size caps, complexity budgets, deletion targets, review gates.
 - Gates are not universal — exploratory harness calls, known-growth systems, and small single-author projects have different constraints.
 
 ## Related
 
-- [Abstraction Bloat](../anti-patterns/abstraction-bloat.md) — the observable output pattern this fallacy explains
-- [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — why naive efficiency instructions make agents do less, not better
-- [Effortless AI Fallacy](../anti-patterns/effortless-ai-fallacy.md) — the adjacent belief that AI should work without effort
-- [Harness Engineering](../agent-design/harness-engineering.md) — the environment-design frame for agent constraints
+- [Abstraction Bloat](../patterns/anti-patterns/abstraction-bloat.md) — the observable output pattern this fallacy explains
+- [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — why naive efficiency instructions make agents do less, not better
+- [Effortless AI Fallacy](../patterns/anti-patterns/effortless-ai-fallacy.md) — the adjacent belief that AI should work without effort
+- [Harness Engineering](../patterns/agent-design/harness-engineering.md) — the environment-design frame for agent constraints
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — mechanical enforcement of constraints prompts cannot hold
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — when to mechanise a constraint
 - [Instruction Polarity](../instructions/instruction-polarity.md) — positive constraints over negative attitude rules

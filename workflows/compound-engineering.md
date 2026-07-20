@@ -17,7 +17,7 @@ maturity: adopted
 
 ## The core idea
 
-Most agent workflows treat each task as independent. You prompt, the agent builds, you review, you ship. The next task starts from scratch with no [memory](../agent-design/agent-memory-patterns.md) of what went wrong or what worked.
+Most agent workflows treat each task as independent. You prompt, the agent builds, you review, you ship. The next task starts from scratch with no [memory](../patterns/agent-design/agent-memory-patterns.md) of what went wrong or what worked.
 
 Compound engineering breaks this. It adds a deliberate Compound step after every feature cycle. You capture bugs, performance issues, novel approaches, and architectural decisions as prompts that prime future agent sessions. Over time, the system builds up institutional knowledge, the equivalent of a senior engineer's experience encoded in the repository itself.
 
@@ -114,9 +114,9 @@ graph TD
     F2C -.->|accumulated learnings| FN
 ```
 
-Here is the mechanism. Every bug caught in Assess and then encoded in Compound makes [tacit knowledge explicit](../anti-patterns/implicit-knowledge-problem.md), so it cannot recur. Every architectural decision you record means the next agent session does not have to rediscover it. New team members, and new agent sessions, inherit the equivalent of senior engineer knowledge from their first interaction.
+Here is the mechanism. Every bug caught in Assess and then encoded in Compound makes [tacit knowledge explicit](../patterns/anti-patterns/implicit-knowledge-problem.md), so it cannot recur. Every architectural decision you record means the next agent session does not have to rediscover it. New team members, and new agent sessions, inherit the equivalent of senior engineer knowledge from their first interaction.
 
-This is the same principle described in [agent memory patterns](../agent-design/agent-memory-patterns.md) (persistence across sessions), the [implicit knowledge problem](../anti-patterns/implicit-knowledge-problem.md) (making tacit knowledge explicit), and [encoding tacit knowledge into agent improvement loops](encoding-tacit-knowledge.md) (active elicitation and encoding). The difference is that compound engineering applies it as a systematic workflow rather than an ad-hoc practice.
+This is the same principle described in [agent memory patterns](../patterns/agent-design/agent-memory-patterns.md) (persistence across sessions), the [implicit knowledge problem](../patterns/anti-patterns/implicit-knowledge-problem.md) (making tacit knowledge explicit), and [encoding tacit knowledge into agent improvement loops](encoding-tacit-knowledge.md) (active elicitation and encoding). The difference is that compound engineering applies it as a systematic workflow rather than an ad-hoc practice.
 
 ## Learnings as prompts
 
@@ -154,9 +154,9 @@ Compound engineering is a workflow that orchestrates patterns already documented
 | Phase | Orchestrated pattern |
 |-------|---------------------|
 | Plan | [Plan-first loop](plan-first-loop.md), [rigor relocation](../human/rigor-relocation.md) |
-| Work | [Agent harness](../agent-design/agent-harness.md), MCP-driven tool use |
+| Work | [Agent harness](../patterns/agent-design/agent-harness.md), MCP-driven tool use |
 | Assess | [Committee review](../code-review/committee-review-pattern.md), [agent self-review loop](../code-review/agent-self-review-loop.md) |
-| Compound | [Agent memory patterns](../agent-design/agent-memory-patterns.md), [implicit knowledge capture](../anti-patterns/implicit-knowledge-problem.md) |
+| Compound | [Agent memory patterns](../patterns/agent-design/agent-memory-patterns.md), [implicit knowledge capture](../patterns/anti-patterns/implicit-knowledge-problem.md) |
 
 The value is not in any individual pattern. It is in the closed loop that connects them. Without the Compound step, learnings from Assess evaporate between sessions. Without a structured Plan, agents build against incomplete context. The closed loop is what turns isolated patterns into cumulative improvement.
 
@@ -180,9 +180,9 @@ Compound engineering needs sustained discipline across all four phases. Several 
 
 - [Plan-First Loop](plan-first-loop.md)
 - [Committee Review Pattern](../code-review/committee-review-pattern.md)
-- [Agent Memory Patterns](../agent-design/agent-memory-patterns.md)
-- [Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md)
+- [Agent Memory Patterns](../patterns/agent-design/agent-memory-patterns.md)
+- [Implicit Knowledge Problem](../patterns/anti-patterns/implicit-knowledge-problem.md)
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
-- [Agentic Flywheel](../agent-design/agentic-flywheel.md)
+- [Agentic Flywheel](../patterns/agent-design/agentic-flywheel.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Encoding Tacit Knowledge](encoding-tacit-knowledge.md)

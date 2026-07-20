@@ -59,7 +59,7 @@ Deep call hierarchies force agents to traverse many files per task. Flat call ch
 
 ### 4. File splitting
 
-Human cognitive limits drive the convention of keeping files small. Agents do not share this limit, but they do pay a navigation cost per file. Let deployment boundaries and logical cohesion drive [file organization](../agent-design/agent-first-software-design.md), not human screen capacity.
+Human cognitive limits drive the convention of keeping files small. Agents do not share this limit, but they do pay a navigation cost per file. Let deployment boundaries and logical cohesion drive [file organization](../patterns/agent-design/agent-first-software-design.md), not human screen capacity.
 
 ### 5. SOLID principles
 
@@ -138,4 +138,4 @@ Semantic density optimization trades human ergonomics for agent performance. The
 - [Context Budget Allocation](context-budget-allocation.md) — distributing token budget across sources
 - [Prompt Compression](prompt-compression.md) — reducing instruction token count without semantic loss
 - [Context Compression Strategies](context-compression-strategies.md) — broader techniques for managing context size in long-running agents
-- [Agent-First Software Design](../agent-design/agent-first-software-design.md) — designing system interfaces for agent consumption; this page covers internal codebase conventions
+- [Agent-First Software Design](../patterns/agent-design/agent-first-software-design.md) — designing system interfaces for agent consumption; this page covers internal codebase conventions

@@ -87,7 +87,7 @@ Prioritize by agent risk, not business risk:
 | Route handlers | New features add or modify routes | High |
 | Service layer | Layer boundary violations concentrate here | High |
 | Data access / repositories | ORM and schema errors need integration tests | High |
-| Utilities and helpers | [Pattern replication](../../anti-patterns/pattern-replication-risk.md) — agents copy utilities ([GitClear, 2025](https://www.gitclear.com/ai_assistant_code_quality_2025_research)) | Medium |
+| Utilities and helpers | [Pattern replication](../../patterns/anti-patterns/pattern-replication-risk.md) — agents copy utilities ([GitClear, 2025](https://www.gitclear.com/ai_assistant_code_quality_2025_research)) | Medium |
 | Configuration loading | Subtle misuse needs test assertions | Medium |
 
 Cover the paths agents modify most before chasing edge cases.
@@ -214,14 +214,14 @@ If the agent still needs you to correct mechanical errors (wrong imports, types,
 The L1→L2 transition pays off, but it is not free. Three conditions make it a poor investment:
 
 - Large existing `any` surface: strict mode on a codebase with hundreds of implicit `any` types floods unrelated files with errors. Fix cost dwarfs the agent benefit until most are annotated. Start with `noImplicitAny` scoped to new files, then expand incrementally.
-- High-churn paths with low test stability: if integration tests on agent-critical paths break often from schema or environment drift, agents learn to ignore failing tests rather than treat them as a [backpressure](../../agent-design/agent-backpressure.md) signal. Stabilize the environment before you rely on tests as a feedback source.
+- High-churn paths with low test stability: if integration tests on agent-critical paths break often from schema or environment drift, agents learn to ignore failing tests rather than treat them as a [backpressure](../../patterns/agent-design/agent-backpressure.md) signal. Stabilize the environment before you rely on tests as a feedback source.
 - Monorepos with shared strict config: enabling strict mode in one package cascades errors into shared libraries used elsewhere. Coordinate across package owners, or use path-scoped tsconfig overrides to limit how far the errors spread.
 
 ---
 
 ## Key Takeaways
 
-- Agent autonomy scales with backpressure quality, not with model capability ([Anthropic](https://code.claude.com/docs/en/best-practices)). A codebase with strict types and meaningful test coverage on critical paths supplies the [backpressure](../../agent-design/agent-backpressure.md) that enables autonomous agent iteration. A codebase without them requires manual review of every output.
+- Agent autonomy scales with backpressure quality, not with model capability ([Anthropic](https://code.claude.com/docs/en/best-practices)). A codebase with strict types and meaningful test coverage on critical paths supplies the [backpressure](../../patterns/agent-design/agent-backpressure.md) that enables autonomous agent iteration. A codebase without them requires manual review of every output.
 - Linter messages are the best form of agent context: they fire at the exact moment and location of a violation. Write custom rules with actionable remediation messages.
 - Prioritize integration tests over mocked unit tests for agent-critical paths — the structural-verification finding LangChain reports from its Terminal Bench gains. They catch the errors agents actually make: ORM misuse, layer violations, transaction handling.
 - Pre-commit hooks are not optional. They are the gate that prevents the feedback loop from being bypassed. Without them, agents can commit and push non-compliant code that the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md) would otherwise catch at the commit boundary.
@@ -229,9 +229,9 @@ The L1→L2 transition pays off, but it is not free. Three conditions make it a 
 
 ## Related
 
-- [Agent Backpressure](../../agent-design/agent-backpressure.md) — the automated feedback loop pattern and the autonomy spectrum
-- [Codebase Readiness for Agents](../../agent-design/codebase-readiness.md) — the agent-hostile vs agent-friendly signal table
-- [Harness Engineering](../../agent-design/harness-engineering.md) — the full discipline these steps build toward
+- [Agent Backpressure](../../patterns/agent-design/agent-backpressure.md) — the automated feedback loop pattern and the autonomy spectrum
+- [Codebase Readiness for Agents](../../patterns/agent-design/codebase-readiness.md) — the agent-hostile vs agent-friendly signal table
+- [Harness Engineering](../../patterns/agent-design/harness-engineering.md) — the full discipline these steps build toward
 - [L0 → L1: Making the Repo Readable](level-0-to-1.md) — previous module
 - [L2 → L3: Building Mechanical Enforcement](level-2-to-3.md) — next module
 - [Brownfield to Agent-First: Repo Maturity Framework](index.md) — full L0–L5 framework overview

@@ -70,7 +70,7 @@ With a well-defined framework, the developer's work changes:
 | Debug each variation individually | Review generated variations for constraint adherence |
 | Linear scaling with feature count | Review-limited scaling |
 
-The bottleneck moves from implementation speed to review throughput. This pairs well with [parallel agent sessions](../workflows/parallel-agent-sessions.md) — multiple agents can generate different variations simultaneously, each working from the same constraint specification.
+The bottleneck moves from implementation speed to review throughput. This pairs well with [parallel agent sessions](parallel-agent-sessions.md) — multiple agents can generate different variations simultaneously, each working from the same constraint specification.
 
 ## Why it works
 
@@ -140,8 +140,8 @@ The diffs show only variation-specific logic differs — file structure, error h
 
 - [Example-Driven vs Rule-Driven Instructions](../instructions/example-driven-vs-rule-driven-instructions.md)
 - [The Specification as Prompt](../instructions/specification-as-prompt.md)
-- [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md)
-- [Oracle-Based Task Decomposition](../multi-agent/oracle-task-decomposition.md)
-- [Skeleton Projects as Scaffolding](../workflows/skeleton-projects-as-scaffolding.md)
-- [Spec-Driven Development](../workflows/spec-driven-development.md)
-- [Lay the Architectural Foundation by Hand Before Delegating](../workflows/architectural-foundation-first.md)
+- [Parallel Agent Sessions](parallel-agent-sessions.md)
+- [Oracle-Based Task Decomposition](../patterns/multi-agent/oracle-task-decomposition.md)
+- [Skeleton Projects as Scaffolding](skeleton-projects-as-scaffolding.md)
+- [Spec-Driven Development](spec-driven-development.md)
+- [Lay the Architectural Foundation by Hand Before Delegating](architectural-foundation-first.md)

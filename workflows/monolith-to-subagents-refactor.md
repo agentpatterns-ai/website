@@ -50,7 +50,7 @@ The monolith's primary failure mode is silent collapse: "If one sub-task failed 
 
 Split the workflow into named nodes, each with one responsibility. Titanium became Company Researcher → Search Planner → Case Study Researcher → Selector → Email Drafter. Each boundary is a failure seam: a step either succeeds under contract or raises, and the pipeline surfaces which step failed rather than which prompt.
 
-This is the sequential form of the split described in [Cognitive Reasoning vs Execution](../agent-design/cognitive-reasoning-execution-separation.md) — extend the two-layer seam to N nodes. For the per-node role design principles, see [Specialized Agent Roles](../agent-design/specialized-agent-roles.md).
+This is the sequential form of the split described in [Cognitive Reasoning vs Execution](../patterns/agent-design/cognitive-reasoning-execution-separation.md) — extend the two-layer seam to N nodes. For the per-node role design principles, see [Specialized Agent Roles](../patterns/agent-design/specialized-agent-roles.md).
 
 ### 2. Push structured outputs into the schema, not the prompt
 
@@ -80,7 +80,7 @@ See [Agent Observability in Practice](../observability/agent-observability-otel.
 
 Agentic loops burn tokens fast: "If an agent hits an error and continually retries a prompt without strict boundaries, it will burn through your token budget in minutes" ([Google](https://developers.googleblog.com/production-ready-ai-agents-5-lessons-from-refactoring-a-monolith/)). Hand-written try/catch/retry logic is both verbose and fragile — every bug in the retry handler is its own failure mode.
 
-Use the orchestration framework's built-in primitives: exponential backoff, timeout ceilings, configurable retry caps. ADK provides these; LangChain's runnable retries, Anthropic SDK's built-in retries, and dedicated circuit-breaker libraries cover the same ground. See [Agent Circuit Breaker](../agent-design/agent-circuit-breaker.md) for the pattern and [Self-Healing Production Agent](../agent-design/self-healing-production-agent.md) for complementary recovery strategies.
+Use the orchestration framework's built-in primitives: exponential backoff, timeout ceilings, configurable retry caps. ADK provides these; LangChain's runnable retries, Anthropic SDK's built-in retries, and dedicated circuit-breaker libraries cover the same ground. See [Agent Circuit Breaker](../patterns/agent-design/agent-circuit-breaker.md) for the pattern and [Self-Healing Production Agent](../patterns/agent-design/self-healing-production-agent.md) for complementary recovery strategies.
 
 ## Trade-offs
 
@@ -106,11 +106,11 @@ The refactor is not free. Adopting a framework, designing schemas, wiring OTel, 
 
 ## Related
 
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent](../agent-design/cognitive-reasoning-execution-separation.md) — the foundational split this workflow extends to N sequential nodes
+- [Cognitive Reasoning vs Execution: A Two-Layer Agent](../patterns/agent-design/cognitive-reasoning-execution-separation.md) — the foundational split this workflow extends to N sequential nodes
 - [Structured Output Constraints](../verification/structured-output-constraints.md) — why schema-first outputs reduce hallucination surface
 - [Agent Observability in Practice](../observability/agent-observability-otel.md) — concrete OTel setup for production agents
-- [Agent Circuit Breaker](../agent-design/agent-circuit-breaker.md) — loop-boundary pattern for the fifth step
-- [Self-Healing Production Agent](../agent-design/self-healing-production-agent.md) — complementary recovery patterns for production pipelines
+- [Agent Circuit Breaker](../patterns/agent-design/agent-circuit-breaker.md) — loop-boundary pattern for the fifth step
+- [Self-Healing Production Agent](../patterns/agent-design/self-healing-production-agent.md) — complementary recovery patterns for production pipelines
 - [Prototype Before Optimizing](prototype-before-optimizing.md) — when to defer optimization constraints during the prototype phase
 - [The 7 Phases of AI-Assisted Feature Development](7-phases-ai-development.md) — where prototype-to-production refactors fit in the broader feature lifecycle
 - [Eval-Driven Development](eval-driven-development.md) — define the success criteria this refactor needs to preserve across the migration

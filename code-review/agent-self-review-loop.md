@@ -77,7 +77,7 @@ For agents without built-in self-review:
 
 ## Limitations
 
-Confirmation bias. An agent that reviews its own output in the same context tends to validate the same assumptions it made during generation. This is structurally less independent than cross-agent or cross-model review, because a single-context reviewer shares the same training biases and blind spots as the generator. The pattern is simpler to run and faster than coordinating separate reviewers, at the cost of that independence. When you add an external LLM reviewer, a separate failure mode applies: LLMs systematically flag correct code as non-compliant, and adding explanation requirements worsens the false positive rate. See [LLM Code Review Overcorrection](../anti-patterns/llm-review-overcorrection.md).
+Confirmation bias. An agent that reviews its own output in the same context tends to validate the same assumptions it made during generation. This is structurally less independent than cross-agent or cross-model review, because a single-context reviewer shares the same training biases and blind spots as the generator. The pattern is simpler to run and faster than coordinating separate reviewers, at the cost of that independence. When you add an external LLM reviewer, a separate failure mode applies: LLMs systematically flag correct code as non-compliant, and adding explanation requirements worsens the false positive rate. See [LLM Code Review Overcorrection](../patterns/anti-patterns/llm-review-overcorrection.md).
 
 Scope ceiling. Self-review catches mechanical issues: style, known vulnerability patterns, and dependency problems. It does not catch architectural misjudgments, incorrect business logic, or design problems that need domain knowledge beyond the agent's context.
 
@@ -153,8 +153,8 @@ The agent parses each JSON output and fixes findings before the PR opens. If fin
 - [Review-Then-Implement Loop](review-then-implement-loop.md)
 - [Committee Review Pattern](committee-review-pattern.md) — cross-agent alternative where independent reviewers evaluate an implementer's output
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
+- [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md)
 - [Convergence Detection](../loop-engineering/convergence-detection.md) — deciding when self-review iterations have stopped surfacing new issues
 - [Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md) — accumulated vs fresh context tradeoffs across iteration loops
-- [Agent Harness](../agent-design/agent-harness.md) — the initializer + coding agent pattern that self-review integrates into as a built-in phase
+- [Agent Harness](../patterns/agent-design/agent-harness.md) — the initializer + coding agent pattern that self-review integrates into as a built-in phase
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)

@@ -85,7 +85,7 @@ The artefact pattern has specific failure conditions. Prefer the interactive Q&A
 - Rapidly-changing [greenfield codebases](agent-driven-greenfield.md) — the artefact is stale before the next teammate arrives. Live Q&A works better because it reflects current code.
 - Teams without review discipline — unreviewed generated guides become a hallucination vector. Agents fabricate file paths and invent architectural rationale. The Claude Code best-practices guide warns that over-specified auto-generated docs make agents "ignore half of it because important rules get lost in the noise," and the same noise confuses humans ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)).
 - Codebases dominated by tacit knowledge — the agent reads only what is in the repo. It cannot extract judgments that live in senior engineers' heads. The artefact will look complete while missing the conventions that actually matter. Pair with [encoding tacit knowledge](encoding-tacit-knowledge.md) rather than relying on synthesis alone.
-- Over-reliance that deepens comprehension debt — if newcomers read only the artefact and never look at the source, [comprehension debt](../anti-patterns/comprehension-debt.md) builds up. Treat the guide as a map, not a substitute for the terrain.
+- Over-reliance that deepens comprehension debt — if newcomers read only the artefact and never look at the source, [comprehension debt](../patterns/anti-patterns/comprehension-debt.md) builds up. Treat the guide as a map, not a substitute for the terrain.
 
 ## Review discipline
 
@@ -132,5 +132,5 @@ When that teammate starts, the agent regenerates the guide once more and the tea
 - [Continuous Documentation](continuous-documentation.md) — the broader drift-detection pipeline the ramp-up guide can plug into
 - [Getting Started with Instruction Files](../instructions/getting-started-instruction-files.md) — CLAUDE.md and AGENTS.md are sibling artefacts to the ramp-up guide
 - [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md) — the reader-side skill the guide accelerates
-- [Comprehension Debt](../anti-patterns/comprehension-debt.md) — the primary failure mode when newcomers substitute the guide for code reading
+- [Comprehension Debt](../patterns/anti-patterns/comprehension-debt.md) — the primary failure mode when newcomers substitute the guide for code reading
 - [Three Knowledge Tiers](../instructions/three-knowledge-tiers.md) — how the ramp-up guide fits alongside hot, warm, and cold knowledge

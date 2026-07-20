@@ -89,7 +89,7 @@ A developer routes VS Code chat through a local vLLM server running a 70B model.
 - [Context-Usage Attribution: Per-Source Breakdown of Agent Context](context-usage-attribution.md) — the source-level sibling cut of the same usage telemetry
 - [Per-Plugin Token-Cost Attribution](plugin-token-cost-attribution.md) — per-component split of the same usage counts on a different axis
 - [Cost-Aware Tracing via Skill Distillation](cost-aware-tracing-skill-distillation.md) — downstream consumer turning per-step USD cost into actionable feedback
-- [Gateway Model Routing](../agent-design/gateway-model-routing.md) — the BYOK routing surface this page makes observable
+- [Gateway Model Routing](../patterns/agent-design/gateway-model-routing.md) — the BYOK routing surface this page makes observable
 - [Copilot CLI BYOK and Local Model Support](../tools/copilot/copilot-cli-byok-local-models.md) — comparable BYOK pattern in a different harness
 - [Copilot vs Claude Billing Semantics](../human/copilot-vs-claude-billing-semantics.md) — the billing-side counterpart to in-IDE token visibility
 - [Centralized LLM Gateway for Per-Dimension Agent Budgets](llm-gateway-per-dimension-budgets.md) — the fleet-wide enforcement layer that caps the per-route spend this page surfaces

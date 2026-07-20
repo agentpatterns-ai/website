@@ -44,7 +44,7 @@ Failures route back to an earlier stage. A blocked implementer means the plan wa
 ## Orchestrators versus workers
 
 - Orchestrators need condensed summaries — enough to route and decompose tasks. File contents waste attention on decisions they do not make.
-- Workers ([sub-agents](../multi-agent/sub-agents-fan-out.md)) need targeted, granular information — the exact files they will edit, the validation commands that confirm correctness, nothing adjacent.
+- Workers ([sub-agents](../patterns/multi-agent/sub-agents-fan-out.md)) need targeted, granular information — the exact files they will edit, the validation commands that confirm correctness, nothing adjacent.
 
 Give both agents the same context bundle and they tend to drift: orchestrators get distracted by implementation details, and workers carry planning artifacts that crowd out actionable context. Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) makes this split explicit: the lead agent coordinates and decomposes, while each subagent "needs an objective, an output format, guidance on the tools and sources to use, and clear task boundaries" — role-specific context rather than a shared bundle.
 
@@ -78,7 +78,7 @@ Over long sequences, agents drift from their objective. Two mechanisms counterac
 
 ## Harness engineering
 
-The environment — repo structure, tests, linters — shapes what context is useful. When an agent struggles, identify what context was missing for that phase and add it to the orchestration layer, not the agent's system prompt. See [Harness Engineering](../agent-design/harness-engineering.md).
+The environment — repo structure, tests, linters — shapes what context is useful. When an agent struggles, identify what context was missing for that phase and add it to the orchestration layer, not the agent's system prompt. See [Harness Engineering](../patterns/agent-design/harness-engineering.md).
 
 ## Claude Code native implementation
 
@@ -166,8 +166,8 @@ Each agent operates with under 3,000 tokens of input context; none receives the 
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Context Budget Allocation](context-budget-allocation.md)
 - [Layered Context Architecture](layered-context-architecture.md)
-- [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md)
-- [Harness Engineering](../agent-design/harness-engineering.md)
+- [Sub-Agents Fan-Out](../patterns/multi-agent/sub-agents-fan-out.md)
+- [Harness Engineering](../patterns/agent-design/harness-engineering.md)
 - [Context Engineering](context-engineering.md)
 - [Treat Task Scope as a Security Boundary](../security/task-scope-security-boundary.md) — scoping each phase's context also limits injection attack surface
 - [Conversation Registers](conversation-registers.md) — the human-facing counterpart: naming your interaction mode and resetting context when it changes

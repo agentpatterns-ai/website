@@ -12,9 +12,10 @@ applies_to: "claude-code@2.x"
 last_reviewed: 2026-05-27
 status: current
 ---
+
 # Plugin Background Monitors: Declarative Supervision Auto-Armed at Session Start
 
-> Plugins declare a top-level `monitors` manifest key; Claude Code arms each monitor automatically at session start or on skill invoke for the lifetime of the session.
+> Plugins declare a top-level `monitors` manifest key; Claude Code arms each monitor at session start or on skill invoke for the lifetime of the session.
 
 Plugin-declared background monitors landed in Claude Code v2.1.105: "Added background monitor support for plugins via a top-level `monitors` manifest key that auto-arms at session start or on skill invoke" ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The plugin author ships the watcher; the harness arms it. Consumers do not write boilerplate to register supervision.
 
@@ -145,7 +146,7 @@ A consumer installs the plugin once. Every subsequent session arms the watcher a
 - [Monitor Tool: Event Streaming from Background Scripts](monitor-tool.md)
 - [Hooks and Lifecycle](hooks-lifecycle.md)
 - [Hooks and Lifecycle Events](../../tool-engineering/hooks-lifecycle-events.md)
-- [Session Initialization Ritual](../../agent-design/session-initialization-ritual.md)
+- [Session Initialization Ritual](../../patterns/agent-design/session-initialization-ritual.md)
 - [Session Scheduling](session-scheduling.md)
 - [Plugin and Extension Packaging](../../standards/plugin-packaging.md)
 - [Extension Points](extension-points.md)

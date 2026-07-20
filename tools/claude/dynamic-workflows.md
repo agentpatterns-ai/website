@@ -89,7 +89,7 @@ Claude writes the orchestration script, the approval prompt shows the planned ph
 
 - [Sub-Agents](sub-agents.md)
 - [Claude Code Agent Teams](agent-teams.md)
-- [Deterministic Orchestration for Structured Modernization](../../agent-design/deterministic-orchestration-structured-modernization.md)
-- [Orchestrator-Worker Pattern for AI Agent Development](../../multi-agent/orchestrator-worker.md)
-- [Sub-Agents for Fan-Out Research and Context Isolation](../../multi-agent/sub-agents-fan-out.md)
+- [Deterministic Orchestration for Structured Modernization](../../patterns/agent-design/deterministic-orchestration-structured-modernization.md)
+- [Orchestrator-Worker Pattern for AI Agent Development](../../patterns/multi-agent/orchestrator-worker.md)
+- [Sub-Agents for Fan-Out Research and Context Isolation](../../patterns/multi-agent/sub-agents-fan-out.md)
 - [Claude Code Feature Flags and Environment Variables](feature-flags.md)

@@ -101,5 +101,5 @@ Now the user has a fast check (does the metric definition match what finance use
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md) — the upstream version: define evaluable success criteria before code, so the artifact ships with verification surface.
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — outcome grading works because the product exposes a checkable final state; the same design move at the eval layer.
 - [Generative Provenance Records for Tool-Using Agents](generative-provenance-records.md) — the deterministic version of "show where each part came from," structured for machine verification.
-- [The Prompt Tinkerer Anti-Pattern in Agent Workflows](../anti-patterns/prompt-tinkerer.md) — the related anti-pattern of fixing scoring or instruction debt instead of the underlying product or structural gap.
+- [The Prompt Tinkerer Anti-Pattern in Agent Workflows](../patterns/anti-patterns/prompt-tinkerer.md) — the related anti-pattern of fixing scoring or instruction debt instead of the underlying product or structural gap.
 - [Evaluator Templates: Portable Primitives for Agent Eval Suites](evaluator-templates.md) — generic scoring templates only carry so far; domain quality still needs the verifiable units this page argues for.

@@ -32,13 +32,13 @@ George Polya's problem-solving framework from '[How to Solve It](https://en.wiki
 | Understand the problem | Formulate the problem precisely before prompting. Ask AI: "What are the constraints here?" not "Write me a solution." |
 | Devise a plan | Outline an approach with AI as a sounding board. "What algorithm would you use for this and why?" before requesting any code. |
 | Carry out the plan | Execute 1–2 logical steps at a time with immediate feedback — run, test, or verify before proceeding. |
-| Look back | Review what was produced. If you cannot [explain every line you commit](../anti-patterns/comprehension-debt.md), that is your signal to ask for an explanation or rewrite it yourself. |
+| Look back | Review what was produced. If you cannot [explain every line you commit](../patterns/anti-patterns/comprehension-debt.md), that is your signal to ask for an explanation or rewrite it yourself. |
 
 The discipline is explicit about the fourth step: comprehension is the exit gate. Code you cannot explain does not get committed.
 
 ## Why small steps
 
-Working in small increments is not just about catching errors early. It keeps the developer's mental model current with the codebase. Large-batch generation produces output faster than review speed — the [velocity-comprehension gap](../anti-patterns/comprehension-debt.md) that accumulates comprehension debt. This tracks a core result from [cognitive load theory](https://journals.sagepub.com/doi/10.1177/0963721420922183): working memory is bounded, so learners build durable schemas when new material arrives in chunks small enough to process — not when it arrives faster than it can be integrated.
+Working in small increments is not just about catching errors early. It keeps the developer's mental model current with the codebase. Large-batch generation produces output faster than review speed — the [velocity-comprehension gap](../patterns/anti-patterns/comprehension-debt.md) that accumulates comprehension debt. This tracks a core result from [cognitive load theory](https://journals.sagepub.com/doi/10.1177/0963721420922183): working memory is bounded, so learners build durable schemas when new material arrives in chunks small enough to process — not when it arrives faster than it can be integrated.
 
 Small steps also expose reasoning gaps: a gap in a 3-line function is recoverable; the same gap across 200 lines of generated code is structural.
 
@@ -78,7 +78,7 @@ The discipline has a cost: it is slower than pure delegation for tasks where com
 
 - Boilerplate and scaffolding — repeated structural patterns where the approach is known and the cost of error is low.
 - Permutation work — generating variants of a proven pattern across multiple files.
-- Throwaway scripts — one-off tooling where you discard and rewrite rather than maintain ([vibe coding](../anti-patterns/vibe-coding.md) is appropriate here).
+- Throwaway scripts — one-off tooling where you discard and rewrite rather than maintain ([vibe coding](../patterns/anti-patterns/vibe-coding.md) is appropriate here).
 
 The distinction: does comprehension of this specific code matter for your ability to debug, extend, or supervise it later? If yes, small steps. If no, delegate freely.
 
@@ -92,7 +92,7 @@ Delegation mode (scores below 40%):
 Prompt: "Write an async API client with rate limiting using asyncio semaphore"
 ```
 
-The agent produces 60 lines. Tests pass. The developer [commits without reading](../anti-patterns/vibe-coding.md). Three days later the rate limiter behaves unexpectedly under burst load. They cannot debug it without asking the agent — paying off comprehension debt with more debt.
+The agent produces 60 lines. Tests pass. The developer [commits without reading](../patterns/anti-patterns/vibe-coding.md). Three days later the rate limiter behaves unexpectedly under burst load. They cannot debug it without asking the agent — paying off comprehension debt with more debt.
 
 Small-steps mode (scores 65%+):
 
@@ -128,9 +128,9 @@ At commit time, the developer can explain every line. When burst behavior appear
 ## Related
 
 - [Skill Atrophy](skill-atrophy.md) — cumulative capability loss when delegation mode becomes the default
-- [Comprehension Debt](../anti-patterns/comprehension-debt.md) — structural gap between agent-produced code and developer understanding
+- [Comprehension Debt](../patterns/anti-patterns/comprehension-debt.md) — structural gap between agent-produced code and developer understanding
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — empirical evidence that experienced developers plan and validate rather than delegate
-- [Vibe Coding](../anti-patterns/vibe-coding.md) — the opposite workflow: appropriate for low-risk, throwaway contexts
+- [Vibe Coding](../patterns/anti-patterns/vibe-coding.md) — the opposite workflow: appropriate for low-risk, throwaway contexts
 - [Process Amplification](process-amplification.md) — strong engineering practices scale with agents; this discipline is one such practice
 - [Strategy Over Code Generation](strategy-over-code-generation.md) — prioritizing understanding of the problem over speed of output
 - [Deliberate AI-Assisted Learning](deliberate-ai-learning.md) — structured approach to accelerating skill acquisition without comprehension loss
