@@ -10,7 +10,7 @@ tags:
   - loop-engineering
   - testing-verification
   - tool-agnostic
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-20
 maturity: emerging
 ---
 
@@ -54,7 +54,7 @@ The verification loop runs the code, observes a failure, passes the error back, 
 
 The outer loop iterates plan → act → verify across many turns. For tasks with a deterministic test harness, the verification loop is enough: tests pass, stop. For prose, specs, design documents, and partly-specified code tasks, no machine-checkable gate exists. So the outer loop needs convergence signals — change velocity, output size, content similarity — to decide when further passes yield diminishing returns ([Convergence Detection](convergence-detection.md), drawing on [Madaan et al., Self-Refine](https://arxiv.org/abs/2303.17651)).
 
-The outer loop's failure mode is progress that does not converge: the diff between consecutive turns stays large, the agent alternates between two trade-offs, or the output grows each turn. Lee et al.'s RefineBench found that self-refinement without an external check gains only +1.8 percentage points over five iterations on frontier models, and that models routinely halt early under overconfidence ([RefineBench, 2025](https://arxiv.org/abs/2511.22173)). So the outer loop needs external checks or convergence signals, not the model's own confidence.
+The outer loop's failure mode is progress that does not converge: the diff between consecutive turns stays large, the agent alternates between two trade-offs, or the output grows each turn. Lee et al.'s RefineBench found that self-refinement without an external check gains only +1.8 percentage points over five iterations on frontier models, and that models routinely halt early under overconfidence ([RefineBench, 2025](https://arxiv.org/abs/2511.22173)). So the outer loop needs external checks or convergence signals, not the model's own confidence. Addy Osmani makes the human the external check: loop engineering means owning the outer loop, keeping a person at its boundary to hold the stop decision rather than delegating convergence to the agent ([Addy Osmani — Own the Outer Loop](https://addyo.substack.com/p/own-the-outer-loop)).
 
 ## How the loops nest
 
@@ -130,6 +130,7 @@ The same session showed three failures across three different loops, each with a
 - [The Agent Loop Problem: When Smart Won't Stop](https://medium.com/@Modexa/the-agent-loop-problem-when-smart-wont-stop-ccbf8489180f), Modexa (2026) — runaway-token failure mode of the inner tool loop
 - Lee et al. [RefineBench: Evaluating Refinement Capability of Language Models via Checklists](https://arxiv.org/abs/2511.22173) (2025) — outer-loop convergence under self-refinement is unreliable on frontier models
 - Madaan et al. [Self-Refine: Iterative Refinement with Self-Feedback](https://arxiv.org/abs/2303.17651) (2023) — quantitative stopping criteria for the outer loop
+- Osmani, A. [Own the Outer Loop](https://addyo.substack.com/p/own-the-outer-loop) — loop engineering keeps a human at the boundary of the outer convergence loop to hold the stop decision
 
 ## Related
 

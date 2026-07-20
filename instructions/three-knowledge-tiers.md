@@ -62,7 +62,7 @@ The second mechanism is audit-surface concentration. Inline hedges like "the mod
 An agent writing a technical summary applies the three tiers inline. The passage below shows Tier 1 (cited), Tier 2 (marked `[unverified]`), and the resulting Unverified Claims section that an editor audits separately.
 
 ```markdown
-## Summary
+## Claude 3.5 Sonnet capabilities
 
 Claude 3.5 Sonnet achieves a 49% solve rate on SWE-bench Verified
 ([source](https://www.anthropic.com/news/claude-3-5-sonnet)), making it

@@ -1,0 +1,19 @@
+{
+  "name": "ai.agentpatterns/search",
+  "title": "Agent Patterns Search",
+  "description": "Natural-language search over the agentpatterns.ai documentation corpus, served by Cloudflare AI Search. Tools return relevant documentation chunks with source URLs.",
+  "version": "1.0.0",
+  "websiteUrl": "https://agentpatterns.ai",
+  "serverInfo": { "name": "Cloudflare AI Search", "version": "1.0.0" },
+  "capabilities": { "tools": { "listChanged": true } },
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://024a397e-1bb1-47a1-a5c6-ba5914b1d289.search.ai.cloudflare.com/mcp"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://024a397e-1bb1-47a1-a5c6-ba5914b1d289.search.ai.cloudflare.com/mcp"
+    }
+  ]
+}

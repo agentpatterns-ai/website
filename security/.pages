@@ -53,6 +53,7 @@ nav:
       - always-on-pr-security-review.md
       - scanner-as-mcp-server.md
       - cross-repository-security-posture.md
+      - structural-safeguard-monitoring.md
   - action-selector-pattern.md
   - adaptive-evaluation-out-of-band-defenses.md
   - agent-authored-message-rendered-image-exfiltration.md

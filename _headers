@@ -40,6 +40,20 @@
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
+# Agent discovery (RFC 8288): the homepage advertises its machine-readable
+# surfaces — the markdown twin of the page itself (rel=alternate, emitted by
+# hooks/agent_readiness.py) and the llms.txt corpus index (rel=describedby).
+# Registered relation types only; per-page Link headers are not possible here
+# (_headers values cannot interpolate the request path).
+/
+  Link: </index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
+
+# Well-known discovery documents (agent-skills index): an hour, like the
+# other machine-readable indexes below.
+/.well-known/*
+  ! Cache-Control
+  Cache-Control: public, max-age=3600
+
 # Feeds and machine-readable indexes: an hour.
 /feed.xml
   ! Cache-Control

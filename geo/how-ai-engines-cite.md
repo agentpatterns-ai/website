@@ -11,7 +11,7 @@ aliases:
   - "AI citation behavior"
   - "how LLMs cite sources"
   - "AI engine citation mechanics"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-07-20
 maturity: established
 ---
 
@@ -78,10 +78,16 @@ Most AI crawlers cannot render JavaScript — only Googlebot, Applebot, and Bing
 ## What drives citation across all platforms
 
 - Brand search volume — strongest cross-platform predictor (0.334 correlation), outperforming backlink metrics ([The Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/))
-- Content freshness — AI bots heavily target recent content, so older pages drop off across all platforms
+- Content freshness — AI-cited URLs run 25.7% fresher than organic search results, so older pages drop off across all platforms ([Ahrefs, 2026](https://ahrefs.com/blog/do-ai-assistants-prefer-to-cite-fresh-content/))
 - Embedded citations and statistics — adding citations and quotations increases AI visibility, with mid-ranked sites seeing the largest gains ([The Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/))
 - Factual density — specific claims, named sources, verifiable data
 - Multi-platform presence — strong cross-platform citation presence compounds ([The Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/))
+
+## How fresh does content need to be?
+
+Freshness is now measured, not assumed. Across 17 million citations spanning seven platforms (February–March 2026), AI-cited URLs averaged 1,064 days old versus 1,432 days for organic SERP results — 25.7% fresher ([Ahrefs, 2026](https://ahrefs.com/blog/do-ai-assistants-prefer-to-cite-fresh-content/)). About half of cited pages had been published or updated within the prior 13 weeks. ChatGPT skews toward the newest content, while Google AI Overviews are the exception — citing older pages than the other engines ([Ahrefs, 2026](https://ahrefs.com/blog/do-ai-assistants-prefer-to-cite-fresh-content/)).
+
+Ranking and citation have decoupled. Only about 38% of Google AI Overview citations come from pages ranking in the organic top 10 ([Ahrefs, 2026](https://ahrefs.com/blog/ai-overview-citations-top-10/)), so a strong SERP position no longer guarantees a citation. Freshness and other signals now select sources largely independently of rank. Keeping `Last-Modified` and `ETag` headers accurate — alongside a visible update date — helps crawlers register when a page has genuinely changed.
 
 ## Why citation behavior differs
 

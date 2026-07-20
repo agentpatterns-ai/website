@@ -132,3 +132,4 @@ Three conditions make checkpointing worse than the alternative:
 - [Incremental Verification](../verification/incremental-verification.md)
 - [Defense in Depth for Agent Safety](defense-in-depth-agent-safety.md)
 - [Prompt-Injection-Resistant Agent Design](prompt-injection-resistant-agent-design.md)
+- [Structural Monitoring for Covert Safeguard-Weakening](structural-safeguard-monitoring.md) — detects the accumulated regression by diffing the code's control- and data-flow graph

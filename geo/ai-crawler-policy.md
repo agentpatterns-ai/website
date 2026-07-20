@@ -156,6 +156,7 @@ No. Google-Extended is a separate, training-only user-agent from standard Google
 
 - [How AI Engines Cite](how-ai-engines-cite.md)
 - [llms.txt: Spec, Adoption, and Honest Limitations](llms-txt.md)
+- [Agent-Readiness Discovery Surfaces](agent-readiness-discovery-surfaces.md)
 - [GSC Search Console Monitoring](gsc-search-console-monitoring.md)
 - [URL Fetch Public Index Gate](../security/url-fetch-public-index-gate.md)
 - [SEO vs GEO](seo-vs-geo.md)

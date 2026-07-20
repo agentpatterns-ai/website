@@ -11,6 +11,7 @@ nav:
       - atomic-pages-and-chunking.md
   - "Technical":
       - ai-crawler-policy.md
+      - agent-readiness-discovery-surfaces.md
       - llms-txt.md
       - schema-and-structured-data.md
   - "Measurement & Strategy":

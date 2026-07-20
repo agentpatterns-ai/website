@@ -138,3 +138,4 @@ The first form is what shipped. The second is what [Anthropic reports](https://w
 - [Rainbow Deployments for Agents](../multi-agent/rainbow-deployments-agents.md)
 - [Harness Engineering](../agent-design/harness-engineering.md)
 - [Eval Awareness](../verification/eval-awareness.md)
+- [Agent-Reactive Bugs at the Model-Harness Boundary](agent-reactive-bugs.md)

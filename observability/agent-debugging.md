@@ -122,6 +122,7 @@ The diagnostic sequence assumes the failure is structural. Three conditions wher
 - [Loop Detection](loop-detection.md)
 - [Making Observability Legible to Agents](observability-legible-to-agents.md)
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
+- [Agent-Reactive Bugs at the Model-Harness Boundary](agent-reactive-bugs.md)
 - [Escape Hatches: Unsticking Stuck Agents](../workflows/escape-hatches.md)
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md)
 - [Visible Thinking in AI Development](../human/visible-thinking-ai-development.md)

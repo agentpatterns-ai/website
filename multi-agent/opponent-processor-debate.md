@@ -190,3 +190,4 @@ The advocate and skeptic receive the same task but structurally incompatible inc
 - [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)
+- [Reviewer Precision as a Pipeline Quality Proxy](reviewer-precision-proxy.md)

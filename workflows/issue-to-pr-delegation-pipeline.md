@@ -131,7 +131,7 @@ The following shows a well-structured issue delegated to the Copilot coding agen
 Issue #284, assigned to Copilot:
 
 ```markdown
-## Background
+## Problem
 
 The `UserSession` model currently stores `created_at` as a Unix timestamp integer.
 All new models use ISO 8601 strings. This inconsistency breaks the shared `DateDisplay`

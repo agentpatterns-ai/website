@@ -116,7 +116,7 @@ The following shows what a `claude-progress.txt` handoff artifact looks like aft
 ## Next Priority
 - [ ] feat: notification preferences
 
-## Notes
+## Setup and gate reminders
 - Run `./init.sh` if environment is cold-started
 - Use `pytest tests/` as the completion gate before updating this file
 ```

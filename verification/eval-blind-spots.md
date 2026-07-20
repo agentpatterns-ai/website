@@ -254,4 +254,5 @@ The outcome grader sees a correct deployment; the trajectory auditor catches tha
 - [Eval Awareness](eval-awareness.md) — agents that recognise evaluations can locate the holdout suite, defeating the protocol
 - [Defense-in-Depth Agent Safety](../security/defense-in-depth-agent-safety.md) — the safety layering the trajectory gap motivates
 - [TDD with Agent Development](tdd-agent-development.md) — writing the test first gives the explicit signal stale and missing tasks lack
+- [Emulated APIs for Agent Skill Evals](emulated-apis-for-skill-evals.md) — environment isolation for the API a skill calls, a measurement confound alongside the skill-retrieval realism gap
   - long-form
