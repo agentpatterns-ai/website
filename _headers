@@ -54,6 +54,12 @@
   ! Cache-Control
   Cache-Control: public, max-age=3600
 
+# RFC 9727 API catalog is extensionless — without this the asset server would
+# guess a generic content type; the RFC requires application/linkset+json.
+/.well-known/api-catalog
+  ! Content-Type
+  Content-Type: application/linkset+json
+
 # Feeds and machine-readable indexes: an hour.
 /feed.xml
   ! Cache-Control

@@ -5,6 +5,22 @@
 # that block is independent of this file. To allow it too, remove
 # the WAF rule via Cloudflare Dashboard > Security > WAF > Custom Rules.
 
+# Explicit welcome for the AI retrieval / user-fetch / training crawlers we
+# know by name (a named User-agent group overrides the * group for that bot,
+# so each group restates the same policy + Content-Signal — keep them in sync).
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: GPTBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: ClaudeBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Cloudflare-AI-Search
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
 User-agent: *
 Allow: /
 # Content Signals (contentsignals.org) — machine-readable form of the policy
