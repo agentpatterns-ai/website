@@ -101,15 +101,21 @@
   flex: 1;
 }
 
-.wwa-footer__rss {
+.wwa-footer__rss,
+.wwa-footer__feedback {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
   color: inherit;
 }
 
-.wwa-footer__rss:hover {
+.wwa-footer__rss:hover,
+.wwa-footer__feedback:hover {
   color: var(--md-accent-fg-color);
+}
+
+.wwa-footer__feedback {
+  margin-right: 1rem;
 }
 
 /* ── Concept map: multi-column link lists ── */
@@ -267,51 +273,7 @@
   }
 }
 
-/* ── Feedback FAB ── */
-
-.wwa-fab {
-  position: fixed;
-  bottom: 1.5rem;
-  /* bottom-RIGHT: the AI Search chat bubble renders bottom-LEFT (its
-     undocumented default — no position attribute exists on the component),
-     so Feedback keeps its original right corner (#9917 overlap fix). */
-  right: 1.5rem;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.5rem 0.85rem;
-  background: var(--md-typeset-a-color);
-  color: #fff;
-  border-radius: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  text-decoration: none;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
-}
-
-.wwa-fab:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-  color: #fff;
-}
-
-.wwa-fab svg {
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-}
-
-/* Collapse to icon-only on small screens */
-@media (max-width: 768px) {
-  .wwa-fab {
-    padding: 0.5rem;
-    border-radius: 50%;
-  }
-
-  .wwa-fab__label {
-    display: none;
-  }
-}
+/* The old floating Feedback FAB was removed: it fought the AI Search chat
+   bubble (fixed bottom-right per the snippet's own CSS, v0.0.25) for corner
+   space across two releases. Feedback now lives in the footer next to RSS
+   (.wwa-footer__feedback above). */
