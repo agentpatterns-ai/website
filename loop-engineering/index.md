@@ -13,12 +13,12 @@ last_reviewed: 2026-06-29
 
 The loop is the defining structure of agentic coding — tool loops, plan/act loops, verification loops, improvement flywheels, long-running autonomous loops. But coverage of *how to engineer loops well* is scattered. Loop engineering is the name for that cluster: the deliberate design of loops that terminate correctly and earn their cost.
 
-It cuts across the site. The canonical treatment of each loop pattern still lives in its home discipline — [agent design](../agent-design/index.md), [workflows](../workflows/index.md), [verification](../verification/index.md), [observability](../observability/index.md). This section owns the pages whose primary subject *is* the loop, and crosswalks the rest under one frame, built on the three-loops spine, so you can navigate "how do I design a loop that terminates correctly and earns its cost?" as a single topic.
+It cuts across the site. The canonical treatment of each loop pattern still lives in its home discipline — [agent design](../patterns/agent-design/index.md), [workflows](../workflows/index.md), [verification](../verification/index.md), [observability](../observability/index.md). This section owns the pages whose primary subject *is* the loop, and crosswalks the rest under one frame, built on the three-loops spine, so you can navigate "how do I design a loop that terminates correctly and earns its cost?" as a single topic.
 
 ## What loop engineering is — and isn't
 
 - It is the design discipline over the iterative structure: which loop type fits the work, how each turn is bounded, and when the loop stops.
-- It is not all of [agent design](../agent-design/index.md). Agent design covers composition, memory, delegation, and harness; loop engineering is the lens on the *iteration* specifically.
+- It is not all of [agent design](../patterns/agent-design/index.md). Agent design covers composition, memory, delegation, and harness; loop engineering is the lens on the *iteration* specifically.
 - It is not [workflows](../workflows/index.md). A workflow is a composed pipeline of agents and gates; loop engineering is about the loop *inside* a single agent's run (though improvement workflows are loops too — they crosswalk here).
 - Termination and cost are the crux. Convergence detection, go/no-go gates, and runaway guardrails are what separate an engineered loop from a runaway — they are foregrounded below.
 
@@ -36,8 +36,8 @@ How much context each iteration carries, and how much the loop runs on its own.
 - [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-strategy-spectrum.md) — accumulated, compressed, or fresh context per iteration, chosen by workload
 - [The Ralph Wiggum Loop: Fresh-Context Iteration Pattern](ralph-wiggum-loop.md) — each iteration runs in a fresh window, state persisted to disk
 - [Goal-Driven Autonomous Loop with Budget Cap](goal-driven-autonomous-loop.md) — an objective-bound loop that stops on goal-done or budget exhaustion
-- [Long-Running Agents](../agent-design/long-running-agents.md) — making progress across many sessions by moving state into durable artifacts
-- [Agentless vs Autonomous](../agent-design/agentless-vs-autonomous.md) — when a fixed pipeline beats a model-controlled loop
+- [Long-Running Agents](../patterns/agent-design/long-running-agents.md) — making progress across many sessions by moving state into durable artifacts
+- [Agentless vs Autonomous](../patterns/agent-design/agentless-vs-autonomous.md) — when a fixed pipeline beats a model-controlled loop
 - [Continuous Autonomous Task Loop](../workflows/continuous-autonomous-task-loop.md) — a self-directed loop that reads a backlog and executes each item
 
 ### Loop structure and orchestration
@@ -45,8 +45,8 @@ How much context each iteration carries, and how much the loop runs on its own.
 The shape of a single iteration and what guarantees run inside it.
 
 - [Agent Loop Middleware — Safety Nets and Message Injection](agent-loop-middleware.md) — wrap the loop from outside so critical steps always run
-- [CoALA Decision-Making Loop](../agent-design/coala-decision-making-loop.md) — propose/evaluate/select/act as a vocabulary for where tactics intervene
-- [ReAct Pattern](../agent-design/react-pattern.md) — interleave thought, tool call, and observation each step
+- [CoALA Decision-Making Loop](../patterns/agent-design/coala-decision-making-loop.md) — propose/evaluate/select/act as a vocabulary for where tactics intervene
+- [ReAct Pattern](../patterns/agent-design/react-pattern.md) — interleave thought, tool call, and observation each step
 - [Plan-First Loop](../workflows/plan-first-loop.md) — design a written plan before code, then loop on it
 
 ### Termination, convergence, and cost gates
@@ -69,8 +69,8 @@ Detecting and breaking loops that spin without converging.
 
 Loops that make future agent work better, not just finish the current task.
 
-- [Agentic Flywheel](../agent-design/agentic-flywheel.md) — agents analyze their own operational data and generate harness improvements
-- [Self-Reporting Loops](../agent-design/self-reporting-loops.md) — out-of-scope observations filed so signal survives the session
+- [Agentic Flywheel](../patterns/agent-design/agentic-flywheel.md) — agents analyze their own operational data and generate harness improvements
+- [Self-Reporting Loops](../patterns/agent-design/self-reporting-loops.md) — out-of-scope observations filed so signal survives the session
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md) — a standing loop that upgrades the agent setup over time
 - [Closed-Loop Agent Training](../workflows/closed-loop-agent-training.md) — feed run outcomes back into training
 - [Skill Library Refinement Loops](../workflows/skill-library-refinement-loops.md) — iteratively refine a skill library from usage
@@ -89,6 +89,6 @@ Iterative review as a loop structure.
 ## Related
 
 - [Concept Map](../concepts.md) — all site content grouped by theme
-- [Agent Design](../agent-design/index.md) — the canonical home for loop patterns
+- [Agent Design](../patterns/agent-design/index.md) — the canonical home for loop patterns
 - [Workflows](../workflows/index.md) — composed pipelines that wrap these loops
 - [Verification](../verification/index.md) — the verification loop's home discipline

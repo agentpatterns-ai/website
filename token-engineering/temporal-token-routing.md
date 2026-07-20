@@ -110,7 +110,7 @@ The refactor saves 50% on a recurring nightly job, and the queue-management code
 ## Related
 
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — the right-model lever that pairs with this right-time lever
-- [Idle-Time Speculative Planning for ReAct Agents](../agent-design/idle-time-speculative-planning.md) — what to do with capacity inside a latency-bound loop
-- [Background Todo Agent](../agent-design/background-todo-agent.md) — out-of-band work the temporal-routing decision applies to first
+- [Idle-Time Speculative Planning for ReAct Agents](../patterns/agent-design/idle-time-speculative-planning.md) — what to do with capacity inside a latency-bound loop
+- [Background Todo Agent](../patterns/agent-design/background-todo-agent.md) — out-of-band work the temporal-routing decision applies to first
 - [Programmatic Cloud-Agent Dispatch via REST API and Webhooks](../workflows/programmatic-cloud-agent-dispatch.md) — the orchestration layer that consumes batch and flex tiers
 - [Prompt Caching: Architectural Discipline for Agents](../context-engineering/prompt-caching-architectural-discipline.md) — the lever to reach for first on caching-dominated workloads

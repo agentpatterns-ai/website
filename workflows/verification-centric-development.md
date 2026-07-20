@@ -20,7 +20,7 @@ Related lesson: [Becoming a Tech Lead](https://learn.agentpatterns.ai/workflows/
 
 LLMs generate implementation code faster than developers can write it. The bottleneck is no longer authorship. It is verification. As the framing goes: Software 1.0 is software you specify; Software 2.0 is software you verify. Production-grade AI-assisted development invests in planning, architecture, and layered automated checks rather than manual code creation.
 
-This is the production-scale counterpart to [vibe coding](../anti-patterns/vibe-coding.md). Where vibe coding skips understanding entirely for throwaway work, verification-centric development builds systematic proof that generated code is correct, secure, and maintainable.
+This is the production-scale counterpart to [vibe coding](../patterns/anti-patterns/vibe-coding.md). Where vibe coding skips understanding entirely for throwaway work, verification-centric development builds systematic proof that generated code is correct, secure, and maintainable.
 
 ## The proof point
 
@@ -60,7 +60,7 @@ Snapshot testing deserves special attention. In the TextForge project, snapshot 
 
 > Most developers who get bad results with AI usually do so because they skip the most important part: planning mode.
 
-Planning has always mattered. LLMs raise the cost of skipping it. A missing architectural decision that a human developer would catch mid-implementation becomes a structural flaw [replicated across dozens of generated files](../anti-patterns/pattern-replication-risk.md) before anyone notices.
+Planning has always mattered. LLMs raise the cost of skipping it. A missing architectural decision that a human developer would catch mid-implementation becomes a structural flaw [replicated across dozens of generated files](../patterns/anti-patterns/pattern-replication-risk.md) before anyone notices.
 
 Effective planning for LLM-assisted development includes:
 
@@ -75,9 +75,9 @@ The infrastructure works, but only if developers actually use it. Current eviden
 
 - Only 48% of developers consistently check AI-assisted code before committing ([Osmani, "The 80% Problem"](https://addyo.substack.com/p/the-80-problem-in-agentic-coding))
 - 38% find reviewing AI logic harder than reviewing human code ([Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding))
-- [Comprehension debt](../anti-patterns/comprehension-debt.md) accumulates: developers grow comfortable approving code they could no longer write independently, which leads to rubber-stamp reviews
+- [Comprehension debt](../patterns/anti-patterns/comprehension-debt.md) accumulates: developers grow comfortable approving code they could no longer write independently, which leads to rubber-stamp reviews
 
-Martin Fowler's team calls this rigor relocation: quality assurance shifts from code authorship to environment design, feedback loops, and control systems, an emerging discipline known as [harness engineering](../agent-design/harness-engineering.md) ([Fowler, harness engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)). The developer who once ensured quality by writing careful code now ensures quality by building careful verification infrastructure.
+Martin Fowler's team calls this rigor relocation: quality assurance shifts from code authorship to environment design, feedback loops, and control systems, an emerging discipline known as [harness engineering](../patterns/agent-design/harness-engineering.md) ([Fowler, harness engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)). The developer who once ensured quality by writing careful code now ensures quality by building careful verification infrastructure.
 
 This relocation is not free. Structural linting and architectural constraints prove conformance but do not prove [behavioral correctness](../verification/behavioral-testing-agents.md). The verification pipeline reduces risk; it does not eliminate it.
 
@@ -85,9 +85,9 @@ This relocation is not free. Structural linting and architectural constraints pr
 
 A reasonable practitioner could defend the opposite recommendation in specific contexts. Verification-centric development is worse than lighter-weight alternatives when:
 
-- The risk budget is smaller than the verification investment. Throwaway scripts, one-off migrations, and exploratory prototypes do not justify snapshot suites, SAST pipelines, and architectural decision records. [Vibe coding](../anti-patterns/vibe-coding.md) is the correct mode for that end of the spectrum.
+- The risk budget is smaller than the verification investment. Throwaway scripts, one-off migrations, and exploratory prototypes do not justify snapshot suites, SAST pipelines, and architectural decision records. [Vibe coding](../patterns/anti-patterns/vibe-coding.md) is the correct mode for that end of the spectrum.
 - Verifiers themselves are unreliable. LLM-based verifiers miss defects at a much higher rate than deterministic tooling, and even benchmark-grade test suites can overestimate solution quality — 20 to 40% of LeetCode problems that passed LiveCodeBench's private tests still failed on the online judge ([Ma et al., "Rethinking Verification for LLM Code Generation"](https://arxiv.org/abs/2507.06920)). Treat any verifier as a fallible signal, not a proof of correctness.
-- Snapshot tests encode the wrong baseline. Verify-style approval tests lock in whatever structure the first reviewer approved. If that initial approval was sloppy, every later diff is compared against a flawed reference and [scope-creep checks](../anti-patterns/pr-scope-creep-review-bottleneck.md) become noise.
+- Snapshot tests encode the wrong baseline. Verify-style approval tests lock in whatever structure the first reviewer approved. If that initial approval was sloppy, every later diff is compared against a flawed reference and [scope-creep checks](../patterns/anti-patterns/pr-scope-creep-review-bottleneck.md) become noise.
 - Process load crowds out thinking. Teams that add ceremony (plans, specs, approval steps) without pruning existing review steps slow down without catching proportionally more bugs. The pipeline should replace manual checks, not stack on top of them.
 
 ## Model routing
@@ -96,7 +96,7 @@ Not every task needs your most expensive model. Route by complexity:
 
 | Task type | Model tier | Rationale |
 |-----------|-----------|-----------|
-| Boilerplate, CRUD, [pattern replication](../anti-patterns/pattern-replication-risk.md) | Cheaper / faster | Low novelty, high predictability |
+| Boilerplate, CRUD, [pattern replication](../patterns/anti-patterns/pattern-replication-risk.md) | Cheaper / faster | Low novelty, high predictability |
 | Refactoring with clear specs | Mid-tier | Moderate complexity, constrained scope |
 | Novel architecture, security-sensitive | Most capable | High stakes, needs strongest reasoning |
 
@@ -108,7 +108,7 @@ A team is building a REST API with authentication. Instead of prompting an agent
 
 1. Plan. Write a spec defining endpoints, auth flow, data models, and error handling. Document which patterns to follow (for example, vertical slice architecture, repository pattern for data access).
 
-2. Generate. Prompt the agent with the spec and architectural constraints. Use a capable model for the auth module, a cheaper model for [CRUD endpoints](../anti-patterns/pattern-replication-risk.md).
+2. Generate. Prompt the agent with the spec and architectural constraints. Use a capable model for the auth module, a cheaper model for [CRUD endpoints](../patterns/anti-patterns/pattern-replication-risk.md).
 
 3. Verify in layers.
 
@@ -132,11 +132,11 @@ dotnet test --filter "Category=Snapshot"
 - Layer automated checks so each catches a different failure class: compiler, linter, tests, static analysis, snapshot tests, end-to-end tests, human review
 - Snapshot testing prevents silent scope creep in LLM output by requiring explicit approval of structural changes
 - Planning is the most commonly skipped and highest-leverage step — LLMs amplify the cost of missing architecture decisions
-- [Comprehension debt](../anti-patterns/comprehension-debt.md) is the primary risk: verification-centric development is powerful but dangerous if developers stop understanding what they approve
+- [Comprehension debt](../patterns/anti-patterns/comprehension-debt.md) is the primary risk: verification-centric development is powerful but dangerous if developers stop understanding what they approve
 
 ## Related
 
-- [Vibe Coding: Outcome-Oriented Development](../anti-patterns/vibe-coding.md) — the casual, low-risk end of the same spectrum
+- [Vibe Coding: Outcome-Oriented Development](../patterns/anti-patterns/vibe-coding.md) — the casual, low-risk end of the same spectrum
 - [The Plan-First Loop: Design Before Code](plan-first-loop.md)
 - [Incremental Verification](../verification/incremental-verification.md)
 - [Rigor Relocation](../human/rigor-relocation.md)

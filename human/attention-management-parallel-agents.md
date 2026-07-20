@@ -44,7 +44,7 @@ Osmani describes pairing background agents (4-5 low-touch sessions handling mech
 
 ### Task classification for delegation
 
-Not all work benefits equally from parallel dispatch. Osmani distinguishes [three tiers](../agent-design/delegation-decision.md):
+Not all work benefits equally from parallel dispatch. Osmani distinguishes [three tiers](../patterns/agent-design/delegation-decision.md):
 
 - Fully delegated — mechanical implementation, boilerplate, migrations. Fire and review later.
 - Checkpoint-based — shared interfaces, integration points. The agent works on its own between [human review gates](bottleneck-migration.md).
@@ -102,10 +102,10 @@ The developer monitors the fully-delegated sessions only when they emit completi
 - [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md)
 - [/batch and Worktrees](../tools/claude/batch-worktrees.md)
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md)
-- [The Delegation Decision](../agent-design/delegation-decision.md)
+- [The Delegation Decision](../patterns/agent-design/delegation-decision.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)
-- [Distributed Computing Parallels in Agent Architecture](../multi-agent/distributed-computing-parallels.md)
-- [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
+- [Distributed Computing Parallels in Agent Architecture](../patterns/multi-agent/distributed-computing-parallels.md)
+- [Sub-Agents for Fan-Out Research and Context Isolation](../patterns/multi-agent/sub-agents-fan-out.md)
 - [The Bottleneck Migration](bottleneck-migration.md)
 </content>
 </invoke>

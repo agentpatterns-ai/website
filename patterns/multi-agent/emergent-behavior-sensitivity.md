@@ -1,0 +1,141 @@
+---
+title: "Emergent Behavior Sensitivity for AI Agent Development"
+term: "Emergent Behavior Sensitivity"
+description: "Small changes to a lead agent's prompt unpredictably alter subagent behavior. Multi-agent prompts must be frameworks for collaboration, not rigid instructions"
+tags:
+  - agent-design
+  - multi-agent
+  - tool-agnostic
+aliases:
+  - prompt sensitivity
+  - cascade sensitivity
+last_reviewed: 2026-06-13
+maturity: adopted
+---
+
+# Emergent Behavior Sensitivity
+
+> Small changes to a lead agent's prompt unpredictably alter subagent behavior. Multi-agent prompts must be frameworks for collaboration, not rigid instructions.
+
+Learn it hands-on with the [Why Multi-Agent Systems Fail](https://learn.agentpatterns.ai/multi-agent/why-multi-agent-fails/) guided lesson and quizzes.
+
+## The problem
+
+Subagents receive only their own system prompt and the delegation message -- not the lead's full context. Minor wording changes in the lead's prompt cascade unpredictably. Anthropic observed this directly: ["small changes to the lead agent can unpredictably change how subagents behave."](https://www.anthropic.com/engineering/multi-agent-research-system)
+
+```mermaid
+graph TD
+    L[Lead Agent Prompt<br><i>small wording change</i>] --> D1[Delegation to Subagent A]
+    L --> D2[Delegation to Subagent B]
+    L --> D3[Delegation to Subagent C]
+    D1 --> S1[Subagent A<br>interprets through<br>own context]
+    D2 --> S2[Subagent B<br>interprets through<br>own context]
+    D3 --> S3[Subagent C<br>interprets through<br>own context]
+    S1 --> O1[Unpredictable<br>behavior shift]
+    S2 --> O2[Unchanged<br>behavior]
+    S3 --> O3[Opposite of<br>intended change]
+
+    style L fill:#5c1a1a,stroke:#a22d2d
+    style O1 fill:#5c1a1a,stroke:#a22d2d
+    style O3 fill:#5c1a1a,stroke:#a22d2d
+    style O2 fill:#2d5016,stroke:#4a8529
+```
+
+This is not a bug -- it is a property of systems where agents interpret instructions rather than execute them deterministically.
+
+## Why prescriptive prompts break
+
+Rigid, step-by-step instructions create brittle multi-agent systems.
+
+Interpretation drift comes first. Each subagent filters delegation through its own context. A phrasing shift changes what the subagent infers about scope or priority, without any explicit instruction changing.
+
+Cascade convergence follows. In [Anthropic's parallel C compiler project](https://www.anthropic.com/engineering/building-c-compiler), agents on a monolithic task would "hit the same bug, fix that bug, and then overwrite each other's changes."
+
+Emergent over-scaling is the third failure. Without effort boundaries, [Anthropic's research system](https://www.anthropic.com/engineering/multi-agent-research-system) "spawned 50 subagents for simple queries, scouring the web endlessly for nonexistent sources."
+
+## Framework prompts over prescriptive prompts
+
+Effective multi-agent prompts [encode "heuristics rather than rigid rules"](https://www.anthropic.com/engineering/multi-agent-research-system). Anthropic's guidance on prompt altitude describes the goal as ["specific enough to guide behavior effectively, yet flexible enough to provide the model with strong heuristics"](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) -- the Goldilocks zone between brittle hard-coded logic and vague high-level guidance.
+
+| Prompt Style | Characteristic | Cascade Behavior |
+|---|---|---|
+| Prescriptive | Step-by-step instructions, exact formats | Brittle -- small changes break downstream agents |
+| Framework | Principles, effort budgets, heuristics | Resilient -- subagents adapt within boundaries |
+
+A framework prompt defines division of labor, problem-solving heuristics, effort budgets, and quality criteria -- what "done" looks like, not how to get there.
+
+## Mitigation strategies
+
+### Task granularity as isolation
+
+Decompose monolithic tasks so each agent operates independently. Shared file or state dependencies let one agent's behavior change cascade to all others. The [oracle pattern](oracle-task-decomposition.md) preserves isolation.
+
+### Explicit effort scaling
+
+Embed resource budgets directly into prompts -- subagent count, search duration, and stopping conditions. Without them, agents infer scope from context and over- or under-invest. See [Heuristic-Based Effort Scaling](../agent-design/heuristic-effort-scaling.md).
+
+### Cascade-aware testing
+
+Measure end-to-end behavior when prompts change. Harness-level changes -- [loop detection](../../observability/loop-detection.md), [pre-completion checklists](../../verification/pre-completion-checklists.md), and prompt adjustments -- [collectively produced a 13.7-point improvement](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) on Terminal Bench 2.0 with no model change.
+
+### Distinguish prompt sensitivity from environmental noise
+
+Infrastructure configuration -- resource limits, network latency, and time-of-day effects -- can produce performance swings that mimic prompt sensitivity. Control for these before attributing behavior changes to a prompt edit.
+
+## Example
+
+A Claude Code orchestrator delegates code review to three subagents using `Task` from the [Claude Agent SDK](../../tools/claude/agent-sdk.md). The lead agent's system prompt says: "Review the pull request for correctness."
+
+A developer edits it to: "Thoroughly review the pull request for correctness, security, and performance."
+
+Prescriptive result: Subagent A interprets "thoroughly" as exhaustive and runs `grep -r` across the entire repository for related patterns. Subagent B treats "security" as its primary scope and flags every `eval()` and `subprocess.run()` call regardless of context. Subagent C combines both signals and spawns its own sub-tasks for each file, exceeding the API rate limit. The orchestrator receives three incompatible review summaries with overlapping, contradictory recommendations.
+
+```python
+# Prescriptive delegation -- brittle under prompt changes
+task = Task(
+    instructions="Thoroughly review every file for correctness, security, and performance issues. "
+                 "Check each function. List all findings."
+)
+```
+
+Framework result: The lead prompt instead encodes effort boundaries: "Review only changed files in the diff; flag at most 5 issues per category; stop after evaluating the diff once." Adding "thorough" language has no effect -- the effort budget caps behavior regardless of adjective choice.
+
+```python
+# Framework delegation -- cascade-resistant
+task = Task(
+    instructions="Review changed files only. Categories: correctness, security, performance. "
+                 "Max 5 findings per category. One pass over the diff. "
+                 "Return structured JSON with file, line, category, severity, description."
+)
+```
+
+The framework version produces the same behavioral outcome whether the prompt says "review" or "thoroughly review" because the effort boundary, not the adjective, controls scope.
+
+## Key Takeaways
+
+- Small input changes produce disproportionate, unpredictable output changes
+- Subagents interpret delegation through their own context -- wording matters more than intent
+- Framework prompts outperform prescriptive prompts for cascade resilience
+- Task granularity is the primary isolation mechanism
+- Evaluate changes end-to-end; individual agent correctness does not predict system behavior
+
+## When this backfires
+
+Framework prompts assume subagents handle ambiguity well. This breaks down in three conditions:
+
+- Compliance-critical contexts. Regulated pipelines (finance, healthcare, legal) may require step-by-step auditability. Framework prompts produce flexible behavior that is harder to trace back to specific instructions, which makes later compliance review difficult.
+- Brittle task types. Tasks with a single correct execution path -- exact database migrations, deterministic build steps -- benefit from rigid instruction sequences and a high [instruction-compliance ceiling](../../instructions/instruction-compliance-ceiling.md). Framework prompts introduce unwanted interpretation where none should occur.
+- Undertrained subagents. Heuristic delegation relies on subagents having enough domain knowledge to infer intent. A model without enough instruction-following capability or domain context will interpret framework prompts erratically, producing worse outcomes than a prescriptive approach.
+
+## Related
+
+- [Instruction Compliance Ceiling](../../instructions/instruction-compliance-ceiling.md)
+- [Process Amplification](../../human/process-amplification.md)
+- [Orchestrator-Worker](orchestrator-worker.md)
+- [Fan-Out Synthesis](fan-out-synthesis.md)
+- [Harness Engineering](../agent-design/harness-engineering.md)
+- [The Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md)
+- [Staggered Agent Launch](staggered-agent-launch.md)
+- [Subagent Schema-Level Tool Filtering](subagent-schema-level-tool-filtering.md)
+- [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
+- [Sub-Agents for Fan-Out](sub-agents-fan-out.md)

@@ -156,7 +156,7 @@ This is the lowest-effort, highest-value CI integration. Every PR gets an automa
 
 Some tasks are naturally parallelisable across many items: reviewing all open PRs, updating documentation across modules, applying a refactoring pattern to many files, triaging a backlog of issues.
 
-### [Bounded batch dispatch](../../multi-agent/bounded-batch-dispatch.md)
+### [Bounded batch dispatch](../../patterns/multi-agent/bounded-batch-dispatch.md)
 
 Process large workloads without hitting rate limits by dispatching work in sequential batches:
 
@@ -223,7 +223,7 @@ Label "ready-for-review" added
   → Adds approval or requests changes
 ```
 
-Each handler is stateless: it reads the current state, does its work, and emits the next state. Humans and agents are interchangeable handlers in [event-driven routing](../../agent-design/event-driven-agent-routing.md) — a human can take over at any stage by removing the label and acting directly.
+Each handler is stateless: it reads the current state, does its work, and emits the next state. Humans and agents are interchangeable handlers in [event-driven routing](../../patterns/agent-design/event-driven-agent-routing.md) — a human can take over at any stage by removing the label and acting directly.
 
 ### Designing for stalls
 
@@ -254,11 +254,11 @@ Training
 Patterns
 
 - [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — premium request costs when running multiple agents
-- [Agent Composition Patterns](../../agent-design/agent-composition-patterns.md) — chain, fan-out, pipeline, supervisor
-- [Specialized Agent Roles](../../agent-design/specialized-agent-roles.md) — complementary coverage through specialisation
+- [Agent Composition Patterns](../../patterns/agent-design/agent-composition-patterns.md) — chain, fan-out, pipeline, supervisor
+- [Specialized Agent Roles](../../patterns/agent-design/specialized-agent-roles.md) — complementary coverage through specialisation
 - [Loop Strategy Spectrum](../../loop-engineering/loop-strategy-spectrum.md) — accumulated vs fresh context for long-running work
 - [Parallel Agent Sessions](../../workflows/parallel-agent-sessions.md) — human-as-tech-lead pattern
-- [Event-Driven Agent Routing](../../agent-design/event-driven-agent-routing.md) — status-change triggers
+- [Event-Driven Agent Routing](../../patterns/agent-design/event-driven-agent-routing.md) — status-change triggers
 
 Platform
 

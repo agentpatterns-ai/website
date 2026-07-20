@@ -21,7 +21,7 @@ maturity: established
 
 ## The fallacy
 
-Teams use AI to generate tests, evals, documentation, or training examples and [treat the outputs as interchangeable](../anti-patterns/trust-without-verify.md) with human-verified artifacts. The reasoning: AI is fast and the outputs look correct, so accepting them as ground truth saves time.
+Teams use AI to generate tests, evals, documentation, or training examples and [treat the outputs as interchangeable](../patterns/anti-patterns/trust-without-verify.md) with human-verified artifacts. The reasoning: AI is fast and the outputs look correct, so accepting them as ground truth saves time.
 
 But the outputs look correct because the model generates plausible outputs, not verified ones. They measure what the model finds likely, not what is true.
 
@@ -93,7 +93,7 @@ The pattern to avoid: AI generates an artifact, AI judges it, and the score is a
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](../verification/anti-reward-hacking.md)
 - [Incremental Verification](../verification/incremental-verification.md)
 - [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md)
-- [Trust Without Verify](../anti-patterns/trust-without-verify.md)
+- [Trust Without Verify](../patterns/anti-patterns/trust-without-verify.md)
 - [The AI Knowledge Generation Fallacy](ai-knowledge-generation-fallacy.md)
 - [Chain-of-Thought Reasoning Fallacy](chain-of-thought-reasoning-fallacy.md)
 - [The Consistent Capability Fallacy](consistent-capability-fallacy.md)

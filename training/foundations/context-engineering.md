@@ -76,7 +76,7 @@ Long-running agents accumulate context that eventually fills the window. Without
 
 Tier 1 — Offload large tool responses. Replace large payloads (full files, API responses) with a filesystem reference and brief summary. The full content is written to disk; the agent re-reads it when needed. [LangChain's Deep Agents framework](https://blog.langchain.com/context-management-for-deepagents/) implements this as the first compression stage.
 
-Tier 2 — Summarise conversation history. When context fills further, summarise prior turns. Effective summaries preserve the current objective, key artifacts, decisions and rationale, and next steps. [Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies this as "compaction." The risk: summaries that capture only "what happened" without "what matters next" cause [objective drift](../../anti-patterns/objective-drift.md).
+Tier 2 — Summarise conversation history. When context fills further, summarise prior turns. Effective summaries preserve the current objective, key artifacts, decisions and rationale, and next steps. [Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies this as "compaction." The risk: summaries that capture only "what happened" without "what matters next" cause [objective drift](../../patterns/anti-patterns/objective-drift.md).
 
 More graduated approaches exist. The [OPENDEV framework](https://arxiv.org/abs/2603.05344) implements five-stage Adaptive Context Compaction, triggered at specific budget thresholds from 70% to 99%, degrading gracefully rather than hitting a single compression cliff.
 
@@ -90,7 +90,7 @@ Static system prompts break down as agent capabilities grow. Every conversation 
 
 ### Modular prompt composition
 
-Assemble system prompts at runtime from priority-ordered modular sections. Toggle sections by execution mode — a planning-mode prompt omits code quality rules; an execution-mode prompt omits strategic reasoning scaffolds. Inject provider-specific blocks conditionally to avoid cross-provider [prompt bloat](../../anti-patterns/prompt-tinkerer.md). The [OPENDEV paper](https://arxiv.org/abs/2603.05344) describes this as modular prompt composition with five functional tiers. See [Dynamic System Prompt Composition](../../context-engineering/dynamic-system-prompt-composition.md).
+Assemble system prompts at runtime from priority-ordered modular sections. Toggle sections by execution mode — a planning-mode prompt omits code quality rules; an execution-mode prompt omits strategic reasoning scaffolds. Inject provider-specific blocks conditionally to avoid cross-provider [prompt bloat](../../patterns/anti-patterns/prompt-tinkerer.md). The [OPENDEV paper](https://arxiv.org/abs/2603.05344) describes this as modular prompt composition with five functional tiers. See [Dynamic System Prompt Composition](../../context-engineering/dynamic-system-prompt-composition.md).
 
 ### Phase-specific context
 

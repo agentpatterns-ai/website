@@ -79,7 +79,7 @@ Anthropic's own Claude Code best-practices teaches a compatible discipline witho
 
 ## Compact format for lifecycle metadata
 
-The metadata cannot itself bloat the file — that defeats the purpose. Keep it inline as a one-line YAML or HTML-comment annotation on terminal rules (rules that prescribe behavior). Pointers and structural sections do not need metadata; following the [separation of knowledge and execution](../agent-design/separation-of-knowledge-and-execution.md), the linked doc carries its own.
+The metadata cannot itself bloat the file — that defeats the purpose. Keep it inline as a one-line YAML or HTML-comment annotation on terminal rules (rules that prescribe behavior). Pointers and structural sections do not need metadata; following the [separation of knowledge and execution](../patterns/agent-design/separation-of-knowledge-and-execution.md), the linked doc carries its own.
 
 ```markdown
 ## Critical constraints
@@ -182,6 +182,6 @@ The pointer-map pattern assumes the agent will follow pointers on demand. An ETH
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — research on when AGENTS.md files degrade agent performance
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) — the underlying AGENTS.md standard
 - [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](hierarchical-claude-md.md) — layering instruction files across directory levels
-- [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md) — why knowledge belongs in docs, not instructions
+- [Separation of Knowledge and Execution](../patterns/agent-design/separation-of-knowledge-and-execution.md) — why knowledge belongs in docs, not instructions
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — why unbounded rule growth degrades agent behavior; the mechanism lifecycle metadata defends against
-- [Harness Engineering](../agent-design/harness-engineering.md) — the discipline of designing agent environments so agents succeed by default
+- [Harness Engineering](../patterns/agent-design/harness-engineering.md) — the discipline of designing agent environments so agents succeed by default

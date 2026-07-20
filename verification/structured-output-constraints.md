@@ -147,4 +147,4 @@ The constrained version cannot hedge, cannot omit the verdict, and must attach a
 - [Verification Ledger](verification-ledger.md)
 - [Grading Agent Outcomes](grade-agent-outcomes.md)
 - [Agent Transcript Analysis](agent-transcript-analysis.md)
-- [Natural Language Tool Selection (NLT)](../agent-design/natural-language-tool-selection.md)
+- [Natural Language Tool Selection (NLT)](../patterns/agent-design/natural-language-tool-selection.md)

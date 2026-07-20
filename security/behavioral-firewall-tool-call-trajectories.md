@@ -110,6 +110,6 @@ The pDFA firewall layers cleanly with the rest of the security stack:
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — ensures the tools whose calls form transitions are themselves trusted
 - [Permission-Gated Custom Commands](permission-gated-commands.md) — exact-match whitelists that close the synonym-substitution gap
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — layering principle the pDFA firewall plugs into rather than replaces
-- [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md) — anti-pattern the residual 5.6% ASR confirms
+- [Single-Layer Prompt Injection Defence](../patterns/anti-patterns/single-layer-injection-defence.md) — anti-pattern the residual 5.6% ASR confirms
 </content>
 </invoke>

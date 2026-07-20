@@ -57,7 +57,7 @@ graph TD
     C --> D[Human attention<br/>review bandwidth]
 ```
 
-Dispatch decides how work is fanned out (see [Async Non-Blocking Subagent Dispatch](../multi-agent/async-non-blocking-subagent-dispatch.md)). Isolation decides whether agents corrupt each other's state (see [Worktree Isolation](worktree-isolation.md)). Tiled layout decides whether the supervisor can see what is happening without paying a per-switch tax. None of these substitute for the others. A tiled view of fire-and-forget agents in a single shared worktree is still wrong.
+Dispatch decides how work is fanned out (see [Async Non-Blocking Subagent Dispatch](../patterns/multi-agent/async-non-blocking-subagent-dispatch.md)). Isolation decides whether agents corrupt each other's state (see [Worktree Isolation](worktree-isolation.md)). Tiled layout decides whether the supervisor can see what is happening without paying a per-switch tax. None of these substitute for the others. A tiled view of fire-and-forget agents in a single shared worktree is still wrong.
 
 The Cursor 3 Agents Window is one consolidated implementation: dispatch via `/worktree`, isolation via per-pane worktree, supervision via Agent Tabs and now Tiled Layout. ([Source: Cursor changelog 3.0](https://cursor.com/changelog/3-0))
 
@@ -69,7 +69,7 @@ A tiled layout with five visible panes is at the edge of that range. Above five,
 
 ## Failure modes
 
-- Attention thrashing: all panes update at once after a batch dispatch. The supervisor flips between them rapidly without finishing any review. Stagger dispatch (see [Staggered Agent Launch](../multi-agent/staggered-agent-launch.md)) so completion times do not collide.
+- Attention thrashing: all panes update at once after a batch dispatch. The supervisor flips between them rapidly without finishing any review. Stagger dispatch (see [Staggered Agent Launch](../patterns/multi-agent/staggered-agent-launch.md)) so completion times do not collide.
 - False supervision: "I'm watching" without actually reading. Treat tiled layout as a notification surface, not a continuous monitor. Set explicit checkpoints per agent rather than relying on peripheral vision.
 - Synchronous-permission collapse: when each agent step needs a permission click (default Claude Code without `--dangerously-skip-permissions`), tiled layout collapses to per-pane click work. Configure per-agent permission policy before fanning out.
 - Hidden drift in small tiles: a pane below readable size — past the roughly 5-pane ceiling on a laptop screen — shows motion but not content. The agent goes off-track and the supervisor sees green animation, not the actual error. Use fewer panes or a larger screen, not smaller tiles.
@@ -114,9 +114,9 @@ If the same developer tried to run 6 panes, the layout would degrade — each ti
 ## Related
 
 - [Parallel Agent Sessions Shift the Bottleneck from Writing Code to Making Decisions](parallel-agent-sessions.md)
-- [Async Non-Blocking Subagent Dispatch](../multi-agent/async-non-blocking-subagent-dispatch.md)
+- [Async Non-Blocking Subagent Dispatch](../patterns/multi-agent/async-non-blocking-subagent-dispatch.md)
 - [Cursor 3 Agents Window](../tools/cursor/agents-window.md)
-- [VS Code Agents App: Agent-Native Parallel Task Execution](../agent-design/vscode-agents-parallel-tasks.md)
+- [VS Code Agents App: Agent-Native Parallel Task Execution](../patterns/agent-design/vscode-agents-parallel-tasks.md)
 - [Developer Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
 - [Worktree Isolation](worktree-isolation.md)
-- [Staggered Agent Launch](../multi-agent/staggered-agent-launch.md)
+- [Staggered Agent Launch](../patterns/multi-agent/staggered-agent-launch.md)

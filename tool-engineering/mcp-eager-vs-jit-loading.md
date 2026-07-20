@@ -36,7 +36,7 @@ Eager loading burns prefix tokens every turn whether the tool is used or not. A 
 
 JIT loading pays a search round-trip on first reference — a `server_tool_use` call before the actual tool call. It also depends on the model's ability to phrase a search query that retrieves the right tool. Tool descriptions that do not match natural-language tasks fail silently, and the agent reports "no tool available" when one exists.
 
-JIT loading does not break prompt cache at the API design level. The docs are explicit: "Deferred tools are not included in the system-prompt prefix. When the model discovers a deferred tool through tool search, the tool definition is appended inline as a `tool_reference` block in the conversation. The prefix is untouched, so prompt caching is preserved" ([Tool search tool docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)). This sets deferred loading apart from manual per-step tool swapping, which does invalidate cache (see [Dynamic Tool Fetching Cache Break](../anti-patterns/dynamic-tool-fetching-cache-break.md)).
+JIT loading does not break prompt cache at the API design level. The docs are explicit: "Deferred tools are not included in the system-prompt prefix. When the model discovers a deferred tool through tool search, the tool definition is appended inline as a `tool_reference` block in the conversation. The prefix is untouched, so prompt caching is preserved" ([Tool search tool docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)). This sets deferred loading apart from manual per-step tool swapping, which does invalidate cache (see [Dynamic Tool Fetching Cache Break](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md)).
 
 The caveat is harness-level, not API-level. A deferred tool definition and `cache_control` are mutually exclusive on the same tool. The API rejects setting both — "Tools with defer_loading cannot use prompt caching" — and a Claude Code build that applied both flags unconditionally surfaced this as a hard error once 3 or more MCP servers were configured ([claude-code#30920](https://github.com/anthropics/claude-code/issues/30920)). The prefix-level cache benefit still holds, but do not assume an individual deferred tool block is itself cacheable, and check that your host does not double-set the flags.
 
@@ -106,5 +106,5 @@ Project search and GitHub stay in the prefix every turn. Linear, Sentry, and Gra
 - [Production MCP Agent Stack](production-mcp-agent-stack.md)
 - [Scoped MCP Server Discovery](scoped-mcp-server-discovery.md)
 - [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md)
-- [Dynamic Tool Fetching Cache Break](../anti-patterns/dynamic-tool-fetching-cache-break.md)
+- [Dynamic Tool Fetching Cache Break](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Context Usage Attribution](../observability/context-usage-attribution.md)

@@ -39,7 +39,7 @@ Answer Engine Optimization (AEO) predates GEO as a practitioner label. Both targ
 
 ## Why this matters for developer content
 
-Developers use AI assistants as their primary discovery channel. When a developer asks ChatGPT about [agent memory patterns](../agent-design/agent-memory-patterns.md), [context engineering](../context-engineering/context-engineering.md), or tool design, the assistant synthesizes from whatever content it retrieves and cites. If your documentation is not structured for AI comprehension, it will not be cited — even when it is the most accurate source available.
+Developers use AI assistants as their primary discovery channel. When a developer asks ChatGPT about [agent memory patterns](../patterns/agent-design/agent-memory-patterns.md), [context engineering](../context-engineering/context-engineering.md), or tool design, the assistant synthesizes from whatever content it retrieves and cites. If your documentation is not structured for AI comprehension, it will not be cited — even when it is the most accurate source available.
 
 The scale signal:
 

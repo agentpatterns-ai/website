@@ -28,7 +28,7 @@ The pattern is conditional. It returns value when all of these hold:
 
 - The team commits to one cloud. `agents-cli` only deploys to Agent Runtime, Cloud Run, or GKE; the LangGraph deploy CLI builds for LangGraph Cloud ([LangChain langgraph-cli](https://reference.langchain.com/python/langgraph-cli)). Each consolidating CLI assumes its vendor.
 - The team uses a coding agent for lifecycle ops. Claude Code, Gemini CLI, Cursor, and Copilot CLI invoke shell commands cheaply. If a human runs every `eval` and `deploy` by hand, the agent-readability premium disappears.
-- Lifecycle phases share state. When eval outputs gate deploys and deploys emit traces that feed the next eval, a single CLI process can carry that state without inter-tool serialization. Whatever the vendor, this is the [Agent Development Lifecycle](../agent-design/agent-development-lifecycle.md) feedback shape.
+- Lifecycle phases share state. When eval outputs gate deploys and deploys emit traces that feed the next eval, a single CLI process can carry that state without inter-tool serialization. Whatever the vendor, this is the [Agent Development Lifecycle](../patterns/agent-design/agent-development-lifecycle.md) feedback shape.
 - The runtime stack matches the CLI. `agents-cli` is Python and `uvx`-distributed ([Google Developers Blog](https://developers.googleblog.com/en/agents-cli-in-agent-platform-create-to-production-in-one-cli/)); LangGraph CLI is Python. Polyglot stacks pay a sidecar cost.
 
 Where these conditions hold, the pattern collapses the documented productivity sink. InfoQ's coverage frames the problem as "tooling and infrastructure ... fragmented across multiple services and environments" and the consolidation goal as making lifecycle interactions "more deterministic and efficient" ([InfoQ, 2026-04-28](https://www.infoq.com/news/2026/04/agents-cli-google-cloud/)).
@@ -102,7 +102,7 @@ A different team — twelve engineers, multi-cloud (AWS Bedrock for one product,
 
 ## Related
 
-- [Agent Development Lifecycle for Agent Products](../agent-design/agent-development-lifecycle.md) — the four-phase loop the single-CLI surfaces in subcommands
+- [Agent Development Lifecycle for Agent Products](../patterns/agent-design/agent-development-lifecycle.md) — the four-phase loop the single-CLI surfaces in subcommands
 - [Agentic Framework Landscape: When Each Framework Fits](../frameworks/agentic-framework-landscape.md) — framework primitives the CLI wraps, including ADK and LangGraph
 - [CLI-IDE-GitHub Context Ladder](cli-ide-github-context-ladder.md) — the three-surface model that frames where a lifecycle CLI sits relative to IDE and forge
 - [Continuous AI Agentic CI/CD](continuous-ai-agentic-cicd.md) — the deploy-pipeline shape that consolidated `infra` and `deploy` subcommands automate

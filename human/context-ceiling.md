@@ -84,14 +84,14 @@ Doctorow's "reverse centaur" describes algorithmic systems that reduce humans to
 
 Approval carries graduated consequences -- from a rap on the knuckles up to personal legal liability in regulated domains. Experts build [deliberate quality systems](rigor-relocation.md) around this: peer review, experimentation labs, multiple design passes. These are not bureaucratic overhead; they are how expert work produces quality.
 
-Rubber-stamping AI output short-circuits all of this. The expert must read the AI's proposal, identify constraint violations the AI could not know about, [mentally reconstruct the correct answer](../anti-patterns/comprehension-debt.md), and fix or restart. That is more work than starting from scratch -- and it replaces the collaborative, iterative process experts value with solitary verification of someone else's reasoning.
+Rubber-stamping AI output short-circuits all of this. The expert must read the AI's proposal, identify constraint violations the AI could not know about, [mentally reconstruct the correct answer](../patterns/anti-patterns/comprehension-debt.md), and fix or restart. That is more work than starting from scratch -- and it replaces the collaborative, iterative process experts value with solitary verification of someone else's reasoning.
 
 !!! warning "The 80% trap"
     Osmani documents that AI excels at greenfield and boilerplate but "in mature codebases with complex invariants, the calculus inverts. The agent doesn't know what it doesn't know." Teams with high AI adoption merged 98% more PRs while review times increased 91% -- efficiency gains in generation were consumed by coordination overhead ([The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
 
 ## Distinguishing from the Implicit Knowledge Problem
 
-The [Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md) addresses knowledge that could be externalized but has not been -- team conventions, architectural decisions, naming standards. The fix is documentation and instruction files.
+The [Implicit Knowledge Problem](../patterns/anti-patterns/implicit-knowledge-problem.md) addresses knowledge that could be externalized but has not been -- team conventions, architectural decisions, naming standards. The fix is documentation and instruction files.
 
 The context ceiling is different:
 
@@ -153,8 +153,8 @@ Rapidly expanding context windows. Frontier models have moved from 4K to 1M toke
 
 ## Related
 
-- [The Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md) -- the externalizable subset of the context gap
-- [Comprehension Debt](../anti-patterns/comprehension-debt.md) -- the downstream cost of accepting AI output without deep understanding
+- [The Implicit Knowledge Problem](../patterns/anti-patterns/implicit-knowledge-problem.md) -- the externalizable subset of the context gap
+- [Comprehension Debt](../patterns/anti-patterns/comprehension-debt.md) -- the downstream cost of accepting AI output without deep understanding
 - [Bottleneck Migration](bottleneck-migration.md) -- how AI shifts bottlenecks rather than eliminating them
 - [Context Engineering](../context-engineering/context-engineering.md) -- strategies for working within context constraints
 - [Lost in the Middle](../context-engineering/lost-in-the-middle.md) -- the U-shaped attention curve behind the effective-capacity gap

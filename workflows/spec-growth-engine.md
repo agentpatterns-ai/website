@@ -104,4 +104,4 @@ The pattern this workflow composes — separating contract from implementation a
 - [Verification-Centric Development for AI-Generated Code](verification-centric-development.md) — the broader posture of layered verification that the drift gate is one specific layer of
 - [Parallel Polyglot Ports as a Spec-Ambiguity Oracle](parallel-polyglot-ports-spec-oracle.md) — a complementary spec-disambiguation workflow that uses port divergence to find spec gaps
 - [Sparse-Checkout Worktrees for Monorepo Agent Isolation](../tools/claude/sparse-paths-monorepo-isolation.md) — the file-system equivalent of the spine context assembler for Claude Code
-- [Coding Agent Scope Expansion: When to Extend Beyond the Codebase](../agent-design/coding-agent-scope-expansion.md) — the broader question of agent scope of which ownership-path scoping is one tactical answer
+- [Coding Agent Scope Expansion: When to Extend Beyond the Codebase](../patterns/agent-design/coding-agent-scope-expansion.md) — the broader question of agent scope of which ownership-path scoping is one tactical answer

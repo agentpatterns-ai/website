@@ -74,5 +74,5 @@ The content is identical; only the second tells the model where each edit lands,
 - [Token-Efficient Code Generation: Structural Beats Prompting](token-efficient-code-generation.md) — the sibling output-token lever, on the code the model writes rather than the feedback you give
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — route by complexity and headroom, the same "spend where it pays" logic
 - [Cost-Quality Pareto Measurement](cost-quality-pareto-measurement.md) — plot the cost-versus-correctness trade-off so a Sonnet-style accuracy loss is visible
-- [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — the guardrail: cutting tokens can degrade output, so measure the correctness side
+- [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — the guardrail: cutting tokens can degrade output, so measure the correctness side
 - [Harness-Controlled Token Economics](harness-token-economics.md) — how the surrounding harness, not just the model, sets token volume

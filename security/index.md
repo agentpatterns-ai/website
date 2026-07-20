@@ -53,7 +53,7 @@ Prompt injection is the primary attack vector for agents that consume untrusted 
 - [RL-Trained Automated Red Teamers for Prompt Injection Discovery](rl-automated-red-teamers.md) — Train an LLM-based attacker with reinforcement learning to discover novel injection vectors before adversaries do
 - [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md) — Narrow task scope limits both the attack surface and the blast radius of a successful injection
 
-Anti-pattern: [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md) — Relying on one safeguard leaves agents vulnerable to attack vectors that layer does not address
+Anti-pattern: [Single-Layer Prompt Injection Defence](../patterns/anti-patterns/single-layer-injection-defence.md) — Relying on one safeguard leaves agents vulnerable to attack vectors that layer does not address
 
 ## Sandboxing
 

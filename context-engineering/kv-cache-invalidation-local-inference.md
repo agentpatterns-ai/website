@@ -79,4 +79,4 @@ If any of these apply, move attribution data out of the prompt body and into HTT
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md)
 - [Static Content First: Maximizing Prompt Cache Hits](static-content-first-caching.md)
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
-- [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
+- [Dynamic Tool Fetching Breaks KV Cache](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md)

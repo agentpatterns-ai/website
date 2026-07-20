@@ -21,7 +21,7 @@ maturity: established
 
 Agents are probabilistic. The model may skip a critical step — committing changes, opening a PR, logging state — depending on context, token pressure, or model attention. Prompt instructions reduce the failure rate. They do not remove it.
 
-Middleware wraps the [agent turn model](../agent-design/agent-turn-model.md) to remove the dependence on agent compliance. Either the agent does the critical step or the middleware does, and the outcome is the same. This differs from the per-tool-call enforcement that [hooks rather than prompts](../instructions/hooks-vs-prompts.md) handle, and the CI checks that [deterministic guardrails](../verification/deterministic-guardrails.md) run. Those act within the loop or after it. Middleware acts at loop boundaries.
+Middleware wraps the [agent turn model](../patterns/agent-design/agent-turn-model.md) to remove the dependence on agent compliance. Either the agent does the critical step or the middleware does, and the outcome is the same. This differs from the per-tool-call enforcement that [hooks rather than prompts](../instructions/hooks-vs-prompts.md) handle, and the CI checks that [deterministic guardrails](../verification/deterministic-guardrails.md) run. Those act within the loop or after it. Middleware acts at loop boundaries.
 
 ## Two middleware patterns
 
@@ -62,7 +62,7 @@ Common safety-net targets:
 | Commit changes | Agent ran out of steps before cleanup |
 | Write to a log / update a ticket | Side effect, not rewarded by task completion |
 | Persist session state | Only matters for the next session |
-| Apply cost cap / abort over-budget | Token and tool-call budgets are easy to ignore mid-loop; the safety net halts deterministically. See [Per-Call Budget Hints for Tool Calls](../agent-design/per-call-budget-hints-tool-calls.md) and [Dual-Budget Control](../agent-design/dual-budget-control-search-agents.md). |
+| Apply cost cap / abort over-budget | Token and tool-call budgets are easy to ignore mid-loop; the safety net halts deterministically. See [Per-Call Budget Hints for Tool Calls](../patterns/agent-design/per-call-budget-hints-tool-calls.md) and [Dual-Budget Control](../patterns/agent-design/dual-budget-control-search-agents.md). |
 
 ### Pre-call message injection
 
@@ -187,7 +187,7 @@ Post-loop safety nets rely on idempotency. If a net fires when the agent already
 
 - Treat the agent loop as a unit to wrap from the outside — middleware nodes guarantee critical steps regardless of model compliance.
 - Post-loop safety nets perform skipped critical steps deterministically; pre-call injection nodes drain external message queues before each model invocation.
-- Safety nets require [idempotent operations](../agent-design/idempotent-agent-operations.md) and verifiable state — if a flag can be wrong, the net can fire twice.
+- Safety nets require [idempotent operations](../patterns/agent-design/idempotent-agent-operations.md) and verifiable state — if a flag can be wrong, the net can fire twice.
 - Monitor net fire-rate; a rate that stays high or climbs hides an upstream prompt or tooling problem that should be fixed at the source.
 - Claude Code's `Stop` and `UserPromptSubmit` hooks provide host-side equivalents of the same two patterns.
 
@@ -198,6 +198,6 @@ Post-loop safety nets rely on idempotency. If a net fires when the agent already
 - [PostToolUse Hooks: Auto-Formatting on Every File Edit](../tools/claude/posttooluse-auto-formatting.md) — automatic formatting via PostToolUse hooks
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — CI and commit-level output checks
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — verification gates before task completion
-- [Steering Running Agents](../agent-design/steering-running-agents.md) — human intervention patterns during agent execution
-- [Agent Turn Model](../agent-design/agent-turn-model.md) — the inference-tool-call loop that middleware intercepts at each iteration
-- [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md) — designing operations for safe retry, relevant when safety nets re-run critical steps
+- [Steering Running Agents](../patterns/agent-design/steering-running-agents.md) — human intervention patterns during agent execution
+- [Agent Turn Model](../patterns/agent-design/agent-turn-model.md) — the inference-tool-call loop that middleware intercepts at each iteration
+- [Idempotent Agent Operations](../patterns/agent-design/idempotent-agent-operations.md) — designing operations for safe retry, relevant when safety nets re-run critical steps

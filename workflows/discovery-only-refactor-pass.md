@@ -143,5 +143,5 @@ The skill stops here. The user picks candidate 3, and a follow-up grilling sessi
 
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — Sibling Pocock skill; same fixed-output, no-side-effects-without-explicit-pick discipline, applied to issue intake rather than refactor surfacing.
 - [Throwaway-Prototype Skill: Build to Discard, Keep Only the Answer](throwaway-prototype-skill.md) — Another scoped Matt Pocock skill — same constrained-output discipline applied to design-question prototyping rather than refactor candidate surfacing.
-- [Code-Health-Gated LLM Tier Routing](../agent-design/auto-model-selection.md) — Complement: the discovery pass tells you *where* refactor cycles should be spent; tier routing tells you *which model* spends them.
+- [Code-Health-Gated LLM Tier Routing](../patterns/agent-design/auto-model-selection.md) — Complement: the discovery pass tells you *where* refactor cycles should be spent; tier routing tells you *which model* spends them.
 - [Demand-Driven Repository Auditing](../verification/demand-driven-repo-auditing.md) — Adjacent skill shape with a different goal: traces specific data flows to find bugs rather than ranking deepening opportunities.

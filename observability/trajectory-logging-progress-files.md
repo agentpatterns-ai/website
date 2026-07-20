@@ -45,7 +45,7 @@ graph TD
 
 ### 1. Progress file (`claude-progress.txt`)
 
-A plain text or markdown file, updated at session end and read at session start. It captures what was completed, what is next in priority order, and any blockers. [Reading it before work begins](../agent-design/session-initialization-ritual.md) gives each fresh context window a recoverable record of prior decisions, without re-analyzing the full codebase.
+A plain text or markdown file, updated at session end and read at session start. It captures what was completed, what is next in priority order, and any blockers. [Reading it before work begins](../patterns/agent-design/session-initialization-ritual.md) gives each fresh context window a recoverable record of prior decisions, without re-analyzing the full codebase.
 
 ### 2. Git commits as trajectory checkpoints
 
@@ -63,7 +63,7 @@ The initializer agent writes `init.sh` to rebuild the development environment. L
 
 When context is compressed, the [LangChain context management pattern](https://blog.langchain.com/context-management-for-deepagents/) writes full conversation messages to the filesystem alongside a structured summary: session intent, artifacts created, and next steps. The trajectory is offloaded rather than discarded.
 
-When this is missing, a visible failure mode is [goal drift](../anti-patterns/objective-drift.md). After summarization, agents ask for clarification they do not need or declare premature completion. Both signal that the trajectory was lost.
+When this is missing, a visible failure mode is [goal drift](../patterns/anti-patterns/objective-drift.md). After summarization, agents ask for clarification they do not need or declare premature completion. Both signal that the trajectory was lost.
 
 ## Active trajectory monitoring
 
@@ -157,10 +157,10 @@ Each session runs `bash init.sh`, reads `claude-progress.txt` to recover prior d
 ## Related
 
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) — machine-readable OTel signals that complement this filesystem pattern
-- [Agent Harness: Initializer and Coding Agent](../agent-design/agent-harness.md) — the four-component harness this page extends
-- [Session Initialization Ritual](../agent-design/session-initialization-ritual.md) — `init.sh` and start-of-session checks
+- [Agent Harness: Initializer and Coding Agent](../patterns/agent-design/agent-harness.md) — the four-component harness this page extends
+- [Session Initialization Ritual](../patterns/agent-design/session-initialization-ritual.md) — `init.sh` and start-of-session checks
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — the verification middleware referenced above
 - [Loop Detection](loop-detection.md) — the active-monitoring counterpart
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — filesystem write-on-summarisation
-- [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — cross-session memory beyond the progress file
+- [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md) — cross-session memory beyond the progress file
 - [Event Sourcing for Agents](event-sourcing-for-agents.md) — an alternative audit-trail substrate

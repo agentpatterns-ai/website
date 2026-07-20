@@ -23,7 +23,7 @@ Learn it hands-on with the [Garbage-Collecting Entropy guided lesson](https://le
 
 Entropy reduction agents are scheduled background processes that scan a codebase for violations of encoded standards — outdated docs, deprecated patterns, architectural drift — and open targeted PRs for human review. They run on a cadence whether or not anyone pushes a commit, catching decay that reactive CI misses entirely.
 
-Codebases accumulate entropy between changes. Documentation drifts from the implementation faster than anyone reconciles it, which is what [continuous documentation](continuous-documentation.md) exists to counter. Deprecated patterns spread as agents copy existing code indiscriminately. Convention violations build up in corners no one watches. OpenAI's [harness engineering](../agent-design/harness-engineering.md) team calls this proactive scanning the "garbage collection" of technical debt ([Martin Fowler — Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
+Codebases accumulate entropy between changes. Documentation drifts from the implementation faster than anyone reconciles it, which is what [continuous documentation](continuous-documentation.md) exists to counter. Deprecated patterns spread as agents copy existing code indiscriminately. Convention violations build up in corners no one watches. OpenAI's [harness engineering](../patterns/agent-design/harness-engineering.md) team calls this proactive scanning the "garbage collection" of technical debt ([Martin Fowler — Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 
 Before adopting this pattern, the OpenAI harness team spent 20% of weekly capacity on cleanup — "AI slop" that proved unsustainable at scale ([Alex Lavaee — OpenAI Agent-First Codebase Learnings](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)).
 
@@ -182,7 +182,7 @@ The pattern is not a substitute for fixing the root-cause process that generates
 - [Continuous AI (Agentic CI/CD)](continuous-ai-agentic-cicd.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Continuous Documentation](continuous-documentation.md)
-- [Agent Harness](../agent-design/agent-harness.md)
+- [Agent Harness](../patterns/agent-design/agent-harness.md)
 - [Hooks Beat Prompts](../instructions/hooks-vs-prompts.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
 - [Scheduled Instruction File Fact-Checker](instruction-file-fact-checker.md)

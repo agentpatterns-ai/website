@@ -81,7 +81,7 @@ When you choose tools for agent workflows, prefer those with descriptive error o
 | Preserve everything | Manus | Keep all failed actions visible; let the model learn from the full history | Context bloat in long sessions |
 | Prevent and compact | Anthropic | Design tools to prevent errors; clear tool results as lightweight compaction | Losing error signal the model needs for recovery |
 
-Anthropic frames tool misuse as [context pollution](../anti-patterns/session-partitioning.md) and recommends clearing tool results as compaction ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Manus takes the opposite position: those dead-ends are the signal. The practical rule: preserve during active recovery, compact once recovery succeeds.
+Anthropic frames tool misuse as [context pollution](../patterns/anti-patterns/session-partitioning.md) and recommends clearing tool results as compaction ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Manus takes the opposite position: those dead-ends are the signal. The practical rule: preserve during active recovery, compact once recovery succeeds.
 
 ## Anchoring recovery in deterministic signals
 
@@ -126,8 +126,8 @@ Removing the first failed tool call would cause the model to retry `/etc/config.
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
 - [Manual Compaction and Dumb-Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
 - [Observation Masking](observation-masking.md)
-- [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md)
-- [Agent-First Software Design](../agent-design/agent-first-software-design.md)
+- [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md)
+- [Agent-First Software Design](../patterns/agent-design/agent-first-software-design.md)
 - [Lost in the Middle](lost-in-the-middle.md)
 - [Attention Sinks](attention-sinks.md)
 - [Context Window Diagnostic Tooling](context-window-diagnostic-tooling.md)

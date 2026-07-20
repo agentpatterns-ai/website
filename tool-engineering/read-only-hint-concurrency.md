@@ -43,7 +43,7 @@ Read-only concurrency only holds when these are true.
 - Annotation audit has run. The MCP spec treats annotations as untrusted unless from a trusted server ([MCP specification](https://spec.modelcontextprotocol.io/specification/server/tools/)). Audit tool idempotency against every connected server before flipping the harness flag — without it, one misannotated tool turns the win into a race.
 - `idempotentHint` is set alongside `readOnlyHint`. A read-only call that fails transiently must be safe to retry. Pure reads are idempotent by definition; the annotation makes that explicit and gives the harness a safe recovery path.
 - Per-server concurrency caps exist. The Codex PR mentions no fairness mechanism — every read-only tool against one server can be dispatched at once ([openai/codex PR #23750](https://github.com/openai/codex/pull/23750)). Rate-limited backends need a harness-side cap or strict server-side throttling.
-- The model handles interleaved tool results. Concurrent dispatch returns results out-of-order. Models that degrade on interleaved-ledger reasoning underperform the sequential baseline regardless of wall-clock gains ([Asynchronous Agent I/O and Speculative Tools](../agent-design/asynchronous-agent-io-and-speculative-tools.md)).
+- The model handles interleaved tool results. Concurrent dispatch returns results out-of-order. Models that degrade on interleaved-ledger reasoning underperform the sequential baseline regardless of wall-clock gains ([Asynchronous Agent I/O and Speculative Tools](../patterns/agent-design/asynchronous-agent-io-and-speculative-tools.md)).
 
 ## When this backfires
 
@@ -99,5 +99,5 @@ The wall-clock cost drops from `sum` to `max`. If `get_customer` is annotated `r
 
 - [MCP Server Design](mcp-server-design.md)
 - [Future-Based Asynchronous Function Calling](future-based-async-function-calling.md)
-- [Asynchronous Agent I/O and Speculative Tools](../agent-design/asynchronous-agent-io-and-speculative-tools.md)
+- [Asynchronous Agent I/O and Speculative Tools](../patterns/agent-design/asynchronous-agent-io-and-speculative-tools.md)
 - [WebMCP: Browser-Hosted Tool Contracts](../standards/webmcp.md)

@@ -101,7 +101,7 @@ The opening section carries the rules the agent must follow reliably. The middle
 - [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)
 - [Attention Sinks: Why First Tokens Always Win](attention-sinks.md)
 - [Critical Instruction Repetition: Exploiting Primacy and Recency Bias](../instructions/critical-instruction-repetition.md)
-- [The Infinite Context](../anti-patterns/infinite-context.md)
+- [The Infinite Context](../patterns/anti-patterns/infinite-context.md)
 - [Goal Recitation: Countering Drift in Long Sessions](goal-recitation.md)
 - [Prompt Layering: How Instructions Stack and Override](prompt-layering.md)
 - [Context Window Management: The Dumb Zone](context-window-dumb-zone.md)

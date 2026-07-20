@@ -35,7 +35,7 @@ A 2025 study found that 94% of LLM-generated compilation errors were type-check 
 
 Types act as implicit constraints on generation. Declaring `x: string` rules out an entire class of invalid operations. Type definitions, interfaces, and schemas act as precise agent instructions — a contract the agent must satisfy rather than a description it might misinterpret.
 
-Type errors become [agent backpressure](../agent-design/agent-backpressure.md) — immediate, machine-readable feedback the agent can self-correct against without human intervention. The agent runs the compiler, reads the error, fixes the code, and re-runs. Untyped codebases surface equivalent errors only at runtime or during human review.
+Type errors become [agent backpressure](../patterns/agent-design/agent-backpressure.md) — immediate, machine-readable feedback the agent can self-correct against without human intervention. The agent runs the compiler, reads the error, fixes the code, and re-runs. Untyped codebases surface equivalent errors only at runtime or during human review.
 
 ## Beyond TypeScript
 
@@ -96,7 +96,7 @@ The convenience loop does not apply uniformly:
 
 - Early-stage prototypes: adding types upfront in a fast-changing domain locks in unstable abstractions. The annotation cost returns before the codebase stabilizes.
 - Dynamic-typing-native stacks: Python data-science workflows (NumPy, pandas, matplotlib) often rely on duck typing. Strict type annotations fight the library conventions and generate noisy mypy errors on legitimate usage.
-- Legacy codebases without CI: retrofitting types onto an untyped codebase is a large batch change. If type errors cannot gate merges (no CI type-check step), they provide [no backpressure](../agent-design/agent-backpressure.md) — just maintenance overhead.
+- Legacy codebases without CI: retrofitting types onto an untyped codebase is a large batch change. If type errors cannot gate merges (no CI type-check step), they provide [no backpressure](../patterns/agent-design/agent-backpressure.md) — just maintenance overhead.
 - Agents that do not self-correct: the backpressure loop requires the agent to run the type checker, read the error, and re-attempt. Agents used in single-shot mode without tool access do not benefit from the feedback cycle.
 
 Types are also not the whole story. They catch a specific error class — they do not close the semantic gap between an LLM's statistical output and a program's intended behavior, which needs formal verification and structured representations beyond type annotations ([Position Paper: Programming Language Techniques for Bridging LLM Code Generation Semantic Gaps, arxiv 2507.09135](https://arxiv.org/abs/2507.09135)). Simpler-syntax dynamic languages can also yield fewer raw generation errors, since verbose type declarations offer more surface for small mistakes. Treat type support as one signal among several, not a guarantee of correctness.
@@ -110,11 +110,11 @@ Types are also not the whole story. They catch a specific error class — they d
 
 ## Related
 
-- [Codebase Readiness for Agents](../agent-design/codebase-readiness.md)
-- [Agent Backpressure](../agent-design/agent-backpressure.md)
+- [Codebase Readiness for Agents](../patterns/agent-design/codebase-readiness.md)
+- [Agent Backpressure](../patterns/agent-design/agent-backpressure.md)
 - [Specification as Prompt](../instructions/specification-as-prompt.md)
 - [Convention Over Configuration](../instructions/convention-over-configuration.md)
 - [Process Amplification](process-amplification.md)
 - [Rigor Relocation](rigor-relocation.md)
 - [Cross-Tool Translation](cross-tool-translation.md)
-- [Domain-Specific Agent Challenges](../agent-design/domain-specific-agent-challenges.md)
+- [Domain-Specific Agent Challenges](../patterns/agent-design/domain-specific-agent-challenges.md)

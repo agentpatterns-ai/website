@@ -124,10 +124,10 @@ Each agent operates in its own directory. If `add-audit-log` fails, its worktree
 ## Related
 
 - [The Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md)
-- [Agent Backpressure](../agent-design/agent-backpressure.md)
-- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
+- [Agent Backpressure](../patterns/agent-design/agent-backpressure.md)
+- [Agent Handoff Protocols](../patterns/multi-agent/agent-handoff-protocols.md)
 - [Single-Branch Git for Agent Swarms](single-branch-git-agent-swarms.md)
-- [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
+- [Sub-Agents for Fan-Out Research and Context Isolation](../patterns/multi-agent/sub-agents-fan-out.md)
 - [Sparse Paths Monorepo Isolation](../tools/claude/sparse-paths-monorepo-isolation.md)
 - [Lazy Worktree Isolation: Enter the Worktree on First Write, Not on Dispatch](lazy-worktree-isolation.md)
 - [Concurrent Agent Pull Requests and Merge-Conflict Cost](concurrent-agent-pr-merge-conflicts.md) — the co-activity and merge-conflict rates that make per-agent isolation worth the setup

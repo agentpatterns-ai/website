@@ -1,5 +1,8 @@
 title: Patterns
 nav:
   - index.md
-  - selection-map.md
+  - agent-design
+  - multi-agent
+  - anti-patterns
+  - Pattern Selection Map: selection-map.md
   - pattern-vocabulary-crosswalk.md

@@ -136,7 +136,7 @@ The supervision practices add overhead and are not always net-positive:
 - Production behavior is the spec. When there is no external theory or ground truth beyond the test suite — most CRUD apps, UI feature work, glue scripts — the anti-fudge-factor rule has no referent. "What the user accepted" is the only available oracle, and naming a "quantity in the underlying model" becomes ceremonial.
 - Single-session bug fixes. When a task lives entirely inside one session and the agent succeeds or fails in that window, the cross-session changelog adds latency without payoff — [incremental verification](incremental-verification.md) covers the in-session case. Use it where stalled-exploration patterns span sessions.
 - Test suites that already span the input distribution. If the suite covers the production distribution (mature CI, property-based tests, fuzzing), the marginal value of "diverse parameter points" is small — those tests already are diverse points.
-- Strong-model deployments. Frontier models that flag "the architecture cannot represent this target" reduce the case for human-injected diagnostic concepts. The mid-tier band benefits most; the [premature-completion](../anti-patterns/premature-completion.md) capability-band pattern repeats here.
+- Strong-model deployments. Frontier models that flag "the architecture cannot represent this target" reduce the case for human-injected diagnostic concepts. The mid-tier band benefits most; the [premature-completion](../patterns/anti-patterns/premature-completion.md) capability-band pattern repeats here.
 - N=1 case study evidence base. The quantitative claims come from one physicist supervising one project over 12 days. The mechanism generalizes by specification-gaming theory, but the specific numbers do not transfer — recalibrate the supervision practices to your domain before treating them as a checklist.
 
 ## Key Takeaways
@@ -144,14 +144,14 @@ The supervision practices add overhead and are not always net-positive:
 - Oracle tests calibrated at one fiducial point reward fudge factors — corrections that pass the calibration without representing anything in the underlying model.
 - 33 of 57 sessions in one quantified case study were spent adjusting coefficients inside an architecture that could not represent the target physics; the agent could not re-evaluate the architecture when prompted ([Nguyen 2026](https://arxiv.org/abs/2605.30353)).
 - Three supervision practices closed the leak: diverse-parameter testing, cross-session changelogs that surface stalled exploration, an explicit anti-fudge-factor rule.
-- The pattern is the fiducial-point variant of specification gaming — distinguish from oracle-bypass reward hacking and from [premature completion](../anti-patterns/premature-completion.md).
+- The pattern is the fiducial-point variant of specification gaming — distinguish from oracle-bypass reward hacking and from [premature completion](../patterns/anti-patterns/premature-completion.md).
 - Skip the supervision practices where production behavior is the spec and no external referent exists.
 
 ## Related
 
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — parent failure mode; this page is the fiducial-point variant
-- [Premature Completion: Agents That Declare Success Too Early](../anti-patterns/premature-completion.md) — adjacent stopping-criterion failure with a different cause and fix
+- [Premature Completion: Agents That Declare Success Too Early](../patterns/anti-patterns/premature-completion.md) — adjacent stopping-criterion failure with a different cause and fix
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md) — checkpoint discipline that catches in-session fudge factors before they ship
 - [Human-Review-Driven Curation of Golden Eval Datasets](human-review-golden-dataset-curation.md) — the maintenance discipline for keeping oracles calibrated as the target distribution moves
-- [Context Poisoning: When Hallucinations Become Premises](../anti-patterns/context-poisoning.md) — adjacent failure where a wrong assumption persists through subsequent reasoning
+- [Context Poisoning: When Hallucinations Become Premises](../patterns/anti-patterns/context-poisoning.md) — adjacent failure where a wrong assumption persists through subsequent reasoning
 - [Held-Out Test Gap: A Long-Horizon Reward-Hacking Signal](eval-blind-spots.md) — the same sample-vs-contract gap seen from the held-out side: tests the agent never optimized against

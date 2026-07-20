@@ -75,7 +75,7 @@ Operationally, the shift looks like this:
 | Code quality degrades | Review and reject diffs | Add linting, architectural rules, or pattern enforcement to harness |
 | New requirements | Prompt the agent with corrections | Update the spec layer of the harness |
 
-[Harness engineering](../agent-design/harness-engineering.md) is the practice of building these environments. The harness is the primary artifact of on-the-loop work.
+[Harness engineering](../patterns/agent-design/harness-engineering.md) is the practice of building these environments. The harness is the primary artifact of on-the-loop work.
 
 ## Making the transition
 
@@ -85,11 +85,11 @@ Teams shifting from in-loop to on-loop typically pass through a recognition: the
 2. Capture patterns as harness rules — when a human would have caught a recurring class of error, convert that judgment into an automated check that catches it upstream.
 3. Review harness performance, not artifact quality — shift the human review cadence from per-PR diff review to periodic harness evaluation: are the checks catching what they should? Are new failure modes emerging?
 
-This is not a one-time migration. The [harness](../agent-design/harness-engineering.md) is continuously maintained. New workload types, model changes, and scope expansions each require harness updates.
+This is not a one-time migration. The [harness](../patterns/agent-design/harness-engineering.md) is continuously maintained. New workload types, model changes, and scope expansions each require harness updates.
 
 ## The agentic flywheel
 
-The on-the-loop mode opens a further evolution: directing agents to analyze their own traces and propose harness improvements. This is the [agentic flywheel](../agent-design/agentic-flywheel.md) — a closed loop where agents evaluate the performance of the loop they run and recommend changes to it.
+The on-the-loop mode opens a further evolution: directing agents to analyze their own traces and propose harness improvements. This is the [agentic flywheel](../patterns/agent-design/agentic-flywheel.md) — a closed loop where agents evaluate the performance of the loop they run and recommend changes to it.
 
 The graduation path for flywheel recommendations mirrors the in/on/out spectrum:
 
@@ -108,7 +108,7 @@ On-the-loop is not a universal remedy. The Microsoft Azure SRE Agent team report
 Conditions under which on-the-loop is worse than the alternative:
 
 - Novel problem classes: if failure modes are not yet recognized, any rule encoded in the harness is a guess — agents with general tools and freedom to explore outperform agents steered by premature guardrails
-- Rapidly shifting model capability: a harness tuned for one model generation can under-use the next — see [per-model harness tuning](../agent-design/per-model-harness-tuning.md) — and the ongoing re-tuning cost can exceed the cost of direct review
+- Rapidly shifting model capability: a harness tuned for one model generation can under-use the next — see [per-model harness tuning](../patterns/agent-design/per-model-harness-tuning.md) — and the ongoing re-tuning cost can exceed the cost of direct review
 - Small teams or short-lived projects: harness investment amortizes over many agent runs; one-off work or exploratory spikes rarely recoup the upfront cost
 - Opaque or bespoke integrations: when harness tooling hides the underlying system behind custom wrappers and pre-digested context, the agent loses the ability to reason about edge cases the wrapper did not anticipate
 
@@ -122,14 +122,14 @@ The signal to watch: if harness maintenance is consuming more human attention th
 - "In the loop" scales poorly: agent throughput exceeds human review capacity; use gates only for irreversible or high-impact steps
 - "On the loop" compounds quality: each harness improvement applies to every future agent run, not just the current artefact
 - Harness investment inverts when the scaffolding pre-computes the agent's answer space — encode constraints, not decisions
-- The [agentic flywheel](../agent-design/agentic-flywheel.md) extends "on the loop" by having agents propose harness improvements — the end state is a system that improves itself within human-defined bounds
+- The [agentic flywheel](../patterns/agent-design/agentic-flywheel.md) extends "on the loop" by having agents propose harness improvements — the end state is a system that improves itself within human-defined bounds
 
 ## Related
 
-- [Harness Engineering](../agent-design/harness-engineering.md)
-- [Agentic Flywheel: Building Self-Improving Agent Systems](../agent-design/agentic-flywheel.md)
+- [Harness Engineering](../patterns/agent-design/harness-engineering.md)
+- [Agentic Flywheel: Building Self-Improving Agent Systems](../patterns/agent-design/agentic-flywheel.md)
 - [Human-in-the-Loop Placement: Where and How to Supervise](human-in-the-loop.md)
 - [Spec-Driven Development](spec-driven-development.md)
-- [Vibe Coding: Outcome-Oriented Agent-Assisted Development](../anti-patterns/vibe-coding.md)
+- [Vibe Coding: Outcome-Oriented Agent-Assisted Development](../patterns/anti-patterns/vibe-coding.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Plan-First Loop](plan-first-loop.md)

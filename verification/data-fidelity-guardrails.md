@@ -56,7 +56,7 @@ Application code copies the `data` object straight from the API response, and `c
 
 ### Typed schema validation
 
-[Structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) enforce schema shape through constrained decoding. See [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md) for the full pattern of applying typed contracts at every agent-to-agent interface. But schema compliance does not equal value accuracy. A correctly typed `"balance": 14500.00` still differs from the true value of `14523.87`.
+[Structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) enforce schema shape through constrained decoding. See [Typed Schemas at Agent Boundaries](../patterns/multi-agent/typed-schemas-at-agent-boundaries.md) for the full pattern of applying typed contracts at every agent-to-agent interface. But schema compliance does not equal value accuracy. A correctly typed `"balance": 14500.00` still differs from the true value of `14523.87`.
 
 Layer schema validation with other defenses:
 

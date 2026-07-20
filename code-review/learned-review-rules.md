@@ -19,7 +19,7 @@ maturity: established
 
 ## The problem
 
-A first-generation review agent treats every PR as a fresh start. It flags the same false positives your team has dismissed dozens of times — including the systematic [overcorrection bias](../anti-patterns/llm-review-overcorrection.md) where LLMs misclassify correct code as non-compliant — misses patterns your codebase convention already handles, and produces a noise-to-signal ratio that degrades trust. The agent does not learn.
+A first-generation review agent treats every PR as a fresh start. It flags the same false positives your team has dismissed dozens of times — including the systematic [overcorrection bias](../patterns/anti-patterns/llm-review-overcorrection.md) where LLMs misclassify correct code as non-compliant — misses patterns your codebase convention already handles, and produces a noise-to-signal ratio that degrades trust. The agent does not learn.
 
 The cause is feedback disposal: when a developer dismisses a comment or accepts a fix, that signal is discarded. The agent behaves the same way on the next PR as it did on the first. An [empirical study of 278,790 code review conversations across 300 open-source projects](https://arxiv.org/abs/2603.15911) found that teams adopt AI agent suggestions at a much lower rate than suggestions from human reviewers. The gap persists in part because agents cannot adjust their defaults to team-specific dismissal patterns.
 
@@ -95,5 +95,5 @@ Rule quality depends on signal clarity. "Dismiss" means different things: incorr
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Tiered Code Review](tiered-code-review.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
-- [LLM Code Review Overcorrection](../anti-patterns/llm-review-overcorrection.md)
+- [LLM Code Review Overcorrection](../patterns/anti-patterns/llm-review-overcorrection.md)
 - [Committee Review Pattern](committee-review-pattern.md)

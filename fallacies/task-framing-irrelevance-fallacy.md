@@ -47,7 +47,7 @@ Fallacy applied — leaving irrelevant files open and using a generic descriptio
 
 > "Refactor the payment service."
 
-No files specified, no constraints, no goal. Relevant files [compete for attention](../anti-patterns/distractor-interference.md) with everything else in context, and the output addresses surface structure rather than the intended change.
+No files specified, no constraints, no goal. Relevant files [compete for attention](../patterns/anti-patterns/distractor-interference.md) with everything else in context, and the output addresses surface structure rather than the intended change.
 
 Fallacy corrected — closed irrelevant files, provided specific framing:
 
@@ -69,12 +69,12 @@ Optimizing framing here yields diminishing returns. The fallacy is the blanket c
 
 - LLM outputs are a function of framing, not just problem structure — changing surface presentation produces measurably different results.
 - Prompt engineering is precision work — parameter names, task descriptions, and context composition affect which patterns the model activates.
-- Irrelevant context is not neutral — open files, conversation history, and surrounding instructions [compete with task-relevant content](../anti-patterns/distractor-interference.md).
+- Irrelevant context is not neutral — open files, conversation history, and surrounding instructions [compete with task-relevant content](../patterns/anti-patterns/distractor-interference.md).
 - Attribute output variation to framing before attributing it to model capability.
 
 ## Related
 
-- [Distractor Interference](../anti-patterns/distractor-interference.md) — how semantically related but inapplicable instructions reduce compliance
+- [Distractor Interference](../patterns/anti-patterns/distractor-interference.md) — how semantically related but inapplicable instructions reduce compliance
 - [Context Engineering](../context-engineering/context-engineering.md) — the discipline of designing what enters the context window
 - [Instruction Polarity](../instructions/instruction-polarity.md) — how framing instruction direction (positive vs negative) affects compliance
 - [The Consistent Capability Fallacy](consistent-capability-fallacy.md) — why success on one task does not predict success on similar tasks, even with identical framing

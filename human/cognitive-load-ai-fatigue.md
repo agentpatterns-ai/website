@@ -102,7 +102,7 @@ After the non-AI block, the developer resumes with Claude Code but caps each new
 - [The Addictive Flow State of Agent-Assisted Development](addictive-flow-agent-development.md) — the opposite pole: compulsive engagement rather than fatigue
 - [Developer as CPU Scheduler: Attention Management with Parallel Agents](attention-management-parallel-agents.md) — structuring attention across simultaneous AI tasks
 - [Skill Atrophy: When AI Reliance Erodes Developer Capability](skill-atrophy.md) — long-term capability costs of sustained AI delegation
-- [Comprehension Debt](../anti-patterns/comprehension-debt.md) — the growing gap between AI-generated code and developer understanding, the third concept in the fatigue/atrophy/debt cluster
+- [Comprehension Debt](../patterns/anti-patterns/comprehension-debt.md) — the growing gap between AI-generated code and developer understanding, the third concept in the fatigue/atrophy/debt cluster
 - [The Bottleneck Migration for AI Agent Development](bottleneck-migration.md) — review and verification as the new bottleneck
 - [The Context Ceiling](context-ceiling.md) — the cognitive overhead experts bear when AI output requires more correction than generation saves
 - [Process Amplification](process-amplification.md) — how AI use intensity scales workload and how to manage the amplification

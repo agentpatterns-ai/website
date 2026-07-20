@@ -24,7 +24,7 @@ Learn it hands-on: [Sandboxing and blast-radius containment](https://learn.agent
 
 ## The principle
 
-Every permission an agent does not need is an attack surface for hallucination-driven damage. A research agent with write access can corrupt files. A reviewer with merge access can close PRs it should not. A draft writer with deploy access is one bad session away from a [production incident](../agent-design/rollback-first-design.md).
+Every permission an agent does not need is an attack surface for hallucination-driven damage. A research agent with write access can corrupt files. A reviewer with merge access can close PRs it should not. A draft writer with deploy access is one bad session away from a [production incident](../patterns/agent-design/rollback-first-design.md).
 
 The permissions you grant an agent bound the damage it can do. This works because the runtime layer enforces tool access. The execution environment filters which tools are available before the model ever sees a request, so even a successfully injected prompt cannot invoke a restricted tool. Isolation is structural, not probabilistic.
 
@@ -167,6 +167,6 @@ Scoping bounds per-action damage but not time-integrated damage. A Kiteworks 202
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md) — paired runtime + filesystem containment
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — layered safety controls beyond permission scoping
 - [Lethal Trifecta Threat Model for AI Agent Development](lethal-trifecta-threat-model.md) — why bounded permissions matter under prompt injection
-- [Rollback-First Design: Every Agent Action Should Be Reversible](../agent-design/rollback-first-design.md) — reversibility as a complement to bounded permissions
+- [Rollback-First Design: Every Agent Action Should Be Reversible](../patterns/agent-design/rollback-first-design.md) — reversibility as a complement to bounded permissions
 - [Constraints as a Substrate for Scalable Agent Oversight](constraint-substrate-scalable-oversight.md) — least privilege as one leg of a broader constraint substrate that makes review scale
 - [Cross-Repository Security Posture for Agent-Introduced Vulnerabilities](cross-repository-security-posture.md) — the organization-wide layer above per-agent scoping, remediating a vulnerability class across every repository

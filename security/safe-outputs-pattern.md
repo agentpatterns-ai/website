@@ -43,7 +43,7 @@ graph TD
 The pipeline applies [three sequential deterministic checks](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/) before any write reaches the repository:
 
 1. Operation filtering. Workflow authors set which operation types are allowed and cap the volume, for example "at most three pull requests". Any operation outside the declared set is rejected.
-2. Content moderation. Pattern analysis removes unwanted elements such as URLs (see [the URL exfiltration guard](./url-exfiltration-guard.md)) and other content that breaks policy.
+2. Content moderation. Pattern analysis removes unwanted elements such as URLs (see [the URL exfiltration guard](url-exfiltration-guard.md)) and other content that breaks policy.
 3. Secret removal. Output sanitization strips exposed credentials before the artifact reaches the repository.
 
 Only artifacts that pass through the whole pipeline are written. Each stage's side effects are transparent and audited.
@@ -73,8 +73,8 @@ The security guarantee is architectural, not behavioral. Routing every write thr
 
 - Write operation not in the declared list. A task needing a write type absent from the workflow's declared list fails silently at the filtering stage — an accidental denial for legitimate work, not just spam.
 - Volume caps too tight. A refactoring agent that opens many small PRs can exceed a cap like the "three pull requests" limit set to stop spam; raising it means first measuring how the actual workload spreads across PRs.
-- Content moderation false positives. The same URL removal that blocks [exfiltration attempts](./url-exfiltration-guard.md) can strip a legitimate documentation link from a PR description without telling the agent why.
-- No protection for the read surface. The pattern bounds only the write blast radius; a compromised agent still reads all repository state, so exfiltration risk needs its own controls, such as [scoped credentials](./scoped-credentials-proxy.md) or network isolation.
+- Content moderation false positives. The same URL removal that blocks [exfiltration attempts](url-exfiltration-guard.md) can strip a legitimate documentation link from a PR description without telling the agent why.
+- No protection for the read surface. The pattern bounds only the write blast radius; a compromised agent still reads all repository state, so exfiltration risk needs its own controls, such as [scoped credentials](scoped-credentials-proxy.md) or network isolation.
 
 ## Example
 
@@ -100,11 +100,11 @@ At runtime, the agent calls the safe outputs MCP server for every write. The ser
 
 ## Related
 
-- [Blast Radius Containment: Least Privilege for AI Agents](./blast-radius-containment.md)
-- [Permission-Gated Commands](./permission-gated-commands.md)
-- [Human-in-the-Loop Confirmation Gates](./human-in-the-loop-confirmation-gates.md)
-- [Scoped Credentials via Proxy](./scoped-credentials-proxy.md)
-- [Secrets Management for Agents](./secrets-management-for-agents.md)
-- [Treat Task Scope as a Security Boundary](./task-scope-security-boundary.md)
-- [Prompt Injection Threat Model](./prompt-injection-threat-model.md)
-- [Guarding Against URL-Based Data Exfiltration](./url-exfiltration-guard.md)
+- [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
+- [Permission-Gated Commands](permission-gated-commands.md)
+- [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
+- [Scoped Credentials via Proxy](scoped-credentials-proxy.md)
+- [Secrets Management for Agents](secrets-management-for-agents.md)
+- [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md)
+- [Prompt Injection Threat Model](prompt-injection-threat-model.md)
+- [Guarding Against URL-Based Data Exfiltration](url-exfiltration-guard.md)

@@ -118,7 +118,7 @@ Recent empirical work tempers the optimistic framing: an [MSR 2026 Mining Challe
 ## Related
 
 - [Safe Outputs Pattern](../security/safe-outputs-pattern.md)
-- [Agent Harness](../agent-design/agent-harness.md)
+- [Agent Harness](../patterns/agent-design/agent-harness.md)
 - [Blast Radius Containment](../security/blast-radius-containment.md)
 - [Human-in-the-Loop](human-in-the-loop.md)
 - [Continuous Documentation](continuous-documentation.md)

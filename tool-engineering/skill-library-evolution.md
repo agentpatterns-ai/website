@@ -129,15 +129,15 @@ Lifecycle governance adds overhead that may exceed its value in some contexts:
 
 - [Skill as Knowledge Pattern](skill-as-knowledge.md)
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md)
-- [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
+- [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
 - [Tool Minimalism](tool-minimalism.md)
 - [Skill Authoring Patterns](skill-authoring-patterns.md)
 - [Skill Library Technical Debt](skill-library-technical-debt.md) — the mechanical-repair counterpart to this page's governance-lifecycle view
 - [Skill Reuse as Vendored Forking](skill-reuse-as-vendored-forking.md) — the empirical account of how reused skills actually behave: one-time near-verbatim copies that rarely re-sync
-- [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md)
+- [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md)
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md)
-- [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
+- [Separation of Knowledge and Execution](../patterns/agent-design/separation-of-knowledge-and-execution.md)
 - [Proprietary-to-Open-Standard Migration](copilot-extensions-to-mcp-migration.md)
 - [Tool Description Quality](tool-description-quality.md)
 - [Video Transcript Skill: Meeting Recording to Markdown](../tools/claude/video-transcript-skill.md) — multi-tool skill example that motivates lifecycle concerns like external dependencies and availability constraints

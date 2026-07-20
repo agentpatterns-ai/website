@@ -116,5 +116,5 @@ Without the cache, every session re-discovers the entry points, re-reads the con
 - [Repository Map Pattern](repository-map-pattern.md) — per-session, token-fitted alternative for code repositories
 - [AOCI: Symbolic-Semantic Repository Indexing](aoci-symbolic-semantic-indexing.md) — query-independent blueprint built offline, contrasted with PEEK's runtime-maintained cache
 - [Seeding Agent Context](seeding-agent-context.md) — human-authored breadcrumbs that play the orientation role without a cache
-- [Tiered Memory Architecture](../agent-design/tiered-memory-architecture.md) — episodic-to-semantic memory pipeline that complements an orientation cache
+- [Tiered Memory Architecture](../patterns/agent-design/tiered-memory-architecture.md) — episodic-to-semantic memory pipeline that complements an orientation cache
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) — what belongs in a persistent artifact versus left for the agent to find

@@ -159,7 +159,7 @@ CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=55 claude
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Observation Masking](observation-masking.md)
 - [Goal Recitation: Countering Drift in Long Sessions](goal-recitation.md)
-- [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md)
+- [Reasoning Budget Allocation](../patterns/agent-design/reasoning-budget-allocation.md)
 - [Attention Sinks](attention-sinks.md)
 - [Context Budget Allocation](context-budget-allocation.md)
 - [Context Priming](context-priming.md)

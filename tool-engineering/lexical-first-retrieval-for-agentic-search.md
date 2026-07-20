@@ -114,6 +114,6 @@ The dense pipeline carries three managed dependencies and per-call API costs on 
 ## Related
 
 - [Web Search Agent Loop](web-search-agent-loop.md)
-- [Dual-Budget Control for Search Agents](../agent-design/dual-budget-control-search-agents.md)
+- [Dual-Budget Control for Search Agents](../patterns/agent-design/dual-budget-control-search-agents.md)
 - [Cross-Repo Agent Search](cross-repo-agent-search.md)
 - [Indexed Regex Search for Agent Tools](indexed-regex-search-agent-tools.md)

@@ -86,9 +86,9 @@ The zero-shot result is also model-dependent. [AsyncTool](https://arxiv.org/abs/
 
 ## Relationship to other async patterns
 
-- [Asynchronous Agent I/O and Speculative Tool Calling](../agent-design/asynchronous-agent-io-and-speculative-tools.md) — the agent-loop FSM for real-time and voice agents; AsyncFC operates one layer down at the function-call boundary.
-- [Async Non-Blocking Subagent Dispatch](../multi-agent/async-non-blocking-subagent-dispatch.md) — orchestrator-subagent coordination; AsyncFC handles model-tool coordination within a single agent.
-- [Bounded Batch Dispatch](../multi-agent/bounded-batch-dispatch.md) — concurrency limits when fanning out to many workers; AsyncFC instead overlaps with the model's own decoding.
+- [Asynchronous Agent I/O and Speculative Tool Calling](../patterns/agent-design/asynchronous-agent-io-and-speculative-tools.md) — the agent-loop FSM for real-time and voice agents; AsyncFC operates one layer down at the function-call boundary.
+- [Async Non-Blocking Subagent Dispatch](../patterns/multi-agent/async-non-blocking-subagent-dispatch.md) — orchestrator-subagent coordination; AsyncFC handles model-tool coordination within a single agent.
+- [Bounded Batch Dispatch](../patterns/multi-agent/bounded-batch-dispatch.md) — concurrency limits when fanning out to many workers; AsyncFC instead overlaps with the model's own decoding.
 
 ## Example
 
@@ -138,7 +138,7 @@ Usage mirrors what the model sees — the model calls `search("foo")`, gets `fut
 
 ## Related
 
-- [Asynchronous Agent I/O and Speculative Tool Calling](../agent-design/asynchronous-agent-io-and-speculative-tools.md)
-- [Async Non-Blocking Subagent Dispatch](../multi-agent/async-non-blocking-subagent-dispatch.md)
+- [Asynchronous Agent I/O and Speculative Tool Calling](../patterns/agent-design/asynchronous-agent-io-and-speculative-tools.md)
+- [Async Non-Blocking Subagent Dispatch](../patterns/multi-agent/async-non-blocking-subagent-dispatch.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)

@@ -92,7 +92,7 @@ The stack still synthesizes and the Lambda works, so the task passes. The flow-g
 
 ## Related
 
-- [Trusting Human Review to Catch Deliberate Agent Sabotage](../anti-patterns/deliberate-agent-code-sabotage.md) — the human-review failure this monitor moves detection away from
+- [Trusting Human Review to Catch Deliberate Agent Sabotage](../patterns/anti-patterns/deliberate-agent-code-sabotage.md) — the human-review failure this monitor moves detection away from
 - [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md) — the same blind spot, where functional tests pass while security regresses across iterations
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — the behavioral counterpart that watches tool-call sequences rather than the code artifact
 - [Distributed Cross-PR Attacks in Persistent-State AI Control](distributed-cross-pr-attacks.md) — the multi-change evasion that defeats a per-diff structural monitor

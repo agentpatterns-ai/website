@@ -52,11 +52,11 @@ Pull the specific signal that failed — a log line, a metric value, a trace spa
 
 ### 2. Correlate
 
-Connect the signal to the responsible layer. A front-end exception triggered by a back-end data shape lives in the back-end. Under a [layered domain architecture](../agent-design/layered-domain-architecture.md), name the layer explicitly — the assignment determines what gets edited in step 4.
+Connect the signal to the responsible layer. A front-end exception triggered by a back-end data shape lives in the back-end. Under a [layered domain architecture](../patterns/agent-design/layered-domain-architecture.md), name the layer explicitly — the assignment determines what gets edited in step 4.
 
 ### 3. Reason
 
-Name a hypothesis with falsifiable predictions before editing. This is the entry point to [hypothesis-driven debugging](../agent-design/hypothesis-driven-debugging.md) — enumerate competing explanations, then identify which one the evidence supports. The hypothetico-deductive method Google SRE codifies in its [Effective Troubleshooting chapter](https://sre.google/sre-book/effective-troubleshooting/) names the same discipline. Skipping it is the classic agent failure mode: edit-rerun-repeat cycles with no discrimination between causes.
+Name a hypothesis with falsifiable predictions before editing. This is the entry point to [hypothesis-driven debugging](../patterns/agent-design/hypothesis-driven-debugging.md) — enumerate competing explanations, then identify which one the evidence supports. The hypothetico-deductive method Google SRE codifies in its [Effective Troubleshooting chapter](https://sre.google/sre-book/effective-troubleshooting/) names the same discipline. Skipping it is the classic agent failure mode: edit-rerun-repeat cycles with no discrimination between causes.
 
 ### 4. Implement
 
@@ -84,7 +84,7 @@ A repeatable bug: API returns 500 on `/users/me` after token refresh, intermitte
 
 - Query — the 500 carries `error_id=auth-token-stale-3f2a` in the body and the log line `level=error fn=refreshToken cause=stale_cache`. That `error_id` is the signal.
 - Correlate — the line is emitted by the auth middleware (`src/auth/middleware.ts`), not the route handler. Layer assignment: middleware token-refresh.
-- Reason — three hypotheses: (a) cache invalidation runs after the refresh, (b) the refresh races a parallel refresh in another worker, (c) the cache TTL is shorter than the refresh window. One log line per hypothesis ([hypothesis-driven debugging](../agent-design/hypothesis-driven-debugging.md)) fires for (a).
+- Reason — three hypotheses: (a) cache invalidation runs after the refresh, (b) the refresh races a parallel refresh in another worker, (c) the cache TTL is shorter than the refresh window. One log line per hypothesis ([hypothesis-driven debugging](../patterns/agent-design/hypothesis-driven-debugging.md)) fires for (a).
 - Implement — invalidate the cache before the refresh, not after. One-line change in `middleware.ts`.
 - Restart — `init.sh` restarts the local API and verifies `/healthz` plus `/users/me` unauthenticated. Both pass; clean restart confirmed.
 - Rerun — the original workload: authenticated session, idle past TTL, then `/users/me`. Not a cache-layer unit test — the same end-to-end path that surfaced the 500.
@@ -113,10 +113,10 @@ The rule from [research-plan-implement](../workflows/research-plan-implement.md)
 ## Related
 
 - [Agent Debugging: Diagnosing Bad Agent Output](agent-debugging.md)
-- [Hypothesis-Driven Debugging: Instrument Before You Patch](../agent-design/hypothesis-driven-debugging.md)
+- [Hypothesis-Driven Debugging: Instrument Before You Patch](../patterns/agent-design/hypothesis-driven-debugging.md)
 - [Making Observability Legible to Agents](observability-legible-to-agents.md)
 - [Trajectory Logging via Progress Files](trajectory-logging-progress-files.md)
 - [Loop Detection](loop-detection.md)
 - [Verification-Centric Development](../workflows/verification-centric-development.md)
 - [Research, Plan, Implement](../workflows/research-plan-implement.md)
-- [Layered Mutability](../agent-design/layered-mutability.md)
+- [Layered Mutability](../patterns/agent-design/layered-mutability.md)

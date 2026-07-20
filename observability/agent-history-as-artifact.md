@@ -122,5 +122,5 @@ The audit shape answers a yes/no question with timestamps and turn types — use
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md) — agent-facing trajectory log, sibling pattern with a different consumer
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) — structured telemetry that can feed the same query shapes at infrastructure level
 - [Using the Agent to Analyze Its Own Evaluation Transcripts](../verification/agent-transcript-analysis.md) — the harness-developer angle on the same trace data
-- [Session Recap: Goal-Shaped Handoff at Context Boundaries](../agent-design/session-recap.md) — per-session handoff, not cross-session aggregate
-- [Memory Synthesis from Execution Logs](../agent-design/memory-synthesis-execution-logs.md) — extracting durable lessons for the agent's future runs
+- [Session Recap: Goal-Shaped Handoff at Context Boundaries](../patterns/agent-design/session-recap.md) — per-session handoff, not cross-session aggregate
+- [Memory Synthesis from Execution Logs](../patterns/agent-design/memory-synthesis-execution-logs.md) — extracting durable lessons for the agent's future runs

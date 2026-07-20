@@ -150,5 +150,5 @@ For these conditions, default to local [plan mode](../tools/claude/plan-mode.md)
 - [Plan Mode: Read-Only Exploration Before Implementation](../tools/claude/plan-mode.md) — the local equivalent; cloud planning extends, does not replace, this baseline
 - [The Plan-First Loop: Always Design Before Writing Code](plan-first-loop.md) — the underlying pattern; cloud planning is one delivery vehicle
 - [Cloud-Local Agent Handoff for AI Agent Development](cloud-local-agent-handoff.md) — the general handoff pattern; teleport-back is its plan-stage instantiation
-- [Multi-Model Plan Synthesis](../multi-agent/multi-model-plan-synthesis.md) — combining plans from multiple planners; complementary to where the planner runs
-- [Cloud Agent Session Bootstrap](../agent-design/cloud-agent-session-bootstrap.md) — the agent-design pattern that the cloud planner composes
+- [Multi-Model Plan Synthesis](../patterns/multi-agent/multi-model-plan-synthesis.md) — combining plans from multiple planners; complementary to where the planner runs
+- [Cloud Agent Session Bootstrap](../patterns/agent-design/cloud-agent-session-bootstrap.md) — the agent-design pattern that the cloud planner composes

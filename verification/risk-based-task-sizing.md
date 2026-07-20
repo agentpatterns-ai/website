@@ -115,9 +115,9 @@ If the same task only touched `tests/test_deploy.py` (Low tier), it would stay S
 ## Related
 
 - [Incremental Verification: Check at Each Step](incremental-verification.md)
-- [Heuristic-Based Effort Scaling](../agent-design/heuristic-effort-scaling.md)
+- [Heuristic-Based Effort Scaling](../patterns/agent-design/heuristic-effort-scaling.md)
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md)
 - [Committee Review Pattern](../code-review/committee-review-pattern.md)
-- [Delegation Decision](../agent-design/delegation-decision.md)
+- [Delegation Decision](../patterns/agent-design/delegation-decision.md)
 - [Risk-Based Shipping](risk-based-shipping.md)
 - [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md)

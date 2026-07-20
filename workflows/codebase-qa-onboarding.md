@@ -17,7 +17,7 @@ maturity: established
 
 ## The problem
 
-Reading code, tracing call paths, and locating conventions take up a large share of developer time. Program comprehension is one of the highest-friction activities in software engineering. The knowledge you need is scattered across files, commit history, [tribal knowledge](../anti-patterns/implicit-knowledge-problem.md), and documentation that drifts from the code within weeks. Research into LLM-powered codebase documentation, for example [RepoAgent, arXiv 2402.16667](https://arxiv.org/abs/2402.16667), confirms that repository-level comprehension is a primary bottleneck for both humans and agents.
+Reading code, tracing call paths, and locating conventions take up a large share of developer time. Program comprehension is one of the highest-friction activities in software engineering. The knowledge you need is scattered across files, commit history, [tribal knowledge](../patterns/anti-patterns/implicit-knowledge-problem.md), and documentation that drifts from the code within weeks. Research into LLM-powered codebase documentation, for example [RepoAgent, arXiv 2402.16667](https://arxiv.org/abs/2402.16667), confirms that repository-level comprehension is a primary bottleneck for both humans and agents.
 
 Agents that search code and read files change this. They act as always-available guides that search the whole codebase. They answer "where does X happen?" and "why is Y structured this way?", and they generate documentation that stays closer to the code than static docs. Agent answers are not always right. Repository-level code Q&A remains an open research problem with documented failure modes ([SWE-QA, arXiv 2509.14635](https://arxiv.org/abs/2509.14635)), so verify cited files and functions rather than trusting summaries blindly.
 
@@ -114,7 +114,7 @@ This mirrors how team knowledge actually forms: not from upfront documentation e
 
 ## Comprehension debt
 
-Over-reliance on agents for codebase understanding carries a real risk: [comprehension debt](../anti-patterns/comprehension-debt.md) and [skill atrophy](../human/skill-atrophy.md). If you always ask the agent instead of reading code yourself, you may understand less of your own codebase over time.
+Over-reliance on agents for codebase understanding carries a real risk: [comprehension debt](../patterns/anti-patterns/comprehension-debt.md) and [skill atrophy](../human/skill-atrophy.md). If you always ask the agent instead of reading code yourself, you may understand less of your own codebase over time.
 
 Mitigations:
 
@@ -165,8 +165,8 @@ The result: ramp-up that typically takes one to two weeks compresses significant
 - [Agent-Generated Onboarding Guide as a Durable Artefact](agent-generated-onboarding-guide.md) — the artefact complement: synthesise the ramp-up into a version-controlled document instead of a live session
 - [Team Onboarding for Agent Workflows](team-onboarding.md) — extending Q&A onboarding to a whole team
 - [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md) — agent exploration as a first step before any change
-- [Codebase Readiness for Agents](../agent-design/codebase-readiness.md) — preparing a repo so agent Q&A is high-signal
+- [Codebase Readiness for Agents](../patterns/agent-design/codebase-readiness.md) — preparing a repo so agent Q&A is high-signal
 - [Getting Started with Instruction Files](../instructions/getting-started-instruction-files.md) — bootstrapping the CLAUDE.md / AGENTS.md that anchors onboarding
 - [Three Knowledge Tiers](../instructions/three-knowledge-tiers.md) — hot/warm/cold tiers for the knowledge surfaced during Q&A
 - [Continuous Documentation](continuous-documentation.md) — keeping the docs produced by onboarding in sync with the code
-- [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — how agents persist and accumulate knowledge across sessions
+- [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md) — how agents persist and accumulate knowledge across sessions

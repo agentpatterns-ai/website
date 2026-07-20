@@ -73,11 +73,11 @@ Skills are defined declaratively in an `<available_skills>` block rather than in
 </available_skills>
 ```
 
-Each entry contains a name, trigger conditions, and a filesystem path. Skill content loads on demand — not on every conversation. This is [progressive disclosure](../agent-design/progressive-disclosure-agents.md) applied to [prompt engineering](../training/foundations/prompt-engineering.md): a lean registry of 20 pointers consumes fewer tokens than 20 inlined definitions.
+Each entry contains a name, trigger conditions, and a filesystem path. Skill content loads on demand — not on every conversation. This is [progressive disclosure](../patterns/agent-design/progressive-disclosure-agents.md) applied to [prompt engineering](../training/foundations/prompt-engineering.md): a lean registry of 20 pointers consumes fewer tokens than 20 inlined definitions.
 
 ## Deferred tool loading
 
-Anthropic's [advanced tool use documentation](https://www.anthropic.com/engineering/advanced-tool-use) describes a `defer_loading: true` flag that keeps tool definitions unavailable until explicitly searched, reducing context from ~77K to ~8.7K tokens. The production prompt applies the same principle: tool definitions are declared statically but masked at runtime, avoiding the [dynamic tool fetching anti-pattern](../anti-patterns/dynamic-tool-fetching-cache-break.md).
+Anthropic's [advanced tool use documentation](https://www.anthropic.com/engineering/advanced-tool-use) describes a `defer_loading: true` flag that keeps tool definitions unavailable until explicitly searched, reducing context from ~77K to ~8.7K tokens. The production prompt applies the same principle: tool definitions are declared statically but masked at runtime, avoiding the [dynamic tool fetching anti-pattern](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md).
 
 ```mermaid
 graph LR
@@ -182,7 +182,7 @@ The CL4R1T4S capture is a computer-use session prompt. The exact parameter names
 
 - [Context Engineering](../context-engineering/context-engineering.md)
 - [Dynamic System Prompt Composition](../context-engineering/dynamic-system-prompt-composition.md)
-- [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
+- [Dynamic Tool Fetching Breaks KV Cache](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Prompt Cache Economics](../context-engineering/prompt-caching-architectural-discipline.md)
 - [Static Content First Caching](../context-engineering/static-content-first-caching.md)
 - [System Prompt Altitude](system-prompt-altitude.md)

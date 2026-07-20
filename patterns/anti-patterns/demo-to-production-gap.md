@@ -1,0 +1,106 @@
+---
+title: "Demo-to-Production Gap: When Demos Hide Real Costs"
+term: "Demo-to-Production Gap"
+description: "Agent demos curate inputs and ignore edge cases. Production reality - scale, security, partial context, and failing tools - is systematically underestimated."
+tags:
+  - agent-design
+  - testing-verification
+  - tool-agnostic
+  - anti-pattern
+last_reviewed: 2026-05-27
+maturity: established
+---
+
+# Demo-to-Production Gap: When Demos Hide Real Costs
+
+> Agent demos curate inputs and ignore edge cases. Production requires scale, security constraints, partial context, and failing tools. The gap is systematically underestimated.
+
+## Why demos mislead
+
+Demos use curated inputs, full context, and reliable tools. Production exposes what demos hide ([HumAI](https://www.humai.blog/why-your-ai-agent-works-in-the-demo-and-breaks-in-the-real-world/)):
+
+| Demo condition | Production reality |
+|---|---|
+| Curated, well-formed inputs | Adversarial, malformed, unexpected inputs |
+| Small scale, no cost pressure | Rate limiting, concurrency, cost management |
+| Tools always succeed | Tool failures, timeouts, partial results |
+| Full, fresh context | Partial, stale, or conflicting context |
+| Single [happy path](happy-path-bias.md) | Edge cases, error recovery, rollback |
+| 80% success rate is impressive | 80% means 1-in-5 requests fails ([ODSC](https://opendatascience.com/the-ai-trends-shaping-2026/)) |
+
+## Compound error amplification
+
+Per-step accuracy compounds: 0.9^10 = ~35% end-to-end. Each step's output becomes the next step's input. A wrong intermediate result propagates forward, and without per-step validation you cannot recover it downstream. Production workflows with more than a few steps face steep end-to-end accuracy decay.
+
+```mermaid
+graph LR
+    A["Step 1<br/>90%"] --> B["Step 2<br/>81%"]
+    B --> C["Step 3<br/>73%"]
+    C --> D["Step 4<br/>66%"]
+    D --> E["Step 5<br/>59%"]
+    E --> F["Step 10<br/>~35%"]
+
+    style A fill:#2d6a4f,color:#fff
+    style B fill:#40916c,color:#fff
+    style C fill:#52b788,color:#000
+    style D fill:#95d5b2,color:#000
+    style E fill:#d8f3dc,color:#000
+    style F fill:#ffb3b3,color:#000
+```
+
+## Failure modes
+
+Production agents fail in patterns demos never exercise:
+
+- Doom loops. Agents fixate on a failed approach and make 10+ repetitive variations without reconsidering, which consumes 10x the expected cost ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
+
+- Context rot. Recall accuracy drops non-linearly as context fills. Compression causes [objective drift](objective-drift.md), where agents declare tasks complete or request unnecessary clarification ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+
+- Premature completion. Agents report "done" on partial work. Long-running tasks hit this reliably ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+
+- Tool output injection. User-provided data, web content, or logs can steer agent actions — the [Lethal Trifecta](../../security/lethal-trifecta-threat-model.md) of private data, untrusted content, and exfiltration ([nibzard](https://www.nibzard.com/agentic-handbook)).
+
+## The numbers
+
+| Metric | Value | Source |
+|---|---|---|
+| AI PRs: bug rate vs human PRs | 1.7x more bugs | [Stack Overflow](https://stackoverflow.blog/2026/01/28/are-bugs-and-incidents-inevitable-with-ai-coding-agents/) |
+| Logic/correctness errors per 100 PRs | 75% more | Stack Overflow |
+| Security vulnerabilities | 1.5-2x more | Stack Overflow |
+| Teams citing quality as top blocker | 32% | [LangChain Survey](https://www.langchain.com/state-of-agent-engineering) |
+| Agents in production with offline evals | 52% | LangChain Survey |
+
+## Engineering countermeasures
+
+The fix is [harness engineering](../agent-design/harness-engineering.md), not better prompts:
+
+- Loop detection. Monitor for repeated tool calls and force reconsideration on doom loops ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
+- Pre-completion checklists. Verify completion criteria before reporting done ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+- Deterministic validation. Use test suites, linters, and type checkers as ground truth ([Simon Willison](https://simonwillison.net/2025/Oct/25/coding-agent-tips/)).
+- Production-representative evals. Include malformed inputs, tool failures, and adversarial content.
+- Cost guards. Set per-task token budgets and kill sessions that exceed budget.
+- Bounded sessions. Checkpoint between steps and avoid unbounded execution.
+
+## Example
+
+A team demos a code-review agent on 5 clean PRs — all pass. Per-step accuracy looks like 95%. They deploy to 200 PRs/day.
+
+Production reality: PRs include merge conflicts and binary files (tool failures), batch runs hit rate limits (concurrency), long PRs overflow context and the agent declares "no issues found" on truncated diffs (context rot), and a malicious PR description instructs the agent to approve all files unconditionally (tool output injection).
+
+At 95% per-step over an 8-step workflow, end-to-end success is 0.95^8 = ~66%. One-third of reviews are wrong. Fixes: eval on production-representative samples, add a pre-completion checklist verifying all files were reviewed, and reject oversized diffs above a token budget.
+
+## When this backfires
+
+Applying full harness engineering to simple, single-step, or heavily supervised workflows is over-engineering. Compound error decay only applies when steps chain automatically without per-step validation. Reserve these countermeasures for workflows with: (1) 5+ sequential automated steps, (2) tool calls that depend on prior tool outputs, and (3) no mandatory human checkpoints between steps.
+
+## Related
+
+- [Objective Drift](objective-drift.md)
+- [Trust Without Verify](trust-without-verify.md)
+- [Loop Detection](../../observability/loop-detection.md)
+- [Pre-Completion Checklists](../../verification/pre-completion-checklists.md)
+- [Circuit Breakers](../../observability/circuit-breakers.md)
+- [Deterministic Guardrails](../../verification/deterministic-guardrails.md)
+- [Eval-Driven Development](../../workflows/eval-driven-development.md)
+- [Context Poisoning](context-poisoning.md)
+- [Context Window Management: The Dumb Zone](../../context-engineering/context-window-dumb-zone.md)

@@ -67,7 +67,7 @@ The investigation context that survives this stage feeds propose-fix without re-
 
 The agent opens a PR when "the fix is clear", or tags the right owner when not ([Cognition: Introducing Auto-Triage](https://cognition.ai/blog/auto-triage)). The decision is binary — no confidence score is surfaced, no per-incident-class threshold documented. Missing any one precondition turns this branch into autonomous PR generation against alerts the agent does not understand.
 
-Adjacent failure-rate data bounds the expected error rate: 15.3% of unmerged AI fix PRs were closed for "incorrect or incomplete fixes" and 18.1% for introducing new test failures ([arXiv:2602.00164](https://arxiv.org/html/2602.00164)). The [agent circuit breaker](../agent-design/agent-circuit-breaker.md) pattern provides the per-fingerprint retry budget that prevents stacked low-confidence fixes against the same alert.
+Adjacent failure-rate data bounds the expected error rate: 15.3% of unmerged AI fix PRs were closed for "incorrect or incomplete fixes" and 18.1% for introducing new test failures ([arXiv:2602.00164](https://arxiv.org/html/2602.00164)). The [agent circuit breaker](../patterns/agent-design/agent-circuit-breaker.md) pattern provides the per-fingerprint retry budget that prevents stacked low-confidence fixes against the same alert.
 
 ## Triggers and constraints
 
@@ -158,7 +158,7 @@ The contract makes the three preconditions executable rather than implicit — e
 
 ## Related
 
-- [Agent Circuit Breaker](../agent-design/agent-circuit-breaker.md) — the per-fingerprint retry budget pattern that prevents stacked low-confidence fixes against the same alert
+- [Agent Circuit Breaker](../patterns/agent-design/agent-circuit-breaker.md) — the per-fingerprint retry budget pattern that prevents stacked low-confidence fixes against the same alert
 - [Incident Log Investigation Skill: Parallel Queries](incident-log-investigation-skill.md) — the stage-3 investigate sub-pattern in isolation, with parallel observability queries and eval-backed precision
 - [Closed-Loop CI Failure Remediation with Cloud Coding Agents](closed-loop-ci-failure-remediation.md) — the propose-fix branch's three required preconditions documented for the adjacent CI-failure trigger
 - [Continuous AI: A Navigation Map of Always-On Agent Workflows](continuous-ai.md) — the parent map placing this in the triage family alongside the continuous-* workflows

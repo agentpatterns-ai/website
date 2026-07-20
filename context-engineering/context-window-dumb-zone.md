@@ -110,5 +110,5 @@ The guidance to keep reasoning-task context under 32K tokens is conservative, an
 - [Context Window Anxiety: Countering Premature Task Closure](context-window-anxiety.md)
 - [Context Window Diagnostic Tooling](context-window-diagnostic-tooling.md) — observability for context fill; the measurement counterpart to this page's degradation mechanism
 - [Lost in the Middle](lost-in-the-middle.md)
-- [The Infinite Context](../anti-patterns/infinite-context.md)
+- [The Infinite Context](../patterns/anti-patterns/infinite-context.md)
 - [Attention Sinks](attention-sinks.md)

@@ -50,11 +50,11 @@ Targeted fixes: add dependency markers for sequencing; surface implicit knowledg
 
 Asking for highly detailed task descriptions — exact file paths, function names, parameter changes — forces the agent to expose design decisions before execution. "Style the navbar" becomes a list of specific CSS property changes with values. You can approve, reject, or redirect each one without waiting for the implementation.
 
-This trades compactness for visibility. Use it when the cost of wrong execution is high, or when [calibrating instruction altitude](../instructions/system-prompt-altitude.md) for a new domain.
+This trades compactness for visibility. Use it when the cost of wrong execution is high, or when [calibrating instruction altitude](system-prompt-altitude.md) for a new domain.
 
 ## Real-time steering
 
-Task lists are not static. When you [correct the agent mid-task](../agent-design/steering-running-agents.md), the updated list shows whether the correction landed. Say you change a requirement to "use green, not blue". If the remaining tasks update to match, the correction landed. If the tasks stay the same, the agent did not take it in, so restate it differently.
+Task lists are not static. When you [correct the agent mid-task](../patterns/agent-design/steering-running-agents.md), the updated list shows whether the correction landed. Say you change a requirement to "use green, not blue". If the remaining tasks update to match, the correction landed. If the tasks stay the same, the agent did not take it in, so restate it differently.
 
 ## Why it works
 
@@ -113,10 +113,10 @@ Re-running the prompt after adding these two sentences produces a plan that matc
 ## Related
 
 - [The Plan-First Loop: Design Before Code](../workflows/plan-first-loop.md)
-- [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md)
-- [Instruction Polarity: Positive Rules Over Negative](../instructions/instruction-polarity.md)
-- [Steering Running Agents](../agent-design/steering-running-agents.md)
-- [The Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md) — omissions in task plans often trace to implicit knowledge the agent was never given
+- [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md)
+- [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
+- [Steering Running Agents](../patterns/agent-design/steering-running-agents.md)
+- [The Implicit Knowledge Problem](../patterns/anti-patterns/implicit-knowledge-problem.md) — omissions in task plans often trace to implicit knowledge the agent was never given
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — structured verification before task completion, complementary to pre-execution plan review
 - [Trajectory Decomposition Diagnosis](../verification/trajectory-decomposition-diagnosis.md) — diagnosing agent failures by decomposing execution traces
 - [Completion Failure Taxonomy](../verification/completion-failure-taxonomy.md) — classifying the ways agents fail to complete tasks

@@ -59,7 +59,7 @@ The workflow for each agent runs in five steps:
 
 ### 2. Pre-commit guard
 
-A git hook that runs before each commit. It reads the active [reservation files](../multi-agent/file-based-agent-coordination.md), checks whether any committed files are reserved by a different agent, and rejects the commit if there is a conflict. This catches the case where two agents claim the same file — one of them fails fast rather than silently overwriting.
+A git hook that runs before each commit. It reads the active [reservation files](../patterns/multi-agent/file-based-agent-coordination.md), checks whether any committed files are reserved by a different agent, and rejects the commit if there is a conflict. This catches the case where two agents claim the same file — one of them fails fast rather than silently overwriting.
 
 ### 3. Destructive command guard (DCG)
 
@@ -85,7 +85,7 @@ Single-branch is not a universal upgrade from worktrees. It is built for a pre-p
 | Coordination infrastructure exists (Agent Mail or equivalent) | Advisory reservations need a messaging layer to notify agents when reservations conflict |
 | DCG is installed and active | Without mechanical enforcement, single-branch is strictly riskier than branching |
 | Agents are fungible | All agents read the same AGENTS.md and can pick up any task. Specialist agents become single points of failure. If the "auth specialist" writes a function signature another agent builds on, a conflict on main breaks both. Fungible agents adapt to any change they encounter. |
-| Work is pre-partitioned into [Code-Native Memory Substrates](../agent-design/code-native-memory-substrates.md) | Independent, small tasks that agents can pick up, complete, and commit in short cycles. Long-running agent sessions with large uncommitted diffs defeat the model. |
+| Work is pre-partitioned into [Code-Native Memory Substrates](../patterns/agent-design/code-native-memory-substrates.md) | Independent, small tasks that agents can pick up, complete, and commit in short cycles. Long-running agent sessions with large uncommitted diffs defeat the model. |
 
 ## Worktrees vs single-branch: when to use each
 
@@ -112,10 +112,10 @@ Claude Code's documented recommendation is worktrees. If you are running fewer t
 ## Related
 
 - [Worktree Isolation](worktree-isolation.md)
-- [File-Based Agent Coordination](../multi-agent/file-based-agent-coordination.md)
-- [Code-Native Memory Substrates](../agent-design/code-native-memory-substrates.md)
+- [File-Based Agent Coordination](../patterns/multi-agent/file-based-agent-coordination.md)
+- [Code-Native Memory Substrates](../patterns/agent-design/code-native-memory-substrates.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)
-- [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md)
-- [Rollback-First Design](../agent-design/rollback-first-design.md)
+- [Idempotent Agent Operations](../patterns/agent-design/idempotent-agent-operations.md)
+- [Rollback-First Design](../patterns/agent-design/rollback-first-design.md)
 - [Developer Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
 - [Headless Claude in CI](headless-claude-ci.md)

@@ -57,6 +57,6 @@ The source article ran an invoice-extraction bake-off over combinations of model
 
 - [pass@k and pass^k: Capability and Consistency Metrics](pass-at-k-metrics.md) — the absolute-threshold metric to keep when you need a pass/fail bar rather than a ranking.
 - [Cost-Quality Pareto Measurement for Agent Configurations](../token-engineering/cost-quality-pareto-measurement.md) — builds the cost/quality points; comparative judging gives a more reliable ranking on the noisy quality axis.
-- [Quality Score Rubric and Simplification Log for Agent Harnesses](../agent-design/quality-score-rubric.md) — the absolute A/B/C/D rubric this technique is the comparative alternative to.
+- [Quality Score Rubric and Simplification Log for Agent Harnesses](../patterns/agent-design/quality-score-rubric.md) — the absolute A/B/C/D rubric this technique is the comparative alternative to.
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — what the judge should score in each best-worst batch: the end state, not the path.
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — why single-run scores are unstable, the noise comparative judging is built to survive.

@@ -96,6 +96,6 @@ A developer renames a TypeScript interface property from `userId` to `accountId`
 ## Related
 
 - [Agent Mode](agent-mode.md)
-- [Agent Backpressure](../../agent-design/agent-backpressure.md)
-- [Codebase Readiness](../../agent-design/codebase-readiness.md)
+- [Agent Backpressure](../../patterns/agent-design/agent-backpressure.md)
+- [Codebase Readiness](../../patterns/agent-design/codebase-readiness.md)
 - [Convenience Loops and AI-Friendly Code](../../human/convenience-loops-ai-friendly-code.md)

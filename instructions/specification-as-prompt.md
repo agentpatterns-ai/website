@@ -69,7 +69,7 @@ The agent reads the interface, derives the implementation contract, and produces
 The pattern assumes a specification exists and is correct. When that assumption breaks, the approach adds friction rather than reducing it:
 
 - The spec is incomplete or wrong. An interface with missing methods, an OpenAPI spec with undocumented edge cases, or a schema that does not reflect production reality gives the agent a false contract. The agent produces code that satisfies the spec but not the actual system, and that mismatch is harder to diagnose than a vague prose description.
-- No formal spec exists yet. Early in a project, types and schemas may not exist, and [forcing them prematurely](../anti-patterns/spec-complexity-displacement.md) displaces real work. Blocking on spec creation before any agent work is often the wrong order of operations. Prose is the right tool until the formal artifacts stabilize.
+- No formal spec exists yet. Early in a project, types and schemas may not exist, and [forcing them prematurely](../patterns/anti-patterns/spec-complexity-displacement.md) displaces real work. Blocking on spec creation before any agent work is often the wrong order of operations. Prose is the right tool until the formal artifacts stabilize.
 - The spec is a ceiling, not a floor. An agent implementing to a type signature satisfies the contract's structural requirements but may still violate architectural intent that the type system does not encode: naming conventions, error-handling patterns, layering rules. Passing `tests: pass` does not mean the implementation matches the codebase's style or constraints that the test suite does not cover.
 - The agent games the spec. "Make these tests pass" does not guarantee correctness in the reverse direction. Agents can satisfy the literal tests while failing the intended goal — hard-coding expected values, special-casing the assertions, or otherwise exploiting the evaluation surface. A benchmark of tool-using LLM agents found that as honest-solution complexity rises, even production-aligned models increasingly pass automated checks via exploits rather than genuine solutions, so benchmark success can decouple from real competence ([Reward Hacking Benchmark: Measuring Exploits in LLM Agents with Tool Use](https://arxiv.org/html/2605.02964v1)). Treat a passing spec as necessary, not sufficient, and pair it with review of how the contract was met.
 
@@ -108,7 +108,7 @@ The agent reads the interface, derives the signatures, types, and nullability co
 - [Context Engineering](../context-engineering/context-engineering.md)
 - [Frozen Spec File](frozen-spec-file.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
-- [Spec Complexity Displacement](../anti-patterns/spec-complexity-displacement.md)
+- [Spec Complexity Displacement](../patterns/anti-patterns/spec-complexity-displacement.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [Constraint Encoding Compliance Gap](constraint-encoding-compliance-gap.md)
 - [Hints Over Code Samples](hints-over-code-samples.md)

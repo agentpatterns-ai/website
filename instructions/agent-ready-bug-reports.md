@@ -48,7 +48,7 @@ A repair agent resolves an issue in two phases: it searches the repository to lo
 The narrowing that helps a correct cue hurts when the cue is wrong:
 
 - Wrong localization or a wrong suggested fix anchors the agent to the wrong region and wastes its search budget on a false lead. A confident but incorrect pointer is worse than none.
-- Reporter-expertise asymmetry: localization and suggested fixes need the reporter to already know roughly where the fix lives. A triage bot or a non-maintainer often cannot supply the most valuable fields, and a guess risks the anchoring failure above. When you cannot localize, an [interactive clarification step](../agent-design/interactive-clarification-underspecified-tasks.md) or a [reproduce-before-report gate](../code-review/reproduce-before-report-verification-gate.md) beats a fabricated pointer.
+- Reporter-expertise asymmetry: localization and suggested fixes need the reporter to already know roughly where the fix lives. A triage bot or a non-maintainer often cannot supply the most valuable fields, and a guess risks the anchoring failure above. When you cannot localize, an [interactive clarification step](../patterns/agent-design/interactive-clarification-underspecified-tasks.md) or a [reproduce-before-report gate](../code-review/reproduce-before-report-verification-gate.md) beats a fabricated pointer.
 - Evidence scope: both studies use SWE-bench Verified — curated Python library bugs with gold patches. The field rankings may not transfer to other languages, UI or configuration bugs, or proprietary codebases.
 - Over-reporting: adding fields to be safe raises length, and length lowers resolution odds. More content is not strictly better.
 
@@ -98,6 +98,6 @@ The second report names the suspect area, proposes a fix, and supplies a runnabl
 
 - [WRAP Framework for Writing Agent-Ready Issue Descriptions](wrap-framework-agent-instructions.md) — a checklist for packaging the task description; this page ranks which report fields to put in it
 - [The Specification as Prompt](specification-as-prompt.md) — the high-signal-pointer principle applied to types, schemas, and tests
-- [Issue Requirements Preprocessing](../agent-design/issue-requirements-preprocessing.md) — restructure a raw issue into structured input before the agent generates code
+- [Issue Requirements Preprocessing](../patterns/agent-design/issue-requirements-preprocessing.md) — restructure a raw issue into structured input before the agent generates code
 - [Issue-to-PR Delegation Pipeline](../workflows/issue-to-pr-delegation-pipeline.md) — the delegation pipeline whose first phase is issue design
-- [Agent-Laundered Bug Reports](../anti-patterns/agent-laundered-bug-reports.md) — the failure mode when agent-written reports lose the reporter's real signal
+- [Agent-Laundered Bug Reports](../patterns/anti-patterns/agent-laundered-bug-reports.md) — the failure mode when agent-written reports lose the reporter's real signal

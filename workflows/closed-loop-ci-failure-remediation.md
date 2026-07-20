@@ -77,7 +77,7 @@ The friction tax on a CI failure is the dominant cost on otherwise-good agent-au
 | Pattern | Trigger | Scope |
 |---|---|---|
 | [One-Click CI Auto-Fix](one-click-ci-auto-fix.md) | Single GitHub button on the workflow log page | Narrow vendor implementation of the human-click trigger shape |
-| [Self-Healing Production Agent](../agent-design/self-healing-production-agent.md) | Post-deploy regression detection on eval suite | Production regression remediation, not pre-merge CI |
+| [Self-Healing Production Agent](../patterns/agent-design/self-healing-production-agent.md) | Post-deploy regression detection on eval suite | Production regression remediation, not pre-merge CI |
 | [Programmatic Cloud-Agent Dispatch](programmatic-cloud-agent-dispatch.md) | REST / webhook / cron | Generic dispatch primitive; this page is its CI-failure specialization |
 
 ## Key Takeaways
@@ -91,7 +91,7 @@ The friction tax on a CI failure is the dominant cost on otherwise-good agent-au
 ## Related
 
 - [One-Click CI Auto-Fix: Human-Triggered Cloud-Agent Remediation](one-click-ci-auto-fix.md) — vendor-specific implementation of the human-click trigger shape, with detail on GitHub's three confirmation gates
-- [Self-Healing Production Agent](../agent-design/self-healing-production-agent.md) — the post-deploy variant of the same loop, with circuit-breaker design for unfixable regressions
+- [Self-Healing Production Agent](../patterns/agent-design/self-healing-production-agent.md) — the post-deploy variant of the same loop, with circuit-breaker design for unfixable regressions
 - [Programmatic Cloud-Agent Dispatch via REST API and Webhooks](programmatic-cloud-agent-dispatch.md) — the generic dispatch primitive this page specializes for CI failure events
 - [AI Bot CI/CD Workflow Reliability by Agent](ai-bot-ci-workflow-reliability.md) — per-agent CI success rates that quantify the failure baseline the loop is competing with
-- [Agentic Flywheel](../agent-design/agentic-flywheel.md) — the offline complement, where accepted fixes feed back into harness improvement
+- [Agentic Flywheel](../patterns/agent-design/agentic-flywheel.md) — the offline complement, where accepted fixes feed back into harness improvement

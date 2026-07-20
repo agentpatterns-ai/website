@@ -76,7 +76,7 @@ The gate is not free, and the suite has to be load-bearing for the diff to mean 
 - Tests are flaky. A flaky baseline corrupts the differential signal. False positives train the developer to ignore real regressions, and the gate becomes anti-signal.
 - Per-turn CI cost exceeds the catch rate. For multi-minute integration or browser suites, the per-turn cost can exceed the regression-catch value in short two- or three-turn sessions. Gate at end-of-session for short interactive sessions; reserve per-turn execution for autonomous loops and longer dialogues where the Phi-0.089 gap compounds.
 - The session is purely cosmetic or removal-only. The 7 – 13% cosmetic rate is non-trivial but lower than the 21% semantic rate; the marginal benefit narrows in style-only sessions and pure deletions ([Guo et al., 2026](https://arxiv.org/abs/2606.25747)).
-- The harness already trusts the model. Pairing the gate with a "trust the agent's PR summary" workflow rebuilds the loop the gate is meant to break — the conjugate anti-pattern is [trust without verify](../anti-patterns/trust-without-verify.md).
+- The harness already trusts the model. Pairing the gate with a "trust the agent's PR summary" workflow rebuilds the loop the gate is meant to break — the conjugate anti-pattern is [trust without verify](../patterns/anti-patterns/trust-without-verify.md).
 
 ## Example
 
@@ -106,6 +106,6 @@ Without the per-turn re-run, the regression survives until end-of-session CI or 
 - [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md)
 - [Multi-Turn Conversation Evaluation](multi-turn-conversation-evaluation.md)
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md)
-- [Trust Without Verify](../anti-patterns/trust-without-verify.md)
+- [Trust Without Verify](../patterns/anti-patterns/trust-without-verify.md)
 - [Pre-Change Impact Analysis](pre-change-impact-analysis.md)
-- [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](../anti-patterns/code-first-test-oracle-bias.md) — a code-first test suite is not an independent oracle; the sibling ordering trap on the code-vs-spec axis
+- [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](../patterns/anti-patterns/code-first-test-oracle-bias.md) — a code-first test suite is not an independent oracle; the sibling ordering trap on the code-vs-spec axis

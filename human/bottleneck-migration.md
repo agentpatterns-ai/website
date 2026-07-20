@@ -64,9 +64,9 @@ The same structural dynamic drove Jevons' original 1865 observation. Cheaper coa
 
 Volume inflation. AI generates much more code for the same tasks. It produces boilerplate, error handling, and defensive branches a human author would omit, so the review surface area expands.
 
-[Comprehension debt](../anti-patterns/comprehension-debt.md). When agents write code you cannot explain, you build up understanding gaps that erode your review competence.
+[Comprehension debt](../patterns/anti-patterns/comprehension-debt.md). When agents write code you cannot explain, you build up understanding gaps that erode your review competence.
 
-Law of Triviality inversion. Small changes get scrutiny, while large AI-generated diffs bypass careful review. See [Law of Triviality in AI PRs](../anti-patterns/law-of-triviality-ai-prs.md).
+Law of Triviality inversion. Small changes get scrutiny, while large AI-generated diffs bypass careful review. See [Law of Triviality in AI PRs](../patterns/anti-patterns/law-of-triviality-ai-prs.md).
 
 ## Three response strategies
 
@@ -87,7 +87,7 @@ This model emerges naturally when PR volume outpaces reviewer capacity — autom
 
 ### 2. Structural enforcement
 
-Embed verification in the codebase, not in downstream review. Linters, structural tests, and CI gates catch bug classes mechanically -- [harness engineering](../agent-design/agent-harness.md) applied to review. See [Rigor Relocation](rigor-relocation.md).
+Embed verification in the codebase, not in downstream review. Linters, structural tests, and CI gates catch bug classes mechanically -- [harness engineering](../patterns/agent-design/agent-harness.md) applied to review. See [Rigor Relocation](rigor-relocation.md).
 
 ### 3. Scope discipline
 
@@ -97,7 +97,7 @@ Constrain agent output so it remains reviewable:
 - Diff-first review with abstracted code representation
 - Stacked PRs to decouple progress from review
 
-Apply constraints at generation time. See [PR Scope Creep](../anti-patterns/pr-scope-creep-review-bottleneck.md).
+Apply constraints at generation time. See [PR Scope Creep](../patterns/anti-patterns/pr-scope-creep-review-bottleneck.md).
 
 ## Industry signals
 
@@ -110,15 +110,15 @@ Apply constraints at generation time. See [PR Scope Creep](../anti-patterns/pr-s
 The three strategies impose their own costs:
 
 - Tiered review adds process overhead. A CI-based AI review step adds latency to every PR. On small teams with tight feedback loops, it slows junior developers more than it helps senior ones.
-- [Scope discipline](../anti-patterns/pr-scope-creep-review-bottleneck.md) constrains genuine progress. Hard LOC caps can fragment logically unified changes, so each atomic PR passes review while the assembled feature stays unreviewed as a whole. Architectural changes that span many files resist artificial splitting.
-- [Structural enforcement](../agent-design/agent-harness.md) creates false confidence. Expanding linter and CI coverage to catch AI-specific bug classes works until the AI learns the lint rules. Newer models generate code that passes the gates while still introducing semantic errors the gates were never designed to catch.
+- [Scope discipline](../patterns/anti-patterns/pr-scope-creep-review-bottleneck.md) constrains genuine progress. Hard LOC caps can fragment logically unified changes, so each atomic PR passes review while the assembled feature stays unreviewed as a whole. Architectural changes that span many files resist artificial splitting.
+- [Structural enforcement](../patterns/agent-design/agent-harness.md) creates false confidence. Expanding linter and CI coverage to catch AI-specific bug classes works until the AI learns the lint rules. Newer models generate code that passes the gates while still introducing semantic errors the gates were never designed to catch.
 
 Apply these strategies when PR volume visibly strains human review capacity. In low-volume teams or early-stage products where speed of iteration matters more than defect rate, the overhead may exceed the benefit.
 
 ## Key Takeaways
 
 - The bottleneck migrates from writing to reviewing -- total workload stays flat
-- [Comprehension debt](../anti-patterns/comprehension-debt.md) accumulates when agents write code developers cannot explain
+- [Comprehension debt](../patterns/anti-patterns/comprehension-debt.md) accumulates when agents write code developers cannot explain
 - Combine tiered review, structural enforcement, and scope discipline to manage the shift
 
 ## Example
@@ -135,11 +135,11 @@ After 60 days: review cycle time returns to 5 hours, defect rate drops 30%, and 
 
 ## Related
 
-- [Law of Triviality in AI PRs](../anti-patterns/law-of-triviality-ai-prs.md) -- reviewer psychology with large AI diffs
-- [PR Scope Creep](../anti-patterns/pr-scope-creep-review-bottleneck.md) -- stalled PRs compound review bottleneck
+- [Law of Triviality in AI PRs](../patterns/anti-patterns/law-of-triviality-ai-prs.md) -- reviewer psychology with large AI diffs
+- [PR Scope Creep](../patterns/anti-patterns/pr-scope-creep-review-bottleneck.md) -- stalled PRs compound review bottleneck
 - [Rigor Relocation](rigor-relocation.md) -- discipline moves from code to scaffolding
 - [Tiered Code Review](../code-review/tiered-code-review.md) -- AI-first review with human escalation
 - [Agentic Code Review Architecture](../code-review/agentic-code-review-architecture.md) -- tiered review system design
-- [Comprehension Debt](../anti-patterns/comprehension-debt.md) -- understanding gaps that erode review competence
+- [Comprehension Debt](../patterns/anti-patterns/comprehension-debt.md) -- understanding gaps that erode review competence
 - [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md) -- review burden on senior engineers
 - [Author-to-Reviewer Role Inversion](author-to-reviewer-role-inversion.md) -- the team-level staffing and measurement shift this economic migration produces

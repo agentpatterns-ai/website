@@ -170,5 +170,5 @@ The harness calls `build_context` after each tool failure and appends the return
 - [Machine-Readable Error Responses (RFC 9457)](../tool-engineering/rfc9457-machine-readable-errors.md) — Structured upstream errors that make context injection more precise
 - [Error Preservation in Context](error-preservation-in-context.md)
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
-- [Agent Harness: Initializer and Coding Agent](../agent-design/agent-harness.md)
-- [Exception Handling and Recovery Patterns](../agent-design/exception-handling-recovery-patterns.md) — Broader taxonomy of agent failure modes and recovery strategies
+- [Agent Harness: Initializer and Coding Agent](../patterns/agent-design/agent-harness.md)
+- [Exception Handling and Recovery Patterns](../patterns/agent-design/exception-handling-recovery-patterns.md) — Broader taxonomy of agent failure modes and recovery strategies

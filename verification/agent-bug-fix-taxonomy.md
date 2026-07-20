@@ -127,6 +127,6 @@ Cost-quality is steep. Gemini 3 Pro costs 9x GPT-5.2 for 5.4 extra points. For C
 - [Agent Debugging](../observability/agent-debugging.md) — Higher-level diagnostic sequence for bad agent output
 - [RAG Agent Reliability Problem Map](rag-agent-reliability-problem-map.md) — Broader 16-domain failure map
 - [Trajectory Decomposition Diagnosis](trajectory-decomposition-diagnosis.md) — Per-stage precision/recall diagnosis
-- [Self-Healing Production Agent](../agent-design/self-healing-production-agent.md) — Post-deploy regression auto-fix loop
+- [Self-Healing Production Agent](../patterns/agent-design/self-healing-production-agent.md) — Post-deploy regression auto-fix loop
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md) — The general pattern behind SelfHeal's external-knowledge tool
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — Why single-run repair rates need distributions, not point estimates

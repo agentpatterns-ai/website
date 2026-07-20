@@ -25,12 +25,12 @@ A codified effort policy is a written rule in your instruction file that makes t
 Three rules, written once into `CLAUDE.md`, `AGENTS.md`, or the settings file:
 
 - Match effort to task. Default to a middle effort level, drop to the lowest for formatting, renames, and boilerplate, and reserve the top level for hard debugging, multi-file refactors, and architecture. Claude Code exposes `low`, `medium`, `high`, `xhigh`, and `max`, where lower effort is faster and cheaper and higher effort reasons deeper ([Claude Code — model configuration](https://code.claude.com/docs/en/model-config)). Set the default with `effortLevel` in the settings file, or per-agent with `effort` frontmatter. This generalizes: Copilot [custom agents](../training/copilot/model-selection.md) pin a model in `.agent.md` frontmatter, so the rule can live in any tool's config surface.
-- Escalate on evidence, not habit. Name the trigger — escalate after N failed verification runs, or when a cheap model's partial trajectory shows it thrashing. A written trigger beats per-task judgment, and it composes with runtime routing like [trajectory-conditioned escalation](../agent-design/trajectory-conditioned-model-escalation.md).
+- Escalate on evidence, not habit. Name the trigger — escalate after N failed verification runs, or when a cheap model's partial trajectory shows it thrashing. A written trigger beats per-task judgment, and it composes with runtime routing like [trajectory-conditioned escalation](../patterns/agent-design/trajectory-conditioned-model-escalation.md).
 - Default cheap, spend on proof. The cheap model and effort level run first; the strong path is the exception the rule forces you to justify, not the reflex.
 
 ## The high-effort trap
 
-Reaching for the top effort level is a signal to check, not a default. `max` runs with no constraint on token spending ([Claude Code — model configuration](https://code.claude.com/docs/en/model-config)), and reasoning tokens are billed and add latency in proportion to length. Continuous maximum effort scored 53.9% against 63.6% for uniform-high reasoning on Terminal Bench 2.0, losing to timeouts ([LangChain, 2026](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). When a cheaper model needs its highest effort to match a flagship, the flagship at moderate effort may be both cheaper and better — so treat the reach for `max` as the prompt to re-check routing, not the answer. Raising effort only pays where the model has headroom below its ceiling and the failure is a reasoning failure ([Mehta, 2026](https://arxiv.org/abs/2607.02436)); it is otherwise the [reasoning-overuse](../anti-patterns/reasoning-overuse.md) anti-pattern.
+Reaching for the top effort level is a signal to check, not a default. `max` runs with no constraint on token spending ([Claude Code — model configuration](https://code.claude.com/docs/en/model-config)), and reasoning tokens are billed and add latency in proportion to length. Continuous maximum effort scored 53.9% against 63.6% for uniform-high reasoning on Terminal Bench 2.0, losing to timeouts ([LangChain, 2026](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). When a cheaper model needs its highest effort to match a flagship, the flagship at moderate effort may be both cheaper and better — so treat the reach for `max` as the prompt to re-check routing, not the answer. Raising effort only pays where the model has headroom below its ceiling and the failure is a reasoning failure ([Mehta, 2026](https://arxiv.org/abs/2607.02436)); it is otherwise the [reasoning-overuse](../patterns/anti-patterns/reasoning-overuse.md) anti-pattern.
 
 ## Why it works
 
@@ -72,8 +72,8 @@ The block names the default, the escalation trigger, and the high-effort review 
 
 ## Related
 
-- [Heuristic-Based Effort Scaling in Agent System Prompts](../agent-design/heuristic-effort-scaling.md) — encode per-tier effort ceilings for multi-agent work; the complement that sizes effort from task cues
-- [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](../agent-design/reasoning-effort-over-tool-scaffolding.md) — evidence that the effort dial, not extra tools, moves first-try reliability
-- [Trajectory-Conditioned Model Escalation (SWE-Router)](../agent-design/trajectory-conditioned-model-escalation.md) — the runtime escalation signal a codified "escalate on evidence" rule points to
+- [Heuristic-Based Effort Scaling in Agent System Prompts](../patterns/agent-design/heuristic-effort-scaling.md) — encode per-tier effort ceilings for multi-agent work; the complement that sizes effort from task cues
+- [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](../patterns/agent-design/reasoning-effort-over-tool-scaffolding.md) — evidence that the effort dial, not extra tools, moves first-try reliability
+- [Trajectory-Conditioned Model Escalation (SWE-Router)](../patterns/agent-design/trajectory-conditioned-model-escalation.md) — the runtime escalation signal a codified "escalate on evidence" rule points to
 - [Convention Over Configuration for Agent Workflows](convention-over-configuration.md) — the broader case for encoding decisions into the harness so agents follow patterns rather than re-decide
-- [Indiscriminate Structured Reasoning](../anti-patterns/reasoning-overuse.md) — the failure mode when effort is spent past the point it helps
+- [Indiscriminate Structured Reasoning](../patterns/anti-patterns/reasoning-overuse.md) — the failure mode when effort is spent past the point it helps

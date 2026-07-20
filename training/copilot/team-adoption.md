@@ -63,7 +63,7 @@ Rollback is not failure — it's calibration. Autonomy is not monotonically incr
 
 ### The review bottleneck
 
-Agent-authored code [increases PR volume](../../code-review/agent-pr-volume-vs-value.md). Without a review strategy, this creates a bottleneck: human reviewers can't keep up, PRs queue, cycle time increases, and the team concludes Copilot "doesn't save time." See [PR Scope Creep as a Human Review Bottleneck](../../anti-patterns/pr-scope-creep-review-bottleneck.md) for the feedback loop and structural mitigations.
+Agent-authored code [increases PR volume](../../code-review/agent-pr-volume-vs-value.md). Without a review strategy, this creates a bottleneck: human reviewers can't keep up, PRs queue, cycle time increases, and the team concludes Copilot "doesn't save time." See [PR Scope Creep as a Human Review Bottleneck](../../patterns/anti-patterns/pr-scope-creep-review-bottleneck.md) for the feedback loop and structural mitigations.
 
 The fix is not "review less carefully." It's routing review effort by risk.
 
@@ -127,7 +127,7 @@ Copilot usage is metered via premium requests. Each interaction with Copilot (ch
 
 | Model tier | Multiplier | Best for |
 |-----------|-----------|----------|
-| Base / [Auto](../../agent-design/auto-model-selection.md) | 1x (with 10% discount when auto model selection is used in Copilot Chat, Copilot CLI, or Copilot cloud agent on paid plans) | Default for most tasks — let Copilot choose |
+| Base / [Auto](../../patterns/agent-design/auto-model-selection.md) | 1x (with 10% discount when auto model selection is used in Copilot Chat, Copilot CLI, or Copilot cloud agent on paid plans) | Default for most tasks — let Copilot choose |
 | Mid-tier models (Claude Sonnet 4.5/4.6, GPT-5.4) | 1x | Complex reasoning, multi-file refactors |
 | Flagship models (Claude Opus 4.5/4.6 at 3x, Claude Opus 4.7 at 15x, GPT-5.5 at 7.5x) | Higher multipliers | Architecture, novel problems, large codebase analysis |
 
@@ -140,7 +140,7 @@ The multiplier roster changes frequently — check the [supported models page](h
 | Use Auto mode | 10% discount (VS Code) + smart routing | Don't override the model unless you have a reason |
 | Short, focused sessions | Fewer tokens consumed per task | Module C's one-task-per-session discipline |
 | Good instructions files | Fewer correction cycles | Module B's customization stack — the agent gets it right the first time |
-| [Strong backpressure](../../agent-design/agent-backpressure.md) | Agent self-corrects via tests, not extra LLM calls | Module D's type/test/linter investment |
+| [Strong backpressure](../../patterns/agent-design/agent-backpressure.md) | Agent self-corrects via tests, not extra LLM calls | Module D's type/test/linter investment |
 | Decompose large tasks | Cheaper models handle smaller chunks | Module C's task decomposition — don't send a flagship model to do a base model's job |
 | Coding agent for async work | Frees your machine and attention | The coding agent consumes premium requests, but your time is more expensive |
 
@@ -320,7 +320,7 @@ The fix: Start with a blank instructions file. Add rules only when you've identi
 
 What it is: Agent-generated code ships faster than the team can understand it. Tests pass, the diff looks reasonable, you merge. 3 days later, no one can explain how the feature works.
 
-Why it's dangerous: [Comprehension debt](../../anti-patterns/comprehension-debt.md) compounds silently. The team becomes unable to debug, extend, or reason about code they nominally own. This is distinct from technical debt — the code may be well-structured, but the team's understanding of it is shallow.
+Why it's dangerous: [Comprehension debt](../../patterns/anti-patterns/comprehension-debt.md) compounds silently. The team becomes unable to debug, extend, or reason about code they nominally own. This is distinct from technical debt — the code may be well-structured, but the team's understanding of it is shallow.
 
 Why it matters: Usage mode shapes comprehension more than whether AI is used at all. Developers who engage with the problem first — asking Copilot to explain the approach before asking it to implement — retain significantly more understanding of the resulting code than developers who delegate directly without first engaging with the problem.
 
@@ -389,7 +389,7 @@ The fix:
 - Content exclusions don't protect against agent workflows. Agent mode, the CLI, and the coding agent bypass content exclusions entirely. Use repository isolation and filesystem permissions for truly sensitive code.
 - Under-configuration is the norm. Most teams stop at a basic `.github/copilot-instructions.md` file. The full stack — path-specific instructions, custom agents, skills, hooks, Spaces — compounds. Adopt incrementally over 2–3 months.
 - Measure outcomes, not activity. PR cycle time, merge rate, defect escapes, and review burden tell you whether adoption is working. Lines generated and interaction count do not.
-- [Comprehension debt](../../anti-patterns/comprehension-debt.md) is the hidden cost. Agent-generated code that ships faster than the team understands it creates fragility. Require explain-before-code, distribute review responsibility, and make review a learning exercise.
+- [Comprehension debt](../../patterns/anti-patterns/comprehension-debt.md) is the hidden cost. Agent-generated code that ships faster than the team understands it creates fragility. Require explain-before-code, distribute review responsibility, and make review a learning exercise.
 - The effortless AI fallacy stalls adoption. Frame Copilot as requiring more rigour initially — context engineering, verification, environment investment — with velocity gains materialising after the upfront effort, not instead of it.
 - Environment beats prompts at team scale. A fast test suite, strict types, and comprehensive linting (Module D) improve every team member's agent output simultaneously. This is the highest-leverage team-level investment.
 
@@ -399,7 +399,7 @@ Training
 
 - [GitHub Copilot: Platform Surface Map](surface-map.md) — all surfaces and when to use each
 - [GitHub Copilot: Customization Primitives](customization-primitives.md) — configuring instructions, agents, skills, hooks, MCP, Spaces, memory
-- [GitHub Copilot: Context Engineering & Agent Workflows](context-and-workflows.md) — context engineering, [progressive disclosure](../../agent-design/progressive-disclosure-agents.md), delegation, steering
+- [GitHub Copilot: Context Engineering & Agent Workflows](context-and-workflows.md) — context engineering, [progressive disclosure](../../patterns/agent-design/progressive-disclosure-agents.md), delegation, steering
 - [GitHub Copilot: Harness Engineering](harness-engineering.md) — making codebases agent-ready
 - [GitHub Copilot: Model Selection & Routing](model-selection.md) — premium request multipliers, model routing, cost detail
 
@@ -409,10 +409,10 @@ Adoption & Human Factors
 - [Progressive Autonomy with Model Evolution](../../human/progressive-autonomy-model-evolution.md) — evidence-based autonomy escalation
 - [Skill Atrophy](../../human/skill-atrophy.md) — when AI reliance erodes developer capability
 - [Cognitive Load and AI Fatigue](../../human/cognitive-load-ai-fatigue.md) — sustainable agent use patterns
-- [Comprehension Debt](../../anti-patterns/comprehension-debt.md) — when developers understand less of their own codebase
+- [Comprehension Debt](../../patterns/anti-patterns/comprehension-debt.md) — when developers understand less of their own codebase
 - [Process Amplification](../../human/process-amplification.md) — why environment beats prompting at scale
-- [The Effortless AI Fallacy](../../anti-patterns/effortless-ai-fallacy.md) — effort shifts, not disappears
-- [Cargo Cult Agent Setup](../../anti-patterns/cargo-cult-agent-setup.md) — copying config without understanding
+- [The Effortless AI Fallacy](../../patterns/anti-patterns/effortless-ai-fallacy.md) — effort shifts, not disappears
+- [Cargo Cult Agent Setup](../../patterns/anti-patterns/cargo-cult-agent-setup.md) — copying config without understanding
 
 Code Review
 

@@ -49,7 +49,7 @@ Optimization quality was comparable on both tasks — token reduction did not de
 
 ## How to apply it tool-agnostically
 
-The paper's reference implementation uses LangGraph, but the pattern — state lives outside the prompt, accessed by tool call — is framework-agnostic, and resembles a [code-native memory substrate](../agent-design/code-native-memory-substrates.md) specialized for iteration loops:
+The paper's reference implementation uses LangGraph, but the pattern — state lives outside the prompt, accessed by tool call — is framework-agnostic, and resembles a [code-native memory substrate](../patterns/agent-design/code-native-memory-substrates.md) specialized for iteration loops:
 
 1. Define a typed state object for the loop's experimental record — current best metric, last hyperparameter set, recent failure traces, working files. Keep fields minimal; every additional field becomes another schema migration ([Mem0, 2026](https://mem0.ai/blog/langgraph-tutorial-build-advanced-ai-agents)).
 2. Expose state through tools the agent can call: `read_state(field)`, `update_state(field, value)`, `list_recent_attempts(n)`. The agent invokes these when it needs context, instead of expecting full history in the transcript.
@@ -96,5 +96,5 @@ They are complementary at the boundary case: a long-horizon stateful loop still 
 - [Static Content First for Cache Hits](static-content-first-caching.md) — the prompt-caching alternative that targets the same O(n²) curve at the provider tier
 - [Elastic Context Orchestration](elastic-context-orchestration.md) — per-turn vocabulary (Skip, Compress, Snippet, Rollback, Delete) for selective context retention in ReAct loops
 - [Context Compression Strategies](context-compression-strategies.md) — tiered offloading and summarisation for long-running agents
-- [Code-Native Memory Substrates for Coding Agents](../agent-design/code-native-memory-substrates.md) — typed external memory for code-bearing agents, from a different angle
+- [Code-Native Memory Substrates for Coding Agents](../patterns/agent-design/code-native-memory-substrates.md) — typed external memory for code-bearing agents, from a different angle
 - [Autonomous Research Loops](../training/foundations/autonomous-research-loops.md) — the curriculum module that puts loop architectures and termination design together

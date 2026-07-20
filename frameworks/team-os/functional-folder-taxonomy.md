@@ -18,7 +18,7 @@ maturity: adopted
 
 ## The folder path as routing substrate
 
-Claude Code's memory system loads subdirectory memory files lazily. The [memory docs](https://code.claude.com/docs/en/memory) put it this way: *"Claude also discovers CLAUDE.md and CLAUDE.local.md files in subdirectories under your current working directory. Instead of loading them at launch, they are included when Claude reads files in those subdirectories."* So the path of the file being read selects the instructions that come with it. That is cheaper than in-prompt branching and more precise than one monolithic root file. See [hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md) for the atomic pattern and [progressive disclosure](../../agent-design/progressive-disclosure-agents.md) for the general shape.
+Claude Code's memory system loads subdirectory memory files lazily. The [memory docs](https://code.claude.com/docs/en/memory) put it this way: *"Claude also discovers CLAUDE.md and CLAUDE.local.md files in subdirectories under your current working directory. Instead of loading them at launch, they are included when Claude reads files in those subdirectories."* So the path of the file being read selects the instructions that come with it. That is cheaper than in-prompt branching and more precise than one monolithic root file. See [hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md) for the atomic pattern and [progressive disclosure](../../patterns/agent-design/progressive-disclosure-agents.md) for the general shape.
 
 Name top-level folders after business functions — product, analytics, engineering, design, data-engineering. Each name maps an agent query to the function whose conventions, glossary, and artifact schemas apply. The root `CLAUDE.md` stays a thin doc index. Function-level files carry function-specific rules, following [AGENTS.md as a table of contents](../../instructions/agents-md-as-table-of-contents.md).
 
@@ -84,5 +84,5 @@ Stulberg's DoorDash setup: a PM query about a customer call resolves to `product
 - [Team OS](index.md) — the framework this page composes into
 - [Hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md) — the atomic pattern for path-scoped instruction loading
 - [AGENTS.md as a table of contents](../../instructions/agents-md-as-table-of-contents.md) — the pointer-map discipline each folder's memory file follows
-- [Progressive disclosure agents](../../agent-design/progressive-disclosure-agents.md) — the generalised shape this implements through filesystem structure
+- [Progressive disclosure agents](../../patterns/agent-design/progressive-disclosure-agents.md) — the generalised shape this implements through filesystem structure
 - [Cross-functional artifacts](cross-functional-artifacts.md) — the sibling pattern on artifact types that span function folders

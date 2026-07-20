@@ -19,7 +19,7 @@ maturity: adopted
 
 ## The decision gate
 
-This is the upstream question to every loop-mechanics page on this site — [Loop Strategy Spectrum](loop-strategy-spectrum.md), [Ralph Wiggum Loop](ralph-wiggum-loop.md), [Goal-Driven Autonomous Loop](goal-driven-autonomous-loop.md), [Evaluator-Optimizer](../agent-design/evaluator-optimizer.md). Those answer how to build a loop. This answers whether you should.
+This is the upstream question to every loop-mechanics page on this site — [Loop Strategy Spectrum](loop-strategy-spectrum.md), [Ralph Wiggum Loop](ralph-wiggum-loop.md), [Goal-Driven Autonomous Loop](goal-driven-autonomous-loop.md), [Evaluator-Optimizer](../patterns/agent-design/evaluator-optimizer.md). Those answer how to build a loop. This answers whether you should.
 
 A loop carries fixed setup costs (a verifier sub-agent, persisted state, a skill capturing project conventions, a schedule or trigger) and per-iteration token waste (re-reads, retries, exploration that does not converge). A single prompt-driven session carries none of that overhead. The loop pays back only when the same task shape recurs enough to amortize the setup and the per-iteration waste stays below the cost of doing the task yourself in a prompt session.
 
@@ -65,7 +65,7 @@ The four conditions sort tasks cleanly.
 | Solo developer on a metered plan, sub-weekly cadence | N is too small to amortise setup; single prompt session is strictly cheaper |
 | Review-bound teams | Multiplying output past the review ceiling makes the queue longer, not faster |
 
-The no-go list maps onto pages already on this site — [comprehension-debt.md](../anti-patterns/comprehension-debt.md) for what happens when shipped-faster outruns understood; [trust-without-verify.md](../anti-patterns/trust-without-verify.md) for the verification-vibes failure; [cost-aware-agent-design.md](../token-engineering/cost-aware-agent-design.md) for the budget side.
+The no-go list maps onto pages already on this site — [comprehension-debt.md](../patterns/anti-patterns/comprehension-debt.md) for what happens when shipped-faster outruns understood; [trust-without-verify.md](../patterns/anti-patterns/trust-without-verify.md) for the verification-vibes failure; [cost-aware-agent-design.md](../token-engineering/cost-aware-agent-design.md) for the budget side.
 
 ## When this backfires
 
@@ -73,7 +73,7 @@ The gate itself can pass on tasks that should still not be looped.
 
 - Review capacity is the team's actual bottleneck. A loop multiplies output by N; if reviewers were already the constraint, the loop's effective throughput is the reviewer's throughput minus the loop's triage overhead. [Addy Osmani — Loop Engineering](https://addyo.substack.com/p/loop-engineering) is explicit on this: "the worktrees take away the mechanical collision but YOU are still the ceiling, your review bandwidth decides how many you can actually run, not the tool." A passing four-condition score does not override a saturated reviewer.
 - Economics flip on plan type. The same loop is "obviously worth it" on an unmetered enterprise plan and "reckless" on a metered consumer plan. Single autonomous refactoring runs in the wild have produced $4,200 weekend bills for one developer ([Vantage — Hidden Cost Driver in Agentic Coding](https://www.vantage.sh/blog/agentic-coding-costs)). The cadence-and-verification check passes; the budget check is doing the real work, and it has to be answered honestly.
-- Comprehension debt accelerates. A loop ships code faster than you can read it; the gap between what exists and what the team understands grows in proportion to loop throughput. The [comprehension-debt](../anti-patterns/comprehension-debt.md) anti-pattern documents this directly — an [Anthropic RCT with 52 junior engineers](https://www.anthropic.com/research/AI-assistance-coding-skills) measured a 17-percentage-point comprehension drop for code-generation-delegation users versus conceptual-inquiry users. A loop is delegation by default.
+- Comprehension debt accelerates. A loop ships code faster than you can read it; the gap between what exists and what the team understands grows in proportion to loop throughput. The [comprehension-debt](../patterns/anti-patterns/comprehension-debt.md) anti-pattern documents this directly — an [Anthropic RCT with 52 junior engineers](https://www.anthropic.com/research/AI-assistance-coding-skills) measured a 17-percentage-point comprehension drop for code-generation-delegation users versus conceptual-inquiry users. A loop is delegation by default.
 - The verifier is a second LLM grading the first. The maker-grades-own-homework failure does not disappear when you split it across two models with shared training distribution. [Osmani's framing](https://addyo.substack.com/p/loop-engineering) — "the model that wrote the code is way too nice grading its own homework" — only resolves when the verifier is external and objective: a test runner, a typechecker, a CI gate. An LLM-as-judge that lacks ground truth is theater, and the loop's stop condition is meaningless.
 - The opposite is sometimes the right call. A reasonable practitioner can defend "stay in prompt-driven sessions until you have measured the same task shape recurring at least weekly" as the default — most engineers see fewer than three weekly-recurring task shapes, and a gate that passes on borderline cases produces too many loops the team cannot maintain. The gate exists to be honest about the conditions; it is not an instruction to build.
 
@@ -116,6 +116,6 @@ Verdict: do not loop. A single prompt-driven session with a domain expert review
 - [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-strategy-spectrum.md) — once the gate passes, this page chooses *how* the loop carries context between iterations
 - [The Ralph Wiggum Loop: Fresh-Context Iteration Pattern](ralph-wiggum-loop.md) — the canonical fresh-context loop mechanic, downstream of this gate
 - [Goal-Driven Autonomous Loop](goal-driven-autonomous-loop.md) — the goal-condition variant of looping, also downstream of this gate
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md) — the split-the-maker-from-the-checker structure that closes the verification condition
+- [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md) — the split-the-maker-from-the-checker structure that closes the verification condition
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — broader cost-control patterns once a loop is approved
-- [Comprehension Debt: When Developers Understand Less of Their Own Codebase](../anti-patterns/comprehension-debt.md) — the anti-pattern that emerges when the gate is skipped and the loop ships faster than the team reads
+- [Comprehension Debt: When Developers Understand Less of Their Own Codebase](../patterns/anti-patterns/comprehension-debt.md) — the anti-pattern that emerges when the gate is skipped and the loop ships faster than the team reads

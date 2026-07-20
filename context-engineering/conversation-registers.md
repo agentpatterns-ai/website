@@ -71,4 +71,4 @@ Rather than continue the thread, you start a fresh conversation and prompt: "In 
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md) — tailoring the context bundle per agent role, the machine-facing counterpart
 - [Context Window Dumb Zone](context-window-dumb-zone.md) — how reasoning degrades as the window fills
 - [Goal Recitation](goal-recitation.md) — keeping intent in the attention window within a session
-- [The Kitchen Sink Session](../anti-patterns/session-partitioning.md) — the anti-pattern that clearing between contexts addresses
+- [The Kitchen Sink Session](../patterns/anti-patterns/session-partitioning.md) — the anti-pattern that clearing between contexts addresses

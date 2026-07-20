@@ -13,6 +13,7 @@ applies_to: "cursor@3.x"
 last_reviewed: 2026-05-27
 status: current
 ---
+
 # Cursor /multitask: Async Subagent Dispatch in the Editor
 
 > Dispatch async subagents from the editor session — parallelise queued prompts and let Cursor break a large task across a background subagent fleet.
@@ -79,15 +80,15 @@ graph TD
 |---|---|---|---|
 | Surface | Slash command in editor | `background: true` frontmatter | `/agent <name>` |
 | Auto-decomposition | Yes | No | No |
-| Result surfacing | Final messages plus resumable IDs | [Monitor streams events](../../multi-agent/async-non-blocking-subagent-dispatch.md) | Torn down per invocation |
+| Result surfacing | Final messages plus resumable IDs | [Monitor streams events](../../patterns/multi-agent/async-non-blocking-subagent-dispatch.md) | Torn down per invocation |
 | Filesystem isolation | Compose with `/worktree` | `Worktree` tool separate | None built-in |
 | Recursion depth | N — nested since Cursor 2.5 ([Cursor subagents docs](https://cursor.com/docs/subagents)) | 1 | 1 |
 
-Sources: [Cursor subagents docs](https://cursor.com/docs/subagents), [Claude Code sub-agents](https://code.claude.com/docs/en/sub-agents), [Cross-tool subagent comparison](../../multi-agent/cross-tool-subagent-comparison.md).
+Sources: [Cursor subagents docs](https://cursor.com/docs/subagents), [Claude Code sub-agents](https://code.claude.com/docs/en/sub-agents), [Cross-tool subagent comparison](../../patterns/multi-agent/cross-tool-subagent-comparison.md).
 
 ## When /multitask backfires
 
-`/multitask` specializes [async non-blocking subagent dispatch](../../multi-agent/async-non-blocking-subagent-dispatch.md). Those caveats apply, plus editor-specific failure modes:
+`/multitask` specializes [async non-blocking subagent dispatch](../../patterns/multi-agent/async-non-blocking-subagent-dispatch.md). Those caveats apply, plus editor-specific failure modes:
 
 - No productive parent work during the wait — Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) chose synchronous dispatch because "asynchronicity adds challenges in result coordination, state consistency, and error propagation across the subagents."
 - Tightly-coupled refactor — subagents lose shared context, produce inconsistent edits, and you pay the merge cost without a parallelism gain.
@@ -124,6 +125,6 @@ If the docs update and OpenAPI regeneration touch overlapping files, compose wit
 ## Related
 
 - [Cursor 3 Agents Window](agents-window.md) — the UI host for `/multitask`, with `/worktree` and `/best-of-n`
-- [Async Non-Blocking Subagent Dispatch](../../multi-agent/async-non-blocking-subagent-dispatch.md) — the tool-agnostic pattern this specialises
-- [Cross-Tool Subagent Comparison](../../multi-agent/cross-tool-subagent-comparison.md) — broader comparison of subagent definition formats and isolation models
-- [Sub-Agents for Fan-Out Research](../../multi-agent/sub-agents-fan-out.md) — the underlying fan-out primitive
+- [Async Non-Blocking Subagent Dispatch](../../patterns/multi-agent/async-non-blocking-subagent-dispatch.md) — the tool-agnostic pattern this specialises
+- [Cross-Tool Subagent Comparison](../../patterns/multi-agent/cross-tool-subagent-comparison.md) — broader comparison of subagent definition formats and isolation models
+- [Sub-Agents for Fan-Out Research](../../patterns/multi-agent/sub-agents-fan-out.md) — the underlying fan-out primitive

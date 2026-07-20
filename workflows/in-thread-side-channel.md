@@ -26,7 +26,7 @@ Related lesson: [Handoffs](https://learn.agentpatterns.ai/workflows/handoffs/) �
 The in-thread side-channel is a narrow tool, not a general-purpose one. Use it when all three conditions hold:
 
 - The session is long enough for attention decay to matter. Long sessions drift off-objective — earlier instructions fall into the low-attention middle zone of the context window ([Liu et al., "Lost in the Middle," TACL 2023](https://arxiv.org/abs/2307.03172)), and goal drift has been measured empirically on 100k+ token sequences ([Arike et al., 2025](https://arxiv.org/abs/2505.02709)). In short sessions the cost of a plain interruption is low.
-- The question is short and clarifying, not a new task. The side-channel signals bounded scope. A substantive question, such as an architectural review or design debate, leaves its reasoning in the main thread whatever the framing, [poisoning the context](../anti-patterns/context-poisoning.md) the agent must keep working in.
+- The question is short and clarifying, not a new task. The side-channel signals bounded scope. A substantive question, such as an architectural review or design debate, leaves its reasoning in the main thread whatever the framing, [poisoning the context](../patterns/anti-patterns/context-poisoning.md) the agent must keep working in.
 - The agent is not mid-transaction. Interrupting an atomic tool sequence risks breaking work the agent cannot re-synchronize.
 
 Outside these conditions, pick a different mechanism — see [Alternatives](#alternatives).
@@ -86,7 +86,7 @@ The in-thread side-channel is the wrong choice outside its narrow conditions. Th
 ## Failure modes
 
 - Scope creep. The "side" question becomes the new task, and the agent never returns. The marker does not prevent this — explicit return framing is the only defense, and even that fails when the side question is substantive.
-- Substantial side questions contaminate anyway. If the question triggers heavy reasoning, the tokens stay in the context window and push the original goal further into the middle zone, accelerating [objective drift](../anti-patterns/objective-drift.md). The marker does not create isolation.
+- Substantial side questions contaminate anyway. If the question triggers heavy reasoning, the tokens stay in the context window and push the original goal further into the middle zone, accelerating [objective drift](../patterns/anti-patterns/objective-drift.md). The marker does not create isolation.
 - Overuse. Once the side-channel is cheap, users ask more questions. The pattern was meant to protect the context budget. Used liberally, it spends that budget faster than plain interruptions would.
 - Empty framing. In a tool without a side-channel primitive, a `[SIDE]` tag is just prose. It works only if the user consistently includes the return signal and the agent reliably honors it. Neither is guaranteed without practice.
 
@@ -116,7 +116,7 @@ graph TD
 ## Related
 
 - [Seamless Background-to-Foreground Handoff](background-foreground-handoff.md) — cross-session handoff, not same-session
-- [Objective Drift](../anti-patterns/objective-drift.md) — the failure mode this pattern partially mitigates
+- [Objective Drift](../patterns/anti-patterns/objective-drift.md) — the failure mode this pattern partially mitigates
 - [Goal Recitation](../context-engineering/goal-recitation.md) — complementary technique: restate objectives at context tail
-- [Distractor Interference](../anti-patterns/distractor-interference.md) — why semantically adjacent content reduces compliance
-- [Context Poisoning](../anti-patterns/context-poisoning.md) — what happens when contamination goes unmanaged
+- [Distractor Interference](../patterns/anti-patterns/distractor-interference.md) — why semantically adjacent content reduces compliance
+- [Context Poisoning](../patterns/anti-patterns/context-poisoning.md) — what happens when contamination goes unmanaged

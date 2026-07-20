@@ -99,8 +99,8 @@ A declarative setup spec makes failure binary. The job either succeeds in full o
 ## Related
 
 - [Coding Agent](../tools/copilot/coding-agent.md)
-- [Session Initialization Ritual](../agent-design/session-initialization-ritual.md)
-- [Repository Bootstrap Checklist](../workflows/repository-bootstrap-checklist.md)
+- [Session Initialization Ritual](../patterns/agent-design/session-initialization-ritual.md)
+- [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
 - [Skeleton Projects as Scaffolding](skeleton-projects-as-scaffolding.md)
 - [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
 - [Agent-Led Dev-Environment Iteration](agent-led-dev-environment.md)

@@ -67,7 +67,7 @@ The right balance depends on task structure:
 
 - Repetitive access to the same document: preload it.
 - Exploratory tasks where the relevant subset is unknown upfront: retrieve on demand.
-- Long-horizon tasks: combine both — keep instructions preloaded, retrieve reference material as needed, and use compaction or [sub-agents](../multi-agent/sub-agents-fan-out.md) when context fills.
+- Long-horizon tasks: combine both — keep instructions preloaded, retrieve reference material as needed, and use compaction or [sub-agents](../patterns/multi-agent/sub-agents-fan-out.md) when context fills.
 
 Anthropic notes that treating context as ["a precious, finite resource"](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) and assembling "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome" produces better results than broad preloading.
 

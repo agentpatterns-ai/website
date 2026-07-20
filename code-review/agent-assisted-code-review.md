@@ -127,7 +127,7 @@ Both agents run on every PR. The security reviewer catches an exposed database U
 
 ## Related
 
-- [Trust Without Verify](../anti-patterns/trust-without-verify.md)
+- [Trust Without Verify](../patterns/anti-patterns/trust-without-verify.md)
 - [Test-Driven Agent Development: Tests as Spec and Guardrail](../verification/tdd-agent-development.md)
 - [Incremental Verification: Check at Each Step, Not at the End](../verification/incremental-verification.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)

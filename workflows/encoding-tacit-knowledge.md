@@ -79,7 +79,7 @@ Schedule periodic re-elicitation sessions on a regular cadence, not triggered by
 Encoding tacit knowledge is expensive and carries its own failure modes:
 
 - Expert is unavailable or unwilling: the workflow needs sustained access to domain experts. If the only subject-matter expert is time-constrained or has left the team, elicitation stalls. Consider recording rationale during code reviews and retrospectives as a lower-bandwidth substitute.
-- Knowledge is too context-sensitive to encode: some judgments depend on real-time context that you cannot capture as static instructions or few-shot examples — the residue of the [implicit knowledge problem](../anti-patterns/implicit-knowledge-problem.md) that encoding cannot reach. Forcing them into an instruction file produces rules that are correct on average but wrong in the specific cases that matter most. Prefer eval tasks that test context-sensitive behavior rather than encoding the rule.
+- Knowledge is too context-sensitive to encode: some judgments depend on real-time context that you cannot capture as static instructions or few-shot examples — the residue of the [implicit knowledge problem](../patterns/anti-patterns/implicit-knowledge-problem.md) that encoding cannot reach. Forcing them into an instruction file produces rules that are correct on average but wrong in the specific cases that matter most. Prefer eval tasks that test context-sensitive behavior rather than encoding the rule.
 - Encoding lag creates stale guidance faster than re-elicitation fixes it: in domains where practices shift rapidly (new frameworks, evolving security requirements), encoded knowledge may be outdated before agents act on it. High-velocity domains may benefit more from retrieval-augmented context — RAG, pulling live documentation at inference time — than from static encoded knowledge.
 - The extractable fraction is smaller than it looks: scheduled interviews cannot recover the insights that only surface during incubation — when an expert wakes up with sudden clarity days after the conversation. A six-hour session with an AI-guided elicitation agent removes that phase entirely rather than compressing it ([INNOQ](https://www.innoq.com/en/blog/2026/04/ai-cognitive-lens-domain-knowledge/)). Pair scheduled elicitation with an always-open capture channel (annotation queue, rationale-in-PR convention, shared decision log) so post-session insights still land in the encoding pipeline.
 
@@ -93,7 +93,7 @@ Encoding tacit knowledge is expensive and carries its own failure modes:
 
 ## Related
 
-- [The Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md) — the anti-pattern this workflow addresses
+- [The Implicit Knowledge Problem](../patterns/anti-patterns/implicit-knowledge-problem.md) — the anti-pattern this workflow addresses
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — the broader improvement loop this feeds into
 - [LLM-as-Judge Evaluation with Human Spot-Check Review](llm-as-judge-evaluation.md) — calibrating automated evaluators with human annotation
 - [Eval-Driven Development](eval-driven-development.md) — using encoded standards as eval criteria

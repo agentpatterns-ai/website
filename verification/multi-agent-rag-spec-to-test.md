@@ -151,6 +151,6 @@ Treat RAG as a style-grounding mechanism, not a correctness mechanism. A systema
 
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
 - [Spec-Driven Development](../workflows/spec-driven-development.md)
-- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
+- [Orchestrator-Worker Pattern](../patterns/multi-agent/orchestrator-worker.md)
 - [Agent-Assisted Code Review](../code-review/agent-assisted-code-review.md)
 - [RAG/Agent Reliability Problem Map](rag-agent-reliability-problem-map.md)

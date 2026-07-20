@@ -362,8 +362,8 @@ Custom agents appear in the same agents dropdown as Ask, Agent, and Plan. The di
 
 - [Custom Agents & Skills in Copilot](../../tools/copilot/custom-agents-skills.md) — defining custom agents with specialized tools and MCP servers
 - [Domain-Specific System Prompts](../../instructions/domain-specific-system-prompts.md) — building system prompts for specialized agents
-- [Agent Composition Patterns](../../agent-design/agent-composition-patterns.md) — how agents compose with other primitives
-- [Specialized Agent Roles](../../agent-design/specialized-agent-roles.md) — assigning distinct, non-overlapping responsibilities to parallel agents
+- [Agent Composition Patterns](../../patterns/agent-design/agent-composition-patterns.md) — how agents compose with other primitives
+- [Specialized Agent Roles](../../patterns/agent-design/specialized-agent-roles.md) — assigning distinct, non-overlapping responsibilities to parallel agents
 - [Controlling Agent Output](../../instructions/controlling-agent-output.md) — constraining what agents produce
 
 ---
@@ -706,11 +706,11 @@ Lifecycle: When a memory proves consistently useful, promote it to the instructi
 
 ### Further reading
 
-- [Agent Memory Patterns](../../agent-design/agent-memory-patterns.md) — persisting knowledge across conversations with scoped memory systems
+- [Agent Memory Patterns](../../patterns/agent-design/agent-memory-patterns.md) — persisting knowledge across conversations with scoped memory systems
 - [Copilot Memory](../../tools/copilot/copilot-memory.md) — Copilot's autonomous memory: citation-based verification, cross-agent sharing, self-healing
-- [Episodic Memory Retrieval](../../agent-design/episodic-memory-retrieval.md) — storing and retrieving problem-solving episodes for agent learning
-- [Memory Synthesis from Execution Logs](../../agent-design/memory-synthesis-execution-logs.md) — synthesizing memory from logs for cross-session learning
-- [Subtask-Level Memory](../../agent-design/subtask-level-memory.md) — granular memory organization at the subtask level
+- [Episodic Memory Retrieval](../../patterns/agent-design/episodic-memory-retrieval.md) — storing and retrieving problem-solving episodes for agent learning
+- [Memory Synthesis from Execution Logs](../../patterns/agent-design/memory-synthesis-execution-logs.md) — synthesizing memory from logs for cross-session learning
+- [Subtask-Level Memory](../../patterns/agent-design/subtask-level-memory.md) — granular memory organization at the subtask level
 
 ---
 

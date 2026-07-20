@@ -126,10 +126,10 @@ Prefer event-driven reminders for long-running or safety-critical agents. For sh
 
 ## Related
 
-- [Objective Drift: When Agents Lose the Thread](../anti-patterns/objective-drift.md)
+- [Objective Drift: When Agents Lose the Thread](../patterns/anti-patterns/objective-drift.md)
 - [Critical Instruction Repetition](critical-instruction-repetition.md)
 - [Hooks and Lifecycle Events: Intercepting Agent Behavior](../tool-engineering/hooks-lifecycle-events.md)
-- [Steering Running Agents](../agent-design/steering-running-agents.md)
+- [Steering Running Agents](../patterns/agent-design/steering-running-agents.md)
 - [Domain-Specific System Prompts](domain-specific-system-prompts.md)
 - [Post-Compaction Re-read Protocol](post-compaction-reread-protocol.md)
 - [Context Compression Strategies: Offloading and Summarisation](../context-engineering/context-compression-strategies.md) — the compression mechanism that event-driven reminders complement

@@ -139,5 +139,5 @@ Multiverse analysis carries real costs that make it impractical in several condi
 
 - [pass@k and pass^k Metrics](pass-at-k-metrics.md)
 - [Grade Agent Outcomes](grade-agent-outcomes.md)
-- [Cross-Vendor Competitive Routing](../agent-design/cross-vendor-competitive-routing.md)
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
+- [Cross-Vendor Competitive Routing](../patterns/agent-design/cross-vendor-competitive-routing.md)
+- [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md)

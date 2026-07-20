@@ -89,4 +89,4 @@ What an actual eval would show: when the team runs both models against 20 real P
 - [LLM-Driven Benchmark Auditing](../verification/llm-benchmark-auditing.md) — treat the comparison artefact itself as a software artefact and audit it before trusting the number
 - [The Task Framing Irrelevance Fallacy](task-framing-irrelevance-fallacy.md) — the same mechanism viewed from the prompt-engineering side: surface framing measurably changes output
 - [The Consistent Capability Fallacy](consistent-capability-fallacy.md) — capability on one task does not predict capability on another, even for the same model
-- [Perceived Model Degradation](../anti-patterns/perceived-model-degradation.md) — another case of mistaking prompt-context effects for stable model properties
+- [Perceived Model Degradation](../patterns/anti-patterns/perceived-model-degradation.md) — another case of mistaking prompt-context effects for stable model properties

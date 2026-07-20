@@ -78,7 +78,7 @@ Minimalism is not a universal rule. Common failure conditions:
 - Multi-system orchestrators: agents coordinating distinct systems (ticketing, CRM, deployment) benefit from one tool per system operation. Collapsing into a generic `do_action(system, verb, payload)` moves the selection decision into parameter space and loses per-tool schemas.
 - Consolidation that expands the parameter surface: a unified `search` tool with `mode={text,semantic,symbol}` only helps if the model picks the mode reliably. If parameter choice is as ambiguous as tool choice, you have traded one ambiguity for another.
 - Compliance-driven work: goal-oriented prompts assume a shared definition of "done". For regulated workflows where the procedure itself is the artifact (audit trails), prescriptive steps are safer.
-- Weaker models: gains from trusting model reasoning shrink with capability, though [iterative feedback can equalize](../agent-design/feedback-capability-equalizer.md) much of that gap. Smaller models benefit more from procedural scaffolding than open-ended goals.
+- Weaker models: gains from trusting model reasoning shrink with capability, though [iterative feedback can equalize](../patterns/agent-design/feedback-capability-equalizer.md) much of that gap. Smaller models benefit more from procedural scaffolding than open-ended goals.
 
 ## Key Takeaways
 
@@ -119,7 +119,7 @@ Three tools, no overlapping functionality. `read_file` absorbed `read_lines` via
 - [Tool Selection Guidance](tool-description-quality.md)
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
-- [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md)
+- [Subagent Schema-Level Tool Filtering](../patterns/multi-agent/subagent-schema-level-tool-filtering.md)
 - [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)
 - [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)

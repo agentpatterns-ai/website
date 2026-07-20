@@ -18,9 +18,9 @@ last_reviewed: 2026-05-27
 
 > A staged transformation model for taking an existing codebase — with no agent considerations — and making it progressively more agent-friendly through sourced, incremental steps.
 
-Most teams start with agents on codebases that were never designed for them: undocumented conventions (the [implicit knowledge problem](../../anti-patterns/implicit-knowledge-problem.md)), weak type coverage, no machine-readable project instructions, manual workflows. This training course provides a diagnostic model and a concrete transformation workflow.
+Most teams start with agents on codebases that were never designed for them: undocumented conventions (the [implicit knowledge problem](../../patterns/anti-patterns/implicit-knowledge-problem.md)), weak type coverage, no machine-readable project instructions, manual workflows. This training course provides a diagnostic model and a concrete transformation workflow.
 
-The model is a diagnostic and investment guide, not a mandatory gate — it scores the same signals catalogued in [Codebase Readiness for Agents](../../agent-design/codebase-readiness.md). You do not have to complete every level before using agents. Use the level descriptions to identify where your repo currently sits, then invest in moving to the next level.
+The model is a diagnostic and investment guide, not a mandatory gate — it scores the same signals catalogued in [Codebase Readiness for Agents](../../patterns/agent-design/codebase-readiness.md). You do not have to complete every level before using agents. Use the level descriptions to identify where your repo currently sits, then invest in moving to the next level.
 
 ## The Five Levels
 
@@ -37,7 +37,7 @@ graph LR
 
 | Level | Label | Defining quality | Agent capability |
 |-------|-------|-----------------|-----------------|
-| L0 | Human-Only | [Implicit knowledge](../../anti-patterns/implicit-knowledge-problem.md); tribal conventions | Cannot orient without hand-holding |
+| L0 | Human-Only | [Implicit knowledge](../../patterns/anti-patterns/implicit-knowledge-problem.md); tribal conventions | Cannot orient without hand-holding |
 | L1 | Agent-Readable | Structure and context are explicit | Can explain the system; cannot execute reliably |
 | L2 | Agent-Assisted | Automated feedback loops in place | Can execute scoped changes with self-correction |
 | L3 | Agent-Operable | Mechanical enforcement; task interfaces | Can run reliably without per-action supervision |
@@ -59,7 +59,7 @@ Diagnose first. Read the level descriptions and exit criteria to identify where 
 
 Invest incrementally. Each module covers one transition. Move to the next level before investing in the one after — the levels compound.
 
-Use agents during transformation. Agents help with the transformation work itself. A repo at L1 can use agents to write tests (moving toward L2), and the test suite becomes the [backpressure](../../agent-design/agent-backpressure.md) that enables L3+. You do not have to reach a level before using agents — you use agents to help reach it.
+Use agents during transformation. Agents help with the transformation work itself. A repo at L1 can use agents to write tests (moving toward L2), and the test suite becomes the [backpressure](../../patterns/agent-design/agent-backpressure.md) that enables L3+. You do not have to reach a level before using agents — you use agents to help reach it.
 
 ## Readiness Scorecard
 
@@ -95,6 +95,6 @@ Score interpretation:
 ## Related
 
 - [AI Development Maturity Model](../../workflows/ai-development-maturity-model.md) — the companion model for *developer* maturity (skeptic → agentic); this course covers *codebase* maturity
-- [Codebase Readiness for Agents](../../agent-design/codebase-readiness.md) — reference page on what makes code agent-friendly
-- [Harness Engineering](../../agent-design/harness-engineering.md) — the technical discipline this course applies to brownfield contexts
-- [Structured Agentic Software Engineering](../../agent-design/structured-agentic-software-engineering.md) — the SE 0–5 maturity model this course draws from ([arXiv:2509.06216](https://arxiv.org/abs/2509.06216))
+- [Codebase Readiness for Agents](../../patterns/agent-design/codebase-readiness.md) — reference page on what makes code agent-friendly
+- [Harness Engineering](../../patterns/agent-design/harness-engineering.md) — the technical discipline this course applies to brownfield contexts
+- [Structured Agentic Software Engineering](../../patterns/agent-design/structured-agentic-software-engineering.md) — the SE 0–5 maturity model this course draws from ([arXiv:2509.06216](https://arxiv.org/abs/2509.06216))

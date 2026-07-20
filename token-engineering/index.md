@@ -13,14 +13,14 @@ last_reviewed: 2026-06-29
 
 Cost is now a first-order constraint on agentic coding, but the techniques that control it are scattered — model routing, effort budgets, prompt compression, caching discipline, token-efficient output, small-model offload, batch scheduling. Token engineering is the name for that cluster: the deliberate practice of spending fewer *expensive* tokens at the *wrong time*, while holding output quality fixed.
 
-It cuts across the site. The canonical treatment of each technique still lives in its home discipline — [context engineering](../context-engineering/index.md), [agent design](../agent-design/index.md), [tool engineering](../tool-engineering/index.md), [observability](../observability/index.md). This section owns the pages whose primary subject *is* token cost, and crosswalks the rest under one frame so you can navigate "how do I cut token spend without losing quality?" as a single topic.
+It cuts across the site. The canonical treatment of each technique still lives in its home discipline — [context engineering](../context-engineering/index.md), [agent design](../patterns/agent-design/index.md), [tool engineering](../tool-engineering/index.md), [observability](../observability/index.md). This section owns the pages whose primary subject *is* token cost, and crosswalks the rest under one frame so you can navigate "how do I cut token spend without losing quality?" as a single topic.
 
 ## What token engineering is — and isn't
 
 - It is the optimisation goal: same task outcome, fewer/cheaper tokens. Every technique below carries an implicit "without degrading the end result" clause.
 - It is not [context engineering](../context-engineering/context-engineering.md). Context engineering decides *what information enters the window* for quality and reliability; token engineering is the cost-and-efficiency lens *over* those decisions. They overlap (lean context is cheaper) but answer different questions.
 - It is not generic cost-performance. The `cost-performance` tag spans latency, throughput, and infra; token engineering is specifically about the *token* as the unit of spend.
-- The quality constraint is the whole point. Cutting tokens can backfire — see [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md), the guardrail every technique here must respect.
+- The quality constraint is the whole point. Cutting tokens can backfire — see [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md), the guardrail every technique here must respect.
 
 ## The crosswalk
 
@@ -32,12 +32,12 @@ Send each task to the cheapest model and tier that still passes, escalating only
 
 - [Routing Decision Framework](routing-decision-framework.md) — the selection map over the routing pages below: pick by dominant signal (complexity, blast radius, latency, cost)
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — the cornerstone: match model capability to task complexity, escalate on validation failure
-- [Gateway Model Routing](../agent-design/gateway-model-routing.md) — one gateway knob drives both the inference target and the model picker
-- [Auto Model Selection](../agent-design/auto-model-selection.md) — hand per-task model choice to the harness
-- [Cross-Vendor Competitive Routing](../agent-design/cross-vendor-competitive-routing.md) — race competing vendors, gate on the winner
-- [Model-Neutral Agent Architecture](../agent-design/model-neutral-agent-architecture.md) — keep the agent portable so routing stays a config decision
-- [Multi-Shape BYOK Provider](../agent-design/multi-shape-byok-provider.md) — bring-your-own-key routing across provider shapes
-- [Parsimonious Agent Routing](../multi-agent/parsimonious-agent-routing.md) — one delegation plan that jointly optimises decompose, worker, and budget
+- [Gateway Model Routing](../patterns/agent-design/gateway-model-routing.md) — one gateway knob drives both the inference target and the model picker
+- [Auto Model Selection](../patterns/agent-design/auto-model-selection.md) — hand per-task model choice to the harness
+- [Cross-Vendor Competitive Routing](../patterns/agent-design/cross-vendor-competitive-routing.md) — race competing vendors, gate on the winner
+- [Model-Neutral Agent Architecture](../patterns/agent-design/model-neutral-agent-architecture.md) — keep the agent portable so routing stays a config decision
+- [Multi-Shape BYOK Provider](../patterns/agent-design/multi-shape-byok-provider.md) — bring-your-own-key routing across provider shapes
+- [Parsimonious Agent Routing](../patterns/multi-agent/parsimonious-agent-routing.md) — one delegation plan that jointly optimises decompose, worker, and budget
 - [Self-Healing Tool Routing](../tool-engineering/self-healing-tool-routing.md) — route around failing tools before they burn retries
 
 ### Right token — lean context and output
@@ -66,8 +66,8 @@ Structure prompts so the cacheable prefix stays stable and hits.
 Route non-urgent work into cheaper capacity windows. Batch APIs are the concrete cost primitive: Anthropic's Message Batches and OpenAI's Batch API both run jobs asynchronously at a 50% discount, completing within 24 hours — typically under an hour for Anthropic ([Anthropic — Message Batches](https://platform.claude.com/docs/en/build-with-claude/batch-processing); [OpenAI — Batch API](https://developers.openai.com/api/docs/guides/batch)). Work that can wait — overnight evals, doc refreshes, bulk refactors, research passes — belongs in those windows.
 
 - [Temporal Token Routing: Batch and Flex Tiers for Non-Urgent Work](temporal-token-routing.md) — the right-time decision: which workload class belongs in batch, flex, or the synchronous tier
-- [Idle-Time Speculative Planning](../agent-design/idle-time-speculative-planning.md) — use idle compute to pre-plan likely next steps
-- [Background TODO Agent](../agent-design/background-todo-agent.md) — defer non-urgent work to a background agent
+- [Idle-Time Speculative Planning](../patterns/agent-design/idle-time-speculative-planning.md) — use idle compute to pre-plan likely next steps
+- [Background TODO Agent](../patterns/agent-design/background-todo-agent.md) — defer non-urgent work to a background agent
 - [Programmatic Cloud Agent Dispatch](../workflows/programmatic-cloud-agent-dispatch.md) — schedule deferred agent runs into cheaper capacity
 
 This axis is the freshest and least covered today — see the spin-off issues for deeper pages on eval-gated scheduling.
@@ -76,16 +76,16 @@ This axis is the freshest and least covered today — see the spin-off issues fo
 
 Spend reasoning compute in proportion to task difficulty, not uniformly.
 
-- [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md) — the reasoning sandwich: heavy planning and verification, light execution
-- [Heuristic-Based Effort Scaling](../agent-design/heuristic-effort-scaling.md) — encode effort rules in the system prompt
-- [Per-Call Budget Hints on Tool Invocations](../agent-design/per-call-budget-hints-tool-calls.md) — raise the cap on one dense, infrequent call
-- [Per-Tool Extended Reasoning Opt-In](../agent-design/per-tool-extended-reasoning-opt-in.md) — tool-call-scoped reasoning budgets
+- [Reasoning Budget Allocation](../patterns/agent-design/reasoning-budget-allocation.md) — the reasoning sandwich: heavy planning and verification, light execution
+- [Heuristic-Based Effort Scaling](../patterns/agent-design/heuristic-effort-scaling.md) — encode effort rules in the system prompt
+- [Per-Call Budget Hints on Tool Invocations](../patterns/agent-design/per-call-budget-hints-tool-calls.md) — raise the cap on one dense, infrequent call
+- [Per-Tool Extended Reasoning Opt-In](../patterns/agent-design/per-tool-extended-reasoning-opt-in.md) — tool-call-scoped reasoning budgets
 
 ### Small-model offload
 
 Push verbose intermediate work to a cheaper model and return a compact result.
 
-- [Specialized Small Language Models as Agent Sub-Tools](../agent-design/specialized-slm-as-agent-tool.md) — an SLM absorbs raw bytes; the orchestrator never sees them
+- [Specialized Small Language Models as Agent Sub-Tools](../patterns/agent-design/specialized-slm-as-agent-tool.md) — an SLM absorbs raw bytes; the orchestrator never sees them
 - [Compositional Skill Routing](../context-engineering/compositional-skill-routing.md) — route across a large skill library without loading it all
 
 ### Measurement and visibility
@@ -103,5 +103,5 @@ You cannot reduce what you do not measure — instrument spend before cutting it
 
 - [Concept Map](../concepts.md) — all site content grouped by theme
 - [Context Engineering](../context-engineering/index.md) — the canonical home for lean-context techniques
-- [Agent Design](../agent-design/index.md) — routing, effort, and offload patterns live here
-- [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — the quality guardrail this section must respect
+- [Agent Design](../patterns/agent-design/index.md) — routing, effort, and offload patterns live here
+- [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — the quality guardrail this section must respect

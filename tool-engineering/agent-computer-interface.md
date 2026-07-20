@@ -133,7 +133,7 @@ The redesign adds: absolute-path constraint (eliminates relative-path errors), w
 - [Tool Description Quality](tool-description-quality.md)
 - [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
 - [Semantic Tool Output](semantic-tool-output.md)
-- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md)
+- [Typed Schemas at Agent Boundaries](../patterns/multi-agent/typed-schemas-at-agent-boundaries.md)
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Tool Engineering Principles](tool-engineering.md)
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md)

@@ -44,7 +44,7 @@ includes CI configuration, has test examples.
 Return the top 5 with links and a one-line summary of each.
 ```
 
-Running several research agents in parallel across different sources produces a broader candidate set than searching one channel at a time — a [fan-out then synthesize](../multi-agent/fan-out-synthesis.md) pattern applied to template discovery.
+Running several research agents in parallel across different sources produces a broader candidate set than searching one channel at a time — a [fan-out then synthesize](../patterns/multi-agent/fan-out-synthesis.md) pattern applied to template discovery.
 
 ### Step 2: Evaluate against criteria
 
@@ -150,7 +150,7 @@ Use a hand-built foundation instead when your team's conventions are well-establ
 
 - [Lay the Architectural Foundation First](architectural-foundation-first.md)
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
-- [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md)
-- [Repository Bootstrap Checklist](../workflows/repository-bootstrap-checklist.md)
-- [Codebase Readiness for Agents](../agent-design/codebase-readiness.md)
-- [Sub-Agents for Fan-Out Research](../multi-agent/sub-agents-fan-out.md)
+- [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
+- [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
+- [Codebase Readiness for Agents](../patterns/agent-design/codebase-readiness.md)
+- [Sub-Agents for Fan-Out Research](../patterns/multi-agent/sub-agents-fan-out.md)

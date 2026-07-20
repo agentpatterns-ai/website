@@ -76,7 +76,7 @@ Allowlisting reduces prompt volume. Sandbox boundaries determine what allowliste
 
 Anthropic's sandboxing covers "not just Claude Code's direct interactions, but also any scripts, programs, or subprocesses" — a benign command can spawn a child that makes an outbound call.
 
-An allowlist without sandbox boundaries relies entirely on the accuracy of your classification. A sandbox without an allowlist retains the fatigue problem. Together they achieve high-signal oversight and a contained [blast radius](../security/blast-radius-containment.md) if a classification is wrong.
+An allowlist without sandbox boundaries relies entirely on the accuracy of your classification. A sandbox without an allowlist retains the fatigue problem. Together they achieve high-signal oversight and a contained [blast radius](blast-radius-containment.md) if a classification is wrong.
 
 The sandbox layer is itself fallible. A SOCKS5 hostname null-byte bypass in Claude Code's network sandbox (Claude Code v2.0.24 through v2.1.89, patched in v2.1.88 on 2026-03-31 and re-bumped in v2.1.90, publicly disclosed May 2026) let an allowlisted shell command escape the network policy via a crafted hostname ([The Register, 2026-05-20](https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662), [SecurityWeek](https://www.securityweek.com/anthropic-silently-patches-claude-code-sandbox-bypass/)). Defense-in-depth assumes both layers are current and patched — pin to a known-good harness version and treat sandbox CVEs as the same severity tier as classification errors.
 

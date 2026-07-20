@@ -59,7 +59,7 @@ Each description stands alone — domain context, return shape, selection signal
 
 ### Annotate behavioral hints
 
-`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint` signal properties clients use for confirmation. Per the [MCP spec schema](https://raw.githubusercontent.com/modelcontextprotocol/specification/main/schema/2025-03-26/schema.ts), defaults are `destructiveHint: true`, `openWorldHint: true`, `readOnlyHint: false`, `idempotentHint: false` — servers must explicitly override destructive/open-world defaults. Clients MUST treat annotations as untrusted unless the server is trusted. `idempotentHint` maps to the [idempotent operations pattern](../agent-design/idempotent-agent-operations.md).
+`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint` signal properties clients use for confirmation. Per the [MCP spec schema](https://raw.githubusercontent.com/modelcontextprotocol/specification/main/schema/2025-03-26/schema.ts), defaults are `destructiveHint: true`, `openWorldHint: true`, `readOnlyHint: false`, `idempotentHint: false` — servers must explicitly override destructive/open-world defaults. Clients MUST treat annotations as untrusted unless the server is trusted. `idempotentHint` maps to the [idempotent operations pattern](../patterns/agent-design/idempotent-agent-operations.md).
 
 ## Error handling
 
@@ -85,7 +85,7 @@ Servers MUST implement both. A generic JSON-RPC error for a database timeout hid
 
 ### Output schemas
 
-Tools can declare an `outputSchema` for [structured results](../multi-agent/typed-schemas-at-agent-boundaries.md) — servers MUST conform, clients SHOULD validate.
+Tools can declare an `outputSchema` for [structured results](../patterns/multi-agent/typed-schemas-at-agent-boundaries.md) — servers MUST conform, clients SHOULD validate.
 
 ## Capability negotiation
 

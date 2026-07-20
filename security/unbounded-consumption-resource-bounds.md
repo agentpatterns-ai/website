@@ -114,7 +114,7 @@ Each bound's failure case is named: per-call cap catches a runaway prompt, itera
 
 ## Related
 
-- [Agent Circuit Breaker](../agent-design/agent-circuit-breaker.md) — tool-level recovery state machine; complements the loop-level and budget-level bounds on this page
+- [Agent Circuit Breaker](../patterns/agent-design/agent-circuit-breaker.md) — tool-level recovery state machine; complements the loop-level and budget-level bounds on this page
 - [Security Budget as Token Economics](security-budget-token-economics.md) — pre-release audit sizing under the same cost-economics frame
 - [Loop Detection](../observability/loop-detection.md) — observability signal that feeds the per-task iteration cap
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — complementary control axis; bounds cap *consumption* while least-privilege caps *reach*

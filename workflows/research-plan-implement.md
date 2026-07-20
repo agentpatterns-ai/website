@@ -44,7 +44,7 @@ With research in hand, outline the approach. Identify which files change, what n
 
 ### Implement
 
-Execute the plan with focused scope. [Implementation becomes mechanical](../agent-design/reasoning-budget-allocation.md) when the research and plan are solid. Deviations from the plan signal missing research, not creative latitude.
+Execute the plan with focused scope. [Implementation becomes mechanical](../patterns/agent-design/reasoning-budget-allocation.md) when the research and plan are solid. Deviations from the plan signal missing research, not creative latitude.
 
 The back-edge in the diagram — implementation surfacing new information that invalidates the plan — is a deliberate replan gate, not a bug. The nibzard [Agentic AI Handbook](https://www.nibzard.com/agentic-handbook) describes production agent work as "plan, controlled execution, and replan gates," where gates trigger reassessment rather than silent drift when assumptions break.
 
@@ -62,7 +62,7 @@ The cost asymmetry is stark:
 
 ## The reasoning sandwich
 
-LangChain's [harness engineering research](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) found that allocating maximum reasoning effort at the beginning (planning) and end (verification) — with lower reasoning during implementation — improved benchmark scores to 66.5%. The implementation phase does not need creative problem-solving; it needs disciplined execution of a known approach. See [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md) for the full pattern breakdown.
+LangChain's [harness engineering research](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) found that allocating maximum reasoning effort at the beginning (planning) and end (verification) — with lower reasoning during implementation — improved benchmark scores to 66.5%. The implementation phase does not need creative problem-solving; it needs disciplined execution of a known approach. See [Reasoning Budget Allocation](../patterns/agent-design/reasoning-budget-allocation.md) for the full pattern breakdown.
 
 ```mermaid
 graph LR
@@ -129,7 +129,7 @@ The pattern assumes research compounds — more reading yields a better plan. Th
 - [Fast feedback loops](../verification/red-green-refactor-agents.md) — when tests run in seconds and failures are compile or runtime errors, try-and-fix can converge faster than plan-and-verify. The pattern shines when errors are expensive to surface, not when the environment surfaces them for free.
 - Open-ended exploration — early prototyping benefits from discovering the problem shape through code. A plan written before the shape is known ossifies premature structure.
 
-The pattern pays off when wrong assumptions are expensive: unfamiliar code, irreversible actions, [long implementation phases](../agent-design/long-running-agents.md) where backtracking burns a large context window. Trivial, well-understood, or cheaply-reversible work is better served by implement-first.
+The pattern pays off when wrong assumptions are expensive: unfamiliar code, irreversible actions, [long implementation phases](../patterns/agent-design/long-running-agents.md) where backtracking burns a large context window. Trivial, well-understood, or cheaply-reversible work is better served by implement-first.
 
 Dexter Horthy — who originally popularized Research-Plan-Implement — publicly reversed that recommendation in early 2026 and rebuilt the workflow as [QRSPI](https://alexlavaee.me/blog/from-rpi-to-qrspi/) (Questioning, Research, Structure, Plan, Implement) after three failure modes surfaced at scale: a broad research prompt skipped the alignment moments where the agent should surface design decisions as explicit options, the Structure phase between Plan and Implement was the most-skipped step in practice, and plans drifted silently once research summaries lost fidelity ([talk: Everything We Got Wrong About Research-Plan-Implement](https://www.youtube.com/watch?v=YwZR6tc7qYg)). Treat the three phases here as the minimum decomposition; for high-stakes work, add an explicit Questioning step before Research and a Structure step before Implement.
 

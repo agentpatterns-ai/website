@@ -56,7 +56,7 @@ Three properties of the workload must hold. One violation produces silent, expen
 | Precondition | Why it matters |
 |---|---|
 | Genuine periodicity | The tool DAG must be stable across invocations within the tested 5-minute to 24-hour envelope. Tasks whose plan branches on input content cannot be replayed from one recording. |
-| Idempotent or transactional tools | Replays may execute against partial state from a prior failed run. Non-idempotent writes (POST without idempotency key, file append, message send) corrupt state on retry. See [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md). |
+| Idempotent or transactional tools | Replays may execute against partial state from a prior failed run. Non-idempotent writes (POST without idempotency key, file append, message send) corrupt state on retry. See [Idempotent Agent Operations](../patterns/agent-design/idempotent-agent-operations.md). |
 | Stable upstream APIs and schemas | A deterministic replay executes a now-invalid sequence when an upstream API, target HTML, or schema changes. The engine has no oracle to detect drift before failure compounds. |
 
 The LOOP write-safety theorem covers concurrent access to persistent configuration via reentrant locks and atomic file replacement, not retry semantics on partially-applied tool effects ([Good to Go: The LOOP Skill Engine, 2026](https://arxiv.org/abs/2605.14237)).
@@ -75,7 +75,7 @@ LOOP accepts the periodic-task envelope and drops the AgentRR check-function ove
 
 - Stochastic branch points. The template freezes whichever branch the first run took. Inputs needing the other branch fail silently. Stress-test with adversarial input distributions before promoting (see [Simulation and Replay Testing](../workflows/simulation-replay-testing.md)).
 - Drifting external dependencies. Without a trust anchor, replay has no oracle for upstream schema changes. Pair replay with a sentinel API call to fail fast on drift.
-- Non-idempotent writes mid-sequence. A partially-failed replay re-executes completed writes. Require idempotency keys on every write tool (see [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md)), or wrap replay in a transaction with rollback.
+- Non-idempotent writes mid-sequence. A partially-failed replay re-executes completed writes. Require idempotency keys on every write tool (see [Idempotent Agent Operations](../patterns/agent-design/idempotent-agent-operations.md)), or wrap replay in a transaction with rollback.
 - Short or one-shot tasks. Amortization needs enough invocations to recoup recording and extraction cost. For a handful of runs, hand-scripting is cheaper.
 
 ## Example
@@ -116,7 +116,7 @@ engine.add_precondition(lambda: github_api_reachable() and slack_channel_exists(
 
 - [Simulation and Replay Testing for Agent Verification](../workflows/simulation-replay-testing.md) — the testing-mode sibling; same recording substrate, different replay semantics.
 - [Cost-Aware Tracing for Skill Distillation](../observability/cost-aware-tracing-skill-distillation.md) — cross-task patch extraction with cost attribution; complementary to within-task replay.
-- [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md) — the per-tool precondition that makes safe replay possible.
+- [Idempotent Agent Operations](../patterns/agent-design/idempotent-agent-operations.md) — the per-tool precondition that makes safe replay possible.
 - [Skill Library Evolution](skill-library-evolution.md) — Loop Skills are a skill-library entry with a distinct lifecycle: record, validate, promote, retire on drift.
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — the broader cost framing; LOOP is one mechanism for the cron-workload slice.
-- [Memory Synthesis from Execution Logs](../agent-design/memory-synthesis-execution-logs.md) — synthesis without the deterministic-replay guarantee; the unbounded sibling.
+- [Memory Synthesis from Execution Logs](../patterns/agent-design/memory-synthesis-execution-logs.md) — synthesis without the deterministic-replay guarantee; the unbounded sibling.

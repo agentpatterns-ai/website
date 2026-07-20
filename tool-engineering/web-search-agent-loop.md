@@ -167,9 +167,9 @@ The main design choices are in `evaluate` (what counts as relevant), `identify_g
 
 - [Loop Detection](../observability/loop-detection.md) — detecting and breaking repetitive agent behavior
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md) — RAG as a foundation for agent-driven retrieval
-- [Sub-Agents and Fan-Out](../multi-agent/sub-agents-fan-out.md) — parallel worker coordination pattern
+- [Sub-Agents and Fan-Out](../patterns/multi-agent/sub-agents-fan-out.md) — parallel worker coordination pattern
 - [Browser Automation as a Research Tool](browser-automation-for-research.md) — fallback when HTTP fetch is blocked
 - [Lexical-First Retrieval for Agentic Search](lexical-first-retrieval-for-agentic-search.md) — when a strong loop lets a tuned BM25 index match dense retrieval on deep-research benchmarks
-- [Evaluator-Optimizer](../agent-design/evaluator-optimizer.md) — iterative generate-evaluate loop pattern
-- [Orchestrator-Worker](../multi-agent/orchestrator-worker.md) — multi-agent coordination architecture
+- [Evaluator-Optimizer](../patterns/agent-design/evaluator-optimizer.md) — iterative generate-evaluate loop pattern
+- [Orchestrator-Worker](../patterns/multi-agent/orchestrator-worker.md) — multi-agent coordination architecture
 - [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md) — using an LLM judge to evaluate agent outputs at scale

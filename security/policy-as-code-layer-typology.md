@@ -129,7 +129,7 @@ The Tool Approval policy carries the hard guarantee that no write reaches the da
 
 ## Related
 
-- [Prompt-Only Tool Access Control](../anti-patterns/prompt-only-tool-access-control.md) — The anti-pattern this typology displaces: prompt-only restrictions leak 11–18 pp; architectural enforcement drives unauthorised invocation to 0%.
+- [Prompt-Only Tool Access Control](../patterns/anti-patterns/prompt-only-tool-access-control.md) — The anti-pattern this typology displaces: prompt-only restrictions leak 11–18 pp; architectural enforcement drives unauthorised invocation to 0%.
 - [Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions](permission-framework-over-model.md) — Measures the Tool Approval stage in isolation: framework swings overeager rates from 27.7% to 1.1% on identical weights.
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md) — A different five-check decomposition focused on the agent-tool boundary; complements the Tool Approval stage with structural and semantic checks.
 - [Action-Selector Pattern](action-selector-pattern.md) — The narrowest deterministic alternative; equivalent guarantees for tiny action surfaces without the typology overhead.

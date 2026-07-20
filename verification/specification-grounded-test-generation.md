@@ -36,7 +36,7 @@ The lever is grounding in intent, not the checklist format or the number of test
 
 ## Why it works
 
-To write a test, the author has to know what the code should do at each edge, and when the ticket leaves an edge unstated an ungrounded tester has to guess. That guess fails in one of two ways: it never probes the edge, so the bug is missed, or it probes the edge but invents the wrong expected value, so correct code is rejected. The enumerated spec is an outside signal that states intended behavior one rule at a time, so the author stops guessing ([Haeri & Ghelichi, 2026](https://arxiv.org/abs/2607.06636)). Both failures share one root cause — missing access to intent — which is why the same signal raised bug detection from 18 of 30 to 30 of 30 and cut the false-alarm rate on correct code from 33% to 0% at once. More ungrounded tests cannot supply that missing intent, so a larger budget does not close the gap. This is the mirror image of the [code-first oracle bias](../anti-patterns/code-first-test-oracle-bias.md): withhold the implementation from the tester, but do supply the specification.
+To write a test, the author has to know what the code should do at each edge, and when the ticket leaves an edge unstated an ungrounded tester has to guess. That guess fails in one of two ways: it never probes the edge, so the bug is missed, or it probes the edge but invents the wrong expected value, so correct code is rejected. The enumerated spec is an outside signal that states intended behavior one rule at a time, so the author stops guessing ([Haeri & Ghelichi, 2026](https://arxiv.org/abs/2607.06636)). Both failures share one root cause — missing access to intent — which is why the same signal raised bug detection from 18 of 30 to 30 of 30 and cut the false-alarm rate on correct code from 33% to 0% at once. More ungrounded tests cannot supply that missing intent, so a larger budget does not close the gap. This is the mirror image of the [code-first oracle bias](../patterns/anti-patterns/code-first-test-oracle-bias.md): withhold the implementation from the tester, but do supply the specification.
 
 ## When this backfires
 
@@ -80,7 +80,7 @@ The spec-grounded oracle enforces the rule the prose-grounded one guessed wrong.
 
 ## Related
 
-- [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](../anti-patterns/code-first-test-oracle-bias.md) — the complementary rule: withhold the implementation from the tester, while this page supplies the specification to it
+- [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](../patterns/anti-patterns/code-first-test-oracle-bias.md) — the complementary rule: withhold the implementation from the tester, while this page supplies the specification to it
 - [The Specification as Prompt](../instructions/specification-as-prompt.md) — using specs as instructions to the code writer; here the same spec grounds the test writer's oracle instead
 - [Test-Driven Intent Clarification](test-driven-intent-clarification.md) — validating agent-written tests to surface specification ambiguity before writing code
 - [Spec-Derived Execution as a Correctness Oracle](spec-derived-execution-correctness-judging.md) — grounding an LLM judge in a natural-language spec by executing spec-derived inputs

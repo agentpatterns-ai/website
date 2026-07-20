@@ -54,16 +54,16 @@ A controlled distillation experiment isolates the mechanism: fine-tuning Qwen2.5
 
 | Use case | Why the metrics help |
 |----------|----------------------|
-| [Cross-vendor competitive routing](../agent-design/cross-vendor-competitive-routing.md) | Confirms whether the secondary vendor's failure modes are uncorrelated, or rebranded distillation lineage |
-| [Voting / ensemble pattern](../multi-agent/voting-ensemble-pattern.md) | Voting confidence assumes errors are independent — high pairwise AGS invalidates the assumption |
-| [Adversarial multi-model pipeline](../multi-agent/adversarial-multi-model-pipeline.md) | Pre-screen candidate adversaries by RPS/AGS distance |
+| [Cross-vendor competitive routing](../patterns/agent-design/cross-vendor-competitive-routing.md) | Confirms whether the secondary vendor's failure modes are uncorrelated, or rebranded distillation lineage |
+| [Voting / ensemble pattern](../patterns/multi-agent/voting-ensemble-pattern.md) | Voting confidence assumes errors are independent — high pairwise AGS invalidates the assumption |
+| [Adversarial multi-model pipeline](../patterns/multi-agent/adversarial-multi-model-pipeline.md) | Pre-screen candidate adversaries by RPS/AGS distance |
 | Fallback model selection | Pick the lowest-AGS competent model, not the closest one |
 
 ## Failure conditions
 
 - Outside tool-use trajectories. RPS and AGS are defined over multi-stage tool-call traces. Single-turn classification, RAG QA, and chat tasks need different metrics.
 - Without matched benchmark traces. Computing RPS/AGS requires running both models on the same task suite under the same harness; teams without τ-Bench-style infrastructure cannot replicate the scores directly.
-- Across model generations. AGS describes two specific checkpoints. By the time measurement finishes, both providers have shipped a new generation — the metric is a [snapshot, not a forecast](../agent-design/cross-vendor-competitive-routing.md).
+- Across model generations. AGS describes two specific checkpoints. By the time measurement finishes, both providers have shipped a new generation — the metric is a [snapshot, not a forecast](../patterns/agent-design/cross-vendor-competitive-routing.md).
 - When consistency is the goal. For systems whose parsers and templates depend on consistent verbal style, high RPS to a known-good primary is a feature. The metric tells you the cost-of-redundancy trade-off; it does not declare which side is right.
 
 ## Adjacent failure modes
@@ -73,7 +73,7 @@ The same root cause — correlated blind spots from shared lineage — surfaces 
 | Layer | Pattern | Defense |
 |-------|---------|---------|
 | Tool-use agents (this page) | Students inherit teacher's optional-tool habits | Measure RPS/AGS before assuming routing diversity |
-| Test generation | LLM-written tests share LLM-written code's blind spots ([test-homogenization-trap.md](../anti-patterns/test-homogenization-trap.md)) | Different model for tests vs code; mutation-guided generation |
+| Test generation | LLM-written tests share LLM-written code's blind spots ([test-homogenization-trap.md](../patterns/anti-patterns/test-homogenization-trap.md)) | Different model for tests vs code; mutation-guided generation |
 | Multi-agent analysis | Same-family agents reach the same wrong answer ([nonstandard-errors-ai-agents.md](nonstandard-errors-ai-agents.md)) | Sample across families; treat single-run output as one draw |
 
 ## Example
@@ -99,10 +99,10 @@ These overlaps exceed Sonnet 4.5 vs Opus 4.1 within Anthropic's own family ([arx
 
 ## Related
 
-- [Cross-Vendor Competitive Routing](../agent-design/cross-vendor-competitive-routing.md) — the routing pattern these metrics test
-- [Voting / Ensemble Pattern](../multi-agent/voting-ensemble-pattern.md) — independence assumption that AGS can falsify
-- [Adversarial Multi-Model Pipeline](../multi-agent/adversarial-multi-model-pipeline.md) — adversarial review depends on different failure modes
-- [Test Homogenization Trap](../anti-patterns/test-homogenization-trap.md) — the same correlated-blind-spot failure at the test-generation layer
+- [Cross-Vendor Competitive Routing](../patterns/agent-design/cross-vendor-competitive-routing.md) — the routing pattern these metrics test
+- [Voting / Ensemble Pattern](../patterns/multi-agent/voting-ensemble-pattern.md) — independence assumption that AGS can falsify
+- [Adversarial Multi-Model Pipeline](../patterns/multi-agent/adversarial-multi-model-pipeline.md) — adversarial review depends on different failure modes
+- [Test Homogenization Trap](../patterns/anti-patterns/test-homogenization-trap.md) — the same correlated-blind-spot failure at the test-generation layer
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — model-family clustering observed in agent analysis tasks
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — adjacent measurement-integrity risk
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — complementary trajectory analysis at finer granularity

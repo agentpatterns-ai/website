@@ -41,14 +41,14 @@ graph TD
 
 ### Phase 1: define agents before code
 
-Start by identifying what agents will do, not what code they will produce. Map discrete task types to [agent definitions](../agent-design/agent-first-software-design.md):
+Start by identifying what agents will do, not what code they will produce. Map discrete task types to [agent definitions](../patterns/agent-design/agent-first-software-design.md):
 
 - Which agent handles feature implementation?
 - Which agent handles tests?
 - Which agent handles documentation?
 - Which agent reviews output?
 
-Each role maps to a separate agent definition with the scoped tools, specific instructions, and bounded context of a single-purpose [agent harness](../agent-design/agent-harness.md).
+Each role maps to a separate agent definition with the scoped tools, specific instructions, and bounded context of a single-purpose [agent harness](../patterns/agent-design/agent-harness.md).
 
 Write AGENTS.md, standards files, and skill definitions before writing a single line of product code. These files serve as both human documentation and agent instructions. The [AGENTS.md standard](https://agents.md) gives the format for expressing project-level context.
 
@@ -65,7 +65,7 @@ For each epic, identify dependencies on other epics,
 the key technical decisions, and acceptance criteria.
 ```
 
-Capture decisions and trade-offs as [issue comments](../agent-design/agent-memory-patterns.md), not just in conversation history. Conversation history is ephemeral. Issue comments persist and seed future agent sessions with context about why you made each decision.
+Capture decisions and trade-offs as [issue comments](../patterns/agent-design/agent-memory-patterns.md), not just in conversation history. Conversation history is ephemeral. Issue comments persist and seed future agent sessions with context about why you made each decision.
 
 ### Phase 3: recursive decomposition to context-safe tasks
 
@@ -197,7 +197,7 @@ Step 5 — iterate on infrastructure. The first round of PRs reveals that the `i
 
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
 - [Lay the Architectural Foundation by Hand Before Delegating to Agents](architectural-foundation-first.md)
-- [Agent-First Software Design](../agent-design/agent-first-software-design.md)
+- [Agent-First Software Design](../patterns/agent-design/agent-first-software-design.md)
 - [The Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)
 - [Context Window Management: The Dumb Zone](../context-engineering/context-window-dumb-zone.md)

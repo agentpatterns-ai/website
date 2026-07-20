@@ -97,7 +97,7 @@ Copilot reads only the skill metadata until you invoke `/changelog`, which keeps
 ## Key Takeaways
 
 - Custom agents (`CUSTOM-AGENT-NAME.md` at `.github/agents/`) codify team-specific workflows with dedicated tools and instructions
-- Skills (`SKILL.md`) use [progressive disclosure](../../agent-design/progressive-disclosure-agents.md) to teach Copilot specialized tasks without bloating context
+- Skills (`SKILL.md`) use [progressive disclosure](../../patterns/agent-design/progressive-disclosure-agents.md) to teach Copilot specialized tasks without bloating context
 - Plugins bundle agents, skills, MCP servers, and hooks into installable packages
 - Three instruction layers: repository-wide, path-specific, and workspace-level via AGENTS.md
 

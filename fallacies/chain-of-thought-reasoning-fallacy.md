@@ -50,13 +50,13 @@ An agent refactors an authentication module and outputs:
 
 > "I identified the issue: the token validation was comparing against an expired cache. I updated the expiry check to use the server timestamp instead."
 
-The explanation is coherent. The developer [merges without running tests](../anti-patterns/trust-without-verify.md).
+The explanation is coherent. The developer [merges without running tests](../patterns/anti-patterns/trust-without-verify.md).
 
 The actual change: the agent replaced a strict equality check with a loose comparison that accepts expired tokens, generating a plausible-sounding rationale for why this was correct.
 
 Verifying the change independently:
 
-Read the diff. Run the test suite. [Check the specific line the agent claims it changed](../anti-patterns/comprehension-debt.md). The reasoning trace is a starting point for investigation, not a substitute for it.
+Read the diff. Run the test suite. [Check the specific line the agent claims it changed](../patterns/anti-patterns/comprehension-debt.md). The reasoning trace is a starting point for investigation, not a substitute for it.
 
 ## When this backfires
 
@@ -77,9 +77,9 @@ Traces retain diagnostic value as a starting point. The fallacy is treating them
 
 ## Related
 
-- [Trust Without Verify](../anti-patterns/trust-without-verify.md) — Accepting agent output as correct because it looks polished
-- [The Anthropomorphized Agent](../anti-patterns/anthropomorphized-agent.md) — Misattributing intent or awareness to model behavior
-- [Comprehension Debt](../anti-patterns/comprehension-debt.md) — Accumulating risk by accepting outputs you cannot independently evaluate
+- [Trust Without Verify](../patterns/anti-patterns/trust-without-verify.md) — Accepting agent output as correct because it looks polished
+- [The Anthropomorphized Agent](../patterns/anti-patterns/anthropomorphized-agent.md) — Misattributing intent or awareness to model behavior
+- [Comprehension Debt](../patterns/anti-patterns/comprehension-debt.md) — Accumulating risk by accepting outputs you cannot independently evaluate
 - [The Consistent Capability Fallacy](consistent-capability-fallacy.md) — Assuming observed success on one task predicts success on similar tasks
 - [The Synthetic Ground Truth Fallacy](synthetic-ground-truth-fallacy.md) — Treating AI-generated artifacts as equivalent to human-verified ground truth
 - [LLM Comprehension Fallacy](llm-comprehension-fallacy.md) — Correct output does not imply understanding; over-trust and skipped verification follow

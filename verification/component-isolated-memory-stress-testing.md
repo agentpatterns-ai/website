@@ -44,14 +44,14 @@ MemFail runs five datasets across these four tasks against four production memor
 
 ## Why it works
 
-Aggregate QA accuracy treats memory as a black box. A 5-point drop after a retriever swap could be the retriever, a regression elsewhere that the old retriever compensated for, or noise — and the team cannot tell. Component isolation recovers the attribution signal. Each adversarial dataset exercises only one operation on the critical path, so a score change attaches to that operation ([MemFail §3](https://arxiv.org/abs/2605.26667)). The same logic motivates [WhenLoss](https://arxiv.org/html/2605.24579) (Δwrite, Δretrieval computed from four controlled conditions) and the harness-layer attribution in the [five-failure-layers diagnostic](../agent-design/five-failure-layers-diagnostic.md): decompose the pipeline, then attribute the failure before reaching for the most expensive lever.
+Aggregate QA accuracy treats memory as a black box. A 5-point drop after a retriever swap could be the retriever, a regression elsewhere that the old retriever compensated for, or noise — and the team cannot tell. Component isolation recovers the attribution signal. Each adversarial dataset exercises only one operation on the critical path, so a score change attaches to that operation ([MemFail §3](https://arxiv.org/abs/2605.26667)). The same logic motivates [WhenLoss](https://arxiv.org/html/2605.24579) (Δwrite, Δretrieval computed from four controlled conditions) and the harness-layer attribution in the [five-failure-layers diagnostic](../patterns/agent-design/five-failure-layers-diagnostic.md): decompose the pipeline, then attribute the failure before reaching for the most expensive lever.
 
 ## The loop
 
 1. Inventory the pipeline. Name the summarizer, storage encoding, and retriever explicitly. If any stage is degenerate (raw chunks with no summarization), skip the discipline.
 2. Build or borrow one adversarial dataset per operation. MemFail's five datasets are a starting point. Add cases drawn from your own incident log ([MemFail §4](https://arxiv.org/abs/2605.26667)).
 3. Run end-to-end against each adversarial set. Record per-operation scores, not just aggregate accuracy.
-4. On a regression, find the operation whose score moved — the same attribute-before-you-fix move as the [five-failure-layers diagnostic](../agent-design/five-failure-layers-diagnostic.md). Investigate that component first.
+4. On a regression, find the operation whose score moved — the same attribute-before-you-fix move as the [five-failure-layers diagnostic](../patterns/agent-design/five-failure-layers-diagnostic.md). Investigate that component first.
 5. After fixing, re-run all three sets. A one-operation fix should not regress the others — if it does, the operations are coupled in your architecture and attribution is partially invalid (see backfires below).
 
 ## When this backfires
@@ -68,7 +68,7 @@ A team using a fact-extraction memory system (summarizer LLM call → structured
 Per-operation attribution against three adversarial sets:
 
 - Summarization set (queries depending on detail only present in the raw conversation): score unchanged — the summarizer is the same.
-- Storage set (relational queries across multiple stored facts, the encoding a [tiered memory architecture](../agent-design/tiered-memory-architecture.md) governs): score unchanged.
+- Storage set (relational queries across multiple stored facts, the encoding a [tiered memory architecture](../patterns/agent-design/tiered-memory-architecture.md) governs): score unchanged.
 - Retrieval set (distribution-shifted queries with paraphrased entities): score improves — the new retriever generalizes better across phrasings.
 
 The aggregate drop is concentrated in a downstream effect the three sets do not directly score: the new retriever returns more candidates, and the context-integration step thrashes when given more memories than it can integrate — exactly the kind of write/retrieval/utilization split that [WhenLoss](https://arxiv.org/html/2605.24579) and [arXiv:2603.02473](https://arxiv.org/abs/2603.02473) measure with controlled conditions. Fixing the integration step recovers aggregate accuracy and keeps the better retriever. Rolling back the retriever erases the gain without addressing the actual bottleneck.
@@ -82,8 +82,8 @@ The aggregate drop is concentrated in a downstream effect the three sets do not 
 
 ## Related
 
-- [Five-Failure-Layers Diagnostic](../agent-design/five-failure-layers-diagnostic.md) — the same attribution discipline applied one layer up (harness layer instead of memory subsystem)
-- [Agent Memory Patterns](../agent-design/agent-memory-patterns.md) — the memory-scope and temporal-memory framework these stress tests would exercise
-- [Tiered Memory Architecture](../agent-design/tiered-memory-architecture.md) — a concrete multi-stage memory pipeline (episodic → semantic) the decomposition applies to
-- [Memory Retrieval as a Control Decision](../agent-design/memory-retrieval-as-control.md) — a specific retrieval-stage control discipline and its mitigation
-- [Memory Synthesis from Execution Logs](../agent-design/memory-synthesis-execution-logs.md) — a summarisation-stage design that would be stressed by the summarisation dataset
+- [Five-Failure-Layers Diagnostic](../patterns/agent-design/five-failure-layers-diagnostic.md) — the same attribution discipline applied one layer up (harness layer instead of memory subsystem)
+- [Agent Memory Patterns](../patterns/agent-design/agent-memory-patterns.md) — the memory-scope and temporal-memory framework these stress tests would exercise
+- [Tiered Memory Architecture](../patterns/agent-design/tiered-memory-architecture.md) — a concrete multi-stage memory pipeline (episodic → semantic) the decomposition applies to
+- [Memory Retrieval as a Control Decision](../patterns/agent-design/memory-retrieval-as-control.md) — a specific retrieval-stage control discipline and its mitigation
+- [Memory Synthesis from Execution Logs](../patterns/agent-design/memory-synthesis-execution-logs.md) — a summarisation-stage design that would be stressed by the summarisation dataset

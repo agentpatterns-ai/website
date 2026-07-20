@@ -19,7 +19,7 @@ maturity: emerging
 
 ## The evidence
 
-[Huang et al. (2025)](https://arxiv.org/abs/2512.14012) observed 13 professional developers and surveyed 99 more (3 to 25 years experience). The central finding: experienced developers "carefully control the agents through planning and supervision" rather than adopting hands-off [vibe coding](../anti-patterns/vibe-coding.md).
+[Huang et al. (2025)](https://arxiv.org/abs/2512.14012) observed 13 professional developers and surveyed 99 more (3 to 25 years experience). The central finding: experienced developers "carefully control the agents through planning and supervision" rather than adopting hands-off [vibe coding](../patterns/anti-patterns/vibe-coding.md).
 
 | Study | Design | Key finding |
 |-------|--------|-------------|
@@ -53,7 +53,7 @@ Developers decompose work before delegating. Planning includes:
 - Specifying constraints — files, APIs, or patterns the agent must follow
 - Choosing granularity — breaking complex work into smaller, verifiable units
 
-This is the decomposition that makes [execution-first delegation](../agent-design/execution-first-delegation.md) effective: a contract (goal plus boundaries), not a script.
+This is the decomposition that makes [execution-first delegation](../patterns/agent-design/execution-first-delegation.md) effective: a contract (goal plus boundaries), not a script.
 
 ### Supervise during execution
 
@@ -61,7 +61,7 @@ Developers monitor output and redirect before the agent commits to the wrong dir
 
 ### Validate every output
 
-Developers read diffs, run tests, and check behavior against the original intent. Validation separates controlled agent use from [comprehension debt](../anti-patterns/comprehension-debt.md) that builds up when developers accept unreviewed code.
+Developers read diffs, run tests, and check behavior against the original intent. Validation separates controlled agent use from [comprehension debt](../patterns/anti-patterns/comprehension-debt.md) that builds up when developers accept unreviewed code.
 
 ## Task suitability
 
@@ -74,7 +74,7 @@ Agents proved effective for well-described, straightforward tasks and ineffectiv
 | Boilerplate and repetitive patterns | Tasks requiring implicit domain knowledge |
 | Well-scoped refactoring | Novel problem exploration |
 
-This mirrors the [vibe coding](../anti-patterns/vibe-coding.md) boundary: vibe coding works for low-risk, well-scoped work; control strategies cover everything else.
+This mirrors the [vibe coding](../patterns/anti-patterns/vibe-coding.md) boundary: vibe coding works for low-risk, well-scoped work; control strategies cover everything else.
 
 ## Why control works
 
@@ -82,14 +82,14 @@ The control loop works because it does three things:
 
 1. Catches errors early — planning surfaces ambiguity before the agent pursues the wrong approach.
 2. Preserves comprehension — reviewing every output prevents the [skill atrophy](skill-atrophy.md) that comes from blind acceptance.
-3. Builds calibrated trust — repeated validate cycles teach developers which tasks the agent handles reliably, which enables [progressive disclosure](../agent-design/progressive-disclosure-agents.md) of autonomy.
+3. Builds calibrated trust — repeated validate cycles teach developers which tasks the agent handles reliably, which enables [progressive disclosure](../patterns/agent-design/progressive-disclosure-agents.md) of autonomy.
 
 ## When this backfires
 
 Control overhead is not free. The loop costs more than it saves when:
 
-- Work is trivial or throwaway — one-line fixes or prototypes rarely repay the planning step. For low-risk, reversible work, [vibe coding](../anti-patterns/vibe-coding.md) is the better default.
-- Supervision is theatre — rubber-stamping diffs without real review is nominal control only, and it recreates [comprehension debt](../anti-patterns/comprehension-debt.md) under a veneer of diligence.
+- Work is trivial or throwaway — one-line fixes or prototypes rarely repay the planning step. For low-risk, reversible work, [vibe coding](../patterns/anti-patterns/vibe-coding.md) is the better default.
+- Supervision is theatre — rubber-stamping diffs without real review is nominal control only, and it recreates [comprehension debt](../patterns/anti-patterns/comprehension-debt.md) under a veneer of diligence.
 - Plans harden against changing requirements — over-specifying exploratory work locks the agent out of useful pivots.
 - Agent count exceeds the attention budget — too many parallel agents degrade validation across all of them; see [attention management](attention-management-parallel-agents.md).
 
@@ -119,7 +119,7 @@ Supervise: watch the agent's output. It starts modifying the database model — 
 
 Validate: review the diff. Run `npm test`. Confirm 422 responses include field-level error messages. Check that the agent did not silently change error formats in other endpoints.
 
-The planning step took two minutes but prevented a scope creep that would have required reverting database migrations — the same batching dynamic that causes [PR scope creep](../anti-patterns/pr-scope-creep-review-bottleneck.md) at review time.
+The planning step took two minutes but prevented a scope creep that would have required reverting database migrations — the same batching dynamic that causes [PR scope creep](../patterns/anti-patterns/pr-scope-creep-review-bottleneck.md) at review time.
 
 ## Key Takeaways
 
@@ -129,11 +129,11 @@ The planning step took two minutes but prevented a scope creep that would have r
 
 ## Related
 
-- [Vibe Coding](../anti-patterns/vibe-coding.md) — the approach these developers explicitly reject for production work
+- [Vibe Coding](../patterns/anti-patterns/vibe-coding.md) — the approach these developers explicitly reject for production work
 - [Skill Atrophy](skill-atrophy.md) — comprehension loss from skipping the validate step
 - [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md) — where to place supervision gates
-- [Execution-First Delegation](../agent-design/execution-first-delegation.md) — contract-based delegation that aligns with how experienced developers plan
-- [Comprehension Debt](../anti-patterns/comprehension-debt.md) — debt from accepting agent output without review
+- [Execution-First Delegation](../patterns/agent-design/execution-first-delegation.md) — contract-based delegation that aligns with how experienced developers plan
+- [Comprehension Debt](../patterns/anti-patterns/comprehension-debt.md) — debt from accepting agent output without review
 - [Addictive Flow in Agent Development](addictive-flow-agent-development.md) — the flow state that tempts developers to skip validation
 - [Attention Management for Parallel Agents](attention-management-parallel-agents.md) — supervision strategies for multiple concurrent agents
 - [Progressive Autonomy and Model Evolution](progressive-autonomy-model-evolution.md) — how calibrated trust feeds progressive delegation

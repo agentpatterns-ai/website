@@ -44,7 +44,7 @@ The adapted DoD has two numbers, not one:
 - Pass rate over N trials (Braintrust recommends averaging across 3+ runs to absorb non-deterministic variance) ([Braintrust](https://www.braintrust.dev/articles/agent-evaluation))
 - Variance bound — the spread across trials must be below a threshold the team commits to before implementation
 
-The "before implementation" ordering is load-bearing. Microsoft's adaptation replaces the prompt-session exit ("ends when the developer feels satisfied") with a contract: each story carries "specific, testable conditions that must be true when this story is complete", so work ends "when a contract is fulfilled" rather than on feel ([Microsoft Developer Blog](https://developer.microsoft.com/blog/agentic-agile-why-agent-development-needs-agile-not-just-prompts)). Wiring those testable conditions to eval thresholds is the agentic step. This mirrors the [Sprint Contracts](../agent-design/sprint-contracts.md) discipline of locking the rubric before the generator runs — pre-commitment prevents post-hoc rationalization.
+The "before implementation" ordering is load-bearing. Microsoft's adaptation replaces the prompt-session exit ("ends when the developer feels satisfied") with a contract: each story carries "specific, testable conditions that must be true when this story is complete", so work ends "when a contract is fulfilled" rather than on feel ([Microsoft Developer Blog](https://developer.microsoft.com/blog/agentic-agile-why-agent-development-needs-agile-not-just-prompts)). Wiring those testable conditions to eval thresholds is the agentic step. This mirrors the [Sprint Contracts](../patterns/agent-design/sprint-contracts.md) discipline of locking the rubric before the generator runs — pre-commitment prevents post-hoc rationalization.
 
 Long-horizon work needs a stricter version. Software-engineering pass rates dropped from 0.90 to 0.44 as task horizon grew, and "capability and reliability rankings diverge substantially, with multi-rank inversions at long horizons" — pass@1 is structurally inadequate for production agent features ([arXiv 2603.29231: Beyond pass@1](https://arxiv.org/abs/2603.29231)).
 
@@ -93,7 +93,7 @@ Agile rituals are mechanisms for shrinking feedback loops between decision and c
 - Solo developer or single-agent context — sprint planning and demo cadence add friction with no synchronization payoff when one developer iterates in minutes; stay on [failure-driven iteration](failure-driven-iteration.md) instead. Continuous flow plus automated trace diagnostics is the correct ceiling.
 - Pure machine-checkable evaluation — if "done" is fully encoded by tests plus eval threshold, a human retro adds nothing the eval dashboard does not already say. Skip the retro ritual until trace-level review surfaces something the dashboard hides.
 - Punishing variance in retros — treating agent flakiness as a defect to blame rather than a signal to investigate amplifies the failure mode the retro was supposed to surface; [eval-driven development](eval-driven-development.md) treats that variance as a measurable bound, not a defect. Teams over-constrain prompts or drop high-variance-high-value patterns; the retrospective becomes hostile to the variance carrying the diagnostic signal.
-- Frontier-model jumps — harness scaffolding for sprint-style decomposition pays off less as model capability improves. The [Sprint Contracts](../agent-design/sprint-contracts.md) page documents the same dynamic: an Anthropic post was later updated to describe removing the sprint construct once a more capable model could plan and self-review over a full run ([Anthropic Engineering](https://www.anthropic.com/engineering/harness-design-long-running-apps)). Revisit ritual adoption when models change tier.
+- Frontier-model jumps — harness scaffolding for sprint-style decomposition pays off less as model capability improves. The [Sprint Contracts](../patterns/agent-design/sprint-contracts.md) page documents the same dynamic: an Anthropic post was later updated to describe removing the sprint construct once a more capable model could plan and self-review over a full run ([Anthropic Engineering](https://www.anthropic.com/engineering/harness-design-long-running-apps)). Revisit ritual adoption when models change tier.
 - Replacement-not-adaptation school is right for some teams — Agentsway argues Agile and Kanban are "increasingly inadequate" for agent-inclusive teams and proposes wholesale replacement by an agent-role lifecycle ([arXiv 2510.23664](https://arxiv.org/abs/2510.23664)). On heavily agent-driven projects with mature instrumentation, replacing rituals with closed-loop trace → eval → patch automation may carry more signal than adapting them.
 
 ## Example
@@ -132,8 +132,8 @@ The retro at end of week reviews the trace corpus, not the outcome dashboard: me
 
 ## Related
 
-- [Sprint Contracts](../agent-design/sprint-contracts.md)
-- [Agent Development Lifecycle](../agent-design/agent-development-lifecycle.md)
+- [Sprint Contracts](../patterns/agent-design/sprint-contracts.md)
+- [Agent Development Lifecycle](../patterns/agent-design/agent-development-lifecycle.md)
 - [Eval-Driven Development](eval-driven-development.md)
 - [Failure-Driven Iteration](failure-driven-iteration.md)
 - [Entropy Reduction Agents](entropy-reduction-agents.md)

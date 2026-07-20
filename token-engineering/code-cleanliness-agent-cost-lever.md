@@ -84,7 +84,7 @@ Path A is the posture to take. Capture the cost lever from work the team would d
 ## Related
 
 - [The Velocity-Quality Asymmetry: Why AI Speed Gains Fade](../workflows/velocity-quality-asymmetry.md) — the inverse finding: agents themselves degrade quality faster than velocity gains persist
-- [Shadow Tech Debt Created by Autonomous AI Agent Commits](../anti-patterns/shadow-tech-debt.md) — the compounding-mess risk that the cleanliness cost lever does not address on its own
+- [Shadow Tech Debt Created by Autonomous AI Agent Commits](../patterns/anti-patterns/shadow-tech-debt.md) — the compounding-mess risk that the cleanliness cost lever does not address on its own
 - [Entropy Reduction Agents: Automated Codebase Hygiene](../workflows/entropy-reduction-agents.md) — scheduled background cleanup that captures the cleanliness side-effect without dedicated refactor sprints
 - [Agent-Generated Code Maintenance Asymmetry](../code-review/agent-code-maintenance-asymmetry.md) — the maintenance footprint that determines whether your cleanup decays or holds
-- [Comprehension Debt from AI-Generated Code Velocity](../anti-patterns/comprehension-debt.md) — the human-side debt that maintainability metrics do not capture
+- [Comprehension Debt from AI-Generated Code Velocity](../patterns/anti-patterns/comprehension-debt.md) — the human-side debt that maintainability metrics do not capture

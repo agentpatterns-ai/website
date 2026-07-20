@@ -82,7 +82,7 @@ Developer controls:
 
 | Dimension | Copilot Memory | Claude Code Memory | OPENDEV (Research) |
 |-----------|---------------|-------------------|-------------------|
-| Creation | Autonomous from interactions | Human-authored (`CLAUDE.md`) + agent-authored (auto memory) | Agent-authored [episodic summaries](../../agent-design/episodic-memory-retrieval.md) |
+| Creation | Autonomous from interactions | Human-authored (`CLAUDE.md`) + agent-authored (auto memory) | Agent-authored [episodic summaries](../../patterns/agent-design/episodic-memory-retrieval.md) |
 | Scope | Repository | Project, user, managed policy | Session + cross-session |
 | Sharing | Cross-agent (coding, review, CLI) | Single tool only | Single agent only |
 | Verification | Citation-based, just-in-time | None (manual curation) | None |
@@ -126,11 +126,11 @@ Autonomous memory creation without human curation works against you in several c
 
 ## Related
 
-- [Agent Memory Patterns](../../agent-design/agent-memory-patterns.md)
+- [Agent Memory Patterns](../../patterns/agent-design/agent-memory-patterns.md)
 - [Context Priming](../../context-engineering/context-priming.md)
 - [Layered Context Architecture](../../context-engineering/layered-context-architecture.md)
-- [Copilot Instructions Convention](./copilot-instructions-md-convention.md)
-- [Copilot Coding Agent](./coding-agent.md)
-- [Copilot Agent Mode](./agent-mode.md)
-- [Copilot CLI Agentic Workflows](./copilot-cli-agentic-workflows.md)
-- [Copilot Spaces](./copilot-spaces.md)
+- [Copilot Instructions Convention](copilot-instructions-md-convention.md)
+- [Copilot Coding Agent](coding-agent.md)
+- [Copilot Agent Mode](agent-mode.md)
+- [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
+- [Copilot Spaces](copilot-spaces.md)

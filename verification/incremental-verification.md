@@ -76,7 +76,7 @@ Checkpoints are not free. Adding a validation step [introduces latency and cost 
 
 Use incremental verification where the verifier is stronger than the generator, a wrong step is expensive, and the unit carries meaningful signal.
 
-A stronger caveat applies to AI coding agents, where [trusting the agent's self-report](../anti-patterns/trust-without-verify.md) is its own failure mode. Checkpoints that only inspect the agent's own narration, such as "I fixed the bug" or "all tests pass", are easy to fool. Practitioners report agents that [claim fixes for code that was never changed](https://dev.to/moonrunnerkc/ai-coding-agents-lie-about-their-work-outcome-based-verification-catches-it-12b4) and insist tests pass when the transcript shows failures. Pair step gates with outcome-based checks, such as `git diff`, build exit codes, and test output, then cross-reference claims against that evidence. A checkpoint that reads the agent's self-report is not a checkpoint.
+A stronger caveat applies to AI coding agents, where [trusting the agent's self-report](../patterns/anti-patterns/trust-without-verify.md) is its own failure mode. Checkpoints that only inspect the agent's own narration, such as "I fixed the bug" or "all tests pass", are easy to fool. Practitioners report agents that [claim fixes for code that was never changed](https://dev.to/moonrunnerkc/ai-coding-agents-lie-about-their-work-outcome-based-verification-catches-it-12b4) and insist tests pass when the transcript shows failures. Pair step gates with outcome-based checks, such as `git diff`, build exit codes, and test output, then cross-reference claims against that evidence. A checkpoint that reads the agent's self-report is not a checkpoint.
 
 ## Key Takeaways
 
@@ -88,7 +88,7 @@ A stronger caveat applies to AI coding agents, where [trusting the agent's self-
 
 ## Related
 
-- [Trust Without Verify](../anti-patterns/trust-without-verify.md)
+- [Trust Without Verify](../patterns/anti-patterns/trust-without-verify.md)
 - [Test-Driven Agent Development: Tests as Spec and Guardrail](tdd-agent-development.md)
 - [Pre-Completion Checklists for AI Agent Development](pre-completion-checklists.md)
 - [Layered Accuracy Defense for Reliable Agent Outputs](layered-accuracy-defense.md)

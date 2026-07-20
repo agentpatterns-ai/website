@@ -50,7 +50,7 @@ Claude Code uses [CLAUDE.md files](https://code.claude.com/docs/en/memory) with 
 
 ### Progressive disclosure over monoliths
 
-A lean entry-point file (~100 lines) pointing to structured subdirectories outperforms a monolithic instruction file — the repository functions as agent memory, and anything not in context does not exist ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings); see also [progressive disclosure for agent definitions](../agent-design/progressive-disclosure-agents.md)).
+A lean entry-point file (~100 lines) pointing to structured subdirectories outperforms a monolithic instruction file — the repository functions as agent memory, and anything not in context does not exist ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings); see also [progressive disclosure for agent definitions](../patterns/agent-design/progressive-disclosure-agents.md)).
 
 ### Inline decision comments
 
@@ -71,7 +71,7 @@ Complete type signatures eliminate agent guesswork about return types, parameter
 
 ### Example files and pattern replication
 
-Agents pattern-match against existing code — a well-written reference implementation communicates conventions more precisely than prose. But agents replicate good and bad patterns alike; poor examples compound drift, a dynamic known as [pattern replication risk](../anti-patterns/pattern-replication-risk.md) ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
+Agents pattern-match against existing code — a well-written reference implementation communicates conventions more precisely than prose. But agents replicate good and bad patterns alike; poor examples compound drift, a dynamic known as [pattern replication risk](../patterns/anti-patterns/pattern-replication-risk.md) ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
 
 ### Progress files as breadcrumbs
 
@@ -94,7 +94,7 @@ Some tools expose a deliberate interactive channel for injecting context mid-ses
 ## When this backfires
 
 - Stale breadcrumbs: an AGENTS.md that no longer reflects the codebase misleads the agent — it acts on false premises with high confidence. Stale seeding is worse than no seeding.
-- Pattern replication: agents replicate existing code indiscriminately ([pattern replication risk](../anti-patterns/pattern-replication-risk.md)). A single poor reference implementation propagates the anti-pattern across every new file; mechanical enforcement is the only reliable safeguard.
+- Pattern replication: agents replicate existing code indiscriminately ([pattern replication risk](../patterns/anti-patterns/pattern-replication-risk.md)). A single poor reference implementation propagates the anti-pattern across every new file; mechanical enforcement is the only reliable safeguard.
 - Conflicting scopes: nested context files with contradictory instructions cause agents to apply the [wrong scope](prompt-layering.md) — unpredictable and difficult to debug.
 
 Seeding suits stable, long-lived codebases. For short-lived projects, the maintenance overhead may exceed the benefit.

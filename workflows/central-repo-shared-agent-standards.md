@@ -17,7 +17,7 @@ maturity: established
 
 ## The multi-repo drift problem
 
-When agent instructions live only in individual repositories, drift is inevitable. [Team A updates their linting conventions, Team B copies an older version, and Team C writes their own from scratch](../anti-patterns/copy-paste-agent.md). Within months, agents across the organization follow different standards for the same concerns — code style, commit format, security checks, naming patterns.
+When agent instructions live only in individual repositories, drift is inevitable. [Team A updates their linting conventions, Team B copies an older version, and Team C writes their own from scratch](../patterns/anti-patterns/copy-paste-agent.md). Within months, agents across the organization follow different standards for the same concerns — code style, commit format, security checks, naming patterns.
 
 The problem compounds because agent instruction files lack the dependency management that code has. No `package.json` pins a version of your AGENTS.md. No lockfile detects when a downstream copy diverges from the canonical source.
 
@@ -123,7 +123,7 @@ agent-standards/
     └── .cursor/rules/
 ```
 
-For the Agent Skills format used in the `skills/` directory, see [Agent Skills Standard](../standards/agent-skills-standard.md). For how skills, agents, and commands relate in this structure, see [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md).
+For the Agent Skills format used in the `skills/` directory, see [Agent Skills Standard](../standards/agent-skills-standard.md). For how skills, agents, and commands relate in this structure, see [Separation of Knowledge and Execution](../patterns/agent-design/separation-of-knowledge-and-execution.md).
 
 The [Nx monorepo approach](https://nx.dev/blog/nx-ai-agent-skills) demonstrates this at scale: a central `nx-ai-agents-config` generates CLAUDE.md and AGENTS.md files from a single source definition. [Datadog's approach](https://dev.to/datadog-frontend-dev/steering-ai-agents-in-monorepos-with-agentsmd-13g0) uses a root AGENTS.md as a router map, with team-owned subdocuments handling domain-specific conventions.
 
@@ -188,9 +188,9 @@ To upgrade, a team bumps the submodule tag and re-runs the copy step. The CI dif
 
 Monolithic instruction file. A single massive file that covers every convention for every tool. It exceeds context windows, confuses agents with irrelevant rules, and creates merge conflicts. Use [modular rules directories](https://claudefa.st/blog/guide/mechanics/rules-directory) with path-specific YAML frontmatter targeting instead.
 
-Copy-paste distribution. Manually copying instruction files between repos. Without automated sync, copies diverge as the source evolves — there is no mechanism to detect or prevent drift. See [The Copy-Paste Agent](../anti-patterns/copy-paste-agent.md) for the full anti-pattern. Use any of the five distribution mechanisms above instead.
+Copy-paste distribution. Manually copying instruction files between repos. Without automated sync, copies diverge as the source evolves — there is no mechanism to detect or prevent drift. See [The Copy-Paste Agent](../patterns/anti-patterns/copy-paste-agent.md) for the full anti-pattern. Use any of the five distribution mechanisms above instead.
 
-No versioning. Pushing changes to all downstream repos at once with no opt-in. Breaks projects that depend on specific convention versions, the [copy-paste-agent](../anti-patterns/copy-paste-agent.md) drift surfacing at version boundaries. Pin versions and validate on CI.
+No versioning. Pushing changes to all downstream repos at once with no opt-in. Breaks projects that depend on specific convention versions, the [copy-paste-agent](../patterns/anti-patterns/copy-paste-agent.md) drift surfacing at version boundaries. Pin versions and validate on CI.
 
 Centralizing everything. Putting project-specific architecture decisions in the central repo. Forces unnecessary coupling and creates conflicts when teams legitimately diverge. Apply the [centralized-vs-local boundary](../instructions/layered-instruction-scopes.md) the table above defines.
 

@@ -37,7 +37,7 @@ The cohort layer is only diagnostic at meaningful scale:
 
 - 25 or more engaged users per phase: below that, one developer adopting Copilot Workspace can flip an org-level "Multi-agent growth" headline
 - 60 or more days since rollout: earlier, cohort transitions are onboarding artifacts (Phase 0 to 1 to 2 happens mechanically in month one), not the result of interventions
-- outcome telemetry wired alongside: pass rate, revision rate, and cost per merged PR decide whether a phase shift mattered, and without them the dashboard is a [vanity metric surface](../anti-patterns/agent-headcount-vanity-metric.md)
+- outcome telemetry wired alongside: pass rate, revision rate, and cost per merged PR decide whether a phase shift mattered, and without them the dashboard is a [vanity metric surface](../patterns/anti-patterns/agent-headcount-vanity-metric.md)
 
 ## Mapping phases to interventions
 
@@ -61,7 +61,7 @@ Cohort segmentation recovers the conditional `P(activity | phase)` instead of th
 ## When this backfires
 
 - Small teams or fresh rollouts: the 28-day window plus small per-phase samples produce noise that reads as trend, so below the thresholds above, ignore the split
-- Phase 3 treated as a goal: grade enablement on "% in Phase 3" and teams Goodhart it — open Workspace once, install the app, touch two surfaces, and Phase 3 climbs while throughput stays flat (the [Agent Headcount Vanity Metric](../anti-patterns/agent-headcount-vanity-metric.md) shape on a different axis)
+- Phase 3 treated as a goal: grade enablement on "% in Phase 3" and teams Goodhart it — open Workspace once, install the app, touch two surfaces, and Phase 3 climbs while throughput stays flat (the [Agent Headcount Vanity Metric](../patterns/anti-patterns/agent-headcount-vanity-metric.md) shape on a different axis)
 - Single-surface shops by policy: regulated environments that disable agent surfaces have a structural Phase 1 ceiling, so reading the distribution as adoption maturity there is a category error
 - Replacement for outcome telemetry: cohort distribution decides where to invest, while outcome metrics decide whether it worked, so reporting Phase 3 growth alone repeats the DORA-as-vanity drift ([Larridin: Why DORA Metrics Break in the AI Era](https://larridin.com/developer-productivity-hub/why-dora-metrics-break-ai-era))
 - Depth confused with productivity: time savings plateaued around four hours per week even as adoption climbed from about 50% to 91% in DX 2025 ([Rob Bowley on DX 2025](https://blog.robbowley.net/2025/11/05/findings-from-dxs-2025-report-ai-wont-save-you-from-your-engineering-culture/)), so a higher Phase 3 share is not a higher-productivity org
@@ -92,7 +92,7 @@ The 62% headline is consistent with this org and with a uniform-60%-medium-use o
 ## Related
 
 - [AI Adoption Footprint: The Segmented Shape of Engineering Orgs](ai-adoption-footprint.md) — the underlying segmented-distribution mechanism cohort segmentation operationalises.
-- [Agent Headcount as a Vanity Metric](../anti-patterns/agent-headcount-vanity-metric.md) — the Goodhart failure mode Phase 3 will exhibit if treated as a target.
+- [Agent Headcount as a Vanity Metric](../patterns/anti-patterns/agent-headcount-vanity-metric.md) — the Goodhart failure mode Phase 3 will exhibit if treated as a target.
 - [The Productivity-Experience Paradox in AI-Assisted Development](productivity-experience-paradox.md) — why depth-of-use can rise while developer experience and outcomes diverge.
 - [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md) — the other side of Copilot-specific instrumentation; cost telemetry that pairs with the cohort distribution.
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — the rollout that these adoption-phase cohorts instrument: seed adoption socially, then track retention as a separate number.

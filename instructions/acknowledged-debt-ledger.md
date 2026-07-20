@@ -67,8 +67,8 @@ The ledger adds overhead that only pays off under specific conditions. Skip it o
 
 - Greenfield or short-lived projects — little accumulated debt, and the project will be rewritten before triggers fire.
 - No scheduled scan or read-at-session-start discipline — a ledger nobody reads is worse than scattered TODOs, which at least sit next to the code that needs to change.
-- Solo projects — the [implicit-knowledge problem](../anti-patterns/implicit-knowledge-problem.md) does not apply when there is no one to externalize to.
-- Bloated entries — the ETH Zurich AGENTS.md study found that overly detailed agent-readable files reduce task success by about 3% and raise cost by more than 20% ([arXiv:2602.11988](https://arxiv.org/abs/2602.11988), cited in [Shadow Tech Debt](../anti-patterns/shadow-tech-debt.md)). Keep each row short.
+- Solo projects — the [implicit-knowledge problem](../patterns/anti-patterns/implicit-knowledge-problem.md) does not apply when there is no one to externalize to.
+- Bloated entries — the ETH Zurich AGENTS.md study found that overly detailed agent-readable files reduce task success by about 3% and raise cost by more than 20% ([arXiv:2602.11988](https://arxiv.org/abs/2602.11988), cited in [Shadow Tech Debt](../patterns/anti-patterns/shadow-tech-debt.md)). Keep each row short.
 - Concurrent agent writes — parallel append or resolve without serialization produces merge conflicts and silently dropped entries.
 
 ## Example
@@ -104,7 +104,7 @@ The code comment can stay or be removed, but the ledger row is now the source of
 
 - [Frozen Spec File](frozen-spec-file.md) — sibling pattern: versioned, agent-readable, single-source — applied to intent rather than deferred work
 - [Entropy Reduction Agents](../workflows/entropy-reduction-agents.md) — scheduled scans that evaluate Next Triggers and open PRs when they fire
-- [The Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md) — version-controlled decision artifacts beat tribal knowledge
-- [Shadow Tech Debt](../anti-patterns/shadow-tech-debt.md) — the failure mode the ledger mitigates
-- [Background Todo Agent](../agent-design/background-todo-agent.md) — within-session plan maintenance; the ledger is the cross-session companion
+- [The Implicit Knowledge Problem](../patterns/anti-patterns/implicit-knowledge-problem.md) — version-controlled decision artifacts beat tribal knowledge
+- [Shadow Tech Debt](../patterns/anti-patterns/shadow-tech-debt.md) — the failure mode the ledger mitigates
+- [Background Todo Agent](../patterns/agent-design/background-todo-agent.md) — within-session plan maintenance; the ledger is the cross-session companion
 - [Feature List Files](feature-list-files.md) — structured tracking for in-flight features alongside deferred debt

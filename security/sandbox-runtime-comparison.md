@@ -45,7 +45,7 @@ A fourth, separate option is to consume one of these families as a managed or ho
 
 ## When containers win
 
-- High session churn with prebuilt images: cold start is dominated by image pull, not VM boot. With [prebuilt agent environments](../agent-design/cloud-agent-session-bootstrap.md) and a warm cache, the first tool call lands sub-second.
+- High session churn with prebuilt images: cold start is dominated by image pull, not VM boot. With [prebuilt agent environments](../patterns/agent-design/cloud-agent-session-bootstrap.md) and a warm cache, the first tool call lands sub-second.
 - Dev-machine parity: the container the agent runs matches CI's.
 - Low-cost CI fleets: container runtimes ship with every CI provider, so you need no extra infrastructure.
 
@@ -69,7 +69,7 @@ The cost: weaker escape resistance than microVMs. On macOS, `sandbox-exec` has b
 
 ## Composition with existing patterns
 
-Runtime choice is one layer, not the whole sandbox. [Dual-boundary sandboxing](dual-boundary-sandboxing.md) is the threat model every runtime enforces; [subprocess PID namespace sandboxing](subprocess-pid-namespace-sandboxing.md) adds a Linux layer blocking daemon persistence; [Session harness sandbox separation](../agent-design/session-harness-sandbox-separation.md) hides runtime choice behind `execute(name, input)`, so the runtime can change without rewriting agent code.
+Runtime choice is one layer, not the whole sandbox. [Dual-boundary sandboxing](dual-boundary-sandboxing.md) is the threat model every runtime enforces; [subprocess PID namespace sandboxing](subprocess-pid-namespace-sandboxing.md) adds a Linux layer blocking daemon persistence; [Session harness sandbox separation](../patterns/agent-design/session-harness-sandbox-separation.md) hides runtime choice behind `execute(name, input)`, so the runtime can change without rewriting agent code.
 
 ## When this backfires
 
@@ -105,8 +105,8 @@ Outcome: Firecracker-based microVMs for production; bubblewrap (Linux) and Seatb
 - [Workload-Keyed Sandbox Selection for Agent-Generated Code](workload-keyed-sandbox-selection.md) — the workload-shape rubric one altitude above this page; workload shape narrows the feature set before runtime family picks the provider
 - [Dual-Boundary Sandboxing for Secure Agent Execution](dual-boundary-sandboxing.md)
 - [Subprocess PID Namespace Sandboxing in Claude Code](subprocess-pid-namespace-sandboxing.md)
-- [Prebuilt Agent Environments](../agent-design/cloud-agent-session-bootstrap.md)
-- [Session Harness Sandbox Separation for Long-Running Agents](../agent-design/session-harness-sandbox-separation.md)
+- [Prebuilt Agent Environments](../patterns/agent-design/cloud-agent-session-bootstrap.md)
+- [Session Harness Sandbox Separation for Long-Running Agents](../patterns/agent-design/session-harness-sandbox-separation.md)
 - [Windows Sandboxing for Coding Agents](windows-sandbox-primitives-coding-agents.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)

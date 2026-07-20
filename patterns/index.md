@@ -18,15 +18,15 @@ Architecture, coordination, and failure-mode patterns organized into three areas
 
 This page is the entry point for those three sections plus two selection aids below. For content grouped by cross-cutting theme, use the [Concept Map](../concepts.md); for the core disciplines, start at [Foundations](../foundations.md); for standards and surrounding context, start at [Reference](../reference.md).
 
-## [Agent Design](../agent-design/index.md)
+## [Agent Design](agent-design/index.md)
 
 Architecture, delegation, memory, control, reliability, and harness patterns for building effective agents. Organized into core design, memory and state, control and orchestration, reliability, and harness engineering.
 
-## [Multi-Agent](../multi-agent/index.md)
+## [Multi-Agent](multi-agent/index.md)
 
 Coordination patterns for systems where multiple agents collaborate — handoff protocols, fan-out synthesis, orchestrator-worker topologies, and ensemble approaches.
 
-## [Anti-Patterns](../anti-patterns/index.md)
+## [Anti-Patterns](anti-patterns/index.md)
 
 Common failure modes in AI-assisted development — from abstraction bloat and context poisoning to the yes-man agent and prompt tinkering. Recognizing these early prevents costly rework.
 

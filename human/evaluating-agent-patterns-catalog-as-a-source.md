@@ -31,7 +31,7 @@ The catalog reduces our research-fetch cost on pattern-shaped topics by serving 
 
 The catalog's CC BY 4.0 license and explicit attribution string ("Agent Patterns Catalog — agentpatternscatalog.org") match the link-and-attribute posture our [editorial inclusion criteria](../about.md) already require — no per-page negotiation needed. Operator identity is named (Marco Nissen, [marco-nissen.com](https://marco-nissen.com)) and per-pattern provenance carries a verifiable GitHub commit hash.
 
-The structural match also helps. Our [`anti-patterns/`](../anti-patterns/index.md) and [`fallacies/`](../fallacies/index.md) sections already follow a context-pressure-consequence shape; the catalog's [Prompt Bloat anti-pattern](https://www.agentpatternscatalog.org/patterns/prompt-bloat/) maps onto it without translation, making cross-checks against an outside catalog cheap.
+The structural match also helps. Our [`anti-patterns/`](../patterns/anti-patterns/index.md) and [`fallacies/`](../fallacies/index.md) sections already follow a context-pressure-consequence shape; the catalog's [Prompt Bloat anti-pattern](https://www.agentpatternscatalog.org/patterns/prompt-bloat/) maps onto it without translation, making cross-checks against an outside catalog cheap.
 
 ## When this backfires
 
@@ -49,7 +49,7 @@ A fourth, smaller risk is name collision: search engines conflate this catalog w
 
 Use it as a source, with guard-rails. Add it to `SOURCES.md` in the same form as the existing `nibzard/awesome-agentic-patterns` entry: cite individual patterns by pattern-page URL with the recommended attribution string, never reproduce pattern bodies, and always co-cite the pattern's linked primary source on the same claim — the catalog is the index, not the authority. Do not wire the MCP server without first running `agent-readiness-audit-lethal-trifecta`, and disambiguate the site catalog from Liu et al.'s CSIRO catalog in any citation that names "Agent Patterns Catalog."
 
-The strongest near-term uses: scanning the [anti-patterns book](https://www.agentpatternscatalog.org/patterns/prompt-bloat/) for failure modes our `anti-patterns/` and `fallacies/` sections have not yet named, and mining the typed-relation graph for sibling-link suggestions when authoring new pages in [`patterns/`](../patterns/index.md) or [`agent-design/`](../agent-design/index.md).
+The strongest near-term uses: scanning the [anti-patterns book](https://www.agentpatternscatalog.org/patterns/prompt-bloat/) for failure modes our `anti-patterns/` and `fallacies/` sections have not yet named, and mining the typed-relation graph for sibling-link suggestions when authoring new pages in [`patterns/`](../patterns/index.md) or [`agent-design/`](../patterns/agent-design/index.md).
 
 ## Key Takeaways
 

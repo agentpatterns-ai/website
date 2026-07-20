@@ -26,7 +26,7 @@ This is the next shape after [operator-authored bootstrapping](agent-environment
 Four preconditions decide whether this workflow saves time or quietly adds risk:
 
 1. A deterministic validator exists. A fast, reliable command (project unit tests, `make build`, a smoke-test script) returns non-zero when the env is broken. Without it, the rollback signal never fires and the agent promotes broken configs.
-2. A snapshot-and-rollback substrate is in place. Use either per-command snapshotting (Repo2Run-style, via `docker commit`) or per-environment version history (Cursor-style). Failed attempts must cost only the build time, not the working baseline — the [rollback-first design](../agent-design/rollback-first-design.md) discipline applied to infrastructure.
+2. A snapshot-and-rollback substrate is in place. Use either per-command snapshotting (Repo2Run-style, via `docker commit`) or per-environment version history (Cursor-style). Failed attempts must cost only the build time, not the working baseline — the [rollback-first design](../patterns/agent-design/rollback-first-design.md) discipline applied to infrastructure.
 3. Layer caching is effective. Most layers stay cached across attempts. On stacks where most layers invalidate per change (heavy native builds, monorepos with cross-cutting base images), iteration cost can exceed the savings.
 4. An audit-log review cadence exists. Someone reads the env-change log — the team-wide audit log Cursor records for every change. Without it, the log does nothing and the agent's freedom to edit infrastructure becomes an undetected drift vector.
 
@@ -60,7 +60,7 @@ The mechanism has three coupled parts. The validator gives the agent a binary `w
 
 Without snapshotting, every failed command pollutes the environment state. The agent then cannot tell whether the next failure is a new bug or residue from the previous one ([Repo2Run, arxiv 2502.13681](https://arxiv.org/html/2502.13681v2)). With snapshotting, each attempt is independent and the agent can converge — which is why the Repo2Run benchmark gap of 77.0 points opens against SWE-agent precisely on the rollback dimension.
 
-This is the same loop-strategy reasoning as [Convergence Detection](../loop-engineering/convergence-detection.md) and [Rollback-First Design](../agent-design/rollback-first-design.md) applied to infrastructure rather than code.
+This is the same loop-strategy reasoning as [Convergence Detection](../loop-engineering/convergence-detection.md) and [Rollback-First Design](../patterns/agent-design/rollback-first-design.md) applied to infrastructure rather than code.
 
 ## When this backfires
 
@@ -129,7 +129,7 @@ The validator (`make smoke-test`) is the gate. `env:working` is the rollback tar
 ## Related
 
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md) — the operator-authored predecessor pattern this workflow contrasts against
-- [Rollback-First Design](../agent-design/rollback-first-design.md) — the design discipline this workflow applies to infrastructure
+- [Rollback-First Design](../patterns/agent-design/rollback-first-design.md) — the design discipline this workflow applies to infrastructure
 - [Convergence Detection](../loop-engineering/convergence-detection.md) — deciding when iteration has stopped making progress
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — the analogous validate-then-promote loop applied to code rather than infrastructure
 - [Experiential-Learning Setup Agents with Snapshot Rollback](experiential-setup-agents-snapshot-rollback.md) — the sibling workflow that reuses the snapshot-rollback substrate for repository setup, adding experience replay and prosecutor-judge verification

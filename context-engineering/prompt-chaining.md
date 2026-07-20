@@ -72,7 +72,7 @@ If a call is producing output that requires significantly different evaluation c
 
 ## Latency trade-off
 
-Chaining adds latency proportional to the number of steps. This is the primary cost: sequential execution cannot be [parallelized](../multi-agent/fan-out-synthesis.md). The trade-off is worthwhile when:
+Chaining adds latency proportional to the number of steps. This is the primary cost: sequential execution cannot be [parallelized](../patterns/multi-agent/fan-out-synthesis.md). The trade-off is worthwhile when:
 
 - Accuracy matters more than speed
 - Intermediate outputs need inspection or logging
@@ -154,10 +154,10 @@ Each step has a single responsibility. Gate 1 prevents incomplete drafts from re
 ## Related
 
 - [Compositional Skill Routing for Large Skill Libraries](compositional-skill-routing.md)
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
-- [Fan-Out Synthesis Pattern](../multi-agent/fan-out-synthesis.md)
-- [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
-- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
-- [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
+- [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md)
+- [Fan-Out Synthesis Pattern](../patterns/multi-agent/fan-out-synthesis.md)
+- [Sub-Agents for Fan-Out Research and Context Isolation](../patterns/multi-agent/sub-agents-fan-out.md)
+- [Orchestrator-Worker Pattern](../patterns/multi-agent/orchestrator-worker.md)
+- [Separation of Knowledge and Execution](../patterns/agent-design/separation-of-knowledge-and-execution.md)
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
 - [Prompt Layering](prompt-layering.md)

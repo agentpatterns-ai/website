@@ -55,7 +55,7 @@ Not for every output. If the user can already name the alternative and one reaso
 
 - Defer to convention. For community-stable defaults (YAML for structured config, folder-per-function in a small team), accept the scaffold and spend the cognitive budget on strategy instead. This wins when the decision is well-understood and the team is on the critical path.
 - Ground-truth-first explanation, then interrogation. For users below the scaffolding threshold, reverse the order: have the agent teach the baseline vocabulary first, then ask why. This is [deliberate AI-assisted learning](../../human/deliberate-ai-learning.md) applied to tooling.
-- Critic agent review. Instead of the user interrogating the decision, a second agent critiques the plan before execution ([critic-agent plan review](../../agent-design/critic-agent-plan-review.md)). This wins when speed matters more than the user's long-term curation skill.
+- Critic agent review. Instead of the user interrogating the decision, a second agent critiques the plan before execution ([critic-agent plan review](../../patterns/agent-design/critic-agent-plan-review.md)). This wins when speed matters more than the user's long-term curation skill.
 
 ## Example
 

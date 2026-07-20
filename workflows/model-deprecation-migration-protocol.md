@@ -151,7 +151,7 @@ The eval suite is the gate. If response length or tool-call frequency drifts bey
 
 - [Model Deprecation Lifecycle for Agent Workloads](model-deprecation-lifecycle.md) — the runtime side: monitor, eval, canary, fallback. This protocol is the codebase side.
 - [Prompt-Rewrite Discipline on Cross-Generation Model Migration](../instructions/prompt-rewrite-on-cross-generation-migration.md) — required pairing when the successor changes how prompts are interpreted.
-- [Harness Impermanence](../agent-design/harness-impermanence.md) — scaffolding that wraps current-generation limits also expires; same supply-chain framing applied to harness code.
+- [Harness Impermanence](../patterns/agent-design/harness-impermanence.md) — scaffolding that wraps current-generation limits also expires; same supply-chain framing applied to harness code.
 - [Eval-Driven Development](eval-driven-development.md) — standing eval infrastructure the migration gate reuses.
 - [Canary Rollout for Agent Policy Changes](canary-rollout-agent-policy.md) — discipline reused when the migration warrants traffic-split.
 </content>

@@ -35,7 +35,7 @@ Most readers find what they need through tags or the concept map, not the sectio
 ## Sections
 
 - Foundations — [Context Engineering](context-engineering/context-engineering.md) and [Instructions](instructions/system-prompt-altitude.md)
-- Patterns — [Agent Design](agent-design/harness-engineering.md), [Multi-Agent](multi-agent/orchestrator-worker.md), [Anti-Patterns](anti-patterns/index.md)
+- Patterns — [Agent Design](patterns/agent-design/harness-engineering.md), [Multi-Agent](patterns/multi-agent/orchestrator-worker.md), [Anti-Patterns](patterns/anti-patterns/index.md)
 - Engineering — [Tool Engineering](tool-engineering/tool-engineering.md), [Code Review](code-review/agent-assisted-code-review.md), [Verification](verification/index.md), [Security](security/index.md), [Observability](observability/agent-debugging.md)
 - [Workflows](workflows/index.md) — end-to-end workflows for agent-assisted development
 - Reference — [Standards](standards/index.md), [Human Factors](human/index.md), [Emerging](emerging/index.md), [Fallacies](fallacies/index.md), [Training](training/index.md), [Frameworks](frameworks/index.md), [GEO](geo/index.md)

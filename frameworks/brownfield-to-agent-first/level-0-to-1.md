@@ -14,13 +14,13 @@ maturity: adopted
 
 # L0 → L1: Making the Repo Readable
 
-> A readable repo externalizes the [implicit knowledge](../../anti-patterns/implicit-knowledge-problem.md) humans hold — architecture, conventions, build commands — into machine-readable artifacts an agent can orient from.
+> A readable repo externalizes the [implicit knowledge](../../patterns/anti-patterns/implicit-knowledge-problem.md) humans hold — architecture, conventions, build commands — into machine-readable artifacts an agent can orient from.
 
 ---
 
 ## What L0 looks like
 
-An L0 codebase relies on [implicit knowledge](../../anti-patterns/implicit-knowledge-problem.md) — conventions, decisions, and constraints that exist only in Slack threads and team memory:
+An L0 codebase relies on [implicit knowledge](../../patterns/anti-patterns/implicit-knowledge-problem.md) — conventions, decisions, and constraints that exist only in Slack threads and team memory:
 
 - No project instructions file — a new agent session starts with no context
 - Directory structure reflects historical accident, not architectural intent
@@ -191,7 +191,7 @@ CI setup stalls on legacy test suites. "Add smoke tests" is straightforward on a
 
 - The project instructions file is the single highest-leverage action for an L0 repo. Generate it with `/init` (Claude Code) and refine from there.
 - Include only what would cause mistakes if absent. A concise, accurate file beats a comprehensive, stale one.
-- A self-describing [directory structure](../../agent-design/codebase-readiness.md) communicates architecture. Renaming directories to reflect architectural layers is one of the highest-ROI refactors for agent-assisted development.
+- A self-describing [directory structure](../../patterns/agent-design/codebase-readiness.md) communicates architecture. Renaming directories to reflect architectural layers is one of the highest-ROI refactors for agent-assisted development.
 - Document known inconsistencies explicitly. An undocumented inconsistency will be replicated; a documented one can be avoided.
 - A CI baseline — even a minimal GitHub Actions lint-and-build gate — is prerequisite infrastructure. Every subsequent level — starting with [L1 → L2](level-1-to-2.md) — depends on it.
 
@@ -199,8 +199,8 @@ CI setup stalls on legacy test suites. "Add smoke tests" is straightforward on a
 
 - [Instruction File Ecosystem](../../instructions/instruction-file-ecosystem.md) — CLAUDE.md, AGENTS.md, `.github/copilot-instructions.md` and how they interact
 - [AGENTS.md Standard](../../standards/agents-md.md) — open standard for cross-tool agent project instructions
-- [Codebase Readiness for Agents](../../agent-design/codebase-readiness.md) — agent-hostile vs agent-friendly code qualities
-- [Harness Engineering](../../agent-design/harness-engineering.md) — the full discipline this transition begins
+- [Codebase Readiness for Agents](../../patterns/agent-design/codebase-readiness.md) — agent-hostile vs agent-friendly code qualities
+- [Harness Engineering](../../patterns/agent-design/harness-engineering.md) — the full discipline this transition begins
 - [Brownfield to Agent-First: Repo Maturity Framework](index.md) — full L0–L5 framework overview
 - [L1 → L2: Adding Feedback Loops](level-1-to-2.md) — next module
 - [L2 → L3: Building Mechanical Enforcement](level-2-to-3.md) — adds hooks and structured task definitions

@@ -33,7 +33,7 @@ The marker is load-bearing. A trailing `[PARTIAL]` line is the easiest implement
 
 ## Why it works
 
-Every tool call costs a model latency turn, so error-then-retry doubles the cost of any large-output call. A tool that returns useful state plus a signal saves the retry whenever the prefix is enough, and only spends it when continuation is required. The same logic underlies [RFC 9457](rfc9457-machine-readable-errors.md) error responses and [observation contracts](../agent-design/observation-contract-preservation.md): encoding recovery into the response shape lets the agent branch on structure instead of parsing prose. MCP has an open proposal for client-negotiated response size caps but no normalized `_meta.truncated` field today ([modelcontextprotocol#2211](https://github.com/modelcontextprotocol/modelcontextprotocol/discussions/2211)). Anthropic recommends the same shape: "pagination, range selection, filtering, and/or truncation with sensible defaults" ([Writing tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents)).
+Every tool call costs a model latency turn, so error-then-retry doubles the cost of any large-output call. A tool that returns useful state plus a signal saves the retry whenever the prefix is enough, and only spends it when continuation is required. The same logic underlies [RFC 9457](rfc9457-machine-readable-errors.md) error responses and [observation contracts](../patterns/agent-design/observation-contract-preservation.md): encoding recovery into the response shape lets the agent branch on structure instead of parsing prose. MCP has an open proposal for client-negotiated response size caps but no normalized `_meta.truncated` field today ([modelcontextprotocol#2211](https://github.com/modelcontextprotocol/modelcontextprotocol/discussions/2211)). Anthropic recommends the same shape: "pagination, range selection, filtering, and/or truncation with sensible defaults" ([Writing tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents)).
 
 ## Where the lever lives
 
@@ -107,6 +107,6 @@ For any tool whose output can grow past a fixed limit:
 - [PostToolUse Output Replacement: Hooks That Rewrite Tool Results](posttooluse-output-replacement.md)
 - [Terminal Tool Output Compression](terminal-output-compression.md)
 - [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md)
-- [Observation Contract Preservation in Tool-Augmented Agents](../agent-design/observation-contract-preservation.md)
+- [Observation Contract Preservation in Tool-Augmented Agents](../patterns/agent-design/observation-contract-preservation.md)
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md)
 - [Semantic Tool Output](semantic-tool-output.md)

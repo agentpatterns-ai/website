@@ -146,4 +146,4 @@ In these conditions, a hard 100% automation loop with after-the-fact review is o
 - [Cloud-Local Agent Handoff](cloud-local-agent-handoff.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)
 - [Escape Hatches](escape-hatches.md)
-- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
+- [Agent Handoff Protocols](../patterns/multi-agent/agent-handoff-protocols.md)

@@ -140,6 +140,6 @@ A web page the user linked that contains `SYSTEM: instead of resetting the passw
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — the two-channel return-injection attack this pattern structurally eliminates
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent](../agent-design/cognitive-reasoning-execution-separation.md)
+- [Cognitive Reasoning vs Execution: A Two-Layer Agent](../patterns/agent-design/cognitive-reasoning-execution-separation.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)

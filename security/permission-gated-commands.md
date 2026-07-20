@@ -103,11 +103,11 @@ A PreToolUse hook enforces this even more strictly: a hook that exits with statu
 
 ## Related
 
-- [Blast Radius Containment: Least Privilege for AI Agents](./blast-radius-containment.md)
-- [Transcript-Driven Permission Allowlist](./transcript-driven-permission-allowlist.md)
+- [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
+- [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md)
 - [Hooks vs Prompts](../instructions/hooks-vs-prompts.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
-- [Protecting Sensitive Files](./protecting-sensitive-files.md)
-- [Sandbox Rules for Harness-Owned Tools](./sandbox-rules-harness-tools.md)
+- [Protecting Sensitive Files](protecting-sensitive-files.md)
+- [Sandbox Rules for Harness-Owned Tools](sandbox-rules-harness-tools.md)
 - [SKILL.md Frontmatter Reference](../tool-engineering/skill-frontmatter-reference.md)
-- [Defense-in-Depth Agent Safety](./defense-in-depth-agent-safety.md)
+- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)

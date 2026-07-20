@@ -108,7 +108,7 @@ Effective descriptions combine activation triggers, domain scope, and temporal c
 
 Validation gates are slow or absent. Cascade routing depends on cheap, deterministic validators (tests, linters, type checkers). If the validation step takes longer than the cost difference between tiers, the cascade adds latency without saving money. Measure gate cost before you commit to escalation-based routing. Routing is a design-time cost control, so pair it with a runtime measurement. Braintrust treats cost-efficiency (tokens or dollars per task at fixed quality) as a first-class eval scoring axis alongside correctness, so a routing change that quietly raises spend without improving quality shows up as a regression ([Braintrust — testing agent cost-efficiency](https://braintrust.dev/blog/test-agent-cost-efficiency)).
 
-Single-task pipelines suffer too. A three-tier routing system — whether by task type or by [code health](../agent-design/auto-model-selection.md) — adds configuration and coordination overhead. For pipelines with one task type and low invocation volume, a single capable model at a fixed tier is simpler and often cheaper once you amortize setup and maintenance cost.
+Single-task pipelines suffer too. A three-tier routing system — whether by task type or by [code health](../patterns/agent-design/auto-model-selection.md) — adds configuration and coordination overhead. For pipelines with one task type and low invocation volume, a single capable model at a fixed tier is simpler and often cheaper once you amortize setup and maintenance cost.
 
 Frequently updated model rosters break role-based routing. Routing fails when a provider deprecates or renames a model tier. Teams without automated model-ID management (display names like `haiku`, capability caching with TTL) spend engineering time on breakage rather than shipping features.
 
@@ -179,12 +179,12 @@ Complexity routing decides which model tier handles a task (fast, balanced, powe
 
 ## Related
 
-- [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md) — budget reasoning effort the same way you budget tier choice
-- [Heuristic-Based Effort Scaling](../agent-design/heuristic-effort-scaling.md) — heuristics that scale model effort by task signals
-- [Cross-Vendor Competitive Routing](../agent-design/cross-vendor-competitive-routing.md) — extend tier routing across providers
-- [Code-Health-Gated LLM Tier Routing](../agent-design/auto-model-selection.md) — route by file-level code health metrics rather than task type
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../agent-design/cognitive-reasoning-execution-separation.md) — role split that complements tier routing
+- [Reasoning Budget Allocation](../patterns/agent-design/reasoning-budget-allocation.md) — budget reasoning effort the same way you budget tier choice
+- [Heuristic-Based Effort Scaling](../patterns/agent-design/heuristic-effort-scaling.md) — heuristics that scale model effort by task signals
+- [Cross-Vendor Competitive Routing](../patterns/agent-design/cross-vendor-competitive-routing.md) — extend tier routing across providers
+- [Code-Health-Gated LLM Tier Routing](../patterns/agent-design/auto-model-selection.md) — route by file-level code health metrics rather than task type
+- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../patterns/agent-design/cognitive-reasoning-execution-separation.md) — role split that complements tier routing
 - [Claude Code Sub-Agents](../tools/claude/sub-agents.md) — per-agent model selection mechanic
 - [Token-Efficient Tool Design](token-efficient-tool-design.md) — pair tier routing with lean tool surfaces
-- [Minimum-Sufficient Control Ladder](../agent-design/minimum-sufficient-control-ladder.md) — orthogonal axis: this page escalates *model tier* by task complexity; the ladder escalates *control mechanism* by named failure mode
+- [Minimum-Sufficient Control Ladder](../patterns/agent-design/minimum-sufficient-control-ladder.md) — orthogonal axis: this page escalates *model tier* by task complexity; the ladder escalates *control mechanism* by named failure mode
 - [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — the complementary lever: the orchestration layer sets token volume and effective price, model routing sets the tier

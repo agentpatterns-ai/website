@@ -107,11 +107,11 @@ The discipline is not free, and several conditions invert its sign:
 - Auto-generated ACFs: a file produced by running `/init` and never edited is duplicating discoverable context already in the codebase. Maintaining the duplicate raises cost without raising accuracy ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). The fix is deletion, not cadence.
 - High update frequency without the compact pass: running only the add loop reproduces the monotonic-growth pattern the empirical data already shows. The Chatlatanagulchai numbers (deletions <15 words/commit) are the warning, not the prescription.
 - Reviewers without prompt-engineering literacy: PR-gated ACF changes degrade into rubber-stamps when reviewers cannot predict the behavioral delta of a wording change — addressed in [Prompt Governance via PR](prompt-governance-via-pr.md).
-- Pinned-model deployments: maintenance overhead assumes that future model updates will reveal new ACF-vs-code drift. On a frozen model with a stable codebase, the rationale collapses; see also [Harness Impermanence](../agent-design/harness-impermanence.md) for the related discipline applied to scaffolding rather than ACFs.
+- Pinned-model deployments: maintenance overhead assumes that future model updates will reveal new ACF-vs-code drift. On a frozen model with a stable codebase, the rationale collapses; see also [Harness Impermanence](../patterns/agent-design/harness-impermanence.md) for the related discipline applied to scaffolding rather than ACFs.
 
 ## Differentiation from adjacent patterns
 
-- [Harness Impermanence](../agent-design/harness-impermanence.md) — about deleting scaffolding code when models subsume it. This page is about maintaining the instruction file.
+- [Harness Impermanence](../patterns/agent-design/harness-impermanence.md) — about deleting scaffolding code when models subsume it. This page is about maintaining the instruction file.
 - [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md) — about what belongs in the ACF. This page is about how the ACF changes over time.
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — about whether an ACF helps. This page is about the maintenance of one that already does.
 - [Rule Lifecycle Metadata](rule-lifecycle-metadata.md) — the per-rule lifecycle (the `source` / `applies_to` / `retire_when` triple). This page is the file-level lifecycle that sits above it; the metadata makes the compact loop mechanical.
@@ -133,5 +133,5 @@ The discipline is not free, and several conditions invert its sign:
 - [Prompt Governance via PR](prompt-governance-via-pr.md) — the PR review surface this discipline plugs into
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — the structural target the compact pass aims at
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — the destination for rules the compact pass moves out of prose
-- [Harness Impermanence](../agent-design/harness-impermanence.md) — the analogous discipline applied to scaffolding code rather than instruction files
+- [Harness Impermanence](../patterns/agent-design/harness-impermanence.md) — the analogous discipline applied to scaffolding code rather than instruction files
 </content>

@@ -25,21 +25,21 @@ Every harness engineering investment falls into one of three categories.
 
 | Pillar | What it means | How the agent experiences it |
 |--------|--------------|------------------------------|
-| Legibility | The repo is its own documentation. The agent orients by reading the codebase, not by being told about it. | Clear directory naming, consistent file patterns, dependency layers visible in the [import graph](../../agent-design/codebase-readiness.md) |
+| Legibility | The repo is its own documentation. The agent orients by reading the codebase, not by being told about it. | Clear directory naming, consistent file patterns, dependency layers visible in the [import graph](../../patterns/agent-design/codebase-readiness.md) |
 | Mechanical enforcement | Constraints are enforced by tools, not by instructions. Certain categories of mistake are impossible. | Linters that block cross-layer imports, pre-commit hooks that run formatters, CI gates that require test passage |
 | Constrained solution spaces | The architecture limits the number of valid approaches. The agent does not need to choose the right pattern -- there is only one valid pattern. | A single ORM (no raw SQL allowed), a single test framework, a standard component template |
 
 All three pillars contributed in OpenAI's approach: legibility told agents what to do, mechanical enforcement told them when they were wrong, and constrained solution spaces made the correct path the only available path ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)).
 
-For the full taxonomy and worked example, see [Harness Engineering](../../agent-design/harness-engineering.md).
+For the full taxonomy and worked example, see [Harness Engineering](../../patterns/agent-design/harness-engineering.md).
 
 ---
 
 ## Backpressure: Automated Feedback Loops
 
-[Backpressure](../../agent-design/agent-backpressure.md) is the automated feedback signal that tells an agent when its output is wrong. The agent writes code, reads the error, fixes the issue, and runs again. No human review required in the loop.
+[Backpressure](../../patterns/agent-design/agent-backpressure.md) is the automated feedback signal that tells an agent when its output is wrong. The agent writes code, reads the error, fixes the issue, and runs again. No human review required in the loop.
 
-Agent autonomy scales directly with backpressure quality in the codebase -- not with [model capability](../../agent-design/feedback-capability-equalizer.md).
+Agent autonomy scales directly with backpressure quality in the codebase -- not with [model capability](../../patterns/agent-design/feedback-capability-equalizer.md).
 
 ### The backpressure spectrum
 
@@ -53,7 +53,7 @@ Agent autonomy scales directly with backpressure quality in the codebase -- not 
 
 A codebase with strict types, comprehensive tests, and enforced linting enables agents to iterate autonomously through a write-check-fix loop. A codebase with no types, no tests, and no linting means every agent output requires manual review -- you become the feedback loop.
 
-These investments compound: they benefit both agents and human developers. Adding types, writing tests, and documenting decisions are not agent-specific investments ([Codebase Readiness](../../agent-design/codebase-readiness.md)).
+These investments compound: they benefit both agents and human developers. Adding types, writing tests, and documenting decisions are not agent-specific investments ([Codebase Readiness](../../patterns/agent-design/codebase-readiness.md)).
 
 ---
 
@@ -87,7 +87,7 @@ Each layer catches what the layer above missed. Written conventions rely on agen
 
 ## Feedback Loop Quality
 
-The quality of error messages determines whether the agent self-corrects or spirals. Linter error messages are just-in-time context: the failure output enters the agent's context at the exact moment it needs to make a different decision. Investing in feedback loop quality often outperforms upgrading the model — see [Feedback as Capability Equalizer](../../agent-design/feedback-capability-equalizer.md).
+The quality of error messages determines whether the agent self-corrects or spirals. Linter error messages are just-in-time context: the failure output enters the agent's context at the exact moment it needs to make a different decision. Investing in feedback loop quality often outperforms upgrading the model — see [Feedback as Capability Equalizer](../../patterns/agent-design/feedback-capability-equalizer.md).
 
 Write messages as actionable remediation, not violation flags ([Fowler/Bockeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)):
 
@@ -185,16 +185,16 @@ Codebases drift -- documentation goes stale, boundaries erode, conventions accum
 
 Harness investment has a break-even point. The steelman for the opposite recommendation: for short-lived prototypes, solo experiments, or throwaway code, the time spent wiring up types, test harnesses, custom linters, and pre-commit hooks can exceed the time the agent would spend producing plausibly-correct output that a human quickly reviews. Three concrete conditions where heavy harness engineering is the wrong call:
 
-- Exploratory prototypes with no second session. If the codebase will be discarded after one or two runs, a brittle linter rule that blocks a one-off pattern is pure friction. [Backpressure](../../agent-design/agent-backpressure.md) only compounds when the same harness catches the same bug class across many sessions.
+- Exploratory prototypes with no second session. If the codebase will be discarded after one or two runs, a brittle linter rule that blocks a one-off pattern is pure friction. [Backpressure](../../patterns/agent-design/agent-backpressure.md) only compounds when the same harness catches the same bug class across many sessions.
 - Thin codebases with weak conventions. Mechanical enforcement codifies rules. When the rules themselves are still being discovered, premature linting freezes the wrong constraints in place and creates churn as rules are rewritten. Establish the convention first, then encode it.
-- Low-signal or noisy checks. A linter that emits false positives the agent has to "work around" burns context every iteration, degrading [feedback loop quality](../../agent-design/feedback-capability-equalizer.md). If the error messages are vague ("build failed", "lint error") rather than actionable, the feedback loop degrades into noise and the agent learns to ignore or suppress it.
+- Low-signal or noisy checks. A linter that emits false positives the agent has to "work around" burns context every iteration, degrading [feedback loop quality](../../patterns/agent-design/feedback-capability-equalizer.md). If the error messages are vague ("build failed", "lint error") rather than actionable, the feedback loop degrades into noise and the agent learns to ignore or suppress it.
 
 The threshold: invest in harness once the cost of manual review across repeated sessions exceeds the cost of building and maintaining the check. Below that threshold, ad-hoc review is cheaper.
 
 ## Key Takeaways
 
 - Environment design beats prompt tuning. Investing in types, tests, and linters improves agent output quality more durably than tweaking instructions. Every harness improvement compounds across all future sessions.
-- Agent autonomy scales with backpressure quality, not with model capability. A codebase with strict types and comprehensive tests enables autonomous [agent iteration](../../agent-design/agent-backpressure.md). A codebase without them requires manual review of every output.
+- Agent autonomy scales with backpressure quality, not with model capability. A codebase with strict types and comprehensive tests enables autonomous [agent iteration](../../patterns/agent-design/agent-backpressure.md). A codebase without them requires manual review of every output.
 - Linter messages are just-in-time agent context. They appear at the exact moment and location of a violation with a specific remediation. Write custom rules with actionable error messages, not violation flags.
 - Instructions provide context; the harness provides enforcement. Use both, but do not rely on instructions for rules that must be followed [mechanically](../../instructions/hooks-vs-prompts.md). If the consequence of violation is real, enforce it with tooling, not text.
 - Engineering rigor relocates, it does not disappear. The discipline shifts from writing clean code to designing clean environments. The leverage point is infrastructure, not intelligence.
@@ -215,12 +215,12 @@ Training
 
 Source Pages
 
-- [Harness Engineering](../../agent-design/harness-engineering.md) -- the full pattern page with three pillars, worked example, and evidence
-- [Agent Backpressure](../../agent-design/agent-backpressure.md) -- automated feedback loops and the autonomy spectrum
+- [Harness Engineering](../../patterns/agent-design/harness-engineering.md) -- the full pattern page with three pillars, worked example, and evidence
+- [Agent Backpressure](../../patterns/agent-design/agent-backpressure.md) -- automated feedback loops and the autonomy spectrum
 - [Convergence Detection](../../loop-engineering/convergence-detection.md) -- three-signal model for knowing when to stop
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) -- verification gates before task completion
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md) -- deterministic enforcement over advisory instructions
-- [Codebase Readiness](../../agent-design/codebase-readiness.md) -- code-level qualities that make a codebase agent-friendly
+- [Codebase Readiness](../../patterns/agent-design/codebase-readiness.md) -- code-level qualities that make a codebase agent-friendly
 - [Entropy Reduction Agents](../../workflows/entropy-reduction-agents.md) -- scheduled background agents for codebase hygiene
 - [Rigor Relocation](../../human/rigor-relocation.md) -- engineering discipline relocates from code to scaffolding
 - [Trajectory Logging via Progress Files and Git History](../../observability/trajectory-logging-progress-files.md) -- progress files and git commits as a filesystem-based audit trail

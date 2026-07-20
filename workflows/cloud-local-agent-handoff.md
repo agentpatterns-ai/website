@@ -93,7 +93,7 @@ The coding agent picks up the task on a new branch, works asynchronously, and op
 Cloud-local handoff depends on session state being transferable, which breaks down in several conditions:
 
 - Stale or truncated session logs — cloud agents that run long tasks can produce logs that exceed the local context window. The receiving session then loads partial context and may misread prior decisions.
-- Branch divergence — if the local branch has commits not yet on the remote, or the remote has moved ahead, the handoff leaves the developer resolving merge conflicts before work can resume. A [single-branch strategy](../workflows/single-branch-git-agent-swarms.md) sidesteps this class of conflict.
+- Branch divergence — if the local branch has commits not yet on the remote, or the remote has moved ahead, the handoff leaves the developer resolving merge conflicts before work can resume. A [single-branch strategy](single-branch-git-agent-swarms.md) sidesteps this class of conflict.
 - Environment mismatch — cloud runners have different toolchains, credentials, and network access than local machines. A task that succeeded in the cloud (for example, calling an internal API with runner credentials) may fail locally without equivalent configuration.
 - Toolchain lock-in — the integrated handoff is GitHub Copilot-specific. Teams using other agent stacks must implement session serialization by hand, through shared branch state and exported logs.
 
@@ -107,11 +107,11 @@ Cloud-local handoff depends on session state being transferable, which breaks do
 
 ## Related
 
-- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
-- [Seamless Background-to-Foreground Handoff](../workflows/background-foreground-handoff.md)
+- [Agent Handoff Protocols](../patterns/multi-agent/agent-handoff-protocols.md)
+- [Seamless Background-to-Foreground Handoff](background-foreground-handoff.md)
 - [Coding Agent](../tools/copilot/coding-agent.md)
-- [Issue-to-PR Delegation Pipeline](../workflows/issue-to-pr-delegation-pipeline.md)
-- [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md)
-- [Programmatic Cloud-Agent Dispatch via REST API and Webhooks](../workflows/programmatic-cloud-agent-dispatch.md)
-- [CLI-IDE-GitHub Context Ladder](../workflows/cli-ide-github-context-ladder.md)
+- [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md)
+- [Parallel Agent Sessions](parallel-agent-sessions.md)
+- [Programmatic Cloud-Agent Dispatch via REST API and Webhooks](programmatic-cloud-agent-dispatch.md)
+- [CLI-IDE-GitHub Context Ladder](cli-ide-github-context-ladder.md)
 - [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md)

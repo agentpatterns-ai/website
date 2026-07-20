@@ -106,4 +106,4 @@ Archaeologist (works):
 - [Discovery-Only Refactor Pass](discovery-only-refactor-pass.md) — Related read-only stance: surface candidates without editing, then let the human pick — applied to refactor opportunities rather than legacy comprehension.
 - [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md) — The upstream principle: invest in understanding before launching an agent, measured on resolution rates.
 - [Verification-Centric Development](verification-centric-development.md) — Where the value shifts once the baseline exists: designing the checks that prove modernized code is correct.
-- [The Grill-Me Technique](../agent-design/grill-me-technique.md) — The single-agent building block Phase 1 specializes: direct the agent to challenge and interrogate rather than help, surfacing hidden assumptions instead of a happy path.
+- [The Grill-Me Technique](../patterns/agent-design/grill-me-technique.md) — The single-agent building block Phase 1 specializes: direct the agent to challenge and interrogate rather than help, surfacing hidden assumptions instead of a happy path.

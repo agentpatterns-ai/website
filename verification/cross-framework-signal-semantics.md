@@ -41,7 +41,7 @@ Treat any borrowed behavioral rule as a hypothesis until you re-measure it local
 3. Prefer mechanism-grounded checks. Signals tied to a falsifiable mechanism ("did the agent run the test command between edit and submission?") transfer better than statistical correlates ("mean turn count"), the same principle behind [behavioral testing for agents](behavioral-testing-agents.md). The mechanism holds across frameworks; the correlate does not.
 4. Treat split-direction signals as warnings, not features. When a signal points opposite ways in different harnesses, do not pick a side. Drop the signal from cross-framework comparisons and look for a mechanism-grounded substitute.
 
-This complements [isometric harness ablation](../agent-design/isometric-harness-ablation.md): ablation tells you which of your own subsystems carries weight; signal-semantics validation tells you which of someone else's rules survive the move into your stack.
+This complements [isometric harness ablation](../patterns/agent-design/isometric-harness-ablation.md): ablation tells you which of your own subsystems carries weight; signal-semantics validation tells you which of someone else's rules survive the move into your stack.
 
 ## When this backfires
 
@@ -64,5 +64,5 @@ Cross-framework validation is overhead, and that overhead is wasted in a few nar
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md)
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
-- [Isometric Harness Ablation](../agent-design/isometric-harness-ablation.md)
-- [Per-Model Harness Tuning](../agent-design/per-model-harness-tuning.md)
+- [Isometric Harness Ablation](../patterns/agent-design/isometric-harness-ablation.md)
+- [Per-Model Harness Tuning](../patterns/agent-design/per-model-harness-tuning.md)

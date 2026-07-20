@@ -115,7 +115,7 @@ variables, or changes function signatures.
 Reads source code and generates API documentation. Never modifies source files.
 ```
 
-Each persona answers: what does this agent produce, and what is it not allowed to touch? This is the [persona-as-code](../agent-design/persona-as-code.md) discipline applied inline. The scope exclusion is as important as the responsibility — it prevents an agent from drifting into adjacent work during a long session.
+Each persona answers: what does this agent produce, and what is it not allowed to touch? This is the [persona-as-code](../patterns/agent-design/persona-as-code.md) discipline applied inline. The scope exclusion is as important as the responsibility — it prevents an agent from drifting into adjacent work during a long session.
 
 The recommended starting point is one specialist (for example `@test-agent`), not a full suite. Upfront over-specification produces personas that conflict or leave gaps that no agent owns.
 
@@ -149,7 +149,7 @@ The recommended starting point is one specialist (for example `@test-agent`), no
 - [Project Instruction File Ecosystem](instruction-file-ecosystem.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
-- [Persona-as-Code: Defining Agent Roles as Structured Docs](../agent-design/persona-as-code.md)
+- [Persona-as-Code: Defining Agent Roles as Structured Docs](../patterns/agent-design/persona-as-code.md)
 - [AGENTS.md as Table of Contents](agents-md-as-table-of-contents.md)
 - [AGENTS.md Distributed Conventions](agents-md-distributed-conventions.md)
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md)

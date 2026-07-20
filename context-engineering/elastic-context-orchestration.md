@@ -70,7 +70,7 @@ Elastic orchestration suits search agents, not short coding sessions.
 - Short-horizon tasks (about 20 turns or fewer). The five-operation vocabulary adds policy complexity and SFT cost without payoff. Raw ReAct or [tiered compression](context-compression-strategies.md) is cheaper.
 - Code agents with persistent file state. Evidence lives in files, not the trajectory. Aggressive Skip or Delete on tool observations breaks debug loops where the agent needs to [re-read prior outputs](observation-masking.md).
 - Off-the-shelf models with no SFT on the vocabulary. Skip, Snippet, and Rollback are not natural ReAct actions. Models invoke them inconsistently and can regress below the ReAct baseline. LongSeeker reports 10,000-trajectory SFT specifically to teach the operation policy ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)).
-- Side-effecting tools. Rollback removes context but cannot undo bookings, payments, or writes. See [Rollback-First Design](../agent-design/rollback-first-design.md) for the separate mechanism that handles world state.
+- Side-effecting tools. Rollback removes context but cannot undo bookings, payments, or writes. See [Rollback-First Design](../patterns/agent-design/rollback-first-design.md) for the separate mechanism that handles world state.
 
 ## Relation to adjacent patterns
 
@@ -107,13 +107,13 @@ The agent ends with a working context of a few hundred tokens covering 22 search
 - The Skip / Compress / Snippet / Rollback / Delete vocabulary lets the policy tier retention by current relevance — Compress is expressively complete; the others exist for efficiency and fidelity.
 - Reported gains come from search-agent benchmarks (BrowseComp, BrowseComp-ZH) on SFT-trained models; numbers are first-party and unreplicated.
 - Short coding sessions, file-state-heavy agents, and off-the-shelf models without operation-vocabulary SFT will not benefit and can regress.
-- Rollback removes context but does not undo side-effects; pair with [Rollback-First Design](../agent-design/rollback-first-design.md) for world-state recovery.
+- Rollback removes context but does not undo side-effects; pair with [Rollback-First Design](../patterns/agent-design/rollback-first-design.md) for world-state recovery.
 
 ## Related
 
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Turn-Level Context Decisions](turn-level-context-decisions.md)
 - [Observation Masking](observation-masking.md)
-- [Long-Running Agents](../agent-design/long-running-agents.md)
+- [Long-Running Agents](../patterns/agent-design/long-running-agents.md)
 - [Lost in the Middle](lost-in-the-middle.md)
-- [Rollback-First Design](../agent-design/rollback-first-design.md)
+- [Rollback-First Design](../patterns/agent-design/rollback-first-design.md)

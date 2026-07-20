@@ -99,7 +99,7 @@ The concise version cuts token cost by roughly two-thirds for the same deliverab
 Concise-output mode is wrong in three situations:
 
 - Debugging unfamiliar failures: verbose chain-of-thought traces are the main diagnostic surface. Suppress them and the agent silently makes wrong decisions without leaving reasoning evidence.
-- Architecture and design decisions: when the problem is underspecified, the agent's narrative explanation surfaces hidden assumptions — the same signal [interactive clarification](../agent-design/interactive-clarification-underspecified-tasks.md) elicits by asking. Asking for code-only output removes the only signal that the agent misunderstood the requirement.
+- Architecture and design decisions: when the problem is underspecified, the agent's narrative explanation surfaces hidden assumptions — the same signal [interactive clarification](../patterns/agent-design/interactive-clarification-underspecified-tasks.md) elicits by asking. Asking for code-only output removes the only signal that the agent misunderstood the requirement.
 - First pass in new domains: a practitioner expert in Python but new to Rust needs the caveats. Concise mode assumes shared context that does not yet exist.
 
 Set output mode per task category in system instructions, not as a global default.
@@ -113,11 +113,11 @@ Set output mode per task category in system instructions, not as a global defaul
 
 ## Related
 
-- [Example-Driven vs Rule-Driven Instructions](../instructions/example-driven-vs-rule-driven-instructions.md)
-- [Negative Space Instructions: What NOT to Do](../instructions/negative-space-instructions.md)
-- [The Instruction Compliance Ceiling: Why More Rules Mean More Ignored Rules](../instructions/instruction-compliance-ceiling.md)
+- [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
+- [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
+- [The Instruction Compliance Ceiling: Why More Rules Mean More Ignored Rules](instruction-compliance-ceiling.md)
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
-- [Agent Turn Model](../agent-design/agent-turn-model.md)
-- [Think Tool](../agent-design/think-tool.md)
-- [Progressive Disclosure for Layered Agent Definitions](../agent-design/progressive-disclosure-agents.md)
+- [Agent Turn Model](../patterns/agent-design/agent-turn-model.md)
+- [Think Tool](../patterns/agent-design/think-tool.md)
+- [Progressive Disclosure for Layered Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md)
 - [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md)

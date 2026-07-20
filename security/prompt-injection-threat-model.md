@@ -72,7 +72,7 @@ Prompt injection succeeds because transformer-based models are provenance-blind.
 Strict injection defenses have real costs. The overhead outweighs the benefit in three conditions:
 
 1. Fully controlled data pipelines. When all content comes from internal, access-controlled sources with no external input path, treating every document as hostile adds friction without reducing real risk. The attack surface does not exist in a closed system.
-2. Confirmation fatigue undermines compliance. Approval gates work only if users read the prompts — the pressure that motivates batched UIs like the [tool confirmation carousel](../agent-design/tool-confirmation-carousel.md). In high-volume automation, users habituate to approvals, which reduces gates to security theater while implying active human oversight.
+2. Confirmation fatigue undermines compliance. Approval gates work only if users read the prompts — the pressure that motivates batched UIs like the [tool confirmation carousel](../patterns/agent-design/tool-confirmation-carousel.md). In high-volume automation, users habituate to approvals, which reduces gates to security theater while implying active human oversight.
 3. Defense mechanisms can be turned against you. Keyword blocking and output validation can fire on legitimate content that resembles injection payloads, breaking valid tasks. Research shows that certain baseline defenses produce "counterproductive side effects" ([arXiv:2604.03870](https://arxiv.org/abs/2604.03870)). Over-filtering degrades utility without stopping attacks that adapt to the filter.
 
 ## Example

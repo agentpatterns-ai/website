@@ -111,7 +111,7 @@ The shift: decisions that previously required judgment (what naming style? which
 
 ## Related
 
-- [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
+- [Separation of Knowledge and Execution](../patterns/agent-design/separation-of-knowledge-and-execution.md)
 - [AGENTS.md as Table of Contents](agents-md-as-table-of-contents.md)
 - [CLAUDE.md Convention](claude-md-convention.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)

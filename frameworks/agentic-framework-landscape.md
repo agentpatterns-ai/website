@@ -24,7 +24,7 @@ A framework speeds up your work when its primitives match your task and fights y
 
 - Task horizon — single turn, single session, or workflows that pause for days and resume from a checkpoint.
 - Action space — tools and code only, browser DOM, full desktop, or all of these.
-- Memory model — none, ephemeral within a session, server-stateful agent identity, or a memory layer composed over any runtime (the scope-and-temporal choices in [Agent Memory Patterns](../agent-design/agent-memory-patterns.md)).
+- Memory model — none, ephemeral within a session, server-stateful agent identity, or a memory layer composed over any runtime (the scope-and-temporal choices in [Agent Memory Patterns](../patterns/agent-design/agent-memory-patterns.md)).
 - Deployment shape — Python or Node library, control-plane runtime with an HTTP surface, or a packaged desktop app.
 - Language and tooling fit — Python-first, polyglot SDKs, or TypeScript/Electron.
 
@@ -101,7 +101,7 @@ A team building a code-review agent for internal PRs starts by asking the five a
 
 - Task horizon: one PR per invocation, single session — no checkpointing needed.
 - Action space: read the repo, call tests, post comments — tools only, no browser.
-- Memory model: review conventions per repo persist; cross-PR review state does not — a scope decision covered in [Agent Memory Patterns](../agent-design/agent-memory-patterns.md).
+- Memory model: review conventions per repo persist; cross-PR review state does not — a scope decision covered in [Agent Memory Patterns](../patterns/agent-design/agent-memory-patterns.md).
 - Deployment shape: a library inside an existing CI service, not a control plane.
 - Language: the existing CI is Go.
 
@@ -112,14 +112,14 @@ Compare a customer-support agent that handles cross-session conversation history
 ## Key Takeaways
 
 - The six frameworks sit at different layers — runtime (ADK, Agno), action space (Browser Use), memory (mem0), stateful agent runtime (Letta), desktop product (Eigent) — so selection is a task-shape match, not a feature comparison.
-- Decide on five axes: task horizon, action space, memory model, deployment shape, language/ecosystem fit — the same integration-shape framing as [The Agent Stack Bet](../agent-design/agent-stack-bets.md). The axes carry the decision; benchmarks rarely do.
+- Decide on five axes: task horizon, action space, memory model, deployment shape, language/ecosystem fit — the same integration-shape framing as [The Agent Stack Bet](../patterns/agent-design/agent-stack-bets.md). The axes carry the decision; benchmarks rarely do.
 - No framework is often the right answer for single-session, short-horizon agents — production teams ship directly on model SDKs plus tracing.
 - Picking on benchmark headlines locks you into vendor methodology disputes that turn over quarterly; pick on integration shape instead.
 
 ## Related
 
-- [The Agent Stack Bet: Architectural Decisions for Production Agents](../agent-design/agent-stack-bets.md) — the four bets enterprise agents take when prompting stops being the bottleneck
-- [Anthropic's Effective Agents Framework: A Pattern Map](../agent-design/anthropic-effective-agents-framework.md) — the augmented-LLM and workflow patterns these frameworks implement
-- [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — scope and temporal memory choices that frame the Letta and mem0 decisions
-- [Tiered Memory Architecture](../agent-design/tiered-memory-architecture.md) — when episodic-to-semantic consolidation pays off, independent of which memory layer you adopt
-- [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md) — the centralised/decentralised/hybrid choice that ADK and Agno multi-agent setups must make
+- [The Agent Stack Bet: Architectural Decisions for Production Agents](../patterns/agent-design/agent-stack-bets.md) — the four bets enterprise agents take when prompting stops being the bottleneck
+- [Anthropic's Effective Agents Framework: A Pattern Map](../patterns/agent-design/anthropic-effective-agents-framework.md) — the augmented-LLM and workflow patterns these frameworks implement
+- [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md) — scope and temporal memory choices that frame the Letta and mem0 decisions
+- [Tiered Memory Architecture](../patterns/agent-design/tiered-memory-architecture.md) — when episodic-to-semantic consolidation pays off, independent of which memory layer you adopt
+- [Multi-Agent Topology Taxonomy](../patterns/multi-agent/multi-agent-topology-taxonomy.md) — the centralised/decentralised/hybrid choice that ADK and Agno multi-agent setups must make

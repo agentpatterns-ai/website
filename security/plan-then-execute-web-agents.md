@@ -101,5 +101,5 @@ plan = [
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the threat model web agents close by default
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — the broader defense family
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — the underlying attack class
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent](../agent-design/cognitive-reasoning-execution-separation.md) — adjacent split at the model/tool layer
-- [Plan Compliance in Agents](../agent-design/plan-compliance-in-agents.md) — measuring whether the executed trajectory matches the instructed plan
+- [Cognitive Reasoning vs Execution: A Two-Layer Agent](../patterns/agent-design/cognitive-reasoning-execution-separation.md) — adjacent split at the model/tool layer
+- [Plan Compliance in Agents](../patterns/agent-design/plan-compliance-in-agents.md) — measuring whether the executed trajectory matches the instructed plan

@@ -69,4 +69,4 @@ The MCP server returns the team's actual pagination helper and its call sites. T
 - [RAG Component Prioritization for Software Engineering](rag-component-prioritization-software-engineering.md)
 - [Lexical-First Retrieval for Agentic Search](../tool-engineering/lexical-first-retrieval-for-agentic-search.md)
 - [Production MCP Agent Stack](../tool-engineering/production-mcp-agent-stack.md)
-- [Episodic Memory Retrieval](../agent-design/episodic-memory-retrieval.md)
+- [Episodic Memory Retrieval](../patterns/agent-design/episodic-memory-retrieval.md)

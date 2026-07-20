@@ -73,7 +73,7 @@ For format and style constraints in a codebase, pointing at existing code outper
 
 ## Domain-Specific Prompts: Generic Instructions Fail
 
-Generic instructions ("reason carefully before acting") give the model no information about what good reasoning looks like in your specific context. [Anthropic's think tool research](https://www.anthropic.com/engineering/claude-think-tool) (see also [The Think Tool](../../agent-design/think-tool.md)) measured a 54% relative improvement on the tau-Bench airline domain when switching from a generic prompt to one with domain-specific guidance and worked examples — same model, same tools, only the prompt changed.
+Generic instructions ("reason carefully before acting") give the model no information about what good reasoning looks like in your specific context. [Anthropic's think tool research](https://www.anthropic.com/engineering/claude-think-tool) (see also [The Think Tool](../../patterns/agent-design/think-tool.md)) measured a 54% relative improvement on the tau-Bench airline domain when switching from a generic prompt to one with domain-specific guidance and worked examples — same model, same tools, only the prompt changed.
 
 A [domain-specific system prompt](../../instructions/domain-specific-system-prompts.md) includes domain vocabulary, worked examples of reasoning chains for real edge cases, explicit guidance for ambiguous inputs, and success/failure definitions specific enough for the agent to self-check.
 

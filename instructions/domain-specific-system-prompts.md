@@ -120,7 +120,7 @@ The after version encodes the tool call sequence, the conditions that gate each 
 
 ## Related
 
-- [The Think Tool](../agent-design/think-tool.md)
+- [The Think Tool](../patterns/agent-design/think-tool.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [System Prompt Altitude](system-prompt-altitude.md)
 - [Production System Prompt Architecture](production-system-prompt-architecture.md)

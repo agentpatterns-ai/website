@@ -115,5 +115,5 @@ You reply `no abcde`. Claude Code receives the denial, the tool call is rejected
 - [Auto Mode](auto-mode.md) — Classifier-based permission gating; pairs with channels relay for low-noise unattended runs
 - [Session Scheduling](session-scheduling.md) — Schedule recurring sessions; combine with channels for overnight autonomous workflows
 - [Hooks & Lifecycle](hooks-lifecycle.md) — Deterministic automation at lifecycle events; complementary to permission relay for pre-approved actions
-- [Deferred Permission Pattern](../../agent-design/deferred-permission-pattern.md) — Alternative approach: pause headless sessions via `PreToolUse` hook `defer` verdict and resume after out-of-band approval
+- [Deferred Permission Pattern](../../patterns/agent-design/deferred-permission-pattern.md) — Alternative approach: pause headless sessions via `PreToolUse` hook `defer` verdict and resume after out-of-band approval
 - [Feature Flags & Environment Variables](feature-flags.md) — Configuration knobs including permission-related flags

@@ -120,7 +120,7 @@ system_prompt = compose_prompt(
 )
 ```
 
-Sections at priority 10–45 are stable across requests and can be cached at the API level. The mode-specific sections at 60 and 75 are mutually exclusive, so only one is ever included. The provider-specific block at priority 80 is injected only for Anthropic and is absent for OpenAI calls — avoiding cross-provider [prompt bloat](../anti-patterns/prompt-tinkerer.md) without branching the calling code.
+Sections at priority 10–45 are stable across requests and can be cached at the API level. The mode-specific sections at 60 and 75 are mutually exclusive, so only one is ever included. The provider-specific block at priority 80 is injected only for Anthropic and is absent for OpenAI calls — avoiding cross-provider [prompt bloat](../patterns/anti-patterns/prompt-tinkerer.md) without branching the calling code.
 
 ## When this backfires
 
@@ -130,7 +130,7 @@ Runtime composition can defeat the caching goal it was meant to enable. Lumer et
 
 2. Dynamic sections open a prompt-injection surface. Session-state and user-provided content need sanitizing before inclusion. Static sections have no injection surface.
 
-3. Over-modulation invalidates the cache. A conditionally included section that appears early in priority order invalidates the cache for every token that follows. [Reserve dynamic sections for the end of the priority stack](./static-content-first-caching.md).
+3. Over-modulation invalidates the cache. A conditionally included section that appears early in priority order invalidates the cache for every token that follows. [Reserve dynamic sections for the end of the priority stack](static-content-first-caching.md).
 
 4. Wording churns across deploys. Re-ordering or re-wording mode- or provider-specific blocks between releases invalidates cached prefixes across all sessions. Composition widens the effect of each wording change across many sessions.
 
@@ -140,16 +140,16 @@ When the task set is narrow and well-defined, a single authored system prompt is
 
 - Assemble system prompts from priority-ordered modular sections, not monolithic text.
 - Toggle sections by mode (planning vs execution) so irrelevant instructions do not consume context.
-- Inject provider-specific blocks conditionally to avoid cross-provider [prompt bloat](../anti-patterns/prompt-tinkerer.md).
+- Inject provider-specific blocks conditionally to avoid cross-provider [prompt bloat](../patterns/anti-patterns/prompt-tinkerer.md).
 - Separate cacheable (stable) from dynamic (session-specific) sections for API cache efficiency.
 - Fall back to default sections on load failure to maintain agent functionality.
 
 ## Related
 
 - [System Prompt Altitude](../instructions/system-prompt-altitude.md)
-- [Prompt Layering: How Instructions Stack and Override](./prompt-layering.md)
+- [Prompt Layering: How Instructions Stack and Override](prompt-layering.md)
 - [Layered Instruction Scopes](../instructions/layered-instruction-scopes.md)
-- [Prompt Caching as Architectural Discipline](./prompt-caching-architectural-discipline.md)
-- [Structure Prompts with Static Content First to Maximize Cache Hits](./static-content-first-caching.md)
-- [Phase-Specific Context Assembly for AI Agent Development](./phase-specific-context-assembly.md)
-- [Layered Context Architecture](./layered-context-architecture.md)
+- [Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md)
+- [Structure Prompts with Static Content First to Maximize Cache Hits](static-content-first-caching.md)
+- [Phase-Specific Context Assembly for AI Agent Development](phase-specific-context-assembly.md)
+- [Layered Context Architecture](layered-context-architecture.md)

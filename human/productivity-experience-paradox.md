@@ -28,7 +28,7 @@ The divergence comes from a change in what the work is. As the assistant takes o
 
 ## Why it matters
 
-The paradox is a warning about which signals a team trusts. Velocity and throughput metrics capture the 84% productivity story and miss the 27% experience story entirely. So a team that optimizes only for output can degrade the work without seeing it in its dashboards, until attrition or burnout surfaces it. Treat developer experience as a primary dimension here, not a soft side-effect. See the [AX/UX/DX triad](../agent-design/ax-ux-dx-triad.md) for why it deserves explicit measurement.
+The paradox is a warning about which signals a team trusts. Velocity and throughput metrics capture the 84% productivity story and miss the 27% experience story entirely. So a team that optimizes only for output can degrade the work without seeing it in its dashboards, until attrition or burnout surfaces it. Treat developer experience as a primary dimension here, not a soft side-effect. See the [AX/UX/DX triad](../patterns/agent-design/ax-ux-dx-triad.md) for why it deserves explicit measurement.
 
 So measure the experience cost alongside the productivity gain. Track verification burden (how much of the day is spent reviewing AI output), interruptions to flow, and self-reported cognitive load — not just lines shipped or tickets closed. A productivity gain bought with a steep experience cost is a trade to make deliberately, not by default.
 
@@ -61,4 +61,4 @@ An engineer adopts an assistant and ships noticeably more. Most new code is gene
 - [Addictive Flow in Agent Development](addictive-flow-agent-development.md)
 - [Bottleneck Migration](bottleneck-migration.md)
 - [Rigor Relocation](rigor-relocation.md)
-- [The AX/UX/DX Triad](../agent-design/ax-ux-dx-triad.md)
+- [The AX/UX/DX Triad](../patterns/agent-design/ax-ux-dx-triad.md)

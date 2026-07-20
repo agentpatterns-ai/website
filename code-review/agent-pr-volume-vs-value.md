@@ -62,7 +62,7 @@ Tooling vendors are responding to the same fixed-reviewer-capacity problem. Line
 
 ## Why acceptance rates lag
 
-The AIDev study blames the acceptance gap on structural and contextual factors. Agent PRs cluster around simpler tasks that reviewers may deprioritize. Agents also lack the ambient project context that shapes which changes are worth making at a given moment. They cannot see unwritten priorities — roadmap direction, or [tribal knowledge](../anti-patterns/implicit-knowledge-problem.md) about which subsystems are frozen. So they optimize for correctness in a local scope rather than relevance across the broader work queue ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
+The AIDev study blames the acceptance gap on structural and contextual factors. Agent PRs cluster around simpler tasks that reviewers may deprioritize. Agents also lack the ambient project context that shapes which changes are worth making at a given moment. They cannot see unwritten priorities — roadmap direction, or [tribal knowledge](../patterns/anti-patterns/implicit-knowledge-problem.md) about which subsystems are frozen. So they optimize for correctness in a local scope rather than relevance across the broader work queue ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
 
 A second study of agent-authored fixes adds failure-mode detail. Reviewers rejected 46.41% of the studied fixes, and the authors sort the reasons into a taxonomy of 14 rejection reasons across four categories ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)). That taxonomy points reviewers at the specific ways agent fixes fail, not just the aggregate shortfall.
 

@@ -110,7 +110,7 @@ Headless Claude in CI is not a free improvement — it shifts work from humans t
 - Rate-limit regressions on the underlying plan — token consumption on Claude Code plans has spiked in past updates ([The New Stack, March 2026](https://thenewstack.io/claude-code-usage-limits/)); `--max-budget-usd` caps API-billed spend but does not protect subscription-based runners from session exhaustion.
 - Tasks requiring `PermissionRequest` hooks — those hooks do not fire in `-p` mode. Enforcement shifts to `PreToolUse` or `--allowedTools`, and any policy that relied on dynamic approval must be rewritten or removed.
 
-For sensitive operations in headless mode, combine the [deferred permission pattern](../agent-design/deferred-permission-pattern.md) with `PreToolUse` hooks so the pipeline can pause for out-of-band approval instead of denying or auto-allowing.
+For sensitive operations in headless mode, combine the [deferred permission pattern](../patterns/agent-design/deferred-permission-pattern.md) with `PreToolUse` hooks so the pipeline can pause for out-of-band approval instead of denying or auto-allowing.
 
 ## Example
 

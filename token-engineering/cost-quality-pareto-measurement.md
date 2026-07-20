@@ -106,6 +106,6 @@ Two findings the bill alone would have hidden: Opus-medium-effort is dominated �
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — the per-request routing pattern that consumes the map this page builds
 - [Per-Plugin Token-Cost Attribution](../observability/plugin-token-cost-attribution.md) — per-component attribution that aggregates up to the cost axis on the plot
 - [BYOK Model Token Visibility](../observability/byok-model-token-visibility.md) — in-IDE telemetry that supplies the per-turn input the cost axis needs on self-hosted routes
-- [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — the guardrail this frame keeps honest: cuts that ignore the quality axis backfire
+- [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — the guardrail this frame keeps honest: cuts that ignore the quality axis backfire
 - [Comparative Judging for Agent Configuration Ranking](../verification/comparative-judging-config-ranking.md) — a more reliable way to rank configs on the noisy quality axis this plot builds, when the quality signal is a judge score
-- [Cheaper-Per-Token Model Upgrades That Cost More Per Task](../anti-patterns/cheaper-per-token-costlier-per-task.md) — the anti-pattern this measurement frame catches: a model swap chosen on price and benchmark instead of effective per-task cost
+- [Cheaper-Per-Token Model Upgrades That Cost More Per Task](../patterns/anti-patterns/cheaper-per-token-costlier-per-task.md) — the anti-pattern this measurement frame catches: a model swap chosen on price and benchmark instead of effective per-task cost

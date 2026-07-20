@@ -30,7 +30,7 @@ Prompt engineering is writing a good question. Context engineering is designing 
 | Failure mode | Bad answer to one question | Inconsistent results across sessions | Agent can't verify its own work — every output requires manual review |
 | Durability | Per-message | Per-repo, evolves with configuration | Permanent — compounds across all agents, all sessions, all team members |
 
-A well-crafted prompt in a poorly configured environment produces inconsistent results. A mediocre prompt in a well-engineered context produces good results reliably. A well-engineered context in a codebase without [backpressure](../../agent-design/agent-backpressure.md) still requires manual verification of every output. All three layers compound: prompt quality × context design × environment feedback loops. The [customization stack](customization-primitives.md) — instructions, agents, skills, hooks, MCP, Spaces, memory — is context engineering infrastructure. The type system, test suite, and linter rules covered in [Harness Engineering](harness-engineering.md) are harness engineering infrastructure.
+A well-crafted prompt in a poorly configured environment produces inconsistent results. A mediocre prompt in a well-engineered context produces good results reliably. A well-engineered context in a codebase without [backpressure](../../patterns/agent-design/agent-backpressure.md) still requires manual verification of every output. All three layers compound: prompt quality × context design × environment feedback loops. The [customization stack](customization-primitives.md) — instructions, agents, skills, hooks, MCP, Spaces, memory — is context engineering infrastructure. The type system, test suite, and linter rules covered in [Harness Engineering](harness-engineering.md) are harness engineering infrastructure.
 
 ### Why this matters for Copilot specifically
 
@@ -292,7 +292,7 @@ What to watch for (VS Code Agent / CLI):
 
 ### 3. Steer (if needed)
 
-If the agent is heading in the wrong direction, send a [steering message](../../agent-design/steering-running-agents.md) immediately — the earlier, the better.
+If the agent is heading in the wrong direction, send a [steering message](../../patterns/agent-design/steering-running-agents.md) immediately — the earlier, the better.
 
 Good steering:
 ```
@@ -343,7 +343,7 @@ Since the agent's self-review handles mechanical checks, human reviewers should 
 | Design fit | Does this change fit the existing architecture, or did the agent introduce a parallel pattern? |
 | Completeness | Did the agent address the full requirement, or just the literal text of the issue? |
 | What's missing | Missing error paths, unhandled edge cases, absent `finally` blocks, no input validation |
-| [Implicit knowledge](../../anti-patterns/implicit-knowledge-problem.md) | Would a team member who knows the system have done this differently? Why? |
+| [Implicit knowledge](../../patterns/anti-patterns/implicit-knowledge-problem.md) | Would a team member who knows the system have done this differently? Why? |
 
 ### The review pipeline
 
@@ -367,19 +367,19 @@ What it is: Accepting agent output because it looks polished — without running
 
 Why it's dangerous: Agent output quality (fluency, formatting, confidence) is independent of correctness. The agent is most dangerous when it's *almost* right — close enough to pass a casual review, wrong enough to cause production issues.
 
-Prevention: Verify against external ground truth — the discipline of [trust without verify](../../anti-patterns/trust-without-verify.md). Run the tests. Read the diff line by line. Check that cited files and functions actually exist. If the agent says "this follows the existing pattern in UserRepository," open `UserRepository` and check.
+Prevention: Verify against external ground truth — the discipline of [trust without verify](../../patterns/anti-patterns/trust-without-verify.md). Run the tests. Read the diff line by line. Check that cited files and functions actually exist. If the agent says "this follows the existing pattern in UserRepository," open `UserRepository` and check.
 
 ### Infinite context loading
 
 What it is: Dumping entire documentation, all project files, or comprehensive reference material into context "just in case" the agent needs it.
 
-Why it's dangerous: Excess context dilutes attention, wastes budget, and accelerates context rot. The agent's ability to follow specific instructions decreases as [total context volume](../../anti-patterns/infinite-context.md) grows.
+Why it's dangerous: Excess context dilutes attention, wastes budget, and accelerates context rot. The agent's ability to follow specific instructions decreases as [total context volume](../../patterns/anti-patterns/infinite-context.md) grows.
 
 Prevention: Load the minimum context needed. Use `#file` references for specific files, not `#codebase` for everything. Let skills and Spaces provide on-demand context rather than preloading.
 
 ### The yes-man agent
 
-What it is: The [yes-man agent](../../anti-patterns/yes-man-agent.md) executes every request without flagging problems — missing requirements, contradictory instructions, tasks that conflict with the codebase's existing patterns.
+What it is: The [yes-man agent](../../patterns/anti-patterns/yes-man-agent.md) executes every request without flagging problems — missing requirements, contradictory instructions, tasks that conflict with the codebase's existing patterns.
 
 Why it's dangerous: Errors ship at machine speed. A human developer would say "this doesn't make sense because..." — the default agent just does it.
 
@@ -406,7 +406,7 @@ Prevention: One task per Copilot session. One PR per task. If you spot something
 
 ### Happy path bias
 
-What it is: Agent-generated code that works for the [common case but breaks on edge cases](../../anti-patterns/happy-path-bias.md), error paths, and boundary conditions.
+What it is: Agent-generated code that works for the [common case but breaks on edge cases](../../patterns/anti-patterns/happy-path-bias.md), error paths, and boundary conditions.
 
 Why it's dangerous: The happy path is what you test manually and demo to stakeholders. The edge cases are what breaks in production at 2 AM.
 
@@ -486,7 +486,7 @@ Total human time: ~5 minutes of review. The agent handled investigation, fix, te
 - Progressive disclosure is a budget pattern: preload only universal rules; load task-specific knowledge on demand via skills. Agent definitions should be under 50 lines. Instructions files under 100.
 - Context rot is real. Long sessions degrade output quality, especially for reasoning tasks. Start fresh sessions for complex work. Use `/compact` in the CLI. Break large tasks into agent-sized chunks.
 - Frame tasks as contracts (goal, constraints, success condition, recovery), not step-by-step scripts. The agent decides how; you define what and how to verify.
-- [Steer early or restart](../../agent-design/steering-running-agents.md). Don't wait for the agent to finish a wrong approach. The earlier you intervene, the less context is polluted.
+- [Steer early or restart](../../patterns/agent-design/steering-running-agents.md). Don't wait for the agent to finish a wrong approach. The earlier you intervene, the less context is polluted.
 - [Agent self-review](../../code-review/agent-self-review-loop.md) handles mechanical checks. Human review should focus on design, completeness, and implicit knowledge the agent can't access.
 - Name failure modes explicitly. "Handle the case where X is null" produces better error handling than "handle errors." Specificity in the delegation contract translates directly to code quality.
 
@@ -513,15 +513,15 @@ Context Engineering
 
 Agent Design
 
-- [Progressive Disclosure for Agents](../../agent-design/progressive-disclosure-agents.md) — minimal definitions, on-demand skills
-- [Delegation Decision](../../agent-design/delegation-decision.md) — when to delegate vs do it yourself
-- [Steering Running Agents](../../agent-design/steering-running-agents.md) — mid-run course correction
+- [Progressive Disclosure for Agents](../../patterns/agent-design/progressive-disclosure-agents.md) — minimal definitions, on-demand skills
+- [Delegation Decision](../../patterns/agent-design/delegation-decision.md) — when to delegate vs do it yourself
+- [Steering Running Agents](../../patterns/agent-design/steering-running-agents.md) — mid-run course correction
 - [Agent Self-Review Loop](../../code-review/agent-self-review-loop.md) — automated pre-human review
-- [Agent Backpressure](../../agent-design/agent-backpressure.md) — how type systems and tests enable agent autonomy
+- [Agent Backpressure](../../patterns/agent-design/agent-backpressure.md) — how type systems and tests enable agent autonomy
 
 Anti-Patterns
 
-- [Trust Without Verify](../../anti-patterns/trust-without-verify.md) — accepting polished output without verification
-- [Infinite Context](../../anti-patterns/infinite-context.md) — context volume vs quality trade-off
-- [Yes-Man Agent](../../anti-patterns/yes-man-agent.md) — agents that execute without flagging problems
-- [Happy Path Bias](../../anti-patterns/happy-path-bias.md) — missing edge cases and error paths
+- [Trust Without Verify](../../patterns/anti-patterns/trust-without-verify.md) — accepting polished output without verification
+- [Infinite Context](../../patterns/anti-patterns/infinite-context.md) — context volume vs quality trade-off
+- [Yes-Man Agent](../../patterns/anti-patterns/yes-man-agent.md) — agents that execute without flagging problems
+- [Happy Path Bias](../../patterns/anti-patterns/happy-path-bias.md) — missing edge cases and error paths

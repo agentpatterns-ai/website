@@ -94,7 +94,7 @@ Prompt layering assumes the model will respect layer precedence, but that assump
 
 - Silent contradictions go undetected. When project instructions and a skill both define a convention differently, the model picks one without signaling the conflict. A flat single-layer system prompt makes contradictions at least visible in one file.
 - [Compliance degrades with stack depth](../instructions/instruction-compliance-ceiling.md). Each added layer increases total instruction volume. Beyond the compliance ceiling, low-priority rules (typically the project layer) are silently dropped. Ten critical rules in a flat prompt outperform forty rules spread across four layers.
-- Subagent isolation amplifies drift. [Subagents](../multi-agent/sub-agents-fan-out.md) start fresh. If the parent's project layer is not explicitly passed, the subagent ignores those conventions entirely. Layering without an explicit injection protocol is operationally equivalent to having no project layer for subagents.
+- Subagent isolation amplifies drift. [Subagents](../patterns/multi-agent/sub-agents-fan-out.md) start fresh. If the parent's project layer is not explicitly passed, the subagent ignores those conventions entirely. Layering without an explicit injection protocol is operationally equivalent to having no project layer for subagents.
 
 ## Related
 

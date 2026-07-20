@@ -86,7 +86,7 @@ AI agents excel at pattern-matching defect databases and applying consistent rul
 
 ## Related
 
-- [Law of Triviality in AI PRs](../anti-patterns/law-of-triviality-ai-prs.md) — why large AI-generated diffs get rubber-stamped while small changes attract debate
+- [Law of Triviality in AI PRs](../patterns/anti-patterns/law-of-triviality-ai-prs.md) — why large AI-generated diffs get rubber-stamped while small changes attract debate
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — design principle for the verbosity problem quantified here (29.6 vs 4.1 tokens/LOC)
 - [Agent-Assisted Code Review](agent-assisted-code-review.md) — prescriptive guide for AI-first review that this page provides empirical backing for
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — PR authoring acceptance rates, complementary to the review suggestion adoption rates here

@@ -32,7 +32,7 @@ This is not metaphor. Each factor gates the next:
 - A precise prompt in an empty context window produces hallucinated output. The model has nothing to ground against. ([Context engineering](../../context-engineering/context-engineering.md) addresses this: "the context window is the agent's entire world.")
 - A well-structured context with vague instructions produces inconsistent output. The model has material but no constraint on how to use it. ([System prompt altitude](../../instructions/system-prompt-altitude.md) addresses this: prompts that are too vague give no real constraint.)
 - A good prompt and rich context routed through a poorly designed tool interface produces malformed actions. The model knows what to do but cannot express it through the tool's parameters. ([Tool engineering](../../tool-engineering/tool-engineering.md) addresses this: "agent quality is bounded by tool quality.")
-- All three working well without a harness produces output that requires manual verification of every result. The agent cannot self-correct. ([Harness engineering](../../agent-design/harness-engineering.md) addresses this: environment design determines whether agents succeed by default.)
+- All three working well without a harness produces output that requires manual verification of every result. The agent cannot self-correct. ([Harness engineering](../../patterns/agent-design/harness-engineering.md) addresses this: environment design determines whether agents succeed by default.)
 
 The multiplication model explains why teams that invest in only one discipline hit ceilings. Doubling prompt quality when context design is poor yields marginal improvement. Investing in harness when tool interfaces are broken gives the agent better feedback on outputs it cannot produce correctly.
 
@@ -44,13 +44,13 @@ The multiplication model explains why teams that invest in only one discipline h
 
 A well-crafted instruction in a system prompt occupies a fixed position. As the session runs, [attention decays](../../context-engineering/context-window-dumb-zone.md) -- tokens in the middle of a long context receive less weight than recent tool outputs. An instruction that worked at turn 3 may be functionally invisible by turn 30.
 
-Context engineering compensates: [progressive disclosure](../../agent-design/progressive-disclosure-agents.md) keeps the active context lean, [compaction](../../context-engineering/context-compression-strategies.md) frees budget, and restating constraints in recent messages exploits the recency bias. Without these mechanisms, prompt quality has a half-life measured in conversation turns.
+Context engineering compensates: [progressive disclosure](../../patterns/agent-design/progressive-disclosure-agents.md) keeps the active context lean, [compaction](../../context-engineering/context-compression-strategies.md) frees budget, and restating constraints in recent messages exploits the recency bias. Without these mechanisms, prompt quality has a half-life measured in conversation turns.
 
 ### Context without harness requires manual verification
 
 A well-designed context window -- the right files loaded, the right instructions in position, the right tool outputs structured cleanly -- produces a high probability of correct output. Probability is not certainty.
 
-[Harness engineering](../../agent-design/harness-engineering.md) converts probability into mechanical guarantee. Type checkers, linters, and test suites provide [backpressure](../../agent-design/agent-backpressure.md): the agent iterates until checks pass. Without a harness, every output requires a human to verify what the type system could have verified automatically. This is the [verification bottleneck inversion](../../human/rigor-relocation.md) -- agents produce code faster than teams can review it, and only mechanical enforcement scales.
+[Harness engineering](../../patterns/agent-design/harness-engineering.md) converts probability into mechanical guarantee. Type checkers, linters, and test suites provide [backpressure](../../patterns/agent-design/agent-backpressure.md): the agent iterates until checks pass. Without a harness, every output requires a human to verify what the type system could have verified automatically. This is the [verification bottleneck inversion](../../human/rigor-relocation.md) -- agents produce code faster than teams can review it, and only mechanical enforcement scales.
 
 ### Tools determine the action space
 
@@ -60,7 +60,7 @@ A tool with ambiguous parameter names causes selection errors. A tool that retur
 
 ### Harness without prompts produces correct but wrong output
 
-A comprehensive test suite and strict type system provide the [mechanical backpressure](../../agent-design/harness-engineering.md) that ensures the agent's code compiles and passes checks. They do not ensure the code solves the right problem. [Prompt altitude](../../instructions/system-prompt-altitude.md) provides the reasoning heuristics -- how to approach authentication code, when to flag missing requirements, which patterns to prefer. Harness catches mechanical errors; prompts shape intent.
+A comprehensive test suite and strict type system provide the [mechanical backpressure](../../patterns/agent-design/harness-engineering.md) that ensures the agent's code compiles and passes checks. They do not ensure the code solves the right problem. [Prompt altitude](../../instructions/system-prompt-altitude.md) provides the reasoning heuristics -- how to approach authentication code, when to flag missing requirements, which patterns to prefer. Harness catches mechanical errors; prompts shape intent.
 
 ---
 
@@ -72,7 +72,7 @@ A comprehensive test suite and strict type system provide the [mechanical backpr
 | When | At the moment you ask or at session start | Before the session (instruction files, skills), during (tool results, steering), and across sessions (memory) | At design time -- before any agent session runs | Before any session -- baked into the codebase and toolchain |
 | Optimises for | A good answer to this question | Consistent quality across all questions in this codebase | Reliable agent actions -- correct tool selection, correct parameters, parseable output | Agent self-correction -- the agent iterates until checks pass without human intervention |
 | Who does it | The person asking | The team, via committed configuration files | The team, via tool definitions and MCP server design | The team, via tooling investments (types, tests, linters, hooks) |
-| Failure mode | Bad answer to one question | Inconsistent results across sessions; [context pollution](../../anti-patterns/session-partitioning.md) dilutes attention | Wrong tool selected, malformed parameters, [verbose output consuming budget](../../tool-engineering/semantic-tool-output.md) | Agent cannot verify its own work -- every output requires manual review |
+| Failure mode | Bad answer to one question | Inconsistent results across sessions; [context pollution](../../patterns/anti-patterns/session-partitioning.md) dilutes attention | Wrong tool selected, malformed parameters, [verbose output consuming budget](../../tool-engineering/semantic-tool-output.md) | Agent cannot verify its own work -- every output requires manual review |
 | Durability | Per-message | Per-repo, evolves with configuration | Per-tool, versioned with the tool definition | Permanent -- compounds across all agents, all sessions, all team members |
 
 This table extends the comparison from the [Copilot context and workflows module](../copilot/context-and-workflows.md). The addition of tool engineering as a fourth column reflects a failure mode that the three-column model misses: agents that understand the task and have the right context but cannot execute because the tool interface is wrong.
@@ -88,7 +88,7 @@ When agent output is wrong, the fix depends on which factor is the bottleneck. M
 | Agent ignores a specific instruction | Context | Is the instruction in a [high-attention position](../../context-engineering/attention-sinks.md)? Has the session accumulated enough history to push it into the [low-attention zone](../../context-engineering/context-window-dumb-zone.md)? |
 | Agent follows instructions but produces wrong approach | Prompt | Is the instruction at the [right altitude](../../instructions/system-prompt-altitude.md) -- a reasoning heuristic, not a brittle case enumeration? |
 | Agent understands the task but produces malformed actions | Tool | Does the tool interface have [clear parameter names, examples, and error messages](../../tool-engineering/tool-engineering.md)? |
-| Agent produces plausible code that fails in unexpected ways | Harness | Does the codebase have [type coverage, test coverage, and linter rules](../../agent-design/harness-engineering.md) that would catch this class of error? |
+| Agent produces plausible code that fails in unexpected ways | Harness | Does the codebase have [type coverage, test coverage, and linter rules](../../patterns/agent-design/harness-engineering.md) that would catch this class of error? |
 | Agent output quality degrades over a long session | Context | Is the session suffering from [context rot](../../context-engineering/context-compression-strategies.md)? Start a fresh session with precisely loaded files. |
 | Agent selects the wrong tool for the task | Tool | Are tool descriptions [distinct enough](../../tool-engineering/tool-engineering.md) for the model to differentiate? Do similar tools have overlapping docstrings? |
 | Agent produces correct code that solves the wrong problem | Prompt | Did the [delegation contract](../copilot/context-and-workflows.md) specify success conditions and constraints, or only the goal? |
@@ -102,9 +102,9 @@ The diagnostic sequence: check harness first (is there mechanical feedback?), th
 Most teams follow a predictable sequence:
 
 1. Prompts first. Individual developers write better messages. Results improve for that developer, that session. Nothing compounds.
-2. Context second. Teams commit instruction files, configure [progressive disclosure](../../agent-design/progressive-disclosure-agents.md), manage context budgets. Results improve per-repo. Knowledge survives across sessions.
+2. Context second. Teams commit instruction files, configure [progressive disclosure](../../patterns/agent-design/progressive-disclosure-agents.md), manage context budgets. Results improve per-repo. Knowledge survives across sessions.
 3. Tools third. Teams invest in tool descriptions, [MCP server design](../../tool-engineering/mcp-server-design.md), structured output, and [poka-yoke parameter design](../../tool-engineering/poka-yoke-agent-tools.md). Agent actions become reliable. The gap between "knows what to do" and "can do it" closes.
-4. Harness last. Teams build [mechanical enforcement](../../agent-design/harness-engineering.md) -- custom linters, structural tests, CI gates. Agent output becomes self-verifying. The [verification bottleneck](../../human/rigor-relocation.md) breaks.
+4. Harness last. Teams build [mechanical enforcement](../../patterns/agent-design/harness-engineering.md) -- custom linters, structural tests, CI gates. Agent output becomes self-verifying. The [verification bottleneck](../../human/rigor-relocation.md) breaks.
 
 The progression is natural but suboptimal. Harness engineering has the highest durability -- a linter rule catches a dependency violation in every session, for every agent, for every team member. The earlier you invest in harness, the more the other three disciplines compound against a reliable verification base.
 
@@ -141,7 +141,7 @@ The pattern that emerges from this exercise is consistent: most teams attribute 
 
 - Agent output quality is a product of four factors -- a zero in any one zeros the result, regardless of investment in the others.
 - Diagnose failures by discipline before fixing them. The symptom determines the factor; the factor determines the fix.
-- [Harness engineering](../../agent-design/harness-engineering.md) has the highest durability. A linter rule persists across all sessions, agents, and team members. A prompt fix lasts one message.
+- [Harness engineering](../../patterns/agent-design/harness-engineering.md) has the highest durability. A linter rule persists across all sessions, agents, and team members. A prompt fix lasts one message.
 - The natural progression (prompts, context, tools, harness) is suboptimal. Investing in harness earlier makes every subsequent prompt and context investment more effective, the way the [compound engineering loop](../../workflows/compound-engineering.md) intends.
 - Context engineering makes prompts land -- position, recency, and budget determine whether instructions receive attention.
 - Tool engineering determines the action space -- agents cannot do what the tool interface does not support.
@@ -163,7 +163,7 @@ Complementary module
 Source pages
 
 - [Context Engineering](../../context-engineering/context-engineering.md) -- the foundational discipline
-- [Harness Engineering](../../agent-design/harness-engineering.md) -- environment design for agent reliability
+- [Harness Engineering](../../patterns/agent-design/harness-engineering.md) -- environment design for agent reliability
 - [Tool Engineering](../../tool-engineering/tool-engineering.md) -- tool interface design principles
 - [System Prompt Altitude](../../instructions/system-prompt-altitude.md) -- calibrating instruction specificity
 - [Rigor Relocation](../../human/rigor-relocation.md) -- where engineering discipline moves when agents write code

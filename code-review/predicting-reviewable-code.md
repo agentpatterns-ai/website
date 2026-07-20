@@ -126,7 +126,7 @@ Pre-flagging adds value when the cost of reviewer time exceeds the cost of runni
 - Cross-file call graphs are expensive: dead code detection that only inspects the generated module (as in the `flag_dead_code` example above) misses legitimate calls from existing files. Building a full project call graph adds pipeline latency and may require language-specific tooling.
 - Single-study generalization risk: the AUC 87.1% result comes from one codebase and one AI model. Feature importance will differ across languages, project types, and model generations — validate false-positive rates locally before routing suppressions to the agent.
 - False negatives pass bad code unexamined: a 12.9% error rate leaves roughly 1-in-8 deletable functions unflagged. Reviewers who lean on the report may skip unflagged code too quickly, raising the cost of each missed deletion.
-- False positives block valid abstractions: a utility called only once looks like over-engineering by metrics but may be essential for testability or extension. Flags routed back to the agent can regenerate away intentional design decisions — the inverse risk to the [abstraction bloat](../anti-patterns/abstraction-bloat.md) the pattern targets.
+- False positives block valid abstractions: a utility called only once looks like over-engineering by metrics but may be essential for testability or extension. Flags routed back to the agent can regenerate away intentional design decisions — the inverse risk to the [abstraction bloat](../patterns/anti-patterns/abstraction-bloat.md) the pattern targets.
 - Feedback loop without calibration: returning flags for regeneration without calibrating "spec scope" can cause under-generation in later tasks. A regeneration limit and human fallback prevent loops.
 
 ## Key Takeaways
@@ -144,5 +144,5 @@ Pre-flagging adds value when the cost of reviewer time exceeds the cost of runni
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Tiered Code Review: AI-First with Human Escalation](tiered-code-review.md)
 - [Risk-Based Task Sizing for Agent Verification Depth](../verification/risk-based-task-sizing.md)
-- [Abstraction Bloat](../anti-patterns/abstraction-bloat.md) — the training incentive that produces over-engineered code and drives the over-engineering deletion category
+- [Abstraction Bloat](../patterns/anti-patterns/abstraction-bloat.md) — the training incentive that produces over-engineered code and drives the over-engineering deletion category
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)

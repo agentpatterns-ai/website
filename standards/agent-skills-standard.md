@@ -55,7 +55,7 @@ Tools discover skills from three locations, in order of precedence:
 2. User skills — `~/.claude/skills/` — local to the developer, available across all projects
 3. Plugin skills — distributed as part of an installable plugin bundle
 
-Agents load skills on demand. When a task matches a skill's scope, the agent reads `SKILL.md` and any referenced supporting files. This applies the progressive disclosure pattern to knowledge distribution — see [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md).
+Agents load skills on demand. When a task matches a skill's scope, the agent reads `SKILL.md` and any referenced supporting files. This applies the progressive disclosure pattern to knowledge distribution — see [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md).
 
 ## Portability value
 
@@ -139,7 +139,7 @@ The standard adds value only when skills need to cross tool or team boundaries. 
 
 ## Related
 
-- [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
+- [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md)
 - [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md)
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](plugin-packaging.md)
 - [Cross-Tool Translation: Learning from Multiple AI Assistants](../human/cross-tool-translation.md)

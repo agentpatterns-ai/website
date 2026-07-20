@@ -24,7 +24,7 @@ Model IDs have finite lifespans. Anthropic defines a four-stage lifecycle — Ac
 
 Deprecation windows are short and getting shorter. As of 2026-04-23, `claude-sonnet-4-20250514` and `claude-opus-4-20250514` were deprecated on 2026-04-14 with retirement scheduled for 2026-06-15 — a 62-day window ([Anthropic: Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations)). On GitHub Copilot, deprecation windows are tighter: GPT-5.1 and its Codex variants were deprecated on 2026-04-03 with migration to GPT-5.3-Codex ([GitHub Changelog: GPT-5.1 deprecated](https://github.blog/changelog/2026-04-03-gpt-5-1-codex-gpt-5-1-codex-max-and-gpt-5-1-codex-mini-deprecated)), and Opus 4.6 Fast was retired from the Pro+ tier on the same day it was announced, 2026-04-10 ([GitHub Changelog: Opus 4.6 Fast retired](https://github.blog/changelog/2026-04-10-enforcing-new-limits-and-retiring-opus-4-6-fast-from-copilot-pro)).
 
-The operational wrapper sits above model-routing patterns like [cost-aware agent design](../token-engineering/cost-aware-agent-design.md) and [cross-vendor competitive routing](../agent-design/cross-vendor-competitive-routing.md). Routing chooses which model handles a task; lifecycle management keeps that choice viable when providers force a change.
+The operational wrapper sits above model-routing patterns like [cost-aware agent design](../token-engineering/cost-aware-agent-design.md) and [cross-vendor competitive routing](../patterns/agent-design/cross-vendor-competitive-routing.md). Routing chooses which model handles a task; lifecycle management keeps that choice viable when providers force a change.
 
 ## Two failure modes
 
@@ -62,7 +62,7 @@ Use display-name aliases (`claude-opus-4-7`) where possible, and pin full dated 
 
 The regression suite runs a fixed set of representative tasks against the current production model and records outputs as the baseline. Before any migration, the same suite runs against the candidate successor. Behavioral drift surfaces as eval deltas; API-level changes surface as request failures.
 
-Keep evals covering the dimensions Anthropic flags as drift-prone in the migration guide: response length calibration, literal instruction following, tool-call frequency, subagent spawning, and effort-level honoring ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)). These five dimensions distinguish a "same-model-ID-different-number" migration from a true drop-in replacement. Pair this with general eval-design practice from [golden query pairs regression](../verification/golden-query-pairs-regression.md) and [LLM-as-judge evaluation](./llm-as-judge-evaluation.md).
+Keep evals covering the dimensions Anthropic flags as drift-prone in the migration guide: response length calibration, literal instruction following, tool-call frequency, subagent spawning, and effort-level honoring ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)). These five dimensions distinguish a "same-model-ID-different-number" migration from a true drop-in replacement. Pair this with general eval-design practice from [golden query pairs regression](../verification/golden-query-pairs-regression.md) and [LLM-as-judge evaluation](llm-as-judge-evaluation.md).
 
 ### 3. Canary migration
 
@@ -113,8 +113,8 @@ This timeline fits inside Anthropic's 60-day notice. For a Copilot same-day reti
 - [Model-ID-as-Dependency: Migration Protocol for Deprecation Churn](model-deprecation-migration-protocol.md) — the codebase-side complement: how to treat pinned model IDs as dependencies inside the repo
 - [Prompt-Rewrite Discipline on Cross-Generation Model Migration](../instructions/prompt-rewrite-on-cross-generation-migration.md) — the prompt-rewrite step required when behavioral drift is non-trivial
 - [Tokenizer Swap Tax](../token-engineering/tokenizer-swap-tax.md) — budgeting for migrations that change token counts, expanding the canary cost-normalization concern
-- [Perceived Model Degradation](../anti-patterns/perceived-model-degradation.md) — distinguishes real regressions (this workflow's eval target) from perceived ones (vibes)
-- [Cross-Vendor Competitive Routing](../agent-design/cross-vendor-competitive-routing.md) — platform-level fallback when one vendor's successor fails eval
+- [Perceived Model Degradation](../patterns/anti-patterns/perceived-model-degradation.md) — distinguishes real regressions (this workflow's eval target) from perceived ones (vibes)
+- [Cross-Vendor Competitive Routing](../patterns/agent-design/cross-vendor-competitive-routing.md) — platform-level fallback when one vendor's successor fails eval
 - [Canary Rollout for Agent Policy Changes](canary-rollout-agent-policy.md) — the traffic-split discipline reused in the migration step
 - [Golden Query Pairs Regression](../verification/golden-query-pairs-regression.md) — regression eval structure for per-model baselines
 - [Behavioral Testing for Agents](../verification/behavioral-testing-agents.md) — covers non-deterministic workloads where output-match regression is not viable

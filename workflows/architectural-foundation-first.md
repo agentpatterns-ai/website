@@ -111,9 +111,9 @@ This file is the boundary between the foundation you built by hand and every age
 
 ## Related
 
-- [Session Initialization Ritual](../agent-design/session-initialization-ritual.md)
+- [Session Initialization Ritual](../patterns/agent-design/session-initialization-ritual.md)
 - [Encode Project Conventions in AGENTS.md Files](../instructions/agents-md-distributed-conventions.md)
 - [The Plan-First Loop](plan-first-loop.md)
-- [Codebase Readiness for Agents](../agent-design/codebase-readiness.md)
+- [Codebase Readiness for Agents](../patterns/agent-design/codebase-readiness.md)
 - [Skeleton Projects as Scaffolding](skeleton-projects-as-scaffolding.md)
 - [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)

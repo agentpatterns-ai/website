@@ -71,7 +71,7 @@ Graduated stages let the agent degrade step by step rather than hitting a single
 
 ## What to preserve in summaries
 
-Summaries that only capture "what happened" without "what matters next" cause [objective drift](../anti-patterns/objective-drift.md). An effective summary structure:
+Summaries that only capture "what happened" without "what matters next" cause [objective drift](../patterns/anti-patterns/objective-drift.md). An effective summary structure:
 
 | Section | Content |
 |---------|---------|
@@ -91,7 +91,7 @@ The effect is measurable. One empirical study reports that pruning context to th
 Compression degrades task continuity when applied incorrectly:
 
 - Silent context loss: aggressive summarization drops subtle constraints whose importance only emerges later. [Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) recommends starting with maximum recall and iterating toward precision, not the reverse.
-- Premature compaction: a too-low threshold forces lossy summarization when context is still navigable, causing [objective drift](../anti-patterns/objective-drift.md) if it omits scope constraints.
+- Premature compaction: a too-low threshold forces lossy summarization when context is still navigable, causing [objective drift](../patterns/anti-patterns/objective-drift.md) if it omits scope constraints.
 - Broken recoverability: offloaded payloads deleted or moved after compaction cannot be re-read, which makes the approach worse than in-context storage. The observation store must persist for the full session lifetime.
 - Compounding errors across cycles: each cycle introduces summarization error. Long sessions accumulate drift a single summary cannot undo.
 
@@ -105,7 +105,7 @@ Compression degrades task continuity when applied incorrectly:
 
 - Tiered compression applies in sequence: offload large tool responses first, then summarise history.
 - Five-stage compaction provides graduated degradation instead of a single compression cliff.
-- Summaries must preserve task objective, current state, and next steps — [not just action history](../anti-patterns/objective-drift.md).
+- Summaries must preserve task objective, current state, and next steps — [not just action history](../patterns/anti-patterns/objective-drift.md).
 - Offloading preserves recoverability; summarisation is lossy — retain decision rationale, not just outcomes.
 - Compaction reuses the cached system-prompt prefix, so a `cache_control` breakpoint keeps post-compaction turns cheap.
 
@@ -142,4 +142,4 @@ The summarizer prompt structure maps to the preservation table above: objective,
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
 - [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md)
 - [Goal Recitation: Countering Drift in Long Sessions](goal-recitation.md)
-- [The Infinite Context](../anti-patterns/infinite-context.md)
+- [The Infinite Context](../patterns/anti-patterns/infinite-context.md)

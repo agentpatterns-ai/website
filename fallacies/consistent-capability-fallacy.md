@@ -43,7 +43,7 @@ The natural language interface masks failures. Models produce confident, plausib
 
 ## Example
 
-A team delegates a complex architectural refactor to Claude Code. The model handles it well and restructures several services with correct dependency handling. Encouraged, the team delegates a "simpler" task the next sprint: updating multi-step data validation logic across a module. This task fails silently. The model carries an incorrect assumption through every updated path, and the output looks plausible. [No one checks](../anti-patterns/trust-without-verify.md) because the model "already proved itself" on a harder task.
+A team delegates a complex architectural refactor to Claude Code. The model handles it well and restructures several services with correct dependency handling. Encouraged, the team delegates a "simpler" task the next sprint: updating multi-step data validation logic across a module. This task fails silently. The model carries an incorrect assumption through every updated path, and the output looks plausible. [No one checks](../patterns/anti-patterns/trust-without-verify.md) because the model "already proved itself" on a harder task.
 
 The architectural task was well represented in training patterns. The validation logic needed algorithmic precision the model approximated badly. From the model's point of view, these were not similar tasks.
 
@@ -65,8 +65,8 @@ The fallacy is most dangerous for tasks that look familiar but need compositiona
 
 ## Related
 
-- [Trust Without Verify](../anti-patterns/trust-without-verify.md) — accepting agent output without structural review
-- [The Effortless AI Fallacy](../anti-patterns/effortless-ai-fallacy.md)
+- [Trust Without Verify](../patterns/anti-patterns/trust-without-verify.md) — accepting agent output without structural review
+- [The Effortless AI Fallacy](../patterns/anti-patterns/effortless-ai-fallacy.md)
 - [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md) — building a new product agent-first with decomposed tasks and human review at PR boundaries
 - [The Task Framing Irrelevance Fallacy](task-framing-irrelevance-fallacy.md) — prompt wording and framing cause measurable performance variation
 - [LLM Comprehension Fallacy](llm-comprehension-fallacy.md) — correct output does not imply understanding or reliable capability

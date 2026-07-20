@@ -99,7 +99,7 @@ The decoupled measurement reveals which side of the Pareto frontier the workload
 
 - [Token-Efficient Code Generation](../token-engineering/token-efficient-code-generation.md) — AST-preserving structural transforms that cut tokens without removing semantic content, a lower-risk alternative on the generation side.
 - [Semantic Density Optimization](semantic-density-optimization.md) — The compression paradox: removing semantic content shifts cost from input tokens to reasoning, explaining the mechanism behind the SWE-bench regression.
-- [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md) — A related anti-pattern: instructing the agent to "be efficient" creates a competing objective that degrades work in similar ways.
+- [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — A related anti-pattern: instructing the agent to "be efficient" creates a competing objective that degrades work in similar ways.
 - [Validating Token-Optimized Formats Inside Agentic Loops](validate-token-optimized-formats-in-agentic-loops.md) — A parallel input-side compression trade-off in tool-schema notation, with the same input-vs-end-to-end measurement gap.
 - [Prompt Compression](prompt-compression.md) — Compressing instruction prose for the same goal at a different layer; lower accuracy risk than code minification.
 - [Context Budget Allocation](context-budget-allocation.md) — Distributing the token budget across sources; minification is one lever, but not the only one.

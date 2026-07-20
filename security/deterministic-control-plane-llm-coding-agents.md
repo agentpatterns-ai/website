@@ -89,7 +89,7 @@ The control plane imposes governance on an artefact whose behavioural impact is 
 
 | Page | Surface it covers |
 |---|---|
-| [Configuration Smells in AGENTS.md Files](../anti-patterns/configuration-smells-agents-md.md) | Defects *within* one config file; intra-file content audit |
+| [Configuration Smells in AGENTS.md Files](../patterns/anti-patterns/configuration-smells-agents-md.md) | Defects *within* one config file; intra-file content audit |
 | [Gate Agent Writes to Executable Config Files](gate-agent-writes-to-executable-config.md) | Write-time gating of agent edits to *execution-grant* config (`.npmrc`, `.devcontainer/`) inside one workspace |
 | [Prompt Governance via PRs](../instructions/prompt-governance-via-pr.md) | PR-based review of *one repo's* instruction file; the change-management surface |
 | [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) | Adversarial payloads hidden in shared *skill* registries |
@@ -106,7 +106,7 @@ The control plane imposes governance on an artefact whose behavioural impact is 
 
 ## Related
 
-- [Configuration Smells in AGENTS.md Files (Six-Smell Catalog)](../anti-patterns/configuration-smells-agents-md.md) — intra-file defect catalogue; the complementary surface to this page's cross-repo dimension.
+- [Configuration Smells in AGENTS.md Files (Six-Smell Catalog)](../patterns/anti-patterns/configuration-smells-agents-md.md) — intra-file defect catalogue; the complementary surface to this page's cross-repo dimension.
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — write-time gating for execution-grant files; same supply-chain concern, different action class.
 - [Prompt Governance via PRs](../instructions/prompt-governance-via-pr.md) — PR-based review of instruction file changes within one repo.
 - [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — adjacent supply-chain page; manifest-side controls vs this page's config-side controls.

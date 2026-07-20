@@ -68,7 +68,7 @@ The check run "always completes with a neutral conclusion so it never blocks mer
 |---------|-------|----------|
 | [Committee review](committee-review-pattern.md) | Fan-out + vote/defer, implementer iterates | Accept/revise loop |
 | [Tiered code review](tiered-code-review.md) | Risk classification routes to different reviewers | Per-tier approval gate |
-| [Fan-out synthesis](../multi-agent/fan-out-synthesis.md) | Parallel generation + synthesis merge | Merged output |
+| [Fan-out synthesis](../patterns/multi-agent/fan-out-synthesis.md) | Parallel generation + synthesis merge | Merged output |
 | Cloud parallel review | Fan-out + verify + aggregate, cloud-executed | Single posted review |
 
 Load-bearing differentiators: the verification step, cloud execution, and a single posted review rather than an iteration loop.
@@ -131,7 +131,7 @@ A 400-line PR that adds a new API route triggers review on push. The agents fan 
 
 - [Committee Review Pattern](committee-review-pattern.md) — voting-style multi-agent review with implementer iteration, the canonical contrast
 - [Tiered Code Review](tiered-code-review.md) — risk-based escalation across review depths
-- [Fan-Out Synthesis Pattern](../multi-agent/fan-out-synthesis.md) — parallel generation with a synthesis merge step, the generative cousin
+- [Fan-Out Synthesis Pattern](../patterns/multi-agent/fan-out-synthesis.md) — parallel generation with a synthesis merge step, the generative cousin
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md) — tool-calling reviewer architecture that many of these agents use
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — the precision principle the verification step enforces
 - [Agent-Assisted Code Review](agent-assisted-code-review.md) — the broader context of routing review work to agents

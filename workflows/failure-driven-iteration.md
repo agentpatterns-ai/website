@@ -75,11 +75,11 @@ When combined with TDD, failure-driven iteration accelerates the red-green cycle
 
 ## Structured verification cycles
 
-Anthropic's [evaluator-optimizer](../agent-design/evaluator-optimizer.md) pattern formalizes this loop: one LLM generates a response while another provides evaluation and feedback, iterating until quality criteria are met. Agents "iterate on solutions using test results as feedback" ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
+Anthropic's [evaluator-optimizer](../patterns/agent-design/evaluator-optimizer.md) pattern formalizes this loop: one LLM generates a response while another provides evaluation and feedback, iterating until quality criteria are met. Agents "iterate on solutions using test results as feedback" ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
 
 For long-running agents, Anthropic recommends running "a basic end-to-end test before implementing a new feature" at session start, catching undocumented bugs from previous sessions. Git-based recovery ("use git to revert bad code changes and recover working states") creates structured fallback points when iteration stalls ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
-LangChain's [harness engineering](../agent-design/harness-engineering.md) research validates the approach with a structured "Plan & Discovery, Build, Verify, Fix" cycle. [Pre-completion checklists](../verification/pre-completion-checklists.md) force verification before the agent exits, preventing premature completion without testing ([LangChain: Harness Engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
+LangChain's [harness engineering](../patterns/agent-design/harness-engineering.md) research validates the approach with a structured "Plan & Discovery, Build, Verify, Fix" cycle. [Pre-completion checklists](../verification/pre-completion-checklists.md) force verification before the agent exits, preventing premature completion without testing ([LangChain: Harness Engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
 ## When to stop iterating
 

@@ -101,14 +101,14 @@ graph LR
     D --> E["/to-issues<br>decompose"]
 ```
 
-`/grill-me` walks the design tree ([Grill Me technique](../agent-design/grill-me-technique.md)). When a branch cannot be resolved by inspection or by reading the codebase, `/prototype` fires. The verdict the prototype produces feeds the PRD step. The PRD then decomposes into tracer-bullet issues. The prototype directory itself is deleted before the PRD is filed.
+`/grill-me` walks the design tree ([Grill Me technique](../patterns/agent-design/grill-me-technique.md)). When a branch cannot be resolved by inspection or by reading the codebase, `/prototype` fires. The verdict the prototype produces feeds the PRD step. The PRD then decomposes into tracer-bullet issues. The prototype directory itself is deleted before the PRD is filed.
 
 ## When this backfires
 
 The pattern adds cost without value in four conditions:
 
 - Mature, well-specified problem spaces. CRUD on a known schema, library upgrades, refactor under green tests. The design tree is shallow, so the ceremony of building and discarding a prototype exceeds the information it surfaces. Run `/grill-me` → `/to-prd` directly.
-- No import-graph or branch-protection enforcement. Without the structural gates, the skill produces a working artifact that stakeholders or future agents pull into production. The "prototype that ships" anti-pattern dominates and the skill becomes a liability — the same [demo-to-production gap](../anti-patterns/demo-to-production-gap.md) that turns any throwaway artifact into an unmaintained dependency.
+- No import-graph or branch-protection enforcement. Without the structural gates, the skill produces a working artifact that stakeholders or future agents pull into production. The "prototype that ships" anti-pattern dominates and the skill becomes a liability — the same [demo-to-production gap](../patterns/anti-patterns/demo-to-production-gap.md) that turns any throwaway artifact into an unmaintained dependency.
 - Solo work with no audience for the verdict. The skill's value is the durable record. Solo developers under time pressure skip the capture step, lose the answer, and re-prototype the same question next sprint — paying the cost without compounding the learning.
 - Pure-UI tasks with an approved design spec. Generating "radically different variations" behind the `?variant=` switcher when the Figma is signed off is rework, not exploration. The UI branch fires correctly only when the visual treatment itself is the open question.
 
@@ -126,7 +126,7 @@ A prior failure condition is worth naming: the skill never firing at all. Vercel
 
 ## Related
 
-- [Grill Me: Developer-Initiated Plan Interrogation](../agent-design/grill-me-technique.md) — surfaces the design questions that this skill resolves.
+- [Grill Me: Developer-Initiated Plan Interrogation](../patterns/agent-design/grill-me-technique.md) — surfaces the design questions that this skill resolves.
 - [Daily-Use Skill Library: Encoding Your Process as Agent Skills](daily-use-skill-library.md) — the pipeline this skill slots into.
 - [Prototype Before Optimizing](prototype-before-optimizing.md) — temporal-budget pattern; complementary, addresses a different question.
 - [Plan Mode: Read-Only Exploration Before Implementation](../tools/claude/plan-mode.md) — alternative for questions resolvable without writing code.

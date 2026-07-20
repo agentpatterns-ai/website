@@ -100,4 +100,4 @@ Trajectory scoring layers with — not replaces — the rest of the stack: [tool
 - [CaMeL: Separating Control and Data Flow](camel-control-data-flow-injection.md) — structural defense that makes the joint state-action attack model inapplicable
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — O(1) trajectory enforcement that complements per-checkpoint trajectory scoring
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the threat-model framing that places tool output in the untrusted-content leg
-- [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md) — the anti-pattern that per-message tool-feedback screening exemplifies
+- [Single-Layer Prompt Injection Defence](../patterns/anti-patterns/single-layer-injection-defence.md) — the anti-pattern that per-message tool-feedback screening exemplifies

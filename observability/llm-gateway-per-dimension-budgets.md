@@ -67,5 +67,5 @@ The gateway helps only for traffic it can see and price correctly. It backfires 
 - [BYOK Model Token Visibility](byok-model-token-visibility.md) — surfaces per-route token cost in the IDE, the visibility half of the same cost-control problem
 - [Per-Plugin Token-Cost Attribution](plugin-token-cost-attribution.md) — attributes spend to components once traffic is metered
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](../loop-engineering/loop-budgeting.md) — allocates budget inside one loop, below the fleet-wide caps this gateway enforces
-- [Gateway Model Routing](../agent-design/gateway-model-routing.md) — the routing role of the same proxy this page uses for budget enforcement
+- [Gateway Model Routing](../patterns/agent-design/gateway-model-routing.md) — the routing role of the same proxy this page uses for budget enforcement
 - [Developer Control Strategies for AI Coding Agents](../human/developer-control-strategies-ai-agents.md) — the human-side control loop that per-dimension budgets operationalize at the org level

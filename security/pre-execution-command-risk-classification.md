@@ -84,7 +84,7 @@ Adversarial inputs can steer the badge. The Lies-in-the-Loop attack class ([Chec
 
 Color-only signals fail in high-volume sessions. With dozens of green confirmations, attention collapses on the color axis before the reader reaches the summary text. Pair the visual signal with a textual cue (`[SAFE]` / `[CAUTION]` / `[REVIEW]` prefix) to put discriminative load on the word.
 
-Fixed-appearance tiers still habituate. Anderson et al.'s fMRI study, [How Polymorphic Warnings Reduce Habituation in the Brain](https://scholarsarchive.byu.edu/facpub/9306/) (CHI 2015), found that the visual-processing response to a static warning drops sharply by the second exposure, and that polymorphic warnings — ones that vary their appearance across exposures — resist that decay far better. A green "Safe" chip rendered identically across hundreds of commands is that static case: tiering separates Safe from Review-carefully, but the repeated within-tier chip still fades. Tiers reallocate attention across severity levels. They do not defeat the repetition habituation that motivated polymorphic designs and batched surfaces like the [tool confirmation carousel](../agent-design/tool-confirmation-carousel.md).
+Fixed-appearance tiers still habituate. Anderson et al.'s fMRI study, [How Polymorphic Warnings Reduce Habituation in the Brain](https://scholarsarchive.byu.edu/facpub/9306/) (CHI 2015), found that the visual-processing response to a static warning drops sharply by the second exposure, and that polymorphic warnings — ones that vary their appearance across exposures — resist that decay far better. A green "Safe" chip rendered identically across hundreds of commands is that static case: tiering separates Safe from Review-carefully, but the repeated within-tier chip still fades. Tiers reallocate attention across severity levels. They do not defeat the repetition habituation that motivated polymorphic designs and batched surfaces like the [tool confirmation carousel](../patterns/agent-design/tool-confirmation-carousel.md).
 
 Fatigue migrates rather than dissolves. If every command arrives with "Caution" — common in agents that install packages routinely — operators learn to ignore orange the same way they ignored the prompt. On its own, classification shifts where attention collapses, not whether it collapses.
 
@@ -101,7 +101,7 @@ Fatigue migrates rather than dissolves. If every command arrives with "Caution" 
 ## Related
 
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
-- [Tool Confirmation Carousel](../agent-design/tool-confirmation-carousel.md)
+- [Tool Confirmation Carousel](../patterns/agent-design/tool-confirmation-carousel.md)
 - [Permission-Gated Custom Commands](permission-gated-commands.md)
 - [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)

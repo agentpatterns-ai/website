@@ -50,7 +50,7 @@ Knowledge and execution change for different reasons:
 
 Embedding knowledge in agents means a domain change forces agent changes. Embedding execution in skills means a tool change forces skill changes. Separating the two so each changes on its own schedule is the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single-responsibility_principle) applied to agent layers.
 
-This mirrors the [harness engineering](../agent-design/harness-engineering.md) pattern at the system level: Anthropic describes encoding feature requirements in `feature_list.json` and progress in `claude-progress.txt` — moving domain knowledge out of the coding agent's execution logic ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+This mirrors the [harness engineering](../patterns/agent-design/harness-engineering.md) pattern at the system level: Anthropic describes encoding feature requirements in `feature_list.json` and progress in `claude-progress.txt` — moving domain knowledge out of the coding agent's execution logic ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
 ## The anti-pattern: skill scripts
 
@@ -98,7 +98,7 @@ The first version works only in Claude Code and breaks if the tool API changes. 
 - Skills encode what the agent should know (domain rules, heuristics, quality constraints), not what it should do (tool calls, shell commands).
 - Knowledge-only skills are inherently portable — they work across any agent in any tool without modification.
 - Separating knowledge from execution prevents coupled change: domain updates touch skills, process updates touch agents.
-- Skills that embed execution sequences ("skill scripts") are brittle, non-portable, and collapse the [separation of knowledge and execution](../agent-design/separation-of-knowledge-and-execution.md).
+- Skills that embed execution sequences ("skill scripts") are brittle, non-portable, and collapse the [separation of knowledge and execution](../patterns/agent-design/separation-of-knowledge-and-execution.md).
 
 ## When this backfires
 
@@ -111,11 +111,11 @@ Knowledge-only skills fail when:
 
 ## Related
 
-- [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
+- [Separation of Knowledge and Execution](../patterns/agent-design/separation-of-knowledge-and-execution.md)
 - [Skill Authoring Patterns](skill-authoring-patterns.md)
 - [Skill Library Evolution](skill-library-evolution.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
-- [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
+- [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md)
 - [Skill Tool as Enforcement](skill-tool-runtime-enforcement.md)
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md)
 - [On-Demand Skill Hooks](on-demand-skill-hooks.md)

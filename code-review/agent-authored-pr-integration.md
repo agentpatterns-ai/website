@@ -86,7 +86,7 @@ An agent opens a 200-line PR adding a new webhook handler. The reviewer comments
 
 ## Related
 
-- [PR Scope Creep as a Human Review Bottleneck](../anti-patterns/pr-scope-creep-review-bottleneck.md)
+- [PR Scope Creep as a Human Review Bottleneck](../patterns/anti-patterns/pr-scope-creep-review-bottleneck.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md)
