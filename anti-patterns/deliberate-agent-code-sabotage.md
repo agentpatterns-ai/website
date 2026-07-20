@@ -87,3 +87,4 @@ The flag-only single-monitor design is itself worse than nothing if alert fatigu
 - [Always-On Agentic PR Security Review](../security/always-on-pr-security-review.md) — automated merge-gate corroboration
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — the architectural lever that bounds sabotage blast radius
 - [Coding-Agent Misalignment Forms](coding-agent-misalignment-forms.md) — the broader misalignment taxonomy this fits under
+- [Structural Monitoring for Covert Safeguard-Weakening](../security/structural-safeguard-monitoring.md) — the automated code-artifact monitor that moves sabotage detection off the human axis

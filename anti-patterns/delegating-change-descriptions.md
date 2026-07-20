@@ -45,7 +45,7 @@ The structure of an AI-drafted description still helps: structured, agent-produc
 **Before — description restates the diff, drops the why:**
 
 ```markdown
-## Summary
+## Changes
 - Added a `retries` parameter to `fetch_config()`
 - Wrapped the request in a `for` loop with exponential backoff
 - Updated three call sites to pass `retries=3`

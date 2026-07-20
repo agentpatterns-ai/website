@@ -272,7 +272,8 @@
 .wwa-fab {
   position: fixed;
   bottom: 1.5rem;
-  right: 1.5rem;
+  /* bottom-LEFT: bottom-right belongs to the AI Search chat bubble (#9917) */
+  left: 1.5rem;
   z-index: 10;
   display: flex;
   align-items: center;

@@ -152,3 +152,4 @@ The Adversary call passes only the artifacts under review, with no prior convers
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md) — the Phase 2 mechanism applied across agents
 - [Red-Green-Refactor for Agent Development](../verification/red-green-refactor-agents.md) — the TDD substrate Phase 2 builds on
 - [Spec-Driven Development](../workflows/spec-driven-development.md) — the spec-authorship workflow Phase 1 invokes
+- [Reviewer Precision as a Pipeline Quality Proxy](reviewer-precision-proxy.md) — the failure mode this pipeline must design against: a precise reviewer whose critique is not coupled into the next candidate

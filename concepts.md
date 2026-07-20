@@ -560,6 +560,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Minimum-Sufficient Execution: Estimate Scope Before Spending Budget](agent-design/minimum-sufficient-execution.md)
 - [Git-Bound Memory for the Agentic Development Lifecycle](agent-design/git-bound-memory.md)
 - [Epistemic Working Memory for Multi-Hop Reasoning (SLEUTH)](agent-design/epistemic-working-memory-multi-hop-reasoning.md)
+- [Reviewer Precision as a Pipeline Quality Proxy](multi-agent/reviewer-precision-proxy.md)
 
 ## Loop Engineering
 
@@ -811,6 +812,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Vetting Tool Definitions for Exfiltration Signatures](security/vetting-tool-definitions-before-install.md)
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](security/non-human-event-provenance-markers.md)
 - [Setup Documentation as an Install-Time Attack Vector](security/setup-documentation-install-time-attacks.md)
+- [Structural Monitoring for Covert Safeguard-Weakening](security/structural-safeguard-monitoring.md)
 
 ## Testing & Evaluation
 
@@ -945,6 +947,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Verify Observability in Agent-Generated Code](verification/verify-generated-code-observability.md)
 - [Action-Graded Severity for Agent Red-Team Outcomes](verification/action-graded-severity-red-team-outcomes.md)
 - [Evidence-Gated Lifecycle Control for Coding Agents (Proof-or-Stop)](verification/evidence-gated-lifecycle-control.md)
+- [Emulated APIs for Agent Skill Evals](verification/emulated-apis-for-skill-evals.md)
 
 ## Hooks & Guardrails
 
@@ -1000,6 +1003,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Trajectory Logging via Progress Files and Git History](observability/trajectory-logging-progress-files.md)
 - [Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)](observability/trajectory-prefilter-failure-diagnosis.md)
 - [Centralized LLM Gateway for Per-Dimension Agent Budgets](observability/llm-gateway-per-dimension-budgets.md)
+- [Agent-Reactive Bugs at the Model-Harness Boundary](observability/agent-reactive-bugs.md)
 
 ## Standards & Protocols
 
@@ -1315,6 +1319,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [SEO vs GEO — How Signals and Metrics Differ](geo/seo-vs-geo.md)
 - [Topical Authority — Entity Coverage for AI Citation](geo/topical-authority.md)
 - [What is GEO — Generative Engine Optimization Defined](geo/what-is-geo.md)
+- [Agent-Readiness Discovery Surfaces for Docs Sites](geo/agent-readiness-discovery-surfaces.md)
 
 ## Frameworks
 

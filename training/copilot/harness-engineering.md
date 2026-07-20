@@ -300,7 +300,7 @@ For work that spans multiple sessions (multi-day features, large refactors), mai
 - [ ] Add rate limit headers to all responses
 - [ ] Dashboard metrics for rate limit hits
 
-## Notes
+## Implementation Gotchas
 - Rate limiter uses sliding window algorithm, not fixed window
 - Redis key format: `ratelimit:{userId}:{endpoint}`
 - Tests require Redis on port 6379 (docker-compose up redis)

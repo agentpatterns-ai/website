@@ -68,7 +68,7 @@ Scope: directory name or filename stem
 
 ## Page Structure
 
-1. YAML frontmatter with `title`, `description` (80–160 chars), `tags` (≥1)
+1. YAML frontmatter with `title`, `description` (120–160 chars), `tags` (≥1)
 2. H1 matching the `title` field
 3. Blockquote summary (one sentence, defines the concept — not "This page covers…")
 4. Body sections using H2; never skip heading levels

@@ -1,0 +1,179 @@
+{
+  "source": {
+    "repo": "agentpatterns-ai/skills",
+    "ref": "v0.5.0"
+  },
+  "index": {
+    "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+    "skills": [
+      {
+        "name": "architecture-committee",
+        "type": "skill-md",
+        "description": "Convene a debiased multi-persona committee to vet an architecture / design decision for a feature, spec, or PRD — distinct personas independently propose, steelman their pick AND its opposite, cross-examine across capped debate rounds, then converge on the approach that fits THIS spec rather than the model's default priors. Invoke when asked to \"form/convene a committee\", weigh architecture or technology options, or pressure-test a design choice before committing. Skip when you are auditing or detecting problems in an existing instruction file / config (use audit-instruction-file or audit-lethal-trifecta), auditing the coordination mechanics of a multi-agent system already built and running (use audit-multi-agent-orchestration), compressing a prompt (use compress-prompt), or when the decision is trivial / already made and only execution remains.",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/architecture-committee/SKILL.md",
+        "digest": "sha256:76b1d2c3305cf5351824075a989498d2b32d27443ca213266892d6a2f3c0e73f"
+      },
+      {
+        "name": "audit-geo-content",
+        "type": "skill-md",
+        "description": "Audit a documentation / content-markdown corpus for AI answer-engine retrieval and citability (GEO) — chunkability (answer-first, atomic, descriptive headings), assertion density, and machine-readable signals (llms.txt, schema). Invoke when reviewing or hardening published docs for AI citation / generative-engine visibility (\"is this page citable by ChatGPT/Perplexity/Claude?\", a GEO review, or before/after a docs restructure aimed at retrieval). Skip when auditing agent-harness config — tool allowlists, MCP, sandbox/egress (use audit-lethal-trifecta) — or instruction-file prose/attention such as a SKILL.md or CLAUDE.md (use audit-instruction-file); and suppress for private / non-indexed docs.",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-geo-content/SKILL.md",
+        "digest": "sha256:de8f1735710bb5f6ef00b3b173c6485c8b0d5d77bde32e23e9b41d76da804372"
+      },
+      {
+        "name": "audit-github-actions-security",
+        "type": "skill-md",
+        "description": "Audit GitHub Actions workflow files (.github/workflows/*.yml, composite/reusable actions) against the OWASP Top 10 CI/CD Security Risks (CICD-SEC-1..10) — script injection via untrusted ${{ github.event }} expansion, pull_request_target/workflow_run pwn-requests, mutable action pins, over-broad GITHUB_TOKEN perms, long-lived secrets in workflow files where OIDC exists, exposed self-hosted runners, and more. Invoke when reviewing, hardening, or writing a GitHub Actions workflow or its CI/CD pipeline config — including one that runs an agent — or vetting one before merge. Skip when scanning for literal hardcoded credentials or the agent's model-API key posture on harness/context surfaces (use audit-secret-exposure), auditing an agent harness's output/dependency-install sinks (use audit-supply-chain-sinks), the harness's own sandbox/reversibility/kill-path even when the agent runs in CI (use audit-harness-safety), or an agent's private-data x untrusted-input x egress architecture (use audit-lethal-trifecta).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-github-actions-security/SKILL.md",
+        "digest": "sha256:db5373f1a592a10494e9bdeb38ae868de6708f29d055a405a67caed450e864f1"
+      },
+      {
+        "name": "audit-harness-safety",
+        "type": "skill-md",
+        "description": "Audit an agent harness's setup for blast-radius containment and recovery — OS-level sandbox + least-privilege scope, hard deny floors, reversibility, a kill path, and consumption bounds — bounding the *damage* if a control fails. Invoke when hardening a harness for destructive-action safety — before granting write/Bash tools, running an agent headless or in CI, or when it touches the filesystem, real credentials, shared branches, prod, or paid APIs; also reviewing whether damage/spend is bounded if a run goes wrong. Skip when the question is exfiltration / whether a web-access grant is safe (use audit-lethal-trifecta), trusting an LLM-emitted string or agent-run install at the sink — even asked as a sandbox question (use audit-supply-chain-sinks), workflow-YAML injection/token/pin risks (use audit-github-actions-security), a stated rule's enforcement medium — prose vs hook vs deny rule (use audit-prompt-hook-placement), or run visibility — traces, is the runaway auto-halted (use audit-observability-setup).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-harness-safety/SKILL.md",
+        "digest": "sha256:3de0f3973f40cc6210b0da9604bb76bfa4bfb65101c82c0542194e7d81b90161"
+      },
+      {
+        "name": "audit-instruction-file",
+        "type": "skill-md",
+        "description": "Audit agent instruction files (AGENTS.md, CLAUDE.md, .cursorrules, copilot-instructions.md, GEMINI.md, …) — one file, or every always-loaded instruction file in a repo plus its @-import assembly — against context-engineering principles and recommend the smallest fix. Invoke when reviewing, writing, or debugging instruction/memory files, when an agent ignores documented rules in one file, or to diagnose why a rule \"isn't sticking\". Skip when the file is a SKILL.md (use audit-skill-quality), when the goal is to shorten/tighten rather than detect problems (use compress-prompt), when the target is its self-improvement/learning-loop section (use audit-self-improvement-protocol), when a must-never-fail rule needs moving into a hook/gate (use audit-prompt-hook-placement), when editing ordinary docs or code, or when rules across peer files with no defined load order contradict each other (use conflicting-instruction-detector) — cross-layer precedence within one load stack (CLAUDE.md vs a loaded SKILL.md) stays here.",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-instruction-file/SKILL.md",
+        "digest": "sha256:feb4f6d4f70d1cef1534bb6666ee129742cc491e5d204f68872d9c831261b015"
+      },
+      {
+        "name": "audit-lethal-trifecta",
+        "type": "skill-md",
+        "description": "Audit an agent / sub-agent / MCP setup for the lethal trifecta — private-data access + untrusted-content exposure + external egress on one execution path — and flag the injection and exfiltration routes it opens. Invoke when reviewing or hardening an agent harness's security architecture (tool allowlists, MCP servers, sandbox/egress) or before deciding if granting new tools, data, or an outbound channel (web access, send-email, git push) is safe — e.g. a RAG agent gaining web access. Skip when the ask is literal secrets in context (use audit-secret-exposure), validating an LLM-emitted string or lone install at the sink, no private data co-held (use audit-supply-chain-sinks), blast-radius/reversibility containment (use audit-harness-safety), a memory/retrieval boundary where web/email is only stored-content provenance, not a live outbound grant (use audit-memory-retrieval-integrity), instruction-file content/attention (use audit-instruction-file), or application source-code vulnerabilities (use review-code).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-lethal-trifecta/SKILL.md",
+        "digest": "sha256:87ba5b32023f89466621ead6832e3fadd4119b5f75c259d620166cc18f6e5d14"
+      },
+      {
+        "name": "audit-mcp-server",
+        "type": "skill-md",
+        "description": "Audit an MCP server's own declaration — primitive choice (tool/resource/prompt), tool naming, input/output schemas, behavior annotations, error channels, transport fit, server instructions, and tool-count/token budget — the design-rule slice of the MCP spec plus agent-friendliness rules. Invoke when authoring, reviewing, or publishing an MCP server, or vetting a third-party server before wiring it in. Skip when auditing individual tool definitions' ergonomics or verifying annotations against their implementation — even for tools an MCP server exposes (use audit-tool-definition) or the whole agent harness's exfiltration/security architecture (use audit-lethal-trifecta).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-mcp-server/SKILL.md",
+        "digest": "sha256:4bcdff047674a8623d70e41764b88f50df04609a1cfb524ba87d05cc41dc330d"
+      },
+      {
+        "name": "audit-memory-retrieval-integrity",
+        "type": "skill-md",
+        "description": "Audit a retrieval or memory layer — RAG config, vector-store queries, agent memory stores — for its authorization-and-integrity gap — cross-tenant chunk bleed, agent-supplied tenant identity, untokenized PII, and retrieved/remembered content trusted as fact-or-instruction with no provenance tier. Invoke when reviewing a RAG / vector-store / agent-memory pipeline's retrieval boundary — including when web/email is only stored-content provenance (pages an ingestion job fetched, emails it read) and the memory-reading agent holds no live outbound tool — a multi-tenant retrieval path, or wiring retrieved chunks into model context. Skip when the agent under review holds or gains a live outbound channel (web access, send-email, curl, git push) alongside that data (use audit-lethal-trifecta), secret hygiene (use audit-secret-exposure), validating an LLM's output at a sink (use audit-supply-chain-sinks), or the standing protocol for whether the agent may persist learnings at all (use audit-self-improvement-protocol).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-memory-retrieval-integrity/SKILL.md",
+        "digest": "sha256:9802b5a44980105d0724b68c9eaf6b13233e80a2b1f89f83d5e6acac89798b45"
+      },
+      {
+        "name": "audit-multi-agent-orchestration",
+        "type": "skill-md",
+        "description": "Audit an existing multi-agent orchestration's coordination mechanics — typed vs prose handoffs, shared mid-run state, verifier/producer role separation, and loop bounds — and flag the structural smells that make multi-agent systems fail. Invoke when reviewing or hardening a harness that already runs more than one agent (orchestrator-worker, fan-out/synthesis, lead-and-teammates, generator-critic loops), including whether the verifier role is independent of the producer. Skip when deciding whether to go multi-agent at all or which topology (use architecture-committee), auditing the general completion-gating architecture — hooks, ledgers, graders, red-green anchoring (use audit-verification-gates), auditing security legs / prompt-injection (use audit-lethal-trifecta), or a single instruction file's prose (use audit-instruction-file).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-multi-agent-orchestration/SKILL.md",
+        "digest": "sha256:5c19be2a0a03acbacb3707310c843d360a032ab32c983600951e0056beb98467"
+      },
+      {
+        "name": "audit-observability-setup",
+        "type": "skill-md",
+        "description": "Audit an agent harness's observability setup — is a long/autonomous/multi-agent run legible enough to confirm it worked and catch it when it fails — OTel exporters, maxTurns + loop-detection circuit breakers, agent_id trace propagation, per-source context attribution, a wired regression gate, and a trajectory trail. Invoke when reviewing or building a harness that runs long, autonomous, or multi-agent work (settings.json hooks/telemetry, subagent instrumentation, CI eval gates — is one wired and trace-coupled — progress files). Skip when a single-shot/stateless prompt has nothing to instrument, when judging whether a gate's grading is correct (use audit-verification-gates) rather than whether observability is wired, when asking whether a missing turn/spend cap leaves damage unbounded rather than whether the runaway is visible and auto-halted (use audit-harness-safety), or when the cost question is prompt-cache hit-rate — cache_read vs cache_creation metering (use audit-prompt-cache-hygiene).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-observability-setup/SKILL.md",
+        "digest": "sha256:cd57b2c8d2f334ae7f347560696061d95204e1f28a540d29c057a93d54f9a043"
+      },
+      {
+        "name": "audit-prompt-cache-hygiene",
+        "type": "skill-md",
+        "description": "Audit an agent harness — prompt-assembly code, tool-definition serialization, and SDK/CLI cache config — for prompt-cache hygiene — volatile content in the static prefix, non-deterministic or mutated tool enumeration, mid-session model/effort/MCP switches, missing cache-usage monitoring, TTL/idle-shape misfit, cache-busting compaction, and cache-economics misfit. Invoke when reviewing an agent loop / SDK integration / harness that assembles a repeated prompt prefix and calls a hosted model across many turns, to find cache-busting cost regressions. Skip when auditing a prose instruction file's content/attention (use audit-instruction-file), general run-legibility/telemetry wiring — OTel exporters, traces, loop bounds — rather than the cache-hit meter (use audit-observability-setup), or a single-turn / cold-start / local-no-KV-reuse flow with no prefix to protect.",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-prompt-cache-hygiene/SKILL.md",
+        "digest": "sha256:fb57525833c18a41bd5a7fe7a3ee00f26227d6b78a104782ff7b7bd2fc64e8ca"
+      },
+      {
+        "name": "audit-prompt-hook-placement",
+        "type": "skill-md",
+        "description": "Audit the enforcement-medium decision in an agent harness — does each stated rule belong in prose (judgment) or a deterministic gate (PreToolUse hook / CI / tool-restriction)? — and flag misplaced absolute rules and unsound hooks. Invoke when deciding where a rule should live — completion rules included (e.g. whether a tests-must-pass-before-finishing prose rule ought to become a Stop hook), when piled-up prompt prohibitions need relocating to a gate, before trusting a CLAUDE.md prohibition for a must-never-fail constraint, or when adding/reviewing a hook. Skip when judging prose wording/attention/density, or diagnosing why a rule isn't followed with no request to relocate it (use audit-instruction-file), bounding the blast radius of a granted action — sandbox scope, deny floors, reversibility (use audit-harness-safety), the private-data/untrusted-input/egress exfiltration model (use audit-lethal-trifecta), or auditing whether an existing completion gate's anchoring is sound (use audit-verification-gates).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-prompt-hook-placement/SKILL.md",
+        "digest": "sha256:d19495d0649b66e49f740916b96a7b73f13eb83172237867e9779a972c6e010a"
+      },
+      {
+        "name": "audit-secret-exposure",
+        "type": "skill-md",
+        "description": "Scan an agent's context surfaces — instruction files, skill files, harness config, tool defs, and credential-bearing files — for credentials that landed where the model can read them — hardcoded keys, secrets pasted into prompts/tool args, agent-readable .env/key files with no mechanical block, long-lived keys on harness/context surfaces where short-lived tokens exist, URL query-string leak channels, secrets baked into skill examples, and control logic stored in a system prompt. Invoke when granting or hardening an agent's repo/harness and you need a deterministic literal-secret content scan. Skip when auditing a workflow file's own secrets/OIDC posture (use audit-github-actions-security), whether private-data + untrusted-input + egress co-occur on one execution path (use audit-lethal-trifecta) or auditing dependency/install sinks (use audit-supply-chain-sinks).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-secret-exposure/SKILL.md",
+        "digest": "sha256:6440dce22cd4f00a353349b794f13a579346166ff44c5cd2840e735b90bcfc85"
+      },
+      {
+        "name": "audit-self-improvement-protocol",
+        "type": "skill-md",
+        "description": "Audit whether an agent's always-loaded base instruction file (CLAUDE.md / AGENTS.md) carries a well-formed self-improvement protocol — the standing section that gates persisted learnings behind approval, routes them to a backlog, and bars autonomous rewrite of the core or executable scaffolding — then install or repair the canonical protocol on confirmation. Invoke when adding, reviewing, or repairing a self-improvement/learning-loop section in a base instruction file, or wiring an agent to capture and track its own improvement ideas. Skip when auditing the whole file's attention/length/density (use audit-instruction-file), read-side memory/retrieval integrity — provenance tiers, trust of remembered content — even for a self-updating store (use audit-memory-retrieval-integrity), harness permissions/sandbox/reversibility/cost boundaries (use audit-harness-safety), placing a must-never-fail rule into a deterministic hook (use audit-prompt-hook-placement), or filing one backlog item (use your backlog tracker).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-self-improvement-protocol/SKILL.md",
+        "digest": "sha256:8b76c8b24ef67620e288bccfb04036726a7b4f0fd4c6f70c42eb5d1a920c7d93"
+      },
+      {
+        "name": "audit-skill-quality",
+        "type": "skill-md",
+        "description": "Audit one or many SKILL.md files against dispatch (frontmatter) and governance (body) quality criteria — description overlap and missing skip-boundaries, absent required fields, attention-curve/length/compliance-ceiling defects, self-containment and progressive-disclosure violations, prompt-only guardrails standing in for real enforcement, missing step-completion criteria, degrees-of-freedom mismatches, and untestable output — and produce a review writeup. Invoke when reviewing, grading, or vetting a SKILL.md before it ships, or figuring out why a skill won't dispatch or misbehaves once loaded. Skip when gating a factory skill for release in this repo (use grade-skill), when the goal is to write or substantially revise a SKILL.md (use write-skill), auditing a plain instruction file that isn't a SKILL.md (use audit-instruction-file), auditing an individual tool/function definition rather than a whole skill (use audit-tool-definition), or shrinking a prompt under a token budget (use compress-prompt).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-skill-quality/SKILL.md",
+        "digest": "sha256:36cff00ed19954a0d586f321c26731a8038be8550373db6a8da4424b4e8c1a62"
+      },
+      {
+        "name": "audit-supply-chain-sinks",
+        "type": "skill-md",
+        "description": "Audit an agent harness's output boundary and dependency-install authority — every place an LLM-emitted string crosses into a code-interpreting sink (shell/exec/eval, SQL, HTML/markdown render, file path, package manager, a downstream LLM) and every place the agent can install an agent-named dependency — and flag the unvalidated sinks (OWASP LLM05) and slopsquatting install routes. Invoke when reviewing or hardening an agent that can execute generated code, run shell, build SQL, render model output, write files, or run package installs — including auto-running package installs inside a sandbox — or before granting an agent code-execution or install authority. Skip when auditing whether one path co-holds private-data + untrusted-input + egress (use audit-lethal-trifecta), credential hygiene in context (use audit-secret-exposure), bounding what an already-granted action can destroy — sandbox, reversibility, kill path (use audit-harness-safety), or ordinary application source-code review (use review-code).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-supply-chain-sinks/SKILL.md",
+        "digest": "sha256:059c2b073b127f679db5828b4911b1e7ce7252c9c19d975779572d32ed07128e"
+      },
+      {
+        "name": "audit-tool-definition",
+        "type": "skill-md",
+        "description": "Audit one or many individual agent-facing tool/function definitions — name, description, inputSchema, output/error contract, and MCP annotations — for the ergonomics failures that make an agent mis-select or misuse a tool, and emit a findings report. Invoke when reviewing the quality of individual tool definitions (function-calling specs, or the per-tool defs an MCP server exposes) or diagnosing why an agent picks or calls a tool wrong. Skip when the goal is to produce the corrected description/schema — for one tool, or a whole set rewritten one tool at a time (use write-tool-description), to audit an MCP server's own declaration — primitive choice, transport, server instructions, tool-count budget, annotation presence/defaults — rather than its individual tool defs (use audit-mcp-server), or to audit per-path data/egress security architecture (use audit-lethal-trifecta).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-tool-definition/SKILL.md",
+        "digest": "sha256:a96e1167823d74a667f589beb043755d7cefc825e072405bae8bf5e46185cf78"
+      },
+      {
+        "name": "audit-verification-gates",
+        "type": "skill-md",
+        "description": "Audit the completion-gating architecture of an agent harness — the hooks, ledgers, graders, checklists, and red-green constraints that decide when an agent may declare \"done\" — and flag every gate that trusts self-report, grades the execution path, or is gameable rather than mechanically anchored to deterministic external state. Invoke when reviewing or hardening how a harness's existing gates block completion (Stop / SubagentStop / PostToolUse hooks, verification ledgers, checklists, red-green/TDD constraints, eval graders) — is each existing gate's anchoring sound? — before trusting an agent's \"all tests pass\" / \"done\". Skip when the concern is run visibility — tracing, logs, metrics, exit-code plumbing (use audit-observability-setup), deciding where a rule should live — prose vs hook/gate, completion rules included (use audit-prompt-hook-placement), a critic agent approving its own producer's output (use audit-multi-agent-orchestration), or security/exfiltration architecture (use audit-lethal-trifecta).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/audit-verification-gates/SKILL.md",
+        "digest": "sha256:71b2cdb7b3606f71b53409fd41cc82a16999855b53ebde3eb2231366ab1d3f59"
+      },
+      {
+        "name": "compress-prompt",
+        "type": "skill-md",
+        "description": "Compress any prompt or instruction file to maximize signal per token — convert prose to tables/bullets/rules, front-load critical constraints, and apply semantics-preserving transforms. Invoke when asked to shorten, tighten, densify, or \"make this prompt/instruction file more concise\". Skip when editing ordinary docs or source code, or when the goal is to detect (not fix) density problems — use audit-instruction-file for that.",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/compress-prompt/SKILL.md",
+        "digest": "sha256:af2a93ed7865d20f3ad4df62857db05810326720eec02486e1d69c7a8437a0c7"
+      },
+      {
+        "name": "conflicting-instruction-detector",
+        "type": "skill-md",
+        "description": "Surface semantic conflicts across two or more agent instruction files / a skill library — pairs of independently-authored rules in different files that contradict in effect though they share no wording — and present them as candidate conflicts for human review, never auto-resolved. Invoke only when the concern is cross-file — rules in different files disagree, a multi-file instruction set or skill library needs checking for cross-document contradictions, or an agent behaves inconsistently because rules in separate files conflict. Skip when the target is a single file's own attention/density, its within-file contradictions, or layer-stack precedence within one load stack — e.g. CLAUDE.md vs a loaded SKILL.md (use audit-instruction-file), when the collision is between skills' frontmatter descriptions / dispatch quality (use audit-skill-quality), or when you want a conflict mechanically fixed.",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/conflicting-instruction-detector/SKILL.md",
+        "digest": "sha256:d405c5a936d929e695440b3c7e18eae99a3dbe907b7c23afa2fae66e7968c277"
+      },
+      {
+        "name": "review-code",
+        "type": "skill-md",
+        "description": "Review a source-code diff, PR, or file against canonical review criteria — Fowler code smells with named refactorings, Clean Code / A Philosophy of Software Design red flags, error-handling/resource-safety gaps, testability seams and test smells, security/secrets basics, performance basics, plus concurrency, database/N+1, distributed-systems, API-contract, observability modules — each defect reported as a line-anchored finding with a named fix. Invoke when asked to review code, a diff, or a PR for quality, maintainability, or correctness, or to find code smells and refactoring opportunities in ordinary application source. Skip when the target is a GitHub Actions workflow (use audit-github-actions-security), a SKILL.md (use audit-skill-quality), an agent instruction file (use audit-instruction-file), an agent harness's security/data-flow architecture (use audit-lethal-trifecta) or its LLM-output sinks/install authority (use audit-supply-chain-sinks), or when writing new tests from a spec (use write-tests).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/review-code/SKILL.md",
+        "digest": "sha256:f07ce9f0137d5db773d320d718c82073dee97daec024cdf75f786193dbfd99d8"
+      },
+      {
+        "name": "write-skill",
+        "type": "skill-md",
+        "description": "Write or substantially revise one SKILL.md — dispatch description craft (what + when + capabilities, trigger phrases), the knowledge-not-behavior boundary, degrees-of-freedom matching, positive framing, one-level-deep progressive disclosure, a Gotchas section, and eval-able output. Invoke when authoring a new agent skill or reworking an existing SKILL.md's frontmatter or body. Skip when reviewing or grading an existing skill's quality without rewriting it (use audit-skill-quality), writing or auditing a plain instruction file that isn't a SKILL.md (use audit-instruction-file), or shrinking an existing prompt under a token budget (use compress-prompt).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/write-skill/SKILL.md",
+        "digest": "sha256:868bb2756f6342776ed28fc58e4f9c4e2eb051119ad5d5d38ec3af302d208333"
+      },
+      {
+        "name": "write-tests",
+        "type": "skill-md",
+        "description": "Write tests that pin behaviour and constrain the implementation — derive each expected value from the stated specification rather than from the implementation it exercises, confirm the failing state before implementing, keep minimum-implementation and refactor work in separate passes, sharpen weak assertions, and cover the error paths and blind spots that let a green suite mislead. Invoke when asked to write, add, or strengthen tests for a function or feature, or to drive an implementation test-first (red-green-refactor). Skip when the ask is to review or flag existing tests — smells, testability seams, weak coverage on a diff — without writing new ones (use review-code), or auditing whether an agent harness's completion gate can be gamed (use audit-verification-gates).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/write-tests/SKILL.md",
+        "digest": "sha256:100c753fcf8b925f25be5cf5dc823cf0fc87734a1fbddb60b966609693d606d1"
+      },
+      {
+        "name": "write-tool-description",
+        "type": "skill-md",
+        "description": "Write the agent-facing description, parameter docs, and schema constraints for ONE tool/function at a time — run per tool for a set — so the model selects and calls it correctly — positive selection signal, sibling discriminator, return shape, example values, and poka-yoke schema. Invoke when authoring or revising one tool's definition the agent chooses among, or when an agent keeps mis-selecting or mis-calling that tool and you want the corrected definition, not just the diagnosis. Skip when flagging description defects across a whole toolset without rewriting (use audit-tool-definition), auditing a natural-language instruction file (use audit-instruction-file), or compressing a system prompt under a token budget (use compress-prompt).",
+        "url": "https://raw.githubusercontent.com/agentpatterns-ai/skills/v0.5.0/write-tool-description/SKILL.md",
+        "digest": "sha256:2df384ea0763672cab201bb7ade54efa2ab02118666a453a2bf1fd8ab3a86940"
+      }
+    ]
+  }
+}

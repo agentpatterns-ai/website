@@ -104,6 +104,7 @@ A CSV-analysis skill gets an `evals/evals.json` with two cases — a "top 3 mont
 ## Related
 
 - [Skill Eval Loop](../tools/claude/skill-eval-loop.md) — Claude-specific implementation using skill-creator
+- [Emulated APIs for Agent Skill Evals](emulated-apis-for-skill-evals.md) — isolate what the skill's API calls hit while these evals run, so cost and live-data mutation stay out of the score
 - [Skill Retrieval Realism Gap](eval-blind-spots.md) — why skill-augmented benchmark gains shrink under realistic retrieval
 - [Skill Specification Violation Fuzzing](skill-specification-violation-fuzzing.md) — semantic fuzzing for natural-language skill guardrails
 - [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — description craft and authoring context

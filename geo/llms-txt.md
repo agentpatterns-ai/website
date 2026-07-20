@@ -7,7 +7,7 @@ tags:
   - technique
   - tool-agnostic
   - workflows
-last_reviewed: 2026-05-27
+last_reviewed: 2026-07-20
 maturity: emerging
 ---
 
@@ -69,11 +69,15 @@ LLM context windows set a hard ceiling on how much a site can serve an agent in 
 
 ## The citation limitation
 
-`llms.txt` is infrastructure for agentic navigation, not a GEO ranking signal:
+`llms.txt` is infrastructure for agentic navigation, not a GEO ranking signal. The first measurement-grade evidence confirms it: an [Ahrefs June 2026 server-log study](https://ahrefs.com/blog/llmstxt-study/) of 137,000 domains found that 97% of `llms.txt` files received zero requests in May 2026. Of the requests that did arrive, SEO audit tools led at 21.7%; among named AI agents, GPTBot accounted for 4.51% of file requests and ClaudeBot 0.80%.
 
-- No major AI provider (Anthropic, OpenAI, Google) has published documentation confirming they read `llms.txt` at inference time
+- No major AI provider (Anthropic, OpenAI, Google) has published documentation confirming they read `llms.txt` at inference time. Vendor claims that Anthropic or Perplexity "confirmed `llms.txt` support" remain uncorroborated by platform docs and are contradicted by the log data ([Ahrefs](https://ahrefs.com/blog/llmstxt-study/)).
 - The spec itself frames the format as inference-time tooling with no defined role in training or citation pipelines ([llmstxt.org](https://llmstxt.org))
 - Citation signals are dominated by content authority, structured data, and entity recognition — not file conventions ([How AI Engines Cite](how-ai-engines-cite.md))
+
+### The real audience is coding agents
+
+The log data shifts the honest use case. `claude-code` was the #2 named AI fetcher of `llms.txt` in the Ahrefs study — the file's real consumers are coding agents, not answer engines ([Ahrefs](https://ahrefs.com/blog/llmstxt-study/)). For a developer-facing site, that is a genuine audience: an agent working in a codebase can fetch your curated index to navigate your docs. That value is real, but it is separate from — and should not be confused with — search ranking or citation in answer engines.
 
 ## Real adoption examples
 
@@ -84,6 +88,8 @@ LLM context windows set a hard ceiling on how much a site can serve an agent in 
 | Anthropic platform | Developer Guide, API Reference, and SDKs — auto-generated via Mintlify hosting |
 
 [Mintlify's November 2024 rollout](https://www.mintlify.com/blog/what-is-llms-txt) auto-generated `llms.txt` across all hosted documentation sites and spread the format quickly. Sites on Mintlify's platform, including Anthropic and Cursor, received `llms.txt` without manual effort.
+
+Adoption keeps climbing even though the files go largely unread: publication grew 8.8x in 12 months (4,088 to 36,120 files across 3 million monitored sites), yet only 7.4% of the Fortune 500 publish one ([PPC Land](https://ppc.land/only-7-4-of-fortune-500-have-an-llms-txt-file-study-finds/)). The gap between fast adoption and near-zero consumption is the practical reason to publish for navigation utility, not for ranking.
 
 ## Example
 
@@ -148,13 +154,15 @@ A curated llms.txt index moves the selection step outside the inference call —
 
 - The spec requires only an H1 — everything else is optional
 - Publish `llms-full.txt` alongside `llms.txt` — agents can load complete site context in one fetch instead of crawling linked pages individually
-- `llms.txt` improves agentic navigation; it is not a citation or ranking signal
+- `llms.txt` improves agentic navigation; it is not a citation or ranking signal — an [Ahrefs June 2026 log study](https://ahrefs.com/blog/llmstxt-study/) of 137,000 domains measured 97% of files receiving zero requests
 - No major LLM provider has published documentation confirming they read `llms.txt` at inference time
+- The file's real consumers are coding agents: `claude-code` was the #2 named AI fetcher, so a developer-facing site has a genuine navigation audience
 - Keep it current — stale entries pointing to dead links are worse than no file
 
 ## Related
 
 - [AI Crawler Policy](ai-crawler-policy.md)
+- [Agent-Readiness Discovery Surfaces](agent-readiness-discovery-surfaces.md)
 - [Schema and Structured Data](schema-and-structured-data.md)
 - [What is GEO](what-is-geo.md)
 - [How AI Engines Cite](how-ai-engines-cite.md)

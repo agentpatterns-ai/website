@@ -160,7 +160,7 @@ For work spanning multiple sessions, such as large features or extended refactor
 - [ ] Apply rate limiting to /api/export endpoint
 - [ ] Add rate limit headers to all responses
 
-## Notes
+## Design decisions
 - Uses sliding window algorithm, not fixed window
 - Redis key format: `ratelimit:{userId}:{endpoint}`
 ```

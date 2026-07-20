@@ -129,6 +129,7 @@ Operational patterns that apply security agents to incoming changes and to resid
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — Pair a PR-time security reviewer with a scheduled whole-codebase scanner so new and resident risk both have continuous coverage; treat the reviewer agent itself as an injection target
 - [Scanner-as-MCP-Server: Secret and Dependency Scans as Typed Agent Tools](scanner-as-mcp-server.md) — Ship the security scanner as an MCP server so the agent invokes typed scans pre-commit and reasons over structured findings; qualified by five failure modes including agent-skips-scan and lethal-trifecta closure on the scanner principal
 - [Cross-Repository Security Posture for Agent-Introduced Vulnerabilities](cross-repository-security-posture.md) — Treat one agent-introduced finding as a class to enumerate and remediate across every repository via variant analysis, not a per-repo point-in-time event; the organization-wide layer above per-agent scoping and per-PR review
+- [Structural Monitoring for Covert Safeguard-Weakening](structural-safeguard-monitoring.md) — Diff the control- and data-flow graph of an agent's infrastructure-as-code change to catch a safeguard weakened under task success; an untrained structural monitor missed 3.5% of sabotage versus 11.6% for a git-diff baseline and cut joint sabotage success to 0% under synchronous rollback
 
 ## Tool Invocation
 

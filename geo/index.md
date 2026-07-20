@@ -74,6 +74,7 @@ GEO analysis is reverse-engineered from AI outputs. No engine publishes ranking 
 | [llms.txt](llms-txt.md) | Full spec walkthrough; adoption examples; honest assessment of limitations |
 | [Schema and Structured Data](schema-and-structured-data.md) | FAQPage / HowTo / DefinedTerm JSON-LD; 2.7× citation lift data |
 | [AI Crawler Policy](ai-crawler-policy.md) | robots.txt for training / index / user-request crawler landscape |
+| [Agent-Readiness Discovery Surfaces](agent-readiness-discovery-surfaces.md) | Which machine-readable discovery surfaces a content site should publish vs. skip |
 | [Measuring GEO Performance](measuring-geo-performance.md) | AI Visibility Score, Citation Share, AI Share of Voice; monitoring tools |
 | [Topical Authority](topical-authority.md) | Comprehensive entity coverage as a persistent citation strategy |
 | [GEO for Technical Docs](geo-for-technical-docs.md) | Synthesis checklist for API references, tutorials, how-to guides |

@@ -134,7 +134,7 @@ The `scene=0.4` threshold captures significant visual transitions (slide changes
 
 ---
 
-## Summary
+## Meeting Summary
 
 {Claude-generated 3-5 sentence summary}
 
