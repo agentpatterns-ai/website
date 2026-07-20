@@ -41,4 +41,5 @@ The endpoint is advertised in this site's [MCP server card](/.well-known/mcp/ser
 
 - [What is GEO](geo/what-is-geo.md) — why this site is structured for AI retrieval
 - [How AI Engines Cite](geo/how-ai-engines-cite.md) — what makes a page citable
-- [AI Crawler Policy](geo/ai-crawler-policy.md) — this site's stance toward AI crawlers
+- [This site's agent access policy](/auth.md) — no authentication, all agent surfaces public ([robots.txt](/robots.txt) carries the machine-readable form)
+- [AI Crawler Policy](geo/ai-crawler-policy.md) — guidance on setting a robots.txt/WAF policy for AI crawlers on your own site
