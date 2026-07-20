@@ -1,0 +1,20 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://024a397e-1bb1-47a1-a5c6-ba5914b1d289.search.ai.cloudflare.com/",
+      "service-doc": [
+        { "href": "https://agentpatterns.ai/search/", "type": "text/html" },
+        { "href": "https://developers.cloudflare.com/ai-search/", "type": "text/html" }
+      ]
+    },
+    {
+      "anchor": "https://024a397e-1bb1-47a1-a5c6-ba5914b1d289.search.ai.cloudflare.com/mcp",
+      "service-doc": [
+        { "href": "https://agentpatterns.ai/search/", "type": "text/html" }
+      ],
+      "describedby": [
+        { "href": "https://agentpatterns.ai/.well-known/mcp/server-card.json", "type": "application/json" }
+      ]
+    }
+  ]
+}

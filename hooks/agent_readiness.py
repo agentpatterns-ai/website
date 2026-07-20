@@ -26,6 +26,11 @@ Cloudflare features):
    Copied verbatim from the committed hooks/mcp-server-card.json; the file's
    absence simply skips publication (no endpoint, no card).
 
+4. /.well-known/api-catalog — RFC 9727 linkset cataloguing the site's
+   agent-facing services (the AI Search public endpoint and MCP endpoint).
+   Copied verbatim from the committed hooks/api-catalog.json; extensionless
+   dest path per the RFC, content type set in docs/_headers.
+
 Twins are copied verbatim, frontmatter included — the frontmatter carries the
 description/tags/last_reviewed signals an agent wants anyway.
 """
@@ -75,23 +80,23 @@ def _manifest_index() -> dict | None:
     return index
 
 
-def _server_card() -> dict | None:
-    """Load the MCP server card (SEP-1649 draft) if one is committed.
+def _optional_json(filename: str, published: str) -> dict | None:
+    """Committed-if-present JSON artifact (MCP server card, API catalog).
 
-    Absence is not an error — the card exists only while the site exposes an
-    MCP endpoint (Cloudflare AI Search, #9917). A committed-but-corrupt card
-    is loud: mkdocs-counted warning, fails --strict in CI.
+    Absence is not an error — these files exist only while the site exposes
+    the corresponding service (#9917). A committed-but-corrupt file is loud:
+    mkdocs-counted warning, fails --strict in CI.
     """
-    card_path = Path(__file__).resolve().parent / "mcp-server-card.json"
-    if not card_path.exists():
+    path = Path(__file__).resolve().parent / filename
+    if not path.exists():
         return None
     try:
-        with card_path.open(encoding="utf-8") as fh:
+        with path.open(encoding="utf-8") as fh:
             return json.load(fh)
     except json.JSONDecodeError as exc:
         log.warning(
             "agent_readiness: %s is not valid JSON (%s) — "
-            "/.well-known/mcp/server-card.json will NOT be published", card_path, exc,
+            "%s will NOT be published", path, exc, published,
         )
         return None
 
@@ -132,7 +137,7 @@ def on_post_build(config):
             json.dump(index, fh, indent=2, ensure_ascii=False)
             fh.write("\n")
 
-    card = _server_card()
+    card = _optional_json("mcp-server-card.json", "/.well-known/mcp/server-card.json")
     if card is not None:
         out_path = site_dir / ".well-known" / "mcp" / "server-card.json"
         out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -140,6 +145,17 @@ def on_post_build(config):
             json.dump(card, fh, indent=2, ensure_ascii=False)
             fh.write("\n")
 
+    # RFC 9727: the catalog's well-known path is extensionless; the
+    # application/linkset+json content type comes from docs/_headers.
+    catalog = _optional_json("api-catalog.json", "/.well-known/api-catalog")
+    if catalog is not None:
+        out_path = site_dir / ".well-known" / "api-catalog"
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        with out_path.open("w", encoding="utf-8") as fh:
+            json.dump(catalog, fh, indent=2, ensure_ascii=False)
+            fh.write("\n")
+
     print(f"agent_readiness.py: wrote {len(_twins)} markdown twin(s)"
           + ("" if index is None else f" + agent-skills index ({len(index.get('skills', []))} skills)")
-          + ("" if card is None else " + mcp server card"))
+          + ("" if card is None else " + mcp server card")
+          + ("" if catalog is None else " + api catalog"))
