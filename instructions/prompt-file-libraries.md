@@ -177,4 +177,5 @@ Prompt file libraries degrade in several predictable conditions:
 - [Custom Agents and Skills (Copilot)](../tools/copilot/custom-agents-skills.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [@import Composition Pattern](import-composition-pattern.md)
+- [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)

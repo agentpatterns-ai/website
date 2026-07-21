@@ -11,7 +11,7 @@ tags:
 aliases:
   - agent troubleshooting
   - LLM debugging
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-21
 maturity: established
 ---
 
@@ -29,6 +29,8 @@ Code bugs have stack traces. Agent bugs have context windows. When an agent fail
 4. Capability ceiling — the task exceeded the model tier’s capability
 
 Debugging means working out which category applies before changing anything.
+
+LangChain's [introduction to coding-agent observability](https://blog.langchain.com/blog/your-coding-agents-are-a-black-box-heres-how-to-crack-them-open) frames an opaque agent as a black box to crack open through tracing and instrumentation.
 
 ## Diagnostic sequence
 

@@ -95,6 +95,7 @@ Volume-first agent deployment underperforms when:
 - [Predicting Which AI-Generated Functions Will Be Deleted](predicting-reviewable-code.md) — structural signals that predict which agent-generated code survives review
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical merge rate gap (45% vs 68%) when CRAs review without human involvement
 - [Interaction-Pattern Evaluation for Agentic PRs](interaction-pattern-evaluation.md) — the interaction-signal complement to these outcome rates, since merge/reject labels misclassify most rejected agentic PRs
+- [Kaizen-Style Continuous Code Quality Loop (Pomona)](../workflows/kaizen-continuous-quality-loop.md) — one operating model that closes the acceptance gap: constrain agent output to small, single-purpose quality PRs a reviewer accepts quickly
 
 ## Sources
 

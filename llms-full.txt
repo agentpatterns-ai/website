@@ -433,6 +433,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Codified Effort and Escalation Policy in the Instruction File](instructions/codified-effort-escalation-policy.md)
 - [Agent-Ready Bug Reports for Software Repair Agents](instructions/agent-ready-bug-reports.md)
 - [Match Tool Instructions to the Agent Workflow](instructions/match-tool-instructions-to-workflow.md)
+- [Prompt Transpilation: Instructions as Build Artifacts](instructions/prompt-transpilation.md)
 
 ## Agent Architecture
 
@@ -685,6 +686,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Git-Bound Memory for the Agentic Development Lifecycle](patterns/agent-design/git-bound-memory.md)
 - [Epistemic Working Memory for Multi-Hop Reasoning (SLEUTH)](patterns/agent-design/epistemic-working-memory-multi-hop-reasoning.md)
 - [Reviewer Precision as a Pipeline Quality Proxy](patterns/multi-agent/reviewer-precision-proxy.md)
+- [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](patterns/agent-design/delegated-autonomy-boundary-artifacts.md)
+- [The Model Economics of Agent Swarms: Cost and Width](patterns/multi-agent/model-economics-agent-swarms.md)
 
 ## Loop Engineering
 
@@ -937,6 +940,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](security/non-human-event-provenance-markers.md)
 - [Setup Documentation as an Install-Time Attack Vector](security/setup-documentation-install-time-attacks.md)
 - [Structural Monitoring for Covert Safeguard-Weakening](security/structural-safeguard-monitoring.md)
+- [Supply-Chain Security Debt in Agent Pull Requests](security/supply-chain-security-debt-agent-prs.md)
 
 ## Testing & Evaluation
 
@@ -1072,6 +1076,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Action-Graded Severity for Agent Red-Team Outcomes](verification/action-graded-severity-red-team-outcomes.md)
 - [Evidence-Gated Lifecycle Control for Coding Agents (Proof-or-Stop)](verification/evidence-gated-lifecycle-control.md)
 - [Emulated APIs for Agent Skill Evals](verification/emulated-apis-for-skill-evals.md)
+- [Diff-Coverage Gating for Agent-Authored Pull Requests](verification/diff-coverage-gate-agent-prs.md)
 
 ## Hooks & Guardrails
 
@@ -1259,6 +1264,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Concurrent Agent Pull Requests and Merge-Conflict Cost](workflows/concurrent-agent-pr-merge-conflicts.md)
 - [Accumulated Behavioral Rules from Review Feedback](workflows/accumulated-behavioral-rules.md)
 - [Legacy Code Archaeology: Reconstruct Intent Before Migrating](workflows/legacy-code-archaeology.md)
+- [Kaizen-Style Continuous Code Quality Loop (Pomona)](workflows/kaizen-continuous-quality-loop.md)
+- [A Governance Framework for Production Agents](workflows/governing-production-agents.md)
 
 ## Human Factors
 
@@ -1417,6 +1424,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Token Reduction Mistaken for Cost Reduction](patterns/anti-patterns/token-reduction-not-cost-reduction.md)
 - [The Compliance Trap: Consuming Conflicting Agent Memory](patterns/anti-patterns/compliance-trap-conflicting-memory.md)
 - [Prompt Debt: Hand-Tuning Natural-Language Prompts as Technical Debt](patterns/anti-patterns/prompt-debt.md)
+- [CodeSlop: Search-Trajectory Residue in Agent Patches](patterns/anti-patterns/codeslop-trajectory-minimization.md)
+- [Assuming Loaded Skills Stay Enforced in Long Contexts](patterns/anti-patterns/assuming-loaded-skills-stay-enforced.md)
+- [Team Shared-Language Desync from Removed Review Friction](patterns/anti-patterns/shared-language-desync.md)
 
 ## Emerging Concepts
 
@@ -9095,6 +9105,7 @@ Structuring instructions across scopes, layers, and files so the right context r
 - [@import Composition Pattern for Instruction Files](import-composition-pattern.md) — Claude Code supports `@path/to/file` imports in CLAUDE.md, enabling modular instruction authoring; other tools rely on hierarchical discovery instead
 - [Prompt File Libraries](prompt-file-libraries.md) — Store reusable, parameterized prompt templates as version-controlled files that team members invoke on demand
 - [Production System Prompt Architecture](production-system-prompt-architecture.md) — Structural patterns from a 102K-char production system prompt: XML-sectioned concern isolation, skills registries, and deferred tool loading
+- [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md) — Compile modular skill files into one validated prompt at build time, with static dependency checks and a golden-file CI gate, so a broken instruction set fails the build not a run
 
 ## System Prompts
 
@@ -9305,6 +9316,7 @@ Both CLAUDE.md files stay short; shared content lives once.
 - [AGENTS.md Design Patterns](agents-md-design-patterns.md)
 - [Distributed Conventions via AGENTS.md](agents-md-distributed-conventions.md)
 - [Prompt File Libraries](prompt-file-libraries.md)
+- [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md)
 
 ---
 
@@ -15646,6 +15658,7 @@ Prompt file libraries degrade in several predictable conditions:
 - [Custom Agents and Skills (Copilot)](../tools/copilot/custom-agents-skills.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [@import Composition Pattern](import-composition-pattern.md)
+- [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
 
 ---
@@ -15740,6 +15753,7 @@ The PR diff makes the severity definition change explicit. Reviewers can judge w
 - [Frozen Spec File: Preserving Intent in AI Agent Sessions](frozen-spec-file.md)
 - [CLAUDE.md Convention](claude-md-convention.md)
 - [Convention Over Configuration for Agent Workflows](convention-over-configuration.md)
+- [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md)
 
 ## Sources
 
@@ -15748,6 +15762,110 @@ The PR diff makes the severity definition change explicit. Reviewers can judge w
 - [GitHub Accessibility — Optimizing Copilot with Custom Instructions](https://accessibility.github.com/documentation/guide/copilot-instructions) — GitHub's own guide on writing accessibility-focused custom instructions
 - [agents.md open standard](https://agents.md) — Cross-tool standard for `AGENTS.md` instruction files
 - [Claude Code Sub-Agents Docs](https://code.claude.com/docs/en/sub-agents) — Confirms CLAUDE.md loads per session including for spawned subagents
+
+---
+
+### Prompt Transpilation: Instructions as Build Artifacts
+Source: https://agentpatterns.ai/instructions/prompt-transpilation/
+
+# Prompt Transpilation: Instructions as Build Artifacts
+
+> Prompt transpilation compiles modular skill files into one validated prompt at build time, so a broken instruction set fails the build, not an agent run.
+
+Prompt transpilation treats agent instructions as build artifacts rather than hand-edited text. You author instructions as small, reusable skill files, run them through a transpiler that resolves imports and variables and statically validates them, and wire that generation into CI so an invalid instruction set fails the build ([Google Developers, 2026](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/)). The model never sees the source files. It sees one deterministic, fully rendered artifact you can test, audit, and diff first.
+
+## When it pays off
+
+The payoff is scale-gated. A single monolithic prompt is usually fine when you are first building an agent, and the transpiler machinery is pure overhead until real pressure appears ([Google Developers, 2026](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/)). Reach for transpilation when these conditions hold:
+
+- Many agents or teams share the same logic, so safety policies, PII handling, or escalation rules get copy-pasted and drift out of sync ([Google Developers, 2026](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/)).
+- The instruction set is large enough that a one-sentence diff has an unpredictable blast radius across the whole agent.
+- The agent runs in production, where a missing variable or bad import surfacing at runtime in a rarely-used workflow is a reliability incident.
+
+Below that scale, a single well-organized instruction file reviewed through ordinary pull requests already delivers the same auditability without a build step. Thoughtworks reaches the same governance goal by treating prompts as versioned, reviewed artifacts kept in sync with code, with no transpiler required ([Thoughtworks, 2026](https://martinfowler.com/articles/structured-prompt-driven/)).
+
+## How it works
+
+Source template files compose shared fragments and inject environment values. The transpiler resolves every include as a dependency and every variable as a requirement, then emits one rendered file for the model ([Google Developers, 2026](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/)).
+
+Build-time validation is the point. The transpiler models each fragment as a node in a dependency graph and fails the build on missing imports, undefined variables, or circular dependencies, catching them before runtime ([Google Developers, 2026](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/)). A golden-file check closes the last gap: CI regenerates the artifact from source and compares it to the committed one, and a mismatch fails the build, so the repo artifact is provably what runs in production ([Google Developers, 2026](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/)).
+
+```mermaid
+graph TD
+    A[Modular skill files] --> B[Transpiler]
+    B --> C{Validate deps}
+    C -->|Missing import or cycle| D[Fail build]
+    C -->|Valid| E[Rendered artifact]
+    E --> F{Golden-file diff in CI}
+    F -->|Differs from committed| D
+    F -->|Matches| G[Ship to agent]
+```
+
+Once the system is modular, an agent can help maintain its own instruction layer. It drafts a new skill module and opens a pull request rather than mutating its instructions live, and that proposal passes the same validation, evals, and human review as any code change ([Google Developers, 2026](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/)).
+
+## Example
+
+A template composes shared fragments, then branches on an environment variable:
+
+```jinja
+{% include "shared/safety.prompt.md" %}
+{% include "shared/tool_usage.prompt.md" %}
+
+You are an SRE triage agent operating in the {{ environment }} environment.
+
+{% if allow_remediation %}
+You may recommend remediation steps, but destructive actions require human approval.
+{% else %}
+You may inspect, summarize, and explain the issue, but do not recommend remediation actions.
+{% endif %}
+```
+
+With `environment = production` and `allow_remediation = true`, the transpiler renders a flat artifact with the includes resolved and the branch collapsed ([Google Developers, 2026](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/)):
+
+```text
+You are an SRE triage agent operating in the production environment.
+
+You may recommend remediation steps, but destructive actions require human approval.
+```
+
+The reviewer diffs the rendered artifact, not the templating logic, so what they approve is exactly what the model receives.
+
+## Why it works
+
+The technique borrows three settled software-engineering mechanisms. Module boundaries bound the blast radius of a change, so a reviewer reasons about scope the way they do with code modules ([Google Developers, 2026](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/)). Static validation over a dependency graph shifts error detection left: a missing import or circular reference is caught at build time instead of failing silently in production ([Google Developers, 2026](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/)). A deterministic build plus a golden-file diff removes the gap between source and deployed artifact, so the thing that was reviewed is the thing that runs ([Google Developers, 2026](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/)). Thoughtworks reports the same drift-prevention effect from treating prompts as synced, versioned artifacts ([Thoughtworks, 2026](https://martinfowler.com/articles/structured-prompt-driven/)).
+
+## When this backfires
+
+The build pipeline is not free, and it does not guarantee what teams often assume it does:
+
+- Small teams pay pure overhead. With one agent and a short, stable prompt there is no drift or duplication to solve, and a transpiler, template engine, and golden-file gate add a new class of build failures for no benefit ([Scott Logic, 2026](https://blog.scottlogic.com/2026/06/16/ponytail-yagni-and-the-problem-with-prompt-benchmarks.html)).
+- A green build is not correct behavior. Static validation proves the artifact is well-formed, but prompt behavior is non-deterministic, so a passing transpile does not catch a semantic regression in what the agent actually does ([Scott Logic, 2026](https://blog.scottlogic.com/2026/06/16/ponytail-yagni-and-the-problem-with-prompt-benchmarks.html)). Pair the build gate with behavioral evals.
+- Fast iteration stalls. Every change routes through the same validation and review gate as code ([Google Developers, 2026](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/)), which swamps eval-driven tuning that tries many variants per session. Prototype in a sandbox and promote the winner into the transpiled source.
+- Over-fragmentation obscures the whole. Splitting into many tiny modules adds its own coherence cost and can hide the full rendered prompt a reviewer needs to read. Loading every skill on every run also wastes tokens, which is why the base prompt should stay stable and task-specific skills load on demand through [progressive disclosure](../patterns/agent-design/progressive-disclosure-agents.md) ([Google Developers, 2026](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/)).
+
+## Key Takeaways
+
+- Prompt transpilation compiles modular skill files into one validated, deterministic artifact so instruction failures surface at build time, not at agent runtime.
+- The build catches missing imports, undefined variables, and circular dependencies over a fragment dependency graph; a golden-file CI diff proves the committed artifact equals what runs.
+- It differs from Claude's runtime `@import` expansion, which composes at session start with no build step or static validation, and from prompt-search optimization, which tunes wording rather than gating a build.
+- The payoff is scale-gated: worthwhile for large, shared, production instruction sets, and overhead for a single small prompt.
+- A passing build proves the prompt is well-formed, not that the agent behaves; pair transpilation with behavioral evals.
+
+## Related
+
+- [@import Composition Pattern for Instruction Files](import-composition-pattern.md)
+- [Prompt File Libraries](prompt-file-libraries.md)
+- [Prompt Governance via PR](prompt-governance-via-pr.md)
+- [The Specification as Prompt](specification-as-prompt.md)
+- [Prompt Debt: Hand-Tuning Natural-Language Prompts as Technical Debt](../patterns/anti-patterns/prompt-debt.md)
+- [Progressive Disclosure for Agents](../patterns/agent-design/progressive-disclosure-agents.md)
+- [DSPy: Programmatic Prompt Optimization](../patterns/agent-design/dspy-programmatic-prompt-optimization.md)
+
+## Sources
+
+- [Building scalable AI agents with modular prompt transpilation](https://developers.googleblog.com/en/building-scalable-ai-agents-with-modular-prompt-transpilation/) — Google Developers blog (2026-07-16); primary source for the transpile, validate, and golden-file pipeline.
+- [Structured-Prompt-Driven Development (SPDD)](https://martinfowler.com/articles/structured-prompt-driven/) — Thoughtworks / martinfowler.com (2026-04-28); independent case for prompts as governed, versioned, synced artifacts.
+- [Ponytail? YAGNI!](https://blog.scottlogic.com/2026/06/16/ponytail-yagni-and-the-problem-with-prompt-benchmarks.html) — Scott Logic (2026-06-16); caution on overengineering prompt tooling and the non-determinism ceiling on structural validation.
 
 ---
 
@@ -17697,6 +17815,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Tool Preamble: User-Visible Status Updates Before Tool Calls](tool-preamble-status-update.md) — A short visible message before tool execution in multi-step agent runs reduces perceived latency without altering behaviour; apply at phase boundaries, not per call
 - [Verification-Gated Agent Autonomy via Automated Review](verification-gated-agent-autonomy.md) — Pair broader agent autonomy with an automated review gate that screens output — trust scales through verification rather than per-action human approval, under specific conditions
 - [Deterministic Precondition Gates for Tool-Using Agents](deterministic-precondition-gates.md) — A read-only deterministic predicate checks a proposed tool call against current state and blocks a forbidden write before it silently corrupts state — the deterministic counterpart to a probabilistic reviewer
+- [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](delegated-autonomy-boundary-artifacts.md) — Write an agent's authority boundary down as two reviewable requirements artifacts — an Agency Justification Record and an Agentic Delegation Policy — instead of leaving it implicit in prompts and tool schemas
 
 ## Reliability
 
@@ -18488,6 +18607,7 @@ No LangGraph or LangSmith required — OTel, a pytest eval runner, and a feature
 - [Traces Need Feedback to Power Learning](../../observability/traces-need-feedback-to-power-learning.md) — how the monitor phase produces verdict-labelled traces.
 - [Continuous Agent Improvement](../../workflows/continuous-agent-improvement.md) — the Monitor → Build back-edge.
 - [Canary Rollout for Agent Policy](../../workflows/canary-rollout-agent-policy.md) — the deploy phase, in depth.
+- [Governing Production Agents: Cost, Control, Compliance](../../workflows/governing-production-agents.md) — the cost, control, and compliance guardrails that gate every phase.
 
 ---
 
@@ -23707,6 +23827,61 @@ v2.1.89 also added a `PermissionDenied` hook event that fires when the [auto-mod
 - [Session Initialization Ritual](session-initialization-ritual.md)
 - [Rollback-First Design](rollback-first-design.md)
 - [Override Pattern: Reusing Interactive Commands in Automated Pipelines](../../tool-engineering/override-interactive-commands.md)
+
+---
+
+### Delegated-Autonomy Boundary Artifacts (AJR and ADP)
+Source: https://agentpatterns.ai/patterns/agent-design/delegated-autonomy-boundary-artifacts/
+
+# Delegated-Autonomy Boundary Artifacts (AJR and ADP)
+
+> The delegated-autonomy boundary — what an agent may do, under what authority, with what oversight — belongs in reviewable artifacts, not implicit in prompts.
+
+An agent plans, keeps state, and acts in external systems, so the decision about what it may do on its own is a requirements-level commitment. Today that commitment lives scattered across prompts, tool schemas, and runtime policies, where no one can review, version, or test it. The pattern names it and writes it down as two artifacts: an Agency Justification Record (AJR) for whether to use an agent at all, and an Agentic Delegation Policy (ADP) for the boundary itself ([arxiv:2607.17225](https://arxiv.org/abs/2607.17225)).
+
+## When to use it
+
+Reach for these artifacts when the authority you are delegating carries real cost. That means an agent with write access, cross-system reach, irreversible actions, or spend — where a wrong action is expensive and graduated approval matters. The artifacts earn their overhead by making that authority reviewable before it ships.
+
+Skip them for a low-risk, reversible, read-only agent. The source paper walks through a code-review agent and rejects the AJR outright: the task is well-defined, the diffs are structured, access is read-only, and the projected gain does not justify the agentic overhead. A prompted-model pipeline is the recommended answer there ([arxiv:2607.17225](https://arxiv.org/abs/2607.17225)). The artifact bounds risk; it is not a compliance form for every agent.
+
+## The two artifacts
+
+The Agency Justification Record decides whether an agent is warranted over a simpler design. It applies minimal justified autonomy: the team justifies the agentic architecture against six criteria — open-ended task structure, unstructured context, cross-system actions, evaluable progress, bounded risk, and a demonstrable advantage over baselines with pre-committed thresholds. The rejection path is a first-class outcome, so a failed AJR records why a simpler design was chosen ([arxiv:2607.17225](https://arxiv.org/abs/2607.17225)).
+
+The Agentic Delegation Policy specifies the boundary for an agent that passed its AJR. It has six parts: purpose with explicit stop conditions, authority split into three tiers, information and memory rules, coordination rules, assurance monitors, and an evolution policy for versioning and rollback. The authority tiers are the core. Autonomous actions need no review, advisory actions are proposed but wait for human approval, and prohibited actions are never permitted regardless of instruction ([arxiv:2607.17225](https://arxiv.org/abs/2607.17225)). This maps onto existing controls: [deterministic precondition gates](deterministic-precondition-gates.md) enforce the prohibited tier, and [verification-gated autonomy](verification-gated-agent-autonomy.md) screens the advisory tier.
+
+## Why It Works
+
+Requirements that stay implicit are unreviewable and unauditable. No one can inspect, version, or test a commitment that was never written down. Naming the boundary as artifacts surfaces it: the AJR forces a justify-or-reject decision before the agent exists, which blocks unjustified agency, and the ADP makes authority, memory, and stop conditions explicit, which blocks under-specified agency. Both failure modes are the paper's stated targets ([arxiv:2607.17225](https://arxiv.org/abs/2607.17225)). This is the standard requirements-engineering mechanism at work: unstated commitments are where defects hide, and making them explicit is what makes them controllable.
+
+## When This Backfires
+
+The artifact describes the agent at one moment, but agent behavior drifts. Extended runs show semantic drift, a progressive deviation from original intent, so an ADP can end up describing an agent that no longer behaves as written ([arxiv:2601.04170](https://arxiv.org/abs/2601.04170)). Treat the policy as a living document tied to a review cadence, not a launch-day sign-off.
+
+A prose policy separate from the enforcement surface is a second source of truth that rots. If the ADP is not connected to the tool schemas, permission hooks, and sandboxes that actually gate behavior, it drifts out of sync the moment a prompt changes. The paper flags this as an open problem, compiling requirements down to runtime, which means the artifact is a starting point, not the enforcement itself ([arxiv:2607.17225](https://arxiv.org/abs/2607.17225)).
+
+Ceremony without enforcement is the third failure. A team that fills in the ADP as a checkbox, then never wires it into real tool scopes, produces a document nobody reads and changes no runtime behavior.
+
+## Example
+
+The paper's discharge-coordination agent shows the artifacts applied to a safety-critical case. Its AJR is justified across all six criteria: the task is open-ended and crosses the electronic health record, pharmacy, and payer systems. Its ADP then grades authority by tier. The agent reads the chart autonomously, flags medication discrepancies to a clinician as an advisory action, and is prohibited from signing orders. Memory is episode-scoped with no personal data retained past discharge, and unresolved conflicts escalate to a clinician after a set number of attempts ([arxiv:2607.17225](https://arxiv.org/abs/2607.17225)). The boundary is legible to a reviewer before the agent runs.
+
+## Key Takeaways
+
+- The delegated-autonomy boundary is a requirements-level commitment; write it down instead of leaving it implicit in prompts and tool schemas.
+- Use an Agency Justification Record to decide whether an agent is warranted, and treat a rejection as a valid, documented outcome.
+- Use an Agentic Delegation Policy to grade authority into autonomous, advisory, and prohibited tiers with explicit stop conditions.
+- The artifacts pay off for high-authority, cross-system, or irreversible agents; they are ceremony for low-risk read-only ones.
+- A policy that is not connected to real enforcement drifts stale, so tie it to a review cadence and to the controls that gate behavior.
+
+## Related
+
+- [The Delegation Decision](delegation-decision.md) — the when-to-delegate heuristic; the AJR is the artifact that records this decision and its rejection rationale
+- [Minimum-Sufficient Control Ladder](minimum-sufficient-control-ladder.md) — escalates control mechanisms by failure mode; complements the ADP's static authority tiers
+- [Verification-Gated Agent Autonomy](verification-gated-agent-autonomy.md) — screens the advisory tier with an automated reviewer rather than per-action human approval
+- [Deterministic Precondition Gates](deterministic-precondition-gates.md) — enforces the prohibited tier deterministically, outside the model's discretion
+- [Approval Response Taxonomy](approval-response-taxonomy.md) — structures the human responses at the advisory-tier approval point
 
 ---
 
@@ -31012,6 +31187,7 @@ A month later a second failure mode appears: the agent marks its own reviews as 
 - [The Delegation Decision](delegation-decision.md) — decides whether to use an agent at all; this ladder takes over once you have
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — *model-tier* escalation (Haiku → Sonnet → Opus) by task complexity; orthogonal axis to this ladder's *control-mechanism* escalation by failure mode
 - [Cargo Cult Agent Setup](../anti-patterns/cargo-cult-agent-setup.md) — the anti-pattern this ladder exists to defuse: stacking sophisticated controls upfront without a failure mode that justifies them
+- [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](delegated-autonomy-boundary-artifacts.md) — records the authority boundary this ladder's controls enforce; the ADP's static tiers complement the ladder's failure-mode escalation
 
 ---
 
@@ -38682,6 +38858,7 @@ Applying the describe-it test: the rename prompt would require explaining which 
 - [Agent Backpressure](agent-backpressure.md)
 - [Agent Composition Patterns](agent-composition-patterns.md)
 - [Agents vs Commands](agents-vs-commands.md)
+- [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](delegated-autonomy-boundary-artifacts.md) — the artifact that records this delegation decision, including the rationale when an agent is rejected
 
 ---
 
@@ -39827,6 +40004,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [The Infinite Context](infinite-context.md) — A larger context window does not produce better output — unfocused context dilutes attention and degrades performance
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) — Copying agent configurations without understanding why they work produces agents that follow irrelevant conventions
 - [Comprehension Debt](comprehension-debt.md) — The growing gap between AI-generated code volume and developer understanding; it lives in people, not in the codebase
+- [Team Shared-Language Desync from Removed Review Friction](shared-language-desync.md) — A team's agreed concepts, boundaries, invariants, and ownership drift apart when agents remove the review friction that kept them synced; the team-level counterpart to comprehension debt
 - [Constraint-Evasive Fabrication: Contradictory Rules and Fake Blockers](constraint-evasive-fabrication.md) — Under irreconcilable instructions, agents fabricate plausible external blockers instead of surfacing the conflict; at the limit they simulate a system crash to disengage
 - [Context Poisoning: When Hallucinations Become Premises](context-poisoning.md) — A hallucination treated as fact propagates through subsequent reasoning, producing confidently wrong output that is internally consistent
 - [Agent Extension Conflicts: When Installed Skills and MCP Servers Fight Each Other](agent-extension-conflicts.md) — Extensions that each pass their own evals can combine to degrade an agent — context-budget contention, vocabulary collision, and silent guidance conflict are invisible to per-extension testing
@@ -39913,6 +40091,8 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Rewriting a CLI Into a JSON Payload for Agents](cli-json-payload-rewrite.md) — Replacing a conventional CLI's flags with a JSON input payload so agents call it more reliably measures as cost without payoff: args match or beat JSON on correctness and cost 4-11x less
 - [The Patchwork Problem in LLM-Generated Code](patchwork-problem.md) — LLM code is locally valid but globally incoherent — undeclared config keys, phantom imports, missing auth guards — and standard type-checking, tests, and SAST are nearly blind to it
 - [Overtrusting Human Sign-Off on Generated Assertions](generated-assertion-signoff.md) — Developers judge correct LLM-generated assertions at ~74% but incorrect ones at near chance (49%) while staying equally confident, so reviewer sign-off is a weak correctness gate — and low-quality explanations lower accuracy while raising confidence
+- [CodeSlop: Search-Trajectory Residue in Agent Patches](codeslop-trajectory-minimization.md) — Agents leave speculative edits and abandoned hypotheses from their own search in the final patch; minimize the trajectory to its behavior-preserving core, gated on a strong test oracle
+- [Assuming Loaded Skills Stay Enforced in Long Contexts](assuming-loaded-skills-stay-enforced.md) — Loading a skill does not keep its requirements active across a long trajectory; obligations silently drop out one at a time, and a self-check inherits the same blind spot, so verify against an independent detailed checklist
 
 ---
 
@@ -40060,6 +40240,7 @@ Fifteen lines. One `send_notification` function. No dead abstractions waiting to
 - [Pattern Replication Risk](pattern-replication-risk.md)
 - [Deterministic Guardrails](../../verification/deterministic-guardrails.md)
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md)
+- [CodeSlop: Search-Trajectory Residue in Agent Patches](codeslop-trajectory-minimization.md) — the other bloat source: residue from the agent's own search rather than over-engineering
 
 ---
 
@@ -40236,6 +40417,7 @@ The right-hand column applies all four mitigations below: scope (one tracker), l
 - [Dynamic Tool Fetching Breaks KV Cache](dynamic-tool-fetching-cache-break.md) — sibling MCP-layer failure mode; the cache-break is the cost when lazy-loading is implemented naively.
 - [Context Budget Allocation](../../context-engineering/context-budget-allocation.md) — the budget framing this anti-pattern violates at the extension boundary.
 - [MCP Eager vs JIT Loading](../../tool-engineering/mcp-eager-vs-jit-loading.md) — the lazy-load mitigation as a tool-engineering decision.
+- [Assuming Loaded Skills Stay Enforced in Long Contexts](assuming-loaded-skills-stay-enforced.md) — a single loaded skill silently sheds its own requirements as the trajectory grows, a failure that appears even without a second conflicting extension.
 
 ---
 
@@ -40640,6 +40822,76 @@ The trap is sharpest when (a) the merge gate is automated, (b) the file's claime
 - [Happy Path Bias](happy-path-bias.md) — the upstream tendency: skipping error paths in code; this page is the downstream form in test code.
 - [Overtrusting Human Sign-Off on Generated Assertions](generated-assertion-signoff.md) — reviewers wave through the generated checks this page is about; they catch wrong assertions at near chance.
 - [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](lazy-generation.md) — the failure a naive coverage gate causes when an agent games coverage with assertion-light tests.
+
+---
+
+### Assuming Loaded Skills Stay Enforced in Long Contexts
+Source: https://agentpatterns.ai/patterns/anti-patterns/assuming-loaded-skills-stay-enforced/
+
+# Assuming Loaded Skills Stay Enforced in Long Contexts
+
+> Loading a skill does not keep its requirements active as a trajectory grows long, so individual skill obligations silently drop out.
+
+Loading an Agent Skill packages procedural instructions and checks into the context, but it does not guarantee every requirement stays active until the task ends. As a tool-using trajectory grows, individual obligations drop out one at a time. A white-box study of a production code-audit workflow held the task and 24 executable checks fixed and varied only the surrounding context. The agent passed 8 of 10 runs in a clean 11K-character context, but only 3 of 10 at 299K characters ([How Agent Skills Fail under Long Contexts, 2026](https://arxiv.org/abs/2607.17937)). Treating a loaded skill as self-enforcing is the anti-pattern.
+
+## The anti-pattern
+
+You write a skill with a clear rule set and a closing line like "before finishing, check you followed every rule above," then trust that the loaded skill polices itself for the rest of the session. It reads as reasonable: the rules are right there in context, and the agent usually finds the correct files and makes mostly correct edits. The failure is not a knowledge gap. It is sparse incompleteness — one missing array, one protected field changed, or one task left silently unfinished ([2026](https://arxiv.org/abs/2607.17937)).
+
+The tell is that requirement coverage stays high while task success collapses. In the same study, more than 92% of individual checks still passed in long contexts, yet only 30% of artifacts passed all 24 checks at once ([2026](https://arxiv.org/abs/2607.17937)). Coverage is not the bottleneck; the single dropped obligation is.
+
+## Why it works
+
+The failure survives a self-check because a self-generated check inherits the same blind spot that dropped the requirement. When the agent is asked to reconstruct its own validation set, it reproduces the omission it just made — "when generation loses a requirement, self-generated validation can reproduce the same blind spot" ([2026](https://arxiv.org/abs/2607.17937)). Supplying the validation set independently breaks that correlation. In the study, a detailed external checklist restored 10 of 10 passes against 5 of 10 for a generic self-check, the one difference that was statistically significant (two-sided Fisher p=0.0325). This matches the broader pattern that models silently shed the lowest-prominence constraints as constraint count rises ([constraint decay in backend code generation](../../verification/constraint-decay-backend-agents.md)) and that recall degrades as token count grows ([Anthropic, 2025](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+
+The practical response: keep mandatory constraints few and explicit, pair each with an executable positive and negative test, hold the pending-obligation set outside the growing transcript, and reopen a task automatically when tool output contradicts an expected result ([2026](https://arxiv.org/abs/2607.17937)).
+
+## When this backfires
+
+Independent verification is not free, and re-anchoring can be the wrong tool:
+
+- Short tasks with a few prominent requirements rarely drop obligations, so an external checklist is pure overhead.
+- Requirements that cannot be expressed as executable positive or negative tests — subjective quality, tone — give a checklist nothing to assert, so it offers false assurance.
+- A long checklist re-creates the problem it was meant to fix; the study is explicit that the completion checklist should hold only critical obligations ([2026](https://arxiv.org/abs/2607.17937)).
+- A checklist that drifts from the real requirements reintroduces silent omission from the other side, so it needs the same maintenance as the skill.
+
+One caveat on the evidence: the raw drop from short to long context was only a trend (Fisher p=0.0698), and relevant and irrelevant long context degraded equally, so length alone is not a proven cause ([2026](https://arxiv.org/abs/2607.17937)). Shrinking the working set through retrieval and compaction can matter as much as any verification step.
+
+## Example
+
+**Before — self-generated validation inherits the omission:**
+
+```markdown
+<!-- in the skill -->
+Before finishing, double-check you followed every rule above.
+```
+
+**After — an independent checklist with executable positive and negative tests, held outside the transcript:**
+
+```yaml
+# checklist.yaml — supplied to a checker, not reconstructed by the agent
+- id: required-arrays-present
+  assert: "output.tags is a list"     # positive: must exist
+- id: protected-id-unchanged
+  assert: "output.id == input.id"     # negative: must not change
+```
+
+The generic self-check asks the agent to rebuild the validation set it just failed to apply; the independent checklist supplies that set, so a lost requirement is caught instead of re-forgotten.
+
+## Key Takeaways
+
+- A loaded skill does not stay enforced; requirements drop out one at a time as the trajectory grows.
+- High requirement coverage hides the failure — one missed obligation fails the whole task while 92%+ of checks still pass.
+- A self-check inherits the generator's blind spot; verify against an independent, detailed checklist instead.
+- Keep the checklist small, pair each obligation with a positive and negative test, and hold it outside the transcript.
+
+## Related
+
+- [The Infinite Context](infinite-context.md) — general context rot: unfocused context dilutes attention and degrades output.
+- [Constraint Decay in Backend Code Generation](../../verification/constraint-decay-backend-agents.md) — the prompt-level version: agents drop the lowest-prominence constraints as constraint count rises.
+- [Premature Completion](premature-completion.md) — agents declare success while a required obligation remains unmet.
+- [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) — the independent-verification fix as a standing practice.
+- [Agent Extension Conflicts](agent-extension-conflicts.md) — how loaded skills interact and degrade under context-budget contention.
 
 ---
 
@@ -41297,6 +41549,61 @@ The numbers are the measured Microsoft AX figures; the point is that only the se
 
 ---
 
+### CodeSlop: Search-Trajectory Residue in Agent Patches
+Source: https://agentpatterns.ai/patterns/anti-patterns/codeslop-trajectory-minimization/
+
+# CodeSlop: Search-Trajectory Residue in Agent Patches
+
+> CodeSlop is the removable code an agent's search leaves in the patch — speculative edits that survive because tests pass, not because they are needed.
+
+CodeSlop is the gap between an agent's patch and the smallest behavior-preserving patch that produces the same repair — formally, `len(AP) − len(AP*)` ([Mathai et al., 2026](https://arxiv.org/abs/2607.18161)). It is not bad code. A slop line can be clean, well-named, and reviewed; it is still slop if removing it changes nothing the tests observe. The distinction matters because static quality checks never flag it.
+
+## Where it comes from
+
+Iterative repair is a search. Between test-feedback requests an agent makes edit sequences, and failed hypotheses leave speculative and diagnostic changes behind. Once a solution passes, the agent has no incentive to remove them, so every edit — essential and abandoned alike — persists in the diff. The paper's motivating case: a Linux-kernel fix touched 21 lines where only 3 were required, leaving 18 search artifacts ([Mathai et al., 2026](https://arxiv.org/abs/2607.18161)).
+
+The residue concentrates in exploratory scaffolding, not core logic. On SWE-Bench-Verified, minimization removed 100% of scratch reproduction scripts and 100% of build and config changes, but only 20.4% of source edits ([Mathai et al., 2026](https://arxiv.org/abs/2607.18161)). Harmless in one patch, the drift compounds as agents own more of a codebase — independent benchmarking finds agent code 2.3x more verbose than human repositories and verbosity rising across 75.5% of long-horizon trajectories ([Orlanski et al., 2026](https://arxiv.org/abs/2603.24755)).
+
+## Minimize the trajectory — but only against a trustworthy oracle
+
+The fix is a distinct post-repair step: shrink the patch to its behavior-preserving core rather than shipping the first diff that passes tests. This holds only where the test suite is a trustworthy proxy for intended behavior, because minimization preserves behavior relative to the oracle, not in the abstract. Two conditions gate it.
+
+First, do not minimize by line count or by asking the agent to clean up its own patch — prompting an agent to minimize its own work fails in 3.8% to 44.9% of cases, including patch inflation and bug reintroduction ([Mathai et al., 2026](https://arxiv.org/abs/2607.18161)). Use counterfactual removal validated against tests. Trajectory minimization (TRIM) walks the recorded edits coarse-to-fine — drop a whole edit sequence, then a file's edits, then individual edits, in reverse order, keeping each removal only if the patch still passes and shrinks.
+
+Second, the oracle must cover the paths the removed code guards. Where it does, the step is nearly free: 17.9% to 32.9% slop reduction across four agent scaffolds with 99.1% oracle preservation on SWE-Bench and near-zero quality loss ([Mathai et al., 2026](https://arxiv.org/abs/2607.18161)).
+
+## Why it works
+
+Trajectory minimization works because the trajectory carries structure the flat diff has lost. Edits group into sequences, sequences touch files, files hold atomic edits. Removing whole groups first and refining only where a group cannot be dropped eliminates search residue with far fewer validations than reconstructing edit dependencies from unstructured hunks — TRIM matches Delta Debugging's reduction (32.9% versus 31.5%, p=0.50) with about 1.9x fewer test runs ([Mathai et al., 2026](https://arxiv.org/abs/2607.18161)). Each removal is gated on the tests still passing, so the test for "is this slop?" is empirical, not stylistic.
+
+## When this backfires
+
+Minimization is only as good as the oracle, so it backfires where the oracle is thin or the code is deliberately untested.
+
+- Weak or shallow test suites — removing a change that guards an untested path passes tests yet ships a regression; empirically rare (3 of 330 on SWE-Bench) but real.
+- Intentional non-functional code — defensive guards, audit and observability hooks, and forward-compatibility structure read as removable slop because no test exercises them. [Abstraction Bloat](abstraction-bloat.md) makes the same warning about stripping audit logging and auth under a "minimum code" rule.
+- Expensive validation domains — each removal candidate needs a fresh test run, so where a single run is costly (kernel builds near 30 minutes) even the structured approach carries real cost, and naive delta-debugging is worse.
+- Unfamiliar task shapes — the evidence covers kernel and repository repair; domains with different trajectory structure may minimize differently ([Mathai et al., 2026](https://arxiv.org/abs/2607.18161)).
+
+Not every extra line is slop. The step earns its place only where "passes tests" is a trustworthy stand-in for "preserves intended behavior."
+
+## Key Takeaways
+
+- CodeSlop is removable functional redundancy — code the agent's own search left behind, distinct from static quality; clean code can still be slop.
+- The cause is structural: iterative repair accumulates speculative and abandoned edits, and nothing rewards removing them once tests pass.
+- Treat minimization as a separate post-repair step, but gate it on a strong oracle and use counterfactual test-validated removal, never line-count shrinking or agent self-cleanup.
+- Slop concentrates in exploratory scaffolding — reproduction scripts and config — far more than in core source.
+
+## Related
+
+- [Abstraction Bloat](abstraction-bloat.md) — the sibling mechanism: over-engineering by training incentive rather than by search residue
+- [Refactoring Runaway](refactoring-runaway.md) — agents bundling unrequested refactors into a fix, a related source of patch inflation
+- [Shadow Tech Debt](shadow-tech-debt.md) — how per-PR drift compounds silently across a codebase
+- [AI Slop as a Process Problem](../../workflows/slop-as-process-problem.md) — the pipeline-gate mitigation that catches slop at PR time
+- [Law of Triviality in AI PRs](law-of-triviality-ai-prs.md) — why the large diffs slop produces get the least review scrutiny
+
+---
+
 ### Coding-Agent Misalignment Forms (Seven-Symptom Taxonomy)
 Source: https://agentpatterns.ai/patterns/anti-patterns/coding-agent-misalignment-forms/
 
@@ -41562,6 +41869,7 @@ A coding agent produces a retry utility with exponential backoff, jitter, and [c
 - [Trust Without Verify](trust-without-verify.md) -- accepting agent output as correct because it looks polished
 - [The Effortless AI Fallacy](effortless-ai-fallacy.md) -- the belief that AI should require less engagement, which accelerates debt accumulation
 - [Shadow Tech Debt](shadow-tech-debt.md) -- AI agents silently eroding codebase coherence, a structural companion to comprehension debt
+- [Team Shared-Language Desync from Removed Review Friction](shared-language-desync.md) -- the team-level counterpart: the group's shared model desyncs, versus one person's comprehension gap
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md) -- team knowledge invisible to agents, compounding the gap between AI output and developer expectations
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) -- copying configurations without understanding why they work, the setup-time parallel to blind code acceptance
 
@@ -45272,6 +45580,7 @@ Same surface symptom, different cause, different fix:
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) — verification steps before declaring done
 - [Red-Green-Refactor for Agents](../../verification/red-green-refactor-agents.md) — test-state as externally observable stopping criterion
 - [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](lazy-generation.md) — the same premature-stop failure narrowed to test generation, where the shortfall skews onto complex branches
+- [Assuming Loaded Skills Stay Enforced in Long Contexts](assuming-loaded-skills-stay-enforced.md) — the dropped-obligation version: a required item silently falls out of a long trajectory, and a self-check inherits the same blind spot
 
 ---
 
@@ -45663,6 +45972,7 @@ A refactoring-aware refinement step inspects the patch, classifies the parameter
 - [Premature Completion](premature-completion.md) — inverse failure mode (agent stops too early); refactoring runaway is doing too much
 - [LLM Refactoring Adoption Patterns](../../human/llm-refactoring-adoption-patterns.md) — how developers modify ChatGPT-suggested refactorings when refactoring *is* the request
 - [Pattern Replication Risk](pattern-replication-risk.md) — adjacent training-distribution-inheritance pathology
+- [CodeSlop: Search-Trajectory Residue in Agent Patches](codeslop-trajectory-minimization.md) — the related residue mechanism: search artifacts, not refactors, inflating the diff
 
 ---
 
@@ -46519,6 +46829,79 @@ After — the tool is scored against its contract: the harness preserves the too
 - [The Test Homogenization Trap](test-homogenization-trap.md) — the adjacent case where the tests share the model's blind spots rather than the tool overfitting its one input.
 - [Run-Status vs Task-Status Confusion in Autonomous Agent Runs](run-status-vs-task-status-confusion.md) — the general rule that a clean exit is not evidence of a correct outcome.
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — the related failure where the completion signal itself fires too early.
+
+---
+
+### Team Shared-Language Desync from Removed Review Friction
+Source: https://agentpatterns.ai/patterns/anti-patterns/shared-language-desync/
+
+# Team Shared-Language Desync from Removed Review Friction
+
+> A team's shared language desyncs when agents remove the review and discussion friction that quietly kept its concepts, boundaries, invariants, and ownership agreed.
+
+Shared-language desync is a team-level failure mode: the group's agreed concepts, boundaries, invariants, and ownership drift apart because coding agents let each engineer ship large changes without the human review and discussion that used to keep everyone's mental model in sync. It appears once agent throughput rises and no deliberate synchronization practice replaces the friction that was removed. It is distinct from [comprehension debt](comprehension-debt.md), which lives in one person; this lives between people.
+
+## The pattern
+
+Each engineer directs an agent to produce large changes and merges them fast. The old loop — colleagues reading, reviewing, and discussing each other's code — carries far less traffic, because the agent, not a teammate, did the reading. Nothing breaks at merge time, so the team keeps shipping. What erodes is the invisible agreement underneath: two developers now hold different ideas of where a module's boundary sits, which invariant a service guarantees, or who owns a subsystem. The code grows faster than the shared understanding of it.
+
+## Why it works
+
+Synchronizing a team's mental model was never an explicit deliverable. It was a byproduct of friction. [Conway's Law holds that a system's structure mirrors the communication structure of the organization that builds it](https://martinfowler.com/bliki/ConwaysLaw.html): code review and discussion were the channel that kept a team's interfaces congruent and its picture of the system agreed. As [Armin Ronacher puts it](https://lucumr.pocoo.org/2026/7/13/the-tower-keeps-rising/), "some of the friction in traditional development was the process by which understanding became shared, and by which teams discovered whether they still agreed about how the system worked." Agents let people "work in parallel without necessarily having to talk to the others, or even acquire the shared understanding that changes would have previously forced them to learn." The desync is silent because, unlike the Tower of Babel, construction does not stop when agreement is lost — [there is no immediate failure to signal the drift](https://simonwillison.net/2026/Jul/14/armin-ronacher/).
+
+## When this backfires
+
+The desync is conditional, not automatic. It stays low or absent when:
+
+- Work is solo or a single owner holds a module end to end. There is no shared model to desync.
+- The team already externalizes its shared model into living artifacts — a [maintained glossary and ADR set](../../instructions/ubiquitous-language-for-ai-plans.md), or [elicited tacit knowledge](../../workflows/encoding-tacit-knowledge.md) — that both humans and agents read and update. Synchronization survives because it never depended on review friction.
+- A small co-located team re-syncs its model through high-bandwidth conversation, independent of who reviewed which pull request.
+- The work is greenfield or throwaway, with no long-lived shared model yet to fall out of sync.
+
+Read the other way, review friction was already a lossy synchronizer — tacit, bottleneck-prone, and often stuck in one reviewer's head. Rising throughput can be a prompt to make the shared model an explicit, durable deliverable rather than a fragile side effect of who happened to review what.
+
+## Example
+
+Two engineers each harden the same downstream call, guided by their own agent, with no shared owner for the invariant they are both editing.
+
+=== "Boundary drift merged silently"
+
+    ```text
+    Engineer A (via agent): adds a retry-with-backoff wrapper inside the
+      payments service, treating "transient failure" as any 5xx.
+    Engineer B (via agent): hardens the same downstream call in the orders
+      service, treating "transient failure" as network timeouts only.
+    Both PRs pass tests and merge the same afternoon. Neither reads the other.
+    ```
+
+    The team now holds two conflicting definitions of a load-bearing invariant, and no one noticed because nothing failed.
+
+=== "A deliberate re-sync point"
+
+    ```text
+    The "transient failure" definition lives in the domain glossary and an ADR.
+    Both agents are pointed at it; both PRs cite it. A weekly model-alignment
+    review reconciles any new boundary or invariant before it spreads.
+    ```
+
+    Synchronization moves from an accidental byproduct of review into a named artifact and ritual, so throughput can rise without the shared model drifting.
+
+## Key Takeaways
+
+- Shared-language desync is a team-level failure mode — concepts, boundaries, invariants, and ownership drift apart — distinct from the person-level [comprehension debt](comprehension-debt.md).
+- The mechanism is that shared understanding was a byproduct of review and discussion friction, not an explicit deliverable; agents remove the friction and the byproduct disappears with it.
+- It is silent because [construction continues after agreement collapses](https://lucumr.pocoo.org/2026/7/13/the-tower-keeps-rising/) — there is no build break to signal the drift.
+- It is conditional: solo work, externalized shared models, small co-located teams, and throwaway work carry little or none.
+- The fix is to re-introduce deliberate synchronization without re-adding all the friction — externalized [ubiquitous-language and ADR artifacts](../../instructions/ubiquitous-language-for-ai-plans.md), agent-consumed shared standards, and periodic model-alignment rituals.
+
+## Related
+
+- [Comprehension Debt](comprehension-debt.md) — the person-level counterpart; no single developer understands the code, versus the team no longer agreeing on what the system is.
+- [The Implicit Knowledge Problem](implicit-knowledge-problem.md) — knowledge stuck in Slack and memory is invisible to agents, the raw material a desyncing team fails to externalize.
+- [Shadow Tech Debt](shadow-tech-debt.md) — the structural companion: agents change what a codebase does without knowing why it is shaped that way.
+- [PR Scope Creep as a Human Review Bottleneck](pr-scope-creep-review-bottleneck.md) — what happens to the review channel itself as agent velocity outpaces human capacity.
+- [Ubiquitous Language for AI Plans](../../instructions/ubiquitous-language-for-ai-plans.md) — a glossary-and-ADR remedy that anchors agent plans to agreed vocabulary.
+- [Encoding Tacit Knowledge](../../workflows/encoding-tacit-knowledge.md) — turning unwritten team judgment into artifacts agents and humans share.
 
 ---
 
@@ -48654,6 +49037,7 @@ Strategies for splitting work across parallel agents — and controlling the bla
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md) — Spawn sub-agents to parallelize independent work in isolated context windows; the main thread receives only distilled results
 - [Adaptive Sandbox Fan-Out Controller](adaptive-sandbox-fanout-controller.md) — Start with a small parallel batch, monitor quality signals, then scale up, stop early, refine the prompt, or decompose — rather than committing to a fixed N upfront
 - [Swarm Migration Pattern](swarm-migration-pattern.md) — Coordinate 10–20 parallel subagents to migrate large codebases atomically, achieving 6–10x speedup for qualifying file-independent transformations
+- [The Model Economics of Agent Swarms](model-economics-agent-swarms.md) — Swarm width is capped first by task decomposability, then by the planner-worker model mix that dominates cost — not by fan-out alone
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md) — Process large agent workloads without hitting API rate limits by dispatching work in sequential batches of fixed size
 - [Staggered Agent Launch](staggered-agent-launch.md) — Launch parallel agents 30 seconds apart to break the thundering-herd dynamic so each agent claims work before the next reads the queue
 - [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md) — Decouple the orchestrator's processing loop from subagent lifecycle so it continues planning and processing partial results while delegates execute concurrently
@@ -54332,6 +54716,68 @@ The pipeline requires conditions that not all codebases meet:
 
 - [Peng et al. (2026). Beyond Local Code Optimization: Multi-Agent Reasoning for Software System Optimization. arXiv:2603.14703](https://arxiv.org/abs/2603.14703)
 - [TeaStore: A Micro-Service Reference Application. DescartesResearch, GitHub](https://github.com/DescartesResearch/TeaStore)
+
+---
+
+### The Model Economics of Agent Swarms: Cost and Width
+Source: https://agentpatterns.ai/patterns/multi-agent/model-economics-agent-swarms/
+
+# The Model Economics of Agent Swarms: Cost and Width
+
+> A swarm's width is capped first by whether the task decomposes, then by the model mix that sets its cost — not by fan-out alone.
+
+The model economics of an agent swarm decide how wide it pays to run and whether it pays at all: per-agent token cost, model throughput, and the planner-worker model mix set an economic ceiling on fan-out. But that ceiling only matters after a prior gate — task decomposability — has already decided whether more agents help. Treat swarm width as two sequential questions, not one topology choice.
+
+## Gate one: decomposability decides if a swarm helps
+
+Economics is the second question. The first is whether the task splits cleanly. A controlled Google Research study of 180 agent configurations found that multi-agent coordination improved a parallelizable task (financial reasoning) by 80.9% over a single agent, while every multi-agent variant degraded a strictly sequential planning task by 39 to 70% ([Google Research — Towards a science of scaling agent systems](https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/), [arXiv:2512.08296](https://arxiv.org/abs/2512.08296)). No token budget or throughput rescues a task that does not decompose. Check decomposability before you price a swarm.
+
+## Gate two: the model mix sets the ceiling
+
+Once a task clears the first gate, cost is dominated by which model does which work — not by raw agent count. Building SQLite in Rust with a swarm, Cursor ran four model configurations that produced similar quality at costs that varied roughly eightfold: an Opus 4.8 planner paired with Composer 2.5 workers cost $1,339, versus $10,565 for GPT-5.5 as both planner and worker ([Cursor — Agent swarms and the new model economics](https://cursor.com/blog/agent-swarm-model-economics)). The worker fleet was the swing: cheap workers cost $411 against $9,373 for frontier workers at comparable quality ([Cursor](https://cursor.com/blog/agent-swarm-model-economics)).
+
+Throughput then sets wall-clock convergence within that ceiling, but only where the task is valuable enough to pay for it. Anthropic reports multi-agent systems use about 15 times more tokens than a chat interaction, so "multi-agent systems require tasks where the value of the task is high enough to pay for the increased performance" ([Anthropic — Building a multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)).
+
+## Why it works
+
+The cost asymmetry comes from where judgment is needed. In Cursor's run the planner "produced a small fraction of the tokens but roughly two-thirds of the cost," because "few moments in a large task genuinely require frontier intelligence, such as the original decomposition, the design decisions, and certain trade-offs. Once a frontier planner has collapsed the ambiguity into a detailed, explicit instruction, less expensive models simply have to follow it" ([Cursor](https://cursor.com/blog/agent-swarm-model-economics)). A planner never implements, so its context never fills with low-level detail, and a worker never plans, so it spends all its context on one narrow piece — which is why Cursor attributes the swarm's scalability to "context efficiency, more than from parallelism itself" ([Cursor](https://cursor.com/blog/agent-swarm-model-economics)). Swarm cost is therefore a model-mix decision: put frontier tokens only on the few high-judgment steps and buy width with cheap, high-throughput workers.
+
+## When this backfires
+
+- Sequential or tightly-coupled tasks: every multi-agent variant Google tested lost 39 to 70% on strict sequential reasoning, and cheaper or faster models do not recover it ([Google Research](https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/)).
+- Low-value tasks: at roughly 15 times the token cost of a chat, a swarm loses to a single agent whenever task value does not clear the bill ([Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system)).
+- Tool-heavy agents: Google found a tool-coordination trade-off where the coordination tax grows disproportionately as agents gain more tools, eroding the per-agent economics ([Google Research](https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/)).
+- Communication-free swarms: independent agents that never check each other amplified errors 17.2x, against 4.4x for a centralized orchestrator, so cheap parallel workers without a validating stage generate rework that eats the savings ([Google Research](https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/)).
+- Ambiguous work handed to cheap workers: the cheap-worker economics hold only after a frontier planner collapses ambiguity. Without that, workers thrash — an early swarm run logged 68,000 commits and more than 70,000 conflicts in two hours ([Cursor](https://cursor.com/blog/agent-swarm-model-economics)).
+
+Human review is a third ceiling that sits on top of both gates: parallel sessions concentrate review on one person, and that capacity, not agent count, becomes the throughput constraint ([Parallel Agent Sessions](../../workflows/parallel-agent-sessions.md)).
+
+## Example
+
+Cursor's four-configuration comparison shows the model mix moving cost while quality holds:
+
+| Planner | Workers | Total cost | Quality |
+|---------|---------|-----------|---------|
+| GPT-5.5 | GPT-5.5 | $10,565 | comparable |
+| Opus 4.8 | Composer 2.5 | $1,339 | comparable |
+
+Same task, same swarm shape, similar quality — an eightfold cost gap driven entirely by which model plans and which model executes ([Cursor](https://cursor.com/blog/agent-swarm-model-economics)). The lever is the mix, not the fan-out width.
+
+## Key Takeaways
+
+- Ask decomposability first: on non-decomposable tasks, multi-agent variants lost 39 to 70%, and no budget recovers it.
+- The planner-worker model mix, not agent count, dominates swarm cost — a frontier planner plus cheap workers held quality at roughly one-eighth the all-frontier cost.
+- Throughput sets convergence speed only where task value clears the roughly 15x token premium of multi-agent work.
+- Put frontier tokens on decomposition and design; buy width with cheap, high-throughput workers.
+- Keep a validating orchestrator: communication-free swarms amplify errors 17.2x versus 4.4x centralized.
+
+## Related
+
+- [Swarm Migration Pattern](swarm-migration-pattern.md) — the mechanics of a 10–20 worker swarm; this page prices how wide that fan-out pays.
+- [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) — the topology gate that this cost lens sits beside, not replaces.
+- [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the per-task model-routing rule that generalizes the planner-worker mix.
+- [Parallel Agent Sessions](../../workflows/parallel-agent-sessions.md) — human review as the separate throughput ceiling above swarm economics.
+- [Cohesion-Aware Task Partitioning](cohesion-aware-task-partitioning.md) — how to test decomposability before fanning out.
 
 ---
 
@@ -68258,6 +68704,7 @@ Volume-first agent deployment underperforms when:
 - [Predicting Which AI-Generated Functions Will Be Deleted](predicting-reviewable-code.md) — structural signals that predict which agent-generated code survives review
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical merge rate gap (45% vs 68%) when CRAs review without human involvement
 - [Interaction-Pattern Evaluation for Agentic PRs](interaction-pattern-evaluation.md) — the interaction-signal complement to these outcome rates, since merge/reject labels misclassify most rejected agentic PRs
+- [Kaizen-Style Continuous Code Quality Loop (Pomona)](../workflows/kaizen-continuous-quality-loop.md) — one operating model that closes the acceptance gap: constrain agent output to small, single-purpose quality PRs a reviewer accepts quickly
 
 ## Sources
 
@@ -71182,6 +71629,7 @@ Two of the six steps caught the substantive defects. The CI and security steps p
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — why high comment counts predict lower merge rates on agent PRs
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — bandwidth pressure that erodes the 10-minute budget
 - [Security Review Gap in AI-Authored PRs](security-review-gap-in-ai-prs.md) — why step 5 (security boundaries) is a hard stop, not a heuristic
+- [Diff-Coverage Gating for Agent-Authored Pull Requests](../verification/diff-coverage-gate-agent-prs.md) — turn the coverage-delta tell into an automated changed-line merge gate
 
 ---
 
@@ -71686,6 +72134,7 @@ Detailed commit message, passing tests, clean CI — a human-PR heuristic approv
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — high-signal review feedback design
 - [Security Constitution for AI Code Generation](../security/security-constitution-ai-code-gen.md) — proactive specification-layer defence against the same CWE classes
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — structural precondition for CWE-78 and CWE-22 at runtime
+- [Supply-Chain Security Debt in Agent Pull Requests](../security/supply-chain-security-debt-agent-prs.md) — the complementary supply-chain view: where agent-PR security debt concentrates outside code-level CWEs
 
 ## Sources
 
@@ -72087,6 +72536,7 @@ Source: https://agentpatterns.ai/verification/
 
 ## Guardrails
 
+- [Diff-Coverage Gating for Agent-Authored Pull Requests](diff-coverage-gate-agent-prs.md) — Gate an agent's PR on the coverage of its changed lines, not the whole-repo percentage, because agents test under half of code-touching PRs and existing suites cover a minority of what they change
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces
 - [Evidence-Gated Lifecycle Control for Coding Agents (Proof-or-Stop)](evidence-gated-lifecycle-control.md) — Advance an agent's lifecycle states (reviewed, tested, done, ready-to-merge) only when fresh, source-bound, mechanically verifiable evidence clears the gate — the agent's own assertion never advances the state
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — Order cheap evidence gates ahead of expensive ones in agentic repair loops — retrieval-grounded context, compile gate, target-test gate, then full regression — to filter invalid candidates before paying full-suite cost
@@ -75092,6 +75542,75 @@ Guardrails impose fixed costs that don't scale with value, so they backfire in s
 
 ---
 
+### Diff-Coverage Gating for Agent-Authored Pull Requests
+Source: https://agentpatterns.ai/verification/diff-coverage-gate-agent-prs/
+
+# Diff-Coverage Gating for Agent-Authored Pull Requests
+
+> Gate an agent's pull request on the test coverage of its changed lines instead of trusting that the agent tested its own diff.
+
+Compute coverage over only the lines a pull request adds or edits, then block the merge when that number falls below a threshold. This makes the agent's own diff the coverage obligation, rather than the whole-repository percentage that a large existing suite already inflates. The gate exists because agents do not reliably test what they change: across 4,882 agent-authored PRs in the AIDev dataset, agents included a test change in only 49.6% of PRs that touched code under test, and existing tests executed 61.5% of changed lines in Java but just 27.0% in Python ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057)).
+
+## The empirical case
+
+The study covered five agents — Codex, Copilot, Cursor, Claude Code, and Devin — across 532 Java and 4,350 Python PRs ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057)). Three findings drive the gate:
+
+- Half of code-touching PRs ship no test change at all (49.6% include one).
+- 64.8% of Python PRs have no changed line executed by any existing test.
+- Error paths are the worst blind spot: try/catch blocks were missed at 86.0% in Java and 81.0% in Python.
+
+Adding tests does not close the gap on its own. When Java agents wrote tests they still deleted more than they added (82 deleted versus 31, a 2.6× ratio), and 74.8% of the new tests Python agents added failed to cover the agent's own changed lines ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057)). A whole-repo coverage number hides all of this; a per-diff number surfaces it.
+
+## How to apply it
+
+- Measure coverage restricted to the diff. Tools such as [diff_cover](https://github.com/Bachmann1234/diff_cover) compute the covered fraction of added and edited lines from a standard coverage report and a git diff.
+- Set a changed-line threshold on the PR check, not a whole-repo one. [Codacy](https://blog.codacy.com/diff-coverage) and [CodeScene](https://codescene.io/docs/guides/code-coverage-gates/check-code-coverage-in-pull-and-merge-requests.html) both gate on diff coverage with a default near 70%; [Azure DevOps](https://learn.microsoft.com/en-us/azure/devops/pipelines/test/codecoverage-for-pullrequests) reports the same metric on pull requests.
+- Weight error-handling paths. Line coverage alone under-counts the try/catch branches agents miss most, so pair the gate with branch coverage or a targeted review of new exception handling.
+- Fail on a deleted test, not just a low number. A dropped test file that raises whole-repo coverage should still block, because test deletion is a documented agent path to a green build.
+
+## Why it works
+
+AI coding agents optimize for syntactic correctness and for passing the visible existing suite, not for exercising the specific lines they wrote, so they routinely open diffs whose new logic no test touches and, in Java, delete failing tests to go green ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057)). A diff-coverage gate converts an implicit assumption — the agent probably tested this — into a mechanical merge condition tied to the exact lines under review. That is the same mechanism that made diff coverage a standard pull-request gate for human authors: scoping the metric to the change forces new code to carry its own tests instead of hiding behind the repository average ([Codacy](https://blog.codacy.com/diff-coverage)).
+
+## When this backfires
+
+The gate measures execution, not correctness, and a threshold is a target an agent will optimize against:
+
+- Assertion-free gaming. An agent can clear the threshold with tests that execute the changed lines but assert nothing, so the gate certifies untested behavior as tested ([Code4IT](https://www.code4it.dev/blog/code-coverage-must-not-be-the-target/)). Pair the gate with [mutation testing](mutation-testing-quality-gate.md), which fails a suite that would not notice a regression.
+- Weak instrumentation. Dynamic languages with partial diff-coverage tooling report misleading numbers — the same study found Python both worse-covered and harder to measure than Java ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057)).
+- Trivial diffs blocked. Pure refactors, generated code, and config-only changes have no meaningful branches to cover, so a uniform threshold blocks safe PRs and pushes teams toward blanket exemptions that erode the gate.
+- Line coverage misses the branches that matter. A high line-coverage number can still leave the rare error paths agents miss most uncovered, so a line-only gate under-weights exactly the risk it was added for.
+
+## Example
+
+Configure diff_cover as a required PR check that blocks below 80% changed-line coverage:
+
+```bash
+# Produce a coverage report, then score only the PR's diff lines
+coverage run -m pytest && coverage xml
+diff-cover coverage.xml --compare-branch origin/main --fail-under 80
+```
+
+An agent opens a PR adding a `refund()` path. The suite passes and whole-repo coverage reads 84%, but `diff-cover` reports 41% on the changed lines: the new negative-balance branch has no test. The check fails, and the reviewer demands a test that exercises that branch before the merge — the defect the agent's own tests skipped.
+
+## Key Takeaways
+
+- Scope the coverage metric to the PR's changed lines; a whole-repo percentage hides an untested diff behind a large existing suite.
+- The gate is justified empirically: agents test under half of code-touching PRs, and existing tests cover 27.0% of changed Python lines ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057)).
+- Block on deleted tests too — test deletion is an agent path to a green build.
+- Coverage proves execution, not assertion; pair the gate with mutation testing or branch coverage so it resists assertion-free gaming.
+- Exempt trivial diffs deliberately rather than lowering the threshold for everyone.
+
+## Related
+
+- [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md) — closes the assertion-free-gaming gap a coverage gate cannot catch on its own.
+- [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — the broader class of hard CI checks a diff-coverage gate belongs to.
+- [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md) — a sibling gate that judges an agent PR on the diff, not the absolute pass rate.
+- [Assertion-Free Test Theater in Agent-Authored Patches](../patterns/anti-patterns/assertion-free-test-theater.md) — the failure mode a coverage-only gate invites.
+- [Reviewer's Playbook for Agent-Authored Pull Requests](../code-review/reviewers-playbook-agent-authored-prs.md) — where coverage delta is one tell in a human review order.
+
+---
+
 ### Distillation-Induced Similarity Metrics for Tool-Use Agents
 Source: https://agentpatterns.ai/verification/distillation-induced-similarity-metrics/
 
@@ -75486,7 +76005,7 @@ Source: https://agentpatterns.ai/verification/eval-blind-spots/
 
 An eval blind spot is a place where your measurement setup is structurally unable to see a failure. The agent may be failing — gaming a visible suite, taking an unsafe path, using a stale retrieval, or leaving a test stale — but the harness reports success because the relevant evidence sits outside what it scores. These gaps share one property: a stronger model does not close them. Only a change to the measurement methodology does.
 
-Run-to-run variance is itself a measurement-methodology problem that sits upstream of the four structural gaps: OpenAI documents an approach for separating real signal from run-to-run noise in coding-agent evaluations, so a single scored pass is not mistaken for a genuine capability difference ([OpenAI: Separating signal from noise in coding evaluations](https://openai.com/index/separating-signal-from-noise-coding-evaluations/)).
+Run-to-run variance is itself a measurement-methodology problem that sits upstream of the four structural gaps: OpenAI documents an approach for separating real signal from run-to-run noise in coding-agent evaluations, so a single scored pass is not mistaken for a genuine capability difference ([OpenAI: Separating signal from noise in coding evaluations](https://openai.com/index/separating-signal-from-noise-coding-evaluations/)). Microsoft frames the same problem as hidden variables — naming model temperature, file ordering, and shared API state as non-determinism sources that silently move eval scores unless the harness controls for them ([Microsoft: The hidden variables in your agent eval](https://developer.microsoft.com/blog/the-hidden-variables-in-your-agent-eval/)).
 
 This page is the umbrella for four documented gaps. Each is a distinct mechanism with its own diagnostic and its own fix:
 
@@ -77882,7 +78401,7 @@ Macro evaluation is the population-level layer above per-call and per-trace eval
 Three conditions decide whether the macro layer is the right tool ([OpenAI Cookbook, 2026](https://developers.openai.com/cookbook/examples/partners/macro_evals_for_agentic_systems/macro_evals_for_agentic_systems)):
 
 - Trace volume in the thousands. The reference run analyzes 992 traces. Below this order of magnitude, density-based clustering (HDBSCAN over UMAP-reduced embeddings) either reports everything as noise or merges unrelated cases into spurious groups.
-- A per-trace `eval_finding` reliable enough not to amplify bias systematically. Macro aggregation concentrates judge bias rather than averaging it out. Below ~70% judge precision, "behavior patterns" can be recurring judge mistakes ([AgentRewardBench, 2025](https://arxiv.org/abs/2504.08942)). Running an LLM-as-judge across thousands of traces is also a cost question: LangChain reports distilling a small task-specific judge that runs roughly 100× cheaper than a frontier judge, which keeps per-trace grading affordable at corpus scale ([LangChain, 2026](https://blog.langchain.com/blog/building-a-100x-cheaper-trace-judge-with-fireworks)).
+- A per-trace `eval_finding` reliable enough not to amplify bias systematically. Macro aggregation concentrates judge bias rather than averaging it out. Below ~70% judge precision, "behavior patterns" can be recurring judge mistakes ([AgentRewardBench, 2025](https://arxiv.org/abs/2504.08942)). Designing those per-trace criteria well is a discipline of its own: Microsoft's practitioner guidance on agent-experience (AX) evals argues for structuring eval scenarios and criteria to produce real signal rather than vanity pass rates ([Microsoft, 2026](https://developer.microsoft.com/blog/building-ax-evals-that-actually-work/)) — the more so at corpus scale, where macro aggregation over a vanity metric only concentrates its blind spots. Running an LLM-as-judge across thousands of traces is also a cost question: LangChain reports distilling a small task-specific judge that runs roughly 100× cheaper than a frontier judge, which keeps per-trace grading affordable at corpus scale ([LangChain, 2026](https://blog.langchain.com/blog/building-a-100x-cheaper-trace-judge-with-fireworks)).
 - Cross-trace structure worth aggregating. Multi-specialist workflows where the same agent recurs across scenarios, or where conditions (tariffs, capacity, compliance) vary across runs, expose patterns that clustering can find. One-shot CI bots returning a patch per task do not.
 
 When these hold, macro evals catch failures the [trajectory-opaque evaluation gap](eval-blind-spots.md) and [outcome grading](grade-agent-outcomes.md) cannot see — population properties of a workflow, not of any single run.
@@ -78579,6 +79098,7 @@ The agent adds three targeted tests; the mutation tool reruns and confirms all 1
 - [Behavioral Testing for Agents](behavioral-testing-agents.md) — testing what agents do, not how they do it
 - [Coverage-Guided Agents for Fuzz Harness Generation](coverage-guided-fuzz-harness-generation.md) — the same generate-measure-refine loop applied to fuzzing
 - [Anti-Reward-Hacking](anti-reward-hacking.md) — designing rubrics agents cannot game by surface metrics
+- [Diff-Coverage Gating for Agent-Authored Pull Requests](diff-coverage-gate-agent-prs.md) — the changed-line coverage gate whose assertion-free blind spot mutation testing closes
 
 ---
 
@@ -83150,6 +83670,7 @@ Tool invocation exposes attack surfaces distinct from prompt injection. Maliciou
 Agents dynamically load tools from MCP servers, plugins, and registries at runtime. A tampered tool inherits the agent's full permissions.
 
 - [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — Agents default to caret and tilde ranges because `npm install` does; for an application with a bump-bot, replace the range with an exact pin plus a lockfile-enforced install — the floating range is the leg that admits a future-compromised release
+- [Supply-Chain Security Debt in Agent Pull Requests](supply-chain-security-debt-agent-prs.md) — Across 4,022 agent-authored PRs, 82.3% of security smells are supply-chain integrity issues (unpinned CI/Docker references) concentrated in workflow and Docker files; target review at high-impact infra paths and enforce SHA pinning plus secret scanning in CI
 - [Content-Addressed Agent Configurations (Deterministic Control Plane)](deterministic-control-plane-llm-coding-agents.md) — Treat coding-agent configs as an installed supply chain with SHA-256 content addressing, a per-project lockfile, and five declared permission tiers; the 10.1% cross-repo duplicate rate and the <1% configs declaring any permission scope (vs 33% of GitHub Actions workflows) make this a governance gap, not a hypothetical one
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — Across 10 models on 1,000 Python tasks, 36.7%-55.7% of LLM-specified versions contain known CVEs and all models converge on the same risky releases — pin against an external vulnerability source, not the model's training prior
 - [Skill Composition Risk in Agent Ecosystems](skill-composition-risk.md) — Skills benign in isolation become harmful when one skill's output flows into the next; three failure modes (CapFlow, TrustLift, AuthBlur) reach 33.6%, 96.5%+, and 71.8% relative attack success across ten production backends, and per-skill vetting misses them by construction
@@ -83770,6 +84291,7 @@ The next `npm install <pkg>` an agent runs writes `1.12.0`, not `^1.12.0`. CI in
 - [Scanner-as-MCP-Server: Secret and Dependency Scans as Typed Agent Tools](scanner-as-mcp-server.md) — the agent-side scanning surface that complements lockfile enforcement
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the broader frame; a permissive range plus untrusted-content tool plus egress is one shape of the trifecta
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — the PR-time gate where manifest-diff inspection and CVE audit land
+- [Supply-Chain Security Debt in Agent Pull Requests](supply-chain-security-debt-agent-prs.md) — the empirical picture: supply-chain integrity dominates agent-PR security smells, with unpinned CI/Docker references alongside floating manifest ranges
 
 ## Sources
 
@@ -93600,7 +94122,7 @@ Learn it hands-on: [Pick Your Sandbox](https://learn.agentpatterns.ai/security/p
 - MicroVM: KVM-backed lightweight VMs with a minimalist VMM. Examples: [Firecracker](https://github.com/firecracker-microvm/firecracker)-based providers (e2b, Daytona, Modal), Kata Containers.
 - OS-level isolators: host-kernel primitives without a container daemon. Examples: [bubblewrap](https://github.com/containers/bubblewrap) on Linux, `sandbox-exec`/Seatbelt on macOS.
 
-A fourth, separate option is to consume one of these families as a managed or hosted runtime rather than self-hosting it. LangChain's LangSmith ships a managed agent sandbox that gives each agent its own isolated computer — a VM with its own environment, dependencies, and network access ([LangChain — Give your AI agent its own computer](https://blog.langchain.com/give-your-ai-agent-its-own-computer)). GitHub now offers cloud and local agent-execution sandboxes for Copilot in public preview ([GitHub changelog — Cloud and local sandboxes for GitHub Copilot](https://github.blog/changelog/2026-06-02-cloud-and-local-sandboxes-for-github-copilot)). These trade operational control for the same isolation boundaries below, and the comparison still applies to whichever family the managed provider wraps.
+A fourth, separate option is to consume one of these families as a managed or hosted runtime rather than self-hosting it. LangChain's LangSmith ships a managed agent sandbox that gives each agent its own isolated computer — a VM with its own environment, dependencies, and network access ([LangChain — Give your AI agent its own computer](https://blog.langchain.com/give-your-ai-agent-its-own-computer)); LangChain makes the broader case that agents need their own dedicated computer so they can run untrusted code safely ([LangChain — Agents need their own computer](https://blog.langchain.com/blog/agents-need-their-own-computer)). GitHub now offers cloud and local agent-execution sandboxes for Copilot in public preview ([GitHub changelog — Cloud and local sandboxes for GitHub Copilot](https://github.blog/changelog/2026-06-02-cloud-and-local-sandboxes-for-github-copilot)). These trade operational control for the same isolation boundaries below, and the comparison still applies to whichever family the managed provider wraps.
 
 ## Comparison
 
@@ -95829,6 +96351,77 @@ When a transcript-driven allowlist, default-deny sandbox, or static analyzer is 
 
 ---
 
+### Supply-Chain Security Debt in Agent Pull Requests
+Source: https://agentpatterns.ai/security/supply-chain-security-debt-agent-prs/
+
+# Supply-Chain Security Debt in Agent Pull Requests
+
+> Most agent-PR security smells are unpinned CI and Docker supply-chain references — target review at high-impact infra paths, not every diff.
+
+This applies when your agent PRs touch GitHub Actions workflows, Dockerfiles, or dependency manifests. If your agents only edit application code and docs, the finding below does not describe your risk.
+
+An empirical study of the AIDev dataset classified security smells across 16,112 file changes in 4,022 agent-authored pull requests and found that 38.9% of those PRs carry at least one security smell, of which 82.3% are supply-chain integrity issues ([arXiv:2607.12428](https://arxiv.org/abs/2607.12428)). GitHub Actions workflows and Docker files together held 87.6% of all detected smells. So review of agent PRs pays off most where the debt concentrates — the infrastructure paths — not spread evenly across every changed line.
+
+## Read the 82.3% as scoped, not absolute
+
+The study restricted its corpus to high-risk file paths and to added lines only ([arXiv:2607.12428](https://arxiv.org/abs/2607.12428)). Scoping to CI and container files over-represents supply-chain smells by construction, so 82.3% describes the smell mix inside those paths, not the share of all agent security problems. Two more limits keep the number honest: the LLM-as-a-judge detector recovered 77.5% of smells against a manually-labeled gold standard (precision 0.908, F1 0.836), so real prevalence is higher than reported; and a "smell" is a hardening gap such as a mutable tag, not a confirmed exploit. Treat the finding as a signal about where to look, not a severity score.
+
+## The credential leaks are a collaboration problem
+
+The critical-severity slice tells a sharper story. Of 253 critical smells, 99.6% were hard-coded credentials, and of the 74 confirmed genuine secrets, 67.6% were introduced by human collaborators rather than the agents ([arXiv:2607.12428](https://arxiv.org/abs/2607.12428)). Worse, 81.1% of those secrets reached integration with no review comment from any bot or human. So the target is not distrust of agents specifically — humans leaked more secrets than the agents did. Agent-driven velocity outpaces human-in-the-loop review, and the same gap swallows secrets from either author. The fix belongs in CI, applied to every PR regardless of author: secret scanning with push protection, SHA-pinning policy, and pinned base images.
+
+## Why it works
+
+Supply-chain smells cluster because agents and humans reference GitHub Actions and Docker images by mutable tags such as `@v4` or `:latest` instead of immutable commit SHAs or digests. A mutable tag is a pointer the upstream owner can move: if that account is compromised, the tag silently resolves to malicious code on the next CI run. The tj-actions/changed-files compromise of March 2025 is the realized case — an attacker repointed more than 350 tags to a commit that dumped runner secrets into build logs, affecting over 23,000 repositories ([Unit 42](https://unit42.paloaltonetworks.com/github-actions-supply-chain-attack/)). Pinning to a full commit SHA removes the mutable pointer, which is why GitHub added policy-level SHA-pinning enforcement ([GitHub Changelog](https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/)). An independent study of agentic PRs found agents concentrate their security-relevant work in configuration and CI surfaces, which is exactly where this debt accrues ([arXiv:2601.00477](https://arxiv.org/abs/2601.00477)).
+
+## When this backfires
+
+- Agent PRs dominated by docs and refactors that never touch CI, Dockerfiles, or manifests: a supply-chain-focused gate adds friction with almost nothing to catch.
+- Repos that already enforce SHA-pinning policy, secret push protection, and pinned base images: the counted smells are blocked deterministically, so extra manual review is redundant.
+- Teams with no security-triage capacity: turning on scanners without a responder produces noise that trains reviewers to dismiss alerts — the review-fatigue mode the authors explicitly warn against ([arXiv:2607.12428](https://arxiv.org/abs/2607.12428)).
+- Single-agent or single-platform shops: the AIDev distribution aggregates many agents and may not match one tool's mix — measure your own before wiring policy to the 82% figure.
+
+## Example
+
+An agent opens a PR adding a workflow step that references a popular action by tag:
+
+**Before — mutable tag, repointable by the upstream owner:**
+```yaml
+- uses: tj-actions/changed-files@v44
+```
+
+**After — pinned to a full commit SHA, with the tag kept as a comment:**
+```yaml
+- uses: tj-actions/changed-files@<full-40-char-commit-sha>  # v44
+```
+
+The pinned form is what survived the March 2025 compromise: workflows referencing `@v44` picked up the malicious commit, while workflows pinned to a known-good SHA never resolved to it ([Unit 42](https://unit42.paloaltonetworks.com/github-actions-supply-chain-attack/)). Enforce the pin as a CI check so the gate does not depend on a reviewer spotting the tag.
+
+## Key takeaways
+
+- In-scope agent PRs carry security debt concentrated in supply-chain integrity — unpinned CI and Docker references — with 87.6% of smells in workflow and Docker files ([arXiv:2607.12428](https://arxiv.org/abs/2607.12428)).
+- Read 82.3% as the smell mix inside high-risk paths, not the share of all agent security issues; the corpus was scoped to those paths and detector recall was 77.5%.
+- Hard-coded credentials were the critical failure, but humans introduced most of them — put secret scanning and SHA-pinning in CI for every author, not as author-conditional distrust of agents.
+- Agent velocity outpaces human review: 81.1% of confirmed secrets reached integration unreviewed, so deterministic CI gates beat manual inspection here.
+- Route review effort to the paths that hold the debt; skip the gate on agent populations that never touch infra files.
+
+## Related
+
+- [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — the manifest-level sibling of the unpinned-tag problem
+- [The Security Review Gap in AI-Authored PRs](../code-review/security-review-gap-in-ai-prs.md) — the complementary code-level view: six CWEs that survive review
+- [Reviewer's Playbook for Agent-Authored Pull Requests](../code-review/reviewers-playbook-agent-authored-prs.md) — the inspection order that puts CI and security boundaries early
+- [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — the operational pattern for running the gate at PR time
+- [Secrets Management for Agents](secrets-management-for-agents.md) — closing the hard-coded-credential leg with proper secret handling
+
+## Sources
+
+- [arXiv:2607.12428](https://arxiv.org/abs/2607.12428) — Sakib, Banik, Jadliwala, "Trust but Verify? Uncovering the Security Debt of Autonomous Coding Agents" (KDD 2026 AgenticSE workshop): primary study
+- [arXiv:2601.00477](https://arxiv.org/abs/2601.00477) — "Security in the Age of AI Teammates": agent security work concentrates in config/CI surfaces
+- [Unit 42 (Palo Alto Networks)](https://unit42.paloaltonetworks.com/github-actions-supply-chain-attack/) — tj-actions/changed-files supply-chain compromise, March 2025
+- [GitHub Changelog, 15 Aug 2025](https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/) — policy-level SHA-pinning enforcement
+
+---
+
 ### System Prompt as Secret Store (OWASP LLM07)
 Source: https://agentpatterns.ai/security/system-prompt-not-a-secret-store/
 
@@ -97829,6 +98422,8 @@ Code bugs have stack traces. Agent bugs have context windows. When an agent fail
 4. Capability ceiling — the task exceeded the model tier’s capability
 
 Debugging means working out which category applies before changing anything.
+
+LangChain's [introduction to coding-agent observability](https://blog.langchain.com/blog/your-coding-agents-are-a-black-box-heres-how-to-crack-them-open) frames an opaque agent as a black box to crack open through tracing and instrumentation.
 
 ## Diagnostic sequence
 
@@ -100282,6 +100877,8 @@ Source: https://agentpatterns.ai/observability/traces-need-feedback-to-power-lea
 Tracing-as-debugging works for one bug at a time. It does not scale into a learning loop, because the trace alone does not say whether the trajectory was good. As Harrison Chase puts it: "Traces alone do not create that loop. You also need feedback: signals that tell you whether the agent's behavior was useful, accepted, rejected, inefficient, risky, or wrong" ([LangChain, May 5 2026](https://www.langchain.com/blog/agent-observability-needs-feedback-to-power-learning)).
 
 The same trace can describe a 40-step success or a 40-step failure. Without a verdict you cannot filter failures worth turning into evals, compare good and bad trajectories on one task, feed [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md) from production volume, or detect drift across the three improvement layers — model weights, harness scaffolding, retrieved context.
+
+Once traces carry verdicts, LangChain frames the shift as a data-mining problem over production traces — mining trajectories for the failures worth fixing rather than hand-authoring test cases ([LangChain — Improving agents is a data-mining problem](https://blog.langchain.com/blog/improving-agents-is-a-data-mining-problem)).
 
 The fix is structural: every trace gets a verdict attached to the run, not stored in a parallel analytics system whose join keys never line up with the trace ID.
 
@@ -127003,12 +127600,14 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Cloud Planning with Inline-Comment Review and Execute-Anywhere Choice](cloud-planning-execute-anywhere.md) — Generate the plan in a cloud session, review it inline in the browser, then defer the cloud-versus-local execution choice to approval time
 - [The Velocity-Quality Asymmetry: Why AI Speed Gains Fade Without QA Investment](velocity-quality-asymmetry.md) — Empirical evidence shows AI coding tools produce transient velocity gains but persistent quality degradation — sustainable speed requires scaling QA as a first-class concern
 - [AI Slop as a Process Problem: Encoding Quality Standards as Pipeline Gates](slop-as-process-problem.md) — Treat AI-generated slop the way CI/CD treats broken builds — a per-PR agent gate enforcing version-controlled standards, sized to agent throughput rather than reviewer attention
+- [Kaizen-Style Continuous Code Quality Loop (Pomona)](kaizen-continuous-quality-loop.md) — Pair a Scanning skill and a Repair skill to file small, single-purpose code-quality PRs a reviewer accepts quickly — for mechanical tasks under a per-day review cap
 - [Vibe Coding: Outcome-Oriented Agent-Assisted Development](../patterns/anti-patterns/vibe-coding.md) — Delegate implementation entirely to the agent and focus on evaluating outcomes for low-risk, throwaway work
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md) — Wire up OpenTelemetry on Claude Code and LangChain agents for cost dashboards, compliance audit trails, and trajectory debugging
 - [Prototype Before Optimizing: Establish Quality Baselines Before Token Constraints](prototype-before-optimizing.md) — Defer production efficiency constraints until after establishing quality baselines to avoid locking in suboptimal architectures
 - [Background-to-Foreground Handoff](background-foreground-handoff.md) — Transfer work from a background agent to a human at the ~90% completion mark using distilled summaries and artifact-based handoff points
 - [In-Thread Side-Channel](in-thread-side-channel.md) — Ask a mid-task clarifying question inside one session using a tagged sub-conversation that returns the agent to its prior goal
 - [Canary Rollout for Agent Policy Changes](canary-rollout-agent-policy.md) — Gate agent policy updates behind a traffic-split rollout so regressions surface on a small blast radius before full deployment
+- [Governing Production Agents: Cost, Control, Compliance](governing-production-agents.md) — A tri-axis framework that designs cost budgets, runtime control, and compliance auditability as one enforced system applied to every model, tool, and agent call
 - [Burn the Boats — Commitment-Forcing Deprecation](burn-the-boats.md) — Remove a working feature entirely with a hard deadline to force full commitment to a new paradigm and stop anchoring to obsolete approaches
 - [The 7 Phases of AI-Assisted Feature Development](7-phases-ai-development.md) — Feature-level workflow model with entry and exit criteria: Research, Prototype, PRD, Issues, Implement, QA, Ship
 - [Monolith-to-Sub-Agents Refactor](monolith-to-subagents-refactor.md) — Five-step migration checklist for taking a brittle monolithic agent prototype to an orchestrated pipeline with schema-first outputs, dynamic RAG, tracing, and framework-native circuit breakers
@@ -127023,6 +127622,84 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Knowledge-Based Pull Requests for Cross-Trust-Boundary Contributions](knowledge-based-pull-requests.md) — Distil an external contribution into a confirmed knowledge package, then have a project-owned trusted agent regenerate the code in-house — for the high-context contributions where reconstructing intent from the diff is expensive
 - [Whole-Codebase Visibility as a Migration Prerequisite](whole-codebase-visibility-migration-prerequisite.md) — Three-condition scoping check (codebase size, multi-repo or cross-VCS scope, discovery-bound shape) that decides whether a large-scale agent-driven migration needs whole-codebase visibility infrastructure or whether agentic search will do
 - [Legacy Code Archaeology: Reconstruct Intent Before Migrating](legacy-code-archaeology.md) — Use a coding agent to excavate an undocumented legacy system's intent — under adversarial forensic prompting and a runnable period-accurate baseline — before modernizing, for the comprehension-first case where no migration blueprint yet exists
+
+---
+
+### A Governance Framework for Production Agents
+Source: https://agentpatterns.ai/workflows/governing-production-agents/
+
+# A Governance Framework for Production Agents
+
+> Govern production agents on three axes at once — cost, control, and compliance — as one enforced system, not per-incident fixes.
+
+Production agent governance designs cost, control, and compliance rules as one enforced system that applies to every model, tool, and agent call, rather than adding controls one incident at a time. The framework comes from LangChain's model for running agents in production, which organizes the problem on those three axes ([LangChain: Building Governed Agents](https://www.langchain.com/blog/building-governed-agents-a-framework-for-cost-control-and-compliance)).
+
+This is a way to think about governance, not a product setting. It differs from vendor policy toggles such as [agent governance policies](agent-governance-policies.md), which configure one tool's controls. The three axes describe what any production agent deployment must cover, whatever tools enforce it.
+
+## Why governance can't be bolted on
+
+Agents are becoming production infrastructure: they answer customers, write and deploy code, and act across business systems. As their autonomy grows, the question is how to apply policy to every interaction without slowing adoption ([LangChain](https://www.langchain.com/blog/building-governed-agents-a-framework-for-cost-control-and-compliance)).
+
+Per-incident controls fail here because agent behavior is unbounded. Spend has no natural ceiling — one request can cascade into hundreds of calls, and a retry loop can burn thousands of dollars overnight before anyone notices ([Finout: Agentic AI Cost Governance](https://www.finout.io/blog/agentic-ai-cost-governance-controlling-spend-before-it-controls-you)). Finout, citing Gartner, reports a forecast that more than 40% of agentic AI projects will be cancelled by 2027, with escalating cost and weak controls among the drivers. Designing governance as a system means the next unplanned behavior is already covered.
+
+## The three axes
+
+### Cost
+
+Cost governance sets budgets and attributes spend before an invoice arrives. Apply hard limits at the organization, team, user, or API-key level, and layer daily, weekly, and monthly caps ([LangChain](https://www.langchain.com/blog/building-governed-agents-a-framework-for-cost-control-and-compliance)). One key per agent or workload turns spend into something you can attribute without a separate tracking system. Pair the caps with per-request and per-session limits and circuit breakers that stop an agent when a threshold is hit ([Finout](https://www.finout.io/blog/agentic-ai-cost-governance-controlling-spend-before-it-controls-you)). Model routing then matches each task to an approved model that meets the required quality, latency, and cost — cheaper models for narrow tasks, capable models reserved for deep reasoning.
+
+### Control
+
+Control governance decides what an agent may do, not just what it may say. For agents, the larger risk is often the action, not the output ([LangChain](https://www.langchain.com/blog/building-governed-agents-a-framework-for-cost-control-and-compliance)). Scope which tools an agent can call and which credentials it receives ([blast radius containment](../security/blast-radius-containment.md)), route consequential actions through a [human approval gate](../security/human-in-the-loop-confirmation-gates.md), and redact sensitive data before it reaches a model. Guardrails detect patterns — regular expressions for structured data like card numbers, model-based detection for names or jailbreak attempts — but they reduce risk rather than remove it, so back them with deterministic limits over content filtering alone ([LangChain](https://www.langchain.com/blog/building-governed-agents-a-framework-for-cost-control-and-compliance)).
+
+### Compliance
+
+Compliance governance produces evidence that the controls work. Regulations including GDPR, HIPAA, and the risk-tiered EU AI Act require organizations to show not only that a policy exists but that it is applied consistently ([LangChain](https://www.langchain.com/blog/building-governed-agents-a-framework-for-cost-control-and-compliance)). That means audit logs that capture who ran a workload, which policy version applied, what outcome followed, and which tools or providers were used — retained under access and retention rules. Wire these into [agent observability](../observability/agent-observability-otel.md) so the audit trail is a byproduct of running the agents, not a separate pipeline.
+
+## How enforcement works
+
+The three axes converge on one enforcement point. LangChain frames it as an LLM gateway that sits between agents and providers: a single place to authenticate usage, select approved models, minimize exposed context, enforce spend and data policies, and retain decision evidence ([LangChain: LangSmith LLM Gateway](https://www.langchain.com/blog/introducing-llm-gateway)). Governance sets the rules; the gateway applies them to every request. When a spend cap is hit, the agent receives a clear error rather than a surprise invoice; when a policy fires, it is logged as evidence.
+
+```mermaid
+graph LR
+    A[Agent call] --> G[Control plane]
+    G -->|cost caps| P[Model provider]
+    G -->|redaction and scoping| P
+    G -->|audit log| C[Compliance evidence]
+```
+
+## Why it works
+
+A single enforcement point makes policy consistent and provable. When every model, tool, and agent hop passes one control plane, the same rule is applied the same way each time and each decision is recorded — so you can demonstrate to a regulator that a policy was applied, not just written ([LangChain](https://www.langchain.com/blog/building-governed-agents-a-framework-for-cost-control-and-compliance)). Per-team reimplementation drifts and cannot be shown to hold. The cost half works for the same reason: upstream limits prevent overruns before they happen, because agent spend is driven by behavior with no natural ceiling and cannot be caught reliably after the fact ([Finout](https://www.finout.io/blog/agentic-ai-cost-governance-controlling-spend-before-it-controls-you)). A central chokepoint also separates applications from model volatility, so you can change providers or prices behind a stable policy surface.
+
+## When this backfires
+
+Governance as a system earns its cost only in production. It backfires when:
+
+- The agent is a prototype or a solo project. A single spend cap and a sandbox cover nearly the same risk for far less effort, and the full framework is premature.
+- The control plane has no failure design. Sitting in the critical path, a gateway without fail-open or fail-closed rules, fallbacks, and load balancing becomes a single point of failure and a latency tax on every call ([LangChain](https://www.langchain.com/blog/building-governed-agents-a-framework-for-cost-control-and-compliance)).
+- Approval cycles run slower than delivery. Developers route around slow allowlists with personal subscriptions and sideloaded servers, which erases the visibility the framework was meant to create — the same shadow-IT failure that [agent governance policies](agent-governance-policies.md) warns about.
+- Teams over-trust guardrails. Pattern detection misses novel formats and model-based detection produces false positives and negatives, so content filtering cannot gate consequential actions on its own.
+
+## Example
+
+A team ships a customer-support agent that can issue refunds. Cost: each agent instance gets its own API key with a daily cap, and a circuit breaker halts it after 500 calls in an hour. Control: the refund tool is scoped to amounts under $50, and anything above routes to a [human approval gate](../security/human-in-the-loop-confirmation-gates.md); social-security and card numbers are redacted before any model sees them. Compliance: every refund decision logs the policy version, the model used, and the outcome, retained for audit. When a prompt-injection attempt drives a burst of refund attempts, the cost cap and the approval gate both fire, and the audit log shows exactly what was blocked and why.
+
+## Key Takeaways
+
+- Production agent governance covers three axes at once — cost, control, and compliance — designed as one enforced system rather than per-incident fixes.
+- Cost is budgets and attribution (per-key caps, circuit breakers, model routing); control is what the agent may do (tool scoping, approvals, redaction); compliance is provable evidence (audit logs, policy versioning) for regulations like GDPR, HIPAA, and the EU AI Act.
+- The axes converge on a single enforcement point — a control plane applied to every model, tool, and agent call — which makes policy consistent and demonstrable.
+- The framework is for production: prototypes, control planes without failure design, slow approval cycles, and over-trusted guardrails are where it backfires.
+
+## Related
+
+- [Agent Governance Policies](agent-governance-policies.md) — the vendor product-policy layer that enforces these axes in GitHub Copilot; relate, do not confuse.
+- [Agent Development Lifecycle for Agent Products](../patterns/agent-design/agent-development-lifecycle.md) — the build-test-deploy-monitor loop these controls gate.
+- [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md) — the control axis in depth.
+- [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md) — approvals for consequential actions.
+- [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md) — the cost and audit evidence layer.
+- [Canary Rollout for Agent Policy Changes](canary-rollout-agent-policy.md) — rolling out a policy change safely.
 
 ---
 
@@ -127509,6 +128186,7 @@ Centralized governance creates bottlenecks when allowlist approval cycles are sl
 
 ## Related
 
+- [Governing Production Agents: Cost, Control, Compliance](governing-production-agents.md) — the tool-agnostic tri-axis framework these product-policy controls implement.
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
 - [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md)
 - [Human-in-the-Loop Placement: Where and How to Supervise](human-in-the-loop.md)
@@ -134697,6 +135375,98 @@ The same ticket dispatched without the R/A/P sections — "users get logged out 
 - [Programmatic Cloud-Agent Dispatch via REST API and Webhooks](programmatic-cloud-agent-dispatch.md) — the REST / webhook / cron dispatch surface
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — the upstream skill that ensures tickets reach the dispatch surface in a WRAP-ready state
 - [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md) — generates the kind of investigated, context-rich tickets that succeed on this dispatch surface
+
+---
+
+### Kaizen-Style Continuous Code Quality Loop (Pomona)
+Source: https://agentpatterns.ai/workflows/kaizen-continuous-quality-loop/
+
+# Kaizen-Style Continuous Code Quality Loop (Pomona)
+
+> Run an agent as a scan-then-repair loop that files small, single-purpose code-quality PRs a reviewer can accept quickly.
+
+A Kaizen-style quality loop pairs a Scanning skill that finds and ranks quality tasks with a Repair skill that opens one small pull request at a time. Bloomberg's Pomona tool is the worked example: over a three-month team deployment it opened 39 PRs, 32 merged (82.1%), at a median time-to-close of 2h14m ([Pomona, arXiv:2606.06752](https://arxiv.org/abs/2606.06752)). The payoff is reviewer acceptance and trust for autonomous agent work, not raw merge speed — so the loop earns its place only under specific conditions.
+
+## When this loop pays off
+
+The value is conditional. Reach for it when all of these hold:
+
+- The tasks are mechanical and well-scoped: lint and type-checker violations, TODO comments, dead code, and coverage gaps — the discovery areas Pomona's Scanning skill targets ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)). Large-scale refactoring is explicitly out of scope.
+- Reviewer bandwidth, not generation speed, is the constraint you are optimizing. Pomona's adopting team capped output at one PR per day and its survey found engineers willing to review two to three agent PRs per week ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)). The loop only works if human review keeps pace.
+- Your goal is a higher acceptance rate for agent-authored changes, not faster merges. Agents outpace humans on speed but their PRs are accepted less often — a trust and utility gap ([AIDev, arXiv:2507.15003](https://arxiv.org/abs/2507.15003)). Small, obviously-correct diffs are how you close that gap.
+
+If you expect the loop to make merges faster because the diffs are small, stop: a study of 845,316 GitHub PRs plus 401,790 Gerrit and Phabricator reviews found PR size has no relationship with time-to-merge ([Do Small Code Changes Merge Faster?, arXiv:2203.05045](https://arxiv.org/abs/2203.05045)). The gain is acceptance, not velocity. See [when this backfires](#when-this-backfires).
+
+## The scan-then-repair loop
+
+```mermaid
+flowchart TD
+    A[Scan: lint, TODOs, dead code, coverage] --> B[Deduplicate findings]
+    B --> C[Rank by benefit x ease-of-review]
+    C --> D[Backlog P1-P4]
+    D --> E[Repair: pick top item]
+    E --> F[Small validated diff]
+    F --> G[Open one PR]
+    G --> H[Human review]
+    H --> D
+```
+
+The cycle draws on Kaizen — continuous improvement through small, consistent changes rather than large one-off projects ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)). It splits into three layers.
+
+### Layer 1: Detection
+
+The Scanning skill fans out parallel sub-agents across separate discovery areas — linter and type-checker output (ruff, mypy), TODO comments, dead code, test-coverage gaps, and coding-standard compliance ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)). Findings are deduplicated so the same underlying issue does not enter the backlog twice.
+
+### Layer 2: Orchestration
+
+Each finding is priced on a benefit-by-ease-of-review matrix and assigned a priority from P1 to P4, which populates a persistent backlog ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)). The backlog is the seam between discovery and repair: it lets the loop tackle high-benefit, low-friction tasks first and defer anything a reviewer could not validate at a glance. A per-day PR cap sits here too, because the binding constraint is review bandwidth.
+
+### Layer 3: Action
+
+The Repair skill takes the top backlog item, generates a targeted change, validates it against the project's tests and linters, updates the backlog, and opens a single PR with a clear motivation statement ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)). Pomona first aimed for roughly 10-line diffs, later raised to a 100-line cap after evaluation. The size limit is enforced deterministically, not left to the model: the agent frequently overshot the intended size on repetitive refactors, so a code-based size check gates each diff ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)).
+
+## Why it works
+
+A small, single-purpose diff lets a reviewer confirm correctness quickly and with little scepticism, so the change stays mergeable even during high-workload weeks. Pomona reports the effect directly: 25 of 32 merged PRs drew no reviewer comments beyond the mandatory review, and 28 of 32 needed no follow-up commits ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)). The causal lever is reviewer cognitive load and trust, not merge latency. That distinction matters because size does not move time-to-merge in the large-scale data ([arXiv:2203.05045](https://arxiv.org/abs/2203.05045)), while agent PRs specifically suffer a lower acceptance rate ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)). Keeping each agent change small and obviously-correct recovers the acceptance that large agent diffs lose.
+
+## When this backfires
+
+The conditions above are load-bearing. Drop one and the loop costs more than it returns.
+
+- Cohesive large changes. Splitting one logical refactor into many small PRs forces branch-stacking and sequencing, and scatters context a reviewer would rather see in one place. Pomona scopes large-scale refactoring out for this reason ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)); a single reviewed PR beats five sequenced fragments.
+- Valid but not worth reviewing. The agent can produce changes that pass every check yet are not worth a reviewer's attention. Experienced engineers in the Pomona survey distrusted fully-automated relevance filtering and preferred user-controlled triggering over autonomous operation ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)).
+- Saturated review bandwidth. Isolated maintenance PRs get deprioritized against feature work. Without the per-day cap, open agent PRs outpace the reviewers and the backlog stops draining.
+- Optimizing for speed. A team that adopts the loop expecting faster merges is measuring the wrong thing — size does not predict merge time ([arXiv:2203.05045](https://arxiv.org/abs/2203.05045)).
+- Missing deterministic guards. Without a size check and duplicate-PR detection the agent overshoots limits and files duplicates. Four early Bloomberg rejections were duplicate PRs from the Repair skill running twice before human review, and two more came from undesirable generated formatting ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)).
+
+## Example
+
+A representative cycle on a Python service. The Scanning skill's sub-agents return findings from each discovery area, which the orchestrator prices and files:
+
+```
+Backlog (benefit x ease-of-review)
+  P1  mypy: 3 missing return-type annotations in orders/handler.py   (~8 lines)
+  P2  dead code: unused _legacy_parse() in billing/parse.py          (~15 lines)
+  P3  coverage gap: retry path in client.py has no test              (~40 lines)
+  P4  TODO: replace hand-rolled date parse with stdlib in report.py  (~60 lines)
+```
+
+The Repair skill picks P1, adds the three annotations, runs mypy and the test suite to confirm they pass, and opens one PR titled "Add missing return-type annotations in orders/handler.py" with a one-line motivation. The diff is small enough that a reviewer validates it without follow-up questions — the shape Pomona reports for most of its merged PRs ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)). The next run picks P2, and so on, one PR at a time under the daily cap.
+
+## Key Takeaways
+
+- Pair a Scanning skill (find and rank quality tasks) with a Repair skill (open one small PR) to run continuous code-quality improvement as a Kaizen loop ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)).
+- The payoff is reviewer acceptance and trust, not merge speed — PR size does not predict time-to-merge ([arXiv:2203.05045](https://arxiv.org/abs/2203.05045)).
+- Scope it to mechanical tasks (lint, types, dead code, coverage) and cap output at roughly one PR per day, because review bandwidth is the binding constraint.
+- Enforce the diff-size limit deterministically; the model overshoots it on repetitive edits.
+- It backfires on cohesive large refactors, saturated review queues, and any team measuring speed instead of acceptance.
+
+## Related
+
+- [Agent-Driven PR Slicing](../code-review/agent-driven-pr-slicing.md) — The complementary move for large branches: an agent decomposes one big diff into reviewable PRs, where this loop generates small ones from the start.
+- [Agent PR Volume vs. Value: The Productivity Paradox](../code-review/agent-pr-volume-vs-value.md) — Quantifies the acceptance gap this loop exists to close: agents produce more PRs but get them merged less often.
+- [Discovery-Only Refactor Pass: Surface Candidates Before Touching Code](discovery-only-refactor-pass.md) — Sibling scan-then-act discipline, applied to refactor candidates rather than mechanical quality fixes.
+- [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — The prioritization half as a standalone skill — turning raw findings into a ranked, actionable backlog.
 
 ---
 

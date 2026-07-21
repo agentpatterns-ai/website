@@ -155,3 +155,4 @@ Fifteen lines. One `send_notification` function. No dead abstractions waiting to
 - [Pattern Replication Risk](pattern-replication-risk.md)
 - [Deterministic Guardrails](../../verification/deterministic-guardrails.md)
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md)
+- [CodeSlop: Search-Trajectory Residue in Agent Patches](codeslop-trajectory-minimization.md) — the other bloat source: residue from the agent's own search rather than over-engineering

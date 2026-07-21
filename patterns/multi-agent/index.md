@@ -40,6 +40,7 @@ Strategies for splitting work across parallel agents — and controlling the bla
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md) — Spawn sub-agents to parallelize independent work in isolated context windows; the main thread receives only distilled results
 - [Adaptive Sandbox Fan-Out Controller](adaptive-sandbox-fanout-controller.md) — Start with a small parallel batch, monitor quality signals, then scale up, stop early, refine the prompt, or decompose — rather than committing to a fixed N upfront
 - [Swarm Migration Pattern](swarm-migration-pattern.md) — Coordinate 10–20 parallel subagents to migrate large codebases atomically, achieving 6–10x speedup for qualifying file-independent transformations
+- [The Model Economics of Agent Swarms](model-economics-agent-swarms.md) — Swarm width is capped first by task decomposability, then by the planner-worker model mix that dominates cost — not by fan-out alone
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md) — Process large agent workloads without hitting API rate limits by dispatching work in sequential batches of fixed size
 - [Staggered Agent Launch](staggered-agent-launch.md) — Launch parallel agents 30 seconds apart to break the thundering-herd dynamic so each agent claims work before the next reads the queue
 - [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md) — Decouple the orchestrator's processing loop from subagent lifecycle so it continues planning and processing partial results while delegates execute concurrently

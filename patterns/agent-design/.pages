@@ -105,6 +105,7 @@ nav:
       - tool-preamble-status-update.md
       - verification-gated-agent-autonomy.md
       - deterministic-precondition-gates.md
+      - delegated-autonomy-boundary-artifacts.md
   - "Reliability":
       - agent-circuit-breaker.md
       - self-healing-production-agent.md

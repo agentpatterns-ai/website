@@ -177,3 +177,4 @@ Both CLAUDE.md files stay short; shared content lives once.
 - [AGENTS.md Design Patterns](agents-md-design-patterns.md)
 - [Distributed Conventions via AGENTS.md](agents-md-distributed-conventions.md)
 - [Prompt File Libraries](prompt-file-libraries.md)
+- [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md)

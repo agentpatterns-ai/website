@@ -114,3 +114,4 @@ Applying the describe-it test: the rename prompt would require explaining which 
 - [Agent Backpressure](agent-backpressure.md)
 - [Agent Composition Patterns](agent-composition-patterns.md)
 - [Agents vs Commands](agents-vs-commands.md)
+- [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](delegated-autonomy-boundary-artifacts.md) — the artifact that records this delegation decision, including the rationale when an agent is rejected

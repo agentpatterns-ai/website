@@ -309,6 +309,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Codified Effort and Escalation Policy in the Instruction File](instructions/codified-effort-escalation-policy.md)
 - [Agent-Ready Bug Reports for Software Repair Agents](instructions/agent-ready-bug-reports.md)
 - [Match Tool Instructions to the Agent Workflow](instructions/match-tool-instructions-to-workflow.md)
+- [Prompt Transpilation: Instructions as Build Artifacts](instructions/prompt-transpilation.md)
 
 ## Agent Architecture
 
@@ -561,6 +562,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Git-Bound Memory for the Agentic Development Lifecycle](patterns/agent-design/git-bound-memory.md)
 - [Epistemic Working Memory for Multi-Hop Reasoning (SLEUTH)](patterns/agent-design/epistemic-working-memory-multi-hop-reasoning.md)
 - [Reviewer Precision as a Pipeline Quality Proxy](patterns/multi-agent/reviewer-precision-proxy.md)
+- [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](patterns/agent-design/delegated-autonomy-boundary-artifacts.md)
+- [The Model Economics of Agent Swarms: Cost and Width](patterns/multi-agent/model-economics-agent-swarms.md)
 
 ## Loop Engineering
 
@@ -813,6 +816,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](security/non-human-event-provenance-markers.md)
 - [Setup Documentation as an Install-Time Attack Vector](security/setup-documentation-install-time-attacks.md)
 - [Structural Monitoring for Covert Safeguard-Weakening](security/structural-safeguard-monitoring.md)
+- [Supply-Chain Security Debt in Agent Pull Requests](security/supply-chain-security-debt-agent-prs.md)
 
 ## Testing & Evaluation
 
@@ -948,6 +952,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Action-Graded Severity for Agent Red-Team Outcomes](verification/action-graded-severity-red-team-outcomes.md)
 - [Evidence-Gated Lifecycle Control for Coding Agents (Proof-or-Stop)](verification/evidence-gated-lifecycle-control.md)
 - [Emulated APIs for Agent Skill Evals](verification/emulated-apis-for-skill-evals.md)
+- [Diff-Coverage Gating for Agent-Authored Pull Requests](verification/diff-coverage-gate-agent-prs.md)
 
 ## Hooks & Guardrails
 
@@ -1135,6 +1140,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Concurrent Agent Pull Requests and Merge-Conflict Cost](workflows/concurrent-agent-pr-merge-conflicts.md)
 - [Accumulated Behavioral Rules from Review Feedback](workflows/accumulated-behavioral-rules.md)
 - [Legacy Code Archaeology: Reconstruct Intent Before Migrating](workflows/legacy-code-archaeology.md)
+- [Kaizen-Style Continuous Code Quality Loop (Pomona)](workflows/kaizen-continuous-quality-loop.md)
+- [A Governance Framework for Production Agents](workflows/governing-production-agents.md)
 
 ## Human Factors
 
@@ -1293,6 +1300,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Token Reduction Mistaken for Cost Reduction](patterns/anti-patterns/token-reduction-not-cost-reduction.md)
 - [The Compliance Trap: Consuming Conflicting Agent Memory](patterns/anti-patterns/compliance-trap-conflicting-memory.md)
 - [Prompt Debt: Hand-Tuning Natural-Language Prompts as Technical Debt](patterns/anti-patterns/prompt-debt.md)
+- [CodeSlop: Search-Trajectory Residue in Agent Patches](patterns/anti-patterns/codeslop-trajectory-minimization.md)
+- [Assuming Loaded Skills Stay Enforced in Long Contexts](patterns/anti-patterns/assuming-loaded-skills-stay-enforced.md)
+- [Team Shared-Language Desync from Removed Review Friction](patterns/anti-patterns/shared-language-desync.md)
 
 ## Emerging Concepts
 

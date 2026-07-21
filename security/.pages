@@ -35,6 +35,7 @@ nav:
       - npm-signing-channel-containment-playbook.md
       - enterprise-managed-plugin-governance.md
       - agent-emitted-dependency-ranges.md
+      - supply-chain-security-debt-agent-prs.md
       - llm-pinned-vulnerable-versions.md
       - skill-supply-chain-poisoning.md
       - tool-signing-verification.md

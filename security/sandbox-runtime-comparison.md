@@ -10,7 +10,7 @@ tags:
 aliases:
   - sandbox runtime comparison
   - agent sandbox runtime selection
-last_reviewed: 2026-06-18
+last_reviewed: 2026-07-21
 maturity: established
 ---
 
@@ -28,7 +28,7 @@ Learn it hands-on: [Pick Your Sandbox](https://learn.agentpatterns.ai/security/p
 - MicroVM: KVM-backed lightweight VMs with a minimalist VMM. Examples: [Firecracker](https://github.com/firecracker-microvm/firecracker)-based providers (e2b, Daytona, Modal), Kata Containers.
 - OS-level isolators: host-kernel primitives without a container daemon. Examples: [bubblewrap](https://github.com/containers/bubblewrap) on Linux, `sandbox-exec`/Seatbelt on macOS.
 
-A fourth, separate option is to consume one of these families as a managed or hosted runtime rather than self-hosting it. LangChain's LangSmith ships a managed agent sandbox that gives each agent its own isolated computer — a VM with its own environment, dependencies, and network access ([LangChain — Give your AI agent its own computer](https://blog.langchain.com/give-your-ai-agent-its-own-computer)). GitHub now offers cloud and local agent-execution sandboxes for Copilot in public preview ([GitHub changelog — Cloud and local sandboxes for GitHub Copilot](https://github.blog/changelog/2026-06-02-cloud-and-local-sandboxes-for-github-copilot)). These trade operational control for the same isolation boundaries below, and the comparison still applies to whichever family the managed provider wraps.
+A fourth, separate option is to consume one of these families as a managed or hosted runtime rather than self-hosting it. LangChain's LangSmith ships a managed agent sandbox that gives each agent its own isolated computer — a VM with its own environment, dependencies, and network access ([LangChain — Give your AI agent its own computer](https://blog.langchain.com/give-your-ai-agent-its-own-computer)); LangChain makes the broader case that agents need their own dedicated computer so they can run untrusted code safely ([LangChain — Agents need their own computer](https://blog.langchain.com/blog/agents-need-their-own-computer)). GitHub now offers cloud and local agent-execution sandboxes for Copilot in public preview ([GitHub changelog — Cloud and local sandboxes for GitHub Copilot](https://github.blog/changelog/2026-06-02-cloud-and-local-sandboxes-for-github-copilot)). These trade operational control for the same isolation boundaries below, and the comparison still applies to whichever family the managed provider wraps.
 
 ## Comparison
 
