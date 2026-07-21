@@ -122,5 +122,6 @@ A coding agent produces a retry utility with exponential backoff, jitter, and [c
 - [Trust Without Verify](trust-without-verify.md) -- accepting agent output as correct because it looks polished
 - [The Effortless AI Fallacy](effortless-ai-fallacy.md) -- the belief that AI should require less engagement, which accelerates debt accumulation
 - [Shadow Tech Debt](shadow-tech-debt.md) -- AI agents silently eroding codebase coherence, a structural companion to comprehension debt
+- [Team Shared-Language Desync from Removed Review Friction](shared-language-desync.md) -- the team-level counterpart: the group's shared model desyncs, versus one person's comprehension gap
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md) -- team knowledge invisible to agents, compounding the gap between AI output and developer expectations
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) -- copying configurations without understanding why they work, the setup-time parallel to blind code acceptance

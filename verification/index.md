@@ -92,6 +92,7 @@ last_reviewed: 2026-05-27
 
 ## Guardrails
 
+- [Diff-Coverage Gating for Agent-Authored Pull Requests](diff-coverage-gate-agent-prs.md) — Gate an agent's PR on the coverage of its changed lines, not the whole-repo percentage, because agents test under half of code-touching PRs and existing suites cover a minority of what they change
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces
 - [Evidence-Gated Lifecycle Control for Coding Agents (Proof-or-Stop)](evidence-gated-lifecycle-control.md) — Advance an agent's lifecycle states (reviewed, tested, done, ready-to-merge) only when fresh, source-bound, mechanically verifiable evidence clears the gate — the agent's own assertion never advances the state
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — Order cheap evidence gates ahead of expensive ones in agentic repair loops — retrieval-grounded context, compile gate, target-test gate, then full regression — to filter invalid candidates before paying full-suite cost

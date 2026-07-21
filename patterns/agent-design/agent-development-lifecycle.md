@@ -115,3 +115,4 @@ No LangGraph or LangSmith required — OTel, a pytest eval runner, and a feature
 - [Traces Need Feedback to Power Learning](../../observability/traces-need-feedback-to-power-learning.md) — how the monitor phase produces verdict-labelled traces.
 - [Continuous Agent Improvement](../../workflows/continuous-agent-improvement.md) — the Monitor → Build back-edge.
 - [Canary Rollout for Agent Policy](../../workflows/canary-rollout-agent-policy.md) — the deploy phase, in depth.
+- [Governing Production Agents: Cost, Control, Compliance](../../workflows/governing-production-agents.md) — the cost, control, and compliance guardrails that gate every phase.

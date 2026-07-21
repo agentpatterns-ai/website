@@ -11,7 +11,7 @@ aliases:
   - macro evaluation for agents
   - population-level agent evaluation
   - whole-task agent scoring
-last_reviewed: 2026-06-28
+last_reviewed: 2026-07-21
 maturity: established
 ---
 
@@ -28,7 +28,7 @@ Macro evaluation is the population-level layer above per-call and per-trace eval
 Three conditions decide whether the macro layer is the right tool ([OpenAI Cookbook, 2026](https://developers.openai.com/cookbook/examples/partners/macro_evals_for_agentic_systems/macro_evals_for_agentic_systems)):
 
 - Trace volume in the thousands. The reference run analyzes 992 traces. Below this order of magnitude, density-based clustering (HDBSCAN over UMAP-reduced embeddings) either reports everything as noise or merges unrelated cases into spurious groups.
-- A per-trace `eval_finding` reliable enough not to amplify bias systematically. Macro aggregation concentrates judge bias rather than averaging it out. Below ~70% judge precision, "behavior patterns" can be recurring judge mistakes ([AgentRewardBench, 2025](https://arxiv.org/abs/2504.08942)). Running an LLM-as-judge across thousands of traces is also a cost question: LangChain reports distilling a small task-specific judge that runs roughly 100× cheaper than a frontier judge, which keeps per-trace grading affordable at corpus scale ([LangChain, 2026](https://blog.langchain.com/blog/building-a-100x-cheaper-trace-judge-with-fireworks)).
+- A per-trace `eval_finding` reliable enough not to amplify bias systematically. Macro aggregation concentrates judge bias rather than averaging it out. Below ~70% judge precision, "behavior patterns" can be recurring judge mistakes ([AgentRewardBench, 2025](https://arxiv.org/abs/2504.08942)). Designing those per-trace criteria well is a discipline of its own: Microsoft's practitioner guidance on agent-experience (AX) evals argues for structuring eval scenarios and criteria to produce real signal rather than vanity pass rates ([Microsoft, 2026](https://developer.microsoft.com/blog/building-ax-evals-that-actually-work/)) — the more so at corpus scale, where macro aggregation over a vanity metric only concentrates its blind spots. Running an LLM-as-judge across thousands of traces is also a cost question: LangChain reports distilling a small task-specific judge that runs roughly 100× cheaper than a frontier judge, which keeps per-trace grading affordable at corpus scale ([LangChain, 2026](https://blog.langchain.com/blog/building-a-100x-cheaper-trace-judge-with-fireworks)).
 - Cross-trace structure worth aggregating. Multi-specialist workflows where the same agent recurs across scenarios, or where conditions (tariffs, capacity, compliance) vary across runs, expose patterns that clustering can find. One-shot CI bots returning a patch per task do not.
 
 When these hold, macro evals catch failures the [trajectory-opaque evaluation gap](eval-blind-spots.md) and [outcome grading](grade-agent-outcomes.md) cannot see — population properties of a workflow, not of any single run.

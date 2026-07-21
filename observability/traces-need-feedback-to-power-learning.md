@@ -11,7 +11,7 @@ aliases:
   - trace-feedback coupling
   - feedback-attached traces
   - trace as eval corpus
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-21
 maturity: established
 ---
 
@@ -24,6 +24,8 @@ maturity: established
 Tracing-as-debugging works for one bug at a time. It does not scale into a learning loop, because the trace alone does not say whether the trajectory was good. As Harrison Chase puts it: "Traces alone do not create that loop. You also need feedback: signals that tell you whether the agent's behavior was useful, accepted, rejected, inefficient, risky, or wrong" ([LangChain, May 5 2026](https://www.langchain.com/blog/agent-observability-needs-feedback-to-power-learning)).
 
 The same trace can describe a 40-step success or a 40-step failure. Without a verdict you cannot filter failures worth turning into evals, compare good and bad trajectories on one task, feed [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md) from production volume, or detect drift across the three improvement layers — model weights, harness scaffolding, retrieved context.
+
+Once traces carry verdicts, LangChain frames the shift as a data-mining problem over production traces — mining trajectories for the failures worth fixing rather than hand-authoring test cases ([LangChain — Improving agents is a data-mining problem](https://blog.langchain.com/blog/improving-agents-is-a-data-mining-problem)).
 
 The fix is structural: every trace gets a verdict attached to the run, not stored in a parallel analytics system whose join keys never line up with the trace ID.
 

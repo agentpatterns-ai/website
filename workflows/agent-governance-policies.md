@@ -144,6 +144,7 @@ Centralized governance creates bottlenecks when allowlist approval cycles are sl
 
 ## Related
 
+- [Governing Production Agents: Cost, Control, Compliance](governing-production-agents.md) — the tool-agnostic tri-axis framework these product-policy controls implement.
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
 - [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md)
 - [Human-in-the-Loop Placement: Where and How to Supervise](human-in-the-loop.md)

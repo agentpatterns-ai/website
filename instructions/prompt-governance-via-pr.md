@@ -98,6 +98,7 @@ The PR diff makes the severity definition change explicit. Reviewers can judge w
 - [Frozen Spec File: Preserving Intent in AI Agent Sessions](frozen-spec-file.md)
 - [CLAUDE.md Convention](claude-md-convention.md)
 - [Convention Over Configuration for Agent Workflows](convention-over-configuration.md)
+- [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md)
 
 ## Sources
 

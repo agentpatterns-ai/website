@@ -119,6 +119,7 @@ The next `npm install <pkg>` an agent runs writes `1.12.0`, not `^1.12.0`. CI in
 - [Scanner-as-MCP-Server: Secret and Dependency Scans as Typed Agent Tools](scanner-as-mcp-server.md) — the agent-side scanning surface that complements lockfile enforcement
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the broader frame; a permissive range plus untrusted-content tool plus egress is one shape of the trifecta
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — the PR-time gate where manifest-diff inspection and CVE audit land
+- [Supply-Chain Security Debt in Agent Pull Requests](supply-chain-security-debt-agent-prs.md) — the empirical picture: supply-chain integrity dominates agent-PR security smells, with unpinned CI/Docker references alongside floating manifest ranges
 
 ## Sources
 

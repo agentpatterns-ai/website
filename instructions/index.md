@@ -58,6 +58,7 @@ Structuring instructions across scopes, layers, and files so the right context r
 - [@import Composition Pattern for Instruction Files](import-composition-pattern.md) — Claude Code supports `@path/to/file` imports in CLAUDE.md, enabling modular instruction authoring; other tools rely on hierarchical discovery instead
 - [Prompt File Libraries](prompt-file-libraries.md) — Store reusable, parameterized prompt templates as version-controlled files that team members invoke on demand
 - [Production System Prompt Architecture](production-system-prompt-architecture.md) — Structural patterns from a 102K-char production system prompt: XML-sectioned concern isolation, skills registries, and deferred tool loading
+- [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md) — Compile modular skill files into one validated prompt at build time, with static dependency checks and a golden-file CI gate, so a broken instruction set fails the build not a run
 
 ## System Prompts
 
