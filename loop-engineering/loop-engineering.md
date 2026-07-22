@@ -12,7 +12,7 @@ aliases:
   - loopcraft
   - stacking loops
   - designing loops that prompt agents
-last_reviewed: 2026-06-28
+last_reviewed: 2026-07-22
 maturity: emerging
 ---
 
@@ -69,7 +69,7 @@ Drifting harness assumptions: Loop 4 optimises the harness against historical tr
 
 ## Loop engineering vs context engineering
 
-Loop engineering does not name per-turn loop mechanics — that is a separate discipline. The choice of how much context survives between iterations of the inner agent loop — accumulated, compressed, or fresh — is covered at the [Loop Strategy Spectrum](loop-strategy-spectrum.md). Within-session compaction is covered at [Context Compression Strategies](../context-engineering/context-compression-strategies.md). Loop engineering operates one layer up: it composes the outer loops around whichever inner-loop strategy you chose. The two disciplines stack; they do not replace one another.
+Loop engineering does not name per-turn loop mechanics — that is a separate discipline. The choice of how much context survives between iterations of the inner agent loop — accumulated, compressed, or fresh — is covered at the [Loop Strategy Spectrum](loop-strategy-spectrum.md). Within-session compaction is covered at [Context Compression Strategies](../context-engineering/context-compression-strategies.md). Loop engineering operates one layer up: it composes the outer loops around whichever inner-loop strategy you chose. The two disciplines stack; they do not replace one another. A Towards Data Science experiment makes the layering concrete by running loop engineering with "no LLM inside the loop" — the outer loops carry the work even when the inner step is not a model call, illustrating loop engineering as a layer beyond context engineering ([Towards Data Science, 2026](https://towardsdatascience.com/context-engineering-isnt-enough-a-loop-engineering-experiment-with-no-llm-inside-the-loop/)).
 
 The same disambiguation applies to harness engineering. [Harness engineering](../patterns/agent-design/harness-engineering.md) is the discipline of designing the environment a single agent runs inside — the legibility, the constraints, the mechanical enforcement. Loop engineering is the discipline of stacking control loops around many agent runs. Osmani positions loop engineering as "one floor above the harness" in his ["Loop Engineering" piece](https://addyo.substack.com/p/loop-engineering); LangChain's hill-climbing loop is what closes the feedback between the two layers.
 

@@ -1142,6 +1142,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Legacy Code Archaeology: Reconstruct Intent Before Migrating](workflows/legacy-code-archaeology.md)
 - [Kaizen-Style Continuous Code Quality Loop (Pomona)](workflows/kaizen-continuous-quality-loop.md)
 - [A Governance Framework for Production Agents](workflows/governing-production-agents.md)
+- [The Software Factory Model: Industrializing Agent Loops](workflows/software-factory-model.md)
 
 ## Human Factors
 
@@ -1303,6 +1304,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [CodeSlop: Search-Trajectory Residue in Agent Patches](patterns/anti-patterns/codeslop-trajectory-minimization.md)
 - [Assuming Loaded Skills Stay Enforced in Long Contexts](patterns/anti-patterns/assuming-loaded-skills-stay-enforced.md)
 - [Team Shared-Language Desync from Removed Review Friction](patterns/anti-patterns/shared-language-desync.md)
+- [Trusting Claimed Prior Approval in Agent Review Gates](patterns/anti-patterns/trusting-claimed-prior-approval.md)
 
 ## Emerging Concepts
 
