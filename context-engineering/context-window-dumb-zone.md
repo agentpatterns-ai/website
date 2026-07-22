@@ -8,7 +8,7 @@ tags:
 aliases:
   - Context Rot
   - Context Window Dumb Zone
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-22
 maturity: established
 ---
 
@@ -55,7 +55,7 @@ Size context budgets by task type, not a single percentage rule:
 - Reasoning-heavy tasks (multi-step planning, architecture): keep total context under 32K tokens where possible. The effective window can be 10-20% of the advertised limit.
 - Code generation and bug fixing: highly model-dependent. Test at your target context length before you commit to a budget.
 
-Claude Code's [auto-compaction triggers at ~95% of the window](https://code.claude.com/docs/en/sub-agents#auto-compaction). Compact well before that, especially for reasoning tasks.
+Claude Code's [auto-compaction triggers at ~95% of the window](https://code.claude.com/docs/en/sub-agents#auto-compaction). Compact well before that, especially for reasoning tasks. Towards Data Science describes [session-level "governed context" tactics for managing context rot in Claude Code](https://towardsdatascience.com/governed-context-managing-context-rot-in-claude-code/) — deliberately governing and refreshing what stays in the window before the token limit is reached, rather than waiting for auto-compaction to intervene.
 
 ## Context load is half the problem
 

@@ -140,3 +140,4 @@ The same session showed three failures across three different loops, each with a
 - [Humans and Agents in Software Engineering Loops](../workflows/humans-agents-development-loops.md) — the why / how loop framing on the human-positioning axis
 - [The Plan-First Loop: Always Design Before Writing Code](../workflows/plan-first-loop.md) — a specific instance of the outer loop
 - [Loop Detection](../observability/loop-detection.md) — runtime instrumentation that catches the inner-loop pathology
+- [The Software Factory Model: Industrializing Agent Loops](../workflows/software-factory-model.md) — composing these loops into a production line bounded by verification

@@ -7,7 +7,7 @@ tags:
 aliases:
   - "augmentation over automation"
   - "human-centered AI tooling"
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-22
 maturity: adopted
 ---
 
@@ -44,6 +44,8 @@ Mentorship and culture stay human. Pull request discussions work as team classro
 Ethics and values stay human too. The question "Should we build this?" [demands your judgment](../workflows/human-in-the-loop.md). AI can tell you how to build a feature. It cannot tell you whether you should.
 
 The merge button marks this boundary. GitHub's pull request model "hard-wired accountability into modern software" by requiring human approval before merging. That governance structure stays essential whatever an agent can do ([GitHub Blog: Why Developers Will Always Own the Merge Button](https://github.blog/ai-and-ml/generative-ai/code-review-in-the-age-of-ai-why-developers-will-always-own-the-merge-button/)).
+
+Simon Willison frames the same boundary in accountability terms: an LLM agent can never be the Directly Responsible Individual, echoing the maxim that "a computer can never be held accountable" ([Simon Willison: The Directly Responsible Individual](https://simonwillison.net/2026/Jul/12/directly-responsible-individuals/)).
 
 ## Flow preservation
 

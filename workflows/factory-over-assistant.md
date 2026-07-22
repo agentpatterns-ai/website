@@ -119,3 +119,4 @@ The human's constraint is now PR review throughput across all 12 PRs, not agent 
 - [Fan-Out and Synthesis](../patterns/multi-agent/fan-out-synthesis.md)
 - [Swarm Migration Pattern](../patterns/multi-agent/swarm-migration-pattern.md)
 - [Burn the Boats](burn-the-boats.md) — Commitment-forcing deprecation that enables the factory paradigm
+- [The Software Factory Model: Industrializing Agent Loops](software-factory-model.md) — The factory-level frame above this operational shift, and where to keep human judgment as it scales
