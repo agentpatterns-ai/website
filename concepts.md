@@ -564,6 +564,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Reviewer Precision as a Pipeline Quality Proxy](patterns/multi-agent/reviewer-precision-proxy.md)
 - [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](patterns/agent-design/delegated-autonomy-boundary-artifacts.md)
 - [The Model Economics of Agent Swarms: Cost and Width](patterns/multi-agent/model-economics-agent-swarms.md)
+- [The Harness as Product: What Listed-Rate Pricing Buys](patterns/agent-design/harness-as-product.md)
 
 ## Loop Engineering
 
@@ -953,6 +954,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Evidence-Gated Lifecycle Control for Coding Agents (Proof-or-Stop)](verification/evidence-gated-lifecycle-control.md)
 - [Emulated APIs for Agent Skill Evals](verification/emulated-apis-for-skill-evals.md)
 - [Diff-Coverage Gating for Agent-Authored Pull Requests](verification/diff-coverage-gate-agent-prs.md)
+- [Emulate Agent-Experience Changes Before Shipping](verification/emulate-ax-changes-before-shipping.md)
 
 ## Hooks & Guardrails
 
@@ -1305,6 +1307,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Assuming Loaded Skills Stay Enforced in Long Contexts](patterns/anti-patterns/assuming-loaded-skills-stay-enforced.md)
 - [Team Shared-Language Desync from Removed Review Friction](patterns/anti-patterns/shared-language-desync.md)
 - [Trusting Claimed Prior Approval in Agent Review Gates](patterns/anti-patterns/trusting-claimed-prior-approval.md)
+- [Trusting a Skill Scanner's Verdict as a Security Judgment (Green-Check Fallacy)](patterns/anti-patterns/skill-scanner-verdict-not-security-judgment.md)
 
 ## Emerging Concepts
 

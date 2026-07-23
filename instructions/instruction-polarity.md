@@ -7,7 +7,7 @@ tags:
   - tool-agnostic
 aliases:
   - Instruction Framing
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-23
 maturity: adopted
 ---
 
@@ -24,7 +24,7 @@ Learn it hands-on with the [Say What To Do guided lesson](https://learn.agentpat
 
 Negative instructions require suppression: the agent must hold the prohibited action in mind while choosing not to take it. Positive instructions require execution: the agent identifies the target behavior and performs it. Token generation favors positive selection, because the model chooses what comes next rather than avoiding tokens. So positive instructions raise the probability of the outputs you want ([The Pink Elephant Problem](https://eval.16x.engineer/blog/the-pink-elephant-negative-instructions-llms-effectiveness-analysis)) and produce higher compliance across equivalent rule sets. Anthropic's prompt engineering guidance says the same: ["Tell Claude what to do instead of what not to do."](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/be-clear-and-direct)
 
-The practical difference is small when instructions are few. It compounds as instruction count grows. Negative rules degrade first under a large instruction set, because the suppression signal competes with a growing context of execution targets.
+The practical difference is small when instructions are few. It compounds as instruction count grows. Negative rules degrade first under a large instruction set, because the suppression signal competes with a growing context of execution targets. The Claude Code team reports the same on current frontier models: negative "don't do X" instructions and few-shot examples now actively hurt output quality, driving a roughly 80% cut to Claude Code's own system prompt ([Cat Wu and Thariq Shihipar, via Simon Willison](https://simonwillison.net/2026/Jul/21/cat-and-thariq/)).
 
 ## Reframing common rules
 

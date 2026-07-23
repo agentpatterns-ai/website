@@ -107,5 +107,6 @@ The three controls compose: current docs in the harness's retrieval, an explicit
 - [Unversioned Scaffolding Commands Pull Stale Templates](unversioned-scaffolding-stale-templates.md) — Adjacent staleness mode at *scaffold* time via the npm resolver, distinct from the always-on generation-time bias here.
 - [Stale AI Configuration Artifacts (Context Rot)](stale-ai-configuration-artifacts.md) — The companion failure on the steering side: if the deprecation rules themselves drift, the counter-measure stops working.
 - [Grounding Agents in Code the Model Has Never Seen](../../context-engineering/grounding-zero-prior-code.md) — Sibling at the opposite end of the prior spectrum: zero training mass at all, so the model collapses to the closest public API rather than an outdated one.
+- [Emulate Agent-Experience Changes Before Shipping](../../verification/emulate-ax-changes-before-shipping.md) — The verification technique that surfaces this gravity empirically: emulate a doc change and measure whether it actually moves agent behavior before shipping it.
 </content>
 </invoke>

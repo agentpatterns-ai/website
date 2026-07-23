@@ -165,6 +165,7 @@ nav:
       - dsl-constraining-harness.md
       - harness-hill-climbing.md
       - harness-impermanence.md
+      - harness-as-product.md
       - isometric-harness-ablation.md
       - lane-based-execution-queueing.md
       - managed-vs-self-hosted-harness.md

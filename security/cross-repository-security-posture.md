@@ -9,7 +9,7 @@ tags:
   - security
   - tool-agnostic
   - automation
-last_reviewed: 2026-07-12
+last_reviewed: 2026-07-23
 maturity: adopted
 ---
 
@@ -33,6 +33,8 @@ Turn a single detection into a closed loop across the fleet:
 - Enumerate — express the class as a query and run it across every repository to find every variant, including ones whose surface syntax differs.
 - Remediate at the scale you detected — open coordinated fixes across all affected repositories, each validated in its own context rather than force-pushed blind.
 - Prevent — feed the class back into pre-merge checks so the next instance is caught before it lands. ([Sourcegraph](https://sourcegraph.com/blog/detection-in-one-repo-isnt-a-security-posture))
+
+Remediation is the leg that breaks down at scale: Sourcegraph describes fixing a class across roughly 10,000 repositories, where AI-generated fixes miss surrounding context, detection coverage leaves gaps, and individual repairs stretch into weeks ([Sourcegraph](https://sourcegraph.com/blog/vulnerability-remediation-at-codebase-scale)). Enumerating a class is cheap once modeled as a query; remediating every variant with per-repo validation is where the cost and the timeline actually land.
 
 ## Why it works
 

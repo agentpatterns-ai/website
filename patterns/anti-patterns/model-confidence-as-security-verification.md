@@ -95,3 +95,4 @@ The confidence still orders the review queue, but the deserialization finding �
 - [Blind Tool Deference: Agents Parroting Callable Tools](blind-tool-deference.md) — Adopting a tool's output wholesale instead of judging it; the same uncritical trust applied to tool results.
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — Declaring done on the first signal of progress, the temporal cousin of declaring code secure on the first confident answer.
 - [Overtrusting Human Sign-Off on Generated Assertions](generated-assertion-signoff.md) — The reviewer-side twin: a human's confidence in a generated assertion does not track whether it is correct either.
+- [Trusting a Skill Scanner's Verdict as a Security Judgment (Green-Check Fallacy)](skill-scanner-verdict-not-security-judgment.md) — The tool-side twin: a scanner's pass/fail does not track a skill's safety, so it triages the review rather than replacing it.

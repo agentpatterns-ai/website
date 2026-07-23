@@ -67,6 +67,7 @@ last_reviewed: 2026-05-27
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md) — Define correctness criteria before implementation so every agent change is validated against a stable, reusable test suite
 - [Skill Evals](skill-evals.md) — Treat each skill as an evaluable unit with a labelled dataset, paired with-skill vs baseline runs, and a benchmark that quantifies pass-rate, time, and token trade-offs
 - [Emulated APIs for Agent Skill Evals](emulated-apis-for-skill-evals.md) — Run an API-calling skill's evals against a transparent emulator at the real URL so cost, live-data mutation, and shared-state non-determinism stay out of the score without rewriting the skill under test
+- [Emulate Agent-Experience Changes Before Shipping](emulate-ax-changes-before-shipping.md) — Stand up a proposed documentation, API, or MCP change in a local emulator and measure its effect on agent behavior against a baseline before shipping, because most AX changes fail
 - [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](agent-driven-eval-flywheel.md) — Drive the eval-generation loop from your coding agent so each fix is graded against the whole accumulated case set, proving it generalizes instead of patching one case
 - [Eval Difficulty as a Product Smell](eval-difficulty-product-smell.md) — Hard-to-write evals usually signal a product that was not designed for users to verify; redesign the artifact for checkability before scaling the scorer
 
