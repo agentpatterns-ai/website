@@ -6,7 +6,7 @@ tags:
   - anti-pattern
   - human-factors
   - tool-agnostic
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-22
 maturity: established
 ---
 
@@ -29,7 +29,7 @@ AI coding agents generate code faster than developers can thoroughly read it. Te
 
 ## The velocity-comprehension gap
 
-Code accumulates faster than understanding. Developers ask AI to fix code they never understood — paying off debt with more debt.
+Code accumulates faster than understanding. Developers ask AI to fix code they never understood — paying off debt with more debt. Sourcegraph frames owning and comprehending a codebase as the hardest and most durable engineering job precisely because agents now generate more code than ever ([Sourcegraph — Owning a codebase](https://sourcegraph.com/blog/owning-a-codebase)).
 
 ## The evidence: usage mode matters
 

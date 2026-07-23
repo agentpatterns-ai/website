@@ -93,6 +93,7 @@ The hybrid is not Cursor-specific. Managed providers increasingly offer self-hos
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md) — the two-phase harness pattern for long-running work
 - [Cursor Self-Hosted Cloud Agents](../../tools/cursor/self-hosted-cloud-agents.md) — hybrid deployment: managed orchestration, self-hosted execution
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — routing by complexity, relevant when multi-provider routing is in scope
+- [The Harness as Product: What Listed-Rate Pricing Buys](harness-as-product.md) — the upstream build-vs-buy question this deployment choice follows: what the product layer adds over raw API tokens
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — assigning competing agents to the same task, a self-hosted-only pattern
 - [Local Model Viability Factors for Coding](local-model-viability-for-coding.md) — when self-hosting extends to a local model, the factors that decide whether it is good enough
 - [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) — the three-primitive architecture inside either deployment mode
