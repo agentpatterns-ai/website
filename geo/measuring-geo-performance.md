@@ -56,6 +56,8 @@ LLMs typically cite a small number of domains per response — far fewer than Go
 
 Starting prices are entry tiers verified June 2026. The cheapest plan is usually single-platform, with multi-LLM coverage on higher tiers. Confirm current pricing with each vendor. All tools sample by running prompts. None access platform-internal data.
 
+[isitagentready.com](https://isitagentready.com) is a free, one-off alternative to those paid trackers: instead of sampling AI responses for citation frequency, it scans a site's own machine-readable surface for the signals that make agent retrieval possible in the first place. A [scan of agentpatterns.ai](https://isitagentready.com/?url=agentpatterns.ai) checked, among other things, markdown alternates — an HTTP `Link` header pointing to a `text/markdown` version of each page — and `/.well-known/` discovery documents such as an agent-skills index and an MCP server card; both check families passed. That result says the site's content is structured for agents to fetch and index cleanly, which is a precondition for citation, not a substitute for the citation-tracking metrics above.
+
 ## What no tool solves
 
 ```mermaid

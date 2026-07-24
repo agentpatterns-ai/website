@@ -59,7 +59,7 @@ When building or configuring AI review:
 
 - Set a confidence floor. Only surface findings the model is confident about. Low-confidence suggestions belong in optional "info" channels, not the PR thread.
 - Categorize by severity. Critical and high findings appear as PR comments. Medium and low findings surface only when you ask for them, the routing [tiered code review](tiered-code-review.md) formalizes.
-- Track false positive rates. If you dismiss a category of finding more than half the time, suppress it or refine how it is detected.
+- Track false positive rates. If you dismiss a category of finding more than half the time, suppress it or refine how it is detected — [agentic review comment acceptance](agentic-review-comment-acceptance.md) data shows developers reject most agentic comments on validity grounds, not volume.
 - Scope review instructions. Tell the agent what to check and, just as much, what to ignore. A review prompt that says "flag all uses of `any`" will flag intentional uses alongside accidental ones.
 
 ## Why it works

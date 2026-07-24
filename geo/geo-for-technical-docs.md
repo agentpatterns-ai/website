@@ -34,6 +34,8 @@ The formats this site produces map to three schema types:
 | Anti-pattern page | FAQPage | Question-framed headings + direct answers |
 | API reference section | FAQPage | Parameter Q&A format |
 
+[Cloudflare AI Search](https://developers.cloudflare.com/ai-search/) is a concrete example of the retrieval system these checklists write for. It is a managed RAG service, available on every Cloudflare plan, that can crawl a site straight from its sitemap and serve results through a Workers binding, a REST API, or a built-in MCP endpoint ([website data source docs](https://developers.cloudflare.com/ai-search/configuration/data-source/website/)). Its indexing step uses recursive chunking — splitting at paragraph and sentence boundaries, then re-splitting anything that is still too long ([chunking docs](https://developers.cloudflare.com/ai-search/configuration/indexing/chunking/)) — which is exactly the boundary the [200–400-word atomic-chunking guidance](atomic-pages-and-chunking.md) exists to give it: a page with clean section breaks gets split on those breaks, while a page without them gets split at an arbitrary token count instead.
+
 ## New page checklist
 
 Apply these to every new page before pushing. Order reflects impact on AI citation probability.

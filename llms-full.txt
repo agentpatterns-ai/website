@@ -689,6 +689,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](patterns/agent-design/delegated-autonomy-boundary-artifacts.md)
 - [The Model Economics of Agent Swarms: Cost and Width](patterns/multi-agent/model-economics-agent-swarms.md)
 - [The Harness as Product: What Listed-Rate Pricing Buys](patterns/agent-design/harness-as-product.md)
+- [Suspect the Harness Before the Model on a Regression](patterns/agent-design/suspect-the-harness-not-the-model.md)
 
 ## Loop Engineering
 
@@ -1079,6 +1080,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Emulated APIs for Agent Skill Evals](verification/emulated-apis-for-skill-evals.md)
 - [Diff-Coverage Gating for Agent-Authored Pull Requests](verification/diff-coverage-gate-agent-prs.md)
 - [Emulate Agent-Experience Changes Before Shipping](verification/emulate-ax-changes-before-shipping.md)
+- [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](verification/validity-estimate-stopping-noisy-repair-loops.md)
+- [Agentic Review Comment Acceptance](code-review/agentic-review-comment-acceptance.md)
 
 ## Hooks & Guardrails
 
@@ -17886,6 +17889,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Harness Impermanence](harness-impermanence.md) — Author agent scaffolding as depreciating capital — design for low cost of removal so native model capability can replace it cleanly
 - [Fleet Harness Attribution](fleet-harness-attribution.md) — Pin model and task, swap whole harnesses, and measure pass rate alongside input-token consumption across a model fleet to attribute outcomes to the harness layer rather than the model
 - [Isometric Harness Ablation](isometric-harness-ablation.md) — Pin the model, remove one harness subsystem at a time, measure the score drop — the resulting per-subsystem table ranks investment priorities
+- [Suspect the Harness, Not the Model](suspect-the-harness-not-the-model.md) — When a released coding agent regresses after an update at a fixed model, suspect the harness before the model — a longitudinal study found flat resolve rate but 70%+ token inflation across 35 releases
 - [Lane-Based Execution Queueing](lane-based-execution-queueing.md) — Isolate concurrent agent tasks into named queues with per-lane concurrency limits to prevent output interleaving, race conditions, and deadlocks
 - [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — Decision framework for choosing between managed agent services and self-hosted harnesses based on compliance, memory ownership, model routing, and ops capacity
 - [The Harness as Product: What Listed-Rate Pricing Buys](harness-as-product.md) — When a coding assistant bills at the model's listed API rates, the money buys the harness, governance, and workflow layer — the build-vs-buy question over raw tokens, and when each layer is worth zero
@@ -37949,6 +37953,64 @@ Subtask-level memory adds overhead that outweighs the benefits in several condit
 - [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md)
 - [Code-Native Memory Substrates](code-native-memory-substrates.md) -- uses AST representations instead of natural language as memory substrate for code generation agents
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
+
+---
+
+### Suspect the Harness Before the Model on a Regression
+Source: https://agentpatterns.ai/patterns/agent-design/suspect-the-harness-not-the-model/
+
+# Suspect the Harness Before the Model on a Regression
+
+> When a released coding agent regresses after an update at a fixed model, suspect the harness, not the model.
+
+When a coding agent gets slower, more expensive, or less reliable after an update, the harness is the more likely cause than the model. The harness is the middleware around the model — system prompts, tool execution, context management, and the reasoning loop — and it changes far more often than the model does. A longitudinal study of 35 sequential Qwen Code CLI releases, run against 50 SWE-bench Verified tasks with the backing model held fixed, found no statistically significant improvement in resolve rate across the releases (Spearman ρ=0.208, p=0.231) while token consumption rose more than 70%, from 391K to 668K, a strong upward trend (ρ=0.743, p<0.0001) ([Ben Sghaier et al., 2026](https://arxiv.org/abs/2607.03691)).
+
+## The diagnostic
+
+Practitioners routinely blame the model for a post-update regression, but the same study shows the harness is where the change actually lands. Agent harnesses ship 13 to 28 times more often than traditional projects — 10 to 18 releases a week against 0.6 to 0.8 for VS Code or GitHub CLI — so between two agent updates the harness has almost always changed and the model usually has not ([Ben Sghaier et al., 2026](https://arxiv.org/abs/2607.03691)). Base your first suspicion on that base rate.
+
+Three steps turn the suspicion into an answer:
+
+- Confirm the model is fixed. Check the release notes or provider for a model change. Hosted APIs rotate models silently, so if you cannot confirm a fixed model ID, the regression could genuinely be the model.
+- Measure against a pinned eval slice. Run a small graded task set — your own held-out eval or a SWE-bench slice — on the old and new versions. Without a fixed slice you cannot separate a real regression from a harder task mix.
+- Watch tokens and tool calls, not just resolve rate. Cost often moves before quality does, and failed tasks in the study burned 2.7 times more tokens and 1.8 times more tool calls than successful ones — an efficiency regression the resolve rate hides.
+
+If the slice confirms a drop at a fixed model, pinning the harness version is a rational response rather than an admission of defeat.
+
+## Why it works
+
+Token inflation with flat quality traces to a compounding structure in the harness, not to model change. Later releases shipped roughly 8% larger system prompts, from expanded tool schemas and instructions, and needed about 18% more conversation turns. Because the full conversation history is prepended on every API call, the enlarged per-turn overhead repeats across every turn — turns and total tokens correlate at ρ=0.941 ([Ben Sghaier et al., 2026](https://arxiv.org/abs/2607.03691)). A harness edit that adds prompt or tooling weight multiplies through the loop, raising cost without raising the resolve rate.
+
+The attribution is credible because the study isolated the harness. It held a single self-hosted model constant so the provider could not swap it, fixed the compute, timeout, and evaluation environment, saw 87.7% run-to-run agreement on task outcomes, and mapped specific git commits to quality shifts by code inspection. The highest-risk components were the LLM-provider and context-management modules — the same layers that [harness token economics](../../token-engineering/harness-token-economics.md) shows control the token bill.
+
+## When this backfires
+
+The diagnostic mis-fires or goes unactionable under specific conditions:
+
+- Managed or consumer-tier agents. When both the harness and the model are vendor-controlled and opaque, you cannot pin or inspect either, so the question is moot — see [managed vs self-hosted harness](managed-vs-self-hosted-harness.md).
+- Genuine model swaps. If the provider rotated the backing model, the regression really is the model, and the diagnostic misleads unless you have confirmed a fixed model ID.
+- Disciplined, eval-gated harness teams. Where each release is gated on a held-out eval, version drift is a weak regression signal and pinning forfeits real gains — [observability-driven harness evolution](observability-driven-harness-evolution.md) shows harness evolution lifting pass@1 from 69.7% to 77.0% when edits are verified against outcomes ([Lin et al., 2026](https://arxiv.org/abs/2604.25850)).
+- Task-mix drift. A resolve-rate drop can come from your own workload shifting toward harder tasks. Without a fixed graded slice you cannot attribute the change to either layer.
+
+## Example
+
+A team's agent starts costing about 40% more per pull request over a month, with no obvious drop in merged-PR rate. The instinct is that the model got worse. Instead they apply the diagnostic. The provider confirms the same model ID across the month, so the model is fixed. They replay a 30-task held-out slice on last month's pinned harness build and this month's: resolve rate is flat at 61%, but median input tokens per task rose from 410K to 690K. The efficiency regression is real and the quality is not moving. They pin the harness at last month's version, file an issue with the token trace, and upgrade only once a later release passes the same slice at equal or lower token cost. This mirrors [fleet harness attribution](fleet-harness-attribution.md), applied across time rather than across models.
+
+## Key Takeaways
+
+- Between two agent updates the harness has almost always changed and the model usually has not — suspect the harness first ([Ben Sghaier et al., 2026](https://arxiv.org/abs/2607.03691)).
+- Confirm the model is fixed, measure on a pinned eval slice, and track tokens and tool calls, not just resolve rate.
+- The mechanism is structural: larger prompts and more turns compound through prepended history (turns-to-tokens ρ=0.941), inflating cost at flat quality.
+- Pinning a harness version is a rational response to a confirmed regression, not a failure to keep up.
+- The diagnostic does not apply to managed agents, genuine model swaps, or eval-gated harness teams, where disciplined evolution improves quality.
+
+## Related
+
+- [Fleet Harness Attribution](fleet-harness-attribution.md) — pin the model and swap whole harnesses to attribute an outcome to the harness layer; this page applies the same logic across time
+- [Observability-Driven Harness Evolution](observability-driven-harness-evolution.md) — the eval-gated discipline whose absence produces the mis-attributed regressions this page diagnoses
+- [Harness Impermanence](harness-impermanence.md) — why harness scaffolding churns so fast, the base rate behind suspecting it first
+- [Harness-Controlled Token Economics](../../token-engineering/harness-token-economics.md) — why the orchestration layer, not the model, sets the token bill that inflates here
+- [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — the boundary condition where you cannot pin or inspect the harness at all
 
 ---
 
@@ -68818,6 +68880,7 @@ As agents author more pull requests, review tooling is moving toward the surface
 - [Review-Then-Implement Loop](review-then-implement-loop.md) — Close the loop between AI code review and code generation — the reviewer identifies issues, a coding agent implements fixes, and a human reviews the result; covers the dialog, CLI-flag (in-process auto-fix), and cloud-agent direct-apply variants
 - [Security Review Gap in AI-Authored PRs](security-review-gap-in-ai-prs.md) — Agent-authored security PRs cluster around six recurring CWE categories, 52.4% merge despite flaws, and commit-message quality stops predicting acceptance
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — Design AI code review to stay silent when it has nothing useful to say — high-signal feedback builds trust; exhaustive commenting destroys it
+- [Agentic Review Comment Acceptance](agentic-review-comment-acceptance.md) — Only about a third of agentic review comments get accepted in the wild — rejections track suggestion validity, so design for a high false-positive rate and measure acceptance, not volume
 - [Tiered Code Review](tiered-code-review.md) — Route review effort by risk: AI handles the first pass on everything, non-critical code merges after AI-only review, and critical code escalates to mandatory human review
 - [Tunable Effort Levels for Code Review Agents](tunable-review-effort.md) — Expose review depth as a per-PR dial backed by a published bug-discovery curve, so reviewers and routing policies trade thoroughness against cost on the runs that need it
 - [Risk-Score Threshold Calibration for Auto-Approval](risk-score-threshold-calibration.md) — Expose the auto-approval cutoff on a learned diff-risk score as an explicit yield-vs-safety knob, with revert and incident telemetry to recalibrate it
@@ -69693,6 +69756,66 @@ You can trigger the same review with GitHub Copilot from the CLI: `gh pr edit --
 
 ---
 
+### Agentic Review Comment Acceptance
+Source: https://agentpatterns.ai/code-review/agentic-review-comment-acceptance/
+
+# Agentic Review Comment Acceptance
+
+> Only about a third of agentic code-review comments get accepted — rejections track suggestion validity, so design for a high false-positive rate and measure acceptance.
+
+Agentic reviewers post comments faster than developers accept them. A study of CodeRabbit in the wild mined 31,073 review-and-feedback pairs across 10,191 pull requests and 239 repositories, and found developers accepted 36.4% of the comments, discussed 7.3%, and rejected 56.3% ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). A review agent that comments on your PRs is, on this evidence, wrong more often than it is right — so treat a high false-positive rate as the operating condition, not a defect to be surprised by.
+
+## What the reception data shows
+
+Rejections are driven by suggestion validity, not comment count. The study attributes rejected comments to invalid suggestions — false positives, redundant observations, and out-of-scope recommendations — plus misalignment with the developer's intent and coding practices ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). The lever is the fraction of comments that are correct and in-scope, not how many the agent emits.
+
+Not all comment types fare equally. Agentic reviews concentrated more on functional concerns than on evolvability-related comments, yet the evolvability comments carried higher invalidity rates ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)) — the agent is on firmer ground flagging what breaks than judging what is "cleaner."
+
+Low comment-level uptake is not unique to this tool. A separate study of 278,790 code reviews found developers adopt AI suggestions at 16.6% against 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)), and a signal-ratio study found 12 of 13 code-review agents average below 60% actionable comments ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). The reception gap is a property of current agentic review, not one vendor.
+
+## Two practical levers
+
+Measure acceptance, do not assume it. Track accept, discuss, and reject rates per repository and per comment type, the same instrumentation [signal over volume](signal-over-volume-in-ai-review.md) calls for. An acceptance rate you have not measured is a value you are assuming.
+
+Pre-filter for validity. Rejection is predictable: lightweight machine-learning features reached up to 76% F1 for predicting which comments developers would reject ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). That makes a suppression layer feasible — score a candidate comment before it posts and drop the likely-invalid ones, rather than throttling volume blindly.
+
+## Why it works
+
+A review comment earns action only when it names a real defect the developer agrees is worth fixing in this change. Agentic reviewers over-produce plausible-but-invalid suggestions — especially on evolvability, where "better" is contextual — so the marginal comment is more likely noise than signal, and developers reject on validity grounds rather than because there are too many comments ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). Because invalidity is the cause, comment quality governs acceptance, which is exactly why the reject signal is learnable from lightweight features. Optimizing validity moves the acceptance rate; adding or trimming volume alone does not.
+
+## When this backfires
+
+Optimizing for acceptance rate is the wrong target in several conditions:
+
+- High-recall, high-stakes review. On security or critical-path code, tolerating false positives to avoid a missed defect is correct, so a low acceptance rate is a deliberate trade, not a failure to fix ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)).
+- Tuned or learning-loop deployments. Once an agent is scoped to repository conventions and fed accept/reject feedback via [learned review rules](learned-review-rules.md), its acceptance rate moves — the 56.3% wild baseline overstates rejection for a calibrated deployment.
+- Low comment volume. Acceptance-rate measurement is noisy below enough comments per repository and per comment type to be stable; small teams may lack the data.
+- Single-tool generalization. The figures are CodeRabbit-specific across 239 repositories ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)); other agentic reviewers and other stacks accept and reject at materially different rates.
+
+## Key Takeaways
+
+- Developers accepted 36.4% of agentic review comments, discussed 7.3%, and rejected 56.3% across 31,073 comments in the wild ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)).
+- Rejection tracks suggestion validity — false positives, redundancy, out-of-scope, intent misalignment — not comment volume.
+- Functional comments are accepted more than evolvability comments, which carry higher invalidity rates.
+- Rejection is predictable (up to 76% F1 from lightweight features), so a validity pre-filter is feasible.
+- Measure acceptance per repository and comment type; do not assume value from comment count.
+
+## Related
+
+- [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — the design principle this reception data grounds: raise validity, treat silence as valid output
+- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — the PR-level counterpart: signal ratio and merge outcomes rather than per-comment acceptance
+- [Learned Review Rules](learned-review-rules.md) — persist accept/reject signals to suppress recurring invalid comments automatically
+- [Human-AI Review Synergy](human-ai-review-synergy.md) — the 16.6% vs 56.5% adoption baseline behind the reception gap
+- [Tiered Code Review](tiered-code-review.md) — route high-stakes diffs where a low acceptance rate is an accepted trade
+
+## Sources
+
+- [arXiv:2607.03316](https://arxiv.org/abs/2607.03316) — Lin, Liang, Thongtanunam, Tantithamthavorn (2026): "Is Agentic Code Review Helpful? Mining Developers' Feedback to CodeRabbit Reviews in the Wild" — 31,073 comment/feedback pairs, 10,191 PRs, 239 repositories.
+- [arXiv:2604.03196](https://arxiv.org/abs/2604.03196) — Chowdhury et al. (2026): code-review-agent signal-ratio study; 12 of 13 CRAs below 60% actionable.
+- [arXiv:2603.15911](https://arxiv.org/abs/2603.15911) — 278,790 code reviews: AI suggestion adoption 16.6% versus 56.5% for human suggestions.
+
+---
+
 ### AI Label as Reviewer Attention Redistribution
 Source: https://agentpatterns.ai/code-review/ai-label-attention-redistribution/
 
@@ -70333,7 +70456,7 @@ When most comments are noise, developers stop acting on them. PRs stall and are 
 
 ### Adoption rate baseline
 
-This finding matches adoption rate data from a separate study of 278,790 code reviews: developers adopt AI suggestions at 16.6% versus 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)). Low adoption follows directly from a low signal ratio — if most comments are not actionable, most comments are not adopted.
+This finding matches adoption rate data from a separate study of 278,790 code reviews: developers adopt AI suggestions at 16.6% versus 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)). Low adoption follows directly from a low signal ratio — if most comments are not actionable, most comments are not adopted. The same low uptake appears at the level of individual comments in [agentic review comment acceptance](agentic-review-comment-acceptance.md).
 
 ## What mixed composition recovers
 
@@ -72105,7 +72228,7 @@ When building or configuring AI review:
 
 - Set a confidence floor. Only surface findings the model is confident about. Low-confidence suggestions belong in optional "info" channels, not the PR thread.
 - Categorize by severity. Critical and high findings appear as PR comments. Medium and low findings surface only when you ask for them, the routing [tiered code review](tiered-code-review.md) formalizes.
-- Track false positive rates. If you dismiss a category of finding more than half the time, suppress it or refine how it is detected.
+- Track false positive rates. If you dismiss a category of finding more than half the time, suppress it or refine how it is detected — [agentic review comment acceptance](agentic-review-comment-acceptance.md) data shows developers reject most agentic comments on validity grounds, not volume.
 - Scope review instructions. Tell the agent what to check and, just as much, what to ignore. A review prompt that says "flag all uses of `any`" will flag intentional uses alongside accidental ones.
 
 ## Why it works
@@ -72757,6 +72880,7 @@ Source: https://agentpatterns.ai/verification/
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — Order cheap evidence gates ahead of expensive ones in agentic repair loops — retrieval-grounded context, compile gate, target-test gate, then full regression — to filter invalid candidates before paying full-suite cost
 - [Execution Budgeting in Agentic Program Repair](execution-budgeting-program-repair.md) — Cap test executions in generate-run-revise loops on frontier commercial agents; prohibiting execution drops resolve rate ~1.25 pp on SWE-bench Verified — applies only under specific preconditions on model strength, codebase familiarity, and execution cost
 - [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — Cap generate-validate-repair loops near three to four rounds; most gains land early and later rounds mostly burn tokens — prefer stop-on-plateau, and watch strong-model late gains, thin-oracle overfitting, and self-critique loops
+- [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — When the verifier is noisy, its acceptance rate rises while true validity falls as repair damages correct plans — estimate validity from repeated votes and stop on the sign of expected marginal gain, not on acceptance
 - [Dependency Gap Validation for AI-Generated Code](dependency-gap-validation.md) — AI coding agents declare a fraction of the dependencies their code actually needs at runtime — validate in clean environments before trusting the manifest
 - [Verify Observability in Agent-Generated Code](verify-generated-code-observability.md) — Agent-generated systems pass functional tests but expose fault signals for under 14% of failures despite having logging — verify runtime fault-signal coverage with fault injection, not the mere presence of logging
 - [Phantom Symbol Detection for LLM API Migration](phantom-symbol-detection.md) — Verify symbols in LLM-generated migration code against a documentation-derived knowledge base — a deterministic check that catches fabricated imports, constructors, and methods that probabilistic judges miss
@@ -73666,6 +73790,7 @@ The load-bearing parts are the low `max_rounds` default and the plateau break. T
 - [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — catches the correctness regressions that extra repair rounds can silently introduce.
 - [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md) — strengthens what each round's test signal actually tells you.
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — the metrics that show whether extra rounds add capability or just retries.
+- [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — the complementary stop rule for when the verifier is noisy rather than a real oracle; stop on estimated validity, not a fixed round count.
 
 ---
 
@@ -80881,6 +81006,7 @@ Without the per-turn re-run, the regression survives until end-of-session CI or 
 - [Trust Without Verify](../patterns/anti-patterns/trust-without-verify.md)
 - [Pre-Change Impact Analysis](pre-change-impact-analysis.md)
 - [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](../patterns/anti-patterns/code-first-test-oracle-bias.md) — a code-first test suite is not an independent oracle; the sibling ordering trap on the code-vs-spec axis
+- [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — when to stop a repair loop once the verifier itself is noisy and its acceptance signal no longer tracks true validity
 
 ---
 
@@ -83472,6 +83598,54 @@ Do not rely on agent analysis as the only quality gate. Use it to narrow the sea
 - [Incident-to-Eval Synthesis: Production Failures as Evals](incident-to-eval-synthesis.md)
 - [Trajectory-Opaque Evaluation Gap: Why Final-Output Grading Misses Safety Violations](eval-blind-spots.md)
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md)
+
+---
+
+### Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)
+Source: https://agentpatterns.ai/verification/validity-estimate-stopping-noisy-repair-loops/
+
+# Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)
+
+> When the verifier in a verify-repair loop is noisy, stop on an estimate of true validity, not on the verifier's rising acceptance signal.
+
+Use the verifier's acceptance rate as your stop signal only when the verifier is a trustworthy oracle. When the verifier is itself noisy — an LLM-as-judge, a learned reward model, or a flaky heuristic — its reported acceptance can keep climbing while the plan's true validity falls, because a noisy repairer damages already-correct plans and the noisy verifier then accepts the damaged result ([Wu et al., 2026](https://arxiv.org/abs/2607.17641)). The fix is to stop on an estimate of true validity instead of the raw acceptance count.
+
+VRR-Stop models the loop with four parameters: the verifier's false-acceptance rate, its false-rejection rate, the repairer's fix rate (invalid to valid), and the repairer's damage rate (valid to invalid) ([Wu et al., 2026](https://arxiv.org/abs/2607.17641)). Each round runs several independent verification votes on the current plan and feeds them through a Bayesian update — belief filtering — to estimate the probability that the plan is truly valid. The loop then repairs only while the expected gain from one more round is positive, and commits otherwise. It needs only the sign of that expected gain to be identifiable, not accurate recovery of all four parameters ([Wu et al., 2026](https://arxiv.org/abs/2607.17641)).
+
+This targets a different failure than a round budget. [Bounded repair-loop iterations](bounded-repair-loop-iterations.md) caps rounds because gains concentrate early under a real oracle. Here the acceptance metric you would normally watch is itself corrupted, so the round count is secondary — you stop on estimated validity regardless of what acceptance reports.
+
+## Why it works
+
+A noisy verifier's observed acceptance rate carries a fixed false-acceptance floor: it equals that floor plus the verifier's discrimination times the true validity ([Wu et al., 2026](https://arxiv.org/abs/2607.17641)). When discrimination is low, the floor dominates and acceptance tracks noise, not validity. A noisy repairer then compounds the problem — it can take a valid plan that was falsely rejected, damage it, and hand the verifier a corrupted plan it falsely accepts, so true validity drops while acceptance climbs. In one stress setting 55% of instances underwent a correct-to-incorrect repair, and six of eight settings showed true validity declining monotonically as rounds continued ([Wu et al., 2026](https://arxiv.org/abs/2607.17641)). Estimating validity from repeated votes and stopping when expected repair gain turns negative breaks that divergence. The same balance appears independently as a feedback-control equilibrium: continue only while the error-correction rate beats the error-introduction rate by the odds factor of current accuracy ([Liu & Meng, 2026](https://arxiv.org/abs/2604.22273)).
+
+## When this backfires
+
+The apparatus earns its keep only in specific regimes.
+
+- The verifier is a trustworthy oracle. When a compiler or a reliable test suite verifies each round and the repairer rarely corrupts correct plans, acceptance already tracks validity. Running several verification votes per round multiplies verification cost for no gain — a fixed round cap suffices.
+- Verifier discrimination approaches zero. When the verifier is barely better than a coin flip, calibration itself fails and estimation error can flip the stopping decision. On one weak-verifier setting (discrimination 0.03) the method dropped 58 percentage points below its reference before the paper's estimation-free fallback, which keeps the best-seen candidate under a sufficient verification margin, recovered it ([Wu et al., 2026](https://arxiv.org/abs/2607.17641)).
+- The loop is non-stationary or the task is graded. The model assumes repairs are conditionally independent of history given the true state, makes one-step decisions that cannot see past interior peaks, and represents validity as binary — so partial correctness and correlated verifier errors on the same plan fall outside its guarantees ([Wu et al., 2026](https://arxiv.org/abs/2607.17641)).
+
+Without external feedback the divergence is worse, not better: intrinsic self-correction with no outside signal degrades reasoning accuracy and flips correct answers to incorrect on GSM8K ([Huang et al., 2024](https://arxiv.org/abs/2310.01798)).
+
+## Example
+
+On a GSM8K stress setting (Qwen2.5-3B, 500 instances, 8 verification votes per round), validity-estimate stopping reached 0.722 true validity at an average of 0.72 repair rounds, against 0.116 for fixed five-round repair — a gain of 60.6 percentage points (95% CI +56.0, +65.0) ([Wu et al., 2026](https://arxiv.org/abs/2607.17641)). Fixed repair kept iterating on a rising acceptance signal and destroyed most of the plans it started with; the validity estimate stopped after less than one round on average because the expected gain was already negative.
+
+## Key Takeaways
+
+- When the verifier is noisy, acceptance can rise while true validity falls — stop on an estimate of validity, not the acceptance rate ([Wu et al., 2026](https://arxiv.org/abs/2607.17641)).
+- Estimate validity from repeated verification votes per round and repair only while the expected marginal gain is positive; you need the sign of that gain, not exact parameters ([Wu et al., 2026](https://arxiv.org/abs/2607.17641)).
+- The method pays off only with a noisy verifier. With a trustworthy oracle, a plain round cap does the same job at lower cost — see [bounded repair-loop iterations](bounded-repair-loop-iterations.md).
+- Near-zero verifier discrimination defeats calibration; fall back to keeping the best-seen candidate under a verification margin ([Wu et al., 2026](https://arxiv.org/abs/2607.17641)).
+- The same continue-or-stop balance shows up independently as a feedback-control threshold — correction rate versus introduction rate ([Liu & Meng, 2026](https://arxiv.org/abs/2604.22273)).
+
+## Related
+
+- [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — caps rounds under a real oracle; the complementary stopping strategy when the verifier is trustworthy rather than noisy.
+- [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — catches the correct-to-incorrect regressions a noisy repair loop introduces.
+- [Markov-Chain Reliability for LLM Agents](markov-chain-agent-reliability.md) — audit the abstraction before you trust a metric; the same caution behind not trusting a noisy acceptance rate.
+- [Evidence-Gated Lifecycle Control for Coding Agents (Proof-or-Stop)](evidence-gated-lifecycle-control.md) — advances state only on verifiable evidence, never on the agent's own acceptance claim.
 
 ---
 
@@ -119063,6 +119237,8 @@ The formats this site produces map to three schema types:
 | Anti-pattern page | FAQPage | Question-framed headings + direct answers |
 | API reference section | FAQPage | Parameter Q&A format |
 
+[Cloudflare AI Search](https://developers.cloudflare.com/ai-search/) is a concrete example of the retrieval system these checklists write for. It is a managed RAG service, available on every Cloudflare plan, that can crawl a site straight from its sitemap and serve results through a Workers binding, a REST API, or a built-in MCP endpoint ([website data source docs](https://developers.cloudflare.com/ai-search/configuration/data-source/website/)). Its indexing step uses recursive chunking — splitting at paragraph and sentence boundaries, then re-splitting anything that is still too long ([chunking docs](https://developers.cloudflare.com/ai-search/configuration/indexing/chunking/)) — which is exactly the boundary the [200–400-word atomic-chunking guidance](atomic-pages-and-chunking.md) exists to give it: a page with clean section breaks gets split on those breaks, while a page without them gets split at an arbitrary token count instead.
+
 ## New page checklist
 
 Apply these to every new page before pushing. Order reflects impact on AI citation probability.
@@ -119745,6 +119921,8 @@ LLMs typically cite a small number of domains per response — far fewer than Go
 | [Scrunch](https://scrunch.com/) | from $100/mo | ChatGPT (entry) → Claude, Perplexity, Gemini | Content gap and outdated information detection |
 
 Starting prices are entry tiers verified June 2026. The cheapest plan is usually single-platform, with multi-LLM coverage on higher tiers. Confirm current pricing with each vendor. All tools sample by running prompts. None access platform-internal data.
+
+[isitagentready.com](https://isitagentready.com) is a free, one-off alternative to those paid trackers: instead of sampling AI responses for citation frequency, it scans a site's own machine-readable surface for the signals that make agent retrieval possible in the first place. A [scan of agentpatterns.ai](https://isitagentready.com/?url=agentpatterns.ai) checked, among other things, markdown alternates — an HTTP `Link` header pointing to a `text/markdown` version of each page — and `/.well-known/` discovery documents such as an agent-skills index and an MCP server card; both check families passed. That result says the site's content is structured for agents to fetch and index cleanly, which is a precondition for citation, not a substitute for the citation-tracking metrics above.
 
 ## What no tool solves
 

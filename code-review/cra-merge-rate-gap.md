@@ -46,7 +46,7 @@ When most comments are noise, developers stop acting on them. PRs stall and are 
 
 ### Adoption rate baseline
 
-This finding matches adoption rate data from a separate study of 278,790 code reviews: developers adopt AI suggestions at 16.6% versus 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)). Low adoption follows directly from a low signal ratio — if most comments are not actionable, most comments are not adopted.
+This finding matches adoption rate data from a separate study of 278,790 code reviews: developers adopt AI suggestions at 16.6% versus 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)). Low adoption follows directly from a low signal ratio — if most comments are not actionable, most comments are not adopted. The same low uptake appears at the level of individual comments in [agentic review comment acceptance](agentic-review-comment-acceptance.md).
 
 ## What mixed composition recovers
 

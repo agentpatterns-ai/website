@@ -167,6 +167,7 @@ nav:
       - harness-impermanence.md
       - harness-as-product.md
       - isometric-harness-ablation.md
+      - suspect-the-harness-not-the-model.md
       - lane-based-execution-queueing.md
       - managed-vs-self-hosted-harness.md
       - local-model-viability-for-coding.md
