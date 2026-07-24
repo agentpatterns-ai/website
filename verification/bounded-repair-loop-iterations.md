@@ -76,3 +76,4 @@ The load-bearing parts are the low `max_rounds` default and the plateau break. T
 - [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — catches the correctness regressions that extra repair rounds can silently introduce.
 - [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md) — strengthens what each round's test signal actually tells you.
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — the metrics that show whether extra rounds add capability or just retries.
+- [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — the complementary stop rule for when the verifier is noisy rather than a real oracle; stop on estimated validity, not a fixed round count.

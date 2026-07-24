@@ -109,3 +109,4 @@ Without the per-turn re-run, the regression survives until end-of-session CI or 
 - [Trust Without Verify](../patterns/anti-patterns/trust-without-verify.md)
 - [Pre-Change Impact Analysis](pre-change-impact-analysis.md)
 - [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](../patterns/anti-patterns/code-first-test-oracle-bias.md) — a code-first test suite is not an independent oracle; the sibling ordering trap on the code-vs-spec axis
+- [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — when to stop a repair loop once the verifier itself is noisy and its acceptance signal no longer tracks true validity

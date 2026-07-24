@@ -565,6 +565,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](patterns/agent-design/delegated-autonomy-boundary-artifacts.md)
 - [The Model Economics of Agent Swarms: Cost and Width](patterns/multi-agent/model-economics-agent-swarms.md)
 - [The Harness as Product: What Listed-Rate Pricing Buys](patterns/agent-design/harness-as-product.md)
+- [Suspect the Harness Before the Model on a Regression](patterns/agent-design/suspect-the-harness-not-the-model.md)
 
 ## Loop Engineering
 
@@ -955,6 +956,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Emulated APIs for Agent Skill Evals](verification/emulated-apis-for-skill-evals.md)
 - [Diff-Coverage Gating for Agent-Authored Pull Requests](verification/diff-coverage-gate-agent-prs.md)
 - [Emulate Agent-Experience Changes Before Shipping](verification/emulate-ax-changes-before-shipping.md)
+- [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](verification/validity-estimate-stopping-noisy-repair-loops.md)
+- [Agentic Review Comment Acceptance](code-review/agentic-review-comment-acceptance.md)
 
 ## Hooks & Guardrails
 
