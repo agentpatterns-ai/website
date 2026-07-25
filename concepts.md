@@ -235,6 +235,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent-Initiated Rubric-Gated Self-Compaction (SelfCompact)](context-engineering/agent-initiated-self-compaction.md)
 - [Reducing System-Prompt Token Bloat in Coding Agents](context-engineering/system-prompt-bloat-reduction.md)
 - [Context Quality as a Leading Indicator of Agent Reliability](context-engineering/context-quality-audit.md)
+- [Context Lifecycle Management: Beyond Store and Retrieve](context-engineering/context-lifecycle-management.md)
 
 ## Instructions & Prompts
 
@@ -566,6 +567,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The Model Economics of Agent Swarms: Cost and Width](patterns/multi-agent/model-economics-agent-swarms.md)
 - [The Harness as Product: What Listed-Rate Pricing Buys](patterns/agent-design/harness-as-product.md)
 - [Suspect the Harness Before the Model on a Regression](patterns/agent-design/suspect-the-harness-not-the-model.md)
+- [Cue-Anchored Working Memory (Delivery, Not Storage)](patterns/agent-design/cue-anchored-working-memory.md)
 
 ## Loop Engineering
 
