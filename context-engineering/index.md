@@ -20,6 +20,7 @@ Core concepts that define context engineering as a practice and establish the st
 - [Context Priming](context-priming.md) — Load relevant context before asking an agent to act; the order information enters the context window shapes the quality of everything that follows
 - [Layered Context Architecture](layered-context-architecture.md) — Ground agents in multiple distinct context sources — schema, code, institutional knowledge, and persistent memory — rather than relying on any single signal
 - [Context Budget Allocation](context-budget-allocation.md) — Context is a finite budget; every token preloaded into the context window displaces a token available for reasoning, tool results, and implementation
+- [Context Lifecycle Management](context-lifecycle-management.md) — Treat context as a managed lifecycle — decide, extract, store per type, consolidate, compact — rather than a passive store, to curb missing recalls and token cost that grows every turn
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) — Only put non-discoverable information in agent instruction files; if the agent can find it in the codebase, let it find it
 - [Instruction-Guided Code Completion](instruction-guided-code-completion.md) — Functional correctness and instruction adherence are independent capabilities; explicit implementation constraints and model selection close the gap
 

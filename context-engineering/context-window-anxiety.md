@@ -108,4 +108,5 @@ None of these mitigations eliminates the behavior — they reduce its likelihood
 - [Context Budget Allocation](context-budget-allocation.md) — allocating tokens deliberately across preloaded context and working space
 - [Goal Recitation](goal-recitation.md) — periodically rewriting objectives at the tail of context to prevent goal drift
 - [Context Compression Strategies](context-compression-strategies.md) — strategies for reducing context fill before limits are approached
+- [Context Lifecycle Management](context-lifecycle-management.md) — the full lifecycle that compaction and budgeting are individual stages within
 - [Proprioceptive Context Dashboard](proprioceptive-context-dashboard.md) — generalizes token-budget transparency from total budget to per-block state the agent manages itself

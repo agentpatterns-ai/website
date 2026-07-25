@@ -359,6 +359,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent-Initiated Rubric-Gated Self-Compaction (SelfCompact)](context-engineering/agent-initiated-self-compaction.md)
 - [Reducing System-Prompt Token Bloat in Coding Agents](context-engineering/system-prompt-bloat-reduction.md)
 - [Context Quality as a Leading Indicator of Agent Reliability](context-engineering/context-quality-audit.md)
+- [Context Lifecycle Management: Beyond Store and Retrieve](context-engineering/context-lifecycle-management.md)
 
 ## Instructions & Prompts
 
@@ -690,6 +691,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The Model Economics of Agent Swarms: Cost and Width](patterns/multi-agent/model-economics-agent-swarms.md)
 - [The Harness as Product: What Listed-Rate Pricing Buys](patterns/agent-design/harness-as-product.md)
 - [Suspect the Harness Before the Model on a Regression](patterns/agent-design/suspect-the-harness-not-the-model.md)
+- [Cue-Anchored Working Memory (Delivery, Not Storage)](patterns/agent-design/cue-anchored-working-memory.md)
 
 ## Loop Engineering
 
@@ -1674,6 +1676,7 @@ Core concepts that define context engineering as a practice and establish the st
 - [Context Priming](context-priming.md) — Load relevant context before asking an agent to act; the order information enters the context window shapes the quality of everything that follows
 - [Layered Context Architecture](layered-context-architecture.md) — Ground agents in multiple distinct context sources — schema, code, institutional knowledge, and persistent memory — rather than relying on any single signal
 - [Context Budget Allocation](context-budget-allocation.md) — Context is a finite budget; every token preloaded into the context window displaces a token available for reasoning, tool results, and implementation
+- [Context Lifecycle Management](context-lifecycle-management.md) — Treat context as a managed lifecycle — decide, extract, store per type, consolidate, compact — rather than a passive store, to curb missing recalls and token cost that grows every turn
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) — Only put non-discoverable information in agent instruction files; if the agent can find it in the codebase, let it find it
 - [Instruction-Guided Code Completion](instruction-guided-code-completion.md) — Functional correctness and instruction adherence are independent capabilities; explicit implementation constraints and model selection close the gap
 
@@ -2994,6 +2997,84 @@ Docs are stored as markdown split into multiple reference files per provider, so
 
 ---
 
+### Context Lifecycle Management: Beyond Store and Retrieve
+Source: https://agentpatterns.ai/context-engineering/context-lifecycle-management/
+
+# Context Lifecycle Management: Beyond Store and Retrieve
+
+> Managing an agent's context as a lifecycle — decide, extract, store, consolidate, compact — curbs missing recalls and token cost that a passive store cannot.
+
+A store-and-retrieve memory optimizes two moments: the write and the read. A lifecycle view optimizes the decisions in between — what to keep, how to structure it, which store fits each data type, what to consolidate or forget, and how to compact to a token budget ([Dadhich, 2026](https://arxiv.org/abs/2607.21503)). Reach for the lifecycle framing when an agent runs long enough that accumulated history, not reasoning ability, is what breaks it.
+
+## When the lifecycle framing earns its cost
+
+The machinery below is real engineering. Apply it only where the conditions justify it:
+
+- The task is long-horizon or spans multiple sessions, so per-turn token cost and cross-session recall dominate.
+- Upstream extraction is sound. If you cannot reliably turn raw turns into structured entries, a lifecycle amplifies the noise rather than fixing it.
+- You have a latency budget for retrieval. Indexing and pre-fetch add time, so an agent that must act immediately pays for machinery it cannot use.
+
+For a short, single-session chat, keep everything in context or use one [compaction](context-compression-strategies.md) step. The lifecycle only pays back at scale.
+
+## The five stages
+
+The source paper frames context management as five primitives rather than a single store ([Dadhich, 2026](https://arxiv.org/abs/2607.21503)):
+
+- Architecting — decide up front which categories matter, where each lives, how long it persists, and how it is retrieved. This is a design decision, not a fixed universal schema.
+- Ingesting — convert raw signals (turns, documents, tool output) into structured, retrievable entries. Retrieval quality is bounded by ingestion quality, so extraction fidelity here caps everything downstream.
+- Scoping — decide what is relevant across a hierarchy (user, then team, then organization) while keeping strict isolation between them.
+- Anticipating — pre-fetch context the agent is likely to need before it asks, moving retrieval off the critical path.
+- Compacting and consolidating — reduce context to fit a budget while checking that critical facts stay recoverable, and preserve provenance so a retained fact still points at its source.
+
+This maps onto patterns already documented here: the store-per-type choice extends [layered context architecture](layered-context-architecture.md), consolidation and forgetting extend [agent memory patterns](../patterns/agent-design/agent-memory-patterns.md), and the compaction stage is [context compression strategies](context-compression-strategies.md).
+
+## Why it works
+
+Providers bill per input token, so a naive full-history append costs O(n²) over a conversation — turn *k* re-sends every prior turn. Bounding what enters context each turn makes cost O(n) instead ([Dadhich, 2026](https://arxiv.org/abs/2607.21503)). At illustrative rates the naive approach costs roughly 6 times more at 100 turns and 31 times more at 500 turns. The same O(n²)-to-O(n) shift drives [stateful iteration state-carry](stateful-iteration-state-carry.md), so the mechanism is not unique to one system. Structuring memory into tiers and paging between them is also how MemGPT and Letta manage context beyond the window ([Letta — Agent Memory](https://www.letta.com/blog/agent-memory/)), which corroborates the lifecycle framing rather than any single vendor's numbers.
+
+## When this backfires
+
+- Crude summarization to hit the budget can cause an accuracy cliff. A validated compaction step — one that checks whether compressed output still preserves the critical facts — is what avoids it ([Dadhich, 2026](https://arxiv.org/abs/2607.21503)).
+- Poor upstream extraction defeats every later stage. One audit in the paper found a 99.6% junk rate (38 usable entries out of 10,134) when ingestion quality failed ([Dadhich, 2026](https://arxiv.org/abs/2607.21503)).
+- Always-on memory injection can underperform doing nothing. Selective intervention beat always-on injection and passive memory exposure in ablations, so a relevance gate on the consolidate and recall stages is load-bearing ([Yang et al., 2026](https://arxiv.org/abs/2607.08716)).
+- More memory is more attack surface. Persistent stores accumulate poisoning and stale-fact risk over time ([longitudinal memory risk](https://arxiv.org/abs/2605.17830)), the failure mode behind the [trojan hippo memory attack](../security/trojan-hippo-memory-attack.md).
+
+## Example
+
+Map each stage to a concrete decision for a long-running code-review agent:
+
+```text
+Architecting  → review conventions live in a relational store; embeddings of
+                past diffs in a vector store; both scoped per repository.
+Ingesting     → extract "reviewer rejected X because Y" as a typed entry,
+                not the raw thread.
+Scoping       → team conventions visible to the team; a maintainer's personal
+                preferences stay user-scoped.
+Anticipating  → on opening a PR, pre-fetch prior reviews touching the same files.
+Compacting    → summarize resolved threads, keep the decision and its rationale,
+                verify the rationale is still retrievable after compaction.
+```
+
+The point is that each row is a separate, tunable decision — the store-and-retrieve view collapses all five into "write it" and "read it".
+
+## Key Takeaways
+
+- A lifecycle view optimizes what a store cannot: retention, structure, per-type storage, consolidation, and budget-bounded compaction.
+- Reach for it only on long-horizon or multi-session work with sound extraction and a retrieval latency budget.
+- The core mechanism is cost: bounding per-turn context turns O(n²) token growth into O(n).
+- The stages are only as good as ingestion — poor extraction produces near-total junk downstream.
+- Gate recall and consolidation on relevance; always-on memory can hurt more than help, and every persisted fact adds attack surface.
+
+## Related
+
+- [Context Compression Strategies](context-compression-strategies.md) — the compact-to-budget stage in depth: offloading and summarization
+- [Context Window Anxiety](context-window-anxiety.md) — the behavioral failure that compaction and budgeting mitigate
+- [Agent Memory Patterns](../patterns/agent-design/agent-memory-patterns.md) — the scope and consolidation stages across sessions
+- [Layered Context Architecture](layered-context-architecture.md) — the store-per-type choice as a grounding architecture
+- [Stateful Iteration State-Carry](stateful-iteration-state-carry.md) — the same O(n²)-to-O(n) cost mechanism for long agent loops
+
+---
+
 ### Context Priming: Pre-Loading Files for AI Agent Tasks
 Source: https://agentpatterns.ai/context-engineering/context-priming/
 
@@ -3300,6 +3381,7 @@ None of these mitigations eliminates the behavior — they reduce its likelihood
 - [Context Budget Allocation](context-budget-allocation.md) — allocating tokens deliberately across preloaded context and working space
 - [Goal Recitation](goal-recitation.md) — periodically rewriting objectives at the tail of context to prevent goal drift
 - [Context Compression Strategies](context-compression-strategies.md) — strategies for reducing context fill before limits are approached
+- [Context Lifecycle Management](context-lifecycle-management.md) — the full lifecycle that compaction and budgeting are individual stages within
 - [Proprioceptive Context Dashboard](proprioceptive-context-dashboard.md) — generalizes token-budget transparency from total budget to per-block state the agent manages itself
 
 ---
@@ -17788,6 +17870,7 @@ How agents persist, retrieve, and synthesize information across turns and sessio
 - [Memory Transfer Learning: Cross-Domain Memory Reuse](memory-transfer-learning.md) — How coding agents transfer learned memories across different task domains, why abstraction level determines transferability, and when cross-domain memory causes negative transfer
 - [Subtask-Level Memory for Software Engineering Agents](subtask-level-memory.md) — Store and retrieve memory at individual reasoning stages, not whole sessions, to prevent misguided retrieval when tasks share surface similarity
 - [Tiered Memory Architecture: Episodic-to-Semantic Consolidation](tiered-memory-architecture.md) — Separate raw episode storage from a curated semantic tier and promote facts between them only on observed re-use — pays off for long operation windows, adds cost without benefit elsewhere
+- [Cue-Anchored Working Memory (Delivery, Not Storage)](cue-anchored-working-memory.md) — A second memory tier the harness delivers by injecting operational facts deterministically when a context cue fires, so the agent never has to remember to look them up
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — Run an agent over raw sources to build and maintain a compact, file-based knowledge layer future agents read instead of re-deriving structure via query-time RAG — for durable domain knowledge with enough query volume to amortize
 
 ## Control & Orchestration
@@ -23488,6 +23571,94 @@ This pattern operates at the platform level, choosing which vendor agent handles
 - [Agent Composition Patterns](agent-composition-patterns.md) — fan-out as a composition primitive
 - [Delegation Decision](delegation-decision.md)
 - [Specialized Agent Roles](specialized-agent-roles.md)
+
+---
+
+### Cue-Anchored Working Memory (Delivery, Not Storage)
+Source: https://agentpatterns.ai/patterns/agent-design/cue-anchored-working-memory/
+
+# Cue-Anchored Working Memory (Delivery, Not Storage)
+
+> Deliver operational facts by injecting them when a cue fires, so the agent uses working memory without remembering to look it up.
+
+Coding agents have one kind of memory today: documents they must deliberately write and deliberately re-read — [CLAUDE.md and its siblings](../../instructions/claude-md-convention.md), plan artifacts, [auto-written memory directories](agent-memory-patterns.md). [Saha (2026)](https://arxiv.org/abs/2607.20972) argues the load-bearing tier for long-horizon work is a second one that does not yet exist: involuntary, situationally-bound facts — gotchas, file locations, local conventions — surfaced automatically when the situation cues them, and that supplying this tier is the harness's job.
+
+## Two tiers of memory
+
+The two tiers differ on how a fact is encoded and how it comes back ([Saha, 2026](https://arxiv.org/abs/2607.20972)):
+
+| Dimension | Tier 1: documents | Tier 2: cue-anchored |
+|-----------|-------------------|----------------------|
+| Content | Durable, shareable: specs, ADRs, runbooks | Situational: gotchas, locations, tacit fluency |
+| Encoding | A deliberate act of authorship | A side effect of the work |
+| Retrieval | Deliberate lookup | Cue-driven, involuntary |
+
+Every persistent surface an agent has — instruction file, plan, memory directory — sits in Tier 1: written on purpose, retrieved on purpose. A fact like "this config is load-bearing" is useful only while you are looking at that config, so it resists being written down as a decontextualized document. That is the tier the paper reproduces.
+
+## Delivery, not storage
+
+The paper's central claim is that whether a store behaves as memory or merely as a reference document is decided by the delivery mechanism, not by what is stored ([Saha, 2026](https://arxiv.org/abs/2607.20972)). Two channels deliver differently:
+
+- Control plane — the harness decides deterministically what enters the window and when, and injects the fact. The agent trusts it, the way you trust a recalled memory.
+- Content plane — material is added and the model must choose to look it up and then evaluate the result. This is how a reference document behaves.
+
+Injection makes a store function as memory; lookup makes it function as a document. This reframes agent-memory design: the win is not a bigger store but a mechanism that re-surfaces the right operational fact at the right moment. It is the same reason memory is treated as [a property of the harness rather than a pluggable module](harness-memory-coupling.md).
+
+## The cue vocabulary
+
+Each stored fact carries standing trigger conditions over five composable cue types, evaluated deterministically harness-side with no model judgment in the delivery path ([Saha, 2026](https://arxiv.org/abs/2607.20972)):
+
+- Path — glob patterns over touched files; fires when the agent opens a matching path.
+- Symbol — a named code entity is referenced; needs a code-symbol graph.
+- Semantic — similarity of the current activity crosses a floor.
+- Event — session start, prompt submit, pre-edit, pre-run, pre- or post-compaction.
+- Temporal — not-before constraints and cooldowns between fires.
+
+Triggers combine by conjunction within a memory and disjunction across memories. A per-session fire ledger de-duplicates redundant injections and re-arms at each compaction boundary, so cue-anchored facts return in a fresh window.
+
+## Why it works
+
+The mechanism is borrowed from cognitive science, not from reported success. Levels-of-processing research shows operational facts are encoded incidentally, through task engagement, not by a deliberate decision to save — so capture cannot depend on agent initiative. The encoding-specificity principle shows retrieval is cue-driven and largely involuntary — involuntary autobiographical memories outnumber voluntary recall roughly two to one — so the default channel must be injection at the cued moment, with lookup only a fallback ([Saha, 2026](https://arxiv.org/abs/2607.20972)). Control-plane injection also meets Clark's extended-mind criterion that an external store be automatically endorsed: an injected fact is trusted, whereas a looked-up one must first be evaluated. The empirics match the theory — a seeded voluntary store drew zero memory operations across 114 turns, while harness-injected facts survived all 138 compact-resume cycles in the decay probe, and only after deterministic delivery did agents begin to recall and revise memory voluntarily ([Saha, 2026](https://arxiv.org/abs/2607.20972)).
+
+## When this backfires
+
+Deterministic delivery has no model gate, so it fires whatever is stored — which is a liability under several conditions:
+
+- Stale or environment-specific facts. A cue fires an invalidated "load-bearing" note unconditionally, and the agent applies it confidently — the staleness failure mode of [authored memory](agent-memory-patterns.md), now automated rather than fixed.
+- Short sessions that never compact. The decay that injection solves never arises, so the cue machinery is pure overhead.
+- Tight context budgets. Per-cycle injection of schemas, guidance, and facts crowds the window; the paper's own memory-equipped runs hit thrash-guard aborts and one late-run confabulation spiral.
+- Missing infrastructure. Without a code-symbol graph or harness hook points, the path and symbol cues cannot be evaluated and the mechanism degrades to semantic and event cues only.
+
+The evidence base is also thin: one single-author study, one corpus, one agent product, one model family, with small samples and no independent replication ([Saha, 2026](https://arxiv.org/abs/2607.20972)). Treat the mechanism as well-grounded and the engineering result as emerging. Pairing delivery with a freshness or supersession check — the [control-decision view of retrieval](memory-retrieval-as-control.md) — addresses the unconditional-fire risk.
+
+## Example
+
+A path-cued operational fact, stored once as a side effect of a debugging session, rendered in the paper's cue vocabulary ([Saha, 2026](https://arxiv.org/abs/2607.20972)):
+
+```yaml
+fact: "generated_client.py is overwritten by `make codegen` — edit the template, not this file"
+cue:
+  path: "src/api/generated_client.py"
+  event: pre-edit
+```
+
+The next time any session opens `src/api/generated_client.py` to edit it, the harness injects the note before the edit — no recall step, no lookup the agent has to remember. Stored as a Tier-1 comment in the file, the same fact only helps if the agent happens to read that far first; delivered on the pre-edit cue, it arrives exactly when it changes the decision.
+
+## Key Takeaways
+
+- Coding agents have only the authored-document tier; the missing tier is involuntary, cue-anchored operational facts the harness surfaces automatically.
+- Delivery decides the behavior: harness injection (control plane) makes a store act as memory; agent lookup (content plane) makes it act as a reference document.
+- Facts carry deterministic triggers over five cue types — path, symbol, semantic, event, temporal — evaluated harness-side with no model judgment in the delivery path.
+- The mechanism is grounded in incidental encoding and cue-driven involuntary retrieval; voluntary memory drew ~0 use while injected facts survived 138 compaction cycles.
+- Deterministic delivery has no gate — it fires stale or environment-specific facts unconditionally, so pair it with a freshness check and skip it for short, non-compacting sessions.
+
+## Related
+
+- [Harness-Memory Coupling as a Design Axis](harness-memory-coupling.md) — why memory is a property of the harness, not a pluggable module
+- [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — the authored-document (Tier 1) memory this pattern complements
+- [Tiered Memory Architecture](tiered-memory-architecture.md) — the storage-and-promotion side of memory, the counterpoint to delivery-first
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — a controller deciding whether to inject retrieved memory, a gate for stale-fact risk
+- [Dual-Trace Memory Encoding](dual-trace-memory-encoding.md) — pairing a fact with the scene it was learned in, the situational binding cue-anchoring relies on
 
 ---
 
@@ -32434,7 +32605,7 @@ memory about what it probably contains.
 </tool_usage>
 ```
 
-Cursor reports the same shape independently: shell-style tool names for Codex, explicit `read_lints` triggers, removed mid-turn user-talk language because Codex models cannot "talk" until the end of a turn ([Cursor](https://cursor.com/blog/codex-model-harness)).
+Cursor reports the same shape independently: shell-style tool names for Codex, explicit `read_lints` triggers, removed mid-turn user-talk language because Codex models cannot "talk" until the end of a turn ([Cursor](https://cursor.com/blog/codex-model-harness)). VS Code reports the same payoff from the prompt side: tuning its coding harness's prompts to a specific backing model improved GPT-5.5's performance, rather than shipping one prompt across providers ([VS Code](https://code.visualstudio.com/blogs/2026/07/06/optimizing-vscode-coding-harness-model-providers)).
 
 Armin Ronacher reports a within-vendor version of the same problem: newer Claude models (Opus 4.8, Sonnet 5) call a custom edit tool with off-schema fields and get rejected, a regression older Claude releases on the same harness didn't show. His theory is that RL training on Claude Code's built-in edit tool degrades a model's compliance with third-party custom edit-tool schemas as the model improves — the implication is to ship multiple edit-tool implementations and select the one the backing model was trained against, rather than assuming one custom schema keeps working across releases ([Simon Willison: Better models, worse tools](https://simonwillison.net/2026/Jul/4/better-models-worse-tools/)).
 
@@ -32538,14 +32709,12 @@ The `create_deep_agent(model=...)` call site is unchanged. Switching `model="ope
 
 - [Harness Engineering](harness-engineering.md) — the discipline of building the harness this pattern overrides per model
 - [Harness Hill-Climbing](harness-hill-climbing.md) — eval-driven tuning of a fixed configuration over time, orthogonal to per-model tuning
-- [Harness Impermanence](harness-impermanence.md) — author scaffolding for cheap removal; profiles benefit from the same discipline
 - [Prompt-Rewrite on Cross-Generation Migration](../../instructions/prompt-rewrite-on-cross-generation-migration.md) — the temporal counterpart for handling model-version upgrades
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — structural-vs-compensatory split that determines which components belong in profiles
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — running multiple vendor agents on the same task; per-model profiles are how each side gets a fair shot
 - [Harness Design Dimensions and Archetypes](harness-design-dimensions.md) — the population-level dimensions per-model deltas vary along
 - [Managed vs Self-Hosted Harness](managed-vs-self-hosted-harness.md) — managed harnesses remove the surface this pattern operates on
 - [Natural Language Tool Selection (NLT)](natural-language-tool-selection.md) — a per-model delta in its own right: prose tool selection helps weak models and hurts structured-optimized ones
-- [Cross-Framework Signal Semantics: Re-Measure Borrowed Trajectory Rules](../../verification/cross-framework-signal-semantics.md) — the same re-measure-in-your-own-harness discipline for behavioural signals borrowed across agent frameworks
 
 ---
 
@@ -41639,7 +41808,7 @@ Microsoft's AX team ran this experiment across 150 agent tasks in 15 scenarios, 
 
 Per-token price is a unit price, not a per-task price: effective cost per task is that unit price times the tokens a task consumes, and a model version can change the second factor by an order of magnitude while dropping the first. Benchmarks score single-turn answer quality, not agentic token efficiency — the tokens and steps a model spends to finish a multi-step task — so a model that benchmarks higher and prices lower can still be more verbose inside an agent loop, where the [roughly 12x rise in tokens per task](https://developer.microsoft.com/blog/not-all-model-upgrades-are-upgrades) swamps a 33% price cut. This differs from a tokenizer swap, where a fixed per-prompt count change is the mechanism ([Tokenizer Swap Tax](../../token-engineering/tokenizer-swap-tax.md)); here the driver is behavioral verbosity on multi-step work.
 
-The remedy is measurement: denominate cost in USD per successful task on your own scenarios, plot it against a quality metric, and let that number decide — the [cost-quality Pareto frame](../../token-engineering/cost-quality-pareto-measurement.md) is the standing form of the comparison.
+The remedy is measurement: denominate cost in USD per successful task on your own scenarios, plot it against a quality metric, and let that number decide — the [cost-quality Pareto frame](../../token-engineering/cost-quality-pareto-measurement.md) is the standing form of the comparison. The same gap surfaces in eval design: an agent can pass every accuracy metric in a published eval harness and still be killed on unit economics, which is the argument for making cost per successful outcome a first-class eval axis rather than an accuracy-only leaderboard ([Towards Data Science — Your AI agent passed every eval; finance still killed it](https://towardsdatascience.com/your-ai-agent-passed-every-eval-finance-still-killed-it/)).
 
 ## When this backfires
 

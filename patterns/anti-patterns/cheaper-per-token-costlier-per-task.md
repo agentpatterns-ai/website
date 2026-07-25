@@ -10,7 +10,7 @@ tags:
 aliases:
   - sticker-price model upgrade
   - per-token price fallacy
-last_reviewed: 2026-07-07
+last_reviewed: 2026-07-24
 maturity: emerging
 ---
 
@@ -30,7 +30,7 @@ Microsoft's AX team ran this experiment across 150 agent tasks in 15 scenarios, 
 
 Per-token price is a unit price, not a per-task price: effective cost per task is that unit price times the tokens a task consumes, and a model version can change the second factor by an order of magnitude while dropping the first. Benchmarks score single-turn answer quality, not agentic token efficiency — the tokens and steps a model spends to finish a multi-step task — so a model that benchmarks higher and prices lower can still be more verbose inside an agent loop, where the [roughly 12x rise in tokens per task](https://developer.microsoft.com/blog/not-all-model-upgrades-are-upgrades) swamps a 33% price cut. This differs from a tokenizer swap, where a fixed per-prompt count change is the mechanism ([Tokenizer Swap Tax](../../token-engineering/tokenizer-swap-tax.md)); here the driver is behavioral verbosity on multi-step work.
 
-The remedy is measurement: denominate cost in USD per successful task on your own scenarios, plot it against a quality metric, and let that number decide — the [cost-quality Pareto frame](../../token-engineering/cost-quality-pareto-measurement.md) is the standing form of the comparison.
+The remedy is measurement: denominate cost in USD per successful task on your own scenarios, plot it against a quality metric, and let that number decide — the [cost-quality Pareto frame](../../token-engineering/cost-quality-pareto-measurement.md) is the standing form of the comparison. The same gap surfaces in eval design: an agent can pass every accuracy metric in a published eval harness and still be killed on unit economics, which is the argument for making cost per successful outcome a first-class eval axis rather than an accuracy-only leaderboard ([Towards Data Science — Your AI agent passed every eval; finance still killed it](https://towardsdatascience.com/your-ai-agent-passed-every-eval-finance-still-killed-it/)).
 
 ## When this backfires
 

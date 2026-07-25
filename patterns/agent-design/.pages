@@ -55,6 +55,7 @@ nav:
       - coala-memory-taxonomy-classifier.md
       - code-native-memory-substrates.md
       - cross-cycle-consensus-relay.md
+      - cue-anchored-working-memory.md
       - dual-trace-memory-encoding.md
       - durable-interactive-artifacts.md
       - interactive-canvas-outputs.md
