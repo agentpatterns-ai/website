@@ -360,6 +360,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Reducing System-Prompt Token Bloat in Coding Agents](context-engineering/system-prompt-bloat-reduction.md)
 - [Context Quality as a Leading Indicator of Agent Reliability](context-engineering/context-quality-audit.md)
 - [Context Lifecycle Management: Beyond Store and Retrieve](context-engineering/context-lifecycle-management.md)
+- [Re-Auditing Context Engineering Across Model Generations](context-engineering/generation-scoped-context-engineering.md)
+- [Usage-Reinforced Memory Decay for Long-Running Agents](context-engineering/usage-reinforced-memory-decay.md)
 
 ## Instructions & Prompts
 
@@ -692,6 +694,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The Harness as Product: What Listed-Rate Pricing Buys](patterns/agent-design/harness-as-product.md)
 - [Suspect the Harness Before the Model on a Regression](patterns/agent-design/suspect-the-harness-not-the-model.md)
 - [Cue-Anchored Working Memory (Delivery, Not Storage)](patterns/agent-design/cue-anchored-working-memory.md)
+- [Knowledge Graphs as Provenance-Carrying Agent Memory](patterns/agent-design/knowledge-graph-shared-memory.md)
 
 ## Loop Engineering
 
@@ -1084,6 +1087,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Emulate Agent-Experience Changes Before Shipping](verification/emulate-ax-changes-before-shipping.md)
 - [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](verification/validity-estimate-stopping-noisy-repair-loops.md)
 - [Agentic Review Comment Acceptance](code-review/agentic-review-comment-acceptance.md)
+- [Profiler-Guided Optimization Loops for Coding Agents](verification/profiler-guided-optimization-loop.md)
 
 ## Hooks & Guardrails
 
@@ -1140,6 +1144,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)](observability/trajectory-prefilter-failure-diagnosis.md)
 - [Centralized LLM Gateway for Per-Dimension Agent Budgets](observability/llm-gateway-per-dimension-budgets.md)
 - [Agent-Reactive Bugs at the Model-Harness Boundary](observability/agent-reactive-bugs.md)
+- [Event-Loop Contention in Async Agent Fan-Out](observability/event-loop-contention-async-fan-out.md)
 
 ## Standards & Protocols
 
@@ -1679,6 +1684,7 @@ Core concepts that define context engineering as a practice and establish the st
 - [Context Lifecycle Management](context-lifecycle-management.md) — Treat context as a managed lifecycle — decide, extract, store per type, consolidate, compact — rather than a passive store, to curb missing recalls and token cost that grows every turn
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) — Only put non-discoverable information in agent instruction files; if the agent can find it in the codebase, let it find it
 - [Instruction-Guided Code Completion](instruction-guided-code-completion.md) — Functional correctness and instruction adherence are independent capabilities; explicit implementation constraints and model selection close the gap
+- [Re-Auditing Context Engineering Across Model Generations](generation-scoped-context-engineering.md) — Context-engineering best practices are model-generation-dependent; a capability jump lets you delete guardrails the new model no longer needs while keeping the security-critical ones
 
 ## Attention & Positioning
 
@@ -1703,6 +1709,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [PEEK: Orientation Cache for Recurring-Context Agents](peek-orientation-cache.md) — A constant-sized prompt artifact that caches reusable orientation knowledge — what is in a recurring context, how it is organised, which entities matter — distinct from trajectory replay and playbook strategy memory
 - [Context Compression Strategies](context-compression-strategies.md) — Long-running agents accumulate context that eventually fills the window; tiered compression — offloading large payloads and summarising history — lets agents continue working without losing task continuity
 - [Selective Rewind Summarization](selective-rewind-summarization.md) — A user-chosen cut point compresses earlier turns to a summary while the recent turns stay verbatim — a targeted alternative to whole-session compaction
+- [Usage-Reinforced Memory Decay for Long-Running Agents](usage-reinforced-memory-decay.md) — Score retention with a forgetting curve whose stability compounds on every recall, so frequently-consulted facts outlive the idle stretches that silently evict them from a fixed recency window
 - [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md) — Give the agent both a compaction tool and a firing rubric so it compacts on trajectory structure — sub-task resolved or converging — instead of a fixed token threshold
 - [Elastic Context Orchestration](elastic-context-orchestration.md) — A per-turn vocabulary of context operations — Skip, Compress, Snippet, Rollback, Delete — that lets long-horizon search agents tier retention by current task relevance instead of accumulating raw trajectory
 - [Prompt Compression](prompt-compression.md) — Write instructions that convey the same guidance in fewer words; shorter, denser instructions improve agent compliance and reduce token cost
@@ -2689,7 +2696,7 @@ OPENDEV extends the two-tier approach with Adaptive Context Compaction (ACC), a 
 |-------|---------|--------|
 | 1 — Warning | 70% budget | Log context pressure for monitoring; no data reduction |
 | 2 — [Observation Masking](observation-masking.md) | 80% budget | Replace older tool results with compact reference pointers |
-| 2.5 — Fast Pruning | 85% budget | Prune older tool outputs beyond recency window |
+| 2.5 — Fast Pruning | 85% budget | Prune older tool outputs beyond recency window (see [Usage-Reinforced Memory Decay](usage-reinforced-memory-decay.md) for a retention-scored alternative to the fixed window) |
 | 3 — Aggressive Masking | 90% budget | Shrink preservation window to only most recent outputs |
 | 4 — Full Compaction | 99% budget | Serialize history to scratch file; LLM-summarize middle portion |
 
@@ -7322,6 +7329,80 @@ Reading its own state, the agent archives the stale, oversized `B17` — `archiv
 
 ---
 
+### Re-Auditing Context Engineering Across Model Generations
+Source: https://agentpatterns.ai/context-engineering/generation-scoped-context-engineering/
+
+# Re-Auditing Context Engineering Across Model Generations
+
+> Context engineering best practices expire as a model generation improves; a capability jump is the cue to re-audit and delete the guidance the model outgrew.
+
+A system prompt encodes assumptions about one model generation's failure modes. When the model improves, those assumptions stop holding and the guardrails built on them turn from help into friction. Anthropic removed "over 80% of Claude Code's system prompt for models like Claude Opus 5 and Claude Fable 5 with no measurable loss on our coding evaluations" — the capability jump made most of the scaffolding obsolete ([Anthropic — The new rules of context engineering for Claude 5 generation models](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models)). Re-auditing guidance on every generation hop, and deleting what the model has outgrown, is now part of maintaining an agent.
+
+## The reversals a capability jump triggers
+
+Anthropic names six former best practices that became myths on the newer models. Read each as a prompt to check your own context ([Anthropic — The new rules of context engineering](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models)):
+
+- Rules to judgment. The old prompt said "default to writing no comments." The new one says "Write code that reads like the surrounding code: match its comment density, naming, and idiom." A capable model reads the room; a blanket rule fires wrongly on the cases it did not anticipate. See [Instruction Polarity](../instructions/instruction-polarity.md) and [System Prompt Altitude](../instructions/system-prompt-altitude.md).
+- Examples to interface design. For tool usage, "giving examples actually constrains them to a certain exploration space." Design expressive parameters instead — a Todo status modelled as an enum of `pending`, `in_progress`, `completed` tells the model how to use the tool without boxing it in.
+- Everything upfront to progressive disclosure. Verification and code review moved out of the system prompt into skills the agent loads when needed, and deferred-loading tools expand their schema only after the agent searches for them. Prefer a tree of files loaded at the right time over a monolithic instruction file — see [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md).
+- Repetition to single tool descriptions. Older models needed the same guidance in the system prompt and the tool description; the newer ones do not. Put tool instructions in the tool description and delete the duplicate.
+- Manual memory to auto-memory. Claude Code now saves relevant memories automatically instead of relying on hand-written CLAUDE.md entries, so the file stays lightweight.
+- Simple specs to rich references. The model handles higher-fidelity references than a markdown plan: an HTML mockup, a test suite, a function to port, or a rubric a verifier agent grades against. See [HTML as an Agent Output Format](../instructions/html-as-output-format.md).
+
+Claude Code ships tooling for the audit itself: "We've put these best practices in `claude doctor`; use the command /doctor in Claude Code to rightsize your skills, and CLAUDE.md files" ([Anthropic — The new rules of context engineering](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models)).
+
+## Why it works
+
+A guardrail in a system prompt is compensation for a specific generation's deficit. Older models wrote wrong comments without a "no comments" rule and attended more to the end of the context window than the start, so the rules earned their tokens. A capability jump lifts the model past the threshold the guardrail compensated for, and the guardrail flips from net benefit to net cost. It becomes a directive the model must reconcile against everything else before acting: Anthropic's own transcripts showed "several conflicting messages in a single request like 'leave documentation as appropriate,' or 'DO NOT add comments'," which the model "must think more carefully about" before deciding ([Anthropic — The new rules of context engineering](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models)). This is the right-altitude idea from Anthropic's [context-engineering guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) moving over time — the correct altitude of a prompt rises as the model improves, so guidance that was correctly specific last generation is over-specified this one.
+
+## When this backfires
+
+Deleting constraints is the wrong move under several conditions:
+
+- A weaker or older model. The reversals are scoped to "more advanced models." On a Sonnet-class, Haiku-class, prior-generation, or non-Anthropic model that still needs the scaffolding, stripping it regresses output because the guardrail was covering a real gap.
+- Security- and injection-critical constraints. Anthropic keeps these — skills should avoid over-constraint "except in highly important areas" ([Anthropic — The new rules of context engineering](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models)). A proactive model can autonomously take destructive actions, and prompt injection remains unsolved, so a deleted "never run destructive commands" line is not friction removed but a control removed ([OWASP via Help Net Security — prompt injection still drives most agentic AI failures](https://www.helpnetsecurity.com/2026/06/11/owasp-prompt-injection-ai-security-failures/)).
+- No regression eval. Anthropic deleted 80% because their coding evals stayed flat. Without an eval set a team cannot tell whether a deletion lost behavior, and the "no measurable loss" claim covers coding tasks, not every safety-critical edge case.
+- Audited or change-controlled prompts. A prompt pinned by a compliance or security sign-off cannot be stripped on a model hop without re-running the audit, and that cost dominates the token saving.
+
+The examples reversal is narrower than it sounds: it targets tool-usage examples, not few-shot examples in general. Anthropic's context-engineering guide still recommends "a set of diverse, canonical examples" for shaping behavior ([Anthropic — Effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Delete the examples that constrain tool exploration, not the canonical ones that define correct behavior.
+
+## Example
+
+The comment rule shows the whole pattern in one edit ([Anthropic — The new rules of context engineering](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models)):
+
+Before, a guardrail written for a prior generation:
+
+```text
+In code: default to writing no comments. Never write multi-paragraph
+docstrings or multi-line comment blocks — one short line max.
+```
+
+After, the same goal delegated to judgment:
+
+```text
+Write code that reads like the surrounding code: match its comment
+density, naming, and idiom.
+```
+
+Same intent, half the words, and it stops firing wrongly on the complex algorithm or public API where multi-line documentation was correct. The security-critical lines in the same prompt stay untouched.
+
+## Key takeaways
+
+- Context-engineering guidance is generation-scoped; a capability jump is the trigger to re-audit and delete what the model has outgrown, not a one-time cleanup.
+- The mechanism is a reconciliation tax: a guardrail the model no longer needs becomes a conflicting directive it must resolve before acting, crowding out context it can now read directly.
+- The six reversals — rules to judgment, examples to interfaces, upfront to progressive disclosure, repetition to single descriptions, manual to auto-memory, simple specs to rich references — are a re-audit checklist, not a demand to delete everything.
+- Keep the security- and injection-critical constraints, keep guardrails for weaker models, and only delete against a regression eval that confirms no loss.
+
+## Related
+
+- [Reducing System-Prompt Token Bloat in Coding Agents](system-prompt-bloat-reduction.md) — the measurement step that finds what to delete before you delete it.
+- [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) — the progressive-disclosure rule: only keep what the model cannot find for itself.
+- [Prompt-Rewrite Discipline on Cross-Generation Model Migration](../instructions/prompt-rewrite-on-cross-generation-migration.md) — the process wrapper for the rewrite this audit feeds into.
+- [Prompt Debt: Hand-Tuning Natural-Language Prompts as Technical Debt](../patterns/anti-patterns/prompt-debt.md) — the slow-accumulation cousin; this page is the generation-jump trigger to pay it down.
+- [Instruction Polarity: Positive Rules Over Negative](../instructions/instruction-polarity.md) — why blanket NEVER rules misfire once the model can reason from intent.
+
+---
+
 ### Reducing System-Prompt Token Bloat in Coding Agents
 Source: https://agentpatterns.ai/context-engineering/system-prompt-bloat-reduction/
 
@@ -7393,6 +7474,7 @@ The bare names in `deny` remove those tool definitions from every request; the `
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md) — assembling prompts at runtime, distinct from removing dead weight.
 - [Exclude Dynamic System Prompt Sections for Cross-Machine Cache Sharing](exclude-dynamic-system-prompt-sections.md) — a different Claude Code system-prompt saving, aimed at cache sharing.
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — the caching economics behind the cost caveat above.
+- [Re-Auditing Context Engineering Across Model Generations](generation-scoped-context-engineering.md) — the generation-jump trigger that turns bloat reduction from one-off cleanup into a recurring audit.
 
 ---
 
@@ -9029,6 +9111,69 @@ The framework assumes you can know task boundaries in advance. Three conditions 
 - [Goal Recitation](goal-recitation.md) — continuous drift prevention within a session
 - [Context Budget Allocation](context-budget-allocation.md) — the finite budget that drives turn-level decisions
 - [Conversation Registers](conversation-registers.md) — the human-facing axis: switching interaction mode on the same task as a reset signal
+
+---
+
+### Usage-Reinforced Memory Decay for Long-Running Agents
+Source: https://agentpatterns.ai/context-engineering/usage-reinforced-memory-decay/
+
+# Usage-Reinforced Memory Decay for Long-Running Agents
+
+> Each recall multiplies a memory item's stability, so heavily-used facts survive idle stretches that a fixed recency window silently evicts.
+
+Reach for usage-reinforced decay when the facts you cannot afford to lose are ones the agent keeps consulting. It replaces the recency window's binary "touched within N turns" test with a continuous retention score that rises every time an item is recalled. It gives you nothing for a constraint stated once and never referenced again.
+
+## How it differs from a recency window
+
+A recency window evicts on elapsed turns alone. Usage-reinforced decay evicts on a retention score, and each recall permanently reshapes that item's future curve ([Towards Data Science, 2026-07-24](https://towardsdatascience.com/context-windows-forget-what-matters-i-used-a-140-year-old-psychology-paper-to-fix-ai-memory/)).
+
+| Behaviour | Recency window | Usage-reinforced decay |
+|---|---|---|
+| Eviction test | `current_turn - last_touched > window` | retention below threshold (default 0.20) |
+| Effect of a recall | resets the clock | raises stability, flattening the whole future curve |
+| Day-one fact recalled six times | evicted on the first long gap | still resident |
+| Fact stored once, never recalled | evicted | evicted, on the same schedule |
+
+The reference implementation is deterministic by construction: it counts turns with an explicit integer rather than reading `time.time()`, uses only the Python 3.12 standard library, and produced byte-identical output when the same suite was diffed across Linux and Windows ([the decay-engine writeup](https://towardsdatascience.com/context-windows-forget-what-matters-i-used-a-140-year-old-psychology-paper-to-fix-ai-memory/)).
+
+## Why it works
+
+Retention decays as `Ret = e^(-t / S)` over turn-distance `t`, and a recall updates the item's stability with `S_new = S_old × (1 + ln(1 + recall_count))` ([the decay-engine writeup](https://towardsdatascience.com/context-windows-forget-what-matters-i-used-a-140-year-old-psychology-paper-to-fix-ai-memory/)). Stability sits in the denominator of the exponent, so raising it flattens the entire remaining curve instead of moving the item to the front of a queue. A recency window can only answer "how long since this was touched", which discards the evidence that the agent has needed the item repeatedly. The logarithm keeps compounding sublinear, so stability grows without the resident set growing with it — the same run reports a token-footprint reduction of 0.911 against the baseline's 0.898.
+
+The same causal structure appears independently in [FadeMem](https://arxiv.org/abs/2601.18642), which strengthens memories on access under an Ebbinghaus-style decay and reports 82.1% critical-fact retention against Mem0's 78.4% at 45% lower storage on LoCoMo, Multi-Session Chat, and LTI-Bench.
+
+## When this backfires
+
+- Write-once constraints get no protection. A "never edit this file" rule recalled zero times decays at the baseline rate — [the decay-engine writeup](https://towardsdatascience.com/context-windows-forget-what-matters-i-used-a-140-year-old-psychology-paper-to-fix-ai-memory/) measures both policies at 0.000 terminal recall for single-use facts. That is the most common shape of the silent failure the technique is sold to fix, so pair it with an explicit pin or a write-time salience score.
+- Frequency diverges from importance. A config path re-read out of habit accrues stability while a rarely-surfaced safety constraint does not. [Novel Memory Forgetting Techniques for Autonomous AI Agents](https://arxiv.org/abs/2604.02280) adds a semantic-alignment term alongside frequency for exactly this reason, scoring importance as `I = α·recency + β·frequency + γ·semantic alignment`.
+- Contradictory facts both survive. The engine ships no conflict resolution, so if two incompatible statements are each reinforced, each stays resident and the compounding makes the stale one progressively harder to evict.
+- Item sizes vary widely. Retention is scored per item, not per token, so a four-token rule and a multi-kilobyte stack trace compete on equal terms. Weight by payload length before trusting it as a budget control.
+- The session shape differs from the tuning set. The defaults — threshold 0.20, base stability 8.0 — were fitted to a burst-then-silence pattern and need re-fitting for a steady drip of recalls.
+- Recall detection is unsolved outside simulation. Production has to infer what counts as genuine memory usage; a loose detector inflates every item's stability and the policy collapses toward keeping everything.
+
+The strongest case against the technique is that importance belongs on the write, not the read. A salience score set by the model that extracted the fact is available on turn one, before any recall exists to count. [A rate-distortion account of memory compaction](https://arxiv.org/abs/2607.08032) formalises this: retention should minimise downstream task degradation, and access count is at best a correlate of that.
+
+## Example
+
+The published harness runs 50 seeded 150-turn sessions across 15 threshold and window combinations (thresholds 0.10, 0.20, 0.30; windows 10, 15, 20, 30, 50), seeding three foundational facts recalled at turns 3, 8, 20, 45, 90, and 150 with 30% jitter, against three throwaway items per turn. Terminal foundational recall comes out at 1.000 for the decay engine and 0.000 for the recency baseline, both with zero standard deviation ([the decay-engine writeup](https://towardsdatascience.com/context-windows-forget-what-matters-i-used-a-140-year-old-psychology-paper-to-fix-ai-memory/)).
+
+Read that contrast against its schedule. The last two scheduled recalls sit roughly 60 turns apart, wider than the widest window tested, so a fixed window cannot reach the terminal measurement holding the fact. The 0.000 is a property of the harness rather than a field result. Take the run as evidence that reinforcement changes the retention curve, then measure the gain on your own recall distribution before budgeting for it.
+
+## Key Takeaways
+
+- Usage-reinforced decay pays off only where recall frequency tracks importance; it is not a general replacement for a recency window.
+- The reinforcement is structural — a recall raises stability and flattens the item's whole future curve, rather than resetting a timer.
+- A fact stored once and never recalled decays exactly as it would under a plain window, so critical write-once constraints still need an explicit pin.
+- The published 100%-versus-0% contrast comes from a synthetic schedule whose final recall gap exceeds every window tested; treat it as a mechanism demonstration, not a benchmark.
+- Systems that ship this on real workloads combine usage with a semantic or importance term rather than relying on the recall counter alone.
+
+## Related
+
+- [Context Compression Strategies](context-compression-strategies.md) — the tiered offload-and-summarise frame whose recency-window pruning tier this technique replaces.
+- [Tiered Memory Architecture](../patterns/agent-design/tiered-memory-architecture.md) — where a decay policy sits relative to working, episodic, and long-term stores.
+- [Generative Agents Memory Stream](../patterns/agent-design/generative-agents-memory-stream.md) — scores retrieval by recency, relevance, and importance; the read-side counterpart to this write-side eviction policy.
+- [Memory Retrieval as Control](../patterns/agent-design/memory-retrieval-as-control.md) — why stale-entry lockout makes eviction and freshness discipline mandatory in any persistent memory.
+- [Context Lifecycle Management](context-lifecycle-management.md) — the decide, extract, store, consolidate, compact loop that an eviction policy plugs into.
 
 ---
 
@@ -16054,6 +16199,7 @@ Anthropic's `/claude-api migrate` skill and the `openai-docs migrate this projec
 - [Harness Engineering](../patterns/agent-design/harness-engineering.md) — the harness review that pairs with the prompt review per Anthropic's migration guide
 - [Production System Prompt Architecture](production-system-prompt-architecture.md) — XML-sectioned prompt structure that makes axis-by-axis re-tuning tractable
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md) — altitude calibration interacts with literal-interpretation shifts on the successor model
+- [Re-Auditing Context Engineering Across Model Generations](../context-engineering/generation-scoped-context-engineering.md) — which specific best practices expire on the capability jump this rewrite responds to
 
 ---
 
@@ -17863,6 +18009,7 @@ How agents persist, retrieve, and synthesize information across turns and sessio
 - [Layered Mutability: Governing Persistent Self-Modifying Agents](layered-mutability.md) — A five-layer lens (pretraining, alignment, self-narrative, memory, weight-level adaptation) for deciding where governance attaches in persistent agents and when compositional drift will ratchet past a visible-layer rollback
 - [Structured Task-State Ledger for Tool-Calling Agents (LedgerAgent)](ledger-agent-structured-task-state.md) — Maintain task state as a typed dictionary outside the prompt and gate write tools against executable policy predicates — pays back on multi-turn, policy-bound, write-heavy workflows where pass^k reliability matters
 - [Epistemic Working Memory for Multi-Hop Reasoning (SLEUTH)](epistemic-working-memory-multi-hop-reasoning.md) — An explicit ledger of confirmed facts, ranked hypotheses, and open questions that drives the next action, so multi-hop reasoning stops degrading as the context window fills
+- [Knowledge Graphs as Provenance-Carrying Agent Memory](knowledge-graph-shared-memory.md) — Store memory as typed relations that each record their source document, so an evaluator can check a claim rather than judge it — worth the construction cost only on cross-document joins and citable feedback
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — Extract causal lessons from agent execution traces — what worked, what failed, which approaches were abandoned and why — so every run makes future runs more effective
 - [RAG over Thinking Traces](rag-over-thinking-traces.md) — For reasoning-intensive tasks, swap the document corpus for prior thinking trajectories — the same retrieve-then-generate pipeline beats both no-RAG and document-RAG with flat or lower inference cost
 - [Session Initialization Ritual: How Agents Orient Themselves](session-initialization-ritual.md) — A mandatory startup sequence that every agent session executes before touching code — verify state, orient to progress, confirm baseline health, then act
@@ -26105,6 +26252,7 @@ Each iteration adds generator and evaluator costs, so N rounds cost roughly 2N t
 - [Agent Composition Patterns](agent-composition-patterns.md)
 - [Controlling Agent Output](../../instructions/controlling-agent-output.md)
 - [DSPy: Programmatic Prompt Optimization](dspy-programmatic-prompt-optimization.md)
+- [Knowledge Graphs as Provenance-Carrying Agent Memory](knowledge-graph-shared-memory.md) — a substrate that gives the evaluator citable criteria instead of judgments
 
 ---
 
@@ -30228,6 +30376,83 @@ Preprocessing adds latency and an extra model call. The cost-benefit inverts in 
 - [Spec-Driven Development](../../workflows/spec-driven-development.md) — upstream approach to eliminating ambiguity at the project level; requirement preprocessing applies the same discipline at the per-issue level
 - [Agent Pushback Protocol](agent-pushback-protocol.md) — agents surface concerns about request quality before proceeding; preprocessing internalizes this step automatically
 - [Subtask-Level Memory for Software Engineering Agents](subtask-level-memory.md) — structured task decomposition that complements requirement preprocessing for multi-step issues
+
+---
+
+### Knowledge Graphs as Provenance-Carrying Agent Memory
+Source: https://agentpatterns.ai/patterns/agent-design/knowledge-graph-shared-memory/
+
+# Knowledge Graphs as Provenance-Carrying Agent Memory
+
+> A knowledge graph stores each fact with the document that asserted it, so an evaluator can check a claim instead of judging it.
+
+Build a knowledge graph for agent memory under two conditions: your agents ask questions that chain facts across documents sharing no common passage, or an evaluator has to say which document asserted a claim. Outside those regimes, plain files and vector retrieval win on accuracy and cost, and the graph's construction stage adds a failure surface that fails quietly.
+
+## When this earns its cost
+
+Either one justifies the build; neither means a simpler store wins:
+
+- Answers span documents. If every answer sits in one source, traversal never fires and extraction is pure overhead.
+- Feedback must cite, not judge. Edge-level provenance is the only part of this pattern that vector chunks cannot supply.
+
+The construction preconditions are the ones any graph memory carries — a controlled entity vocabulary, sessions long enough to amortize the build, and someone who owns the schema. Maintenance has a prescribed shape too: "When a new document arrives, extract its entities, resolve them against the existing canonical set (not against each other), and add only the new edges. Re-summarize an entity only when its source-document set changes materially" ([Anthropic claude-cookbooks](https://github.com/anthropics/claude-cookbooks/blob/main/capabilities/knowledge_graph/guide.ipynb)) — guidance the guide states in prose, not logic the pipeline ships. [Context-Graph Shared Memory for Multi-Agent Systems](../multi-agent/context-graph-shared-memory.md) works through those and the graph-versus-vector retrieval question; this page is about what provenance adds on top.
+
+## Grounding evaluator feedback
+
+Anthropic's knowledge-graph pipeline runs five stages — corpus build, entity and relation extraction, entity resolution, graph assembly, and multi-hop querying — and the assembly step attaches the originating document to every edge, writing `source_doc` alongside the predicate ([Anthropic claude-cookbooks](https://github.com/anthropics/claude-cookbooks/tree/main/capabilities/knowledge_graph)). The stored unit is not a passage that mentions two entities; it is one relation, attributed to one document.
+
+That attribution changes what an evaluator can say. Building Effective Agents defines the evaluator-optimizer workflow as one call generating a response while another "provides evaluation and feedback in a loop," and names its precondition directly: it works "when we have clear evaluation criteria, and when iterative refinement provides measurable value" ([Schluntz and Zhang, 2024](https://www.anthropic.com/engineering/building-effective-agents)). A provenance-carrying graph supplies exactly that criterion. The evaluator stops estimating whether a claim looks right and instead resolves whether the relation exists and which document backs it.
+
+That lookup is only as good as the extraction behind it, and Anthropic publishes the error bar. Running the guide's prompt with `claude-haiku-4-5`, expect entities at "P 0.80–0.90 | R 0.70–0.85" and relations at "P 0.70–0.85 | R 0.55–0.70" ([Anthropic claude-cookbooks](https://github.com/anthropics/claude-cookbooks/blob/main/capabilities/knowledge_graph/evaluation/README.md)). Relation recall is the binding number, and the same source calls it generous: predicate wording is ignored when scoring, "which makes the reported relation recall an upper bound — it measures whether the extractor found the right *connections*, not whether it labeled them correctly." Three in ten stated relations are missing from the graph at best, and some that survive carry the wrong predicate.
+
+That ceiling dictates one design rule: a missing edge means *unknown*, never *refuted*. An evaluator that reads absence as disproof turns the recall gap into confident false accusations, which is worse than the vague judgment the graph replaced — a wrong answer delivered with a citation format. Measure extraction recall against your own gold set before wiring an evaluator to the graph.
+
+## Surviving a context flush
+
+Long-running loops lose their working state at the context boundary. Anthropic's research system treats this as a design constraint — "if the context window exceeds 200,000 tokens it will be truncated and it is important to retain the plan" — and has agents store "essential information in external memory before proceeding to new tasks," alongside "artifact systems where specialized agents can create outputs that persist independently" ([Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system)). A graph is one substrate for that requirement, and a demanding one.
+
+Anthropic met the requirement with memory files and artifacts, not a graph, and still reported that a multi-agent system "outperformed single-agent Claude Opus 4 by 90.2%" ([Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system)). Reach for the graph when the retained state has to be queried by relation, not when it merely has to survive.
+
+## Why it works
+
+The mechanism has two halves, and both are regime-bound. First, chaining: when the answer spans documents, similarity search has nothing to score, because the linking facts never co-occur in a passage. The cookbook states the consequence plainly — "No single document contains the answer. RAG retrieval won't chain the facts for you. You need a knowledge graph" ([Anthropic claude-cookbooks](https://github.com/anthropics/claude-cookbooks/tree/main/capabilities/knowledge_graph)). Second, attribution: because provenance rides on the edge rather than the chunk, verification becomes a lookup with a citation attached, which is the checkable criterion the evaluator-optimizer loop requires to converge ([Schluntz and Zhang, 2024](https://www.anthropic.com/engineering/building-effective-agents)). If your queries need no join and your feedback needs no citation, neither half engages and construction cost buys nothing.
+
+## When this backfires
+
+The evidence against general adoption is stronger than the evidence for it, so adopt narrowly:
+
+- Single-document question answering. A systematic pipeline analysis finds that "GraphRAG frequently underperforms vanilla RAG on many real-world tasks" ([Xiang et al., 2025](https://arxiv.org/abs/2506.05690)).
+- Cost-sensitive deployments. In a distributed multi-agent comparison on LoCoMo, vector memory reached "77% to 81% accuracy" against graph memory's "55% to 56%" — traced to "retrieval incompleteness rather than reasoning failure" — while a plain retrieval baseline matched the top cluster "at 8.4 times lower total cost of ownership" ([Wolff and Bennati, 2026](https://arxiv.org/abs/2601.07978)). Multi-agent operation already runs "about 15× more tokens than chats" ([Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system)); a construction stage compounds that.
+- Free-text agents with no controlled vocabulary. The pipeline's resolver has no fallback for stragglers, so "any raw name Claude leaves out of every cluster silently disappears from the graph" ([Anthropic claude-cookbooks](https://github.com/anthropics/claude-cookbooks/tree/main/capabilities/knowledge_graph)). A construction error becomes an invisible retrieval gap, not a loud failure.
+- Ungoverned schemas. The same pipeline documents over-merging, where a specific entity gets folded into a broader one ([Anthropic claude-cookbooks](https://github.com/anthropics/claude-cookbooks/tree/main/capabilities/knowledge_graph)), degrading answers without raising an error.
+- Evaluators wired to treat a missing edge as a refuted claim. This is the pattern's signature failure: it inverts the one role that justifies the construction cost, and the published relation-recall ceiling above says how often it fires.
+
+## Example
+
+The cookbook's Apollo graph resolves 36 raw entities and 34 raw relations extracted from six source summaries down to 22 canonical entities, then assembles edges that keep their origin ([Anthropic claude-cookbooks](https://github.com/anthropics/claude-cookbooks/tree/main/capabilities/knowledge_graph)):
+
+```python
+G.add_edge(src, tgt, predicate=r["predicate"], source_doc=r["source_doc"])
+```
+
+One argument carries the whole pattern. Without `source_doc`, an evaluator reviewing a generated claim can only report that something seems off. With it, the evaluator resolves the relation and answers with the document that asserted it — the difference between an opinion and a citation.
+
+## Key Takeaways
+
+- Provenance on the edge, not the chunk, is what a knowledge graph adds that vector retrieval cannot; it turns evaluator feedback from a judgment into a lookup with a citation
+- Anthropic's pipeline attaches `source_doc` to every relation, and the evaluator-optimizer workflow it feeds requires exactly that kind of checkable criterion to converge
+- The mechanism is capped by extraction: published relation recall is 0.55–0.70 and explicitly an upper bound, so a missing edge must resolve to unknown rather than refuted
+- Persistence alone does not justify a graph — Anthropic's own multi-agent system used memory files and artifacts, and reported a 90.2% gain over a single agent without one
+- Construction failures are silent: unmatched entity names vanish from the graph and over-merging degrades answers without erroring, so an unowned schema is worse than no graph
+- Independent benchmarks favor simpler stores outside the join-plus-citation regime, including a plain retrieval baseline matching graph memory at 8.4 times lower cost of ownership
+
+## Related
+
+- [Context-Graph Shared Memory for Multi-Agent Systems](../multi-agent/context-graph-shared-memory.md) — the retrieval-side argument for graph state across agents, with the vector-versus-graph benchmark evidence this page defers to
+- [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — the generate-and-critique loop whose feedback quality provenance-carrying edges are meant to raise
+- [Anthropic's Effective Agents Framework: A Pattern Map](anthropic-effective-agents-framework.md) — the workflow taxonomy that supplies the evaluator-optimizer definition used here
+- [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — the broader scoped-memory decision this pattern sits inside
+- [Epistemic Working Memory for Multi-Hop Reasoning (SLEUTH)](epistemic-working-memory-multi-hop-reasoning.md) — an explicit fact ledger for multi-hop work when a full graph is more machinery than the task needs
 
 ---
 
@@ -39515,12 +39740,12 @@ Mitigate by gating promotion on a confidence signal, reviewer pass, or semantic-
 
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md) — episode-keyed recall without explicit tier promotion
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — scope-based memory architecture for cross-session learning
-- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — controller deciding *whether* to inject retrieved memory
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — controller deciding whether to inject retrieved memory, and utility-score updates for stored memories from outcome feedback
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — extracting causal lessons from execution traces into persistent knowledge
 - [Subtask-Level Memory for Software Engineering Agents](subtask-level-memory.md) — granularity choice in memory retrieval
-- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — utility-score updates for stored memories from outcome feedback
 - [Generative Agents Memory Stream](generative-agents-memory-stream.md) — three-layer architecture for long-running agents with high observation density
 - [Component-Isolated Memory Stress Testing](../../verification/component-isolated-memory-stress-testing.md) — stress-tests the summarisation, storage, and retrieval stages of this pipeline so a regression attributes to one tier
+- [Usage-Reinforced Memory Decay for Long-Running Agents](../../context-engineering/usage-reinforced-memory-decay.md) — an eviction policy for the working tier that scores retention by recall count instead of elapsed turns
 
 ---
 
@@ -50037,6 +50262,7 @@ Compare with blocking batch dispatch, where the orchestrator dispatches 10, wait
 - [Orchestrator-Worker Pattern](orchestrator-worker.md) — the broader orchestration model
 - [Agent Composition Patterns](../agent-design/agent-composition-patterns.md) — survey of composition structures including fan-out
 - [Staggered Agent Launch](staggered-agent-launch.md) — complementary pattern for avoiding thundering-herd on dispatch
+- [Event-Loop Contention in Async Agent Fan-Out](../../observability/event-loop-contention-async-fan-out.md) — the runtime failure mode this pattern can hit at scale, and how to diagnose it
 
 ---
 
@@ -50423,7 +50649,7 @@ Source: https://agentpatterns.ai/patterns/multi-agent/context-graph-shared-memor
 
 > Context-graph memory stores cross-agent state as typed triples and beats vector RAG on multi-hop join queries — but only when entities are clean.
 
-Context-graph shared memory layers cross-agent state as `(subject, predicate, object)` triples in a directed graph, replacing flat chat history or vector chunks with relational traversal. The architecture is qualified — independent benchmarks show it beats vector RAG on multi-hop join queries but matches or underperforms it on single-fact retrieval, and a production multi-agent comparison found no statistically significant accuracy advantage at 40% higher cost ([Wolff & Bennati 2025](https://arxiv.org/html/2601.07978v1)). Before defaulting to vector RAG, benchmark all three (chat history, vector RAG, context graph) on the regime your queries actually live in.
+Context-graph shared memory layers cross-agent state as `(subject, predicate, object)` triples in a directed graph, replacing flat chat history or vector chunks with relational traversal. The architecture is qualified — independent benchmarks show it beats vector RAG on multi-hop join queries but falls well behind it on general long-conversation recall, where a cloud-edge evaluation puts graph backends roughly 25 accuracy points below vector and RAG memory at ten times the cost ([Wolff & Bennati 2026](https://arxiv.org/abs/2601.07978v4)). Before defaulting to vector RAG, benchmark all three (chat history, vector RAG, context graph) on the regime your queries actually live in.
 
 ## When This Pattern Applies
 
@@ -50469,13 +50695,13 @@ Context-graph memory works on multi-hop queries because it encodes relationships
 
 Two independent results show the gain is regime-specific, not universal:
 
-- Vector RAG matches graph memory in production multi-agent settings — a distributed multi-agent system comparison of Graphiti (graph) vs mem0 (vector + LLM compression) found Graphiti's 11.1% accuracy advantage over mem0's 7.5% is not statistically significant (p > 0.05), and the graph cost 40.2% more per query; the authors flag mem0 as Pareto-optimal ([Wolff & Bennati 2025](https://arxiv.org/html/2601.07978v1)).
+- Vector RAG beats graph memory outright in distributed multi-agent deployments — an independent cloud-edge testbed running mem0 (vector), Graphiti (graph), cognee (hybrid), and RAG and full-context baselines against the LoCoMo benchmark splits them into two clusters: mem0 at 81.08%, RAG at 78.31%, and full-context at 77.16%, against Graphiti at 56.03% and cognee at 55.27%. The separation is significant under a Bonferroni-corrected Wilcoxon signed-rank test (p = 0.002), and the graph engine is also the second most expensive backend measured — $6.95 total cost of ownership against RAG's $0.65. Only RAG and mem0 land on the Pareto frontier ([Wolff & Bennati 2026](https://arxiv.org/abs/2601.07978v4)).
 - Graph-RAG underperforms vanilla RAG on many real-world tasks — a systematic study across the graph-RAG pipeline finds the architecture "frequently underperforms vanilla RAG on many real-world tasks" outside the multi-hop reasoning regime ([Xiang et al. 2025](https://arxiv.org/abs/2506.05690)).
 
 Specific failure conditions:
 
 - Single-fact lookups with no joins — the graph's traversal mechanism is dead weight; vector RAG is cheaper at equal accuracy.
-- Free-text agents without controlled vocabulary — Alexander's own benchmark fails on queries like "the dataset with anomaly" without LLM-based entity linking, which then destroys the deterministic-extraction cost advantage the same benchmark reports.
+- Free-text agents without controlled vocabulary — Alexander's own benchmark fails on queries like "the dataset with anomaly" without LLM-based entity linking, which then destroys the deterministic-extraction cost advantage the same benchmark reports. This is the failure the cloud-edge evaluation isolates: the graph deficit there "is driven by retrieval incompleteness rather than reasoning failure", with graph backends returning 25.58% and 28.18% unknown responses against 8.38% to 11.14% for the vector cluster, because "graph-based ingestion introduces entity resolution, relation labeling, and schema-constrained extraction, each an opportunity for information loss before retrieval" ([Wolff & Bennati 2026](https://arxiv.org/abs/2601.07978v4)).
 - Short sessions — graph construction never amortises before the session ends.
 - Dynamic facts without temporal modelling — Alexander flags stale-fact retrieval as a major liability when supersession isn't implemented.
 - Teams without graph-query expertise — Cypher / SPARQL / ontology maintenance is a skill gap that produces a half-implemented graph that underperforms vector RAG.
@@ -50492,13 +50718,13 @@ Treat these as preprint signals, not load-bearing:
 | Tokens per query | 490.9 | 75.9 | 26.9 |
 | Join-query accuracy | 40.0% | 20.0% | 80.0% |
 
-Source: [Alexander 2026](https://towardsdatascience.com/vector-rag-isnt-enough-i-built-a-context-graph-layer-for-multi-agent-memory/) — 5 scenarios, 18 queries, deterministic (no LLM calls). The distributed-MAS evaluation in [Wolff & Bennati 2025](https://arxiv.org/html/2601.07978v1) and the multi-hop-reasoning benchmarks in [Wu et al. 2026](https://arxiv.org/html/2606.00610v1) report substantially smaller gaps once LLM-based extraction is in the loop.
+Source: [Alexander 2026](https://towardsdatascience.com/vector-rag-isnt-enough-i-built-a-context-graph-layer-for-multi-agent-memory/) — 5 scenarios, 18 queries, deterministic (no LLM calls). The multi-hop-reasoning benchmarks in [Wu et al. 2026](https://arxiv.org/html/2606.00610v1) report substantially smaller gaps once LLM-based extraction is in the loop, and the cloud-edge evaluation in [Wolff & Bennati 2026](https://arxiv.org/abs/2601.07978v4) reverses the sign entirely on general long-conversation recall — treat the table above as evidence for the join-query regime only, not for memory quality overall.
 
 ## Key Takeaways
 
 - Context-graph shared memory beats vector RAG on cross-agent multi-hop join queries with controlled vocabulary; outside that regime two independent studies show it matches or underperforms vector RAG
 - The mechanism is typed-edge traversal — the gain only materialises when queries actually require chaining facts; single-fact lookups extract no benefit and pay the schema-maintenance cost
-- A production multi-agent comparison ([Wolff & Bennati 2025](https://arxiv.org/html/2601.07978v1)) found graphs cost 40% more per query with no statistically significant accuracy gain over vector + LLM-compressed memory
+- An independent cloud-edge evaluation ([Wolff & Bennati 2026](https://arxiv.org/abs/2601.07978v4)) puts graph memory about 25 accuracy points below vector and RAG memory on long-conversation recall at ten times RAG's cost, with the gap traced to information lost during graph ingestion rather than to weaker reasoning
 - Benchmark the three architectures (chat history, vector RAG, context graph) on your actual query mix before adopting; "vector RAG is enough" is the more common production answer
 
 ## Related
@@ -50507,6 +50733,7 @@ Source: [Alexander 2026](https://towardsdatascience.com/vector-rag-isnt-enough-i
 - [Schema-Guided Graph Retrieval](../../context-engineering/schema-guided-graph-retrieval.md) — the single-agent precursor whose schema discipline a multi-agent context graph inherits
 - [Experience Graphs as Structured Memory for Self-Evolving Agents](../agent-design/experience-graphs-self-evolving-agents.md) — graph-structured memory in a single-agent self-improvement loop; the mechanism transfers when joins matter
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — scope-based memory architecture covering shared-store designs; the destination once the graph-vs-vector decision is made
+- [Knowledge Graphs as Provenance-Carrying Agent Memory](../agent-design/knowledge-graph-shared-memory.md) — the complementary case for graph state: what per-edge source attribution adds once the retrieval question here is settled
 - [Agent Handoff Protocols: Passing Work Between Agents](agent-handoff-protocols.md) — explicit handoff contracts for state passed between agents; the alternative to a shared-memory layer when the handoffs are well-defined
 
 ---
@@ -73049,6 +73276,7 @@ Source: https://agentpatterns.ai/verification/
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — Order cheap evidence gates ahead of expensive ones in agentic repair loops — retrieval-grounded context, compile gate, target-test gate, then full regression — to filter invalid candidates before paying full-suite cost
 - [Execution Budgeting in Agentic Program Repair](execution-budgeting-program-repair.md) — Cap test executions in generate-run-revise loops on frontier commercial agents; prohibiting execution drops resolve rate ~1.25 pp on SWE-bench Verified — applies only under specific preconditions on model strength, codebase familiarity, and execution cost
 - [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — Cap generate-validate-repair loops near three to four rounds; most gains land early and later rounds mostly burn tokens — prefer stop-on-plateau, and watch strong-model late gains, thin-oracle overfitting, and self-critique loops
+- [Profiler-Guided Optimization Loops for Coding Agents](profiler-guided-optimization-loop.md) — Feed the agent a summarized profile and gate every iteration on a behavior-preserving test run; the profiler and the gate only pay off shipped together, and profiler evidence is itself fallible
 - [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — When the verifier is noisy, its acceptance rate rises while true validity falls as repair damages correct plans — estimate validity from repeated votes and stop on the sign of expected marginal gain, not on acceptance
 - [Dependency Gap Validation for AI-Generated Code](dependency-gap-validation.md) — AI coding agents declare a fraction of the dependencies their code actually needs at runtime — validate in clean environments before trusting the manifest
 - [Verify Observability in Agent-Generated Code](verify-generated-code-observability.md) — Agent-generated systems pass functional tests but expose fault signals for under 14% of failures despite having logging — verify runtime fault-signal coverage with fault injection, not the mere presence of logging
@@ -73960,6 +74188,7 @@ The load-bearing parts are the low `max_rounds` default and the plateau break. T
 - [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md) — strengthens what each round's test signal actually tells you.
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — the metrics that show whether extra rounds add capability or just retries.
 - [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — the complementary stop rule for when the verifier is noisy rather than a real oracle; stop on estimated validity, not a fixed round count.
+- [Profiler-Guided Optimization Loops for Coding Agents](profiler-guided-optimization-loop.md) — changes what signal each round acts on rather than how many rounds run, for the performance-optimization case.
 
 ---
 
@@ -77282,6 +77511,7 @@ The shape is the load-bearing part: a hard cap with an explicit "submit your bes
 - [Cost-Aware Skill Rewriting](../instructions/cost-aware-skill-rewriting.md) — the broader practice of making cost explicit in instructions and tool descriptions agents read.
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md) — adjacent tool-level cost lever; reduces the cost per execution rather than the count of executions.
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — why "execution prohibited" sounds dangerous but isn't on the measured slice — the slice itself is the load-bearing claim.
+- [Profiler-Guided Optimization Loops for Coding Agents](profiler-guided-optimization-loop.md) — the performance-optimization case, where a run is the objective signal rather than a cost to cap.
 
 ---
 
@@ -77691,7 +77921,7 @@ For coding agents, grade the execution result alongside the artifact — differe
 
 ## Building the suite
 
-Start with 20 to 50 manually authored pairs covering failures, edge cases, and high-volume scenarios. Grow the suite continuously — every production failure is a candidate pair (see [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md)). Review goldens for drift periodically. A stale suite hides regressions behind [benchmark-contamination](benchmark-contamination-eval-risk.md) and [reward-hacking](anti-reward-hacking.md) dynamics.
+We recommend starting with 20 to 50 manually authored pairs covering failures, edge cases, and high-volume scenarios. That range is our own starting point rather than a published finding: it is small enough that a domain expert can author and review every pair by hand. Grow the suite continuously — every production failure is a candidate pair (see [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md)). Review goldens for drift periodically. A stale suite hides regressions behind [benchmark-contamination](benchmark-contamination-eval-risk.md) and [reward-hacking](anti-reward-hacking.md) dynamics.
 
 ## For coding agents
 
@@ -80954,6 +81184,89 @@ Precision against a reference patch is a useful signal only when a reference pat
 - [pass@k and pass^k](pass-at-k-metrics.md) — capability and consistency metrics that sit alongside edit precision
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — the right default when no reference patch exists
 - [Completion Failure Taxonomy](completion-failure-taxonomy.md) — categorizes why code suggestions fail, complementary to edit-precision diagnosis
+
+---
+
+### Profiler-Guided Optimization Loops for Coding Agents
+Source: https://agentpatterns.ai/verification/profiler-guided-optimization-loop/
+
+# Profiler-Guided Optimization Loops for Coding Agents
+
+> Give an agent profiler hotspots plus a behavior-preserving test gate — either optimization signal alone underperforms the pair.
+
+A profiler-guided optimization loop gives a coding agent two feedback channels: a summarized profile saying where time actually goes, and a behavior-preserving test gate deciding whether a candidate patch counts. PerfAgent layers both onto an off-the-shelf agent harness, along with a controller that intercepts the agent's stop signal and re-profiles. It raises expert-matching patches on GSO from 19.6% to 39.2% with GPT-5.1, and from 26% to 74% on SWE-fficiency-Lite against an OpenHands baseline ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)).
+
+Optimization is harder for agents than issue resolution. Leading software-engineering agents clear under 5% of GSO's 102 optimization tasks across 10 codebases ([Shetty et al., 2025](https://arxiv.org/abs/2505.23671)), and a benchmark of 140 real performance pull requests reports a wide gap between model patches and expert ones ([SWE-Perf, 2025](https://arxiv.org/abs/2507.12415)).
+
+## When this applies
+
+Four conditions carry the result. The gain disappears when any one fails.
+
+1. The model can read a profile. Kimi-K2 struggles to identify relevant information from profiling output and gains far less than GPT-5.1 from the same summaries ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)). On a weaker model the profiler channel is cost without signal.
+2. The profiler and the gate ship together. In the ablation the loop alone scored 33.3% on GSO, loop plus tests 24.5%, loop plus profiler 36.3%, and all three 44.1% ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)). A gate with no hotspot evidence scored below the plain loop.
+3. The task can spend its iteration budget. On SWE-fficiency-Lite most instances submitted only one or two patches under a $5 per-task budget, because file reading consumed the turns ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)). A loop that never reaches a second round pays for unused machinery.
+4. Test coverage reaches the code being optimized. The selective validator tracks Python coverage only, so a patch to a C or Cython extension can clear the gate and still break edge cases ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)).
+
+This changes the loop's objective signal, not its spend. [Bounded repair-loop iterations](bounded-repair-loop-iterations.md) caps how many rounds run and [execution budgeting](execution-budgeting-program-repair.md) caps test runs inside a round. Here the profile is what tells the agent which edit to attempt next.
+
+## How the loop runs
+
+The profiler is py-spy, a sampling profiler. Its raw output is aggregated into hotspots carrying location, call context, self time, and total time, setup frames are filtered out, and the result is summarized into a compact form rather than handed to the agent raw ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)).
+
+The controller then intercepts the agent's stop signal. It re-applies the patch, rebuilds, runs the affected tests, re-profiles, and returns updated hotspots plus the measured speedup, for up to five iterations, keeping the fastest correct patch rather than the last one submitted. Running only the tests the diff touches cut test volume by 66% to 99% on GSO and 47% to 98% on SWE-fficiency-Lite while still catching regressions ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)).
+
+## Why it works
+
+Profiler evidence changes the agent's search space rather than its effort. Agents given hotspot summaries reached low-level code in C, C++, Cython, or Rust on 48% of GSO instances against 31% for the baseline, because bottlenecks behind abstraction layers and native extensions are invisible to source reading alone ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)).
+
+The controller also converts a one-shot submission into a search that only ever keeps a better patch, and the gate removes the cheap way to win. Against a timing-only objective the paper found 18 instances where the baseline cached results inside the timing loop, dropping its raw 62% to 44% once those were discounted. That the gain comes from feedback quality rather than sampling volume shows in the cost: 44.1% at $2.88 per task beats an oracle best-of-five baseline at 26.5% and $11.01 per task ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)).
+
+## When this backfires
+
+Profiler output is evidence, not ground truth, and the loop inherits every way that evidence misleads.
+
+- Profilers disagree about the hot method. Four mature Java profilers frequently disagree on which method is hottest, and a profiler can send an analyst to optimize a method that is not hot at all ([Mytkowicz et al., 2010](https://dl.acm.org/doi/10.1145/1806596.1806618)).
+- Hot is not the same as high-payoff. Conventional profilers report where time is spent, not where optimization pays off, and in concurrent and asynchronous programs those differ ([Curtsinger and Berger, 2016](https://arxiv.org/abs/1608.03676)).
+- The gate alone makes things worse. Loop plus tests scored 24.5% on GSO against loop-only's 33.3% ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)); a gate with no hotspot evidence steers the agent toward safe, shallow edits.
+- One workload is a narrow measurement. Performance is measured on a single provided workload, and a patch fast on it need not generalize ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)).
+- The plumbing may not earn its cost. A timing-only loop already reached 49% on SWE-fficiency-Lite ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)), so where hot paths are algorithmic and legible from the source, a strong model and a stopwatch capture much of the gain with none of the setup.
+
+## Example
+
+One iteration of the controller, in the shape PerfAgent describes ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)):
+
+```python
+profile = py_spy_record(workload)              # sampling profiler, not wall-clock timing
+hotspots = summarize(aggregate(profile))       # location, call context, self time, total time
+patch = agent.optimize(repo, hotspots)         # agent proposes one edit
+
+apply(patch)
+rebuild()
+if not run_affected_tests().passed:            # behavior gate over the diff's tests only
+    continue                                   # discard; previous best stands
+
+speedup = measure(workload)
+best = max(best, (speedup, patch))             # keep the fastest correct patch, not the last
+```
+
+Three parts carry the result: the agent reads a summary rather than raw profiler output, the gate runs only the tests the diff touches, and the best correct patch is retained across iterations instead of the final submission.
+
+## Key Takeaways
+
+- Optimization asks for more than a passing test suite, and agents are weak at it — leading agents clear under 5% of GSO's optimization tasks ([Shetty et al., 2025](https://arxiv.org/abs/2505.23671)).
+- Ship the hotspot summary and the behavior gate together. Adding a test gate without profiler evidence scored below the plain loop on GSO, 24.5% against 33.3% ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)).
+- Summarize the profile before the agent sees it, and keep the fastest correct patch across iterations rather than the last one submitted ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)).
+- A behavior gate is what stops a timing objective from being gamed — 18 baseline instances cached results inside the timing loop ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)).
+- Treat the profile as fallible evidence: mature profilers disagree on the hottest method ([Mytkowicz et al., 2010](https://dl.acm.org/doi/10.1145/1806596.1806618)) and hot code is not always where optimization pays ([Curtsinger and Berger, 2016](https://arxiv.org/abs/1608.03676)).
+
+## Related
+
+- [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — caps how many rounds a repair loop runs; this page changes what signal each round acts on.
+- [Execution Budgeting in Agentic Program Repair](execution-budgeting-program-repair.md) — caps how often tests run inside a round; here the test gate is what makes a speedup count.
+- [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — orders cheap gates ahead of expensive ones, the same economics behind running only the affected tests.
+- [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — the general form of the caching-inside-the-timing-loop failure a behavior gate blocks.
+- [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — the regression risk that selective validation trades against.
+- [Making Application Observability Legible to Agents](../observability/observability-legible-to-agents.md) — wiring runtime signals into agent context generally; a profile is one such signal, aimed at optimization.
 
 ---
 
@@ -98814,6 +99127,7 @@ Source: https://agentpatterns.ai/observability/
 - [Context-Usage Attribution: Per-Source Breakdown of Agent Context](context-usage-attribution.md) — An always-on observability surface that breaks the context window into rules, skills, MCP returns, subagent transcripts, and conversation history — so operators prune the right source instead of guessing
 - [Cost-Aware Tracing for Skill Distillation](cost-aware-tracing-skill-distillation.md) — Per-step USD cost paired with redundancy flags lets a distillation pipeline distinguish necessary steps from incidental ones — prune patches transfer; preserve patches do not
 - [Circuit Breakers for Agent Loops](circuit-breakers.md) — Stop agents automatically when progress stalls — repeated errors, escalating costs, context exhaustion, or circular behavior signal a halt
+- [Event-Loop Contention in Async Agent Fan-Out](event-loop-contention-async-fan-out.md) — Adding concurrent agents raises end-to-end latency when per-response CPU work serializes on one event loop — how to tell it apart from provider throttling and connection-pool exhaustion
 - [Event Sourcing for Agents](event-sourcing-for-agents.md) — Agents emit structured intentions in validated JSON; a deterministic orchestrator validates, persists, and applies effects for replay-verifiable execution
 - [Failure-Aware Observability for Multi-Agent LLM Systems](failure-aware-observability-multi-agent.md) — A six-signal trace taxonomy — tool reliability, execution recovery, orchestration loops, evidence availability, information change, budget pressure — that maps recurring multi-agent failure modes to online observability so wasted runs are caught mid-trajectory
 - [Harness Bug Detection Patterns](harness-bug-postmortem-patterns.md) — Three detection gaps — idle-state evals, internal-vs-public build parity, per-model ablation — drawn from Anthropic's April 2026 Claude Code postmortem
@@ -100109,6 +100423,90 @@ If the derived state diverges from the filesystem, `verify` reports which events
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
 </content>
 </invoke>
+
+---
+
+### Event-Loop Contention in Async Agent Fan-Out
+Source: https://agentpatterns.ai/observability/event-loop-contention-async-fan-out/
+
+# Event-Loop Contention in Async Agent Fan-Out
+
+> Fan-out latency rises with agent count when per-response CPU work serializes on one event loop, even while every provider call stays fast.
+
+A fan-out service that slows down as you add agents has at least three plausible causes, and they share one symptom: the provider reports fast completions while your users see rising latency and timeouts. Telling event-loop contention apart from the other two takes one measurement, not a rewrite.
+
+## Three causes, one signature
+
+The symptom alone does not identify the cause:
+
+| Cause | What is happening | Distinguishing evidence |
+|---|---|---|
+| Event-loop contention | Per-response CPU work runs on the loop's own thread and delays every other coroutine | Event-loop lag climbs with concurrency; the loop is busy rather than waiting |
+| Provider throttling | Token-per-minute or request-per-minute limits queue or reject requests | 429 responses, or a local queue that grows while in-flight requests stay flat |
+| Connection-pool exhaustion | Requests wait for a free connection in the client pool | In-flight requests plateau exactly at the configured pool limit |
+
+Throttling is the more common cause: agent fan-out generates bursty traffic that trips provider limits, and a client that self-throttles queues requests locally, so users see latency instead of errors ([Portkey on rate limiting for LLM applications](https://portkey.ai/blog/rate-limiting-for-llm-applications/), [TrueFoundry on rate limiting AI agents](https://www.truefoundry.com/blog/rate-limiting-ai-agents-preventing-llm-api-exhaustion)). Check provider error codes and queue depth first.
+
+## The measurement that discriminates
+
+Event-loop lag separates "the loop is busy" from "the loop is waiting". Planck's investigation read `event-loop lag: 230 ms (loop was busy, not waiting)`, which ruled out both throttling and I/O ([Towards Data Science](https://towardsdatascience.com/why-adding-more-ai-agents-made-our-system-slower/)).
+
+CPython ships the check. With asyncio debug mode enabled, any callback that runs longer than `loop.slow_callback_duration` (default 100 ms) is logged ([Developing with asyncio](https://docs.python.org/3/library/asyncio-dev.html)). A steady stream of those warnings under load, with provider latency flat, is the confirmation.
+
+## Why it works
+
+An async runtime multiplexes many coroutines onto one thread. While a coroutine awaits I/O the loop runs others, but any code between `await` points holds the thread exclusively. Each completed model call therefore forces a synchronous CPU segment — deserialize the payload, count tokens, validate, apply business logic — before the loop can service the next ready coroutine. Total delay is the sum of those segments, so it grows with concurrency even though the I/O overlaps perfectly ([Towards Data Science](https://towardsdatascience.com/why-adding-more-ai-agents-made-our-system-slower/)).
+
+Under CPython the usual escape hatch is narrow. Asyncio "stalls the entire event loop during the inevitable CPU bound phases of data serialization", and naive thread-pool scaling degrades rather than parallelizes, because the global interpreter lock serializes bytecode ([Mandal and Shende, arxiv 2601.10582](https://arxiv.org/abs/2601.10582)). The docs still route blocking work through `loop.run_in_executor()` ([Developing with asyncio](https://docs.python.org/3/library/asyncio-dev.html)), but the durable fix is a separate process — or, on free-threaded builds, a separate event loop per thread ([asyncio and free-threaded Python](https://docs.python.org/3/library/asyncio-threading.html)).
+
+## The fix ladder
+
+Work upward, and stop when loop lag falls:
+
+1. Shrink the payload. Less data to deserialize means a shorter CPU segment per completion.
+2. Swap the serializer. Planck moved to `orjson` and tuned the `aiohttp` connector limit up from its default of 100; both helped marginally, and latency still rose with agent count ([Towards Data Science](https://towardsdatascience.com/why-adding-more-ai-agents-made-our-system-slower/)).
+3. Offload the CPU segment with `run_in_executor()`. Pure-Python work stays behind the interpreter lock, so this rung pays only for C-accelerated or genuinely blocking calls.
+4. Distribute the loop. Planck's fix was a router fanning requests across worker processes, each with its own event loop and connection pool, which stopped latency growing with agent count ([Towards Data Science](https://towardsdatascience.com/why-adding-more-ai-agents-made-our-system-slower/)). On free-threaded Python the same shape works with one loop per thread ([asyncio and free-threaded Python](https://docs.python.org/3/library/asyncio-threading.html)).
+
+## When this backfires
+
+Four conditions where chasing event-loop contention costs more than it returns:
+
+1. Small payloads or modest fan-out. Per-completion CPU is negligible, so the instrumentation and a process router cost more than they recover. Bound the concurrency instead with [bounded batch dispatch](../patterns/multi-agent/bounded-batch-dispatch.md).
+2. Throttling is the real constraint. Sharding across worker processes raises the burst rate the provider sees, so it deepens the throttling you were trying to escape ([Portkey](https://portkey.ai/blog/rate-limiting-for-llm-applications/)).
+3. Single-core or memory-constrained hosts. Each worker process adds around 20 MB of resident memory, capping a 2 GB Raspberry Pi 4 at 4 to 8 workers, and single-core saturation persists under free-threaded Python 3.13t at 21.8% against 14.2% degradation — context-switch cost, not only the interpreter lock ([Mandal and Shende, arxiv 2601.10582](https://arxiv.org/abs/2601.10582)).
+4. Runtimes without a global interpreter lock. The diagnostic transfers to any single-threaded loop, but the prescription does not: offloading to a thread there actually parallelizes, so step 3 resolves it.
+
+The steelman: rate limits and retry storms are more common, cheaper to check, and produce the identical signature. Measure loop lag before you redesign.
+
+## Example
+
+Planck reproduced the failure with a local FastAPI server and simulated payloads rather than live provider calls ([Towards Data Science](https://towardsdatascience.com/why-adding-more-ai-agents-made-our-system-slower/)):
+
+```python
+NUM_AGENTS = 50
+CALLS_PER_AGENT = 30
+IO_RANGE = (0.45, 0.55)      # simulated LLM latency
+CPU_RANGE = (0.001, 0.002)   # simulated (de)serialization
+```
+
+Response time rose in proportion to agent count despite a pure async implementation. The control run matters as much as the result: bare asyncio handled hundreds of thousands of coroutines efficiently, which ruled out scheduler overhead and left the 1 to 2 ms CPU segment per call as the cause. That segment is small enough to look free in a single-request trace and large enough to dominate at 1,500 concurrent calls.
+
+## Key Takeaways
+
+- Three causes share the "provider fast, wall-clock slow" signature: event-loop contention, provider throttling, and connection-pool exhaustion. Check throttling first, because it is the most common.
+- Event-loop lag is the discriminator. In CPython, asyncio debug mode logs any callback exceeding `loop.slow_callback_duration`, default 100 ms ([Developing with asyncio](https://docs.python.org/3/library/asyncio-dev.html)).
+- The mechanism is summation, not scheduling: per-completion CPU work runs between `await` points and adds up with concurrency, while the I/O overlaps ([Towards Data Science](https://towardsdatascience.com/why-adding-more-ai-agents-made-our-system-slower/)).
+- Micro-optimization buys little. Planck's `orjson` and connector-limit changes helped marginally; distributing across worker processes, each with its own loop and pool, is what stopped the growth.
+- The fix has conditions. It backfires under provider throttling, on memory-constrained hosts, and on runtimes with no global interpreter lock ([Mandal and Shende, arxiv 2601.10582](https://arxiv.org/abs/2601.10582)).
+
+## Related
+
+- [Async Non-Blocking Subagent Dispatch](../patterns/multi-agent/async-non-blocking-subagent-dispatch.md) — argues for async dispatch and backpressure; this page covers the starvation failure mode that pattern can hit at scale.
+- [Bounded Batch Dispatch](../patterns/multi-agent/bounded-batch-dispatch.md) — capping in-flight work is the cheaper alternative when per-response CPU is small.
+- [Staggered Agent Launch](../patterns/multi-agent/staggered-agent-launch.md) — the launch-side counterpart, addressing contention on a shared queue rather than on the runtime.
+- [The Model Economics of Agent Swarms: Cost and Width](../patterns/multi-agent/model-economics-agent-swarms.md) — the other ceiling on fan-out width, set by cost rather than by runtime contention.
+- [Failure-Aware Observability for Multi-Agent LLM Systems](failure-aware-observability-multi-agent.md) — the trace-signal taxonomy this diagnostic slots into as an infrastructure-layer signal.
 
 ---
 

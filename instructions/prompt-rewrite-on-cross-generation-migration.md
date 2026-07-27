@@ -105,3 +105,4 @@ Anthropic's `/claude-api migrate` skill and the `openai-docs migrate this projec
 - [Harness Engineering](../patterns/agent-design/harness-engineering.md) — the harness review that pairs with the prompt review per Anthropic's migration guide
 - [Production System Prompt Architecture](production-system-prompt-architecture.md) — XML-sectioned prompt structure that makes axis-by-axis re-tuning tractable
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md) — altitude calibration interacts with literal-interpretation shifts on the successor model
+- [Re-Auditing Context Engineering Across Model Generations](../context-engineering/generation-scoped-context-engineering.md) — which specific best practices expire on the capability jump this rewrite responds to

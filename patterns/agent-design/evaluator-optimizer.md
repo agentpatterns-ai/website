@@ -122,3 +122,4 @@ Each iteration adds generator and evaluator costs, so N rounds cost roughly 2N t
 - [Agent Composition Patterns](agent-composition-patterns.md)
 - [Controlling Agent Output](../../instructions/controlling-agent-output.md)
 - [DSPy: Programmatic Prompt Optimization](dspy-programmatic-prompt-optimization.md)
+- [Knowledge Graphs as Provenance-Carrying Agent Memory](knowledge-graph-shared-memory.md) — a substrate that gives the evaluator citable criteria instead of judgments

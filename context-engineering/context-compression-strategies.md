@@ -61,7 +61,7 @@ OPENDEV extends the two-tier approach with Adaptive Context Compaction (ACC), a 
 |-------|---------|--------|
 | 1 — Warning | 70% budget | Log context pressure for monitoring; no data reduction |
 | 2 — [Observation Masking](observation-masking.md) | 80% budget | Replace older tool results with compact reference pointers |
-| 2.5 — Fast Pruning | 85% budget | Prune older tool outputs beyond recency window |
+| 2.5 — Fast Pruning | 85% budget | Prune older tool outputs beyond recency window (see [Usage-Reinforced Memory Decay](usage-reinforced-memory-decay.md) for a retention-scored alternative to the fixed window) |
 | 3 — Aggressive Masking | 90% budget | Shrink preservation window to only most recent outputs |
 | 4 — Full Compaction | 99% budget | Serialize history to scratch file; LLM-summarize middle portion |
 

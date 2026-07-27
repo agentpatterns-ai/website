@@ -121,3 +121,4 @@ The shape is the load-bearing part: a hard cap with an explicit "submit your bes
 - [Cost-Aware Skill Rewriting](../instructions/cost-aware-skill-rewriting.md) — the broader practice of making cost explicit in instructions and tool descriptions agents read.
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md) — adjacent tool-level cost lever; reduces the cost per execution rather than the count of executions.
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — why "execution prohibited" sounds dangerous but isn't on the measured slice — the slice itself is the load-bearing claim.
+- [Profiler-Guided Optimization Loops for Coding Agents](profiler-guided-optimization-loop.md) — the performance-optimization case, where a run is the objective signal rather than a cost to cap.

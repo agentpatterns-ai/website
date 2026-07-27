@@ -23,6 +23,7 @@ Core concepts that define context engineering as a practice and establish the st
 - [Context Lifecycle Management](context-lifecycle-management.md) — Treat context as a managed lifecycle — decide, extract, store per type, consolidate, compact — rather than a passive store, to curb missing recalls and token cost that grows every turn
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) — Only put non-discoverable information in agent instruction files; if the agent can find it in the codebase, let it find it
 - [Instruction-Guided Code Completion](instruction-guided-code-completion.md) — Functional correctness and instruction adherence are independent capabilities; explicit implementation constraints and model selection close the gap
+- [Re-Auditing Context Engineering Across Model Generations](generation-scoped-context-engineering.md) — Context-engineering best practices are model-generation-dependent; a capability jump lets you delete guardrails the new model no longer needs while keeping the security-critical ones
 
 ## Attention & Positioning
 
@@ -47,6 +48,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [PEEK: Orientation Cache for Recurring-Context Agents](peek-orientation-cache.md) — A constant-sized prompt artifact that caches reusable orientation knowledge — what is in a recurring context, how it is organised, which entities matter — distinct from trajectory replay and playbook strategy memory
 - [Context Compression Strategies](context-compression-strategies.md) — Long-running agents accumulate context that eventually fills the window; tiered compression — offloading large payloads and summarising history — lets agents continue working without losing task continuity
 - [Selective Rewind Summarization](selective-rewind-summarization.md) — A user-chosen cut point compresses earlier turns to a summary while the recent turns stay verbatim — a targeted alternative to whole-session compaction
+- [Usage-Reinforced Memory Decay for Long-Running Agents](usage-reinforced-memory-decay.md) — Score retention with a forgetting curve whose stability compounds on every recall, so frequently-consulted facts outlive the idle stretches that silently evict them from a fixed recency window
 - [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md) — Give the agent both a compaction tool and a firing rubric so it compacts on trajectory structure — sub-task resolved or converging — instead of a fixed token threshold
 - [Elastic Context Orchestration](elastic-context-orchestration.md) — A per-turn vocabulary of context operations — Skip, Compress, Snippet, Rollback, Delete — that lets long-horizon search agents tier retention by current task relevance instead of accumulating raw trajectory
 - [Prompt Compression](prompt-compression.md) — Write instructions that convey the same guidance in fewer words; shorter, denser instructions improve agent compliance and reduce token cost
