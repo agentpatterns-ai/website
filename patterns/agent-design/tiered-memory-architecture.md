@@ -93,9 +93,9 @@ Mitigate by gating promotion on a confidence signal, reviewer pass, or semantic-
 
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md) — episode-keyed recall without explicit tier promotion
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — scope-based memory architecture for cross-session learning
-- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — controller deciding *whether* to inject retrieved memory
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — controller deciding whether to inject retrieved memory, and utility-score updates for stored memories from outcome feedback
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — extracting causal lessons from execution traces into persistent knowledge
 - [Subtask-Level Memory for Software Engineering Agents](subtask-level-memory.md) — granularity choice in memory retrieval
-- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — utility-score updates for stored memories from outcome feedback
 - [Generative Agents Memory Stream](generative-agents-memory-stream.md) — three-layer architecture for long-running agents with high observation density
 - [Component-Isolated Memory Stress Testing](../../verification/component-isolated-memory-stress-testing.md) — stress-tests the summarisation, storage, and retrieval stages of this pipeline so a regression attributes to one tier
+- [Usage-Reinforced Memory Decay for Long-Running Agents](../../context-engineering/usage-reinforced-memory-decay.md) — an eviction policy for the working tier that scores retention by recall count instead of elapsed turns

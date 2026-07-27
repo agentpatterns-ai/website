@@ -77,3 +77,4 @@ The load-bearing parts are the low `max_rounds` default and the plateau break. T
 - [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md) — strengthens what each round's test signal actually tells you.
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — the metrics that show whether extra rounds add capability or just retries.
 - [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — the complementary stop rule for when the verifier is noisy rather than a real oracle; stop on estimated validity, not a fixed round count.
+- [Profiler-Guided Optimization Loops for Coding Agents](profiler-guided-optimization-loop.md) — changes what signal each round acts on rather than how many rounds run, for the performance-optimization case.

@@ -59,7 +59,7 @@ For coding agents, grade the execution result alongside the artifact — differe
 
 ## Building the suite
 
-Start with 20 to 50 manually authored pairs covering failures, edge cases, and high-volume scenarios. Grow the suite continuously — every production failure is a candidate pair (see [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md)). Review goldens for drift periodically. A stale suite hides regressions behind [benchmark-contamination](benchmark-contamination-eval-risk.md) and [reward-hacking](anti-reward-hacking.md) dynamics.
+We recommend starting with 20 to 50 manually authored pairs covering failures, edge cases, and high-volume scenarios. That range is our own starting point rather than a published finding: it is small enough that a domain expert can author and review every pair by hand. Grow the suite continuously — every production failure is a candidate pair (see [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md)). Review goldens for drift periodically. A stale suite hides regressions behind [benchmark-contamination](benchmark-contamination-eval-risk.md) and [reward-hacking](anti-reward-hacking.md) dynamics.
 
 ## For coding agents
 

@@ -10,7 +10,7 @@ aliases:
   - context graph layer
   - graph-based shared memory
   - graph memory for multi-agent
-last_reviewed: 2026-06-28
+last_reviewed: 2026-07-26
 maturity: emerging
 ---
 
@@ -18,7 +18,7 @@ maturity: emerging
 
 > Context-graph memory stores cross-agent state as typed triples and beats vector RAG on multi-hop join queries — but only when entities are clean.
 
-Context-graph shared memory layers cross-agent state as `(subject, predicate, object)` triples in a directed graph, replacing flat chat history or vector chunks with relational traversal. The architecture is qualified — independent benchmarks show it beats vector RAG on multi-hop join queries but matches or underperforms it on single-fact retrieval, and a production multi-agent comparison found no statistically significant accuracy advantage at 40% higher cost ([Wolff & Bennati 2025](https://arxiv.org/html/2601.07978v1)). Before defaulting to vector RAG, benchmark all three (chat history, vector RAG, context graph) on the regime your queries actually live in.
+Context-graph shared memory layers cross-agent state as `(subject, predicate, object)` triples in a directed graph, replacing flat chat history or vector chunks with relational traversal. The architecture is qualified — independent benchmarks show it beats vector RAG on multi-hop join queries but falls well behind it on general long-conversation recall, where a cloud-edge evaluation puts graph backends roughly 25 accuracy points below vector and RAG memory at ten times the cost ([Wolff & Bennati 2026](https://arxiv.org/abs/2601.07978v4)). Before defaulting to vector RAG, benchmark all three (chat history, vector RAG, context graph) on the regime your queries actually live in.
 
 ## When This Pattern Applies
 
@@ -64,13 +64,13 @@ Context-graph memory works on multi-hop queries because it encodes relationships
 
 Two independent results show the gain is regime-specific, not universal:
 
-- Vector RAG matches graph memory in production multi-agent settings — a distributed multi-agent system comparison of Graphiti (graph) vs mem0 (vector + LLM compression) found Graphiti's 11.1% accuracy advantage over mem0's 7.5% is not statistically significant (p > 0.05), and the graph cost 40.2% more per query; the authors flag mem0 as Pareto-optimal ([Wolff & Bennati 2025](https://arxiv.org/html/2601.07978v1)).
+- Vector RAG beats graph memory outright in distributed multi-agent deployments — an independent cloud-edge testbed running mem0 (vector), Graphiti (graph), cognee (hybrid), and RAG and full-context baselines against the LoCoMo benchmark splits them into two clusters: mem0 at 81.08%, RAG at 78.31%, and full-context at 77.16%, against Graphiti at 56.03% and cognee at 55.27%. The separation is significant under a Bonferroni-corrected Wilcoxon signed-rank test (p = 0.002), and the graph engine is also the second most expensive backend measured — $6.95 total cost of ownership against RAG's $0.65. Only RAG and mem0 land on the Pareto frontier ([Wolff & Bennati 2026](https://arxiv.org/abs/2601.07978v4)).
 - Graph-RAG underperforms vanilla RAG on many real-world tasks — a systematic study across the graph-RAG pipeline finds the architecture "frequently underperforms vanilla RAG on many real-world tasks" outside the multi-hop reasoning regime ([Xiang et al. 2025](https://arxiv.org/abs/2506.05690)).
 
 Specific failure conditions:
 
 - Single-fact lookups with no joins — the graph's traversal mechanism is dead weight; vector RAG is cheaper at equal accuracy.
-- Free-text agents without controlled vocabulary — Alexander's own benchmark fails on queries like "the dataset with anomaly" without LLM-based entity linking, which then destroys the deterministic-extraction cost advantage the same benchmark reports.
+- Free-text agents without controlled vocabulary — Alexander's own benchmark fails on queries like "the dataset with anomaly" without LLM-based entity linking, which then destroys the deterministic-extraction cost advantage the same benchmark reports. This is the failure the cloud-edge evaluation isolates: the graph deficit there "is driven by retrieval incompleteness rather than reasoning failure", with graph backends returning 25.58% and 28.18% unknown responses against 8.38% to 11.14% for the vector cluster, because "graph-based ingestion introduces entity resolution, relation labeling, and schema-constrained extraction, each an opportunity for information loss before retrieval" ([Wolff & Bennati 2026](https://arxiv.org/abs/2601.07978v4)).
 - Short sessions — graph construction never amortises before the session ends.
 - Dynamic facts without temporal modelling — Alexander flags stale-fact retrieval as a major liability when supersession isn't implemented.
 - Teams without graph-query expertise — Cypher / SPARQL / ontology maintenance is a skill gap that produces a half-implemented graph that underperforms vector RAG.
@@ -87,13 +87,13 @@ Treat these as preprint signals, not load-bearing:
 | Tokens per query | 490.9 | 75.9 | 26.9 |
 | Join-query accuracy | 40.0% | 20.0% | 80.0% |
 
-Source: [Alexander 2026](https://towardsdatascience.com/vector-rag-isnt-enough-i-built-a-context-graph-layer-for-multi-agent-memory/) — 5 scenarios, 18 queries, deterministic (no LLM calls). The distributed-MAS evaluation in [Wolff & Bennati 2025](https://arxiv.org/html/2601.07978v1) and the multi-hop-reasoning benchmarks in [Wu et al. 2026](https://arxiv.org/html/2606.00610v1) report substantially smaller gaps once LLM-based extraction is in the loop.
+Source: [Alexander 2026](https://towardsdatascience.com/vector-rag-isnt-enough-i-built-a-context-graph-layer-for-multi-agent-memory/) — 5 scenarios, 18 queries, deterministic (no LLM calls). The multi-hop-reasoning benchmarks in [Wu et al. 2026](https://arxiv.org/html/2606.00610v1) report substantially smaller gaps once LLM-based extraction is in the loop, and the cloud-edge evaluation in [Wolff & Bennati 2026](https://arxiv.org/abs/2601.07978v4) reverses the sign entirely on general long-conversation recall — treat the table above as evidence for the join-query regime only, not for memory quality overall.
 
 ## Key Takeaways
 
 - Context-graph shared memory beats vector RAG on cross-agent multi-hop join queries with controlled vocabulary; outside that regime two independent studies show it matches or underperforms vector RAG
 - The mechanism is typed-edge traversal — the gain only materialises when queries actually require chaining facts; single-fact lookups extract no benefit and pay the schema-maintenance cost
-- A production multi-agent comparison ([Wolff & Bennati 2025](https://arxiv.org/html/2601.07978v1)) found graphs cost 40% more per query with no statistically significant accuracy gain over vector + LLM-compressed memory
+- An independent cloud-edge evaluation ([Wolff & Bennati 2026](https://arxiv.org/abs/2601.07978v4)) puts graph memory about 25 accuracy points below vector and RAG memory on long-conversation recall at ten times RAG's cost, with the gap traced to information lost during graph ingestion rather than to weaker reasoning
 - Benchmark the three architectures (chat history, vector RAG, context graph) on your actual query mix before adopting; "vector RAG is enough" is the more common production answer
 
 ## Related
@@ -102,4 +102,5 @@ Source: [Alexander 2026](https://towardsdatascience.com/vector-rag-isnt-enough-i
 - [Schema-Guided Graph Retrieval](../../context-engineering/schema-guided-graph-retrieval.md) — the single-agent precursor whose schema discipline a multi-agent context graph inherits
 - [Experience Graphs as Structured Memory for Self-Evolving Agents](../agent-design/experience-graphs-self-evolving-agents.md) — graph-structured memory in a single-agent self-improvement loop; the mechanism transfers when joins matter
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — scope-based memory architecture covering shared-store designs; the destination once the graph-vs-vector decision is made
+- [Knowledge Graphs as Provenance-Carrying Agent Memory](../agent-design/knowledge-graph-shared-memory.md) — the complementary case for graph state: what per-edge source attribution adds once the retrieval question here is settled
 - [Agent Handoff Protocols: Passing Work Between Agents](agent-handoff-protocols.md) — explicit handoff contracts for state passed between agents; the alternative to a shared-memory layer when the handoffs are well-defined

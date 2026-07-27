@@ -67,6 +67,7 @@ nav:
       - layered-mutability.md
       - ledger-agent-structured-task-state.md
       - epistemic-working-memory-multi-hop-reasoning.md
+      - knowledge-graph-shared-memory.md
       - memory-retrieval-as-control.md
       - memory-synthesis-execution-logs.md
       - memory-transfer-learning.md

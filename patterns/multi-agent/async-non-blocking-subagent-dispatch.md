@@ -125,3 +125,4 @@ Compare with blocking batch dispatch, where the orchestrator dispatches 10, wait
 - [Orchestrator-Worker Pattern](orchestrator-worker.md) — the broader orchestration model
 - [Agent Composition Patterns](../agent-design/agent-composition-patterns.md) — survey of composition structures including fan-out
 - [Staggered Agent Launch](staggered-agent-launch.md) — complementary pattern for avoiding thundering-herd on dispatch
+- [Event-Loop Contention in Async Agent Fan-Out](../../observability/event-loop-contention-async-fan-out.md) — the runtime failure mode this pattern can hit at scale, and how to diagnose it

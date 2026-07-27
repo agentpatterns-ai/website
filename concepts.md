@@ -236,6 +236,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Reducing System-Prompt Token Bloat in Coding Agents](context-engineering/system-prompt-bloat-reduction.md)
 - [Context Quality as a Leading Indicator of Agent Reliability](context-engineering/context-quality-audit.md)
 - [Context Lifecycle Management: Beyond Store and Retrieve](context-engineering/context-lifecycle-management.md)
+- [Re-Auditing Context Engineering Across Model Generations](context-engineering/generation-scoped-context-engineering.md)
+- [Usage-Reinforced Memory Decay for Long-Running Agents](context-engineering/usage-reinforced-memory-decay.md)
 
 ## Instructions & Prompts
 
@@ -568,6 +570,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The Harness as Product: What Listed-Rate Pricing Buys](patterns/agent-design/harness-as-product.md)
 - [Suspect the Harness Before the Model on a Regression](patterns/agent-design/suspect-the-harness-not-the-model.md)
 - [Cue-Anchored Working Memory (Delivery, Not Storage)](patterns/agent-design/cue-anchored-working-memory.md)
+- [Knowledge Graphs as Provenance-Carrying Agent Memory](patterns/agent-design/knowledge-graph-shared-memory.md)
 
 ## Loop Engineering
 
@@ -960,6 +963,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Emulate Agent-Experience Changes Before Shipping](verification/emulate-ax-changes-before-shipping.md)
 - [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](verification/validity-estimate-stopping-noisy-repair-loops.md)
 - [Agentic Review Comment Acceptance](code-review/agentic-review-comment-acceptance.md)
+- [Profiler-Guided Optimization Loops for Coding Agents](verification/profiler-guided-optimization-loop.md)
 
 ## Hooks & Guardrails
 
@@ -1016,6 +1020,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)](observability/trajectory-prefilter-failure-diagnosis.md)
 - [Centralized LLM Gateway for Per-Dimension Agent Budgets](observability/llm-gateway-per-dimension-budgets.md)
 - [Agent-Reactive Bugs at the Model-Harness Boundary](observability/agent-reactive-bugs.md)
+- [Event-Loop Contention in Async Agent Fan-Out](observability/event-loop-contention-async-fan-out.md)
 
 ## Standards & Protocols
 

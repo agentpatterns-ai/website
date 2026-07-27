@@ -82,3 +82,4 @@ The bare names in `deny` remove those tool definitions from every request; the `
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md) — assembling prompts at runtime, distinct from removing dead weight.
 - [Exclude Dynamic System Prompt Sections for Cross-Machine Cache Sharing](exclude-dynamic-system-prompt-sections.md) — a different Claude Code system-prompt saving, aimed at cache sharing.
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — the caching economics behind the cost caveat above.
+- [Re-Auditing Context Engineering Across Model Generations](generation-scoped-context-engineering.md) — the generation-jump trigger that turns bloat reduction from one-off cleanup into a recurring audit.
