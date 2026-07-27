@@ -39,7 +39,7 @@ Deterministic CI, short interactive sessions, and single-agent harnesses without
 |---|---|---|
 | A | Environment / platform quirk | macOS TCC sandbox silently blocked an SSD backup; the 60-day-latency end of the distribution ([Wu](https://arxiv.org/html/2606.14589v1)) |
 | B | Design-assumption mismatch | Positional parsing of LLM output recurred across unrelated jobs; one key-based-parsing rule with a repo-wide scanner closed every instance ([Wu §3.3](https://arxiv.org/html/2606.14589v1)) |
-| C | Error swallowing / dilution | Errors captured into a log cache or summarised by an intermediate component before reaching any alert path ([Wu](https://arxiv.org/abs/2606.14589)) |
+| C | Error swallowing / dilution | Errors captured into a log cache or summarized by an intermediate component before reaching any alert path ([Wu](https://arxiv.org/abs/2606.14589)) |
 | D | Chained hallucination / "fail-plausible" | A Unicode-surrogate error was captured into a log cache; the downstream LLM composed a confident "Hugging Face platform crisis" analysis and pushed it to the user as routine analysis ([Wu §D1](https://arxiv.org/html/2606.14589v1)) |
 | E | Operational omission / forensic blind spot | A reserved-file mute in a logging path; no record existed for postmortem to consult ([Wu](https://arxiv.org/abs/2606.14589)) |
 

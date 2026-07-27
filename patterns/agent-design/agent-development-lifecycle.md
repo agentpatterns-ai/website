@@ -18,11 +18,11 @@ maturity: established
 
 # Agent Development Lifecycle for Agent Products
 
-> A four-phase loop — build, test, deploy, monitor — for teams whose unit of work is the agent, with verdict-labelled traces feeding the next cycle.
+> A four-phase loop — build, test, deploy, monitor — for teams whose unit of work is the agent, with verdict-labeled traces feeding the next cycle.
 
 ## A lifecycle for the agent, not the feature
 
-The Agent Development Lifecycle (ADLC) is a four-phase loop — build, test, deploy, monitor — for teams whose product is the agent, with verdict-labelled production traces feeding the next build cycle ([LangChain blog](https://www.langchain.com/blog/the-agent-development-lifecycle)).
+The Agent Development Lifecycle (ADLC) is a four-phase loop — build, test, deploy, monitor — for teams whose product is the agent, with verdict-labeled production traces feeding the next build cycle ([LangChain blog](https://www.langchain.com/blog/the-agent-development-lifecycle)).
 
 It inverts two SDLC framings already on this project. [The 7 Phases of AI Development](../../workflows/7-phases-ai-development.md) is a feature-level workflow for using an agent to ship code. [SDLC-Phase Skill Taxonomy](../../workflows/sdlc-skill-taxonomy.md) organizes a skill library so an agent acting on a codebase activates the right skills. Both treat the agent as the tool; ADLC treats it as the product.
 
@@ -55,13 +55,13 @@ Ship the agent in a controlled way. Canary rollouts, traffic shadowing, and roll
 
 Trace every run, label every trace with a verdict, alert on drift. Agent dashboards track usage, feedback, latency, cost, tool calls, evaluator scores, and recurring failure patterns ([LangChain blog](https://www.langchain.com/blog/the-agent-development-lifecycle)).
 
-The verdict step is essential. [Traces Need Feedback to Power Learning](../../observability/traces-need-feedback-to-power-learning.md) covers the four feedback sources and the OTel `gen_ai.evaluation.result` channel for attaching them. Without that coupling, monitor produces trajectories nobody can act on. Produces: a verdict-labelled trace corpus and a regression-case stream for the next test cycle.
+The verdict step is essential. [Traces Need Feedback to Power Learning](../../observability/traces-need-feedback-to-power-learning.md) covers the four feedback sources and the OTel `gen_ai.evaluation.result` channel for attaching them. Without that coupling, monitor produces trajectories nobody can act on. Produces: a verdict-labeled trace corpus and a regression-case stream for the next test cycle.
 
 ## Closing the loop
 
 [Continuous Agent Improvement](../../workflows/continuous-agent-improvement.md) turns the Monitor → Build back-edge into an observation-to-update loop for agent configurations.
 
-The underlying mechanism: agents fail on distributions, not on cases. Bug-fix-and-redeploy optimizes one failing trace; a four-phase lifecycle with verdict-labelled traces optimizes the failure-rate trend across a population. The phases are the minimum cut points where verdict-carrying signal can flow back.
+The underlying mechanism: agents fail on distributions, not on cases. Bug-fix-and-redeploy optimizes one failing trace; a four-phase lifecycle with verdict-labeled traces optimizes the failure-rate trend across a population. The phases are the minimum cut points where verdict-carrying signal can flow back.
 
 ## When ADLC adds value
 
@@ -93,18 +93,18 @@ One caveat: several 2026 framings treat security and governance as an intrinsic 
 A two-person team ships a support-triage agent and wants the loop without a vendor platform:
 
 - Build: define scope (classify and route inbound tickets, never auto-reply), pick a single-agent harness, wire OTel tracing. Artifact: a runnable agent plus a one-page scope doc.
-- Test: 40 labelled tickets become the eval suite. CI runs the agent against them and gates merge on ≥ 90% routing accuracy — written before the agent exists, so live bugs cannot redefine "correct." Artifact: a pass/fail verdict.
+- Test: 40 labeled tickets become the eval suite. CI runs the agent against them and gates merge on ≥ 90% routing accuracy — written before the agent exists, so live bugs cannot redefine "correct." Artifact: a pass/fail verdict.
 - Deploy: a canary routes 5% of live tickets through the new policy with a one-command rollback; permission scoping blocks any write path beyond the ticketing API. Artifact: a running deployment emitting traces.
-- Monitor: every run is traced and labelled — deterministic rule (did routing match the human's later reassignment?), plus a direct thumbs-up/down from the agent on duty. A weekly job converts each mis-route into a regression case (Monitor → Test) and surfaces recurring failure clusters for the next scope revision (Monitor → Build).
+- Monitor: every run is traced and labeled — deterministic rule (did routing match the human's later reassignment?), plus a direct thumbs-up/down from the agent on duty. A weekly job converts each mis-route into a regression case (Monitor → Test) and surfaces recurring failure clusters for the next scope revision (Monitor → Build).
 
 No LangGraph or LangSmith required — OTel, a pytest eval runner, and a feature-flagged deploy reproduce the same back-edges.
 
 ## Key Takeaways
 
 - ADLC is a meta-lifecycle for the agent product itself — distinct from a feature-level SDLC or a skill-library SDLC; same loop shape, different unit of work.
-- The four phases — build, test, deploy, monitor — produce explicit hand-off artifacts: scope doc, eval verdict, deploy artifact, verdict-labelled traces.
-- The Monitor → Test back-edge is operationalised by an incident-to-eval pipeline; the Monitor → Build back-edge by a [continuous-improvement loop](../../workflows/continuous-agent-improvement.md).
-- The mechanism is distributional: verdict-labelled traces let teams optimise failure-rate trends, not one-off failing cases.
+- The four phases — build, test, deploy, monitor — produce explicit hand-off artifacts: scope doc, eval verdict, deploy artifact, verdict-labeled traces.
+- The Monitor → Test back-edge is operationalized by an incident-to-eval pipeline; the Monitor → Build back-edge by a [continuous-improvement loop](../../workflows/continuous-agent-improvement.md).
+- The mechanism is distributional: verdict-labeled traces let teams optimize failure-rate trends, not one-off failing cases.
 - The lifecycle is not free — small teams pre-PMF, stateless one-shot agents, batch jobs with no user surface, and privacy-constrained agents should ship the collapsed rebuild loop first.
 
 ## Related
@@ -112,7 +112,7 @@ No LangGraph or LangSmith required — OTel, a pytest eval runner, and a feature
 - [The 7 Phases of AI Development](../../workflows/7-phases-ai-development.md) — feature-level SDLC for using an agent to ship code; contrast point.
 - [SDLC-Phase Skill Taxonomy](../../workflows/sdlc-skill-taxonomy.md) — lifecycle for an agent acting on a codebase; contrast point.
 - [Eval-Driven Development](../../workflows/eval-driven-development.md) — the test phase, in depth.
-- [Traces Need Feedback to Power Learning](../../observability/traces-need-feedback-to-power-learning.md) — how the monitor phase produces verdict-labelled traces.
+- [Traces Need Feedback to Power Learning](../../observability/traces-need-feedback-to-power-learning.md) — how the monitor phase produces verdict-labeled traces.
 - [Continuous Agent Improvement](../../workflows/continuous-agent-improvement.md) — the Monitor → Build back-edge.
 - [Canary Rollout for Agent Policy](../../workflows/canary-rollout-agent-policy.md) — the deploy phase, in depth.
 - [Governing Production Agents: Cost, Control, Compliance](../../workflows/governing-production-agents.md) — the cost, control, and compliance guardrails that gate every phase.

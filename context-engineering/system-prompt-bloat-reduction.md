@@ -18,7 +18,7 @@ maturity: adopted
 
 > Measure what fills a coding agent's system prompt, then cut the tools, skills, and features you never use to free the token budget.
 
-System-prompt token bloat is the static payload — tool definitions, a skills catalogue, and feature instructions — that a coding agent re-sends on every request whether you touch those features or not. You reduce it by measuring the payload first, then switching off the parts that do not earn their place, so the fixed prefix shrinks and more of the context window stays free for your task.
+System-prompt token bloat is the static payload — tool definitions, a skills catalog, and feature instructions — that a coding agent re-sends on every request whether you touch those features or not. You reduce it by measuring the payload first, then switching off the parts that do not earn their place, so the fixed prefix shrinks and more of the context window stays free for your task.
 
 Two conditions shape the payoff before you cut anything: with prompt caching active the win is mostly context-window headroom, not a large per-turn cost cut, and every cut disables a feature. Trim what you do not use, keep what your workflow relies on.
 

@@ -84,5 +84,5 @@ Stulberg's DoorDash setup: a PM query about a customer call resolves to `product
 - [Team OS](index.md) — the framework this page composes into
 - [Hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md) — the atomic pattern for path-scoped instruction loading
 - [AGENTS.md as a table of contents](../../instructions/agents-md-as-table-of-contents.md) — the pointer-map discipline each folder's memory file follows
-- [Progressive disclosure agents](../../patterns/agent-design/progressive-disclosure-agents.md) — the generalised shape this implements through filesystem structure
+- [Progressive disclosure agents](../../patterns/agent-design/progressive-disclosure-agents.md) — the generalized shape this implements through filesystem structure
 - [Cross-functional artifacts](cross-functional-artifacts.md) — the sibling pattern on artifact types that span function folders

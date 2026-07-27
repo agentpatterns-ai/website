@@ -1,6 +1,6 @@
 ---
 title: "Org-Membership-Gated Agent Entitlement"
-description: "Gate AI chat activation on directory-managed GitHub organization membership, not seat licences alone — a fail-closed device policy that ties entitlement to identity rather than installation."
+description: "Gate AI chat activation on directory-managed GitHub organization membership, not seat licenses alone — a fail-closed device policy that ties entitlement to identity rather than installation."
 term: "Org-Membership-Gated Agent Entitlement"
 aliases:
   - org-gated agent entitlement
@@ -16,7 +16,7 @@ maturity: established
 
 # Org-Membership-Gated Agent Entitlement
 
-> Gate AI chat on directory-managed GitHub org membership, not seat licences — a fail-closed device policy tying entitlement to identity, not installation.
+> Gate AI chat on directory-managed GitHub org membership, not seat licenses — a fail-closed device policy tying entitlement to identity, not installation.
 
 Seat licenses answer "who paid" but not "who is currently allowed to send code to a model." A user offboarded from the company keeps the installed VS Code on their device. They may also keep a personal GitHub account that still resolves a Copilot Pro seat. Org-membership-gated entitlement closes that gap by deciding chat activation on the device against directory-managed group membership.
 
@@ -78,7 +78,7 @@ Pair the offboarding runbook with org-membership revocation as the first irrever
 ## Key Takeaways
 
 - The Approved Account gate is fail-closed: chat stays off until an approved-org GitHub account is signed in *and* policy has resolved.
-- Device-side enforcement is structurally distinct from seat licences and from GitHub.com-side org policies — it gates on the account currently signed in, not the licence assigned.
+- Device-side enforcement is structurally distinct from seat licenses and from GitHub.com-side org policies — it gates on the account currently signed in, not the license assigned.
 - Coverage is bounded to the VS Code surface; layer it with seat licensing and IdP-based controls rather than relying on it alone.
 - The offboarding contract is one membership revocation — make it a runbook step, not an afterthought.
 

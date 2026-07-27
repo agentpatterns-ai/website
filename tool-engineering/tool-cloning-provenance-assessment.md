@@ -77,7 +77,7 @@ Applied to the Kim et al. measurement corpus: 7,508 MCP repositories containing 
 - 60% of high-Jaccard and 85% of high-ssdeep clone candidates in MCP are manual-verified clones; raw repository counts overstate diversity by a meaningful factor ([arxiv 2605.09817](https://arxiv.org/abs/2605.09817)).
 - Pair lexical (Jaccard) and fuzzy-structural (ssdeep) signals — single-metric detection misclassifies templates and refactors.
 - Apply the correction when raw counts feed real decisions: benchmark splits, marketplace breadth claims, security triage.
-- Do not generalise to "all clones are defects" — fork diversity is a sustainability signal in classical OSS and template scaffolding is by design in young ecosystems.
+- Do not generalize to "all clones are defects" — fork diversity is a sustainability signal in classical OSS and template scaffolding is by design in young ecosystems.
 
 ## Related
 

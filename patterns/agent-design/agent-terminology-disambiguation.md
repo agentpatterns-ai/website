@@ -120,8 +120,8 @@ Category recognition reduces over-engineering. The [Agentless paper](https://arx
 - The central axis for workflow vs agent is control-flow ownership — predefined code paths versus LLM-directed next-step decisions ([Anthropic — Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
 - Long-running describes duration, autonomous describes control flow, assistant describes reactivity — independent dimensions.
 - RAG is a generation technique, not an agent. Workflow engines and agent runtimes solve different problems and can compose.
-- AI coding agents are a specialisation with distinct verification surfaces; generic LLM agent patterns do not always transfer.
-- Categories are spectrum points; the goal is recognising which patterns apply, not winning a definitional argument.
+- AI coding agents are a specialization with distinct verification surfaces; generic LLM agent patterns do not always transfer.
+- Categories are spectrum points; the goal is recognizing which patterns apply, not winning a definitional argument.
 
 ## Related
 

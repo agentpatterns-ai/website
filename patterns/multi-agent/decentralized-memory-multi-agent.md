@@ -17,7 +17,7 @@ maturity: emerging
 
 # Decentralized Memory for Self-Evolving Multi-Agent Systems
 
-> Decentralized memory gives each agent a private store instead of a shared one, so each specialises on its own task distribution.
+> Decentralized memory gives each agent a private store instead of a shared one, so each specializes on its own task distribution.
 
 Decentralized memory gives each agent in a multi-agent system its own persistent local store, rather than a shared central repository. Improvement becomes a federated process: each agent builds role-specific expertise without coordinating writes. The trade swaps write contention and central-store staleness for divergence between agents and the loss of the shared-signal benefit a central store provides.
 
@@ -91,5 +91,5 @@ A poisoned LLM-as-judge is a particular concern even when the "trusted writers" 
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — scope-based memory architecture covering shared-store designs
 - [Continual Learning for AI Agents: Three Layers of Knowledge Accumulation](../agent-design/continual-learning-layers.md) — the context-layer view of memory updates that decentralized stores instantiate
 - [Agentic Flywheel: Self-Improving Agent Systems](../agent-design/agentic-flywheel.md) — self-improvement loop that decentralized memory feeds at the per-agent level
-- [Multi-Agent Topology Taxonomy: Centralised, Decentralised, and Hybrid](multi-agent-topology-taxonomy.md) — coordination-topology context for choosing per-agent vs shared state
+- [Multi-Agent Topology Taxonomy: Centralized, Decentralized, and Hybrid](multi-agent-topology-taxonomy.md) — coordination-topology context for choosing per-agent vs shared state
 - [Memory Retrieval as a Control Decision](../agent-design/memory-retrieval-as-control.md) — utility-score updates for retrieval that the LLM-as-judge reweighting parallels at the pool level

@@ -1,6 +1,6 @@
 ---
 title: "Persistent-Connection Agent Transport"
-description: "Hold one bidirectional channel to the model API across an agent rollout, sending only incremental input each turn so per-request overhead amortises over the full session."
+description: "Hold one bidirectional channel to the model API across an agent rollout, sending only incremental input each turn so per-request overhead amortizes over the full session."
 term: "Persistent-Connection Agent Transport"
 tags:
   - agent-design
@@ -16,7 +16,7 @@ maturity: established
 
 # Persistent-Connection Agent Transport
 
-> Hold one bidirectional channel to the model API across an agent rollout, sending only incremental input each turn so per-request overhead amortises over the full session.
+> Hold one bidirectional channel to the model API across an agent rollout, sending only incremental input each turn so per-request overhead amortizes over the full session.
 
 ## The per-turn overhead problem
 
@@ -122,7 +122,7 @@ The server reuses the cached tool definitions, prior tokens, and routing decisio
 
 ## Key Takeaways
 
-- Persistent-connection transport amortises fixed per-request overhead across a multi-turn agent rollout
+- Persistent-connection transport amortizes fixed per-request overhead across a multi-turn agent rollout
 - The benefit is conditional: tool-call-heavy workloads (~20+ calls), single-replica or sticky-session deployment, and provider availability
 - OpenAI's Responses API offers it today; Anthropic and Google use stateless request/response with SSE streaming
 - Plan for connection caps, single-in-flight semantics, and cache eviction on error — these dictate the reconnect logic the client must own

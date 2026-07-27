@@ -154,3 +154,4 @@ In these conditions, a prose spec plus code review is often a better fit.
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
 - [Pre-Completion Checklists](pre-completion-checklists.md)
 - [Pass@k Metrics](pass-at-k-metrics.md)
+- [TDD Interaction Models: Throughput Versus Test Quality](../workflows/tdd-interaction-models.md)

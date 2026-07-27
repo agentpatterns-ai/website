@@ -47,7 +47,7 @@ graph TD
     F -->|typed result| D
 ```
 
-Cognitive layer — the LLM. It interprets the goal, plans, selects tools, and synthesises results. It never changes external state, only emits typed tool calls (the [cognitive/execution split](cognitive-reasoning-execution-separation.md)).
+Cognitive layer — the LLM. It interprets the goal, plans, selects tools, and synthesizes results. It never changes external state, only emits typed tool calls (the [cognitive/execution split](cognitive-reasoning-execution-separation.md)).
 
 Typed tool interfaces — the boundary. Calls and results are schema-validated, so the cognitive layer cannot send a malformed command. This is the main thing making behavior predictable — [typed schemas at the boundary](../multi-agent/typed-schemas-at-agent-boundaries.md).
 
@@ -59,12 +59,12 @@ This separation lets you test each layer and audit every call at the boundary �
 
 Three coordination topologies each carry their own failure patterns. [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md) breaks them down; [arXiv:2601.01743](https://arxiv.org/abs/2601.01743) surveys the centralized versus decentralized tradeoffs.
 
-Centralised orchestration — one orchestrator manages all workers, which run assigned tasks and return results, the shape covered in [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md).
+Centralized orchestration — one orchestrator manages all workers, which run assigned tasks and return results, the shape covered in [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md).
 
 - Advantage: a single point of coordination keeps reasoning traceable
 - Failure mode: the orchestrator becomes a bottleneck, and its failure halts the system
 
-Decentralised peer-to-peer — agents talk directly without a coordinator, making local decisions from shared state or messages, as in [decentralized memory for self-evolving multi-agent systems](../multi-agent/decentralized-memory-multi-agent.md).
+Decentralized peer-to-peer — agents talk directly without a coordinator, making local decisions from shared state or messages, as in [decentralized memory for self-evolving multi-agent systems](../multi-agent/decentralized-memory-multi-agent.md).
 
 - Advantage: no single point of failure, and it scales horizontally
 - Failure mode: emergent coordination failures, race conditions, and inconsistent shared state are harder to debug
@@ -112,7 +112,7 @@ The cognitive/execution separation adds structural overhead. It costs more than 
 
 A code review agent on this architecture:
 
-Cognitive layer — the LLM receives `"Review PR #42 for security issues"`. It breaks the goal down: fetch the PR diff, identify changed files, scan each for known patterns, and summarise findings. For each step it emits a typed tool call, for example `{ "tool": "github_get_pr_diff", "pr": 42 }`.
+Cognitive layer — the LLM receives `"Review PR #42 for security issues"`. It breaks the goal down: fetch the PR diff, identify changed files, scan each for known patterns, and summarize findings. For each step it emits a typed tool call, for example `{ "tool": "github_get_pr_diff", "pr": 42 }`.
 
 Execution layer — `github_get_pr_diff` fetches the diff and returns a typed result `{ "files": [...], "additions": 310, "deletions": 45 }`. The LLM never calls GitHub directly. It only receives the formatted result and picks the next tool call.
 
@@ -128,7 +128,7 @@ Each component maps onto the reference architecture: the LLM in the cognitive la
 
 - Goal-directed agents require structural separation of cognitive reasoning from execution — not a prompt-engineering refinement of the request-response model.
 - Typed tool interfaces at the cognitive/execution boundary are the primary mechanism that makes agent behavior predictable and auditable.
-- [Three multi-agent topologies](../multi-agent/multi-agent-topology-taxonomy.md) — centralised, decentralised peer-to-peer, and hybrid — each carry distinct failure modes that must be matched to task shape.
+- [Three multi-agent topologies](../multi-agent/multi-agent-topology-taxonomy.md) — centralized, decentralized peer-to-peer, and hybrid — each carry distinct failure modes that must be matched to task shape.
 - Enterprise deployment adds three orthogonal concerns to functional correctness: governance, observability, and reproducibility.
 - The full harness is overhead until volume justifies it; simple single-turn tasks, prototypes, and human-supervised workflows are cheaper without it.
 

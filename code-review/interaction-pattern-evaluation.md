@@ -63,7 +63,7 @@ Stratifying by interaction pattern surfaces a different story. Copilot and Devin
 ## Related
 
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — the outcome-rate view this page complements; per-agent acceptance rates and the productivity paradox
-- [Agent-Authored PR Integration](agent-authored-pr-integration.md) — the same interaction signals analysed via logistic regression on 33,596 PRs; reviewer engagement as the strongest positive predictor
+- [Agent-Authored PR Integration](agent-authored-pr-integration.md) — the same interaction signals analyzed via logistic regression on 33,596 PRs; reviewer engagement as the strongest positive predictor
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — how reviewer composition shifts outcome rates by 23 points independent of code quality
 - [PR Description Style as a Lever](pr-description-style-lever.md) — a single configurable input that moves the interaction-pattern signals
 - [Tiered Code Review](tiered-code-review.md) — risk-routing framework that makes per-agent, per-task evaluation operationally useful

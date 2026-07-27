@@ -104,7 +104,7 @@ The merged exclusion list at launch contains both patterns. Your session loads t
 
 ## Why it works
 
-Claude Code loads CLAUDE.md content as a user message after the system prompt, and every byte counts against the same context window the conversation will use ([memory docs](https://code.claude.com/docs/en/memory#troubleshoot-memory-issues)). [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) shows that aggregate instruction load — not file count — causes degradation: doubling the number of rules in scope makes the agent less likely to follow any one of them. `claudeMdExcludes` works because it intercepts the discovery step itself. Matched files are never read, never tokenised, never concatenated into the launch context. Scope merging preserves a team-shared baseline while letting individuals add personal suppressions without an overwrite war.
+Claude Code loads CLAUDE.md content as a user message after the system prompt, and every byte counts against the same context window the conversation will use ([memory docs](https://code.claude.com/docs/en/memory#troubleshoot-memory-issues)). [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) shows that aggregate instruction load — not file count — causes degradation: doubling the number of rules in scope makes the agent less likely to follow any one of them. `claudeMdExcludes` works because it intercepts the discovery step itself. Matched files are never read, never tokenized, never concatenated into the launch context. Scope merging preserves a team-shared baseline while letting individuals add personal suppressions without an overwrite war.
 
 ## When this backfires
 

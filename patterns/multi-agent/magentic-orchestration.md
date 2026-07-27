@@ -123,7 +123,7 @@ If step 1 returns "errors trace to a downstream dependency, not v4.7.1," the sta
 - Use Magentic only when the plan is the unknown, a reviewable plan is product-valued, cost / latency budgets allow it, and write-access specialists are sandboxed.
 - Cap the stall counter low (≤2 per the paper) and cap total iterations to bound cost.
 - Reported benchmarks: GAIA 38.0%, AssistantBench 27.7% accuracy, WebArena 32.8% ([arxiv:2411.04468](https://arxiv.org/html/2411.04468v1)) — competitive but not human-level, and worse on easy tasks than hard.
-- Primary-source–documented unsafe behaviours (account lockouts, unauthorised password resets) make sandboxing and human gates non-optional.
+- Primary-source–documented unsafe behaviors (account lockouts, unauthorized password resets) make sandboxing and human gates non-optional.
 
 ## Related
 

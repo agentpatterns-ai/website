@@ -78,7 +78,7 @@ The fix was not in the extra context — the extra context is why the fix failed
 
 - [Context Engineering: The Discipline of Designing Agent Context](../../context-engineering/context-engineering.md)
 - [Retrieval-Augmented Agent Workflows](../../context-engineering/retrieval-augmented-agent-workflows.md)
-- [Context Compression Strategies: Offloading and Summarisation](../../context-engineering/context-compression-strategies.md)
+- [Context Compression Strategies: Offloading and Summarization](../../context-engineering/context-compression-strategies.md)
 - [Context Window Management: The Dumb Zone](../../context-engineering/context-window-dumb-zone.md)
 - [Manual Compaction as Dumb Zone Mitigation](../../context-engineering/manual-compaction-dumb-zone-mitigation.md)
 - [Context Poisoning](context-poisoning.md)

@@ -36,11 +36,11 @@ The WASM substrate — fuel or epoch CPU bounds, memory caps, deny-by-default I/
 
 Because the harness owns each bridge, it also owns the limits. The clearest example is calling subagents from interpreter code: instead of a process manager, the agent gets a function with a narrow contract, and "because we own that bridge, we also set its limits: how many subagents can run at once, and how many a single call can spawn" ([LangChain, 2026](https://www.langchain.com/blog/running-untrusted-agent-code-without-a-sandbox)).
 
-Which bridges are safe to combine follows Meta's Agents Rule of Two: until prompt injection is reliably detected, an agent should satisfy no more than two of process untrusted input, access sensitive data, or change state and communicate externally ([Meta, 2025](https://ai.meta.com/blog/practical-ai-agent-security/)). The additive model makes the rule enforceable — each capability is a deliberate grant you can count — but it does not enforce the rule for you. Materialising each grant as a revocable, subgoal-scoped handle is the stricter version of the same discipline ([PORTICO](revocable-resource-effect-capabilities.md)).
+Which bridges are safe to combine follows Meta's Agents Rule of Two: until prompt injection is reliably detected, an agent should satisfy no more than two of process untrusted input, access sensitive data, or change state and communicate externally ([Meta, 2025](https://ai.meta.com/blog/practical-ai-agent-security/)). The additive model makes the rule enforceable — each capability is a deliberate grant you can count — but it does not enforce the rule for you. Materializing each grant as a revocable, subgoal-scoped handle is the stricter version of the same discipline ([PORTICO](revocable-resource-effect-capabilities.md)).
 
 ## Durable pauses
 
-A production agent must stop and wait for a human before a risky action, and that approval can return hours or days later, after the agent has left the process. Because QuickJS runs inside WASM, the harness pauses the program itself: it serialises the interpreter's linear memory to durable state, and on resume restores the snapshot and feeds the result back into the call that was waiting. "The program sees only an async call that took a while to return" ([LangChain, 2026](https://www.langchain.com/blog/running-untrusted-agent-code-without-a-sandbox)). This turns [human-in-the-loop approval](human-in-the-loop-confirmation-gates.md) into a first-class control rather than a blocking hack.
+A production agent must stop and wait for a human before a risky action, and that approval can return hours or days later, after the agent has left the process. Because QuickJS runs inside WASM, the harness pauses the program itself: it serializes the interpreter's linear memory to durable state, and on resume restores the snapshot and feeds the result back into the call that was waiting. "The program sees only an async call that took a while to return" ([LangChain, 2026](https://www.langchain.com/blog/running-untrusted-agent-code-without-a-sandbox)). This turns [human-in-the-loop approval](human-in-the-loop-confirmation-gates.md) into a first-class control rather than a blocking hack.
 
 ## Why it works
 
@@ -68,7 +68,7 @@ An injected instruction that tells the code to read `~/.ssh/id_rsa` or POST to a
 - It inverts the subtractive sandbox: additive capability fails closed, subtractive hardening fails open on the forgotten permission.
 - WebAssembly supplies execution isolation in-process — separate linear memory means guest code cannot reach host memory — with QuickJS as the small engine inside the boundary.
 - Harness-owned bridges carry explicit limits, such as caps on concurrent subagents; Meta's Rule of Two decides which bridges are safe to combine.
-- Durable pauses come free from running QuickJS in WASM: serialise the linear memory, resume the paused call after human approval.
+- Durable pauses come free from running QuickJS in WASM: serialize the linear memory, resume the paused call after human approval.
 - It is a lighter alternative for orchestration code, not a replacement — hostile-tenant, general-code, or Python-semantics workloads still need a full remote sandbox.
 
 ## Related

@@ -151,5 +151,5 @@ The attacker receives the full `defender trace` — not just a pass/fail — ena
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Designing Injection-Resistant Agents with Defense-in-Depth](prompt-injection-resistant-agent-design.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
-- [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
+- [Code Injection Defense in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)

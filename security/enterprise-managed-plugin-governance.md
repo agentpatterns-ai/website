@@ -30,10 +30,10 @@ A managed plugin contract has four parts. The matrix below is the enforcement sc
 
 | Lever | What it controls | Why it matters |
 |---|---|---|
-| Catalogue allow/block | Which plugin marketplaces a user may add | Pre-network gate — a blocked source never reaches the cache or postinstall hook |
+| Catalog allow/block | Which plugin marketplaces a user may add | Pre-network gate — a blocked source never reaches the cache or postinstall hook |
 | Plugin enable | Which plugins auto-install at sign-in | Removes the "did the dev install the approved plugin?" question |
-| Version pin | Branch, tag, or commit SHA the plugin resolves to | Defence against force-push tag rug-pulls |
-| Policy-change behaviour | What happens to an installed plugin when policy tightens | Determines whether revocation is immediate or eventual |
+| Version pin | Branch, tag, or commit SHA the plugin resolves to | Defense against force-push tag rug-pulls |
+| Policy-change behavior | What happens to an installed plugin when policy tightens | Determines whether revocation is immediate or eventual |
 
 ## How the contracts compare
 
@@ -137,7 +137,7 @@ The first stage adds a managed marketplace without breaking working sessions. Th
 
 ## Key Takeaways
 
-- The managed-plugin contract is four levers — catalogue allow/block, plugin enable, version pin, and policy-change behaviour — not one switch
+- The managed-plugin contract is four levers — catalog allow/block, plugin enable, version pin, and policy-change behavior — not one switch
 - Restrictions check before network or filesystem access, so a blocked marketplace never executes a postinstall, hook, or `mcpServers` declaration — the structural advantage over runtime-only controls
 - Copilot CLI, Claude Code, and Cursor expose convergent but unequal surfaces today; a single cross-tool policy posture is not yet symmetric
 - Pre-existing installs survive policy until the next refresh on every tool — managed plugins are not a "freeze now" lever

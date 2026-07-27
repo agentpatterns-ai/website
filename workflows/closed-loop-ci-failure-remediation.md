@@ -1,6 +1,6 @@
 ---
 title: "Closed-Loop CI Failure Remediation with Cloud Coding Agents"
-description: "Dispatching a cloud coding agent on a CI failure event and surfacing a fix PR works only when the dispatcher classifies the failure, sanitises the log payload, scopes the fix, caps retries, and keeps PR review load-bearing."
+description: "Dispatching a cloud coding agent on a CI failure event and surfacing a fix PR works only when the dispatcher classifies the failure, sanitizes the log payload, scopes the fix, caps retries, and keeps PR review load-bearing."
 term: "Closed-Loop CI Failure Remediation"
 tags:
   - workflows
@@ -16,7 +16,7 @@ maturity: established
 
 # Closed-Loop CI Failure Remediation with Cloud Coding Agents
 
-> A CI failure becomes a cloud-agent fix PR only under five controls: failure classification, payload sanitisation, scoped fix, retry budget, and a load-bearing review gate.
+> A CI failure becomes a cloud-agent fix PR only under five controls: failure classification, payload sanitization, scoped fix, retry budget, and a load-bearing review gate.
 
 In closed-loop CI failure remediation, a CI failure event triggers a cloud coding agent. The agent reads the failure context, proposes a patch on the existing branch, and surfaces it as a reviewable PR. This moves CI red from "human triages then dispatches" to "agent proposes, human reviews." By mid-2026 the pattern ships in three trigger shapes. It works only when an explicit dispatcher control replaces every step the human used to do implicitly.
 
@@ -42,7 +42,7 @@ The same closed-loop pattern ships under different trigger surfaces, and the saf
 |---|---|---|
 | Human click on the failing run | GitHub Copilot cloud agent "Fix with Copilot" button — Business/Enterprise tiers, admin-enabled ([GitHub Changelog, 2026-05-18](https://github.blog/changelog/2026-05-18-one-click-fixes-for-failing-actions-with-copilot-cloud-agent/)) | Operator intent; "Approve and run workflows" gate on the fix commit |
 | Event-driven from a GitHub Actions workflow | `anthropics/claude-code-action@v1` with `pull_request` / `workflow_run` triggers; Sonnet or Opus 4.7 selectable via `claude_args` ([Claude Code GitHub Actions](https://code.claude.com/docs/en/github-actions)) | Action-level permission scope (Contents/Issues/PRs Read & Write); the action runs on GitHub-hosted runners with separate API-key scope |
-| Programmatic dispatch from a watcher | Cursor Background Agents + Automations support test-failure event triggers and a `cursor --headless` CLI for CI invocation ([Cursor Cloud](https://cursor.com/cloud)); a dedicated agent (Datadog Bits AI Dev Agent) narrows the trigger to flaky-test only and pre-validates against historical flakiness before surfacing a draft PR ([Datadog blog](https://www.datadoghq.com/blog/bits-ai-test-optimization/)) | None implicit — caller owns dedupe, sanitisation, budget caps, and audit attribution, matching [Programmatic Cloud-Agent Dispatch](programmatic-cloud-agent-dispatch.md) |
+| Programmatic dispatch from a watcher | Cursor Background Agents + Automations support test-failure event triggers and a `cursor --headless` CLI for CI invocation ([Cursor Cloud](https://cursor.com/cloud)); a dedicated agent (Datadog Bits AI Dev Agent) narrows the trigger to flaky-test only and pre-validates against historical flakiness before surfacing a draft PR ([Datadog blog](https://www.datadoghq.com/blog/bits-ai-test-optimization/)) | None implicit — caller owns dedupe, sanitization, budget caps, and audit attribution, matching [Programmatic Cloud-Agent Dispatch](programmatic-cloud-agent-dispatch.md) |
 
 ```mermaid
 graph TD
@@ -84,7 +84,7 @@ The friction tax on a CI failure is the dominant cost on otherwise-good agent-au
 
 - CI failure is the highest-signal first trigger for a cloud coding agent — discrete, reproducible, known goal state, self-contained payload.
 - The pattern ships in three trigger shapes (human click, event-driven action, programmatic dispatch); safety differences track the trigger.
-- Five preconditions are load-bearing: classifier upstream of dispatch, log sanitisation, scoped fix surface, retry budget, review gate.
+- Five preconditions are load-bearing: classifier upstream of dispatch, log sanitization, scoped fix surface, retry budget, review gate.
 - Reviewer engagement is the strongest empirical correlate of agent-PR merge — 93.75% of merged agent PRs went through actionable review loops ([arXiv:2602.19441](https://arxiv.org/html/2602.19441v1)).
 - Reward hacking on the failing test is the highest-severity failure mode; detection caps at 63% even on frontier reasoning models ([arXiv:2601.20103](https://arxiv.org/abs/2601.20103)).
 

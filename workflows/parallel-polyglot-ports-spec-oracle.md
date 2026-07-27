@@ -1,6 +1,6 @@
 ---
 title: "Parallel Polyglot Ports as a Spec-Ambiguity Oracle"
-description: "Generate multiple AI-paired ports from one executable spec and treat divergence as a signal that the spec under-specifies behaviour — not as a fault-tolerance vote."
+description: "Generate multiple AI-paired ports from one executable spec and treat divergence as a signal that the spec under-specifies behavior — not as a fault-tolerance vote."
 term: "Parallel Polyglot Ports"
 tags:
   - workflows
@@ -14,7 +14,7 @@ maturity: emerging
 
 # Parallel Polyglot Ports as a Spec-Ambiguity Oracle
 
-> Generate multiple AI-paired ports from one executable spec and treat divergence as a signal that the spec under-specifies behaviour — not as a fault-tolerance vote.
+> Generate multiple AI-paired ports from one executable spec and treat divergence as a signal that the spec under-specifies behavior — not as a fault-tolerance vote.
 
 This workflow pairs an AI coding assistant with a precise executable specification, then has it generate independent ports in different languages or runtimes. Where two ports disagree on observable behavior, the spec is either ambiguous or wrong — and that is the only correctness signal the parallel implementations reliably produce. Jason Hickey reports five ports of a vector-illustration application (Rust, Swift, OCaml, Python, browser) generated from a shared 23,000-line YAML spec in about 120 evening hours by a single developer ([Hickey, 2026](https://arxiv.org/abs/2606.07828)).
 
@@ -88,7 +88,7 @@ Tool-agnostic. The workflow does not depend on any specific harness — Claude C
 
 The Jas case study reports five ports from one YAML spec ([Hickey, 2026](https://arxiv.org/abs/2606.07828)):
 
-| Artefact | Size | Role |
+| Artifact | Size | Role |
 |---|---|---|
 | Shared YAML spec | 23,000 lines | Single source of truth — versioned, executable |
 | Rust port | up to ~95,000 lines | Native target |
@@ -104,7 +104,7 @@ The diff harness operates on observable artifacts (rendered SVG, exported file b
 
 - AI pairing lowers the cost of multi-language implementation enough to make divergence-as-spec-feedback affordable for solo developers.
 - The mechanism that survives review is spec disambiguation, not fault-tolerant voting — the latter was rejected in 1986 and is worse under shared LLM training corpora.
-- Use the workflow only when cross-platform reach is already a product requirement and the behaviour is YAML-specifiable; outside those conditions a single port with property-based and metamorphic tests is cheaper and produces a cleaner correctness signal.
+- Use the workflow only when cross-platform reach is already a product requirement and the behavior is YAML-specifiable; outside those conditions a single port with property-based and metamorphic tests is cheaper and produces a cleaner correctness signal.
 - Treat port *agreement* as suspect (correlated training bias) and port *disagreement* as the actionable signal (spec gap or bug).
 - The reported five-port case study measures authoring cost, not steady-state maintenance; the cost multiplier under platform churn has not been demonstrated.
 

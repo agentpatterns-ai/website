@@ -78,7 +78,7 @@ What an actual eval would show: when the team runs both models against 20 real P
 ## Key Takeaways
 
 - Bare-chat tallies of what a model reaches for measure prompt framing × training-data distribution, not a stable "preference."
-- Prompt-formatting changes alone produce performance swings up to 76 accuracy points on standardised benchmarks; one-prompt evaluations are intrinsically misleading.
+- Prompt-formatting changes alone produce performance swings up to 76 accuracy points on standardized benchmarks; one-prompt evaluations are intrinsically misleading.
 - Before letting a "model X prefers Y" claim drive a routing or stack decision, run the reading checklist: what was varied, what was held fixed, was framing controlled, sample size, and does the result generalize to your context.
 - Training-distribution priors and project-contextual capability are different things — conflating them produces bad routing and stack choices.
 - The fallacy framing is strongest for real, project-contextual workloads; it softens for low-stakes reversible decisions and strictly constrained output modes.
@@ -86,7 +86,7 @@ What an actual eval would show: when the team runs both models against 20 real P
 ## Related
 
 - [Benchmark-Driven Tool Selection for Code Generation](../verification/benchmark-driven-tool-selection.md) — once you've decoded the comparison claim, here's the constructive way to actually evaluate
-- [LLM-Driven Benchmark Auditing](../verification/llm-benchmark-auditing.md) — treat the comparison artefact itself as a software artefact and audit it before trusting the number
+- [LLM-Driven Benchmark Auditing](../verification/llm-benchmark-auditing.md) — treat the comparison artifact itself as a software artifact and audit it before trusting the number
 - [The Task Framing Irrelevance Fallacy](task-framing-irrelevance-fallacy.md) — the same mechanism viewed from the prompt-engineering side: surface framing measurably changes output
 - [The Consistent Capability Fallacy](consistent-capability-fallacy.md) — capability on one task does not predict capability on another, even for the same model
 - [Perceived Model Degradation](../patterns/anti-patterns/perceived-model-degradation.md) — another case of mistaking prompt-context effects for stable model properties

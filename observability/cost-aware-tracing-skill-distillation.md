@@ -38,7 +38,7 @@ CostCraft consumes TraceCards and emits three patch types ([ClawTrace, 2026](htt
 
 | Patch | Source signal | Argument required |
 |-------|---------------|-------------------|
-| Preserve | Successful outcome on a step sequence | Identify the behaviour that drove the success |
+| Preserve | Successful outcome on a step sequence | Identify the behavior that drove the success |
 | Prune | High cost + redundancy flag | Counterfactual: removing this named step does not change the outcome |
 | Repair | Failed outcome with oracle evidence | Specific fix grounded in the verifier's signal |
 

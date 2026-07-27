@@ -43,7 +43,7 @@ Each category maps to a distinct remediation surface. A breakdown that collapses
 | Rules / instruction files | Loaded at session start, persistent | Prune CLAUDE.md / AGENTS.md against the rule budget |
 | Skill definitions | Descriptions always-on; full body loads on use | Mark low-value skills `name-only` or `off` via [skill overrides](https://code.claude.com/docs/en/skills#override-skill-visibility-from-settings) |
 | MCP tool returns | Grow with each call; cumulative | Drop server, narrow tool selection, audit tool-output token cost |
-| Subagent transcripts | Forwarded back to parent on completion | Tighten subagent output schema, summarise instead of forward |
+| Subagent transcripts | Forwarded back to parent on completion | Tighten subagent output schema, summarize instead of forward |
 | Tool outputs (non-MCP) | File reads, grep, build logs | Truncate at the call site; apply [observation masking](../context-engineering/observation-masking.md) |
 | Conversation history | Compounds with turns | Compact, or split into a fresh session |
 | Cache prefix | Read-only; cheap but counts against window | Stable across turns — flag only when prefix bloats |

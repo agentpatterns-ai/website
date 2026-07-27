@@ -1,7 +1,7 @@
 ---
 title: "Five-Pass Blunder Hunt: Repeated Critique Passes for Plans"
 term: "Five-Pass Blunder Hunt"
-description: "Run the same critique prompt five times on a plan or spec to force each pass deeper into structural and logical problems the first pass normalises."
+description: "Run the same critique prompt five times on a plan or spec to force each pass deeper into structural and logical problems the first pass normalizes."
 tags:
   - testing-verification
   - workflows
@@ -12,7 +12,7 @@ maturity: adopted
 
 # Five-Pass Blunder Hunt
 
-> A Five-Pass Blunder Hunt runs one critique prompt repeatedly over a plan; each pass normalises its own findings, so later passes reach deeper structural flaws.
+> A Five-Pass Blunder Hunt runs one critique prompt repeatedly over a plan; each pass normalizes its own findings, so later passes reach deeper structural flaws.
 
 ## The problem
 
@@ -114,11 +114,11 @@ Models stop after a satisfying number of issues; a higher target prevents premat
 
 ## Key Takeaways
 
-- A single pass normalises problems — reviewer and author share blind spots
+- A single pass normalizes problems — reviewer and author share blind spots
 - Five same-prompt passes force progressive descent into document quality
 - Convergence signals (decreasing findings, increasing similarity) are the stopping criterion
 - Oscillation means stop and reframe
-- Applies to artefacts without formal verifiers — plans, specs; not code with test suites
+- Applies to artifacts without formal verifiers — plans, specs; not code with test suites
 
 ## Related
 
@@ -130,6 +130,6 @@ Models stop after a satisfying number of issues; a higher target prevents premat
 
 [^1]: Valmeekam, Marquez, Kambhampati (2023), [Can Large Language Models Really Improve by Self-critiquing Their Own Plans?](https://arxiv.org/abs/2310.08118) — self-critique diminishes plan-generation performance compared to external sound validators for formally verifiable planning tasks.
 
-[^2]: Stechly, Valmeekam, Kambhampati (2024), [On the Self-Verification Limitations of Large Language Models on Reasoning and Planning Tasks](https://arxiv.org/abs/2402.08115) — across Game of 24, graph colouring, and STRIPS planning, self-critique loops exhibited significant performance collapse relative to sound external verification; errors in verification, critique generation, and critique consideration compound.
+[^2]: Stechly, Valmeekam, Kambhampati (2024), [On the Self-Verification Limitations of Large Language Models on Reasoning and Planning Tasks](https://arxiv.org/abs/2402.08115) — across Game of 24, graph coloring, and STRIPS planning, self-critique loops exhibited significant performance collapse relative to sound external verification; errors in verification, critique generation, and critique consideration compound.
 
-[^3]: Xu et al. (2024), [Pride and Prejudice: LLM Amplifies Self-Bias in Self-Refinement](https://arxiv.org/abs/2402.11436) — across six LLMs and three task families, self-bias (the tendency to favour one's own generation) is prevalent, and the self-refine pipeline amplifies it; larger models and accurate external feedback are what reduce it.
+[^3]: Xu et al. (2024), [Pride and Prejudice: LLM Amplifies Self-Bias in Self-Refinement](https://arxiv.org/abs/2402.11436) — across six LLMs and three task families, self-bias (the tendency to favor one's own generation) is prevalent, and the self-refine pipeline amplifies it; larger models and accurate external feedback are what reduce it.

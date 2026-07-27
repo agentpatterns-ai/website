@@ -248,7 +248,7 @@ Each layer catches what the layer above missed. Instructions catch intent violat
 |-----------|-----------------|-----|
 | "Use Vitest, not Jest" | Linter rule (flag `jest` imports) | Deterministic, exact location, auto-fixable |
 | "Don't write to `/migrations/`" | Copilot hook (`preToolUse`) | Must block the action before it happens |
-| "All API responses must include `requestId`" | Integration test | Validates behaviour, not just syntax |
+| "All API responses must include `requestId`" | Integration test | Validates behavior, not just syntax |
 | "Functions must not exceed 50 lines" | Linter rule | Measurable, enforceable at write time |
 | "Use the repository pattern for data access" | Linter rule (block direct DB imports) + instructions (explain the pattern) | Enforcement + context |
 | "PRs require at least one approval" | Branch protection | Platform-level enforcement |
@@ -411,7 +411,7 @@ Agents iterate. The [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop
 | Signal | What to measure | Convergence indicator |
 |--------|----------------|----------------------|
 | Change velocity | Lines changed per iteration | Changes slow to near-zero |
-| Output size | Total output length | Stabilises or shrinks |
+| Output size | Total output length | Stabilizes or shrinks |
 | Content similarity | Diff between consecutive iterations | Diff approaches zero |
 
 When all three signals indicate convergence, further iteration produces diminishing returns. Stop.
@@ -441,7 +441,7 @@ Not all iteration converges. Watch for these failure patterns:
 |---------|---------|-------|----------|
 | Oscillation | Agent alternates between two states (adds a feature, removes it, adds it back) | Unresolvable trade-off in the constraints | Stop the agent. Resolve the trade-off yourself, then restart with clearer constraints. |
 | Expansion | Output grows each iteration without improving | Scope drift — the agent keeps adding tangentially related content | Stop and constrain scope explicitly. |
-| Low-quality plateau | Output stabilises but at an unsatisfactory quality level | The approach is wrong, not the execution | Restart with a different approach via the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md), not more iterations of the same one. |
+| Low-quality plateau | Output stabilizes but at an unsatisfactory quality level | The approach is wrong, not the execution | Restart with a different approach via the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md), not more iterations of the same one. |
 
 ### Hard limits as safety nets
 

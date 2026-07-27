@@ -175,7 +175,7 @@ Key decisions: choose the guard model for structured-data competence, not safety
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — argument-generation and return-processing attacks on individual tool calls
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — layering principle that mid-trajectory guardrails extend
 - [Deterministic Guardrails Around Probabilistic Agents](../verification/deterministic-guardrails.md) — rule-based checks that complement LLM guard models
-- [Single-Layer Prompt Injection Defence](../patterns/anti-patterns/single-layer-injection-defence.md) — anti-pattern that mid-trajectory obfuscation exploits
+- [Single-Layer Prompt Injection Defense](../patterns/anti-patterns/single-layer-injection-defence.md) — anti-pattern that mid-trajectory obfuscation exploits
 - [Trajectory-Opaque Evaluation Gap](../verification/eval-blind-spots.md) — why outcome-only grading misses safety violations in intermediate steps
 - [Prompt Injection Threat Model](prompt-injection-threat-model.md) — foundational injection attack model that multi-step attacks build upon
 - [RL-Automated Red Teamers](rl-automated-red-teamers.md) — RL-based discovery of multi-step attack sequences that mid-trajectory guardrails must catch

@@ -75,7 +75,7 @@ The five rules invert under conditions where the reference is the contract or wh
 
 ## Example
 
-Breunig built `scaffold-docs`, an opinionated skill that operationalises the five rules into a three-tier structure ([scaffold-docs on GitHub](https://github.com/dbreunig/scaffold-docs-skill)):
+Breunig built `scaffold-docs`, an opinionated skill that operationalizes the five rules into a three-tier structure ([scaffold-docs on GitHub](https://github.com/dbreunig/scaffold-docs-skill)):
 
 1. Getting Started — a narrative tutorial covering a single representative use case.
 2. Diving Deeper — one file per topic, organized around intent and design decisions (not API surface).

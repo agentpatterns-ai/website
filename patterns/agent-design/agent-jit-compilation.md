@@ -75,7 +75,7 @@ A multi-step shopping task on a stable e-commerce site fits the envelope. The ta
 - JIT compilation collapses many per-step LLM calls into one per-task planning round, then runs the resulting code with parallel scheduling and contract checks.
 - The reported speedups (10.4× over Browser-Use, 2.4× over OpenAI CUA) depend on capable code generators, contract-annotated tools, multi-step tasks, and stable UIs.
 - Accuracy gains come from plan-time validation filtering invalid candidates, not from better reasoning inside the executor.
-- Code-as-action is the substrate ([CodeAct](https://arxiv.org/html/2402.01030v4)); the scheduler and invariant protocol are what turn it into a cost-optimising agent.
+- Code-as-action is the substrate ([CodeAct](https://arxiv.org/html/2402.01030v4)); the scheduler and invariant protocol are what turn it into a cost-optimizing agent.
 - Outside the envelope — dynamic UIs, short tasks, weak models, untyped tools — a sequential ReAct loop with prompt caching is still the default.
 
 ## Related

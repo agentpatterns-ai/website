@@ -18,7 +18,7 @@ maturity: emerging
 
 # Skill Specification Violation Fuzzing
 
-> Semantic fuzzing turns each natural-language skill guardrail into a reachability goal over an execution trace, surfacing benign-input violations that static review and prompt-injection defences miss.
+> Semantic fuzzing turns each natural-language skill guardrail into a reachability goal over an execution trace, surfacing benign-input violations that static review and prompt-injection defenses miss.
 
 Agent skills bundle instructions, optional scripts, and embedded safety constraints ([Agent Skills standard](../standards/agent-skills-standard.md)); the agent interprets guardrail semantics at runtime. SEFZ found 120 of 402 deployed OpenClaw skills (29.9%) silently violate their own rules on benign inputs — 26 previously unknown and exploitable in production ([arXiv:2605.13044](https://arxiv.org/abs/2605.13044)). A separate study of 31,132 marketplace skills found 26.1% carry at least one vulnerability; script-bundling skills are 2.12× more vulnerable than instruction-only skills ([arXiv:2601.10338](https://arxiv.org/abs/2601.10338)).
 
@@ -99,7 +99,7 @@ Both findings are auto-remediable: (1) rewrites to "before any `delete` operatio
 ## Related
 
 - [FLARE: Coverage-Guided Fuzzing for Multi-Agent LLM Systems](flare-multi-agent-fuzzing.md) — Sibling fuzzing technique at the multi-agent coordination layer rather than the skill specification layer
-- [Skill Evals](skill-evals.md) — Treats each skill as an evaluable unit with a labelled dataset, complementary to violation fuzzing
+- [Skill Evals](skill-evals.md) — Treats each skill as an evaluable unit with a labeled dataset, complementary to violation fuzzing
 - [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — How to author specifications that survive the F1–F6 pitfalls in the first place
 - [Skill Supply-Chain Poisoning](../security/skill-supply-chain-poisoning.md) — Adjacent threat model — malicious skills rather than violations of a skill's own honest specification
-- [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md) — Runtime defence that complements specification-level remediation
+- [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md) — Runtime defense that complements specification-level remediation

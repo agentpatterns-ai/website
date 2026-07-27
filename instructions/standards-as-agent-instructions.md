@@ -125,5 +125,3 @@ When standards files grow large, the correct response is decomposition — not m
 - [Layer Agent Instructions by Specificity: Global, Project, and Directory Scopes](layered-instruction-scopes.md)
 - [The Specification as Prompt: Existing Artifacts as Agent Instructions](specification-as-prompt.md)
 - [Deferred Standards Enforcement via Review Agents](../code-review/deferred-standards-enforcement.md)
-</content>
-</invoke>

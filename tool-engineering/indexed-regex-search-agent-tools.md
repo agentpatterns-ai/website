@@ -78,5 +78,6 @@ A trigram decomposition of `func (s *Server) Handle` against a corpus yields req
 - [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md)
 - [Repository Map Pattern](../context-engineering/repository-map-pattern.md)
 - [Repository-Level Retrieval for Code Generation](../context-engineering/repository-level-retrieval-code-generation.md)
+- [Agent-Tuned Code Search](../context-engineering/agent-tuned-code-search.md) — the tool-contract layer above this index, and how to read its vendor benchmarks
 - [Semantic Context Loading](../context-engineering/semantic-context-loading.md)
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)

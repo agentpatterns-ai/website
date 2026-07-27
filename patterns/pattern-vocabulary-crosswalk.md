@@ -35,7 +35,7 @@ Andrew Ng's 2024 DeepLearning.AI series names four patterns that improve agentic
 | Reflection | Ng frames reflection as a self-evaluation step inside an agent loop. The site splits this across a code-review-loop variant and a generator/critic split. | [Agent Self-Review Loop](../code-review/agent-self-review-loop.md), [Evaluator-Optimizer](agent-design/evaluator-optimizer.md) |
 | Tool Use | Ng treats tool use as a single pattern; the site decomposes it into tool design, advanced tool use, MCP, and skills. | [Advanced Tool Use](../tool-engineering/advanced-tool-use.md), [Tool Engineering](../tool-engineering/tool-engineering.md) |
 | Planning | Ng's planning is a runtime "decompose first, then execute" loop; the site's [`plan-first-loop`](../workflows/plan-first-loop.md) is the workflow shape, while the cognitive split is a separate pattern. | [Plan-First Loop](../workflows/plan-first-loop.md), [Cognitive Reasoning vs Execution Separation](agent-design/cognitive-reasoning-execution-separation.md) |
-| Multi-Agent Collaboration | Ng treats multi-agent as one pattern; the site indexes it as a whole section organised by topology. | [Multi-Agent (section index)](multi-agent/index.md), [Multi-Agent Topology Taxonomy](multi-agent/multi-agent-topology-taxonomy.md) |
+| Multi-Agent Collaboration | Ng treats multi-agent as one pattern; the site indexes it as a whole section organized by topology. | [Multi-Agent (section index)](multi-agent/index.md), [Multi-Agent Topology Taxonomy](multi-agent/multi-agent-topology-taxonomy.md) |
 
 ## Anthropic's five workflow patterns
 
@@ -44,7 +44,7 @@ Anthropic's 'Building Effective Agents' names five workflow patterns — control
 | Anthropic pattern | Scope difference | This site's canonical page |
 |---|---|---|
 | Prompt chaining | | [Prompt Chaining](../context-engineering/prompt-chaining.md) |
-| Routing | Anthropic names the classify-then-dispatch shape. The site's canonical page emphasises the cost-aware "cheapest model that solves it" variant. | [Parsimonious Agent Routing](multi-agent/parsimonious-agent-routing.md) |
+| Routing | Anthropic names the classify-then-dispatch shape. The site's canonical page emphasizes the cost-aware "cheapest model that solves it" variant. | [Parsimonious Agent Routing](multi-agent/parsimonious-agent-routing.md) |
 | Parallelization | Anthropic covers sectioning (independent subtasks) and voting (consensus). The site's `fan-out-synthesis` is the sectioning variant; voting is a separate pattern. | [Fan-Out Synthesis](multi-agent/fan-out-synthesis.md), [Voting Ensemble Pattern](multi-agent/voting-ensemble-pattern.md) |
 | Orchestrator-workers | | [Orchestrator-Worker](multi-agent/orchestrator-worker.md) |
 | Evaluator-optimizer | | [Evaluator-Optimizer](agent-design/evaluator-optimizer.md) |
@@ -84,9 +84,9 @@ Antonio Gulli's 'Agentic Design Patterns' book organizes 21 patterns across Core
 | Gulli's pattern | Scope difference | This site's canonical page | Status |
 |---|---|---|---|
 | Inter-Agent Communication (A2A) | | [A2A Protocol](../standards/a2a-protocol.md) | covered |
-| Resource-Aware Optimization | Gulli covers cost/latency optimisation generally; the site's coverage is the cost-aware-design page plus the routing page above. | [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) | covered |
+| Resource-Aware Optimization | Gulli covers cost/latency optimization generally; the site's coverage is the cost-aware-design page plus the routing page above. | [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) | covered |
 | Reasoning Techniques | Gulli covers chain-of-thought, ReAct, and tree-of-thoughts as reasoning patterns. The site treats reasoning as a cognitive-execution split plus a three-spaces decomposition. | [Cognitive Reasoning vs Execution Separation](agent-design/cognitive-reasoning-execution-separation.md), [Three Reasoning Spaces](agent-design/three-reasoning-spaces.md) | covered |
-| Guardrails / Safety Patterns | Gulli covers safety as one pattern; the site has a four-layer taxonomy and a defence-in-depth page that decompose it further. | [Four-Layer Agent Security Taxonomy](../security/four-layer-agent-security-taxonomy.md), [Defense-in-Depth Agent Safety](../security/defense-in-depth-agent-safety.md) | covered |
+| Guardrails / Safety Patterns | Gulli covers safety as one pattern; the site has a four-layer taxonomy and a defense-in-depth page that decompose it further. | [Four-Layer Agent Security Taxonomy](../security/four-layer-agent-security-taxonomy.md), [Defense-in-Depth Agent Safety](../security/defense-in-depth-agent-safety.md) | covered |
 | Evaluation and Monitoring | Gulli covers evaluation as one pattern; the site separates evaluator-as-pattern from eval-as-workflow. | [Evaluator-Optimizer](agent-design/evaluator-optimizer.md), [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md) | covered |
 | Prioritization | Gulli treats prioritization as next-action ranking; the site's page focuses on rank-vs-routing-vs-scheduling and dependency-aware signals. | [In-Agent Task Prioritization](agent-design/in-agent-task-prioritization.md) | covered |
 | Exploration and Discovery | Gulli frames exploration as a search-and-discover pattern; the site's coverage is the best-of-n delegation page and a discovery-only refactor workflow. | [Recursive Best-of-N Delegation](multi-agent/recursive-best-of-n-delegation.md), [Discovery-Only Refactor Pass](../workflows/discovery-only-refactor-pass.md) | covered |
@@ -119,7 +119,7 @@ A crosswalk is a discovery aid, not a recommendation engine, and four failure mo
 ## Key Takeaways
 
 - A vocabulary crosswalk maps external taxonomy names to canonical site pages so readers find coverage by whichever name they arrived with; it is navigation, not a competing taxonomy.
-- Ng's four (Reflection, Tool Use, Planning, Multi-Agent), Anthropic's five (chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer), Gulli's 21 (Core/Advanced/Specialized), and CoALA's three axes (memory, action, decision-loop) all map cleanly onto this site's mechanism-organised pages with documented scope differences.
+- Ng's four (Reflection, Tool Use, Planning, Multi-Agent), Anthropic's five (chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer), Gulli's 21 (Core/Advanced/Specialized), and CoALA's three axes (memory, action, decision-loop) all map cleanly onto this site's mechanism-organized pages with documented scope differences.
 - All 21 of Gulli's patterns are covered on the site as of `last_reviewed`, with scope differences noted per row (e.g., Memory decomposed across memory-patterns and CoALA-classifier; RAG mapped to the canonical Retrieval-Augmented Agent Workflows reference).
 - Every row leads with the canonical page link plus a one-line scope-difference note — there is no definition of any pattern in this page's own words, by design.
 - For pattern *trade-offs* (token cost, latency, blast radius), pair this crosswalk with the sibling [Pattern Selection Map](selection-map.md); for cross-vendor *terminology* (workflow vs agent vs assistant), pair it with [Agent Terminology Disambiguation](agent-design/agent-terminology-disambiguation.md).

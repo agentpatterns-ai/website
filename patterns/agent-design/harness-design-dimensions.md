@@ -1,6 +1,6 @@
 ---
 title: "Harness Design Dimensions and Archetypes"
-description: "Five design dimensions and five archetypes derived from 70 agent-system projects — a population-level lens for characterising harness choices."
+description: "Five design dimensions and five archetypes derived from 70 agent-system projects — a population-level lens for characterizing harness choices."
 term: "Harness Design Dimensions"
 tags:
   - agent-design
@@ -57,7 +57,7 @@ Design dimensions are not independent. [arXiv:2604.18071](https://arxiv.org/abs/
 |---------|----------------------|
 | Coordination ↔ context | Deeper subagent coordination pairs with more explicit context services |
 | Execution ↔ governance | Stronger execution environments correlate with more structured governance |
-| Tooling ↔ ecosystem | Formalised tool-registration boundaries align with broader ecosystem ambitions |
+| Tooling ↔ ecosystem | Formalized tool-registration boundaries align with broader ecosystem ambitions |
 
 The implication for design: a single upgrade rarely lands in isolation. Adding multi-agent coordination without matching [context services](../../context-engineering/phase-specific-context-assembly.md) leaves agents starved of state. Tightening tool boundaries without ecosystem commitments imposes cost without the reach that justifies it.
 
@@ -71,7 +71,7 @@ The same paper groups the 70 projects into five recurring archetypes ([arXiv:260
 | Balanced CLI frameworks | Moderate complexity; CLI-oriented with adaptive loops and registry tools |
 | Multi-agent orchestrators | Deep coordination, explicit context services, role-specialized subagents |
 | Enterprise systems | Structured governance, stronger isolation, broader ecosystem scope |
-| Scenario-verticalised projects | Domain-specific harnesses optimized for one class of workflow |
+| Scenario-verticalized projects | Domain-specific harnesses optimized for one class of workflow |
 
 Archetypes are descriptive clusters, not prescriptions. A project's archetype emerges from the dimension choices that reinforce each other — which is why the co-occurrence clusters matter more than any single dimension.
 
@@ -149,8 +149,8 @@ Scaffold architectures resist discrete classification ([arXiv:2604.03515](https:
 
 - Five dimensions — subagent architecture, context management, tool systems, safety mechanisms, orchestration — cover the non-LLM choices in an agent harness.
 - Dimension choices cluster: coordination with context services, execution with governance, tooling with ecosystem. Single-axis upgrades under-perform the paired investment.
-- Five archetypes (lightweight, CLI, multi-agent, enterprise, verticalised) are descriptive clusters derived from the 70-project corpus, not prescribed templates.
-- The framework is most useful at ecosystem level; pair it with a finer-grained taxonomy when characterising a single scaffold.
+- Five archetypes (lightweight, CLI, multi-agent, enterprise, verticalized) are descriptive clusters derived from the 70-project corpus, not prescribed templates.
+- The framework is most useful at ecosystem level; pair it with a finer-grained taxonomy when characterizing a single scaffold.
 - Rare-in-corpus signals are actionable: high-assurance audit is uncommon, so any project claiming it should be verified, not assumed.
 
 ## Related

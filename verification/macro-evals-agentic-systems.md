@@ -99,7 +99,7 @@ Macro evaluation pairs with per-call rubrics, trajectory-aware safety auditing, 
 
 - Macro evals are the population-level layer above per-call and per-trace evals, surfacing recurring patterns that are properties of the corpus, not of any single run.
 - The four-label taxonomy (`case_type`, `run_outcome`, `eval_finding`, `behavior_pattern`) separates per-trace inputs from the per-cluster macro output.
-- Pipeline: per-call rubrics → embed traces → UMAP + HDBSCAN → c-TF-IDF labelling → impact-score ranking. The shift in unit of analysis, not the clustering algorithm, is the mechanism.
+- Pipeline: per-call rubrics → embed traces → UMAP + HDBSCAN → c-TF-IDF labeling → impact-score ranking. The shift in unit of analysis, not the clustering algorithm, is the mechanism.
 - Three pre-conditions must hold: thousands of traces, judge precision above ~70%, cross-trace structure. Outside those, frequency tables do the same job.
 - Clusters are hypotheses, not diagnoses — the selection-biased pool describes flagged-trace pathology, not full-system behavior.
 

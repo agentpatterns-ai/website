@@ -120,5 +120,5 @@ KPR works because it inserts a sanitize-and-regenerate gateway at the exact boun
 - [Agent-Authored PR Integration](../code-review/agent-authored-pr-integration.md) — reviewer-engagement evidence on why agent-authored PRs are accepted or rejected, the empirical ground KPR is responding to.
 - [Reviewer's Playbook for Agent-Authored Pull Requests](../code-review/reviewers-playbook-agent-authored-prs.md) — the inspection priorities a reviewer applies when judging an agent-generated PR directly; KPR shifts what *gets reviewed* from code to knowledge package.
 - [Tiered Code Review](../code-review/tiered-code-review.md) — route review effort by risk; KPR is the high-context branch when the diff alone is not enough.
-- [Lethal Trifecta in Agent Tooling](../security/lethal-trifecta-threat-model.md) — the cross-tool security model KPR's tainted-trace gateway operationalises for the contribution surface.
+- [Lethal Trifecta in Agent Tooling](../security/lethal-trifecta-threat-model.md) — the cross-tool security model KPR's tainted-trace gateway operationalizes for the contribution surface.
 - [Agent-Proposed Merge Resolution](../code-review/agent-proposed-merge-resolution.md) — sibling pattern where an agent prepares a change for confirmation rather than direct merge.

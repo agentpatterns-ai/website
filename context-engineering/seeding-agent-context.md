@@ -16,7 +16,7 @@ maturity: established
 
 # Seeding Agent Context: Breadcrumbs in Code
 
-> Seed breadcrumbs — files, comments, and markers — that agents discover during exploration and use to shape their behaviour.
+> Seed breadcrumbs — files, comments, and markers — that agents discover during exploration and use to shape their behavior.
 
 !!! note "Also known as"
     Providing Context to Agents, Context Priming, Breadcrumbs in Code. Seeding embeds contextual hints directly in the codebase for agents to discover during exploration. For the general technique of loading relevant context before a task, see [Context Priming](context-priming.md).

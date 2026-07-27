@@ -73,7 +73,7 @@ Without these controls, the same scenario exfiltrates in 24 of 25 retries — th
 ## Related
 
 - [Prompt Injection: A First-Class Threat to Agentic Systems](../../security/prompt-injection-threat-model.md)
-- [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md)
+- [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md)
 - [Lethal Trifecta in Agent Tooling](../../security/lethal-trifecta-threat-model.md)
 - [Guarding Against URL-Based Data Exfiltration](../../security/url-exfiltration-guard.md)
 - [Trust Without Verify](trust-without-verify.md)

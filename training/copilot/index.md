@@ -5,7 +5,7 @@ tags:
   - training
   - copilot
   - index
-last_reviewed: 2026-05-27
+last_reviewed: 2026-07-28
 ---
 
 # GitHub Copilot
@@ -29,4 +29,4 @@ Elective modules for teams that want to go deeper on specific topics. Not requir
 | Module | Topic | Duration |
 |--------|-------|----------|
 | [Advanced Patterns](advanced-patterns.md) | Multi-agent orchestration, parallel sessions, agentic workflows, CI/CD integration, batch operations, Agents page, event-driven routing | 30–45 min |
-| [Model Selection & Routing](model-selection.md) | Model roster, premium request multipliers, when to override Auto, cascade routing, the [reasoning sandwich](../../patterns/agent-design/reasoning-budget-allocation.md), coding agent cost optimisation, competitive evaluation | 30–45 min |
+| [Model Selection & Routing](model-selection.md) | Model roster, AI credit and token economics, the per-model cost spread, when to override Auto, cascade routing, the [reasoning sandwich](../../patterns/agent-design/reasoning-budget-allocation.md), coding agent cost optimization, competitive evaluation | 30–45 min |

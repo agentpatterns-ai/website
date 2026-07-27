@@ -9,7 +9,7 @@ status: current
 
 # About Agent Patterns
 
-> A practitioner's catalogue of patterns and primitives for engineers building with AI coding assistants.
+> A practitioner's catalog of patterns and primitives for engineers building with AI coding assistants.
 
 Agent Patterns is a reference site for experienced developers who use AI coding assistants every day: Claude Code, GitHub Copilot, Cursor and the tools around them. The principles aim to work across assistants. We show the examples mainly on Claude Code and GitHub Copilot, with lighter coverage of Cursor and the OpenAI Agents SDK. Each page aims for a read of under 60 seconds and covers one concept.
 

@@ -87,7 +87,7 @@ Make constraints mechanical. Anthropic recommends requiring absolute filepaths r
 
 - Open-ended efficiency instructions ("preserve tokens", "don't be wasteful") create a second objective that long-horizon agents resolve by doing less work — skipping exploration, refusing ambitious tasks, stopping early.
 - The mechanism is instruction precedence: a system-level resource constraint outranks the user's task, so the agent is faithfully following a conflicting directive, not being lazy.
-- The failure mode is specific to multi-step, tool-using tasks where the agent chooses whether to continue ([harness-engineering](../agent-design/harness-engineering.md) territory); single-turn and summarisation work has no "less work" to fall back to.
+- The failure mode is specific to multi-step, tool-using tasks where the agent chooses whether to continue ([harness-engineering](../agent-design/harness-engineering.md) territory); single-turn and summarization work has no "less work" to fall back to.
 - A bounded, quantified token budget (e.g. TALE) can cut tokens with minimal accuracy loss — the backfire is a property of vague minimisation framing, not of efficiency goals.
 - Reframe constraints as quality targets ("be thorough", "bias to action") or make them mechanical, rather than as resource limits.
 

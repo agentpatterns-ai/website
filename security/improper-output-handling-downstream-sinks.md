@@ -103,12 +103,12 @@ cursor.execute(
 )
 ```
 
-The LLM never writes SQL; the deterministic executor assembles the query from allowlisted fragments — the column and operator come from fixed mappings keyed by the validated enum, and only the value is parameterised.
+The LLM never writes SQL; the deterministic executor assembles the query from allowlisted fragments — the column and operator come from fixed mappings keyed by the validated enum, and only the value is parameterized.
 
 ## Key Takeaways
 
 - Agent output is untrusted input to the next system — enumerate downstream sinks and validate at each one.
-- The controls are not new: parameterised queries, context-aware encoding, command allowlists, schema validation. The new surface is that LLM-generated strings now reach those sinks.
+- The controls are not new: parameterized queries, context-aware encoding, command allowlists, schema validation. The new surface is that LLM-generated strings now reach those sinks.
 - LLM05 (downstream mishandling) is distinct from LLM06 (agent action) — defend both, independently.
 - [Safe Outputs](safe-outputs-pattern.md) and [Action-Selector](action-selector-pattern.md) are concrete architectural mitigations; per-sink encoding is the universal control.
 - For coding agents specifically, the sinks include source control, package managers, and shells — sinks that previously consumed only trusted strings.

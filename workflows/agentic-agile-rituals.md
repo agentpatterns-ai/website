@@ -58,7 +58,7 @@ Negative constraints map onto spec-violation detection. AgentPex extracts behavi
 
 Outcome-only retros miss the signal. "Failed trajectories consistently exceed successful ones in length and exhibit greater variability"; agents pinpoint problem files 72–81% of the time even in failures but struggle on the fix ([arXiv 2511.00197: Code Agent Trajectories](https://arxiv.org/abs/2511.00197)). Retro signal lives in trace shape and persistence — length distributions, tool-call sequences, recovery patterns — not in the pass/fail bit.
 
-Scrum.org's adaptation for mixed human-agent teams shifts the retro role split: the agent reviews session files, git commit logs, and PR history to surface trace-level improvement areas; humans review collaboration health and decide which failure patterns are worth a prompt or harness change ([Scrum.org](https://www.scrum.org/resources/blog/how-run-sprint-retrospective-when-half-your-team-ai-agents)). This pairs directly with [Traces Need Feedback to Power Learning](../observability/traces-need-feedback-to-power-learning.md) — without verdict-labelled traces the retro produces trajectories nobody can act on.
+Scrum.org's adaptation for mixed human-agent teams shifts the retro role split: the agent reviews session files, git commit logs, and PR history to surface trace-level improvement areas; humans review collaboration health and decide which failure patterns are worth a prompt or harness change ([Scrum.org](https://www.scrum.org/resources/blog/how-run-sprint-retrospective-when-half-your-team-ai-agents)). This pairs directly with [Traces Need Feedback to Power Learning](../observability/traces-need-feedback-to-power-learning.md) — without verdict-labeled traces the retro produces trajectories nobody can act on.
 
 ## The rituals that do not carry over
 
@@ -125,7 +125,7 @@ The retro at end of week reviews the trace corpus, not the outcome dashboard: me
 ## Key Takeaways
 
 - Agentic-agile is selective adoption, not wholesale import — three rituals carry over (DoD as eval threshold + variance bound, acceptance criteria as pass rate + negative constraints, retros on trace corpora) and three do not (timed sprints, daily stand-ups, demos as gate)
-- The three preconditions (eval suite, trace instrumentation, past prompt-only iteration) are not aspirational — without them the workflow becomes theatre that legitimises feel-based approval under a new vocabulary
+- The three preconditions (eval suite, trace instrumentation, past prompt-only iteration) are not aspirational — without them the workflow becomes theatre that legitimizes feel-based approval under a new vocabulary
 - The variance bound is load-bearing: pass@1 is structurally inadequate for non-deterministic agents and capability rankings invert at long horizons, so single-run acceptance is unsafe even for high-capability systems
 - Retro signal lives in trace shape and persistence (length distributions, tool-call sequences, spec violations) — outcome-only retros miss the procedural failures that produce most production incidents
 - Treat ritual adoption as conditional on model capability — revisit when models change tier; aggressive ceremony adoption can outlive its model regime

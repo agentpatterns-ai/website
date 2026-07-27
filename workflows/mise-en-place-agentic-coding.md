@@ -93,7 +93,7 @@ Each subagent loads `CLAUDE.md` plus `spec.md`, queries Beads for ready tasks in
 ## Key Takeaways
 
 - MEP is three sequential phases — contextual grounding, collaborative specification, task decomposition — that produce written artifacts agents read before any code is generated.
-- The mechanism is alignment, not generation: parallel agents working from shared externalised intent make consistent micro-decisions that reactive correction would otherwise have to fix.
+- The mechanism is alignment, not generation: parallel agents working from shared externalized intent make consistent micro-decisions that reactive correction would otherwise have to fix.
 - The paper's evidence is 1 practitioner, 1 hackathon, no control group; treat MEP as a useful synthesis of established practices, not a validated speedup.
 - Apply it when implementation is parallel, irreversible, or domain-heavy. Skip it for tight-loop scripting, exploratory prototyping, and well-mapped single-agent work where the [plan-first loop](plan-first-loop.md) provides most of the alignment benefit at lower cost.
 - Pair MEP with an explicit replan gate so the spec evolves with the implementation rather than misleading agents when reality diverges from the plan.

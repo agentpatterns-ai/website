@@ -179,5 +179,3 @@ The changelog comment ("added 2026-02-14 — sessions #42, #47, #51") documents 
 - [Skill Library Refinement Loops](skill-library-refinement-loops.md)
 - [Scheduled Instruction File Fact-Checker](instruction-file-fact-checker.md)
 - [Continuous AI: A Navigation Map of Always-On Agent Workflows](continuous-ai.md) — the parent map of the continuous-* and triage families this loop belongs to
-</content>
-</invoke>

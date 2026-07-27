@@ -1,5 +1,5 @@
 ---
-title: "Agent-Aware CLI Behaviour via Environment Variable"
+title: "Agent-Aware CLI Behavior via Environment Variable"
 description: "Harness-set environment variables let CLIs detect agent execution and switch to machine-readable output without per-CLI flag knowledge in the system prompt — the pattern earns its keep when you control both the harness and the CLI."
 term: "Agent-Aware CLI Behaviour"
 tags:
@@ -10,7 +10,7 @@ last_reviewed: 2026-06-03
 maturity: established
 ---
 
-# Agent-Aware CLI Behaviour via Environment Variable
+# Agent-Aware CLI Behavior via Environment Variable
 
 > A harness sets a well-known environment variable on agent-spawned subprocesses; a CLI that checks it switches to machine-readable output. The contract needs both ends.
 
@@ -71,14 +71,14 @@ The pattern adds to `CI=true`, it does not replace it. VS Code positions it expl
 |----------|---------|--------|
 | `CI=true` | Non-interactive batch context | 50+ CI vendors ([watson/ci-info](https://github.com/watson/ci-info)) |
 | `VSCODE_AGENT` / `CLAUDECODE` | Agent-initiated execution inside a developer session | Agent harness |
-| `NO_COLOR` / `FORCE_COLOR` | Colour preference | User or harness |
+| `NO_COLOR` / `FORCE_COLOR` | Color preference | User or harness |
 | `GIT_TERMINAL_PROMPT=0` | Per-tool prompt suppression | User or harness |
 
 CI runs are non-interactive with no user present. Agent runs are non-interactive with the user watching, and may want richer error detail than a CI mode would emit. Collapsing them to one axis loses that distinction.
 
 ## Why it works
 
-The contract inverts the direction of CLI-specific knowledge. Today, the agent's prompt carries N flags per CLI ("`--no-pager` for git, `CI=true` for npm, `-y` for apt"). It sits on the side that changes most often and aims at a moving target. The env-var contract moves that knowledge to the CLI's own source, where its maintainer already tracks which subcommands prompt and where pagers launch. The harness declares context once, the CLI decides behavior, the contract survives flag renames on either side ([VS Code v1.121 release notes](https://code.visualstudio.com/updates/v1_121)). This is the mechanism that made `CI=true` succeed: `ci-info` catalogues 50+ vendors that set it and CLIs (`npm`, `gh`, `gcloud`, `pip`) that branch on it ([watson/ci-info](https://github.com/watson/ci-info)).
+The contract inverts the direction of CLI-specific knowledge. Today, the agent's prompt carries N flags per CLI ("`--no-pager` for git, `CI=true` for npm, `-y` for apt"). It sits on the side that changes most often and aims at a moving target. The env-var contract moves that knowledge to the CLI's own source, where its maintainer already tracks which subcommands prompt and where pagers launch. The harness declares context once, the CLI decides behavior, the contract survives flag renames on either side ([VS Code v1.121 release notes](https://code.visualstudio.com/updates/v1_121)). This is the mechanism that made `CI=true` succeed: `ci-info` catalogs 50+ vendors that set it and CLIs (`npm`, `gh`, `gcloud`, `pip`) that branch on it ([watson/ci-info](https://github.com/watson/ci-info)).
 
 ## Example
 
@@ -124,7 +124,7 @@ Reach for the [agent-side override](override-interactive-commands.md) or [headle
 - VS Code 1.121 ships `VSCODE_AGENT`; Claude Code sets `CLAUDECODE=1` and `AI_AGENT`; the shape is the same, the names diverge
 - The contract is additive to `CI=true`, not a replacement — agent runs are non-interactive but the user is watching
 - The pattern earns its keep when you control both the harness and the CLI; against third-party CLIs that have not adopted any variable, you still need the agent-side flag override
-- Treat the variable as a behavioural hint, not an authorisation signal — any process can set it
+- Treat the variable as a behavioral hint, not an authorization signal — any process can set it
 
 ## Related
 

@@ -92,11 +92,11 @@ Run the targeted test for that file. Return: { path, edits_applied, tests_pass }
 
 The leaf worker is deliberately tool-restricted: no `Agent` (or `Task`) tool, no further nesting. This is the same posture Claude Code enforces at depth 5 ([changelog](https://code.claude.com/docs/en/changelog)) and the mitigation the opencode issue argues for ([#18100](https://github.com/anomalyco/opencode/issues/18100)). Each higher level summarizes its children's structured returns into a parent-shaped report; the root receives five subsystem summaries rather than the ~40 per-file edit logs.
 
-If the same refactor used flat fan-out, the root would directly own ~40 leaf workers and either synthesise 40 structured returns (orchestrator context overflow) or batch them in chunks (eliminating most of the parallelism benefit). Depth here is buying coherent per-subsystem aggregation at the cost of three extra orchestration rounds.
+If the same refactor used flat fan-out, the root would directly own ~40 leaf workers and either synthesize 40 structured returns (orchestrator context overflow) or batch them in chunks (eliminating most of the parallelism benefit). Depth here is buying coherent per-subsystem aggregation at the cost of three extra orchestration rounds.
 
 ## Key Takeaways
 
-- Depth is a design lever, distinct from fan-out width — each level buys one more isolated context window and compounds tokens, latency, summarisation loss, and tracing burden.
+- Depth is a design lever, distinct from fan-out width — each level buys one more isolated context window and compounds tokens, latency, summarization loss, and tracing burden.
 - Cap depth by tool posture (Claude Code's 5, Codex's default 1) and by problem shape: nest only when sub-problems are themselves cohesively filterable.
 - Strip the `Agent`/`Task` tool from leaf sub-agents to prevent re-dispatch loops — the dominant failure mode of unbounded recursion.
 - Treat OpenTelemetry-style nested tracing with correlation IDs as a prerequisite for any depth ≥3 hierarchy; without it, root-cause analysis is intractable.

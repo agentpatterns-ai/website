@@ -54,7 +54,7 @@ The fix is architectural, not instructional. Closing the [lethal trifecta](../..
 
 1. Map retrieval paths to attack surface. Web fetch, MCP server, dependency README, package metadata, and IDE rule file are each injection vectors ([Discovering Indirect Injection Vulnerabilities](../../security/indirect-injection-discovery.md) lists them).
 2. Treat the read boundary as a policy boundary, with [URL fetch gating](../../security/url-fetch-public-index-gate.md), [scoped credentials](../../security/scoped-credentials-proxy.md), and [confirmation gates](../../security/human-in-the-loop-confirmation-gates.md). These controls hold regardless of model compliance.
-3. Layer defenses. Detector models reach below 1% attack success on benchmarks ([Shi et al. 2025](https://arxiv.org/pdf/2507.15219)), but benchmark wins do not generalize to adaptive attackers. See [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md).
+3. Layer defenses. Detector models reach below 1% attack success on benchmarks ([Shi et al. 2025](https://arxiv.org/pdf/2507.15219)), but benchmark wins do not generalize to adaptive attackers. See [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md).
 
 ## Example
 
@@ -108,5 +108,5 @@ The agent still reads the README, and the malicious instruction still lands in c
 - [Prompt Injection: A First-Class Threat to Agentic Systems](../../security/prompt-injection-threat-model.md)
 - [Discovering Indirect Injection Vulnerabilities in Your Agent](../../security/indirect-injection-discovery.md)
 - [Lethal Trifecta Threat Model](../../security/lethal-trifecta-threat-model.md)
-- [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md)
+- [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md)
 - [Use a Public-Web Index to Gate Automatic URL Fetching](../../security/url-fetch-public-index-gate.md)

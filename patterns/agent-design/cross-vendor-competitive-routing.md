@@ -10,7 +10,7 @@ tags:
 aliases:
   - cross-vendor routing
   - competitive model routing
-last_reviewed: 2026-05-27
+last_reviewed: 2026-07-28
 maturity: emerging
 ---
 
@@ -63,12 +63,12 @@ The selection criteria differ from within-harness model routing. Cost and latenc
 
 | Approach | Pros | Cons |
 |----------|------|------|
-| Cross-vendor competitive | Surfaces capability differences; catches failure modes of primary agent | Doubles premium request consumption; requires human review of two outputs |
+| Cross-vendor competitive | Surfaces capability differences; catches failure modes of primary agent | Doubles token consumption; requires human review of two outputs |
 | Single-vendor static routing | Predictable cost; no redundant work | Blind spots in primary agent's capability profile go undetected |
 
 ## When this backfires
 
-The pattern's hidden cost is coordination, not premium-request consumption.
+The pattern's hidden cost is coordination, not token consumption.
 
 - Merge conflicts when agents touch the same files. Each agent works on its own branch, but if both vendors edit the same module the losing-branch close is not free. The winning PR may still need rebase or hand-merge work that erases the parallelism dividend.
 - Coordination races on issue state. Agents act on each other's side effects. One closes an issue another agent just opened, or files a duplicate PR while the first is still in review. GitHub's own multi-agent orchestration guidance flags both failure modes and recommends [mission-control patterns to serialize touchpoints](../../tools/copilot/agent-mission-control.md) ([GitHub Blog: How to orchestrate agents using mission control](https://github.blog/ai-and-ml/github-copilot/how-to-orchestrate-agents-using-mission-control/)).
@@ -100,7 +100,7 @@ This pattern operates at the platform level, choosing which vendor agent handles
 ## Related
 
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md)
-- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — premium request multipliers vs token billing
+- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — GitHub AI credits vs Anthropic token rates, compared per model
 - [Code-Health-Gated LLM Tier Routing](auto-model-selection.md) — pre-generation routing via file-level code health metrics
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — selecting between candidate outputs
 - [Event-Driven Agent Routing](event-driven-agent-routing.md)

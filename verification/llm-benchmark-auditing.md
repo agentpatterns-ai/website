@@ -1,6 +1,6 @@
 ---
 title: "LLM-Driven Benchmark Auditing"
-description: "Frontier LLMs can audit agent benchmark artefacts — specs, fixtures, grading scripts — and surface defects that inflate or deflate measured agent performance, provided every flag is confirmed by a human or the benchmark authors."
+description: "Frontier LLMs can audit agent benchmark artifacts — specs, fixtures, grading scripts — and surface defects that inflate or deflate measured agent performance, provided every flag is confirmed by a human or the benchmark authors."
 term: "LLM-Driven Benchmark Auditing"
 tags:
   - testing-verification
@@ -16,7 +16,7 @@ maturity: emerging
 
 # LLM-Driven Benchmark Auditing
 
-> Treat the benchmark itself as a software artefact and let a frontier LLM audit its specs, fixtures, and grading scripts before you trust the score it produces.
+> Treat the benchmark itself as a software artifact and let a frontier LLM audit its specs, fixtures, and grading scripts before you trust the score it produces.
 
 ## Why benchmarks need auditing
 
@@ -60,7 +60,7 @@ The same paper's deployment on ScienceAgentBench produced 12 author-confirmed is
 
 ## Key Takeaways
 
-- Agent benchmarks are software artefacts and ship with bugs that distort scores — SWE-bench+ found defects severe enough to triple measured resolution rates
+- Agent benchmarks are software artifacts and ship with bugs that distort scores — SWE-bench+ found defects severe enough to triple measured resolution rates
 - LLM-based cross-verification of spec, solution, and grader can surface those bugs cheaply (under USD 15 per 50-task audit on BenchGuard)
 - Reported precision is high on expert-curated benchmarks (83.3% match on BIXBench Verified-50) but every flag still needs author or expert confirmation
 - Use a different model family for the audit than the one being evaluated to reduce circular failure modes
@@ -69,6 +69,6 @@ The same paper's deployment on ScienceAgentBench produced 12 author-confirmed is
 ## Related
 
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — training-data leakage as a parallel score-distortion mechanism
-- [Eval Awareness: Designing Evals Agents Cannot Recognise](eval-awareness.md) — models detecting eval prompts as another measurement-validity threat
+- [Eval Awareness: Designing Evals Agents Cannot Recognize](eval-awareness.md) — models detecting eval prompts as another measurement-validity threat
 - [Anti-Reward Hacking](anti-reward-hacking.md) — agents exploiting weak graders, the failure mode rigid scripts try to prevent
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — using benchmarks for tool evaluation once you trust them

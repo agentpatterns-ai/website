@@ -32,7 +32,7 @@ Constraints sit in the same medium as every other prompt token — natural langu
 
 | Surface | Drift mechanism | Concrete failure |
 |---|---|---|
-| Memory | Long history positional decay; compaction summarisation | Initial spending limit gets buried as conversation grows; agent quotes a higher cap later |
+| Memory | Long history positional decay; compaction summarization | Initial spending limit gets buried as conversation grows; agent quotes a higher cap later |
 | Delegation | Subordinate agent receives task but not the constraint scope | Orchestrator enforces a deny-list; worker spawned without it calls the denied tool |
 | Communication | Constraints encoded in prose get paraphrased across handoffs | Reviewer's "do not approve PRs touching `/auth`" becomes "be careful with auth PRs" downstream |
 | Tool use | Tool gateway operates outside the agent's constraint model | Code-exec tool runs the script the agent generated under a constraint it never saw |

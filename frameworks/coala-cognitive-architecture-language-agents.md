@@ -106,7 +106,7 @@ The audit surfaces two missing slots. Acting on them is a separate decision. Epi
 ## Related
 
 - [Anthropic's Effective Agents Framework: A Pattern Map](../patterns/agent-design/anthropic-effective-agents-framework.md) — the workflow-first counterpoint to CoALA's taxonomic depth
-- [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md) — atomic memory patterns CoALA's taxonomy organises
+- [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md) — atomic memory patterns CoALA's taxonomy organizes
 - [Tiered Memory Architecture: Episodic-to-Semantic Consolidation](../patterns/agent-design/tiered-memory-architecture.md) — the consolidation pattern between two CoALA memory types
 - [Agent Harness](../patterns/agent-design/agent-harness.md) — the scaffolding layer that hosts the CoALA decision loop
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../patterns/agent-design/cognitive-reasoning-execution-separation.md) — a related boundary cut: reasoning versus action, parallel to CoALA's internal/external split

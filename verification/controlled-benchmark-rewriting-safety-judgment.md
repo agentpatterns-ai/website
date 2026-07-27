@@ -1,7 +1,7 @@
 ---
 title: "Controlled Benchmark Rewriting for Agent Safety Judgment"
 term: "Controlled Benchmark Rewriting"
-description: "Rewrite known unsafe trajectories into deceptive variants while preserving risk labels to measure how far frontier safety judgment generalises out-of-distribution."
+description: "Rewrite known unsafe trajectories into deceptive variants while preserving risk labels to measure how far frontier safety judgment generalizes out-of-distribution."
 tags:
   - testing-verification
   - evals
@@ -109,6 +109,6 @@ The source-set F1 alone would not separate the candidates — the rewrite delta 
 
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — Why outcome-only grading misses safety violations that trajectory auditing catches
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — Test-set leakage as a separate failure mode from rewriting
-- [Eval Awareness](eval-awareness.md) — Models recognising eval-shaped prompts and shifting behaviour
+- [Eval Awareness](eval-awareness.md) — Models recognizing eval-shaped prompts and shifting behavior
 - [Mid-Trajectory Guardrail Selection](../security/mid-trajectory-guardrail-selection.md) — Guardrail-side findings on single-turn vs trajectory safety scoring
 - [Deterministic Guardrails](deterministic-guardrails.md) — Hard checks that bypass judgment-model robustness debt entirely

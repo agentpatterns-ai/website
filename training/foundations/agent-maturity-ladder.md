@@ -24,7 +24,7 @@ The rungs below are the diagnostic layers. For each: a one-sentence definition, 
 
 A single LLM call that invokes one tool and returns. No retries, no validation, no state.
 
-Exposes: the model's raw structured-output reliability and the tool's API behaviour under nominal conditions. Without seeing rung 1 fail, you cannot tell the difference between a model that returns malformed arguments and a tool that returns malformed results.
+Exposes: the model's raw structured-output reliability and the tool's API behavior under nominal conditions. Without seeing rung 1 fail, you cannot tell the difference between a model that returns malformed arguments and a tool that returns malformed results.
 
 Cargo-cult symptom: claiming "the model picks the wrong tool" when the actual failure is that the model's structured output is intermittently malformed and the harness silently retries — invisible at rung 5, visible at rung 1.
 
@@ -104,7 +104,7 @@ Anchor: [Cognitive Reasoning vs Execution Separation](../../patterns/agent-desig
 
 Multiple agents coordinate — orchestrator/worker, peer-to-peer, role-based topologies, handoff protocols.
 
-Exposes: the failure modes Walden Yan (Cognition) catalogued — "fragile systems due to poor context sharing and conflicting decisions" — and the 15× token cost amplification Anthropic measured on its research system ([Anthropic Engineering: Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system); [Cognition: Don't Build Multi-Agents](https://cognition.ai/blog/dont-build-multi-agents)). These costs are invisible at rung 8 because the token bill scales linearly with planning, not exponentially with agent count.
+Exposes: the failure modes Walden Yan (Cognition) cataloged — "fragile systems due to poor context sharing and conflicting decisions" — and the 15× token cost amplification Anthropic measured on its research system ([Anthropic Engineering: Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system); [Cognition: Don't Build Multi-Agents](https://cognition.ai/blog/dont-build-multi-agents)). These costs are invisible at rung 8 because the token bill scales linearly with planning, not exponentially with agent count.
 
 Cargo-cult symptom: building a multi-agent system for a task Anthropic explicitly flags as unsuitable: "domains that require all agents to share the same context or involve many dependencies between agents" and "most coding tasks [which] involve fewer truly parallelizable tasks than research" ([Anthropic multi-agent](https://www.anthropic.com/engineering/multi-agent-research-system)).
 

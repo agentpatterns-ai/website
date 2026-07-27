@@ -26,7 +26,7 @@ Adopt context-graph shared memory only when every one of the following holds:
 
 1. Cross-agent join queries — agents routinely ask questions that chain two separately-stated facts (e.g. "which component does the module owned by Agent_Implementer depend on?"). On Alexander's benchmark, vector RAG drops to 20% on join queries while a context graph holds 80% ([Alexander 2026](https://towardsdatascience.com/vector-rag-isnt-enough-i-built-a-context-graph-layer-for-multi-agent-memory/)). If queries are single-fact lookups, the mechanism never fires.
 2. Controlled entity vocabulary — agents reference entities by stable names, or you fund LLM-based entity linking at every ingest. Alexander reports queries that say "the authentication module" instead of `AuthModule` fail outright without an extraction LLM in the loop.
-3. Long-enough sessions to amortise construction — graph construction overhead never amortises across short interactions; the same Q&A inside one session that ends at handoff is cheaper served by raw chat history.
+3. Long-enough sessions to amortize construction — graph construction overhead never amortizes across short interactions; the same Q&A inside one session that ends at handoff is cheaper served by raw chat history.
 4. A team that can own a schema — Cypher / SPARQL / equivalent traversal logic and ongoing schema governance are real engineering costs flagged across practitioner write-ups; without that skill set the graph degrades faster than vector RAG and produces no compensating gain.
 
 If any precondition fails, prefer vector RAG with a recency index or scoped chat history — see [agent memory patterns](../agent-design/agent-memory-patterns.md).
@@ -54,7 +54,7 @@ graph LR
     style R fill:#2d5a2d,stroke:#4a4a4a,color:#e0e0e0
 ```
 
-Compared to vector RAG, this trades similarity-based chunk retrieval for deterministic typed-edge traversal — the gain materialises specifically on queries that need to chain facts ([Wu et al. 2026](https://arxiv.org/html/2606.00610v1)).
+Compared to vector RAG, this trades similarity-based chunk retrieval for deterministic typed-edge traversal — the gain materializes specifically on queries that need to chain facts ([Wu et al. 2026](https://arxiv.org/html/2606.00610v1)).
 
 ## Why It Works
 
@@ -71,8 +71,8 @@ Specific failure conditions:
 
 - Single-fact lookups with no joins — the graph's traversal mechanism is dead weight; vector RAG is cheaper at equal accuracy.
 - Free-text agents without controlled vocabulary — Alexander's own benchmark fails on queries like "the dataset with anomaly" without LLM-based entity linking, which then destroys the deterministic-extraction cost advantage the same benchmark reports. This is the failure the cloud-edge evaluation isolates: the graph deficit there "is driven by retrieval incompleteness rather than reasoning failure", with graph backends returning 25.58% and 28.18% unknown responses against 8.38% to 11.14% for the vector cluster, because "graph-based ingestion introduces entity resolution, relation labeling, and schema-constrained extraction, each an opportunity for information loss before retrieval" ([Wolff & Bennati 2026](https://arxiv.org/abs/2601.07978v4)).
-- Short sessions — graph construction never amortises before the session ends.
-- Dynamic facts without temporal modelling — Alexander flags stale-fact retrieval as a major liability when supersession isn't implemented.
+- Short sessions — graph construction never amortizes before the session ends.
+- Dynamic facts without temporal modeling — Alexander flags stale-fact retrieval as a major liability when supersession isn't implemented.
 - Teams without graph-query expertise — Cypher / SPARQL / ontology maintenance is a skill gap that produces a half-implemented graph that underperforms vector RAG.
 
 A further benchmark-vs-production gap matters: the Alexander head-to-head strips LLM calls from extraction, query answering, and grading to isolate architectural differences. Production reintroduces them as ongoing GPU and latency cost; treat the reported 18x token reduction as a retrieval-side signal, not a system-cost estimate.
@@ -92,7 +92,7 @@ Source: [Alexander 2026](https://towardsdatascience.com/vector-rag-isnt-enough-i
 ## Key Takeaways
 
 - Context-graph shared memory beats vector RAG on cross-agent multi-hop join queries with controlled vocabulary; outside that regime two independent studies show it matches or underperforms vector RAG
-- The mechanism is typed-edge traversal — the gain only materialises when queries actually require chaining facts; single-fact lookups extract no benefit and pay the schema-maintenance cost
+- The mechanism is typed-edge traversal — the gain only materializes when queries actually require chaining facts; single-fact lookups extract no benefit and pay the schema-maintenance cost
 - An independent cloud-edge evaluation ([Wolff & Bennati 2026](https://arxiv.org/abs/2601.07978v4)) puts graph memory about 25 accuracy points below vector and RAG memory on long-conversation recall at ten times RAG's cost, with the gap traced to information lost during graph ingestion rather than to weaker reasoning
 - Benchmark the three architectures (chat history, vector RAG, context graph) on your actual query mix before adopting; "vector RAG is enough" is the more common production answer
 

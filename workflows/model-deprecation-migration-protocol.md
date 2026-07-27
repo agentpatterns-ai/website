@@ -154,5 +154,3 @@ The eval suite is the gate. If response length or tool-call frequency drifts bey
 - [Harness Impermanence](../patterns/agent-design/harness-impermanence.md) — scaffolding that wraps current-generation limits also expires; same supply-chain framing applied to harness code.
 - [Eval-Driven Development](eval-driven-development.md) — standing eval infrastructure the migration gate reuses.
 - [Canary Rollout for Agent Policy Changes](canary-rollout-agent-policy.md) — discipline reused when the migration warrants traffic-split.
-</content>
-</invoke>

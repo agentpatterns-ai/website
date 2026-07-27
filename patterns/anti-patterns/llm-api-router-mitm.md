@@ -105,7 +105,7 @@ The pinned digest blocks the unpinned-image step of the LiteLLM compromise. The 
 ## Key Takeaways
 
 - An LLM API router is an application-layer MITM by construction — it holds prompts, completions, tool calls, and provider keys in plaintext because it terminates the client's TLS session
-- Four attack classes are formalised and measured in the wild: payload injection, dependency-targeted injection, conditional (audit-evading) delivery, and secret exfiltration ([Xie et al. 2026](https://arxiv.org/abs/2606.16358); [Wang et al. 2026](https://arxiv.org/abs/2604.08407))
+- Four attack classes are formalized and measured in the wild: payload injection, dependency-targeted injection, conditional (audit-evading) delivery, and secret exfiltration ([Xie et al. 2026](https://arxiv.org/abs/2606.16358); [Wang et al. 2026](https://arxiv.org/abs/2604.08407))
 - Nine of 428 measured commodity routers actively injected malicious code; 17 touched planted AWS credentials; the March 2026 LiteLLM compromise exfiltrated ~4 TB from one downstream customer ([HeroDevs](https://www.herodevs.com/blog-posts/the-litellm-supply-chain-attack-what-happened-why-it-matters-and-what-to-do-next))
 - Client-side defenses tested by the AEGIS paper — fail-closed gating, response anomaly screening, append-only logging — are evadable by adaptive routers
 - Proportionate response is not "stop using routers"; it is pin the release, scope provider keys per tenant, allowlist egress, rotate on a short cycle, and reach for TEE attestation when available — and admit that none of these close the L7 plaintext gap

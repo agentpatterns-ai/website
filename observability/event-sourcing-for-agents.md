@@ -158,5 +158,3 @@ If the derived state diverges from the filesystem, `verify` reports which events
 - [Rollback-First Design](../patterns/agent-design/rollback-first-design.md)
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md)
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
-</content>
-</invoke>

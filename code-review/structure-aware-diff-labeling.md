@@ -77,14 +77,14 @@ Best result on this benchmark: 84% recall, 81% precision with Gemini-3-Pro-Previ
 
 - The two-stage Labeler-plus-Refiner shape is the structural idea; whole-patch refinement is what lets the pipeline emit relationships, not just types.
 - Polyglot coverage and label customisability are the legitimate wins; determinism, cost, and per-category precision are the legitimate trade-offs.
-- The paper itself recommends a hybrid with static analysis for label types where accuracy matters — treat LLM labelling as a supplement, not a replacement.
+- The paper itself recommends a hybrid with static analysis for label types where accuracy matters — treat LLM labeling as a supplement, not a replacement.
 - Cost between models is non-uniform — Gemini-3's accuracy lead comes with ~7.5× the output tokens of Claude Sonnet 4.5.
 - Under-represented label types (external interface, error handling, log) are where the approach is weakest; do not build a workflow that depends on those categories alone.
 
 ## Related
 
-- [Diff-Based Review](diff-based-review.md) — Review effort scoped to the diff is the substrate this labelling enriches.
+- [Diff-Based Review](diff-based-review.md) — Review effort scoped to the diff is the substrate this labeling enriches.
 - [Agent-Driven PR Slicing](agent-driven-pr-slicing.md) — Slicing decisions can consume structure-aware labels to identify semantic boundaries rather than syntactic ones.
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — Per-hunk labels are a precondition for suppressing low-value comments on mechanical change categories.
 - [Tunable Effort Levels for Code Review Agents](tunable-review-effort.md) — Labels can route hunks to different review depths instead of treating every change uniformly.
-- [Learned Review Rules](learned-review-rules.md) — Both approaches reduce reviewer-side work; labelling structures the input, learned rules structure the output.
+- [Learned Review Rules](learned-review-rules.md) — Both approaches reduce reviewer-side work; labeling structures the input, learned rules structure the output.

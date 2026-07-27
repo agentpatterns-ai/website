@@ -112,6 +112,6 @@ Three load-bearing constraints: a temp-file path so artifacts don't collide acro
 - [Session Recap: Goal-Shaped Handoff at Context Boundaries](session-recap.md) — Harness-invoked sibling for compaction, resume, and fork boundaries
 - [Cross-Cycle Consensus Relay](cross-cycle-consensus-relay.md) — Cross-session relay document for long-running autonomous loops
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — The pipeline-level contract this skill instantiates for the single-receiver case
-- [Daily-Use Skill Library](../../workflows/daily-use-skill-library.md) — The skill-library catalogue this entry slots into
-- [Discrete Phase Separation](discrete-phase-separation.md) — Phase boundaries the skill formalises into an artifact
+- [Daily-Use Skill Library](../../workflows/daily-use-skill-library.md) — The skill-library catalog this entry slots into
+- [Discrete Phase Separation](discrete-phase-separation.md) — Phase boundaries the skill formalizes into an artifact
 - [Session Initialization Ritual](session-initialization-ritual.md) — What the receiving session runs after reading the handoff doc

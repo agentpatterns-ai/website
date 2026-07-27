@@ -56,7 +56,7 @@ Three Claude Code primitives observe sessions. They fire at different points and
 | Primitive | Trigger | Lifetime | Can block |
 |---|---|---|---|
 | [Hooks](hooks-lifecycle.md) | Tool-call boundaries (`PreToolUse`, `PostToolUse`, `Stop`, and so on) | Per event, synchronous | Yes (`PreToolUse`) |
-| [Monitor tool](monitor-tool.md) | Claude calls it imperatively in-session | Until cancelled or session end | No |
+| [Monitor tool](monitor-tool.md) | Claude calls it imperatively in-session | Until canceled or session end | No |
 | Plugin background monitor | Auto-armed at session start or on skill invoke | Whole session | No |
 
 ```mermaid

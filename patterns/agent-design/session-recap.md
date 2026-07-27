@@ -126,7 +126,7 @@ After compaction the agent's first read is the recap. The `hard_constraints` blo
 ## Key Takeaways
 
 - Recap is a goal-shaped artifact authored at a boundary; compaction is text-density compression run at a threshold
-- The schema (intent, decisions, open questions, focus, next action) preserves decision-density that prose summarisation discards
+- The schema (intent, decisions, open questions, focus, next action) preserves decision-density that prose summarization discards
 - Pay the token cost only at real boundaries — compaction, resume, fork — and only when no continuous progress file already owns the state
 - Claude Code's `/recap` (v2.1.108, April 2026) is one concrete implementation; the tool-agnostic protocol is a fixed-schema write at a known discontinuity
 

@@ -1,6 +1,6 @@
 ---
 title: "Programmatic Cloud-Agent Dispatch via REST API and Webhooks"
-description: "Dispatching coding agents from REST, webhooks, and cron is safe only with caller-side dedupe, payload sanitisation, budget caps, and principal logging."
+description: "Dispatching coding agents from REST, webhooks, and cron is safe only with caller-side dedupe, payload sanitization, budget caps, and principal logging."
 term: "Programmatic Cloud-Agent Dispatch"
 tags:
   - workflows
@@ -18,7 +18,7 @@ maturity: established
 
 # Programmatic Cloud-Agent Dispatch via REST API and Webhooks
 
-> Dispatching coding agents from REST, webhooks, or cron is safe only when the caller adds dedupe, payload sanitisation, budget caps, and principal logging itself.
+> Dispatching coding agents from REST, webhooks, or cron is safe only when the caller adds dedupe, payload sanitization, budget caps, and principal logging itself.
 
 Programmatic cloud-agent dispatch is the third invocation principal, after the IDE and chat surfaces. Any system that can issue an authenticated POST can hand work to a coding agent. GitHub's May 2026 Agent tasks REST API exposes the same control plane the IDE and chat paths use internally. It supports cron-triggered release notes, webhook-driven refactors, and internal-portal automation. The plumbing has shipped, but the discipline is the caller's problem.
 
@@ -120,7 +120,7 @@ The fixed prompt and explicit `event_id` close two failure modes at once: no pay
 ## Key Takeaways
 
 - The Agent tasks REST API ships the dispatch primitive; safety is caller-side responsibility.
-- Required disciplines: dedupe by event ID, sanitise payload-to-prompt, cap tokens per trigger, log the originating principal out of band.
+- Required disciplines: dedupe by event ID, sanitize payload-to-prompt, cap tokens per trigger, log the originating principal out of band.
 - Auth is user-to-server only — a service identity cannot dispatch today; some human's PAT must, and the audit log will attribute every task to them.
 - Billing shifts to token-shaped AI Credits on 2026-06-01; per-trigger caps must move from request-count to token-count to remain meaningful.
 - Public preview, Business and Enterprise only — expect the auth model and parameter set to change before GA.
@@ -130,7 +130,7 @@ The fixed prompt and explicit `event_id` close two failure modes at once: no pay
 - [Chat-Platform Agent Delegation](chat-platform-agent-delegation.md) — The chat invocation principal — `@mention` in Slack or Teams with a human in the thread.
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — The issue invocation principal — assigning a GitHub issue to an agent and receiving a draft PR.
 - [Issue-Tracker Agent Dispatch Surface](issue-tracker-agent-dispatch-surface.md) — The fourth invocation surface — GitHub Issues, Jira, and Linear as the agent control plane.
-- [Multi-Repo and No-Repo Automation Templates](multi-repo-no-repo-automation-templates.md) — Caller-side fan-out built on this single-repo dispatch primitive; reuses the dedupe and sanitisation discipline across attached-repo sets.
+- [Multi-Repo and No-Repo Automation Templates](multi-repo-no-repo-automation-templates.md) — Caller-side fan-out built on this single-repo dispatch primitive; reuses the dedupe and sanitization discipline across attached-repo sets.
 - [Cloud-Local Agent Handoff](cloud-local-agent-handoff.md) — Moving work between a cloud sandbox and a local clone after the agent finishes.
 - [Continuous Autonomous Task Loop](continuous-autonomous-task-loop.md) — Self-directed agent loop that selects, executes, and iterates without external dispatch.
 - [Agent Commit Attribution: Signed Commits and Agent Identity](agent-commit-attribution.md) — How to keep the principal trail visible in git history after the agent commits.

@@ -95,6 +95,6 @@ They are complementary at the boundary case: a long-horizon stateful loop still 
 
 - [Static Content First for Cache Hits](static-content-first-caching.md) — the prompt-caching alternative that targets the same O(n²) curve at the provider tier
 - [Elastic Context Orchestration](elastic-context-orchestration.md) — per-turn vocabulary (Skip, Compress, Snippet, Rollback, Delete) for selective context retention in ReAct loops
-- [Context Compression Strategies](context-compression-strategies.md) — tiered offloading and summarisation for long-running agents
+- [Context Compression Strategies](context-compression-strategies.md) — tiered offloading and summarization for long-running agents
 - [Code-Native Memory Substrates for Coding Agents](../patterns/agent-design/code-native-memory-substrates.md) — typed external memory for code-bearing agents, from a different angle
 - [Autonomous Research Loops](../training/foundations/autonomous-research-loops.md) — the curriculum module that puts loop architectures and termination design together

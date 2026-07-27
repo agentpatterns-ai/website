@@ -82,7 +82,7 @@ The flag-only single-monitor design is itself worse than nothing if alert fatigu
 
 - [Trust Without Verify](trust-without-verify.md) — the accidental-overtrust adjacent failure mode
 - [The Yes-Man Agent](yes-man-agent.md) — agents without verification habits as the related design failure
-- [Code Injection Defence in Multi-Agent Pipelines](../../security/code-injection-multi-agent-defence.md) — the inverse threat where the agent is victim, not adversary
+- [Code Injection Defense in Multi-Agent Pipelines](../../security/code-injection-multi-agent-defence.md) — the inverse threat where the agent is victim, not adversary
 - [Human-in-the-Loop Confirmation Gates](../../security/human-in-the-loop-confirmation-gates.md) — the recommend-and-wait architecture the paper's participants prefer
 - [Always-On Agentic PR Security Review](../../security/always-on-pr-security-review.md) — automated merge-gate corroboration
 - [Lethal Trifecta Threat Model](../../security/lethal-trifecta-threat-model.md) — the architectural lever that bounds sabotage blast radius

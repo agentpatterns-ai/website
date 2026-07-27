@@ -52,7 +52,7 @@ Three existing patterns address the same scaling problem with different mechanis
 | Pattern | Mechanism | When it fits |
 |---------|-----------|--------------|
 | [Tool Search](advanced-tool-use.md) | Dynamic, stateless lazy discovery — planner queries a search tool on demand | Any library size; no pre-grouping; works without fine-tuning |
-| [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md) | Filesystem-organised lazy loading from a directory tree | Large MCP tool collections; directory structure mirrors domains |
+| [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md) | Filesystem-organized lazy loading from a directory tree | Large MCP tool collections; directory structure mirrors domains |
 | [Consolidate Agent Tools](consolidate-agent-tools.md) | Merge always-co-called leaves into one tool | Tools always called together with no independent use |
 | Toolset Agentization | Wrap co-used groups behind a sub-agent interface | Hundreds of tools clustered into reusable sub-capabilities; you can fine-tune the planner |
 

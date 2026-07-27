@@ -161,4 +161,4 @@ The grader outputs a structured verdict for each pair, making it straightforward
 - [Benchmark Contamination as an Eval Risk](benchmark-contamination-eval-risk.md)
 - [Anti Reward Hacking](anti-reward-hacking.md)
 - [Evaluator Templates: Portable Primitives](evaluator-templates.md)
-- [Eval Awareness: Designing Evals Agents Cannot Recognise](eval-awareness.md)
+- [Eval Awareness: Designing Evals Agents Cannot Recognize](eval-awareness.md)

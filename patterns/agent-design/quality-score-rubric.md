@@ -101,7 +101,7 @@ Six weeks later a regression to 61% appears on a different change. The team has 
 
 ## Key Takeaways
 
-- The pattern is two artefacts: a per-module A/B/C/D rubric and a simplification log of retired primitives, maintained together.
+- The pattern is two artifacts: a per-module A/B/C/D rubric and a simplification log of retired primitives, maintained together.
 - Use the lower grades — `C` and `D` are the signal; an all-`A` rubric is either accurate or unread.
 - The simplification log creates a one-way ratchet that defends against harness bloat as model capability rises ([Harness Impermanence](harness-impermanence.md)).
 - Benchmark snapshots give [harness hill-climbing](harness-hill-climbing.md) a persistent baseline; tuning regressions become diagnosable.

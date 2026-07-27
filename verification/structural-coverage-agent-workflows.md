@@ -94,3 +94,4 @@ End-to-end task-success metrics aggregate over the full workflow, masking which 
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — End-state and decision-quality testing; structural coverage answers a different question and sits beneath it.
 - [Independent Test Generation in Multi-Agent Code Systems](../patterns/multi-agent/independent-test-generation-multi-agent.md) — A different multi-agent testing concern (test-writer bias) at a different layer.
 - [Agent Handoff Protocols](../patterns/multi-agent/agent-handoff-protocols.md) — Declared handoff contracts; structural coverage tests whether those contracts actually fire.
+- [Skill Test Coverage as a Release Gate](skill-test-coverage-release-gate.md) — The same adequacy idea where no coordination graph exists: obligations are extracted from a skill's natural-language prose, then used to gate release.

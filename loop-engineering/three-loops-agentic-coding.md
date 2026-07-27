@@ -35,8 +35,8 @@ Skip the frame for single-shot tasks (one-line config edits, version bumps) wher
 |---|---|---|
 | Same tool call repeating with similar arguments; no progress between turns | Inner tool loop | Inspect tool definitions and permissions; clip the iteration cap; see [Loop Detection](../observability/loop-detection.md) |
 | Tests or build keep failing; agent's fix-attempts cycle through the same handful of edits | Verification loop | Improve the error signal: shorter feedback cycle, more specific test, paste full stack trace; see [Failure-Driven Iteration](../workflows/failure-driven-iteration.md) |
-| Each turn produces a fresh-looking attempt; diff oscillates, scope drifts, no version is meaningfully closer to done | Outer convergence loop | Stop iterating on the artefact; revisit the plan or scope; see [Convergence Detection](convergence-detection.md) |
-| Many tool calls but tests are green and the diff stabilises | Healthy — converging | None — let it finish |
+| Each turn produces a fresh-looking attempt; diff oscillates, scope drifts, no version is meaningfully closer to done | Outer convergence loop | Stop iterating on the artifact; revisit the plan or scope; see [Convergence Detection](convergence-detection.md) |
+| Many tool calls but tests are green and the diff stabilizes | Healthy — converging | None — let it finish |
 
 The signals are distinct in the trace. A spinning inner tool loop shows up as repeated tool calls inside a single agent turn. A failing verification loop shows up as test runs that stay red across turns. A non-converging outer loop shows up as a series of substantially different diffs across turns, none of them reaching a stable state. Modexa's analysis of stuck agent loops — a single turn consuming millions of tokens before hitting a wall — is the textbook inner-loop pathology ([Modexa, 2026](https://medium.com/@Modexa/the-agent-loop-problem-when-smart-wont-stop-ccbf8489180f)).
 

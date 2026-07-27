@@ -125,7 +125,7 @@ The 429 belongs to `fanout-3`, spawned by `orch`. A cost-by-`agent.name` panel i
 - `agent_id` plus `parent_agent_id` is the load-bearing pair — flat per-instance identity plus a parent back-pointer reconstructs the hierarchy without span-tree traversal.
 - Use `agent_id` as a span/event attribute, never a metric label. Use `agent.name` for bounded-cardinality metric slicing.
 - The pattern breaks at off-protocol boundaries — shell-out to `curl`, fire-and-forget queues, raw subprocess spawn. Close the gap by lifting those into instrumented tool calls.
-- The pattern generalises beyond Claude Code: any harness that propagates a stable agent identifier through HTTP headers and span attributes inherits the same query surface.
+- The pattern generalizes beyond Claude Code: any harness that propagates a stable agent identifier through HTTP headers and span attributes inherits the same query surface.
 
 ## Related
 

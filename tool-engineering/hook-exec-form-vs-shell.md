@@ -1,7 +1,7 @@
 ---
 title: "Hook Exec Form vs Shell Form: Shell-Injection-Safe Hook Commands"
 term: "Hook Exec Form vs Shell Form"
-description: "Claude Code's hook args array spawns the command directly without a shell, neutralising metacharacters in substituted hook input. Use exec form whenever tool input flows into argv; reserve shell form for pipes, redirects, and expansion."
+description: "Claude Code's hook args array spawns the command directly without a shell, neutralizing metacharacters in substituted hook input. Use exec form whenever tool input flows into argv; reserve shell form for pipes, redirects, and expansion."
 tags:
   - tool-engineering
   - security
@@ -24,7 +24,7 @@ A Claude Code [`command`-type hook handler](https://code.claude.com/docs/en/hook
 
 | Form | Selected when | How the harness invokes it |
 |------|--------------|------------------------|
-| Shell form | `args` absent | Passes `command` to `sh -c` on macOS/Linux, Git Bash on Windows, or PowerShell. Shell tokenises, expands variables, and interprets pipes, `&&`, redirects, and globs. |
+| Shell form | `args` absent | Passes `command` to `sh -c` on macOS/Linux, Git Bash on Windows, or PowerShell. Shell tokenizes, expands variables, and interprets pipes, `&&`, redirects, and globs. |
 | Exec form | `args` present | Resolves `command` on `PATH` and spawns it directly. Each `args` element becomes one argument verbatim. Special characters pass through because there is no shell to interpret them. |
 
 The [Claude Code changelog](https://code.claude.com/docs/en/changelog) for v2.1.139 (2026-05-11) frames the benefit as quoting convenience. The larger consequence is that exec form neutralizes shell metacharacters as an attack surface.
@@ -143,7 +143,7 @@ Prettier receives the entire string as one filename argument and fails with `ENO
 - Shell form is appropriate only when you need pipes, redirects, expansion, or globs — and only when no substituted field is attacker-influenceable.
 - Wrap unavoidable shell features in a script under `scripts/`, then call the script in exec form with hook fields as positional arguments.
 - The Windows `.cmd`/`.bat` shim caveat does not justify shell form — invoke the underlying script with `node` directly in exec form.
-- Exec form is a syntactic mitigation, not a substitute for [argument-value validation or allowlisting](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.md) — it neutralises metacharacters, not malicious argument values.
+- Exec form is a syntactic mitigation, not a substitute for [argument-value validation or allowlisting](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.md) — it neutralizes metacharacters, not malicious argument values.
 
 ## Related
 

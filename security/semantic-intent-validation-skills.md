@@ -1,7 +1,7 @@
 ---
 title: "Semantic Intent Validation for Agent Skills"
 term: "Semantic Intent Validation"
-description: "Signature scanning catches 90.7% of malicious skills but misses payload-less attacks where the agent synthesises the payload at runtime. Semantic intent validation closes the gap by asking whether documented intent matches observable code behavior."
+description: "Signature scanning catches 90.7% of malicious skills but misses payload-less attacks where the agent synthesizes the payload at runtime. Semantic intent validation closes the gap by asking whether documented intent matches observable code behavior."
 tags:
   - security
   - agent-design
@@ -17,7 +17,7 @@ maturity: adopted
 
 # Semantic Intent Validation for Agent Skills
 
-> Semantic intent validation uses a separate model to check whether a skill's documented intent matches its observable behavior, catching payloads the agent synthesises at runtime.
+> Semantic intent validation uses a separate model to check whether a skill's documented intent matches its observable behavior, catching payloads the agent synthesizes at runtime.
 
 ## The gap signature scanning cannot close
 
@@ -102,7 +102,7 @@ Stage 1 handles the bulk at low cost. Stage 2 is the intent check the static lay
 
 ## Key Takeaways
 
-- Payload-less attacks succeed by being syntactically benign — the malicious behavior exists only after the agent synthesises it from documented examples, which signatures cannot match
+- Payload-less attacks succeed by being syntactically benign — the malicious behavior exists only after the agent synthesizes it from documented examples, which signatures cannot match
 - Semantic intent validation compares declared intent against inferred behavior using a separate model; multi-model consensus drives the residual bypass rate from 11.6%–33.5% to 1.6%
 - The layer is justified when agents pull from public skill marketplaces and have meaningful write or network authority; for fully internal libraries it adds latency without proportional risk reduction
 - Compose static signatures and semantic intent in series, not in parallel — signatures handle the 90.7% cheaply, semantic catches the residual that bypasses alignment

@@ -165,9 +165,11 @@ The decision reduces to session shape:
 | Agent waiting on side-agents or human review | Mostly 5–60 min idle | 1-hour |
 | Walk-away workflows (return next day) | > 60 min idle | Neither — cache will expire |
 
+A third option sits between paying the 1-hour premium and letting the entry die: replay the prefix on a timer so the 5-minute entry never expires. That trade has its own break-even and its own failure modes — see [Prompt Cache Keepalive for Agent Pauses](prompt-cache-keepalive-agent-pauses.md).
+
 ## TTL cost model and troubleshooting
 
-The break-even is the multiplier ratio, not the prefix size. A 1-hour cache write costs 2x base input; two consecutive 5-minute writes cost 2 × 1.25x = 2.5x. When a session idles longer than 5 minutes but resumes within the hour, the 1-hour write is strictly cheaper than rewriting the 5-minute cache on resume. Skidmore (2026) derives the closed form for the related *refresh against let-expire* decision: `T = 5 × (W / R) = 5 × (1.25 / 0.10) = 62.5 min`, with token count and per-token price cancelling out — the crossover is identical for a 5K Sonnet prefix and a 500K Opus prefix. [Source: [Skidmore: 62.5-minute rule](https://skids.dev/blog/anthropic-cache-tokenomics/)]
+The break-even is the multiplier ratio, not the prefix size. A 1-hour cache write costs 2x base input; two consecutive 5-minute writes cost 2 × 1.25x = 2.5x. When a session idles longer than 5 minutes but resumes within the hour, the 1-hour write is strictly cheaper than rewriting the 5-minute cache on resume. Skidmore (2026) derives the closed form for the related *refresh against let-expire* decision: `T = 5 × (W / R) = 5 × (1.25 / 0.10) = 62.5 min`, with token count and per-token price canceling out — the crossover is identical for a 5K Sonnet prefix and a 500K Opus prefix. [Source: [Skidmore: 62.5-minute rule](https://skids.dev/blog/anthropic-cache-tokenomics/)]
 
 | Model | Base input | 5-min write | 1-hour write | Cache read |
 |---|---|---|---|---|

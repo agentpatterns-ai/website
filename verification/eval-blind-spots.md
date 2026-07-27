@@ -246,12 +246,12 @@ The outcome grader sees a correct deployment; the trajectory auditor catches tha
 
 ## Related
 
-- [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — rubric-level defences for the held-out gap's failure class
+- [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — rubric-level defenses for the held-out gap's failure class
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — the outcome-grading default the trajectory-opaque gap qualifies
 - [pass@k and pass^k Metrics](pass-at-k-metrics.md) — consistency metrics that surface what the trajectory gap and retrieval variance hide
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — idealized-condition inflation, adjacent to the skill-retrieval gap
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — the lower-overhead alternative at short horizons
-- [Eval Awareness](eval-awareness.md) — agents that recognise evaluations can locate the holdout suite, defeating the protocol
+- [Eval Awareness](eval-awareness.md) — agents that recognize evaluations can locate the holdout suite, defeating the protocol
 - [Defense-in-Depth Agent Safety](../security/defense-in-depth-agent-safety.md) — the safety layering the trajectory gap motivates
 - [TDD with Agent Development](tdd-agent-development.md) — writing the test first gives the explicit signal stale and missing tasks lack
 - [Emulated APIs for Agent Skill Evals](emulated-apis-for-skill-evals.md) — environment isolation for the API a skill calls, a measurement confound alongside the skill-retrieval realism gap

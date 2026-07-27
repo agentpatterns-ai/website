@@ -108,7 +108,7 @@ A read-only investigation that ends in no fix never creates a worktree — the l
 - Lazy isolation is the documented default for background sessions in Claude Code v2.1.139+ — the worktree is created on the first Edit/Write, not at dispatch.
 - Three skip rules encode the *do nothing more than necessary* invariant: already in a worktree, no git and no hook, write outside cwd.
 - `worktree.bgIsolation: "none"` (v2.1.143+) disables the latch entirely for repos where worktrees are impractical — the design is a setting, not a hardcode.
-- A `WorktreeCreate` hook generalises the laziness contract beyond git to SVN, Perforce, and Mercurial.
+- A `WorktreeCreate` hook generalizes the laziness contract beyond git to SVN, Perforce, and Mercurial.
 - Write-bound fan-outs save nothing and add a transition surface — use eager `isolation: worktree` on sub-agents that will definitely write.
 
 ## Related

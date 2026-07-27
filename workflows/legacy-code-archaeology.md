@@ -16,7 +16,7 @@ maturity: emerging
 
 # Legacy Code Archaeology: Reconstruct Intent Before Migrating
 
-> Excavate a legacy system's real behaviour with a coding agent before modernizing it — but only under adversarial prompting and a runnable baseline.
+> Excavate a legacy system's real behavior with a coding agent before modernizing it — but only under adversarial prompting and a runnable baseline.
 
 Legacy code archaeology points a coding agent at an undocumented legacy codebase to reconstruct what it actually does — its structure, implicit contracts, and intent — as a distinct phase before any modernization. It earns its place only under three conditions: the agent is prompted adversarially rather than helpfully, it cites line-level evidence rather than narrating a plausible story, and its findings are checked against a runnable baseline of the original system. Skip those conditions and the phase produces confident fiction that is worse than no understanding at all. This is the comprehension-first case where the documentation needed to guide a migration does not yet exist and has to be dug out of the code.
 
@@ -53,7 +53,7 @@ The oracle has to be made honest first. Existing tests can lie: in the worked ca
 
 ### Phase 3: Incremental lift against the oracle
 
-Only now modernize, in small steps, with the compiler and honest tests as ground truth. A tight feedback loop works well: enable strict compiler warnings, feed the agent the exact warning log for a few lines, and have it refactor only those lines, repeating file by file ([martinfowler.com](https://martinfowler.com/articles/archaeologist-copilot.html)). Each step is checkable, so a misread shows up as a failing build rather than a silent semantic regression. The human keeps deciding scope — refactor versus rewrite, and when to abort an over-ambitious change in favour of a pragmatic one.
+Only now modernize, in small steps, with the compiler and honest tests as ground truth. A tight feedback loop works well: enable strict compiler warnings, feed the agent the exact warning log for a few lines, and have it refactor only those lines, repeating file by file ([martinfowler.com](https://martinfowler.com/articles/archaeologist-copilot.html)). Each step is checkable, so a misread shows up as a failing build rather than a silent semantic regression. The human keeps deciding scope — refactor versus rewrite, and when to abort an over-ambitious change in favor of a pragmatic one.
 
 This workflow is tool-agnostic. The leverage is in the prompting discipline and the runnable oracle, not any one agent's features.
 

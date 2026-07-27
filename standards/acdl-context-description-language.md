@@ -39,7 +39,7 @@ ACDL captures a prompt's architecture independent of its content. The paper docu
 | Fragments | Reusable string or role blocks |
 | Mark blocks | Numbered annotations referenced from surrounding prose |
 
-Specifications render as block diagrams: roles become labelled columns, the vertical axis is time, loops collapse and expand, conditional branches fork. Diagrams can be hand-drawn on a whiteboard or written in formal syntax and rendered to PDF/PNG.
+Specifications render as block diagrams: roles become labeled columns, the vertical axis is time, loops collapse and expand, conditional branches fork. Diagrams can be hand-drawn on a whiteboard or written in formal syntax and rendered to PDF/PNG.
 
 The paper documents several real systems in ACDL: ReAct variants, the MINT benchmark agent, OpenCode, OpenClaw, the Gemini agent that played Pokemon Blue, and DeepSeek-V4 ([§4–5](https://arxiv.org/html/2605.01920)). Each shows how two superficially similar systems differ at the architectural level — the kind of difference informal prose hides.
 
@@ -102,7 +102,7 @@ The architecture is explicit: a system message, a user task, a loop over past st
 - Its constructs (roles, time indices, namespaces, control flow) capture the structural choices that move benchmark numbers
 - Tooling is shipped today: web editor, VS Code extension, Claude Code skill, examples
 - The value is conditional — cross-team and cross-paper communication earn it back; solo high-iteration work usually does not
-- Two structural limitations remain: in-construction mutation and multi-agent clock desynchronisation
+- Two structural limitations remain: in-construction mutation and multi-agent clock desynchronization
 
 ## Related
 

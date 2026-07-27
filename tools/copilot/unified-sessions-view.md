@@ -94,7 +94,7 @@ When the CLI agent moves to `Needs input`, the developer attaches to that row, a
 - It shipped paired with a locally-running CLI agent that offers worktree or workspace isolation modes from the agent picker.
 - The value is conditional: concurrency > 1, multiple invocation surfaces in use, and real isolation behind the rows. Below those thresholds the view is overhead.
 - The pattern converged independently across Copilot JetBrains, Claude Code's `claude agents` agent view, Cursor 3's Agents Window, and Windsurf's Agent Command Center between November 2025 and May 2026.
-- A unified view organises sessions but does not give them shared memory — session amnesia remains the underlying complaint developers report most ([RedMonk 2025-12-22](https://redmonk.com/kholterhoff/2025/12/22/10-things-developers-want-from-their-agentic-ides-in-2025/)).
+- A unified view organizes sessions but does not give them shared memory — session amnesia remains the underlying complaint developers report most ([RedMonk 2025-12-22](https://redmonk.com/kholterhoff/2025/12/22/10-things-developers-want-from-their-agentic-ides-in-2025/)).
 - Business and Enterprise tenants require admin enablement of the Editor preview features policy before the surface is visible.
 
 ## Related
@@ -102,5 +102,5 @@ When the CLI agent moves to `Needs input`, the developer attaches to that row, a
 - [Editor and Manager Surface Separation in Agent IDEs](../../patterns/agent-design/editor-manager-surface-separation.md) — the broader two-surface pattern the unified sessions view is one instance of
 - [Agent Mission Control](agent-mission-control.md) — the cloud-coding-agent counterpart of the JetBrains local view
 - [Copilot Agent Mode — inline surface (JetBrains)](agent-mode.md#inline-agent-mode-jetbrains) — one of the invocation surfaces the view aggregates
-- [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md) — the standalone CLI behaviour that the IDE-hosted CLI agent wraps
+- [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md) — the standalone CLI behavior that the IDE-hosted CLI agent wraps
 - [Remote Session Control for Local CLI Agents](../../patterns/agent-design/remote-session-control.md) — cross-surface session control that pairs with the registry

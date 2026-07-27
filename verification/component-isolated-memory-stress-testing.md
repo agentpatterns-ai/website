@@ -1,7 +1,7 @@
 ---
 title: "Component-Isolated Memory Stress Testing for LLM Agents"
 term: "Component-Isolated Memory Stress Testing"
-description: "Decompose memory into summarisation, storage, and retrieval, then stress-test each operation against an adversarial set so regressions attribute to one component."
+description: "Decompose memory into summarization, storage, and retrieval, then stress-test each operation against an adversarial set so regressions attribute to one component."
 tags:
   - testing-verification
   - memory
@@ -17,7 +17,7 @@ maturity: emerging
 
 # Component-Isolated Memory Stress Testing
 
-> Test summarisation, storage, and retrieval against three separate adversarial datasets so a memory regression resolves to one component rather than an aggregate accuracy drop.
+> Test summarization, storage, and retrieval against three separate adversarial datasets so a memory regression resolves to one component rather than an aggregate accuracy drop.
 
 !!! info "Also known as"
     MemFail-style memory testing, three-operation memory benchmark, per-component memory diagnostics
@@ -36,8 +36,8 @@ Skip it if the agent has no explicit summarization step. Raw chunks plus a vecto
 
 | Operation | What it does | Adversarial dataset stresses |
 |-----------|-------------|------------------------------|
-| Summarisation | Compresses raw episodes, conversations, or tool traces into a denser form before storage | Information that survives only in low-salience details — exact entities, dates, numbers, contradictions buried in long contexts ([MemFail §3](https://arxiv.org/abs/2605.26667)) |
-| Storage | Encodes and persists the summarised representation, including temporal order and inter-fact relationships | Temporal-ordering queries, relational queries across multiple facts, queries that need contextual metadata the encoder may have dropped ([MemFail §3](https://arxiv.org/abs/2605.26667)) |
+| Summarization | Compresses raw episodes, conversations, or tool traces into a denser form before storage | Information that survives only in low-salience details — exact entities, dates, numbers, contradictions buried in long contexts ([MemFail §3](https://arxiv.org/abs/2605.26667)) |
+| Storage | Encodes and persists the summarized representation, including temporal order and inter-fact relationships | Temporal-ordering queries, relational queries across multiple facts, queries that need contextual metadata the encoder may have dropped ([MemFail §3](https://arxiv.org/abs/2605.26667)) |
 | Retrieval | Recalls relevant entries at query time, ranks candidates, integrates them into the response | Distribution-shifted queries that don't lexically match stored phrasing, queries with multiple plausible matches that test ranking, out-of-distribution lookups ([MemFail §3](https://arxiv.org/abs/2605.26667)) |
 
 MemFail runs five datasets across these four tasks against four production memory systems. It produces per-operation scores rather than a single accuracy number ([MemFail §4](https://arxiv.org/abs/2605.26667)).
@@ -75,10 +75,10 @@ The aggregate drop is concentrated in a downstream effect the three sets do not 
 
 ## Key Takeaways
 
-- Decompose memory into summarisation, storage, retrieval before stress-testing — aggregate accuracy hides which lever moves ([MemFail](https://arxiv.org/abs/2605.26667)).
+- Decompose memory into summarization, storage, retrieval before stress-testing — aggregate accuracy hides which lever moves ([MemFail](https://arxiv.org/abs/2605.26667)).
 - Build or borrow one adversarial dataset per operation; a regression on one set names the operation to investigate.
-- The framework is architecture-dependent. Skip it when summarisation is a no-op, and treat per-operation scores as a property of your stack — not a universal ranking ([WhenLoss](https://arxiv.org/html/2605.24579) and [arXiv:2603.02473](https://arxiv.org/abs/2603.02473) reach opposite conclusions on which operation dominates).
-- The attribution discipline is the artefact worth taking from the paper — more than the specific failure-mode taxonomy.
+- The framework is architecture-dependent. Skip it when summarization is a no-op, and treat per-operation scores as a property of your stack — not a universal ranking ([WhenLoss](https://arxiv.org/html/2605.24579) and [arXiv:2603.02473](https://arxiv.org/abs/2603.02473) reach opposite conclusions on which operation dominates).
+- The attribution discipline is the artifact worth taking from the paper — more than the specific failure-mode taxonomy.
 
 ## Related
 
@@ -86,4 +86,4 @@ The aggregate drop is concentrated in a downstream effect the three sets do not 
 - [Agent Memory Patterns](../patterns/agent-design/agent-memory-patterns.md) — the memory-scope and temporal-memory framework these stress tests would exercise
 - [Tiered Memory Architecture](../patterns/agent-design/tiered-memory-architecture.md) — a concrete multi-stage memory pipeline (episodic → semantic) the decomposition applies to
 - [Memory Retrieval as a Control Decision](../patterns/agent-design/memory-retrieval-as-control.md) — a specific retrieval-stage control discipline and its mitigation
-- [Memory Synthesis from Execution Logs](../patterns/agent-design/memory-synthesis-execution-logs.md) — a summarisation-stage design that would be stressed by the summarisation dataset
+- [Memory Synthesis from Execution Logs](../patterns/agent-design/memory-synthesis-execution-logs.md) — a summarization-stage design that would be stressed by the summarization dataset

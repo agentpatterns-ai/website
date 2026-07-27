@@ -1,6 +1,6 @@
 ---
 title: "Four-Layer Taxonomy of Agent Security Risks"
-description: "Organise autonomous agent threats into context/instruction, tool/action, state/persistence, and ecosystem/automation layers — a navigation aid that surfaces coverage gaps when threats propagate across boundaries."
+description: "Organize autonomous agent threats into context/instruction, tool/action, state/persistence, and ecosystem/automation layers — a navigation aid that surfaces coverage gaps when threats propagate across boundaries."
 term: "Four-Layer Agent Security Taxonomy"
 tags:
   - security
@@ -25,8 +25,8 @@ maturity: emerging
 | Layer | Surface | Representative threats | Site coverage |
 |-------|---------|------------------------|---------------|
 | L1 Context / Instruction | System prompt, user input, fetched content | Direct and indirect [prompt injection](prompt-injection-threat-model.md), [goal reframing](goal-reframing-exploitation-trigger.md), hidden-instruction smuggling | [CaMeL](camel-control-data-flow-injection.md), [action-selector](action-selector-pattern.md), [indirect injection discovery](indirect-injection-discovery.md) |
-| L2 Tool / Action | Tool catalog, argument generation, return processing, MCP servers | [Tool-invocation attacks](tool-invocation-attack-surface.md), [skill supply-chain poisoning](skill-supply-chain-poisoning.md), unauthorised egress | [Behavioural firewall](behavioral-firewall-tool-call-trajectories.md), [MCP control plane](mcp-runtime-control-plane.md), [tool signing](tool-signing-verification.md) |
-| L3 State / Persistence | Memory store, scratchpads, workspace files, retrieved history | Memory poisoning, persistent context contamination, secrets in transcripts | [Protect sensitive files](protecting-sensitive-files.md), [PII tokenisation](pii-tokenization-in-agent-context.md), [secrets management](secrets-management-for-agents.md) |
+| L2 Tool / Action | Tool catalog, argument generation, return processing, MCP servers | [Tool-invocation attacks](tool-invocation-attack-surface.md), [skill supply-chain poisoning](skill-supply-chain-poisoning.md), unauthorized egress | [Behavioral firewall](behavioral-firewall-tool-call-trajectories.md), [MCP control plane](mcp-runtime-control-plane.md), [tool signing](tool-signing-verification.md) |
+| L3 State / Persistence | Memory store, scratchpads, workspace files, retrieved history | Memory poisoning, persistent context contamination, secrets in transcripts | [Protect sensitive files](protecting-sensitive-files.md), [PII tokenization](pii-tokenization-in-agent-context.md), [secrets management](secrets-management-for-agents.md) |
 | L4 Ecosystem / Automation | Schedulers, hooks, multi-agent links, third-party registries, deployment pipelines | Cross-agent privilege escalation, supply-chain compromise, drift in unattended automation | [Cryptographic audit trail](cryptographic-governance-audit-trail.md), [enterprise hardening](enterprise-agent-hardening.md), [security drift](security-drift-iterative-refinement.md) |
 
 ## Cross-layer propagation
@@ -90,5 +90,5 @@ The taxonomy is a map, not a defense. Three failure modes:
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md) — production controls across all four layers
 - [OWASP LLM Top 10 (2025): Agent Security Crosswalk](owasp-llm-top-10-2025-agent-crosswalk.md) — maps named threats onto controls; pairs with the four-layer grid for coverage mapping
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — complementary taxonomy focused on the runtime audit boundary
-- [Three-Vector Evasion Taxonomy for Agent Security Tests](temporal-spatial-semantic-evasion-taxonomy.md) — orthogonal taxonomy organising how attacks evade per-layer checkpoints
+- [Three-Vector Evasion Taxonomy for Agent Security Tests](temporal-spatial-semantic-evasion-taxonomy.md) — orthogonal taxonomy organizing how attacks evade per-layer checkpoints
 - [Computer-Systems Lens for Always-On Agent Security](computer-systems-lens-agent-security.md) — an alternate framing that maps the same threats onto OS components rather than execution layers

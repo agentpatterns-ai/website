@@ -51,7 +51,7 @@ The classifier resolves cleanly onto coding-agent artifacts. The mapping is the 
 | CoALA type | Concrete harness artifact | What it's good at | What it's bad at |
 |------------|--------------------------|-------------------|------------------|
 | Working | The live context window; in-turn scratchpads | Holding the current goal, recent tool results, and intermediate reasoning | Persistence — evaporates at session end and degrades inside the [context-window dumb zone](../../context-engineering/context-window-dumb-zone.md) |
-| Episodic | Session transcripts; [session recap files](session-recap.md); execution traces; [memory synthesis from execution logs](memory-synthesis-execution-logs.md) | Recalling *what was tried* in similar past situations | Generalising across episodes — raw transcripts re-injected verbatim crowd context without synthesis |
+| Episodic | Session transcripts; [session recap files](session-recap.md); execution traces; [memory synthesis from execution logs](memory-synthesis-execution-logs.md) | Recalling *what was tried* in similar past situations | Generalizing across episodes — raw transcripts re-injected verbatim crowd context without synthesis |
 | Semantic | RAG indexes, vector stores, knowledge graphs, codebase symbol indexes, [structured domain retrieval](../../context-engineering/structured-domain-retrieval.md) | Looking up *facts* — API signatures, schema, file locations | Tracking *whether the fact is current*; mixing facts and experiences under uniform decay produces a category error ([Roynard, 2026](https://arxiv.org/abs/2604.11364)) |
 | Procedural | [CLAUDE.md](../../instructions/claude-md-convention.md) / [AGENTS.md](../../instructions/agents-md-design-patterns.md), skills, slash commands, hooks, the agent's own code | Encoding *how to act* — the procedure the agent runs every time | Reflecting recent experience — procedural memory is rarely updated mid-session; learning is offline by design ([CoALA §3.1.4](https://arxiv.org/html/2309.02427v3)) |
 
@@ -112,7 +112,7 @@ The inventory says: missing semantic memory. The capability prediction follows d
 
 - CoALA's four memory types map cleanly onto production coding-agent artifacts; the mapping is the diagnostic tool.
 - The classifier earns its keep on multi-layer harnesses where absence of a memory type is non-obvious by inspection; it adds ceremony without value on trivial agents.
-- The four-type lens describes content type, not operational mechanics — a labelled type can still be operationally broken, and writeable stores blur memory-versus-environment boundaries.
+- The four-type lens describes content type, not operational mechanics — a labeled type can still be operationally broken, and writeable stores blur memory-versus-environment boundaries.
 - [Roynard (2026)](https://arxiv.org/abs/2604.11364) identifies a category-error risk: applying uniform decay or update mechanics to facts and experiences under the same "long-term memory" label silently corrupts one or both.
 - Use the taxonomy to *name* what you already have, not as a build recipe — the implementation pages remain the source of truth for how each memory type actually works.
 
@@ -120,8 +120,8 @@ The inventory says: missing semantic memory. The capability prediction follows d
 
 - [CoALA Decision-Making Loop as an Orchestration Lens](coala-decision-making-loop.md) — The other CoALA axis: this page classifies the *memory* surfaces, that page traces the *decision-making* loop (propose -> evaluate -> select -> act) — two distinct facets of the same framework
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — scope-based memory architecture for cross-session learning
-- [Continual-Learning Layers](continual-learning-layers.md) — companion taxonomy organised by update-target / persistence-scope, distinct from this classify-what axis
-- [Tiered Memory Architecture](tiered-memory-architecture.md) — operationalising episodic-to-semantic consolidation
+- [Continual-Learning Layers](continual-learning-layers.md) — companion taxonomy organized by update-target / persistence-scope, distinct from this classify-what axis
+- [Tiered Memory Architecture](tiered-memory-architecture.md) — operationalizing episodic-to-semantic consolidation
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md) — episode-keyed recall implementation
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — converting traces into persistent knowledge
 - [Session Recap: Goal-Shaped Handoff at Context Boundaries](session-recap.md) — episodic-memory artifact for compaction boundaries

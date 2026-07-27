@@ -130,5 +130,3 @@ Push stays blocked even if a broader allow rule would otherwise permit it. For e
 - [CLI-IDE-GitHub Context Ladder](../../workflows/cli-ide-github-context-ladder.md)
 - [Cloud-Local Agent Handoff](../../workflows/cloud-local-agent-handoff.md)
 - [Agentic Code Review Architecture](../../code-review/agentic-code-review-architecture.md)
-</content>
-</invoke>

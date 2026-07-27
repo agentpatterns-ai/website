@@ -138,7 +138,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 
     ---
 
-    Generative-engine optimisation, llms.txt, and topical authority — making content reachable by AI answer engines.
+    Generative-engine optimization, llms.txt, and topical authority — making content reachable by AI answer engines.
 
     [Jump to section →](#discoverability-geo)
 
@@ -238,6 +238,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Context Lifecycle Management: Beyond Store and Retrieve](context-engineering/context-lifecycle-management.md)
 - [Re-Auditing Context Engineering Across Model Generations](context-engineering/generation-scoped-context-engineering.md)
 - [Usage-Reinforced Memory Decay for Long-Running Agents](context-engineering/usage-reinforced-memory-decay.md)
+- [Agent-Tuned Code Search: Retrieval Built for the Loop](context-engineering/agent-tuned-code-search.md)
+- [Prompt Cache Keepalive for Agent Pauses](context-engineering/prompt-cache-keepalive-agent-pauses.md)
 
 ## Instructions & Prompts
 
@@ -297,7 +299,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Post-Compaction Re-read Protocol for Agent Continuity](instructions/post-compaction-reread-protocol.md)
 - [Production System Prompt Architecture and Techniques](instructions/production-system-prompt-architecture.md)
 - [Prompt File Libraries for Reusable Agent Instructions](instructions/prompt-file-libraries.md)
-- [Prompt Governance via PRs: Reviewable AI Behaviour](instructions/prompt-governance-via-pr.md)
+- [Prompt Governance via PRs: Reviewable AI Behavior](instructions/prompt-governance-via-pr.md)
 - [Prompt-Rewrite Discipline on Cross-Generation Model Migration](instructions/prompt-rewrite-on-cross-generation-migration.md)
 - [Rule Lifecycle Metadata for Prunable Instruction Surfaces](instructions/rule-lifecycle-metadata.md)
 - [Shared Context Bundle Registry for Agent Teams](instructions/shared-context-bundle-registry.md)
@@ -462,7 +464,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Model-Neutral Agent Architecture: Model Portability Over Cloud Portability](patterns/agent-design/model-neutral-agent-architecture.md)
 - [Most-Restrictive-Wins Fusion for Parallel Agent Control Returns](patterns/agent-design/most-restrictive-wins-fusion.md)
 - [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](patterns/multi-agent/multi-agent-se-design-patterns.md)
-- [Multi-Agent Topology Taxonomy: Centralised, Decentralised](patterns/multi-agent/multi-agent-topology-taxonomy.md)
+- [Multi-Agent Topology Taxonomy: Centralized, Decentralized](patterns/multi-agent/multi-agent-topology-taxonomy.md)
 - [Multi-Model Plan Synthesis for System Architecture](patterns/multi-agent/multi-model-plan-synthesis.md)
 - [Multi-Shape BYOK Provider: Declare API Family per Endpoint](patterns/agent-design/multi-shape-byok-provider.md)
 - [Observability-Driven Harness Evolution](patterns/agent-design/observability-driven-harness-evolution.md)
@@ -571,6 +573,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Suspect the Harness Before the Model on a Regression](patterns/agent-design/suspect-the-harness-not-the-model.md)
 - [Cue-Anchored Working Memory (Delivery, Not Storage)](patterns/agent-design/cue-anchored-working-memory.md)
 - [Knowledge Graphs as Provenance-Carrying Agent Memory](patterns/agent-design/knowledge-graph-shared-memory.md)
+- [Browser as Agent Action Space](patterns/agent-design/browser-as-agent-action-space.md)
 
 ## Loop Engineering
 
@@ -606,7 +609,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Tool Description Quality](tool-engineering/tool-description-quality.md)
 - [Write Tool Descriptions Like Onboarding Docs](tool-engineering/tool-descriptions-as-onboarding.md)
 - [Designing Agent Tools Like APIs](tool-engineering/tool-engineering.md)
-- [Agent-Aware CLI Behaviour via Environment Variable](tool-engineering/agent-aware-cli-via-env-var.md)
+- [Agent-Aware CLI Behavior via Environment Variable](tool-engineering/agent-aware-cli-via-env-var.md)
 - [Agent-Computer Interface (ACI): Tool Design as UX Discipline](tool-engineering/agent-computer-interface.md)
 - [Chance-Corrected Shortlist Depth Sizing for Tool Retrieval (Bits-over-Random)](tool-engineering/chance-corrected-shortlist-depth-sizing.md)
 - [CLI-First Skill Design](tool-engineering/cli-first-skill-design.md)
@@ -689,6 +692,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Temporal Token Routing: Batch and Flex Tiers for Non-Urgent Work](token-engineering/temporal-token-routing.md)
 - [Harness-Controlled Token Economics (The Harness Effect)](token-engineering/harness-token-economics.md)
 - [Line-Anchored Feedback: Deliver Change Requests as Inline Comments](token-engineering/line-anchored-feedback.md)
+- [Request Shaping to Cut Wasted Agent Turns](token-engineering/request-shaping-wasted-turns.md)
 
 ## Security & Safety
 
@@ -718,7 +722,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](security/authority-confusion-untrusted-context.md)
 - [Behavioral Firewall for Tool-Call Trajectories](security/behavioral-firewall-tool-call-trajectories.md)
 - [Clarification Mode Amplifies Prompt Injection](security/clarification-mode-injection-amplification.md)
-- [Code Injection Defence in Multi-Agent Pipelines](security/code-injection-multi-agent-defence.md)
+- [Code Injection Defense in Multi-Agent Pipelines](security/code-injection-multi-agent-defence.md)
 - [Cognitive Poisoning: Untrusted Tool Feedback as a Trajectory Attack](security/cognitive-poisoning-tool-feedback.md)
 - [Compositional Vulnerability Induction in Coding Agents](security/compositional-vulnerability-induction.md)
 - [Constraint Drift: Why Safety Must Be Maintained, Not Asserted](security/constraint-drift-multi-agent-safety.md)
@@ -880,7 +884,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Dependency Gap Validation for AI-Generated Code](verification/dependency-gap-validation.md)
 - [Distillation-Induced Similarity Metrics for Tool-Use Agents](verification/distillation-induced-similarity-metrics.md)
 - [Dominator-Graph Trajectory Invariants for Non-Deterministic Agents](verification/dominator-graph-trajectory-invariants.md)
-- [Eval Awareness: Designing Evals Agents Cannot Recognise](verification/eval-awareness.md)
+- [Eval Awareness: Designing Evals Agents Cannot Recognize](verification/eval-awareness.md)
 - [Evaluator Templates: Portable Primitives for Agent Eval Suites](verification/evaluator-templates.md)
 - [Five-Pass Blunder Hunt: Repeated Critique Passes for Plans](verification/five-pass-blunder-hunt.md)
 - [Generative Provenance Records for Tool-Using Agents](verification/generative-provenance-records.md)
@@ -964,6 +968,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](verification/validity-estimate-stopping-noisy-repair-loops.md)
 - [Agentic Review Comment Acceptance](code-review/agentic-review-comment-acceptance.md)
 - [Profiler-Guided Optimization Loops for Coding Agents](verification/profiler-guided-optimization-loop.md)
+- [Skill Test Coverage as a Release Gate](verification/skill-test-coverage-release-gate.md)
 
 ## Hooks & Guardrails
 
@@ -1071,7 +1076,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent Commit Attribution: Signed Commits and Agent Identity](workflows/agent-commit-attribution.md)
 - [Agent Environment Bootstrapping for AI Agent Development](workflows/agent-environment-bootstrapping.md)
 - [Agent Governance Policies for AI Agent Development](workflows/agent-governance-policies.md)
-- [Agent-Generated Onboarding Guide as a Durable Artefact](workflows/agent-generated-onboarding-guide.md)
+- [Agent-Generated Onboarding Guide as a Durable Artifact](workflows/agent-generated-onboarding-guide.md)
 - [Agent-Led Dev-Environment Iteration with Validation and Rollback](workflows/agent-led-dev-environment.md)
 - [Agent-Powered Codebase Q&A and Onboarding Workflow](workflows/codebase-qa-onboarding.md)
 - [Agentic-Agile: Adapting Agile Rituals for Agent Work](workflows/agentic-agile-rituals.md)
@@ -1133,7 +1138,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Semantic Issue Search from Chat vs Query Syntax](workflows/semantic-issue-search-natural-language.md)
 - [Single-Branch Git for Agent Swarms: A Trade-Off Pattern](workflows/single-branch-git-agent-swarms.md)
 - [Single-CLI Agent Platform: Create to Production in One CLI](workflows/single-cli-agent-platform.md)
-- [Skill Library Refinement Loops: Organisational Feedback for Shared Skills](workflows/skill-library-refinement-loops.md)
+- [Skill Library Refinement Loops: Organizational Feedback for Shared Skills](workflows/skill-library-refinement-loops.md)
 - [Spec-Driven Development with Spec Kit](workflows/spec-driven-development.md)
 - [Staged Literal Porting with a Per-Stage Numeric Oracle](workflows/staged-literal-port-with-numeric-oracle.md)
 - [Stakeholder Trust Through Evals and Observability](workflows/stakeholder-trust-evals-observability.md)
@@ -1155,6 +1160,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Kaizen-Style Continuous Code Quality Loop (Pomona)](workflows/kaizen-continuous-quality-loop.md)
 - [A Governance Framework for Production Agents](workflows/governing-production-agents.md)
 - [The Software Factory Model: Industrializing Agent Loops](workflows/software-factory-model.md)
+- [TDD Interaction Models: Throughput Versus Test Quality](workflows/tdd-interaction-models.md)
 
 ## Human Factors
 
@@ -1198,7 +1204,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The Productivity-Experience Paradox in AI-Assisted Development](human/productivity-experience-paradox.md)
 - [Visible Thinking in AI-Assisted Development](human/visible-thinking-ai-development.md)
 - [Intervention Rate as a Diagnostic North Star, Not a Target](human/intervention-rate-diagnostic-north-star.md)
-- [Programming Language Choice Still Shapes Agent Artefacts](human/programming-language-choice-shapes-agent-artefacts.md)
+- [Programming Language Choice Still Shapes Agent Artifacts](human/programming-language-choice-shapes-agent-artefacts.md)
 - [Adapting AI Assistants to Developer Interaction Style](human/developer-interaction-style-adaptation.md)
 - [Rolling Out CLI Coding Agents at Organization Scale](human/org-scale-cli-agent-rollout.md)
 - [Risk Architecture for AI-Native Engineering Teams](human/risk-architecture-ai-native-teams.md)
@@ -1219,7 +1225,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The Prompt Tinkerer](patterns/anti-patterns/prompt-tinkerer.md)
 - [Indiscriminate Structured Reasoning](patterns/anti-patterns/reasoning-overuse.md)
 - [The Kitchen Sink Session](patterns/anti-patterns/session-partitioning.md)
-- [Single-Layer Prompt Injection Defence](patterns/anti-patterns/single-layer-injection-defence.md)
+- [Single-Layer Prompt Injection Defense](patterns/anti-patterns/single-layer-injection-defence.md)
 - [Trust Without Verify](patterns/anti-patterns/trust-without-verify.md)
 - [Vibe Coding](patterns/anti-patterns/vibe-coding.md)
 - [The Yes-Man Agent](patterns/anti-patterns/yes-man-agent.md)
@@ -1280,7 +1286,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Configuration Smells in AGENTS.md Files (Six-Smell Catalog)](patterns/anti-patterns/configuration-smells-agents-md.md)
 - [Constraint-Evasive Fabrication in Instruction Sets](patterns/anti-patterns/constraint-evasive-fabrication.md)
 - [Silent-Failure Mechanism Taxonomy in Production Agent Runtimes](patterns/anti-patterns/silent-failure-mechanism-taxonomy.md)
-- [Adversarial-Only Threat Modelling for Agent Data Leakage](patterns/anti-patterns/adversarial-only-leakage-threat-modelling.md)
+- [Adversarial-Only Threat Modeling for Agent Data Leakage](patterns/anti-patterns/adversarial-only-leakage-threat-modelling.md)
 - [Agent Extension Conflicts: When Installed Skills and MCP Servers Fight Each Other](patterns/anti-patterns/agent-extension-conflicts.md)
 - [Assertion-Free Test Theater in Agent-Authored Patches](patterns/anti-patterns/assertion-free-test-theater.md)
 - [Destructive-Failure Mechanism Attribution by Mitigation Owner (ClayBuddy Three)](patterns/anti-patterns/destructive-failure-mechanism-attribution.md)
@@ -1330,7 +1336,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 
 ## Discoverability & GEO
 
-> Generative-engine optimisation, llms.txt, and topical authority — making content reachable by AI answer engines.
+> Generative-engine optimization, llms.txt, and topical authority — making content reachable by AI answer engines.
 
 - [AI Crawler Policy: robots.txt for the Three-Tier Crawler Landscape](geo/ai-crawler-policy.md)
 - [Answer-First Writing: Structure Content for AI Retrieval](geo/answer-first-writing.md)

@@ -1,7 +1,7 @@
 ---
 title: "System Prompt Altitude: Specific Without Being Brittle"
 term: "System Prompt Altitude"
-description: "Effective system prompts describe how to reason, not what to decide — sitting at the altitude that produces consistent behaviour across variation."
+description: "Effective system prompts describe how to reason, not what to decide — sitting at the altitude that produces consistent behavior across variation."
 aliases:
   - prompt altitude
   - instruction specificity level
@@ -15,7 +15,7 @@ maturity: established
 
 # System Prompt Altitude: Specific Without Being Brittle
 
-> System prompts fail when too brittle on edge cases or too vague to constrain. The right altitude produces consistent behaviour across variation.
+> System prompts fail when too brittle on edge cases or too vague to constrain. The right altitude produces consistent behavior across variation.
 
 Learn it hands-on with [The Compliance Stack](https://learn.agentpatterns.ai/prompt-engineering/the-compliance-stack/), a guided lesson with quizzes.
 
@@ -48,7 +48,7 @@ The right-altitude versions generalize. The too-brittle versions break on edge c
 | Section | Purpose | Altitude |
 |---------|---------|---------|
 | Background | Role, project context, agent's scope | High — principles and context |
-| Instructions | How to behave and what to prioritise | Medium — heuristics |
+| Instructions | How to behave and what to prioritize | Medium — heuristics |
 | Tool guidance | When and how to use specific tools | Low — precise constraints |
 | Output format | Structure, length, format of responses | Precise — exact requirements |
 
@@ -77,8 +77,8 @@ Altitude-calibrated prompts are a worse choice than enumeration in specific cond
 
 - Brittle prompts enumerate cases; they break on inputs the author didn't anticipate.
 - Vague prompts give no real constraint; the agent defaults to its pre-training distribution.
-- The right altitude describes how to reason, not what to decide — strong heuristics that generalise.
-- Organise system prompts by section — see [production system prompt architecture](production-system-prompt-architecture.md); each section operates at an appropriate altitude (background high, tool guidance precise).
+- The right altitude describes how to reason, not what to decide — strong heuristics that generalize.
+- Organize system prompts by section — see [production system prompt architecture](production-system-prompt-architecture.md); each section operates at an appropriate altitude (background high, tool guidance precise).
 
 ## Example
 

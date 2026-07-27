@@ -66,4 +66,4 @@ A CLI agent runs a build step and sees `sudo: not found`. It adopts the false pr
 - [Rollback-First Design](rollback-first-design.md) — making actions reversible so intervention can undo, not just abort
 - [Five-Failure-Layers Diagnostic](five-failure-layers-diagnostic.md) — attributing a failure to a harness layer once you have caught it
 - [Strained Coherence as a Pre-Failure Signal in Agent Trajectories](../../observability/strained-coherence-pre-failure-signal.md) — a complementary early signal for detecting divergence before lock-in
-- [Completion Failure Taxonomy](../../verification/completion-failure-taxonomy.md) — a categorisation of why agent output misses, at the completion level
+- [Completion Failure Taxonomy](../../verification/completion-failure-taxonomy.md) — a categorization of why agent output misses, at the completion level

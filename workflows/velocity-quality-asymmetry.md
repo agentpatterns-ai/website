@@ -186,3 +186,4 @@ By spending the velocity windfall on QA infrastructure in weeks 1 to 2, the team
 - [Tiered Code Review](../code-review/tiered-code-review.md) — routing review effort by risk level
 - [The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) — Osmani on bottleneck migration from writing to verification
 - [The Bottleneck Migration](../human/bottleneck-migration.md) — review becomes the new bottleneck as code generation gets cheaper
+- [TDD Interaction Models: Throughput Versus Test Quality](tdd-interaction-models.md) — the same trade seen at the level of a single TDD cycle

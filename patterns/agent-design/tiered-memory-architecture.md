@@ -85,7 +85,7 @@ Mitigate by gating promotion on a confidence signal, reviewer pass, or semantic-
 ## Key Takeaways
 
 - A two-tier store with consolidation is one design point on the agent-memory spectrum, not a default — it pays off for long operation windows and recurring task structure
-- Promotion should be conditional on observed cross-context re-use, not raw frequency, to avoid generalising single-context facts
+- Promotion should be conditional on observed cross-context re-use, not raw frequency, to avoid generalizing single-context facts
 - Reported accuracy gains are against a weak full-context baseline; the margin over a well-tuned flat RAG store is smaller and unreplicated
 - Tiering adds incorrect-promotion and policy-drift failure modes that scale with agent lifetime — audit the promotion step explicitly
 
@@ -97,5 +97,5 @@ Mitigate by gating promotion on a confidence signal, reviewer pass, or semantic-
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — extracting causal lessons from execution traces into persistent knowledge
 - [Subtask-Level Memory for Software Engineering Agents](subtask-level-memory.md) — granularity choice in memory retrieval
 - [Generative Agents Memory Stream](generative-agents-memory-stream.md) — three-layer architecture for long-running agents with high observation density
-- [Component-Isolated Memory Stress Testing](../../verification/component-isolated-memory-stress-testing.md) — stress-tests the summarisation, storage, and retrieval stages of this pipeline so a regression attributes to one tier
+- [Component-Isolated Memory Stress Testing](../../verification/component-isolated-memory-stress-testing.md) — stress-tests the summarization, storage, and retrieval stages of this pipeline so a regression attributes to one tier
 - [Usage-Reinforced Memory Decay for Long-Running Agents](../../context-engineering/usage-reinforced-memory-decay.md) — an eviction policy for the working tier that scores retention by recall count instead of elapsed turns

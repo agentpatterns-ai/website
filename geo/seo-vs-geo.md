@@ -15,7 +15,7 @@ maturity: established
 
 # SEO vs GEO — How Signals and Metrics Differ
 
-> SEO optimises for rank position in a list of links; GEO optimises for citation share inside synthesised answers — and the signals driving each differ.
+> SEO optimizes for rank position in a list of links; GEO optimizes for citation share inside synthesized answers — and the signals driving each differ.
 
 Related lesson: [The Citation Economy](https://learn.agentpatterns.ai/geo/the-citation-economy/) covers this concept in a hands-on lesson with quizzes.
 

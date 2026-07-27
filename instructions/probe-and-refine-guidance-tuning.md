@@ -86,5 +86,3 @@ Practitioners running Claude Code today do an unautomated version of this every 
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — the pointer-map alternative this technique competes with for the same job
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — the alternative when the rule is critical enough that prompts are the wrong surface
 - [Configuration File Structure Does Not Drive Compliance](configuration-file-structure-compliance-gap.md) — empirical null on file structure, complementary to this page's content-tuning angle
-</content>
-</invoke>

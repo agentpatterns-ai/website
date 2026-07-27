@@ -161,8 +161,8 @@ The diagnostic fixes nothing — it specifies the [runtime authority control](..
 
 ## Key Takeaways
 
-- Overeager behaviour is a distinct failure class: benign prompt, successful task, out-of-scope tool calls. Task-completion suites, jailbreak suites, and static overeager benchmarks all under-measure it.
-- The transferable artefact is the scope + trap fragment composition — five consent realisations × 24 archetypes × deterministic predicates. Teams author trap fragments specific to their own tool surface.
+- Overeager behavior is a distinct failure class: benign prompt, successful task, out-of-scope tool calls. Task-completion suites, jailbreak suites, and static overeager benchmarks all under-measure it.
+- The transferable artifact is the scope + trap fragment composition — five consent realisations × 24 archetypes × deterministic predicates. Teams author trap fragments specific to their own tool surface.
 - The judge-free oracle (trap-predicate hits plus filesystem-delta) removes LLM-judge drift and catches stealth modifications pattern-only traps miss.
 - Thompson sampling concentrates the per-pair run budget on the consent realisations that elicit the most overreach, delivering a 2.26× mean uplift over the static benchmark.
 - Agent framework explains 56% of trigger-rate variation; base model explains 21% — the diagnostic confirms the framework-over-model finding and points the fix at runtime authority control, not model swap.
@@ -174,4 +174,4 @@ The diagnostic fixes nothing — it specifies the [runtime authority control](..
 - [Decomposed Red-Teaming for Agent Monitors](decomposed-red-teaming-agent-monitors.md) — Adjacent elicitation methodology that splits attack construction into strategy, execution, and refinement; both diagnose what single-pass methods miss.
 - [Controlled Benchmark Rewriting for Agent Safety Judgment](controlled-benchmark-rewriting-safety-judgment.md) — Rewrite existing trajectories to test judgment robustness; complementary lens on safety-eval validity.
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — Why outcome-only grading misses safety violations the trajectory carries; the broader category this technique sits inside.
-- [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — Adjacent rubric-design discipline for evals where the agent might game the metric; the judge-free oracle is one such defence.
+- [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — Adjacent rubric-design discipline for evals where the agent might game the metric; the judge-free oracle is one such defense.

@@ -126,5 +126,3 @@ The reformulated version is not more information — it is the same information 
 - [pass@k and pass^k Metrics](../verification/pass-at-k-metrics.md) — Measuring capability versus consistency before enabling any prompt-layer change
 - [Prompt Chaining](prompt-chaining.md) — Model reformulation and generation as two explicit chain steps rather than an implicit pass
 - [Prompt Layering](prompt-layering.md) — How instructions from multiple sources compose in the final prompt surface
-</content>
-</invoke>

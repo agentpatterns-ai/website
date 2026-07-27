@@ -89,5 +89,5 @@ The same agent hits the 400-line cap on the first attempt, splits the change, an
 - [Effortless AI Fallacy](../patterns/anti-patterns/effortless-ai-fallacy.md) — the adjacent belief that AI should work without effort
 - [Harness Engineering](../patterns/agent-design/harness-engineering.md) — the environment-design frame for agent constraints
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — mechanical enforcement of constraints prompts cannot hold
-- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — when to mechanise a constraint
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — when to mechanize a constraint
 - [Instruction Polarity](../instructions/instruction-polarity.md) — positive constraints over negative attitude rules

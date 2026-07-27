@@ -91,7 +91,7 @@ Six levers solve adjacent problems and compose; none substitutes for another:
 | [Graceful Tool Output Truncation](graceful-tool-output-truncation.md) | Tool author, runtime | PARTIAL with continuation handle |
 | [Semantic Tool Output](semantic-tool-output.md) | Tool author, design | Less noise emitted at source |
 | [Observation Masking](../context-engineering/observation-masking.md) | History, post-hoc | Tool result used — drop it |
-| [Context Compression Strategies](../context-engineering/context-compression-strategies.md) | History, threshold | Budget threshold — offload, summarise |
+| [Context Compression Strategies](../context-engineering/context-compression-strategies.md) | History, threshold | Budget threshold — offload, summarize |
 
 ## When this backfires
 
@@ -161,6 +161,4 @@ The model sees the banner first, knows compression fired, and can request raw ou
 - [MCP Result Persistence Annotation](mcp-result-persistence-annotation.md)
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Observation Masking: Filter Tool Outputs from Context](../context-engineering/observation-masking.md)
-- [Context Compression Strategies: Offloading and Summarisation](../context-engineering/context-compression-strategies.md)
-</content>
-</invoke>
+- [Context Compression Strategies: Offloading and Summarization](../context-engineering/context-compression-strategies.md)

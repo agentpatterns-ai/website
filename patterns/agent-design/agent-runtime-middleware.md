@@ -73,7 +73,7 @@ Both frameworks ship a baseline set mapping to common production needs:
 | PII detection / redaction | (custom) | `PIIMiddleware` |
 | Cap total model calls | (custom) | `ModelCallLimitMiddleware` |
 | Cap tool invocations | (custom) | `ToolCallLimitMiddleware` |
-| Summarise long history | (custom) | `SummarizationMiddleware` |
+| Summarize long history | (custom) | `SummarizationMiddleware` |
 
 Genkit ships in TypeScript, Go, and Dart with Python in flight; LangChain's API is Python-native ([Genkit announcement](https://developers.googleblog.com/announcing-genkit-middleware-intercept-extend-and-harden-your-agentic-apps/)).
 

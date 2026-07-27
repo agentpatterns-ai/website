@@ -113,13 +113,13 @@ The narrowed manifest hides `export_ledger`, `delete_record`, `create_journal_en
 
 - IGAC is a per-request intent layer above the static effect-control pipeline, not a replacement for it; drafts, preflight, state-witness, and audit still carry the high-stakes load.
 - The monotonicity property (`Visible_IGAC ⊆ Visible_OpenPort`) is what makes the layer load-bearing: classifier failure or injection can deny legitimate work but cannot widen authority.
-- Adopt only when the tool catalog is typed, traffic is mediated, and the team can absorb both classifier-driven false denials and the intent-materialisation privacy regression flagged by IntentMiner.
-- Where the static manifest can be tightened per-task-context, deterministic per-action policy (OAP) achieves stronger empirical attack reduction without an LLM in the authorisation path.
+- Adopt only when the tool catalog is typed, traffic is mediated, and the team can absorb both classifier-driven false denials and the intent-materialization privacy regression flagged by IntentMiner.
+- Where the static manifest can be tightened per-task-context, deterministic per-action policy (OAP) achieves stronger empirical attack reduction without an LLM in the authorization path.
 
 ## Related
 
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md) — CASA's five byte-level checks gate call *form*; IGAC gates call *justification*. Complementary, not overlapping.
-- [Task-Based Access Control with Hybrid Inspection](task-based-access-control-hybrid-inspection.md) — TBAC's deterministic axis is signed task-bound credentials; IGAC's certificate is server-issued from the canonicalised request itself.
+- [Task-Based Access Control with Hybrid Inspection](task-based-access-control-hybrid-inspection.md) — TBAC's deterministic axis is signed task-bound credentials; IGAC's certificate is server-issued from the canonicalized request itself.
 - [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — PORTICO closes lingering authority *across time*; IGAC narrows authority *per request*.
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — IGAC inherits the same trust assumption: only the trusted user request issues the certificate, never the planner or retrieved content.
-- [Semantic Intent Validation for Agent Skills](semantic-intent-validation-skills.md) — intent vs behaviour at *skill admission*; IGAC checks intent vs *per-call payload*.
+- [Semantic Intent Validation for Agent Skills](semantic-intent-validation-skills.md) — intent vs behavior at *skill admission*; IGAC checks intent vs *per-call payload*.

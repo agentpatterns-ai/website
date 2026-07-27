@@ -127,7 +127,7 @@ The first form is what shipped. The second is what [Anthropic reports](https://w
 ## Key Takeaways
 
 - Idle-state evals sweep temporal state; standard evals sweep input space. Both are required when harness caches or TTL-bound headers persist across turns.
-- Internal-vs-public build parity is a first-class release artefact, enforced like any other [harness-engineering](../patterns/agent-design/harness-engineering.md) gate. Dogfooding on a divergent internal build cannot catch public-only regressions.
+- Internal-vs-public build parity is a first-class release artifact, enforced like any other [harness-engineering](../patterns/agent-design/harness-engineering.md) gate. Dogfooding on a divergent internal build cannot catch public-only regressions.
 - Per-model ablation surfaces regressions that aggregate evals average out. Gate changes on per-model non-regression — the detection method for [perceived model degradation](../patterns/anti-patterns/perceived-model-degradation.md) — not aggregate improvement.
 - The reviewer model is a harness variable. Lower-capability reviewers can silently pass bugs that higher-capability reviewers catch.
 

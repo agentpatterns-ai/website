@@ -1,7 +1,7 @@
 ---
 title: "Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines"
 term: "Parameter-Keyed Caching and Dependency-Aware Parallelism"
-description: "Augment semantic cache keys with parsed parameters, disk-back the tool-discovery cache, and fan out dependency-independent plan steps — three orthogonal optimisations for parameter-rich, multi-MCP agent pipelines."
+description: "Augment semantic cache keys with parsed parameters, disk-back the tool-discovery cache, and fan out dependency-independent plan steps — three orthogonal optimizations for parameter-rich, multi-MCP agent pipelines."
 tags:
   - agent-design
   - cost-performance
@@ -19,7 +19,7 @@ maturity: emerging
 
 # Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines
 
-> Three orthogonal caching and parallelism optimisations for parameter-rich plan-execute pipelines: partition the cache key on parsed parameters, disk-back tool discovery, and parallelise independent steps.
+> Three orthogonal caching and parallelism optimizations for parameter-rich plan-execute pipelines: partition the cache key on parsed parameters, disk-back tool discovery, and parallelize independent steps.
 
 ## When this pattern earns its complexity
 

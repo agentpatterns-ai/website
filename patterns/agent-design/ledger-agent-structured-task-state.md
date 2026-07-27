@@ -99,7 +99,7 @@ The same model on the same transcript can no longer issue the policy-violating c
 ## Key Takeaways
 
 - A structured task-state ledger pays back only under all four conditions: structured tool returns, codified domain policy, multi-turn reliability gap, and costly bad writes.
-- Two artefacts per domain — a tool path map (read-tool field → ledger path) and a set of executable predicates over ledger fields — written once per API surface, reused across tasks.
+- Two artifacts per domain — a tool path map (read-tool field → ledger path) and a set of executable predicates over ledger fields — written once per API surface, reused across tasks.
 - The reliability gain concentrates in `pass^k` (all-`k`-trials succeed), not `pass@1`. If a workload is not evaluated under multi-trial consistency, the headline numbers will not reflect the benefit.
 - The pattern cannot certify facts the agent never fetched, and the ledger goes stale under write-dominated workflows — pair with a [sibling work-state ledger](../../instructions/acknowledged-debt-ledger.md) or write-through observers when staleness is the dominant risk.
 

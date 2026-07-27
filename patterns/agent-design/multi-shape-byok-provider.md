@@ -77,11 +77,11 @@ The same gateway host can front all three if it terminates each envelope nativel
 - The mechanism is envelope-preserves-capability: shape-specific fields (`cache_control`, reasoning items, native tool blocks) round-trip only through the native shape, so the per-endpoint family declaration is the smallest unit of BYOK config that does not lose capability.
 - Shape declaration is user-explicit, not auto-detected — pair it with BYOK telemetry so wrong-shape endpoints become visible.
 - Skip the provider when only one envelope is in use, when a gateway already normalizes shape upstream, or when the available channel is preview-only and the team cannot tolerate Insiders gating.
-- The provider abstraction sits orthogonally to the gateway (which centralises auth and discovery) and the telemetry contract (which makes the BYOK route observable) — not in place of either.
+- The provider abstraction sits orthogonally to the gateway (which centralizes auth and discovery) and the telemetry contract (which makes the BYOK route observable) — not in place of either.
 
 ## Related
 
-- [Gateway Model Routing](gateway-model-routing.md) — the gateway/discovery layer that publishes the model catalogue; multi-shape BYOK sits in front of the gateway choice and declares which envelope reaches the model.
+- [Gateway Model Routing](gateway-model-routing.md) — the gateway/discovery layer that publishes the model catalog; multi-shape BYOK sits in front of the gateway choice and declares which envelope reaches the model.
 - [BYOK Model Token Visibility](../../observability/byok-model-token-visibility.md) — the BYOK telemetry contract that makes a wrong-shape endpoint observable; the multi-shape provider depends on it for the silent-degradation failure mode.
 - [Auto Model Selection](auto-model-selection.md) — vendor-side routing policy across a fungible pool; complementary to per-endpoint shape declaration on self-managed BYOK routes.
 - [Per-Model Harness Tuning](per-model-harness-tuning.md) — declarative model-keyed overrides for prompt/tool/middleware; the same per-target capability-declaration discipline applied inside the harness.

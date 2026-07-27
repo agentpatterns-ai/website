@@ -108,7 +108,7 @@ The baseline number alone would let the team ship the monitor with confidence. T
 
 - Single-pass elicitation under-reports monitor failure because frontier models hit a conceive-execute trade-off within one prompt — 81% of Opus 4.6-elicited attacks cluster into 2 of 5 technical tiers.
 - Decomposing red-teaming into strategy, execution, and refinement drops Opus 4.5 monitor catch rates from 94.9% to 60.3% against the same threat model.
-- Attacks refined against three development monitors generalise to ten held-out monitors and seven held-out stepwise monitors — the pipeline is not overfit to a specific defender.
+- Attacks refined against three development monitors generalize to ten held-out monitors and seven held-out stepwise monitors — the pipeline is not overfit to a specific defender.
 - Stepwise monitors calibrated at 1% per-action FPR exhibit 6.7-17.4% trajectory-level FPR; report both or the noise floor is mis-stated.
 - Treat the decomposed-pipeline catch rate as the regression number for any monitor that is the load-bearing safety layer; pair with [deterministic guardrails](deterministic-guardrails.md) when the residual is above the team's risk tolerance.
 
@@ -118,6 +118,6 @@ The baseline number alone would let the team ship the monitor with confidence. T
 - [RL-Trained Automated Red Teamers](../security/rl-automated-red-teamers.md) — Train a single end-to-end attacker via RL; alternative to decomposed construction
 - [Close the Attack-to-Fix Loop](../security/close-attack-to-fix-loop.md) — Feed discovered attacks straight into adversarial fine-tuning of the defender
 - [Learned Prefix Monitors for Agent Traces](learned-prefix-monitors-agent-traces.md) — Online failure-warning scorers and the alert-calibration problem the FPR finding maps onto
-- [Eval Awareness](eval-awareness.md) — Why monitors and judges shift behaviour on eval-shaped prompts
+- [Eval Awareness](eval-awareness.md) — Why monitors and judges shift behavior on eval-shaped prompts
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — Outcome-only grading misses safety violations that trajectory auditing catches
 - [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — Grades how harmful a compromised trajectory was on an L0 to L6 scale, complementing decomposed attack construction

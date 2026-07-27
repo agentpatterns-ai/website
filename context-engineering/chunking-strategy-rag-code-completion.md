@@ -78,7 +78,7 @@ The controlled study's finding is qualified by task shape and repository structu
 
 - Function-based chunking is dominated by every other strategy on line-level code completion benchmarks (3.57-5.64 pp gap on RepoEval) — the most "natural" code unit is the worst chunking choice for this task ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)).
 - Sliding Window and cAST sit on the cost-quality Pareto frontier; Declaration is statistically tied with both.
-- Cross-file context length doubling delivers up to 4.2 pp — a larger gain than choosing among the non-function strategies. Optimise context length before chunking strategy.
+- Cross-file context length doubling delivers up to 4.2 pp — a larger gain than choosing among the non-function strategies. Optimize context length before chunking strategy.
 - Chunk size has a non-monotonic effect; tune by retriever, not by intuition.
 - The default inverts for whole-function generation tasks and parser-incomplete polyglot repos.
 

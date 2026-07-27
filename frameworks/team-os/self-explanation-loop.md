@@ -64,7 +64,7 @@ The canonical artifact is Stulberg's "why is this a YAML file?" moment. She has 
 ## Key Takeaways
 
 - The loop asks the agent to justify structural choices so the user builds the mental model to curate them — the artifact is the explanation, not the code.
-- Lead with caveats. IOED amplification, post-hoc rationalisation, and the performance/learning gap are documented failure modes of LLM-mediated self-explanation.
+- Lead with caveats. IOED amplification, post-hoc rationalization, and the performance/learning gap are documented failure modes of LLM-mediated self-explanation.
 - The escalation prompt — *"2–3 alternatives and when would each win?"* — is the one prescriptive upgrade over a bare "why?", because tradeoff surfaces are harder to confabulate.
 - Scope to structural and tooling decisions the user will curate long-term, not every agent output.
 - Verify with two checks: can the user predict the losing alternative, and can they defend the decision to a teammate a week later? Without both, the loop terminates in fluent agreement.
@@ -72,7 +72,7 @@ The canonical artifact is Stulberg's "why is this a YAML file?" moment. She has 
 ## Related
 
 - [Team OS](index.md) — the framework this page composes into
-- [Deliberate AI-assisted learning](../../human/deliberate-ai-learning.md) — the general active-learning frame this page specialises
+- [Deliberate AI-assisted learning](../../human/deliberate-ai-learning.md) — the general active-learning frame this page specializes
 - [Strategy over code generation](../../human/strategy-over-code-generation.md) — why the curator's leverage lives above the output
 - [Critical instruction repetition](../../instructions/critical-instruction-repetition.md) — the complementary instruction-side mechanism for retention
 - [Plan mode for knowledge artifacts](plan-mode-knowledge-artifacts.md) — the sibling pattern that gates *production*; this one gates *acceptance*

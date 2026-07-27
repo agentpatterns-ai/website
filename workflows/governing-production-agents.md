@@ -27,7 +27,7 @@ This is a way to think about governance, not a product setting. It differs from 
 
 Agents are becoming production infrastructure: they answer customers, write and deploy code, and act across business systems. As their autonomy grows, the question is how to apply policy to every interaction without slowing adoption ([LangChain](https://www.langchain.com/blog/building-governed-agents-a-framework-for-cost-control-and-compliance)).
 
-Per-incident controls fail here because agent behavior is unbounded. Spend has no natural ceiling — one request can cascade into hundreds of calls, and a retry loop can burn thousands of dollars overnight before anyone notices ([Finout: Agentic AI Cost Governance](https://www.finout.io/blog/agentic-ai-cost-governance-controlling-spend-before-it-controls-you)). Finout, citing Gartner, reports a forecast that more than 40% of agentic AI projects will be cancelled by 2027, with escalating cost and weak controls among the drivers. Designing governance as a system means the next unplanned behavior is already covered.
+Per-incident controls fail here because agent behavior is unbounded. Spend has no natural ceiling — one request can cascade into hundreds of calls, and a retry loop can burn thousands of dollars overnight before anyone notices ([Finout: Agentic AI Cost Governance](https://www.finout.io/blog/agentic-ai-cost-governance-controlling-spend-before-it-controls-you)). Finout, citing Gartner, reports a forecast that more than 40% of agentic AI projects will be canceled by 2027, with escalating cost and weak controls among the drivers. Designing governance as a system means the next unplanned behavior is already covered.
 
 ## The three axes
 

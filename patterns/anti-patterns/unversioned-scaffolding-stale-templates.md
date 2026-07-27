@@ -99,5 +99,3 @@ The pinned entry point skips the engines-fallback walkback. The verification ste
 - [Pattern Replication Risk](pattern-replication-risk.md) — the compounding failure: once a stale template is on disk, the agent reproduces its deprecated shapes elsewhere.
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — broader framing: every generator output crosses the agent's read boundary as authoritative content unless something checks it.
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) — when scaffold output is copied into agent configuration without understanding, the resolver bug becomes load-bearing across sessions.
-</content>
-</invoke>

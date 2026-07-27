@@ -27,7 +27,7 @@ Related lesson: [Where You Stand](https://learn.agentpatterns.ai/workflows/where
 
 Every human approval gate in an agent pipeline has two costs: latency (the agent waits) and friction (the human stops their work). Place gates at the wrong points and automation runs slower than doing the work by hand — this is the misplacement the [risk-based shipping](../verification/risk-based-shipping.md) matrix exists to prevent. Place no gates at all and the first agent error to reach production becomes a support incident.
 
-Aim for gate placement that captures real risk without cancelling the value of automation.
+Aim for gate placement that captures real risk without canceling the value of automation.
 
 ## Placement heuristic
 

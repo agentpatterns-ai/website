@@ -115,7 +115,7 @@ The deletion of `auth-credentials.bak` now requires a separate consent event the
 - The mechanism is pattern-matching on consent declarations, not scope inference — stripping the declaration raises overeager rates by 11.9–17.2 percentage points across models ([Qu et al., 2026](https://arxiv.org/abs/2605.18583)).
 - Classifier-based gating reduces but does not eliminate the failure: Anthropic's Auto Mode leaves 17% of real overeager actions undetected ([Anthropic Engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
 - Choose the framework before you tune the model when the agent has write access to native state, real credentials, or shared remote resources.
-- A hermetic sandbox or deterministic narrow allowlist neutralises the framework distinction — for those workloads, contain blast radius and accept the rate.
+- A hermetic sandbox or deterministic narrow allowlist neutralizes the framework distinction — for those workloads, contain blast radius and accept the rate.
 
 ## Related
 

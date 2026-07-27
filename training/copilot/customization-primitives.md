@@ -218,7 +218,7 @@ Markdown files in `.github/prompts/` that define reusable prompt templates. Each
 
 ### Used for
 
-Standardising how the team asks Copilot for specific task types. Encodes the "how to ask" knowledge so consistent quality doesn't depend on who writes the prompt.
+Standardizing how the team asks Copilot for specific task types. Encodes the "how to ask" knowledge so consistent quality doesn't depend on who writes the prompt.
 
 ### When to use it
 
@@ -289,7 +289,7 @@ Giving the agent domain-specific expertise, constraints, and a consistent person
 
 ### When to use it
 
-The default Copilot behaviour produces consistent friction for a category of task, and you can articulate the better behaviour as a system prompt. Agents are for repeatable task types where the specialization pays off every time.
+The default Copilot behavior produces consistent friction for a category of task, and you can articulate the better behavior as a system prompt. Agents are for repeatable task types where the specialization pays off every time.
 
 ### When NOT to use it
 
@@ -670,7 +670,7 @@ Persistent knowledge that Copilot stores about your repository — coding conven
 
 ### Used for
 
-Reducing repetitive corrections. Instead of re-explaining your conventions each session, Copilot remembers them. Memory complements instructions with learned context that you haven't formalised into a file.
+Reducing repetitive corrections. Instead of re-explaining your conventions each session, Copilot remembers them. Memory complements instructions with learned context that you haven't formalized into a file.
 
 ### When to use it
 
@@ -734,7 +734,7 @@ Curating the reference material that Copilot uses when answering questions. Inst
 ### When NOT to use it
 
 - Small repos where `#codebase` already surfaces the right context. The curation overhead isn't worth it.
-- Rules and constraints — those belong in instructions. Spaces are for *reference material*, not *behavioural rules*.
+- Rules and constraints — those belong in instructions. Spaces are for *reference material*, not *behavioral rules*.
 - Sensitive data you wouldn't want accessible via Copilot Chat — Space contents are available to anyone with access to the Space.
 
 ### How it works
@@ -811,7 +811,7 @@ Configured in: Organization or enterprise settings on GitHub.com. Manageable via
 |---------|-----------|-----|
 | Copilot keeps using the wrong test framework | Repository instructions | Universal rule, always applied |
 | Frontend and backend have different conventions | Path-specific instructions | Scoped to file patterns |
-| The team asks for code reviews inconsistently | Prompt file | Standardises the prompt for a repeatable task |
+| The team asks for code reviews inconsistently | Prompt file | Standardizes the prompt for a repeatable task |
 | Need a specialist for security reviews | Custom agent | Persona with tool/model constraints |
 | Changelog generation follows a 5-step procedure | Skill | Structured steps with template files |
 | The agent must never write to `/migrations/` | Hook (`preToolUse`) | Hard enforcement the agent can't override |
@@ -841,7 +841,7 @@ A repository that uses the full stack:
       SKILL.md                       ← 5-step changelog procedure with template
 ```
 
-Instructions provide baseline context. Path-specific instructions refine per directory. The prompt file standardises a recurring ask. Custom agents specialise Copilot for task categories. The hook enforces a hard constraint. The skill packages a procedure. MCP servers (configured in settings, not in `.github/`) connect external tools. Memory fills gaps the instructions don't cover yet.
+Instructions provide baseline context. Path-specific instructions refine per directory. The prompt file standardizes a recurring ask. Custom agents specialize Copilot for task categories. The hook enforces a hard constraint. The skill packages a procedure. MCP servers (configured in settings, not in `.github/`) connect external tools. Memory fills gaps the instructions don't cover yet.
 
 ---
 

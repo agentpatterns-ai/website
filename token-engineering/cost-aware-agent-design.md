@@ -8,7 +8,7 @@ tags:
   - source:opendev-paper
   - long-form
   - tool-agnostic
-last_reviewed: 2026-06-30
+last_reviewed: 2026-07-28
 maturity: established
 ---
 
@@ -74,19 +74,24 @@ Complexity routing decides which tier to use. Role routing decides which capabil
 
 Provider abstraction separates role assignment from model identity, so you can swap providers without touching agent code ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)). Clients initialize lazily — only the models a session uses — and capabilities are cached locally with TTL refresh for offline startup.
 
-## Premium request economics
+## Token economics in GitHub Copilot
 
-In GitHub Copilot, [premium request multipliers](https://docs.github.com/en/copilot/concepts/billing/copilot-requests) make model choice a direct economic decision:
+On 2026-06-01 GitHub replaced premium requests with GitHub AI Credits: one credit is $0.01, and an interaction bills on the model's input, cached-input, and output tokens at that model's published rates ([GitHub — Copilot is moving to usage-based billing](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/), [GitHub Docs — models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)). The multipliers and per-seat request quotas of the [retired request-based model](https://docs.github.com/en/copilot/concepts/billing/copilot-requests) no longer apply ([GitHub Docs — what changed with billing](https://docs.github.com/en/copilot/reference/copilot-billing/request-based-billing-legacy/what-changed-with-billing)).
 
-| Model Tier | Examples | Multiplier |
-|-----------|----------|------------|
-| Budget | Claude Haiku 4.5, Grok Code Fast 1 | 0.25x–0.33x |
-| Included | GPT-5 mini, GPT-4.1, GPT-4o | 0x (no premium cost) |
-| Standard | Claude Sonnet 4/4.5/4.6, Gemini 2.5 Pro | 1x |
-| Premium | Claude Opus 4.5/4.6 | 3x |
-| Ultra | Claude Opus 4.6 (fast) | 30x |
+Copilot rates, USD per million tokens ([GitHub Docs — models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)):
 
-Using a 1x model for tasks that a 0.33x model handles just as well spends three times the premium request budget for no quality gain. GitHub Copilot's Auto mode gives a [10% multiplier discount](https://docs.github.com/en/copilot/concepts/billing/copilot-requests) and lets you override the selected model at any time ([GitHub Changelog: Auto Model Selection](https://github.blog/changelog/2025-11-11-auto-model-selection-for-copilot-in-visual-studio-in-public-preview/)).
+| Model | Input | Cached Input | Output |
+|-------|-------|--------------|--------|
+| GPT-5 mini | $0.25 | $0.025 | $2.00 |
+| Claude Haiku 4.5 | $1.00 | $0.10 | $5.00 |
+| Gemini 2.5 Pro | $1.25 | $0.125 | $10.00 |
+| Claude Sonnet 5 | $2.00 | $0.20 | $10.00 |
+| Claude Opus 5 | $5.00 | $0.50 | $25.00 |
+| GPT-5.5 | $5.00 | $0.50 | $30.00 |
+
+Tier still drives cost — Sonnet 5 bills twice Haiku 4.5 per token, Opus 5 five times — but tier is now one term in a product rather than a fixed charge per request. A verbose session on a cheap model can outspend a compact one on an expensive model, so token volume belongs in the routing calculation alongside tier. Cached input bills at a tenth of fresh input on every Claude model listed, which makes a stable prompt prefix worth as much as a tier downgrade. Code completions and next edit suggestions consume no credits and stay unlimited on paid plans ([GitHub Docs — models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)), so this decision applies to chat and agent work only.
+
+Included credits are denominated at the seat price — Copilot Business is $19 per user per month for 1,900 credits per user, promotionally 3,000 through 2026-09-01 — so a paid seat is a floor on spend, not a discount on token rates. Organization credits pool at the billing entity and reset unused at the start of each month ([GitHub Docs — usage-based billing for organizations and enterprises](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises)). Auto model selection gives a 10% discount on model costs on individual plans and lets you override the selected model at any time ([GitHub Docs — usage-based billing for individuals](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-individuals), [GitHub Changelog: Auto Model Selection](https://github.blog/changelog/2025-11-11-auto-model-selection-for-copilot-in-visual-studio-in-public-preview/)).
 
 ## Model deprecation awareness
 
@@ -186,5 +191,6 @@ Complexity routing decides which model tier handles a task (fast, balanced, powe
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../patterns/agent-design/cognitive-reasoning-execution-separation.md) — role split that complements tier routing
 - [Claude Code Sub-Agents](../tools/claude/sub-agents.md) — per-agent model selection mechanic
 - [Token-Efficient Tool Design](token-efficient-tool-design.md) — pair tier routing with lean tool surfaces
+- [Copilot vs Claude Billing Semantics](../human/copilot-vs-claude-billing-semantics.md) — AI credits, seat-included credits, per-model token rates, and budget controls compared
 - [Minimum-Sufficient Control Ladder](../patterns/agent-design/minimum-sufficient-control-ladder.md) — orthogonal axis: this page escalates *model tier* by task complexity; the ladder escalates *control mechanism* by named failure mode
 - [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — the complementary lever: the orchestration layer sets token volume and effective price, model routing sets the tier

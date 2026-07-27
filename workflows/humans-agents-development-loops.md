@@ -13,7 +13,7 @@ maturity: established
 
 # Humans and Agents in Software Engineering Loops
 
-> Position humans to manage the loop, not inspect every artefact — throughput and quality compound when humans engineer the harness rather than gate outputs.
+> Position humans to manage the loop, not inspect every artifact — throughput and quality compound when humans engineer the harness rather than gate outputs.
 
 Learn it hands-on: [Where You Stand](https://learn.agentpatterns.ai/workflows/where-you-stand/) — guided lesson with quizzes.
 
@@ -116,11 +116,11 @@ The signal to watch: if harness maintenance is consuming more human attention th
 
 ## Key Takeaways
 
-- Software delivery nests two loops: the why loop (idea → working software, human-owned) and the how loop (artefacts → working software, increasingly agent-owned)
+- Software delivery nests two loops: the why loop (idea → working software, human-owned) and the how loop (artifacts → working software, increasingly agent-owned)
 - The how loop itself nests: feature delivery wraps story breakdown wraps code generation
 - Three human positioning modes exist: outside (delegate the how loop), in (gate each step), on (engineer the harness)
 - "In the loop" scales poorly: agent throughput exceeds human review capacity; use gates only for irreversible or high-impact steps
-- "On the loop" compounds quality: each harness improvement applies to every future agent run, not just the current artefact
+- "On the loop" compounds quality: each harness improvement applies to every future agent run, not just the current artifact
 - Harness investment inverts when the scaffolding pre-computes the agent's answer space — encode constraints, not decisions
 - The [agentic flywheel](../patterns/agent-design/agentic-flywheel.md) extends "on the loop" by having agents propose harness improvements — the end state is a system that improves itself within human-defined bounds
 

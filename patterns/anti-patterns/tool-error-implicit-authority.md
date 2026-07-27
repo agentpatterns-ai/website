@@ -109,6 +109,6 @@ The anti-pattern label is over-broad in five cases:
 
 - [Tool-Invocation Attack Surface in Coding Agents](../../security/tool-invocation-attack-surface.md) — broader argument-generation and return-channel injection surface; error-path injection is the error-frame slice of the same threat family.
 - [Cognitive Poisoning: Untrusted Tool Feedback as a Trajectory Attack](../../security/cognitive-poisoning-tool-feedback.md) — multi-round trajectory variant where benign-looking responses condition the agent for a final harmful action; complements the single-frame VATS attack.
-- [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](../../security/authority-confusion-untrusted-context.md) — dispatch-layer primitive that makes error-stream content informational only, never authorising.
-- [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md) — the broader anti-pattern that "filter tool output but not tool errors" exemplifies.
+- [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](../../security/authority-confusion-untrusted-context.md) — dispatch-layer primitive that makes error-stream content informational only, never authorizing.
+- [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md) — the broader anti-pattern that "filter tool output but not tool errors" exemplifies.
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — developer mental-model failure that error streams inherit when treated as system diagnostics rather than artifacts.

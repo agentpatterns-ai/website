@@ -76,7 +76,7 @@ Elastic orchestration suits search agents, not short coding sessions.
 
 - [Context Compression Strategies](context-compression-strategies.md) — periodic tiered compaction. Elastic orchestration is per-step with multiple operations.
 - [Turn-Level Context Decisions](turn-level-context-decisions.md) — five-option decision framework for human-driven coding sessions (continue, rewind, clear, compact, delegate). Elastic orchestration is the autonomous-agent analogue.
-- [Observation Masking](observation-masking.md) — one operation (mask processed observations) generalised by Skip / Delete here.
+- [Observation Masking](observation-masking.md) — one operation (mask processed observations) generalized by Skip / Delete here.
 - [Lost in the Middle](lost-in-the-middle.md) — the attention-distribution result that motivates concentrating retention on currently-relevant tokens.
 
 ## Example

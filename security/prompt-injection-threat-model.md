@@ -124,4 +124,4 @@ The system prompt uses minimal permissions (no outbound POST capability) and req
 - [Goal Reframing: The Primary Exploitation Trigger for LLM Agents](goal-reframing-exploitation-trigger.md)
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
 - [URL Exfiltration Guard](url-exfiltration-guard.md)
-- [Design Agents with Defence-in-Depth Against Prompt Injection](../verification/layered-accuracy-defense.md)
+- [Design Agents with Defense-in-Depth Against Prompt Injection](../verification/layered-accuracy-defense.md)

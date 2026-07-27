@@ -1,7 +1,7 @@
 ---
 title: "PostToolUse Output Replacement: Hooks That Rewrite Tool Results"
 term: "PostToolUse Output Replacement"
-description: "A PostToolUse hook can replace what the model sees from any tool call via updatedToolOutput — redacting secrets, compressing output, normalising platforms, or injecting structured annotations before the model reasons over the result."
+description: "A PostToolUse hook can replace what the model sees from any tool call via updatedToolOutput — redacting secrets, compressing output, normalizing platforms, or injecting structured annotations before the model reasons over the result."
 tags:
   - tool-engineering
   - claude
@@ -12,7 +12,7 @@ maturity: adopted
 
 # PostToolUse Output Replacement: Hooks That Rewrite Tool Results
 
-> `PostToolUse` hooks replace the string the model sees from any tool call via `updatedToolOutput` — enabling secret redaction, output compression, and platform normalisation.
+> `PostToolUse` hooks replace the string the model sees from any tool call via `updatedToolOutput` — enabling secret redaction, output compression, and platform normalization.
 
 ## The capability
 
@@ -136,7 +136,7 @@ Replacement is the sharpest mode of `PostToolUse` and the easiest to misuse. Fou
 
 - `hookSpecificOutput.updatedToolOutput` overwrites the model's view of any tool's output as of Claude Code v2.1.121; previously MCP-only.
 - The modified output is written to the transcript — the original output is not preserved anywhere.
-- Replace is the right mode for secret redaction, compression, normalisation, and structured envelopes; observe-only or `additionalContext` covers everything else.
+- Replace is the right mode for secret redaction, compression, normalization, and structured envelopes; observe-only or `additionalContext` covers everything else.
 - `updatedToolOutput`, `additionalContext`, and `decision: "block"` can be combined in a single hook response.
 - Concurrent hooks on the same matcher race — register at most one rewriting hook per tool.
 

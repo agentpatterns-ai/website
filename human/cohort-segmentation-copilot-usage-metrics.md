@@ -45,7 +45,7 @@ Each phase has a different intervention surface, which is the reason to break ad
 
 | Phase | Likely cause of stall | Intervention |
 |---|---|---|
-| 0 | Dormant licence, policy block, refusal | Triage before reclaiming — causes diverge ([AI Adoption Footprint](ai-adoption-footprint.md)) |
+| 0 | Dormant license, policy block, refusal | Triage before reclaiming — causes diverge ([AI Adoption Footprint](ai-adoption-footprint.md)) |
 | 1 | Has not crossed the agent-supervision skill gate | Pair sessions, agent-mode demos, low-stakes first tasks |
 | 2 | Single surface is enough for current work | Multi-surface onboarding only if work requires it |
 | 3 | Power user — retention question | Instrument outcomes, protect from churn, mine for patterns |
@@ -91,10 +91,8 @@ The 62% headline is consistent with this org and with a uniform-60%-medium-use o
 
 ## Related
 
-- [AI Adoption Footprint: The Segmented Shape of Engineering Orgs](ai-adoption-footprint.md) — the underlying segmented-distribution mechanism cohort segmentation operationalises.
+- [AI Adoption Footprint: The Segmented Shape of Engineering Orgs](ai-adoption-footprint.md) — the underlying segmented-distribution mechanism cohort segmentation operationalizes.
 - [Agent Headcount as a Vanity Metric](../patterns/anti-patterns/agent-headcount-vanity-metric.md) — the Goodhart failure mode Phase 3 will exhibit if treated as a target.
 - [The Productivity-Experience Paradox in AI-Assisted Development](productivity-experience-paradox.md) — why depth-of-use can rise while developer experience and outcomes diverge.
 - [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md) — the other side of Copilot-specific instrumentation; cost telemetry that pairs with the cohort distribution.
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — the rollout that these adoption-phase cohorts instrument: seed adoption socially, then track retention as a separate number.
-</content>
-</invoke>

@@ -4,12 +4,12 @@ description: "Complete capability map across VS Code, GitHub.com, CLI, coding ag
 tags:
   - training
   - copilot
-last_reviewed: 2026-05-27
+last_reviewed: 2026-07-28
 ---
 
 # GitHub Copilot: Platform Surface Map
 
-> GitHub Copilot runs across five distinct surfaces — VS Code, GitHub.com, CLI, coding agent, and mobile — each with different environments, trade-offs, and capabilities. A layered customization stack (instructions, agents, skills, hooks, Spaces, memory) extends behaviour across all of them.
+> GitHub Copilot runs across five distinct surfaces — VS Code, GitHub.com, CLI, coding agent, and mobile — each with different environments, trade-offs, and capabilities. A layered customization stack (instructions, agents, skills, hooks, Spaces, memory) extends behavior across all of them.
 
 Copilot's surfaces differ in latency, autonomy, context access, and control model. Choosing the wrong surface is the most common cause of friction. This reference maps every surface and customization primitive so you can match each task to the right environment.
 
@@ -48,7 +48,7 @@ When to use it: You know what you want to write — you just want to type less. 
 
 When NOT to use it: You need to understand a codebase, make cross-file changes, or the suggestion requires broader context than the current file. Completions are contextually shallow.
 
-How to use it: Nothing to configure for basics. Type and `Tab`. Tune behaviour:
+How to use it: Nothing to configure for basics. Type and `Tab`. Tune behavior:
 
 ```json
 // settings.json
@@ -183,7 +183,7 @@ When to use it: You want to stay in VS Code with full visibility and control. Go
 
 When NOT to use it: You want to hand off and not supervise. For async delegated work, the Copilot coding agent on GitHub is better — it runs in an isolated sandbox without occupying your machine.
 
-How to use it: Select **Agent** from the mode dropdown. The agent has access to file read/write tools, the terminal, and MCP server tools. You approve tool use, or enable auto-approve for trusted tasks. Each prompt counts as one premium request (multiplied by the model's multiplier).
+How to use it: Select **Agent** from the mode dropdown. The agent has access to file read/write tools, the terminal, and MCP server tools. You approve tool use, or enable auto-approve for trusted tasks. Each prompt bills in AI credits — one credit is $0.01 — against the input, cached-input, and output tokens it consumes at the selected model's published rate ([GitHub Docs: models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)).
 
 Tools available:
 
@@ -422,7 +422,7 @@ Available models: Auto (default) plus models from Anthropic (Claude Haiku 4.5, S
 
 Third-party coding agents: In addition to the Copilot coding agent, GitHub hosts third-party agents (Anthropic Claude, OpenAI Codex) that can be selected when assigning tasks. These produce PRs the same way, but use their own models and tool stacks.
 
-BYOK (Bring Your Own Key): Enterprise and Business plans can configure custom model providers (Anthropic, OpenAI, xAI, and Microsoft Foundry) so Copilot uses your own API keys and model access. Usage is billed directly by the provider and does not count against GitHub Copilot request quotas. Public preview.
+BYOK (Bring Your Own Key): Enterprise and Business plans can configure custom model providers (Anthropic, OpenAI, xAI, and Microsoft Foundry) so Copilot uses your own API keys and model access. Usage is billed directly by the provider. Public preview.
 
 MCP integration: Extend the agent's capabilities with MCP servers configured in **Settings > Code & automation > Copilot > Coding agent** as JSON. Supports `local`, `stdio`, `http`, and `sse` transport types — useful for connecting to Sentry, Notion, Jira, Azure DevOps, etc. Only tool calls are supported (not MCP resources or prompts).
 
@@ -441,7 +441,7 @@ Constraints to know:
 
 ## The Customization Stack
 
-These mechanisms let you extend and constrain Copilot behaviour across all surfaces. They compose — you can use all simultaneously.
+These mechanisms let you extend and constrain Copilot behavior across all surfaces. They compose — you can use all simultaneously.
 
 ```
 .github/
@@ -534,7 +534,7 @@ The `applyTo` field supports standard glob patterns (`*`, `**`, comma-separated)
 
 What it is: [Reusable prompt templates](../../instructions/prompt-file-libraries.md) with embedded file references. Available in VS Code, Visual Studio, and JetBrains.
 
-Used for: Standardising how the team asks Copilot for specific tasks — ensures consistent results across developers.
+Used for: Standardizing how the team asks Copilot for specific tasks — ensures consistent results across developers.
 
 When to use it: A task is repeated often by multiple team members and the prompt matters for quality. Encodes the "how to ask" knowledge in a `.prompt.md` file.
 
@@ -560,7 +560,7 @@ What it is: Markdown files with YAML frontmatter that define specialized agent p
 
 Used for: Giving the agent domain-specific expertise or constraints. A `docs-agent` that knows your documentation style. A `security-reviewer` that checks for a specific threat model. A `test-writer` that follows your coverage conventions.
 
-When to use it: When the default Copilot behaviour produces consistent friction for a category of task — and you can articulate the better behaviour as a prompt.
+When to use it: When the default Copilot behavior produces consistent friction for a category of task — and you can articulate the better behavior as a prompt.
 
 When NOT to use it: Don't create an agent for a one-off task. Agents are for repeatable task types where the specialization pays off every time.
 
@@ -723,7 +723,7 @@ What it is: Persistent knowledge that Copilot stores about your repository — c
 
 Used for: Reducing repetitive explanations. Instead of re-describing your conventions each session, Copilot remembers them. Complements custom instructions with learned context.
 
-When to use it: When you find yourself repeatedly correcting Copilot about the same repo-specific details that aren't worth formalising in the instructions file.
+When to use it: When you find yourself repeatedly correcting Copilot about the same repo-specific details that aren't worth formalizing in the instructions file.
 
 When NOT to use it: Don't rely on memory for critical rules — use custom instructions for anything that must always apply. Memory is best-effort context, not guaranteed enforcement.
 

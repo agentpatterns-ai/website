@@ -163,7 +163,7 @@ The `create_deep_agent(model=...)` call site is unchanged. Switching `model="ope
 
 ## Key Takeaways
 
-- The same harness produces measurably different behaviour on different backing models — LangChain documented 10-20 point tau2-bench deltas from profile work alone ([LangChain](https://blog.langchain.com/tuning-deep-agents-different-models)).
+- The same harness produces measurably different behavior on different backing models — LangChain documented 10-20 point tau2-bench deltas from profile work alone ([LangChain](https://blog.langchain.com/tuning-deep-agents-different-models)).
 - The override surface is system prompt, tool inclusion and naming, tool descriptions, middleware selection, and subagent configuration. Structural mechanisms (sandboxing, permissions, observability) port cleanly and stay shared.
 - Express deltas as declarative model-keyed overrides so they version, compose, and remove. Avoid `if model == ...` branches through the agent loop.
 - Profile work pays off only with a representative eval suite. Without measurement, per-model tuning is unmeasured prompt churn.

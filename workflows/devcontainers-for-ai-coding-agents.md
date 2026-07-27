@@ -108,7 +108,7 @@ The reference container with the firewall is materially heavier — it requires 
 - The two official paths solve different problems: Claude Code's reference container delivers isolation, Copilot CLI's Feature delivers installation
 - The egress-allowlist firewall (`iptables` default `DROP` + curated ipset) is what makes Claude Code's relaxed in-container permissions defensible — without it, `--dangerously-skip-permissions` is not safe
 - Copilot CLI is preinstalled in the default Codespaces image, so the install-only path is zero-config in Codespaces
-- Anthropic explicitly warns the container does not prevent in-container credential exfiltration — treat the firewall as defence-in-depth, not a perimeter
+- Anthropic explicitly warns the container does not prevent in-container credential exfiltration — treat the firewall as defense-in-depth, not a perimeter
 - Devcontainer beats trial-and-repair setup; it does not beat per-worktree VMs for multi-agent fan-out on one repo
 - `.devcontainer/` writes are execution-escalations — gate them like other privileged edits
 

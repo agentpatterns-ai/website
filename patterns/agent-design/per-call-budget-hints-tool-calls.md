@@ -135,5 +135,3 @@ On Opus 4.7, the equivalent is `thinking: {type: "adaptive"}` with `effort: "xhi
 - [Token-Efficient Tool Design: Tools That Don't Eat Your Context](../../token-engineering/token-efficient-tool-design.md) — the design-time counterpart on the tool-author side.
 - [Effort-Aware Hooks: Reading the Reasoning Tier](../../tool-engineering/effort-aware-hooks.md) — hook-side read of the tier the caller set.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the broader routing framing the hint slots into.
-</content>
-</invoke>

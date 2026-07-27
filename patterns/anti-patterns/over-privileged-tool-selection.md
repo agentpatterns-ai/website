@@ -86,5 +86,5 @@ The pattern is load-bearing when the deployment uses a mid-tier or open-weight m
 - [Permission Framework Over Model](../../security/permission-framework-over-model.md) — the constructive complement: privilege decisions belong outside the model.
 - [Trusting Tool Error Messages as Implicit Authority (Error-Path Injection)](tool-error-implicit-authority.md) — the corrective-reasoning mechanism that amplifies escalation after transient failures.
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — adjacent failure: relying on prompt rules to enforce tool boundaries rather than harness-level deny rules.
-- [Action-Selector Pattern](../../security/action-selector-pattern.md) — architectural defence that eliminates the selection surface where the catalog allows it.
+- [Action-Selector Pattern](../../security/action-selector-pattern.md) — architectural defense that eliminates the selection surface where the catalog allows it.
 - [Entity Binding Failures in Tool-Augmented Agents](entity-binding-failures.md) — the sibling right-tool failure: correct privilege, wrong entity the tool acts on.

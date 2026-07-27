@@ -1,7 +1,7 @@
 ---
 title: "Deterministic Orchestration for Structured Modernization"
 term: "Deterministic Orchestration"
-description: "When a modernization workflow has a stable shape, encoding orchestration in code beats LLM-controlled execution — comparable accuracy at up to 3.5x lower token cost and tighter worst-case behaviour."
+description: "When a modernization workflow has a stable shape, encoding orchestration in code beats LLM-controlled execution — comparable accuracy at up to 3.5x lower token cost and tighter worst-case behavior."
 tags:
   - agent-design
   - workflows

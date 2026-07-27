@@ -124,7 +124,7 @@ The "after" configuration trades about 2 accuracy points (only at medium scale; 
 - LogicalRAG moves retrieval precision from the index to the query author: a frontier LLM emits AND/OR/NOT/field-scoped queries against a plain inverted index ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
 - The pattern matches an agentic hybrid baseline at KILT-scale Wikipedia (0.717 vs. 0.716) and trails it on medium-scale multi-hop QA (0.784 vs. 0.807); the win is cost (41× faster indexing) and hallucination rate (0.083 vs. 0.128), not raw accuracy ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
 - The Boolean "no match" gives a sharper unanswerable signal than a low cosine score, which is why hallucination on answer-unavailable queries drops materially ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
-- Weaker generators cannot author useful Boolean decompositions — Search-R1 + BM25 collapses to 3.86% on BrowseComp-Plus while a frontier-agent + BM25 reaches 83.1% ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848); [Chen et al., 2025](https://arxiv.org/abs/2508.06600)). The pattern is a precision-cost migration, not a free optimisation.
+- Weaker generators cannot author useful Boolean decompositions — Search-R1 + BM25 collapses to 3.86% on BrowseComp-Plus while a frontier-agent + BM25 reaches 83.1% ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848); [Chen et al., 2025](https://arxiv.org/abs/2508.06600)). The pattern is a precision-cost migration, not a free optimization.
 - The pattern composes with the broader retrieval-side-dominance trend: retriever choice exerts more influence than generator choice for SE-task RAG when corpora have high lexical overlap ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
 
 ## Related

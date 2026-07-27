@@ -103,7 +103,7 @@ For projects already invested in framework-native multi-agent code, the portabil
 
 - Swarm Skills extends [Agent Skills](agent-skills-standard.md) with three frontmatter fields (`kind`, `teammate_mode`, `roles[]`) plus a `roles/` + `workflow.md` + `bind.md` + `evolutions.json` layout — no new DSL.
 - A CREATE / USE / PATCH lifecycle distills multi-agent traces into reusable skills and appends Evolution Records on friction signals.
-- Scoring is `S = w_E*E + w_U*U + w_F*F` with Bayesian-smoothed effectiveness, decaying utilisation, and exponential-half-life freshness; governance fires SIMPLIFY, REBUILD, or ROLLBACK above 10 records.
+- Scoring is `S = w_E*E + w_U*U + w_F*F` with Bayesian-smoothed effectiveness, decaying utilization, and exponential-half-life freshness; governance fires SIMPLIFY, REBUILD, or ROLLBACK above 10 records.
 - The spec is a May 2026 proposal — no independent benchmarks of the self-evolution loop, no conformance tests on hosts other than JiuwenSwarm, and the authors flag "first-run lock-in" as an open failure mode.
 
 ## Related

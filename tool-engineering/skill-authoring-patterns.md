@@ -123,7 +123,7 @@ Decomposing a monolithic skill into smaller composed units has a research-backed
 
 ## CLI-first design (recommended for executable skills)
 
-Skills with non-trivial executable logic should ship a dedicated CLI entry point under `<skill-name>/scripts/<skill-name>.{sh,py}` rather than embedding bash or Python inline in `SKILL.md` ([nibzard catalogue: CLI-First Skill Design](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/cli-first-skill-design.md)). A single CLI interface serves humans (debugging, testing, composition with Unix tools) and agents (deterministic invocation, meaningful exit codes) at the same time.
+Skills with non-trivial executable logic should ship a dedicated CLI entry point under `<skill-name>/scripts/<skill-name>.{sh,py}` rather than embedding bash or Python inline in `SKILL.md` ([nibzard catalog: CLI-First Skill Design](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/cli-first-skill-design.md)). A single CLI interface serves humans (debugging, testing, composition with Unix tools) and agents (deterministic invocation, meaningful exit codes) at the same time.
 
 Inline-shell skills have compounding costs: logic cannot be tested independently, agents re-parse the shell on every invocation, humans debugging must manually extract commands from markdown, and composition requires reassembly.
 
@@ -239,7 +239,7 @@ Asking the agent "When would you use the linear-issue-manager skill?" after savi
 ## Key Takeaways
 
 - The `description` field is the load gate — write it as `[what] + [when] + [capabilities]` with trigger phrases users would actually say, and add negative triggers to prevent over-firing.
-- Write instructions as a delta from baseline model behaviour: only team conventions, domain rules, and edge cases the model would otherwise get wrong.
+- Write instructions as a delta from baseline model behavior: only team conventions, domain rules, and edge cases the model would otherwise get wrong.
 - Default new skills to CLI-first — script-backed with the `SKILL.md` as a thin wrapper — so logic is testable, debuggable, and composable; reserve inline-shell for trivial one-liners and pure-reference for templates and taxonomies.
 - A `## Gotchas` section is the highest-signal content: build it incrementally from real failures, naming both the mistake and the correct alternative.
 - Test along three axes — triggering, functional correctness, and performance (tool calls, messages, tokens with vs. without the skill) — and use a `PreToolUse` hook to log invocation frequency for under- or over-triggering signal.

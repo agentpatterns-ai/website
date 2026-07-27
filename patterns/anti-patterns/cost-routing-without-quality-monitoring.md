@@ -24,7 +24,7 @@ The anti-pattern is not model routing — it is the *unmeasured cutover*. Pre-ro
 
 ## The Pattern
 
-A team trains a small classifier on historical queries with quality labels and puts it in front of the agent. Each request is labelled `simple` or `complex` from surface features and routed: cheap model for simple, capable model for complex. The offline holdout looks excellent — in [the Towards Data Science postmortem this idea is built on](https://towardsdatascience.com/we-built-a-routing-layer-to-cut-our-ai-costs-it-broke-the-product/), the original 5,000-query holdout showed "equivalent answer quality across 94 percent" of test queries, and post-rollout the inference bill dropped to ~40% of its previous level.
+A team trains a small classifier on historical queries with quality labels and puts it in front of the agent. Each request is labeled `simple` or `complex` from surface features and routed: cheap model for simple, capable model for complex. The offline holdout looks excellent — in [the Towards Data Science postmortem this idea is built on](https://towardsdatascience.com/we-built-a-routing-layer-to-cut-our-ai-costs-it-broke-the-product/), the original 5,000-query holdout showed "equivalent answer quality across 94 percent" of test queries, and post-rollout the inference bill dropped to ~40% of its previous level.
 
 The infrastructure dashboard is green. Spend is down ~60%, latency is unchanged, error rate is flat. The product team treats the routing change as shipped and successful.
 
@@ -55,11 +55,11 @@ The three-month detection lag is structural. Inference cost is a leading, well-i
 
 ## The Correct Alternatives
 
-Two structural changes turn cost-driven routing from this anti-pattern back into a normal optimisation.
+Two structural changes turn cost-driven routing from this anti-pattern back into a normal optimization.
 
 Per-tier observability before the cutover. Every quality signal — eval pass rate, satisfaction sample, regression suite — must carry a tier label end-to-end. Per the [TDS postmortem](https://towardsdatascience.com/we-built-a-routing-layer-to-cut-our-ai-costs-it-broke-the-product/), "every quality signal in the existing architecture must be split by routing tier, with the tier label propagated end-to-end through the instrumentation." Without this, no quantity of dashboards detects a tier-specific regression — the postmortem estimates the work at "perhaps three engineer-weeks" before launch, against months of attribution work after the fact.
 
-Uncertainty-routed cascade with calibrated confidence and shadow scoring. The postmortem's recommended inversion: every query starts at the cheap model. When the cheap model's calibrated confidence is high, the response goes back directly; below threshold, escalate to the capable model. This replaces a pre-generation classifier's guess about query difficulty with a post-generation signal from the model that actually answered. The [cascade-routing survey](https://arxiv.org/html/2603.04445v2) formalises the distinction: routing-by-classifier operates pre-generation with no output signal; cascade-by-uncertainty operates post-generation and conditions on the response. Calibration is mandatory — [UCCI](https://arxiv.org/html/2605.18796) succeeds because it calibrates token-level uncertainty into error probabilities rather than trusting raw self-reported confidence.
+Uncertainty-routed cascade with calibrated confidence and shadow scoring. The postmortem's recommended inversion: every query starts at the cheap model. When the cheap model's calibrated confidence is high, the response goes back directly; below threshold, escalate to the capable model. This replaces a pre-generation classifier's guess about query difficulty with a post-generation signal from the model that actually answered. The [cascade-routing survey](https://arxiv.org/html/2603.04445v2) formalizes the distinction: routing-by-classifier operates pre-generation with no output signal; cascade-by-uncertainty operates post-generation and conditions on the response. Calibration is mandatory — [UCCI](https://arxiv.org/html/2605.18796) succeeds because it calibrates token-level uncertainty into error probabilities rather than trusting raw self-reported confidence.
 
 Shadow scoring closes the loop: run the capable model on a small percentage of production traffic in parallel with the cheap model. The drift signal precedes customer-visible quality regression by weeks, which is the lead time needed to course-correct. Tracking the distribution of routing-confidence scores on live traffic against the training distribution gives an even earlier signal — confidence drift precedes quality drift, which precedes churn.
 
@@ -74,10 +74,10 @@ Not every routing setup has this failure mode. The anti-pattern applies most str
 - Fixed-distribution, benchmark-shaped workloads: when production traffic stays close to the classifier's training distribution, the published RouteLLM results — [up to 85% cost reduction on MT Bench at 95% of GPT-4 quality](https://www.lmsys.org/blog/2024-07-01-routellm/) — transfer cleanly. The failure described here is a long-tail and distribution-shift failure, not a routing failure.
 - No customer-side fallback path: if dissatisfied users have no escape hatch (no human support, no competitor switch), the cost of quality regressions stays on the watched budget. The hidden-cost-shift mechanism that gave the [postmortem team](https://towardsdatascience.com/we-built-a-routing-layer-to-cut-our-ai-costs-it-broke-the-product/) three months of false confidence does not operate.
 - Pre-merge eval gates with realistic distribution coverage: a 50–500-case eval suite that gates routing changes in CI, drawn from production traffic (not just curated holdout sets), catches large regressions before they ship. The expensive failure is the silent rollout, not the routing change itself.
-- Single-turn, low-stakes work where being wrong costs little: ad-hoc summarisation or classification where the cost of one wrong answer is bounded does not have the customer-retention amplification that turned $100K/month of savings into ~$500K/month of damage.
+- Single-turn, low-stakes work where being wrong costs little: ad-hoc summarization or classification where the cost of one wrong answer is bounded does not have the customer-retention amplification that turned $100K/month of savings into ~$500K/month of damage.
 - Cascade calibration is genuinely unavailable: small models in some domains lack any reliable uncertainty signal even after calibration. In that regime the cascade alternative collapses to "always call the capable model," and the right move is to abandon routing rather than route on uncalibrated confidence.
 
-Treating this anti-pattern as "don't ever route to cheaper models" inverts a well-studied production optimisation. The [Dynamic Model Routing and Cascading survey](https://arxiv.org/html/2603.04445v2) catalogues multiple production-grade routing systems that work; the [LMSYS RouteLLM benchmark](https://www.lmsys.org/blog/2024-07-01-routellm/) shows 85% cost reduction on MT Bench and 45% on MMLU without quality loss when routing is preference-data-trained on representative data. The failure is the unmeasured cutover, not the cutover itself.
+Treating this anti-pattern as "don't ever route to cheaper models" inverts a well-studied production optimization. The [Dynamic Model Routing and Cascading survey](https://arxiv.org/html/2603.04445v2) catalogs multiple production-grade routing systems that work; the [LMSYS RouteLLM benchmark](https://www.lmsys.org/blog/2024-07-01-routellm/) shows 85% cost reduction on MT Bench and 45% on MMLU without quality loss when routing is preference-data-trained on representative data. The failure is the unmeasured cutover, not the cutover itself.
 
 ## Example
 
@@ -118,7 +118,7 @@ The cheap model surfaces its own uncertainty; the tier label propagates through 
 
 - The failure is the unmeasured cutover, not routing — every quality signal must carry a tier label end-to-end before any cheap-model rollout.
 - Pre-routing classifiers use only surface features; cascades with calibrated post-generation uncertainty condition on the answer that was actually computed. The latter is the architecture that survives long-tail and distribution-shift production traffic.
-- Cost dashboards are leading and well-instrumented; customer retention is lagging. Optimising the leading metric and ignoring the lagging one buys months of false confidence followed by months of recovery.
+- Cost dashboards are leading and well-instrumented; customer retention is lagging. Optimizing the leading metric and ignoring the lagging one buys months of false confidence followed by months of recovery.
 
 ## Related
 

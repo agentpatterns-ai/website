@@ -133,7 +133,7 @@ The same query through inline context — pasting the node text into the prompt 
 - Oracle Poisoning is the data-path sibling of prompt injection: correct reasoning, corrupted premises.
 - L2 attacker sophistication is sufficient for 100% trust across nine models — well below "advanced persistent threat".
 - Tool-use delivery is the key risk multiplier; the same fact inline can produce 0% trust on the same model.
-- Directed queries maximise the attack; open-ended decomposition drops trust to 3-55%.
+- Directed queries maximize the attack; open-ended decomposition drops trust to 3-55%.
 - Read-only KG access is the only fully effective defense the paper measures. Everything else is partial and model-dependent.
 
 ## Related

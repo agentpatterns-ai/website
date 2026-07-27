@@ -102,6 +102,6 @@ jobs:
 - [Chain-of-Thought Robustness in Code Generation](../../verification/cot-robustness-code-generation.md) — Why CoT helps with prompt fragility on the average case but does not close the adversarial gap.
 - [Constraint Degradation in AI Code Generation](../../instructions/constraint-degradation-code-generation.md) — Same substrate fragility expressed through constraint count instead of token-level perturbation.
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — Adjacent failure: relying on prompt rules to enforce tool boundaries instead of harness-level deny rules.
-- [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md) — Same single-control-surface mistake applied to injection defence.
+- [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md) — Same single-control-surface mistake applied to injection defense.
 - [Tool-Use Sim-to-Real Perturbation Taxonomy](../../verification/tool-use-sim-to-real-perturbation-taxonomy.md) — Perturbation framing for tool-use agents; the prompt-perturbation result is the code-generation analogue.
 - [Model Confidence as Security Verification](model-confidence-as-security-verification.md) — The output-side twin: the model's own confidence in its code is no more a security guarantee than the prompt was.

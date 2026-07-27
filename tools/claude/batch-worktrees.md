@@ -104,5 +104,3 @@ For tightly-coupled refactors, a single agent with `--worktree` isolation (no fa
 - [Agent Teams](agent-teams.md)
 - [Monitor Tool](monitor-tool.md)
 - [Session Scheduling](session-scheduling.md)
-</content>
-</invoke>

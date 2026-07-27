@@ -17,7 +17,7 @@ maturity: established
 
 # Large-Codebase Coding-Agent Failure Patterns (Sourcegraph Five)
 
-> Five repeatable failure shapes coding agents exhibit once a codebase passes roughly 400,000 lines — recognise each by its transcript signature before shipping the patch.
+> Five repeatable failure shapes coding agents exhibit once a codebase passes roughly 400,000 lines — recognize each by its transcript signature before shipping the patch.
 
 The Sourcegraph CodeScaleBench study scored 1,281 agent runs across 40+ open-source repositories in 9 languages and isolated five recurring failure patterns ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)). Each is a transcript signature a reviewer can spot before merge.
 
@@ -71,16 +71,16 @@ A reviewer who spots these signatures stops the PR. They either ask the agent to
 ## Key Takeaways
 
 - The five patterns — Lost in the Codebase, Wrong File / Wrong Symbol, Partial Completion, Tool Thrashing, Context Overflow — are sourced from 1,281 agent runs across 40+ repos and surface as observable transcript signatures ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)).
-- The catalogue applies above ~400K LOC and to discovery-bound, multi-file tasks. Below that, standard tools suffice.
-- The mechanism is shared: the agent's working set exceeds what context plus naive search can carry, so externalised indexing replaces failed implicit search.
+- The catalog applies above ~400K LOC and to discovery-bound, multi-file tasks. Below that, standard tools suffice.
+- The mechanism is shared: the agent's working set exceeds what context plus naive search can carry, so externalized indexing replaces failed implicit search.
 - Code intelligence on the recommended band delivered +0.259 reward delta, file recall 0.127 → 0.277, and F1@5 0.099 → 0.262 ([CodeScaleBench](https://sourcegraph.com/blog/codescalebench-testing-coding-agents-on-large-codebases-and-multi-repo-software-engineering-tasks)).
-- The semantic-retrieval remediation for Partial Completion is contested — Claude Code, Cursor, and Devin dropped vector-DB RAG in favour of agentic search ([SmartScope, 2026](https://smartscope.blog/en/ai-development/practices/rag-debate-agentic-search-code-exploration/)).
+- The semantic-retrieval remediation for Partial Completion is contested — Claude Code, Cursor, and Devin dropped vector-DB RAG in favor of agentic search ([SmartScope, 2026](https://smartscope.blog/en/ai-development/practices/rag-debate-agentic-search-code-exploration/)).
 - Use the patterns as a transcript-review checklist; treat the specific Sourcegraph stack as one remediation among several.
 
 ## Related
 
-- [Whole-Codebase Visibility as a Migration Prerequisite](../../workflows/whole-codebase-visibility-migration-prerequisite.md) — the upstream scoping check that decides whether a migration needs whole-codebase visibility infrastructure to prevent the Partial Completion entry in this catalogue.
-- [Five-Failure-Layers Diagnostic](../agent-design/five-failure-layers-diagnostic.md) — complementary layer-attribution ladder; this catalogue names behavioural symptoms, the diagnostic names the harness layer responsible.
+- [Whole-Codebase Visibility as a Migration Prerequisite](../../workflows/whole-codebase-visibility-migration-prerequisite.md) — the upstream scoping check that decides whether a migration needs whole-codebase visibility infrastructure to prevent the Partial Completion entry in this catalog.
+- [Five-Failure-Layers Diagnostic](../agent-design/five-failure-layers-diagnostic.md) — complementary layer-attribution ladder; this catalog names behavioral symptoms, the diagnostic names the harness layer responsible.
 - [Premature Completion](premature-completion.md) — verification-skip failure that overlaps with Partial Completion's transcript signature; root cause differs.
 - [The Infinite Context](infinite-context.md) — the deliberate version of Context Overflow; same attention-dilution mechanism, different trigger.
 - [Refactoring Runaway](refactoring-runaway.md) — adjacent multi-file failure where the agent does too much rather than too little.

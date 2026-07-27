@@ -112,7 +112,7 @@ Six weeks later, the on-call dashboard shows no silent-handler-failure incidents
 ## Key Takeaways
 
 - Three or more occurrences of the same review comment is the trigger — fewer is a hypothesis, not a pattern.
-- Categorise before encoding: style → linter, boundary → AST check, safety → [pre-completion checklist](../verification/pre-completion-checklists.md), spec → evaluator rubric. Wrong layer is a recurring-noise source.
+- Categorize before encoding: style → linter, boundary → AST check, safety → [pre-completion checklist](../verification/pre-completion-checklists.md), spec → evaluator rubric. Wrong layer is a recurring-noise source.
 - Remediation text is non-optional. A rule that says *what is wrong* without *what to do instead* relocates the bottleneck instead of removing it.
 - Hooks and mechanical checks are deterministic; CLAUDE.md instructions and review comments are advisory. Promotion converts advisory into enforced.
 - Pair promotion with retirement. Rules whose hit count trends to zero have done their job — delete them before priority saturation degrades the rest.

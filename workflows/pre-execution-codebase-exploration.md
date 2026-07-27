@@ -14,7 +14,7 @@ maturity: emerging
 
 # Pre-Execution Codebase Exploration
 
-> Invest in problem statement quality before launching an agent — a lightweight exploration phase that adds reproduction steps, expected behaviours, and targeted exploration hints improves resolution rates by 20% on SWE-bench Verified.
+> Invest in problem statement quality before launching an agent — a lightweight exploration phase that adds reproduction steps, expected behaviors, and targeted exploration hints improves resolution rates by 20% on SWE-bench Verified.
 
 Related lesson: [Plan Before Code](https://learn.agentpatterns.ai/workflows/plan-before-code/) — this concept features in a hands-on lesson with quizzes.
 
@@ -118,7 +118,7 @@ The enhanced version lets the agent go directly to `apply_coupon` and `Coupon.am
 ## Key Takeaways
 
 - Underspecified problem statements are a primary cause of agent failure — agents over-explore or loop without evolution.
-- A pre-execution phase adds reproduction steps, expected behaviours, and exploration hints before agent execution begins.
+- A pre-execution phase adds reproduction steps, expected behaviors, and exploration hints before agent execution begins.
 - The same principle applies in three modes: automated wrapper, interactive Plan Mode, and persistent CLAUDE.md documentation.
 - Pre-execution enhancement operates on top of existing agent scaffolds — no modification to the main agent is required.
 - 20% improvement in resolution rates on SWE-bench Verified; the gain is from [task framing](../fallacies/task-framing-irrelevance-fallacy.md) quality, not agent capability.
@@ -133,5 +133,3 @@ The enhanced version lets the agent go directly to `apply_coupon` and `Coupon.am
 - [Discovery-Only Refactor Pass: Surface Candidates Before Touching Code](discovery-only-refactor-pass.md)
 - [Context Priming](../context-engineering/context-priming.md)
 - [Session Initialization Ritual](../patterns/agent-design/session-initialization-ritual.md)
-</content>
-</invoke>

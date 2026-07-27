@@ -77,7 +77,7 @@ In several of these cases the cheaper alternative is per-agent observation maski
 - One persistent searcher deduplicates exploration and returns location references, attacking output volume at both the duplication and verbosity axes.
 - Reported result: ~25% lower per-episode GPU energy at equal SWE-Bench Verified performance.
 - The benefit is conditional — large repos, high overlap, output-dominated work; otherwise the searcher is overhead or a bottleneck.
-- It is the inverse of fan-out: fan-out isolates input context, the shared searcher centralises exploration to cut redundant output.
+- It is the inverse of fan-out: fan-out isolates input context, the shared searcher centralizes exploration to cut redundant output.
 
 ## Related
 

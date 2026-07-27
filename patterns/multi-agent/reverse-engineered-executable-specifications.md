@@ -16,7 +16,7 @@ maturity: emerging
 
 # Reverse-Engineered Executable Specifications for Agentic Program Repair
 
-> Instead of asking an agent to propose a patch directly, a specification-inference agent first derives executable Gherkin scenarios from the failing behaviour; a repair agent then generates the minimal edit that satisfies the inferred spec. The split narrows the ["Intent Gap"](../../verification/test-driven-intent-clarification.md) by making the target explicit before any code is written.
+> Instead of asking an agent to propose a patch directly, a specification-inference agent first derives executable Gherkin scenarios from the failing behavior; a repair agent then generates the minimal edit that satisfies the inferred spec. The split narrows the ["Intent Gap"](../../verification/test-driven-intent-clarification.md) by making the target explicit before any code is written.
 
 ## The pattern
 
@@ -96,7 +96,7 @@ The RQA step checks the scenarios against the [reference implementation](oracle-
 
 ## Key Takeaways
 
-- Decomposing APR into specification inference then constrained patching produces an inspectable intermediate artefact that direct-repair agents lack.
+- Decomposing APR into specification inference then constrained patching produces an inspectable intermediate artifact that direct-repair agents lack.
 - The mechanism — explicit contracts narrow the space of acceptable patches — is the same one that drives [test-driven intent clarification](../../verification/test-driven-intent-clarification.md), applied in the repair direction.
 - The RQA Loop's ground-truth oracle is the main portability constraint; benchmark results do not transfer to settings without one.
 - Defects4J numbers should be read with contamination caveats; treat the *pattern* as the contribution, not the percentage.

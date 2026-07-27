@@ -1,7 +1,7 @@
 ---
 title: "Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)"
 term: "Revocable Resource-and-Effect Capabilities"
-description: "Grant a coding agent a tool capability only for the subgoal that needs it and revoke it on closure — a reference monitor materialises expansions as epoch-bound handles and rejects stale replay before side effects."
+description: "Grant a coding agent a tool capability only for the subgoal that needs it and revoke it on closure — a reference monitor materializes expansions as epoch-bound handles and rejects stale replay before side effects."
 aliases:
   - PORTICO reference monitor
   - lingering authority defense
@@ -17,7 +17,7 @@ maturity: emerging
 
 # Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)
 
-> Materialise each subgoal-scoped capability as a revocable epoch-bound handle — closure removes it from the planner and stale replay is rejected.
+> Materialize each subgoal-scoped capability as a revocable epoch-bound handle — closure removes it from the planner and stale replay is rejected.
 
 ## When this recommendation applies
 
@@ -96,7 +96,7 @@ The mechanisms compose: value-level attenuation, hierarchy-level liveness, and s
 
 ## Key Takeaways
 
-- PORTICO addresses lingering authority — capabilities that remain exposed after the subgoal that justified them closes — by materialising every expansion as an opaque, epoch-bound handle and removing the handle from the planner's interface at closure.
+- PORTICO addresses lingering authority — capabilities that remain exposed after the subgoal that justified them closes — by materializing every expansion as an opaque, epoch-bound handle and removing the handle from the planner's interface at closure.
 - The reported security delta is large in its envelope: zero executed contract-forbidden effects, 10/10 post-closure reuses rejected versus 10/10 permitted by a non-revoking comparator on real repository layouts.
 - The envelope is narrow: mediated tools, sound typed catalog, hand-authored contracts, and subgoals long enough that replay is a real risk. Outside it, short-TTL transport credentials plus narrow task scope close the same gap with less complexity.
 - Closure predicates must evaluate against trusted state only — reading untrusted runtime context to decide whether a handle closes reintroduces the confused-deputy problem this page was meant to close.

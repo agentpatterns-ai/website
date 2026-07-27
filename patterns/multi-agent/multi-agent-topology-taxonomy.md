@@ -1,7 +1,7 @@
 ---
-title: "Multi-Agent Topology Taxonomy: Centralised, Decentralised"
+title: "Multi-Agent Topology Taxonomy: Centralized, Decentralized"
 term: "Multi-Agent Topology Taxonomy"
-description: "Coordination topology choice is a primary source of multi-agent failures; centralised, decentralised, and hybrid each carry distinct failure modes."
+description: "Coordination topology choice is a primary source of multi-agent failures; centralized, decentralized, and hybrid each carry distinct failure modes."
 aliases:
   - Coordination Topology
 tags:
@@ -12,14 +12,14 @@ last_reviewed: 2026-06-13
 maturity: established
 ---
 
-# Multi-Agent Topology Taxonomy: Centralised, Decentralised, and Hybrid
+# Multi-Agent Topology Taxonomy: Centralized, Decentralized, and Hybrid
 
-> Coordination topology choice is a primary source of multi-agent failures; centralised, decentralised, and hybrid each carry distinct failure modes.
+> Coordination topology choice is a primary source of multi-agent failures; centralized, decentralized, and hybrid each carry distinct failure modes.
 
 Learn it hands-on: [When Many Agents Beat One](https://learn.agentpatterns.ai/multi-agent/when-many-agents/) — guided lesson with quizzes.
 
 !!! info "Also known as"
-    Coordination Topology. Related but distinct: [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md) catalogs 16 finer-grained design patterns from a 94-paper literature review, while this page classifies systems at the coarser level of coordination topology — centralised, decentralised, or hybrid.
+    Coordination Topology. Related but distinct: [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md) catalogs 16 finer-grained design patterns from a 94-paper literature review, while this page classifies systems at the coarser level of coordination topology — centralized, decentralized, or hybrid.
 
 ## The three topologies
 
@@ -94,10 +94,10 @@ Context blindness — agents act without orientation in unfamiliar environments,
 
 | Task characteristic | Topology |
 |--------------------|----------|
-| Sequential dependencies, shared state | Centralised |
-| Independent subtasks, no shared state | Decentralised |
+| Sequential dependencies, shared state | Centralized |
+| Independent subtasks, no shared state | Decentralized |
 | Mixed: phased with intra-phase parallelism | Hybrid |
-| Unknown — start here | Centralised |
+| Unknown — start here | Centralized |
 
 Centralized is the default because its failure modes are deterministic. Decentralized topologies need shared-state primitives (file locks, [CRDTs](crdt-observation-driven-coordination.md)) that add implementation surface.
 
@@ -116,7 +116,7 @@ Once multi-agent is justified, the coordination-pattern choice is a separate dec
 | Pattern | Coordination | Routing | Best for | Watch out for |
 |---------|--------------|---------|----------|---------------|
 | [Sequential](../../context-engineering/prompt-chaining.md) (a.k.a. *prompt chaining*, *pipeline*) | Linear pipeline; each agent processes the previous agent's output | Deterministic, predefined order | Step-by-step refinement with clear stage dependencies | Failures in early stages propagate; no parallelism |
-| [Concurrent](fan-out-synthesis.md) (a.k.a. *fan-out / parallelisation*; see also [LLM Map-Reduce](llm-map-reduce.md)) | Parallel; agents work independently on the same input | Deterministic or dynamic agent selection | Independent analysis from multiple perspectives; latency-sensitive scenarios | Conflict resolution when results contradict; resource-intensive |
+| [Concurrent](fan-out-synthesis.md) (a.k.a. *fan-out / parallelization*; see also [LLM Map-Reduce](llm-map-reduce.md)) | Parallel; agents work independently on the same input | Deterministic or dynamic agent selection | Independent analysis from multiple perspectives; latency-sensitive scenarios | Conflict resolution when results contradict; resource-intensive |
 | [Group chat](opponent-processor-debate.md) (a.k.a. *debate*, *maker-checker*; see also [Evaluator-Optimizer](../agent-design/evaluator-optimizer.md)) | Conversational; agents contribute to a shared thread | Chat manager controls turn order | Consensus-building, brainstorming, iterative maker-checker validation | Conversation loops; hard to control beyond three agents |
 | [Handoff](agent-handoff-protocols.md) (a.k.a. *routing*, *triage*, *dispatch*) | Dynamic delegation; one active agent at a time | Agents decide when to transfer control | Tasks where the right specialist emerges during processing | Infinite handoff loops; unpredictable routing paths |
 | [Magentic](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns#magentic-orchestration) (a.k.a. *task-ledger orchestration*, *adaptive planning*; nearest in-site neighbour: [Orchestrator-Worker](orchestrator-worker.md)) | Plan-build-execute; manager agent builds and adapts a task ledger | Manager assigns and reorders tasks dynamically | Open-ended problems with no predetermined solution path | Slow to converge; stalls on ambiguous goals |
@@ -141,10 +141,10 @@ Hybrid — a coordinator routes contracts by type (NDA, MSA, SOW) to domain-spec
 
 ## Key Takeaways
 
-- Centralised orchestration fails via context saturation and single points of failure; decentralised fails via coordination storms and conflicting edits.
+- Centralized orchestration fails via context saturation and single points of failure; decentralized fails via coordination storms and conflicting edits.
 - Self-verification bias, doom loops, and context blindness are cross-topology failure modes requiring harness mitigations.
 - Claude Code enforces a topology constraint (no sub-agent spawning) that eliminates unbounded nesting.
-- Start with centralised; move to decentralised only when independent subtask structure is proven and shared-state primitives are in place.
+- Start with centralized; move to decentralized only when independent subtask structure is proven and shared-state primitives are in place.
 
 ## Related
 

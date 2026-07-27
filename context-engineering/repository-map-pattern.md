@@ -52,7 +52,7 @@ Tree-sitter parses source into ASTs and extracts structural elements: function s
 
 ### 2. Rank: PageRank on the reference graph
 
-Source files become nodes in a directed graph. Edges connect files that share symbol references. PageRank with personalization scores each node: files being edited get higher weight, heavily-referenced symbols rank higher, and the result favours task-relevance over sheer size.
+Source files become nodes in a directed graph. Edges connect files that share symbol references. PageRank with personalization scores each node: files being edited get higher weight, heavily-referenced symbols rank higher, and the result favors task-relevance over sheer size.
 
 PageRank works here because importance propagates through the call graph. A function referenced by 20 files outranks a helper called once, and symbols referenced by important symbols gain higher scores in turn. BM25 and recency weighting lack this property — the top-ranked symbols surface the architectural spine without any query. ([Aider repo map docs](https://aider.chat/docs/repomap.html))
 

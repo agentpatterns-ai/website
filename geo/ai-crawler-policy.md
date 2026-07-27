@@ -24,7 +24,7 @@ Related lesson: [Four Engines, Four Backends](https://learn.agentpatterns.ai/geo
 
 AI crawlers are not monolithic. Each major provider now operates separate bots for distinct purposes, each with its own user-agent string:
 
-| Tier | Purpose | User-agents | robots.txt behaviour |
+| Tier | Purpose | User-agents | robots.txt behavior |
 |------|---------|-------------|----------------------|
 | Tier 1 — User-facing retrieval | Powers real-time citations in AI chat and search | `ChatGPT-User`*, `OAI-SearchBot`, `Claude-User`, `Claude-SearchBot`, `PerplexityBot`†, `Perplexity-User`† | Allow — drives referral traffic and AI citations |
 | Tier 2 — Training scrapers | Ingests content for model training datasets | `GPTBot`, `ClaudeBot`, `Google-Extended`, `Meta-ExternalAgent` | Disallow — no citation benefit; opts out of training data |

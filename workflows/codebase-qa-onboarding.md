@@ -162,7 +162,7 @@ The result: ramp-up that typically takes one to two weeks compresses significant
 
 ## Related
 
-- [Agent-Generated Onboarding Guide as a Durable Artefact](agent-generated-onboarding-guide.md) — the artefact complement: synthesise the ramp-up into a version-controlled document instead of a live session
+- [Agent-Generated Onboarding Guide as a Durable Artifact](agent-generated-onboarding-guide.md) — the artifact complement: synthesize the ramp-up into a version-controlled document instead of a live session
 - [Team Onboarding for Agent Workflows](team-onboarding.md) — extending Q&A onboarding to a whole team
 - [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md) — agent exploration as a first step before any change
 - [Codebase Readiness for Agents](../patterns/agent-design/codebase-readiness.md) — preparing a repo so agent Q&A is high-signal

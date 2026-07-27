@@ -80,7 +80,7 @@ Skip or replace the framework when:
 ## Key Takeaways
 
 - Synthetic eval data drifts silently from production — the same idealized-condition inflation [benchmark contamination as eval risk](benchmark-contamination-eval-risk.md) describes; SynAE catches the drift before a deploy gate trusts the suite.
-- Score on three orthogonal pillars across four trace components — the matrix is the artefact, not an aggregated number.
+- Score on three orthogonal pillars across four trace components — the matrix is the artifact, not an aggregated number.
 - Five known generation failure modes have predictable pillar signatures; read the signatures to pick the right fix.
 - Skip when there is no production reference, the agent is single-turn, the set is small, or the LLM judge is uncalibrated.
 - The validity check is itself bounded by LLM-judge F1 of 0.86 — treat the measurement layer as one more component that needs calibration.

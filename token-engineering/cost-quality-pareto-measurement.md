@@ -15,7 +15,7 @@ maturity: established
 
 > Cost-quality Pareto measurement plots each agent configuration on the non-dominated cost/quality frontier — quality-trading downgrades become visible.
 
-Token engineering's premise — fewer, cheaper tokens *without* losing quality — depends on a frame that surfaces the *without*. Plotting each configuration's mean cost against its mean task quality and drawing the non-dominated frontier turns the trade-off into a graph: a cache-on or batch-API change moves a point left along the frontier, a model downgrade that loses quality drops it below the frontier ([Kapoor et al., "AI Agents That Matter", arXiv:2407.01502](https://arxiv.org/abs/2407.01502)). Without the joint plot, both changes register on the bill as "lower spend" and the quality regression hides until users complain. The mechanism formalises what [token-cost profiling for always-on workflows](token-cost-profiling-always-on-workflows.md) drives toward — the unit on which configurations are *compared*, not just measured.
+Token engineering's premise — fewer, cheaper tokens *without* losing quality — depends on a frame that surfaces the *without*. Plotting each configuration's mean cost against its mean task quality and drawing the non-dominated frontier turns the trade-off into a graph: a cache-on or batch-API change moves a point left along the frontier, a model downgrade that loses quality drops it below the frontier ([Kapoor et al., "AI Agents That Matter", arXiv:2407.01502](https://arxiv.org/abs/2407.01502)). Without the joint plot, both changes register on the bill as "lower spend" and the quality regression hides until users complain. The mechanism formalizes what [token-cost profiling for always-on workflows](token-cost-profiling-always-on-workflows.md) drives toward — the unit on which configurations are *compared*, not just measured.
 
 ## A configuration is the joint product
 
@@ -47,7 +47,7 @@ The quality axis depends on the task surface:
 | Code generation / edit | Test pass rate on a fixed exercise set | Aider polyglot benchmark — percent correct over 225 Exercism exercises across 6 languages ([Aider leaderboards](https://aider.chat/docs/leaderboards/)) |
 | Multi-step agent (web, research, science) | Task pass rate on a benchmark suite | HAL — nine benchmarks across coding, web navigation, science, customer service ([HAL, arXiv:2510.11977](https://arxiv.org/abs/2510.11977)) |
 | Free-form generation | Rubric score from a judge — with caveats | Run-to-run variance must be measured; LLM-as-judge scores can drift with rubric wording ([LLM evaluation review, Weights & Biases](https://wandb.ai/onlineinference/genai-research/reports/LLM-evaluation-Metrics-frameworks-and-best-practices--VmlldzoxMTMxNjQ4NA)) |
-| Structured extraction / classification | Field accuracy, precision/recall against a labelled set | Deterministic; no judge variance |
+| Structured extraction / classification | Field accuracy, precision/recall against a labeled set | Deterministic; no judge variance |
 
 One axis per plot. Mixing surfaces collapses configurations that win on one task and lose on another.
 
@@ -63,20 +63,20 @@ Kapoor et al.'s headline result on HumanEval: a simple warming-strategy baseline
 
 ## Why it works
 
-The same change registers differently on a bill and on the frontier. A Batch-API switch holding quality is a horizontal move left along the frontier; a model downgrade losing 10 quality is a vertical move off it. The bill collapses both into "lower spend" and hides the regression until users complain. Kapoor et al. formalise the property as the non-dominated set under joint optimisation; HAL's empirical finding that the most expensive configurations are usually off-frontier is what makes the measurement load-bearing ([AI Agents That Matter, arXiv:2407.01502](https://arxiv.org/abs/2407.01502); [HAL, arXiv:2510.11977](https://arxiv.org/abs/2510.11977)).
+The same change registers differently on a bill and on the frontier. A Batch-API switch holding quality is a horizontal move left along the frontier; a model downgrade losing 10 quality is a vertical move off it. The bill collapses both into "lower spend" and hides the regression until users complain. Kapoor et al. formalize the property as the non-dominated set under joint optimization; HAL's empirical finding that the most expensive configurations are usually off-frontier is what makes the measurement load-bearing ([AI Agents That Matter, arXiv:2407.01502](https://arxiv.org/abs/2407.01502); [HAL, arXiv:2510.11977](https://arxiv.org/abs/2510.11977)).
 
 ## When this backfires
 
 The frame breaks down under four conditions — they shape *when* to measure, not whether the measurement is meaningful.
 
-- Low-traffic workflow. The sweep itself burns tokens. Sub-daily workflows usually fall below the threshold where the measurement amortises — the same precondition as [token-cost profiling for always-on workflows](token-cost-profiling-always-on-workflows.md). Below it, "switch to the obvious cheaper model and revisit when the bill arrives" beats a Pareto sweep.
-- Noisy or misaligned quality metric. LLM-as-judge scores can swing run-to-run with rubric wording; proxy metrics (e.g., an optimality gap) can look strong while the underlying solution structurally fails ([component-level optimisation evaluation, arXiv:2510.16943](https://arxiv.org/pdf/2510.16943)). A frontier built on a smeared or misaligned quality axis lets dominated configurations appear Pareto-optimal. Pin a deterministic metric (test pass, field accuracy) before plotting; if the quality axis must be a judge, measure its variance first.
+- Low-traffic workflow. The sweep itself burns tokens. Sub-daily workflows usually fall below the threshold where the measurement amortizes — the same precondition as [token-cost profiling for always-on workflows](token-cost-profiling-always-on-workflows.md). Below it, "switch to the obvious cheaper model and revisit when the bill arrives" beats a Pareto sweep.
+- Noisy or misaligned quality metric. LLM-as-judge scores can swing run-to-run with rubric wording; proxy metrics (e.g., an optimality gap) can look strong while the underlying solution structurally fails ([component-level optimization evaluation, arXiv:2510.16943](https://arxiv.org/pdf/2510.16943)). A frontier built on a smeared or misaligned quality axis lets dominated configurations appear Pareto-optimal. Pin a deterministic metric (test pass, field accuracy) before plotting; if the quality axis must be a judge, measure its variance first.
 - Single-run sampling and optimizer's curse. Pareto plots built on one generation per configuration suffer the bias of taking maxima over noisy samples — accuracy estimates inflate up to 8.7% and cost up to 88% at G ≤ 10 generations ([The Capability Frontier, arXiv:2606.26836](https://arxiv.org/html/2606.26836v1)). Average over multiple runs per cell, or apply explicit bias correction; otherwise the frontier itself is wrong.
 - Rapid model churn or non-token cost dominance. Frontier inference cost rising on the order of 18x per year and per-token prices dropping monthly mean a sweep's recommendation ages ([Digital Applied — Q2 2026](https://www.digitalapplied.com/blog/ai-model-performance-vs-price-efficient-frontier-q2)). When wall-clock, infra overhead, or session-runtime fees dominate token spend (e.g., low-volume Computer Use sessions billed on session-hours per [Claude pricing](https://platform.claude.com/docs/en/about-claude/pricing)), a token-axis plot misranks; use USD per successful task instead of Effective Tokens.
 
 ## Example
 
-A team running an always-on PR review agent wants to know whether dropping from Opus 4.7 to Sonnet 4.6 with prompt caching loses quality. They take a fixed set of 50 historical PRs with human-labelled "good review / missed-the-issue" ground truth, then sweep:
+A team running an always-on PR review agent wants to know whether dropping from Opus 4.7 to Sonnet 4.6 with prompt caching loses quality. They take a fixed set of 50 historical PRs with human-labeled "good review / missed-the-issue" ground truth, then sweep:
 
 | Configuration | Cost / PR (USD) | Quality (review-pass rate on the 50 PRs) | On frontier? |
 |---|---|---|---|

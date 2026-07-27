@@ -11,7 +11,7 @@ aliases:
   - cloud agent auto model selection
   - harness-side model routing
   - vendor-side model broker
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-28
 maturity: established
 ---
 
@@ -19,7 +19,7 @@ maturity: established
 
 > Auto model selection hands per-task model choice to the harness, which picks from a vendor pool by health, policy, and plan — fit trails availability.
 
-Auto model selection is a harness-side routing policy that picks the backing model per request from a vendor-managed pool, using availability and policy signals rather than a user-pinned choice. GitHub Copilot ships it across Chat, CLI, JetBrains, VS Code, and the cloud coding agent ([GitHub Changelog 2026-05-14](https://github.blog/changelog/2026-05-14-copilot-cloud-agent-supports-auto-model-selection/)). When the user is absent — a cloud agent on an issue, a scripted CLI call — the decision lives in the harness or never happens.
+Auto model selection is a harness-side routing policy that picks the backing model per request from a vendor-managed pool, using availability and policy signals rather than a user-pinned choice. GitHub Copilot ships it across Chat, CLI, JetBrains, VS Code, and the cloud coding agent ([GitHub Changelog 2026-05-14](https://github.blog/changelog/2026-05-14-copilot-cloud-agent-supports-auto-model-selection/)). Copilot is not the only vendor shipping it: Cursor ships Cursor Router, first-party automatic per-request model routing built into the coding agent ([Cursor Changelog 2026-07-22](https://cursor.com/changelog/router)) — so the pattern now has more than one shipping vendor instance. When the user is absent — a cloud agent on an issue, a scripted CLI call — the decision lives in the harness or never happens.
 
 This is the harness policy layer, distinct from the gateway infrastructure layer ([Gateway Model Routing](gateway-model-routing.md)) and the per-tier budget layer ([Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md)).
 
@@ -31,14 +31,14 @@ Three conditions hold together:
 - First-choice models hit rate-limit ceilings. The broker reroutes a saturated model to a peer; without rate pressure, routing solves nothing.
 - Per-request capability variance is acceptable — similar prompts can hit different backends, fine for a developer, poison for eval-gated CI.
 
-When all three hold, the payoff is a 10% multiplier discount and exemption from weekly rate limits on the affected request ([GitHub Changelog 2026-04-17](https://github.blog/changelog/2026-04-17-github-copilot-cli-now-supports-copilot-auto-model-selection/)).
+When all three hold, the payoff is a 10% discount on model costs for individual plans ([GitHub Docs: usage-based billing for individuals](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-individuals)). Under the request-based billing model in force when Auto shipped in the CLI, that discount was a 10% multiplier reduction and carried exemption from weekly rate limits on the affected request ([GitHub Changelog 2026-04-17](https://github.blog/changelog/2026-04-17-github-copilot-cli-now-supports-copilot-auto-model-selection/)).
 
 ## The four design points
 
 ```mermaid
 graph TD
     R[Incoming request] --> P{Policy filter:<br>org + plan}
-    P --> H[Available pool:<br>health + multiplier]
+    P --> H[Available pool:<br>health + model cost]
     H --> S[Pick model]
     S --> M[Metric record:<br>actual model id]
     S --> C[Per-session lock<br>or per-request swap]
@@ -51,7 +51,7 @@ graph TD
 
 ## Why it works
 
-The mechanism is resource pooling across a fungible model fleet: treating capability as a band converts one user's quota exhaustion into a peer's headroom. Most coding-agent traffic is execution-class work several pool members handle equivalently, so rerouting a saturated model to an in-band peer holds quality roughly constant at lower latency and cost — Auto just centralizes that decision with the vendor, not the team. It breaks down whenever the pool includes a member outside the band — a frontier task routed to a cheaper model, or an experimental model treated as a peer.
+The mechanism is resource pooling across a fungible model fleet: treating capability as a band converts one user's rate-limit exhaustion into a peer's headroom. Most coding-agent traffic is execution-class work several pool members handle equivalently, so rerouting a saturated model to an in-band peer holds quality roughly constant at lower latency and cost — Auto just centralizes that decision with the vendor, not the team. It breaks down whenever the pool includes a member outside the band — a frontier task routed to a cheaper model, or an experimental model treated as a peer.
 
 ## When this backfires
 
@@ -73,17 +73,17 @@ Issue #4421 assigned to copilot/cloud-agent
 → Broker reads: plan = Business+
 → Broker reads: pool health = GPT-5.4 saturated, Sonnet 4.6 healthy
 → Broker selects: Sonnet 4.6 (in-band, available, allowed by policy)
-→ Multiplier billed: 1x * 0.9 = 0.9 premium requests per call
+→ Billed: session tokens metered in AI credits at Sonnet 4.6's published rate
 → Metric records: model_id = "claude-sonnet-4-6" (not "Auto")
 ```
 
-The published pool: "Auto routes to models like GPT-5.4, GPT-5.3-Codex, Sonnet 4.6, and Haiku 4.5 based on your plan and policies" ([GitHub Changelog 2026-04-17](https://github.blog/changelog/2026-04-17-github-copilot-cli-now-supports-copilot-auto-model-selection/)). On business and enterprise plans only 0x–1x-multiplier models are in scope, and "the models auto will route to will change over time" — so the per-call cost ceiling is bounded, but the model that ran is not stable across weeks.
+The published pool: "Auto routes to models like GPT-5.4, GPT-5.3-Codex, Sonnet 4.6, and Haiku 4.5 based on your plan and policies" ([GitHub Changelog 2026-04-17](https://github.blog/changelog/2026-04-17-github-copilot-cli-now-supports-copilot-auto-model-selection/)). Under the retired request-based model, business and enterprise pools carried only 0x–1x-multiplier models, which capped the per-call cost; since 2026-06-01 the cost of a call is the tokens it consumes, priced at the routed model's published rate ([GitHub Blog: usage-based billing](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/)). Either way, "the models auto will route to will change over time" — the model that ran is not stable across weeks.
 
 To pin instead — when any failure condition above applies — the cloud agent switches the picker to a specific model per issue or per-PR. The escape hatch is per-request, not a permanent client-side default ([Disable Auto Model Selection discussion](https://github.com/orgs/community/discussions/187429)).
 
 ## Cloud-agent tiered model routing
 
-Auto's per-request brokering is one end of a spectrum; at the other is operator-dispatched tier routing, where a human assigns each cloud-agent session to a capability tier — frontier, standard, or fast/cheap — at dispatch, before the session starts. GitHub's Copilot cloud agent ships this as a per-session model picker after the 2026-05-18 changelog added Claude Haiku 4.5 and GPT-5.4 mini at a 0.33x multiplier ([GitHub Changelog 2026-05-18](https://github.blog/changelog/2026-05-18-copilot-cloud-agent-fast-cost-efficient-models-for-simple-tasks/)). Billing is one premium request per session at the model's multiplier — per-task economics, not per-turn ([GitHub Docs: Copilot requests](https://docs.github.com/en/copilot/concepts/billing/copilot-requests)). Where a picker is not exposed, the session falls through to Auto.
+Auto's per-request brokering is one end of a spectrum; at the other is operator-dispatched tier routing, where a human assigns each cloud-agent session to a capability tier — frontier, standard, or fast/cheap — at dispatch, before the session starts. GitHub's Copilot cloud agent ships this as a per-session model picker after the 2026-05-18 changelog added Claude Haiku 4.5 and GPT-5.4 mini, priced at a 0.33x multiplier under the request-based billing model then in force ([GitHub Changelog 2026-05-18](https://github.blog/changelog/2026-05-18-copilot-cloud-agent-fast-cost-efficient-models-for-simple-tasks/)). That model billed one premium request per session at the model's multiplier, never one per action ([GitHub Docs: Copilot requests](https://docs.github.com/en/copilot/concepts/billing/copilot-requests)); since 2026-06-01 a session bills by the total tokens it consumes, so the economics stay per-task but the per-session figure is no longer flat ([GitHub Blog: usage-based billing](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/)). Where a picker is not exposed, the session falls through to Auto.
 
 ### Four conditions for the cheap tier
 
@@ -91,22 +91,16 @@ All four must hold, or the cheap default is a net loss:
 
 - Bounded task scope. Cheap-tier sessions fit dependency bumps, changelog wording, small refactors, and single-issue fixes — not security-critical work, architectural decisions, or large migrations ([Igor's Lab, 2026-05-19](https://www.igorslab.de/en/github-copilot-cloud-agent-economy-models/)).
 - Per-tier quality telemetry. Without PR acceptance, retry, and reviewer-rejection rates broken down by `model_id`, regressions hide behind the savings — the "silent quality degradation" failure ([Tianpan: LLM Routing](https://tianpan.co/blog/2025-10-19-llm-routing-production)).
-- Bounded rework cost. A cheap session that escalates costs 0.297 + 0.9 = 1.197 requests vs 0.9 for pinning Sonnet; above ~25% cheap-tier failure, the cheap default is the pricier one.
+- Bounded rework cost. A cheap session that escalates bills for both sessions' tokens, so the cheap default only pays while its escalation rate stays low — past that point pinning the stronger model is the cheaper option.
 - Picker exposed at the entrypoint. Model selection is supported only when assigning an issue to Copilot on GitHub.com, mentioning `@copilot` in a pull-request comment, or starting from the agents tab/panel, GitHub Mobile, or Raycast; "where a model picker is not available, Auto will be used automatically" ([GitHub Docs: Changing the AI model](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/changing-the-ai-model)).
 
-## Tiers and multiplier math
+## Tiers and cost math
 
 The cloud agent currently exposes Auto, Sonnet 4.5, Opus 4.7, Haiku 4.5, GPT-5.2-Codex, and GPT-5.4 mini.
 
-| Model | Multiplier | Per session under Auto (−10%) |
-|-------|-----------|-------------------------------|
-| Claude Haiku 4.5 | 0.33 | 0.297 |
-| GPT-5.4 mini | 0.33 | 0.297 |
-| Claude Sonnet 4.5 / 4.6 | 1 | 0.9 |
-| GPT-5.2-Codex / GPT-5.4 | 1 | 0.9 |
-| Claude Opus 4.7 | 15 | 13.5 |
+Since 2026-06-01 a session costs the input, cached-input, and output tokens it consumed, priced in AI credits at the routed model's published rate — one credit is $0.01, and Copilot lists Haiku 4.5 at $1.00/$5.00 per million input/output tokens against $5.00/$25.00 for Opus 5, a five-fold spread ([GitHub Docs: models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)). Auto's 10% discount applies to that model cost on individual plans. Under the retired request-based model the same tiers were denominated as multipliers — 0.33x for Haiku 4.5 and GPT-5.4 mini — billed once per session ([GitHub Docs: Copilot requests](https://docs.github.com/en/copilot/concepts/billing/copilot-requests)).
 
-Source: [GitHub Docs: Copilot requests](https://docs.github.com/en/copilot/concepts/billing/copilot-requests). Each `@copilot` steering comment also bills at the session's tier: a five-round Haiku session (5 × 0.33 = 1.65) costs more than a clean Sonnet session (1.0).
+Each `@copilot` steering comment adds another round of input and output tokens, so a five-round cheap-tier session can cost more than one clean session a tier up.
 
 The cloud agent ships no automatic task-complexity classifier — the task-optimized Auto variant is "generally available in Copilot Chat in VS Code" only ([GitHub Docs: Auto Model Selection](https://docs.github.com/en/copilot/concepts/auto-model-selection)). For cloud-agent sessions the operator is the classifier: single-file edits and dependency bumps map to the cheap tier, multi-file refactors do not. When in doubt, default up: misrouting up wastes inference, down wastes review.
 
@@ -116,14 +110,14 @@ graph TD
     S -->|No| F[Pin Sonnet or Opus]
     S -->|Yes| T{Quality telemetry?}
     T -->|No| F
-    T -->|Yes| R{Rework rate<br>under 25%?}
+    T -->|Yes| R{Escalation rate<br>low?}
     R -->|No| F
     R -->|Yes| C[Pick Haiku 4.5<br>or GPT-5.4 mini]
 ```
 
 Capability scales sub-linearly with price across tiers, so most queries need no frontier model ([Tianpan: LLM Routing](https://tianpan.co/blog/2025-10-19-llm-routing-production)). Anthropic claims Haiku 4.5 "delivers similar levels of coding performance to Sonnet 4 but at one-third the cost and more than twice the speed" ([Anthropic: Claude Haiku 4.5](https://www.anthropic.com/news/claude-haiku-4-5)), and [FrugalGPT](https://arxiv.org/abs/2305.05176) shows a cascade upper bound of 98% cost reduction at GPT-4 quality. The tier-routing variant is its manual, human-classified instance.
 
-Where it backfires: there is no documented in-session escalation — a failed cheap-tier PR is caught at human review after the premium request has billed, and re-dispatching at Sonnet pays both multipliers (~1.2 vs 0.9). As budgets rise, "routers systematically default to the most capable and most expensive model even when cheaper models already suffice" ([arxiv:2602.03478](https://arxiv.org/abs/2602.03478)); the human picker likewise reverts to the safe default under shipping pressure. Long-context refactors widen the gap — Anthropic's "comparable to Sonnet 4" framing benchmarks short-context tasks, exactly where the canonical cloud-agent workload diverges.
+Where it backfires: there is no documented in-session escalation — a failed cheap-tier PR is caught at human review after the session's tokens have already billed, and re-dispatching at Sonnet pays for both sessions. As budgets rise, "routers systematically default to the most capable and most expensive model even when cheaper models already suffice" ([arxiv:2602.03478](https://arxiv.org/abs/2602.03478)); the human picker likewise reverts to the safe default under shipping pressure. Long-context refactors widen the gap — Anthropic's "comparable to Sonnet 4" framing benchmarks short-context tasks, exactly where the canonical cloud-agent workload diverges.
 
 ## Code-health-gated tier routing
 
@@ -217,12 +211,12 @@ Code-health routing decides before the small model runs; syntax-aware routing de
 ## Key Takeaways
 
 - Auto model selection moves the per-task model decision from the user to the harness, picking from a vendor-managed pool by availability and policy — not by declared task class or context size.
-- The mechanism is resource pooling across a fungible model fleet: capability is treated as a band, and the broker exchanges one user's saturated quota for another peer's headroom inside that band.
+- The mechanism is resource pooling across a fungible model fleet: capability is treated as a band, and the broker exchanges one user's rate-limited model for another peer's headroom inside that band.
 - Per-session vs per-request scope is a separate design point — Copilot CLI locks per session; without that lock, in-context learning can be lost to a silent mid-conversation swap.
 - Observability depends on the resolved `model_id` reaching per-request telemetry; a generic "Auto" label in dashboards is unauditable and was Copilot's state until 2026-03-20.
-- Pin the model — do not trust Auto — for long multi-turn hard tasks, eval-gated CI, compliance attestation, individual plans where the pool can include evaluation models, and workloads where rework cost exceeds the typical 10% multiplier discount.
+- Pin the model — do not trust Auto — for long multi-turn hard tasks, eval-gated CI, compliance attestation, individual plans where the pool can include evaluation models, and workloads where rework cost exceeds Auto's 10% model-cost discount.
 - The tier-routing variants differ by routing signal and decision point: operator-dispatched tiering picks per session at dispatch, code-health-gated routing picks per file pre-generation from a complexity score, and syntax-aware routing picks per request post-generation from confidence plus a parse check.
-- All three share one constraint — a deterministic verification gate (tests, linters, parse check) identical across tiers — and one failure mode: without per-`model_id` quality telemetry, cheap-tier regressions hide behind the multiplier savings.
+- All three share one constraint — a deterministic verification gate (tests, linters, parse check) identical across tiers — and one failure mode: without per-`model_id` quality telemetry, cheap-tier regressions hide behind the per-token savings.
 
 ## Related
 

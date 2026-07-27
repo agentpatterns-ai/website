@@ -1,7 +1,7 @@
 ---
-title: "Adversarial-Only Threat Modelling for Agent Data Leakage"
+title: "Adversarial-Only Threat Modeling for Agent Data Leakage"
 term: "Adversarial-Only Leakage Threat Modelling"
-description: "Tool-using LLM agents leak sensitive data during benign requests, not only under prompt-injection attacks — adversarial-only defences miss the surface."
+description: "Tool-using LLM agents leak sensitive data during benign requests, not only under prompt-injection attacks — adversarial-only defenses miss the surface."
 tags:
   - security
   - anti-pattern
@@ -16,9 +16,9 @@ last_reviewed: 2026-06-18
 maturity: emerging
 ---
 
-# Adversarial-Only Threat Modelling for Agent Data Leakage
+# Adversarial-Only Threat Modeling for Agent Data Leakage
 
-> Tool-using agents leak sensitive data during benign requests — adversarial-only defences miss audience, necessity, and access-scope failures that fire under ordinary use.
+> Tool-using agents leak sensitive data during benign requests — adversarial-only defenses miss audience, necessity, and access-scope failures that fire under ordinary use.
 
 ## The pattern
 
@@ -91,16 +91,16 @@ Each new control targets one named failure pattern from [Baek et al. 2026](https
 
 ## Key Takeaways
 
-- Tool-using agents leak sensitive data while completing benign requests; defences scoped to adversarial exfiltration do not cover audience, necessity, or access-scope failures ([Baek et al. 2026](https://arxiv.org/abs/2606.17114)).
-- The five named failure patterns — inadequate data awareness, insufficient audience consideration, policy non-compliance, excessive data collection, access boundary violations — are all benign-task behaviours, not attacks.
-- Content-sensitivity classification is not enough: the model can strip a budget figure from text yet still send the message to an unauthorised recipient ([Baek et al. 2026](https://arxiv.org/abs/2606.17114)).
+- Tool-using agents leak sensitive data while completing benign requests; defenses scoped to adversarial exfiltration do not cover audience, necessity, or access-scope failures ([Baek et al. 2026](https://arxiv.org/abs/2606.17114)).
+- The five named failure patterns — inadequate data awareness, insufficient audience consideration, policy non-compliance, excessive data collection, access boundary violations — are all benign-task behaviors, not attacks.
+- Content-sensitivity classification is not enough: the model can strip a budget figure from text yet still send the message to an unauthorized recipient ([Baek et al. 2026](https://arxiv.org/abs/2606.17114)).
 - Cross-tool inference is its own risk class — individually non-sensitive fragments compose into sensitive disclosures at an average 88.6% rate; prompt-only mitigations close little of that ([Wang et al. 2026](https://arxiv.org/abs/2512.16310)).
-- Treat benign-leakage controls as additive: recipient authorisation per data class, data-minimisation at the tool boundary, and audience-aware egress filters target the failure surface adversarial-only models miss.
+- Treat benign-leakage controls as additive: recipient authorization per data class, data-minimisation at the tool boundary, and audience-aware egress filters target the failure surface adversarial-only models miss.
 
 ## Related
 
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — the read-side anti-pattern; this page covers the write-side counterpart.
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — instruction-layer controls are insufficient for tool restriction, the same shape of failure that prompt-only data-minimisation hits.
-- [Privacy-Preserving LLM Requests](../../security/privacy-preserving-llm-requests.md) — local routing plus redact-and-rephrase as a content-level control complementary to recipient authorisation.
+- [Privacy-Preserving LLM Requests](../../security/privacy-preserving-llm-requests.md) — local routing plus redact-and-rephrase as a content-level control complementary to recipient authorization.
 - [Guarding Against URL-Based Data Exfiltration](../../security/url-exfiltration-guard.md) — the URL-channel exfiltration counterpart; covers adversarial fetch leakage that this page does not.
 - [Protecting Sensitive Files from Agent Context Access](../../security/protecting-sensitive-files.md) — the read-boundary control that pairs with the write-boundary controls in the After example.

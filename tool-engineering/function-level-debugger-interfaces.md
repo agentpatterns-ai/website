@@ -117,6 +117,6 @@ This mirrors the surgical-edit profile from the [precise debugging benchmark](..
 - [Agent-Computer Interface (ACI): Tool Design as UX Discipline](agent-computer-interface.md) — The general HCI-to-ACI mapping; this page is its specialization to debuggers.
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md) — Same information-per-token mechanism applied to tool output sizing.
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md) — The toolset-level analogue of frame-level granularity: fewer, higher-level primitives.
-- [Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate](../verification/precise-debugging-benchmark.md) — How to measure whether the cheaper localisation produces targeted fixes rather than regeneration.
+- [Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate](../verification/precise-debugging-benchmark.md) — How to measure whether the cheaper localization produces targeted fixes rather than regeneration.
 - [Hypothesis-Driven Debugging: Instrument Before You Patch](../patterns/agent-design/hypothesis-driven-debugging.md) — Workflow-level companion: what the agent does once a function-level trace narrows the suspect frames.
 - [Agent Debugging: Diagnosing Bad Agent Output](../observability/agent-debugging.md) — AgentStepper-style abstraction-raising applied to debugging the agent itself.

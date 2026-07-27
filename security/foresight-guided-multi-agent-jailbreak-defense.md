@@ -116,12 +116,12 @@ When the user-uploaded VirAE lands in agent A's album, A's next chat round trigg
 - Infectious jailbreak is a propagation attack specific to multi-agent systems with shared multimodal retrieval — not a general MAS threat
 - Global "cure factor" defenses suppress infection by homogenizing responses, destroying the diversity that motivated multi-agent deployment
 - Local foresight simulation detects infection through persona-driven diversity collapse, preserving healthy heterogeneity
-- Album rollback handles fresh infections; Recursive Binary Diagnosis localises older ones via `O(log m)` bisection
+- Album rollback handles fresh infections; Recursive Binary Diagnosis localizes older ones via `O(log m)` bisection
 - For coding-agent topologies with isolated sub-agent contexts, sub-agent isolation already breaks the contagion channel — FLP-grade defense is overkill
 
 ## Related
 
-- [Code Injection Attacks on Multi-Agent Systems: Coder-Reviewer-Tester as Defence](code-injection-multi-agent-defence.md)
+- [Code Injection Attacks on Multi-Agent Systems: Coder-Reviewer-Tester as Defense](code-injection-multi-agent-defence.md)
 - [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md)
 - [Constraint Drift: Why Safety Must Be Maintained, Not Asserted](constraint-drift-multi-agent-safety.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)

@@ -8,7 +8,7 @@ aliases:
   - cursor typescript sdk
   - "@cursor/sdk"
 applies_to: "cursor@3.x"
-last_reviewed: 2026-06-03
+last_reviewed: 2026-07-28
 status: current
 ---
 
@@ -97,7 +97,7 @@ The three programmable agent SDKs share one primitive — embed the vendor's har
 | Hosted runtime | Cursor-hosted VMs + self-hosted workers | None — local execution only | None — local execution only |
 | Auto PR creation | Yes (cloud) | No (manual) | No (manual) |
 | MCP support | Yes | Yes | Yes |
-| Pricing | Token consumption (Cursor pool) | Counts against Copilot premium request quotas | Anthropic API tokens |
+| Pricing | Token consumption (Cursor pool) | Token-metered [GitHub AI credits](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) | Anthropic API tokens |
 
 Cursor alone ships a vendor-managed cloud runtime in the SDK, with explicit support for long-running, disconnection-resilient jobs that produce PRs.
 
