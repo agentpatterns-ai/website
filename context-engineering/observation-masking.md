@@ -135,7 +135,7 @@ The token saving from masking `read_file` and `edit_file` in this example is rou
 ## Related
 
 - [Context Engineering: The Practice of Shaping Agent Context](context-engineering.md)
-- [Context Compression Strategies: Offloading and Summarisation](context-compression-strategies.md)
+- [Context Compression Strategies: Offloading and Summarization](context-compression-strategies.md)
 - [Error Preservation in Context for AI Agent Development](error-preservation-in-context.md)
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)

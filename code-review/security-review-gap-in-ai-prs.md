@@ -107,7 +107,7 @@ Detailed commit message, passing tests, clean CI — a human-PR heuristic approv
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — merge rate as a productivity metric
 - [Tiered Code Review](tiered-code-review.md) — risk-based routing for high-risk agent PR paths
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — high-signal review feedback design
-- [Security Constitution for AI Code Generation](../security/security-constitution-ai-code-gen.md) — proactive specification-layer defence against the same CWE classes
+- [Security Constitution for AI Code Generation](../security/security-constitution-ai-code-gen.md) — proactive specification-layer defense against the same CWE classes
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — structural precondition for CWE-78 and CWE-22 at runtime
 - [Supply-Chain Security Debt in Agent Pull Requests](../security/supply-chain-security-debt-agent-prs.md) — the complementary supply-chain view: where agent-PR security debt concentrates outside code-level CWEs
 

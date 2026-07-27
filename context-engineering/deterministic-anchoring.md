@@ -101,9 +101,9 @@ The build regenerates the comment header. You do not hand-maintain it. Stale anc
 
 ## Key Takeaways
 
-- The technique stabilises navigation, not capability — variance roughly halves; accuracy gains are modest (+2–3 pp on the originating study's metrics).
-- Earn the ~10% input-token cost only when reproducibility matters, the codebase is medium-sized and structurally stable, and static facts track runtime behaviour.
-- Anchor what an analyser can extract deterministically: call graphs, inheritance, config dependencies — not behavioural assertions.
+- The technique stabilizes navigation, not capability — variance roughly halves; accuracy gains are modest (+2–3 pp on the originating study's metrics).
+- Earn the ~10% input-token cost only when reproducibility matters, the codebase is medium-sized and structurally stable, and static facts track runtime behavior.
+- Anchor what an analyser can extract deterministically: call graphs, inheritance, config dependencies — not behavioral assertions.
 - Regenerate the anchor; never hand-edit. Stale anchors are confident lies.
 - Outside the qualifying conditions, on-demand agentic search recovers the same facts at lower cost.
 

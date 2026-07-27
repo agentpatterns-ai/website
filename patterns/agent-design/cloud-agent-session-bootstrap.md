@@ -1,7 +1,7 @@
 ---
 title: "Cloud-Agent Session Bootstrap: Cached Install plus Per-Session Start"
 term: "Cloud-Agent Session Bootstrap"
-description: "Split a cloud agent's session bootstrap into a cached install phase and a per-session start phase so dependency churn amortises while ephemeral setup stays explicit."
+description: "Split a cloud agent's session bootstrap into a cached install phase and a per-session start phase so dependency churn amortizes while ephemeral setup stays explicit."
 tags:
   - agent-design
   - workflows
@@ -17,7 +17,7 @@ maturity: established
 
 # Cloud-Agent Session Bootstrap
 
-> Split a cloud agent's session bootstrap into a cached install phase and a per-session start phase so dependency churn amortises while ephemeral setup stays explicit.
+> Split a cloud agent's session bootstrap into a cached install phase and a per-session start phase so dependency churn amortizes while ephemeral setup stays explicit.
 
 Cursor reports that the single biggest factor in cloud-agent output quality is giving the agent a full development environment — the kind a local agent inherits from a developer's laptop for free ([What we've learned building cloud agents](https://cursor.com/blog/cloud-agent-lessons)). A cloud agent has no laptop to inherit, so it must bootstrap that environment explicitly. That makes how you structure the bootstrap a first-order quality lever, not just a latency optimization.
 
@@ -146,7 +146,7 @@ Skip this lever when dispatch volume is low (the saved seconds do not amortize t
 
 - The install/start lifecycle split keeps cacheable work off the hot path while keeping per-session work explicit — the third bootstrap lever alongside prebuilt images and runtime-only install
 - Cursor's `environment.json` and GitHub Copilot's `copilot-setup-steps.yml` + `sessionStart` hooks expose this lifecycle directly; lockfile-keyed snapshots are the cache boundary
-- Use this pattern when dependency churn outpaces image rebuild cadence but session volume justifies amortising the install cost
+- Use this pattern when dependency churn outpaces image rebuild cadence but session volume justifies amortizing the install cost
 - Partial-install semantics are silent on both platforms — the bootstrap script must fail loud or the agent runs in a degraded environment
 - Treat the install script as production code: pinned versions, lockfile-gated rebuilds, secret scoping that doesn't leak credentials into the snapshot
 

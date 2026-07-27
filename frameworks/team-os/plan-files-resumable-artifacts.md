@@ -1,6 +1,6 @@
 ---
 title: "Plan Files as Resumable Artifacts"
-description: "Committed plan files externalise agent state across sessions — a qualified pattern that pays for multi-session, recurring, or cross-functional work and backfires without a supersession discipline."
+description: "Committed plan files externalize agent state across sessions — a qualified pattern that pays for multi-session, recurring, or cross-functional work and backfires without a supersession discipline."
 term: "Plan Files"
 tags:
   - context-engineering

@@ -122,5 +122,3 @@ The traditional approach issues 20 round-trips and pulls thousands of line items
 - [Selective Network Sandbox Mode](../security/selective-network-sandbox-mode.md) — fine-grained network policy that pairs with interpreter-level bridges
 - [OpenAI Agents SDK Sandboxes Harness and Memory](../tools/openai-agents-sdk.md) — vendor-specific framing of the same harness/compute split
 - [Restricting a Coding Agent to a Single execute_code Tool](restrict-coding-agent-to-execute-code.md) — the head-to-head cost ablation of an interpreter-only surface against bash and native edit, by task regime
-</content>
-</invoke>

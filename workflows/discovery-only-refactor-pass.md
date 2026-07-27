@@ -61,7 +61,7 @@ The skill is strict about architecture language. Vague words ("component," "serv
 | Interface | Everything a caller must know — types, invariants, error modes, ordering, config |
 | Implementation | The code inside |
 | Depth | Leverage at the interface. Deep = high leverage; shallow = interface nearly as complex as the implementation |
-| Seam | Where an interface lives — a place behaviour can change without editing in place |
+| Seam | Where an interface lives — a place behavior can change without editing in place |
 | Adapter | A concrete thing satisfying an interface at a seam |
 | Locality | Change, bugs, and knowledge concentrated in one place |
 

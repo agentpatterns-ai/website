@@ -68,10 +68,10 @@ In auto-approve mode, step 3 cancels the command instead and the agent receives 
 ## Key Takeaways
 
 - Interception applies only to interactive TTY prompt paths — passwords, passphrases, PINs, verification codes; it does nothing for secrets read from files or returned by MCP tools.
-- The two safe behaviours are confirm-in-terminal (default mode) and cancel-the-command (auto-approve) — never let the agent type the secret itself.
+- The two safe behaviors are confirm-in-terminal (default mode) and cancel-the-command (auto-approve) — never let the agent type the secret itself.
 - Stdout regex redaction is a fallback, not a substitute: by the time output is filtered the secret has already been in an agent-controlled buffer.
 - Detection is heuristic and brittle — expect false positives on legitimate interactive flows and false negatives on non-standard prompts; instrument both failure modes.
-- The structurally better fix is to remove credentials from the TTY path entirely — browser PKCE, device-code, or [credential-broker injection via a scoped-credentials proxy](scoped-credentials-proxy.md) — and treat interception as defence-in-depth for cases where the prompt cannot be designed away.
+- The structurally better fix is to remove credentials from the TTY path entirely — browser PKCE, device-code, or [credential-broker injection via a scoped-credentials proxy](scoped-credentials-proxy.md) — and treat interception as defense-in-depth for cases where the prompt cannot be designed away.
 
 ## Related
 

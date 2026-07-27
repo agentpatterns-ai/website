@@ -87,7 +87,7 @@ Every split above is harness-configured: a human sets `chat.utilityModel` (or th
 
 ## Related
 
-- [Gateway Model Routing](gateway-model-routing.md) — Decouple harness model selection from vendor SDKs by treating the gateway as both inference target and catalogue.
+- [Gateway Model Routing](gateway-model-routing.md) — Decouple harness model selection from vendor SDKs by treating the gateway as both inference target and catalog.
 - [Auto Model Selection](auto-model-selection.md) — Vendor-side per-request routing from a managed model pool by availability and policy.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — Match model capability to task complexity across the full agent loop.
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — Hide a fine-tuned small model behind a tool-call interface to offload narrow operations.

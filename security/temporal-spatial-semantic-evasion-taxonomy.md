@@ -111,7 +111,7 @@ If the standard suite passes but the three-vector additions succeed, the conclus
 
 ## Key Takeaways
 
-- Three orthogonal axes — temporal, spatial, semantic — organise multi-turn agent payloads by how they evade per-prompt review; ASR rises from 28.3% to 52.6% on stateful tool-using agents under combined attack ([Ma et al., 2026](https://arxiv.org/abs/2605.22321)).
+- Three orthogonal axes — temporal, spatial, semantic — organize multi-turn agent payloads by how they evade per-prompt review; ASR rises from 28.3% to 52.6% on stateful tool-using agents under combined attack ([Ma et al., 2026](https://arxiv.org/abs/2605.22321)).
 - The framing is diagnostic, not defensive — use it to check axis coverage in an audit, not as a defense recipe.
 - It applies only when the agent has persistent state, external artifact ingestion, and a tool catalog larger than the immediate task; one-shot stateless agents collapse to standard single-turn injection.
 - Vectors compose — fragmenting temporally, concealing spatially, and reframing semantically targets three different gaps simultaneously.

@@ -21,9 +21,9 @@ Follow-up refinement requests in a multi-turn coding dialogue — "make it more 
 
 ## The silent-regression mechanism
 
-A model optimises each refinement against the stated intent of the user's turn, not against the invariant that the original test suite encodes. The two come apart sharply. CodeChat-Eval evaluated 8 LLMs across 4 families on 542 tasks (164 HumanEval + 378 MBPP) over 10-turn dialogues (one initial generation plus nine refinement turns), grading every turn against EvalPlus extended test cases. The headline measurement: the Phi coefficient between instruction adherence and functional correctness is 0.089, a negligible correlation ([Guo et al., 2026](https://arxiv.org/abs/2606.25747)).
+A model optimizes each refinement against the stated intent of the user's turn, not against the invariant that the original test suite encodes. The two come apart sharply. CodeChat-Eval evaluated 8 LLMs across 4 families on 542 tasks (164 HumanEval + 378 MBPP) over 10-turn dialogues (one initial generation plus nine refinement turns), grading every turn against EvalPlus extended test cases. The headline measurement: the Phi coefficient between instruction adherence and functional correctness is 0.089, a negligible correlation ([Guo et al., 2026](https://arxiv.org/abs/2606.25747)).
 
-That single number is load-bearing. A developer reading the diff can verify the model did what was asked. They cannot, at face value, tell whether behaviour was preserved — the Phi 0.089 says the two are statistically independent for this task. Re-executing the test suite is the only externalised invariant that catches the gap.
+That single number is load-bearing. A developer reading the diff can verify the model did what was asked. They cannot, at face value, tell whether behavior was preserved — the Phi 0.089 says the two are statistically independent for this task. Re-executing the test suite is the only externalized invariant that catches the gap.
 
 The regression rate is monotonic across turns and scales inversely with model strength:
 
@@ -58,15 +58,15 @@ A single principle: every refinement turn produces a candidate patch, and the or
 
 Three components:
 
-1. Pin the original test suite at the start of the session and treat it as the invariant. Re-running a *refined* test suite leaks behavioural drift into the gate.
-2. Run the suite at every turn that lands code — not only on `add` or `semantic` operations. The 7 – 13% cosmetic regression rate is the residual that catches refactors which were not as behaviour-neutral as the model believed.
+1. Pin the original test suite at the start of the session and treat it as the invariant. Re-running a *refined* test suite leaks behavioral drift into the gate.
+2. Run the suite at every turn that lands code — not only on `add` or `semantic` operations. The 7 – 13% cosmetic regression rate is the residual that catches refactors which were not as behavior-neutral as the model believed.
 3. Surface a diff between baseline pass-set and current pass-set, not the absolute pass rate. The "I broke something I didn't" false positive and the "all green, ship it" false-green that [baseline-aware test evaluation](baseline-aware-test-evaluation-issue-resolution.md) names both apply per-turn.
 
 This sits cleanly inside [incremental verification](incremental-verification.md), which already prescribes checkpoints between agent steps. The refinement axis is the specific instance: the step is one turn, the checkpoint is the original suite, the recovery is to reject the turn and ask again.
 
 ## Why It Works
 
-Preserving behaviour across a refinement is not in the model's loss function for that turn. The model optimises for the user's stated request; the Phi 0.089 measurement says compliance with that request is statistically independent of whether behaviour was preserved. The original test suite is the externalised invariant the model is not optimising against, so re-executing it surfaces violations the model's self-evaluation cannot see — the same lever [baseline-aware test evaluation](baseline-aware-test-evaluation-issue-resolution.md) pulls on the patch axis. The independence finding is what keeps the gate non-redundant against diff review: a clean diff is evidence of compliance, not of preservation.
+Preserving behavior across a refinement is not in the model's loss function for that turn. The model optimizes for the user's stated request; the Phi 0.089 measurement says compliance with that request is statistically independent of whether behavior was preserved. The original test suite is the externalized invariant the model is not optimizing against, so re-executing it surfaces violations the model's self-evaluation cannot see — the same lever [baseline-aware test evaluation](baseline-aware-test-evaluation-issue-resolution.md) pulls on the patch axis. The independence finding is what keeps the gate non-redundant against diff review: a clean diff is evidence of compliance, not of preservation.
 
 ## When This Backfires
 
@@ -99,7 +99,7 @@ Without the per-turn re-run, the regression survives until end-of-session CI or 
 - Functional correctness drops 19 – 27% over nine refinement turns on frontier models, 50 – 69% on weaker open models; independent corroboration on 32 additional models reports the same 20 – 27% direction.
 - Logic-changing (`semantic`) refinements and code-`add` operations have the highest regression rates (21% and 17% respectively); even cosmetic refinements regress 7 – 13% of the time.
 - The fix is differential testing along the turn axis: pin the original suite, run it after every turn, gate on the diff between baseline pass-set and current pass-set — not the absolute pass rate.
-- The gate is anti-signal when the suite is weak, flaky, or expensive enough that per-turn cost exceeds catch rate; strengthen and stabilise the suite first.
+- The gate is anti-signal when the suite is weak, flaky, or expensive enough that per-turn cost exceeds catch rate; strengthen and stabilize the suite first.
 
 ## Related
 

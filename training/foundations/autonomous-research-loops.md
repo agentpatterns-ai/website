@@ -128,7 +128,7 @@ Long-running loops degrade because of [context rot](../../context-engineering/co
 
 ### Compaction
 
-Periodically summarize accumulated history, discard raw conversation, and keep only recent context plus the summary. The agent operates on a rolling window rather than an ever-growing transcript. See [Context Compression Strategies](../../context-engineering/context-compression-strategies.md) for the full offload-and-summarise pipeline.
+Periodically summarize accumulated history, discard raw conversation, and keep only recent context plus the summary. The agent operates on a rolling window rather than an ever-growing transcript. See [Context Compression Strategies](../../context-engineering/context-compression-strategies.md) for the full offload-and-summarize pipeline.
 
 ### Sub-agent isolation
 

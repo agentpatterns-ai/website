@@ -23,9 +23,9 @@ Coding agents produce functional UI but default to generic styling because the t
 
 The technique applies when:
 
-1. Structural rails exist first. Design tokens, a typed component library, and lint rules already prevent non-token colors, unauthorised components, and off-scale spacing. Encoded conventions steer inside the allowed space; they do not replace the wall ([PairCoder, 2026](https://paircoder.ai/blog/enforcement-not-prompts/)).
+1. Structural rails exist first. Design tokens, a typed component library, and lint rules already prevent non-token colors, unauthorized components, and off-scale spacing. Encoded conventions steer inside the allowed space; they do not replace the wall ([PairCoder, 2026](https://paircoder.ai/blog/enforcement-not-prompts/)).
 2. Decisions are observable. Every rule names a checkable form — `"Destructive actions use Verb + Noun"`, `"Selects with 2-3 static options are Radio buttons"`. Adjective-only guidance ("clear, polished") is not verifiable; this is the failure the technique exists to avoid ([Vercel, 2026-06-25](https://vercel.com/blog/teaching-agents-product-design-at-vercel)).
-3. The surface is reused. Repeatedly-extended product surfaces amortise the authoring cost; a solo prototype does not.
+3. The surface is reused. Repeatedly-extended product surfaces amortize the authoring cost; a solo prototype does not.
 
 If any precondition fails, skip the skill file and invest in tokens, lint, or component coverage first.
 
@@ -36,7 +36,7 @@ Vercel's `.agents/skills/product-design/` skill is the reference shape, separati
 - `product-judgment.md` — workflow, user intent, mode resolution.
 - `interface-quality.md` — visual implementation standards (spacing, hierarchy, component choice).
 - `copy.md` — language conventions and voice.
-- Surface-specific guidance — per-area files for decisions that do not generalise.
+- Surface-specific guidance — per-area files for decisions that do not generalize.
 - `exemplars/pr-{name}.md` — shipped decisions worth repeating, linked to the establishing PR.
 - `coverage-gaps.md` — areas the team has *not* decided about, so the agent does not pattern-match into a gap and invent policy.
 
@@ -61,7 +61,7 @@ The `SKILL.md` directs: `"Resolve the mode from the user's verb and artifact bef
 Observable constraints beat abstract adjectives. The decision-form that works is a checkable predicate the agent can self-verify:
 
 - Good: `"Destructive actions use Verb + Noun"` — the agent can scan its output and check.
-- Bad: `"Buttons should be clear"` — no operationalised meaning for "clear".
+- Bad: `"Buttons should be clear"` — no operationalized meaning for "clear".
 
 The DESIGN.md practitioner pattern ([Naya Moss](https://nayamoss.com/how-i-use-ai/teach-ai-agents-design-system)) captures the same shape at a smaller scale: a single Markdown file at repo root describing palette, typography, spacing, and usage rules, referenced from the project instruction file. Mode-routing and coverage-gap layers differentiate the Vercel-shape skill from a flat DESIGN.md.
 
@@ -81,7 +81,7 @@ Encoded conventions are worth nothing without checks. Vercel runs three, weakest
 - Adjective-only guidance. A skill of "clear, polished, intuitive" is uncheckable. It occupies context budget for no behavioral lift.
 - Positive-directive bloat. On SWE-bench, positive directives individually degraded success while negative constraints helped — and random rules helped as much as expert-curated ones ([Zhang et al., 2026](https://arxiv.org/abs/2604.11088)). Treat encoded design as steering, not ceremony.
 - Coverage-gap blindness. Without an explicit `coverage-gaps.md`, the agent extrapolates from the nearest exemplar into undecided domains — silence becomes accidental policy ([Vercel, 2026-06-25](https://vercel.com/blog/teaching-agents-product-design-at-vercel)).
-- Small surface, throwaway work. Solo prototypes and single-route internal tools do not amortise authoring and maintenance cost.
+- Small surface, throwaway work. Solo prototypes and single-route internal tools do not amortize authoring and maintenance cost.
 
 ## Why It Works
 

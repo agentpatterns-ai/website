@@ -75,7 +75,7 @@ one optimized for zero downtime, one for simplicity.
 What does each sacrifice?"
 ```
 
-Observing multiple valid solutions, and understanding why they differ, is a mechanism the nibzard/awesome-agentic-patterns catalogue identifies as a primary learning accelerator unavailable in traditional mentorship ([source](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/ai-accelerated-learning-and-skill-development.md)).
+Observing multiple valid solutions, and understanding why they differ, is a mechanism the nibzard/awesome-agentic-patterns catalog identifies as a primary learning accelerator unavailable in traditional mentorship ([source](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/ai-accelerated-learning-and-skill-development.md)).
 
 ### Fading support
 

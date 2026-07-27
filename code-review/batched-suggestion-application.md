@@ -96,7 +96,7 @@ CI re-runs once on the batched commit, confirming no new alerts introduced. The 
 
 ## Key Takeaways
 
-- The pattern is the cluster boundary, not the bulk-apply button — `(rule × severity × file scope)` with capped batch size keeps amortisation safe
+- The pattern is the cluster boundary, not the bulk-apply button — `(rule × severity × file scope)` with capped batch size keeps amortization safe
 - Vendor implementations encode boundary discipline: Dependabot refuses to group across ecosystems; GitHub's code-scanning batch operates within the **Files changed** tab; Cursor's Fix All applies only to actionable Bugbot suggestions
 - The 16.6% AI suggestion adoption rate means a meaningful fraction of suggestions should not be applied — batching makes it cheaper to apply the wrong ones if boundaries are loose
 - Mandatory CI re-run on the batched commit and per-finding commit-message manifests preserve the verification and audit properties that per-finding workflow gave for free

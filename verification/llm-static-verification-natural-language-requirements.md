@@ -52,7 +52,7 @@ Splitting verification into rule extraction and per-rule judgment is the same me
 
 | Approach | What it checks | Oracle type |
 |----------|---------------|-------------|
-| Tests | Observed behaviour against expected output | Runtime, deterministic |
+| Tests | Observed behavior against expected output | Runtime, deterministic |
 | Types and lints | Structural invariants | Static, deterministic |
 | [Chain-of-verification](chain-of-verification-coding-agents.md) | Residual claims no test or LSP can reach | LLM, factored |
 | LLM static verification (this page) | Per-rule conformance to a natural-language spec | LLM, structured two-stage |

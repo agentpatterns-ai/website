@@ -28,13 +28,13 @@ Classical patterns are a starting point, not a blueprint. They solve code organi
 
 | Classical Pattern | Agent Analogue |
 |---|---|
-| Strategy | [Cost-aware routing](../../token-engineering/cost-aware-agent-design.md); classifier dispatches to specialised handlers |
+| Strategy | [Cost-aware routing](../../token-engineering/cost-aware-agent-design.md); classifier dispatches to specialized handlers |
 | Observer | `PreToolUse`/`PostToolUse` hooks; tracing middleware as independent subscribers |
 | Circuit Breaker | `maxTurns`; [loop detection](../../observability/loop-detection.md); backpressure on repeated failure |
 | Composite | [Orchestrator-worker](../multi-agent/orchestrator-worker.md); sub-agents share the callable interface |
 | Saga | Multi-step workflows where each tool call is a step with compensating actions on failure |
 | Factory / Abstract Factory | [Dynamic tool](../anti-patterns/dynamic-tool-fetching-cache-break.md) instantiation; sub-agent spawning |
-| Decorator | Context-injection middleware; summarisation wrapping outputs before passing downstream |
+| Decorator | Context-injection middleware; summarization wrapping outputs before passing downstream |
 | Chain of Responsibility | Hook pipelines; permission escalation chains that approve, modify, or reject |
 | Memento | Checkpointing; multi-session state resumption stored externally |
 | Facade | `AGENTS.md` / `CLAUDE.md` as a stable interface hiding internal complexity |
@@ -100,19 +100,17 @@ Observer via hooks — A `PreToolUse` hook receives every tool call before execu
 
 ## Key Takeaways
 
-- Classical patterns transfer their structure (subscriber/publisher, context/strategy, component/composite) but not their drivers — agent systems optimise for control and safety, not reuse.
+- Classical patterns transfer their structure (subscriber/publisher, context/strategy, component/composite) but not their drivers — agent systems optimize for control and safety, not reuse.
 - Behavioral patterns (Observer, Chain of Responsibility, Strategy) transfer most cleanly; structural patterns (Composite, Facade) transfer weakest because the uniform interface depends on enforced output schemas.
 - Treat the mapping as a starting vocabulary, not a blueprint: each metaphor imports assumptions (retriable failures, uniform interfaces, stateless instantiation) that LLM non-determinism can break.
 
 ## Related
 
-- [Multi-Agent SE Design Patterns Taxonomy](../multi-agent/multi-agent-se-design-patterns.md) — the broader pattern catalogue this page maps into
-- [Orchestrator-Worker](../multi-agent/orchestrator-worker.md) — Composite pattern realised
+- [Multi-Agent SE Design Patterns Taxonomy](../multi-agent/multi-agent-se-design-patterns.md) — the broader pattern catalog this page maps into
+- [Orchestrator-Worker](../multi-agent/orchestrator-worker.md) — Composite pattern realized
 - [Agent Loop Middleware](../../loop-engineering/agent-loop-middleware.md) — Chain of Responsibility and Observer in the agent loop
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — Saga and Circuit Breaker in failure recovery
 - [Advanced Tool Use](../../tool-engineering/advanced-tool-use.md) — Tool Search as Factory pattern
 - [Harness Engineering](harness-engineering.md) — Factory and Facade patterns in harness design
 - [AGENTS.md](../../standards/agents-md.md) — Facade pattern in practice
 - [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md) — a parallel classical-to-agent mapping
-</content>
-</invoke>

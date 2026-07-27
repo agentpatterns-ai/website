@@ -104,7 +104,7 @@ Developers select per-task, not per-identity. The team tracks intervention rate 
 - The mechanism is input-distribution alignment, not personality matching — `.chatmode.md`, `.cursorrules`, and `CLAUDE.md` work because they shift the model's effective conditioning to match each developer's natural prompting style.
 - The literature splits on mode count — five style-anchored modes in [Richards et al. 2026](https://arxiv.org/abs/2606.19216), two in [Barke et al. 2023](https://arxiv.org/abs/2206.15000), and a different decomposition again under agent-mode automation ([Chen et al. 2026](https://arxiv.org/abs/2507.08149)) — so build vocabulary around the two-mode baseline and treat finer subdivisions as advisory.
 - Per-developer config overhead is fixed; the payoff scales with team size, style variance, and tool stability. Below ~5 developers, in fast-moving agent tooling, or under compliance, a shared default wins on TCO.
-- Pair any persona rollout with outcome telemetry (intervention rate, revision rate, time-to-merge) — without it, the configuration optimises chat comfort, not output quality.
+- Pair any persona rollout with outcome telemetry (intervention rate, revision rate, time-to-merge) — without it, the configuration optimizes chat comfort, not output quality.
 
 ## Related
 
@@ -113,5 +113,3 @@ Developers select per-task, not per-identity. The team tracks intervention rate 
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — empirical evidence on how experienced developers supervise AI output, complementary to the style framing here
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — the failure mode that persona-tailoring is supposed to reduce
 - [Deliberate AI-Assisted Learning](deliberate-ai-learning.md) — the onboarding-time counter-pressure on persona-as-default
-</content>
-</invoke>

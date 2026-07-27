@@ -88,6 +88,6 @@ One caution against over-correcting: LLM review is not worthless here. Removing 
 
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](../../security/authority-confusion-untrusted-context.md) — the dispatch-layer primitive this review-gate failure is a specific instance of; untrusted content must inform, never authorize.
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](../../security/non-human-event-provenance-markers.md) — the in-transcript sibling; both refuse a fabricated approval by keying on provenance rather than text.
-- [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md) — relying on one review layer is exactly what this pipeline did before the entry provenance control.
+- [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md) — relying on one review layer is exactly what this pipeline did before the entry provenance control.
 - [Trusting Tool Error Messages as Implicit Authority (Error-Path Injection)](tool-error-implicit-authority.md) — the same authority-confusion mechanism applied to the error stream instead of the approval claim.
 - [Security Review Gap in AI-Authored PRs](../../code-review/security-review-gap-in-ai-prs.md) — the broader review-coverage failure that authority framing exploits.

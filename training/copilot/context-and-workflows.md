@@ -25,7 +25,7 @@ Prompt engineering is writing a good question. Context engineering is designing 
 |-|-------------------|-------------------|-------------------|
 | Scope | The user message | Everything in the context window: system prompt, instructions, tool outputs, conversation history, file contents | The development environment: type system, test suite, linters, CI pipeline, repo structure |
 | When | At the moment you ask | Before the session (instructions, skills, Spaces), during (tool results, steering), and across sessions (memory) | Before any session — baked into the codebase and toolchain |
-| Optimises for | A good answer to this question | Consistent quality across all questions in this codebase | Agent self-correction — the agent iterates until checks pass without human help |
+| Optimizes for | A good answer to this question | Consistent quality across all questions in this codebase | Agent self-correction — the agent iterates until checks pass without human help |
 | Who does it | The person asking | The team, via committed configuration files | The team, via tooling investments (types, tests, linters, hooks) |
 | Failure mode | Bad answer to one question | Inconsistent results across sessions | Agent can't verify its own work — every output requires manual review |
 | Durability | Per-message | Per-repo, evolves with configuration | Permanent — compounds across all agents, all sessions, all team members |
@@ -165,7 +165,7 @@ The practical implication: For complex reasoning tasks, a fresh context with pre
 |----------|------------|-----|
 | Fresh sessions for complex tasks | Before starting a multi-file refactor or complex bug fix | Start a new chat. Load specific files with `#file` references. State the task clearly. |
 | [Manual compaction](../../context-engineering/manual-compaction-dumb-zone-mitigation.md) | Mid-session, when you notice quality dropping | Copilot CLI: `/compact`. VS Code: start a new session (no manual compact yet). |
-| Sub-agent isolation | Research phase separate from implementation | In Copilot CLI, use a separate session for research. Summarise findings, then start a new session for implementation. |
+| Sub-agent isolation | Research phase separate from implementation | In Copilot CLI, use a separate session for research. Summarize findings, then start a new session for implementation. |
 | Smaller tasks | Prevent rot by finishing before it starts | Break large tasks into agent-sized chunks (see next section). |
 
 ---

@@ -1,7 +1,7 @@
 ---
 title: "LLM Self-Review Failure in Code Modernization Tasks"
 term: "LLM Self-Review Failure"
-description: "Asking an LLM to verify behaviour preservation of its own migration output misses 31.7% of semantic drift cases — independent of model capability."
+description: "Asking an LLM to verify behavior preservation of its own migration output misses 31.7% of semantic drift cases — independent of model capability."
 tags:
   - testing-verification
   - anti-pattern
@@ -91,7 +91,7 @@ The reviewer is a separate principal — different model or, at minimum, a fresh
 
 - Self-review by the producing model misses ~31.7% of semantic drift during code modernization and the miss rate is independent of model capability or cost
 - The failure is structural — a model that can articulate the relevant semantic rule still approves its own violation of it
-- Mitigate with two independent signals: a different reviewer (different model or isolated session) and a behavioural oracle (tests or executable spec); both are needed
+- Mitigate with two independent signals: a different reviewer (different model or isolated session) and a behavioral oracle (tests or executable spec); both are needed
 - Frontier models do not fix this — capability investments do not substitute for independent verification
 
 ## Related
@@ -100,4 +100,4 @@ The reviewer is a separate principal — different model or, at minimum, a fresh
 - [Trust Without Verify](trust-without-verify.md) — the general anti-pattern of accepting polished agent output without independent checks
 - [The Test Homogenization Trap](test-homogenization-trap.md) — why LLM-generated tests share the same blind spots as the LLM-generated code they cover
 - [Prior Dominance Over Feedback](prior-dominance-over-feedback.md) — why feedback loops amplify the original output instead of correcting it
-- [Documentation-Guided Legacy Migration](../../workflows/documentation-guided-legacy-migration.md) — workflow that pairs migration with an external behavioural oracle
+- [Documentation-Guided Legacy Migration](../../workflows/documentation-guided-legacy-migration.md) — workflow that pairs migration with an external behavioral oracle

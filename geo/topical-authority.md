@@ -158,5 +158,3 @@ External infrastructure amplifies but doesn't replace internal coverage. A Wikid
 - [Awisee: How to Earn LLM Citations](https://awisee.com/blog/earn-llm-citations/)
 - [iPullRank: How Does Internal Linking Impact Topical Authority?](https://ipullrank.com/internal-linking-topical-authority)
 - [Search Engine Land: What is Generative Engine Optimization?](https://searchengineland.com/what-is-generative-engine-optimization-geo-444418)
-</content>
-</invoke>

@@ -53,7 +53,7 @@ Rigor comes first. Eric Evans' original ubiquitous-language argument: when prose
 
 Drift detection comes second. The agent uses docs as both a question generator — probing where the change touches existing concepts — and a consistency checker — flagging when the developer's answer uses a different word than the glossary. The same loop surfaces glossary entries that no longer match the code ([DeepWiki: *Aligning Plans with Docs*](https://deepwiki.com/mattpocock/skills/7.1-aligning-plans-with-docs-(grill-with-docs))). One session yields three outputs (resolved terminology, detected doc drift, surfaced design gaps) where Grill Me yields one.
 
-The root cause this addresses is widely reported: AI coding agents amplify whatever vocabulary they receive, collapsing business terms into framework terms unless a formalised domain language constrains them ([Brown, *AI Coding Assistants and the Erosion of Ubiquitous Language*](https://dev.to/dbrown/ai-coding-assistants-and-the-erosion-of-ubiquitous-language-301a); [Rezki, *Solving AI Agent Ambiguity with DDD's Ubiquitous Language*](https://earezki.com/ai-news/2026-05-21-your-agent-keeps-using-that-word-/)).
+The root cause this addresses is widely reported: AI coding agents amplify whatever vocabulary they receive, collapsing business terms into framework terms unless a formalized domain language constrains them ([Brown, *AI Coding Assistants and the Erosion of Ubiquitous Language*](https://dev.to/dbrown/ai-coding-assistants-and-the-erosion-of-ubiquitous-language-301a); [Rezki, *Solving AI Agent Ambiguity with DDD's Ubiquitous Language*](https://earezki.com/ai-news/2026-05-21-your-agent-keeps-using-that-word-/)).
 
 ## When this backfires
 
@@ -88,7 +88,7 @@ The same session surfaces a year-old glossary entry — `Lesson Video` is still 
 ## Key Takeaways
 
 - Anchor the *interview*, not just the plan, in living docs — that is what makes the pattern distinct from `ubiquitous-language-for-ai-plans.md` and from undirected `grill-me`.
-- Keep the artefact contract small: a glossary, an ADR set gated by three conditions, and an optional cross-context index — created lazily during the session, not pre-written ([Pocock, *grill-with-docs SKILL.md*](https://github.com/mattpocock/skills/blob/main/skills/engineering/grill-with-docs/SKILL.md)).
+- Keep the artifact contract small: a glossary, an ADR set gated by three conditions, and an optional cross-context index — created lazily during the session, not pre-written ([Pocock, *grill-with-docs SKILL.md*](https://github.com/mattpocock/skills/blob/main/skills/engineering/grill-with-docs/SKILL.md)).
 - One session yields three outputs — resolved terminology, detected doc drift, surfaced design gaps — where Grill Me alone yields one.
 - The pattern is Qualified, not universal: it earns its cost only when domain vocabulary is non-trivial, docs are kept fresh, and types do not already enforce the language. Outside those conditions, expect Gloaguen-style cost-without-value or MemU-style drift propagation.
 

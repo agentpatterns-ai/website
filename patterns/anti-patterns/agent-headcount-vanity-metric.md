@@ -1,6 +1,6 @@
 ---
 title: "Agent Headcount as a Vanity Metric"
-description: "Counting AI agents predicts no operational outcome — compute-equalised benchmarks show the same architecture swings from +80% to -70% based on task fit, not count."
+description: "Counting AI agents predicts no operational outcome — compute-equalized benchmarks show the same architecture swings from +80% to -70% based on task fit, not count."
 term: "Agent Headcount Vanity Metric"
 tags:
   - anti-pattern
@@ -48,7 +48,7 @@ Track the agent system's outputs, not its population:
 ## When this backfires
 
 - Zero outcome telemetry. Retiring headcount without the dashboards above leaves a vacuum filled by worse proxies — AI-generated code lines, prompt counts, acceptance ratios. Build the replacement first.
-- Genuinely decomposable parallel work. For breadth-first research, multi-vendor extraction, or batch processing, more agents helps up to the parallelization limit ([Kim et al., 2025](https://arxiv.org/abs/2512.08296)). Headcount there is a weak-but-positive signal — the anti-pattern is generalising from it.
+- Genuinely decomposable parallel work. For breadth-first research, multi-vendor extraction, or batch processing, more agents helps up to the parallelization limit ([Kim et al., 2025](https://arxiv.org/abs/2512.08296)). Headcount there is a weak-but-positive signal — the anti-pattern is generalizing from it.
 - Non-technical reporting. "8 production agents" lands on a board slide; "0.72 cost per merged PR" needs a briefing. Publish both.
 
 ## Example
@@ -80,7 +80,7 @@ Throughput and cost-per-unit are up while agent count is down. The vanity metric
 ## Key Takeaways
 
 - Counting agents is a category error — like counting spreadsheets or browser tabs, it reports a number without describing value
-- Compute-equalised benchmarks show single-agent matches or beats multi-agent on most tasks; the same system swings +80% to -70% by task fit, not count
+- Compute-equalized benchmarks show single-agent matches or beats multi-agent on most tasks; the same system swings +80% to -70% by task fit, not count
 - Track pass rate, revision rate, cost per merged PR, and unedited-merge percentage — headcount cannot distinguish winning configurations from losing ones
 - Multi-agent earns its token cost on a narrow class of breadth-first parallel work; outside that class, more agents adds coordination overhead without value
 

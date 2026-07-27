@@ -27,9 +27,9 @@ Four conditions must all hold:
 
 | Condition | What it means | If absent |
 |----------|----------------|-----------|
-| Task cadence | The same task shape recurs at least every 7 days | Setup never amortises — one-shot prompt is cheaper |
+| Task cadence | The same task shape recurs at least every 7 days | Setup never amortizes — one-shot prompt is cheaper |
 | Objective verification | An external gate (test, build, typecheck, lint, CI status) can grade "done" without an LLM's opinion | The loop stops on vibes; maker grades own homework |
-| Absorbable token budget | You can spend on retries, re-reads, and exploration without it changing behaviour | Per-iteration waste dominates the savings |
+| Absorbable token budget | You can spend on retries, re-reads, and exploration without it changing behavior | Per-iteration waste dominates the savings |
 | Real tooling | The agent has logs, a reproduction environment, and can run the thing it writes | Loop iterates on a stale view; convergence is theatre |
 
 Fail any one and the loop's marginal cost stays at or above the prompt-session cost forever — there is no number of iterations that fixes it.
@@ -62,7 +62,7 @@ The four conditions sort tasks cleanly.
 | Architecture rewrites | No automated verifier for "is the design right"; judgment-call done condition |
 | Auth and payments | Verification needs human security review; cost of a wrong merge is catastrophic |
 | Production deploys | Verification is the real environment, not a test suite; bounded blast radius matters more than cadence |
-| Solo developer on a metered plan, sub-weekly cadence | N is too small to amortise setup; single prompt session is strictly cheaper |
+| Solo developer on a metered plan, sub-weekly cadence | N is too small to amortize setup; single prompt session is strictly cheaper |
 | Review-bound teams | Multiplying output past the review ceiling makes the queue longer, not faster |
 
 The no-go list maps onto pages already on this site — [comprehension-debt.md](../patterns/anti-patterns/comprehension-debt.md) for what happens when shipped-faster outruns understood; [trust-without-verify.md](../patterns/anti-patterns/trust-without-verify.md) for the verification-vibes failure; [cost-aware-agent-design.md](../token-engineering/cost-aware-agent-design.md) for the budget side.

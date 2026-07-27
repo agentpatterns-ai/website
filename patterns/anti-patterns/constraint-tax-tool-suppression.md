@@ -111,6 +111,6 @@ Pair this with monitoring that tracks tool-invocation rate alongside schema-comp
 
 - [Structured Output Constraints: Reducing Hallucination](../../verification/structured-output-constraints.md) — the complementary benefit-side view; this page is the cost-side trade-off when combined with tool calling
 - [Indiscriminate Structured Reasoning](reasoning-overuse.md) — another anti-pattern where a generally useful technique is applied without checking whether it helps the specific task
-- [Dynamic Tool Fetching Breaks KV Cache](dynamic-tool-fetching-cache-break.md) — sibling failure where intuitive tool-side optimisation breaks a different layer (cache vs. decoding)
+- [Dynamic Tool Fetching Breaks KV Cache](dynamic-tool-fetching-cache-break.md) — sibling failure where intuitive tool-side optimization breaks a different layer (cache vs. decoding)
 - [Token-Efficient Tool Design](../../token-engineering/token-efficient-tool-design.md) — tool-side design choices that affect agent reliability
 - [Advanced Tool Use](../../tool-engineering/advanced-tool-use.md) — broader reference for tool-calling reliability and harness design

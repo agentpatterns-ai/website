@@ -1,7 +1,7 @@
 ---
 title: "Post-Compaction Re-read Protocol for Agent Continuity"
 term: "Post-Compaction Re-read Protocol"
-description: "Restore behavioural contracts after context compaction by triggering a targeted re-read of CLAUDE.md or AGENTS.md — via hook or manual prompt."
+description: "Restore behavioral contracts after context compaction by triggering a targeted re-read of CLAUDE.md or AGENTS.md — via hook or manual prompt."
 tags:
   - context-engineering
   - instructions
@@ -13,7 +13,7 @@ maturity: adopted
 
 # Post-Compaction Re-read Protocol
 
-> Compaction summarises conversation history but discards the soft operational knowledge agents accumulate by reading instruction files early in a session. A targeted re-read restores that knowledge.
+> Compaction summarizes conversation history but discards the soft operational knowledge agents accumulate by reading instruction files early in a session. A targeted re-read restores that knowledge.
 
 Learn it hands-on with [The Re-read Protocol](https://learn.agentpatterns.ai/prompt-engineering/the-reread-protocol/), a guided lesson with quizzes.
 

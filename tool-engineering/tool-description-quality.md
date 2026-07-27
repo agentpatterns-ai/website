@@ -130,4 +130,3 @@ Each description adds tokens on every invocation. This matters in three cases:
 - [MCP Server Design](mcp-server-design.md)
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Self-Healing Tool Routing](self-healing-tool-routing.md)
-</content>

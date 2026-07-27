@@ -152,5 +152,3 @@ The `--no-cache` flag gives a genuinely clean context each cycle. Non-zero exit 
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — the upstream skill that produces the atomic, unambiguous tasks this loop requires
 - [The Plan-First Loop](plan-first-loop.md) — the design-before-code variant for non-trivial tasks where this pattern's mechanical execution is unsafe
 - [Continuous AI: A Navigation Map of Always-On Agent Workflows](continuous-ai.md) — the parent map of the continuous-* and triage families this loop belongs to
-</content>
-</invoke>

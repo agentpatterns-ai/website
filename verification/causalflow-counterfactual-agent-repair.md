@@ -85,7 +85,7 @@ Combine with stage decomposition. [Trajectory decomposition](trajectory-decompos
 ## Key Takeaways
 
 - CausalFlow scores each step in a failed trajectory by counterfactual lift — replace the step with an oracle-guided alternative, replay, observe whether the outcome flips ([arxiv 2605.25338](https://arxiv.org/abs/2605.25338))
-- The minimal edit that produces the flip is a *validated* repair, not a hypothesised one — usable for test-time recovery or as offline preference data
+- The minimal edit that produces the flip is a *validated* repair, not a hypothesized one — usable for test-time recovery or as offline preference data
 - The technique is qualified by three preconditions: binary verifier, replay isolation, and single-trajectory failure that is not the tip of a cascade
 - For distributed or multi-agent failures, prefer hierarchical causal-graph attribution ([CHIEF](https://arxiv.org/abs/2602.23701)) or multi-perspective benchmarks ([TraceElephant](https://arxiv.org/abs/2604.22708))
 - Replay isolation is the load-bearing prerequisite — invest there before the attribution model

@@ -12,7 +12,7 @@ maturity: emerging
 
 # Product-as-IDE: When the Application Becomes the Development Environment
 
-> The running product becomes its own development environment — operators change behaviour from inside the app and ship it via background agents.
+> The running product becomes its own development environment — operators change behavior from inside the app and ship it via background agents.
 
 ## The concept
 

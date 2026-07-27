@@ -106,11 +106,11 @@ AgentCore's gateway evaluates this Cedar document on every `deploy_service` call
 
 ## Key Takeaways
 
-- A runtime control plane collapses N per-server authorisation models into one policy evaluation point between agent and tool.
+- A runtime control plane collapses N per-server authorization models into one policy evaluation point between agent and tool.
 - Consistent policy dimensions: identity, tool name, argument inspection, rate limit, environment, data labels.
 - Deterministic enforcement (Cedar, OPA) is independent of model judgment; prompt-only controls measure ~27% violation rates in red-team tests vs 0% for policy engines.
 - The plane covers only traffic that traverses it; pair with a registry, runtime hooks, and argument-level policy to address bypass and blind-spot failure modes.
-- Control plane is distinct from network egress policy (lower), sandbox rules (process), and MCP transport; defence in depth combines all four.
+- Control plane is distinct from network egress policy (lower), sandbox rules (process), and MCP transport; defense in depth combines all four.
 
 ## Related
 

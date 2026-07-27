@@ -43,7 +43,7 @@ Prompt injection is the primary attack vector for agents that consume untrusted 
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md) — Separate trusted control flow from untrusted data flow so injection attacks cannot alter tool invocation, regardless of model susceptibility
 - [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md) — Use new attack traces to adversarially train hardened model checkpoints immediately after discovery
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — Architectural patterns and defense-in-depth strategies for building coding agents that stay resilient when untrusted input lands in context
-- [Destyling Untrusted Input as a Prompt Injection Defense](destyling-untrusted-input.md) — Normalise the surface style of untrusted input before the model encodes who is speaking; cuts CoT-forgery attack success from 61% to 10% on a static benchmark by interrupting role perception at the representational layer
+- [Destyling Untrusted Input as a Prompt Injection Defense](destyling-untrusted-input.md) — Normalize the surface style of untrusted input before the model encodes who is speaking; cuts CoT-forgery attack success from 61% to 10% on a static benchmark by interrupting role perception at the representational layer
 - [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md) — Map retrieval paths, audit against the Lethal Trifecta, and test with synthetic payloads to find the vulnerabilities standard testing misses
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — Mandatory checkpoints before irreversible actions let humans catch injection-driven misbehavior before it causes harm
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — Tag every value with a sink-specific capability budget and intersect budgets through tool composition; closes permission laundering only with expert-crafted manifests and explicit-flow attacks
@@ -53,7 +53,7 @@ Prompt injection is the primary attack vector for agents that consume untrusted 
 - [RL-Trained Automated Red Teamers for Prompt Injection Discovery](rl-automated-red-teamers.md) — Train an LLM-based attacker with reinforcement learning to discover novel injection vectors before adversaries do
 - [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md) — Narrow task scope limits both the attack surface and the blast radius of a successful injection
 
-Anti-pattern: [Single-Layer Prompt Injection Defence](../patterns/anti-patterns/single-layer-injection-defence.md) — Relying on one safeguard leaves agents vulnerable to attack vectors that layer does not address
+Anti-pattern: [Single-Layer Prompt Injection Defense](../patterns/anti-patterns/single-layer-injection-defence.md) — Relying on one safeguard leaves agents vulnerable to attack vectors that layer does not address
 
 ## Sandboxing
 
@@ -101,11 +101,11 @@ Excess permissions expand the blast radius of any failure or attack.
 - [Constraints as a Substrate for Scalable Agent Oversight](constraint-substrate-scalable-oversight.md) — Manage coding agents with the controls used for human teams — access control, network policy, tooling-enforced conventions — so a small, cheap reviewer scales oversight; substrate plus a ~200-line tool lifted a small reviewer's backdoor recall from 54.5% to 90.9%
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — Block agent startup until remote managed settings are freshly validated; exit rather than run with stale or missing policy
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — Writes to `.npmrc`, `.yarnrc`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, and `.devcontainer/` are execution-escalations — interrupt permissive edit modes at the write site, complementing execution-side defaults like `ignore-scripts=true`
-- [Intent-Governed Tool Authorization for AI Agents (IGAC)](intent-governed-tool-authorization.md) — A server-issued intent certificate narrows the static OpenPort manifest per user request via a monotone-only filter; the planner cannot reach tools the current ask does not justify, but classifier failure and intent-materialisation privacy regressions constrain where the trade-off pays off
-- [Org-Membership-Gated Agent Entitlement](org-membership-gated-agent-entitlement.md) — Gate AI chat activation on directory-managed GitHub organization membership via VS Code's `ChatApprovedAccountOrganizations` device policy; fail-closed and structurally distinct from seat licences
+- [Intent-Governed Tool Authorization for AI Agents (IGAC)](intent-governed-tool-authorization.md) — A server-issued intent certificate narrows the static OpenPort manifest per user request via a monotone-only filter; the planner cannot reach tools the current ask does not justify, but classifier failure and intent-materialization privacy regressions constrain where the trade-off pays off
+- [Org-Membership-Gated Agent Entitlement](org-membership-gated-agent-entitlement.md) — Gate AI chat activation on directory-managed GitHub organization membership via VS Code's `ChatApprovedAccountOrganizations` device policy; fail-closed and structurally distinct from seat licenses
 - [Permission-Gated Custom Commands](permission-gated-commands.md) — Pre-approve the tools a Claude Code slash command may use via frontmatter, narrowing the expected surface for shared commands
 - [Pre-Execution Risk Classification for Terminal Commands](pre-execution-command-risk-classification.md) — Display a tiered Safe/Caution/Review-carefully badge with command-specific text before the agent runs a terminal command; an attention-allocation lever paired with deterministic allowlists that carry the policy load
-- [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — Materialise each subgoal-scoped capability as an opaque epoch-bound handle that closure removes from the planner's interface; stale replay is rejected before side effects, closing lingering authority when tool traffic is mediated and the catalog is typed
+- [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — Materialize each subgoal-scoped capability as an opaque epoch-bound handle that closure removes from the planner's interface; stale replay is rejected before side effects, closing lingering authority when tool traffic is mediated and the catalog is typed
 - [Safe Outputs Pattern](safe-outputs-pattern.md) — Default agents to read-only and require explicit grants for each write output type, producing a deterministic blast radius
 - [Task-Based Access Control with Hybrid Inspection](task-based-access-control-hybrid-inspection.md) — Bind each tool call to the user's current task via short-lived signed credentials, with a semantic axis flagging in-scope-but-off-task calls; the deterministic axis carries the security guarantee
 - [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md) — Mine session transcripts for repeated read-only tool calls and propose a prioritized allowlist — narrower than bypass, tighter than manual curation
@@ -114,7 +114,7 @@ Excess permissions expand the blast radius of any failure or attack.
 
 Code injection in multi-agent pipelines exploits agent trust in code it reads as input, distinct from prompt injection against a single agent.
 
-- [Code Injection Attacks on Multi-Agent Systems: Coder-Reviewer-Tester as Defence](code-injection-multi-agent-defence.md) — A coder-reviewer-tester architecture with a dedicated security analysis agent achieves the highest resilience while recovering efficiency losses
+- [Code Injection Attacks on Multi-Agent Systems: Coder-Reviewer-Tester as Defense](code-injection-multi-agent-defence.md) — A coder-reviewer-tester architecture with a dedicated security analysis agent achieves the highest resilience while recovering efficiency losses
 
 ## Multi-Agent Propagation
 

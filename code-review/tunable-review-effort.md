@@ -26,7 +26,7 @@ Cursor's Bugbot externalized this dial on [2026-05-11](https://cursor.com/change
 
 | Level | Bug-discovery rate | Reviewer-stated trade-off |
 |-------|-------------------|-------------------------|
-| Default | 0.7 bugs/run | Optimised for efficiency and speed |
+| Default | 0.7 bugs/run | Optimized for efficiency and speed |
 | High | 0.95 bugs/run | "More reasoning time; more expensive and slower, but finds more bugs" |
 | Custom | Operator-defined | Natural-language policy: "Describe when Bugbot should use default or high effort" |
 

@@ -1,7 +1,7 @@
 ---
 title: "Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit"
 term: "Skill Evals"
-description: "Treat each agent skill as an evaluable unit — with a labelled dataset, pass criteria, and a parallel with-skill vs baseline runner — to detect regressions and quantify cost-benefit trade-offs."
+description: "Treat each agent skill as an evaluable unit — with a labeled dataset, pass criteria, and a parallel with-skill vs baseline runner — to detect regressions and quantify cost-benefit trade-offs."
 tags:
   - testing-verification
   - evals
@@ -15,7 +15,7 @@ maturity: established
 
 # Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit
 
-> Evaluate each skill as a unit: a labelled dataset, explicit assertions, paired with-skill and baseline runs, and a benchmark quantifying pass-rate, time, and token trade-offs.
+> Evaluate each skill as a unit: a labeled dataset, explicit assertions, paired with-skill and baseline runs, and a benchmark quantifying pass-rate, time, and token trade-offs.
 
 Related lesson: [Evals at Scale](https://learn.agentpatterns.ai/verification/evals-at-scale/) — this concept features in a hands-on lesson with quizzes.
 

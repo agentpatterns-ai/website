@@ -18,7 +18,7 @@ This page is the entry point for two sections. For content grouped by cross-cutt
 
 ## [Context Engineering](context-engineering/index.md)
 
-The practice of designing what information enters a model's context window, how it is structured, and what is excluded — to maximise the quality and reliability of agent output. Covers attention mechanics, compression strategies, caching economics, and retrieval patterns.
+The practice of designing what information enters a model's context window, how it is structured, and what is excluded — to maximize the quality and reliability of agent output. Covers attention mechanics, compression strategies, caching economics, and retrieval patterns.
 
 ## [Instructions](instructions/index.md)
 

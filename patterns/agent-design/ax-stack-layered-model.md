@@ -1,7 +1,7 @@
 ---
 title: "The AX Stack: A Layered Model of an AI Coding Agent's Prompt-to-Compile Path"
 term: "AX Stack"
-description: "A four-layer model — model, harness, agent extensions, technology surface — for naming where an agent failure or optimisation lives. Useful as a diagnostic vocabulary, misleading when treated as architectural independence."
+description: "A four-layer model — model, harness, agent extensions, technology surface — for naming where an agent failure or optimization lives. Useful as a diagnostic vocabulary, misleading when treated as architectural independence."
 tags:
   - agent-design
   - tool-agnostic
@@ -17,11 +17,11 @@ maturity: adopted
 
 # The AX Stack
 
-> The AX stack names four layers — model, harness, agent extensions, technology surface — to locate where an agent failure or optimisation lives.
+> The AX stack names four layers — model, harness, agent extensions, technology surface — to locate where an agent failure or optimization lives.
 
 ## When this helps (and when it misleads)
 
-The stack is a diagnostic and communication tool, not an architecture. Use it when a team needs shared vocabulary to locate a failure ("the agent picked the wrong SDK — that is an extensions-layer problem, not a model swap") or to prioritize where to invest first. Treat the fixed and open boundaries as approximate, not absolute. The cases where the framing actively misleads are catalogued in [when this backfires](#when-this-backfires) below.
+The stack is a diagnostic and communication tool, not an architecture. Use it when a team needs shared vocabulary to locate a failure ("the agent picked the wrong SDK — that is an extensions-layer problem, not a model swap") or to prioritize where to invest first. Treat the fixed and open boundaries as approximate, not absolute. The cases where the framing actively misleads are cataloged in [when this backfires](#when-this-backfires) below.
 
 The [Five-Failure-Layers Diagnostic](five-failure-layers-diagnostic.md) is a different cut of the same problem — five working layers, no independence claim. The AX stack frames fixed versus controllable layers. The failure-layers diagnostic frames attribution before a model swap.
 
@@ -46,7 +46,7 @@ flowchart TD
 | Layer | Owner | Typical intervention | Canonical failure mode |
 |-------|-------|---------------------|------------------------|
 | Model | Vendor | None directly — you can only swap models | Outdated SDK pattern; hallucinated API; default to competing technology when yours has thinner training data ([Mastykarz](https://developer.microsoft.com/blog/the-ax-stack-whats-fixed-where-you-can-win)) |
-| Harness | Vendor (mostly) | Hooks, settings, system-prompt knobs the vendor exposes — but not full replacement | Inconsistent extension behaviour across Copilot, Claude Code, Cursor ([Mastykarz](https://developer.microsoft.com/blog/the-ax-stack-whats-fixed-where-you-can-win)) |
+| Harness | Vendor (mostly) | Hooks, settings, system-prompt knobs the vendor exposes — but not full replacement | Inconsistent extension behavior across Copilot, Claude Code, Cursor ([Mastykarz](https://developer.microsoft.com/blog/the-ax-stack-whats-fixed-where-you-can-win)) |
 | Agent extensions | You | Skills, MCP servers, `AGENTS.md`/`CLAUDE.md`, custom agents | Discovery, selection, or quality failure ([Mastykarz](https://developer.microsoft.com/blog/the-ax-stack-whats-fixed-where-you-can-win)) |
 | Technology surface | You | The shape of the CLI, SDK, or API the agent ultimately calls | Surface assumes human-readable feedback the agent cannot parse |
 
@@ -111,10 +111,10 @@ Lift-vs-drag test: add a one-paragraph `AGENTS.md` entry and an MCP server retur
 
 ## Key Takeaways
 
-- Four layers — model, harness, agent extensions, technology surface — give a shared vocabulary for naming where an agent failure or optimisation lives.
+- Four layers — model, harness, agent extensions, technology surface — give a shared vocabulary for naming where an agent failure or optimization lives.
 - The model and harness are mostly fixed by the vendor; extensions and the technology surface are where developers have leverage.
 - The fixed/controllable dichotomy is approximate, not absolute — vendors expose harness-level levers (hooks, settings, system-prompt overrides) that the binary framing hides.
-- Layers leak in predictable ways: model bias defeats extension steering; harness conventions change extension behaviour across platforms (an MCP server can lift in Claude Code and drag in Copilot); tool descriptions interact with system prompts.
+- Layers leak in predictable ways: model bias defeats extension steering; harness conventions change extension behavior across platforms (an MCP server can lift in Claude Code and drag in Copilot); tool descriptions interact with system prompts.
 - Pair the diagnostic with a lift-vs-drag measurement — without it the vocabulary justifies unfalsifiable claims.
 
 ## Related

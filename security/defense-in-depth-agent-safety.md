@@ -131,7 +131,7 @@ Apply the full five-layer stack to production agents with write access, external
 
 ## Related
 
-- [Single-Layer Prompt Injection Defence](../patterns/anti-patterns/single-layer-injection-defence.md) — the anti-pattern this addresses
+- [Single-Layer Prompt Injection Defense](../patterns/anti-patterns/single-layer-injection-defence.md) — the anti-pattern this addresses
 - [Subagent Schema-Level Tool Filtering](../patterns/multi-agent/subagent-schema-level-tool-filtering.md) — schema layer in depth
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md) — approval layer in depth
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — lifecycle-hook layer vs prompt layer

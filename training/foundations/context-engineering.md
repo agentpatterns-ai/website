@@ -1,6 +1,6 @@
 ---
 title: "Context Engineering (Training Module)"
-description: "Context engineering is the discipline of designing what enters a model context window, how it is structured, and what is excluded to maximise reliability."
+description: "Context engineering is the discipline of designing what enters a model context window, how it is structured, and what is excluded to maximize reliability."
 tags:
   - training
   - context-engineering
@@ -10,7 +10,7 @@ last_reviewed: 2026-05-27
 
 # Context Engineering (Training Module)
 
-> The discipline of designing what enters a model's context window, how it is structured, and what is excluded — to maximise output quality and reliability.
+> The discipline of designing what enters a model's context window, how it is structured, and what is excluded — to maximize output quality and reliability.
 
 Context windows have structural and economic properties that determine whether an agent produces reliable output or drifts into incoherence. Attention is not uniform — it follows a U-shaped curve. Tokens are not free — every preloaded token displaces one available for reasoning, so [context is a budget](../../context-engineering/context-budget-allocation.md). Compression is not optional — long sessions demand it. This module covers these mechanics and the engineering strategies that exploit them, regardless of which tool you use.
 
@@ -76,11 +76,11 @@ Long-running agents accumulate context that eventually fills the window. Without
 
 Tier 1 — Offload large tool responses. Replace large payloads (full files, API responses) with a filesystem reference and brief summary. The full content is written to disk; the agent re-reads it when needed. [LangChain's Deep Agents framework](https://blog.langchain.com/context-management-for-deepagents/) implements this as the first compression stage.
 
-Tier 2 — Summarise conversation history. When context fills further, summarise prior turns. Effective summaries preserve the current objective, key artifacts, decisions and rationale, and next steps. [Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies this as "compaction." The risk: summaries that capture only "what happened" without "what matters next" cause [objective drift](../../patterns/anti-patterns/objective-drift.md).
+Tier 2 — Summarize conversation history. When context fills further, summarize prior turns. Effective summaries preserve the current objective, key artifacts, decisions and rationale, and next steps. [Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies this as "compaction." The risk: summaries that capture only "what happened" without "what matters next" cause [objective drift](../../patterns/anti-patterns/objective-drift.md).
 
 More graduated approaches exist. The [OPENDEV framework](https://arxiv.org/abs/2603.05344) implements five-stage Adaptive Context Compaction, triggered at specific budget thresholds from 70% to 99%, degrading gracefully rather than hitting a single compression cliff.
 
-For implementation details and the full five-stage pipeline, see [Context Compression Strategies: Offloading and Summarisation](../../context-engineering/context-compression-strategies.md).
+For implementation details and the full five-stage pipeline, see [Context Compression Strategies: Offloading and Summarization](../../context-engineering/context-compression-strategies.md).
 
 ---
 
@@ -133,7 +133,7 @@ The rule of thumb: seed durable information in the codebase; prompt session-spec
 
 ## Key Takeaways
 
-- The context window is the agent's complete world. What is not in it does not exist for the agent. Optimise for signal density, not volume.
+- The context window is the agent's complete world. What is not in it does not exist for the agent. Optimize for signal density, not volume.
 - Attention follows a U-shape: critical rules belong at the start and end of instruction files, not [lost in the middle](../../context-engineering/lost-in-the-middle.md). The middle is for reference material, not rules.
 - Context is a budget. Every preloaded token displaces a token available for reasoning and implementation. Preload only what every task needs; load everything else on-demand, per the [context budget framework](../../context-engineering/context-budget-allocation.md).
 - Compression preserves task continuity in long sessions. Summaries must retain the objective, decisions, and next steps — not just action history.
@@ -149,7 +149,7 @@ Source pages
 - [Attention Sinks: Why First Tokens Always Win](../../context-engineering/attention-sinks.md)
 - [Lost in the Middle: The U-Shaped Attention Curve](../../context-engineering/lost-in-the-middle.md)
 - [Context Budget Allocation: Every Token Has a Cost](../../context-engineering/context-budget-allocation.md)
-- [Context Compression Strategies: Offloading and Summarisation](../../context-engineering/context-compression-strategies.md)
+- [Context Compression Strategies: Offloading and Summarization](../../context-engineering/context-compression-strategies.md)
 - [Dynamic System Prompt Composition](../../context-engineering/dynamic-system-prompt-composition.md)
 - [Phase-Specific Context Assembly](../../context-engineering/phase-specific-context-assembly.md)
 - [Seeding Agent Context: Breadcrumbs in Code](../../context-engineering/seeding-agent-context.md)

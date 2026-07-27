@@ -136,7 +136,7 @@ The harvested CLI is the unit other agents call; the scenario-driving agent is t
 
 - [Prototype Before Optimizing](prototype-before-optimizing.md) — the baseline-first logic P3 inherits.
 - [Throwaway-Prototype Skill](throwaway-prototype-skill.md) — sibling prototyping discipline that discards instead of harvesting.
-- [Single-CLI Agent Platform](single-cli-agent-platform.md) — adjacent CLI-as-interface idea at the lifecycle level, not the agent-behaviour level.
+- [Single-CLI Agent Platform](single-cli-agent-platform.md) — adjacent CLI-as-interface idea at the lifecycle level, not the agent-behavior level.
 - [Agent Development Lifecycle](../patterns/agent-design/agent-development-lifecycle.md) — the four-phase product loop this methodology slots inside.
 - [Claude Agent SDK](../tools/claude/agent-sdk.md) — SDK-specific contrast: one vendor's substrate carrier.
 - [Agent Composition Patterns](../patterns/agent-design/agent-composition-patterns.md) — composition vocabulary the Turtle pattern reduces to CLI composition.

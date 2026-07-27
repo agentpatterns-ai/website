@@ -29,11 +29,11 @@ The defect is not the test file. The defect is the merge gate that reads "test f
 
 Banik et al. classify test patches against an eight-category taxonomy that collapses to three tiers ([arxiv:2606.18168](https://arxiv.org/abs/2606.18168)):
 
-| Tier | What the test does | Behavioural signal |
+| Tier | What the test does | Behavioral signal |
 |------|--------------------|-------------------|
 | No oracle | Smoke / call-only patterns, exception-swallowing try/except, assertion-free flows | None beyond "does not crash" |
 | Weak oracle | Generic `assertTrue(x)`, `assertNotNull(x)`, truthiness checks | Crash plus broad truthiness — boundary and value checks absent |
-| Strong oracle | Specific value, boundary, or state checks tied to expected behaviour | Direct behavioural verification |
+| Strong oracle | Specific value, boundary, or state checks tied to expected behavior | Direct behavioral verification |
 
 After controlling for agent type, PR size, repo popularity, task type, and language, strong-oracle patches merge at higher rates (odds ratio 1.28, p < 0.001) ([Banik et al. 2026](https://arxiv.org/abs/2606.18168)). Raw pre-adjustment numbers can run the other way — which is exactly why presence-based dashboards make the gap invisible. The fix is oracle-aware grading, not file counting.
 
@@ -52,7 +52,7 @@ Do not apply oracle-aware gates blindly. Four conditions make presence-based or 
 - Early-stage or spike codebases. Under fast API churn, specific assertions rot within days. A smoke test that survives churn carries more long-run signal than a brittle value check.
 - Teams whose merge gate is thorough human review. Reviewers catch assertion-free tests when they read the diff; the gate is not the CI predicate.
 
-The trap is sharpest when (a) the merge gate is automated, (b) the file's claimed type is behavioural / unit, and (c) the agent wrote both the production change and the test.
+The trap is sharpest when (a) the merge gate is automated, (b) the file's claimed type is behavioral / unit, and (c) the agent wrote both the production change and the test.
 
 ## Mitigations
 
@@ -65,8 +65,8 @@ The trap is sharpest when (a) the merge gate is automated, (b) the file's claime
 
 - File-presence quality gates overstate verification by roughly five-fold when 80.2% of agent-authored test patches carry weak or no oracle signal ([Banik et al. 2026](https://arxiv.org/abs/2606.18168)).
 - The strong-oracle merge advantage (OR 1.28) only surfaces after controlling for confounders — presence-based dashboards systematically hide the gap.
-- The defect is the gate's predicate, not the agent's output; an agent optimising against "tests exist" correctly emits the cheapest passing output.
-- Smoke-only and import-ping tests are legitimate; the trap is *grading* them as behavioural verification, not writing them.
+- The defect is the gate's predicate, not the agent's output; an agent optimizing against "tests exist" correctly emits the cheapest passing output.
+- Smoke-only and import-ping tests are legitimate; the trap is *grading* them as behavioral verification, not writing them.
 - Replace presence checks with oracle-aware grading — AST-level assertion counts, taxonomy classification, or differential testing where a reference is available.
 
 ## Related

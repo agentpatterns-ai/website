@@ -107,5 +107,3 @@ The developer monitors the fully-delegated sessions only when they emit completi
 - [Distributed Computing Parallels in Agent Architecture](../patterns/multi-agent/distributed-computing-parallels.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../patterns/multi-agent/sub-agents-fan-out.md)
 - [The Bottleneck Migration](bottleneck-migration.md)
-</content>
-</invoke>

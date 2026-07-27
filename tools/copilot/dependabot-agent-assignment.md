@@ -6,7 +6,7 @@ tags:
   - workflows
   - security
 applies_to: "copilot@1.x"
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-28
 status: current
 ---
 
@@ -76,14 +76,14 @@ Agent assignment degrades or fails in three conditions:
 
 1. No test suite. The agent opens a PR, but without automated tests there is no signal that the dependency bump is safe. Reviewers must exercise the diff by hand, which negates much of the time saving.
 2. Complex transitive updates. When a version bump pulls in a chain of transitive upgrades, the agent may resolve conflicts mechanically and miss semantic breakage in nested packages. A human still needs to inspect the full dependency graph.
-3. No available patch. The agent cannot synthesize a fix for an advisory that has no upstream patch. Assigning these alerts wastes a Copilot premium request and produces a draft PR with no useful changes.
+3. No available patch. The agent cannot synthesize a fix for an advisory that has no upstream patch. Assigning these alerts burns an agent session whose tokens still bill as [GitHub AI credits](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing), and produces a draft PR with no useful changes.
 
 ## Key Takeaways
 
 - Assigning a Dependabot alert to `@copilot` replaces a manual notification with autonomous fix generation
 - Auto-triage rules reduce the assignment queue by dismissing low-risk alerts before they surface
 - The draft PR model keeps a human at the merge gate — the agent executes, but cannot ship
-- Risk-based routing (version bumps and transitive updates to agent; logic-impacting advisories to humans) maximises throughput while preserving review quality
+- Risk-based routing (version bumps and transitive updates to agent; logic-impacting advisories to humans) maximizes throughput while preserving review quality
 
 ## Related
 

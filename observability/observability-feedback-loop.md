@@ -108,7 +108,7 @@ The rule from [research-plan-implement](../workflows/research-plan-implement.md)
 - The signal you query for in step 1 is the same signal you verify the absence of in step 7. Bind them deliberately
 - Skipping the restart step lets accumulated state corrupt the verification; skipping the rerun step lets a simpler proxy mask the real failure
 - Compress the loop only when the failure surface is self-evident — the procedure is overhead when the stack trace already names the layer and cause
-- A named procedure is invocable: "run the observability feedback loop on bug X" gives an agent unambiguous steps and checkpointable artefacts
+- A named procedure is invocable: "run the observability feedback loop on bug X" gives an agent unambiguous steps and checkpointable artifacts
 
 ## Related
 

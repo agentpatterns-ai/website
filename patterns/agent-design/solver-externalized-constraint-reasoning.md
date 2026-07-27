@@ -64,7 +64,7 @@ The pattern moves the load-bearing step onto a tool with formal correctness guar
 
 ## Off-the-shelf solvers
 
-Reach for an established solver, not a paper-specific one — the pattern externalises to a verified routine, not a particular engine.
+Reach for an established solver, not a paper-specific one — the pattern externalizes to a verified routine, not a particular engine.
 
 | Solver | Theory | Use for |
 |--------|--------|---------|
@@ -115,7 +115,7 @@ The solver returns an assignment; a verification pass checks each hard constrain
 
 - Apply only when constraints have a crisp objective, the theory is decidable, and you can independently verify the solver's output against the original intent.
 - The encoding step is where mistakes hide — the solver is correct on the problem it was given, not on the problem the user asked.
-- Pick an off-the-shelf solver (z3, python-sat, OR-Tools CP-SAT) instead of building a paper-specific system; the pattern is about externalising, not about a particular engine.
+- Pick an off-the-shelf solver (z3, python-sat, OR-Tools CP-SAT) instead of building a paper-specific system; the pattern is about externalizing, not about a particular engine.
 - A verification pass that checks the solver's answer against the original constraints is part of the pattern, not optional.
 
 ## Related
@@ -125,4 +125,4 @@ The solver returns an assignment; a verification pass checks each hard constrain
 - [RubricRefine: Pre-Execution Rubric Refinement for Code-Mode Tool Use](rubric-refine-pre-execution-tool-use.md) — Pre-execution check on agent-emitted tool-use code; the verification step in this pattern plays the same role for solver code.
 - [Critic Agent Pattern](critic-agent-plan-review.md) — A second model reviewing the encoding before solver invocation is the practical form of this pattern's verification step.
 - [Deterministic Guardrails Around Probabilistic Agents](../../verification/deterministic-guardrails.md) — The exact solver and the verification pass are deterministic guardrails wrapped around the probabilistic encoding step.
-- [DSLs as a Constraining Harness for LLM Code Generation](dsl-constraining-harness.md) — Generalises the constrain-then-check move: a domain language plus its validator narrows the space of programs the model can emit.
+- [DSLs as a Constraining Harness for LLM Code Generation](dsl-constraining-harness.md) — Generalizes the constrain-then-check move: a domain language plus its validator narrows the space of programs the model can emit.

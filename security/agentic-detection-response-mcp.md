@@ -70,7 +70,7 @@ The pattern is calibrated for enterprise deployments. Smaller or differently sha
 
 | Approach | Pros | Cons |
 |----------|------|------|
-| ADR at MCP boundary | Captures intent + execution causal chain; tiered inference cost; per-session online detection | Cost amortisation requires enterprise volume; misses slow-drift attacks; needs SOC to action alerts |
+| ADR at MCP boundary | Captures intent + execution causal chain; tiered inference cost; per-session online detection | Cost amortization requires enterprise volume; misses slow-drift attacks; needs SOC to action alerts |
 | Policy gate only ([control plane](mcp-runtime-control-plane.md)) | Deterministic, low-overhead, fail-closed at the boundary | No detection signal for novel patterns the policy does not encode |
 | Trajectory firewall ([pDFA](behavioral-firewall-tool-call-trajectories.md)) | Sub-millisecond enforcement on stable tool catalogs | Brittle when tool catalog or sequence space grows |
 | EDR only | Mature tooling and SOC integration | Cannot see agent reasoning, prompts, or causal chains ([Li et al., 2026](https://arxiv.org/abs/2605.17380)) |
@@ -86,6 +86,6 @@ The pattern is calibrated for enterprise deployments. Smaller or differently sha
 
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](mcp-runtime-control-plane.md) — the gate half of the same architecture; ADR observes, the control plane refuses
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — offline trajectory enforcement via parameterized DFA; complementary to ADR's online detection
-- [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — formalises what the audit record must guarantee, the safety property ADR's telemetry feeds
+- [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — formalizes what the audit record must guarantee, the safety property ADR's telemetry feeds
 - [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md) — the broader checklist ADR sits inside as the observability gate
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](../observability/agent-observability-otel.md) — adjacent observability mechanics for non-MCP signals

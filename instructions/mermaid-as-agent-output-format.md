@@ -121,5 +121,3 @@ The same prompt sent to an agent posting to a plain Slack channel produces a fen
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md)
 - [Controlling Agent Output: Concise Answers, Not Essays](controlling-agent-output.md)
 - [Event-Driven System Reminders](event-driven-system-reminders.md)
-</content>
-</invoke>

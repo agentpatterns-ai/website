@@ -17,7 +17,7 @@ It cuts across the site. The canonical treatment of each technique still lives i
 
 ## What token engineering is — and isn't
 
-- It is the optimisation goal: same task outcome, fewer/cheaper tokens. Every technique below carries an implicit "without degrading the end result" clause.
+- It is the optimization goal: same task outcome, fewer/cheaper tokens. Every technique below carries an implicit "without degrading the end result" clause.
 - It is not [context engineering](../context-engineering/context-engineering.md). Context engineering decides *what information enters the window* for quality and reliability; token engineering is the cost-and-efficiency lens *over* those decisions. They overlap (lean context is cheaper) but answer different questions.
 - It is not generic cost-performance. The `cost-performance` tag spans latency, throughput, and infra; token engineering is specifically about the *token* as the unit of spend.
 - The quality constraint is the whole point. Cutting tokens can backfire — see [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md), the guardrail every technique here must respect.
@@ -37,18 +37,19 @@ Send each task to the cheapest model and tier that still passes, escalating only
 - [Cross-Vendor Competitive Routing](../patterns/agent-design/cross-vendor-competitive-routing.md) — race competing vendors, gate on the winner
 - [Model-Neutral Agent Architecture](../patterns/agent-design/model-neutral-agent-architecture.md) — keep the agent portable so routing stays a config decision
 - [Multi-Shape BYOK Provider](../patterns/agent-design/multi-shape-byok-provider.md) — bring-your-own-key routing across provider shapes
-- [Parsimonious Agent Routing](../patterns/multi-agent/parsimonious-agent-routing.md) — one delegation plan that jointly optimises decompose, worker, and budget
+- [Parsimonious Agent Routing](../patterns/multi-agent/parsimonious-agent-routing.md) — one delegation plan that jointly optimizes decompose, worker, and budget
 - [Self-Healing Tool Routing](../tool-engineering/self-healing-tool-routing.md) — route around failing tools before they burn retries
 
 ### Right token — lean context and output
 
 Shrink what each call has to carry, on both the input and output sides.
 
+- [Request Shaping to Cut Wasted Agent Turns](request-shaping-wasted-turns.md) — phrasing that replaces agent-side retrieval with prompt-side facts, and the point where added specification stops paying
 - [Token-Efficient Tool Design](token-efficient-tool-design.md) — each tool call injects the minimum tokens for the next decision
 - [Token-Efficient Code Generation](token-efficient-code-generation.md) — idiomatic structure beats "be concise" prompting
 - [Line-Anchored Feedback](line-anchored-feedback.md) — deliver change requests as line-anchored inline comments to cut edit tokens on large files
 - [Tokenizer Swap Tax](tokenizer-swap-tax.md) — budgeting for migrations that change token counts under flat per-token pricing
-- [Prompt Compression](../context-engineering/prompt-compression.md) — maximise signal per token in instructions
+- [Prompt Compression](../context-engineering/prompt-compression.md) — maximize signal per token in instructions
 - [Semantic Density Optimization](../context-engineering/semantic-density-optimization.md) — raise task-relevant tokens per byte in the codebase
 - [Context Budget Allocation](../context-engineering/context-budget-allocation.md) — treat context as a finite budget across sources
 

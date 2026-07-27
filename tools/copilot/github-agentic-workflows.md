@@ -8,7 +8,7 @@ tags:
   - github-actions
   - security
 applies_to: "copilot@1.x"
-last_reviewed: 2026-06-18
+last_reviewed: 2026-07-28
 status: current
 ---
 
@@ -104,14 +104,14 @@ Start read-only and comment-only. Prove the workflow stays low-noise before you 
 
 ## Cost model
 
-Copilot-engine workflows cost two premium requests per run ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
+Since 2026-06-01 Copilot usage is metered in AI credits against the tokens an interaction consumes, so a run has no flat price — cost scales with how long the agent works and which model it uses ([GitHub Blog: usage-based billing](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/)). The retired request-based model priced a Copilot-engine run at two premium requests ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
 
 ## When this backfires
 
 Agentic workflows do not replace standard GitHub Actions YAML workflows ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)):
 
 - Deterministic CI/CD — build, test, and deploy pipelines belong in standard Actions; agentic workflows are for subjective reasoning tasks
-- High-volume automation — two premium requests per run add up fast at scale, and workflows that fire on every PR can "quietly accumulate large API bills" ([GitHub Blog: Token Efficiency](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/))
+- High-volume automation — token-metered runs add up fast at scale, and workflows that fire on every PR can "quietly accumulate large API bills" ([GitHub Blog: Token Efficiency](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/))
 - Broad credential access — zero-secret-access is a security constraint, so cross-repo credential workflows belong in standard Actions
 - Latency-sensitive gates — agent reasoning adds latency, so pre-merge checks and deployments belong outside the agentic loop
 - Wide blast radius from misconfiguration — one bad tool wiring can cause runaway loops; GitHub documents a case where a misconfiguration produced a 64-turn fallback loop before being caught ([GitHub Blog: Token Efficiency](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/)). Cap turns, watch token spend per workflow, and alert on per-run anomalies
@@ -166,7 +166,7 @@ The compiled `summarize.lock.yml` is the GitHub Actions workflow that runs. The 
 - [Prompt Injection Threat Model](../../security/prompt-injection-threat-model.md)
 - [Defense-in-Depth Agent Safety](../../security/defense-in-depth-agent-safety.md)
 - [Safe Outputs Pattern](../../security/safe-outputs-pattern.md)
-- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — premium request costs for workflow runs
+- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — AI credits, per-model token rates, credit pooling, and budget controls behind workflow-run costs
 - [Cloud Agent Organization Controls](cloud-agent-org-controls.md) — runner configuration, firewall policy, and org-level governance for agentic workflow execution
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [GitHub Models in Actions](github-models-in-actions.md)

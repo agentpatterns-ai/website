@@ -53,7 +53,7 @@ Subscribe to every primary source. Provider changelogs publish retirements befor
 
 - Anthropic: the [model deprecations page](https://platform.claude.com/docs/en/about-claude/model-deprecations) lists every publicly released model with current state, deprecation date, and tentative retirement date.
 - Anthropic Console → Usage → Export CSV: the [audit path](https://platform.claude.com/docs/en/about-claude/model-deprecations) for identifying which of your API keys are still calling deprecated IDs.
-- GitHub Copilot: the [Copilot-labelled changelog](https://github.blog/changelog/label/copilot/) announces deprecations, retirements, and new-model availability on the same feed.
+- GitHub Copilot: the [Copilot-labeled changelog](https://github.blog/changelog/label/copilot/) announces deprecations, retirements, and new-model availability on the same feed.
 - Anthropic Models API: the `/v1/models/list` endpoint returns current model IDs programmatically ([Anthropic models overview](https://platform.claude.com/docs/en/docs/about-claude/models)), usable in a daily CI job that diffs the current list against the expected one.
 
 Use display-name aliases (`claude-opus-4-7`) where possible, and pin full dated IDs (`claude-opus-4-7-20260416`) only when reproducibility requires it ([Anthropic models overview](https://platform.claude.com/docs/en/docs/about-claude/models)).

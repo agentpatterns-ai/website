@@ -1,5 +1,5 @@
 ---
-title: "Skill Library Refinement Loops: Organisational Feedback for Shared Skills"
+title: "Skill Library Refinement Loops: Organizational Feedback for Shared Skills"
 term: "Skill Library Refinement Loops"
 description: "Four complementary feedback mechanisms that together keep a team's shared skill library accurate and useful — no single loop catches every failure class."
 tags:
@@ -115,7 +115,7 @@ Start with Loops 1 and 2. Add Loop 4 when the library grows large enough that pr
 - No single feedback mechanism catches all skill failure classes — the anti-pattern is assuming your Slack channel (or your dashboards) covers everything
 - Loops 1 and 2 are the baseline for any shared skill library and require no infrastructure beyond a channel and a wiki
 - Loop 3 (log-driven) earns its cost only for platform-level skills maintained by a central team with an observability stack already in place
-- Loop 4 (dashboard) adds prioritisation signal; pair it with quality evals — invocation count alone does not measure output correctness
+- Loop 4 (dashboard) adds prioritization signal; pair it with quality evals — invocation count alone does not measure output correctness
 - Add loops as the library grows; don't build the full infrastructure stack for a five-skill team
 
 ## Related

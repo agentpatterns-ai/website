@@ -90,7 +90,7 @@ Without the `env` block, a user selecting `Default` in the picker would land on 
 
 ## Key Takeaways
 
-- Tenant model policy is the layer *above* harness routing and *below* the vendor catalogue — failure modes come from collapsing it into either neighbour.
+- Tenant model policy is the layer *above* harness routing and *below* the vendor catalog — failure modes come from collapsing it into either neighbour.
 - An `Enabled` Copilot rule applies a model to every org until disabled, so it is the wrong stance for regulated workloads — but note Copilot does not auto-enable newly-launched models, so the standing risk is a stale rule, not silent auto-onboarding. Treat every new model launch as untrusted until an explicit rule says otherwise.
 - Allow-lists in isolation are not deny-lists. Claude Code's `availableModels` requires `model` and `ANTHROPIC_DEFAULT_*_MODEL` companions to pin model identity.
 - Explicit denial signals matter more than the deny itself: silent fallback erases the audit trail and pushes developers off-platform.
@@ -99,7 +99,7 @@ Without the `env` block, a user selecting `Default` in the picker would land on 
 ## Related
 
 - [Agent Governance Policies](../../workflows/agent-governance-policies.md) — the broader three-tier policy hierarchy (enterprise → organization → user) Copilot enforces.
-- [Auto Model Selection](auto-model-selection.md) — harness-side routing within the catalogue an org rule has filtered.
+- [Auto Model Selection](auto-model-selection.md) — harness-side routing within the catalog an org rule has filtered.
 - [Gateway Model Routing](gateway-model-routing.md) — the infrastructure-layer alternative when the harness exposes no native admin surface.
-- [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — within-budget tier routing that runs once policy has constrained the catalogue.
+- [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — within-budget tier routing that runs once policy has constrained the catalog.
 - [Model Deprecation Lifecycle](../../workflows/model-deprecation-lifecycle.md) — the operational wrapper that prevents rule drift after model retirements.

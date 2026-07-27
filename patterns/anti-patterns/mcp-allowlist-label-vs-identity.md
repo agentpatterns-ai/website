@@ -77,7 +77,7 @@ The allowlist matches by hostname, an artifact the user does not own. The denyli
 - The Anthropic doc carries an explicit Warning that `serverName`-only allowlists are not a security control; the evaluation-order table demotes `serverName` matches whenever any `serverUrl` or `serverCommand` entry exists.
 - Mixed allowlists silently never match `serverName` entries for the transport that has a stricter key — admins assume coverage that the table withholds.
 - The fix is to allowlist by `serverUrl` (hostname-grounded) or `serverCommand` (binary-grounded, exact arg sequence) and pair with `allowManagedMcpServersOnly: true` so user settings cannot merge in their own allowlist.
-- `serverName` denylist entries remain useful — denylist matches always apply, so a labelled bad-server entry is a belt to the URL/command suspenders.
+- `serverName` denylist entries remain useful — denylist matches always apply, so a labeled bad-server entry is a belt to the URL/command suspenders.
 
 ## Related
 
@@ -85,4 +85,4 @@ The allowlist matches by hostname, an artifact the user does not own. The denyli
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](../../security/mcp-runtime-control-plane.md)
 - [Enterprise-Managed Plugin Governance for Agent CLIs](../../security/enterprise-managed-plugin-governance.md)
 - [Permission Framework over Model Judgment](../../security/permission-framework-over-model.md)
-- [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md)
+- [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md)

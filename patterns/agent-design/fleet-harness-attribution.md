@@ -47,7 +47,7 @@ graph TD
 
 ## The two output metrics
 
-Pass rate alone reduces to ordinary harness comparison and misses the cost-side win. Input-token consumption is the harness output most decoupled from model capability — it tracks context-engineering choices the harness makes (what to load, what to summarise, when to externalise), not how many tokens a model needs per reasoning step. The Agentic Harness Engineering paper attributes harness gains to tools, middleware, and long-term memory rather than the system prompt — structural levers the token-input metric exposes directly ([AHE](https://arxiv.org/abs/2604.25850)).
+Pass rate alone reduces to ordinary harness comparison and misses the cost-side win. Input-token consumption is the harness output most decoupled from model capability — it tracks context-engineering choices the harness makes (what to load, what to summarize, when to externalize), not how many tokens a model needs per reasoning step. The Agentic Harness Engineering paper attributes harness gains to tools, middleware, and long-term memory rather than the system prompt — structural levers the token-input metric exposes directly ([AHE](https://arxiv.org/abs/2604.25850)).
 
 | Output metric | What it measures | Why both matter |
 |---|---|---|
@@ -60,7 +60,7 @@ A harness can win on either metric alone. The interesting result is parity on ta
 
 Pinning the model fixes its capability; pinning the task fixes the difficulty; the swap leaves the harness as the only varying factor. Variance in pass rate or token consumption then traces to harness orchestration — system prompt, tool set, retry logic, context management. Repeating the measurement across a model fleet does two distinct things. It averages out one model's idiosyncratic interaction with the harness, producing a fleet-mean estimate. And it exposes interaction terms — when per-model deltas disagree in sign or magnitude, the harness contribution is partly an interaction the experiment cannot decompose without a factorial design.
 
-Harness-Bench formalises this as the attribution argument: agent capability should be reported at the model-harness configuration level rather than attributed to the base model alone — the same controlled-variable logic generalised to 106 sandboxed tasks and 5,194 trajectories ([Harness-Bench](https://arxiv.org/abs/2605.27922)).
+Harness-Bench formalizes this as the attribution argument: agent capability should be reported at the model-harness configuration level rather than attributed to the base model alone — the same controlled-variable logic generalized to 106 sandboxed tasks and 5,194 trajectories ([Harness-Bench](https://arxiv.org/abs/2605.27922)).
 
 ## How to run it
 
@@ -77,7 +77,7 @@ Harness-Bench formalises this as the attribution argument: agent capability shou
 - No paired token-efficiency baseline. Reading only pass rate collapses the method into ordinary harness comparison and misses the cost-side win. The GitHub Copilot result is mostly a token-reduction result with pass-rate parity — measuring only pass rate would have shown nothing.
 - Vendor-managed harness. Claude Managed Agents, Copilot consumer tiers, and most cloud APIs route to harness components you cannot vary. There is no harness to attribute. The framework applies to teams shipping their own scaffold against multiple models, not to teams consuming a managed agent.
 - Stochastic noise larger than the effect. GitHub's TerminalBench differences fell within stochastic variance ([GitHub](https://github.blog/ai-and-ml/github-copilot/evaluating-performance-and-efficiency-of-the-github-copilot-agentic-harness-across-models-and-tasks)). Single-trial fleet attribution on a noisy benchmark cannot separate harness from noise. Use multi-trial averaging or accept that this slice is not informative.
-- Tier-skewed fleet. Stronger model backends both score higher and exhibit lower cross-harness variance — harness investment pays back differently at different tiers ([Harness-Bench](https://arxiv.org/abs/2605.27922)). A fleet weighted toward one tier produces an attribution claim that does not generalise to the others.
+- Tier-skewed fleet. Stronger model backends both score higher and exhibit lower cross-harness variance — harness investment pays back differently at different tiers ([Harness-Bench](https://arxiv.org/abs/2605.27922)). A fleet weighted toward one tier produces an attribution claim that does not generalize to the others.
 
 ## Relation to adjacent methods
 
@@ -91,7 +91,7 @@ graph LR
 ```
 
 - [Isometric Harness Ablation](isometric-harness-ablation.md) — removes one subsystem within a fixed harness; fleet attribution swaps whole harnesses across multiple models. The former ranks subsystem investment; the latter ranks harness choice.
-- [Harness Hill-Climbing](harness-hill-climbing.md) — within-harness iterative optimisation; fleet attribution is between-harness comparison. Hill-climb after you have picked the harness; attribute to pick it.
+- [Harness Hill-Climbing](harness-hill-climbing.md) — within-harness iterative optimization; fleet attribution is between-harness comparison. Hill-climb after you have picked the harness; attribute to pick it.
 - [Per-Model Harness Tuning](per-model-harness-tuning.md) — the failure case fleet attribution makes visible. When per-cell deltas disagree, per-model overrides are the treatment, not a generic harness.
 - [Eval Strategy by Agent Generation](eval-strategy-by-agent-generation.md) — the locator that picks the eval surface from your current structure. Fleet attribution is one Gen-6 eval method, applicable when the system is a harness wrapping a model fleet.
 

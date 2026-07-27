@@ -13,7 +13,7 @@ maturity: emerging
 
 # Distilled Bootstrap Contract: Agent-Authored Repo Setup
 
-> Version an agent's Docker-verified repo-setup heuristics as a `.bootstrap` contract, converting per-session discovery cost into amortised lookup cost for every future agent.
+> Version an agent's Docker-verified repo-setup heuristics as a `.bootstrap` contract, converting per-session discovery cost into amortized lookup cost for every future agent.
 
 A distilled bootstrap contract is an agent-authored, version-controlled artifact that records the dependencies, repair steps, and verification commands a coding agent discovered while bootstrapping a repository from a bare environment. Subsequent agent sessions consume the contract directly, skipping the trial-and-error phase. The pattern was introduced as BootstrapAgent, a multi-agent framework that combines evidence extraction, structured planning, Docker-based verification, and trace-driven repair to produce a `.bootstrap` contract, and reports a 92.9% bootstrap success rate alongside a 25.9% reduction in downstream agent token usage and a 22.3% reduction in build time ([arXiv 2605.15815](https://arxiv.org/abs/2605.15815)).
 
@@ -27,7 +27,7 @@ The pattern pays back only under three conditions. Use it when all three hold; o
 
 ## How the pipeline works
 
-BootstrapAgent decomposes bootstrap discovery into four stages, each producing an artefact the next stage consumes ([arXiv 2605.15815](https://arxiv.org/abs/2605.15815)):
+BootstrapAgent decomposes bootstrap discovery into four stages, each producing an artifact the next stage consumes ([arXiv 2605.15815](https://arxiv.org/abs/2605.15815)):
 
 ```mermaid
 graph TD
@@ -84,7 +84,7 @@ Agent-authored — a `.bootstrap` contract produced by the BootstrapAgent pipeli
 
 ## Key Takeaways
 
-- A distilled bootstrap contract caches the resolved repo-setup heuristics that an agent discovered during initial exploration, converting per-session discovery cost into amortised lookup cost.
+- A distilled bootstrap contract caches the resolved repo-setup heuristics that an agent discovered during initial exploration, converting per-session discovery cost into amortized lookup cost.
 - The pipeline has four stages — evidence extraction, structured planning, Docker-based verification, and trace-driven repair — and depends on a deterministic build or test target to produce a usable pass/fail signal.
 - The pattern is Qualified, not universal: it pays back only when multiple agents will reuse the contract, a verification target exists, and the build system is stable.
 - Operator-authored alternatives like `copilot-setup-steps.yml` remain preferable when a maintainer is willing to write one — they are deterministic by construction and avoid encoding agent hallucinations as durable truth.
@@ -93,7 +93,7 @@ Agent-authored — a `.bootstrap` contract produced by the BootstrapAgent pipeli
 ## Related
 
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md) — Operator-authored `copilot-setup-steps.yml` and the deterministic alternative to agent-discovered setup.
-- [Agent-Led Dev-Environment Iteration with Validation and Rollback](agent-led-dev-environment.md) — Adjacent agent-authored bootstrap pattern that synthesises a Dockerfile with rollback per attempt.
+- [Agent-Led Dev-Environment Iteration with Validation and Rollback](agent-led-dev-environment.md) — Adjacent agent-authored bootstrap pattern that synthesizes a Dockerfile with rollback per attempt.
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md) — Dependency-ordered sequence for adding agent support to an existing repo, the operator-authored counterpart to this workflow.
 - [Memory Synthesis from Execution Logs](../patterns/agent-design/memory-synthesis-execution-logs.md) — General mechanism for extracting durable lessons from agent execution traces; bootstrap distillation is one applied instance.
-- [Agent-Generated Onboarding Guide as a Durable Artefact](agent-generated-onboarding-guide.md) — Companion pattern that produces a human-consumable ramp-up guide; the bootstrap contract is the agent-consumable equivalent.
+- [Agent-Generated Onboarding Guide as a Durable Artifact](agent-generated-onboarding-guide.md) — Companion pattern that produces a human-consumable ramp-up guide; the bootstrap contract is the agent-consumable equivalent.

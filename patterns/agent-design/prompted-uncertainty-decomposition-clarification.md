@@ -93,7 +93,7 @@ The two-axis table is the load-bearing part. A single-scalar router collapses ro
 
 ## Related
 
-- [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — the behavioural pattern this technique signals; that page covers when an agent should ask, this page covers how it decides
+- [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — the behavioral pattern this technique signals; that page covers when an agent should ask, this page covers how it decides
 - [Task Feasibility Awareness](task-feasibility-awareness.md) — sibling capability that gates on tool availability rather than spec ambiguity; pairs cleanly with low action-confidence routing
 - [Assumption Propagation](../anti-patterns/assumption-propagation.md) — the failure mode when the request-uncertainty signal is absent or ignored
 - [Agent Pushback Protocol](agent-pushback-protocol.md) — structured agent-initiated clarification on request quality; consumes the same request-uncertainty signal

@@ -102,6 +102,6 @@ The event sits on the same trace as the agent run, joined by trace ID. Backends 
 ## Related
 
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) — the instrumentation layer this pattern attaches feedback to
-- [Observability Feedback Loop](observability-feedback-loop.md) — the seven-step debug runbook that consumes verdict-labelled traces one bug at a time
-- [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — the offline-corpus consumer that feedback-labelled traces feed
-- [Harness Bug Detection Patterns](harness-bug-postmortem-patterns.md) — three structural eval gaps that feedback-labelled traces help expose
+- [Observability Feedback Loop](observability-feedback-loop.md) — the seven-step debug runbook that consumes verdict-labeled traces one bug at a time
+- [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — the offline-corpus consumer that feedback-labeled traces feed
+- [Harness Bug Detection Patterns](harness-bug-postmortem-patterns.md) — three structural eval gaps that feedback-labeled traces help expose

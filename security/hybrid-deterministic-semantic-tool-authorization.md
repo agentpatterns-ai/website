@@ -106,7 +106,7 @@ Now an injected instruction in a fetched issue body makes the LLM emit `db-reado
 - The five deterministic checks are byte-level comparisons that block tampering without LLM overhead.
 - Semantic matching extends single-task TBAC to multi-turn by separating extraction from matching.
 - Multi-turn matching is meaningfully less reliable than single-turn (10% FPR / 7% FNR on multi-agent traffic) — design fallbacks.
-- Hybrid earns its complexity only when the tool catalogue is large/dynamic and conversations are multi-turn; for static action sets, deterministic allowlists are cheaper and tighter.
+- Hybrid earns its complexity only when the tool catalog is large/dynamic and conversations are multi-turn; for static action sets, deterministic allowlists are cheaper and tighter.
 
 ## Related
 

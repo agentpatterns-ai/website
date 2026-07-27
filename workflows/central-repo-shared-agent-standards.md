@@ -211,7 +211,7 @@ If the steelman fits the org, leave the standards local until at least one of th
 ## Key Takeaways
 
 - Maintain a single canonical repository for organization-wide agent standards; distribute to downstream repos through automated mechanisms.
-- Centralise language conventions, security policies, and shared skills. Keep [project architecture and domain knowledge local](../instructions/agents-md-distributed-conventions.md).
+- Centralize language conventions, security policies, and shared skills. Keep [project architecture and domain knowledge local](../instructions/agents-md-distributed-conventions.md).
 - Canonicalize-then-fan-out is the most robust cross-tool distribution mechanism; plugin systems are the most automated for single-vendor environments.
 - Version your standards and validate compliance on CI — treat standard updates like dependency upgrades.
 - Platform-native enterprise distribution (GitHub Copilot org instructions, Claude Code managed-settings.json) complements but does not replace a canonical source repo.

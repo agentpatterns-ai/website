@@ -1,6 +1,6 @@
 ---
 title: "Cursor /multitask: Async Subagent Dispatch in the Editor"
-description: "Cursor 3.2's /multitask command runs async subagents from inside an editor session — parallelising queued prompts and decomposing large tasks across a fleet of background subagents."
+description: "Cursor 3.2's /multitask command runs async subagents from inside an editor session — parallelizing queued prompts and decomposing large tasks across a fleet of background subagents."
 tags:
   - cursor
   - multi-agent
@@ -16,7 +16,7 @@ status: current
 
 # Cursor /multitask: Async Subagent Dispatch in the Editor
 
-> Dispatch async subagents from the editor session — parallelise queued prompts and let Cursor break a large task across a background subagent fleet.
+> Dispatch async subagents from the editor session — parallelize queued prompts and let Cursor break a large task across a background subagent fleet.
 
 Cursor 3.2 (April 24, 2026) added `/multitask` to the [Agents Window](agents-window.md). Instead of queueing prompts, `/multitask` spawns async subagents that run in parallel and can decompose a request into chunks "for a fleet of async subagents to tackle simultaneously" ([Cursor changelog](https://cursor.com/changelog)).
 
@@ -116,7 +116,7 @@ If the docs update and OpenAPI regeneration touch overlapping files, compose wit
 
 ## Key Takeaways
 
-- `/multitask` runs async background subagents in parallel from the editor session — for queue parallelisation and auto-decomposition of one large request
+- `/multitask` runs async background subagents in parallel from the editor session — for queue parallelization and auto-decomposition of one large request
 - Each subagent has its own context window; only the final summary returns to the parent, preserving the parent's planning capacity
 - `/multitask` gives context isolation only — compose with `/worktree` when subagents will edit overlapping files
 - Justified when the parent has follow-up work during the wait; sequential dispatch is simpler for one-prompt sessions
@@ -125,6 +125,6 @@ If the docs update and OpenAPI regeneration touch overlapping files, compose wit
 ## Related
 
 - [Cursor 3 Agents Window](agents-window.md) — the UI host for `/multitask`, with `/worktree` and `/best-of-n`
-- [Async Non-Blocking Subagent Dispatch](../../patterns/multi-agent/async-non-blocking-subagent-dispatch.md) — the tool-agnostic pattern this specialises
+- [Async Non-Blocking Subagent Dispatch](../../patterns/multi-agent/async-non-blocking-subagent-dispatch.md) — the tool-agnostic pattern this specializes
 - [Cross-Tool Subagent Comparison](../../patterns/multi-agent/cross-tool-subagent-comparison.md) — broader comparison of subagent definition formats and isolation models
 - [Sub-Agents for Fan-Out Research](../../patterns/multi-agent/sub-agents-fan-out.md) — the underlying fan-out primitive

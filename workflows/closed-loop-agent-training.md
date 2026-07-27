@@ -196,5 +196,3 @@ After validation against a sandboxed HR API, both the trajectory and its task de
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md) -- designing tool interfaces that minimize token waste, relevant to schema quality for synthesis
 - [Tool Description Quality](../tool-engineering/tool-description-quality.md) -- better descriptions produce better synthetic training data
 - [Compound Engineering](compound-engineering.md) -- a related learning loop, but operating at the prompt/instruction level rather than model weights
-</content>
-</invoke>

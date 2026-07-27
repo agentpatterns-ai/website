@@ -132,5 +132,5 @@ Prefer event-driven reminders for long-running or safety-critical agents. For sh
 - [Steering Running Agents](../patterns/agent-design/steering-running-agents.md)
 - [Domain-Specific System Prompts](domain-specific-system-prompts.md)
 - [Post-Compaction Re-read Protocol](post-compaction-reread-protocol.md)
-- [Context Compression Strategies: Offloading and Summarisation](../context-engineering/context-compression-strategies.md) — the compression mechanism that event-driven reminders complement
+- [Context Compression Strategies: Offloading and Summarization](../context-engineering/context-compression-strategies.md) — the compression mechanism that event-driven reminders complement
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — why adding more instructions past a threshold degrades compliance; reminders counter this without adding static rules

@@ -93,7 +93,7 @@ The order matters. Generating the full final-shell N up front is fine — genera
 - Use when verifier-to-generator cost ratio exceeds ~10× and N is large; below that, fixed-budget best-of-N wins on latency.
 - The monotonicity assumption — rank correlates with verifier-pass probability — is load-bearing. Reward-hacked rankers (PRMs trained against gameable signals) invert the gains.
 - The doubling schedule gives a constant-factor guarantee against a distribution-aware oracle; the constant can be large when the score-label distribution is unknown ([Dughmi et al., 2026](https://arxiv.org/abs/2605.17609)).
-- ADAP optimises verifier-pass rate, not solution quality. Pair with strict verifiers or accept the false-positive floor of outcome-only checking ([Right Is Not Enough, 2026](https://arxiv.org/pdf/2506.06877)).
+- ADAP optimizes verifier-pass rate, not solution quality. Pair with strict verifiers or accept the false-positive floor of outcome-only checking ([Right Is Not Enough, 2026](https://arxiv.org/pdf/2506.06877)).
 
 ## Related
 

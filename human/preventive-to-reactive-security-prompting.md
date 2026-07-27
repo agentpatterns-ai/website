@@ -27,7 +27,7 @@ Bappy et al. (2026) interviewed 15 professional engineers and observed them comp
 
 | Finding | Source |
 |---|---|
-| AI assistants reorganise rather than eliminate security thinking, shifting it from writing to reviewing | [Bappy et al., 2026](https://arxiv.org/abs/2605.23130) |
+| AI assistants reorganize rather than eliminate security thinking, shifting it from writing to reviewing | [Bappy et al., 2026](https://arxiv.org/abs/2605.23130) |
 | None of the observed engineers specified security requirements in their initial prompts, even those who had just articulated the relevant vulnerability concerns | [Bappy et al., 2026](https://arxiv.org/abs/2605.23130) |
 | Experience cohort did not reliably predict security performance | [Bappy et al., 2026](https://arxiv.org/abs/2605.23130) |
 | ~65% of LLM-generated code is insecure under naive prompts; 94–100% secure under security-specific prompts across Copilot, ChatGPT, CodeWhisperer, CodeLlama | [Götz et al., 2024](https://arxiv.org/abs/2408.07106) |
@@ -72,7 +72,7 @@ Front-loading security in prompts has real costs and known failure conditions:
 
 ## Key Takeaways
 
-- AI assistants reorganise security thinking from writing-time to review-time, and experience does not close the gap — the intervention has to change what the developer does, not how senior they are ([Bappy et al., 2026](https://arxiv.org/abs/2605.23130))
+- AI assistants reorganize security thinking from writing-time to review-time, and experience does not close the gap — the intervention has to change what the developer does, not how senior they are ([Bappy et al., 2026](https://arxiv.org/abs/2605.23130))
 - Explicit security requirements in the initial prompt narrow the gap — Götz et al. measured ~65% → 94–100% secure output across four assistants ([arxiv 2408.07106](https://arxiv.org/abs/2408.07106))
 - Codify recurring security constraints in persistent instruction files (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`) — the [OpenSSF guide](https://best.openssf.org/Security-Focused-Guide-for-AI-Code-Assistant-Instructions.html) is a current practitioner reference
 - Front-loading is not a security guarantee — see [Prompt as Security Knob](../patterns/anti-patterns/prompt-as-security-knob.md); independent verification of deployed paths remains required
@@ -80,7 +80,7 @@ Front-loading security in prompts has real costs and known failure conditions:
 ## Related
 
 - [Rigor Relocation: Engineering Discipline with AI Agents](rigor-relocation.md) — broader move from code-style discipline to scaffolding; front-loading is the human-facing edge, persistent instruction files the mechanical edge
-- [Security Constitution for AI Code Generation](../security/security-constitution-ai-code-gen.md) — formalises the same security-by-construction principle as a versioned, machine-readable artifact for linters and CI
+- [Security Constitution for AI Code Generation](../security/security-constitution-ai-code-gen.md) — formalizes the same security-by-construction principle as a versioned, machine-readable artifact for linters and CI
 - [Prompt as Security Knob](../patterns/anti-patterns/prompt-as-security-knob.md) — why front-loading shifts the distribution but never certifies a single output as secure
 - [The Bottleneck Migration When Humans Supervise Agents](bottleneck-migration.md) — review-time security catching is part of the bottleneck that front-loading aims to reduce
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — front-loading sits inside the plan-supervise-validate loop experienced developers already run

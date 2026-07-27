@@ -151,7 +151,7 @@ Graders that are too strict: exact-match verifiers reject valid alternative solu
 
 No baseline run: skipping the baseline means you cannot measure progress. A pass rate of 85% is meaningless without knowing the starting point.
 
-Single-run evaluation: running each task once gives a misleading confidence level. Run at least 3 times per task to detect variance — the [pass@k and pass^k metrics](../../verification/pass-at-k-metrics.md) formalise capability-versus-consistency across runs. If variance is high (pass rate swings more than 20% between runs), you need more runs or tighter task specifications.
+Single-run evaluation: running each task once gives a misleading confidence level. Run at least 3 times per task to detect variance — the [pass@k and pass^k metrics](../../verification/pass-at-k-metrics.md) formalize capability-versus-consistency across runs. If variance is high (pass rate swings more than 20% between runs), you need more runs or tighter task specifications.
 
 Too few runs for small effects: a suite of 20–50 tasks at 3 runs each can detect large improvements (30% → 80%) but not small ones (85% → 90%). As changes become incremental, increase task count or run count to maintain the ability to distinguish real improvements from noise.
 

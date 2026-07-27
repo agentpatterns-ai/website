@@ -34,7 +34,7 @@ Monitor these signals across consecutive refinement passes:
 | Signal | Converging | Diverging |
 |--------|-----------|-----------|
 | Change velocity | Rate of modifications slows — pass N changes 30%, pass N+3 changes 2% | Rate stays high or accelerates |
-| Output size | Size stabilises or shrinks — additive passes are exhausted | Size grows — indicates scope creep, not refinement |
+| Output size | Size stabilizes or shrinks — additive passes are exhausted | Size grows — indicates scope creep, not refinement |
 | Content similarity | Diff between consecutive passes shrinks toward zero | Diff stays large — substantive issues remain unresolved |
 
 When all three signals converge simultaneously, further passes yield diminishing returns. When any signal diverges, issues remain unresolved and more passes are warranted.
@@ -86,7 +86,7 @@ Convergence signals measure whether the output is stabilizing, not whether it is
 
 - Three signals — change velocity, output size, content similarity — replace intuitive stopping with observable criteria
 - Oscillation, expansion, and low-quality plateau are failure patterns that require a restart, not more passes
-- The [five-pass blunder hunt](../verification/five-pass-blunder-hunt.md) applies convergence detection to critique loops: when consecutive passes produce near-identical critiques, the output has stabilised
+- The [five-pass blunder hunt](../verification/five-pass-blunder-hunt.md) applies convergence detection to critique loops: when consecutive passes produce near-identical critiques, the output has stabilized
 - Convergence detection fills the gap for prose and design tasks where no test harness exists; use PASS/FAIL from tests for code
 - Always pair with a hard max-round limit as a cost fallback
 

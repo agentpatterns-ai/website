@@ -94,6 +94,6 @@ The model never sees the dangerous tools at discovery. If an injection convinces
 
 - [MCP Runtime Control Plane](../../security/mcp-runtime-control-plane.md)
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](../../security/hybrid-deterministic-semantic-tool-authorization.md)
-- [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md)
+- [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md)
 - [The Prompt Tinkerer](prompt-tinkerer.md)
 - [Action-Selector Pattern](../../security/action-selector-pattern.md)

@@ -109,7 +109,7 @@ A registry crawls `https://acme.com/.well-known/ai-catalog.json`, indexes the en
 - The mechanism is information retrieval: move tool selection out of the LLM context window into a dedicated search service so the catalog can scale beyond what fits in the prompt.
 - Catalog entries are artifact-agnostic envelopes keyed by IANA media type (`application/mcp-server+json`, `application/a2a-agent-card+json`); ARD does not redefine the underlying schemas.
 - Trust today is weak: attestation is optional, the spec instructs intermediaries to omit strict media-type verification pending IANA registration, and "verified publisher" reduces to "controls the domain". Treat ARD as discovery, not as a hardened trust layer.
-- ARD productises agent-to-agent discoverability across organisational boundaries — the same surface that enabled the ServiceNow Now Assist second-order prompt injection. Do not run it on a principal that also holds untrusted-content access and egress.
+- ARD productizes agent-to-agent discoverability across organizational boundaries — the same surface that enabled the ServiceNow Now Assist second-order prompt injection. Do not run it on a principal that also holds untrusted-content access and egress.
 - ARD is not part of the Linux Foundation Agentic AI Foundation track; neither Anthropic nor OpenAI has announced client-side support. Track adoption rather than building against the draft.
 
 ## Related

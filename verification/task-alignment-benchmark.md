@@ -98,7 +98,7 @@ The paper reports the strongest agent (Claude Opus 4.7) approaches the third pos
 
 - Standard terminal benchmarks reward task completion and ignore what the agent did along the way — an agent can score well by blanket-following every instruction in the environment
 - TAB decomposes capability into cue use and distraction resistance; capability rank on Terminal-Bench does not predict alignment rank on TAB
-- All six prompt-injection defenses evaluated reduced distractor execution and cue utilisation by comparable amounts — current external defense layers cannot deliver selectivity
+- All six prompt-injection defenses evaluated reduced distractor execution and cue utilization by comparable amounts — current external defense layers cannot deliver selectivity
 - Selectivity is not always the right target: high-stakes, multi-tenant, or trifecta-holding agents should keep strict environmental-instruction rejection
 - For agents where environmental cues are an intended input, report cue use and distraction resistance separately and pair every defense evaluation with a cue-recovery test
 
@@ -108,5 +108,5 @@ The paper reports the strongest agent (Claude Opus 4.7) approaches the third pos
 - [Prompt Injection Threat Model](../security/prompt-injection-threat-model.md) — the threat model under which blanket rejection is the correct posture
 - [Discovering Indirect Injection Vulnerabilities in Your Agent](../security/indirect-injection-discovery.md) — adjacent measurement of false-positive (acceptance) cost; TAB measures the false-negative (suppression) cost
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — conditions under which selectivity reintroduces the attack surface
-- [Eval Awareness: Designing Evals Agents Cannot Recognise](eval-awareness.md) — adjacent benchmark-design failure mode where the agent's policy shifts on eval-shape detection
+- [Eval Awareness: Designing Evals Agents Cannot Recognize](eval-awareness.md) — adjacent benchmark-design failure mode where the agent's policy shifts on eval-shape detection
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — the parent issue of synthetic benchmarks overstating real-world capability

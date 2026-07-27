@@ -88,7 +88,7 @@ The purge is the wrong move under four conditions:
 
 ## Example
 
-A team spent two weeks on a refactor that the architect cancelled this morning. The next agent session opens with "let's continue the dependency-injection migration on `UserService`" — the abandoned direction, not the new one.
+A team spent two weeks on a refactor that the architect canceled this morning. The next agent session opens with "let's continue the dependency-injection migration on `UserService`" — the abandoned direction, not the new one.
 
 Before, without a purge, hand-editing state:
 

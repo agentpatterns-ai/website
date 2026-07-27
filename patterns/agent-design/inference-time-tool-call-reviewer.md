@@ -117,7 +117,7 @@ The same reviewer wired into a read-heavy lookup workflow would inflate harmfuln
 - The inference-time tool-call reviewer fires per provisional tool call, between decision and dispatch — distinct from plan critique, output evaluation, and post-hoc audit.
 - Helpfulness-Harmfulness metrics are the design contract: a reviewer is only worth running when its benefit-to-risk ratio is measurably above 1:1 on the target task distribution.
 - Reviewer model choice dominates the ratio — reasoning-tier or different-vendor models avoid base-agent blind spots; same-model reviewers inherit them ([Ta et al., 2026](https://arxiv.org/abs/2604.27233)).
-- Prompt optimisation on the reviewer is independent of the base agent; tuning the reviewer with [GEPA](gepa-reflective-prompt-evolution.md) compounds with model choice.
+- Prompt optimization on the reviewer is independent of the base agent; tuning the reviewer with [GEPA](gepa-reflective-prompt-evolution.md) compounds with model choice.
 - Reserve the reviewer for tool calls allowlists and sandboxes cannot absorb — high-base-accuracy tasks and read-only calls invert the cost-benefit.
 
 ## Related

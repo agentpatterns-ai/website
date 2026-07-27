@@ -83,7 +83,7 @@ Same surface symptom, different cause, different fix:
 - Premature completion is a stopping-criterion misalignment — the "done" token fires on first-signal-of-progress patterns that under-specify multi-file work.
 - Four independent teams have named this same failure within a year; agents "fix" correct code >50% of the time.
 - Mid-tier models are affected most; frontier models verify internally.
-- Reproduction-first prompts, runtime-enforced verification, and externalised stopping criteria are the evidence-backed mitigations.
+- Reproduction-first prompts, runtime-enforced verification, and externalized stopping criteria are the evidence-backed mitigations.
 - Distinguish from continuing-past-completion, objective drift, and context-pressure abandonment — same symptom, different fix.
 
 ## Related

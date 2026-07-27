@@ -90,7 +90,7 @@ Independent work names the broader class 'cross-session stored prompt injection'
 2. Semantic activation. Retrieval surfaces the payload exactly when high-value data is in context.
 3. Persistence. Memory persists by design, which hides the causal link from single-session monitoring.
 
-[A-MemGuard (2025)](https://arxiv.org/abs/2510.02373) and [Memory Poisoning and Secure Multi-Agent Systems (2026)](https://arxiv.org/abs/2603.20357) propose provenance-aware retrieval and cryptographic provenance; neither is broadly deployed. Later work reports a certified defence against runtime memory poisoning in persistent-memory agents — a provable guarantee rather than a heuristic filter ([Certified defence against runtime memory poisoning, 2026](https://arxiv.org/abs/2606.12703)).
+[A-MemGuard (2025)](https://arxiv.org/abs/2510.02373) and [Memory Poisoning and Secure Multi-Agent Systems (2026)](https://arxiv.org/abs/2603.20357) propose provenance-aware retrieval and cryptographic provenance; neither is broadly deployed. Later work reports a certified defense against runtime memory poisoning in persistent-memory agents — a provable guarantee rather than a heuristic filter ([Certified defense against runtime memory poisoning, 2026](https://arxiv.org/abs/2606.12703)).
 
 ## When this does not apply
 

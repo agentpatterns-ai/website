@@ -56,7 +56,7 @@ AOCI sits alongside two patterns already on this site:
 | Approach | When the index is built | What enters context | Best when |
 |----------|------------------------|---------------------|-----------|
 | AOCI blueprint | Once, offline; persistent | The whole index, read in a single pass before any task | Stable architecture; agent needs global frame before local edits |
-| [Repository Map](repository-map-pattern.md) (tree-sitter + PageRank) | Per session, token-fitted | Top-ranked symbols sized to a budget; ranking is task-personalised | Large stable codebases; need cross-file orientation under tight token budgets |
+| [Repository Map](repository-map-pattern.md) (tree-sitter + PageRank) | Per session, token-fitted | Top-ranked symbols sized to a budget; ranking is task-personalized | Large stable codebases; need cross-file orientation under tight token budgets |
 | [Repository-Level Retrieval](repository-level-retrieval-code-generation.md) | Per query | Top-k chunks scored against the current task | The relevant slice is small and the task is well-specified |
 | Agentic search (Claude Code's choice) | Never — no index | Whatever the agent fetches via Glob, Grep, Read | Living repos where freshness matters more than structure ([Vadim, 2025](https://vadim.blog/claude-code-no-indexing)) |
 

@@ -58,7 +58,7 @@ Per-skill review samples each skill in isolation. Emergent risks across activate
 | SCR (this page) | Two or more benign skills composed in shared context | No skill is malicious; the agent's reasoning across outputs is what harms |
 | [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) | A single skill carries a hidden payload (DDIPE) | The malicious skill exists as an artifact; detection is per-skill |
 | [Compositional Vulnerability Induction](compositional-vulnerability-induction.md) | Sequential coding tickets compose an exploitable end-state diff | Coding agent emits vulnerable code; SCR coerces the agent into a harmful runtime action |
-| Permission laundering (defended by [Monotonic Capability Attenuation](monotonic-capability-attenuation.md)) | Per-tool checks pass, chained effect exfiltrates | Defence target — capability budgets that intersect through composition |
+| Permission laundering (defended by [Monotonic Capability Attenuation](monotonic-capability-attenuation.md)) | Per-tool checks pass, chained effect exfiltrates | Defense target — capability budgets that intersect through composition |
 
 Catching DDIPE perfectly still admits CapFlow pairs because each artifact is benign. Monotonic capability attenuation stops CapFlow exfiltration but not TrustLift — there is no permission to attenuate when the model is legitimately authorized to act and is being deceived about whether it should.
 

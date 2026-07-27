@@ -1,7 +1,7 @@
 ---
 title: "Distillation-Induced Similarity Metrics for Tool-Use Agents"
 term: "Distillation-Induced Similarity Metrics"
-description: "Quantify how much two models share non-mandatory tool-use behaviour using Response Pattern Similarity and Action Graph Similarity — surface correlated failure modes before routing or ensembling treats them as independent."
+description: "Quantify how much two models share non-mandatory tool-use behavior using Response Pattern Similarity and Action Graph Similarity — surface correlated failure modes before routing or ensembling treats them as independent."
 tags:
   - testing-verification
   - evals
@@ -18,7 +18,7 @@ maturity: emerging
 
 # Distillation-Induced Similarity Metrics for Tool-Use Agents
 
-> Two metrics quantify how much distilled models share non-mandatory tool-use behaviour, so routing and ensemble voting stop treating correlated failure modes as independent.
+> Two metrics quantify how much distilled models share non-mandatory tool-use behavior, so routing and ensemble voting stop treating correlated failure modes as independent.
 
 ## Why behavioral overlap matters
 
@@ -91,11 +91,11 @@ These overlaps exceed Sonnet 4.5 vs Opus 4.1 within Anthropic's own family ([arx
 
 ## Key Takeaways
 
-- Distillation transfers non-mandatory behaviour — optional tool choice, sequence habits, dependency topology — alongside task capability; benchmark scores cannot see this transfer
+- Distillation transfers non-mandatory behavior — optional tool choice, sequence habits, dependency topology — alongside task capability; benchmark scores cannot see this transfer
 - RPS measures verbal alignment, AGS measures tool-use graph alignment; the two correlate weakly (r = 0.491) and need to be reported together
 - Cross-vendor routing and ensemble voting both assume independent failure modes — measure RPS/AGS before treating two models as independent
-- Within-family pairs cluster more (5.9 pp higher AGS) but cross-family convergence still occurs — vendor boundaries do not guarantee behavioural diversity
-- The metrics are a snapshot of two checkpoints, defined over tool-use trajectories — they do not transfer to single-turn tasks or generalise across model generations
+- Within-family pairs cluster more (5.9 pp higher AGS) but cross-family convergence still occurs — vendor boundaries do not guarantee behavioral diversity
+- The metrics are a snapshot of two checkpoints, defined over tool-use trajectories — they do not transfer to single-turn tasks or generalize across model generations
 
 ## Related
 

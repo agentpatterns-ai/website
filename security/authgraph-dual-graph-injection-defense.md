@@ -109,7 +109,7 @@ A prompt injection in a `search_hotels` observation tries to substitute `flight_
 
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md) — strict control/data separation with provable ASR=0.00 at higher utility cost; AuthGraph trades a small ASR increase for substantially better utility on dynamic tasks
 - [Provenance-Aware Decision Auditing for LLM Agents](provenance-aware-decision-auditing.md) — single-graph influence auditing (ARGUS); covers the same problem space without the isolated-intent reference graph
-- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — the broader defense-in-depth catalogue this pattern slots into
+- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — the broader defense-in-depth catalog this pattern slots into
 - [Action-Selector Pattern](action-selector-pattern.md) — near-zero-overhead alternative when the action space can be enumerated up front
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md) — deterministic backstop for the residual 1–2% ASR
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — parent threat model

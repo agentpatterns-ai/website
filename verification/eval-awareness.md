@@ -1,7 +1,7 @@
 ---
-title: "Eval Awareness: Designing Evals Agents Cannot Recognise"
+title: "Eval Awareness: Designing Evals Agents Cannot Recognize"
 term: "Eval Awareness"
-description: "Frontier models detect eval-shaped prompts and behave differently from production — remove the signals that cue recognition so measured behaviour generalises to real tasks."
+description: "Frontier models detect eval-shaped prompts and behave differently from production — remove the signals that cue recognition so measured behavior generalizes to real tasks."
 tags:
   - testing-verification
   - evals
@@ -14,9 +14,9 @@ last_reviewed: 2026-05-27
 maturity: established
 ---
 
-# Eval Awareness: Designing Evals Agents Cannot Recognise
+# Eval Awareness: Designing Evals Agents Cannot Recognize
 
-> Frontier models detect eval-shaped prompts and shift behaviour between evaluation and production. Design evals that remove the signals models use to recognise them.
+> Frontier models detect eval-shaped prompts and shift behavior between evaluation and production. Design evals that remove the signals models use to recognize them.
 
 ## What eval awareness is
 
@@ -112,15 +112,15 @@ A layered, retrieval-focused defense. No prompt rewrite closes the gap once the 
 
 ## Key Takeaways
 
-- Eval awareness is distinct from reward hacking and benchmark contamination — the model's policy shifts because it recognises the context, not because it exploits a grader or memorised the answer
+- Eval awareness is distinct from reward hacking and benchmark contamination — the model's policy shifts because it recognizes the context, not because it exploits a grader or memorized the answer
 - Detection is cumulative across a trajectory; structural signals (specificity, artificial constraints, meta-references) matter more than prompt length or token budget
 - Two complementary design levers: production mimicry for everyday evals, novelty over realism for capability benchmarks
 - Operational controls — encryption, authentication, search blocking — close gaps that rubric design cannot
-- Private team-internal suites with deterministic grading rarely need eval-awareness defences — apply them to frontier-model capability evals and any benchmark with public footprint
+- Private team-internal suites with deterministic grading rarely need eval-awareness defenses — apply them to frontier-model capability evals and any benchmark with public footprint
 
 ## Related
 
-- [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — complementary defence against rubric exploitation once the agent is inside the eval
+- [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — complementary defense against rubric exploitation once the agent is inside the eval
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — training-data overlap as the adjacent failure mode
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — production-trajectory grading that resists eval-shape drift
 - [Behavioral Testing for Agents](behavioral-testing-agents.md) — capability matrices and variance thresholds for production-aligned evals

@@ -52,7 +52,7 @@ graph TD
     A2 --> S3[Skill: Style Guide]
 ```
 
-Shared skills mean a single update propagates everywhere. Shared agents mean orchestration changes do not require agent rewrites. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) presents these composable patterns as the recommended building blocks for agent systems, and favours reuse over monolithic design — see [Anthropic's Effective Agents Framework](anthropic-effective-agents-framework.md) for a full taxonomy.
+Shared skills mean a single update propagates everywhere. Shared agents mean orchestration changes do not require agent rewrites. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) presents these composable patterns as the recommended building blocks for agent systems, and favors reuse over monolithic design — see [Anthropic's Effective Agents Framework](anthropic-effective-agents-framework.md) for a full taxonomy.
 
 ## Independent testability
 

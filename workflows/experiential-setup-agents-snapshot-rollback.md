@@ -132,7 +132,7 @@ If the repo had shipped a devcontainer, the entire pipeline above is replaced by
 
 - Use this pattern only when prebuilt-environment alternatives are unavailable, repos share enough substrate for experience to transfer, and verification is ambiguous enough to need a two-role protocol.
 - The three mechanisms — XPU experience records, snapshot-stack speculative execution, prosecutor-judge verification — compose multiplicatively; dropping any one re-introduces a distinct failure mode.
-- Snapshot rollback is independently validated by Repo2Run for Python-repo setup; SetupX generalises it with cross-repo experience reuse.
+- Snapshot rollback is independently validated by Repo2Run for Python-repo setup; SetupX generalizes it with cross-repo experience reuse.
 - The dual-modality XPU format addresses negative-transfer risk by pairing executable actions with retrieval-friendly guidance.
 - Promote verified sequences back to the experience store — without the writeback step, the agent learns nothing across repos.
 
@@ -144,5 +144,3 @@ If the repo had shipped a devcontainer, the entire pipeline above is replaced by
 - [Memory Transfer Learning](../patterns/agent-design/memory-transfer-learning.md)
 - [Experience Graphs as Structured Memory for Self-Evolving Agents](../patterns/agent-design/experience-graphs-self-evolving-agents.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
-</content>
-</invoke>

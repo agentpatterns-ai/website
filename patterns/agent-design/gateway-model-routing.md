@@ -1,7 +1,7 @@
 ---
 title: "Gateway Model Routing: Treat the LLM Gateway as a Discovery Source"
 term: "Gateway Model Routing"
-description: "Decouple harness model selection from vendor SDKs by letting an Anthropic-compatible gateway both serve inference and publish the model catalogue, with Claude Code 2.1.126 as the reference implementation."
+description: "Decouple harness model selection from vendor SDKs by letting an Anthropic-compatible gateway both serve inference and publish the model catalog, with Claude Code 2.1.126 as the reference implementation."
 tags:
   - agent-design
   - cost-performance
@@ -16,7 +16,7 @@ maturity: adopted
 
 # Gateway Model Routing
 
-> An Anthropic-compatible gateway serves inference and publishes the model catalogue, so one config knob drives both the inference target and the model picker.
+> An Anthropic-compatible gateway serves inference and publishes the model catalog, so one config knob drives both the inference target and the model picker.
 
 ## The pattern
 
@@ -90,11 +90,11 @@ This is the gateway version of pinning a Bedrock ARN ([Claude Code: Model config
 
 ## Key Takeaways
 
-- Gateway model routing decouples model choice from harness binary by treating an Anthropic-compatible gateway as both inference target and catalogue source.
+- Gateway model routing decouples model choice from harness binary by treating an Anthropic-compatible gateway as both inference target and catalog source.
 - Discovery is opt-in by URL, namespace-filtered (`claude`/`anthropic` only), and degrades gracefully through cached and built-in fallbacks.
 - The harness contract requires `/v1/messages`, `/v1/messages/count_tokens`, and forwarded `anthropic-beta`/`anthropic-version` headers — gateways that violate this silently disable features.
-- Capability detection is separate from discovery: declare effort and thinking support via `_SUPPORTED_CAPABILITIES` for IDs the harness does not recognise.
-- The pattern adds an auth surface and a supply-chain dependency; reserve it for workloads that already need centralised auth, budgets, or multi-vendor routing.
+- Capability detection is separate from discovery: declare effort and thinking support via `_SUPPORTED_CAPABILITIES` for IDs the harness does not recognize.
+- The pattern adds an auth surface and a supply-chain dependency; reserve it for workloads that already need centralized auth, budgets, or multi-vendor routing.
 
 ## Related
 

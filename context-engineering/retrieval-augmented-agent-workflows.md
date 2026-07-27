@@ -141,7 +141,7 @@ MCP servers expose external data sources, such as documentation, files, and sear
 - [Context Hub: On-Demand Versioned API Docs for Coding Agents](context-hub.md)
 - [Semantic Context Loading: Language Server Plugins for Agents](semantic-context-loading.md)
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
-- [Context Compression Strategies: Offloading and Summarisation](context-compression-strategies.md)
+- [Context Compression Strategies: Offloading and Summarization](context-compression-strategies.md)
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
 - [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](../standards/mcp-protocol.md)

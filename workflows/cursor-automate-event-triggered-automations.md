@@ -71,7 +71,7 @@ The cost is a review-deficit: the trigger picked, the tools attached, and the te
 
 The mechanism is the same one that fires every always-on agent loop on this site: event triggers replace the human typing step with a signal the team already produces. The asymmetric-scaling framing Cursor's blog uses — "code review, monitoring, and maintenance haven't sped up to the same extent" as code production ([Cursor blog](https://cursor.com/blog/automations)) — is the same mechanism the [Continuous AI](continuous-ai.md) family captures and that [Programmatic Cloud-Agent Dispatch](programmatic-cloud-agent-dispatch.md) makes explicit at the API level.
 
-Where 3.8 differs is in lowering the authoring cost. The `/automate` skill collapses trigger selection, instruction drafting, and tool wiring into one natural-language step — the marginal automation that would not have justified the dashboard configuration now ships. The four implicit safeguards a human dispatcher provided in the manual-mention case (dedupe, payload sanitisation, budget caps, audit attribution) must be reconstructed at the automation level, and the natural-language authoring path makes it easier to ship the automation before those safeguards exist ([Multi-Repo and No-Repo Automation Templates](multi-repo-no-repo-automation-templates.md)).
+Where 3.8 differs is in lowering the authoring cost. The `/automate` skill collapses trigger selection, instruction drafting, and tool wiring into one natural-language step — the marginal automation that would not have justified the dashboard configuration now ships. The four implicit safeguards a human dispatcher provided in the manual-mention case (dedupe, payload sanitization, budget caps, audit attribution) must be reconstructed at the automation level, and the natural-language authoring path makes it easier to ship the automation before those safeguards exist ([Multi-Repo and No-Repo Automation Templates](multi-repo-no-repo-automation-templates.md)).
 
 ## When this backfires
 
@@ -95,6 +95,6 @@ Where 3.8 differs is in lowering the authoring cost. The `/automate` skill colla
 
 - [Continuous AI](continuous-ai.md) — the navigation map of always-on agent workflows this trigger surface sits inside
 - [Chat-Platform Agent Delegation](chat-platform-agent-delegation.md) — the trifecta-concentration posture extended by the Slack emoji trigger
-- [Programmatic Cloud-Agent Dispatch](programmatic-cloud-agent-dispatch.md) — dedupe, sanitisation, budget caps, and audit attribution that 3.8 triggers also require
+- [Programmatic Cloud-Agent Dispatch](programmatic-cloud-agent-dispatch.md) — dedupe, sanitization, budget caps, and audit attribution that 3.8 triggers also require
 - [Multi-Repo and No-Repo Automation Templates](multi-repo-no-repo-automation-templates.md) — the trigger/scope decoupling Cursor introduced in 3.5 that 3.8 builds on
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — the threat model the 3.8 defaults close by default

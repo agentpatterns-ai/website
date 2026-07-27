@@ -25,7 +25,7 @@ Reach for usage-reinforced decay when the facts you cannot afford to lose are on
 
 A recency window evicts on elapsed turns alone. Usage-reinforced decay evicts on a retention score, and each recall permanently reshapes that item's future curve ([Towards Data Science, 2026-07-24](https://towardsdatascience.com/context-windows-forget-what-matters-i-used-a-140-year-old-psychology-paper-to-fix-ai-memory/)).
 
-| Behaviour | Recency window | Usage-reinforced decay |
+| Behavior | Recency window | Usage-reinforced decay |
 |---|---|---|
 | Eviction test | `current_turn - last_touched > window` | retention below threshold (default 0.20) |
 | Effect of a recall | resets the clock | raises stability, flattening the whole future curve |
@@ -49,7 +49,7 @@ The same causal structure appears independently in [FadeMem](https://arxiv.org/a
 - The session shape differs from the tuning set. The defaults — threshold 0.20, base stability 8.0 — were fitted to a burst-then-silence pattern and need re-fitting for a steady drip of recalls.
 - Recall detection is unsolved outside simulation. Production has to infer what counts as genuine memory usage; a loose detector inflates every item's stability and the policy collapses toward keeping everything.
 
-The strongest case against the technique is that importance belongs on the write, not the read. A salience score set by the model that extracted the fact is available on turn one, before any recall exists to count. [A rate-distortion account of memory compaction](https://arxiv.org/abs/2607.08032) formalises this: retention should minimise downstream task degradation, and access count is at best a correlate of that.
+The strongest case against the technique is that importance belongs on the write, not the read. A salience score set by the model that extracted the fact is available on turn one, before any recall exists to count. [A rate-distortion account of memory compaction](https://arxiv.org/abs/2607.08032) formalizes this: retention should minimize downstream task degradation, and access count is at best a correlate of that.
 
 ## Example
 
@@ -67,7 +67,7 @@ Read that contrast against its schedule. The last two scheduled recalls sit roug
 
 ## Related
 
-- [Context Compression Strategies](context-compression-strategies.md) — the tiered offload-and-summarise frame whose recency-window pruning tier this technique replaces.
+- [Context Compression Strategies](context-compression-strategies.md) — the tiered offload-and-summarize frame whose recency-window pruning tier this technique replaces.
 - [Tiered Memory Architecture](../patterns/agent-design/tiered-memory-architecture.md) — where a decay policy sits relative to working, episodic, and long-term stores.
 - [Generative Agents Memory Stream](../patterns/agent-design/generative-agents-memory-stream.md) — scores retrieval by recency, relevance, and importance; the read-side counterpart to this write-side eviction policy.
 - [Memory Retrieval as Control](../patterns/agent-design/memory-retrieval-as-control.md) — why stale-entry lockout makes eviction and freshness discipline mandatory in any persistent memory.

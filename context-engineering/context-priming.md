@@ -112,7 +112,7 @@ Transformer models generate each token conditioned on all tokens currently in co
 - [Context Engineering: The Practice of Shaping Agent Context](context-engineering.md)
 - [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md)
 - [Seeding Agent Context: Breadcrumbs in Code](seeding-agent-context.md)
-- [Context Compression Strategies: Offloading and Summarisation](context-compression-strategies.md)
+- [Context Compression Strategies: Offloading and Summarization](context-compression-strategies.md)
 - [Phase-Specific Context Assembly for AI Agent Development](phase-specific-context-assembly.md)
 - [Layered Context Architecture for AI Agent Development](layered-context-architecture.md)
 - [Retrieval-Augmented Agent Workflows: On-Demand Context](retrieval-augmented-agent-workflows.md)

@@ -94,7 +94,7 @@ The opening section carries the rules the agent must follow reliably. The middle
 - Model attention follows a U-shape: strongest at the start and end, weakest in the middle.
 - Critical rules belong at the beginning and end of instruction files like `AGENTS.md`; reference material can occupy the middle.
 - Adding instructions in the middle of a long file pushes existing instructions further into the low-attention zone.
-- Keep instruction files short enough to minimise the size of the weak-attention middle zone.
+- Keep instruction files short enough to minimize the size of the weak-attention middle zone.
 
 ## Related
 

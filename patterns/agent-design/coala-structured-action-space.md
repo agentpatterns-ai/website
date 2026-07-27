@@ -101,7 +101,7 @@ The boundary makes three things visible at a glance: steps 4–8 need permission
 - CoALA's internal/external boundary maps onto cost, reversibility, permission, and observability profiles that monolithic tool lists hide.
 - The four action types — reason, retrieve, learn, ground — give a vocabulary for auditing harness asymmetry; most coding agents over-invest in grounding and under-invest in learning.
 - The split pays off when the agent has [persistent long-term memory](agent-memory-patterns.md) or a mixed-side-effect tool surface; it adds work without insight on single-tool ReAct loops.
-- Tools that both retrieve and mutate need explicit annotation, not forced one-side classification — the boundary is a modelling choice, not a physical fact.
+- Tools that both retrieve and mutate need explicit annotation, not forced one-side classification — the boundary is a modeling choice, not a physical fact.
 - Pair the action taxonomy with explicit memory tiering when facts and experiences share a store, to avoid the persistence-semantics category error.
 
 ## Related

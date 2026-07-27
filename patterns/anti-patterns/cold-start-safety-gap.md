@@ -53,7 +53,7 @@ The paper's mitigation: prepend a brief warm-up of real benign agentic tasks (D=
 This is necessary but not sufficient — warm-up closes part of the gap, not all of it, and is orthogonal to other surfaces:
 
 1. Per-turn filters and tool-call authorization apply regardless of state. Warm-up shifts a refusal probability; authorization is a hard boundary. Pair them.
-2. Defense-in-depth keeps cold-start as one model-level layer; infrastructure egress controls and product confirmation gates remain independent and necessary ([Single-Layer Prompt Injection Defence](single-layer-injection-defence.md)).
+2. Defense-in-depth keeps cold-start as one model-level layer; infrastructure egress controls and product confirmation gates remain independent and necessary ([Single-Layer Prompt Injection Defense](single-layer-injection-defence.md)).
 3. Tool-call safety transfer is not automatic — text-trained refusal does not transfer cleanly to tool-call refusal ([Yi et al. 2026](https://arxiv.org/pdf/2602.16943)), so a warmed-up agent can still execute harmful tool calls.
 4. Red-team coverage should evaluate refusal at depth 0, 5, and 20 (or depths representative of your deployment). A single-depth eval reports one point on the curve.
 
@@ -87,14 +87,14 @@ The deployment fix is not "trust the depth-20 number." It is to measure refusal 
 - The driver is representational — benign agentic turns shift hidden states into a safety-aligned region; the agent learns nothing new.
 - A 5–10 task benign warm-up closes most of the gap at low utility cost; user-task turns matter more than agent responses.
 - The mitigation is structurally identical to a many-shot prefix and can be inverted by attacker-controlled warm-up content — populate it from a trusted source.
-- Warm-up is one layer of defence, not a replacement for per-turn tool-call authorization, egress controls, or product-level confirmation gates.
+- Warm-up is one layer of defense, not a replacement for per-turn tool-call authorization, egress controls, or product-level confirmation gates.
 - Evaluate refusal at multiple depths in red-team coverage; a single-depth eval reports a single point on the curve.
 
 ## Related
 
 - [Lethal Trifecta Threat Model](../../security/lethal-trifecta-threat-model.md) — the per-turn architectural constraint that warm-up does not address; refusal-rate curves don't bound a configuration that holds private data, untrusted input, and egress on the same principal
-- [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md) — the parallel anti-pattern of treating any one safety mechanism as sufficient; cold-start mitigation is one layer
-- [Defence-in-Depth for Agent Safety](../../security/defense-in-depth-agent-safety.md) — the broader posture in which warm-up belongs
+- [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md) — the parallel anti-pattern of treating any one safety mechanism as sufficient; cold-start mitigation is one layer
+- [Defense-in-Depth for Agent Safety](../../security/defense-in-depth-agent-safety.md) — the broader posture in which warm-up belongs
 - [Constraint Drift: Why Safety Must Be Maintained, Not Asserted](../../security/constraint-drift-multi-agent-safety.md) — safety properties weaken across trajectory surfaces; cold-start is one such drift dimension
 - [The Anthropomorphized Agent](anthropomorphized-agent.md) — treating safety as a stable agent trait rather than a turn-by-turn measurement
 - [Prompt as Security Knob](prompt-as-security-knob.md) — assuming a prompt-level property is constant when it varies with perturbation

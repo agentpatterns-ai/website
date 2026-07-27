@@ -11,7 +11,7 @@ aliases:
   - graduated cost circuit breaker
   - soft spend limit alerts
   - staged budget alerting
-last_reviewed: 2026-06-02
+last_reviewed: 2026-07-28
 maturity: established
 ---
 
@@ -104,4 +104,4 @@ The 50/80/100 split is the Cursor implementation; the pattern itself is "progres
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — per-tool failure-rate state machine; complementary, operates on a different signal
 - [Circuit Breakers for Agent Loops](../../observability/circuit-breakers.md) — loop-level stops including a single cost threshold; this pattern decomposes that signal
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — controls per-turn cost; progressive alerts catch what the per-turn allocation lets through over a period
-- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — defines the unit (premium request vs token) over which the budget window is measured
+- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — defines the unit (GitHub AI credits vs Anthropic token rates) over which the budget window is measured, plus credit pooling and forfeiture

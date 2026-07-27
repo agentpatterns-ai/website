@@ -9,7 +9,7 @@ last_reviewed: 2026-05-27
 
 # Context Engineering
 
-> The discipline of designing what information enters a model's context window, how it is structured, and what is excluded — to maximise the quality and reliability of agent output.
+> The discipline of designing what information enters a model's context window, how it is structured, and what is excluded — to maximize the quality and reliability of agent output.
 
 ## Fundamentals
 
@@ -45,8 +45,8 @@ Strategies for fitting more useful content into less space, and for making repea
 - [Context-Window Diagnostic Tooling](context-window-diagnostic-tooling.md) — Surface which tool calls are inflating the context window so you can optimize specific culprits rather than prune blindly
 - [Reducing System-Prompt Token Bloat in Coding Agents](system-prompt-bloat-reduction.md) — Measure the shipped system prompt with `/context`, then switch off unused tools, skills, and features so the fixed prefix stops crowding out task context
 - [Proprioceptive Context Dashboard](proprioceptive-context-dashboard.md) — Give a long-horizon agent a live view of its own context blocks — size, age, and usage — so it makes competent keep-or-archive decisions itself instead of a hidden layer compressing blindly
-- [PEEK: Orientation Cache for Recurring-Context Agents](peek-orientation-cache.md) — A constant-sized prompt artifact that caches reusable orientation knowledge — what is in a recurring context, how it is organised, which entities matter — distinct from trajectory replay and playbook strategy memory
-- [Context Compression Strategies](context-compression-strategies.md) — Long-running agents accumulate context that eventually fills the window; tiered compression — offloading large payloads and summarising history — lets agents continue working without losing task continuity
+- [PEEK: Orientation Cache for Recurring-Context Agents](peek-orientation-cache.md) — A constant-sized prompt artifact that caches reusable orientation knowledge — what is in a recurring context, how it is organized, which entities matter — distinct from trajectory replay and playbook strategy memory
+- [Context Compression Strategies](context-compression-strategies.md) — Long-running agents accumulate context that eventually fills the window; tiered compression — offloading large payloads and summarizing history — lets agents continue working without losing task continuity
 - [Selective Rewind Summarization](selective-rewind-summarization.md) — A user-chosen cut point compresses earlier turns to a summary while the recent turns stay verbatim — a targeted alternative to whole-session compaction
 - [Usage-Reinforced Memory Decay for Long-Running Agents](usage-reinforced-memory-decay.md) — Score retention with a forgetting curve whose stability compounds on every recall, so frequently-consulted facts outlive the idle stretches that silently evict them from a fixed recency window
 - [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md) — Give the agent both a compaction tool and a firing rubric so it compacts on trajectory structure — sub-task resolved or converging — instead of a fixed token threshold
@@ -54,6 +54,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [Prompt Compression](prompt-compression.md) — Write instructions that convey the same guidance in fewer words; shorter, denser instructions improve agent compliance and reduce token cost
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — Treat prompt caching as a structural constraint on prompt composition, with cross-provider economics and extended-TTL guidance folded in
 - [Static Content First for Cache Hits](static-content-first-caching.md) — Place static content at the beginning of the prompt and variable content at the end to maximize prompt cache hits and keep inference costs linear
+- [Prompt Cache Keepalive for Agent Pauses](prompt-cache-keepalive-agent-pauses.md) — Replay a cached prefix on a timer so it survives tool runs and approval waits, and the billing, pause-length, and interval conditions that decide whether it saves money or costs 4x more
 - [Stateful Iteration State-Carry](stateful-iteration-state-carry.md) — Carry typed persistent state across long agent loops through a state-read tool instead of replaying the full transcript each turn; converts O(n²) total token cost to O(n) when loops are long and observations are large
 - [Exclude Dynamic System Prompt Sections for Cross-Machine Cache Sharing](exclude-dynamic-system-prompt-sections.md) — Move per-machine context (cwd, OS, shell, memory paths) out of the Claude Code system prompt so identical fleet configurations share one prompt-cache entry across users and machines
 - [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md) — When Claude Code prepends an attribution header to prompts sent to local models, it invalidates the KV cache on every request and causes ~90% slower inference
@@ -68,7 +69,7 @@ How to build, layer, and route context to the right agent at the right time rath
 
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md) — Build system prompts from modular, priority-ordered sections rather than monolithic static text, enabling mode-specific variants and efficient API caching
 - [Narrative Problem Reformulation for Code Generation](narrative-problem-reformulation.md) — Rewriting a fragmented coding problem as a coherent three-part narrative measurably shifts which algorithms a code LLM selects, with reported 18.7% zero-shot pass@10 gains concentrated on harder competitive-programming tasks
-- [Phase-Specific Context Assembly](phase-specific-context-assembly.md) — Optimise the orchestration layer that prepares each agent per phase; planners get summaries, workers get targeted file excerpts and validation commands
+- [Phase-Specific Context Assembly](phase-specific-context-assembly.md) — Optimize the orchestration layer that prepares each agent per phase; planners get summaries, workers get targeted file excerpts and validation commands
 - [Prompt Chaining](prompt-chaining.md) — Decompose a complex task into a sequence of LLM calls where each step processes the output of the previous one, enabling verification and gate-checking at each stage
 - [Prompt Layering](prompt-layering.md) — Agent instructions arrive from multiple sources simultaneously; understanding the precedence order and conflict resolution prevents unpredictable behavior
 - [Filter and Aggregate in the Execution Environment](filter-aggregate-execution-env.md) — Run data processing logic inside the code execution sandbox before surfacing results to the model, so only the relevant subset of data enters context
@@ -86,10 +87,11 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Repository Map Pattern](repository-map-pattern.md) — Parse source files with tree-sitter to extract structural symbols, rank them by graph importance, then binary-search fit the most relevant entries into the agent's available token budget
 - [Deterministic Anchoring](deterministic-anchoring.md) — Inject call-graph, inheritance, and config-dependency facts as plain-text comments so code-agent navigation converges run-to-run; the win is reproducibility, not capability
 - [Semantic Context Loading](semantic-context-loading.md) — Query codebases through Language Server Protocol semantics — symbol lookup, reference finding, type navigation — rather than reading raw files
-- [Seeding Agent Context](seeding-agent-context.md) — Strategically place files, comments, and markers that agents discover during exploration and use to shape their behaviour
+- [Seeding Agent Context](seeding-agent-context.md) — Strategically place files, comments, and markers that agents discover during exploration and use to shape their behavior
 - [Grounding Agents in Code the Model Has Never Seen](grounding-zero-prior-code.md) — When the model has no training signal for a proprietary SDK or custom framework, it generates against the closest public API in training; provisioning must displace that prior, not just supplement it
 - [Environment Specification as Context](environment-specification-as-context.md) — Feed dependency versions, lock files, and runtime constraints into agent context to prevent the 50–70% accuracy drop caused by environment-blind code generation
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — AI coding agents that retrieve cross-file context from dependency graphs, ASTs, and semantic embeddings generate more accurate code than those limited to local file context
+- [Agent-Tuned Code Search](agent-tuned-code-search.md) — A search tool that runs its own loop and returns file paths plus line ranges cuts search latency sharply, but the token win against local grep is modest and bounded by index freshness
 - [AOCI: Symbolic-Semantic Repository Indexing](aoci-symbolic-semantic-indexing.md) — A persistent, query-independent blueprint pairing architectural coordinates with semantic content — read whole before any task, distinct from on-demand retrieval and token-fitted repo maps
 - [Structured Domain Retrieval](structured-domain-retrieval.md) — Combine hierarchical knowledge graphs with coverage-driven case selection to retrieve domain-specific context that flat vector search misses
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — Use one shared domain schema across graph construction, query decomposition, and typed retrieval to improve multi-hop reasoning precision over private knowledge bases

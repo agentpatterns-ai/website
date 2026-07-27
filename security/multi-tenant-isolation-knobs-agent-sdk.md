@@ -1,7 +1,7 @@
 ---
 title: "Multi-Tenant Isolation Knobs for Shared-Container Agent SDK Hosting"
 term: "Multi-Tenant Isolation Knobs"
-description: "The specific set of Claude Agent SDK options and environment variables that neutralise each default settings-and-state input when one container serves multiple tenants."
+description: "The specific set of Claude Agent SDK options and environment variables that neutralize each default settings-and-state input when one container serves multiple tenants."
 tags:
   - security
   - claude
@@ -33,7 +33,7 @@ The hosting docs are explicit: "Do not rely on default `query()` options for mul
 
 Each knob severs one input pathway. Apply all four on every `query()` call, plus a per-tenant proxy egress rule:
 
-| Knob | Surface | What it neutralises |
+| Knob | Surface | What it neutralizes |
 |---|---|---|
 | `settingSources: []` (TS) / `setting_sources=[]` (Py) | `query()` option | Blocks filesystem-loaded settings, `CLAUDE.md`, rules, skills, hooks ([Control filesystem settings](https://code.claude.com/docs/en/agent-sdk/claude-code-features#control-filesystem-settings-with-settingsources)) |
 | `CLAUDE_CONFIG_DIR=<per-tenant>` | `env` | Relocates `~/.claude.json` to a per-tenant path; otherwise tenants share one global config ([What settingSources does not control](https://code.claude.com/docs/en/agent-sdk/claude-code-features#what-settingsources-does-not-control)) |

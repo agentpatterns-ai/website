@@ -1,7 +1,7 @@
 ---
 title: "Evaluator Templates: Portable Primitives for Agent Eval Suites"
 term: "Evaluator Templates"
-description: "Treat LLM-as-judge evaluators as reusable, parameterised templates — but only for the subset of evaluation questions whose shape is genuinely portable across domains."
+description: "Treat LLM-as-judge evaluators as reusable, parameterized templates — but only for the subset of evaluation questions whose shape is genuinely portable across domains."
 tags:
   - evals
   - testing-verification
@@ -15,13 +15,13 @@ maturity: established
 
 # Evaluator Templates: Portable Primitives
 
-> Treat judge prompts as parameterised templates for the narrow set of evaluation questions whose shape is portable across domains. Use custom evaluators for everything else.
+> Treat judge prompts as parameterized templates for the narrow set of evaluation questions whose shape is portable across domains. Use custom evaluators for everything else.
 
 ## What templates actually solve
 
 Every agent project re-authors the same judge prompts: prompt-injection detection, PII leakage, format adherence, tool-choice correctness, trajectory accuracy. LangSmith shipped 30+ evaluator templates on April 16, 2026, across six categories — Security, Safety, Quality, Conversation, Trajectory, Image & Voice — as LLM-as-judge prompts and rule-based evaluators with tuned defaults. [Source: [Reusable Evaluators and Evaluator Templates in LangSmith](https://blog.langchain.com/reusable-langsmith-evaluator-templates/)]
 
-The [openevals](https://github.com/langchain-ai/openevals) library exposes them as parameterised f-string constants — `PROMPT_INJECTION_PROMPT`, `PII_LEAKAGE_PROMPT`, `TRAJECTORY_ACCURACY_PROMPT`, `TOOL_SELECTION_PROMPT`, `HALLUCINATION_PROMPT` — fed into `create_llm_as_judge(prompt=...)` with `{inputs}`, `{outputs}`, `{reference_outputs}` placeholders. A workspace-level Evaluators tab attaches one definition to many tracing projects. [Source: [Manage evaluators — LangSmith docs](https://docs.langchain.com/langsmith/evaluators)]
+The [openevals](https://github.com/langchain-ai/openevals) library exposes them as parameterized f-string constants — `PROMPT_INJECTION_PROMPT`, `PII_LEAKAGE_PROMPT`, `TRAJECTORY_ACCURACY_PROMPT`, `TOOL_SELECTION_PROMPT`, `HALLUCINATION_PROMPT` — fed into `create_llm_as_judge(prompt=...)` with `{inputs}`, `{outputs}`, `{reference_outputs}` placeholders. A workspace-level Evaluators tab attaches one definition to many tracing projects. [Source: [Manage evaluators — LangSmith docs](https://docs.langchain.com/langsmith/evaluators)]
 
 ## The portable subset
 
@@ -75,7 +75,7 @@ A reusable template is more than a prompt string. It bundles:
 
 | Element | Example |
 |---------|---------|
-| Parameterised prompt | f-string with `{inputs}`, `{outputs}`, `{reference_outputs}` |
+| Parameterized prompt | f-string with `{inputs}`, `{outputs}`, `{reference_outputs}` |
 | Output schema | pass/fail + score 0.0–1.0 + short rationale |
 | Default rubric | Criteria and escape hatches ("Unknown" option) |
 | Calibration dataset | 20–50 human-graded examples bundled with the template |
@@ -106,7 +106,7 @@ Templates cover the portable floor; custom evaluators cover what matters. They a
 The steelman against templates: skip the library, write every judge from scratch. Reasonable failure conditions:
 
 - Calibration debt outweighs saved draft cost. Template prompts are only "free" until you grade 20–50 examples per template and re-grade on every judge-model upgrade. For a small suite (≤3 judges), calibration overhead can exceed bespoke authoring time.
-- Workspace-level lock-in. Centralising definitions in one vendor's tab re-creates the migration tax LangSmith identifies for duplicated copies — the unit of duplication moves from per-project to per-vendor.
+- Workspace-level lock-in. Centralizing definitions in one vendor's tab re-creates the migration tax LangSmith identifies for duplicated copies — the unit of duplication moves from per-project to per-vendor.
 - Shortcut bias inherited silently. Recent work documents systematic [shortcut bias in LLM judges](anti-reward-hacking.md) — recency, provenance hierarchy, verbosity inflation — that templates inherit unacknowledged. A safety template scoring "expert-tagged" outputs higher independent of content is portable only on the surface. [Source: [The Silent Judge: Unacknowledged Shortcut Bias in LLM-as-a-Judge (arXiv 2509.26072)](https://arxiv.org/abs/2509.26072)]
 - False ceiling on coverage. Six template categories can read as "evals done" while domain-specific failures remain unmeasured.
 
@@ -172,5 +172,3 @@ The template carries the portable question. The custom judge carries the domain-
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
 - [Incident to Eval Synthesis](incident-to-eval-synthesis.md)
-</content>
-</invoke>

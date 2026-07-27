@@ -1,18 +1,18 @@
 ---
 title: "GitHub Copilot: Model Selection, Routing, and Costs"
-description: "Understand the Copilot model roster, premium multipliers, when to override Auto, cascade routing, the reasoning sandwich, and coding agent cost."
+description: "Understand the Copilot model roster, AI credit token economics, when to override Auto, cascade routing, the reasoning sandwich, and coding agent cost."
 tags:
   - training
   - cost-performance
   - copilot
-last_reviewed: 2026-05-27
+last_reviewed: 2026-07-28
 ---
 
 # GitHub Copilot: Model Selection & Routing
 
 > Model selection determines cost, quality, and speed for every Copilot interaction. Matching the right model tier to each task — budget for exploration, balanced for implementation, powerful for architecture — prevents both wasted spend and wasted rework.
 
-GitHub Copilot exposes models from multiple providers across every surface: VS Code chat, the coding agent, CLI, custom agents, and GitHub.com. Each model carries a premium request multiplier that compounds across actions, making selection a first-order cost lever. The strategies below assume familiarity with the core training modules — particularly Module E's cost management section.
+GitHub Copilot exposes models from multiple providers across every surface: VS Code chat, the coding agent, CLI, custom agents, and GitHub.com. Since 2026-06-01, Copilot [bills usage in AI credits rather than premium requests](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/): what an interaction costs depends on the model and the input, cached, and output tokens it consumes, priced at that model's published rate. That makes model choice a first-order cost lever — Claude Opus 5 output runs $25 per million tokens against Claude Haiku 4.5's $5.00, a 5x spread on the same work. The strategies below assume familiarity with the core training modules — particularly Module E's cost management section.
 
 ---
 
@@ -22,17 +22,24 @@ GitHub Copilot exposes models from multiple providers across every surface: VS C
 
 GitHub Copilot supports models from multiple providers. The roster changes frequently — models are added, retired, and re-priced. Check the [supported models page](https://docs.github.com/en/copilot/reference/ai-models/supported-models) for the current list.
 
-As of March 2026, the general shape:
+Spend is denominated in AI credits, where [1 credit = $0.01](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing). Code completions and next edit suggestions consume no credits at all and stay unlimited on every paid plan, so everything below concerns chat, agent, and CLI turns.
 
-| Tier | Models (examples) | Premium multiplier | Character |
-|------|------------------|-------------------|-----------|
-| Free | GPT-4o, GPT-4.1 | 0x | Unlimited routine completions and chat |
-| Budget | Claude Haiku 4.5 | 0.33x | Fast, cheap, good for exploration and simple tasks |
-| Balanced | Claude Sonnet 4/4.5, GPT-4.1 | 1x | Default workhorse — most tasks |
-| Powerful | Claude Opus 4.5/4.6, Gemini 2.5 Pro | 3x+ | Complex reasoning, architecture, large codebase analysis |
-| Ultra (our label) | Claude Opus 4.6 fast (preview, Pro+/Enterprise) | 30x | Maximum capability, maximum cost |
+As of July 2026, the published Copilot rates (USD per 1M tokens):
 
-[Auto mode](../../patterns/agent-design/auto-model-selection.md) provides a 10% multiplier discount on Copilot Chat (in VS Code, GitHub.com, and JetBrains on paid plans) and routes to the model Copilot judges best for the task. Unless you have a specific reason to override, Auto is the default recommendation.
+| Tier | Model | Input / cached input / output | Character |
+|------|-------|-------------------------------|-----------|
+| Budget | GPT-5 mini | $0.25 / $0.025 / $2.00 | Cheapest turn on the roster |
+| Budget | Claude Haiku 4.5 | $1.00 / $0.10 / $5.00 | Fast — exploration, search, simple edits |
+| Balanced | Gemini 2.5 Pro | $1.25 / $0.125 / $10.00 | Long-context reading |
+| Balanced | Gemini 3.5 Flash | $1.50 / $0.15 / $9.00 | High-throughput iteration |
+| Balanced | Claude Sonnet 5 | $2.00 / $0.20 / $10.00 | Default workhorse — most tasks |
+| Balanced | GPT-5.4 | $2.50 / $0.25 / $15.00 | Reasoning at mid-tier cost |
+| Powerful | Claude Opus 5 | $5.00 / $0.50 / $25.00 | Architecture, large-codebase analysis |
+| Powerful | GPT-5.5 | $5.00 / $0.50 / $30.00 | Most expensive output on the roster |
+
+Rates from the [models and pricing reference](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing); tier labels are ours. Two structural facts fall out of the table. Cached input costs a tenth of fresh input on every model, so a long conversation that reuses context is much cheaper per turn than its raw token count suggests. And output is the expensive leg — priced at 5x its own input rate on every Claude tier and 6x to 8x on the GPT and Gemini rows — so a verbose model on an expensive tier is where budgets go.
+
+[Auto mode](../../patterns/agent-design/auto-model-selection.md) takes [10% off model costs on individual plans](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-individuals) and routes to the model Copilot judges best for the task. Unless you have a specific reason to override, Auto is the default recommendation.
 
 ### Where models are selected
 
@@ -52,11 +59,11 @@ Auto mode handles most tasks well. Override it when:
 
 | Situation | Override to | Why |
 |-----------|-----------|-----|
-| Exploration / file search | Budget model (Haiku) | Reading files and searching code doesn't need reasoning power. Save premium requests. |
+| Exploration / file search | Budget model (Haiku) | Reading files and searching code doesn't need reasoning power. Save credits for the turns that do. |
 | Architecture / novel design | Powerful model (Opus) | Complex reasoning benefits from larger models. The cost of a wrong architectural decision exceeds the cost of the model. |
 | Long multi-file refactor | Balanced model (Sonnet) | Good reasoning at reasonable cost. Opus is overkill for systematic, well-defined refactors. |
 | Generating tests | Balanced model (Sonnet) | Tests follow patterns. Balanced models handle them well. |
-| Security review | Powerful model (Opus) | Security reasoning benefits from deeper analysis. Worth the premium. |
+| Security review | Powerful model (Opus) | Security reasoning benefits from deeper analysis. Worth the higher token rate. |
 | Routine bug fix | Auto | Let the system route. No reason to override. |
 
 ### The model override in custom agents
@@ -97,10 +104,10 @@ Start with a cheaper model. Escalate only when the task fails validation:
 
 ```
 Task arrives
-  → Try with balanced model (Sonnet)
+  → Try with balanced model (Sonnet 5)
   → Run tests / linter / type check
-  → If all pass → done (1x cost)
-  → If fail after 2 attempts → escalate to powerful model (Opus, 3x cost)
+  → If all pass → done, at Sonnet token rates
+  → If fail after 2 attempts → escalate to Opus 5 (2.5x Sonnet's input and output rates)
 ```
 
 This is the cost-aware version of the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md) (Module D). The key insight: if the [backpressure](../../patterns/agent-design/agent-backpressure.md) system (tests, linter, types) provides binary pass/fail feedback, you can start cheap and escalate on failure. The test suite is the routing signal.
@@ -172,7 +179,7 @@ Don't run maximum reasoning throughout. It's expensive and counterproductive. Co
 
 The coding agent runs asynchronously in GitHub Actions. Model selection affects:
 
-- Cost: Premium request multiplier applies to each action the agent takes
+- Cost: the session bills for every token it consumes end to end — reading files, running commands, editing, iterating
 - Quality: More capable models make fewer mistakes, reducing back-and-forth
 - Speed: Budget models are faster per action, but may need more actions to converge
 
@@ -187,15 +194,19 @@ The coding agent runs asynchronously in GitHub Actions. Model selection affects:
 | Refactoring without clear spec | Powerful (Opus) | Needs to understand architecture and make design decisions. |
 | Security-sensitive changes | Powerful | Higher stakes justify higher cost. |
 
-### The cost multiplier matters more for the coding agent
+### Why session length is the cost driver
 
-The coding agent takes many actions per task — reading files, running commands, making edits, running tests, iterating. Each action consumes premium requests at the model's multiplier. A task that takes 50 actions:
+A coding agent session is long: it reads files, runs commands, makes edits, runs tests, and iterates. Under the retired request-based model that entire session cost [one premium request per session, not one per action](https://docs.github.com/en/copilot/concepts/billing/copilot-requests); the per-action reading was a widespread misconception that made agent runs look far more expensive than they were. Under AI credits there is no per-session unit at all: cost rises with every token the session reads and writes, so session length rather than action count is what you manage.
 
-- At 0.33x (Haiku): ~17 premium requests
-- At 1x (Sonnet): 50 premium requests
-- At 3x (Opus): 150 premium requests
+Take a session consuming 2M input tokens and 200K output tokens, a plausible shape for a multi-file fix with a few test cycles. The token volumes are an illustrative assumption; the rates are the published ones.
 
-For routine tasks where a balanced model succeeds, using Opus costs 3x more without proportional quality improvement. Reserve Opus for tasks where the reasoning improvement justifies the multiplier.
+| Model | Input | Output | Session cost |
+|-------|-------|--------|--------------|
+| Claude Haiku 4.5 | $2.00 | $1.00 | $3.00 (300 credits) |
+| Claude Sonnet 5 | $4.00 | $2.00 | $6.00 (600 credits) |
+| Claude Opus 5 | $10.00 | $5.00 | $15.00 (1,500 credits) |
+
+A [$19 Copilot Business seat includes 1,900 credits](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises) — 3,000 promotionally through 2026-09-01 — pooled across the organization rather than held per user. One Opus session of this size consumes half to four-fifths of a seat's monthly allowance depending on which figure applies; the same session on Haiku consumes a tenth to a sixth of it. That is the argument for reserving Opus for work where deeper reasoning changes the outcome — and for keeping context cached, since cached input bills at a tenth of fresh input.
 
 ---
 
@@ -206,55 +217,55 @@ For routine tasks where a balanced model succeeds, using Opus costs 3x more with
 The Agents page lets you assign the same task to different agents (Copilot, Anthropic Claude, OpenAI Codex). Use this to:
 
 - Discover strengths: Run the same 5–10 representative tasks through different models. See which produces better results for your codebase's patterns.
-- Validate defaults: Before standardising on a model for a custom agent, test it against alternatives on real tasks.
+- Validate defaults: Before standardizing on a model for a custom agent, test it against alternatives on real tasks.
 - High-stakes decisions: For critical changes, run two agents independently and compare their approaches.
 
 ### Spot-check vs always-on
 
-- Spot-check (recommended): Run competitive evaluation on a sample of tasks (e.g., 1 in 10) to calibrate. Then standardise on the winner for routine work.
+- Spot-check (recommended): Run competitive evaluation on a sample of tasks (e.g., 1 in 10) to calibrate. Then standardize on the winner for routine work.
 - Always-on (expensive): Run both agents on every task. Only justified when the cost of a wrong approach exceeds double the agent cost — security-sensitive or architecture-critical changes.
 
 ---
 
 ## Example
 
-A team receives a bug report: the `/api/upload` endpoint silently drops files larger than 50 MB. Here is how model selection plays out across the fix lifecycle.
+A team receives a bug report: the `/api/upload` endpoint silently drops files larger than 50 MB. Here is how model selection plays out across the fix lifecycle. Assume each interactive turn consumes roughly 100K input tokens (the handler plus its middleware) and 10K output tokens, and the agent session five times that.
 
-1. Triage — Budget model (Haiku, 0.33x)
+1. Triage — Claude Haiku 4.5
 
-Open VS Code chat, switch to Haiku, and ask it to locate the upload handler and any size-limit constants. Haiku reads files and searches code quickly without burning premium requests on reasoning.
+Open VS Code chat, switch to Haiku, and ask it to locate the upload handler and any size-limit constants. Reading files and searching code needs no reasoning power. 100K input at $1.00 plus 10K output at $5.00 comes to $0.15, or 15 credits.
 
-2. Root-cause analysis — Powerful model (Opus, 3x)
+2. Root-cause analysis — Claude Opus 5
 
-The upload handler delegates to three middleware layers. Switch to Opus and ask it to trace the request path, identify where the size check occurs, and explain why large files are silently dropped instead of returning a 413 error. Opus's deeper reasoning catches the interaction between the streaming middleware and the error handler that swallows the exception.
+The upload handler delegates to three middleware layers. Switch to Opus and ask it to trace the request path, identify where the size check occurs, and explain why large files are silently dropped instead of returning a 413 error. Opus's deeper reasoning catches the interaction between the streaming middleware and the error handler that swallows the exception. The same turn at Opus rates costs $0.75, or 75 credits.
 
-3. Implementation — Balanced model (Sonnet, 1x) via cascade
+3. Implementation — Claude Sonnet 5 via cascade
 
-Assign the fix to the coding agent with Sonnet. The agent edits the middleware, adds a proper 413 response, and runs the test suite. Tests pass on the first attempt — cascade routing never escalates.
+Assign the fix to the coding agent with Sonnet — a tightly scoped session, roughly a quarter the size of the multi-file illustration above. The agent edits the middleware, adds a proper 413 response, and runs the test suite. Tests pass on the first attempt — cascade routing never escalates. At 500K input and 50K output that is $1.00 plus $0.50, or 150 credits.
 
-4. Review — Powerful model (Opus, 3x)
+4. Review — Claude Opus 5
 
-Switch back to Opus in Ask mode to review the diff. Opus identifies that the fix handles the content-length header check but misses chunked transfer encoding. The agent makes a second pass to cover that edge case.
+Switch back to Opus in Ask mode to review the diff. Opus identifies that the fix handles the content-length header check but misses chunked transfer encoding. The agent makes a second pass to cover that edge case. Another $0.75, or 75 credits.
 
-Cost: ~20 premium requests total (3 Haiku + 8 Sonnet + 9 Opus equivalent). Running Opus throughout would have cost ~60 equivalent premium requests — 3x more for the same outcome.
+Cost: $3.15, or 315 credits. Running Opus for all four phases at the same token volumes costs $6.00 (600 credits) — nearly double for the same outcome. Running Haiku throughout costs $1.20, but Haiku would not have found the middleware interaction in step 2, and a single round of rework costs more than the $1.95 saved.
 
 ---
 
 ## Key Takeaways
 
-- Auto mode is the default. Override only when you have a specific reason — exploration (go cheaper), architecture (go more powerful), security (go more powerful).
+- Auto mode is the default and takes 10% off model costs on individual plans. Override only when you have a specific reason — exploration (go cheaper), architecture (go more powerful), security (go more powerful).
 - Use display names, not pinned IDs in custom agent definitions. Models retire; display names (`claude-opus-4-5`) map to the current version automatically.
 - Cascade routing starts cheap and escalates on failure. It works when backpressure (tests, types, linters) provides binary feedback. For tasks without automated feedback, use the powerful model directly.
 - The [reasoning sandwich](../../patterns/agent-design/reasoning-budget-allocation.md) (high planning → standard execution → high verification) outperforms uniform reasoning. Use Plan mode for planning, Agent mode for execution, Ask mode for review.
-- The coding agent's cost multiplier compounds across many actions per task. A 3x multiplier on 50 actions is significant. Reserve expensive models for tasks where reasoning quality matters.
-- Spot-check competitive evaluation before standardising. Run representative tasks through different models to discover which fits your codebase best.
+- The coding agent bills by total tokens across the whole session, not per action, so session length is the cost driver. Reserve expensive models for work where reasoning quality changes the outcome.
+- Spot-check competitive evaluation before standardizing. Run representative tasks through different models to discover which fits your codebase best.
 
 ## Related
 
 - [GitHub Copilot: Team Adoption & Governance](team-adoption.md) — cost management section
 - [GitHub Copilot: Customization Primitives](customization-primitives.md) — custom agents with model overrides
 - [GitHub Copilot: Harness Engineering](harness-engineering.md) — backpressure as the cascade routing signal
-- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — premium request vs token billing comparison
+- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — AI credits, per-model rates, credit pooling and forfeiture, budget controls
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — big.LITTLE routing, cascade patterns, token economics
 - [Reasoning Budget Allocation](../../patterns/agent-design/reasoning-budget-allocation.md) — the reasoning sandwich, dual-mode operation
 - [Heuristic Effort Scaling](../../patterns/agent-design/heuristic-effort-scaling.md) — self-classifying complexity tiers

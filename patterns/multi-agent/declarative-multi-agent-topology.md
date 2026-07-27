@@ -132,7 +132,7 @@ Running the compiler against this file emits platform-specific configs for each 
 ## Related
 
 - [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md) — define agents and workflows as structured data within a single framework
-- [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) — choosing between centralised, decentralised, and hybrid topologies
+- [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) — choosing between centralized, decentralized, and hybrid topologies
 - [Portable Agent Definitions](../../standards/portable-agent-definitions.md) — packaging individual agent identity as a portable, version-controlled artifact
 - [Agent Handoff Protocols](agent-handoff-protocols.md) — typed contracts between pipeline stages that flows enforce
 - [Subagent Schema-Level Tool Filtering](subagent-schema-level-tool-filtering.md) — declarative constraints on subagent tool access

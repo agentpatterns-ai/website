@@ -98,7 +98,7 @@ Perceived response time is bounded by TTS dispatch (~200 ms), not by the flight 
 
 - Synchronous agent loops blow the sub-second budget the moment any tool call is slow; voice and real-time agents need an event-driven FSM with priority scheduling, not bigger models.
 - The FSM treats user speech, model tokens, TTS output, and tool results as preemptible events on a shared ledger — adapted from real-time operating systems.
-- Speculative tool calling extends async I/O by dispatching predicted tools ahead of model authorisation (PASTE reports a 48.5% task-time reduction); only safe when the tool is idempotent, reversible, or sandboxed.
+- Speculative tool calling extends async I/O by dispatching predicted tools ahead of model authorization (PASTE reports a 48.5% task-time reduction); only safe when the tool is idempotent, reversible, or sandboxed.
 - The primary failure mode is not architectural — it's the model itself. Frontier LLMs degrade on out-of-order async ledgers; evaluate before adopting.
 - Skip both when latency is dominated by inference, the user is fine with a spinner, or the tools are non-idempotent write APIs.
 

@@ -70,7 +70,7 @@ A comprehensive test suite and strict type system provide the [mechanical backpr
 |-|-------------------|-------------------|-----------------|-------------------|
 | Scope | The user message and system instructions | Everything in the context window: instructions, tool outputs, conversation history, file contents | The interfaces agents use to act: tool definitions, parameter schemas, output formats | The development environment: type system, test suite, linters, CI pipeline |
 | When | At the moment you ask or at session start | Before the session (instruction files, skills), during (tool results, steering), and across sessions (memory) | At design time -- before any agent session runs | Before any session -- baked into the codebase and toolchain |
-| Optimises for | A good answer to this question | Consistent quality across all questions in this codebase | Reliable agent actions -- correct tool selection, correct parameters, parseable output | Agent self-correction -- the agent iterates until checks pass without human intervention |
+| Optimizes for | A good answer to this question | Consistent quality across all questions in this codebase | Reliable agent actions -- correct tool selection, correct parameters, parseable output | Agent self-correction -- the agent iterates until checks pass without human intervention |
 | Who does it | The person asking | The team, via committed configuration files | The team, via tool definitions and MCP server design | The team, via tooling investments (types, tests, linters, hooks) |
 | Failure mode | Bad answer to one question | Inconsistent results across sessions; [context pollution](../../patterns/anti-patterns/session-partitioning.md) dilutes attention | Wrong tool selected, malformed parameters, [verbose output consuming budget](../../tool-engineering/semantic-tool-output.md) | Agent cannot verify its own work -- every output requires manual review |
 | Durability | Per-message | Per-repo, evolves with configuration | Per-tool, versioned with the tool definition | Permanent -- compounds across all agents, all sessions, all team members |
@@ -108,7 +108,7 @@ Most teams follow a predictable sequence:
 
 The progression is natural but suboptimal. Harness engineering has the highest durability -- a linter rule catches a dependency violation in every session, for every agent, for every team member. The earlier you invest in harness, the more the other three disciplines compound against a reliable verification base.
 
-The [compound engineering workflow](../../workflows/compound-engineering.md) formalises this: the Compound step encodes learnings as repository artifacts (instruction files, linter rules, test cases) that persist across sessions. Each cycle strengthens the harness, which makes the next cycle's prompts and context more effective.
+The [compound engineering workflow](../../workflows/compound-engineering.md) formalizes this: the Compound step encodes learnings as repository artifacts (instruction files, linter rules, test cases) that persist across sessions. Each cycle strengthens the harness, which makes the next cycle's prompts and context more effective.
 
 ---
 

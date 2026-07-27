@@ -1,7 +1,7 @@
 ---
 title: "Strained Coherence as a Pre-Failure Signal in Agent Trajectories"
 term: "Strained Coherence as a Pre-Failure Signal"
-description: "An LLM judge that flags spans where a coding agent acknowledges a conflict in its reasoning then proceeds anyway — a late-stage triage signal, useful only when the agent verbalises and the judge is not the optimisation target."
+description: "An LLM judge that flags spans where a coding agent acknowledges a conflict in its reasoning then proceeds anyway — a late-stage triage signal, useful only when the agent verbalizes and the judge is not the optimization target."
 tags:
   - observability
   - testing-verification
@@ -100,11 +100,11 @@ Compare this with a trajectory where the agent silently writes to the same file 
 - Strained coherence = (acknowledged conflict) + (non-resolving action); mechanical patches that remove the surface contradiction count as non-resolution ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)).
 - The Qwen3.5 substrate yields a 47-point failure-rate gap (94% vs. 46%, p=0.003) at matched-selectivity 94% precision ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)).
 - It is a triage trigger (83–84% lead time), not an in-loop abort — pair with circuit breakers for early-warning needs.
-- It collapses on low-verbosity models, under optimisation pressure against the judge, or once CoT obfuscation transfers ([Baker et al., arxiv 2503.11926](https://arxiv.org/abs/2503.11926)).
+- It collapses on low-verbosity models, under optimization pressure against the judge, or once CoT obfuscation transfers ([Baker et al., arxiv 2503.11926](https://arxiv.org/abs/2503.11926)).
 
 ## Related
 
-- [Chain-of-Thought Reasoning Fallacy: Traces Are Not Truth](../fallacies/chain-of-thought-reasoning-fallacy.md) — Why a CoT-reading judge inherits a faithfulness ceiling and what the 2% verbalisation rate on reward-hacked answers implies for monitor precision.
+- [Chain-of-Thought Reasoning Fallacy: Traces Are Not Truth](../fallacies/chain-of-thought-reasoning-fallacy.md) — Why a CoT-reading judge inherits a faithfulness ceiling and what the 2% verbalization rate on reward-hacked answers implies for monitor precision.
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](../verification/anti-reward-hacking.md) — The orthogonal-grader rubric that complements a CoT-level signal; the strained-coherence judge is one signal among several.
 - [Learned Prefix Monitors for Agent Traces](../verification/learned-prefix-monitors-agent-traces.md) — A typed-event supervised scorer; the substrate-independent alternative when the agent does not produce verbose CoT.
 - [Trajectory-Opaque Evaluation Gap](../verification/eval-blind-spots.md) — Structured trajectory auditing catches 44% of safety violations outcome graders miss; complementary to the conflict-acknowledgment signal.

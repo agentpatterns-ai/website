@@ -149,10 +149,10 @@ Even if a malicious PR contains injected instructions, the agent lacks the tools
 
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
-- [Single-Layer Prompt Injection Defence](../patterns/anti-patterns/single-layer-injection-defence.md)
+- [Single-Layer Prompt Injection Defense](../patterns/anti-patterns/single-layer-injection-defence.md)
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Safe Outputs Pattern](safe-outputs-pattern.md)
-- [Task Alignment: The Selective-Compliance Gap Benchmarks Miss](../verification/task-alignment-benchmark.md) — the benchmark showing these architectural defences carry a cue-suppression cost that finish-the-task metrics miss
+- [Task Alignment: The Selective-Compliance Gap Benchmarks Miss](../verification/task-alignment-benchmark.md) — the benchmark showing these architectural defenses carry a cue-suppression cost that finish-the-task metrics miss

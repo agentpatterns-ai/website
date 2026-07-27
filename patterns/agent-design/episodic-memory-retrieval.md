@@ -208,4 +208,4 @@ Reflective error propagation in long-running agents. Storing "attempts with outc
 - [Code-Native Memory Substrates](code-native-memory-substrates.md) -- AST representations as memory substrate; work-state tracking that complements knowledge memory
 - [Retrieval-Augmented Agent Workflows](../../context-engineering/retrieval-augmented-agent-workflows.md) -- on-demand context retrieval patterns
 - [Chain-of-Thought Reasoning Fallacy](../../fallacies/chain-of-thought-reasoning-fallacy.md) -- why stored reasoning traces should be treated as rationalization rather than ground truth
-- [Context Engineering](../../context-engineering/context-engineering.md) — the discipline of designing what enters an agent's context window to maximise output quality
+- [Context Engineering](../../context-engineering/context-engineering.md) — the discipline of designing what enters an agent's context window to maximize output quality

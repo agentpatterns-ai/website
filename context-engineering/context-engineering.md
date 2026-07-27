@@ -1,7 +1,7 @@
 ---
 title: "Context Engineering: The Practice of Shaping Agent Context"
 term: "Context Engineering"
-description: "The discipline of designing what enters an agent context window and how it is structured to maximise output quality and reliability."
+description: "The discipline of designing what enters an agent context window and how it is structured to maximize output quality and reliability."
 tags:
   - context-engineering
   - tool-agnostic
@@ -15,7 +15,7 @@ maturity: established
 
 # Context Engineering: The Practice of Shaping Agent Context
 
-> Context engineering designs what enters a model's context window, how it is structured, and what is excluded — to maximise output quality.
+> Context engineering designs what enters a model's context window, how it is structured, and what is excluded — to maximize output quality.
 
 ## What context engineering is
 
@@ -95,7 +95,7 @@ The pattern assumes retrieval quality and compaction fidelity. When those assump
 ## Key Takeaways
 
 - The context window is the agent's complete world — what is absent does not exist.
-- Optimise for signal density, not volume: "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome."
+- Optimize for signal density, not volume: "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome."
 - Every context layer has a cost — lazy loading, compaction, and sub-agent isolation manage that cost.
 - Context engineering subsumes prompt engineering, skill design, agent architecture, and memory management.
 
@@ -119,7 +119,7 @@ The key decisions were about exclusion: what not to load, when not to load it, a
 
 - [Layered Context Architecture](layered-context-architecture.md)
 - [Context Budget Allocation](context-budget-allocation.md)
-- [Context Compression Strategies: Offloading and Summarisation](context-compression-strategies.md)
+- [Context Compression Strategies: Offloading and Summarization](context-compression-strategies.md)
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
 - [Lost in the Middle](lost-in-the-middle.md)
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)

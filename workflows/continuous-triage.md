@@ -8,7 +8,7 @@ tags:
   - github-actions
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-28
 maturity: established
 ---
 
@@ -116,7 +116,7 @@ Service failures are also a real risk. AI services go down and rate limits apply
 
 ## Cost model
 
-Copilot-powered triage workflows consume Copilot premium requests per run. Event-triggered workflows scale with issue volume. Scheduled batch workflows spread the cost across all accumulated issues ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
+Triage workflows that route turns through Copilot models consume [GitHub AI credits](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) per run, metered by the tokens each run uses. Event-triggered workflows scale with issue volume. Scheduled batch workflows spread the cost across all accumulated issues ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
 
 ## Key Takeaways
 

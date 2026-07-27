@@ -83,7 +83,7 @@ Post-hoc DFA extraction converts the trained monitor into a finite-state represe
 ## How to adopt
 
 1. Start with [deterministic guardrails](deterministic-guardrails.md) and [circuit breakers](../observability/circuit-breakers.md). They are cheap, transparent, and catch named failure modes.
-2. Collect labelled terminal outcomes. The same corpus supports [incident-to-eval](incident-to-eval-synthesis.md) regression cases.
+2. Collect labeled terminal outcomes. The same corpus supports [incident-to-eval](incident-to-eval-synthesis.md) regression cases.
 3. Decide the alert-budget envelope before training. Pick a target false-alarm rate the team can absorb; report precision and recall at that operating point — the same [primary-metric choice](pass-at-k-metrics.md) discipline applies — not just AUPRC.
 4. Pin the trace distribution. If the harness or model changes, retrain — calibration drifts silently otherwise.
 
@@ -92,7 +92,7 @@ Post-hoc DFA extraction converts the trained monitor into a finite-state represe
 - A prefix monitor reads partial traces and predicts terminal failure; learned monitors avoid both hand-authored-schema brittleness and deployment-time LLM judging cost.
 - StepView induces a typed-event abstraction from raw traces offline; the supervised scorer trains on terminal outcomes against that fixed vocabulary.
 - Reported AUPRC is +0.137 over raw-text baselines across WebArena, τ²-Bench, SkillsBench, TerminalBench — but high AUPRC does not imply low-false-alarm alerts.
-- Use learned prefix monitors as a complement to deterministic circuit breakers, not a replacement; they pay off on long-horizon traces with stable distributions and labelled outcomes.
+- Use learned prefix monitors as a complement to deterministic circuit breakers, not a replacement; they pay off on long-horizon traces with stable distributions and labeled outcomes.
 - Treat the alert-budget operating point as the deployment metric, not AUPRC. A monitor that can't hit the team's false-alarm budget is not deployable regardless of ranking score.
 
 ## Related
@@ -100,7 +100,7 @@ Post-hoc DFA extraction converts the trained monitor into a finite-state represe
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md) — the deterministic counterpart; named failure modes and explicit stopping signals.
 - [Loop Detection](../observability/loop-detection.md) — point-wise repetition detection; complementary to prefix-distribution monitoring.
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — the broader case for hard, transparent checks before adding learned components.
-- [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md) — the labelled-outcome corpus the monitor trains against can also seed regression evals.
+- [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md) — the labeled-outcome corpus the monitor trains against can also seed regression evals.
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — stage-level diagnostic that pairs with distribution-level monitoring.
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — why outcome-only grading misses safety failures the prefix view catches.
 - [Corpus-Level Trace Diagnostics](corpus-level-trace-diagnostics.md) — offline cross-trace analysis that complements online prefix scoring.

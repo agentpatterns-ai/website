@@ -15,7 +15,7 @@ maturity: emerging
 
 # Intervention Rate as a Diagnostic North Star, Not a Target
 
-> Intervention rate is a segmented diagnostic signal — not a single number to minimise — and only useful paired with quality and ambition metrics.
+> Intervention rate is a segmented diagnostic signal — not a single number to minimize — and only useful paired with quality and ambition metrics.
 
 Intervention rate — the share of turns on which a developer interrupts, corrects, or redirects the AI assistant — works as a composite diagnostic signal for prompt quality, code organization, task breakdown, and tool selection. It does not work as a Goodhart-safe target the way build times did in CI/CD: a near-zero rate often means low ambition or uncritical acceptance, and Anthropic's own data shows expert users intervene more, not less. Instrument, segment, and diagnose it — do not minimize it.
 
@@ -61,7 +61,7 @@ Baseline by task type. Read the category breakdowns (Sniffly-style) before you r
 
 ## Key Takeaways
 
-- Intervention rate is a *diagnostic* North Star, not a *target* North Star — minimising it is a Goodhart trap.
+- Intervention rate is a *diagnostic* North Star, not a *target* North Star — minimizing it is a Goodhart trap.
 - Publish your operational definition before any baseline is comparable.
 - Segment by task type and by error category; aggregate hides the spread Continue reports (15–60%).
 - Pair with quality and ambition metrics; the DX Core 4 four-dimension shape is the right altitude.

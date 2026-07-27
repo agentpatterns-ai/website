@@ -1,7 +1,7 @@
 ---
 title: "Tool Preamble: User-Visible Status Updates Before Tool Calls"
 term: "Tool Preamble"
-description: "A short visible message before tool execution in multi-step agent runs reduces perceived latency without altering behaviour. Apply at phase boundaries, not per call."
+description: "A short visible message before tool execution in multi-step agent runs reduces perceived latency without altering behavior. Apply at phase boundaries, not per call."
 tags:
   - agent-design
   - human-factors

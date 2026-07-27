@@ -41,7 +41,7 @@ last_reviewed: 2026-05-27
 - [Macro Evals for Agentic Systems](macro-evals-agentic-systems.md) — Aggregate per-trace findings across a corpus of agent runs to surface recurring behavior patterns that single-trace evals cannot expose — when volume, judge quality, and selection bias permit
 - [Variance-Based RL Sample Selection](variance-based-rl-sample-selection.md) — Profile training samples by score variance before RL fine-tuning to identify the productive subset where the model sometimes succeeds and sometimes fails
 - [CoT Robustness in Code Generation](cot-robustness-code-generation.md) — Chain-of-thought is not a universal win for code generation; measure Pass@1 and Pass^k with and without CoT before enabling it as a default
-- [Distillation-Induced Similarity Metrics for Tool-Use Agents](distillation-induced-similarity-metrics.md) — Quantify how much two models share non-mandatory tool-use behaviour with Response Pattern Similarity and Action Graph Similarity to surface correlated failure modes before routing or ensembling treats them as independent
+- [Distillation-Induced Similarity Metrics for Tool-Use Agents](distillation-induced-similarity-metrics.md) — Quantify how much two models share non-mandatory tool-use behavior with Response Pattern Similarity and Action Graph Similarity to surface correlated failure modes before routing or ensembling treats them as independent
 - [Learned Prefix Monitors for Agent Traces](learned-prefix-monitors-agent-traces.md) — Online failure-warning monitors learn an event abstraction and a prefix-risk score from terminal outcomes; useful complement to deterministic guardrails, but high AUPRC does not imply usable alerts
 - [ComplexMCP: Three Bottlenecks in Large Interdependent Tool Sandboxes](complexmcp-tool-sandbox-bottlenecks.md) — 300+ MCP tools across stateful sandboxes expose tool retrieval saturation, over-confidence skipping verification, and strategic defeatism — each maps to a deployment choice
 - [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — Grade red-team outcomes on an L0 to L6 harm scale over reversibility, scope, and privilege so evals surface how harmful a compromise was, not just whether one occurred — a defense can report 0% attack success while still leaking cross-scope
@@ -51,6 +51,7 @@ last_reviewed: 2026-05-27
 - [Behavioral Testing for Agents](behavioral-testing-agents.md) — Test decision quality and end-state for non-deterministic agent systems using capability matrices, three grading methods, and acceptable variance thresholds
 - [FLARE: Coverage-Guided Fuzzing for Multi-Agent LLM Systems](flare-multi-agent-fuzzing.md) — Apply coverage-guided fuzzing to multi-agent systems using interaction path coverage as the exploration signal to surface coordination failures and emergent failure modes
 - [Structural Coverage Criteria for Agent Workflows](structural-coverage-agent-workflows.md) — Represent multi-agent workflows as a typed coordination graph and derive coverage obligations over reachable agents, allowed tool edges, restricted tool edges, and delegation edges — a test-adequacy layer that complements end-to-end success scores
+- [Skill Test Coverage as a Release Gate](skill-test-coverage-release-gate.md) — Extract operational obligations from a skill's natural-language workflow and gate release on how many of them any testcase activates; 36.3% of 157 production skills failed an 80% threshold on first measurement
 - [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md) — Coverage proves a line ran; mutation testing proves the suite would notice a regression — the discriminator that separates ceremonial agent-written tests from load-bearing ones
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — Plant deterministic bugs and check that captured signals lead an agent to the responsible layer — if they don't, the gap is in the instrumentation, not the bug
 
@@ -65,7 +66,7 @@ last_reviewed: 2026-05-27
 ## Eval-Driven Development
 
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md) — Define correctness criteria before implementation so every agent change is validated against a stable, reusable test suite
-- [Skill Evals](skill-evals.md) — Treat each skill as an evaluable unit with a labelled dataset, paired with-skill vs baseline runs, and a benchmark that quantifies pass-rate, time, and token trade-offs
+- [Skill Evals](skill-evals.md) — Treat each skill as an evaluable unit with a labeled dataset, paired with-skill vs baseline runs, and a benchmark that quantifies pass-rate, time, and token trade-offs
 - [Emulated APIs for Agent Skill Evals](emulated-apis-for-skill-evals.md) — Run an API-calling skill's evals against a transparent emulator at the real URL so cost, live-data mutation, and shared-state non-determinism stay out of the score without rewriting the skill under test
 - [Emulate Agent-Experience Changes Before Shipping](emulate-ax-changes-before-shipping.md) — Stand up a proposed documentation, API, or MCP change in a local emulator and measure its effect on agent behavior against a baseline before shipping, because most AX changes fail
 - [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](agent-driven-eval-flywheel.md) — Drive the eval-generation loop from your coding agent so each fix is graded against the whole accumulated case set, proving it generalizes instead of patching one case
@@ -73,7 +74,7 @@ last_reviewed: 2026-05-27
 
 ## Review Techniques
 
-- [Five-Pass Blunder Hunt](five-pass-blunder-hunt.md) — Run the same critique prompt five times in sequence on a plan or spec; each pass normalises the issues it finds, forcing later passes deeper into structural and logical problems
+- [Five-Pass Blunder Hunt](five-pass-blunder-hunt.md) — Run the same critique prompt five times in sequence on a plan or spec; each pass normalizes the issues it finds, forcing later passes deeper into structural and logical problems
 - [Pre-Completion Checklists](pre-completion-checklists.md) — Block agent completion signals with a mandatory verification sequence
 - [Golden Journeys: Restartability as a First-Class Verification Primitive](golden-journeys.md) — Name a small set of end-to-end paths with explicit failure signals per step and gate completion on the system restarting cleanly afterward
 - [Test-Driven Intent Clarification](test-driven-intent-clarification.md) — Use AI-generated tests to surface specification ambiguity before code review — validate tests instead of code to clarify intent with lower cognitive cost
@@ -87,7 +88,7 @@ last_reviewed: 2026-05-27
 
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — Design eval rubrics with orthogonal signals so no single metric is gameable by agents
 - [Symptom-Reduction-as-Root-Cause: Why Oracle Tests Alone Miss Architectural Drift](symptom-reduction-as-root-cause.md) — Agents iterating against fiducial-point oracle tests will adjust coefficients inside an architecture that cannot represent the target — diverse-parameter tests, cross-session changelogs, and an anti-fudge-factor rule catch what oracles miss
-- [Eval Awareness: Designing Evals Agents Cannot Recognise](eval-awareness.md) — Frontier models detect eval-shaped prompts and shift behaviour between evaluation and production — remove the signals that cue recognition
+- [Eval Awareness: Designing Evals Agents Cannot Recognize](eval-awareness.md) — Frontier models detect eval-shaped prompts and shift behavior between evaluation and production — remove the signals that cue recognition
 - [Evaluator Templates: Portable Primitives for Agent Eval Suites](evaluator-templates.md) — Reusable judge templates cover the portable subset of eval questions — security, PII, format, trajectory — while domain quality still needs custom evaluators
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — An LLM judge's rubric verdict hides its own error rate; measure it against human labels before scaling, because reliability varies by domain, model, and prompt (RuVerBench: 94.7 down to 51.6 balanced accuracy)
 

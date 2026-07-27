@@ -61,5 +61,5 @@ For flaws that live within permitted operations — subtle logic errors and busi
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — the access-control leg of the substrate, applied per task
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md) — the network-policy leg, enforced below the model
 - [Security Budget as Token Economics](security-budget-token-economics.md) — sizing review spend when oversight cost, not agent capability, is the constraint
-- [Code Injection Attacks on Multi-Agent Systems: Coder-Reviewer-Tester as Defence](code-injection-multi-agent-defence.md) — the scaffolding layer for threats the substrate cannot see
+- [Code Injection Attacks on Multi-Agent Systems: Coder-Reviewer-Tester as Defense](code-injection-multi-agent-defence.md) — the scaffolding layer for threats the substrate cannot see
 - [Safe Command Allowlisting](safe-command-allowlisting.md) — deterministic tooling-enforced limits on what an agent may run

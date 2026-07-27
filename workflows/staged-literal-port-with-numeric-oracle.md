@@ -124,8 +124,8 @@ None of these are syntax errors. All of them compile, run, and produce output. W
 
 ## Key Takeaways
 
-- The recipe is one practice in three parts — staged boundaries that change one axis at a time, strictly literal translation per stage, and an oracle per stage drawn from the prior version's output. Any one alone produces the failure modes the LLM-translation literature already catalogues.
-- The mechanism is bug-oracle compression — holding the source as verified specification converts every behavioural ambiguity into a clear divergence signal, and staging preserves the property at each step.
+- The recipe is one practice in three parts — staged boundaries that change one axis at a time, strictly literal translation per stage, and an oracle per stage drawn from the prior version's output. Any one alone produces the failure modes the LLM-translation literature already catalogs.
+- The mechanism is bug-oracle compression — holding the source as verified specification converts every behavioral ambiguity into a clear divergence signal, and staging preserves the property at each step.
 - The literal rule must be enforceable at constant granularity (quote `file:line` and exact value) or the assistant silently "improves" coefficients and rearranges arithmetic until bitwise reproducibility breaks.
 - A per-kernel "twin" of the prior version, gated by an environment variable so the run state is restored after comparison, makes the per-kernel R1 oracle tractable on a running production model.
 - Outside the preconditions (bit-reproducible reference, thin API surface, control-flow-preserving language pair, expert director, fast acceptance loop) the recipe inverts — a SACTOR-style two-phase pipeline or a property-based test harness against a single canonical port costs less and produces more maintainable code.
@@ -136,6 +136,6 @@ None of these are syntax errors. All of them compile, run, and produce output. W
 - [Parallel Polyglot Ports as a Spec-Ambiguity Oracle](parallel-polyglot-ports-spec-oracle.md) — Sibling differential-testing workflow; uses divergence between sibling ports as the oracle, not divergence from a prior canonical version.
 - [Spec-Driven Development with Spec Kit](spec-driven-development.md) — The new-code analogue: an executable specification plays the role the verified source plays in this workflow.
 - [Verification-Centric Development for AI-Generated Code](verification-centric-development.md) — General layered-verification frame that the R1–R5 acceptance ladder instantiates.
-- [The Research-Plan-Implement Pattern](research-plan-implement.md) — Three-phase shape this workflow specialises for staged literal porting.
+- [The Research-Plan-Implement Pattern](research-plan-implement.md) — Three-phase shape this workflow specializes for staged literal porting.
 
 The composed building blocks (an incremental-verification technique page and a numeric-oracle pattern page) do not yet have standalone entries under `docs/patterns/` or `docs/techniques/` — the closest sibling building blocks today live under [Verification-Centric Development](verification-centric-development.md) and the workflows above. File an idea issue if you would benefit from a standalone "kernel-twin verification" technique page.

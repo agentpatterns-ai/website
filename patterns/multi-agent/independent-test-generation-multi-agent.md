@@ -134,5 +134,5 @@ The test designer generates tests from the spec alone — including edge cases l
 
 ## Sources
 
-- [AgentCoder: Multi-Agent Code Generation with Effective Testing and Self-optimisation](https://arxiv.org/abs/2312.13010) — Huang et al., 2023. Primary source for all quantitative claims on this page.
+- [AgentCoder: Multi-Agent Code Generation with Effective Testing and Self-optimization](https://arxiv.org/abs/2312.13010) — Huang et al., 2023. Primary source for all quantitative claims on this page.
 - [BACE: Bayesian Anchored Co-Evolution for Code Generation](https://arxiv.org/abs/2603.28653) — 2026. Critiques treating agent-generated tests as ground truth; proposes modeling them as noisy sensors with Bayesian updates anchored to reference examples.

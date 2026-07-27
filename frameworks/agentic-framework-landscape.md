@@ -122,4 +122,4 @@ Compare a customer-support agent that handles cross-session conversation history
 - [Anthropic's Effective Agents Framework: A Pattern Map](../patterns/agent-design/anthropic-effective-agents-framework.md) — the augmented-LLM and workflow patterns these frameworks implement
 - [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md) — scope and temporal memory choices that frame the Letta and mem0 decisions
 - [Tiered Memory Architecture](../patterns/agent-design/tiered-memory-architecture.md) — when episodic-to-semantic consolidation pays off, independent of which memory layer you adopt
-- [Multi-Agent Topology Taxonomy](../patterns/multi-agent/multi-agent-topology-taxonomy.md) — the centralised/decentralised/hybrid choice that ADK and Agno multi-agent setups must make
+- [Multi-Agent Topology Taxonomy](../patterns/multi-agent/multi-agent-topology-taxonomy.md) — the centralized/decentralized/hybrid choice that ADK and Agno multi-agent setups must make

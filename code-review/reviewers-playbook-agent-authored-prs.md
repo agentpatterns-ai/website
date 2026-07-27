@@ -113,7 +113,7 @@ Two of the six steps caught the substantive defects. The CI and security steps p
 - Defects in agent PRs hide *outside* the changed lines — duplicated utilities, adjacent unchanged code, workflow edits — not just inside the diff
 - The evidence test (a failing-before test) is the strongest heuristic for distinguishing genuine fixes from fabricated ones
 - The review budget shifts from correctness verification (for humans) to context verification (for agents); automated review owns the mechanical first pass
-- The playbook degrades to surface review past ~400 lines per diff, in CRA-only setups, and in grep-only repos — recognise these conditions and reduce volume rather than refining the checklist
+- The playbook degrades to surface review past ~400 lines per diff, in CRA-only setups, and in grep-only repos — recognize these conditions and reduce volume rather than refining the checklist
 
 ## Related
 

@@ -83,7 +83,7 @@ Content that must be reliably followed belongs at either end. Content the agent 
 
 - Initial tokens receive disproportionate attention — open instruction files with your most critical constraint, not context-setting prose.
 - Boilerplate at the top of a system prompt wastes the highest-attention positions on low-value content.
-- The role and constraints placed first shape agent behaviour most strongly across the session.
+- The role and constraints placed first shape agent behavior most strongly across the session.
 - Attention sinks and recency effects are the two mechanisms behind the [U-shaped attention distribution](lost-in-the-middle.md).
 
 ## When this backfires

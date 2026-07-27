@@ -70,7 +70,7 @@ The metric estimates counterfactual human time. Every failure mode below traces 
 
 ## Example
 
-A platform team runs Devin and Claude Code across two months, defending (or cancelling) a $1,500/seat agentic-coding budget.
+A platform team runs Devin and Claude Code across two months, defending (or canceling) a $1,500/seat agentic-coding budget.
 
 Before — counting completions:
 

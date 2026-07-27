@@ -53,7 +53,7 @@ Russo's framework names four interventions that follow from the variance decompo
 - Single-agent repos: when only one agent operates, "govern the repo, not the agent" collapses into "govern the agent" with extra dashboarding overhead.
 - Mandatory per-PR human review: the merge-queue tempo lever has no slack to give — every PR already gates on a human reviewer.
 - Greenfield repos: with no concurrent contributors, integration friction by definition cannot accumulate; the thesis applies only to repos with active concurrent change.
-- As a vendor lock-in justification: treating the ICC as licence to standardise on one agent inverts the recommendation.
+- As a vendor lock-in justification: treating the ICC as license to standardize on one agent inverts the recommendation.
 
 Per-agent assessment remains a complementary signal — agent merge rates range 43% (Copilot) to 82.6% (Codex) in the same population ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441)) — so layer repo-level tempo and routing on top of per-agent quality choices. Repository rules are also bypassable when text-based ([arXiv:2603.26487](https://arxiv.org/abs/2603.26487)); pair the dashboard with mechanically enforceable controls (CI gates, merge-queue policy, branch protection).
 

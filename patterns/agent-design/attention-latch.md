@@ -94,7 +94,7 @@ Heavy mitigations can overshoot. Shehata and Li (2026) report a Procedural Integ
 
 ## Key Takeaways
 
-- The Attention Latch is the behavioural face of decoder-only over-squashing — a structural property, not a prompt bug.
+- The Attention Latch is the behavioral face of decoder-only over-squashing — a structural property, not a prompt bug.
 - It triggers when long histories collide with contradicting mid-task updates, especially in the [U-shaped middle zone](../../context-engineering/lost-in-the-middle.md).
 - Mitigate on a spectrum: recency anchoring first, history reset next, architectural split only when measured drift justifies the overhead.
 - Heavy mitigations introduce the Grounding Paradox — verify the failure is removed, not relocated.
@@ -104,7 +104,7 @@ Heavy mitigations can overshoot. Shehata and Li (2026) report a Procedural Integ
 - [Lost in the Middle: The U-Shaped Attention Curve](../../context-engineering/lost-in-the-middle.md) — the positional-bias half of the same problem
 - [Goal Recitation: Countering Drift in Long Sessions](../../context-engineering/goal-recitation.md) — recency-anchoring mitigation
 - [Event-Driven System Reminders](../../instructions/event-driven-system-reminders.md) — harness-injected reminders at decision points
-- [Post-Compaction Re-read Protocol](../../instructions/post-compaction-reread-protocol.md) — restoring foundational instructions after summarisation
+- [Post-Compaction Re-read Protocol](../../instructions/post-compaction-reread-protocol.md) — restoring foundational instructions after summarization
 - [Objective Drift: When Agents Lose the Thread](../anti-patterns/objective-drift.md) — the post-compaction sibling failure mode
 - [The Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md) — bounded-history restarts that keep cumulative weight low
 - [Cognitive Reasoning vs Execution Separation](cognitive-reasoning-execution-separation.md) — typed-interface variant of the architectural split

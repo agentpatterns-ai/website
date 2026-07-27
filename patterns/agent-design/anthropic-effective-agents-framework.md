@@ -94,7 +94,7 @@ The patterns assume the task is well-specified and the output is verifiable. In 
 - Definitional drift — independent reviewers note that the post's definitions of "agentic", "workflows", and "agents" are not internally consistent ([thoughtsfromthedatafront analysis](https://www.thoughtsfromthedatafront.com/p/anthropics-blueprint-for-building))
 - Parallel sub-agents sharing implicit context — when parallelization or orchestrator-workers is pushed into autonomous multi-agent territory, Cognition argues the pattern turns fragile: concurrent agents that lack each other's implicit design decisions make conflicting choices that do not compose ([Cognition: Don't Build Multi-Agents](https://cognition.ai/blog/dont-build-multi-agents)). Their follow-up narrows the safe envelope to topologies where multiple agents contribute intelligence but writes stay single-threaded ([Cognition: Multi-Agents — What's Actually Working](https://cognition.ai/blog/multi-agents-working)), the opposite of the dynamic-dispatch framing the original post leaves open
 
-The site's [Anti-Patterns](../anti-patterns/index.md) section catalogues specific failure modes for several of these workflow shapes.
+The site's [Anti-Patterns](../anti-patterns/index.md) section catalogs specific failure modes for several of these workflow shapes.
 
 ## Key Takeaways
 

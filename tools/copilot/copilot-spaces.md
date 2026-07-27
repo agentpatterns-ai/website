@@ -125,5 +125,3 @@ Spaces work well for stable reference material — they underperform in several 
 - [Context Budget Allocation](../../context-engineering/context-budget-allocation.md)
 - [Discoverable vs. Non-Discoverable Context](../../context-engineering/discoverable-vs-nondiscoverable-context.md)
 - [MCP Integration with Copilot](mcp-integration.md)
-</content>
-</invoke>

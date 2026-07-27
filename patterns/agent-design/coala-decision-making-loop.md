@@ -85,5 +85,5 @@ CoALA itself frames the loop descriptively, not prescriptively ("we use CoALA to
 - [Critic Agent Pattern](critic-agent-plan-review.md) — A second model that runs the evaluate sub-stage on the planner's output
 - [Adaptive Generate-Rank-Verify](adaptive-generate-rank-verify.md) — Evaluate-and-select made explicit when verification dominates cost
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — Two-role loop where one role generates and the other evaluates
-- [Graph of Thoughts](graph-of-thoughts.md) — Generalises Tree of Thoughts with an aggregate operation across propose/evaluate/select
+- [Graph of Thoughts](graph-of-thoughts.md) — Generalizes Tree of Thoughts with an aggregate operation across propose/evaluate/select
 - [Anthropic's Effective Agents Framework](anthropic-effective-agents-framework.md) — Practical workflow patterns that often skip evaluate/select in favor of external verification

@@ -135,7 +135,7 @@ print(f"pass^3: {pass_pow_k:.2f}")  # pass^3: 0.40
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — Design tests that account for agent non-determinism across multiple trials
 - [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](pass-at-k-t-agentic-rl-eval.md) — Extends pass@k by also varying interaction depth *T* for tool-use agents
 - [Markov-Chain Reliability for LLM Agents](markov-chain-agent-reliability.md) — Treats pass@k and pass^k as projections of one underlying success first-passage distribution
-- [Decomposing Agent Output Variability by Layer (Sampling vs Orchestration State)](sampling-state-agent-variability-layers.md) — Pass@k/pass^k summarises the aggregate spread; this technique attributes the spread to the layer that should be mitigated
+- [Decomposing Agent Output Variability by Layer (Sampling vs Orchestration State)](sampling-state-agent-variability-layers.md) — Pass@k/pass^k summarizes the aggregate spread; this technique attributes the spread to the layer that should be mitigated
 - [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md)
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md)
 - [Comparative Judging for Agent Configuration Ranking](comparative-judging-config-ranking.md) — the ranking method for picking a bake-off winner, where pass@k/pass^k stays the metric for an absolute pass/fail bar

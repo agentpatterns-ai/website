@@ -41,7 +41,7 @@ The architecture is often shaped by org structure rather than task structure. As
 
 Multi-agent fails on most tasks because every handoff loses the context the receiving agent did not see. The receiver has to reconstruct it (expensive and lossy) or act on a degraded picture (incorrect). Cognition's "Don't Build Multi-Agents" post names the mechanism: in naive multi-agent setups *"sub-agents have no context of each other's work"*, and *"failure generally boils down to missing context within the system"* ([Cognition, *Don't Build Multi-Agents*, June 2025](https://cognition.com/blog/dont-build-multi-agents)).
 
-Compute-equalised benchmarks confirm the mechanism. With reasoning-token budget held constant, single-agent systems "consistently match or outperform" multi-agent ones on multi-hop reasoning across the Qwen3, DeepSeek-R1, and Gemini 2.5 families; the earlier multi-agent gains reflect "unaccounted computation and context effects rather than inherent architectural benefits" ([Tran & Kiela, 2026, *arxiv:2604.02460*](https://arxiv.org/abs/2604.02460)). Shopify's ICML 2025 Sidekick lessons reach the same conclusion from production: *"avoid multi-agent architectures early — simple single-agent systems can handle more complexity than you might expect"* ([Shopify Engineering, 2025](https://shopify.engineering/building-production-ready-agentic-systems)).
+Compute-equalized benchmarks confirm the mechanism. With reasoning-token budget held constant, single-agent systems "consistently match or outperform" multi-agent ones on multi-hop reasoning across the Qwen3, DeepSeek-R1, and Gemini 2.5 families; the earlier multi-agent gains reflect "unaccounted computation and context effects rather than inherent architectural benefits" ([Tran & Kiela, 2026, *arxiv:2604.02460*](https://arxiv.org/abs/2604.02460)). Shopify's ICML 2025 Sidekick lessons reach the same conclusion from production: *"avoid multi-agent architectures early — simple single-agent systems can handle more complexity than you might expect"* ([Shopify Engineering, 2025](https://shopify.engineering/building-production-ready-agentic-systems)).
 
 ## Signals of Over-Engineering
 
@@ -73,7 +73,7 @@ by the previous one.
 
 Three teams own three agents. A bug reported as "task agent ignores customer's stated time zone" turns out to be triage agent dropping the time zone from the summary. The task agent never saw it.
 
-After — one agent holds the conversation, tools do the specialised work:
+After — one agent holds the conversation, tools do the specialized work:
 
 ```text
 Customer-support agent system, v3:
@@ -91,7 +91,7 @@ Sierra runs this architecture across Fortune-20 customer agents and frames it ex
 - Default to the simplest loop; reach for multi-agent only on breadth-first parallel research, tasks that exceed a single context window, or evaluator-optimizer loops with measurable criteria.
 - Context loss at every handoff is the mechanism — sub-agents acting on summaries instead of the underlying conversation produce internally consistent but wrong output.
 - A topology that mirrors the org chart is the signal that org structure, not task structure, shaped the architecture.
-- Compute-equalised benchmarks find single-agent matches or beats multi-agent on most reasoning tasks; pre-equalised wins reflect unaccounted compute, not architecture.
+- Compute-equalized benchmarks find single-agent matches or beats multi-agent on most reasoning tasks; pre-equalized wins reflect unaccounted compute, not architecture.
 
 ## Related
 
@@ -99,4 +99,4 @@ Sierra runs this architecture across Fortune-20 customer agents and frames it ex
 - [Agent Headcount as a Vanity Metric](agent-headcount-vanity-metric.md) — counting agents reports decomposition style, not capability; the metric companion to this design error
 - [Agent Sprawl](agent-sprawl.md) — the fleet-management failure that follows over-orchestration over time
 - [Framework-First Agent Development](framework-first.md) — reaching for LangChain or CrewAI before the raw API; the framework-altitude companion to this topology-altitude error
-- [Abstraction Bloat in AI Agent-Generated Code Output](abstraction-bloat.md) — agents optimise for comprehensive-looking output rather than minimal implementation; same instinct, applied to code instead of architecture
+- [Abstraction Bloat in AI Agent-Generated Code Output](abstraction-bloat.md) — agents optimize for comprehensive-looking output rather than minimal implementation; same instinct, applied to code instead of architecture

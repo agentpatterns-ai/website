@@ -136,5 +136,3 @@ The skill carries the which-audience-needs-what knowledge that a regex cannot en
 - [CLAUDE.md Convention](../instructions/claude-md-convention.md)
 - [AGENTS.md as a Table of Contents, Not an Encyclopedia](../instructions/agents-md-as-table-of-contents.md)
 - [Instruction Compliance Ceiling](../instructions/instruction-compliance-ceiling.md)
-</content>
-</invoke>

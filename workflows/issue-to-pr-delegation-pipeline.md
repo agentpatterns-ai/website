@@ -7,7 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
   - automation
-last_reviewed: 2026-06-24
+last_reviewed: 2026-07-28
 maturity: established
 ---
 
@@ -106,7 +106,7 @@ The Copilot coding agent supports Jira Cloud integration (public preview March 2
 
 ## Cost considerations
 
-Copilot delegation consumes premium requests plus GitHub Actions minutes. You can run concurrent sessions, but each one adds cost. Model selection lets you trade speed for capability — faster models for routine tasks such as unit tests, more capable models for complex refactoring ([GitHub Blog: What's New](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/)).
+Copilot delegation consumes [GitHub AI credits](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) plus GitHub Actions minutes. A session bills by the tokens it consumes, so cost scales with session length, and concurrent sessions each add cost. Model selection lets you trade speed and per-token rate for capability — faster models for routine tasks such as unit tests, more capable models for complex refactoring ([GitHub Blog: What's New](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/)).
 
 ## Why it works
 
@@ -201,5 +201,3 @@ When assigned, Copilot opens a draft PR tagged `[WIP]` with a task checklist der
 - [Issue Tracker Agent Dispatch Surface](issue-tracker-agent-dispatch-surface.md) — the issue-assignment entry point treated as its own dispatch surface
 - [Chat Platform Agent Delegation](chat-platform-agent-delegation.md) — Slack/Teams `@agent` mentions as a sibling entry point to the GitHub `@copilot` surface
 - [Cloud-Local Agent Handoff](cloud-local-agent-handoff.md) — extends Phase 5 by routing the draft PR back to a local agent for finishing
-</content>
-</invoke>

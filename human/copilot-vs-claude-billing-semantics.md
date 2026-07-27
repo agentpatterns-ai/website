@@ -1,6 +1,6 @@
 ---
 title: "Copilot vs Claude Billing Semantics for Enterprise Teams"
-description: "Compare GitHub Copilot premium requests and Anthropic Claude token billing models to budget enterprise AI coding tool costs and avoid surprise overages."
+description: "How GitHub Copilot AI credits and Anthropic Claude token billing compare after Copilot's move to usage-based billing, and what a seat fee actually buys."
 tags:
   - human-factors
   - cost-performance
@@ -8,149 +8,130 @@ tags:
 aliases:
   - "billing comparison"
   - "copilot pricing vs claude pricing"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-07-28
 maturity: adopted
 ---
 
 # Copilot vs Claude Billing Semantics
 
-> Copilot bills in abstract "premium requests" with model multipliers; Claude bills per-token or per-seat. Understanding the gap prevents budget surprises when enterprise teams run both tools.
+> Copilot and Claude both meter tokens now; a Copilot seat fee buys included credits, governance, and free completions, not cheaper tokens.
 
-## Two metering philosophies
+## The metering models converged
 
-Copilot uses request-level abstraction. Each interaction is one premium request regardless of length. Model choice sets the multiplier, and token volume stays invisible.
+On 1 June 2026 GitHub replaced premium request units with GitHub AI Credits. The cost of an interaction now depends on the model and the number of input, output, and cached tokens it consumes, priced at the listed API rates for that model ([GitHub: Copilot is moving to usage-based billing](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/)). One AI credit equals $0.01 ([GitHub Docs: Models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)).
 
-Claude uses token-level proportionality. Every input and output token is metered. Caching, batching, and model selection shift the per-token rate.
+Request quotas and model multipliers are gone. They survive only for Pro and Pro+ subscribers mid-way through an annual plan on 1 June, who drop to Copilot Free when it ends ([GitHub Docs: What changed with billing](https://docs.github.com/en/copilot/reference/copilot-billing/request-based-billing-legacy/what-changed-with-billing)).
+
+Code completions and next edit suggestions are the exception: they consume no AI credits and stay unlimited on every paid plan.
 
 ```mermaid
 flowchart LR
-    subgraph Copilot
-        A[User interaction] --> B{Model multiplier}
-        B -->|GPT-4o: 0x| C[No premium request]
-        B -->|Sonnet 4: 1x| D[1 premium request]
-        B -->|Opus 4.5: 3x| E[3 premium requests]
-    end
-    subgraph Claude
-        F[User interaction] --> G[Count input tokens]
-        G --> H[Count output tokens]
-        H --> I[tokens × per-model rate]
-    end
+    A[Interaction] --> B{Completion or<br/>next edit suggestion?}
+    B -->|Yes| C[Free on all paid plans]
+    B -->|No| D[Count input, output,<br/>cached tokens]
+    D --> E[Apply per-model rate]
+    E --> F[Draw down AI credits<br/>1 credit = $0.01]
 ```
 
-## Seat pricing comparison
+## Seat pricing and included usage
 
-| Plan | Price | What You Get |
-|------|-------|-------------|
-| Copilot Business | $19/seat/mo | 300 premium requests/mo, base models unlimited |
-| Copilot Enterprise | $39/seat/mo | 1,000 premium requests/mo, knowledge bases |
-| Copilot Pro+ | $39/mo | 1,500 premium requests/mo |
-| Claude Team | $25/seat/mo | Claude.ai access, limited usage |
-| Claude Max 5x | $100/mo | 5x Pro usage of Claude.ai + Claude Code |
-| Claude Max 20x | $200/mo | 20x Pro usage of Claude.ai + Claude Code |
-| Claude API | Per-token | Full control, no seat cap |
+At standard rates, included credits are denominated at exactly the seat price, so a paid seat is a floor on spend rather than a discount on it. The promotional allowances running to 1 September 2026 break that parity in the buyer's favor: a $19 Business seat currently carries $30 of credits.
 
-## Premium request multipliers
+| Plan | Price | Included credits/month | Notes |
+|------|-------|------------------------|-------|
+| Copilot Pro | $10/mo | 1,000 base + 500 flex | Individual |
+| Copilot Pro+ | $39/mo | 3,900 base + 3,100 flex | Individual |
+| Copilot Business | $19/user/mo | 1,900/user | 3,000/user promotionally, 1 June–1 Sept 2026 |
+| Copilot Enterprise | $39/user/mo | 3,900/user | 7,000/user promotionally, same window |
+| Claude Pro | $20/mo ($17 annual) | Per-seat allowance | Rolling 5-hour + weekly windows |
+| Claude Team | $25/seat/mo standard; $125 premium | Per-seat allowance | Premium seat is 5× standard |
+| Claude API | Per-token | None | No seat floor; scales to zero |
 
-| Model | Multiplier (paid plans) | Auto-selection |
-|-------|------------------------|----------------|
-| GPT-4.1, GPT-4o, GPT-5 mini | 0x (included) | — |
-| Claude Sonnet 4 | 1x | 0.9x |
-| Claude Opus 4.5/4.6 | 3x | 2.7x |
-| o1, Gemini 2.5 Pro | 1x | 0.9x |
+Sources: [GitHub Docs: Usage-based billing for organizations](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises), [GitHub Docs: Usage-based billing for individuals](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-individuals), [Claude: Plans and pricing](https://claude.com/pricing).
 
-Zero-cost base models are Copilot's main advantage. GPT-4o and GPT-4.1 consume no premium requests on paid plans. Claude has no equivalent zero-cost tier.
+## Token rates are near-identical
 
-[Auto model selection](../patterns/agent-design/auto-model-selection.md) gives a 10% discount ([GitHub Docs: Copilot requests](https://docs.github.com/en/copilot/concepts/billing/copilot-requests)). Overages cost $0.04 per request; unused requests reset monthly and do not roll over ([GitHub Docs: Premium requests](https://docs.github.com/en/billing/concepts/product-billing/github-copilot-premium-requests)).
+Because Copilot bills at published API rates, the same Claude model costs roughly the same through either channel.
 
-## Claude API token pricing
+| Model | Copilot: input / cached / output (per MTok) | Anthropic API: input / output |
+|-------|--------------------------------------------|-------------------------------|
+| Claude Haiku 4.5 | $1.00 / $0.10 / $5.00 | $1.00 / $5.00 |
+| Claude Sonnet 5 | $2.00 / $0.20 / $10.00 | $3.00 / $15.00 list; $2.00 / $10.00 through 31 Aug 2026 |
+| Claude Opus 5 | $5.00 / $0.50 / $25.00 | $5.00 / $25.00 |
+| GPT-5 mini | $0.25 / $0.025 / $2.00 | — |
+| GPT-5.4 | $2.50 / $0.25 / $15.00 | — |
+| Gemini 2.5 Pro | $1.25 / $0.125 / $10.00 | — |
 
-| Model | Input (per MTok) | Output (per MTok) | Cache hits |
-|-------|------------------|-------------------|------------|
-| Opus 4.6 | $5 | $25 | $0.50 (90% off) |
-| Sonnet 4.6 | $3 | $15 | $0.30 (90% off) |
-| Haiku 4.5 | $1 | $5 | $0.10 (90% off) |
+Cached input is discounted 90% on both sides. Copilot's Sonnet 5 rate currently matches Anthropic's introductory price; if it tracks list pricing after 31 August, that line rises by half.
 
-Batch API cuts costs 50%; [prompt caching](../context-engineering/prompt-caching-architectural-discipline.md) saves up to 90% on cache hits.
+Copilot's own lever is [auto model selection](../patterns/agent-design/auto-model-selection.md), which takes 10% off model costs on individual plans. Anthropic's levers are the Batch API (50% off) and explicit [prompt caching](../context-engineering/prompt-caching-architectural-discipline.md) control; Copilot applies caching automatically but publishes no batch tier and exposes no cache-TTL setting.
 
-Typical Claude Code costs via API run about $6 per developer per day on average, and under $12 a day for 90% of users ([Anthropic: Manage costs effectively](https://code.claude.com/docs/en/costs)).
+## What the seat fee buys
 
-## When each model wins
+Three things, none of them a token discount.
 
-```mermaid
-flowchart TD
-    A[Enterprise team billing decision] --> B{Primary workload?}
-    B -->|High-volume completions & chat| C[Copilot seat]
-    B -->|Heavy agentic workflows| D[Claude API or Max]
-    B -->|Mixed usage| E[Hybrid: both tools]
-    C --> F[Base models at 0x cost dominate]
-    D --> G[Token-level control,<br/>caching, model switching]
-    E --> H[Copilot for routine,<br/>Claude for deep tasks]
-```
+### Pooled allowances
 
-A Copilot seat wins when routine completions dominate (GPT-4o at 0x) and predictable billing matters.
+Business and Enterprise credits pool at the billing entity, not per user — 100 Business seats give one 190,000-credit pool. Adding licenses grows it immediately; removals apply next cycle. Nothing rolls over: the pool resets at 00:00:00 UTC on the first of each month and unused credits are forfeited.
 
-Claude API or Max wins for agentic workflows or spiky workloads, because billing scales to zero when idle.
+### Budget controls
 
-A hybrid setup is the default: Copilot for completions, Claude for agentic sessions.
+Limits can be set at user, cost-center, organization, and enterprise level. When the pool is exhausted, policy decides whether usage continues at published rates or is blocked until the next cycle.
+
+### The wrapper
+
+GitHub enumerates what direct API access leaves a team to build for itself: prompts, retrieval, routing, retry logic, logging, security model, and billing controls ([GitHub: Copilot vs raw API access](https://github.blog/ai-and-ml/github-copilot/copilot-vs-raw-api-access-what-are-you-actually-paying-for/)). Now that the token rates match, that engineering — plus unlimited completions — is what the seat premium actually covers.
 
 ## Cost management levers
 
 | Lever | Copilot | Claude |
 |-------|---------|--------|
-| Model selection | Choose via multiplier | Switch mid-session |
-| Spend limits | Monthly quota only | Per-org limits |
+| Model selection | Per-model rate; 10% auto-selection discount | Switch mid-session |
+| Spend limits | User, cost center, org, enterprise | Per-org, per-workspace, per-member |
 | Rate limiting | Not configurable | TPM/RPM per org |
-| Caching | Not exposed | Prompt caching (90% savings) |
-| Batch discounts | Not available | 50% via Batch API |
-| Idle cost | Seat cost regardless | Scales to zero |
-
-## Agentic session billing
-
-Copilot coding agent sessions consume 1 premium request per session (× model rate). Tool calls within a session do not add requests ([GitHub community: Coding Agent now uses one Premium Request per session](https://github.com/orgs/community/discussions/165798)). Coding agent and Spark use separate SKUs tracked from November 2025.
-
-Claude Code bills by total tokens consumed — costs scale with codebase size and conversation length.
+| Caching | Automatic, 90% off cached input | Explicit control, 90% off cached reads |
+| Batch discounts | None published | 50% via Batch API |
+| Idle cost | Seat fee regardless of usage | API scales to zero |
+| Unused allowance | Forfeited monthly | No allowance to forfeit on API |
 
 ## Example
 
-Scenario: 10 developers, 22 working days, mixed workload of 80% routine completions and chat and 20% agentic coding sessions.
+Ten developers, 22 active days, agentic coding. Anthropic reports Claude Code averaging about $13 per developer per active day across enterprise deployments ([Anthropic: Manage costs effectively](https://code.claude.com/docs/en/costs)); assume a Copilot team drives an equivalent workload. Monthly spend: 10 × 22 × $13 = $2,860, or 286,000 AI credits.
 
-### Copilot Enterprise — $390/month (10 × $39)
+| Channel | Included | Metered | Total |
+|---------|----------|---------|-------|
+| Copilot Business | 19,000 credits ($190 of seats) | $2,670 | $2,860 |
+| Copilot Enterprise | 39,000 credits ($390 of seats) | $2,470 | $2,860 |
+| Copilot Business, promotional | 30,000 credits | $2,560 | $2,750 |
+| Claude API | — | $2,860 | $2,860 |
 
-| Usage type | Model | Multiplier | Sessions/dev/day | Monthly premium requests |
-|-----------|-------|-----------|-----------------|--------------------------|
-| Routine completions & chat | GPT-4o | 0× | ~40 | 0 (free) |
-| Agentic sessions | Claude Sonnet 4 | 1× | ~3 | 660 |
-| Total | | | | 660 of 10,000 quota |
+The three standard-rate rows land in the same place, because included credits are priced at exactly the seat fee; only the promotional allowance, which expires on 1 September 2026, breaks the tie. The comparison only separates at the edges: below the allowance a Copilot seat is a floor you pay anyway, while API spend scales to zero; above it, Anthropic's batch and caching levers have no Copilot equivalent.
 
-$390/month flat. 9,340 premium requests unused.
+## Agentic session billing
 
-### Claude API — ~$1,200–1,500/month
-
-Using the $6/dev/day average from typical Claude Code usage:
-10 developers × $6/day × 22 days = $1,320/month (uncached, all agentic).
-With prompt caching covering repeated system prompts: ~$900–1,000/month.
-
-### Hybrid — ~$430/month
-
-- Copilot Business (routine completions): 10 × $19 = $190/month
-- Claude API (agentic 20% of sessions): ~$240/month ($1.20/dev/day on focused tasks)
-- Total: ~$430/month
-
-The takeaway: Copilot's 0× base models absorb routine work at no marginal cost. Claude API adds token-level control where it matters, in the 20% of sessions where agentic depth justifies the metering overhead. A pure Claude API setup costs 3–4× more unless usage is mostly agentic.
+Both tools bill agentic work by total tokens, so cost scales with codebase size and session length, not session count. Copilot's old flat rates — one premium request per coding agent session, four per Spark prompt, 13 per code review — apply only on legacy plans. The [cost-aware design](../token-engineering/cost-aware-agent-design.md) levers are now identical on both sides.
 
 ## When this backfires
 
-Copilot overages spike with premium model adoption. Shifting even a fraction of routine usage to Claude Opus (3× multiplier) or o1 can exhaust quotas before mid-month. The 0× base model advantage disappears if GPT-4o is deprecated, repriced, or policy-restricted.
+Forfeited allowances punish uneven teams. A pooled Business allowance resets monthly with no rollover, so a team that under-uses in July and over-runs in August pays the overage in full. Variable-headcount and contractor-heavy teams pay a seat floor for developers who are on leave or not in an IDE.
 
-Managing two billing models adds overhead. Hybrid setups need separate cost dashboards, budget owners, and approval workflows. For teams under ~10 developers or purely agentic shops, the dual-vendor overhead can exceed any savings.
+Rate parity is not a guarantee. Copilot's published rates track upstream API pricing, which moves — the Sonnet 5 line is currently an introductory rate. A comparison built on today's table needs re-checking at each price change, not annually.
 
-Token-level billing is unpredictable for spiky teams. Claude API costs scale with codebase size and conversation length, not headcount. A single large refactor or multi-hour session can cost $50–100. Without per-developer spend limits, monthly totals are hard to forecast.
+Token-level billing is unpredictable for spiky teams. A single large refactor or multi-hour session can dominate a day's spend; without per-user limits, monthly totals are hard to forecast on either side.
 
-Idle seat cost is unavoidable with Copilot. Developers on leave, onboarding, or in non-IDE contexts still consume seat fees. Claude API scales to zero when idle, which is better for contractors or variable-headcount teams.
+Running both still adds overhead — separate dashboards, budget owners, approval workflows. For teams under roughly ten developers that overhead can exceed any saving, now that the rates converge.
+
+## Key Takeaways
+
+- Copilot has metered tokens, not requests, since 1 June 2026; premium request units and model multipliers are legacy.
+- One AI credit is $0.01, and each plan's included credits equal its seat price — the seat is a spend floor, not a discount.
+- Copilot bills Claude models at published API rates, so channel choice no longer changes the token bill materially.
+- Copilot's differentiators are unlimited completions, pooled allowances, tiered budget controls, and the wrapper; Anthropic's are batch pricing, explicit caching, and scaling to zero.
+- Included credits expire monthly with no rollover, which penalizes uneven usage.
 
 ## Related
 
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md)
-- [GitHub Copilot: Model Selection & Routing](../training/copilot/model-selection.md) — multipliers, Auto mode discount, cascade routing
+- [GitHub Copilot: Model Selection & Routing](../training/copilot/model-selection.md) — model choice and routing under the new rates
 - [Cross-Tool Translation](cross-tool-translation.md)
 - [Copilot Spaces (Context Curation)](../tools/copilot/copilot-spaces.md)

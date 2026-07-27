@@ -1,7 +1,7 @@
 ---
-title: "Context Compression Strategies: Offloading and Summarisation"
+title: "Context Compression Strategies: Offloading and Summarization"
 term: "Context Compression Strategies"
-description: "Tiered compression keeps long-running agents within their context window by offloading large payloads to disk and summarising conversation history."
+description: "Tiered compression keeps long-running agents within their context window by offloading large payloads to disk and summarizing conversation history."
 aliases:
   - context compaction
   - context summarization
@@ -15,11 +15,11 @@ last_reviewed: 2026-06-13
 maturity: established
 ---
 
-# Context Compression Strategies: Offloading and Summarisation
+# Context Compression Strategies: Offloading and Summarization
 
-> Tiered compression — offloading large payloads and summarising history — keeps long-running agents within the context window without losing task continuity.
+> Tiered compression — offloading large payloads and summarizing history — keeps long-running agents within the context window without losing task continuity.
 
-Learn it hands-on: [Offload vs Summarise](https://learn.agentpatterns.ai/context-engineering/context-compression/) — guided lesson with quizzes.
+Learn it hands-on: [Offload vs Summarize](https://learn.agentpatterns.ai/context-engineering/context-compression/) — guided lesson with quizzes.
 
 ## The problem
 
@@ -84,7 +84,7 @@ Summaries that only capture "what happened" without "what matters next" cause [o
 
 Transformer attention runs over all tokens in the window. As context grows, relevant signal competes with accumulated noise — redundant tool outputs, superseded reasoning, resolved errors — and [retrieval precision degrades](context-window-dumb-zone.md). Compression reduces this noise floor. Offloading removes content that is addressable on demand but rarely needed. Summarization distills decision rationale and state into a compact form the model can condition on. The mechanism is selective discarding, not lossy encoding — artifacts remain on disk, so compaction is non-destructive for recoverable content.
 
-The effect is measurable. One empirical study reports that pruning context to the last five tool call/response pairs, plus summarization, reached 91.6% task completion versus 71% for full-context agents, at a fraction of the tokens and runtime. This supports combining the offload and summarize tiers rather than carrying full history ([Pruning and summarising context for tool-using agents](https://arxiv.org/abs/2606.10209)).
+The effect is measurable. One empirical study reports that pruning context to the last five tool call/response pairs, plus summarization, reached 91.6% task completion versus 71% for full-context agents, at a fraction of the tokens and runtime. This supports combining the offload and summarize tiers rather than carrying full history ([Pruning and summarizing context for tool-using agents](https://arxiv.org/abs/2606.10209)).
 
 ## When this backfires
 
@@ -103,10 +103,10 @@ Compression degrades task continuity when applied incorrectly:
 
 ## Key Takeaways
 
-- Tiered compression applies in sequence: offload large tool responses first, then summarise history.
+- Tiered compression applies in sequence: offload large tool responses first, then summarize history.
 - Five-stage compaction provides graduated degradation instead of a single compression cliff.
 - Summaries must preserve task objective, current state, and next steps — [not just action history](../patterns/anti-patterns/objective-drift.md).
-- Offloading preserves recoverability; summarisation is lossy — retain decision rationale, not just outcomes.
+- Offloading preserves recoverability; summarization is lossy — retain decision rationale, not just outcomes.
 - Compaction reuses the cached system-prompt prefix, so a `cache_control` breakpoint keeps post-compaction turns cheap.
 
 ## Example

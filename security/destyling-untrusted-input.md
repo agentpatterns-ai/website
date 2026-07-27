@@ -1,7 +1,7 @@
 ---
 title: "Destyling Untrusted Input as a Prompt Injection Defense"
 term: "Destyling"
-description: "Normalise the surface style of untrusted input before the model encodes who is speaking — a representational-layer defense that cuts CoT-forgery attack success from 61% to 10% by interrupting role perception, complementary to control/data-flow separation."
+description: "Normalize the surface style of untrusted input before the model encodes who is speaking — a representational-layer defense that cuts CoT-forgery attack success from 61% to 10% by interrupting role perception, complementary to control/data-flow separation."
 tags:
   - security
   - instructions
@@ -85,7 +85,7 @@ The transform is shallow and content-preserving — the agent can still summariz
 ## Key Takeaways
 
 - Prompt injection succeeds because models infer the source of text from its style, not from the role tag around it; injected text imitating a trusted role lands in the same representational region as authentic text from that role ([Ye et al., 2026](https://arxiv.org/abs/2603.12277)).
-- Destyling normalises the surface style of untrusted input before the model encodes who is speaking. It is a representational-layer defense, distinct from content filtering (which classifies) and structural defenses (which separate flows).
+- Destyling normalizes the surface style of untrusted input before the model encodes who is speaking. It is a representational-layer defense, distinct from content filtering (which classifies) and structural defenses (which separate flows).
 - The intervention is causal, not correlational: a single bigram replacement (`"The user"` → `"The request"`) drops attack success by 19 percentage points; the full transform cuts CoT-forgery attack success from 61% to 10% on the paper's evaluation set.
 - Treat destyling as a complementary layer, not a structural fix. It buys time against current attack styles but regresses under adaptive attackers, cannot reach template-level or multi-modal injections, and adds utility cost wherever style is part of the legitimate signal.
 - Skip the layer entirely when the harness already enforces control/data-flow separation or an action-selector pattern — destyling adds preprocessing overhead without measurable additional benefit in those architectures.
@@ -93,7 +93,7 @@ The transform is shallow and content-preserving — the agent can still summariz
 ## Related
 
 - [Control/Data-Flow Separation for Prompt Injection Defense (CaMeL)](camel-control-data-flow-injection.md) — structural defense at the harness layer; destyling complements it by addressing the representational layer for any input that does reach the model.
-- [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md) — narrows the action surface so injection cannot promote itself to a tool call; pairs with destyling when the action catalogue must remain open.
-- [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — dispatch-layer authorisation that fixes the authority issuer at task start; destyling sits one layer below, on the data entering the planner.
-- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — defense-in-depth catalogue; destyling slots in alongside the six provable patterns as a representational-layer mitigation.
+- [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md) — narrows the action surface so injection cannot promote itself to a tool call; pairs with destyling when the action catalog must remain open.
+- [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — dispatch-layer authorization that fixes the authority issuer at task start; destyling sits one layer below, on the data entering the planner.
+- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — defense-in-depth catalog; destyling slots in alongside the six provable patterns as a representational-layer mitigation.
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — the underlying threat model whose representational mechanism destyling targets.

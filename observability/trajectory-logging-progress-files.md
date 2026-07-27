@@ -161,6 +161,6 @@ Each session runs `bash init.sh`, reads `claude-progress.txt` to recover prior d
 - [Session Initialization Ritual](../patterns/agent-design/session-initialization-ritual.md) — `init.sh` and start-of-session checks
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — the verification middleware referenced above
 - [Loop Detection](loop-detection.md) — the active-monitoring counterpart
-- [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — filesystem write-on-summarisation
+- [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — filesystem write-on-summarization
 - [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md) — cross-session memory beyond the progress file
 - [Event Sourcing for Agents](event-sourcing-for-agents.md) — an alternative audit-trail substrate

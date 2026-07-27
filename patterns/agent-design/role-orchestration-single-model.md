@@ -69,7 +69,7 @@ Same-weight review inherits shared failure modes. The corrector's isolation from
 
 Role boundaries are prompt-level, not architectural. A frozen-weights scaffold cannot enforce role scope through permissions. Agents often disobey role specifications when under-conditioned ([Cemri et al., 2025](https://arxiv.org/html/2503.13657v1)).
 
-The gain is task-dependent. The corrector role addresses repetitive failure loops. Tasks that fail in novel ways each time show less benefit. Short-context tasks gain less from summarisation than long-trajectory tasks.
+The gain is task-dependent. The corrector role addresses repetitive failure loops. Tasks that fail in novel ways each time show less benefit. Short-context tasks gain less from summarization than long-trajectory tasks.
 
 ## When this backfires
 
@@ -79,7 +79,7 @@ The gain is task-dependent. The corrector role addresses repetitive failure loop
 
 ## Key Takeaways
 
-- Same frozen weights, three conditioning regimes (summarise, reason, correct) — a scaffolded policy, not an ensemble.
+- Same frozen weights, three conditioning regimes (summarize, reason, correct) — a scaffolded policy, not an ensemble.
 - The corrector's isolation from dialogue history is the specific mechanism that breaks repetitive failure loops.
 - Scoped to constrained-hardware small-model deployments; larger models or heterogeneous role routing remain stronger on unconstrained hardware.
 
@@ -89,6 +89,6 @@ The gain is task-dependent. The corrector role addresses repetitive failure loop
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — heterogeneous models per role (action/thinking/critique/vision/compact)
 - [Specialized Agent Roles](specialized-agent-roles.md) — parallel role specialization across agents
 - [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md) — two-layer split, typically across different models
-- [Context Compression Strategies](../../context-engineering/context-compression-strategies.md) — summarisation-as-compression in the main agent loop
+- [Context Compression Strategies](../../context-engineering/context-compression-strategies.md) — summarization-as-compression in the main agent loop
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — the summariser and corrector roles as removable scaffolding once models close the capability gap
 - [Scaffold Architecture Taxonomy](harness-design-dimensions.md) — where role orchestration fits in the control-architecture layer

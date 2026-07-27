@@ -114,9 +114,9 @@ Tight instructions reduce flexibility — a narrow-scope agent cannot handle req
 
 - Scope is an attack surface — the breadth of an agent's task description bounds what an injected instruction can plausibly request.
 - Tight, enumerated instructions force injections to contradict a stated directive rather than extend a vague one.
-- Capability restrictions at the tool layer enforce scope independently of model behaviour — an agent without an action cannot be coerced into taking it.
-- Narrow scope reduces but does not eliminate injection risk; pair it with [confirmation gates](human-in-the-loop-confirmation-gates.md), least-privilege permissions, and defence in depth.
-- Avoid "use your judgment" framings for agents that consume any untrusted content — they authorise the redirection an attacker needs.
+- Capability restrictions at the tool layer enforce scope independently of model behavior — an agent without an action cannot be coerced into taking it.
+- Narrow scope reduces but does not eliminate injection risk; pair it with [confirmation gates](human-in-the-loop-confirmation-gates.md), least-privilege permissions, and defense in depth.
+- Avoid "use your judgment" framings for agents that consume any untrusted content — they authorize the redirection an attacker needs.
 
 ## Related
 

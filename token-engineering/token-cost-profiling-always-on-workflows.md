@@ -32,7 +32,7 @@ Always-on workflows accumulate three costs that are not visible at the per-invoc
 |---|---|---|
 | Tool-definition payload re-sent every turn | 5 MCP servers × 30 tools ≈ 30–60K tokens of metadata per turn, 25–30% of a 200K-token context ([Junia AI: MCP Context Window Problem](https://www.junia.ai/blog/mcp-context-window-problem); upstream [claude-code #20421](https://github.com/anthropics/claude-code/issues/20421)) | Prune the manifest; load tools lazily |
 | Deterministic data-gathering inside the LLM loop | `gh issue view`, label scans, diff retrieval — each requires an LLM round-trip to decide-call-receive | Move to a pre-agentic CLI step that writes a workspace artifact |
-| Frequency-multiplied small inefficiencies | A 5% per-run waste on 100 runs/day is 5 runs/day of pure overhead | Cost-weight every metric by runs/day before prioritising |
+| Frequency-multiplied small inefficiencies | A 5% per-run waste on 100 runs/day is 5 runs/day of pure overhead | Cost-weight every metric by runs/day before prioritizing |
 
 ## The loop
 
@@ -102,7 +102,7 @@ The three preconditions above name the dominant failure modes; four additional t
 
 - The loop pays back only on high-frequency, stable workflows with output-side measurement; below that bar, accept the API bill.
 - Three structural costs drive always-on workflow spend: tool-definition payload, deterministic LLM round-trips, and frequency-multiplied small inefficiencies.
-- Prioritise by `ET/run × runs/day`, not `ET/run` — frequency is the multiplier in every published case.
+- Prioritize by `ET/run × runs/day`, not `ET/run` — frequency is the multiplier in every published case.
 - Verify every fix against a metric that includes output tokens; input compression that ignores output regresses cost.
 
 ## Multi-tool coverage
@@ -115,9 +115,10 @@ The instrumentation surface differs by tool; the loop is tool-agnostic.
 
 ## Related
 
-- [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — the per-request routing decision that complements workflow-level optimisation
+- [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — the per-request routing decision that complements workflow-level optimization
 - [Context-Usage Attribution: Per-Source Breakdown of Agent Context](../observability/context-usage-attribution.md) — the orthogonal per-source cut (rules, skills, MCP returns) inside one session
 - [OpenTelemetry for AI Agent Observability and Tracing](../standards/opentelemetry-agent-observability.md) — the cross-vendor instrumentation surface for `gen_ai.usage.*`
 - [Auto-Triage Workflow](../workflows/auto-triage-workflow.md) — the canonical high-frequency always-on workflow and the GitHub case where pre-agentic CLI substitution delivered the headline 62%
-- [Prototype Before Optimizing: Establish Quality Baselines Before Token Constraints](../workflows/prototype-before-optimizing.md) — why deferring optimisation until the workflow stabilises is the same logic at a different scope
+- [Prototype Before Optimizing: Establish Quality Baselines Before Token Constraints](../workflows/prototype-before-optimizing.md) — why deferring optimization until the workflow stabilizes is the same logic at a different scope
 - [Code Cleanliness as an Agent Cost Lever](code-cleanliness-agent-cost-lever.md) — a complementary token-cost lever under the same cheaper-than-the-savings precondition
+- [Request Shaping to Cut Wasted Agent Turns](request-shaping-wasted-turns.md) — the per-request lever to reach for once profiling shows retrieval, not model choice, dominates the spend

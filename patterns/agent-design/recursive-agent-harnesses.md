@@ -108,4 +108,4 @@ The `verified` step is what makes this RAH rather than ordinary fan-out — an a
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md) — the harness this pattern makes the recursive unit of
 - [Anthropic's Effective Agents Framework](anthropic-effective-agents-framework.md) — the workflow-vs-agent taxonomy RAH extends with a code-first orchestration script
 - [Deep Agent Runtime](deep-agent-runtime.md) — the runtime layer that durably executes the script the parent writes
-- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md) — the structural pattern RAH specialises by making the worker a recursive harness
+- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md) — the structural pattern RAH specializes by making the worker a recursive harness

@@ -115,7 +115,7 @@ The plain-bash equivalent is the [Ralph loop](https://ghuntley.com/ralph/): a `f
 - A long-running agent is one whose run survives session boundaries, sandbox crashes, and human-in-the-loop pauses by moving state out of the context window into durable artifacts.
 - Three walls — finite context, no persistent state, unreliable self-grading — force the same convergent design across Anthropic, Cursor, Google, and Ralph-style open-source practice.
 - Five primitives recur: external done-condition, durable session log, stateless harness with disposable sandbox, separate evaluator, deliberate checkpoint cadence.
-- Compaction-as-summarisation is not enough at day-plus durations; full context resets driven by a structured handoff file are part of the operational shape.
+- Compaction-as-summarization is not enough at day-plus durations; full context resets driven by a structured handoff file are part of the operational shape.
 - The pattern is overhead for short-horizon work, pre-PMF agents, underspecified tasks, and unbounded session logs — apply it when uninterrupted units of work genuinely exceed a single session.
 - Cost, security, alignment drift, and human verification of 24-hour activity remain open; budgets, circuit breakers, and structured artifacts are the current answers.
 

@@ -6,7 +6,7 @@ tags:
   - multi-agent
   - automation
   - training
-last_reviewed: 2026-05-27
+last_reviewed: 2026-07-28
 ---
 
 # GitHub Copilot: Advanced Patterns
@@ -25,7 +25,7 @@ GitHub's Agents page (`github.com/copilot/agents`) runs multiple coding agents �
 
 When to use it: High-stakes changes where you want independent perspectives. Assign both Copilot and Claude to the same issue — each opens its own branch and draft PR. Review both, merge the better one.
 
-When NOT to use it: Routine tasks where one agent is sufficient. Running two agents doubles the premium request cost for the same task (see [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md)).
+When NOT to use it: Routine tasks where one agent is sufficient. Running two agents roughly doubles the tokens consumed for the same task, and both vendors meter by token (see [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md)).
 
 ### Parallel sessions
 
@@ -38,7 +38,7 @@ How to structure parallel work:
 1. Divide along natural boundaries — independent modules, separate concerns, distinct features. If two agents need to modify the same files, they'll conflict.
 2. Use separate branches — each agent works on its own branch. Merge sequentially after review in GitHub.
 3. Batch agent questions — check in on all sessions periodically rather than context-switching every time one agent has a question.
-4. Prioritise decisions only humans can make — architecture choices, ambiguous requirements, design trade-offs. Let agents handle the implementation within decided boundaries.
+4. Prioritize decisions only humans can make — architecture choices, ambiguous requirements, design trade-offs. Let agents handle the implementation within decided boundaries.
 
 In VS Code: Run multiple Agent mode sessions in separate windows, each on a different branch.
 
@@ -90,17 +90,17 @@ Event-driven repository automation defined in Markdown, compiled to GitHub Actio
 
 ### Security architecture
 
-Agentic workflows use defence-in-depth:
+Agentic workflows use defense-in-depth:
 
 - Agent containers have zero secret access — API tokens live in a separate proxy container. The agent can't exfiltrate credentials even if prompt-injected.
-- [Safe outputs pipeline](../../security/safe-outputs-pattern.md) — four stages: operation filtering (restricts API calls) → volume limiting (caps operations per run) → content sanitisation (removes URLs, secrets) → moderation (deterministic analysis before delivery).
+- [Safe outputs pipeline](../../security/safe-outputs-pattern.md) — four stages: operation filtering (restricts API calls) → volume limiting (caps operations per run) → content sanitization (removes URLs, secrets) → moderation (deterministic analysis before delivery).
 - Read-only by default — workflows produce artifacts (PRs, issues, comments), not autonomous changes. Write operations require explicit safe-output declarations.
 
 ### Rollout sequencing
 
 Start conservative, escalate with evidence:
 
-1. Read-only workflows — triage, labelling, reporting. No writes. Build confidence.
+1. Read-only workflows — triage, labeling, reporting. No writes. Build confidence.
 2. Comment-only workflows — agent posts analysis as comments on issues and PRs. Still no code changes; these run as GitHub Actions.
 3. Write workflows with review gates — agent opens draft PRs. Human review before merge.
 4. Automated write workflows — for low-risk, high-frequency tasks where the review gate is unnecessary (e.g., dependency bumps with passing CI).
@@ -182,7 +182,7 @@ Example: 10 bug fixes in a backlog. Assign all 10 to Copilot. Each produces a dr
 
 ### Monitoring multi-agent work
 
-The Agents page (`github.com/copilot/agents`) provides a centralised dashboard for all active coding agent sessions across repositories.
+The Agents page (`github.com/copilot/agents`) provides a centralized dashboard for all active coding agent sessions across repositories.
 
 What you can do:
 
@@ -234,10 +234,10 @@ Every status must have a designated handler. If a label is added and nothing res
 ## Key Takeaways
 
 - Parallel sessions shift your role from implementer to tech lead. The bottleneck becomes your review capacity, not agent throughput. Cap at 3–5 concurrent sessions.
-- Specialised agents produce complementary coverage that unspecialised agents can't achieve. Create distinct [custom agents](customization-primitives.md) for security, testing, and documentation rather than one general-purpose agent.
-- Agentic workflows are event-driven automation, not ad-hoc tasks. Start read-only, escalate to comments, then writes with review gates. Defence-in-depth security is built into the platform.
+- Specialized agents produce complementary coverage that unspecialized agents can't achieve. Create distinct [custom agents](customization-primitives.md) for security, testing, and documentation rather than one general-purpose agent.
+- Agentic workflows are event-driven automation, not ad-hoc tasks. Start read-only, escalate to comments, then writes with review gates. Defense-in-depth security is built into the platform.
 - Use traditional CI for deterministic checks and Copilot-augmented CI for judgment tasks. Don't replace linters with agents — they serve different purposes.
-- Batch operations parallelise across items, not within a single task. Each agent gets its own context. Monitor from the GitHub Agents page.
+- Batch operations parallelize across items, not within a single task. Each agent gets its own context. Monitor from the GitHub Agents page.
 - Event-driven routing removes the need for a central orchestrator. Status changes fire agents. Humans and agents are interchangeable handlers.
 
 ## Related
@@ -253,16 +253,16 @@ Training
 
 Patterns
 
-- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — premium request costs when running multiple agents
+- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — GitHub AI credit and token costs when running multiple agents
 - [Agent Composition Patterns](../../patterns/agent-design/agent-composition-patterns.md) — chain, fan-out, pipeline, supervisor
-- [Specialized Agent Roles](../../patterns/agent-design/specialized-agent-roles.md) — complementary coverage through specialisation
+- [Specialized Agent Roles](../../patterns/agent-design/specialized-agent-roles.md) — complementary coverage through specialization
 - [Loop Strategy Spectrum](../../loop-engineering/loop-strategy-spectrum.md) — accumulated vs fresh context for long-running work
 - [Parallel Agent Sessions](../../workflows/parallel-agent-sessions.md) — human-as-tech-lead pattern
 - [Event-Driven Agent Routing](../../patterns/agent-design/event-driven-agent-routing.md) — status-change triggers
 
 Platform
 
-- [Agent Mission Control](../../tools/copilot/agent-mission-control.md) — centralised multi-agent dashboard
+- [Agent Mission Control](../../tools/copilot/agent-mission-control.md) — centralized multi-agent dashboard
 - [Agent HQ](../../tools/copilot/agent-hq.md) — multi-vendor agent platform
 - [GitHub Agentic Workflows](../../tools/copilot/github-agentic-workflows.md) — event-driven automation patterns
 - [Copilot CLI Agentic Workflows](../../tools/copilot/copilot-cli-agentic-workflows.md) — terminal-native agent patterns

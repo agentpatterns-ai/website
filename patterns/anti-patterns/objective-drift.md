@@ -17,7 +17,7 @@ maturity: established
 
 # Objective Drift: When Agents Lose the Thread
 
-> After context compression, agents can continue working productively on a subtly wrong objective — the original intent lost in summarisation.
+> After context compression, agents can continue working productively on a subtly wrong objective — the original intent lost in summarization.
 
 Learn it hands-on: work through the [Objective Drift guided lesson](https://learn.agentpatterns.ai/anti-patterns/objective-drift/), which includes quizzes.
 
@@ -79,7 +79,7 @@ Together, the structured intent file and the system-prompt anchor keep the exact
 
 ## Key Takeaways
 
-- Objective drift occurs when summarisation loses task specifics or instructions fade from attention.
+- Objective drift occurs when summarization loses task specifics or instructions fade from attention.
 - The agent appears productive but solves the wrong problem — drift is subtle, not obvious.
 - Structured summaries with a named session-intent field resist drift better than prose.
 - [Event-driven reminders](../../instructions/event-driven-system-reminders.md) counter fade-out by re-injecting objectives at decision points.
@@ -91,7 +91,7 @@ Together, the structured intent file and the system-prompt anchor keep the exact
 - [Attention Latch: When Agents Stay Anchored to Stale Instructions](../agent-design/attention-latch.md) — the structural over-squashing mechanism behind instruction fade-out
 - [Post-Compaction Re-read Protocol](../../instructions/post-compaction-reread-protocol.md) — restores instruction compliance after compaction
 - [Event-Driven System Reminders](../../instructions/event-driven-system-reminders.md) — counters fade-out by injecting targeted reminders
-- [Context Compression Strategies: Offloading and Summarisation](../../context-engineering/context-compression-strategies.md) — tiered compression that preserves task intent through summarisation
+- [Context Compression Strategies: Offloading and Summarization](../../context-engineering/context-compression-strategies.md) — tiered compression that preserves task intent through summarization
 - [Context Poisoning](context-poisoning.md) — hallucinated facts compound through context
 - [Distractor Interference](distractor-interference.md) — irrelevant instructions reduce compliance
 - [The Kitchen Sink Session](session-partitioning.md) — mixing unrelated tasks fills context with noise

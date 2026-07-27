@@ -5,7 +5,7 @@ tags:
   - agent-design
   - copilot
 applies_to: "copilot@1.x"
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-28
 status: current
 ---
 
@@ -53,13 +53,13 @@ This pattern lets you move agent capabilities from a fixed surface (IDE, CLI) to
 
 ## When this backfires
 
-Embedding the Copilot SDK ties your application to GitHub's subscription model, rate limits, and runtime decisions. Conditions where this is worse than the alternative:
+Embedding the Copilot SDK ties your application to GitHub's subscription model, billing regime, and runtime decisions. Conditions where this is worse than the alternative:
 
 - Subscription dependency: users need an active Copilot subscription, or you supply BYOK keys. Applications that must serve users without Copilot access cannot use the SDK as-is.
-- Rate limit exposure: SDK requests count against premium request quotas, so high-volume workflows can exhaust limits faster than interactive use does.
+- Billing exposure: SDK sessions consume [GitHub AI credits](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) metered by the input, output, and cached tokens they burn, so high-volume workflows drain a plan's included allowance faster than interactive use does. On Business and Enterprise plans that allowance is a single pool shared across the billing entity, and it resets — without rollover — on the first of each month ([usage-based billing for organizations](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises)).
 - Runtime lock-in: the execution loop, tool surface, and session management are GitHub's. If the runtime changes behavior (model swap, tool API change), embedding applications absorb the regression without direct control over the upgrade path.
 
-The rate-limit risk is not theoretical: in April 2026 GitHub [paused new Copilot sign-ups](https://thenewstack.io/github-copilot-signups-paused/) after agentic usage broke flat-rate economics, [fixed a token-counting bug](https://www.theregister.com/2026/04/15/github_copilot_rate_limiting_bug/) that had been under-counting newer models, and [announced a shift to token-based billing with tighter rate limits for individual plans](https://github.blog/changelog/2026-04-20-changes-to-github-copilot-plans-for-individuals/). Applications embedding the SDK inherit whatever quota regime GitHub sets for their users' plans.
+The billing risk is not theoretical: in April 2026 GitHub [paused new Copilot sign-ups](https://thenewstack.io/github-copilot-signups-paused/) after agentic usage broke flat-rate economics, [fixed a token-counting bug](https://www.theregister.com/2026/04/15/github_copilot_rate_limiting_bug/) that had been under-counting newer models, and [announced a shift to token-based billing with tighter rate limits for individual plans](https://github.blog/changelog/2026-04-20-changes-to-github-copilot-plans-for-individuals/). That shift landed on 2026-06-01, when premium requests gave way to [usage-based AI credits](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/). Applications embedding the SDK inherit whatever credit allowance and budget policy GitHub sets for their users' plans — including whether an exhausted pool keeps billing at published rates or blocks until the next cycle.
 
 Runtime lock-in is similarly concrete. In May 2026 a cross-binding bug ([github/copilot-sdk#251](https://github.com/github/copilot-sdk/issues/251)) stopped custom agents initialized through the SDK from reaching the assistant in either Node or .NET — a defect in the shared `copilot-agent-runtime` that no embedding application could patch. A practitioner ship report covering six SDK upgrades documents runtime changes breaking the embedding harness mid-iteration ([SDK upgrade-path regression](https://dev.to/moonrunnerkc/i-shipped-6-upgrades-to-my-copilot-cli-orchestrator-the-sdk-had-other-plans-2jpa)). The SDK gives you GitHub's execution loop — and GitHub's bugs.
 
@@ -103,7 +103,7 @@ Streaming is event-based rather than async-iterable: `assistant.message_delta` f
 - Supports Node.js, Python, Go, .NET, and Java with the same agent capabilities across all bindings
 - Enables the agent-in-app pattern: you embed planning, tool use, and file editing into custom applications
 - MCP server support and custom tool definitions let you extend the agent's capabilities beyond built-in tools
-- Generally available (GA as of 2026-06-02) with authentication through Copilot subscriptions or custom API keys; requests count against premium quotas
+- Generally available (GA as of 2026-06-02) with authentication through Copilot subscriptions or custom API keys; sessions consume token-metered AI credits from the plan's allowance
 
 ## Related
 

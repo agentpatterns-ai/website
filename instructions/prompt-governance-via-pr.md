@@ -1,7 +1,7 @@
 ---
-title: "Prompt Governance via PRs: Reviewable AI Behaviour"
+title: "Prompt Governance via PRs: Reviewable AI Behavior"
 term: "Prompt Governance via PRs"
-description: "Store agent instructions as markdown files in git and use pull requests to propose, review, and merge behaviour changes — no ML expertise required."
+description: "Store agent instructions as markdown files in git and use pull requests to propose, review, and merge behavior changes — no ML expertise required."
 tags:
   - instructions
   - technique
@@ -13,7 +13,7 @@ maturity: established
 
 # Prompt Governance via PR
 
-> Govern agent prompt files like code: store them as markdown in git and review behaviour changes through pull requests, no retraining required.
+> Govern agent prompt files like code: store them as markdown in git and review behavior changes through pull requests, no retraining required.
 
 ## Instruction files are already version-controlled
 
@@ -83,10 +83,10 @@ The PR diff makes the severity definition change explicit. Reviewers can judge w
 ## Key Takeaways
 
 - Instruction files are already in git — treating them as governed artifacts requires only a branch and PR convention, not new tooling
-- Behaviour changes are diffs: reviewable, approvable, and revertible with the same process as code changes
-- The audit log is git history — every behaviour decision is attributed and timestamped
+- Behavior changes are diffs: reviewable, approvable, and revertible with the same process as code changes
+- The audit log is git history — every behavior decision is attributed and timestamped
 - Fine-tuning changes model weights and is opaque; prompt-file changes are transparent and take effect immediately on the next agent run
-- Non-ML team members can own and iterate on AI behaviour — the change medium is markdown, not training pipelines
+- Non-ML team members can own and iterate on AI behavior — the change medium is markdown, not training pipelines
 
 ## Related
 

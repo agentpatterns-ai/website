@@ -111,7 +111,7 @@ The audit shape answers a yes/no question with timestamps and turn types — use
 ## Key Takeaways
 
 - Chat history is a structured trace; a queryable database over it is a practitioner-facing surface distinct from in-session search and agent-facing trajectory logs
-- VS Code 1.118's Chronicle is the first commodity implementation; the OTel GenAI span conventions are the standardised infrastructure equivalent
+- VS Code 1.118's Chronicle is the first commodity implementation; the OTel GenAI span conventions are the standardized infrastructure equivalent
 - Three query shapes — standup, tips, ad-hoc — differ in window length, risk profile, and the inferential leap the consumer must make
 - The tips shape is the riskiest: a 7-day correlation in a sample of one is not causal advice
 - Privacy boundaries are on the *generated output*, not the database — local-first storage protects data at rest, not what the practitioner pastes into Slack

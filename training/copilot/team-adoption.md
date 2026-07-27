@@ -5,7 +5,7 @@ tags:
   - training
   - human-factors
   - copilot
-last_reviewed: 2026-05-27
+last_reviewed: 2026-07-28
 ---
 
 # GitHub Copilot: Team Adoption & Governance
@@ -99,7 +99,7 @@ Step 3: Set branch protection rules
 
 Step 4: Configure review severity
 
-In your organisation's Copilot settings or via `.github/copilot-instructions.md`, guide Copilot Code Review to only flag high-confidence findings:
+In your organization's Copilot settings or via `.github/copilot-instructions.md`, guide Copilot Code Review to only flag high-confidence findings:
 
 ```markdown
 ## Code Review
@@ -121,32 +121,31 @@ The critical-path tiers (2 and 3) still get full human attention. The difference
 
 ## Cost Management
 
-### The premium request model
+### The AI credits model
 
-Copilot usage is metered via premium requests. Each interaction with Copilot (chat message, agent action, coding agent task) consumes premium requests, with a multiplier based on the model used.
+On 2026-06-01 GitHub [replaced premium requests with AI Credits](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/). One credit is $0.01, and an interaction bills the input, cached, and output tokens it consumes at that model's [published rate](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing), so cost tracks model choice and session length. Multipliers and per-seat quotas are retired; completions consume no credits. [Auto model selection](../../patterns/agent-design/auto-model-selection.md) takes 10% off model costs on individual plans. The roster itself changes frequently — see the [supported models page](https://docs.github.com/en/copilot/reference/ai-models/supported-models) for the current list.
 
-| Model tier | Multiplier | Best for |
-|-----------|-----------|----------|
-| Base / [Auto](../../patterns/agent-design/auto-model-selection.md) | 1x (with 10% discount when auto model selection is used in Copilot Chat, Copilot CLI, or Copilot cloud agent on paid plans) | Default for most tasks — let Copilot choose |
-| Mid-tier models (Claude Sonnet 4.5/4.6, GPT-5.4) | 1x | Complex reasoning, multi-file refactors |
-| Flagship models (Claude Opus 4.5/4.6 at 3x, Claude Opus 4.7 at 15x, GPT-5.5 at 7.5x) | Higher multipliers | Architecture, novel problems, large codebase analysis |
+Four [governance facts](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises) drive team cost:
 
-The multiplier roster changes frequently — check the [supported models page](https://docs.github.com/en/copilot/reference/ai-models/supported-models) for current rates.
+- Included credits equal the seat price — Business $19/user/mo buys 1,900 credits/user, Enterprise $39 buys 3,900 (promotionally 3,000 and 7,000 through 2026-09-01). A spend floor, not a rate discount.
+- Credits pool at the billing entity: 100 Business seats make one 190,000-credit pool.
+- No rollover — the pool resets at 00:00:00 UTC monthly; unused credits are forfeited.
+- Budgets set at four levels (user, cost center, organization, enterprise) decide whether exhaustion blocks usage or bills on at published rates.
 
-### Cost optimisation strategies
+### Cost optimization strategies
 
 | Strategy | Impact | How |
 |----------|--------|-----|
-| Use Auto mode | 10% discount (VS Code) + smart routing | Don't override the model unless you have a reason |
+| Use Auto mode | Smart routing; 10% off model costs on individual plans | Don't override the model unless you have a reason |
 | Short, focused sessions | Fewer tokens consumed per task | Module C's one-task-per-session discipline |
 | Good instructions files | Fewer correction cycles | Module B's customization stack — the agent gets it right the first time |
 | [Strong backpressure](../../patterns/agent-design/agent-backpressure.md) | Agent self-corrects via tests, not extra LLM calls | Module D's type/test/linter investment |
 | Decompose large tasks | Cheaper models handle smaller chunks | Module C's task decomposition — don't send a flagship model to do a base model's job |
-| Coding agent for async work | Frees your machine and attention | The coding agent consumes premium requests, but your time is more expensive |
+| Coding agent for async work | Frees your machine and attention | A coding agent session bills by total tokens consumed, so cost scales with session length — but your time is more expensive |
 
 ### The real cost equation
 
-Premium requests are the visible cost. The invisible costs are:
+Credit spend is the visible cost. The invisible costs are:
 
 - Review time — agent-authored PRs that require extensive rework cost more in human time than they saved
 - Context rot — long sessions that degrade and need restarting waste the tokens already consumed (see [Context Window Dumb Zone](../../context-engineering/context-window-dumb-zone.md))
@@ -182,12 +181,12 @@ This is the single most important security fact for teams adopting agent workflo
 
 ### Prompt injection awareness
 
-Agents read external content — web pages via `#fetch`, issue comments, PR descriptions, code comments. Any of these can contain instructions that attempt to redirect the agent's behaviour (prompt injection).
+Agents read external content — web pages via `#fetch`, issue comments, PR descriptions, code comments. Any of these can contain instructions that attempt to redirect the agent's behavior (prompt injection).
 
 What teams should know:
 
-- No tool solves this completely. Defence is architectural, not a single feature.
-- The coding agent runs in a GitHub Actions sandbox with restricted network access and limited permissions. This is structural defence — even if injected, the agent's blast radius is constrained.
+- No tool solves this completely. Defense is architectural, not a single feature.
+- The coding agent runs in a GitHub Actions sandbox with restricted network access and limited permissions. This is structural defense — even if injected, the agent's blast radius is constrained.
 - Copilot hooks (Module B) provide pre-tool-use enforcement. A `preToolUse` hook can block writes to sensitive paths regardless of what the agent was instructed to do.
 - Instructions files are an attack surface. If you clone a repo with a malicious `.github/copilot-instructions.md`, those instructions apply to your Copilot session. Review instruction files in unfamiliar repos the same way you'd review a `Makefile` or `postinstall` script.
 
@@ -223,11 +222,11 @@ This creates a local audit log of all agent actions. For the coding agent, hooks
 
 ## Shared Configuration
 
-### What to standardise vs leave to individual repos
+### What to standardize vs leave to individual repos
 
 | Level | What to configure | Example |
 |-------|------------------|---------|
-| Organisation | Organisation-level Copilot instructions (GitHub.com settings) | "All code must include error handling. Use English for all comments and documentation." |
+| Organization | Organization-level Copilot instructions (GitHub.com settings) | "All code must include error handling. Use English for all comments and documentation." |
 | Team / shared | [Copilot Spaces](../../tools/copilot/copilot-spaces.md) with team-specific reference material | A "Payments Team" Space with the payment schema, compliance docs, and relevant ADRs |
 | Repository | `.github/copilot-instructions.md` + path-specific instructions | Stack, conventions, build commands (Module B) |
 | Repository | [Custom agents](../../tools/copilot/custom-agents-skills.md) for recurring task types | `security-reviewer.agent.md`, `test-writer.agent.md` (Module B) |
@@ -275,14 +274,14 @@ Automate this with a monthly GitHub Action that validates URLs and flags files n
 | Agent PR merge rate | What percentage of agent PRs merge without major rework? | Count merged vs closed-without-merge for `copilot/*` branches |
 | Review burden | Is human review time increasing or decreasing? | Track time-to-first-review and number of review rounds |
 | Defect escape rate | Are bugs in agent-authored code reaching production? | Tag bugs with source (agent vs human) in your issue tracker |
-| Premium request usage | Are costs proportional to value? | Copilot usage dashboard in GitHub org settings |
+| AI credit consumption against the pool | Are costs proportional to value, and will the pool last the month? | Copilot usage dashboard in GitHub org settings |
 | Suggestion acceptance rate | Are inline completions relevant? | Copilot dashboard — low acceptance suggests poor instructions |
 
 ### What NOT to measure
 
 - Lines of code generated — volume is not value. More lines can mean more review burden and more maintenance.
 - Number of Copilot interactions — usage without quality metrics is vanity.
-- Time "saved" by self-report — developers consistently overestimate AI speedup. METR's 2025 randomised trial of experienced open-source developers found participants self-reported a 20% speedup while measurements showed a 19% slowdown — a 39-point gap between perception and reality ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Track cycle time and merge rates instead.
+- Time "saved" by self-report — developers consistently overestimate AI speedup. METR's 2025 randomized trial of experienced open-source developers found participants self-reported a 20% speedup while measurements showed a 19% slowdown — a 39-point gap between perception and reality ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Track cycle time and merge rates instead.
 
 ### Benchmarking merge rates
 
@@ -304,7 +303,7 @@ What it is: Expecting Copilot to require less expertise, investing minimally, ge
 
 Why it happens: AI removes some effort (boilerplate, syntax recall, routine patterns) while requiring new effort (context engineering, verification, iteration). Teams that conflate "automates typing" with "automates thinking" are disappointed.
 
-The fix: Frame adoption as requiring more rigour, not less — at least initially. The effort shifts from writing code to engineering context ([Module C](context-and-workflows.md)), preparing the environment ([Module D](harness-engineering.md)), and verifying output. Velocity gains materialise after the upfront investment, not instead of it.
+The fix: Frame adoption as requiring more rigor, not less — at least initially. The effort shifts from writing code to engineering context ([Module C](context-and-workflows.md)), preparing the environment ([Module D](harness-engineering.md)), and verifying output. Velocity gains materialize after the upfront investment, not instead of it.
 
 ### Cargo cult configuration
 
@@ -314,7 +313,7 @@ Why it happens: The configuration looks comprehensive and professional. It must 
 
 The problem: Instructions encode repo-specific knowledge — stack details, architectural decisions, team conventions. A React team's instructions actively mislead Copilot in a Go microservices repo. Skills from another project reference scripts, templates, and patterns that don't exist in yours.
 
-The fix: Start with a blank instructions file. Add rules only when you've identified a recurring Copilot mistake in your codebase. Use other repos for structural patterns (how to organise sections, what categories to include), not content.
+The fix: Start with a blank instructions file. Add rules only when you've identified a recurring Copilot mistake in your codebase. Use other repos for structural patterns (how to organize sections, what categories to include), not content.
 
 ### Comprehension debt
 
@@ -355,7 +354,7 @@ The fix:
 ### Weeks 3–4: Practice and invest
 
 - Module C: Team learns context engineering, delegation contracts, steering patterns
-- Module D: Assess backpressure quality per repo. Prioritise type strictness and test coverage improvements.
+- Module D: Assess backpressure quality per repo. Prioritize type strictness and test coverage improvements.
 - Autonomy level: 2–3 (Propose → Execute with gates) — agent mode with approval
 
 ### Weeks 5–8: Delegate and measure
@@ -369,7 +368,7 @@ The fix:
 
 - Add custom agents and skills for recurring task types
 - Implement hooks for enforcement in compliance-sensitive repos
-- Configure organisation-level instructions for company-wide standards
+- Configure organization-level instructions for company-wide standards
 - Establish monthly configuration audits
 - Autonomy level: 5 for proven task types — calibrated trust with tiered review
 
@@ -390,7 +389,7 @@ The fix:
 - Under-configuration is the norm. Most teams stop at a basic `.github/copilot-instructions.md` file. The full stack — path-specific instructions, custom agents, skills, hooks, Spaces — compounds. Adopt incrementally over 2–3 months.
 - Measure outcomes, not activity. PR cycle time, merge rate, defect escapes, and review burden tell you whether adoption is working. Lines generated and interaction count do not.
 - [Comprehension debt](../../patterns/anti-patterns/comprehension-debt.md) is the hidden cost. Agent-generated code that ships faster than the team understands it creates fragility. Require explain-before-code, distribute review responsibility, and make review a learning exercise.
-- The effortless AI fallacy stalls adoption. Frame Copilot as requiring more rigour initially — context engineering, verification, environment investment — with velocity gains materialising after the upfront effort, not instead of it.
+- The effortless AI fallacy stalls adoption. Frame Copilot as requiring more rigor initially — context engineering, verification, environment investment — with velocity gains materializing after the upfront effort, not instead of it.
 - Environment beats prompts at team scale. A fast test suite, strict types, and comprehensive linting (Module D) improve every team member's agent output simultaneously. This is the highest-leverage team-level investment.
 
 ## Related
@@ -401,11 +400,11 @@ Training
 - [GitHub Copilot: Customization Primitives](customization-primitives.md) — configuring instructions, agents, skills, hooks, MCP, Spaces, memory
 - [GitHub Copilot: Context Engineering & Agent Workflows](context-and-workflows.md) — context engineering, [progressive disclosure](../../patterns/agent-design/progressive-disclosure-agents.md), delegation, steering
 - [GitHub Copilot: Harness Engineering](harness-engineering.md) — making codebases agent-ready
-- [GitHub Copilot: Model Selection & Routing](model-selection.md) — premium request multipliers, model routing, cost detail
+- [GitHub Copilot: Model Selection & Routing](model-selection.md) — per-model token rates, model routing, cost detail
 
 Adoption & Human Factors
 
-- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — seat pricing, premium request model, and Claude API comparison
+- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — AI credits, the seat-price-equals-included-credits arithmetic, per-model rates, pooling and forfeiture, budget controls, and the Claude API comparison
 - [Progressive Autonomy with Model Evolution](../../human/progressive-autonomy-model-evolution.md) — evidence-based autonomy escalation
 - [Skill Atrophy](../../human/skill-atrophy.md) — when AI reliance erodes developer capability
 - [Cognitive Load and AI Fatigue](../../human/cognitive-load-ai-fatigue.md) — sustainable agent use patterns
@@ -423,7 +422,7 @@ Code Review
 Security
 
 - [Prompt Injection Threat Model](../../security/prompt-injection-threat-model.md) — injection as a first-class threat to agentic systems
-- [Injection-Resistant Agent Design](../../security/prompt-injection-resistant-agent-design.md) — defence-in-depth architecture patterns
+- [Injection-Resistant Agent Design](../../security/prompt-injection-resistant-agent-design.md) — defense-in-depth architecture patterns
 - [Content Exclusion Gap](../../instructions/content-exclusion-gap.md) — why exclusions don't apply to agent workflows
 - [Sandbox Rules for Harness Tools](../../security/sandbox-rules-harness-tools.md) — scoping sandbox policies correctly
 

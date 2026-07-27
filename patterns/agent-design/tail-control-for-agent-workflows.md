@@ -21,13 +21,13 @@ maturity: emerging
 
 ## The Framing
 
-A multi-step agent workflow exposed through an API is judged by its worst frequent outcomes, not its median. LLM tool calls and reasoning steps are heavy-tailed in both latency and quality, so a chain fails when *one* step hits its tail — not when many run mildly slow ([Towards Data Science: Tail Control for Reliable Agentic Workflows, 2026-06-28](https://towardsdatascience.com/tail-control-the-counterintuitive-engineering-of-reliable-agentic-workflows/)). Optimising the average benchmark leaves the tail intact and produces an agent that demos well and ships unreliable.
+A multi-step agent workflow exposed through an API is judged by its worst frequent outcomes, not its median. LLM tool calls and reasoning steps are heavy-tailed in both latency and quality, so a chain fails when *one* step hits its tail — not when many run mildly slow ([Towards Data Science: Tail Control for Reliable Agentic Workflows, 2026-06-28](https://towardsdatascience.com/tail-control-the-counterintuitive-engineering-of-reliable-agentic-workflows/)). Optimizing the average benchmark leaves the tail intact and produces an agent that demos well and ships unreliable.
 
 The shift is from quality engineering ("can the agent solve this task?") to reliability engineering ("what does the 99th-percentile run look like?"). The framework ports from distributed-systems practice — Dean and Barroso's *The Tail at Scale* made exactly this argument for service fanout ([Dean & Barroso, CACM 2013](https://cacm.acm.org/research/the-tail-at-scale/)) — onto non-deterministic agent steps.
 
 ## Why Average-Case Quality Misleads
 
-Single-trial benchmarks systematically overstate the reliability behind an API. τ-bench formalises this with the Pass^k metric — succeeding on *all* k independent trials. Agents at 60% pass@1 collapse to roughly 25% on Pass^k=8 because variance compounds across trials ([Evaluation and Benchmarking of LLM Agents: A Survey, 2025](https://arxiv.org/pdf/2507.21504)). A user behind an API runs the agent many times — they experience Pass^k, not pass@1.
+Single-trial benchmarks systematically overstate the reliability behind an API. τ-bench formalizes this with the Pass^k metric — succeeding on *all* k independent trials. Agents at 60% pass@1 collapse to roughly 25% on Pass^k=8 because variance compounds across trials ([Evaluation and Benchmarking of LLM Agents: A Survey, 2025](https://arxiv.org/pdf/2507.21504)). A user behind an API runs the agent many times — they experience Pass^k, not pass@1.
 
 The latency picture is the same shape. Production LLM steps show p99 latency 2–7× the median, driven by transient factors — queueing, scheduling, occasional long generations — rather than computational work ([Towards Data Science: Tail Control, 2026-06-28](https://towardsdatascience.com/tail-control-the-counterintuitive-engineering-of-reliable-agentic-workflows/)). In a multi-hop workflow those tails compound: five steps with small p99 tails combine into a much worse end-to-end tail ([SRE School: Tail latency, 2026](https://sreschool.com/blog/tail-latency/)). A 2026 reliability survey extends the same point to the model level — two agents at equal accuracy can have fundamentally different reliability profiles, and "a system that fails in known, expected ways is often preferable to one that fails rarely but unpredictably" ([Towards a Science of AI Agent Reliability, 2026](https://arxiv.org/html/2602.16666v2)).
 
@@ -51,7 +51,7 @@ When a call exceeds its cutoff, fire a parallel re-draw and take whichever retur
 
 ### Graceful degradation paths
 
-Classify failures into transient slowness, genuine work overload, and wrong answer ([Towards Data Science: Tail Control, 2026-06-28](https://towardsdatascience.com/tail-control-the-counterintuitive-engineering-of-reliable-agentic-workflows/)). Transient slowness gets a parallel re-draw; work overload degrades to a faster model; a wrong-answer signal escalates to a more capable model. A 2026 field guide identifies five fallback patterns stabilised in production AI gateways — provider rotation, automatic fallbacks on retryable errors, model fallback by capability, retry-with-backoff, and content-aware routing — each addressing a distinct failure class ([Future AGI: LLM Fallback Strategy 2026 Field Guide](https://futureagi.com/blog/what-is-llm-fallback-strategy-2026/)).
+Classify failures into transient slowness, genuine work overload, and wrong answer ([Towards Data Science: Tail Control, 2026-06-28](https://towardsdatascience.com/tail-control-the-counterintuitive-engineering-of-reliable-agentic-workflows/)). Transient slowness gets a parallel re-draw; work overload degrades to a faster model; a wrong-answer signal escalates to a more capable model. A 2026 field guide identifies five fallback patterns stabilized in production AI gateways — provider rotation, automatic fallbacks on retryable errors, model fallback by capability, retry-with-backoff, and content-aware routing — each addressing a distinct failure class ([Future AGI: LLM Fallback Strategy 2026 Field Guide](https://futureagi.com/blog/what-is-llm-fallback-strategy-2026/)).
 
 ### Bounded retries with idempotent steps
 
@@ -59,7 +59,7 @@ A retry that mutates state on the first try and re-mutates on the second corrupt
 
 ### Percentile-based reliability metrics, not means
 
-Instrument the workflow on Pass^k or pass∧k for quality and p95/p99 for latency, and run the SLO against those ([Evaluation and Benchmarking of LLM Agents: A Survey, 2025](https://arxiv.org/pdf/2507.21504); [Towards a Science of AI Agent Reliability, 2026](https://arxiv.org/html/2602.16666v2)). A mean accuracy dashboard cannot show you which step is the tail-killer; a per-step p99 dashboard names it. The agent reliability survey proposes twelve metrics across consistency, robustness, predictability, and safety dimensions — the practical floor is at least one consistency metric (Pass^k or variance-normalised) and one latency percentile per step.
+Instrument the workflow on Pass^k or pass∧k for quality and p95/p99 for latency, and run the SLO against those ([Evaluation and Benchmarking of LLM Agents: A Survey, 2025](https://arxiv.org/pdf/2507.21504); [Towards a Science of AI Agent Reliability, 2026](https://arxiv.org/html/2602.16666v2)). A mean accuracy dashboard cannot show you which step is the tail-killer; a per-step p99 dashboard names it. The agent reliability survey proposes twelve metrics across consistency, robustness, predictability, and safety dimensions — the practical floor is at least one consistency metric (Pass^k or variance-normalized) and one latency percentile per step.
 
 ## When This Backfires
 

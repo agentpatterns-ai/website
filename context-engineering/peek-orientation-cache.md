@@ -1,7 +1,7 @@
 ---
 title: "PEEK: Orientation Cache for Recurring-Context Agents"
 term: "PEEK"
-description: "A constant-sized prompt artifact that caches reusable orientation knowledge — what is in a recurring context, how it is organised, which entities matter — distinct from trajectory replay and playbook strategy memory."
+description: "A constant-sized prompt artifact that caches reusable orientation knowledge — what is in a recurring context, how it is organized, which entities matter — distinct from trajectory replay and playbook strategy memory."
 aliases:
   - PEEK context map
   - orientation cache
@@ -18,7 +18,7 @@ maturity: emerging
 
 # PEEK: Orientation Cache for Recurring-Context Agents
 
-> A constant-sized prompt artifact caching orientation knowledge — what a recurring context holds and how it is organised. Pays off only on stable, re-entered contexts.
+> A constant-sized prompt artifact caching orientation knowledge — what a recurring context holds and how it is organized. Pays off only on stable, re-entered contexts.
 
 ## When this pattern applies
 
@@ -34,7 +34,7 @@ Without all three, fall through to per-session orientation: a [tree-sitter repo 
 
 | Pattern | Stores | Lifecycle |
 |---------|--------|-----------|
-| PEEK orientation cache | What is in the context, how it is organised, useful entities/constants/schemas | Persisted; updated each re-entry under a fixed token budget |
+| PEEK orientation cache | What is in the context, how it is organized, useful entities/constants/schemas | Persisted; updated each re-entry under a fixed token budget |
 | [Evolving Playbooks (ACE)](evolving-playbooks.md) | Strategies — *how the agent worked successfully* | Persisted; grows via incremental delta entries |
 | [Repository Map Pattern](repository-map-pattern.md) | Top-ranked AST symbols of a code repository | Rebuilt per session, fitted to a token budget |
 | [AOCI](aoci-symbolic-semantic-indexing.md) | Symbolic-plus-semantic blueprint | Built once offline, read whole before each task |

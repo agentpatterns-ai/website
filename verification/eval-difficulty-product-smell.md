@@ -38,7 +38,7 @@ If the answers are thin, the product surface is the gap, not the rubric.
 
 ## How it connects to evals
 
-A verifiable product gives evals tractable units to score. Once a lesson plan is reduced to a vetted anchor plus two labelled edits, the eval can grade retrieval-anchor sensibility and per-edit constraint compliance — concrete units against concrete inputs. Whether an automated or LLM-judge scorer then grades those units reliably is a separate downstream question — Hamel Husain's companion piece takes up whether automated evals actually hold up in practice ([Hamel Husain — "Do Automated Evals Work?"](https://parlance-labs.com/blog/posts/auto-evals.html)). The same applies to [grade agent outcomes, not execution paths](grade-agent-outcomes.md): outcome graders work because the product exposes a checkable final state. Designing for verification is the upstream version of writing evals first; the [eval-driven development workflow](../workflows/eval-driven-development.md) only pays off once the artifact has units to evaluate.
+A verifiable product gives evals tractable units to score. Once a lesson plan is reduced to a vetted anchor plus two labeled edits, the eval can grade retrieval-anchor sensibility and per-edit constraint compliance — concrete units against concrete inputs. Whether an automated or LLM-judge scorer then grades those units reliably is a separate downstream question — Hamel Husain's companion piece takes up whether automated evals actually hold up in practice ([Hamel Husain — "Do Automated Evals Work?"](https://parlance-labs.com/blog/posts/auto-evals.html)). The same applies to [grade agent outcomes, not execution paths](grade-agent-outcomes.md): outcome graders work because the product exposes a checkable final state. Designing for verification is the upstream version of writing evals first; the [eval-driven development workflow](../workflows/eval-driven-development.md) only pays off once the artifact has units to evaluate.
 
 Coding agents already use the pattern. Cursor records a short video of UI changes and [Devin's testing-and-recordings docs](https://docs.devin.ai/work-with-devin/testing-and-recordings) walk through how the agent produces video proof so reviewers can verify without reproducing the change. The diff plus the recording is the checkable artifact; the eval grades the diff, not the agent's reasoning.
 
@@ -86,7 +86,7 @@ After — verifiable artifact:
 > cells the agent could not verify.
 ```
 
-Now the user has a fast check (does the metric definition match what finance uses?), a known-good anchor (Priya's vetted analysis), an itemised "what I could not verify" list, and an escape hatch into the full notebook for deeper review. The eval team has tractable units: anchor-retrieval sensibility, metric-definition match against the governed source, and per-claim provenance presence ([Hamel Husain — eval-smell](https://hamel.dev/blog/posts/eval-smell/)).
+Now the user has a fast check (does the metric definition match what finance uses?), a known-good anchor (Priya's vetted analysis), an itemized "what I could not verify" list, and an escape hatch into the full notebook for deeper review. The eval team has tractable units: anchor-retrieval sensibility, metric-definition match against the governed source, and per-claim provenance presence ([Hamel Husain — eval-smell](https://hamel.dev/blog/posts/eval-smell/)).
 
 ## Key takeaways
 

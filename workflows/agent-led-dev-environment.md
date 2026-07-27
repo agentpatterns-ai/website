@@ -87,7 +87,7 @@ Bootstrap is the right default. Agent-led iteration earns its place when depende
 
 ## Example
 
-A minimal agent-led iteration loop using `docker commit` as the snapshot substrate, modelled on the [Repo2Run](https://arxiv.org/html/2502.13681v2) mechanism:
+A minimal agent-led iteration loop using `docker commit` as the snapshot substrate, modeled on the [Repo2Run](https://arxiv.org/html/2502.13681v2) mechanism:
 
 ```bash
 SNAPSHOT="env:baseline"

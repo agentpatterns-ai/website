@@ -153,6 +153,7 @@ nav:
       - agent-runtime-middleware.md
       - agent-pushback-protocol.md
       - agent-turn-model.md
+      - browser-as-agent-action-space.md
       - deep-agent-runtime.md
       - delta-channels-checkpoint-storage.md
       - dual-write-append-mirror-transcript.md

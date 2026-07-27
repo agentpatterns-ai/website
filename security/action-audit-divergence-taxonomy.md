@@ -27,7 +27,7 @@ An agentic runtime issues tool calls and actuates devices for an LLM. Its load-b
 
 | Mode | Name | What the audit lies about |
 |------|------|----------------------------|
-| F1 | Gate-bypass | Authorisation said no; the action ran |
+| F1 | Gate-bypass | Authorization said no; the action ran |
 | F2 | Audit-forgery | Action ran; log shows a different action |
 | F3 | Silent host failure | Log says action ran; host did nothing |
 | F4 | Wrong-target | Log names target X; action hit target Y |

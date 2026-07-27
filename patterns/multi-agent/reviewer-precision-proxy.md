@@ -74,4 +74,4 @@ The percentages are the study's measured coupling rate and its feedback-embeddin
 - [Adversarial Multi-Model Development Pipeline (VSDD)](adversarial-multi-model-pipeline.md)
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md)
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)
-- [Multi-Agent Topology Taxonomy: Centralised, Decentralised, and Hybrid](multi-agent-topology-taxonomy.md)
+- [Multi-Agent Topology Taxonomy: Centralized, Decentralized, and Hybrid](multi-agent-topology-taxonomy.md)

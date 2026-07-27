@@ -135,7 +135,7 @@ Control-layer behavior — abstention's structural-compatibility feature scores 
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — structural memory architecture these control layers sit in front of
 - [Subtask-Level Memory for Software Engineering Agents](subtask-level-memory.md) — finer retrieval granularity that reduces but does not eliminate false-positive risk
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — extracting reusable lessons from traces that these controllers decide whether to inject
-- [Code-Native Memory Substrates](code-native-memory-substrates.md) — the calibrated-silence mechanism a typed memory layer uses; abstention generalises to that retriever
+- [Code-Native Memory Substrates](code-native-memory-substrates.md) — the calibrated-silence mechanism a typed memory layer uses; abstention generalizes to that retriever
 - [Continual Learning for AI Agents](continual-learning-layers.md) — three-layer taxonomy locating utility scoring at the cheapest, most reversible context layer
 - [Memory Transfer Learning](memory-transfer-learning.md) — cross-domain reuse and when utility scores transfer poorly
 - [Layered Mutability: Governing Persistent Self-Modifying Agents](layered-mutability.md) — where governance attaches in persistent agents; the pre-action gate is one attachment point

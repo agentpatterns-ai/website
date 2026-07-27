@@ -108,5 +108,3 @@ The operator matches slider position to turn type: `medium` for reads, `max` for
 - [Steering Running Agents](steering-running-agents.md) — companion primitive for mid-session operator input on direction rather than compute
 - [Agent Turn Model](agent-turn-model.md) — the turn abstraction that makes per-turn controls meaningful
 - [The Think Tool](think-tool.md) — mid-stream reasoning checkpoint; complementary to extended-thinking budget
-</content>
-</invoke>

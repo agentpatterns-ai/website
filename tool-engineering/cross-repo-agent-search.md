@@ -119,5 +119,3 @@ Step 2 is the single API turn that turns "we don't know who calls this" into a b
 - [Repository Map Pattern](../context-engineering/repository-map-pattern.md) — orienting the agent within a single repo before reaching outside
 - [Repository-Level Retrieval for Code Generation](../context-engineering/repository-level-retrieval-code-generation.md) — alternative when the corpus is one large repo, not many
 - [Browser Automation for Research](browser-automation-for-research.md) — the same untrusted-content discipline applied to fetched web pages
-</content>
-</invoke>

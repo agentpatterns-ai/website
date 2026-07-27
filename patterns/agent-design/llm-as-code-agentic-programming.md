@@ -95,7 +95,7 @@ Each LLM call sees only the field it is choosing for, the application data, and 
 
 ## Key Takeaways
 
-- Hand control flow back to the program when the workflow shape is enumerable, per-step uncertainty is contained, and the orchestration cost amortises across runs — three preconditions that frame this as a conditional pattern, not a universal recommendation ([Qi et al., 2026](https://arxiv.org/abs/2606.15874)).
+- Hand control flow back to the program when the workflow shape is enumerable, per-step uncertainty is contained, and the orchestration cost amortizes across runs — three preconditions that frame this as a conditional pattern, not a universal recommendation ([Qi et al., 2026](https://arxiv.org/abs/2606.15874)).
 - The mechanism is token amplification and variance collapse, plus the call-tree context shape that decouples context length from sequence length — not "LLMs are bad at orchestration."
 - Empirical anchor: up to 3.5x lower token cost and improved worst-case robustness with comparable accuracy on COBOL-to-Python under deterministic orchestration ([Lwin & Kumar, 2026](https://arxiv.org/abs/2605.09894)); stability gains on long visual operation sequences in the call-tree case study.
 - The pattern backfires on open-ended exploration, one-off jobs, evolving workflows, and tasks with no stable call-tree abstraction — match the orchestration strategy to the task structure, not to fashion.
@@ -109,4 +109,4 @@ Each LLM call sees only the field it is choosing for, the application data, and 
 - [Harness Design Dimensions and Archetypes](harness-design-dimensions.md) — Where this pattern sits in the orchestration dimension of the population-level harness taxonomy
 - [Stochastic vs Deterministic Boundary](stochastic-deterministic-boundary.md) — Where the LLM call hands off to deterministic code, and how to design that interface
 - [Discrete Phase Separation](discrete-phase-separation.md) — The same context-isolation idea applied at conversation phase boundaries instead of within one harness
-- [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — The amortisation calculus that decides when the engineering cost of program-controlled orchestration pays back
+- [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — The amortization calculus that decides when the engineering cost of program-controlled orchestration pays back

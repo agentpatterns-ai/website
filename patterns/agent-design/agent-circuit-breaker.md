@@ -21,7 +21,7 @@ maturity: established
 
 ## The problem
 
-When an external tool (API, search engine, code executor) degrades mid-session, most agents enter retry loops. Each failed call consumes tokens, and the loop runs until context is exhausted or the session is abandoned. Backoff does not solve this — it delays the waste rather than prevents it, a recovery gap catalogued in [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md).
+When an external tool (API, search engine, code executor) degrades mid-session, most agents enter retry loops. Each failed call consumes tokens, and the loop runs until context is exhausted or the session is abandoned. Backoff does not solve this — it delays the waste rather than prevents it, a recovery gap cataloged in [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md).
 
 The circuit breaker pattern, adapted from distributed systems, tracks per-tool failure rates and disables broken endpoints. Agents then try alternatives or degrade gracefully instead of repeating calls that will fail.
 

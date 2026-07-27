@@ -73,7 +73,7 @@ Belcak et al. argue SLMs are "sufficiently powerful, inherently more suitable, a
 
 | Approach | Pros | Cons |
 |----------|------|------|
-| SLM-backed tool | Verbose intermediate state stays out of orchestrator context; can run many parallel sub-operations and summarise | Nested model loop adds latency and a second hallucination surface; harder to attribute failures |
+| SLM-backed tool | Verbose intermediate state stays out of orchestrator context; can run many parallel sub-operations and summarize | Nested model loop adds latency and a second hallucination surface; harder to attribute failures |
 | Direct primitive tool (grep, fd, bash) | Deterministic, debuggable, zero model-call cost; raw output is auditable | Verbose output enters orchestrator context |
 | API tool search ([Anthropic Tool Search Tool](../../tool-engineering/advanced-tool-use.md)) | Defers tool definitions until needed | Does not reduce per-call output volume; complementary, not a substitute |
 

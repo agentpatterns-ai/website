@@ -33,7 +33,7 @@ The paper defines six online trace signals, each tied to a distinct failure mech
 | Execution failure | Execution success rate, compile/import/timeout classes | Code execution fails without recovery |
 | Repeated action loop | Repeated action keys, ABAB cycle labels, cache hits | Computation without strategy change |
 | Low information gain | New URLs, extracted fact count, low-gain streaks | Search/retrieval no longer adds task-relevant state |
-| Evidence failure | Evidence-present rate, citation consistency, answer-evidence similarity, sentence support | Final answer is unsupported by trajectory artefacts |
+| Evidence failure | Evidence-present rate, citation consistency, answer-evidence similarity, sentence support | Final answer is unsupported by trajectory artifacts |
 | Budget waste | Tokens, tool calls, budget pressure, post-warning remaining budget | Computation budget is being exhausted; intervention window is closing |
 
 Two metrics carry concrete formulas, and cost is a weighted sum ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)):
@@ -80,8 +80,8 @@ At step 18 of 30, retrieval-agent-2 has `ToolErr = 0.7` over the last 10 calls, 
 
 ## Related
 
-- [Loop Detection](loop-detection.md) — single-signal counterpart focused on repeated file edits; the orchestration-loop signal in this taxonomy generalises that mechanism across multi-agent action keys.
+- [Loop Detection](loop-detection.md) — single-signal counterpart focused on repeated file edits; the orchestration-loop signal in this taxonomy generalizes that mechanism across multi-agent action keys.
 - [Circuit Breakers for Agent Loops](circuit-breakers.md) — stopping-policy enumeration that consumes signals like the ones this framework produces.
-- [Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)](trajectory-prefilter-failure-diagnosis.md) — complementary technique for *localising* failure once it has occurred; this page is about detecting it while the run is live.
+- [Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)](trajectory-prefilter-failure-diagnosis.md) — complementary technique for *localizing* failure once it has occurred; this page is about detecting it while the run is live.
 - [Agent-Trace Data Layer: Storage for Hours-Long Traces](agent-trace-data-layer.md) — the storage tier the framework presupposes; without it, the signals lag the run.
 - [Observability Feedback Loop: A 7-Step Debug Runbook](observability-feedback-loop.md) — the broader debugging runbook into which failure-aware signals plug as the early-detection step.

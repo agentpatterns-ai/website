@@ -100,14 +100,15 @@ The integration becomes a liability in the hugo-12448 case study: the explorer r
 ## Key Takeaways
 
 - FastContext is a *trained* repository-exploration sub-agent (4B–30B parameters, SFT + GRPO RL) that returns file-path + line-range citations to the solver — not raw snippets ([Zhang et al., 2026](https://arxiv.org/abs/2606.14066); [microsoft/fastcontext](https://github.com/microsoft/fastcontext)).
-- The mechanism is context isolation specialised to repository exploration, plus citation-precision training — the same isolate-then-distil idea Anthropic describes for sub-agents generally, with a specialist model on the narrow task.
+- The mechanism is context isolation specialized to repository exploration, plus citation-precision training — the same isolate-then-distil idea Anthropic describes for sub-agents generally, with a specialist model on the narrow task.
 - Pays off when the workload is repeated broad exploration over an unfamiliar repo, citations are trusted, and serving infrastructure exists. Pattern fails (and *adds* tokens) when citations are broad enough to trigger solver re-exploration — the paper's hugo-12448 case is the worked failure.
-- Distinct from [Specialized SLM as Tool](specialized-slm-as-agent-tool.md) (training step), [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md) (specialised to exploration, not generic), and [Domain-Scoped Parallel Exploration](domain-scoped-parallel-localization.md) (separates exploration from solving, not partitioning within a single solver loop).
+- Distinct from [Specialized SLM as Tool](specialized-slm-as-agent-tool.md) (training step), [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md) (specialized to exploration, not generic), and [Domain-Scoped Parallel Exploration](domain-scoped-parallel-localization.md) (separates exploration from solving, not partitioning within a single solver loop).
 
 ## Related
 
 - [Specialized SLM as Agent Sub-Tool](specialized-slm-as-agent-tool.md) — Untrained / fixed-role variant of the same nested-model-behind-a-tool idea; FastContext adds the training step and the citation-only output contract.
-- [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md) — The general fan-out primitive that this pattern specialises for repository exploration with a single trained sub-agent.
+- [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md) — The general fan-out primitive that this pattern specializes for repository exploration with a single trained sub-agent.
 - [Domain-Scoped Parallel Exploration for Multi-File Change Localization](domain-scoped-parallel-localization.md) — A sibling exploration-context-isolation pattern that partitions *within* the solver's exploration phase rather than lifting exploration out of the solver loop entirely.
 - [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md) — The architectural seam FastContext draws between explorer and solver is one instance of the broader reasoning-vs-execution split.
 - [Discrete Phase Separation](discrete-phase-separation.md) — The same isolate-then-distil mechanism applied across workflow phases instead of across the exploration boundary.
+- [Agent-Tuned Code Search](../../context-engineering/agent-tuned-code-search.md) — The hosted, vendor-indexed variant of the same explorer contract, where index freshness and code egress replace the serving-infrastructure constraint.

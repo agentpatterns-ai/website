@@ -122,14 +122,14 @@ The Tool Approval policy carries the hard guarantee that no write reaches the da
 
 ## Key Takeaways
 
-- The typology's value is labelling the five loop boundaries, not the controls themselves. The boundaries make audit coverage discoverable.
+- The typology's value is labeling the five loop boundaries, not the controls themselves. The boundaries make audit coverage discoverable.
 - Only Tool Approval and the deterministic portion of Tool Guide carry hard enforcement guarantees, the stage measured in isolation by [permission-framework-over-model](permission-framework-over-model.md). The other three reduce error rates but inherit LLM-classifier brittleness.
 - Adopt the full typology when the agent loop has all five stages, the action surface is broad, audit requires typed intervention records, and fine-tuning is unavailable.
 - For small action surfaces, headless automation, or single-tool agents, prefer a [deny list](permission-gated-commands.md) plus a [confirmation prompt](human-in-the-loop-confirmation-gates.md) over the full typology.
 
 ## Related
 
-- [Prompt-Only Tool Access Control](../patterns/anti-patterns/prompt-only-tool-access-control.md) — The anti-pattern this typology displaces: prompt-only restrictions leak 11–18 pp; architectural enforcement drives unauthorised invocation to 0%.
+- [Prompt-Only Tool Access Control](../patterns/anti-patterns/prompt-only-tool-access-control.md) — The anti-pattern this typology displaces: prompt-only restrictions leak 11–18 pp; architectural enforcement drives unauthorized invocation to 0%.
 - [Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions](permission-framework-over-model.md) — Measures the Tool Approval stage in isolation: framework swings overeager rates from 27.7% to 1.1% on identical weights.
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md) — A different five-check decomposition focused on the agent-tool boundary; complements the Tool Approval stage with structural and semantic checks.
 - [Action-Selector Pattern](action-selector-pattern.md) — The narrowest deterministic alternative; equivalent guarantees for tiny action surfaces without the typology overhead.

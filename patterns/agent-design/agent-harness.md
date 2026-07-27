@@ -143,7 +143,7 @@ Only after this orientation does the agent select the highest-priority incomplet
 - [Harness Engineering](harness-engineering.md) — broader engineering discipline that frames this pattern
 - [Session Initialization Ritual](session-initialization-ritual.md) — the initializer's per-task setup procedure
 - [Trajectory Logging via Progress Files and Git History](../../observability/trajectory-logging-progress-files.md) — how `claude-progress.txt` and commits become an audit trail
-- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — formalises the cross-session handoff mechanism
+- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — formalizes the cross-session handoff mechanism
 - [Feature List Files](../../instructions/feature-list-files.md) — the priority-ordered task list the coding agent reads
 - [Worktree Isolation](../../workflows/worktree-isolation.md) — companion workflow for parallel session safety
 - [Cross-Cycle Consensus Relay](cross-cycle-consensus-relay.md) — consensus structure that extends the initializer/worker pattern across autonomous cycles

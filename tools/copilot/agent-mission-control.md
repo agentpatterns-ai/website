@@ -75,7 +75,7 @@ When you spot drift, redirect via chat with a specific correction. For a systema
 
 | Filter | Values |
 |--------|--------|
-| Status | queued, in progress, completed, failed, idle (waiting for user), timed out, cancelled |
+| Status | queued, in progress, completed, failed, idle (waiting for user), timed out, canceled |
 | Repository | any repo in the org |
 | User | any member who triggered a session |
 

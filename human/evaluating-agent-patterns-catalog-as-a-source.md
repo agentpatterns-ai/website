@@ -43,7 +43,7 @@ Treating it as authoritative on disputed claims. The [GitHub repository](https:/
 
 Wiring the hosted MCP server. The catalog exposes a hosted Model Context Protocol endpoint at `https://mcp.agentpatternscatalog.org/mcp` with tools like `find_pattern`, `recommend_recipe`, and `pattern_for_symptom` ([Use page](https://www.agentpatternscatalog.org/use/)). Adding it to a sub-agent that also holds repo-read access would close the [lethal trifecta](../security/lethal-trifecta-threat-model.md) on that principal — private data, untrusted content, egress — exactly the scenario our `AGENTS.md` MCP-onboarding gate exists to prevent. This evaluation is a citation-source decision, not an MCP-wiring decision — the catalog goes in `SOURCES.md`, not `.mcp.json`.
 
-A fourth, smaller risk is name collision: search engines conflate this catalog with Liu et al.'s peer-reviewed [Agent Design Pattern Catalogue](https://arxiv.org/abs/2405.10467) (CSIRO Data61, 18 architectural patterns). They are distinct artifacts with overlapping vocabulary. Citations must disambiguate.
+A fourth, smaller risk is name collision: search engines conflate this catalog with Liu et al.'s peer-reviewed [Agent Design Pattern Catalog](https://arxiv.org/abs/2405.10467) (CSIRO Data61, 18 architectural patterns). They are distinct artifacts with overlapping vocabulary. Citations must disambiguate.
 
 ## Recommendation
 
@@ -56,7 +56,7 @@ The strongest near-term uses: scanning the [anti-patterns book](https://www.agen
 - The catalog is CC BY 4.0, single-maintainer, GoF-shaped, and grounded in a public GitHub repository — adequate for citation, light on peer review.
 - Use it as an *index over primary sources*, not as the authority on a claim. Always co-cite the underlying reference.
 - Do not wire its hosted MCP server without running the lethal-trifecta audit; the citation decision and the MCP decision are separate.
-- Add to `SOURCES.md` with the same posture used for `nibzard/awesome-agentic-patterns`: cited individually, summarised in our own words, never reproduced wholesale.
+- Add to `SOURCES.md` with the same posture used for `nibzard/awesome-agentic-patterns`: cited individually, summarized in our own words, never reproduced wholesale.
 
 ## Related
 

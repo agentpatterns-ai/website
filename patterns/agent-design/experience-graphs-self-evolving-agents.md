@@ -1,7 +1,7 @@
 ---
 title: "Experience Graphs as Structured Memory for Self-Evolving Agents"
 term: "Experience Graphs as Structured Memory"
-description: "Organise an agent's accumulated successes and failures as an explicit relational graph — works only under long-running deployments, capable backbones, selective retrieval, and a trusted-writer boundary."
+description: "Organize an agent's accumulated successes and failures as an explicit relational graph — works only under long-running deployments, capable backbones, selective retrieval, and a trusted-writer boundary."
 tags:
   - agent-design
   - memory
@@ -72,6 +72,6 @@ Empirically:
 
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md) — the flat baseline; trajectory-level recall without an abstracted layer.
 - [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — utility-scored retrieval over episodic memory; complements the graph's edge weights.
-- [Memory Transfer Learning](memory-transfer-learning.md) — when accumulated memory generalises across domains and when it triggers negative transfer.
+- [Memory Transfer Learning](memory-transfer-learning.md) — when accumulated memory generalizes across domains and when it triggers negative transfer.
 - [Tiered Memory Architecture](tiered-memory-architecture.md) — episodic-to-semantic consolidation as an alternative structuring choice.
-- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — gating retrieval on evidence strength, the selective-retrieval discipline ExpWeaver formalises.
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — gating retrieval on evidence strength, the selective-retrieval discipline ExpWeaver formalizes.

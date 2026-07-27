@@ -34,7 +34,7 @@ SEO rank tracking works because results are deterministic. GEO measurement is di
 
 | Metric | Definition |
 |--------|------------|
-| AI Visibility Score | Normalised composite: mention frequency × position × platform coverage |
+| AI Visibility Score | Normalized composite: mention frequency × position × platform coverage |
 | Share of Model (SoM) | % of AI responses where your brand appears for relevant category queries |
 | Citation Share of Voice | Your brand's citation count as a % of total category citations |
 | Generative Position | Average rank when AI outputs a list; first-mentioned brands receive more prominent framing in the response |
@@ -85,7 +85,7 @@ The GEO and SEO tension: restructuring for AI extraction can raise citation rate
 |-----------|----------|
 | Daily | Run 20–30 target prompts across platforms (automated via tool or script) |
 | Weekly | Review mention frequency, citation share, position, and sentiment; flag anomalies |
-| Monthly | Aggregate visibility trends; analyse citation source breakdown; benchmark competitors |
+| Monthly | Aggregate visibility trends; analyze citation source breakdown; benchmark competitors |
 | Quarterly | Sentiment analysis in depth; update competitive benchmarks; reassess prompt set |
 
 Brand web mention volume correlates with AI Overview visibility — stronger organic presence tends to mean more frequent AI citation.

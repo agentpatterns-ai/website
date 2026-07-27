@@ -45,9 +45,9 @@ graph TD
 
 Fixing the bug is not the goal — the bug exists to test the signals. If signals don't lead to it, the remediation is at the instrumentation layer, not the application layer.
 
-## Building a fixture catalogue
+## Building a fixture catalog
 
-A small catalogue of planted bugs across layers gives broad calibration coverage:
+A small catalog of planted bugs across layers gives broad calibration coverage:
 
 | Layer | Example fixture | Diagnosable signature |
 |-------|----------------|----------------------|
@@ -59,13 +59,13 @@ A small catalogue of planted bugs across layers gives broad calibration coverage
 
 Each fixture should be deterministic — same input, same failure, every time — and have a signature an agent could conceivably reach from instrumentation alone. Fixtures that depend on production-only conditions (specific user, specific data volume) belong to the incident-to-eval pipeline, not here.
 
-Rerun the catalogue on every major harness change. Instrumentation refactors, log-level changes, and new MCP server additions all shift what an agent can see — the catalogue is the regression suite for the observability stack.
+Rerun the catalog on every major harness change. Instrumentation refactors, log-level changes, and new MCP server additions all shift what an agent can see — the catalog is the regression suite for the observability stack.
 
 ## What this catches
 
 The anti-pattern this surfaces most often is structured logging that exists but obscures: a high-volume `INFO` storm that buries the one `WARN` line that matters. The signals are technically present; the calibration probe still fails because the relevant entry is invisible within N steps. [Monitoring detects the known; observability explains the unknown](https://www.simform.com/blog/observability-driven-development/) — high-volume info-level logs satisfy monitoring but fail observability when the explanation cost exceeds the diagnostic budget.
 
-Other failures the catalogue exposes:
+Other failures the catalog exposes:
 
 - Metrics aggregated at a level that hides the layer (one error counter for "the whole pipeline")
 - Trace spans that close before the failure path executes
@@ -75,10 +75,10 @@ Other failures the catalogue exposes:
 ## When this backfires
 
 - Solo engineer with full system context: they can mentally simulate the failure path and reach the same gap by reading code. Fixtures add ceremony without diagnostic value at that scale.
-- Pre-production prototype: every refactor breaks the catalogue, so calibration shifts faster than the bugs.
+- Pre-production prototype: every refactor breaks the catalog, so calibration shifts faster than the bugs.
 - High-fidelity production replay already in place: shadow traffic gives organic calibration from the real signals an [OTel-based observability stack](../observability/agent-observability-otel.md) already records. Synthetic planted bugs are duplicative unless coverage gaps remain.
 - Observability stack itself is broken: planted bugs reveal the gap but offer no remediation path. The methodology surfaces the symptom without naming the fix.
-- Fixtures drift from real failure modes: engineers plant the bugs they already know how to instrument for, rather than the ones [incident-to-eval synthesis](incident-to-eval-synthesis.md) would surface from production. Without periodic refresh from the incident-to-eval pipeline, the catalogue calibrates against a fake distribution.
+- Fixtures drift from real failure modes: engineers plant the bugs they already know how to instrument for, rather than the ones [incident-to-eval synthesis](incident-to-eval-synthesis.md) would surface from production. Without periodic refresh from the incident-to-eval pipeline, the catalog calibrates against a fake distribution.
 
 ## Example
 
@@ -100,7 +100,7 @@ If the captured logs include only `INFO request received` and `INFO request comp
 
 - Chaos experiments depend on observability; planted bugs invert that and make observability the subject
 - Pass criterion is binary per probe: an agent reading only the signals identifies the responsible layer within N steps
-- A small cross-layer catalogue (parsing, persistence, IPC, async race, concurrency) gives broad calibration coverage
+- A small cross-layer catalog (parsing, persistence, IPC, async race, concurrency) gives broad calibration coverage
 - Rerun on every major harness change — instrumentation refactors silently shift what agents can see
 - Complement to [incident-to-eval synthesis](incident-to-eval-synthesis.md), not a replacement
 

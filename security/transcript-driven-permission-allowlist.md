@@ -123,7 +123,7 @@ The next session runs without prompts for these four commands, while any new or 
 - Only read-only calls are allowlist candidates; mutating calls stay behind a prompt regardless of frequency
 - Propose binary-prefix rules (`Bash(npm test *)`, `mcp__server__*`); defer argument-level enforcement to PreToolUse hooks, which the Claude Code docs flag as the reliable mechanism
 - Deny/ask/allow precedence bounds the downside: a mis-curated allow rule cannot override deny or ask rules protecting sensitive surfaces
-- The pattern generalises to any harness with a tool-call log — Claude Code's `/less-permission-prompts` and Copilot CLI's `--allow-tool` both target the same allowlist shape
+- The pattern generalizes to any harness with a tool-call log — Claude Code's `/less-permission-prompts` and Copilot CLI's `--allow-tool` both target the same allowlist shape
 
 ## Related
 
