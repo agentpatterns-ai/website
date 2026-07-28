@@ -90,3 +90,4 @@ The only change is what the test-generation prompt is allowed to see. The spec-g
 - [Assertion-Free Test Theater in Agent-Authored Patches](assertion-free-test-theater.md) — agent-written tests that run green while carrying no real oracle signal
 - [Happy Path Bias](happy-path-bias.md) — agents skip error handling and edge cases systematically, in code and in tests
 - [Specification-Grounded Test Writing](../../verification/specification-grounded-test-generation.md) — the complementary move: withhold the implementation, then supply the specification as enumerated rules so the tester knows the intended edge behavior
+- [Deriving a Specification From Buggy Code Before Generating Tests](../../verification/derived-specification-test-generation.md) — what to do when no written specification exists: have the model derive one from the code, then drop the code from the prompt

@@ -77,3 +77,4 @@ The numbers are the measured Microsoft AX figures; the point is that only the se
 - [Tokenizer Swap Tax](../../token-engineering/tokenizer-swap-tax.md) — the distinct token-count mechanism this page must not be conflated with
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — routing by task complexity once the per-task numbers are known
 - [Token Reduction Mistaken for Cost Reduction](token-reduction-not-cost-reduction.md) — the same unit-price-versus-billed-cost gap, on a bolt-on context-reduction layer instead of a model swap
+- [Pricier-Per-Token Models That Cost Less Per Task](../../token-engineering/pricier-per-token-cheaper-per-task.md) — the reciprocal case, where a delegating harness inverts the ordering the other way

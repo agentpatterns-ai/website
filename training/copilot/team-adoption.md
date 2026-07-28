@@ -384,7 +384,7 @@ The fix:
 ## Key Takeaways
 
 - Progressive autonomy, not binary adoption. Start at Level 1 (suggestions) and escalate based on measured evidence — acceptance rate, merge rate, defect escapes. Define rollback triggers before granting autonomy.
-- Tiered code review eliminates the review bottleneck. Route by risk: automated-only for low-risk changes, AI + human for business logic, human-only for security-sensitive code. This reduces human review burden 40–60% while increasing coverage on critical paths.
+- Tiered code review eliminates the review bottleneck. Route by risk: automated-only for low-risk changes, AI + human for business logic, human-only for security-sensitive code. This concentrates human attention on the tiers that carry risk. Measure your own baseline rather than assuming a fixed saving.
 - Content exclusions don't protect against agent workflows. Agent mode, the CLI, and the coding agent bypass content exclusions entirely. Use repository isolation and filesystem permissions for truly sensitive code.
 - Under-configuration is the norm. Most teams stop at a basic `.github/copilot-instructions.md` file. The full stack — path-specific instructions, custom agents, skills, hooks, Spaces — compounds. Adopt incrementally over 2–3 months.
 - Measure outcomes, not activity. PR cycle time, merge rate, defect escapes, and review burden tell you whether adoption is working. Lines generated and interaction count do not.

@@ -123,6 +123,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Verification-Gated Agent Autonomy via Automated Review](verification-gated-agent-autonomy.md) — Pair broader agent autonomy with an automated review gate that screens output — trust scales through verification rather than per-action human approval, under specific conditions
 - [Deterministic Precondition Gates for Tool-Using Agents](deterministic-precondition-gates.md) — A read-only deterministic predicate checks a proposed tool call against current state and blocks a forbidden write before it silently corrupts state — the deterministic counterpart to a probabilistic reviewer
 - [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](delegated-autonomy-boundary-artifacts.md) — Write an agent's authority boundary down as two reviewable requirements artifacts — an Agency Justification Record and an Agentic Delegation Policy — instead of leaving it implicit in prompts and tool schemas
+- [Trigger-Level Gating for Autonomous Agent Intake](trigger-level-agent-intake-gating.md) — Three gates stand between an incoming issue and a changed one — trigger, tool, and approval — and only the first two carry authority; confidence-based approval queues govern attention, not permission
 
 ## Reliability
 

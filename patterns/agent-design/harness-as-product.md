@@ -9,7 +9,7 @@ tags:
 aliases:
   - what you pay for beyond tokens
   - coding assistant value layers
-last_reviewed: 2026-07-23
+last_reviewed: 2026-07-28
 maturity: adopted
 ---
 
@@ -25,7 +25,7 @@ The product layer earns its price only under specific conditions. Buy when:
 
 - You would otherwise build the harness from scratch. The product ships context management, tool orchestration, and iterative loops you would spend months rebuilding.
 - You need organization-scale governance. Admins set budgets, enforce model allowlists, and track usage across teams — worth nothing to a solo developer, decisive for a regulated org ([GitHub](https://github.blog/ai-and-ml/github-copilot/copilot-vs-raw-api-access-what-are-you-actually-paying-for/)).
-- The integrated surface graph matters. One system spans editor, repository, pull request, issue, terminal, and org controls; wiring those surfaces yourself is the real cost a raw key hides.
+- The integrated surface graph matters. One system spans editor, repository, pull request, issue, terminal, and org controls; wiring those surfaces yourself is the real cost a raw key hides. GitHub says its own surfaces — the CLI, the Copilot app, VS Code, Visual Studio, JetBrains — are "increasingly being centralized on the same harness," so "the core workflow is consistent" and you "learn the harness once, use it everywhere" ([GitHub](https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly/)). That is the vendor describing its own product, not an independent finding.
 
 Outside these conditions, a raw or bring-your-own-key API path is usually cheaper — see [When this backfires](#when-this-backfires).
 
@@ -33,9 +33,11 @@ Outside these conditions, a raw or bring-your-own-key API path is usually cheape
 
 A raw model key buys inference. The product adds three layers on top:
 
-- The harness — the agent loop itself, which is a measured efficiency lever, not decoration.
+- The harness — the agent loop itself, which is a measured efficiency lever, not decoration. GitHub describes Copilot orchestrating while it implements a plan: file reading routes to an "Explore" subagent on a small model, and complex work usually to a "General Purpose" subagent on a larger one, giving a buyer "the advantages of subagents and multimodel workflows" without configuring anything ([GitHub](https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly/)).
 - Policy and governance — budget caps, model selection enforced at team level, usage tracking.
 - An opinionated coding workflow — the surface graph and the defaults that connect it.
+
+The defaults, not the configuration layer above them, are what a single developer buys. GitHub's own position is that skills, MCP servers, instructions, and custom agents are not required to be "highly successful with AI," but "become quite important as you progress and need to define complex workflows and automate things for your teams" ([GitHub](https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly/)). So the configuration surface earns its price at team scale, not at desk scale.
 
 ## Why it works
 

@@ -142,6 +142,7 @@ The constrained version cannot hedge, cannot omit the verdict, and must attach a
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md)
 - [Layered Accuracy Defense](layered-accuracy-defense.md)
 - [Data Fidelity Guardrails](data-fidelity-guardrails.md)
+- [Typed Generation Contracts for Grounded Extraction](typed-generation-contract.md)
 - [Diff-Based Review Over Output Review](../code-review/diff-based-review.md)
 - [Incremental Verification](incremental-verification.md)
 - [Verification Ledger](verification-ledger.md)

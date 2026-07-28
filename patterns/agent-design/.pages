@@ -108,6 +108,7 @@ nav:
       - verification-gated-agent-autonomy.md
       - deterministic-precondition-gates.md
       - delegated-autonomy-boundary-artifacts.md
+      - trigger-level-agent-intake-gating.md
   - "Reliability":
       - agent-circuit-breaker.md
       - self-healing-production-agent.md

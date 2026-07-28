@@ -75,5 +75,6 @@ The [Multi-Agent System Failure Taxonomy](https://arxiv.org/abs/2503.13657) name
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md)
 - [Verification Ledger](../../verification/verification-ledger.md)
 - [Agent Handoff Protocols](agent-handoff-protocols.md)
+- [Pre-Write Change Intent Admission (Claim Plane)](pre-write-change-intent-admission.md)
 - [Deterministic Guardrails](../../verification/deterministic-guardrails.md)
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md)

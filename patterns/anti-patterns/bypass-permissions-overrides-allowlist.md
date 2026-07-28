@@ -120,3 +120,4 @@ const options = {
 - [Skill disallowed-tools Frontmatter](../../tools/claude/skill-disallowed-tools.md) — the deny-side complement to allow-lists at the skill layer
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — same shape one layer up: instructions cannot enforce a closed set either
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — why the restricted-bypass trap is dangerous in the first place
+- [Permission Modes as a Defense Against a Tampered Response Path (Response-Path Control Gap)](response-path-control-gap.md) — the other way a correctly-set permission mode fails: a router on the path chooses the response the mode evaluates

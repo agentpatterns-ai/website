@@ -133,3 +133,4 @@ The signal to watch: if harness maintenance is consuming more human attention th
 - [Vibe Coding: Outcome-Oriented Agent-Assisted Development](../patterns/anti-patterns/vibe-coding.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Plan-First Loop](plan-first-loop.md)
+- [How Teams Build SE Agents: A Seven-Stage Build Loop](se-agent-build-workflow.md) — survey-validated evidence for where effort moves once implementation gets cheap

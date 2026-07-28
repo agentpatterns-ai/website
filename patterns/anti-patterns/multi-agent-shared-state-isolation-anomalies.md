@@ -99,6 +99,7 @@ The lattice pays off only when shared mutable state is genuinely involved — a 
 ## Related
 
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](../multi-agent/crdt-observation-driven-coordination.md)
+- [Pre-Write Change Intent Admission (Claim Plane)](../multi-agent/pre-write-change-intent-admission.md)
 - [Hint-Driven Concurrency for Read-Only MCP Tools](../../tool-engineering/read-only-hint-concurrency.md)
 - [File-Based Agent Coordination](../multi-agent/file-based-agent-coordination.md)
 - [Decentralized Memory for Self-Evolving Multi-Agent Systems](../multi-agent/decentralized-memory-multi-agent.md)

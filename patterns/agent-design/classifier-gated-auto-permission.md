@@ -116,3 +116,4 @@ The four design choices map across tools even when setting names do not. A team 
 - [Sandbox + Approvals + Auto-Review Triad](../../security/sandbox-approvals-auto-review-triad.md) — the four-layer Codex posture that wires this pattern with sandbox, approval policy, and telemetry
 - [Pre-Execution Command Risk Classification](../../security/pre-execution-command-risk-classification.md) — the attention-allocation lever for prompts that still reach the human
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — how headless sessions pause for out-of-band approval when the classifier blocks
+- [Trigger-Level Gating for Autonomous Agent Intake](trigger-level-agent-intake-gating.md) — the intake counterpart: gating whether an unprompted agent starts at all, rather than which of its tool calls re-prompt

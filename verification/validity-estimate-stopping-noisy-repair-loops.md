@@ -55,3 +55,4 @@ On a GSM8K stress setting (Qwen2.5-3B, 500 instances, 8 verification votes per r
 - [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — catches the correct-to-incorrect regressions a noisy repair loop introduces.
 - [Markov-Chain Reliability for LLM Agents](markov-chain-agent-reliability.md) — audit the abstraction before you trust a metric; the same caution behind not trusting a noisy acceptance rate.
 - [Evidence-Gated Lifecycle Control for Coding Agents (Proof-or-Stop)](evidence-gated-lifecycle-control.md) — advances state only on verifiable evidence, never on the agent's own acceptance claim.
+- [State-Bound Evidence and Typed Revision Contracts for Repair Loops](state-bound-repair-evidence.md) — the complementary lever when the verifier is sound but its output is stale: bind evidence to a code state and preserve the last verified candidate.
