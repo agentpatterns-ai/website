@@ -114,7 +114,7 @@ A PR that receives a response of "No high-confidence findings." passes the bar. 
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Tiered Code Review](tiered-code-review.md)
 - [Tunable Review Effort](tunable-review-effort.md) — why High-by-default backfires; the per-PR effort lever that complements signal-over-volume
-- [Human-AI Review Synergy](human-ai-review-synergy.md) — complementary strengths of AI and human reviewers and how to structure collaboration
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical signal ratio data showing how actionable comment rates determine merge outcomes
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](../human/cognitive-load-ai-fatigue.md) — cognitive costs of review fatigue and how to manage them sustainably
 - [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md) — how agents can persist accept/reject signals to suppress recurring false positives automatically
+- [Inline Suggestion Attachment](inline-suggestion-attachment.md) — for the comments that survive the signal bar, an applicable patch beats better prose as a resolution lever

@@ -13,7 +13,7 @@ aliases:
   - harness vs model attribution
   - fleet-wide harness comparison
   - harness portability evaluation
-last_reviewed: 2026-06-28
+last_reviewed: 2026-07-28
 maturity: established
 ---
 
@@ -75,7 +75,7 @@ Harness-Bench formalizes this as the attribution argument: agent capability shou
 - Single-model deployments. No fleet to attribute across, no portability surface to claim. [Isometric harness ablation](isometric-harness-ablation.md) — remove one subsystem at a time within the model you ship — is the right tool. The fleet machinery costs measurement budget without earning anything back.
 - Strong per-model interactions. Per-model harness tuning produces 10–20 pp deltas on tau2-bench — GPT-5.3 Codex from 33% to 53%, Claude Opus 4.7 from 43% to 53% with profile-level overrides ([LangChain](https://blog.langchain.com/tuning-deep-agents-different-models)). When the deltas point different ways for different models, the same harness across the fleet attributes interaction terms to the harness layer and overstates portability. The treatment is [Per-Model Harness Tuning](per-model-harness-tuning.md), not a fleet-mean claim.
 - No paired token-efficiency baseline. Reading only pass rate collapses the method into ordinary harness comparison and misses the cost-side win. The GitHub Copilot result is mostly a token-reduction result with pass-rate parity — measuring only pass rate would have shown nothing.
-- Vendor-managed harness. Claude Managed Agents, Copilot consumer tiers, and most cloud APIs route to harness components you cannot vary. There is no harness to attribute. The framework applies to teams shipping their own scaffold against multiple models, not to teams consuming a managed agent.
+- Vendor-managed harness. Claude Managed Agents, Copilot consumer tiers, and most cloud APIs route to harness components you cannot vary. There is no harness to attribute. The framework applies to teams shipping their own scaffold against multiple models, not to teams consuming a managed agent. The line falls at the default configuration rather than at the product: GitHub describes Copilot choosing its own subagents and models by default, while naming custom agents and instructions as what gives "fine-grained control over orchestration" ([GitHub](https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly/)). Where a vendor exposes that control, part of the harness becomes variable again and a narrower attribution is possible.
 - Stochastic noise larger than the effect. GitHub's TerminalBench differences fell within stochastic variance ([GitHub](https://github.blog/ai-and-ml/github-copilot/evaluating-performance-and-efficiency-of-the-github-copilot-agentic-harness-across-models-and-tasks)). Single-trial fleet attribution on a noisy benchmark cannot separate harness from noise. Use multi-trial averaging or accept that this slice is not informative.
 - Tier-skewed fleet. Stronger model backends both score higher and exhibit lower cross-harness variance — harness investment pays back differently at different tiers ([Harness-Bench](https://arxiv.org/abs/2605.27922)). A fleet weighted toward one tier produces an attribution claim that does not generalize to the others.
 

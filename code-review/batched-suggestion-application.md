@@ -111,3 +111,4 @@ CI re-runs once on the batched commit, confirming no new alerts introduced. The 
 - [Tiered Code Review](tiered-code-review.md) — severity-based routing is a precondition for safe batch boundaries
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md) — reviewer engagement is the strongest predictor of merge; batching shifts the unit of engagement
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — empirical adoption-rate data that bounds the rubber-stamp risk
+- [Inline Suggestion Attachment](inline-suggestion-attachment.md) — the upstream decision: which findings should carry an applicable patch at all

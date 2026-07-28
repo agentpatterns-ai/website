@@ -6,7 +6,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-06-03
+last_reviewed: 2026-07-28
 maturity: established
 ---
 
@@ -53,6 +53,8 @@ The minimum useful set is `init`, `run`, `eval`, `deploy`. Operational subcomman
 The strongest case for the pattern is self-service deployment by the agent itself. When an agent owns part of its own release process — running its own eval before a deploy, deciding whether to promote a canary, rolling back on a regression — it needs a programmatic surface for the lifecycle. Google's positioning is explicit: the CLI is "specialized ... designed specifically for AI coding agents" so the agent can scaffold, evaluate, and deploy without re-reading documentation each session ([Google Developers Blog](https://developers.googleblog.com/en/agents-cli-in-agent-platform-create-to-production-in-one-cli/)).
 
 The architecture rhymes with [the continuous autonomous task loop](continuous-autonomous-task-loop.md) — a stable subcommand surface that the agent can iterate against without context-window penalty. This is where the consolidation matters most: an agent learning one `agents-cli` surface deeply costs less per turn than the same agent re-learning four fragmented CLIs every session.
+
+Vendors are pushing the same argument past the coding platform itself. Replit frames the end state as a "self-driving company" — agent loops running company operations end-to-end rather than only the build-and-ship step ([Replit: the self-driving company](https://replit.com/blog/self-driving-company)). Read that as vendor positioning, not a measured result. It still marks the direction the lifecycle surface has to serve: the further an agent's remit runs past writing code, the more of the operational surface has to be reachable by subcommand rather than by console — which is exactly where the `logs` and `rollback` gap above starts to bite.
 
 ## Why it works
 

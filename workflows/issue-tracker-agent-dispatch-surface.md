@@ -135,3 +135,4 @@ The same ticket dispatched without the R/A/P sections — "users get logged out 
 - [Programmatic Cloud-Agent Dispatch via REST API and Webhooks](programmatic-cloud-agent-dispatch.md) — the REST / webhook / cron dispatch surface
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — the upstream skill that ensures tickets reach the dispatch surface in a WRAP-ready state
 - [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md) — generates the kind of investigated, context-rich tickets that succeed on this dispatch surface
+- [Trigger-Level Gating for Autonomous Agent Intake](../patterns/agent-design/trigger-level-agent-intake-gating.md) — the opt-in pickup filter above, expanded into the three gates that decide whether an agent starts and what it may change

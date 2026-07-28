@@ -364,6 +364,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Usage-Reinforced Memory Decay for Long-Running Agents](context-engineering/usage-reinforced-memory-decay.md)
 - [Agent-Tuned Code Search: Retrieval Built for the Loop](context-engineering/agent-tuned-code-search.md)
 - [Prompt Cache Keepalive for Agent Pauses](context-engineering/prompt-cache-keepalive-agent-pauses.md)
+- [Version-Controlled Agent Context (Git Context Controller)](context-engineering/version-controlled-agent-context.md)
+- [Skill Loadout Curation for Coding Agents](context-engineering/skill-loadout-curation.md)
 
 ## Instructions & Prompts
 
@@ -698,6 +700,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Cue-Anchored Working Memory (Delivery, Not Storage)](patterns/agent-design/cue-anchored-working-memory.md)
 - [Knowledge Graphs as Provenance-Carrying Agent Memory](patterns/agent-design/knowledge-graph-shared-memory.md)
 - [Browser as Agent Action Space](patterns/agent-design/browser-as-agent-action-space.md)
+- [Pre-Write Change Intent Admission (Claim Plane)](patterns/multi-agent/pre-write-change-intent-admission.md)
+- [Trigger-Level Gating for Autonomous Agent Intake](patterns/agent-design/trigger-level-agent-intake-gating.md)
 
 ## Loop Engineering
 
@@ -715,6 +719,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Human-in-the-Loop Checkpoints as Loop Control](loop-engineering/human-in-the-loop-checkpoints.md)
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](loop-engineering/loop-budgeting.md)
 - [Stuck-Loop Recovery: Detecting and Escaping Non-Converging Agent Loops](loop-engineering/stuck-loop-recovery.md)
+- [Within-Task Model Cascade: Designing the Escalation Gate](loop-engineering/within-task-model-cascade.md)
 
 ## Tool Design
 
@@ -817,6 +822,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Harness-Controlled Token Economics (The Harness Effect)](token-engineering/harness-token-economics.md)
 - [Line-Anchored Feedback: Deliver Change Requests as Inline Comments](token-engineering/line-anchored-feedback.md)
 - [Request Shaping to Cut Wasted Agent Turns](token-engineering/request-shaping-wasted-turns.md)
+- [Pricier-Per-Token Models That Cost Less Per Task](token-engineering/pricier-per-token-cheaper-per-task.md)
+- [Language Choice as an Agent Token-Cost Lever](token-engineering/language-choice-token-cost.md)
 
 ## Security & Safety
 
@@ -1093,6 +1100,10 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agentic Review Comment Acceptance](code-review/agentic-review-comment-acceptance.md)
 - [Profiler-Guided Optimization Loops for Coding Agents](verification/profiler-guided-optimization-loop.md)
 - [Skill Test Coverage as a Release Gate](verification/skill-test-coverage-release-gate.md)
+- [Deriving a Specification From Buggy Code Before Generating Tests](verification/derived-specification-test-generation.md)
+- [Typed Generation Contracts for Grounded Extraction](verification/typed-generation-contract.md)
+- [State-Bound Evidence and Typed Revision Contracts for Repair Loops](verification/state-bound-repair-evidence.md)
+- [Inline Suggestion Attachment in Agent Code Review](code-review/inline-suggestion-attachment.md)
 
 ## Hooks & Guardrails
 
@@ -1285,6 +1296,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [A Governance Framework for Production Agents](workflows/governing-production-agents.md)
 - [The Software Factory Model: Industrializing Agent Loops](workflows/software-factory-model.md)
 - [TDD Interaction Models: Throughput Versus Test Quality](workflows/tdd-interaction-models.md)
+- [How Teams Build SE Agents: A Seven-Stage Build Loop](workflows/se-agent-build-workflow.md)
 
 ## Human Factors
 
@@ -1448,6 +1460,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Team Shared-Language Desync from Removed Review Friction](patterns/anti-patterns/shared-language-desync.md)
 - [Trusting Claimed Prior Approval in Agent Review Gates](patterns/anti-patterns/trusting-claimed-prior-approval.md)
 - [Trusting a Skill Scanner's Verdict as a Security Judgment (Green-Check Fallacy)](patterns/anti-patterns/skill-scanner-verdict-not-security-judgment.md)
+- [Permission Modes as a Defense Against a Tampered Response Path (Response-Path Control Gap)](patterns/anti-patterns/response-path-control-gap.md)
 
 ## Emerging Concepts
 
@@ -1717,6 +1730,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [Selective Rewind Summarization](selective-rewind-summarization.md) — A user-chosen cut point compresses earlier turns to a summary while the recent turns stay verbatim — a targeted alternative to whole-session compaction
 - [Usage-Reinforced Memory Decay for Long-Running Agents](usage-reinforced-memory-decay.md) — Score retention with a forgetting curve whose stability compounds on every recall, so frequently-consulted facts outlive the idle stretches that silently evict them from a fixed recency window
 - [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md) — Give the agent both a compaction tool and a firing rubric so it compacts on trajectory structure — sub-task resolved or converging — instead of a fixed token threshold
+- [Version-Controlled Agent Context](version-controlled-agent-context.md) — Commit, branch, merge, and read agent memory as a durable file tree so the abstraction level is chosen at read time; the retrieval path carries the benefit, not the checkpoints
 - [Elastic Context Orchestration](elastic-context-orchestration.md) — A per-turn vocabulary of context operations — Skip, Compress, Snippet, Rollback, Delete — that lets long-horizon search agents tier retention by current task relevance instead of accumulating raw trajectory
 - [Prompt Compression](prompt-compression.md) — Write instructions that convey the same guidance in fewer words; shorter, denser instructions improve agent compliance and reduce token cost
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — Treat prompt caching as a structural constraint on prompt composition, with cross-provider economics and extended-TTL guidance folded in
@@ -1766,6 +1780,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Component-Wise RAG Prioritization](rag-component-prioritization-software-engineering.md) — A 21+ model component-wise empirical study finds retriever choice dominates generator choice for SE-task RAG, and BM25 is robust across code generation, summarization, and repair — under specific conditions
 - [LLM-Driven Logical Retrieval](llm-driven-logical-retrieval.md) — When the agent LLM is frontier-capable, letting it emit AND/OR/NOT Boolean queries against an inverted index matches an agentic hybrid baseline at 41× lower indexing cost — under specific lexical-overlap conditions
 - [Compositional Skill Routing](compositional-skill-routing.md) — Decompose a query into atomic sub-tasks, retrieve one skill per sub-task, then compose the plan — earns its cost only above hundreds of skills, where decomposition quality caps the system
+- [Skill Loadout Curation for Coding Agents](skill-loadout-curation.md) — Curate the skills and MCP servers an agent loads before a session; above roughly 30 skills the gain comes from removing colliding descriptions, not from saving tokens
 
 ## Error Handling & Drift Prevention
 
@@ -2565,7 +2580,7 @@ The broader pattern already ships in products. Anthropic's [Tool Search Tool](ht
 - Small libraries (under 50 skills). The >99% context-saving headline measures against a 2,209-skill baseline. With 50 skills and prompt caching, preloading every schema is cheap; adding a decomposer call costs more than the savings and adds decomposition-error risk for no gain.
 - Failed decomposition cascades. SAD reaches 67.7% accuracy, so roughly one in three queries still decomposes incorrectly. On those, every downstream retrieval and compose step is wasted. [Survey work on agent failures](https://arxiv.org/abs/2509.25370) finds early decomposition mistakes "rarely remain confined" — they propagate through the trajectory.
 - Tightly-coupled sub-tasks. A pre-committed DAG cannot recover when step 2's output should change step 3's plan. [TDAG (2402.10178)](https://arxiv.org/abs/2402.10178) formalizes this as Cascading Task Failure and argues for dynamic re-decomposition; one-iteration SAD does not fully address it.
-- Ambiguous or overlapping skills. The bi-encoder cannot tell functionally overlapping skills apart from descriptions alone. Decomposition does not fix a poorly-curated catalog — [Anthropic's guidance applies](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): if a human engineer cannot pick the right skill, the agent cannot either.
+- Ambiguous or overlapping skills. The bi-encoder cannot tell functionally overlapping skills apart from descriptions alone. Decomposition does not fix a poorly-curated catalog — [Anthropic's guidance applies](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): if a human engineer cannot pick the right skill, the agent cannot either. Resolving the overlap is [skill loadout curation](skill-loadout-curation.md), a separate step that happens before any routing.
 - Latency-sensitive paths. Decompose, retrieve, and plan adds at least one extra LLM round-trip before any real work begins. For sub-second interactive paths this overhead is dead weight that preload-and-route avoids.
 
 ## Example
@@ -7577,6 +7592,8 @@ A `permissions.deny` rule with a bare tool name removes an individual tool's def
 
 Then restart and re-run `/context` to confirm the drop. Do not hand-prune MCP servers first: Claude Code already defers MCP tool definitions by default through tool search, so the trimmable weight is mostly built-in tools, skills, and features, not MCP ([Claude Code — Manage costs](https://code.claude.com/docs/en/costs); [Anthropic — advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)).
 
+Token count is only one reason to drop a skill. When the symptom is the agent reaching for the wrong skill rather than a crowded prefix, the fix is [skill loadout curation](skill-loadout-curation.md), which prunes for colliding descriptions instead of size.
+
 ## Why it works
 
 Each turn is a stateless API request that re-sends the whole system prompt and every tool schema before the model reaches your task ([Claude Code — Manage costs](https://code.claude.com/docs/en/costs); [MCP schema overhead, issue #2808](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/2808)). Tool and feature definitions sit in that fixed prefix, so removing a definition shrinks the prefix permanently. Token cost scales with context size and the window is finite, so a smaller prefix leaves more room for task context and less for the model to read past before it reaches your problem.
@@ -8692,6 +8709,87 @@ Semantic density optimization trades human ergonomics for agent performance. The
 
 ---
 
+### Skill Loadout Curation for Coding Agents
+Source: https://agentpatterns.ai/context-engineering/skill-loadout-curation/
+
+# Skill Loadout Curation for Coding Agents
+
+> A loadout is the skill set an agent carries into a session; past roughly 30 skills, extras shadow the right one and selection degrades.
+
+A loadout is everything an agent loads before you type a word: the name and description of every installed skill, plus the tools of every connected MCP server ([Breunig, 2026](https://www.dbreunig.com/2026/07/24/manage-your-agent-s-loadout-with-dr-skill.html)). Curating it means choosing what to carry in, not only what to author. The practice pays above roughly 30 skills, and it pays by removing descriptions that collide — not by saving tokens.
+
+## When curation pays
+
+The discipline is conditional. Four things decide whether it returns anything.
+
+| Condition | Why it matters |
+|---|---|
+| The catalog exceeds about 30 skills or tools | Retrieval precision holds at low counts, breaks up across candidate positions 31–70, and collapses "beyond position ~100" ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275)). Below that range there is no measurable loss to recover. |
+| Two or more descriptions overlap | Selection fails when a distractor describes itself the way the right skill does. Without overlap, catalog size alone costs little. |
+| A weaker model does the routing | At a 202-skill library, Claude Haiku 4.5 loses 0.26 pass rate against Sonnet 4.6's 0.15 ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050)). Small models break far earlier: Llama 3.1-8B fails a query given 46 tools and succeeds given 19, in the same 16K context ([Paramanayakam et al., 2024](https://arxiv.org/abs/2411.15399)). |
+| Skills arrive by default | Drew Breunig describes an enterprise agent that silently loaded over 600 colleague-authored skills, and the Hermes agent shipping nearly 100 ([Breunig, 2026](https://www.dbreunig.com/2026/07/24/manage-your-agent-s-loadout-with-dr-skill.html)). |
+
+## Prune for collision, not for size
+
+The intuitive reason to prune — idle skills waste context — is the weaker one. Song and Wei split the damage from a growing library into two channels and measured each. Skill shadowing, where the agent picks a distractor whose description matches the query better than the right skill does, costs 0.14 pass rate (95% CI [0.06, 0.26]). Context overhead costs 0.07 (CI [-0.13, 0.25]), indistinguishable from zero ([arxiv:2605.24050](https://arxiv.org/abs/2605.24050)).
+
+So deleting your largest skill usually changes nothing. Renaming or merging two skills that describe themselves the same way is what moves the number.
+
+[Progressive disclosure](../patterns/agent-design/progressive-disclosure-agents.md) explains the weak token channel. Anthropic preloads only each skill's name and description, loading the body when the skill triggers, so the content behind a skill is "effectively unbounded" ([Anthropic, 2025](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)). Disclosure caps what an idle skill costs; it does nothing about telling two similar descriptions apart.
+
+## Auditing a loadout
+
+Ask three questions in order: what is loaded, what collides, and what actually gets used. The `drskill` scanner answers all three ([Breunig, 2026](https://github.com/dbreunig/drskill)).
+
+- `drskill list --harness claude-code` prints the effective skill set for one harness with token counts.
+- `drskill scan` checks 34 issue categories across skills and MCP servers; its first skill check is skills that shadow each other. The `--deep` flag uses a model to judge whether two descriptions collide or two scopes overlap.
+- `drskill audit` reads your traces and reports which skills and tools were actually called, and on which queries.
+
+The trace report is the pruning signal that matters. A skill that never appears in traces is either invisible to the router or redundant, and both diagnoses point at its description rather than its length.
+
+## Why it works
+
+The causal channel is selection interference, not context pressure. An agent chooses a skill by matching the request against the preloaded descriptions, so every added skill is another distractor competing for that match. When a distractor fits the request better than the intended skill, the router picks it every time — Song and Wei's worked case is a video-frame-extraction skill that beat the intended skill on a coin-counting query in every trajectory they ran ([arxiv:2605.24050](https://arxiv.org/abs/2605.24050)). Because the interference happens between descriptions, cutting the candidate set is what recovers accuracy: restricting candidates by retrieval lifts tool selection from 13.62% to 43.13% while roughly halving prompt tokens ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275)).
+
+## When this backfires
+
+- Small catalogs. Under about 30 skills the degradation this practice targets has not started ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275)), so curation costs attention and returns nothing.
+- Pruning by token weight. Removing the heaviest skill can leave the shadowing pair intact, so the symptom survives the cleanup.
+- Unpredictable task mixes. You pick a loadout before you know the task. Exploratory debugging crosses domains, and a removed skill becomes a silent capability gap rather than a visible error.
+- Shared repositories. A per-developer loadout makes agent behavior irreproducible: a skill present locally and absent in CI changes outcomes with no committed code change.
+- Strong routers on moderate catalogs. Sonnet 4.6 degrades roughly half as much as Haiku 4.5 at the same 202 skills ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050)), so the better the model, the thinner the return.
+
+An automated alternative competes with curation directly: retrieve skills on demand from a large corpus instead of enumerating a fixed set ([Su et al., 2026](https://arxiv.org/abs/2604.24594)). Where such a retrieval layer exists, invest in description hygiene and let it do the selecting.
+
+## Example
+
+Breunig's Hermes agent kept invoking the wrong note-taking skill. Inspecting the machine showed Hermes ships with nearly 100 skills. Deleting the stock note-taking skill helped but did not fully fix the behavior, because the remaining collisions were in descriptions he had not yet found — which is what motivated a scanner rather than more manual deletion ([Breunig, 2026](https://www.dbreunig.com/2026/07/24/manage-your-agent-s-loadout-with-dr-skill.html)).
+
+The corrective sequence is diagnostic, not subtractive:
+
+```bash
+drskill list --harness claude-code   # what this harness actually sees
+drskill scan --deep                  # which descriptions collide or overlap
+drskill audit                        # which skills traces show being called
+```
+
+## Key Takeaways
+
+- A loadout is what an agent loads before your first message: every installed skill's metadata plus every connected MCP server's tools.
+- The measurable harm of a large catalog is skill shadowing, not token cost; context overhead is statistically indistinguishable from zero.
+- Curation earns its keep above roughly 30 skills, and earlier on smaller or weaker models.
+- Prune for colliding descriptions and for skills absent from traces, not for the biggest files.
+- Where an on-demand skill retrieval layer exists, description hygiene beats hand-curating a per-task set.
+
+## Related
+
+- [Compositional Skill Routing](compositional-skill-routing.md) — routing among skills at invocation time, once they are already present
+- [Reducing System-Prompt Token Bloat in Coding Agents](system-prompt-bloat-reduction.md) — measuring the fixed prefix that a loadout contributes to
+- [Cost-Aware Skill Rewriting](../instructions/cost-aware-skill-rewriting.md) — what to keep inside a skill you decide to carry
+- [Contractual Skill Files](../instructions/contractual-skill-files.md) — writing the description a router has to discriminate on
+
+---
+
 ### Source Code Minification for State-in-Context Agents
 Source: https://agentpatterns.ai/context-engineering/source-code-minification-trade-off/
 
@@ -9428,6 +9526,91 @@ The decoupled measurement reveals which side of the compression Pareto your work
 - [Prompt Compression](prompt-compression.md) — Compress instructions and prose for the same goal at a different layer of the prompt.
 - [Semantic Density Optimization](semantic-density-optimization.md) — Why naive compression backfires: removing semantic content shifts cost to inference, paralleling the input-vs-output asymmetry seen with format swaps.
 - [Tokenizer Swap Tax](../token-engineering/tokenizer-swap-tax.md) — Another notation-layer change with hidden costs that only surface in end-to-end measurement.
+
+---
+
+### Version-Controlled Agent Context (Git Context Controller)
+Source: https://agentpatterns.ai/context-engineering/version-controlled-agent-context/
+
+# Version-Controlled Agent Context (Git Context Controller)
+
+> Checkpoint agent memory to a durable file tree and re-read it at a chosen level of detail instead of inheriting one lossy summary.
+
+Version-controlled agent context gives memory the operations of a version control system: commit a milestone, branch to try an alternative, merge the useful result back, and read the store at whatever abstraction level the current step needs. The store is plain files on disk, so a fresh session recovers state the way a new engineer reads git history ([Git Context Controller, arxiv 2508.00031](https://arxiv.org/abs/2508.00031)).
+
+The gains do not come from checkpointing, which is why the condition leads. In the source paper's ablation, adding a roadmap and commit records moved SWE-bench Verified resolution from 67.2% to 69.1%; adding fine-grained logs plus the read operation that retrieves them moved it from 69.1% to 75.3% ([arxiv 2508.00031](https://arxiv.org/abs/2508.00031)). Skip the read path and you land in the smaller number.
+
+## When it pays
+
+Adopt this only where all three conditions hold:
+
+- The work outgrows one context window, or spans sessions. Anything that finishes inside a single window pays the overhead and collects none of the recovery benefit.
+- The agent can read the store back at more than one granularity. One progress file read whole is a partial adoption.
+- Something prunes the store. Notes from finished work stay weighted the same as current notes and pollute later answers ([The MEMORY.md Problem](https://dev.to/anajuliabit/the-memorymd-problem-why-local-files-fail-at-scale-58ae)).
+
+## The four operations
+
+The paper defines four operations over a plain-text store ([arxiv 2508.00031](https://arxiv.org/abs/2508.00031)):
+
+| Operation | What it does | When the agent calls it |
+|-----------|--------------|-------------------------|
+| Commit | Records intent, a coarse summary, and detailed progress as a checkpoint | A milestone resolves |
+| Branch | Opens an isolated trace for an alternative approach | The agent wants a second design without disturbing the first |
+| Merge | Folds a branch summary back into the main roadmap | The alternative resolved and is worth keeping |
+| Read | Returns the store at a chosen level: roadmap, commit, raw log, or metadata | The agent needs orientation, or one specific earlier detail |
+
+The layout is a directory of markdown and YAML: a top-level roadmap file, and per-branch files holding the commit log, the fine-grained action trace, and structural metadata such as file layout and dependencies ([arxiv 2508.00031](https://arxiv.org/abs/2508.00031)). Nothing in it requires a database.
+
+## Why it works
+
+Compaction is a one-shot lossy decision made before you know which details will matter. Anthropic names the failure directly: "overly aggressive compaction can result in the loss of subtle but critical context whose importance only becomes apparent later" ([Anthropic: effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). A summary fixes one abstraction level at write time. A structured store defers that choice to read time, so the agent pulls the roadmap for orientation and the raw trace for a specific earlier detail.
+
+That is why the ablation credits retrieval rather than checkpointing or branching. The same mechanism explains the cross-session claim: a durable file tree lets a fresh agent recover state without inheriting an earlier author's compression choices. Anthropic's long-running-agent harness reaches the same shape from practice, starting each session by reading git logs and a progress file "to get up to speed on what was recently worked on" ([Anthropic: effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+
+## When this backfires
+
+- Tasks that fit one window. The overhead is measured: 101.5 tool calls against 95.3 for the compaction baseline on SWE-bench Verified, and 24.5 against 14.2 for a ReAct baseline on BrowseComp-Plus ([arxiv 2508.00031](https://arxiv.org/abs/2508.00031)). With no window pressure that buys nothing back.
+- Checkpoints without retrieval. Teams build the write path first and stop, which collects the 1.9-point gain and leaves the 6.2-point one on the table.
+- Branches explored by concurrent agents. Isolation is what makes branching useful and also what breaks it: separate contexts act on assumptions never stated upfront, and the merge inherits the conflict. Cognition's second principle is that "actions carry implicit decisions, and conflicting decisions carry bad results", and their default is a single-threaded agent with one compression step ([Cognition: Don't Build Multi-Agents](https://cognition.com/blog/dont-build-multi-agents)). Branch and merge is also the smallest ablation contributor, at 2.4 points.
+- Stores nobody prunes. Metadata updates depend on the agent noticing a change and recording it, and when that lapses later reads return confidently wrong structure.
+- Borrowing the numbers for an unscaffolded setup. The results come from a controller that exposes these operations as tools and enforces them, so telling an agent to write notes like git commits is a different intervention.
+
+The experiments also exposed only the most recent commit record, so the gains do not demonstrate deep recall across a long commit chain ([arxiv 2508.00031](https://arxiv.org/abs/2508.00031)).
+
+## Example
+
+The paper's own store is four plain files, and the read path — not the commit template — is the part worth copying ([arxiv 2508.00031](https://arxiv.org/abs/2508.00031)):
+
+```text
+.GCC/
+  main.md                    # global roadmap: goals, milestones, to-do list
+  branches/
+    <branch-name>/
+      commit.md              # one entry per milestone: intent, summary, detail
+      log.md                 # fine-grained observation-thought-action trace
+      metadata.yaml          # file structures, dependencies, configs
+```
+
+The agent starts a session by reading `main.md` alone. It opens `commit.md` when the roadmap is too coarse to place the current step, and `log.md` only when it needs an exact earlier command, error, or decision that a summary dropped. Three depths, and the choice made at read time.
+
+A second directory under `branches/` is the optional fourth step. Keep it sequential — one agent, one trace at a time — so the merge does not have to reconcile assumptions two contexts never shared ([Cognition: Don't Build Multi-Agents](https://cognition.com/blog/dont-build-multi-agents)).
+
+## Key Takeaways
+
+- The read path carries the benefit: layered logs plus retrieval moved SWE-bench Verified from 69.1% to 75.3%, while commit records alone moved it 67.2% to 69.1%.
+- Store context as plain files at several depths — roadmap, commit log, raw trace, metadata — so the agent picks its abstraction level at read time.
+- It works because compaction commits to one level of detail before you know which details matter, and a durable store defers that choice.
+- Skip it for work that fits one context window: the source paper measures about 6% more tool calls on SWE-bench Verified and 70% more on BrowseComp-Plus.
+- Treat branch and merge as optional and keep them sequential; parallel branches produce the conflicting-assumption failure that argues against multi-agent splits.
+- The published gains assume a controller enforcing these operations as tools, so an unenforced notes file is a partial adoption.
+
+## Related
+
+- [Context Compression Strategies](context-compression-strategies.md) — the tiered write-time compression this pattern defers in favor of read-time choice.
+- [Selective Rewind Summarization](selective-rewind-summarization.md) — compress before a chosen cut point and keep recent turns verbatim, a lighter answer to the same lossy-summary problem.
+- [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md) — decides when to compact; this page decides what survives compaction and how it reads back.
+- [Stateful Iteration State-Carry](stateful-iteration-state-carry.md) — typed persistent state read through a tool instead of transcript replay, the narrower single-file case.
+- [Context Lifecycle Management](context-lifecycle-management.md) — the broader decide, store, consolidate, compact frame this pattern sits inside.
 
 ---
 
@@ -18192,6 +18375,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Verification-Gated Agent Autonomy via Automated Review](verification-gated-agent-autonomy.md) — Pair broader agent autonomy with an automated review gate that screens output — trust scales through verification rather than per-action human approval, under specific conditions
 - [Deterministic Precondition Gates for Tool-Using Agents](deterministic-precondition-gates.md) — A read-only deterministic predicate checks a proposed tool call against current state and blocks a forbidden write before it silently corrupts state — the deterministic counterpart to a probabilistic reviewer
 - [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](delegated-autonomy-boundary-artifacts.md) — Write an agent's authority boundary down as two reviewable requirements artifacts — an Agency Justification Record and an Agentic Delegation Policy — instead of leaving it implicit in prompts and tool schemas
+- [Trigger-Level Gating for Autonomous Agent Intake](trigger-level-agent-intake-gating.md) — Three gates stand between an incoming issue and a changed one — trigger, tool, and approval — and only the first two carry authority; confidence-based approval queues govern attention, not permission
 
 ## Reliability
 
@@ -21996,6 +22180,7 @@ The four design choices map across tools even when setting names do not. A team 
 - [Sandbox + Approvals + Auto-Review Triad](../../security/sandbox-approvals-auto-review-triad.md) — the four-layer Codex posture that wires this pattern with sandbox, approval policy, and telemetry
 - [Pre-Execution Command Risk Classification](../../security/pre-execution-command-risk-classification.md) — the attention-allocation lever for prompts that still reach the human
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — how headless sessions pause for out-of-band approval when the classifier blocks
+- [Trigger-Level Gating for Autonomous Agent Intake](trigger-level-agent-intake-gating.md) — the intake counterpart: gating whether an unprompted agent starts at all, rather than which of its tool calls re-prompt
 
 ---
 
@@ -27520,7 +27705,7 @@ Harness-Bench formalizes this as the attribution argument: agent capability shou
 - Single-model deployments. No fleet to attribute across, no portability surface to claim. [Isometric harness ablation](isometric-harness-ablation.md) — remove one subsystem at a time within the model you ship — is the right tool. The fleet machinery costs measurement budget without earning anything back.
 - Strong per-model interactions. Per-model harness tuning produces 10–20 pp deltas on tau2-bench — GPT-5.3 Codex from 33% to 53%, Claude Opus 4.7 from 43% to 53% with profile-level overrides ([LangChain](https://blog.langchain.com/tuning-deep-agents-different-models)). When the deltas point different ways for different models, the same harness across the fleet attributes interaction terms to the harness layer and overstates portability. The treatment is [Per-Model Harness Tuning](per-model-harness-tuning.md), not a fleet-mean claim.
 - No paired token-efficiency baseline. Reading only pass rate collapses the method into ordinary harness comparison and misses the cost-side win. The GitHub Copilot result is mostly a token-reduction result with pass-rate parity — measuring only pass rate would have shown nothing.
-- Vendor-managed harness. Claude Managed Agents, Copilot consumer tiers, and most cloud APIs route to harness components you cannot vary. There is no harness to attribute. The framework applies to teams shipping their own scaffold against multiple models, not to teams consuming a managed agent.
+- Vendor-managed harness. Claude Managed Agents, Copilot consumer tiers, and most cloud APIs route to harness components you cannot vary. There is no harness to attribute. The framework applies to teams shipping their own scaffold against multiple models, not to teams consuming a managed agent. The line falls at the default configuration rather than at the product: GitHub describes Copilot choosing its own subagents and models by default, while naming custom agents and instructions as what gives "fine-grained control over orchestration" ([GitHub](https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly/)). Where a vendor exposes that control, part of the harness becomes variable again and a narrower attribution is possible.
 - Stochastic noise larger than the effect. GitHub's TerminalBench differences fell within stochastic variance ([GitHub](https://github.blog/ai-and-ml/github-copilot/evaluating-performance-and-efficiency-of-the-github-copilot-agentic-harness-across-models-and-tasks)). Single-trial fleet attribution on a noisy benchmark cannot separate harness from noise. Use multi-trial averaging or accept that this slice is not informative.
 - Tier-skewed fleet. Stronger model backends both score higher and exhibit lower cross-harness variance — harness investment pays back differently at different tiers ([Harness-Bench](https://arxiv.org/abs/2605.27922)). A fleet weighted toward one tier produces an attribution claim that does not generalize to the others.
 
@@ -39549,7 +39734,7 @@ The product layer earns its price only under specific conditions. Buy when:
 
 - You would otherwise build the harness from scratch. The product ships context management, tool orchestration, and iterative loops you would spend months rebuilding.
 - You need organization-scale governance. Admins set budgets, enforce model allowlists, and track usage across teams — worth nothing to a solo developer, decisive for a regulated org ([GitHub](https://github.blog/ai-and-ml/github-copilot/copilot-vs-raw-api-access-what-are-you-actually-paying-for/)).
-- The integrated surface graph matters. One system spans editor, repository, pull request, issue, terminal, and org controls; wiring those surfaces yourself is the real cost a raw key hides.
+- The integrated surface graph matters. One system spans editor, repository, pull request, issue, terminal, and org controls; wiring those surfaces yourself is the real cost a raw key hides. GitHub says its own surfaces — the CLI, the Copilot app, VS Code, Visual Studio, JetBrains — are "increasingly being centralized on the same harness," so "the core workflow is consistent" and you "learn the harness once, use it everywhere" ([GitHub](https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly/)). That is the vendor describing its own product, not an independent finding.
 
 Outside these conditions, a raw or bring-your-own-key API path is usually cheaper — see [When this backfires](#when-this-backfires).
 
@@ -39557,9 +39742,11 @@ Outside these conditions, a raw or bring-your-own-key API path is usually cheape
 
 A raw model key buys inference. The product adds three layers on top:
 
-- The harness — the agent loop itself, which is a measured efficiency lever, not decoration.
+- The harness — the agent loop itself, which is a measured efficiency lever, not decoration. GitHub describes Copilot orchestrating while it implements a plan: file reading routes to an "Explore" subagent on a small model, and complex work usually to a "General Purpose" subagent on a larger one, giving a buyer "the advantages of subagents and multimodel workflows" without configuring anything ([GitHub](https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly/)).
 - Policy and governance — budget caps, model selection enforced at team level, usage tracking.
 - An opinionated coding workflow — the surface graph and the defaults that connect it.
+
+The defaults, not the configuration layer above them, are what a single developer buys. GitHub's own position is that skills, MCP servers, instructions, and custom agents are not required to be "highly successful with AI," but "become quite important as you progress and need to define complex workflows and automate things for your teams" ([GitHub](https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly/)). So the configuration surface earns its price at team scale, not at desk scale.
 
 ## Why it works
 
@@ -40280,7 +40467,7 @@ Pick the model from how a cheap model behaves on the task, not from the task des
 
 Most LLM routers decide from the task description alone. That works when the prompt separates easy from hard, but agentic software tasks routinely defeat it: a near-identical issue can hide a one-line typo fix or a multi-module refactor, and the description does not tell them apart ([SWE-Router](https://arxiv.org/abs/2607.00053)).
 
-[Cascade routing](../../training/copilot/model-selection.md) answers this by starting cheap and escalating when tests fail — but that needs a binary pass/fail signal. Many agentic tasks have no such signal: no test to run, no type check, no linter verdict at the routing moment. Trajectory-conditioned escalation substitutes a learned read of the partial trajectory for the missing test result, so the escalation decision survives on tasks where cascade routing has nothing to key on.
+[Cascade routing](../../loop-engineering/within-task-model-cascade.md) answers this by starting cheap and escalating when a gate rejects the output — but that needs a binary pass/fail signal. Many agentic tasks have no such signal: no test to run, no type check, no linter verdict at the routing moment. Trajectory-conditioned escalation substitutes a learned read of the partial trajectory for the missing test result, so the escalation decision survives on tasks where cascade routing has nothing to key on.
 
 ## How it runs
 
@@ -40314,11 +40501,87 @@ SWE-Router pairs a weak model with a strong one and lets the weak model explore 
 
 ## Related
 
-- [GitHub Copilot: Model Selection & Routing](../../training/copilot/model-selection.md) — cascade routing that escalates on binary test pass/fail; this technique fills the gap it leaves on feedback-less tasks.
+- [Within-Task Model Cascade: Designing the Escalation Gate](../../loop-engineering/within-task-model-cascade.md) — cascade routing that escalates when a gate rejects the output; this technique fills the gap it leaves on feedback-less tasks.
+- [GitHub Copilot: Model Selection & Routing](../../training/copilot/model-selection.md) — the same cascade taught as a Copilot curriculum lesson, with worked credit costs.
 - [Gateway Model Routing](gateway-model-routing.md) — the infrastructure layer that exposes the weak and strong models a router escalates between.
 - [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — a prompt-time complement that allocates effort from task cues rather than trajectory evidence.
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — the weak-model side of the pairing, used as a bounded sub-tool.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the broader cost-routing frame this escalation policy sits inside.
+
+---
+
+### Trigger-Level Gating for Autonomous Agent Intake
+Source: https://agentpatterns.ai/patterns/agent-design/trigger-level-agent-intake-gating/
+
+# Trigger-Level Gating for Autonomous Agent Intake
+
+> Trigger filters and tool scope decide what an autonomous agent may do to your issues; approvals only decide when you notice.
+
+Once an agent can act on a tracker without being asked, three separate gates stand between an incoming issue and a changed one. They are not interchangeable, and only two of them carry authority. Getting the order wrong produces a team that believes it has a governance boundary when it has a notification preference.
+
+## The three gates
+
+GitHub's issue automations expose all three, which makes them a useful reference implementation for a distinction that applies to any tracker-driven agent.
+
+| Gate | Question | Mechanism | Carries authority |
+|------|----------|-----------|-------------------|
+| Trigger | May the agent start? | Trigger type plus an optional search-query filter | Yes |
+| Tool | What may it do once running? | The tool set granted at creation | Yes |
+| Approval | Does this change land now? | Self-rated confidence against a repository threshold | No |
+
+Automations fire on a schedule, when an issue is created, or when a pull request is opened or synchronized. A second rule narrows intake further: automations ignore events from users without write access by default, stated as a measure "to reduce the risk of prompt injection" ([About Copilot automations](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-automations)).
+
+Tool selection is where scope actually lives. GitHub is direct about it — "Selecting tools is the main way you control the scope of an automation. Grant only the tools that the task needs" — and an automation can act in only the single repository it is scoped to ([About Copilot automations](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-automations)).
+
+The approval gate reaches issue labels, fields, type, closing, and assignees, and nothing else. A repository-wide automation level sets the threshold the agent's self-rating is compared against: Full control, Cautious (the default), Balanced, or Full automation ([rationale, confidence, and approvals](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-automation-rationale-and-approvals)). GitHub ships this third gate in public preview and states it is "subject to change," so treat the level names and thresholds as the least durable part of the model — the trigger and tool gates are the ones worth building policy on.
+
+## Approvals are not a boundary
+
+The approval layer is the one most teams reach for, and GitHub disclaims it directly: "Approvals are a workflow convenience, not a security control. They don't enforce a server-side boundary, so an agent with permission to change issues can apply changes directly instead of proposing them, including through the REST and GraphQL APIs. Use repository and agent permissions, not approvals, to control what an automation is allowed to do" ([rationale, confidence, and approvals](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-automation-rationale-and-approvals)).
+
+Set the trigger filter and the tool set as though the approval queue does not exist, then use the automation level to tune how much of the resulting work you read.
+
+## Why it works
+
+The trigger gate is deterministic and runs before the model does. A search-query filter is evaluated against issue metadata with no inference involved, so a crafted issue body has no reasoning surface to argue against — the agent never reads text that fails the filter. Excluding events from untrusted users closes the prompt-injection path at intake rather than detecting the injection downstream ([About Copilot automations](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-automations)). This is the same architectural-rather-behavioral guarantee that makes the [safe outputs pattern](../../security/safe-outputs-pattern.md) hold.
+
+The approval gate sits on the other side of the model and inherits its weaknesses. It grades work already produced, scored by the agent's own verbalized confidence — a signal measured at 0.492 and 0.570 expected calibration error on two small open models, driven by a stable set of middle-to-late-layer components rather than a tuning artifact ([Wired for Overconfidence, arxiv 2604.01457](https://arxiv.org/abs/2604.01457)). That is why the vendor scopes it to convenience.
+
+## When this backfires
+
+- Treating the approvals panel as a boundary. An automation holding issue-write permission applies changes directly through the REST and GraphQL APIs, and the queue shows nothing about what bypassed it ([rationale, confidence, and approvals](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-automation-rationale-and-approvals)).
+- Trusting confidence tiers on triage work. Issue triage means reading issue text and searching for related context — the evidence-tool regime that "systematically induce[s] severe overconfidence due to inherent noise in retrieved information," in contrast to verification tools whose deterministic feedback grounds the estimate ([The Confidence Dichotomy, arxiv 2601.07264](https://arxiv.org/abs/2601.07264)). The default Cautious level auto-applies high-confidence ratings, which is where that inflation concentrates.
+- Reviewing the queue in bulk. Suggestions accumulate and are searchable with `has:suggestions`, and the panel offers accept-all ([GitHub Changelog, 2026-07-23](https://github.blog/changelog/2026-07-23-agent-automation-controls-in-github-issues-in-public-preview)). A queue cleared that way is Full automation with extra latency and an audit trail that misrepresents the review as considered.
+- Assuming the policy covers a known set of agents. Any user with write access can create an automation, but "An automation is private to the user who created it. Other people, including repository administrators, can't see your automations" ([About Copilot automations](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-automations)). The automation level applies repository-wide to a population no admin can enumerate.
+- Planning to use it on a public repository. Automations require a private or internal repository ([About Copilot automations](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-automations)), so the repositories facing the most untrusted intake are excluded.
+- Adding a filter instead of narrowing tools. A broadly triggered agent with a minimal tool set is easier to reason about than a narrowly filtered agent holding broad tools, because the filter is configuration that drifts as labels are renamed while the tool grant is the thing that bounds damage. Reach for the trigger filter to control cost, noise, and injection surface — not to substitute for scope.
+
+## Example
+
+A team wants an agent to triage inbound bugs but never to touch anything release-related. The gates get set in order of authority.
+
+The trigger gate fires on issue creation with a search-query filter restricting the run to issues that are not already labeled `release`. Because the default excludes events from users without write access, an outside reporter's issue does not start a run until someone on the team engages with it.
+
+The tool gate grants label and issue-type tools only. No assignment tool, no close tool, no pull-request tool. Even a fully injected run cannot close an issue or dispatch work, because the capability was never granted.
+
+The approval gate is set to Cautious while the team calibrates, so medium and low-confidence labels queue for review. After a month of reading the rationale on accepted suggestions, they move to Balanced. Nothing about that change alters what the agent is permitted to do — only how much of its output they read first.
+
+## Key Takeaways
+
+- Three gates stand between an incoming issue and a changed one: trigger, tool, and approval. Only the first two carry authority.
+- GitHub states that approvals "are a workflow convenience, not a security control" and directs teams to repository and agent permissions instead.
+- The trigger gate is deterministic and pre-model, so a filtered-out issue never enters the agent's context — this is what makes it an injection boundary.
+- Self-rated confidence is a weak threshold signal, and weakest on exactly the evidence-gathering work that issue triage consists of.
+- Set triggers and tools as if the approval queue did not exist, then use the automation level to tune reading volume.
+- Repository-level automation levels govern automations that administrators cannot see, so the policy is not an inventory.
+
+## Related
+
+- [Issue-Tracker as Agent Dispatch Surface](../../workflows/issue-tracker-agent-dispatch-surface.md) — the dispatch contract this gating sits inside; names the opt-in pickup filter as a precondition
+- [Classifier-Gated Auto-Permission for Cloud-IDE Coding Agents](classifier-gated-auto-permission.md) — the in-session counterpart, deciding per tool call rather than per intake event
+- [Deterministic Precondition Gates for Tool-Using Agents](deterministic-precondition-gates.md) — a deterministic predicate on the write path, operating inside the tool gate
+- [Safe Outputs Pattern](../../security/safe-outputs-pattern.md) — the architectural guarantee that grants write capability per output type rather than reviewing writes afterwards
+- [Verification-Gated Agent Autonomy via Automated Review](verification-gated-agent-autonomy.md) — what to do when review must scale past a human reading every suggestion
 
 ---
 
@@ -40803,6 +41066,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Cost-Driven Model Routing Without Quality Monitoring](cost-routing-without-quality-monitoring.md) — Routing to cheaper models without per-tier quality signals turns the cost dashboard green while customer-visible quality silently decays for months; the fix is calibrated cascades and shadow scoring, not abandoning routing
 - [Multi-Agent Shared State Isolation Anomalies](multi-agent-shared-state-isolation-anomalies.md) — Multi-agent systems sharing mutable memory or tool registries hit four formally verified concurrency anomalies — stale-generation, phantom-tool, causal-cascade, tool-effect reordering — reproduced in deer-flow and LangGraph's prebuilt ToolNode
 - [LLM API Routers as Application-Layer Man-in-the-Middle](llm-api-router-mitm.md) — An LLM API router terminates client TLS and holds every prompt, completion, and tool call in plaintext; four formalized attack classes and a March 2026 LiteLLM compromise show the router is a privileged tier in your threat model, not benign infrastructure
+- [Permission Modes as a Defense Against a Tampered Response Path (Response-Path Control Gap)](response-path-control-gap.md) — In-agent permission modes and allowlists evaluate the tool calls a response contains, so a router that rewrites the response chooses what those gates are shown; four coding agents recorded a 0% defense success rate
 - [Pooled-Evidence Factuality Checks for MCP Agents (Cross-Source Conflation)](pooled-evidence-mcp-factuality-conflation.md) — pooled-evidence NLI verifiers pass claims supported somewhere in MCP traces but attributed to the wrong source; on 50 controlled clinical conflation probes the source-blind baselines retained every injected attribution swap
 - [Trusting Model-Level Privilege Restraint at Tool Selection](over-privileged-tool-selection.md) — mainstream open-weight agents pick higher-privilege tools 55-65% of the time when a lower-privilege variant suffices, and transient failures amplify the rate; general safety alignment does not transfer to tool-selection privilege
 - [Destructive-Failure Mechanism Attribution by Mitigation Owner (ClayBuddy Three)](destructive-failure-mechanism-attribution.md) — A three-mechanism cut of destructive coding-agent failures — underspecification, capability errors, harness errors — chosen so each bucket routes to a different mitigation owner (spec author, model trainer, harness builder)
@@ -42126,6 +42390,7 @@ const options = {
 - [Skill disallowed-tools Frontmatter](../../tools/claude/skill-disallowed-tools.md) — the deny-side complement to allow-lists at the skill layer
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — same shape one layer up: instructions cannot enforce a closed set either
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — why the restricted-bypass trap is dangerous in the first place
+- [Permission Modes as a Defense Against a Tampered Response Path (Response-Path Control Gap)](response-path-control-gap.md) — the other way a correctly-set permission mode fails: a router on the path chooses the response the mode evaluates
 
 ---
 
@@ -42290,6 +42555,7 @@ The numbers are the measured Microsoft AX figures; the point is that only the se
 - [Tokenizer Swap Tax](../../token-engineering/tokenizer-swap-tax.md) — the distinct token-count mechanism this page must not be conflated with
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — routing by task complexity once the per-task numbers are known
 - [Token Reduction Mistaken for Cost Reduction](token-reduction-not-cost-reduction.md) — the same unit-price-versus-billed-cost gap, on a bolt-on context-reduction layer instead of a model swap
+- [Pricier-Per-Token Models That Cost Less Per Task](../../token-engineering/pricier-per-token-cheaper-per-task.md) — the reciprocal case, where a delegating harness inverts the ordering the other way
 
 ---
 
@@ -44314,6 +44580,7 @@ The only change is what the test-generation prompt is allowed to see. The spec-g
 - [Assertion-Free Test Theater in Agent-Authored Patches](assertion-free-test-theater.md) — agent-written tests that run green while carrying no real oracle signal
 - [Happy Path Bias](happy-path-bias.md) — agents skip error handling and edge cases systematically, in code and in tests
 - [Specification-Grounded Test Writing](../../verification/specification-grounded-test-generation.md) — the complementary move: withhold the implementation, then supply the specification as enumerated rules so the tester knows the intended edge behavior
+- [Deriving a Specification From Buggy Code Before Generating Tests](../../verification/derived-specification-test-generation.md) — what to do when no written specification exists: have the model derive one from the code, then drop the code from the prompt
 
 ---
 
@@ -44864,6 +45131,7 @@ The pinned digest blocks the unpinned-image step of the LiteLLM compromise. The 
 
 ## Related
 
+- [Permission Modes as a Defense Against a Tampered Response Path (Response-Path Control Gap)](response-path-control-gap.md) — the agent-side half: what a router on the path does to permission modes, execution allowlists, and model review
 - [Lethal Trifecta Threat Model](../../security/lethal-trifecta-threat-model.md) — router compromise instantly closes the trifecta on agents whose principals look benign in isolation
 - [Hostname-Allowlist Proxy: The TLS-Inspection Blind Spot](../../security/hostname-allowlist-tls-blind-spot.md) — the network-layer sibling at the L4/L7 boundary; this page is its application-layer analogue
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — untrusted *inputs* the agent reads; this page is the complementary anti-pattern for untrusted *infrastructure* the agent's traffic transits
@@ -45480,6 +45748,7 @@ The lattice pays off only when shared mutable state is genuinely involved — a 
 ## Related
 
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](../multi-agent/crdt-observation-driven-coordination.md)
+- [Pre-Write Change Intent Admission (Claim Plane)](../multi-agent/pre-write-change-intent-admission.md)
 - [Hint-Driven Concurrency for Read-Only MCP Tools](../../tool-engineering/read-only-hint-concurrency.md)
 - [File-Based Agent Coordination](../multi-agent/file-based-agent-coordination.md)
 - [Decentralized Memory for Self-Evolving Multi-Agent Systems](../multi-agent/decentralized-memory-multi-agent.md)
@@ -46045,6 +46314,75 @@ When the team suspects degradation, they run the eval suite against the pinned v
 - [Demo-to-Production Gap](demo-to-production-gap.md)
 - [The Anthropomorphized Agent](anthropomorphized-agent.md) — misattributing context overload to agent fatigue rather than session state
 - [Blaming the Model for Scaffolding-Driven Quality Regressions](blaming-the-model-for-scaffolding-regressions.md) — the scaffolding-evolution counterpart: the other layer that changed when quality dropped
+
+---
+
+### Permission Modes as a Defense Against a Tampered Response Path (Response-Path Control Gap)
+Source: https://agentpatterns.ai/patterns/anti-patterns/response-path-control-gap/
+
+# Permission Modes as a Defense Against a Tampered Response Path (Response-Path Control Gap)
+
+> Client-side permission modes gate the tool calls a response contains, so a router that rewrites the response chooses what the agent asks permission for.
+
+Permission prompts, execution allowlists, and plan mode all evaluate the tool calls carried in the response the agent received ([Anthropic](https://code.claude.com/docs/en/permissions)). When a third-party API router sits between the agent and the provider, the router decides what that response carries, so it also decides what the permission system is shown. [Fu et al. (2026)](https://arxiv.org/abs/2607.23624) measured this against four commodity coding agents and recorded a 0% defense success rate at every injection level tested. The anti-pattern is counting in-agent gates as the control that keeps a router-mediated agent safe.
+
+## When the gap is open
+
+Three conditions have to hold together:
+
+- A third-party router or an unattested self-hosted gateway sits on the request path. Routing Claude Code through one is a documented configuration, and Anthropic states that it "doesn't endorse, maintain, or audit third-party gateway products" ([Anthropic](https://code.claude.com/docs/en/llm-gateway)).
+- The agent runs with enough autonomy to execute repository actions straight from the response it receives.
+- In-agent permission logic is the layer you rely on to stop unsafe actions.
+
+Drop any one condition and the exposure narrows sharply.
+
+## What the measurements show
+
+[Fu et al.](https://arxiv.org/abs/2607.23624) record real provider traces and replay them with router-side edits, which removes agent randomness from the measurement. Their four injection levels escalate in subtlety:
+
+- Replace the response outright.
+- Append an extra tool call, preserving every action the provider intended.
+- Rewrite prose and payload together, so the explanation matches the injected action.
+- Regenerate output from a blend of clean and injected next-token distributions.
+
+The test set holds 400 records covering malicious execution, buggy code, exfiltration, and supply-chain payloads. Claude Code, Codex, Cursor, and OpenCode all recorded 0% defense success at every level, as did each of Claude Code's four permission modes and each of four backend models.
+
+The client-side mitigations they tested helped partly, never fully. Execution allowlists reached 30.8% to 44.1% defense success while wrongly blocking 29.7% to 43.9% of benign actions. Review of each response by a second model reached up to 64.4% against the crudest injection and 50.8% to 51.8% against the subtle ones, with collateral blocking between 9.0% and 53.2% depending on the reviewer model.
+
+## Why it works
+
+Nothing binds the response your agent consumes to the response the provider produced. No provider enforces cryptographic integrity between client and upstream model ([Xie et al. 2026](https://arxiv.org/abs/2606.16358)), and clients "cannot independently distinguish honest mediation from route substitution, hidden fallback, stream manipulation, or forged provenance" ([Wang and Tian 2026](https://arxiv.org/abs/2606.22560)). The permission gate therefore sits downstream of the tampering and inspects an artifact the attacker authored. Tightening the gate raises the bar on presentation, which is what the polished injection levels are built to clear.
+
+## When this backfires
+
+- Reading 0% as "permission modes do not work." They constrain the model's own mistakes and injection arriving through [repository content, fetched pages, and tool output](external-artifacts-as-data.md). This result maps the edge of that envelope; it does not retire the control.
+- No third-party router on the path. Calling the provider directly, or through a first-party or hyperscaler endpoint, leaves no extra intermediary and no gap to close.
+- A human on the execution path. When the agent only proposes a diff someone applies, an injected tool call has no route to execution.
+- Containment was never measured. The paper tested in-agent allowlists and model review, not kernel-enforced sandboxing plus an [egress allowlist](../../security/agent-network-egress-policy.md), which bound the effect of a call regardless of who authored it. A 0% in-agent figure does not describe a contained deployment.
+- Removing the gateway to close the gap. Gateways deliver credential custody, per-developer attribution, budget enforcement, and audit logging ([Anthropic](https://code.claude.com/docs/en/llm-gateway)); attested gateway runtimes that sign route and stream evidence give fail-closed tamper detection instead ([Wang and Tian 2026](https://arxiv.org/abs/2606.22560)).
+- Treating small-sample rates as universal. [Fu et al.](https://arxiv.org/abs/2607.23624) ran three task instances per configuration and say the numbers are configuration-dependent rather than universal.
+
+## Example
+
+The second injection level in [Fu et al.](https://arxiv.org/abs/2607.23624) is the clearest illustration. The router leaves the provider's response intact, so every action the provider intended still runs, and appends one attacker-chosen tool call. Each record in their dataset pairs that call with an assistant utterance describing it as ordinary task work, which is why the appended step reads as part of the job in progress. Their tool distribution is 277 Bash, 74 Write, and 49 Edit calls across 34 attack subcategories.
+
+An `acceptEdits`-mode session sees a Bash call accompanied by a plausible explanation and approves it under the same rule that approves the legitimate calls beside it. The gate is working exactly as specified. It is being shown a forged input.
+
+## Key Takeaways
+
+- Client-side permission modes authorize the tool calls a response contains, and a router on the path chooses that response, so the gate evaluates an artifact the attacker wrote
+- Four commodity coding agents recorded a 0% defense success rate across four injection levels, and Claude Code's four permission modes each recorded 0% ([Fu et al. 2026](https://arxiv.org/abs/2607.23624))
+- Execution allowlists reached 30.8% to 44.1% defense success and second-model review up to 64.4%, both with substantial wrong-blocking of benign actions — partial mitigations, not closures
+- The gap exists because no provider enforces cryptographic integrity between client and upstream model ([Xie et al. 2026](https://arxiv.org/abs/2606.16358))
+- The proportionate response is to add a layer that binds execution — sandboxing with egress allowlists, or an attested gateway that signs route and stream evidence — and to keep permission modes for the threats they were built for
+
+## Related
+
+- [LLM API Routers as Application-Layer Man-in-the-Middle](llm-api-router-mitm.md) — the router threat model this page assumes; that page covers the infrastructure tier, this one covers the agent-side gates
+- [bypassPermissions Silently Overrides allowedTools (The Restricted-Bypass Trap)](bypass-permissions-overrides-allowlist.md) — the misconfiguration sibling, where the permission system is defeated by its own settings rather than by a tampered response
+- [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — the same lesson one layer up: enforcement outside the model beats instruction inside it
+- [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](../../security/agent-network-egress-policy.md) — a containment layer that bounds an injected call regardless of who authored the response
+- [Blast Radius Containment: Least Privilege for AI Agents](../../security/blast-radius-containment.md) — scoping the permissions a compromised turn can spend
 
 ---
 
@@ -49923,6 +50261,7 @@ How agents hand off work, share state, and refine each other's output without a 
 - [Forked vs Fresh Subagents: When to Inherit the Parent Conversation](forked-vs-fresh-subagents.md) — Fork when the parent's mental model is an asset the brief cannot reconstruct; start fresh when bias, trifecta exposure, or token budget make inherited context a liability
 - [File-Based Agent Coordination](file-based-agent-coordination.md) — Coordinate parallel agents using lightweight file locks in a shared repository; git merge mechanics enforce task exclusivity without a central orchestrator
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](crdt-observation-driven-coordination.md) — CRDT-based shared state enables lock-free concurrent code generation with zero structural merge conflicts
+- [Pre-Write Change Intent Admission (Claim Plane)](pre-write-change-intent-admission.md) — Workers declare a versioned change intent before coding and a deterministic control plane admits, constrains, or refuses it — moving interference detection ahead of the write, at the cost of frequent serialization
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md) — Decompose the self-improving agent loop into discrete, specialized roles with persistent knowledge layers, staged validation, and gated persistence
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md) — Separate code and test generation into independent agents so the test writer never sees the code, preventing bias that cuts test accuracy by 30%
 - [Persistent Shared Search Sub-Agent for Output-Token Reuse](persistent-search-subagent.md) — Route repository lookups through one persistent searcher so a region is explored once, cutting the redundant output tokens that dominate multi-agent cost
@@ -54004,6 +54343,90 @@ In several of these cases the cheaper alternative is per-agent observation maski
 
 ---
 
+### Pre-Write Change Intent Admission (Claim Plane)
+Source: https://agentpatterns.ai/patterns/multi-agent/pre-write-change-intent-admission/
+
+# Pre-Write Change Intent Admission (Claim Plane)
+
+> Agents declare base commit and write scope before coding; a deterministic control plane admits, constrains, or refuses each claim before any byte changes.
+
+Pre-write change intent admission moves interference detection ahead of the write. Each parallel worker declares a versioned change intent — an exact base commit, typed resources, dependencies, and the operations it plans — and a control plane decides whether that claim can coexist with the intents already active ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)). The distinction it rests on is between an integration conflict, which you can only see after both agents have written code, and an authority conflict, which two active workers already have the moment they claim incompatible rights over the same surface. The published evidence is a six-pair feasibility check, so treat the mechanism as clear and the payoff as unproven.
+
+## When this pattern applies
+
+Three conditions have to hold before the protocol earns its cost:
+
+- You control an enforceable write boundary. Claim Plane routes file operations through a broker with exact capabilities, so an ordinary write does not imply delete or rename. Where a runtime exposes tool-call hooks, an adapter enforces this directly; where it does not, you fall back to isolated worktrees plus diff verification and "the guarantee is correspondingly weaker because direct host writes may bypass the control plane" ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)).
+- Your planner can declare scope accurately. Admission compares typed resources, so a planner that cannot predict which files, symbols, or contracts a task will touch either blocks legitimate edits or over-declares and serializes unrelated work.
+- Contention is high enough to pay for the protocol. [Worktree isolation](../../workflows/worktree-isolation.md) already separates two agents working on different modules, so the declaration layer buys nothing until they genuinely collide.
+
+If any of the three fails, prefer [cohesion-aware task partitioning](cohesion-aware-task-partitioning.md) upstream or an optimistic scheme like [CRDT-based observation-driven coordination](crdt-observation-driven-coordination.md).
+
+## Committed and contingent scope
+
+The declaration splits into two kinds of authority. A committed operation reserves write ownership now and participates in admission immediately. A contingent operation names a surface the worker might need later; it is tracked as a read premise but reserves nothing ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)).
+
+That split exists to defuse a planner trade-off. Declaring narrowly preserves parallelism but blocks legitimate supporting edits; declaring broadly preserves recall but serializes unrelated work. When a worker first tries to mutate a contingent surface, the control plane promotes only the concrete path or region requested — never the whole declared pattern — and re-runs the same admission logic inside one transaction. If admission fails, the mutation is denied and the intent is left untouched, so failed speculation cannot quietly widen a worker's write rights.
+
+Admission returns a decision from a fixed vocabulary rather than a yes or no. Beyond independent and serialize, it can admit an overlap governed by a shared contract, record one worker as dependent on another's contract, allow parallel work confined to disjoint declared regions, or track a premise so it can invalidate a dependent later. Unknown overlapping writes fail closed.
+
+## Why it works
+
+Two causes, both structural. First, timing: an integration conflict becomes visible only after both workers have spent inference and test budget, while an authority conflict is decidable from a declared base commit, typed resources, and dependencies before a single byte is written ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)). Moving the decision earlier converts wasted inference into a cheap refusal. Second, separation of proposal from authority: the planner may be probabilistic, but admission, promotion, leases, fencing, and verification are deterministic and auditable, so a mis-predicting planner cannot expand its own rights. This is the same systems argument [SWE-agent](https://arxiv.org/abs/2405.15793) made for single agents — the execution interface and the invariants around tool actions change outcomes independently of the model.
+
+The coordination penalty it targets is measured: across more than 600 collaborative coding tasks, [CooperBench](https://arxiv.org/abs/2601.13295) reports roughly 30% lower success when two agents split work than when one agent does both.
+
+## Example
+
+The paper's reference authorization rule shows where the enforcement point sits. Every mutation is checked against current committed authority first, and a contingent surface must survive re-admission before it is touched:
+
+```text
+function AUTHORIZE_MUTATION(intent I, mutation m):
+    if committed_scope(I) covers m:
+        validate lease, intent version, capability, fencing token
+        execute through broker and record tree transition
+        return SUCCESS
+    if contingent_scope(I) covers m:
+        I' <- promote only the concrete path/region required by m
+        if ADMIT(I', current active intents) succeeds atomically:
+            re-attest broker to I'
+            execute m
+            return SUCCESS
+        return BLOCK
+    return BLOCK
+```
+
+Adapted from Appendix A of [Nikolaev (2026)](https://arxiv.org/abs/2607.21909). An undeclared mutation falls through both branches and is refused.
+
+## When this backfires
+
+- Serialization is the common outcome, not the exception. In the paper's six-pair check, the arm that treated all planned scope as committed passed 6 of 6 pairs, but only by serializing all 6. Plain always-serial execution passed 4 of 6, and the dynamic-scope arm the paper introduces passed 3 of 6 with 7 promotions and 2 fail-closed blocks ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)). The author reports one safe parallel case that was conservatively serialized and labels the run a debugging signal.
+- Blocking is expensive when transactions are long. An agent holds authority across minutes of inference, so a pessimistic gate blocks far longer than a database lock would — the cost regime behind [multi-agent shared state isolation anomalies](../anti-patterns/multi-agent-shared-state-isolation-anomalies.md). [CoAgent](https://arxiv.org/abs/2606.15376) argues the opposite design from that premise, advisory notification plus targeted repair, and reports staying within 5% of serial correctness at 1.4x speedup where two-phase locking and optimistic concurrency control give up nearly all concurrency gains.
+- High-recall planners lower precision. Declaring many bounded contingent regions reduces undeclared writes, but the paper reports it also makes static policy far more conservative and blurs region boundaries ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)).
+- Language coverage is thin. The prototype is Python-first for typed symbol and callable extraction; the protocol is language-agnostic, but the author notes that useful semantic analysis elsewhere needs language adapters that do not yet exist ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)).
+- Single-host only. The reference lease and operating-system lock give authority on one host; fleets need a network-authoritative store plus a distributed lease and fencing sequence ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)).
+- Most coordination loss is not a write conflict. CooperBench attributes the bulk of collaborative failure to jammed communication and wrong expectations about a partner's plan ([CooperBench, 2026](https://arxiv.org/abs/2601.13295)). An authority layer refuses bad writes; it does not correct a wrong model of what the other agent is doing.
+
+Pre-write admission is also not a replacement for merge, tests, or review. It is one more enforcement layer meant to surface unsafe concurrency earlier ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)).
+
+## Key Takeaways
+
+- Pre-write admission decides whether two workers may hold incompatible rights over a surface before either writes, rather than repairing the collision at merge ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909))
+- Committed scope reserves authority now; contingent scope reserves nothing until the first attempted mutation triggers a narrowed promotion and atomic re-admission
+- A rejected promotion leaves the intent unchanged, so a planner that guesses wrong cannot widen its own write authority
+- The mechanism only binds where writes cross an enforceable boundary; without tool-call hooks or a broker, direct host writes bypass the control plane
+- Published results are a six-pair feasibility check in which full serialization was the only clean arm, so treat parallel throughput as unproven and measure it yourself ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909))
+
+## Related
+
+- [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](crdt-observation-driven-coordination.md)
+- [Verify-Gated Completion as Admission Control](verify-gated-completion-admission-control.md)
+- [Cohesion-Aware Task Partitioning for Multi-Agent Coding](cohesion-aware-task-partitioning.md)
+- [File-Based Agent Coordination](file-based-agent-coordination.md)
+- [Multi-Agent Shared State Isolation Anomalies](../anti-patterns/multi-agent-shared-state-isolation-anomalies.md)
+
+---
+
 ### Rainbow Deployments for Agents: Gradual Version Migration
 Source: https://agentpatterns.ai/patterns/multi-agent/rainbow-deployments-agents/
 
@@ -55922,6 +56345,7 @@ The [Multi-Agent System Failure Taxonomy](https://arxiv.org/abs/2503.13657) name
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md)
 - [Verification Ledger](../../verification/verification-ledger.md)
 - [Agent Handoff Protocols](agent-handoff-protocols.md)
+- [Pre-Write Change Intent Admission (Claim Plane)](pre-write-change-intent-admission.md)
 - [Deterministic Guardrails](../../verification/deterministic-guardrails.md)
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md)
 
@@ -66784,6 +67208,7 @@ Shrink what each call has to carry, on both the input and output sides.
 - [Token-Efficient Code Generation](token-efficient-code-generation.md) — idiomatic structure beats "be concise" prompting
 - [Line-Anchored Feedback](line-anchored-feedback.md) — deliver change requests as line-anchored inline comments to cut edit tokens on large files
 - [Tokenizer Swap Tax](tokenizer-swap-tax.md) — budgeting for migrations that change token counts under flat per-token pricing
+- [Language Choice as an Agent Token-Cost Lever](language-choice-token-cost.md) — agents spend up to 1.69x more tokens in OCaml than Python, and the gap is compile loops rather than harder thinking
 - [Prompt Compression](../context-engineering/prompt-compression.md) — maximize signal per token in instructions
 - [Semantic Density Optimization](../context-engineering/semantic-density-optimization.md) — raise task-relevant tokens per byte in the codebase
 - [Context Budget Allocation](../context-engineering/context-budget-allocation.md) — treat context as a finite budget across sources
@@ -66829,6 +67254,7 @@ Push verbose intermediate work to a cheaper model and return a compact result.
 You cannot reduce what you do not measure — instrument spend before cutting it.
 
 - [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — swapping only the orchestration layer cut cost per task 41% at parity quality; the harness sets both token volume and effective price
+- [Pricier-Per-Token Models That Cost Less Per Task](pricier-per-token-cheaper-per-task.md) — comparing two models under one harness: a 2x per-token premium inverted into a lower bill once the lead could delegate
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — the instrument-attribute-fix-verify loop
 - [Cost-Quality Pareto Measurement for Agent Configurations](cost-quality-pareto-measurement.md) — plot each configuration on the (cost, quality) frontier so quality-trading downgrades are visible
 - [Code Cleanliness as an Agent Cost Lever](code-cleanliness-agent-cost-lever.md) — cleaner code cut token use 7-8% with no pass-rate change
@@ -66970,7 +67396,7 @@ Model rotation starts with the cheaper model and escalates only on validation fa
 
 Retrieval augmentation is a second lever on the same trade-off: a cheaper model with good context can beat a bigger model used alone. On a CodeScaleBench evaluation, Claude Sonnet 4.6 paired with code-search MCP beat Fable 5 alone on 6 of 9 large-codebase tasks at roughly half the cost per quality point ([Sourcegraph — MCP and a cheaper model beat a bigger model alone](https://sourcegraph.com/blog/sourcegraph-mcp-and-a-cheaper-model-beat-a-mythos-class-model-alone)). Pairing a lower tier with targeted retrieval can beat a single high-tier call before you reach for escalation.
 
-Cascade routing queries cheaper models first and escalates only when confidence is low. [FrugalGPT](https://arxiv.org/abs/2305.05176) showed up to 98% cost reduction this way. No coding tool implements it natively, so the cascade pattern stays a manual or custom build. Approximate it with a two-pass pattern: fast model first, deterministic gate (tests, linter, type checker), then escalate to the capable model on failure.
+Cascade routing queries cheaper models first and escalates only when confidence is low. [FrugalGPT](https://arxiv.org/abs/2305.05176) showed up to 98% cost reduction this way. No coding tool implements it natively, so the cascade pattern stays a manual or custom build. Approximate it with a two-pass pattern: fast model first, deterministic gate (tests, linter, type checker), then escalate to the capable model on failure. [Within-Task Model Cascade](../loop-engineering/within-task-model-cascade.md) covers the part that decides whether this pays — how to design the gate, and what a shape-only check lets through.
 
 Routing also affects how predictable your spend is, not just the average. Escalation paths make per-task cost vary. LangChain describes techniques for making a coding agent's token spend predictable, treating bounded cost as an explicit design goal rather than a side effect of tier choice ([LangChain — making coding-agent spend predictable](https://blog.langchain.com/how-we-made-coding-agent-spend-predictable)).
 
@@ -67303,6 +67729,90 @@ Because the prefix bytes never change, the provider serves them as cache reads. 
 - [Prompt Caching: Architectural Discipline for Agents](../context-engineering/prompt-caching-architectural-discipline.md) — the caching mechanism that drives the effective-input-price lever
 - [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — the quality guardrail that cutting tokens must respect
 - [The Harness as Product: What Listed-Rate Pricing Buys](../patterns/agent-design/harness-as-product.md) — the build-vs-buy view of the same harness layer: what you pay for beyond tokens when a product bills at listed API rates
+- [Pricier-Per-Token Models That Cost Less Per Task](pricier-per-token-cheaper-per-task.md) — the inverse experiment: hold the harness fixed and vary the model, where the cost ordering can invert
+
+---
+
+### Language Choice as an Agent Token-Cost Lever
+Source: https://agentpatterns.ai/token-engineering/language-choice-token-cost/
+
+# Language Choice as an Agent Token-Cost Lever
+
+> Language choice shifts agent token cost up to 1.69x — OCaml versus Python at matched difficulty — through compile loops, not harder thinking.
+
+Treat a per-language token multiplier as a diagnostic, not a language-selection rule. The effect is real and survives difficulty controls, but three conditions bound it: your model has to show the effect, task difficulty has to be held constant, and the language has to be something you can actually change. Miss any one and the number tells you nothing you can act on.
+
+## What the measurement shows
+
+[Wu, Anderson and Guha](https://arxiv.org/abs/2607.22807) ran five models across Python, Java, Rust and OCaml on MiniLCB — 100 problems sampled from LiveCodeBench v6's 499 language-agnostic tasks, 2,000 agent sessions in total. They fitted linear mixed-effects models with language as a fixed effect and problem identity as a random effect, so the ratios below are difficulty-controlled.
+
+| Language vs Python | Range across the five models |
+|---|---|
+| OCaml | 1.28x – 1.69x |
+| Rust | 1.07x – 1.57x |
+| Java | 0.85x – 1.34x |
+
+The direction is not uniform. Java is the only language that can come out cheaper than Python — Gemma writes it at 0.85x — and several Rust results are not statistically significant ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)). So "lower-resource costs more" is a tendency, not a law you can assume for your stack.
+
+Accuracy barely moves with language, with Gemma on OCaml the exception ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)). That makes this a cost lever rather than a capability one — the same shape as [code cleanliness](code-cleanliness-agent-cost-lever.md), which cut tokens without changing pass rate.
+
+This is the difficulty-controlled per-task view. For the complementary project-level view — how language choice moves an artifact's quality ceiling and total run cost across 17 languages — see [Programming Language Choice Still Shapes Agent Artifacts](../human/programming-language-choice-shapes-agent-artefacts.md).
+
+## Why it works
+
+The agent burns tokens failing to compile, not thinking harder. On OCaml, 92% of failed intermediate solutions are compile-time errors and only 8% are wrong answers, so the agent rarely gets far enough to learn whether its algorithm was right ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)). Escape from the loop is a language-learning event: "fix bug" accounts for 60% of breakthrough transitions, the moment the agent finally names a concrete OCaml-specific type error and the unchanged algorithm passes. Gemma looped on stuck states 1,196 times, 31% of them byte-identical rewrites.
+
+Two secondary behaviors add tokens. Agents prototype in Python before translating — Qwen spent 12 turns on one problem in Python before writing OCaml, and Sonnet spent 23 turns on another ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)). Agents also plan inside code comments rather than in prose.
+
+Upstream, the cause is training-data scarcity. Code LLMs produce strong results on well-represented languages such as Python, Java and JavaScript, and struggle on low-resource languages with limited training data ([Joel et al., arXiv:2410.03981](https://arxiv.org/abs/2410.03981)).
+
+The shape of the overspend inverts by language, which is what makes the multiplier a diagnostic. Gemma spends 3,554 median output tokens polishing an already-passing Python solution against 1,173 for OCaml ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)). Python spend is cosmetic churn after success; OCaml spend is compile churn before it. Those two failure modes need different fixes.
+
+## When this backfires
+
+- The language is not a free variable. In an existing repository the language was chosen years before an agent touched it, and a measured multiplier produces a recommendation nobody can act on.
+- Difficulty is not matched. The paper reports an intraclass correlation of 0.80–0.97, so problem identity explains most of the token variance ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)). Comparing raw per-language spend across a real backlog measures the backlog, not the language.
+- You chase 1.7x while carrying 30x. On SWE-bench Verified, identical tasks vary by up to 30x in total tokens across eight frontier models, and higher spend does not correlate with better accuracy ([Bai et al., arXiv:2604.22750](https://arxiv.org/abs/2604.22750)). Harness and loop design move more than language does.
+- The result may not reach your work. MiniLCB tasks are self-contained competitive-programming problems with visible tests, and the authors say the findings may not generalize to repository-scale software engineering ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)), where accumulated input tokens dominate spend ([arXiv:2604.22750](https://arxiv.org/abs/2604.22750)).
+- The gap is a moving target. Fine-tuning and in-context learning both shift low-resource performance, with effectiveness depending on model size ([Giagnorio et al., arXiv:2501.19085](https://arxiv.org/abs/2501.19085)). A multiplier you measure this quarter decays as models and harnesses improve.
+
+The authors are explicit that the paper is not language-selection advice: the title is a joke, and the stated intent is to understand why agents overspend in low-resource languages so that better multilingual agents can be built ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)).
+
+## Example
+
+A team runs agents against a Rust service and a Python service and sees the Rust runs costing more per merged change. The multiplier tells them where to look, not what to rewrite.
+
+The mechanism says the Rust spend should concentrate before the first passing state, in compile-error loops. So instrument that split first:
+
+```bash
+# Cheap proxy for the paper's snapshot analysis: how many turns end in a
+# compile failure versus a test failure, per language.
+cargo check --message-format=short   # fast typecheck, no codegen, no test run
+```
+
+If compile failures dominate, the fixes are all harness-side, not language-side. They are an instance of [feedback as capability equalizer](../patterns/agent-design/feedback-capability-equalizer.md) — raising feedback quality beats changing the model, or here the language:
+
+- Put the fast typechecker in the agent loop (`cargo check`, not `cargo build`) so a type error costs one short turn instead of a full build.
+- Return the compiler's own diagnostic text verbatim. Rust and OCaml error messages name the fix, and truncating them is what forces the byte-identical retry loop the paper measured.
+- Load idiom examples and type signatures for the crates in play, which attacks the training-data scarcity directly rather than routing around it.
+
+Rewriting the service in Python to capture at most 1.57x would trade a bounded token cost for an unbounded engineering one.
+
+## Key Takeaways
+
+- At matched difficulty, coding agents spend 1.28x–1.69x more tokens in OCaml than Python and 1.07x–1.57x more in Rust; Java ranges 0.85x–1.34x and can be cheaper than Python ([Wu et al., 2026](https://arxiv.org/abs/2607.22807))
+- The mechanism is compile-error looping, not deeper reasoning — 92% of failed OCaml snapshots are compile-time errors ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807))
+- Accuracy is largely unaffected by language, so this is a cost lever and not a capability one ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807))
+- Problem difficulty dominates token variance (ICC 0.80–0.97), and within-task variance reaches 30x on repository-scale benchmarks — both larger than the language effect ([arXiv:2604.22750](https://arxiv.org/abs/2604.22750))
+- Act on the diagnosis, not the multiplier: a fast typechecker in the loop, verbatim compiler diagnostics, and idiom examples in context attack the mechanism without changing language
+
+## Related
+
+- [Programming Language Choice Still Shapes Agent Artifacts](../human/programming-language-choice-shapes-agent-artefacts.md) — the project-level counterpart: quality ceiling and total run cost across 17 languages
+- [Feedback as Capability Equalizer](../patterns/agent-design/feedback-capability-equalizer.md) — the principle behind the fix: better feedback beats a bigger model, or a different language
+- [Code Cleanliness as an Agent Cost Lever](code-cleanliness-agent-cost-lever.md) — the same shape of finding: a real token saving with no pass-rate change
+- [Tokenizer Swap Tax: Budgeting for Model Migrations That Change Token Counts](tokenizer-swap-tax.md) — the other multiplier that moves cost without any code change
+- [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — the larger lever this page defers to when compile loops are not the bottleneck
 
 ---
 
@@ -67371,6 +67881,75 @@ The content is identical; only the second tells the model where each edit lands,
 - [Cost-Quality Pareto Measurement](cost-quality-pareto-measurement.md) — plot the cost-versus-correctness trade-off so a Sonnet-style accuracy loss is visible
 - [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — the guardrail: cutting tokens can degrade output, so measure the correctness side
 - [Harness-Controlled Token Economics](harness-token-economics.md) — how the surrounding harness, not just the model, sets token volume
+
+---
+
+### Pricier-Per-Token Models That Cost Less Per Task
+Source: https://agentpatterns.ai/token-engineering/pricier-per-token-cheaper-per-task/
+
+# Pricier-Per-Token Models That Cost Less Per Task
+
+> A model priced twice as high per token can finish a task for less total cost — but only when the harness lets it delegate.
+
+What you are pricing is the model and the harness together. Per-token price orders models correctly inside a plain agent loop, and can order them backwards once the harness gives the lead model somewhere cheaper to send work. The bill then follows what the lead declines to do itself.
+
+## The condition that decides it
+
+Cognition ran 3,000 evaluation sessions on the FrontierCode 1.1 benchmark with Fable 5 and Opus 4.8 in the lead seat, each with and without the same cheap sidekick agent. Fable 5 costs twice as much per token as Opus 4.8. The two arms landed on opposite sides ([Cognition, "Making Fable Cheaper Than Opus"](https://cognition.com/blog/making-fable-cheaper-than-opus)):
+
+| Configuration | Score | Cost per run |
+|---|---|---|
+| Fable 5 (low) + sidekick | 60.7 | $1.86 |
+| Opus 4.8 (medium) + sidekick | 54.6 | $2.04 |
+| Fable 5 (low) alone | 60.8 | $4.03 |
+| Opus 4.8 (medium) alone | 55.4 | $3.06 |
+
+Read the bottom two rows first. Without a sidekick, the 2x per-token premium lands as a 32% higher bill, exactly as the price table predicts. The inversion appears only in the top two rows, where each lead can hand work to a cheaper model. So the finding is not that expensive models are secretly cheap. It is that a delegating harness moves the cost ordering far enough to cross over, and a plain loop does not.
+
+Treat these as vendor-reported figures. Cognition sells Devin and the [Fusion architecture](https://cognition.com/blog/devin-fusion) credited for the result, no public harness reproduces the run, and a separate study measured a 23.8 percentage-point score spread across six harnesses on identical tasks and model backends ([Harness-Bench, arXiv:2605.27922](https://arxiv.org/abs/2605.27922)). Carry the method across to your own setup, not the numbers.
+
+## Why it works
+
+Effective cost per task is unit price multiplied by tokens consumed, and on agentic work the lead model's behavior sets the second factor. Cognition parsed every model call across the 3,000 sessions and found cost "dominated by how many turns the lead model takes, how much context it drags along, and above all, what it decides not to do itself". Fable's lead took 11.5 turns per run against Opus's 26.5, wrote 6.1k output tokens against 19.0k, and consumed roughly a third of the input tokens. It spent $0.27 more per run on its sidekick and $0.45 less on itself. In 81% of Fable-led runs the lead never made a single code edit, against 24% for Opus ([Cognition](https://cognition.com/blog/making-fable-cheaper-than-opus)).
+
+Both leads handed off about three times per run, so delegation volume is not the driver. Timing and content are. Fable delegated the implement-test-lint loop early with a constraint-level brief, while Opus explored and implemented solo and delegated the mechanical tail, then pulled the sidekick's files back into its own context twice as often and made four times as many corrective edits at lead prices ([Cognition](https://cognition.com/blog/making-fable-cheaper-than-opus)). That judgment is a model property no price table reports, which is why agentic capability is better reported per model-harness configuration than per model ([Harness-Bench, arXiv:2605.27922](https://arxiv.org/abs/2605.27922)).
+
+## When this backfires
+
+Per-token price stays the better guide under three conditions:
+
+- You have no delegating harness. A single-agent loop gives the lead nowhere cheaper to send work, so judgment cannot convert into fewer expensive tokens. Cognition's own no-sidekick arm is this case, and the price ordering held.
+- The tasks have nothing worth handing off. Cognition names short tasks with a handful of lead turns, and serial debugging where the root-cause hunt is one chain of judgments and "the accumulated context is the work" ([Cognition](https://cognition.com/blog/making-fable-cheaper-than-opus)).
+- The model sits below the delegation-capability floor. You cannot instruct the effect into existence: "a model coerced into delegating doesn't gain that judgment; it just delegates the wrong things" ([Cognition](https://cognition.com/blog/making-fable-cheaper-than-opus)). Sub-agent delegation is reliable only on the strongest models ([Harness-Controlled Token Economics](harness-token-economics.md)).
+
+The finding also inverts into a bad rule if you read it as "pricier is cheaper". On the independent AA-Briefcase benchmark, cost per task spans more than 800x across models, the leader is also the most expensive per task at over $31, and no low-cost-per-task model reaches frontier quality ([Artificial Analysis](https://artificialanalysis.ai/articles/aa-briefcase)). Price and per-task cost are not reliably related in either direction, which is why the measurement below is the deliverable rather than the ordering.
+
+## Example
+
+The design that settles the question is a four-cell matrix, not a two-model comparison. Vary the model and the harness independently, and price each cell on your own tasks:
+
+```text
+                  no sidekick      with sidekick
+  cheaper model   cost / score     cost / score
+  pricier model   cost / score     cost / score
+```
+
+That is the shape Cognition ran, and it is what makes the result interpretable: the no-sidekick column is the control showing the per-token premium behaving normally, so the crossover in the sidekick column is attributable to delegation rather than to the model alone ([Cognition](https://cognition.com/blog/making-fable-cheaper-than-opus)). Running only the sidekick column would have produced the same headline with no way to tell which factor caused it.
+
+## Key Takeaways
+
+- Compare model-harness pairs, not models. Per-token price ordered these two models correctly in a plain loop and backwards once a cheap sidekick was available.
+- The mechanism is what the lead model declines to do: 11.5 lead turns against 26.5, and a lead that never touched the code in 81% of runs.
+- The figures are vendor-reported by the company selling the harness, and a 23.8 percentage-point cross-harness spread means single-harness numbers transfer poorly. Reuse the method, re-measure the numbers.
+- Keep using per-token price when you have no delegating harness, the tasks have nothing to hand off, or the model lacks delegation judgment.
+
+## Related
+
+- [Cheaper-Per-Token Model Upgrades That Cost More Per Task](../patterns/anti-patterns/cheaper-per-token-costlier-per-task.md) — the other direction of the same unit mismatch, driven by token inflation rather than delegation
+- [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — the third axis: hold the model fixed and swap the orchestration layer
+- [Cost-Quality Pareto Measurement for Agent Configurations](cost-quality-pareto-measurement.md) — the standing frame for plotting each configuration on the cost-quality frontier
+- [Utility-Model Split: Background Tasks on a Cheaper Model](../patterns/agent-design/utility-model-split.md) — the sidekick architecture this result depends on
+- [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — matching model tier to task complexity once the per-task numbers exist
 
 ---
 
@@ -68177,6 +68756,7 @@ The crux — what stops a loop and what justifies running one at all.
 - [Convergence Detection in Iterative Agent Refinement](convergence-detection.md) — mechanical stopping criteria from change velocity, output size, and similarity
 - [Agent Loop Go/No-Go: When Looping Earns Its Cost](agent-loop-go-no-go-gate.md) — the four-condition gate before you build a loop at all
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](loop-budgeting.md) — pick the budget primitive (iteration / token / wall-clock) and choose front-loaded vs even-split per-turn allocation
+- [Within-Task Model Cascade: Designing the Escalation Gate](within-task-model-cascade.md) — retry the same step on a cheap model first and escalate on gate failure; the gate's false-accept rate sets both the saving and the quality floor
 
 ### Runaway guardrails
 
@@ -69521,6 +70101,101 @@ The same session showed three failures across three different loops, each with a
 
 ---
 
+### Within-Task Model Cascade: Designing the Escalation Gate
+Source: https://agentpatterns.ai/loop-engineering/within-task-model-cascade/
+
+# Within-Task Model Cascade: Designing the Escalation Gate
+
+> A within-task model cascade runs the step on a cheap model first and escalates to the flagship only when a gate rejects the output.
+
+Build the gate before you build the ladder. The ladder is a retry loop over two or three models and takes an afternoon. The gate decides which cheap answers ship as final, so it sets both the saving and the quality floor — and a gate that only checks output shape will pass wrong answers straight through.
+
+## The three conditions
+
+Cascade within a task only when all three hold:
+
+- The gate rejects semantically wrong output, not just malformed output. Everything the gate accepts ships unreviewed.
+- The escalation rate stays below break-even. You pay the cheap attempt on every item, so the cascade beats always-flagship only while the escalation rate stays under `1 − (cheap cost ÷ flagship cost)`.
+- The cheap rung is not slower than the flagship, or latency does not matter. This one is not free — see the example below.
+
+Miss any of them and a single flagship call is the better default.
+
+## How the ladder runs
+
+One published implementation extracts structured fields from retrieved documents ([Towards Data Science — an LLM cascade from a cheap local model up to a hosted flagship](https://towardsdatascience.com/loop-engineering-for-rag-generation-an-llm-cascade-from-a-cheap-local-model-up-to-a-hosted-flagship/)):
+
+1. Run the cheapest rung that can plausibly do the work.
+2. Validate the result — "is the typed shape correct, do the cited spans exist," and does quoted text appear in the source document.
+3. On failure, rerun the same step on the next rung up.
+4. Bound the ladder. That implementation caps it at `max_escalations: int = 2`, and returns an explicit `NotAnswered()` when even the flagship fails the check.
+
+Step 4 matters as much as step 1. An unbounded ladder is a [non-converging loop](stuck-loop-recovery.md) with a bigger bill; the explicit no-answer terminal is what keeps a failed item visible instead of silently degraded.
+
+Pick the starting rung by measurement, not parameter count. Across twenty local models, a 4B (`qwen3:4b`) and a 7B (`mistral:7b`) beat 12B and 14B variants — "size is a poor predictor" — while a 0.5B model "returned empty JSON on most fields" ([Towards Data Science](https://towardsdatascience.com/loop-engineering-for-rag-generation-an-llm-cascade-from-a-cheap-local-model-up-to-a-hosted-flagship/)). [Local Model Viability Factors for Coding](../patterns/agent-design/local-model-viability-for-coding.md) covers the rest of the screen for a self-hosted rung — memory, context length, and tool-calling reliability.
+
+This is escalation inside one step, which is a different axis from the routing patterns already on this site. [Utility-Model Split](../patterns/agent-design/utility-model-split.md) is a static split by call type fixed at design time. [Auto Model Selection](../patterns/agent-design/auto-model-selection.md) is a single up-front pick per request. [Trajectory-Conditioned Model Escalation](../patterns/agent-design/trajectory-conditioned-model-escalation.md) escalates mid-run for agentic tasks that have no pass/fail signal to gate on. A within-task cascade needs that signal and reruns the whole step when it fires.
+
+## Choosing the gate
+
+Three gate families are documented, and they differ mainly in what they let through:
+
+| Gate | Signal | Lets through |
+|---|---|---|
+| Structural | Schema conformance, span existence, quote match, tests, type check | Output that is well-formed, grounded, and wrong |
+| Self-judged | The model's own confidence or verification pass | Errors the model is confident about — the failure mode is correlated with the error |
+| Behavioral | Downstream signal such as a user rejecting the suggestion | Errors the user accepts, and nothing until the user acts |
+
+Structural gates are cheap and honest about their limits. Self-judged gates are the risky choice: intrinsic self-correction without external feedback degraded accuracy on every benchmark tested — GPT-4 fell from 95.5% to 89.0% on GSM8K over two rounds, and GPT-3.5 from 75.8% to 38.1% on CommonSenseQA ([Huang et al., arXiv:2310.01798](https://arxiv.org/abs/2310.01798)). AutoMix reaches the same conclusion from inside the cascade literature and layers a POMDP meta-verifier over the raw self-verification signal rather than trusting it ([arXiv:2310.12963](https://arxiv.org/abs/2310.12963)). Behavioral gates sidestep both problems by reading an external event: MCCom triggers its cloud model from user actions when the local 121M model's completion fails, cutting LLM usage 46.3% ([arXiv:2603.05974](https://arxiv.org/abs/2603.05974)).
+
+## Why it works
+
+Spend in a cascade is set by the escalation rate, not by the price list. If a fraction `p` of items fail the gate, expected cost is `cheap + p × flagship` against `flagship` for the always-flagship baseline. Because flagship models "cost an order of magnitude more per call than a small local one," the cheap attempt is close to rounding error and the saving approaches `(1 − p) × flagship` ([Towards Data Science](https://towardsdatascience.com/loop-engineering-for-rag-generation-an-llm-cascade-from-a-cheap-local-model-up-to-a-hosted-flagship/)). FrugalGPT quantifies the same mechanism at scale, matching GPT-4 with up to 98% cost reduction by learning which model combination handles which query ([arXiv:2305.05176](https://arxiv.org/abs/2305.05176)).
+
+That arithmetic is why the gate carries the design risk. It sets `p`, and it caps quality at its own false-accept rate, because every cheap-rung error it admits becomes the final answer. Both terms move together: a stricter gate raises `p` and erodes the saving, a looser one lowers `p` and ships more wrong answers. Tuning that trade-off is a cost-quality configuration comparison, so measure it as one ([Cost-Quality Pareto Measurement](../token-engineering/cost-quality-pareto-measurement.md)).
+
+## When this backfires
+
+- The gate checks form, not meaning. Schema-valid, span-grounded, wrong output never escalates. In the source benchmark the cheap rung was 62% accurate at field level, so roughly a third of fields could pass a shape-and-span check and still be wrong ([Towards Data Science](https://towardsdatascience.com/loop-engineering-for-rag-generation-an-llm-cascade-from-a-cheap-local-model-up-to-a-hosted-flagship/)).
+- Most items escalate. Above break-even you pay the cheap attempt on everything plus the flagship on everything, which is strictly worse than skipping the ladder.
+- The cheap rung has no scaffolding. The small model reached only about a third of fields alone; it needed "tight retrieval snippet, the right prompt content, validation on every field, and code doing the hard formatting" to reach 62% ([Towards Data Science](https://towardsdatascience.com/loop-engineering-for-rag-generation-an-llm-cascade-from-a-cheap-local-model-up-to-a-hosted-flagship/)).
+- The rungs fail on the same items. A cascade returns one member model's answer, and for any such policy "accuracy cannot exceed one minus beta, where beta is the rate at which every model is wrong on the same query" — a ceiling measured across 67 frontier models, with observed co-failure roughly 2.5 times higher than standard statistical models predict ([When Does Combining Language Models Help?, arXiv:2606.27288](https://arxiv.org/abs/2606.27288)).
+- A single up-front decision would do. Predictive routing sends each query to one model and reports up to 3.66x cost reduction at 95% of GPT-4 quality on MT Bench, never paying two inferences on the hard tail; its authors draw the contrast directly, noting that cascades "rely on multiple LLM queries" while "our approach routes each query to a single LLM" ([RouteLLM, arXiv:2406.18665](https://arxiv.org/abs/2406.18665)).
+
+## Example
+
+The field-extraction benchmark measured accuracy at each rung ([Towards Data Science](https://towardsdatascience.com/loop-engineering-for-rag-generation-an-llm-cascade-from-a-cheap-local-model-up-to-a-hosted-flagship/)):
+
+| Configuration | Field accuracy |
+|---|---|
+| Small local model, no glossary | ~38% |
+| Small local model, with glossary | 62% |
+| Hosted flagship, no glossary | 62% |
+| Hosted flagship, with glossary | 100% |
+
+Two readings follow, and they point opposite ways. The cost case holds: most fields "never leave the cheap rung," so flagship tokens go to the residual hard cases. The latency case inverts. The hosted flagship answered in "about 1.4 seconds per field" while the local 7B to 14B models took "roughly 2.6 to 7.6 seconds each on a single consumer GPU," so this cascade "does not buy latency" and escalated fields pay two serial attempts. Cascading is a cost lever here, not a speed lever.
+
+The sign is not fixed. MCCom pairs a 121M local model that is genuinely faster than its cloud tier and cuts latency up to 47.9% ([arXiv:2603.05974](https://arxiv.org/abs/2603.05974)). Measure your own rungs before assuming which way it goes.
+
+## Key Takeaways
+
+- The gate, not the ladder, is the design work. Everything the gate accepts ships as final, so its false-accept rate caps the cascade's quality.
+- Structural gates (schema, spans, tests) pass output that is well-formed and wrong. Budget for that residual error rather than assuming the gate caught it.
+- Avoid gating on the model's own confidence — intrinsic self-correction degraded accuracy on every benchmark tested ([arXiv:2310.01798](https://arxiv.org/abs/2310.01798)).
+- Break-even is an escalation rate: the cascade wins only while escalations stay below `1 − (cheap cost ÷ flagship cost)`.
+- Cascading is a cost lever, not automatically a speed lever. Measure per-rung latency — a local rung can be slower than the hosted flagship.
+- Bound the ladder and return an explicit no-answer at the top, so failures stay visible instead of degrading silently.
+
+## Related
+
+- [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — the broader tier-routing frame this escalation policy sits inside
+- [Trajectory-Conditioned Model Escalation](../patterns/agent-design/trajectory-conditioned-model-escalation.md) — escalation for agentic tasks that have no pass/fail gate to key on
+- [Utility-Model Split](../patterns/agent-design/utility-model-split.md) — the static counterpart: split by call type up front, no retry ladder
+- [Agent Loop Go/No-Go: When Looping Earns Its Cost](agent-loop-go-no-go-gate.md) — the upstream question of whether the loop earns its overhead at all
+- [Stuck-Loop Recovery](stuck-loop-recovery.md) — what an unbounded escalation ladder turns into without the `max_escalations` cap
+- [Routing Decision Framework](../token-engineering/routing-decision-framework.md) — selects among the between-task routing patterns; this page is the within-task complement to that set
+
+---
+
 ## Code Review
 
 ### Code Review
@@ -69559,6 +70234,7 @@ As agents author more pull requests, review tooling is moving toward the surface
 - [Security Review Gap in AI-Authored PRs](security-review-gap-in-ai-prs.md) — Agent-authored security PRs cluster around six recurring CWE categories, 52.4% merge despite flaws, and commit-message quality stops predicting acceptance
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — Design AI code review to stay silent when it has nothing useful to say — high-signal feedback builds trust; exhaustive commenting destroys it
 - [Agentic Review Comment Acceptance](agentic-review-comment-acceptance.md) — Only about a third of agentic review comments get accepted in the wild — rejections track suggestion validity, so design for a high false-positive rate and measure acceptance, not volume
+- [Inline Suggestion Attachment](inline-suggestion-attachment.md) — Attaching a ready-to-apply patch is the strongest measured predictor that an agent review comment gets resolved, but only where the finding is diff-verifiable — a one-click patch on a false positive is a one-click defect
 - [Tiered Code Review](tiered-code-review.md) — Route review effort by risk: AI handles the first pass on everything, non-critical code merges after AI-only review, and critical code escalates to mandatory human review
 - [Tunable Effort Levels for Code Review Agents](tunable-review-effort.md) — Expose review depth as a per-PR dial backed by a published bug-discovery curve, so reviewers and routing policies trade thoroughness against cost on the runs that need it
 - [Risk-Score Threshold Calibration for Auto-Approval](risk-score-threshold-calibration.md) — Expose the auto-approval cutoff on a learned diff-risk score as an explicit yield-vs-safety knob, with revert and incident telemetry to recalibrate it
@@ -70482,6 +71158,7 @@ Optimizing for acceptance rate is the wrong target in several conditions:
 
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — the design principle this reception data grounds: raise validity, treat silence as valid output
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — the PR-level counterpart: signal ratio and merge outcomes rather than per-comment acceptance
+- [Inline Suggestion Attachment](inline-suggestion-attachment.md) — what raises action once validity is handled: a ready-to-apply patch outranks clearer prose as a resolution lever
 - [Learned Review Rules](learned-review-rules.md) — persist accept/reject signals to suppress recurring invalid comments automatically
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — the 16.6% vs 56.5% adoption baseline behind the reception gap
 - [Tiered Code Review](tiered-code-review.md) — route high-stakes diffs where a low acceptance rate is an accepted trade
@@ -70820,6 +71497,7 @@ CI re-runs once on the batched commit, confirming no new alerts introduced. The 
 - [Tiered Code Review](tiered-code-review.md) — severity-based routing is a precondition for safe batch boundaries
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md) — reviewer engagement is the strongest predictor of merge; batching shifts the unit of engagement
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — empirical adoption-rate data that bounds the rubber-stamp risk
+- [Inline Suggestion Attachment](inline-suggestion-attachment.md) — the upstream decision: which findings should carry an applicable patch at all
 
 ---
 
@@ -71573,6 +72251,80 @@ AI agents excel at pattern-matching defect databases and applying consistent rul
 - [PR Description Style as a Lever](pr-description-style-lever.md) — PR description structure as a configurable parameter affecting reviewer engagement
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical data on how CRA-only review affects merge outcomes; complementary evidence to the adoption rate findings here
 - [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md) — adaptive agents that extract accept/reject signals to improve future suggestion adoption rates, directly addressing the 16.6% baseline
+
+---
+
+### Inline Suggestion Attachment
+Source: https://agentpatterns.ai/code-review/inline-suggestion-attachment/
+
+# Inline Suggestion Attachment
+
+> Attaching a ready-to-apply inline suggestion moves agent review comments to resolution more than clearer prose does, where the finding is mechanically verifiable.
+
+Attach an inline code suggestion to an agent review comment and developers act on it more often than on the same finding written as better prose. A study of agent-generated review comments across 342 Python repositories analyzed 54,713 of them from Copilot, Cursor, and Codex: comments carrying an inline suggestion resolved at 75.5% against 64.5% without, and suggestion attachment was the strongest predictor in the model at odds ratio 1.617 ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). Clarity scored 1.022. Prose quality is measurably not the lever.
+
+## Attach only where the finding is mechanically checkable
+
+The attachment decision is a gate, not a default. A suggestion block lowers the cost of acting, which is useful only when acting is the right outcome — so apply it under three conditions:
+
+- The finding is verifiable from the diff alone. A missing null check, a wrong comparison operator, an unhandled error path. Where correctness can be confirmed by reading the patch, cheap acceptance is cheap correctness.
+- The fix is localized. One hunk, one call site, no dependent edits elsewhere. A suggestion that is only part of the change invites a partial application.
+- The surrounding code is simple enough to review at a glance.
+
+Where those conditions fail — design disagreements, cross-file refactors, anything contestable — post prose and no patch. Among the comments core developers left unresolved, over 72% were rejected on intentional-design-decision grounds ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)); a diff-shaped suggestion cannot carry an architectural argument, and dressing an opinion as a mechanical fix invites the wrong kind of agreement.
+
+## What the model actually ranks
+
+Every variable that reduces interpretive work moves resolution. Every variable that adds prose does not.
+
+| Predictor | Odds ratio | Direction |
+|---|---|---|
+| Inline code suggestion | 1.617 | Raises resolution |
+| Conciseness | 1.059 | Raises resolution |
+| Relevance | 1.046 | Raises resolution |
+| Clarity | 1.022 | Raises resolution |
+| Comment length (log) | 0.926 | Lowers resolution |
+| Has explanation | 0.593 | Lowers resolution |
+
+All values from [arXiv:2607.21997](https://arxiv.org/abs/2607.21997); every row is significant at p<0.05. The length penalty is sharper on functional-issue comments at 0.855. Read the explanation row carefully: among comments that carry explanations, two explanation types peak at 71.7% usefulness, so the finding is that more prose does not buy action, not that explaining is pointless.
+
+Resolution rates varied by agent: Copilot 72.9%, Cursor 67.2%, Codex 54.8% ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)).
+
+## Why it works
+
+An inline suggestion changes what the comment asks of the developer. Prose requires them to interpret the finding, locate the site, author the edit, and commit it. A suggestion block collapses that to reading a concrete diff and applying it — which is what the GitHub suggestion feature exists to do, making "reviewers' feedback more actionable for the submitters" ([arXiv:2502.04835](https://arxiv.org/abs/2502.04835)). Cost of acting, not persuasiveness, is what resolution varies with ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). The same mechanism corroborates outside agent review — pull requests using human-authored suggestions merged at 76.2% against 65.7% without ([arXiv:2502.04835](https://arxiv.org/abs/2502.04835)).
+
+## When this backfires
+
+The mechanism is friction removal, so it removes friction from wrong changes just as efficiently.
+
+- Comment validity is unmeasured. A patch attached to a false positive converts a comment the developer would have skipped into a one-click defect. Incorrect suggestions and intentional design decisions are the two most prevalent reasons comments go unresolved, and 63 of the 67 incorrect-suggestion cases were factually wrong or false positives ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)); a separate reception study finds rejection tracks validity rather than packaging ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). Gate on [comment acceptance data](agentic-review-comment-acceptance.md) before optimizing attachment.
+- The person applying the patch is not the person who would push back. Core developers — the top 20% by authored and reviewed pull requests — resolved 78.1% of Copilot's resolved comments, and design-grounds rejection concentrates in that group ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). A one-click patch applied by a contributor with less repository context skips the scrutiny that data attributes to core reviewers.
+- Merge latency matters more than resolution. Suggestion use significantly increased pull request resolution time and produced no decrease in code complexity ([arXiv:2502.04835](https://arxiv.org/abs/2502.04835)). More action is not faster delivery.
+- You are treating resolution as usefulness. The authors flag resolution as "an imperfect proxy" and report the model's discrimination as low at AUC 0.58 ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). Suggestion attachment is the strongest lever inside a model that explains a small share of the outcome.
+- Your stack is unlike the sample. Findings come from Python repositories with at least 1,000 stars, 1,000 pull requests, and 50 contributors; the authors name other languages, small projects, and proprietary settings as generalizability threats, and excluded Devin and Claude for insufficient data ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)).
+
+## Key Takeaways
+
+- Inline suggestion attachment is the strongest measured predictor of comment resolution, at odds ratio 1.617 against 1.022 for clarity ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)).
+- Comments with suggestions resolved at 75.5% versus 64.5% without.
+- Longer comments resolve less often (odds ratio 0.926), and the explanation flag is negatively associated at 0.593 — rewriting prose is the wrong first knob.
+- Attach a patch only where the finding is diff-verifiable and localized; post prose for design disagreements.
+- The effect is observational on a model with AUC 0.58, measured against resolution rather than usefulness, so validity gating comes before attachment.
+
+## Related
+
+- [Agentic Review Comment Acceptance](agentic-review-comment-acceptance.md) — the validity gate this pattern depends on: rejections track whether the comment was right, not how it was packaged
+- [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — the companion constraint: attach suggestions to fewer, higher-confidence comments rather than to everything
+- [Batched Suggestion Application](batched-suggestion-application.md) — what to do once suggestions arrive in bulk, and the cluster discipline that stops bulk apply becoming a rubber stamp
+- [Review-Then-Implement Loop](review-then-implement-loop.md) — the escalation path when a finding is real but too large to express as an inline patch
+- [Learned Review Rules](learned-review-rules.md) — feed applied and dismissed suggestions back so the reviewer stops emitting the patches nobody takes
+
+## Sources
+
+- [arXiv:2607.21997](https://arxiv.org/abs/2607.21997) — Cynthia, Widyasari, Roy, Zhang, Lo (2026): "Go Home Copilot, You're Drunk": Understanding Developer Responses to Agent-Generated Code Review Comments — 54,791 comments collected across 342 Python repositories, 54,713 analyzed from three agents.
+- [arXiv:2502.04835](https://arxiv.org/abs/2502.04835) — Bouraffa, Pham, Maalej (2025): How Do Developers Use Code Suggestions in Pull Request Reviews? — 8,672 suggestions across 2,852 pull requests in 46 projects.
+- [arXiv:2607.03316](https://arxiv.org/abs/2607.03316) — Lin, Liang, Thongtanunam, Tantithamthavorn (2026): Is Agentic Code Review Helpful? Mining Developers' Feedback to CodeRabbit Reviews in the Wild.
 
 ---
 
@@ -72961,10 +73713,10 @@ A PR that receives a response of "No high-confidence findings." passes the bar. 
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Tiered Code Review](tiered-code-review.md)
 - [Tunable Review Effort](tunable-review-effort.md) — why High-by-default backfires; the per-PR effort lever that complements signal-over-volume
-- [Human-AI Review Synergy](human-ai-review-synergy.md) — complementary strengths of AI and human reviewers and how to structure collaboration
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical signal ratio data showing how actionable comment rates determine merge outcomes
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](../human/cognitive-load-ai-fatigue.md) — cognitive costs of review fatigue and how to manage them sustainably
 - [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md) — how agents can persist accept/reject signals to suppress recurring false positives automatically
+- [Inline Suggestion Attachment](inline-suggestion-attachment.md) — for the comments that survive the signal bar, an applicable patch beats better prose as a resolution lever
 
 ---
 
@@ -73541,6 +74293,7 @@ Source: https://agentpatterns.ai/verification/
 - [Agent-Recorded Video Demos as a Verification Artifact](agent-recorded-video-demos.md) — The agent drives the running app and records a screencast as proof-of-work for human PR reviewers — a visual modality that complements tests where they are weakest, under stated conditions
 - [Spec-Derived Execution as a Correctness Oracle](spec-derived-execution-correctness-judging.md) — Judge candidate code against a natural-language spec by deriving inputs from the spec, executing them, and grading the I/O pairs — ground the LLM judge in real execution traces instead of asking it to reason over the code
 - [Specification-Grounded Test Writing](specification-grounded-test-generation.md) — Give an agent's test writer the specification as enumerated rules so it catches the missing-validation and boundary bugs its own tests otherwise pass — grounding in intent, not test count, drives a +38pp correct-code gain on spec-completeness defects
+- [Deriving a Specification From Buggy Code Before Generating Tests](derived-specification-test-generation.md) — When no written specification exists and the code under test may be wrong, have the model write a behavioral docstring first and generate tests from that with the implementation removed — recovers part of the lost bug-detection power, not all of it
 - [Natural-Language Documentation as a Code-Review Intermediate (Verifiable Literate Programming)](verifiable-literate-programming.md) — Translate LLM code into a deterministic natural-language documentation layer and review that prose, so intent-code mismatches surface where a human can judge them
 
 ## Rubric Design
@@ -73561,11 +74314,13 @@ Source: https://agentpatterns.ai/verification/
 - [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — Cap generate-validate-repair loops near three to four rounds; most gains land early and later rounds mostly burn tokens — prefer stop-on-plateau, and watch strong-model late gains, thin-oracle overfitting, and self-critique loops
 - [Profiler-Guided Optimization Loops for Coding Agents](profiler-guided-optimization-loop.md) — Feed the agent a summarized profile and gate every iteration on a behavior-preserving test run; the profiler and the gate only pay off shipped together, and profiler evidence is itself fallible
 - [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — When the verifier is noisy, its acceptance rate rises while true validity falls as repair damages correct plans — estimate validity from repeated votes and stop on the sign of expected marginal gain, not on acceptance
+- [State-Bound Evidence and Typed Revision Contracts for Repair Loops](state-bound-repair-evidence.md) — A repair loop can find a correct patch and then destroy it (0.847 ever-correct against 0.673 submitted); bind every test result to the code state that produced it, preserve the last verified candidate, and admit only typed revision actions
 - [Dependency Gap Validation for AI-Generated Code](dependency-gap-validation.md) — AI coding agents declare a fraction of the dependencies their code actually needs at runtime — validate in clean environments before trusting the manifest
 - [Verify Observability in Agent-Generated Code](verify-generated-code-observability.md) — Agent-generated systems pass functional tests but expose fault signals for under 14% of failures despite having logging — verify runtime fault-signal coverage with fault injection, not the mere presence of logging
 - [Phantom Symbol Detection for LLM API Migration](phantom-symbol-detection.md) — Verify symbols in LLM-generated migration code against a documentation-derived knowledge base — a deterministic check that catches fabricated imports, constructors, and methods that probabilistic judges miss
 - [Generative Provenance Records for Tool-Using Agents](generative-provenance-records.md) — Emit a structured record (tool turn, evidence span, relation) alongside each output sentence so a mechanical verifier can check claim-level grounding before the answer leaves the loop
 - [Per-Line Requirement Citations for Hallucination Detection](per-line-requirement-citations.md) — Cite a requirement ID on every generated line so a set-difference check flags any citation to a requirement absent from the spec as a hallucination — detection at a determinism cost
+- [Typed Generation Contracts for Grounded Extraction](typed-generation-contract.md) — Split a wrong grounded answer by context sufficiency first, then make the extraction half checkable with typed fields, verbatim evidence spans, and a validator that runs
 - [Defense-in-Depth Against Coding Agent Fabrication (Honesty Harness)](honesty-harness-fabrication-defense.md) — Four uncorrelated layers — instruction-level honesty rules, verify-before-write, real-time hooks that feed output back, and an external-tool fact-checker subagent — that reduce fabrication survival without claiming elimination
 - [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — Stack scanner-pass, full-scanner, validate, plan, and plan-diff oracles so LLM-generated infrastructure-as-code security fixes have to clear behavioral checks — first-pass agent repairs cleared the targeted Checkov finding 83.3 percent of the time but 71.4 percent of plan-compared repairs were deceptive fixes
 
@@ -76390,6 +77145,100 @@ Weigh the gate cost against failure cost. For production deployments and externa
 
 ---
 
+### Deriving a Specification From Buggy Code Before Generating Tests
+Source: https://agentpatterns.ai/verification/derived-specification-test-generation/
+
+# Deriving a Specification From Buggy Code Before Generating Tests
+
+> Buggy code steers a model into asserting the bug; replacing it with a model-written specification buys back part of the lost bug-detection power.
+
+Show a model the implementation and ask for unit tests, and the tests encode whatever the implementation does — including its defects. Across 11 models on Defects4J 3.0 (318 focal methods, 233 defects, 17 Java projects), prompting with the buggy version instead of the fixed version raised misguided tests from 16.46 to 137.69 on average and cut effective bug-revealing tests from 304.08 to 104.15, close to a threefold loss ([Zhao, Zhou & Cohen, 2026](https://arxiv.org/abs/2607.22883)). A misguided test is one that passes on the buggy version and fails on the fixed one, so it is a false negative that certifies the defect.
+
+## When to reach for it
+
+This is a fallback with a measured ceiling, not a general upgrade to test generation. Three conditions have to hold:
+
+- You have no trustworthy written specification. If you do, supply that instead — an enumerated human specification is the stronger lever, as [specification-grounded test writing](specification-grounded-test-generation.md) shows.
+- The code under test may itself be wrong: a bug reproduction, an inherited module, a legacy method you are pinning down before changing.
+- The unit is self-contained enough that a method-level description captures its behavior. The evidence base is method-level Java, not stateful or dependency-rich code.
+
+Expect partial recovery. The base version of the technique moved misguided tests from 137.69 to 113.00 and effective tests from 104.15 to 186.77 — well short of the 16.46 and 304.08 the same models reached when given correct code ([Zhao, Zhou & Cohen, 2026](https://arxiv.org/abs/2607.22883)).
+
+## How to apply it
+
+Split generation into two prompts. First, ask the model to write a behavioral docstring for the method that states its functionality and intent without quoting the code. Second, generate tests from that docstring, with the implementation removed from the prompt. Removal is the load-bearing step: the authors report the code has to go entirely rather than be supplemented ([Zhao, Zhou & Cohen, 2026](https://arxiv.org/abs/2607.22883)).
+
+An advanced docstring prompt asks the model to also flag logical mistakes that contradict the inferred intent and robustness omissions such as missing null checks or boundary handling. That variant added a further gain over the base prompt, larger on reasoning models (32.00 fewer misguided tests, 56.15 more effective ones) than on base models (18.17 fewer, 28.67 more) ([Zhao, Zhou & Cohen, 2026](https://arxiv.org/abs/2607.22883)).
+
+Review the docstring before generating tests. It is the single point where the whole technique can fail silently.
+
+## Why it works
+
+Buggy code shifts the model's token-level preference toward tests that assert the buggy behavior, so the effect is internal to generation rather than downstream noise. The authors measured this with sequence scores, which reflect a model's probabilistic preference for a generated sequence: for DeepSeek-V3, misguided tests scored higher when conditioned on buggy code than on fixed code (−1.21 against −1.31), while effective tests scored higher when conditioned on fixed code (−1.23 against −1.30) ([Zhao, Zhou & Cohen, 2026](https://arxiv.org/abs/2607.22883)). Removing the implementation removes the conditioning signal that produces the skew, which is why supplementing the code with a specification does not work. The same study found the drop in misguided tests and the rise in effective tests correlate at r = 0.90 (p < 0.01), and that models with stronger code comprehension can be more susceptible to misguidance rather than less. This is the mitigation side of [code-first oracle bias](../patterns/anti-patterns/code-first-test-oracle-bias.md), applied to the case where the code was not the agent's own.
+
+## When this backfires
+
+- The derived specification inherits the bug. Manual inspection found 15% to 21% of generated docstrings preserved the original defect, and those runs produced significantly more misguided tests. The technique fails silently and its output is indistinguishable from a success ([Zhao, Zhou & Cohen, 2026](https://arxiv.org/abs/2607.22883)).
+- Stateful or dependency-rich code. A method-level docstring omits class state and dependency information, which the authors name as a limit on their results. An industrial deployment report reaches the opposite conclusion for repository-scale Java, finding that compilation robustness depends on making project-level dependencies explicit rather than letting the model infer them ([Chen et al., 2026](https://arxiv.org/abs/2607.19682)).
+- Regression and characterization testing. When the goal is pinning current behavior rather than checking it against intent, the implementation is the intended oracle and removing it defeats the exercise.
+- Proprietary or domain-specific systems. Without domain knowledge the model can produce a hallucinated false intent instead of a specification ([Zhao, Zhou & Cohen, 2026](https://arxiv.org/abs/2607.22883)).
+- False-alarm-sensitive pipelines. The advanced prompt lifted the false-positive share from roughly 16% to 18%, and on bug-free code the false-alarm rate rose from 37.45% to 39.04% ([Zhao, Zhou & Cohen, 2026](https://arxiv.org/abs/2607.22883)). Coverage did not suffer there, so the cost is false alarms rather than reach.
+
+## Example
+
+The two prompt shapes below show the only thing that changes: what the test-generation prompt is allowed to see. The method stands in for any unit whose empty-input branch violates its stated contract, the defect class the study's advanced prompt is built to catch.
+
+Before — implementation in the prompt, tests assert the defect:
+
+```text
+Prompt: "Write JUnit tests for this method."
+        <paste of the implementation, whose empty-input branch
+         returns null instead of the documented empty result>
+
+  -> assertNull(subject.summarize(empty))
+  -> green on the buggy version, red on the fixed version:
+     a misguided test that certifies the defect
+```
+
+After — docstring first, implementation withheld:
+
+```text
+Prompt 1: "Write a formal docstring for this method describing its
+           functionality and intent. Do not quote the code. Flag any
+           logic that contradicts the inferred intent and any missing
+           null or boundary handling."
+
+  -> "Summarizes the input collection. Returns an empty result for
+      an empty collection. Note: the implementation returns null in
+      that branch, which contradicts the stated contract."
+
+Prompt 2: "Write JUnit tests for the method described by this
+           docstring." <docstring only, no code>
+
+  -> assertEquals(EMPTY_RESULT, subject.summarize(empty))
+  -> fails on the buggy version: an effective test
+```
+
+The second prompt never sees the null return, so it has nothing to copy. When the first prompt misses the contradiction, the docstring carries the bug forward and the suite certifies it again — the 15% to 21% case above.
+
+## Key Takeaways
+
+- Prompting a model with buggy code raised misguided tests from 16.46 to 137.69 and cut effective bug-revealing tests from 304.08 to 104.15 across 11 models on Defects4J 3.0.
+- Sequence-score analysis shows the cause is internal: buggy code raises the model's own preference for tests that assert the buggy behavior, and stronger code comprehension can increase susceptibility.
+- Replacing the implementation with a model-written docstring recovers part of the gap — 113.00 misguided and 186.77 effective tests — not all of it. The code must be removed, not supplemented.
+- The docstring is the failure point: 15% to 21% preserved the original bug, so review it before generating tests.
+- Reach for this only when no written specification exists. When one does, supply it directly; when the goal is regression testing or the code is dependency-rich, keep the implementation in context.
+
+## Related
+
+- [Specification-Grounded Test Writing](specification-grounded-test-generation.md) — the stronger move when a human-authored specification exists: enumerate it as rules and write one test per rule
+- [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](../patterns/anti-patterns/code-first-test-oracle-bias.md) — the anti-pattern this mitigates, measured on code the agent itself just wrote
+- [Reverse-Engineered Executable Specifications for Agentic Program Repair](../patterns/multi-agent/reverse-engineered-executable-specifications.md) — the same specification-inference-first split applied to patch generation rather than test generation
+- [Assertion-Free Test Theater in Agent-Authored Patches](../patterns/anti-patterns/assertion-free-test-theater.md) — the adjacent failure where generated tests carry no oracle signal at all
+- [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — keeps a pinned invariant suite outside the loop that refinement can drift against
+
+---
+
 ### Deterministic Guardrails Around Probabilistic Agents
 Source: https://agentpatterns.ai/verification/deterministic-guardrails/
 
@@ -78054,6 +78903,7 @@ The verifier confirms `OCR_2` and `Calculator_1` are in the trajectory, the span
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md)
 - [RAG/Agent Reliability Problem Map](rag-agent-reliability-problem-map.md)
 - [Per-Line Requirement Citations for Hallucination Detection](per-line-requirement-citations.md) — Attach a machine-checkable requirement ID to each generated line so a set-difference check catches hallucinated requirements deterministically.
+- [Typed Generation Contracts for Grounded Extraction](typed-generation-contract.md) — The same evidence-span discipline applied to a single extraction step, with typed values and an explicit not-found flag.
 
 ---
 
@@ -81769,6 +82619,7 @@ Without the per-turn re-run, the regression survives until end-of-session CI or 
 - [Pre-Change Impact Analysis](pre-change-impact-analysis.md)
 - [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](../patterns/anti-patterns/code-first-test-oracle-bias.md) — a code-first test suite is not an independent oracle; the sibling ordering trap on the code-vs-spec axis
 - [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — when to stop a repair loop once the verifier itself is noisy and its acceptance signal no longer tracks true validity
+- [State-Bound Evidence and Typed Revision Contracts for Repair Loops](state-bound-repair-evidence.md) — detecting the regression is half the job; binding evidence to a code state and preserving the last verified candidate stops it happening
 
 ---
 
@@ -82903,6 +83754,7 @@ The spec-grounded oracle enforces the rule the prose-grounded one guessed wrong.
 - [Test-Driven Intent Clarification](test-driven-intent-clarification.md) — validating agent-written tests to surface specification ambiguity before writing code
 - [Spec-Derived Execution as a Correctness Oracle](spec-derived-execution-correctness-judging.md) — grounding an LLM judge in a natural-language spec by executing spec-derived inputs
 - [Per-Line Requirement Citations for Hallucination Detection](per-line-requirement-citations.md) — tying generated code back to specific requirement IDs so a mechanical check flags anything unsupported
+- [Deriving a Specification From Buggy Code Before Generating Tests](derived-specification-test-generation.md) — the fallback when no human specification exists: a model-written docstring recovers part of the gap, but inherits the bug about one time in five
 
 ---
 
@@ -82979,6 +83831,72 @@ A reasonable practitioner could argue the gains attributed to "evidence-driven g
 - [Multi-Agent RAG for Spec-to-Test Automation](multi-agent-rag-spec-to-test.md) — The retrieval-grounded analogue in the spec-to-test direction.
 - [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — The cost-ascending gate ordering applied to IaC security repair instead of bug repair.
 - [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — Caps how many repair rounds run; staged gates order what happens inside each round.
+
+---
+
+### State-Bound Evidence and Typed Revision Contracts for Repair Loops
+Source: https://agentpatterns.ai/verification/state-bound-repair-evidence/
+
+# State-Bound Evidence and Typed Revision Contracts for Repair Loops
+
+> Bind every test result to the code state that produced it, and preserve the last verified candidate, so revision cannot destroy a correct patch.
+
+A generate-test-revise loop can find a correct patch and then throw it away. Across 900 forced-revision trajectories over 30 HumanEval repairs, current correctness fell from 0.820 after one revision to 0.673 after two while cumulative ever-correct rose to 0.847; 16.0% of trajectories held a correct patch and lost it by revision three ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)). Finding the answer, retaining it, verifying it, and submitting it are four separate obligations. A bare loop implements only the first.
+
+## When this earns its cost
+
+Adopt the full apparatus only when your loop matches the regime it defends against. The source's own prospective evaluation missed its bar, so treat evidence hygiene as the default and the machinery as conditional.
+
+- Your loop revises after a passing result, or on a fixed budget. The measured degradation comes from forced revision, which the authors call not a natural adaptive policy; an agent that halts when the suite goes green rarely enters this regime ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)).
+- Test output can outlive the edit that produced it. Any path that carries a trace or failure report across a code change creates the stale-evidence condition.
+- You can absorb the liveness cost. In a prospective 540-rollout paired policy the guard eliminated observed correct-start harm but cut wrong-start repair from 100/135 to 93/135 and sound completion from 219/270 to 211/270, missing its five-point non-inferiority criterion ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)).
+
+If none of those hold, take the cheap half only: never carry a test result across an edit, and keep a copy of the last candidate that passed.
+
+## The typed revision contract
+
+The contract replaces free-form revision output with three mutually exclusive actions ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)):
+
+- `Keep` — return the current code unchanged. This absorbing state is where an agent's bare "STATUS: DONE" with no code belongs, instead of being read as a corrupt state.
+- `Patch(code)` — replace the current state, admitted only when the payload parses and executes.
+- `Escalate(reason)` — abstain with a stated reason instead of guessing.
+
+Around those actions sit five obligations a bare loop conflates: admission (only a valid `Patch` replaces state), preservation (retain and exactly restore the last verified candidate), grounded certification (re-execute checks against the state you actually ship), competence (the coder's ability to use evidence), and liveness (whether the orchestrator finishes). Separating them distinguishes a loop that cannot repair from one that repaired and lost the result.
+
+This is a different lever from its neighbors: [bounded repair-loop iterations](bounded-repair-loop-iterations.md) caps how many rounds run, [validity-estimate stopping](validity-estimate-stopping-noisy-repair-loops.md) fixes when to stop under a noisy verifier, and [re-running the original suite](test-suite-after-refinement-turn.md) detects the regression. This page is about not losing what the loop already proved.
+
+## Why it works
+
+A test result records the code hash, suite hash, and execution that produced it. When that code hash no longer matches the current state, the trace still reports true input and output facts — but about a different program, while reading to the model as a description of the code in front of it. The report "contains valid input/output facts, but falsely asserts that they describe the current code" ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)). Rejecting or refreshing evidence whenever the hashes diverge removes a persuasive but wrong input, rather than asking the model to notice the mismatch. In a prespecified 14B replication over frozen common states, stale traces harmed 34 of 135 correct starts against 4 of 135 with current traces — a 22.2-point increase, task-cluster 95% confidence interval [8.9, 37.0], exact Holm p=0.0337 ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)). Replay showed state binding intercepting every stale-condition harm at both model sizes.
+
+## When this backfires
+
+- Repository-scale work with a low acceptance floor. Over 24 bugs and four coder stacks, the base model produced five accepted completions and the contract produced zero; the joint intersection-union test failed ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)). An admission boundary can zero out liveness before it prevents any harm.
+- Small models on single-file benchmarks are where the effect was measured, and mostly not significantly: all six 7B contrasts and five of six 14B contrasts were nonsignificant after Holm correction, and the 30 HumanEval tasks may sit in training data ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)).
+- Weak oracles. Only oracle-covered properties are preserved ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)), so a preserved checkpoint that passes an under-specified suite preserves an overfitted patch as faithfully as a correct one.
+- Loops where iteration genuinely pays. Self-feedback refinement improves outputs by roughly 20% absolute on average across seven tasks with no evidence binding ([Madaan et al., 2023](https://arxiv.org/abs/2303.17651)). Repetition is not inherently destructive; stale inputs are.
+
+The reference implementation carries the same caution: it passes 35 deterministic failure-injection cases, but the authors state it is "an executable specification and conformance artifact, not evidence of improved repair competence or calibrated verifier dependence" ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)).
+
+## Example
+
+On HumanEval/89 the agent held a trace generated from code that used a Caesar shift of 12. The code had since been fixed to use a shift of 4. The trace's input and output values were accurate for the program that produced them, and the model read them as a description of the current program, so all five seeds reverted the correct shift-4 solution back to shift 12 ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)). A hash comparison between the trace's recorded code state and the current one rejects that evidence before the model ever sees it.
+
+## Key Takeaways
+
+- Measure ever-correct alongside final correctness. A loop that reaches 0.847 ever-correct and submits 0.673 has a retention problem, not a repair problem ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)).
+- Never carry a test result across an edit. Stale traces cause active harm, and the fix is a state-hash comparison rather than a prompt asking the model to check freshness.
+- Keep the last candidate that passed, and re-run the checks against the state you actually ship rather than the state you last tested.
+- Type the revision output. `Keep`, `Patch(code)`, and `Escalate(reason)` make an unparsable response a no-op instead of a corrupted state.
+- Expect the full contract to cost liveness. The source's own guarded policy failed its non-inferiority criterion and dropped repository acceptances to zero, so measure both harm avoided and work lost.
+
+## Related
+
+- [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — detects the silent regression this page tries to prevent.
+- [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — the stopping-rule answer to correct-to-incorrect repair when the verifier is itself noisy.
+- [Evidence-Gated Lifecycle Control for Coding Agents (Proof-or-Stop)](evidence-gated-lifecycle-control.md) — the same freshness-binding idea applied to lifecycle state rather than revision input.
+- [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — caps how many rounds run, which limits exposure to the degradation described here.
+- [Selective Checkpoint Restore Across Code and Conversation State](../patterns/agent-design/selective-checkpoint-restore.md) — the harness affordance that makes preserving and restoring a verified candidate practical.
 
 ---
 
@@ -83312,6 +84230,7 @@ The constrained version cannot hedge, cannot omit the verdict, and must attach a
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md)
 - [Layered Accuracy Defense](layered-accuracy-defense.md)
 - [Data Fidelity Guardrails](data-fidelity-guardrails.md)
+- [Typed Generation Contracts for Grounded Extraction](typed-generation-contract.md)
 - [Diff-Based Review Over Output Review](../code-review/diff-based-review.md)
 - [Incremental Verification](incremental-verification.md)
 - [Verification Ledger](verification-ledger.md)
@@ -84290,6 +85209,88 @@ Skip it when:
 
 ---
 
+### Typed Generation Contracts for Grounded Extraction
+Source: https://agentpatterns.ai/verification/typed-generation-contract/
+
+# Typed Generation Contracts for Grounded Extraction
+
+> Split a wrong grounded answer by whether the context held it, then make the extraction half checkable with typed fields and verbatim evidence spans.
+
+## Split the failure before you pick a fix
+
+A wrong answer from a retrieval-grounded step belongs to one of two classes, and they have opposite fixes. Either the retrieved context contained the answer and the step still emitted the wrong value, or the context never contained it. Better retrieval fixes the second and does nothing for the first. A typed output contract fixes the first and cannot manufacture what retrieval failed to deliver.
+
+Both classes are large, so the split is worth measuring rather than assuming. [Joren et al.](https://arxiv.org/abs/2411.06037) formalize the test as a "sufficient context" autorater — an automated judge that decides whether the answer is inferable from the retrieved passages alone — and report 54.8% of their instances as context-sufficient against 45.2% insufficient. Within the sufficient half, strong models still err: Gemini 1.5 Pro answered 84.1% correctly, abstained 1.6% of the time, and hallucinated 14.3%; GPT-4o scored 82.5 / 4.8 / 12.7 and Claude 3.5 Sonnet 85.7 / 11.1 / 3.2.
+
+Do not carry the stronger claim that most grounded hallucinations are extraction errors. [RAGTruth](https://arxiv.org/abs/2401.00396), a corpus of roughly 18,000 responses annotated span by span, separates content that conflicts with the context from content baseless in it and finds that for question answering "the generation of information baseless in the context was significantly more prevalent than the generation of information conflicting." Mis-extraction is a real and addressable class. It is not established as the dominant one.
+
+## What the contract declares
+
+A typed generation contract makes each emitted field carry three things instead of a bare value ([Towards Data Science](https://towardsdatascience.com/most-rag-hallucinations-are-extraction-errors-seven-patterns-for-a-typed-generation-contract/)):
+
+- A declared type, so a duration parses as a duration and an amount carries its currency and unit.
+- An evidence span — the line range in the source document plus the verbatim quote the value came from.
+- Explicit nullability, as separate flags for whether an answer was found at all and whether it was found completely.
+
+The contract only pays off when a validator actually runs against it. That validator checks that cited line spans fall inside the document's bounds, that the quoted text matches those lines verbatim, and that each value parses under its declared format. Skip the validator and the structure signals a verification that never happens.
+
+## Why it works
+
+The contract converts an unverifiable claim into one with a machine-checkable postcondition. Free text can only be checked semantically, which means running another model and inheriting its error rate. A typed value plus a line range plus a verbatim quote can be checked with a range comparison and a string containment test.
+
+Two independent results show why the mechanical step, not the schema, carries the weight. Self-reported citations are unreliable when nothing checks them: on the ELI5 dataset in the [ALCE benchmark](https://arxiv.org/abs/2305.14627), even the best models lacked complete citation support 50% of the time. And once grounding is annotated at span level it becomes learnable — the RAGTruth authors fine-tuned a comparatively small model to hallucination-detection performance competitive with prompt-based GPT-4 ([Niu et al.](https://arxiv.org/abs/2401.00396)). The span makes the failure addressable; the type makes the check cheap.
+
+## When this backfires
+
+- Retrieval is the actual bottleneck. Where the answer was never retrieved, the contract reports "not found" at best and fabricates a span at worst. [Joren et al.](https://arxiv.org/abs/2411.06037) put that case at 45.2% of instances.
+- The field requires inference rather than lookup. A derived rate or a normalized category has no verbatim span to point at, and [Tam et al.](https://arxiv.org/abs/2408.02442) find a significant decline in reasoning ability under format restrictions, with stricter constraints degrading more.
+- You lean on the model's own not-found flag as the abstention gate. Models abstain rarely even when they should — 1.6% to 11.1% on context-sufficient cases and 50% to 61.5% on insufficient ones ([Joren et al.](https://arxiv.org/abs/2411.06037)) — so the flag under-reports absence.
+- The validator is never built. A self-reported span that nothing checks carries ALCE's failure rate under the appearance of provenance.
+- Extraction volume is low. Schema design, span plumbing, and validator maintenance are fixed costs that hand inspection can undercut.
+
+## Example
+
+Any agent step that reads a tool response and emits a structured field is doing extraction, so the contract applies to tool-result parsing as much as to document question answering.
+
+An agent asked which test failed can return a bare conclusion, which nothing downstream can check:
+
+```json
+{ "failing_test": "test_auth_expiry" }
+```
+
+Under a typed generation contract the same step must cite where it read that, and declare absence explicitly:
+
+```json
+{
+  "failing_test": "test_auth_expiry",
+  "evidence": { "line_start": 1187, "line_end": 1187,
+                "quote": "FAILED tests/test_auth.py::test_auth_expiry" },
+  "answer_found": true,
+  "complete_answer_found": false
+}
+```
+
+A validator now confirms line 1187 exists in the captured log and that the quoted string appears there verbatim. A fabricated test name fails the containment check without any model in the loop, and the false `complete_answer_found` flag tells the caller that other failures may remain unreported.
+
+## Key Takeaways
+
+- Classify a wrong grounded answer by context sufficiency first, because retrieval fixes and extraction fixes solve different halves.
+- Both halves are large — the Joren et al. sample split 54.8% sufficient against 45.2% insufficient, and strong models still hallucinated inside the sufficient half.
+- The claim that most grounded hallucinations are extraction errors is not established — RAGTruth finds baseless content outweighing context conflict in question answering.
+- A typed generation contract declares a type, a verbatim evidence span, and explicit nullability per field.
+- The validator is the load-bearing part — a declared contract nobody checks buys the appearance of provenance, not the substance.
+- Do not use the contract on inference-bearing fields or as a substitute for an abstention gate the model cannot reliably drive.
+
+## Related
+
+- [Structured Output Constraints: Reducing Hallucination Surface](structured-output-constraints.md) — the general case for schemas over free text; this page narrows it to the extraction step and adds provenance
+- [Generative Provenance Records for Tool-Using Agents](generative-provenance-records.md) — the same evidence-span idea applied per output sentence across a tool trajectory
+- [Per-Line Requirement Citations for Hallucination Detection](per-line-requirement-citations.md) — the code-generation counterpart, citing requirement IDs instead of document spans
+- [RAG/Agent Reliability Problem Map](rag-agent-reliability-problem-map.md) — the wider failure taxonomy this diagnostic slots into
+- [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — why the validator, not the schema, is what makes the contract hold
+
+---
+
 ### Using the Agent to Analyze Its Own Evaluation Transcripts
 Source: https://agentpatterns.ai/verification/agent-transcript-analysis/
 
@@ -84471,6 +85472,7 @@ On a GSM8K stress setting (Qwen2.5-3B, 500 instances, 8 verification votes per r
 - [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — catches the correct-to-incorrect regressions a noisy repair loop introduces.
 - [Markov-Chain Reliability for LLM Agents](markov-chain-agent-reliability.md) — audit the abstraction before you trust a metric; the same caution behind not trusting a noisy acceptance rate.
 - [Evidence-Gated Lifecycle Control for Coding Agents (Proof-or-Stop)](evidence-gated-lifecycle-control.md) — advances state only on verifiable evidence, never on the agent's own acceptance claim.
+- [State-Bound Evidence and Typed Revision Contracts for Repair Loops](state-bound-repair-evidence.md) — the complementary lever when the verifier is sound but its output is stale: bind evidence to a code state and preserve the last verified candidate.
 
 ---
 
@@ -114602,7 +115604,7 @@ The fix:
 ## Key Takeaways
 
 - Progressive autonomy, not binary adoption. Start at Level 1 (suggestions) and escalate based on measured evidence — acceptance rate, merge rate, defect escapes. Define rollback triggers before granting autonomy.
-- Tiered code review eliminates the review bottleneck. Route by risk: automated-only for low-risk changes, AI + human for business logic, human-only for security-sensitive code. This reduces human review burden 40–60% while increasing coverage on critical paths.
+- Tiered code review eliminates the review bottleneck. Route by risk: automated-only for low-risk changes, AI + human for business logic, human-only for security-sensitive code. This concentrates human attention on the tiers that carry risk. Measure your own baseline rather than assuming a fixed saving.
 - Content exclusions don't protect against agent workflows. Agent mode, the CLI, and the coding agent bypass content exclusions entirely. Use repository isolation and filesystem permissions for truly sensitive code.
 - Under-configuration is the norm. Most teams stop at a basic `.github/copilot-instructions.md` file. The full stack — path-specific instructions, custom agents, skills, hooks, Spaces — compounds. Adopt incrementally over 2–3 months.
 - Measure outcomes, not activity. PR cycle time, merge rate, defect escapes, and review burden tell you whether adoption is working. Lines generated and interaction count do not.
@@ -128928,6 +129930,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [SDLC-Phase Skill Taxonomy: Full-Lifecycle Skill Libraries](sdlc-skill-taxonomy.md) — Organize a skill library around SDLC phases so phase-entry commands activate only the relevant skills at each stage
 - [Introspective Skill Generation](introspective-skill-generation.md) — Mine agent patterns across sessions to generate new skills, agents, and hooks
 - [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md) — Define evaluation tasks and success criteria before implementing agent features to make "done" objective and prevent requirement drift
+- [How Teams Build SE Agents: A Seven-Stage Build Loop](se-agent-build-workflow.md) — The seven-stage loop practitioners follow when building SE agents, and where engineering effort moves once implementation gets cheap
 - [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md) — Create and iterate on your first CLAUDE.md, AGENTS.md, or copilot-instructions.md in under thirty minutes
 - [Google Search Console Monitoring Workflow](../geo/gsc-search-console-monitoring.md) — Automate GSC and Bing WMT verification, index coverage tracking, and weekly CWV + query reports via API
 - [LLM-as-Judge Evaluation with Human Spot-Checking](llm-as-judge-evaluation.md) — Combine automated LLM rubric scoring with targeted human review to evaluate multi-agent output at scale without sacrificing quality on edge cases
@@ -135612,6 +136615,116 @@ This workflow combines `--max-turns`, `--max-budget-usd`, and `timeout-minutes` 
 
 ---
 
+### How Teams Build SE Agents: A Seven-Stage Build Loop
+Source: https://agentpatterns.ai/workflows/se-agent-build-workflow/
+
+# How Teams Build SE Agents: A Seven-Stage Build Loop
+
+> Teams building SE agents run a seven-stage loop in which effort moves from writing code to specifying, evaluating, and reviewing it.
+
+Building a software engineering agent reorganizes the process around it. A mixed-methods study of 20 practitioners across 12 organizations found a recurring seven-stage loop and five process shifts. A survey of 80 more practitioners validated both ([How Do Practitioners Build SE Agents?](https://arxiv.org/abs/2607.10856)). All of it follows from one fact: when writing code stops being the constraint, the next one becomes visible. Bottlenecks shift rather than disappear.
+
+## Why conventional process does not carry over
+
+An SE agent is software, but its behavior does not come from its code. It emerges from the model, prompts, tools, context, and execution environment ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)). Teams that run a conventional pipeline against it hit two failures. Deterministic test gates cannot certify output that varies between identical runs. And a finished-then-verified sequence puts the check after the point where it could have steered anything.
+
+This is not specific to one study. Evaluation built around fixed benchmarks and static test suites fails to capture emergent behavior. It also cannot support continuous adaptation across the lifecycle. So evaluation has to become a continuous governing function rather than a terminal checkpoint ([Evaluation-Driven Development and Operations of LLM Agents](https://arxiv.org/abs/2411.13768)).
+
+## Who this applies to
+
+Read this loop as a map for teams shipping agentic systems, not for teams that only use one. Three conditions bound it.
+
+The sample is narrow. The study recruited people who build SE agents, weighted toward large technology companies — 15 of the 20 interviewees — in applied-scientist and research-engineer roles. The authors state that the findings may not transfer to smaller firms, non-technical organizations, or general users ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)).
+
+Some stages are conditional. Data acts as a substrate for evaluation and, where teams adapt models, for training. Teams that build their agent through prompt engineering alone often needed no training-data pipeline, so data was not a universal sequential stage ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)).
+
+The evidence is a snapshot. Interviews ran from February to May 2026, and the authors flag temporal validity as a limitation because models and tools change quickly ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)).
+
+## The seven-stage loop
+
+```mermaid
+flowchart TD
+    A[Requirements] --> B[Evaluation criteria]
+    B --> C[Data<br>conditional]
+    C --> D[System construction]
+    D --> E[Testing and deployment]
+    E --> F[Human feedback]
+    F --> G[Adaptive maintenance]
+    G -.-> A
+    F -.-> B
+    B -.-> D
+```
+
+The seven components form an iterative loop rather than a one-way pipeline. Evaluation results, operational feedback, and provider model changes all return teams to earlier stages. Of the survey respondents, 91% agreed the loop reflects how SE agents get built ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)). The loop is tool-agnostic — no stage depends on which agent you build with.
+
+What distinguishes each stage ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)):
+
+- Requirements serve two audiences: the human team, and the agents that consume the requirements as input. Some teams made specifications more explicit and agent-readable as a result.
+- Evaluation sets the criteria for judging agent behavior. It differs from testing: testing verifies deterministic correctness, evaluation assesses variable behavior and task capability.
+- Data covers benchmarks, ground truth, operational traces, and golden patches mined from real commits. Manual collection and labeling remained necessary even where agents helped gather it.
+- System construction follows cheapest-first escalation. Teams start with an existing API or open-source model and prompting. They then move to adaptation such as LoRA, supervised fine-tuning, preference optimization, or continued pre-training. Few organizations pre-train a foundation model. Spanning every level sits the harness — context, memory, tools, skills, permissions, and orchestration.
+- Testing and deployment run both checks on an iteration before it ships.
+- Human feedback arrives through internal dogfooding, human review, validator agents, closed beta releases, and controlled A/B tests.
+- Adaptive maintenance handles provider-side model releases. A release can expand capabilities, expose new failure modes, or make parts of the existing harness unnecessary.
+
+## Where the effort moves
+
+The study measured agreement with five process shifts on a five-point scale ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)):
+
+| Shift | Agreement | Average |
+|-------|-----------|---------|
+| Effort is both unmasked and created | 95% | 4.46 |
+| Implementation becomes cheaper | 84% | 4.01 |
+| Evaluation increasingly steers development | 82% | 4.10 |
+| Specifications become central engineering artifacts | 77% | 3.90 |
+| Role boundaries shrink | 71% | 3.81 |
+
+The strongest result is not that work got faster. It is that work moved. As coding shrank, long-standing effort in requirements, coordination, and deployment became more visible. Meanwhile reviewing generated code and evaluating agent behavior created work that did not exist before. One participant put the unmasking plainly: "Writing code isn't the slow bit, it never was" ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)).
+
+## Why it works
+
+Effort relocates rather than disappears because the artifacts that control correctness migrate out of code. When behavior comes from the model, prompt, context, and tools, those become the things you engineer. That is why participants version and test prompts, skills, and context definitions alongside code ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)).
+
+Non-determinism supplies the second half of the mechanism. The same model, scaffold, and version can run twice and produce different scores, so verification cannot be a one-time gate ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)). It has to become a recurring signal that steers each iteration. That is the causal reason evaluation moves from final check to the thing that organizes development. This is a constraint result rather than a productivity result: cheapening one stage exposes the next binding constraint. It holds whether or not the net speed-up is real.
+
+## When this backfires
+
+You use agents but do not build them. The data and evaluation stages presuppose benchmarks, ground truth, and training pipelines. A product team consuming a coding agent has no model strategy to escalate and no eval corpus to curate. Importing the full loop adds ceremony without value.
+
+Your task already has a trustworthy oracle. The evaluation stage exists because agent output often has no valid signal. Where existing tests genuinely encode correctness, ordinary test-driven development is cheaper. The risk is believing you have one when you do not. Participants described teams treating existing tests as the oracle even when those tests encoded outdated criteria and rejected better solutions ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)).
+
+You cannot staff evaluation. Participants described evaluation as the hardest and most resource-intensive part of building an agent, with dedicated research and data-science teams behind it ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)). A two-person team cannot fund that.
+
+The acceleration premise is contested. That implementation gets cheaper rests on self-report: 16 of 20 interviewees said implementation was faster, and none reported a slowdown ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)). A randomized controlled trial found the opposite in a comparable population. Sixteen experienced open-source developers completed 246 tasks. They took 19% longer with AI tools, while estimating afterwards that AI had made them 20% faster ([Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity](https://arxiv.org/abs/2507.09089)). The developers who felt faster were measured slower. That trial covered early-2025 tooling, so it bounds the claim rather than refuting it. Do not treat self-reported speed-up as evidence of throughput.
+
+The prescriptions age. Scaffolding built around a model's current weaknesses turns into drag when the model improves. Participants named the pattern directly: "Today's design pattern may be tomorrow's anti-pattern" ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)). See [Harness Impermanence: Build Scaffolding To Be Deleted](../patterns/agent-design/harness-impermanence.md).
+
+The weakest answers concern comprehension. Practices addressing the gap between generated code and developer understanding drew the lowest effectiveness ratings in the study, at 53.9% for delegating maintenance back to AI. The authors concede the problem remains unresolved ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)).
+
+## Example
+
+The clearest case of a metric breaking is code volume. In one organization studied, AI-generated code grew from roughly four million lines a year to a projected fifteen million lines a month. The organization could not translate that increase into business value ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)). The participant responsible described the number as a warning rather than a target: "It is like a canary in a coal mine. If that number goes up, that should give us some attention. I do not think it is something we should performance-manage on."
+
+The team-level cost is what makes the metric misleading. An individual developer generating code quickly can look faster while creating review and maintenance work for everyone downstream. Of the survey respondents, 85% agreed that coding agents increase observable output without clarifying its value, the highest agreement of any challenge in the study. Only 65.8% rated treating code volume as a diagnostic signal rather than a target as very effective or essential. Even the recommended response is unsettled ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)).
+
+## Key Takeaways
+
+- The loop has seven stages — requirements, evaluation, data, system construction, testing and deployment, human feedback, adaptive maintenance — and 91% of surveyed practitioners recognized it.
+- Effort relocation is the best-supported finding at 95% agreement, and it does not depend on agents making anyone faster.
+- Evaluation and specifications become the artifacts that control correctness, because an agent's behavior comes from model, prompt, context, and tools rather than hand-written code.
+- Data and model adaptation are conditional stages; teams building prompt-only agents can skip both.
+- Treat the cheaper-implementation claim with care: it is self-reported, and a randomized trial measured a 19% slowdown in a comparable population.
+
+## Related
+
+- [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md) — the evaluation stage of this loop as a standalone practice
+- [Spec-Driven Development with Spec Kit](spec-driven-development.md) — treating specifications as the persistent source of truth
+- [When Developers Understand Less of Their Own Codebase](../patterns/anti-patterns/comprehension-debt.md) — the review burden this loop shifts downstream
+- [Harness Impermanence: Build Scaffolding To Be Deleted](../patterns/agent-design/harness-impermanence.md) — why scaffolding built for today's model becomes drag
+- [The Implicit Knowledge Problem for AI Coding Agents](../patterns/anti-patterns/implicit-knowledge-problem.md) — why agents retrieve what was written but not what was left unsaid
+
+---
+
 ### Human-in-the-Loop Placement: Where and How to Supervise Agent Pipelines
 Source: https://agentpatterns.ai/workflows/human-in-the-loop/
 
@@ -135875,6 +136988,7 @@ The signal to watch: if harness maintenance is consuming more human attention th
 - [Vibe Coding: Outcome-Oriented Agent-Assisted Development](../patterns/anti-patterns/vibe-coding.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Plan-First Loop](plan-first-loop.md)
+- [How Teams Build SE Agents: A Seven-Stage Build Loop](se-agent-build-workflow.md) — survey-validated evidence for where effort moves once implementation gets cheap
 
 ---
 
@@ -136726,6 +137840,7 @@ The same ticket dispatched without the R/A/P sections — "users get logged out 
 - [Programmatic Cloud-Agent Dispatch via REST API and Webhooks](programmatic-cloud-agent-dispatch.md) — the REST / webhook / cron dispatch surface
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — the upstream skill that ensures tickets reach the dispatch surface in a WRAP-ready state
 - [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md) — generates the kind of investigated, context-rich tickets that succeed on this dispatch surface
+- [Trigger-Level Gating for Autonomous Agent Intake](../patterns/agent-design/trigger-level-agent-intake-gating.md) — the opt-in pickup filter above, expanded into the three gates that decide whether an agent starts and what it may change
 
 ---
 
@@ -140456,6 +141571,8 @@ The minimum useful set is `init`, `run`, `eval`, `deploy`. Operational subcomman
 The strongest case for the pattern is self-service deployment by the agent itself. When an agent owns part of its own release process — running its own eval before a deploy, deciding whether to promote a canary, rolling back on a regression — it needs a programmatic surface for the lifecycle. Google's positioning is explicit: the CLI is "specialized ... designed specifically for AI coding agents" so the agent can scaffold, evaluate, and deploy without re-reading documentation each session ([Google Developers Blog](https://developers.googleblog.com/en/agents-cli-in-agent-platform-create-to-production-in-one-cli/)).
 
 The architecture rhymes with [the continuous autonomous task loop](continuous-autonomous-task-loop.md) — a stable subcommand surface that the agent can iterate against without context-window penalty. This is where the consolidation matters most: an agent learning one `agents-cli` surface deeply costs less per turn than the same agent re-learning four fragmented CLIs every session.
+
+Vendors are pushing the same argument past the coding platform itself. Replit frames the end state as a "self-driving company" — agent loops running company operations end-to-end rather than only the build-and-ship step ([Replit: the self-driving company](https://replit.com/blog/self-driving-company)). Read that as vendor positioning, not a measured result. It still marks the direction the lifecycle surface has to serve: the further an agent's remit runs past writing code, the more of the operational surface has to be reachable by subcommand rather than by console — which is exactly where the `logs` and `rollback` gap above starts to bite.
 
 ## Why it works
 

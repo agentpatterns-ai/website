@@ -240,6 +240,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Usage-Reinforced Memory Decay for Long-Running Agents](context-engineering/usage-reinforced-memory-decay.md)
 - [Agent-Tuned Code Search: Retrieval Built for the Loop](context-engineering/agent-tuned-code-search.md)
 - [Prompt Cache Keepalive for Agent Pauses](context-engineering/prompt-cache-keepalive-agent-pauses.md)
+- [Version-Controlled Agent Context (Git Context Controller)](context-engineering/version-controlled-agent-context.md)
+- [Skill Loadout Curation for Coding Agents](context-engineering/skill-loadout-curation.md)
 
 ## Instructions & Prompts
 
@@ -574,6 +576,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Cue-Anchored Working Memory (Delivery, Not Storage)](patterns/agent-design/cue-anchored-working-memory.md)
 - [Knowledge Graphs as Provenance-Carrying Agent Memory](patterns/agent-design/knowledge-graph-shared-memory.md)
 - [Browser as Agent Action Space](patterns/agent-design/browser-as-agent-action-space.md)
+- [Pre-Write Change Intent Admission (Claim Plane)](patterns/multi-agent/pre-write-change-intent-admission.md)
+- [Trigger-Level Gating for Autonomous Agent Intake](patterns/agent-design/trigger-level-agent-intake-gating.md)
 
 ## Loop Engineering
 
@@ -591,6 +595,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Human-in-the-Loop Checkpoints as Loop Control](loop-engineering/human-in-the-loop-checkpoints.md)
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](loop-engineering/loop-budgeting.md)
 - [Stuck-Loop Recovery: Detecting and Escaping Non-Converging Agent Loops](loop-engineering/stuck-loop-recovery.md)
+- [Within-Task Model Cascade: Designing the Escalation Gate](loop-engineering/within-task-model-cascade.md)
 
 ## Tool Design
 
@@ -693,6 +698,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Harness-Controlled Token Economics (The Harness Effect)](token-engineering/harness-token-economics.md)
 - [Line-Anchored Feedback: Deliver Change Requests as Inline Comments](token-engineering/line-anchored-feedback.md)
 - [Request Shaping to Cut Wasted Agent Turns](token-engineering/request-shaping-wasted-turns.md)
+- [Pricier-Per-Token Models That Cost Less Per Task](token-engineering/pricier-per-token-cheaper-per-task.md)
+- [Language Choice as an Agent Token-Cost Lever](token-engineering/language-choice-token-cost.md)
 
 ## Security & Safety
 
@@ -969,6 +976,10 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agentic Review Comment Acceptance](code-review/agentic-review-comment-acceptance.md)
 - [Profiler-Guided Optimization Loops for Coding Agents](verification/profiler-guided-optimization-loop.md)
 - [Skill Test Coverage as a Release Gate](verification/skill-test-coverage-release-gate.md)
+- [Deriving a Specification From Buggy Code Before Generating Tests](verification/derived-specification-test-generation.md)
+- [Typed Generation Contracts for Grounded Extraction](verification/typed-generation-contract.md)
+- [State-Bound Evidence and Typed Revision Contracts for Repair Loops](verification/state-bound-repair-evidence.md)
+- [Inline Suggestion Attachment in Agent Code Review](code-review/inline-suggestion-attachment.md)
 
 ## Hooks & Guardrails
 
@@ -1161,6 +1172,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [A Governance Framework for Production Agents](workflows/governing-production-agents.md)
 - [The Software Factory Model: Industrializing Agent Loops](workflows/software-factory-model.md)
 - [TDD Interaction Models: Throughput Versus Test Quality](workflows/tdd-interaction-models.md)
+- [How Teams Build SE Agents: A Seven-Stage Build Loop](workflows/se-agent-build-workflow.md)
 
 ## Human Factors
 
@@ -1324,6 +1336,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Team Shared-Language Desync from Removed Review Friction](patterns/anti-patterns/shared-language-desync.md)
 - [Trusting Claimed Prior Approval in Agent Review Gates](patterns/anti-patterns/trusting-claimed-prior-approval.md)
 - [Trusting a Skill Scanner's Verdict as a Security Judgment (Green-Check Fallacy)](patterns/anti-patterns/skill-scanner-verdict-not-security-judgment.md)
+- [Permission Modes as a Defense Against a Tampered Response Path (Response-Path Control Gap)](patterns/anti-patterns/response-path-control-gap.md)
 
 ## Emerging Concepts
 

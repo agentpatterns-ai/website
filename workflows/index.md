@@ -32,6 +32,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [SDLC-Phase Skill Taxonomy: Full-Lifecycle Skill Libraries](sdlc-skill-taxonomy.md) — Organize a skill library around SDLC phases so phase-entry commands activate only the relevant skills at each stage
 - [Introspective Skill Generation](introspective-skill-generation.md) — Mine agent patterns across sessions to generate new skills, agents, and hooks
 - [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md) — Define evaluation tasks and success criteria before implementing agent features to make "done" objective and prevent requirement drift
+- [How Teams Build SE Agents: A Seven-Stage Build Loop](se-agent-build-workflow.md) — The seven-stage loop practitioners follow when building SE agents, and where engineering effort moves once implementation gets cheap
 - [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md) — Create and iterate on your first CLAUDE.md, AGENTS.md, or copilot-instructions.md in under thirty minutes
 - [Google Search Console Monitoring Workflow](../geo/gsc-search-console-monitoring.md) — Automate GSC and Bing WMT verification, index coverage tracking, and weekly CWV + query reports via API
 - [LLM-as-Judge Evaluation with Human Spot-Checking](llm-as-judge-evaluation.md) — Combine automated LLM rubric scoring with targeted human review to evaluate multi-agent output at scale without sacrificing quality on edge cases

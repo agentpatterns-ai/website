@@ -25,7 +25,7 @@ Pick the model from how a cheap model behaves on the task, not from the task des
 
 Most LLM routers decide from the task description alone. That works when the prompt separates easy from hard, but agentic software tasks routinely defeat it: a near-identical issue can hide a one-line typo fix or a multi-module refactor, and the description does not tell them apart ([SWE-Router](https://arxiv.org/abs/2607.00053)).
 
-[Cascade routing](../../training/copilot/model-selection.md) answers this by starting cheap and escalating when tests fail — but that needs a binary pass/fail signal. Many agentic tasks have no such signal: no test to run, no type check, no linter verdict at the routing moment. Trajectory-conditioned escalation substitutes a learned read of the partial trajectory for the missing test result, so the escalation decision survives on tasks where cascade routing has nothing to key on.
+[Cascade routing](../../loop-engineering/within-task-model-cascade.md) answers this by starting cheap and escalating when a gate rejects the output — but that needs a binary pass/fail signal. Many agentic tasks have no such signal: no test to run, no type check, no linter verdict at the routing moment. Trajectory-conditioned escalation substitutes a learned read of the partial trajectory for the missing test result, so the escalation decision survives on tasks where cascade routing has nothing to key on.
 
 ## How it runs
 
@@ -59,7 +59,8 @@ SWE-Router pairs a weak model with a strong one and lets the weak model explore 
 
 ## Related
 
-- [GitHub Copilot: Model Selection & Routing](../../training/copilot/model-selection.md) — cascade routing that escalates on binary test pass/fail; this technique fills the gap it leaves on feedback-less tasks.
+- [Within-Task Model Cascade: Designing the Escalation Gate](../../loop-engineering/within-task-model-cascade.md) — cascade routing that escalates when a gate rejects the output; this technique fills the gap it leaves on feedback-less tasks.
+- [GitHub Copilot: Model Selection & Routing](../../training/copilot/model-selection.md) — the same cascade taught as a Copilot curriculum lesson, with worked credit costs.
 - [Gateway Model Routing](gateway-model-routing.md) — the infrastructure layer that exposes the weak and strong models a router escalates between.
 - [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — a prompt-time complement that allocates effort from task cues rather than trajectory evidence.
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — the weak-model side of the pairing, used as a bounded sub-tool.

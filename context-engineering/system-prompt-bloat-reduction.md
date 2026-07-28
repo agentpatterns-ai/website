@@ -38,6 +38,8 @@ A `permissions.deny` rule with a bare tool name removes an individual tool's def
 
 Then restart and re-run `/context` to confirm the drop. Do not hand-prune MCP servers first: Claude Code already defers MCP tool definitions by default through tool search, so the trimmable weight is mostly built-in tools, skills, and features, not MCP ([Claude Code — Manage costs](https://code.claude.com/docs/en/costs); [Anthropic — advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)).
 
+Token count is only one reason to drop a skill. When the symptom is the agent reaching for the wrong skill rather than a crowded prefix, the fix is [skill loadout curation](skill-loadout-curation.md), which prunes for colliding descriptions instead of size.
+
 ## Why it works
 
 Each turn is a stateless API request that re-sends the whole system prompt and every tool schema before the model reaches your task ([Claude Code — Manage costs](https://code.claude.com/docs/en/costs); [MCP schema overhead, issue #2808](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/2808)). Tool and feature definitions sit in that fixed prefix, so removing a definition shrinks the prefix permanently. Token cost scales with context size and the window is finite, so a smaller prefix leaves more room for task context and less for the model to read past before it reaches your problem.

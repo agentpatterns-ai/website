@@ -49,6 +49,7 @@ Shrink what each call has to carry, on both the input and output sides.
 - [Token-Efficient Code Generation](token-efficient-code-generation.md) — idiomatic structure beats "be concise" prompting
 - [Line-Anchored Feedback](line-anchored-feedback.md) — deliver change requests as line-anchored inline comments to cut edit tokens on large files
 - [Tokenizer Swap Tax](tokenizer-swap-tax.md) — budgeting for migrations that change token counts under flat per-token pricing
+- [Language Choice as an Agent Token-Cost Lever](language-choice-token-cost.md) — agents spend up to 1.69x more tokens in OCaml than Python, and the gap is compile loops rather than harder thinking
 - [Prompt Compression](../context-engineering/prompt-compression.md) — maximize signal per token in instructions
 - [Semantic Density Optimization](../context-engineering/semantic-density-optimization.md) — raise task-relevant tokens per byte in the codebase
 - [Context Budget Allocation](../context-engineering/context-budget-allocation.md) — treat context as a finite budget across sources
@@ -94,6 +95,7 @@ Push verbose intermediate work to a cheaper model and return a compact result.
 You cannot reduce what you do not measure — instrument spend before cutting it.
 
 - [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — swapping only the orchestration layer cut cost per task 41% at parity quality; the harness sets both token volume and effective price
+- [Pricier-Per-Token Models That Cost Less Per Task](pricier-per-token-cheaper-per-task.md) — comparing two models under one harness: a 2x per-token premium inverted into a lower bill once the lead could delegate
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — the instrument-attribute-fix-verify loop
 - [Cost-Quality Pareto Measurement for Agent Configurations](cost-quality-pareto-measurement.md) — plot each configuration on the (cost, quality) frontier so quality-trading downgrades are visible
 - [Code Cleanliness as an Agent Cost Lever](code-cleanliness-agent-cost-lever.md) — cleaner code cut token use 7-8% with no pass-rate change

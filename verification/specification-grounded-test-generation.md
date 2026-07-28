@@ -85,3 +85,4 @@ The spec-grounded oracle enforces the rule the prose-grounded one guessed wrong.
 - [Test-Driven Intent Clarification](test-driven-intent-clarification.md) — validating agent-written tests to surface specification ambiguity before writing code
 - [Spec-Derived Execution as a Correctness Oracle](spec-derived-execution-correctness-judging.md) — grounding an LLM judge in a natural-language spec by executing spec-derived inputs
 - [Per-Line Requirement Citations for Hallucination Detection](per-line-requirement-citations.md) — tying generated code back to specific requirement IDs so a mechanical check flags anything unsupported
+- [Deriving a Specification From Buggy Code Before Generating Tests](derived-specification-test-generation.md) — the fallback when no human specification exists: a model-written docstring recovers part of the gap, but inherits the bug about one time in five
