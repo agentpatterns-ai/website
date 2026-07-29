@@ -10,7 +10,7 @@ tags:
 aliases:
   - agent PR supply-chain debt
   - agent-authored PR security smells
-last_reviewed: 2026-07-21
+last_reviewed: 2026-07-29
 maturity: emerging
 ---
 
@@ -32,7 +32,7 @@ The critical-severity slice tells a sharper story. Of 253 critical smells, 99.6%
 
 ## Why it works
 
-Supply-chain smells cluster because agents and humans reference GitHub Actions and Docker images by mutable tags such as `@v4` or `:latest` instead of immutable commit SHAs or digests. A mutable tag is a pointer the upstream owner can move: if that account is compromised, the tag silently resolves to malicious code on the next CI run. The tj-actions/changed-files compromise of March 2025 is the realized case — an attacker repointed more than 350 tags to a commit that dumped runner secrets into build logs, affecting over 23,000 repositories ([Unit 42](https://unit42.paloaltonetworks.com/github-actions-supply-chain-attack/)). Pinning to a full commit SHA removes the mutable pointer, which is why GitHub added policy-level SHA-pinning enforcement ([GitHub Changelog](https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/)). An independent study of agentic PRs found agents concentrate their security-relevant work in configuration and CI surfaces, which is exactly where this debt accrues ([arXiv:2601.00477](https://arxiv.org/abs/2601.00477)).
+Supply-chain smells cluster because agents and humans reference GitHub Actions and Docker images by mutable tags such as `@v4` or `:latest` instead of immutable commit SHAs or digests. A mutable tag is a pointer the upstream owner can move: if that account is compromised, the tag silently resolves to malicious code on the next CI run. The tj-actions/changed-files compromise of March 2025 is the realized case — an attacker repointed more than 350 tags to a commit that dumped runner secrets into build logs, affecting over 23,000 repositories ([Unit 42](https://unit42.paloaltonetworks.com/github-actions-supply-chain-attack/)). Pinning to a full commit SHA removes the mutable pointer, which is why GitHub added policy-level SHA-pinning enforcement ([GitHub Changelog](https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/)). GitHub reports it now holds workflows it flags as potentially malicious for human approval before they run, a further platform-side, CI-layer control for the same agent-authored-workflow risk ([GitHub Changelog](https://github.blog/changelog/2026-07-28-github-actions-holds-potentially-malicious-workflows-for-approval)). An independent study of agentic PRs found agents concentrate their security-relevant work in configuration and CI surfaces, which is exactly where this debt accrues ([arXiv:2601.00477](https://arxiv.org/abs/2601.00477)).
 
 ## When this backfires
 
@@ -79,3 +79,4 @@ The pinned form is what survived the March 2025 compromise: workflows referencin
 - [arXiv:2601.00477](https://arxiv.org/abs/2601.00477) — "Security in the Age of AI Teammates": agent security work concentrates in config/CI surfaces
 - [Unit 42 (Palo Alto Networks)](https://unit42.paloaltonetworks.com/github-actions-supply-chain-attack/) — tj-actions/changed-files supply-chain compromise, March 2025
 - [GitHub Changelog, 15 Aug 2025](https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/) — policy-level SHA-pinning enforcement
+- [GitHub Changelog, 28 Jul 2026](https://github.blog/changelog/2026-07-28-github-actions-holds-potentially-malicious-workflows-for-approval) — GitHub Actions holds flagged workflows for human approval

@@ -140,6 +140,7 @@ The same team running on a developer laptop with no container and no proxy must 
 
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md)
+- [Permitted Egress Routes as Agent Sandbox Attack Surface](permitted-egress-attack-surface.md) — what the remaining permitted routes still expose once network access is partly restored
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Sandboxed Coding Environments: Containers vs MicroVMs vs OS-Level Isolators](sandbox-runtime-comparison.md)
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md)

@@ -248,11 +248,10 @@ Asking the agent "When would you use the linear-issue-manager skill?" after savi
 ## Related
 
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md) — the portable SKILL.md format
+- [Skill Authoring as Software Engineering: What Transfers](skill-authoring-software-engineering.md) — the construction principles behind these patterns, and which of them independent measurement actually supports
 - [CLI-First Skill Design](cli-first-skill-design.md) — the dual-use script shape for executable skills
 - [Skill Frontmatter Reference](skill-frontmatter-reference.md)
 - [Skill Library Evolution](skill-library-evolution.md) — lifecycle governance for authored skills
 - [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md)
 - [Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit](../verification/skill-evals.md) — evaluating an authored skill as a unit
-- [SDLC-Phase Skill Taxonomy](../workflows/sdlc-skill-taxonomy.md) — organizing an authored library by lifecycle phase at scale
-- [Daily-Use Skill Library](../workflows/daily-use-skill-library.md) — encoding a personal engineering process as a small skill set
 - [Project Writing Skill: House Style as Model-Invocable Skill](project-writing-skill.md) — a concrete authored skill packaging house-style writing conventions, loaded only when the agent writes prose

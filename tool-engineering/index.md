@@ -65,6 +65,7 @@ Packaging domain knowledge and reusable capabilities as agent skills with reliab
 - [Skill as Knowledge Pattern](skill-as-knowledge.md) — Design skills as pure knowledge containers -- domain rules, heuristics, and reference material -- not executable behavior, so they remain portable across agents
 - [CLI-First Skill Design](cli-first-skill-design.md) — Design agent skills as CLI tools so the same interface serves both humans debugging locally and agents automating through shell tool calls
 - [Skill Authoring Patterns](skill-authoring-patterns.md) — Practical patterns for building, testing, and troubleshooting agent skills -- categories, description craft, implementation patterns, and debugging
+- [Skill Authoring as Software Engineering: What Transfers](skill-authoring-software-engineering.md) — Which software-engineering principles survive contact with measurement when authoring skills, and the two questions that decide skill versus hook
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md) — All SKILL.md frontmatter fields: invocation control, subagent delegation, tool restriction, hooks, and argument handling
 - [Skill Context Isolation](skill-context-isolation.md) — Run a skill in an isolated subagent context so its auxiliary tokens never enter the main chat; the parent receives only the distilled result
 - [Skill Library Evolution](skill-library-evolution.md) — How agent skill libraries grow, get pruned, and evolve through versioning, quality gates, and lifecycle governance
