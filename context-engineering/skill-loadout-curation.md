@@ -91,3 +91,4 @@ drskill audit                        # which skills traces show being called
 - [Reducing System-Prompt Token Bloat in Coding Agents](system-prompt-bloat-reduction.md) — measuring the fixed prefix that a loadout contributes to
 - [Cost-Aware Skill Rewriting](../instructions/cost-aware-skill-rewriting.md) — what to keep inside a skill you decide to carry
 - [Contractual Skill Files](../instructions/contractual-skill-files.md) — writing the description a router has to discriminate on
+- [Skill Authoring as Software Engineering: What Transfers](../tool-engineering/skill-authoring-software-engineering.md) — the authoring-time counterpart; single responsibility is what keeps a description from shadowing its siblings

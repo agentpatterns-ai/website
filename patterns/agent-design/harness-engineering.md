@@ -10,7 +10,7 @@ tags:
 aliases:
   - agent environment design
   - environment design for agents
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-29
 maturity: established
 ---
 
@@ -24,7 +24,7 @@ Learn it hands-on: [Capstone — The Harness Decision Table](https://learn.agent
 
 Harness engineering is the practice of structuring a codebase, its tooling, and its documentation so that coding agents succeed by default. It treats the repository as the primary interface for agent work: if something is not in the repo, it does not exist for the agent.
 
-OpenAI, Anthropic, LangChain, and Martin Fowler's team each published findings converging on the same conclusion: environment quality determines agent output quality more than model capability or prompt sophistication.
+OpenAI, Anthropic, LangChain, Martin Fowler's team, and GitHub each published findings converging on the same conclusion: environment quality determines agent output quality more than model capability or prompt sophistication. GitHub frames its version of the claim with an explicit qualifier -- "(mostly)" -- naming the point where harness investment stops paying off, the same limit this page covers in [When this backfires](#when-this-backfires) ([GitHub](https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly/)).
 
 OpenAI shipped roughly one million lines of production code without manually written source in a five-month experiment. The enabler was environment design ([InfoQ](https://www.infoq.com/news/2026/02/openai-harness-engineering-codex/)). LangChain improved Terminal Bench 2.0 from 52.8% to 66.5% through pure harness changes -- no model change ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 

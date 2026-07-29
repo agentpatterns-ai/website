@@ -105,6 +105,7 @@ A "yes" to 1 and 2 with a "no" to 3 puts the deployment in the gap this anti-pat
 ## Related
 
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md)
+- [Permitted Egress Routes as Agent Sandbox Attack Surface](permitted-egress-attack-surface.md) — the sibling failure, where the allowlisted destination is itself the vulnerability
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)

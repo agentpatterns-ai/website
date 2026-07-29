@@ -680,6 +680,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Auth-Isolation as the MCP-vs-CLI Selection Heuristic](tool-engineering/mcp-auth-isolation-vs-cli-selection.md)
 - [Skill Reuse as Vendored Forking](tool-engineering/skill-reuse-as-vendored-forking.md)
 - [Restricting a Coding Agent to a Single execute_code Tool](tool-engineering/restrict-coding-agent-to-execute-code.md)
+- [Skill Authoring as Software Engineering: What Transfers](tool-engineering/skill-authoring-software-engineering.md)
 
 ## Token Engineering
 
@@ -835,6 +836,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Setup Documentation as an Install-Time Attack Vector](security/setup-documentation-install-time-attacks.md)
 - [Structural Monitoring for Covert Safeguard-Weakening](security/structural-safeguard-monitoring.md)
 - [Supply-Chain Security Debt in Agent Pull Requests](security/supply-chain-security-debt-agent-prs.md)
+- [Permitted Egress Routes as Agent Sandbox Attack Surface](security/permitted-egress-attack-surface.md)
 
 ## Testing & Evaluation
 
