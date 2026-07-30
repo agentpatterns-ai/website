@@ -91,3 +91,4 @@ If the developer had run `/compact` instead, the recent reasoning chain — incl
 - [Observation Masking](observation-masking.md) — a complementary primitive: strip intermediate tool results without touching the conversation shape.
 - [Goal Recitation](goal-recitation.md) — what to preserve in the summary so the agent does not drift after the cut.
 - [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md) — moves the cut decision from the user to the model, gated by a firing rubric instead of a chosen turn.
+- [Addressable Recall Compaction](addressable-recall-compaction.md) — keeps the compressed side recoverable by ID instead of accepting the summary as the only record.

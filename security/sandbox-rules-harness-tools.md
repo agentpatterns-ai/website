@@ -60,7 +60,7 @@ When you build harnesses that compose mixed tools, define trust boundaries per t
 | Third-party MCP server | Third-party's policies (audit separately) |
 | User-provided tools | User's responsibility; document this explicitly |
 
-This makes accountability visible at design time, not discovered during an incident.
+This makes accountability visible at design time, not discovered during an incident. The same ownership line governs what a harness can ship to a fleet: [distributing security controls through the agent harness](harness-distributed-security-controls.md) works only for controls that sit at a boundary the harness owns.
 
 ## Auditing third-party MCP tools
 

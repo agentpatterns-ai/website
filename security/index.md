@@ -165,8 +165,10 @@ Agents dynamically load tools from MCP servers, plugins, and registries at runti
 
 No single safety mechanism is sufficient. Layered defenses ensure that failure of one layer does not compromise the agent.
 
+- [Agent Retrieval Provenance as an Audit Control](agent-retrieval-provenance.md) — Capture which files an agent searched and read before it changed code so an auditor can test the process behind the diff; scope it to high-blast-radius changes and persist hashes rather than prompt text
 - [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md) — Wrap tool calls with policy validation and post-quantum receipt signing to produce a tamper-evident, append-only action log for regulated environments
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — Layer five independent safety mechanisms so no single failure point can compromise agent behavior
+- [Distributing Security Controls Through the Agent Harness](harness-distributed-security-controls.md) — A distributable harness ships OS sandboxing, skill scanning, and tool restriction to a fleet in one install, lifting composite score 52.3% to 78.3%; only declarative, boundary-local, conflict-free controls survive the trip, and injection defense is not one of them
 - [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md) — Move agents to production through three control gates — governance, observability, reproducibility — with MUST/SHOULD checklists for each
 - [Inline Safety Harness with Cascade Verification (FinHarness)](inline-lifecycle-safety-harness.md) — Wrap each agent turn with prospective per-call monitors and route verification between a cheap and an advanced judge by per-step risk; worth it for high-stakes, high-call-volume workflows, not low-volume or long-context agents
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — Embed defense mechanisms into each execution lifecycle phase with cross-layer feedback so layers coordinate rather than operate in isolation

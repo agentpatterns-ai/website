@@ -42,6 +42,8 @@ The retention decision turns on whether the agent will need to reference the too
 
 The heuristic is simple. Once the agent has extracted what it needs from the tool output and expressed it as a decision or artifact, the raw output is no longer needed.
 
+When you cannot make that call confidently, [addressable recall compaction](addressable-recall-compaction.md) removes the need to: it swaps the observation for a citation the agent can dereference, so a wrong masking decision stays recoverable.
+
 ## Implementation considerations
 
 Apply observation masking at the conversation history management layer. Post-process the message list before each inference call, not after:

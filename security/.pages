@@ -40,9 +40,11 @@ nav:
       - skill-supply-chain-poisoning.md
       - tool-signing-verification.md
   - "Auditing & Governance":
+      - agent-retrieval-provenance.md
       - cryptographic-governance-audit-trail.md
       - defense-in-depth-agent-safety.md
       - enterprise-agent-hardening.md
+      - harness-distributed-security-controls.md
       - inline-lifecycle-safety-harness.md
       - lifecycle-security-architecture.md
       - locked-desktop-agent-safeguards.md
