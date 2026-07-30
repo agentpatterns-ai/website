@@ -366,6 +366,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Prompt Cache Keepalive for Agent Pauses](context-engineering/prompt-cache-keepalive-agent-pauses.md)
 - [Version-Controlled Agent Context (Git Context Controller)](context-engineering/version-controlled-agent-context.md)
 - [Skill Loadout Curation for Coding Agents](context-engineering/skill-loadout-curation.md)
+- [Addressable Recall Compaction: Compact to Citations, Not Summaries](context-engineering/addressable-recall-compaction.md)
 
 ## Instructions & Prompts
 
@@ -961,6 +962,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Structural Monitoring for Covert Safeguard-Weakening](security/structural-safeguard-monitoring.md)
 - [Supply-Chain Security Debt in Agent Pull Requests](security/supply-chain-security-debt-agent-prs.md)
 - [Permitted Egress Routes as Agent Sandbox Attack Surface](security/permitted-egress-attack-surface.md)
+- [Agent Retrieval Provenance as an Audit Control](security/agent-retrieval-provenance.md)
+- [Distributing Security Controls Through the Agent Harness](security/harness-distributed-security-controls.md)
 
 ## Testing & Evaluation
 
@@ -1730,6 +1733,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [PEEK: Orientation Cache for Recurring-Context Agents](peek-orientation-cache.md) — A constant-sized prompt artifact that caches reusable orientation knowledge — what is in a recurring context, how it is organized, which entities matter — distinct from trajectory replay and playbook strategy memory
 - [Context Compression Strategies](context-compression-strategies.md) — Long-running agents accumulate context that eventually fills the window; tiered compression — offloading large payloads and summarizing history — lets agents continue working without losing task continuity
 - [Selective Rewind Summarization](selective-rewind-summarization.md) — A user-chosen cut point compresses earlier turns to a summary while the recent turns stay verbatim — a targeted alternative to whole-session compaction
+- [Addressable Recall Compaction](addressable-recall-compaction.md) — Store every tool observation verbatim under a stable ID and show a compact citation once context fills, so the agent recovers the exact record instead of a summary or a similarity match
 - [Usage-Reinforced Memory Decay for Long-Running Agents](usage-reinforced-memory-decay.md) — Score retention with a forgetting curve whose stability compounds on every recall, so frequently-consulted facts outlive the idle stretches that silently evict them from a fixed recency window
 - [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md) — Give the agent both a compaction tool and a firing rubric so it compacts on trajectory structure — sub-task resolved or converging — instead of a fixed token threshold
 - [Version-Controlled Agent Context](version-controlled-agent-context.md) — Commit, branch, merge, and read agent memory as a durable file tree so the abstraction level is chosen at read time; the retrieval path carries the benefit, not the checkpoints
@@ -1791,6 +1795,85 @@ Keeping agents on track across long sessions by preserving failure signals and r
 - [Context-Injected Error Recovery](context-injected-error-recovery.md) — When a tool call fails, inject structured error context into the next inference call to prevent retry loops before they form
 - [Error Preservation in Context](error-preservation-in-context.md) — Keep failed actions and error traces visible in the agent's context window; error history acts as negative examples that shift model behavior
 - [Goal Recitation](goal-recitation.md) — Periodically rewrite objectives, to-do lists, and status summaries at the tail of context to exploit recency bias and prevent goal drift in long-running sessions
+
+---
+
+### Addressable Recall Compaction: Compact to Citations, Not Summaries
+Source: https://agentpatterns.ai/context-engineering/addressable-recall-compaction/
+
+# Addressable Recall Compaction: Compact to Citations, Not Summaries
+
+> Compaction replaces older tool observations with short citations the agent can dereference by ID, so the exact bytes stay recoverable without re-running the tool.
+
+Reach for addressable recall when your agent loses specific details it already saw. Keep every tool observation verbatim in an append-only store keyed by a stable identifier. When the window fills, swap the observation in the transcript for a compact citation and let the agent ask for the record back by ID. [Summarization and masking](context-compression-strategies.md) make the loss permanent; addressing makes it reversible.
+
+The condition is narrow, and the evidence says so. Addressable Recall Compaction (ARC), the named form of this pattern, scored 99.00% exact-answer accuracy on a needle-in-a-haystack task against 79.57% for a similarity-retrieval baseline, running Qwen3-8B at a 16k window. On the LongBench-v2 hard subset, which needs synthesis rather than lookup, that same 8B setup scored 27.47% against 25.83% ([Dang et al., arxiv 2607.25066](https://arxiv.org/abs/2607.25066)). Treat the Qwen3 figures as the shape of the effect, not a claim about frontier models — the authors scope their evaluation to that family.
+
+## What the citation carries
+
+A citation is not a summary. It is a pointer plus enough surface for the agent to decide whether to follow it. ARC computes the identifier as a hash of the action signature and the observation, then stores the record without ever overwriting or deleting it ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).
+
+| Element | Purpose |
+|---------|---------|
+| Stable identifier | Resolves to exactly one record, so recovery skips ranking |
+| Head and tail preview | Lets the agent answer from the stub when the preview is enough |
+| Length and type metadata | Signals what a recall would cost before paying for it |
+| Recall hint | Names the action that fetches the full record |
+
+Recall is bounded, not free. ARC caps recalls per step, caps the total materialized recall budget, caps each recall's length, and evicts least-recently-used recalled bodies back to stubs when a budget is exceeded ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).
+
+## Why it works
+
+Compaction loss is a presentation problem that harnesses treat as a storage problem. The observation is only missing from the transcript, so an external store makes the loss reversible. Manus states the reason plainly: an agent "must predict the next action based on all prior state—and you can't reliably predict which observation might become critical ten steps later. From a logical standpoint, any irreversible compression carries risk" ([Context Engineering for AI Agents](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
+
+The second half is exactness. An identifier resolves to one record, so recovery never passes through an embedding ranker that can push the needed record below the cut. That is what the 19-point needle-in-a-haystack gap over similarity retrieval measures ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)). Anthropic describes the same idea as holding "lightweight identifiers (file paths, stored queries, web links, etc.)" and loading data through them at runtime ([Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+
+## When this backfires
+
+- Reasoning-bound tasks. The margin falls from 19 points on verbatim recall to under 2 points on LongBench-v2 hard, because perfect recall still permits faulty reasoning ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).
+- Tight recall budgets. At the smallest ablated budget ARC scored 26.05% against a structured-state baseline's 27.01% on Qwen3-8B — stub overhead consumed the budget it was meant to protect ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).
+- Models that never call recall. StructMemEval found agents handle structured memory reliably only when explicitly instructed, and "do not always recognize the memory structure when not prompted to do so" ([arxiv 2602.11243](https://arxiv.org/abs/2602.11243)). Unprompted, the store becomes write-only.
+- Latency-sensitive loops. Every dereference is another turn and another inference. Anthropic notes that just-in-time loading is slower than pre-processing data up front ([Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+- Dialogue-shaped history. Similarity retrieval sometimes wins there, and the ARC authors describe explicit and implicit recall as complementary rather than competing ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).
+
+The case against the pattern is worth holding onto: if your agent fails through attention dilution rather than detail loss, a summary fixes that and a citation does not, while the stubs, the extra turns, and the storage backend all still cost you.
+
+## Example
+
+The Strands Agents SDK ships this pattern as its `ContextOffloader` plugin. Any tool result over `max_result_tokens` (default 2,500) is stored externally and replaced in the conversation with a preview, a per-block reference, and a hint naming the retrieval tool ([Strands Agents documentation](https://strandsagents.com/docs/user-guide/concepts/plugins/context-offloader/)):
+
+```text
+[Offloaded: 1 blocks, ~10,000 tokens]
+Tool result was offloaded to external storage due to size.
+Use the preview below if it answers your question.
+If you need more detail, use retrieve_offloaded_content with a reference and:
+  - pattern: regex or keyword to find matching lines with context
+  - line_range: { start, end } to read a specific span of lines
+Retrieve full content (omit pattern/line_range) as a last resort.
+
+{"users":[{"id":1,"name":"Alice","role":"admin"},{"id":2,"name":"Bob",...
+
+[Stored references:]
+  mem_1_tool-123_0 (json, 42,000 bytes)
+```
+
+Two details differ from the paper, and both are deliberate. Strands supports partial dereference by regex pattern or line range, so the agent pulls a slice instead of the whole record. It also evicts offloaded entries after 20 idle agent loop cycles by default, and evicted content is gone — append-only retention is a setting you choose, not what you get ([Strands Agents documentation](https://strandsagents.com/docs/user-guide/concepts/plugins/context-offloader/)).
+
+## Key Takeaways
+
+- Choose addressable recall when compaction is losing details your agent later needs, not when the transcript is merely long.
+- Its advantage is exact recovery, so it beats similarity retrieval on lookup and barely moves reasoning-bound tasks.
+- Budget the recall channel deliberately — caps per step, per recall, and in total — or stub overhead eats the space compaction freed.
+- Prompt the recall action explicitly; agents do not reliably invoke memory tools on their own.
+- Decide your eviction policy on purpose. Production implementations default to deleting idle records, not keeping them forever.
+
+## Related
+
+- [Context Compression Strategies](context-compression-strategies.md) — the tiered offload-then-summarize baseline this pattern extends with exact addressing
+- [Observation Masking](observation-masking.md) — the lossy alternative that drops processed tool outputs instead of citing them
+- [Selective Rewind Summarization](selective-rewind-summarization.md) — choosing a cut point when summarization is the right tool
+- [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md) — deciding when compaction fires, orthogonal to what it leaves behind
+- [Event Sourcing for Agents](../observability/event-sourcing-for-agents.md) — the append-only event log as a general agent-state substrate
 
 ---
 
@@ -1949,6 +2032,7 @@ Two consequences follow. The caller cannot narrow the search with file globs or 
 - [Indexed Regex Search for Agent Tools](../tool-engineering/indexed-regex-search-agent-tools.md) — the index implementation beneath a hosted search tool, and its freshness problem.
 - [Trained Repository Explorer Sub-Agent (FastContext)](../patterns/agent-design/fastcontext-trained-repository-explorer.md) — the locally served, trained variant of the same explorer contract.
 - [Persistent Shared Search Sub-Agent](../patterns/multi-agent/persistent-search-subagent.md) — the multi-agent version, which deduplicates exploration across workers rather than compressing one agent's search.
+- [Agent Retrieval Provenance as an Audit Control](../security/agent-retrieval-provenance.md) — the compliance case for scoped retrieval: the same citations that save tokens also form the audit trail of what the agent read.
 
 ---
 
@@ -2775,7 +2859,7 @@ graph TD
 
 ### Tier 1: offload large tool responses
 
-Replace large tool payloads (full files, API responses, search results) with a filesystem reference and brief summary. Full content goes to disk, and the agent re-reads it when needed. This keeps content recoverable without holding payloads in active context. You can configure the thresholds — frameworks typically set them in the tens of thousands of tokens.
+Replace large tool payloads (full files, API responses, search results) with a filesystem reference and brief summary. Full content goes to disk, and the agent re-reads it when needed. This keeps content recoverable without holding payloads in active context — [addressable recall compaction](addressable-recall-compaction.md) generalizes the same move to every compacted observation, keyed by a stable identifier. You can configure the thresholds — frameworks typically set them in the tens of thousands of tokens.
 
 ### Tier 2: summarize conversation history
 
@@ -6357,6 +6441,8 @@ The retention decision turns on whether the agent will need to reference the too
 
 The heuristic is simple. Once the agent has extracted what it needs from the tool output and expressed it as a decision or artifact, the raw output is no longer needed.
 
+When you cannot make that call confidently, [addressable recall compaction](addressable-recall-compaction.md) removes the need to: it swaps the observation for a citation the agent can dereference, so a wrong masking decision stays recoverable.
+
 ## Implementation considerations
 
 Apply observation masking at the conversation history management layer. Post-process the message list before each inference call, not after:
@@ -8465,6 +8551,7 @@ If the developer had run `/compact` instead, the recent reasoning chain — incl
 - [Observation Masking](observation-masking.md) — a complementary primitive: strip intermediate tool results without touching the conversation shape.
 - [Goal Recitation](goal-recitation.md) — what to preserve in the summary so the agent does not drift after the cut.
 - [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md) — moves the cut decision from the user to the model, gated by a firing rubric instead of a chosen turn.
+- [Addressable Recall Compaction](addressable-recall-compaction.md) — keeps the compressed side recoverable by ID instead of accepting the summary as the only record.
 
 ---
 
@@ -16237,6 +16324,8 @@ Instruction files (`CLAUDE.md`, `.github/copilot-instructions.md`, `AGENTS.md`) 
 
 Treat this as deliberate governance, not an incidental storage choice. Teams then get a structured way to own and improve AI behavior without ML infrastructure or data scientists.
 
+The PR mechanism is one part of a larger gap. Towards Data Science argues that prompt engineering is the solved half of the problem and prompt *management* — versioning, a registry, and lifecycle handling — is the half still missing from most teams ([Towards Data Science — Prompt Engineering Is Solved. Prompt Management Isn't](https://towardsdatascience.com/prompt-engineering-is-solved-prompt-management-isnt/)). Branch-and-review covers versioning and approval; the registry and lifecycle pieces need conventions on top.
+
 GitHub's accessibility team chose this on purpose: they stored prompt files instead of fine-tuning a model, so that any team member could update AI behavior through a pull request. When accessibility standards change, the team edits the instruction files and merges a PR. The AI adapts on the next run, not the next training cycle. ([Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/))
 
 ## How it works
@@ -16313,7 +16402,6 @@ The PR diff makes the severity definition change explicit. Reviewers can judge w
 - [Standards as Agent Instructions for AI Agent Development](standards-as-agent-instructions.md)
 - [Frozen Spec File: Preserving Intent in AI Agent Sessions](frozen-spec-file.md)
 - [CLAUDE.md Convention](claude-md-convention.md)
-- [Convention Over Configuration for Agent Workflows](convention-over-configuration.md)
 - [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md)
 
 ## Sources
@@ -16323,6 +16411,7 @@ The PR diff makes the severity definition change explicit. Reviewers can judge w
 - [GitHub Accessibility — Optimizing Copilot with Custom Instructions](https://accessibility.github.com/documentation/guide/copilot-instructions) — GitHub's own guide on writing accessibility-focused custom instructions
 - [agents.md open standard](https://agents.md) — Cross-tool standard for `AGENTS.md` instruction files
 - [Claude Code Sub-Agents Docs](https://code.claude.com/docs/en/sub-agents) — Confirms CLAUDE.md loads per session including for spawned subagents
+- [Towards Data Science — Prompt Engineering Is Solved. Prompt Management Isn't](https://towardsdatascience.com/prompt-engineering-is-solved-prompt-management-isnt/) — Argues versioning, registry, and lifecycle are the unsolved half of prompt work
 
 ---
 
@@ -86061,8 +86150,10 @@ Agents dynamically load tools from MCP servers, plugins, and registries at runti
 
 No single safety mechanism is sufficient. Layered defenses ensure that failure of one layer does not compromise the agent.
 
+- [Agent Retrieval Provenance as an Audit Control](agent-retrieval-provenance.md) — Capture which files an agent searched and read before it changed code so an auditor can test the process behind the diff; scope it to high-blast-radius changes and persist hashes rather than prompt text
 - [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md) — Wrap tool calls with policy validation and post-quantum receipt signing to produce a tamper-evident, append-only action log for regulated environments
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — Layer five independent safety mechanisms so no single failure point can compromise agent behavior
+- [Distributing Security Controls Through the Agent Harness](harness-distributed-security-controls.md) — A distributable harness ships OS sandboxing, skill scanning, and tool restriction to a fleet in one install, lifting composite score 52.3% to 78.3%; only declarative, boundary-local, conflict-free controls survive the trip, and injection defense is not one of them
 - [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md) — Move agents to production through three control gates — governance, observability, reproducibility — with MUST/SHOULD checklists for each
 - [Inline Safety Harness with Cascade Verification (FinHarness)](inline-lifecycle-safety-harness.md) — Wrap each agent turn with prospective per-call monitors and route verification between a cheap and an advanced judge by per-step risk; worth it for high-stakes, high-call-volume workflows, not low-volume or long-context agents
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — Embed defense mechanisms into each execution lifecycle phase with cross-layer feedback so layers coordinate rather than operate in isolation
@@ -86465,6 +86556,81 @@ Denies override the `*.internal.corp.example` wildcard for two known-bad subdoma
 - [MCP Runtime Control Plane](mcp-runtime-control-plane.md)
 - [Docker Sandbox Adoption for Agent Workloads](docker-sbx-adoption.md)
 - [Customer-Hosted MCP Tunnel: Outbound-Only Connectivity to Private MCP Servers](customer-hosted-mcp-tunnel.md) — outbound-only tunnelling that reaches private MCP servers without inbound ports, the same egress-constrained posture
+
+---
+
+### Agent Retrieval Provenance as an Audit Control
+Source: https://agentpatterns.ai/security/agent-retrieval-provenance/
+
+# Agent Retrieval Provenance as an Audit Control
+
+> Recording which files an agent read before it changed code gives an auditor evidence about the process, not just the diff.
+
+Agent retrieval provenance is the captured trail of what an agent searched for, found, and read before it made a change — described by [Sourcegraph](https://sourcegraph.com/blog/compliance-first-ai-proving-agent-provenance) as "the evidence of which files an agent read, and why, before it changed anything." When the author is an agent, the diff and the approval survive, but the context that informed the change disappears when the session ends.
+
+## When this is worth doing
+
+The strongest argument against blanket adoption comes from the source that proposes the control: "Nobody expects a list of every file a person reads," and file-level scrutiny "tends to be reserved for high-blast-radius artifacts like the Terraform applied to customer environments" ([Sourcegraph](https://sourcegraph.com/blog/compliance-first-ai-proving-agent-provenance)). Capture the trail where all of these hold:
+
+- The change class already attracts file-level scrutiny — authentication flows, data-handling routines, infrastructure applied to customer environments, dependencies with known CVEs.
+- Your tooling exposes discrete named operations (read a file, search by keyword, jump to a definition) rather than one opaque tool, so each retrieval is an individually observable event ([Sourcegraph](https://sourcegraph.com/blog/compliance-first-ai-proving-agent-provenance)).
+- You can redact at source, so the trail does not become the data-protection incident it was meant to prevent.
+
+Below that bar, the retention obligation and the privacy surface outweigh the evidentiary value.
+
+## What the trail must contain
+
+Retention and redaction pull in opposite directions, and the pattern that survives both keeps the metadata while dropping the content. [ARMO](https://www.armosec.io/blog/minimum-viable-audit-trail/) recommends persisting "data shape, sensitivity classifications, byte counts, semantic tags, and content hashes" so the trail "proves what happened without storing what was said." A compliance consumer also needs tamper evidence and retention set to the most stringent applicable framework — one to seven years of cold storage, on ARMO's matrix.
+
+Access scoping belongs inside the control, not beside it: agents "can only read the repositories a user is already permitted to see" ([Sourcegraph](https://sourcegraph.com/blog/compliance-first-ai-proving-agent-provenance)). A trail showing the agent read a repository the requester could not open documents a violation instead of evidencing compliance.
+
+## Why it works
+
+Auditing tests the process that produced the evidence, not only the evidence itself. PCAOB [AS 1105.10](https://pcaobus.org/oversight/standards/auditing-standards/details/AS1105) requires that when using information produced by the company as audit evidence, the auditor "Test the accuracy and completeness of the information, or test the controls over the accuracy and completeness of that information." When an agent authors the change, the process that produced it is the retrieval, so the retrieval record is the artifact a process test can examine.
+
+The obvious substitute — asking the agent to explain itself — fails on measured grounds. Anthropic found Claude 3.7 Sonnet mentioned a decisive hint in its chain of thought 25% of the time and DeepSeek R1 39%; on the more concerning hint classes Claude was faithful 41% and R1 19%. The unfaithful chains of thought "were substantially longer than the faithful ones" ([Anthropic](https://www.anthropic.com/research/reasoning-models-dont-say-think)), so a fluent rationale evidences nothing. The harness observes a retrieval event rather than the model reporting it, so it does not inherit that unreliability.
+
+Regulators have reached the same shape. EU AI Act [Article 12](https://artificialintelligenceact.eu/article/12/) requires high-risk systems to "technically allow for the automatic recording of events (logs) over the lifetime of the system," and for one Annex III class sets minimum logging including "the reference database against which input data has been checked by the system" and "the input data for which the search has led to a match" — retrieval-trail capture in law, though for a narrower class of system than coding agents.
+
+## When this backfires
+
+- Retrieval is not attention. A read event proves a file entered the context window, not that it informed the change. Accuracy "significantly degrades when models must access relevant information in the middle of long contexts" ([Liu et al.](https://arxiv.org/abs/2307.03172)), so bulk-loading produces a trail that overstates what was used.
+- The trail cannot establish completeness. It records what was read, never what should have been read; testing that assertion needs an independently defined set of relevant sources, which the log cannot supply.
+- Verbatim capture inverts the control. Storing prompt content and model output as plaintext is "a PII spill waiting to happen" ([ARMO](https://www.armosec.io/blog/minimum-viable-audit-trail/)) — the control becomes the breach.
+- Attacker-controlled sources still pass. The trail records that the agent read a poisoned file; it defends nothing. Pair it with [Provenance-Aware Decision Auditing](provenance-aware-decision-auditing.md), which gates actions at runtime instead.
+- Agents answering from parametric memory log nothing, so the control reports green while covering none of the change.
+
+## Example
+
+Sourcegraph's Deep Search is a shipped implementation. It "returns an explicit list of sources with every answer: a record of which searches it ran and which files it read to reach its conclusion," and each conversation [exports as a PDF](https://sourcegraph.com/changelog/deep-search-pdf-support) that can be handed to an auditor ([Sourcegraph](https://sourcegraph.com/blog/compliance-first-ai-proving-agent-provenance)).
+
+What marks it as a control rather than a search feature is the question it answers. These are the auditor's questions, not a developer's:
+
+- "Show me all commits touching the authentication service in the last audit period." — change management
+- "Where is PII encrypted at rest, and when was that encryption added?" — GDPR and CCPA
+- "When was MFA enforcement added to the admin login flow?" — SOC 2 and ISO 27001
+
+It groups every commit touching the authentication service by theme, with the SHA, date, and author for each. Run against the public `gitlab-org/gitlab` repository, it traces credit card data from entry point to storage, naming the files and the fields that get hashed ([Sourcegraph](https://sourcegraph.com/blog/compliance-first-ai-proving-agent-provenance)).
+
+The evidence is the source list, not the answer. Without it the output is a claim; with it, a reviewer can check the conclusion against the exact files consulted.
+
+## Key Takeaways
+
+- Agent retrieval provenance is input-side evidence — what the agent read before acting — as distinct from output-side claim grounding or a signed log of what it did.
+- The mechanism is that auditing tests the process behind the evidence ([AS 1105.10](https://pcaobus.org/oversight/standards/auditing-standards/details/AS1105)), and with an agent the process is the retrieval.
+- Self-reported reasoning is not a substitute: models omit the decisive factor most of the time, and unfaithful rationales run longer than faithful ones ([Anthropic](https://www.anthropic.com/research/reasoning-models-dont-say-think)).
+- Scope it to high-blast-radius changes; the source itself notes nobody audits which files a human read.
+- Persist metadata and hashes rather than prompt and output text, or the audit trail becomes a PII spill ([ARMO](https://www.armosec.io/blog/minimum-viable-audit-trail/)).
+- The trail evidences which context was available, not that the agent used it, and it cannot prove completeness by itself — claim only what it supports.
+
+## Related
+
+- [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md) — the action-side dual: tamper-evident signed receipts of what the agent did, where this page covers what it read.
+- [Provenance-Aware Decision Auditing for LLM Agents](provenance-aware-decision-auditing.md) — runtime gating on an influence graph, rather than a post-hoc record for an auditor.
+- [Generative Provenance Records for Tool-Using Agents](../verification/generative-provenance-records.md) — claim-level grounding of generated sentences, the third provenance axis.
+- [Agent-Tuned Code Search: Retrieval Built for the Loop](../context-engineering/agent-tuned-code-search.md) — the scoped-retrieval tooling that makes a legible trail possible.
+- [Agent Chat History as a First-Class Artifact](../observability/agent-history-as-artifact.md) — the practitioner-facing query surface over the same session record.
+- [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md) — the wider control set this evidence artifact plugs into.
 
 ---
 
@@ -89845,6 +90011,80 @@ Each diff is justified on its own; the attack exists only when the three compose
 
 ---
 
+### Distributing Security Controls Through the Agent Harness
+Source: https://agentpatterns.ai/security/harness-distributed-security-controls/
+
+# Distributing Security Controls Through the Agent Harness
+
+> A harness ships security controls to a whole fleet in one install, but only declarative, boundary-local, conflict-free controls survive the trip.
+
+Harness distribution works for a narrow class of control. A control survives the trip when you can express it as a versioned artifact, place it at a boundary the harness owns, and run it beside its neighbors without conflict. SHarD, a distributable harness built on the Pi agent, embedded OS sandboxing, skill scanning, and tool restriction and shipped all three in a single install command ([arXiv:2607.25890](https://arxiv.org/abs/2607.25890)). Its composite score rose from 52.3% to 78.3% on a 23-test suite derived from the [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/2025/12/09/owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai/), with no regression in any category. Indirect prompt injection defense did not make the trip.
+
+## What distributes and what does not
+
+Four controls were evaluated; three shipped ([arXiv:2607.25890](https://arxiv.org/abs/2607.25890)):
+
+| Control | Where it is enforced | Baseline → distributed |
+|---|---|---|
+| OS sandboxing | Kernel, via macOS Seatbelt. Capabilities are irreversible once applied and inherited by child processes | 66.7% → 100% |
+| Skill scanning | External scan API called before a skill loads, enforced by a scan-first workflow file, against [skill supply-chain poisoning](skill-supply-chain-poisoning.md) | 58.3% → 100% |
+| Tool restriction | Harness layer, a regex hook on the bash tool's arguments | 50.0% → 100% |
+| Content protection | Not distributed — cut before shipping | 37.5% → 44.4% |
+
+Read the fourth row before the headline: the paper's 100% figure is an adjusted score that excludes content protection, the one class aimed at indirect prompt injection. It was cut because it triggered false positives on the skill scanner and imposed prohibitive overhead when both ran together. What distributed was containment, not injection resistance.
+
+The enforcement column matters as much as the score. Only the OS sandbox is structural; the paper states plainly that a determined agent bypasses the tool-restriction hook by invoking system calls directly instead of going through the bash tool. Treat harness-layer denial as a guard against agent error, and the kernel sandbox as the guard against an agent already turned.
+
+## Why it works
+
+A control distributes when policy becomes an artifact instead of an instruction. The paper attributes the result to four properties ([arXiv:2607.25890](https://arxiv.org/abs/2607.25890)): the policy is declarative and portable, expressed as a JSON profile, a markdown workflow file, or an extension, and applied without any end-user configuration; each control sits at or near an execution boundary the harness owns; the co-resident controls do not conflict; and the harness is extensible enough that everything loads through hooks with no change to core source.
+
+The determinism argument is the load-bearing half. During testing the uncontrolled agent passed one injection test by chance, after wandering into its own skill list and finding the scanner, then never reproduced that path. The paper concludes that such outcomes "cannot be substituted for deterministic controls" ([arXiv:2607.25890](https://arxiv.org/abs/2607.25890)), so enforcement has to be built into the harness through hooks rather than left to model behavior. Content protection failed the conflict property, which is why it is the one class that did not ship.
+
+## When this backfires
+
+- Indirect prompt injection is your primary threat. The distributed set does not address it; content protection moved 37.5% to 44.4% and was then dropped. Pair harness distribution with the defenses in [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md).
+- Your fleet already runs one vendor agent with a managed-policy file. Claude Code's `managed-settings.json` deploys to a system path and "cannot be overridden by user or project settings" ([Claude Code settings](https://code.claude.com/docs/en/settings)) — the same declarative, centrally applied channel with no fork to maintain. Adding controls to a stock commercial agent reached 87.0% composite against the custom harness's 78.3% ([arXiv:2607.25890](https://arxiv.org/abs/2607.25890)).
+- The target agent manages its own network. Network filtering could not be applied to one commercial agent at all, because its internal managed network proxy produced a fatal conflict that profile tuning did not resolve ([arXiv:2607.25890](https://arxiv.org/abs/2607.25890)).
+- The scan sits on the interactive path. Scanned skill tests took 1m49s to 8m13s against 18–30 seconds uncontrolled ([arXiv:2607.25890](https://arxiv.org/abs/2607.25890)) — acceptable for a gate that fires on install, unacceptable for one that fires every turn.
+- You cannot secure the distribution channel. A one-command installer concentrates fleet-wide code execution behind a single URL, the install-time trust decision described in [Setup Documentation as an Install-Time Attack Vector](setup-documentation-install-time-attacks.md).
+
+The evidence base is one harness, four controls, and functional probes rather than adversarial evaluation ([arXiv:2607.25890](https://arxiv.org/abs/2607.25890)), so treat the four-property test as a filter for what to try, not a guarantee.
+
+## Example
+
+SHarD's whole security posture is seven new files plus one edit to the package manifest, with no changes to the harness core ([arXiv:2607.25890](https://arxiv.org/abs/2607.25890)):
+
+```text
+extensions/shard-nono.ts          session-start hook: relaunch the session inside the OS sandbox
+extensions/shard-permissions.ts   tool_call hook: test bash strings against deny rules
+extensions/shard-onboarding.ts    provision the skill-scanner credential at startup
+config/pi.json                    sandbox capability profile: filesystem, network, admin functions
+permissions.json                  deny rules, resolved from global and project-local files
+SKILL.md                          the scan-before-load workflow the agent must follow
+package manifest (modified)       registers the above; core harness source untouched
+```
+
+Everything the fleet gets is a file the package manager places, with nothing left for a developer to configure — which is why the channel deserves the same audit as the controls it carries.
+
+## Key Takeaways
+
+- Harness distribution carries containment controls well and injection defense poorly; the headline 100% is an adjusted score that excludes the content-protection class ([arXiv:2607.25890](https://arxiv.org/abs/2607.25890)).
+- A control distributes when it is declarative, sits at a boundary the harness owns, does not conflict with co-resident controls, and loads through hooks without core changes.
+- The enforcement layer decides the threat model: the kernel sandbox is structural, the bash-tool deny hook is bypassable by direct system calls.
+- Model non-determinism produced an unreproducible security pass, which is the argument for hook-enforced controls over relying on model behavior.
+- Where a vendor already ships a non-overridable managed-settings file, that channel delivers the same declarative fleet policy without the fork.
+
+## Related
+
+- [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md) — which tools a harness can actually enforce against, the boundary this pattern depends on
+- [Enterprise-Managed Plugin Governance for Agent CLIs](enterprise-managed-plugin-governance.md) — the vendor-native distribution channel and its four levers
+- [Setup Documentation as an Install-Time Attack Vector](setup-documentation-install-time-attacks.md) — why the one-command install channel is itself a trust decision
+- [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — where in the execution lifecycle each distributed control lands
+- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — layering the controls a single harness cannot carry alone
+
+---
+
 ### Docker sbx Adoption for Coding Agents
 Source: https://agentpatterns.ai/security/docker-sbx-adoption/
 
@@ -93170,6 +93410,7 @@ On Agent-SafetyBench with DeepSeek-V3.2 across three configurations (ReAct, Mult
 - Cost outweighs the benefit for low-risk agents. For read-only agents or prototypes, independent [defense-in-depth](defense-in-depth-agent-safety.md) delivers most of the benefit at lower complexity.
 - Coupling amplifies false positives. A misconfigured entropy monitor can cascade blocks system-wide.
 - Latency-sensitive pipelines suffer. LLM-judge escalation may add unacceptable overhead in high-frequency tool-calling.
+- Deployment reach is out of scope. The architecture protects only the agents that actually receive it; getting it to a fleet is a separate problem, and [distributing security controls through the agent harness](harness-distributed-security-controls.md) carries containment layers far better than injection defense.
 
 ## Key Takeaways
 
@@ -96799,7 +97040,7 @@ When you build harnesses that compose mixed tools, define trust boundaries per t
 | Third-party MCP server | Third-party's policies (audit separately) |
 | User-provided tools | User's responsibility; document this explicitly |
 
-This makes accountability visible at design time, not discovered during an incident.
+This makes accountability visible at design time, not discovered during an incident. The same ownership line governs what a harness can ship to a fleet: [distributing security controls through the agent harness](harness-distributed-security-controls.md) works only for controls that sit at a boundary the harness owns.
 
 ## Auditing third-party MCP tools
 
@@ -100761,6 +101002,7 @@ The audit shape answers a yes/no question with timestamps and turn types — use
 - [Using the Agent to Analyze Its Own Evaluation Transcripts](../verification/agent-transcript-analysis.md) — the harness-developer angle on the same trace data
 - [Session Recap: Goal-Shaped Handoff at Context Boundaries](../patterns/agent-design/session-recap.md) — per-session handoff, not cross-session aggregate
 - [Memory Synthesis from Execution Logs](../patterns/agent-design/memory-synthesis-execution-logs.md) — extracting durable lessons for the agent's future runs
+- [Agent Retrieval Provenance as an Audit Control](../security/agent-retrieval-provenance.md) — the audit query shape hardened into a change-management control for regulated teams
 
 ---
 

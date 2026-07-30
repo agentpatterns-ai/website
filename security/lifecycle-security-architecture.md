@@ -119,6 +119,7 @@ On Agent-SafetyBench with DeepSeek-V3.2 across three configurations (ReAct, Mult
 - Cost outweighs the benefit for low-risk agents. For read-only agents or prototypes, independent [defense-in-depth](defense-in-depth-agent-safety.md) delivers most of the benefit at lower complexity.
 - Coupling amplifies false positives. A misconfigured entropy monitor can cascade blocks system-wide.
 - Latency-sensitive pipelines suffer. LLM-judge escalation may add unacceptable overhead in high-frequency tool-calling.
+- Deployment reach is out of scope. The architecture protects only the agents that actually receive it; getting it to a fleet is a separate problem, and [distributing security controls through the agent harness](harness-distributed-security-controls.md) carries containment layers far better than injection defense.
 
 ## Key Takeaways
 

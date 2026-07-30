@@ -242,6 +242,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Prompt Cache Keepalive for Agent Pauses](context-engineering/prompt-cache-keepalive-agent-pauses.md)
 - [Version-Controlled Agent Context (Git Context Controller)](context-engineering/version-controlled-agent-context.md)
 - [Skill Loadout Curation for Coding Agents](context-engineering/skill-loadout-curation.md)
+- [Addressable Recall Compaction: Compact to Citations, Not Summaries](context-engineering/addressable-recall-compaction.md)
 
 ## Instructions & Prompts
 
@@ -837,6 +838,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Structural Monitoring for Covert Safeguard-Weakening](security/structural-safeguard-monitoring.md)
 - [Supply-Chain Security Debt in Agent Pull Requests](security/supply-chain-security-debt-agent-prs.md)
 - [Permitted Egress Routes as Agent Sandbox Attack Surface](security/permitted-egress-attack-surface.md)
+- [Agent Retrieval Provenance as an Audit Control](security/agent-retrieval-provenance.md)
+- [Distributing Security Controls Through the Agent Harness](security/harness-distributed-security-controls.md)
 
 ## Testing & Evaluation
 

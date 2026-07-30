@@ -81,3 +81,4 @@ Two consequences follow. The caller cannot narrow the search with file globs or 
 - [Indexed Regex Search for Agent Tools](../tool-engineering/indexed-regex-search-agent-tools.md) — the index implementation beneath a hosted search tool, and its freshness problem.
 - [Trained Repository Explorer Sub-Agent (FastContext)](../patterns/agent-design/fastcontext-trained-repository-explorer.md) — the locally served, trained variant of the same explorer contract.
 - [Persistent Shared Search Sub-Agent](../patterns/multi-agent/persistent-search-subagent.md) — the multi-agent version, which deduplicates exploration across workers rather than compressing one agent's search.
+- [Agent Retrieval Provenance as an Audit Control](../security/agent-retrieval-provenance.md) — the compliance case for scoped retrieval: the same citations that save tokens also form the audit trail of what the agent read.

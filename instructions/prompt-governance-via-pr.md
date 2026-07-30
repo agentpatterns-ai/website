@@ -7,7 +7,7 @@ tags:
   - technique
   - tool-agnostic
   - workflows
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-30
 maturity: established
 ---
 
@@ -20,6 +20,8 @@ maturity: established
 Instruction files (`CLAUDE.md`, `.github/copilot-instructions.md`, `AGENTS.md`) are already plain text in version control. So they fall under the same change-management tools the team already uses for code: branches, diffs, reviews, merge approvals, and revert.
 
 Treat this as deliberate governance, not an incidental storage choice. Teams then get a structured way to own and improve AI behavior without ML infrastructure or data scientists.
+
+The PR mechanism is one part of a larger gap. Towards Data Science argues that prompt engineering is the solved half of the problem and prompt *management* — versioning, a registry, and lifecycle handling — is the half still missing from most teams ([Towards Data Science — Prompt Engineering Is Solved. Prompt Management Isn't](https://towardsdatascience.com/prompt-engineering-is-solved-prompt-management-isnt/)). Branch-and-review covers versioning and approval; the registry and lifecycle pieces need conventions on top.
 
 GitHub's accessibility team chose this on purpose: they stored prompt files instead of fine-tuning a model, so that any team member could update AI behavior through a pull request. When accessibility standards change, the team edits the instruction files and merges a PR. The AI adapts on the next run, not the next training cycle. ([Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/))
 
@@ -97,7 +99,6 @@ The PR diff makes the severity definition change explicit. Reviewers can judge w
 - [Standards as Agent Instructions for AI Agent Development](standards-as-agent-instructions.md)
 - [Frozen Spec File: Preserving Intent in AI Agent Sessions](frozen-spec-file.md)
 - [CLAUDE.md Convention](claude-md-convention.md)
-- [Convention Over Configuration for Agent Workflows](convention-over-configuration.md)
 - [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md)
 
 ## Sources
@@ -107,3 +108,4 @@ The PR diff makes the severity definition change explicit. Reviewers can judge w
 - [GitHub Accessibility — Optimizing Copilot with Custom Instructions](https://accessibility.github.com/documentation/guide/copilot-instructions) — GitHub's own guide on writing accessibility-focused custom instructions
 - [agents.md open standard](https://agents.md) — Cross-tool standard for `AGENTS.md` instruction files
 - [Claude Code Sub-Agents Docs](https://code.claude.com/docs/en/sub-agents) — Confirms CLAUDE.md loads per session including for spawned subagents
+- [Towards Data Science — Prompt Engineering Is Solved. Prompt Management Isn't](https://towardsdatascience.com/prompt-engineering-is-solved-prompt-management-isnt/) — Argues versioning, registry, and lifecycle are the unsolved half of prompt work
