@@ -9,7 +9,7 @@ tags:
 aliases:
   - "Agentic Code Review"
   - "Tool-Calling Code Review"
-last_reviewed: 2026-06-13
+last_reviewed: 2026-07-30
 maturity: adopted
 ---
 
@@ -21,7 +21,7 @@ maturity: adopted
 
 Traditional AI code review works on the diff alone. The reviewer sees the changed lines without the surrounding architectural context. Agentic code review replaces this with a tool-calling architecture. The reviewer explores the repository, reads linked issues, traces dependencies, and examines the directory structure before it writes feedback.
 
-GitHub Copilot code review made this shift in [October 2025 (public preview)](https://github.blog/changelog/2025-10-28-new-public-preview-features-in-copilot-code-review-ai-reviews-that-see-the-full-picture/) and [March 2026 (GA)](https://github.blog/changelog/2026-03-05-copilot-code-review-now-runs-on-an-agentic-architecture/). The reviews now comment on architectural effects, pattern violations, and cross-cutting concerns, not just line-level syntax.
+GitHub Copilot code review made this shift in [October 2025 (public preview)](https://github.blog/changelog/2025-10-28-new-public-preview-features-in-copilot-code-review-ai-reviews-that-see-the-full-picture/) and [March 2026 (GA)](https://github.blog/changelog/2026-03-05-copilot-code-review-now-runs-on-an-agentic-architecture/). The reviews now comment on architectural effects, pattern violations, and cross-cutting concerns, not just line-level syntax. The architecture kept extending after GA: GitHub reports that [agent skills and MCP reached general availability in Copilot code review](https://github.blog/changelog/2026-07-29-copilot-code-review-agent-skills-and-mcp-now-generally-available) in July 2026.
 
 ## How agentic review works
 

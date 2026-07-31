@@ -31,7 +31,7 @@ Traditional security treats the system prompt or user input as the injection vec
 
 - Web pages browsed as part of research
 - Email bodies read and acted upon
-- Documents processed for summarization or extraction
+- [Documents processed for summarization or extraction](document-borne-prompt-injection.md)
 - API responses from third-party services
 - Database records retrieved from external sources
 - Code comments in repositories the agent clones

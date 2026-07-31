@@ -103,3 +103,4 @@ The patterns compose: the control plane gates on identity, capability budgets ga
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — Subgoal-scoped revocation through a reference monitor; same envelope of mediated tools + typed catalog
+- [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — The same non-amplification property applied to a change of subject rather than a chain of values

@@ -840,6 +840,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Permitted Egress Routes as Agent Sandbox Attack Surface](security/permitted-egress-attack-surface.md)
 - [Agent Retrieval Provenance as an Audit Control](security/agent-retrieval-provenance.md)
 - [Distributing Security Controls Through the Agent Harness](security/harness-distributed-security-controls.md)
+- [Authorization Continuity Across Agent Mutation](security/authorization-continuity-across-agent-mutation.md)
+- [Document-Borne Prompt Injection Through Agent Read Tools](security/document-borne-prompt-injection.md)
 
 ## Testing & Evaluation
 
@@ -1226,6 +1228,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Rolling Out CLI Coding Agents at Organization Scale](human/org-scale-cli-agent-rollout.md)
 - [Risk Architecture for AI-Native Engineering Teams](human/risk-architecture-ai-native-teams.md)
 - [Author-to-Reviewer Role Inversion in AI-Assisted Teams](human/author-to-reviewer-role-inversion.md)
+- [Marking Which Artifacts Are for Humans or Agents (Landmarking)](human/landmarking-human-vs-agent-artifacts.md)
 
 ## Anti-Patterns
 

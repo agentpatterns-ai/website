@@ -97,3 +97,4 @@ Two structural choices reinforce the five rules. First, the tutorial is single-u
 - [AGENTS.md as a Table of Contents, Not an Encyclopedia](../instructions/agents-md-as-table-of-contents.md) — Why agent-facing project files fail when written as exhaustive reference.
 - [llms.txt: Spec, Adoption, and Honest Limitations](../geo/llms-txt.md) — The curated site index agents consume at inference time.
 - [Visible Thinking in AI-Assisted Development](visible-thinking-ai-development.md) — Documenting intent across commits and PRs as a sibling discipline to documenting intent in prose docs.
+- [Marking Which Artifacts Are for Humans or Agents (Landmarking)](landmarking-human-vs-agent-artifacts.md) — The prior question: which artifacts have a human audience at all, agreed as a team convention.
