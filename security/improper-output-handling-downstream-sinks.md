@@ -118,5 +118,6 @@ The LLM never writes SQL; the deterministic executor assembles the query from al
 - [Safe Outputs Pattern](safe-outputs-pattern.md)
 - [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md)
 - [Agent-Authored Messages as a Deferred Exfiltration Channel](agent-authored-message-rendered-image-exfiltration.md)
+- [Document-Borne Prompt Injection Through Agent Read Tools](document-borne-prompt-injection.md)
 - [Tool-Invocation Attack Surface in Coding Agents](tool-invocation-attack-surface.md)
 - [Three-Depth In-Session Security Review](three-depth-in-session-security-review.md)

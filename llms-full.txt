@@ -964,6 +964,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Permitted Egress Routes as Agent Sandbox Attack Surface](security/permitted-egress-attack-surface.md)
 - [Agent Retrieval Provenance as an Audit Control](security/agent-retrieval-provenance.md)
 - [Distributing Security Controls Through the Agent Harness](security/harness-distributed-security-controls.md)
+- [Authorization Continuity Across Agent Mutation](security/authorization-continuity-across-agent-mutation.md)
+- [Document-Borne Prompt Injection Through Agent Read Tools](security/document-borne-prompt-injection.md)
 
 ## Testing & Evaluation
 
@@ -1350,6 +1352,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Rolling Out CLI Coding Agents at Organization Scale](human/org-scale-cli-agent-rollout.md)
 - [Risk Architecture for AI-Native Engineering Teams](human/risk-architecture-ai-native-teams.md)
 - [Author-to-Reviewer Role Inversion in AI-Assisted Teams](human/author-to-reviewer-role-inversion.md)
+- [Marking Which Artifacts Are for Humans or Agents (Landmarking)](human/landmarking-human-vs-agent-artifacts.md)
 
 ## Anti-Patterns
 
@@ -42972,6 +42975,7 @@ A coding agent produces a retry utility with exponential backoff, jitter, and [c
 - [Team Shared-Language Desync from Removed Review Friction](shared-language-desync.md) -- the team-level counterpart: the group's shared model desyncs, versus one person's comprehension gap
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md) -- team knowledge invisible to agents, compounding the gap between AI output and developer expectations
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) -- copying configurations without understanding why they work, the setup-time parallel to blind code acceptance
+- [Marking Which Artifacts Are for Humans or Agents (Landmarking)](../../human/landmarking-human-vs-agent-artifacts.md) -- a team convention declaring which artifacts are written to be understood, so comprehension effort lands where it is needed
 
 ---
 
@@ -71193,7 +71197,7 @@ Source: https://agentpatterns.ai/code-review/agentic-code-review-architecture/
 
 Traditional AI code review works on the diff alone. The reviewer sees the changed lines without the surrounding architectural context. Agentic code review replaces this with a tool-calling architecture. The reviewer explores the repository, reads linked issues, traces dependencies, and examines the directory structure before it writes feedback.
 
-GitHub Copilot code review made this shift in [October 2025 (public preview)](https://github.blog/changelog/2025-10-28-new-public-preview-features-in-copilot-code-review-ai-reviews-that-see-the-full-picture/) and [March 2026 (GA)](https://github.blog/changelog/2026-03-05-copilot-code-review-now-runs-on-an-agentic-architecture/). The reviews now comment on architectural effects, pattern violations, and cross-cutting concerns, not just line-level syntax.
+GitHub Copilot code review made this shift in [October 2025 (public preview)](https://github.blog/changelog/2025-10-28-new-public-preview-features-in-copilot-code-review-ai-reviews-that-see-the-full-picture/) and [March 2026 (GA)](https://github.blog/changelog/2026-03-05-copilot-code-review-now-runs-on-an-agentic-architecture/). The reviews now comment on architectural effects, pattern violations, and cross-cutting concerns, not just line-level syntax. The architecture kept extending after GA: GitHub reports that [agent skills and MCP reached general availability in Copilot code review](https://github.blog/changelog/2026-07-29-copilot-code-review-agent-skills-and-mcp-now-generally-available) in July 2026.
 
 ## How agentic review works
 
@@ -86030,6 +86034,7 @@ Prompt injection is the primary attack vector for agents that consume untrusted 
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — Architectural patterns and defense-in-depth strategies for building coding agents that stay resilient when untrusted input lands in context
 - [Destyling Untrusted Input as a Prompt Injection Defense](destyling-untrusted-input.md) — Normalize the surface style of untrusted input before the model encodes who is speaking; cuts CoT-forgery attack success from 61% to 10% on a static benchmark by interrupting role perception at the representational layer
 - [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md) — Map retrieval paths, audit against the Lethal Trifecta, and test with synthetic payloads to find the vulnerabilities standard testing misses
+- [Document-Borne Prompt Injection Through Agent Read Tools](document-borne-prompt-injection.md) — A file that crossed a provenance boundary is untrusted the moment a read tool returns it; Copilot for Word strips formatting before inference, so concealed text stays invisible to the reviewer and legible to the model, then copies itself into the next document
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — Mandatory checkpoints before irreversible actions let humans catch injection-driven misbehavior before it causes harm
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — Tag every value with a sink-specific capability budget and intersect budgets through tool composition; closes permission laundering only with expert-crafted manifests and explicit-flow attacks
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](non-human-event-provenance-markers.md) — Stamp every system- and harness-injected event as non-human input so an autonomous agent cannot act on a fabricated in-transcript approval; pair the marker with a consent gate that traces to genuine human input
@@ -86083,6 +86088,7 @@ Excess permissions expand the blast radius of any failure or attack.
 
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md) — Restrict which domains agent tools can reach via harness-enforced allow and deny lists; remove the model from the network trust boundary
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — Decompose task authority into a step-level authority context the dispatch layer can check; runtime content may inform the planner but never become the issuer that authorizes a side effect
+- [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — A grant names a subject as well as an effect; a transition envelope decides whether it survives a model, tool, or delegation change, while an immutable ceiling fixed at grant time stops agent-produced evidence from widening it
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — Limit agent access to only what the current task requires; excess permissions directly amplify injection impact
 - [Constraints as a Substrate for Scalable Agent Oversight](constraint-substrate-scalable-oversight.md) — Manage coding agents with the controls used for human teams — access control, network policy, tooling-enforced conventions — so a small, cheap reviewer scales oversight; substrate plus a ~200-line tool lifted a small reviewer's backdoor recall from 54.5% to 90.9%
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — Block agent startup until remote managed settings are freshly validated; exit rather than run with stale or missing policy
@@ -87171,6 +87177,107 @@ The authority context `α` was issued by the user at task start with `scope = {r
 - [Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions](permission-framework-over-model.md) — empirical case for moving authorization out of the model; this page names the structured field set that framework checks should consume.
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the threat model authority confusion most directly mitigates against.
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](non-human-event-provenance-markers.md) — the live-transcript sibling; a fabricated in-transcript approval is untrusted content trying to authorize an action, blocked here at the event-provenance layer.
+- [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — the issuer is correct here but the subject has changed since the grant was evaluated.
+
+---
+
+### Authorization Continuity Across Agent Mutation
+Source: https://agentpatterns.ai/security/authorization-continuity-across-agent-mutation/
+
+# Authorization Continuity Across Agent Mutation
+
+> A grant names a subject, not just an effect — when the agent mutates, the authorization can lapse even though the effect is unchanged.
+
+Authorization continuity asks whether a grant still applies after the agent holding it has changed. Two separate controls answer two separate questions. A transition envelope lists the mutation classes a grant may survive and suspends the grant when the agent changes in a way outside that list. An immutable effect ceiling, fixed when the grant is issued, bounds what authority can ever become active, so no evidence the agent produces can widen it ([Zhang and Zhang, 2026](https://arxiv.org/abs/2607.23586)).
+
+## When this recommendation applies
+
+The two controls repay their interruption cost only under these conditions ([Zhang and Zhang, 2026](https://arxiv.org/abs/2607.23586)):
+
+- Your harness observes every mutation. Unobserved mutation breaks the model's soundness condition, so an agent that swaps its model, skills, or memory through an uninstrumented channel keeps a grant that still reads as live.
+- Evidence that widens authority comes from outside the agent. If the agent can realize that evidence itself, no bound below the ceiling can be certified.
+- Mutation is infrequent relative to the work. Every out-of-envelope change suspends the grant before the next protected action, and re-granting it lands on the human.
+- The enforcement layer sits outside the agent's reach. Approval policy, sandbox, verifier, and logging changes are themselves a mutation class that has to fail closed.
+
+Outside these conditions the simpler postures dominate: keep the grant narrow from the start with [task scope as a security boundary](task-scope-security-boundary.md), or bound the window instead of the subject with [revocable resource-and-effect capabilities](revocable-resource-effect-capabilities.md). See [when this backfires](#when-this-backfires).
+
+## Two controls, two questions
+
+| Control | Question it answers | What it does |
+|---|---|---|
+| Transition envelope | Is this still the agent you authorized? | Suspends the grant before the next protected action when an observed mutation falls outside the listed classes |
+| Effect ceiling | How much effect may ever be active? | Clamps every proposed authority to the bound fixed at grant time |
+
+The two run independently. The monitor suspends an out-of-envelope grant even when the proposed effect set still sits inside the ceiling ([Zhang and Zhang, 2026](https://arxiv.org/abs/2607.23586)). Beneath the ceiling, movement is asymmetric: contraction is admitted unconditionally, and every other proposal counts as ascent and needs qualifying evidence. Evidence picks which part of an already consented boundary is active. It never enlarges the boundary.
+
+## The six mutation classes
+
+The paper sorts authorization-relevant changes into six classes, each with its own response ([Zhang and Zhang, 2026](https://arxiv.org/abs/2607.23586)):
+
+| Class | Example change | Response |
+|---|---|---|
+| Control state | Model or provider switch, instruction, skill, or memory update | Re-measure the subject; continue only within the approved transition class |
+| Capability | New tools, network access, wider filesystem roots, new credentials | Recompute active authority; contract, or request a scoped grant |
+| Delegation | New subagents, changed child models, recursive delegation | Attenuate child authority and bind it to the delegated subtask |
+| Task or phase | Inspect to edit, test to commit, local to deploy | Use phase-bound authority with explicit transition gates |
+| Trust context | Repository or tool output becoming persistent control input | Track provenance and restrict persistence |
+| Enforcement | Approval policy, sandbox, verifier, or logging changes | Fail closed and require an external update path |
+
+## Why it works
+
+The ceiling preserves a property capability systems have held since the 1960s: authority cannot be amplified by the principal exercising it. Transitive attenuation states it formally for a delegation chain, where each child's capability set is a subset of its parent's, and static capability confinement bounds a component to the transitive closure of its declared set — both under a sandbox assumption, both traced to Dennis and Van Horn (1966) and Miller (2006) ([Bhardwaj, 2026](https://arxiv.org/abs/2603.00195)).
+
+An evidence-driven autonomy dial breaks that property quietly. Admit a signal the agent can produce as input to the authority-raising relation, and the agent — or whoever injected it — controls its own bound. The separation obligation restores non-amplification by requiring that no admissible signal can raise the ceiling. Ascent then needs an external premise the agent cannot manufacture: an independent audit, an authorized countersignature, or an evaluation it cannot run on itself ([Zhang and Zhang, 2026](https://arxiv.org/abs/2607.23586)).
+
+## When this backfires
+
+- Uninstrumented harnesses get nothing. The guarantee holds only while the monitor sees every mutation ([Zhang and Zhang, 2026](https://arxiv.org/abs/2607.23586)).
+- Self-realizable evidence collapses the earned-authority layer. When the evidence qualifying an ascent is achievable by the agent under its current authority, no bound below the ceiling can be certified, so passing your own test suite buys nothing ([Zhang and Zhang, 2026](https://arxiv.org/abs/2607.23586)).
+- High-mutation interactive work pays in interruption. Enterprise customers on conservative fixed permissions saw roughly 40% of agent actions blocked; the vendor response was to loosen the gate to a classifier that blocks about 4% of actions and interrupts about 7% of chats ([Cursor](https://cursor.com/blog/agent-autonomy-auto-review)).
+- Ceiling selection is unsolved. The authors concede both directions fail — a high ceiling weakens the result, a low one interrupts useful work — and offer no method for choosing ([Zhang and Zhang, 2026](https://arxiv.org/abs/2607.23586)).
+- Fleets have no revocation story. Cross-generation revocation and population-level authority are left unsolved, so agents respawned from a shared configuration fall outside the model ([Zhang and Zhang, 2026](https://arxiv.org/abs/2607.23586)).
+- The opposite case has serious backing. A systematization of trust-authorization mismatch names the gap between dynamic trust and static authorization boundaries as the shared root cause of prompt injection and tool poisoning, and argues for risk-adaptive authorization instead of fixed bounds ([SoK, 2025](https://arxiv.org/abs/2512.06914)). Nothing here is tested against that position: the model carries no empirical evaluation of drift frequency or cost.
+
+## Example
+
+The delegation mutation class is a live default, not a hypothetical. A Claude Code subagent that omits `tools` inherits every tool available to subagents, and `model` defaults to `inherit` ([Claude Code subagents](https://code.claude.com/docs/en/sub-agents)). Delegation therefore carries both the parent's capability and its subject forward unchanged.
+
+**Before** — delegation that attenuates nothing:
+
+```markdown
+---
+name: pr-fixer
+description: Fix review comments on an open PR
+---
+```
+
+**After** — delegation bound to the subtask:
+
+```markdown
+---
+name: pr-fixer
+description: Fix review comments on an open PR
+tools: [Read, Edit, Grep, Glob]
+model: sonnet
+---
+```
+
+The second form pins the child below the parent, so the delegation stops widening what the original grant covered.
+
+## Key Takeaways
+
+- Grant survival and effect bounds are separate controls; an envelope suspension can fire while the requested effect still sits inside the ceiling.
+- Evidence may allocate authority beneath a ceiling but must never raise it, or the agent controls its own bound.
+- Six mutation classes give you a practical checklist: control state, capability, delegation, task or phase, trust context, and enforcement.
+- The model is a formalization with no empirical evaluation, and ceiling selection is left open — treat it as a design lens, not a specification to implement whole.
+
+## Related
+
+- [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — authority laundered through value composition, rather than through a change of subject
+- [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — authority outliving the subgoal that justified it
+- [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — the issuer being the wrong principal in the first place
+- [Verification-Gated Agent Autonomy via Automated Review](../patterns/agent-design/verification-gated-agent-autonomy.md) — screening output instead of re-approving each action
+- [Progressive Autonomy: Scaling Trust with Model Evolution](../human/progressive-autonomy-model-evolution.md) — turning the autonomy dial up as evidence accumulates
 
 ---
 
@@ -90185,6 +90292,72 @@ The `policy log` output names the matched rule and proxy type for every contacte
 
 ---
 
+### Document-Borne Prompt Injection Through Agent Read Tools
+Source: https://agentpatterns.ai/security/document-borne-prompt-injection/
+
+# Document-Borne Prompt Injection Through Agent Read Tools
+
+> A file an agent opens is untrusted input once it crossed a provenance boundary — the read tool, not the network, carries the payload.
+
+Draw the trust boundary at the tool result, and scope it by where the file came from rather than how it arrived. A market analysis downloaded from a compromised site, a shared spreadsheet, a vendored dependency, an artifact another agent wrote — each is third-party content the moment a read tool returns it, exactly like a fetched web page. A file your own team authored in a repository it controls is not. That distinction is the whole control; a blanket rule over every read is both unaffordable and ineffective.
+
+## Why the document path gets missed
+
+Teams build their untrusted-input model around fetches, because a fetch looks like it reaches outside. A file read looks like the opposite: the user asked for it, so it reads as intent rather than third-party content. Harnesses encode that assumption. GitHub Security Lab's assessment of VS Code agent mode records that sensitive tools require confirmation but "some standard tools, such as `read-files`, are automatically executed", because "prompting users to approve every tool invocation would be tedious" ([Stepankin, 2026](https://github.blog/security/vulnerability-research/safeguarding-vs-code-against-prompt-injections/)).
+
+Retrieval widens the gap, because the user need not choose the file at all. Håkon Måløy's disclosure shows Microsoft 365 Copilot searching a victim's OneDrive, pulling in a malicious document filed outside the relevant folder, and executing its instructions ([Måløy, 2026](https://enklypesalt.com/posts/context-collapse-part3-ai-worming-through-word/)). Frank Dickson of IDC puts the strongest lever here rather than at the model: "the most useful lever right now sits outside the model entirely, in how much untrusted content Copilot is allowed to pull into a session without a human choosing it" ([CSO Online, 2026](https://www.csoonline.com/article/4203630/microsoft-confirms-an-ai-worm-is-propagating-through-copilot-and-other-ms-apps.html)).
+
+## Why it works
+
+Concealment is free because the human's rendering and the model's rendering diverge. Måløy reports that "Copilot for Word strips all text formatting like color and font size before passing the text into the underlying Large Language Model (LLM), this text remains fully readable to Copilot even though the victim cannot see it" ([Måløy, 2026](https://enklypesalt.com/posts/context-collapse-part3-ai-worming-through-word/)). His payload was white text at font size 8. The strip is a one-way filter: every channel a container format offers for text a reader will not see — color, size, comments, tracked changes, metadata — arrives as plain tokens.
+
+Detection cannot be delegated to the model doing the reading, because reading is the compromise. The model has to process external content to judge whether it contains an attack, and by then, Måløy writes, "the attacker-controlled tokens are already influencing the computation that produces it. The content being inspected participates in the act of inspection." That is why two Microsoft mitigations over the 144-day disclosure — a revised "Edit with Copilot" experience and a model upgrade — closed the reported payloads without closing the class, and testing "reproduced the attack with all current mitigations deployed" ([Måløy, 2026](https://enklypesalt.com/posts/context-collapse-part3-ai-worming-through-word/)).
+
+## The propagation step
+
+Documents differ from web pages in one further way: the agent writes them. A payload that tells the agent to copy itself into the output turns each generated file into the next carrier. Måløy's payload framed that instruction as source tracking and the concealment instruction as a readability improvement. By stage two the original malicious document was no longer attached, and the attack still triggered from the previously generated report ([Måløy, 2026](https://enklypesalt.com/posts/context-collapse-part3-ai-worming-through-word/)).
+
+The chain breaks at three points, none of them inside the model:
+
+- Restrict what enters context without a human choosing it. Narrowing automatic document discovery removes one of the two footholds.
+- Strip concealed content on write. Refusing to emit text the reader will not see denies the payload its hiding place.
+- Diff what the agent changed. IDC recommends "a visible diff or redline of anything Copilot changes in a financial or otherwise consequential document" with human approval — "not a technical fix, it's a workflow one, and it's available today" ([CSO Online, 2026](https://www.csoonline.com/article/4203630/microsoft-confirms-an-ai-worm-is-propagating-through-copilot-and-other-ms-apps.html)).
+
+Provenance metadata stops nothing, but it restores traceability once the carriers are internal, legitimately authored files. Måløy recommends the same: "generated documents should preserve provenance for source material and model-performed edits in metadata".
+
+## When this backfires
+
+- Every file read is treated as untrusted. Confirming every read reinstates the tedium VS Code omitted the gate to avoid ([Stepankin, 2026](https://github.blog/security/vulnerability-research/safeguarding-vs-code-against-prompt-injections/)), and [confirmation fatigue](prompt-injection-threat-model.md) turns high-volume gates into theater.
+- The label has no gate consuming it. VS Code already separates tool output as `role: "tool"`, and frontier models follow it anyway ([Stepankin, 2026](https://github.blog/security/vulnerability-research/safeguarding-vs-code-against-prompt-injections/)). A provenance tag with no capability restriction attached changes nothing.
+- The workflow needs the document to carry procedure. Måløy's own caveat: "the distinction between data and instructions is not always clear in real-world workflows", such as an agent booking a trip from a document holding the booking procedure ([CSO Online, 2026](https://www.csoonline.com/article/4203630/microsoft-confirms-an-ai-worm-is-propagating-through-copilot-and-other-ms-apps.html)).
+- Nothing crosses a boundary. A repository your team wrote, with no downloads, shared files, or third-party dependencies in scope, has no channel to police.
+- The agent never authors. Where it only summarizes, the propagation half does not apply and the anti-worm controls buy nothing.
+- Severity is oversold. Tyler Reguly of Fortra calls it a "laboratory vulnerability" needing "a perfect storm", noting the concealed prompts sat on an extra apparently blank page. Mike Wilkes of Aikido Security agrees it "is not a conventional worm that spreads automatically" — a user or workflow must still pull the file into context ([CSO Online, 2026](https://www.csoonline.com/article/4203630/microsoft-confirms-an-ai-worm-is-propagating-through-copilot-and-other-ms-apps.html)).
+
+## Example
+
+Måløy's proof of concept used a mock market analysis. The payload sat at the end of the file in white text, split into an instruction that halved every financial figure in the drafted report and an instruction that appended the whole payload to the output in white text at size 8. The employee saw a plausible quarterly report and shared it. A colleague later used that report as source material, and Copilot halved the figures again and copied the payload forward — with the original document no longer attached anywhere ([Måløy, 2026](https://enklypesalt.com/posts/context-collapse-part3-ai-worming-through-word/)).
+
+The propagation shape is not new; the channel is. [Morris II](https://arxiv.org/abs/2403.02817) demonstrated self-replicating prompts spreading through retrieval-backed email assistants. Måløy's contribution is "among the first public demonstrations of document-borne AI-worm self-propagation through normal workflows in a mainstream commercial productivity suite".
+
+## Key Takeaways
+
+- Scope the boundary by provenance, not transport: a file that crossed an organizational or third-party boundary is untrusted the moment a read tool returns it.
+- Read tools usually carry no confirmation gate, so the document channel sits outside the untrusted-input model most teams build around fetches.
+- Formatting is stripped before inference, so concealed text is invisible to the reviewer and fully legible to the model.
+- An agent that writes documents can propagate a payload it read, turning legitimately authored internal files into carriers.
+- The controls that work sit outside the model: restrict automatic discovery, strip concealed content on write, diff generated changes, and record provenance in metadata.
+
+## Related
+
+- [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — the general threat model this channel is one instance of
+- [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — separating what informs a plan from what authorizes an action
+- [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md) — the architectural fix for content that must enter context anyway
+- [Destyling Untrusted Input as a Prompt Injection Defense](destyling-untrusted-input.md) — a representational-layer transform applied to untrusted input before the model sees it
+- [Improper Output Handling: Validate Agent Output Before Downstream Use](improper-output-handling-downstream-sinks.md) — the write side, where an authored document becomes the next input
+
+---
+
 ### Dormant Memory Payloads Triggered by Sensitive Topics (Trojan Hippo)
 Source: https://agentpatterns.ai/security/trojan-hippo-memory-attack/
 
@@ -92811,6 +92984,7 @@ The LLM never writes SQL; the deterministic executor assembles the query from al
 - [Safe Outputs Pattern](safe-outputs-pattern.md)
 - [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md)
 - [Agent-Authored Messages as a Deferred Exfiltration Channel](agent-authored-message-rendered-image-exfiltration.md)
+- [Document-Borne Prompt Injection Through Agent Read Tools](document-borne-prompt-injection.md)
 - [Tool-Invocation Attack Surface in Coding Agents](tool-invocation-attack-surface.md)
 - [Three-Depth In-Session Security Review](three-depth-in-session-security-review.md)
 
@@ -94118,6 +94292,7 @@ The patterns compose: the control plane gates on identity, capability budgets ga
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — Subgoal-scoped revocation through a reference monitor; same envelope of mediated tools + typed catalog
+- [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — The same non-amplification property applied to a change of subject rather than a chain of values
 
 ---
 
@@ -95575,7 +95750,7 @@ Traditional security treats the system prompt or user input as the injection vec
 
 - Web pages browsed as part of research
 - Email bodies read and acted upon
-- Documents processed for summarization or extraction
+- [Documents processed for summarization or extraction](document-borne-prompt-injection.md)
 - API responses from third-party services
 - Database records retrieved from external sources
 - Code comments in repositories the agent clones
@@ -107166,6 +107341,7 @@ Source: https://agentpatterns.ai/human/
 - [Cohort Segmentation in the Copilot Usage Metrics API](cohort-segmentation-copilot-usage-metrics.md) — The May 2026 Copilot API exposes four AI-adoption phases per user, a diagnostic primitive that recovers the segmented shape an aggregate utilization number hides
 - [LLM Refactoring Adoption Patterns](llm-refactoring-adoption-patterns.md) — Five patterns for how developers modify ChatGPT refactoring suggestions — driven by prompt context completeness and refactor complexity
 - [Human-Facing Docs in the Agent Era: Mental Models Over Reference](human-docs-mental-models-agent-era.md) — When the audience reads alongside an agent, human docs shift from exhaustive reference to mental models, intent, and design exclusions — with the conditions under which the pivot backfires
+- [Marking Which Artifacts Are for Humans or Agents (Landmarking)](landmarking-human-vs-agent-artifacts.md) — Agree a team-wide readership contract for which repository artifacts are written to be understood by a person and which are agent context, and back it with tooling
 - [Programming Language Choice Still Shapes Agent Artifacts](programming-language-choice-shapes-agent-artefacts.md) — Coding agents reach every language but the language you pick still decides performance ceiling, run cost, and verification effort — budget both
 - [Human-Equivalent Hours for Autonomous Coding Agent Productivity](human-equivalent-hours-agent-productivity.md) — Estimate the human engineering hours an autonomous agent's output would have taken so spend can be weighed against a denominator finance and headcount already use
 - [Intent-Centric Engineering: Oversight Over Authorship](intent-centric-engineering.md) — When code generation is cheap, the engineer's leverage moves from authorship to specifying intent and governing humans-plus-agents-plus-tools — but only under specific conditions, with sharp failure modes (spec-as-code displacement, skill atrophy, vendor ToS gaps)
@@ -109131,6 +109307,7 @@ Two structural choices reinforce the five rules. First, the tutorial is single-u
 - [AGENTS.md as a Table of Contents, Not an Encyclopedia](../instructions/agents-md-as-table-of-contents.md) — Why agent-facing project files fail when written as exhaustive reference.
 - [llms.txt: Spec, Adoption, and Honest Limitations](../geo/llms-txt.md) — The curated site index agents consume at inference time.
 - [Visible Thinking in AI-Assisted Development](visible-thinking-ai-development.md) — Documenting intent across commits and PRs as a sibling discipline to documenting intent in prose docs.
+- [Marking Which Artifacts Are for Humans or Agents (Landmarking)](landmarking-human-vs-agent-artifacts.md) — The prior question: which artifacts have a human audience at all, agreed as a team convention.
 
 ---
 
@@ -109573,6 +109750,83 @@ After the non-AI block, the developer resumes with Claude Code but caps each new
 - [The Context Ceiling](context-ceiling.md) — the cognitive overhead experts bear when AI output requires more correction than generation saves
 - [Process Amplification](process-amplification.md) — how AI use intensity scales workload and how to manage the amplification
 - [Safe Command Allowlisting: Reducing Approval Fatigue](../security/safe-command-allowlisting.md) — pre-authorizing low-risk operations to preserve attention for high-stakes decisions
+
+---
+
+### Marking Which Artifacts Are for Humans or Agents (Landmarking)
+Source: https://agentpatterns.ai/human/landmarking-human-vs-agent-artifacts/
+
+# Marking Which Artifacts Are for Humans or Agents (Landmarking)
+
+> Landmarking is a team-agreed convention marking which repository artifacts are written for people to understand and which exist only as agent context.
+
+Developers working with coding agents already invent these conventions privately. Elle O'Brien's contextual inquiry of scientific programmers found participants improvising personal schemes for marking which artifacts carry meaning for a human reader, and warns that "because each landmarking strategy is individually determined, conventions fragment across teams" ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)). The technique is to make that scheme explicit and shared.
+
+## When it pays back
+
+Three conditions carry the overhead; outside them it is waste:
+
+- More than one person reads the repository. The payoff is a second reader who needs to know where to spend comprehension effort. Solo exploratory work has none: O'Brien reports her own mental model breaking on exploratory analysis, ending in "committing haphazardly and without any real documentation" ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)).
+- The team's tooling is heterogeneous. A git-trailer convention is unusable by a colleague working through a chatbot, which is how roughly three quarters of the scientific programmers she surveyed work ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)).
+- The code outlives the session, so someone will return after the transcript is gone.
+
+## The schemes people invent
+
+O'Brien's four cases each route a reader's attention differently ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)):
+
+| Scheme | Marked human-readable | Left as agent context |
+|--------|-----------------------|-----------------------|
+| Commit message as journal | The message, written "like a journal entry" recording why the output was accepted | The diff itself |
+| Merged diff as the unit | "Only what gets merged, the diff, is meant to be understood by a human" | Branch commits and transient specs |
+| Spec-driven review | Iterated markdown specs committed with the change — "code is not reviewed, the specs are" | The implementation |
+| Chat log plus growing script | Chat logs recording every choice explored | Agent comments left in code "for context for the agents in the future" |
+
+None is wrong; the defect is that each is private, so a collaborator cannot tell which artifacts were written to be understood.
+
+## Turning a private habit into a team artifact
+
+Write the readership contract where agents and people both read it — the [AGENTS.md file or its per-directory variants](../instructions/agents-md-distributed-conventions.md) — stating per artifact class who must understand it and who reviews it.
+
+Back it with something mechanical, because a social convention alone is weakly followed. Git carries one such marker: files tagged `linguist-generated` in `.gitattributes` are "suppressed in diffs" ([Linguist docs](https://github.com/github-linguist/linguist/blob/main/docs/overrides.md)), so review attention skips them without anyone opting in. Contribution policy is the other lever: among 118 AI policies across 1,000 popular GitHub repositories, 51% require disclosure and 74% a human in the loop ([Hora and Robbes, 2026](https://arxiv.org/abs/2605.16706)).
+
+## Why it works
+
+Review attention is scarce and routed by signals, so a shared readership marker concentrates comprehension effort on the artifacts carrying decision context. What gets lost without one is the decision shadow — "the constraints, rejected alternatives, and forward-looking context that shaped the decision", which a diff discards by construction ([Stetsenko, 2026](https://arxiv.org/abs/2603.15566)). Each of O'Brien's schemes preserves that shadow somewhere and tells its inventor where to look; sharing it extends the routing to everyone else ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)). The evidence is a position argument from four cases and a survey of over 800 scientific programmers, not a controlled study.
+
+## When this backfires
+
+- Voluntary marking goes unfollowed. Across 14,300 commits in 7,393 repositories, 95.2% showed AI usage but only 29.5% disclosed it, ranging from 80.5% for one tool to 9.0% for another ([Kraishan, 2025](https://arxiv.org/abs/2512.00867)). A partial map reads as a complete one.
+- Disclosure costs whoever complies: explicit attribution drew 23% more questions and 21% more comments, though sentiment stayed neutral ([Kraishan, 2025](https://arxiv.org/abs/2512.00867)).
+- Marks drift from the code. Inconsistent annotation changes are "around 1.5 times more likely to lead to a bug-introducing commit than consistent changes" ([Radmanesh et al., 2024](https://arxiv.org/abs/2409.10781)). A stale "agent context only" marker is worse than none.
+- The agent tier is still load-bearing. Labeling an artifact as agent context does not stop agents acting on it; it only lowers the human review bar on something that still runs. Where policy already requires human review of AI-assisted contributions ([Hora and Robbes, 2026](https://arxiv.org/abs/2605.16706)), a "nobody reviews this tier" rule conflicts with it.
+- The convention is not portable. Strategies "are not necessarily interoperable" across collaborators, and what an agent recovers differs sharply between an unlimited and a constrained token budget ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)).
+
+## Example
+
+Two halves of one contract. The mechanical half uses an attribute git already understands:
+
+```text
+# .gitattributes — files marked generated are suppressed in diffs
+Api.js linguist-generated=true
+```
+
+The social half is the sentence the team agrees and commits, adapted from the merged-diff scheme: agents may commit freely on a branch, but only the squashed merge diff and its message are written to be understood by a person, and the branch commits are agent context ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)). Written down, a new collaborator knows to read merges and skip branch history. Left implicit, they read everything or nothing.
+
+## Key Takeaways
+
+- Landmarking marks which repository artifacts are written for human understanding and which exist as agent context; the value is in the convention being shared, not in any one scheme.
+- Four schemes observed in practice: commit message as journal, merged diff as the unit, spec-driven review, and chat log plus growing script ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)).
+- It pays back with multiple readers, heterogeneous tooling, and code that outlives the session; it is overhead in solo exploratory work.
+- Back the convention with mechanism — `linguist-generated` suppression, review policy, CI — because voluntary disclosure ran at 29.5% against 95.2% actual AI usage ([Kraishan, 2025](https://arxiv.org/abs/2512.00867)).
+- Stale marks are worse than absent ones: inconsistent annotations precede bug-introducing commits about 1.5 times more often ([Radmanesh et al., 2024](https://arxiv.org/abs/2409.10781)).
+
+## Related
+
+- [Human-Facing Docs in the Agent Era: Mental Models Over Reference](human-docs-mental-models-agent-era.md) — what to put in the artifacts you mark as human-readable, once the split exists.
+- [Comprehension Debt: When Developers Understand Less of Their Own Codebase](../patterns/anti-patterns/comprehension-debt.md) — the individual comprehension gap this convention tries to keep from spreading across a team.
+- [Visible Thinking in AI-Assisted Development](visible-thinking-ai-development.md) — commit and PR practices that make one of these schemes concrete.
+- [Encode Project Conventions in Distributed AGENTS.md Files](../instructions/agents-md-distributed-conventions.md) — where a readership contract is written so agents and people both read it.
+- [Agent Commit Attribution: Signed Commits and Agent Identity](../workflows/agent-commit-attribution.md) — the provenance half: marking which commits an agent authored, distinct from marking who an artifact is for.
 
 ---
 

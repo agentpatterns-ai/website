@@ -125,3 +125,4 @@ A coding agent produces a retry utility with exponential backoff, jitter, and [c
 - [Team Shared-Language Desync from Removed Review Friction](shared-language-desync.md) -- the team-level counterpart: the group's shared model desyncs, versus one person's comprehension gap
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md) -- team knowledge invisible to agents, compounding the gap between AI output and developer expectations
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) -- copying configurations without understanding why they work, the setup-time parallel to blind code acceptance
+- [Marking Which Artifacts Are for Humans or Agents (Landmarking)](../../human/landmarking-human-vs-agent-artifacts.md) -- a team convention declaring which artifacts are written to be understood, so comprehension effort lands where it is needed

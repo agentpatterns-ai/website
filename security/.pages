@@ -64,6 +64,7 @@ nav:
   - agentic-detection-response-mcp.md
   - authgraph-dual-graph-injection-defense.md
   - authority-confusion-untrusted-context.md
+  - authorization-continuity-across-agent-mutation.md
   - behavioral-firewall-tool-call-trajectories.md
   - blast-radius-containment.md
   - camel-control-data-flow-injection.md
@@ -77,6 +78,7 @@ nav:
   - customer-hosted-mcp-tunnel.md
   - destyling-untrusted-input.md
   - deterministic-control-plane-llm-coding-agents.md
+  - document-borne-prompt-injection.md
   - embedding-inversion-vector-store-disclosure.md
   - evidence-based-allowlist-auto-discovery.md
   - fail-closed-remote-settings-enforcement.md

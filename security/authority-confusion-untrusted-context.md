@@ -120,3 +120,4 @@ The authority context `α` was issued by the user at task start with `scope = {r
 - [Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions](permission-framework-over-model.md) — empirical case for moving authorization out of the model; this page names the structured field set that framework checks should consume.
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the threat model authority confusion most directly mitigates against.
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](non-human-event-provenance-markers.md) — the live-transcript sibling; a fabricated in-transcript approval is untrusted content trying to authorize an action, blocked here at the event-provenance layer.
+- [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — the issuer is correct here but the subject has changed since the grant was evaluated.
