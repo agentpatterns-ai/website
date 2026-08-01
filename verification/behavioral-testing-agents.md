@@ -151,6 +151,20 @@ Behavioral testing pays off only when outputs are genuinely non-deterministic:
 - Uncalibrated thresholds: Thresholds set without real failure data either block valid outputs or pass defective ones.
 - Uncalibrated LLM judge: An LLM grader not calibrated against human experts introduces systematic bias that invalidates the eval pipeline.
 
+## FAQ
+
+**How many test cases do I need to start?**
+
+About 20 representative queries. Small samples catch dramatic effect sizes — a prompt change moving pass rate from 30% to 80%, for example — without building a large dataset upfront. The dataset is one of three parts: it feeds the agent under test, a scorer library grades the outputs, and regressions flow back into the agent as a feedback loop.
+
+**Does every part of an agent system need behavioral evaluation?**
+
+No. A capability matrix splits the system: deterministic components — tool input parsing, output formatting, API call construction — take traditional unit and integration tests, while decision-making, tool selection, and multi-step reasoning need behavioral evaluation. Tool output quality deserves evaluation too, since concise, filtered, well-formatted responses shape the context the agent reasons over downstream.
+
+**When does LLM-as-judge grading cost more than it returns?**
+
+On constrained function-calling agents, where structured JSON against a fixed schema needs plain equality checks and LLM grading adds cost without signal. Also on high-volume regression suites: thousands of LLM-graded cases per CI run is slow and expensive, so reserve judging for the agentic layer and code-check structured outputs at scale. An uncalibrated judge adds systematic bias on top.
+
 ## Key Takeaways
 
 - Separate deterministic from agentic components using a capability matrix

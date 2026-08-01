@@ -112,3 +112,4 @@ Cross-function dependency handling: if any function's output depends on another,
 - [Incremental Verification](../../verification/incremental-verification.md)
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md)
+- [Oracle-Gated Delegation Beyond Your Domain Expertise](../../workflows/oracle-gated-delegation.md)

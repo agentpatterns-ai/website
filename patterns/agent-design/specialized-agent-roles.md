@@ -143,6 +143,20 @@ Specialized roles degrade when tasks are inherently cross-cutting:
 - Small codebases: a single agent that fits the entire codebase in context covers all improvement dimensions in one pass. Multiple specialized agents multiply cost without multiplying coverage.
 - Role boundary violations: [Research on multi-agent system failures](https://arxiv.org/html/2503.13657v1) finds agents frequently disobey role specifications and attempt changes outside their scope. When this happens, conflicts increase rather than decrease.
 
+## FAQ
+
+**What happens when two roles can both legitimately change the same code?**
+
+Define a priority rule naming which role owns the final decision, then back it with file-based locking and a merge review. Without one, agents produce conflicting edits: each may interpret the other's change as a bug and attempt to fix it, creating a compounding correction loop that exclusive scopes are meant to shrink.
+
+**Do specialized agents reliably stay inside their assigned scope?**
+
+Not always. Research on multi-agent system failures finds that agents frequently disobey role specifications and attempt changes outside their scope, and when that happens conflicts increase rather than decrease. Boundary ambiguity makes it worse — "performance" and "code quality" genuinely overlap, since extracting a well-named helper function improves both, so each scope needs pinning down explicitly.
+
+**When does a single generalist agent beat a specialized team?**
+
+On a small codebase that fits entirely in one context window, a single agent covers every improvement dimension in one pass, so multiple specialists multiply cost without multiplying coverage. Specialization also loses when subtasks are tightly coupled and cannot change independently: the agents then produce conflicting edits that raise merge cost instead of lowering it.
+
 ## Key Takeaways
 
 - Identical instructions produce redundant outputs; specialized roles produce complementary ones

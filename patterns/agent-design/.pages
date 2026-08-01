@@ -77,6 +77,7 @@ nav:
       - subtask-level-memory.md
       - tiered-memory-architecture.md
       - wiki-memory-agent-maintained-knowledge-base.md
+      - filesystem-memory-organization.md
   - "Control & Orchestration":
       - background-todo-agent.md
       - in-agent-task-prioritization.md

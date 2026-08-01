@@ -139,6 +139,20 @@ claude
 
 The agent calls `scripts/stripe-balance.sh` and `scripts/query-db.sh` as tools. Neither the Vault token, the 1Password service account token, nor the raw credential values ever appear in the agent's context window.
 
+## FAQ
+
+**Why not fetch the secret with a CLI tool during the agent session?**
+
+Because the retrieval command and its output can land in the context window. Running a secrets-manager fetch mid-task puts the credential on a channel the agent reads and can log. Retrieve every secret in the parent shell before the session starts, so the session inherits only the exported value and the retrieval command stays outside the agent's context.
+
+**Can other processes on the same host read the injected environment variables?**
+
+In shared container environments they sometimes can. On Linux, sibling processes in multi-tenant or sidecar-based deployments may be able to read `/proc/<pid>/environ` unless the container is hardened with user namespaces or seccomp restrictions. Environment injection assumes the process boundary holds, so container hardening is a prerequisite for this pattern rather than an optional extra.
+
+**What if the agent runs its tools in a sandboxed subprocess?**
+
+Then the injected variables may never reach them. Some agent frameworks spawn sandboxed sub-processes with a cleaned environment, so values exported in the parent shell before launch are not inherited by the tool that needs them. Verify the tool execution model before relying on this pattern: it depends on child processes inheriting the parent environment, which is exactly what such sandboxes strip.
+
 ## Key Takeaways
 
 - Inject secrets as environment variables before the agent starts — never in prompts or instruction files

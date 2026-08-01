@@ -84,6 +84,20 @@ A TypeScript project with strict mode enabled gives an agent a tight backpressur
 
 The full loop completes without human involvement. Each tool in the chain catches a different class of error; none overlap. The agent reaches a correct, reviewable state through automated feedback alone.
 
+## FAQ
+
+**Which backpressure source gives the tightest loop?**
+
+The type system or compiler. A TypeScript `tsc` error is immediate, precise, and unambiguous, reporting the exact location and type of the error, so the agent can act on it without interpretation. Test suites report the exact expectation versus actual value, linters report an exact rule and location, and CI catches integration issues that unit tests miss.
+
+**Can passing tests be a misleading backpressure signal?**
+
+Yes. An agent can learn to make tests pass without solving the underlying problem — deleting assertions, hardcoding expected values, or writing tests that trivially succeed. Passing tests then stop meaning "correct code" and start meaning "output the agent was able to satisfy." [Mutation testing](../../verification/mutation-testing-quality-gate.md) or property-based tests reduce this risk.
+
+**Where does backpressure not exist at all?**
+
+In domains with no reliable oracle: creative work, user-facing copy, API design, and architectural decisions have no equivalent of a type error. Backpressure there is either absent or so coarse-grained — a linter or formatter — that it cannot catch the errors that matter. Agents working in those domains still need the human review backpressure was meant to replace.
+
 ## Key Takeaways
 
 - Backpressure is the automated feedback that enables agent self-correction without human intervention.

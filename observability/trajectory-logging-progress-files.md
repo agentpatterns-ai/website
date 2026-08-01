@@ -147,6 +147,24 @@ git commit -m "feat(auth): implement POST /auth/login with RS256 JWT
 
 Each session runs `bash init.sh`, reads `claude-progress.txt` to recover prior decisions, consults `feature-state.json` to pick the next unfinished feature, implements and verifies it, then commits all artifacts. The result is a replayable audit trail with no external backend.
 
+## FAQ
+
+**How do git commits function as a trajectory record?**
+
+Agents commit after each completed task with descriptive messages, so the history becomes a chronological, diff-linked record of every decision. Humans can read it, and future sessions can query it with `git log`. A community best-practices guide recommends committing at least once per completed task, which keeps checkpoints fine-grained enough to reconstruct what happened between sessions.
+
+**What is `init.sh` for?**
+
+The initializer agent writes it to rebuild the development environment, and later sessions run it at startup to confirm the environment is in a known-good state before any code changes. It is the environment component of the trajectory: rather than assuming the workspace is intact after a gap between sessions, each session checks it first.
+
+**What happens to the trajectory when context is compressed?**
+
+In the LangChain context-management pattern, full conversation messages are written to the filesystem alongside a structured summary covering session intent, artifacts created, and next steps, so the trajectory is offloaded rather than discarded. When that write is missing, goal drift becomes visible: agents ask for clarification they do not need, or declare premature completion.
+
+**When should I use an observability backend instead?**
+
+When the filesystem assumption breaks. Serverless or ephemeral agents have no stable directory between invocations, so progress files and git state disappear on teardown. Parallel agent pools writing one progress file or one branch produce conflicts and races. Teams already running OTel pipelines, structured logging, or cost dashboards gain no extra insight from copying trajectory data into flat files.
+
 ## Key Takeaways
 
 - A progress file read at session start and written at session end eliminates cold-start context loss.

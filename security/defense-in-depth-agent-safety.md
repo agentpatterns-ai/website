@@ -121,6 +121,20 @@ Each layer adds configuration, testing, and maintenance cost. Misconfigured laye
 
 Apply the full five-layer stack to production agents with write access, external integrations, or multi-agent pipelines. For short-lived, read-only, or sandboxed internal tools, one or two targeted layers (schema restrictions plus lifecycle hooks) often give enough protection at lower cost.
 
+## FAQ
+
+**Do I need all five layers?**
+
+Not always. Apply the full stack to production agents with write access, external integrations, or multi-agent pipelines. For short-lived, read-only, or sandboxed internal tools, one or two targeted layers — schema restrictions plus lifecycle hooks — often give enough protection at lower cost, and per-call hooks and validation add latency that matters in streaming or high-frequency pipelines.
+
+**What does schema filtering cost me?**
+
+Legitimate capability. A subagent whose schema excludes a tool cannot adapt outside its defined scope, so in exploratory or general-purpose work strict [schema restrictions](../patterns/multi-agent/subagent-schema-level-tool-filtering.md) force constant operator intervention, or push you to fan out into specialized agents where one broader agent would have done the job.
+
+**How do the layers reinforce each other?**
+
+Each covers what another leaves open. Schema filtering reduces the surface area runtime approvals must cover; lifecycle hooks catch what prompt guardrails miss; tool validation handles the case schema filtering does not address, a valid tool called with invalid inputs; and approval gates put a human in front of operations that passed every automated check.
+
 ## Key Takeaways
 
 - Five independent safety layers: prompt guardrails, schema restrictions, runtime approvals, tool validation, lifecycle hooks

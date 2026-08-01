@@ -179,6 +179,20 @@ def evaluate(agent_output: str, sources: list[str], tool_log: list[dict]) -> dic
 
 Running this against 20 representative queries before a release surfaces whether factual accuracy or citation accuracy is the failing dimension — keeping scores separate ensures the right subagent or prompt is targeted for improvement rather than applying a broad fix that may degrade passing dimensions.
 
+## FAQ
+
+**Which outputs should a human actually spot-check?**
+
+Not all of them. Spot-checking is a targeted sample: review a fixed set of known-hard queries each release, review the outputs the automated judge flagged as borderline, and rotate in novel queries that test the edges of your distribution. Feed the edge cases that review surfaces back into the test-case library, so the suite grows where failures actually appear.
+
+**When do judge scores mislead?**
+
+LLM judges often share stylistic and verbosity biases with the models they evaluate, so a fluent but factually incorrect output can outscore a terse correct one — most acutely when judge and subject come from the same model family. Judges also hit a subtlety ceiling on tone appropriateness, reasoning soundness, and whether a source is authoritative in context, which is where human review stays essential.
+
+**A dimension failed — where do I look first?**
+
+Rubric scoring identifies what failed; observability data helps locate where. Factual or citation-accuracy failures point at tool outputs and source retrieval, since a subagent may be selecting the wrong sources upstream. Completeness failures point at orchestrator task decomposition, where required subtasks were never delegated. Tool-efficiency failures point at traces showing repeated or circular tool calls.
+
 ## Key Takeaways
 
 - Score evaluation dimensions independently — an aggregated single score hides which dimension failed

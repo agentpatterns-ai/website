@@ -133,6 +133,20 @@ agent = Agent(
 
 The summarizer prompt structure maps to the preservation table above: objective, state, constraints, next steps.
 
+## FAQ
+
+**Does pruning context improve results, or only cut cost?**
+
+Both, on the available evidence. Pruning context to the last five tool call/response pairs, plus summarization, reached 91.6% task completion against 71% for full-context agents, at a fraction of the tokens and runtime ([Pruning and summarizing context for tool-using agents](https://arxiv.org/abs/2606.10209)). That supports combining the offload and summarize tiers rather than carrying full history.
+
+**What happens if the compaction threshold is set too low?**
+
+Premature compaction forces lossy summarization while the context is still navigable, and it causes [objective drift](../patterns/anti-patterns/objective-drift.md) when the summary omits scope constraints. [Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) recommends starting with maximum recall and iterating toward precision, not the reverse, because aggressive summarization drops subtle constraints whose importance only emerges later.
+
+**How do I test a compression setup?**
+
+Three checks. Lower the threshold deliberately, then verify task continuity across cycles. After an offload, verify the agent retrieves the stored content on demand — payloads deleted or moved after compaction cannot be re-read, so the observation store must persist for the session lifetime. After summarization, verify the next action still matches the original task.
+
 ## Related
 
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)

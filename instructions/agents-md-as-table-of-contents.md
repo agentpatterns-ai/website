@@ -168,6 +168,20 @@ The pointer-map pattern assumes the agent will follow pointers on demand. An ETH
 - Agents do not reliably follow pointers. Some agent harnesses pre-load AGENTS.md but never traverse the linked docs, which leaves the agent with a table of contents and no content. The study found instructions are followed, but context files "do not function as effective repository overviews."
 - The docs/ directory is drafted by an agent rather than maintained by humans. LLM-generated context files in the study degraded performance. Without the discipline of human authorship and the CI and doc-gardening machinery described above, the pointer map decays into stale links.
 
+## FAQ
+
+**Does research support repository-level context files?**
+
+Only partly. An ETH Zurich study of 138 Python tasks across four agents found that repository-level context files, even human-written ones, consistently raise inference cost by adding 19-20% more agent steps, and that LLM-generated context files reduced task success by roughly 3% compared with no context file at all. Instructions were followed, but the files did not function as effective repository overviews.
+
+**Which lines need source, applicability, and expiry metadata?**
+
+Only terminal rules, meaning the lines that prescribe behavior. Pointers and structural sections skip it, because the document a pointer routes to carries its own provenance and review cadence. Skip the annotations entirely when the repo has fewer than about ten terminal rules, when one author owns the file, or when the expiry observable is already tracked authoritatively somewhere else.
+
+**Doesn't per-rule metadata bloat the file it is meant to shrink?**
+
+Not if it stays compact. Keep each annotation to a one-line YAML or HTML-comment block attached to the terminal rule it governs. HTML comments render invisibly in GitHub previews while staying visible to agents reading the file, and a quarterly audit script can grep for `expiry:` lines, evaluate the observable, and open a pull request removing rules whose expiry has fired.
+
 ## Key Takeaways
 
 - Monolithic AGENTS.md crowds context, dilutes attention, and rots — structural fix: a ~100-line pointer map backed by a versioned `docs/` directory.

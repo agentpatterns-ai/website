@@ -105,6 +105,24 @@ result = execute_write_file(validated_call)        # execution layer receives on
 
 The reasoning layer never opens files. The execution layer never decides what to write. The `WriteFileCall` schema is the enforced boundary.
 
+## FAQ
+
+**What exactly is the contract between the two layers?**
+
+A JSON schema parameter definition. Every tool the reasoning layer can invoke has a name, a purpose, and typed inputs; the reasoning layer picks which tool to call from the schema description, and the execution layer validates the incoming call against that schema before acting. Without a schema contract, neither layer can be exercised on its own — testing means running the full system.
+
+**How do you test each layer independently?**
+
+Give the reasoning layer a known task and known tool schemas with canned execution responses, then check whether it produces the correct tool-call sequence. Test the execution layer by handing it a valid typed call — a validated `BaseModel` — and checking the side effect and return value it produces. Neither test requires the other layer to be present.
+
+**Should every tool schema load into context at startup?**
+
+No. Loading every tool definition into the reasoning layer's context at startup is wasteful, and Anthropic's context-engineering patterns recommend keeping context lean by loading only what is needed. Apply the same principle to the tool registry: surface schemas to the reasoning layer on demand, so execution-layer tools stay available without pre-occupying reasoning context.
+
+**When is the two-layer split not worth its overhead?**
+
+For tasks that finish in one or two tool calls, the typed-interface seam adds schema validation and context-passing overhead with no testability benefit, and a simple function call is clearer. A remote execution layer adds network latency to every round-trip, which hurts reactive and streaming agents. Frequently changing tool signatures force schema versioning work that offsets the testing advantage.
+
 ## Key Takeaways
 
 - The reasoning layer decides; the execution layer acts — no cross-layer logic belongs in either.

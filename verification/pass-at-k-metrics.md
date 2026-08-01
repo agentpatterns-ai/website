@@ -121,6 +121,20 @@ print(f"pass@3: {pass_at_k:.2f}")   # pass@3: 0.80
 print(f"pass^3: {pass_pow_k:.2f}")  # pass^3: 0.40
 ```
 
+## FAQ
+
+**Why can a high pass@k rank a lucky agent above a reliable one?**
+
+pass@k is exponentially forgiving as k grows: almost any agent with non-zero capability eventually hits a correct answer given enough attempts, so a single lucky run lifts the score. Users rarely judge a tool by its best of ten attempts [Source: [Brooker, *Pass@k is Mostly Bunk*](https://brooker.co.za/blog/2026/01/21/pass-k.html)]. Read pass@k as a capability ceiling, never as a standalone ranking.
+
+**What makes pass^k collapse even when the agent's work is correct?**
+
+A single flaky oracle. pass^k is dominated by the noisiest check in the suite, so a timing-race integration test or an LLM-as-judge running above temperature 0 can drive it to zero while the agent is producing correct output. Confirm every correctness check is deterministic before you use pass^k as a deployment gate.
+
+**Do the k runs need to be independent?**
+
+Yes. pass@k assumes independent attempts, so if your harness shares context, seeds, or cached state across the k runs, the samples are correlated and the metric no longer measures what its definition claims. Isolate each run's environment before reporting a number, and remember that small suites at small k carry wide confidence intervals most reports omit.
+
 ## Key Takeaways
 
 - pass@k (at least one success) measures capability; pass^k (all successes) measures consistency

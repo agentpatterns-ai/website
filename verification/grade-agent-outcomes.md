@@ -121,6 +121,20 @@ In these cases, combine outcome checks with targeted trajectory constraints scop
 
 Industry practice as of 2025–2026 increasingly adopts hybrid evaluation that uses outcome metrics to determine correctness while retaining trajectory data for debugging and process improvement — not as a correctness gate, but as diagnostic signal. [Source: [Evaluating AI Agents in Practice – InfoQ](https://www.infoq.com/articles/evaluating-ai-agents-lessons-learned/)]
 
+## FAQ
+
+**Should I stop collecting trajectory data altogether?**
+
+No. Industry practice through 2025–2026 keeps trajectory data while using outcome metrics to decide correctness — the trace serves debugging and process improvement rather than acting as the pass/fail gate [Source: [Evaluating AI Agents in Practice – InfoQ](https://www.infoq.com/articles/evaluating-ai-agents-lessons-learned/)]. Recording how the agent got there costs nothing; grading on it is what produces false negatives.
+
+**Why do path-based graders get worse as agents improve?**
+
+The same correct final state is reachable by many valid execution sequences, and the number of valid paths grows combinatorially with task complexity. An eval that encodes one anticipated path turns every other valid route into a false negative, so the mismatch widens exactly as tasks and models get more capable [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)].
+
+**How do I grade a task that must follow a required procedure?**
+
+Add targeted trajectory constraints scoped to the steps that matter — the audit entry, the approval gate, the pre-flight check — and leave the rest of the path free. Compliance domains and side-effecting tasks need this because an agent can reach a correct final state while skipping a mandated step or making irreversible calls on the way.
+
 ## Key Takeaways
 
 - Grade the final environment state or test results, not the sequence of tool calls

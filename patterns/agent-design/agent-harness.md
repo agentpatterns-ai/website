@@ -131,6 +131,20 @@ cat features.md                # Which features remain, and in what priority ord
 
 Only after this orientation does the agent select the highest-priority incomplete item and begin work. The session ends with a commit whose message documents what was implemented, which tests pass, and what the next task is — making `git log` a readable cross-session audit trail.
 
+## FAQ
+
+**When should I skip the two-phase harness?**
+
+In three cases. A task that fits in a single context window needs no initializer, progress file, or multi-session handoff machinery, and maintaining them costs more than they return. Human-in-the-loop workflows where a person redirects after every subtask gain nothing from rigid single-feature sessions. And without reliable git access the handoff degrades to manual file management with no audit trail.
+
+**Why limit the coding agent to one feature per session?**
+
+Because an agent that tries to do too much in one session exhausts context mid-feature and leaves partial work behind. Anthropic's engineering practice confirms that the one-feature constraint [prevents context mid-feature exhaustion](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents). The session then ends on a clean commit and an accurate progress file rather than a half-state the next session has to reconstruct.
+
+**What happens inside a single execution cycle?**
+
+Six phases run in order: a pre-check that assesses context pressure and compacts if needed, optional extended thinking, self-critique of the approach before committing, the LLM call with tool schemas, tool execution, and post-processing that updates state and checks termination conditions. LangChain's build-your-own walkthrough traces the same primitives — the loop, the tool set, and the state between iterations.
+
 ## Key Takeaways
 
 - The initializer runs once; the coding agent runs once per session, always reading artifacts before acting

@@ -146,6 +146,20 @@ The orchestrator routes each finding based on `implementable`:
 
 The result: the null-check fix appears in a separate PR targeting the same branch. You review one small [diff that addresses one specific finding](diff-based-review.md). The architectural suggestion stays as a comment for you to evaluate.
 
+## FAQ
+
+**Why should the fixing agent add a commit instead of force-pushing?**
+
+Force pushes are the strongest negative predictor of merge across 33,596 agent-authored PRs, and reviewer engagement is the strongest positive predictor in the same cohort ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441)). A new commit preserves the reviewer's branch context so re-review stays tractable; rewriting history destroys the diff they were reading.
+
+**Can the tool decide which review comments the agent fixes?**
+
+Keep classification human-set. The best published comment-intent classifier reaches 59.3% accuracy on a 1,828-comment dataset ([arXiv:2307.03852](https://arxiv.org/abs/2307.03852)), so automated routing would import roughly a 40% misclassification rate into the dispatch step. The maintainer's click is also the load-bearing mitigation against comment-borne prompt injection on agentic GitHub Actions.
+
+**What has to be true before enabling an in-process `--fix` flag?**
+
+Three preconditions: the rubric is calibrated on template-shaped findings, the working tree is clean or the flag refuses (the `cargo fix` precedent), and design-judgment findings stay out of scope. Re-running the flag on a clean tree must be a no-op — idempotency is the rollback proxy, and two different patches for one diff mean the rubric is not stable enough to apply.
+
 ## Key Takeaways
 
 - Connect AI code review to a coding agent so review findings can be implemented automatically for mechanical issues

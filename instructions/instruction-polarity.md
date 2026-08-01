@@ -54,7 +54,7 @@ In these cases, keep the negative instruction and move it toward the top of the 
 
 If a prohibition is critical enough that failure is unacceptable, it should not be an instruction at all — it should be a hook. A pre-commit hook that rejects `var` declarations enforces the rule deterministically. An instruction asks; a hook requires.
 
-The heuristic: if you find yourself writing "never" or "must not," ask whether a hook is the right implementation. Instructions are probabilistic; hooks are not.
+The heuristic: if you find yourself writing "never" or "must not," ask whether a hook is the right implementation. Instructions are probabilistic; hooks are not. Polarity has a limit here: a rule asking the agent to stop work entirely is not followed at either polarity, which is why [restraint rules need external enforcement](restraint-rules-need-external-enforcement.md).
 
 ## Example
 
@@ -96,6 +96,20 @@ Positive reframing has limits. It fails or does not apply when:
 - Rule count is low. With fewer than five or six instructions, the compliance gap between positive and negative forms is small enough that other factors such as clarity or brevity outweigh it.
 
 The pattern is a default, not a universal. Apply it where the compliance benefit is material and the positive form is unambiguous.
+
+## FAQ
+
+**Does polarity matter in a short instruction file?**
+
+Barely. With fewer than five or six instructions, the compliance gap between positive and negative forms is small enough that other factors such as clarity or brevity outweigh it. The difference compounds as instruction count grows: negative rules degrade first under a large set, because the suppression signal competes with a growing context of execution targets.
+
+**Where should a negative rule sit when I keep one?**
+
+Move it toward the top of the instruction set. LLMs show position-dependent attention, so earlier instructions tend to receive stronger weighting, though this can reverse in very long contexts where recency dominates. Keep the negative form when acceptable alternatives are too numerous to list, when the prohibition is absolute, or when you are naming one specific banned item.
+
+**Does positive phrasing survive a very long context?**
+
+Not by itself. Positive instructions still suffer the lost-in-the-middle effect, and long instruction sets degrade every rule type once they pass the instruction compliance ceiling, so positive phrasing eases the problem without removing it. Polarity has a further limit: a rule asking the agent to stop work entirely is not followed at either polarity.
 
 ## Key Takeaways
 

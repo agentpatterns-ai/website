@@ -147,6 +147,20 @@ After applying the end-of-session synthesis prompt, the agent produces:
 
 The raw observation records what happened. The synthesized lesson records what to do differently and why, anchored to a verifiable signal (CI timing, S3 API behavior).
 
+## FAQ
+
+**How much does adding reflection actually improve results?**
+
+Reflexion added self-critique after a failure, injected as context on retry, and raised HumanEval pass@1 from 80% to 91% — but those lessons are ephemeral and task-specific. Meta-Policy Reflexion consolidates reflections into transferable, predicate-like rules that persist beyond the originating episode, and Voyager converts verified traces into executable code skills, refining or discarding unverified attempts.
+
+**Which storage format should synthesized lessons live in?**
+
+Flat markdown suits most workflows: simple, human-editable, and version-controllable, though it offers no semantic search and degrades at scale. Structured predicates are transferable and enforceable but harder to audit and require a synthesis step; executable code is composable and self-verifying but brittle to environment changes; hybrid vector-plus-keyword stores add relevance ranking at the cost of vector-database infrastructure.
+
+**Should failed attempts be summarized out of the context?**
+
+No. Manus retains failure traces in context rather than summarizing them away, so the model can implicitly update its internal beliefs, and premature summarization strips the diagnostic signal that makes reflection useful. A success only confirms that one path worked; a failure is what reveals why the alternatives did not, which is the more transferable signal.
+
 ## Key Takeaways
 
 - Recording *what happened* is not learning; synthesis extracts *why* an outcome occurred into a rule that transfers to future runs.

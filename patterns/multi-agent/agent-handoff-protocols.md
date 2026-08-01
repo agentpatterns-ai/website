@@ -107,6 +107,20 @@ The writer agent's system prompt references this schema directly. It reads `find
 
 [Structured schemas](typed-schemas-at-agent-boundaries.md) remove ambiguity at parse time. A downstream agent that reads a prose summary must work out, through language understanding, where the "findings" end and the "open questions" begin. With a schema, field boundaries are explicit and predictable token for token. This makes the receiving agent less likely to misread the scope or act on information the upstream agent meant as provisional. The effect grows in longer pipelines. Each stage of ambiguity compounds, so structure early on prevents errors from spreading across many handoffs. GitHub Engineering describes the same pattern in its analysis of [why multi-agent workflows often fail](https://github.blog/ai-and-ml/generative-ai/multi-agent-workflows-often-fail-heres-how-to-engineer-ones-that-dont/), where ambiguity in early handoffs surfaces as wrong actions several agents downstream.
 
+## FAQ
+
+**When is a handoff schema not worth the overhead?**
+
+When work never crosses an agent boundary. In a short-lived or single-stage pipeline, where one agent completes the task end to end, a schema adds friction and returns nothing. Schemas also cost more than they return during early prototyping: if upstream outputs change often, keeping the contract in sync is constant work, and loose prose may adapt better until the pipeline shape stabilizes.
+
+**Can a well-formed structured handoff still lose information?**
+
+Yes, in two ways. Aggressive summarization at the boundary can discard the caveats and edge-case findings the downstream agent needed, especially when the upstream agent cannot separate essential from incidental detail. Named fields also imply certainty: a well-formatted JSON findings array hides that its conclusions were tentative, where prose with hedging language would have carried that doubt forward.
+
+**Why does handoff ambiguity get worse in longer pipelines?**
+
+Because each stage compounds the last. A downstream agent reading prose must work out through language understanding where the findings end and the open questions begin, while a schema makes field boundaries explicit and predictable token for token. Ambiguity introduced early therefore surfaces as wrong actions several agents downstream, so structure in the early stages stops errors spreading.
+
 ## Key Takeaways
 
 - Define explicit output schemas for each pipeline stage — structured handoffs are more reliable than prose.

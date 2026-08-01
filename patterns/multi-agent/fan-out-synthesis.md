@@ -120,6 +120,20 @@ Each agent produces an independent API specification. A synthesis agent then:
 
 The result is a specification no single agent would have produced — combining simplicity, extensibility, and robustness — validated by committee review before acceptance.
 
+## FAQ
+
+**How many agents should I fan out to?**
+
+Three to five. Best-of-N research shows quality gains compress while compute grows linearly, which makes N=3–5 the efficient range ([CarBoN: Calibrated Best-of-N Sampling](https://arxiv.org/abs/2510.15674)). N=10 rarely justifies ten times the cost of N=3, and passing ten outputs to one synthesizer risks exceeding its context limit as well.
+
+**Which part of the pattern is riskiest?**
+
+The synthesis agent. If the synthesizer cannot judge which elements are strongest, the merge step adds errors instead of removing them and the result can be worse than the best individual attempt. That risk compounds when the merged output feeds a later agent as authoritative, because synthesis errors then cascade downstream rather than self-correcting.
+
+**What if all the agents produce the same answer?**
+
+Then there is nothing for synthesis to exploit — the pattern depends on genuine diversity, and identical instructions do not guarantee it. Agents can converge through conformity bias, and constrained solution spaces amplify it; inter-agent misalignment is one of three failure categories in a taxonomy of multi-agent LLM failures ([Cemri et al., 2025](https://arxiv.org/abs/2503.13657)). More agents alone does not buy diversity.
+
 ## Related
 
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)

@@ -149,6 +149,20 @@ The checklist assumes a stable, internally-owned API. Conditions that invert tha
 [ ] Server has clear instructions for tool search discoverability
 ```
 
+## FAQ
+
+**What is the difference between MCP's two error channels?**
+
+Protocol errors use JSON-RPC codes such as -32602 and -32603 and are aimed at the client — missing parameters, an invalid method. Tool execution errors set `isError: true` in the result and are aimed at the agent, covering validation failures and not-found cases. The spec expects the latter to carry actionable feedback that language models can use to self-correct and retry.
+
+**When do enums become a liability?**
+
+When the upstream API is not yours to control. Enumerated values encode a snapshot, so the moment upstream adds one, agents hit validation failures until you redeploy. A thin string type trades strict validation for durability. The design checklist assumes a stable, internally-owned API, and where that assumption does not hold the looser type is the safer choice.
+
+**Do schemas and annotations make a server safe?**
+
+No. Tool annotations such as `readOnlyHint` and `destructiveHint` are metadata only and are not trustable coming from an untrusted server. Schemas also do not cover input sanitization: the STDIO execution model in Anthropic's official MCP SDKs runs commands even when the local process fails to start, so argument sanitization is the mitigation rather than richer schemas.
+
 ## Key Takeaways
 
 - Pick the right primitive first: tools for agent-invoked actions, resources for read-only context, prompts for user-triggered workflows.

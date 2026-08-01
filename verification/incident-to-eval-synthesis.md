@@ -179,6 +179,24 @@ Every postmortem should ask: "What eval would have caught this?"
 - Grader decay for LLM-as-judge: [LLM judges](../workflows/llm-as-judge-evaluation.md) require periodic calibration against human ratings. If the judge model is updated or the prompt drifts, scoring shifts without any test case changing. A passing suite may no longer reflect actual quality.
 - Volume without triage: high-traffic systems generate hundreds of incidents with overlapping failure modes. Without deduplication and priority labeling, the suite balloons with redundant cases that slow CI without improving coverage.
 
+## FAQ
+
+**Which incidents should not become eval cases?**
+
+One-off data issues — a corrupt input or a transient API failure — belong upstream, because an eval for them would test infrastructure rather than the LLM feature. Evals carry a maintenance cost, so every candidate passes a cost-benefit filter first. Security and safety violations are the standing exception: they earn a mandatory P0 case regardless of how rarely they occur.
+
+**How do I identify the failure mode in the first place?**
+
+That is harder than writing the eval. Gather 100+ production traces covering failures and near-misses, journal issues without predefined categories while focusing on the first upstream failure in each trace, then group those entries into a taxonomy with frequency counts. Repeat until new traces stop yielding new categories. Braintrust's Topics clusters traces to partly automate the grouping.
+
+**Why does a passing regression suite stop meaning anything?**
+
+Because each case hardcodes the expected behavior as of the incident. When intended behavior changes — a new policy, an updated model, shifting requirements — old cases silently test the previous correct answer. LLM-as-judge cases decay separately: if the judge model is updated or its prompt drifts, scoring shifts without a single test case changing.
+
+**How many cases should the regression dataset hold?**
+
+Practitioner-reported tiers put a minimum viable suite at 50-100 cases covering critical failure modes, production-ready at 200-500 with broad coverage, and mature at 1000+ with tiered severity and CI gating. Growth needs deduplication and priority labeling, or a high-traffic system balloons the suite with redundant overlapping cases that slow CI without improving coverage.
+
 ## Key Takeaways
 
 - Production incidents are the highest-signal eval source

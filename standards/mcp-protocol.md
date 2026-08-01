@@ -93,6 +93,20 @@ MCP adds a protocol layer that is not always worth it:
 
 Use MCP when building reusable tool servers shared across hosts or developers. For one-off integrations, evaluate whether the indirection adds value.
 
+## FAQ
+
+**Do I need an MCP server for every integration?**
+
+No. When an agent only ever calls one API, a native SDK call is simpler than standing up an MCP server, and the abstraction buys nothing if you do not need portability. Use MCP when you are building reusable tool servers shared across hosts or developers; for one-off integrations, evaluate first whether the extra protocol layer adds value.
+
+**How much context does an MCP server consume?**
+
+More than most teams budget for. MCP injects tool schemas into the model's context at startup: the GitHub MCP server alone has been measured at roughly 55,000 tokens across its 93 tool definitions ([The New Stack](https://thenewstack.io/how-to-reduce-mcp-token-bloat/)), and stacking several servers can consume a third or more of a 200k window before any user input arrives.
+
+**How much should I trust a third-party MCP server?**
+
+Treat it like a third-party shell script: select, pin, and sandbox it. The stdio execution model leaves input sanitization to each server author, and [Ox Security disclosed an RCE-class flaw](https://www.ox.security/blog/the-mother-of-all-ai-supply-chains-critical-systemic-vulnerability-at-the-core-of-the-mcp/) in the official MCP SDKs affecting 150M+ downloads and 7,000+ exposed servers, which [Anthropic confirmed is by design](https://www.securityweek.com/by-design-flaw-in-mcp-could-enable-widespread-ai-supply-chain-attacks/).
+
 ## Key Takeaways
 
 - MCP decouples agent reasoning from tool execution — write a tool server once, use it with any MCP-compliant host

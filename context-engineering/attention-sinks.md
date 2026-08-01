@@ -79,6 +79,20 @@ Attention sinks explain the strong-start portion of the U-shaped attention curve
 
 Content that must be reliably followed belongs at either end. Content the agent refers to passively can occupy the middle.
 
+## FAQ
+
+**Is the attention sink just "earlier tokens always matter more"?**
+
+Not quite. Gu et al. found the sink concentrates on the first token rather than spreading smoothly across an early-position band, and that it is a learned behavior emerging during pre-training under softmax normalization — swap softmax for sigmoid attention and it does not appear in models up to 1B parameters. Treat it as first-token-anchored, not a uniform positional gradient.
+
+**Where do I put a constraint when the conversation is already long?**
+
+Restate it at the point where you need it rather than relying on an early-session statement. That exploits the recency effect at the other end of the U-shaped curve, where performance peaks when relevant information sits at the beginning or end of the window and drops sharply in the middle. Middle positions suit content the agent only consults passively.
+
+**When does putting the constraint first stop being reliable?**
+
+When the full prompt prefix is not preserved. Context compression and some KV-cache eviction strategies discard early tokens, neutralizing the primacy advantage. In retrieval pipelines, chunks are injected mid-prompt, so a constraint buried in a static preamble can be outweighed by the semantic relevance of that material. Under a few hundred tokens, placement has little observable effect.
+
 ## Key Takeaways
 
 - Initial tokens receive disproportionate attention — open instruction files with your most critical constraint, not context-setting prose.

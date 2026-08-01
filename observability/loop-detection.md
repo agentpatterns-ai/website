@@ -133,6 +133,20 @@ Loop detection is not free. Across 220 instrumented agent runs, only half of 12 
 
 Measure whether a given intervention reduces the signal it targets, and remove the ones that do not.
 
+## FAQ
+
+**What edit-count threshold should trigger the nudge?**
+
+There is no published canonical threshold; LangChain's middleware leaves N to the operator to tune. The tradeoff runs both ways — a low value interrupts legitimate iterative refinement, while a high one lets more context burn before the nudge fires. Tune it against your own runs rather than adopting a number from a reference implementation.
+
+**How do I distinguish a real loop from focused iteration?**
+
+Edit count alone cannot. Where test output is available, track whether failures fall between edits: the same file edited with failures holding steady is likely a loop, while the same file edited with failures falling is iterative refinement. Edit count is the fallback for cases where test output is not available.
+
+**What does a nudge cost when it fires wrongly?**
+
+Every injected nudge consumes context the agent could otherwise spend on code, so on an agent already near the [context limit](../context-engineering/context-window-dumb-zone.md), a false positive speeds up the failure it was meant to prevent. Detectors can also amplify each other when one fires on output another produces, and no threshold fixes missing requirements or wrong architecture.
+
 ## Key Takeaways
 
 - Track edit count per file path within a session; flag when a threshold is exceeded

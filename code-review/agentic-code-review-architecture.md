@@ -89,6 +89,20 @@ A pull request modifies a shared authentication helper used by six services. Wit
 
 You can trigger the same review with GitHub Copilot from the CLI: `gh pr edit --add-reviewer @copilot`. The agent runs in a loop, calling tools to gather context before it posts inline comments.
 
+## FAQ
+
+**What infrastructure does agentic review require?**
+
+More than static diff analysis needs. Tool-calling loops need compute infrastructure, and GitHub's implementation requires self-hosted runners for organizations that opted out of GitHub-hosted runners. A custom implementation has to budget for the added latency and cost of multiple tool calls per review, so teams without that infrastructure cannot adopt the approach without operational changes first.
+
+**When is static diff review still the better choice?**
+
+On small or trivial pull requests, where a tool-calling loop's fixed startup latency exceeds the value added on a single-file or typo-fix change, static diff review is faster and sufficient. It also fits latency-sensitive pipelines: teams running sub-minute CI gates find that multi-tool round-trips clash with merge-velocity targets, and the 8.1% quality gain does not compensate for a blocked pipeline.
+
+**Does wider repository context create new false positives?**
+
+It can. Broader access lets the agent comment on code that is intentionally isolated, or that follows conventions the agent does not know about, producing low-signal architectural remarks. Without a custom review persona tuned to project norms, those comments accumulate and increase reviewer fatigue, so wider context improves findings only when the agent also knows which deviations are deliberate.
+
 ## Key Takeaways
 
 - Agentic code review replaces static diff analysis with tool-calling that explores full repository context

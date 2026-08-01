@@ -10,7 +10,7 @@ tags:
   - testing-verification
   - evals
   - tool-agnostic
-last_reviewed: 2026-07-02
+last_reviewed: 2026-08-02
 maturity: established
 ---
 
@@ -75,7 +75,7 @@ The grader judges functional equivalence, not textual identity.
 
 The approach assumes the suite represents the target distribution and that the grader's judgments are stable. Both break under specific conditions:
 
-- Overfitting to the eval set. If the suite is small and authored by the same team tuning prompts, scores improve without improving real-user behavior — benchmarks lose discriminative power once they become the optimization target. [Source: [Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena](https://arxiv.org/abs/2306.05685)]
+- Overfitting to the eval set. If the suite is small and authored by the same team tuning prompts, scores improve without improving real-user behavior — benchmarks lose discriminative power once they become the optimization target. [Source: [Categorizing Variants of Goodhart's Law](https://arxiv.org/abs/1803.04585)]
 - Grader bias contaminates the signal. LLM judges show position, verbosity, and self-enhancement biases. A "regression" may be grader drift rather than agent drift, especially when the judge model is updated. [Source: [Justice or Prejudice? Quantifying Biases in LLM-as-a-Judge](https://arxiv.org/abs/2410.02736)]
 - Stale goldens mark correct answers wrong. Golden answers erode as the agent's tools, data, or scope legitimately change. Without periodic re-review, passing the suite stops meaning the agent is correct. [Source: [Golden Datasets for GenAI Testing](https://www.techment.com/blogs/golden-datasets-for-genai-testing/)]
 - Cost and latency break continuity. A large suite graded by a strong judge adds minutes and dollars per CI run, pushing teams to sample or skip the check.

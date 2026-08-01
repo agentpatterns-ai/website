@@ -257,6 +257,20 @@ Hooks: rules that must hold without exception, strong opposing model priors (pac
 
 Instructions: contextual "prefer X when Y" guidance, or suggestions rather than requirements.
 
+## FAQ
+
+**Why does a hook that exits 1 fail open?**
+
+Because for most hook events Claude Code treats only exit code `2` as a block. Exit code `1` is logged as a non-blocking error and the tool call proceeds anyway. Developers who reach for the conventional Unix failure code therefore ship guards that look enforced but silently let the forbidden command through ([hooks reference](https://code.claude.com/docs/en/hooks)).
+
+**Can the model route around a hook that blocks a tool?**
+
+Yes, because hooks fire per tool match. Block `Edit` and `Write` and the model reaches for `Bash` with `sed`, `python -c`, or a heredoc; block `rm` and it falls back to `perl -e 'unlink(...)'`. Anchor outcome-layer harms in file permissions, network policy, or a sandbox, and pair tool hooks with a `Bash` matcher for the obvious bypasses.
+
+**When should a rule be a hook rather than an instruction?**
+
+Use a hook when the rule must hold without exception, when the model carries a strong opposing prior (package managers, test runners, `curl`), or when the behavior must survive a long multi-step session where instructions drift. Keep it as an instruction when the guidance is contextual — "prefer X when Y" — or a suggestion rather than a hard requirement.
+
 ## Key Takeaways
 
 - `PreToolUse` + `Bash` matcher covers CLI enforcement and destructive guardrails

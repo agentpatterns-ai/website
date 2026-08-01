@@ -106,6 +106,20 @@ Circuit breakers detect failure modes; they do not guarantee correctness. Set to
 
 The steelman: if your agents already fail gracefully on their own — return partial results, detect their own thrash — then another stopping layer mostly creates false positives. Instrument first. Add breakers where instrumentation shows real loops, not as a precaution.
 
+## FAQ
+
+**What token count should trip the context-budget breaker?**
+
+There is no universal one. Chroma's Context Rot study tested 18 frontier models, including GPT-4.1, Claude Opus 4, and Gemini 2.5, and found every model degrades non-uniformly as input grows, with onset depending on task similarity and distractor density. Trip the breaker when recall or coherence drops on your own task rather than at a fixed number.
+
+**Why does a repetition breaker fire on healthy behavior?**
+
+Because naive "did we already do this?" heuristics cannot separate a stuck loop from valid repetition. Re-reading a file after editing it, or refetching a URL after a 429 backoff, are normal behaviors that trip the same signal. Cost caps share the problem: exploratory research legitimately consumes variable budgets, so the real signal is cost without progress, not cost alone.
+
+**Should I add circuit breakers before I have evidence of loops?**
+
+Instrument first. If your agents already fail gracefully — returning partial results and detecting their own thrash — an extra stopping layer mostly manufactures false positives, and an iteration limit set low enough to catch pathological loops also cuts off legitimate multi-step refactors that need 50 or more turns. Add breakers where instrumentation shows real loops.
+
 ## Key Takeaways
 
 - Five stopping signals: iteration limit, repeated failure, repetition, context budget, cost threshold

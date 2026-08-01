@@ -119,6 +119,20 @@ def get_ci_status(run_id: str) -> str:
 
 The agent receives `"3 checks passed, 1 failed: lint"` and can immediately decide to run the lint fixer — no parsing, no discarding irrelevant fields.
 
+## FAQ
+
+**Why does oversized tool output hurt beyond the raw token count?**
+
+The mechanism is attention dilution. Transformer self-attention computes pairwise relationships across every token, so irrelevant tokens compete with relevant ones for the model's focus. [Liu et al. (2023)](https://arxiv.org/abs/2307.03172) find accuracy drops sharply on multi-document QA when the target document sits in the middle of a long context rather than at either end.
+
+**How large should a single tool response be?**
+
+A useful heuristic is that it should fit in a paragraph. If it does not, work through three options: the tool returns too much and needs filtering or summarization; the task genuinely needs that much information, in which case load it once and structure it carefully; or the output belongs in a file rather than inline in the context window.
+
+**When is a custom summarization layer not worth building?**
+
+When the tool is called once per session, the engineering overhead can cost more than the token savings justify. Filtering also drops edge-case fields the agent cannot ask for because it does not know they exist, couples a bespoke summary to a response shape that changes upstream, and adds a layer to trace when debugging wrong behavior. Apply it where output is consistently large.
+
 ## Key Takeaways
 
 - Every tool response is a context injection — size it for the agent's next decision, not for completeness.

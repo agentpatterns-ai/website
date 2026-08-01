@@ -112,6 +112,20 @@ Schema filtering adds structural rigidity. When it fails to match the actual wor
 - Parallel execution overhead: spawning multiple filtered subagents adds orchestration overhead (compilation, context initialization, result aggregation). For simple linear tasks, a single agent with a broad schema is cheaper.
 - "Structurally impossible" is a ceiling, not a guarantee: schema filtering narrows intent to the visible tool set, but tools inside the allowlist still expose indirect pathways. [CVE-2026-22708](https://github.com/cursor/cursor/security/advisories/GHSA-82wg-qcm4-fp2w) showed that Cursor Agent's terminal allowlist could be bypassed through shell built-ins and environment-variable manipulation. Poisoning the environment of allowed commands produced effects the allowlist never sanctioned. The same pattern recurs whenever an allowlisted tool (shell, package manager, HTTP client) can be steered into unintended behavior through its inputs. Treat schema filtering as one layer of defense in depth, not as a boundary the model cannot reason around.
 
+## FAQ
+
+**Does adding a tool to the shared registry grant it to existing subagents?**
+
+No. Allowlists do not update themselves: a tool added to the shared registry is not granted to any existing subagent until its SubAgentSpec is edited, and removing a tool from a spec that still references it causes compilation errors. The spec layer has to be kept in sync with the live registry as an ongoing maintenance cost.
+
+**Can a subagent still cause harm using only its allowlisted tools?**
+
+Yes. Filtering blocks calls to absent tools but does nothing about misuse of present ones, so a Code Explorer holding `search_code` can still run excessive queries or leak what it finds. [CVE-2026-22708](https://github.com/cursor/cursor/security/advisories/GHSA-82wg-qcm4-fp2w) showed Cursor Agent's terminal allowlist bypassed through shell built-ins and environment-variable manipulation.
+
+**When is a single agent with a broad schema the better choice?**
+
+When the task is simple and linear. Spawning multiple filtered subagents adds orchestration overhead, covering compilation, context initialization, and result aggregation, that a straightforward sequential task never recovers. Filtered schemas pay for themselves when independent exploration runs in parallel and each subagent needs its own structural capability boundary.
+
 ## Key Takeaways
 
 - Schema filtering is stronger than runtime rejection — the model cannot call tools absent from its schema

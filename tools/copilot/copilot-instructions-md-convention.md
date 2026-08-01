@@ -139,6 +139,20 @@ REST API for order management. Node.js 20, Express, PostgreSQL, Prisma ORM.
 - `tests/` — integration and unit tests
 ```
 
+## FAQ
+
+**What should I keep out of the file?**
+
+Task-specific instructions belong in the prompt or in path-specific files, and full documentation should be linked rather than embedded -- with one exception, since code review cannot follow links, so inline anything review-specific. Also drop vague directives like "be more accurate", narrative prose in place of lists and headings, and Claude Code or Cursor syntax, which Copilot ignores.
+
+**Does an instruction file guarantee Copilot follows it?**
+
+No. GitHub notes that "providing instructions doesn't guarantee perfect code" -- the same request can yield different results across sessions ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/)). Treat the file as a probabilistic nudge, not a contract. Personal-scope instructions also silently override repository ones, so teammates with conflicting personal settings see different behavior from the same file.
+
+**What does the coding agent need that chat does not?**
+
+Exact build and test commands, environment setup, and CI requirements, added on top of the five recommended categories -- project overview, tech stack, coding guidelines, project structure, and available resources. Copilot reads the repository file on every coding agent task, so those commands reach the system prompt automatically instead of being restated in each task description.
+
 ## Key Takeaways
 
 - `.github/copilot-instructions.md` is appended to Copilot's system prompt on every chat, agent mode, coding agent, and code review interaction -- no import needed.

@@ -76,6 +76,20 @@ Volume-first agent deployment underperforms when:
 - Integration friction is ignored: a separate analysis of 142K agent-authored PRs reports a 27.67% merge-conflict rate, with wide variation across agents ([arXiv:2604.03551](https://arxiv.org/abs/2604.03551)). Higher PR volume raises conflict exposure, so raw throughput gains erode once rebase and resolution costs are counted.
 - Merge is treated as success: a study of 1,210 merged agent-generated bug-fix PRs found that merge success does not reliably reflect post-merge code quality. Code smells, especially at critical and major severities, dominate the defects introduced ([arXiv:2601.20109](https://arxiv.org/abs/2601.20109)). Acceptance rate alone over-reports value unless paired with downstream quality signals.
 
+## FAQ
+
+**Why do agent-authored PRs get rejected more often than human ones?**
+
+The AIDev study attributes the gap to structural and contextual factors. Agent PRs cluster around simpler tasks that reviewers may deprioritize, and agents lack the ambient project context deciding which changes are worth making at a given moment — roadmap direction, or which subsystems are frozen. So they optimize for correctness in a local scope rather than relevance across the broader queue.
+
+**Does higher PR volume cost anything beyond reviewer time?**
+
+Yes. An analysis of 142K agent-authored PRs reports a 27.67% merge-conflict rate, with wide variation across agents, so raw throughput gains erode once rebase and resolution costs are counted. A separate study of agent-authored fixes found reviewers rejected 46.41% of them, sorted into a taxonomy of 14 rejection reasons across four categories.
+
+**Is a merged agent PR proof the change was good?**
+
+Not on its own. A study of 1,210 merged agent-generated bug-fix PRs found that merge success does not reliably reflect post-merge code quality, with code smells at critical and major severities dominating the defects introduced. Acceptance rate therefore over-reports value unless it is paired with quality signals measured after the change lands.
+
 ## Key Takeaways
 
 - Agent PR volume can increase by 10-50x, but acceptance rates drop 13-42 percentage points below human baselines

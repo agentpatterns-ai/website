@@ -226,6 +226,24 @@ The four mechanisms:
 
 The calibration loop is the part that earns the "meta" prefix; without it, the architecture is just a multi-agent pipeline. It backfires below the throughput threshold, on heavy feature interdependencies where role-separation coordination overhead exceeds parallelism benefit (coding tasks "have fewer parallelizable opportunities than research" — [Anthropic Engineering](https://www.anthropic.com/engineering/multi-agent-research-system)), under frequent requirement churn that staleness contracts faster than calibration refines them, and in cost-constrained deployments. The originating 17-feature deployment includes no single-agent A/B baseline — treat the architecture as a structurally-grounded candidate, not an empirically-proven default.
 
+## FAQ
+
+**What does a harness fail to catch?**
+
+Anything at the intent layer. Linters, structural tests, and CI gates operate on syntax and architecture, so they reliably catch import violations, boundary crossings, and format errors — but misdiagnosis of the issue, overengineering, unnecessary features, and misunderstood instructions still surface ([Fowler](https://martinfowler.com/articles/harness-engineering.html)). GitHub frames its version of the harness claim with an explicit "(mostly)" qualifier for exactly this reason.
+
+**Can a harness be over-constrained?**
+
+Yes. Excessively narrow linter rules block valid solutions and force agents to contort implementations to satisfy constraints rather than solve the actual problem. The same holds for tooling breadth: comprehensive tool libraries with every capability gave worse results than stripped-down essentials in Vercel's experience, where fewer choices made agents faster and more reliable ([NxCode](https://www.nxcode.io/resources/news/harness-engineering-complete-guide-ai-agent-codex-2026)).
+
+**Do harness rules transfer when I swap models?**
+
+Only to the extent that what is encoded is environment-side, not model-side. [Xu et al. (2026)](https://arxiv.org/abs/2605.22166) report harnesses evolved from a single 4B model transferring to 17 other backbones. But action-realization and trajectory-regulation layers become depreciating capital once a model handles structured output, tool-call repair, or stopping natively — so re-ablate on every model swap.
+
+**When is the meta-engineering composite worth building?**
+
+Only under continuous production with throughput to amortize it. Below roughly ten features per quarter, the failure-classification pipeline costs more than it saves; token overhead is real, with single agents using about 4x more tokens than chat and multi-agent systems about 15x; and the two-pass compiler needs requirements that settle before generation ([Sengupta et al., 2026](https://arxiv.org/abs/2605.25665)).
+
 ## Key Takeaways
 
 - Harness engineering is the discipline of designing environments where agents succeed by default -- it subsumes prompt engineering

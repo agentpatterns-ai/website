@@ -104,6 +104,20 @@ Rollback-first design is not free. It is worse than the alternative under these 
 
 The pattern scales with stakes. Apply it fully for agents touching shared codebases, production systems, or customer-facing data. Relax it when the blast radius is small and recovery is already trivial.
 
+## FAQ
+
+**What does bounding a transaction add beyond working on a branch?**
+
+It caps how much has to be undone at once. IBM Research's STRATUS system applies a transactional-no-regression rule: mitigation agents may only take reversible actions within a transaction, and the commands per transaction are capped to keep rollbacks tractable ([IBM Research, 2025](https://research.ibm.com/blog/undo-agent-for-cloud)). For coding agents, bound each turn to changes you can undo in one step.
+
+**Can easy rollback make a system less reliable?**
+
+It can. When rollback is trivial, teams lean on "undo and retry" instead of fixing the underlying bug, so a reliable undo path can delay diagnosis until the failure surfaces somewhere harder to reverse. Gate latency is the other cost: in high-frequency inner-loop edits, an approval gate on every action loses more throughput than the recovery it saves.
+
+**When is the reversibility machinery redundant?**
+
+When re-running is already cheaper than building a rollback primitive. Idempotent operations whose natural answer is "just run it again" need no undo path, and throwaway environments — a container spun up per task, or a test database that resets on each run — are themselves the rollback primitive, making branch-level isolation redundant.
+
 ## Key Takeaways
 
 - Treat undo cost as a design constraint, not an afterthought

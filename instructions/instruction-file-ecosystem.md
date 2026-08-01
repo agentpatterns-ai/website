@@ -138,6 +138,24 @@ Auth code: never log request payloads. Token handling must use the `crypto` modu
 
 With this layout, updating `AGENTS.md` propagates to Claude Code immediately (via import) while Copilot's file needs a manual sync — a deliberate tradeoff that makes the drift surface explicit and small.
 
+## FAQ
+
+**Why do the three instruction files drift apart?**
+
+Because each tool reads only its own file. `CLAUDE.md`, `.github/copilot-instructions.md`, and `AGENTS.md` hold the same categories — project context, conventions, constraints, workflow notes — but an update to one does not propagate to the others. Left alone they diverge: one file says "use pnpm", another says "use npm", and each agent follows its own source.
+
+**What are the trade-offs of symlinking every instruction file to one source?**
+
+Symlinks give one source of truth, but tool-specific syntax does not travel: Claude Code's `@path/to/import` may not work in the other tools reading that same file. Symlinks also need developer setup on Windows, where git does not create them by default. A shared base with tool-specific extends avoids both problems where imports are supported.
+
+**Does Copilot read the whole instruction file?**
+
+Not in code review. Copilot code review reads only the first 4,000 characters and silently ignores the rest; chat and coding agents have no limit. Claude Code's docs put the practical limit at roughly 200 lines per `CLAUDE.md`, because longer files reduce adherence. `AGENTS.md` has no formal limit — keep it concise for widest compatibility.
+
+**How does each tool find its instruction files?**
+
+Differently, which is why layout matters. Claude Code walks up the directory tree loading every `CLAUDE.md`, with subdirectory files loading on demand and `.claude/rules/*.md` triggering on `paths` globs. Copilot loads all tiers at once, using `applyTo` globs for path-specific files. AGENTS.md uses proximity: the file closest to the edited file wins.
+
 ## Key Takeaways
 
 - Without a convergence strategy, multiple instruction files diverge and become unreliable

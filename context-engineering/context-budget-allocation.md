@@ -108,6 +108,20 @@ steps:
 
 At session start, Claude Code loads only the two `description` strings (~30 tokens total). When you trigger `migrate-api`, the full YAML — including the three `steps` entries and the file paths — enters context for that task alone. A research sub-agent that reads `src/api/v1/` does so in its own isolated context window. Only its condensed summary appears in the coordinator's context, which leaves the coordinator's budget free for synthesis and implementation.
 
+## FAQ
+
+**Does a 1M-token context window remove the need for a budget?**
+
+No. Claude Opus 4.6 and Sonnet 4.6 support a [1M token context window](https://docs.anthropic.com/en/docs/about-claude/models) natively at flat pricing, while older models still need the `context-1m-2025-08-07` beta header and face a pricing cliff above 200K tokens. Use the larger window when retaining full history matters, and prefer compaction whenever prior context can be safely summarized instead.
+
+**How much room do skill descriptions get?**
+
+Claude Code allocates [a dynamic budget of 1% of the context window](https://code.claude.com/docs/en/skills) for all skill descriptions combined, with a fallback cap of 8,000 characters; full skill content loads only on invocation. Because every description shares that single budget, each skill you add forces the existing descriptions to get leaner.
+
+**What makes just-in-case preloading expensive?**
+
+It converts a conditional cost into fixed overhead paid on every task, whether or not the material is used. The same applies to always-on instructions carrying code samples, directory trees, and API signatures: they swell the preloaded layer permanently. Replace them with hints and pointers to [discoverable content](discoverable-vs-nondiscoverable-context.md) the agent can fetch when it actually needs them.
+
 ## Key Takeaways
 
 - Context is a budget: every preloaded token displaces a token available for work.

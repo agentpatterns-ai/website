@@ -99,3 +99,4 @@ Mitigate by gating promotion on a confidence signal, reviewer pass, or semantic-
 - [Generative Agents Memory Stream](generative-agents-memory-stream.md) — three-layer architecture for long-running agents with high observation density
 - [Component-Isolated Memory Stress Testing](../../verification/component-isolated-memory-stress-testing.md) — stress-tests the summarization, storage, and retrieval stages of this pipeline so a regression attributes to one tier
 - [Usage-Reinforced Memory Decay for Long-Running Agents](../../context-engineering/usage-reinforced-memory-decay.md) — an eviction policy for the working tier that scores retention by recall count instead of elapsed turns
+- [Organizing Filesystem Agent Memory for Retrieval Cost](filesystem-memory-organization.md) — the same promote-and-curate spend measured on a plain markdown store, where the payoff shows up in read price rather than accuracy

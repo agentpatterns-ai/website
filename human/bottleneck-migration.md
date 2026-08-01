@@ -133,6 +133,20 @@ They apply all three strategies in combination:
 
 After 60 days: review cycle time returns to 5 hours, defect rate drops 30%, and total throughput doubles compared to the pre-AI baseline.
 
+## FAQ
+
+**How much does review load actually grow after AI adoption?**
+
+Teams merge 98% more PRs while review time rises 91% and average PR size grows 154% ([Faros AI](https://www.faros.ai/ai-productivity-paradox)), and benchmark data shows 4.6x longer review wait times where AI adoption is high ([LinearB](https://linearb.io/resources/software-engineering-benchmarks-report)). AI-generated PRs also carry more defects: 10.83 issues per PR against 6.45 for human code ([CodeRabbit](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report)).
+
+**What does Jevons paradox have to do with code review?**
+
+Jevons observed in 1865 that cheaper coal energy raised total coal consumption, because the lower cost made new uses worthwhile. Cheaper code generation behaves the same way: it enables more features, which drive more review load, which consumes the freed capacity and then some. The saving is real per task and invisible in aggregate — reported net workload change is roughly zero.
+
+**Why can a hard line-count cap on PRs make review worse?**
+
+Because it fragments logically unified changes. Each atomic PR passes review on its own while the assembled feature is never reviewed as a whole, and architectural changes spanning many files resist artificial splitting. Scope discipline still helps once volume strains reviewer capacity, but apply the constraint at generation time and split at natural boundaries rather than at an arbitrary line count.
+
 ## Related
 
 - [Law of Triviality in AI PRs](../patterns/anti-patterns/law-of-triviality-ai-prs.md) -- reviewer psychology with large AI diffs

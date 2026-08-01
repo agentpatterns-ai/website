@@ -88,6 +88,7 @@ How agents persist, retrieve, and synthesize information across turns and sessio
 - [Tiered Memory Architecture: Episodic-to-Semantic Consolidation](tiered-memory-architecture.md) — Separate raw episode storage from a curated semantic tier and promote facts between them only on observed re-use — pays off for long operation windows, adds cost without benefit elsewhere
 - [Cue-Anchored Working Memory (Delivery, Not Storage)](cue-anchored-working-memory.md) — A second memory tier the harness delivers by injecting operational facts deterministically when a context cue fires, so the agent never has to remember to look them up
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — Run an agent over raw sources to build and maintain a compact, file-based knowledge layer future agents read instead of re-deriving structure via query-time RAG — for durable domain knowledge with enough query volume to amortize
+- [Organizing Filesystem Agent Memory for Retrieval Cost](filesystem-memory-organization.md) — Organizing a markdown memory tree roughly halves per-query retrieval cost on large stores while leaving answer quality unchanged — a cost optimization with a size threshold
 
 ## Control & Orchestration
 

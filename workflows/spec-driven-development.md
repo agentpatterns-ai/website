@@ -137,6 +137,24 @@ Running `/speckit.tasks` against this spec decomposes it into reviewable units:
 
 Each task is concrete and independently verifiable, matching the Tasks phase of the Specify → Plan → Tasks → Implement workflow.
 
+## FAQ
+
+**When is spec ceremony slower than just prompting iteratively?**
+
+On small, well-scoped changes. Scott Logic rebuilt one hobby-app feature both ways: Spec Kit took over 3.5 hours and produced 2,577 lines of specification, much of it redundant, while iterative prompting finished the same feature in 23 minutes with comparable bug counts. The four-phase pipeline pays off when requirements are genuinely complex and stable.
+
+**What goes wrong when the spec and the code drift apart?**
+
+A stale spec misleads agents more dangerously than a stale design doc misleads humans, because agents follow the plan confidently without flagging divergence. Practitioner reports call this the dominant failure mode: reality changes faster than specs do, and keeping them synchronized is a maintenance tax that grows with system complexity. Treat the spec as a living artifact.
+
+**Should feature status live inside the specification file?**
+
+Keep it separate and structured. Anthropic's harness research found models are less likely to wrongly modify JSON files than Markdown files, so structured JSON stays more reliable than Markdown checklists for feature-status tracking. The Markdown spec holds project intent — user journeys, data contracts, UI descriptions, and constraints — while status tracking sits beside it in JSON.
+
+**What slows compilation down as a project grows?**
+
+Specification size. Larger spec files take longer to compile and consume more of the context window on every cycle. The fix is splitting the specification into several files, each scoped to a subsystem, then pointing the agent at specific sections; only smaller specs let the agent detect the changed parts on its own.
+
 ## Key Takeaways
 
 - Spec-driven development externalizes project intent into a Markdown file that persists across agent sessions, eliminating context loss as the primary failure mode

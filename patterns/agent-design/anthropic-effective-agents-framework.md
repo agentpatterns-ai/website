@@ -96,6 +96,24 @@ The patterns assume the task is well-specified and the output is verifiable. In 
 
 The site's [Anti-Patterns](../anti-patterns/index.md) section catalogs specific failure modes for several of these workflow shapes.
 
+## FAQ
+
+**What are the five workflow patterns, and what does each decompose?**
+
+Prompt chaining splits a task into sequential LLM calls with programmatic checkpoints between steps. Routing classifies input and dispatches to a specialized downstream prompt. Parallelization runs independent calls concurrently or repeats one call for consensus. Orchestrator-workers decomposes the task at runtime and dispatches dynamic subtasks. Evaluator-optimizer pairs a generator with a separate critic that loops until a quality threshold passes.
+
+**What does the eBook add beyond the December 2024 post?**
+
+Three things. Case studies: Coinbase running Claude as a customer-support agentic system with financial-compliance guardrails, and Thomson Reuters rebuilding CoCounsel Legal on the Claude Agent SDK. Expanded context management, developed further in Anthropic's context-engineering post. And Skills — modular instructions for cross-task agent capability, defined in the agentskills.io standard.
+
+**Where do these patterns stop applying?**
+
+They assume a well-specified task and verifiable output. Deterministic code beats both workflows and agents on high-frequency, low-complexity work. Evaluator-optimizer turns circular with no reliable evaluation criterion. Retrieval-bottlenecked tasks make pattern choice second-order. And teams without existing infrastructure often adopt LangGraph or CrewAI more cheaply than re-implementing the patterns themselves.
+
+**What do critics say about the multi-agent guidance?**
+
+Cognition argues that pushing parallelization or orchestrator-workers into autonomous multi-agent territory makes the pattern fragile: concurrent agents that lack each other's implicit design decisions make conflicting choices that do not compose. Their follow-up narrows the safe envelope to topologies where multiple agents contribute intelligence but writes stay single-threaded. Independent reviewers separately note the post's definitions are not internally consistent.
+
 ## Key Takeaways
 
 - The augmented LLM (retrieval + tools + memory) is the substrate; the five workflow patterns and the autonomous loop are built on it

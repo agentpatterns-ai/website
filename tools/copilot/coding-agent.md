@@ -87,6 +87,20 @@ After the PR opens, add an MCP server to extend what the agent can access during
 
 With the MCP server registered, the coding agent can query live table schemas during implementation instead of inferring them from existing code.
 
+## FAQ
+
+**What does the coding agent do before it opens a pull request?**
+
+It runs the agent self-review loop: it [reviews its own changes](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/) with Copilot code review, acts on that feedback, and runs security scanning — [CodeQL code scanning, secret scanning, and dependency vulnerability checks](https://github.blog/changelog/2025-10-28-copilot-coding-agent-now-automatically-validates-code-security-and-quality/). Since June 2026, Copilot code review also reads a repository's `AGENTS.md`, so the review follows the project's own conventions.
+
+**Can the coding agent use MCP resources and prompts, or only tools?**
+
+Only tools, for now. The coding agent can draw on tools from local and remote MCP servers, but not resources or prompts. Registering a server — for example a database introspection tool in `.github/copilot/mcp.json` — lets it query live table schemas during implementation instead of inferring them from existing code, which extends what it can reach on future tasks.
+
+**Which tasks is the coding agent a poor fit for?**
+
+Large multi-file refactors, where practitioners report it struggles once changes span many interconnected files and architectural concerns, and tight iteration loops, where a webapp session can take 90+ seconds just to start an Actions runner ([community report, Jan 2026](https://github.com/orgs/community/discussions/183877)). It is also a poor fit for work it cannot self-verify: UX, API design, and security-sensitive logic still need close human review.
+
 ## Key Takeaways
 
 - Fully asynchronous — works in the background via GitHub Actions while you continue

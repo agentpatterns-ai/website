@@ -119,3 +119,4 @@ The negative rules reshape the agent's search by removing known failure branches
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the ceiling past which rule count dominates rule design
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — when examples beat rules of either polarity
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — the deterministic alternative to instruction-text constraints
+- [Restraint Rules Need External Enforcement](restraint-rules-need-external-enforcement.md) — which rules can stay in the file at all: agents follow rules that add work, never rules that stop it

@@ -123,6 +123,16 @@ The following pair shows a Jira MCP tool description before and after applying t
 
 The improved description makes explicit three things a new hire would learn on day one: sprint IDs are numeric strings, you must call `list_sprints` first to get one, and `status` only accepts the exact strings shown. None of this is in the terse version, so an agent using that version will guess — and fail — on each point.
 
+## FAQ
+
+**Why is an accurate API reference not enough for an agent?**
+
+A terse reference assumes background an agent does not have — what "user" means in your domain, whether a date is ISO 8601, how one resource relates to another. [Research on rewriting tool descriptions](https://arxiv.org/abs/2602.20426) finds they are written for human developers and tolerate ambiguity agents cannot resolve, and that targeted rewrites produce consistent accuracy gains on unseen tools.
+
+**How do I find which descriptions need fixing?**
+
+Work from observed failures, not anticipated ones. Log the agent failures that trace back to tool misuse and identify the description gap behind each, review descriptions whenever the underlying API changes, and update from those patterns. Description quality degrades silently — accurate text goes stale as the system changes, and new use cases expose gaps nobody predicted.
+
 ## Key Takeaways
 
 - Write as if training a new hire: explicit about implicit context, domain conventions, and resource relationships

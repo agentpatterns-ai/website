@@ -67,3 +67,4 @@ Wiki memory is the general form: it synthesizes arbitrary domain sources into fi
 - [Code-Native Memory Substrates](code-native-memory-substrates.md) — structured memory rooted in codebase artifacts, the code-specific counterpart to a general wiki
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — the scope-and-temporal taxonomy this durable-knowledge layer slots into
 - [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — the query-time retrieval side that wiki memory precomputes away
+- [Organizing Filesystem Agent Memory for Retrieval Cost](filesystem-memory-organization.md) — measured evidence on what organizing a file-based store actually buys, and the store size at which it starts paying

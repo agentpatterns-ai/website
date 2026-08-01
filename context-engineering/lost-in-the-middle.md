@@ -89,6 +89,24 @@ The opening section carries the rules the agent must follow reliably. The middle
 - Long-context models with position-aware training: some models, such as those trained with long-context fine-tuning or instruction-following reinforcement, show less middle-degradation. Treat placement as a default safeguard, not a guarantee.
 - Frequently refreshed context: in agent loops that [compact](manual-compaction-dumb-zone-mitigation.md) or re-inject context at each step, the middle shifts continuously. Tuning static layout matters less than making sure critical state survives each compaction cycle.
 
+## FAQ
+
+**What causes the U-shaped attention curve?**
+
+It is a structural property of how transformer attention weights earlier and later tokens, not a quirk of a particular model or instruction format. Later theoretical work traces the pattern to how causal masking and relative positional encodings such as RoPE interact, biasing attention toward the edges of the sequence ([Wu et al., 2025](https://arxiv.org/abs/2502.01951)). The size of the gap varies by model, but the bias holds across architectures tested.
+
+**Does position matter even when the wording is good?**
+
+Yes. An instruction placed in section 5 of a 10-section system prompt sits in the weak-attention zone; it may be well written and perfectly clear, yet the model is statistically less likely to follow it than the same instruction placed at the top or bottom. Position affects retrieval accuracy even when the content is identical ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)).
+
+**What belongs in the middle of an instruction file?**
+
+Reference material the agent actively pulls — schemas, examples, and lookup information — rather than rules it must remember. Content that must be followed reliably belongs at the edges, because the middle relies on passive attention. Retrieval behaves differently: when you direct the model to a specific document section, the retrieval directive largely overrides positional bias.
+
+**When is placement tuning not worth the effort?**
+
+When the whole input fits in a few hundred tokens, there is no meaningful middle zone, so tuning adds structural overhead for no gain. Models trained with long-context fine-tuning or instruction-following reinforcement show less middle-degradation, making placement a default safeguard rather than a guarantee. In loops that compact or re-inject context each step, the middle shifts continuously anyway.
+
 ## Key Takeaways
 
 - Model attention follows a U-shape: strongest at the start and end, weakest in the middle.
