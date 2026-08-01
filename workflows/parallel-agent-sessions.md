@@ -11,7 +11,7 @@ tags:
   - workflows
   - multi-agent
   - tool-agnostic
-last_reviewed: 2026-06-12
+last_reviewed: 2026-08-01
 maturity: established
 ---
 
@@ -52,6 +52,8 @@ Each active session requires:
 - Final PR review before merge
 
 How many sessions one engineer can manage well depends on task complexity and how often each session needs attention. Beyond a handful of concurrent sessions, the overhead of staying current may exceed the parallelism benefit.
+
+See also Towards Data Science for a practitioner account of [organizing coding-agent tasks across parallel sessions, including tracking which agent holds which task while several run at once](https://towardsdatascience.com/how-to-organize-all-of-your-coding-agent-tasks/).
 
 ## Agents do not context-switch, but humans do
 
@@ -109,6 +111,20 @@ With this structure, the engineer reviews progress updates from each session in 
 
 The same isolation can move off the laptop. Vercel describes two examples: Conductor [moves parallel coding agents from the laptop to cloud-isolated workspaces](https://vercel.com/blog/how-conductor-moved-parallel-coding-agents-from-the-laptop-to-the-cloud-with-vercel-sandbox), and Superset [runs up to 10 coding agents in parallel, each in an isolated workspace, with every branch auto-creating a preview deployment](https://vercel.com/blog/how-superset-built-the-ide-for-ai-agents-on-vercel). Superset ships about [600 of these preview deployments a day, each building in roughly 30 seconds on average](https://vercel.com/blog/how-superset-built-the-ide-for-ai-agents-on-vercel) — cloud-sandboxed equivalents of the local-worktree setup above. [Source: [Conductor on Vercel Sandbox](https://vercel.com/blog/how-conductor-moved-parallel-coding-agents-from-the-laptop-to-the-cloud-with-vercel-sandbox), [Superset IDE for AI agents](https://vercel.com/blog/how-superset-built-the-ide-for-ai-agents-on-vercel)] Moving sessions to the cloud does not relax the human bottleneck: it raises the ceiling on concurrent sessions, which only sharpens the review-bandwidth constraint described above.
 
+## FAQ
+
+**What should a parallel session's task prompt include?**
+
+A scoped boundary and an explicit pause condition. The example prompt names the worktree the session works in, the module it owns, a directive not to modify files outside that path, and an instruction to stop and report when a design decision affects the API surface. The engineer then reviews each session in turn and merges its branch via PR.
+
+**Which work splits cleanly across concurrent sessions?**
+
+Work that divides along natural boundaries: independent modules or components with clean interfaces, separate concerns such as tests, error handling, or logging, and tasks that integrate through PR review rather than real-time coordination. Sessions conflict when they edit shared files, when correct behavior depends on decisions another session has not made yet, or when integration needs undelegatable architectural judgment.
+
+**Does moving sessions to the cloud relieve the human bottleneck?**
+
+No. Cloud-isolated workspaces raise the ceiling on concurrency — Superset runs up to 10 coding agents in parallel, each in an isolated workspace with an auto-created preview deployment — which only sharpens the review-bandwidth constraint. The engineer still switches between sessions one at a time, so more concurrent work concentrates more review on the same person.
+
 ## Key Takeaways
 
 - Parallel sessions shift the bottleneck from writing code to making architectural decisions, giving feedback, and integrating changes
@@ -120,7 +136,6 @@ The same isolation can move off the laptop. Vercel describes two examples: Condu
 
 ## Related
 
-- [Worktree Isolation](worktree-isolation.md)
 - [Human in the Loop](human-in-the-loop.md)
 - [Background-to-Foreground Handoff](background-foreground-handoff.md)
 - [The Delegation Decision](../patterns/agent-design/delegation-decision.md)

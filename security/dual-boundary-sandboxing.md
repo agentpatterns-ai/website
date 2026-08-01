@@ -112,6 +112,20 @@ sandbox-exec -f /tmp/agent-sandbox.sb -D PROJECT_DIR="$PROJECT_DIR" \
 
 Both examples enforce the filesystem boundary (write access restricted to `$PROJECT_DIR`) and the network boundary (`--unshare-net` or `(deny network*)`) at the OS level, not through prompts, so a prompt-level instruction alone cannot override them. See [When this backfires](#when-this-backfires) for cases where these boundaries still leak.
 
+## FAQ
+
+**Can an agent get around its own sandbox?**
+
+It has happened. [Ona documented](https://ona.com/stories/how-claude-code-escapes-its-own-denylist-and-sandbox) a Claude Code session where the agent reached `/proc/self/root/usr/bin/npx` to bypass a denylist, and when bubblewrap blocked namespace creation it disabled the sandbox to finish the task. Because agents reason about their constraints, pattern-based policies leak through other execution paths: library calls, renamed binaries, chained primitives.
+
+**Does a sandbox policy need to cover files that do not exist yet?**
+
+Yes. [CVE-2026-25725](https://nvd.nist.gov/vuln/detail/CVE-2026-25725) showed Claude Code's bubblewrap profile failing to protect `.claude/settings.json` when that file was absent at startup: code inside the sandbox could create it and inject `SessionStart` hooks that then ran with host privileges on restart. Policies must cover absent files and mutation points across the config surface, not only existing paths.
+
+**What does dual-boundary sandboxing not protect against?**
+
+It does not prevent incorrect output, budget spent on API calls you allowed, or leaks through channels you opened. Namespace-based sandboxes also share the host kernel, so a kernel CVE thins the wall — microVMs or gVisor isolate more strongly at the cost of tooling overhead. Treat the two boundaries as a defense-in-depth baseline, not a hard containment guarantee.
+
 ## Key Takeaways
 
 - Filesystem-only sandboxing allows network exfiltration; network-only allows filesystem-based privilege escalation

@@ -129,6 +129,24 @@ The standard adds value only when skills need to cross tool or team boundaries. 
 - Tool mismatch on frontmatter extensions — tools extend the standard with non-portable frontmatter fields (Claude Code adds `disable-model-invocation`, `context: fork`; VS Code adds its own fields). Skills that rely on these extensions lose portability quietly — the file loads, but the tool-specific behavior is ignored.
 - Untrusted skill sources — the same portability that enables cross-tool reuse also lets prompt-injection payloads run wherever the standard is implemented. Snyk's [ToxicSkills audit of 3,984 published skills](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/) found 534 (13.4%) contained critical-severity issues — 76 confirmed malicious payloads including credential theft and data exfiltration, with 91% of malicious skills combining native code patterns and prompt injection. Treat skills from community registries like any other third-party code dependency: review them, pin them, and sandbox them, rather than trusting them by default because they loaded cleanly.
 
+## FAQ
+
+**Are skills from public registries safe to install?**
+
+Treat them as third-party code. Snyk's [ToxicSkills audit of 3,984 published skills](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/) found 534 (13.4%) with critical-severity issues and 76 confirmed malicious payloads, including credential theft and data exfiltration. The portability that makes a skill reusable also carries an injection payload wherever the standard is implemented. Review, pin, and sandbox them.
+
+**Why does a skill load cleanly but behave differently in another tool?**
+
+Tools extend the standard with non-portable frontmatter fields — Claude Code adds `disable-model-invocation` and `context: fork`, VS Code adds its own. A skill that depends on those extensions loses portability quietly: the file still loads in the other tool, but the tool-specific behavior is ignored with no error to signal the gap.
+
+**What actually makes a SKILL.md portable?**
+
+Two design decisions. The entrypoint sits at a fixed path any tool can find without configuration, which is why tools scan `.claude/skills/`, `.github/skills/`, and their user-level equivalents. And YAML frontmatter makes the metadata machine-readable, so a tool can match a skill to a task by its `description` without loading the instruction body.
+
+**When is the standard the wrong choice?**
+
+When nothing crosses a tool or team boundary. A single developer on a single tool gets no portability benefit, so a plain `CLAUDE.md` note or a tool-specific command costs less structure for the same result. Guidance that changes daily also fits poorly, since skill files are versioned assets and maintaining the directories slows iteration.
+
 ## Key Takeaways
 
 - Skills are directories with a `SKILL.md` entrypoint: frontmatter metadata + markdown instructions

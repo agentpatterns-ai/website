@@ -117,6 +117,20 @@ A project `CLAUDE.md` for a data pipeline codebase with scoped memory entries:
 
 The first two sections belong in the project `CLAUDE.md` (version-controlled, shared). The third belongs in `~/.claude/CLAUDE.md` (personal, not committed).
 
+## FAQ
+
+**What should never go into memory?**
+
+Session-specific state, single-case conclusions, unverified hypotheses, and instructions that merely duplicate code comments or AGENTS.md. General model knowledge does not belong there either — an entry earns its context cost only when it captures a domain-specific deviation the model would otherwise get wrong, such as a table that excludes first-party traffic or an auth split introduced by a key rotation.
+
+**How does working memory differ from episodic memory?**
+
+Episodic memory persists across sessions: the agent summarizes key decisions and failed approaches at session end, then re-injects them on the next start. Working memory is session-scoped, holding observations gathered during execution, re-injected each iteration and bounded to prevent context growth. Episodic memory maps to project or user scope; working memory maps to session-local state.
+
+**What goes wrong when a team shares project memory?**
+
+Concurrent writes to shared project memory can introduce race conditions or leave stale artifacts visible after updates ([multi-agent memory challenges](https://arxiv.org/html/2603.10062v1)). Scoping is the mitigation: keep team conventions in project scope and personal preferences in user scope, since mixing them degrades the experience for one party and org policies must stay separate from individual corrections.
+
 ## Key Takeaways
 
 - Memory has two axes: *scope* (managed / project / user) decides who sees it, and *time* (episodic vs. working) decides whether it survives the session.

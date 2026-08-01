@@ -117,6 +117,20 @@ Return findings as:
 
 Both agents run on every PR. The security reviewer catches an exposed database URL in a config file and flags it as critical. The style reviewer notes two functions missing type hints as high-severity. Human reviewers skip the mechanical checks entirely and focus on whether the new caching layer belongs at the service level or the repository level.
 
+## FAQ
+
+**Why do agent reviews get vaguer on large pull requests?**
+
+Diffs that exceed the model's context limit force truncation, and the agent produces generic, low-signal comments spread across the fragments it did see. That is why PR size matters here: keep each PR small enough that the whole diff fits, so findings stay specific to the changed lines instead of restating generalities.
+
+**Should I run one review agent or several focused ones?**
+
+Run several. For specialized domains, separate security, performance, and style reviewers beat one general-purpose agent, because each carries a narrower checklist and its own severity scheme. The example on this page runs a security reviewer and a style reviewer on every PR: the security agent flags an exposed database URL as critical while the style agent reports missing type hints.
+
+**What false-positive rate should I expect, and how does it affect adoption?**
+
+False positives run 5–15% for well-configured tools and higher when poorly tuned ([Graphite](https://graphite.com/guides/ai-code-review-false-positives)). Adoption tracks that calibration: AI suggestions are taken up at 16.6% against 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)), and untuned prompts depress adoption even for correct findings. Specify what to ignore, and set severity thresholds so low-severity output stays optional.
+
 ## Key Takeaways
 
 - Agents handle mechanical checks (style, types, security patterns); humans handle design and architecture judgment

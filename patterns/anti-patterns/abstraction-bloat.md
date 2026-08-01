@@ -139,6 +139,20 @@ def send_notification(recipient: str, message: str) -> bool:
 
 Fifteen lines. One `send_notification` function. No dead abstractions waiting to be maintained.
 
+## FAQ
+
+**How much extra code does this actually produce?**
+
+Agent-assisted repositories show a 76% increase in lines of code and a 39% rise in cognitive complexity, alongside an eightfold spike in duplicated blocks between 2021 and 2024 and three times as many readability issues. Refactoring's share of work fell from 25% to under 10% over a comparable period, so the excess accumulates instead of being cleaned up afterwards.
+
+**Why does dead code pile up rather than get reused?**
+
+Agents regenerate rather than reuse, leaving orphans behind, and refactoring drops because each task is treated as greenfield. Nothing then removes what the previous pass abandoned. Excessive scaffolding compounds it: class hierarchies where a function would do, abstract base classes for a single implementation, and roughly a thousand lines where a hundred would have sufficed.
+
+**Does "write the minimum code" ever cause harm?**
+
+Yes, applied unconditionally. A service known to be gaining Slack and SMS channels this sprint benefits from the factory pattern upfront, and flat functions in a layered codebase create architectural inconsistency. Audit logging, rate limiting, and auth exist for non-functional reasons, so scope the directive to the task and let a deterministic guardrail fail the build when they disappear.
+
 ## Key Takeaways
 
 - Agents produce bloated code by training incentive, not by misunderstanding the task

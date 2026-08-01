@@ -138,6 +138,20 @@ Rules:
 
 Even if a malicious PR contains injected instructions, the agent lacks the tools to act on them. Schema-level filtering ensures the model cannot call `Write`, `Edit`, or `Bash` -- the boundary is enforced architecturally, not by prompt compliance.
 
+## FAQ
+
+**Can prompt injection be fully solved?**
+
+No. LLMs have no parameterized-query equivalent, because the boundary between instruction and data is implicit, and a meta-analysis of 78 studies from 2021 to 2026 found attack success rates above 85% against the strongest known defenses. [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)] No single defense works, so only defense-in-depth is viable.
+
+**What does "provable" resistance actually guarantee?**
+
+Resistance by construction, not an empirically validated guarantee -- the originating patterns paper runs no quantitative experiments. Follow-up work measured the Dual LLM pattern driving attack success to 0% while task utility collapsed from 49.7% to 14.6% in a bug-fixing scenario. [Source: [Jacob et al., 2025](https://arxiv.org/abs/2509.25926)] The security gain is real, and so is the utility cost.
+
+**Which agents cannot be constrained this way?**
+
+Open-ended ones that reason over what they just read. [Action-Selector](action-selector-pattern.md) needs a fixed action set and Plan-Then-Execute needs a plan generated before untrusted content is seen, so neither fits an agent whose next step depends on the data it ingested. Dual LLM covers that case but doubles inference cost.
+
 ## Key Takeaways
 
 - Constrain what a model can do after ingesting untrusted input, not what it will say

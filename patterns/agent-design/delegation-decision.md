@@ -99,6 +99,20 @@ Do it yourself — a one-line rename (quicker to execute than to describe):
 
 Applying the describe-it test: the rename prompt would require explaining which file, which function, which variable, what to rename it to, and why — easily 40+ words. The edit itself is two keystrokes in an IDE. The test says: do it yourself.
 
+## FAQ
+
+**Where should I start if I don't know where to draw the line?**
+
+Start conservatively. Use agents for review and research before using them for implementation, then widen a task category once trust builds there, informed by task-feasibility awareness. Progressive expansion builds calibrated confidence, rather than swinging between delegating everything because agents are available and refusing to delegate at all after one bad experience in a single category.
+
+**Why does delegation get riskier the better it works?**
+
+Repeated successful delegations encourage trusting output without enough scrutiny — automation bias. The agent's actual error rate does not change, but review depth drops, opening a trust gap ([Cognitive Load Framework for Human–AI Symbiosis, Springer 2026](https://link.springer.com/article/10.1007/s10462-026-11510-z)). Delegating codebase changes without reading the diffs erodes familiarity with the code as well, accumulating comprehension debt.
+
+**Is "the tests pass" enough to call a task verifiable?**
+
+Often not. A task looks verifiable because a criterion exists, but the suite may not cover the behavior that changed. Agent output can satisfy the stated criterion while adding an unlisted failure mode, so the review tax stays non-zero even for test-covered work. Treat verifiability as a claim about coverage, not about the presence of a passing check.
+
 ## Key Takeaways
 
 - Delegation has overhead; the break-even point depends on task size, repeatability, and review cost.

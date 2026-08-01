@@ -135,6 +135,20 @@ Hooks are the wrong tool when the rule they encode is aspirational rather than a
 - Performance tax. Every `PostToolUse` hook runs synchronously on the hot path, so a slow formatter or network call slows every edit. Move expensive work to `SessionEnd` or out-of-band jobs.
 - CLAUDE.md would have worked. If the rule bends gracefully under load — prefer a style, avoid a phrase — a prompt instruction fails softer than a hook rejection and keeps the model in the loop.
 
+## FAQ
+
+**Why is a misbehaving agent often a hook problem?**
+
+Hooks act as hidden global state. One can silently rewrite, block, or reformat files while staying invisible in the transcript unless it exits non-zero, so the model looks like it is misbehaving when the harness is. Debugging that indirection can take longer than the hook saves, and over-scoped blocks push users to disable the hook rather than live with the false positives.
+
+**What breaks hook scripts when Claude Code updates?**
+
+Schema coupling. Hook scripts parse the `tool_input` JSON that arrives on stdin, so when a tool's schema changes in a new release — new field names, renamed events, added matcher semantics — those scripts fail silently or start blocking valid calls. Nothing in the transcript flags the mismatch, because a hook surfaces only when it exits non-zero.
+
+**Where should expensive hook work go?**
+
+Off the hot path. Every `PostToolUse` hook runs synchronously after the tool result, so a slow formatter or a network call slows every single edit. Move that work to `SessionEnd` or an out-of-band job. The `SessionEnd` hook takes no matcher and fires whenever the session ends, which makes it the right place to write progress files or close audit logs.
+
 ## Key Takeaways
 
 - Hooks fire deterministically at documented lifecycle events across session, tool, subagent, compaction, worktree, and file-change phases

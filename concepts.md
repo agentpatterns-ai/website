@@ -318,6 +318,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent-Ready Bug Reports for Software Repair Agents](instructions/agent-ready-bug-reports.md)
 - [Match Tool Instructions to the Agent Workflow](instructions/match-tool-instructions-to-workflow.md)
 - [Prompt Transpilation: Instructions as Build Artifacts](instructions/prompt-transpilation.md)
+- [Restraint Rules Need External Enforcement](instructions/restraint-rules-need-external-enforcement.md)
 
 ## Agent Architecture
 
@@ -579,6 +580,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Browser as Agent Action Space](patterns/agent-design/browser-as-agent-action-space.md)
 - [Pre-Write Change Intent Admission (Claim Plane)](patterns/multi-agent/pre-write-change-intent-admission.md)
 - [Trigger-Level Gating for Autonomous Agent Intake](patterns/agent-design/trigger-level-agent-intake-gating.md)
+- [Organizing Filesystem Agent Memory for Retrieval Cost](patterns/agent-design/filesystem-memory-organization.md)
 
 ## Loop Engineering
 
@@ -1180,6 +1182,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The Software Factory Model: Industrializing Agent Loops](workflows/software-factory-model.md)
 - [TDD Interaction Models: Throughput Versus Test Quality](workflows/tdd-interaction-models.md)
 - [How Teams Build SE Agents: A Seven-Stage Build Loop](workflows/se-agent-build-workflow.md)
+- [Oracle-Gated Delegation Beyond Your Domain Expertise](workflows/oracle-gated-delegation.md)
 
 ## Human Factors
 

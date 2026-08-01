@@ -100,6 +100,20 @@ The 3% gap between the sandwich (66.5%) and uniform high (63.6%) does not always
 - Verification is cheap relative to planning. When tests or types check correctness, extra-high model-based verification duplicates what the test harness already does.
 - Execution dominates the trajectory. Bulk refactors and migrations spend most tokens in execution; reducing compute there saves little, while planning and verification contribute a small share of cost.
 
+## FAQ
+
+**When is uniform high reasoning the better choice?**
+
+When phases are not cleanly separable. Exploratory debugging that interleaves planning and execution forces misclassified routing, so the sandwich degrades to noisy uniform compute plus routing overhead. Teams without the budget for reliable [planner, executor, and verifier routing](discrete-phase-separation.md) also do better with a single tier, since mode switching can add more bugs than it prevents.
+
+**Which workloads get little from the sandwich?**
+
+Single-step tasks and independent parallel tool calls, where added reasoning overhead buys nothing. Bulk refactors and migrations are the other case: they spend most of their tokens in execution, so reducing compute there saves little while planning and verification contribute a small share of cost. Where tests or types already check correctness, extra-high model-based verification duplicates the test harness.
+
+**What if my tool has no per-call reasoning setting?**
+
+Approximate the sandwich through prompt structure: more reasoning guidance in planning prompts, less in execution ones. Model routing is the other lever available in almost any tool — send planning and verification to a capable model and execution to a cheaper one, which reproduces the compute gradient without a per-call thinking budget parameter.
+
 ## Key Takeaways
 
 - Planning and verification warrant extra-high reasoning compute; execution warrants high.

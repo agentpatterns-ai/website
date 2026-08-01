@@ -148,6 +148,20 @@ pip-audit --format=json > audit-findings.json
 
 The agent parses each JSON output and fixes findings before the PR opens. If findings remain after the iteration cap, they are documented in the PR body for human review.
 
+## FAQ
+
+**How does self-review differ from committee review?**
+
+In a self-review loop the same agent evaluates and iterates on its own work as a built-in phase before submission; in the [committee pattern](committee-review-pattern.md) separate reviewer agents evaluate an implementer's output. Self-review is simpler to run and faster than coordinating separate reviewers, at the cost of independence — a single-context reviewer shares the generator's assumptions, training biases, and blind spots.
+
+**How do I add self-review to an agent that lacks it?**
+
+Add a review step before pull-request creation: run a separate review prompt or subagent against `git diff` so the review is scoped to the changes only. Wire linters, static analysis such as CodeQL, Semgrep, or Bandit, and secret scanners in as shell commands, parse their results, and fix findings before proceeding. A fresh context for the review step reduces confirmation bias.
+
+**What does self-review fail to catch?**
+
+It catches mechanical issues — style, known vulnerability patterns, and dependency problems — but not architectural misjudgments, incorrect business logic, or design problems requiring domain knowledge beyond the agent's context. Architectural decisions, mentorship through pull-request threads, and ethical evaluation remain exclusively human functions, which is why GitHub frames the merge button as a human decision.
+
 ## Related
 
 - [Review-Then-Implement Loop](review-then-implement-loop.md)

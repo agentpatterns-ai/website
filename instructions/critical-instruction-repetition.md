@@ -113,6 +113,20 @@ directory. This includes /etc, /home, /tmp, and any path not under /workspace.
 
 The opening line places the constraint in the primacy position. The closing restatement places it in the recency position. The other rules — important but not catastrophic if missed — appear only once.
 
+## FAQ
+
+**Which instructions justify repeating?**
+
+Only ones where non-compliance has real consequences. Ask three questions: would forgetting this cause a security, safety, or correctness problem; is it a hard constraint rather than a preference; and is the context window long or dense enough for attention decay to be a real risk? Examples that qualify include "never include credentials in output" and "do not modify files outside the specified directory".
+
+**Does repetition still help reasoning models?**
+
+Less than it helps non-reasoning models, which are more susceptible to positional effects and benefit most from explicit repetition. Reasoning models restate instructions during their thinking phase, which may reduce but not eliminate positional bias: Liao et al. (2025) found long chain-of-thought models still show a position effect, with the first reasoning step disproportionately shaping the final answer.
+
+**Can repeating a rule make compliance worse?**
+
+Yes, in three ways. Repeating several rules strips the priority signal, so the model cannot tell which constraint is truly critical. In a 200-token prompt there is no middle zone to avoid, so the second copy adds noise rather than focus. And if the opening and closing wordings differ enough to imply different behaviors, the model may treat them as conflicting constraints rather than reinforcing ones.
+
 ## Related
 
 - [Attention Sinks: Why First Tokens Always Win](../context-engineering/attention-sinks.md)

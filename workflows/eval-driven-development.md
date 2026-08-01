@@ -220,6 +220,24 @@ for task in tasks:
 
 Running this suite against a baseline before any feature code is written produces a clear failure rate — the gap the implementation must close, not a post-hoc rubber stamp.
 
+## FAQ
+
+**Which metrics should a tool evaluation track besides accuracy?**
+
+Track tool-call count, token consumption, tool errors, and runtime alongside accuracy so the numbers triangulate the problem. An unusually high call count signals redundant or confusing tools, high token consumption suggests over-verbose responses, and parameter errors point at unclear descriptions. Redundant calls often mean pagination or filtering gaps — the agent is compensating for tools that return incomplete data.
+
+**What do transcripts show that metrics cannot?**
+
+Raw metrics identify that a problem exists; transcripts explain why. Watch for what the agent says it cannot do, what it never mentions at all (silence about a capability can mean it does not know the tool exists), its stated tool-selection reasoning, and where it backtracks — repeated attempts at one step signal confusion about a tool's response format.
+
+**How do I stop the suite from overfitting the thing it evaluates?**
+
+Hold out a test set: running the same tasks during development and final evaluation overfits the design to that task set. Avoid verifiers so strict they reject valid alternative approaches. Treat a fixed suite as a known floor rather than a ceiling once the eval distribution drifts from production, rotate tasks, and weight production telemetry so the suite is not just a benchmark to game.
+
+**When should I skip writing evals first?**
+
+Defer during early exploration of a novel problem space, on short-lived prototypes where the harness is heavier than the artifact, on highly subjective outputs whose preferences shift faster than the eval set can be updated, and when upstream tools or APIs churn weekly. The practical test: if two reviewers cannot agree on pass/fail across 20 representative tasks, the problem is not yet eval-ready.
+
 ## Key Takeaways
 
 - Writing evals after the fact embeds current bugs into the definition of correct; write them before development instead

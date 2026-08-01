@@ -12,7 +12,7 @@ aliases:
   - SPOQ pipeline
   - specialist orchestrated queuing
   - wave-based topological dispatch with dual gates
-last_reviewed: 2026-06-05
+last_reviewed: 2026-08-01
 maturity: emerging
 ---
 
@@ -63,7 +63,7 @@ Separating producer from validator removes self-judgment bias — LLMs prefer th
 ## When this backfires
 
 - Dense dependency graphs. Wave dispatch returns one wave per task; orchestration cost remains, parallelism gain vanishes ([arXiv:2606.00953](https://arxiv.org/abs/2606.00953)).
-- Coordination overhead exceeds parallelism dividend. [Cemri et al.](https://arxiv.org/abs/2503.13657) measured parallel coordination at up to 21.1% speedup on some tasks and up to 39.4% slowdown on others. Multi-agent communication structures inflate token cost 2×–11.8× over single-chain baselines ([arXiv:2410.02506](https://arxiv.org/abs/2410.02506)).
+- Coordination overhead exceeds parallelism dividend. [Cemri et al.](https://arxiv.org/abs/2503.13657) measured parallel coordination at up to 21.1% speedup on some tasks and up to 39.4% slowdown on others. Multi-agent communication structures inflate token cost 2×–11.8× over single-chain baselines ([arXiv:2410.02506](https://arxiv.org/abs/2410.02506)). Towards Data Science reports a production post-mortem where migrating to a supervisor-node multi-agent architecture roughly tripled token spend at flat traffic ([The 3x Token Bill We Didn't See Coming](https://towardsdatascience.com/the-3x-token-bill-we-didnt-see-coming/)). It diagnoses supervisor decision tokens plus system prompts, tool schemas, and context duplicated across each sub-agent.
 - Dual gate enforced without precision evidence. A gate at 0.39% blocked precision blocks more valid work than invalid ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)).
 - No human available for HaaA. Without a specialist, teams drop to the automated-only envelope (0.34 → 0.20) and pay the orchestration cost regardless.
 - Single-tier provider access. The tiered roster assumes three model tiers; teams capped to one capability tier lose the cost-asymmetric routing.

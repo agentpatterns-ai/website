@@ -127,6 +127,20 @@ Implement `sort_users.py` so that all tests in `tests/test_sort_users.py` pass. 
 
 The agent cannot pass the tie-ordering test by sorting carelessly. The test encodes a specific stable-sort requirement that forces a precise implementation choice. The suite is the specification, and `pytest` is the verifier.
 
+## FAQ
+
+**Does a green test suite mean the agent's change is safe?**
+
+Not on its own. An agent that makes the target tests green can still break unrelated behavior elsewhere in the same codebase. Anthropic's guidance names this the trust-then-verify gap: a plausible-looking implementation that does not handle edge cases. A green focal suite is not a green full suite, so run the whole regression set rather than only the new tests.
+
+**What stops the implement-run-fix loop from running forever?**
+
+A turn-level ceiling. When a Stop hook gates the turn on the test suite, Claude Code overrides that hook and ends the turn after eight consecutive blocks, so a persistently red suite surfaces to a human instead of looping indefinitely. The self-verification loop is tight, but repeated failure escalates to review rather than continuing unbounded.
+
+**When is writing tests first the wrong move?**
+
+On exploratory or research code, where the problem shape is unclear and tests written up front encode guesses the agent then optimizes toward. Also when requirements are still in flux, since property-based and snapshot tests are expensive to author and hand-written examples do not scale. And for UI polish, load performance, and stochastic output, which unit-style assertions capture poorly.
+
 ## Key Takeaways
 
 - Tests written before implementation are an unambiguous specification the agent cannot misinterpret

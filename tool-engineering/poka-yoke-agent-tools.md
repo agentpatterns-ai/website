@@ -112,6 +112,20 @@ Apply poka-yoke where failure modes are well-understood and the constraint space
 5. Can the tool silently apply the wrong change? Add a uniqueness or [idempotency](../patterns/agent-design/idempotent-agent-operations.md) constraint.
 6. Test like a junior developer API — pass many inputs and observe where the model fails. Fix the interface, not the prompt.
 
+## FAQ
+
+**How do I tell when a constraint has gone too far?**
+
+Four signatures. An enum that was valid at design time excludes production edge cases, so the agent cannot proceed until you update it. Read-before-write gates deadlock optimistic-write and content-from-scratch pipelines. Constraints encode the designer's model of valid usage, so legitimate emergent strategies get rejected. And over-normalized toolsets push agents into multi-step workarounds with higher cumulative error probability.
+
+**Why does the input format matter as much as the parameters?**
+
+Because formats close to naturally-occurring internet text use the model's training priors, while formats that require line counting, string escaping, or unusual reasoning raise error rates however well the parameters are constrained. Concrete sample calls in the tool definition help for the same reason: they improved accuracy from 72% to 90% on complex parameter handling in Anthropic's testing.
+
+**Does poka-yoke apply beyond tool parameters?**
+
+Yes, the same prevention logic works at the harness level. Scope credentials to test or staging with a budget cap so costly production mistakes cannot happen. Pre-completion checklist middleware forces verification before the agent exits, and loop-detection middleware intervenes after a set number of iterations. Minimal, non-overlapping toolsets remove wrong-tool selection from the option space entirely.
+
 ## Key Takeaways
 
 - Poka-yoke makes the wrong tool call structurally impossible, not merely documented as wrong — one of the four [Agent-Computer Interface (ACI)](agent-computer-interface.md) design principles.

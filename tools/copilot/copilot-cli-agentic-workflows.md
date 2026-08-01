@@ -111,6 +111,20 @@ Push stays blocked even if a broader allow rule would otherwise permit it. For e
 - `/delegate` latency mismatch: cloud agent execution via GitHub Actions takes minutes to hours. Delegating time-sensitive tasks introduces a latency gap that breaks flow if you expect synchronous completion.
 - Usage caps on parallel workflows: in April 2026, GitHub tightened session and weekly token limits on Pro plans, and warned that parallelized commands like `/fleet` consume tokens heavily enough to exhaust weekly quotas. Agentic CLI workflows that fan out across monorepos can stall when limits hit, and GitHub removed Opus models from Pro entirely ([GitHub Blog](https://github.blog/news-insights/company-news/changes-to-github-copilot-individual-plans/)).
 
+## FAQ
+
+**Does `--deny-tool` guarantee a blocked command cannot run?**
+
+No. Copilot evaluates deny rules after allow rules, so a `--deny-tool` entry overrides any matching `--allow-tool` and limits allowlist creep. The veto is not absolute: PromptArmor disclosed a February 2026 bypass where `env curl ... | env sh` evades the allowlist, because `env` is auto-approved and the validator treats `curl` and `sh` as arguments rather than commands.
+
+**When should I reach for programmatic mode instead of interactive mode?**
+
+Use programmatic mode (`copilot -p "<prompt>"`) for CI/CD and scripting, where a single headless command runs unattended. It exits after the first attempt and cannot ask clarifying questions, so an underspecified prompt returns partial or incorrect results with no chance to course-correct. Keep exploratory work in interactive mode, where you approve each step and can start in plan mode.
+
+**Is `/delegate` suitable for time-sensitive work?**
+
+No. `/delegate` dispatches work to the cloud coding agent for async execution via GitHub Actions, which takes minutes to hours before a PR opens for review. That latency gap breaks flow if you expect synchronous completion. It fits work you can leave running while you keep coding locally, and `/resume` switches between the local and remote sessions.
+
 ## Key Takeaways
 
 - Interactive and programmatic modes serve different needs — exploration versus automation

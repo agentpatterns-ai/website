@@ -127,6 +127,20 @@ Gates are not free insurance — they degrade as workload rises. A reasonable co
 
 Mitigations: rotate reviewers to prevent complacency, include negative-sample injections in review queues to keep attention calibrated, and prefer asynchronous on-the-loop monitoring with alerting over synchronous gates once the workflow's error rate is measured.
 
+## FAQ
+
+**Why do approval gates stop working as volume rises?**
+
+Decision fatigue. When reviewers approve dozens or hundreds of agent actions a day, review becomes a reflex and the gate exists in the diagram but not in practice. Automation complacency compounds it — the more reliable the agent looks, the less vigilant the human becomes ([source](https://www.defensenews.com/opinion/2026/03/26/the-militarys-fabled-human-in-the-loop-for-ai-is-dangerously-misleading/)) — and synchronous gates push reviewers toward batch "approve all" heuristics.
+
+**What keeps a gate from degrading into a rubber stamp?**
+
+Rotate reviewers so complacency does not settle on one person, inject negative samples into the review queue to keep attention calibrated, and prefer asynchronous on-the-loop monitoring with alerting over synchronous approvals once the workflow's error rate is measured. Each mitigation targets reviewer attention, which is what rubber-stamping erodes.
+
+**How do Claude Code permission modes map onto graduated trust?**
+
+They give three oversight levels in one setting: `default` asks before each action, `acceptEdits` auto-accepts file edits and common filesystem commands, and `dontAsk` auto-denies tools unless they are pre-approved through `/permissions` or `permissions.allow` rules ([Claude Code permission modes](https://code.claude.com/docs/en/permissions)). Tightening or loosening the mode is how progressive trust gets applied day to day.
+
 ## Key Takeaways
 
 - Gate before irreversible actions; skip gates for reversible execution steps

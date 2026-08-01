@@ -105,6 +105,24 @@ Implementation phase (fresh context per module): each module fix starts a clean 
 
 If this were a single accumulated-context run, the agent would degrade after dozens of modules — BABILong-style context rot would cause it to miss or duplicate fixes. If it used [Ralph loops](ralph-wiggum-loop.md) for the research phase, it would lose cross-file pattern recognition. The hybrid matches the workload: synthesis needs accumulated context; execution needs fresh context.
 
+## FAQ
+
+**What actually degrades during a long accumulated-context run?**
+
+Reasoning quality, as the window fills. Anthropic describes a performance gradient that appears across all models, and BABILong benchmarks show reasoning tasks retain only 10 to 20% effective context at high fill levels. Karpathy hit the failure mode directly in autoresearch: as sessions lengthened, the agent began producing spurious correlations that needed manual correction.
+
+**What does within-session compression look like in practice?**
+
+LangChain's Deep Agents implements three tiers: it offloads tool responses above 20K tokens, offloads large inputs at 85% capacity, and summarizes conversation history. Manus takes a different route, reciting objectives via `todo.md` at the end of context to hold focus and treating the filesystem as the ultimate context. The session continues without a hard reset.
+
+**Can one system use accumulated and fresh context at the same time?**
+
+Yes, by applying each at a different level. Anthropic's multi-agent research system has a LeadResearcher that accumulates context while planning and saves that plan to memory so it survives the 200K-token truncation point, then spawns fresh subagents with clean contexts for parallel investigation. They return condensed findings: accumulated at the orchestrator, fresh at the worker.
+
+**What does a fresh-context loop give up?**
+
+Cross-referencing. Each iteration starts a clean window and reads persistent state from disk, so the agent cannot connect findings from earlier iterations except through what it wrote down, and coherence depends entirely on those artifacts. In exchange, a failed iteration leaves disk state at the last successful write, so the next cycle continues cleanly.
+
 ## Key Takeaways
 
 - Each strategy has a primary risk: context rot (accumulated), lossy compression (within-session), fragmented coherence (fresh). Choose based on which risk matters least for the workload.

@@ -168,6 +168,20 @@ The logic is identical across all four; only the wrapper structure and the param
 - Strict mode schema constraints: OpenAI and Anthropic strict mode requires all properties to be listed in `required`. This prevents using optional fields with defaults in ways that feel natural in JSON Schema. Tools that rely heavily on optional parameters need a redesign to use strict mode.
 - MCP overhead in local integrations: MCP adds a client-server protocol layer. For a tool that only ever runs in one host (for example, a Claude Code-only tool), defining a full MCP server adds operational overhead with no portability benefit. Inline tool definitions in the host's native format are simpler.
 
+## FAQ
+
+**What should a tool description actually contain?**
+
+Treat it as agent-facing UX and give it the same care as human-facing copy: include example usage, edge cases, input format requirements, and clear boundaries from other tools. Add a description to every parameter as well, because without one the model guesses the expected value from the parameter name alone, which is where hallucinated arguments come from.
+
+**When should I not turn on strict mode?**
+
+When the tool leans on optional parameters with defaults. Strict mode requires every property to be listed in `required` and `additionalProperties` to be `false` on every object, so a schema built around optional fields needs a redesign first. Reach for it in production, where invalid tool parameters would cause downstream failures.
+
+**Is defining an MCP server always worth it?**
+
+Not for a tool that only ever runs in one host. MCP adds a client-server protocol layer, so a Claude Code-only tool takes on operational overhead with no portability benefit, and an inline definition in the host's native format is simpler. The write-once argument holds when several compatible hosts must call the same tool.
+
 ## Key Takeaways
 
 - All providers converge on JSON Schema for tool parameters, but the wrapping structure and field names differ (`parameters` vs `input_schema` vs `inputSchema`).

@@ -139,6 +139,24 @@ Decentralized — extraction and classification agents pull contracts from a sha
 
 Hybrid — a coordinator routes contracts by type (NDA, MSA, SOW) to domain-specific clusters. Each cluster runs extraction and classification agents in parallel (decentralized within the cluster). The coordinator handles inter-cluster routing and final report assembly. The topology boundary between coordinator and clusters must be [typed](typed-schemas-at-agent-boundaries.md): each cluster returns a structured report object, not raw text, to prevent coordinator context flooding.
 
+## FAQ
+
+**Which topology should I start with when the task structure is unclear?**
+
+Centralized. It is the default because its failure modes are deterministic — context saturation, single point of failure, worker result flooding — and therefore predictable to mitigate. Decentralized topologies need shared-state primitives such as file locks or CRDTs, which add implementation surface. Move off centralized only once independent subtask structure is proven and those primitives are in place.
+
+**How does a coordination topology differ from a coordination pattern?**
+
+Topology answers where the task graph lives; the coordination pattern answers how agents pass work. They are separate decisions and they compose rather than replace each other — a hybrid topology often runs Concurrent agents inside a cluster and Sequential handoffs across clusters. Put another way: topology is where state lives, pattern is how state moves.
+
+**When is multi-agent orchestration justified at all?**
+
+Only after walking down the complexity ladder. Start with a direct model call — one prompt, no agent logic or tools — for classification, summarization, and single-step extraction. Escalate to a single agent with tools, the right default for most enterprise tasks. Reach for multiple coordinated agents only when prompt complexity, tool overload, or security boundaries make one agent unreliable.
+
+**What keeps a hybrid topology's coordinator from drowning in worker output?**
+
+A typed boundary between coordinator and clusters. Each cluster returns a structured report object rather than raw text, which prevents the coordinator context flooding that verbose worker results otherwise cause. Hybrid topologies inherit both centralized and decentralized failure modes, so they need explicit topology boundaries and typed handoff contracts between clusters.
+
 ## Key Takeaways
 
 - Centralized orchestration fails via context saturation and single points of failure; decentralized fails via coordination storms and conflicting edits.

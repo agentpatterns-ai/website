@@ -77,6 +77,20 @@ Together, the structured intent file and the system-prompt anchor keep the exact
 - Exploratory tasks: strict anchoring blocks legitimate course corrections mid-session.
 - Compaction policy mismatch: structured summaries only help if the compressor keeps named fields, and many paraphrase them anyway.
 
+## FAQ
+
+**Why does compression drop the constraint rather than the main task?**
+
+Summarization favors high-frequency content. A constraint such as "do not change public method signatures" appears once, while the core task recurs across many messages, so the compressor discards the constraint as noise. Downstream steps then compound the error: each tool call is consistent with the compressed objective, so the agent builds toward the wrong target with no internal signal.
+
+**How is instruction fade-out different from losing text to summarization?**
+
+Fade-out needs no deletion. Models deprioritize the initial instructions as history grows, even when those instructions remain present in context ([Bui, 2026 §3.2](https://arxiv.org/abs/2603.05344)). That makes it a second, independent trigger for drift, and it calls for a different counter: [event-driven reminders](../../instructions/event-driven-system-reminders.md) that re-inject objectives at decision points.
+
+**When is a session-intent file not worth writing?**
+
+On short sessions that never reach compaction, where it is pure overhead, and on exploratory tasks, where strict anchoring blocks legitimate mid-session course corrections. It also fails on a compaction-policy mismatch: structured summaries only survive if the compressor keeps named fields, and many compressors paraphrase them anyway, leaving the intent no better protected than prose.
+
 ## Key Takeaways
 
 - Objective drift occurs when summarization loses task specifics or instructions fade from attention.

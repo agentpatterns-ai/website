@@ -101,6 +101,20 @@ Seeding suits stable, long-lived codebases. For short-lived projects, the mainte
 
 Even accurate seeding is not free. A controlled study found that repository-level context files often reduce coding-agent task success versus no context while raising inference cost by over 20% — broad architectural overviews can pull agents into unbounded exploration, and LLM-generated files fare worst, with human-curated ones giving only modest gains ([Gloaguen et al., "Evaluating AGENTS.md"](https://arxiv.org/abs/2602.11988)). Seed lean, specific, hand-written context — not generated bulk.
 
+## FAQ
+
+**What should be seeded in the codebase rather than prompted?**
+
+Seed durable information: stable conventions and constraints, architectural decisions and their rationale, known issues and TODOs, type annotations and interfaces, and progress files for multi-session work. Prompt session-specific intent instead — task requirements, what you are building now, session priorities and scope, one-off instructions, and corrections. The dividing line is durability.
+
+**Does adding an AGENTS.md always improve agent performance?**
+
+No. A controlled study found repository-level context files often reduce coding-agent task success versus no context while raising inference cost by over 20%; broad architectural overviews can pull agents into unbounded exploration, and LLM-generated files fare worst, with human-curated ones giving only modest gains ([Gloaguen et al.](https://arxiv.org/abs/2602.11988)). Seed lean, specific, hand-written context.
+
+**What goes wrong with nested context files?**
+
+Contradictory instructions across scopes make agents apply the wrong scope, which is unpredictable and difficult to debug. Staleness compounds it: a context file that no longer reflects the codebase leads the agent to act on false premises with high confidence, and stale seeding is worse than no seeding at all.
+
 ## Key Takeaways
 
 - Mechanical enforcement is the most durable seeding form — agents cannot ignore a failing check.

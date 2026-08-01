@@ -79,6 +79,20 @@ When ReAct is the right shape, two failure modes still recur:
 - Reasoning-trace drift. Long thought tokens can wander from the original task, and later thoughts condition on earlier generated tokens rather than observations. The original paper traces several ALFWorld failures to thought drift compounding across steps ([Yao et al., 2022](https://arxiv.org/abs/2210.03629)).
 - Observation overload. Tool results that dump large payloads (full search-result pages, untrimmed file contents) flood the context and crowd out signal. The act-observe boundary stops working when observations are 90% noise ([context engineering](../../context-engineering/context-engineering.md)).
 
+## FAQ
+
+**What still fails inside a ReAct loop that is otherwise the right shape?**
+
+Two failure modes recur. Reasoning-trace drift: long thought tokens wander from the original task, and later thoughts condition on earlier generated tokens rather than observations — the original paper traces several ALFWorld failures to it ([Yao et al., 2022](https://arxiv.org/abs/2210.03629)). Observation overload: tool results that dump large payloads crowd out signal, and the act-observe boundary stops working when observations are mostly noise.
+
+**Is ReAct redundant when a hook or type-checker already gates the action?**
+
+Largely. When a PreToolUse hook, type-checker, test suite, or sandbox sits between the agent and any irreversible action, the implicit evaluate hidden inside each ReAct thought duplicates the external check. Anthropic's broader guidance applies: add agentic loops "only when simpler solutions fall short" ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
+
+**How does ReAct's cost scale with trajectory length?**
+
+Linearly, because reasoning is "repeatedly recomputed after each observation" ([PTR §1, arXiv:2604.04131](https://arxiv.org/abs/2604.04131)). That recomputation pays back only when the observation disambiguates the next thought; when every observation is predictable from prior state, the extra inference step costs without buying signal, and for bulk fan-out the per-action overhead exceeds the per-action reliability gain.
+
 ## Key Takeaways
 
 - ReAct interleaves thought → act → observation; each step re-conditions on real evidence instead of the model's prior generation ([arXiv:2210.03629](https://arxiv.org/abs/2210.03629)).

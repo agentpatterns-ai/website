@@ -108,6 +108,20 @@ Debugging is harder because the parent only sees the final result. If a sub-agen
 
 Sub-agents cannot talk to each other. When a task needs agents to exchange partial results, coordinate decisions, or share state, [agent teams](agent-teams.md) are the right model. Sub-agents are for fire-and-forget delegation only.
 
+## FAQ
+
+**When does a sub-agent cost more than doing the work inline?**
+
+When the work takes fewer tokens to finish than it takes to describe and delegate. Anthropic's research-system retrospective reports that [multi-agent systems use roughly 15× more tokens than a single-thread chat](https://www.anthropic.com/engineering/built-multi-agent-research-system), so the value of the delegated task has to justify that multiplier. For small edits, delegation is both slower and more expensive.
+
+**Can sub-agents coordinate or hand work to each other?**
+
+No. Each runs in its own fresh context, shares nothing with siblings, and returns only a final result to the parent, so sub-agents are for fire-and-forget delegation. When a task needs agents to exchange partial results, coordinate decisions, or share state, use [agent teams](agent-teams.md). The upside of that isolation is error containment: a failed sub-agent does not cancel siblings running in parallel.
+
+**Which frontmatter fields does a sub-agent definition require?**
+
+Only `name` and `description`. The `tools` field restricts which tools are available and `model` routes the sub-agent to a specific Claude model, but both are optional. Definitions live in `.claude/agents/` for project scope or `~/.claude/agents/` for user scope; the Agent SDK also supports inline definitions through the `agents` option, with no filesystem dependency.
+
 ## Key Takeaways
 
 - Sub-agents run in isolated context — the parent only sees the final result

@@ -9,7 +9,7 @@ tags:
 aliases:
   - agent PR splitting
   - logical PR decomposition
-last_reviewed: 2026-06-13
+last_reviewed: 2026-08-01
 maturity: established
 ---
 
@@ -46,7 +46,7 @@ Intent-driven slicing adds a sixth axis: which task in the chat session each edi
 
 ## Stacking and dependency order
 
-Independent slices land as parallel PRs against the same base. Dependent slices stack, each targeting the one before it. GitHub's native Stacked PRs (`gh-stack` CLI, private preview 2026-04-13) makes this first-class: branch protection enforces against the final base, CI runs every layer, and the CLI is "designed for use by AI agents" ([GitHub Stacked PRs](https://github.github.com/gh-stack/), [InfoQ on GitHub Stacked PRs](https://www.infoq.com/news/2026/04/github-stacked-prs/)).
+Independent slices land as parallel PRs against the same base. Dependent slices stack, each targeting the one before it. GitHub's native Stacked PRs (`gh-stack` CLI, [public preview as of 2026-07-30](https://github.blog/changelog/2026-07-30-stacked-pull-requests-are-now-in-public-preview)) makes this first-class: branch protection enforces against the final base, CI runs every layer, and the CLI is "designed for use by AI agents" ([GitHub Stacked PRs](https://github.github.com/gh-stack/), [InfoQ on GitHub Stacked PRs](https://www.infoq.com/news/2026/04/github-stacked-prs/)).
 
 Dependency-aware slicing has two parts: identify the slices, then their partial order. Without the order, dependent slices look independent, reviewers merge them out of sequence, and intermediate states break ([Graphite on PR dependencies](https://graphite.com/guides/github-pr-dependency)).
 

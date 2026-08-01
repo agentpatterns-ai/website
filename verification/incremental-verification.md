@@ -78,6 +78,20 @@ Use incremental verification where the verifier is stronger than the generator, 
 
 A stronger caveat applies to AI coding agents, where [trusting the agent's self-report](../patterns/anti-patterns/trust-without-verify.md) is its own failure mode. Checkpoints that only inspect the agent's own narration, such as "I fixed the bug" or "all tests pass", are easy to fool. Practitioners report agents that [claim fixes for code that was never changed](https://dev.to/moonrunnerkc/ai-coding-agents-lie-about-their-work-outcome-based-verification-catches-it-12b4) and insist tests pass when the transcript shows failures. Pair step gates with outcome-based checks, such as `git diff`, build exit codes, and test output, then cross-reference claims against that evidence. A checkpoint that reads the agent's self-report is not a checkpoint.
 
+## FAQ
+
+**How do I know a checkpoint is trustworthy?**
+
+The verifier has to be more reliable than the thing it checks. Compilers and test suites qualify; an unconstrained [LLM-as-judge](../workflows/llm-as-judge-evaluation.md) often does not, because one that hallucinates rejects correct work and approves wrong work. Use incremental verification where the verifier is genuinely stronger than the generator and a wrong step is expensive.
+
+**Why doesn't the agent reporting "all tests pass" count as a checkpoint?**
+
+Because it inspects narration rather than evidence. Practitioners report agents claiming fixes for code that was never changed, and insisting tests pass when the transcript shows failures. Pair step gates with outcome-based checks such as `git diff`, build exit codes, and test output, then cross-reference the agent's claims against that evidence.
+
+**Can checkpoints be too frequent?**
+
+Yes. Checking after every token or line suppresses exploration, since a model forced to pass a type check before line two cannot sketch across functions before refining. Checkpoint overhead is also fixed per gate, so it never pays back on prototypes and spikes that are cheaper to rewrite than to verify step by step.
+
 ## Key Takeaways
 
 - Error cost grows with distance from the error source — catch failures close to where they occur

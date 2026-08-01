@@ -142,6 +142,20 @@ Progressive disclosure adds complexity that creates its own failure modes:
 
 The pattern works best when tasks are clearly scoped and [skills are genuinely orthogonal](separation-of-knowledge-and-execution.md). It degrades when the agent's task space is broad and overlapping.
 
+## FAQ
+
+**How much context does progressive disclosure actually save?**
+
+It depends on how many skills a task needs. A monolithic 2000-token definition loads all 2000 tokens on every invocation; split into a 200-token definition plus five 400-token skills, a task that needs two skills loads 1000 — half the baseline with the same knowledge reachable. The CI review example goes further: a lint-only run loads 470 tokens instead of 1800.
+
+**Why must each skill be self-contained?**
+
+A skill that depends on another skill being loaded first creates an implicit ordering requirement the agent may not follow. Because the agent picks which skills to read, it may load them in a different order or load only one, producing inconsistent output. Skills that grow large are a signal to decompose further, not to merge back into the definition.
+
+**When does progressive disclosure cost more than it saves?**
+
+When the task genuinely needs every skill at once: each load is another read operation, so the pattern adds round-trips without reducing the token load. Broad, overlapping task spaces make it worse — ambiguous task descriptions lead the agent to load the wrong skill, and a stale skill index points at files that were renamed, moved, or deleted.
+
 ## Key Takeaways
 
 - Agent definitions should be under 50 lines: identity, scope, quality bar, skill references

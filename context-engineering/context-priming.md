@@ -99,6 +99,20 @@ Transformer models generate each token conditioned on all tokens currently in co
 - Short, self-contained tasks: for tasks with no codebase dependency — writing a pure-function utility, converting a data format — priming adds latency and [token cost](context-budget-allocation.md) without improving output quality. Apply it selectively.
 - Stale context: if loaded files do not reflect the current state of the codebase (out-of-date after a refactor), the agent anchors on the wrong patterns. Verify that primed files are current before loading them.
 
+## FAQ
+
+**Why does loading files before the task change the output at all?**
+
+Transformer models condition each generated token on everything currently in context — there is no separate memory step. Putting your actual middleware signature, naming conventions, and config shape in context makes project-specific outputs more probable and generic boilerplate less probable, the same mechanism that makes [few-shot prompting effective](https://arxiv.org/abs/2005.14165): in-context examples shift the output distribution without any weight update.
+
+**When is priming not worth the tokens?**
+
+On short, self-contained work with no codebase dependency, such as writing a pure-function utility or converting a data format. Priming there adds latency and token cost without improving output quality, so apply it selectively. Large files carry a saturation cost too: trim or summarize them before loading rather than pre-loading them whole.
+
+**What happens if the primed files are out of date?**
+
+The agent anchors on the wrong patterns, reproducing a structure the refactor already replaced, so verify that primed files reflect the current codebase before loading them. Loosely related files cause a milder version of the same problem: content that does not directly constrain the task output adds noise competing with the relevant signal.
+
 ## Key Takeaways
 
 - Agents work with what's in context — they don't automatically know your codebase

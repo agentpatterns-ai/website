@@ -115,6 +115,20 @@ When an agent works in `my-repo/api/`, the harness assembles the prompt in this 
 
 The instruction "use uv not pip" from `api/AGENTS.md` appears last and takes priority over any package-manager guidance in the project root file. The `my-repo/frontend/` directory receives only the first two files — its working directory has no AGENTS.md of its own.
 
+## FAQ
+
+**Why concatenate files instead of writing conditional rules in one file?**
+
+Because a conditional makes the model do work it can get wrong. A flat file saying "if in `api/`, use uv; otherwise use pip" has to be evaluated correctly on every turn. Concatenating from general to specific replaces that with a later, unconditional "use uv" for the directory in question, and recency bias makes the later instruction win with no conditional reasoning.
+
+**What happens when a harness does not implement the full traversal?**
+
+Part of the layering is silently ignored. Not all tools implement the spec: some load only the root AGENTS.md, and others support nesting but not `AGENTS.override.md`, so instructions written for full traversal never reach the model. Agents that weight instructions by relevance rather than position may also resolve a global-versus-directory conflict unpredictably.
+
+**How do I apply this pattern outside Codex?**
+
+Any harness that reads instruction files from the filesystem can do it. Collect every AGENTS.md from global config through the git root down to the current working directory, concatenate them in order of increasing specificity, enforce a total size cap, and prefer `AGENTS.override.md` over `AGENTS.md` within a directory when both are present.
+
 ## Key Takeaways
 
 - Concatenate instruction files from general to specific — global config, then git root, then each directory down to the working directory — so the most specific rule appears last and wins.

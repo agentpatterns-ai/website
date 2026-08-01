@@ -100,6 +100,20 @@ Fix: <concrete code change>
 
 A PR that receives a response of "No high-confidence findings." passes the bar. A PR that receives one `[CRITICAL]` comment about an SQL injection risk gets immediate attention precisely because the agent stayed silent on everything else.
 
+## FAQ
+
+**Does a high confidence floor hide real bugs?**
+
+Yes, in two ways. A strict floor silences defects that span many files, because the agent lacks the scope to reach the required confidence. It also silences novel patterns: a new vulnerability type scores low because it is rare in training data, not because it is low risk. An [empirical evaluation on labeled vulnerable samples](https://arxiv.org/abs/2509.13650) found Copilot frequently missing SQL injection, XSS, and insecure deserialization while still returning clean reviews.
+
+**Where should low-confidence and medium-severity findings go?**
+
+Not into the pull request thread. Surface only findings that clear the confidence bar, and route only critical and high severity into PR comments; medium and low findings appear when a reviewer explicitly asks for a full review, the routing [tiered code review](tiered-code-review.md) formalizes. Low-confidence suggestions belong in optional "info" channels instead.
+
+**Is a slower reviewer that comments less actually better?**
+
+GitHub's data says yes. The agentic architecture redesign raised positive feedback by 8.1% through better signal quality, and a later move to a stronger reasoning model added a further 6% even though review latency rose 16%. Fewer, better comments beat faster, noisier ones because the scarce resource being spent is reviewer attention, not wall-clock time.
+
 ## Key Takeaways
 
 - Silence is a valid review output — 29% of Copilot code reviews intentionally produce no comments

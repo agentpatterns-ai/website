@@ -152,6 +152,24 @@ Judgment rules belong in instructions. Binary, non-negotiable rules belong in ho
 - Hooks fail open silently. Any exit code other than 0 or 2 counts as a hook error and does not block. Teammates with missing dependencies get no enforcement and no warning ([5 Claude Code hook mistakes](https://dev.to/yurukusa/5-claude-code-hook-mistakes-that-silently-break-your-safety-net-58l3)).
 - Judgment rules regress when forced binary. "Prefer descriptive names" or "add tests when changing behavior" lose nuance compressed into a regex. Keep ambiguous rules in CLAUDE.md.
 
+## FAQ
+
+**What do the hook exit codes mean?**
+
+Exit code 2 blocks the tool call, and the hook's stderr becomes the block reason fed back to the model. Exit 0 allows the call. Any other code counts as a hook error and does not block — which is how hooks fail open silently, leaving a teammate with a missing dependency no enforcement and no warning that enforcement is gone.
+
+**Which rules belong in a hook rather than in CLAUDE.md?**
+
+Binary, non-negotiable ones: package-manager choice, destructive commands such as force push, and completion criteria like tests passing before "done". Judgment rules stay in instructions — "prefer descriptive names" or "add tests when changing behavior" lose their nuance once compressed into a regex. Style preferences and naming conventions sit at the advisory end, optionally backed by a linter.
+
+**Can a hook change a command instead of blocking it?**
+
+Yes. A hook can print JSON containing `updatedInput` to stdout and Claude Code replaces the original tool input — rewriting `pip install` to `uv pip install`, for instance. The model then sees the rewritten command, which reinforces the correct pattern for future calls. Rewrite hooks do break projects with intentional exceptions, so scope the matcher narrowly.
+
+**Can a developer disable a team's hooks?**
+
+It depends on scope. User, project, and local settings are all overridable by the user, so enforcement committed in `.claude/settings.json` can be undone locally. Managed hooks delivered through enterprise MDM policy cannot be disabled by project or user settings, which is how organizations enforce security policies regardless of individual developer configuration.
+
 ## Key Takeaways
 
 - Exit code 2 is the documented block signal — a shell process sits outside the context window, but coverage gaps exist across tools and events

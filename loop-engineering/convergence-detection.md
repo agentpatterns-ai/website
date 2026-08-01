@@ -82,6 +82,20 @@ Running a sixth pass — one beyond the [five-pass blunder hunt](../verification
 
 Convergence signals measure whether the output is stabilizing, not whether it is correct. Lee et al., [RefineBench: Evaluating Refinement Capability of Language Models via Checklists](https://arxiv.org/abs/2511.22173) (2025), evaluated Gemini 2.5 Pro, GPT-5, and DeepSeek-R1 on 1,000 problems across 11 domains and found that self-refinement without external feedback yielded gains of +1.8 percentage points or less over five iterations, while guided refinement approached near-perfect scores — and that models routinely halt early due to overconfidence even when errors remain. When signals converge without an external evaluator, the stable state may reflect self-bias, not quality. For high-stakes outputs, pair convergence detection with an external checker (tests, a second model, a human reviewer) rather than relying on the signals alone.
 
+## FAQ
+
+**Do converging signals mean the output is correct?**
+
+No — they measure whether the output is stabilizing, not whether it is right. RefineBench found that self-refinement without external feedback yielded gains of 1.8 percentage points or less over five iterations, and that models routinely halt early through overconfidence while errors remain ([Lee et al., 2025](https://arxiv.org/abs/2511.22173)). For high-stakes outputs, pair the signals with tests, a second model, or a human reviewer.
+
+**Why repeat the identical critique prompt rather than varying it?**
+
+Because a single critique pass produces false confidence. Repeating the same prompt forces examination of progressively subtler problems, since each pass surfaces issues the previous ones normalized over. The convergence reading then falls out of the exercise: when pass four and pass five return near-identical critiques with no new issues, content similarity has converged and the output is stable.
+
+**What does pairing an evaluator with a round cap look like in production?**
+
+Microsoft's VS Code ships an Advanced Autopilot mode whose utility-model judge decides loop completion by reading the run transcript, bounded by a maximum of three loops ([VS Code 1.124 release notes](https://code.visualstudio.com/updates/v1_124)). That couples a transcript-aware stopping decision with the max-round fallback, rather than trusting either mechanism on its own to end the loop.
+
 ## Key Takeaways
 
 - Three signals — change velocity, output size, content similarity — replace intuitive stopping with observable criteria

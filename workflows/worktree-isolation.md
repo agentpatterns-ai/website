@@ -114,6 +114,20 @@ done
 
 Each agent operates in its own directory. If `add-audit-log` fails, its worktree is deleted without affecting the other two. The orchestrator collects the surviving branches and opens PRs.
 
+## FAQ
+
+**Do worktrees isolate ports, databases, and background processes?**
+
+No. Worktrees separate files and branches, not runtime state. Two agents each starting a dev server on port 3000, sharing one Postgres instance, or driving the same Docker daemon will collide even though their checkouts are independent. For runtime isolation, pair worktrees with per-agent containers, ephemeral databases, and dynamic port allocation.
+
+**Is worktree isolation specific to Claude Code?**
+
+No. `git worktree` is a core Git feature that has shipped since Git 2.5 in July 2015, so the isolation guarantee comes from Git rather than from any agent tool. Claude Code only automates it: sub-agents accept `isolation: worktree`, and the `--worktree` flag creates an isolated worktree for a top-level session, removed on exit if you made no changes.
+
+**When is a worktree per agent not worth the setup cost?**
+
+When per-worktree initialization costs more than the parallelism returns. Each worktree is a fresh checkout, so `npm install`, Docker builds, and secrets provisioning run again for every agent, which is expensive for short-lived agents doing lightweight tasks. Stateless agents that only read files and call external APIs need no isolation at all, and a shared checkout serves them safely.
+
 ## Key Takeaways
 
 - Each agent in its own git worktree cannot interfere with other agents or the main branch.

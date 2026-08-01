@@ -132,6 +132,20 @@ Fan-out sub-agents add overhead that makes them worse than in-thread execution i
 - [Cost-sensitive workloads](../../token-engineering/cost-aware-agent-design.md) — N parallel sub-agents mean N model invocations at once. For simple sub-tasks, a single agent with context compaction is cheaper.
 - Synthesis is the bottleneck — if assembling N summaries means reading most of the raw detail anyway, the main thread context fills up regardless.
 
+## FAQ
+
+**Why does context isolation matter more than parallelism?**
+
+Parallelism only saves wall-clock time; isolation protects the main thread's context window. Each sub-agent's file reads, URL fetches, retries, and dead ends stay inside its own window and are discarded when it finishes, so only a distilled summary returns. A sub-agent that consumes 5000 tokens reading a page hands back a 200-token summary, and the other 4800 tokens vanish with it.
+
+**What should a sub-agent return to the main thread?**
+
+The minimum needed for synthesis: extracted findings, structured summaries, and specific facts with source attribution — not full file contents, raw HTML, or complete API responses. Returning raw material defeats the point of the boundary, which exists so that exploration artifacts stay inside the sub-agent's window and never reach the thread doing the synthesis.
+
+**When does fan-out cost more than it saves?**
+
+When each sub-task is small. Spawning three sub-agents to read three 100-token files costs more latency and money than three sequential in-thread reads. Fan-out also collapses into a two-phase sequence when sub-task B depends on sub-task A's output, and it saves nothing when assembling the summaries means reading most of the raw detail anyway.
+
 ## Key Takeaways
 
 - Sub-agents have isolated context windows — exploration never pollutes the main thread

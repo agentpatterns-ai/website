@@ -104,6 +104,20 @@ The evaluator-optimizer is a two-agent loop with a single evaluator. The [commit
 
 Each iteration adds generator and evaluator costs, so N rounds cost roughly 2N times a single generation. The loop is most cost-efficient when the evaluator terminates after one or two rounds and each revision meaningfully reduces the remaining issues. When a generator makes only marginal progress per iteration, redesign the feedback format rather than raise the round limit.
 
+## FAQ
+
+**Can adding an evaluator loop make output worse?**
+
+Yes. Snorkel AI's [2025 "Self-Critique Paradox" study](https://snorkel.ai/blog/the-self-critique-paradox-why-ai-verification-fails-where-its-needed-most/) found that on tasks where the generator already scored about 98%, adding a self-critique loop dropped accuracy to roughly 57%, because the critic hallucinates flaws to justify its existence. The loop pays off when the generator is weak on the task, below about 35% baseline.
+
+**What does each additional round cost?**
+
+Each iteration adds a generator call and an evaluator call, so N rounds cost roughly 2N times a single generation. The loop is most cost-efficient when the evaluator terminates after one or two rounds and every revision meaningfully reduces the remaining issues. When the generator makes only marginal progress per iteration, redesign the feedback format rather than raise the round limit.
+
+**When should I use committee review instead of one evaluator?**
+
+When several distinct evaluation dimensions must all pass. The evaluator-optimizer is a two-agent loop with a single evaluator; [committee review](../../code-review/committee-review-pattern.md) extends it with multiple specialized reviewers that apply different lenses in parallel before feedback is aggregated. A committee also counters shared blind spots, where a same-model evaluator misses the same class of errors as the generator.
+
 ## Key Takeaways
 
 - Generator produces output; evaluator provides structured feedback; the loop terminates on PASS or a round limit

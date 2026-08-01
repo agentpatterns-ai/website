@@ -115,6 +115,20 @@ Total context used at any point: ~9,000 tokens. The agent produces a correct, ta
 
 The key decisions were about exclusion: what not to load, when not to load it, and what to condense rather than retain verbatim.
 
+## FAQ
+
+**Does loading extra "might be relevant" files hurt output?**
+
+Yes, measurably. Irrelevant tokens do not produce neutral noise — they dilute attention on the relevant ones. An agent loaded with 50 potentially-relevant files produces worse output on the 2 actually-relevant files than one loaded with only those 2, and [Liu et al. (2023)](https://arxiv.org/abs/2307.03172) found multi-document QA accuracy drops 30%+ as distractors increase.
+
+**How do I decide what to cut?**
+
+Ask one diagnostic question of every candidate inclusion: does this improve output on this specific task? If the answer is no, it is pollution. The usual sources are speculative preloading of reference material, tool responses returning full data structures where a summary suffices, accumulated history carrying superseded instructions, and project instructions duplicating the system prompt.
+
+**When is an unfiltered context better than a filtered one?**
+
+When retrieval quality or compaction fidelity cannot be relied on. Selective loading with a retrieval layer that picks the wrong files leaves the agent no fallback; lossy summarization discards state that only turns out to matter later; and a coordinator handed a poor sub-agent summary cannot recover the missing context.
+
 ## Related
 
 - [Layered Context Architecture](layered-context-architecture.md)

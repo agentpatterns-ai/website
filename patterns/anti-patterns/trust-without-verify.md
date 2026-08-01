@@ -85,6 +85,20 @@ assert is_valid_email("user+tag@example.com")  # FAILS
 
 The test catches the missing `+` in the character class. The developer asks the agent to fix it, and the corrected regex is verified before merge.
 
+## FAQ
+
+**Why does polished output feel accurate?**
+
+Readers mistake fluency, formatting, and confidence for correctness, and agents are trained to produce coherent responses — a separate objective from accuracy. Users systematically overestimate LLM accuracy when shown default explanations, and longer explanations inflate user confidence without improving answer accuracy ([Steyvers et al., 2025](https://www.nature.com/articles/s42256-024-00976-7)). A follow-up study reproduced the same persuasion paradox in human-AI teams.
+
+**What counts as real verification?**
+
+Checking the output against external ground truth rather than re-reading it. Fetch cited URLs and confirm the source says what the agent claims. Run the code — "compiles" and "correct" are different properties. Look assertions up in the official documentation instead of the agent's summary of it. Review the diff, which is easier to verify than the full artifact.
+
+**Can you over-verify?**
+
+Yes. Running tests that do not cover the actual change is verification theater — the motion of verification without the substance. Automated checks that fire too often train reviewers to dismiss failures, so real errors get approved. Applying production-grade scrutiny to a throwaway script wastes the time AI assistance saves. The fix is calibrated verification, not universal paranoia.
+
 ## Key Takeaways
 
 - "Looks right" is not a verification method

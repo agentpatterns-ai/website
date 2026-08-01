@@ -107,6 +107,20 @@ Before taking any action outside of searching and note-taking, pause and ask the
 
 The system prompt uses minimal permissions (no outbound POST capability) and requires explicit confirmation for unexpected actions. Even if the injection is processed as text, the agent lacks the tools to fulfill it, and the [confirmation gate](human-in-the-loop-confirmation-gates.md) surfaces the anomaly to the user.
 
+## FAQ
+
+**Why can't the model simply be told to ignore injected instructions?**
+
+Because transformer-based models are provenance-blind. Attention reads all tokens in the context window uniformly, with no architectural distinction between system prompt, user input, and externally fetched content, and injected instructions carry no origin metadata. Defenses have to compensate from outside the model — separating control and data flow, or enforcing permissions at the tool layer rather than relying on the model to police itself.
+
+**Can injection defenses make things worse?**
+
+They can. Keyword blocking and output validation fire on legitimate content that resembles injection payloads, breaking valid tasks, and research shows certain baseline defenses produce "counterproductive side effects" ([arXiv:2604.03870](https://arxiv.org/abs/2604.03870)). Over-filtering degrades utility without stopping attacks that adapt to the filter, and in a fully closed internal pipeline that friction reduces no real risk.
+
+**Do confirmation gates hold up in high-volume automation?**
+
+Not on their own. Approval gates work only if users read the prompts, and in high-volume automation users habituate to approvals. That reduces the gates to security theater while implying active human oversight. The same pressure is what motivates batched interfaces such as the [tool confirmation carousel](../patterns/agent-design/tool-confirmation-carousel.md).
+
 ## Key Takeaways
 
 - Any text an agent reads from an external source is a potential injection vector, not just system prompt or user input.

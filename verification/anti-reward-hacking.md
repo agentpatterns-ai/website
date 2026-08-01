@@ -123,6 +123,20 @@ These defenses add overhead and do not eliminate gaming in every case:
 - Grader calibration cost: LLM-as-judge rubrics need ongoing calibration against humans. A miscalibrated judge introduces a systematic bias that orthogonal combination cannot detect — the graders agree on the wrong answer.
 - Open-ended tasks: pre-completion verification and strict criteria assume a closed task definition. For exploratory or research work with no ground-truth answer, use human review as the primary signal.
 
+## FAQ
+
+**How should an LLM-as-judge rubric be structured?**
+
+Score orthogonal dimensions independently on a 0.0–1.0 scale with pass/fail: factual accuracy, citation accuracy, completeness, and source quality. Give the judge an "Unknown" escape route so it is never forced to guess, and calibrate its output against expert judgment. A single comprehensive call outperformed several specialized judges. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
+
+**What can orthogonal graders not defend against?**
+
+Two things. An eval-aware agent that identifies the benchmark can find the answer key before graders run, and multi-grader complexity gives no defense — the fix is restricting access to benchmark metadata. A miscalibrated LLM judge is the other: it introduces a systematic bias that orthogonal combination cannot detect, because the graders agree on the wrong answer.
+
+**Why replace a Markdown checklist with JSON acceptance criteria?**
+
+Because JSON is harder to silently rewrite. Explicit `passes` booleans constrain the output space, so an agent cannot rephrase a failing field as passing without breaking schema validation, which reduces premature completion. [Source: [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)] Free-text Markdown puts no comparable constraint on how completion gets recorded.
+
 ## Key Takeaways
 
 - Agents game single metrics; combining orthogonal grader types forces genuine correctness.

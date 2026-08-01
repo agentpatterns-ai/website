@@ -108,6 +108,20 @@ Rigor relocation has real costs. The scaffolding-first bet fails or pays off poo
 - Harness correctness burden: the harness itself can encode wrong invariants. A passing test suite that validates incorrect behavior is harder to debug than a failed prompt, because the failures become invisible rather than explicit.
 - Skill atrophy accelerates: mechanical enforcement reduces the need for engineers to reason about correctness directly, which compounds over time (see [Skill Atrophy](skill-atrophy.md)).
 
+## FAQ
+
+**What evidence supports investing in the harness rather than the prompt?**
+
+LangChain moved their coding agent from rank 30 to rank 5 on Terminal Bench 2.0 without changing the model, using pre-completion checklists, loop detection middleware, and structured verification. OpenAI shipped roughly one million lines of agent-written production code over five months on machine-readable documentation, mechanical architectural boundaries, and telemetry-driven iteration. Both gains came from the environment, not the model.
+
+**Won't better models make this scaffolding unnecessary?**
+
+The reported direction is the opposite: better models increase infrastructure demands, because more autonomy needs better guardrails. A capacity problem sits underneath, which no model fixes — agents already produce software faster than any team can verify it, so the binding constraint is trusting what was written rather than producing more of it.
+
+**What does the engineer actually do once the harness carries the discipline?**
+
+The job shifts from code reviewer to harness designer: set measurable verification targets, design the constraint-enforcement infrastructure, approve architectural decisions instead of line-by-line code, and build feedback loops that catch bug classes rather than individual bugs. Quality then depends on what the environment permits the model to access rather than on what the model knows.
+
 ## Key Takeaways
 
 - Engineering discipline does not vanish when agents write the code -- it relocates from code style and abstractions to scaffolding, feedback loops, and mechanical enforcement.

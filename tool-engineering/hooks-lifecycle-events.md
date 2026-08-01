@@ -123,6 +123,20 @@ In multi-agent workflows (Claude Code v2.1.69), hook events carry extra context:
 
 Configure at project level (`.claude/settings.json`, committed) or user level (`~/.claude/settings.json`, local). Project hooks travel with the repo and enforce team conventions.
 
+## FAQ
+
+**If the model cannot override a hook, can it route around one?**
+
+Yes. Hooks enforce at the tool-call boundary, not the intent boundary. Block `Write` and the model reaches for a `Bash` heredoc; block `rm` and it deletes through `perl -e 'unlink(...)'`. A deny only holds when it covers every tool capable of the same effect, so enumerate the alternatives rather than blocking the most obvious one.
+
+**Do hooks still fire inside sub-agents, MCP calls, and pipe mode?**
+
+Not reliably. A hook that works in the parent session can silently fail in sub-agents, MCP server calls, or pipe mode. For a boundary that must hold everywhere, put it below the agent: OS-level controls such as file permissions, network policy, and containers. Widening the matcher is not a substitute, since un-scoped hooks fire on every event of that type and tax all tool calls.
+
+**What does not belong in a hook?**
+
+Anything that needs judgment or conversation. Creative choices such as architecture and style are exactly where model judgment is the point. Conversation-dependent logic fails because a hook sees only the immediate tool call. Complex workflows do not fit either, since hooks are scripts and stay short and deterministic. Hooks enforce what the model should not decide.
+
 ## Key Takeaways
 
 - Hooks execute in the shell — the model cannot override them

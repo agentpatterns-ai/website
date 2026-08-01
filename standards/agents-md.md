@@ -122,6 +122,20 @@ AGENTS.md degrades in three conditions:
 - Context overconsumption: every line in AGENTS.md consumes context budget before the agent sees the task. Verbose files — architecture writeups, process narratives, duplicated documentation — crowd out room for the task itself. An [ETH Zurich evaluation of AGENTS.md](https://arxiv.org/abs/2602.11988) found context files increased inference cost by over 20% on average, largely because agents followed their instructions into broader-than-necessary exploration. The file works against itself when it embeds knowledge instead of linking to it.
 - Mismatch with dynamic environments: AGENTS.md is a static snapshot. A single root file serves projects poorly when they have frequent toolchain changes, several distinct workflows, or constraints that vary per run. MCP servers or runtime-loaded skill files handle dynamic context better than a committed static document.
 
+## FAQ
+
+**How is AGENTS.md different from a README?**
+
+The audience and the moment differ. A human README explains what the software does to someone considering using it; AGENTS.md explains how the project works to someone about to modify it. The reader is an agent beginning a task, not a developer evaluating whether to adopt a tool, so the content is conventions, constraints, and navigation pointers.
+
+**Does adding an AGENTS.md cost anything?**
+
+Yes. Every line consumes context budget before the agent sees the task, and an [ETH Zurich evaluation of AGENTS.md](https://arxiv.org/abs/2602.11988) found context files increased inference cost by over 20% on average, largely because agents followed their instructions into broader-than-necessary exploration. Verbose files — architecture writeups, process narratives, duplicated documentation — crowd out room for the task itself.
+
+**When is a single root file the wrong fit?**
+
+When the environment is not static. AGENTS.md is a snapshot, so it serves projects poorly when they have frequent toolchain changes, several distinct workflows, or constraints that vary per run; MCP servers or runtime-loaded skill files handle dynamic context better. The same risk applies over time, since a file that described tooling correctly six months ago now points agents at deprecated commands.
+
 ## Key Takeaways
 
 - AGENTS.md is project orientation for agents: conventions, constraints, and pointers — not documentation

@@ -106,6 +106,20 @@ A coding agent produces a retry utility with exponential backoff, jitter, and [c
 
     The developer now understands the design gap, requests a fix, and merges with full comprehension.
 
+## FAQ
+
+**How is comprehension debt different from skill atrophy?**
+
+Both live in people, but they accumulate differently. Skill atrophy comes from reduced practice and shows up as being unable to write similar code independently. Comprehension debt comes from accepting code you did not read closely, and shows up as being unable to debug, plan, or extend a specific system without the agent that produced it.
+
+**Why does accepting generated code weaken memory?**
+
+Because it removes the retrieval effort that consolidates knowledge. Writing code applies what you know; accepting generated code substitutes recognition ("this looks right") for recall ("I can reconstruct why this works"). [Retrieval-practice research](https://pmc.ncbi.nlm.nih.gov/articles/PMC5912918/) finds effortful recall, not re-reading, integrates new knowledge with prior memory. Recognition fades; recall persists.
+
+**Why not just ask the agent to fix code you do not understand?**
+
+That pays off debt with more debt. The gap that made the original code opaque is still there, so the fix arrives on the same terms: merged on a glance and unexplained. In the retry-utility example above, asking the agent to explain the function first surfaced a real design gap — nothing resets the circuit breaker.
+
 ## Key Takeaways
 
 - Comprehension debt is the gap between agent-produced code and the developer's understanding of it; it accumulates in people, not the codebase, and is distinct from both technical debt and skill atrophy.

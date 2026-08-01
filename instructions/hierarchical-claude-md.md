@@ -124,6 +124,20 @@ All PRs require `pre-commit run --all-files` to pass before merge.
 
 When Claude Code works inside `frontend/`, it loads the root file plus `frontend/CLAUDE.md` — backend conventions stay out of its context. The reverse applies when working in `backend/`.
 
+## FAQ
+
+**Do subdirectory CLAUDE.md files count as a fifth scope?**
+
+No. Files such as `./api/CLAUDE.md` belong to the Project scope rather than sitting alongside managed policy, project, user, and local. Claude Code walks the directory tree and loads them on demand when you work in that directory, which lets a subproject document its own lint rules, test commands, and conventions without duplicating them into the repo root file.
+
+**Does splitting rules across more files reduce the compliance risk of having many rules?**
+
+No. Spreading instructions over several files does not lower the total instruction load the model must hold: even frontier models keep only 68% accuracy at the highest density tested, 500 simultaneous instructions, regardless of how many files that count is spread across ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). Trim rules rather than add more files.
+
+**Does linking to other docs instead of embedding them cut token cost?**
+
+Only partly. Linking removes duplication, but an `@path` import still loads its target in full at launch and can recurse up to four hops deep, so the tokens still land in context ([Claude Code memory docs](https://code.claude.com/docs/en/memory#import-additional-files)). Because every loaded file is read in full at session start, keeping each file under 200 lines is what protects the budget.
+
 ## Key Takeaways
 
 - Managed policy scope: organization-wide constraints, admin-controlled.

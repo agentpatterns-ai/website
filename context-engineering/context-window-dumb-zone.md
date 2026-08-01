@@ -101,6 +101,20 @@ The guidance to keep reasoning-task context under 32K tokens is conservative, an
 - Compaction has its own failure mode. [Compressing a long context into a shorter summary](context-compression-strategies.md) discards detail. For multi-step tasks that depend on specific prior outputs, aggressive compaction can drop critical intermediate state. Test compaction fidelity before you apply a blanket early-compact policy.
 - The auto-compaction threshold is configurable. Claude Code's auto-compaction triggers at ~95%, and `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` lets teams lower it. Setting it to 50% is common advice, but it adds a fixed overhead cost on every session regardless of task type or actual degradation onset.
 
+## FAQ
+
+**Does the dumb zone only apply to what I put in the task prompt?**
+
+No. It applies to total context, not just task instructions: system prompts, skill definitions, reference files, and conversation history all count against the same window. A deployment that preloads a 60K-token system prompt, 20K of project instructions, and 15K of recent history has already spent 95K tokens before the first task token arrives.
+
+**Should I apply the 32K reasoning ceiling to every task?**
+
+No — it applies to reasoning-heavy work only. Applying it to retrieval-heavy or code-comprehension tasks discards legitimate capacity, since simple retrieval benchmarks show over 99% recall well past 32K and over-compacting adds needless summarization loss. Frontier models released since the benchmark generation also improve on the curve, so calibrate against the model version you actually deploy.
+
+**Is compacting early always the safer choice?**
+
+No. Compressing a long context into a shorter summary discards detail, and multi-step tasks that depend on specific prior outputs can lose critical intermediate state. Claude Code's auto-compaction triggers at about 95%, and `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` lets teams lower it, but a blanket 50% setting adds fixed overhead on every session regardless of task type. Test compaction fidelity first.
+
 ## Related
 
 - [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)

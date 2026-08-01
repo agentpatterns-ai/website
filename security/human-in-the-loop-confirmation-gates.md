@@ -123,6 +123,20 @@ send_email(recipient, subject, body)
 
 Because the recipient is shown verbatim, the reviewer sees `attacker@external.com` at once — a summary that said "forwarding to the requester" would have hidden it. The gate defaults to rejection (`[y/N]`), making it easy to say no.
 
+## FAQ
+
+**Why surface the exact action data instead of a summary?**
+
+A summary can hide injection artifacts that show in raw form. Displaying the exact recipient address, subject, body, and attachments makes an injected `attacker@external.com` visible at once, where "forwarding to a contact" would conceal it. Showing the raw values is what turns the pause into a detection surface rather than a formality the reviewer clicks through.
+
+**When is watch mode worth the attention it demands?**
+
+In sensitive contexts — banking, medical records, access control — where approving individual actions at the end is too coarse. In watch mode the user sees each tool call as it happens and can pause or abort at any point. That gives higher assurance than end-of-run approval, at the cost of sustained attention across the whole run.
+
+**Should every agent action get a gate?**
+
+No. Gates placed too early create alert fatigue, and frequent confirmations push reviewers to rubber-stamp without evaluating — adversaries can flood the approval queue deliberately, classified as threat T10 in Rippling's 2025 Agentic AI Security guide. [Source: [The Agent Approval Fatigue Problem](https://molten.bot/blog/agent-approval-fatigue/)] Reserve gates for the irreversible and high-stakes actions.
+
 ## Key Takeaways
 
 - Identify the consequential actions in your agent (send, purchase, delete, share, modify auth) and gate each one

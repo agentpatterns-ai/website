@@ -176,6 +176,20 @@ Tiered review depends entirely on correct classification. Three conditions cause
 
 Tiered review is not a substitute for threat modeling or dependency scanning — it reduces the volume reaching human reviewers, not the need for human judgment on the paths that matter.
 
+## FAQ
+
+**How do I approximate tiered review with GitHub's native tools?**
+
+GitHub has no path-based review routing, so layer three existing mechanisms. Enable [Copilot automatic code review](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/request-a-code-review/configure-automatic-review) at repository or org level for the AI-first pass. Define CODEOWNERS entries for critical paths. Then require CODEOWNERS approval in branch protection. PRs touching only paths with no CODEOWNERS match need just AI review and green CI.
+
+**What actually makes a change "critical"?**
+
+Four heuristics decide. Security boundary: authentication, authorization, encryption, or PII handling. Financial impact: payments, billing, or subscriptions. Blast radius: bugs that hit all users rather than one feature. Reversibility: changes that corrupt persistent state instead of rolling back in minutes. Everything else — tests, docs, configuration, CSS, build scripts, reversible migrations — is non-critical.
+
+**How does tiered review fail quietly?**
+
+Through misclassification. A migration adding a PII column, a config change broadening CORS policy, or a utility function called from an auth path matches no CODEOWNERS pattern, so it routes to the automated tier and merges without human review. Cross-cutting PRs can under-escalate, and AI reviewers silently degrade on novel architectural styles unless accuracy is audited periodically.
+
 ## Key Takeaways
 
 - Tiered review is a risk-routing problem — classify code by criticality, then match review depth to risk

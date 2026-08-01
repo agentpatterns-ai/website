@@ -127,6 +127,20 @@ The six-layer model is optimized for large, complex corpora. It carries real eng
 
 A two-layer approach (schema + [live queries](retrieval-augmented-agent-workflows.md)) suffices for many agents. Add layers only when each source closes a production error, not a theoretical gap.
 
+## FAQ
+
+**Do more layers always improve accuracy?**
+
+No. An [analysis of RAG as noisy in-context learning](https://arxiv.org/abs/2506.03100) derives bounds showing retrieval gains shrink as examples accumulate and can flip to hurt performance past a threshold, and practitioner reports on [RAG at scale](https://www.goml.io/blog/stanford-ai-research-rag-systems) describe precision dropping beyond roughly 10,000 documents and collapsing past 50,000. Confirm a layer closes a real production error first.
+
+**When is the six-layer model overkill?**
+
+When the corpus is small or the data infrastructure is not already in place. A codebase that fits in a context window gains nothing from RAG latency — loading it directly is simpler and faster. Aggregation pipelines, embedding refresh, and vector stores add operational surface, and a two-layer approach of schema plus [live queries](retrieval-augmented-agent-workflows.md) suffices for many agents.
+
+**What degrades as the number of layers grows?**
+
+Two things. Layers go stale: when offline pipelines and live queries diverge — an un-propagated schema change, for instance — the agent acts on [contradictory context](discoverable-vs-nondiscoverable-context.md). And explicit priority rules get harder to maintain, so an undocumented exception silently produces wrong answers that are difficult to trace.
+
 ## Key Takeaways
 
 - Schema or file structure alone cannot ground an agent in the meaning of a dataset or codebase.

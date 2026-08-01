@@ -113,6 +113,20 @@ methods). Do not flag stylistic choices that vary by framework.
 
 This version works across Go, TypeScript, Ruby, Python, and any future test framework because it describes the reasoning principle, not the per-language checklist.
 
+## FAQ
+
+**How do I tell whether a prompt is pitched too low?**
+
+Introduce an edge case the prompt never anticipated and watch what happens: a well-calibrated prompt degrades gracefully because the agent applies the nearest heuristic, while a brittle one breaks or falls through to vague defaults. A second signal is maintenance shape — if adding one instruction forces three more to cover its edge cases, the original was too brittle.
+
+**When is enumerating cases the better choice?**
+
+Enumerate for fixed-schema extraction in regulated formats such as FHIR, EDI, or ISO financial messages, where auditors need to trace each rule to a requirement. Enumerate hard security boundaries explicitly, since a heuristic can leave gaps a precise rule would close. Enumerate too for low-capability or heavily fine-tuned models, which pattern-match against explicit conditions more reliably than they generalize from principles.
+
+**Does altitude affect anything besides edge-case coverage?**
+
+Yes — context budget. Enumerated rules consume it, and accuracy degrades as the number of simultaneous instructions grows: even the best frontier models reach only 68% accuracy at a density of 500 instructions ([instruction-count scaling research](https://arxiv.org/abs/2507.11538)). Principle-level guidance also activates knowledge the model already holds, so one heuristic can replace dozens of rules approximating it.
+
 ## Related
 
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)

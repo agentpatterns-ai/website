@@ -119,6 +119,20 @@ echo "Max cycles reached." && exit 1
 
 The prompt tells the agent to read state, complete one bounded task, and write results. The `--no-cache` flag forces a genuinely fresh context each cycle. The script exits when the task list is empty.
 
+## FAQ
+
+**What stops a Ralph loop from cycling forever on a task it cannot solve?**
+
+Without a reliable completion check — a test suite, a task-list marker, or a CI result — the loop can cycle indefinitely, burning tokens without converging. Practitioner reports argue that every loop needs a supervisor which detects non-convergence and halts it, because an iteration cap alone is a financial circuit breaker rather than a quality gate: it bounds the spend, not the destructive iteration.
+
+**What does a long fresh-context loop cost to run?**
+
+Cost scales fast with iteration count: a fifty-iteration loop on a medium codebase typically runs $50 to $100 or more in API credits. Each cycle opens a clean window and re-reads specs, AGENTS.md, task lists, and progress markers from disk, so the loop deliberately trades reuse of an accumulated context for the reliability of a fresh one.
+
+**Which tasks lose more from a fresh context than they gain?**
+
+Tasks needing deep continuity — extended negotiation, multi-turn clarification, stateful debugging sessions — do not benefit, because the discarded context is load-bearing. Unbounded work that cannot fit one window also stalls, producing partial output every cycle. Architectural coherence suffers too: generated code reflects the agent's path to a working state rather than an intentional structure.
+
 ## Key Takeaways
 
 - Fresh context each iteration prevents the ["dumb zone"](../context-engineering/context-window-dumb-zone.md) that accumulates in long sessions.

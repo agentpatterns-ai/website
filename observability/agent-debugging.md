@@ -110,6 +110,20 @@ The diagnostic sequence assumes the failure is structural. Three conditions wher
 2. Novel capability gaps — if the task genuinely exceeds any available model tier's capability, no amount of context or instruction tuning will fix it. Reaching Step 4 too late delays this conclusion.
 3. Over-instrumented environments — dense instruction files with many CLAUDE.md layers make conflict scanning slow. In these setups, reducing instruction surface area helps more than per-failure diagnosis.
 
+## FAQ
+
+**The agent took a longer path than it needed — what does that point to?**
+
+Usually missing tool access: the agent worked around a gap rather than failing loudly. Check which tools were enabled or blocked in the session, whether any tool call failed silently and triggered a pivot, and whether the agent needed something it never had, such as web search or a specific CLI. Tool permissions are configured in `.claude/settings.json`.
+
+**How do I inspect what the agent actually did, step by step?**
+
+Claude Code stores session transcripts locally under `~/.claude/projects/`. Use one to trace what the agent did first, when its behavior diverged, whether a tool failure caused a pivot, and whether it flagged a missing resource. For environment-level problems a transcript will not show — malformed config, MCP errors, oversized instruction files — run `/doctor`.
+
+**Why does behavior differ across sessions, or between testing and production?**
+
+Behavior that varies session to session usually means instruction files loaded inconsistently or not at all. Behavior that holds in testing but not in production usually means a different instruction-file scope applied — user versus project versus managed. Vague wording compounds both failures: "format code properly" reads differently on each run, while "use 2-space indentation" holds up.
+
 ## Key Takeaways
 
 - The four agent-failure modes are missing context, conflicting instructions, missing or blocked tools, and capability ceiling — classify before you change anything.

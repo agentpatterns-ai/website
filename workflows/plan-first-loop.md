@@ -220,6 +220,24 @@ Plan-first costs more than it returns under these conditions:
 
 In these cases, use direct prompting, or apply Plan Mode only to the specific step where scope uncertainty is high, rather than applying the full loop by default.
 
+## FAQ
+
+**When does plan-first cost more than it returns?**
+
+On trivial or already-understood changes where one implementation path exists, in exploratory or debugging sessions where the goal is to discover what is wrong, and in rapid-iteration loops where the feedback cycle is shorter than the planning overhead. In those cases prompt directly, or apply Plan Mode only to the one step where scope uncertainty is high.
+
+**Is `--append-system-prompt` planning actually enforced?**
+
+No. Auto-plan mode is instruction-based, not runtime-enforced: the requirement lives in the prompt, so compliance depends on the model. For safety-critical workflows pair it with `--permission-mode plan`, a permission constraint the runtime applies, or with deterministic guardrails, which enforce the constraint outside the model's discretion.
+
+**Can more planning replace a more expensive model?**
+
+Often, yes. Spending additional compute on planning rounds with a mid-tier model can substitute for switching to a costlier one, because the gain comes from reasoning quality at the planning stage rather than raw generation power. Self-critique rounds do cost tokens, so reserve them for complex work, expensive-to-repair changes, or long unsupervised runs.
+
+**How is this different from research-plan-implement?**
+
+Research-plan-implement focuses on gathering information before acting. The plan-first loop adds two elements on top: the explicit correction step, where you surface and fix the agent's misunderstandings before any plan is written, and the plan-as-file mechanism, which persists an approved plan across context boundaries so a new session inherits the direction.
+
 ## Key Takeaways
 
 - Have the agent describe the subsystem before it plans; plan before it implements.

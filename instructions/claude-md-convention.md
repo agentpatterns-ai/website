@@ -161,6 +161,24 @@ paths:
 - Return errors using the `ApiError` class from `shared/errors`
 ```
 
+## FAQ
+
+**What happens when CLAUDE.md imports another file with `@path`?**
+
+The `@path/to/file` syntax pulls that file's contents into the instruction context. Relative and absolute paths both work, and imports nest up to five levels deep, so one root file can compose several smaller ones. Claude Code shows an approval dialog the first time it encounters an import, and imports you decline remain disabled.
+
+**How do `.claude/rules/` files differ from CLAUDE.md itself?**
+
+Rules files hold topic-specific Markdown that need not load every session. A rules file without `paths` frontmatter loads unconditionally; one carrying a `paths` glob loads only when matching files are in scope, so API conventions reach the agent when it works on API code and cost nothing otherwise. Rules files also support symlinks for cross-repo sharing.
+
+**What is auto memory, and how does it relate to CLAUDE.md?**
+
+Auto memory is the companion system — what Claude writes back rather than what you author: build commands, debugging insights, and preferences picked up during work. It is stored in `~/.claude/projects/<project>/memory/`, and its first 200 lines load at session start alongside the instruction files you wrote. Toggle it with the `/memory` command.
+
+**Should a team using several AI tools write CLAUDE.md or AGENTS.md?**
+
+CLAUDE.md is proprietary to Claude Code and read only by it; AGENTS.md is an open standard that any compatible tool reads. Teams running multiple AI tools should maintain both or consolidate into AGENTS.md, accepting a feature trade-off: path scoping, imports, and personal scopes such as `CLAUDE.local.md` are not part of the AGENTS.md standard.
+
 ## Key Takeaways
 
 - CLAUDE.md is context loaded into the session, not enforced configuration — specificity yields compliance.

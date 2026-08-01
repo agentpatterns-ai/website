@@ -236,6 +236,24 @@ Below is the core of a Sequential Workflow Orchestration skill (Pattern 1) for t
 
 Asking the agent "When would you use the linear-issue-manager skill?" after saving the file confirms the description is being read correctly — the agent quotes the trigger phrases back verbatim, revealing any gaps.
 
+## FAQ
+
+**How do I check whether the agent reads my description the way I intended?**
+
+Ask it directly: "When would you use the [skill name] skill?" The agent quotes the description back, which shows what is missing — absent trigger phrases that cause under-triggering, or scope broad enough to fire on unrelated queries. Running this check after saving the file confirms whether the trigger phrases you wrote come back verbatim.
+
+**Where should a skill write data that must survive an upgrade?**
+
+In `${CLAUDE_PLUGIN_DATA}`, the stable data directory that persists across skill upgrades — use it for user preferences, learned conventions, and the `config.json` holding first-run setup values. `${CLAUDE_SKILL_DIR}` points at the current skill's own directory and suits sibling assets such as templates; data written there may be deleted on upgrade.
+
+**What happens if a skill references another skill that is not installed?**
+
+Nothing catches it for you. Skills reference each other by their exact `name` field, but there is no native dependency management, so the agent has to handle a missing skill gracefully. Write the fallback into the workflow itself — for example, instructing a manual checklist review when the `code-review` skill is absent before continuing.
+
+**My skill loads but the agent ignores its instructions. What is wrong?**
+
+The instructions are probably too verbose or buried. Put the critical ones first, use numbered lists, and move supporting detail into `references/`. If results also vary between sessions, the cause is ambiguous language: replace "validate properly" with explicit checks such as verifying the name is non-empty and the date is not in the past.
+
 ## Key Takeaways
 
 - The `description` field is the load gate — write it as `[what] + [when] + [capabilities]` with trigger phrases users would actually say, and add negative triggers to prevent over-firing.

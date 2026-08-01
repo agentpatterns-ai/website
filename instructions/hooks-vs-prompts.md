@@ -35,6 +35,8 @@ Use hooks when all three apply:
 2. The rule is binary — a command either violates it or it does not
 3. The behavior has a strong opposing prior in training data
 
+A fourth trigger is measured rather than judged: when the rule asks the agent to stop working rather than do more, prose compliance drops to zero, so [restraint rules need external enforcement](restraint-rules-need-external-enforcement.md) regardless of how the other three score.
+
 Use prompts when any of these apply:
 
 - Guidance is contextual ("prefer X when working in Y")
@@ -148,6 +150,20 @@ Write a unit test for any change to business logic in `src/domain/`.
 ```
 
 These instructions require evaluating context a hook cannot inspect mechanically, so they belong in the prompt.
+
+## FAQ
+
+**Are hooks in a repo I just cloned safe to run?**
+
+Not automatically. A hook is only as trustworthy as the file that defines it, and project-scope hooks in `.claude/settings.json` from an untrusted repo can be weaponized. Check Point showed remote code execution and API-key exfiltration through malicious hooks firing on repo load, so review hook configs before opening unfamiliar repositories.
+
+**Does moving a rule from the prompt into a hook save context?**
+
+Yes. Prompt instructions occupy context and compete for attention with everything else in the window, while hooks run outside the agent's context and cost nothing. Moving absolute rules into hooks improves reliability and frees context budget — but only rules that are non-negotiable, binary, and expressible at the tool-call boundary belong there.
+
+**What if the rule asks the agent to stop working rather than do more?**
+
+Treat that as an automatic case for external enforcement. When a rule asks the agent to stop rather than do more, prose compliance drops to zero, so restraint rules need enforcement outside the prompt no matter how they score against the other three criteria: non-negotiable cost of failure, binary evaluability, and a strong opposing training prior.
 
 ## Key Takeaways
 

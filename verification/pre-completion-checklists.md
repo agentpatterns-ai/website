@@ -132,6 +132,20 @@ Pre-completion checklists introduce risk in several conditions:
 - Vague items give false confidence. A checklist item like "check your work" passes without verifying anything. Agents satisfy the surface form of the instruction, not the intent — the [anti-reward-hacking](anti-reward-hacking.md) failure shape. Every item must specify a concrete, observable output.
 - Latency compounds in long pipelines. Each verification pass adds one full LLM round-trip. In a multi-step pipeline with a pre-completion gate at every stage, total latency can exceed the cost of running the end-to-end tests directly.
 
+## FAQ
+
+**Why implement the checklist as a hook rather than a prompt instruction?**
+
+Hooks run outside the LLM's reasoning chain, so they fire even when the agent forgets the instruction under context pressure or in a long session. [Prompt-based instructions achieve 70 to 90% compliance, while hooks achieve near-100% because they run at the system level](https://www.dotzlaw.com/insights/claude-hooks/). Pairing both is stronger still: the hook enforces the gate, the prompt explains it.
+
+**What makes a checklist item effective?**
+
+Specificity. "Run the test suite and confirm all tests pass" names a concrete, observable output; "check your work" passes without verifying anything, because agents satisfy the surface form of an instruction rather than its intent. Items that make the agent re-read the original requirement, confirm each acceptance criterion, and check that no existing tests were removed hold up the same way.
+
+**What happens when a checklist item can never pass?**
+
+The gate becomes a deadlock. If the agent cannot make a failing test pass — because the test is flawed, the requirement is contradictory, or the underlying capability is missing — the checklist loops until loop detection breaks it. Add a maximum retry count or an explicit escalation path so persistent failures reach a human instead of burning iterations.
+
 ## Key Takeaways
 
 - Agents stop when output looks plausible, not when it is verified correct — without intervention

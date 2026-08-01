@@ -134,6 +134,20 @@ The security guarantee comes from OS-level process isolation. The agent and the 
 - Latency overhead: every authenticated call adds a local network hop through the proxy, which doubles as an [egress-policy](agent-network-egress-policy.md) enforcement point. This is measurable for high-frequency tool use, so benchmark before adopting the pattern in latency-sensitive workflows.
 - Operational complexity: one more process to deploy and secure. For low-blast-radius dev tasks, environment variable injection is simpler and enough.
 
+## FAQ
+
+**When is environment variable injection enough?**
+
+For low-stakes development tasks. Env-var injection keeps secrets out of the model's context but still places them inside the sandbox process, where any code the agent runs can read them. Reach for the proxy when the credential carries significant blast radius, when the agent processes untrusted external content, or when compliance requires logging of authenticated actions.
+
+**What happens if the proxy itself is compromised or unreachable?**
+
+The pattern concentrates risk: a supply-chain attack on the proxy process or a misconfigured admin API exposes every credential it holds, so harden it as the high-value target it is. An unreachable proxy also blocks all agent authentication, which is why production deployments need health checks and restart policies alongside the allowlist.
+
+**Does routing every call through a proxy cost latency?**
+
+Yes — each authenticated call adds a local network hop, which is measurable under high-frequency tool use, so benchmark before adopting the pattern in latency-sensitive workflows. The hop is not pure overhead: the same process doubles as an egress-policy enforcement point, so one boundary covers request validation, token attachment, and outbound control together.
+
 ## Key Takeaways
 
 - Credentials inside the sandbox are reachable by any code the agent runs or is tricked into running

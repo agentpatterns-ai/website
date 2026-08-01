@@ -97,6 +97,20 @@ With externalized knowledge, an `AGENTS.md` entry and a lint rule make the conve
 
 The agent reads the convention from `AGENTS.md`, and even if it guesses wrong, the lint rule catches the mistake before commit.
 
+## FAQ
+
+**Why does the agent repeat a mistake I already corrected?**
+
+Each session starts fresh, with no persistent memory of prior sessions, established conventions, or past mistakes — a recurring first day. Absent an explicit convention it can read, the agent falls back on training-data patterns: broad programming knowledge that may contradict what this project requires. The correction lived in a conversation rather than in version control, so it did not survive.
+
+**Why do these violations get through code review?**
+
+They fail silently. The output compiles, passes review, and ships, because a wrong decision that looks correct never surfaces as an error. Across 283 sessions on a 108k-line system, missing specs produced exactly this class of failure. Mechanical enforcement is the counter: agents respond to the pass/fail signals of linters and CI checks, not to rationale.
+
+**Which conventions actually belong in an instruction file?**
+
+Only what agents cannot find through reads and searches. A naming pattern evident from fifty or more files needs no AGENTS.md entry — adding it creates redundancy with no enforcement benefit. Keep the file thin and treat it as an entry point to reference directories, because a monolithic file capturing everything becomes noisy enough that agents hallucinate compliance.
+
 ## Related
 
 - [Discoverable vs Non-Discoverable Context](../../context-engineering/discoverable-vs-nondiscoverable-context.md) -- instruction files vs. what agents find themselves

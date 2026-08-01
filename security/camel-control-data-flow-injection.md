@@ -100,6 +100,20 @@ Use CaMeL-style control/data separation when:
 
 For lower-risk contexts, the [defense-in-depth](defense-in-depth-agent-safety.md) layered approach (schema filtering, confirmation gates, sandbox isolation) achieves strong probabilistic reduction with lower operational overhead.
 
+## FAQ
+
+**How does CaMeL differ from the conceptual Dual LLM pattern?**
+
+CaMeL is a formally implemented instance of it. The conceptual pattern separates a privileged LLM from a quarantined one and relies on careful system design and prompt discipline. CaMeL adds a custom Python interpreter as the enforcement engine, capability labels for taint tracking, and formal security policies checked at tool-call time, so the boundary is enforced mechanically rather than by convention.
+
+**What does the dual-LLM design cost in latency?**
+
+Roughly double the model invocations. When the quarantined LLM processes complex artifacts, latency can exceed ten seconds, which is too slow for interactive applications. That points the pattern at contexts where agents handle high volumes of untrusted external content and where exfiltration or unauthorized tool invocation would cause significant harm, rather than at every agent by default.
+
+**What does the security guarantee explicitly exclude?**
+
+Side channels. The authors leave them outside the guarantee: an adversary can still leak a secret by observing data-dependent behavior — a loop whose iteration count depends on a private value, or execution that halts only when a condition on the secret holds. Capability labels constrain explicit data flow, not these implicit channels. Security policies also need maintenance as tool sets evolve.
+
 ## Key Takeaways
 
 - CaMeL separates control flow (trusted user query → P-LLM) from data flow (untrusted tool outputs → Q-LLM), making injection-driven tool misuse structurally impossible.
