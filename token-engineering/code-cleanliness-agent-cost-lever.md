@@ -35,7 +35,7 @@ Lower cognitive complexity and fewer rule violations let the agent find the rele
 
 The study measures cleanliness as SonarQube Cloud rule violations plus cognitive complexity scores ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049)) — both measurable in CI, neither subjective. The page does not extend to claims about naming, comments, or architectural coherence, which the study did not isolate.
 
-The inference also runs the other way. At the Future of Software Development Retreat, Martin Fowler proposed the inverse framing: use the token cost of making a given change as a proxy metric for architecture and design quality — if the same change requires fewer tokens, that indicates a better architecture ([Martin Fowler — Future of Software Development Retreat](https://martinfowler.com/fragments/2026-07-06.html)). Where the empirical result above uses cleanliness to predict token cost, Fowler's framing uses token cost to diagnose cleanliness — the same mechanism read in reverse.
+The inference also runs the other way. At the Future of Software Development Retreat, Martin Fowler proposed the inverse framing: use the token cost of making a given change as a proxy metric for architecture and design quality, so that if the same change requires fewer tokens, that indicates a better architecture ([Martin Fowler — Future of Software Development Retreat](https://martinfowler.com/fragments/2026-07-06.html)). Where the empirical result above uses cleanliness to predict token cost, Fowler's framing uses token cost to diagnose cleanliness, the same mechanism read in reverse.
 
 ## When this backfires
 

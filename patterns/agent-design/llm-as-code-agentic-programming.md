@@ -46,7 +46,7 @@ graph TD
     B --> B1[LLM call B1<br>sees: M, B]
 ```
 
-Under LLM-as-orchestrator, the equivalent diagram would carry `M`, `A`, and `B` context, plus every prior call's tool outputs, into every node — context grows with the sequence, not the depth. This asymmetry removes the "context bloat scales with steps" failure mode that the paper names as architectural rather than tunable. Two long-running siblings do not pollute each other's window, and a single call carries only the ancestors it logically depends on. The [discrete phase separation](discrete-phase-separation.md) pattern applies the same idea at the conversation level — only distilled artifacts cross a phase boundary — and here it runs inside one harness.
+Under LLM-as-orchestrator, the equivalent diagram would carry `M`, `A`, and `B` context, plus every prior call's tool outputs, into every node, so context grows with the sequence, not the depth. This asymmetry removes the "context bloat scales with steps" failure mode that the paper names as architectural rather than tunable. Two long-running siblings do not pollute each other's window, and a single call carries only the ancestors it logically depends on. The [discrete phase separation](discrete-phase-separation.md) pattern applies the same idea at the conversation level, where only distilled artifacts cross a phase boundary, and here it runs inside one harness.
 
 ## Why it works
 
@@ -104,6 +104,7 @@ Each LLM call sees only the field it is choosing for, the application data, and 
 ## Related
 
 - [Deterministic Orchestration for Structured Modernization](deterministic-orchestration-structured-modernization.md) — The narrow legacy-modernization application of the same inversion, with the cost study that anchors the mechanism
+- [Bounded Agent Steps Inside a Deterministic Workflow](bounded-agent-step.md) — The weaker form of the inversion: the agent loop survives as one fenced workflow stage instead of being replaced by a plain model call
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md) — The layer split that makes the inversion possible; this page pushes the boundary one step further by putting orchestration in the program
 - [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md) — The same trade-off framed at SWE-bench scale, with the asymmetry between cost-win and accuracy-win made explicit
 - [Harness Design Dimensions and Archetypes](harness-design-dimensions.md) — Where this pattern sits in the orchestration dimension of the population-level harness taxonomy

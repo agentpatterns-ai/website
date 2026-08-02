@@ -19,7 +19,7 @@ maturity: established
 
 > A trace corpus past a few hundred runs needs population-level analysis: a scout-investigator pipeline proposes recurring failure hypotheses, then verifies each against corpus evidence.
 
-Corpus-level trace diagnostics runs a structured multi-agent pipeline over a large set of agent execution traces to surface systematic failure patterns — recurring tool misuse, silent [reward hacking](anti-reward-hacking.md), drift after long context — invisible when a human inspects one failing trace at a time. It sits above per-trace error analysis, not in place of it. For the statistical route to the same corpus-level question — clustering judge-labeled traces instead of agent-proposed hypotheses — see [Macro Evals for Agentic Systems](macro-evals-agentic-systems.md).
+Corpus-level trace diagnostics runs a structured multi-agent pipeline over a large set of agent execution traces to surface systematic failure patterns (recurring tool misuse, silent [reward hacking](anti-reward-hacking.md), drift after long context) that are invisible when a human inspects one failing trace at a time. It sits above per-trace error analysis, not in place of it. For the statistical route to the same corpus-level question, clustering judge-labeled traces instead of agent-proposed hypotheses, see [Macro Evals for Agentic Systems](macro-evals-agentic-systems.md).
 
 ## When it applies
 

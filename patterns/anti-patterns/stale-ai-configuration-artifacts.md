@@ -22,7 +22,7 @@ CLAUDE.md, AGENTS.md, and `.cursorrules` are documentation. They describe code e
 
 ## Disambiguation
 
-"Context rot" is overloaded in 2026 practitioner writing. This page is the artifact-drift sense from Treude & Baltes ([arxiv 2606.09090](https://arxiv.org/abs/2606.09090)) — config files going stale as code moves underneath them. The unrelated usage — output quality degrading as the context window fills with conversation history — is a different phenomenon ([Morph LLM](https://www.morphllm.com/context-rot)), covered under [The Infinite Context](infinite-context.md).
+"Context rot" is overloaded in 2026 practitioner writing. This page is the artifact-drift sense from Treude & Baltes ([arxiv 2606.09090](https://arxiv.org/abs/2606.09090)): config files going stale as code moves underneath them. The unrelated usage, output quality degrading as the context window fills with conversation history, is a different phenomenon ([Morph LLM](https://www.morphllm.com/context-rot)), covered under [The Infinite Context](infinite-context.md).
 
 ## The pattern
 

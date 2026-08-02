@@ -6,6 +6,7 @@ tags:
   - multi-agent
   - code-review
   - tool-agnostic
+  - arxiv
 aliases:
   - reviewer-solver decoupling
   - reviewer precision proxy

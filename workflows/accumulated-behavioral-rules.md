@@ -85,7 +85,7 @@ The mechanism is retention, not intelligence. Codifying each accepted correction
 
 ## How this differs from promoting comments to mechanical checks
 
-For a high-frequency invariant a machine can verify — an import boundary, a formatting rule — the stronger move is to promote the comment into a deterministic check rather than an advisory rule, which is the [Review-Feedback-to-Rule Loop](../code-review/review-feedback-to-rule-loop.md). A lint rule or checklist fires every time and costs no context budget; a behavioral rule is probabilistic and adds to the file the agent must read. The two compose: promote mechanically-checkable invariants into the lint stack and hooks, and reserve accumulated behavioral rules for the semantic corrections that resist a deterministic check — design judgment, API-shape preferences, context-dependent trade-offs.
+For a high-frequency invariant a machine can verify, such as an import boundary or a formatting rule, the stronger move is to promote the comment into a deterministic check rather than an advisory rule, which is the [Review-Feedback-to-Rule Loop](../code-review/review-feedback-to-rule-loop.md). A lint rule or checklist fires every time and costs no context budget; a behavioral rule is probabilistic and adds to the file the agent must read. The two compose: promote mechanically-checkable invariants into the lint stack and hooks, and reserve accumulated behavioral rules for the semantic corrections that resist a deterministic check, such as design judgment, API-shape preferences, and context-dependent trade-offs.
 
 ## Example
 

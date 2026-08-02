@@ -82,7 +82,7 @@ An agent opens a 200-line PR adding a new webhook handler. The reviewer comments
 - Force pushes during active review are the strongest negative predictor; treat this as a hard constraint in agent configuration
 - Keep agent PRs small; large diffs reduce reviewer willingness to engage and lower merge probability
 - More iterations do not substitute for review alignment; optimize for reviewer expectations over iteration volume
-- The actionable review loop — specific feedback, targeted response, convergence — is the dominant success mechanism
+- Design each PR for a reviewer who will comment once. What merges is specific feedback answered by a targeted change, so a PR that cannot converge in a single round rarely converges at all
 
 ## Related
 

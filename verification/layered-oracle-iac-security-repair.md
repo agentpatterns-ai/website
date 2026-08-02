@@ -28,7 +28,7 @@ The stack only earns its CI cost when these conditions hold. Skip it when any on
 - The blast radius of a missed vulnerability is high enough to justify several seconds of `terraform plan` per PR. Internal-only modules, throwaway dev environments, and prototype stacks are the wrong target.
 - A baseline plan exists to diff against. Greenfield modules with no pre-repair state cannot run the plan-comparison layer; for those, the stack collapses to its first four oracles.
 
-The TerraProbe paper instruments the pattern for Terraform on AWS with Checkov ([Alsaid et al., 2026](https://arxiv.org/abs/2606.26590)). The mechanism — the oracle problem in automated program repair ([Monperrus, 2018 — Automatic Software Repair](https://arxiv.org/abs/1807.00515)) — generalizes to any IaC scanner pair where the rule shape is syntactic and the policy intent is broader.
+The TerraProbe paper instruments the pattern for Terraform on AWS with Checkov ([Alsaid et al., 2026](https://arxiv.org/abs/2606.26590)). The mechanism, the oracle problem in automated program repair ([Monperrus, 2018 — Automatic Software Repair](https://arxiv.org/abs/1807.00515)), generalizes to any IaC scanner pair where the rule shape is syntactic and the policy intent is broader.
 
 ## The deceptive-fix failure mode
 
@@ -108,7 +108,7 @@ resource "aws_iam_policy" "example" {
 }
 ```
 
-What each layer does on this candidate. L1 passes — the original `Resource: "*"` pattern at the Statement level is gone. L2 passes — Checkov has no rule that catches a `StringLike` condition with a wildcard. L3 and L4 pass — the HCL is valid and plannable. L5 is what catches it: the plan-diff shows the effective IAM grant is unchanged, the wildcard is still reachable, and the candidate is rejected for semantic review before merge. The pattern in action is the stack itself — rejecting this candidate at L5 instead of accepting it at L1.
+What each layer does on this candidate. L1 passes, because the original `Resource: "*"` pattern at the Statement level is gone. L2 passes, because Checkov has no rule that catches a `StringLike` condition with a wildcard. L3 and L4 pass, because the HCL is valid and plannable. L5 is what catches it: the plan-diff shows the effective IAM grant is unchanged, the wildcard is still reachable, and the candidate is rejected for semantic review before merge. The pattern in action is the stack itself — rejecting this candidate at L5 instead of accepting it at L1.
 
 ## When this backfires
 

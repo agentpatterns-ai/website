@@ -74,7 +74,7 @@ Generation and evaluation run as different roles, sometimes different models. Cu
 
 ### 5. Checkpoint cadence
 
-Write intermediate state every few units of work — not every step, which wastes effort, and not only at the end, which is catastrophic on failure. [Trajectory logging via progress files](../../observability/trajectory-logging-progress-files.md) is the filesystem form. Managed runtimes ship `thread_id`-keyed checkpoints with run-level cancel and resume.
+Write intermediate state every few units of work — not every step, which wastes effort, and not only at the end, which is catastrophic on failure. [Trajectory logging via progress files](../../observability/trajectory-logging-progress-files.md) is the filesystem form, and a [persistent teammate workspace](persistent-teammate-workspace.md) is the per-teammate form for agent teams. Managed runtimes ship `thread_id`-keyed checkpoints with run-level cancel and resume.
 
 ## Beyond summarization: full context resets
 

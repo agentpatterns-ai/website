@@ -44,7 +44,7 @@ The categories are the load-bearing design choice. Subscribe by category — "re
 
 ## Why it works
 
-The agent stream inverts consumer stability. A token-stream consumer commits to LLM-output deltas. A sub-agent spawn, guardrail, or tool retry never appears there, so the consumer infers them from the assembled message. An agent-stream consumer commits to harness-decision verbs and renders affordances — approval modals, sub-agent tabs, retry indicators — directly ([AG-UI events](https://docs.ag-ui.com/concepts/events)). Swapping the LLM (Anthropic → Gemini → OpenAI) replaces the token stream but leaves the verbs intact — the abstraction inversion event-sourcing applies to databases ([Fowler, EventSourcing](https://martinfowler.com/eaaDev/EventSourcing.html)), at the harness/LLM boundary.
+The agent stream inverts consumer stability. A token-stream consumer commits to LLM-output deltas. A sub-agent spawn, guardrail, or tool retry never appears there, so the consumer infers them from the assembled message. An agent-stream consumer commits to harness-decision verbs and renders affordances (approval modals, sub-agent tabs, retry indicators) directly ([AG-UI events](https://docs.ag-ui.com/concepts/events)). Swapping the LLM (Anthropic → Gemini → OpenAI) replaces the token stream but leaves the verbs intact — the abstraction inversion event-sourcing applies to databases ([Fowler, EventSourcing](https://martinfowler.com/eaaDev/EventSourcing.html)), at the harness/LLM boundary.
 
 ## Versioning the event schema
 

@@ -52,7 +52,7 @@ Earlier-stage proposals sit in the same family: DNS-AID advertises agents throug
 
 ## Why it works
 
-These surfaces work because they relocate consumption metadata to predictable, machine-readable locations — chiefly the `/.well-known/` URI prefix defined by RFC 8615 — so an agent finds what a site offers without prior configuration or URL guessing ([RFC 8615](https://www.rfc-editor.org/info/rfc8615/), [Agent Skills Discovery RFC](https://github.com/cloudflare/agent-skills-discovery-rfc)). The payoff holds only under two conditions: a real consumer reads the surface, and something real sits behind it. A surface that names a capability the site does not have is a dangling pointer — it signals nothing an agent can act on.
+These surfaces work because they relocate consumption metadata to predictable, machine-readable locations, chiefly the `/.well-known/` URI prefix defined by RFC 8615, so an agent finds what a site offers without prior configuration or URL guessing ([RFC 8615](https://www.rfc-editor.org/info/rfc8615/), [Agent Skills Discovery RFC](https://github.com/cloudflare/agent-skills-discovery-rfc)). The payoff holds only under two conditions: a real consumer reads the surface, and something real sits behind it. A surface that names a capability the site does not have is a dangling pointer — it signals nothing an agent can act on.
 
 ## When this backfires
 

@@ -101,7 +101,7 @@ betterleaks dir .claude/skills/ -v
 trufflehog filesystem .claude/skills/ --only-verified
 ```
 
-Community corpora rely on contributor inspection — registry-level scanning is not universal. The [awesome-copilot](https://github.com/github/awesome-copilot) notice — "inspect any agent and its documentation before installing" — puts this burden on consumers. Scanning before publishing shifts it to the authoring stage.
+Community corpora rely on contributor inspection, and registry-level scanning is not universal. The [awesome-copilot](https://github.com/github/awesome-copilot) notice, "inspect any agent and its documentation before installing", puts this burden on consumers. Scanning before publishing shifts it to the authoring stage.
 
 ### Structural successors: treat hygiene as a holding pattern
 

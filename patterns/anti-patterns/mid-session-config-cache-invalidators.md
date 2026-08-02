@@ -15,7 +15,7 @@ maturity: adopted
 
 > Mid-session model, effort, or MCP changes silently invalidate the prompt cache and re-bill the full prefix at ~10x.
 
-The prompt cache is keyed by the exact prefix of each request — system prompt, tool definitions, project context, conversation history — plus the model and effort level ([Claude Code docs](https://code.claude.com/docs/en/prompt-caching#how-the-cache-is-organized)). A change at any layer recomputes everything after it, so the next turn reads zero cache and re-bills the full prefix at standard input rate — roughly 10x the cache-read rate ([Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing)).
+The prompt cache is keyed by the exact prefix of each request (system prompt, tool definitions, project context, conversation history) plus the model and effort level ([Claude Code docs](https://code.claude.com/docs/en/prompt-caching#how-the-cache-is-organized)). A change at any layer recomputes everything after it, so the next turn reads zero cache and re-bills the full prefix at standard input rate — roughly 10x the cache-read rate ([Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing)).
 
 ## The invalidator catalog
 

@@ -7,6 +7,7 @@ tags:
   - workflows
   - anti-pattern
   - tool-agnostic
+  - arxiv
 aliases:
   - greedy optimizer prior
   - propose-evaluate-revise anti-pattern

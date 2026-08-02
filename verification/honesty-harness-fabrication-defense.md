@@ -49,7 +49,7 @@ Implement the gate as a hook, not a prompt instruction. Prompts compete for atte
 
 A read-only reviewer in a fresh context examines the diff before commit. The independence is structural: Anthropic notes that a subagent reviewer "sees only the diff and the criteria you give it, not the reasoning that produced the change, so it evaluates the result on its own terms" ([Best practices](https://code.claude.com/docs/en/best-practices)).
 
-The reviewer must hold external tools. Intrinsic self-correction — re-reasoning without an oracle — overturns 21.9% of correct GPT-4o code solutions and 28.3% of correct GPT-3.5 solutions to wrong answers ([Liu et al., 2024 — arXiv:2412.14959](https://arxiv.org/abs/2412.14959)). A fact-checker without LSP, doc lookup, or test execution shares the original agent's prior and either rubber-stamps fabrications or invents new ones.
+The reviewer must hold external tools. Intrinsic self-correction, meaning re-reasoning without an oracle, overturns 21.9% of correct GPT-4o code solutions and 28.3% of correct GPT-3.5 solutions to wrong answers ([Liu et al., 2024 — arXiv:2412.14959](https://arxiv.org/abs/2412.14959)). A fact-checker without LSP, doc lookup, or test execution shares the original agent's prior and either rubber-stamps fabrications or invents new ones.
 
 Constrain the reviewer to correctness gaps. Anthropic's caution is explicit: "A reviewer prompted to find gaps will usually report some, even when the work is sound, because that is what it was asked to do… tell the reviewer to flag only gaps that affect correctness or the stated requirements."
 

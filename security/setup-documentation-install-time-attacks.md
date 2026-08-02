@@ -32,7 +32,7 @@ Each class violates a different trust property of an install — that the packag
 - Configuration-based — a build file that redirects resolution, for example a `Makefile` that sets `PIP_CONFIG_FILE`.
 - Output-based — an error message that suggests installing an attacker's package.
 
-The detection results invert the human threat model. Agents catch blatant typosquats reliably — an obvious `tranformers` misspelling was refused 30/30 — because those names recur in the security advisories the models trained on. Source-based attacks are missed almost everywhere: several harness-model pairs installed the untrusted registry 0 times out of 10, because `--extra-index-url` is a routine flag whose malicious uses are rare in training data. The plausible middle, separator confusion, splits by pairing — caught 30/30 on one configuration and 2/30 on another ([arXiv:2607.15143](https://arxiv.org/abs/2607.15143)).
+The detection results invert the human threat model. Agents catch blatant typosquats reliably, with an obvious `tranformers` misspelling refused 30/30, because those names recur in the security advisories the models trained on. Source-based attacks are missed almost everywhere: several harness-model pairs installed the untrusted registry 0 times out of 10, because `--extra-index-url` is a routine flag whose malicious uses are rare in training data. The plausible middle, separator confusion, splits by pairing, caught 30/30 on one configuration and 2/30 on another ([arXiv:2607.15143](https://arxiv.org/abs/2607.15143)).
 
 ## Why it works
 

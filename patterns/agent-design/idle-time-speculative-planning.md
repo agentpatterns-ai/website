@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - arxiv
 aliases:
   - idle-time speculative planning
   - IdleSpec

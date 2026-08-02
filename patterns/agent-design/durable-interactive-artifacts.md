@@ -66,7 +66,7 @@ Cursor canvases can be packaged as skills — trigger description, layout spec, 
 
 ## When to use an artifact over a file
 
-Plain-text artifacts in git — PRs, markdown, tests, specs — are already durable, diff-able, and portable. Reach for a durable interactive artifact only when the data is multi-dimensional, the output will be re-run against new data, the human interacts with the output directly instead of re-prompting, or the artifact outlives a single session. Otherwise prefer plain text — markdown, JSON, and SQL cross tool boundaries that canvas objects do not.
+Plain-text artifacts in git (PRs, markdown, tests, specs) are already durable, diff-able, and portable. Reach for a durable interactive artifact only when the data is multi-dimensional, the output will be re-run against new data, the human interacts with the output directly instead of re-prompting, or the artifact outlives a single session. Otherwise prefer plain text — markdown, JSON, and SQL cross tool boundaries that canvas objects do not.
 
 ## Failure modes
 

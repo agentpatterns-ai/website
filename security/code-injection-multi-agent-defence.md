@@ -7,6 +7,7 @@ tags:
   - security
   - tool-agnostic
   - multi-agent
+  - arxiv
 aliases:
   - "code injection attack defence"
   - "multi-agent code injection resilience"

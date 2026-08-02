@@ -5,6 +5,7 @@ description: "Reliable LLM agents externalize cognitive burdens into persistent 
 tags:
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - cognitive externalization in agents
   - externalization framework for agents

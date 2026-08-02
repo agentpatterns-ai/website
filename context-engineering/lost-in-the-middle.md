@@ -5,6 +5,7 @@ description: "Model attention is strongest at the start and end of a context win
 tags:
   - context-engineering
   - tool-agnostic
+  - arxiv
 aliases:
   - Critical Instruction Repetition
   - Attention Bias

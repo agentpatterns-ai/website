@@ -21,7 +21,7 @@ Environment design beats prompt tuning. A codebase with strict types, comprehens
 
 ### The investment that compounds
 
-Every improvement to your development environment benefits both human developers and agents simultaneously. A stricter type system catches bugs for everyone. A better test suite validates changes regardless of who wrote them — human or Copilot. A linter with clear error messages guides anyone — human or agent — toward the right pattern.
+Every improvement to your development environment benefits both human developers and agents simultaneously. A stricter type system catches bugs for everyone. A better test suite validates changes regardless of who wrote them, human or Copilot. A linter with clear error messages guides anyone, human or agent, toward the right pattern.
 
 But agents benefit disproportionately. A human developer who encounters a type error can reason about the fix from experience. Copilot, encountering the same error, reads the error message literally and attempts the fix it suggests. The quality of that error message — its specificity, its remediation guidance — directly determines whether the agent self-corrects or spirals.
 

@@ -31,7 +31,7 @@ const options = {
 };
 ```
 
-Their model: "those three are pre-approved; bypass means no prompts; therefore the agent can only run those three." The reality: every tool — `Bash`, `Write`, `Edit`, `WebFetch`, every MCP tool — runs without prompts; the allow list is decorative. The same shape in CLI flags (`claude -p "..." --allowedTools Read --permission-mode bypassPermissions`) executes `Bash` without prompting. Filed as [anthropics/claude-code#12232](https://github.com/anthropics/claude-code/issues/12232) and closed as not planned — intended behavior, not a bug.
+Their model: "those three are pre-approved; bypass means no prompts; therefore the agent can only run those three." The reality: every tool (`Bash`, `Write`, `Edit`, `WebFetch`, every MCP tool) runs without prompts, and the allow list is decorative. The same shape in CLI flags (`claude -p "..." --allowedTools Read --permission-mode bypassPermissions`) executes `Bash` without prompting. Filed as [anthropics/claude-code#12232](https://github.com/anthropics/claude-code/issues/12232) and closed as not planned — intended behavior, not a bug.
 
 ## Why it works (the documented evaluation order)
 

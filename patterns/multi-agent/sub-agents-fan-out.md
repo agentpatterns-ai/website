@@ -160,6 +160,7 @@ When each sub-task is small. Spawning three sub-agents to read three 100-token f
 - [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](../agent-design/agent-composition-patterns.md)
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
+- [The Orchestrator's Attention Budget](../agent-design/orchestrator-attention-budget.md) — why the isolation matters, and how the main thread undoes it
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md)
 - [Staggered Agent Launch](staggered-agent-launch.md)
 - [Subagent Schema-Level Tool Filtering](subagent-schema-level-tool-filtering.md)

@@ -24,7 +24,7 @@ A six-month longitudinal study of professional engineers found that productivity
 
 ## Supervisory engineering work
 
-The divergence comes from a change in what the work is. As the assistant takes over code production, the engineer's job shifts toward directing, evaluating, and correcting AI output — what the study calls supervisory engineering work. This is the same creation-to-verification shift documented in [bottleneck migration](bottleneck-migration.md) and [rigor relocation](rigor-relocation.md), now measured over time: feedback loops improved, but [flow states](addictive-flow-agent-development.md) declined and [cognitive load](cognitive-load-ai-fatigue.md) rose. Reviewing and steering someone else's drafts — even a machine's — is a different cognitive mode than building, and it is less conducive to flow.
+The divergence comes from a change in what the work is. As the assistant takes over code production, the engineer's job shifts toward directing, evaluating, and correcting AI output, what the study calls supervisory engineering work. This is the same creation-to-verification shift documented in [bottleneck migration](bottleneck-migration.md) and [rigor relocation](rigor-relocation.md), now measured over time: feedback loops improved, but [flow states](addictive-flow-agent-development.md) declined and [cognitive load](cognitive-load-ai-fatigue.md) rose. Reviewing and steering someone else's drafts, even a machine's, is a different cognitive mode than building, and it is less conducive to flow.
 
 ## Why it matters
 

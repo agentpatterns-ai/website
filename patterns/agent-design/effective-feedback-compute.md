@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - reliability
+  - arxiv
 aliases:
   - effective feedback compute
   - trace-level scaling coordinate

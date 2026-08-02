@@ -68,8 +68,8 @@ Mixed composition is the practical baseline. CRA-first review with required huma
 
 - CRA-only reviewed PRs merge at 45.20% versus 68.37% for human-only — a 23-point gap driven by low signal ratios
 - 60.2% of closed CRA-only PRs receive fewer than 30% actionable comments, causing abandonment
-- 12 of 13 CRAs studied show average signal ratios below 60%
-- Adding one human reviewer to CRA-reviewed PRs recovers most of the merge rate (67.99%)
+- Signal ratio is the lever, not vendor choice: 12 of 13 CRAs sit below 60%, so constraining what the agent may comment on moves the number further than switching tools
+- One human reviewer is the cheapest available fix, recovering the merge rate to 67.99%. Route CRA output to a person rather than trying to raise CRA autonomy
 - Industry claims of 80% CRA self-sufficiency are not supported by empirical merge rate data
 
 ## When this backfires

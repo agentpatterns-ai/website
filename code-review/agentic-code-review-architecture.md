@@ -109,7 +109,7 @@ It can. Broader access lets the agent comment on code that is intentionally isol
 - The hybrid approach blends LLM semantic analysis with deterministic tools (CodeQL, ESLint) for high-signal findings
 - Strategic review planning prevents context loss on complex PRs
 - Reading linked issues and tracing dependencies enables reviews that evaluate architectural fit, not just line-level correctness
-- The approach produced an 8.1% increase in positive developer feedback despite higher latency
+- Budget for the latency the architecture spends. It buys 8.1% more positive developer feedback by exploring the repository, which suits asynchronous PR review and rules it out of a pre-commit hook
 
 ## Related
 

@@ -18,7 +18,7 @@ last_reviewed: 2026-05-27
 
 ## Why Evals Come First
 
-Teams that write evals after the fact tend to reverse-engineer success criteria from a live system. This embeds the agent's current behavior — including its bugs — into the definition of correct. The eval suite then validates what the agent already does rather than what it should do — the opposite of what evals are meant to measure (see [What Evals Are](what-evals-are.md)).
+Teams that write evals after the fact tend to reverse-engineer success criteria from a live system. This embeds the agent's current behavior, including its bugs, into the definition of correct. The eval suite then validates what the agent already does rather than what it should do — the opposite of what evals are meant to measure (see [What Evals Are](what-evals-are.md)).
 
 Writing evals first forces clarity: you must decide what "done" means before building toward it. A low pass rate on a new capability eval is a feature, not a problem — it identifies the gap and makes progress visible as implementation proceeds. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 

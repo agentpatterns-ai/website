@@ -41,7 +41,7 @@ Single-repo single-team stacks already get versioning, PR review, and rollback f
 | Revision cadence | 58% single-commit; 0.4 commits/month | 0.6 commits/month for comparator files |
 | Permission declarations | <1% of agent configs declare permission boundaries | 33% of GitHub Actions workflows |
 
-The duplication is mostly cross-organization — these are not just fork copies. The revision rate is half that of comparable repo files. And where GitHub Actions workflows reached a third-of-files-declare-permissions baseline, agent configs sit near zero. The same paper proposes a "deterministic control plane" — content addressing, permission enforcement, state-machine promotion, drift detection — as the structural response ([arxiv:2606.26924](https://arxiv.org/abs/2606.26924)).
+The duplication is mostly cross-organization, so these are not just fork copies. The revision rate is half that of comparable repo files. And where GitHub Actions workflows reached a third-of-files-declare-permissions baseline, agent configs sit near zero. The same paper proposes a "deterministic control plane" (content addressing, permission enforcement, state-machine promotion, drift detection) as the structural response ([arxiv:2606.26924](https://arxiv.org/abs/2606.26924)).
 
 ## The four control-plane mechanisms
 

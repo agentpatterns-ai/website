@@ -5,6 +5,7 @@ description: "Transformer models disproportionately attend to initial tokens reg
 tags:
   - context-engineering
   - tool-agnostic
+  - arxiv
 aliases:
   - Critical Instruction Repetition
   - Attention Bias and Instruction Placement

@@ -243,6 +243,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Version-Controlled Agent Context (Git Context Controller)](context-engineering/version-controlled-agent-context.md)
 - [Skill Loadout Curation for Coding Agents](context-engineering/skill-loadout-curation.md)
 - [Addressable Recall Compaction: Compact to Citations, Not Summaries](context-engineering/addressable-recall-compaction.md)
+- [Reasoning Retention and Compaction as Harness Settings](context-engineering/reasoning-retention-and-compaction.md)
+- [Per-Object Context Allocation (Selective Invariance)](context-engineering/per-object-context-allocation.md)
+- [Context Compiler: Deterministic Assembly Over Bigger Windows](context-engineering/context-compiler.md)
 
 ## Instructions & Prompts
 
@@ -319,6 +322,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Match Tool Instructions to the Agent Workflow](instructions/match-tool-instructions-to-workflow.md)
 - [Prompt Transpilation: Instructions as Build Artifacts](instructions/prompt-transpilation.md)
 - [Restraint Rules Need External Enforcement](instructions/restraint-rules-need-external-enforcement.md)
+- [Knowledge Gap or Skill Gap: Triage Before Writing Context](instructions/knowledge-gap-vs-skill-gap-triage.md)
 
 ## Agent Architecture
 
@@ -581,6 +585,10 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Pre-Write Change Intent Admission (Claim Plane)](patterns/multi-agent/pre-write-change-intent-admission.md)
 - [Trigger-Level Gating for Autonomous Agent Intake](patterns/agent-design/trigger-level-agent-intake-gating.md)
 - [Organizing Filesystem Agent Memory for Retrieval Cost](patterns/agent-design/filesystem-memory-organization.md)
+- [The Orchestrator's Attention Budget: Delegating to Protect Context](patterns/agent-design/orchestrator-attention-budget.md)
+- [Sandbox Forking: Branch Agent Runs From a Warm Snapshot](patterns/agent-design/sandbox-forking.md)
+- [Persistent Teammate Workspace: Durable State for Agent Teams](patterns/agent-design/persistent-teammate-workspace.md)
+- [Bounded Agent Steps Inside a Deterministic Workflow](patterns/agent-design/bounded-agent-step.md)
 
 ## Loop Engineering
 
@@ -599,6 +607,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](loop-engineering/loop-budgeting.md)
 - [Stuck-Loop Recovery: Detecting and Escaping Non-Converging Agent Loops](loop-engineering/stuck-loop-recovery.md)
 - [Within-Task Model Cascade: Designing the Escalation Gate](loop-engineering/within-task-model-cascade.md)
+- [Blind Resampling Over Self-Repair in Small Code Models](loop-engineering/blind-resampling-over-self-repair.md)
 
 ## Tool Design
 
@@ -989,6 +998,12 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Typed Generation Contracts for Grounded Extraction](verification/typed-generation-contract.md)
 - [State-Bound Evidence and Typed Revision Contracts for Repair Loops](verification/state-bound-repair-evidence.md)
 - [Inline Suggestion Attachment in Agent Code Review](code-review/inline-suggestion-attachment.md)
+- [Audit-Budget Allocation for Agent Fleets](verification/audit-budget-allocation-agent-fleets.md)
+- [Agent-Generated Verification Reports: A Structured Round-Trip for Human Review](verification/agent-generated-verification-report.md)
+- [Evidence-Chain Run Logs: Bracket the Reported Symptom](verification/evidence-chain-run-logs.md)
+- [Purpose-Built Eval Suites for Model and Harness Swaps](verification/purpose-built-eval-suites.md)
+- [Dual Executable Specifications for Long-Horizon Features](verification/dual-executable-specifications.md)
+- [Non-Compensatory Readiness Gates Before Agent Release](verification/non-compensatory-readiness-gates.md)
 
 ## Hooks & Guardrails
 
@@ -1079,6 +1094,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [WebMCP: Browser-Hosted Tool Contracts for In-Page AI Agents](standards/webmcp.md)
 - [Agentic Resource Discovery: Federated Pre-Invocation Search](standards/agentic-resource-discovery.md)
 - [Governance Layer for Agent Interoperability Protocols](standards/protocol-governance-layer.md)
+- [Stateless MCP: One Request per Tool Call](standards/stateless-mcp.md)
 
 ## Development Workflows
 
@@ -1183,6 +1199,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [TDD Interaction Models: Throughput Versus Test Quality](workflows/tdd-interaction-models.md)
 - [How Teams Build SE Agents: A Seven-Stage Build Loop](workflows/se-agent-build-workflow.md)
 - [Oracle-Gated Delegation Beyond Your Domain Expertise](workflows/oracle-gated-delegation.md)
+- [Stacked Agent Sessions on Unmerged Feature Branches](workflows/stacked-agent-sessions.md)
+- [Behavioral Specification Elicitation Before Synthesis (SpecFirst)](workflows/behavioral-spec-elicitation.md)
 
 ## Human Factors
 
@@ -1232,6 +1250,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Risk Architecture for AI-Native Engineering Teams](human/risk-architecture-ai-native-teams.md)
 - [Author-to-Reviewer Role Inversion in AI-Assisted Teams](human/author-to-reviewer-role-inversion.md)
 - [Marking Which Artifacts Are for Humans or Agents (Landmarking)](human/landmarking-human-vs-agent-artifacts.md)
+- [Step Budgets and Trust in Agent-Generated Code Tours](human/agent-generated-code-tour-step-budgets.md)
 
 ## Anti-Patterns
 
@@ -1348,6 +1367,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Trusting Claimed Prior Approval in Agent Review Gates](patterns/anti-patterns/trusting-claimed-prior-approval.md)
 - [Trusting a Skill Scanner's Verdict as a Security Judgment (Green-Check Fallacy)](patterns/anti-patterns/skill-scanner-verdict-not-security-judgment.md)
 - [Permission Modes as a Defense Against a Tampered Response Path (Response-Path Control Gap)](patterns/anti-patterns/response-path-control-gap.md)
+- [Artifact-Only Verification Hides Skipped Skill Steps](patterns/anti-patterns/artifact-only-verification.md)
 
 ## Emerging Concepts
 

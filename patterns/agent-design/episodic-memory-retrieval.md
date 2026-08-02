@@ -8,6 +8,7 @@ tags:
   - memory
   - tool-agnostic
   - long-form
+  - arxiv
 aliases:
   - experience replay for agents
   - episode-based recall

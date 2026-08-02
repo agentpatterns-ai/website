@@ -28,6 +28,8 @@ Learn it hands-on with the [Sandboxes for Swarms guided lesson](https://learn.ag
 
 For agent workflows, this gives each agent a private sandbox. Claude Code sets this up for each sub-agent through `isolation: worktree`. The agent reads and writes files without touching any other agent's environment. If its output is wrong, you delete the worktree. If its output is correct, you submit its branch for merge.
 
+What a worktree does not isolate is the provisioned environment around the tree. Every worktree still installs its own dependencies, builds its own artifacts, and starts its own services. [Sandbox Forking](../patterns/agent-design/sandbox-forking.md) covers the complementary primitive that branches the whole prepared machine from a snapshot, and the conditions under which that is worth doing.
+
 The [Claude Code worktrees workflow documentation](https://code.claude.com/docs/en/common-workflows) covers the mechanics. The underlying primitive is standard [git worktree](https://git-scm.com/docs/git-worktree), a core Git feature since [Git 2.5, released in July 2015](https://github.blog/2015-07-29-git-2-5-including-multiple-worktrees-and-triangular-workflows/) — so nothing about the isolation guarantee is Claude-specific.
 
 ## Isolation guarantees

@@ -6,6 +6,7 @@ tags:
   - multi-agent
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - recursive best-of-N
   - parallel candidate selection

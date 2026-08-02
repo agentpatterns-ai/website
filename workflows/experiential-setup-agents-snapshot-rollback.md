@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
   - memory
+  - arxiv
 aliases:
   - SetupX experiential learning
   - dual-modality experience records for setup

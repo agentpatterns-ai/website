@@ -39,7 +39,7 @@ Andrew Ng's 2024 DeepLearning.AI series names four patterns that improve agentic
 
 ## Anthropic's five workflow patterns
 
-Anthropic's 'Building Effective Agents' names five workflow patterns — control-flow defined in code — plus an autonomous-agent loop where the model owns control flow ([Anthropic — Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)). The full taxonomy mapping with augmented-LLM context lives at [Anthropic's Effective Agents Framework](agent-design/anthropic-effective-agents-framework.md); the rows below are the navigation lookup.
+Anthropic's 'Building Effective Agents' names five workflow patterns, each with control-flow defined in code, plus an autonomous-agent loop where the model owns control flow ([Anthropic — Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)). The full taxonomy mapping with augmented-LLM context lives at [Anthropic's Effective Agents Framework](agent-design/anthropic-effective-agents-framework.md); the rows below are the navigation lookup.
 
 | Anthropic pattern | Scope difference | This site's canonical page |
 |---|---|---|

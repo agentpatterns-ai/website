@@ -82,7 +82,7 @@ Accepts: short-term churn from users who depended on the old path. This churn is
 
 ## Safety boundary: not an agent design pattern
 
-The nibzard catalog entry warns against applying irreversibility logic to AI agent systems themselves. Giving agents irreversible operations with broad permissions creates severe risk from prompt injection or context overflow — the case for [blast-radius containment](../security/blast-radius-containment.md). This pattern applies to product strategy — what features a team maintains or removes — not to agent autonomy design. Design agents with reversible, bounded operations.
+The nibzard catalog entry warns against applying irreversibility logic to AI agent systems themselves. Giving agents irreversible operations with broad permissions creates severe risk from prompt injection or context overflow, which is the case for [blast-radius containment](../security/blast-radius-containment.md). This pattern applies to product strategy, meaning what features a team maintains or removes, not to agent autonomy design. Design agents with reversible, bounded operations.
 
 ## Key Takeaways
 

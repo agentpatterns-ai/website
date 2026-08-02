@@ -7,6 +7,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - arxiv
 aliases:
   - contextual capability profile
   - context-aware agent routing

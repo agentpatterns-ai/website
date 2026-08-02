@@ -44,6 +44,8 @@ MCP supports two transport modes ([Claude Code MCP docs](https://code.claude.com
 - stdio (local): the server runs as a subprocess on the same machine and communicates over stdin and stdout. Fast and enough for most developer tooling.
 - Streamable HTTP (remote): the server runs remotely and accepts HTTP connections with optional streaming, so teams can share tooling. The older HTTP+SSE transport is deprecated.
 
+The session model described above applies to spec revisions before `2026-07-28`. That revision made the protocol core stateless — no `initialize` handshake and no `Mcp-Session-Id` — so a tool call is a single self-describing request. See [Stateless MCP: One Request per Tool Call](stateless-mcp.md).
+
 ## Cross-tool portability
 
 The same MCP server works with any MCP-compliant host. A Playwright [browser automation](../tool-engineering/browser-automation-for-research.md) server built for Claude Code also works in GitHub Copilot once Copilot supports MCP, so an organization builds its internal tools server once. [GitHub Copilot's third-party agent documentation](https://docs.github.com/en/copilot/concepts/agents/about-third-party-agents) covers how Copilot works with agents such as Claude and Codex.
@@ -117,6 +119,7 @@ Treat it like a third-party shell script: select, pin, and sandbox it. The stdio
 
 ## Related
 
+- [Stateless MCP: One Request per Tool Call](stateless-mcp.md)
 - [Agent-to-Agent (A2A) Protocol for AI Agent Development](a2a-protocol.md)
 - [Agent Cards: Capability Discovery Standard for AI Agents](agent-cards.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)

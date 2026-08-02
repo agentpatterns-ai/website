@@ -163,10 +163,11 @@ The Honk team wired deterministic verifiers — format, build, and test — dire
 ## Related
 
 - [Trust Without Verify](../patterns/anti-patterns/trust-without-verify.md)
+- [Agent-Generated Verification Reports: A Structured Round-Trip for Human Review](agent-generated-verification-report.md) — the human-verified counterpart, for changes no machine check covers
 - [Incremental Verification](incremental-verification.md)
 - [Deterministic Guardrails](deterministic-guardrails.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
 - [Data Fidelity Guardrails](data-fidelity-guardrails.md)
 - [Pre-Completion Checklists](pre-completion-checklists.md)
-- [Structured Output Constraints](structured-output-constraints.md)
 - [Grade Agent Outcomes](grade-agent-outcomes.md)
+- [Evidence-Chain Run Logs](evidence-chain-run-logs.md) — records whether the reported symptom moved, not only whether the checks ran

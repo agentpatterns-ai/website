@@ -65,7 +65,7 @@ The mechanism is decoupling marginal value-of-information from a single global c
 | Project-defined function-tool parameter | Custom `extended_reasoning: bool` on a research tool | Any model that supports function-calling |
 | MCP tool annotation | None today | Would require spec change |
 
-MCP is not yet viable. Its annotation surface — `readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`, `title` — covers risk and behavior, not compute budget, and the spec says "clients MUST consider tool annotations to be untrusted unless they come from trusted servers" ([MCP blog: tool annotations](https://blog.modelcontextprotocol.io/posts/2026-03-16-tool-annotations/)). A per-call budget belongs on the tool's input schema, not in a server-declared hint. For project-defined tools routing to expensive backends — deep research, plan-synthesis subagents — adding the parameter and teaching its trigger phrases in the description is the portable form.
+MCP is not yet viable. Its annotation surface (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`, `title`) covers risk and behavior, not compute budget, and the spec says "clients MUST consider tool annotations to be untrusted unless they come from trusted servers" ([MCP blog: tool annotations](https://blog.modelcontextprotocol.io/posts/2026-03-16-tool-annotations/)). A per-call budget belongs on the tool's input schema, not in a server-declared hint. For project-defined tools routing to expensive backends, such as deep research or plan-synthesis subagents, adding the parameter and teaching its trigger phrases in the description is the portable form.
 
 ## When this backfires
 

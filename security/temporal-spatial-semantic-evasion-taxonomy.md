@@ -49,7 +49,7 @@ The [tool-invocation attack surface](tool-invocation-attack-surface.md) captures
 
 A payload whose intent is obscured under contextual noise — wrapped in benign-looking framing, role-play, or "consistency with prior context" cues. Per-prompt classifiers score surface features ("does this look like a jailbreak?") and miss the latent goal ([Ma et al., 2026](https://arxiv.org/abs/2605.22321)).
 
-[Goal reframing](goal-reframing-exploitation-trigger.md) is the documented primary semantic-axis trigger: a 10,000-trial taxonomy finds reframing — not social engineering or incentives — is the one prompt condition that reliably exploits frontier models. [History-anchor consistency injection](history-anchor-consistency-injection.md) is a second instance — a single "stay consistent with prior history" sentence flips frontier agents from near-zero unsafe selection to 91–98%. [Compositional vulnerability induction](compositional-vulnerability-induction.md) sits on this axis too: each routine ticket is semantically benign while the joint intent is exploitative.
+[Goal reframing](goal-reframing-exploitation-trigger.md) is the documented primary semantic-axis trigger: a 10,000-trial taxonomy finds reframing, not social engineering or incentives, is the one prompt condition that reliably exploits frontier models. [History-anchor consistency injection](history-anchor-consistency-injection.md) is a second instance, where a single "stay consistent with prior history" sentence flips frontier agents from near-zero unsafe selection to 91–98%. [Compositional vulnerability induction](compositional-vulnerability-induction.md) sits on this axis too: each routine ticket is semantically benign while the joint intent is exploitative.
 
 ## Cross-vector composition
 

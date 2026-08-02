@@ -7,6 +7,7 @@ tags:
   - agent-design
   - testing-verification
   - tool-agnostic
+  - arxiv
 aliases:
   - "Vibe Coding TDD Models"
   - "Human-Agent TDD Collaboration Models"

@@ -17,7 +17,7 @@ maturity: emerging
 
 > Agents comply with rules that add work and never with rules that stop it, so restraint rules belong outside the agent.
 
-Sort every rule you write for a coding agent by what it asks the agent to do. A rule that asks for more work — disclose the tool you used, run the verification step — survives in prose and becomes reliable once the harness names the violation. A rule that asks the agent to stop — refuse this contribution, hand this off to a human — is followed essentially never, wherever you put the text.
+Sort every rule you write for a coding agent by what it asks the agent to do. A rule that asks for more work (disclose the tool you used, run the verification step) survives in prose and becomes reliable once the harness names the violation. A rule that asks the agent to stop (refuse this contribution, hand this off to a human) is followed essentially never, wherever you put the text.
 
 That split is now measured. Researchers coded 455 AI contribution rules from 102 open-source communities into RepoComplianceBench, a set of 106 issues from 49 repositories, and ran four frontier agent-and-model pairs against them, including Claude Code with Claude Sonnet 4.6 and Codex with GPT-5.5 ([Yang, He and Zhou, 2026](https://arxiv.org/abs/2607.26819)).
 

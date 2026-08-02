@@ -25,7 +25,7 @@ Three steps, in order, with no shortcuts:
 2. Instrument to discriminate — insert log statements whose output will confirm or eliminate each hypothesis. Tag each line with the hypothesis it tests.
 3. Reproduce, converge, clean up — run the failing case, read the tagged output, identify the hypothesis the evidence supports, write a targeted fix, and remove the instrumentation.
 
-Cursor ships this as a first-class `/debug` mode in its CLI (2026-04-14): "Cursor generates hypotheses, adds log statements, and uses runtime information to pinpoint the issue before making a targeted fix." [Source: [CLI Debug Mode and /btw Support — Cursor Changelog](https://cursor.com/changelog/04-14-26)] The formal docs describe a five-phase workflow — exploration, instrumentation, reproduction, analysis, resolution/cleanup — and recommend the mode for bugs you can reproduce but cannot figure out, race conditions and timing issues, performance problems and memory leaks, and regressions. [Source: [Debug Mode — Cursor Docs](https://cursor.com/docs/agent/debug-mode)]
+Cursor ships this as a first-class `/debug` mode in its CLI (2026-04-14): "Cursor generates hypotheses, adds log statements, and uses runtime information to pinpoint the issue before making a targeted fix." [Source: [CLI Debug Mode and /btw Support — Cursor Changelog](https://cursor.com/changelog/04-14-26)] The formal docs describe a five-phase workflow (exploration, instrumentation, reproduction, analysis, resolution/cleanup) and recommend the mode for bugs you can reproduce but cannot figure out, race conditions and timing issues, performance problems and memory leaks, and regressions. [Source: [Debug Mode — Cursor Docs](https://cursor.com/docs/agent/debug-mode)]
 
 ```mermaid
 graph TD

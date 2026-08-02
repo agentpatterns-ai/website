@@ -49,7 +49,7 @@ Independent trajectory analysis corroborates the early-signal finding — a codi
 
 ## Example
 
-A CLI agent runs a build step and sees `sudo: not found`. It adopts the false premise that it lacks permissions and spends the next several steps rewriting commands to avoid `sudo` — an internally consistent but wrong path. The real cause is that `sudo` is not installed in the container. The decisive error was the first step of that detour; the recovery window was the very next step, before the agent committed to the permissions theory. A premise check — confirm this is a permissions error before working around it — would have caught it inside the window. Ten steps later, when the build still fails for unrelated reasons, the run has already locked in ([Zhao et al., 2026](https://arxiv.org/abs/2607.09510)).
+A CLI agent runs a build step and sees `sudo: not found`. It adopts the false premise that it lacks permissions and spends the next several steps rewriting commands to avoid `sudo`, an internally consistent but wrong path. The real cause is that `sudo` is not installed in the container. The decisive error was the first step of that detour; the recovery window was the very next step, before the agent committed to the permissions theory. A premise check (confirm this is a permissions error before working around it) would have caught it inside the window. Ten steps later, when the build still fails for unrelated reasons, the run has already locked in ([Zhao et al., 2026](https://arxiv.org/abs/2607.09510)).
 
 ## Key Takeaways
 

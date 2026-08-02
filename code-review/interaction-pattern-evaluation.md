@@ -32,7 +32,7 @@ Task type confounds aggregate merge rate on its own. Documentation accepts at 82
 
 ## Why it works
 
-The mechanism is causal pathway separation. An outcome label collapses three independent processes — output viability, reviewer engagement, and trace observability — into one binary, so any comparison built on it carries noise from the other two. The MSR 2026 inspection shows that roughly two-thirds of rejection labels and one-fifth of merge labels carry information unrelated to capability. Interaction signals — review-loop, reviewer-commit, and force-push counts, plus the abandonment timestamp — come out separately, so a metric built on them recovers a cleaner capability estimate. The pattern recurs in Alam et al.'s 8,106 fix-related PRs, where test failures and prior resolution drove non-integration rather than capability defects ([arXiv:2602.00164](https://arxiv.org/abs/2602.00164)).
+The mechanism is causal pathway separation. An outcome label collapses three independent processes (output viability, reviewer engagement, and trace observability) into one binary, so any comparison built on it carries noise from the other two. The MSR 2026 inspection shows that roughly two-thirds of rejection labels and one-fifth of merge labels carry information unrelated to capability. Interaction signals (review-loop, reviewer-commit, and force-push counts, plus the abandonment timestamp) come out separately, so a metric built on them recovers a cleaner capability estimate. The pattern recurs in Alam et al.'s 8,106 fix-related PRs, where test failures and prior resolution drove non-integration rather than capability defects ([arXiv:2602.00164](https://arxiv.org/abs/2602.00164)).
 
 ## When this backfires
 

@@ -77,7 +77,7 @@ LLM context windows set a hard ceiling on how much a site can serve an agent in 
 
 ### The real audience is coding agents
 
-The log data shifts the honest use case. `claude-code` was the #2 named AI fetcher of `llms.txt` in the Ahrefs study — the file's real consumers are coding agents, not answer engines ([Ahrefs](https://ahrefs.com/blog/llmstxt-study/)). For a developer-facing site, that is a genuine audience: an agent working in a codebase can fetch your curated index to navigate your docs. That value is real, but it is separate from — and should not be confused with — search ranking or citation in answer engines.
+The log data shifts the honest use case. `claude-code` was the #2 named AI fetcher of `llms.txt` in the Ahrefs study, so the file's real consumers are coding agents, not answer engines ([Ahrefs](https://ahrefs.com/blog/llmstxt-study/)). For a developer-facing site, that is a genuine audience: an agent working in a codebase can fetch your curated index to navigate your docs. That value is real, but it is separate from search ranking or citation in answer engines, and should not be confused with either.
 
 ## Real adoption examples
 

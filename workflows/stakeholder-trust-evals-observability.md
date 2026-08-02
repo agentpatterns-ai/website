@@ -25,7 +25,7 @@ The pattern only earns trust when three preconditions hold: error-analysis narra
 
 ## Why stakeholder-facing evals and observability
 
-Eval scores, traces, and observability data come from structurally different subsystems — offline harness, runtime tracing, infrastructure metrics — each optimized for the engineer who owns it, with legibility to a non-engineer incidental. Stakeholders (PM, leadership, GTM, support leads) cannot judge whether an AI feature is working without pulling those signals onto one surface and re-rendering them in domain vocabulary ([Braintrust: How to earn stakeholder trust with evals and observability, 28 April 2026](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). Otherwise engineering gets pulled into status meetings to paraphrase eval scores and trace JSON — a cost that scales poorly as AI features multiply.
+Eval scores, traces, and observability data come from structurally different subsystems (offline harness, runtime tracing, infrastructure metrics) each optimized for the engineer who owns it, with legibility to a non-engineer incidental. Stakeholders (PM, leadership, GTM, support leads) cannot judge whether an AI feature is working without pulling those signals onto one surface and re-rendering them in domain vocabulary ([Braintrust: How to earn stakeholder trust with evals and observability, 28 April 2026](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). Otherwise engineering gets pulled into status meetings to paraphrase eval scores and trace JSON — a cost that scales poorly as AI features multiply.
 
 ## Preconditions
 

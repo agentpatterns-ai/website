@@ -18,7 +18,7 @@ maturity: emerging
 
 > Wiki memory precomputes a compact, agent-maintained knowledge layer from raw sources, so future agents read a synthesis instead of re-deriving structure on every query.
 
-Wiki memory runs an agent over raw source data — logs, notes, code, docs, experiments, Slack threads, transcripts — and asks it to produce a denser, structured, inspectable set of files that later agents read to understand the domain faster ([LangChain — Wiki Memory, 2026](https://blog.langchain.com/wiki-memory)). The agent both builds the wiki and keeps it current as sources change. It is precomputed synthesis, not query-time retrieval: the structure is compiled once and maintained, rather than rediscovered on every question.
+Wiki memory runs an agent over raw source data (logs, notes, code, docs, experiments, Slack threads, transcripts) and asks it to produce a denser, structured, inspectable set of files that later agents read to understand the domain faster ([LangChain — Wiki Memory, 2026](https://blog.langchain.com/wiki-memory)). The agent both builds the wiki and keeps it current as sources change. It is precomputed synthesis, not query-time retrieval: the structure is compiled once and maintained, rather than rediscovered on every question.
 
 ## When to reach for a wiki
 

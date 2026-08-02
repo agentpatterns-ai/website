@@ -86,7 +86,7 @@ For a new system, name each seam and decide who owns it before picking a harness
 
 Two options for an internal research assistant:
 
-Option A — managed-agents tier. The provider handles harness, session storage, and long-term memory behind one API. Setup is one week. Memory operations — compaction, retrieval, AGENTS.md loading, skill placement — are opaque. A year in, the team wants a different model with better retrieval. The stored memory (months of user-specific corrections) has no documented export format. Migration requires rebuilding memory from scratch.
+Option A, the managed-agents tier. The provider handles harness, session storage, and long-term memory behind one API. Setup is one week. Memory operations (compaction, retrieval, AGENTS.md loading, skill placement) are opaque. A year in, the team wants a different model with better retrieval. The stored memory (months of user-specific corrections) has no documented export format. Migration requires rebuilding memory from scratch.
 
 Option B — open harness with owned storage. The team runs an open-source harness (for example, [Deep Agents](deep-agent-runtime.md)) with memory in their own Postgres. Setup is three weeks. Explicit decisions: AGENTS.md loaded at session start, skill metadata in system messages, compaction summary stored as plain JSON, interaction log queryable by user id. A year in, swapping the model only requires re-pointing the harness — memory is untouched.
 

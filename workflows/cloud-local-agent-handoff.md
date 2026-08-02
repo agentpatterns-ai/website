@@ -52,7 +52,7 @@ The `&` shortcut in the CLI gives you a [quick way to delegate](https://github.b
 
 ## The transferable pattern
 
-GitHub Copilot was an early example, but the handoff is no longer single-vendor. Cursor ships the same building blocks: `/in-cloud` cloud subagents that each run on their own VM and branch — Cursor provisions that cloud dev environment in under 10 minutes ([Cursor — cloud agents in the agents window](https://cursor.com/changelog/cloud-in-agents-window)) — plus a `/babysit` command that prepares a cloud PR for merge remotely, and reliable session pull-back to local for verification. The pattern applies broadly: agent sessions should be serializable and portable across execution surfaces. It needs four properties:
+GitHub Copilot was an early example, but the handoff is no longer single-vendor. Cursor ships the same building blocks: `/in-cloud` cloud subagents that each run on their own VM and branch, with Cursor provisioning that cloud dev environment in under 10 minutes ([Cursor — cloud agents in the agents window](https://cursor.com/changelog/cloud-in-agents-window)), plus a `/babysit` command that prepares a cloud PR for merge remotely, and reliable session pull-back to local for verification. The pattern applies broadly: agent sessions should be serializable and portable across execution surfaces. It needs four properties:
 
 - branch as shared state: Git branches coordinate any cloud and local agent
 - session logs as context: the receiving surface needs to see what the sending surface did

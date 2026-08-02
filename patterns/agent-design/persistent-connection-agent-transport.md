@@ -20,7 +20,7 @@ maturity: established
 
 ## The per-turn overhead problem
 
-A typical agent loop issues many sequential model calls — read a file, edit it, run a test, inspect output, repeat. Each turn over stateless HTTP pays the same fixed costs: TLS handshake, request validation, conversation rendering, safety classifier passes, tokenization, and model routing. As model inference itself gets faster, this fixed overhead becomes the largest share of latency. OpenAI reports that for GPT-5.3-Codex-Spark — running at about 1,000 tokens per second versus 65 TPS on prior flagship models — Responses API overhead grew larger than the inference time it surrounded ([OpenAI: Speeding up agentic workflows with WebSockets](https://openai.com/index/speeding-up-agentic-workflows-with-websockets/)).
+A typical agent loop issues many sequential model calls: read a file, edit it, run a test, inspect output, repeat. Each turn over stateless HTTP pays the same fixed costs: TLS handshake, request validation, conversation rendering, safety classifier passes, tokenization, and model routing. As model inference itself gets faster, this fixed overhead becomes the largest share of latency. OpenAI reports that for GPT-5.3-Codex-Spark, running at about 1,000 tokens per second versus 65 TPS on prior flagship models, Responses API overhead grew larger than the inference time it surrounded ([OpenAI: Speeding up agentic workflows with WebSockets](https://openai.com/index/speeding-up-agentic-workflows-with-websockets/)).
 
 ## The pattern
 

@@ -31,7 +31,7 @@ RAG systems ingest documents in three steps:
 2. Embed — convert each passage to a vector representation through an embedding model.
 3. Score — at query time, rank passages by cosine similarity to the query embedding.
 
-AI engines cite the returned passage. When a passage spans several unrelated topics, its embedding becomes a blended average — less similar to any single query than a focused passage. [NVIDIA research (2024)](https://developer.nvidia.com/blog/finding-the-best-chunking-strategy-for-accurate-ai-responses/) found page-level chunking scored highest of the strategies tested on their internal retrieval-accuracy metric — the benchmark doesn't name the metric's unit or scale, so treat the ranking as directional rather than the raw score as a comparable figure — and that 256–512 token chunks perform best for factoid queries, which is the actionable finding.
+AI engines cite the returned passage. When a passage spans several unrelated topics, its embedding becomes a blended average, less similar to any single query than a focused passage. [NVIDIA research (2024)](https://developer.nvidia.com/blog/finding-the-best-chunking-strategy-for-accurate-ai-responses/) found page-level chunking scored highest of the strategies tested on their internal retrieval-accuracy metric. The benchmark doesn't name the metric's unit or scale, so treat the ranking as directional rather than the raw score as a comparable figure. It also found that 256–512 token chunks perform best for factoid queries, which is the actionable finding.
 
 ## The atomic page principle
 

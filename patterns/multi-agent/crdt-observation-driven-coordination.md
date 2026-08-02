@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - multi-agent
+  - arxiv
 aliases:
   - CRDT-based agent coordination
   - observation-driven coordination

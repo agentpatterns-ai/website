@@ -60,3 +60,4 @@ The source article ran an invoice-extraction bake-off over combinations of model
 - [Quality Score Rubric and Simplification Log for Agent Harnesses](../patterns/agent-design/quality-score-rubric.md) — the absolute A/B/C/D rubric this technique is the comparative alternative to.
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — what the judge should score in each best-worst batch: the end state, not the path.
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — why single-run scores are unstable, the noise comparative judging is built to survive.
+- [Purpose-Built Eval Suites for Model and Harness Swaps](purpose-built-eval-suites.md) — how to build and size the suite whose scores this technique ranks.

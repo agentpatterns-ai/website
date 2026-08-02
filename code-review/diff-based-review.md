@@ -109,7 +109,7 @@ Each `git diff` is 10–30 lines. The reviewer never re-reads the full page — 
 ## Key Takeaways
 
 - Mistakes live in new content — diffs focus review on exactly that
-- Design agent pipelines so review happens at PR and checkpoint boundaries, not on complete artifacts
+- Put the review boundary where the pipeline already has one: a PR, a staged change, a stage handoff. A boundary you introduce has to be maintained; one the pipeline already produces does not
 - Review fatigue scales with output size; diff-based review keeps the review surface manageable
 - Multiple small diffs are preferable to one large diff — they are easier to review and easier to bisect
 - Staged pipelines have natural diff boundaries at each stage handoff

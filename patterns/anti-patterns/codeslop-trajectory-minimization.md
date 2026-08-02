@@ -5,6 +5,7 @@ description: "Coding agents leave speculative edits and abandoned hypotheses fro
 tags:
   - anti-pattern
   - tool-agnostic
+  - arxiv
 aliases:
   - code slop
   - trajectory minimization

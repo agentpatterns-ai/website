@@ -9,6 +9,7 @@ tags:
   - instructions
   - context-engineering
   - tool-agnostic
+  - arxiv
 last_reviewed: 2026-06-13
 maturity: emerging
 ---
@@ -94,7 +95,7 @@ Critical format constraints belong in the main instruction file. Reference examp
 
 ## Why it works
 
-Rules and examples engage different mechanisms in how transformers process instructions. GPT-3 established that large language models can infer tasks from text demonstrations alone, without fine-tuning or explicit rules ([Brown et al., 2020](https://arxiv.org/abs/2005.14165)). Mechanistic interpretability research traces in-context learning to induction heads — pairs of attention heads that find an earlier occurrence of the current token and copy what followed it, matching and extending prior patterns ([Olsson et al., "In-context Learning and Induction Heads," 2022](https://arxiv.org/abs/2209.11895)). An example gives the model a concrete template to replicate rather than a constraint to interpret — the effect [domain-specific system prompts](domain-specific-system-prompts.md) exploit with worked reasoning traces. Rules require the model to derive the intended output space through inference; examples supply it directly. This is why rules tolerate ambiguity when acceptable variation is wide, and examples are necessary when the output space is tightly constrained. The combination — state the rule, provide one anchor example — engages both: the rule limits the interpretation space, the example collapses residual ambiguity to a specific format.
+Rules and examples engage different mechanisms in how transformers process instructions. GPT-3 established that large language models can infer tasks from text demonstrations alone, without fine-tuning or explicit rules ([Brown et al., 2020](https://arxiv.org/abs/2005.14165)). Mechanistic interpretability research traces in-context learning to induction heads, pairs of attention heads that find an earlier occurrence of the current token and copy what followed it, matching and extending prior patterns ([Olsson et al., "In-context Learning and Induction Heads," 2022](https://arxiv.org/abs/2209.11895)). An example gives the model a concrete template to replicate rather than a constraint to interpret, the effect [domain-specific system prompts](domain-specific-system-prompts.md) exploit with worked reasoning traces. Rules require the model to derive the intended output space through inference; examples supply it directly. This is why rules tolerate ambiguity when acceptable variation is wide, and examples are necessary when the output space is tightly constrained. The combination — state the rule, provide one anchor example — engages both: the rule limits the interpretation space, the example collapses residual ambiguity to a specific format.
 
 ## Key Takeaways
 

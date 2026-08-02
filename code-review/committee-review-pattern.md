@@ -104,7 +104,7 @@ File-level risk classification drives automatic escalation — changes to authen
 - Set a maximum round limit and escalate to human review if unresolved
 - Use different model providers for reviewers so blind spots do not overlap
 - Scale reviewer count to task risk — one for medium tasks, three cross-model for high-risk changes
-- Focus review prompts on bugs, security, and logic; exclude style to reduce noise
+- Give style to the linter and keep it out of the review prompt entirely. Style comments are the bulk of the noise that teaches reviewers to skim the rest
 
 ## Example
 

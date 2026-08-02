@@ -6,6 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
   - multi-agent
+  - arxiv
 aliases:
   - Multi-Agent Architecture Patterns
 last_reviewed: 2026-06-13

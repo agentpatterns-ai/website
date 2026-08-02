@@ -19,7 +19,7 @@ maturity: established
 
 ## The decision
 
-Managed agent services — [Claude Managed Agents](https://claude.com/blog/building-with-claude-managed-agents) ([platform docs](https://platform.claude.com/docs/en/managed-agents/overview)) — provide a pre-built harness, [sandboxed execution](../../security/sandbox-runtime-comparison.md), and hosted infrastructure in exchange for vendor coupling. Self-hosted open-source harnesses — [LangChain Deep Agents Deploy](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/), Cursor's self-hosted cloud agents — trade ops burden for control over data, model selection, and accumulated [agent memory](agent-memory-patterns.md).
+Managed agent services such as [Claude Managed Agents](https://claude.com/blog/building-with-claude-managed-agents) ([platform docs](https://platform.claude.com/docs/en/managed-agents/overview)) provide a pre-built harness, [sandboxed execution](../../security/sandbox-runtime-comparison.md), and hosted infrastructure in exchange for vendor coupling. Self-hosted open-source harnesses such as [LangChain Deep Agents Deploy](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/) and Cursor's self-hosted cloud agents trade ops burden for control over data, model selection, and accumulated [agent memory](agent-memory-patterns.md).
 
 The choice mirrors the classic SaaS vs on-prem decision but with a compounding factor: agents accumulate memory over time. Locking memory behind a proprietary API raises migration cost with every session.
 
@@ -51,7 +51,7 @@ If you need multi-model routing, cost-based routing across providers, or model m
 
 ### 5. Ops capacity
 
-Self-hosted means deploying and operating the harness, orchestration layer, sandboxes, and memory stores. Deep Agents Deploy cuts this to a single `deepagents deploy` command that provisions a multi-tenant, horizontally scalable server with 30+ endpoints — but you still own the infrastructure ([LangChain, April 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)). Managed services — Claude Managed Agents in particular — handle all of it: "no need to build your own agent loop, sandbox, or tool execution layer" ([Anthropic, 2026](https://platform.claude.com/docs/en/managed-agents/overview)). The trade-off is losing the ability to customize those layers.
+Self-hosted means deploying and operating the harness, orchestration layer, sandboxes, and memory stores. Deep Agents Deploy cuts this to a single `deepagents deploy` command that provisions a multi-tenant, horizontally scalable server with 30+ endpoints, but you still own the infrastructure ([LangChain, April 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)). Managed services, Claude Managed Agents in particular, handle all of it: "no need to build your own agent loop, sandbox, or tool execution layer" ([Anthropic, 2026](https://platform.claude.com/docs/en/managed-agents/overview)). The trade-off is losing the ability to customize those layers.
 
 ## Decision flow
 

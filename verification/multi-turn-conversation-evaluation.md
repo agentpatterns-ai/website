@@ -57,7 +57,7 @@ Online scoring rules then run both scorers asynchronously against new production
 
 ## Why it works
 
-Failures emerging from accumulated state must be scored where that state is observable. Per-turn scoring projects the conversation into independent slices — the projection in which context loss, intent drift, and circular exchange vanish. The trace is the smallest unit that exposes all three. This generalizes beyond chatbots: the 2025 multi-turn agent survey names five evaluation dimensions — task completion, response quality, user experience, memory and context retention, planning and tool integration — and only the first two are cleanly observable per-turn. ([Survey, 2025](https://arxiv.org/abs/2503.22458))
+Failures emerging from accumulated state must be scored where that state is observable. Per-turn scoring projects the conversation into independent slices, the projection in which context loss, intent drift, and circular exchange vanish. The trace is the smallest unit that exposes all three. This generalizes beyond chatbots: the 2025 multi-turn agent survey names five evaluation dimensions (task completion, response quality, user experience, memory and context retention, planning and tool integration) and only the first two are cleanly observable per-turn. ([Survey, 2025](https://arxiv.org/abs/2503.22458))
 
 ## When this backfires
 

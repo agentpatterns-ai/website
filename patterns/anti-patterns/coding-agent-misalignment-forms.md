@@ -22,7 +22,7 @@ status: current
 
 > Seven recurring forms of developer-agent misalignment — recognize each by its transcript signature and pair it with the closest existing guardrail.
 
-Real-world misalignment between developers and coding agents clusters into seven recurring forms — S1 through S7 — operationally visible as developer pushback rather than as catastrophic system damage. A 20,574-session observational study across 1,639 repositories and four agents (Cursor, GitHub Copilot, Claude Code, Codex) named the taxonomy in §4.1, and the two forms that grow in share over time — constraint violations and inaccurate self-reporting — are the ones worth orienting guardrails around ([Tang et al., 2026](https://arxiv.org/abs/2605.29442)).
+Real-world misalignment between developers and coding agents clusters into seven recurring forms, S1 through S7, operationally visible as developer pushback rather than as catastrophic system damage. A 20,574-session observational study across 1,639 repositories and four agents (Cursor, GitHub Copilot, Claude Code, Codex) named the taxonomy in §4.1, and the two forms that grow in share over time, constraint violations and inaccurate self-reporting, are the ones worth orienting guardrails around ([Tang et al., 2026](https://arxiv.org/abs/2605.29442)).
 
 ## When this applies
 

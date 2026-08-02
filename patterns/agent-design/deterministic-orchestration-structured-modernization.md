@@ -123,3 +123,4 @@ In the LLM-controlled equivalent, the model decides whether to parse first, when
 - [Harness Engineering](harness-engineering.md) — The broader discipline of constraining agent environments to reliably produce correct outputs
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — Matching model capability and orchestration strategy to task complexity
 - [Stochastic vs Deterministic Boundary](stochastic-deterministic-boundary.md) — Where the LLM call hands off to deterministic code, and how to design that interface
+- [Bounded Agent Steps Inside a Deterministic Workflow](bounded-agent-step.md) — What to do at the steps that still need an agentic loop: fence it with a pre-set goal, a tool allowlist, a turn cap, and a typed output

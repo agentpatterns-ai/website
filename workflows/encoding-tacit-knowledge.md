@@ -42,7 +42,7 @@ Review recent agent failures with the domain expert — the same raw material [i
 
 ### Example annotation
 
-Present the expert with a set of agent outputs — a mix of good, acceptable, and poor — and ask them to annotate each. The annotations reveal the evaluation criteria the expert applies — the human half of [LLM-as-judge evaluation](llm-as-judge-evaluation.md). Disagreements across annotations from multiple experts identify where the tacit knowledge is ambiguous or contested. Those cases need explicit team alignment before encoding.
+Present the expert with a set of agent outputs, a mix of good, acceptable, and poor, and ask them to annotate each. The annotations reveal the evaluation criteria the expert applies, the human half of [LLM-as-judge evaluation](llm-as-judge-evaluation.md). Disagreements across annotations from multiple experts identify where the tacit knowledge is ambiguous or contested. Those cases need explicit team alignment before encoding.
 
 Use a single internal domain expert as the final decision-maker for quality standards. External annotators without shared context create more disagreement than they resolve ([Hamel Husain](https://hamel.dev/blog/posts/evals/)).
 

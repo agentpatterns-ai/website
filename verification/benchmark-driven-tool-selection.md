@@ -116,3 +116,4 @@ Result: The team selects Model B despite its lower aggregate ranking — the tas
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — Evaluate by final output quality, not intermediate steps
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — Design evaluations that account for agent non-determinism
 - [Eval-Driven Development](../workflows/eval-driven-development.md) — Define correctness criteria before comparing tools
+- [Purpose-Built Eval Suites for Model and Harness Swaps](purpose-built-eval-suites.md) — Build your own small suite when no public benchmark matches your workload

@@ -97,7 +97,7 @@ ConvCodeBench, a static benchmark using pre-generated feedback logs, correlated 
 
 ## Where feedback hits diminishing returns
 
-The equalizing effect has a ceiling. Models exhibit "feedback friction" — resistance to external correction even under near-ideal, ground-truth feedback — strongest exactly where a model is confidently wrong, so it plateaus below target accuracy no matter how many correction turns it gets ([Jiang et al., 2025](https://arxiv.org/abs/2506.11930)). The friction is worst on complex reasoning tasks — the same tasks where a stronger base model pays off. Feedback substitutes for scale on routine work bound by fault localization; on the reasoning-bound tail, upgrading the model is still the higher-return move. Treat "improve the feedback loop first" as the default, not an absolute.
+The equalizing effect has a ceiling. Models exhibit "feedback friction", resistance to external correction even under near-ideal, ground-truth feedback, strongest exactly where a model is confidently wrong, so it plateaus below target accuracy no matter how many correction turns it gets ([Jiang et al., 2025](https://arxiv.org/abs/2506.11930)). The friction is worst on complex reasoning tasks — the same tasks where a stronger base model pays off. Feedback substitutes for scale on routine work bound by fault localization; on the reasoning-bound tail, upgrading the model is still the higher-return move. Treat "improve the feedback loop first" as the default, not an absolute.
 
 ## Example
 

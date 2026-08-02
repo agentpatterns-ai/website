@@ -72,7 +72,7 @@ Reward and transition robustness must be designed. A 40% drop on reward-relevant
 
 ## What domain randomization buys you
 
-Domain randomization — training on perturbed inputs so the real distribution falls inside the trained envelope — is the standard sim-to-real recipe from robotics ([Tobin et al., 2017](https://arxiv.org/abs/1703.06907)). [Zhou et al. (2026)](https://arxiv.org/abs/2605.11928) adapt it as ToolRL-DR: a 3B Qwen2.5 backbone trained with GRPO on 3,984 trajectories across the 16 statically-augmentable perturbation types. Transition perturbations are excluded — they only happen at runtime.
+Domain randomization, training on perturbed inputs so the real distribution falls inside the trained envelope, is the standard sim-to-real recipe from robotics ([Tobin et al., 2017](https://arxiv.org/abs/1703.06907)). [Zhou et al. (2026)](https://arxiv.org/abs/2605.11928) adapt it as ToolRL-DR: a 3B Qwen2.5 backbone trained with GRPO on 3,984 trajectories across the 16 statically-augmentable perturbation types. Transition perturbations are excluded, because they only happen at runtime.
 
 ToolRL-DR-Full retains ~75% of clean accuracy under perturbation and closes ~27% of the transition gap without training on transition perturbations — RL on adversarial static inputs induces a persistent retry policy that transfers.
 

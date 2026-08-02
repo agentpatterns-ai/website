@@ -79,4 +79,5 @@ The generic self-check asks the agent to rebuild the validation set it just fail
 - [Constraint Decay in Backend Code Generation](../../verification/constraint-decay-backend-agents.md) — the prompt-level version: agents drop the lowest-prominence constraints as constraint count rises.
 - [Premature Completion](premature-completion.md) — agents declare success while a required obligation remains unmet.
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) — the independent-verification fix as a standing practice.
+- [Artifact-Only Verification Hides Skipped Skill Steps](artifact-only-verification.md) — the measurement counterpart: steps skipped even in a short context, where the artifact checks stay green.
 - [Agent Extension Conflicts](agent-extension-conflicts.md) — how loaded skills interact and degrade under context-budget contention.

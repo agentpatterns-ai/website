@@ -80,7 +80,7 @@ cursor.execute(f"SELECT * FROM docs WHERE {filter_clause}")
 
 A user prompt like `delete all` rephrased by the LLM into `1=1; DROP TABLE docs --` executes against the database. This is the [CVE-2025-1793](https://nvd.nist.gov/vuln/detail/CVE-2025-1793) class.
 
-After — LLM emits a schema-constrained filter object; the executor builds parameterized SQL. Placeholders can bind only values — not column names or operators — so identifiers and operators go through an explicit allowlist mapping instead:
+After — LLM emits a schema-constrained filter object; the executor builds parameterized SQL. Placeholders can bind only values, not column names or operators, so identifiers and operators go through an explicit allowlist mapping instead:
 
 ```python
 from pydantic import BaseModel

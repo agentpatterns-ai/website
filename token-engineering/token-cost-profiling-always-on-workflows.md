@@ -87,7 +87,7 @@ GitHub closes the loop with two agentic workflows: a Daily Token Usage Auditor t
 
 ## Why it works
 
-The three structural costs are invisible inside one run and only emerge against aggregated history — the proxy, normalized log, and ET metric close that attribution gap. Each named lever maps one-to-one to a cost mechanism — the same just-in-time-loading and stable-prefix-reuse pattern the context-engineering literature names for long-running agents, applied at the workflow loop rather than the per-call boundary ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); [Anthropic Prompt Caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). The loop converges because the optimizer closes the same data path the auditor opened — any regression surfaces on the next day's report.
+The three structural costs are invisible inside one run and only emerge against aggregated history, and the proxy, normalized log, and ET metric close that attribution gap. Each named lever maps one-to-one to a cost mechanism, the same just-in-time-loading and stable-prefix-reuse pattern the context-engineering literature names for long-running agents, applied at the workflow loop rather than the per-call boundary ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); [Anthropic Prompt Caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). The loop converges because the optimizer closes the same data path the auditor opened — any regression surfaces on the next day's report.
 
 ## When this backfires
 

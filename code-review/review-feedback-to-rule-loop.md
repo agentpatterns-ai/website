@@ -22,7 +22,7 @@ maturity: established
 
 ## When a comment becomes a signal
 
-A recurring review comment is evidence of an unencoded invariant — the rule lives in one reviewer's head, and every PR pays the cost of re-deriving it. The promotion threshold — same comment across three or more PRs in a window — is load-bearing: one or two occurrences is a hypothesis, three or more is a pattern. The walkinglabs harness engineering curriculum encodes this loop as a first-class practice ([walkinglabs — review-feedback-to-rule](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-10-why-end-to-end-testing-changes-results/code/review-feedback-to-rule.md)).
+A recurring review comment is evidence of an unencoded invariant. The rule lives in one reviewer's head, and every PR pays the cost of re-deriving it. The promotion threshold (same comment across three or more PRs in a window) is load-bearing: one or two occurrences is a hypothesis, three or more is a pattern. The walkinglabs harness engineering curriculum encodes this loop as a first-class practice ([walkinglabs — review-feedback-to-rule](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-10-why-end-to-end-testing-changes-results/code/review-feedback-to-rule.md)).
 
 ## The loop
 
