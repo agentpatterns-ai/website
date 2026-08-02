@@ -36,7 +36,7 @@ The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.
 | Fluency Optimization | +15–30% |
 | Keyword Stuffing | –10% |
 
-Caveats: all three top techniques add content rather than modifying it — PAWC rewards length, giving content-addition techniques a structural advantage. The study permitted fabricated statistics, which limits real-world applicability (see [Sandbox SEO's critique of the methodology](https://sandboxseo.com/generative-engine-optimization-experiment/)). The directional finding — specific over vague — holds; the exact percentages are an upper bound.
+Caveats: all three top techniques add content rather than modifying it, and PAWC rewards length, giving content-addition techniques a structural advantage. The study permitted fabricated statistics, which limits real-world applicability (see [Sandbox SEO's critique of the methodology](https://sandboxseo.com/generative-engine-optimization-experiment/)). The directional finding (specific over vague) holds; the exact percentages are an upper bound.
 
 ## What counts
 

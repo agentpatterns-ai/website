@@ -48,7 +48,7 @@ where `m` is the uncalibrated estimate and `h` the corrected human-hours figure 
 
 ## Why code volume is not the metric
 
-Regressing lines changed against human-time estimates produces R²_log = 0.27 — code volume captures roughly a quarter of the variance in productive output ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)). That is the empirical case against task-completion-rate and PR-count metrics: they correlate weakly with the value the team pays for. Under [bottleneck migration](bottleneck-migration.md) the cheap part — generation — is exactly what those metrics count.
+Regressing lines changed against human-time estimates produces R²_log = 0.27, so code volume captures roughly a quarter of the variance in productive output ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)). That is the empirical case against task-completion-rate and PR-count metrics: they correlate weakly with the value the team pays for. Under [bottleneck migration](bottleneck-migration.md) the cheap part — generation — is exactly what those metrics count.
 
 ## Why it works
 

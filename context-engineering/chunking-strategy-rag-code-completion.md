@@ -120,3 +120,4 @@ The chunking change moves the configuration onto the Pareto frontier; the contex
 - [Context Budget Allocation](context-budget-allocation.md) — framework for deciding how much budget to spend on retrieved chunks versus other context
 - [Context Window Dumb Zone](context-window-dumb-zone.md) — upper bound on the context-length lever; doubling helps until quality degrades
 - [Token-Efficient Code Generation](../token-engineering/token-efficient-code-generation.md) — reduces token cost of generated code, complementary to retrieval-side chunking choices
+- [Per-Object Context Allocation](per-object-context-allocation.md) — chunking decides how many views one code object produces; this decides how much context each object gets once they compete

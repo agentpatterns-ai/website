@@ -21,7 +21,7 @@ maturity: established
 
 Every agent project re-authors the same judge prompts: prompt-injection detection, PII leakage, format adherence, tool-choice correctness, trajectory accuracy. LangSmith shipped 30+ evaluator templates on April 16, 2026, across six categories — Security, Safety, Quality, Conversation, Trajectory, Image & Voice — as LLM-as-judge prompts and rule-based evaluators with tuned defaults. [Source: [Reusable Evaluators and Evaluator Templates in LangSmith](https://blog.langchain.com/reusable-langsmith-evaluator-templates/)]
 
-The [openevals](https://github.com/langchain-ai/openevals) library exposes them as parameterized f-string constants — `PROMPT_INJECTION_PROMPT`, `PII_LEAKAGE_PROMPT`, `TRAJECTORY_ACCURACY_PROMPT`, `TOOL_SELECTION_PROMPT`, `HALLUCINATION_PROMPT` — fed into `create_llm_as_judge(prompt=...)` with `{inputs}`, `{outputs}`, `{reference_outputs}` placeholders. A workspace-level Evaluators tab attaches one definition to many tracing projects. [Source: [Manage evaluators — LangSmith docs](https://docs.langchain.com/langsmith/evaluators)]
+The [openevals](https://github.com/langchain-ai/openevals) library exposes them as parameterized f-string constants (`PROMPT_INJECTION_PROMPT`, `PII_LEAKAGE_PROMPT`, `TRAJECTORY_ACCURACY_PROMPT`, `TOOL_SELECTION_PROMPT`, `HALLUCINATION_PROMPT`) fed into `create_llm_as_judge(prompt=...)` with `{inputs}`, `{outputs}`, `{reference_outputs}` placeholders. A workspace-level Evaluators tab attaches one definition to many tracing projects. [Source: [Manage evaluators — LangSmith docs](https://docs.langchain.com/langsmith/evaluators)]
 
 ## The portable subset
 

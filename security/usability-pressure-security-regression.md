@@ -7,6 +7,7 @@ tags:
   - instructions
   - testing-verification
   - tool-agnostic
+  - arxiv
 aliases:
   - usability pressure attack
   - UPAttack
@@ -21,7 +22,7 @@ maturity: established
 
 ## The asymmetry
 
-Most production coding prompts read like everyday tickets: "make this endpoint faster", "simplify the validation logic", "add a CSV export". Usability requirements — features, performance, simplicity — are explicit and high-signal. Security requirements — input sanitization, bounds checking, authorization invariants — are usually absent from the prompt and present only in the model's pretraining priors.
+Most production coding prompts read like everyday tickets: "make this endpoint faster", "simplify the validation logic", "add a CSV export". Usability requirements (features, performance, simplicity) are explicit and high-signal. Security requirements (input sanitization, bounds checking, authorization invariants) are usually absent from the prompt and present only in the model's pretraining priors.
 
 [Usability as a Weapon (Wang et al., 2026)](https://arxiv.org/abs/2605.10133) names the resulting attack class UPAttack. It also ships an automated framework, U-SPLOIT, that generates realistic usability pressure across three vectors — Functionality, Implementation, and Trade-off — against initially-secure tasks. Across 25 CWEs x 3 cases in Python, C, and JavaScript, attack success rates reach 98.1% on GPT-5.2-chat and Gemini-3-Flash-Preview.
 

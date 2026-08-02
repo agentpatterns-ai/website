@@ -6,6 +6,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - cognitive poisoning attack
   - untrusted tool feedback
@@ -51,7 +52,7 @@ Per-message scorers collapse to blanket-execute or blanket-reject because malici
 
 ## Why it works
 
-The mechanism is implicit trust accumulation. Agents lower their prior on tool maliciousness with each benign-looking response, even when no single response would pass screening if the final action were already visible. A malicious tool exploits this with a trajectory that looks like routine exploration — sandbox probes, object-consistency checks, baseline collection — before issuing the response whose joint configuration with the planned final action triggers harm ([Yan et al., 2026](https://arxiv.org/html/2605.17453)). TraceSafe-Bench corroborates independently: guardrail efficacy on multi-step trajectories correlates with structured-data competence (rho=0.79), not safety alignment — the discriminative signal lives in trajectory structure, not message content ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)).
+The mechanism is implicit trust accumulation. Agents lower their prior on tool maliciousness with each benign-looking response, even when no single response would pass screening if the final action were already visible. A malicious tool exploits this with a trajectory that looks like routine exploration (sandbox probes, object-consistency checks, baseline collection) before issuing the response whose joint configuration with the planned final action triggers harm ([Yan et al., 2026](https://arxiv.org/html/2605.17453)). TraceSafe-Bench corroborates independently: guardrail efficacy on multi-step trajectories correlates with structured-data competence (rho=0.79), not safety alignment, so the discriminative signal lives in trajectory structure, not message content ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)).
 
 ## Detection pattern: trajectory-aware features
 

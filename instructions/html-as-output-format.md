@@ -81,7 +81,7 @@ Output-format guidance belongs in the most precise section of the system prompt 
 
 ## Why the mechanism works
 
-Output format determines what you can do with the artifact after the model stops talking. You read a Markdown plan, then switch context to act on it. An HTML plan encodes the next workspace inline — filters on the triage list, tabs in the explainer, severity columns on the review — the kind of precise output-format directive [system prompt altitude](system-prompt-altitude.md) places well. The value of interactivity dominates the marginal token cost in the cases that warrant it. For ad-hoc replies that lack those affordances, the cost-benefit inverts — the technique is conditional, not a default.
+Output format determines what you can do with the artifact after the model stops talking. You read a Markdown plan, then switch context to act on it. An HTML plan encodes the next workspace inline (filters on the triage list, tabs in the explainer, severity columns on the review), the kind of precise output-format directive [system prompt altitude](system-prompt-altitude.md) places well. The value of interactivity dominates the marginal token cost in the cases that warrant it. For ad-hoc replies that lack those affordances, the cost-benefit inverts — the technique is conditional, not a default.
 
 ## Key Takeaways
 

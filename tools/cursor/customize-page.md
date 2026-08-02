@@ -17,7 +17,7 @@ status: current
 
 > The Cursor Customize page is one surface to add and manage plugins, skills, MCPs, subagents, rules, commands, and hooks at user, team, or workspace scope.
 
-Cursor 3.9, released June 22, 2026, ships a Customize page that federates seven customization primitives behind a single UI with explicit install scopes and a team-popularity leaderboard ([Cursor changelog — Customize](https://cursor.com/changelog/customize); [Cursor docs — Customize Cursor](https://cursor.com/docs/customize-cursor)). It is a discovery and management surface, not a new storage backend — its value depends on team size, config-as-code discipline, and supply-chain posture.
+Cursor 3.9, released June 22, 2026, ships a Customize page that federates seven customization primitives behind a single UI with explicit install scopes and a team-popularity leaderboard ([Cursor changelog — Customize](https://cursor.com/changelog/customize); [Cursor docs, Customize Cursor](https://cursor.com/docs/customize-cursor)). It is a discovery and management surface, not a new storage backend, and its value depends on team size, config-as-code discipline, and supply-chain posture.
 
 ## When This Pays Off
 
@@ -39,7 +39,7 @@ The Customize page assumes three preconditions; treat the absence of any of them
 | Hooks | Scripts that observe, control, or extend the agent loop at lifecycle events |
 | MCPs | Model Context Protocol servers, including bring-your-own |
 
-Each primitive installs at three scopes — user (cross-project, per-developer), team (organization-wide via the dashboard), or workspace (this project only) — through the same UI ([Cursor changelog — Customize](https://cursor.com/changelog/customize)).
+Each primitive installs at three scopes, user (cross-project, per-developer), team (organization-wide via the dashboard), or workspace (this project only), through the same UI ([Cursor changelog — Customize](https://cursor.com/changelog/customize)).
 
 ## Discovery Features
 

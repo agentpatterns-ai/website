@@ -70,7 +70,7 @@ The wire format above the storage layer is converging on OpenTelemetry's GenAI s
 
 ## Why it works
 
-Each of the four properties violates a different layer — collector sampling, the SDK span-as-transaction abstraction, storage-tier index sizing, and the trace-by-ID access path — and the violations compound: fixing one leaves the workload degrading on the other three. That is why a single lever never suffices. SmithDB's reported P50 latencies — 92 ms trace tree load, 400 ms full-text search, 82 ms run filter — land at the intersection of all four levers, not from any one ([LangChain SmithDB](https://www.langchain.com/blog/introducing-smithdb)).
+Each of the four properties violates a different layer (collector sampling, the SDK span-as-transaction abstraction, storage-tier index sizing, and the trace-by-ID access path) and the violations compound: fixing one leaves the workload degrading on the other three. That is why a single lever never suffices. SmithDB's reported P50 latencies — 92 ms trace tree load, 400 ms full-text search, 82 ms run filter — land at the intersection of all four levers, not from any one ([LangChain SmithDB](https://www.langchain.com/blog/introducing-smithdb)).
 
 ## When this backfires
 

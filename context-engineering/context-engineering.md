@@ -60,7 +60,7 @@ Context space is finite. Every inclusion is an exclusion:
 
 ## Context pollution
 
-[Context pollution](../patterns/anti-patterns/session-partitioning.md) — irrelevant context accumulated across unrelated tasks — competes with relevant content for attention. An agent loaded with 50 potentially-relevant files produces worse output on the 2 actually-relevant files than one loaded with only those 2 — a pattern confirmed by [Liu et al. (2023)](https://arxiv.org/abs/2307.03172), who found multi-document QA accuracy drops 30%+ as distractors increase. Semantically related but inapplicable instructions are a specific form of this: see [Distractor Interference](../patterns/anti-patterns/distractor-interference.md).
+[Context pollution](../patterns/anti-patterns/session-partitioning.md), meaning irrelevant context accumulated across unrelated tasks, competes with relevant content for attention. An agent loaded with 50 potentially-relevant files produces worse output on the 2 actually-relevant files than one loaded with only those 2 — a pattern confirmed by [Liu et al. (2023)](https://arxiv.org/abs/2307.03172), who found multi-document QA accuracy drops 30%+ as distractors increase. Semantically related but inapplicable instructions are a specific form of this: see [Distractor Interference](../patterns/anti-patterns/distractor-interference.md).
 
 The diagnostic question: "Does this improve output on this specific task?" If no, it is pollution.
 

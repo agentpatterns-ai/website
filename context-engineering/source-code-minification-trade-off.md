@@ -17,7 +17,7 @@ maturity: emerging
 
 Related lesson: [Measure Before You Optimize](https://learn.agentpatterns.ai/context-engineering/measure-before-you-optimize/) — this concept features in a hands-on lesson with quizzes.
 
-Source code minification — removing comments, collapsing whitespace, shortening identifiers, and stripping docstrings — is a measured trade-off. On SWE-bench Verified with GPT-5-mini and the DirectSolve state-in-context agent, cumulative minification cut average input tokens 42% (from ~90,500 to ~52,800 per task) while dropping pass@1 resolution rate from 50.0% to 38.0% — a 12-percentage-point absolute regression, ~24% of baseline ([Hrubec & Cito, 2026](https://arxiv.org/abs/2606.01326)). The technique is viable when a workload can absorb accuracy loss for token savings; it is the wrong default for production agents that land code.
+Source code minification (removing comments, collapsing whitespace, shortening identifiers, and stripping docstrings) is a measured trade-off. On SWE-bench Verified with GPT-5-mini and the DirectSolve state-in-context agent, cumulative minification cut average input tokens 42% (from ~90,500 to ~52,800 per task) while dropping pass@1 resolution rate from 50.0% to 38.0% — a 12-percentage-point absolute regression, ~24% of baseline ([Hrubec & Cito, 2026](https://arxiv.org/abs/2606.01326)). The technique is viable when a workload can absorb accuracy loss for token savings; it is the wrong default for production agents that land code.
 
 ## Apply only under these conditions
 

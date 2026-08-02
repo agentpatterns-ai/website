@@ -7,6 +7,7 @@ tags:
   - testing-verification
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - Blind Test Generation
   - Code-Test Separation Pattern

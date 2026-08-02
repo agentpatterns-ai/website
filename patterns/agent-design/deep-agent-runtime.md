@@ -45,7 +45,7 @@ LangChain ships a managed task queue with automatic checkpointing keyed by `thre
 
 A long-running agent needs explicit lifecycle states beyond running and finished. Cursor adds three: "explicit agent lifecycle controls with archive, unarchive, and permanent delete" — archive is reversible suspension; delete is irreversible ([Cursor changelog, 2026-04-29](https://cursor.com/changelog)). Cancellation is run-scoped and terminal: `POST /v1/agents/{id}/runs/{runId}/cancel` returns `409 run_not_cancellable` for runs already terminal ([Cursor API](https://cursor.com/docs/cloud-agent/api/endpoints)).
 
-LangChain's HITL primitives — `interrupt()` and `Command(resume=...)` — view the same concern from the agent side: a call that frees the worker and surfaces a payload, resume as a separate operation landing minutes, hours, or days later ([Runkle & Trivedy, LangChain, 2026-04-20](https://www.langchain.com/blog/runtime-behind-production-deep-agents)). Without these, lifecycle is implicit — buried in process state or ad-hoc timeouts.
+LangChain's HITL primitives (`interrupt()` and `Command(resume=...)`) view the same concern from the agent side: a call that frees the worker and surfaces a payload, resume as a separate operation landing minutes, hours, or days later ([Runkle & Trivedy, LangChain, 2026-04-20](https://www.langchain.com/blog/runtime-behind-production-deep-agents)). Without these, lifecycle is implicit — buried in process state or ad-hoc timeouts.
 
 ### 3. Streaming primitives
 

@@ -17,7 +17,7 @@ maturity: emerging
 
 > Intervention rate is a segmented diagnostic signal — not a single number to minimize — and only useful paired with quality and ambition metrics.
 
-Intervention rate — the share of turns on which a developer interrupts, corrects, or redirects the AI assistant — works as a composite diagnostic signal for prompt quality, code organization, task breakdown, and tool selection. It does not work as a Goodhart-safe target the way build times did in CI/CD: a near-zero rate often means low ambition or uncritical acceptance, and Anthropic's own data shows expert users intervene more, not less. Instrument, segment, and diagnose it — do not minimize it.
+Intervention rate (the share of turns on which a developer interrupts, corrects, or redirects the AI assistant) works as a composite diagnostic signal for prompt quality, code organization, task breakdown, and tool selection. It does not work as a Goodhart-safe target the way build times did in CI/CD: a near-zero rate often means low ambition or uncritical acceptance, and Anthropic's own data shows expert users intervene more, not less. Instrument, segment, and diagnose it — do not minimize it.
 
 ## The conditions under which it works
 
@@ -32,7 +32,7 @@ Treat the metric as useful only when these four conditions hold at once. Skip th
 
 Each intervention sits downstream of a concrete, fixable workflow input — an under-specified prompt, missing context, a task too coarse-grained, or the wrong tool or model for the work. The causal claim is not that the rate itself moves outcomes. It is that a rising rate is a cheap early signal of degraded inputs, but only if the categories underneath are surfaced. Huyen's Sniffly breakdown makes this concrete: the top error class is "Content Not Found" at 20–30%, where Claude searches for files or functions that do not exist ([Huyen, 2025](https://x.com/chipro/status/1945527700808184115)). That points the fix at code organization and search affordances, not prompt phrasing.
 
-The build-times analogy from Continue holds at the loop level — instrument, baseline, diagnose, re-measure — but breaks at the target. Build times had no useful non-zero optimum; intervention rate plausibly does. Anthropic's expertise data is consistent with a U-shape between rate and outcome quality: very low rates correlate with low ambition or uncritical acceptance, very high rates with thrashing, and expertise concentrates in the middle band ([Anthropic, 2026](https://www.anthropic.com/research/claude-code-expertise)). The diagnostic is only as good as its category breakdown — never the bare aggregate.
+The build-times analogy from Continue holds at the loop level (instrument, baseline, diagnose, re-measure) but breaks at the target. Build times had no useful non-zero optimum; intervention rate plausibly does. Anthropic's expertise data is consistent with a U-shape between rate and outcome quality: very low rates correlate with low ambition or uncritical acceptance, very high rates with thrashing, and expertise concentrates in the middle band ([Anthropic, 2026](https://www.anthropic.com/research/claude-code-expertise)). The diagnostic is only as good as its category breakdown — never the bare aggregate.
 
 ## The diagnostic loop
 

@@ -65,7 +65,7 @@ Structure prompts so the cacheable prefix stays stable and hits.
 
 ### Right time — temporal routing
 
-Route non-urgent work into cheaper capacity windows. Batch APIs are the concrete cost primitive: Anthropic's Message Batches and OpenAI's Batch API both run jobs asynchronously at a 50% discount, completing within 24 hours — typically under an hour for Anthropic ([Anthropic — Message Batches](https://platform.claude.com/docs/en/build-with-claude/batch-processing); [OpenAI — Batch API](https://developers.openai.com/api/docs/guides/batch)). Work that can wait — overnight evals, doc refreshes, bulk refactors, research passes — belongs in those windows.
+Route non-urgent work into cheaper capacity windows. Batch APIs are the concrete cost primitive: Anthropic's Message Batches and OpenAI's Batch API both run jobs asynchronously at a 50% discount, completing within 24 hours, typically under an hour for Anthropic ([Anthropic — Message Batches](https://platform.claude.com/docs/en/build-with-claude/batch-processing); [OpenAI, Batch API](https://developers.openai.com/api/docs/guides/batch)). Work that can wait, such as overnight evals, doc refreshes, bulk refactors, and research passes, belongs in those windows.
 
 - [Temporal Token Routing: Batch and Flex Tiers for Non-Urgent Work](temporal-token-routing.md) — the right-time decision: which workload class belongs in batch, flex, or the synchronous tier
 - [Idle-Time Speculative Planning](../patterns/agent-design/idle-time-speculative-planning.md) — use idle compute to pre-plan likely next steps

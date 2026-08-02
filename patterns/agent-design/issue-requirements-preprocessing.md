@@ -64,9 +64,9 @@ graph TD
     D --> J[Submit]
 ```
 
-Conflict — requirements contradict the issue description or codebase state.  
-Omission — requirements underspecify intended behavior or constraints.  
-Ambiguity — vague descriptions that generate multiple valid interpretations.
+Conflict: requirements contradict the issue description or codebase state.  
+Omission: requirements underspecify intended behavior or constraints.  
+Ambiguity: vague descriptions that generate multiple valid interpretations.
 
 The Requirement Assessment Score (RAS = tests passed / total tests) controls each iteration, the same [evaluator-optimizer](evaluator-optimizer.md) loop applied to inputs rather than outputs. High-temperature sampling generates ten test scripts per issue. If RAS < 1.0, the classified deficiency triggers a targeted refinement and the requirements regenerate. The agent logs non-improving feedback as a counterexample, so it avoids repeating failed refinements. After at most four iterations, REAgent selects the highest-RAS set.
 

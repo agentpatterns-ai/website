@@ -5,6 +5,7 @@ description: "CoALA splits agent actions into internal (reason, retrieve, learn)
 tags:
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - CoALA internal external actions
   - structured agent action space

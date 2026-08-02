@@ -118,6 +118,7 @@ A team reproduces this from its own telemetry: bucket diffs by score percentile,
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — design principle for the LLM ACR stage that follows the risk-score gate
 - [Agent-Assisted Code Review](agent-assisted-code-review.md) — broader framing for the AI-first pass that RADAR's ACR stage instantiates
 - [Risk-Based Shipping](../verification/risk-based-shipping.md) — analogous risk-tier reasoning applied to deployment rather than review
+- [Audit-Budget Allocation for Agent Fleets](../verification/audit-budget-allocation-agent-fleets.md) — the same allocation problem when the ranking signal is the agent's own confidence rather than a learned diff-risk score
 
 ## Sources
 

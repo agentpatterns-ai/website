@@ -164,3 +164,4 @@ The gate becomes a deadlock. If the agent cannot make a failing test pass — be
 - [TDD for Agent Development](tdd-agent-development.md)
 - [Verification Ledger](verification-ledger.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
+- [Artifact-Only Verification Hides Skipped Skill Steps](../patterns/anti-patterns/artifact-only-verification.md) — why a harness-run checklist catches what an output check cannot.

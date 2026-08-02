@@ -62,7 +62,7 @@ Classical patterns are a starting point, not a blueprint. They solve code organi
 
 ## Why it works
 
-Classical patterns capture stable structural relationships — how components connect and delegate — not implementation details. Those relationships (subscriber/publisher, context/strategy, component/composite) survive the shift from deterministic OOP to probabilistic LLM outputs. They survive because they are defined at the call-boundary level, not the computation level. An Observer hook (`PreToolUse`/`PostToolUse`) does not care whether the handler runs a database query or an LLM inference; it only requires that subscribers can be registered and notified. The concern shift — from reuse to control and safety — happens within each role, not at the structural connection between roles.
+Classical patterns capture stable structural relationships, meaning how components connect and delegate, not implementation details. Those relationships (subscriber/publisher, context/strategy, component/composite) survive the shift from deterministic OOP to probabilistic LLM outputs. They survive because they are defined at the call-boundary level, not the computation level. An Observer hook (`PreToolUse`/`PostToolUse`) does not care whether the handler runs a database query or an LLM inference; it only requires that subscribers can be registered and notified. The concern shift, from reuse to control and safety, happens within each role, not at the structural connection between roles.
 
 ## When this backfires
 

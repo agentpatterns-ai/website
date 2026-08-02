@@ -32,7 +32,7 @@ Outside these conditions, a strong agent loop with on-demand search recovers the
 
 ## How the mechanism works
 
-Code agents navigate repositories through keyword search ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)). The first grep result biases the next tool call, which biases the next, and stochastic decoding compounds across the trajectory — even at temperature 0, multi-step agent runs diverge in code modifications and reasoning paths because numerical non-determinism and decoding randomness accumulate ([Yao et al., 2026 — How Consistent Are LLM Agents?](https://arxiv.org/abs/2605.28840), [Saghir et al., 2025 — Numerical Sources of Nondeterminism in LLM Inference](https://arxiv.org/abs/2506.09501)).
+Code agents navigate repositories through keyword search ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)). The first grep result biases the next tool call, which biases the next, and stochastic decoding compounds across the trajectory. Even at temperature 0, multi-step agent runs diverge in code modifications and reasoning paths because numerical non-determinism and decoding randomness accumulate ([Yao et al., 2026 — How Consistent Are LLM Agents?](https://arxiv.org/abs/2605.28840), [Saghir et al., 2025 — Numerical Sources of Nondeterminism in LLM Inference](https://arxiv.org/abs/2506.09501)).
 
 Anchoring inserts the same plain-text structural facts in the same prompt position every run. The agent sees identical call-graph edges before it decides where to look, so navigation converges on the same code regions regardless of decoding noise. The reported link-following rate rising from 0.15–0.18 to 0.21–0.24 is the measurable footprint of this discipline: when structural facts are surfaced, the agent follows them, and those facts are deterministic ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)).
 
@@ -110,6 +110,7 @@ The build regenerates the comment header. You do not hand-maintain it. Stale anc
 ## Related
 
 - [Repository Map Pattern](repository-map-pattern.md) — AST + PageRank produces token-fitted structural maps; complementary mechanism for the *orientation* problem rather than the *reproducibility* problem.
+- [Context Compiler](context-compiler.md) — the subtractive sibling: it excludes unreachable files rather than annotating them, which buys more tokens and hides its own misses.
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — places anchoring inside the broader lexical → semantic → graph → hybrid retrieval hierarchy.
 - [Seeding Agent Context](seeding-agent-context.md) — comment-level breadcrumbs the agent discovers during exploration; anchoring is a machine-generated, regenerated subset.
 - [Semantic Context Loading](semantic-context-loading.md) — LSP-driven structural lookup as an on-demand alternative when stability is less important than freshness.

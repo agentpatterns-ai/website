@@ -81,7 +81,7 @@ What the agent builds: a `--dry-run` flag that runs the full deployment pipeline
 
 What was wanted: a `--dry-run` flag that prints the deployment plan to stdout and exits. No execution, no sandbox, no rollback. Ten lines of code, not two hundred.
 
-The agent assumed "shows what would be deployed" meant "deploys and then shows what happened." Every later decision — sandbox architecture, rollback strategy, cleanup logic — stayed consistent with that wrong assumption. The fix is not a patch. It is a rewrite — the property that distinguishes this from [objective drift](objective-drift.md), where output degrades gradually instead.
+The agent assumed "shows what would be deployed" meant "deploys and then shows what happened." Every later decision (sandbox architecture, rollback strategy, cleanup logic) stayed consistent with that wrong assumption. The fix is not a patch. It is a rewrite — the property that distinguishes this from [objective drift](objective-drift.md), where output degrades gradually instead.
 
 With Level 1 mitigation, the agent restates: "I will implement `--dry-run` by executing the deployment in a sandbox and rolling back." The developer catches the misunderstanding in thirty seconds and corrects it before any code is written.
 

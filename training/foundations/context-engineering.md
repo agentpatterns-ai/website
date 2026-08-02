@@ -12,7 +12,7 @@ last_reviewed: 2026-05-27
 
 > The discipline of designing what enters a model's context window, how it is structured, and what is excluded — to maximize output quality and reliability.
 
-Context windows have structural and economic properties that determine whether an agent produces reliable output or drifts into incoherence. Attention is not uniform — it follows a U-shaped curve. Tokens are not free — every preloaded token displaces one available for reasoning, so [context is a budget](../../context-engineering/context-budget-allocation.md). Compression is not optional — long sessions demand it. This module covers these mechanics and the engineering strategies that exploit them, regardless of which tool you use.
+Context windows have structural and economic properties that determine whether an agent produces reliable output or drifts into incoherence. Attention is not uniform: it follows a U-shaped curve. Tokens are not free, and every preloaded token displaces one available for reasoning, so [context is a budget](../../context-engineering/context-budget-allocation.md). Compression is not optional, because long sessions demand it. This module covers these mechanics and the engineering strategies that exploit them, regardless of which tool you use.
 
 ---
 

@@ -2,7 +2,7 @@
 title: "Ask the Docs: AI Search Over Agent Patterns"
 description: "Ask questions of the Agent Patterns corpus in natural language — AI-powered search over every page, with cited source links, served by Cloudflare AI Search."
 tags:
-  - tools
+  - tool-agnostic
 noindex: true
 ---
 

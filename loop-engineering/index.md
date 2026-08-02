@@ -35,6 +35,7 @@ How much context each iteration carries, and how much the loop runs on its own.
 
 - [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-strategy-spectrum.md) — accumulated, compressed, or fresh context per iteration, chosen by workload
 - [The Ralph Wiggum Loop: Fresh-Context Iteration Pattern](ralph-wiggum-loop.md) — each iteration runs in a fresh window, state persisted to disk
+- [Blind Resampling Over Self-Repair in Small Code Models](blind-resampling-over-self-repair.md) — below 7B, discard the failed program and resample rather than feed it back for repair
 - [Goal-Driven Autonomous Loop with Budget Cap](goal-driven-autonomous-loop.md) — an objective-bound loop that stops on goal-done or budget exhaustion
 - [Long-Running Agents](../patterns/agent-design/long-running-agents.md) — making progress across many sessions by moving state into durable artifacts
 - [Agentless vs Autonomous](../patterns/agent-design/agentless-vs-autonomous.md) — when a fixed pipeline beats a model-controlled loop

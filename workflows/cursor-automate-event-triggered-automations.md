@@ -41,7 +41,7 @@ The 3.8 release adds three trigger families and a default-on tool. Each maps to 
 
 ### Slack emoji reaction
 
-Reacting to any Slack message with a designated emoji fires the automation ([Cursor changelog 06-18-26](https://cursor.com/changelog/06-18-26)). The trigger fires only on public channels — private channels are not visible to automations ([Cursor docs](https://cursor.com/docs/cloud-agent/automations)). That restriction blocks one principal class but leaves a more common one open: any member of a public channel — including a Slack Connect external participant — is a valid dispatcher.
+Reacting to any Slack message with a designated emoji fires the automation ([Cursor changelog 06-18-26](https://cursor.com/changelog/06-18-26)). The trigger fires only on public channels, since private channels are not visible to automations ([Cursor docs](https://cursor.com/docs/cloud-agent/automations)). That restriction blocks one principal class but leaves a more common one open: any member of a public channel, including a Slack Connect external participant, is a valid dispatcher.
 
 The failure mode is the trifecta concentration the [Chat-Platform Agent Delegation](chat-platform-agent-delegation.md) page already covers, now extended to a reaction surface that no longer requires an `@mention`. A single reaction is enough to dispatch.
 

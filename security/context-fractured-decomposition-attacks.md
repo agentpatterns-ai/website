@@ -21,7 +21,7 @@ maturity: emerging
 
 > Defenders inspecting a single contiguous conversation miss attacks decomposed across tools, modules, and time — artifact provenance gaps recompose them downstream.
 
-Context-Fractured Decomposition (CFD) is a family of cross-context multi-step jailbreaks that preserve benign-looking intermediate artifacts from an early interaction and elicit harmful behavior much later — potentially in a different agent instance or workflow stage — via individually innocuous tool actions whose risk emerges only under delayed artifact-mediated composition ([Lin et al., 2026](https://arxiv.org/abs/2606.09084)). The anti-pattern is shipping an agent defense that only inspects one contiguous conversation. The structural failure is artifact provenance gaps — the workspace files, logs, and persisted state that carry attack state across boundaries no single checkpoint sees.
+Context-Fractured Decomposition (CFD) is a family of cross-context multi-step jailbreaks that preserve benign-looking intermediate artifacts from an early interaction and elicit harmful behavior much later, potentially in a different agent instance or workflow stage, via individually innocuous tool actions whose risk emerges only under delayed artifact-mediated composition ([Lin et al., 2026](https://arxiv.org/abs/2606.09084)). The anti-pattern is shipping an agent defense that only inspects one contiguous conversation. The structural failure is artifact provenance gaps — the workspace files, logs, and persisted state that carry attack state across boundaries no single checkpoint sees.
 
 ## The failure mode
 

@@ -52,7 +52,7 @@ A system where the LLM dynamically directs its own processes and tool usage, mai
 
 ### Long-running system
 
-A system that operates across multiple sessions, accumulating state and context over hours, days, or weeks. Long-running systems can be workflows or agents — the distinguishing axis is duration, not control flow ([Anthropic — Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents); [Addy Osmani — Long-running Agents](https://addyo.substack.com/p/long-running-agents)).
+A system that operates across multiple sessions, accumulating state and context over hours, days, or weeks. Long-running systems can be workflows or agents; the distinguishing axis is duration, not control flow ([Anthropic — Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents); [Addy Osmani — Long-running Agents](https://addyo.substack.com/p/long-running-agents)).
 
 - Example: a coding agent harness with an initializer phase and incremental session-by-session work, surviving across compaction boundaries.
 - Most-likely conflation is the autonomous agent. "Long-running" describes a temporal property. "Autonomous" describes a control-flow property. See [Long-Running Agents](long-running-agents.md).

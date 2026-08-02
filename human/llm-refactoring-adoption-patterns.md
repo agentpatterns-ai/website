@@ -98,7 +98,7 @@ Two axes explain them ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)):
 
 ## Implications for practice
 
-Name the pattern when you modify. Deleting code you did not ask for is pattern 2 — push back on suggestion scope in the prompt. Translating names and paths is pattern 3 — give the model more file context next time, since full-file context is the cheapest way to land pattern 1. Rewriting logic under a kept structure is pattern 5 — the model gave you a scaffold, not a solution.
+Name the pattern when you modify. Deleting code you did not ask for is pattern 2: push back on suggestion scope in the prompt. Translating names and paths is pattern 3, so give the model more file context next time, since full-file context is the cheapest way to land pattern 1. Rewriting logic under a kept structure is pattern 5 — the model gave you a scaffold, not a solution.
 
 Do not generalize past the dataset. Findings cover developer-initiated, single-file, local refactors. Cross-module refactors, interface changes, and review-feedback adoption show different rates (compare [Human-AI Review Synergy](../code-review/human-ai-review-synergy.md), where AI review suggestions adopt at 16.6%).
 

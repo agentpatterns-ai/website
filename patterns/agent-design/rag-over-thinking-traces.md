@@ -8,6 +8,7 @@ tags:
   - context-engineering
   - tool-agnostic
   - rag
+  - arxiv
 aliases:
   - thinking trace retrieval
   - reasoning trace corpus

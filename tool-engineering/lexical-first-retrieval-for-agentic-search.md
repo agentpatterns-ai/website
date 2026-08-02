@@ -8,6 +8,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - rag
+  - arxiv
 aliases:
   - BM25 for agentic search
   - lexical retrieval for deep research

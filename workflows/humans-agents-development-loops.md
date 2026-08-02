@@ -46,7 +46,7 @@ Humans run the why loop only. Agents run the entire how loop without human direc
 
 The appeal is real: the how loop is where software development accumulates the most friction (over-engineering, technical debt, approval queues). Delegating it entirely removes that friction.
 
-The risk: agents working in messy or poorly-structured codebases spiral more, take longer, and cost more. Internal code quality still matters, not for its own sake, but because a clean codebase improves agent velocity and reduces inference cost — [code cleanliness is an agent cost lever](../token-engineering/code-cleanliness-agent-cost-lever.md). External quality — correctness, performance, compliance — remains the measure, but it is harder to achieve without internal structure.
+The risk: agents working in messy or poorly-structured codebases spiral more, take longer, and cost more. Internal code quality still matters, not for its own sake, but because a clean codebase improves agent velocity and reduces inference cost ([code cleanliness is an agent cost lever](../token-engineering/code-cleanliness-agent-cost-lever.md)). External quality, meaning correctness, performance, and compliance, remains the measure, but it is harder to achieve without internal structure.
 
 ## Humans in the loop
 

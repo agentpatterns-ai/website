@@ -7,6 +7,7 @@ tags:
   - security
   - source:opendev-paper
   - tool-agnostic
+  - arxiv
 aliases:
   - defense in depth
   - layered security

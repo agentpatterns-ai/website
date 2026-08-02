@@ -62,7 +62,7 @@ Updates happen in two modes:
 - Offline (batch) — after execution, a background job analyzes traces and updates context. OpenClaw calls this ["dreaming"](https://docs.openclaw.ai/concepts/dreaming).
 - Hot path (inline) — the agent updates memory mid-task, either on user instruction or harness direction.
 
-Context-layer updates — the [agent memory](agent-memory-patterns.md) tier — are cheapest and easiest to reverse. Edit a file, reload context. The tradeoff: context has limited scope — it does not improve base model capability and only affects instances that load it.
+Context-layer updates, the [agent memory](agent-memory-patterns.md) tier, are cheapest and easiest to reverse. Edit a file, reload context. The tradeoff: context has limited scope — it does not improve base model capability and only affects instances that load it.
 
 Cheapness masks silent failure modes. 2026 practitioner reports document stale memories surfacing after facts change and [recurring-correction loops where a written-down rule loses to competing retrievals](https://medium.com/@vivioo.io/your-ai-agent-keeps-forgetting-76d7bcefacf0). Retrieval quality, recency bias, and eviction policy decide whether an update actually lands.
 

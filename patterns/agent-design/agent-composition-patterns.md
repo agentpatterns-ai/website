@@ -233,4 +233,5 @@ Route narrow, well-defined subtasks to cheaper models like Haiku and reserve cap
 - [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md)
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
 - [Delegation Decision](delegation-decision.md)
+- [The Orchestrator's Attention Budget](orchestrator-attention-budget.md) — the attention-dilution counterpart to the overflow failure above
 - [Evaluator-Optimizer](evaluator-optimizer.md)

@@ -85,6 +85,8 @@ For remote servers using Streamable HTTP:
 - On a 404 for a known session, the client must reinitialize, because the session expired or was invalidated
 - SSE event IDs and `Last-Event-ID` enable resumability after disconnects, which prevents message loss
 
+This session handling applies to spec revisions before `2026-07-28`, which removed `Mcp-Session-Id` and the handshake that minted it. See [Stateless MCP: One Request per Tool Call](../standards/stateless-mcp.md).
+
 ## Security
 
 ### Tool description integrity

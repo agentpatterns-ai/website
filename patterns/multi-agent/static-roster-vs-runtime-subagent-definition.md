@@ -18,7 +18,7 @@ maturity: adopted
 
 > Static subagent rosters are the safer default; programmatic definition pays off only when sub-task shape cannot be known at author time.
 
-The decision is about who defines each subagent's identity — prompt, tool allowlist, scope — and when. Author-time static files fix those decisions in version control before any run starts. Developer code assembled at invocation is programmatic definition. LLM self-composition — where the model picks each helper's tools mid-task — is unsupported by shipped tools and undermines the structural guarantees that make scoping safe.
+The decision is about who defines each subagent's identity (prompt, tool allowlist, scope) and when. Author-time static files fix those decisions in version control before any run starts. Developer code assembled at invocation is programmatic definition. LLM self-composition, where the model picks each helper's tools mid-task, is unsupported by shipped tools and undermines the structural guarantees that make scoping safe.
 
 ## Three tiers of subagent definition
 

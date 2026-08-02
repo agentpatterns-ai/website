@@ -82,7 +82,7 @@ A harness with only working and procedural memory cannot learn from past session
 
 ## Why it works
 
-The four-type split is not arbitrary. CoALA inherits it from Soar and ACT-R — cognitive architectures whose purpose is to expose which capabilities a memory system has and lacks ([Sumers et al., 2024 §2.3](https://arxiv.org/html/2309.02427v3)) — and re-applies that mapping to language agents. Sumers et al. demonstrate the mechanism in Table 2: noting ReAct "lacks semantic or episodic memory" immediately predicts its inability to retrieve from or learn across episodes ([§3](https://arxiv.org/html/2309.02427v3)). The classifier earns its keep when absence is the diagnostic signal — what the cognitive-architecture inheritance is designed to make legible.
+The four-type split is not arbitrary. CoALA inherits it from Soar and ACT-R, cognitive architectures whose purpose is to expose which capabilities a memory system has and lacks ([Sumers et al., 2024 §2.3](https://arxiv.org/html/2309.02427v3)), and re-applies that mapping to language agents. Sumers et al. demonstrate the mechanism in Table 2: noting ReAct "lacks semantic or episodic memory" immediately predicts its inability to retrieve from or learn across episodes ([§3](https://arxiv.org/html/2309.02427v3)). The classifier earns its keep when absence is the diagnostic signal — what the cognitive-architecture inheritance is designed to make legible.
 
 ## When this backfires
 

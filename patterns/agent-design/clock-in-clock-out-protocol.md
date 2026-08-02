@@ -145,7 +145,7 @@ A working PROGRESS.md and DECISIONS.md pair at clock-out time, drawn from the le
 - Constraint: Cache TTL of 5 minutes, active invalidation on write
 ```
 
-Run the 4-question check against this pair: a fresh agent reaches an executable state from two files and one `make check` (Q1 — yes); the failing test is named (Q2 — yes); Next Steps is numbered and concrete (Q3 — yes); the Redis-vs-materialized-view rationale survives with its rejected alternative (Q4 — yes). Clock-out is complete.
+Run the 4-question check against this pair: a fresh agent reaches an executable state from two files and one `make check` (Q1, yes); the failing test is named (Q2, yes); Next Steps is numbered and concrete (Q3, yes); the Redis-vs-materialized-view rationale survives with its rejected alternative (Q4, yes). Clock-out is complete.
 
 Compare an insufficient leave-behind: "PROGRESS.md: making progress on auth and pagination, some tests failing, will continue next session." Q1 passes — the agent reads one line — but Q2, Q3, and Q4 all fail. The next session has no concrete blocker, no concrete next step, and no decision history, and rebuild cost reverts to its uncontrolled baseline.
 
@@ -166,3 +166,4 @@ Compare an insufficient leave-behind: "PROGRESS.md: making progress on auth and 
 - [Objective Drift](../anti-patterns/objective-drift.md) — the silent re-decision failure mode DECISIONS.md prevents
 - [Agent Memory Patterns](agent-memory-patterns.md) — cross-session persistence one layer above per-session continuity
 - [Cross-Cycle Consensus Relay](cross-cycle-consensus-relay.md) — structured handoff artifacts for long-running loops across sessions
+- [Persistent Teammate Workspace](persistent-teammate-workspace.md) — the same read-on-entry, write-on-exit discipline applied per teammate across a whole agent team

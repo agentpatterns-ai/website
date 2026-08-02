@@ -61,7 +61,7 @@ Three failure modes apply on top of the applicability bounds above:
 
 ## Worked example
 
-A code-review agent starts at Rung 1 — Tool Use alone — with a single prompt that reads the diff and posts a review. After two weeks, the team observes a reproducible failure mode: the agent posts reviews that miss the project's linter rules. The failure is named, externally verifiable (linter exit code), and traceable to a missing control (the agent never ran the linter before reviewing). Rung 2 — Reflection — adds a step where the agent runs the linter and revises the review. The failure mode disappears.
+A code-review agent starts at Rung 1, Tool Use alone, with a single prompt that reads the diff and posts a review. After two weeks, the team observes a reproducible failure mode: the agent posts reviews that miss the project's linter rules. The failure is named, externally verifiable (linter exit code), and traceable to a missing control (the agent never ran the linter before reviewing). Rung 2, Reflection, adds a step where the agent runs the linter and revises the review. The failure mode disappears.
 
 A month later a second failure mode appears: the agent marks its own reviews as "looks good" even when a test it ran has failed. Self-critique is unreliable for this surface. Rung 3 — Evaluator-Optimizer — adds a separate evaluator that gates the review on test results. The team stops at Rung 3; no rung 4 or 5 climb happens because no irreversible action and no genuinely independent subtask is in the loop. The agent's controllability and token cost stay at the minimum the observed failure modes require.
 

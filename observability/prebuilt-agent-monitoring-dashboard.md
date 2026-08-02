@@ -90,7 +90,7 @@ Anthropic's `working-dashboard.json` ships eight Grafana panels built on three P
 }
 ```
 
-The dashboard's three required metric series — `claude_code_cost_usage_USD_total`, `claude_code_token_usage_tokens_total`, `claude_code_lines_of_code_count_total` — match the canonical Claude Code metric names ([monitoring usage docs](https://code.claude.com/docs/en/monitoring-usage#metrics)). A team that imports the dashboard against a misconfigured emitter sees empty panels — which is the intended feedback loop.
+The dashboard's three required metric series (`claude_code_cost_usage_USD_total`, `claude_code_token_usage_tokens_total`, `claude_code_lines_of_code_count_total`) match the canonical Claude Code metric names ([monitoring usage docs](https://code.claude.com/docs/en/monitoring-usage#metrics)). A team that imports the dashboard against a misconfigured emitter sees empty panels — which is the intended feedback loop.
 
 ## Key Takeaways
 

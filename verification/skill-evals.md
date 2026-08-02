@@ -90,7 +90,7 @@ Evals pay off when the skill ships to multiple users, its value is capability up
 
 ## Example
 
-A CSV-analysis skill gets an `evals/evals.json` with two cases — a "top 3 months by revenue" chart and a "clean missing emails" transform — each with input files, an expected output description, and four specific assertions. The first run with no assertions produces `outputs/` directories paired per case; after review, assertions like `"The chart shows exactly 3 months"` and `"Both axes are labeled"` are added. A benchmark across both cases and both configurations reports `with_skill` pass rate 0.83 vs `without_skill` 0.33 — a 50-point delta at 13 seconds and 1,700 tokens of overhead, making the skill's cost-benefit explicit before shipping. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
+A CSV-analysis skill gets an `evals/evals.json` with two cases, a "top 3 months by revenue" chart and a "clean missing emails" transform, each with input files, an expected output description, and four specific assertions. The first run with no assertions produces `outputs/` directories paired per case; after review, assertions like `"The chart shows exactly 3 months"` and `"Both axes are labeled"` are added. A benchmark across both cases and both configurations reports `with_skill` pass rate 0.83 vs `without_skill` 0.33, a 50-point delta at 13 seconds and 1,700 tokens of overhead, making the skill's cost-benefit explicit before shipping. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
 
 ## Key Takeaways
 

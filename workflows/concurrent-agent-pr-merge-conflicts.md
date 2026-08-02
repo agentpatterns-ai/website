@@ -90,3 +90,4 @@ A team runs four Claude Code agents on one service repo. Before adding any coord
 - [Labels as Locks: Pipelined Backlog Processing](labels-as-locks-pipeline.md) — claim-label leasing to serialize only the contended work
 - [Agent-Authored PR Integration](../code-review/agent-authored-pr-integration.md) — merge-success predictors on the same AIDev dataset, complementary to the conflict-cost view here
 - [Developer as CPU Scheduler: Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md) — the human-attention cost of running the same parallel fleet
+- [Stacked Agent Sessions on Unmerged Feature Branches](stacked-agent-sessions.md) — chaining dependent sessions instead of running them in parallel, which trades conflict cost for review-order cost

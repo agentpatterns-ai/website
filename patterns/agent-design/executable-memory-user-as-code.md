@@ -19,7 +19,7 @@ maturity: emerging
 
 > Compile a user's memory log into typed code and call functions instead of retrieving passages — beats retrieval on aggregates, loses on plain recall.
 
-Executable memory represents a personalized agent's view of the user — trips, contacts, medical visits, transactions — as typed Python objects with rule functions rather than a corpus of retrievable text, so the agent answers a query by calling a function over those objects — `sum(t.cost for t in trips if t.year == 2024)` — instead of aggregating retrieved passages. That design beats text retrieval on aggregate queries, rule enforcement, and contradiction handling, and loses to it on plain recall. Two phases keep it honest: an append-only log preserves every observation, and a periodic checkpoint compiles the log into dataclasses ([Li 2026 — arXiv:2606.16707](https://arxiv.org/abs/2606.16707)). The codebase analogue (commits, ASTs, task graphs as code) is [code-native memory substrates](code-native-memory-substrates.md); this page covers the user-state instance.
+Executable memory represents a personalized agent's view of the user (trips, contacts, medical visits, transactions) as typed Python objects with rule functions rather than a corpus of retrievable text, so the agent answers a query by calling a function over those objects, `sum(t.cost for t in trips if t.year == 2024)`, instead of aggregating retrieved passages. That design beats text retrieval on aggregate queries, rule enforcement, and contradiction handling, and loses to it on plain recall. Two phases keep it honest: an append-only log preserves every observation, and a periodic checkpoint compiles the log into dataclasses ([Li 2026 — arXiv:2606.16707](https://arxiv.org/abs/2606.16707)). The codebase analogue (commits, ASTs, task graphs as code) is [code-native memory substrates](code-native-memory-substrates.md); this page covers the user-state instance.
 
 ## When the pattern pays
 
@@ -31,7 +31,7 @@ Use executable memory only when at least one row applies:
 | Rule enforcement — drug-allergy conflicts, dietary constraints, scheduling rules | Rules become predicates that fire at decision time, not optional context the model may ignore. |
 | Contradiction-sensitive history — preferences that change, conflicting facts across sessions | The append-only log preserves every prior fact. Checkpoint generation can encode contradictions as explicit `if`/`elif` arbitration rather than leaving which version surfaces to chance. |
 
-On the LOCOMO conversation-recall benchmark — pure "what did the user say" retrieval — text-based systems beat code-as-memory: MemMachine reaches 91.69% ([Yang et al. 2026 — arXiv:2604.04853](https://arxiv.org/abs/2604.04853)), Memobase 75.78% ([Memobase LOCOMO benchmark](https://github.com/memodb-io/memobase/blob/main/docs/experiments/locomo-benchmark/README.md)), against UaC's 78.8% ([Li 2026](https://arxiv.org/abs/2606.16707)). The pattern complements retrieval-based memory ([Agent Memory Patterns](agent-memory-patterns.md)), not replaces it.
+On the LOCOMO conversation-recall benchmark, which is pure "what did the user say" retrieval, text-based systems beat code-as-memory: MemMachine reaches 91.69% ([Yang et al. 2026 — arXiv:2604.04853](https://arxiv.org/abs/2604.04853)), Memobase 75.78% ([Memobase LOCOMO benchmark](https://github.com/memodb-io/memobase/blob/main/docs/experiments/locomo-benchmark/README.md)), against UaC's 78.8% ([Li 2026](https://arxiv.org/abs/2606.16707)). The pattern complements retrieval-based memory ([Agent Memory Patterns](agent-memory-patterns.md)), not replaces it.
 
 ## How the two phases work
 
@@ -46,7 +46,7 @@ graph LR
 
 The append-only log is the safety property. It keeps every observation verbatim. Contradictions stay visible, so the checkpoint pass has the material to encode arbitration rules rather than discarding history.
 
-The checkpoint is the performance property. A model rewrites the log as typed Python — dataclasses for entities (`Trip`, `Contact`, `MedicalVisit`), typed lists for collections, rule functions for invariants. Once compiled, the agent invokes those objects through a Python REPL rather than reasoning over retrieved text. Ning et al. catalog this broader shift — code as an operational substrate for agent reasoning, memory, and tool use — across an established design space ([arXiv:2605.18747](https://arxiv.org/abs/2605.18747)).
+The checkpoint is the performance property. A model rewrites the log as typed Python: dataclasses for entities (`Trip`, `Contact`, `MedicalVisit`), typed lists for collections, rule functions for invariants. Once compiled, the agent invokes those objects through a Python REPL rather than reasoning over retrieved text. Ning et al. catalog this broader shift, code as an operational substrate for agent reasoning, memory, and tool use, across an established design space ([arXiv:2605.18747](https://arxiv.org/abs/2605.18747)).
 
 ## Why it works
 

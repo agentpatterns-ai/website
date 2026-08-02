@@ -6,6 +6,7 @@ tags:
   - context-engineering
   - cost-performance
   - tool-agnostic
+  - arxiv
 aliases:
   - agent-readable codebase
 last_reviewed: 2026-06-13

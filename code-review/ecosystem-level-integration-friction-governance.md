@@ -36,7 +36,7 @@ The full population is 930,292 agent PRs across 116,211 repositories, joining th
 
 ## Why it works
 
-Repository attributes — base-branch churn, branch protection, test-suite latency, conventions density, reviewer availability — set the cost floor for every PR. Agents amplify this concentration because they generate contributions faster than humans, increasing concurrency density per unit time, and because they lack the ambient project context that lets human contributors self-route around hot areas. So the same repo-level attributes that mildly shape human friction strongly shape agent friction — a variance-decomposition effect that Russo (2026) quantifies as roughly half of agent-PR friction sitting in the repository, not in the agent ([arXiv:2606.28235](https://arxiv.org/abs/2606.28235)).
+Repository attributes (base-branch churn, branch protection, test-suite latency, conventions density, reviewer availability) set the cost floor for every PR. Agents amplify this concentration because they generate contributions faster than humans, increasing concurrency density per unit time, and because they lack the ambient project context that lets human contributors self-route around hot areas. So the same repo-level attributes that mildly shape human friction strongly shape agent friction — a variance-decomposition effect that Russo (2026) quantifies as roughly half of agent-PR friction sitting in the repository, not in the agent ([arXiv:2606.28235](https://arxiv.org/abs/2606.28235)).
 
 ## The four governance levers
 

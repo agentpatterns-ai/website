@@ -116,7 +116,7 @@ The caller surfaces this in its own UI, collects `"Yes"`, then resumes. On resum
 
 ## Why it works
 
-Before exiting, Claude Code serializes the full session transcript — conversation history, tool state, and the pending invocation — to disk under the session ID. `--resume` rehydrates that transcript, so the model context is byte-identical to the moment before exit. The `deferred_tool_use` payload gives the caller the tool name, ID, and input it needs to surface the approval. On resume, `PreToolUse` fires again for the same call, and `"allow"` with `updatedInput` injects the answer before execution. The design separates the approval moment, owned by the caller's UI, from the execution moment, owned by Claude Code — without blocking, polling, or restarting.
+Before exiting, Claude Code serializes the full session transcript (conversation history, tool state, and the pending invocation) to disk under the session ID. `--resume` rehydrates that transcript, so the model context is byte-identical to the moment before exit. The `deferred_tool_use` payload gives the caller the tool name, ID, and input it needs to surface the approval. On resume, `PreToolUse` fires again for the same call, and `"allow"` with `updatedInput` injects the answer before execution. The design separates the approval moment, owned by the caller's UI, from the execution moment, owned by Claude Code, without blocking, polling, or restarting.
 
 ## When this backfires
 

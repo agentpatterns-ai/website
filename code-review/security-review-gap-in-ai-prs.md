@@ -66,7 +66,7 @@ Pseudo-R² of 0.23 on the logistic regression confirms limited predictive power.
 
 ## Why review heuristics fail on agent PRs
 
-Reviewer proxies — message care, test scaffolding, change size, contributor history — assume a careful author produces careful code. Agent PRs break the link: a CI-passing patch with a detailed message still ships a polynomial regex. A regression on 33,596 agent-authored PRs shows reviewer engagement as the strongest single merge predictor ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441); see [Agent-Authored PR Integration](agent-authored-pr-integration.md)) — a social signal that under-weights security analysis.
+Reviewer proxies (message care, test scaffolding, change size, contributor history) assume a careful author produces careful code. Agent PRs break the link: a CI-passing patch with a detailed message still ships a polynomial regex. A regression on 33,596 agent-authored PRs shows reviewer engagement as the strongest single merge predictor ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441); see [Agent-Authored PR Integration](agent-authored-pr-integration.md)) — a social signal that under-weights security analysis.
 
 ## What to change
 

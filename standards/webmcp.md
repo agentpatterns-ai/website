@@ -53,7 +53,7 @@ WebMCP carries real adoption and security costs. The cases below mark where reac
 
 WebMCP is available in Chrome 149 through the early preview program ([Chrome for Developers: WebMCP early preview](https://developer.chrome.com/blog/webmcp-epp), 2026-02-10). Brandon Walderman of Microsoft is lead editor alongside Khushal Sagar and Dominic Farolino of Google. The spec remains a Community Group Draft, not a W3C Recommendation.
 
-The implementation existing does not mean agents use it. As of May 2026 no mainstream agent — Claude, ChatGPT's agent, Gemini, or Perplexity — calls `navigator.modelContext` tools directly; all still rely on DOM scraping or computer use, and with no agent demand sites have little reason to author descriptors ([freeCodeCamp: A Developer's Guide to WebMCP — Shipping a 0% Adoption Standard](https://www.freecodecamp.org/news/a-developers-guide-to-webmcp/)). Until a shipping agent consumes these tools, WebMCP is a capability to track, not one to build against. Follow changes at [webmachinelearning.github.io/webmcp](https://webmachinelearning.github.io/webmcp/).
+The implementation existing does not mean agents use it. As of May 2026 no mainstream agent (Claude, ChatGPT's agent, Gemini, or Perplexity) calls `navigator.modelContext` tools directly; all still rely on DOM scraping or computer use, and with no agent demand sites have little reason to author descriptors ([freeCodeCamp: A Developer's Guide to WebMCP — Shipping a 0% Adoption Standard](https://www.freecodecamp.org/news/a-developers-guide-to-webmcp/)). Until a shipping agent consumes these tools, WebMCP is a capability to track, not one to build against. Follow changes at [webmachinelearning.github.io/webmcp](https://webmachinelearning.github.io/webmcp/).
 
 ## Example
 

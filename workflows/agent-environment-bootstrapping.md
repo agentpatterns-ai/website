@@ -82,6 +82,8 @@ Trial-and-error discovery is expensive. Each installation attempt consumes token
 
 A declarative setup spec makes failure binary. The job either succeeds in full or fails with an explicit exit code before the agent runs. This removes the silent partial-failure mode, where the agent proceeds with the wrong tool versions.
 
+Once the spec exists, the bootstrap output becomes reusable. [Sandbox Forking](../patterns/agent-design/sandbox-forking.md) snapshots the environment a spec like this produces and branches a copy per run, so a fan-out pays the bootstrap cost once rather than once per agent.
+
 ## When this backfires
 
 - One-off exploratory tasks — a bootstrap file is overhead. If you run a task once and discard the environment straight away, trial-and-error discovery may beat writing and debugging setup steps.

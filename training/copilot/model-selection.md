@@ -112,7 +112,7 @@ Task arrives
 
 This is the cost-aware version of the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md) (Module D). The key insight: if the [backpressure](../../patterns/agent-design/agent-backpressure.md) system (tests, linter, types) provides binary pass/fail feedback, you can start cheap and escalate on failure. The test suite is the routing signal.
 
-When cascade works: Tasks with verifiable outcomes — tests pass, types check, linter clean. The feedback loop — the same [backpressure](harness-engineering.md) that gates the cascade — tells you whether the cheaper model was sufficient.
+When cascade works: tasks with verifiable outcomes, where tests pass, types check, and the linter is clean. The feedback loop, the same [backpressure](harness-engineering.md) that gates the cascade, tells you whether the cheaper model was sufficient.
 
 When cascade doesn't work: Tasks without binary feedback — architecture design, documentation quality, code review. There's no automated signal to trigger escalation. Use the powerful model directly for these, or read the cheap model's partial trajectory to decide when to escalate — see [Trajectory-Conditioned Model Escalation](../../patterns/agent-design/trajectory-conditioned-model-escalation.md).
 
@@ -132,7 +132,7 @@ Verification phase → high reasoning (review the implementation critically)
 
 ### Why it works
 
-Concentrating reasoning at decision points — the [reasoning budget allocation](../../patterns/agent-design/reasoning-budget-allocation.md) pattern — outperforms both maximum reasoning throughout and uniform reduced reasoning. Maximum reasoning throughout is counterproductive — the model spends so long reasoning about each step that it risks exhausting token budgets before completing the task. Reasoning is most valuable where decisions are made, not where they're executed.
+Concentrating reasoning at decision points, the [reasoning budget allocation](../../patterns/agent-design/reasoning-budget-allocation.md) pattern, outperforms both maximum reasoning throughout and uniform reduced reasoning. Maximum reasoning throughout is counterproductive: the model spends so long reasoning about each step that it risks exhausting token budgets before completing the task. Reasoning is most valuable where decisions are made, not where they're executed.
 
 ### How to apply it in Copilot
 
@@ -206,7 +206,7 @@ Take a session consuming 2M input tokens and 200K output tokens, a plausible sha
 | Claude Sonnet 5 | $4.00 | $2.00 | $6.00 (600 credits) |
 | Claude Opus 5 | $10.00 | $5.00 | $15.00 (1,500 credits) |
 
-A [$19 Copilot Business seat includes 1,900 credits](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises) — 3,000 promotionally through 2026-09-01 — pooled across the organization rather than held per user. One Opus session of this size consumes half to four-fifths of a seat's monthly allowance depending on which figure applies; the same session on Haiku consumes a tenth to a sixth of it. That is the argument for reserving Opus for work where deeper reasoning changes the outcome — and for keeping context cached, since cached input bills at a tenth of fresh input.
+A [$19 Copilot Business seat includes 1,900 credits](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises), or 3,000 promotionally through 2026-09-01, pooled across the organization rather than held per user. One Opus session of this size consumes half to four-fifths of a seat's monthly allowance depending on which figure applies; the same session on Haiku consumes a tenth to a sixth of it. That is the argument for reserving Opus for work where deeper reasoning changes the outcome, and for keeping context cached, since cached input bills at a tenth of fresh input.
 
 ---
 

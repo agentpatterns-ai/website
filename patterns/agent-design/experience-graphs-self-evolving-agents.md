@@ -6,6 +6,7 @@ tags:
   - agent-design
   - memory
   - tool-agnostic
+  - arxiv
 aliases:
   - EXG framework
   - experience graph memory

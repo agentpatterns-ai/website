@@ -78,6 +78,7 @@ nav:
       - tiered-memory-architecture.md
       - wiki-memory-agent-maintained-knowledge-base.md
       - filesystem-memory-organization.md
+      - persistent-teammate-workspace.md
   - "Control & Orchestration":
       - background-todo-agent.md
       - in-agent-task-prioritization.md
@@ -85,6 +86,7 @@ nav:
       - critic-agent-plan-review.md
       - deterministic-orchestration-structured-modernization.md
       - llm-as-code-agentic-programming.md
+      - bounded-agent-step.md
       - ast-grounded-doc-critic-loop.md
       - selective-autonomy-from-copilot-feedback.md
       - dspy-programmatic-prompt-optimization.md
@@ -95,6 +97,7 @@ nav:
       - grill-me-technique.md
       - inference-time-tool-call-reviewer.md
       - minimum-sufficient-control-ladder.md
+      - orchestrator-attention-budget.md
       - plan-compliance-in-agents.md
       - proactive-idle-time-anticipation.md
       - progressive-disclosure-agents.md
@@ -182,6 +185,7 @@ nav:
       - persistent-connection-agent-transport.md
       - quality-score-rubric.md
       - recursive-agent-harnesses.md
+      - sandbox-forking.md
       - scoped-devtools-access-runtime-diagnosis.md
       - session-harness-sandbox-separation.md
       - temporary-compensatory-mechanisms.md

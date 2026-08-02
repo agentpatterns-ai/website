@@ -67,7 +67,7 @@ graph LR
 
 ## Why it works
 
-Mixing reasoning spaces degrades quality because each space works on a different scope of context. Plan space needs global visibility — the whole system in context — to make coherent architecture decisions. Code space works on local context, a single file or function. When an agent shifts between the two in one session, the narrow window of code space makes it re-derive global constraints that plan space should have fixed. The result, according to Osmani, is implicit architecture choices buried in generated code. Bead space prevents this. It writes those constraints down as artifacts — acceptance criteria, dependency lists, required context — so code-space agents work within explicit bounds instead of guessing them. The phase gates keep each space's reasoning coherent, because it no longer competes with the concerns of the other two.
+Mixing reasoning spaces degrades quality because each space works on a different scope of context. Plan space needs global visibility, the whole system in context, to make coherent architecture decisions. Code space works on local context, a single file or function. When an agent shifts between the two in one session, the narrow window of code space makes it re-derive global constraints that plan space should have fixed. The result, according to Osmani, is implicit architecture choices buried in generated code. Bead space prevents this. It writes those constraints down as artifacts (acceptance criteria, dependency lists, required context) so code-space agents work within explicit bounds instead of guessing them. The phase gates keep each space's reasoning coherent, because it no longer competes with the concerns of the other two.
 
 ## When this backfires
 

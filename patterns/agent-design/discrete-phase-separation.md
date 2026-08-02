@@ -67,7 +67,7 @@ flowchart LR
 
 ## Why conversation boundary matters
 
-Prompt-level separation — using section headers or instruction clauses within one conversation — does not work the same way. The model has already processed the earlier content, and its attention spans the full context. Distraction and crosstalk persist — the [distractor-interference](../anti-patterns/distractor-interference.md) failure mode.
+Prompt-level separation, using section headers or instruction clauses within one conversation, does not work the same way. The model has already processed the earlier content, and its attention spans the full context. Distraction and crosstalk persist — the [distractor-interference](../anti-patterns/distractor-interference.md) failure mode.
 
 A conversation boundary resets everything: the KV cache, attention state, and implicit prior reasoning. The execution agent cannot see what the research agent concluded, except through the artifact you pass it.
 

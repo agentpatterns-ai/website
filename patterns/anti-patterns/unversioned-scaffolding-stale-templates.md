@@ -22,7 +22,7 @@ When an agent runs `npx create-something` with no `@version`, it assumes "no ver
 
 ## The pattern
 
-Coding agents reach for scaffolding generators the way developers do — `npx create-next-app`, `npx create-react-app`, `npx @microsoft/generator-sharepoint`, `pnpm create vite`. Most tool READMEs document the unpinned form, so the agent reproduces what it sees. When the command succeeds and emits a project tree, the agent treats the result as canonical and continues — wiring routes, adding tests, deploying CI — against whatever structure landed on disk.
+Coding agents reach for scaffolding generators the way developers do: `npx create-next-app`, `npx create-react-app`, `npx @microsoft/generator-sharepoint`, `pnpm create vite`. Most tool READMEs document the unpinned form, so the agent reproduces what it sees. When the command succeeds and emits a project tree, the agent treats the result as canonical and continues, wiring routes, adding tests, and deploying CI against whatever structure landed on disk.
 
 ## Why it fails
 

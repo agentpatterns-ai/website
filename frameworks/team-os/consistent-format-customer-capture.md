@@ -47,7 +47,7 @@ The schema is a hand-built inverted index. `grep -A 20 '### Feature Requests' cu
 
 ## Drift prevention
 
-Enforcement lives in the skill file. `SKILL.md` closes with a 17-item Quality Checklist — items like `[ ] Insights use table format with quotes on separate lines` and `[ ] Feature requests cross-referenced with feature-requests/feature-requests.md` — that Claude runs against each draft before finalizing. A capture rule in `CLAUDE.md` routes Claude to the skill; the checklist inside the skill enforces the shape (prompt-as-spec — see [structured-output constraints](../../verification/structured-output-constraints.md)).
+Enforcement lives in the skill file. `SKILL.md` closes with a 17-item Quality Checklist, with items like `[ ] Insights use table format with quotes on separate lines` and `[ ] Feature requests cross-referenced with feature-requests/feature-requests.md`, that Claude runs against each draft before finalizing. A capture rule in `CLAUDE.md` routes Claude to the skill; the checklist inside the skill enforces the shape (prompt-as-spec — see [structured-output constraints](../../verification/structured-output-constraints.md)).
 
 ## Progressive tightening
 

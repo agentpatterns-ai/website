@@ -72,7 +72,7 @@ Coverage improvement is not a universal proxy for harness quality. The approach 
 
 ## Generalization
 
-The paper demonstrates the pattern on Java libraries. The feedback loop — generate, measure coverage, refine — could in principle apply to other typed API surfaces — C/C++ with [libFuzzer](https://llvm.org/docs/LibFuzzer.html) or [AFL++](https://github.com/AFLplusplus/AFLplusplus), Python with [Atheris](https://github.com/google/atheris), Rust with [cargo-fuzz](https://github.com/rust-fuzz/cargo-fuzz) — but cross-language generalization has not been validated by published research.
+The paper demonstrates the pattern on Java libraries. The feedback loop of generate, measure coverage, refine could in principle apply to other typed API surfaces, such as C/C++ with [libFuzzer](https://llvm.org/docs/LibFuzzer.html) or [AFL++](https://github.com/AFLplusplus/AFLplusplus), Python with [Atheris](https://github.com/google/atheris), and Rust with [cargo-fuzz](https://github.com/rust-fuzz/cargo-fuzz), but cross-language generalization has not been validated by published research.
 
 ## Key Takeaways
 

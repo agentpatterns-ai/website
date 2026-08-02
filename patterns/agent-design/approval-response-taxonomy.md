@@ -18,7 +18,7 @@ maturity: adopted
 
 > Six distinct approval responses — approve, approve-with-changes, approve-and-remember, reject, suggest alternative, redirect entirely — compose from three callback knobs over a binary protocol.
 
-The underlying protocol is binary: a `canUseTool` callback returns either `PermissionResultAllow(updated_input=...)` or `PermissionResultDeny(message=...)` ([Claude Agent SDK — Handle approvals and user input](https://code.claude.com/docs/en/agent-sdk/user-input#respond-to-tool-requests)). Six shapes emerge when three independent knobs — input mutation, persisted permission updates, and the deny message — are treated as design surfaces. The Agent SDK doc enumerates the six verbatim.
+The underlying protocol is binary: a `canUseTool` callback returns either `PermissionResultAllow(updated_input=...)` or `PermissionResultDeny(message=...)` ([Claude Agent SDK — Handle approvals and user input](https://code.claude.com/docs/en/agent-sdk/user-input#respond-to-tool-requests)). Six shapes emerge when three independent knobs (input mutation, persisted permission updates, and the deny message) are treated as design surfaces. The Agent SDK doc enumerates the six verbatim.
 
 ## The three underlying knobs
 

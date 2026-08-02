@@ -27,7 +27,7 @@ For non-spatial work, the visual surface has no referent. Keep those in text.
 
 ## What the agent receives
 
-Selecting an element gives the agent two complementary signals: element identity — "xpath, the component, attributes, computed styles, props from the fiber tree" — and spatial context — a viewport screenshot capturing layout and surrounding elements ([Cursor — Design Mode, 2026-06-05](https://cursor.com/blog/design-mode)). Identity alone cannot say "match the spacing of the sibling card". The screenshot alone leaves the agent guessing which DOM node to edit. Each modality covers the other's blind spot — the property [app-window snapshots](../../context-engineering/app-window-snapshot-context.md) exploit for passive capture.
+Selecting an element gives the agent two complementary signals: element identity ("xpath, the component, attributes, computed styles, props from the fiber tree") and spatial context, a viewport screenshot capturing layout and surrounding elements ([Cursor — Design Mode, 2026-06-05](https://cursor.com/blog/design-mode)). Identity alone cannot say "match the spacing of the sibling card". The screenshot alone leaves the agent guessing which DOM node to edit. Each modality covers the other's blind spot, the property [app-window snapshots](../../context-engineering/app-window-snapshot-context.md) exploit for passive capture.
 
 ## Three multimodal patterns, one site
 
@@ -52,7 +52,7 @@ Cursor pairs it with Composer 2.5, "both fast and strong at interface work" ([Cu
 
 ## Why it works
 
-Spatial intent is a multi-dimensional referent that text encodes lossily. The dual signal — identity (xpath/component/computed-style/fiber-tree props) plus a screenshot — collapses the multi-turn "describe → clarify → re-describe" loop into one grounded instruction. Identity anchors where to edit. The screenshot anchors what good looks like ([Cursor — Design Mode](https://cursor.com/blog/design-mode)) — the argument validated for screenshot-plus-accessibility-tree capture in [GUI agent research](https://arxiv.org/html/2507.03730v1).
+Spatial intent is a multi-dimensional referent that text encodes lossily. The dual signal, identity (xpath/component/computed-style/fiber-tree props) plus a screenshot, collapses the multi-turn "describe → clarify → re-describe" loop into one grounded instruction. Identity anchors where to edit. The screenshot anchors what good looks like ([Cursor — Design Mode](https://cursor.com/blog/design-mode)), the argument validated for screenshot-plus-accessibility-tree capture in [GUI agent research](https://arxiv.org/html/2507.03730v1).
 
 ## When this backfires
 

@@ -113,3 +113,4 @@ Each PR is independently reviewable against its own base. Each lands inside the 
 - [Tiered Code Review](tiered-code-review.md) — routing review effort by risk; complementary to intent slicing
 - [Cloud Parallel Review Pattern](cloud-parallel-review-pattern.md) — fan-out review across one PR
 - [Diff-Based Review](diff-based-review.md) — the review-the-delta scope slicing makes tractable
+- [Stacked Agent Sessions on Unmerged Feature Branches](../workflows/stacked-agent-sessions.md) — the inverse operation: sequencing new sessions onto unmerged branches before the work exists

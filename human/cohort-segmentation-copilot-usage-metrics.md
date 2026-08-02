@@ -54,7 +54,7 @@ Phase 0 does not equal "dormant." It means "did not meet engagement criteria in 
 
 ## Why it works
 
-Aggregate utilization — "60% active this month" — is a mean over a distribution that is almost always bimodal in engineering orgs: a small power-user mode, a long middle, and a dormant tail ([Userpilot 2026](https://userpilot.com/blog/user-adoption-metrics/), [AI Adoption Footprint](ai-adoption-footprint.md)). Means over bimodal distributions hide the modes, and the modes are where interventions land. A 60% headline is consistent with a 20%-power / 40%-dormant org and with a uniform-60%-medium-use org — same number, opposite playbooks.
+Aggregate utilization ("60% active this month") is a mean over a distribution that is almost always bimodal in engineering orgs: a small power-user mode, a long middle, and a dormant tail ([Userpilot 2026](https://userpilot.com/blog/user-adoption-metrics/), [AI Adoption Footprint](ai-adoption-footprint.md)). Means over bimodal distributions hide the modes, and the modes are where interventions land. A 60% headline is consistent with a 20%-power / 40%-dormant org and with a uniform-60%-medium-use org — same number, opposite playbooks.
 
 Cohort segmentation recovers the conditional `P(activity | phase)` instead of the marginal `P(activity)` — the actionable shape ([Zigpoll 2026](https://www.zigpoll.com/content/9-ways-optimize-cohort-analysis-techniques-developertools)). The API's depth-of-surface framing aligns with the capability-layering mechanism in [AI Adoption Footprint](ai-adoption-footprint.md): each phase boundary is a skill gate (autocomplete to agent supervision to multi-agent), so per-phase averages reveal which gate is choking adoption.
 

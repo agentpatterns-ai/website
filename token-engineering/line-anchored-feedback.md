@@ -34,7 +34,7 @@ Deliver each requested change as an inline comment anchored to the specific line
 
 ## Why it works
 
-Line anchors shrink the model's search space. On a large file, finding which lines to change is genuinely hard, so a model handed only a holistic prompt hedges by regenerating large spans — often the whole file — to be safe. Telling it exactly where to edit licenses a small, targeted edit instead, which is where the token saving comes from ([arxiv 2607.12713](https://arxiv.org/abs/2607.12713)). The same localization removes silent "runs but produces the wrong result" failures in weaker models by pointing them at the right region — for one model that failure rate dropped from 7.3% to zero. So the benefit follows whichever dimension has slack.
+Line anchors shrink the model's search space. On a large file, finding which lines to change is genuinely hard, so a model handed only a holistic prompt hedges by regenerating large spans, often the whole file, to be safe. Telling it exactly where to edit licenses a small, targeted edit instead, which is where the token saving comes from ([arxiv 2607.12713](https://arxiv.org/abs/2607.12713)). The same localization removes silent "runs but produces the wrong result" failures in weaker models by pointing them at the right region: for one model that failure rate dropped from 7.3% to zero. So the benefit follows whichever dimension has slack.
 
 ## When this backfires
 

@@ -20,7 +20,7 @@ maturity: established
 
     Narrow Agent Scope Over Broad Role, Specialized Agent Roles (sequential context)
 
-    Scope: sequential task decomposition — discrete, bounded tasks running one at a time. For parallel specialization — concurrent agents on the same codebase — see [Specialized Agent Roles](specialized-agent-roles.md).
+    Scope: sequential task decomposition, meaning discrete, bounded tasks running one at a time. For parallel specialization, where concurrent agents work on the same codebase, see [Specialized Agent Roles](specialized-agent-roles.md).
 
 ## The failure mode of role-based agents
 

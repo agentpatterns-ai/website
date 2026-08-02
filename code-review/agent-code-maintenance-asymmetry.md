@@ -67,7 +67,7 @@ Modification timing tracks organizational factors. Predicting when AI-authored c
 
 ## Key Takeaways
 
-- AI-generated files see roughly half the commit frequency of human-authored files in the first month, with smaller per-commit change magnitude
+- Read the modification mix, not the commit count. Frequency alone (roughly half, at smaller per-commit magnitude) is consistent with both better quality and avoidance, so it settles nothing on its own
 - The modification mix inverts: AI files are dominated by feature additions (21.78%) and refactoring (14.19%); human files are dominated by bug fixes (16.76%) and documentation (16.22%)
 - Humans perform 83.21% of maintenance on AI-generated files; agents return for only 16.79%
 - Lower modification rates have two competing explanations — better quality or comprehension-driven avoidance — and the data does not distinguish them

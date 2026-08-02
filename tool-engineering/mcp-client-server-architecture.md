@@ -35,7 +35,7 @@ Transport is a deployment topology decision, not a latency choice.
 | Security surface | Process isolation | Network exposure, requires auth |
 | Use case | Local dev tools | Shared team servers, cloud services |
 
-Use stdio unless you need multiple clients or remote hosting. Streamable HTTP adds [required security measures](https://modelcontextprotocol.io/docs/concepts/transports). The [MCP spec's security warning](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports) makes `Origin` validation a **MUST for every Streamable HTTP server, local or remote** — it's the DNS-rebinding defense, not a local-only concern. A locally-running server should additionally bind to localhost; all Streamable HTTP servers should authenticate callers.
+Use stdio unless you need multiple clients or remote hosting. Streamable HTTP adds [required security measures](https://modelcontextprotocol.io/docs/concepts/transports). The [MCP spec's security warning](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports) makes `Origin` validation a **MUST for every Streamable HTTP server, local or remote** — it's the DNS-rebinding defense, not a local-only concern. A locally-running server should additionally bind to localhost; all Streamable HTTP servers should authenticate callers. The session management in the table above applies to spec revisions before `2026-07-28`, which made the protocol core stateless — see [Stateless MCP: One Request per Tool Call](../standards/stateless-mcp.md).
 
 ## Tool surface design
 

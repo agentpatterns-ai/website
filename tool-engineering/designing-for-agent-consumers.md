@@ -50,7 +50,7 @@ Each rule maps to a tactic page that develops it in depth:
 
 ## Why it works
 
-An agent's only contact with your product is the literal bytes of your surface — signatures, descriptions, output, and errors — with no intuition to repair ambiguity. Because the agent "take[s] your error message literally" ([Mastykarz](https://developer.microsoft.com/blog/how-ai-coding-agents-actually-use-your-technology)), surface legibility decides whether it recovers or guesses. It needs machine-readable, structured interfaces rather than the human-readable affordances a GUI offers ([Nordic APIs](https://nordicapis.com/what-is-agent-experience-ax/)) — treating the surface as a contract read by a literal consumer is what separates AX from generic SDK polish.
+An agent's only contact with your product is the literal bytes of your surface (signatures, descriptions, output, and errors) with no intuition to repair ambiguity. Because the agent "take[s] your error message literally" ([Mastykarz](https://developer.microsoft.com/blog/how-ai-coding-agents-actually-use-your-technology)), surface legibility decides whether it recovers or guesses. It needs machine-readable, structured interfaces rather than the human-readable affordances a GUI offers ([Nordic APIs](https://nordicapis.com/what-is-agent-experience-ax/)), and treating the surface as a contract read by a literal consumer is what separates AX from generic SDK polish.
 
 ## When this backfires
 

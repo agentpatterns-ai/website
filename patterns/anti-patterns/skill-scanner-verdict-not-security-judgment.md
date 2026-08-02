@@ -44,7 +44,7 @@ The corrective — read the findings and decide, do not obey the verdict — has
 
 **Before — green check read as the go-ahead:** a skill scans clean, so it is installed. Its malicious step was rendered as a "workflow diagram" image the static scanner never parsed, and the multimodal agent reads and executes it at runtime ([Wang et al., 2026](https://arxiv.org/abs/2606.18198)). The pass certified "no pattern matched," which was never the same as "safe."
 
-**After — the verdict is an input, not the decision:** the scan runs first as triage, then a reviewer reads what fired and what did not — an unexplained bundled image, a network sink the skill's purpose does not need, a permission beyond its declared scope — and weights those against the skill's stated function before installing.
+**After** — the verdict is an input, not the decision: the scan runs first as triage, then a reviewer reads what fired and what did not (an unexplained bundled image, a network sink the skill's purpose does not need, a permission beyond its declared scope) and weights those against the skill's stated function before installing.
 
 ## Key takeaways
 

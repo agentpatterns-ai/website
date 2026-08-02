@@ -68,7 +68,7 @@ Skip when: you build an agent into another application — Eigent is the applica
 
 ### Letta (formerly MemGPT)
 
-Stateful agent runtime — Python/TypeScript SDKs and REST API — built around server-side agent identity ([Letta README](https://github.com/letta-ai/letta)). You create agents with explicit `memory_blocks` (`human`, `persona`) and an agent ID; later requests address the same persistent agent. The model edits its own memory by calling the `memory_replace`, `memory_insert`, and `memory_rethink` tools — the "self-editing memory" model inherited from MemGPT ([Letta blog: Agent Memory](https://www.letta.com/blog/agent-memory)). Sleep-time compute uses idle periods to reorganize memory ([smeuse: MemGPT/Letta stateful agents](https://blog.smeuse.org/posts/memgpt-letta-stateful-agents)).
+Stateful agent runtime (Python/TypeScript SDKs and REST API) built around server-side agent identity ([Letta README](https://github.com/letta-ai/letta)). You create agents with explicit `memory_blocks` (`human`, `persona`) and an agent ID; later requests address the same persistent agent. The model edits its own memory by calling the `memory_replace`, `memory_insert`, and `memory_rethink` tools — the "self-editing memory" model inherited from MemGPT ([Letta blog: Agent Memory](https://www.letta.com/blog/agent-memory)). Sleep-time compute uses idle periods to reorganize memory ([smeuse: MemGPT/Letta stateful agents](https://blog.smeuse.org/posts/memgpt-letta-stateful-agents)).
 
 Fits when: the agent must hold a coherent identity across sessions and users, or you build conversational apps with cross-session continuity.
 
