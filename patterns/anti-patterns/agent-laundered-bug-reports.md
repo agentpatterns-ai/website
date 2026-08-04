@@ -101,3 +101,4 @@ The maintainer-side defense — telling the agent to "not trust analysis written
 - [Continuous Triage](../../workflows/continuous-triage.md) — maintainer-side triage workflow this anti-pattern degrades upstream of
 - [Backlog Triage Skill](../../workflows/backlog-triage-skill.md) — automated inbound-issue routing assumes the issue body is a faithful observation
 - [Observation Contract Preservation](../agent-design/observation-contract-preservation.md) — the same discipline applied to tool outputs that downstream tools validate by exact bytes
+- [The Meat Proxy: Relaying Agent Output Without Reading It](meat-proxy.md) — the opposite direction of the same handoff: model output forwarded to a human untouched, instead of a human observation expanded by a model

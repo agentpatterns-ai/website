@@ -59,15 +59,15 @@ Agents over-flag — surfacing style issues in generated code and flagging inten
 
 ## When this backfires
 
-CRA-only configurations backfire. An empirical study of 3,109 PRs found CRA-only review achieves a 45% merge rate versus 68% for human-involved review, and 12 of 13 CRAs studied averaged signal ratios below 60% ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). Always require at least one human approval.
+Dropping the human is the failure with the hardest number attached. An empirical study of 3,109 PRs found CRA-only review achieves a 45% merge rate against 68% for human-involved review, and 12 of 13 CRAs studied averaged signal ratios below 60% ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). Require at least one human approval.
 
-PRs that exceed context limits backfire too. Large diffs produce generic, low-signal comments across truncated context. Keep PRs small — see [agent-driven PR slicing](agent-driven-pr-slicing.md).
+Size breaks it differently. A diff past the context limit gets truncated, and what comes back is generic comment spread thinly over the fragments the agent did see. Keep PRs small — see [agent-driven PR slicing](agent-driven-pr-slicing.md).
 
-An agent reviewing its own output is another trap. A reviewer in the same session validates the same assumptions the generating agent made. Route to a fresh-context reviewer ([Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md)).
+Self-review is subtler. A reviewer running in the same session validates the assumptions that produced the code, so route to a fresh-context reviewer instead ([Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md)).
 
-Skipping human review after agent approval breaks the pattern. It only works if humans remain accountable for design. Treating agent approval as enough accumulates architectural debt the agent cannot see.
+Accountability decays quietly. Treat agent approval as sufficient and architectural debt accumulates exactly where the agent cannot see it, because nobody is answerable for design any more.
 
-Uncalibrated false positive rates lower adoption. AI suggestions are adopted at 16.6% versus 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)). Untuned prompts reduce adoption even for correct findings.
+Calibration decides whether any of this gets used at all. AI suggestions are adopted at 16.6% against 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)), and an untuned prompt depresses adoption even for findings that are correct.
 
 ## Example
 
@@ -133,11 +133,11 @@ False positives run 5–15% for well-configured tools and higher when poorly tun
 
 ## Key Takeaways
 
-- Agents handle mechanical checks (style, types, security patterns); humans handle design and architecture judgment
-- GitHub Copilot code review leaves non-binding comments and does not block merges — findings are advisory
-- [Claude Code Review](../tools/claude/code-review.md) subagents should be read-only — `Edit` and `Write` tools excluded by design
-- Structure agent findings by severity; calibrate false positive handling before trusting outputs
-- Never have an agent review its own output — independence is structural, not behavioral
+- Split the queue by what each reviewer is good at, then hold the line: the moment humans stop owning design, the agent's clean pass starts reading as approval it was never scoped to give
+- Advisory by construction is a feature, not a limitation. Because [Claude Code Review](../tools/claude/code-review.md) subagents and Copilot both comment without approving, neither can be mistaken for the required review
+- Withholding `Edit` and `Write` from a reviewer is what keeps its findings falsifiable — an agent that can apply its own fix has no incentive to be right about it
+- Calibrate before you trust, not after. At a 16.6% adoption rate the failure is invisible: correct findings and false positives are both simply ignored
+- Independence has to be structural. An agent asked to review itself will agree, because it is re-deriving the same assumptions rather than testing them
 
 ## Related
 

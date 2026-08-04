@@ -1,6 +1,6 @@
 ---
 title: "App-Window Snapshot as Agent Context"
-description: "Bind one hotkey to capture the active app window — screenshot plus accessibility-tree text — as agent context. The richer payload pays off only under specific conditions."
+description: "Bind one hotkey to capture the active app window's screenshot and accessibility-tree text as agent context. The richer payload pays off only under specific conditions."
 term: "App-Window Snapshot"
 tags:
   - context-engineering
@@ -17,7 +17,7 @@ status: current
 
 # App-Window Snapshot as Agent Context
 
-> Bind one keystroke to send the active app window — rendered screenshot plus accessibility-tree text — to an agent as one context unit.
+> Bind one keystroke to send the active app window's screenshot and accessibility-tree text to an agent as one context unit.
 
 An app-window snapshot bundles two signals into one zero-friction event: a rendered screenshot of the active window plus a structured text extract from the OS accessibility tree, including content outside the visible scroll. The bundle becomes the agent's context unit.
 
@@ -25,24 +25,24 @@ An app-window snapshot bundles two signals into one zero-friction event: a rende
 
 The pattern pays off only when these conditions hold at once:
 
-- The task is bound to one window — debugging a UI bug, summarizing a doc-viewer page, validating a deployment dashboard. Cross-window or whole-desktop tasks need a different primitive.
-- Sensitive surfaces are not adjacent — no credentials manager, banking tab, token-bearing terminal, or PII form open in the captured window. OpenAI's own guidance is to "avoid taking appshots of sensitive content unless the task requires that content" ([Codex Appshots changelog](https://developers.openai.com/codex/changelog)).
-- The OS exposes a structured accessibility surface — macOS Accessibility API, Windows UI Automation, Linux AT-SPI. Where apps opt out, the structured-text half collapses and the pattern degrades to plain screenshot OCR.
-- The image-token budget has headroom — one high-detail image consumes roughly 765 tokens at 1024×1024 on GPT-4o, reaching 1100 to 3000 at higher resolutions ([Roboflow VLM cost analysis](https://blog.roboflow.com/image-token-cost-vlm/), [Aigosearch tokens guide](https://www.aigosearch.com/post/ai-tokens/)).
+- The task is bound to one window: debugging a UI bug, summarizing a doc-viewer page, validating a deployment dashboard. Cross-window or whole-desktop tasks need a different primitive.
+- Sensitive surfaces are not adjacent: no credentials manager, banking tab, token-bearing terminal, or PII form open in the captured window. OpenAI's own guidance is to "avoid taking appshots of sensitive content unless the task requires that content" ([Codex Appshots changelog](https://developers.openai.com/codex/changelog)).
+- The OS exposes a structured accessibility surface: macOS Accessibility API, Windows UI Automation, Linux AT-SPI. Where apps opt out, the structured-text half collapses and the pattern degrades to plain screenshot OCR.
+- The image-token budget has headroom: one high-detail image consumes roughly 765 tokens at 1024×1024 on GPT-4o, reaching 1100 to 3000 at higher resolutions ([Roboflow VLM cost analysis](https://blog.roboflow.com/image-token-cost-vlm/), [Aigosearch tokens guide](https://www.aigosearch.com/post/ai-tokens/)).
 
 Outside these conditions, prefer file-path attachment with per-call review or the [live browser channel](live-browser-context-channel.md) for web-tab tasks.
 
-## Why two modalities, not one
+## Why two modalities outperform one
 
 The image encodes layout, visual affordances, and rendered state. The accessibility tree encodes selection, focus, hierarchical structure, and content beyond the visible viewport. Codex walks the AX tree of the active window via `NSWorkspace.frontmostApplication` and `kAXFocusedWindowAttribute`, returning text the user has not scrolled into view ([Kingy AI Appshots analysis](https://kingy.ai/blog/appshots-inside-openai-codexs-new-command-command-trick-for-macos/)).
 
-The dual-modality benefit is measured, not assumed. Agents receiving both a screenshot and an accessibility tree outperform single-modality baselines, because the two cover each other's blind spots: the screenshot grounds visual affordances, the tree disambiguates element types ([Less is More: Context-Aware GUI Simplification, arxiv 2507.03730](https://arxiv.org/html/2507.03730v1)). The hotkey is the second mechanism. Collapsing capture, switch, attach, and describe into one keystroke drops the handoff cost below the point at which developers actually use it.
+The dual-modality benefit is measured directly: agents receiving both a screenshot and an accessibility tree outperform single-modality baselines, because the two cover each other's blind spots. The screenshot grounds visual affordances, the tree disambiguates element types ([Less is More: Context-Aware GUI Simplification, arxiv 2507.03730](https://arxiv.org/html/2507.03730v1)). The hotkey is the second mechanism. Collapsing capture, switch, attach, and describe into one keystroke drops the handoff cost below the point at which developers actually use it.
 
 ## The shipping implementation
 
-OpenAI's Codex app shipped this primitive as "Appshots" in version 26.519 on 2026-05-21. Pressing both Command keys sends the frontmost macOS window — screenshot plus AX-extracted text — to Codex ([Codex Appshots changelog](https://developers.openai.com/codex/changelog)). A new snapshot opens a new conversation, but joins the most recent thread if the user interacted with it in the last 60 seconds. Consecutive snapshots then stack into that thread ([Kingy AI](https://kingy.ai/blog/appshots-inside-openai-codexs-new-command-command-trick-for-macos/)). Snapshots persist locally in the session file like attached files, and ChatGPT-plan retention rules apply to model-bound content.
+OpenAI's Codex app shipped this primitive as "Appshots" in version 26.519 on 2026-05-21. Pressing both Command keys sends the frontmost macOS window (screenshot plus AX-extracted text) to Codex ([Codex Appshots changelog](https://developers.openai.com/codex/changelog)). A new snapshot opens a new conversation, but joins the most recent thread if the user interacted with it in the last 60 seconds. Consecutive snapshots then stack into that thread ([Kingy AI](https://kingy.ai/blog/appshots-inside-openai-codexs-new-command-command-trick-for-macos/)). Snapshots persist locally in the session file like attached files, and ChatGPT-plan retention rules apply to model-bound content.
 
-Adjacent tools accept image input but require manual capture. Claude Code's CLI uses a file-path convention or a project `/screenshots/` directory ([App Screenshots skill walkthrough](https://alexop.dev/posts/app-screenshots-claude-code-skill/), [Claude Code paste-image issue #32005](https://github.com/anthropics/claude-code/issues/32005)). Cursor reaches it through a [Screenshot MCP server](https://github.com/upnorthmedia/ScreenshotMCP/), and the Claude Code VS Code extension accepts drag-and-drop. None bind frontmost-window capture to a hotkey or extract AX-tree text alongside the image. That integration gap, not the image-input capability, is what makes Appshots structurally distinct.
+Adjacent tools accept image input but require manual capture. Claude Code's CLI uses a file-path convention or a project `/screenshots/` directory ([App Screenshots skill walkthrough](https://alexop.dev/posts/app-screenshots-claude-code-skill/), [Claude Code paste-image issue #32005](https://github.com/anthropics/claude-code/issues/32005)). Cursor reaches it through a [Screenshot MCP server](https://github.com/upnorthmedia/ScreenshotMCP/), and the Claude Code VS Code extension accepts drag-and-drop. None bind frontmost-window capture to a hotkey or extract AX-tree text alongside the image — that integration gap is what makes Appshots structurally distinct.
 
 ## When this backfires
 
@@ -57,19 +57,19 @@ Adjacent tools accept image input but require manual capture. Claude Code's CLI 
 
 A developer is debugging a React app with the wrong button state. The DevTools panel is open, the React Profiler shows a re-render trace, and the Sources panel highlights the suspected component.
 
-Without the pattern: screenshot the DevTools window, save to disk, drag the file into the agent chat, and type the full context. The agent receives the image only. The profiler's component-tree text and the source-view selection are left out — the same context-continuity gap the [live browser channel](live-browser-context-channel.md) closes for web tabs.
+Without the pattern: screenshot the DevTools window, save to disk, drag the file into the agent chat, and type the full context. The agent receives the image only. The profiler's component-tree text and the source-view selection are left out. That is the same context-continuity gap the [live browser channel](live-browser-context-channel.md) closes for web tabs.
 
-With the pattern: focus the DevTools window, press the hotkey. The agent receives the screenshot plus the AX-tree extract — off-screen flame-graph entries, the highlighted source range, the open file path — in one capture. The developer types "what's the most likely cause" without re-stating context the snapshot already carries.
+With the pattern: focus the DevTools window, press the hotkey. The agent receives the screenshot plus the AX-tree extract (off-screen flame-graph entries, the highlighted source range, the open file path) in one capture. The developer types "what's the most likely cause" without re-stating context the snapshot already carries.
 
 The pattern wins here because the window is single-purpose, the AX tree carries selection state pure OCR would lose, and the desktop holds [no sensitive surface](../security/prompt-injection-threat-model.md). The same flow against an editor with a credentials file open in an adjacent tab would silently include accessibility-labeled credential text.
 
 ## Key Takeaways
 
-- A frontmost-window snapshot bundles a rendered screenshot and an accessibility-tree text extract into one zero-friction context unit — richer than image-only capture, with a different blast radius
-- The dual-modality benefit is empirical: AX-tree text disambiguates element types and reveals off-screen content the screenshot half cannot
-- Apply only when the task is window-scoped, sensitive surfaces are not adjacent, the OS exposes a structured accessibility surface, and the image-token budget has headroom
-- The same ergonomic that makes the pattern useful — one keystroke — defeats the inspect-before-send gate that gated file-path or MCP-server flows preserve; treat the vendor's "avoid sensitive content" guidance as load-bearing, not advisory
-- Adjacent tools (Claude Code, Cursor, Copilot CLI) accept image input but require manual capture and lack the AX-tree extract; the integration gap is what makes the hotkey-bound primitive structurally distinct
+- Confirm the target app still exposes a live accessibility surface before binding the hotkey; if it opts out, the bundle silently degrades to plain screenshot OCR with no warning that it happened
+- The dual-modality benefit assumes the two signals still agree at read time: capture-time drift breaks that assumption whenever the app's state changes between the snapshot and the agent's response, so treat the AX-tree text as a snapshot-time record that may already be stale by the time the agent responds
+- Re-check the four applicability conditions per capture, not once per task: an app that starts clean can still have a credentials prompt open, or fall outside the accessibility surface, by the time you press the hotkey
+- The same ergonomic that makes the pattern useful — one keystroke — defeats the inspect-before-send gate that gated file-path or MCP-server flows preserve; treat the vendor's sensitive-content guidance as load-bearing, not advisory
+- If your current tool already accepts image input (Claude Code, Cursor, and Copilot CLI all do), budget the integration work for the two missing pieces: the hotkey binding and the AX-tree extract
 
 ## Related
 

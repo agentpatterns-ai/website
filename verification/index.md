@@ -62,6 +62,7 @@ last_reviewed: 2026-05-27
 - [Human-Review-Driven Curation of Golden Eval Datasets](human-review-golden-dataset-curation.md) — Sample production traces on intent, attribute each disagreement to scorer or agent, and feed only agent-failure labels back into the golden set to keep an LLM-judge suite aligned with a moving production distribution
 - [Pre-Change Impact Analysis](pre-change-impact-analysis.md) — Build a code-to-test dependency map and deliver it as a lightweight agent skill so agents verify at-risk tests before committing, cutting regressions by 70%
 - [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md) — Run the test suite twice (baseline + patched) and gate the PR on the diff, not the absolute pass rate — under specific preconditions on test-suite strength, planner localization, and CI determinism
+- [Bug-Discriminating Validation Evidence for Repair Agents (BSG-VA)](bug-discriminating-validation-evidence.md) — Replay a repair agent's own passing test against the unfixed code; 46.0% of positive validation events pass there too and carry no information about the bug
 - [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — Multi-turn LLM code refinement silently breaks previously-passing code (Phi 0.089 between instruction adherence and functional correctness); pin the original suite, re-execute every turn, and gate on the pass-set diff
 
 ## Eval-Driven Development
@@ -121,5 +122,6 @@ last_reviewed: 2026-05-27
 
 ## Tooling
 
+- [Eval Environment Containment for Cyber-Capable Agents](eval-environment-containment.md) — An agent that cannot reach its fictional target attacks a real one; enforce isolation at the network layer and verify egress from inside the environment, because a scope statement in the prompt is not a boundary
 - [Test Harness Design for LLM Context Windows](llm-context-test-harness.md) — Terse stdout, verbose log files, and grep-friendly error lines that keep agent context clean and actionable during evaluation runs
 - [Runnable Documentation as Agent Verification](runnable-documentation.md) — Extract inline code examples into standalone files that CI executes on every build so doc rot fails the build the same way broken code does

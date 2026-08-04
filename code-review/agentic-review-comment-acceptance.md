@@ -16,13 +16,13 @@ maturity: emerging
 
 > Only about a third of agentic code-review comments get accepted — rejections track suggestion validity, so design for a high false-positive rate and measure acceptance.
 
-Agentic reviewers post comments faster than developers accept them. A study of CodeRabbit in the wild mined 31,073 review-and-feedback pairs across 10,191 pull requests and 239 repositories, and found developers accepted 36.4% of the comments, discussed 7.3%, and rejected 56.3% ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). A review agent that comments on your PRs is, on this evidence, wrong more often than it is right — so treat a high false-positive rate as the operating condition, not a defect to be surprised by.
+Agentic reviewers post comments faster than developers accept them. A study of CodeRabbit in the wild mined 31,073 review-and-feedback pairs across 10,191 pull requests and 239 repositories. Developers accepted 36.4% of the comments, discussed 7.3%, and rejected 56.3% ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). A review agent that comments on your PRs is, on this evidence, wrong more often than it is right. Treat a high false-positive rate as the operating condition.
 
 ## What the reception data shows
 
-Rejections are driven by suggestion validity, not comment count. The study attributes rejected comments to invalid suggestions — false positives, redundant observations, and out-of-scope recommendations — plus misalignment with the developer's intent and coding practices ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). The lever is the fraction of comments that are correct and in-scope, not how many the agent emits.
+Rejections are driven by suggestion validity, not comment count. The study attributes rejected comments to invalid suggestions — false positives, redundant observations, and out-of-scope recommendations — plus misalignment with the developer's intent and coding practices ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)).
 
-Not all comment types fare equally. Agentic reviews concentrated more on functional concerns than on evolvability-related comments, yet the evolvability comments carried higher invalidity rates ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)) — the agent is on firmer ground flagging what breaks than judging what is "cleaner."
+Not all comment types fare equally. Agentic reviews concentrated more on functional concerns than on evolvability-related comments, yet the evolvability comments carried higher invalidity rates ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). The agent is on firmer ground flagging what breaks than judging what is "cleaner."
 
 Low comment-level uptake is not unique to this tool. A separate study of 278,790 code reviews found developers adopt AI suggestions at 16.6% against 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)), and a signal-ratio study found 12 of 13 code-review agents average below 60% actionable comments ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). The reception gap is a property of current agentic review, not one vendor.
 
@@ -34,14 +34,14 @@ Pre-filter for validity. Rejection is predictable: lightweight machine-learning 
 
 ## Why it works
 
-A review comment earns action only when it names a real defect the developer agrees is worth fixing in this change. Agentic reviewers over-produce plausible-but-invalid suggestions — especially on evolvability, where "better" is contextual — so the marginal comment is more likely noise than signal, and developers reject on validity grounds rather than because there are too many comments ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). Because invalidity is the cause, comment quality governs acceptance, which is exactly why the reject signal is learnable from lightweight features. Optimizing validity moves the acceptance rate; adding or trimming volume alone does not.
+A review comment earns action only when it names a real defect the developer agrees is worth fixing in this change. Agentic reviewers over-produce plausible-but-invalid suggestions, especially on evolvability, where "better" is contextual, so the marginal comment is more likely noise than signal. Developers reject on validity grounds regardless of comment volume ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). Because invalidity is the cause, comment quality governs acceptance, which is exactly why the reject signal is learnable from lightweight features. Optimizing validity moves the acceptance rate; adding or trimming volume alone does not.
 
 ## When this backfires
 
 Optimizing for acceptance rate is the wrong target in several conditions:
 
-- High-recall, high-stakes review. On security or critical-path code, tolerating false positives to avoid a missed defect is correct, so a low acceptance rate is a deliberate trade, not a failure to fix ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)).
-- Tuned or learning-loop deployments. Once an agent is scoped to repository conventions and fed accept/reject feedback via [learned review rules](learned-review-rules.md), its acceptance rate moves — the 56.3% wild baseline overstates rejection for a calibrated deployment.
+- High-recall, high-stakes review. On security or critical-path code, tolerating false positives to avoid a missed defect is correct. A low acceptance rate here is a deliberate trade, not a failure to fix ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)).
+- Tuned or learning-loop deployments. Once an agent is scoped to repository conventions and fed accept/reject feedback via [learned review rules](learned-review-rules.md), its acceptance rate moves. The 56.3% wild baseline overstates rejection for a calibrated deployment.
 - Low comment volume. Acceptance-rate measurement is noisy below enough comments per repository and per comment type to be stable; small teams may lack the data.
 - Single-tool generalization. The figures are CodeRabbit-specific across 239 repositories ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)); other agentic reviewers and other stacks accept and reject at materially different rates.
 
@@ -51,7 +51,7 @@ Optimizing for acceptance rate is the wrong target in several conditions:
 - Rejection tracks suggestion validity — false positives, redundancy, out-of-scope, intent misalignment — not comment volume.
 - Functional comments are accepted more than evolvability comments, which carry higher invalidity rates.
 - Rejection is predictable (up to 76% F1 from lightweight features), so a validity pre-filter is feasible.
-- Measure acceptance per repository and comment type; do not assume value from comment count.
+- Measure acceptance per repository and comment type. Do not assume value from comment count.
 
 ## Related
 

@@ -1,7 +1,7 @@
 ---
 title: "Context Hub: On-Demand Versioned API Docs for Coding Agents"
 term: "Context Hub"
-description: "Fetch current, versioned API documentation into agent context at generation time so agents write against the live spec rather than stale training-data"
+description: "Fetch current, versioned API documentation into agent context at generation time so agents write against the live spec rather than stale training-data snapshots."
 tags:
   - context-engineering
   - cost-performance
@@ -34,7 +34,7 @@ The failure mode is subtle. Generated code compiles and looks correct, but it ta
 
 ## Context Hub (chub)
 
-[Context Hub](https://github.com/andrewyng/context-hub) is an open-source npm CLI (`npm install -g @aisuite/chub`) that retrieves current API documentation on demand. The agent calls a shell command before generating code against a specific API, injecting the live spec into its context window.
+[Context Hub](https://github.com/andrewyng/context-hub) is an open-source npm CLI (`npm install -g @aisuite/chub`) that retrieves current API documentation on demand. The agent calls a shell command before generating code against a specific API. The command injects the live spec into its context window.
 
 ### Core commands
 
@@ -59,7 +59,7 @@ Docs are stored as markdown with YAML frontmatter, split into multiple reference
 
 Context Hub keeps local annotations across sessions. When an agent finds an undocumented quirk or workaround, `chub annotate` records it. On later fetches, annotations surface automatically, so the agent does not rediscover the same issue. As Ng describes it, [agents can "save a note so as not to have to rediscover it from scratch next time"](https://www.deeplearning.ai/the-batch/issue-343/).
 
-Feedback ratings (`chub feedback`) flow upstream to doc maintainers, creating an improvement loop where real agent usage identifies gaps in documentation.
+Feedback ratings (`chub feedback`) flow upstream to doc maintainers. This closes an improvement loop: real agent usage identifies documentation gaps that maintainers can then fix.
 
 ## Private and internal APIs
 
@@ -73,7 +73,7 @@ Context Hub implements what Anthropic calls [just-in-time context loading](https
 
 An agent tasked with writing a Python function that calls the OpenAI Chat Completions API runs `chub get openai/chat-completions --lang py` before generating code. The command returns current parameter names, required fields, and deprecation notices as markdown, which the agent reads into its context window. It then generates code against the live spec rather than the training-time snapshot.
 
-If the agent finds that `stream=True` needs explicit iterator handling the docs do not cover, it runs `chub annotate openai/chat-completions "stream=True returns a generator; call next() to advance"`. On the next fetch, this annotation surfaces automatically, so the agent does not rediscover the quirk.
+If the agent finds that `stream=True` needs explicit iterator handling the docs do not cover, it runs `chub annotate openai/chat-completions "stream=True returns a generator; call next() to advance"`. On the next fetch, the note reappears automatically, so the agent skips re-diagnosing the same quirk.
 
 ## When this backfires
 
@@ -95,10 +95,10 @@ Docs are stored as markdown split into multiple reference files per provider, so
 
 ## Key Takeaways
 
-- Agents hallucinate API calls when training data predates library changes — on-demand doc retrieval solves this at generation time rather than retraining
+- Agents hallucinate API calls when training data predates library changes. On-demand doc retrieval fixes this at generation time, without retraining the model
 - `chub get <provider>/<endpoint>` injects current, language-specific API docs into context before code generation
-- Annotations persist locally and surface on re-fetch, preventing agents from rediscovering known workarounds
-- The pattern extends to proprietary APIs by authoring internal doc sets in the same markdown-with-frontmatter format
+- `chub annotate <id> <note>` records a workaround locally; the annotation surfaces automatically on the next `chub get`, so it never needs rediscovery
+- The pattern extends to proprietary APIs: write internal doc sets in the same markdown-with-frontmatter format and fetch them with `chub get`, without submitting them to the public registry
 
 ## Related
 

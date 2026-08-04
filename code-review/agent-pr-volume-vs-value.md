@@ -1,7 +1,7 @@
 ---
 title: "Agent PR Volume vs. Value: The Productivity Paradox"
 term: "Agent PR Volume vs. Value"
-description: "Autonomous coding agents dramatically increase PR volume but face lower merge rates than humans — speed and quantity alone do not equal engineering value."
+description: "Autonomous coding agents increase PR volume but face lower merge rates than humans — speed and quantity alone do not equal engineering value."
 tags:
   - code-review
   - human-factors
@@ -13,13 +13,13 @@ maturity: established
 
 # Agent PR Volume vs. Value: The Productivity Paradox
 
-> Autonomous coding agents can generate PRs orders of magnitude faster than humans, but acceptance rates are significantly lower — volume amplifies output without guaranteeing value.
+> Autonomous coding agents can generate PRs orders of magnitude faster than humans, but acceptance rates are lower — volume amplifies output without guaranteeing value.
 
 ## The finding
 
-The AIDev dataset gives the first large-scale picture of agent-authored PRs in real projects: 456,535 pull requests from five autonomous coding agents (OpenAI Codex, Devin, GitHub Copilot, Cursor, Claude Code) across 61,453 repositories ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
+The AIDev dataset gives the first large-scale picture of agent-authored PRs in real projects. It covers 456,535 pull requests from five autonomous coding agents (OpenAI Codex, Devin, GitHub Copilot, Cursor, Claude Code) across 61,453 repositories ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
 
-The headline numbers show a paradox. Agents are much faster, but they get measurably less code merged.
+The headline numbers show a paradox. Agents are much faster, but they get less code merged.
 
 ## Speed versus acceptance
 
@@ -54,11 +54,11 @@ Documentation is the clearest agent strength. Codex (88.6%) and Claude Code (85.
 
 ## The review burden shift
 
-Bots make up 20% of reviewers on agent PRs, compared with 10% for human PRs. This points to an emerging pattern: agent-authored code increasingly passes through automated review before, or instead of, human review. Teams adopting agents at scale need a review triage strategy — see [tiered code review](tiered-code-review.md).
+Bots make up 20% of reviewers on agent PRs, compared with 10% for human PRs. Agent-authored code increasingly passes through automated review before, or instead of, human review. Teams adopting agents at scale need a review triage strategy — see [tiered code review](tiered-code-review.md).
 
 As volume rises, the value shifts from writing code to judging it. [Addy Osmani argues that code review becomes the highest-value engineering skill](https://addyo.substack.com/p/agentic-code-review) as agent output grows, because deciding what to merge increasingly outweighs writing the change.
 
-Tooling vendors are responding to the same fixed-reviewer-capacity problem. Linear built a dedicated diff and review surface, [Linear Diffs](https://linear.app/blog/linear-diffs), to make review fast enough to keep pace with agent-generated PRs — a tooling-side answer to the review bottleneck this page describes.
+Tooling vendors are responding to the same fixed-reviewer-capacity problem. Linear built a dedicated diff and review surface, [Linear Diffs](https://linear.app/blog/linear-diffs), to make review fast enough to keep pace with agent-generated PRs.
 
 ## Why acceptance rates lag
 
@@ -71,7 +71,7 @@ A second study of agent-authored fixes adds failure-mode detail. Reviewers rejec
 Volume-first agent deployment underperforms when:
 
 - Scope is poorly defined: agents without clear, bounded task specifications produce PRs that are technically valid but strategically irrelevant. The 49% acceptance rate for Devin reflects this failure mode.
-- Review capacity is fixed: 10× more PRs at lower acceptance rates consumes reviewer time without proportional throughput. Bot pre-screening, already 20% of agent PR reviews, is a partial mitigation, not a solution.
+- Review capacity is fixed: 10x more PRs at lower acceptance rates consumes reviewer time without proportional throughput. Bot pre-screening, already 20% of agent PR reviews, is a partial mitigation, not a solution.
 - Complexity is the real bottleneck: if the backlog is dominated by architectural changes (cyclomatic complexity), agent output skewed toward simpler tasks adds little to velocity. Only 9.1% of agent PRs change complexity, versus 23.3% for humans.
 - Integration friction is ignored: a separate analysis of 142K agent-authored PRs reports a 27.67% merge-conflict rate, with wide variation across agents ([arXiv:2604.03551](https://arxiv.org/abs/2604.03551)). Higher PR volume raises conflict exposure, so raw throughput gains erode once rebase and resolution costs are counted.
 - Merge is treated as success: a study of 1,210 merged agent-generated bug-fix PRs found that merge success does not reliably reflect post-merge code quality. Code smells, especially at critical and major severities, dominate the defects introduced ([arXiv:2601.20109](https://arxiv.org/abs/2601.20109)). Acceptance rate alone over-reports value unless paired with downstream quality signals.
@@ -80,21 +80,21 @@ Volume-first agent deployment underperforms when:
 
 **Why do agent-authored PRs get rejected more often than human ones?**
 
-The AIDev study attributes the gap to structural and contextual factors. Agent PRs cluster around simpler tasks that reviewers may deprioritize, and agents lack the ambient project context deciding which changes are worth making at a given moment — roadmap direction, or which subsystems are frozen. So they optimize for correctness in a local scope rather than relevance across the broader queue.
+The AIDev study attributes the gap to structural and contextual factors. Agent PRs cluster around simpler tasks that reviewers may deprioritize. Agents also lack the ambient project context that shapes which changes are worth making at a given moment — roadmap direction, or which subsystems are frozen. So they optimize for correctness in a local scope rather than relevance across the broader queue.
 
 **Does higher PR volume cost anything beyond reviewer time?**
 
-Yes. An analysis of 142K agent-authored PRs reports a 27.67% merge-conflict rate, with wide variation across agents, so raw throughput gains erode once rebase and resolution costs are counted. A separate study of agent-authored fixes found reviewers rejected 46.41% of them, sorted into a taxonomy of 14 rejection reasons across four categories.
+Yes. An analysis of 142K agent-authored PRs reports a 27.67% merge-conflict rate, with wide variation across agents. Raw throughput gains erode once rebase and resolution costs are counted. A separate study of agent-authored fixes found reviewers rejected 46.41% of them, sorted into a taxonomy of 14 rejection reasons across four categories.
 
 **Is a merged agent PR proof the change was good?**
 
-Not on its own. A study of 1,210 merged agent-generated bug-fix PRs found that merge success does not reliably reflect post-merge code quality, with code smells at critical and major severities dominating the defects introduced. Acceptance rate therefore over-reports value unless it is paired with quality signals measured after the change lands.
+Not on its own. A study of 1,210 merged agent-generated bug-fix PRs found that merge success does not reliably reflect post-merge code quality. Code smells, especially at critical and major severities, dominate the defects introduced. Acceptance rate therefore over-reports value unless it is paired with quality signals measured after the change lands.
 
 ## Key Takeaways
 
 - Agent PR volume can increase by 10-50x, but acceptance rates drop 13-42 percentage points below human baselines
 - Speed gains are real but skew toward structurally simpler tasks — cyclomatic complexity changes are 2.5x less frequent in agent PRs
-- Documentation is the highest-confidence agent task type, with acceptance rates exceeding human baselines
+- Route documentation PRs through lighter review. Agent acceptance there already exceeds the human baseline, so the reviewer time is better spent elsewhere
 - Review infrastructure must scale with agent output — bot reviewers already handle a disproportionate share of agent PR reviews
 - Merge rate, not PR count, is the metric that matters for measuring agent-assisted productivity
 
@@ -117,7 +117,7 @@ Not on its own. A study of 1,210 merged agent-generated bug-fix PRs found that m
 - [arXiv:2604.03551](https://arxiv.org/abs/2604.03551) — "AgenticFlict: A Large-Scale Dataset of Merge Conflicts in AI Coding Agent Pull Requests on GitHub" — 27.67% conflict rate across 142K agent PRs
 - [arXiv:2601.20109](https://arxiv.org/abs/2601.20109) — "Beyond Bug Fixes: An Empirical Investigation of Post-Merge Code Quality Issues in Agent-Generated Pull Requests" — merge success does not reliably reflect post-merge code quality
 - [arXiv:2606.13468](https://arxiv.org/abs/2606.13468) — empirical study of agent-authored fixes: 46.41% rejected, with a taxonomy of 14 rejection reasons across four categories
-- [Agentic Code Review (Addy Osmani)](https://addyo.substack.com/p/agentic-code-review) — review becomes the highest-leverage engineering skill as agent output volume rises
+- [Agentic Code Review (Addy Osmani)](https://addyo.substack.com/p/agentic-code-review) — review becomes the highest-value engineering skill as agent output volume rises
 
 > Headline acceptance-rate figures derive primarily from the AIDev snapshot. Treat them as initial benchmarks corroborated by independent integration and post-merge-quality evidence, not as settled industry averages.
 

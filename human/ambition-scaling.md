@@ -37,7 +37,7 @@ graph TD
 
 ## What actually moves
 
-Task growth is domain-asymmetric. Cursor's data shows documentation +62%, architecture +52%, code review +51%, learning +50% — versus UI and styling at only +15% ([Melas-Kyriazi, 2026](https://cursor.com/blog/better-models-ambitious-work)). Capability gains go first to higher-order work, where the boundary was set by reasoning, not typing speed. At the extreme, Cursor's agent scaling report documents previously infeasible multi-week projects becoming tractable: a from-scratch web browser (1M+ lines, 1,000 files) and a 3-week framework migration (+266K/−193K) ([Cursor, 2026](https://cursor.com/blog/scaling-agents)).
+Task growth is domain-asymmetric. Cursor's data shows documentation +62%, architecture +52%, code review +51%, learning +50% — versus UI and styling at only +15% ([Melas-Kyriazi, 2026](https://cursor.com/blog/better-models-ambitious-work)). Capability gains go first to higher-order work, where the boundary was set by reasoning, not typing speed. At the extreme, Cursor's agent scaling report documents previously infeasible multi-week projects becoming tractable. Examples include a from-scratch web browser (1M+ lines, 1,000 files) and a 3-week framework migration (+266K/−193K) ([Cursor, 2026](https://cursor.com/blog/scaling-agents)).
 
 The underlying capability curve is measurable. METR's time-horizon benchmark shows Claude 3.5 Sonnet (October 2024) handled roughly 21-minute tasks, while Opus 4.6 (February 2026) handles 12-hour tasks — about 35x in 16 months ([METR Time Horizon 1.1](https://metr.org/blog/2026-1-29-time-horizon-1-1/)).
 
@@ -55,7 +55,7 @@ The practice, from Anthropic's PM playbook: "deliberately ask [the model] to do 
 
 ## Ambition requires harness investment
 
-Moving the target is not a prompt change. Cursor's 4 to 6 week discovery lag is where harness rework happens: tests that catch new failure modes, sandboxes that contain broader action scope, and review loops that keep pace with larger diffs ([Melas-Kyriazi, 2026](https://cursor.com/blog/better-models-ambitious-work)). It is the supply-side counterpart to [bottleneck migration](bottleneck-migration.md). Attempting more without more review capacity turns capability gain into comprehension debt.
+Moving the target is not a prompt change. Cursor's 4 to 6 week discovery lag is where harness rework happens. Tests catch new failure modes, sandboxes contain broader action scope, and review loops keep pace with larger diffs ([Melas-Kyriazi, 2026](https://cursor.com/blog/better-models-ambitious-work)). It is the supply-side counterpart to [bottleneck migration](bottleneck-migration.md). Attempting more without more review capacity turns capability gain into comprehension debt.
 
 [Progressive Autonomy](progressive-autonomy-model-evolution.md) governs the autonomy level at which a task runs. Ambition scaling governs task scope at a given level. The dials move independently.
 
@@ -68,7 +68,7 @@ The advice to move the target is conditional. Evidence supports holding the line
 - Pre-production organizations. A March 2026 enterprise survey found 78% of organizations run agent pilots but only 14% scale to production ([DigitalApplied, 2026](https://www.digitalapplied.com/blog/ai-agent-scaling-gap-march-2026-pilot-to-production)). The cap is governance and evaluation infrastructure. Chasing ambition before installing evals produces silent failures.
 - Teams already carrying comprehension debt. Osmani: "the growing gap between how much code exists in your system and how much of it any human being genuinely understands" ([Osmani, 2026](https://addyosmani.com/blog/comprehension-debt/)). Scaling ambition compounds the gap, so pay the debt down first.
 
-Bank the speed-up on existing work, invest the savings in harness and review, and defer the target move until the feedback loop can tell success from silent failure.
+Bank the speed-up on existing work, and invest the savings in harness and review. Defer the target move until the feedback loop can tell success from silent failure.
 
 ## Example
 

@@ -9,7 +9,7 @@ term: "Continuous Autonomous Task Loop"
 aliases:
   - continuous task loop
   - autonomous task loop
-last_reviewed: 2026-05-27
+last_reviewed: 2026-08-04
 maturity: established
 ---
 
@@ -47,6 +47,8 @@ Rate-limit handling — when the agent hits an API rate limit, the loop waits us
 Git automation — a post-task safety net commits changes after each task completes. Whether the agent committed or not, the safety net guarantees a clean commit history per task. This is the same [post-loop safety-net](../loop-engineering/agent-loop-middleware.md) pattern used in other harness designs. [Source: [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md)]
 
 Anthropic's two-agent harness independently validates the same structure: an initializer agent populates a feature list; the coding agent runs one item per session, commits, updates the progress file, and stops — letting the outer loop restart with fresh context. [Source: [Anthropic: Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)]
+
+Linear's Loops feature applies the pattern inside a work tracker. It runs recurring agent workflows for bug triage, request routing, and documentation updates. Each run stays visible to the humans who own the work. [Source: [Linear: Introducing Loops](https://linear.app/now/introducing-loops)]
 
 ## Backlog design
 

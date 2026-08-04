@@ -64,7 +64,7 @@ Working code examples show how API functions are actually used. The idea is cove
 2. Select cases one at a time, adding a case if it covers a new package or cluster.
 3. Stop at coverage thresholds, typically 90% of packages and 90% of clusters.
 
-DomAgent found that 30% of coverage-selected cases matched the performance of 80% randomly selected cases on the benchmarks tested (DS-1000 and a truck CAN signal domain); generalizability to other domains has not been established ([DomAgent, 2025](https://arxiv.org/abs/2603.21430)).
+DomAgent found that 30% of coverage-selected cases matched the performance of 80% randomly selected cases on the benchmarks tested (DS-1000 and a truck CAN signal domain). Generalizability to other domains has not been established ([DomAgent, 2025](https://arxiv.org/abs/2603.21430)).
 
 ## Refinement gate
 
@@ -95,7 +95,7 @@ Then expose both paths as tools, following the [retrieval-augmented agent workfl
 - search_case_base: Retrieve representative code examples for a task
 ```
 
-The agent starts lean — only tool descriptions preloaded — then calls `search_domain_kg` and `search_case_base` on demand and generates code grounded in both.
+The agent starts lean, with only tool descriptions preloaded, then calls `search_domain_kg` and `search_case_base` on demand and generates code grounded in both.
 
 ## Example
 

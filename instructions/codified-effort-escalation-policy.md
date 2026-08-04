@@ -77,3 +77,4 @@ The block names the default, the escalation trigger, and the high-effort review 
 - [Trajectory-Conditioned Model Escalation (SWE-Router)](../patterns/agent-design/trajectory-conditioned-model-escalation.md) — the runtime escalation signal a codified "escalate on evidence" rule points to
 - [Convention Over Configuration for Agent Workflows](convention-over-configuration.md) — the broader case for encoding decisions into the harness so agents follow patterns rather than re-decide
 - [Indiscriminate Structured Reasoning](../patterns/anti-patterns/reasoning-overuse.md) — the failure mode when effort is spent past the point it helps
+- [Advisory Prompts Distilled from Reasoning Traces](advisory-prompts-from-reasoning-traces.md) — what the cheap, reasoning-off branch of this policy can and cannot recover through the prompt alone

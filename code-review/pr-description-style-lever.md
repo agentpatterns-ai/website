@@ -77,7 +77,7 @@ In these cases, make the template opt-in rather than mandatory.
 
 1. Add a PR description template to `CLAUDE.md`, `.github/agents/`, or `AGENTS.md` for every agent that opens PRs.
 2. Specify the required sections: Summary, Changes, Testing, and Breaking Changes at a minimum.
-3. Do not rely on model defaults, because they vary across models and produce variance.
+3. Do not rely on model defaults. Description structure varies by agent, as the merge-rate spread above shows.
 4. If Copilot's PR summary generator is in use, add a step after PR creation where an agent rewrites the description from your template rather than the diff-based summary.
 5. Treat description style as a reviewable artifact in agent eval runs, and spot-check section completeness alongside code correctness.
 
@@ -95,15 +95,15 @@ A `CLAUDE.md` section that enforces PR description structure for an agent openin
 
     Do not include emojis, contributor shout-outs, or auto-generated diff summaries.
 
-With this template in `CLAUDE.md`, the agent's PR descriptions consistently include the four sections reviewers need, reducing back-and-forth and aligning with the high-merge-rate structural patterns identified in the AIDev study.
+With this template in `CLAUDE.md`, the agent's PR descriptions consistently include the 4 sections reviewers need.
 
 ## Key Takeaways
 
-- PR description structure varies systematically by agent and correlates with reviewer engagement and merge rates per empirical study ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084))
-- High reviewer discussion volume does not predict merge success — review churn is the failure mode to avoid
-- Description templates in `CLAUDE.md`, `AGENTS.md`, or custom agent instructions are the direct configuration mechanism
-- Neither Claude Code nor GitHub Copilot enforces PR description structure by default — it must be configured
-- Code quality remains the primary determinant of merge success; description style is a secondary lever with measurable but bounded effect
+- Merge rates ranged from 43% (Copilot) to 82.6% (Codex) in the study. Treat that gap as a lead to test in your own eval runs, not proof that description structure alone moves your merge rate. The study does not establish causality
+- In agent evals, weight time-to-close and merge rate over comment count. Copilot's PRs drew the most discussion yet took 13 hours to merge and closed at only 43%, the lowest of the five agents
+- A single template, dropped into `CLAUDE.md`/`AGENTS.md` and into Copilot's `.github/agents/AGENT-NAME.md`, covers both configuration surfaces. Write it once, not per tool
+- Configure the template yourself: neither Claude Code nor Copilot applies one by default. If you use Copilot's built-in summary generator, add a step that rewrites the description from your template. The generator works from the diff alone and does not read what you write
+- Code quality still decides most outcomes. Skip the template, or make it optional, for solo/inner-source repos, trivial or mechanical PRs, and teams that already share deep context. The added structure creates friction there with no engagement payoff
 
 ## Related
 

@@ -93,7 +93,7 @@ You can trigger the same review with GitHub Copilot from the CLI: `gh pr edit --
 
 **What infrastructure does agentic review require?**
 
-More than static diff analysis needs. Tool-calling loops need compute infrastructure, and GitHub's implementation requires self-hosted runners for organizations that opted out of GitHub-hosted runners. A custom implementation has to budget for the added latency and cost of multiple tool calls per review, so teams without that infrastructure cannot adopt the approach without operational changes first.
+Agentic review needs more infrastructure than static diff analysis: tool-calling loops need compute infrastructure, and GitHub's implementation requires self-hosted runners for organizations that opted out of GitHub-hosted runners. A custom implementation has to budget for the added latency and cost of multiple tool calls per review, so teams without that infrastructure cannot adopt the approach without operational changes first.
 
 **When is static diff review still the better choice?**
 
@@ -105,10 +105,10 @@ It can. Broader access lets the agent comment on code that is intentionally isol
 
 ## Key Takeaways
 
-- Agentic code review replaces static diff analysis with tool-calling that explores full repository context
-- The hybrid approach blends LLM semantic analysis with deterministic tools (CodeQL, ESLint) for high-signal findings
-- Strategic review planning prevents context loss on complex PRs
-- Reading linked issues and tracing dependencies enables reviews that evaluate architectural fit, not just line-level correctness
+- GitHub shipped this in three stages over nine months: preview in October 2025, GA in March 2026, and agent skills with MCP support that July
+- Route security and style checks to CodeQL and ESLint, and reserve the LLM budget for architectural fit and naming judgment
+- Reserve the up-front planning step for complex, multi-file PRs, since trivial diffs do not need one before comments start
+- Architectural feedback requires read access to linked issues and cross-file call sites, not just the diff
 - Budget for the latency the architecture spends. It buys 8.1% more positive developer feedback by exploring the repository, which suits asynchronous PR review and rules it out of a pre-commit hook
 
 ## Related

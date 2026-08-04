@@ -33,7 +33,7 @@ TypeScript overtook Python and JavaScript as GitHub's most-used language in Augu
 
 A 2025 study found that 94% of LLM-generated compilation errors were type-check failures ([GitHub blog, citing arxiv.org/pdf/2504.09246](https://github.blog/ai-and-ml/llms/why-ai-is-pushing-developers-toward-typed-languages/)). Types catch the exact error class AI introduces most often.
 
-Types act as implicit constraints on generation. Declaring `x: string` rules out an entire class of invalid operations. Type definitions, interfaces, and schemas act as precise agent instructions — a contract the agent must satisfy rather than a description it might misinterpret.
+Types implicitly constrain generation. Declaring `x: string` rules out an entire class of invalid operations. Type definitions, interfaces, and schemas give agents precise instructions: a contract the agent must satisfy, not a description it might misinterpret.
 
 Type errors become [agent backpressure](../patterns/agent-design/agent-backpressure.md) — immediate, machine-readable feedback the agent can self-correct against without human intervention. The agent runs the compiler, reads the error, fixes the code, and re-runs. Untyped codebases surface equivalent errors only at runtime or during human review.
 

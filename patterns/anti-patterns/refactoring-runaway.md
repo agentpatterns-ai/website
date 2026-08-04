@@ -81,3 +81,4 @@ A refactoring-aware refinement step inspects the patch, classifies the parameter
 - [LLM Refactoring Adoption Patterns](../../human/llm-refactoring-adoption-patterns.md) — how developers modify ChatGPT-suggested refactorings when refactoring *is* the request
 - [Pattern Replication Risk](pattern-replication-risk.md) — adjacent training-distribution-inheritance pathology
 - [CodeSlop: Search-Trajectory Residue in Agent Patches](codeslop-trajectory-minimization.md) — the related residue mechanism: search artifacts, not refactors, inflating the diff
+- [Deletion Avoidance](deletion-avoidance.md) — the subtractive counterpart: agents leaving out the removal half of an edit rather than adding an unrequested one

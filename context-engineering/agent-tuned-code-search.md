@@ -19,11 +19,11 @@ maturity: emerging
 
 > Agent-tuned code search runs its own search loop and hands the calling agent file paths and line ranges instead of a browsable results page.
 
-Agent-tuned code search is a retrieval tool whose output contract is written for a coding agent rather than a human reader. You give it a task in natural language, it runs its own search loop across a repository, and it returns matching file paths and line ranges with a short note on what each one does ([Jarmak and Hartman, Sourcegraph](https://sourcegraph.com/blog/code-finder-fast-code-search-for-agents)). The calling agent reads a focused answer instead of spending turns opening files and backing out of dead ends.
+Agent-tuned code search is a retrieval tool whose output contract is written for a coding agent rather than a human reader. You give it a task in natural language. It runs its own search loop across a repository, then returns matching file paths and line ranges with a short note on what each one does ([Jarmak and Hartman, Sourcegraph](https://sourcegraph.com/blog/code-finder-fast-code-search-for-agents)). The calling agent reads a focused answer instead of spending turns opening files and backing out of dead ends.
 
 ## When this pays off
 
-The pattern is conditional, not a default. Adopt it when all of these hold:
+Adopt this pattern only when every condition below holds:
 
 - Search latency is on your critical path. That is where the measured gap is largest.
 - The agent works against committed code on an indexed revision. Hosted search indexes each repository's default branch; covering more needs an experimental setting capped at 64 additional branches ([Sourcegraph admin docs](https://sourcegraph.com/docs/admin/search)).
@@ -42,7 +42,7 @@ Vendor benchmarks report time and cost together, and the two tell different stor
 | Coding agent calling Sourcegraph MCP tools | 1.14x | 1.63x |
 | Coding agent using local search | 2.19x | 1.32x |
 
-The headline claim, "cost up to 40% less," is measured against the vendor's own general MCP tools, not against the agent's local grep. Against local search the cost ratio is 1.32x, so about a 24% saving, while the 2.19x figure is time. Against a competent local search loop the case is therefore mostly latency and only partly tokens.
+The headline claim, "cost up to 40% less," is measured against the vendor's own general MCP tools, not against the agent's local grep. Against local search, the cost ratio is 1.32x, so about a 24% saving, while the 2.19x figure measures time. That makes the case against a competent local search loop mostly about latency, only partly about tokens.
 
 Treat the numbers as directional. The methodology names neither the task count, the repositories, nor the agent model, and describes result quality only as "comparable" ([Jarmak and Hartman](https://sourcegraph.com/blog/code-finder-fast-code-search-for-agents)).
 
@@ -62,15 +62,15 @@ Independent work confirms the mechanism on code exploration. FastContext routes 
 
 ## Example
 
-The tool contract is the design. Sourcegraph's Code Finder exposes one required parameter, `task`, described as "The task or query to research and answer," and returns "a short summary followed by links to the relevant files and line ranges." It also declines broad cross-repository discovery, so the caller identifies the repository first ([Sourcegraph MCP docs](https://sourcegraph.com/docs/api/mcp)).
+Sourcegraph's Code Finder exposes one required parameter, `task`, described as "The task or query to research and answer," and returns "a short summary followed by links to the relevant files and line ranges." It also declines broad cross-repository discovery, so the caller identifies the repository first ([Sourcegraph MCP docs](https://sourcegraph.com/docs/api/mcp)).
 
-Two consequences follow. The caller cannot narrow the search with file globs or a revision, so scoping quality rests entirely on the task string. And because the tool returns citations rather than snippets, the agent still reads the files it is pointed at — the saving lands on the search phase, not the read phase.
+The caller cannot narrow the search with file globs or a revision, so scoping quality rests entirely on the task string. And because the tool returns citations rather than snippets, the agent still reads the files it is pointed at. The saving lands on the search phase, not the read phase.
 
 ## Key Takeaways
 
 - Agent-tuned code search returns paths and line ranges for one task string, not a browsable results page ([Sourcegraph MCP docs](https://sourcegraph.com/docs/api/mcp)).
 - Split the vendor benchmark by axis: 2.19x faster than local search, but only about 24% cheaper than it; the "40% less" figure compares against the vendor's own general MCP tools ([Jarmak and Hartman](https://sourcegraph.com/blog/code-finder-fast-code-search-for-agents)).
-- The mechanism is context compression across a tool boundary, independently measured at 60.3% token reduction on SWE-QA for 2.1% explorer overhead ([Zhang et al., 2026](https://arxiv.org/abs/2606.14066)).
+- FastContext's dedicated subagent spent 2.1% of total cost to cut 60.3% of tokens on SWE-QA, the same tool-boundary compression mechanism measured independently ([Zhang et al., 2026](https://arxiv.org/abs/2606.14066)).
 - Default-branch indexing is the binding constraint for an agent editing on a feature branch ([Sourcegraph admin docs](https://sourcegraph.com/docs/admin/search)).
 - Citation precision decides the outcome: loose citations trigger re-verification and make the delegation net-negative on tokens ([Zhang et al., 2026](https://arxiv.org/abs/2606.14066)).
 

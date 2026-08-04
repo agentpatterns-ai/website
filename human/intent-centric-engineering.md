@@ -34,7 +34,7 @@ When any condition fails, build deterministic harnesses and verification capacit
 
 ## The mechanism
 
-Code generation accelerates production faster than human review scales. Faros AI data from high-adoption teams shows 98% more PRs merged but 91% longer review times — generation roughly doubled, review capacity did not ([Osmani: The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)). Because the engineer cannot match generation throughput line-by-line, the advantage moves upstream to the gates that compress decision volume: an intent specification compresses many implementations into one acceptable region, a constraint-bearing harness compresses many code states into a verifiable subset, and evidence gates make verification mechanical rather than judgment-bound.
+Code generation accelerates production faster than human review scales. Faros AI data from high-adoption teams shows 98% more PRs merged but 91% longer review times — generation roughly doubled, review capacity did not ([Osmani: The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)). Because the engineer cannot match generation throughput line-by-line, the advantage moves upstream to the gates that compress decision volume. An intent specification compresses many implementations into one acceptable region. A constraint-bearing harness compresses many code states into a verifiable subset. Evidence gates make verification mechanical rather than judgment-bound.
 
 This is the mechanism Martin Fowler named "rigor relocation" — discipline does not vanish, it moves to constraint design, verification systems, and intent specification ([Rigor Relocation](rigor-relocation.md)). Intent-centric engineering names where the rigor relocates: the layer above authorship.
 
@@ -58,7 +58,7 @@ The skills that gain weight relative to authorship are the ones that compress de
 | Governance | Allocates accountability across the human-plus-agent system |
 | Accountable judgment | Owns the merge decision when the evidence gates pass |
 
-These are not new disciplines — it is the redistribution of weight away from authorship toward practices that were secondary when code-writing was the bottleneck.
+These are not new disciplines. The shift redistributes weight away from authorship toward practices that were secondary when code-writing was the bottleneck.
 
 ## When this backfires
 
@@ -73,7 +73,7 @@ Do not relocate rigor upward as a posture. Invest in mechanical evidence gates a
 
 ## Example
 
-A platform team running an agentic refactor across a large repo writes the change as an intent specification (the invariants the refactor must preserve, the types it must not change, the test cases that must continue to pass) rather than as a sequence of code edits. The [harness enforces the intent mechanically](../patterns/agent-design/harness-engineering.md): a type checker, the existing test suite, and a custom linter that fails on banned API patterns. The team's senior engineers spend their time on the intent specification and the harness rules; the agent does the authorship; the evidence gates produce the proof that the change is acceptable. Review focuses on the architectural decisions encoded in the intent spec and the structural changes the agent proposes, not on line-by-line code style. This is the pattern GitHub's four-stage maturity model labels "Strategist" — orchestrating agents as "creative director of code" rather than implementing line by line ([GitHub Octoverse: New Identity of a Developer](https://github.blog/news-insights/octoverse/the-new-identity-of-a-developer-what-changes-and-what-doesnt-in-the-ai-era/)).
+A platform team running an agentic refactor across a large repo writes the change as an intent specification, not as a sequence of code edits. The specification lists the invariants the refactor must preserve, the types it must not change, and the test cases that must continue to pass. The [harness enforces the intent mechanically](../patterns/agent-design/harness-engineering.md): a type checker, the existing test suite, and a custom linter that fails on banned API patterns. The team's senior engineers spend their time on the intent specification and the harness rules; the agent does the authorship; the evidence gates produce the proof that the change is acceptable. Review focuses on the architectural decisions encoded in the intent spec and the structural changes the agent proposes, not on line-by-line code style. This is the pattern GitHub's four-stage maturity model labels "Strategist" — orchestrating agents as "creative director of code" rather than implementing line by line ([GitHub Octoverse: New Identity of a Developer](https://github.blog/news-insights/octoverse/the-new-identity-of-a-developer-what-changes-and-what-doesnt-in-the-ai-era/)).
 
 The same team rejects a proposal to apply the model to a one-off prototype. The intent-spec-plus-harness overhead does not recoup for a single agent run; the spec-first investment only pays off when agents iterate or fan out.
 

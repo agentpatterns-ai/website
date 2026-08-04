@@ -17,7 +17,7 @@ maturity: adopted
 
 ## The principle
 
-Good AI coding tools extend your capability without replacing your judgment. The design goal is empowerment: the tool handles mechanical work so you can focus on decisions that need experience, context, and accountability. GitHub's developer research puts it plainly: "effective AI empowers developers, but doesn't replace their judgment" ([GitHub Blog: What AI Is Actually Good For](https://github.blog/ai-and-ml/generative-ai/what-ai-is-actually-good-for-according-to-developers/)).
+Good AI coding tools extend your capability without replacing your judgment. The design goal is empowerment: the tool handles mechanical work so you can focus on decisions that need experience, context, and accountability. GitHub's developer research puts it: "effective AI empowers developers, but doesn't replace their judgment" ([GitHub Blog: What AI Is Actually Good For](https://github.blog/ai-and-ml/generative-ai/what-ai-is-actually-good-for-according-to-developers/)).
 
 This is a design choice, not a limitation. Tools built for empowerment preserve developer judgment. Tools built for full automation create resistance and risk.
 
@@ -39,7 +39,7 @@ Three kinds of work stay human ([GitHub Blog: Why Developers Will Always Own the
 
 Architectural trade-offs stay with you. Decisions about service boundaries, caching strategies, and when to take on technical debt need organizational knowledge that agents lack. They carry long-term consequences that demand your accountability.
 
-Mentorship and culture stay human. Pull request discussions work as team classrooms, where organizational wisdom passes between team members. AI cannot replace the cultural context that shapes how your team builds and reviews code.
+Mentorship and culture stay human. Pull request discussions pass organizational wisdom between team members. AI cannot replace the cultural context that shapes how your team builds and reviews code.
 
 Ethics and values stay human too. The question "Should we build this?" [demands your judgment](../workflows/human-in-the-loop.md). AI can tell you how to build a feature. It cannot tell you whether you should.
 
@@ -77,7 +77,7 @@ The empowerment model breaks down in a few conditions:
 
 ## Example
 
-A team adds an AI-assisted code review step to their pull request workflow. Before the PR opens, [the agent scans for style violations](../code-review/agent-self-review-loop.md), unused imports, and missing null checks, clearing the mechanical nits that used to eat reviewer attention. CI then runs linters, tests, and security scans. When the PR reaches human review, the reviewer skips style comments and weighs whether the new service boundary suits a planned microservices migration. The AI handled the pattern matching; the human kept the architectural decision.
+A team adds an AI-assisted code review step to their pull request workflow. Before the PR opens, [the agent scans for style violations](../code-review/agent-self-review-loop.md), unused imports, and missing null checks. CI then runs linters, tests, and security scans. When the PR reaches human review, the reviewer skips style comments and weighs whether the new service boundary suits a planned microservices migration. The AI handled the pattern matching; the human kept the architectural decision.
 
 The same team rejects a proposal to let the agent [auto-approve PRs that pass CI](../workflows/human-in-the-loop.md). The merge button stays human: the AI earns a place in the filter chain, not at the end of it.
 

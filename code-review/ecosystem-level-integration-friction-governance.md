@@ -26,7 +26,7 @@ The repository-level governance lens is the right primary unit when all three of
 - Concurrent contributions land at a rate fast enough to interact (roughly ≥50 agent PRs/month, the threshold below which repo-specific friction estimates lack statistical power).
 - Reviewer and CI capacity, not generation, is the bottleneck.
 
-Outside these conditions — single-agent repos, low PR volume, regulated codebases with mandatory human review — fall back to per-agent assessment and PR-level signals ([Agent-Authored PR Integration](agent-authored-pr-integration.md)).
+Outside these conditions (single-agent repos, low PR volume, regulated codebases with mandatory human review), fall back to per-agent assessment and PR-level signals ([Agent-Authored PR Integration](agent-authored-pr-integration.md)).
 
 ## The finding
 
@@ -59,10 +59,10 @@ Per-agent assessment remains a complementary signal — agent merge rates range 
 
 ## Key Takeaways
 
-- The repository, not the agent, is the unit of governance when multiple agents contribute concurrently at volume.
-- Agent contributions concentrate repository-level friction roughly twice as much as human contributions (ICC 0.30 vs. 0.16).
+- Confirm all three conditions before adopting this lens: multiple contributing agents, concurrent PR volume, and reviewer or CI capacity as the bottleneck. Missing any one, use the per-agent lens instead.
+- Agent contributions concentrate repository-level friction roughly twice as much as human contributions (ICC 0.30 vs. 0.16). Budget review and CI capacity for that concentration, not the lighter human baseline.
 - The four levers are in-repo assessment, tempo governance, friction-aware review routing, and a repo-level dashboard — not agent-headcount caps.
-- The lens is complementary to per-agent merge-rate analysis, not a replacement for it.
+- Layer repo-level tempo and review-routing controls on top of per-agent merge-rate checks. Dropping either one leaves a gap the other does not cover.
 - Below ~50 agent PRs/month, the variance decomposition lacks power and the per-agent lens is cheaper.
 
 ## Related

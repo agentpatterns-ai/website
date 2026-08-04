@@ -66,7 +66,7 @@ Cohort segmentation recovers the conditional `P(activity | phase)` instead of th
 - Replacement for outcome telemetry: cohort distribution decides where to invest, while outcome metrics decide whether it worked, so reporting Phase 3 growth alone repeats the DORA-as-vanity drift ([Larridin: Why DORA Metrics Break in the AI Era](https://larridin.com/developer-productivity-hub/why-dora-metrics-break-ai-era))
 - Depth confused with productivity: time savings plateaued around four hours per week even as adoption climbed from about 50% to 91% in DX 2025 ([Rob Bowley on DX 2025](https://blog.robbowley.net/2025/11/05/findings-from-dxs-2025-report-ai-wont-save-you-from-your-engineering-culture/)), so a higher Phase 3 share is not a higher-productivity org
 
-Cohort segmentation is the right diagnostic primitive for adoption shape; it is the wrong target for adoption success.
+Cohort segmentation is the right diagnostic primitive for adoption shape. It is the wrong target for adoption success.
 
 ## Example
 

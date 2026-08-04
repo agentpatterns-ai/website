@@ -28,7 +28,7 @@ An L0 codebase relies on [implicit knowledge](../../patterns/anti-patterns/impli
 - Conventions exist but are not written down ("we never put business logic in the route handlers")
 - No CI — tests run manually if they run at all
 
-Agents operating on an L0 repo invent rather than extrapolate. They pick arbitrary directories for new files, reproduce deprecated patterns, and miss non-obvious constraints. Every session needs significant hand-holding to stay on track.
+Agents operating on an L0 repo invent rather than extrapolate. They pick arbitrary directories for new files, reproduce deprecated patterns, and miss non-obvious constraints. Every session needs close supervision to stay on track.
 
 ## What L1 looks like
 
@@ -181,7 +181,7 @@ CLAUDE.md becomes a liability. Instructions added early go stale as the codebase
 
 Architecture documents drift faster than code. A diagram created at L1 that says "routes → services → repositories" becomes wrong the moment the team adds a message queue, an event layer, or a service mesh. Agents read the document before reading the code. An outdated architecture document makes agents pattern-match against the wrong structure and place new code in the wrong place. Keep architecture documents short enough to update in minutes, not hours.
 
-Directory restructuring has a high blast radius. Renaming `src/models/` to `src/services/` touches every import in every file. On a large brownfield codebase, a directory rename can generate hundreds of merge conflicts and break CI for a day. For teams without strong test coverage or automated import rewriting, the cost of restructuring outweighs the benefit until L2, when CI is reliable enough to catch breakage. When the codebase is too fragile, document the inconsistency in CLAUDE.md instead of restructuring.
+Directory restructuring affects the whole codebase at once. Renaming `src/models/` to `src/services/` touches every import in every file. On a large brownfield codebase, a directory rename can generate hundreds of merge conflicts and break CI for a day. For teams without strong test coverage or automated import rewriting, the cost of restructuring outweighs the benefit until L2, when CI is reliable enough to catch breakage. When the codebase is too fragile, document the inconsistency in CLAUDE.md instead of restructuring.
 
 CI setup stalls on legacy test suites. "Add smoke tests" is straightforward on a greenfield project. On a brownfield repo with no tests, or a flaky, slow suite, getting CI green can take weeks. If test quality blocks CI, start with a build-only gate (`npm run build`) and lint. A consistent build check gives you most of the L1 value until tests are reliable enough to run in CI.
 

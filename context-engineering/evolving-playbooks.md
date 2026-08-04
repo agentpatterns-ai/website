@@ -36,11 +36,11 @@ A static prompt stays simpler and is enough when a task has one optimal strategy
 
 ### Brevity bias
 
-When an LLM rewrites a context, it drops domain-specific knowledge to stay concise. Strategies that took several iterations to find -- specific error recovery sequences, tool ordering preferences, edge case handling -- are cut first, because they look verbose next to high-level guidance ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
+When an LLM rewrites a context, it drops domain-specific knowledge to stay concise. Strategies that took several iterations to find (specific error recovery sequences, tool ordering preferences, edge case handling) are cut first because they look verbose next to high-level guidance ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
 
 ### Context collapse
 
-Repeated full rewrites turn brevity bias into steady knowledge loss. Each cycle takes the previous output as input and drops more nuance. In measured runs, monolithic rewrites shrank a working context from 18,282 tokens to 122 tokens over several cycles, with a 9.6-point accuracy drop -- because rewriting loses information the model treats as redundant ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
+Repeated full rewrites turn brevity bias into steady knowledge loss. Each cycle takes the previous output as input and drops more nuance. In measured runs, monolithic rewrites shrank a working context from 18,282 tokens to 122 tokens over several cycles, with a 9.6-point accuracy drop, because rewriting loses information the model treats as redundant ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
 
 ## The generation-reflection-curation loop
 
@@ -56,13 +56,13 @@ graph TD
     C -->|Up to 5 rounds| C
 ```
 
-Generator: executes tasks and produces reasoning trajectories -- tool calls, intermediate outputs, decision points -- capturing both successful strategies and failure modes.
+Generator: executes tasks and produces reasoning trajectories (tool calls, intermediate outputs, decision points) that record both successful strategies and failure modes.
 
 Reflector: extracts concrete, reusable insights from traces. It runs up to 5 rounds to distill lessons from successes and errors, using execution feedback signals rather than labeled training data.
 
-Curator: turns reflections into compact delta entries -- itemized units that each represent a single strategy, domain concept, or failure mode. Each entry carries a unique ID and helpful/harmful counters that track outcome frequency.
+Curator: turns reflections into compact delta entries, itemized units that each represent a single strategy, domain concept, or failure mode. Each entry carries a unique ID and helpful/harmful counters that track outcome frequency.
 
-The critical design choice: the Curator merges deltas through deterministic, non-LLM logic -- semantic embedding comparison for deduplication, plus ID-based updates. This avoids the rewriting bottleneck that forces an LLM to compress the full context.
+The critical design choice: the Curator merges deltas through deterministic, non-LLM logic, using semantic embedding comparison for deduplication plus ID-based updates. This avoids the rewriting bottleneck that forces an LLM to compress the full context.
 
 ## Delta entries versus monolithic rewrites
 
@@ -71,11 +71,11 @@ The critical design choice: the Curator merges deltas through deterministic, non
 | Monolithic rewrite | LLM regenerates full context | Lossy -- each cycle drops nuance | Degrades as context grows |
 | Delta entries | Add/update/remove items | Structural -- entries persist independently | Grows with domain complexity |
 
-Each delta entry is independently addressable, so updating one strategy does not regenerate the whole context. Helpful/harmful counters give lightweight reinforcement: consistently useful strategies surface more prominently, while harmful ones are deprioritized or removed -- without explicit labels ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
+Each delta entry is independently addressable, so updating one strategy does not regenerate the whole context. Helpful/harmful counters give lightweight reinforcement: consistently useful strategies surface more prominently, while harmful ones are deprioritized or removed, without explicit labels ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
 
 ## Offline and online optimization
 
-Offline (system prompts): run the loop over a task batch, then update the system prompt with the accumulated playbook -- like updating `CLAUDE.md` or `.github/copilot-instructions.md` based on observed failures.
+Offline (system prompts): run the loop over a task batch, then update the system prompt with the accumulated playbook, like updating `CLAUDE.md` or `.github/copilot-instructions.md` based on observed failures.
 
 Online (agent memory): run the loop within a session, accumulating strategies as the agent works. The playbook persists for future sessions, as in Claude Code's [memory system](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents).
 
@@ -98,11 +98,11 @@ The predecessor framework, Dynamic Cheatsheet, showed the core mechanism: GPT-4o
 
 ## Key Takeaways
 
-- Brevity bias and context collapse are named failure modes of iterative prompt rewriting -- monolithic rewrites progressively lose domain knowledge.
-- Evolving playbooks replace full rewrites with structured delta entries that carry metadata and merge deterministically.
-- The generation-reflection-curation loop separates task execution, [insight extraction](../patterns/agent-design/memory-synthesis-execution-logs.md), and knowledge organization into distinct phases.
-- The pattern requires reliable feedback signals and sufficient domain complexity to justify the infrastructure overhead.
-- Static prompts remain the better choice for well-understood, fixed-strategy tasks.
+- Watch for shrinking context and disappearing edge-case handling across rewrite cycles: both signal brevity bias turning into context collapse.
+- Keep the merge step non-LLM and deterministic (embedding-based dedup plus ID-based updates); an LLM reconciling entries reintroduces the rewriting bottleneck the pattern exists to avoid.
+- Keep Generator, Reflector, and Curator as separate steps, even in a single-agent build: collapsing them into one call for [insight extraction](../patterns/agent-design/memory-synthesis-execution-logs.md) reproduces the rewriting bottleneck the loop exists to avoid.
+- Before adopting, name the specific reusable strategies your domain would accumulate (coding patterns, tool usage sequences, error recovery): if you cannot, a static prompt does the same job for less overhead.
+- Default to a static prompt first, and add the loop only once you can point to specific failures a static prompt could not fix.
 
 ## Related
 

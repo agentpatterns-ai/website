@@ -52,7 +52,7 @@ The technique reduces to three moves a team can wire into the review surface:
 
 - Surface the originating prompt alongside the code. PR description, commit message, or in-IDE annotation — whichever channel the reviewer already reads first. The label without the prompt produces fixation-time gain only; the prompt is what triggers the criteria-shift and the cross-check pattern ([arXiv:2606.26505 §Results](https://arxiv.org/abs/2606.26505)).
 - Route labeled PRs through a criteria-based checklist. The 37.5% criteria-shift is voluntary in the lab; pairing the label with a structural inspection order ([Reviewer's Playbook for Agent-Authored Pull Requests](reviewers-playbook-agent-authored-prs.md)) converts it from "if the reviewer remembers" into "the queue routes it."
-- Use the prompt as cross-check, not as documentation. The requirement-validation pattern is the higher-quality of the two — train reviewers to gaze prompt → code → contract rather than prompt → code-as-described. The documentation-support pattern is what anchors review to a fabricated contract.
+- Use the prompt as cross-check, not as documentation. The requirement-validation pattern is the higher-quality of the two — train reviewers to gaze from prompt to code to contract, rather than from prompt to code-as-described. The documentation-support pattern is what anchors review to a fabricated contract.
 
 ## Why it works
 
@@ -62,7 +62,7 @@ Explicitly labeling code as LLM-generated flags the region as warranting verific
 
 Five conditions degrade or invert the lab effect:
 
-- High agent-PR volume. The within-reviewer longitudinal data on 400 repeat reviewers over seven months shows approval rates rise 30.1% → 36.8% (p < 10⁻⁶), inline comments fall 22%, and latency triples once exposure compounds ([Reviewer Habituation in Agent PR Review](reviewer-habituation-decay.md)). The label that prompted +33% fixation in a one-shot session loses that effect under sustained exposure.
+- High agent-PR volume. The within-reviewer longitudinal data on 400 repeat reviewers over seven months shows approval rates rise from 30.1% to 36.8% (p < 10⁻⁶), inline comments fall 22%, and latency triples once exposure compounds ([Reviewer Habituation in Agent PR Review](reviewer-habituation-decay.md)). The label that prompted +33% fixation in a one-shot session loses that effect under sustained exposure.
 - Documentation-support gaze pattern. Seven of the fourteen prompt-users read the prompt as documentation rather than as a cross-check ([arXiv:2606.26505 §Interview Analysis](https://arxiv.org/abs/2606.26505)). When the agent fabricates a plausible intent — common for agent PRs — the prompt cross-check confirms the fabrication.
 - Saccade-length plateau as silent failure. Measured inspection thoroughness did not move ([arXiv:2606.26505 §Results](https://arxiv.org/abs/2606.26505)). A team treating the label as a thoroughness lever misses the same boundary-case defects as without it; the additional time goes into more passes of the same pattern. The technique is for attention routing, not for catching what surface review already misses.
 - Reviewer-sentiment dampening. Empirical PR-review data shows reviewers express fewer negative emotions toward AI-generated PRs than toward human ones, despite the code carrying substantially higher redundancy ([arXiv:2601.21276](https://arxiv.org/abs/2601.21276)). The label can soften critical pushback rather than sharpen it.
@@ -88,12 +88,12 @@ A team integrating an agent that opens PRs against a public API repo wires the l
 
 A reviewer following the requirement-validation pattern reads the prompt, scans the diff, and cross-checks: does the middleware return 429 when the window is exhausted, or only when it is exceeded? The prompt asserts the contract; the code is the implementation. The cross-check catches the off-by-one — the middleware fires on `requests >= limit + 1` instead of `requests > limit`.
 
-A reviewer following the documentation-support pattern reads the prompt, accepts it as the contract, scans the diff for surface plausibility, and approves. Same label, same prompt, opposite outcome — the gaze pattern is what determines whether the technique works.
+A reviewer following the documentation-support pattern reads the prompt, accepts it as the contract, scans the diff for surface plausibility, and approves. The label and prompt are identical to the requirement-validation reading; only the gaze pattern differs, and it alone determines whether the technique catches the defect.
 
 ## Key Takeaways
 
 - Labeling code as LLM-generated and surfacing the prompt raises fixation time +33% on simple code and +60% on complex code in a one-shot lab study ([arXiv:2606.26505](https://arxiv.org/abs/2606.26505)).
-- Saccade length — the eye-tracking proxy for inspection thoroughness — does not change. The label redistributes attention; it does not deepen inspection.
+- Saccade length — the eye-tracking proxy for inspection thoroughness — stays flat across both conditions (95% CI [-0.07, 0.10]).
 - 37.5% of reviewers adjust evaluation criteria and 43.75% use the prompt during review, splitting into requirement-validation (n=5) and documentation-support (n=7) gaze patterns with opposite review-quality implications.
 - The lab effect compresses or inverts under high agent-PR volume, habituated reviewer pools, the documentation-support gaze pattern, dampened reviewer sentiment, and positive priors toward LLMs.
 - Treat the label as an attention-routing lever paired with structural guards (criteria-based checklist, requirement-validation training, revert telemetry), not as a thoroughness lever.

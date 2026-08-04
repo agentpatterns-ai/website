@@ -24,7 +24,7 @@ Deterministic anchoring is a context-engineering technique for stabilizing code-
 
 The pattern earns its token cost only when all three conditions hold.
 
-- Reproducibility is a requirement, not a nice-to-have. Audit replay, trajectory diffing, and regression-style evaluation of agent changes all depend on the agent landing in the same files for the same task. If you run once and ship, the determinism benefit buys you nothing you can measure.
+- Reproducibility is a hard requirement: audit replay, trajectory diffing, and regression-style evaluation of agent changes all depend on the agent landing in the same files for the same task. If you run once and ship, the determinism benefit buys you nothing you can measure.
 - The codebase is medium-sized and structurally stable. The reported gains (+2.2 pp Func@5, +3.4 pp Pass@1, link-following rate 0.15–0.18 → 0.21–0.24) are on medium-scale repositories ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)). Below ~20 files the agent can read the source directly. Above a certain size the anchor itself does not fit, or it goes stale within a session.
 - Static facts match runtime facts. The anchor is a call graph extracted from source. In codebases that resolve dispatch at runtime — Rails `method_missing`, Python metaclasses, JS proxies, macro-heavy Rust — the anchor diverges from what actually runs, so anchored navigation misleads ([repository map pattern](repository-map-pattern.md)).
 
@@ -45,7 +45,7 @@ graph TD
     E --> F[Convergent navigation]
 ```
 
-The mechanism is not "more information helps the model." It is "the same information surfaced the same way pins down stochastic exploration." That distinction is why the headline metric is variance, not accuracy.
+Holding the same structural facts in the same place across every run pins down stochastic exploration — the model itself does not reason any differently. The headline metric is variance, not accuracy.
 
 ## What to anchor
 
@@ -61,7 +61,7 @@ The point is that these facts are cheap, accurate, and stable. They are not the 
 
 ## Why it works
 
-The causal reason is navigational discipline under decoding noise. A code agent's per-turn decision — which file to open next — is a function of the prompt. When the prompt contains the same structural assertions on every run, the per-turn decision distribution narrows. Variance halves not because the agent reasons better but because its inputs no longer drift between runs ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)).
+The causal reason is navigational discipline under decoding noise. A code agent's per-turn decision — which file to open next — is a function of the prompt. When the prompt contains the same structural assertions on every run, the per-turn decision distribution narrows. Its inputs stop drifting between runs, which is what halves variance, not any improvement in how it reasons ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)).
 
 This matches the broader retrieval finding that graph-based retrieval outperforms semantic and lexical retrieval on cross-file code tasks, with the largest gains on tasks whose required dependencies share no vocabulary with the task description ([survey of retrieval-augmented code generation](https://arxiv.org/abs/2510.04905)). Deterministic anchoring is the cheapest realization of that finding — graph facts rendered as prompt-time text — but the contribution is stability, not localization accuracy. The accuracy gains (+2–3 pp) are within the noise band the same technique is suppressing. The variance reduction is what does the real work.
 
@@ -101,11 +101,11 @@ The build regenerates the comment header. You do not hand-maintain it. Stale anc
 
 ## Key Takeaways
 
-- The technique stabilizes navigation, not capability — variance roughly halves; accuracy gains are modest (+2–3 pp on the originating study's metrics).
+- When judging results, read the variance number, not the accuracy number — the reported gains (+2–3 pp) sit inside the noise the technique itself is shrinking.
 - Earn the ~10% input-token cost only when reproducibility matters, the codebase is medium-sized and structurally stable, and static facts track runtime behavior.
 - Anchor what an analyser can extract deterministically: call graphs, inheritance, config dependencies — not behavioral assertions.
 - Regenerate the anchor; never hand-edit. Stale anchors are confident lies.
-- Outside the qualifying conditions, on-demand agentic search recovers the same facts at lower cost.
+- Default to on-demand agentic search when a qualifying condition fails — it recovers the same facts without the token premium.
 
 ## Related
 

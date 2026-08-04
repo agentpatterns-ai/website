@@ -1,7 +1,7 @@
 ---
 title: "Disable Attribution Headers to Preserve KV Cache in Local Inference"
 term: "Disable Attribution Headers to Preserve KV Cache"
-description: "When Claude Code prepends an attribution header to prompts sent to local models, it invalidates the KV cache on every request and causes ~90% slower inference"
+description: "When Claude Code prepends an attribution header to prompts sent to local models, it invalidates the KV cache on every request and causes ~90% slower inference."
 tags:
   - cost-performance
   - claude
@@ -15,7 +15,7 @@ maturity: established
 
 # Disable Attribution Headers to Preserve KV Cache in Local Inference
 
-> When Claude Code prepends an attribution header to prompts sent to local models, it invalidates the KV cache on every request and causes ~90% slower inference — disable it via `~/.claude/settings.json`.
+> The attribution header Claude Code adds to every local-inference prompt invalidates the KV cache and slows inference by about 90%.
 
 ## How KV caching works in local inference
 
@@ -69,8 +69,8 @@ If any of these apply, move attribution data out of the prompt body and into HTT
 
 ## Key Takeaways
 
-- Claude Code's attribution header prepends tokens to every prompt, breaking KV cache prefix matching in local inference servers
-- Disable it by setting `CLAUDE_CODE_ATTRIBUTION_HEADER` to `0` in `~/.claude/settings.json` — shell exports do not work
+- If local inference with Claude Code gets slower over a session with no other change, check the attribution header first: it is the most likely cause of a broken KV cache prefix match
+- Disable it by setting `CLAUDE_CODE_ATTRIBUTION_HEADER` to `0` in `~/.claude/settings.json`. Shell exports do not work
 - Any tool that mutates the prompt prefix will cause the same cache invalidation; keep prefixes stable across requests
 - The fix is confirmed for llama.cpp; vLLM and Ollama-backed servers will be affected by the same mechanism because all use hash-based prefix matching
 

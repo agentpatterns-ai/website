@@ -63,13 +63,13 @@ GEO techniques boosted visibility by up to 40% in benchmark testing. Effectivene
 
 ## Why it works
 
-Generative engines retrieve candidate content chunks, score them for relevance and quality, then synthesize a response. Specific, [cited statistics](assertion-density.md) give retrieval models a discrete, attributable fact — extractable without paraphrasing risk. Vague prose offers no extractable fact and no attribution target. Citations also signal external validation, reducing the engine's uncertainty about including the claim. The [Princeton GEO paper](https://arxiv.org/abs/2311.09735) benchmarked these effects at scale; the underlying mechanism is content that minimizes retrieval ambiguity and maximizes attribution confidence.
+Generative engines retrieve candidate content chunks, score them for relevance and quality, then synthesize a response. Specific, [cited statistics](assertion-density.md) give retrieval models a discrete, attributable fact — extractable without paraphrasing risk. Vague prose offers no extractable fact and no attribution target. Citations also signal external validation. That reduces the engine's uncertainty about including the claim. The [Princeton GEO paper](https://arxiv.org/abs/2311.09735) benchmarked these effects at scale; the underlying mechanism is content that minimizes retrieval ambiguity and maximizes attribution confidence.
 
 ## The citation economy
 
 AI answer engines exhibit a citation gap: [only 11% of domains appear across both ChatGPT and Perplexity citations](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/). Citation patterns also vary drastically by platform — the same brand can see a [615× difference in citation rate](https://www.superlines.io/articles/ai-search-statistics/) between the highest-citing and lowest-citing AI platform.
 
-This fragmentation means GEO is not a one-time optimization — it requires per-platform awareness and measurement. See [Measuring GEO Performance](measuring-geo-performance.md) for tooling and metrics.
+This fragmentation means GEO requires ongoing, per-platform awareness and measurement, not a one-time optimization. See [Measuring GEO Performance](measuring-geo-performance.md) for tooling and metrics.
 
 ## When this backfires
 
@@ -104,7 +104,7 @@ Backlinks were SEO's core currency, but they show only weak or neutral correlati
 
 **Why do AI engines cite specific statistics over vague claims?**
 
-Generative engines retrieve content chunks, score them for relevance and quality, then synthesize a response. A specific, cited statistic gives the retrieval model a discrete, attributable fact it can extract without paraphrasing risk, while vague prose offers no extractable fact or attribution target. Citations also signal external validation, reducing the engine's uncertainty about including a claim.
+Generative engines retrieve content chunks, score them for relevance and quality, then synthesize a response. A specific, cited statistic gives the retrieval model a discrete, attributable fact it can extract without paraphrasing risk, while vague prose offers no extractable fact or attribution target. Citations also signal external validation. That reduces the engine's uncertainty about including a claim.
 
 **When does GEO investment not pay off?**
 

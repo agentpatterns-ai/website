@@ -84,7 +84,13 @@ Skip when: memory accuracy is load-bearing (medical, legal, compliance) — full
 
 ## Why it works
 
-Framework primitives are designed for a specific task. ADK's graph-based Workflow Runtime works for long-running multi-agent processes because durable execution and explicit state transitions are exactly what workflows that pause for days need ([ADK Resume Agents](https://google.github.io/adk-docs/runtime/resume/)). Letta's server-stateful model works for cross-session identity because LLMs follow explicit memory-edit tool contracts more reliably than they manage arbitrary long-form context ([Letta: Agent Memory](https://www.letta.com/blog/agent-memory)). mem0's memory layer works for recall-heavy workloads because retrieval-augmented memory is linear-cost per turn instead of quadratic, paying for the accuracy gap with token economics ([Mem0 research](https://mem0.ai/research)). The wrong framework wastes effort because its primitives are tuned for a different task — you reimplement what it does badly and route around what you do not need.
+Framework primitives are designed for a specific task:
+
+- ADK's graph-based Workflow Runtime works for long-running multi-agent processes because durable execution and explicit state transitions are exactly what workflows that pause for days need ([ADK Resume Agents](https://google.github.io/adk-docs/runtime/resume/)).
+- Letta's server-stateful model works for cross-session identity because LLMs follow explicit memory-edit tool contracts more reliably than they manage arbitrary long-form context ([Letta: Agent Memory](https://www.letta.com/blog/agent-memory)).
+- mem0's memory layer works for recall-heavy workloads because retrieval-augmented memory is linear-cost per turn instead of quadratic, paying for the accuracy gap with token economics ([Mem0 research](https://mem0.ai/research)).
+
+The wrong framework wastes effort because its primitives are tuned for a different task — you reimplement what it does badly and route around what you do not need.
 
 ## When this backfires
 

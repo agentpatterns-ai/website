@@ -30,7 +30,7 @@ Reviewer attention has a fixed per-decision cost dominated by context-switching:
 
 ## Cluster boundaries are the whole game
 
-A bulk-apply button is not the pattern. The cluster-construction rules are. Without them, batching turns a careful reviewer into a rubber stamp. Vendor implementations encode boundary discipline:
+The pattern is the cluster-construction rules, not a bulk-apply button. Skip them and batching turns a careful reviewer into a rubber stamp. Vendor implementations encode boundary discipline:
 
 - Dependabot grouped security updates consolidate fixes [per ecosystem, never across ecosystems](https://github.blog/changelog/2024-08-19-dependabot-grouped-security-updates-public-beta/) — pip and npm stay in separate PRs.
 - Dependabot grouped version updates require [pattern-matching with `exclude-patterns`](https://github.blog/changelog/2023-06-30-grouped-version-updates-for-dependabot-public-beta/) — explicit boundary declarations rather than "everything in one batch".
@@ -92,13 +92,13 @@ Applies CodeQL suggestions for:
 Resolves: 2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111
 ```
 
-CI re-runs once on the batched commit, confirming no new alerts introduced. The High-severity finding gets the per-finding commit it deserves.
+CI re-runs once on the batched commit. No new alerts appear. The High-severity finding gets the per-finding commit it deserves.
 
 ## Key Takeaways
 
 - The pattern is the cluster boundary, not the bulk-apply button — `(rule × severity × file scope)` with capped batch size keeps amortization safe
 - Vendor implementations encode boundary discipline: Dependabot refuses to group across ecosystems; GitHub's code-scanning batch operates within the **Files changed** tab; Cursor's Fix All applies only to actionable Bugbot suggestions
-- The 16.6% AI suggestion adoption rate means a meaningful fraction of suggestions should not be applied — batching makes it cheaper to apply the wrong ones if boundaries are loose
+- The 16.6% AI suggestion adoption rate sets the real-world error floor: batch eligibility should require a suggestion source that has earned a track record, not just a rule match
 - Mandatory CI re-run on the batched commit and per-finding commit-message manifests preserve the verification and audit properties that per-finding workflow gave for free
 - Encode the exclusions as repo policy, not reviewer discipline. A batch boundary that depends on someone remembering it fails on exactly the busy PR where batching is most tempting
 

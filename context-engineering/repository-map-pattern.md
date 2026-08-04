@@ -17,11 +17,11 @@ maturity: established
 
 # Repository Map Pattern: AST + PageRank for Dynamic Code Context
 
-> Parse source files with tree-sitter to extract structural symbols, rank them by graph importance, then binary-search fit the most relevant entries into the agent's available token budget.
+> The repository map pattern parses source with tree-sitter, ranks symbols by PageRank, then binary-search fits the result into the agent's token budget.
 
 ## The orientation problem
 
-In a large codebase, directory listings, file samples, and keyword greps waste tokens on low-signal content. The agent needs to know which functions exist, which classes matter, and how they connect — not implementation details.
+In a large codebase, directory listings, file samples, and keyword greps waste tokens on low-signal content. The agent needs to know which functions exist, which classes matter, and how they connect, not the implementation details.
 
 The repository map pattern builds a weighted structural overview fitted to a token budget.
 
@@ -54,7 +54,7 @@ Tree-sitter parses source into ASTs and extracts structural elements: function s
 
 Source files become nodes in a directed graph. Edges connect files that share symbol references. PageRank with personalization scores each node: files being edited get higher weight, heavily-referenced symbols rank higher, and the result favors task-relevance over sheer size.
 
-PageRank works here because importance propagates through the call graph. A function referenced by 20 files outranks a helper called once, and symbols referenced by important symbols gain higher scores in turn. BM25 and recency weighting lack this property — the top-ranked symbols surface the architectural spine without any query. ([Aider repo map docs](https://aider.chat/docs/repomap.html))
+PageRank works here because importance propagates through the call graph. A function referenced by 20 files outranks a helper called once, and symbols referenced by important symbols gain higher scores in turn. BM25 and recency weighting lack this property. PageRank's top-ranked symbols surface the architectural spine without any query. ([Aider repo map docs](https://aider.chat/docs/repomap.html))
 
 ### 3. Fit: binary search to token budget
 
@@ -110,7 +110,7 @@ Codebase orientation strategies:
 | Agentic search (Claude Code) | On-demand Glob, Grep, Read | Frequent changes; freshness matters more than structure |
 | Vector embeddings (Cursor, Windsurf) | Semantic similarity search | Natural-language queries against code |
 
-Claude Code skips indexing and uses agentic search — early RAG experiments showed agentic search performed better. ([Vadim's blog: Claude Code Doesn't Index Your Codebase](https://vadim.blog/claude-code-no-indexing)) Cursor and Windsurf use vector stores with re-ranking. ([Mike Mason: AI Coding Agents in 2026](https://mikemason.ca/writing/ai-coding-agents-jan-2026/))
+Claude Code skips indexing and uses agentic search: early RAG experiments showed it performed better. ([Vadim's blog: Claude Code Doesn't Index Your Codebase](https://vadim.blog/claude-code-no-indexing)) Cursor and Windsurf use vector stores with re-ranking. ([Mike Mason: AI Coding Agents in 2026](https://mikemason.ca/writing/ai-coding-agents-jan-2026/))
 
 ## MCP server availability
 
@@ -172,10 +172,10 @@ The map consumed 87 tokens instead of the ~12,000 tokens that reading all source
 
 ## Key Takeaways
 
-- Tree-sitter extraction + PageRank ranking + binary-search fitting produces a weighted structural overview for any token budget.
-- The map adapts dynamically: expands with few files in context, shrinks with many.
+- Raise `max_map_tokens` (default 1,024) for a denser map with more files, or lower it to leave more of the budget for source reads.
+- Skip the pattern in repos under ~20 files (reading every source file already fits the window), in monorepos with thousands of daily commits (agentic search queries the live filesystem instead of a stale index), and in heavy-metaprogramming codebases such as Rails `method_missing` or Python metaclasses (AST symbols do not reflect runtime structure).
 - Three codebase orientation approaches (structural indexing, agentic search, vector embeddings) — choose by codebase size and change frequency.
-- RepoMapper and mcp-server-tree-sitter make the pattern available to any MCP-compatible agent.
+- Add repository-map behavior without building it: RepoMapper and mcp-server-tree-sitter wrap the tree-sitter pipeline as MCP tools, and Serena offers an LSP-based alternative for symbol-level navigation.
 
 ## Related
 

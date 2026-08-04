@@ -71,7 +71,7 @@ Store credentials as GitHub Actions secrets:
 
 ## Automated weekly report
 
-Set up a scheduled GitHub Actions workflow that runs every Monday at 08:00 UTC, calls the GSC and CrUX APIs, and opens a GitHub issue with the results.
+Set up a scheduled GitHub Actions workflow that runs every Monday at 08:00 UTC. It calls the GSC and CrUX APIs and opens a GitHub issue with the results.
 
 ```mermaid
 graph LR
@@ -83,7 +83,7 @@ graph LR
     F --> G[Open GitHub issue — label: gsc-report]
 ```
 
-The implementation is two files you add to your repo: a workflow at `.github/workflows/gsc-weekly-report.yml` that runs on the schedule, and a report script (for example `scripts/gsc_report.py`) that calls the APIs and formats the Markdown.
+The implementation is two files you add to your repo. A workflow at `.github/workflows/gsc-weekly-report.yml` runs on the schedule. A report script, for example `scripts/gsc_report.py`, calls the APIs and formats the Markdown.
 
 Report sections:
 
@@ -131,13 +131,13 @@ cat /tmp/gsc_report.md
 
 ## FAQ
 
-**Why can't you monitor Bing the same way as Google Search Console?**
+**Why can you not monitor Bing the same way as Google Search Console?**
 
-Bing Webmaster Tools has a public API but no bulk CSV export equivalent to GSC's Search Analytics API, so trend monitoring across queries still relies on the dashboard rather than an automated pull. Bing WMT still covers ownership verification, sitemap submission, and IndexNow auto-submit, and it provides visibility into Bing and Microsoft Copilot Search that GSC does not.
+Bing Webmaster Tools has a public API but no bulk CSV export equivalent to GSC's Search Analytics API. Trend monitoring across queries still relies on the dashboard rather than an automated pull. Bing WMT still covers ownership verification, sitemap submission, and IndexNow auto-submit, and it provides visibility into Bing and Microsoft Copilot Search that GSC does not.
 
 **Why does the Core Web Vitals section sometimes stay empty?**
 
-The CrUX API requires a minimum volume of real user data per origin; sites below that threshold get a 404 response instead of metrics. That's a real risk for low-traffic sites — the automation adds a GCP service account, stored credentials, and a scheduled workflow, and the Core Web Vitals section can stay empty for most of the property's life if traffic never clears CrUX's eligibility bar.
+The CrUX API requires a minimum volume of real user data per origin; sites below that threshold get a 404 response instead of metrics. That's a real risk for low-traffic sites. The automation adds a GCP service account, stored credentials, and a scheduled workflow. The Core Web Vitals section can stay empty for most of the property's life if traffic never clears CrUX's eligibility bar.
 
 **What's the rate limit on the URL Inspection API?**
 

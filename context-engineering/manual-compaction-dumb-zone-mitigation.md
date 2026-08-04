@@ -12,9 +12,9 @@ maturity: established
 
 # Manual Compaction as Dumb Zone Mitigation
 
-> Auto-compaction fires at ~95% context fill — long after reasoning quality has degraded. Manual compaction reframes context management from memory cleanup to reasoning quality preservation.
+> Manual compaction reframes context management from memory cleanup to reasoning quality preservation, ahead of auto-compaction's ~95% trigger.
 
-Learn it hands-on: [Compaction](https://learn.agentpatterns.ai/harness-engineering/compaction/) — guided lesson with quizzes.
+Learn it hands-on in [Compaction](https://learn.agentpatterns.ai/harness-engineering/compaction/), a guided lesson with quizzes.
 
 ## The gap
 
@@ -32,7 +32,7 @@ graph LR
     style E fill:#95a5a6,color:#fff
 ```
 
-The gap between degradation onset and auto-compaction is where quality silently erodes.
+The gap between degradation onset and auto-compaction is where quality erodes without warning.
 
 ## When to compact manually
 
@@ -84,7 +84,7 @@ Custom compaction instructions are a [first-class feature](https://code.claude.c
 
 ## Why it works
 
-Transformer attention spans all tokens in the context window, creating n² pairwise relationships for n tokens. As the context grows, [the attention budget spreads thin](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents). The model attends less to any specific piece of information, while irrelevant tokens compete for the same fixed capacity. Compaction replaces the accumulated token mass with a dense summary. That gives the model a focused context, where relevant information receives proportionally more attention. Compacting early, before the window saturates, stops useful signal from being crowded out by accumulated noise.
+Transformer attention spans all tokens in the context window. That creates n² pairwise relationships for n tokens. As the context grows, [the attention budget spreads thin](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents). The model attends less to any specific piece of information, while irrelevant tokens compete for the same fixed capacity. Compaction replaces the accumulated token mass with a dense summary. That gives the model a focused context, where relevant information receives proportionally more attention. Compacting early, before the window saturates, stops useful signal from being crowded out by accumulated noise.
 
 ## Lowering the auto-compaction threshold
 
@@ -135,7 +135,7 @@ A developer is debugging a failing integration test in Claude Code. The session 
 >   unrelated source files.
 ```
 
-After compaction, context drops to ~15%. The developer then asks Claude to reason about the root cause — with a clean context window, the agent identifies a race condition it had previously overlooked.
+After compaction, context drops to ~15%. The developer then asks Claude to reason about the root cause. With a clean context window, the agent identifies a race condition it had previously overlooked.
 
 For the next session, the developer sets an earlier auto-compaction trigger:
 
@@ -145,7 +145,7 @@ CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=55 claude
 
 ## Key Takeaways
 
-- Manual compaction preserves reasoning quality — auto-compaction at 95% fires long after degradation begins.
+- Do not wait for auto-compaction's 95% trigger. Treat it as a ceiling, not a cue, and compact manually before quality degrades.
 - Compact at task-type transitions, after bulk reads, or when output quality declines.
 - Use a focus directive or CLAUDE.md to control what survives summarization.
 - Set `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` to 50-70% for reasoning-heavy sessions.

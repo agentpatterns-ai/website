@@ -42,7 +42,7 @@ Pick by team size: Ralph for solo iteration, Codex for long-horizon runs, Manus 
 
 ## Resumption mechanic
 
-The next session reads the plan as context. It does not reconstruct reasoning. Anthropic frames resumption as "engineers working in shifts, where each new engineer arrives with no memory of what happened on the previous shift": read the git log and progress files, then pick the highest-priority unfinished feature ([Anthropic harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). In Claude Code, accepting a plan auto-names the session from its content, which ties `claude --resume <name>` to the artifact ([common workflows](https://code.claude.com/docs/en/common-workflows)). The filesystem plays disk; the context window plays RAM ([planning-with-files](https://github.com/OthmanAdi/planning-with-files)).
+The next session reads the plan as context. It does not reconstruct reasoning. Anthropic frames resumption as "engineers working in shifts, where each new engineer arrives with no memory of what happened on the previous shift": read the git log and progress files, then pick the highest-priority unfinished feature ([Anthropic harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). In Claude Code, accepting a plan auto-names the session from its content, which ties `claude --resume <name>` to the artifact ([common workflows](https://code.claude.com/docs/en/common-workflows)). The filesystem persists across sessions; the context window does not ([planning-with-files](https://github.com/OthmanAdi/planning-with-files)).
 
 ## The supersession discipline
 

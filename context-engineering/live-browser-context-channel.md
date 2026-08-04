@@ -64,11 +64,11 @@ Live tab sharing is structurally different on two axes:
 
 ## The lethal-trifecta consequence
 
-Indirect prompt injection through web content is in-the-wild against browser-using agents. Palo Alto Unit 42 documents active attacks ([Help Net Security summary](https://www.helpnetsecurity.com/2026/04/24/indirect-prompt-injection-in-the-wild/)); Brave demonstrated injection against Perplexity Comet via DOM content ([Brave: agentic browser security](https://brave.com/blog/comet-prompt-injection/)); Anthropic states "no browser agent is immune to prompt injection" ([Anthropic: prompt injection defenses](https://www.anthropic.com/research/prompt-injection-defenses)).
+Indirect prompt injection through web content is in-the-wild against browser-using agents. Palo Alto Unit 42 documents active attacks ([Help Net Security summary](https://www.helpnetsecurity.com/2026/04/24/indirect-prompt-injection-in-the-wild/)). Brave demonstrated injection against Perplexity Comet via DOM content ([Brave: agentic browser security](https://brave.com/blog/comet-prompt-injection/)). Anthropic states "no browser agent is immune to prompt injection" ([Anthropic: prompt injection defenses](https://www.anthropic.com/research/prompt-injection-defenses)).
 
 When the channel reads the developer's authenticated browser, every shared page is untrusted input on a principal holding the developer's session cookies. If that agent also has egress, the [lethal trifecta](../security/lethal-trifecta-threat-model.md) is closed within a single tool call. BrowseSafe frames the threat as injections that "influence real-world actions rather than mere text outputs" ([BrowseSafe (arxiv 2511.20597)](https://arxiv.org/abs/2511.20597)).
 
-The chrome-devtools-mcp README states the boundary plainly: "enabling the remote debugging port opens up a debugging port on the running browser instance. Any application on your machine can connect to this port and control the browser" ([chrome-devtools-mcp README](https://github.com/ChromeDevTools/chrome-devtools-mcp)).
+The chrome-devtools-mcp README states the boundary: "enabling the remote debugging port opens up a debugging port on the running browser instance. Any application on your machine can connect to this port and control the browser" ([chrome-devtools-mcp README](https://github.com/ChromeDevTools/chrome-devtools-mcp)).
 
 ## Conditions where the pattern pays
 
@@ -104,10 +104,10 @@ Revocation — when the task completes, the developer clicks the sharing button 
 
 ## Key Takeaways
 
-- The channel reads the developer's running browser instead of spawning a headless one — value is information continuity, not new capability.
-- VS Code 1.119 ships the per-tab share-and-revoke model; Claude Code reaches the same surface via chrome-devtools-mcp; Cursor's embedded browser is the contrasting agent-owned model.
-- The cost is structural: shared tabs are post-auth and untrusted DOM enters context on a principal that holds the developer's session cookies.
-- Use the channel for tasks tied to the page the developer is already looking at; prefer headless browsing when the agent has consequential tools or the page is reachable unauthenticated.
+- Before wiring the channel, confirm the task actually needs the logged-in session — if a headless script can already reach the page unauthenticated, use that instead and skip the shared-session risk.
+- chrome-devtools-mcp shares every open window for the profile, with no per-tab boundary; prefer a surface with VS Code's per-tab opt-in when the task only needs one page.
+- The cost is structural: shared tabs are post-auth, and untrusted DOM enters context on a principal that holds the developer's session cookies.
+- When it is unclear whether the agent's other tools are safe, default to headless browsing — the channel is an optimization for a narrow case, not the safe default.
 - Treat the share approval as a security gate, not a UI prompt — reflexive approval defeats the only mitigation the channel provides.
 
 ## Related

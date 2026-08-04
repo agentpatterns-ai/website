@@ -26,10 +26,10 @@ Check all four before wiring a timer:
 
 - You pay per token. On Claude Pro or Max, or any seat-based plan, there is no token bill to reduce and each ping consumes request quota instead ([claude-code-cache-keepalive](https://github.com/yujiachen-y/claude-code-cache-keepalive)).
 - Your pauses exceed the cache lifetime. Anthropic's default entry lives five minutes ([Anthropic prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)), so a two-second tool call never needed help.
-- Your pauses stay under the break-even horizon. Ping rent accumulates; the re-prefill it prevents is a single charge. Khailo puts the crossover near 46 minutes on Anthropic's five-minute tier ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214)).
+- Your pauses stay under the break-even horizon. Repeated ping costs add up over a long pause, while the re-prefill they prevent is a single charge. Khailo puts the crossover near 46 minutes on Anthropic's five-minute tier ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214)).
 - Your provider actually evicts. The same measurements found Google's implicit cache "never reliably evicts" and DeepSeek's re-prefill "too cheap to insure," which empties the paying band on both.
 
-Miss any one and the honest answer is to do nothing, or to buy a longer lifetime instead — see [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md), which covers the five-minute against one-hour tier decision.
+Miss any one and the honest answer is to do nothing, or to buy a longer lifetime instead. See [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md), which covers the five-minute against one-hour tier decision.
 
 ## Why it works
 
@@ -37,17 +37,17 @@ A cache read restarts the eviction clock, and providers charge far less for that
 
 ## Choosing the interval
 
-The interval, not the idea, is where shipped tooling gets it wrong. Roughly 240 seconds on Anthropic holds the same retention as the conventional 30-second ping — median cache hit rate stayed at or above 98% either way. The 30-second convention just spends about 8x more for it: 7.8x across the paper's interval runs, or about $3.60 per hour against about $0.45 per hour on a 100k-token prefix at July 2026 list prices ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214)).
+Shipped tooling gets the interval wrong far more often than the idea. Roughly 240 seconds on Anthropic holds the same retention as the conventional 30-second ping: median cache hit rate stayed at or above 98% either way. The 30-second convention just spends about 8x more for it: 7.8x across the paper's interval runs, or about $3.60 per hour against about $0.45 per hour on a 100k-token prefix at July 2026 list prices ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214)).
 
-Overshooting is the more expensive error. At Anthropic's 300-second lifetime, a 900-second interval means every ping lands on a dead entry and pays the full write price, so the keepalive "costs 4x more than never pinging" ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214)). Measure your own retention rather than copying a table: cross-provider lifetimes move, and OpenAI now defaults organizations without zero data retention to a 24-hour window, contradicting the shorter lifetimes usually assumed ([OpenAI API changelog](https://developers.openai.com/api/docs/changelog)).
+Overshooting is the more expensive error. At Anthropic's 300-second lifetime, a 900-second interval means every ping lands on a dead entry and pays the full write price, so the keepalive "costs 4x more than never pinging" ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214)). Measure your own retention rather than copying a table: cross-provider lifetimes move, and OpenAI now defaults organizations without zero data retention to a 24-hour window. That contradicts the shorter lifetimes usually assumed ([OpenAI API changelog](https://developers.openai.com/api/docs/changelog)).
 
 ## When this backfires
 
 - Subscription billing. Pings cost quota and save nothing ([claude-code-cache-keepalive](https://github.com/yujiachen-y/claude-code-cache-keepalive)).
-- Long walk-aways. Past the break-even horizon, accumulated rent exceeds the one re-prefill you avoided ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214)).
+- Long walk-aways. Past the break-even horizon, the pings' combined cost exceeds the one re-prefill they avoided ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214)).
 - An interval above real retention, which inverts the result to 4x worse than doing nothing.
-- Prefix mutation mid-pause. If tool definitions or the system prompt change while the timer runs, you warm a prefix the next real request will not match — the failure mode described in [Static Content First for Cache Hits](static-content-first-caching.md).
-- Fleet-wide adoption. Khailo argues keepalives manufacture recency, so "once every client keeps its prefixes alive, LRU has nothing left to rank and the tier degrades toward first-in-first-out-of-luck," pushing providers toward metering residency directly and closing the arbitrage ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214)).
+- Prefix mutation mid-pause. If tool definitions or the system prompt change while the timer runs, you warm a prefix the next real request will not match (the failure mode described in [Static Content First for Cache Hits](static-content-first-caching.md)).
+- Fleet-wide adoption. Khailo argues keepalives manufacture recency, so "once every client keeps its prefixes alive, LRU has nothing left to rank and the tier degrades toward first-in-first-out-of-luck," which pushes providers toward metering residency directly and closes the arbitrage ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214)).
 
 ## Example
 
@@ -59,14 +59,14 @@ claude-code-cache-keepalive       → 240 s   Stop hook sleeps, then injects a t
 openclaw #62475 (proposed)        → TTL x 0.8 (~240 s), plus a $0.10/hour cost cap
 ```
 
-Only the second and third leave headroom for jitter. Aider fires exactly at the documented lifetime ([aider docs](https://aider.chat/docs/usage/caching.html)); the Claude Code plugin sleeps 240 seconds and injects a keepalive turn through a Stop hook ([repo](https://github.com/yujiachen-y/claude-code-cache-keepalive)); openclaw derived an adaptive interval of 0.8 times the TTL with an automatic cost cap, then closed the proposal as not planned ([openclaw#62475](https://github.com/openclaw/openclaw/issues/62475)). That closure is itself a signal: maintainers weighed the complexity against the saving and declined.
+Only the second and third leave headroom for jitter. Aider fires exactly at the documented lifetime ([aider docs](https://aider.chat/docs/usage/caching.html)); the Claude Code plugin sleeps 240 seconds and injects a keepalive turn through a Stop hook ([repo](https://github.com/yujiachen-y/claude-code-cache-keepalive)); openclaw derived an adaptive interval of 0.8 times the TTL with an automatic cost cap, then closed the proposal as not planned ([openclaw#62475](https://github.com/openclaw/openclaw/issues/62475)). Maintainers weighed the complexity against the saving and declined the proposal.
 
 ## Key Takeaways
 
-- A keepalive converts a 1.25x cache write into a 0.10x cache read by exploiting documented refresh-on-read semantics.
-- Roughly 240 seconds beats the conventional 30-second ping by about 8x in spend on Anthropic, at the same retention.
-- An interval above real retention costs about 4x more than never pinging — overshooting is worse than not trying.
-- Subscription billing, sub-lifetime pauses, walk-aways past the break-even horizon, and non-evicting providers each remove the benefit entirely.
+- Check your own provider's read-versus-write price ratio before wiring a keepalive: Anthropic's 0.10x-read against 1.25x-write split is what makes the arbitrage pay, and a provider priced differently may not reward it.
+- Do not copy a shipped tool's default interval without checking it against your provider's real cache lifetime: a 30-second ping can spend roughly 8x more than an interval tuned to the retention window, for no extra retention.
+- When the retention window is uncertain, undershoot rather than overshoot: an interval past the real lifetime turns every ping into a full-price rebuild, about 4x worse than never pinging at all.
+- Rule out all four disqualifying conditions before deploying: billing model, pause length against the cache lifetime, walk-away length against the break-even horizon, and whether the provider actually evicts. Missing any one erases the saving.
 - Measure your provider's retention window; published cross-provider lifetimes conflict and change.
 
 ## Related

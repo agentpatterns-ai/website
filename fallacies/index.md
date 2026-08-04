@@ -24,6 +24,7 @@ Fallacies differ from anti-patterns: an anti-pattern is a wrong *practice*, a fa
 - [The Model Preference Fallacy](model-preference-fallacy.md) — bare-chat tallies of what models reach for measure prompt framing and training-data distribution, not a stable model preference
 - [The Synthetic Ground Truth Fallacy](synthetic-ground-truth-fallacy.md) — the belief that AI-generated artifacts can substitute for human-verified ones, and why it introduces compounding feedback loops
 - [The Task Framing Irrelevance Fallacy](task-framing-irrelevance-fallacy.md) — the belief that surface framing doesn't matter, only the underlying problem does
+- [The Token Price Index Fallacy in Agent Cost Planning](token-price-index-fallacy.md) — a blended price-per-token index measures where a market routes its work, not what models cost, so reading one as a vendor price signal misplans budgets
 
 ## Related
 

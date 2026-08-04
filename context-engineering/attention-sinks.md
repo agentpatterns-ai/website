@@ -1,7 +1,7 @@
 ---
 title: "Attention Sinks: Why First Tokens Always Win"
 term: "Attention Sinks"
-description: "Transformer models disproportionately attend to initial tokens regardless of their semantic content — position determines attention weight, not importance."
+description: "Transformer models disproportionately attend to initial tokens regardless of their semantic content. Position determines attention weight, not importance."
 tags:
   - context-engineering
   - tool-agnostic
@@ -15,9 +15,9 @@ maturity: emerging
 
 # Attention Sinks: Why First Tokens Always Win
 
-> Transformer models disproportionately attend to initial tokens regardless of their semantic content — position determines attention weight, not importance.
+> Transformer models disproportionately attend to initial tokens regardless of their semantic content. Position determines attention weight, not importance.
 
-Related lesson: [Lost in the Middle](https://learn.agentpatterns.ai/context-engineering/lost-in-the-middle/) — this concept features in a hands-on lesson with quizzes.
+Related lesson: [Lost in the Middle](https://learn.agentpatterns.ai/context-engineering/lost-in-the-middle/). This concept features in a hands-on lesson with quizzes.
 
 !!! info "Also known as"
     Lost in the Middle, Critical Instruction Repetition, Attention Bias and Instruction Placement
@@ -26,7 +26,7 @@ Related lesson: [Lost in the Middle](https://learn.agentpatterns.ai/context-engi
 
 Attention in autoregressive transformer models is structurally biased toward early tokens. The first tokens act as attention sinks. They absorb a large share of attention from every later token, whatever their meaning at the current generation step. Xiao et al. (2023) confirmed this: keeping just the KV cache of the early tokens largely recovers the performance of full-window attention ([StreamingLLM](https://arxiv.org/abs/2309.17453)).
 
-This is not a quirk to fix. It is a structural property of how causal attention masking works. Every token the model generates is shaped more by early tokens than by equivalent tokens placed later in the context.
+The attention sink is a structural property of how causal attention masking works, not a quirk to fix. Every token the model generates is shaped more by early tokens than by equivalent tokens placed later in the context.
 
 A more precise account narrows the mechanism. Gu et al. (2024) found that the sink concentrates on the first token rather than spreading smoothly across an early-position band. It is a learned behavior that emerges during pre-training under softmax normalization. Replace softmax with sigmoid attention and the sink does not appear in models up to 1B parameters, so it is not strictly inherent to causal masking ([When Attention Sink Emerges in Language Models](https://arxiv.org/abs/2410.10781)). The practical takeaway holds: the strongest-attention position is the very start of the prompt. But treat "earlier is stronger" as a first-token-anchored, softmax-driven effect, not a uniform positional gradient.
 
@@ -78,13 +78,13 @@ Attention sinks explain the strong-start portion of the U-shaped attention curve
 - Middle tokens: weakest attention (low recall)
 - Last tokens: recency effect (high recall)
 
-Content that must be reliably followed belongs at either end. Content the agent refers to passively can occupy the middle.
+Content that must be reliably followed belongs at either end; content the agent only consults passively can occupy the middle.
 
 ## FAQ
 
 **Is the attention sink just "earlier tokens always matter more"?**
 
-Not quite. Gu et al. found the sink concentrates on the first token rather than spreading smoothly across an early-position band, and that it is a learned behavior emerging during pre-training under softmax normalization — swap softmax for sigmoid attention and it does not appear in models up to 1B parameters. Treat it as first-token-anchored, not a uniform positional gradient.
+Not quite. Gu et al. found the sink concentrates on the first token rather than spreading smoothly across an early-position band, and that it is a learned behavior emerging during pre-training under softmax normalization. Swap softmax for sigmoid attention and the sink does not appear in models up to 1B parameters. Treat it as first-token-anchored, not a uniform positional gradient.
 
 **Where do I put a constraint when the conversation is already long?**
 
@@ -92,14 +92,14 @@ Restate it at the point where you need it rather than relying on an early-sessio
 
 **When does putting the constraint first stop being reliable?**
 
-When the full prompt prefix is not preserved. Context compression and some KV-cache eviction strategies discard early tokens, neutralizing the primacy advantage. In retrieval pipelines, chunks are injected mid-prompt, so a constraint buried in a static preamble can be outweighed by the semantic relevance of that material. Under a few hundred tokens, placement has little observable effect.
+When the full prompt prefix is not preserved. Context compression and some KV-cache eviction strategies discard early tokens and neutralize the primacy advantage. In retrieval pipelines, chunks are injected mid-prompt, so a constraint buried in a static preamble can be outweighed by the semantic relevance of that material. Under a few hundred tokens, placement has little observable effect.
 
 ## Key Takeaways
 
-- Initial tokens receive disproportionate attention — open instruction files with your most critical constraint, not context-setting prose.
-- Boilerplate at the top of a system prompt wastes the highest-attention positions on low-value content.
-- The role and constraints placed first shape agent behavior most strongly across the session.
-- Attention sinks and recency effects are the two mechanisms behind the [U-shaped attention distribution](lost-in-the-middle.md).
+- Put your single most important constraint on the first line of a system prompt or instruction file, ahead of any persona description or version header.
+- Audit an existing system prompt's opening lines for version headers, dates, or generic preamble, and move a real constraint there instead.
+- In a long-running conversation, do not rely on an early instruction to still carry weight. Restate a critical constraint near the turn where you need it followed.
+- Before relying on first-position placement, confirm your context pipeline preserves the full prompt prefix. Compression or KV-cache eviction can silently discard it.
 
 ## When this backfires
 

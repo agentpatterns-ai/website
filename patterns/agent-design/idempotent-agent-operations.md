@@ -134,3 +134,4 @@ The unique identifier (`issue.number`) is the key throughout: it names the branc
 - [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md)
 - [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md)
 - [The Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md)
+- [Organizational Context Layer for Agents](../../context-engineering/organizational-context-layer.md)

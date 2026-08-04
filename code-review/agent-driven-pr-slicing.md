@@ -48,7 +48,7 @@ Intent-driven slicing adds a sixth axis: which task in the chat session each edi
 
 Independent slices land as parallel PRs against the same base. Dependent slices stack, each targeting the one before it. GitHub's native Stacked PRs (`gh-stack` CLI, [public preview as of 2026-07-30](https://github.blog/changelog/2026-07-30-stacked-pull-requests-are-now-in-public-preview)) makes this first-class: branch protection enforces against the final base, CI runs every layer, and the CLI is "designed for use by AI agents" ([GitHub Stacked PRs](https://github.github.com/gh-stack/), [InfoQ on GitHub Stacked PRs](https://www.infoq.com/news/2026/04/github-stacked-prs/)).
 
-Dependency-aware slicing has two parts: identify the slices, then their partial order. Without the order, dependent slices look independent, reviewers merge them out of sequence, and intermediate states break ([Graphite on PR dependencies](https://graphite.com/guides/github-pr-dependency)).
+Dependency-aware slicing has two parts: identify the slices, then their partial order. Without the order, dependent slices look independent. Reviewers merge them out of sequence, and intermediate states break as a result ([Graphite on PR dependencies](https://graphite.com/guides/github-pr-dependency)).
 
 ```mermaid
 graph TD
@@ -66,10 +66,10 @@ graph TD
 
 A single PR is preferable when:
 
-- Cross-cutting refactor — a rename or interface migration touches many files but is one semantic unit; file or hunk boundaries produce clusters that each break the build.
-- Atomic-revert requirements — feature flags, schema-and-code changes, migrations that must land or roll back together; a revert across N stacked PRs is harder than reverting one.
+- Cross-cutting refactor — a rename or interface migration touches many files but is one semantic unit. File or hunk boundaries produce clusters that each break the build.
+- Atomic-revert requirements — feature flags, schema-and-code changes, migrations that must land or roll back together. A revert across N stacked PRs is harder than reverting one.
 - Security-sensitive paths — splitting a security fix widens the partial-protection window and risks out-of-order merges.
-- Small total diffs — a 200-line change sliced into three 60-line PRs adds queue overhead without lowering per-PR load; below the 200-LOC floor the SmartBear data suggests slicing is net-negative.
+- Small total diffs — a 200-line change sliced into three 60-line PRs adds queue overhead without lowering per-PR load. Below the 200-LOC floor, the SmartBear data suggests slicing is net-negative.
 - Thin chat context — when the agent did not author the branch or context was compacted, slicing falls back to diff-only signals and misses intent.
 
 ## When splits are worse than the original
@@ -96,21 +96,21 @@ Intent-based slicing uses the agent's chat context:
 3. OAuth route and provider plumbing depends on step 2, and adds the new endpoint with tests.
 4. Frontend login UI depends on step 3, and is exercised by integration tests against the staged stack.
 
-Each PR is independently reviewable against its own base. Each lands inside the 200–400 LOC reviewer envelope. The dependency graph is explicit. A reviewer engaging only with PR 3 does not need to load the frontend changes into working memory.
+Each PR is independently reviewable against its own base. Every PR lands inside the 200–400 LOC reviewer envelope. The dependency graph is explicit. A reviewer engaging only with PR 3 does not need to load the frontend changes into working memory.
 
 ## Key Takeaways
 
-- The slicer's edge is intent context — the same agent that produced the branch knows which edits belong to which sub-task; a separate diff-analysis tool does not
+- Ask for the slice plan before compacting the session — the sub-task record that makes the split possible does not survive compaction
 - Slicing only helps when the resulting PRs each fit within the SmartBear 200–400 LOC envelope and each is independently meaningful
-- Dependency-aware slicing produces a stack, not a flat set; flat slicing on dependent work produces broken intermediate states
-- The pattern fails on cross-cutting refactors, atomic-revert paths, security-sensitive changes, and small diffs
-- Keep the author's approval gate before PRs are created; the proposed split is a hypothesis, not a result
+- Check the dependency graph before approving a slice plan — a flat set of PRs on dependent work merges out of order and breaks intermediate states
+- Screen for cross-cutting refactors, atomic-revert requirements, security fixes, and small diffs before slicing — catching them after the split costs more to unwind than the review time it saved
+- Keep the author's approval gate before PRs are created — the agent's split proposal can be approved, adjusted, or rejected before anything merges
 
 ## Related
 
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — reviewer-attention pressure that motivates slicing
 - [Predicting Reviewable Code](predicting-reviewable-code.md) — upstream signal on which code is worth reviewing
-- [Tiered Code Review](tiered-code-review.md) — routing review effort by risk; complementary to intent slicing
+- [Tiered Code Review](tiered-code-review.md) — routing review effort by risk, complementary to intent slicing
 - [Cloud Parallel Review Pattern](cloud-parallel-review-pattern.md) — fan-out review across one PR
 - [Diff-Based Review](diff-based-review.md) — the review-the-delta scope slicing makes tractable
 - [Stacked Agent Sessions on Unmerged Feature Branches](../workflows/stacked-agent-sessions.md) — the inverse operation: sequencing new sessions onto unmerged branches before the work exists

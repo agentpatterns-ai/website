@@ -20,7 +20,7 @@ maturity: emerging
 
 > Managing an agent's context as a lifecycle — decide, extract, store, consolidate, compact — curbs missing recalls and token cost that a passive store cannot.
 
-A store-and-retrieve memory optimizes two moments: the write and the read. A lifecycle view optimizes the decisions in between — what to keep, how to structure it, which store fits each data type, what to consolidate or forget, and how to compact to a token budget ([Dadhich, 2026](https://arxiv.org/abs/2607.21503)). Reach for the lifecycle framing when an agent runs long enough that accumulated history, not reasoning ability, is what breaks it.
+A store-and-retrieve memory optimizes two moments: the write and the read. A lifecycle view optimizes the decisions in between — what to keep, how to structure it, which store fits each data type, what to consolidate or forget, and how to compact to a token budget ([Dadhich, 2026](https://arxiv.org/abs/2607.21503)). Reach for the lifecycle framing when an agent runs long enough that accumulated history is what breaks it.
 
 ## When the lifecycle framing earns its cost
 
@@ -36,10 +36,10 @@ For a short, single-session chat, keep everything in context or use one [compact
 
 The source paper frames context management as five primitives rather than a single store ([Dadhich, 2026](https://arxiv.org/abs/2607.21503)):
 
-- Architecting — decide up front which categories matter, where each lives, how long it persists, and how it is retrieved. This is a design decision, not a fixed universal schema.
+- Architecting — decide up front which categories matter, where each lives, how long it persists, and how it is retrieved. Each system makes this decision on its own terms; no universal schema fits every case.
 - Ingesting — convert raw signals (turns, documents, tool output) into structured, retrievable entries. Retrieval quality is bounded by ingestion quality, so extraction fidelity here caps everything downstream.
 - Scoping — decide what is relevant across a hierarchy (user, then team, then organization) while keeping strict isolation between them.
-- Anticipating — pre-fetch context the agent is likely to need before it asks, moving retrieval off the critical path.
+- Anticipating — pre-fetch context the agent is likely to need before it asks. Retrieval then happens off the critical path.
 - Compacting and consolidating — reduce context to fit a budget while checking that critical facts stay recoverable, and preserve provenance so a retained fact still points at its source.
 
 This maps onto patterns already documented here: the store-per-type choice extends [layered context architecture](layered-context-architecture.md), consolidation and forgetting extend [agent memory patterns](../patterns/agent-design/agent-memory-patterns.md), and the compaction stage is [context compression strategies](context-compression-strategies.md).
@@ -75,10 +75,10 @@ The point is that each row is a separate, tunable decision — the store-and-ret
 
 ## Key Takeaways
 
-- A lifecycle view optimizes what a store cannot: retention, structure, per-type storage, consolidation, and budget-bounded compaction.
+- Answer all five decisions explicitly — retention, structure, per-type store, consolidation, and compaction budget — or the design defaults back to store-and-retrieve.
 - Reach for it only on long-horizon or multi-session work with sound extraction and a retrieval latency budget.
-- The core mechanism is cost: bounding per-turn context turns O(n²) token growth into O(n).
-- The stages are only as good as ingestion — poor extraction produces near-total junk downstream.
+- Watch per-turn token cost as turns grow: cost tracking O(n²) instead of O(n) is the signal to add lifecycle management.
+- Audit ingestion output for its junk rate before investing in the other four stages — bad extraction caps everything downstream.
 - Gate recall and consolidation on relevance; always-on memory can hurt more than help, and every persisted fact adds attack surface.
 
 ## Related

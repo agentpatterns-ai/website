@@ -16,7 +16,7 @@ maturity: established
 
 Learn it hands-on: [What's Eating the Window](https://learn.agentpatterns.ai/context-engineering/whats-eating-the-window/) — guided lesson with quizzes.
 
-Context-window diagnostic tooling is a class of commands that attribute token consumption to the specific tool calls, memory files, or outputs responsible — so an agent developer can shrink the actual culprit rather than guess. Claude Code's [`/context` command](https://code.claude.com/docs/en/changelog) (v2.1.74, 2026-03-12) is the first developer-facing example to ship in a major harness.
+Context-window diagnostic tooling is a class of commands that attribute token consumption to the specific tool calls, memory files, or outputs responsible, so an agent developer can shrink the actual culprit rather than guess. Claude Code's [`/context` command](https://code.claude.com/docs/en/changelog) (v2.1.74, 2026-03-12) is the first developer-facing example to ship in a major harness.
 
 ## The blind optimization problem
 
@@ -24,9 +24,7 @@ Agents accumulate context silently. A large file read, verbose grep output, and 
 
 ## Per-tool attribution
 
-The `/context` command identifies which tools consume the most context, flags memory bloat, and suggests specific fixes alongside capacity warnings.
-
-The command exposes:
+The `/context` command exposes:
 
 - Tool-level attribution: which tool calls consume the most tokens
 - Memory bloat flags: memory files that have grown larger than they need to be
@@ -65,13 +63,13 @@ Run the diagnostic before you apply [context compression strategies](context-com
 
 `/context` exposes tool-call attribution directly to the developer rather than compressing behind the scenes. No other major AI coding harness currently documents an equivalent developer-facing diagnostic. The pattern generalizes: any harness that tracks per-tool token contribution can expose the same surface.
 
-LangChain's [Deep Agents framework](https://github.com/langchain-ai/deepagents) handles long contexts through auto-summarization but does not surface per-tool token breakdowns. [Bui (2026)](https://arxiv.org/abs/2603.05344) describes OPENDEV's Adaptive Context Compaction, which reduces older observations as usage grows — attribution logic is internal to the compactor, not visible to the practitioner.
+LangChain's [Deep Agents framework](https://github.com/langchain-ai/deepagents) handles long contexts through auto-summarization but does not surface per-tool token breakdowns. [Bui (2026)](https://arxiv.org/abs/2603.05344) describes OPENDEV's Adaptive Context Compaction, which reduces older observations as usage grows. The attribution logic stays internal to the compactor, not exposed to the practitioner.
 
 For harnesses without built-in diagnostics, instrument at the tool-call boundary: log token counts before and after each invocation, then aggregate by tool type.
 
 ## Why it works
 
-Aggregate context metrics (total tokens used, percentage full) tell you that you have a problem, but not which tool caused it. Token counts are additive and stable. Each tool call appends a fixed delta that persists for the session, which is what makes [context budget allocation](context-budget-allocation.md) tractable in the first place. Per-tool attribution exposes the delta at invocation time, so skew is visible immediately: one tool type dominating the distribution pinpoints the bottleneck. The mechanism is measure-then-act rather than compress-and-hope, the same principle as per-query profiling in databases.
+Aggregate context metrics (total tokens used, percentage full) tell you that you have a problem, but not which tool caused it. Token counts are additive and stable. Each tool call appends a fixed delta that persists for the session, which is what makes [context budget allocation](context-budget-allocation.md) tractable in the first place. Per-tool attribution exposes the delta at invocation time, so skew is visible immediately: one tool type dominating the distribution pinpoints the bottleneck. The mechanism measures before it acts. That is the same principle as per-query profiling in databases.
 
 ## When this backfires
 
@@ -85,10 +83,10 @@ Per-tool attribution helps most when the expensive tool is also avoidable. It pr
 
 ## Key Takeaways
 
-- Per-tool context attribution enables targeted optimization — you fix the culprit, not the symptoms.
-- The most common high-cost tools are large file reads, verbose tool outputs (which [observation masking](observation-masking.md) filters), and unbounded memory files.
-- Diagnose before compressing: compression without attribution can discard valuable content while leaving the inflator in place.
-- For harnesses without built-in diagnostics, instrument token counts at the tool-call boundary.
+- Run attribution before cutting anything, so the fix targets the one tool actually responsible.
+- Large file reads, verbose tool outputs, and unbounded memory files are the most common attributed offenders. [Observation masking](observation-masking.md) targets the second directly.
+- Skip the diagnostic on short-lived, stateless, or tool-sparse pipelines: there is no compounding cost to find.
+- When attribution shows modest tool costs but the window stays full, the bloat sits in conversation history or the system prompt. Reach for manual compaction instead.
 
 ## Related
 

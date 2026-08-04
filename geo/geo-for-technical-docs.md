@@ -19,11 +19,11 @@ maturity: emerging
 
 Related lesson: [Capstone — Measure & Decide](https://learn.agentpatterns.ai/geo/capstone-measure-and-decide/) — this concept features in a hands-on lesson with quizzes.
 
-Technical documentation needs the same GEO principles as any content, but you apply them differently by format. An API reference page, a tutorial, and a pattern page each have their own structure, reader intent, and schema type, so each maps to a distinct checklist. The sections below give format-specific checklists, schema selection guidance, and an agent-discovery loop for finding citation gaps.
+Technical documentation needs the same GEO principles as any content, but you apply them differently by format. An API reference page, a tutorial, and a pattern page each have their own structure, reader intent, and schema type. Each format maps to a distinct checklist. The sections below give format-specific checklists, schema selection guidance, and an agent-discovery loop for finding citation gaps.
 
 ## Why content format determines GEO strategy
 
-GEO techniques are not uniform across content types. The [arxiv GEO paper (KDD 2024)](https://arxiv.org/abs/2311.09735) found that quotation addition, statistics, and citing sources each produced 30–40% visibility gains — but the mechanism matters. A tutorial page gains most from HowTo schema and sequential answer-first steps. A pattern page gains from TechArticle schema and quotable assertions. Applying the wrong technique to the wrong format produces neutral or negative results.
+GEO techniques are not uniform across content types. The [arxiv GEO paper (KDD 2024)](https://arxiv.org/abs/2311.09735) found that quotation addition, statistics, and citing sources each produced 30–40% visibility gains. But the mechanism matters. A tutorial page gains most from HowTo schema and sequential answer-first steps. A pattern page gains from TechArticle schema and quotable assertions. Applying the wrong technique to the wrong format produces neutral or negative results.
 
 The formats this site produces map to three schema types:
 
@@ -34,7 +34,7 @@ The formats this site produces map to three schema types:
 | Anti-pattern page | FAQPage | Question-framed headings + direct answers |
 | API reference section | FAQPage | Parameter Q&A format |
 
-[Cloudflare AI Search](https://developers.cloudflare.com/ai-search/) is a concrete example of the retrieval system these checklists write for. It is a managed RAG service, available on every Cloudflare plan, that can crawl a site straight from its sitemap and serve results through a Workers binding, a REST API, or a built-in MCP endpoint ([website data source docs](https://developers.cloudflare.com/ai-search/configuration/data-source/website/)). Its indexing step uses recursive chunking — splitting at paragraph and sentence boundaries, then re-splitting anything that is still too long ([chunking docs](https://developers.cloudflare.com/ai-search/configuration/indexing/chunking/)) — which is exactly the boundary the [200–400-word atomic-chunking guidance](atomic-pages-and-chunking.md) exists to give it: a page with clean section breaks gets split on those breaks, while a page without them gets split at an arbitrary token count instead.
+[Cloudflare AI Search](https://developers.cloudflare.com/ai-search/) is a concrete example of the retrieval system these checklists write for. It is a managed RAG service, available on every Cloudflare plan, that can crawl a site straight from its sitemap and serve results through a Workers binding, a REST API, or a built-in MCP endpoint ([website data source docs](https://developers.cloudflare.com/ai-search/configuration/data-source/website/)). Its indexing step uses recursive chunking: it splits at paragraph and sentence boundaries, then re-splits anything still too long ([chunking docs](https://developers.cloudflare.com/ai-search/configuration/indexing/chunking/)). That is exactly the boundary the [200–400-word atomic-chunking guidance](atomic-pages-and-chunking.md) exists to give it. A page with clean section breaks gets split on those breaks; a page without them gets split at an arbitrary token count instead.
 
 ## New page checklist
 
@@ -105,7 +105,7 @@ Audit in priority order — highest citation impact first.
 
 ### Pattern and concept pages
 
-Pattern pages document a repeatable design — a mechanism, a structure, or an approach that applies across multiple contexts. GEO priority: quotable assertions and statistics, because AI tools retrieve concept definitions using short declarative matches — a direct one-sentence definition gives the retrieval model a high-confidence anchor.
+Pattern pages document a repeatable design: a mechanism, a structure, or an approach that applies across multiple contexts. GEO priority: quotable assertions and statistics, because AI tools retrieve concept definitions using short declarative matches. A direct one-sentence definition gives the retrieval model a high-confidence anchor.
 
 - Lead with a one-sentence definition the reader can quote verbatim
 - Include a quantitative outcome where available ("reduces [context pollution](../patterns/anti-patterns/session-partitioning.md) by eliminating N token categories")
@@ -128,7 +128,7 @@ Anti-pattern pages describe what goes wrong and why. GEO priority: `FAQPage` sch
 
 - Frame each H2 as a question the failing developer would ask ("Why does my agent lose context mid-task?")
 - Answer directly in the first sentence of each section
-- Include a "What to do instead" section — corrective guidance answers a different (and more actionable) query than the failure description alone, increasing the range of questions this page can answer.
+- Include a "What to do instead" section — corrective guidance answers a different (and more actionable) query than the failure description alone, so it increases the range of questions this page can answer.
 - Apply `FAQPage` schema with one `Question`/`Answer` pair per H2 section
 
 ### API reference sections
@@ -177,15 +177,15 @@ GEO techniques developed for general web content do not transfer uniformly to al
 
 **Why does the same GEO technique produce different results across content formats?**
 
-Because the arxiv GEO paper (KDD 2024) measured gains for quotation addition, statistics, and citing sources at 30–40% overall, but that average hides format-specific mechanics: tutorials gain most from HowTo schema and sequential steps, pattern pages gain from TechArticle schema and quotable assertions, and anti-pattern or reference pages gain from FAQPage Q&A structure. Applying the wrong technique to the wrong format produces neutral or negative results ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)).
+Because the arxiv GEO paper (KDD 2024) measured gains for quotation addition, statistics, and citing sources at 30–40% overall, but that average hides format-specific mechanics. Tutorials gain most from HowTo schema and sequential steps. Pattern pages gain from TechArticle schema and quotable assertions. Anti-pattern or reference pages gain from FAQPage Q&A structure. Applying the wrong technique to the wrong format produces neutral or negative results ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)).
 
 **When does HowTo schema hurt a tutorial page instead of helping?**
 
-HowTo schema works well for a tutorial that covers one self-contained task, where numbered steps and a totalTime estimate map cleanly onto the page. Multi-page tutorials or modular guides don't compress into a single HowTo block — forcing the schema onto them produces malformed structured data instead of a clean win, so skip it for those formats.
+HowTo schema works well for a tutorial that covers one self-contained task, where numbered steps and a totalTime estimate map cleanly onto the page. Multi-page tutorials or modular guides do not compress into a single HowTo block. Forcing the schema onto them produces malformed structured data, so skip it for those formats.
 
 **Do narrow API reference pages need a statistic to satisfy GEO?**
 
-No. The GEO paper's statistics gains were measured on general web content ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)), not narrow technical references. For a page documenting a single API parameter or one error code, forcing in a quantitative claim that doesn't fit the section degrades readability without a confirmed citation benefit — skip the statistic requirement there.
+No. The GEO paper's statistics gains were measured on general web content ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)), not narrow technical references. For a page documenting a single API parameter or one error code, forcing in a quantitative claim that does not fit the section degrades readability without a confirmed citation benefit. Skip the statistic requirement there.
 
 ## Sources
 

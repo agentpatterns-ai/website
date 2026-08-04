@@ -1,7 +1,7 @@
 ---
 title: "Preempting Agentic PR Rejection by Failure-Mode Category"
 term: "Preempting Agentic PR Rejection"
-description: "A 14-reason taxonomy of why agent-authored fix PRs get rejected — and which preemption practices actually move which categories of failure."
+description: "A 14-reason taxonomy of why agent-authored fix PRs get rejected, and which preemption practices move which categories of failure."
 tags:
   - code-review
   - arxiv
@@ -39,7 +39,7 @@ The four categories have different causal roots, so preemption prompts only move
 2. CI validation instructions tell the agent how to run tests and confirm the fix without introducing breaking changes. This targets Technical Issues.
 3. Task prioritization before dispatch filters out low-priority, superseded, or stale-on-arrival issues. This targets the Low-priority and Superseded sub-reasons under Relevance of Fix.
 
-Inactivity (17.3% of the sample, the single largest cause) is a workflow-attention failure, not a fix-content failure, so no prompt change reduces it. Provider-Related rejections (agent failure 7.5%, rate limit 1.0%) are infrastructure failures, and no prompt addresses them.
+The three practices above do not touch Inactivity or Provider-Related rejections; When this backfires explains why.
 
 ## Why it works
 
@@ -51,10 +51,10 @@ Preemption prompts target only the Implementation and Technical-Issue buckets, r
 
 - Greenfield or single-purpose repos without an established convention set: the instruction file has nothing to encode beyond generic advice, and authoring it costs more than the rejections it prevents.
 - Silent-reject reviewers: 67.9% of rejected PRs carry no reviewer feedback ([arXiv:2602.04226](https://arxiv.org/abs/2602.04226)), so instructions cannot address rejection reasons the reviewer never states.
-- Inactivity rejections (17.3% of the sample): reviewer attention and triage cadence drive these, not PR content, so preemption shifts only the workflow side.
+- Inactivity rejections (17.3% of the sample): reviewer attention and triage cadence drive these, so preemption shifts only the workflow side.
 - Provider-side rejections (agent failure 7.5%, rate limit 1.0%): no prompt can stop the agent from going down or running out of quota.
-- Low-priority and Superseded fixes: a task-routing problem, not a fix-quality problem. A better fix does not change the outcome, because the issue should not have gone to an agent at all. See [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) for the productivity-paradox framing.
-- Different sampling, different headline: a separate empirical study of fix-related PRs measures a 65% merge rate (Codex 81.6%, Copilot 42.4%, Devin 42.9%) on a different sample ([arXiv:2602.00164](https://arxiv.org/pdf/2602.00164)). The 46.41% rejection figure is specific to AIDev's fix-PR slice, so treat the headline as a calibration target, not a universal constant.
+- Low-priority and Superseded fixes: a task-routing problem. A better fix does not change the outcome, because the issue should not have gone to an agent at all. See [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) for the productivity-paradox framing.
+- Different sampling, different headline: a separate empirical study of fix-related PRs measures a 65% merge rate (Codex 81.6%, Copilot 42.4%, Devin 42.9%) on a different sample ([arXiv:2602.00164](https://arxiv.org/pdf/2602.00164)). The 46.41% rejection figure is specific to AIDev's fix-PR slice; treat it as a calibration target for that sample.
 
 The paper measures rejection causes, not the causal effect of any preemption intervention. No study yet measures how much adding `.github/copilot-instructions.md` reduces the rejection rate. The taxonomy motivates the practice well, but an A/B comparison has not validated it.
 
@@ -81,15 +81,15 @@ A preemption-shaped instruction file carries three load-bearing sections.
 - Run `<project lint command>` and confirm no new warnings.
 ```
 
-The Approach-hints and Approaches-to-avoid blocks target Implementation Issues; the Validation block targets Technical Issues. Nothing in the file addresses Inactivity, Superseded, or Provider-Related failures — those need workflow-side or infrastructure changes.
+The Approach-hints and Approaches-to-avoid blocks target Implementation Issues; the Validation block targets Technical Issues. Nothing in the file addresses Inactivity, Superseded, or Provider-Related failures. Those need workflow-side or infrastructure changes.
 
 ## Key Takeaways
 
-- 46.41% of agent-authored fix PRs in the AIDev sample are rejected; the reasons cluster into 14 specific causes across four categories.
-- Implementation Issues (10.1%) and Technical Issues (7.2%) are the buckets that respond to preemption prompts — roughly 17 percentage points of the rejection rate.
-- Inactivity (17.3%) is the single largest sub-reason and is a workflow-attention failure, not a content failure.
-- 67.9% of rejected PRs lack explicit reviewer feedback, so the prescription set is grounded on a minority of cases.
-- Preemption practices — approach hints, CI validation instructions, pre-dispatch prioritization — target specific buckets; treat them as partial mitigations, not universal merge-rate boosters.
+- Implementation Issues (10.1%) and Technical Issues (7.2%) are the only buckets preemption prompts move; together they sum to 17.3 points, about the same share as Inactivity alone (17.3%), the single largest cause and one no prompt touches. Preemption's upside is capped near the size of the one problem it cannot solve.
+- 67.9% of rejected PRs carry no reviewer feedback, so most rejection causes on your own repo will not map cleanly onto this taxonomy. Check your own PRs before writing an instruction file to fix a guessed cause.
+- No study has measured whether adding an instruction file reduces rejections. The taxonomy motivates the three preemption practices; it does not validate them. Treat them as a plausible fix pending an A/B study.
+- A differently sampled study of the same rejection phenomenon measured a 65% merge rate against this page's 46.41% rejection figure. Recalibrate against your own repo's numbers before trusting either headline.
+- Filter out low-priority and superseded issues before dispatch. No fix quality changes an outcome that routing already decided.
 
 ## Related
 

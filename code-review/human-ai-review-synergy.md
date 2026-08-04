@@ -15,7 +15,7 @@ maturity: emerging
 
 # Human-AI Review Synergy
 
-> AI reviewer suggestions are adopted at 16.6% versus 56.5% for humans — but the gap is a design input, not a failure. Structure collaboration around measured strengths.
+> AI reviewer suggestions are adopted at 16.6% versus 56.5% for humans. Structure human-AI review collaboration around that measured gap.
 
 ## The evidence
 
@@ -23,7 +23,7 @@ An empirical study of 278,790 code review conversations across 300 GitHub projec
 
 ### Adoption rate gap
 
-Human suggestions are adopted 56.5% of the time versus 16.6% for AI — a 39.9 percentage point gap. Over half of unadopted AI suggestions are incorrect or addressed through alternative developer fixes ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). AI review output requires triage — not equivalence to a human comment.
+Human suggestions are adopted 56.5% of the time versus 16.6% for AI — a 39.9 percentage point gap. Over half of unadopted AI suggestions are incorrect or addressed through alternative developer fixes ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). AI review output requires triage before a developer acts on it.
 
 ### Complexity cost
 
@@ -31,7 +31,7 @@ Adopted AI suggestions produce larger increases in cyclomatic complexity (+0.085
 
 ### Verbosity and focus
 
-AI agents produce 29.6 tokens per line of code reviewed versus 4.1 for humans — a 7x difference ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). Over 95% of AI comments target code improvement or defect detection, while humans spread across understanding questions (17-31%), knowledge transfer (4-6%), testing feedback, and social communication ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). AI review misses mentoring, architectural questioning, and team knowledge sharing.
+AI agents produce 29.6 tokens per line of code reviewed versus 4.1 for humans — a 7x difference ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). Over 95% of AI comments target code improvement or defect detection ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). Humans spread across understanding questions (17-31%), knowledge transfer (4-6%), testing feedback, and social communication ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). AI review misses mentoring, architectural questioning, and team knowledge sharing.
 
 ### Conversation dynamics
 
@@ -54,35 +54,35 @@ flowchart LR
 
 The data supports a specific model.
 
-AI first, human last. AI agents handle the mechanical first pass — defect detection and code improvement suggestions. The human reviewer makes the final decision, covering design judgment, knowledge transfer, and architectural fit that AI misses ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)).
+AI first, human last. AI agents handle the mechanical first pass — defect detection and code improvement suggestions. The human reviewer makes the final decision, covering the design judgment and team context that AI misses ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)).
 
 Triage AI output rather than rubber-stamping it. With a 16.6% adoption rate and over half of rejections caused by incorrect suggestions, treating AI review output as a todo list works against you. Evaluate each suggestion on its own.
 
-Monitor the effect on complexity. Track whether adopted AI suggestions increase cyclomatic complexity or code size more than human suggestions do. A technically correct suggestion can still harm the architecture.
+Track whether adopted AI suggestions increase cyclomatic complexity or code size more than human suggestions do. A technically correct fix can still harm the architecture.
 
-Constrain AI verbosity. At 7x the tokens per line of code, unconstrained AI review output creates the same alert fatigue that [signal-over-volume design](signal-over-volume-in-ai-review.md) addresses. Configure review agents with confidence thresholds and severity filters.
+At 7x the tokens per line of code, unconstrained AI review output creates the same alert fatigue that [signal-over-volume design](signal-over-volume-in-ai-review.md) addresses. Configure review agents with confidence thresholds and severity filters to control it.
 
 Use multi-agent verification. A second AI agent that validates the first agent's findings can filter incorrect suggestions before they reach the developer, which reduces triage load. This connects to the [committee review pattern](committee-review-pattern.md). When both agents share the same training distribution and no executable specification anchors the review, correlated failures can echo rather than cancel ([arxiv:2603.25773](https://arxiv.org/abs/2603.25773)).
 
 ## When this backfires
 
-The AI-first, human-last model adds triage cost to every PR. In high-velocity repositories where AI suggestion quality is low (below 10% adoption), the developer triage burden can exceed the defect-catch benefit — measure adoption rates per-repo before committing to the pattern.
+The AI-first, human-last model adds triage cost to every PR. In high-velocity repositories where AI suggestion quality is low (below 10% adoption), the developer triage burden can exceed the defect-catch benefit. Measure adoption rates per-repo before committing to the pattern.
 
-When AI-generated code is reviewed by AI agents from the same model family, correlated failures emerge: the reviewing agent reasons from the same training distribution as the generating agent and misses the same classes of error ([arxiv:2603.25773](https://arxiv.org/abs/2603.25773)). Executable specifications or cross-family agent panels mitigate this.
+When AI-generated code is reviewed by AI agents from the same model family, correlated failures emerge. The reviewing agent reasons from the same training distribution as the generating agent and misses the same classes of error ([arxiv:2603.25773](https://arxiv.org/abs/2603.25773)). Executable specifications or cross-family agent panels mitigate this.
 
-Teams without confidence threshold or severity filter tooling will experience the 7x verbosity gap as alert fatigue that degrades trust in AI review output over time, reducing effective adoption below the 16.6% baseline.
+Teams without confidence threshold or severity filter tooling will experience the 7x verbosity gap as alert fatigue. That fatigue degrades trust in AI review output over time and pushes effective adoption below the 16.6% baseline.
 
 ## Why it works
 
-AI agents excel at pattern-matching defect databases and applying consistent rules without fatigue. Human reviewers contribute judgment AI lacks: architectural fit, knowledge transfer, and evolving team conventions. The sequential model works because AI pre-triage reduces the human reviewer's cognitive load — known-pattern defects are addressed first, freeing attention for higher-level concerns. The data confirms the role division: over 95% of AI comments target defects and improvements, while human comments distribute across understanding, knowledge transfer, and design ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)).
+AI agents excel at pattern-matching defect databases and applying consistent rules without fatigue. Human reviewers contribute judgment AI lacks: architectural fit, knowledge transfer, and evolving team conventions. The sequential model works because AI pre-triage reduces the human reviewer's cognitive load: known-pattern defects are addressed first. The data backs the role split: AI comments concentrate on defects and improvements, while human comments cover far more ground ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)).
 
 ## Key Takeaways
 
-- AI review suggestions are adopted at one-third the rate of human suggestions (16.6% vs 56.5%) — design workflows around this reality
+- AI reviewer suggestions are adopted at one-third the rate of human suggestions (16.6% vs 56.5%) — triage every suggestion before treating it as a fix
 - Adopted AI suggestions increase code complexity more than human suggestions — monitor for technical debt accumulation
-- AI review covers only two categories (defects and improvements) while humans provide mentoring, knowledge transfer, and architectural feedback
-- The human-last principle ensures design judgment and team context inform the merge decision
-- 85-87% of AI reviews end without discussion — AI review is a broadcast, not a conversation
+- AI review covers only two categories (defects and improvements) — mentoring, knowledge transfer, and architectural feedback stay with the human reviewer
+- Route the final merge decision to a human reviewer even when AI pre-triage looks clean — architectural fit and team context are what AI misses
+- 85-87% of AI reviews end without follow-up discussion — treat an AI comment as a one-shot signal and route anything that needs debate straight to a human reviewer
 
 ## Related
 

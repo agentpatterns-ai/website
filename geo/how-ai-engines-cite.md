@@ -21,7 +21,7 @@ maturity: established
 
 Learn it hands-on with the [Four Engines, Four Backends guided lesson](https://learn.agentpatterns.ai/geo/four-engines-four-backends/), which includes quizzes.
 
-Only 11% of cited domains appear on both ChatGPT and Perplexity for identical queries ([Whitehat SEO, 2025](https://whitehat-seo.co.uk/blog/ai-engines-comparison-citations)). Each platform runs a different search backend, applies different freshness weights, and uses a different crawler. Work out which engine you are targeting before you optimize.
+Only 11% of cited domains appear on both ChatGPT and Perplexity for identical queries ([Whitehat SEO, 2025](https://whitehat-seo.co.uk/blog/ai-engines-comparison-citations)). Search backends, freshness weights, and crawlers differ by platform. Work out which engine you are targeting before you optimize.
 
 ## The crawler split: training vs retrieval
 
@@ -75,7 +75,7 @@ Most AI crawlers cannot render JavaScript — only Googlebot, Applebot, and Bing
 | ChatGPT | 7.92 | 42,592 |
 | Microsoft Copilot | 2.47 | 111 |
 
-## What drives citation across all platforms
+## What predicts citation across all platforms
 
 - Brand search volume — strongest cross-platform predictor (0.334 correlation), outperforming backlink metrics ([The Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/))
 - Content freshness — AI-cited URLs run 25.7% fresher than organic search results, so older pages drop off across all platforms ([Ahrefs, 2026](https://ahrefs.com/blog/do-ai-assistants-prefer-to-cite-fresh-content/))
@@ -83,7 +83,7 @@ Most AI crawlers cannot render JavaScript — only Googlebot, Applebot, and Bing
 - Factual density — specific claims, named sources, verifiable data
 - Multi-platform presence — strong cross-platform citation presence compounds ([The Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/))
 
-## How fresh does content need to be?
+## How fresh content needs to be
 
 Freshness is now measured, not assumed. Across 17 million citations spanning seven platforms (February–March 2026), AI-cited URLs averaged 1,064 days old versus 1,432 days for organic SERP results — 25.7% fresher ([Ahrefs, 2026](https://ahrefs.com/blog/do-ai-assistants-prefer-to-cite-fresh-content/)). About half of cited pages had been published or updated within the prior 13 weeks. ChatGPT skews toward the newest content, while Google AI Overviews are the exception — citing older pages than the other engines ([Ahrefs, 2026](https://ahrefs.com/blog/do-ai-assistants-prefer-to-cite-fresh-content/)).
 
@@ -101,13 +101,13 @@ Citation profiles follow retrieval architecture. ChatGPT inherits Bing ranking s
 
 ## FAQ
 
-**Why don't ChatGPT and Perplexity cite the same sources for the same query?**
+**Why do ChatGPT and Perplexity not cite the same sources for the same query?**
 
 Only 11% of cited domains appear on both ChatGPT and Perplexity for identical queries ([Whitehat SEO, 2025](https://whitehat-seo.co.uk/blog/ai-engines-comparison-citations)), because each platform runs its own retrieval backend — ChatGPT inherits Bing's rankings while Perplexity crawls its own index. Winning both requires different content architecture, not the same page with minor tweaks.
 
 **Why does blocking an AI crawler sometimes have no effect on citation?**
 
-Every major platform runs separate crawlers for training and real-time citation — for example Anthropic uses `anthropic-ai`/`ClaudeBot` for training but `Claude-SearchBot` for retrieval ([Momentic AI Crawlers Guide](https://momenticmarketing.com/blog/ai-search-crawlers-bots)). Blocking the training bot in `robots.txt` while leaving the retrieval bot open doesn't remove a page from citation results — it only stops that page from feeding future model training data.
+Every major platform runs separate crawlers for training and real-time citation — for example Anthropic uses `anthropic-ai`/`ClaudeBot` for training but `Claude-SearchBot` for retrieval ([Momentic AI Crawlers Guide](https://momenticmarketing.com/blog/ai-search-crawlers-bots)). Blocking the training bot in `robots.txt` while leaving the retrieval bot open does not remove a page from citation results — it only stops that page from feeding future model training data.
 
 **Which AI platform cites the most sources per response?**
 

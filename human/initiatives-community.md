@@ -15,7 +15,7 @@ maturity: adopted
 
 ## Why community tracking works
 
-New patterns, tools, and governance frameworks appear weekly — faster than any one practitioner can track. Release notes record what shipped. Communities show what is being designed. Standards bodies and open-source repositories reveal architectural decisions weeks to months before tooling settles. Practitioners who read agents.md discussions while the spec was still a draft understood AGENTS.md conventions before tool support was common. That lowered their cost to adopt the conventions once support landed. Governance follows the same pattern: o16g tracks how organizations respond to jumps in AI capability, and those responses come months before enterprise tooling mandates. Courses and practitioners on social channels act as a shared sensing layer. They meet capability changes in daily work and report friction or breakthroughs faster than any central source can.
+New patterns, tools, and governance frameworks appear weekly — faster than any one practitioner can track. Release notes record what shipped. Communities show what is being designed. Standards bodies and open-source repositories reveal architectural decisions weeks to months before tooling settles. Practitioners who read agents.md discussions while the spec was still a draft understood AGENTS.md conventions before tool support was common. That lowered their cost to adopt the conventions once support landed. Governance follows the same pattern: o16g tracks how organizations respond to jumps in AI capability, and those responses come months before enterprise tooling mandates. Courses and practitioners on social channels meet capability changes in daily work. They report friction or breakthroughs faster than any central source can.
 
 ## Standards and open protocols
 
@@ -43,7 +43,7 @@ New patterns, tools, and governance frameworks appear weekly — faster than any
 
 ## What to watch
 
-The signals that matter in this space:
+The signals that matter:
 
 - Standards adoption — whether agents.md and agentskills.io gain broad tool support decides whether cross-tool portability becomes practical
 - Governance frameworks — o16g tracks how organizations set guardrails, which is the leading indicator for enterprise adoption patterns

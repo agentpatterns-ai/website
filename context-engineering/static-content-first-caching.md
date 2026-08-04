@@ -30,7 +30,7 @@ When the static prefix exactly matches a cached prefix, the provider recomputes 
 
 ## What goes where
 
-| Content Type | Position | Why |
+| Content type | Position | Why |
 |--------------|----------|-----|
 | System instructions | Start of prompt | Static, changes rarely |
 | Tool schemas and definitions | After instructions | Static per session |
@@ -43,25 +43,22 @@ When the static prefix exactly matches a cached prefix, the provider recomputes 
 
 Prompt caching needs exact prefix matches. Common cache-busting mistakes include:
 
-Non-deterministic tool enumeration: [OpenAI found a bug in Codex](https://openai.com/index/unrolling-the-codex-agent-loop/) where [MCP](../standards/mcp-protocol.md) tools were listed in non-deterministic order. This caused a cache miss on every call, because the tool list prefix was never the same twice. Enumerate tool definitions in a consistent, deterministic order.
-
-Model switching: Codex injects model-specific instructions early in the prompt. Changing the target model mid-conversation busts the cache, because the injected instructions differ. If you need to switch models, treat it as a context boundary.
-
-Prefix mutation: any change to content earlier in the prompt than the current turn [invalidates the cache](kv-cache-invalidation-local-inference.md) for everything after it. Even reordering two static sections that produce identical content busts the cache if the character sequences differ.
-
-Stateless against stateful: some implementations send the full conversation history on every call rather than referencing a conversation ID. A full resend keeps all content available for caching but incurs quadratic network traffic. Referencing a `previous_response_id` cuts network traffic but loses the caching opportunity for historical content.
+- Non-deterministic tool enumeration: [OpenAI found a bug in Codex](https://openai.com/index/unrolling-the-codex-agent-loop/) where [MCP](../standards/mcp-protocol.md) tools were listed in non-deterministic order. This caused a cache miss on every call, because the tool list prefix was never the same twice. Enumerate tool definitions in a consistent, deterministic order.
+- Model switching: Codex injects model-specific instructions early in the prompt. Changing the target model mid-conversation busts the cache, because the injected instructions differ. If you need to switch models, treat it as a context boundary.
+- Prefix mutation: any change to content earlier in the prompt than the current turn [invalidates the cache](kv-cache-invalidation-local-inference.md) for everything after it. Even reordering two static sections that produce identical content busts the cache if the character sequences differ.
+- Stateless versus stateful: some implementations send the full conversation history on every call rather than referencing a conversation ID. A full resend keeps all content available for caching but incurs quadratic network traffic. Referencing a `previous_response_id` cuts network traffic but loses the caching opportunity for historical content.
 
 ## Tradeoffs
 
 Optimizing for cache hits takes discipline in how you build the prompt:
 
-- Tool definitions must hold a deterministic order and stay unchanged during a session
+- Tool definitions must stay in a deterministic order, unchanged during a session
 - System instructions cannot be personalized per call, because any change busts the prefix cache
 - You must keep the split between static and dynamic sections as the harness evolves
 
 For short agent sessions (5 to 10 tool calls), the cache optimization may not be worth the engineering overhead. For long-running sessions or high-volume production loops, [cache reads cost 10% of base input token price](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), and studies on agentic workloads report 41 to 80% total cost reductions across providers ([Don't Break the Cache, 2026](https://arxiv.org/abs/2601.06007)).
 
-Static-first ordering is necessary but not sufficient. The same study finds that naive full-context caching — caching everything, including volatile tool results — can increase latency. Strategic cache-block control that excludes dynamic tool results and places variable content deliberately gives more consistent gains ([Don't Break the Cache, 2026](https://arxiv.org/abs/2601.06007)). Order the prefix static-first, then be selective about which dynamic blocks you cache at all.
+Static-first ordering is necessary but not sufficient. The same study finds that naive full-context caching (caching everything, including volatile tool results) can increase latency. Strategic cache-block control that excludes dynamic tool results and places variable content deliberately gives more consistent gains ([Don't Break the Cache, 2026](https://arxiv.org/abs/2601.06007)). Order the prefix static-first, then be selective about which dynamic blocks you cache at all.
 
 ## Implementation checklist
 

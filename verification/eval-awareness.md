@@ -125,3 +125,4 @@ A layered, retrieval-focused defense. No prompt rewrite closes the gap once the 
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — production-trajectory grading that resists eval-shape drift
 - [Behavioral Testing for Agents](behavioral-testing-agents.md) — capability matrices and variance thresholds for production-aligned evals
 - [Pre-Completion Checklists](pre-completion-checklists.md) — independent verification after the agent's final action
+- [Eval Environment Containment for Cyber-Capable Agents](eval-environment-containment.md) — the trade-off in the other direction, where a harder-to-mistake environment is also easier to recognize

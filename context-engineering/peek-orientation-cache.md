@@ -65,9 +65,9 @@ The fixed token budget is load-bearing — without the evictor the cache grows m
 
 ## Why it works
 
-Re-entry into the same large context is the dominant cost driver for recurring agent workloads — each session otherwise re-pays for discovery. A constant-sized artifact amortizes that discovery across sessions, and the fixed token budget stops it from crowding out task-specific context. The savings come from skipping re-discovery, not from better reasoning: PEEK is a cost-reduction pattern for repeated re-entry, not a reasoning enhancement or a substitute for retrieval and tool design.
+Re-entry into the same large context is the dominant cost driver for recurring agent workloads — each session otherwise re-pays for discovery. A constant-sized artifact amortizes that discovery across sessions, and the fixed token budget stops it from crowding out task-specific context. PEEK cuts cost for repeated re-entry by skipping re-discovery. It does not improve reasoning, and it does not replace retrieval or tool design.
 
-In the PEEK paper's evaluation, the cache delivered 6.3–34.0% improvement on long-context reasoning and information-aggregation tasks and 6.0–14.0% on in-context learning, against [ACE](evolving-playbooks.md) — the strongest prior framework for evolving prompts — with 93–145 fewer iterations and 1.7–5.8× lower cost, generalizing across models and architectures including OpenAI Codex. These numbers come from one team's evaluation and are not yet independently replicated; treat them as a directional signal. ([Gu et al., 2026](https://arxiv.org/abs/2605.19932))
+In the PEEK paper's evaluation, the cache improved long-context reasoning and information-aggregation tasks by 6.3–34.0% and in-context learning by 6.0–14.0%, against [ACE](evolving-playbooks.md) — the strongest prior framework for evolving prompts. It also cut iterations by 93–145 and cost by 1.7–5.8×, and results held across models and architectures, including OpenAI Codex. These numbers come from one team's evaluation and are not yet independently replicated; treat them as a directional signal. ([Gu et al., 2026](https://arxiv.org/abs/2605.19932))
 
 ## When this backfires
 
@@ -100,15 +100,15 @@ schema_notes:
 last_verified: "session-014"
 ```
 
-Without the cache, every session re-discovers the entry points, re-reads the config to find the constants, and re-deduces the session model. With the cache, the same orientation rides along for free at the cost of a handful of tokens — provided a session-end hook fails when `last_verified` lags behind `git log -- src/auth/`.
+Every session without the cache re-discovers the entry points, re-reads the config for the constants, and re-deduces the session model. The cache carries that orientation forward for the cost of a handful of tokens, provided a session-end hook fails when `last_verified` lags behind `git log -- src/auth/`.
 
 ## Key Takeaways
 
-- PEEK caches *orientation knowledge of the recurring context* — distinct from trajectory replay, strategy memory, or token-fitted repo maps.
+- Choose among orientation patterns by what you need stored: PEEK for orientation knowledge of the context, Evolving Playbooks for trajectories, a Repository Map Pattern for per-session symbol maps.
 - The cache pays off only under three conditions together: repeated re-entry, stable-enough context, and a working invalidation surface.
-- The Distiller / Cartographer / Evictor pipeline keeps the artifact under a fixed token budget; without the evictor the cache becomes a long-context problem of its own.
+- Check for an eviction step before trusting a "PEEK-style" cache: a Distiller/Cartographer pair with no Evictor will grow past its token budget and reintroduce the lost-in-the-middle problem it was meant to avoid.
 - Reported gains versus ACE are substantial (6.3–34.0% with 1.7–5.8× lower cost) but single-source; treat as a directional signal.
-- Where the conditions do not hold, per-session orientation (repo map, agentic search, seeded breadcrumbs) is the safer default.
+- If any condition fails, skip the cache and default to per-session orientation — a repo map, agentic search, or seeded breadcrumbs — rather than building one anyway.
 
 ## Related
 

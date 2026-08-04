@@ -16,7 +16,7 @@ maturity: emerging
 
 # Narrative Problem Reformulation for Code Generation
 
-> Reformulate a scattered code-generation prompt into a coherent narrative with a task overview, constraints, and examples before passing it to the model — but only where the evidence shows it helps, not as a blanket default.
+> Reformulating a fragmented code prompt into a narrative (task overview, constraints, examples) helps code LLMs choose better algorithms, but only when the evidence supports it.
 
 ## The technique
 
@@ -44,13 +44,13 @@ Across 11 models (Gemini-2.5-Flash, GPT-4.1-mini, Claude-3.5-Haiku, DeepSeek-Cod
 
 The gain concentrates on harder competitive-programming problems, not on well-structured textbook tasks. HumanEval — where problem statements are already short and separable — shows the smallest delta.
 
-The authors report that benefits "depend on narrative coherence and genre alignment": replacing aligned genres (fantasy adventure, sci-fi exploration, mathematical mystery) with incongruent ones (administrative, legal, memorial) produces a significant performance drop ([arxiv:2604.14631](https://arxiv.org/abs/2604.14631)). The improvement is not a free effect of extra tokens — it requires a narrative that matches the problem's algorithmic shape.
+The authors report that benefits "depend on narrative coherence and genre alignment": replacing aligned genres (fantasy adventure, sci-fi exploration, mathematical mystery) with incongruent ones (administrative, legal, memorial) produces a significant performance drop ([arxiv:2604.14631](https://arxiv.org/abs/2604.14631)). The gain requires a narrative that matches the problem's algorithmic shape; added tokens alone do not produce it.
 
 ## Why it works
 
 Code LLMs are measurably fragile to surface framing. Independent work on LLM4Code robustness characterizes this as "reasoning fragility" concentrated at reasoning-to-code, symbolic-commitment, and algorithmic-articulation points ([Liu et al., 2026](https://arxiv.org/abs/2604.12214)). Perturbing the input shifts which algorithms the model selects and where it commits implementation errors — in both directions.
 
-StoryCoder's stated mechanism: co-locating task, constraints, and examples in a coherent narrative reduces the structural reconstruction cost the model would otherwise pay, front-loading algorithmic commitment before code generation begins ([arxiv:2604.14631](https://arxiv.org/abs/2604.14631)). This aligns with the broader finding that explicit structural scaffolds outperform free-form prose in code generation — Structured CoT with sequence/branch/loop placeholders beats plain CoT by up to 13.79% in Pass@1 ([Li et al., arxiv:2305.06599](https://arxiv.org/abs/2305.06599)). Narrative reformulation applies the scaffolding insight at the input layer rather than the reasoning layer. The [Task Framing Irrelevance Fallacy](../fallacies/task-framing-irrelevance-fallacy.md) page documents the same underlying sensitivity.
+StoryCoder's stated mechanism: co-locating task, constraints, and examples in a coherent narrative reduces the structural reconstruction cost the model would otherwise pay. That front-loads algorithmic commitment before code generation begins ([arxiv:2604.14631](https://arxiv.org/abs/2604.14631)). This aligns with the broader finding that explicit structural scaffolds outperform free-form prose in code generation: Structured CoT with sequence/branch/loop placeholders beats plain CoT by up to 13.79% in Pass@1 ([Li et al., arxiv:2305.06599](https://arxiv.org/abs/2305.06599)). Narrative reformulation applies the scaffolding insight at the input layer rather than the reasoning layer. The [Task Framing Irrelevance Fallacy](../fallacies/task-framing-irrelevance-fallacy.md) page documents the same underlying sensitivity.
 
 ## When it helps
 
@@ -74,7 +74,13 @@ Measure before adopting. Run an A/B on the target model and task distribution co
 
 ## Relationship to adjacent techniques
 
-Narrative reformulation is an input-layer transform. Other scaffolding patterns operate at different layers: [Self-Discover Reasoning](../patterns/agent-design/self-discover-reasoning.md) transforms the reasoning layer; [CoT Robustness in Code Generation](../verification/cot-robustness-code-generation.md) covers the reasoning-trace layer with failure modes (lengthening, branching, simplification) that also apply when reformulation destabilizes smaller models; [Prompt Chaining](prompt-chaining.md) treats reformulation and generation as two gated chain steps. The research reports single-layer gains; it does not establish that stacking with SCoT or self-planning multiplies.
+Narrative reformulation is an input-layer transform. Other scaffolding patterns operate at different layers:
+
+- [Self-Discover Reasoning](../patterns/agent-design/self-discover-reasoning.md) transforms the reasoning layer.
+- [CoT Robustness in Code Generation](../verification/cot-robustness-code-generation.md) covers the reasoning-trace layer, with failure modes (lengthening, branching, simplification) that also apply when reformulation destabilizes smaller models.
+- [Prompt Chaining](prompt-chaining.md) treats reformulation and generation as two gated chain steps.
+
+The research reports single-layer gains; it does not establish that stacking with SCoT or self-planning multiplies.
 
 ## Example
 
@@ -108,13 +114,13 @@ from Station 1 to Station n, or report that no route exists.
   the optimal route is 1→2→3 at cost 10. Report 10, not 12.
 ```
 
-The reformulated version is not more information — it is the same information reorganized so the algorithmic shape (weighted shortest path, Dijkstra-class) is visible before the model commits to code. The genre ("sci-fi exploration") is chosen to match the graph-traversal framing; replacing it with an incongruent genre drops measured performance ([arxiv:2604.14631](https://arxiv.org/abs/2604.14631)).
+The reformulated version contains the same information as the original, reorganized so the algorithmic shape (weighted shortest path, Dijkstra-class) is visible before the model commits to code. The genre ("sci-fi exploration") is chosen to match the graph-traversal framing; replacing it with an incongruent genre drops measured performance ([arxiv:2604.14631](https://arxiv.org/abs/2604.14631)).
 
 ## Key Takeaways
 
-- Narrative reformulation rewrites a fragmented problem into task overview, constraints, and examples bound by a genre matched to the algorithm; reported 18.7% average zero-shot pass@10 gain across 11 models.
-- Gains concentrate on harder competitive-programming benchmarks (CodeForces +9.62pp) and shrink on simpler ones (HumanEval +8.45pp).
-- Genre alignment matters — incongruent genres drop measured performance, so the mechanism is structural coherence, not added verbosity.
+- Budget an extra inference pass before adopting narrative reformulation: it rewrites a fragmented problem into task overview, constraints, and examples bound by a genre matched to the algorithm, for a reported 18.7% average zero-shot pass@10 gain across 11 models.
+- Weight this technique toward hard competitive-programming problems: gains run largest on CodeForces (+9.62pp) and smallest on already-structured HumanEval tasks (+8.45pp).
+- Match the narrative genre to the problem: incongruent genres drop measured performance, confirming the mechanism is structural coherence rather than added verbosity.
 - Pass@1 deltas, smaller code LLMs, strict-schema tool calling, and latency-sensitive loops are failure conditions not covered by the reported gains — measure before adopting.
 - Treat reformulation as an input-layer scaffold alongside [Self-Discover Reasoning](../patterns/agent-design/self-discover-reasoning.md) and [Structured CoT](../verification/cot-robustness-code-generation.md), not as a replacement or automatic stack.
 

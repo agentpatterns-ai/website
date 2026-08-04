@@ -88,25 +88,25 @@ Keyword density is a token cost: repetition consumes budget without adding seman
 - Small-brand cold-start: citation pools favor established earned media — Wikipedia, major press, G2-tier reviews. New brands must build that inventory before GEO techniques gain traction.
 - Model-specific variability: citation signals do not transfer uniformly across engines — a source prominent in ChatGPT may not appear in Gemini or Perplexity. Track per model.
 - Attribution bleed: brand-mention campaigns may also lift organic rankings, making the GEO contribution hard to isolate without prompt-based measurement.
-- Backlinks are not worthless: "weak predictor" is relative, not zero. Correlation analyses still find [link authority](topical-authority.md) carries a positive — if secondary — signal, well behind brand mentions but above it. Read the Direction column's "deprioritize" as reallocate away from, not abandon.
+- Backlinks are not worthless: "weak predictor" is relative, not zero. Correlation analyses still find [link authority](topical-authority.md) carries a positive but secondary signal, well behind brand mentions but above it. Read the Direction column's "deprioritize" as reallocate away from, not abandon.
 
 ## FAQ
 
 **Do lower-ranked sites benefit more from GEO than top-ranked sites?**
 
-Yes. The [Princeton GEO study](https://arxiv.org/html/2311.09735v3) found citation-oriented techniques produced a 115% visibility increase for lower-ranked sites, while top-ranked sites saw a 30% decrease. Rank position and AI citation are only weakly correlated, so a page that never cracks page one of search results can still be heavily cited inside AI-generated answers — and pages already dominating SERPs have less room, or even downside, to gain.
+Yes. The [Princeton GEO study](https://arxiv.org/html/2311.09735v3) found citation-oriented techniques produced a 115% visibility increase for lower-ranked sites, while top-ranked sites saw a 30% decrease. Rank position and AI citation are only weakly correlated, so a page that never cracks page one of search results can still be heavily cited inside AI-generated answers. Pages already dominating SERPs have less room, or even downside, to gain.
 
 **Why is it hard to measure whether GEO efforts are working?**
 
-AI citation share has no tracking standard equivalent to [Google Search Console](gsc-search-console-monitoring.md) — there's no unified dashboard reporting which prompts surfaced your brand. Campaigns can run for months before any lift becomes detectable, and attribution gets murkier still: a brand-mention push often lifts organic rankings at the same time, making it hard to isolate how much of the gain came from GEO work specifically.
+AI citation share has no tracking standard equivalent to [Google Search Console](gsc-search-console-monitoring.md) — there's no unified dashboard reporting which prompts surfaced your brand. Campaigns can run for months before any lift becomes detectable. Attribution gets murkier still: a brand-mention push often lifts organic rankings at the same time. That overlap makes it hard to isolate how much of the gain came from GEO work specifically.
 
 **Do citation signals carry over the same way across ChatGPT, Gemini, and Perplexity?**
 
-No. Citation signals don't transfer uniformly across engines — a source that ChatGPT cites prominently may not appear at all in Gemini or Perplexity's answers, since each model draws on different training data and retrieval sources. Track citation performance per model rather than assuming a single GEO campaign produces the same lift everywhere; treat each engine as a separate channel to measure.
+No. Citation signals do not transfer uniformly across engines. A source that ChatGPT cites prominently may not appear at all in Gemini or Perplexity's answers, since each model draws on different training data and retrieval sources. Track citation performance per model rather than assuming a single GEO campaign produces the same lift everywhere. Treat each engine as a separate channel to measure.
 
 **Should new brands expect quick GEO results?**
 
-Not immediately. Citation pools favor established earned media — Wikipedia, major press, and G2-tier reviews — that new brands haven't accumulated yet. A brand with no forum presence, no press coverage, and no review inventory has little for AI engines to cite, regardless of how well its own pages are structured. Expect a cold-start period spent building that off-site inventory before GEO techniques show traction.
+Not immediately. Citation pools favor established earned media — Wikipedia, major press, and G2-tier reviews — that new brands have not accumulated yet. A brand with no forum presence, no press coverage, and no review inventory has little for AI engines to cite, regardless of how well its own pages are structured. Expect a cold-start period spent building that off-site inventory before GEO techniques show traction.
 
 ## Key Takeaways
 

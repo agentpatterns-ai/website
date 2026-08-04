@@ -12,7 +12,7 @@ aliases:
   - handoff skill
   - cross-session handoff skill
   - slash-command handoff
-last_reviewed: 2026-06-12
+last_reviewed: 2026-08-03
 maturity: adopted
 ---
 
@@ -25,6 +25,8 @@ maturity: adopted
 The handoff skill is user-triggered and model-dispatched. You ask the agent to "hand off this work" and the model invokes the skill. The body directs it to compact the conversation into a temp file (`mktemp -t handoff-XXXXXX.md` in Matt Pocock's reference implementation), name the skills the next session should pre-load, and — critically — not re-state content already captured in PRDs, plans, ADRs, issues, or commits. Those are referenced by path or URL ([SKILL.md, mattpocock/skills](https://github.com/mattpocock/skills/blob/main/skills/productivity/handoff/SKILL.md)).
 
 It fires at an explicit transfer point with a no-duplication rule that prevents the most common failure: copying the whole transcript.
+
+AI Hero publishes a dedicated reference page for the skill ([AI Hero, /handoff](https://www.aihero.dev/skills-handoff)).
 
 ## Two invocation patterns
 

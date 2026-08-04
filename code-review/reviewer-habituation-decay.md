@@ -1,7 +1,7 @@
 ---
 title: "Reviewer Habituation in Agent PR Review"
 term: "Reviewer Habituation"
-description: "Repeat exposure to AI-authored PRs shifts within-reviewer approval rates up and comment volume down — diagnose with three co-moving signals and counter with structural guards, not exhortation."
+description: "Repeat exposure to AI-authored PRs shifts within-reviewer approval rates up and comment volume down. Diagnose the shift with three co-moving signals and counter it with structural guards, not exhortation."
 aliases:
   - within-reviewer scrutiny decay
   - longitudinal reviewer habituation
@@ -18,7 +18,7 @@ maturity: emerging
 
 # Reviewer Habituation in Agent PR Review
 
-> Repeat exposure to agent PRs lifts a reviewer's approval rate and cuts comments while latency grows — three co-moving signals separate habituation from trust gain.
+> Repeat exposure to agent PRs lifts a reviewer's approval rate and cuts comments while latency grows. Three co-moving signals separate habituation from trust gain.
 
 ## When this pattern applies
 
@@ -35,19 +35,19 @@ A within-reviewer longitudinal study on the AIDev dataset followed 400 repeat re
 | Inline-comment volume per review | down | 22% (p = 0.0014) |
 | Median review latency | up | 3.5× |
 
-Source dataset and methodology: AIDev ([arXiv:2602.09185](https://arxiv.org/abs/2602.09185)). The study controls for calendar time and reports PR size held flat across the window, closing the two obvious confounders — that agents simply got better, or that diffs got smaller.
+Source dataset and methodology: AIDev ([arXiv:2602.09185](https://arxiv.org/abs/2602.09185)). The study controls for calendar time and reports that PR size stayed flat across the window, which closes the two obvious confounders: that agents got better, or that diffs got smaller.
 
 ## The three-signal diagnostic
 
-Approval going up while comments go down can mean two opposite things. Rational trust calibration: the reviewer has learned which agent code is safe and is correctly approving more, faster, with less commentary. Habituation: the reviewer is offloading scrutiny under load while approving more, slowly, with less commentary. The signal that separates them is review latency direction. A 3.5× rise in time-to-decision alongside falling comments is incompatible with confident pattern-recognition; it is consistent with avoidance ([arXiv:2606.22721](https://arxiv.org/abs/2606.22721)). Track all three together — a single rising-approval-rate dashboard hides the difference.
+Approval going up while comments go down can mean two opposite things. Rational trust calibration: the reviewer has learned which agent code is safe and is correctly approving more, faster, with less commentary. Habituation: the reviewer is offloading scrutiny under load while approving more, slowly, with less commentary. The signal that separates them is review latency direction. A 3.5× rise in time-to-decision alongside falling comments is incompatible with confident pattern-recognition; it is consistent with avoidance ([arXiv:2606.22721](https://arxiv.org/abs/2606.22721)). Track all three together. A single rising-approval-rate dashboard hides the difference.
 
 ## Why it works
 
-Repeat exposure to plausibly-shaped agent output anchors a low-defect prior even when actual defect rates have not moved. Once the prior is anchored, the cognitive cost of overriding it — opening files, tracing the critical path, demanding evidence — rises faster than the perceived payoff, while the verbal commitment to "reviewing" stays intact. The result is reflexive habituation rather than trust calibration ([arXiv:2606.22721](https://arxiv.org/abs/2606.22721)). The pattern is the within-reviewer counterpart to two static effects this site already documents: alert fatigue past the rubber-stamp threshold ([Reviewer's Playbook for Agent-Authored Pull Requests](reviewers-playbook-agent-authored-prs.md)) and signal-ratio decay below 60% actionable comments ([CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md)). What is new is time: an individual reviewer's curve, not a population's snapshot.
+Repeat exposure to plausibly-shaped agent output anchors a low-defect prior even when actual defect rates have not moved. Once the prior is anchored, the cognitive cost of overriding it (opening files, tracing the critical path, demanding evidence) rises faster than the perceived payoff, while the verbal commitment to "reviewing" stays intact. The result is reflexive habituation rather than trust calibration ([arXiv:2606.22721](https://arxiv.org/abs/2606.22721)). The pattern is the within-reviewer counterpart to two static effects this site already documents: alert fatigue past the rubber-stamp threshold ([Reviewer's Playbook for Agent-Authored Pull Requests](reviewers-playbook-agent-authored-prs.md)) and signal-ratio decay below 60% actionable comments ([CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md)). What is new is time: an individual reviewer's curve, not a population's snapshot.
 
 ## Structural guards outperform exhortation
 
-The three signals are stable enough to design against, but no individual reviewer can correct habituation by trying harder — the mechanism is sub-deliberate ([arXiv:2606.22721](https://arxiv.org/abs/2606.22721)). Effective countermeasures move the work, not the resolve:
+The three signals are stable enough to design against, but no individual reviewer can correct habituation by trying harder. The mechanism is sub-deliberate ([arXiv:2606.22721](https://arxiv.org/abs/2606.22721)). Effective countermeasures move the work, not the resolve:
 
 - Rotate the reviewer-of-record on agent PRs. Fresh reviewers carry unaged priors. The same agent PR pool reviewed by a rotating panel breaks the within-reviewer anchoring the paper measures.
 - Route by risk, not by queue order. A learned diff-risk threshold and mandatory human review on high-risk diffs ([Risk-Score Threshold Calibration](risk-score-threshold-calibration.md)) keeps the highest-stakes PRs out of the habituated channel.
@@ -60,10 +60,10 @@ The longitudinal-decay finding rests on a single workshop preprint ([arXiv:2606.
 
 ## Key Takeaways
 
-- Within-reviewer approval rates rise (30.1% → 36.8%, p < 10⁻⁶) while comment volume falls 22% and latency triples — three co-moving signals that distinguish habituation from rational trust gain.
+- Within-reviewer approval rates rise (30.1% to 36.8%, p < 10⁻⁶) while comment volume falls 22% and latency triples. These three co-moving signals distinguish habituation from rational trust gain.
 - The 14.5 pp gap between first and tenth review episode for the same reviewer is the within-person effect; the population snapshot misses it.
 - The mechanism is sub-deliberate, so structural guards (rotation, risk-routing, scope limits, revert telemetry) outperform exhortation.
-- The finding is single-source (workshop preprint, AIDev dataset) — treat the size of the response as proportional to your repeat-exposure conditions.
+- The finding is single-source (workshop preprint, AIDev dataset). Treat the size of the response as proportional to your repeat-exposure conditions.
 
 ## Related
 

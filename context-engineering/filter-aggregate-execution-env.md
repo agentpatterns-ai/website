@@ -1,7 +1,7 @@
 ---
 title: "Filter and Aggregate Data in the Execution Environment"
 term: "Filter and Aggregate Data"
-description: "Run filtering and aggregation inside a code execution sandbox so only the relevant subset of data enters the model's context, reducing cost and latency."
+description: "Run filtering and aggregation inside a code execution sandbox so only the relevant subset of data enters the model's context. That cuts cost and latency."
 tags:
   - context-engineering
   - agent-design
@@ -19,7 +19,7 @@ Related lesson: [Code Mode](https://learn.agentpatterns.ai/mcp-server-design/cod
 
 ## The problem
 
-When an agent fetches a dataset to find a few matching records, the naive approach passes the whole dataset through the model's context. A 10,000-row dataset fetched to find three matching records wastes 9,997 rows of context. This caps the size of datasets an agent can reason about, and it raises cost in proportion.
+When an agent fetches a dataset to find a few matching records, the naive approach passes the whole dataset through the model's context. A 10,000-row dataset fetched to find three matching records wastes 9,997 rows of context. This caps the size of datasets an agent can reason about. It also raises cost in proportion.
 
 [Anthropic's MCP code execution research](https://www.anthropic.com/engineering/code-execution-with-mcp) describes running filtering and aggregation inside a sandboxed execution environment as the primary mechanism for keeping arbitrarily large datasets manageable.
 
@@ -35,7 +35,7 @@ graph TD
     D --> E[Agent reasons over result]
 ```
 
-The model sees only the output, not the intermediate data. The sandbox acts as a compute boundary that keeps large datasets out of context.
+The model sees only the output, not the intermediate data. The sandbox is a compute boundary: it keeps large datasets out of context.
 
 ## What can be processed in the sandbox
 
@@ -83,10 +83,10 @@ It does not apply when the agent needs to reason about the full dataset. For exa
 
 ## Key Takeaways
 
-- Pass filtered results to the model, not raw datasets — the sandbox is the compute boundary.
-- Replace multi-step tool chains with single sandbox executions to reduce latency and [token cost](../token-engineering/token-efficient-tool-design.md).
-- Apply to any large intermediate representation: tables, logs, API payloads, binary data.
-- The sandbox must have resource limits, isolation, and monitoring — code execution without these is a security risk.
+- Before wiring a new data source into an agent, check whether raw records reach the model or only a filtered result crosses the sandbox boundary.
+- Flag any tool chain with more than one fetch-filter-aggregate step as a candidate to consolidate into a single sandbox run and cut [token cost](../token-engineering/token-efficient-tool-design.md).
+- Before ruling out a data type that is not tabular, ask what derived result the task needs: a count, an aggregate, a filtered slice.
+- Before shipping a sandbox integration, confirm resource limits, isolation, and monitored output are all configured; missing any one turns the sandbox into an attack surface.
 
 ## Example
 

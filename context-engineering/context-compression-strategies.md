@@ -17,9 +17,9 @@ maturity: established
 
 # Context Compression Strategies: Offloading and Summarization
 
-> Tiered compression — offloading large payloads and summarizing history — keeps long-running agents within the context window without losing task continuity.
+> Tiered compression (offloading large payloads and summarizing history) keeps long-running agents within the context window without losing task continuity.
 
-Learn it hands-on: [Offload vs Summarize](https://learn.agentpatterns.ai/context-engineering/context-compression/) — guided lesson with quizzes.
+Learn it hands-on: [Offload vs Summarize](https://learn.agentpatterns.ai/context-engineering/context-compression/), a guided lesson with quizzes.
 
 ## The problem
 
@@ -43,7 +43,7 @@ graph TD
 
 ### Tier 1: offload large tool responses
 
-Replace large tool payloads (full files, API responses, search results) with a filesystem reference and brief summary. Full content goes to disk, and the agent re-reads it when needed. This keeps content recoverable without holding payloads in active context — [addressable recall compaction](addressable-recall-compaction.md) generalizes the same move to every compacted observation, keyed by a stable identifier. You can configure the thresholds — frameworks typically set them in the tens of thousands of tokens.
+Replace large tool payloads (full files, API responses, search results) with a filesystem reference and brief summary. Full content goes to disk, and the agent re-reads it when needed. This keeps content recoverable without holding payloads in active context. [Addressable recall compaction](addressable-recall-compaction.md) generalizes the same move to every compacted observation, keyed by a stable identifier. You can configure the thresholds. Frameworks typically set them in the tens of thousands of tokens.
 
 ### Tier 2: summarize conversation history
 
@@ -65,7 +65,7 @@ OPENDEV extends the two-tier approach with Adaptive Context Compaction (ACC), a 
 | 3 — Aggressive Masking | 90% budget | Shrink preservation window to only most recent outputs |
 | 4 — Full Compaction | 99% budget | Serialize history to scratch file; LLM-summarize middle portion |
 
-Recent tool outputs stay at full fidelity. An Artifact Index serialized into compaction summaries tracks every file touched, and the summary carries the history archive path — making compaction effectively non-lossy ([Bui, 2026 §2.3.6](https://arxiv.org/abs/2603.05344)).
+Recent tool outputs stay at full fidelity. An Artifact Index serialized into compaction summaries tracks every file touched, and the summary carries the history archive path. That makes compaction effectively non-lossy ([Bui, 2026 §2.3.6](https://arxiv.org/abs/2603.05344)).
 
 Graduated stages let the agent degrade step by step rather than hitting a single compression cliff where the full history collapses at once.
 
@@ -82,7 +82,7 @@ Summaries that only capture "what happened" without "what matters next" cause [o
 
 ## Why it works
 
-Transformer attention runs over all tokens in the window. As context grows, relevant signal competes with accumulated noise (redundant tool outputs, superseded reasoning, resolved errors) and [retrieval precision degrades](context-window-dumb-zone.md). Compression reduces this noise floor. Offloading removes content that is addressable on demand but rarely needed. Summarization distills decision rationale and state into a compact form the model can condition on. The mechanism is selective discarding, not lossy encoding — artifacts remain on disk, so compaction is non-destructive for recoverable content.
+Transformer attention runs over all tokens in the window. As context grows, relevant signal competes with accumulated noise (redundant tool outputs, superseded reasoning, resolved errors) and [retrieval precision degrades](context-window-dumb-zone.md). Compression reduces this noise floor. Offloading removes content that is addressable on demand but rarely needed. Summarization distills decision rationale and state into a compact form the model can condition on. The mechanism is selective discarding, not lossy encoding. Artifacts remain on disk, so compaction is non-destructive for recoverable content.
 
 The effect is measurable. One empirical study reports that pruning context to the last five tool call/response pairs, plus summarization, reached 91.6% task completion versus 71% for full-context agents, at a fraction of the tokens and runtime. This supports combining the offload and summarize tiers rather than carrying full history ([Pruning and summarizing context for tool-using agents](https://arxiv.org/abs/2606.10209)).
 
@@ -91,7 +91,7 @@ The effect is measurable. One empirical study reports that pruning context to th
 Compression degrades task continuity when applied incorrectly:
 
 - Silent context loss: aggressive summarization drops subtle constraints whose importance only emerges later. [Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) recommends starting with maximum recall and iterating toward precision, not the reverse.
-- Premature compaction: a too-low threshold forces lossy summarization when context is still navigable, causing [objective drift](../patterns/anti-patterns/objective-drift.md) if it omits scope constraints.
+- Premature compaction: a too-low threshold forces lossy summarization when context is still navigable. If the summary omits scope constraints, it causes [objective drift](../patterns/anti-patterns/objective-drift.md).
 - Broken recoverability: offloaded payloads deleted or moved after compaction cannot be re-read, which makes the approach worse than in-context storage. The observation store must persist for the full session lifetime.
 - Compounding errors across cycles: each cycle introduces summarization error. Long sessions accumulate drift a single summary cannot undo.
 
@@ -103,11 +103,11 @@ Compression degrades task continuity when applied incorrectly:
 
 ## Key Takeaways
 
-- Tiered compression applies in sequence: offload large tool responses first, then summarize history.
-- Five-stage compaction provides graduated degradation instead of a single compression cliff.
-- Summaries must preserve task objective, current state, and next steps — [not just action history](../patterns/anti-patterns/objective-drift.md).
-- Offloading preserves recoverability; summarization is lossy — retain decision rationale, not just outcomes.
-- Compaction reuses the cached system-prompt prefix, so a `cache_control` breakpoint keeps post-compaction turns cheap.
+- Tiered compression is ordered on purpose: offload before summarizing, so recoverable content moves to disk before anything is discarded for good.
+- Five-stage compaction degrades gradually. The Artifact Index serialized into each summary keeps every touched file traceable, so even the 99%-budget full-compaction stage stays effectively non-lossy.
+- Summaries must preserve task objective, current state, and next steps rather than [just action history](../patterns/anti-patterns/objective-drift.md).
+- Offloading preserves recoverability. Summarization is lossy, so retain decision rationale, not just outcomes.
+- Compaction reuses the cached prefix, so a `cache_control` breakpoint at the end of the system prompt keeps post-compaction turns cheap.
 
 ## Example
 
@@ -145,7 +145,7 @@ Premature compaction forces lossy summarization while the context is still navig
 
 **How do I test a compression setup?**
 
-Three checks. Lower the threshold deliberately, then verify task continuity across cycles. After an offload, verify the agent retrieves the stored content on demand — payloads deleted or moved after compaction cannot be re-read, so the observation store must persist for the session lifetime. After summarization, verify the next action still matches the original task.
+Three checks. Lower the threshold deliberately, then verify task continuity across cycles. After an offload, verify the agent retrieves the stored content on demand. Payloads deleted or moved after compaction cannot be re-read, so the observation store must persist for the session lifetime. After summarization, verify the next action still matches the original task.
 
 ## Related
 

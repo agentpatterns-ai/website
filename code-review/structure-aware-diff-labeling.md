@@ -24,7 +24,7 @@ The approach is qualified: the paper's own evaluation shows performance varies a
 Use a two-stage LLM labeler when:
 
 - The codebase spans multiple languages and per-language refactor detectors (RefactoringMiner for Java, ts-morph for TypeScript, libcst for Python) would require maintaining separate pipelines.
-- The label taxonomy needs to evolve over time — few-shot prompting lets you add categories without retraining or rewriting AST rules ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
+- The label taxonomy needs to evolve over time. Few-shot prompting lets you add categories without retraining or rewriting AST rules ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
 - The downstream consumer (reviewer prioritization, PR routing, automated comment suppression) tolerates non-deterministic output and ~80% precision/recall rather than requiring 100% reproducible labels.
 
 Skip it when a single-language project has mature static-analysis tooling, when CI demands deterministic outputs for audit purposes, or when per-PR token cost dominates the budget.
@@ -35,11 +35,11 @@ Stage 1 is the Labeler. It runs per-hunk classification using few-shot prompting
 
 Stage 2 is the Refiner. It runs whole-patch inference to capture cross-hunk relationships. A rename labeled in isolation does not record which hunk holds the declaration and which hold the consequences. So the Refiner assigns a parent field (parent=0 for declaration, parent=N for usage) and extracts attributes like old/new names and types. It also corrects misclassifications visible only in whole-patch view ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
 
-The single-shot Refiner pass is the central idea. Without it, a hunk-only labeler can name change types but cannot link them into the structural patterns that shape review prioritization — knowing four hunks are renames is less useful than knowing they all consume one declaration.
+The single-shot Refiner pass is the central idea. Without it, a hunk-only labeler can name change types but cannot link them into the structural patterns that shape review prioritization. Knowing four hunks are renames is less useful than knowing they all consume one declaration.
 
 ## Why it works
 
-Decomposing classification into per-hunk labeling plus a whole-patch refinement makes each LLM call work within its strengths: short-context few-shot inference for the labeling step and large-context relational reasoning for the refinement step. Few-shot prompting transfers across programming languages without per-language training, so one prompt handles Java and Python diffs with comparable accuracy in the paper's benchmark ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)). The Refiner's whole-patch view supplies the global context that per-hunk inference structurally cannot represent — declaration-to-usage parenting and move source-target pairing emerge from seeing the entire patch in one pass.
+Decomposing classification into per-hunk labeling plus a whole-patch refinement makes each LLM call work within its strengths: short-context few-shot inference for the labeling step and large-context relational reasoning for the refinement step. Few-shot prompting transfers across programming languages without per-language training, so one prompt handles Java and Python diffs with comparable accuracy in the paper's benchmark ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)). The Refiner's whole-patch view supplies the global context that per-hunk inference structurally cannot represent. Declaration-to-usage parenting and move source-target pairing emerge from seeing the entire patch in one pass.
 
 ## When this backfires
 
@@ -54,7 +54,7 @@ The paper's own recommendation: "a hybrid strategy can be adopted — using LLM-
 
 ## Example
 
-The paper's benchmark uses patches drawn from SWE-bench Multilingual and SWE-PolyBench supplemented with fabricated patches for label-type coverage — 95 hunks across 13 PRs, mostly Java with Python included to demonstrate language-agnostic behavior ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
+The paper's benchmark uses patches drawn from SWE-bench Multilingual and SWE-PolyBench supplemented with fabricated patches for label-type coverage. It totals 95 hunks across 13 PRs, mostly Java with Python included to show language-agnostic behavior ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
 
 A representative pipeline shape, per the paper:
 
@@ -75,11 +75,11 @@ Best result on this benchmark: 84% recall, 81% precision with Gemini-3-Pro-Previ
 
 ## Key Takeaways
 
-- The two-stage Labeler-plus-Refiner shape is the structural idea; whole-patch refinement is what lets the pipeline emit relationships, not just types.
-- Polyglot coverage and label customisability are the legitimate wins; determinism, cost, and per-category precision are the legitimate trade-offs.
-- The paper itself recommends a hybrid with static analysis for label types where accuracy matters — treat LLM labeling as a supplement, not a replacement.
-- Cost between models is non-uniform — Gemini-3's accuracy lead comes with ~7.5× the output tokens of Claude Sonnet 4.5.
-- Under-represented label types (external interface, error handling, log) are where the approach is weakest; do not build a workflow that depends on those categories alone.
+- Skipping the Refiner stage leaves per-hunk types with no cross-hunk relationships. Run it whenever a downstream consumer needs to know which hunks are linked, not just what each one is.
+- Polyglot coverage and label customizability are the legitimate wins; determinism, cost, and per-category precision are the legitimate trade-offs.
+- Default to a hybrid rather than pure LLM labeling unless every label type in your taxonomy has been checked at an accuracy your workflow can tolerate — the paper's own recommendation, not a hedge.
+- Weigh cost against accuracy per model, not just headline recall. The paper's top scorer (Gemini-3-Pro-Preview) used up to 7.5× the output tokens of the runner-up (Claude Sonnet 4.5).
+- Spot-check external interface, error handling, and log labels by hand. Those are the categories furthest from the paper's headline accuracy numbers.
 
 ## Related
 

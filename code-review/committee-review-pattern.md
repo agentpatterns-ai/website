@@ -81,7 +81,7 @@ The committee pattern adds cost, latency, and orchestration complexity that can 
 
 A committee where every reviewer runs on the same model shares the same blind spots. Cross-model review assigns each reviewer to a different provider (for example, GPT, Gemini, Claude) so failure modes are independent.
 
-The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) implements this: three review subagents run in parallel on different models, each receiving the same staged diff. Verdicts are stored as structured data with the model name attached. Review prompts focus on bugs, security, logic errors, and edge cases — style is excluded to reduce noise.
+The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) implements this: three review subagents run in parallel on different models, each receiving the same staged diff. It stores each verdict as structured data with the model name attached. Review prompts focus on bugs, security, logic errors, and edge cases and exclude style to reduce noise.
 
 ### Risk-proportional scaling
 

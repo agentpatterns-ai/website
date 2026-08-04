@@ -49,6 +49,7 @@ How you phrase, frame, and structure individual rules determines whether agents 
 - [Three Knowledge Tiers: Sourced, Unverified, Hallucinated](three-knowledge-tiers.md) — Classify agent knowledge into three tiers to preserve useful training knowledge while maintaining accuracy standards
 - [Cost-Aware Skill Rewriting: Preserve Operational Anchors, Not Skill Tokens](cost-aware-skill-rewriting.md) — Rewriting a skill is an economic trade-off, not pure compression — stripping sparse operational anchors makes the agent explore and retry, raising total cost despite a shorter document
 - [Codified Effort and Escalation Policy in the Instruction File](codified-effort-escalation-policy.md) — Write the default-cheap, escalate-on-evidence effort and model-routing rule into the instruction file so the cheap path is the default and survives context switches
+- [Advisory Prompts Distilled from Reasoning Traces](advisory-prompts-from-reasoning-traces.md) — Distill the cases where thinking mode fixed an answer into standing procedural advice and run with reasoning off; the technique buys output tokens at a per-model accuracy price, not reasoning parity
 
 ## Architecture & Composition
 

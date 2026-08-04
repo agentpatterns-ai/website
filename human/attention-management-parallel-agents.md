@@ -20,13 +20,13 @@ maturity: established
 
 ## The scheduling metaphor
 
-When you run parallel agent sessions, your role shifts from doing the work to dispatching and reviewing it. The [ClaudeLog "You Are the Main Thread"](https://claudelog.com/mechanics/you-are-the-main-thread) framing captures this: treat your attention as the main thread, agent sessions as worker threads, and apply the principle "do not block the main thread."
+When you run parallel agent sessions, your role shifts from doing the work to dispatching and reviewing it. The [ClaudeLog "You Are the Main Thread"](https://claudelog.com/mechanics/you-are-the-main-thread) framing captures this. Treat your attention as the main thread, agent sessions as worker threads, and apply the principle "do not block the main thread."
 
 With N agents running, a single idle minute costs N units of forgone progress — each unspawned agent is an idle core. [Source: [ClaudeLog](https://claudelog.com/mechanics/you-are-the-main-thread)]
 
 ## Attention as the bottleneck
 
-The natural bottleneck in parallel agent workflows is not code generation — it is your review capacity. As Addy Osmani observes, "the highest-leverage developers will look like async-first managers running a small fleet of parallel AI coding agents," and the constraint shifts from producing code to evaluating it. [Source: [Addy Osmani — Your AI Coding Agents Need a Manager](https://addyosmani.com/blog/coding-agents-manager/)]
+Your review capacity, not code generation, is the natural bottleneck in parallel agent workflows. As Addy Osmani observes, "the highest-leverage developers will look like async-first managers running a small fleet of parallel AI coding agents," and the constraint shifts from producing code to evaluating it. [Source: [Addy Osmani — Your AI Coding Agents Need a Manager](https://addyosmani.com/blog/coding-agents-manager/)]
 
 The Sora for Android team found simultaneous Codex sessions felt "uncannily similar to being a tech lead with several new engineers, all making progress, all needing guidance." [Source: [OpenAI — Shipping Sora for Android with Codex](https://openai.com/index/shipping-sora-for-android-with-codex/)]
 
@@ -89,7 +89,7 @@ Each session gets a task classified before dispatch:
 | `../feature-migrate` | Write Alembic migration for new `user_roles` table | Checkpoint-based — review schema before applying |
 | `../feature-auth` | Refactor auth to support OAuth2 + PKCE | Human-in-the-loop — architectural judgment required |
 
-The developer monitors the fully-delegated sessions only when they emit completion signals, keeps one terminal pane open for the auth refactor, and uses the idle minutes (waiting for agents to finish) to classify the next batch of tasks. WIP stays at four sessions — adding a fifth would push review load past the point where output quality can be validated.
+The developer monitors the fully-delegated sessions only when they emit completion signals and keeps one terminal pane open for the auth refactor. Idle minutes spent waiting for agents to finish go toward classifying the next batch of tasks. WIP stays at four sessions — adding a fifth would push review load past the point where output quality can be validated.
 
 ## Key Takeaways
 

@@ -21,7 +21,7 @@ maturity: established
 
 [Latent Patterns](https://latentpatterns.com/glossary) defines context engineering as "the discipline of designing, managing, and optimizing the information placed into a language model's context window to maximize the quality and reliability of its output."
 
-The context window is the agent's entire world. Every output is a function of what sits in that window. It depends on what you place in context, not on what exists in the codebase or what you intended.
+The context window holds everything the agent has access to — nothing else shapes its output. What is not placed there does not count, whether that is codebase state or your unstated intentions.
 
 [Anthropic frames this](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) as finding "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome." Signal density beats volume.
 
@@ -47,7 +47,7 @@ graph TD
 | Conversation history | Prior turns, compressed as needed | Accumulated |
 | Tool outputs | Results from tool calls | Per tool call |
 
-Each layer has an opportunity cost: every token displaces reasoning, instructions, or task-relevant content. This is not just a capacity constraint, because [attention is non-uniform](https://arxiv.org/abs/2307.03172). Models attend strongly to content near the start and end of the context window, and poorly to content in the middle. Irrelevant tokens do not produce neutral noise. They dilute attention on relevant tokens, which degrades the output measurably.
+Each layer has an opportunity cost: every token displaces reasoning, instructions, or task-relevant content. [Attention is also non-uniform](https://arxiv.org/abs/2307.03172): models attend strongly to content near the start and end of the context window, and poorly to content in the middle. Irrelevant tokens do not produce neutral noise. They dilute attention on relevant tokens, which degrades the output measurably.
 
 ## Token economics
 
@@ -94,10 +94,10 @@ The pattern assumes retrieval quality and compaction fidelity. When those assump
 
 ## Key Takeaways
 
-- The context window is the agent's complete world — what is absent does not exist.
+- Verify what is actually in context rather than assuming — the agent cannot act on intentions or codebase state you never placed there.
 - Optimize for signal density, not volume: "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome."
-- Every context layer has a cost — lazy loading, compaction, and sub-agent isolation manage that cost.
-- Context engineering subsumes prompt engineering, skill design, agent architecture, and memory management.
+- Lazy loading, compaction, and sub-agent isolation are the concrete ways to cut a layer's token cost.
+- Reviewing agent behavior means checking all four — prompt engineering, skill design, agent architecture, memory management — not just prompt wording.
 
 ## Example
 
@@ -123,11 +123,11 @@ Yes, measurably. Irrelevant tokens do not produce neutral noise — they dilute 
 
 **How do I decide what to cut?**
 
-Ask one diagnostic question of every candidate inclusion: does this improve output on this specific task? If the answer is no, it is pollution. The usual sources are speculative preloading of reference material, tool responses returning full data structures where a summary suffices, accumulated history carrying superseded instructions, and project instructions duplicating the system prompt.
+Ask one diagnostic question of every candidate inclusion: does this improve output on this specific task? If the answer is no, it is pollution. The usual sources are speculative preloading, tool responses returning full data instead of a summary, stale history, and project instructions duplicating the system prompt.
 
 **When is an unfiltered context better than a filtered one?**
 
-When retrieval quality or compaction fidelity cannot be relied on. Selective loading with a retrieval layer that picks the wrong files leaves the agent no fallback; lossy summarization discards state that only turns out to matter later; and a coordinator handed a poor sub-agent summary cannot recover the missing context.
+When retrieval quality or compaction fidelity cannot be relied on. A retrieval layer that picks the wrong files leaves the agent no fallback. Lossy summarization can discard state that only turns out to matter later, and a coordinator handed a poor sub-agent summary cannot recover the missing context.
 
 ## Related
 

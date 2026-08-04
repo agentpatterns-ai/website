@@ -49,22 +49,22 @@ Optimization quality was comparable on both tasks — token reduction did not de
 
 ## How to apply it tool-agnostically
 
-The paper's reference implementation uses LangGraph, but the pattern — state lives outside the prompt, accessed by tool call — is framework-agnostic, and resembles a [code-native memory substrate](../patterns/agent-design/code-native-memory-substrates.md) specialized for iteration loops:
+The paper's reference implementation uses LangGraph, but the pattern is framework-agnostic — state lives outside the prompt, accessed by tool call. It resembles a [code-native memory substrate](../patterns/agent-design/code-native-memory-substrates.md) specialized for iteration loops:
 
 1. Define a typed state object for the loop's experimental record — current best metric, last hyperparameter set, recent failure traces, working files. Keep fields minimal; every additional field becomes another schema migration ([Mem0, 2026](https://mem0.ai/blog/langgraph-tutorial-build-advanced-ai-agents)).
 2. Expose state through tools the agent can call: `read_state(field)`, `update_state(field, value)`, `list_recent_attempts(n)`. The agent invokes these when it needs context, instead of expecting full history in the transcript.
 3. Persist state via a checkpointer, not in-memory. InMemorySaver loses everything on restart and undermines durability ([Towards AI, 2026](https://pub.towardsai.net/getting-started-with-langgraph-build-a-stateful-ai-agent-not-another-prompt-chain-ccedc9b6e9ad)); production loops use Redis, Postgres, or DynamoDB-backed stores ([AWS, 2026](https://aws.amazon.com/blogs/database/build-durable-ai-agents-with-langgraph-and-amazon-dynamodb/)).
-4. Trim the message window to recent turns only. The state object — not the transcript — is the source of truth for prior iterations.
+4. Trim the message window to recent turns only. The state object is the source of truth for prior iterations, not the transcript.
 
 ## Why it works
 
-The causal mechanism is purely about where state lives, not about model reasoning. A stateless loop encodes the experimental record in the message transcript, which the inference call must re-process every turn — the provider re-bills the full prefix on each call. A stateful loop encodes the same record in a typed object outside the prompt and exposes it through tools, so per-call input is bounded by the working set the current step touches, not by cumulative history. The asymptotic effect (`O(N²) → O(N)`) is a direct consequence of decoupling the experimental record from the transcript ([Jabbarvaziri, 2026](https://arxiv.org/abs/2606.14945)). The 90% and 52% reductions are not optimizations on top of the same architecture — they are the gap between a quadratic and a linear cost curve at finite iteration counts.
+The causal mechanism is purely about where state lives, not about model reasoning. A stateless loop encodes the experimental record in the message transcript. The inference call must re-process that transcript every turn, and the provider re-bills the full prefix on each call. A stateful loop encodes the same record in a typed object outside the prompt and exposes it through tools. Per-call input is bounded by the working set the current step touches, not by cumulative history. The asymptotic effect (`O(N²) → O(N)`) is a direct consequence of decoupling the experimental record from the transcript ([Jabbarvaziri, 2026](https://arxiv.org/abs/2606.14945)). The 90% and 52% reductions are the gap between a quadratic and a linear cost curve at finite iteration counts, not optimizations on top of the same architecture.
 
 ## When this backfires
 
 Conditions under which the pattern is worse than the alternative:
 
-- Short loops with stable prefixes. Below ~10 iterations, [prompt caching at the provider tier](static-content-first-caching.md) already converts the dominant cost line to roughly O(1) for the static portion — Anthropic charges ~10% of input price on cache hit, OpenAI ~50% ([NeuralTrust, 2026](https://neuraltrust.ai/blog/prompt-caching)). The stateful refactor adds engineering cost the cached stateless loop avoids.
+- Short loops with stable prefixes. Below ~10 iterations, [prompt caching at the provider tier](static-content-first-caching.md) already converts the dominant cost line to roughly O(1) for the static portion. Anthropic charges ~10% of input price on cache hit, OpenAI ~50% ([NeuralTrust, 2026](https://neuraltrust.ai/blog/prompt-caching)). The stateful refactor adds engineering cost the cached stateless loop avoids.
 - State schema churn. When the experimental shape changes often — new fields, renamed metrics, restructured observations — every schema change risks breaking persisted checkpoints. Projects have failed because "every additional field increases complexity exponentially" and the state object became a monolith ([Mem0, 2026](https://mem0.ai/blog/langgraph-tutorial-build-advanced-ai-agents)).
 - Concurrent or multi-replica execution without isolation. Shared state corrupts silently under concurrent writes; the failure surfaces several state transitions downstream from the cause, making root-cause hard ([Focused.io, 2026](https://focused.io/lab/persistent-agent-memory-in-langgraph)).
 - Tasks that need the full trajectory. Causal debugging, exploratory branching, transcript replay — pruning to typed state discards the audit trail that made the loop debuggable.
@@ -82,7 +82,7 @@ The two approaches attack the same cost curve from different layers:
 | Best for | Stable prefix, short to medium loops | Long loops, large observations |
 | Failure mode | Cache misses on prefix mutation | State schema churn, concurrent corruption |
 
-They are complementary at the boundary case: a long-horizon stateful loop still benefits from a cached static prefix on the residual transcript. They are competing for short loops with stable observations.
+They are complementary at the boundary case: a long-horizon stateful loop still benefits from a cached static prefix on the residual transcript. For short loops with stable observations, the two approaches compete.
 
 ## Key Takeaways
 
@@ -98,3 +98,4 @@ They are complementary at the boundary case: a long-horizon stateful loop still 
 - [Context Compression Strategies](context-compression-strategies.md) — tiered offloading and summarization for long-running agents
 - [Code-Native Memory Substrates for Coding Agents](../patterns/agent-design/code-native-memory-substrates.md) — typed external memory for code-bearing agents, from a different angle
 - [Autonomous Research Loops](../training/foundations/autonomous-research-loops.md) — the curriculum module that puts loop architectures and termination design together
+- [Execution-State Ledger for Long-Horizon Coding Agents](../patterns/agent-design/execution-state-ledger-coding-agents.md) — carries freshness rather than task state, and applies it at the command boundary as well as the prompt

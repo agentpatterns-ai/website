@@ -23,7 +23,7 @@ maturity: established
 
 The [AIRA paper (Parris, 2026)](https://arxiv.org/abs/2604.17587) defines failure truthfulness as "the property that a system's observable outputs accurately represent its internal success or failure state, without suppression, ambiguity, or degradation masking."
 
-A matched-control replication (955 AI-attributed files vs 955 human controls across JavaScript, Python, TypeScript) found 0.435 high-severity findings per AI file vs 0.242 for human controls, a 1.80x differential concentrated in exception-handling patterns ([AIRA paper §Study 3](https://arxiv.org/html/2604.17587v1)). Independent work converges. An empirical study of AI-generated build code across 387 PRs and 945 files identifies lack of error handling as a recurring maintainability smell ([Mudbhari et al., arxiv:2601.16839](https://arxiv.org/abs/2601.16839)), and a 304,362-commit longitudinal study finds AI-authored code accumulates technical debt faster than human-authored code ([arxiv:2603.28592](https://arxiv.org/abs/2603.28592)).
+A matched-control replication compared 955 AI-attributed files against 955 human controls across JavaScript, Python, and TypeScript. It found 0.435 high-severity findings per AI file vs 0.242 for human controls, a 1.80x differential concentrated in exception-handling patterns ([AIRA paper §Study 3](https://arxiv.org/html/2604.17587v1)). Independent work converges. An empirical study of AI-generated build code across 387 PRs and 945 files identifies lack of error handling as a recurring maintainability smell ([Mudbhari et al., arxiv:2601.16839](https://arxiv.org/abs/2601.16839)), and a 304,362-commit longitudinal study finds AI-authored code accumulates technical debt faster than human-authored code ([arxiv:2603.28592](https://arxiv.org/abs/2603.28592)).
 
 ## The reward-shaped failure hypothesis
 
@@ -41,7 +41,7 @@ graph TD
 
 Visible crashes draw stronger negative feedback than silent failures, because raters can see a crash but not a silent degradation. Optimizing against this lopsided signal biases the model toward code that looks correct under shallow inspection: broad `except:` blocks, fallback paths that always succeed, retry loops that mask contract violations.
 
-An LLM-based reviewer inherits the same training bias and is blind to the same patterns. AIRA is deterministic by design — resistant to the failure mode it detects.
+An LLM-based reviewer inherits the same training bias and is blind to the same patterns. AIRA is deterministic by design. It resists the failure mode it detects.
 
 ## The 15 checks
 
@@ -79,10 +79,10 @@ AIRA is a deterministic inspection layer, not a replacement for LLM-based review
 
 The framework targets "governance, compliance, and safety-critical systems where fail-closed behavior is required" ([AIRA paper](https://arxiv.org/html/2604.17587v1)), not general-purpose review. The paper acknowledges these limits:
 
-- Cross-file semantic reasoning is limited — checks work on single files or short spans.
-- False positives are unavoidable — broad exception handling is legitimate in resilience engineering and low-level systems code. False-positive rates are a [documented trade-off for rule-based static analysis](https://arxiv.org/abs/2310.08837).
-- PASS is not safety — it measures pattern absence, not correctness.
-- The checks measure patterns, not authorship — the 1.80x figure describes a population difference, not an individual-file classifier.
+- Cross-file semantic reasoning is limited. Checks work on single files or short spans.
+- False positives are unavoidable. Broad exception handling is legitimate in resilience engineering and low-level systems code; false-positive rates are a [documented trade-off for rule-based static analysis](https://arxiv.org/abs/2310.08837).
+- PASS measures pattern absence, not correctness.
+- The checks measure patterns, not authorship. The 1.80x figure describes a population difference, not an individual-file classifier.
 - UNKNOWN on governance-critical paths needs manual verification.
 
 Outside governance/safety-critical contexts (prototypes, research code, small teams with strong CI), process cost likely outweighs findings volume.
@@ -125,7 +125,7 @@ The database failure now propagates. The degraded search index is explicit in th
 - AIRA targets the gap between observable output state and internal success state — the specific failure mode amplified by RLHF reward shaping.
 - Empirical signal is real and cross-language: AI-attributed files show ~1.80x high-severity findings vs human controls, concentrated in exception handling.
 - Deterministic checks resist the training bias that would blind an LLM reviewer to the same patterns.
-- The framework scopes to governance, compliance, and safety-critical systems — PASS means pattern absent, not system safe.
+- The framework scopes to governance, compliance, and safety-critical systems. Skip it for prototypes, research code, or small teams with strong CI, where the review overhead probably costs more than it finds.
 
 ## Related
 

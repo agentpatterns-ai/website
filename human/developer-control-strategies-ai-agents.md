@@ -80,16 +80,16 @@ This mirrors the [vibe coding](../patterns/anti-patterns/vibe-coding.md) boundar
 
 The control loop works because it does three things:
 
-1. Catches errors early — planning surfaces ambiguity before the agent pursues the wrong approach.
-2. Preserves comprehension — reviewing every output prevents the [skill atrophy](skill-atrophy.md) that comes from blind acceptance.
-3. Builds calibrated trust — repeated validate cycles teach developers which tasks the agent handles reliably, which enables [progressive disclosure](../patterns/agent-design/progressive-disclosure-agents.md) of autonomy.
+- Catches errors early — planning surfaces ambiguity before the agent pursues the wrong approach.
+- Preserves comprehension — reviewing every output prevents the [skill atrophy](skill-atrophy.md) that comes from blind acceptance.
+- Builds calibrated trust — repeated validate cycles teach developers which tasks the agent handles reliably, which enables [progressive disclosure](../patterns/agent-design/progressive-disclosure-agents.md) of autonomy.
 
 ## When this backfires
 
 Control overhead is not free. The loop costs more than it saves when:
 
 - Work is trivial or throwaway — one-line fixes or prototypes rarely repay the planning step. For low-risk, reversible work, [vibe coding](../patterns/anti-patterns/vibe-coding.md) is the better default.
-- Supervision is theatre — rubber-stamping diffs without real review is nominal control only, and it recreates [comprehension debt](../patterns/anti-patterns/comprehension-debt.md) under a veneer of diligence.
+- Supervision is theatre — rubber-stamping diffs without real review is nominal control only, and it recreates [comprehension debt](../patterns/anti-patterns/comprehension-debt.md) while looking diligent.
 - Plans harden against changing requirements — over-specifying exploratory work locks the agent out of useful pivots.
 - Agent count exceeds the attention budget — too many parallel agents degrade validation across all of them; see [attention management](attention-management-parallel-agents.md).
 

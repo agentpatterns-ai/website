@@ -1,7 +1,7 @@
 ---
 title: "Agent Self-Review Loop for Iterative Self-Improvement"
 term: "Agent Self-Review Loop"
-description: "Agents review their own output — running code review, security scanning, and quality checks — before submitting work for human review."
+description: "Agents review their own output, running code review, security scanning, and quality checks, before submitting work for human review."
 tags:
   - code-review
   - testing-verification
@@ -42,7 +42,7 @@ graph TD
 
 ### GitHub Copilot coding agent
 
-GitHub's [Copilot coding agent](../tools/copilot/coding-agent.md) implements this pattern natively. The agent [reviews its own changes using Copilot code review before it opens the pull request](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/). It takes the feedback, iterates, and improves the patch. It requests human review only after it finishes its own review cycle.
+GitHub's [Copilot coding agent](../tools/copilot/coding-agent.md) implements this pattern natively. The agent [reviews its own changes using Copilot code review before it opens the pull request](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/). It takes the feedback and revises the patch. It requests human review only after it finishes its own review cycle.
 
 The agent also runs security checks during its workflow:
 
@@ -61,7 +61,7 @@ Self-review removes the issues humans should not spend time on: style violations
 GitHub identifies [three functions that remain exclusively human](https://github.blog/ai-and-ml/generative-ai/code-review-in-the-age-of-ai-why-developers-will-always-own-the-merge-button/):
 
 1. Architectural decisions. A question like "should we split this service?" needs contextual judgment.
-2. Mentorship. PR threads work as team classrooms where experience transfers.
+2. Mentorship. Experience transfers through PR review comments, from senior engineers to junior ones.
 3. Ethical evaluation. People decide whether features align with organizational values.
 
 Self-review [reduces back-and-forth by roughly a third](https://github.blog/ai-and-ml/generative-ai/code-review-in-the-age-of-ai-why-developers-will-always-own-the-merge-button/) by removing trivial corrections, and the merge button stays a human decision.
@@ -85,11 +85,11 @@ Diminishing returns. After 2 to 3 rounds of self-review iteration, more rounds r
 
 ## Key Takeaways
 
-- Agents that review their own output before submitting PRs eliminate mechanical issues from human review queues
-- GitHub's Copilot coding agent implements self-review natively — code review, security scanning, and dependency checks run before the PR opens
-- Self-review reduces reviewer back-and-forth by roughly a third while preserving human authority over the merge decision
-- Cap self-review iterations at two to three rounds to avoid diminishing returns
-- Self-review complements but does not replace independent cross-agent review for high-risk changes
+- Removing mechanical issues from the review queue does not touch the three functions GitHub calls exclusively human: architectural decisions, mentorship, and ethical evaluation
+- GitHub's Copilot coding agent implements self-review natively: code review, security scanning, and dependency checks all run before the PR opens
+- The roughly one-third cut in reviewer back-and-forth comes specifically from removing trivial corrections, not from skipping the human merge decision
+- Cap self-review at two to three rounds and document remaining findings before opening the PR, because further rounds rarely surface anything new
+- Adding an external LLM reviewer trades one failure mode for another: LLMs over-flag correct code as non-compliant, especially when asked to justify each flag
 
 ## Example
 
@@ -152,7 +152,7 @@ The agent parses each JSON output and fixes findings before the PR opens. If fin
 
 **How does self-review differ from committee review?**
 
-In a self-review loop the same agent evaluates and iterates on its own work as a built-in phase before submission; in the [committee pattern](committee-review-pattern.md) separate reviewer agents evaluate an implementer's output. Self-review is simpler to run and faster than coordinating separate reviewers, at the cost of independence — a single-context reviewer shares the generator's assumptions, training biases, and blind spots.
+In a self-review loop the same agent evaluates and iterates on its own work as a built-in phase before submission; in the [committee pattern](committee-review-pattern.md) separate reviewer agents evaluate an implementer's output. Self-review is simpler to run and faster than coordinating separate reviewers, at the cost of independence. A single-context reviewer shares the generator's assumptions, training biases, and blind spots.
 
 **How do I add self-review to an agent that lacks it?**
 
@@ -160,7 +160,7 @@ Add a review step before pull-request creation: run a separate review prompt or 
 
 **What does self-review fail to catch?**
 
-It catches mechanical issues — style, known vulnerability patterns, and dependency problems — but not architectural misjudgments, incorrect business logic, or design problems requiring domain knowledge beyond the agent's context. Architectural decisions, mentorship through pull-request threads, and ethical evaluation remain exclusively human functions, which is why GitHub frames the merge button as a human decision.
+It catches mechanical issues: style, known vulnerability patterns, and dependency problems. It does not catch architectural misjudgments, incorrect business logic, or design problems requiring domain knowledge beyond the agent's context. Architectural decisions, mentorship through pull-request threads, and ethical evaluation remain exclusively human functions, which is why GitHub frames the merge button as a human decision.
 
 ## Related
 

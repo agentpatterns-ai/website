@@ -75,7 +75,7 @@ This pattern has real costs:
 - Maintenance is yours: no vendor handles security patches, scaling, or compliance certifications for your custom features
 - Quality ceiling: a purpose-built SaaS product (Zendesk, PostHog) has years of refinement, so an agent-built clone may miss edge cases
 - Scaling limits: custom implementations may not handle the load that dedicated SaaS infrastructure handles
-- Rebuild risk: if the agent builds something poorly, you debug it; with SaaS, you file a support ticket
+- Rebuild risk: if the agent builds something poorly, you debug it. With SaaS, you file a support ticket
 
 ## Where it fits
 

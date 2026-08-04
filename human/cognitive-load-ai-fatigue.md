@@ -24,7 +24,7 @@ AI assistants cut mechanical effort but add new cognitive demands. You review ge
 
 Research from BCG and UC Riverside [found that 14% of workers experience mental fatigue from excessive AI tool use](https://www.bcg.com/news/5march2026-when-using-ai-leads-brain-fry), with high performers most affected. The intensive users who get the most value are also the most exposed to the costs.
 
-The underlying mechanism is working-memory saturation. Human working memory is sharply bounded. AI-assisted work does not remove that limit — it shifts what fills it. Instead of holding implementation details, your attention moves to checking output correctness, tracking context across AI and human thinking modes, and making constant accept/reject micro-decisions. [MIT Media Lab research](https://arxiv.org/abs/2506.08872) found that sustained AI assistance reduced neural connectivity in brain networks tied to deep engagement. The researchers termed this pattern "cognitive debt" — the accumulated cost of offloading reasoning rather than performing it. Geoffrey Litt's ["understand to participate" framing](https://simonwillison.net/2026/Jul/2/understand-to-participate/) (via Simon Willison) names the practical stake of that debt: you must understand agent-authored code deeply enough to keep participating in the creative process, a participation-capability threshold that offloaded reasoning erodes.
+The underlying mechanism is working-memory saturation. Human working memory is sharply bounded. AI-assisted work does not remove that limit. It shifts what fills it. Instead of holding implementation details, your attention moves to checking output correctness, tracking context across AI and human thinking modes, and making constant accept/reject micro-decisions. [MIT Media Lab research](https://arxiv.org/abs/2506.08872) found that sustained AI assistance reduced neural connectivity in brain networks tied to deep engagement. The researchers termed this pattern "cognitive debt" — the accumulated cost of offloading reasoning rather than performing it. Geoffrey Litt's ["understand to participate" framing](https://simonwillison.net/2026/Jul/2/understand-to-participate/) (via Simon Willison) names the practical stake of that debt. You must understand agent-authored code deeply enough to keep participating in the creative process, and offloaded reasoning erodes that capacity.
 
 ## Forms of AI cognitive load
 
@@ -84,11 +84,11 @@ Rather than monitoring each generated line, the developer returns after 8 minute
 
 ### Midday: designated non-AI block
 
-The developer switches off AI assistance entirely to investigate a production latency regression. The problem needs reading flame graphs, correlating query plans, and reasoning about caching behavior across three services — a task where the correction loop would be tight and every suggestion would need close review. The non-AI block also serves as a cognitive recovery window.
+The developer switches off AI assistance entirely to investigate a production latency regression. The problem needs reading flame graphs, correlating query plans, and reasoning about caching behavior across three services. The correction loop would be tight, and every suggestion would need close review. The non-AI block also gives the developer a cognitive recovery window.
 
 ### Afternoon: explicit scope limit
 
-After the non-AI block, the developer resumes with Claude Code but caps each new agent task to a single file or function boundary. Asked to refactor a module with unclear ownership, they decline to delegate and handle it directly — recognizing that the poorly-defined problem space makes AI assistance net-negative here.
+After the non-AI block, the developer resumes with Claude Code but caps each new agent task to a single file or function boundary. Asked to refactor a module with unclear ownership, they decline to delegate and handle it directly. The problem space is poorly defined, so AI assistance would be net-negative here.
 
 ## Key Takeaways
 

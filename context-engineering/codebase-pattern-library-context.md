@@ -21,7 +21,7 @@ status: current
 
 ## The idea
 
-A codebase-derived pattern library extracts reusable implementations already proven in your own repositories, indexes them, and lets an agent retrieve them by intent during a task. Without one, an agent writing code in your repository defaults to general training-data patterns rather than your team's reviewed ones. Instead of "how does anyone paginate an API," the agent asks "how do we paginate an API" and gets your team's actual, reviewed implementation.
+A codebase-derived pattern library extracts reusable implementations already proven in your own repositories, indexes them, and lets an agent retrieve them by intent during a task. Without one, an agent writing code in your repository defaults to general training-data patterns rather than your team's reviewed ones. The agent asks "how do we paginate an API", not the generic "how does anyone paginate an API," and gets your team's actual, reviewed implementation.
 
 This is a [retrieval problem](retrieval-augmented-agent-workflows.md) with a sharper corpus. The [logical retrieval over an inverted index](llm-driven-logical-retrieval.md) and [RAG component prioritization for software engineering](rag-component-prioritization-software-engineering.md) approaches tune how relevant context is selected. A pattern library instead tunes what is in the corpus, narrowing it to vetted, in-house code rather than the open web.
 
@@ -33,7 +33,7 @@ This is a [retrieval problem](retrieval-augmented-agent-workflows.md) with a sha
 
 ## How the library gets built
 
-Turning a repository into a searchable pattern library is an extraction pipeline, not a manual catalog. [Pattern Vault](https://arunksingh16.github.io/pattern-vault/) is one concrete implementation: it parses source with tree-sitter to walk the AST, uses an LLM to classify and label the extracted snippets, and stores them in a local SQLite database with full-text search. The AST step bounds extraction to real syntactic units such as functions, classes, and blocks rather than arbitrary text spans. The LLM step attaches the intent labels that make later intent-based search possible. The same AST-then-store-then-serve shape underpins published work on agent code retrieval. [Codebase-Memory](https://arxiv.org/abs/2603.27277) builds a tree-sitter knowledge graph persisted to SQLite and exposed over MCP, the route this pattern generalizes.
+Turning a repository into a searchable pattern library is an automated extraction pipeline. [Pattern Vault](https://arunksingh16.github.io/pattern-vault/) is one concrete implementation: it parses source with tree-sitter to walk the AST, uses an LLM to classify and label the extracted snippets, and stores them in a local SQLite database with full-text search. The AST step bounds extraction to real syntactic units such as functions, classes, and blocks rather than arbitrary text spans. The LLM step attaches the intent labels that make later intent-based search possible. The same AST-then-store-then-serve shape underpins published work on agent code retrieval. [Codebase-Memory](https://arxiv.org/abs/2603.27277) builds a tree-sitter knowledge graph persisted to SQLite and exposed over MCP, the route this pattern generalizes.
 
 ## Serving patterns to the agent
 
@@ -57,11 +57,11 @@ The MCP server returns the team's actual pagination helper and its call sites. T
 
 ## Key Takeaways
 
-- A codebase-derived pattern library narrows the retrieval corpus to vetted in-house code, raising signal over generic public examples
-- The build pipeline is AST parsing for structure plus LLM classification for intent labels
-- MCP is the transport that puts the library in front of an agent mid-task
-- The main risks are index staleness and amplifying suboptimal existing patterns
-- [Pattern Vault](https://arunksingh16.github.io/pattern-vault/) implements this end-to-end: AST extraction, LLM classification, local SQLite search, and an MCP server for Claude Code and Cursor
+- Confirm the library is self-hosted — routing extraction through a third-party service gives up the privacy benefit it exists for
+- Re-run extraction after a major refactor — a stale index keeps surfacing patterns the codebase has already replaced
+- Spot-check a retrieved pattern before merging it; reuse alone does not mean the pattern is still the team's best practice
+- Track how often a retrieved pattern actually gets reused — if the number stays low, the index costs more to maintain than it saves
+- To try this without building the pipeline yourself, [Pattern Vault](https://arunksingh16.github.io/pattern-vault/) already ships AST extraction, LLM classification, SQLite search, and an MCP server together
 
 ## Related
 

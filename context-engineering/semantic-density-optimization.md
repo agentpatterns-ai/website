@@ -29,9 +29,7 @@ Compressing codebase content for agents backfires. A controlled experiment on lo
 | Structured | 7,106 | 24,000 | 3.4× |
 | Compressed | 6,695 | 31,600 | 4.7× |
 
-The compressed format cut input tokens by 17% but raised total session cost by 67%. Removing semantic content shifts the interpretive burden to the reasoning phase, so the model reconstructs meaning it could have read directly.
-
-The lesson is to optimize for semantic density, not raw token count.
+The compressed format cut input tokens by 17% but raised total session cost by 67%. Removing semantic content shifts the interpretive burden to the reasoning phase, so the model reconstructs meaning it could have read directly. Optimize for semantic density, not raw token count.
 
 ## What semantic density means
 
@@ -40,7 +38,7 @@ Semantic density is the ratio of task-relevant tokens to total tokens. Every tok
 - High-density: meaning the agent cannot derive without extra inference, such as descriptive names, type annotations, docstrings, error messages, and commit reasoning
 - Zero-density: structural overhead the agent must parse but gains nothing from, such as boilerplate, dependency injection wiring, framework scaffolding, and ceremonial access modifiers
 
-The goal is not to compress. It is to remove zero-density tokens while protecting high-density ones.
+The goal is to remove zero-density tokens while protecting high-density ones.
 
 ## Seven conventions to reconsider
 
@@ -72,7 +70,7 @@ Structured log entries with readable field names beat abbreviation-heavy formats
 
 ### 7. Classical anti-patterns
 
-Anti-patterns like the God Object emerged to protect human cognition. Under agent consumption, gathering related logic into fewer files reduces cross-file traversal. This trade-off lacks empirical validation. The paper flags it as theoretically motivated but unconfirmed. Attention degradation on very large files is a documented LLM limitation ([Liu et al., 2024](https://arxiv.org/abs/2307.03172)), but the paper does not measure it here, so treat this as provisional.
+Anti-patterns like the God Object emerged to protect human cognition. Under agent consumption, gathering related logic into fewer files reduces cross-file traversal. This trade-off lacks empirical validation. The paper flags it as theoretically motivated but unconfirmed. Attention degradation on very large files is a documented LLM limitation ([Liu et al., 2024](https://arxiv.org/abs/2307.03172)). The paper does not measure it here, so treat this as provisional.
 
 ## The program skeleton artifact
 
@@ -125,11 +123,11 @@ Semantic density optimization trades human ergonomics for agent performance. The
 
 ## Key Takeaways
 
-- Compressing codebase content increases total session cost when compression removes semantic information the agent must reconstruct
-- Semantic density optimization targets zero-information tokens (boilerplate, ceremony) not high-information tokens (names, docs, error messages)
-- Stronger naming conventions, expanded commit messages, and flatter abstractions improve agent performance
-- A `CODEMAP.md` program skeleton gives agents topology-level orientation in a single read
-- File consolidation driven by deployment boundaries (not human cognitive limits) reduces agent traversal cost
+- Before compressing a format to cut input tokens, measure total session cost — a 17%-smaller format raised it 67% in the cited experiment
+- Classify each line as zero-density (cut freely) or high-density (the agent cannot reconstruct it) before trimming — the wrong cut is what causes the cost blowup
+- Apply naming, commit-message, and abstraction changes where agents read the code often, not as a blanket rewrite — human teams still pay the ergonomics cost
+- Add a `CODEMAP.md` at the repo root with module topology, entry points, call chains, and data flow — read once instead of exploring file by file
+- Flatter files cut agent traversal cost but raise merge-conflict frequency and risk exceeding a model's attention range on very large files — weigh both before consolidating
 
 ## Related
 

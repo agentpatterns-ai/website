@@ -1,7 +1,7 @@
 ---
 title: "Context Priming: Pre-Loading Files for AI Agent Tasks"
 term: "Context Priming"
-description: "Context priming loads relevant files into an agent context window before a task, improving output quality by grounding the agent in your codebase."
+description: "Context priming loads relevant files into an agent's context window before a task so its output fits your codebase's actual patterns."
 tags:
   - context-engineering
   - instructions
@@ -34,7 +34,7 @@ An agent that has read your middleware layer, auth config, and user model before
 
 ### Read before write
 
-Have the agent read the files it will touch — and the files adjacent to them — before making any changes. For a new feature, that means existing similar features, the relevant module's entry point, and any shared utilities it will call.
+Have the agent read the files it will touch (and the files adjacent to them) before making any changes. For a new feature, that means existing similar features, the relevant module's entry point, and any shared utilities it will call.
 
 ### Progressive context loading
 
@@ -48,7 +48,7 @@ Dumping everything at once is less effective than building understanding increme
 
 ### Explore before implement
 
-Use a read-only exploration phase before switching to implementation mode. Some tools support this explicitly — Claude Code's [plan mode](../tools/claude/plan-mode.md) separates reasoning from execution, letting the agent map out its approach before writing any code.
+Use a read-only exploration phase before switching to implementation mode. Some tools support this explicitly: Claude Code's [plan mode](../tools/claude/plan-mode.md) separates reasoning from execution, so the agent maps out its approach before writing any code.
 
 ### Use plan mode
 
@@ -87,7 +87,7 @@ Add a POST /auth/refresh endpoint. Follow the existing pattern in login.ts.
 Use the refreshToken field on the User model. Return a new access token signed with jwtConfig.secret.
 ```
 
-Contrast this with a cold prompt that provides none of the above context — the agent would fall back to generic Express boilerplate, require rework to match the actual middleware signature, and likely miss the `refreshToken` field entirely.
+Contrast this with a cold prompt that provides none of the above context — the agent would fall back to generic Express boilerplate and miss the `refreshToken` field entirely, requiring rework to match the actual middleware signature.
 
 ## Why it works
 
@@ -97,7 +97,7 @@ Transformer models generate each token conditioned on all tokens currently in co
 
 - Context window saturation: pre-loading large files pushes task instructions and earlier reasoning toward the middle of the context window, where attention degrades. Trim or summarize long files before loading them ([Context Compression Strategies](context-compression-strategies.md)).
 - Low-precision context: loading loosely related files adds noise that competes with the relevant signal. If the loaded content does not directly constrain the task output, it can steer the agent toward irrelevant patterns.
-- Short, self-contained tasks: for tasks with no codebase dependency — writing a pure-function utility, converting a data format — priming adds latency and [token cost](context-budget-allocation.md) without improving output quality. Apply it selectively.
+- Short, self-contained tasks: for tasks with no codebase dependency (writing a pure-function utility, converting a data format), priming adds latency and [token cost](context-budget-allocation.md) without improving output quality. Apply it selectively.
 - Stale context: if loaded files do not reflect the current state of the codebase (out-of-date after a refactor), the agent anchors on the wrong patterns. Verify that primed files are current before loading them.
 
 ## FAQ
@@ -116,9 +116,9 @@ The agent anchors on the wrong patterns, reproducing a structure the refactor al
 
 ## Key Takeaways
 
-- Agents work with what's in context — they don't automatically know your codebase
+- Prime every task with relevant files — without them, agents default to generic patterns instead of your codebase's actual conventions
 - Read relevant files first; implement second
-- Build context progressively: broad architecture → specific files
+- Build context progressively: broad architecture, then specific files
 - Use [plan mode](../tools/claude/plan-mode.md) to verify the agent's understanding before it acts
 - Position critical context at the start of the prompt, not buried in the middle
 

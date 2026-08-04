@@ -117,3 +117,4 @@ The agent adds three targeted tests; the mutation tool reruns and confirms all 1
 - [Coverage-Guided Agents for Fuzz Harness Generation](coverage-guided-fuzz-harness-generation.md) — the same generate-measure-refine loop applied to fuzzing
 - [Anti-Reward-Hacking](anti-reward-hacking.md) — designing rubrics agents cannot game by surface metrics
 - [Diff-Coverage Gating for Agent-Authored Pull Requests](diff-coverage-gate-agent-prs.md) — the changed-line coverage gate whose assertion-free blind spot mutation testing closes
+- [Bug-Discriminating Validation Evidence for Repair Agents (BSG-VA)](bug-discriminating-validation-evidence.md) — the same discrimination question asked against the real reported defect rather than a synthetic mutant

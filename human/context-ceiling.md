@@ -26,7 +26,7 @@ Expert architects carry hundreds of interconnected constraints simultaneously --
 
 ## The expertise gradient
 
-AI capability maps inversely to the [complexity of context required](../context-engineering/context-engineering.md). Standard engineering tasks -- well-documented, pattern-matchable, bounded in scope -- succeed reliably. Expert architecture tasks -- requiring simultaneous awareness of organizational, regulatory, and technical context -- fail systematically.
+AI capability maps inversely to the [complexity of context required](../context-engineering/context-engineering.md). Standard engineering tasks, well-documented, pattern-matchable, and bounded in scope, succeed reliably. Expert architecture tasks, requiring simultaneous awareness of organizational, regulatory, and technical context, fail systematically.
 
 This is not theoretical. A METR RCT (2025) measured 16 experienced developers across 246 tasks -- they were 19% slower with AI assistance yet predicted a 24% speedup and believed they had achieved a 20% speedup ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Noy and Zhang (2023) found AI raised overall productivity 40%, but lower-performing workers benefited disproportionately while top performers saw diminishing returns.
 
@@ -53,9 +53,9 @@ The architect's real work is navigating corner cases: a regulatory exception tha
 
 ### Advertised capacity is not effective capacity
 
-Liu et al. (2023) found LLMs exhibit a U-shaped attention curve: performance degrades when relevant information is in the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172)). Chroma (2025) tested all 18 frontier models and found every one degrades as input length grows ([Chroma Research](https://research.trychroma.com/context-rot)). Effective capacity is substantially below advertised window size — both studies show degradation begins well before the nominal limit is reached.
+Liu et al. (2023) found LLMs exhibit a U-shaped attention curve: performance degrades when relevant information is in the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172)). Chroma (2025) tested all 18 frontier models and found every one degrades as input length grows ([Chroma Research](https://research.trychroma.com/context-rot)). Effective capacity is substantially below advertised window size, and both find degradation begins well before the nominal limit is reached.
 
-Du et al. (2025) found performance drops 13.9--85% as input length increases even when all relevant information is retrieved and all distractors are removed -- sheer input length degrades performance independent of retrieval quality ([arXiv](https://arxiv.org/abs/2510.05381)). Better retrieval cannot fix the ceiling.
+Du et al. (2025) found performance drops 13.9 to 85% as input length increases even when all relevant information is retrieved and all distractors are removed -- sheer input length degrades performance independent of retrieval quality ([arXiv](https://arxiv.org/abs/2510.05381)). Better retrieval cannot fix the ceiling.
 
 ### Enterprise codebases exceed even theoretical limits
 
@@ -69,7 +69,7 @@ Anthropic's context engineering guidance confirms: "Every new token introduced d
 
 The Dreyfus model describes five stages from novice to expert. At the expert stage, performance becomes "fluid, unconscious, and automatic" -- intuition built from vast experience, not explicit rules ([Dreyfus & Dreyfus, 1986](https://en.wikipedia.org/wiki/Dreyfus_model_of_skill_acquisition)).
 
-Expert knowledge resists serialization. The architect does not consult a checklist -- they feel when a design is wrong because it [conflicts with something learned from a production incident years ago](../workflows/encoding-tacit-knowledge.md). That intuition cannot be externalized because the expert cannot fully articulate it. Polanyi's paradox -- "we can know more than we can tell" -- applies directly. Kambhampati (2021) calls this "Polanyi's revenge": AI creates new problems when machines lack the wisdom to know when their learned patterns do not apply. <!-- Kambhampati, S. (2021). Polanyi's Revenge and AI's New Romance with Tacit Knowledge. Communications of the ACM. -->
+Expert knowledge resists serialization. The architect does not consult a checklist. They feel when a design is wrong because it [conflicts with something learned from a production incident years ago](../workflows/encoding-tacit-knowledge.md). That intuition cannot be externalized because the expert cannot fully articulate it. Polanyi's paradox applies directly: "we can know more than we can tell." Kambhampati (2021) calls this "Polanyi's revenge": AI creates new problems when machines lack the wisdom to know when their learned patterns do not apply. <!-- Kambhampati, S. (2021). Polanyi's Revenge and AI's New Romance with Tacit Knowledge. Communications of the ACM. -->
 
 | Dreyfus stage | Knowledge type | AI compatibility |
 |---|---|---|
@@ -89,7 +89,7 @@ Rubber-stamping AI output short-circuits all of this. The expert must read the A
 !!! warning "The 80% trap"
     Osmani documents that AI excels at greenfield and boilerplate but "in mature codebases with complex invariants, the calculus inverts. The agent doesn't know what it doesn't know." Teams with high AI adoption merged 98% more PRs while review times increased 91% -- efficiency gains in generation were consumed by coordination overhead ([The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
 
-## Distinguishing from the Implicit Knowledge Problem
+## Distinguishing from the implicit knowledge problem
 
 The [Implicit Knowledge Problem](../patterns/anti-patterns/implicit-knowledge-problem.md) addresses knowledge that could be externalized but has not been -- team conventions, architectural decisions, naming standards. The fix is documentation and instruction files.
 
@@ -106,7 +106,7 @@ Even perfect documentation cannot solve the ceiling: the constraint is volume of
 
 ## What this means for AI adoption
 
-This is not an argument against AI -- it is an argument for honesty about where AI stops being useful. The expert who says "AI can't do what I do" is making an empirically supportable observation. The productive response is to identify the boundary:
+This argues for honesty about where AI stops being useful, not against AI. The expert who says "AI can't do what I do" is making an empirically supportable observation. The productive response is to identify the boundary:
 
 | Where AI helps the expert | Where AI cannot help |
 |---|---|

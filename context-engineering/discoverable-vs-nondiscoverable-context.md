@@ -65,11 +65,11 @@ Instruction files sit at the front of every context window before the agent read
 
 ## Anti-patterns
 
-Directory trees in instruction files: the agent can run a glob, and the tree in the file is stale within a sprint.
+These 3 habits smuggle discoverable content into an instruction file:
 
-Code samples that mirror real code: the agent can read the real file, and the sample [drifts the moment the code changes](../instructions/agents-md-as-table-of-contents.md).
-
-API signatures as documentation: the agent can read the source. Duplicating signatures creates two sources of truth, and one of them will be wrong.
+- Directory trees: the agent can run a glob, and the tree in the file is stale within a sprint.
+- Code samples that mirror real code: the agent can read the real file, and the sample [drifts the moment the code changes](../instructions/agents-md-as-table-of-contents.md).
+- API signatures as documentation: the agent can read the source. Duplicating signatures creates two sources of truth, and one of them will be wrong.
 
 ## Example
 
@@ -111,22 +111,22 @@ Tests use Jest with `@testing-library/react`. Run with `npm test`.
   queries against staging carry real production load.
 ```
 
-The "after" version is shorter and will never go stale. The project structure, API signatures, and test runner are all readable directly from the codebase. The architectural decisions and operational constraints cannot be inferred from any file in the repository, so these are the only entries that earn a place in the instruction file.
+The "after" version is shorter and will never go stale. The project structure, API signatures, and test runner are all readable directly from the codebase. The architectural decisions and operational constraints cannot be inferred from any file in the repository. These are the only entries that earn a place in the instruction file.
 
 ## When this backfires
 
-Agents without exploration tools: if the agent lacks file-read or search tools, the discoverable and non-discoverable split collapses, and structural information becomes non-discoverable to that agent. Check actual tool access before you apply this filter.
+The split breaks down in 3 cases:
 
-Large monorepos: with hundreds of modules, a scoped pointer ("see `services/payments/`") crosses into discoverable territory but may be worth including to prevent broad traversal. The pointer form, a path rather than a full tree, limits token cost.
-
-High-churn codebases: context files go stale within a sprint during rapid restructuring. Lean toward non-discoverable content, and keep any structural pointers in a separate, frequently updated file rather than the main instruction file.
+- Agents without exploration tools: if the agent lacks file-read or search tools, the discoverable and non-discoverable split collapses. Structural information becomes non-discoverable to that agent, so check tool access before you apply this filter.
+- Large monorepos: with hundreds of modules, a scoped pointer ("see `services/payments/`") crosses into discoverable territory but may be worth including to prevent broad traversal. The pointer form, a path rather than a full tree, limits token cost.
+- High-churn codebases: context files go stale within a sprint during rapid restructuring. Lean toward non-discoverable content, and keep any structural pointers in a separate, frequently updated file rather than the main instruction file.
 
 ## Key Takeaways
 
-- Instruction files load on every interaction — every line is a recurring cost.
-- Discoverable information belongs in the codebase, not the instruction file.
-- Non-discoverable information — decisions, constraints, domain context — earns a place in instruction files.
-- Pointers ("see `src/repos/`") are preferable to copies of discoverable content.
+- Run the discoverability test before adding a line: if the agent can find it in the codebase, cut it or leave a pointer instead.
+- Without file-read or search tools, an agent cannot discover anything on its own, so check tool access before applying this split.
+- In large monorepos, a scoped pointer such as `services/payments/` is worth keeping even though it is technically discoverable, since it prevents broad traversal.
+- In high-churn codebases, keep structural pointers in a separate, frequently updated file, since embedded structure goes stale within a sprint.
 
 ## Related
 

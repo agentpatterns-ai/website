@@ -43,20 +43,20 @@ SEO rank tracking works because results are deterministic. GEO measurement is di
 | Hallucination Rate | How often AI states factually incorrect information about your brand |
 | Platform Coverage Rate | % of tracked platforms where your brand appears for target prompts |
 
-LLMs typically cite a small number of domains per response — far fewer than Google's 10 blue links — making citation share intensely competitive.
+LLMs typically cite a small number of domains per response, far fewer than Google's 10 blue links. That makes citation share intensely competitive.
 
 ## Available tools
 
 | Tool | Starting Price | Platforms Tracked | Differentiator |
 |------|---------------|-------------------|----------------|
 | [Otterly.ai](https://otterly.ai/) | $29/mo | ChatGPT, AI Overviews, AI Mode, Perplexity, Gemini, Copilot | Widest platform coverage; 40+ countries |
-| [Semrush AI Toolkit](https://www.semrush.com/semrush-ai-toolkit/) | $99/mo/domain | Major LLMs | Integrates with existing Semrush ecosystem |
+| [Semrush AI Toolkit](https://www.semrush.com/semrush-ai-toolkit/) | $99/mo/domain | Major LLMs | Integrates with existing Semrush tools |
 | [Profound](https://www.tryprofound.com/) | from $99/mo | ChatGPT (entry) → 10+ LLMs (enterprise) | Enterprise; hallucination detection; compliance |
 | [Scrunch](https://scrunch.com/) | from $100/mo | ChatGPT (entry) → Claude, Perplexity, Gemini | Content gap and outdated information detection |
 
 Starting prices are entry tiers verified June 2026. The cheapest plan is usually single-platform, with multi-LLM coverage on higher tiers. Confirm current pricing with each vendor. All tools sample by running prompts. None access platform-internal data.
 
-[isitagentready.com](https://isitagentready.com) is a free, one-off alternative to those paid trackers: instead of sampling AI responses for citation frequency, it scans a site's own machine-readable surface for the signals that make agent retrieval possible in the first place. A [scan of agentpatterns.ai](https://isitagentready.com/?url=agentpatterns.ai) checked, among other things, markdown alternates — an HTTP `Link` header pointing to a `text/markdown` version of each page — and `/.well-known/` discovery documents such as an agent-skills index and an MCP server card; both check families passed. That result says the site's content is structured for agents to fetch and index cleanly, which is a precondition for citation, not a substitute for the citation-tracking metrics above.
+[isitagentready.com](https://isitagentready.com) is a free, one-off alternative to those paid trackers: instead of sampling AI responses for citation frequency, it scans a site's own machine-readable surface for the signals that make agent retrieval possible in the first place. A [scan of agentpatterns.ai](https://isitagentready.com/?url=agentpatterns.ai) checked, among other things, markdown alternates (an HTTP `Link` header pointing to a `text/markdown` version of each page) and `/.well-known/` discovery documents such as an agent-skills index and an MCP server card; both check families passed. That result says the site's content is structured for agents to fetch and index cleanly, which is a precondition for citation, not a substitute for the citation-tracking metrics above.
 
 ## What no tool solves
 
@@ -88,7 +88,7 @@ The GEO and SEO tension: restructuring for AI extraction can raise citation rate
 | Monthly | Aggregate visibility trends; analyze citation source breakdown; benchmark competitors |
 | Quarterly | Sentiment analysis in depth; update competitive benchmarks; reassess prompt set |
 
-Brand web mention volume correlates with AI Overview visibility — stronger organic presence tends to mean more frequent AI citation.
+Brand web mention volume correlates with AI Overview visibility. Stronger organic presence tends to mean more frequent AI citation.
 
 ## When this backfires
 
@@ -146,15 +146,15 @@ Run on a daily cron (`0 9 * * *`). Diff `mentioned` counts week-over-week to det
 
 **Can you build your own GEO monitoring setup instead of paying for a tracking tool?**
 
-Yes — a minimal script using the Anthropic SDK can sample target prompts, check whether a brand name appears in the response, and log the result. Running it on a daily cron and diffing mention counts week-over-week surfaces the same visibility drops that paid tools detect, though it lacks their multi-platform coverage and dashboards.
+Yes. A minimal script using the Anthropic SDK can sample target prompts, check whether a brand name appears in the response, and log the result. Running it on a daily cron and diffing mention counts week-over-week surfaces the same visibility drops that paid tools detect, though it lacks their multi-platform coverage and dashboards.
 
 **Why can restructuring content for AI extraction hurt SEO rankings?**
 
-GEO and SEO pull in different directions. Content reshaped to be easily extracted and cited by AI systems can raise citation rates on platforms like ChatGPT or Perplexity while simultaneously reducing organic search rankings, since the structural changes that help machine extraction don't always align with what search engines reward. Teams should weigh both before restructuring.
+GEO and SEO pull in different directions. Content reshaped to be easily extracted and cited by AI systems can raise citation rates on platforms like ChatGPT or Perplexity while reducing organic search rankings. The structural changes that help machine extraction do not always align with what search engines reward. Teams should weigh both before restructuring.
 
 **Does having strong organic search visibility improve AI citation frequency?**
 
-There's a correlation: brand web mention volume tends to track with AI Overview visibility, meaning a stronger organic presence generally coincides with more frequent AI citation. That's not a guarantee, though — GEO measurement stays probabilistic and platform-specific, so a strong SEO footprint doesn't automatically translate into citations on every AI platform.
+There's a correlation: brand web mention volume tends to track with AI Overview visibility. A stronger organic presence generally coincides with more frequent AI citation. That's not a guarantee, though. GEO measurement stays probabilistic and platform-specific, so a strong SEO footprint does not automatically translate into citations on every AI platform.
 
 **Why do broad prompts like "best tools for X" produce unreliable GEO data?**
 

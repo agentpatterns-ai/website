@@ -22,7 +22,7 @@ maturity: adopted
 
 The familiar version of this problem is a stale prior: the model knows an old release of a public API and writes against it with confidence ([Training-Data Gravity](../patterns/anti-patterns/training-data-gravity.md)).
 
-Zero-prior is a different problem. For internal SDKs, proprietary codebases, and custom frameworks, the correct API is not in the training data at all. The model does not pause, ask for documentation, or flag uncertainty. It "finds the closest match in its training data and generates code as if that match were your technology" ([Mastykarz, "When the model has never seen your code", Microsoft for Developers, 2026](https://developer.microsoft.com/blog/when-the-model-has-never-seen-your-code)), mapping an unknown `SessionManager.initialize()` onto whichever public SDK sits nearest by name and shape.
+Zero-prior is a different problem. For internal SDKs, proprietary codebases, and custom frameworks, the correct API is not in the training data at all. The model does not pause, ask for documentation, or flag uncertainty. It "finds the closest match in its training data and generates code as if that match were your technology" ([Mastykarz, "When the model has never seen your code", Microsoft for Developers, 2026](https://developer.microsoft.com/blog/when-the-model-has-never-seen-your-code)). An unknown `SessionManager.initialize()` maps onto whichever public SDK sits nearest by name and shape.
 
 The code compiles often enough to reach review looking fine. It still violates the requirements of the technology you actually run.
 
@@ -76,7 +76,7 @@ Every generation samples from the pretrained distribution. When the correct API 
 
 The behavior is stubborn. In one study, models accepted fabricated library names under plausible prompts in up to 99% of cases ([Twist et al., "Library Hallucinations in LLM-Generated Code", arxiv 2509.22202, 2026](https://arxiv.org/abs/2509.22202)).
 
-Documentation adds weight where the correct API should be. The wrong one still wins wherever the docs are silent, which is most places. An identity layer changes the question the model is answering. Instead of "complete this code against the most likely API," it reads "this is technology X, X is not Y, treat Y patterns as errors," and that constraint holds across the whole generation rather than one call at a time.
+Documentation adds weight where the correct API should be. The wrong one still wins wherever the docs are silent, which is most places. An identity layer changes the question the model is answering, from "complete this code against the most likely API" to "this is technology X, X is not Y, treat Y patterns as errors." That constraint holds across the whole generation, not just one call.
 
 ## When this backfires
 
@@ -142,8 +142,8 @@ Always-loaded context stays at about 30 lines. The expensive layers load only wh
 
 ## Key Takeaways
 
-- Diagnose before you provision. Whichever public framework the unprovisioned baseline produces is the one your identity layer has to name and forbid ([Mastykarz, 2026](https://developer.microsoft.com/blog/when-the-model-has-never-seen-your-code)).
-- Retrieval alone leaves the gap open, because the nearest public API wins every decision the docs do not explicitly override ([Zhang et al., arxiv 2603.15159, 2026](https://arxiv.org/abs/2603.15159)).
+- Diagnose before you provision, and only for a surface big enough to justify it: run the unprovisioned baseline first, then name and forbid whichever public framework it reaches for ([Mastykarz, 2026](https://developer.microsoft.com/blog/when-the-model-has-never-seen-your-code)).
+- Retrieval alone leaves the gap open, so pair it with an identity layer rather than treat it as the fix: the nearest public API still wins every decision the docs do not explicitly override ([Zhang et al., arxiv 2603.15159, 2026](https://arxiv.org/abs/2603.15159)).
 - Order the layers identity, concepts, shape, patterns, gotchas, and never drop the first. It is the only one that contradicts the wrong guess head-on.
 - Split by load shape rather than by topic: identity always-loaded, shape and examples on demand, or context cost outruns the gain in task success ([Gloaguen et al., arxiv 2602.11988](https://arxiv.org/abs/2602.11988)).
 - Stale provisioning is worse than none at all. If nobody owns the identity layer, do not build one.

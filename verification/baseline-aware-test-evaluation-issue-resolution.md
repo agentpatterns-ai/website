@@ -114,3 +114,4 @@ The shape is the load-bearing part — two runs, a diff on the pass set, exit no
 - [Issue-to-PR Delegation Pipeline](../workflows/issue-to-pr-delegation-pipeline.md) — the end-to-end workflow Phoenix's gate plugs into.
 - [Chain-of-Verification for Coding Agents](chain-of-verification-coding-agents.md) — adjacent verification-loop pattern that combines structural diff with self-critique.
 - [Pre-Change Impact Analysis](pre-change-impact-analysis.md) — a complementary up-front gate that surfaces at-risk tests before the patch is generated.
+- [Bug-Discriminating Validation Evidence for Repair Agents (BSG-VA)](bug-discriminating-validation-evidence.md) — the same baseline replay turned on the agent's own new test, asking whether a passing result said anything about the bug.

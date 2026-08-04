@@ -32,13 +32,13 @@ Cursor's Bugbot externalized this dial on [2026-05-11](https://cursor.com/change
 
 High finds [35% more bugs at constant 80% resolution rate](https://cursor.com/blog/may-2026-bugbot-changes). Developers address the extra flags at merge time rather than silently dismissing them.
 
-The per-PR analogue of [heuristic effort scaling](../patterns/agent-design/heuristic-effort-scaling.md) (agent-tiered per query) and [interactive effort sliders](../patterns/agent-design/interactive-effort-sliders.md) (operator-tiered per turn) — here the unit is one PR and the decision sits with a reviewer or routing policy.
+This is the per-PR analogue of [heuristic effort scaling](../patterns/agent-design/heuristic-effort-scaling.md) (agent-tiered per query) and [interactive effort sliders](../patterns/agent-design/interactive-effort-sliders.md) (operator-tiered per turn). Here the unit is one PR, and the decision sits with a reviewer or routing policy.
 
 ## Why a dial, not a constant
 
-Single-calibration agents force a compromise. Calibrate for thoroughness and routine PRs drown in commentary — developers [override more than 30% of flags](https://www.codeant.ai/blogs/ai-code-review-false-positives) until the tool is functionally disabled. Calibrate for signal and the agent misses real regressions in high-stakes code.
+Single-calibration agents force a compromise. Calibrate for thoroughness and routine PRs drown in commentary: developers [override more than 30% of flags](https://www.codeant.ai/blogs/ai-code-review-false-positives) until the tool is functionally disabled. Calibrate for signal and the agent misses real regressions in high-stakes code.
 
-GitHub Copilot's review began as the implicit binary form: in [29% of reviews the agent stays silent and in 71% it surfaces actionable feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/). A multi-level dial generalizes it: silence is the lowest rung, full agentic exploration the highest. By mid-2026 Copilot had externalized the dial too. Admins set a per-repository analysis tier: `low` (the fast, cost-efficient default) or a new `medium` tier that routes complex logic, security-sensitive code, and cross-service changes to a higher-reasoning model ([GitHub, 2026-06-02](https://github.blog/changelog/2026-06-02-shape-copilot-code-review-around-your-team/)). Weeks later, GitHub widened the surface with [new configurations and controls for tuning the review agent](https://github.blog/changelog/2026-06-12-copilot-code-review-new-configurations-and-controls) (GitHub, 2026-06-12). Cursor binds the choice to one PR, Copilot to one repository — coarser-grained, but the same effort-routing primitive.
+GitHub Copilot's review began as the implicit binary form: in [29% of reviews the agent stays silent and in 71% it surfaces actionable feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/). A multi-level dial generalizes it: silence is the lowest rung, full agentic exploration the highest. By mid-2026 Copilot had externalized the dial too. Admins set a per-repository analysis tier: `low` (the fast, cost-efficient default) or a new `medium` tier that routes complex logic, security-sensitive code, and cross-service changes to a higher-reasoning model ([GitHub, 2026-06-02](https://github.blog/changelog/2026-06-02-shape-copilot-code-review-around-your-team/)). Weeks later, GitHub widened the surface with [new configurations and controls for tuning the review agent](https://github.blog/changelog/2026-06-12-copilot-code-review-new-configurations-and-controls) (GitHub, 2026-06-12). Cursor binds the choice to one PR, Copilot to one repository: coarser-grained, but the same effort-routing primitive.
 
 ## Calibration is the pattern
 
@@ -102,16 +102,16 @@ Use High effort when:
 Use Default effort otherwise.
 ```
 
-A 30-line fix in `tests/integration/` from a long-tenured engineer runs at Default — 0.7 bugs/run, fast, and silence on style reads as real silence. A 1,200-line refactor touching `src/auth/session.ts` from a first-time contributor runs at High — 0.95 bugs/run, and the reviewer reads each flag knowing the routing concentrated effort here on purpose.
+A 30-line fix in `tests/integration/` from a long-tenured engineer runs at Default (0.7 bugs/run), fast, and silence on style reads as real silence. A 1,200-line refactor touching `src/auth/session.ts` from a first-time contributor runs at High (0.95 bugs/run), and the reviewer reads each flag knowing the routing concentrated effort here on purpose.
 
-Pinning Default at the team level and letting Custom escalate inverts biasing-up: it preserves the silence-as-output contract for routine work while making the higher tier opt-in by policy, not per-PR clicking.
+Pinning Default at the team level and letting Custom escalate keeps escalation policy-driven rather than manual: it preserves the silence-as-output contract for routine work while making the higher tier opt-in by policy, not per-PR clicking.
 
 ## Key Takeaways
 
-- Effort levels in code review agents are the per-PR analogue of [heuristic effort scaling](../patterns/agent-design/heuristic-effort-scaling.md) and [interactive effort sliders](../patterns/agent-design/interactive-effort-sliders.md), but with the unit of work bound to one PR and the decision delegated to a reviewer or routing policy.
-- The dial is meaningful only with a published bug-discovery curve. Effort labels without numbers are hedge words.
-- Resolution rate gates whether the higher-effort flags are useful; published rates are not the same as precision, and teams that need a precision floor measure it themselves.
-- Routing policies concentrate High on the axes that pay for it — file-path criticality, change size, author trust, historical defect rate — the heuristic siblings of [risk-score threshold calibration](risk-score-threshold-calibration.md). Pinning High globally collapses the pattern back to a fixed-pipeline calibration.
+- Bind the dial to one PR and give the decision to whoever routes it. That is what separates this from [heuristic effort scaling](../patterns/agent-design/heuristic-effort-scaling.md) and [interactive effort sliders](../patterns/agent-design/interactive-effort-sliders.md), where the unit is the agent or the query rather than the change under review.
+- Before adopting a dial, ask the vendor for the bug-discovery curve behind each level. A level with no published rate is a hedge word, not a knob.
+- Resolution rate answers "did the flag get addressed," not "was the flag correct." A dismissed flag and a fixed one count the same. Check which question a vendor's number answers, and measure noise yourself if the review needs a precision floor.
+- Routing policies concentrate High on the axes that pay for it — file-path criticality, change size, author trust, historical defect rate — the heuristic siblings of [risk-score threshold calibration](risk-score-threshold-calibration.md). Before pinning High globally, check whether you can still name the axis that triggered each escalation; if not, the routing has already collapsed into a fixed-pipeline calibration.
 - Custom natural-language policies are themselves drift-prone instruction surfaces. Treat them like CLAUDE.md: review periodically, gate changes through eval.
 
 ## Related

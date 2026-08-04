@@ -39,7 +39,7 @@ Retrieval becomes deterministic: glob the folder for the artifact type, read the
 
 ## Why it works
 
-Consistent shape converts retrieval from a similarity problem into a lookup: glob a folder, read a YAML key. Embedding distance does not encode path hierarchy or schema membership; the feature-index encodes those relationships explicitly, making them queryable in O(1) ([structured domain retrieval](../../context-engineering/structured-domain-retrieval.md)).
+Consistent shape converts retrieval from a similarity problem into a lookup: glob a folder, read a YAML key. Embedding distance does not encode path hierarchy or schema membership; the feature-index encodes those relationships explicitly, so they are queryable in O(1) ([structured domain retrieval](../../context-engineering/structured-domain-retrieval.md)).
 
 ## The artifact matrix
 

@@ -16,7 +16,7 @@ maturity: established
 
 > For PRDs, strategy memos, and architectural briefs, freezing direction in a reviewed plan before prose is generated compounds the gains plan mode delivers for code.
 
-Plan mode's value on knowledge artifacts is higher than on code, not lower. Prose errors do not fail a test suite — they hide in reviewer fatigue, anchor downstream readers on the first draft, and only surface after someone has already built on a wrong assumption. Hannah Stulberg, who runs her PM workflow through this pattern, states the thesis plainly: "The plan is not overhead. The plan is the work" ([Gupta × Stulberg](https://www.news.aakashg.com/p/claude-code-team-os)).
+Plan mode's value on knowledge artifacts is higher than on code. Prose errors do not fail a test suite. They hide in reviewer fatigue, anchor downstream readers on the first draft, and only surface after someone has already built on a wrong assumption. Hannah Stulberg, who runs her PM workflow through this pattern, states the thesis: "The plan is not overhead. The plan is the work" ([Gupta × Stulberg](https://www.news.aakashg.com/p/claude-code-team-os)).
 
 ## Why knowledge artifacts suffer more
 
@@ -25,7 +25,7 @@ Two mechanisms compound for prose:
 - Action bias. LLMs bias toward taking an action each round ([Maini, Goldstone & Tiganj, 2026, arXiv:2604.02578](https://arxiv.org/abs/2604.02578)). Plan mode removes that bias: "Claude's bias for action is removed" once plan mode is engaged ([Gupta × Stulberg](https://www.news.aakashg.com/p/claude-code-team-os)).
 - Reflection before production. Structured self-reflection significantly improves LLM problem-solving performance (p < 0.001) ([Renze & Guven, 2024, arXiv:2405.06682](https://arxiv.org/abs/2405.06682)). Plan mode forces a reflect-then-act decomposition before output.
 
-For code, a failing test catches misread intent. For a PRD, no such gate exists — the reader is the gate, and the reader is fatigued.
+For code, a failing test catches misread intent. For a PRD, the reader is the only gate, and the reader is fatigued.
 
 ## Activating plan mode
 

@@ -78,3 +78,4 @@ The trap is sharpest when (a) the merge gate is automated, (b) the file's claime
 - [Happy Path Bias](happy-path-bias.md) — the upstream tendency: skipping error paths in code; this page is the downstream form in test code.
 - [Overtrusting Human Sign-Off on Generated Assertions](generated-assertion-signoff.md) — reviewers wave through the generated checks this page is about; they catch wrong assertions at near chance.
 - [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](lazy-generation.md) — the failure a naive coverage gate causes when an agent games coverage with assertion-light tests.
+- [Deletion Avoidance](deletion-avoidance.md) — the absence a suite never asserts: code the edit was meant to remove, still present under a guard.

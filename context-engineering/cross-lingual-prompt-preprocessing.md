@@ -19,7 +19,7 @@ maturity: emerging
 
 > Cross-lingual preprocessing translates non-English prompts to English via a local small model, arbitraging BPE tokenizer asymmetry to cut cloud input tokens 34–47%.
 
-Cross-lingual prompt preprocessing inserts a small local model (for example, Llama 3.2 3B) between the developer and a cloud coding agent. The local model translates the prompt to English, rewrites it into a compact task-oriented form, and a regex-validated fallback ensures the rewrite never exceeds the original size — the cloud LLM bills against the rewritten version ([Colak, 2026](https://arxiv.org/abs/2606.03618)). The arbitrage is flat per-token cloud pricing applied to languages that tokenize 2–6× more expensively than English in standard BPE vocabularies ([Tokenization Is Killing Our Multilingual LLM Dream](https://huggingface.co/blog/omarkamali/tokenization)).
+Cross-lingual prompt preprocessing inserts a small local model (for example, Llama 3.2 3B) between the developer and a cloud coding agent. The local model translates the prompt to English and rewrites it into a compact task-oriented form. A regex-validated fallback ensures the rewrite never exceeds the original size, so the cloud LLM bills against the rewritten version ([Colak, 2026](https://arxiv.org/abs/2606.03618)). The arbitrage is flat per-token cloud pricing applied to languages that tokenize 2–6× more expensively than English in standard BPE vocabularies ([Tokenization Is Killing Our Multilingual LLM Dream](https://huggingface.co/blog/omarkamali/tokenization)).
 
 ## When this pattern applies
 
@@ -41,17 +41,17 @@ The pattern only pays back its preprocessing latency and complexity under all of
 | Structural rewrite into task-oriented form | Removes conversational entropy (restatement, politeness, ambiguity) without changing instruction content |
 | Regex-validated rewrite-with-fallback | Hard upper bound — the rewritten prompt is never larger than the original |
 
-The paper attributes most of the gain to rewriting rather than extraction, distinguishing the technique from same-language compression baselines like [LLMLingua-2](https://arxiv.org/abs/2403.12968).
+The paper attributes most of the gain to rewriting rather than extraction. That sets the technique apart from same-language compression baselines like [LLMLingua-2](https://arxiv.org/abs/2403.12968).
 
 ## Why it works
 
-The mechanism is a fixed pricing arbitrage. Cloud providers charge flat per-token rates regardless of which language the tokens encode, while BPE tokenizers trained primarily on English allocate fewer vocabulary slots to non-Latin scripts and morphologically rich languages — the same content costs 2–6× more tokens in Turkish, Arabic, or Chinese than in English ([Tokenization Is Killing Our Multilingual LLM Dream](https://huggingface.co/blog/omarkamali/tokenization)). Translation moves the input from an expensive token language to a cheap one before metering; the rewrite collapses structural entropy a task-oriented form does not need. The fallback bound makes the worst case no-regression on token count, isolating the open question to semantic fidelity rather than cost.
+The mechanism is a fixed pricing arbitrage. Cloud providers charge flat per-token rates regardless of which language the tokens encode. BPE tokenizers trained primarily on English allocate fewer vocabulary slots to non-Latin scripts and morphologically rich languages. The same content costs 2–6× more tokens in Turkish, Arabic, or Chinese than in English ([Tokenization Is Killing Our Multilingual LLM Dream](https://huggingface.co/blog/omarkamali/tokenization)). Translation moves the input from an expensive token language to a cheap one before metering; the rewrite collapses structural entropy a task-oriented form does not need. The fallback bound makes the worst case no-regression on token count. What remains open is semantic fidelity, not cost.
 
 ## When this backfires
 
 Several documented conditions erase the savings or make the pattern net-negative:
 
-- Short interactive prompts: [Prompt Compression in the Wild (arXiv 2604.02985)](https://arxiv.org/abs/2604.02985) finds end-to-end compression speedups only inside a narrow operating window of prompt length × compression ratio × hardware capacity — outside it, preprocessing overhead cancels the inference gains. A 3B-parameter local model on short prompts adds fixed per-turn latency the cloud savings cannot recover.
+- Short interactive prompts: [Prompt Compression in the Wild (arXiv 2604.02985)](https://arxiv.org/abs/2604.02985) finds end-to-end compression speedups only inside a narrow operating window of prompt length × compression ratio × hardware capacity. Outside that window, preprocessing overhead cancels the inference gains. A 3B-parameter local model on short prompts adds fixed per-turn latency the cloud savings cannot recover.
 - Native-language prompting hurts problem-solving rate, not just tokens: [Ren et al. (2026) "Mythbuster"](https://arxiv.org/abs/2604.14210) found that prompting in Chinese on SWE-bench Lite lowered the resolution rate across every model tested — including models where Chinese token counts dropped. The relevant metric is cost-per-successful-task, not raw input-token reduction.
 - Identifier and code-switched content corruption: translation and rewriting can damage library names, file paths, language-specific keywords, and code-switched specifications. The regex-validated fallback prevents size regressions but does not guarantee semantic fidelity on technical strings — those failures land as wrong code, not as bigger prompts.
 - Frontier-vs-small-model framing risk: a 3B preprocessor rewriting for a frontier-class cloud agent risks down-leveling task framing — what a small model considers "structurally compact" may strip context the frontier model would have used. Benchmark accuracy parity does not transfer to production code with idiosyncratic identifiers, domain vocabulary, or long files.
@@ -87,9 +87,9 @@ The rewrite drops conversational framing, restatement of intent, and the politen
 
 ## Key Takeaways
 
-- Cross-lingual preprocessing arbitrages flat cloud per-token pricing against BPE tokenizer asymmetry; [Colak (2026)](https://arxiv.org/abs/2606.03618) reports 34–47% input-token reduction across commercial backends.
+- The reported 34–47% input-token reduction ([Colak, 2026](https://arxiv.org/abs/2606.03618)) is a ceiling, not a guarantee — it holds only once preprocessing latency, accuracy, and fidelity costs are netted out.
 - The savings only materialize when the developer cannot prompt directly in English, input dominates cost, latency tolerates the local pass, and the source language tokenizes inefficiently.
-- [Ren et al. (2026)](https://arxiv.org/abs/2604.14210) shows non-English prompting on coding benchmarks lowers problem-solving rate across multiple models — token reduction alone is not the right success metric; cost-per-successful-task is.
+- Before trusting a token-reduction number, check task resolution rate too: [Ren et al. (2026)](https://arxiv.org/abs/2604.14210) found that prompting in the source language lowers coding-benchmark resolution rate even when its token counts drop, so cost-per-successful-task is the metric that matters.
 - Preprocessing pays back only inside the narrow operating window from [arXiv 2604.02985](https://arxiv.org/abs/2604.02985); short interactive prompts close it.
 - Regex-validated rewrite-with-fallback bounds the worst-case token count but not semantic fidelity — identifier corruption and frontier-framing loss must be caught by your own evals, not assumed from benchmark numbers.
 
